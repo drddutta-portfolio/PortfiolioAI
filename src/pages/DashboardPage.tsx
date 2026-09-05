@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 export function DashboardPage() {
   return (
     <section className="dashboard-placeholder">
@@ -15,6 +17,9 @@ export function DashboardPage() {
           <p>Database access remains governed by Supabase Row Level Security.</p>
         </div>
       </div>
+      <Link className="button button-primary link-button dashboard-action" to="/app/import">
+        Open Data Import Centre
+      </Link>
     </section>
   )
 }

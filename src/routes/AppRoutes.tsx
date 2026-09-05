@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { RedirectIfAuthenticated } from "../auth/RedirectIfAuthenticated"
 import { RequireAuth } from "../auth/RequireAuth"
@@ -7,6 +8,12 @@ import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
 import { LoginPage } from "../pages/LoginPage"
 import { NotFoundPage } from "../pages/NotFoundPage"
 import { UpdatePasswordPage } from "../pages/UpdatePasswordPage"
+import { PageLoader } from "../components/PageLoader"
+
+const ImportPage = lazy(async () => {
+  const module = await import("../pages/ImportPage")
+  return { default: module.ImportPage }
+})
 
 export function AppRoutes() {
   return (
@@ -23,6 +30,16 @@ export function AppRoutes() {
           element={
             <AppShell>
               <DashboardPage />
+            </AppShell>
+          }
+        />
+        <Route
+          path="/app/import"
+          element={
+            <AppShell>
+              <Suspense fallback={<PageLoader label="Loading the Import Centre" />}>
+                <ImportPage />
+              </Suspense>
             </AppShell>
           }
         />

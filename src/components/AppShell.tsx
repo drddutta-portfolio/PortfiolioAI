@@ -1,4 +1,5 @@
 import { useState, type PropsWithChildren } from "react"
+import { NavLink } from "react-router-dom"
 import { useAuth } from "../auth/authContext"
 import { getAuthErrorMessage } from "../lib/authError"
 
@@ -22,10 +23,14 @@ export function AppShell({ children }: PropsWithChildren) {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <a className="app-brand" href="/app" aria-label="PortfolioAI home">
+        <NavLink className="app-brand" to="/app" end aria-label="PortfolioAI home">
           <span className="app-brand-mark" aria-hidden="true">P</span>
           <span>PortfolioAI</span>
-        </a>
+        </NavLink>
+        <nav className="app-navigation" aria-label="Primary navigation">
+          <NavLink to="/app" end>Home</NavLink>
+          <NavLink to="/app/import">Import</NavLink>
+        </nav>
         <div className="account-menu">
           <span className="account-email">{user?.email}</span>
           <button

@@ -181,6 +181,8 @@ At minimum:
 
 Supported source categories include Trendlyne, Angel One, Google/Excel import, official company filing, NSE/BSE, Manual and Other Verified.
 
+External credit-rating, analyst-consensus and earnings-estimate observations must additionally preserve the provider's source identifier where available, observation date, applicable financial period, original value, normalized value, publication date, retrieval time, confidence and normalization methodology/version. Historical observations are append-only evidence: a later rating, estimate or consensus observation must not silently overwrite the point-in-time record that preceded it.
+
 Manual overrides must retain original value, replacement value, reason, user and timestamp.
 
 ---
@@ -381,6 +383,64 @@ Question:
 > What happens if I add this stock to THIS portfolio?
 
 Consider overlap, correlation, concentration, diversification benefit, role balance, risk contribution and position size.
+
+### 7.10 Credit Intelligence Engine
+
+Credit Intelligence is an independent external-intelligence dimension for Indian listed companies. It must remain source-agnostic and may use verified observations from CRISIL, ICRA, CARE Ratings, India Ratings, official company disclosures or exchange announcements, and other legally accessible rating-agency sources.
+
+Each rating observation should conceptually capture:
+
+- security/company
+- rating agency and source identifier where available
+- rating and publication dates
+- rating type
+- long-term and short-term ratings
+- outlook and watch status
+- rating action: UPGRADE, DOWNGRADE, REAFFIRMED, ASSIGNED, WITHDRAWN or OTHER
+- previous rating
+- instrument or facility
+- amount rated where available
+- rationale/source URL
+- retrieved_at
+- original and normalized values
+- provenance, confidence and normalization methodology/version
+
+Derived deterministic intelligence may include a normalized credit score, upgrade/downgrade history, outlook improvement or deterioration, rating-agency disagreement and a recent-adverse-credit-event flag. Credit trend states are IMPROVING, STABLE, DETERIORATING, NOT_RATED and INSUFFICIENT_DATA.
+
+**NOT_RATED is not poor credit quality.** A debt-free or lightly leveraged company may have no relevant public rating. Credit ratings are opinions about creditworthiness and debt-servicing ability, not equity Buy/Sell recommendations.
+
+Credit Intelligence acts primarily as balance-sheet and risk confirmation. Deterioration may increase risk or Exit Radar attention, and improvement may strengthen conviction, but neither a rating nor its trend automatically determines Core eligibility or an investment action.
+
+### 7.11 Analyst & Earnings Revision Intelligence Engine
+
+Analyst & Earnings Revision Intelligence is a separate, provider-agnostic external-intelligence engine. Potential sources include Trendlyne and licensed or otherwise verified structured broker/institutional research providers.
+
+Point-in-time consensus observations should conceptually capture analyst count, Buy/Hold/Sell counts, consensus label and score, consensus/high/low target prices, current price at observation, implied upside/downside and observation date.
+
+Earnings-estimate observations should capture period-specific revenue, EBITDA, PBT, PAT and EPS estimates where available, together with the estimate timestamp. Revision history should retain:
+
+- EPS revisions over 1M, 3M and 6M
+- revenue and profit revisions
+- target-price revisions
+- counts of upward and downward revisions
+- analyst upgrades and downgrades
+
+Derived deterministic outputs may include Analyst Consensus Score, Earnings Revision Score, Target Revision Score, Analyst Intelligence Score, coverage confidence and a revision trend of STRONGLY_POSITIVE, POSITIVE, STABLE, NEGATIVE, STRONGLY_NEGATIVE, NOT_COVERED or INSUFFICIENT_DATA.
+
+**NOT_COVERED is not negative.** Limited small- or mid-cap coverage lowers confidence; it must not penalize the company. Earnings revision direction may be more informative than a simple Buy/Hold/Sell label, and consensus alone must never trigger an investment action.
+
+### 7.12 Engine separation and conflict handling
+
+PortfolioAI conceptually separates its evidence dimensions:
+
+- **Fundamental engines:** Quality, Growth, Capital Efficiency, Cash Generation, Balance Sheet and Valuation.
+- **Market engines:** Momentum, Technical and Relative Strength.
+- **External Intelligence engines:** Credit Intelligence, Analyst Intelligence and Earnings Revision Intelligence.
+- **Portfolio engines:** Position Sizing, Portfolio Fit, Risk, Exit Radar and Movement Engine.
+
+These dimensions remain independently visible inputs to the Investment Committee and optional AI synthesis layer. PortfolioAI must not collapse them into one arbitrary master score that hides disagreement.
+
+Contradictions are first-class observations and alerts. Examples include strong fundamentals and positive consensus alongside deteriorating EPS revisions, or weak momentum alongside an improving credit rating and strong earnings revisions. Deterministic engines identify the conflict; the Investment Committee layer explains it with evidence rather than erasing it through averaging.
 
 ---
 
@@ -610,6 +670,7 @@ AI responsibilities:
 - answer portfolio questions
 - interpret documents
 - produce evidence-grounded recommendations
+- surface and explain contradictions between fundamental, market, external-intelligence and portfolio engines
 
 AI must **not**:
 
@@ -773,6 +834,10 @@ Initial groups:
 - company_events
 - documents
 - document_observations
+- credit_rating_observations
+- analyst_consensus_observations
+- earnings_estimate_observations
+- analyst_revision_observations
 
 ### Engines
 
@@ -788,6 +853,9 @@ Initial groups:
 - movement_events
 - promotion_events
 - demotion_events
+- credit_intelligence_assessments
+- analyst_intelligence_assessments
+- earnings_revision_assessments
 
 ### Thesis / AI / audit
 
@@ -890,6 +958,8 @@ Historical accounting and transaction data must not be silently rewritten.
 - Movement foundation
 - professional UI foundation
 
+Credit and analyst intelligence must not delay the initial XLSX/CSV import and transaction-derived holdings foundation.
+
 ### Phase 2 — Angel One
 
 - live prices
@@ -902,6 +972,7 @@ Historical accounting and transaction data must not be silently rewritten.
 - fundamental automation
 - historical metrics
 - ownership/shareholding and supported research parameters
+- analyst consensus, earnings-estimate and revision-history ingestion where licensed and available
 - incremental updates/caching
 
 ### Phase 4 — Advanced Engines
@@ -914,6 +985,10 @@ Historical accounting and transaction data must not be silently rewritten.
 - advanced position sizing
 - thesis monitoring
 - replacement engine
+- Credit Intelligence ingestion after a verified source strategy is selected
+- Credit Intelligence scoring
+- Analyst and Earnings Revision Intelligence scoring
+- cross-engine conflict observations for the Investment Committee
 
 ### Phase 5 — AI Brain
 
@@ -943,6 +1018,8 @@ Historical accounting and transaction data must not be silently rewritten.
 ### Phase 8 — Advanced Quant / Backtesting
 
 Only after sufficient point-in-time historical data exists. Avoid look-ahead bias, survivorship bias and use correct historical information availability dates.
+
+Credit ratings, analyst consensus, earnings estimates and revisions used in backtests must be selected by the date they were actually observable, never by a later revised history.
 
 ---
 

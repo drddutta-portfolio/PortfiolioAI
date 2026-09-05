@@ -56,6 +56,9 @@ The database is organized into these logical layers:
 - financial periods
 - research documents metadata
 - extracted research facts/observations
+- credit-rating observations
+- analyst-consensus observations
+- earnings-estimate and revision observations
 - source provenance
 
 ### E. Deterministic intelligence
@@ -71,6 +74,9 @@ The database is organized into these logical layers:
 - exit-risk assessments
 - portfolio-fit assessments
 - sector assessments
+- credit-intelligence assessments
+- analyst-consensus assessments
+- earnings-revision assessments
 - investment thesis records
 
 ### F. Decision and audit layer
@@ -214,6 +220,8 @@ Raw source identity is immutable at every stage. Once the parent batch is commit
 
 Source rows carry portfolio-safe provenance through their batch and portfolio composite key. Duplicate transaction evidence is constrained to the same portfolio.
 
+For multi-sheet workbook staging, `import_source_rows.row_number` is a batch-wide sequence required by the existing unique constraint. The exact original sheet name and original worksheet row number remain separately embedded in immutable `raw_data`; they must never be reconstructed from the batch-wide sequence.
+
 The canonical committed lineage direction is:
 
 `transactions.import_source_row_id` → `import_source_rows`
@@ -237,6 +245,29 @@ If fuller broker history becomes available, it must first be reconciled against 
 Imports follow preview, validation, confirmation and commit stages. Rejected and ambiguous rows remain auditable. Committed financial records and committed import evidence are immutable to browser clients, and transaction corrections use controlled reversal or supersession.
 
 The atomic import commit, reversal and historical-reconciliation operations are deferred. When implemented, each must validate ownership and all untrusted staging fields, then update every related ledger, lineage and batch state in one database transaction.
+
+#### Minimum trusted import-commit operation
+
+The browser has no mutation privilege on `transactions`, so V1 parsing and review must stop at staging until a separately reviewed trusted operation is introduced. The minimum operation should be one narrowly scoped PostgreSQL function exposed through Supabase RPC, or an Edge Function that invokes an equivalent single database transaction. It must not accept arbitrary transaction payloads from the browser.
+
+Proposed browser inputs are only:
+
+- `import_batch_id`
+- an explicit ordered list of approved `import_source_row_id` values
+- an idempotency/confirmation token bound to the user, batch and reviewed staging version
+
+Inside one transaction, the trusted operation must:
+
+1. derive the caller from `auth.uid()` and confirm ownership through `import_batches.portfolio_id → portfolios.user_id`;
+2. lock the batch and approved source rows, require an allowed pre-commit state and reject already committed/changed staging;
+3. revalidate transaction type, exact decimals, nullable date/broker rules, security resolution, same-portfolio broker account, source lineage and every database constraint from immutable raw evidence and reviewed normalized staging;
+4. reject `INVALID`, `AMBIGUOUS`, `DUPLICATE`, `IGNORED` or otherwise unapproved rows, and recompute duplicate identities server-side without over-deduplicating missing-date legacy records;
+5. insert at most one V1 transaction per approved source row with canonical lineage in `transactions.import_source_row_id`;
+6. atomically update batch counts/status and set `confirmed_at`/`committed_at` only after all ledger inserts succeed.
+
+The function would require `SECURITY DEFINER` only if needed to cross the browser's read-only ledger boundary. If used, it must have a fixed empty `search_path`, schema-qualified object references, explicit authenticated-only execute privilege, internal ownership checks and an owner that cannot be influenced by browser users. The service-role key must never enter the browser.
+
+Idempotency must combine the confirmation token, batch state, the unique `transactions.import_source_row_id` constraint and existing provider/deduplication identities. A retry after a successful commit must return the existing commit result rather than insert again. Any validation, constraint, ownership or insertion failure must roll back every ledger and batch-state change; staged evidence remains available for diagnosis and correction. This operation requires its own migration, two-user RLS/security tests, concurrency/retry tests and explicit approval before creation or deployment.
 
 ## 6. Market-data tables
 
@@ -361,9 +392,69 @@ Examples:
 - capital allocation
 - governance observations
 
-## 10. Deterministic engine result tables
+## 10. External intelligence and deterministic engine results
 
-The exact engine tables may be normalized or versioned snapshots. The following logical entities must exist.
+The exact future observation and assessment tables may be normalized or versioned snapshots. The logical entities below describe architecture, not currently implemented schema.
+
+### Credit-rating observations and assessments
+
+Credit source evidence must be stored independently from derived assessments. A future normalized model should associate every observation with a security and preserve:
+
+- rating agency/provider and provider source identifier
+- rating date, observation date, publication date and `retrieved_at`
+- rating type, long-term rating, short-term rating, outlook and watch status
+- rating action: `UPGRADE`, `DOWNGRADE`, `REAFFIRMED`, `ASSIGNED`, `WITHDRAWN` or `OTHER`
+- previous rating
+- instrument/facility and amount rated where available
+- rationale/source URL or document reference
+- original provider values and normalized values
+- confidence and normalization methodology/version
+
+Potential providers include CRISIL, ICRA, CARE Ratings, India Ratings, official company or exchange disclosures, and other verified rating-agency sources. Provider-specific payloads must be mapped through adapters rather than embedded in the canonical model.
+
+Future deterministic assessments may produce a normalized credit score, trend, rating-action history, outlook changes, agency disagreement and recent-adverse-event flags. Credit trend values are `IMPROVING`, `STABLE`, `DETERIORATING`, `NOT_RATED` and `INSUFFICIENT_DATA`.
+
+`NOT_RATED` is a neutral availability state, not a low score. Credit ratings assess debt-servicing creditworthiness; they are not equity Buy/Sell recommendations. Credit Intelligence primarily confirms balance-sheet and risk evidence and may increase or reduce risk/exit attention without automatically determining Core eligibility.
+
+### Analyst-consensus, earnings-estimate and revision observations
+
+The analyst-intelligence source layer must preserve separate point-in-time observations for:
+
+- analyst, Buy, Hold and Sell counts
+- consensus label and normalized consensus score
+- consensus, high and low target prices
+- current price at observation and implied upside/downside
+- observation date
+- period-specific revenue, EBITDA, PBT, PAT and EPS estimates where available
+- estimate timestamp
+- EPS revisions over 1M, 3M and 6M
+- revenue, profit and target-price revisions
+- counts of upward/downward revisions and analyst upgrades/downgrades
+
+Every observation must retain provider, source identifier where available, financial period, observation/publication/retrieval dates, original and normalized values, confidence and methodology/version. Trendlyne is a planned provider, but the canonical model must accept licensed or verified structured alternatives through provider adapters.
+
+Future assessments may expose Analyst Consensus Score, Earnings Revision Score, Target Revision Score, Analyst Intelligence Score, coverage confidence and revision trend. Revision trend values are `STRONGLY_POSITIVE`, `POSITIVE`, `STABLE`, `NEGATIVE`, `STRONGLY_NEGATIVE`, `NOT_COVERED` and `INSUFFICIENT_DATA`.
+
+`NOT_COVERED` is neutral rather than negative. Limited coverage reduces confidence instead of penalizing the security. Revision direction may carry more decision value than the simple consensus label, and neither consensus nor target price can independently trigger Buy/Sell.
+
+### Engine-family separation
+
+PortfolioAI keeps four independently inspectable engine families:
+
+- **Fundamental:** Quality, Growth, Capital Efficiency, Cash Generation, Balance Sheet and Valuation.
+- **Market:** Momentum, Technical and Relative Strength.
+- **External Intelligence:** Credit Intelligence, Analyst Intelligence and Earnings Revision Intelligence.
+- **Portfolio:** Position Sizing, Portfolio Fit, Risk, Exit Radar and Movement Engine.
+
+The Investment Committee layer consumes versioned outputs from all families. It must expose conflicts—such as strong fundamentals with deteriorating EPS revisions—in structured observations or alerts instead of hiding them inside an arbitrary master score.
+
+### Acquisition and history policy
+
+Use licensed APIs, MCP integrations, official disclosures or other legally accessible structured sources. Fragile scraping must not be a foundational dependency. Coverage will vary by company, so missing, `NOT_RATED`, `NOT_COVERED` and `INSUFFICIENT_DATA` states must remain explicit. AI must never manufacture a credit rating, analyst recommendation, target or estimate.
+
+Observations must be append-only or explicitly versioned to support point-in-time reconstruction. Later corrections and provider revisions must not silently rewrite what was known on an earlier date. Backtesting must filter by actual publication/availability time to avoid look-ahead bias.
+
+The following existing deterministic assessment entities remain part of the architecture.
 
 ### `quality_growth_assessments`
 Strict screenshot-style diagnostic. It evaluates:
@@ -587,6 +678,8 @@ Fields should include:
 
 AI must consume structured evidence generated by deterministic engines.
 
+The AI/Investment Committee layer may synthesize credit, analyst and earnings-revision evidence alongside fundamental, market and portfolio-engine results. It must cite the underlying observations, preserve confidence and missing-data states, and surface contradictions rather than inventing a reconciled fact or opaque master score.
+
 ### `ai_usage_ledger`
 Aggregates AI usage for transparency and cost monitoring.
 
@@ -609,6 +702,11 @@ Where a metric or observation originates externally, retain:
 Supported source labels initially include:
 - Trendlyne
 - Angel One
+- CRISIL
+- ICRA
+- CARE Ratings
+- India Ratings
+- Licensed analyst-data provider
 - Google Sheet/XLSX
 - Official company filing
 - NSE/BSE
@@ -620,6 +718,8 @@ Manual overrides must preserve the original value and record:
 - reason
 - user
 - timestamp
+
+Credit-rating, analyst-consensus, earnings-estimate and revision observations additionally require an observation date, original value, normalized value, provider source identifier where available, confidence and normalization methodology/version. Their point-in-time histories must remain reproducible after later provider revisions.
 
 ## 16. Corporate actions
 
@@ -718,6 +818,8 @@ Examples:
 - live prices: real-time/session-based
 - daily OHLCV: daily
 - fundamentals: on new published period or scheduled freshness check
+- analyst estimates/revisions: on a new provider observation or scheduled freshness check
+- credit ratings: on a new rating action, disclosure or scheduled freshness check
 - research documents: event/new-document driven
 - scores: recompute when their inputs change
 
@@ -755,6 +857,9 @@ The following are deliberately deferred and must be introduced through separatel
 - historical reconciliation operation
 - Angel One ingestion
 - Trendlyne ingestion
+- credit-rating ingestion and Credit Intelligence scoring
+- analyst-consensus/estimate ingestion and revision scoring
+- cross-engine Investment Committee conflict observations
 
 Until the corresponding deterministic logic exists, unresolved quantity events must remain disclosed and date-sensitive analytics must not treat incomplete legacy transactions as complete.
 
@@ -774,3 +879,5 @@ Never modify historical accounting/investment records merely to make a new score
 ## 24. Next implementation step
 
 The next database-writing step is the separate trusted import/commit workflow. It must be designed, implemented and validated before portfolio data is loaded. Advanced deterministic engines remain downstream work.
+
+Credit and analyst-intelligence schema/integration preparation follows the initial portfolio import foundation. Trendlyne analyst and estimate ingestion belongs in the Trendlyne phase; credit-rating ingestion waits for a verified source strategy; scoring and conflict synthesis belong in the advanced-engine and Investment Committee phases. These future engines must not delay the current XLSX/CSV import work.
