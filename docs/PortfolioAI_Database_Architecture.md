@@ -1,7 +1,7 @@
 # PortfolioAI — Database Architecture
 
 **Step 0.4 — Foundation database design**  
-**Status:** Architecture specification; implementation follows after review
+**Status:** Foundation and import/transaction migrations applied remotely; V1 authentication frontend implemented locally
 
 ## 1. Purpose
 
@@ -32,13 +32,16 @@ The database is organized into these logical layers:
 - users / authenticated user identity
 - portfolios
 - brokers
+- broker accounts
 - securities
 - sectors and industries
+- portfolio security settings
 - themes
 - system settings
 
 ### B. Portfolio source data
 - transactions
+- current holdings view
 - corporate actions
 - manual adjustments where required
 - imported source batches and source rows
@@ -79,175 +82,161 @@ The database is organized into these logical layers:
 - AI analysis runs
 - AI usage ledger
 
-## 4. Main tables — V1 foundation
+## 4. Implemented V1 foundation tables
 
 ### 4.1 `portfolios`
-Represents a user's investment portfolio.
 
-Key fields:
-- `id`
-- `user_id`
-- `name`
-- `base_currency` (default INR)
-- `is_active`
-- `created_at`
-- `updated_at`
-
-A portfolio must not assume a single broker.
+Represents a user's investment portfolio. It contains `id`, `user_id`, `name`, `base_currency`, `is_active`, `created_at` and `updated_at`. A portfolio can contain multiple broker accounts and must not assume a single broker.
 
 ### 4.2 `brokers`
-Broker/master data.
 
-Key fields:
-- `id`
-- `name`
-- `code`
-- `api_provider`
-- `is_active`
+Trusted broker reference master containing `id`, `name`, `code`, `api_provider`, `is_active` and audit timestamps. Browser-authenticated users can read it but cannot write it.
 
-Examples may include Angel One and other brokers used through import/manual workflows.
+### 4.3 `broker_accounts`
 
-### 4.3 `securities`
-Canonical security master.
+Represents a broker account within a portfolio. It contains `id`, `portfolio_id`, `broker_id`, `account_name`, optional `external_account_id`, `is_active` and audit timestamps.
 
-Key fields:
-- `id`
-- `symbol`
-- `exchange`
-- `isin`
-- `name`
-- `asset_class`
-- `instrument_type`
-- `sector_id`
-- `industry_id`
-- `currency`
-- `is_active`
-- `created_at`
-- `updated_at`
+Transactions use `broker_account_id`, not `broker_id`. A legacy transaction may have no known broker account, so `transactions.broker_account_id` is nullable. When it is present, a composite foreign key enforces that the account belongs to the same portfolio as the transaction.
 
-`asset_class` is mandatory for classification and must support at least:
-- EQUITY
-- ETF
-- MUTUAL_FUND
-- GOLD
-- SILVER
-- BOND
-- CASH
-- OTHER
+### 4.4 `securities`
 
-Do not send ETFs through equity Quality-Growth/ROCE/EBITDA scoring.
+The canonical security master contains `id`, `symbol`, `exchange`, canonical `isin`, `name`, `asset_class`, `instrument_type`, sector and industry references, `currency`, `is_active` and audit timestamps.
 
-### 4.4 `transactions`
-The primary portfolio source-of-truth table.
+`asset_class` supports `EQUITY`, `ETF`, `MUTUAL_FUND`, `GOLD`, `SILVER`, `BOND`, `CASH` and `OTHER`. It remains separate from portfolio role. Equity-specific engines must not be applied blindly to ETFs or other unsuitable assets.
 
-Key fields:
-- `id`
-- `portfolio_id`
-- `broker_id`
+### 4.5 `transactions`
+
+`transactions` is the accounting source of truth. Holdings are subordinate projections and cannot replace the ledger.
+
+Implemented fields and concepts include:
+
+- `id` and `portfolio_id`
+- nullable `broker_account_id`
 - `security_id`
-- `transaction_type`
-- `transaction_date`
-- `quantity`
-- `price`
-- `gross_amount`
-- `charges`
-- `net_amount`
-- `currency`
-- `source`
-- `import_batch_id`
-- `source_row_id`
-- `external_transaction_id`
-- `notes`
-- `created_at`
+- controlled `transaction_type`
+- nullable `transaction_date` and `executed_at`
+- optional `source_sequence`
+- `quantity`, `unit_price`, `gross_amount`, `charges`, `taxes`, `net_amount`, `source_average_cost` and `source_cost_basis`
+- `currency_code`
+- `source_type`, optional `source_provider`, provider transaction/order/trade identifiers and `deduplication_key`
+- optional `import_batch_id` and canonical `import_source_row_id`
+- `data_quality_status`
+- `accounting_status`
+- reversal and supersession relationships
+- notes and managed audit timestamps
 
-Transaction types should support at least BUY, SELL, DIVIDEND, SPLIT, BONUS, RIGHTS, TRANSFER_IN, TRANSFER_OUT and other explicitly defined corporate/portfolio events as required.
+The V1 transaction types are `BUY`, `SELL`, `OPENING_POSITION`, `TRANSFER_IN`, `TRANSFER_OUT`, `BONUS`, `SPLIT`, `REVERSAL` and `ADJUSTMENT`. Quantity is stored as a positive magnitude; the transaction type determines direction.
 
-Quantities and monetary amounts should use numeric/decimal types, never floating-point storage for financial values.
+Accounting states are:
 
-### 4.5 `holdings` / derived holdings view
-Holdings should normally be derived from transactions rather than manually maintained as an independent source of truth.
+- `ACTIVE`
+- `SUPERSEDED`
+- `REVERSED`
 
-The application may expose a database view/materialized/derived representation containing:
-- security
-- quantity
-- average cost
-- invested value
-- current value
-- realized P&L
-- unrealized P&L
-- portfolio weight
-- broker exposure
-- role
-- target/min/max weight
+Only `ACTIVE` transactions can affect current holdings. Future commit, reversal and reconciliation operations must change transaction state, replacement lineage, import-row linkage and batch state atomically.
 
-FIFO/lot support should be designed into the transaction model even if tax calculations are deferred.
+Data-quality states are:
 
-### 4.6 `portfolio_security_settings`
-User-specific investment configuration for a security.
+- `COMPLETE`
+- `MISSING_DATE`
+- `MISSING_BROKER`
+- `MISSING_DATE_AND_BROKER`
+- `NEEDS_REVIEW`
 
-Key fields:
-- `id`
-- `portfolio_id`
-- `security_id`
+`transaction_date` is intentionally nullable because some legacy source transactions have no known date. Unknown dates must remain `NULL`; import date, snapshot date, row order and inferred dates must never be substituted. Undated active BUY and SELL transactions still contribute to current quantity. FIFO, holding-period, time-based realized P&L, CAGR, XIRR and tax-lot calculations must explicitly exclude or separately handle undated transactions rather than treating them as dated.
+
+Transaction quantities, prices, amounts, charges, taxes and source cost values use PostgreSQL `numeric(38,18)`. Application and API code must carry these values as decimal strings or another exact-decimal representation and must not rely on JavaScript floating-point arithmetic.
+
+Browser-authenticated clients receive read-only access to their own transactions. They cannot insert, update, delete or truncate ledger records. Corrections use controlled reversal or supersession; ordinary hard deletion of financial history is not permitted.
+
+### 4.6 `current_holdings`
+
+`current_holdings` is a normal, non-materialized SQL view with invoker security. It is not independently writable and remains subordinate to `transactions`.
+
+It derives quantity from `ACTIVE` transactions only:
+
+- `BUY`: positive
+- `SELL`: negative
+- `OPENING_POSITION`: positive
+- `TRANSFER_IN`: positive
+- `TRANSFER_OUT`: negative
+- `BONUS`: positive
+- `SUPERSEDED` and `REVERSED` rows: excluded
+
+SPLIT, ADJUSTMENT and REVERSAL quantity effects are not guessed. Active unresolved events contribute zero quantity and are disclosed instead.
+
+The view exposes:
+
+- `current_quantity`
+- `active_transaction_count`
+- `incomplete_transaction_count`
+- `has_missing_dates`
+- `has_missing_broker`
+- `unresolved_quantity_event_count`
+- `is_quantity_complete`
+
+Missing date or broker information alone does not make quantity incomplete when the quantity effect remains mathematically determinable. `is_quantity_complete` is false when unresolved quantity-affecting events exist. Closed positions with zero quantity are omitted unless an unresolved event requires the position to remain visible.
+
+V1 `current_holdings` does not claim FIFO, realized or unrealized P&L, holding period, or reconstructed cost basis where evidence is insufficient.
+
+### 4.7 `portfolio_security_settings`
+
+Stores portfolio-specific configuration for a security:
+
+- `id`, `portfolio_id` and `security_id`
 - `portfolio_role`
-- `target_weight`
-- `min_weight`
-- `max_weight`
+- `target_weight`, `minimum_weight` and `maximum_weight`
 - `priority`
-- `is_watchlisted`
-- `is_frozen`
-- `holding_horizon`
+- `is_watchlisted` and `is_frozen`
+- `investment_horizon`
 - `notes`
-- `created_at`
-- `updated_at`
+- managed audit timestamps
 
-Portfolio roles should support CORE, SATELLITE, THEMATIC, ETF and OTHER. The role does not determine asset class.
+Roles are `CORE`, `SATELLITE`, `THEMATIC`, `ETF` and `OTHER`. Role is independent of asset class. Portfolio weights use `numeric(9,6)` and a `0–100` percentage convention.
 
-## 5. Import architecture
+## 5. Implemented import architecture
 
 ### 5.1 `import_batches`
-Tracks every XLSX/CSV or future broker/API import.
 
-Key fields:
-- `id`
-- `portfolio_id`
-- `source_type`
-- `file_name`
-- `file_hash`
-- `imported_at`
-- `status`
-- `row_count`
-- `success_count`
-- `error_count`
-- `duplicate_count`
-- `mapping_version`
-- `notes`
+Every XLSX, XLS, CSV, API or manual import attempt receives its own independently auditable batch record. Fields include portfolio and optional broker-account context, source metadata, optional lowercase SHA-256, optional duplicate-batch linkage, mapping metadata, optional snapshot date, controlled status, row counts, failure details, confirmation/commit timestamps and managed audit timestamps.
+
+Repeated identical file hashes are permitted. SHA-256 is indexed for duplicate detection but is not globally unique. `duplicate_of_import_batch_id` may link an attempt to a prior batch in the same portfolio. A batch cannot link to itself.
+
+Lifecycle states are `UPLOADED`, `PREVIEWED`, `VALIDATED`, `AWAITING_CONFIRMATION`, `COMMITTING`, `COMMITTED`, `REJECTED` and `FAILED`. Once committed, a batch cannot be updated, reopened or deleted.
+
+XLSX/CSV binaries are not stored in Supabase.
 
 ### 5.2 `import_source_rows`
-Preserves the original imported row for auditability.
 
-Key fields:
-- `id`
-- `import_batch_id`
-- `row_number`
-- `raw_data_json`
-- `normalized_security_id`
-- `normalized_transaction_id`
-- `status`
-- `validation_errors`
-- `created_at`
+Every source row is retained, including valid, invalid, ambiguous, duplicate and ignored rows. Stored evidence includes the original `raw_data`, optional source-row hash, normalized staging representation, security resolution, validation errors and warnings, duplicate state and optional duplicate-transaction reference.
 
-The original source row must not be discarded after successful normalization.
+Raw source identity is immutable at every stage. Once the parent batch is committed, source rows cannot be inserted, updated or deleted, including through trusted/service-role application paths.
 
-Import rules:
-- validate before committing
-- show errors clearly
-- identify ETFs separately
-- identify securities where possible
-- detect duplicate rows/transactions
-- preserve original values
-- require explicit confirmation where mapping is ambiguous
-- never silently alter financial values
+Source rows carry portfolio-safe provenance through their batch and portfolio composite key. Duplicate transaction evidence is constrained to the same portfolio.
+
+The canonical committed lineage direction is:
+
+`transactions.import_source_row_id` → `import_source_rows`
+
+There is no independently writable `committed_transaction_id` relationship. A partial unique index permits at most one committed V1 transaction per source row. If one source row must later produce multiple accounting events, a future mapping table may replace that uniqueness rule without rewriting the original source evidence.
+
+Normalized data, validation results, security resolution and duplicate fields are untrusted staging values. The future trusted commit process must revalidate them server-side before creating transactions.
+
+### 5.3 Same-portfolio provenance
+
+Composite database constraints—not RLS alone—enforce same-portfolio integrity across transaction import batches, source rows, duplicate transaction evidence, superseding batches, broker accounts and reversal relationships.
+
+### 5.4 Opening positions and incomplete legacy history
+
+`OPENING_POSITION` records a source-reported position anchor; it is not a fabricated BUY. When only a holdings snapshot is known, the system must not manufacture transaction dates, purchase transactions or historical lots. Source-reported average cost and cost basis are preserved when supplied.
+
+If fuller broker history becomes available, it must first be reconciled against legacy or opening records. Replacement uses explicit supersession, never deletion. Legacy/opening evidence remains permanently auditable, and holdings must include either active replacement history or superseded legacy/opening records—never both.
+
+### 5.5 Import and correction workflow
+
+Imports follow preview, validation, confirmation and commit stages. Rejected and ambiguous rows remain auditable. Committed financial records and committed import evidence are immutable to browser clients, and transaction corrections use controlled reversal or supersession.
+
+The atomic import commit, reversal and historical-reconciliation operations are deferred. When implemented, each must validate ownership and all untrusted staging fields, then update every related ledger, lineage and batch state in one database transaction.
 
 ## 6. Market-data tables
 
@@ -650,34 +639,53 @@ Corporate actions must not rewrite historical transactions invisibly. They shoul
 ## 17. Recommended database constraints
 
 - UUID primary keys for application entities.
-- Foreign keys for portfolio/security/broker/document relationships.
+- Foreign keys for portfolio, security, broker-account, import and document relationships.
+- Composite foreign keys for relationships that must remain within one portfolio.
 - Unique constraints for canonical security identifiers where valid.
 - Unique security/date/source constraints for market observations as appropriate.
-- Unique import batch hashes where appropriate.
+- Non-unique SHA-256 lookup for import attempts; repeated identical files remain independently auditable.
+- Stable provider identifiers and source-row lineage constraints for transaction deduplication.
 - Check constraints for enumerated asset classes and transaction types.
-- Decimal/numeric financial types rather than float.
+- `numeric(38,18)` transaction financial values rather than floating-point storage.
+- `numeric(9,6)` portfolio weights using the `0–100` convention.
 - `created_at` and `updated_at` on mutable entities.
 - Soft-delete/archive flags where historical traceability requires them.
+- Restrictive delete behavior for financial and provenance parents.
 
 ## 18. Security / RLS
 
-Supabase Row Level Security must be enabled on user-owned tables.
+Supabase Row Level Security is enabled on all implemented user-owned and reference tables. Ownership of portfolio data derives through `portfolios.user_id`.
 
-Baseline rule:
-- authenticated users can access only their own portfolios and portfolio-linked records.
-- security master/reference data can be read more broadly if appropriate.
-- write permissions should be restricted by table and role.
-- service-role operations must be server-side only.
-- API keys/secrets must never be committed to GitHub.
+- Authenticated users can access only their own portfolios, broker accounts, import batches, source rows, transactions and portfolio-security settings.
+- Transactions are browser read-only. Browser roles have no insert, update, delete or truncate ledger privileges.
+- `anon` has no access to the new import, transaction, settings or holdings objects.
+- Brokers, sectors, industries, securities and security identifiers remain browser read-only reference masters.
+- Import staging fields written by a browser are untrusted. Trusted commit processing must revalidate them before ledger creation.
+- RLS is not used as a substitute for same-portfolio foreign-key integrity.
+- Service-role RLS bypass is expected only for narrowly controlled server operations; service credentials must never reach browser code.
+- API keys, passwords and service-role secrets must never be committed to the repository.
+- `SECURITY DEFINER` functions should be avoided unless justified. Any future use requires a fixed safe `search_path`, schema-qualified objects, internal ownership checks and restricted execution privileges.
 
-V1 is personal-use, but the schema should not make future multi-user isolation impossible.
+V1 is personal-use, but these rules preserve future multi-user isolation.
+
+### 18.1 V1 authentication architecture
+
+Supabase Auth is the V1 identity provider. The browser application supports email/password login, password reset, persisted sessions, logout and protected application routes. The centralized Supabase browser client uses only the public anon/publishable key; a service-role credential must never be included in frontend configuration.
+
+The authenticated identity is the UUID issued by `auth.users.id`. Portfolio ownership continues to be enforced through `portfolios.user_id` and existing RLS policies; the application must never fabricate a user UUID or treat a client-supplied portfolio or user ID as proof of ownership.
+
+Public self-registration is disabled for V1. The application exposes no sign-up route, button or browser-side `signUp` operation. The initial owner account must be created through **Supabase Dashboard → Authentication → Users → Add user** (or an equivalently trusted administrative Auth workflow), never through a database insert, frontend service-role key or temporary public-registration endpoint. The hosted project's Auth settings should also disallow public email signups after the owner is provisioned as defense in depth.
+
+Password-reset redirect URLs must be explicitly allow-listed in Supabase Auth for local and deployed application origins. The frontend derives the reset destination from `VITE_APP_URL`, falling back to the current browser origin during local development.
+
+Authentication and authorization remain separate: a valid session identifies the caller, while RLS authorizes each database operation. The auth provider and route guards are deliberately independent of onboarding, plans, teams and account limits so a future reviewed public-registration UI can be enabled without changing the `auth.users.id` ownership model or weakening RLS.
 
 ## 19. Storage policy
 
 ### Supabase
 Use for:
 - transactions
-- holdings-derived data
+- the `current_holdings` view and future transaction-derived results
 - securities
 - portfolio configuration
 - market data needed by engines
@@ -724,38 +732,33 @@ Use:
 - processing status
 - version numbers
 
-## 21. V1 database scope
+## 21. Implemented migration status
 
-The first physical migration should implement only the foundation required for:
-1. authentication/user ownership
-2. portfolios
-3. brokers
-4. securities and asset classification
-5. XLSX/CSV import audit trail
-6. transactions
-7. derived holdings
-8. portfolio roles and position sizing settings
-9. basic price data
-10. core/satellite/thematic structure
-11. initial provenance framework
-12. RLS/security foundations
+### Foundation migration
 
-Advanced scoring/result tables can be added incrementally once the base schema is verified.
+`supabase/migrations/20260904180000_create_portfolio_foundation.sql` has been validated and applied to the remote Supabase project. It establishes portfolios, brokers, broker accounts, sectors, industries, securities, alternate security identifiers, audit timestamps, restrictive relationships and baseline RLS.
 
-## 22. Important non-goals for first migration
+### Import and transaction foundation migration
 
-Do not build the entire system in one migration.
+`supabase/migrations/20260905120000_create_import_transaction_foundation.sql` has passed fresh disposable local execution, constraints, two-user RLS tests, privilege checks, linting and schema-diff validation and has been applied to the remote Supabase project.
 
-Do not initially add:
-- complex tax engine
-- automatic trading/execution
-- intraday/scalping strategy engine
-- multi-user billing
-- massive document storage
-- full backtesting infrastructure
-- every possible broker integration
+## 22. Deferred features
 
-These can be added later without destabilizing the foundation.
+The following are deliberately deferred and must be introduced through separately reviewed migrations and deterministic application components:
+
+- atomic import commit operation
+- FIFO and transaction lots
+- realized and unrealized P&L engine
+- cash-ledger semantics
+- complete corporate-action processing
+- SPLIT and ADJUSTMENT quantity semantics
+- historical reconciliation operation
+- Angel One ingestion
+- Trendlyne ingestion
+
+Until the corresponding deterministic logic exists, unresolved quantity events must remain disclosed and date-sensitive analytics must not treat incomplete legacy transactions as complete.
+
+Other longer-term non-goals for the current foundation remain complex tax calculation, automatic trading, intraday/scalping strategies, multi-user billing, large binary document storage and full backtesting infrastructure.
 
 ## 23. Migration discipline
 
@@ -770,19 +773,4 @@ Never modify historical accounting/investment records merely to make a new score
 
 ## 24. Next implementation step
 
-Before writing the first SQL migration, inspect the actual Supabase project and confirm whether any tables, policies, functions or extensions already exist.
-
-Then create the initial migration in small, reviewable units:
-
-1. extensions/utilities
-2. portfolios + user ownership
-3. broker/security master
-4. import batches + source rows
-5. transactions
-6. corporate actions
-7. derived holdings
-8. portfolio security settings
-9. RLS policies
-10. seed/reference data
-
-Only after this foundation is validated should the advanced deterministic engines be implemented.
+The next database-writing step is the separate trusted import/commit workflow. It must be designed, implemented and validated before portfolio data is loaded. Advanced deterministic engines remain downstream work.

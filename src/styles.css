@@ -1,0 +1,86 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #18211d;
+  background: #f3f5f1;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, input { font: inherit; }
+a { color: #1e6548; text-underline-offset: 0.2em; }
+a:hover { color: #134832; }
+
+.auth-page { min-height: 100vh; display: grid; grid-template-columns: minmax(320px, 0.92fr) minmax(420px, 1.08fr); }
+.brand-panel { padding: clamp(2rem, 6vw, 5.5rem); display: flex; flex-direction: column; justify-content: space-between; color: #f8fbf7; background: radial-gradient(circle at 18% 12%, #32775b 0, transparent 34%), linear-gradient(150deg, #183c2d 0%, #10271f 100%); }
+.brand-panel > div:nth-child(2) { max-width: 35rem; }
+.brand-mark, .app-brand-mark { display: grid; place-items: center; background: #d2e9ac; color: #173b2c; font-weight: 800; }
+.brand-mark { width: 3rem; height: 3rem; border-radius: 0.8rem; margin-bottom: clamp(3rem, 10vh, 8rem); }
+.brand-name { font-size: 0.9rem; letter-spacing: 0.16em; text-transform: uppercase; color: #d2e9ac; font-weight: 700; }
+.brand-panel h1 { max-width: 12ch; margin: 1rem 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.7rem, 5vw, 5rem); font-weight: 500; line-height: 0.98; letter-spacing: -0.045em; }
+.brand-panel p:not(.brand-name) { max-width: 39rem; color: #c8d7d0; font-size: 1.05rem; line-height: 1.7; }
+.brand-footnote { margin-top: 3rem; font-size: 0.85rem !important; }
+
+.auth-panel { padding: 2rem; display: grid; place-items: center; }
+.auth-card { width: min(100%, 28rem); }
+.eyebrow { margin: 0 0 0.65rem; color: #307256; font-size: 0.76rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
+.auth-card h2, .centered-page h1, .dashboard-placeholder h1 { margin: 0; color: #14231c; font-family: Georgia, "Times New Roman", serif; font-weight: 500; letter-spacing: -0.03em; }
+.auth-card h2 { font-size: 2.35rem; }
+.auth-description { margin: 0.7rem 0 2rem; color: #637068; line-height: 1.6; }
+.auth-form { display: grid; gap: 0.72rem; }
+.auth-form label { color: #2e3a34; font-size: 0.88rem; font-weight: 700; }
+.label-row { display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; }
+.label-row a { font-size: 0.86rem; }
+.auth-form input { width: 100%; padding: 0.86rem 0.95rem; border: 1px solid #cad1cc; border-radius: 0.6rem; color: #18211d; background: #fff; outline: none; transition: border-color 140ms ease, box-shadow 140ms ease; }
+.auth-form input:focus { border-color: #35795c; box-shadow: 0 0 0 3px rgba(53, 121, 92, 0.14); }
+.button { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; padding: 0.75rem 1rem; border: 1px solid transparent; border-radius: 0.6rem; cursor: pointer; font-weight: 750; transition: background 140ms ease, border-color 140ms ease, transform 140ms ease; }
+.button:hover:not(:disabled) { transform: translateY(-1px); }
+.button:disabled { cursor: wait; opacity: 0.64; }
+.button-primary { margin-top: 1rem; color: #fff; background: #225f45; }
+.button-primary:hover:not(:disabled) { background: #184b36; }
+.button-secondary { color: #26352e; background: #fff; border-color: #cbd3ce; }
+.button-compact { min-height: 2.3rem; padding: 0.5rem 0.8rem; font-size: 0.86rem; }
+.link-button { text-decoration: none; }
+.auth-footer { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid #dce1dd; color: #778079; font-size: 0.84rem; line-height: 1.5; }
+.notice { margin-bottom: 1rem; padding: 0.85rem 0.95rem; border-radius: 0.55rem; background: #edf1ee; color: #3f4c45; font-size: 0.88rem; line-height: 1.5; }
+.notice-error, .shell-error { color: #7f2525; background: #faeaea; }
+.notice-success { color: #1d5b40; background: #e5f3ea; }
+
+.centered-page { min-height: 100vh; padding: 2rem; display: grid; place-content: center; justify-items: center; text-align: center; }
+.centered-page h1 { font-size: 2.4rem; }
+.muted { color: #68746d; }
+.loader { width: 2rem; height: 2rem; border: 3px solid #cdd7d1; border-top-color: #27684b; border-radius: 50%; animation: spin 700ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.app-shell { min-height: 100vh; background: #f4f6f3; }
+.app-header { min-height: 4.5rem; padding: 0 5vw; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid #dce2dd; background: rgba(255,255,255,0.92); }
+.app-brand { display: flex; align-items: center; gap: 0.7rem; color: #173b2c; font-weight: 800; text-decoration: none; }
+.app-brand-mark { width: 2rem; height: 2rem; border-radius: 0.5rem; }
+.account-menu { display: flex; align-items: center; gap: 1rem; }
+.account-email { color: #637068; font-size: 0.86rem; }
+.shell-error { padding: 0.75rem 5vw; font-size: 0.88rem; }
+.app-content { padding: clamp(2rem, 6vw, 5rem); }
+.dashboard-placeholder { max-width: 48rem; }
+.dashboard-placeholder h1 { margin-top: 0.4rem; font-size: clamp(2.5rem, 5vw, 4.5rem); }
+.dashboard-placeholder > p:not(.eyebrow) { max-width: 40rem; color: #657169; font-size: 1.05rem; line-height: 1.65; }
+.status-card { margin-top: 2.5rem; padding: 1.25rem; display: flex; align-items: flex-start; gap: 0.8rem; border: 1px solid #d8dfda; border-radius: 0.75rem; background: #fff; box-shadow: 0 16px 45px rgba(31, 51, 42, 0.07); }
+.status-dot { width: 0.65rem; height: 0.65rem; margin-top: 0.3rem; flex: 0 0 auto; border-radius: 50%; background: #36a36c; box-shadow: 0 0 0 4px #e2f4e9; }
+.status-card p { margin: 0.3rem 0 0; color: #6b766f; font-size: 0.9rem; }
+
+@media (max-width: 760px) {
+  .auth-page { grid-template-columns: 1fr; }
+  .brand-panel { min-height: 15rem; padding: 2rem; }
+  .brand-panel h1 { font-size: 2.6rem; }
+  .brand-panel p:not(.brand-name), .brand-footnote { display: none; }
+  .brand-mark { margin-bottom: 2rem; }
+  .auth-panel { padding: 3rem 1.25rem; }
+  .app-header { align-items: flex-start; padding-block: 1rem; }
+  .account-menu { align-items: flex-end; flex-direction: column; gap: 0.5rem; }
+  .account-email { max-width: 13rem; overflow: hidden; text-overflow: ellipsis; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
