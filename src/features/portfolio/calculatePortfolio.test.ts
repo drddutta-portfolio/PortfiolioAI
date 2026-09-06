@@ -1,0 +1,81 @@
+import { describe, expect, it } from "vitest"
+import { calculatePortfolio } from "./calculatePortfolio"
+import type { LedgerTransaction, PortfolioLedgerSnapshot } from "./types"
+
+function transaction(id: string, securityId: string, overrides: Partial<LedgerTransaction> = {}): LedgerTransaction {
+  return {
+    id,
+    portfolioId: "portfolio-1",
+    securityId,
+    sourceRowId: null,
+    brokerAccountId: "account-1",
+    transactionType: "BUY",
+    transactionDate: "2026-01-01",
+    quantity: "1",
+    unitPrice: "10.10",
+    charges: null,
+    taxes: null,
+    dataQualityStatus: "COMPLETE",
+    sourceSequence: 1,
+    ...overrides,
+  }
+}
+
+function snapshot(transactions: readonly LedgerTransaction[], securityCount: number): PortfolioLedgerSnapshot {
+  return {
+    portfolio: { id: "portfolio-1", name: "Consolidated Portfolio", currency: "INR" },
+    transactions,
+    securities: Array.from({ length: securityCount }, (_, index) => ({
+      id: `security-${index}`,
+      symbol: `STOCK${index}`,
+      name: `Stock ${index}`,
+      sector: null,
+      assetClass: "EQUITY",
+    })),
+    brokerAccounts: [{ id: "account-1", name: "Primary", brokerName: "Broker" }],
+    roles: new Map(),
+    prices: [],
+  }
+}
+
+describe("calculatePortfolio", () => {
+  it("preserves the real import's 477-row structure as 248 open and 22 closed histories", () => {
+    const rows: LedgerTransaction[] = []
+    for (let index = 0; index < 248; index += 1) rows.push(transaction(`open-${index}`, `security-${index}`))
+    for (let index = 0; index < 22; index += 1) {
+      const securityId = `security-${248 + index}`
+      rows.push(transaction(`closed-buy-${index}`, securityId))
+      rows.push(transaction(`closed-sell-${index}`, securityId, { transactionType: "SELL", unitPrice: "11.10" }))
+    }
+    for (let index = 0; index < 185; index += 1) rows.push(transaction(`extra-${index}`, "security-0"))
+    expect(rows).toHaveLength(477)
+    const result = calculatePortfolio(snapshot(rows, 270))
+    expect(result.totals.openHoldings).toBe(248)
+    expect(result.totals.closedHistories).toBe(22)
+    expect(result.totals.securityHistories).toBe(270)
+  })
+
+  it("uses exact decimals for a complete buy-only cost basis", () => {
+    const result = calculatePortfolio(snapshot([
+      transaction("a", "security-0", { quantity: "0.1", unitPrice: "0.2" }),
+      transaction("b", "security-0", { quantity: "0.2", unitPrice: "0.1" }),
+    ], 1))
+    expect(result.openPositions).toHaveLength(1)
+    expect(result.openPositions[0]!.investedAmount).toBe("0.04")
+    expect(result.openPositions[0]!.quantity).toBe("0.3")
+  })
+
+  it("does not infer cost basis, broker exposure, prices, or realised P&L", () => {
+    const result = calculatePortfolio(snapshot([
+      transaction("buy", "security-0", { brokerAccountId: null, transactionDate: null }),
+      transaction("sell", "security-0", { transactionType: "SELL", quantity: "0.5", unitPrice: "12" }),
+    ], 1))
+    expect(result.openPositions).toHaveLength(1)
+    const position = result.openPositions[0]!
+    expect(position.averageCost).toBeNull()
+    expect(position.currentValue).toBeNull()
+    expect(position.realisedPnl).toBeNull()
+    expect(position.brokerExposure).toBeNull()
+    expect(position.hasMissingDates).toBe(true)
+  })
+})

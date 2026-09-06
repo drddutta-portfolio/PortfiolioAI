@@ -14,6 +14,10 @@ const ImportPage = lazy(async () => {
   const module = await import("../pages/ImportPage")
   return { default: module.ImportPage }
 })
+const HoldingsPage = lazy(async () => {
+  const module = await import("../pages/HoldingsPage")
+  return { default: module.HoldingsPage }
+})
 
 export function AppRoutes() {
   return (
@@ -30,6 +34,16 @@ export function AppRoutes() {
           element={
             <AppShell>
               <DashboardPage />
+            </AppShell>
+          }
+        />
+        <Route
+          path="/app/holdings"
+          element={
+            <AppShell>
+              <Suspense fallback={<PageLoader label="Loading holdings" />}>
+                <HoldingsPage />
+              </Suspense>
             </AppShell>
           }
         />

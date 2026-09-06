@@ -28,7 +28,8 @@ export function AppShell({ children }: PropsWithChildren) {
           <span>PortfolioAI</span>
         </NavLink>
         <nav className="app-navigation" aria-label="Primary navigation">
-          <NavLink to="/app" end>Home</NavLink>
+          <NavLink to="/app" end>Dashboard</NavLink>
+          <NavLink to="/app/holdings">Holdings</NavLink>
           <NavLink to="/app/import">Import</NavLink>
         </nav>
         <div className="account-menu">
