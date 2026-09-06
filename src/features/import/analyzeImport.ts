@@ -79,6 +79,30 @@ function optionalText(value: SourceValue) {
   return text || null
 }
 
+function isValidIsin(value: string) {
+  const normalized = value.trim().toUpperCase()
+  if (!/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(normalized)) return false
+
+  const expanded = [...normalized]
+    .map((character) => /[0-9]/.test(character)
+      ? character
+      : String(character.charCodeAt(0) - 55))
+    .join("")
+
+  let sum = 0
+  let doubleDigit = false
+  for (let index = expanded.length - 1; index >= 0; index -= 1) {
+    let digit = Number(expanded[index])
+    if (doubleDigit) {
+      digit *= 2
+      if (digit > 9) digit -= 9
+    }
+    sum += digit
+    doubleDigit = !doubleDigit
+  }
+  return sum % 10 === 0
+}
+
 function parseTransactionType(value: SourceValue): TransactionType | null {
   const normalized = optionalText(value)?.toUpperCase()
   if (normalized === "BUY") return "BUY"
@@ -128,10 +152,11 @@ function buildStockMaster(rows: readonly ParsedSourceRow[]) {
   for (const row of rows.filter((candidate) => candidate.sheetKind === "STOCK_MASTER")) {
     const sourceSymbol = optionalText(sourceValue(findCell(row, FIELD_ALIASES.ticker)))
     if (!sourceSymbol) continue
+    const rawIsin = optionalText(sourceValue(findCell(row, FIELD_ALIASES.isin)))?.toUpperCase() ?? null
     const identity: StockMasterIdentity = {
       sourceSymbol,
       sourceCompany: optionalText(sourceValue(findCell(row, FIELD_ALIASES.company))),
-      isin: optionalText(sourceValue(findCell(row, FIELD_ALIASES.isin)))?.toUpperCase() ?? null,
+      isin: rawIsin && isValidIsin(rawIsin) ? rawIsin : null,
     }
     const key = normalizeSourceTicker(sourceSymbol)
     bySymbol.set(key, [...(bySymbol.get(key) ?? []), identity])
@@ -160,7 +185,9 @@ function resolveSecurity(
   if (sourceIsins.length === 1) {
     const sourceIsin = sourceIsins[0] ?? null
     const matches = references.securities.filter(
-      (security) => security.isin?.toUpperCase() === sourceIsin,
+      (security) => security.isin
+        && isValidIsin(security.isin)
+        && security.isin.toUpperCase() === sourceIsin,
     )
     if (matches.length === 1) {
       return {

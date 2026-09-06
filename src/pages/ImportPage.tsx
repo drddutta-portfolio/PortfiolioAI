@@ -6,26 +6,28 @@ import {
 } from "../features/import/analyzeImport"
 import { parseImportFile } from "../features/import/workbookParser"
 import type {
+  CommitImportResult,
   DuplicateContext,
   ImportAnalysis,
   ImportReferences,
   ImportSourceType,
   ParsedImportFile,
+  PreparedImportCommit,
   StageImportResult,
 } from "../features/import/types"
 import {
+  commitImportBatch,
   loadDuplicateContext,
   loadImportReferences,
+  prepareImportCommit,
+  resumePreparedImportCommit,
   stageImport,
 } from "../data/importRepository"
+import { displayError } from "../lib/displayError"
 
 const EMPTY_DUPLICATE_CONTEXT: DuplicateContext = {
   duplicateOfImportBatchId: null,
   priorRowHashes: new Set<string>(),
-}
-
-function displayError(error: unknown) {
-  return error instanceof Error ? error.message : "The import operation failed unexpectedly."
 }
 
 export function ImportPage() {
@@ -38,9 +40,14 @@ export function ImportPage() {
   const [manualMappings, setManualMappings] = useState<ManualSecurityMappings>({})
   const [analysis, setAnalysis] = useState<ImportAnalysis | null>(null)
   const [stageResult, setStageResult] = useState<StageImportResult | null>(null)
+  const [preparedCommit, setPreparedCommit] = useState<PreparedImportCommit | null>(null)
+  const [commitResult, setCommitResult] = useState<CommitImportResult | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isStaging, setIsStaging] = useState(false)
+  const [isPreparingCommit, setIsPreparingCommit] = useState(false)
+  const [isCommitting, setIsCommitting] = useState(false)
+  const [isResumingCommit, setIsResumingCommit] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -60,6 +67,18 @@ export function ImportPage() {
     return () => { active = false }
   }, [])
 
+  useEffect(() => {
+    if (!portfolioId || preparedCommit || isResumingCommit) return
+    const importBatchId = new URLSearchParams(window.location.search).get("resumeBatch")
+    if (!importBatchId) return
+    setIsResumingCommit(true)
+    setError(null)
+    void resumePreparedImportCommit(importBatchId, portfolioId)
+      .then(setPreparedCommit)
+      .catch((resumeError: unknown) => setError(displayError(resumeError)))
+      .finally(() => setIsResumingCommit(false))
+  }, [isResumingCommit, portfolioId, preparedCommit])
+
   const unresolvedRows = useMemo(
     () => analysis?.rows.filter((row) =>
       row.source.sheetKind === "TRANSACTIONS" && row.validationStatus !== "VALID") ?? [],
@@ -78,6 +97,8 @@ export function ImportPage() {
     setManualMappings({})
     setAnalysis(null)
     setStageResult(null)
+    setPreparedCommit(null)
+    setCommitResult(null)
     setError(null)
   }
 
@@ -134,6 +155,36 @@ export function ImportPage() {
     }
   }
 
+  const handlePrepareCommit = async () => {
+    if (!stageResult || !portfolioId || stageResult.status !== "VALIDATED") return
+    setIsPreparingCommit(true)
+    setError(null)
+    try {
+      setPreparedCommit(await prepareImportCommit(stageResult.importBatchId, portfolioId))
+    } catch (prepareError) {
+      setError(displayError(prepareError))
+    } finally {
+      setIsPreparingCommit(false)
+    }
+  }
+
+  const handleCommit = async () => {
+    if (!preparedCommit) return
+    const confirmed = window.confirm(
+      `Commit ${preparedCommit.approvedSourceRowIds.length} reviewed transactions to the ledger?`,
+    )
+    if (!confirmed) return
+    setIsCommitting(true)
+    setError(null)
+    try {
+      setCommitResult(await commitImportBatch(preparedCommit))
+    } catch (commitError) {
+      setError(displayError(commitError))
+    } finally {
+      setIsCommitting(false)
+    }
+  }
+
   if (isLoading) return <div className="import-page"><p className="muted">Loading import references…</p></div>
 
   return (
@@ -152,6 +203,29 @@ export function ImportPage() {
         <div className="notice notice-error" role="alert">
           No active portfolio is available. Create an owned portfolio before staging an import.
         </div>
+      ) : null}
+      {isResumingCommit ? <div className="notice" role="status">Restoring reviewed batch confirmation…</div> : null}
+      {!analysis && preparedCommit ? (
+        <section className="panel commit-panel">
+          <div>
+            <p className="eyebrow">Review boundary restored</p>
+            <h2>Awaiting trusted commit</h2>
+            <div className="notice notice-success" role="status">
+              Batch {preparedCommit.importBatchId} has {preparedCommit.approvedSourceRowIds.length} reviewed transaction rows.
+            </div>
+          </div>
+          <div className="commit-actions">
+            <button
+              className="button button-primary"
+              type="button"
+              disabled={isCommitting || commitResult !== null}
+              onClick={() => void handleCommit()}
+            >
+              {isCommitting ? "Committing…" : commitResult ? "Committed" : "Commit reviewed transactions"}
+            </button>
+            <small>The awaiting batch and source rows were loaded read-only; no evidence was restaged.</small>
+          </div>
+        </section>
       ) : null}
 
       <div className="import-grid">
@@ -349,6 +423,16 @@ export function ImportPage() {
                   Batch {stageResult.importBatchId} staged with status {stageResult.status}.
                 </div>
               ) : null}
+              {preparedCommit ? (
+                <div className="notice notice-success" role="status">
+                  {preparedCommit.approvedSourceRowIds.length} transaction rows are awaiting confirmation.
+                </div>
+              ) : null}
+              {commitResult ? (
+                <div className="notice notice-success" role="status">
+                  Batch committed with {commitResult.transactionCount} transactions.
+                </div>
+              ) : null}
             </div>
             <div className="commit-actions">
               <button
@@ -359,13 +443,24 @@ export function ImportPage() {
               >
                 {isStaging ? "Staging evidence…" : stageResult ? "Evidence staged" : "Stage reviewed evidence"}
               </button>
-              <button className="button button-primary" type="button" disabled>
-                Commit to ledger unavailable
+              <button
+                className="button button-secondary"
+                type="button"
+                disabled={!stageResult || stageResult.status !== "VALIDATED" || isPreparingCommit || preparedCommit !== null}
+                onClick={() => void handlePrepareCommit()}
+              >
+                {isPreparingCommit ? "Preparing confirmation…" : preparedCommit ? "Awaiting confirmation" : "Prepare final commit"}
+              </button>
+              <button
+                className="button button-primary"
+                type="button"
+                disabled={!preparedCommit || isCommitting || commitResult !== null}
+                onClick={() => void handleCommit()}
+              >
+                {isCommitting ? "Committing…" : commitResult ? "Committed" : "Commit reviewed transactions"}
               </button>
               <small>
-                {analysis.validationComplete
-                  ? "Validation is complete, but the reviewed trusted commit operation does not yet exist."
-                  : "Resolve invalid, ambiguous, duplicate and reconciliation issues before future commit."}
+                Transactions are created only by the authenticated trusted commit RPC. Browser table writes remain prohibited.
               </small>
             </div>
           </section>

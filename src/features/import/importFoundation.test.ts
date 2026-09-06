@@ -20,8 +20,8 @@ const NO_DUPLICATES: DuplicateContext = {
 const REFERENCES: ImportReferences = {
   portfolios: [{ id: "portfolio-a", name: "Primary" }],
   securities: [
-    { id: "security-a", symbol: "ALPHA", isin: "INE000A00001", name: "Alpha Ltd", exchange: "NSE" },
-    { id: "security-b", symbol: "BETA", isin: "INE000B00002", name: "Beta Ltd", exchange: "NSE" },
+    { id: "security-a", symbol: "ALPHA", isin: "INE009A01021", name: "Alpha Ltd", exchange: "NSE" },
+    { id: "security-b", symbol: "BEL", isin: "INE263A01024", name: "Bharat Electronics Ltd", exchange: "NSE" },
   ],
   securityIdentifiers: [],
   brokerAccounts: [{
@@ -163,12 +163,69 @@ describe("legacy transaction validation", () => {
       row("STOCK_MASTER", 2, {
         Symbol: evidence("ALPHA"),
         Company: evidence("Renamed Alpha"),
-        ISIN: evidence("INE000B00002"),
+        ISIN: evidence("INE263A01024"),
       }),
     ]
     const transaction = firstTransaction(analyzeImport(parsed(sourceRows), REFERENCES, {}, NO_DUPLICATES))
     expect(transaction.normalized.securityId).toBe("security-b")
     expect(transaction.securityResolution?.method).toBe("ISIN")
+  })
+
+  it("excludes checksum-invalid ISIN evidence without discarding the raw workbook value", () => {
+    const sourceRows = [
+      transactionRow({ Ticker: evidence("NSE:BEL") }),
+      row("STOCK_MASTER", 2, {
+        Symbol: evidence("NSE:BEL"),
+        Company: evidence("Bharat Electronics Ltd"),
+        ISIN: evidence("INE263A01024"),
+      }),
+      row("STOCK_MASTER", 3, {
+        Symbol: evidence("NSE:BEL"),
+        Company: evidence("Bharat Electronics Ltd"),
+        ISIN: evidence("INE263A01025"),
+      }),
+    ]
+
+    const analysis = analyzeImport(parsed(sourceRows), REFERENCES, {}, NO_DUPLICATES)
+    const transaction = firstTransaction(analysis)
+    const invalidEvidence = analysis.rows.find(
+      (candidate) => candidate.source.originalRowNumber === 3,
+    )?.source.cells.ISIN
+
+    expect(transaction.normalized.securityId).toBe("security-b")
+    expect(transaction.securityResolution).toMatchObject({
+      method: "ISIN",
+      sourceIsin: "INE263A01024",
+    })
+    expect(invalidEvidence?.value).toBe("INE263A01025")
+  })
+
+  it("falls through to a trusted identifier when STOCK MASTER has only an invalid ISIN", () => {
+    const sourceRows = [
+      transactionRow(),
+      row("STOCK_MASTER", 2, {
+        Symbol: evidence("ALPHA"),
+        Company: evidence("Alpha Ltd"),
+        ISIN: evidence("INE263A01025"),
+      }),
+    ]
+    const references: ImportReferences = {
+      ...REFERENCES,
+      securityIdentifiers: [{
+        securityId: "security-a",
+        identifierType: "LEGACY_TICKER",
+        identifierValue: "ALPHA",
+        providerCode: "LEGACY_WORKBOOK",
+      }],
+    }
+
+    const transaction = firstTransaction(analyzeImport(
+      parsed(sourceRows), references, {}, NO_DUPLICATES,
+    ))
+
+    expect(transaction.normalized.securityId).toBe("security-a")
+    expect(transaction.securityResolution?.method).toBe("IDENTIFIER")
+    expect(transaction.securityResolution?.sourceIsin).toBeNull()
   })
 
   it("preserves but ignores formula-derived accounting fields", () => {

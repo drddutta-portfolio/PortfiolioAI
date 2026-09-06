@@ -2,9 +2,11 @@ import type { Json, TablesInsert } from "../../supabase/types/database.types"
 import type {
   AnalyzedSourceRow,
   CellEvidence,
+  CommitImportResult,
   DuplicateContext,
   ImportReferences,
   ImportSourceType,
+  PreparedImportCommit,
   StageImportInput,
   StageImportResult,
 } from "../features/import/types"
@@ -247,4 +249,110 @@ export async function stageImport(input: StageImportInput): Promise<StageImportR
     }
     throw error
   }
+}
+
+export async function prepareImportCommit(
+  importBatchId: string,
+  portfolioId: string,
+): Promise<PreparedImportCommit> {
+  const approvedSourceRowIds = await loadApprovedTransactionSourceRowIds(importBatchId, portfolioId)
+
+  const batchResult = await supabase
+    .from("import_batches")
+    .update({ status: "AWAITING_CONFIRMATION" })
+    .eq("id", importBatchId)
+    .eq("portfolio_id", portfolioId)
+    .eq("status", "VALIDATED")
+    .select("id,status")
+    .single()
+  if (batchResult.error) throw batchResult.error
+  if (batchResult.data.status !== "AWAITING_CONFIRMATION") {
+    throw new Error("Import batch did not enter AWAITING_CONFIRMATION.")
+  }
+
+  return { importBatchId, status: "AWAITING_CONFIRMATION", approvedSourceRowIds }
+}
+
+async function loadApprovedTransactionSourceRowIds(importBatchId: string, portfolioId: string) {
+  const rowsResult = await supabase
+    .from("import_source_rows")
+    .select("id,row_number,normalized_data")
+    .eq("import_batch_id", importBatchId)
+    .eq("portfolio_id", portfolioId)
+    .eq("validation_status", "VALID")
+    .order("row_number")
+  if (rowsResult.error) throw rowsResult.error
+
+  const approvedSourceRowIds = (rowsResult.data ?? []).flatMap((row) => {
+    const normalized = row.normalized_data
+    return normalized
+      && typeof normalized === "object"
+      && !Array.isArray(normalized)
+      && normalized.record_kind === "TRANSACTION"
+      ? [row.id]
+      : []
+  })
+  if (approvedSourceRowIds.length === 0) {
+    throw new Error("No validated transaction rows are available for commit confirmation.")
+  }
+  return approvedSourceRowIds
+}
+
+export async function resumePreparedImportCommit(
+  importBatchId: string,
+  portfolioId: string,
+): Promise<PreparedImportCommit> {
+  const batchResult = await supabase
+    .from("import_batches")
+    .select("id,status")
+    .eq("id", importBatchId)
+    .eq("portfolio_id", portfolioId)
+    .eq("status", "AWAITING_CONFIRMATION")
+    .single()
+  if (batchResult.error) throw batchResult.error
+  if (batchResult.data.status !== "AWAITING_CONFIRMATION") {
+    throw new Error("Import batch is not awaiting confirmation.")
+  }
+
+  const approvedSourceRowIds = await loadApprovedTransactionSourceRowIds(importBatchId, portfolioId)
+  return { importBatchId, status: "AWAITING_CONFIRMATION", approvedSourceRowIds }
+}
+
+function parseCommitResult(value: Json): CommitImportResult {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Trusted import commit returned an invalid response.")
+  }
+  const rawTransactionIds = value.transaction_ids
+  const transactionIds = Array.isArray(rawTransactionIds)
+    ? rawTransactionIds.filter((id): id is string => typeof id === "string")
+    : null
+  if (
+    value.status !== "COMMITTED"
+    || typeof value.import_batch_id !== "string"
+    || typeof value.transaction_count !== "number"
+    || !Array.isArray(rawTransactionIds)
+    || !transactionIds
+    || transactionIds.length !== rawTransactionIds.length
+    || typeof value.already_committed !== "boolean"
+  ) {
+    throw new Error("Trusted import commit returned an unexpected response shape.")
+  }
+  return {
+    importBatchId: value.import_batch_id,
+    status: value.status,
+    transactionCount: value.transaction_count,
+    transactionIds,
+    alreadyCommitted: value.already_committed,
+  }
+}
+
+export async function commitImportBatch(
+  prepared: PreparedImportCommit,
+): Promise<CommitImportResult> {
+  const result = await supabase.rpc("commit_import_batch_v1", {
+    p_import_batch_id: prepared.importBatchId,
+    p_approved_source_row_ids: [...prepared.approvedSourceRowIds],
+  })
+  if (result.error) throw result.error
+  return parseCommitResult(result.data)
 }

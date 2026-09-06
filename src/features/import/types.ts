@@ -180,6 +180,20 @@ export interface StageImportResult {
   readonly status: "VALIDATED" | "PREVIEWED"
 }
 
+export interface PreparedImportCommit {
+  readonly importBatchId: string
+  readonly status: "AWAITING_CONFIRMATION"
+  readonly approvedSourceRowIds: readonly string[]
+}
+
+export interface CommitImportResult {
+  readonly importBatchId: string
+  readonly status: "COMMITTED"
+  readonly transactionCount: number
+  readonly transactionIds: readonly string[]
+  readonly alreadyCommitted: boolean
+}
+
 export function toJsonObject(value: Readonly<Record<string, Json>>): Json {
   return value
 }
