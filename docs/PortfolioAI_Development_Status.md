@@ -2,7 +2,7 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 5 — Transactions, FIFO Lot Accounting & Portfolio Accounting complete
+**Current milestone:** Stage 5.1 — Transaction Management Completion complete
 
 **Last reviewed:** 7 September 2026
 
@@ -175,6 +175,30 @@ The post-migration production snapshot remains 477 active transactions, 270
 security histories, 248 open holdings, 22 closed histories, and 248/248 current
 price coverage. Market value remains ₹22,48,208.55; Stage 5 did not mutate market
 data or imported ledger evidence.
+
+## E.1 Implemented Stage 5.1
+
+Stage 5.1 adds trusted canonical-security onboarding within manual transaction entry,
+audited transaction correction by supersession, sortable transaction headers,
+combined security/source/quality/evidence filters, and durable requirements
+traceability. New securities receive an explicit unresolved Angel One mapping until
+trusted provider-master evidence can verify them; no provider identity or CMP is
+fabricated. Corrections preserve original transactions and imported source evidence,
+while on-demand accounting automatically reads the replacement `ACTIVE` row.
+
+Migrations `20260907190000_complete_stage5_1_transaction_management.sql`,
+`20260907200000_fix_isin_validation_lint.sql`, and
+`20260907210000_store_security_series_canonically.sql` are applied to the linked
+project. The latter two forward-only migrations preserve applied history while
+removing a lint warning and placing exchange series on the canonical security
+listing rather than the globally unique identifier table.
+
+Post-deployment read-only validation remains unchanged: 477 active transactions,
+270 security histories, 248 open holdings, 22 closed histories, 270 canonical
+securities, 248 verified mappings and 248 latest prices. No production security,
+transaction, correction request, or mapping was fabricated for testing. Remote
+schema lint and migration history pass; the local/test pgTAP suite validates both
+trusted workflows transactionally.
 
 ## F. Deferred future work
 

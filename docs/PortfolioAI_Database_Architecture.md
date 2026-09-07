@@ -249,6 +249,23 @@ historical-reconciliation operations remain deferred; when implemented, each mus
 validate ownership and all untrusted inputs, then update every related ledger,
 lineage and batch state in one database transaction.
 
+Stage 5.1 implements the BUY/SELL correction subset through
+`correct_transaction_v1`. The original transaction becomes `SUPERSEDED`; a new
+`ACTIVE` transaction links through `corrected_from_transaction_id` and records the
+authenticated correcting user, timestamp, reason and idempotent request evidence.
+Imported source-row lineage remains attached to the original immutable row. Current
+holdings and FIFO projections rebuild from effective `ACTIVE` rows without a mutable
+derived-lot cache.
+
+Canonical NSE/BSE equity and ETF onboarding uses `create_manual_security_v1`.
+Browser roles retain read-only access to reference masters. The function normalizes
+identity, validates ISIN checksum where supplied, rejects symbol/ISIN collisions,
+stores exchange listing series on `securities.series`, and records manual
+provenance. Series is not an alternate globally unique identifier. The workflow
+creates an `UNRESOLVED` Angel One mapping when no
+trusted provider instrument identity is available; provider tokens and prices are
+never inferred.
+
 #### Trusted import-commit operation
 
 The browser has no mutation privilege on `transactions`. V1 parsing and review use

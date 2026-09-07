@@ -6,7 +6,8 @@
   text-rendering: optimizeLegibility;
 }
 
-.transaction-controls { grid-template-columns: minmax(220px, 2fr) repeat(5, minmax(130px, 1fr)); }
+.transaction-controls { grid-template-columns: minmax(220px, 2fr) repeat(7, minmax(130px, 1fr)); }
+.sort-header { border: 0; padding: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .check-control { align-self: end; display: flex !important; flex-direction: row !important; align-items: center; gap: .5rem; min-height: 42px; }
 .check-control input { width: auto; }
 .transactions-table { min-width: 1500px; }
@@ -25,6 +26,7 @@
 .manual-transaction-form label { display: flex; flex-direction: column; gap: .35rem; font-size: .8rem; color: #526078; }
 .manual-transaction-form input, .manual-transaction-form select, .manual-transaction-form textarea { border: 1px solid #d4dbea; border-radius: 8px; padding: .7rem .75rem; background: white; color: inherit; font: inherit; }
 .manual-transaction-form textarea { min-height: 72px; resize: vertical; }
+.nested-form { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e1e6ef; }
 .form-wide { grid-column: 1 / -1; }
 .form-actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 @media (max-width: 900px) {

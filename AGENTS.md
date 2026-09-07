@@ -21,7 +21,9 @@ Read and apply the documents below in this authority order before implementation
    implementation discipline.
 4. `docs/PortfolioAI_Development_Status.md` — actual implemented state, completed
    milestones, known limitations, current milestone, and next approved work.
-5. Relevant stage-specific documentation — detailed decisions, architecture, and
+5. `docs/PortfolioAI_Requirements_Register.md` — requirement traceability and
+   implementation placement; it does not override canonical specifications.
+6. Relevant stage-specific documentation — detailed decisions, architecture, and
    completed behaviour for that stage.
 
 The first three documents are canonical specifications, not suggestions. The
@@ -54,6 +56,7 @@ Keep this check proportional and practical, but complete it before coding:
 - [ ] Read `docs/PortfolioAI_Database_Architecture.md`.
 - [ ] Read `docs/PortfolioAI_Development_Rules.md`.
 - [ ] Read `docs/PortfolioAI_Development_Status.md`.
+- [ ] Read `docs/PortfolioAI_Requirements_Register.md`.
 - [ ] Read relevant stage-specific documentation.
 - [ ] Identify the current approved milestone.
 - [ ] Check the proposed work against the Blueprint.

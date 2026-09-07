@@ -894,7 +894,9 @@ export type Database = {
       securities: {
         Row: {
           asset_class: string
+          created_by: string | null
           created_at: string
+          creation_source: string
           currency: string
           exchange: string
           id: string
@@ -904,12 +906,15 @@ export type Database = {
           isin: string | null
           name: string
           sector_id: string | null
+          series: string | null
           symbol: string
           updated_at: string
         }
         Insert: {
           asset_class: string
+          created_by?: string | null
           created_at?: string
+          creation_source?: string
           currency?: string
           exchange: string
           id?: string
@@ -919,12 +924,15 @@ export type Database = {
           isin?: string | null
           name: string
           sector_id?: string | null
+          series?: string | null
           symbol: string
           updated_at?: string
         }
         Update: {
           asset_class?: string
+          created_by?: string | null
           created_at?: string
+          creation_source?: string
           currency?: string
           exchange?: string
           id?: string
@@ -934,6 +942,7 @@ export type Database = {
           isin?: string | null
           name?: string
           sector_id?: string | null
+          series?: string | null
           symbol?: string
           updated_at?: string
         }
@@ -950,6 +959,41 @@ export type Database = {
             columns: ["sector_id"]
             isOneToOne: false
             referencedRelation: "sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_creation_requests: {
+        Row: {
+          created_at: string
+          id: string
+          idempotency_key: string
+          request_hash: string
+          security_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          idempotency_key: string
+          request_hash: string
+          security_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          idempotency_key?: string
+          request_hash?: string
+          security_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_creation_requests_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
             referencedColumns: ["id"]
           },
         ]
@@ -998,11 +1042,59 @@ export type Database = {
           },
         ]
       }
+      transaction_correction_requests: {
+        Row: {
+          corrected_transaction_id: string
+          created_at: string
+          id: string
+          idempotency_key: string
+          original_transaction_id: string
+          request_hash: string
+          user_id: string
+        }
+        Insert: {
+          corrected_transaction_id: string
+          created_at?: string
+          id?: string
+          idempotency_key: string
+          original_transaction_id: string
+          request_hash: string
+          user_id: string
+        }
+        Update: {
+          corrected_transaction_id?: string
+          created_at?: string
+          id?: string
+          idempotency_key?: string
+          original_transaction_id?: string
+          request_hash?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transaction_correction_requests_corrected_transaction_id_fkey"
+            columns: ["corrected_transaction_id"]
+            isOneToOne: true
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transaction_correction_requests_original_transaction_id_fkey"
+            columns: ["original_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transactions: {
         Row: {
           accounting_status: string
           broker_account_id: string | null
           charges: number | null
+          corrected_by: string | null
+          corrected_from_transaction_id: string | null
+          correction_reason: string | null
           created_at: string
           currency_code: string
           data_quality_status: string
@@ -1039,6 +1131,9 @@ export type Database = {
           accounting_status?: string
           broker_account_id?: string | null
           charges?: number | null
+          corrected_by?: string | null
+          corrected_from_transaction_id?: string | null
+          correction_reason?: string | null
           created_at?: string
           currency_code?: string
           data_quality_status: string
@@ -1075,6 +1170,9 @@ export type Database = {
           accounting_status?: string
           broker_account_id?: string | null
           charges?: number | null
+          corrected_by?: string | null
+          corrected_from_transaction_id?: string | null
+          correction_reason?: string | null
           created_at?: string
           currency_code?: string
           data_quality_status?: string
@@ -1113,6 +1211,13 @@ export type Database = {
             columns: ["broker_account_id", "portfolio_id"]
             isOneToOne: false
             referencedRelation: "broker_accounts"
+            referencedColumns: ["id", "portfolio_id"]
+          },
+          {
+            foreignKeyName: "transactions_correction_portfolio_fkey"
+            columns: ["corrected_from_transaction_id", "portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
             referencedColumns: ["id", "portfolio_id"]
           },
           {
@@ -1224,12 +1329,44 @@ export type Database = {
         }
         Returns: Json
       }
+      create_manual_security_v1: {
+        Args: {
+          p_asset_class: string
+          p_exchange: string
+          p_idempotency_key: string
+          p_instrument_type: string
+          p_isin: string
+          p_name: string
+          p_portfolio_id: string
+          p_series: string
+          p_symbol: string
+        }
+        Returns: Json
+      }
+      correct_transaction_v1: {
+        Args: {
+          p_broker_account_id: string
+          p_idempotency_key: string
+          p_notes: string
+          p_original_transaction_id: string
+          p_portfolio_id: string
+          p_quantity: number
+          p_reason: string
+          p_security_id: string
+          p_total_charges: number
+          p_transaction_date: string
+          p_transaction_type: string
+          p_unit_price: number
+        }
+        Returns: Json
+      }
       portfolioai_import_cell: {
         Args: { p_aliases: string[]; p_raw_data: Json }
         Returns: Json
       }
       portfolioai_import_cell_text: { Args: { p_cell: Json }; Returns: string }
       portfolioai_import_date: { Args: { p_cell: Json }; Returns: string }
+      portfolioai_is_valid_isin: { Args: { p_isin: string }; Returns: boolean }
       portfolioai_normalize_import_token: {
         Args: { p_value: string }
         Returns: string
