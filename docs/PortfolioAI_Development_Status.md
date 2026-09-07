@@ -2,7 +2,7 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 5 — Transactions, FIFO Lot Accounting & Portfolio Accounting
+**Current milestone:** Stage 5 — Transactions, FIFO Lot Accounting & Portfolio Accounting complete
 
 **Last reviewed:** 7 September 2026
 
@@ -136,23 +136,25 @@ These are explicit, deferred limitations—not accidental omissions:
 - Advanced investment engines remain future work.
 - Manual transaction-entry UI is not implemented.
 
-## E. Current next milestone
+## E. Completed Stage 5
 
 ### Stage 5 — Transactions, FIFO Lot Accounting & Portfolio Accounting
 
-This section records approved scope only. Stage 5 has not been designed or
-implemented by this governance milestone.
+Stage 5 application code, additive migration, tests and implementation documentation
+are complete. Migration `20260907160000_create_stage5_manual_transactions.sql` is
+applied locally and remotely. Local SQL security tests and local/remote schema lint
+pass, and generated Supabase types reflect the deployed schema.
 
-**Transactions page:** add user-facing navigation and a page for reviewing
+**Transactions page:** user-facing navigation and a page for reviewing
 historical transactions, with search; sorting; security, broker/account,
 transaction-type, and available-date filters; and visible data quality, source, and
 provenance.
 
-**Manual transaction entry:** support validated, trusted BUY/SELL entry with
+**Manual transaction entry:** validated, trusted BUY/SELL entry with
 portfolio, broker/demat account, security, transaction date, quantity, price,
 available charges, appropriate source/notes, and auditable provenance.
 
-**Accounting engine:** introduce transaction lots and deterministic FIFO accounting,
+**Accounting engine:** on-demand deterministic FIFO lot accounting,
 including partial sales, remaining quantity and cost basis, average cost, realised
 and unrealised P&L, and explicit coverage/completeness states.
 
@@ -163,6 +165,16 @@ where deterministic FIFO is impossible.
 **Auditability:** preserve imported historical evidence. Corrections and reversals
 must be linked and auditable; manual changes must retain provenance and must not
 silently rewrite trusted history.
+
+Read-only production-data validation confirms 4 of the 28 open partial-sale
+histories have provable gross FIFO chronology; 24 remain incomplete because dates
+are missing. All 4 have unknown historical charges/taxes and are consequently
+labelled `PARTIAL_ACCOUNTING`, not complete net P&L.
+
+The post-migration production snapshot remains 477 active transactions, 270
+security histories, 248 open holdings, 22 closed histories, and 248/248 current
+price coverage. Market value remains ₹22,48,208.55; Stage 5 did not mutate market
+data or imported ledger evidence.
 
 ## F. Deferred future work
 

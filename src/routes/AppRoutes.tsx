@@ -18,6 +18,10 @@ const HoldingsPage = lazy(async () => {
   const module = await import("../pages/HoldingsPage")
   return { default: module.HoldingsPage }
 })
+const TransactionsPage = lazy(async () => {
+  const module = await import("../pages/TransactionsPage")
+  return { default: module.TransactionsPage }
+})
 
 export function AppRoutes() {
   return (
@@ -29,6 +33,16 @@ export function AppRoutes() {
       <Route path="/auth/update-password" element={<UpdatePasswordPage />} />
 
       <Route element={<RequireAuth />}>
+        <Route
+          path="/app/transactions"
+          element={
+            <AppShell>
+              <Suspense fallback={<PageLoader label="Loading transactions" />}>
+                <TransactionsPage />
+              </Suspense>
+            </AppShell>
+          }
+        />
         <Route
           path="/app"
           element={

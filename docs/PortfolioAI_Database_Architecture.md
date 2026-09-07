@@ -1,7 +1,7 @@
 # PortfolioAI — Database Architecture
 
 **Step 0.4 — Foundation database design**  
-**Status:** Stages 1–4 implemented; foundation, transaction/import, and market-data migrations applied remotely
+**Status:** Stages 1–5 implemented; Stage 5 trusted-write migration applied remotely
 
 ## 1. Purpose
 
@@ -284,6 +284,26 @@ failure rolls back every ledger and batch-state change; staged evidence remains
 available for diagnosis and correction. The operation was introduced through its
 own migration and validated with two-user RLS/security, concurrency/retry and
 performance tests before deployment.
+
+### 5.6 Stage 5 manual transaction operation
+
+`create_manual_transaction_v1` is the narrowly scoped authenticated path for
+manual BUY/SELL records. It derives ownership from `auth.uid()`, validates the
+portfolio/account/security relationships and exact numeric inputs, serializes
+quantity validation per portfolio/security, rejects oversells, and inserts a
+transaction with explicit `MANUAL / PORTFOLIOAI` provenance. The browser retains
+read-only access to `transactions`.
+
+`manual_transaction_requests` is a server-owned UUID idempotency ledger binding
+each caller/key to a SHA-256 request hash and created transaction. It has RLS and no
+browser table privileges. The security-definer RPC uses an empty search path,
+schema-qualified objects, and authenticated-only execute privilege.
+
+FIFO is currently an on-demand exact-decimal projection rather than stored derived
+state. This is appropriate for the small personal portfolio, avoids stale caches,
+and retains match-level BUY/SELL transaction IDs in the calculation result. A
+future tax/reporting stage may materialise those results through a rebuildable,
+versioned projection without changing the ledger.
 
 ## 6. Market-data tables
 
@@ -884,8 +904,7 @@ MOTHERSON identity is `ANGEL_ONE / NSE / MOTHERSON-EQ / 4204`.
 
 The following are deliberately deferred and must be introduced through separately reviewed migrations and deterministic application components:
 
-- FIFO and transaction lots
-- realized and unrealized P&L engine
+- persisted/materialised tax-lot snapshots (Stage 5 computes auditable FIFO matches on demand)
 - cash-ledger semantics
 - complete corporate-action processing
 - SPLIT and ADJUSTMENT quantity semantics
@@ -912,12 +931,11 @@ Never modify historical accounting/investment records merely to make a new score
 
 ## 24. Next implementation step
 
-The next approved milestone is Stage 5 — Transactions, FIFO Lot Accounting &
-Portfolio Accounting. It includes a transaction-review page, safe manual BUY/SELL
-entry, deterministic FIFO lot accounting and explicit completeness behaviour for
-histories whose chronological order cannot be established. Unknown transaction
-dates must remain null; historical import evidence and correction lineage must not
-be rewritten to make FIFO appear complete.
+Stage 5 and its additive trusted manual-write migration are applied and validated.
+Its on-demand FIFO projection
+keeps transactions authoritative and exposes match-level transaction lineage;
+unknown dates remain null and chronology-incomplete histories do not receive a
+fabricated basis.
 
 Advanced deterministic engines remain downstream work. Trendlyne analyst and
 estimate ingestion belongs in the Trendlyne phase; credit-rating ingestion waits

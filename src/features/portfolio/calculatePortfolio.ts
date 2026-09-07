@@ -1,4 +1,5 @@
 import Decimal from "decimal.js"
+import { calculateFifoAccounting } from "../accounting/fifoAccounting"
 import type {
   BrokerAccountReference,
   LedgerTransaction,
@@ -73,16 +74,9 @@ function buildPosition(
   const currentQuantity = quantityComplete
     ? sum(quantities.filter((quantity): quantity is Decimal => quantity !== null))
     : ZERO
-  const buyOnly = transactions.every((transaction) => transaction.transactionType === "BUY")
-  const pricedBuyOnly = buyOnly && transactions.every((transaction) =>
-    transaction.quantity !== null && transaction.unitPrice !== null)
-  const invested = pricedBuyOnly
-    ? sum(transactions.map((transaction) =>
-      new Decimal(transaction.quantity ?? "0").times(transaction.unitPrice ?? "0")))
-    : null
-  const averageCost = invested && currentQuantity.gt(0)
-    ? invested.div(currentQuantity)
-    : null
+  const accounting = calculateFifoAccounting(transactions)
+  const invested = accounting.remainingCostBasis === null ? null : new Decimal(accounting.remainingCostBasis)
+  const averageCost = accounting.averageRemainingCost === null ? null : new Decimal(accounting.averageRemainingCost)
 
   const price = snapshot.prices.find((candidate) => candidate.securityId === security.id)
   const currentPrice = price ? new Decimal(price.price) : null
@@ -92,20 +86,7 @@ function buildPosition(
     ? unrealisedPnl.div(invested).times(100)
     : null
 
-  const fullyClosedBuySell = currentQuantity.isZero()
-    && transactions.every((transaction) => transaction.transactionType === "BUY" || transaction.transactionType === "SELL")
-    && transactions.every((transaction) =>
-      transaction.quantity !== null
-      && transaction.unitPrice !== null
-      && transaction.charges !== null
-      && transaction.taxes !== null)
-  const realisedPnl = fullyClosedBuySell
-    ? sum(transactions.map((transaction) => {
-      const gross = new Decimal(transaction.quantity ?? "0").times(transaction.unitPrice ?? "0")
-      const costs = new Decimal(transaction.charges ?? "0").plus(transaction.taxes ?? "0")
-      return transaction.transactionType === "SELL" ? gross.minus(costs) : gross.plus(costs).negated()
-    }))
-    : null
+  const realisedPnl = accounting.realisedPnl === null ? null : new Decimal(accounting.realisedPnl)
 
   const accounts = new Map(snapshot.brokerAccounts.map((account) => [account.id, account]))
   return {
@@ -124,6 +105,11 @@ function buildPosition(
     unrealisedPnlPercent: unrealisedPnlPercent ? text(unrealisedPnlPercent) : null,
     portfolioWeightPercent: null,
     realisedPnl: realisedPnl ? text(realisedPnl) : null,
+    realisedCostBasis: accounting.realisedCostBasis,
+    realisedProceeds: accounting.realisedProceeds,
+    totalQuantitySold: accounting.totalQuantitySold,
+    accountingQuality: accounting.quality,
+    accountingReason: accounting.reason,
     brokerExposure: brokerExposure(transactions, accounts),
     hasMissingDates: transactions.some((transaction) => transaction.transactionDate === null),
     hasMissingBrokers: transactions.some((transaction) => transaction.brokerAccountId === null),
@@ -133,12 +119,8 @@ function buildPosition(
     priceProvider: price?.provider ?? null,
     priceSessionStatus: price?.marketSessionStatus ?? null,
     isPriceStale: price?.isStale ?? false,
-    costBasisReason: averageCost ? null : buyOnly
-      ? "One or more purchase prices are unavailable."
-      : "Sell or non-purchase history requires an approved lot-accounting method.",
-    realisedPnlReason: realisedPnl ? null : currentQuantity.isZero()
-      ? "Charges, taxes, prices, or supported BUY/SELL evidence are incomplete."
-      : "Position remains open; realised lot accounting is not inferred.",
+    costBasisReason: averageCost ? accounting.reason : accounting.reason,
+    realisedPnlReason: realisedPnl ? accounting.reason : accounting.reason ?? "No disposal has been recorded.",
   }
 }
 
@@ -160,14 +142,18 @@ export function calculatePortfolio(snapshot: PortfolioLedgerSnapshot): Portfolio
   const closedPositions = positions.filter((position) => new Decimal(position.quantity).isZero())
   const investedPositions = rawOpenPositions.filter((position) => position.investedAmount !== null)
   const valuedPositions = rawOpenPositions.filter((position) => position.currentValue !== null)
-  const realisedPositions = closedPositions.filter((position) => position.realisedPnl !== null)
+  const disposalPositions = positions.filter((position) => new Decimal(position.totalQuantitySold).gt(0))
+  const realisedPositions = disposalPositions.filter((position) => position.realisedPnl !== null)
   const invested = investedPositions.length
     ? sum(investedPositions.map((position) => new Decimal(position.investedAmount ?? "0")))
     : null
   const currentValue = valuedPositions.length === rawOpenPositions.length && valuedPositions.length
     ? sum(valuedPositions.map((position) => new Decimal(position.currentValue ?? "0")))
     : null
-  const unrealised = currentValue && investedPositions.length === rawOpenPositions.length && invested
+  const unrealised = currentValue
+    && investedPositions.length === rawOpenPositions.length
+    && rawOpenPositions.every((position) => position.accountingQuality === "DETERMINISTIC")
+    && invested
     ? currentValue.minus(invested)
     : null
   const realised = realisedPositions.length
@@ -196,8 +182,11 @@ export function calculatePortfolio(snapshot: PortfolioLedgerSnapshot): Portfolio
       unrealisedPnlPercent: unrealised && invested?.gt(0) ? text(unrealised.div(invested).times(100)) : null,
       realisedPnl: realised ? text(realised) : null,
       realisedCoverage: realisedPositions.length,
+      realisedEligibleHistories: disposalPositions.length,
       freshPriceCoverage: openPositions.filter((position) => position.currentPrice !== null && !position.isPriceStale).length,
       stalePriceCoverage: openPositions.filter((position) => position.currentPrice !== null && position.isPriceStale).length,
+      accountingCoverage: openPositions.filter((position) => position.investedAmount !== null).length,
+      incompleteAccountingPositions: openPositions.filter((position) => position.investedAmount === null).length,
     },
     quality: {
       holdingsWithMissingDates: openPositions.filter((position) => position.hasMissingDates).length,

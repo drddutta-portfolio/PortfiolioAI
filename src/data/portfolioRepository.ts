@@ -84,7 +84,7 @@ export async function loadPortfolioLedgerSnapshot(
   const portfolio = portfoliosResult.data
 
   const [transactionsResult, securitiesResult, sectorsResult, accountsResult, brokersResult, settingsResult] = await Promise.all([
-    supabase.from("transactions").select("id,portfolio_id,security_id,broker_account_id,transaction_type,transaction_date,quantity,unit_price,charges,taxes,data_quality_status,source_sequence,import_source_row_id").eq("portfolio_id", portfolio.id).eq("accounting_status", "ACTIVE").order("source_sequence"),
+    supabase.from("transactions").select("id,portfolio_id,security_id,broker_account_id,transaction_type,transaction_date,executed_at,quantity,unit_price,gross_amount,charges,taxes,net_amount,data_quality_status,accounting_status,source_type,source_provider,source_sequence,import_batch_id,import_source_row_id,notes").eq("portfolio_id", portfolio.id).eq("accounting_status", "ACTIVE").order("transaction_date", { nullsFirst: false }).order("executed_at", { nullsFirst: false }).order("created_at"),
     supabase.from("securities").select("id,symbol,name,sector_id,asset_class").eq("is_active", true),
     supabase.from("sectors").select("id,name"),
     supabase.from("broker_accounts").select("id,account_name,broker_id").eq("portfolio_id", portfolio.id).eq("is_active", true),
@@ -116,11 +116,19 @@ export async function loadPortfolioLedgerSnapshot(
     brokerAccountId: transaction.broker_account_id,
     transactionType: transaction.transaction_type,
     transactionDate: transaction.transaction_date,
+    executedAt: transaction.executed_at,
     quantity: exactEvidence(evidence?.quantity) ?? exact(transaction.quantity),
     unitPrice: exactEvidence(evidence?.unit_price) ?? exact(transaction.unit_price),
     charges: exact(transaction.charges),
     taxes: exact(transaction.taxes),
     dataQualityStatus: transaction.data_quality_status,
+    accountingStatus: transaction.accounting_status,
+    sourceType: transaction.source_type,
+    sourceProvider: transaction.source_provider,
+    grossAmount: exact(transaction.gross_amount),
+    netAmount: exact(transaction.net_amount),
+    notes: transaction.notes,
+    importBatchId: transaction.import_batch_id,
     sourceSequence: transaction.source_sequence,
   }})
   const companyNames = new Map<string, string>()

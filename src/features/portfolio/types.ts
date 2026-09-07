@@ -8,11 +8,19 @@ export interface LedgerTransaction {
   readonly brokerAccountId: string | null
   readonly transactionType: string
   readonly transactionDate: string | null
+  readonly executedAt: string | null
   readonly quantity: string | null
   readonly unitPrice: string | null
   readonly charges: string | null
   readonly taxes: string | null
   readonly dataQualityStatus: string
+  readonly accountingStatus: string
+  readonly sourceType: string
+  readonly sourceProvider: string | null
+  readonly grossAmount: string | null
+  readonly netAmount: string | null
+  readonly notes: string | null
+  readonly importBatchId: string | null
   readonly sourceSequence: number | null
 }
 
@@ -72,6 +80,11 @@ export interface PortfolioPosition {
   readonly unrealisedPnlPercent: string | null
   readonly portfolioWeightPercent: string | null
   readonly realisedPnl: string | null
+  readonly realisedCostBasis: string | null
+  readonly realisedProceeds: string | null
+  readonly totalQuantitySold: string
+  readonly accountingQuality: import("../accounting/fifoAccounting").AccountingQuality
+  readonly accountingReason: string | null
   readonly brokerExposure: readonly BrokerExposure[] | null
   readonly hasMissingDates: boolean
   readonly hasMissingBrokers: boolean
@@ -101,8 +114,11 @@ export interface PortfolioViewModel {
     readonly unrealisedPnlPercent: string | null
     readonly realisedPnl: string | null
     readonly realisedCoverage: number
+    readonly realisedEligibleHistories: number
     readonly freshPriceCoverage: number
-    readonly stalePriceCoverage: number
+      readonly stalePriceCoverage: number
+      readonly accountingCoverage: number
+      readonly incompleteAccountingPositions: number
   }
   readonly quality: {
     readonly holdingsWithMissingDates: number

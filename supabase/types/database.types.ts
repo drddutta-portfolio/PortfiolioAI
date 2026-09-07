@@ -7,30 +7,10 @@ export type Json =
   | Json[]
 
 export type Database = {
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -319,6 +299,471 @@ export type Database = {
             columns: ["sector_id"]
             isOneToOne: false
             referencedRelation: "sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      manual_transaction_requests: {
+        Row: {
+          created_at: string
+          id: string
+          idempotency_key: string
+          request_hash: string
+          transaction_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          idempotency_key: string
+          request_hash: string
+          transaction_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          idempotency_key?: string
+          request_hash?: string
+          transaction_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manual_transaction_requests_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_data_instrument_mappings: {
+        Row: {
+          created_at: string
+          evidence: Json
+          exchange: string | null
+          id: string
+          instrument_master_as_of: string | null
+          mapping_status: string
+          match_basis: string | null
+          provider_code: string
+          provider_instrument_id: string | null
+          provider_instrument_type: string | null
+          security_id: string
+          trading_symbol: string | null
+          updated_at: string
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          evidence?: Json
+          exchange?: string | null
+          id?: string
+          instrument_master_as_of?: string | null
+          mapping_status: string
+          match_basis?: string | null
+          provider_code: string
+          provider_instrument_id?: string | null
+          provider_instrument_type?: string | null
+          security_id: string
+          trading_symbol?: string | null
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          evidence?: Json
+          exchange?: string | null
+          id?: string
+          instrument_master_as_of?: string | null
+          mapping_status?: string
+          match_basis?: string | null
+          provider_code?: string
+          provider_instrument_id?: string | null
+          provider_instrument_type?: string | null
+          security_id?: string
+          trading_symbol?: string | null
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_data_instrument_mappings_provider_code_fkey"
+            columns: ["provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_providers"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "market_data_instrument_mappings_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_data_mapping_reviews: {
+        Row: {
+          detected_at: string
+          evidence: Json
+          id: string
+          mapping_id: string
+          proposed_exchange: string | null
+          proposed_mapping_status: string
+          proposed_match_basis: string | null
+          proposed_provider_instrument_id: string | null
+          proposed_provider_instrument_type: string | null
+          proposed_trading_symbol: string | null
+          provider_code: string
+          review_notes: string | null
+          review_status: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          security_id: string
+        }
+        Insert: {
+          detected_at?: string
+          evidence?: Json
+          id?: string
+          mapping_id: string
+          proposed_exchange?: string | null
+          proposed_mapping_status: string
+          proposed_match_basis?: string | null
+          proposed_provider_instrument_id?: string | null
+          proposed_provider_instrument_type?: string | null
+          proposed_trading_symbol?: string | null
+          provider_code: string
+          review_notes?: string | null
+          review_status?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          security_id: string
+        }
+        Update: {
+          detected_at?: string
+          evidence?: Json
+          id?: string
+          mapping_id?: string
+          proposed_exchange?: string | null
+          proposed_mapping_status?: string
+          proposed_match_basis?: string | null
+          proposed_provider_instrument_id?: string | null
+          proposed_provider_instrument_type?: string | null
+          proposed_trading_symbol?: string | null
+          provider_code?: string
+          review_notes?: string | null
+          review_status?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          security_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_data_mapping_review_mapping_consistency_fk"
+            columns: ["mapping_id", "security_id", "provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_instrument_mappings"
+            referencedColumns: ["id", "security_id", "provider_code"]
+          },
+          {
+            foreignKeyName: "market_data_mapping_reviews_mapping_id_fkey"
+            columns: ["mapping_id"]
+            isOneToOne: false
+            referencedRelation: "market_data_instrument_mappings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_data_mapping_reviews_provider_code_fkey"
+            columns: ["provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_providers"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "market_data_mapping_reviews_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_data_operation_leases: {
+        Row: {
+          lease_expires_at: string | null
+          lease_holder: string | null
+          next_allowed_at: string
+          operation: string
+          portfolio_id: string
+          provider_code: string
+          updated_at: string
+        }
+        Insert: {
+          lease_expires_at?: string | null
+          lease_holder?: string | null
+          next_allowed_at?: string
+          operation: string
+          portfolio_id: string
+          provider_code: string
+          updated_at?: string
+        }
+        Update: {
+          lease_expires_at?: string | null
+          lease_holder?: string | null
+          next_allowed_at?: string
+          operation?: string
+          portfolio_id?: string
+          provider_code?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_data_operation_leases_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_data_operation_leases_provider_code_fkey"
+            columns: ["provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_providers"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      market_data_providers: {
+        Row: {
+          capabilities: Json
+          code: string
+          created_at: string
+          is_active: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          capabilities?: Json
+          code: string
+          created_at?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          capabilities?: Json
+          code?: string
+          created_at?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      market_data_refresh_runs: {
+        Row: {
+          cached_security_count: number
+          completed_at: string | null
+          error_summary: string | null
+          failed_security_count: number
+          fetched_security_count: number
+          id: string
+          metadata: Json
+          portfolio_id: string
+          provider_code: string
+          requested_by: string
+          requested_security_count: number
+          started_at: string
+          status: string
+          unresolved_security_count: number
+        }
+        Insert: {
+          cached_security_count?: number
+          completed_at?: string | null
+          error_summary?: string | null
+          failed_security_count?: number
+          fetched_security_count?: number
+          id?: string
+          metadata?: Json
+          portfolio_id: string
+          provider_code: string
+          requested_by: string
+          requested_security_count: number
+          started_at?: string
+          status: string
+          unresolved_security_count?: number
+        }
+        Update: {
+          cached_security_count?: number
+          completed_at?: string | null
+          error_summary?: string | null
+          failed_security_count?: number
+          fetched_security_count?: number
+          id?: string
+          metadata?: Json
+          portfolio_id?: string
+          provider_code?: string
+          requested_by?: string
+          requested_security_count?: number
+          started_at?: string
+          status?: string
+          unresolved_security_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_data_refresh_runs_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_data_refresh_runs_provider_code_fkey"
+            columns: ["provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_providers"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      market_price_history: {
+        Row: {
+          adjusted_close: number | null
+          close: number
+          high: number
+          interval: string
+          low: number
+          mapping_id: string
+          open: number
+          period_start: string
+          provenance: Json
+          provider_code: string
+          retrieved_at: string
+          security_id: string
+          volume: number | null
+        }
+        Insert: {
+          adjusted_close?: number | null
+          close: number
+          high: number
+          interval: string
+          low: number
+          mapping_id: string
+          open: number
+          period_start: string
+          provenance: Json
+          provider_code: string
+          retrieved_at?: string
+          security_id: string
+          volume?: number | null
+        }
+        Update: {
+          adjusted_close?: number | null
+          close?: number
+          high?: number
+          interval?: string
+          low?: number
+          mapping_id?: string
+          open?: number
+          period_start?: string
+          provenance?: Json
+          provider_code?: string
+          retrieved_at?: string
+          security_id?: string
+          volume?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_price_history_mapping_consistency_fk"
+            columns: ["mapping_id", "security_id", "provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_instrument_mappings"
+            referencedColumns: ["id", "security_id", "provider_code"]
+          },
+          {
+            foreignKeyName: "market_price_history_provider_code_fkey"
+            columns: ["provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_providers"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "market_price_history_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_price_latest: {
+        Row: {
+          currency: string
+          day_high: number | null
+          day_low: number | null
+          day_open: number | null
+          mapping_id: string
+          market_session_status: string
+          previous_close: number | null
+          price: number
+          price_timestamp: string | null
+          provenance: Json
+          provider_code: string
+          retrieved_at: string
+          security_id: string
+        }
+        Insert: {
+          currency?: string
+          day_high?: number | null
+          day_low?: number | null
+          day_open?: number | null
+          mapping_id: string
+          market_session_status?: string
+          previous_close?: number | null
+          price: number
+          price_timestamp?: string | null
+          provenance: Json
+          provider_code: string
+          retrieved_at?: string
+          security_id: string
+        }
+        Update: {
+          currency?: string
+          day_high?: number | null
+          day_low?: number | null
+          day_open?: number | null
+          mapping_id?: string
+          market_session_status?: string
+          previous_close?: number | null
+          price?: number
+          price_timestamp?: string | null
+          provenance?: Json
+          provider_code?: string
+          retrieved_at?: string
+          security_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_price_latest_mapping_consistency_fk"
+            columns: ["mapping_id", "security_id", "provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_instrument_mappings"
+            referencedColumns: ["id", "security_id", "provider_code"]
+          },
+          {
+            foreignKeyName: "market_price_latest_provider_code_fkey"
+            columns: ["provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_providers"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "market_price_latest_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
             referencedColumns: ["id"]
           },
         ]
@@ -747,8 +1192,36 @@ export type Database = {
       }
     }
     Functions: {
+      acquire_market_data_operation_lease: {
+        Args: {
+          p_lease_holder: string
+          p_lease_seconds: number
+          p_operation: string
+          p_portfolio_id: string
+          p_provider_code: string
+        }
+        Returns: {
+          acquired: boolean
+          retry_after: string
+        }[]
+      }
       commit_import_batch_v1: {
         Args: { p_approved_source_row_ids: string[]; p_import_batch_id: string }
+        Returns: Json
+      }
+      create_manual_transaction_v1: {
+        Args: {
+          p_broker_account_id: string
+          p_idempotency_key: string
+          p_notes: string
+          p_portfolio_id: string
+          p_quantity: number
+          p_security_id: string
+          p_total_charges: number
+          p_transaction_date: string
+          p_transaction_type: string
+          p_unit_price: number
+        }
         Returns: Json
       }
       portfolioai_import_cell: {
@@ -760,6 +1233,16 @@ export type Database = {
       portfolioai_normalize_import_token: {
         Args: { p_value: string }
         Returns: string
+      }
+      release_market_data_operation_lease: {
+        Args: {
+          p_cooldown_seconds: number
+          p_lease_holder: string
+          p_operation: string
+          p_portfolio_id: string
+          p_provider_code: string
+        }
+        Returns: boolean
       }
     }
     Enums: {
@@ -779,12 +1262,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -808,11 +1291,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -833,11 +1316,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -858,11 +1341,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -875,11 +1358,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -889,9 +1372,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {},
   },

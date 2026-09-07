@@ -53,14 +53,14 @@ export function DashboardPage() {
     {refreshError ? <div className="notice notice-error" role="alert">{refreshError}</div> : null}
     <div className="kpi-grid">
       <Kpi label="Open holdings" value={String(portfolio.totals.openHoldings)} detail={`${portfolio.totals.closedHistories} closed histories retained`} />
-      <Kpi label="Calculable Cost Basis" value={formatMoney(portfolio.totals.investedAmount)} detail={`${portfolio.totals.investedCoverage} of ${portfolio.totals.openHoldings} holdings calculable`} />
+      <Kpi label="Calculable Cost Basis" value={formatMoney(portfolio.totals.investedAmount)} detail={`${portfolio.totals.accountingCoverage} of ${portfolio.totals.openHoldings} holdings covered · ${portfolio.totals.incompleteAccountingPositions} incomplete`} />
       <Kpi label="Total Current Market Value" value={formatMoney(portfolio.totals.currentValue)} detail={`${portfolio.totals.priceCoverage} of ${portfolio.totals.openHoldings} priced · ${portfolio.totals.freshPriceCoverage} fresh · ${portfolio.totals.stalePriceCoverage} stale`} />
       <Kpi label="Unrealised P&L" value={formatMoney(portfolio.totals.unrealisedPnl)} detail={portfolio.totals.unrealisedPnl === null ? `Unavailable until cost basis covers all ${portfolio.totals.openHoldings} holdings (${portfolio.totals.investedCoverage} calculable)` : formatPercent(portfolio.totals.unrealisedPnlPercent)} />
-      <Kpi label="Realised P&L" value={formatMoney(portfolio.totals.realisedPnl)} detail={`${portfolio.totals.realisedCoverage} of ${portfolio.totals.closedHistories} histories calculable`} />
+      <Kpi label="Gross realised P&L (covered)" value={formatMoney(portfolio.totals.realisedPnl)} detail={`${portfolio.totals.realisedCoverage} of ${portfolio.totals.realisedEligibleHistories} disposal histories have FIFO coverage; quality badges disclose unknown costs`} />
     </div>
     <section className="quality-strip" aria-label="Portfolio data quality"><Quality label="Missing transaction dates" value={portfolio.quality.holdingsWithMissingDates} /><Quality label="Missing broker attribution" value={portfolio.quality.holdingsWithMissingBrokers} /><Quality label="Missing prices" value={portfolio.quality.holdingsWithMissingPrices} /><Quality label="Stale prices" value={portfolio.quality.holdingsWithStalePrices} /></section>
     <div className="dashboard-grid"><AllocationPanel title="Allocation by stock" rows={stockAllocation} empty="Live prices are required before stock weights can be calculated." /><AllocationPanel title="Allocation by sector" rows={sectorAllocation} empty="Trusted sector classifications are not yet available for every holding." /></div>
-    <section className="panel methodology-panel"><div><p className="eyebrow">Calculation integrity</p><h2>Evidence before estimates</h2></div><p>Quantities use ACTIVE ledger transactions. Cost is shown only for complete buy-only histories. No FIFO, missing prices, dates, brokers, charges, or taxes are inferred.</p></section>
+    <section className="panel methodology-panel"><div><p className="eyebrow">Calculation integrity</p><h2>Evidence before estimates</h2></div><p>Quantities use ACTIVE ledger transactions. FIFO cost and realised results are calculated only where chronology is provable. Unknown dates, prices, charges, taxes, or market prices are never invented.</p></section>
   </section>
 }
 
