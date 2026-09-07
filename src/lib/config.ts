@@ -21,6 +21,7 @@ export const publicConfig = {
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
   ),
+  marketDataEnabled: import.meta.env.VITE_MARKET_DATA_ENABLED === "true",
 }
 
 export function getApplicationOrigin() {

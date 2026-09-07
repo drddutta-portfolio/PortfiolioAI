@@ -71,6 +71,8 @@ export function ImportPage() {
     if (!portfolioId || preparedCommit || isResumingCommit) return
     const importBatchId = new URLSearchParams(window.location.search).get("resumeBatch")
     if (!importBatchId) return
+    // This guards the async resume operation from being started again by the effect's own dependencies.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsResumingCommit(true)
     setError(null)
     void resumePreparedImportCommit(importBatchId, portfolioId)

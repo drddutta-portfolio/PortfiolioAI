@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { calculatePortfolio } from "./calculatePortfolio"
-import type { LedgerTransaction, PortfolioLedgerSnapshot } from "./types"
+import type { LedgerTransaction, MarketPrice, PortfolioLedgerSnapshot } from "./types"
 
 function transaction(id: string, securityId: string, overrides: Partial<LedgerTransaction> = {}): LedgerTransaction {
   return {
@@ -21,7 +21,7 @@ function transaction(id: string, securityId: string, overrides: Partial<LedgerTr
   }
 }
 
-function snapshot(transactions: readonly LedgerTransaction[], securityCount: number): PortfolioLedgerSnapshot {
+function snapshot(transactions: readonly LedgerTransaction[], securityCount: number, prices: readonly MarketPrice[] = []): PortfolioLedgerSnapshot {
   return {
     portfolio: { id: "portfolio-1", name: "Consolidated Portfolio", currency: "INR" },
     transactions,
@@ -34,7 +34,7 @@ function snapshot(transactions: readonly LedgerTransaction[], securityCount: num
     })),
     brokerAccounts: [{ id: "account-1", name: "Primary", brokerName: "Broker" }],
     roles: new Map(),
-    prices: [],
+    prices,
   }
 }
 
@@ -77,5 +77,53 @@ describe("calculatePortfolio", () => {
     expect(position.realisedPnl).toBeNull()
     expect(position.brokerExposure).toBeNull()
     expect(position.hasMissingDates).toBe(true)
+  })
+
+  it("calculates valuation and weights using exact decimals", () => {
+    const prices: MarketPrice[] = [
+      { securityId: "security-0", price: "12.30", currency: "INR", priceTimestamp: "2026-09-07T04:00:00.000Z", retrievedAt: "2026-09-07T04:00:05.000Z", provider: "ANGEL_ONE", marketSessionStatus: "OPEN", isStale: false, staleAfterSeconds: 900 },
+      { securityId: "security-1", price: "20", currency: "INR", priceTimestamp: "2026-09-07T04:00:00.000Z", retrievedAt: "2026-09-07T04:00:05.000Z", provider: "ANGEL_ONE", marketSessionStatus: "OPEN", isStale: true, staleAfterSeconds: 900 },
+    ]
+    const result = calculatePortfolio(snapshot([
+      transaction("a", "security-0", { quantity: "2", unitPrice: "10.10" }),
+      transaction("b", "security-1", { quantity: "1", unitPrice: "15" }),
+    ], 2, prices))
+    expect(result.totals.currentValue).toBe("44.6")
+    expect(result.totals.unrealisedPnl).toBe("9.4")
+    expect(result.openPositions[0]!.portfolioWeightPercent).toBe("55.15695067264573991")
+    expect(result.totals.freshPriceCoverage).toBe(1)
+    expect(result.totals.stalePriceCoverage).toBe(1)
+  })
+
+  it("does not present a partial portfolio total or weights as complete", () => {
+    const result = calculatePortfolio(snapshot([
+      transaction("a", "security-0"),
+      transaction("b", "security-1"),
+    ], 2, [{ securityId: "security-0", price: "12", currency: "INR", priceTimestamp: "2026-09-07T04:00:00.000Z", retrievedAt: "2026-09-07T04:00:05.000Z", provider: "ANGEL_ONE", marketSessionStatus: "UNKNOWN", isStale: false, staleAfterSeconds: 900 }]))
+    expect(result.totals.currentValue).toBeNull()
+    expect(result.openPositions.every((position) => position.portfolioWeightPercent === null)).toBe(true)
+    expect(result.quality.holdingsWithMissingPrices).toBe(1)
+  })
+
+  it("keeps market valuation available when a partial sale makes cost basis unavailable", () => {
+    const result = calculatePortfolio(snapshot([
+      transaction("buy", "security-0", { quantity: "10", unitPrice: "100" }),
+      transaction("sell", "security-0", { transactionType: "SELL", quantity: "4", unitPrice: "125" }),
+    ], 1, [{ securityId: "security-0", price: "150", currency: "INR", priceTimestamp: "2026-09-07T04:00:00.000Z", retrievedAt: "2026-09-07T04:00:05.000Z", provider: "ANGEL_ONE", marketSessionStatus: "UNKNOWN", isStale: false, staleAfterSeconds: 900 }]))
+
+    expect(result.openPositions[0]).toMatchObject({
+      quantity: "6",
+      currentPrice: "150",
+      currentValue: "900",
+      portfolioWeightPercent: "100",
+      averageCost: null,
+      investedAmount: null,
+      unrealisedPnl: null,
+      unrealisedPnlPercent: null,
+      hasMissingPrices: false,
+    })
+    expect(result.totals.currentValue).toBe("900")
+    expect(result.totals.investedCoverage).toBe(0)
+    expect(result.totals.unrealisedPnl).toBeNull()
   })
 })

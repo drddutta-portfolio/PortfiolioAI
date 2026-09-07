@@ -122,11 +122,17 @@ function buildPosition(
     currentValue: currentValue ? text(currentValue) : null,
     unrealisedPnl: unrealisedPnl ? text(unrealisedPnl) : null,
     unrealisedPnlPercent: unrealisedPnlPercent ? text(unrealisedPnlPercent) : null,
+    portfolioWeightPercent: null,
     realisedPnl: realisedPnl ? text(realisedPnl) : null,
     brokerExposure: brokerExposure(transactions, accounts),
     hasMissingDates: transactions.some((transaction) => transaction.transactionDate === null),
     hasMissingBrokers: transactions.some((transaction) => transaction.brokerAccountId === null),
     hasMissingPrices: !price,
+    priceTimestamp: price?.priceTimestamp ?? null,
+    priceRetrievedAt: price?.retrievedAt ?? null,
+    priceProvider: price?.provider ?? null,
+    priceSessionStatus: price?.marketSessionStatus ?? null,
+    isPriceStale: price?.isStale ?? false,
     costBasisReason: averageCost ? null : buyOnly
       ? "One or more purchase prices are unavailable."
       : "Sell or non-purchase history requires an approved lot-accounting method.",
@@ -150,24 +156,30 @@ export function calculatePortfolio(snapshot: PortfolioLedgerSnapshot): Portfolio
     return buildPosition(security, transactions, snapshot)
   }).sort((left, right) => left.symbol.localeCompare(right.symbol))
 
-  const openPositions = positions.filter((position) => !new Decimal(position.quantity).isZero())
+  const rawOpenPositions = positions.filter((position) => !new Decimal(position.quantity).isZero())
   const closedPositions = positions.filter((position) => new Decimal(position.quantity).isZero())
-  const investedPositions = openPositions.filter((position) => position.investedAmount !== null)
-  const valuedPositions = openPositions.filter((position) => position.currentValue !== null)
+  const investedPositions = rawOpenPositions.filter((position) => position.investedAmount !== null)
+  const valuedPositions = rawOpenPositions.filter((position) => position.currentValue !== null)
   const realisedPositions = closedPositions.filter((position) => position.realisedPnl !== null)
   const invested = investedPositions.length
     ? sum(investedPositions.map((position) => new Decimal(position.investedAmount ?? "0")))
     : null
-  const currentValue = valuedPositions.length === openPositions.length && valuedPositions.length
+  const currentValue = valuedPositions.length === rawOpenPositions.length && valuedPositions.length
     ? sum(valuedPositions.map((position) => new Decimal(position.currentValue ?? "0")))
     : null
-  const unrealised = currentValue && investedPositions.length === openPositions.length && invested
+  const unrealised = currentValue && investedPositions.length === rawOpenPositions.length && invested
     ? currentValue.minus(invested)
     : null
   const realised = realisedPositions.length
     ? sum(realisedPositions.map((position) => new Decimal(position.realisedPnl ?? "0")))
     : null
 
+  const openPositions = rawOpenPositions.map((position) => ({
+    ...position,
+    portfolioWeightPercent: position.currentValue && currentValue?.gt(0)
+      ? text(new Decimal(position.currentValue).div(currentValue).times(100))
+      : null,
+  }))
   return {
     portfolio: snapshot.portfolio,
     openPositions,
@@ -184,11 +196,14 @@ export function calculatePortfolio(snapshot: PortfolioLedgerSnapshot): Portfolio
       unrealisedPnlPercent: unrealised && invested?.gt(0) ? text(unrealised.div(invested).times(100)) : null,
       realisedPnl: realised ? text(realised) : null,
       realisedCoverage: realisedPositions.length,
+      freshPriceCoverage: openPositions.filter((position) => position.currentPrice !== null && !position.isPriceStale).length,
+      stalePriceCoverage: openPositions.filter((position) => position.currentPrice !== null && position.isPriceStale).length,
     },
     quality: {
       holdingsWithMissingDates: openPositions.filter((position) => position.hasMissingDates).length,
       holdingsWithMissingBrokers: openPositions.filter((position) => position.hasMissingBrokers).length,
       holdingsWithMissingPrices: openPositions.filter((position) => position.hasMissingPrices).length,
+      holdingsWithStalePrices: openPositions.filter((position) => position.isPriceStale).length,
     },
   }
 }

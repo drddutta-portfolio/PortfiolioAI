@@ -881,3 +881,17 @@ Never modify historical accounting/investment records merely to make a new score
 The next database-writing step is the separate trusted import/commit workflow. It must be designed, implemented and validated before portfolio data is loaded. Advanced deterministic engines remain downstream work.
 
 Credit and analyst-intelligence schema/integration preparation follows the initial portfolio import foundation. Trendlyne analyst and estimate ingestion belongs in the Trendlyne phase; credit-rating ingestion waits for a verified source strategy; scoring and conflict synthesis belong in the advanced-engine and Investment Committee phases. These future engines must not delay the current XLSX/CSV import work.
+
+## 25. Stage 4 market-data preparation status
+
+Stage 4 market-data architecture is prepared locally in the unapplied migration
+`20260907120000_create_market_data_foundation.sql` and the authenticated
+`refresh-market-data` Edge Function. It introduces provider-independent instrument
+mappings, latest-price observations, refresh audit runs, and a daily OHLCV
+foundation. Provider credentials remain Supabase Edge Function secrets and are not
+stored in application tables or browser configuration.
+
+This preparation has not been applied or deployed remotely. Until explicit
+approval, credentials, mapping review, and remote deployment are complete,
+`VITE_MARKET_DATA_ENABLED` remains false and the application continues to show
+market-derived values as unavailable.

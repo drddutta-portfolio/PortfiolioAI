@@ -34,8 +34,12 @@ export interface MarketPrice {
   readonly securityId: string
   readonly price: string
   readonly currency: string
-  readonly observedAt: string
-  readonly source: string
+  readonly priceTimestamp: string | null
+  readonly retrievedAt: string
+  readonly provider: string
+  readonly marketSessionStatus: "OPEN" | "CLOSED" | "PRE_OPEN" | "POST_CLOSE" | "UNKNOWN"
+  readonly isStale: boolean
+  readonly staleAfterSeconds: number
 }
 
 export interface PortfolioLedgerSnapshot {
@@ -66,11 +70,17 @@ export interface PortfolioPosition {
   readonly currentValue: string | null
   readonly unrealisedPnl: string | null
   readonly unrealisedPnlPercent: string | null
+  readonly portfolioWeightPercent: string | null
   readonly realisedPnl: string | null
   readonly brokerExposure: readonly BrokerExposure[] | null
   readonly hasMissingDates: boolean
   readonly hasMissingBrokers: boolean
   readonly hasMissingPrices: boolean
+  readonly priceTimestamp: string | null
+  readonly priceRetrievedAt: string | null
+  readonly priceProvider: string | null
+  readonly priceSessionStatus: MarketPrice["marketSessionStatus"] | null
+  readonly isPriceStale: boolean
   readonly costBasisReason: string | null
   readonly realisedPnlReason: string | null
 }
@@ -91,10 +101,13 @@ export interface PortfolioViewModel {
     readonly unrealisedPnlPercent: string | null
     readonly realisedPnl: string | null
     readonly realisedCoverage: number
+    readonly freshPriceCoverage: number
+    readonly stalePriceCoverage: number
   }
   readonly quality: {
     readonly holdingsWithMissingDates: number
     readonly holdingsWithMissingBrokers: number
     readonly holdingsWithMissingPrices: number
+    readonly holdingsWithStalePrices: number
   }
 }
