@@ -4,7 +4,7 @@ This register preserves feature traceability. It does not override the Master Bl
 
 | ID | Area | Requirement | Status | Target milestone | Architectural placement / notes |
 |---|---|---|---|---|---|
-| REQ-TRAN-001 | Transactions | Add/resolve an unknown security during manual BUY entry | IMPLEMENTED | 5.1 | Trusted canonical-security RPC; unresolved provider mapping does not block ledger entry |
+| REQ-TRAN-001 | Transactions | Add/resolve an unknown security directly from manual BUY entry when no existing security matches | IMPLEMENTED / ACCEPTED | 5.1 | One searchable selector exposes the add action, preserves entered BUY fields, auto-selects the created canonical security, and permits unresolved provider mapping |
 | REQ-TRAN-002 | Transactions | Audited correction of date, security, type, quantity, price, broker, charges and notes | IMPLEMENTED | 5.1 | Supersession plus replacement transaction; original and imported evidence retained |
 | REQ-TRAN-003 | Transactions | Sortable transaction columns | IMPLEMENTED | 5.1 | Stable single-column client sort; missing values remain explicit |
 | REQ-TRAN-004 | Transactions | Advanced filtering and text search | IMPLEMENTED | 5.1 | Combined security, account, type, source, dates, missing evidence and quality filters |
@@ -18,4 +18,3 @@ This register preserves feature traceability. It does not override the Master Bl
 | REQ-MARKET-001 | Market/momentum | 90-day data/chart and momentum indicators | DEFERRED | Technical engine | Provider-independent OHLCV foundation exists |
 | REQ-SEC-001 | Security intelligence | Sector, market cap and category enrichment | DEFERRED | Fundamentals | Canonical security attributes, not transaction copies |
 | REQ-INVEST-001 | Investment engines | Quality, Core/Satellite, valuation, risk and portfolio-fit engines | DEFERRED | Future stages | Governed by Master Blueprint; deterministic inputs separated from AI synthesis |
-

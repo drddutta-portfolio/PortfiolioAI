@@ -6,7 +6,9 @@ Stage 5.1 completes daily ledger management without changing Stage 5 accounting 
 
 ## New-security workflow
 
-Manual BUY/SELL entry now offers searchable canonical selection plus **Add / resolve new security** for NSE/BSE equities and ETFs. The trusted `create_manual_security_v1` RPC derives the caller, verifies portfolio ownership, normalizes exchange/symbol/ISIN/series, applies the established ISIN format plus checksum, rejects symbol or ISIN collisions, records creation provenance, and is idempotent. Exchange series is stored on the canonical security listing rather than misrepresented as a globally unique alternate identifier. Browser roles still cannot write `securities` or `security_identifiers` directly.
+Manual BUY/SELL entry uses one searchable security selector. Typing a ticker or company shows existing matches; when none match, the same control exposes **Add [ticker] as a new security**. The compact onboarding panel pre-fills the typed ticker. On success it closes, selects the canonical security automatically, preserves already entered transaction fields, and displays either verified mapping availability or **Price mapping pending**. No reload is required. This direct accessibility is part of REQ-TRAN-001; the backend RPC alone does not satisfy the requirement.
+
+The trusted `create_manual_security_v1` RPC supports NSE/BSE equities and ETFs, derives the caller, verifies portfolio ownership, normalizes exchange/symbol/ISIN/series, applies the established ISIN format plus checksum, rejects symbol or ISIN collisions, records creation provenance, and is idempotent. Exchange series is stored on the canonical security listing rather than misrepresented as a globally unique alternate identifier. Browser roles still cannot write `securities` or `security_identifiers` directly.
 
 Provider identity stays separate. A newly created security receives an `ANGEL_ONE / UNRESOLVED` mapping with review evidence. No provider token is guessed. The transaction may proceed while CMP is explicitly pending; a future trusted instrument-master sync can verify the mapping.
 

@@ -134,7 +134,6 @@ These are explicit, deferred limitations—not accidental omissions:
 - Historical OHLCV population is not complete for the future technical/momentum
   engine.
 - Advanced investment engines remain future work.
-- Manual transaction-entry UI is not implemented.
 
 ## E. Completed Stage 5
 
@@ -185,6 +184,14 @@ traceability. New securities receive an explicit unresolved Angel One mapping un
 trusted provider-master evidence can verify them; no provider identity or CMP is
 fabricated. Corrections preserve original transactions and imported source evidence,
 while on-demand accounting automatically reads the replacement `ACTIVE` row.
+
+User acceptance subsequently exposed that the first frontend used separate search
+and select controls: an unmatched typed ticker did not reveal onboarding and native
+select validation blocked submission. The accepted UI now uses one searchable
+security control. It lists existing matches or presents a contextual **Add new
+security** action, pre-fills the typed ticker, preserves transaction fields, and
+automatically selects the trusted RPC result without a reload. REQ-TRAN-001 is not
+considered satisfied by backend availability alone.
 
 Migrations `20260907190000_complete_stage5_1_transaction_management.sql`,
 `20260907200000_fix_isin_validation_lint.sql`, and

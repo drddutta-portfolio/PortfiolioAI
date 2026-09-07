@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { TransactionsPage } from "./TransactionsPage"
 
@@ -58,17 +58,37 @@ describe("TransactionsPage", () => {
     expect(screen.getByText("ABC Limited")).toBeInTheDocument()
   })
 
-  it("keeps a newly resolved security selected in the transaction workflow", async () => {
+  it("offers unknown ticker onboarding, preserves BUY fields, and selects the new security", async () => {
     createManualSecurity.mockResolvedValue({ security_id: "s-new", mapping_status: "UNRESOLVED" })
+    createManualTransaction.mockResolvedValue({ transaction_id: "t-new" })
     render(<TransactionsPage />)
     await screen.findByRole("heading", { name: "Transactions" })
     fireEvent.click(screen.getByRole("button", { name: "Add transaction" }))
-    fireEvent.click(screen.getByRole("button", { name: "Add / resolve new security" }))
-    fireEvent.change(screen.getByLabelText("Trading symbol"), { target: { value: "NEWCO" } })
+    fireEvent.change(screen.getByLabelText("Broker / demat account"), { target: { value: "a1" } })
+    fireEvent.change(screen.getByLabelText("Transaction date"), { target: { value: "2026-09-07" } })
+    fireEvent.change(screen.getByLabelText("Quantity"), { target: { value: "12" } })
+    fireEvent.change(screen.getByLabelText("Execution price"), { target: { value: "221" } })
+    fireEvent.change(screen.getByPlaceholderText("Type ticker or company name"), { target: { value: "V2RETAIL" } })
+    expect(screen.getByText("No existing security found.")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "+ Add V2RETAIL as a new security" }))
+    expect(screen.getByLabelText("Trading symbol")).toHaveValue("V2RETAIL")
     fireEvent.change(screen.getByLabelText("Security name"), { target: { value: "New Company" } })
     fireEvent.submit(screen.getByRole("button", { name: "Verify and add" }).closest("form")!)
     await waitFor(() => expect(createManualSecurity).toHaveBeenCalledOnce())
-    expect(screen.getAllByLabelText("Security").find((element) => element.hasAttribute("required"))).toHaveValue("s-new")
-    expect(screen.getByText(/pending trusted mapping review/i)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText("Type ticker or company name")).toHaveValue("V2RETAIL — New Company")
+    expect(screen.getByText("Selected")).toBeInTheDocument()
+    expect(screen.getByText(/price mapping pending/i)).toBeInTheDocument()
+    fireEvent.submit(screen.getByRole("button", { name: "Record transaction" }).closest("form")!)
+    await waitFor(() => expect(createManualTransaction).toHaveBeenCalledWith(expect.objectContaining({ securityId: "s-new", quantity: "12", unitPrice: "221" })))
+  })
+
+  it("selects an existing security from the same searchable control", async () => {
+    render(<TransactionsPage />)
+    await screen.findByRole("heading", { name: "Transactions" })
+    fireEvent.click(screen.getByRole("button", { name: "Add transaction" }))
+    fireEvent.change(screen.getByPlaceholderText("Type ticker or company name"), { target: { value: "ABC" } })
+    fireEvent.click(within(screen.getByRole("listbox", { name: "Matching securities" })).getByRole("option", { name: /ABC Limited/ }))
+    expect(screen.getByPlaceholderText("Type ticker or company name")).toHaveValue("ABC — ABC Limited")
+    expect(screen.getByText("Selected")).toBeInTheDocument()
   })
 })
