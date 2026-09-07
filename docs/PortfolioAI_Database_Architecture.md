@@ -1,7 +1,7 @@
 # PortfolioAI — Database Architecture
 
 **Step 0.4 — Foundation database design**  
-**Status:** Foundation and import/transaction migrations applied remotely; V1 authentication frontend implemented locally
+**Status:** Stages 1–4 implemented; foundation, transaction/import, and market-data migrations applied remotely
 
 ## 1. Purpose
 
@@ -228,7 +228,7 @@ The canonical committed lineage direction is:
 
 There is no independently writable `committed_transaction_id` relationship. A partial unique index permits at most one committed V1 transaction per source row. If one source row must later produce multiple accounting events, a future mapping table may replace that uniqueness rule without rewriting the original source evidence.
 
-Normalized data, validation results, security resolution and duplicate fields are untrusted staging values. The future trusted commit process must revalidate them server-side before creating transactions.
+Normalized data, validation results, security resolution and duplicate fields are untrusted staging values. The trusted commit process revalidates them server-side before creating transactions.
 
 ### 5.3 Same-portfolio provenance
 
@@ -244,13 +244,19 @@ If fuller broker history becomes available, it must first be reconciled against 
 
 Imports follow preview, validation, confirmation and commit stages. Rejected and ambiguous rows remain auditable. Committed financial records and committed import evidence are immutable to browser clients, and transaction corrections use controlled reversal or supersession.
 
-The atomic import commit, reversal and historical-reconciliation operations are deferred. When implemented, each must validate ownership and all untrusted staging fields, then update every related ledger, lineage and batch state in one database transaction.
+The atomic import commit operation is implemented. Reversal and
+historical-reconciliation operations remain deferred; when implemented, each must
+validate ownership and all untrusted inputs, then update every related ledger,
+lineage and batch state in one database transaction.
 
-#### Minimum trusted import-commit operation
+#### Trusted import-commit operation
 
-The browser has no mutation privilege on `transactions`, so V1 parsing and review must stop at staging until a separately reviewed trusted operation is introduced. The minimum operation should be one narrowly scoped PostgreSQL function exposed through Supabase RPC, or an Edge Function that invokes an equivalent single database transaction. It must not accept arbitrary transaction payloads from the browser.
+The browser has no mutation privilege on `transactions`. V1 parsing and review use
+staging followed by the narrowly scoped `commit_import_batch_v1` PostgreSQL function
+exposed through Supabase RPC. It does not accept arbitrary transaction payloads from
+the browser.
 
-Proposed browser inputs are only:
+Browser inputs are limited to:
 
 - `import_batch_id`
 - an explicit ordered list of approved `import_source_row_id` values
@@ -265,9 +271,19 @@ Inside one transaction, the trusted operation must:
 5. insert at most one V1 transaction per approved source row with canonical lineage in `transactions.import_source_row_id`;
 6. atomically update batch counts/status and set `confirmed_at`/`committed_at` only after all ledger inserts succeed.
 
-The function would require `SECURITY DEFINER` only if needed to cross the browser's read-only ledger boundary. If used, it must have a fixed empty `search_path`, schema-qualified object references, explicit authenticated-only execute privilege, internal ownership checks and an owner that cannot be influenced by browser users. The service-role key must never enter the browser.
+The function uses `SECURITY DEFINER` to cross the browser's read-only ledger
+boundary, with a fixed empty `search_path`, schema-qualified objects, explicit
+authenticated-only execute privilege and internal ownership checks. The service-role
+key never enters the browser.
 
-Idempotency must combine the confirmation token, batch state, the unique `transactions.import_source_row_id` constraint and existing provider/deduplication identities. A retry after a successful commit must return the existing commit result rather than insert again. Any validation, constraint, ownership or insertion failure must roll back every ledger and batch-state change; staged evidence remains available for diagnosis and correction. This operation requires its own migration, two-user RLS/security tests, concurrency/retry tests and explicit approval before creation or deployment.
+Idempotency combines the confirmation token, batch state, the unique
+`transactions.import_source_row_id` constraint and existing provider/deduplication
+identities. A retry after a successful commit returns the existing commit result
+rather than inserting again. Any validation, constraint, ownership or insertion
+failure rolls back every ledger and batch-state change; staged evidence remains
+available for diagnosis and correction. The operation was introduced through its
+own migration and validated with two-user RLS/security, concurrency/retry and
+performance tests before deployment.
 
 ## 6. Market-data tables
 
@@ -844,18 +860,36 @@ Use:
 
 `supabase/migrations/20260905120000_create_import_transaction_foundation.sql` has passed fresh disposable local execution, constraints, two-user RLS tests, privilege checks, linting and schema-diff validation and has been applied to the remote Supabase project.
 
+The trusted import-commit migrations
+`20260905180000_create_trusted_import_commit.sql`,
+`20260906183000_accept_raw_transactions_record_kind.sql` and
+`20260906203000_cache_stock_master_identity_evidence.sql` are also applied. The
+trusted commit path is operational and preserves immutable source-row lineage while
+keeping browser transaction access read-only.
+
+### Stage 4 market-data migrations
+
+The following Stage 4 migrations are applied to the remote Supabase project:
+
+- `20260907120000_create_market_data_foundation.sql`
+- `20260907123000_fix_market_data_lease_retry_after.sql`
+- `20260907130000_verify_motherson_angel_mapping.sql`
+
+The authenticated `refresh-market-data` Edge Function is deployed and the
+server-side Angel One SmartAPI integration is operational. All 248 open holdings
+have `VERIFIED` provider mappings and latest-price cache coverage. The reviewed
+MOTHERSON identity is `ANGEL_ONE / NSE / MOTHERSON-EQ / 4204`.
+
 ## 22. Deferred features
 
 The following are deliberately deferred and must be introduced through separately reviewed migrations and deterministic application components:
 
-- atomic import commit operation
 - FIFO and transaction lots
 - realized and unrealized P&L engine
 - cash-ledger semantics
 - complete corporate-action processing
 - SPLIT and ADJUSTMENT quantity semantics
 - historical reconciliation operation
-- Angel One ingestion
 - Trendlyne ingestion
 - credit-rating ingestion and Credit Intelligence scoring
 - analyst-consensus/estimate ingestion and revision scoring
@@ -878,20 +912,33 @@ Never modify historical accounting/investment records merely to make a new score
 
 ## 24. Next implementation step
 
-The next database-writing step is the separate trusted import/commit workflow. It must be designed, implemented and validated before portfolio data is loaded. Advanced deterministic engines remain downstream work.
+The next approved milestone is Stage 5 — Transactions, FIFO Lot Accounting &
+Portfolio Accounting. It includes a transaction-review page, safe manual BUY/SELL
+entry, deterministic FIFO lot accounting and explicit completeness behaviour for
+histories whose chronological order cannot be established. Unknown transaction
+dates must remain null; historical import evidence and correction lineage must not
+be rewritten to make FIFO appear complete.
 
-Credit and analyst-intelligence schema/integration preparation follows the initial portfolio import foundation. Trendlyne analyst and estimate ingestion belongs in the Trendlyne phase; credit-rating ingestion waits for a verified source strategy; scoring and conflict synthesis belong in the advanced-engine and Investment Committee phases. These future engines must not delay the current XLSX/CSV import work.
+Advanced deterministic engines remain downstream work. Trendlyne analyst and
+estimate ingestion belongs in the Trendlyne phase; credit-rating ingestion waits
+for a verified source strategy; scoring and conflict synthesis belong in the
+advanced-engine and Investment Committee phases.
 
-## 25. Stage 4 market-data preparation status
+## 25. Stage 4 market-data status
 
-Stage 4 market-data architecture is prepared locally in the unapplied migration
-`20260907120000_create_market_data_foundation.sql` and the authenticated
-`refresh-market-data` Edge Function. It introduces provider-independent instrument
-mappings, latest-price observations, refresh audit runs, and a daily OHLCV
-foundation. Provider credentials remain Supabase Edge Function secrets and are not
-stored in application tables or browser configuration.
+Stage 4 is remotely applied, deployed and operational. Its provider-independent
+instrument mappings, latest-price observations, refresh audit runs, leases and
+daily OHLCV foundation are established by the applied migrations listed in section
+21. The deployed authenticated `refresh-market-data` Edge Function keeps Angel One
+credentials in Supabase secrets and never exposes them to browser configuration.
 
-This preparation has not been applied or deployed remotely. Until explicit
-approval, credentials, mapping review, and remote deployment are complete,
-`VITE_MARKET_DATA_ENABLED` remains false and the application continues to show
-market-derived values as unavailable.
+All 248 open holdings have verified mappings and latest-price cache coverage. The
+Dashboard and Holdings market-data frontend is activated and verified. Price
+evidence retains provider provenance, provider timestamp, retrieval timestamp and
+fresh/stale status.
+
+Current limitations remain explicit: cached observations may become stale between
+refreshes; 28 partial-sale holdings lack deterministic remaining cost basis pending
+FIFO/lot accounting; trusted sector classifications are not populated; and the
+historical OHLCV dataset required by future momentum/technical engines is not yet
+populated.

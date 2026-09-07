@@ -2,17 +2,67 @@
 
 These instructions apply to the entire repository.
 
-## Architecture and source of truth
+## Governance and source of truth
 
-- Before major work, always read all three canonical documents:
-  - `docs/PortfolioAI_Master_Blueprint.md`
-  - `docs/PortfolioAI_Database_Architecture.md`
-  - `docs/PortfolioAI_Development_Rules.md`
-- Treat those documents and the GitHub repository as the project's canonical specifications. Do not silently change product or financial rules during implementation.
+PortfolioAI is governed by the repository, not by any coding agent, chat history, or
+agent-specific configuration. Project knowledge and new work must remain portable
+between competent coding agents and human developers. Coding-agent choice must not
+become part of the product architecture.
+
+Read and apply the documents below in this authority order before implementation:
+
+1. `docs/PortfolioAI_Master_Blueprint.md` — product vision, intended capabilities,
+   investment methodology, and long-term architecture.
+2. `docs/PortfolioAI_Database_Architecture.md` — approved database architecture,
+   data ownership, provenance, accounting and financial-data semantics, and
+   database security/RLS expectations.
+3. `docs/PortfolioAI_Development_Rules.md` — engineering standards, security and
+   testing requirements, deterministic financial-calculation rules, and
+   implementation discipline.
+4. `docs/PortfolioAI_Development_Status.md` — actual implemented state, completed
+   milestones, known limitations, current milestone, and next approved work.
+5. Relevant stage-specific documentation — detailed decisions, architecture, and
+   completed behaviour for that stage.
+
+The first three documents are canonical specifications, not suggestions. The
+Development Status records reality and handover state but does not override them.
+Stage documents elaborate their scope and must remain consistent with higher
+authority documents.
+
+If proposed work conflicts with the Master Blueprint, Database Architecture, or
+Development Rules, do not silently proceed. Report the conflict and identify the
+product or architecture decision requiring owner approval. A difference between
+the implementation order and the Blueprint's broad phases is not itself a conflict.
+Do not casually or incidentally change completed-stage behaviour, especially
+financial or accounting semantics, while doing unrelated work.
+
 - Treat transactions as the source of truth for holdings and portfolio accounting.
-- Never silently overwrite financial data, source data, provenance, or historical records. Preserve original inputs and represent corrections explicitly and audibly.
+- Never silently overwrite financial data, source data, provenance, historical
+  transaction evidence, or historical records. Preserve original inputs and make
+  corrections explicit, linked, and auditable.
+- Never infer or fabricate missing financial data, replace it with zero, or assign
+  invented transaction dates, brokers, or prices.
 - Keep asset class separate from portfolio role. Equity, ETF, Mutual Fund, Gold, Silver, Bond, Cash, and Other describe assets; Core, Satellite, Thematic, ETF, and Other describe portfolio roles.
 - Keep AI explanations and synthesis separate from deterministic calculations. AI must not calculate, replace, or override deterministic financial results.
+
+## Mandatory implementation pre-flight
+
+Keep this check proportional and practical, but complete it before coding:
+
+- [ ] Read `AGENTS.md`.
+- [ ] Read `docs/PortfolioAI_Master_Blueprint.md`.
+- [ ] Read `docs/PortfolioAI_Database_Architecture.md`.
+- [ ] Read `docs/PortfolioAI_Development_Rules.md`.
+- [ ] Read `docs/PortfolioAI_Development_Status.md`.
+- [ ] Read relevant stage-specific documentation.
+- [ ] Identify the current approved milestone.
+- [ ] Check the proposed work against the Blueprint.
+- [ ] Identify database/schema impact.
+- [ ] Identify financial/accounting impact.
+- [ ] Identify security/RLS impact.
+- [ ] Identify provenance/audit impact.
+- [ ] Determine whether completed-stage semantics could change.
+- [ ] Report genuine architectural conflicts before implementing them.
 
 ## Security and data storage
 
@@ -100,7 +150,27 @@ These instructions apply to the entire repository.
 
 ## Completion standard
 
-Before declaring a task complete, report:
+Before declaring implementation work complete, run and report the checks that are
+relevant to the change. Documentation-only work does not require irrelevant
+application checks.
+
+- [ ] Tests appropriate to the change pass.
+- [ ] Deterministic financial calculations are tested against known expectations
+  where applicable.
+- [ ] TypeScript passes where applicable.
+- [ ] ESLint passes where applicable.
+- [ ] The production build passes where applicable.
+- [ ] `git diff --check` passes.
+- [ ] A secret scan is completed where appropriate.
+- [ ] There are no unexplained database/schema changes.
+- [ ] There is no silent Blueprint deviation.
+- [ ] There are no unintended financial-semantic changes.
+- [ ] Transaction provenance and auditability are preserved.
+- [ ] `docs/PortfolioAI_Development_Status.md` is updated if implemented state,
+  limitations, the current milestone, or next approved work changed.
+- [ ] Relevant stage documentation is updated where appropriate.
+
+The completion report must state:
 
 - files changed;
 - behavior changed;

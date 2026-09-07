@@ -28,24 +28,22 @@ An automatic sync never changes or downgrades an existing `VERIFIED` identity. A
 - Portfolio current value, total unrealised P&L, and weights remain unavailable unless every open holding is priced. Individual positions may still show supported values.
 - Existing Stage 3 cost-basis limitations remain: sell/non-purchase histories do not receive an invented lot basis.
 
-## Deployment gate (not yet executed)
+## Deployment status
 
-After review and explicit approval:
+Stage 4 is remotely applied, deployed and operational:
 
-1. Apply `20260907120000_create_market_data_foundation.sql` and regenerate `supabase/types/database.types.ts` from the applied schema.
-2. Configure Edge Function secrets (never `VITE_` variables):
-   - `ANGEL_ONE_API_KEY`
-   - `ANGEL_ONE_CLIENT_CODE`
-   - `ANGEL_ONE_PIN`
-   - `ANGEL_ONE_TOTP_SECRET`
-   - `ANGEL_ONE_CLIENT_LOCAL_IP`
-   - `ANGEL_ONE_CLIENT_PUBLIC_IP`
-   - `ANGEL_ONE_MAC_ADDRESS`
-3. Deploy `refresh-market-data` with normal Supabase JWT verification enabled.
-4. Invoke `SYNC_MAPPINGS`, review all `AMBIGUOUS`, `UNRESOLVED`, and unsupported securities, and manually verify exceptions with recorded evidence rather than guessing.
-5. Invoke `REFRESH`, verify counts and sampled quotes, then set `VITE_MARKET_DATA_ENABLED=true` in the deployed frontend configuration.
-
-No migration, function deployment, secret write, mapping sync, or provider login is performed by the Stage 4 local preparation itself.
+- `20260907120000_create_market_data_foundation.sql`,
+  `20260907123000_fix_market_data_lease_retry_after.sql` and
+  `20260907130000_verify_motherson_angel_mapping.sql` are applied.
+- `refresh-market-data` is deployed with normal Supabase JWT verification, and the
+  Angel One integration operates only server-side with credentials held in
+  Supabase secrets.
+- All 248 open holdings have `VERIFIED` mappings and latest-price cache coverage.
+- MOTHERSON is verified as `ANGEL_ONE / NSE / MOTHERSON-EQ / 4204` from separately
+  reviewed identity evidence.
+- The Dashboard and Holdings Stage 4 frontend activation is complete and verified.
+- Price evidence exposes provider provenance, provider timestamp, retrieval
+  timestamp and fresh/stale status without exposing provider credentials.
 
 ## Credential and session safety
 
@@ -55,8 +53,16 @@ TOTP is generated only inside the Edge Function from `ANGEL_ONE_TOTP_SECRET`. JW
 
 ## Recovery
 
-The unapplied migration is additive and PostgreSQL DDL is transactional. If it is later applied successfully, rollback must be a new compensating migration rather than editing this file. Export any mapping, price, review, and refresh provenance first, then remove Stage 4 objects in reverse dependency order. Existing Stage 1–3 ledger objects are not modified by this migration.
+The applied migrations are additive and must never be edited. Any rollback requires
+a new compensating migration. Export mapping, price, review and refresh provenance
+first, then remove Stage 4 objects in reverse dependency order. Existing Stage 1–3
+ledger objects were not modified by the Stage 4 foundation.
 
 ## Historical foundation
 
 `market_price_history` stores provider-independent daily OHLCV observations with exact numerics, interval, period, retrieval time, and provenance. Stage 4 deliberately does not calculate momentum, technical indicators, relative strength, volatility, drawdown, or portfolio risk.
+
+Historical OHLCV population remains future work. Cached prices may become stale
+between refreshes. Separately, 28 partial-sale holdings still lack deterministic
+remaining cost basis pending FIFO/lot accounting, and trusted sector classifications
+are not yet populated; neither limitation indicates missing current-price coverage.
