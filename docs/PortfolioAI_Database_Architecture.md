@@ -1,7 +1,7 @@
 # PortfolioAI — Database Architecture
 
 **Step 0.4 — Foundation database design**  
-**Status:** Stages 1–6 implemented remotely and accepted; Stage 7 foundation implemented locally, remote deployment pending
+**Status:** Stages 1–7 implemented remotely; Stage 7 provider connection and data ingestion remain separately gated
 
 ## 1. Purpose
 
@@ -982,7 +982,7 @@ The following are deliberately deferred and must be introduced through separatel
 - complete corporate-action processing
 - SPLIT and ADJUSTMENT quantity semantics
 - historical reconciliation operation
-- production Trendlyne ingestion (provider-neutral Stage 7 storage and adapter contract exist locally)
+- production Trendlyne ingestion (provider-neutral Stage 7 storage is deployed; adapter connection remains gated)
 - credit-rating ingestion and Credit Intelligence scoring
 - analyst-consensus/estimate ingestion and revision scoring
 - cross-engine Investment Committee conflict observations
@@ -1011,16 +1011,17 @@ linked migration history. They preserve transaction authority, imported evidence
 asset-class/portfolio-role separation and the audited correction model described
 above.
 
-Stage 7 Fundamental Data & Security Enrichment has an owner-approved local
-foundation checkpoint documented in
+Stage 7 Fundamental Data & Security Enrichment has an owner-approved, remotely
+deployed foundation documented in
 `Stage_7_Fundamental_Data_and_Security_Enrichment_Architecture_Proposal.md`.
 The provenance, identity, normalized observation, research-document,
 fundamental-reconciliation, market-cap policy and cache-view migrations are applied
-only to local Supabase. Browser writes remain
+to local and linked remote Supabase through `20260908120000`. Browser writes remain
 prohibited and aggregate views are restricted to securities in the authenticated
-user's transaction history. Remote migration and Edge Function deployment require
-a separate instruction. Advanced deterministic scoring, credit/analyst intelligence
-and Investment Committee synthesis remain downstream work.
+user's transaction history. Trendlyne connection, provider-specific mapping, first
+real ingestion and any Edge Function deployment require separate review. Advanced
+deterministic scoring, credit/analyst intelligence and Investment Committee
+synthesis remain downstream work.
 
 ## 25. Stage 4 market-data status
 

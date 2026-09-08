@@ -2,7 +2,7 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 7 — owner-approved foundation implemented and validated locally; remote deployment pending
+**Current milestone:** Stage 7 — deployed and complete; Stage 7.1 Trendlyne connection remains separately gated
 
 **Last reviewed:** 8 September 2026
 
@@ -421,9 +421,45 @@ by the historical MOTHERSON verification migration; the ordinary seedless replay
 still fails closed at that intentional production-data guard. Supabase-managed
 `storage` triggers differ with local service-image versions and are outside the
 PortfolioAI `public` schema result. Final secret and diff checks are recorded in the
-completion report for this checkpoint. No remote
-migration, remote schema mutation, provider call, Edge Function deployment or git
-push has occurred.
+completion report for this checkpoint. At the close of the local checkpoint, no
+remote migration, provider call, Edge Function deployment or git push had occurred.
+
+## E.5 Stage 7 remote deployment and completion
+
+On 8 September 2026 the owner authorized the final pre-production review and,
+subject to every blocking gate passing, remote application of exactly the nine
+Stage 7 migrations. Governance, migration, security, local validation, isolated
+full-chain replay and public-schema equivalence gates passed. Commit
+`a312422851c971f1f344be41846112ad11196d1d` captured the reviewed Stage 7
+implementation before deployment.
+
+The linked PortfolioAI Supabase project `uxiyufbsbgzzdujzcdxe` matched the expected
+pre-Stage-7 migration history through `20260908102000`. Migrations
+`20260908110000` through `20260908120000` were then applied once, in order, with no
+reset, repair, provider call, invented enrichment data or transaction/accounting
+mutation. Linked migration history is synchronized and remote `public` schema lint
+reports no errors.
+
+Read-only remote catalog verification confirms all 25 Stage 7 tables, six
+security-invoker cache views and required RPCs are present; all Stage 7 tables have
+RLS enabled; browser mutation grants are absent; trusted functions have an empty
+`search_path` and the intended execute grants; and the three `published_at`
+columns are nullable. The ninth migration's five document/reconciliation tables,
+constraints, indexes, validation/audit triggers and policies are present. A remote
+unrelated-user RLS simulation returned zero rows from every portfolio-scoped Stage
+7 table and cache view while leaving globally readable reference metadata visible.
+
+Post-deployment counts remain 482 transactions, 271 securities, one portfolio,
+five broker accounts, 248 latest-price rows and zero portfolio security settings.
+Dashboard, Holdings, Transactions and Portfolio Structure load against the remote
+schema without PGRST/schema errors or a live provider. Existing holdings,
+accounting, classifications and themes remain available. Stage 7 is therefore
+**DEPLOYED / COMPLETE**.
+
+Trendlyne remains registered but inactive, unentitled and without verified
+retention rights. Stage 7.1 may begin only with subscribed MCP tool/schema and
+rights inspection; provider-specific mappings and the first real ingestion remain
+separately reviewable work. No Edge Function was deployed during this checkpoint.
 
 ## F. Deferred future work
 

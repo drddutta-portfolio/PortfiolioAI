@@ -1,7 +1,7 @@
 # PortfolioAI Stage 7 — Fundamental Data & Security Enrichment Foundation
 
-**Status:** Owner-approved architecture — local foundation checkpoint implemented; remote deployment pending
-**Checkpoint:** Nine forward migrations are applied locally; the narrow ninth adds publication time, canonical research-document provenance, and fundamental reconciliation. No remote migration or provider call has occurred
+**Status:** Owner-approved architecture — deployed and complete
+**Checkpoint:** Nine forward migrations are applied locally and remotely; the narrow ninth adds publication time, canonical research-document provenance, and fundamental reconciliation. No provider was activated or called
 **Prepared:** 8 September 2026
 
 ## 1. Purpose and boundary
@@ -36,8 +36,9 @@ The stage preserves these completed-stage invariants:
 
 Stage 6 implementation, deployment and owner acceptance are complete. On 8
 September 2026 the owner approved this Stage 7 architecture and explicitly
-authorized the local implementation checkpoint. Stage 7 is now the active local
-milestone; remote deployment still requires a separate instruction.
+authorized the local implementation checkpoint. Stage 7 then became the active
+local milestone. Its later remote deployment was separately authorized, completed
+and verified on 8 September 2026.
 
 The following repository evidence was inspected:
 
@@ -935,8 +936,9 @@ application requires a later, separate owner instruction after local acceptance.
     Database Architecture and this Stage 7 document with actual implemented state.
 14. Present migration diffs, schema diff, test evidence, data-coverage report and
     known conflicts for owner acceptance.
-15. Only after a separate explicit instruction, apply approved migrations remotely,
-    deploy the Edge Function and perform non-destructive production acceptance.
+15. **Remote database deployment complete.** After a separate explicit instruction,
+    all nine approved migrations were applied and non-destructive production
+    acceptance passed. The Edge Function remains intentionally undeployed.
 
 ## 14. Remaining entitlement and data questions
 
@@ -974,7 +976,10 @@ from remotely deployed Stage 6 behavior.
 
 ## 15. Architecture-review checkpoint
 
-The approved material schema change is implemented and verified locally. No remote
-migration, database push/reset, Edge Function deployment, Angel One/Trendlyne call
-or production-data mutation was performed. The subscribed Trendlyne MCP schema and
-rights inspection remains the gate for provider-specific mappings and ingestion.
+The approved material schema change is implemented and verified locally and
+remotely. The linked history now includes exactly the nine Stage 7 migrations
+through `20260908120000`; remote catalog, lint, data-safety, application and RLS
+checks passed. No database reset, Edge Function deployment, Angel One/Trendlyne
+call, invented enrichment data or transaction/accounting mutation was performed.
+The subscribed Trendlyne MCP schema and rights inspection remains the gate for
+provider-specific mappings and ingestion in Stage 7.1.
