@@ -983,3 +983,19 @@ checks passed. No database reset, Edge Function deployment, Angel One/Trendlyne
 call, invented enrichment data or transaction/accounting mutation was performed.
 The subscribed Trendlyne MCP schema and rights inspection remains the gate for
 provider-specific mappings and ingestion in Stage 7.1.
+
+## 16. Stage 7.1A–C completion addendum
+
+Stage 7.1A completed discovery of the subscribed Trendlyne MCP contract and stable
+identity/document fields. Stage 7.1B correctly stopped at the absence of a trusted
+runtime adapter. Stage 7.1C closes that gate with a server-only adapter behind
+`refresh-security-enrichment`, strict portfolio/open-holding/equity limits, verified
+provider-instrument mappings, immutable raw provenance and bounded leases.
+
+The linked migration and function are deployed. The approved ten-security pilot
+succeeded for identity, first-wave fundamentals and aggregate ownership; focused
+annual-report discovery succeeded for three securities and retained only stable
+source headers as `REVIEW_REQUIRED`. Adjusted provider P/B remains quarantined,
+missing period/scope/currency is not invented, and Angel One remains the current
+price authority. The pilot did not select canonical observations, seed taxonomy,
+change portfolio/accounting data, ingest the remaining holdings, or start Stage 8.

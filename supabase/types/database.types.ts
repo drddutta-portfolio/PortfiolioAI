@@ -2876,6 +2876,7 @@ export type Database = {
           observed_exchange: string | null
           observed_isin: string | null
           observed_name: string | null
+          provider_instrument_id: string | null
           observed_series: string | null
           observed_symbol: string | null
           security_id: string | null
@@ -2892,6 +2893,7 @@ export type Database = {
           observed_exchange?: string | null
           observed_isin?: string | null
           observed_name?: string | null
+          provider_instrument_id?: string | null
           observed_series?: string | null
           observed_symbol?: string | null
           security_id?: string | null
@@ -2908,6 +2910,7 @@ export type Database = {
           observed_exchange?: string | null
           observed_isin?: string | null
           observed_name?: string | null
+          provider_instrument_id?: string | null
           observed_series?: string | null
           observed_symbol?: string | null
           security_id?: string | null

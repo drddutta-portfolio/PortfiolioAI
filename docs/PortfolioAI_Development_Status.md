@@ -2,7 +2,7 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 7 — deployed and complete; Stage 7.1 Trendlyne connection remains separately gated
+**Current milestone:** Stage 7.1C — trusted Trendlyne adapter deployed and controlled pilot complete; Stage 8 not started
 
 **Last reviewed:** 8 September 2026
 
@@ -19,10 +19,10 @@ owner.
 
 - Frontend: React, Vite, and strict TypeScript.
 - Backend: Supabase Auth, PostgreSQL, Row Level Security, RPCs, and Edge Functions.
-- Current major sources/integrations: trusted Excel/XLSX portfolio imports and
-  Angel One SmartAPI market prices through a server-side integration. Trendlyne MCP
-  is the planned primary structured fundamental/intelligence provider but is not
-  connected until subscribed tools, entitlement and retention rights are verified.
+- Current major sources/integrations: trusted Excel/XLSX portfolio imports, Angel
+  One SmartAPI market prices, and the server-side Trendlyne MCP adapter for
+  controlled structured fundamental, aggregate-ownership and provisional-document
+  evidence. Angel One remains current-price authority.
 - Portfolio: one consolidated portfolio across distinct broker/demat accounts.
 
 ## B. Canonical document hierarchy
@@ -456,14 +456,46 @@ schema without PGRST/schema errors or a live provider. Existing holdings,
 accounting, classifications and themes remain available. Stage 7 is therefore
 **DEPLOYED / COMPLETE**.
 
-Trendlyne remains registered but inactive, unentitled and without verified
-retention rights. Stage 7.1 may begin only with subscribed MCP tool/schema and
-rights inspection; provider-specific mappings and the first real ingestion remain
-separately reviewable work. No Edge Function was deployed during this checkpoint.
+That statement described the Stage 7 completion checkpoint. Stage 7.1A subsequently
+completed subscribed MCP tool/schema and rights discovery; Stage 7.1B correctly
+identified the missing trusted server-side adapter as the ingestion gate. Stage
+7.1C has now activated the owner-approved source and deployed that adapter.
+
+## E.6 Stage 7.1C trusted Trendlyne pilot
+
+Migration `20260908200000_enable_trusted_trendlyne_ingestion.sql` is applied to the
+linked project. It adds the provider-scoped instrument identifier, its verified
+uniqueness rule, document-appearance deduplication, the reviewed first-wave metric
+dictionary, and auditable owner-approved provider activation. The deployed
+`refresh-security-enrichment` function reads the credential only from the server
+secret store, enforces authenticated portfolio ownership, open-held equity scope,
+one-to-ten security limits, a three-security document limit and ingestion leases.
+
+The controlled pilot succeeded for HDFCBANK, M&M, BHARTIARTL, MOTHERSON, BBOX,
+AVALON, ASTRAMICRO, WABAG, WAAREEENER and ZAGGLE. All ten received distinct verified
+Trendlyne instrument mappings; 70 first-wave fundamental observations and 58
+aggregate ownership observations were retained. Ten adjusted P/B observations are
+explicitly `CONFLICTING`, not generic P/B. Three annual-report source appearances
+were retained for HDFCBANK, M&M and BHARTIARTL as `REVIEW_REQUIRED`; full document
+bodies were discarded. A repeat document run left exactly three documents and
+three appearances.
+
+Before/after pilot counts remained unchanged at 482 transactions, 249 current
+holdings, five broker accounts, zero position settings, two themes, 14 theme
+memberships, 248 latest-price rows and zero price-history rows. No accounting,
+holdings, role, theme or Angel One price data changed. Browser mutation remains
+denied and browser reads of ingestion-run administration remain denied. Normal
+application reads remain cache-only.
+
+The pilot establishes provider evidence, not selected canonical fundamentals.
+Provider periods/scopes/currency that were absent remain null, classification
+taxonomy values remain unseeded, document identities require review, and full
+portfolio ingestion is not authorized. Stage 8 and Theme Outlook scoring have not
+started.
 
 ## F. Deferred future work
 
-- production Trendlyne/fundamental ingestion after subscribed MCP schema and rights verification
+- production Trendlyne refresh beyond the controlled ten-security pilot, subject to a separately approved rollout policy
 - Quality-Growth diagnostic
 - Core Selection and Core Health engines
 - Satellite Opportunity Engine

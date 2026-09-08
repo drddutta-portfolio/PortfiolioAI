@@ -1,48 +1,70 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
-import { parseEnrichmentAction, PLANNED_PRIMARY_ENRICHMENT_SOURCE } from "../_shared/enrichment.ts"
-import { safeError, SafeOperationalError } from "../_shared/security.ts"
+import {createClient} from "https://esm.sh/@supabase/supabase-js@2"
+import {parseEnrichmentAction,PLANNED_PRIMARY_ENRICHMENT_SOURCE} from "../_shared/enrichment.ts"
+import {safeError,SafeOperationalError} from "../_shared/security.ts"
+import {assertExpectedStockId,parseDocumentAppearances,parseOverview,parseOwnership,parseSearchCandidates,TrendlyneMcpClient,verifyIdentity,type CanonicalIdentity,type TrendlyneIdentity} from "../_shared/trendlyne.ts"
 
-const corsHeaders = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type" }
-const json = (status: number, body: Readonly<Record<string, unknown>>) => new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } })
+const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, x-client-info, apikey, content-type"}
+const reply=(status:number,body:Record<string,unknown>)=>new Response(JSON.stringify(body),{status,headers:{...cors,"Content-Type":"application/json"}})
+const sha=async(value:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify(value))))).map(x=>x.toString(16).padStart(2,"0")).join("")
+type Admin=ReturnType<typeof createClient>
+interface RequestBody{action?:unknown;portfolioId?:unknown;securityIds?:unknown;sourceCode?:unknown}
+interface Security extends CanonicalIdentity{readonly id:string}
+const providerFailureCode=(error:unknown)=>{const message=error instanceof Error?error.message:"";return ["AMBIGUOUS_PROVIDER_IDENTITY","NO_EXACT_PROVIDER_IDENTITY","CONFLICTING_PROVIDER_IDENTITY","UNEXPECTED_PROVIDER_SECURITY","UNEXPECTED_PROVIDER_DOCUMENT_SECURITY","PROVIDER_IDENTITY_ALREADY_MAPPED","PROVIDER_NETWORK_ERROR","PROVIDER_PROTOCOL_ERROR","PROVIDER_RPC_ERROR","PROVIDER_RESULT_MISSING","PROVIDER_HTTP_400","PROVIDER_HTTP_401","PROVIDER_HTTP_403","PROVIDER_HTTP_404","PROVIDER_HTTP_405","PROVIDER_HTTP_406","PROVIDER_HTTP_415","PROVIDER_HTTP_429","PROVIDER_HTTP_500","PROVIDER_HTTP_502","PROVIDER_HTTP_503","PROVIDER_HTTP_504"].find(code=>message.includes(code))??"PROVIDER_REQUEST_FAILED"}
 
-interface RequestBody { readonly action?: unknown; readonly portfolioId?: unknown; readonly securityIds?: unknown; readonly sourceCode?: unknown }
-
-Deno.serve(async (request) => {
-  if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders })
-  if (request.method !== "POST") return json(405,{ error: "Method not allowed." })
-  const authorization = request.headers.get("Authorization")
-  if (!authorization) return json(401,{ error: "Authentication required." })
-  const url = Deno.env.get("SUPABASE_URL"), anonKey = Deno.env.get("SUPABASE_ANON_KEY"), serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
-  if (!url || !anonKey || !serviceKey) return json(500,{ error: "Supabase server configuration is incomplete." })
-  try {
-    const body = await request.json() as RequestBody
-    const action = parseEnrichmentAction(body.action)
-    if (!action) throw new SafeOperationalError("INVALID_ACTION","Unknown enrichment action.",400)
-    const userClient = createClient(url,anonKey,{ global:{ headers:{ Authorization:authorization } } })
-    const { data:userData,error:userError } = await userClient.auth.getUser()
-    if (userError || !userData.user) throw new SafeOperationalError("AUTHENTICATION_REQUIRED","Invalid authenticated session.",401)
-    const securityIds = Array.isArray(body.securityIds) && body.securityIds.every((value) => typeof value === "string") ? [...new Set(body.securityIds as string[])].slice(0,1000) : []
-    if (action === "READ_CACHE") {
-      if (!securityIds.length) return json(200,{ observations:[] })
-      const { data,error } = await userClient.from("current_security_enrichment_v1").select("*").in("security_id",securityIds)
-      if (error) throw error
-      return json(200,{ observations:data ?? [] })
-    }
-    if (typeof body.portfolioId !== "string") throw new SafeOperationalError("INVALID_PORTFOLIO","portfolioId is required.",400)
-    const admin = createClient(url,serviceKey,{ auth:{ persistSession:false } })
-    const { data:portfolio,error:portfolioError } = await admin.from("portfolios").select("id").eq("id",body.portfolioId).eq("user_id",userData.user.id).single()
-    if (portfolioError || !portfolio) throw new SafeOperationalError("PORTFOLIO_NOT_FOUND","Portfolio not found.",404)
-    const sourceCode = typeof body.sourceCode === "string" ? body.sourceCode : PLANNED_PRIMARY_ENRICHMENT_SOURCE
-    const { data:source,error:sourceError } = await admin.from("data_sources").select("code,is_active,entitlement_verified,retention_rights_verified,capabilities").eq("code",sourceCode).single()
-    if (sourceError || !source) throw new SafeOperationalError("SOURCE_NOT_FOUND","Enrichment source is not registered.",404)
-    if (!source.is_active || !source.entitlement_verified || !source.retention_rights_verified) {
-      const completedAt = new Date().toISOString()
-      await admin.from("data_ingestion_runs").insert({ source_code:source.code,operation:action,requested_by:userData.user.id,status:"CONFIGURATION_PENDING",completed_at:completedAt,requested_count:securityIds.length,metadata:{ reason:"ENTITLEMENT_OR_RETENTION_UNVERIFIED" } })
-      return json(409,{ code:"SOURCE_CONFIGURATION_PENDING",error:"The subscribed source methods, entitlement, and retention rights must be verified before ingestion.",sourceCode:source.code })
-    }
-    throw new SafeOperationalError("ADAPTER_NOT_REGISTERED","No verified provider adapter is registered for this source.",501)
-  } catch (error) {
-    const safe = safeError(error)
-    return json(safe.status,{ error:safe.publicMessage,code:safe.code })
+async function sourceRecord(admin:Admin,runId:string,kind:string,externalId:string,payload:Record<string,unknown>){
+  const payloadHash=await sha(payload),row={source_code:PLANNED_PRIMARY_ENRICHMENT_SOURCE,ingestion_run_id:runId,record_kind:kind,external_record_id:externalId,payload_hash:payloadHash,raw_payload:payload,terms_snapshot:{approval_source:"OWNER_APPROVED_STAGE_7_1C"}}
+  const inserted=await admin.from("data_source_records").upsert(row,{onConflict:"source_code,record_kind,external_record_id,payload_hash",ignoreDuplicates:true}).select("id").maybeSingle();if(inserted.error)throw inserted.error;if(inserted.data)return inserted.data.id
+  const existing=await admin.from("data_source_records").select("id").eq("source_code",row.source_code).eq("record_kind",kind).eq("external_record_id",externalId).eq("payload_hash",payloadHash).single();if(existing.error)throw existing.error;return existing.data.id as string
+}
+async function putFundamentals(admin:Admin,runId:string,securityId:string,stockId:string,metrics:ReturnType<typeof parseOverview>["metrics"]){
+  const recordId=await sourceRecord(admin,runId,"FUNDAMENTAL_SNAPSHOT",`${stockId}:overview`,{stock_id:stockId,metrics})
+  for(const metric of metrics){const result=await admin.from("fundamental_observations").upsert({security_id:securityId,metric_code:metric.code,source_record_id:recordId,source_code:PLANNED_PRIMARY_ENRICHMENT_SOURCE,numeric_value:metric.value,unit:metric.unit,period_type:metric.periodType,consolidation_scope:null,observed_at:null,fresh_until:new Date(Date.now()+86400000).toISOString(),evidence_status:metric.evidenceStatus},{onConflict:"security_id,metric_code,source_code,period_end,period_type,consolidation_scope,source_record_id",ignoreDuplicates:true});if(result.error)throw result.error}
+}
+async function putOwnership(admin:Admin,runId:string,securityId:string,stockId:string,items:ReturnType<typeof parseOwnership>){
+  const recordId=await sourceRecord(admin,runId,"AGGREGATE_OWNERSHIP",`${stockId}:shareholding`,{stock_id:stockId,aggregate_ownership:items})
+  for(const item of items){const result=await admin.from("fundamental_observations").upsert({security_id:securityId,metric_code:item.code,source_record_id:recordId,source_code:PLANNED_PRIMARY_ENRICHMENT_SOURCE,numeric_value:item.value,unit:item.unit,period_end:item.periodEnd,period_type:item.periodEnd?"QUARTER":null,consolidation_scope:null,observed_at:null,fresh_until:new Date(Date.now()+7776000000).toISOString(),evidence_status:"AVAILABLE"},{onConflict:"security_id,metric_code,source_code,period_end,period_type,consolidation_scope,source_record_id",ignoreDuplicates:true});if(result.error)throw result.error}
+}
+async function putDocuments(admin:Admin,runId:string,security:Security,identity:TrendlyneIdentity,text:string){
+  const appearances=parseDocumentAppearances(text).slice(0,10)
+  for(const appearance of appearances){
+    assertExpectedStockId(identity.stockId,appearance.stockId)
+    if(appearance.symbol!==identity.symbol)throw new Error("UNEXPECTED_PROVIDER_DOCUMENT_SECURITY")
+    const payload={stock_id:identity.stockId,provider_document_id:appearance.providerDocumentId,company_name:appearance.companyName,symbol:appearance.symbol,document_type:appearance.documentType,published_at:appearance.publishedAt,body_retained:false}
+    const recordId=await sourceRecord(admin,runId,"RESEARCH_DOCUMENT_APPEARANCE",appearance.providerDocumentId,payload),metadataHash=await sha({source:PLANNED_PRIMARY_ENRICHMENT_SOURCE,stock_id:identity.stockId,provider_document_id:appearance.providerDocumentId})
+    const existingDocument=await admin.from("research_documents").select("id").eq("security_id",security.id).eq("metadata_identity_hash",metadataHash).maybeSingle();if(existingDocument.error)throw existingDocument.error
+    let documentId=existingDocument.data?.id as string|undefined
+    if(!documentId){const inserted=await admin.from("research_documents").insert({security_id:security.id,document_type:appearance.documentType,published_at:appearance.publishedAt,metadata_identity_hash:metadataHash,identity_basis:"REVIEW_REQUIRED",identity_status:"REVIEW_REQUIRED",identity_evidence:{provider_document_id:appearance.providerDocumentId,provider_stock_id:identity.stockId,canonical_identity_not_established:true}}).select("id").single();if(inserted.error)throw inserted.error;documentId=inserted.data.id}
+    const existingSource=await admin.from("research_document_sources").select("id").eq("source_code",PLANNED_PRIMARY_ENRICHMENT_SOURCE).eq("provider_document_id",appearance.providerDocumentId).maybeSingle();if(existingSource.error)throw existingSource.error
+    if(!existingSource.data){const source=await admin.from("research_document_sources").insert({research_document_id:documentId,source_code:PLANNED_PRIMARY_ENRICHMENT_SOURCE,source_record_id:recordId,provider_document_id:appearance.providerDocumentId,source_title:appearance.documentType,source_published_at:appearance.publishedAt,retrieved_at:new Date().toISOString(),extraction_method:"MCP_SEMANTIC_SEARCH_HEADER",extraction_version:"1",extraction_provenance:{body_retained:false,header_verified:true},source_status:"REVIEW_REQUIRED"});if(source.error)throw source.error}
   }
+  return appearances.length
+}
+
+Deno.serve(async request=>{
+  if(request.method==="OPTIONS")return new Response("ok",{headers:cors});if(request.method!=="POST")return reply(405,{error:"Method not allowed."})
+  const authorization=request.headers.get("Authorization");if(!authorization)return reply(401,{error:"Authentication required."})
+  const supabaseUrl=Deno.env.get("SUPABASE_URL"),anonKey=Deno.env.get("SUPABASE_ANON_KEY"),serviceKey=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),mcpUrl=Deno.env.get("TRENDLYNE_MCP_URL");if(!supabaseUrl||!anonKey||!serviceKey)return reply(500,{error:"Supabase server configuration is incomplete."})
+  try{
+    const body=await request.json() as RequestBody,action=parseEnrichmentAction(body.action);if(!action)throw new SafeOperationalError("INVALID_ACTION","Unknown enrichment action.",400)
+    const user=createClient(supabaseUrl,anonKey,{global:{headers:{Authorization:authorization}}}),auth=await user.auth.getUser();if(auth.error||!auth.data.user)throw new SafeOperationalError("AUTHENTICATION_REQUIRED","Invalid authenticated session.",401)
+    const ids=Array.isArray(body.securityIds)&&body.securityIds.every(x=>typeof x==="string")?[...new Set(body.securityIds as string[])]:[]
+    if(action==="READ_CACHE"){if(!ids.length)return reply(200,{observations:[]});const cached=await user.from("current_security_enrichment_v1").select("*").in("security_id",ids);if(cached.error)throw cached.error;return reply(200,{observations:cached.data??[]})}
+    if(typeof body.portfolioId!=="string")throw new SafeOperationalError("INVALID_PORTFOLIO","portfolioId is required.",400);if(!ids.length||ids.length>10)throw new SafeOperationalError("INVALID_PILOT_SCOPE","A refresh must contain one to ten securities.",400);if(action==="REFRESH_DOCUMENTS"&&ids.length>3)throw new SafeOperationalError("INVALID_DOCUMENT_SCOPE","Document discovery is limited to three pilot securities.",400)
+    const admin=createClient(supabaseUrl,serviceKey,{auth:{persistSession:false}}),portfolio=await admin.from("portfolios").select("id").eq("id",body.portfolioId).eq("user_id",auth.data.user.id).single();if(portfolio.error)throw new SafeOperationalError("PORTFOLIO_NOT_FOUND","Portfolio not found.",404)
+    const sourceCode=typeof body.sourceCode==="string"?body.sourceCode:PLANNED_PRIMARY_ENRICHMENT_SOURCE;if(sourceCode!==PLANNED_PRIMARY_ENRICHMENT_SOURCE)throw new SafeOperationalError("UNSUPPORTED_SOURCE","Only the approved provider is supported.",400)
+    const source=await admin.from("data_sources").select("is_active,entitlement_verified,retention_rights_verified").eq("code",sourceCode).single();if(source.error)throw new SafeOperationalError("SOURCE_NOT_FOUND","Enrichment source is not registered.",404)
+    if(!mcpUrl||!source.data.is_active||!source.data.entitlement_verified||!source.data.retention_rights_verified){await admin.from("data_ingestion_runs").insert({source_code:sourceCode,operation:action,requested_by:auth.data.user.id,status:"CONFIGURATION_PENDING",completed_at:new Date().toISOString(),requested_count:ids.length,metadata:{reason:"TRUSTED_PROVIDER_CONFIGURATION_INCOMPLETE"}});return reply(409,{code:"SOURCE_CONFIGURATION_PENDING",error:"The trusted provider configuration is incomplete."})}
+    const holdings=await admin.from("current_holdings").select("security_id").eq("portfolio_id",body.portfolioId).in("security_id",ids);if(holdings.error)throw holdings.error;const held=new Set((holdings.data??[]).map(x=>x.security_id));if(ids.some(id=>!held.has(id)))throw new SafeOperationalError("SECURITY_NOT_HELD","Every requested security must be an open holding.",403)
+    const securities=await admin.from("securities").select("id,name,symbol,isin,asset_class").in("id",ids);if(securities.error)throw securities.error;if((securities.data??[]).some(x=>x.asset_class!=="EQUITY"))throw new SafeOperationalError("EQUITY_ONLY","The pilot accepts equities only.",400)
+    const identifiers=await admin.from("security_identifiers").select("security_id,identifier_value").eq("identifier_type","BSE_CODE").in("security_id",ids),bse=new Map((identifiers.data??[]).map(x=>[x.security_id,x.identifier_value]));const rows=(securities.data??[]).map(x=>({id:x.id,name:x.name,symbol:x.symbol,isin:x.isin,bseCode:bse.get(x.id)??null})) as Security[]
+    const leaseHolder=crypto.randomUUID(),lease=await admin.rpc("acquire_data_ingestion_lease_v1",{p_source_code:sourceCode,p_operation:action,p_lease_holder:leaseHolder,p_lease_seconds:900});if(lease.error)throw lease.error;if(!lease.data?.[0]?.acquired)throw new SafeOperationalError("REFRESH_IN_PROGRESS","A provider refresh is already running or cooling down.",429)
+    const run=await admin.from("data_ingestion_runs").insert({source_code:sourceCode,operation:action,requested_by:auth.data.user.id,status:"RUNNING",requested_count:rows.length,metadata:{adapter_contract:"TRENDLYNE_MCP_V1",pilot_limit:10}}).select("id").single();if(run.error)throw run.error
+    const mapped=await admin.from("security_identity_observations").select("security_id,provider_instrument_id").eq("source_code",sourceCode).eq("evidence_status","MATCHED").in("security_id",ids);if(mapped.error)throw mapped.error;const mappedBySecurity=new Map((mapped.data??[]).map(x=>[x.security_id,x.provider_instrument_id as string]))
+    const mcp=new TrendlyneMcpClient(mcpUrl),failures:{securityId:string;reason:string}[]=[];let fetched=0
+    for(const security of rows){try{const overviewText=await mcp.call("get_overview_news_corp_events",{stock_code:security.symbol,type:"overview"}),overview=parseOverview(overviewText),knownStockId=mappedBySecurity.get(security.id);let candidates:ReturnType<typeof parseSearchCandidates>
+      if(knownStockId){assertExpectedStockId(knownStockId,overview.identity.stockId);candidates=[{...overview.identity}]}
+      else{let searchText=await mcp.call("search_entities",{query:security.symbol,entity_type:"stock",limit:10});candidates=parseSearchCandidates(searchText);if(!candidates.some(x=>x.symbol===security.symbol||(security.isin!==null&&x.isin===security.isin))){searchText=await mcp.call("search_entities",{query:overview.identity.name,entity_type:"stock",limit:10});candidates=parseSearchCandidates(searchText)}}
+      const identity=verifyIdentity(security,candidates,overview),identityPayload={identity,candidates:candidates.map(x=>({name:x.name,symbol:x.symbol,bseCode:x.bseCode,isin:x.isin})),verification:"EXISTING_STOCK_ID_OR_ISIN_BSE_SYMBOL_PROVIDER_NAME"},recordId=await sourceRecord(admin,run.data.id,"SECURITY_IDENTITY",identity.stockId,identityPayload);const existingIdentity=await admin.from("security_identity_observations").select("id,security_id").eq("source_code",sourceCode).eq("provider_instrument_id",identity.stockId).eq("evidence_status","MATCHED").maybeSingle();if(existingIdentity.error)throw existingIdentity.error;if(existingIdentity.data&&existingIdentity.data.security_id!==security.id)throw new Error("PROVIDER_IDENTITY_ALREADY_MAPPED");if(!existingIdentity.data){const identityWrite=await admin.from("security_identity_observations").insert({security_id:security.id,source_record_id:recordId,source_code:sourceCode,provider_instrument_id:identity.stockId,observed_name:identity.name,observed_isin:identity.isin,observed_exchange:"NSE",observed_symbol:identity.symbol,evidence_status:"MATCHED",confidence:"1.0000"});if(identityWrite.error)throw identityWrite.error}if(action==="REFRESH_FUNDAMENTALS")await putFundamentals(admin,run.data.id,security.id,identity.stockId,overview.metrics);if(action==="REFRESH_MARKET_CAP")await putFundamentals(admin,run.data.id,security.id,identity.stockId,overview.metrics.filter(x=>x.code==="MARKET_CAP_PROVIDER_RAW"));if(action==="REFRESH_OWNERSHIP"){const ownershipText=await mcp.call("get_ownership_deals_insider_sast",{stock_code:security.symbol,type:"shareholding"});await putOwnership(admin,run.data.id,security.id,identity.stockId,parseOwnership(`${overviewText}\n${ownershipText}`))}if(action==="REFRESH_DOCUMENTS"){const documentText=await mcp.call("get_document_search_results",{query:`${identity.name} FY26 annual report`});if(await putDocuments(admin,run.data.id,security,identity,documentText)===0)throw new Error("DOCUMENT_APPEARANCE_NOT_FOUND")}fetched++}catch(error){failures.push({securityId:security.id,reason:providerFailureCode(error)})}}
+    const failed=failures.length,status=failed===0?"SUCCEEDED":fetched===0?"FAILED":"PARTIAL";await admin.from("data_ingestion_runs").update({status,completed_at:new Date().toISOString(),fetched_count:fetched,failed_count:failed,error_summary:failed?`${failed} security refresh(es) failed.`:null,metadata:{adapter_contract:"TRENDLYNE_MCP_V1",failures}}).eq("id",run.data.id);await admin.rpc("release_data_ingestion_lease_v1",{p_source_code:sourceCode,p_operation:action,p_lease_holder:leaseHolder,p_cooldown_seconds:0});return reply(status==="FAILED"?502:200,{runId:run.data.id,status,requestedCount:rows.length,fetchedCount:fetched,failedCount:failed,failures})
+  }catch(error){const safe=safeError(error);return reply(safe.status,{error:safe.publicMessage,code:safe.code})}
 })

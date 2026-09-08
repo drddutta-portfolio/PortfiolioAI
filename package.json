@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint .",
+    "lint:edge": "eslint --config eslint.edge.config.js supabase/functions",
+    "test:edge": "vitest run --config vitest.edge.config.ts",
     "test": "vitest run"
   },
   "dependencies": {

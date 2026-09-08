@@ -6,5 +6,10 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
+    // Fork fan-out exhausts this project's desktop execution environment before
+    // workers can initialize. Serial threads preserve isolation and test coverage.
+    fileParallelism: false,
+    pool: "threads",
+    maxWorkers: 1,
   },
 })

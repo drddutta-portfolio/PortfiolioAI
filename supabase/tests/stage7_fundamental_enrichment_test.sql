@@ -3,8 +3,8 @@ create extension if not exists pgtap with schema extensions;
 select extensions.plan(23);
 
 select extensions.has_table('public','data_source_records','raw evidence table exists');
-select extensions.is((select is_active from public.data_sources where code='TRENDLYNE_MCP'),false,'Trendlyne remains inactive before subscribed schema verification');
-select extensions.is((select entitlement_verified from public.data_sources where code='TRENDLYNE_MCP'),false,'Trendlyne entitlement is not assumed');
+select extensions.is((select is_active from public.data_sources where code='TRENDLYNE_MCP'),true,'owner-approved Trendlyne adapter is active after Stage 7.1C migration');
+select extensions.is((select entitlement_verified from public.data_sources where code='TRENDLYNE_MCP'),true,'Trendlyne entitlement is explicitly recorded after owner approval');
 select extensions.is((select large_cap_max_rank from public.market_cap_classification_policies where code='SEBI_AMFI_FULL_MARKET_CAP_RANK_V1'),100,'large-cap boundary is rank 100');
 select extensions.is((select mid_cap_max_rank from public.market_cap_classification_policies where code='SEBI_AMFI_FULL_MARKET_CAP_RANK_V1'),250,'mid-cap boundary is rank 250');
 select extensions.throws_ok($$insert into public.market_cap_classification_policies(code,version,name,effective_from,large_cap_max_rank,mid_cap_max_rank,minimum_universe_size) values('BAD',1,'Bad',current_date,100,90,251)$$,'23514',null,'invalid rank boundaries are rejected');
