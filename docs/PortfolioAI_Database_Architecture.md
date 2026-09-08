@@ -1,7 +1,7 @@
 # PortfolioAI — Database Architecture
 
 **Step 0.4 — Foundation database design**  
-**Status:** Stages 1–5 implemented remotely; Stage 6 classification migration validated locally and awaiting remote approval
+**Status:** Stages 1–6 implemented remotely and accepted; Stage 7 foundation implemented locally, remote deployment pending
 
 ## 1. Purpose
 
@@ -982,7 +982,7 @@ The following are deliberately deferred and must be introduced through separatel
 - complete corporate-action processing
 - SPLIT and ADJUSTMENT quantity semantics
 - historical reconciliation operation
-- Trendlyne ingestion
+- production Trendlyne ingestion (provider-neutral Stage 7 storage and adapter contract exist locally)
 - credit-rating ingestion and Credit Intelligence scoring
 - analyst-consensus/estimate ingestion and revision scoring
 - cross-engine Investment Committee conflict observations
@@ -1004,23 +1004,23 @@ Never modify historical accounting/investment records merely to make a new score
 
 ## 24. Next implementation step
 
-Stage 5 and its additive trusted manual-write migration are applied and validated.
-Its on-demand FIFO projection
-keeps transactions authoritative and exposes match-level transaction lineage;
-unknown dates remain null and chronology-incomplete histories do not receive a
-fabricated basis.
+Stages 5, 5.1 and 6 are applied, validated and owner-accepted locally and remotely.
+Stage 6 migration `20260907220000_create_stage6_portfolio_classification.sql` and
+the three forward completion migrations through `20260908102000` are part of the
+linked migration history. They preserve transaction authority, imported evidence,
+asset-class/portfolio-role separation and the audited correction model described
+above.
 
-Advanced deterministic engines remain downstream work. Trendlyne analyst and
-estimate ingestion belongs in the Trendlyne phase; credit-rating ingestion waits
-for a verified source strategy; scoring and conflict synthesis belong in the
-advanced-engine and Investment Committee phases.
-
-Stage 6 migration `20260907220000_create_stage6_portfolio_classification.sql` is
-locally validated and awaits explicit approval before linked-project application.
-It adds only `themes`, `theme_securities`, their indexes, timestamps, holding-
-validation trigger, privileges, RLS policies and comments. It does not update
-existing rows or alter transactions, FIFO, securities, provider mappings or market
-prices.
+Stage 7 Fundamental Data & Security Enrichment has an owner-approved local
+foundation checkpoint documented in
+`Stage_7_Fundamental_Data_and_Security_Enrichment_Architecture_Proposal.md`.
+The provenance, identity, normalized observation, research-document,
+fundamental-reconciliation, market-cap policy and cache-view migrations are applied
+only to local Supabase. Browser writes remain
+prohibited and aggregate views are restricted to securities in the authenticated
+user's transaction history. Remote migration and Edge Function deployment require
+a separate instruction. Advanced deterministic scoring, credit/analyst intelligence
+and Investment Committee synthesis remain downstream work.
 
 ## 25. Stage 4 market-data status
 

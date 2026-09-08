@@ -2,7 +2,7 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 6 — implementation, remote migration and production acceptance complete
+**Current milestone:** Stage 7 — owner-approved foundation implemented and validated locally; remote deployment pending
 
 **Last reviewed:** 8 September 2026
 
@@ -20,7 +20,9 @@ owner.
 - Frontend: React, Vite, and strict TypeScript.
 - Backend: Supabase Auth, PostgreSQL, Row Level Security, RPCs, and Edge Functions.
 - Current major sources/integrations: trusted Excel/XLSX portfolio imports and
-  Angel One SmartAPI market prices through a server-side integration.
+  Angel One SmartAPI market prices through a server-side integration. Trendlyne MCP
+  is the planned primary structured fundamental/intelligence provider but is not
+  connected until subscribed tools, entitlement and retention rights are verified.
 - Portfolio: one consolidated portfolio across distinct broker/demat accounts.
 
 ## B. Canonical document hierarchy
@@ -357,16 +359,82 @@ was completed by marking only that historical data migration applied, after whic
 all later migrations and the full pgTAP suite passed. The already-applied migration
 was not edited.
 
+## E.4 Stage 7 local foundation checkpoint
+
+The owner-approved Stage 7 architecture is implemented and validated locally. Four
+functional migrations establish provider-neutral sources/raw evidence, ingestion
+runs and leases, canonical listings and identity reconciliation, classification and
+fundamental observations/decisions, the versioned SEBI/AMFI full-market-cap rank
+policy, cache-only current views and listing-aware Stage 4 mappings. Four small
+forward-only hardening migrations were added: the first local pgTAP run proved
+that an aggregate view could reveal an unavailable row for an unrelated user's
+security and schema lint found an invalid qualified `greatest` call in the lease
+function, an audit review added database-enforced immutability for raw and
+normalized provider evidence plus append-only selection-decision events. The
+last correction fixes both seeded policy dates to the 8 September 2026 owner
+decision so later replay cannot acquire a deployment-dependent effective date. The
+corrected view now limits results to the authenticated user's full
+transaction history while trusted server roles retain canonical-universe access.
+
+The approved narrow ninth migration is also applied locally. It adds explicit
+nullable publication time, immutable provider-independent research documents,
+multiple immutable source appearances, deterministic content/authority/metadata
+identity keys, and dedicated fundamental reconciliation cases/members/events.
+Competing observations remain intact, and RLS keeps document URLs and conflict
+membership within the user's transaction-history security scope.
+
+Trendlyne MCP is PortfolioAI's planned primary structured fundamental-data provider,
+but it is neither the canonical data model nor a single point of failure. It remains
+inactive. No provider-specific fields are canonical, and no network call is made
+until the subscribed MCP methods, stable identifiers, usage limits, caching and
+retention rights are inspected. The authenticated Edge Function contract serves
+stored cache data and records an explicit configuration-pending result for an
+unverified provider. Normal Dashboard operation never depends on a live MCP call.
+
+The Dashboard locally uses selected cached evidence for trusted sector and
+market-cap category allocation. Its denominator remains all priced open positions;
+Unclassified/Unavailable and ETF/non-equity buckets are explicit, and enrichment
+exposes LOADING, AVAILABLE, PARTIAL, UNAVAILABLE, STALE and FAILED states. The old
+unlabeled imported company-name fallback was removed. Transactions, portfolio
+roles, themes, accounting and Stage 4 price semantics are unchanged.
+
+The approved `PORTFOLIOAI_INDUSTRY_V1` taxonomy shell is present, but its sector and
+industry mapping values remain deliberately unseeded until actual STOCK MASTER and
+provider classifications are inspected. No production enrichment observations or
+coverage claims exist yet. The implemented `MARKET_CAP_CONFLICT_TOLERANCE_V1`
+routes like-for-like observations to review at more than 1% same-date difference or
+more than 5% adjacent-date difference within 36 hours; unlike bases or more distant
+dates are not compared. These thresholds never average or fabricate a value.
+
+Multi-source storage is implemented. Screener owner-provided CSV/XLSX ingestion,
+official company/filing retrieval, controlled allowlisted public-web acquisition,
+future licensed adapters and manual-audit workflows are architecturally supported
+but not operational. Adapter fixtures prove explicit source-field paths and
+metric-level fallback. Derived formula/input lineage is deferred to the mandatory
+pre-Stage-8 analytical-input review.
+
+Local validation covers 177 pgTAP/RLS assertions and 125 Vitest tests. TypeScript,
+ESLint, the production build, local public-schema lint and generated Supabase types
+pass. Full migration replay and `public` schema equivalence pass using an ephemeral,
+uncommitted shadow-only fixture that supplies the exact prerequisite data asserted
+by the historical MOTHERSON verification migration; the ordinary seedless replay
+still fails closed at that intentional production-data guard. Supabase-managed
+`storage` triggers differ with local service-image versions and are outside the
+PortfolioAI `public` schema result. Final secret and diff checks are recorded in the
+completion report for this checkpoint. No remote
+migration, remote schema mutation, provider call, Edge Function deployment or git
+push has occurred.
+
 ## F. Deferred future work
 
-- Trendlyne/fundamental ingestion
+- production Trendlyne/fundamental ingestion after subscribed MCP schema and rights verification
 - Quality-Growth diagnostic
 - Core Selection and Core Health engines
 - Satellite Opportunity Engine
 - Valuation, Momentum/Technical, Sector, Risk, and Portfolio-Fit engines
 - Advanced Position Sizing, Movement Radar, and Exit Radar
 - Investment Thesis and Stock Detail
-- Corporate research/document pipeline
+- production corporate research/document acquisition and extraction pipeline (canonical persistence exists locally)
 - Ownership/shareholding intelligence
 - Credit Intelligence
 - Analyst & Earnings Revision Intelligence

@@ -28,7 +28,6 @@ interface SourceTransactionEvidence {
   readonly quantity?: unknown
   readonly unit_price?: unknown
   readonly source_ticker?: unknown
-  readonly source_company?: unknown
 }
 
 interface SourceRowEvidence {
@@ -199,12 +198,6 @@ export async function loadPortfolioLedgerSnapshot(
     importBatchId: transaction.import_batch_id,
     sourceSequence: transaction.source_sequence,
   }})
-  const companyNames = new Map<string, string>()
-  transactions.forEach((transaction) => {
-    if (!transaction.sourceRowId) return
-    const company = sourceRows.get(transaction.sourceRowId)?.normalized.source_company
-    if (typeof company === "string" && company.trim()) companyNames.set(transaction.securityId, company.trim())
-  })
   const securityIdBySourceTicker = new Map<string, string>((securitiesResult.data ?? []).map((security) => [security.symbol.toUpperCase(), security.id]))
   transactions.forEach((transaction) => {
     if (!transaction.sourceRowId) return
@@ -223,9 +216,7 @@ export async function loadPortfolioLedgerSnapshot(
     if (holdingsResult.error) throw holdingsResult.error
     holdingsResult.data.forEach((row) => {
       const ticker = rawCellText(row.raw_data, ["TICKER", "SYMBOL", "STOCK", "SCRIP"])
-      const company = rawCellText(row.raw_data, ["COMPANY", "COMPANYNAME", "SECURITYNAME", "NAME"])
       const securityId = ticker ? securityIdBySourceTicker.get(canonicalSourceTicker(ticker)) : null
-      if (securityId && company) companyNames.set(securityId, company)
       const evidence = holdingsSnapshotEvidence(row)
       if (securityId && evidence && !snapshotEvidence.has(securityId)) snapshotEvidence.set(securityId, evidence)
     })
@@ -235,7 +226,7 @@ export async function loadPortfolioLedgerSnapshot(
   const securities: SecurityReference[] = (securitiesResult.data ?? []).map((security) => ({
     id: security.id,
     symbol: security.symbol,
-    name: security.name === security.symbol ? companyNames.get(security.id) ?? security.name : security.name,
+    name: security.name,
     sector: security.sector_id ? sectors.get(security.sector_id) ?? null : null,
     industry: security.industry_id ? industries.get(security.industry_id) ?? null : null,
     assetClass: security.asset_class,
