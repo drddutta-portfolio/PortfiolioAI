@@ -121,10 +121,20 @@ describe("calculatePortfolio", () => {
     expect(result.totals.currentValue).toBeNull()
     expect(result.totals.pricedMarketValue).toBe("12")
     expect(result.totals.coveredUnrealisedPnl).toBe("1.9")
+    expect(result.totals.coveredUnrealisedCostBasis).toBe("10.1")
+    expect(result.totals.coveredUnrealisedPnlPercent).toBe("18.811881188118811881")
     expect(result.totals.unrealisedCoverage).toBe(1)
     expect(result.openPositions[0]!.portfolioWeightPercent).toBe("100")
     expect(result.openPositions[1]!.portfolioWeightPercent).toBeNull()
     expect(result.quality.holdingsWithMissingPrices).toBe(1)
+  })
+
+  it("does not fabricate a covered unrealised return when covered cost is zero", () => {
+    const result = calculatePortfolio(snapshot([
+      transaction("a", "security-0", { unitPrice: "0" }),
+    ], 1, [{ securityId: "security-0", price: "12", currency: "INR", priceTimestamp: null, retrievedAt: "2026-09-07T04:00:05.000Z", provider: "ANGEL_ONE", marketSessionStatus: "UNKNOWN", isStale: false, staleAfterSeconds: 900 }]))
+    expect(result.totals.coveredUnrealisedCostBasis).toBe("0")
+    expect(result.totals.coveredUnrealisedPnlPercent).toBeNull()
   })
 
   it("uses average cost for a missing-date partial sale and keeps live P/L available", () => {

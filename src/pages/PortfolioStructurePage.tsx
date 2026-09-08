@@ -8,7 +8,7 @@ import type { PortfolioPosition, PortfolioRole, PortfolioTheme } from "../featur
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { displayError } from "../lib/displayError"
 
-type StructureFilter = PortfolioRole | "ALL"
+type StructureFilter = PortfolioRole | "IN_THEMES" | "ALL"
 
 function labelRole(role: PortfolioRole) {
   return role === "UNCLASSIFIED" ? "Unclassified" : role[0] + role.slice(1).toLowerCase()
@@ -26,7 +26,7 @@ export function PortfolioStructurePage() {
     if (!portfolio) return []
     const query = search.trim().toUpperCase()
     return portfolio.openPositions.filter((position) =>
-      (roleFilter === "ALL" || position.role === roleFilter)
+      (roleFilter === "ALL" || (roleFilter === "IN_THEMES" ? position.themes.some((theme) => theme.isActive) : position.role === roleFilter))
       && (assetFilter === "ALL" || (assetFilter === "OTHER" ? !["EQUITY", "ETF"].includes(position.assetClass) : position.assetClass === assetFilter))
       && (!query || `${position.symbol} ${position.company}`.toUpperCase().includes(query)))
       .sort((left, right) => (left.settings.priority ?? Number.MAX_SAFE_INTEGER) - (right.settings.priority ?? Number.MAX_SAFE_INTEGER) || left.symbol.localeCompare(right.symbol))
@@ -35,10 +35,14 @@ export function PortfolioStructurePage() {
   if (isLoading) return <div className="portfolio-loading"><span className="loader" /><p>Loading portfolio structure…</p></div>
   if (error || !portfolio) return <div className="notice notice-error" role="alert">{error ?? "Portfolio structure could not be loaded."}</div>
   const roles: PortfolioRole[] = ["CORE", "SATELLITE", "THEMATIC", "ETF", "OTHER", "UNCLASSIFIED"]
+  const summaryRoles: PortfolioRole[] = ["CORE", "SATELLITE", "ETF", "OTHER", "UNCLASSIFIED"]
+  const holdingsInActiveThemes = portfolio.openPositions.filter((position) => position.themes.some((theme) => theme.isActive)).length
   return <section className="portfolio-page">
     <div className="portfolio-hero compact-hero"><div><p className="eyebrow">Portfolio management</p><h1>Portfolio Structure</h1><p>Human-controlled roles, themes, and position preferences. Classification never changes transaction history or analytical scores.</p></div><button className="button button-secondary" onClick={() => setThemeOpen((value) => !value)}>{themeOpen ? "Close theme manager" : "Manage themes"}</button></div>
     <div className="structure-summary">
-      {roles.map((role) => <button key={role} className={roleFilter === role ? "structure-card active" : "structure-card"} onClick={() => setRoleFilter(role)}><span>{labelRole(role)}</span><strong>{portfolio.openPositions.filter((position) => position.role === role).length}</strong><small>{role === "ETF" ? "Role; asset class remains separate" : "open positions"}</small></button>)}
+      {summaryRoles.slice(0, 2).map((role) => <button key={role} className={roleFilter === role ? "structure-card active" : "structure-card"} onClick={() => setRoleFilter(role)}><span>{labelRole(role)}</span><strong>{portfolio.openPositions.filter((position) => position.role === role).length}</strong><small>open positions by primary role</small></button>)}
+      <button className={roleFilter === "IN_THEMES" ? "structure-card active" : "structure-card"} onClick={() => setRoleFilter("IN_THEMES")}><span>In Themes</span><strong>{holdingsInActiveThemes}</strong><small>unique holdings in active themes</small></button>
+      {summaryRoles.slice(2).map((role) => <button key={role} className={roleFilter === role ? "structure-card active" : "structure-card"} onClick={() => setRoleFilter(role)}><span>{labelRole(role)}</span><strong>{portfolio.openPositions.filter((position) => position.role === role).length}</strong><small>{role === "ETF" ? "Primary role; asset class remains separate" : "open positions by primary role"}</small></button>)}
     </div>
     {themeOpen ? <ThemeManager portfolioId={portfolio.portfolio.id} themes={portfolio.themes} positions={portfolio.openPositions} onSaved={reload} /> : null}
     <section className="panel structure-panel">

@@ -234,6 +234,12 @@ export function calculatePortfolio(snapshot: PortfolioLedgerSnapshot): Portfolio
   const coveredUnrealisedPnl = unrealisedPositions.length
     ? sum(unrealisedPositions.map((position) => new Decimal(position.unrealisedPnl ?? "0")))
     : null
+  const coveredUnrealisedCostBasis = unrealisedPositions.length
+    ? sum(unrealisedPositions.map((position) => new Decimal(position.investedAmount ?? "0")))
+    : null
+  const coveredUnrealisedPnlPercent = coveredUnrealisedPnl && coveredUnrealisedCostBasis?.gt(0)
+    ? coveredUnrealisedPnl.div(coveredUnrealisedCostBasis).times(100)
+    : null
   const unrealised = currentValue
     && investedPositions.length === rawOpenPositions.length
     && invested
@@ -267,6 +273,8 @@ export function calculatePortfolio(snapshot: PortfolioLedgerSnapshot): Portfolio
       unrealisedPnl: unrealised ? text(unrealised) : null,
       unrealisedPnlPercent: unrealised && invested?.gt(0) ? text(unrealised.div(invested).times(100)) : null,
       coveredUnrealisedPnl: coveredUnrealisedPnl ? text(coveredUnrealisedPnl) : null,
+      coveredUnrealisedCostBasis: coveredUnrealisedCostBasis ? text(coveredUnrealisedCostBasis) : null,
+      coveredUnrealisedPnlPercent: coveredUnrealisedPnlPercent ? text(coveredUnrealisedPnlPercent) : null,
       unrealisedCoverage: unrealisedPositions.length,
       realisedPnl: realised ? text(realised) : null,
       realisedCoverage: realisedPositions.length,

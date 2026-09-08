@@ -61,7 +61,7 @@ export function DashboardPage() {
       <Kpi label="Open holdings" value={String(portfolio.totals.openHoldings)} detail={`${portfolio.totals.closedHistories} closed histories retained`} />
       <Kpi label="Calculable Cost Basis" value={formatMoney(portfolio.totals.investedAmount)} detail={`${portfolio.totals.accountingCoverage} of ${portfolio.totals.openHoldings} open holdings covered · all histories: ${portfolio.totals.fifoAccountingHistories} FIFO, ${portfolio.totals.averageCostAccountingHistories} average cost, ${portfolio.totals.unresolvedAccountingHistories} unresolved`} />
       <Kpi label={completePrices ? "Total Current Market Value" : "Priced Market Value (partial)"} value={formatMoney(portfolio.totals.pricedMarketValue)} detail={`${portfolio.totals.priceCoverage} of ${portfolio.totals.openHoldings} priced · ${portfolio.totals.freshPriceCoverage} fresh · ${portfolio.totals.stalePriceCoverage} stale${unpriced.length ? ` · Unpriced: ${unpriced.join(", ")}` : ""}`} />
-      <Kpi label={portfolio.totals.unrealisedPnl === null ? "Covered Unrealised P&L (partial)" : "Unrealised P&L"} value={formatMoney(portfolio.totals.unrealisedPnl ?? portfolio.totals.coveredUnrealisedPnl)} detail={portfolio.totals.unrealisedPnl === null ? `${portfolio.totals.unrealisedCoverage} of ${portfolio.totals.openHoldings} holdings included; this is not complete portfolio P&L` : formatPercent(portfolio.totals.unrealisedPnlPercent)} />
+      <Kpi label={portfolio.totals.unrealisedPnl === null ? "Covered Unrealised P&L (partial)" : "Unrealised P&L"} value={formatMoney(portfolio.totals.unrealisedPnl ?? portfolio.totals.coveredUnrealisedPnl)} secondaryValue={formatSignedPercent(portfolio.totals.unrealisedPnl === null ? portfolio.totals.coveredUnrealisedPnlPercent : portfolio.totals.unrealisedPnlPercent)} detail={portfolio.totals.unrealisedPnl === null ? `${portfolio.totals.unrealisedCoverage} of ${portfolio.totals.openHoldings} holdings included; this is not complete portfolio P&L` : "All open holdings covered"} />
       <Kpi label="Supported realised P&L (covered)" value={formatMoney(portfolio.totals.realisedPnl)} detail={`${portfolio.totals.realisedCoverage} of ${portfolio.totals.realisedEligibleHistories} disposal histories covered; basis and unknown-charge quality are disclosed`} />
     </div>
     <section className="quality-strip" aria-label="Portfolio data quality"><Quality label="Missing transaction dates" value={portfolio.quality.holdingsWithMissingDates} /><Quality label="Missing broker attribution" value={portfolio.quality.holdingsWithMissingBrokers} /><Quality label="Missing prices" value={portfolio.quality.holdingsWithMissingPrices} /><Quality label="Stale prices" value={portfolio.quality.holdingsWithStalePrices} /></section>
@@ -94,8 +94,13 @@ function PerformanceBar({ position, max, kind }: { readonly position: PortfolioP
   return <div className={`performance-bar ${kind}`} title={`${position.symbol}: ${formatPercent(value.toFixed())}`}><span>{formatPercent(value.toFixed())}</span><i style={{ height: `${Decimal.max(3, value.abs().div(max).times(100)).toFixed()}%` }} /><strong>{position.symbol}</strong></div>
 }
 
-function Kpi({ label, value, detail }: { readonly label: string; readonly value: string; readonly detail: string }) {
-  return <article className="kpi-card"><span>{label}</span><strong>{value}</strong><small>{detail}</small></article>
+function Kpi({ label, value, secondaryValue, detail }: { readonly label: string; readonly value: string; readonly secondaryValue?: string; readonly detail: string }) {
+  return <article className="kpi-card"><span>{label}</span><strong>{value}</strong>{secondaryValue ? <b className="kpi-secondary-value">{secondaryValue}</b> : null}<small>{detail}</small></article>
+}
+function formatSignedPercent(value: string | null) {
+  if (value === null) return "Unavailable"
+  const decimal = new Decimal(value)
+  return `${decimal.gt(0) ? "+" : ""}${formatPercent(value)}`
 }
 function Quality({ label, value }: { readonly label: string; readonly value: number }) {
   return <div><span className={value ? "quality-dot quality-warn" : "quality-dot"} /><strong>{value}</strong><span>{label}</span></div>

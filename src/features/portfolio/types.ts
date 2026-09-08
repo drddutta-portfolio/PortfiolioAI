@@ -190,6 +190,8 @@ export interface PortfolioViewModel {
     readonly unrealisedPnl: string | null
     readonly unrealisedPnlPercent: string | null
     readonly coveredUnrealisedPnl: string | null
+    readonly coveredUnrealisedCostBasis: string | null
+    readonly coveredUnrealisedPnlPercent: string | null
     readonly unrealisedCoverage: number
     readonly realisedPnl: string | null
     readonly realisedCoverage: number

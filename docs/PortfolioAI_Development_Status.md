@@ -334,6 +334,23 @@ priced holdings and ₹22,59,239.37, with V2RETAIL still unpriced; broker analyt
 Best/Worst ranking render. Portfolio Structure shows BBOX as an equity stock, the
 nine remaining ETF assets as ETFs, and existing roles, themes and settings unchanged.
 
+Final Stage 6 UI-summary remediation keeps primary role and theme membership
+independent. Portfolio Structure now replaces the misleading primary-role
+`THEMATIC` summary card with `In Themes`, counting each open holding once when it
+belongs to at least one active user-controlled theme; the primary-role filter and
+editor continue to expose `THEMATIC` as a role, and ETF asset class remains a
+separate canonical classification. Production-backed browser verification shows
+the active Waste Management theme with six assigned holdings, an `In Themes` count
+of six, and exactly six positions after selecting that summary.
+
+Dashboard now displays a covered unrealised-return percentage beside the partial
+covered unrealised P/L amount. Its denominator is the remaining cost basis of the
+same holdings included in the covered P/L numerator, never total portfolio cost or
+imported HOLDINGS snapshot values; a zero or unsupported denominator remains
+unavailable. The 8 September production-backed snapshot shows covered unrealised
+P/L of ₹3,83,301.62 over ₹18,70,672.75, or +20.49%, covering 248 of 249 open
+holdings. V2RETAIL is the sole exclusion because trusted CMP remains unavailable.
+
 Clean empty-database replay remains blocked at the older, production-data-specific
 `20260907130000_verify_motherson_angel_mapping.sql` guard. Disposable-local replay
 was completed by marking only that historical data migration applied, after which

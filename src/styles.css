@@ -142,6 +142,7 @@ a:hover { color: #134832; }
 .kpi-card { min-height: 7.8rem; padding: 0.9rem 1rem; display: flex; flex-direction: column; border: 1px solid #d9dfdb; border-radius: 0.7rem; background: linear-gradient(145deg, #fff, #f8faf8); box-shadow: 0 8px 24px rgba(31, 51, 42, 0.04); }
 .kpi-card > span { color: #6d7971; font-size: 0.76rem; font-weight: 750; }
 .kpi-card strong { margin: auto 0 0.3rem; color: #183428; font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.35rem, 2vw, 2rem); font-weight: 500; }
+.kpi-card .kpi-secondary-value { margin-bottom: 0.3rem; color: #26734d; font-size: 0.9rem; font-weight: 800; }
 .kpi-card small { min-height: 2.2em; color: #7b857e; font-size: 0.7rem; line-height: 1.35; }
 .quality-strip { margin-bottom: 0.75rem; padding: 0.62rem 1rem; display: flex; flex-wrap: wrap; gap: 1.35rem; border: 1px solid #d9dfdb; border-left: 3px solid #d6983a; border-radius: 0.6rem; background: #fff; }
 .quality-strip > div { display: flex; align-items: center; gap: 0.5rem; color: #69756e; font-size: 0.77rem; }
