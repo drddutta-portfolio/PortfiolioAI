@@ -1,7 +1,7 @@
 # PortfolioAI — Database Architecture
 
 **Step 0.4 — Foundation database design**  
-**Status:** Stages 1–5 implemented; Stage 5 trusted-write migration applied remotely
+**Status:** Stages 1–5 implemented remotely; Stage 6 classification migration validated locally and awaiting remote approval
 
 ## 1. Purpose
 
@@ -149,7 +149,7 @@ Data-quality states are:
 - `MISSING_DATE_AND_BROKER`
 - `NEEDS_REVIEW`
 
-`transaction_date` is intentionally nullable because some legacy source transactions have no known date. Unknown dates must remain `NULL`; import date, snapshot date, row order and inferred dates must never be substituted. Undated active BUY and SELL transactions still contribute to current quantity. FIFO, holding-period, time-based realized P&L, CAGR, XIRR and tax-lot calculations must explicitly exclude or separately handle undated transactions rather than treating them as dated.
+`transaction_date` is intentionally nullable because some legacy source transactions have no known date. Unknown dates must remain `NULL`; import date, snapshot date, row order and inferred dates must never be substituted. Undated active BUY and SELL transactions still contribute to current quantity. FIFO, holding-period, time-based realized P&L, CAGR, XIRR and tax-lot calculations must never treat them as dated. Cost and P/L accounting separately handles an unprovable chronology through the deterministic, order-independent average-cost basis described below.
 
 Transaction quantities, prices, amounts, charges, taxes and source cost values use PostgreSQL `numeric(38,18)`. Application and API code must carry these values as decimal strings or another exact-decimal representation and must not rely on JavaScript floating-point arithmetic.
 
@@ -199,6 +199,39 @@ Stores portfolio-specific configuration for a security:
 - managed audit timestamps
 
 Roles are `CORE`, `SATELLITE`, `THEMATIC`, `ETF` and `OTHER`. Role is independent of asset class. Portfolio weights use `numeric(9,6)` and a `0–100` percentage convention.
+
+The absence of a row means genuinely unclassified. It is not equivalent to the
+explicit `OTHER` role. Stage 6 manages these values through ordinary owner-scoped
+RLS; transaction and reference-master privileges are unchanged.
+
+### 4.8 Stage 6 portfolio themes
+
+`themes` stores user-controlled, portfolio-owned theme name, description, optional
+maximum allocation, priority, active state and audit timestamps. Maximum allocation
+uses `numeric(9,6)` with the same `0–100` convention as position weights.
+
+`theme_securities` provides the many-to-many mapping. A composite foreign key binds
+every mapping to its theme's portfolio, and a database trigger requires the mapped
+security to be an open transaction-derived holding in that same portfolio at the
+time membership is created or moved. A security may belong to multiple themes,
+including while its primary role is unclassified; no settings row is required.
+Theme membership therefore cannot create or change a primary role. Role changes
+have no foreign-key or cascade path to theme membership. Both tables use ordinary
+owner-scoped RLS. Theme membership can be removed; themes are retired through
+`is_active` rather than deleted.
+
+### 4.9 Imported holdings-snapshot projection
+
+Stage 6 does not add a duplicate snapshot table. Immutable
+`import_source_rows.raw_data` already retains the typed cell value, formatted text,
+formula, error type, source sheet and original row. The application projects valid
+numeric HOLDINGS cells read-only and links them by preserved ticker/security
+identity. Spreadsheet errors and non-numeric placeholders are excluded.
+
+Projected snapshot average cost, invested value, price, market value and P&L are
+reconciliation evidence only. They never enter the Stage 5 FIFO engine, manufacture
+dates or lots, replace current trusted prices, or become canonical sector or
+fundamental data.
 
 ## 5. Implemented import architecture
 
@@ -266,6 +299,20 @@ creates an `UNRESOLVED` Angel One mapping when no
 trusted provider instrument identity is available; provider tokens and prices are
 never inferred.
 
+Stage 6 completion implements user-requested removal through `void_transaction_v1`
+without using the unresolved `REVERSAL` transaction type. An owned ACTIVE BUY/SELL
+is atomically moved to `REVERSED` only after the effective quantity remains valid.
+`restore_transaction_v1` may return a transaction voided through this trusted path
+to ACTIVE after the same validation. Both operations are idempotent and append an
+auditable event; the original transaction and imported lineage are never deleted or
+rewritten. Browser clients retain no direct ledger-write privilege.
+
+Canonical asset-class corrections use owner-submitted, portfolio-scoped requests.
+Because `securities` is a shared canonical reference, authenticated browser users
+cannot apply changes directly. A service-role-only trusted function validates and
+applies the reviewed request atomically and appends immutable old/new classification
+evidence. Asset class remains independent of transactions and portfolio roles.
+
 #### Trusted import-commit operation
 
 The browser has no mutation privilege on `transactions`. V1 parsing and review use
@@ -316,11 +363,20 @@ each caller/key to a SHA-256 request hash and created transaction. It has RLS an
 browser table privileges. The security-definer RPC uses an empty search path,
 schema-qualified objects, and authenticated-only execute privilege.
 
-FIFO is currently an on-demand exact-decimal projection rather than stored derived
-state. This is appropriate for the small personal portfolio, avoids stale caches,
-and retains match-level BUY/SELL transaction IDs in the calculation result. A
-future tax/reporting stage may materialise those results through a rebuildable,
-versioned projection without changing the ledger.
+Accounting is currently an on-demand exact-decimal projection rather than stored
+derived state. One basis is selected per effective security history. Provable
+chronology uses FIFO and retains match-level BUY/SELL transaction IDs. If chronology
+is not provable but ACTIVE BUY/SELL quantities and prices form a consistent ledger,
+the projection uses order-independent weighted-average acquisition cost: pooled BUY
+cost divided by pooled BUY quantity, with sold and remaining quantities valued at
+that basis. It does not manufacture lots or label the result FIFO. Oversells,
+unsupported types and missing essential quantity/price evidence remain unresolved.
+When any charge or tax is unknown, all charge/tax adjustments are excluded and the
+result is explicitly gross-only; known and unknown costs are not silently mixed.
+Imported HOLDINGS values never feed either calculation and remain reconciliation
+evidence. This on-demand design is appropriate for the small personal portfolio and
+avoids stale caches. A future tax/reporting stage may materialise versioned FIFO
+results without changing the source ledger or this disclosed fallback.
 
 ## 6. Market-data tables
 
@@ -958,6 +1014,13 @@ Advanced deterministic engines remain downstream work. Trendlyne analyst and
 estimate ingestion belongs in the Trendlyne phase; credit-rating ingestion waits
 for a verified source strategy; scoring and conflict synthesis belong in the
 advanced-engine and Investment Committee phases.
+
+Stage 6 migration `20260907220000_create_stage6_portfolio_classification.sql` is
+locally validated and awaits explicit approval before linked-project application.
+It adds only `themes`, `theme_securities`, their indexes, timestamps, holding-
+validation trigger, privileges, RLS policies and comments. It does not update
+existing rows or alter transactions, FIFO, securities, provider mappings or market
+prices.
 
 ## 25. Stage 4 market-data status
 

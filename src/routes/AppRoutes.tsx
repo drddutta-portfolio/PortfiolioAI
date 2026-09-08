@@ -18,6 +18,10 @@ const HoldingsPage = lazy(async () => {
   const module = await import("../pages/HoldingsPage")
   return { default: module.HoldingsPage }
 })
+const PortfolioStructurePage = lazy(async () => {
+  const module = await import("../pages/PortfolioStructurePage")
+  return { default: module.PortfolioStructurePage }
+})
 const TransactionsPage = lazy(async () => {
   const module = await import("../pages/TransactionsPage")
   return { default: module.TransactionsPage }
@@ -57,6 +61,16 @@ export function AppRoutes() {
             <AppShell>
               <Suspense fallback={<PageLoader label="Loading holdings" />}>
                 <HoldingsPage />
+              </Suspense>
+            </AppShell>
+          }
+        />
+        <Route
+          path="/app/structure"
+          element={
+            <AppShell>
+              <Suspense fallback={<PageLoader label="Loading portfolio structure" />}>
+                <PortfolioStructurePage />
               </Suspense>
             </AppShell>
           }

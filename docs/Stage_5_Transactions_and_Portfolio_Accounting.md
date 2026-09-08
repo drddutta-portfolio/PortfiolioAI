@@ -4,14 +4,14 @@
 
 Transactions remain the sole accounting source of truth. The Stage 5 accounting projection is computed on demand from the authenticated user's `ACTIVE` ledger rows using Decimal.js. Persisting derived lots was deliberately avoided at the current 477-row scale: it removes cache invalidation and rebuild risk while retaining a reproducible `BUY transaction → SELL transaction → matched quantity/cost/proceeds` match graph in each calculation result. Future tax or reporting work may materialise the same deterministic output without changing source transactions.
 
-## FIFO and accounting rules
+## Per-history accounting-basis rules
 
-- `BUY` creates an acquisition lot; `SELL` consumes open lots FIFO.
+- A complete, provable chronology uses FIFO: `BUY` creates an acquisition lot and `SELL` consumes open lots in chronological order.
+- An incomplete or ambiguous chronology uses deterministic, order-independent weighted-average cost when all effective ACTIVE BUY/SELL quantities and prices are valid. It does not create inferred lots or claim FIFO.
 - Exact decimal strings are used throughout. No authoritative calculation uses JavaScript floating point.
 - Stored BUY charges/taxes increase acquisition cost; stored SELL charges/taxes reduce proceeds. They are allocated pro rata across the transaction quantity.
-- If either charges or taxes are null, gross-price FIFO remains visible as `PARTIAL_ACCOUNTING`, with an explicit warning that unknown costs are excluded. Null is never converted in storage to zero.
-- A fully supported result is `DETERMINISTIC`. Missing dates or ambiguous equal timestamps with disposal history are `INCOMPLETE_CHRONOLOGY`. Missing price/quantity or unsupported event semantics are `NOT_CALCULABLE`.
-- Buy-only histories do not require chronological ordering to calculate aggregate remaining cost. A disposal history requires every transaction date and a unique available timestamp.
+- If any charge or tax is null, a gross price-based result remains visible as `GROSS_ONLY_CHARGES_INCOMPLETE`; all charges/taxes are excluded rather than partially mixed. Null is never changed in storage.
+- Basis is `FIFO`, `AVERAGE_COST` or `UNRESOLVED`. Quality separately discloses complete FIFO, incomplete-chronology average cost, gross-only costs, or an unresolved/inconsistent ledger.
 - An oversell is not assigned negative lots. Imported evidence is disclosed as not calculable; the manual-write RPC rejects it before insertion.
 - Market value remains independent of cost-basis coverage and continues to use Stage 4 cached-price semantics.
 
@@ -29,7 +29,7 @@ The `SECURITY DEFINER` function has an empty `search_path`, schema-qualified rel
 
 ## Holdings and Dashboard
 
-Holdings now display FIFO average cost, remaining cost, unrealised P&L, realised cost/proceeds/P&L for closed histories, and accounting quality. The Dashboard reports calculable cost-basis coverage and the number of incomplete positions. A portfolio-wide unrealised P&L is shown only when every open position has a trusted current price and `DETERMINISTIC` accounting; gross-only partial results never become a misleading total.
+Holdings display the selected basis, average cost, remaining cost, unrealised P&L, realised cost/proceeds/P&L and accounting quality. Dashboard totals and rankings may combine supported FIFO and average-cost histories only with explicit basis coverage. Incomplete price or accounting coverage remains partial and cannot be presented as a complete portfolio total.
 
 ## Deployment and real-portfolio validation (read-only snapshot, 7 September 2026)
 
@@ -40,9 +40,7 @@ refreshed from the deployed project.
 
 - 477 active transactions; 296 have unknown dates.
 - 270 security histories: 248 open and 22 closed.
-- 28 open partial-sale histories: 4 have provable FIFO order and gross remaining basis; 24 remain `INCOMPLETE_CHRONOLOGY` because at least one required transaction date is null.
-- Across open and closed disposal histories, 14 have provable gross FIFO order (4 open, 10 closed); 36 remain chronology-incomplete (24 open, 12 closed).
-- Historical charges/taxes are null for all 14 chronologically resolvable histories. They are therefore `PARTIAL_ACCOUNTING`, not fully deterministic net P&L.
+- The later owner-approved Stage 6-completion rule replaces the former unavailable state for chronology-incomplete but mathematically consistent BUY/SELL ledgers. Production-snapshot reconciliation classifies 58 histories as FIFO and 213 as average cost, with no currently unresolved history; 48/201 are open and 10/12 are closed respectively.
 - Quantity counts and Stage 4 market-price data are unchanged. The accounting projection is read-only and does not refresh or mutate market data.
 - Current-price coverage remains 248/248 and market value is unchanged at ₹22,48,208.55.
 

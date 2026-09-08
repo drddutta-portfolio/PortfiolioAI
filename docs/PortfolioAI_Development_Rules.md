@@ -28,6 +28,15 @@ The specification must remain independent of Codex, Claude Code, Lovable or any 
 - Never fabricate financial facts, catalysts, prices or research.
 - Every important metric must retain source and period provenance.
 - Deterministic financial calculations must not depend on an LLM.
+- FIFO is authoritative for a security history when transaction chronology is
+  complete and provable.
+- Missing or incomplete chronology must not suppress valid cost/P&L accounting
+  when an order-independent weighted-average-cost result can be deterministically
+  computed from the effective BUY/SELL ledger.
+- Never fabricate chronology or describe an average-cost fallback as FIFO. Select
+  and disclose exactly one accounting basis per security history.
+- Imported HOLDINGS values are reconciliation evidence only and must never replace
+  independently calculated ledger accounting.
 
 ## 5. AI Rules
 

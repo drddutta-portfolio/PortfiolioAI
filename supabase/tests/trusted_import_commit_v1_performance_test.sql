@@ -2,6 +2,8 @@
 \set ON_ERROR_STOP on
 
 begin;
+create extension if not exists pgtap with schema extensions;
+select extensions.plan(2);
 
 insert into auth.users (id, instance_id, aud, role, email)
 values ('33333333-3333-3333-3333-333333333333', '00000000-0000-0000-0000-000000000000',
@@ -156,18 +158,19 @@ select pg_catalog.set_config('request.jwt.claim.sub', '33333333-3333-3333-3333-3
 set local role authenticated;
 
 \echo '477-row trusted commit benchmark'
-select (public.commit_import_batch_v1(
+select extensions.is((public.commit_import_batch_v1(
   '30000000-0000-0000-0000-000000000001',
   pg_catalog.array_agg(id order by row_number)
-))->>'transaction_count' as transaction_count
+))->>'transaction_count', '477', '477-row trusted commit completes')
 from public.import_source_rows
 where import_batch_id = '30000000-0000-0000-0000-000000000001'
   and normalized_data ->> 'record_kind' = 'TRANSACTION';
 
 reset role;
 
-select count(*) as committed_transactions
+select extensions.is(count(*), 477::bigint, '477 transactions are committed exactly once')
 from public.transactions
 where import_batch_id = '30000000-0000-0000-0000-000000000001';
 
+select * from extensions.finish();
 rollback;

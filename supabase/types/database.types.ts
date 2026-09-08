@@ -894,8 +894,8 @@ export type Database = {
       securities: {
         Row: {
           asset_class: string
-          created_by: string | null
           created_at: string
+          created_by: string | null
           creation_source: string
           currency: string
           exchange: string
@@ -912,8 +912,8 @@ export type Database = {
         }
         Insert: {
           asset_class: string
-          created_by?: string | null
           created_at?: string
+          created_by?: string | null
           creation_source?: string
           currency?: string
           exchange: string
@@ -930,8 +930,8 @@ export type Database = {
         }
         Update: {
           asset_class?: string
-          created_by?: string | null
           created_at?: string
+          created_by?: string | null
           creation_source?: string
           currency?: string
           exchange?: string
@@ -959,6 +959,123 @@ export type Database = {
             columns: ["sector_id"]
             isOneToOne: false
             referencedRelation: "sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_classification_changes: {
+        Row: {
+          applied_at: string
+          applied_by: string
+          evidence_reference: string
+          id: string
+          new_asset_class: string
+          new_instrument_type: string
+          old_asset_class: string
+          old_instrument_type: string
+          request_id: string
+          security_id: string
+        }
+        Insert: {
+          applied_at?: string
+          applied_by: string
+          evidence_reference: string
+          id?: string
+          new_asset_class: string
+          new_instrument_type: string
+          old_asset_class: string
+          old_instrument_type: string
+          request_id: string
+          security_id: string
+        }
+        Update: {
+          applied_at?: string
+          applied_by?: string
+          evidence_reference?: string
+          id?: string
+          new_asset_class?: string
+          new_instrument_type?: string
+          old_asset_class?: string
+          old_instrument_type?: string
+          request_id?: string
+          security_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_classification_changes_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: true
+            referencedRelation: "security_classification_correction_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "security_classification_changes_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_classification_correction_requests: {
+        Row: {
+          created_at: string
+          evidence_reference: string
+          id: string
+          portfolio_id: string
+          proposed_asset_class: string
+          proposed_instrument_type: string
+          reason: string
+          request_status: string
+          requested_by: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          security_id: string
+        }
+        Insert: {
+          created_at?: string
+          evidence_reference: string
+          id?: string
+          portfolio_id: string
+          proposed_asset_class: string
+          proposed_instrument_type: string
+          reason: string
+          request_status?: string
+          requested_by: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          security_id: string
+        }
+        Update: {
+          created_at?: string
+          evidence_reference?: string
+          id?: string
+          portfolio_id?: string
+          proposed_asset_class?: string
+          proposed_instrument_type?: string
+          reason?: string
+          request_status?: string
+          requested_by?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          security_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_classification_correction_requests_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "security_classification_correction_requests_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
             referencedColumns: ["id"]
           },
         ]
@@ -1039,6 +1156,149 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "securities"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      theme_securities: {
+        Row: {
+          created_at: string
+          id: string
+          portfolio_id: string
+          security_id: string
+          theme_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          portfolio_id: string
+          security_id: string
+          theme_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          portfolio_id?: string
+          security_id?: string
+          theme_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "theme_securities_security_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "theme_securities_theme_portfolio_fkey"
+            columns: ["theme_id", "portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "themes"
+            referencedColumns: ["id", "portfolio_id"]
+          },
+        ]
+      }
+      themes: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          max_allocation: number | null
+          name: string
+          portfolio_id: string
+          priority: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          max_allocation?: number | null
+          name: string
+          portfolio_id: string
+          priority?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          max_allocation?: number | null
+          name?: string
+          portfolio_id?: string
+          priority?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "themes_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transaction_accounting_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          idempotency_key: string
+          performed_by: string
+          portfolio_id: string
+          prior_accounting_status: string
+          reason: string
+          request_hash: string
+          resulting_accounting_status: string
+          transaction_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          idempotency_key: string
+          performed_by: string
+          portfolio_id: string
+          prior_accounting_status: string
+          reason: string
+          request_hash: string
+          resulting_accounting_status: string
+          transaction_id: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          idempotency_key?: string
+          performed_by?: string
+          portfolio_id?: string
+          prior_accounting_status?: string
+          reason?: string
+          request_hash?: string
+          resulting_accounting_status?: string
+          transaction_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transaction_accounting_events_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transaction_accounting_events_transaction_portfolio_fkey"
+            columns: ["transaction_id", "portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id", "portfolio_id"]
           },
         ]
       }
@@ -1310,17 +1570,27 @@ export type Database = {
           retry_after: string
         }[]
       }
+      apply_security_classification_correction_v1: {
+        Args: {
+          p_request_id: string
+          p_review_notes: string
+          p_reviewer: string
+        }
+        Returns: Json
+      }
       commit_import_batch_v1: {
         Args: { p_approved_source_row_ids: string[]; p_import_batch_id: string }
         Returns: Json
       }
-      create_manual_transaction_v1: {
+      correct_transaction_v1: {
         Args: {
           p_broker_account_id: string
           p_idempotency_key: string
           p_notes: string
+          p_original_transaction_id: string
           p_portfolio_id: string
           p_quantity: number
+          p_reason: string
           p_security_id: string
           p_total_charges: number
           p_transaction_date: string
@@ -1343,15 +1613,13 @@ export type Database = {
         }
         Returns: Json
       }
-      correct_transaction_v1: {
+      create_manual_transaction_v1: {
         Args: {
           p_broker_account_id: string
           p_idempotency_key: string
           p_notes: string
-          p_original_transaction_id: string
           p_portfolio_id: string
           p_quantity: number
-          p_reason: string
           p_security_id: string
           p_total_charges: number
           p_transaction_date: string
@@ -1359,6 +1627,15 @@ export type Database = {
           p_unit_price: number
         }
         Returns: Json
+      }
+      portfolioai_assert_effective_quantity_valid: {
+        Args: {
+          p_excluded_transaction_id?: string
+          p_included_transaction_id?: string
+          p_portfolio_id: string
+          p_security_id: string
+        }
+        Returns: undefined
       }
       portfolioai_import_cell: {
         Args: { p_aliases: string[]; p_raw_data: Json }
@@ -1380,6 +1657,24 @@ export type Database = {
           p_provider_code: string
         }
         Returns: boolean
+      }
+      restore_transaction_v1: {
+        Args: {
+          p_idempotency_key: string
+          p_portfolio_id: string
+          p_reason: string
+          p_transaction_id: string
+        }
+        Returns: Json
+      }
+      void_transaction_v1: {
+        Args: {
+          p_idempotency_key: string
+          p_portfolio_id: string
+          p_reason: string
+          p_transaction_id: string
+        }
+        Returns: Json
       }
     }
     Enums: {

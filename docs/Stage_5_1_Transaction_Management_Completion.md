@@ -2,7 +2,10 @@
 
 ## Purpose and architecture
 
-Stage 5.1 completes daily ledger management without changing Stage 5 accounting rules. Transactions remain authoritative; only `ACTIVE` rows feed holdings and on-demand Decimal.js FIFO. Imported source rows remain immutable.
+Stage 5.1 completes daily ledger management. Transactions remain authoritative;
+only `ACTIVE` rows feed holdings and the on-demand exact-decimal accounting engine.
+The later owner-approved Stage 6-completion amendment selects FIFO when chronology
+is provable and weighted-average cost otherwise. Imported source rows remain immutable.
 
 ## New-security workflow
 

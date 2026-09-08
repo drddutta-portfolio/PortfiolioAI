@@ -2,9 +2,9 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 5.1 — Transaction Management Completion complete
+**Current milestone:** Stage 6 — implementation, remote migration and production acceptance complete
 
-**Last reviewed:** 7 September 2026
+**Last reviewed:** 8 September 2026
 
 This document records what is actually implemented, live, incomplete, and approved
 next. It is intentionally concise and does not duplicate the product specification.
@@ -153,22 +153,23 @@ provenance.
 portfolio, broker/demat account, security, transaction date, quantity, price,
 available charges, appropriate source/notes, and auditable provenance.
 
-**Accounting engine:** on-demand deterministic FIFO lot accounting,
-including partial sales, remaining quantity and cost basis, average cost, realised
-and unrealised P&L, and explicit coverage/completeness states.
+**Accounting engine:** on-demand exact-decimal per-history accounting. Provable
+chronology uses authoritative FIFO lots; incomplete chronology uses deterministic,
+order-independent weighted-average cost when the effective BUY/SELL ledger remains
+mathematically valid. Results expose basis, charge completeness and unresolved state.
 
-**Missing-date problem:** explicitly define behaviour when chronological ordering
-cannot be established. Never invent dates; expose accounting quality/completeness
-where deterministic FIFO is impossible.
+**Missing-date behaviour:** dates remain null and are never invented. Missing dates
+prevent a FIFO claim but no longer suppress independently calculable average cost,
+remaining cost, gross realised P&L or live-CMP unrealised P&L.
 
 **Auditability:** preserve imported historical evidence. Corrections and reversals
 must be linked and auditable; manual changes must retain provenance and must not
 silently rewrite trusted history.
 
-Read-only production-data validation confirms 4 of the 28 open partial-sale
-histories have provable gross FIFO chronology; 24 remain incomplete because dates
-are missing. All 4 have unknown historical charges/taxes and are consequently
-labelled `PARTIAL_ACCOUNTING`, not complete net P&L.
+Read-only production-snapshot reconciliation for the completion amendment finds 58
+FIFO histories and 213 average-cost histories, with no currently unresolved ledger;
+48/201 are open and 10/12 closed respectively. Historical missing charges remain
+explicit gross-only quality and never become zero-valued stored evidence.
 
 The post-migration production snapshot remains 477 active transactions, 270
 security histories, 248 open holdings, 22 closed histories, and 248/248 current
@@ -207,24 +208,153 @@ transaction, correction request, or mapping was fabricated for testing. Remote
 schema lint and migration history pass; the local/test pgTAP suite validates both
 trusted workflows transactionally.
 
+## E.2 Stage 6 implementation and deployment
+
+Stage 6 application code is complete and migration
+`20260907220000_create_stage6_portfolio_classification.sql` is applied to the
+linked project. The migration adds portfolio-owned themes and portfolio-safe
+many-to-many theme membership with owner-scoped RLS. Membership is validated
+against transaction-derived open holdings and has no dependency on a primary-role row. Existing
+`portfolio_security_settings` remains the single source for roles and position
+preferences.
+
+The Portfolio Structure page manages role, exact-decimal target/minimum/maximum
+weights, priority, watchlist, frozen state, investment horizon, notes and theme
+membership. Explicit `OTHER` remains distinct from an absent settings row shown as
+`UNCLASSIFIED`. ETF presentation uses canonical asset class independently of role.
+
+Dashboard valuation now retains the priced market-value subtotal under incomplete
+coverage and labels coverage and unpriced holdings. Allocation and weights are
+identified as priced-subset values when incomplete. Covered unrealised and realised
+P&L remain qualified by accounting coverage rather than presented as complete.
+
+Holdings reads imported HOLDINGS snapshot evidence directly from immutable source
+rows. Valid snapshot cost/P&L values are visibly labelled as reconciliation evidence
+alongside authoritative FIFO values; spreadsheet errors are ignored. No snapshot
+storage table, transaction mutation, inferred date, fabricated price, provider
+mapping, sector or industry was introduced.
+
+Post-migration production evidence contains 478 active transactions, 271 security
+histories, 249 open holdings, 22 closed histories, 271 canonical securities, 248
+verified mappings and 248 latest prices. The covered market-value subtotal is
+₹22,59,239.37 across 248/249 open holdings; V2RETAIL is the sole unpriced holding
+and remains an EQUITY with an unresolved Angel One mapping. All 249 production
+positions remain genuinely UNCLASSIFIED because no production settings were
+created. After the audited BBOX correction, the nine canonical ETF assets remain
+distinct from portfolio roles.
+
+Disposable local acceptance verified theme create/edit/retire, multiple simultaneous
+theme memberships, role changes that preserve theme membership, theme removal that
+preserves role and holding, and persistence of position settings. Temporary themes,
+memberships and settings were removed after verification; no production
+configuration or financial history was changed. Imported HOLDINGS evidence was
+verified in the UI beside unavailable FIFO values for incomplete chronology.
+
+Validation: TypeScript, ESLint, Vitest, production build, all pgTAP assertions,
+local and linked public-schema lint, migration-history alignment, remote schema
+inspection and production-snapshot acceptance pass. The local Edge Function wrapper
+did not return cached prices during browser acceptance; the restored production
+cache and exact subtotal were therefore verified directly in PostgreSQL, while UI
+partial-coverage behavior remains covered by deterministic application tests.
+
+## E.3 Stage 6 owner-acceptance completion and deployment
+
+Owner-acceptance remediation is implemented and deployed. The existing correction
+action now opens in a visible modal and browser
+integration verifies the full audited correction payload. Transaction details lead
+with supported investment/position context and retain identifiers, correction and
+void history under Audit & provenance.
+
+Audited Remove/Restore uses ACTIVE/REVERSED state rather than hard deletion or the
+unresolved REVERSAL type. Trusted RPCs enforce ownership, BUY/SELL eligibility,
+idempotency and effective-quantity integrity; immutable source lineage remains on
+the original row. Canonical classification requests are owner-visible under RLS but
+only a service-role operation can apply shared security changes. The ten-position
+ETF audit confirmed nine ETFs and identified BBOX as conclusively EQUITY; the
+guarded, audited BBOX correction is now applied remotely.
+
+Dashboard now includes deterministic per-account broker analytics with an explicit
+Unknown / Unattributed bucket and coverage, plus Best 30 / Worst 30 unrealised-return
+ranking using FIFO- or average-cost-supported holdings with trusted CMP. Holdings
+presents the selected accounting basis and imported snapshot values with immediately
+distinct labels. Sector/market-cap
+enrichment remains Stage 7; target/stop/trend/momentum remains monitoring/technical.
+
+Local final validation is complete after the three forward migrations and
+application changes: 116 pgTAP/RLS assertions, 96 Vitest tests, TypeScript, ESLint,
+the production build, local public-schema lint and `git diff --check` pass. The
+audit-protection migration additionally proves that controlled VOID/RESTORE and
+classification application can append legitimate history while trusted direct
+UPDATE or DELETE attempts against either applied-history table fail. Generated
+Supabase types match the schema. On 8 September 2026 the linked project applied, in
+order, `20260908100000`, `20260908101000` and `20260908102000`; linked migration
+history now aligns through the final migration.
+
+The accounting completion was reconciled from a read-only production snapshot.
+ABCAPITAL independently matches imported average cost ₹324.7142857, remaining cost
+₹11,365 and gross realised P/L ₹424. CPPLUS and ETERNAL likewise match imported
+average cost, remaining cost and gross realised P/L. Their current values and
+unrealised P/L use PortfolioAI's trusted CMP rather than the older workbook CMP.
+Representative additional partial-sale, fully dated FIFO and fully closed histories
+were checked. Production-snapshot accounting coverage is 58 FIFO histories (48
+open, 10 closed), 213 average-cost histories (201 open, 12 closed), and zero
+unresolved histories.
+
+All 22 closed histories reconcile exactly to immutable XLSX realised-P/L evidence.
+Closed Holdings labels disposed quantity separately from current quantity zero,
+shows historical average acquisition cost, and identifies remaining cost/current
+value as zero. Ten histories use FIFO and twelve use average cost. Reopened-cycle
+tests prove a prior close retains realised history while a later BUY alone supplies
+the new open FIFO cost basis.
+
+Transactions is compatible with the linked pre-completion schema: expected
+`PGRST205`/missing-RPC responses for pending audit objects no longer abort page
+loading or expose raw PostgREST details. Only VOID/RESTORE features are unavailable;
+listing, correction, filtering and provenance remain usable. Fully migrated local
+tests confirm audit history and actions return automatically. Classification-request
+submission converts only its known pending-table mismatch to a human message.
+
+Post-deployment read-only schema/data inspection confirms BBOX is `EQUITY` /
+`COMMON_STOCK`, with its approved request and immutable applied ETF-to-equity audit
+history present. Authenticated users retain SELECT-only direct access to transactions
+and audit histories. VOID/RESTORE execute only through ownership-validating RPCs,
+classification requests remain owner-scoped, shared classification application
+remains service-only, and immutable-history triggers reject UPDATE/DELETE even for
+trusted operational roles.
+
+Live authenticated-browser acceptance passed without changing transaction, role,
+theme, position-setting or price data. Transactions loads 478 active records without
+PGRST205 and retains correction, Remove/Restore availability, search/filter/sort and
+auditable provenance. Holdings loads 249 open and 22 closed histories; ABCAPITAL,
+CPPLUS, ETERNAL, ANANTRAJ and BEL show supported average-cost accounting, current
+price/value and realised/unrealised P/L. All closed histories retain disposed and
+acquired quantities, historical average cost, zero current quantity/remaining cost,
+and reconciled realised values. Dashboard remains explicitly partial at 248/249
+priced holdings and ₹22,59,239.37, with V2RETAIL still unpriced; broker analytics and
+Best/Worst ranking render. Portfolio Structure shows BBOX as an equity stock, the
+nine remaining ETF assets as ETFs, and existing roles, themes and settings unchanged.
+
+Clean empty-database replay remains blocked at the older, production-data-specific
+`20260907130000_verify_motherson_angel_mapping.sql` guard. Disposable-local replay
+was completed by marking only that historical data migration applied, after which
+all later migrations and the full pgTAP suite passed. The already-applied migration
+was not edited.
+
 ## F. Deferred future work
 
-- Core/Satellite/Thematic UI and classification
-- ETF and other-asset-specific treatment
 - Trendlyne/fundamental ingestion
 - Quality-Growth diagnostic
 - Core Selection and Core Health engines
 - Satellite Opportunity Engine
 - Valuation, Momentum/Technical, Sector, Risk, and Portfolio-Fit engines
-- Position Sizing, Movement Radar, and Exit Radar
+- Advanced Position Sizing, Movement Radar, and Exit Radar
 - Investment Thesis and Stock Detail
 - Corporate research/document pipeline
 - Ownership/shareholding intelligence
 - Credit Intelligence
 - Analyst & Earnings Revision Intelligence
 - Why Stocks Moved and Portfolio Calendar
-- Watchlist and Screeners
-- Core/Satellite candidates
+- Screeners and candidate discovery
 - AI Investment Committee
 - Advanced quant/backtesting
 

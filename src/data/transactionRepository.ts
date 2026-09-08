@@ -10,7 +10,10 @@ export interface TransactionListRow {
   readonly sourceProvider: string | null; readonly dataQualityStatus: string; readonly accountingStatus: string
   readonly importBatchId: string | null; readonly importSourceRowId: string | null; readonly createdAt: string; readonly notes: string | null
   readonly correctedFromTransactionId: string | null; readonly correctionReason: string | null; readonly supersededAt: string | null
+  readonly accountingEvents: readonly TransactionAccountingEvent[]
 }
+
+export interface TransactionAccountingEvent { readonly id: string; readonly eventType: "VOID" | "RESTORE"; readonly reason: string; readonly createdAt: string }
 
 export interface TransactionReferences {
   readonly portfolios: readonly { id: string; name: string }[]
@@ -18,15 +21,23 @@ export interface TransactionReferences {
   readonly securities: readonly { id: string; symbol: string; name: string; exchange: string; isin: string | null; instrumentType: string }[]
 }
 
-export async function loadTransactions(): Promise<{ rows: readonly TransactionListRow[]; references: TransactionReferences }> {
-  const [transactions, portfolios, accounts, brokers, securities] = await Promise.all([
+export function isPendingTransactionAuditSchemaError(error: { readonly code?: string; readonly message?: string } | null) {
+  return error !== null && (error.code === "PGRST205" || error.code === "PGRST202" || error.code === "42883")
+}
+
+const pendingAuditMessage = "Void/restore audit history is not available until the latest database migration is deployed."
+
+export async function loadTransactions(): Promise<{ rows: readonly TransactionListRow[]; references: TransactionReferences; auditFeaturesAvailable: boolean }> {
+  const [transactions, portfolios, accounts, brokers, securities, accountingEvents] = await Promise.all([
     supabase.from("transactions").select("id,portfolio_id,security_id,broker_account_id,transaction_type,transaction_date,quantity,unit_price,gross_amount,charges,taxes,source_type,source_provider,data_quality_status,accounting_status,import_batch_id,import_source_row_id,created_at,notes,corrected_from_transaction_id,correction_reason,superseded_at").order("transaction_date", { ascending: false, nullsFirst: false }).order("created_at", { ascending: false }),
     supabase.from("portfolios").select("id,name").eq("is_active", true).order("name"),
     supabase.from("broker_accounts").select("id,portfolio_id,broker_id,account_name").eq("is_active", true).order("account_name"),
     supabase.from("brokers").select("id,name"),
     supabase.from("securities").select("id,symbol,name,exchange,isin,instrument_type").eq("is_active", true).order("symbol"),
+    supabase.from("transaction_accounting_events").select("id,transaction_id,event_type,reason,created_at").order("created_at"),
   ])
-  const failure = [transactions, portfolios, accounts, brokers, securities].find((result) => result.error)
+  const auditFeaturesAvailable = !isPendingTransactionAuditSchemaError(accountingEvents.error)
+  const failure = [transactions, portfolios, accounts, brokers, securities, ...(auditFeaturesAvailable ? [accountingEvents] : [])].find((result) => result.error)
   if (failure?.error) throw failure.error
   const securityMap = new Map((securities.data ?? []).map((security) => [security.id, security]))
   const brokerMap = new Map((brokers.data ?? []).map((broker) => [broker.id, broker.name]))
@@ -45,7 +56,8 @@ export async function loadTransactions(): Promise<{ rows: readonly TransactionLi
         accountingStatus: transaction.accounting_status, importBatchId: transaction.import_batch_id,
         importSourceRowId: transaction.import_source_row_id, createdAt: transaction.created_at, notes: transaction.notes,
         correctedFromTransactionId: transaction.corrected_from_transaction_id, correctionReason: transaction.correction_reason,
-        supersededAt: transaction.superseded_at }
+        supersededAt: transaction.superseded_at,
+        accountingEvents: (accountingEvents.data ?? []).filter((event) => event.transaction_id===transaction.id).map((event) => ({ id:event.id,eventType:event.event_type as "VOID"|"RESTORE",reason:event.reason,createdAt:event.created_at })) }
     }),
     references: {
       portfolios: portfolios.data ?? [],
@@ -53,7 +65,22 @@ export async function loadTransactions(): Promise<{ rows: readonly TransactionLi
       securities: (securities.data ?? []).map((security) => ({ id: security.id, symbol: security.symbol, name: security.name,
         exchange: security.exchange, isin: security.isin, instrumentType: security.instrument_type })),
     },
+    auditFeaturesAvailable,
   }
+}
+
+export async function voidTransaction(transactionId: string, portfolioId: string, reason: string, idempotencyKey: string) {
+  const result = await supabase.rpc("void_transaction_v1", { p_transaction_id: transactionId, p_portfolio_id: portfolioId, p_reason: reason, p_idempotency_key: idempotencyKey })
+  if (isPendingTransactionAuditSchemaError(result.error)) throw new Error(pendingAuditMessage)
+  if (result.error) throw result.error
+  return result.data
+}
+
+export async function restoreTransaction(transactionId: string, portfolioId: string, reason: string, idempotencyKey: string) {
+  const result = await supabase.rpc("restore_transaction_v1", { p_transaction_id: transactionId, p_portfolio_id: portfolioId, p_reason: reason, p_idempotency_key: idempotencyKey })
+  if (isPendingTransactionAuditSchemaError(result.error)) throw new Error(pendingAuditMessage)
+  if (result.error) throw result.error
+  return result.data
 }
 
 export interface ManualSecurityInput {

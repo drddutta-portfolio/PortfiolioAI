@@ -38,29 +38,38 @@ function snapshot(transactions: readonly LedgerTransaction[], securityCount: num
       symbol: `STOCK${index}`,
       name: `Stock ${index}`,
       sector: null,
+      industry: null,
       assetClass: "EQUITY",
+      exchange: "NSE",
+      isin: null,
+      instrumentType: "STOCK",
+      series: "EQ",
     })),
     brokerAccounts: [{ id: "account-1", name: "Primary", brokerName: "Broker" }],
     roles: new Map(),
+    settings: new Map(),
+    themes: [],
+    themeIdsBySecurity: new Map(),
+    snapshotEvidence: new Map(),
     prices,
   }
 }
 
 describe("calculatePortfolio", () => {
-  it("preserves the real import's 477-row structure as 248 open and 22 closed histories", () => {
+  it("preserves the current production structure as 249 open and 22 closed histories", () => {
     const rows: LedgerTransaction[] = []
-    for (let index = 0; index < 248; index += 1) rows.push(transaction(`open-${index}`, `security-${index}`))
+    for (let index = 0; index < 249; index += 1) rows.push(transaction(`open-${index}`, `security-${index}`))
     for (let index = 0; index < 22; index += 1) {
-      const securityId = `security-${248 + index}`
+      const securityId = `security-${249 + index}`
       rows.push(transaction(`closed-buy-${index}`, securityId))
       rows.push(transaction(`closed-sell-${index}`, securityId, { transactionType: "SELL", unitPrice: "11.10" }))
     }
     for (let index = 0; index < 185; index += 1) rows.push(transaction(`extra-${index}`, "security-0"))
-    expect(rows).toHaveLength(477)
-    const result = calculatePortfolio(snapshot(rows, 270))
-    expect(result.totals.openHoldings).toBe(248)
+    expect(rows).toHaveLength(478)
+    const result = calculatePortfolio(snapshot(rows, 271))
+    expect(result.totals.openHoldings).toBe(249)
     expect(result.totals.closedHistories).toBe(22)
-    expect(result.totals.securityHistories).toBe(270)
+    expect(result.totals.securityHistories).toBe(271)
   })
 
   it("uses exact decimals for a complete buy-only cost basis", () => {
@@ -73,16 +82,17 @@ describe("calculatePortfolio", () => {
     expect(result.openPositions[0]!.quantity).toBe("0.3")
   })
 
-  it("does not infer cost basis, broker exposure, prices, or realised P&L", () => {
+  it("calculates average cost from ledger evidence without inferring broker or prices", () => {
     const result = calculatePortfolio(snapshot([
       transaction("buy", "security-0", { brokerAccountId: null, transactionDate: null }),
       transaction("sell", "security-0", { transactionType: "SELL", quantity: "0.5", unitPrice: "12" }),
     ], 1))
     expect(result.openPositions).toHaveLength(1)
     const position = result.openPositions[0]!
-    expect(position.averageCost).toBeNull()
+    expect(position.accountingBasis).toBe("AVERAGE_COST")
+    expect(position.averageCost).toBe("10.1")
     expect(position.currentValue).toBeNull()
-    expect(position.realisedPnl).toBeNull()
+    expect(position.realisedPnl).toBe("0.95")
     expect(position.brokerExposure).toBeNull()
     expect(position.hasMissingDates).toBe(true)
   })
@@ -103,17 +113,21 @@ describe("calculatePortfolio", () => {
     expect(result.totals.stalePriceCoverage).toBe(1)
   })
 
-  it("does not present a partial portfolio total or weights as complete", () => {
+  it("presents a priced subtotal and subset weights without claiming a complete total", () => {
     const result = calculatePortfolio(snapshot([
       transaction("a", "security-0"),
       transaction("b", "security-1"),
     ], 2, [{ securityId: "security-0", price: "12", currency: "INR", priceTimestamp: "2026-09-07T04:00:00.000Z", retrievedAt: "2026-09-07T04:00:05.000Z", provider: "ANGEL_ONE", marketSessionStatus: "UNKNOWN", isStale: false, staleAfterSeconds: 900 }]))
     expect(result.totals.currentValue).toBeNull()
-    expect(result.openPositions.every((position) => position.portfolioWeightPercent === null)).toBe(true)
+    expect(result.totals.pricedMarketValue).toBe("12")
+    expect(result.totals.coveredUnrealisedPnl).toBe("1.9")
+    expect(result.totals.unrealisedCoverage).toBe(1)
+    expect(result.openPositions[0]!.portfolioWeightPercent).toBe("100")
+    expect(result.openPositions[1]!.portfolioWeightPercent).toBeNull()
     expect(result.quality.holdingsWithMissingPrices).toBe(1)
   })
 
-  it("keeps market valuation available when a partial sale makes cost basis unavailable", () => {
+  it("uses average cost for a missing-date partial sale and keeps live P/L available", () => {
     const result = calculatePortfolio(snapshot([
       transaction("buy", "security-0", { quantity: "10", unitPrice: "100" }),
       transaction("sell", "security-0", { transactionType: "SELL", quantity: "4", unitPrice: "125" }),
@@ -124,14 +138,49 @@ describe("calculatePortfolio", () => {
       currentPrice: "150",
       currentValue: "900",
       portfolioWeightPercent: "100",
-      averageCost: null,
-      investedAmount: null,
-      unrealisedPnl: null,
-      unrealisedPnlPercent: null,
+      accountingBasis: "AVERAGE_COST",
+      averageCost: "100",
+      investedAmount: "600",
+      unrealisedPnl: "300",
+      unrealisedPnlPercent: "50",
       hasMissingPrices: false,
     })
     expect(result.totals.currentValue).toBe("900")
-    expect(result.totals.investedCoverage).toBe(0)
-    expect(result.totals.unrealisedPnl).toBeNull()
+    expect(result.totals.investedCoverage).toBe(1)
+    expect(result.totals.unrealisedPnl).toBe("300")
+  })
+
+  it("preserves historical average acquisition cost and explicit zero quantity for a closed position", () => {
+    const result = calculatePortfolio(snapshot([
+      transaction("buy", "security-0", { transactionDate: null, quantity: "12", unitPrice: "236" }),
+      transaction("sell", "security-0", { transactionType: "SELL", quantity: "12", unitPrice: "200" }),
+    ], 1))
+    expect(result.closedPositions[0]).toMatchObject({ quantity: "0", totalQuantityAcquired: "12", totalQuantitySold: "12", averageCost: "236", investedAmount: "0", realisedCostBasis: "2832", realisedProceeds: "2400", realisedPnl: "-432", accountingBasis: "AVERAGE_COST" })
+  })
+
+  it("keeps explicit OTHER, unclassified, ETF role, and ETF asset class distinct", () => {
+    const input = snapshot([transaction("a", "security-0"), transaction("b", "security-1")], 2)
+    const result = calculatePortfolio({ ...input,
+      securities: [{ ...input.securities[0]!, assetClass: "ETF", instrumentType: "ETF" }, input.securities[1]!],
+      roles: new Map([["security-0", "OTHER"]]),
+      settings: new Map([["security-0", { id: "setting-1", portfolioRole: "OTHER", targetWeight: null, minimumWeight: null, maximumWeight: null, priority: null, isWatchlisted: false, isFrozen: false, investmentHorizon: null, notes: null }]]),
+    })
+    expect(result.openPositions[0]).toMatchObject({ assetClass: "ETF", role: "OTHER" })
+    expect(result.openPositions[1]).toMatchObject({ assetClass: "EQUITY", role: "UNCLASSIFIED" })
+  })
+
+  it("builds deterministic broker analytics and keeps missing attribution separate", () => {
+    const input=snapshot([
+      transaction("known","security-0",{quantity:"2",unitPrice:"10"}),
+      transaction("unknown","security-1",{brokerAccountId:null,quantity:"3",unitPrice:"5"}),
+    ],2,[
+      { securityId:"security-0",price:"12",currency:"INR",priceTimestamp:null,retrievedAt:"2026-09-08T00:00:00Z",provider:"ANGEL_ONE",marketSessionStatus:"UNKNOWN",isStale:false,staleAfterSeconds:900 },
+      { securityId:"security-1",price:"6",currency:"INR",priceTimestamp:null,retrievedAt:"2026-09-08T00:00:00Z",provider:"ANGEL_ONE",marketSessionStatus:"UNKNOWN",isStale:false,staleAfterSeconds:900 },
+    ])
+    const result=calculatePortfolio(input)
+    expect(result.brokerAnalytics).toEqual([
+      expect.objectContaining({broker:"Broker · Primary",investedAmount:"20",currentValue:"24",unrealisedPnl:"4",coveredHistories:1,totalHistories:1}),
+      expect.objectContaining({broker:"Unknown / Unattributed",investedAmount:"15",currentValue:"18",unrealisedPnl:"3",coveredHistories:1,totalHistories:1}),
+    ])
   })
 })
