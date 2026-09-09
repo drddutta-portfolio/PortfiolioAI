@@ -754,6 +754,20 @@ continue unchanged. Asset-class correction remains its existing audited process.
 Stage 7 decisions cannot cascade into transactions, FIFO/average cost, themes or
 roles.
 
+### 9.1 Stage 7.2B1 bounded cohort orchestration
+
+Before cohort execution, cached identity and per-domain freshness are converted to a
+deterministic provider-neutral plan. Compatible consumers may share one physical
+overview request for the same security, but each canonical domain retains separate
+validation, provenance, run-item and refresh-state semantics. Usage records count
+physical provider attempts rather than the observations derived from them.
+
+Planning reserves bounded transient retry capacity, rejects non-equities and
+document expansion, and packs work by estimated attempts under the 40-attempt run
+ceiling and 100-attempt daily ceiling. Reservations are acquired before leases; a
+common cleanup boundary settles attempted/failed/released units, releases the lease
+and records terminal state on every exit path.
+
 ## 10. Test strategy and acceptance criteria
 
 ### Schema and RLS

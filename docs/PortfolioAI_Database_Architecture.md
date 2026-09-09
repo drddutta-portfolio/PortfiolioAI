@@ -995,6 +995,20 @@ does not delete, replace or invalidate immutable evidence. Authenticated clients
 cannot mutate any control, budget, usage, run-item or refresh-state table and may
 call only the safe operational-summary RPC.
 
+## 21.2 Stage 7.2B1 cohort orchestration boundary
+
+The cohort planner is provider-neutral and reads cached identity and domain
+freshness before reserving work. One physical overview request may feed multiple
+separately validated domain processors, but usage accounting records the physical
+attempt once and canonical observations retain independent semantics and provenance.
+Planning rejects ineligible assets, document scope above three, reservations above
+40 per run, and daily totals above 100.
+
+The orchestration executor treats reservations and leases as operational resources.
+Its cleanup boundary settles consumed, failed and unused units, releases the lease,
+and records terminal status even when execution or persistence fails. Immutable
+evidence accepted before a later failure is never deleted as rollback.
+
 ## 22. Deferred features
 
 The following are deliberately deferred and must be introduced through separately reviewed migrations and deterministic application components:

@@ -2,7 +2,7 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 7.2A — provider control plane deployed, validated and complete; Stage 7.2B and Stage 8 not started
+**Current milestone:** Stage 7.2B1 — cohort orchestrator hardened and dry-run validated; Cohort A execution and Stage 8 not started
 
 **Last reviewed:** 9 September 2026
 
@@ -519,6 +519,20 @@ existing `extensions` schema. That runner limitation occurs at `extensions.plan`
 before Stage 7.2A assertions and does not justify widening production privileges;
 the disposable pgTAP/RLS suite plus linked read-only schema verification is the safe
 equivalent. No Trendlyne call or Cohort A ingestion was performed.
+
+## E.8 Stage 7.2B1 cohort orchestrator hardening
+
+The provider-neutral Cohort A planner reuses one overview request per security for
+compatible identity and fundamental processing while retaining separate canonical
+domain mappings and provenance. Fresh pilot identity, fundamental, ownership and
+approved document-discovery evidence is skipped. The exact 25-security dry run
+plans 60 base attempts plus a bounded 12-attempt transient retry reserve across
+two logical batches of 39 and 33, within the unchanged 100/day and 40/run limits.
+
+The execution boundary guarantees reservation settlement, unused-unit release,
+lease release and terminal completion across failure paths. No schema migration,
+deployment, provider call or Cohort A ingestion occurred. Cohort A remains subject
+to separate owner authorization.
 
 ## F. Deferred future work
 
