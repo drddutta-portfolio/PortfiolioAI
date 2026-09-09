@@ -103,3 +103,64 @@ export async function loadProviderOperationalSummary(): Promise<ProviderOperatio
     policyVersion: row.policy_version,
   }
 }
+
+export type RefreshPlanDomainState = "REQUIRED" | "SKIPPED_FRESH" | "NOT_APPROVED"
+export interface ResearchRefreshPlanSecurity {
+  readonly securityId: string
+  readonly symbol: string
+  readonly domains: Readonly<Record<"IDENTITY" | "FUNDAMENTALS" | "OWNERSHIP" | "DOCUMENTS", RefreshPlanDomainState>>
+  readonly operations: readonly string[]
+  readonly baseCalls: number
+}
+export interface ResearchRefreshPlanBatch {
+  readonly batchNumber: number
+  readonly baseCalls: number
+  readonly retryReserve: number
+  readonly reservedAttempts: number
+}
+export interface ResearchRefreshPlan {
+  readonly selectedSecurityCount: number
+  readonly plan: {
+    readonly securities: readonly ResearchRefreshPlanSecurity[]
+    readonly batches: readonly ResearchRefreshPlanBatch[]
+    readonly baseCalls: number
+    readonly retryReserve: number
+    readonly worstCaseAttempts: number
+  }
+  readonly projectedDailyUsage: number
+  readonly dailyRemaining: number
+  readonly fitsDailyBudget: boolean
+  readonly providerQuotaStatus: string
+  readonly providerCalls: number
+  readonly budgetConsumed: number
+  readonly executionAllowed: false
+  readonly executionGateReason: string
+  readonly perRunInternalAttemptLimit: number
+  readonly dailyInternalAttemptLimit: number
+  readonly dailyObservedUsage: number
+}
+
+function isResearchRefreshPlan(value: unknown): value is ResearchRefreshPlan {
+  if (typeof value !== "object" || value === null) return false
+  const record = value as Record<string, unknown>
+  return typeof record.selectedSecurityCount === "number"
+    && typeof record.projectedDailyUsage === "number"
+    && typeof record.executionAllowed === "boolean"
+    && record.executionAllowed === false
+    && typeof record.plan === "object"
+    && record.plan !== null
+}
+
+export async function estimateResearchRefresh(portfolioId: string, securityIds: readonly string[], documentSecurityIds: readonly string[] = []): Promise<ResearchRefreshPlan> {
+  const result = await supabase.functions.invoke("plan-research-refresh", {
+    body: { portfolioId, securityIds: [...new Set(securityIds)], documentSecurityIds: [...new Set(documentSecurityIds)], sourceCode: "TRENDLYNE_MCP" },
+  })
+  if (result.error) throw result.error
+  const data: unknown = result.data
+  if (typeof data === "object" && data !== null && "error" in data) {
+    const error = (data as Record<string, unknown>).error
+    if (typeof error === "string") throw new Error(error)
+  }
+  if (!isResearchRefreshPlan(data)) throw new Error("Research refresh estimate is unavailable.")
+  return data
+}

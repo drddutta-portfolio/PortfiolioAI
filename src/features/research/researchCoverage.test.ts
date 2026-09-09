@@ -14,7 +14,18 @@ const position = (overrides: Partial<PortfolioPosition> = {}) => ({
   instrumentType: "EQ",
   series: null,
   role: "CORE",
-  settings: {} as PortfolioPosition["settings"],
+  settings: {
+    id: null,
+    portfolioRole: "CORE",
+    targetWeight: null,
+    minimumWeight: null,
+    maximumWeight: null,
+    priority: null,
+    isWatchlisted: false,
+    isFrozen: false,
+    investmentHorizon: null,
+    notes: null,
+  },
   themes: [],
   snapshotEvidence: null,
   quantity: "1",
@@ -47,7 +58,7 @@ const position = (overrides: Partial<PortfolioPosition> = {}) => ({
   costBasisReason: null,
   realisedPnlReason: null,
   ...overrides,
-} as PortfolioPosition)
+}) satisfies PortfolioPosition
 
 const freshUntil = "2026-10-09T00:00:00.000Z"
 const retrievedAt = "2026-09-08T00:00:00.000Z"
