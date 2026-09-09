@@ -39,7 +39,7 @@ describe("ResearchCoveragePage refresh planning",()=>{
     fireEvent.click(screen.getByLabelText("Select BEL for refresh planning"))
     fireEvent.click(screen.getByRole("button",{name:"Estimate refresh (1)"}))
     await waitFor(()=>expect(estimateResearchRefresh).toHaveBeenCalledWith("p1",["e1"],[]))
-    expect(screen.getByText(/made 0 provider calls/)).toBeInTheDocument()
+    expect(screen.getByText("0 provider calls")).toBeInTheDocument()
     expect(screen.getByText("Unknown")).toBeInTheDocument()
     expect(screen.getByRole("button",{name:/Review and acknowledge estimate/})).toBeDisabled()
     fireEvent.click(screen.getByLabelText(/I reviewed this estimate/))
