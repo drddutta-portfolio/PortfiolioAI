@@ -140,12 +140,27 @@ export interface ResearchRefreshPlan {
   readonly dailyObservedUsage: number
 }
 
+function isResearchRefreshPlan(value: unknown): value is ResearchRefreshPlan {
+  if (typeof value !== "object" || value === null) return false
+  const record = value as Record<string, unknown>
+  return typeof record.selectedSecurityCount === "number"
+    && typeof record.projectedDailyUsage === "number"
+    && typeof record.executionAllowed === "boolean"
+    && record.executionAllowed === false
+    && typeof record.plan === "object"
+    && record.plan !== null
+}
+
 export async function estimateResearchRefresh(portfolioId: string, securityIds: readonly string[], documentSecurityIds: readonly string[] = []): Promise<ResearchRefreshPlan> {
   const result = await supabase.functions.invoke("plan-research-refresh", {
     body: { portfolioId, securityIds: [...new Set(securityIds)], documentSecurityIds: [...new Set(documentSecurityIds)], sourceCode: "TRENDLYNE_MCP" },
   })
   if (result.error) throw result.error
-  if (!result.data || typeof result.data !== "object") throw new Error("Research refresh estimate is unavailable.")
-  if ("error" in result.data && typeof result.data.error === "string") throw new Error(result.data.error)
-  return result.data as ResearchRefreshPlan
+  const data: unknown = result.data
+  if (typeof data === "object" && data !== null && "error" in data) {
+    const error = (data as Record<string, unknown>).error
+    if (typeof error === "string") throw new Error(error)
+  }
+  if (!isResearchRefreshPlan(data)) throw new Error("Research refresh estimate is unavailable.")
+  return data
 }
