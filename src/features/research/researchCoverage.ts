@@ -49,7 +49,9 @@ interface EnrichmentSummary {
   readonly marketCapCategory: string | null
 }
 
-const IDENTITY_FRESHNESS_MS = 180 * 24 * 60 * 60 * 1000
+const DAY_MS = 24 * 60 * 60 * 1000
+const IDENTITY_FRESHNESS_MS = 180 * DAY_MS
+const DOCUMENT_FRESHNESS_MS = 7 * DAY_MS
 const isFresh = (freshUntil: string, now = Date.now()) => Number.isFinite(Date.parse(freshUntil)) && Date.parse(freshUntil) > now
 
 function evidenceState(rows: readonly CoverageObservation[], applicable = true): ResearchCoverageState {
@@ -64,7 +66,11 @@ function documentState(rows: readonly CoverageDocument[], applicable = true): Re
   if (!rows.length) return "MISSING"
   if (rows.some((row) => row.identityStatus === "REVIEW_REQUIRED")) return "REVIEW_REQUIRED"
   if (rows.some((row) => row.identityStatus === "CONFLICTING" || row.identityStatus === "AMBIGUOUS")) return "CONFLICTING"
-  return "FRESH"
+  const latest = [...rows].sort((left, right) => right.createdAt.localeCompare(left.createdAt))[0]
+  if (!latest) return "MISSING"
+  const created = Date.parse(latest.createdAt)
+  if (!Number.isFinite(created)) return "STALE"
+  return created + DOCUMENT_FRESHNESS_MS > Date.now() ? "FRESH" : "STALE"
 }
 
 function identityState(rows: readonly CoverageIdentity[], applicable = true): ResearchCoverageState {
