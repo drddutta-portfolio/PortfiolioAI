@@ -32,7 +32,7 @@ const position = (overrides: Partial<PortfolioPosition> = {}) => ({
   realisedProceeds: "0",
   totalQuantitySold: "0",
   accountingBasis: "FIFO",
-  accountingQuality: "COMPLETE",
+  accountingQuality: "FIFO_COMPLETE",
   chargesComplete: true,
   accountingReason: null,
   brokerExposure: [],
