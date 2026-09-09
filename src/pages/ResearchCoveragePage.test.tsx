@@ -6,7 +6,9 @@ import type { PortfolioViewModel } from "../features/portfolio/types"
 import type { ResearchCoverageRow } from "../features/research/researchCoverage"
 import { ResearchCoveragePage } from "./ResearchCoveragePage"
 
-const estimateResearchRefresh = vi.fn<(portfolioId: string, securityIds: readonly string[], documentSecurityIds?: readonly string[]) => Promise<ResearchRefreshPlan>>()
+const { estimateResearchRefresh } = vi.hoisted(() => ({
+  estimateResearchRefresh: vi.fn<(portfolioId: string, securityIds: readonly string[], documentSecurityIds?: readonly string[]) => Promise<ResearchRefreshPlan>>(),
+}))
 const equityPosition={securityId:"e1",symbol:"BEL",company:"Bharat Electronics",assetClass:"EQUITY"} as const
 const etfPosition={securityId:"f1",symbol:"NIFTYBEES",company:"Nifty ETF",assetClass:"ETF"} as const
 const portfolio={portfolio:{id:"p1",name:"Portfolio",currency:"INR"},openPositions:[equityPosition,etfPosition]} as unknown as PortfolioViewModel
