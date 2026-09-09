@@ -2,7 +2,7 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 7.2B — controlled Cohort A rollout complete; Stage 7.2C and Stage 8 not started
+**Current milestone:** Stage 7.2C — cache-only Research Workspace complete; Stage 7.2D and Stage 8 not started
 
 **Last reviewed:** 9 September 2026
 
@@ -566,6 +566,22 @@ observations. Adjusted P/B remains a distinct conflicting metric, null semantics
 were preserved, and documents remained limited to the existing three provisional
 appearances. Protected accounting, holdings, roles, themes and Angel One state did
 not change. Stage 7.2C requires separate owner authorization.
+
+## E.11 Stage 7.2C cache-only Research Workspace
+
+The responsive Research directory and company workspace are implemented at
+`/app/research` and `/app/research/:security`. Seven keyboard-operable sections
+present Overview, Financials, Quality & Growth coverage, Ownership, Valuation,
+Documents and the detailed Evidence ledger. The page reads existing RLS-protected
+Supabase cache/evidence objects through one typed repository and performs no
+Trendlyne refresh, budget reservation, usage recording or ingestion-run creation.
+
+Angel One remains the CMP authority through the established portfolio projection.
+Missing values remain unavailable, adjusted provider P/B remains distinctly
+labelled and conflicting, reporting periods are retained, and provisional document
+appearances remain review-required without false open links. Quality/Growth scores,
+valuation conclusions, recommendations and AI synthesis remain explicitly disabled.
+No migration, database mutation, Edge change, deployment or provider call was made.
 
 ## F. Deferred future work
 

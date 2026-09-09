@@ -31,6 +31,7 @@ export function AppShell({ children }: PropsWithChildren) {
           <NavLink to="/app" end>Dashboard</NavLink>
           <NavLink to="/app/holdings">Holdings</NavLink>
           <NavLink to="/app/structure">Portfolio Structure</NavLink>
+          <NavLink to="/app/research">Research</NavLink>
           <NavLink to="/app/transactions">Transactions</NavLink>
           <NavLink to="/app/import">Import</NavLink>
         </nav>

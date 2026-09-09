@@ -26,6 +26,14 @@ const TransactionsPage = lazy(async () => {
   const module = await import("../pages/TransactionsPage")
   return { default: module.TransactionsPage }
 })
+const ResearchPage = lazy(async () => {
+  const module = await import("../pages/ResearchPage")
+  return { default: module.ResearchPage }
+})
+const ResearchIndexPage = lazy(async () => {
+  const module = await import("../pages/ResearchPage")
+  return { default: module.ResearchIndexPage }
+})
 
 export function AppRoutes() {
   return (
@@ -74,6 +82,14 @@ export function AppRoutes() {
               </Suspense>
             </AppShell>
           }
+        />
+        <Route
+          path="/app/research"
+          element={<AppShell><Suspense fallback={<PageLoader label="Loading Research" />}><ResearchIndexPage /></Suspense></AppShell>}
+        />
+        <Route
+          path="/app/research/:security"
+          element={<AppShell><Suspense fallback={<PageLoader label="Loading security research" />}><ResearchPage /></Suspense></AppShell>}
         />
         <Route
           path="/app/import"
