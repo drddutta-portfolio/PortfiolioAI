@@ -2,7 +2,7 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 7.2C — cache-only Research Workspace complete; Stage 7.2D and Stage 8 not started
+**Current milestone:** Stage 7.2C.1 — Research Workspace information architecture refined; Stage 7.2D and Stage 8 not started
 
 **Last reviewed:** 9 September 2026
 
@@ -582,6 +582,23 @@ labelled and conflicting, reporting periods are retained, and provisional docume
 appearances remain review-required without false open links. Quality/Growth scores,
 valuation conclusions, recommendations and AI synthesis remain explicitly disabled.
 No migration, database mutation, Edge change, deployment or provider call was made.
+
+## E.12 Stage 7.2C.1 Research Workspace UI refinement
+
+The Research workspace now follows an investor-first hierarchy. Company identity,
+classification, role and themes lead the left side of the header, while a dense
+right-side position dashboard reuses the exact transaction-derived Holdings model
+for CMP, quantity, cost, value, P/L, weight and broker-account exposure. Target and
+stop-loss remain explicitly unavailable because the current schema does not support
+them.
+
+Overview is now an evidence cockpit rather than a duplicate holdings summary. It
+presents business/portfolio context, quality and growth input coverage, valuation
+and ownership snapshots, and an actual evidence-health summary with a direct path
+to the Evidence tab. Adjusted provider P/B remains conflicting, missing metrics stay
+unavailable, and investment scoring remains disabled. The refinement is responsive
+and cache-only and required no migration, database mutation, provider call, Edge
+change or deployment.
 
 ## F. Deferred future work
 

@@ -1,9 +1,10 @@
+import Decimal from "decimal.js"
 import { useMemo, useState, type KeyboardEvent } from "react"
 import { Link, useParams } from "react-router-dom"
 import { formatMoney, formatPercent, formatQuantity } from "../features/portfolio/format"
 import type { PortfolioPosition } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
-import { GROWTH_CODES, latestByCode, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatResearchMetric } from "../features/research/researchPolicy"
+import { GROWTH_CODES, latestByCode, metricLabel, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatResearchMetric } from "../features/research/researchPolicy"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "../features/research/types"
 import { useSecurityResearch } from "../features/research/useSecurityResearch"
 
@@ -22,7 +23,7 @@ export function ResearchPage() {
   return <section className="research-page">
     <ResearchHeader position={position} research={research.data} currency={portfolio.portfolio.currency} />
     <ResearchTabs value={tab} onChange={setTab} />
-    {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : research.data ? <TabPanel tab={tab} position={position} research={research.data} currency={portfolio.portfolio.currency} /> : null}
+    {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : research.data ? <TabPanel tab={tab} position={position} research={research.data} onTabChange={setTab} /> : null}
   </section>
 }
 
@@ -36,7 +37,9 @@ export function ResearchIndexPage() {
 }
 
 function ResearchHeader({ position, research, currency }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly currency: string }) {
-  return <header className="research-header"><div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><p className="eyebrow">{position.exchange} · {position.assetClass}</p><h1><span>{position.symbol}</span>{research?.companyName ?? position.company}</h1><p>{research?.sector ?? position.sector ?? "Sector unavailable"} · {research?.industry ?? position.industry ?? "Industry unavailable"}</p></div><div className="research-head-metrics"><MetricCard label="Angel One CMP" value={formatMoney(position.currentPrice, currency)} detail={position.currentPrice === null ? "No trusted cached price" : `${position.isPriceStale ? "Stale" : "Fresh"} · ${position.priceProvider ?? "Angel One"}`} /><MetricCard label="Portfolio weight" value={formatPercent(position.portfolioWeightPercent)} detail="Priced portfolio basis" /><MetricCard label="Portfolio role" value={position.role === "UNCLASSIFIED" ? "Unclassified" : position.role} detail={position.themes.length ? position.themes.map((theme) => theme.name).join(", ") : "No active themes"} /><div className="research-status-card"><span>Research evidence</span><Status value={research?.state ?? "UNAVAILABLE"} /><small>{research?.freshUntil ? `Fresh through ${date(research.freshUntil)}` : "Freshness unavailable"}</small></div></div></header>
+  const marketCap = latestByCode(research?.metrics ?? []).get("MARKET_CAP_PROVIDER_RAW")
+  const brokers = position.brokerExposure ?? []
+  return <header className="research-header"><div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><h1>{research?.companyName ?? position.company}</h1><p className="security-identity-line"><strong>{position.symbol}</strong> · {position.exchange} · {titleCase(position.instrumentType)}</p><p>{research?.sector ?? position.sector ?? "Sector unavailable"} · {research?.industry ?? position.industry ?? "Industry unavailable"}</p><p>{research?.marketCapCategory ? titleCase(research.marketCapCategory) : "Market-cap category unavailable"} · {position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</p><p className="raw-market-cap">Raw market cap: {formatResearchMetric(marketCap)}</p><div className="identity-chips" aria-label="Themes">{position.themes.length ? position.themes.map((theme) => <span key={theme.id}>{theme.name}</span>) : <span>No themes</span>}</div></div><section className="position-dashboard" aria-labelledby="position-dashboard-title"><h2 id="position-dashboard-title">Your position</h2><div className="research-head-metrics"><MetricCard label="Current price / CMP" value={formatMoney(position.currentPrice, currency)} detail={position.currentPrice === null ? "Unavailable" : `${position.isPriceStale ? "Stale price" : "Current cache"} · ${position.priceProvider ?? "Angel One"}`} /><MetricCard label="Total quantity" value={formatQuantity(position.quantity)} /><MetricCard label="Average cost" value={formatMoney(position.averageCost, currency)} detail={titleCase(position.accountingBasis)} /><MetricCard label="Portfolio weight" value={formatPercent(position.portfolioWeightPercent)} /><MetricCard label="Invested amount" value={formatMoney(position.investedAmount, currency)} detail="Cost basis" /><MetricCard label="Current value" value={formatMoney(position.currentValue, currency)} detail="At cached CMP" /><PnlCard position={position} currency={currency} /><MetricCard label="Target price" value="Unavailable" detail="Not configured" /><MetricCard label="Stop loss" value="Unavailable" detail="Not configured" /><article className="research-metric-card broker-card"><span>Brokers / demat</span><div className="broker-chips">{brokers.length ? brokers.map((broker) => <span key={broker.broker} title={`${formatQuantity(broker.quantity)} shares`}>{broker.broker}</span>) : <strong>Unavailable</strong>}</div><small>{brokers.length ? `${brokers.length} account${brokers.length === 1 ? "" : "s"}` : "Attribution incomplete"}</small></article></div></section></header>
 }
 
 function ResearchTabs({ value, onChange }: { readonly value: Tab; readonly onChange: (tab: Tab) => void }) {
@@ -49,9 +52,9 @@ function ResearchTabs({ value, onChange }: { readonly value: Tab; readonly onCha
   return <div className="research-tabs" role="tablist" aria-label="Research sections">{TABS.map((tab, index) => <button id={`research-tab-${index}`} key={tab} type="button" role="tab" aria-selected={value === tab} aria-controls="research-panel" tabIndex={value === tab ? 0 : -1} onClick={() => onChange(tab)} onKeyDown={(event) => activate(event, index)}>{tab}</button>)}</div>
 }
 
-function TabPanel({ tab, position, research, currency }: { readonly tab: Tab; readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly currency: string }) {
+function TabPanel({ tab, position, research, onTabChange }: { readonly tab: Tab; readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly onTabChange: (tab: Tab) => void }) {
   return <div id="research-panel" role="tabpanel" tabIndex={0} aria-labelledby={`research-tab-${TABS.indexOf(tab)}`} className="research-panel">
-    {tab === "Overview" ? <Overview position={position} research={research} currency={currency} /> : null}
+    {tab === "Overview" ? <Overview position={position} research={research} onViewEvidence={() => onTabChange("Evidence")} /> : null}
     {tab === "Financials" ? <Financials research={research} /> : null}
     {tab === "Quality & Growth" ? <QualityGrowth research={research} /> : null}
     {tab === "Ownership" ? <Ownership research={research} /> : null}
@@ -61,10 +64,20 @@ function TabPanel({ tab, position, research, currency }: { readonly tab: Tab; re
   </div>
 }
 
-function Overview({ position, research, currency }: { readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly currency: string }) {
+function Overview({ position, research, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly onViewEvidence: () => void }) {
   const metrics = latestByCode(research.metrics)
-  const marketCap = metrics.get("MARKET_CAP_PROVIDER_RAW") ?? metrics.get("MARKET_CAP")
-  return <><SectionHeading title="Position overview" detail="Portfolio context and cached evidence remain separate and traceable." /><div className="research-card-grid"><MetricCard label="Quantity" value={formatQuantity(position.quantity)} /><MetricCard label="Average cost" value={formatMoney(position.averageCost, currency)} detail={position.accountingBasis.replaceAll("_", " ")} /><MetricCard label="Current value" value={formatMoney(position.currentValue, currency)} /><MetricCard label="Unrealised P&L" value={formatMoney(position.unrealisedPnl, currency)} detail={formatPercent(position.unrealisedPnlPercent)} /><MetricCard label="Market-cap category" value={research.marketCapCategory ?? "Unavailable"} /><MetricCard label="Raw provider market cap" value={formatResearchMetric(marketCap)} detail={marketCap ? `${marketCap.provider} · ${period(marketCap)}` : undefined} /><MetricCard label="Target price" value="Unavailable" detail="No target-price field is configured in the current schema." /><MetricCard label="Stop-loss" value="Unavailable" detail="No stop-loss field is configured in the current schema." /></div><section className="research-callout"><strong>No investment conclusion</strong><p>Scoring and recommendations are planned for Stage 8. This workspace displays evidence and portfolio context only.</p></section></>
+  const groups = [
+    { title: "Quality at a glance", codes: [...QUALITY_CODES] },
+    { title: "Growth at a glance", codes: [...GROWTH_CODES] },
+    { title: "Valuation snapshot", codes: [...VALUATION_CODES] },
+    { title: "Ownership snapshot", codes: [...OWNERSHIP_CODES] },
+  ]
+  const conflicts = research.metrics.filter((metric) => metric.status === "CONFLICTING").length
+  const provisional = research.metrics.filter((metric) => metric.status === "PROVISIONAL").length
+  const reviewRequired = research.documents.filter((document) => document.status === "REVIEW_REQUIRED").length
+  const stale = research.metrics.filter((metric) => metric.status === "STALE").length
+  const coverage = research.metrics.length ? "Partial" : "Unavailable"
+  return <><SectionHeading title="Research at a glance" detail="A summary of stored evidence; the detailed tabs remain the source of truth." /><section className="context-strip" aria-label="Business and portfolio context"><div><span>Business</span><strong>{research.sector ?? position.sector ?? "Unavailable"}</strong><small>{research.industry ?? position.industry ?? "Industry unavailable"}</small></div><div><span>Portfolio</span><strong>{position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</strong><small>{formatPercent(position.portfolioWeightPercent)} weight · {position.brokerExposure?.length ?? 0} broker account(s)</small></div><div><span>Classification</span><strong>{research.marketCapCategory ? titleCase(research.marketCapCategory) : "Unavailable"}</strong><small>{position.themes.length ? position.themes.map((theme) => theme.name).join(", ") : "No themes"}</small></div></section><div className="research-cockpit">{groups.map((group) => <section className="cockpit-panel" key={group.title}><h2>{group.title}</h2><div className="snapshot-list">{group.codes.map((code) => { const metric = metrics.get(code); return <div key={code}><span>{metric?.label ?? metricLabelForCode(code)}</span><strong>{formatResearchMetric(metric)}</strong><small>{metric ? period(metric) : "Unavailable"}</small><Status value={coverageStatus(metric)} /></div> })}</div></section>)}</div><section className="research-health"><div><p className="eyebrow">Research health</p><h2>{coverage} coverage</h2><p>{research.metrics.length} cached observations · {stale ? "mixed freshness" : research.metrics.length ? "current cache" : "freshness unavailable"}</p></div><dl><div><dt>Conflicts</dt><dd>{conflicts}</dd></div><div><dt>Review required</dt><dd>{reviewRequired}</dd></div><div><dt>Provisional</dt><dd>{provisional}</dd></div></dl><button type="button" className="button button-secondary" onClick={onViewEvidence}>View Evidence</button></section><p className="assessment-note">Investment scoring and recommendations are not yet enabled.</p></>
 }
 
 function Financials({ research }: { readonly research: SecurityResearch }) {
@@ -105,6 +118,12 @@ function MetricTable({ rows, empty, detailed = false }: { readonly rows: readonl
 }
 
 function Status({ value }: { readonly value: ResearchEvidenceStatus }) { return <span className={`evidence-badge evidence-${value.toLocaleLowerCase()}`}>{value.replaceAll("_", " ")}</span> }
+function PnlCard({ position, currency }: { readonly position: PortfolioPosition; readonly currency: string }) {
+  const sign = position.unrealisedPnl === null ? "" : new Decimal(position.unrealisedPnl).gte(0) ? "+" : ""
+  const percentSign = position.unrealisedPnlPercent === null ? "" : new Decimal(position.unrealisedPnlPercent).gte(0) ? "+" : ""
+  const direction = position.unrealisedPnl === null ? "Unavailable" : new Decimal(position.unrealisedPnl).gte(0) ? "Gain" : "Loss"
+  return <article className={`research-metric-card pnl-card pnl-${direction.toLocaleLowerCase()}`}><span>P/L</span><strong>{position.unrealisedPnl === null ? "Unavailable" : `${sign}${formatMoney(position.unrealisedPnl, currency)}`}</strong><small>{position.unrealisedPnlPercent === null ? "Unavailable" : `${percentSign}${formatPercent(position.unrealisedPnlPercent)} · ${direction}`}</small></article>
+}
 function MetricCard({ label, value, detail }: { readonly label: string; readonly value: string; readonly detail?: string }) { return <article className="research-metric-card"><span>{label}</span><strong>{value}</strong>{detail ? <small>{detail}</small> : null}</article> }
 function SectionHeading({ title, detail }: { readonly title: string; readonly detail: string }) { return <div className="research-section-heading"><h2>{title}</h2><p>{detail}</p></div> }
 function Empty({ title, detail }: { readonly title: string; readonly detail: string }) { return <div className="data-empty"><strong>{title}</strong><p>{detail}</p></div> }
@@ -113,3 +132,5 @@ function ResearchNotFound() { return <section className="research-page"><div cla
 function date(value: string) { const parsed = new Date(value); return Number.isNaN(parsed.valueOf()) ? "Unavailable" : new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(parsed) }
 function dateTime(value: string) { if (!value) return "Unavailable"; const parsed = new Date(value); return Number.isNaN(parsed.valueOf()) ? "Unavailable" : new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short" }).format(parsed) }
 function period(metric: ResearchMetric) { return [metric.periodType?.replaceAll("_", " "), metric.periodEnd ? date(metric.periodEnd) : null].filter(Boolean).join(" · ") || "Period unavailable" }
+function titleCase(value: string) { return value.replaceAll("_", " ").toLocaleLowerCase().replace(/(^|\s)\S/gu, (match) => match.toLocaleUpperCase()) }
+function metricLabelForCode(code: string) { return metricLabel(code) }

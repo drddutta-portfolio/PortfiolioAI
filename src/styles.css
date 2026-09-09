@@ -408,18 +408,70 @@ th { color: #69746d; background: #f7f9f7; font-size: 0.7rem; letter-spacing: 0.0
 .evidence-filter { width: 14rem; margin-bottom: .8rem; display: grid; gap: .3rem; color: #5e6d65; font-size: .72rem; font-weight: 750; }
 .security-research-link { color: #245d43; text-underline-offset: .18em; }
 
+/* Stage 7.2C.1 — investor-first information hierarchy */
+.research-header { grid-template-columns: minmax(18rem, .72fr) minmax(38rem, 1.28fr); gap: 1.4rem; }
+.research-title h1 { margin: .2rem 0 .65rem; font-size: clamp(2.05rem, 3.7vw, 3.25rem); line-height: 1.04; }
+.security-identity-line { margin: 0 0 .8rem; color: #42564b !important; font-size: .92rem; }
+.security-identity-line strong { color: #173f2d; letter-spacing: .06em; }
+.research-title > p { margin-block: .4rem; }
+.raw-market-cap { font-size: .77rem; }
+.identity-chips, .broker-chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+.identity-chips span, .broker-chips span { padding: .28rem .5rem; border: 1px solid #cedbd3; border-radius: 999px; color: #3f5b4d; background: #f4f8f5; font-size: .68rem; font-weight: 750; }
+.position-dashboard h2 { margin: 0 0 .6rem; color: #2e493b; font-size: .82rem; letter-spacing: .05em; text-transform: uppercase; }
+.position-dashboard .research-head-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .45rem; }
+.position-dashboard .research-metric-card { min-height: 4.65rem; padding: .62rem .68rem; gap: .18rem; border-radius: .55rem; }
+.position-dashboard .research-metric-card > span { font-size: .6rem; }
+.position-dashboard .research-metric-card strong { font-size: .88rem; line-height: 1.2; }
+.position-dashboard .research-metric-card small { font-size: .62rem; }
+.broker-card { grid-column: span 3; }
+.broker-card .broker-chips { margin-block: .15rem; }
+.pnl-card strong { display: flex; align-items: center; gap: .3rem; }
+.pnl-gain strong::before, .pnl-loss strong::before { font-size: .65rem; font-weight: 800; text-transform: uppercase; }
+.pnl-gain strong, .pnl-gain small { color: #17603b; }
+.pnl-loss strong, .pnl-loss small { color: #9a342d; }
+.context-strip { margin-bottom: .8rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+.context-strip > div { padding: .8rem 1rem; display: grid; gap: .2rem; border: 1px solid #dce4df; border-radius: .65rem; background: #f8faf8; }
+.context-strip span { color: #748078; font-size: .62rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.context-strip strong { color: #243d31; font-size: .9rem; }
+.context-strip small { color: #728077; }
+.research-cockpit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+.cockpit-panel { min-width: 0; padding: 1rem; border: 1px solid #dce4df; border-radius: .75rem; background: #fff; }
+.cockpit-panel h2 { margin: 0 0 .6rem; color: #263d32; font-size: 1rem; }
+.snapshot-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem; }
+.snapshot-list > div { min-width: 0; padding: .55rem; display: grid; grid-template-columns: 1fr auto; gap: .2rem .45rem; border-radius: .5rem; background: #f7f9f7; }
+.snapshot-list > div > span { overflow: hidden; color: #607067; font-size: .68rem; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
+.snapshot-list > div > strong { color: #223a2e; font-size: .82rem; text-align: right; }
+.snapshot-list > div > small { grid-column: 1 / -1; color: #7a857f; font-size: .62rem; }
+.snapshot-list .evidence-badge { grid-column: 1 / -1; }
+.research-health { margin-top: .8rem; padding: 1rem; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 1rem; border: 1px solid #d7e1db; border-radius: .75rem; background: #f2f7f4; }
+.research-health h2, .research-health p { margin: .15rem 0; }
+.research-health dl { margin: 0; display: flex; gap: .6rem; }
+.research-health dl > div { min-width: 5.3rem; padding: .5rem; text-align: center; border-radius: .5rem; background: #fff; }
+.research-health dt { color: #758079; font-size: .6rem; text-transform: uppercase; }
+.research-health dd { margin: .15rem 0 0; color: #263e32; font-size: 1rem; font-weight: 800; }
+.assessment-note { margin: .65rem 0 0; color: #6d7972; font-size: .73rem; text-align: right; }
+
 @media (max-width: 1024px) {
   .research-header { grid-template-columns: 1fr; }
-  .research-head-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .position-dashboard .research-head-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (max-width: 768px) {
-  .research-head-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .position-dashboard .research-head-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .broker-card { grid-column: span 2; }
+  .research-cockpit { grid-template-columns: 1fr; }
+  .research-health { grid-template-columns: 1fr; }
+  .research-health dl { flex-wrap: wrap; }
+  .research-health .button { justify-self: start; }
   .coverage-columns { grid-template-columns: 1fr; }
   .research-tabs { margin-inline: -.25rem; }
 }
 @media (max-width: 540px) {
   .research-header { padding: 1rem; }
-  .research-head-metrics, .research-card-grid { grid-template-columns: 1fr; }
+  .position-dashboard .research-head-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .broker-card { grid-column: span 2; }
+  .context-strip, .snapshot-list { grid-template-columns: 1fr; }
+  .research-health dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .research-health dl > div { min-width: 0; }
   .document-list article { flex-direction: column; }
   .document-list article > div:last-child { justify-items: start; text-align: left; }
   .research-tabs button { min-height: 3.25rem; padding-inline: .85rem; }
