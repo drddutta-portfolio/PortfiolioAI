@@ -1,5 +1,6 @@
 export interface CanonicalIdentity { readonly name:string; readonly symbol:string; readonly isin:string|null; readonly bseCode:string|null }
 export interface TrendlyneIdentity { readonly stockId:string; readonly name:string; readonly symbol:string; readonly isin:string|null; readonly bseCode:string|null; readonly sector:string|null; readonly industry:string|null }
+export interface TrendlyneSourceRef { readonly source_table:string; readonly source_id:string|number }
 export interface MetricValue { readonly code:string; readonly value:string; readonly unit:string|null; readonly periodType:"POINT_IN_TIME"|"TTM"|null; readonly evidenceStatus:"AVAILABLE"|"CONFLICTING"; readonly sourceField:string }
 export interface OwnershipValue { readonly code:string; readonly value:string; readonly periodEnd:string|null; readonly unit:string }
 export interface DocumentAppearance { readonly providerDocumentId:string; readonly companyName:string; readonly symbol:string; readonly stockId:string; readonly publishedAt:string|null; readonly documentType:"ANNUAL_REPORT"|"QUARTERLY_RESULT"|"INVESTOR_PRESENTATION"|"EARNINGS_CALL"|"OTHER" }
@@ -88,4 +89,6 @@ export class TrendlyneMcpClient {
   }
   async initialize():Promise<void>{ await this.#post({jsonrpc:"2.0",id:this.#next++,method:"initialize",params:{protocolVersion:"2025-03-26",capabilities:{},clientInfo:{name:"PortfolioAI",version:"1"}}}); await this.#post({jsonrpc:"2.0",method:"notifications/initialized",params:{}}) }
   async call(name:string,args:Readonly<Record<string,unknown>>):Promise<string>{ if(!this.#session)await this.initialize(); const result=await this.#post({jsonrpc:"2.0",id:this.#next++,method:"tools/call",params:{name,arguments:args}}) as {content?:{type:string;text?:string}[];structuredContent?:{result?:string}}; const text=result?.structuredContent?.result??result?.content?.find(x=>x.type==="text")?.text; if(typeof text!=="string")throw new Error("PROVIDER_RESULT_MISSING"); return text }
+  async searchParameters(query:string,sourceTable="stockprofile"):Promise<string>{return this.call("search_parameters",{query,source_table:sourceTable})}
+  async getParameterValues(stocks:readonly TrendlyneSourceRef[],parameters:readonly string[]):Promise<string>{return this.call("get_parameter_values",{stocks:[...stocks],parameters:[...parameters]})}
 }
