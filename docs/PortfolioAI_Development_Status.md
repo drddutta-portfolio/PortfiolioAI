@@ -2,9 +2,9 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 7.1C — trusted Trendlyne adapter deployed and controlled pilot complete; Stage 8 not started
+**Current milestone:** Stage 7.2A — provider control plane deployed, validated and complete; Stage 7.2B and Stage 8 not started
 
-**Last reviewed:** 8 September 2026
+**Last reviewed:** 9 September 2026
 
 This document records what is actually implemented, live, incomplete, and approved
 next. It is intentionally concise and does not duplicate the product specification.
@@ -492,6 +492,33 @@ Provider periods/scopes/currency that were absent remain null, classification
 taxonomy values remain unseeded, document identities require review, and full
 portfolio ingestion is not authorized. Stage 8 and Theme Outlook scoring have not
 started.
+
+## E.7 Stage 7.2A provider control plane
+
+Migration `20260909100000_create_stage7_2a_provider_control_plane.sql` is applied
+to the linked project. It adds configurable PortfolioAI-internal daily, rolling,
+per-run and concurrency safeguards, atomic reservation/settlement, append-only
+usage and control audit records, per-run security/domain items, operational refresh
+state and versioned freshness policies. The actual provider contractual quota
+remains explicitly `UNKNOWN`.
+
+The deployed `refresh-security-enrichment` boundary checks the provider kill switch
+before constructing the MCP client, reserves a conservative four internal attempts
+per requested security, records each provider tool attempt, settles unused units,
+and records run-item and refresh outcomes. Existing pilot bounds remain unchanged.
+Scheduler, news, corporate events and Trendlyne technical market data remain
+disabled; Angel One remains current-price authority.
+
+Disposable validation passed 45 pgTAP assertions, clean-schema replay, schema lint
+and a two-session concurrency test. The full application suite passed 153 tests,
+including both jsdom UI suites; 62 Edge tests, TypeScript, application and Edge
+ESLint, and the production build also passed. Linked migration history, schema lint,
+schema-only inspection and regression estimates passed. The linked CLI pgTAP runner
+cannot execute assertions because its temporary login role lacks `USAGE` on the
+existing `extensions` schema. That runner limitation occurs at `extensions.plan`
+before Stage 7.2A assertions and does not justify widening production privileges;
+the disposable pgTAP/RLS suite plus linked read-only schema verification is the safe
+equivalent. No Trendlyne call or Cohort A ingestion was performed.
 
 ## F. Deferred future work
 

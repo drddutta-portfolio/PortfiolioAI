@@ -1,7 +1,7 @@
 # PortfolioAI — Database Architecture
 
 **Step 0.4 — Foundation database design**  
-**Status:** Stages 1–7 implemented remotely; Stage 7 provider connection and data ingestion remain separately gated
+**Status:** Stages 1–7.2A implemented remotely; broader provider ingestion remains separately gated
 
 ## 1. Purpose
 
@@ -972,6 +972,28 @@ The authenticated `refresh-market-data` Edge Function is deployed and the
 server-side Angel One SmartAPI integration is operational. All 248 open holdings
 have `VERIFIED` provider mappings and latest-price cache coverage. The reviewed
 MOTHERSON identity is `ANGEL_ONE / NSE / MOTHERSON-EQ / 4204`.
+
+## 21.1 Stage 7.2A provider operational control plane
+
+Provider execution is governed independently from immutable evidence. The
+`provider_ingestion_controls` row defines configurable PortfolioAI internal safety
+limits and kill switches; it does not represent the provider's contractual quota.
+Every change uses the service-only audited control RPC and produces an append-only
+`provider_control_events` record.
+
+`provider_budget_reservations` and the service-only reserve/settle RPCs serialize on
+the provider control row, preventing concurrent orchestration from oversubscribing
+daily, rolling, per-run or concurrency limits. `provider_usage_events` records safe
+per-attempt accounting without credentials, headers or payloads. Expired abandoned
+reservations are released on the next reservation attempt.
+
+`data_ingestion_run_items` provides per-security/domain outcomes while additive
+nullable columns preserve historical `data_ingestion_runs`. Versioned
+`refresh_domain_policies` hold freshness and retry configuration.
+`security_refresh_states` is only a mutable operational projection: refresh failure
+does not delete, replace or invalidate immutable evidence. Authenticated clients
+cannot mutate any control, budget, usage, run-item or refresh-state table and may
+call only the safe operational-summary RPC.
 
 ## 22. Deferred features
 

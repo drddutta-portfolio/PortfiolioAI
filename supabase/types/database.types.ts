@@ -7,8 +7,8 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Preserve the repository's deployed PostgREST compatibility marker while
-  // regenerating the public schema with the locally installed Supabase CLI.
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
@@ -241,56 +241,181 @@ export type Database = {
           },
         ]
       }
+      data_ingestion_run_items: {
+        Row: {
+          accepted_record_count: number
+          attempted_call_count: number
+          completed_at: string | null
+          data_domain: string
+          id: string
+          ingestion_run_id: string
+          metadata: Json
+          safe_reason_code: string | null
+          security_id: string
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          accepted_record_count?: number
+          attempted_call_count?: number
+          completed_at?: string | null
+          data_domain: string
+          id?: string
+          ingestion_run_id: string
+          metadata?: Json
+          safe_reason_code?: string | null
+          security_id: string
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          accepted_record_count?: number
+          attempted_call_count?: number
+          completed_at?: string | null
+          data_domain?: string
+          id?: string
+          ingestion_run_id?: string
+          metadata?: Json
+          safe_reason_code?: string | null
+          security_id?: string
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "data_ingestion_run_items_ingestion_run_id_fkey"
+            columns: ["ingestion_run_id"]
+            isOneToOne: false
+            referencedRelation: "data_ingestion_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "data_ingestion_run_items_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "data_ingestion_run_items_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "data_ingestion_run_items_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "data_ingestion_run_items_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       data_ingestion_runs: {
         Row: {
+          accepted_count: number | null
+          attempted_call_count: number | null
           cached_count: number
           completed_at: string | null
+          conflicting_count: number | null
           error_summary: string | null
+          estimated_call_count: number | null
           failed_count: number
           fetched_count: number
           id: string
           metadata: Json
           operation: string
+          orchestration_type: string | null
+          policy_version: number | null
+          portfolio_id: string | null
+          rejected_count: number | null
           requested_by: string | null
           requested_count: number
+          reserved_call_count: number | null
+          skipped_count: number | null
           source_code: string
           started_at: string
           status: string
+          trigger_source: string | null
           unchanged_count: number
         }
         Insert: {
+          accepted_count?: number | null
+          attempted_call_count?: number | null
           cached_count?: number
           completed_at?: string | null
+          conflicting_count?: number | null
           error_summary?: string | null
+          estimated_call_count?: number | null
           failed_count?: number
           fetched_count?: number
           id?: string
           metadata?: Json
           operation: string
+          orchestration_type?: string | null
+          policy_version?: number | null
+          portfolio_id?: string | null
+          rejected_count?: number | null
           requested_by?: string | null
           requested_count?: number
+          reserved_call_count?: number | null
+          skipped_count?: number | null
           source_code: string
           started_at?: string
           status: string
+          trigger_source?: string | null
           unchanged_count?: number
         }
         Update: {
+          accepted_count?: number | null
+          attempted_call_count?: number | null
           cached_count?: number
           completed_at?: string | null
+          conflicting_count?: number | null
           error_summary?: string | null
+          estimated_call_count?: number | null
           failed_count?: number
           fetched_count?: number
           id?: string
           metadata?: Json
           operation?: string
+          orchestration_type?: string | null
+          policy_version?: number | null
+          portfolio_id?: string | null
+          rejected_count?: number | null
           requested_by?: string | null
           requested_count?: number
+          reserved_call_count?: number | null
+          skipped_count?: number | null
           source_code?: string
           started_at?: string
           status?: string
+          trigger_source?: string | null
           unchanged_count?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "data_ingestion_runs_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_enrichment_coverage_v1"
+            referencedColumns: ["portfolio_id"]
+          },
+          {
+            foreignKeyName: "data_ingestion_runs_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "data_ingestion_runs_source_code_fkey"
             columns: ["source_code"]
@@ -2060,6 +2185,356 @@ export type Database = {
         }
         Relationships: []
       }
+      provider_budget_reservations: {
+        Row: {
+          consumed_units: number
+          estimated_units: number
+          expires_at: string
+          failed_units: number
+          id: string
+          ingestion_run_id: string
+          policy_version: number
+          released_units: number
+          reservation_key: string
+          reserved_at: string
+          settled_at: string | null
+          source_code: string
+          status: string
+        }
+        Insert: {
+          consumed_units?: number
+          estimated_units: number
+          expires_at: string
+          failed_units?: number
+          id?: string
+          ingestion_run_id: string
+          policy_version: number
+          released_units?: number
+          reservation_key: string
+          reserved_at?: string
+          settled_at?: string | null
+          source_code: string
+          status?: string
+        }
+        Update: {
+          consumed_units?: number
+          estimated_units?: number
+          expires_at?: string
+          failed_units?: number
+          id?: string
+          ingestion_run_id?: string
+          policy_version?: number
+          released_units?: number
+          reservation_key?: string
+          reserved_at?: string
+          settled_at?: string | null
+          source_code?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_budget_reservations_ingestion_run_id_fkey"
+            columns: ["ingestion_run_id"]
+            isOneToOne: false
+            referencedRelation: "data_ingestion_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_budget_reservations_source_code_fkey"
+            columns: ["source_code"]
+            isOneToOne: false
+            referencedRelation: "data_sources"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      provider_control_events: {
+        Row: {
+          actor_id: string | null
+          actor_kind: string
+          control_name: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          new_value: Json
+          policy_version: number
+          previous_value: Json | null
+          reason: string
+          source_code: string
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_kind: string
+          control_name: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          new_value: Json
+          policy_version: number
+          previous_value?: Json | null
+          reason: string
+          source_code: string
+        }
+        Update: {
+          actor_id?: string | null
+          actor_kind?: string
+          control_name?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          new_value?: Json
+          policy_version?: number
+          previous_value?: Json | null
+          reason?: string
+          source_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_control_events_source_code_fkey"
+            columns: ["source_code"]
+            isOneToOne: false
+            referencedRelation: "data_sources"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      provider_ingestion_controls: {
+        Row: {
+          actual_provider_quota: Json | null
+          actual_provider_quota_status: string
+          caution_threshold: number
+          concurrency_limit: number
+          consecutive_failure_threshold: number
+          conservation_threshold: number
+          daily_internal_attempt_limit: number
+          hard_stop_threshold: number
+          ingestion_enabled: boolean
+          per_run_internal_attempt_limit: number
+          policy_version: number
+          rolling_internal_attempt_limit: number
+          rolling_window_days: number
+          scheduler_enabled: boolean
+          source_code: string
+          updated_at: string
+          updated_by: string | null
+          warning_threshold: number
+        }
+        Insert: {
+          actual_provider_quota?: Json | null
+          actual_provider_quota_status?: string
+          caution_threshold: number
+          concurrency_limit: number
+          consecutive_failure_threshold: number
+          conservation_threshold: number
+          daily_internal_attempt_limit: number
+          hard_stop_threshold?: number
+          ingestion_enabled?: boolean
+          per_run_internal_attempt_limit: number
+          policy_version: number
+          rolling_internal_attempt_limit: number
+          rolling_window_days?: number
+          scheduler_enabled?: boolean
+          source_code: string
+          updated_at?: string
+          updated_by?: string | null
+          warning_threshold: number
+        }
+        Update: {
+          actual_provider_quota?: Json | null
+          actual_provider_quota_status?: string
+          caution_threshold?: number
+          concurrency_limit?: number
+          consecutive_failure_threshold?: number
+          conservation_threshold?: number
+          daily_internal_attempt_limit?: number
+          hard_stop_threshold?: number
+          ingestion_enabled?: boolean
+          per_run_internal_attempt_limit?: number
+          policy_version?: number
+          rolling_internal_attempt_limit?: number
+          rolling_window_days?: number
+          scheduler_enabled?: boolean
+          source_code?: string
+          updated_at?: string
+          updated_by?: string | null
+          warning_threshold?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_ingestion_controls_source_code_fkey"
+            columns: ["source_code"]
+            isOneToOne: true
+            referencedRelation: "data_sources"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      provider_usage_events: {
+        Row: {
+          accounting_class: string
+          actual_internal_units: number
+          attempted_at: string
+          completed_at: string | null
+          created_at: string
+          data_domain: string | null
+          estimated_internal_units: number
+          id: string
+          idempotency_key: string
+          ingestion_run_id: string | null
+          operation_class: string
+          outcome: string
+          provider_reported_units: number | null
+          retry_attempt: number
+          run_item_id: string | null
+          safe_error_code: string | null
+          security_id: string | null
+          source_code: string
+        }
+        Insert: {
+          accounting_class: string
+          actual_internal_units: number
+          attempted_at: string
+          completed_at?: string | null
+          created_at?: string
+          data_domain?: string | null
+          estimated_internal_units?: number
+          id?: string
+          idempotency_key: string
+          ingestion_run_id?: string | null
+          operation_class: string
+          outcome: string
+          provider_reported_units?: number | null
+          retry_attempt?: number
+          run_item_id?: string | null
+          safe_error_code?: string | null
+          security_id?: string | null
+          source_code: string
+        }
+        Update: {
+          accounting_class?: string
+          actual_internal_units?: number
+          attempted_at?: string
+          completed_at?: string | null
+          created_at?: string
+          data_domain?: string | null
+          estimated_internal_units?: number
+          id?: string
+          idempotency_key?: string
+          ingestion_run_id?: string | null
+          operation_class?: string
+          outcome?: string
+          provider_reported_units?: number | null
+          retry_attempt?: number
+          run_item_id?: string | null
+          safe_error_code?: string | null
+          security_id?: string | null
+          source_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_usage_events_ingestion_run_id_fkey"
+            columns: ["ingestion_run_id"]
+            isOneToOne: false
+            referencedRelation: "data_ingestion_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_usage_events_run_item_id_fkey"
+            columns: ["run_item_id"]
+            isOneToOne: false
+            referencedRelation: "data_ingestion_run_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_usage_events_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "provider_usage_events_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "provider_usage_events_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "provider_usage_events_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_usage_events_source_code_fkey"
+            columns: ["source_code"]
+            isOneToOne: false
+            referencedRelation: "data_sources"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      refresh_domain_policies: {
+        Row: {
+          cooldown_seconds: number
+          created_at: string
+          data_domain: string
+          definition: Json
+          effective_from: string
+          effective_to: string | null
+          freshness_basis: string
+          freshness_seconds: number | null
+          is_enabled: boolean
+          policy_version: number
+          retry_schedule_seconds: number[]
+          source_code: string
+        }
+        Insert: {
+          cooldown_seconds?: number
+          created_at?: string
+          data_domain: string
+          definition?: Json
+          effective_from?: string
+          effective_to?: string | null
+          freshness_basis: string
+          freshness_seconds?: number | null
+          is_enabled?: boolean
+          policy_version: number
+          retry_schedule_seconds?: number[]
+          source_code: string
+        }
+        Update: {
+          cooldown_seconds?: number
+          created_at?: string
+          data_domain?: string
+          definition?: Json
+          effective_from?: string
+          effective_to?: string | null
+          freshness_basis?: string
+          freshness_seconds?: number | null
+          is_enabled?: boolean
+          policy_version?: number
+          retry_schedule_seconds?: number[]
+          source_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "refresh_domain_policies_source_code_fkey"
+            columns: ["source_code"]
+            isOneToOne: false
+            referencedRelation: "data_sources"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       research_document_sources: {
         Row: {
           content_hash: string | null
@@ -2876,9 +3351,9 @@ export type Database = {
           observed_exchange: string | null
           observed_isin: string | null
           observed_name: string | null
-          provider_instrument_id: string | null
           observed_series: string | null
           observed_symbol: string | null
+          provider_instrument_id: string | null
           security_id: string | null
           source_code: string
           source_record_id: string
@@ -2893,9 +3368,9 @@ export type Database = {
           observed_exchange?: string | null
           observed_isin?: string | null
           observed_name?: string | null
-          provider_instrument_id?: string | null
           observed_series?: string | null
           observed_symbol?: string | null
+          provider_instrument_id?: string | null
           security_id?: string | null
           source_code: string
           source_record_id: string
@@ -2910,9 +3385,9 @@ export type Database = {
           observed_exchange?: string | null
           observed_isin?: string | null
           observed_name?: string | null
-          provider_instrument_id?: string | null
           observed_series?: string | null
           observed_symbol?: string | null
+          provider_instrument_id?: string | null
           security_id?: string | null
           source_code?: string
           source_record_id?: string
@@ -3179,6 +3654,97 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "data_source_records"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_refresh_states: {
+        Row: {
+          consecutive_failures: number
+          data_domain: string
+          fresh_until: string | null
+          last_attempt_at: string | null
+          last_evidence_change_at: string | null
+          last_run_id: string | null
+          last_safe_error_code: string | null
+          last_success_at: string | null
+          next_eligible_refresh_at: string | null
+          refresh_status: string
+          security_id: string
+          source_code: string
+          updated_at: string
+        }
+        Insert: {
+          consecutive_failures?: number
+          data_domain: string
+          fresh_until?: string | null
+          last_attempt_at?: string | null
+          last_evidence_change_at?: string | null
+          last_run_id?: string | null
+          last_safe_error_code?: string | null
+          last_success_at?: string | null
+          next_eligible_refresh_at?: string | null
+          refresh_status?: string
+          security_id: string
+          source_code: string
+          updated_at?: string
+        }
+        Update: {
+          consecutive_failures?: number
+          data_domain?: string
+          fresh_until?: string | null
+          last_attempt_at?: string | null
+          last_evidence_change_at?: string | null
+          last_run_id?: string | null
+          last_safe_error_code?: string | null
+          last_success_at?: string | null
+          next_eligible_refresh_at?: string | null
+          refresh_status?: string
+          security_id?: string
+          source_code?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_refresh_states_last_run_id_fkey"
+            columns: ["last_run_id"]
+            isOneToOne: false
+            referencedRelation: "data_ingestion_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "security_refresh_states_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "security_refresh_states_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "security_refresh_states_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "security_refresh_states_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "security_refresh_states_source_code_fkey"
+            columns: ["source_code"]
+            isOneToOne: false
+            referencedRelation: "data_sources"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -3958,6 +4524,29 @@ export type Database = {
         }
         Returns: Json
       }
+      get_provider_operational_summary_v1: {
+        Args: { p_source_code?: string }
+        Returns: {
+          active_orchestrations: number
+          active_reservations: number
+          actual_provider_quota_status: string
+          daily_internal_attempt_limit: number
+          daily_observed_usage: number
+          daily_remaining: number
+          ingestion_enabled: boolean
+          last_failed_run_at: string
+          last_successful_run_at: string
+          latest_safe_error: string
+          policy_version: number
+          provider_name: string
+          rolling_internal_attempt_limit: number
+          rolling_observed_usage: number
+          rolling_remaining: number
+          scheduler_enabled: boolean
+          source_code: string
+          utilization_state: string
+        }[]
+      }
       portfolioai_assert_effective_quantity_valid: {
         Args: {
           p_excluded_transaction_id?: string
@@ -3978,6 +4567,55 @@ export type Database = {
         Args: { p_value: string }
         Returns: string
       }
+      record_provider_usage_event_v1: {
+        Args: {
+          p_accounting_class: string
+          p_actual_internal_units: number
+          p_attempted_at: string
+          p_completed_at: string
+          p_data_domain: string
+          p_estimated_internal_units: number
+          p_idempotency_key: string
+          p_ingestion_run_id: string
+          p_operation_class: string
+          p_outcome: string
+          p_retry_attempt: number
+          p_run_item_id: string
+          p_safe_error_code: string
+          p_security_id: string
+          p_source_code: string
+        }
+        Returns: string
+      }
+      record_refresh_item_result_v1: {
+        Args: {
+          p_accepted_record_count: number
+          p_attempted_call_count: number
+          p_metadata?: Json
+          p_run_item_id: string
+          p_safe_reason_code: string
+          p_status: string
+        }
+        Returns: {
+          accepted_record_count: number
+          attempted_call_count: number
+          completed_at: string | null
+          data_domain: string
+          id: string
+          ingestion_run_id: string
+          metadata: Json
+          safe_reason_code: string | null
+          security_id: string
+          started_at: string | null
+          status: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "data_ingestion_run_items"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       release_data_ingestion_lease_v1: {
         Args: {
           p_cooldown_seconds: number
@@ -3997,6 +4635,21 @@ export type Database = {
         }
         Returns: boolean
       }
+      reserve_provider_budget_v1: {
+        Args: {
+          p_estimated_units: number
+          p_ingestion_run_id: string
+          p_reservation_key: string
+          p_reservation_seconds?: number
+          p_source_code: string
+        }
+        Returns: {
+          policy_version: number
+          reason_code: string
+          reservation_id: string
+          reserved: boolean
+        }[]
+      }
       resolve_fundamental_reconciliation_case_v1: {
         Args: {
           p_case_id: string
@@ -4015,6 +4668,55 @@ export type Database = {
           p_transaction_id: string
         }
         Returns: Json
+      }
+      set_provider_ingestion_control_v1: {
+        Args: {
+          p_changes: Json
+          p_expires_at?: string
+          p_reason: string
+          p_source_code: string
+        }
+        Returns: {
+          actual_provider_quota: Json | null
+          actual_provider_quota_status: string
+          caution_threshold: number
+          concurrency_limit: number
+          consecutive_failure_threshold: number
+          conservation_threshold: number
+          daily_internal_attempt_limit: number
+          hard_stop_threshold: number
+          ingestion_enabled: boolean
+          per_run_internal_attempt_limit: number
+          policy_version: number
+          rolling_internal_attempt_limit: number
+          rolling_window_days: number
+          scheduler_enabled: boolean
+          source_code: string
+          updated_at: string
+          updated_by: string | null
+          warning_threshold: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "provider_ingestion_controls"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      settle_provider_budget_v1: {
+        Args: {
+          p_consumed_units: number
+          p_failed_units: number
+          p_released_units: number
+          p_reservation_id: string
+        }
+        Returns: {
+          consumed_units: number
+          failed_units: number
+          released_units: number
+          reservation_id: string
+          status: string
+        }[]
       }
       submit_security_enrichment_correction_v1: {
         Args: {
@@ -4054,12 +4756,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -4083,11 +4785,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -4108,11 +4810,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -4133,11 +4835,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -4150,11 +4852,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
