@@ -1,11 +1,12 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { afterEach, describe, expect, it, vi } from "vitest"
+import type { ResearchRefreshPlan } from "../data/researchCoverageRepository"
 import type { PortfolioViewModel } from "../features/portfolio/types"
 import type { ResearchCoverageRow } from "../features/research/researchCoverage"
 import { ResearchCoveragePage } from "./ResearchCoveragePage"
 
-const estimateResearchRefresh=vi.fn()
+const estimateResearchRefresh = vi.fn<(portfolioId: string, securityIds: readonly string[], documentSecurityIds?: readonly string[]) => Promise<ResearchRefreshPlan>>()
 const equityPosition={securityId:"e1",symbol:"BEL",company:"Bharat Electronics",assetClass:"EQUITY"} as const
 const etfPosition={securityId:"f1",symbol:"NIFTYBEES",company:"Nifty ETF",assetClass:"ETF"} as const
 const portfolio={portfolio:{id:"p1",name:"Portfolio",currency:"INR"},openPositions:[equityPosition,etfPosition]} as unknown as PortfolioViewModel
@@ -16,7 +17,7 @@ vi.mock("../features/portfolio/usePortfolioView",()=>({usePortfolioView:()=>({po
 vi.mock("../features/research/useResearchCoverage",()=>({useResearchCoverage:()=>({data:coverage,error:null,isLoading:false})}))
 vi.mock("../data/researchCoverageRepository",async(importOriginal)=>{
   const actual=await importOriginal<typeof import("../data/researchCoverageRepository")>()
-  return {...actual,estimateResearchRefresh:(...args:unknown[])=>estimateResearchRefresh(...args)}
+  return {...actual,estimateResearchRefresh}
 })
 
 describe("ResearchCoveragePage refresh planning",()=>{
