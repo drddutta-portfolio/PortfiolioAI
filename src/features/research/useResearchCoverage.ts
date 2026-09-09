@@ -11,18 +11,17 @@ export function useResearchCoverage(positions: readonly PortfolioPosition[]) {
 
   useEffect(() => {
     let active = true
-    if (!securityIds.length) {
-      setState({ key, data: [], error: null })
-      return () => { active = false }
+    if (securityIds.length) {
+      void loadResearchCoverageEvidence(securityIds)
+        .then((evidence) => {
+          if (active) setState({ key, data: buildResearchCoverage(positions, evidence.observations, evidence.documents, evidence.identities, evidence.enrichment), error: null })
+        })
+        .catch((reason: unknown) => { if (active) setState({ key, data: [], error: displayError(reason) }) })
     }
-    void loadResearchCoverageEvidence(securityIds)
-      .then((evidence) => {
-        if (active) setState({ key, data: buildResearchCoverage(positions, evidence.observations, evidence.documents, evidence.identities, evidence.enrichment), error: null })
-      })
-      .catch((reason: unknown) => { if (active) setState({ key, data: [], error: displayError(reason) }) })
     return () => { active = false }
   }, [key, positions, securityIds])
 
+  if (!securityIds.length) return { data: [] as readonly ResearchCoverageRow[], error: null, isLoading: false }
   return {
     data: state?.key === key ? state.data : [],
     error: state?.key === key ? state.error : null,
