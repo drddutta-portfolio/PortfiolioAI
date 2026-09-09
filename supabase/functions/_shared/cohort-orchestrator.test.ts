@@ -1,5 +1,5 @@
 import {describe,expect,it,vi} from "vitest"
-import {executePlannedBatch,isRetryableProviderFailure,planCohort,SecurityExecutionError,type CohortSecurityState} from "./cohort-orchestrator.ts"
+import {executePlannedBatch,isApprovedCohortA,isRetryableProviderFailure,planCohort,SecurityExecutionError,type CohortSecurityState} from "./cohort-orchestrator.ts"
 
 const pilot=["HDFCBANK","M&M","BHARTIARTL","MOTHERSON","BBOX","AVALON","ASTRAMICRO","WABAG","WAAREEENER","ZAGGLE"]
 const additions=["ICICIBANK","SBIN","FEDERALBNK","INFY","TITAN","TORNTPHARM","LAURUSLABS","TVSMOTOR","IREDA","HUDCO","TDPOWERSYS","MTARTECH","PIIND","VBL","NETWEB"]
@@ -8,6 +8,10 @@ const cohort=[...pilot.map((symbol,index)=>state(symbol,true,index)),...addition
 const policy={dailyLimit:100,perRunLimit:40,retryReservePercent:.2,maxRetryReserve:12,identitySearchCalls:2}
 
 describe("Stage 7.2B1 cohort planner",()=>{
+  it("accepts only the exact owner-approved Cohort A symbols",()=>{
+    expect(isApprovedCohortA([...pilot,...additions])).toBe(true)
+    expect(isApprovedCohortA([...pilot,...additions.slice(0,-1),"REPLACEMENT"])).toBe(false)
+  })
   it("skips fresh pilot evidence and shares one overview for required domains",()=>{
     const plan=planCohort(cohort,policy)
     expect(plan.securities.slice(0,10).every(item=>item.baseCalls===0)).toBe(true)

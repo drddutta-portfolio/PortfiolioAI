@@ -2,7 +2,7 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 7.2B1 — cohort orchestrator hardened and dry-run validated; Cohort A execution and Stage 8 not started
+**Current milestone:** Stage 7.2B1.5 — hardened cohort orchestrator integrated into live Edge path and authenticated linked dry-run validated; Cohort A execution and Stage 8 not started
 
 **Last reviewed:** 9 September 2026
 
@@ -533,6 +533,22 @@ The execution boundary guarantees reservation settlement, unused-unit release,
 lease release and terminal completion across failure paths. No schema migration,
 deployment, provider call or Cohort A ingestion occurred. Cohort A remains subject
 to separate owner authorization.
+
+## E.9 Stage 7.2B1.5 live cohort orchestrator integration
+
+The shared freshness-aware planner and guaranteed-cleanup executor are now wired
+to `refresh-security-enrichment`. The former action-separated live execution path
+and its `rows.length * 4` reservation estimate were removed; legacy refresh
+actions stop safely so no parallel path can bypass cohort controls. The exact
+owner-approved 25-symbol cohort is enforced server-side.
+
+An authenticated, non-mutating live dry-run uses the same planner and returns
+cached skips, operations, batches, base/retry attempts, observed/projected daily
+usage and budget eligibility before provider-client construction or reservation.
+Linked deployment version 11 reproduced the Stage 7.2B1 plan: ten pilot skips,
+15 additions, 60 base plus 12 retry attempts, and batches of 39 and 33. Provider
+usage, reservations, run items and refresh states remained zero. No Trendlyne call
+or Cohort A ingestion occurred; execution still requires separate owner approval.
 
 ## F. Deferred future work
 

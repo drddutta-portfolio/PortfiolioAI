@@ -13,6 +13,7 @@ describe("provider-neutral enrichment orchestration", () => {
   })
   it("accepts only the versioned contract actions", () => {
     expect(parseEnrichmentAction("REFRESH_FUNDAMENTALS")).toBe("REFRESH_FUNDAMENTALS")
+    expect(parseEnrichmentAction("REFRESH_COHORT")).toBe("REFRESH_COHORT")
     expect(parseEnrichmentAction("REFRESH_ALL")).toBeNull()
   })
 })

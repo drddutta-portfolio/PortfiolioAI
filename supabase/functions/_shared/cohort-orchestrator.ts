@@ -1,6 +1,13 @@
 export type RefreshDomain="IDENTITY"|"FUNDAMENTALS"|"OWNERSHIP"|"DOCUMENTS"
 export type PlannedOperation="OVERVIEW"|"IDENTITY_SEARCH"|"OWNERSHIP"|"DOCUMENT_SEARCH"
 
+export const APPROVED_COHORT_A_SYMBOLS=["HDFCBANK","M&M","BHARTIARTL","MOTHERSON","BBOX","AVALON","ASTRAMICRO","WABAG","WAAREEENER","ZAGGLE","ICICIBANK","SBIN","FEDERALBNK","INFY","TITAN","TORNTPHARM","LAURUSLABS","TVSMOTOR","IREDA","HUDCO","TDPOWERSYS","MTARTECH","PIIND","VBL","NETWEB"] as const
+
+export function isApprovedCohortA(symbols:readonly string[]):boolean{
+  const approved=new Set<string>(APPROVED_COHORT_A_SYMBOLS)
+  return symbols.length===approved.size&&new Set(symbols).size===approved.size&&symbols.every(symbol=>approved.has(symbol))
+}
+
 export interface CohortSecurityState{
   readonly securityId:string
   readonly symbol:string
@@ -10,6 +17,19 @@ export interface CohortSecurityState{
   readonly ownershipFresh:boolean
   readonly documentsFresh:boolean
   readonly documentsApproved:boolean
+}
+
+export interface CachedCohortEvidence{
+  readonly securityId:string
+  readonly identityFreshUntil:string|null
+  readonly fundamentalFreshUntil:string|null
+  readonly ownershipFreshUntil:string|null
+  readonly documentsFreshUntil:string|null
+}
+
+const fresh=(value:string|null,now:Date)=>value!==null&&Number.isFinite(Date.parse(value))&&Date.parse(value)>now.getTime()
+export function cohortSecurityState(security:{readonly id:string;readonly symbol:string;readonly assetClass:string},cached:CachedCohortEvidence|undefined,documentsApproved:boolean,now:Date):CohortSecurityState{
+  return {securityId:security.id,symbol:security.symbol,isOpenEquity:security.assetClass==="EQUITY",verifiedIdentityFresh:fresh(cached?.identityFreshUntil??null,now),fundamentalsFresh:fresh(cached?.fundamentalFreshUntil??null,now),ownershipFresh:fresh(cached?.ownershipFreshUntil??null,now),documentsFresh:fresh(cached?.documentsFreshUntil??null,now),documentsApproved}
 }
 
 export interface SecurityRefreshPlan{
