@@ -2,7 +2,7 @@
 
 **Status:** Living implementation and handover record
 
-**Current milestone:** Stage 7.2B1.5 — hardened cohort orchestrator integrated into live Edge path and authenticated linked dry-run validated; Cohort A execution and Stage 8 not started
+**Current milestone:** Stage 7.2B — controlled Cohort A rollout complete; Stage 7.2C and Stage 8 not started
 
 **Last reviewed:** 9 September 2026
 
@@ -549,6 +549,23 @@ Linked deployment version 11 reproduced the Stage 7.2B1 plan: ten pilot skips,
 15 additions, 60 base plus 12 retry attempts, and batches of 39 and 33. Provider
 usage, reservations, run items and refresh states remained zero. No Trendlyne call
 or Cohort A ingestion occurred; execution still requires separate owner approval.
+
+## E.10 Stage 7.2B controlled Cohort A rollout
+
+The exact owner-approved 25-security Cohort A was executed through the hardened
+live Edge path. Ten pilot securities remained fresh and were skipped; 15 additions
+were processed in two separately gated logical batches. Both runs succeeded with
+47 total provider attempts, zero retries and zero failures. All attempts reconcile
+one-to-one with usage events, both reservations settled, 26 unused units were
+released, all 45 run items are accepted, all 45 refresh states are fresh, and the
+provider lease is clear.
+
+Identity coverage is 25/25 with no duplicate provider ID. The rollout added 105
+approved first-wave fundamental observations and 75 aggregate-ownership
+observations. Adjusted P/B remains a distinct conflicting metric, null semantics
+were preserved, and documents remained limited to the existing three provisional
+appearances. Protected accounting, holdings, roles, themes and Angel One state did
+not change. Stage 7.2C requires separate owner authorization.
 
 ## F. Deferred future work
 
