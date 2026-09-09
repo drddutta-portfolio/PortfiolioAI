@@ -49,7 +49,8 @@ interface EnrichmentSummary {
   readonly marketCapCategory: string | null
 }
 
-const isFresh = (freshUntil: string) => Number.isFinite(Date.parse(freshUntil)) && Date.parse(freshUntil) > Date.now()
+const IDENTITY_FRESHNESS_MS = 180 * 24 * 60 * 60 * 1000
+const isFresh = (freshUntil: string, now = Date.now()) => Number.isFinite(Date.parse(freshUntil)) && Date.parse(freshUntil) > now
 
 function evidenceState(rows: readonly CoverageObservation[], applicable = true): ResearchCoverageState {
   if (!applicable) return "NOT_APPLICABLE"
@@ -71,9 +72,11 @@ function identityState(rows: readonly CoverageIdentity[], applicable = true): Re
   if (!rows.length) return "MISSING"
   const latest = [...rows].sort((left, right) => right.createdAt.localeCompare(left.createdAt))[0]
   if (!latest) return "MISSING"
-  if (latest.evidenceStatus === "MATCHED") return "FRESH"
   if (latest.evidenceStatus === "CONFLICTING" || latest.evidenceStatus === "AMBIGUOUS") return "CONFLICTING"
-  return "REVIEW_REQUIRED"
+  if (latest.evidenceStatus !== "MATCHED") return "REVIEW_REQUIRED"
+  const created = Date.parse(latest.createdAt)
+  if (!Number.isFinite(created)) return "STALE"
+  return created + IDENTITY_FRESHNESS_MS > Date.now() ? "FRESH" : "STALE"
 }
 
 const rank: Readonly<Record<ResearchCoverageState, number>> = {
