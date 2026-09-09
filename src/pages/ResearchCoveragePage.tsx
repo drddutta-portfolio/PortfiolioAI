@@ -1,14 +1,16 @@
 import { useMemo, useState } from "react"
 import { Link } from "react-router-dom"
+import type { PortfolioPosition } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import type { ResearchCoverageRow, ResearchCoverageState } from "../features/research/researchCoverage"
 import { useResearchCoverage } from "../features/research/useResearchCoverage"
 
 const COVERAGE_STATES: readonly ResearchCoverageState[] = ["FRESH", "STALE", "MISSING", "CONFLICTING", "REVIEW_REQUIRED", "NOT_APPLICABLE"]
+const EMPTY_POSITIONS: readonly PortfolioPosition[] = []
 
 export function ResearchCoveragePage() {
   const { portfolio, error: portfolioError, isLoading: portfolioLoading } = usePortfolioView()
-  const positions = portfolio?.openPositions ?? []
+  const positions = portfolio?.openPositions ?? EMPTY_POSITIONS
   const coverage = useResearchCoverage(positions)
   const [query, setQuery] = useState("")
   const [state, setState] = useState("ALL")
@@ -46,7 +48,7 @@ export function ResearchCoveragePage() {
   const counts = COVERAGE_STATES.reduce<Record<string, number>>((result, value) => ({ ...result, [value]: coverage.data.filter((row) => row.overall === value).length }), {})
 
   return <section className="research-page">
-    <div className="portfolio-hero compact-hero"><div><p className="eyebrow">Stage 7.2D · cache-only coverage</p><h1>Research Coverage</h1><p>See where stored company research is fresh, stale, missing, conflicting, or requires review. Browsing and filtering this page never refreshes a provider.</p></div><Link className="button button-secondary" to="/app/settings/data-sources">Data Sources / Refresh</Link></div>
+    <div className="portfolio-hero compact-hero"><div><p className="eyebrow">Stage 7.2D.1 · cache-only coverage</p><h1>Research Coverage</h1><p>See where stored company research is fresh, stale, missing, conflicting, or requires review. Browsing and filtering this page never refreshes a provider.</p></div><Link className="button button-secondary" to="/app/settings/data-sources">Data Sources / Refresh</Link></div>
 
     <section className="summary-grid" aria-label="Research coverage summary">
       <Summary label="Open holdings" value={coverage.data.length} />
@@ -66,7 +68,7 @@ export function ResearchCoveragePage() {
         <Filter label="Sector" value={sector} onChange={setSector} options={options.sectors} />
         <Filter label="Market cap" value={marketCap} onChange={setMarketCap} options={options.marketCaps} />
         <Filter label="Equity eligibility" value={eligibility} onChange={setEligibility} options={["ELIGIBLE", "NOT_ELIGIBLE"]} />
-        <Filter label="Provider identity" value={identity} onChange={setIdentity} options={COVERAGE_STATES.filter((value) => value !== "REVIEW_REQUIRED")} />
+        <Filter label="Provider identity" value={identity} onChange={setIdentity} options={COVERAGE_STATES} />
       </div>
       <p className="assessment-note">{rows.length} of {coverage.data.length} holdings shown. Provider identity and evidence states are derived only from stored records.</p>
     </section>
