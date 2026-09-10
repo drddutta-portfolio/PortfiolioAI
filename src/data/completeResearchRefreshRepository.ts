@@ -25,7 +25,7 @@ export interface CompleteResearchRefreshResult {
   readonly providerSucceeded: number
   readonly providerFailed: number
   readonly releasedReservationUnits: number
-  readonly status: "SUCCEEDED" | "FAILED"
+  readonly status: "SUCCEEDED" | "PARTIAL" | "FAILED"
   readonly results: readonly Record<string, unknown>[]
   readonly runId: string
   readonly note: string
