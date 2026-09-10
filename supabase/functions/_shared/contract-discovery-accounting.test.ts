@@ -25,12 +25,27 @@ describe("Stage 7.2D.2B.3 contract-discovery accounting boundary",()=>{
     expect(source).toContain("p_released_units: releasedUnits")
   })
 
-  it("keeps research evidence read-only while recording operational audit state",()=>{
+  it("captures successful discovery output as bounded raw provider evidence",()=>{
+    expect(source).toContain('const CAPTURE_RECORD_KIND = "CONTRACT_DISCOVERY_SEARCH_RESULT"')
+    expect(source).toContain("const MAX_CAPTURE_BYTES = 512 * 1024")
+    expect(source).toContain('.from("data_source_records").upsert')
+    expect(source).toContain('onConflict: "source_code,record_kind,external_record_id,payload_hash"')
+    expect(source).toContain('ignoreDuplicates: true')
+    expect(source).toContain('canonical_promotion_performed: false')
+    expect(source).toContain('captureRecorded: true')
+    const providerLoop=source.indexOf("for (const term of DISCOVERY_TERMS)")
+    const captureCall=source.indexOf("capturePayloadHash = await persistDiscoveryCapture(")
+    expect(providerLoop).toBeGreaterThan(-1)
+    expect(captureCall).toBeGreaterThan(providerLoop)
+  })
+
+  it("keeps canonical research evidence read-only while recording operational audit state",()=>{
     expect(source).toContain('data_domain: DATA_DOMAIN')
     expect(source).toContain('p_status: status')
     expect(source).toContain("researchWritesPerformed: 0")
     expect(source).not.toContain('.from("fundamental_observations").insert')
     expect(source).not.toContain('.from("fundamental_observations").upsert')
     expect(source).not.toContain('.from("research_documents").insert')
+    expect(source).not.toContain("getParameterValues(")
   })
 })
