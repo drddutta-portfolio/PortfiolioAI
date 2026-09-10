@@ -52,9 +52,9 @@ declare
 begin
   if auth.uid() is null then raise exception 'Authentication required.'; end if;
 
-  select * into c
-  from public.provider_ingestion_controls
-  where provider_ingestion_controls.source_code = p_source_code;
+  select pic.* into c
+  from public.provider_ingestion_controls pic
+  where pic.source_code = p_source_code;
 
   if not found then return; end if;
 
