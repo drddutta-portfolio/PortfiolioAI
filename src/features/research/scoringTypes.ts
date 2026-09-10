@@ -16,6 +16,15 @@ export interface ExternalRatingObservation {
   readonly evidenceStatus: string
 }
 
+export interface MetricScoreSignal {
+  readonly inputCode: string
+  readonly label: string
+  readonly weight: number
+  readonly state: "SCORED" | "AVAILABLE_UNSCORED" | "MISSING" | "PENDING_SOURCE"
+  readonly value: number | null
+  readonly normalizedScore: number | null
+}
+
 export interface DimensionScore {
   readonly dimensionCode: string
   readonly dimensionWeight: number
@@ -24,6 +33,8 @@ export interface DimensionScore {
   readonly evidenceCoverage: number
   readonly confidence: number
   readonly heatState: HeatState
+  readonly signals?: readonly MetricScoreSignal[]
+  readonly preview?: boolean
 }
 
 export interface SecurityScoringSnapshot {
@@ -39,4 +50,5 @@ export interface SecurityScoringSnapshot {
   readonly asOfDate: string | null
   readonly dimensions: readonly DimensionScore[]
   readonly ratings: readonly ExternalRatingObservation[]
+  readonly previewMode?: boolean
 }

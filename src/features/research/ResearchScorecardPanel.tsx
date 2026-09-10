@@ -22,6 +22,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
 
   const byCode = new Map(snapshot.dimensions.map((dimension) => [dimension.dimensionCode, dimension]))
   const hasRun = Boolean(snapshot.runState)
+  const scoredSignals = snapshot.dimensions.flatMap((dimension) => (dimension.signals ?? []).filter((signal) => signal.state === "SCORED").map((signal) => ({ dimension: dimension.dimensionCode, ...signal })))
 
   return <>
     <section className="panel scoring-summary-panel" aria-labelledby="stock-scorecard-title">
@@ -38,24 +39,32 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           <small>{hasRun ? label(snapshot.runState ?? "PARTIAL") : "Not calculated yet"}</small>
         </div>
         <div className="score-coverage-box">
-          <span>Evidence coverage</span>
+          <span>Verified scoring coverage</span>
           <strong>{percent(snapshot.evidenceCoverage)}</strong>
           <small>Confidence {snapshot.evidenceConfidence === null ? "—" : `${snapshot.evidenceConfidence.toFixed(0)}%`}</small>
         </div>
       </div>
-      {!hasRun ? <div className="research-callout research-callout-neutral"><strong>Scoring framework is ready; score is intentionally withheld.</strong><p>The sector-aware model is visible now, but PortfolioAI will not manufacture a number until the evidence and coverage gates are met.</p></div> : null}
+      {!hasRun ? <div className="research-callout research-callout-neutral"><strong>Read-only scoring preview</strong><p>Verified inputs and coverage are calculated for inspection, but no official stock score is stored until the configured evidence gates pass.</p></div> : null}
       <div className="score-heatmap" aria-label="Investment score heatmap">
         {DIMENSION_ORDER.map((dimensionCode) => {
           const dimension = byCode.get(dimensionCode)
           const heatState = dimension?.heatState ?? "INSUFFICIENT"
+          const notApplicable = Boolean(dimension && dimension.dimensionWeight === 0)
           return <article key={dimensionCode} className={`score-heat-cell heat-${heatState.toLocaleLowerCase()}`}>
             <span>{label(dimensionCode)}</span>
-            <strong>{score(dimension?.rawScore ?? null)}</strong>
-            <small>{dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence` : "Insufficient evidence"}</small>
-            <em>{label(heatState)}</em>
+            <strong>{notApplicable ? "N/A" : score(dimension?.rawScore ?? null)}</strong>
+            <small>{notApplicable ? "Not applicable to this profile" : dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% verified inputs` : "Insufficient evidence"}</small>
+            <em>{notApplicable ? "Not Applicable" : label(heatState)}</em>
           </article>
         })}
       </div>
+      {scoredSignals.length ? <div className="verified-signal-strip" aria-label="Verified scoring inputs">
+        {scoredSignals.map((signal) => <article key={`${signal.dimension}:${signal.inputCode}`}>
+          <span>{label(signal.dimension)}</span>
+          <strong>{label(signal.inputCode)}</strong>
+          <small>{signal.value === null ? "Value unavailable" : `Value ${signal.value}`} · normalized signal {signal.normalizedScore?.toFixed(0) ?? "—"}/100 · {signal.weight.toFixed(0)}% within dimension</small>
+        </article>)}
+      </div> : <p className="assessment-note">No metric has both reviewed semantics and a usable scoring rule yet for this security.</p>}
       <p className="assessment-note">Core/Satellite suitability is a later decision layer. PortfolioAI may recommend a role, but portfolio inclusion and role selection remain entirely user-controlled.</p>
     </section>
 
