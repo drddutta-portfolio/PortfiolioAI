@@ -12,6 +12,9 @@ const reply = (status: number, body: Record<string, unknown>) =>
 const SOURCE_CODE = "TRENDLYNE_MCP"
 const DATA_DOMAIN = "CONTRACT_DISCOVERY"
 const OPERATION_CLASS = "SEARCH_PARAMETERS"
+const CAPTURE_RECORD_KIND = "CONTRACT_DISCOVERY_SEARCH_RESULT"
+const CAPTURE_CONTRACT_VERSION = "v1"
+const MAX_CAPTURE_BYTES = 512 * 1024
 const DISCOVERY_TERMS = ["ROCE", "diluted EPS", "EBITDA", "operating margin"] as const
 const RESERVED_UNITS = DISCOVERY_TERMS.length
 const ACCOUNTING_WRITE_ATTEMPTS = 3
@@ -23,6 +26,52 @@ const budgetHttpStatus = (reasonCode: string) => {
   if (reasonCode === "INGESTION_DISABLED") return 409
   if (reasonCode === "DAILY_LIMIT" || reasonCode === "ROLLING_LIMIT" || reasonCode === "PER_RUN_LIMIT" || reasonCode === "CONCURRENCY_LIMIT") return 429
   return 503
+}
+
+async function sha256Hex(value: string) {
+  const bytes = new TextEncoder().encode(value)
+  const digest = await crypto.subtle.digest("SHA-256", bytes)
+  return Array.from(new Uint8Array(digest)).map(byte => byte.toString(16).padStart(2, "0")).join("")
+}
+
+async function persistDiscoveryCapture(
+  admin: Admin,
+  runId: string,
+  securityId: string,
+  providerInstrumentId: string,
+  searches: Readonly<Record<string, string>>,
+) {
+  const rawPayload = {
+    mode: "CONTRACT_DISCOVERY_ONLY",
+    security_id: securityId,
+    provider_instrument_id: providerInstrumentId,
+    terms: DISCOVERY_TERMS,
+    searches,
+  }
+  const serialized = JSON.stringify(rawPayload)
+  if (new TextEncoder().encode(serialized).byteLength > MAX_CAPTURE_BYTES) throw new Error("CAPTURE_PAYLOAD_TOO_LARGE")
+  const payloadHash = await sha256Hex(serialized)
+  const result = await admin.from("data_source_records").upsert({
+    source_code: SOURCE_CODE,
+    ingestion_run_id: runId,
+    record_kind: CAPTURE_RECORD_KIND,
+    external_record_id: `${providerInstrumentId}:contract-discovery:${CAPTURE_CONTRACT_VERSION}`,
+    retrieved_at: new Date().toISOString(),
+    payload_hash: payloadHash,
+    raw_payload: rawPayload,
+    terms_snapshot: {
+      mode: "CONTRACT_DISCOVERY_ONLY",
+      contract_version: CAPTURE_CONTRACT_VERSION,
+      terms: DISCOVERY_TERMS,
+      research_writes_performed: 0,
+      canonical_promotion_performed: false,
+    },
+  }, {
+    onConflict: "source_code,record_kind,external_record_id,payload_hash",
+    ignoreDuplicates: true,
+  })
+  if (result.error) throw new Error("CAPTURE_PERSISTENCE_FAILED")
+  return payloadHash
 }
 
 async function recordUsage(
@@ -220,6 +269,7 @@ Deno.serve(async (request) => {
     let attempted = 0
     let providerFailed = 0
     let terminalError: Error | null = null
+    let capturePayloadHash: string | null = null
     const searches: Record<string, string> = {}
 
     try {
@@ -236,10 +286,19 @@ Deno.serve(async (request) => {
         }
         await recordUsage(admin, runId, runItemId, body.securityId, attempted, attemptedAt, "SUCCEEDED", null)
       }
+      capturePayloadHash = await persistDiscoveryCapture(
+        admin,
+        runId,
+        body.securityId,
+        identity.data.provider_instrument_id,
+        searches,
+      )
     } catch (error) {
-      terminalError = error instanceof Error && error.message === "USAGE_ACCOUNTING_FAILED"
-        ? error
-        : new Error("CONTRACT_DISCOVERY_FAILED")
+      terminalError = error instanceof Error && (
+        error.message === "USAGE_ACCOUNTING_FAILED" ||
+        error.message === "CAPTURE_PAYLOAD_TOO_LARGE" ||
+        error.message === "CAPTURE_PERSISTENCE_FAILED"
+      ) ? error : new Error("CONTRACT_DISCOVERY_FAILED")
     }
 
     const consumedUnits = attempted - providerFailed
@@ -273,6 +332,8 @@ Deno.serve(async (request) => {
         consumed_units: consumedUnits,
         failed_units: providerFailed,
         released_units: releasedUnits,
+        capture_record_kind: capturePayloadHash ? CAPTURE_RECORD_KIND : null,
+        capture_payload_hash: capturePayloadHash,
       },
     }).eq("id", runId)
     if (completed.error && !terminalError) terminalError = new Error("RUN_ACCOUNTING_FAILED")
@@ -291,6 +352,9 @@ Deno.serve(async (request) => {
       researchWritesPerformed: 0,
       valuesRetrieved: false,
       operationalAccountingRecorded: true,
+      captureRecorded: true,
+      captureRecordKind: CAPTURE_RECORD_KIND,
+      capturePayloadHash,
       runId,
       reservationId,
       searches,
