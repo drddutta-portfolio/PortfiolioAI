@@ -6,16 +6,19 @@ import type { SecurityResearch } from "./types"
 export function useSecurityResearch(securityId: string | null) {
   const [data, setData] = useState<SecurityResearch | null>(null)
   const [error, setError] = useState<{ readonly securityId: string; readonly message: string } | null>(null)
+  const [revision, setRevision] = useState(0)
   useEffect(() => {
     let active = true
     if (!securityId) return () => { active = false }
+    setError(null)
     void loadSecurityResearch(securityId).then((value) => { if (active) setData(value) })
       .catch((reason: unknown) => { if (active) setError({ securityId, message: displayError(reason) }) })
     return () => { active = false }
-  }, [securityId])
+  }, [securityId, revision])
   return {
     data: data?.securityId === securityId ? data : null,
     error: error?.securityId === securityId ? error.message : null,
     isLoading: Boolean(securityId) && data?.securityId !== securityId && error?.securityId !== securityId,
+    reload: () => setRevision(value => value + 1),
   }
 }
