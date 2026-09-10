@@ -43,6 +43,7 @@ async function persistDiscoveryCapture(
 ) {
   const rawPayload = {
     mode: "CONTRACT_DISCOVERY_ONLY",
+    run_id: runId,
     security_id: securityId,
     provider_instrument_id: providerInstrumentId,
     terms: DISCOVERY_TERMS,
@@ -55,7 +56,7 @@ async function persistDiscoveryCapture(
     source_code: SOURCE_CODE,
     ingestion_run_id: runId,
     record_kind: CAPTURE_RECORD_KIND,
-    external_record_id: `${providerInstrumentId}:contract-discovery:${CAPTURE_CONTRACT_VERSION}`,
+    external_record_id: `${providerInstrumentId}:contract-discovery:${CAPTURE_CONTRACT_VERSION}:${runId}`,
     retrieved_at: new Date().toISOString(),
     payload_hash: payloadHash,
     raw_payload: rawPayload,
