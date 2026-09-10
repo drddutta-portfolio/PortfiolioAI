@@ -29,6 +29,8 @@ describe("Stage 7.2D.2B.3 contract-discovery accounting boundary",()=>{
     expect(source).toContain('const CAPTURE_RECORD_KIND = "CONTRACT_DISCOVERY_SEARCH_RESULT"')
     expect(source).toContain("const MAX_CAPTURE_BYTES = 512 * 1024")
     expect(source).toContain('.from("data_source_records").upsert')
+    expect(source).toContain('run_id: runId')
+    expect(source).toContain('external_record_id: `${providerInstrumentId}:contract-discovery:${CAPTURE_CONTRACT_VERSION}:${runId}`')
     expect(source).toContain('onConflict: "source_code,record_kind,external_record_id,payload_hash"')
     expect(source).toContain('ignoreDuplicates: true')
     expect(source).toContain('canonical_promotion_performed: false')
