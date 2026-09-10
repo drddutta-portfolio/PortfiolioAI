@@ -98,7 +98,8 @@ function previewDimensions(
       .filter((rule) => overrides.get(`${rule.dimension_code}:${rule.input_code}`)?.applicability !== "NOT_APPLICABLE")
     const effectiveWeight = (rule: RuleRow) => Number(rule.metric_weight) * Number(overrides.get(`${rule.dimension_code}:${rule.input_code}`)?.weight_multiplier ?? 1)
     const totalWeight = dimensionRules.reduce((sum, rule) => sum + effectiveWeight(rule), 0)
-    let scoredWeight = 0
+    let evidenceWeight = 0
+    let scoreReadyWeight = 0
     let scoredContribution = 0
     const signals: MetricScoreSignal[] = dimensionRules.map((rule) => {
       const weight = effectiveWeight(rule)
@@ -107,14 +108,16 @@ function previewDimensions(
       const observation = latestUsableObservation(observations, rule.metric_code)
       if (!observation) return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "MISSING", value: null, normalizedScore: null }
       const value = asNumber(observation.numeric_value)
+      if (value !== null && rule.rule_state === "REVIEWED") evidenceWeight += weight
       const normalizedScore = value === null || rule.rule_state !== "REVIEWED" ? null : normalizePiecewise(value, rule.normalization_rule)
       if (normalizedScore === null) return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "AVAILABLE_UNSCORED", value, normalizedScore: null }
-      scoredWeight += weight
+      scoreReadyWeight += weight
       scoredContribution += normalizedScore * weight
       return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "SCORED", value, normalizedScore }
     })
-    const evidenceCoverage = totalWeight > 0 ? scoredWeight / totalWeight : 0
-    const rawScore = evidenceCoverage >= MIN_DIMENSION_COVERAGE && scoredWeight > 0 ? scoredContribution / scoredWeight : null
+    const evidenceCoverage = totalWeight > 0 ? evidenceWeight / totalWeight : 0
+    const scoreReadyCoverage = totalWeight > 0 ? scoreReadyWeight / totalWeight : 0
+    const rawScore = scoreReadyCoverage >= MIN_DIMENSION_COVERAGE && scoreReadyWeight > 0 ? scoredContribution / scoreReadyWeight : null
     const dimensionWeight = dimensionWeights.get(dimensionCode) ?? 0
     return {
       dimensionCode,
@@ -122,6 +125,7 @@ function previewDimensions(
       rawScore,
       weightedContribution: rawScore === null ? null : rawScore * dimensionWeight / 100,
       evidenceCoverage,
+      scoreReadyCoverage,
       confidence: Math.round(evidenceCoverage * 100),
       heatState: heatState(rawScore),
       signals,
@@ -171,7 +175,7 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
     dimensions = (dimensionResult.data ?? []).map((row) => ({
       dimensionCode: String(row.dimension_code), dimensionWeight: Number(row.dimension_weight), rawScore: row.raw_score === null ? null : Number(row.raw_score),
       weightedContribution: row.weighted_contribution === null ? null : Number(row.weighted_contribution), evidenceCoverage: Number(row.evidence_coverage),
-      confidence: Number(row.confidence), heatState: row.heat_state as HeatState,
+      scoreReadyCoverage: Number(row.evidence_coverage), confidence: Number(row.confidence), heatState: row.heat_state as HeatState,
     }))
   } else {
     const weights = new Map<string, number>()
@@ -189,14 +193,17 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
   }))
 
   const weightedEligible = dimensions.filter((dimension) => dimension.dimensionWeight > 0)
-  const previewCoverage = weightedEligible.length ? weightedEligible.reduce((sum, dimension) => sum + dimension.evidenceCoverage * dimension.dimensionWeight, 0) / weightedEligible.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0) : 0
+  const totalDimensionWeight = weightedEligible.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
+  const previewEvidenceCoverage = totalDimensionWeight > 0 ? weightedEligible.reduce((sum, dimension) => sum + dimension.evidenceCoverage * dimension.dimensionWeight, 0) / totalDimensionWeight : 0
+  const previewScoreReadyCoverage = totalDimensionWeight > 0 ? weightedEligible.reduce((sum, dimension) => sum + dimension.scoreReadyCoverage * dimension.dimensionWeight, 0) / totalDimensionWeight : 0
 
   return {
     profileCode, profileName: profile?.name ?? profileCode.replaceAll("_", " "), profileSource,
     modelName: model.name, modelStatus: model.status, runState: run?.run_state ?? null,
     overallScore: run?.overall_score === null || run?.overall_score === undefined ? null : Number(run.overall_score),
-    evidenceCoverage: run ? Number(run.evidence_coverage) : previewCoverage,
-    evidenceConfidence: run ? Number(run.evidence_confidence) : Math.round(previewCoverage * 100),
+    evidenceCoverage: run ? Number(run.evidence_coverage) : previewEvidenceCoverage,
+    scoreReadyCoverage: run ? Number(run.evidence_coverage) : previewScoreReadyCoverage,
+    evidenceConfidence: run ? Number(run.evidence_confidence) : Math.round(previewEvidenceCoverage * 100),
     asOfDate: run?.as_of_date ?? null, dimensions, ratings, previewMode: !run,
   }
 }
