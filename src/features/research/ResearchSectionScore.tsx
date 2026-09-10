@@ -16,8 +16,11 @@ const CONFIG: Readonly<Record<string, SectionConfig>> = {
 function aggregate(dimensions: readonly DimensionScore[]) {
   const applicable = dimensions.filter((dimension) => dimension.dimensionWeight > 0)
   const totalWeight = applicable.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
-  const weightedCoverage = totalWeight > 0
+  const weightedEvidenceCoverage = totalWeight > 0
     ? applicable.reduce((sum, dimension) => sum + dimension.evidenceCoverage * dimension.dimensionWeight, 0) / totalWeight
+    : 0
+  const weightedScoreReadyCoverage = totalWeight > 0
+    ? applicable.reduce((sum, dimension) => sum + dimension.scoreReadyCoverage * dimension.dimensionWeight, 0) / totalWeight
     : 0
   const scored = applicable.filter((dimension) => dimension.rawScore !== null)
   const scoredWeight = scored.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
@@ -27,7 +30,7 @@ function aggregate(dimensions: readonly DimensionScore[]) {
   const confidence = scoredWeight > 0
     ? scored.reduce((sum, dimension) => sum + dimension.confidence * dimension.dimensionWeight, 0) / scoredWeight
     : null
-  return { score, coverage: weightedCoverage, confidence }
+  return { score, evidenceCoverage: weightedEvidenceCoverage, scoreReadyCoverage: weightedScoreReadyCoverage, confidence }
 }
 
 export function ResearchSectionScore({ snapshot, section }: {
@@ -44,16 +47,16 @@ export function ResearchSectionScore({ snapshot, section }: {
     <div>
       <span>Section score</span>
       <strong>{config.title}</strong>
-      <small>{result.score === null ? "Score withheld until all required dimensions pass their evidence gates" : "Derived from the same audited dimension engine as the overall stock score"}</small>
+      <small>{result.score === null ? "Score withheld until all required dimensions pass their score-ready gates" : "Derived from the same audited dimension engine as the overall stock score"}</small>
     </div>
     <div className="section-score-number">
       <span>Score</span>
       <strong>{result.score === null ? "—" : `${result.score.toFixed(0)}/100`}</strong>
     </div>
     <div className="section-score-number">
-      <span>Verified coverage</span>
-      <strong>{Math.round(result.coverage * 100)}%</strong>
-      <small>Confidence {result.confidence === null ? "—" : `${result.confidence.toFixed(0)}%`}</small>
+      <span>Verified evidence</span>
+      <strong>{Math.round(result.evidenceCoverage * 100)}%</strong>
+      <small>Score-ready {Math.round(result.scoreReadyCoverage * 100)}% · Confidence {result.confidence === null ? "—" : `${result.confidence.toFixed(0)}%`}</small>
     </div>
   </section>
 }
