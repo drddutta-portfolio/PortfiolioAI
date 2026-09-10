@@ -1,3 +1,4 @@
+import "./ResearchScorecardPanel.css"
 import type { SecurityScoringSnapshot } from "./scoringTypes"
 
 const DIMENSION_ORDER = [
