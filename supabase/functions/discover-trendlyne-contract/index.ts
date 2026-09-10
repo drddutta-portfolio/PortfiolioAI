@@ -14,11 +14,10 @@ const DATA_DOMAIN = "CONTRACT_DISCOVERY"
 const OPERATION_CLASS = "SEARCH_PARAMETERS"
 const DISCOVERY_TERMS = ["ROCE", "diluted EPS", "EBITDA", "operating margin"] as const
 const RESERVED_UNITS = DISCOVERY_TERMS.length
+const ACCOUNTING_WRITE_ATTEMPTS = 3
 
 type RequestBody = { readonly portfolioId?: unknown; readonly securityId?: unknown }
 type Admin = ReturnType<typeof createClient>
-
-const safeProviderErrorCode = (_error: unknown) => "PROVIDER_REQUEST_FAILED"
 
 const budgetHttpStatus = (reasonCode: string) => {
   if (reasonCode === "INGESTION_DISABLED") return 409
@@ -36,7 +35,7 @@ async function recordUsage(
   outcome: "SUCCEEDED" | "FAILED",
   safeErrorCode: string | null,
 ) {
-  const usage = await admin.rpc("record_provider_usage_event_v1", {
+  const payload = {
     p_source_code: SOURCE_CODE,
     p_ingestion_run_id: runId,
     p_run_item_id: runItemId,
@@ -52,8 +51,12 @@ async function recordUsage(
     p_safe_error_code: safeErrorCode,
     p_retry_attempt: 0,
     p_idempotency_key: `${runId}:${OPERATION_CLASS}:${attemptNumber}`,
-  })
-  if (usage.error) throw new Error("USAGE_ACCOUNTING_FAILED")
+  }
+  for (let accountingAttempt = 1; accountingAttempt <= ACCOUNTING_WRITE_ATTEMPTS; accountingAttempt += 1) {
+    const usage = await admin.rpc("record_provider_usage_event_v1", payload)
+    if (!usage.error) return
+  }
+  throw new Error("USAGE_ACCOUNTING_FAILED")
 }
 
 async function completeRunItem(
@@ -226,15 +229,17 @@ Deno.serve(async (request) => {
         const attemptedAt = new Date().toISOString()
         try {
           searches[term] = await client.searchParameters(term)
-        } catch (error) {
+        } catch {
           providerFailed += 1
-          await recordUsage(admin, runId, runItemId, body.securityId, attempted, attemptedAt, "FAILED", safeProviderErrorCode(error))
-          throw error
+          await recordUsage(admin, runId, runItemId, body.securityId, attempted, attemptedAt, "FAILED", "PROVIDER_REQUEST_FAILED")
+          throw new Error("CONTRACT_DISCOVERY_FAILED")
         }
         await recordUsage(admin, runId, runItemId, body.securityId, attempted, attemptedAt, "SUCCEEDED", null)
       }
     } catch (error) {
-      terminalError = error instanceof Error ? error : new Error("CONTRACT_DISCOVERY_FAILED")
+      terminalError = error instanceof Error && error.message === "USAGE_ACCOUNTING_FAILED"
+        ? error
+        : new Error("CONTRACT_DISCOVERY_FAILED")
     }
 
     const consumedUnits = attempted - providerFailed
@@ -245,10 +250,10 @@ Deno.serve(async (request) => {
       p_failed_units: providerFailed,
       p_released_units: releasedUnits,
     })
-    if (settlement.error && !terminalError) terminalError = new Error("BUDGET_SETTLEMENT_FAILED")
+    if (settlement.error) terminalError = new Error("BUDGET_SETTLEMENT_FAILED")
 
     try {
-      await completeRunItem(admin, runItemId, terminalError ? "FAILED" : "ACCEPTED", terminalError ? "CONTRACT_DISCOVERY_FAILED" : null, attempted)
+      await completeRunItem(admin, runItemId, terminalError ? "FAILED" : "ACCEPTED", terminalError ? terminalError.message : null, attempted)
     } catch (error) {
       if (!terminalError) terminalError = error instanceof Error ? error : new Error("RUN_ITEM_ACCOUNTING_FAILED")
     }
@@ -292,7 +297,7 @@ Deno.serve(async (request) => {
       note: "No metric contract is promoted by this response. Results require owner review before parser/storage changes.",
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Contract discovery failed."
-    return reply(502, { error: message.replace(/https?:\/\/\S+/g, "[redacted-url]") })
+    const code = error instanceof Error ? error.message : "CONTRACT_DISCOVERY_FAILED"
+    return reply(502, { error: "Contract discovery failed safely.", code })
   }
 })
