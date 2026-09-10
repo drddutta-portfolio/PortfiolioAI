@@ -1,15 +1,34 @@
 import "./ResearchScorecardPanel.css"
-import type { SecurityScoringSnapshot } from "./scoringTypes"
+import type { DimensionScore, SecurityScoringSnapshot } from "./scoringTypes"
 
 const DIMENSION_ORDER = [
   "QUALITY", "GROWTH", "CAPITAL_EFFICIENCY", "CASH_FLOW", "BALANCE_SHEET_CREDIT",
   "VALUATION", "MOMENTUM", "OWNERSHIP_GOVERNANCE", "RISK",
 ] as const
 
+const SECTION_GROUPS = [
+  { label: "Quality & Growth", codes: ["QUALITY", "GROWTH"] },
+  { label: "Financial Strength", codes: ["CAPITAL_EFFICIENCY", "CASH_FLOW", "BALANCE_SHEET_CREDIT"] },
+  { label: "Valuation", codes: ["VALUATION"] },
+  { label: "Momentum", codes: ["MOMENTUM"] },
+  { label: "Ownership", codes: ["OWNERSHIP_GOVERNANCE"] },
+  { label: "Risk", codes: ["RISK"] },
+] as const
+
 const label = (value: string) => value.replaceAll("_", " ").toLocaleLowerCase().replace(/(^|\s)\S/gu, (match) => match.toLocaleUpperCase())
 const percent = (value: number | null) => value === null ? "Unavailable" : `${Math.round(value * 100)}%`
 const score = (value: number | null) => value === null ? "—" : value.toFixed(0)
 const profileSourceLabel = (source: SecurityScoringSnapshot["profileSource"]) => source === "REVIEWED_ASSIGNMENT" ? "Reviewed profile" : source === "SECTOR_RULE" ? "Sector-resolved profile" : "General fallback"
+
+function sectionSummary(dimensions: readonly DimensionScore[], codes: readonly string[]) {
+  const selected = codes.map((code) => dimensions.find((dimension) => dimension.dimensionCode === code)).filter((dimension): dimension is DimensionScore => Boolean(dimension && dimension.dimensionWeight > 0))
+  const totalWeight = selected.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
+  if (!selected.length || totalWeight <= 0) return { score: null, coverage: null }
+  const coverage = selected.reduce((sum, dimension) => sum + dimension.evidenceCoverage * dimension.dimensionWeight, 0) / totalWeight
+  const fullyScored = selected.every((dimension) => dimension.rawScore !== null)
+  const sectionScore = fullyScored ? selected.reduce((sum, dimension) => sum + (dimension.rawScore ?? 0) * dimension.dimensionWeight, 0) / totalWeight : null
+  return { score: sectionScore, coverage }
+}
 
 export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
   readonly snapshot: SecurityScoringSnapshot | null
@@ -28,15 +47,15 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
     <section className="panel scoring-summary-panel" aria-labelledby="stock-scorecard-title">
       <div className="scoring-summary-head">
         <div>
-          <p className="eyebrow">PortfolioAI Stock Score</p>
+          <p className="eyebrow">Investment decision cockpit</p>
           <h2 id="stock-scorecard-title">{snapshot.profileName}</h2>
           <p>{snapshot.modelName} · model {snapshot.modelStatus.toLocaleLowerCase()}</p>
           <small>{profileSourceLabel(snapshot.profileSource)}</small>
         </div>
         <div className="overall-score-box">
-          <span>Overall score</span>
+          <span>Overall stock score</span>
           <strong>{score(snapshot.overallScore)}</strong>
-          <small>{hasRun ? label(snapshot.runState ?? "PARTIAL") : "Not calculated yet"}</small>
+          <small>{hasRun ? label(snapshot.runState ?? "PARTIAL") : "Awaiting evidence gate"}</small>
         </div>
         <div className="score-coverage-box">
           <span>Verified scoring coverage</span>
@@ -44,7 +63,24 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           <small>Confidence {snapshot.evidenceConfidence === null ? "—" : `${snapshot.evidenceConfidence.toFixed(0)}%`}</small>
         </div>
       </div>
-      {!hasRun ? <div className="research-callout research-callout-neutral"><strong>Read-only scoring preview</strong><p>Verified inputs and coverage are calculated for inspection, but no official stock score is stored until the configured evidence gates pass.</p></div> : null}
+
+      <div className="investment-clarity-strip" aria-label="Section score summary">
+        {SECTION_GROUPS.map((group) => {
+          const summary = sectionSummary(snapshot.dimensions, group.codes)
+          return <article key={group.label}>
+            <span>{group.label}</span>
+            <strong>{summary.score === null ? "—" : `${summary.score.toFixed(0)}`}</strong>
+            <small>{summary.coverage === null ? "Not applicable" : `${Math.round(summary.coverage * 100)}% verified coverage`}</small>
+          </article>
+        })}
+      </div>
+
+      {!hasRun ? <div className="research-callout research-callout-neutral"><strong>Read-only scoring preview</strong><p>The page is already showing verified coverage and scored inputs. Official section and overall scores remain withheld until the configured evidence gates are satisfied.</p></div> : null}
+
+      <div className="heatmap-heading">
+        <div><p className="eyebrow">Investment heatmap</p><h3>Where the stock is strong, weak or still unknown</h3></div>
+        <div className="heatmap-legend" aria-label="Heatmap legend"><span>Strong</span><span>Positive</span><span>Neutral</span><span>Weak</span><span>Risk</span><span>Insufficient</span></div>
+      </div>
       <div className="score-heatmap" aria-label="Investment score heatmap">
         {DIMENSION_ORDER.map((dimensionCode) => {
           const dimension = byCode.get(dimensionCode)
@@ -61,11 +97,11 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
       {scoredSignals.length ? <div className="verified-signal-strip" aria-label="Verified scoring inputs">
         {scoredSignals.map((signal) => <article key={`${signal.dimension}:${signal.inputCode}`}>
           <span>{label(signal.dimension)}</span>
-          <strong>{label(signal.inputCode)}</strong>
-          <small>{signal.value === null ? "Value unavailable" : `Value ${signal.value}`} · normalized signal {signal.normalizedScore?.toFixed(0) ?? "—"}/100 · {signal.weight.toFixed(0)}% within dimension</small>
+          <strong>{signal.label}</strong>
+          <small>{signal.value === null ? "Value unavailable" : `Value ${signal.value}`} · signal {signal.normalizedScore?.toFixed(0) ?? "—"}/100 · {signal.weight.toFixed(0)}% within dimension</small>
         </article>)}
       </div> : <p className="assessment-note">No metric has both reviewed semantics and a usable scoring rule yet for this security.</p>}
-      <p className="assessment-note">Core/Satellite suitability is a later decision layer. PortfolioAI may recommend a role, but portfolio inclusion and role selection remain entirely user-controlled.</p>
+      <p className="assessment-note">Core/Satellite suitability is a downstream recommendation layer. PortfolioAI may recommend a role, but portfolio inclusion and role selection remain entirely user-controlled.</p>
     </section>
 
     <section className="panel external-ratings-panel" aria-labelledby="external-ratings-title">
