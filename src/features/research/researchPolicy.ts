@@ -10,9 +10,14 @@ const LABELS: Readonly<Record<string, string>> = {
   NET_PROFIT_TTM: "PAT (TTM)",
   NET_INCOME: "PAT",
   EPS_DILUTED: "Diluted EPS",
+  EPS_GROWTH_YOY: "EPS Growth YoY",
   CFO_ANNUAL: "Cash Flow from Operations",
   ROE_ANNUAL: "ROE",
   ROCE_ANNUAL: "ROCE",
+  EBITDA_TTM: "EBITDA (TTM)",
+  OPM_TTM: "Operating Margin (TTM)",
+  GROSS_NPA_PERCENT: "Gross NPA Ratio",
+  NET_NPA_PERCENT: "Net NPA Ratio",
   SHAREHOLDING_PROMOTER_PERCENT: "Promoter",
   SHAREHOLDING_FII_FPI_PERCENT: "FII / FPI",
   SHAREHOLDING_DII_PERCENT: "DII",
@@ -26,8 +31,8 @@ export const OWNERSHIP_CODES = new Set([
   "SHAREHOLDING_MUTUAL_FUND_PERCENT", "SHAREHOLDING_PUBLIC_PERCENT", "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
 ])
 export const VALUATION_CODES = new Set(["MARKET_CAP_PROVIDER_RAW", "MARKET_CAP", "PE_TTM", "PBV_ADJUSTED_PROVIDER"])
-export const GROWTH_CODES = new Set(["REVENUE_TTM", "REVENUE", "NET_PROFIT_TTM", "NET_INCOME", "EPS_DILUTED"])
-export const QUALITY_CODES = new Set(["CFO_ANNUAL", "ROE_ANNUAL", "ROCE_ANNUAL"])
+export const GROWTH_CODES = new Set(["REVENUE_TTM", "REVENUE", "NET_PROFIT_TTM", "NET_INCOME", "EPS_DILUTED", "EPS_GROWTH_YOY"])
+export const QUALITY_CODES = new Set(["CFO_ANNUAL", "ROE_ANNUAL", "ROCE_ANNUAL", "OPM_TTM", "GROSS_NPA_PERCENT", "NET_NPA_PERCENT"])
 
 export function metricLabel(code: string, fallback?: string | null) {
   return LABELS[code] ?? fallback ?? code.replaceAll("_", " ")
