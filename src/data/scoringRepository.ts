@@ -25,11 +25,33 @@ type ObservationRow = {
   retrieved_at: string
   fresh_until: string
 }
+type RatingRow = {
+  id: string
+  agency_code: string
+  instrument_type: string | null
+  instrument_description: string | null
+  rating_symbol: string
+  outlook: string | null
+  rating_action: string | null
+  rating_date: string | null
+  source_url: string
+  retrieved_at: string
+  fresh_until: string
+  evidence_status: string
+}
 type DimensionWeightRow = { dimension_code: string; weight: number | string }
 type ProfileOverrideRow = { dimension_code: string; weight: number | string }
 type MetricOverrideRow = { dimension_code: string; input_code: string; applicability: string; weight_multiplier: number | string }
 
 type PiecewiseBand = { score?: unknown; gte?: unknown; gt?: unknown; lte?: unknown; lt?: unknown }
+type RatingOrdinalRule = {
+  type?: unknown
+  scale?: unknown
+  outlook_modifier?: unknown
+  clamp?: unknown
+  eligible_instrument_types?: unknown
+  selection_policy?: unknown
+}
 
 function profileForSector(sector: string | null, industry: string | null): { readonly code: string; readonly source: ScoringProfileSource } {
   const haystack = `${sector ?? ""} ${industry ?? ""}`.trim().toUpperCase()
@@ -77,6 +99,38 @@ function normalizePiecewise(value: number, rule: unknown): number | null {
   return normalizeBands(value, rule, ["piecewise"])
 }
 
+function normalizeRating(row: RatingRow, rule: unknown): number | null {
+  if (!rule || typeof rule !== "object" || Array.isArray(rule)) return null
+  const typed = rule as RatingOrdinalRule
+  if (typed.type !== "rating_ordinal" || !typed.scale || typeof typed.scale !== "object" || Array.isArray(typed.scale)) return null
+  const scale = typed.scale as Record<string, unknown>
+  const base = asNumber(scale[row.rating_symbol.toUpperCase()])
+  if (base === null) return null
+  const modifiers = typed.outlook_modifier && typeof typed.outlook_modifier === "object" && !Array.isArray(typed.outlook_modifier)
+    ? typed.outlook_modifier as Record<string, unknown> : {}
+  const modifier = row.outlook ? asNumber(modifiers[row.outlook.toUpperCase()]) ?? 0 : 0
+  const clamp = Array.isArray(typed.clamp) && typed.clamp.length === 2 ? typed.clamp.map(asNumber) : [0, 100]
+  const min = clamp[0] ?? 0; const max = clamp[1] ?? 100
+  return Math.max(min, Math.min(max, base + modifier))
+}
+
+function selectedExternalRating(rows: readonly RatingRow[], rule: unknown): { readonly row: RatingRow; readonly score: number } | null {
+  if (!rule || typeof rule !== "object" || Array.isArray(rule)) return null
+  const typed = rule as RatingOrdinalRule
+  const eligible = Array.isArray(typed.eligible_instrument_types)
+    ? new Set(typed.eligible_instrument_types.filter((value): value is string => typeof value === "string"))
+    : new Set<string>()
+  if (!eligible.size) return null
+  const now = Date.now()
+  const candidates = rows.filter((row) => row.evidence_status === "AVAILABLE" && Date.parse(row.fresh_until) > now && row.instrument_type && eligible.has(row.instrument_type))
+  if (!candidates.length) return null
+  const latestDate = candidates.map((row) => row.rating_date ?? "").sort((a, b) => b.localeCompare(a))[0]
+  const latest = candidates.filter((row) => (row.rating_date ?? "") === latestDate)
+    .flatMap((row) => { const score = normalizeRating(row, rule); return score === null ? [] : [{ row, score }] })
+    .sort((a, b) => a.score - b.score || a.row.instrument_type!.localeCompare(b.row.instrument_type!))
+  return latest[0] ?? null
+}
+
 function heatState(score: number | null): HeatState {
   if (score === null) return "INSUFFICIENT"
   if (score >= 80) return "STRONG"
@@ -120,7 +174,7 @@ function institutionalOwnershipTrend4Q(rows: readonly ObservationRow[]): number 
 }
 
 function previewDimensions(
-  rules: readonly RuleRow[], observations: readonly ObservationRow[], dimensionWeights: ReadonlyMap<string, number>, metricOverrides: readonly MetricOverrideRow[],
+  rules: readonly RuleRow[], observations: readonly ObservationRow[], ratings: readonly RatingRow[], dimensionWeights: ReadonlyMap<string, number>, metricOverrides: readonly MetricOverrideRow[],
 ): DimensionScore[] {
   const overrides = new Map(metricOverrides.map((row) => [`${row.dimension_code}:${row.input_code}`, row]))
   const dimensions = [...new Set(rules.map((rule) => rule.dimension_code))]
@@ -145,6 +199,18 @@ function previewDimensions(
         scoreReadyWeight += weight
         scoredContribution += normalizedScore * weight
         return { inputCode: rule.input_code, label: "Institutional ownership trend (4Q)", weight, state: "SCORED", value, normalizedScore }
+      }
+
+      if (rule.input_kind === "EXTERNAL_RATING" && rule.input_code === "EXTERNAL_LONG_TERM_RATING") {
+        const selected = selectedExternalRating(ratings, rule.normalization_rule)
+        if (!selected) return { inputCode: rule.input_code, label: "External long-term rating", weight, state: "MISSING", value: null, normalizedScore: null }
+        if (rule.rule_state === "REVIEWED") evidenceWeight += weight
+        const normalizedScore = rule.rule_state === "REVIEWED" ? selected.score : null
+        if (normalizedScore === null) return { inputCode: rule.input_code, label: `External rating ${selected.row.rating_symbol}`, weight, state: "AVAILABLE_UNSCORED", value: selected.score, normalizedScore: null }
+        scoreReadyWeight += weight
+        scoredContribution += normalizedScore * weight
+        const outlook = selected.row.outlook ? ` / ${selected.row.outlook}` : ""
+        return { inputCode: rule.input_code, label: `External rating ${selected.row.rating_symbol}${outlook}`, weight, state: "SCORED", value: selected.score, normalizedScore }
       }
 
       if (rule.input_kind !== "FUNDAMENTAL" || !rule.metric_code) return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "AVAILABLE_UNSCORED", value: null, normalizedScore: null }
@@ -199,6 +265,7 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
   const model = modelResult.data as { id: string; name: string; status: string } | null
   const profile = profileResult.data as { code: string; name: string } | null
   if (!model) throw new Error("Scoring model is unavailable.")
+  const ratingRows = (ratingsResult.data ?? []) as RatingRow[]
 
   const [runResult, rulesResult, baseDimensionsResult, profileDimensionsResult, metricOverridesResult] = await Promise.all([
     scoringDb.from("stock_score_runs").select("id,run_state,overall_score,evidence_coverage,evidence_confidence,as_of_date").eq("security_id", securityId).eq("scoring_model_id", model.id).eq("scoring_profile", profileCode).order("as_of_date", { ascending: false }).order("created_at", { ascending: false }).limit(1).maybeSingle(),
@@ -224,10 +291,10 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
     const weights = new Map<string, number>()
     for (const row of (baseDimensionsResult.data ?? []) as DimensionWeightRow[]) weights.set(row.dimension_code, Number(row.weight))
     for (const row of (profileDimensionsResult.data ?? []) as ProfileOverrideRow[]) weights.set(row.dimension_code, Number(row.weight))
-    dimensions = previewDimensions((rulesResult.data ?? []) as RuleRow[], (observationsResult.data ?? []) as ObservationRow[], weights, (metricOverridesResult.data ?? []) as MetricOverrideRow[])
+    dimensions = previewDimensions((rulesResult.data ?? []) as RuleRow[], (observationsResult.data ?? []) as ObservationRow[], ratingRows, weights, (metricOverridesResult.data ?? []) as MetricOverrideRow[])
   }
 
-  const ratings: ExternalRatingObservation[] = (ratingsResult.data ?? []).map((row) => ({
+  const ratings: ExternalRatingObservation[] = ratingRows.map((row) => ({
     id: String(row.id), agencyCode: String(row.agency_code), instrumentType: row.instrument_type === null ? null : String(row.instrument_type),
     instrumentDescription: row.instrument_description === null ? null : String(row.instrument_description), ratingSymbol: String(row.rating_symbol),
     outlook: row.outlook === null ? null : String(row.outlook), ratingAction: row.rating_action === null ? null : String(row.rating_action),
