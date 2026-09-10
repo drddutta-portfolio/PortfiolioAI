@@ -30,7 +30,10 @@ export interface DimensionScore {
   readonly dimensionWeight: number
   readonly rawScore: number | null
   readonly weightedContribution: number | null
+  /** Reviewed, fresh evidence present for the configured metric contract. */
   readonly evidenceCoverage: number
+  /** Share of the dimension with a reviewed normalization rule and usable score. */
+  readonly scoreReadyCoverage: number
   readonly confidence: number
   readonly heatState: HeatState
   readonly signals?: readonly MetricScoreSignal[]
@@ -46,6 +49,7 @@ export interface SecurityScoringSnapshot {
   readonly runState: string | null
   readonly overallScore: number | null
   readonly evidenceCoverage: number | null
+  readonly scoreReadyCoverage: number | null
   readonly evidenceConfidence: number | null
   readonly asOfDate: string | null
   readonly dimensions: readonly DimensionScore[]

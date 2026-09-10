@@ -23,11 +23,12 @@ const profileSourceLabel = (source: SecurityScoringSnapshot["profileSource"]) =>
 function sectionSummary(dimensions: readonly DimensionScore[], codes: readonly string[]) {
   const selected = codes.map((code) => dimensions.find((dimension) => dimension.dimensionCode === code)).filter((dimension): dimension is DimensionScore => Boolean(dimension && dimension.dimensionWeight > 0))
   const totalWeight = selected.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
-  if (!selected.length || totalWeight <= 0) return { score: null, coverage: null }
-  const coverage = selected.reduce((sum, dimension) => sum + dimension.evidenceCoverage * dimension.dimensionWeight, 0) / totalWeight
+  if (!selected.length || totalWeight <= 0) return { score: null, evidenceCoverage: null, scoreReadyCoverage: null }
+  const evidenceCoverage = selected.reduce((sum, dimension) => sum + dimension.evidenceCoverage * dimension.dimensionWeight, 0) / totalWeight
+  const scoreReadyCoverage = selected.reduce((sum, dimension) => sum + dimension.scoreReadyCoverage * dimension.dimensionWeight, 0) / totalWeight
   const fullyScored = selected.every((dimension) => dimension.rawScore !== null)
   const sectionScore = fullyScored ? selected.reduce((sum, dimension) => sum + (dimension.rawScore ?? 0) * dimension.dimensionWeight, 0) / totalWeight : null
-  return { score: sectionScore, coverage }
+  return { score: sectionScore, evidenceCoverage, scoreReadyCoverage }
 }
 
 export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
@@ -58,9 +59,9 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           <small>{hasRun ? label(snapshot.runState ?? "PARTIAL") : "Awaiting evidence gate"}</small>
         </div>
         <div className="score-coverage-box">
-          <span>Verified scoring coverage</span>
+          <span>Verified evidence</span>
           <strong>{percent(snapshot.evidenceCoverage)}</strong>
-          <small>Confidence {snapshot.evidenceConfidence === null ? "—" : `${snapshot.evidenceConfidence.toFixed(0)}%`}</small>
+          <small>Score-ready {percent(snapshot.scoreReadyCoverage)}</small>
         </div>
       </div>
 
@@ -70,12 +71,12 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           return <article key={group.label}>
             <span>{group.label}</span>
             <strong>{summary.score === null ? "—" : `${summary.score.toFixed(0)}`}</strong>
-            <small>{summary.coverage === null ? "Not applicable" : `${Math.round(summary.coverage * 100)}% verified coverage`}</small>
+            <small>{summary.evidenceCoverage === null ? "Not applicable" : `${Math.round(summary.evidenceCoverage * 100)}% evidence · ${Math.round((summary.scoreReadyCoverage ?? 0) * 100)}% score-ready`}</small>
           </article>
         })}
       </div>
 
-      {!hasRun ? <div className="research-callout research-callout-neutral"><strong>Read-only scoring preview</strong><p>The page is already showing verified coverage and scored inputs. Official section and overall scores remain withheld until the configured evidence gates are satisfied.</p></div> : null}
+      {!hasRun ? <div className="research-callout research-callout-neutral"><strong>Read-only scoring preview</strong><p>Verified evidence and score readiness are shown separately. A metric can be trusted evidence before its normalization formula is approved; official section and overall scores remain withheld until the configured score-ready gates are satisfied.</p></div> : null}
 
       <div className="heatmap-heading">
         <div><p className="eyebrow">Investment heatmap</p><h3>Where the stock is strong, weak or still unknown</h3></div>
@@ -89,7 +90,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           return <article key={dimensionCode} className={`score-heat-cell heat-${heatState.toLocaleLowerCase()}`}>
             <span>{label(dimensionCode)}</span>
             <strong>{notApplicable ? "N/A" : score(dimension?.rawScore ?? null)}</strong>
-            <small>{notApplicable ? "Not applicable to this profile" : dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% verified inputs` : "Insufficient evidence"}</small>
+            <small>{notApplicable ? "Not applicable to this profile" : dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Insufficient evidence"}</small>
             <em>{notApplicable ? "Not Applicable" : label(heatState)}</em>
           </article>
         })}
