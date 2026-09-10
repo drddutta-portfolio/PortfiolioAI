@@ -17,7 +17,16 @@ describe("research evidence policy", () => {
   })
   it("keeps provider adjusted P/B distinct and conflicting", () => {
     expect(metricLabel("PBV_ADJUSTED_PROVIDER")).toBe("Provider Adjusted P/B")
-    expect(evidenceStatus("CONFLICTING", "2099-01-01T00:00:00Z")).toBe("CONFLICTING")
+    expect(evidenceStatus("CONFLICTING", "2099-01-01T00:00:00Z", false, true)).toBe("CONFLICTING")
+  })
+  it("shows fresh available evidence as verified when its metric contract is reviewed", () => {
+    expect(evidenceStatus("AVAILABLE", "2099-01-01T00:00:00Z", false, true)).toBe("VERIFIED")
+  })
+  it("keeps fresh available evidence provisional while its metric contract is not reviewed", () => {
+    expect(evidenceStatus("AVAILABLE", "2099-01-01T00:00:00Z", false, false)).toBe("PROVISIONAL")
+  })
+  it("keeps stale precedence even for a reviewed metric contract", () => {
+    expect(evidenceStatus("AVAILABLE", "2000-01-01T00:00:00Z", false, true)).toBe("STALE")
   })
   it("retains the latest stored reporting period without synthesizing history", () => {
     const older = metric({ id: "old", periodEnd: "2026-03-31" })
