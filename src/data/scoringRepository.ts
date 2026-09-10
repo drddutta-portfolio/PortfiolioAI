@@ -1,24 +1,35 @@
 import { supabase } from "../lib/supabase"
-import type { DimensionScore, ExternalRatingObservation, SecurityScoringSnapshot } from "../features/research/scoringTypes"
+import type { DimensionScore, ExternalRatingObservation, ScoringProfileSource, SecurityScoringSnapshot } from "../features/research/scoringTypes"
 
-function profileForSector(sector: string | null, industry: string | null) {
-  const haystack = `${sector ?? ""} ${industry ?? ""}`.toUpperCase()
-  if (/\bBANK\b|NBFC|LENDING/.test(haystack)) return "BANK_NBFC"
-  if (/IT|TECHNOLOGY|SOFTWARE/.test(haystack)) return "IT_TECH"
-  if (/INDUSTRIAL|CAPITAL GOODS|ENGINEERING/.test(haystack)) return "INDUSTRIALS_CAPITAL_GOODS"
-  if (/FMCG|CONSUMER/.test(haystack)) return "CONSUMER_FMCG"
-  if (/PHARMA|HEALTHCARE/.test(haystack)) return "PHARMA_HEALTHCARE"
-  if (/AUTO|AUTOMOBILE/.test(haystack)) return "AUTO_COMPONENTS"
-  if (/POWER|ENERGY|UTILIT|OIL|GAS/.test(haystack)) return "ENERGY_UTILITIES"
-  if (/METAL|MINING|COMMODIT/.test(haystack)) return "METALS_COMMODITIES"
-  if (/INFRA|CONSTRUCTION|EPC/.test(haystack)) return "INFRA_CONSTRUCTION"
-  if (/REAL ESTATE|REALTY/.test(haystack)) return "REAL_ESTATE"
-  if (/FINANCIAL SERVICES|INSURANCE|ASSET MANAGEMENT/.test(haystack)) return "FIN_SERVICES_NON_LENDER"
-  return "GENERAL"
+function profileForSector(sector: string | null, industry: string | null): { readonly code: string; readonly source: ScoringProfileSource } {
+  const haystack = `${sector ?? ""} ${industry ?? ""}`.trim().toUpperCase()
+  if (!haystack) return { code: "GENERAL", source: "GENERAL_FALLBACK" }
+  if (/\bBANK\b|NBFC|LENDING/.test(haystack)) return { code: "BANK_NBFC", source: "SECTOR_RULE" }
+  if (/IT|TECHNOLOGY|SOFTWARE/.test(haystack)) return { code: "IT_TECH", source: "SECTOR_RULE" }
+  if (/INDUSTRIAL|CAPITAL GOODS|ENGINEERING/.test(haystack)) return { code: "INDUSTRIALS_CAPITAL_GOODS", source: "SECTOR_RULE" }
+  if (/FMCG|CONSUMER/.test(haystack)) return { code: "CONSUMER_FMCG", source: "SECTOR_RULE" }
+  if (/PHARMA|HEALTHCARE/.test(haystack)) return { code: "PHARMA_HEALTHCARE", source: "SECTOR_RULE" }
+  if (/AUTO|AUTOMOBILE/.test(haystack)) return { code: "AUTO_COMPONENTS", source: "SECTOR_RULE" }
+  if (/POWER|ENERGY|UTILIT|OIL|GAS/.test(haystack)) return { code: "ENERGY_UTILITIES", source: "SECTOR_RULE" }
+  if (/METAL|MINING|COMMODIT/.test(haystack)) return { code: "METALS_COMMODITIES", source: "SECTOR_RULE" }
+  if (/INFRA|CONSTRUCTION|EPC/.test(haystack)) return { code: "INFRA_CONSTRUCTION", source: "SECTOR_RULE" }
+  if (/REAL ESTATE|REALTY/.test(haystack)) return { code: "REAL_ESTATE", source: "SECTOR_RULE" }
+  if (/FINANCIAL SERVICES|INSURANCE|ASSET MANAGEMENT/.test(haystack)) return { code: "FIN_SERVICES_NON_LENDER", source: "SECTOR_RULE" }
+  return { code: "GENERAL", source: "GENERAL_FALLBACK" }
 }
 
 export async function loadSecurityScoringSnapshot(securityId: string, sector: string | null, industry: string | null): Promise<SecurityScoringSnapshot> {
-  const profileCode = profileForSector(sector, industry)
+  const assignmentResult = await supabase.from("security_scoring_profile_assignments")
+    .select("scoring_profile_code,assignment_status")
+    .eq("security_id", securityId)
+    .eq("assignment_status", "REVIEWED")
+    .maybeSingle()
+  if (assignmentResult.error) throw assignmentResult.error
+
+  const inferred = profileForSector(sector, industry)
+  const profileCode = assignmentResult.data?.scoring_profile_code ?? inferred.code
+  const profileSource: ScoringProfileSource = assignmentResult.data ? "REVIEWED_ASSIGNMENT" : inferred.source
+
   const [modelResult, profileResult, ratingsResult] = await Promise.all([
     supabase.from("scoring_models").select("id,name,status").eq("code", "PAI_STOCK_SCORE").eq("version", 1).maybeSingle(),
     supabase.from("scoring_profiles").select("code,name").eq("code", profileCode).maybeSingle(),
@@ -71,6 +82,7 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
   return {
     profileCode,
     profileName: profile?.name ?? profileCode.replaceAll("_", " "),
+    profileSource,
     modelName: model.name,
     modelStatus: model.status,
     runState: runResult.data?.run_state ?? null,
