@@ -29,7 +29,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
     try {
       const next = await executeCompleteResearchRefresh(portfolioId, securityId)
       setResult(next)
-      if (next.status === "SUCCEEDED") onCompleted()
+      if (next.status !== "FAILED") onCompleted()
       setPlan(await planCompleteResearchRefresh(portfolioId, securityId))
     } catch (reason: unknown) { setError(displayError(reason)) }
     finally { setBusy(null) }
@@ -61,9 +61,9 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       <button type="button" className="button button-primary" disabled={!plan.executionAllowed || busy !== null} onClick={execute}>{busy === "EXECUTE" ? "Refreshing research…" : `Run Complete Research Refresh · ${plan.estimatedProviderCalls} calls`}</button>
     </div> : null}
 
-    {result ? <div className={result.status === "SUCCEEDED" ? "notice notice-success" : "notice notice-error"} role="status">
-      <strong>{result.status === "SUCCEEDED" ? "Complete Research Refresh finished." : "Refresh finished with incomplete domains."}</strong>
-      <span>{result.providerSucceeded} of {result.providerCalls} provider calls succeeded. Research data has been reloaded where accepted.</span>
+    {result ? <div className={result.status === "SUCCEEDED" ? "notice notice-success" : result.status === "PARTIAL" ? "notice" : "notice notice-error"} role="status">
+      <strong>{result.status === "SUCCEEDED" ? "Complete Research Refresh finished." : result.status === "PARTIAL" ? "Research refresh completed partially." : "Complete Research Refresh failed safely."}</strong>
+      <span>{result.providerSucceeded} of {result.providerCalls} provider calls succeeded. Any accepted research evidence has been reloaded.</span>
     </div> : null}
   </section>
 }
