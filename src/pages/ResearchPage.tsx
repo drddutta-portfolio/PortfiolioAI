@@ -5,8 +5,10 @@ import { formatMoney, formatPercent, formatQuantity } from "../features/portfoli
 import type { PortfolioPosition } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { GROWTH_CODES, latestByCode, metricLabel, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatResearchMetric } from "../features/research/researchPolicy"
+import { ResearchScorecardPanel } from "../features/research/ResearchScorecardPanel"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "../features/research/types"
 import { useSecurityResearch } from "../features/research/useSecurityResearch"
+import { useSecurityScoring } from "../features/research/useSecurityScoring"
 
 const TABS = ["Overview", "Financials", "Quality & Growth", "Ownership", "Valuation", "Documents", "Evidence"] as const
 type Tab = typeof TABS[number]
@@ -16,6 +18,7 @@ export function ResearchPage() {
   const { portfolio, error: portfolioError, isLoading: portfolioLoading } = usePortfolioView()
   const position = portfolio?.openPositions.find((item) => item.securityId === security || item.symbol.toLocaleUpperCase() === security?.toLocaleUpperCase()) ?? null
   const research = useSecurityResearch(position?.securityId ?? null)
+  const scoring = useSecurityScoring(position?.securityId ?? null, research.data?.sector ?? position?.sector ?? null, research.data?.industry ?? position?.industry ?? null)
   const [tab, setTab] = useState<Tab>("Overview")
   if (portfolioLoading) return <Loading label="Loading cached portfolio context…" />
   if (portfolioError) return <div className="notice notice-error" role="alert">{portfolioError}</div>
@@ -23,7 +26,7 @@ export function ResearchPage() {
   return <section className="research-page">
     <ResearchHeader position={position} research={research.data} currency={portfolio.portfolio.currency} />
     <ResearchTabs value={tab} onChange={setTab} />
-    {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : research.data ? <TabPanel tab={tab} position={position} research={research.data} onTabChange={setTab} /> : null}
+    {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : research.data ? <TabPanel tab={tab} position={position} research={research.data} scoring={scoring} onTabChange={setTab} /> : null}
   </section>
 }
 
@@ -44,17 +47,18 @@ function ResearchHeader({ position, research, currency }: { readonly position: P
 
 function ResearchTabs({ value, onChange }: { readonly value: Tab; readonly onChange: (tab: Tab) => void }) {
   const activate = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return
     event.preventDefault()
-    const next = event.key === 'Home' ? 0 : event.key === 'End' ? TABS.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + TABS.length) % TABS.length
+    const next = event.key === "Home" ? 0 : event.key === "End" ? TABS.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + TABS.length) % TABS.length
     onChange(TABS[next]!); document.getElementById(`research-tab-${next}`)?.focus()
   }
   return <div className="research-tabs" role="tablist" aria-label="Research sections">{TABS.map((tab, index) => <button id={`research-tab-${index}`} key={tab} type="button" role="tab" aria-selected={value === tab} aria-controls="research-panel" tabIndex={value === tab ? 0 : -1} onClick={() => onChange(tab)} onKeyDown={(event) => activate(event, index)}>{tab}</button>)}</div>
 }
 
-function TabPanel({ tab, position, research, onTabChange }: { readonly tab: Tab; readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly onTabChange: (tab: Tab) => void }) {
+type ScoringHook = ReturnType<typeof useSecurityScoring>
+function TabPanel({ tab, position, research, scoring, onTabChange }: { readonly tab: Tab; readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly scoring: ScoringHook; readonly onTabChange: (tab: Tab) => void }) {
   return <div id="research-panel" role="tabpanel" tabIndex={0} aria-labelledby={`research-tab-${TABS.indexOf(tab)}`} className="research-panel">
-    {tab === "Overview" ? <Overview position={position} research={research} onViewEvidence={() => onTabChange("Evidence")} /> : null}
+    {tab === "Overview" ? <Overview position={position} research={research} scoring={scoring} onViewEvidence={() => onTabChange("Evidence")} /> : null}
     {tab === "Financials" ? <Financials research={research} /> : null}
     {tab === "Quality & Growth" ? <QualityGrowth research={research} /> : null}
     {tab === "Ownership" ? <Ownership research={research} /> : null}
@@ -64,7 +68,7 @@ function TabPanel({ tab, position, research, onTabChange }: { readonly tab: Tab;
   </div>
 }
 
-function Overview({ position, research, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly onViewEvidence: () => void }) {
+function Overview({ position, research, scoring, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly scoring: ScoringHook; readonly onViewEvidence: () => void }) {
   const metrics = latestByCode(research.metrics)
   const groups = [
     { title: "Quality at a glance", codes: [...QUALITY_CODES] },
@@ -77,7 +81,7 @@ function Overview({ position, research, onViewEvidence }: { readonly position: P
   const reviewRequired = research.documents.filter((document) => document.status === "REVIEW_REQUIRED").length
   const stale = research.metrics.filter((metric) => metric.status === "STALE").length
   const coverage = research.metrics.length ? "Partial" : "Unavailable"
-  return <><SectionHeading title="Research at a glance" detail="A summary of stored evidence; the detailed tabs remain the source of truth." /><section className="context-strip" aria-label="Business and portfolio context"><div><span>Business</span><strong>{research.sector ?? position.sector ?? "Unavailable"}</strong><small>{research.industry ?? position.industry ?? "Industry unavailable"}</small></div><div><span>Portfolio</span><strong>{position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</strong><small>{formatPercent(position.portfolioWeightPercent)} weight · {position.brokerExposure?.length ?? 0} broker account(s)</small></div><div><span>Classification</span><strong>{research.marketCapCategory ? titleCase(research.marketCapCategory) : "Unavailable"}</strong><small>{position.themes.length ? position.themes.map((theme) => theme.name).join(", ") : "No themes"}</small></div></section><div className="research-cockpit">{groups.map((group) => <section className="cockpit-panel" key={group.title}><h2>{group.title}</h2><div className="snapshot-list">{group.codes.map((code) => { const metric = metrics.get(code); return <div key={code}><span>{metric?.label ?? metricLabelForCode(code)}</span><strong>{formatResearchMetric(metric)}</strong><small>{metric ? period(metric) : "Unavailable"}</small><Status value={coverageStatus(metric)} /></div> })}</div></section>)}</div><section className="research-health"><div><p className="eyebrow">Research health</p><h2>{coverage} coverage</h2><p>{research.metrics.length} cached observations · {stale ? "mixed freshness" : research.metrics.length ? "current cache" : "freshness unavailable"}</p></div><dl><div><dt>Conflicts</dt><dd>{conflicts}</dd></div><div><dt>Review required</dt><dd>{reviewRequired}</dd></div><div><dt>Provisional</dt><dd>{provisional}</dd></div></dl><button type="button" className="button button-secondary" onClick={onViewEvidence}>View Evidence</button></section><p className="assessment-note">Investment scoring and recommendations are not yet enabled.</p></>
+  return <><SectionHeading title="Research at a glance" detail="A summary of stored evidence; the detailed tabs remain the source of truth." /><section className="context-strip" aria-label="Business and portfolio context"><div><span>Business</span><strong>{research.sector ?? position.sector ?? "Unavailable"}</strong><small>{research.industry ?? position.industry ?? "Industry unavailable"}</small></div><div><span>Portfolio</span><strong>{position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</strong><small>{formatPercent(position.portfolioWeightPercent)} weight · {position.brokerExposure?.length ?? 0} broker account(s)</small></div><div><span>Classification</span><strong>{research.marketCapCategory ? titleCase(research.marketCapCategory) : "Unavailable"}</strong><small>{position.themes.length ? position.themes.map((theme) => theme.name).join(", ") : "No themes"}</small></div></section><ResearchScorecardPanel snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} /><div className="research-cockpit">{groups.map((group) => <section className="cockpit-panel" key={group.title}><h2>{group.title}</h2><div className="snapshot-list">{group.codes.map((code) => { const metric = metrics.get(code); return <div key={code}><span>{metric?.label ?? metricLabelForCode(code)}</span><strong>{formatResearchMetric(metric)}</strong><small>{metric ? period(metric) : "Unavailable"}</small><Status value={coverageStatus(metric)} /></div> })}</div></section>)}</div><section className="research-health"><div><p className="eyebrow">Research health</p><h2>{coverage} coverage</h2><p>{research.metrics.length} cached observations · {stale ? "mixed freshness" : research.metrics.length ? "current cache" : "freshness unavailable"}</p></div><dl><div><dt>Conflicts</dt><dd>{conflicts}</dd></div><div><dt>Review required</dt><dd>{reviewRequired}</dd></div><div><dt>Provisional</dt><dd>{provisional}</dd></div></dl><button type="button" className="button button-secondary" onClick={onViewEvidence}>View Evidence</button></section><p className="assessment-note">Core/Satellite suitability is deliberately downstream of validated scoring. Portfolio membership and role remain the user's decision.</p></>
 }
 
 function Financials({ research }: { readonly research: SecurityResearch }) {
@@ -88,7 +92,7 @@ function Financials({ research }: { readonly research: SecurityResearch }) {
 function QualityGrowth({ research }: { readonly research: SecurityResearch }) {
   const latest = latestByCode(research.metrics)
   const inputs = [{ title: "Growth inputs", codes: [...GROWTH_CODES] }, { title: "Quality inputs", codes: [...QUALITY_CODES] }]
-  return <><section className="research-callout research-callout-neutral"><strong>Scoring not yet enabled</strong><p>Available evidence coverage is shown below. PortfolioAI does not calculate CAGR, quality, QGMV, or Core scores at this stage.</p></section><div className="coverage-columns">{inputs.map((group) => <section className="panel" key={group.title}><h2>{group.title}</h2><div className="coverage-list">{group.codes.map((code) => { const metric = latest.get(code); return <div key={code}><span>{metric?.label ?? code.replaceAll("_", " ")}</span><Status value={coverageStatus(metric)} />{metric ? <small>{formatResearchMetric(metric)} · {period(metric)}</small> : <small>No cached observation</small>}</div> })}</div></section>)}</div></>
+  return <><section className="research-callout research-callout-neutral"><strong>Sector-aware scoring framework enabled</strong><p>Scores remain withheld until the configured evidence gates pass. Missing or unverified inputs reduce coverage instead of becoming artificial zeroes.</p></section><div className="coverage-columns">{inputs.map((group) => <section className="panel" key={group.title}><h2>{group.title}</h2><div className="coverage-list">{group.codes.map((code) => { const metric = latest.get(code); return <div key={code}><span>{metric?.label ?? code.replaceAll("_", " ")}</span><Status value={coverageStatus(metric)} />{metric ? <small>{formatResearchMetric(metric)} · {period(metric)}</small> : <small>No cached observation</small>}</div> })}</div></section>)}</div></>
 }
 
 function Ownership({ research }: { readonly research: SecurityResearch }) {
@@ -99,7 +103,7 @@ function Ownership({ research }: { readonly research: SecurityResearch }) {
 
 function Valuation({ research }: { readonly research: SecurityResearch }) {
   const rows = research.metrics.filter((metric) => VALUATION_CODES.has(metric.code))
-  return <><SectionHeading title="Valuation evidence" detail="No cheap/fair/expensive classification or valuation score is calculated." /><MetricTable rows={rows} empty="No semantically approved valuation observations are cached for this security." /></>
+  return <><SectionHeading title="Valuation evidence" detail="Sector-relative and self-history valuation scoring remains gated until the benchmark series are available." /><MetricTable rows={rows} empty="No semantically approved valuation observations are cached for this security." /></>
 }
 
 function Documents({ research }: { readonly research: SecurityResearch }) {
