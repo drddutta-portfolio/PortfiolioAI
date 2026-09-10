@@ -14,7 +14,7 @@ const CONFIG: Readonly<Record<string, SectionConfig>> = {
 }
 
 function aggregate(dimensions: readonly DimensionScore[]) {
-  const applicable = dimensions.filter((dimension) => dimension.heatState !== "NOT_APPLICABLE")
+  const applicable = dimensions.filter((dimension) => dimension.dimensionWeight > 0)
   const totalWeight = applicable.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
   const weightedCoverage = totalWeight > 0
     ? applicable.reduce((sum, dimension) => sum + dimension.evidenceCoverage * dimension.dimensionWeight, 0) / totalWeight
