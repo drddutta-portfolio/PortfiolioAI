@@ -9,6 +9,7 @@ const DIMENSION_ORDER = [
 const label = (value: string) => value.replaceAll("_", " ").toLocaleLowerCase().replace(/(^|\s)\S/gu, (match) => match.toLocaleUpperCase())
 const percent = (value: number | null) => value === null ? "Unavailable" : `${Math.round(value * 100)}%`
 const score = (value: number | null) => value === null ? "—" : value.toFixed(0)
+const profileSourceLabel = (source: SecurityScoringSnapshot["profileSource"]) => source === "REVIEWED_ASSIGNMENT" ? "Reviewed profile" : source === "SECTOR_RULE" ? "Sector-resolved profile" : "General fallback"
 
 export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
   readonly snapshot: SecurityScoringSnapshot | null
@@ -29,6 +30,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           <p className="eyebrow">PortfolioAI Stock Score</p>
           <h2 id="stock-scorecard-title">{snapshot.profileName}</h2>
           <p>{snapshot.modelName} · model {snapshot.modelStatus.toLocaleLowerCase()}</p>
+          <small>{profileSourceLabel(snapshot.profileSource)}</small>
         </div>
         <div className="overall-score-box">
           <span>Overall score</span>
@@ -54,6 +56,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           </article>
         })}
       </div>
+      <p className="assessment-note">Core/Satellite suitability is a later decision layer. PortfolioAI may recommend a role, but portfolio inclusion and role selection remain entirely user-controlled.</p>
     </section>
 
     <section className="panel external-ratings-panel" aria-labelledby="external-ratings-title">
