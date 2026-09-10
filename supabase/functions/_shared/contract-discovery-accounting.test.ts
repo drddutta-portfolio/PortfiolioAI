@@ -1,8 +1,9 @@
 import {readFile} from "node:fs/promises"
+import {resolve} from "node:path"
 import {describe,expect,it} from "vitest"
 
-const sourceUrl=new URL("../discover-trendlyne-contract/index.ts",import.meta.url)
-const source=await readFile(sourceUrl,"utf8")
+const sourcePath=resolve(process.cwd(),"supabase/functions/discover-trendlyne-contract/index.ts")
+const source=await readFile(sourcePath,"utf8")
 
 describe("Stage 7.2D.2B.3 contract-discovery accounting boundary",()=>{
   it("reserves the exact four-call pilot before constructing the provider client",()=>{
