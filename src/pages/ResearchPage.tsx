@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom"
 import { formatMoney, formatPercent, formatQuantity } from "../features/portfolio/format"
 import type { PortfolioPosition } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
+import { CompleteResearchRefreshPanel } from "../features/research/CompleteResearchRefreshPanel"
 import { GROWTH_CODES, latestByCode, metricLabel, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatResearchMetric } from "../features/research/researchPolicy"
 import { ResearchScorecardPanel } from "../features/research/ResearchScorecardPanel"
 import { ResearchSectionScore } from "../features/research/ResearchSectionScore"
@@ -26,6 +27,7 @@ export function ResearchPage() {
   if (!position || !portfolio) return <ResearchNotFound />
   return <section className="research-page">
     <ResearchHeader position={position} research={research.data} scoring={scoring} currency={portfolio.portfolio.currency} />
+    <CompleteResearchRefreshPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} symbol={position.symbol} onCompleted={() => { research.reload(); scoring.reload() }} />
     <ResearchTabs value={tab} onChange={setTab} />
     {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : research.data ? <TabPanel tab={tab} position={position} research={research.data} scoring={scoring} onTabChange={setTab} /> : null}
   </section>
