@@ -230,7 +230,7 @@ async function writeDocuments(admin: Admin, runId: string, security: Security, p
     security_symbol: security.symbol,
     provider_instrument_id: providerInstrumentId,
     provider_tool: "get_document_search_results",
-    body_retained: false,
+    document_bodies_retained: false,
     result: text,
   })
   const appearances = parseDocumentAppearances(text)
@@ -249,7 +249,7 @@ async function writeDocuments(admin: Admin, runId: string, security: Security, p
         document_type: appearance.documentType,
         published_at: appearance.publishedAt,
         metadata_identity_hash: metadataHash,
-        identity_basis: "PROVIDER_APPEARANCE",
+        identity_basis: "REVIEW_REQUIRED",
         identity_status: "REVIEW_REQUIRED",
         identity_evidence: {
           provider_document_id: appearance.providerDocumentId,
@@ -276,7 +276,7 @@ async function writeDocuments(admin: Admin, runId: string, security: Security, p
         retrieved_at: rawRecord.retrieved_at,
         extraction_method: "MCP_SEMANTIC_SEARCH_HEADER",
         extraction_version: "2",
-        extraction_provenance: { body_retained: false, exact_stock_id: providerInstrumentId, exact_symbol: security.symbol },
+        extraction_provenance: { document_bodies_retained: false, exact_stock_id: providerInstrumentId, exact_symbol: security.symbol },
         source_status: "REVIEW_REQUIRED",
       })
       if (source.error) throw source.error
@@ -423,7 +423,9 @@ Deno.serve(async request => {
       p_reservation_seconds: 900,
     })
     if (reservation.error || !reservation.data?.[0]?.reserved) {
-      await admin.from("data_ingestion_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), skipped_count: 1, error_summary: reservation.data?.[0]?.reason_code ?? "BUDGET_RESERVATION_FAILED" }).eq("id", runId)
+      const safeCode = reservation.data?.[0]?.reason_code ?? "BUDGET_RESERVATION_FAILED"
+      for (const domain of DOMAINS) await markItem(admin, itemByDomain.get(domain)!, "SKIPPED_BUDGET", safeCode, 0, 0)
+      await admin.from("data_ingestion_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), skipped_count: 4, error_summary: safeCode }).eq("id", runId)
       return reply(429, { error: "Provider budget reservation was not granted.", providerCalls: 0, runId })
     }
     const reservationId = reservation.data[0].reservation_id as string
@@ -437,6 +439,8 @@ Deno.serve(async request => {
     })
     if (lease.error || !lease.data?.[0]?.acquired) {
       await admin.rpc("settle_provider_budget_v1", { p_reservation_id: reservationId, p_consumed_units: 0, p_failed_units: 0, p_released_units: RESERVED_UNITS })
+      for (const domain of DOMAINS) await markItem(admin, itemByDomain.get(domain)!, "SKIPPED_BUDGET", "REFRESH_IN_PROGRESS", 0, 0)
+      await admin.from("data_ingestion_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), skipped_count: 4, error_summary: "REFRESH_IN_PROGRESS" }).eq("id", runId)
       return reply(409, { error: "Another complete research refresh is currently running.", providerCalls: 0, runId })
     }
 
@@ -455,7 +459,7 @@ Deno.serve(async request => {
         await recordUsage(admin, runId, itemId, security.id, domain, operation, attempted, attemptedAt, "SUCCEEDED", null)
         providerSucceeded += 1
       } catch (error) {
-        const safeCode = error instanceof Error && error.message.startsWith("PROVIDER_") ? error.message : "PROVIDER_REQUEST_FAILED"
+        const safeCode = error instanceof Error && error.message.startsWith("PROVIDER_") ? error.message.replace(/[^A-Z0-9_]/gi, "_").toUpperCase() : "PROVIDER_REQUEST_FAILED"
         await recordUsage(admin, runId, itemId, security.id, domain, operation, attempted, attemptedAt, "FAILED", safeCode)
         providerFailed += 1
         failedItems += 1
@@ -471,7 +475,7 @@ Deno.serve(async request => {
         results.push({ domain, status: "ACCEPTED", ...output })
         return true
       } catch (error) {
-        const safeCode = error instanceof Error ? error.message.replace(/[^A-Z0-9_:.]/gi, "_").toUpperCase().slice(0, 120) : "POSTPROCESSING_FAILED"
+        const safeCode = error instanceof Error ? error.message.replace(/[^A-Z0-9_]/gi, "_").toUpperCase().slice(0, 120) : "POSTPROCESSING_FAILED"
         failedItems += 1
         await markItem(admin, itemId, "FAILED", safeCode, 1, 0)
         results.push({ domain, status: "FAILED", safeCode })
@@ -524,21 +528,23 @@ Deno.serve(async request => {
       }
     } finally {
       const released = RESERVED_UNITS - attempted
-      await admin.rpc("settle_provider_budget_v1", {
+      const settlement = await admin.rpc("settle_provider_budget_v1", {
         p_reservation_id: reservationId,
         p_consumed_units: providerSucceeded,
         p_failed_units: providerFailed,
         p_released_units: released,
       })
-      await admin.rpc("release_data_ingestion_lease_v1", {
+      if (settlement.error) results.push({ domain: "ACCOUNTING", status: "FAILED", safeCode: "BUDGET_SETTLEMENT_FAILED" })
+      const release = await admin.rpc("release_data_ingestion_lease_v1", {
         p_source_code: SOURCE_CODE,
         p_operation: "COMPLETE_RESEARCH_REFRESH",
         p_lease_holder: leaseHolder,
         p_cooldown_seconds: 0,
       })
+      if (release.error) results.push({ domain: "ACCOUNTING", status: "FAILED", safeCode: "LEASE_RELEASE_FAILED" })
     }
 
-    const finalStatus = failedItems === 0 && !abortRemaining ? "SUCCEEDED" : "FAILED"
+    const finalStatus = abortRemaining || acceptedItems === 0 ? "FAILED" : failedItems > 0 ? "PARTIAL" : "SUCCEEDED"
     await admin.from("data_ingestion_runs").update({
       status: finalStatus,
       completed_at: new Date().toISOString(),
@@ -551,7 +557,7 @@ Deno.serve(async request => {
       metadata: { security: security.symbol, provider_instrument_id: providerInstrumentId, results },
     }).eq("id", runId)
 
-    return reply(finalStatus === "SUCCEEDED" ? 200 : 207, {
+    return reply(finalStatus === "SUCCEEDED" ? 200 : finalStatus === "PARTIAL" ? 207 : 502, {
       mode: "COMPLETE_RESEARCH_REFRESH",
       security: security.symbol,
       providerInstrumentId,
