@@ -21,6 +21,7 @@ type ObservationRow = {
   metric_code: string
   numeric_value: number | string | null
   evidence_status: string
+  period_end: string | null
   retrieved_at: string
   fresh_until: string
 }
@@ -56,10 +57,10 @@ function asNumber(value: unknown): number | null {
   return null
 }
 
-function normalizePiecewise(value: number, rule: unknown): number | null {
+function normalizeBands(value: number, rule: unknown, allowedTypes: readonly string[]): number | null {
   if (!rule || typeof rule !== "object" || Array.isArray(rule)) return null
   const typed = rule as { type?: unknown; bands?: unknown }
-  if (typed.type !== "piecewise" || !Array.isArray(typed.bands)) return null
+  if (typeof typed.type !== "string" || !allowedTypes.includes(typed.type) || !Array.isArray(typed.bands)) return null
   for (const rawBand of typed.bands) {
     if (!rawBand || typeof rawBand !== "object" || Array.isArray(rawBand)) continue
     const band = rawBand as PiecewiseBand
@@ -70,6 +71,10 @@ function normalizePiecewise(value: number, rule: unknown): number | null {
     if (matches) return score
   }
   return null
+}
+
+function normalizePiecewise(value: number, rule: unknown): number | null {
+  return normalizeBands(value, rule, ["piecewise"])
 }
 
 function heatState(score: number | null): HeatState {
@@ -88,6 +93,32 @@ function latestUsableObservation(rows: readonly ObservationRow[], metricCode: st
     .sort((a, b) => b.retrieved_at.localeCompare(a.retrieved_at))[0] ?? null
 }
 
+function latestByQuarter(rows: readonly ObservationRow[], metricCode: string): ReadonlyMap<string, number> {
+  const now = Date.now()
+  const candidates = rows
+    .filter((row) => row.metric_code === metricCode && row.period_end && row.evidence_status === "AVAILABLE" && Date.parse(row.fresh_until) > now && asNumber(row.numeric_value) !== null)
+    .sort((a, b) => b.retrieved_at.localeCompare(a.retrieved_at))
+  const result = new Map<string, number>()
+  for (const row of candidates) {
+    if (!row.period_end || result.has(row.period_end)) continue
+    const value = asNumber(row.numeric_value)
+    if (value !== null) result.set(row.period_end, value)
+  }
+  return result
+}
+
+function institutionalOwnershipTrend4Q(rows: readonly ObservationRow[]): number | null {
+  const fii = latestByQuarter(rows, "SHAREHOLDING_FII_FPI_PERCENT")
+  const dii = latestByQuarter(rows, "SHAREHOLDING_DII_PERCENT")
+  const sharedPeriods = [...fii.keys()].filter((period) => dii.has(period)).sort((a, b) => b.localeCompare(a))
+  if (sharedPeriods.length < 5) return null
+  const latest = sharedPeriods[0]
+  const priorYear = sharedPeriods[4]
+  const latestCombined = (fii.get(latest) ?? 0) + (dii.get(latest) ?? 0)
+  const priorCombined = (fii.get(priorYear) ?? 0) + (dii.get(priorYear) ?? 0)
+  return latestCombined - priorCombined
+}
+
 function previewDimensions(
   rules: readonly RuleRow[], observations: readonly ObservationRow[], dimensionWeights: ReadonlyMap<string, number>, metricOverrides: readonly MetricOverrideRow[],
 ): DimensionScore[] {
@@ -104,6 +135,18 @@ function previewDimensions(
     const signals: MetricScoreSignal[] = dimensionRules.map((rule) => {
       const weight = effectiveWeight(rule)
       if (rule.rule_state === "PENDING_SOURCE") return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "PENDING_SOURCE", value: null, normalizedScore: null }
+
+      if (rule.input_kind === "DERIVED" && rule.input_code === "INSTITUTIONAL_OWNERSHIP_TREND") {
+        const value = institutionalOwnershipTrend4Q(observations)
+        if (value === null) return { inputCode: rule.input_code, label: "Institutional ownership trend (4Q)", weight, state: "MISSING", value: null, normalizedScore: null }
+        if (rule.rule_state === "REVIEWED") evidenceWeight += weight
+        const normalizedScore = rule.rule_state === "REVIEWED" ? normalizeBands(value, rule.normalization_rule, ["ownership_trend_4q"]) : null
+        if (normalizedScore === null) return { inputCode: rule.input_code, label: "Institutional ownership trend (4Q)", weight, state: "AVAILABLE_UNSCORED", value, normalizedScore: null }
+        scoreReadyWeight += weight
+        scoredContribution += normalizedScore * weight
+        return { inputCode: rule.input_code, label: "Institutional ownership trend (4Q)", weight, state: "SCORED", value, normalizedScore }
+      }
+
       if (rule.input_kind !== "FUNDAMENTAL" || !rule.metric_code) return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "AVAILABLE_UNSCORED", value: null, normalizedScore: null }
       const observation = latestUsableObservation(observations, rule.metric_code)
       if (!observation) return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "MISSING", value: null, normalizedScore: null }
@@ -149,7 +192,7 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
     scoringDb.from("scoring_models").select("id,name,status").eq("code", "PAI_STOCK_SCORE").eq("version", 1).maybeSingle(),
     scoringDb.from("scoring_profiles").select("code,name").eq("code", profileCode).maybeSingle(),
     scoringDb.from("external_rating_observations").select("id,agency_code,instrument_type,instrument_description,rating_symbol,outlook,rating_action,rating_date,source_url,retrieved_at,fresh_until,evidence_status").eq("security_id", securityId).order("rating_date", { ascending: false, nullsFirst: false }).order("retrieved_at", { ascending: false }),
-    scoringDb.from("fundamental_observations").select("metric_code,numeric_value,evidence_status,retrieved_at,fresh_until").eq("security_id", securityId),
+    scoringDb.from("fundamental_observations").select("metric_code,numeric_value,evidence_status,period_end,retrieved_at,fresh_until").eq("security_id", securityId),
   ])
   const failure = [modelResult, profileResult, ratingsResult, observationsResult].find((result) => result.error)
   if (failure?.error) throw failure.error
