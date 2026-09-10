@@ -3,10 +3,18 @@ import type { ResearchDocument, ResearchMetric, SecurityResearch } from "../feat
 import { supabase } from "../lib/supabase"
 
 const exact = (value: unknown) => typeof value === "number" || typeof value === "string" ? String(value) : null
+function definitionObject(definition: unknown): Readonly<Record<string, unknown>> | null {
+  return definition && typeof definition === "object" && !Array.isArray(definition)
+    ? definition as Readonly<Record<string, unknown>>
+    : null
+}
 function sourceField(definition: unknown) {
-  if (!definition || typeof definition !== "object" || Array.isArray(definition)) return null
-  const field = (definition as { readonly trendlyne_field?: unknown }).trendlyne_field
+  const object = definitionObject(definition)
+  const field = object?.trendlyne_field ?? object?.provider_label
   return typeof field === "string" && field.trim() ? field : null
+}
+function contractReviewed(definition: unknown) {
+  return definitionObject(definition)?.selection === "REVIEWED"
 }
 
 export async function loadSecurityResearch(securityId: string): Promise<SecurityResearch> {
@@ -19,18 +27,20 @@ export async function loadSecurityResearch(securityId: string): Promise<Security
   ])
   const failure = [enrichment, observations, definitions, decisions, documents].find((result) => result.error)
   if (failure?.error) throw failure.error
-  const names = new Map((definitions.data ?? []).map((definition) => [definition.code, definition.name]))
-  const sourceFields = new Map((definitions.data ?? []).map((definition) => [definition.code, sourceField(definition.definition)]))
+  const definitionsByCode = new Map((definitions.data ?? []).map((definition) => [definition.code, definition]))
   const selected = new Set((decisions.data ?? []).map((decision) => decision.selected_observation_id))
   const metrics: ResearchMetric[] = (observations.data ?? []).map((row) => {
     const isSelected = selected.has(row.id)
+    const definition = definitionsByCode.get(row.metric_code)
     const value = exact(row.numeric_value) ?? row.text_value ?? (row.boolean_value === null ? row.date_value : String(row.boolean_value))
     return {
-      id: row.id, code: row.metric_code, label: metricLabel(row.metric_code, names.get(row.metric_code)), value,
-      numericValue: exact(row.numeric_value), provider: row.source_code, sourceField: sourceFields.get(row.metric_code) ?? null,
+      id: row.id, code: row.metric_code, label: metricLabel(row.metric_code, definition?.name), value,
+      numericValue: exact(row.numeric_value), provider: row.source_code, sourceField: sourceField(definition?.definition),
       periodStart: row.period_start, periodEnd: row.period_end, periodType: row.period_type,
       scope: row.consolidation_scope, unit: row.unit, currency: row.currency, retrievedAt: row.retrieved_at,
-      freshUntil: row.fresh_until, status: evidenceStatus(row.evidence_status, row.fresh_until, isSelected), selected: isSelected,
+      freshUntil: row.fresh_until,
+      status: evidenceStatus(row.evidence_status, row.fresh_until, isSelected, contractReviewed(definition?.definition)),
+      selected: isSelected,
     }
   })
   const researchDocuments: ResearchDocument[] = (documents.data ?? []).flatMap((document) => {
