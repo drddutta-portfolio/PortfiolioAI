@@ -38,11 +38,17 @@ export function metricLabel(code: string, fallback?: string | null) {
   return LABELS[code] ?? fallback ?? code.replaceAll("_", " ")
 }
 
-export function evidenceStatus(status: string | null, freshUntil: string | null, selected = false): ResearchEvidenceStatus {
+export function evidenceStatus(
+  status: string | null,
+  freshUntil: string | null,
+  selected = false,
+  contractReviewed = false,
+): ResearchEvidenceStatus {
   if (freshUntil && Date.parse(freshUntil) <= Date.now()) return "STALE"
   if (status === "CONFLICTING") return "CONFLICTING"
   if (status === "REJECTED") return "AMBIGUOUS"
   if (status === "REVIEW_REQUIRED") return "REVIEW_REQUIRED"
+  if (status === "AVAILABLE" && contractReviewed) return "VERIFIED"
   return selected ? "VERIFIED" : "PROVISIONAL"
 }
 
