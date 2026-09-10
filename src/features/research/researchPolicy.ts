@@ -11,6 +11,8 @@ const LABELS: Readonly<Record<string, string>> = {
   NET_INCOME: "PAT",
   EPS_DILUTED: "Diluted EPS",
   EPS_GROWTH_YOY: "EPS Growth YoY",
+  ADVANCES_GROWTH_YOY: "Gross Advances Growth YoY",
+  DEPOSITS_GROWTH_YOY: "Deposits Growth YoY",
   CFO_ANNUAL: "Cash Flow from Operations",
   ROE_ANNUAL: "ROE",
   ROCE_ANNUAL: "ROCE",
@@ -31,7 +33,10 @@ export const OWNERSHIP_CODES = new Set([
   "SHAREHOLDING_MUTUAL_FUND_PERCENT", "SHAREHOLDING_PUBLIC_PERCENT", "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
 ])
 export const VALUATION_CODES = new Set(["MARKET_CAP_PROVIDER_RAW", "MARKET_CAP", "PE_TTM", "PBV_ADJUSTED_PROVIDER"])
-export const GROWTH_CODES = new Set(["REVENUE_TTM", "REVENUE", "NET_PROFIT_TTM", "NET_INCOME", "EPS_DILUTED", "EPS_GROWTH_YOY"])
+export const GROWTH_CODES = new Set([
+  "ADVANCES_GROWTH_YOY", "DEPOSITS_GROWTH_YOY", "EPS_GROWTH_YOY",
+  "REVENUE_TTM", "REVENUE", "NET_PROFIT_TTM", "NET_INCOME", "EPS_DILUTED",
+])
 export const QUALITY_CODES = new Set(["CFO_ANNUAL", "ROE_ANNUAL", "ROCE_ANNUAL", "OPM_TTM", "GROSS_NPA_PERCENT", "NET_NPA_PERCENT"])
 
 export function metricLabel(code: string, fallback?: string | null) {
