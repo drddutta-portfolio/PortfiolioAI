@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { executeCompleteResearchRefresh, planCompleteResearchRefresh, type CompleteResearchRefreshPlan, type CompleteResearchRefreshResult } from "../../data/completeResearchRefreshRepository"
 import { displayError } from "../../lib/displayError"
+import "./CompleteResearchRefreshPanel.css"
 
 export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, onCompleted }: {
   readonly portfolioId: string
