@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { discoverBankGrowthContract, type BankGrowthDiscoveryResult } from "../../data/bankGrowthDiscoveryRepository"
 import { executeCompleteResearchRefresh, planCompleteResearchRefresh, type CompleteResearchRefreshPlan, type CompleteResearchRefreshResult } from "../../data/completeResearchRefreshRepository"
 import { displayError } from "../../lib/displayError"
 import "./CompleteResearchRefreshPanel.css"
@@ -11,8 +12,9 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
 }) {
   const [plan, setPlan] = useState<CompleteResearchRefreshPlan | null>(null)
   const [result, setResult] = useState<CompleteResearchRefreshResult | null>(null)
+  const [growthResult, setGrowthResult] = useState<BankGrowthDiscoveryResult | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState<"PLAN" | "EXECUTE" | null>(null)
+  const [busy, setBusy] = useState<"PLAN" | "EXECUTE" | "GROWTH" | null>(null)
 
   const createPlan = async () => {
     setBusy("PLAN"); setError(null); setResult(null)
@@ -32,6 +34,15 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       if (next.status !== "FAILED") onCompleted()
       setPlan(await planCompleteResearchRefresh(portfolioId, securityId))
     } catch (reason: unknown) { setError(displayError(reason)) }
+    finally { setBusy(null) }
+  }
+
+  const discoverGrowth = async () => {
+    const accepted = window.confirm("This targeted HDFCBANK growth discovery will use exactly 1 Trendlyne call and will not promote any metric automatically. Continue?")
+    if (!accepted) return
+    setBusy("GROWTH"); setError(null); setGrowthResult(null)
+    try { setGrowthResult(await discoverBankGrowthContract(portfolioId, securityId)) }
+    catch (reason: unknown) { setError(displayError(reason)) }
     finally { setBusy(null) }
   }
 
@@ -64,6 +75,16 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
     {result ? <div className={result.status === "SUCCEEDED" ? "notice notice-success" : result.status === "PARTIAL" ? "notice" : "notice notice-error"} role="status">
       <strong>{result.status === "SUCCEEDED" ? "Complete Research Refresh finished." : result.status === "PARTIAL" ? "Research refresh completed partially." : "Complete Research Refresh failed safely."}</strong>
       <span>{result.providerSucceeded} of {result.providerCalls} provider calls succeeded. Any accepted research evidence has been reloaded.</span>
+    </div> : null}
+
+    {symbol === "HDFCBANK" ? <div className="complete-refresh-plan">
+      <div>
+        <p className="eyebrow">Reference-stock completion</p>
+        <h3>Discover missing bank growth fields</h3>
+        <p>Targets Advances Growth YoY and Deposits Growth YoY only. This is discovery evidence, not automatic promotion or scoring.</p>
+      </div>
+      <button type="button" className="button button-secondary" disabled={busy !== null} onClick={discoverGrowth}>{busy === "GROWTH" ? "Discovering…" : "Run growth discovery · 1 Trendlyne call"}</button>
+      {growthResult ? <div className="notice notice-success" role="status"><strong>Growth contract discovery captured.</strong><span>1 Trendlyne call used. No metric was promoted automatically; the capture is ready for semantic review.</span></div> : null}
     </div> : null}
   </section>
 }
