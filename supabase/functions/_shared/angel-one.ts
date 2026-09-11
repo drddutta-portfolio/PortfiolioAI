@@ -118,9 +118,20 @@ function headers(config: AngelOneConfig, jwt?: string) {
   return result
 }
 
+function safeProviderCode(value: string) {
+  return value.toUpperCase().replace(/[^A-Z0-9_]/gu, "_").slice(0, 40)
+}
+
 export class AngelProviderError extends SafeOperationalError {
   constructor(readonly providerCode: string, readonly sessionExpired: boolean) {
-    super(sessionExpired ? "ANGEL_SESSION_EXPIRED" : "ANGEL_PROVIDER_ERROR", SAFE_PROVIDER_FAILURE, sessionExpired ? 401 : 502)
+    const providerSuffix = safeProviderCode(providerCode)
+    super(
+      sessionExpired ? `ANGEL_SESSION_EXPIRED_${providerSuffix}` : `ANGEL_PROVIDER_ERROR_${providerSuffix}`,
+      sessionExpired
+        ? `Angel One rejected the market-data session (${providerSuffix}).`
+        : `Angel One market-data request failed (${providerSuffix}).`,
+      sessionExpired ? 401 : 502,
+    )
   }
 }
 
@@ -132,7 +143,7 @@ async function responseJson<T>(response: Response): Promise<AngelResponse<T>> {
     throw new AngelProviderError(`HTTP_${response.status}`, response.status === 401 || response.status === 403)
   }
   if (!response.ok || body.status !== true) {
-    const code = typeof body.errorcode === "string" ? body.errorcode : `HTTP_${response.status}`
+    const code = typeof body.errorcode === "string" && body.errorcode.trim() ? body.errorcode.trim() : `HTTP_${response.status}`
     throw new AngelProviderError(code, response.status === 401 || response.status === 403 || SESSION_ERROR_CODES.has(code))
   }
   return body
