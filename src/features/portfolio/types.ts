@@ -6,6 +6,10 @@ export interface PositionSettings {
   readonly targetWeight: string | null
   readonly minimumWeight: string | null
   readonly maximumWeight: string | null
+  readonly targetPrice: string | null
+  readonly stopLossPrice: string | null
+  readonly targetPriceAlertEnabled: boolean
+  readonly stopLossAlertEnabled: boolean
   readonly priority: number | null
   readonly isWatchlisted: boolean
   readonly isFrozen: boolean
@@ -197,12 +201,12 @@ export interface PortfolioViewModel {
     readonly realisedCoverage: number
     readonly realisedEligibleHistories: number
     readonly freshPriceCoverage: number
-      readonly stalePriceCoverage: number
+    readonly stalePriceCoverage: number
     readonly accountingCoverage: number
-      readonly incompleteAccountingPositions: number
-      readonly fifoAccountingHistories: number
-      readonly averageCostAccountingHistories: number
-      readonly unresolvedAccountingHistories: number
+    readonly incompleteAccountingPositions: number
+    readonly fifoAccountingHistories: number
+    readonly averageCostAccountingHistories: number
+    readonly unresolvedAccountingHistories: number
   }
   readonly quality: {
     readonly holdingsWithMissingDates: number
