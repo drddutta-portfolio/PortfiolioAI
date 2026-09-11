@@ -106,17 +106,26 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
 
       <div className="heatmap-heading">
         <div><p className="eyebrow">Investment heatmap</p><h3>Where the stock is strong, weak or still unknown</h3></div>
-        <div className="heatmap-legend" aria-label="Heatmap legend"><span>Strong</span><span>Positive</span><span>Neutral</span><span>Weak</span><span>Risk</span><span>Insufficient</span></div>
+        <div className="heatmap-legend" aria-label="Heatmap legend">
+          <span className="legend-strong">Strong</span>
+          <span className="legend-positive">Positive</span>
+          <span className="legend-neutral">Neutral</span>
+          <span className="legend-weak">Weak</span>
+          <span className="legend-risk">Risk</span>
+          <span className="legend-insufficient">Insufficient</span>
+        </div>
       </div>
       <div className="score-heatmap" aria-label="Investment score heatmap">
         {DIMENSION_ORDER.map((dimensionCode) => {
           const dimension = byCode.get(dimensionCode)
           const heatState = dimension?.heatState ?? "INSUFFICIENT"
-          const notApplicable = Boolean(dimension && dimension.dimensionWeight === 0)
-          return <article key={dimensionCode} className={`score-heat-cell heat-${heatState.toLocaleLowerCase()}`}>
+          const profileNotApplicable = snapshot.profileCode === "BANK_NBFC" && dimensionCode === "CASH_FLOW"
+          const notApplicable = profileNotApplicable || Boolean(dimension && dimension.dimensionWeight === 0)
+          const heatClass = notApplicable ? "heat-not-applicable" : `heat-${heatState.toLocaleLowerCase()}`
+          return <article key={dimensionCode} className={`score-heat-cell ${heatClass}`}>
             <span>{label(dimensionCode)}</span>
             <strong>{notApplicable ? "N/A" : score(dimension?.rawScore ?? null)}</strong>
-            <small>{notApplicable ? "Not applicable to this profile" : dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Insufficient evidence"}</small>
+            <small>{notApplicable ? "Not applicable to this scoring profile" : dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Insufficient evidence"}</small>
             <em>{notApplicable ? "Not Applicable" : label(heatState)}</em>
           </article>
         })}
