@@ -3,6 +3,7 @@ import { discoverBankGrowthContract, type BankGrowthDiscoveryResult } from "../.
 import { executeBankBenchmarkRefresh, planBankBenchmarkRefresh, type BankBenchmarkRefreshPlan, type BankBenchmarkRefreshResult } from "../../data/bankBenchmarkRefreshRepository"
 import { executeCompleteResearchRefresh, planCompleteResearchRefresh, type CompleteResearchRefreshPlan, type CompleteResearchRefreshResult } from "../../data/completeResearchRefreshRepository"
 import { executeMarketHistoryRefresh, planMarketHistoryRefresh, type MarketHistoryRefreshPlan, type MarketHistoryRefreshResult } from "../../data/marketHistoryRefreshRepository"
+import { executeValuationEvidenceRefresh, planValuationEvidenceRefresh, type ValuationEvidenceRefreshPlan, type ValuationEvidenceRefreshResult } from "../../data/valuationEvidenceRefreshRepository"
 import { displayError } from "../../lib/displayError"
 import "./CompleteResearchRefreshPanel.css"
 
@@ -18,9 +19,11 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
   const [marketResult, setMarketResult] = useState<MarketHistoryRefreshResult | null>(null)
   const [benchmarkPlan, setBenchmarkPlan] = useState<BankBenchmarkRefreshPlan | null>(null)
   const [benchmarkResult, setBenchmarkResult] = useState<BankBenchmarkRefreshResult | null>(null)
+  const [valuationPlan, setValuationPlan] = useState<ValuationEvidenceRefreshPlan | null>(null)
+  const [valuationResult, setValuationResult] = useState<ValuationEvidenceRefreshResult | null>(null)
   const [growthResult, setGrowthResult] = useState<BankGrowthDiscoveryResult | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState<"PLAN" | "EXECUTE" | "MARKET_PLAN" | "MARKET_EXECUTE" | "BENCHMARK_PLAN" | "BENCHMARK_EXECUTE" | "GROWTH" | null>(null)
+  const [busy, setBusy] = useState<"PLAN" | "EXECUTE" | "MARKET_PLAN" | "MARKET_EXECUTE" | "BENCHMARK_PLAN" | "BENCHMARK_EXECUTE" | "VALUATION_PLAN" | "VALUATION_EXECUTE" | "GROWTH" | null>(null)
 
   const createPlan = async () => {
     setBusy("PLAN"); setError(null); setResult(null)
@@ -85,6 +88,27 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
     finally { setBusy(null) }
   }
 
+  const createValuationPlan = async () => {
+    setBusy("VALUATION_PLAN"); setError(null); setValuationResult(null)
+    try { setValuationPlan(await planValuationEvidenceRefresh(portfolioId, securityId)) }
+    catch (reason: unknown) { setError(displayError(reason)) }
+    finally { setBusy(null) }
+  }
+
+  const executeValuation = async () => {
+    if (!valuationPlan?.executionAllowed) return
+    const accepted = window.confirm(`Valuation evidence refresh for ${symbol} will use exactly ${valuationPlan.estimatedProviderCalls} Trendlyne call. It refreshes only the approved 5-year P/E self-history valuation metric. Continue?`)
+    if (!accepted) return
+    setBusy("VALUATION_EXECUTE"); setError(null); setValuationResult(null)
+    try {
+      const next = await executeValuationEvidenceRefresh(portfolioId, securityId)
+      setValuationResult(next)
+      onCompleted()
+      setValuationPlan(await planValuationEvidenceRefresh(portfolioId, securityId))
+    } catch (reason: unknown) { setError(displayError(reason)) }
+    finally { setBusy(null) }
+  }
+
   const discoverGrowth = async () => {
     const accepted = window.confirm("This targeted HDFCBANK growth discovery will use exactly 1 Trendlyne call and will not promote any metric automatically. Continue?")
     if (!accepted) return
@@ -126,6 +150,26 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
     </div> : null}
 
     {symbol === "HDFCBANK" ? <>
+      <div className="complete-refresh-plan">
+        <div>
+          <p className="eyebrow">Stage 8.8D.2 · Valuation evidence</p>
+          <h3>Refresh stale valuation evidence</h3>
+          <p>Refreshes only HDFCBANK's approved 5-year P/E self-history valuation evidence used by the BANK/NBFC recommendation gate. Planning uses zero calls; execution uses exactly one Trendlyne call.</p>
+        </div>
+        <button type="button" className="button button-secondary" disabled={busy !== null} onClick={createValuationPlan}>{busy === "VALUATION_PLAN" ? "Planning…" : valuationPlan ? "Re-plan valuation refresh" : "Plan valuation refresh"}</button>
+        {valuationPlan ? <>
+          <div className="summary-grid">
+            <Metric label="Trendlyne calls" value={String(valuationPlan.estimatedProviderCalls)} />
+            <Metric label="Today's internal usage" value={`${valuationPlan.dailyObservedUsage}/${valuationPlan.dailyLimit}`} />
+            <Metric label="Latest value" value={valuationPlan.latestValue === null ? "Unavailable" : `${valuationPlan.latestValue.toFixed(2)}%`} />
+            <Metric label="Quota gate" value={valuationPlan.executionAllowed ? "Ready" : "Blocked"} />
+          </div>
+          <p className="assessment-note">This targeted action does not refresh prices, change your role, change target weight, create a score run or trade. It only revalidates the approved valuation input.</p>
+          <button type="button" className="button button-primary" disabled={!valuationPlan.executionAllowed || busy !== null} onClick={executeValuation}>{busy === "VALUATION_EXECUTE" ? "Refreshing valuation…" : "Run valuation refresh · 1 Trendlyne call"}</button>
+        </> : null}
+        {valuationResult ? <div className="notice notice-success" role="status"><strong>Valuation evidence refreshed.</strong><span>5-year P/E self-history implied upside is now {valuationResult.value.toFixed(2)}%. Research scoring and PortfolioAI advisory have been reloaded.</span></div> : null}
+      </div>
+
       <div className="complete-refresh-plan">
         <div>
           <p className="eyebrow">Stage 8.6E · Market evidence</p>
