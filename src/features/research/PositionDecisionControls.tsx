@@ -35,6 +35,15 @@ function transitionLabel(value: RecommendationTransitionStatus) {
 }
 function transitionClass(value: RecommendationTransitionStatus) { return `transition-${value.toLocaleLowerCase().replaceAll("_", "-")}` }
 function dateLabel(value: string) { return new Date(value).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) }
+function suggestionTone(value: RecommendationPreview["suggestedRole"] | undefined) {
+  switch (value) {
+    case "CORE_CANDIDATE": return "suggestion-core"
+    case "SATELLITE_CANDIDATE": return "suggestion-satellite"
+    case "WATCH": return "suggestion-watch"
+    case "AVOID": return "suggestion-avoid"
+    default: return "suggestion-pending"
+  }
+}
 
 export function PositionDecisionControls({
   portfolioId,
@@ -188,30 +197,47 @@ export function PositionDecisionControls({
   }
 
   const suggestionDetail = recommendation
-    ? `${recommendation.sectorProfile} · ${recommendation.policyStatus.toLocaleLowerCase()} policy${recommendation.cautions.length ? ` · ${recommendation.cautions.join("; ")}` : ""}`
+    ? `${recommendation.sectorProfile} · ${recommendation.policyStatus.toLocaleLowerCase()} policy`
     : scoring.isLoading ? "Evaluating sector-specific profile…" : "No validated sector-specific recommendation policy yet."
+  const confirmationTarget = tracking?.changeSignal === "DOWNGRADE" ? recommendationPolicy?.persistenceRules.downgradeConfirmations : recommendationPolicy?.persistenceRules.upgradeConfirmations ?? 2
 
   return <section className="position-controls" aria-label="Position controls">
     <div className="position-controls-heading">
-      <div><span>Decision controls</span><strong>Your investment plan</strong><small>These values are user-controlled and never overwritten by PortfolioAI.</small></div>
-      <button type="button" className="button button-secondary" onClick={() => setEditing((value) => !value)}>{editing ? "Cancel" : "Edit plan"}</button>
+      <div><span>Decision controls</span><strong>Your saved investment plan and PortfolioAI advisory</strong><small>Your settings remain user-controlled; PortfolioAI recommendations are always separate and read-only.</small></div>
+      <button type="button" className="button button-secondary decision-edit-button" onClick={() => setEditing((value) => !value)}>{editing ? "Cancel" : "Edit plan"}</button>
     </div>
-    <div className="position-control-grid">
-      <article><span>Target price</span><strong>{money(settings.targetPrice, currency)}</strong><small>{settings.targetPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
-      <article><span>Stop loss</span><strong>{money(settings.stopLossPrice, currency)}</strong><small>{settings.stopLossPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
-      <article><span>Your selected role</span><strong>{title(settings.portfolioRole)}</strong><small>Manual portfolio decision</small></article>
-      <article><span>Target weight</span><strong>{percent(settings.targetWeight)}</strong><small>Portfolio allocation guide</small></article>
-      <article><span>Investment horizon</span><strong>{settings.investmentHorizon || "Not set"}</strong><small>Your intended holding horizon</small></article>
-      <article className="portfolioai-suggestion">
-        <span>PortfolioAI suggestion</span>
-        <strong>{recommendation ? recommendationLabel(recommendation.suggestedRole) : "Pending"}</strong>
-        {tracking ? <span className={`recommendation-transition ${transitionClass(tracking.transitionStatus)}`}>{transitionLabel(tracking.transitionStatus)}</span> : null}
-        <small>{suggestionDetail}</small>
-        {tracking ? <small className="persistence-note">{tracking.persistenceCount} consecutive qualifying evaluation{tracking.persistenceCount === 1 ? "" : "s"} · role changes require {tracking.changeSignal === "DOWNGRADE" ? recommendationPolicy?.persistenceRules.downgradeConfirmations : recommendationPolicy?.persistenceRules.upgradeConfirmations ?? 2} confirmations</small> : null}
-        {recommendation?.policyStatus === "DRAFT" ? <em>Read-only pilot · does not change your role</em> : null}
-        {history.length ? <details className="recommendation-history"><summary>Tracking history</summary><div>{history.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : null}
-      </article>
+
+    <div className="decision-layout">
+      <section className="user-plan-panel" aria-labelledby="user-plan-title">
+        <div className="decision-panel-heading"><div className="decision-panel-icon" aria-hidden="true">◎</div><div><h3 id="user-plan-title">Your investment plan</h3><p>These values are user-controlled and never overwritten by PortfolioAI.</p></div></div>
+        <div className="user-plan-grid">
+          <article className="decision-metric"><span>Target price</span><strong>{money(settings.targetPrice, currency)}</strong><small>{settings.targetPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
+          <article className="decision-metric"><span>Stop loss</span><strong>{money(settings.stopLossPrice, currency)}</strong><small>{settings.stopLossPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
+          <article className="decision-metric"><span>Your selected role</span><strong>{title(settings.portfolioRole)}</strong><small>Manual portfolio decision</small></article>
+          <article className="decision-metric"><span>Target weight</span><strong>{percent(settings.targetWeight)}</strong><small>Portfolio allocation guide</small></article>
+          <article className="decision-metric"><span>Investment horizon</span><strong>{settings.investmentHorizon || "Not set"}</strong><small>Your intended holding horizon</small></article>
+        </div>
+        <p className="position-alert-note">Target and stop-loss values are stored in the database with alert flags so a future notification service can notify you when either level is reached.</p>
+      </section>
+
+      <aside className={`portfolioai-advisory ${suggestionTone(recommendation?.suggestedRole)}`} aria-labelledby="portfolioai-advisory-title">
+        <div className="advisory-heading"><div className="advisory-title"><div className="decision-panel-icon advisory-icon" aria-hidden="true">✦</div><div><h3 id="portfolioai-advisory-title">PortfolioAI suggestion</h3><p>Sector-aware research recommendation preview.</p></div></div>{tracking ? <span className={`recommendation-transition ${transitionClass(tracking.transitionStatus)}`}>{transitionLabel(tracking.transitionStatus)}</span> : null}</div>
+
+        <div className="advisory-recommendation">
+          <strong>{recommendation ? recommendationLabel(recommendation.suggestedRole) : "Pending"}</strong>
+          <span>{suggestionDetail}</span>
+          {recommendation?.cautions.length ? <div className="advisory-cautions">{recommendation.cautions.map((caution) => <span key={caution}>⚠ {caution}</span>)}</div> : null}
+        </div>
+
+        {tracking ? <div className="tracking-status-card"><div><span>Tracking status</span><strong>{tracking.persistenceCount} consecutive qualifying evaluation{tracking.persistenceCount === 1 ? "" : "s"} recorded</strong><small>Role changes require {confirmationTarget} confirmations</small></div><span className="tracking-chevron" aria-hidden="true">›</span></div> : null}
+
+        <div className="advisory-footer">
+          <div><strong>Read-only pilot · does not change your role</strong><small>This is a research preview. Your selected role, holdings and target values remain under your control.</small></div>
+          {history.length ? <details className="recommendation-history"><summary>Tracking history</summary><div>{history.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : null}
+        </div>
+      </aside>
     </div>
+
     {editing ? <div className="position-control-editor">
       <label><span>Target price</span><input inputMode="decimal" type="number" min="0" step="0.01" value={draft.targetPrice} onChange={(event) => setDraft((value) => ({ ...value, targetPrice: event.target.value }))} placeholder="e.g. 900" /></label>
       <label><span>Stop loss</span><input inputMode="decimal" type="number" min="0" step="0.01" value={draft.stopLossPrice} onChange={(event) => setDraft((value) => ({ ...value, stopLossPrice: event.target.value }))} placeholder="e.g. 620" /></label>
@@ -221,6 +247,5 @@ export function PositionDecisionControls({
       <button type="button" className="button button-primary" disabled={saving} onClick={() => void save()}>{saving ? "Saving…" : "Save plan"}</button>
     </div> : null}
     {error ? <div className="notice notice-error" role="alert">{error}</div> : null}
-    <p className="position-alert-note">Target and stop-loss values are stored in the database with alert flags so a future notification service can notify you when either level is reached.</p>
   </section>
 }
