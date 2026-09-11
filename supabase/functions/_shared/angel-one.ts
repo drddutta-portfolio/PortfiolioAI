@@ -40,6 +40,16 @@ interface AngelResponse<T> {
   readonly data?: T
 }
 
+export interface AngelDailyCandle {
+  readonly periodStart: string
+  readonly open: string
+  readonly high: string
+  readonly low: string
+  readonly close: string
+  readonly volume: string | null
+  readonly retrievedAt: string
+}
+
 const SESSION_TTL_MS = 20 * 60_000
 const SESSION_SAFETY_MS = 60_000
 const SESSION_ERROR_CODES = new Set(["AB1004", "AG8001", "AG8002", "AG8003", "AG8004", "AG8005"])
@@ -167,6 +177,30 @@ async function authenticate(config: AngelOneConfig, now = Date.now()) {
   return token
 }
 
+function parseDailyCandles(data: readonly unknown[][] | undefined, retrievedAt: string): AngelDailyCandle[] {
+  const result: AngelDailyCandle[] = []
+  for (const row of data ?? []) {
+    if (!Array.isArray(row) || row.length < 5) continue
+    const timestamp = new Date(String(row[0]))
+    if (Number.isNaN(timestamp.getTime())) continue
+    const open = exactDecimal(row[1], "historical open")
+    const high = exactDecimal(row[2], "historical high")
+    const low = exactDecimal(row[3], "historical low")
+    const close = exactDecimal(row[4], "historical close")
+    if (open === null || high === null || low === null || close === null) continue
+    result.push({
+      periodStart: timestamp.toISOString(),
+      open,
+      high,
+      low,
+      close,
+      volume: row.length > 5 ? exactDecimal(row[5], "historical volume") : null,
+      retrievedAt,
+    })
+  }
+  return result.sort((a, b) => a.periodStart.localeCompare(b.periodStart))
+}
+
 export class AngelOneProvider implements MarketDataProvider {
   readonly code = MARKET_DATA_PROVIDER
   constructor(private readonly config: AngelOneConfig) {}
@@ -175,50 +209,80 @@ export class AngelOneProvider implements MarketDataProvider {
     return this.getLatestPricesAttempt(instruments, false)
   }
 
+  async getDailyHistory(instrument: ProviderInstrument, fromDate: string, toDate: string) {
+    return this.getDailyHistoryAttempt(instrument, fromDate, toDate, false)
+  }
+
+  private async getDailyHistoryAttempt(instrument: ProviderInstrument, fromDate: string, toDate: string, reauthenticated: boolean): Promise<AngelDailyCandle[]> {
+    const jwt = await authenticate(this.config)
+    const retrievedAt = new Date().toISOString()
+    try {
+      const response = await fetch("https://apiconnect.angelone.in/rest/secure/angelbroking/historical/v1/getCandleData", {
+        method: "POST",
+        headers: headers(this.config, jwt),
+        body: JSON.stringify({
+          exchange: instrument.exchange,
+          symboltoken: instrument.providerInstrumentId,
+          interval: "ONE_DAY",
+          fromdate: fromDate,
+          todate: toDate,
+        }),
+      })
+      const body = await responseJson<readonly unknown[][]>(response)
+      return parseDailyCandles(body.data, retrievedAt)
+    } catch (error) {
+      if (error instanceof AngelProviderError && error.sessionExpired && !reauthenticated) {
+        clearAngelSession()
+        return this.getDailyHistoryAttempt(instrument, fromDate, toDate, true)
+      }
+      throw error
+    }
+  }
+
   private async getLatestPricesAttempt(instruments: readonly ProviderInstrument[], reauthenticated: boolean): Promise<LatestPriceObservation[]> {
     const jwt = await authenticate(this.config)
     const observations: LatestPriceObservation[] = []
     try {
       for (const batch of chunk(instruments, QUOTE_BATCH_SIZE)) {
-      const exchangeTokens: Record<string, string[]> = {}
-      batch.forEach((instrument) => {
-        ;(exchangeTokens[instrument.exchange] ??= []).push(instrument.providerInstrumentId)
-      })
-      const requestedAt = new Date().toISOString()
-      const response = await fetch("https://apiconnect.angelone.in/rest/secure/angelbroking/market/v1/quote/", {
-        method: "POST",
-        headers: headers(this.config, jwt),
-        body: JSON.stringify({ mode: "FULL", exchangeTokens }),
-      })
-      const body = await responseJson<{ readonly fetched?: readonly AngelQuote[]; readonly unfetched?: readonly unknown[] }>(response)
-      const byIdentity = new Map(batch.map((instrument) => [`${instrument.exchange}:${instrument.providerInstrumentId}`, instrument]))
-      for (const quote of body.data?.fetched ?? []) {
-        const instrument = byIdentity.get(`${String(quote.exchange)}:${String(quote.symbolToken)}`)
-        if (!instrument) continue
-        const price = exactDecimal(quote.ltp, "LTP")
-        if (price === null) continue
-        observations.push({
-          mappingId: instrument.mappingId,
-          securityId: instrument.securityId,
-          providerCode: MARKET_DATA_PROVIDER,
-          price,
-          priceTimestamp: parseAngelTimestamp(quote.exchTradeTime ?? quote.exchFeedTime),
-          retrievedAt: requestedAt,
-          marketSessionStatus: "UNKNOWN",
-          previousClose: exactDecimal(quote.close, "previous close"),
-          dayOpen: exactDecimal(quote.open, "open"),
-          dayHigh: exactDecimal(quote.high, "high"),
-          dayLow: exactDecimal(quote.low, "low"),
-          provenance: {
-            endpoint: "/rest/secure/angelbroking/market/v1/quote/",
-            mode: "FULL",
-            exchange: instrument.exchange,
-            trading_symbol: instrument.tradingSymbol,
-            symbol_token: instrument.providerInstrumentId,
-            requested_at: requestedAt,
-          },
+        const exchangeTokens: Record<string, string[]> = {}
+        batch.forEach((instrument) => {
+          ;(exchangeTokens[instrument.exchange] ??= []).push(instrument.providerInstrumentId)
         })
-      }
+        const requestedAt = new Date().toISOString()
+        const response = await fetch("https://apiconnect.angelone.in/rest/secure/angelbroking/market/v1/quote/", {
+          method: "POST",
+          headers: headers(this.config, jwt),
+          body: JSON.stringify({ mode: "FULL", exchangeTokens }),
+        })
+        const body = await responseJson<{ readonly fetched?: readonly AngelQuote[]; readonly unfetched?: readonly unknown[] }>(response)
+        const byIdentity = new Map(batch.map((instrument) => [`${instrument.exchange}:${instrument.providerInstrumentId}`, instrument]))
+        for (const quote of body.data?.fetched ?? []) {
+          const instrument = byIdentity.get(`${String(quote.exchange)}:${String(quote.symbolToken)}`)
+          if (!instrument) continue
+          const price = exactDecimal(quote.ltp, "LTP")
+          if (price === null) continue
+          observations.push({
+            mappingId: instrument.mappingId,
+            securityId: instrument.securityId,
+            providerCode: MARKET_DATA_PROVIDER,
+            price,
+            priceTimestamp: parseAngelTimestamp(quote.exchTradeTime ?? quote.exchFeedTime),
+            retrievedAt: requestedAt,
+            marketSessionStatus: "UNKNOWN",
+            previousClose: exactDecimal(quote.close, "previous close"),
+            dayOpen: exactDecimal(quote.open, "open"),
+            dayHigh: exactDecimal(quote.high, "high"),
+            dayLow: exactDecimal(quote.low, "low"),
+            provenance: {
+              endpoint: "/rest/secure/angelbroking/market/v1/quote/",
+              mode: "FULL",
+              exchange: instrument.exchange,
+              trading_symbol: instrument.tradingSymbol,
+              symbol_token: instrument.providerInstrumentId,
+              requested_at: requestedAt,
+            },
+          })
+        }
         if (batch.length === QUOTE_BATCH_SIZE) await new Promise((resolve) => setTimeout(resolve, 1100))
       }
     } catch (error) {
