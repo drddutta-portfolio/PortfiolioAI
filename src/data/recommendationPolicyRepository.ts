@@ -3,6 +3,30 @@ import { supabase } from "../lib/supabase"
 
 const db = supabase as unknown as SupabaseClient
 
+export interface RecommendationWeightPolicy {
+  readonly singleStockMax: number | null
+  readonly core?: {
+    readonly high?: readonly [number, number]
+    readonly standard?: readonly [number, number]
+    readonly cautious?: readonly [number, number]
+  }
+  readonly satellite?: {
+    readonly standard?: readonly [number, number]
+    readonly cautious?: readonly [number, number]
+  }
+  readonly watch?: readonly [number, number]
+  readonly avoid?: readonly [number, number]
+  readonly highConvictionScore: number | null
+  readonly cautionScore: number | null
+  readonly momentumCautionBelow: number | null
+  readonly riskCautionBelow: number | null
+  readonly momentumCap: number | null
+  readonly riskCap: number | null
+  readonly profileConcentrationSoftCap: number | null
+  readonly profileConcentrationHardCap: number | null
+  readonly minProfileCoverageForConcentration: number
+}
+
 export interface RecommendationPolicy {
   readonly profileCode: string
   readonly policyVersion: number
@@ -22,6 +46,7 @@ export interface RecommendationPolicy {
     readonly upgradeConfirmations: number
     readonly downgradeConfirmations: number
   }
+  readonly weightPolicy: RecommendationWeightPolicy
   readonly notes: string | null
 }
 
@@ -43,6 +68,14 @@ export interface RecommendationTrackingRecord {
   readonly createdAt: string
 }
 
+export interface PortfolioProfileExposure {
+  readonly profileCode: string
+  readonly sameProfileWeight: number
+  readonly reviewedAssignmentCoverage: number
+  readonly reviewedAssignmentCount: number
+  readonly totalPositionCount: number
+}
+
 function numberOrNull(value: unknown) {
   if (typeof value === "number") return value
   if (typeof value === "string" && value.trim() !== "") {
@@ -52,10 +85,38 @@ function numberOrNull(value: unknown) {
   return null
 }
 
+function tuple(value: unknown): readonly [number, number] | undefined {
+  if (!Array.isArray(value) || value.length !== 2) return undefined
+  const first = Number(value[0]); const second = Number(value[1])
+  return Number.isFinite(first) && Number.isFinite(second) ? [first, second] : undefined
+}
+
+function weightPolicy(value: unknown): RecommendationWeightPolicy {
+  const raw = value && typeof value === "object" ? value as Record<string, unknown> : {}
+  const core = raw.core && typeof raw.core === "object" ? raw.core as Record<string, unknown> : {}
+  const satellite = raw.satellite && typeof raw.satellite === "object" ? raw.satellite as Record<string, unknown> : {}
+  return {
+    singleStockMax: numberOrNull(raw.single_stock_max),
+    core: { high: tuple(core.high), standard: tuple(core.standard), cautious: tuple(core.cautious) },
+    satellite: { standard: tuple(satellite.standard), cautious: tuple(satellite.cautious) },
+    watch: tuple(raw.watch),
+    avoid: tuple(raw.avoid),
+    highConvictionScore: numberOrNull(raw.high_conviction_score),
+    cautionScore: numberOrNull(raw.caution_score),
+    momentumCautionBelow: numberOrNull(raw.momentum_caution_below),
+    riskCautionBelow: numberOrNull(raw.risk_caution_below),
+    momentumCap: numberOrNull(raw.momentum_cap),
+    riskCap: numberOrNull(raw.risk_cap),
+    profileConcentrationSoftCap: numberOrNull(raw.profile_concentration_soft_cap),
+    profileConcentrationHardCap: numberOrNull(raw.profile_concentration_hard_cap),
+    minProfileCoverageForConcentration: Number(raw.min_profile_coverage_for_concentration ?? 70),
+  }
+}
+
 export async function loadRecommendationPolicy(profileCode: string): Promise<RecommendationPolicy | null> {
   const result = await db
     .from("recommendation_profile_policies")
-    .select("profile_code,policy_version,status,min_score_ready_coverage,core_min_score,satellite_min_score,watch_min_score,mandatory_dimension_floors,caution_rules,sector_focus,persistence_rules,notes")
+    .select("profile_code,policy_version,status,min_score_ready_coverage,core_min_score,satellite_min_score,watch_min_score,mandatory_dimension_floors,caution_rules,sector_focus,persistence_rules,weight_policy,notes")
     .eq("profile_code", profileCode)
     .in("status", ["ACTIVE", "REVIEWED", "DRAFT"])
     .order("policy_version", { ascending: false })
@@ -79,7 +140,39 @@ export async function loadRecommendationPolicy(profileCode: string): Promise<Rec
       upgradeConfirmations: Number(persistence.upgrade_confirmations ?? 2),
       downgradeConfirmations: Number(persistence.downgrade_confirmations ?? 2),
     },
+    weightPolicy: weightPolicy(result.data.weight_policy),
     notes: typeof result.data.notes === "string" ? result.data.notes : null,
+  }
+}
+
+export async function loadPortfolioProfileExposure(
+  positions: readonly { readonly securityId: string; readonly portfolioWeightPercent: string | null }[],
+  profileCode: string,
+): Promise<PortfolioProfileExposure> {
+  const ids = positions.map((position) => position.securityId)
+  if (!ids.length) return { profileCode, sameProfileWeight: 0, reviewedAssignmentCoverage: 0, reviewedAssignmentCount: 0, totalPositionCount: 0 }
+  const result = await db
+    .from("security_scoring_profile_assignments")
+    .select("security_id,scoring_profile_code,assignment_status")
+    .in("security_id", ids)
+    .eq("assignment_status", "REVIEWED")
+  if (result.error) throw result.error
+  const assignments = new Map<string, string>((result.data ?? []).map((row) => [String(row.security_id), String(row.scoring_profile_code)]))
+  let sameProfileWeight = 0
+  let reviewedAssignmentCoverage = 0
+  for (const position of positions) {
+    const weight = Number(position.portfolioWeightPercent ?? 0)
+    if (!Number.isFinite(weight)) continue
+    const assignedProfile = assignments.get(position.securityId)
+    if (assignedProfile) reviewedAssignmentCoverage += weight
+    if (assignedProfile === profileCode) sameProfileWeight += weight
+  }
+  return {
+    profileCode,
+    sameProfileWeight,
+    reviewedAssignmentCoverage,
+    reviewedAssignmentCount: assignments.size,
+    totalPositionCount: positions.length,
   }
 }
 
