@@ -141,7 +141,7 @@ export function PositionDecisionControls({
       rationale: { reason: recommendation.reason, cautions: recommendation.cautions, sectorProfile: recommendation.sectorProfile, actionHeadline: actionPreview.headline, actionReasons: actionPreview.reasons, weightReasons: weightPreview?.reasons ?? [] },
     }).then(async (record) => {
       if (!active) return
-      setTracking(record)
+      setTracking((previous) => previous && previous.id === record.id && previous.transitionStatus === record.transitionStatus && previous.persistenceCount === record.persistenceCount && previous.actionBias === record.actionBias && previous.suggestedWeightMin === record.suggestedWeightMin && previous.suggestedWeightMax === record.suggestedWeightMax ? previous : record)
       const rows = await loadRecommendationHistory(portfolioId, securityId)
       if (active) setHistory(rows)
     }).catch(() => { /* preserve previous tracking/history */ })
