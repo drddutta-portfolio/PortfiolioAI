@@ -12,6 +12,9 @@ const response = JSON.stringify({ markdown_data: [
   "Promoter holding pledge percentage % Qtr",
   "M&M: 0.02",
   "---",
+  "Fair Price 5YrPE Upside%",
+  "M&M: 24.50",
+  "---",
 ].join("\\n") })
 
 describe("Complete Research Refresh exact metric mapping", () => {
@@ -21,8 +24,10 @@ describe("Complete Research Refresh exact metric mapping", () => {
       "ROCE_ANNUAL",
       "OPM_TTM",
       "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT",
+      "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT",
     ])
-    expect(metrics.map(metric => metric.numericValue)).toEqual([16.42, 18.6, 0.02])
+    expect(metrics.map(metric => metric.numericValue)).toEqual([16.42, 18.6, 0.02, 24.5])
+    expect(metrics.at(-1)?.periodType).toBe("POINT_IN_TIME")
   })
 
   it("rejects a substituted primary entity", () => {

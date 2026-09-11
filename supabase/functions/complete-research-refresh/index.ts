@@ -147,7 +147,7 @@ async function writeDetailed(admin: Admin, runId: string, security: Security, pr
   })
   const mapped = mapApprovedCompleteResearchMetrics(text, security.symbol, providerInstrumentId)
   if (!mapped.length) return { metricCount: 0, captured: true }
-  const definitions = await admin.from("fundamental_metric_definitions").select("code,canonical_unit,is_active")
+  const definitions = await admin.from("fundamental_metric_definitions").select("code,canonical_unit,is_active,freshness_seconds")
     .in("code", mapped.map(metric => metric.canonicalCode))
   if (definitions.error) throw definitions.error
   const definitionByCode = new Map((definitions.data ?? []).map(row => [row.code, row]))
@@ -155,26 +155,30 @@ async function writeDetailed(admin: Admin, runId: string, security: Security, pr
     const definition = definitionByCode.get(metric.canonicalCode)
     return definition?.is_active && definition.canonical_unit === metric.canonicalUnit
   })
-  const freshUntil = new Date(new Date(record.retrieved_at).getTime() + 90 * DAY).toISOString()
-  const rows = accepted.map(metric => ({
-    security_id: security.id,
-    metric_code: metric.canonicalCode,
-    source_record_id: record.id,
-    source_code: SOURCE_CODE,
-    numeric_value: metric.numericValue,
-    currency: null,
-    unit: metric.canonicalUnit,
-    period_start: null,
-    period_end: null,
-    period_type: metric.periodType,
-    accounting_standard: null,
-    consolidation_scope: "UNKNOWN",
-    observed_at: null,
-    retrieved_at: record.retrieved_at,
-    fresh_until: freshUntil,
-    evidence_status: "AVAILABLE",
-    published_at: null,
-  }))
+  const rows = accepted.map(metric => {
+    const definition = definitionByCode.get(metric.canonicalCode)
+    const freshnessSeconds = Number(definition?.freshness_seconds ?? 0)
+    if (!Number.isFinite(freshnessSeconds) || freshnessSeconds <= 0) throw new Error("METRIC_FRESHNESS_CONTRACT_INVALID")
+    return {
+      security_id: security.id,
+      metric_code: metric.canonicalCode,
+      source_record_id: record.id,
+      source_code: SOURCE_CODE,
+      numeric_value: metric.numericValue,
+      currency: null,
+      unit: metric.canonicalUnit,
+      period_start: null,
+      period_end: null,
+      period_type: metric.periodType,
+      accounting_standard: null,
+      consolidation_scope: "UNKNOWN",
+      observed_at: null,
+      retrieved_at: record.retrieved_at,
+      fresh_until: new Date(new Date(record.retrieved_at).getTime() + freshnessSeconds * 1000).toISOString(),
+      evidence_status: "AVAILABLE",
+      published_at: null,
+    }
+  })
   if (rows.length) {
     const inserted = await admin.from("fundamental_observations").upsert(rows, {
       onConflict: "security_id,metric_code,source_code,period_end,period_type,consolidation_scope,source_record_id",
@@ -493,7 +497,7 @@ Deno.serve(async request => {
       if (!overviewOk) abortRemaining = true
 
       if (!abortRemaining) {
-        const detailedQuery = `${security.name} ${security.symbol} instrument ${providerInstrumentId} latest ROCE Ann. %, OPM TTM %, promoter holding pledge percentage, Gross NPA ratio Qtr %, Net NPA ratio % Qtr, EPS Qtr YoY Growth %, net profit 3Y growth, cash EPS 3Y growth, operating cash flow 3Y growth, debt equity, interest coverage, ROA, NIM, capital adequacy and CET1`
+        const detailedQuery = `${security.name} ${security.symbol} instrument ${providerInstrumentId} latest ROCE Ann. %, OPM TTM %, promoter holding pledge percentage, Gross NPA ratio Qtr %, Net NPA ratio % Qtr, EPS Qtr YoY Growth %, Fair Price 5YrPE Upside%, net profit 3Y growth, cash EPS 3Y growth, operating cash flow 3Y growth, debt equity, interest coverage, ROA, NIM, capital adequacy and CET1`
         await executeCall(
           "DETAILED_FUNDAMENTALS",
           "GET_PARAMETER_VALUES_MULTI_STOCK",
