@@ -15,10 +15,29 @@ const SECTION_GROUPS = [
   { label: "Risk", codes: ["RISK"] },
 ] as const
 
+const OVERALL_PREVIEW_COVERAGE_GATE = 0.70
+
 const label = (value: string) => value.replaceAll("_", " ").toLocaleLowerCase().replace(/(^|\s)\S/gu, (match) => match.toLocaleUpperCase())
 const percent = (value: number | null) => value === null ? "Unavailable" : `${Math.round(value * 100)}%`
 const score = (value: number | null) => value === null ? "—" : value.toFixed(0)
 const profileSourceLabel = (source: SecurityScoringSnapshot["profileSource"]) => source === "REVIEWED_ASSIGNMENT" ? "Reviewed profile" : source === "SECTOR_RULE" ? "Sector-resolved profile" : "General fallback"
+
+function scoreBand(value: number) {
+  if (value >= 80) return "Strong"
+  if (value >= 65) return "Positive"
+  if (value >= 50) return "Neutral"
+  if (value >= 35) return "Weak"
+  return "Risk"
+}
+
+function previewOverallScore(dimensions: readonly DimensionScore[], scoreReadyCoverage: number | null) {
+  if (scoreReadyCoverage === null || scoreReadyCoverage < OVERALL_PREVIEW_COVERAGE_GATE) return null
+  const weighted = dimensions.filter((dimension) => dimension.dimensionWeight > 0)
+  if (!weighted.length || weighted.some((dimension) => dimension.rawScore === null)) return null
+  const totalWeight = weighted.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
+  if (totalWeight <= 0) return null
+  return weighted.reduce((sum, dimension) => sum + (dimension.rawScore ?? 0) * dimension.dimensionWeight, 0) / totalWeight
+}
 
 function sectionSummary(dimensions: readonly DimensionScore[], codes: readonly string[]) {
   const selected = codes.map((code) => dimensions.find((dimension) => dimension.dimensionCode === code)).filter((dimension): dimension is DimensionScore => Boolean(dimension && dimension.dimensionWeight > 0))
@@ -42,6 +61,13 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
 
   const byCode = new Map(snapshot.dimensions.map((dimension) => [dimension.dimensionCode, dimension]))
   const hasRun = Boolean(snapshot.runState)
+  const previewScore = hasRun ? null : previewOverallScore(snapshot.dimensions, snapshot.scoreReadyCoverage)
+  const displayedOverallScore = hasRun ? snapshot.overallScore : previewScore
+  const overallStatus = hasRun
+    ? label(snapshot.runState ?? "PARTIAL")
+    : previewScore === null
+      ? "Awaiting evidence gate"
+      : `Read-only preview · ${scoreBand(previewScore)}`
   const scoredSignals = snapshot.dimensions.flatMap((dimension) => (dimension.signals ?? []).filter((signal) => signal.state === "SCORED").map((signal) => ({ dimension: dimension.dimensionCode, ...signal })))
 
   return <>
@@ -55,8 +81,8 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
         </div>
         <div className="overall-score-box">
           <span>Overall stock score</span>
-          <strong>{score(snapshot.overallScore)}</strong>
-          <small>{hasRun ? label(snapshot.runState ?? "PARTIAL") : "Awaiting evidence gate"}</small>
+          <strong>{score(displayedOverallScore)}</strong>
+          <small>{overallStatus}</small>
         </div>
         <div className="score-coverage-box">
           <span>Verified evidence</span>
@@ -76,7 +102,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
         })}
       </div>
 
-      {!hasRun ? <div className="research-callout research-callout-neutral"><strong>Read-only scoring preview</strong><p>Verified evidence and score readiness are shown separately. A metric can be trusted evidence before its normalization formula is approved; official section and overall scores remain withheld until the configured score-ready gates are satisfied.</p></div> : null}
+      {!hasRun ? <div className="research-callout research-callout-neutral"><strong>Read-only scoring preview</strong><p>Verified evidence and score readiness are shown separately. The overall preview appears only after at least 70% score-ready coverage and every weighted dimension has crossed its own scoring gate. It is not an official persisted score and does not change portfolio membership or role.</p></div> : null}
 
       <div className="heatmap-heading">
         <div><p className="eyebrow">Investment heatmap</p><h3>Where the stock is strong, weak or still unknown</h3></div>
