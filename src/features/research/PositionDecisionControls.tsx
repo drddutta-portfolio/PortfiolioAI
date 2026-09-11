@@ -50,7 +50,7 @@ export function PositionDecisionControls({
   readonly portfolioId: string
   readonly securityId: string
   readonly currentRole: PortfolioRole
-  readonly currentWeight: string | null
+  readonly currentWeight?: string | null
   readonly fallbackTargetWeight: string | null
   readonly fallbackInvestmentHorizon: string | null
   readonly currency: string
@@ -150,7 +150,9 @@ export function PositionDecisionControls({
     setRecommendation(buildRecommendationPreview(scoring.data, recommendationPolicy))
   }, [recommendationPolicy, scoring.data])
 
-  const effectiveCurrentWeight = profileExposure?.currentWeight ?? (currentWeight === null ? null : Number(currentWeight))
+  const fallbackCurrentWeight = currentWeight == null ? null : Number(currentWeight)
+  const safeFallbackCurrentWeight = fallbackCurrentWeight !== null && Number.isFinite(fallbackCurrentWeight) ? fallbackCurrentWeight : null
+  const effectiveCurrentWeight = profileExposure?.currentWeight ?? safeFallbackCurrentWeight
   const weightPreview = useMemo(() => {
     if (!scoring.data || !recommendationPolicy || !recommendation) return null
     return buildSuggestedWeightPreview({
