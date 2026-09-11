@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react"
 import { loadPositionDecisionSettings, savePositionDecisionSettings, type PositionDecisionSettings, type UserPortfolioRole } from "../../data/positionDecisionRepository"
-import { loadRecommendationHistory, loadRecommendationPolicy, recordRecommendationPreview, type RecommendationPolicy, type RecommendationTrackingRecord, type RecommendationTransitionStatus } from "../../data/recommendationPolicyRepository"
+import { loadPortfolioProfileExposure, loadRecommendationHistory, loadRecommendationPolicy, recordRecommendationPreview, type PortfolioProfileExposure, type RecommendationPolicy, type RecommendationTrackingRecord, type RecommendationTransitionStatus } from "../../data/recommendationPolicyRepository"
 import { displayError } from "../../lib/displayError"
 import type { PortfolioRole } from "../portfolio/types"
 import { buildRecommendationPreview, recommendationLabel, type RecommendationPreview } from "./sectorRecommendation"
+import { buildSuggestedWeightPreview, formatWeightRange } from "./weightRecommendation"
 import { useSecurityScoring } from "./useSecurityScoring"
 import "./PositionDecisionControls.css"
 
@@ -40,6 +41,8 @@ export function PositionDecisionControls({
   portfolioId,
   securityId,
   currentRole,
+  currentWeight,
+  portfolioPositions,
   fallbackTargetWeight,
   fallbackInvestmentHorizon,
   currency,
@@ -48,6 +51,8 @@ export function PositionDecisionControls({
   readonly portfolioId: string
   readonly securityId: string
   readonly currentRole: PortfolioRole
+  readonly currentWeight: string | null
+  readonly portfolioPositions: readonly { readonly securityId: string; readonly portfolioWeightPercent: string | null }[]
   readonly fallbackTargetWeight: string | null
   readonly fallbackInvestmentHorizon: string | null
   readonly currency: string
@@ -72,6 +77,7 @@ export function PositionDecisionControls({
   const scoring = useSecurityScoring(securityId, null, null)
   const [recommendationPolicy, setRecommendationPolicy] = useState<RecommendationPolicy | null>(null)
   const [recommendation, setRecommendation] = useState<RecommendationPreview | null>(null)
+  const [profileExposure, setProfileExposure] = useState<PortfolioProfileExposure | null>(null)
   const [tracking, setTracking] = useState<RecommendationTrackingRecord | null>(null)
   const [history, setHistory] = useState<readonly RecommendationTrackingRecord[]>([])
   const [draft, setDraft] = useState(() => ({
@@ -107,14 +113,19 @@ export function PositionDecisionControls({
     if (!profileCode) {
       setRecommendationPolicy(null)
       setRecommendation(null)
+      setProfileExposure(null)
       return () => { active = false }
     }
-    void loadRecommendationPolicy(profileCode).then((policy) => {
+    void Promise.all([
+      loadRecommendationPolicy(profileCode),
+      loadPortfolioProfileExposure(portfolioPositions, profileCode),
+    ]).then(([policy, exposure]) => {
       if (!active) return
       setRecommendationPolicy(policy)
-    }).catch(() => { if (active) setRecommendationPolicy(null) })
+      setProfileExposure(exposure)
+    }).catch(() => { if (active) { setRecommendationPolicy(null); setProfileExposure(null) } })
     return () => { active = false }
-  }, [scoring.data?.profileCode])
+  }, [portfolioPositions, scoring.data?.profileCode])
 
   useEffect(() => {
     if (!scoring.data || !recommendationPolicy) {
@@ -123,6 +134,18 @@ export function PositionDecisionControls({
     }
     setRecommendation(buildRecommendationPreview(scoring.data, recommendationPolicy))
   }, [recommendationPolicy, scoring.data])
+
+  const weightPreview = useMemo(() => {
+    if (!scoring.data || !recommendationPolicy || !recommendation) return null
+    return buildSuggestedWeightPreview({
+      recommendation,
+      snapshot: scoring.data,
+      policy: recommendationPolicy,
+      currentWeight,
+      userTargetWeight: settings.targetWeight,
+      exposure: profileExposure,
+    })
+  }, [currentWeight, profileExposure, recommendation, recommendationPolicy, scoring.data, settings.targetWeight])
 
   useEffect(() => {
     let active = true
@@ -154,7 +177,7 @@ export function PositionDecisionControls({
       evidenceConfidence: scoring.data.evidenceConfidence,
       suggestedRole: recommendation.suggestedRole,
       currentUserRole: settings.portfolioRole,
-      currentWeight: null,
+      currentWeight: currentWeight === null ? null : Number(currentWeight),
       rationale: { reason: recommendation.reason, cautions: recommendation.cautions, sectorProfile: recommendation.sectorProfile },
     }).then(async (record) => {
       if (!active) return
@@ -163,7 +186,7 @@ export function PositionDecisionControls({
       if (active) setHistory(rows)
     }).catch(() => { if (active) setTracking(null) })
     return () => { active = false }
-  }, [portfolioId, recommendation, recommendationPolicy, scoring.data, securityId, settings.portfolioRole, settingsLoaded])
+  }, [currentWeight, portfolioId, recommendation, recommendationPolicy, scoring.data, securityId, settings.portfolioRole, settingsLoaded])
 
   const save = async () => {
     setSaving(true); setError(null)
@@ -231,13 +254,19 @@ export function PositionDecisionControls({
           {recommendation?.cautions.length ? <div className="advisory-cautions" aria-label="Recommendation cautions">{recommendation.cautions.map((caution) => <span key={caution}>{caution}</span>)}</div> : null}
         </div>
 
+        {weightPreview ? <section className={`weight-preview weight-${weightPreview.position.toLocaleLowerCase().replaceAll("_", "-")}`} aria-label="PortfolioAI suggested weight range">
+          <div className="weight-preview-main"><span>Suggested weight range</span><strong>{formatWeightRange(weightPreview)}</strong><small>{weightPreview.label}</small></div>
+          <div className="weight-preview-context"><span><b>Current</b>{weightPreview.currentWeight === null ? "Unavailable" : `${weightPreview.currentWeight.toFixed(2)}%`}</span><span><b>Your target</b>{weightPreview.userTargetWeight === null ? "Not set" : `${weightPreview.userTargetWeight}%`}</span>{weightPreview.profileExposure !== null ? <span><b>Known {recommendation?.sectorProfile ?? "profile"} exposure</b>{weightPreview.profileExposure.toFixed(2)}%</span> : null}</div>
+          <details className="weight-rationale"><summary>Why this range?</summary><ul>{weightPreview.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></details>
+        </section> : null}
+
         {tracking ? <div className="advisory-tracking-summary">
           <div><span>Tracking status</span><strong>{tracking.persistenceCount} consecutive qualifying evaluation{tracking.persistenceCount === 1 ? "" : "s"} recorded</strong><small>Role changes require {confirmationTarget} confirmations.</small></div>
           <span aria-hidden="true">›</span>
         </div> : null}
 
         <div className="advisory-footer">
-          <div><strong>Read-only pilot · does not change your role</strong><small>This is a research preview. Your selected role, holdings, target weight, target price and stop loss remain under your control.</small></div>
+          <div><strong>Read-only pilot · does not change your role or weight</strong><small>This is a research preview. Your selected role, holdings, target weight, target price and stop loss remain under your control.</small></div>
           {history.length ? <details className="recommendation-history"><summary>Tracking history</summary><div>{history.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : null}
         </div>
       </section>
