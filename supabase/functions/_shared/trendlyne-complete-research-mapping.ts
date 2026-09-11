@@ -3,7 +3,7 @@ export type CompleteResearchMetric = {
   readonly providerLabel: string
   readonly numericValue: number
   readonly canonicalUnit: string
-  readonly periodType: "YEAR" | "TTM" | "QUARTER"
+  readonly periodType: "YEAR" | "TTM" | "QUARTER" | "POINT_IN_TIME"
 }
 
 type MappingSpec = Omit<CompleteResearchMetric, "numericValue">
@@ -15,6 +15,7 @@ const APPROVED_MAPPINGS: readonly MappingSpec[] = [
   { canonicalCode: "GROSS_NPA_PERCENT", providerLabel: "Gross NPA ratio Qtr %", canonicalUnit: "PERCENT", periodType: "QUARTER" },
   { canonicalCode: "NET_NPA_PERCENT", providerLabel: "Net NPA ratio % Qtr", canonicalUnit: "PERCENT", periodType: "QUARTER" },
   { canonicalCode: "EPS_GROWTH_YOY", providerLabel: "EPS Qtr YoY Growth %", canonicalUnit: "PERCENT", periodType: "QUARTER" },
+  { canonicalCode: "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT", providerLabel: "Fair Price 5YrPE Upside%", canonicalUnit: "PERCENT", periodType: "POINT_IN_TIME" },
 ]
 
 const unwrapMarkdown = (providerResult: string): string => {
