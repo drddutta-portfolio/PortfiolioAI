@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { discoverBankGrowthContract, type BankGrowthDiscoveryResult } from "../../data/bankGrowthDiscoveryRepository"
+import { executeBankBenchmarkRefresh, planBankBenchmarkRefresh, type BankBenchmarkRefreshPlan, type BankBenchmarkRefreshResult } from "../../data/bankBenchmarkRefreshRepository"
 import { executeCompleteResearchRefresh, planCompleteResearchRefresh, type CompleteResearchRefreshPlan, type CompleteResearchRefreshResult } from "../../data/completeResearchRefreshRepository"
 import { executeMarketHistoryRefresh, planMarketHistoryRefresh, type MarketHistoryRefreshPlan, type MarketHistoryRefreshResult } from "../../data/marketHistoryRefreshRepository"
 import { displayError } from "../../lib/displayError"
@@ -15,9 +16,11 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
   const [result, setResult] = useState<CompleteResearchRefreshResult | null>(null)
   const [marketPlan, setMarketPlan] = useState<MarketHistoryRefreshPlan | null>(null)
   const [marketResult, setMarketResult] = useState<MarketHistoryRefreshResult | null>(null)
+  const [benchmarkPlan, setBenchmarkPlan] = useState<BankBenchmarkRefreshPlan | null>(null)
+  const [benchmarkResult, setBenchmarkResult] = useState<BankBenchmarkRefreshResult | null>(null)
   const [growthResult, setGrowthResult] = useState<BankGrowthDiscoveryResult | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState<"PLAN" | "EXECUTE" | "MARKET_PLAN" | "MARKET_EXECUTE" | "GROWTH" | null>(null)
+  const [busy, setBusy] = useState<"PLAN" | "EXECUTE" | "MARKET_PLAN" | "MARKET_EXECUTE" | "BENCHMARK_PLAN" | "BENCHMARK_EXECUTE" | "GROWTH" | null>(null)
 
   const createPlan = async () => {
     setBusy("PLAN"); setError(null); setResult(null)
@@ -57,6 +60,27 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       setMarketResult(next)
       onCompleted()
       setMarketPlan(await planMarketHistoryRefresh(portfolioId, securityId))
+    } catch (reason: unknown) { setError(displayError(reason)) }
+    finally { setBusy(null) }
+  }
+
+  const createBenchmarkPlan = async () => {
+    setBusy("BENCHMARK_PLAN"); setError(null); setBenchmarkResult(null)
+    try { setBenchmarkPlan(await planBankBenchmarkRefresh(portfolioId, securityId)) }
+    catch (reason: unknown) { setError(displayError(reason)) }
+    finally { setBusy(null) }
+  }
+
+  const executeBenchmark = async () => {
+    if (!benchmarkPlan) return
+    const accepted = window.confirm(`NIFTY Bank benchmark refresh will use ${benchmarkPlan.estimatedProviderCalls} Angel One historical call and derive 12M relative strength for ${symbol}. Continue?`)
+    if (!accepted) return
+    setBusy("BENCHMARK_EXECUTE"); setError(null); setBenchmarkResult(null)
+    try {
+      const next = await executeBankBenchmarkRefresh(portfolioId, securityId)
+      setBenchmarkResult(next)
+      onCompleted()
+      setBenchmarkPlan(await planBankBenchmarkRefresh(portfolioId, securityId))
     } catch (reason: unknown) { setError(displayError(reason)) }
     finally { setBusy(null) }
   }
@@ -116,10 +140,30 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
             <Metric label="Interval" value={marketPlan.interval} />
             <Metric label="Existing latest candle" value={marketPlan.latestExistingCandle ? new Date(marketPlan.latestExistingCandle).toLocaleDateString("en-IN") : "None"} />
           </div>
-          <p className="assessment-note">After a successful refresh, Momentum can score from 12M + 6M price returns and Risk can score from GNPA + NNPA + max drawdown. Relative strength and benchmark-relative volatility remain pending.</p>
+          <p className="assessment-note">Momentum currently scores from absolute 12M + 6M returns. Risk uses GNPA + NNPA + max drawdown. The benchmark step below adds NIFTY Bank relative strength.</p>
           <button type="button" className="button button-primary" disabled={busy !== null} onClick={executeMarket}>{busy === "MARKET_EXECUTE" ? "Refreshing market history…" : `Run market history refresh · ${marketPlan.estimatedProviderCalls} call`}</button>
         </> : null}
         {marketResult ? <div className="notice notice-success" role="status"><strong>Market history refreshed.</strong><span>{marketResult.candlesStored} daily candles stored. {marketResult.derivedMetrics.length} deterministic market metrics were derived and Research scoring has been reloaded.</span></div> : null}
+      </div>
+
+      <div className="complete-refresh-plan">
+        <div>
+          <p className="eyebrow">Stage 8.6F · Benchmark-relative momentum</p>
+          <h3>Add NIFTY Bank Relative Strength</h3>
+          <p>Fetches NIFTY Bank daily history from Angel One, aligns it to HDFCBANK's stored daily closes and derives 12M relative strength as stock return minus benchmark return.</p>
+        </div>
+        <button type="button" className="button button-secondary" disabled={busy !== null} onClick={createBenchmarkPlan}>{busy === "BENCHMARK_PLAN" ? "Planning…" : benchmarkPlan ? "Re-plan benchmark refresh" : "Plan NIFTY Bank benchmark"}</button>
+        {benchmarkPlan ? <>
+          <div className="summary-grid">
+            <Metric label="Angel One calls" value={String(benchmarkPlan.estimatedProviderCalls)} />
+            <Metric label="Benchmark" value={benchmarkPlan.benchmark} />
+            <Metric label="History window" value={`${benchmarkPlan.historyDays} days`} />
+            <Metric label="Existing benchmark candle" value={benchmarkPlan.latestBenchmarkCandle ? new Date(benchmarkPlan.latestBenchmarkCandle).toLocaleDateString("en-IN") : "None"} />
+          </div>
+          <p className="assessment-note">The benchmark instrument is resolved from the current Angel One instrument master using exact accepted aliases before any history is stored. No Trendlyne technical signal is involved.</p>
+          <button type="button" className="button button-primary" disabled={busy !== null} onClick={executeBenchmark}>{busy === "BENCHMARK_EXECUTE" ? "Refreshing NIFTY Bank…" : `Run NIFTY Bank benchmark · ${benchmarkPlan.estimatedProviderCalls} call`}</button>
+        </> : null}
+        {benchmarkResult ? <div className="notice notice-success" role="status"><strong>NIFTY Bank relative strength added.</strong><span>HDFCBANK 12M return {benchmarkResult.stockReturn12M.toFixed(2)}% vs NIFTY Bank {benchmarkResult.benchmarkReturn12M.toFixed(2)}%; relative strength {benchmarkResult.relativeStrength12M.toFixed(2)} percentage points. Research scoring has been reloaded.</span></div> : null}
       </div>
 
       <div className="complete-refresh-plan">
