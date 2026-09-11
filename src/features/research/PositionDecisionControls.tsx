@@ -4,6 +4,7 @@ import { loadPortfolioProfileExposure, loadRecommendationHistory, loadRecommenda
 import { displayError } from "../../lib/displayError"
 import type { PortfolioRole } from "../portfolio/types"
 import { buildActionBiasPreview } from "./actionRecommendation"
+import { RecommendationInterpretationPanel } from "./RecommendationInterpretationPanel"
 import { buildRecommendationPreview, recommendationLabel, type RecommendationPreview } from "./sectorRecommendation"
 import { buildSuggestedWeightPreview, formatWeightRange } from "./weightRecommendation"
 import { useSecurityScoring } from "./useSecurityScoring"
@@ -138,7 +139,22 @@ export function PositionDecisionControls({
       overallScore: recommendation.overallScore, scoreReadyCoverage: recommendation.scoreReadyCoverage, evidenceConfidence: scoring.data.evidenceConfidence,
       suggestedRole: recommendation.suggestedRole, actionBias: actionPreview.actionBias, currentUserRole: settings.portfolioRole, currentWeight: effectiveCurrentWeight,
       suggestedWeightMin: weightPreview?.min ?? null, suggestedWeightMax: weightPreview?.max ?? null,
-      rationale: { reason: recommendation.reason, cautions: recommendation.cautions, sectorProfile: recommendation.sectorProfile, actionHeadline: actionPreview.headline, actionReasons: actionPreview.reasons, weightReasons: weightPreview?.reasons ?? [] },
+      rationale: {
+        reason: recommendation.reason,
+        cautions: recommendation.cautions,
+        sectorProfile: recommendation.sectorProfile,
+        actionHeadline: actionPreview.headline,
+        actionReasons: actionPreview.reasons,
+        weightReasons: weightPreview?.reasons ?? [],
+        dimensions: scoring.data.dimensions.map((dimension) => ({
+          code: dimension.dimensionCode,
+          score: dimension.rawScore,
+          evidenceCoverage: dimension.evidenceCoverage,
+          scoreReadyCoverage: dimension.scoreReadyCoverage,
+          confidence: dimension.confidence,
+          heatState: dimension.heatState,
+        })),
+      },
     }).then(async (record) => {
       if (!active) return
       setTracking((previous) => previous && previous.id === record.id && previous.transitionStatus === record.transitionStatus && previous.persistenceCount === record.persistenceCount && previous.actionBias === record.actionBias && previous.suggestedWeightMin === record.suggestedWeightMin && previous.suggestedWeightMax === record.suggestedWeightMax ? previous : record)
@@ -196,6 +212,8 @@ export function PositionDecisionControls({
         <div className="advisory-footer"><div><strong>Read-only pilot · does not change your role or weight</strong><small>This is a research preview. Your selected role, holdings, target weight, target price and stop loss remain under your control.</small></div>{history.length ? <details className="recommendation-history"><summary>Tracking history</summary><div>{history.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{item.actionBias ? `${title(item.actionBias)} · ` : ""}{rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax) ? `${rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax)} · ` : ""}{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : <span className="tracking-history-empty">Tracking history will appear after the first qualifying evaluation.</span>}</div>
       </section>
     </div>
+
+    <RecommendationInterpretationPanel portfolioId={portfolioId} securityId={securityId} enabled={Boolean(tracking && recommendation && recommendation.suggestedRole !== "INSUFFICIENT")} />
 
     {editing ? <div className="position-control-editor">
       <label><span>Target price</span><input inputMode="decimal" type="number" min="0" step="0.01" value={draft.targetPrice} onChange={(event) => setDraft((value) => ({ ...value, targetPrice: event.target.value }))} placeholder="e.g. 900" /></label>
