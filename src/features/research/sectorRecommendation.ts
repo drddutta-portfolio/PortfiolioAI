@@ -40,6 +40,19 @@ export function buildRecommendationPreview(snapshot: SecurityScoringSnapshot, po
     return [rule.label ?? `${dimensionCode.replaceAll("_", " ")} caution`]
   })
 
+  const thresholdsValidated = policy.coreMinScore !== null || policy.satelliteMinScore !== null || policy.watchMinScore !== null
+  if (!thresholdsValidated) {
+    return {
+      suggestedRole: "INSUFFICIENT",
+      overallScore,
+      scoreReadyCoverage,
+      cautions,
+      sectorProfile: snapshot.profileName,
+      policyStatus: policy.status,
+      reason: "Sector recommendation thresholds are not yet validated for this profile.",
+    }
+  }
+
   if (scoreReadyCoverage < policy.minScoreReadyCoverage || overallScore === null) {
     return {
       suggestedRole: "INSUFFICIENT",
