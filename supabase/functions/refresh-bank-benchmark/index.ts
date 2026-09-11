@@ -12,6 +12,7 @@ const CONFIRMATION = "OWNER_CONFIRMED_BANK_BENCHMARK_REFRESH"
 const LEASE_SECONDS = 300
 const COOLDOWN_SECONDS = 60
 const ACCEPTED_ALIASES = new Set(["NIFTY BANK", "BANKNIFTY"])
+const REQUIRED_INDEX_INSTRUMENT_TYPE = "AMXIDX"
 
 type Admin = ReturnType<typeof createClient>
 type Body = { readonly action?: unknown; readonly portfolioId?: unknown; readonly securityId?: unknown; readonly confirmation?: unknown }
@@ -28,14 +29,15 @@ function dayKey(value: string) { return value.slice(0, 10) }
 function exactBenchmark(master: readonly MasterRow[]) {
   const matches = master.filter((row) => {
     const exchange = text(row.exch_seg)?.toUpperCase()
-    if (exchange !== "NSE") return false
+    const instrumentType = text(row.instrumenttype)?.toUpperCase()
+    if (exchange !== "NSE" || instrumentType !== REQUIRED_INDEX_INSTRUMENT_TYPE) return false
     const name = text(row.name)?.toUpperCase() ?? ""
     const symbol = text(row.symbol)?.toUpperCase() ?? ""
     return ACCEPTED_ALIASES.has(name) || ACCEPTED_ALIASES.has(symbol)
   }).map((row) => ({ token: text(row.token), exchange: text(row.exch_seg), symbol: text(row.symbol), name: text(row.name), instrumentType: text(row.instrumenttype) }))
     .filter((row) => row.token && row.exchange && row.symbol)
   const byToken = new Map(matches.map((row) => [row.token!, row]))
-  if (byToken.size !== 1) throw new SafeOperationalError("BENCHMARK_IDENTITY_AMBIGUOUS", "NIFTY Bank could not be resolved to exactly one Angel One instrument.", 409)
+  if (byToken.size !== 1) throw new SafeOperationalError("BENCHMARK_IDENTITY_AMBIGUOUS", "NIFTY Bank could not be resolved to exactly one Angel One AMXIDX instrument.", 409)
   return [...byToken.values()][0]!
 }
 
@@ -96,7 +98,7 @@ Deno.serve(async (request) => {
     const latestBenchmark = await admin.from("market_benchmark_price_history").select("period_start").eq("benchmark_code", BENCHMARK_CODE).eq("provider_code", MARKET_DATA_PROVIDER).eq("interval", "ONE_DAY").order("period_start", { ascending: false }).limit(1).maybeSingle()
     if (latestBenchmark.error) throw latestBenchmark.error
 
-    if (body.action === "PLAN") return json(200, { mode: "BANK_BENCHMARK_REFRESH_PLAN", providerCalls: 0, estimatedProviderCalls: 1, benchmark: BENCHMARK_NAME, benchmarkCode: BENCHMARK_CODE, historyDays: HISTORY_DAYS, latestBenchmarkCandle: latestBenchmark.data?.period_start ?? null, stockHistoryObservations: stockRows.length, metricAfterRefresh: "RELATIVE_STRENGTH_12M", note: "Planning uses zero Angel One historical calls. Execution resolves the NIFTY Bank instrument exactly from the current Angel One master before fetching history." })
+    if (body.action === "PLAN") return json(200, { mode: "BANK_BENCHMARK_REFRESH_PLAN", providerCalls: 0, estimatedProviderCalls: 1, benchmark: BENCHMARK_NAME, benchmarkCode: BENCHMARK_CODE, historyDays: HISTORY_DAYS, latestBenchmarkCandle: latestBenchmark.data?.period_start ?? null, stockHistoryObservations: stockRows.length, metricAfterRefresh: "RELATIVE_STRENGTH_12M", note: "Planning uses zero Angel One historical calls. Execution resolves the NIFTY Bank AMXIDX instrument exactly from the current Angel One master before fetching history." })
     if (body.confirmation !== CONFIRMATION) return json(409, { error: "Explicit owner confirmation is required.", providerCalls: 0 })
 
     const holder = crypto.randomUUID()
@@ -109,7 +111,7 @@ Deno.serve(async (request) => {
       const master = await masterResponse.json() as readonly MasterRow[]
       const resolved = exactBenchmark(master)
       const verifiedAt = new Date().toISOString()
-      const mapping = await admin.from("market_benchmarks").upsert({ code: BENCHMARK_CODE, name: BENCHMARK_NAME, provider_code: MARKET_DATA_PROVIDER, provider_instrument_id: resolved.token, exchange: resolved.exchange, trading_symbol: resolved.symbol, mapping_status: "VERIFIED", mapping_evidence: { method: "Exact alias match in Angel One instrument master", accepted_aliases: [...ACCEPTED_ALIASES], candidate: resolved, instrument_master_retrieved_at: verifiedAt, mapping_version: "nifty-bank-v1" }, verified_at: verifiedAt, updated_at: verifiedAt }, { onConflict: "code" })
+      const mapping = await admin.from("market_benchmarks").upsert({ code: BENCHMARK_CODE, name: BENCHMARK_NAME, provider_code: MARKET_DATA_PROVIDER, provider_instrument_id: resolved.token, exchange: resolved.exchange, trading_symbol: resolved.symbol, mapping_status: "VERIFIED", mapping_evidence: { method: "Exact NSE AMXIDX alias match in Angel One instrument master", accepted_aliases: [...ACCEPTED_ALIASES], required_instrument_type: REQUIRED_INDEX_INSTRUMENT_TYPE, candidate: resolved, instrument_master_retrieved_at: verifiedAt, mapping_version: "nifty-bank-v2" }, verified_at: verifiedAt, updated_at: verifiedAt }, { onConflict: "code" })
       if (mapping.error) throw mapping.error
 
       const to = new Date(), from = new Date(to.getTime() - HISTORY_DAYS * DAY)
