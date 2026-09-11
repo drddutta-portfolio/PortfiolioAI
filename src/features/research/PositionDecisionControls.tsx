@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react"
 import { loadPositionDecisionSettings, savePositionDecisionSettings, type PositionDecisionSettings, type UserPortfolioRole } from "../../data/positionDecisionRepository"
+import { loadRecommendationPolicy, type RecommendationPolicy } from "../../data/recommendationPolicyRepository"
 import { displayError } from "../../lib/displayError"
 import type { PortfolioRole } from "../portfolio/types"
+import { buildRecommendationPreview, recommendationLabel, type RecommendationPreview } from "./sectorRecommendation"
+import { useSecurityScoring } from "./useSecurityScoring"
 import "./PositionDecisionControls.css"
 
 const ROLES: readonly UserPortfolioRole[] = ["CORE", "SATELLITE", "THEMATIC", "ETF", "OTHER"]
@@ -52,6 +55,9 @@ export function PositionDecisionControls({
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const scoring = useSecurityScoring(securityId, null, null)
+  const [recommendationPolicy, setRecommendationPolicy] = useState<RecommendationPolicy | null>(null)
+  const [recommendation, setRecommendation] = useState<RecommendationPreview | null>(null)
   const [draft, setDraft] = useState(() => ({
     portfolioRole: fallback.portfolioRole,
     targetWeight: fallback.targetWeight ?? "",
@@ -77,6 +83,29 @@ export function PositionDecisionControls({
     return () => { active = false }
   }, [fallback, portfolioId, securityId])
 
+  useEffect(() => {
+    let active = true
+    const profileCode = scoring.data?.profileCode
+    if (!profileCode) {
+      setRecommendationPolicy(null)
+      setRecommendation(null)
+      return () => { active = false }
+    }
+    void loadRecommendationPolicy(profileCode).then((policy) => {
+      if (!active) return
+      setRecommendationPolicy(policy)
+    }).catch(() => { if (active) setRecommendationPolicy(null) })
+    return () => { active = false }
+  }, [scoring.data?.profileCode])
+
+  useEffect(() => {
+    if (!scoring.data || !recommendationPolicy) {
+      setRecommendation(null)
+      return
+    }
+    setRecommendation(buildRecommendationPreview(scoring.data, recommendationPolicy))
+  }, [recommendationPolicy, scoring.data])
+
   const save = async () => {
     setSaving(true); setError(null)
     try {
@@ -99,6 +128,10 @@ export function PositionDecisionControls({
     }
   }
 
+  const suggestionDetail = recommendation
+    ? `${recommendation.sectorProfile} · ${recommendation.policyStatus.toLocaleLowerCase()} policy${recommendation.cautions.length ? ` · ${recommendation.cautions.join("; ")}` : ""}`
+    : scoring.isLoading ? "Evaluating sector-specific profile…" : "No validated sector-specific recommendation policy yet."
+
   return <section className="position-controls" aria-label="Position controls">
     <div className="position-controls-heading">
       <div><span>Decision controls</span><strong>Your investment plan</strong><small>These values are user-controlled and never overwritten by PortfolioAI.</small></div>
@@ -110,7 +143,7 @@ export function PositionDecisionControls({
       <article><span>Your selected role</span><strong>{title(settings.portfolioRole)}</strong><small>Manual portfolio decision</small></article>
       <article><span>Target weight</span><strong>{percent(settings.targetWeight)}</strong><small>Portfolio allocation guide</small></article>
       <article><span>Investment horizon</span><strong>{settings.investmentHorizon || "Not set"}</strong><small>Your intended holding horizon</small></article>
-      <article className="portfolioai-suggestion"><span>PortfolioAI suggestion</span><strong>Pending</strong><small>Recommendation layer will remain separate from your selected role.</small></article>
+      <article className="portfolioai-suggestion"><span>PortfolioAI suggestion</span><strong>{recommendation ? recommendationLabel(recommendation.suggestedRole) : "Pending"}</strong><small>{suggestionDetail}</small>{recommendation?.policyStatus === "DRAFT" ? <em>Read-only pilot · does not change your role</em> : null}</article>
     </div>
     {editing ? <div className="position-control-editor">
       <label><span>Target price</span><input inputMode="decimal" type="number" min="0" step="0.01" value={draft.targetPrice} onChange={(event) => setDraft((value) => ({ ...value, targetPrice: event.target.value }))} placeholder="e.g. 900" /></label>
@@ -121,6 +154,6 @@ export function PositionDecisionControls({
       <button type="button" className="button button-primary" disabled={saving} onClick={() => void save()}>{saving ? "Saving…" : "Save plan"}</button>
     </div> : null}
     {error ? <div className="notice notice-error" role="alert">{error}</div> : null}
-    <p className="position-alert-note">Target and stop-loss values are now stored in the database with alert flags so a future notification service can notify you when either level is reached.</p>
+    <p className="position-alert-note">Target and stop-loss values are stored in the database with alert flags so a future notification service can notify you when either level is reached.</p>
   </section>
 }
