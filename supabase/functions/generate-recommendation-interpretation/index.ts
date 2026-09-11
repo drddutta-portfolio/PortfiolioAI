@@ -93,6 +93,18 @@ function outputText(payload: Record<string, unknown>): string {
   throw new Error("AI_OUTPUT_MISSING")
 }
 
+function providerErrorDetail(payload: unknown): { detail: string | null; code: string | null } {
+  if (!payload || typeof payload !== "object") return { detail: null, code: null }
+  const root = payload as Record<string, unknown>
+  const error = root.error && typeof root.error === "object" ? root.error as Record<string, unknown> : root
+  const message = typeof error.message === "string" ? error.message.trim() : null
+  const type = typeof error.type === "string" ? error.type.trim() : null
+  const code = typeof error.code === "string" ? error.code.trim() : null
+  const param = typeof error.param === "string" ? error.param.trim() : null
+  const detail = [message, type ? `Type: ${type}` : null, param ? `Parameter: ${param}` : null].filter(Boolean).join(" · ")
+  return { detail: detail || null, code: code || null }
+}
+
 Deno.serve(async request => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: cors })
   if (request.method !== "POST") return reply(405, { error: "Method not allowed." })
@@ -191,8 +203,23 @@ Deno.serve(async request => {
       }),
     })
     if (!response.ok) {
-      await admin.from("stock_recommendation_runs").update({ ai_interpretation_status: "FAILED" }).eq("id", recommendation.data.id)
-      return reply(502, { error: "AI interpretation provider request failed.", code: `AI_PROVIDER_HTTP_${response.status}` })
+      let providerPayload: unknown = null
+      try { providerPayload = await response.clone().json() } catch { /* response body is optional */ }
+      const providerError = providerErrorDetail(providerPayload)
+      await admin.from("stock_recommendation_runs").update({
+        ai_interpretation_status: "FAILED",
+        ai_interpretation_usage: {
+          provider_http_status: response.status,
+          provider_error_code: providerError.code,
+          provider_error_detail: providerError.detail,
+          failed_at: new Date().toISOString(),
+        },
+      }).eq("id", recommendation.data.id)
+      return reply(502, {
+        error: "OpenAI could not generate the interpretation.",
+        detail: providerError.detail ?? `Provider returned HTTP ${response.status}.`,
+        code: providerError.code ?? `AI_PROVIDER_HTTP_${response.status}`,
+      })
     }
     const responsePayload = await response.json() as Record<string, unknown>
     const interpretation = validateInterpretation(parseJsonObject(outputText(responsePayload)))
