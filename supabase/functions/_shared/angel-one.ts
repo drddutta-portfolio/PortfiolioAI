@@ -52,7 +52,8 @@ export interface AngelDailyCandle {
 
 const SESSION_TTL_MS = 20 * 60_000
 const SESSION_SAFETY_MS = 60_000
-const SESSION_ERROR_CODES = new Set(["AB1004", "AG8001", "AG8002", "AG8003", "AG8004", "AG8005"])
+const SESSION_ERROR_CODES = new Set(["AG8001", "AG8002", "AG8003", "AG8004", "AG8005"])
+const TRANSIENT_HISTORY_ERROR_CODES = new Set(["AB1004"])
 
 let cachedJwt: { readonly token: string; readonly expiresAt: number } | null = null
 
@@ -210,10 +211,16 @@ export class AngelOneProvider implements MarketDataProvider {
   }
 
   async getDailyHistory(instrument: ProviderInstrument, fromDate: string, toDate: string) {
-    return this.getDailyHistoryAttempt(instrument, fromDate, toDate, false)
+    return this.getDailyHistoryAttempt(instrument, fromDate, toDate, false, false)
   }
 
-  private async getDailyHistoryAttempt(instrument: ProviderInstrument, fromDate: string, toDate: string, reauthenticated: boolean): Promise<AngelDailyCandle[]> {
+  private async getDailyHistoryAttempt(
+    instrument: ProviderInstrument,
+    fromDate: string,
+    toDate: string,
+    reauthenticated: boolean,
+    transientRetried: boolean,
+  ): Promise<AngelDailyCandle[]> {
     const jwt = await authenticate(this.config)
     const retrievedAt = new Date().toISOString()
     try {
@@ -233,7 +240,11 @@ export class AngelOneProvider implements MarketDataProvider {
     } catch (error) {
       if (error instanceof AngelProviderError && error.sessionExpired && !reauthenticated) {
         clearAngelSession()
-        return this.getDailyHistoryAttempt(instrument, fromDate, toDate, true)
+        return this.getDailyHistoryAttempt(instrument, fromDate, toDate, true, transientRetried)
+      }
+      if (error instanceof AngelProviderError && TRANSIENT_HISTORY_ERROR_CODES.has(error.providerCode) && !transientRetried) {
+        await new Promise((resolve) => setTimeout(resolve, 1500))
+        return this.getDailyHistoryAttempt(instrument, fromDate, toDate, reauthenticated, true)
       }
       throw error
     }
