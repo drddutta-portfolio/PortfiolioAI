@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { discoverBankGrowthContract, type BankGrowthDiscoveryResult } from "../../data/bankGrowthDiscoveryRepository"
 import { executeCompleteResearchRefresh, planCompleteResearchRefresh, type CompleteResearchRefreshPlan, type CompleteResearchRefreshResult } from "../../data/completeResearchRefreshRepository"
+import { executeMarketHistoryRefresh, planMarketHistoryRefresh, type MarketHistoryRefreshPlan, type MarketHistoryRefreshResult } from "../../data/marketHistoryRefreshRepository"
 import { displayError } from "../../lib/displayError"
 import "./CompleteResearchRefreshPanel.css"
 
@@ -12,9 +13,11 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
 }) {
   const [plan, setPlan] = useState<CompleteResearchRefreshPlan | null>(null)
   const [result, setResult] = useState<CompleteResearchRefreshResult | null>(null)
+  const [marketPlan, setMarketPlan] = useState<MarketHistoryRefreshPlan | null>(null)
+  const [marketResult, setMarketResult] = useState<MarketHistoryRefreshResult | null>(null)
   const [growthResult, setGrowthResult] = useState<BankGrowthDiscoveryResult | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState<"PLAN" | "EXECUTE" | "GROWTH" | null>(null)
+  const [busy, setBusy] = useState<"PLAN" | "EXECUTE" | "MARKET_PLAN" | "MARKET_EXECUTE" | "GROWTH" | null>(null)
 
   const createPlan = async () => {
     setBusy("PLAN"); setError(null); setResult(null)
@@ -33,6 +36,27 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       setResult(next)
       if (next.status !== "FAILED") onCompleted()
       setPlan(await planCompleteResearchRefresh(portfolioId, securityId))
+    } catch (reason: unknown) { setError(displayError(reason)) }
+    finally { setBusy(null) }
+  }
+
+  const createMarketPlan = async () => {
+    setBusy("MARKET_PLAN"); setError(null); setMarketResult(null)
+    try { setMarketPlan(await planMarketHistoryRefresh(portfolioId, securityId)) }
+    catch (reason: unknown) { setError(displayError(reason)) }
+    finally { setBusy(null) }
+  }
+
+  const executeMarket = async () => {
+    if (!marketPlan) return
+    const accepted = window.confirm(`Historical market refresh for ${symbol} will use ${marketPlan.estimatedProviderCalls} Angel One call and store about ${marketPlan.historyDays} calendar days of daily OHLCV. Continue?`)
+    if (!accepted) return
+    setBusy("MARKET_EXECUTE"); setError(null); setMarketResult(null)
+    try {
+      const next = await executeMarketHistoryRefresh(portfolioId, securityId)
+      setMarketResult(next)
+      onCompleted()
+      setMarketPlan(await planMarketHistoryRefresh(portfolioId, securityId))
     } catch (reason: unknown) { setError(displayError(reason)) }
     finally { setBusy(null) }
   }
@@ -77,15 +101,37 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       <span>{result.providerSucceeded} of {result.providerCalls} provider calls succeeded. Any accepted research evidence has been reloaded.</span>
     </div> : null}
 
-    {symbol === "HDFCBANK" ? <div className="complete-refresh-plan">
-      <div>
-        <p className="eyebrow">Reference-stock completion</p>
-        <h3>Discover missing bank growth fields</h3>
-        <p>Targets Advances Growth YoY and Deposits Growth YoY only. This is discovery evidence, not automatic promotion or scoring.</p>
+    {symbol === "HDFCBANK" ? <>
+      <div className="complete-refresh-plan">
+        <div>
+          <p className="eyebrow">Stage 8.6E · Market evidence</p>
+          <h3>Build Momentum & Risk from Angel One</h3>
+          <p>Loads daily price history and derives PortfolioAI's own 12M/6M momentum, 1Y max drawdown and 1Y volatility. Trendlyne technical scores are not used.</p>
+        </div>
+        <button type="button" className="button button-secondary" disabled={busy !== null} onClick={createMarketPlan}>{busy === "MARKET_PLAN" ? "Planning…" : marketPlan ? "Re-plan market refresh" : "Plan market history refresh"}</button>
+        {marketPlan ? <>
+          <div className="summary-grid">
+            <Metric label="Angel One calls" value={String(marketPlan.estimatedProviderCalls)} />
+            <Metric label="History window" value={`${marketPlan.historyDays} days`} />
+            <Metric label="Interval" value={marketPlan.interval} />
+            <Metric label="Existing latest candle" value={marketPlan.latestExistingCandle ? new Date(marketPlan.latestExistingCandle).toLocaleDateString("en-IN") : "None"} />
+          </div>
+          <p className="assessment-note">After a successful refresh, Momentum can score from 12M + 6M price returns and Risk can score from GNPA + NNPA + max drawdown. Relative strength and benchmark-relative volatility remain pending.</p>
+          <button type="button" className="button button-primary" disabled={busy !== null} onClick={executeMarket}>{busy === "MARKET_EXECUTE" ? "Refreshing market history…" : `Run market history refresh · ${marketPlan.estimatedProviderCalls} call`}</button>
+        </> : null}
+        {marketResult ? <div className="notice notice-success" role="status"><strong>Market history refreshed.</strong><span>{marketResult.candlesStored} daily candles stored. {marketResult.derivedMetrics.length} deterministic market metrics were derived and Research scoring has been reloaded.</span></div> : null}
       </div>
-      <button type="button" className="button button-secondary" disabled={busy !== null} onClick={discoverGrowth}>{busy === "GROWTH" ? "Discovering…" : "Run growth discovery · 1 Trendlyne call"}</button>
-      {growthResult ? <div className="notice notice-success" role="status"><strong>Growth contract discovery captured.</strong><span>1 Trendlyne call used. No metric was promoted automatically; the capture is ready for semantic review.</span></div> : null}
-    </div> : null}
+
+      <div className="complete-refresh-plan">
+        <div>
+          <p className="eyebrow">Reference-stock completion</p>
+          <h3>Discover missing bank growth fields</h3>
+          <p>Targets Advances Growth YoY and Deposits Growth YoY only. This is discovery evidence, not automatic promotion or scoring.</p>
+        </div>
+        <button type="button" className="button button-secondary" disabled={busy !== null} onClick={discoverGrowth}>{busy === "GROWTH" ? "Discovering…" : "Run growth discovery · 1 Trendlyne call"}</button>
+        {growthResult ? <div className="notice notice-success" role="status"><strong>Growth contract discovery captured.</strong><span>1 Trendlyne call used. No metric was promoted automatically; the capture is ready for semantic review.</span></div> : null}
+      </div>
+    </> : null}
   </section>
 }
 
