@@ -41,8 +41,6 @@ export function PositionDecisionControls({
   portfolioId,
   securityId,
   currentRole,
-  currentWeight,
-  portfolioPositions,
   fallbackTargetWeight,
   fallbackInvestmentHorizon,
   currency,
@@ -51,8 +49,6 @@ export function PositionDecisionControls({
   readonly portfolioId: string
   readonly securityId: string
   readonly currentRole: PortfolioRole
-  readonly currentWeight: string | null
-  readonly portfolioPositions: readonly { readonly securityId: string; readonly portfolioWeightPercent: string | null }[]
   readonly fallbackTargetWeight: string | null
   readonly fallbackInvestmentHorizon: string | null
   readonly currency: string
@@ -118,14 +114,14 @@ export function PositionDecisionControls({
     }
     void Promise.all([
       loadRecommendationPolicy(profileCode),
-      loadPortfolioProfileExposure(portfolioPositions, profileCode),
+      loadPortfolioProfileExposure(portfolioId, securityId, profileCode),
     ]).then(([policy, exposure]) => {
       if (!active) return
       setRecommendationPolicy(policy)
       setProfileExposure(exposure)
     }).catch(() => { if (active) { setRecommendationPolicy(null); setProfileExposure(null) } })
     return () => { active = false }
-  }, [portfolioPositions, scoring.data?.profileCode])
+  }, [portfolioId, scoring.data?.profileCode, securityId])
 
   useEffect(() => {
     if (!scoring.data || !recommendationPolicy) {
@@ -141,11 +137,11 @@ export function PositionDecisionControls({
       recommendation,
       snapshot: scoring.data,
       policy: recommendationPolicy,
-      currentWeight,
+      currentWeight: profileExposure?.currentWeight ?? null,
       userTargetWeight: settings.targetWeight,
       exposure: profileExposure,
     })
-  }, [currentWeight, profileExposure, recommendation, recommendationPolicy, scoring.data, settings.targetWeight])
+  }, [profileExposure, recommendation, recommendationPolicy, scoring.data, settings.targetWeight])
 
   useEffect(() => {
     let active = true
@@ -177,7 +173,7 @@ export function PositionDecisionControls({
       evidenceConfidence: scoring.data.evidenceConfidence,
       suggestedRole: recommendation.suggestedRole,
       currentUserRole: settings.portfolioRole,
-      currentWeight: currentWeight === null ? null : Number(currentWeight),
+      currentWeight: profileExposure?.currentWeight ?? null,
       rationale: { reason: recommendation.reason, cautions: recommendation.cautions, sectorProfile: recommendation.sectorProfile },
     }).then(async (record) => {
       if (!active) return
@@ -186,7 +182,7 @@ export function PositionDecisionControls({
       if (active) setHistory(rows)
     }).catch(() => { if (active) setTracking(null) })
     return () => { active = false }
-  }, [currentWeight, portfolioId, recommendation, recommendationPolicy, scoring.data, securityId, settings.portfolioRole, settingsLoaded])
+  }, [portfolioId, profileExposure?.currentWeight, recommendation, recommendationPolicy, scoring.data, securityId, settings.portfolioRole, settingsLoaded])
 
   const save = async () => {
     setSaving(true); setError(null)
