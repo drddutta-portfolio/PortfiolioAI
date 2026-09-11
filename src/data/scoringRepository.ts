@@ -25,6 +25,14 @@ type ObservationRow = {
   retrieved_at: string
   fresh_until: string
 }
+type MarketObservationRow = {
+  metric_code: string
+  numeric_value: number | string | null
+  evidence_status: string
+  as_of_date: string
+  retrieved_at: string
+  fresh_until: string
+}
 type RatingRow = {
   id: string
   agency_code: string
@@ -147,6 +155,13 @@ function latestUsableObservation(rows: readonly ObservationRow[], metricCode: st
     .sort((a, b) => b.retrieved_at.localeCompare(a.retrieved_at))[0] ?? null
 }
 
+function latestUsableMarketObservation(rows: readonly MarketObservationRow[], metricCode: string) {
+  const now = Date.now()
+  return rows
+    .filter((row) => row.metric_code === metricCode && row.evidence_status === "AVAILABLE" && Date.parse(row.fresh_until) > now && asNumber(row.numeric_value) !== null)
+    .sort((a, b) => b.as_of_date.localeCompare(a.as_of_date) || b.retrieved_at.localeCompare(a.retrieved_at))[0] ?? null
+}
+
 function latestByQuarter(rows: readonly ObservationRow[], metricCode: string): ReadonlyMap<string, number> {
   const now = Date.now()
   const candidates = rows
@@ -174,7 +189,7 @@ function institutionalOwnershipTrend4Q(rows: readonly ObservationRow[]): number 
 }
 
 function previewDimensions(
-  rules: readonly RuleRow[], observations: readonly ObservationRow[], ratings: readonly RatingRow[], dimensionWeights: ReadonlyMap<string, number>, metricOverrides: readonly MetricOverrideRow[],
+  rules: readonly RuleRow[], observations: readonly ObservationRow[], marketObservations: readonly MarketObservationRow[], ratings: readonly RatingRow[], dimensionWeights: ReadonlyMap<string, number>, metricOverrides: readonly MetricOverrideRow[],
 ): DimensionScore[] {
   const overrides = new Map(metricOverrides.map((row) => [`${row.dimension_code}:${row.input_code}`, row]))
   const dimensions = [...new Set(rules.map((rule) => rule.dimension_code))]
@@ -213,8 +228,12 @@ function previewDimensions(
         return { inputCode: rule.input_code, label: `External rating ${selected.row.rating_symbol}${outlook}`, weight, state: "SCORED", value: selected.score, normalizedScore }
       }
 
-      if (rule.input_kind !== "FUNDAMENTAL" || !rule.metric_code) return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "AVAILABLE_UNSCORED", value: null, normalizedScore: null }
-      const observation = latestUsableObservation(observations, rule.metric_code)
+      if ((rule.input_kind !== "FUNDAMENTAL" && rule.input_kind !== "MARKET") || !rule.metric_code) {
+        return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "AVAILABLE_UNSCORED", value: null, normalizedScore: null }
+      }
+      const observation = rule.input_kind === "MARKET"
+        ? latestUsableMarketObservation(marketObservations, rule.metric_code)
+        : latestUsableObservation(observations, rule.metric_code)
       if (!observation) return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "MISSING", value: null, normalizedScore: null }
       const value = asNumber(observation.numeric_value)
       if (value !== null && rule.rule_state === "REVIEWED") evidenceWeight += weight
@@ -254,18 +273,20 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
   const profileSource: ScoringProfileSource = assignedCode ? "REVIEWED_ASSIGNMENT" : inferred.source
   const ruleProfile = profileCode === "BANK_NBFC" ? "BANK_NBFC" : "GENERAL"
 
-  const [modelResult, profileResult, ratingsResult, observationsResult] = await Promise.all([
+  const [modelResult, profileResult, ratingsResult, observationsResult, marketObservationsResult] = await Promise.all([
     scoringDb.from("scoring_models").select("id,name,status").eq("code", "PAI_STOCK_SCORE").eq("version", 1).maybeSingle(),
     scoringDb.from("scoring_profiles").select("code,name").eq("code", profileCode).maybeSingle(),
     scoringDb.from("external_rating_observations").select("id,agency_code,instrument_type,instrument_description,rating_symbol,outlook,rating_action,rating_date,source_url,retrieved_at,fresh_until,evidence_status").eq("security_id", securityId).order("rating_date", { ascending: false, nullsFirst: false }).order("retrieved_at", { ascending: false }),
     scoringDb.from("fundamental_observations").select("metric_code,numeric_value,evidence_status,period_end,retrieved_at,fresh_until").eq("security_id", securityId),
+    scoringDb.from("market_metric_observations").select("metric_code,numeric_value,evidence_status,as_of_date,retrieved_at,fresh_until").eq("security_id", securityId),
   ])
-  const failure = [modelResult, profileResult, ratingsResult, observationsResult].find((result) => result.error)
+  const failure = [modelResult, profileResult, ratingsResult, observationsResult, marketObservationsResult].find((result) => result.error)
   if (failure?.error) throw failure.error
   const model = modelResult.data as { id: string; name: string; status: string } | null
   const profile = profileResult.data as { code: string; name: string } | null
   if (!model) throw new Error("Scoring model is unavailable.")
   const ratingRows = (ratingsResult.data ?? []) as RatingRow[]
+  const marketRows = (marketObservationsResult.data ?? []) as MarketObservationRow[]
 
   const [runResult, rulesResult, baseDimensionsResult, profileDimensionsResult, metricOverridesResult] = await Promise.all([
     scoringDb.from("stock_score_runs").select("id,run_state,overall_score,evidence_coverage,evidence_confidence,as_of_date").eq("security_id", securityId).eq("scoring_model_id", model.id).eq("scoring_profile", profileCode).order("as_of_date", { ascending: false }).order("created_at", { ascending: false }).limit(1).maybeSingle(),
@@ -291,7 +312,7 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
     const weights = new Map<string, number>()
     for (const row of (baseDimensionsResult.data ?? []) as DimensionWeightRow[]) weights.set(row.dimension_code, Number(row.weight))
     for (const row of (profileDimensionsResult.data ?? []) as ProfileOverrideRow[]) weights.set(row.dimension_code, Number(row.weight))
-    dimensions = previewDimensions((rulesResult.data ?? []) as RuleRow[], (observationsResult.data ?? []) as ObservationRow[], ratingRows, weights, (metricOverridesResult.data ?? []) as MetricOverrideRow[])
+    dimensions = previewDimensions((rulesResult.data ?? []) as RuleRow[], (observationsResult.data ?? []) as ObservationRow[], marketRows, ratingRows, weights, (metricOverridesResult.data ?? []) as MetricOverrideRow[])
   }
 
   const ratings: ExternalRatingObservation[] = ratingRows.map((row) => ({
