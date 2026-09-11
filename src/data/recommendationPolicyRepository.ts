@@ -70,6 +70,7 @@ export interface RecommendationTrackingRecord {
 
 export interface PortfolioProfileExposure {
   readonly profileCode: string
+  readonly currentWeight: number
   readonly sameProfileWeight: number
   readonly reviewedAssignmentCoverage: number
   readonly reviewedAssignmentCount: number
@@ -146,33 +147,25 @@ export async function loadRecommendationPolicy(profileCode: string): Promise<Rec
 }
 
 export async function loadPortfolioProfileExposure(
-  positions: readonly { readonly securityId: string; readonly portfolioWeightPercent: string | null }[],
+  portfolioId: string,
+  securityId: string,
   profileCode: string,
 ): Promise<PortfolioProfileExposure> {
-  const ids = positions.map((position) => position.securityId)
-  if (!ids.length) return { profileCode, sameProfileWeight: 0, reviewedAssignmentCoverage: 0, reviewedAssignmentCount: 0, totalPositionCount: 0 }
-  const result = await db
-    .from("security_scoring_profile_assignments")
-    .select("security_id,scoring_profile_code,assignment_status")
-    .in("security_id", ids)
-    .eq("assignment_status", "REVIEWED")
+  const result = await db.rpc("get_portfolio_profile_weight_context_v1", {
+    p_portfolio_id: portfolioId,
+    p_security_id: securityId,
+    p_profile_code: profileCode,
+  })
   if (result.error) throw result.error
-  const assignments = new Map<string, string>((result.data ?? []).map((row) => [String(row.security_id), String(row.scoring_profile_code)]))
-  let sameProfileWeight = 0
-  let reviewedAssignmentCoverage = 0
-  for (const position of positions) {
-    const weight = Number(position.portfolioWeightPercent ?? 0)
-    if (!Number.isFinite(weight)) continue
-    const assignedProfile = assignments.get(position.securityId)
-    if (assignedProfile) reviewedAssignmentCoverage += weight
-    if (assignedProfile === profileCode) sameProfileWeight += weight
-  }
+  const row = Array.isArray(result.data) ? result.data[0] : result.data
+  if (!row) return { profileCode, currentWeight: 0, sameProfileWeight: 0, reviewedAssignmentCoverage: 0, reviewedAssignmentCount: 0, totalPositionCount: 0 }
   return {
     profileCode,
-    sameProfileWeight,
-    reviewedAssignmentCoverage,
-    reviewedAssignmentCount: assignments.size,
-    totalPositionCount: positions.length,
+    currentWeight: Number(row.current_weight ?? 0),
+    sameProfileWeight: Number(row.same_profile_weight ?? 0),
+    reviewedAssignmentCoverage: Number(row.reviewed_assignment_coverage ?? 0),
+    reviewedAssignmentCount: Number(row.reviewed_assignment_count ?? 0),
+    totalPositionCount: Number(row.total_position_count ?? 0),
   }
 }
 
