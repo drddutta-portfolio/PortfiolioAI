@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
-import { extractLogoCandidates, extractScreenerCompanyProfile, publicHttpUrl } from "../_shared/company-profile.ts"
+import { extractLogoCandidates, extractScreenerCompanyProfile, extractWebsiteDescription, publicHttpUrl } from "../_shared/company-profile.ts"
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -18,10 +18,13 @@ const USER_AGENT = "PortfolioAI/1.0 personal research profile cache"
 
 type Admin = ReturnType<typeof createClient>
 type RequestBody = { readonly portfolioId?: unknown; readonly securityId?: unknown; readonly force?: unknown }
-
-type TrackedResponse = {
-  readonly response: Response
-  readonly bytes: Uint8Array
+type TrackedResponse = { readonly response: Response; readonly bytes: Uint8Array }
+type CachedProfile = {
+  readonly profile_status: string
+  readonly about_summary: string | null
+  readonly company_website_url: string | null
+  readonly logo_storage_path: string | null
+  readonly last_checked_at: string | null
 }
 
 function budgetHttpStatus(reasonCode: string) {
@@ -29,6 +32,7 @@ function budgetHttpStatus(reasonCode: string) {
   if (["DAILY_LIMIT", "ROLLING_LIMIT", "PER_RUN_LIMIT", "CONCURRENCY_LIMIT"].includes(reasonCode)) return 429
   return 503
 }
+function key(value: string) { return value.toLocaleUpperCase().replace(/[^A-Z0-9]/g, "") }
 
 async function sha256Hex(value: string | Uint8Array) {
   const bytes = typeof value === "string" ? new TextEncoder().encode(value) : value
@@ -47,10 +51,7 @@ async function readLimitedBody(response: Response, limit: number) {
     const { done, value } = await reader.read()
     if (done) break
     total += value.byteLength
-    if (total > limit) {
-      await reader.cancel()
-      throw new Error("RESPONSE_TOO_LARGE")
-    }
+    if (total > limit) { await reader.cancel(); throw new Error("RESPONSE_TOO_LARGE") }
     chunks.push(value)
   }
   const merged = new Uint8Array(total)
@@ -64,8 +65,7 @@ async function safeFetch(url: string, maxBytes: number, accept: string): Promise
   if (!current) throw new Error("UNSAFE_SOURCE_URL")
   for (let redirects = 0; redirects <= 3; redirects += 1) {
     const response = await fetch(current, {
-      method: "GET",
-      redirect: "manual",
+      method: "GET", redirect: "manual",
       headers: { "User-Agent": USER_AGENT, Accept: accept, "Accept-Language": "en-IN,en;q=0.9" },
       signal: AbortSignal.timeout(15_000),
     })
@@ -77,39 +77,18 @@ async function safeFetch(url: string, maxBytes: number, accept: string): Promise
       current = next
       continue
     }
-    const bytes = await readLimitedBody(response, maxBytes)
-    return { response, bytes }
+    return { response, bytes: await readLimitedBody(response, maxBytes) }
   }
   throw new Error("PROVIDER_REDIRECT_LIMIT")
 }
 
-async function recordUsage(
-  admin: Admin,
-  runId: string,
-  runItemId: string,
-  securityId: string,
-  attemptNumber: number,
-  operationClass: string,
-  attemptedAt: string,
-  outcome: "SUCCEEDED" | "FAILED",
-  safeErrorCode: string | null,
-) {
+async function recordUsage(admin: Admin, runId: string, runItemId: string, securityId: string, attemptNumber: number, operationClass: string, attemptedAt: string, outcome: "SUCCEEDED" | "FAILED", safeErrorCode: string | null) {
   const payload = {
-    p_source_code: SOURCE_CODE,
-    p_ingestion_run_id: runId,
-    p_run_item_id: runItemId,
-    p_security_id: securityId,
-    p_data_domain: DATA_DOMAIN,
-    p_operation_class: operationClass,
-    p_accounting_class: "PROVIDER_TOOL_ATTEMPT",
-    p_estimated_internal_units: 1,
-    p_actual_internal_units: 1,
-    p_attempted_at: attemptedAt,
-    p_completed_at: new Date().toISOString(),
-    p_outcome: outcome,
-    p_safe_error_code: safeErrorCode,
-    p_retry_attempt: 0,
-    p_idempotency_key: `${runId}:${operationClass}:${attemptNumber}`,
+    p_source_code: SOURCE_CODE, p_ingestion_run_id: runId, p_run_item_id: runItemId, p_security_id: securityId,
+    p_data_domain: DATA_DOMAIN, p_operation_class: operationClass, p_accounting_class: "PROVIDER_TOOL_ATTEMPT",
+    p_estimated_internal_units: 1, p_actual_internal_units: 1, p_attempted_at: attemptedAt,
+    p_completed_at: new Date().toISOString(), p_outcome: outcome, p_safe_error_code: safeErrorCode,
+    p_retry_attempt: 0, p_idempotency_key: `${runId}:${operationClass}:${attemptNumber}`,
   }
   for (let retry = 0; retry < ACCOUNTING_WRITE_ATTEMPTS; retry += 1) {
     const usage = await admin.rpc("record_provider_usage_event_v1", payload)
@@ -118,22 +97,10 @@ async function recordUsage(
   throw new Error("USAGE_ACCOUNTING_FAILED")
 }
 
-async function completeRunItem(
-  admin: Admin,
-  runItemId: string,
-  status: "ACCEPTED" | "FAILED" | "SKIPPED_BUDGET",
-  safeReasonCode: string | null,
-  attemptedCallCount: number,
-  acceptedRecordCount: number,
-  metadata: Record<string, unknown>,
-) {
+async function completeRunItem(admin: Admin, runItemId: string, status: "ACCEPTED" | "FAILED" | "SKIPPED_BUDGET", safeReasonCode: string | null, attemptedCallCount: number, acceptedRecordCount: number, metadata: Record<string, unknown>) {
   const result = await admin.rpc("record_refresh_item_result_v1", {
-    p_run_item_id: runItemId,
-    p_status: status,
-    p_safe_reason_code: safeReasonCode,
-    p_attempted_call_count: attemptedCallCount,
-    p_accepted_record_count: acceptedRecordCount,
-    p_metadata: metadata,
+    p_run_item_id: runItemId, p_status: status, p_safe_reason_code: safeReasonCode,
+    p_attempted_call_count: attemptedCallCount, p_accepted_record_count: acceptedRecordCount, p_metadata: metadata,
   })
   if (result.error) throw new Error("RUN_ITEM_ACCOUNTING_FAILED")
 }
@@ -145,7 +112,6 @@ function logoExtension(contentType: string) {
   if (contentType === "image/svg+xml") return "svg"
   return null
 }
-
 function sanitizeSvg(bytes: Uint8Array) {
   let svg = new TextDecoder().decode(bytes)
   if (!/<svg\b/i.test(svg)) throw new Error("LOGO_FORMAT_UNSUPPORTED")
@@ -157,43 +123,39 @@ function sanitizeSvg(bytes: Uint8Array) {
   return new TextEncoder().encode(svg)
 }
 
-async function persistCapture(admin: Admin, runId: string, symbol: string, sourceUrl: string, about: string | null, websiteUrl: string | null, logoSourceUrl: string | null) {
+async function persistCapture(admin: Admin, runId: string, symbol: string, sourceUrl: string, about: string | null, websiteUrl: string | null, logoSourceUrl: string | null, aboutSource: "SCREENER" | "OFFICIAL_WEBSITE") {
   const aboutHash = about ? await sha256Hex(about) : null
   const rawPayload = {
-    mode: "NORMALIZED_PROFILE_CACHE_ONLY",
-    symbol,
-    source_url: sourceUrl,
-    about_sha256: aboutHash,
-    official_website_url: websiteUrl,
-    logo_source_url: logoSourceUrl,
-    raw_html_retained: false,
+    mode: "NORMALIZED_PROFILE_CACHE_ONLY", symbol, source_url: sourceUrl, about_source: aboutSource,
+    about_sha256: aboutHash, official_website_url: websiteUrl, logo_source_url: logoSourceUrl, raw_html_retained: false,
   }
   const serialized = JSON.stringify(rawPayload)
   const payloadHash = await sha256Hex(serialized)
   const record = await admin.from("data_source_records").upsert({
-    source_code: SOURCE_CODE,
-    ingestion_run_id: runId,
-    record_kind: "COMPANY_PROFILE_DISCOVERY",
-    external_record_id: `${symbol}:company-profile:${runId}`,
-    retrieved_at: new Date().toISOString(),
-    payload_hash: payloadHash,
-    raw_payload: rawPayload,
-    source_url: sourceUrl,
-    terms_snapshot: {
-      raw_html_retained: false,
-      normalized_about_cached: Boolean(about),
-      logo_cached: Boolean(logoSourceUrl),
-      financial_evidence_authority: false,
-    },
+    source_code: SOURCE_CODE, ingestion_run_id: runId, record_kind: "COMPANY_PROFILE_DISCOVERY",
+    external_record_id: `${symbol}:company-profile:${runId}`, retrieved_at: new Date().toISOString(), payload_hash: payloadHash,
+    raw_payload: rawPayload, source_url: sourceUrl,
+    terms_snapshot: { raw_html_retained: false, normalized_about_cached: Boolean(about), logo_cached: Boolean(logoSourceUrl), financial_evidence_authority: false },
   }, { onConflict: "source_code,record_kind,external_record_id,payload_hash" }).select("id").single()
   if (record.error) throw new Error("CAPTURE_PERSISTENCE_FAILED")
   return { sourceRecordId: record.data.id as string, aboutHash }
 }
 
+function chooseScreenerMatch(rows: Array<{ url?: unknown; name?: unknown }>, symbol: string, companyName: string) {
+  const symbolKey = key(symbol)
+  const nameKey = key(companyName)
+  const exactSlug = rows.find(row => {
+    if (typeof row.url !== "string" || !row.url.startsWith("/company/")) return false
+    const slug = row.url.split("/").filter(Boolean)[1] ?? ""
+    return key(slug) === symbolKey
+  })
+  if (exactSlug) return exactSlug
+  return rows.find(row => typeof row.name === "string" && key(row.name) === nameKey && typeof row.url === "string" && row.url.startsWith("/company/")) ?? null
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: cors })
   if (request.method !== "POST") return reply(405, { error: "Method not allowed." })
-
   const authorization = request.headers.get("Authorization")
   if (!authorization) return reply(401, { error: "Authentication required." })
   const supabaseUrl = Deno.env.get("SUPABASE_URL")
@@ -205,7 +167,6 @@ Deno.serve(async (request) => {
     const body = await request.json() as RequestBody
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return reply(400, { error: "portfolioId and securityId are required." })
     const force = body.force === true
-
     const user = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
     const auth = await user.auth.getUser()
     if (auth.error || !auth.data.user) return reply(401, { error: "Invalid authenticated session." })
@@ -215,13 +176,12 @@ Deno.serve(async (request) => {
     if (portfolio.error) return reply(404, { error: "Portfolio not found." })
     const holding = await admin.from("current_holdings").select("security_id").eq("portfolio_id", body.portfolioId).eq("security_id", body.securityId).maybeSingle()
     if (holding.error || !holding.data) return reply(403, { error: "Security must be an open holding." })
-    const security = await admin.from("securities").select("id,symbol,asset_class,company_name").eq("id", body.securityId).single()
+    const security = await admin.from("securities").select("id,symbol,asset_class,name").eq("id", body.securityId).single()
     if (security.error || security.data.asset_class !== "EQUITY") return reply(400, { error: "Company profile discovery is limited to held equities." })
 
-    const cached = await admin.from("security_company_profiles").select("profile_status,about_summary,company_website_url,logo_storage_path,last_checked_at").eq("security_id", body.securityId).maybeSingle()
-    if (!cached.error && cached.data && !force && (cached.data.profile_status === "READY" || cached.data.profile_status === "PARTIAL")) {
-      return reply(200, { cached: true, providerCalls: 0, profile: cached.data })
-    }
+    const cachedResult = await admin.from("security_company_profiles").select("profile_status,about_summary,company_website_url,logo_storage_path,last_checked_at").eq("security_id", body.securityId).maybeSingle()
+    const cached = cachedResult.error ? null : cachedResult.data as CachedProfile | null
+    if (cached && !force && (cached.profile_status === "READY" || cached.profile_status === "PARTIAL")) return reply(200, { cached: true, providerCalls: 0, profile: cached })
 
     const source = await admin.from("data_sources").select("is_active,entitlement_verified,configuration").eq("code", SOURCE_CODE).single()
     if (source.error || !source.data.is_active || !source.data.entitlement_verified) return reply(409, { error: "Company profile source is not enabled.", providerCalls: 0 })
@@ -230,40 +190,18 @@ Deno.serve(async (request) => {
     if (!control.data.ingestion_enabled) return reply(409, { error: "Company profile discovery is disabled.", code: "INGESTION_DISABLED", providerCalls: 0 })
 
     const run = await admin.from("data_ingestion_runs").insert({
-      source_code: SOURCE_CODE,
-      portfolio_id: body.portfolioId,
-      operation: DATA_DOMAIN,
-      orchestration_type: "OWNER_PROFILE_DISCOVERY",
-      trigger_source: "OWNER",
-      requested_by: auth.data.user.id,
-      status: "RUNNING",
-      requested_count: 1,
-      estimated_call_count: RESERVED_UNITS,
-      reserved_call_count: RESERVED_UNITS,
-      attempted_call_count: 0,
-      policy_version: control.data.policy_version,
-      metadata: { force, symbol: security.data.symbol, raw_html_retained: false },
+      source_code: SOURCE_CODE, portfolio_id: body.portfolioId, operation: DATA_DOMAIN, orchestration_type: "OWNER_PROFILE_DISCOVERY",
+      trigger_source: "OWNER", requested_by: auth.data.user.id, status: "RUNNING", requested_count: 1,
+      estimated_call_count: RESERVED_UNITS, reserved_call_count: RESERVED_UNITS, attempted_call_count: 0,
+      policy_version: control.data.policy_version, metadata: { force, symbol: security.data.symbol, raw_html_retained: false },
     }).select("id").single()
     if (run.error) throw new Error("RUN_ACCOUNTING_FAILED")
     const runId = run.data.id as string
-
-    const runItem = await admin.from("data_ingestion_run_items").insert({
-      ingestion_run_id: runId,
-      security_id: body.securityId,
-      data_domain: DATA_DOMAIN,
-      status: "PLANNED",
-      metadata: { symbol: security.data.symbol },
-    }).select("id").single()
+    const runItem = await admin.from("data_ingestion_run_items").insert({ ingestion_run_id: runId, security_id: body.securityId, data_domain: DATA_DOMAIN, status: "PLANNED", metadata: { symbol: security.data.symbol } }).select("id").single()
     if (runItem.error) throw new Error("RUN_ITEM_ACCOUNTING_FAILED")
     const runItemId = runItem.data.id as string
 
-    const reservation = await admin.rpc("reserve_provider_budget_v1", {
-      p_source_code: SOURCE_CODE,
-      p_ingestion_run_id: runId,
-      p_reservation_key: `${runId}:${DATA_DOMAIN}`,
-      p_estimated_units: RESERVED_UNITS,
-      p_reservation_seconds: 900,
-    })
+    const reservation = await admin.rpc("reserve_provider_budget_v1", { p_source_code: SOURCE_CODE, p_ingestion_run_id: runId, p_reservation_key: `${runId}:${DATA_DOMAIN}`, p_estimated_units: RESERVED_UNITS, p_reservation_seconds: 900 })
     const reservationRow = reservation.data?.[0]
     if (reservation.error || !reservationRow?.reserved || !reservationRow.reservation_id) {
       const reasonCode = reservationRow?.reason_code ?? "BUDGET_RESERVATION_FAILED"
@@ -294,32 +232,32 @@ Deno.serve(async (request) => {
     let terminalError: Error | null = null
     let screenerUrl: string | null = null
     let about: string | null = null
+    let aboutSource: "SCREENER" | "OFFICIAL_WEBSITE" = "SCREENER"
     let websiteUrl: string | null = null
     let logoStoragePath: string | null = null
     let logoSourceUrl: string | null = null
     let logoContentType: string | null = null
     let sourceRecordId: string | null = null
-    let aboutHash: string | null = null
 
     try {
       const searchUrl = `https://www.screener.in/api/company/search/?q=${encodeURIComponent(security.data.symbol)}`
       const search = await call("SCREENER_COMPANY_SEARCH", searchUrl, 256 * 1024, "application/json,text/plain;q=0.9,*/*;q=0.1")
-      const searchRows = JSON.parse(new TextDecoder().decode(search.bytes)) as Array<{ url?: unknown; name?: unknown; id?: unknown }>
-      const first = Array.isArray(searchRows) ? searchRows[0] : null
-      if (!first || typeof first.url !== "string" || !first.url.startsWith("/company/")) throw new Error("SCREENER_MATCH_NOT_FOUND")
-      screenerUrl = new URL(first.url, "https://www.screener.in").toString()
+      const searchRows = JSON.parse(new TextDecoder().decode(search.bytes)) as Array<{ url?: unknown; name?: unknown }>
+      const match = chooseScreenerMatch(Array.isArray(searchRows) ? searchRows : [], security.data.symbol, security.data.name)
+      if (!match || typeof match.url !== "string") throw new Error("SCREENER_MATCH_AMBIGUOUS")
+      screenerUrl = new URL(match.url, "https://www.screener.in").toString()
 
       const page = await call("SCREENER_PROFILE_FETCH", screenerUrl, MAX_PAGE_BYTES, "text/html,application/xhtml+xml;q=0.9")
-      const profile = extractScreenerCompanyProfile(new TextDecoder().decode(page.bytes), screenerUrl)
-      about = profile.about
-      websiteUrl = profile.websiteUrl
-      if (!about) throw new Error("ABOUT_NOT_FOUND")
+      const screenerProfile = extractScreenerCompanyProfile(new TextDecoder().decode(page.bytes), screenerUrl)
+      about = screenerProfile.about
+      websiteUrl = screenerProfile.websiteUrl
 
       if (websiteUrl && attempted < RESERVED_UNITS) {
         try {
           const site = await call("OFFICIAL_SITE_FETCH", websiteUrl, MAX_PAGE_BYTES, "text/html,application/xhtml+xml;q=0.9")
-          const candidates = extractLogoCandidates(new TextDecoder().decode(site.bytes), websiteUrl)
-          for (const candidate of candidates.slice(0, 2)) {
+          const siteHtml = new TextDecoder().decode(site.bytes)
+          if (!about) { about = extractWebsiteDescription(siteHtml); if (about) aboutSource = "OFFICIAL_WEBSITE" }
+          for (const candidate of extractLogoCandidates(siteHtml, websiteUrl).slice(0, 2)) {
             if (attempted >= RESERVED_UNITS) break
             try {
               const logo = await call("OFFICIAL_LOGO_FETCH", candidate, MAX_LOGO_BYTES, "image/png,image/jpeg,image/webp,image/svg+xml;q=0.9,*/*;q=0.1")
@@ -336,106 +274,53 @@ Deno.serve(async (request) => {
               logoSourceUrl = candidate
               logoContentType = contentType
               break
-            } catch {
-              // The attempt is already accounted. Try at most one alternate candidate within the reservation.
-            }
+            } catch { /* attempt already accounted; at most one alternate is tried */ }
           }
-        } catch {
-          // About text is still useful; logo remains a ticker-initial fallback.
-        }
+        } catch { /* Screener About remains usable even when the official site is unavailable */ }
       }
+      if (!about) throw new Error("ABOUT_NOT_FOUND")
 
-      const capture = await persistCapture(admin, runId, security.data.symbol, screenerUrl, about, websiteUrl, logoSourceUrl)
+      const capture = await persistCapture(admin, runId, security.data.symbol, screenerUrl, about, websiteUrl, logoSourceUrl, aboutSource)
       sourceRecordId = capture.sourceRecordId
-      aboutHash = capture.aboutHash
       const now = new Date().toISOString()
-      const profileStatus = about && logoStoragePath ? "READY" : about ? "PARTIAL" : "FAILED"
+      const profileStatus = logoStoragePath ? "READY" : "PARTIAL"
       const stored = await admin.from("security_company_profiles").upsert({
-        security_id: body.securityId,
-        profile_status: profileStatus,
-        about_summary: about,
-        company_website_url: websiteUrl,
-        source_code: SOURCE_CODE,
-        source_url: screenerUrl,
-        source_record_id: sourceRecordId,
-        source_about_hash: aboutHash,
-        logo_storage_path: logoStoragePath,
-        logo_source_url: logoSourceUrl,
-        logo_content_type: logoContentType,
-        about_retrieved_at: about ? now : null,
-        logo_retrieved_at: logoStoragePath ? now : null,
-        last_checked_at: now,
-        last_safe_error_code: null,
-        metadata: { raw_html_retained: false, discovery_mode: "OWNER_ONCE_UNLESS_FORCED" },
+        security_id: body.securityId, profile_status: profileStatus, about_summary: about, company_website_url: websiteUrl,
+        source_code: SOURCE_CODE, source_url: screenerUrl, source_record_id: sourceRecordId, source_about_hash: capture.aboutHash,
+        logo_storage_path: logoStoragePath, logo_source_url: logoSourceUrl, logo_content_type: logoContentType,
+        about_retrieved_at: now, logo_retrieved_at: logoStoragePath ? now : null, last_checked_at: now, last_safe_error_code: null,
+        metadata: { raw_html_retained: false, discovery_mode: "OWNER_ONCE_UNLESS_FORCED", about_source: aboutSource },
       }, { onConflict: "security_id" }).select("profile_status,about_summary,company_website_url,logo_storage_path,last_checked_at").single()
       if (stored.error) throw new Error("PROFILE_CACHE_WRITE_FAILED")
     } catch (error) {
       terminalError = error instanceof Error ? error : new Error("COMPANY_PROFILE_DISCOVERY_FAILED")
-      await admin.from("security_company_profiles").upsert({
-        security_id: body.securityId,
-        profile_status: "FAILED",
-        source_code: SOURCE_CODE,
-        source_url: screenerUrl,
-        last_checked_at: new Date().toISOString(),
-        last_safe_error_code: terminalError.message.replace(/[^A-Z0-9_]/gi, "_").toLocaleUpperCase().slice(0, 64) || "COMPANY_PROFILE_DISCOVERY_FAILED",
-        metadata: { raw_html_retained: false },
-      }, { onConflict: "security_id" })
+      const safeError = terminalError.message.replace(/[^A-Z0-9_]/gi, "_").toLocaleUpperCase().slice(0, 64) || "COMPANY_PROFILE_DISCOVERY_FAILED"
+      const failureRow: Record<string, unknown> = {
+        security_id: body.securityId, source_code: SOURCE_CODE, source_url: screenerUrl, last_checked_at: new Date().toISOString(),
+        last_safe_error_code: safeError, metadata: { raw_html_retained: false, last_attempt_failed: true },
+        profile_status: cached?.about_summary ? cached.profile_status : "FAILED",
+      }
+      await admin.from("security_company_profiles").upsert(failureRow, { onConflict: "security_id" })
     }
 
     const consumedUnits = attempted - failed
     const releasedUnits = RESERVED_UNITS - attempted
-    const settlement = await admin.rpc("settle_provider_budget_v1", {
-      p_reservation_id: reservationId,
-      p_consumed_units: consumedUnits,
-      p_failed_units: failed,
-      p_released_units: releasedUnits,
-    })
+    const settlement = await admin.rpc("settle_provider_budget_v1", { p_reservation_id: reservationId, p_consumed_units: consumedUnits, p_failed_units: failed, p_released_units: releasedUnits })
     if (settlement.error && !terminalError) terminalError = new Error("BUDGET_SETTLEMENT_FAILED")
-
     try {
-      await completeRunItem(admin, runItemId, terminalError ? "FAILED" : "ACCEPTED", terminalError ? "COMPANY_PROFILE_DISCOVERY_FAILED" : null, attempted, terminalError ? 0 : 1, {
-        symbol: security.data.symbol,
-        about_cached: Boolean(about),
-        logo_cached: Boolean(logoStoragePath),
-        raw_html_retained: false,
-      })
-    } catch (error) {
-      if (!terminalError) terminalError = error instanceof Error ? error : new Error("RUN_ITEM_ACCOUNTING_FAILED")
-    }
+      await completeRunItem(admin, runItemId, terminalError ? "FAILED" : "ACCEPTED", terminalError ? "COMPANY_PROFILE_DISCOVERY_FAILED" : null, attempted, terminalError ? 0 : 1, { symbol: security.data.symbol, about_cached: Boolean(about), logo_cached: Boolean(logoStoragePath), raw_html_retained: false })
+    } catch (error) { if (!terminalError) terminalError = error instanceof Error ? error : new Error("RUN_ITEM_ACCOUNTING_FAILED") }
 
     await admin.from("data_ingestion_runs").update({
-      status: terminalError ? "FAILED" : "SUCCEEDED",
-      completed_at: new Date().toISOString(),
-      attempted_call_count: attempted,
-      fetched_count: terminalError ? 0 : 1,
-      accepted_count: terminalError ? 0 : 1,
-      failed_count: terminalError ? 1 : 0,
+      status: terminalError ? "FAILED" : "SUCCEEDED", completed_at: new Date().toISOString(), attempted_call_count: attempted,
+      fetched_count: terminalError ? 0 : 1, accepted_count: terminalError ? 0 : 1, failed_count: terminalError ? 1 : 0,
       error_summary: terminalError ? "COMPANY_PROFILE_DISCOVERY_FAILED" : null,
-      metadata: {
-        symbol: security.data.symbol,
-        provider_attempts: attempted,
-        consumed_units: consumedUnits,
-        failed_units: failed,
-        released_units: releasedUnits,
-        about_cached: Boolean(about),
-        logo_cached: Boolean(logoStoragePath),
-        source_record_id: sourceRecordId,
-        raw_html_retained: false,
-      },
+      metadata: { symbol: security.data.symbol, provider_attempts: attempted, consumed_units: consumedUnits, failed_units: failed, released_units: releasedUnits, about_cached: Boolean(about), logo_cached: Boolean(logoStoragePath), source_record_id: sourceRecordId, raw_html_retained: false },
     }).eq("id", runId)
 
-    if (terminalError) return reply(502, { error: "Company profile discovery failed.", code: terminalError.message, providerCalls: attempted, runId })
-
+    if (terminalError) return reply(502, { error: "Company profile discovery failed.", code: terminalError.message, providerCalls: attempted, runId, preservedExistingCache: Boolean(cached?.about_summary) })
     const profile = await admin.from("security_company_profiles").select("profile_status,about_summary,company_website_url,logo_storage_path,last_checked_at").eq("security_id", body.securityId).single()
-    return reply(200, {
-      cached: false,
-      providerCalls: attempted,
-      budgetConsumed: consumedUnits,
-      budgetFailed: failed,
-      budgetReleased: releasedUnits,
-      runId,
-      profile: profile.data,
-    })
+    return reply(200, { cached: false, providerCalls: attempted, budgetConsumed: consumedUnits, budgetFailed: failed, budgetReleased: releasedUnits, runId, profile: profile.data })
   } catch (error) {
     console.error("discover-company-profile failed", error)
     return reply(500, { error: "Company profile discovery could not be completed.", code: error instanceof Error ? error.message : "UNKNOWN_ERROR" })
