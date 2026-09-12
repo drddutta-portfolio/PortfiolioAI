@@ -6,6 +6,7 @@ import { AppShell } from "../components/AppShell"
 import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
 import { LoginPage } from "../pages/LoginPage"
+import { N4aNormalizationPilotPage } from "../pages/N4aNormalizationPilotPage"
 import { NotFoundPage } from "../pages/NotFoundPage"
 import { UpdatePasswordPage } from "../pages/UpdatePasswordPage"
 import { PageLoader } from "../components/PageLoader"
@@ -106,6 +107,14 @@ export function AppRoutes() {
               <Suspense fallback={<PageLoader label="Loading the Import Centre" />}>
                 <ImportPage />
               </Suspense>
+            </AppShell>
+          }
+        />
+        <Route
+          path="/app/internal/n4a-normalization-pilot"
+          element={
+            <AppShell>
+              <N4aNormalizationPilotPage />
             </AppShell>
           }
         />
