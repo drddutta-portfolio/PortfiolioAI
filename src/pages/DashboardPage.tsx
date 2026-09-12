@@ -12,6 +12,7 @@ import "./DashboardDesign.css"
 
 interface AllocationRow { readonly label: string; readonly value: string; readonly percentage: string }
 interface SumResult { readonly value: string | null; readonly coverage: number }
+type SignedTone = "positive" | "negative" | "neutral"
 
 const ROLE_SCOPE_ORDER: readonly PortfolioRole[] = ["CORE", "SATELLITE", "THEMATIC", "ETF", "OTHER", "UNCLASSIFIED"]
 const DONUT_COLORS = ["#2d6a4f", "#74a57f", "#b7d39b", "#557c93", "#c8a96b", "#8a7b9d", "#9aa6a0"] as const
@@ -101,6 +102,14 @@ function positionScopeWeight(position: PortfolioPosition, scopedValue: string | 
   return new Decimal(position.currentValue).div(denominator).times(100)
 }
 
+function signedTone(value: string | null): SignedTone {
+  if (value === null) return "neutral"
+  const decimal = new Decimal(value)
+  if (decimal.gt(0)) return "positive"
+  if (decimal.lt(0)) return "negative"
+  return "neutral"
+}
+
 export function DashboardPage() {
   const { portfolio, error, isLoading, reload } = usePortfolioView()
   const enrichment = usePortfolioEnrichment(portfolio?.openPositions.map((position) => position.securityId) ?? [])
@@ -143,7 +152,8 @@ export function DashboardPage() {
   const leadLaggard = laggards[0] ?? null
   const largestPosition = stockAllocation[0] ?? null
 
-  const sizedPositions = [...scopedPositions]
+  const sizingEligiblePositions = scopedPositions.filter((position) => position.assetClass !== "ETF")
+  const sizedPositions = [...sizingEligiblePositions]
     .filter((position) => position.currentValue !== null)
     .sort((left, right) => new Decimal(right.currentValue ?? 0).comparedTo(left.currentValue ?? 0))
     .slice(0, 10)
@@ -199,8 +209,8 @@ export function DashboardPage() {
     <section className="dashboard-kpi-strip" aria-label="Portfolio summary">
       <Kpi icon="₹" label={completePrices ? "Current value" : "Priced value"} value={formatMoney(kpiCurrentValue)} detail={`${scopedCurrent.coverage}/${scopedPositions.length} scoped holdings priced`} />
       <Kpi icon="◫" label="Calculable cost basis" value={formatMoney(kpiCostBasis)} detail={`${isConsolidated ? portfolio.totals.accountingCoverage : scopedCost.coverage}/${scopedPositions.length} scoped holdings covered`} />
-      <Kpi icon="↗" label={completePrices ? "Unrealised P&L" : "Covered unrealised P&L"} value={formatMoney(kpiUnrealised)} secondaryValue={formatSignedPercent(kpiUnrealisedPercent)} detail={`${isConsolidated ? portfolio.totals.unrealisedCoverage : scopedUnrealised.coverage}/${scopedPositions.length} scoped holdings included`} />
-      <Kpi icon="✓" label={isConsolidated ? "Supported realised P&L" : "Scoped realised P&L"} value={formatMoney(kpiRealised)} detail={isConsolidated ? `${portfolio.totals.realisedCoverage}/${portfolio.totals.realisedEligibleHistories} disposal histories covered` : `${scopedRealised.coverage}/${scopedPositions.length} current scoped holdings with supported realised P&L`} />
+      <Kpi icon="↗" label={completePrices ? "Unrealised P&L" : "Covered unrealised P&L"} value={formatMoney(kpiUnrealised)} secondaryValue={formatSignedPercent(kpiUnrealisedPercent)} detail={`${isConsolidated ? portfolio.totals.unrealisedCoverage : scopedUnrealised.coverage}/${scopedPositions.length} scoped holdings included`} tone={signedTone(kpiUnrealised)} />
+      <Kpi icon="✓" label={isConsolidated ? "Supported realised P&L" : "Scoped realised P&L"} value={formatMoney(kpiRealised)} detail={isConsolidated ? `${portfolio.totals.realisedCoverage}/${portfolio.totals.realisedEligibleHistories} disposal histories covered` : `${scopedRealised.coverage}/${scopedPositions.length} current scoped holdings with supported realised P&L`} tone={signedTone(kpiRealised)} />
       <Kpi icon="#" label="Open holdings" value={String(scopedPositions.length)} detail={isConsolidated ? `${portfolio.totals.closedHistories} closed histories retained` : selectedScopeLabel} />
     </section>
 
@@ -270,10 +280,10 @@ export function DashboardPage() {
           <div className="dashboard-section-heading compact"><div><p className="eyebrow">Key insights</p><h2>{selectedScopeLabel}</h2></div></div>
           <div className="dashboard-key-insight-list">
             <InsightRow label="Largest position" value={largestPosition?.label ?? "Unavailable"} detail={largestPosition ? `${new Decimal(largestPosition.percentage).toDecimalPlaces(2).toFixed(2)}% of selected priced scope` : "Awaiting price coverage"} />
-            <InsightRow label="Strongest return" value={leadWinner?.symbol ?? "Unavailable"} detail={leadWinner ? formatSignedPercent(leadWinner.unrealisedPnlPercent) : "Awaiting supported accounting"} />
-            <InsightRow label="Weakest return" value={leadLaggard?.symbol ?? "Unavailable"} detail={leadLaggard ? formatSignedPercent(leadLaggard.unrealisedPnlPercent) : "Awaiting supported accounting"} />
+            <InsightRow label="Strongest return" value={leadWinner?.symbol ?? "Unavailable"} detail={leadWinner ? formatSignedPercent(leadWinner.unrealisedPnlPercent) : "Awaiting supported accounting"} tone="positive" />
+            <InsightRow label="Weakest return" value={leadLaggard?.symbol ?? "Unavailable"} detail={leadLaggard ? formatSignedPercent(leadLaggard.unrealisedPnlPercent) : "Awaiting supported accounting"} tone="negative" />
             <InsightRow label="Price coverage" value={`${pricedCoveragePercent}%`} detail={`${scopedCurrent.coverage}/${scopedPositions.length} holdings priced`} />
-            <InsightRow label="Sizing targets" value={`${scopedPositions.filter((position) => position.settings.targetWeight !== null).length}/${scopedPositions.length}`} detail="Holdings with a user target weight" />
+            <InsightRow label="Sizing targets" value={`${sizingEligiblePositions.filter((position) => position.settings.targetWeight !== null).length}/${sizingEligiblePositions.length}`} detail="Non-ETF holdings with a user target weight" />
           </div>
           <div className="dashboard-quick-links">
             <Link to="/app/research">Research coverage <span>→</span></Link>
@@ -315,8 +325,8 @@ function CoverageMeter({ label, value, detail }: { readonly label: string; reado
   return <div className="dashboard-coverage-meter"><div><span>{label}</span><strong>{value}%</strong></div><div className="dashboard-meter-track"><i style={{ width: `${width}%` }} /></div><small>{detail}</small></div>
 }
 
-function InsightRow({ label, value, detail }: { readonly label: string; readonly value: string; readonly detail: string }) {
-  return <article><small>{label}</small><strong>{value}</strong><p>{detail}</p></article>
+function InsightRow({ label, value, detail, tone = "neutral" }: { readonly label: string; readonly value: string; readonly detail: string; readonly tone?: SignedTone }) {
+  return <article className={`dashboard-signed-${tone}`}><small>{label}</small><strong>{value}</strong><p>{detail}</p></article>
 }
 
 function DonutAllocationPanel({ title: panelTitle, rows, empty, partial, status }: { readonly title: string; readonly rows: readonly AllocationRow[]; readonly empty: string; readonly partial: boolean; readonly status?: string }) {
@@ -342,8 +352,8 @@ function BarAllocationPanel({ title: panelTitle, rows, empty, partial, status }:
 
 function PositionSizingPanel({ positions, scopedValue, scopeLabel: selectedScopeLabel }: { readonly positions: readonly PortfolioPosition[]; readonly scopedValue: string | null; readonly scopeLabel: string }) {
   return <section className="dashboard-sizing-section">
-    <div className="dashboard-section-heading"><div><p className="eyebrow">Position sizing</p><h2>Largest positions & sizing intent</h2><p>Current portfolio weight is compared only with your configured portfolio sizing settings. Scope share is shown separately so theme/role views do not distort your saved target.</p></div><Link to="/app/structure">Edit sizing targets →</Link></div>
-    {positions.length ? <div className="dashboard-sizing-list">{positions.map((position) => <SizingRow key={position.securityId} position={position} scopedValue={scopedValue} />)}</div> : <EmptyData text={`No priced holdings are available in ${selectedScopeLabel}.`} />}
+    <div className="dashboard-section-heading"><div><p className="eyebrow">Position sizing</p><h2>Largest stock positions & sizing intent</h2><p>Equity stock positions only—ETFs are intentionally excluded. Current portfolio weight is compared with your configured sizing settings, while scope share remains separate.</p></div><Link to="/app/structure">Edit sizing targets →</Link></div>
+    {positions.length ? <div className="dashboard-sizing-list">{positions.map((position) => <SizingRow key={position.securityId} position={position} scopedValue={scopedValue} />)}</div> : <EmptyData text={`No non-ETF priced holdings are available in ${selectedScopeLabel}. ETFs are intentionally excluded from position sizing.`} />}
   </section>
 }
 
@@ -419,7 +429,7 @@ function BrokerAnalytics({ rows }: { readonly rows: PortfolioViewModel["brokerAn
   const max = Decimal.max(1, ...rows.map((row) => new Decimal(row.currentValue ?? 0)))
   return <section className="panel analytics-panel dashboard-analytics-panel"><div className="panel-heading"><div><p className="eyebrow">Broker / demat exposure</p><h2>Account performance and exposure</h2><p>Each broker/demat account is calculated independently. Missing attribution remains in Unknown / Unattributed; unsupported histories are excluded, not reassigned.</p></div></div>
     <div className="broker-chart" aria-label="Broker current-value comparison">{rows.map((row) => <div key={row.broker}><span>{row.broker}</span><div><i style={{ width: `${new Decimal(row.currentValue ?? 0).div(max).times(100).toFixed()}%` }} /></div><strong>{formatMoney(row.currentValue)}</strong></div>)}</div>
-    <details className="dashboard-broker-details"><summary>Detailed broker accounting</summary><div className="table-scroll"><table className="analytics-table"><thead><tr><th>Broker / account</th><th>Supported cost</th><th>Current value</th><th>Unrealised</th><th>Realised</th><th>Total supported P&amp;L</th><th>Return</th><th>Coverage</th></tr></thead><tbody>{rows.map((row) => <tr key={row.broker}><td>{row.broker}</td><td>{formatMoney(row.investedAmount)}</td><td>{formatMoney(row.currentValue)}</td><td>{formatMoney(row.unrealisedPnl)}</td><td>{formatMoney(row.realisedPnl)}</td><td>{formatMoney(row.supportedPnl)}</td><td>{formatPercent(row.returnPercent)}</td><td>{row.coveredHistories}/{row.totalHistories} · {row.fifoHistories} FIFO · {row.averageCostHistories} average · {row.unresolvedHistories} unresolved</td></tr>)}</tbody></table></div></details>
+    <details className="dashboard-broker-details"><summary>Detailed broker accounting</summary><div className="table-scroll"><table className="analytics-table"><thead><tr><th>Broker / account</th><th>Supported cost</th><th>Current value</th><th>Unrealised</th><th>Realised</th><th>Total supported P&amp;L</th><th>Return</th><th>Coverage</th></tr></thead><tbody>{rows.map((row) => <tr key={row.broker}><td>{row.broker}</td><td>{formatMoney(row.investedAmount)}</td><td>{formatMoney(row.currentValue)}</td><td className={`dashboard-value-${signedTone(row.unrealisedPnl)}`}>{formatMoney(row.unrealisedPnl)}</td><td className={`dashboard-value-${signedTone(row.realisedPnl)}`}>{formatMoney(row.realisedPnl)}</td><td className={`dashboard-value-${signedTone(row.supportedPnl)}`}>{formatMoney(row.supportedPnl)}</td><td className={`dashboard-value-${signedTone(row.returnPercent)}`}>{formatPercent(row.returnPercent)}</td><td>{row.coveredHistories}/{row.totalHistories} · {row.fifoHistories} FIFO · {row.averageCostHistories} average · {row.unresolvedHistories} unresolved</td></tr>)}</tbody></table></div></details>
   </section>
 }
 
@@ -427,8 +437,8 @@ function EmptyData({ text }: { readonly text: string }) {
   return <div className="data-empty"><strong>Not yet available</strong><p>{text}</p></div>
 }
 
-function Kpi({ icon, label, value, secondaryValue, detail }: { readonly icon: string; readonly label: string; readonly value: string; readonly secondaryValue?: string; readonly detail: string }) {
-  return <article className="dashboard-kpi-card"><span className="dashboard-kpi-icon" aria-hidden="true">{icon}</span><div><span>{label}</span><strong>{value}</strong>{secondaryValue ? <b className="kpi-secondary-value">{secondaryValue}</b> : null}<small>{detail}</small></div></article>
+function Kpi({ icon, label, value, secondaryValue, detail, tone = "neutral" }: { readonly icon: string; readonly label: string; readonly value: string; readonly secondaryValue?: string; readonly detail: string; readonly tone?: SignedTone }) {
+  return <article className={`dashboard-kpi-card dashboard-signed-${tone}`}><span className="dashboard-kpi-icon" aria-hidden="true">{icon}</span><div><span>{label}</span><strong>{value}</strong>{secondaryValue ? <b className="kpi-secondary-value">{secondaryValue}</b> : null}<small>{detail}</small></div></article>
 }
 
 function formatSignedPercent(value: string | null) {
