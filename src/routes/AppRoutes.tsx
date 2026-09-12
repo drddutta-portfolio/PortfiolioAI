@@ -7,6 +7,7 @@ import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
 import { LoginPage } from "../pages/LoginPage"
 import { N4aNormalizationPilotPage } from "../pages/N4aNormalizationPilotPage"
+import { N4bBatchNormalizationPilotPage } from "../pages/N4bBatchNormalizationPilotPage"
 import { NotFoundPage } from "../pages/NotFoundPage"
 import { UpdatePasswordPage } from "../pages/UpdatePasswordPage"
 import { PageLoader } from "../components/PageLoader"
@@ -115,6 +116,14 @@ export function AppRoutes() {
           element={
             <AppShell>
               <N4aNormalizationPilotPage />
+            </AppShell>
+          }
+        />
+        <Route
+          path="/app/internal/n4b-batch-normalization-pilot"
+          element={
+            <AppShell>
+              <N4bBatchNormalizationPilotPage />
             </AppShell>
           }
         />
