@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom"
 import { formatMoney, formatPercent, formatQuantity } from "../features/portfolio/format"
 import type { PortfolioPosition } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
+import { CompanyAboutPanel } from "../features/research/CompanyAboutPanel"
 import { CompleteResearchRefreshPanel } from "../features/research/CompleteResearchRefreshPanel"
 import { FinancialsWorkspace, OwnershipWorkspace, QualityGrowthWorkspace, ValuationWorkspace } from "../features/research/ResearchEvidenceWorkspace"
 import { PositionDecisionControls } from "../features/research/PositionDecisionControls"
@@ -17,10 +18,6 @@ const TABS = ["Overview", "Financials", "Quality & Growth", "Ownership", "Valuat
 type Tab = typeof TABS[number]
 
 type ScoringHook = ReturnType<typeof useSecurityScoring>
-
-const COMPANY_ABOUT_PREVIEW: Readonly<Record<string, string>> = {
-  HDFCBANK: "HDFC Bank is one of India's largest private-sector banking groups, serving retail, business and corporate customers through banking, lending, payments and other financial services. Its broad domestic franchise spans deposits, credit, payments and corporate banking. PortfolioAI evaluates the company under its bank-specific research framework; this short profile is a cached preview that can later be replaced by a provider-sourced, normalized company description.",
-}
 
 export function ResearchPage() {
   const { security } = useParams()
@@ -57,7 +54,7 @@ function ResearchHeader({ position, research, scoring, currency, portfolioId, on
   const profileSource = scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed" : scoring.data?.profileSource === "SECTOR_RULE" ? "Sector-resolved" : scoring.data ? "General fallback" : null
   return <header className="research-header">
     <div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><h1>{research?.companyName ?? position.company}</h1><p className="security-identity-line"><strong>{position.symbol}</strong> · {position.exchange} · {titleCase(position.instrumentType)}</p><p><strong>Scoring profile:</strong> {scoring.data?.profileName ?? "Loading…"}{profileSource ? ` · ${profileSource}` : ""}</p><p>Canonical sector: {sector ?? "Awaiting classification"} · Canonical industry: {industry ?? "Awaiting classification"}</p><p>{research?.marketCapCategory ? titleCase(research.marketCapCategory) : "Market-cap category unavailable"} · {position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</p><p className="raw-market-cap">Raw market cap: {formatResearchMetric(marketCap)}</p><div className="identity-chips" aria-label="Themes">{position.themes.length ? position.themes.map((theme) => <span key={theme.id}>{theme.name}</span>) : <span>No themes</span>}</div></div>
-    <section className="company-about-panel" aria-labelledby="company-about-title"><header><p className="eyebrow" id="company-about-title">About the company</p><span className="about-source">Cached profile preview</span></header><div className="company-about-scroll" tabIndex={0}><p>{companyAboutSummary(position, research, scoring)}</p></div></section>
+    <CompanyAboutPanel portfolioId={portfolioId} securityId={position.securityId} symbol={position.symbol} companyName={research?.companyName ?? position.company} />
     <section className="position-dashboard" aria-labelledby="position-dashboard-title"><h2 id="position-dashboard-title">Your position</h2><div className="research-head-metrics">
       <MetricCard label="Current price / CMP" value={formatMoney(position.currentPrice, currency)} detail={position.currentPrice === null ? "Unavailable" : `${position.isPriceStale ? "Stale price" : "Current cache"} · ${position.priceProvider ?? "Angel One"}`} />
       <MetricCard label="Total quantity" value={formatQuantity(position.quantity)} />
@@ -148,11 +145,3 @@ function dateTime(value: string) { if (!value) return "Unavailable"; const parse
 function period(metric: ResearchMetric) { return [metric.periodType?.replaceAll("_", " "), metric.periodEnd ? date(metric.periodEnd) : null].filter(Boolean).join(" · ") || "Period unavailable" }
 function titleCase(value: string) { return value.replaceAll("_", " ").toLocaleLowerCase().replace(/(^|\s)\S/gu, (match) => match.toLocaleUpperCase()) }
 function metricLabelForCode(code: string) { return metricLabel(code) }
-function companyAboutSummary(position: PortfolioPosition, research: SecurityResearch | null, scoring: ScoringHook) {
-  const seeded = COMPANY_ABOUT_PREVIEW[position.symbol.toLocaleUpperCase()]
-  if (seeded) return seeded
-  const company = research?.companyName ?? position.company
-  const context = scoring.data?.profileName ?? research?.sector ?? position.sector ?? "its current research profile"
-  const industry = research?.industry ?? position.industry
-  return `${company} is currently covered by PortfolioAI under ${context}${industry ? `, with ${industry} as the available industry context` : ""}. This compact company profile is intended for stable business context rather than frequently changing market data, and can later be replaced by a cached provider-sourced description.`
-}
