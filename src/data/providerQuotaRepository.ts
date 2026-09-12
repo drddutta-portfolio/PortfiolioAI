@@ -1,4 +1,10 @@
+import type { SupabaseClient } from "@supabase/supabase-js"
 import { supabase } from "../lib/supabase"
+
+// This RPC exists in the linked production schema, while the repository's generated
+// Database snapshot is still behind it. Keep the untyped adapter local until the
+// generated Supabase types are synchronized in a dedicated housekeeping change.
+const quotaDb = supabase as unknown as SupabaseClient
 
 export interface ProviderQuotaSummary {
   readonly sourceCode: string
@@ -37,7 +43,7 @@ type ProviderQuotaRow = {
 }
 
 export async function loadProviderQuotaSummary(): Promise<ProviderQuotaSummary> {
-  const result = await supabase.rpc("get_provider_quota_summary_v1", { p_source_code: "TRENDLYNE_MCP" })
+  const result = await quotaDb.rpc("get_provider_quota_summary_v1", { p_source_code: "TRENDLYNE_MCP" })
   if (result.error) throw result.error
   const rows = result.data as unknown as readonly ProviderQuotaRow[] | null
   const row = rows?.[0]
