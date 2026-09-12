@@ -1,6 +1,6 @@
 -- Stage N3 preparation: additive Portfolio News Intelligence foundation.
 -- This migration is intentionally NOT applied by repository creation alone.
--- It keeps Trendlyne scheduling disabled and only prepares a manual/pilot NEWS policy.
+-- It prepares a manual/pilot NEWS policy but does not mutate provider scheduler controls.
 
 create table public.news_items (
   id uuid primary key default gen_random_uuid(),
@@ -154,10 +154,9 @@ insert into public.refresh_domain_policies(
   now()
 );
 
--- Explicitly keep scheduling off during N3.
-update public.provider_ingestion_controls
-set scheduler_enabled=false, updated_at=now()
-where source_code='TRENDLYNE_MCP';
+-- N3 deliberately does not update provider_ingestion_controls directly.
+-- The pilot function refuses to run unless scheduler_enabled is already false.
+-- Any future provider-control mutation must use the audited Stage 7.2A control path.
 
 comment on table public.news_items is 'Normalized security-centric cached news. N3 pilot does not populate this table until the live provider response contract is reviewed.';
 comment on table public.news_source_appearances is 'Provider/source lineage for normalized news items. Browser clients have no direct access.';
