@@ -45,5 +45,5 @@ Deno.test("rejects private or local URLs", () => {
 })
 
 Deno.test("plain text decoder removes markup and entities", () => {
-  assertEquals(htmlToPlainText("<p>A &amp; B</p><p>C&nbsp;D</p>"), "A & B\n C D")
+  assertEquals(htmlToPlainText("<p>A &amp; B</p><p>C&nbsp;D</p>"), "A & B\nC D")
 })
