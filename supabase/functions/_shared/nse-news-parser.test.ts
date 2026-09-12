@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { buildHeadline, categoryFromSubject, normalizeCompanyName, parseNseCorporateAnnouncements, parseNsePublishedAt } from "./nse-news-parser.ts"
+import { buildHeadline, categoryFromSubject, importanceFromItem, normalizeCompanyName, parseNseCorporateAnnouncements, parseNsePublishedAt, toneFromItem } from "./nse-news-parser.ts"
 
 describe("NSE news parser", () => {
   it("normalizes conservative legal suffixes", () => {
@@ -30,6 +30,46 @@ describe("NSE news parser", () => {
       category: "MANAGEMENT",
     })
     expect(buildHeadline(rows[0])).toBe("HDFC Bank Limited: Change in Directors/KMP/SMP/Auditor/RTA")
+    expect(importanceFromItem(rows[0])).toBe("NOTABLE")
+    expect(toneFromItem(rows[0])).toEqual({
+      state: "NEUTRAL",
+      method: "DETERMINISTIC",
+      confidence: 0.9,
+      reason: "Management-change disclosure without explicit positive or negative language.",
+    })
+  })
+
+  it("classifies only explicit positive and negative event language", () => {
+    const positive = {
+      companyName: "Example Limited",
+      sourceUrl: "https://nsearchives.nseindia.com/corporate/order.pdf",
+      description: "Example Limited has received an order from a customer",
+      subject: "Order Received",
+      publishedAt: "2026-09-12T15:09:47.000Z",
+      publicationPrecision: "DATETIME" as const,
+      category: "ORDER_CONTRACT" as const,
+    }
+    const negative = {
+      ...positive,
+      sourceUrl: "https://nsearchives.nseindia.com/corporate/rating.pdf",
+      description: "Credit rating downgraded following default",
+      subject: "Credit Rating Downgrade",
+      category: "CREDIT_RATING" as const,
+    }
+    const ambiguous = {
+      ...positive,
+      sourceUrl: "https://nsearchives.nseindia.com/corporate/results.pdf",
+      description: "Financial results for the quarter",
+      subject: "Financial Results",
+      category: "RESULTS" as const,
+    }
+
+    expect(toneFromItem(positive).state).toBe("POSITIVE")
+    expect(importanceFromItem(positive)).toBe("NOTABLE")
+    expect(toneFromItem(negative).state).toBe("NEGATIVE")
+    expect(importanceFromItem(negative)).toBe("IMPORTANT")
+    expect(toneFromItem(ambiguous).state).toBe("UNCLASSIFIED")
+    expect(importanceFromItem(ambiguous)).toBe("IMPORTANT")
   })
 
   it("rejects malformed and non-NSE archive items", () => {
