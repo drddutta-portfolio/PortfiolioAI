@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PortfolioAI — N3 HDFCBANK News Pilot</title>
+  <style>
+    body { font-family: Inter, system-ui, sans-serif; background:#f4f8f5; color:#17352b; margin:0; padding:40px; }
+    main { max-width:720px; margin:0 auto; background:#fff; border:1px solid #cfe0d6; border-radius:16px; padding:28px; box-shadow:0 12px 40px rgba(25,75,55,.08); }
+    h1 { margin:0 0 8px; font-size:26px; }
+    p { line-height:1.55; color:#4e635b; }
+    .notice { background:#fff8e8; border:1px solid #ebcf87; border-radius:10px; padding:14px; margin:18px 0; color:#6e5410; }
+    button { background:#226b4b; color:white; border:0; border-radius:9px; padding:12px 18px; font-weight:700; cursor:pointer; }
+    button:disabled { opacity:.55; cursor:not-allowed; }
+    pre { white-space:pre-wrap; overflow-wrap:anywhere; background:#eef4f0; padding:14px; border-radius:10px; margin-top:18px; min-height:48px; }
+  </style>
+</head>
+<body>
+<main>
+  <p style="font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#287150">PortfolioAI controlled pilot</p>
+  <h1>HDFCBANK — N3 News Pilot</h1>
+  <p>This temporary page invokes the already-deployed authenticated pilot using your existing PortfolioAI login session. It is intentionally limited to HDFCBANK and the N3 contract-capture flow.</p>
+  <div class="notice"><strong>One controlled provider call only.</strong> Do not click the button more than once. The pilot performs no normalized news writes and does not enable scheduling.</div>
+  <button id="run">Run HDFCBANK N3 News Pilot</button>
+  <pre id="status">Ready. You must already be logged in to PortfolioAI on this localhost origin.</pre>
+</main>
+<script>
+  const PROJECT_REF = 'uxiyufbsbgzzdujzcdxe';
+  const PORTFOLIO_ID = '6193a4aa-3235-4057-bddc-209fcf443fc2';
+  const SECURITY_ID = 'b47b007d-1990-4504-a5a2-4391c07687c5';
+  const button = document.getElementById('run');
+  const status = document.getElementById('status');
+
+  function findAccessToken() {
+    const preferred = `sb-${PROJECT_REF}-auth-token`;
+    const keys = [preferred, ...Object.keys(localStorage).filter(k => k.startsWith(`sb-${PROJECT_REF}`) && k.includes('auth-token'))];
+    for (const key of [...new Set(keys)]) {
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      try {
+        const parsed = JSON.parse(raw);
+        if (typeof parsed?.access_token === 'string') return parsed.access_token;
+        if (typeof parsed?.currentSession?.access_token === 'string') return parsed.currentSession.access_token;
+        if (Array.isArray(parsed) && typeof parsed[0]?.access_token === 'string') return parsed[0].access_token;
+      } catch { /* continue */ }
+    }
+    return null;
+  }
+
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    status.textContent = 'Checking authenticated PortfolioAI session…';
+    const token = findAccessToken();
+    if (!token) {
+      status.textContent = 'No active PortfolioAI session was found in this browser. Open /app, log in, then return to this page.';
+      button.disabled = false;
+      return;
+    }
+
+    status.textContent = 'Running the single controlled HDFCBANK provider call…';
+    try {
+      const response = await fetch(`https://${PROJECT_REF}.supabase.co/functions/v1/pilot-trendlyne-news`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ portfolioId: PORTFOLIO_ID, securityId: SECURITY_ID })
+      });
+      const text = await response.text();
+      let body;
+      try { body = JSON.parse(text); } catch { body = { raw: text }; }
+      status.textContent = `HTTP ${response.status}\n\n${JSON.stringify(body, null, 2)}`;
+      if (!response.ok) button.disabled = false;
+    } catch (error) {
+      status.textContent = `Request failed before completion: ${error instanceof Error ? error.message : String(error)}`;
+      button.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
