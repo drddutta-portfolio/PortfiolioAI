@@ -17,8 +17,11 @@ function betterSnapshot(current: SecurityScoringSnapshot | undefined, incoming: 
   const currentRank = snapshotRank(current)
   const incomingRank = snapshotRank(incoming)
   for (let index = 0; index < currentRank.length; index += 1) {
-    if (incomingRank[index] > currentRank[index]) return incoming
-    if (incomingRank[index] < currentRank[index]) return current
+    const incomingValue = incomingRank[index]
+    const currentValue = currentRank[index]
+    if (incomingValue === undefined || currentValue === undefined) continue
+    if (incomingValue > currentValue) return incoming
+    if (incomingValue < currentValue) return current
   }
   return incoming
 }
