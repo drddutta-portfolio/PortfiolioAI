@@ -144,7 +144,6 @@ Deno.serve(async (request) => {
     }
     const runItemId = runItem.data.id as string
 
-    const attemptedAt = new Date().toISOString()
     let responseStatus: number | null = null
     let responseContentType: string | null = null
     let rawXml: string | null = null
