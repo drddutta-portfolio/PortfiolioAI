@@ -179,7 +179,8 @@ export function PositionDecisionControls({
   const suggestionDetail = recommendation ? `${recommendation.sectorProfile} · ${recommendation.policyStatus.toLocaleLowerCase()} policy` : scoring.isLoading ? "Evaluating sector-specific profile…" : recommendationPolicy ? "Recommendation evidence is being evaluated." : "No validated sector-specific recommendation policy yet."
   const confirmationTarget = tracking?.changeSignal === "DOWNGRADE" ? recommendationPolicy?.persistenceRules.downgradeConfirmations : recommendationPolicy?.persistenceRules.upgradeConfirmations ?? 2
   const primaryCaution = recommendation?.cautions[0] ?? null
-  const evidenceConfidence = scoring.data && Number.isFinite(scoring.data.evidenceConfidence) ? `${Math.round(scoring.data.evidenceConfidence)}%` : "Pending"
+  const evidenceConfidenceValue = scoring.data?.evidenceConfidence
+  const evidenceConfidence = typeof evidenceConfidenceValue === "number" && Number.isFinite(evidenceConfidenceValue) ? `${Math.round(evidenceConfidenceValue)}%` : "Pending"
 
   return <section className="position-controls" aria-label="Position controls">
     <div className="research-decision-layout">
