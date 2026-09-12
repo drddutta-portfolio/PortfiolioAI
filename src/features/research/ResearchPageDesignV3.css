@@ -6,7 +6,7 @@
   .research-page .research-header {
     grid-template-columns: minmax(280px, 1.55fr) repeat(8, minmax(88px, 1fr));
     gap: .48rem;
-    align-items: stretch;
+    align-items: start;
   }
 
   .research-page .research-title {
@@ -16,7 +16,9 @@
   }
 
   .research-page .research-metric-card {
-    min-height: 84px;
+    min-height: 76px;
+    height: auto;
+    align-self: start;
     align-content: start;
   }
 
