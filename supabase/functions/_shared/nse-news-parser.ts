@@ -8,6 +8,16 @@ export interface ParsedNseNewsItem {
   readonly category: "RESULTS" | "CORPORATE_ACTION" | "MANAGEMENT" | "ORDER_CONTRACT" | "FUND_RAISE" | "MA_INVESTMENT" | "CREDIT_RATING" | "SHAREHOLDING_INSIDER" | "LITIGATION_GOVERNANCE" | "UNCLASSIFIED"
 }
 
+export type NewsImportanceState = "UNCLASSIFIED" | "ROUTINE" | "NOTABLE" | "IMPORTANT"
+export type NewsToneState = "POSITIVE" | "NEUTRAL" | "NEGATIVE" | "UNCLASSIFIED"
+
+export interface DeterministicToneResult {
+  readonly state: NewsToneState
+  readonly method: "DETERMINISTIC" | "UNCLASSIFIED"
+  readonly confidence: number | null
+  readonly reason: string | null
+}
+
 const MONTHS: Readonly<Record<string, string>> = {
   Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05", Jun: "06",
   Jul: "07", Aug: "08", Sep: "09", Oct: "10", Nov: "11", Dec: "12",
@@ -27,6 +37,10 @@ function decodeXml(value: string): string {
 function text(tag: string, item: string): string | null {
   const match = item.match(new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`, "i"))
   return match ? decodeXml(match[1]) : null
+}
+
+function classifierText(item: ParsedNseNewsItem): string {
+  return `${item.subject ?? ""} ${item.description}`.toUpperCase()
 }
 
 export function normalizeCompanyName(value: string): string {
@@ -63,6 +77,33 @@ export function categoryFromSubject(subject: string | null): ParsedNseNewsItem["
   if (/SHAREHOLDING|INSIDER TRADING/.test(value)) return "SHAREHOLDING_INSIDER"
   if (/LITIGATION|FINE|PENALTY|GOVERNANCE/.test(value)) return "LITIGATION_GOVERNANCE"
   return "UNCLASSIFIED"
+}
+
+export function importanceFromItem(item: ParsedNseNewsItem): NewsImportanceState {
+  const value = classifierText(item)
+  if (/DOWNGRADE|DEFAULT|FRAUD|INSOLVENC|LIQUIDATION|PENALTY|\bFINE\b/.test(value)) return "IMPORTANT"
+  if (item.category === "RESULTS" || item.category === "FUND_RAISE" || item.category === "MA_INVESTMENT") return "IMPORTANT"
+  if (item.category === "MANAGEMENT" && /\b(CEO|CHIEF EXECUTIVE OFFICER|MD|MANAGING DIRECTOR|CFO|CHIEF FINANCIAL OFFICER|CHAIRMAN|WHOLE[- ]TIME DIRECTOR)\b/.test(value)) return "IMPORTANT"
+  if (["CORPORATE_ACTION", "MANAGEMENT", "ORDER_CONTRACT", "CREDIT_RATING", "LITIGATION_GOVERNANCE"].includes(item.category)) return "NOTABLE"
+  if (item.category === "SHAREHOLDING_INSIDER") return "ROUTINE"
+  return "UNCLASSIFIED"
+}
+
+export function toneFromItem(item: ParsedNseNewsItem): DeterministicToneResult {
+  const value = classifierText(item)
+  if (/DOWNGRADE|DEFAULT|PENALTY|\bFINE\b|FRAUD|INSOLVENC|LIQUIDATION|CANCELLATION|TERMINATION|ADVERSE ORDER/.test(value)) {
+    return { state: "NEGATIVE", method: "DETERMINISTIC", confidence: 0.95, reason: "Explicit negative event language in NSE announcement." }
+  }
+  if (/RATING UPGRADE|UPGRADED.*RATING|ORDER RECEIVED|RECEIVED.*ORDER|CONTRACT AWARDED|AWARDED.*CONTRACT|LETTER OF AWARD|DIVIDEND DECLARED|DIVIDEND RECOMMENDED|RECOMMENDED.*DIVIDEND/.test(value)) {
+    return { state: "POSITIVE", method: "DETERMINISTIC", confidence: 0.95, reason: "Explicit positive event language in NSE announcement." }
+  }
+  if (/RECORD DATE|SHAREHOLDING PATTERN|BOARD MEETING|ANALYST.*MEET|INVESTOR.*MEET/.test(value)) {
+    return { state: "NEUTRAL", method: "DETERMINISTIC", confidence: 0.9, reason: "Explicit administrative or informational event language in NSE announcement." }
+  }
+  if (item.category === "MANAGEMENT" && /CHANGE IN DIRECTORS|KMP|SMP|AUDITOR|RTA/.test(value)) {
+    return { state: "NEUTRAL", method: "DETERMINISTIC", confidence: 0.9, reason: "Management-change disclosure without explicit positive or negative language." }
+  }
+  return { state: "UNCLASSIFIED", method: "UNCLASSIFIED", confidence: null, reason: null }
 }
 
 export function parseNseCorporateAnnouncements(xml: string): ParsedNseNewsItem[] {
