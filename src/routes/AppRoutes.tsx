@@ -9,6 +9,7 @@ import { LoginPage } from "../pages/LoginPage"
 import { N4aNormalizationPilotPage } from "../pages/N4aNormalizationPilotPage"
 import { N4bBatchNormalizationPilotPage } from "../pages/N4bBatchNormalizationPilotPage"
 import { N4cLinkedDocumentPilotPage } from "../pages/N4cLinkedDocumentPilotPage"
+import { N4c2TextExtractionPilotPage } from "../pages/N4c2TextExtractionPilotPage"
 import { NotFoundPage } from "../pages/NotFoundPage"
 import { UpdatePasswordPage } from "../pages/UpdatePasswordPage"
 import { PageLoader } from "../components/PageLoader"
@@ -133,6 +134,14 @@ export function AppRoutes() {
           element={
             <AppShell>
               <N4cLinkedDocumentPilotPage />
+            </AppShell>
+          }
+        />
+        <Route
+          path="/app/internal/n4c2-text-extraction-pilot"
+          element={
+            <AppShell>
+              <N4c2TextExtractionPilotPage />
             </AppShell>
           }
         />
