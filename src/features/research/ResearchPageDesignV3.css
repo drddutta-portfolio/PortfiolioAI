@@ -16,10 +16,20 @@
   }
 
   .research-page .research-metric-card {
-    min-height: 76px;
+    min-height: 74px;
     height: auto;
     align-self: start;
     align-content: start;
+    margin-top: .52rem;
+    padding: .52rem .58rem;
+  }
+
+  .research-page .research-metric-card > span {
+    line-height: 1.12;
+  }
+
+  .research-page .research-metric-card strong {
+    line-height: 1.08;
   }
 
   .research-page .broker-card { grid-column: auto; }
@@ -43,6 +53,11 @@
   grid-template-columns: minmax(0, .98fr) minmax(0, 1.08fr);
   gap: .72rem;
   padding: .72rem;
+}
+
+.research-page .user-plan-panel,
+.research-page .portfolioai-advisory {
+  box-shadow: 0 4px 14px rgba(31, 69, 48, .025);
 }
 
 /* ---------- User plan: 2 x 2 primary tiles + compact selected-role strip ---------- */
@@ -154,7 +169,7 @@
 }
 
 .research-page .key-insight-list small { font-size: .56rem; }
-.research-page .key-insight-list strong { font-size: .78rem; }
+.research-page .key-insight-list strong { font-size: .78rem; line-height: 1.2; }
 .research-page .key-insight-list p { font-size: .62rem; line-height: 1.34; }
 
 .research-page .key-insights-readonly {
@@ -164,33 +179,35 @@
 
 /* ---------- AI interpretation typography and hierarchy ---------- */
 .research-page .ai-interpretation-panel {
-  padding: .82rem;
+  padding: .86rem;
+  box-shadow: 0 5px 16px rgba(31, 69, 48, .025);
 }
 
 .research-page .ai-thesis {
-  padding: .72rem .8rem;
+  padding: .76rem .84rem;
 }
 
 .research-page .ai-thesis h4 {
-  font-size: 1.02rem;
+  font-size: 1.03rem;
+  line-height: 1.18;
 }
 
 .research-page .ai-thesis p {
-  font-size: .72rem;
-  line-height: 1.42;
+  font-size: .73rem;
+  line-height: 1.43;
 }
 
 .research-page .ai-explanation-grid {
-  gap: .5rem;
+  gap: .52rem;
 }
 
 .research-page .ai-explanation-grid article {
-  padding: .68rem;
+  padding: .7rem;
 }
 
 .research-page .ai-explanation-grid p {
-  font-size: .69rem;
-  line-height: 1.38;
+  font-size: .7rem;
+  line-height: 1.4;
 }
 
 .research-page .ai-detail-grid {
