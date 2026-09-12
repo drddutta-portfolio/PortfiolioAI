@@ -1,5 +1,5 @@
 import { assertEquals } from "jsr:@std/assert@1"
-import { extractLogoCandidates, extractScreenerCompanyProfile, htmlToPlainText, publicHttpUrl } from "./company-profile.ts"
+import { extractLogoCandidates, extractScreenerCompanyProfile, extractWebsiteDescription, htmlToPlainText, publicHttpUrl } from "./company-profile.ts"
 
 Deno.test("extracts Screener About and official website", () => {
   const html = `
@@ -19,6 +19,13 @@ Deno.test("extracts Screener About and official website", () => {
   const profile = extractScreenerCompanyProfile(html, "https://www.screener.in/company/EXAMPLE/")
   assertEquals(profile.about, "Example Bank provides retail & corporate banking services. It operates across India.")
   assertEquals(profile.websiteUrl, "https://examplebank.test/")
+})
+
+Deno.test("extracts official website description fallback", () => {
+  assertEquals(
+    extractWebsiteDescription('<meta name="description" content="Example &amp; Company makes useful products for customers across India.">'),
+    "Example & Company makes useful products for customers across India.",
+  )
 })
 
 Deno.test("extracts likely company logo candidates in priority order", () => {
