@@ -1,0 +1,181 @@
+/* Designs branch V5 — company About panel beside identity, with existing position cards below.
+   Presentation-only preview. No provider calls, persistence, scoring or backend changes. */
+
+@media (min-width: 1060px) {
+  .research-page .research-header {
+    grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+    gap: .7rem .85rem;
+    align-items: start;
+  }
+
+  .research-page .research-title {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    padding-right: .85rem;
+  }
+
+  .research-page .company-about-panel {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    min-height: 104px;
+    max-height: 124px;
+    padding: .72rem .85rem .75rem;
+    border: 1px solid #d7e3dc;
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(255,255,255,.94) 0%, rgba(248,251,249,.94) 100%);
+    box-shadow: 0 4px 16px rgba(31,69,48,.025);
+    overflow: hidden;
+  }
+
+  .research-page .company-about-panel > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: .34rem;
+  }
+
+  .research-page .company-about-panel .eyebrow {
+    margin: 0;
+    color: #567064;
+    font-size: .56rem;
+    font-weight: 850;
+    letter-spacing: .075em;
+    text-transform: uppercase;
+  }
+
+  .research-page .company-about-panel .about-source {
+    color: #809087;
+    font-size: .54rem;
+    white-space: nowrap;
+  }
+
+  .research-page .company-about-scroll {
+    max-height: 82px;
+    padding-left: .5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #a9beb2 transparent;
+    direction: rtl;
+  }
+
+  .research-page .company-about-scroll > p {
+    margin: 0;
+    color: #30463a;
+    font-size: .72rem;
+    line-height: 1.42;
+    direction: ltr;
+    text-align: left;
+  }
+
+  .research-page .company-about-scroll::-webkit-scrollbar { width: 6px; }
+  .research-page .company-about-scroll::-webkit-scrollbar-track { background: transparent; }
+  .research-page .company-about-scroll::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #b4c8bd;
+  }
+  .research-page .company-about-scroll::-webkit-scrollbar-thumb:hover { background: #93ad9f; }
+
+  /* Keep the existing eight position cards directly below the About panel. */
+  .research-page .position-dashboard {
+    grid-column: 2;
+    grid-row: 2;
+    display: block;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .research-page .position-dashboard > h2 { display: none; }
+
+  .research-page .position-dashboard .research-head-metrics {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(78px, 1fr));
+    gap: .45rem;
+  }
+
+  .research-page .position-dashboard .research-metric-card {
+    min-height: 72px;
+    margin-top: 0;
+    padding: .52rem .56rem;
+  }
+
+  .research-page .position-dashboard .position-controls {
+    grid-column: 1 / -1;
+    margin-top: .35rem;
+  }
+}
+
+@media (max-width: 1059px) and (min-width: 821px) {
+  .research-page .research-header {
+    display: grid;
+    grid-template-columns: minmax(220px, .72fr) minmax(0, 1.28fr);
+    gap: .7rem;
+  }
+
+  .research-page .research-title {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .research-page .company-about-panel {
+    grid-column: 2;
+    grid-row: 1;
+    max-height: 130px;
+    padding: .7rem .8rem;
+    border: 1px solid #d7e3dc;
+    border-radius: 11px;
+    background: #fbfdfb;
+  }
+
+  .research-page .company-about-panel > header {
+    display: flex;
+    justify-content: space-between;
+    gap: .6rem;
+    margin-bottom: .3rem;
+  }
+
+  .research-page .company-about-panel .eyebrow { margin: 0; font-size: .56rem; }
+  .research-page .company-about-panel .about-source { font-size: .53rem; color: #809087; }
+  .research-page .company-about-scroll { max-height: 86px; overflow-y: auto; }
+  .research-page .company-about-scroll > p { margin: 0; font-size: .7rem; line-height: 1.4; }
+
+  .research-page .position-dashboard {
+    grid-column: 2;
+    grid-row: 2;
+    display: block;
+  }
+
+  .research-page .position-dashboard > h2 { display: none; }
+  .research-page .position-dashboard .research-head-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: .45rem;
+  }
+  .research-page .position-dashboard .position-controls { grid-column: 1 / -1; }
+}
+
+@media (max-width: 820px) {
+  .research-page .company-about-panel {
+    margin-top: .65rem;
+    padding: .72rem .78rem;
+    border: 1px solid #d7e3dc;
+    border-radius: 10px;
+    background: #fbfdfb;
+  }
+
+  .research-page .company-about-panel > header {
+    display: flex;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-bottom: .32rem;
+  }
+
+  .research-page .company-about-panel .eyebrow { margin: 0; font-size: .57rem; }
+  .research-page .company-about-panel .about-source { font-size: .53rem; color: #809087; }
+  .research-page .company-about-scroll { max-height: 110px; overflow-y: auto; }
+  .research-page .company-about-scroll > p { margin: 0; font-size: .72rem; line-height: 1.42; }
+
+  .research-page .position-dashboard { margin-top: .65rem; }
+}

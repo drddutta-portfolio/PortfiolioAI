@@ -178,42 +178,63 @@ export function PositionDecisionControls({
 
   const suggestionDetail = recommendation ? `${recommendation.sectorProfile} · ${recommendation.policyStatus.toLocaleLowerCase()} policy` : scoring.isLoading ? "Evaluating sector-specific profile…" : recommendationPolicy ? "Recommendation evidence is being evaluated." : "No validated sector-specific recommendation policy yet."
   const confirmationTarget = tracking?.changeSignal === "DOWNGRADE" ? recommendationPolicy?.persistenceRules.downgradeConfirmations : recommendationPolicy?.persistenceRules.upgradeConfirmations ?? 2
+  const primaryCaution = recommendation?.cautions[0] ?? null
+  const evidenceConfidenceValue = scoring.data?.evidenceConfidence
+  const evidenceConfidence = typeof evidenceConfidenceValue === "number" && Number.isFinite(evidenceConfidenceValue) ? `${Math.round(evidenceConfidenceValue)}%` : "Pending"
 
   return <section className="position-controls" aria-label="Position controls">
-    <div className="position-controls-heading"><div><span>Decision controls</span><strong>Your saved investment plan and PortfolioAI advisory</strong><small>Your plan remains user-controlled. PortfolioAI recommendations are sector-aware, read-only and never overwrite your decisions.</small></div><button type="button" className="button button-secondary position-edit-button" onClick={() => setEditing((value) => !value)}>{editing ? "Cancel" : "Edit plan"}</button></div>
-    <div className="decision-workspace">
-      <section className="user-plan-panel" aria-labelledby="user-plan-title">
-        <header className="decision-panel-heading"><span className="decision-panel-icon" aria-hidden="true">◎</span><div><h3 id="user-plan-title">Your investment plan</h3><p>These values are user-controlled and never overwritten by PortfolioAI.</p></div></header>
-        <div className="user-plan-grid">
-          <article><span>Target price</span><strong>{money(settings.targetPrice, currency)}</strong><small>{settings.targetPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
-          <article><span>Stop loss</span><strong>{money(settings.stopLossPrice, currency)}</strong><small>{settings.stopLossPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
-          <article><span>Your selected role</span><strong>{title(settings.portfolioRole)}</strong><small>Manual portfolio decision</small></article>
-          <article><span>Target weight</span><strong>{percent(settings.targetWeight)}</strong><small>Portfolio allocation guide</small></article>
-          <article><span>Investment horizon</span><strong>{settings.investmentHorizon || "Not set"}</strong><small>Your intended holding horizon</small></article>
+    <div className="research-decision-layout">
+      <div className="research-decision-main">
+        <div className="position-controls-heading"><div><span>Decision controls</span><strong>Decision Workspace</strong><small>Your saved investment plan and PortfolioAI advisory stay separate. PortfolioAI is read-only and never overwrites your decisions.</small></div><button type="button" className="button button-secondary position-edit-button" onClick={() => setEditing((value) => !value)}>{editing ? "Cancel" : "Edit plan"}</button></div>
+
+        <div className="decision-workspace">
+          <section className="user-plan-panel" aria-labelledby="user-plan-title">
+            <header className="decision-panel-heading"><span className="decision-panel-icon" aria-hidden="true">◎</span><div><h3 id="user-plan-title">Your investment plan</h3><p>These values are user-controlled and never overwritten by PortfolioAI.</p></div></header>
+            <div className="user-plan-grid">
+              <article><span>Target price</span><strong>{money(settings.targetPrice, currency)}</strong><small>{settings.targetPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
+              <article><span>Stop loss</span><strong>{money(settings.stopLossPrice, currency)}</strong><small>{settings.stopLossPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
+              <article><span>Your selected role</span><strong>{title(settings.portfolioRole)}</strong><small>Manual portfolio decision</small></article>
+              <article><span>Target weight</span><strong>{percent(settings.targetWeight)}</strong><small>Portfolio allocation guide</small></article>
+              <article><span>Investment horizon</span><strong>{settings.investmentHorizon || "Not set"}</strong><small>Your intended holding horizon</small></article>
+            </div>
+          </section>
+
+          <section className="portfolioai-advisory" aria-labelledby="portfolioai-advisory-title">
+            <header className="advisory-heading"><div className="advisory-title-wrap"><span className="decision-panel-icon advisory-icon" aria-hidden="true">✦</span><div><h3 id="portfolioai-advisory-title">PortfolioAI suggestion</h3><p>Sector-aware research recommendation preview.</p></div></div>{tracking ? <span className={`recommendation-transition ${transitionClass(tracking.transitionStatus)}`}>{transitionLabel(tracking.transitionStatus)}</span> : null}</header>
+            <div className="advisory-primary"><strong>{recommendation ? recommendationLabel(recommendation.suggestedRole) : "Pending"}</strong><small>{suggestionDetail}</small>{recommendation?.cautions.length ? <div className="advisory-cautions" aria-label="Recommendation cautions">{recommendation.cautions.map((caution) => <span key={caution}>{caution}</span>)}</div> : null}</div>
+
+            {actionPreview ? <section className={`action-bias action-${actionPreview.tone.toLocaleLowerCase()}`} aria-label="PortfolioAI action bias">
+              <div className="action-bias-main"><span>Action bias</span><strong>{actionPreview.label}</strong><small>{actionPreview.headline}</small></div>
+              <details><summary>Why this action?</summary><ul>{actionPreview.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></details>
+            </section> : null}
+
+            {weightPreview ? <section className={`weight-preview weight-${weightPreview.position.toLocaleLowerCase().replaceAll("_", "-")}`} aria-label="PortfolioAI suggested weight range">
+              <div className="weight-preview-main"><span>Suggested weight range</span><strong>{formatWeightRange(weightPreview)}</strong><small>{weightPreview.label}</small></div>
+              <div className="weight-preview-context"><span><b>Current</b>{weightPreview.currentWeight === null ? "Unavailable" : `${weightPreview.currentWeight.toFixed(2)}%`}</span><span><b>Your target</b>{weightPreview.userTargetWeight === null ? "Not set" : `${weightPreview.userTargetWeight}%`}</span>{weightPreview.profileExposure !== null ? <span><b>Known {recommendation?.sectorProfile ?? "profile"} exposure</b>{weightPreview.profileExposure.toFixed(2)}%</span> : <span><b>Portfolio context</b>Classification coverage pending</span>}</div>
+              <details className="weight-rationale"><summary>Why this range?</summary><ul>{weightPreview.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></details>
+            </section> : null}
+
+            {tracking ? <div className="advisory-tracking-summary"><div><span>Tracking status</span><strong>{tracking.persistenceCount} consecutive qualifying evaluation{tracking.persistenceCount === 1 ? "" : "s"} recorded</strong><small>Role changes require {confirmationTarget} confirmations.</small></div><span aria-hidden="true">›</span></div> : null}
+            <div className="advisory-footer"><div><strong>Read-only pilot · does not change your role or weight</strong><small>This is a research preview. Your selected role, holdings, target weight, target price and stop loss remain under your control.</small></div>{history.length ? <details className="recommendation-history"><summary>Tracking history</summary><div>{history.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{item.actionBias ? `${title(item.actionBias)} · ` : ""}{rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax) ? `${rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax)} · ` : ""}{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : <span className="tracking-history-empty">Tracking history will appear after the first qualifying evaluation.</span>}</div>
+          </section>
         </div>
-      </section>
 
-      <section className="portfolioai-advisory" aria-labelledby="portfolioai-advisory-title">
-        <header className="advisory-heading"><div className="advisory-title-wrap"><span className="decision-panel-icon advisory-icon" aria-hidden="true">✦</span><div><h3 id="portfolioai-advisory-title">PortfolioAI suggestion</h3><p>Sector-aware research recommendation preview.</p></div></div>{tracking ? <span className={`recommendation-transition ${transitionClass(tracking.transitionStatus)}`}>{transitionLabel(tracking.transitionStatus)}</span> : null}</header>
-        <div className="advisory-primary"><strong>{recommendation ? recommendationLabel(recommendation.suggestedRole) : "Pending"}</strong><small>{suggestionDetail}</small>{recommendation?.cautions.length ? <div className="advisory-cautions" aria-label="Recommendation cautions">{recommendation.cautions.map((caution) => <span key={caution}>{caution}</span>)}</div> : null}</div>
+        <RecommendationInterpretationPanel portfolioId={portfolioId} securityId={securityId} enabled={Boolean(tracking && recommendation && recommendation.suggestedRole !== "INSUFFICIENT")} />
+      </div>
 
-        {actionPreview ? <section className={`action-bias action-${actionPreview.tone.toLocaleLowerCase()}`} aria-label="PortfolioAI action bias">
-          <div className="action-bias-main"><span>Action bias</span><strong>{actionPreview.label}</strong><small>{actionPreview.headline}</small></div>
-          <details><summary>Why this action?</summary><ul>{actionPreview.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></details>
-        </section> : null}
-
-        {weightPreview ? <section className={`weight-preview weight-${weightPreview.position.toLocaleLowerCase().replaceAll("_", "-")}`} aria-label="PortfolioAI suggested weight range">
-          <div className="weight-preview-main"><span>Suggested weight range</span><strong>{formatWeightRange(weightPreview)}</strong><small>{weightPreview.label}</small></div>
-          <div className="weight-preview-context"><span><b>Current</b>{weightPreview.currentWeight === null ? "Unavailable" : `${weightPreview.currentWeight.toFixed(2)}%`}</span><span><b>Your target</b>{weightPreview.userTargetWeight === null ? "Not set" : `${weightPreview.userTargetWeight}%`}</span>{weightPreview.profileExposure !== null ? <span><b>Known {recommendation?.sectorProfile ?? "profile"} exposure</b>{weightPreview.profileExposure.toFixed(2)}%</span> : <span><b>Portfolio context</b>Classification coverage pending</span>}</div>
-          <details className="weight-rationale"><summary>Why this range?</summary><ul>{weightPreview.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></details>
-        </section> : null}
-
-        {tracking ? <div className="advisory-tracking-summary"><div><span>Tracking status</span><strong>{tracking.persistenceCount} consecutive qualifying evaluation{tracking.persistenceCount === 1 ? "" : "s"} recorded</strong><small>Role changes require {confirmationTarget} confirmations.</small></div><span aria-hidden="true">›</span></div> : null}
-        <div className="advisory-footer"><div><strong>Read-only pilot · does not change your role or weight</strong><small>This is a research preview. Your selected role, holdings, target weight, target price and stop loss remain under your control.</small></div>{history.length ? <details className="recommendation-history"><summary>Tracking history</summary><div>{history.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{item.actionBias ? `${title(item.actionBias)} · ` : ""}{rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax) ? `${rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax)} · ` : ""}{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : <span className="tracking-history-empty">Tracking history will appear after the first qualifying evaluation.</span>}</div>
-      </section>
+      <aside className="key-insights-panel" aria-labelledby="key-insights-title">
+        <header><span className="key-insights-icon" aria-hidden="true">▥</span><div><h3 id="key-insights-title">Key Insights</h3><p>Quick view of the most important research signals.</p></div></header>
+        <div className="key-insight-list">
+          <article><span className="key-insight-badge" aria-hidden="true">☆</span><div><small>Role</small><strong>{recommendation ? recommendationLabel(recommendation.suggestedRole) : "Pending"}</strong><p>{suggestionDetail}</p></div></article>
+          <article><span className="key-insight-badge" aria-hidden="true">◎</span><div><small>Action bias</small><strong>{actionPreview?.label ?? "Pending"}</strong><p>{actionPreview?.headline ?? "Awaiting recommendation context."}</p></div></article>
+          <article><span className="key-insight-badge" aria-hidden="true">◔</span><div><small>Suggested weight range</small><strong>{weightPreview ? formatWeightRange(weightPreview) : "Pending"}</strong><p>{weightPreview?.label ?? "Awaiting portfolio context."}</p></div></article>
+          <article className={primaryCaution ? "key-insight-caution" : undefined}><span className="key-insight-badge" aria-hidden="true">↗</span><div><small>Primary caution</small><strong>{primaryCaution ? "Watch" : "None highlighted"}</strong><p>{primaryCaution ?? "No current recommendation caution is highlighted."}</p></div></article>
+          <article><span className="key-insight-badge" aria-hidden="true">✓</span><div><small>Tracking status</small><strong>{tracking ? `${tracking.persistenceCount} qualifying evaluation${tracking.persistenceCount === 1 ? "" : "s"}` : "Pending"}</strong><p>{tracking ? `Role changes require ${confirmationTarget} confirmations.` : "Tracking begins after a qualifying evaluation."}</p></div></article>
+          <article><span className="key-insight-badge" aria-hidden="true">▤</span><div><small>Evidence confidence</small><strong>{evidenceConfidence}</strong><p>Confidence is reported from the current deterministic scoring snapshot.</p></div></article>
+        </div>
+        <div className="key-insights-readonly"><strong>Read-only advisory</strong><p>Your selected role, holdings, target weight, target price and stop loss remain under your control.</p>{history.length ? <details className="recommendation-history key-insights-history"><summary>Tracking history</summary><div>{history.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{item.actionBias ? `${title(item.actionBias)} · ` : ""}{rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax) ? `${rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax)} · ` : ""}{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : null}</div>
+      </aside>
     </div>
-
-    <RecommendationInterpretationPanel portfolioId={portfolioId} securityId={securityId} enabled={Boolean(tracking && recommendation && recommendation.suggestedRole !== "INSUFFICIENT")} />
 
     {editing ? <div className="position-control-editor">
       <label><span>Target price</span><input inputMode="decimal" type="number" min="0" step="0.01" value={draft.targetPrice} onChange={(event) => setDraft((value) => ({ ...value, targetPrice: event.target.value }))} placeholder="e.g. 900" /></label>

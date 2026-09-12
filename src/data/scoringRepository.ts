@@ -183,6 +183,7 @@ function institutionalOwnershipTrend4Q(rows: readonly ObservationRow[]): number 
   if (sharedPeriods.length < 5) return null
   const latest = sharedPeriods[0]
   const priorYear = sharedPeriods[4]
+  if (!latest || !priorYear) return null
   const latestCombined = (fii.get(latest) ?? 0) + (dii.get(latest) ?? 0)
   const priorCombined = (fii.get(priorYear) ?? 0) + (dii.get(priorYear) ?? 0)
   return latestCombined - priorCombined
