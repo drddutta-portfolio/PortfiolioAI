@@ -18,10 +18,29 @@ export interface ProviderQuotaSummary {
   readonly usageBasis: string
 }
 
+type ProviderQuotaRow = {
+  readonly source_code: string
+  readonly quota_status: string
+  readonly plan_name: string
+  readonly internal_daily_limit: number
+  readonly internal_daily_used: number
+  readonly internal_daily_remaining: number
+  readonly provider_daily_limit: number
+  readonly provider_daily_estimated_used: number
+  readonly provider_daily_estimated_remaining: number
+  readonly provider_monthly_limit: number
+  readonly provider_monthly_estimated_used: number
+  readonly provider_monthly_estimated_remaining: number
+  readonly day_started_at: string
+  readonly month_started_at: string
+  readonly usage_basis: string
+}
+
 export async function loadProviderQuotaSummary(): Promise<ProviderQuotaSummary> {
   const result = await supabase.rpc("get_provider_quota_summary_v1", { p_source_code: "TRENDLYNE_MCP" })
   if (result.error) throw result.error
-  const row = result.data?.[0]
+  const rows = result.data as unknown as readonly ProviderQuotaRow[] | null
+  const row = rows?.[0]
   if (!row) throw new Error("Provider quota summary is unavailable.")
   return {
     sourceCode: row.source_code,
