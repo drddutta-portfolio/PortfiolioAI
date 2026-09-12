@@ -208,25 +208,22 @@ Deno.serve(async (request) => {
       if (verifiedHash !== raw.document_sha256) throw new Error("STORED_DOCUMENT_HASH_MISMATCH")
 
       const pdf = await getDocumentProxy(bytes, { maxImageSize: MAX_IMAGE_SIZE })
-      try {
-        pageCount = pdf.numPages
-        if (pageCount < 1 || pageCount > MAX_PDF_PAGES) throw new Error("PDF_PAGE_LIMIT_REJECTED")
-        const extracted = await withTimeout(extractText(pdf, { mergePages: true }), EXTRACTION_TIMEOUT_MS)
-        const normalized = normalizeExtractedText(typeof extracted.text === "string" ? extracted.text : extracted.text.join("\n\n"))
-        if (!normalized) throw new Error("PDF_TEXT_EMPTY")
-        extractedCharCount = normalized.length
-        truncated = extractedCharCount > MAX_TEXT_CHARS
-        persistedText = normalized.slice(0, MAX_TEXT_CHARS)
-        outputHash = await sha256Hex(new TextEncoder().encode(persistedText))
-      } finally {
-        await pdf.destroy()
-      }
+      pageCount = pdf.numPages
+      if (pageCount < 1 || pageCount > MAX_PDF_PAGES) throw new Error("PDF_PAGE_LIMIT_REJECTED")
+
+      const extracted = await withTimeout(extractText(pdf, { mergePages: true }), EXTRACTION_TIMEOUT_MS)
+      const normalized = normalizeExtractedText(typeof extracted.text === "string" ? extracted.text : extracted.text.join("\n\n"))
+      if (!normalized) throw new Error("PDF_TEXT_EMPTY")
+      extractedCharCount = normalized.length
+      truncated = extractedCharCount > MAX_TEXT_CHARS
+      persistedText = normalized.slice(0, MAX_TEXT_CHARS)
+      outputHash = await sha256Hex(new TextEncoder().encode(persistedText))
 
       const derived = await admin.from("data_source_records").insert({
         source_code: SOURCE_CODE,
         ingestion_run_id: runId,
         record_kind: OUTPUT_RECORD_KIND,
-        external_record_id: `NSE:LINKED_DOCUMENT_TEXT:${news.data.id}:${capture.data.id}`,
+        external_record_id: `NSE:LINKED_DOCUMENT_TEXT:${news.data.id}:${capture.data.id}:${runId}`,
         source_url: capture.data.source_url,
         retrieved_at: new Date().toISOString(),
         payload_hash: outputHash,
