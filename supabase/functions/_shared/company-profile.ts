@@ -41,7 +41,7 @@ function clampAbout(value: string) {
   if (cleaned.length <= MAX_ABOUT_LENGTH) return cleaned
   const clipped = cleaned.slice(0, MAX_ABOUT_LENGTH)
   const sentence = clipped.lastIndexOf(". ")
-  return `${(sentence > 400 ? clipped.slice(0, sentence + 1) : clipped).trim()}`
+  return (sentence > 400 ? clipped.slice(0, sentence + 1) : clipped).trim()
 }
 
 function extractAboutFragment(html: string) {
@@ -54,8 +54,7 @@ function extractAboutFragment(html: string) {
   if (aboutClassMatch?.[1]) return aboutClassMatch[1]
 
   const headingPattern = /<(?:h2|h3|div)\b[^>]*>\s*About\s*<\/(?:h2|h3|div)>([\s\S]*?)(?=<(?:h2|h3|div)\b[^>]*>\s*(?:Key Points|Peer comparison|Quarterly Results)\s*<|$)/i
-  const headingMatch = html.match(headingPattern)
-  return headingMatch?.[1] ?? null
+  return html.match(headingPattern)?.[1] ?? null
 }
 
 function safeExternalHttpUrl(raw: string, baseUrl: string) {
@@ -82,16 +81,14 @@ export function extractScreenerCompanyProfile(html: string, pageUrl: string): Sc
   const companyInfo = html.match(/<div\b[^>]*id=["']company-info["'][^>]*>([\s\S]*?)(?=<section\b|<div\b[^>]*id=["']company-ratios["']|$)/i)?.[1] ?? html.slice(0, Math.min(html.length, 150_000))
   const anchors = [...companyInfo.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)]
   for (const anchor of anchors) {
-    const href = anchor[1] ?? ""
-    const label = htmlToPlainText(anchor[2] ?? "").toLocaleLowerCase()
-    const candidate = safeExternalHttpUrl(href, pageUrl)
+    const candidate = safeExternalHttpUrl(anchor[1] ?? "", pageUrl)
     if (!candidate) continue
+    const label = htmlToPlainText(anchor[2] ?? "").toLocaleLowerCase()
     const host = new URL(candidate).hostname.toLocaleLowerCase()
     if (host.endsWith("screener.in") || host.endsWith("bseindia.com") || host.endsWith("nseindia.com")) continue
     if (label.includes("website") || !websiteUrl) websiteUrl = candidate
     if (label.includes("website")) break
   }
-
   return { about, websiteUrl }
 }
 
@@ -99,6 +96,19 @@ function attribute(tag: string, name: string) {
   const quoted = tag.match(new RegExp(`${name}\\s*=\\s*["']([^"']+)["']`, "i"))
   if (quoted?.[1]) return quoted[1]
   return tag.match(new RegExp(`${name}\\s*=\\s*([^\\s>]+)`, "i"))?.[1] ?? null
+}
+
+export function extractWebsiteDescription(html: string) {
+  const metaTags = [...html.matchAll(/<meta\b[^>]*>/gi)].map(match => match[0])
+  let fallback: string | null = null
+  for (const tag of metaTags) {
+    const key = `${attribute(tag, "name") ?? ""} ${attribute(tag, "property") ?? ""}`.toLocaleLowerCase()
+    const value = attribute(tag, "content")
+    if (!value) continue
+    if (key.includes("og:description")) return clampAbout(decodeHtmlEntities(value))
+    if (key.split(/\s+/).includes("description")) fallback = clampAbout(decodeHtmlEntities(value))
+  }
+  return fallback
 }
 
 export function extractLogoCandidates(html: string, websiteUrl: string) {
@@ -110,31 +120,21 @@ export function extractLogoCandidates(html: string, websiteUrl: string) {
     candidates.push(resolved)
   }
 
-  const imageTags = [...html.matchAll(/<img\b[^>]*>/gi)].map(match => match[0])
-  for (const tag of imageTags) {
+  for (const match of html.matchAll(/<img\b[^>]*>/gi)) {
+    const tag = match[0]
     const signature = `${attribute(tag, "src") ?? ""} ${attribute(tag, "alt") ?? ""} ${attribute(tag, "class") ?? ""} ${attribute(tag, "id") ?? ""}`.toLocaleLowerCase()
     if (signature.includes("logo") || signature.includes("brand")) add(attribute(tag, "src"))
   }
-
-  const linkTags = [...html.matchAll(/<link\b[^>]*>/gi)].map(match => match[0])
-  for (const tag of linkTags) {
-    const rel = (attribute(tag, "rel") ?? "").toLocaleLowerCase()
-    if (rel.includes("icon")) add(attribute(tag, "href"))
+  for (const match of html.matchAll(/<link\b[^>]*>/gi)) {
+    const tag = match[0]
+    if ((attribute(tag, "rel") ?? "").toLocaleLowerCase().includes("icon")) add(attribute(tag, "href"))
   }
-
-  const metaTags = [...html.matchAll(/<meta\b[^>]*>/gi)].map(match => match[0])
-  for (const tag of metaTags) {
+  for (const match of html.matchAll(/<meta\b[^>]*>/gi)) {
+    const tag = match[0]
     const property = `${attribute(tag, "property") ?? ""} ${attribute(tag, "name") ?? ""}`.toLocaleLowerCase()
     if (property.includes("og:image") || property.includes("twitter:image")) add(attribute(tag, "content"))
   }
-
-  try {
-    const root = new URL(websiteUrl)
-    add(new URL("/favicon.ico", root).toString())
-  } catch {
-    // ignored
-  }
-
+  try { add(new URL("/favicon.ico", new URL(websiteUrl)).toString()) } catch { /* ignored */ }
   return candidates.slice(0, 8)
 }
 
