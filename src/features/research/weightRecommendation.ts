@@ -21,7 +21,7 @@ function dim(snapshot: SecurityScoringSnapshot, code: string) {
   return snapshot.dimensions.find((item) => item.dimensionCode === code)?.rawScore ?? null
 }
 
-function rangeFor(recommendation: RecommendationPreview, snapshot: SecurityScoringSnapshot, policy: RecommendationPolicy) {
+function rangeFor(recommendation: RecommendationPreview, policy: RecommendationPolicy) {
   const weights = policy.weightPolicy
   const score = recommendation.overallScore
   if (recommendation.suggestedRole === "CORE_CANDIDATE") {
@@ -57,7 +57,7 @@ export function buildSuggestedWeightPreview(input: {
 }): SuggestedWeightPreview {
   const currentWeight = numeric(input.currentWeight)
   const userTargetWeight = numeric(input.userTargetWeight)
-  const base = rangeFor(input.recommendation, input.snapshot, input.policy)
+  const base = rangeFor(input.recommendation, input.policy)
   if (!base) {
     return { min: null, max: null, currentWeight, userTargetWeight, position: "UNAVAILABLE", label: "Pending", reasons: ["Weight thresholds are not validated for this sector profile yet."], portfolioGuardStatus: "NOT_REQUIRED", profileExposure: null, reviewedProfileCoverage: input.exposure?.reviewedAssignmentCoverage ?? null }
   }
