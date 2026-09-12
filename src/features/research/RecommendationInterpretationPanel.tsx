@@ -89,15 +89,27 @@ export function RecommendationInterpretationPanel({ portfolioId, securityId, ena
         <article><span>How to read the weight range</span><p>{interpretation.weight_guidance}</p></article>
       </div>
 
-      <div className="ai-evidence-columns">
-        <section><h4>What supports the thesis</h4>{interpretation.strengths.map((item) => <div key={`${item.title}:${item.detail}`}><strong>{item.title}</strong><p>{item.detail}</p></div>)}</section>
-        <section><h4>What needs caution</h4>{interpretation.cautions.map((item) => <div key={`${item.title}:${item.detail}`}><strong>{item.title}</strong><p>{item.detail}</p></div>)}</section>
-      </div>
-
-      <div className="ai-trigger-grid">
-        <section><h4>What could improve the view</h4><ul>{interpretation.upgrade_triggers.map((item) => <li key={item}>{item}</li>)}</ul></section>
-        <section><h4>What could weaken the view</h4><ul>{interpretation.downgrade_triggers.map((item) => <li key={item}>{item}</li>)}</ul></section>
-        <section><h4>Evidence limitations</h4><ul>{interpretation.evidence_limits.map((item) => <li key={item}>{item}</li>)}</ul></section>
+      <div className="ai-detail-grid" aria-label="Interpretation supporting detail">
+        <details>
+          <summary><span>What supports the thesis</span><small>{interpretation.strengths.length} points</small></summary>
+          <div>{interpretation.strengths.map((item) => <article key={`${item.title}:${item.detail}`}><strong>{item.title}</strong><p>{item.detail}</p></article>)}</div>
+        </details>
+        <details>
+          <summary><span>What needs caution</span><small>{interpretation.cautions.length} points</small></summary>
+          <div>{interpretation.cautions.map((item) => <article key={`${item.title}:${item.detail}`}><strong>{item.title}</strong><p>{item.detail}</p></article>)}</div>
+        </details>
+        <details>
+          <summary><span>What could improve the view</span><small>{interpretation.upgrade_triggers.length} triggers</small></summary>
+          <ul>{interpretation.upgrade_triggers.map((item) => <li key={item}>{item}</li>)}</ul>
+        </details>
+        <details>
+          <summary><span>What could weaken the view</span><small>{interpretation.downgrade_triggers.length} triggers</small></summary>
+          <ul>{interpretation.downgrade_triggers.map((item) => <li key={item}>{item}</li>)}</ul>
+        </details>
+        <details>
+          <summary><span>Evidence limitations</span><small>{interpretation.evidence_limits.length} notes</small></summary>
+          <ul>{interpretation.evidence_limits.map((item) => <li key={item}>{item}</li>)}</ul>
+        </details>
       </div>
 
       <p className="ai-interpretation-disclaimer">AI explains the audited recommendation state; it does not create trades, alter holdings or override your selected role, target weight, target price or stop loss.</p>
