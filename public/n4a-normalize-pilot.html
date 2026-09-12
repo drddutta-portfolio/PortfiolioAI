@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N4A HDFCBANK Normalization Pilot</title>
+  <style>
+    body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f7faf8;color:#173b31}.wrap{max-width:760px;margin:0 auto;padding:28px 18px 48px}.eyebrow{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#2f7a64}.card{background:#fff;border:1px solid #dbe8e1;border-radius:16px;padding:18px;margin-top:18px}.warn{background:#fff8e8;border:1px solid #efcf7a;color:#6b4b00}.btn{margin-top:18px;border:0;border-radius:10px;background:#8db7a8;color:white;font-weight:800;padding:12px 18px;cursor:pointer}.btn:disabled{opacity:.55;cursor:not-allowed}pre{white-space:pre-wrap;word-break:break-word;background:#eef5f1;border-radius:12px;padding:16px;margin-top:18px;min-height:70px}
+  </style>
+</head>
+<body><div class="wrap">
+  <div class="eyebrow">PortfolioAI controlled pilot</div>
+  <h1>N4A — HDFCBANK NSE Normalization Pilot</h1>
+  <p>This page invokes the authenticated production normalization pilot using the already captured NSE RSS evidence.</p>
+  <div class="card warn"><strong>Zero external fetches.</strong> This reads only the reviewed NSE capture already stored in Supabase. Tone classification and scheduling remain disabled.</div>
+  <button id="run" class="btn">Run HDFCBANK N4A Normalization Pilot</button>
+  <pre id="out">Ready.</pre>
+</div>
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+  const supabaseUrl='https://uxiyufbsbgzzdujzcdxe.supabase.co'
+  const anonKey=localStorage.getItem('sb-uxiyufbsbgzzdujzcdxe-auth-token') ? null : null
+  const findSession=()=>{
+    const raw=localStorage.getItem('sb-uxiyufbsbgzzdujzcdxe-auth-token')
+    if(!raw) return null
+    try{return JSON.parse(raw)}catch{return null}
+  }
+  const button=document.getElementById('run'); const out=document.getElementById('out')
+  button.addEventListener('click', async()=>{
+    button.disabled=true; out.textContent='Running…'
+    try{
+      const session=findSession(); const accessToken=session?.access_token ?? session?.currentSession?.access_token
+      if(!accessToken) throw new Error('No logged-in PortfolioAI Supabase session found. Open /app and sign in first, then return here.')
+      const response=await fetch(`${supabaseUrl}/functions/v1/normalize-nse-news-pilot`,{
+        method:'POST',headers:{'Authorization':`Bearer ${accessToken}`,'Content-Type':'application/json','apikey':session?.token_type ? '' : ''},
+        body:JSON.stringify({portfolioId:'6193a4aa-3235-4057-bddc-209fcf443fc2',securityId:'b47b007d-1990-4504-a5a2-4391c07687c5',captureRecordId:'de7493fd-6908-426e-85e3-848c39a5e04f'})
+      })
+      const text=await response.text(); let formatted=text; try{formatted=JSON.stringify(JSON.parse(text),null,2)}catch{}
+      out.textContent=`HTTP ${response.status}\n\n${formatted}`
+    }catch(e){out.textContent=String(e?.message ?? e)} finally{button.disabled=false}
+  })
+</script></body></html>
