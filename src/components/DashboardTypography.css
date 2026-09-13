@@ -1,0 +1,79 @@
+/* Dashboard-wide readability layer.
+   Keep compact labels compact, but prevent normal reading text from dropping below a comfortable desktop size. */
+
+/* Normal explanatory/body copy */
+.dashboard-command-centre :where(.dashboard-section-heading p:not(.eyebrow),.dashboard-scope-copy>p:last-child,.dashboard-inline-warning,.dashboard-key-insight-list p,.dashboard-news-placeholder p,.dashboard-analytics-panel .panel-heading p,.dashboard-methodology p:last-child),
+.dashboard-next-layer :where(.dashboard-next-heading p:not(.eyebrow),.dashboard-next-notice,.dashboard-action-item p),
+.dashboard-risk :where(.dashboard-risk-heading p:not(.eyebrow),.dashboard-risk-notice,.dashboard-risk-list p),
+.dashboard-monitoring :where(.dashboard-monitoring-heading p,.dashboard-monitoring-notice,.dashboard-monitoring-gap-list p,.dashboard-monitoring-footnote),
+.dashboard-research-intelligence :where(.dashboard-research-heading p:not(.eyebrow),.dashboard-research-attention-list p),
+.dashboard-portfolio-intelligence :where(.dashboard-pi-heading p:not(.eyebrow),.dashboard-pi-notice,.dashboard-pi-list p,.dashboard-pi-footnote),
+.dashboard-allocation-performance :where(.dap-heading p:not(.eyebrow),.dap-warning,.dap-chart-heading p,.dap-method,.dap-matrix-heading p:not(.eyebrow),.dap-matrix-note),
+.dashboard-live-news :where(.dashboard-live-news-heading p:last-child,.dashboard-live-news-footer) {
+  font-size: 13px;
+  line-height: 1.48;
+}
+
+/* Primary row/table/list text */
+.dashboard-command-centre :where(.dashboard-chart-legend span,.dashboard-chart-legend strong,.dashboard-horizontal-bars span,.dashboard-horizontal-bars strong,.dashboard-allocation-card .allocation-list>div>div:first-child strong,.dashboard-allocation-card .allocation-list>div>div:first-child span,.dashboard-sizing-identity span,.dashboard-sizing-metrics span,.dashboard-sizing-status strong,.dashboard-sizing-status span,.dashboard-contribution-card a,.dashboard-contribution-card article span,.dashboard-analytics-panel .analytics-table th,.dashboard-analytics-panel .analytics-table td),
+.dashboard-next-layer :where(.dashboard-role-row strong,.dashboard-role-row a,.dashboard-theme-row strong,.dashboard-theme-row a,.dashboard-action-item a,.dashboard-action-item strong),
+.dashboard-risk :where(.dashboard-risk-sector-list span,.dashboard-risk-sector-list strong,.dashboard-risk-list a,.dashboard-risk-list strong,.dashboard-risk-list b),
+.dashboard-monitoring :where(.dashboard-monitoring-bars article span,.dashboard-monitoring-bars article strong,.dashboard-monitoring-gap-list article>div:nth-child(2) a,.dashboard-monitoring-gap-list article>div:nth-child(3) strong,.dashboard-monitoring-gap-list article b),
+.dashboard-research-intelligence :where(.dashboard-domain-list span,.dashboard-domain-list strong,.dashboard-research-attention-list a,.dashboard-research-attention-list article>div:nth-child(2)>span),
+.dashboard-portfolio-intelligence :where(.dashboard-pi-bias-list span,.dashboard-pi-bias-list strong,.dashboard-pi-list a,.dashboard-pi-list strong,.dashboard-pi-list b),
+.dashboard-allocation-performance :where(.dap-chart-legend b,.dap-chart-legend strong,.dap-table-card th,.dap-table-card td,.dap-table-card td strong,.dap-group-trigger,.dap-holdings-trigger,.dap-matrix-quadrant>header strong,.dap-matrix-item b,.dap-matrix-item strong),
+.dashboard-live-news :where(.dashboard-live-news-company a,.dashboard-live-news-copy>a) {
+  font-size: 12px;
+  line-height: 1.38;
+}
+
+/* Secondary metadata: keep readable, never microscopic */
+.dashboard-command-centre :where(.dashboard-kpi-card small,.dashboard-pulse-card>small,.dashboard-pulse-card>p,.dashboard-key-insight-list small,.dashboard-coverage-meter small,.dashboard-quality-list>div span:last-child,.dashboard-chart-card-heading p,.dashboard-donut span,.dashboard-sizing-scale,.dashboard-sizing-metrics b,.dashboard-column-chart span,.dashboard-column-chart strong,.dashboard-contribution-card small,.dashboard-news-status,.dashboard-broker-details>summary),
+.dashboard-next-layer :where(.dashboard-next-section-title span,.dashboard-overlap-note,.dashboard-role-row small,.dashboard-theme-row small,.dashboard-theme-header>span,.dashboard-action-item small,.dashboard-next-empty span),
+.dashboard-risk :where(.dashboard-risk-summary span,.dashboard-risk-summary small,.dashboard-risk-subheading span,.dashboard-risk-subheading>a,.dashboard-risk-subheading>small,.dashboard-risk-sector-list small,.dashboard-risk-list small),
+.dashboard-monitoring :where(.dashboard-monitoring-summary span,.dashboard-monitoring-summary small,.dashboard-monitoring-subheading span,.dashboard-monitoring-subheading>small,.dashboard-monitoring-bars article small,.dashboard-monitoring-gap-list article small),
+.dashboard-research-intelligence :where(.research-summary-card span,.research-summary-card small,.dashboard-research-subheading span,.dashboard-research-subheading a,.dashboard-domain-list small,.dashboard-research-attention-list small,.dashboard-research-empty span),
+.dashboard-portfolio-intelligence :where(.dashboard-pi-summary span,.dashboard-pi-summary small,.dashboard-pi-subheading span,.dashboard-pi-list small),
+.dashboard-allocation-performance :where(.dap-coverage-grid small,.dap-coverage-grid p,.dap-chart-heading>span,.dap-chart-legend small,.dap-table-heading span,.dap-table-card td small,.dap-donut-center span,.dap-donut-tooltip,.dap-donut-tooltip b,.dap-donut-tooltip small,.dap-holdings-popover-head span,.dap-holdings-popover th,.dap-holdings-popover td,.dap-holdings-popover td small,.dap-matrix-thresholds span,.dap-matrix-quadrant>header span,.dap-matrix-quadrant>header>b,.dap-matrix-item small,.dap-matrix-empty),
+.dashboard-live-news :where(.dashboard-live-news-company span,.dashboard-live-news-meta,.dashboard-live-news-badges span) {
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+/* Section links/actions should be comfortably clickable/readable */
+.dashboard-command-centre :where(.dashboard-section-heading>a,.dashboard-quick-links a,.dashboard-secondary-allocation>summary,.dashboard-methodology>summary),
+.dashboard-next-layer :where(.dashboard-next-section-title a),
+.dashboard-risk :where(.dashboard-risk-heading>a),
+.dashboard-monitoring :where(.dashboard-monitoring-heading>a,.dashboard-monitoring-subheading a),
+.dashboard-research-intelligence :where(.dashboard-research-heading>a),
+.dashboard-portfolio-intelligence :where(.dashboard-pi-heading>a),
+.dashboard-live-news :where(.dashboard-live-news-footer a) {
+  font-size: 12px;
+}
+
+/* Command index / collapsible controls */
+.dashboard-section-navigator-copy span { font-size: 11px; }
+.dashboard-section-navigator-copy small { font-size: 12px; }
+.dashboard-section-navigator-links a,
+.dashboard-section-navigator-top { font-size: 12px; }
+.dashboard-collapsible-toggle { font-size: 15px; }
+.dashboard-collapsible-action { font-size: 12px; }
+
+/* Preserve stronger hierarchy for headings and KPI values. */
+.dashboard-command-centre :where(.dashboard-section-heading h2),
+.dashboard-next-layer .dashboard-next-heading h2,
+.dashboard-risk .dashboard-risk-heading h2,
+.dashboard-monitoring .dashboard-monitoring-heading h2,
+.dashboard-research-intelligence .dashboard-research-heading h2,
+.dashboard-portfolio-intelligence .dashboard-pi-heading h2,
+.dashboard-allocation-performance .dap-heading h2,
+.dashboard-live-news-heading h2 {
+  font-size: 19px;
+  line-height: 1.25;
+}
+
+@media (max-width: 760px) {
+  .dashboard-section-navigator-links a,
+  .dashboard-section-navigator-top { font-size: 11.5px; }
+  .dashboard-collapsible-toggle { font-size: 14px; }
+}

@@ -3,13 +3,18 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { RedirectIfAuthenticated } from "../auth/RedirectIfAuthenticated"
 import { RequireAuth } from "../auth/RequireAuth"
 import { AppShell } from "../components/AppShell"
+import { DashboardAllocationPerformance } from "../components/DashboardAllocationPerformance"
+import { DashboardCollapsibleSection } from "../components/DashboardCollapsibleSection"
 import { DashboardDecisionLayer } from "../components/DashboardDecisionLayer"
 import { DashboardMonitoringReadiness } from "../components/DashboardMonitoringReadiness"
 import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
 import { DashboardPortfolioIntelligence } from "../components/DashboardPortfolioIntelligence"
 import { DashboardResearchIntelligence } from "../components/DashboardResearchIntelligence"
 import { DashboardRiskConcentration } from "../components/DashboardRiskConcentration"
+import { DashboardScopeProvider } from "../components/DashboardScopeContext"
 import { DashboardSectionNavigator } from "../components/DashboardSectionNavigator"
+import "../components/DashboardTypography.css"
+import "../components/DashboardD32Polish.css"
 import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
 import { LoginPage } from "../pages/LoginPage"
@@ -70,16 +75,17 @@ export function AppRoutes() {
           path="/app"
           element={
             <AppShell>
-              <>
+              <DashboardScopeProvider>
                 <DashboardSectionNavigator />
                 <div id="dashboard-overview" className="dashboard-section-anchor"><DashboardPage /></div>
+                <div id="dashboard-performance" className="dashboard-section-anchor"><DashboardAllocationPerformance /></div>
                 <div id="dashboard-structure" className="dashboard-section-anchor"><DashboardDecisionLayer /></div>
-                <div id="dashboard-risk" className="dashboard-section-anchor"><DashboardRiskConcentration /></div>
-                <div id="dashboard-monitoring" className="dashboard-section-anchor"><DashboardMonitoringReadiness /></div>
-                <div id="dashboard-research" className="dashboard-section-anchor"><DashboardResearchIntelligence /></div>
-                <div id="dashboard-intelligence" className="dashboard-section-anchor"><DashboardPortfolioIntelligence /></div>
+                <div id="dashboard-risk" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="risk" label="Portfolio Risk & Concentration" anchorId="dashboard-risk" defaultOpen><DashboardRiskConcentration /></DashboardCollapsibleSection></div>
+                <div id="dashboard-monitoring" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="monitoring" label="Monitoring & Configuration Coverage" anchorId="dashboard-monitoring"><DashboardMonitoringReadiness /></DashboardCollapsibleSection></div>
+                <div id="dashboard-research" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="research" label="Research & Intelligence Status" anchorId="dashboard-research"><DashboardResearchIntelligence /></DashboardCollapsibleSection></div>
+                <div id="dashboard-intelligence" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="intelligence" label="Portfolio Intelligence Snapshot" anchorId="dashboard-intelligence"><DashboardPortfolioIntelligence /></DashboardCollapsibleSection></div>
                 <div id="dashboard-news" className="dashboard-section-anchor"><DashboardNewsPreview /></div>
-              </>
+              </DashboardScopeProvider>
             </AppShell>
           }
         />

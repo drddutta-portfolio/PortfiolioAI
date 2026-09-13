@@ -1,0 +1,187 @@
+/* D32 final responsive and usability polish for the /app dashboard. */
+
+.dashboard-section-anchor,
+.dashboard-allocation-performance,
+.dashboard-next-layer,
+.dashboard-risk,
+.dashboard-monitoring,
+.dashboard-research-intelligence,
+.dashboard-portfolio-intelligence,
+.dashboard-live-news {
+  min-width: 0;
+}
+
+/* The command index is sticky. Keep it fully opaque so scrolled content never
+   shows through it, and give it a clear visual separation from the page. */
+.dashboard-section-navigator {
+  z-index: 50;
+  background: #fbfdfb;
+  box-shadow: 0 8px 24px rgba(38, 74, 55, 0.12);
+}
+
+/* Dense tables should remain usable without shrinking readable text. */
+.dap-table-scroll,
+.dashboard-role-table,
+.dashboard-theme-table,
+.dashboard-research-attention-list,
+.dashboard-monitoring-gap-list,
+.dashboard-risk-list,
+.dashboard-pi-list,
+.dashboard-action-list {
+  scrollbar-gutter: stable;
+}
+
+.dap-table-scroll,
+.dashboard-role-table,
+.dashboard-theme-table {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Keep sticky navigation from obscuring section titles when jumping. */
+.dashboard-section-anchor {
+  scroll-margin-top: 6.5rem;
+}
+
+/* Improve touch affordance for chart/table interactions. */
+.dap-donut-arc,
+.dap-group-trigger,
+.dap-holdings-trigger,
+.dashboard-collapsible-toggle,
+.dashboard-section-navigator-links a,
+.dashboard-section-navigator-top {
+  touch-action: manipulation;
+}
+
+@media (max-width: 980px) {
+  .dashboard-section-navigator {
+    position: sticky;
+    top: .35rem;
+  }
+
+  .dashboard-command-header,
+  .dap-heading,
+  .dashboard-next-heading,
+  .dashboard-risk-heading,
+  .dashboard-monitoring-heading,
+  .dashboard-research-heading,
+  .dashboard-pi-heading,
+  .dashboard-live-news-heading {
+    gap: .75rem;
+  }
+
+  .dap-chart-layout {
+    grid-template-columns: 190px minmax(0, 1fr);
+  }
+
+  .dap-matrix-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .dashboard-section-navigator {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .dashboard-section-navigator-links {
+    padding-bottom: 2px;
+  }
+
+  .dashboard-section-navigator-links a,
+  .dashboard-section-navigator-top {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .dashboard-command-header,
+  .dashboard-allocation-performance,
+  .dashboard-next-layer,
+  .dashboard-risk,
+  .dashboard-monitoring,
+  .dashboard-research-intelligence,
+  .dashboard-portfolio-intelligence {
+    border-radius: 14px;
+  }
+
+  .dap-chart-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dap-chart-legend {
+    width: 100%;
+  }
+
+  .dap-chart-legend > div {
+    grid-template-columns: 10px minmax(0, 1fr) auto;
+  }
+
+  .dap-table-scroll {
+    max-height: 420px;
+  }
+
+  .dap-table-card table {
+    min-width: 860px;
+  }
+
+  .dap-holdings-popover {
+    left: 12px !important;
+    right: 12px;
+    width: auto;
+    max-width: none;
+  }
+
+  .dap-holdings-popover-scroll {
+    max-height: min(52vh, 320px);
+  }
+
+  .dashboard-live-news-row {
+    padding-left: 20px;
+    padding-right: 16px;
+  }
+}
+
+@media (max-width: 520px) {
+  .dashboard-section-anchor {
+    scroll-margin-top: 5.75rem;
+  }
+
+  .dashboard-section-navigator {
+    padding: .5rem;
+  }
+
+  .dashboard-section-navigator-links a,
+  .dashboard-section-navigator-top {
+    min-height: 34px;
+  }
+
+  .dap-coverage-grid,
+  .dashboard-risk-summary,
+  .dashboard-monitoring-summary,
+  .dashboard-research-summary,
+  .dashboard-pi-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .dap-matrix-item {
+    grid-template-columns: minmax(0, 1fr) 64px 64px;
+    gap: 6px;
+  }
+
+  .dap-matrix-thresholds {
+    display: grid;
+    justify-content: stretch;
+  }
+
+  .dap-matrix-thresholds span {
+    text-align: center;
+  }
+
+  .dashboard-live-news-footer {
+    align-items: stretch;
+  }
+
+  .dashboard-live-news-footer a {
+    white-space: normal;
+  }
+}
