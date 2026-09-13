@@ -4,16 +4,38 @@ Status: **IMPLEMENTED ON REVIEW BRANCH — OWNER VISUAL APPROVAL PENDING**
 
 ## Purpose
 
-Extend the existing PortfolioAI Dashboard with the next two product-workflow capabilities already specified in `PortfolioAI_Product_UI_and_Decision_Workflow.md`:
+Extend the existing PortfolioAI Dashboard with the next product-workflow capabilities already specified in `PortfolioAI_Product_UI_and_Decision_Workflow.md`:
 
-1. Theme Snapshot
-2. Action Center
+1. Portfolio Role Snapshot
+2. Theme Snapshot
+3. Action Center
 
 This stage is read-only. It does not add investment rules, provider calls, schema changes, AI authority, transaction mutations, automatic role changes, or order execution.
 
+## Portfolio Role Snapshot
+
+The consolidated portfolio view now presents the mutually exclusive portfolio-role structure separately from themes. Existing role assignments are grouped as available across:
+
+- Core
+- Satellite
+- Thematic
+- ETF
+- Other
+- Unclassified
+
+For each active role the Dashboard shows:
+
+- current priced exposure
+- covered unrealised return
+- holding count
+- largest priced holding
+- user target-weight coverage
+
+Unlike themes, portfolio roles are mutually exclusive and therefore represent the structural partition of the current portfolio.
+
 ## Theme Snapshot
 
-The consolidated portfolio view now derives a compact theme table from existing active theme assignments and trusted portfolio calculations:
+The consolidated portfolio view derives a compact theme table from existing active theme assignments and trusted portfolio calculations:
 
 - current priced exposure
 - covered unrealised return
@@ -50,7 +72,9 @@ The stage performs authenticated read-only queries to existing `stock_recommenda
 
 ## UI integration
 
-`DashboardDecisionLayer` is mounted beneath the existing Dashboard command-centre section. This first build is explicitly labelled **Consolidated portfolio** so it cannot be mistaken for the selected role/theme scope above it.
+`DashboardDecisionLayer` is mounted beneath the existing Dashboard command-centre section. The left side deliberately separates **Portfolio Role Snapshot** from **Theme Snapshot** so structural roles are never mixed with overlapping thematic assignments. The right side remains the **Action Center**.
+
+This first build is explicitly labelled **Consolidated portfolio** so it cannot be mistaken for the selected role/theme scope above it.
 
 A later refinement may share the Dashboard scope state directly with this layer after visual acceptance; that should be a separate small refactor rather than silently coupling two independent data views.
 
