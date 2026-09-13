@@ -44,6 +44,12 @@ function age(value: string) {
   if (days === 1) return "1 day ago"
   return `${days} days ago`
 }
+function coverageLabel(analyzed: number, total: number) {
+  if (!total) return "0%"
+  const value = (analyzed / total) * 100
+  if (value > 0 && value < 1) return `${value.toFixed(1)}%`
+  return `${Math.round(value)}%`
+}
 
 export function DashboardPortfolioIntelligence() {
   const { portfolio, isLoading, error } = usePortfolioView()
@@ -75,14 +81,14 @@ export function DashboardPortfolioIntelligence() {
   const summary = useMemo(() => {
     const total = portfolio?.openPositions.length ?? 0
     const analyzed = rows.length
-    const coverage = total ? Math.round((analyzed / total) * 100) : 0
+    const coverage = coverageLabel(analyzed, total)
     const readiness = rows.map((row) => n(row.score_ready_coverage)).filter((value): value is number => value !== null)
     const avgReadiness = readiness.length ? Math.round((readiness.reduce((sum, value) => sum + value, 0) / readiness.length) * 100) : null
     const roleChanges = rows.filter((row) => row.current_user_role && row.suggested_role && row.current_user_role !== row.suggested_role).length
     const confirmedTransitions = rows.filter((row) => ["CONFIRMED_UPGRADE", "CONFIRMED_DOWNGRADE"].includes(row.transition_status ?? "")).length
     const counts = new Map<string, number>()
     rows.forEach((row) => { const key = (row.action_bias ?? "PENDING").toUpperCase(); counts.set(key, (counts.get(key) ?? 0) + 1) })
-    return { total, analyzed, coverage, avgReadiness, roleChanges, confirmedTransitions, counts }
+    return { total, analyzed, coverage, avgReadiness, readinessCount: readiness.length, roleChanges, confirmedTransitions, counts }
   }, [portfolio, rows])
 
   const latest = useMemo(() => [...rows].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 12), [rows])
@@ -98,8 +104,8 @@ export function DashboardPortfolioIntelligence() {
 
     {!loading && !loadError ? <>
       <div className="dashboard-pi-summary">
-        <article><span>Analysis coverage</span><strong>{summary.coverage}%</strong><small>{summary.analyzed} of {summary.total} current holdings have a persisted recommendation run</small></article>
-        <article><span>Average score readiness</span><strong>{summary.avgReadiness === null ? "—" : `${summary.avgReadiness}%`}</strong><small>Across holdings with persisted recommendation evidence</small></article>
+        <article><span>Analysis coverage</span><strong>{summary.coverage}</strong><small>{summary.analyzed} of {summary.total} current holdings have a persisted recommendation run</small></article>
+        <article><span>Average score readiness</span><strong>{summary.avgReadiness === null ? "—" : `${summary.avgReadiness}%`}</strong><small>Based on {summary.readinessCount} analyzed holding{summary.readinessCount === 1 ? "" : "s"} with persisted readiness evidence</small></article>
         <article><span>Role-change suggestions</span><strong>{summary.roleChanges}</strong><small>Latest suggested role differs from the current user role</small></article>
         <article><span>Confirmed transitions</span><strong>{summary.confirmedTransitions}</strong><small>Persisted recommendation upgrades or downgrades confirmed</small></article>
       </div>
