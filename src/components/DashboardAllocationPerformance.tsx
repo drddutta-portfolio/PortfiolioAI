@@ -44,6 +44,7 @@ type HoldingsPopoverState = {
   x: number
   y: number
 }
+type MatrixBucket = "strength" | "review" | "watch" | "lowPriority"
 
 const DONUT_COLORS = ["#2d6a4f", "#4e8f70", "#72a77e", "#9dbd8e", "#c6c88d", "#c69a5a", "#7b91a8", "#8d7d9d"] as const
 const SPECIAL_COLORS: Record<NonNullable<AllocationSegment["special"]>, string> = {
@@ -58,6 +59,7 @@ const MARKET_CAP_COLORS: Record<string, string> = {
   ETF: "#0891b2",
   Unclassified: "#c8cec9",
 }
+const HIGH_ALLOCATION_THRESHOLD = new Decimal(5)
 
 function prettyMarketCap(value: SecurityEnrichment["marketCapCategory"] | "ETF") {
   if (value === "ETF") return "ETF"
@@ -74,16 +76,16 @@ function buildGroups(positions: readonly PortfolioPosition[], enrichment: Readon
     if (p.investedAmount !== null && p.unrealisedPnl !== null) totalCoveredCost = totalCoveredCost.plus(p.investedAmount)
   })
 
-  const groups = new Map<string, { positions: PortfolioPosition[] }>()
+  const groups = new Map<string, PortfolioPosition[]>()
   positions.forEach((position) => {
-    const e = enrichment.get(position.securityId)
+    const stored = enrichment.get(position.securityId)
     let label: string | null = null
-    if (mode === "sector") label = e?.sector?.trim() || null
+    if (mode === "sector") label = stored?.sector?.trim() || null
     else if (position.assetClass === "ETF") label = "ETF"
-    else if (e?.marketCapCategory && ["LARGE_CAP", "MID_CAP", "SMALL_CAP"].includes(e.marketCapCategory)) label = prettyMarketCap(e.marketCapCategory)
+    else if (stored?.marketCapCategory && ["LARGE_CAP", "MID_CAP", "SMALL_CAP"].includes(stored.marketCapCategory)) label = prettyMarketCap(stored.marketCapCategory)
     if (!label) return
-    const current = groups.get(label) ?? { positions: [] }
-    current.positions.push(position)
+    const current = groups.get(label) ?? []
+    current.push(position)
     groups.set(label, current)
   })
 
@@ -93,7 +95,7 @@ function buildGroups(positions: readonly PortfolioPosition[], enrichment: Readon
     let coveredPnl = new Decimal(0)
     let accountingCovered = 0
     let priced = 0
-    group.positions.forEach((position) => {
+    group.forEach((position) => {
       if (position.currentValue !== null) { currentValue = currentValue.plus(position.currentValue); priced += 1 }
       if (position.investedAmount !== null && position.unrealisedPnl !== null) {
         totalCost = totalCost.plus(position.investedAmount)
@@ -103,7 +105,7 @@ function buildGroups(positions: readonly PortfolioPosition[], enrichment: Readon
     })
     return {
       label,
-      holdings: group.positions.length,
+      holdings: group.length,
       currentValue,
       totalCost,
       coveredPnl,
@@ -174,7 +176,6 @@ function buildGroupHoldings(positions: readonly PortfolioPosition[], enrichment:
     current.push(row)
     groups.set(label, current)
   })
-
   groups.forEach((holdings) => holdings.sort((a, b) => {
     if (a.returnPct === null && b.returnPct !== null) return 1
     if (a.returnPct !== null && b.returnPct === null) return -1
@@ -197,11 +198,9 @@ function summarizeSegments(segments: readonly AllocationSegment[], minimumWeight
   const special = segments.filter((segment) => segment.special === "ETF" || segment.special === "UNCLASSIFIED")
   const regular = segments.filter((segment) => !segment.special)
   if (minimumWeight === null) return [...regular, ...special]
-
   const visible = regular.filter((segment) => segment.weight.greaterThanOrEqualTo(minimumWeight))
   const remainder = regular.filter((segment) => segment.weight.lessThan(minimumWeight))
   if (!remainder.length) return [...visible, ...special]
-
   const others = remainder.reduce((acc, segment) => ({
     label: "Other sectors",
     value: acc.value.plus(segment.value),
@@ -241,11 +240,66 @@ function allocationColor(title: string, segment: AllocationSegment, index: numbe
   return segment.special ? SPECIAL_COLORS[segment.special] : DONUT_COLORS[index % DONUT_COLORS.length]
 }
 
+function supportedPortfolioReturn(positions: readonly PortfolioPosition[]) {
+  let cost = new Decimal(0)
+  let pnl = new Decimal(0)
+  positions.forEach((position) => {
+    if (position.investedAmount === null || position.unrealisedPnl === null) return
+    cost = cost.plus(position.investedAmount)
+    pnl = pnl.plus(position.unrealisedPnl)
+  })
+  return cost.isZero() ? null : pnl.div(cost).times(100)
+}
+
+function matrixBucket(row: GroupRow, baselineReturn: Decimal): MatrixBucket {
+  const highAllocation = row.weight.greaterThanOrEqualTo(HIGH_ALLOCATION_THRESHOLD)
+  const strongPerformance = row.returnPct !== null && row.returnPct.greaterThanOrEqualTo(baselineReturn)
+  if (highAllocation && strongPerformance) return "strength"
+  if (highAllocation) return "review"
+  if (strongPerformance) return "watch"
+  return "lowPriority"
+}
+
+function AllocationPerformanceMatrix({ rows, baselineReturn }: { rows: readonly GroupRow[]; baselineReturn: Decimal | null }) {
+  const eligible = rows.filter((row) => row.returnPct !== null)
+  if (!eligible.length || baselineReturn === null) return null
+
+  const buckets: Record<MatrixBucket, GroupRow[]> = { strength: [], review: [], watch: [], lowPriority: [] }
+  eligible.forEach((row) => buckets[matrixBucket(row, baselineReturn)].push(row))
+  Object.values(buckets).forEach((items) => items.sort((a, b) => b.weight.comparedTo(a.weight)))
+
+  const cards: Array<{ key: MatrixBucket; title: string; subtitle: string }> = [
+    { key: "strength", title: "Portfolio strength", subtitle: "High allocation · stronger return" },
+    { key: "review", title: "Review priority", subtitle: "High allocation · weaker return" },
+    { key: "watch", title: "Emerging strength", subtitle: "Lower allocation · stronger return" },
+    { key: "lowPriority", title: "Low-priority drag", subtitle: "Lower allocation · weaker return" },
+  ]
+
+  return <section className="dap-matrix-card" aria-label="Sector allocation versus performance matrix">
+    <div className="dap-matrix-heading">
+      <div><p className="eyebrow">Allocation vs performance</p><h3>Where is sector exposure helping or lagging?</h3><p>Descriptive positioning only. It does not generate a buy, sell, add or reduce recommendation.</p></div>
+      <div className="dap-matrix-thresholds"><span>High allocation ≥ 5%</span><span>Strong return ≥ {signed(baselineReturn)}</span></div>
+    </div>
+    <div className="dap-matrix-grid">
+      {cards.map((card) => <article key={card.key} className={`dap-matrix-quadrant is-${card.key}`}>
+        <header><div><strong>{card.title}</strong><span>{card.subtitle}</span></div><b>{buckets[card.key].length}</b></header>
+        <div className="dap-matrix-items">
+          {buckets[card.key].length ? buckets[card.key].map((row) => <div key={row.label} className="dap-matrix-item">
+            <span><b>{row.label}</b><small>{row.holdings} holdings</small></span>
+            <span><strong>{row.weight.toDecimalPlaces(1).toFixed(1)}%</strong><small>allocation</small></span>
+            <span className={row.returnPct?.gt(0) ? "is-positive" : row.returnPct?.lt(0) ? "is-negative" : ""}><strong>{signed(row.returnPct)}</strong><small>return</small></span>
+          </div>) : <p className="dap-matrix-empty">No sectors currently fall in this quadrant.</p>}
+        </div>
+      </article>)}
+    </div>
+    <p className="dap-matrix-note">Performance is compared with the portfolio's supported unrealised return using the same accounting-covered holdings as the tables above. Sector weights use current priced portfolio value.</p>
+  </section>
+}
+
 function AllocationDonut({ title, segments, classifiedCoverage, empty }: { title: string; segments: readonly AllocationSegment[]; classifiedCoverage: string; empty: string }) {
   const display = summarizeSegments(segments, title === "Sector allocation" ? 1.5 : null)
   const [tooltip, setTooltip] = useState<{ segment: AllocationSegment; x: number; y: number } | null>(null)
   if (!display.length) return <section className="dap-chart-card"><div className="dap-chart-heading"><div><h3>{title}</h3><p>Portfolio weight by current priced value</p></div><span>{classifiedCoverage} classified</span></div><div className="dap-chart-empty">{empty}</div></section>
-
   let cursor = 0
   const arcs = display.map((segment, index) => {
     const start = cursor
@@ -261,49 +315,18 @@ function AllocationDonut({ title, segments, classifiedCoverage, empty }: { title
     const y = Math.max(8, Math.min(event.clientY - rect.top + 12, rect.height - 104))
     setTooltip({ segment, x, y })
   }
-
   return <section className="dap-chart-card">
     <div className="dap-chart-heading"><div><h3>{title}</h3><p>Portfolio weight by current priced value</p></div><span>{classifiedCoverage} classified</span></div>
     <div className="dap-chart-layout">
       <div className="dap-donut-wrap">
         <svg className="dap-donut-svg" viewBox="0 0 100 100" role="img" aria-label={`${title}: ${classifiedCoverage} classified`} onMouseLeave={() => setTooltip(null)}>
           <circle cx="50" cy="50" r="40" fill="none" stroke="#edf2ef" strokeWidth="18" />
-          {arcs.map(({ segment, index, start, weight, color }) => <circle
-            key={`${segment.label}-${index}`}
-            className="dap-donut-arc"
-            cx="50"
-            cy="50"
-            r="40"
-            fill="none"
-            stroke={color}
-            strokeWidth="18"
-            pathLength="100"
-            strokeDasharray={`${weight} ${Math.max(0, 100 - weight)}`}
-            strokeDashoffset={-start}
-            transform="rotate(-90 50 50)"
-            tabIndex={0}
-            aria-label={`${segment.label}, ${segment.holdings} holdings, ${segment.weight.toDecimalPlaces(1).toFixed(1)} percent, ${formatMoney(segment.value.toFixed())}`}
-            onMouseEnter={(event) => showTooltip(event, segment)}
-            onMouseMove={(event) => showTooltip(event, segment)}
-            onFocus={() => setTooltip({ segment, x: 12, y: 12 })}
-            onBlur={() => setTooltip(null)}
-          />)}
+          {arcs.map(({ segment, index, start, weight, color }) => <circle key={`${segment.label}-${index}`} className="dap-donut-arc" cx="50" cy="50" r="40" fill="none" stroke={color} strokeWidth="18" pathLength="100" strokeDasharray={`${weight} ${Math.max(0, 100 - weight)}`} strokeDashoffset={-start} transform="rotate(-90 50 50)" tabIndex={0} aria-label={`${segment.label}, ${segment.holdings} holdings, ${segment.weight.toDecimalPlaces(1).toFixed(1)} percent, ${formatMoney(segment.value.toFixed())}`} onMouseEnter={(event) => showTooltip(event, segment)} onMouseMove={(event) => showTooltip(event, segment)} onFocus={() => setTooltip({ segment, x: 12, y: 12 })} onBlur={() => setTooltip(null)} />)}
         </svg>
         <div className="dap-donut-center"><strong>{classifiedCoverage}</strong><span>classified</span></div>
-        {tooltip ? <div className="dap-donut-tooltip" style={{ left: tooltip.x, top: tooltip.y }} role="tooltip">
-          <strong>{tooltip.segment.label}</strong>
-          <span>{tooltip.segment.holdings} holding{tooltip.segment.holdings === 1 ? "" : "s"}</span>
-          <span>{formatMoney(tooltip.segment.value.toFixed())}</span>
-          <b>{tooltip.segment.weight.toDecimalPlaces(1).toFixed(1)}% of priced portfolio</b>
-          {tooltip.segment.details?.length ? <small>Includes: {tooltip.segment.details.slice(0, 8).join(", ")}{tooltip.segment.details.length > 8 ? ` +${tooltip.segment.details.length - 8} more` : ""}</small> : null}
-        </div> : null}
+        {tooltip ? <div className="dap-donut-tooltip" style={{ left: tooltip.x, top: tooltip.y }} role="tooltip"><strong>{tooltip.segment.label}</strong><span>{tooltip.segment.holdings} holding{tooltip.segment.holdings === 1 ? "" : "s"}</span><span>{formatMoney(tooltip.segment.value.toFixed())}</span><b>{tooltip.segment.weight.toDecimalPlaces(1).toFixed(1)}% of priced portfolio</b>{tooltip.segment.details?.length ? <small>Includes: {tooltip.segment.details.slice(0, 8).join(", ")}{tooltip.segment.details.length > 8 ? ` +${tooltip.segment.details.length - 8} more` : ""}</small> : null}</div> : null}
       </div>
-      <div className="dap-chart-legend">
-        {display.map((segment, index) => {
-          const color = allocationColor(title, segment, index)
-          return <div key={segment.label}><i style={{ background: color }} /><span><b>{segment.label}</b><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed())}</small></span><strong>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</strong></div>
-        })}
-      </div>
+      <div className="dap-chart-legend">{display.map((segment, index) => { const color = allocationColor(title, segment, index); return <div key={segment.label}><i style={{ background: color }} /><span><b>{segment.label}</b><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed())}</small></span><strong>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</strong></div> })}</div>
     </div>
   </section>
 }
@@ -314,18 +337,9 @@ function PerformanceTable({ title, rows, empty, groupHoldings }: { title: string
   const [popover, setPopover] = useState<HoldingsPopoverState | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const sorted = useMemo(() => sortRows(rows, sortKey, direction), [rows, sortKey, direction])
-  const choose = (key: SortKey) => {
-    if (key === sortKey) setDirection((value) => value === "desc" ? "asc" : "desc")
-    else { setSortKey(key); setDirection("desc") }
-  }
-  const cancelClose = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current)
-    closeTimer.current = null
-  }
-  const closeSoon = () => {
-    cancelClose()
-    closeTimer.current = setTimeout(() => setPopover(null), 140)
-  }
+  const choose = (key: SortKey) => { if (key === sortKey) setDirection((value) => value === "desc" ? "asc" : "desc"); else { setSortKey(key); setDirection("desc") } }
+  const cancelClose = () => { if (closeTimer.current) clearTimeout(closeTimer.current); closeTimer.current = null }
+  const closeSoon = () => { cancelClose(); closeTimer.current = setTimeout(() => setPopover(null), 140) }
   const openHoldings = (event: ReactMouseEvent<HTMLElement>, row: GroupRow) => {
     const holdings = groupHoldings?.get(row.label)
     if (!holdings?.length) return
@@ -341,19 +355,11 @@ function PerformanceTable({ title, rows, empty, groupHoldings }: { title: string
   if (!rows.length) return <section className="dap-table-card"><h3>{title}</h3><div className="dap-empty">{empty}</div></section>
   return <section className="dap-table-card">
     <div className="dap-table-heading"><h3>{title}</h3><span>{rows.length} classified groups</span></div>
-    <div className="dap-table-scroll"><table><thead><tr><th>Group</th><th><button onClick={() => choose("holdings")}>Holdings</button></th><th><button onClick={() => choose("weight")}>Weight</button></th><th>Invested</th><th>Current value</th><th><button onClick={() => choose("pnl")}>Unrealised P&amp;L</button></th><th><button onClick={() => choose("return")}>Return</button></th><th><button onClick={() => choose("impact")}>Return contribution</button></th></tr></thead>
-      <tbody>{sorted.map((row) => {
-        const interactive = Boolean(groupHoldings?.get(row.label)?.length)
-        return <tr key={row.label}>
-          <td>{interactive ? <button className="dap-group-trigger" type="button" aria-haspopup="dialog" onMouseEnter={(event) => openHoldings(event, row)} onMouseLeave={closeSoon} onFocus={(event) => openHoldings(event, row)} onBlur={closeSoon} onClick={(event) => openHoldings(event, row)}>{row.label}</button> : <strong>{row.label}</strong>}<small>{row.priced}/{row.holdings} priced · {row.accountingCovered}/{row.holdings} accounting covered</small></td>
-          <td>{interactive ? <button className="dap-holdings-trigger" type="button" aria-label={`Show ${row.holdings} holdings in ${row.label}`} onMouseEnter={(event) => openHoldings(event, row)} onMouseLeave={closeSoon} onFocus={(event) => openHoldings(event, row)} onBlur={closeSoon} onClick={(event) => openHoldings(event, row)}>{row.holdings}</button> : row.holdings}</td>
-          <td>{row.weight.toDecimalPlaces(1).toFixed(1)}%</td><td>{formatMoney(row.accountingCovered ? row.totalCost.toFixed() : null)}</td><td>{formatMoney(row.priced ? row.currentValue.toFixed() : null)}</td><td className={row.coveredPnl.gt(0) ? "is-positive" : row.coveredPnl.lt(0) ? "is-negative" : ""}>{row.accountingCovered ? formatMoney(row.coveredPnl.toFixed()) : "—"}</td><td className={row.returnPct?.gt(0) ? "is-positive" : row.returnPct?.lt(0) ? "is-negative" : ""}>{signed(row.returnPct)}</td><td className={row.contributionPctPoints?.gt(0) ? "is-positive" : row.contributionPctPoints?.lt(0) ? "is-negative" : ""}>{signed(row.contributionPctPoints, " pp")}</td>
-        </tr>
-      })}</tbody></table></div>
-    {popover ? <div className="dap-holdings-popover" role="dialog" aria-label={`${popover.label} holdings`} style={{ left: popover.x, top: popover.y }} onMouseEnter={cancelClose} onMouseLeave={closeSoon}>
-      <div className="dap-holdings-popover-head"><div><strong>{popover.label}</strong><span>{popover.holdings.length} holdings · return descending</span></div><button type="button" aria-label="Close holdings popover" onClick={() => setPopover(null)}>×</button></div>
-      <div className="dap-holdings-popover-scroll"><table><thead><tr><th>Stock</th><th>Return</th><th>P&amp;L</th><th>Current value</th></tr></thead><tbody>{popover.holdings.map((holding) => <tr key={holding.securityId}><td><b>{holding.symbol}</b><small>{holding.company}</small></td><td className={holding.returnPct?.gt(0) ? "is-positive" : holding.returnPct?.lt(0) ? "is-negative" : ""}>{signed(holding.returnPct)}</td><td className={holding.unrealisedPnl?.gt(0) ? "is-positive" : holding.unrealisedPnl?.lt(0) ? "is-negative" : ""}>{holding.unrealisedPnl === null ? "—" : formatMoney(holding.unrealisedPnl.toFixed())}</td><td>{holding.currentValue === null ? "—" : formatMoney(holding.currentValue.toFixed())}</td></tr>)}</tbody></table></div>
-    </div> : null}
+    <div className="dap-table-scroll"><table><thead><tr><th>Group</th><th><button onClick={() => choose("holdings")}>Holdings</button></th><th><button onClick={() => choose("weight")}>Weight</button></th><th>Invested</th><th>Current value</th><th><button onClick={() => choose("pnl")}>Unrealised P&amp;L</button></th><th><button onClick={() => choose("return")}>Return</button></th><th><button onClick={() => choose("impact")}>Return contribution</button></th></tr></thead><tbody>{sorted.map((row) => {
+      const interactive = Boolean(groupHoldings?.get(row.label)?.length)
+      return <tr key={row.label}><td>{interactive ? <button className="dap-group-trigger" type="button" aria-haspopup="dialog" onMouseEnter={(event) => openHoldings(event, row)} onMouseLeave={closeSoon} onFocus={(event) => openHoldings(event, row)} onBlur={closeSoon} onClick={(event) => openHoldings(event, row)}>{row.label}</button> : <strong>{row.label}</strong>}<small>{row.priced}/{row.holdings} priced · {row.accountingCovered}/{row.holdings} accounting covered</small></td><td>{interactive ? <button className="dap-holdings-trigger" type="button" aria-label={`Show ${row.holdings} holdings in ${row.label}`} onMouseEnter={(event) => openHoldings(event, row)} onMouseLeave={closeSoon} onFocus={(event) => openHoldings(event, row)} onBlur={closeSoon} onClick={(event) => openHoldings(event, row)}>{row.holdings}</button> : row.holdings}</td><td>{row.weight.toDecimalPlaces(1).toFixed(1)}%</td><td>{formatMoney(row.accountingCovered ? row.totalCost.toFixed() : null)}</td><td>{formatMoney(row.priced ? row.currentValue.toFixed() : null)}</td><td className={row.coveredPnl.gt(0) ? "is-positive" : row.coveredPnl.lt(0) ? "is-negative" : ""}>{row.accountingCovered ? formatMoney(row.coveredPnl.toFixed()) : "—"}</td><td className={row.returnPct?.gt(0) ? "is-positive" : row.returnPct?.lt(0) ? "is-negative" : ""}>{signed(row.returnPct)}</td><td className={row.contributionPctPoints?.gt(0) ? "is-positive" : row.contributionPctPoints?.lt(0) ? "is-negative" : ""}>{signed(row.contributionPctPoints, " pp")}</td></tr>
+    })}</tbody></table></div>
+    {popover ? <div className="dap-holdings-popover" role="dialog" aria-label={`${popover.label} holdings`} style={{ left: popover.x, top: popover.y }} onMouseEnter={cancelClose} onMouseLeave={closeSoon}><div className="dap-holdings-popover-head"><div><strong>{popover.label}</strong><span>{popover.holdings.length} holdings · return descending</span></div><button type="button" aria-label="Close holdings popover" onClick={() => setPopover(null)}>×</button></div><div className="dap-holdings-popover-scroll"><table><thead><tr><th>Stock</th><th>Return</th><th>P&amp;L</th><th>Current value</th></tr></thead><tbody>{popover.holdings.map((holding) => <tr key={holding.securityId}><td><b>{holding.symbol}</b><small>{holding.company}</small></td><td className={holding.returnPct?.gt(0) ? "is-positive" : holding.returnPct?.lt(0) ? "is-negative" : ""}>{signed(holding.returnPct)}</td><td className={holding.unrealisedPnl?.gt(0) ? "is-positive" : holding.unrealisedPnl?.lt(0) ? "is-negative" : ""}>{holding.unrealisedPnl === null ? "—" : formatMoney(holding.unrealisedPnl.toFixed())}</td><td>{holding.currentValue === null ? "—" : formatMoney(holding.currentValue.toFixed())}</td></tr>)}</tbody></table></div></div> : null}
   </section>
 }
 
@@ -374,6 +380,7 @@ export function DashboardAllocationPerformance() {
   const sectorCoverage = coveragePct(sectorClassified, equityPositions.length)
   const marketCapCoverage = coveragePct(marketCapClassifiedEquities, equityPositions.length)
   const classificationIncomplete = sectorClassified < equityPositions.length || marketCapClassifiedEquities < equityPositions.length
+  const baselineReturn = supportedPortfolioReturn(positions)
 
   return <section className="dashboard-allocation-performance" aria-label="Sector and market-cap performance">
     <div className="dap-heading"><div><p className="eyebrow">Allocation &amp; performance</p><h2>Sector and market-cap performance</h2><p>Classification-backed allocation and supported return aggregation. Missing classifications are excluded rather than guessed.</p></div><span>Consolidated portfolio</span></div>
@@ -384,14 +391,9 @@ export function DashboardAllocationPerformance() {
       <article><small>Enrichment state</small><strong>{enrichment.state.replaceAll("_", " ")}</strong><p>Canonical stored enrichment only</p></article>
     </div>
     {classificationIncomplete ? <div className="dap-warning"><strong>Classification coverage is intentionally partial.</strong><span> PortfolioAI shows only canonical trusted evidence; unresolved or missing source identities remain Unclassified rather than being guessed.</span></div> : null}
-    <div className="dap-chart-grid">
-      <AllocationDonut title="Sector allocation" segments={sectorSegments} classifiedCoverage={sectorCoverage} empty="Sector allocation will appear when trusted sector classifications and current prices are available." />
-      <AllocationDonut title="Market-cap allocation" segments={marketCapSegments} classifiedCoverage={marketCapCoverage} empty="Market-cap allocation will appear when trusted classifications and current prices are available." />
-    </div>
-    <div className="dap-table-grid">
-      <PerformanceTable title="Sector performance" rows={sectorRows} groupHoldings={sectorGroupHoldings} empty="No trusted sector classifications are stored yet." />
-      <PerformanceTable title="Market-cap performance" rows={marketCapRows} empty="No trusted market-cap categories are stored yet. ETFs will appear independently when present." />
-    </div>
+    <div className="dap-chart-grid"><AllocationDonut title="Sector allocation" segments={sectorSegments} classifiedCoverage={sectorCoverage} empty="Sector allocation will appear when trusted sector classifications and current prices are available." /><AllocationDonut title="Market-cap allocation" segments={marketCapSegments} classifiedCoverage={marketCapCoverage} empty="Market-cap allocation will appear when trusted classifications and current prices are available." /></div>
+    <div className="dap-table-grid"><PerformanceTable title="Sector performance" rows={sectorRows} groupHoldings={sectorGroupHoldings} empty="No trusted sector classifications are stored yet." /><PerformanceTable title="Market-cap performance" rows={marketCapRows} empty="No trusted market-cap categories are stored yet. ETFs will appear independently when present." /></div>
+    <AllocationPerformanceMatrix rows={sectorRows} baselineReturn={baselineReturn} />
     <p className="dap-method">Allocation donuts use current priced value and explicitly retain ETF / Unclassified slices so missing evidence is visible. Sector donut slices are shown individually from 1.5% portfolio weight upward; smaller sectors are grouped into Other sectors. Hover a donut slice for its allocation details; hover a sector name or holdings count to inspect the constituent stocks sorted by return. Return = supported unrealised P&amp;L ÷ supported invested cost within that group. Return contribution is the group P&amp;L divided by total supported portfolio cost, expressed in percentage points. Coverage remains explicit.</p>
   </section>
 }
