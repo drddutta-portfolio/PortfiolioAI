@@ -6,6 +6,7 @@ const SECTIONS = [
   ["dashboard-daily-move", "Daily Move"],
   ["dashboard-performance", "Performance"],
   ["dashboard-structure", "Structure"],
+  ["dashboard-health", "Health"],
   ["dashboard-risk", "Risk"],
   ["dashboard-monitoring", "Monitoring"],
   ["dashboard-research", "Research"],
