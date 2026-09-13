@@ -270,16 +270,16 @@ function AllocationPerformanceMatrix({ rows, baselineReturn, scopeLabel }: { row
   Object.values(buckets).forEach((items) => items.sort((a, b) => b.weight.comparedTo(a.weight)))
 
   const cards: Array<{ key: MatrixBucket; title: string; subtitle: string }> = [
-    { key: "strength", title: "Portfolio strength", subtitle: "High allocation · stronger return" },
-    { key: "review", title: "Review priority", subtitle: "High allocation · weaker return" },
-    { key: "watch", title: "Emerging strength", subtitle: "Lower allocation · stronger return" },
-    { key: "lowPriority", title: "Low-priority drag", subtitle: "Lower allocation · weaker return" },
+    { key: "strength", title: "Portfolio strength", subtitle: "Large exposure · outperforming selected scope" },
+    { key: "review", title: "Review priority", subtitle: "Large exposure · underperforming selected scope" },
+    { key: "watch", title: "Emerging strength", subtitle: "Small exposure · outperforming selected scope" },
+    { key: "lowPriority", title: "Low-priority drag", subtitle: "Small exposure · underperforming selected scope" },
   ]
 
   return <section className="dap-matrix-card" aria-label="Sector allocation versus performance matrix">
     <div className="dap-matrix-heading">
       <div><p className="eyebrow">Allocation vs performance</p><h3>Where is sector exposure helping or lagging?</h3><p>Descriptive positioning within {scopeLabel}. It does not generate a buy, sell, add or reduce recommendation.</p></div>
-      <div className="dap-matrix-thresholds"><span>High allocation ≥ 5%</span><span>Strong return ≥ {signed(baselineReturn)}</span></div>
+      <div className="dap-matrix-thresholds"><span>Large exposure ≥ 5%</span><span>Outperforming ≥ {signed(baselineReturn)}</span></div>
     </div>
     <div className="dap-matrix-grid">
       {cards.map((card) => <article key={card.key} className={`dap-matrix-quadrant is-${card.key}`}>
