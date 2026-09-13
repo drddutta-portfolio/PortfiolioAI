@@ -11,6 +11,7 @@ import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
 import { DashboardPortfolioIntelligence } from "../components/DashboardPortfolioIntelligence"
 import { DashboardResearchIntelligence } from "../components/DashboardResearchIntelligence"
 import { DashboardRiskConcentration } from "../components/DashboardRiskConcentration"
+import { DashboardScopeProvider } from "../components/DashboardScopeContext"
 import { DashboardSectionNavigator } from "../components/DashboardSectionNavigator"
 import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
@@ -72,7 +73,7 @@ export function AppRoutes() {
           path="/app"
           element={
             <AppShell>
-              <>
+              <DashboardScopeProvider>
                 <DashboardSectionNavigator />
                 <div id="dashboard-overview" className="dashboard-section-anchor"><DashboardPage /></div>
                 <div id="dashboard-performance" className="dashboard-section-anchor"><DashboardAllocationPerformance /></div>
@@ -82,7 +83,7 @@ export function AppRoutes() {
                 <div id="dashboard-research" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="research" label="Research & Intelligence Status" anchorId="dashboard-research"><DashboardResearchIntelligence /></DashboardCollapsibleSection></div>
                 <div id="dashboard-intelligence" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="intelligence" label="Portfolio Intelligence Snapshot" anchorId="dashboard-intelligence"><DashboardPortfolioIntelligence /></DashboardCollapsibleSection></div>
                 <div id="dashboard-news" className="dashboard-section-anchor"><DashboardNewsPreview /></div>
-              </>
+              </DashboardScopeProvider>
             </AppShell>
           }
         />
