@@ -35,6 +35,13 @@ const SPECIAL_COLORS: Record<NonNullable<AllocationSegment["special"]>, string> 
   UNCLASSIFIED: "#c8cec9",
   OTHER: "#a7b6ad",
 }
+const MARKET_CAP_COLORS: Record<string, string> = {
+  "Large Cap": "#2563eb",
+  "Mid Cap": "#d97706",
+  "Small Cap": "#7c3aed",
+  ETF: "#0891b2",
+  Unclassified: "#c8cec9",
+}
 
 function prettyMarketCap(value: SecurityEnrichment["marketCapCategory"] | "ETF") {
   if (value === "ETF") return "ETF"
@@ -165,6 +172,11 @@ function sortRows(rows: readonly GroupRow[], key: SortKey, direction: Direction)
   })
 }
 
+function allocationColor(title: string, segment: AllocationSegment, index: number) {
+  if (title === "Market-cap allocation") return MARKET_CAP_COLORS[segment.label] ?? "#64748b"
+  return segment.special ? SPECIAL_COLORS[segment.special] : DONUT_COLORS[index % DONUT_COLORS.length]
+}
+
 function AllocationDonut({ title, segments, classifiedCoverage, empty }: { title: string; segments: readonly AllocationSegment[]; classifiedCoverage: string; empty: string }) {
   const display = summarizeSegments(segments)
   if (!display.length) return <section className="dap-chart-card"><div className="dap-chart-heading"><div><h3>{title}</h3><p>Portfolio weight by current priced value</p></div><span>{classifiedCoverage} classified</span></div><div className="dap-chart-empty">{empty}</div></section>
@@ -172,7 +184,7 @@ function AllocationDonut({ title, segments, classifiedCoverage, empty }: { title
   const gradient = display.map((segment, index) => {
     const start = cursor
     cursor = cursor.plus(segment.weight)
-    const color = segment.special ? SPECIAL_COLORS[segment.special] : DONUT_COLORS[index % DONUT_COLORS.length]
+    const color = allocationColor(title, segment, index)
     return `${color} ${start.toDecimalPlaces(2).toFixed(2)}% ${cursor.toDecimalPlaces(2).toFixed(2)}%`
   }).join(",")
   return <section className="dap-chart-card">
@@ -183,7 +195,7 @@ function AllocationDonut({ title, segments, classifiedCoverage, empty }: { title
       </div>
       <div className="dap-chart-legend">
         {display.map((segment, index) => {
-          const color = segment.special ? SPECIAL_COLORS[segment.special] : DONUT_COLORS[index % DONUT_COLORS.length]
+          const color = allocationColor(title, segment, index)
           return <div key={segment.label}><i style={{ background: color }} /><span><b>{segment.label}</b><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed())}</small></span><strong>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</strong></div>
         })}
       </div>
@@ -222,6 +234,7 @@ export function DashboardAllocationPerformance() {
   const marketCapSegments = buildAllocationSegments(positions, enrichment.bySecurityId, "marketCap")
   const sectorCoverage = coveragePct(sectorClassified, equityPositions.length)
   const marketCapCoverage = coveragePct(marketCapClassifiedEquities, equityPositions.length)
+  const classificationIncomplete = sectorClassified < equityPositions.length || marketCapClassifiedEquities < equityPositions.length
 
   return <section className="dashboard-allocation-performance" aria-label="Sector and market-cap performance">
     <div className="dap-heading"><div><p className="eyebrow">Allocation &amp; performance</p><h2>Sector and market-cap performance</h2><p>Classification-backed allocation and supported return aggregation. Missing classifications are excluded rather than guessed.</p></div><span>Consolidated portfolio</span></div>
@@ -231,7 +244,7 @@ export function DashboardAllocationPerformance() {
       <article><small>ETF bucket</small><strong>{etfCount}</strong><p>ETFs are shown separately from equity market-cap categories</p></article>
       <article><small>Enrichment state</small><strong>{enrichment.state.replaceAll("_", " ")}</strong><p>Canonical stored enrichment only</p></article>
     </div>
-    {sectorClassified === 0 || marketCapClassifiedEquities === 0 ? <div className="dap-warning"><strong>Classification coverage is not yet sufficient for complete allocation analytics.</strong><span> The charts make missing coverage visible, and the tables activate automatically as canonical sector and market-cap evidence is populated.</span></div> : null}
+    {classificationIncomplete ? <div className="dap-warning"><strong>Classification coverage is intentionally partial.</strong><span> PortfolioAI shows only canonical trusted evidence; unresolved or missing source identities remain Unclassified rather than being guessed.</span></div> : null}
     <div className="dap-chart-grid">
       <AllocationDonut title="Sector allocation" segments={sectorSegments} classifiedCoverage={sectorCoverage} empty="Sector allocation will appear when trusted sector classifications and current prices are available." />
       <AllocationDonut title="Market-cap allocation" segments={marketCapSegments} classifiedCoverage={marketCapCoverage} empty="Market-cap allocation will appear when trusted classifications and current prices are available." />
