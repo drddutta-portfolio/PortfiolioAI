@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { RedirectIfAuthenticated } from "../auth/RedirectIfAuthenticated"
 import { RequireAuth } from "../auth/RequireAuth"
 import { AppShell } from "../components/AppShell"
+import { DashboardDecisionLayer } from "../components/DashboardDecisionLayer"
 import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
 import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
@@ -66,6 +67,7 @@ export function AppRoutes() {
             <AppShell>
               <>
                 <DashboardPage />
+                <DashboardDecisionLayer />
                 <DashboardNewsPreview />
               </>
             </AppShell>
