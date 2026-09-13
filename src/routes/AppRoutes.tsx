@@ -5,6 +5,7 @@ import { RequireAuth } from "../auth/RequireAuth"
 import { AppShell } from "../components/AppShell"
 import { DashboardDecisionLayer } from "../components/DashboardDecisionLayer"
 import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
+import { DashboardPortfolioIntelligence } from "../components/DashboardPortfolioIntelligence"
 import { DashboardResearchIntelligence } from "../components/DashboardResearchIntelligence"
 import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
@@ -70,6 +71,7 @@ export function AppRoutes() {
                 <DashboardPage />
                 <DashboardDecisionLayer />
                 <DashboardResearchIntelligence />
+                <DashboardPortfolioIntelligence />
                 <DashboardNewsPreview />
               </>
             </AppShell>
