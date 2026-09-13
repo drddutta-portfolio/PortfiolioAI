@@ -7,6 +7,7 @@ import { DashboardDecisionLayer } from "../components/DashboardDecisionLayer"
 import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
 import { DashboardPortfolioIntelligence } from "../components/DashboardPortfolioIntelligence"
 import { DashboardResearchIntelligence } from "../components/DashboardResearchIntelligence"
+import { DashboardRiskConcentration } from "../components/DashboardRiskConcentration"
 import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
 import { LoginPage } from "../pages/LoginPage"
@@ -70,6 +71,7 @@ export function AppRoutes() {
               <>
                 <DashboardPage />
                 <DashboardDecisionLayer />
+                <DashboardRiskConcentration />
                 <DashboardResearchIntelligence />
                 <DashboardPortfolioIntelligence />
                 <DashboardNewsPreview />
