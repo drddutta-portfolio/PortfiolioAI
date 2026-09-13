@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState } from "react"
-import type { ChangeEvent, ReactNode } from "react"
+import type { FormEvent, ReactNode } from "react"
 import type { PortfolioPosition, PortfolioRole, PortfolioViewModel } from "../features/portfolio/types"
 
 type DashboardScopeContextValue = {
@@ -12,7 +12,7 @@ export function DashboardScopeProvider({ children }: { children: ReactNode }) {
   const [scopeKey, setScopeKey] = useState("ALL")
   const value = useMemo(() => ({ scopeKey }), [scopeKey])
 
-  const captureScopeChange = (event: ChangeEvent<HTMLDivElement>) => {
+  const captureScopeChange = (event: FormEvent<HTMLDivElement>) => {
     const target = event.target
     if (!(target instanceof HTMLSelectElement)) return
     if (target.getAttribute("aria-label") !== "Portfolio scope") return
