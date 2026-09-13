@@ -17,11 +17,14 @@ const DOMAINS = [
 
 type DomainKey = typeof DOMAINS[number][1]
 
+type AttentionTier = "REVIEW_REQUIRED" | "CONFLICTING" | "MISSING" | "STALE"
+const ATTENTION_PRIORITY: Readonly<Record<AttentionTier, number>> = { REVIEW_REQUIRED: 7, CONFLICTING: 6, MISSING: 4, STALE: 3 }
+
 function title(value: string) {
   return value.toLowerCase().replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase())
 }
 
-function stateClass(state: ResearchCoverageState) {
+function stateClass(state: ResearchCoverageState | AttentionTier) {
   if (state === "FRESH") return "good"
   if (state === "STALE") return "warning"
   if (state === "CONFLICTING" || state === "REVIEW_REQUIRED") return "critical"
@@ -44,6 +47,15 @@ function issueSummary(row: ResearchCoverageRow) {
   return issues.length ? issues.join(" · ") : "All applicable research domains are fresh"
 }
 
+function attentionTier(row: ResearchCoverageRow): AttentionTier | null {
+  const states = DOMAINS.map(([, key]) => row[key])
+  if (states.includes("REVIEW_REQUIRED")) return "REVIEW_REQUIRED"
+  if (states.includes("CONFLICTING")) return "CONFLICTING"
+  if (states.includes("MISSING")) return "MISSING"
+  if (states.includes("STALE")) return "STALE"
+  return null
+}
+
 export function DashboardResearchIntelligence() {
   const { portfolio, isLoading: portfolioLoading, error: portfolioError } = usePortfolioView()
   const positions = portfolio?.openPositions ?? []
@@ -53,14 +65,31 @@ export function DashboardResearchIntelligence() {
     const rows = coverage.data
     const counts = Object.fromEntries(STATES.map((state) => [state, rows.filter((row) => row.overall === state).length])) as Record<ResearchCoverageState, number>
     const applicable = rows.filter((row) => row.overall !== "NOT_APPLICABLE")
-    const freshPercent = applicable.length ? Math.round(((counts.FRESH ?? 0) / applicable.length) * 100) : 0
     const latest = rows.map((row) => row.latestEvidenceAt).filter((value): value is string => Boolean(value)).sort().at(-1) ?? null
-    return { counts, applicable: applicable.length, freshPercent, latest }
+
+    let freshDomainSlots = 0
+    let applicableDomainSlots = 0
+    rows.forEach((row) => {
+      DOMAINS.forEach(([, key]) => {
+        if (row[key] === "NOT_APPLICABLE") return
+        applicableDomainSlots += 1
+        if (row[key] === "FRESH") freshDomainSlots += 1
+      })
+    })
+    const freshEvidencePercent = applicableDomainSlots ? Math.round((freshDomainSlots / applicableDomainSlots) * 100) : 0
+    const fullyFresh = counts.FRESH ?? 0
+    const hardIssues = (counts.CONFLICTING ?? 0) + (counts.REVIEW_REQUIRED ?? 0)
+    return { counts, applicable: applicable.length, latest, freshDomainSlots, applicableDomainSlots, freshEvidencePercent, fullyFresh, hardIssues }
   }, [coverage.data])
 
   const attention = useMemo(() => [...coverage.data]
-    .filter((row) => !["FRESH", "NOT_APPLICABLE"].includes(row.overall))
-    .sort((a, b) => STATE_PRIORITY[b.overall] - STATE_PRIORITY[a.overall] || b.reviewRequiredCount - a.reviewRequiredCount || b.conflictCount - a.conflictCount || a.symbol.localeCompare(b.symbol))
+    .map((row) => ({ row, tier: attentionTier(row) }))
+    .filter((item): item is { row: ResearchCoverageRow; tier: AttentionTier } => item.tier !== null)
+    .sort((a, b) => ATTENTION_PRIORITY[b.tier] - ATTENTION_PRIORITY[a.tier]
+      || STATE_PRIORITY[b.row.overall] - STATE_PRIORITY[a.row.overall]
+      || b.row.reviewRequiredCount - a.row.reviewRequiredCount
+      || b.row.conflictCount - a.row.conflictCount
+      || a.row.symbol.localeCompare(b.row.symbol))
     .slice(0, 12), [coverage.data])
 
   const domainRows = useMemo(() => DOMAINS.map(([label, key]) => {
@@ -82,10 +111,10 @@ export function DashboardResearchIntelligence() {
 
     {!coverage.isLoading && !coverage.error ? <>
       <div className="dashboard-research-summary">
-        <article className="research-summary-card hero"><span>Fresh research coverage</span><strong>{summary.freshPercent}%</strong><small>{summary.counts.FRESH ?? 0} of {summary.applicable} applicable holdings fully fresh</small></article>
-        <article className="research-summary-card warning"><span>Stale</span><strong>{summary.counts.STALE ?? 0}</strong><small>Holdings with one or more expired evidence domains</small></article>
-        <article className="research-summary-card missing"><span>Missing</span><strong>{summary.counts.MISSING ?? 0}</strong><small>Holdings missing required stored research evidence</small></article>
-        <article className="research-summary-card critical"><span>Conflicting / review</span><strong>{(summary.counts.CONFLICTING ?? 0) + (summary.counts.REVIEW_REQUIRED ?? 0)}</strong><small>Evidence needing owner attention before reliance</small></article>
+        <article className="research-summary-card hero"><span>Fresh evidence coverage</span><strong>{summary.freshEvidencePercent}%</strong><small>{summary.freshDomainSlots} of {summary.applicableDomainSlots} applicable evidence slots fresh</small></article>
+        <article className="research-summary-card neutral"><span>Fully fresh holdings</span><strong>{summary.fullyFresh}</strong><small>{summary.fullyFresh} of {summary.applicable} holdings fresh across every applicable domain</small></article>
+        <article className="research-summary-card missing"><span>Missing</span><strong>{summary.counts.MISSING ?? 0}</strong><small>Holdings missing one or more required evidence domains</small></article>
+        <article className="research-summary-card critical"><span>Conflicting / review</span><strong>{summary.hardIssues}</strong><small>Holdings with evidence requiring owner attention before reliance</small></article>
         <article className="research-summary-card neutral"><span>Latest evidence</span><strong>{summary.latest ? new Intl.DateTimeFormat("en-IN", { day: "2-digit", month: "short" }).format(new Date(summary.latest)) : "—"}</strong><small>{ageLabel(summary.latest)}</small></article>
       </div>
 
@@ -97,9 +126,9 @@ export function DashboardResearchIntelligence() {
 
         <section className="dashboard-research-attention">
           <div className="dashboard-research-subheading"><div><span>Research attention queue</span><strong>{attention.length ? `${attention.length} highest-priority holdings` : "No immediate research gaps"}</strong></div><Link to="/app/research">Research →</Link></div>
-          {attention.length ? <div className="dashboard-research-attention-list">{attention.map((row) => <article key={row.securityId} className={`state-${stateClass(row.overall)}`}>
+          {attention.length ? <div className="dashboard-research-attention-list">{attention.map(({ row, tier }) => <article key={row.securityId} className={`state-${stateClass(tier)}`}>
             <div><Link to={`/app/research/${row.securityId}`}>{row.symbol}</Link><small>{row.company}</small></div>
-            <div><span>{title(row.overall)}</span><p>{issueSummary(row)}</p></div>
+            <div><span>{title(tier)}</span><p>{issueSummary(row)}</p></div>
             <small>{ageLabel(row.latestEvidenceAt)}</small>
           </article>)}</div> : <div className="dashboard-research-empty"><strong>Research coverage is currently fresh.</strong><span>No applicable holding is stale, missing, conflicting or awaiting review.</span></div>}
         </section>
