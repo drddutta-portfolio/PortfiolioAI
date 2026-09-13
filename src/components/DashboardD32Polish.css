@@ -11,6 +11,14 @@
   min-width: 0;
 }
 
+/* The command index is sticky. Keep it fully opaque so scrolled content never
+   shows through it, and give it a clear visual separation from the page. */
+.dashboard-section-navigator {
+  z-index: 50;
+  background: #fbfdfb;
+  box-shadow: 0 8px 24px rgba(38, 74, 55, 0.12);
+}
+
 /* Dense tables should remain usable without shrinking readable text. */
 .dap-table-scroll,
 .dashboard-role-table,
