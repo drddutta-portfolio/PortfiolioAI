@@ -12,6 +12,8 @@ create table if not exists public.position_sizing_assessments (
   assessment_state text not null check (
     assessment_state in ('READY','INSUFFICIENT_EVIDENCE','BLOCKED_PREREQUISITE','NOT_APPLICABLE')
   ),
+  research_profile_code text null check (research_profile_code is null or length(btrim(research_profile_code)) > 0),
+  research_profile_version text null check (research_profile_version is null or length(btrim(research_profile_version)) > 0),
   current_weight numeric(9,6) null check (current_weight between 0 and 100),
   suggested_target_weight numeric(9,6) null check (suggested_target_weight between 0 and 100),
   suggested_minimum_weight numeric(9,6) null check (suggested_minimum_weight between 0 and 100),
@@ -26,8 +28,8 @@ create table if not exists public.position_sizing_assessments (
   reason_codes text[] not null default '{}'::text[],
   rationale jsonb not null default '[]'::jsonb check (jsonb_typeof(rationale) = 'array'),
   input_snapshot jsonb not null check (jsonb_typeof(input_snapshot) = 'object'),
-  source_score_run_id uuid null references public.stock_score_runs(id) on delete set null,
-  source_recommendation_run_id uuid null references public.stock_recommendation_runs(id) on delete set null,
+  source_score_run_id uuid null references public.stock_score_runs(id) on delete restrict,
+  source_recommendation_run_id uuid null references public.stock_recommendation_runs(id) on delete restrict,
   created_at timestamptz not null default now(),
   constraint position_sizing_assessments_range_order check (
     suggested_minimum_weight is null
@@ -42,6 +44,8 @@ create table if not exists public.position_sizing_assessments (
   ),
   constraint position_sizing_assessments_ready_shape check (
     (assessment_state = 'READY'
+      and research_profile_code is not null
+      and research_profile_version is not null
       and current_weight is not null
       and suggested_target_weight is not null
       and suggested_minimum_weight is not null
@@ -62,6 +66,10 @@ comment on table public.position_sizing_assessments is
   'Append-only deterministic D35B position-sizing assessments. Engine output is separate from owner-controlled portfolio_security_settings.';
 comment on column public.position_sizing_assessments.evaluation_key is
   'Stable SHA-256-style fingerprint/idempotency key derived from the canonical sizing input snapshot by trusted orchestration.';
+comment on column public.position_sizing_assessments.research_profile_code is
+  'Approved upstream sector/research profile used by the deterministic score/recommendation lineage.';
+comment on column public.position_sizing_assessments.research_profile_version is
+  'Version of the approved upstream sector/research profile; READY assessments require both profile code and version.';
 comment on column public.position_sizing_assessments.input_snapshot is
   'Canonical structured inputs used by the deterministic engine, retained for reproducibility; never an AI-generated payload.';
 comment on column public.position_sizing_assessments.recommended_action is
