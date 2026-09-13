@@ -12,26 +12,46 @@ D35B converts already-reviewed deterministic investment evidence into a separate
 
 It answers:
 
-> Given the evidence that PortfolioAI currently has for this security and its present portfolio weight, what sizing state/range/action can the system support without inventing missing evidence or overwriting the owner's settings?
+> Given an approved sector/research profile, sufficient deterministic research/scoring/recommendation evidence, the current portfolio weight and owner context, what sizing state/range/action can PortfolioAI support without inventing evidence or overwriting owner settings?
 
-D35B is a portfolio engine. It does not replace the upstream Quality/Growth/Valuation/Risk/Recommendation engines and does not fetch provider data.
+D35B is a downstream portfolio engine. It does not replace sector-specific research, Quality/Growth/Valuation/Risk/Recommendation engines and does not fetch provider data.
 
 ## 2. Architecture boundary
 
 The canonical Master Blueprint requires Position Sizing to consider conviction, portfolio role, business quality, growth durability, permanent-loss risk, valuation, volatility, concentration, liquidity and portfolio fit.
 
-The R1 reference contract does **not** pretend all ten domains are already portfolio-wide. Instead it:
+The sector-research architecture further establishes that those business-quality inputs must come from an approved business/sector research profile rather than a universal stock formula.
 
-1. consumes a persisted deterministic score/recommendation lineage;
-2. consumes validated upstream weight guidance when that guidance exists;
-3. consumes the transaction/price-derived current portfolio weight;
-4. treats owner position settings as human context only;
-5. fails closed when required evidence is absent or below policy readiness;
-6. persists a separate append-only assessment when trusted orchestration is later enabled.
+The intended production dependency is:
 
-This makes R1 a reference contract rather than an unsupported second scoring engine.
+```text
+sector/profile research
+    -> standardized deterministic investment dimensions
+    -> persisted score run
+    -> persisted recommendation run + reviewed weight guidance
+    -> D35B position sizing assessment
+```
+
+R1 does **not** pretend all of these domains are already portfolio-wide. Instead it:
+
+1. requires an explicit approved research profile code and version;
+2. requires that profile readiness be `READY` before D35B itself can become `READY`;
+3. consumes persisted deterministic score/recommendation lineage;
+4. consumes validated upstream weight guidance when that guidance exists;
+5. consumes the transaction/price-derived current portfolio weight;
+6. treats owner position settings as human context only;
+7. fails closed when required evidence is absent, pending or below policy readiness;
+8. persists a separate append-only assessment when trusted orchestration is later enabled.
+
+A supplied min/max weight range by itself is **never sufficient** to unlock a real security for D35B.
 
 ## 3. Non-negotiable separations
+
+### Sector research is upstream, not recreated inside D35B
+
+D35B does not calculate bank GNPA/NIM, IT deal wins, pharma regulatory quality, industrial cash conversion or any other sector-specific business metric.
+
+Those belong to the approved research profile and upstream deterministic scoring path. D35B consumes the standardized, versioned result and retains profile lineage.
 
 ### Owner settings are not engine output
 
@@ -41,11 +61,12 @@ The owner target/min/max values may be compared with the deterministic engine ra
 
 ### Recommendation guidance is upstream evidence, not the D35B record
 
-`stock_recommendation_runs` may contain `suggested_weight_min` / `suggested_weight_max` from the reviewed recommendation policy. D35B consumes those values with their score/recommendation lineage and creates its own assessment.
+`stock_recommendation_runs` may contain `suggested_weight_min` / `suggested_weight_max` from the reviewed recommendation policy. D35B consumes those values with their research-profile, score and recommendation lineage and creates its own assessment.
 
-The two records remain distinct so the system can answer:
+The records remain distinct so the system can answer:
 
-- what the recommendation layer said;
+- which research profile and version applied;
+- what the score/recommendation layer said;
 - what current portfolio weight was used;
 - what D35B concluded;
 - what the owner configured separately.
@@ -63,6 +84,9 @@ The pure TypeScript reference implementation accepts:
 - `assetClass`;
 - exact-decimal `currentWeight`;
 - policy `minimumScoreReadyCoverage`;
+- research profile code;
+- research profile version;
+- research profile readiness state;
 - owner portfolio role;
 - owner target/min/max settings;
 - owner frozen state;
@@ -81,7 +105,7 @@ No provider call, AI output, news fetch or browser-side inference is part of the
 
 ### `READY`
 
-The required equity applicability, deterministic lineage, readiness coverage, current weight and validated upstream range are present.
+The asset is an equity; an approved research profile code/version exists and is `READY`; persisted score/recommendation lineage exists; readiness coverage passes policy; current weight and validated upstream range are present.
 
 ### `INSUFFICIENT_EVIDENCE`
 
@@ -91,7 +115,14 @@ No target/min/max range or action is returned in this state.
 
 ### `BLOCKED_PREREQUISITE`
 
-A required upstream deterministic prerequisite is absent or explicitly pending. Examples include no persisted recommendation run, no score-run lineage, an `INSUFFICIENT` upstream recommendation or `EVIDENCE_PENDING` transition.
+A required upstream prerequisite is absent, pending or not approved. Examples include:
+
+- missing research profile code/version;
+- profile state `PARTIAL`, `PROFILE_PENDING`, `BLOCKED_REVIEW` or `INSUFFICIENT_EVIDENCE`;
+- no persisted recommendation run;
+- no score-run lineage;
+- an `INSUFFICIENT` upstream recommendation;
+- `EVIDENCE_PENDING` recommendation transition.
 
 ### `NOT_APPLICABLE`
 
@@ -101,11 +132,11 @@ The equity position-sizing contract does not apply to the asset. R1 explicitly r
 
 The v1 action is deliberately conservative:
 
-- owner frozen → `FREEZE`;
-- upstream `EXIT_CANDIDATE` → `EXIT_REVIEW`;
-- current weight above engine maximum → `REDUCE`;
-- current weight below engine minimum **and** upstream bias `ACCUMULATE` → `ADD`;
-- otherwise → `HOLD`.
+- owner frozen -> `FREEZE`;
+- upstream `EXIT_CANDIDATE` -> `EXIT_REVIEW`;
+- current weight above engine maximum -> `REDUCE`;
+- current weight below engine minimum **and** upstream bias `ACCUMULATE` -> `ADD`;
+- otherwise -> `HOLD`.
 
 The schema reserves `ADD_ON_WEAKNESS` and `TRIM_INTO_STRENGTH` for later deterministic market/timing contracts. V1 does not fabricate those states without the required timing inputs.
 
@@ -128,6 +159,8 @@ The additive migration introduces `position_sizing_assessments` with:
 - `evaluation_key` idempotency fingerprint;
 - assessment timestamp;
 - assessment state;
+- research profile code;
+- research profile version;
 - captured current weight;
 - suggested target/min/max weights;
 - recommended sizing action;
@@ -138,6 +171,10 @@ The additive migration introduces `position_sizing_assessments` with:
 - source score-run lineage;
 - source recommendation-run lineage;
 - creation timestamp.
+
+A `READY` persisted assessment requires non-null profile code/version and score/recommendation lineage.
+
+Source score and recommendation foreign keys use restrictive deletion semantics so a retained READY assessment cannot silently lose its deterministic lineage through source-row deletion.
 
 ### Idempotency
 
@@ -160,32 +197,41 @@ This keeps future execution in a trusted server/orchestration path and prevents 
 
 ## 9. Reference cohort
 
-The contract tests four deliberately different cases.
+The contract tests deliberately different cases.
 
-### 1. HDFCBANK reference
+### 1. HDFCBANK genuine reference
 
-Uses the known 3–4% upstream reference guidance with adequate score coverage. The pure engine reproduces the range generically, derives a 3.5% midpoint and can return `ADD` when current weight is below 3% and the upstream action bias is `ACCUMULATE`.
+Uses `BANK / BANK_V1` research-profile lineage, the known 3–4% upstream reference guidance and adequate score coverage. The pure engine derives a 3.5% midpoint and can return `ADD` when current weight is below 3% and upstream action bias is `ACCUMULATE`.
 
-**Important:** `HDFCBANK` is not hard-coded in the engine.
+**Important:** HDFCBANK is not hard-coded in the engine; `BANK_V1` is supplied as validated upstream context.
 
-### 2. Non-financial equity contract case
+### 2. Unready non-bank security
 
-A non-financial equity with valid persisted lineage and validated upstream range follows exactly the same engine path. This proves the D35B implementation is not bank-specific.
+A stock may have an apparently valid 2–3% range, but if its sector/research profile is `PROFILE_PENDING` or otherwise not `READY`, D35B must return `BLOCKED_PREREQUISITE` with no range/action.
 
-The repository's reviewed non-financial scoring-profile validation cohort contains INFY, TORNTPHARM and M&M, but R1 does not claim that any one of those currently has production-ready persisted sizing guidance. Selection of a real production reference stock requires current evidence inspection during the later approved execution step.
+This proves that supplying a range cannot bypass sector-specific research readiness.
 
-### 3. Deliberately incomplete equity
+### 3. Synthetic non-financial contract fixture
+
+A synthetic non-financial test fixture may be marked with an explicitly READY test profile to prove the D35B software itself is not bank-coded.
+
+This is a **software contract test only**. It is not evidence that INFY, TORNTPHARM, M&M or any other non-bank production security currently has research-backed sizing readiness.
+
+### 4. Deliberately incomplete equity
 
 A stock with score-ready coverage below policy returns `INSUFFICIENT_EVIDENCE`, no range and no action.
 
-### 4. ETF
+### 5. ETF
 
 An ETF returns `NOT_APPLICABLE`, no range and no action.
 
 ## 10. Additional guard tests
 
-The TypeScript reference tests also verify:
+The TypeScript reference tests verify:
 
+- missing research profile code/version blocks sizing;
+- non-READY sector/profile research blocks sizing even if a range is supplied;
+- a synthetic READY non-financial fixture exercises the generic software path without claiming production coverage;
 - missing upstream ranges do not create a default 3–4% range;
 - human freeze returns `FREEZE`;
 - exit candidates become `EXIT_REVIEW`, never automatic exit;
@@ -193,16 +239,26 @@ The TypeScript reference tests also verify:
 
 The SQL contract test verifies:
 
-- required columns and lineage fields exist;
+- required columns and score/recommendation/profile lineage fields exist;
 - idempotency is uniquely constrained;
 - owner-scoped RLS policy exists;
 - browser writes are denied;
 - service role can append but cannot rewrite/delete assessment history.
 
-## 11. What R1 explicitly does not do
+## 11. Current real-world coverage boundary
+
+At R1, HDFCBANK remains the only genuine research-backed `READY` sizing reference case.
+
+Until R2/R3/R4 establish portfolio coverage and approved sector/profile research contracts, other real securities should remain `BLOCKED_PREREQUISITE`, `INSUFFICIENT_EVIDENCE`, `PROFILE_PENDING` upstream, or `NOT_APPLICABLE` as appropriate.
+
+R1 therefore proves the receiving/downstream contract. It does not manufacture missing sector research.
+
+## 12. What R1 explicitly does not do
 
 R1 does not:
 
+- implement BANK_V1 research itself;
+- implement the other sector research profiles;
 - apply the migration to production;
 - populate `position_sizing_assessments` in production;
 - change `portfolio_security_settings`;
@@ -215,18 +271,19 @@ R1 does not:
 - claim all Blueprint sizing factors already have portfolio-wide evidence;
 - enable automatic trading or automatic exits.
 
-## 12. Approval gates
+## 13. Approval gates
 
 Before a production sizing assessment can be persisted:
 
-1. review and merge the R1 code/schema contract;
-2. run TypeScript/test/lint/build checks in a full repository checkout;
-3. run the migration and pgTAP test against a disposable/local Supabase environment;
-4. inspect the resulting schema/RLS diff;
-5. obtain explicit owner approval before applying the migration to production;
-6. select and inspect the real four-case pilot cohort using current stored evidence;
-7. run a bounded manual dry run;
-8. inspect outputs and lineage;
-9. only then consider a trusted persistence/orchestration path.
+1. approve/merge the sector-research architecture reference;
+2. review and merge the R1 code/schema contract;
+3. run TypeScript/test/lint/build checks in a full repository checkout;
+4. run the migration and pgTAP test against a disposable/local Supabase environment;
+5. inspect the resulting schema/RLS diff;
+6. obtain explicit owner approval before applying the migration to production;
+7. inspect the real pilot cohort using current stored evidence;
+8. run a bounded manual dry run;
+9. inspect outputs and lineage;
+10. only then consider a trusted persistence/orchestration path.
 
 Passing R1 means **ENGINE CONTRACT COMPLETE**. It does not mean PILOT COMPLETE, PORTFOLIO-WIDE COVERAGE COMPLETE or AUTOMATION COMPLETE.
