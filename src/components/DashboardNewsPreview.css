@@ -1,0 +1,230 @@
+.dashboard-news-section > .dashboard-section-heading,
+.dashboard-news-section > .dashboard-news-placeholder {
+  display: none;
+}
+
+.dashboard-live-news {
+  border: 1px solid #d9e5de;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%);
+  box-shadow: 0 8px 26px rgba(32, 72, 54, 0.06);
+  overflow: hidden;
+}
+
+.dashboard-live-news-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid #e7eeea;
+}
+
+.dashboard-live-news-heading h2 {
+  margin: 3px 0 6px;
+}
+
+.dashboard-live-news-heading p:last-child {
+  margin: 0;
+  color: #66756d;
+  max-width: 720px;
+}
+
+.dashboard-live-news-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #edf7f1;
+  color: #2d6a4f;
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.dashboard-live-news-status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3f9b67;
+  box-shadow: 0 0 0 3px rgba(63, 155, 103, 0.12);
+}
+
+.dashboard-live-news-list {
+  display: grid;
+}
+
+.dashboard-live-news-row {
+  display: grid;
+  grid-template-columns: minmax(125px, 0.75fr) minmax(300px, 2.5fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #eef3f0;
+}
+
+.dashboard-live-news-row:last-child {
+  border-bottom: 0;
+}
+
+.dashboard-live-news-company {
+  min-width: 0;
+}
+
+.dashboard-live-news-company a {
+  display: inline-block;
+  color: #245a43;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.dashboard-live-news-company span {
+  display: block;
+  margin-top: 3px;
+  color: #7a8780;
+  font-size: 11px;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-live-news-copy {
+  min-width: 0;
+}
+
+.dashboard-live-news-copy > a {
+  color: #17251e;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.dashboard-live-news-copy > a:hover,
+.dashboard-live-news-company a:hover {
+  text-decoration: underline;
+}
+
+.dashboard-live-news-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-top: 7px;
+  color: #849089;
+  font-size: 11px;
+}
+
+.dashboard-live-news-meta span + span::before {
+  content: "•";
+  margin-right: 12px;
+  color: #b0bab4;
+}
+
+.dashboard-live-news-badges {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.dashboard-live-news-badges span {
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.news-importance.important {
+  background: #fff0ec;
+  color: #9d3d2c;
+  border-color: #f3c9bf;
+}
+
+.news-importance.notable {
+  background: #fff7e7;
+  color: #80621d;
+  border-color: #eddcad;
+}
+
+.news-importance.routine {
+  background: #f2f5f3;
+  color: #6a756f;
+  border-color: #dfe6e2;
+}
+
+.news-tone.positive {
+  background: #edf8f1;
+  color: #34724f;
+  border-color: #c7e6d2;
+}
+
+.news-tone.negative {
+  background: #fff0f0;
+  color: #984343;
+  border-color: #efcaca;
+}
+
+.news-tone.neutral {
+  background: #f2f4f8;
+  color: #657083;
+  border-color: #dde2eb;
+}
+
+.dashboard-live-news-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 28px 24px;
+  color: #6e7c74;
+}
+
+.dashboard-live-news-empty strong {
+  color: #33463c;
+}
+
+.dashboard-live-news-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  padding: 12px 24px;
+  border-top: 1px solid #e7eeea;
+  background: #f8fbf9;
+  color: #7a8780;
+  font-size: 11px;
+}
+
+.dashboard-live-news-footer a {
+  color: #2d6a4f;
+  font-weight: 750;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .dashboard-live-news-heading,
+  .dashboard-live-news-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-live-news-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .dashboard-live-news-company span {
+    white-space: normal;
+  }
+
+  .dashboard-live-news-badges {
+    justify-content: flex-start;
+  }
+}
