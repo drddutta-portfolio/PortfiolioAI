@@ -4,7 +4,7 @@
 
 Implementation branch: `dashboard-allocation-performance`
 
-Production enrichment and Dashboard activation are in progress. Allocation visuals are owner-reviewed; backend classification coverage is now materially populated and the interactive chart/table layer is under final review.
+Production enrichment and Dashboard activation are in progress. Allocation visuals are owner-reviewed; market-cap and sector classification are now complete for the current non-ETF equity portfolio, and the interactive chart/table layer is under final review.
 
 ## Production enrichment audit
 
@@ -24,15 +24,35 @@ The initial stored-evidence pass classified 25 current equities. A bounded Trend
 
 ### Owner STOCK MASTER sector evidence
 
-The owner-provided `PortFolio-1 (1)(3).xlsx` STOCK MASTER sector column was then ingested as `STOCK_MASTER` evidence rather than being represented as provider evidence.
+The owner-provided `PortFolio-1 (1)(3).xlsx` STOCK MASTER sector column was ingested as `STOCK_MASTER` evidence rather than being represented as provider evidence.
 
-Current sector coverage is:
+That increased sector coverage to 212 / 240 current non-ETF equities (88.3%).
 
-- 212 / 240 current non-ETF equities = 88.3% by holding count
-- 28 non-ETF equities remain without canonical sector evidence
-- the Dashboard donut can show 27 Unclassified when one of those holdings lacks a usable current priced value, because the donut is current-value weighted
+### Final sector-gap review
 
-Unresolved securities remain Unclassified until trusted owner/provider/reference evidence is available; they are not guessed from company names.
+Migration `20260913172000_complete_sector_gap_review.sql` closes the final 28 sector gaps through owner-reviewed canonical classification evidence. The review uses the owner STOCK MASTER taxonomy where an exact/alternate symbol is available, and otherwise uses current exchange/company/reference evidence recorded in the source payload. It does not infer sectors from ticker names alone.
+
+The final reviewed mappings include, among others:
+
+- CIEINDIA / SHARDAMOTR → Automobile and Auto Components
+- EPL / GOODLUCK / PENIND / SBCL / SHAKTIPUMP → Capital Goods
+- GNFC / IPL / PRIVISCL / TATVA / VINATIORGA → Chemicals
+- ICICIAMC / TATACAP → Financial Services
+- JTLIND / VAML → Metals & Mining
+- SOLARA → Pharma
+- UTLSOLAR → Renewable Energy
+- V2RETAIL / YATRA → Consumer Services
+- BLUSPRING / QUESS → Services
+- EBGNG → Information Technology
+- IONEXCHANG → Waste Managment, using the owner STOCK MASTER alternate symbol `IONEXCHANGE`
+
+Current sector coverage is therefore:
+
+- 240 / 240 current non-ETF equities = 100% by holding count
+- no remaining canonical sector gaps in the current non-ETF equity portfolio
+- ETF remains a separate Dashboard bucket
+
+The final gap review is stored as `OWNER_REVIEWED_CLASSIFICATION` evidence with explicit per-symbol evidence notes/URLs and append-only observations/decisions.
 
 ### Trendlyne usage-accounting correction
 
@@ -120,7 +140,6 @@ The Stage-7 immutable-evidence trigger remains enforced. No safeguard was disabl
 
 ## Remaining planned stages
 
-- resolve the remaining 28 sector classifications through trusted owner/provider/reference evidence
 - D24/D25: final sector and market-cap performance validation
 - D26: allocation-vs-performance matrix
 - D30: shared Portfolio Scope behavior
