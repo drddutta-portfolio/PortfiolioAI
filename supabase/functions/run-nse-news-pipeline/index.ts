@@ -26,6 +26,7 @@ const EXTRACTION_VERSION = "unpdf@1.8.1"
 const MAX_FEED_BYTES = 1024 * 1024
 const MAX_DOCUMENT_BYTES = 5 * 1024 * 1024
 const MAX_LINKED_DOCUMENT_FETCHES = 3
+const MAX_LINKED_DOCUMENT_WORK_ITEMS = 3
 const MAX_MATCHED_ITEMS = 100
 const MAX_PDF_PAGES = 12
 const MAX_TEXT_CHARS = 20_000
@@ -71,6 +72,7 @@ type PolicyDefinition = {
   readonly linked_document_parsing_enabled?: unknown
   readonly deterministic_classification_enabled?: unknown
   readonly max_linked_document_fetches_per_run?: unknown
+  readonly max_linked_document_work_items_per_run?: unknown
   readonly max_matched_items_per_run?: unknown
   readonly max_feed_bytes?: unknown
   readonly max_document_bytes?: unknown
@@ -508,6 +510,7 @@ Deno.serve(async request => {
     definition?.external_fetches_allowed !== true || definition?.normalization_enabled !== true ||
     definition?.linked_document_capture_enabled !== true || definition?.linked_document_parsing_enabled !== true ||
     definition?.deterministic_classification_enabled !== true || definition?.max_linked_document_fetches_per_run !== MAX_LINKED_DOCUMENT_FETCHES ||
+    definition?.max_linked_document_work_items_per_run !== MAX_LINKED_DOCUMENT_WORK_ITEMS ||
     definition?.max_matched_items_per_run !== MAX_MATCHED_ITEMS ||
     definition?.max_feed_bytes !== MAX_FEED_BYTES || definition?.max_document_bytes !== MAX_DOCUMENT_BYTES ||
     definition?.max_pdf_pages !== MAX_PDF_PAGES || definition?.max_extracted_text_chars !== MAX_TEXT_CHARS || definition?.ai_enabled !== false
@@ -800,13 +803,14 @@ Deno.serve(async request => {
     }
 
     let linkedDocumentFetches = 0
+    let linkedDocumentWorkItems = 0
     let insertedDocumentCaptures = 0
     let insertedTextExtractions = 0
     let unchangedDocumentCaptures = 0
     let unchangedTextExtractions = 0
     const documentErrors: Array<{ newsItemId: string; code: string }> = []
 
-    for (const candidate of documentCandidates.slice(0, MAX_LINKED_DOCUMENT_FETCHES)) {
+    for (const candidate of documentCandidates) {
       try {
         const prior = await existingDocumentCapture(admin, candidate.newsItemId, candidate.sourceUrl)
         if (prior) {
@@ -815,7 +819,8 @@ Deno.serve(async request => {
           if (raw.content_type === "application/pdf" && typeof raw.storage_object_path === "string" && typeof raw.document_sha256 === "string") {
             const existingExtraction = await existingTextExtraction(admin, candidate.newsItemId, prior.id as string)
             if (existingExtraction) unchangedTextExtractions += 1
-            else {
+            else if (linkedDocumentWorkItems < MAX_LINKED_DOCUMENT_WORK_ITEMS) {
+              linkedDocumentWorkItems += 1
               const extraction = await extractAndPersistPdf(admin, {
                 runId, newsItemId: candidate.newsItemId, securityId: candidate.security.id, symbol: candidate.security.symbol,
                 captureRecordId: prior.id as string, sourceUrl: candidate.sourceUrl,
@@ -827,6 +832,8 @@ Deno.serve(async request => {
           }
           continue
         }
+        if (linkedDocumentFetches >= MAX_LINKED_DOCUMENT_FETCHES || linkedDocumentWorkItems >= MAX_LINKED_DOCUMENT_WORK_ITEMS) continue
+        linkedDocumentWorkItems += 1
         const result = await captureAndExtractDocument(admin, {
           runId, newsItemId: candidate.newsItemId, securityId: candidate.security.id,
           symbol: candidate.security.symbol, sourceUrl: candidate.sourceUrl,
@@ -878,7 +885,7 @@ Deno.serve(async request => {
       error_summary: documentErrors.length ? "LINKED_DOCUMENT_PARTIAL_FAILURE" : null,
       metadata: {
         stage: "N5", mode: POLICY_MODE, action, feed_record_id: feedRecordId, feed_payload_hash: feedHash,
-        external_fetches: attemptedCalls, shared_feed_fetches: 1, linked_document_fetches: linkedDocumentFetches,
+        external_fetches: attemptedCalls, shared_feed_fetches: 1, linked_document_fetches: linkedDocumentFetches, linked_document_work_items: linkedDocumentWorkItems,
         parsed_items: parsed.length, matched_items: selectedMatches.length, total_matched_items: matching.matched.length, matched_items_truncated: matchedItemsTruncated, unmatched_items: matching.unmatched,
         ambiguous_items: matching.ambiguous, inserted_news_items: insertedNewsItems, duplicate_news_items: duplicateNewsItems,
         inserted_source_appearances: insertedAppearances, duplicate_source_appearances: duplicateAppearances,
@@ -896,7 +903,7 @@ Deno.serve(async request => {
       parsedItems: parsed.length, matchedItems: selectedMatches.length, totalMatchedItems: matching.matched.length, matchedItemsTruncated, unmatchedItems: matching.unmatched,
       ambiguousItems: matching.ambiguous, insertedNewsItems, duplicateNewsItems,
       insertedSourceAppearances: insertedAppearances, duplicateSourceAppearances: duplicateAppearances,
-      linkedDocumentFetches, insertedDocumentCaptures, unchangedDocumentCaptures,
+      linkedDocumentFetches, linkedDocumentWorkItems, insertedDocumentCaptures, unchangedDocumentCaptures,
       insertedTextExtractions, unchangedTextExtractions, documentErrors,
       externalFetches: attemptedCalls, providerBudgetReservations: 0,
       aiEnabled: false, schedulerEnabled: definition.scheduler_allowed === true,
