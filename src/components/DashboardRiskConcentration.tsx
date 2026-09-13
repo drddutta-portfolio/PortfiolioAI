@@ -37,8 +37,12 @@ export function DashboardRiskConcentration() {
     const top5Value = sorted.slice(0, 5).reduce((sum, position) => sum.plus(position.currentValue ?? "0"), new Decimal(0))
     const top5 = total.isZero() ? new Decimal(0) : top5Value.div(total).times(100)
 
+    const knownSectorPositions = priced.filter((position) => Boolean(position.sector))
+    const knownSectorValue = knownSectorPositions.reduce((sum, position) => sum.plus(position.currentValue ?? "0"), new Decimal(0))
+    const sectorCoverage = total.isZero() ? new Decimal(0) : knownSectorValue.div(total).times(100)
+    const unknownSectorExposure = total.isZero() ? new Decimal(0) : new Decimal(100).minus(sectorCoverage)
     const sectors = new Map<string, Decimal>()
-    priced.forEach((position) => sectors.set(position.sector ?? "Sector unavailable", (sectors.get(position.sector ?? "Sector unavailable") ?? new Decimal(0)).plus(position.currentValue ?? "0")))
+    knownSectorPositions.forEach((position) => sectors.set(position.sector!, (sectors.get(position.sector!) ?? new Decimal(0)).plus(position.currentValue ?? "0")))
     const sectorRows = [...sectors.entries()].map(([name, value]) => ({ name, value, weight: total.isZero() ? new Decimal(0) : value.div(total).times(100) })).sort((a, b) => b.value.comparedTo(a.value))
     const largestSector = sectorRows[0] ?? null
 
@@ -60,40 +64,54 @@ export function DashboardRiskConcentration() {
       let tone: RiskTone = "neutral"
       const weight = d(position.portfolioWeightPercent)
       const maximum = d(position.settings.maximumWeight)
-      if (weight && maximum && weight.gt(maximum)) { flags.push(`Above max weight ${pct(maximum)}`); priority += 35; tone = "critical" }
-      if (position.isPriceStale) { flags.push("Stale market price"); priority += 20; if (tone !== "critical") tone = "warning" }
-      if (position.currentValue === null) { flags.push("Unpriced holding"); priority += 25; if (tone !== "critical") tone = "warning" }
-      if (position.role === "UNCLASSIFIED") { flags.push("Role unclassified"); priority += 10 }
       const research = researchById.get(position.securityId)
+
+      if (weight && maximum && weight.gt(maximum)) { flags.push(`Above max weight ${pct(maximum)}`); priority += 35; tone = "critical" }
       if (research?.overall === "CONFLICTING" || research?.overall === "REVIEW_REQUIRED") { flags.push("Research needs review"); priority += 30; tone = "critical" }
       else if (research?.overall === "MISSING") { flags.push("Research evidence missing"); priority += 18; if (tone !== "critical") tone = "warning" }
       else if (research?.overall === "STALE") { flags.push("Research evidence stale"); priority += 12; if (tone === "neutral") tone = "warning" }
-      if (weight && weight.gte(5)) { flags.push(`${pct(weight)} portfolio weight`); priority += Number(weight.toFixed(0)); }
+      if (position.currentValue === null) { flags.push("Unpriced holding"); priority += 25; if (tone !== "critical") tone = "warning" }
+      else if (position.isPriceStale) { flags.push("Market price is stale"); priority += 20; if (tone !== "critical") tone = "warning" }
+      if (position.role === "UNCLASSIFIED") { flags.push("Role unclassified"); priority += 10 }
+      if (weight && weight.gte(5)) { flags.push(`${pct(weight)} portfolio weight`); priority += Number(weight.toFixed(0)) }
       return { position, flags, priority, tone }
     }).filter((item) => item.flags.length > 0).sort((a, b) => b.priority - a.priority || a.position.symbol.localeCompare(b.position.symbol)).slice(0, 12)
 
-    return { total, largest, largestWeight: largest ? weightOf(largest) : null, top5, largestSector, staleExposure, unclassifiedExposure, researchRiskExposure, sectorRows: sectorRows.slice(0, 6), items }
+    return {
+      total,
+      largest,
+      largestWeight: largest ? weightOf(largest) : null,
+      top5,
+      largestSector,
+      sectorCoverage,
+      unknownSectorExposure,
+      staleExposure,
+      unclassifiedExposure,
+      researchRiskExposure,
+      sectorRows: sectorRows.slice(0, 6),
+      items,
+    }
   }, [coverage.data, positions])
 
   if (isLoading || error || !portfolio) return null
 
   return <section className="dashboard-risk" aria-label="Portfolio risk and concentration">
-    <div className="dashboard-risk-heading"><div><p className="eyebrow">Portfolio risk & concentration</p><h2>Where is portfolio risk concentrated?</h2><p>Read-only concentration and evidence-risk view using current portfolio weights, user sizing limits, market-data freshness and stored research coverage.</p></div><Link to="/app/holdings">Open holdings →</Link></div>
+    <div className="dashboard-risk-heading"><div><p className="eyebrow">Portfolio risk & concentration</p><h2>Where is portfolio risk concentrated?</h2><p>Read-only view separating true portfolio concentration from market-data, classification and research-evidence risk.</p></div><Link to="/app/holdings">Open holdings →</Link></div>
 
     {coverage.error ? <div className="dashboard-risk-notice">Research-risk exposure could not be fully assessed: {coverage.error}</div> : null}
 
     <div className="dashboard-risk-summary">
       <article><span>Largest holding</span><strong>{model.largest?.symbol ?? "—"}</strong><small>{model.largestWeight ? `${pct(model.largestWeight)} of priced portfolio` : "No priced holdings"}</small></article>
       <article><span>Top 5 concentration</span><strong>{pct(model.top5)}</strong><small>Share of priced portfolio held in the five largest positions</small></article>
-      <article><span>Largest sector</span><strong>{model.largestSector?.name ?? "—"}</strong><small>{model.largestSector ? `${pct(model.largestSector.weight)} · ${money(model.largestSector.value)}` : "Sector data unavailable"}</small></article>
-      <article className={model.staleExposure.gt(0) ? "warning" : ""}><span>Stale-price exposure</span><strong>{pct(model.staleExposure)}</strong><small>Priced capital relying on stale market evidence</small></article>
-      <article className={model.researchRiskExposure.gte(25) ? "critical" : model.researchRiskExposure.gt(0) ? "warning" : ""}><span>Research-risk exposure</span><strong>{coverage.isLoading ? "…" : pct(model.researchRiskExposure)}</strong><small>Priced capital with non-fresh applicable research coverage</small></article>
+      <article className={model.sectorCoverage.lt(80) ? "warning" : ""}><span>Sector classification coverage</span><strong>{pct(model.sectorCoverage)}</strong><small>{model.largestSector ? `Largest known sector: ${model.largestSector.name} at ${pct(model.largestSector.weight)}` : `${pct(model.unknownSectorExposure)} of priced capital lacks sector classification`}</small></article>
+      <article className={model.staleExposure.gt(0) ? "warning" : ""}><span>Stale market-data exposure</span><strong>{pct(model.staleExposure)}</strong><small>Priced capital whose current-value evidence is stale</small></article>
+      <article className={model.researchRiskExposure.gte(25) ? "critical" : model.researchRiskExposure.gt(0) ? "warning" : ""}><span>Research-evidence risk</span><strong>{coverage.isLoading ? "…" : pct(model.researchRiskExposure)}</strong><small>Priced capital with non-fresh applicable research coverage</small></article>
     </div>
 
     <div className="dashboard-risk-grid">
       <section className="dashboard-risk-sectors">
-        <div className="dashboard-risk-subheading"><div><span>Concentration map</span><strong>Largest sector exposures</strong></div><small>{pct(model.unclassifiedExposure)} in unclassified-role holdings</small></div>
-        <div className="dashboard-risk-sector-list">{model.sectorRows.map((row) => <article key={row.name}><div><span>{row.name}</span><strong>{pct(row.weight)}</strong></div><div className="dashboard-risk-track"><i style={{ width: `${Math.min(100, Number(row.weight.toFixed(2)))}%` }} /></div><small>{money(row.value)}</small></article>)}</div>
+        <div className="dashboard-risk-subheading"><div><span>Concentration map</span><strong>{model.sectorRows.length ? "Largest known sector exposures" : "Sector concentration unavailable"}</strong></div><small>{pct(model.unclassifiedExposure)} in unclassified-role holdings</small></div>
+        {model.sectorRows.length ? <div className="dashboard-risk-sector-list">{model.sectorRows.map((row) => <article key={row.name}><div><span>{row.name}</span><strong>{pct(row.weight)}</strong></div><div className="dashboard-risk-track"><i style={{ width: `${Math.min(100, Number(row.weight.toFixed(2)))}%` }} /></div><small>{money(row.value)}</small></article>)}</div> : <div className="dashboard-risk-empty"><strong>Sector concentration cannot yet be measured reliably.</strong><span>{pct(model.unknownSectorExposure)} of priced portfolio value currently lacks sector classification. This is a classification-data gap, not a 100% sector concentration.</span></div>}
       </section>
 
       <section className="dashboard-risk-queue">
