@@ -14,6 +14,7 @@ import { DashboardRiskConcentration } from "../components/DashboardRiskConcentra
 import { DashboardScopeProvider } from "../components/DashboardScopeContext"
 import { DashboardSectionNavigator } from "../components/DashboardSectionNavigator"
 import "../components/DashboardTypography.css"
+import "../components/DashboardD32Polish.css"
 import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
 import { LoginPage } from "../pages/LoginPage"
