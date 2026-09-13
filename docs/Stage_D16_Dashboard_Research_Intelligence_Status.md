@@ -14,13 +14,17 @@ This stage answers:
 
 ### Research coverage summary
 
+The summary deliberately separates domain-level freshness from the stricter all-or-nothing holding state.
+
 Shows:
 
-- percentage of applicable holdings whose complete research coverage is fresh
-- stale holdings
-- missing holdings
-- conflicting / review-required holdings
+- **Fresh evidence coverage %** — fresh applicable evidence slots across identity, fundamentals, ownership, valuation and documents
+- **Fully fresh holdings** — holdings whose every applicable research domain is fresh
+- holdings with missing required evidence
+- holdings with conflicting / review-required evidence
 - latest stored research evidence date
+
+This prevents a portfolio with partial but useful stored research from being described simply as "0% researched" while preserving the stricter fully-fresh definition.
 
 ### Domain coverage
 
@@ -36,10 +40,10 @@ The percentages are derived from the same cached coverage engine used by the Res
 
 ### Research attention queue
 
-Ranks up to 12 holdings needing attention using existing coverage severity only:
+Ranks up to 12 holdings needing attention from existing evidence only. The displayed queue tier is determined from the actual affected domains rather than only the row's aggregate worst-state label:
 
-1. conflicting evidence
-2. review required
+1. review required
+2. conflicting evidence
 3. missing evidence
 4. stale evidence
 
