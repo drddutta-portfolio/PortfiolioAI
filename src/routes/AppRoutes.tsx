@@ -9,6 +9,7 @@ import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
 import { DashboardPortfolioIntelligence } from "../components/DashboardPortfolioIntelligence"
 import { DashboardResearchIntelligence } from "../components/DashboardResearchIntelligence"
 import { DashboardRiskConcentration } from "../components/DashboardRiskConcentration"
+import { DashboardSectionNavigator } from "../components/DashboardSectionNavigator"
 import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
 import { LoginPage } from "../pages/LoginPage"
@@ -70,13 +71,14 @@ export function AppRoutes() {
           element={
             <AppShell>
               <>
-                <DashboardPage />
-                <DashboardDecisionLayer />
-                <DashboardRiskConcentration />
-                <DashboardMonitoringReadiness />
-                <DashboardResearchIntelligence />
-                <DashboardPortfolioIntelligence />
-                <DashboardNewsPreview />
+                <DashboardSectionNavigator />
+                <div id="dashboard-overview" className="dashboard-section-anchor"><DashboardPage /></div>
+                <div id="dashboard-structure" className="dashboard-section-anchor"><DashboardDecisionLayer /></div>
+                <div id="dashboard-risk" className="dashboard-section-anchor"><DashboardRiskConcentration /></div>
+                <div id="dashboard-monitoring" className="dashboard-section-anchor"><DashboardMonitoringReadiness /></div>
+                <div id="dashboard-research" className="dashboard-section-anchor"><DashboardResearchIntelligence /></div>
+                <div id="dashboard-intelligence" className="dashboard-section-anchor"><DashboardPortfolioIntelligence /></div>
+                <div id="dashboard-news" className="dashboard-section-anchor"><DashboardNewsPreview /></div>
               </>
             </AppShell>
           }
