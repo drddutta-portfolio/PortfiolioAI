@@ -2,7 +2,7 @@ import Decimal from "decimal.js"
 import { useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import type { SupabaseClient } from "@supabase/supabase-js"
-import type { PortfolioPosition } from "../features/portfolio/types"
+import type { PortfolioPosition, PortfolioRole } from "../features/portfolio/types"
 import { formatMoney } from "../features/portfolio/format"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { supabase } from "../lib/supabase"
@@ -13,8 +13,10 @@ type RecommendationRow = { security_id: string; suggested_role: string | null; a
 type SettingRow = { security_id: string; target_price: number | string | null; stop_loss_price: number | string | null; target_price_alert_enabled: boolean | null; stop_loss_alert_enabled: boolean | null }
 type ActionItem = { id: string; securityId: string; symbol: string; company: string; label: string; detail: string; tone: Tone; priority: number }
 type ThemeRow = { id: string; name: string; exposure: Decimal; currentValue: Decimal; coveredCost: Decimal; coveredPnl: Decimal; coveredCount: number; holdingCount: number; best: PortfolioPosition | null; maxAllocation: string | null }
+type RoleRow = { role: PortfolioRole; label: string; exposure: Decimal; currentValue: Decimal; coveredCost: Decimal; coveredPnl: Decimal; coveredCount: number; holdingCount: number; largest: PortfolioPosition | null; targetCount: number }
 
 const db = supabase as unknown as SupabaseClient
+const ROLE_ORDER: readonly PortfolioRole[] = ["CORE", "SATELLITE", "THEMATIC", "ETF", "OTHER", "UNCLASSIFIED"]
 
 function d(value: string | number | null | undefined) {
   if (value === null || value === undefined || value === "") return null
@@ -22,11 +24,32 @@ function d(value: string | number | null | undefined) {
 }
 function pct(value: Decimal | null, digits = 1) { return value === null ? "—" : `${value.toDecimalPlaces(digits).toFixed(digits)}%` }
 function pretty(value: string | null | undefined) { return value ? value.toLowerCase().replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase()) : "Pending" }
+function roleLabel(role: PortfolioRole) { return role === "UNCLASSIFIED" ? "Unclassified" : pretty(role) }
 function recommendationTone(value: string | null): Tone {
   const v = (value ?? "").toUpperCase()
   if (v.includes("EXIT") || v.includes("REDUCE") || v.includes("AVOID")) return "critical"
   if (v.includes("ADD") || v.includes("ACCUMULATE") || v.includes("BUY")) return "positive"
   return "neutral"
+}
+
+function roles(positions: readonly PortfolioPosition[]): readonly RoleRow[] {
+  const pricedTotal = positions.reduce((sum, position) => sum.plus(position.currentValue ?? "0"), new Decimal(0))
+  return ROLE_ORDER.map((role) => {
+    const members = positions.filter((position) => position.role === role)
+    const currentValue = members.reduce((sum, position) => sum.plus(position.currentValue ?? "0"), new Decimal(0))
+    let coveredCost = new Decimal(0); let coveredPnl = new Decimal(0); let coveredCount = 0
+    members.forEach((position) => {
+      if (position.investedAmount !== null && position.unrealisedPnl !== null) {
+        coveredCost = coveredCost.plus(position.investedAmount); coveredPnl = coveredPnl.plus(position.unrealisedPnl); coveredCount += 1
+      }
+    })
+    const largest = [...members].filter((position) => position.currentValue !== null).sort((a, b) => new Decimal(b.currentValue ?? 0).comparedTo(a.currentValue ?? 0))[0] ?? null
+    return {
+      role, label: roleLabel(role), currentValue, coveredCost, coveredPnl, coveredCount, holdingCount: members.length, largest,
+      targetCount: members.filter((position) => position.settings.targetWeight !== null).length,
+      exposure: pricedTotal.isZero() ? new Decimal(0) : currentValue.div(pricedTotal).times(100),
+    }
+  }).filter((row) => row.holdingCount > 0)
 }
 
 function themes(positions: readonly PortfolioPosition[]): readonly ThemeRow[] {
@@ -91,6 +114,7 @@ export function DashboardDecisionLayer() {
     void load(); return () => { cancelled = true }
   }, [portfolio])
 
+  const roleRows = useMemo(() => roles(portfolio?.openPositions ?? []), [portfolio])
   const themeRows = useMemo(() => themes(portfolio?.openPositions ?? []), [portfolio])
   const actions = useMemo(() => {
     if (!portfolio) return []
@@ -107,17 +131,31 @@ export function DashboardDecisionLayer() {
 
   if (isLoading || error || !portfolio) return null
   return <section className="dashboard-next-layer" aria-label="Dashboard decision layer">
-    <div className="dashboard-next-heading"><div><p className="eyebrow">Decision layer</p><h2>Theme snapshot & action center</h2><p>Read-only signals from evidence already stored in PortfolioAI. Nothing here changes a holding, role, recommendation or transaction.</p></div><span>Consolidated portfolio</span></div>
+    <div className="dashboard-next-heading"><div><p className="eyebrow">Decision layer</p><h2>Portfolio structure & action center</h2><p>Roles show mutually exclusive portfolio structure; themes show overlapping strategic exposure. All signals are read-only and use evidence already stored in PortfolioAI.</p></div><span>Consolidated portfolio</span></div>
     {loadError ? <div className="dashboard-next-notice">Some persisted decision evidence could not be loaded: {loadError}</div> : null}
     <div className="dashboard-next-grid">
-      <section className="dashboard-theme-snapshot">
-        <div className="dashboard-next-section-title"><div><span>Theme snapshot</span><strong>{themeRows.length} active themes</strong></div><Link to="/app/structure">Portfolio structure →</Link></div>
-        {themeRows.length ? <div className="dashboard-theme-table"><div className="dashboard-theme-row dashboard-theme-header"><span>Theme</span><span>Exposure</span><span>Covered return</span><span>Best contributor</span><span>Allocation cap</span></div>{themeRows.slice(0, 8).map((row) => {
-          const themeReturn = row.coveredCount && !row.coveredCost.isZero() ? row.coveredPnl.div(row.coveredCost).times(100) : null
-          const max = d(row.maxAllocation); const overCap = max !== null && row.exposure.gt(max)
-          return <div className="dashboard-theme-row" key={row.id}><span><strong>{row.name}</strong><small>{row.holdingCount} holding{row.holdingCount === 1 ? "" : "s"}</small></span><span className={overCap ? "is-warning" : ""}><strong>{pct(row.exposure)}</strong><small>{formatMoney(row.currentValue.toFixed())}</small></span><span className={themeReturn?.gte(0) ? "is-positive" : themeReturn?.lt(0) ? "is-negative" : ""}><strong>{pct(themeReturn)}</strong><small>{row.coveredCount}/{row.holdingCount} covered</small></span><span>{row.best ? <><Link to={`/app/research/${row.best.securityId}`}>{row.best.symbol}</Link><small>{formatMoney(row.best.unrealisedPnl)}</small></> : <><strong>—</strong><small>Unavailable</small></>}</span><span className={overCap ? "is-warning" : ""}><strong>{max ? pct(max) : "Not set"}</strong><small>{overCap ? "Above configured cap" : "User setting"}</small></span></div>
-        })}</div> : <div className="dashboard-next-empty">No active theme assignments are available yet.</div>}
-      </section>
+      <div className="dashboard-structure-stack">
+        <section className="dashboard-role-snapshot">
+          <div className="dashboard-next-section-title"><div><span>Portfolio role snapshot</span><strong>{roleRows.length} active roles · {portfolio.openPositions.length} holdings</strong></div><Link to="/app/structure">Portfolio structure →</Link></div>
+          <div className="dashboard-role-table">
+            <div className="dashboard-role-row dashboard-theme-header"><span>Role</span><span>Exposure</span><span>Covered return</span><span>Largest holding</span><span>Sizing targets</span></div>
+            {roleRows.map((row) => {
+              const roleReturn = row.coveredCount && !row.coveredCost.isZero() ? row.coveredPnl.div(row.coveredCost).times(100) : null
+              return <div className="dashboard-role-row" key={row.role}><span><strong>{row.label}</strong><small>{row.holdingCount} holding{row.holdingCount === 1 ? "" : "s"}</small></span><span><strong>{pct(row.exposure)}</strong><small>{formatMoney(row.currentValue.toFixed())}</small></span><span className={roleReturn?.gte(0) ? "is-positive" : roleReturn?.lt(0) ? "is-negative" : ""}><strong>{pct(roleReturn)}</strong><small>{row.coveredCount}/{row.holdingCount} covered</small></span><span>{row.largest ? <><Link to={`/app/research/${row.largest.securityId}`}>{row.largest.symbol}</Link><small>{formatMoney(row.largest.currentValue)}</small></> : <><strong>—</strong><small>Unpriced</small></>}</span><span><strong>{row.targetCount}/{row.holdingCount}</strong><small>User target weights</small></span></div>
+            })}
+          </div>
+        </section>
+
+        <section className="dashboard-theme-snapshot">
+          <div className="dashboard-next-section-title"><div><span>Theme snapshot</span><strong>{themeRows.length} active themes</strong></div><span className="dashboard-overlap-note">Themes may overlap</span></div>
+          {themeRows.length ? <div className="dashboard-theme-table"><div className="dashboard-theme-row dashboard-theme-header"><span>Theme</span><span>Exposure</span><span>Covered return</span><span>Best contributor</span><span>Allocation cap</span></div>{themeRows.slice(0, 8).map((row) => {
+            const themeReturn = row.coveredCount && !row.coveredCost.isZero() ? row.coveredPnl.div(row.coveredCost).times(100) : null
+            const max = d(row.maxAllocation); const overCap = max !== null && row.exposure.gt(max)
+            return <div className="dashboard-theme-row" key={row.id}><span><strong>{row.name}</strong><small>{row.holdingCount} holding{row.holdingCount === 1 ? "" : "s"}</small></span><span className={overCap ? "is-warning" : ""}><strong>{pct(row.exposure)}</strong><small>{formatMoney(row.currentValue.toFixed())}</small></span><span className={themeReturn?.gte(0) ? "is-positive" : themeReturn?.lt(0) ? "is-negative" : ""}><strong>{pct(themeReturn)}</strong><small>{row.coveredCount}/{row.holdingCount} covered</small></span><span>{row.best ? <><Link to={`/app/research/${row.best.securityId}`}>{row.best.symbol}</Link><small>{formatMoney(row.best.unrealisedPnl)}</small></> : <><strong>—</strong><small>Unavailable</small></>}</span><span className={overCap ? "is-warning" : ""}><strong>{max ? pct(max) : "Not set"}</strong><small>{overCap ? "Above configured cap" : "User setting"}</small></span></div>
+          })}</div> : <div className="dashboard-next-empty">No active theme assignments are available yet.</div>}
+        </section>
+      </div>
+
       <section className="dashboard-action-center">
         <div className="dashboard-next-section-title"><div><span>Action center</span><strong>{actions.length} surfaced signals</strong></div><Link to="/app/research">Research →</Link></div>
         {actions.length ? <div className="dashboard-action-list">{actions.map((item) => <article className={`dashboard-action-item ${item.tone}`} key={item.id}><i /><div><Link to={`/app/research/${item.securityId}`}>{item.symbol}</Link><small>{item.company}</small></div><div><strong>{item.label}</strong><p>{item.detail}</p></div></article>)}</div> : <div className="dashboard-next-empty"><strong>No immediate action signals.</strong><span>No target/stop trigger, sizing-range breach, stale-price warning, or non-hold persisted advisory is currently surfaced.</span></div>}
