@@ -2,6 +2,7 @@ import "./DashboardSectionNavigator.css"
 
 const SECTIONS = [
   ["dashboard-overview", "Overview"],
+  ["dashboard-performance", "Performance"],
   ["dashboard-structure", "Structure"],
   ["dashboard-risk", "Risk"],
   ["dashboard-monitoring", "Monitoring"],
