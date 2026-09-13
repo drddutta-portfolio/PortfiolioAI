@@ -13,6 +13,7 @@ import { DashboardResearchIntelligence } from "../components/DashboardResearchIn
 import { DashboardRiskConcentration } from "../components/DashboardRiskConcentration"
 import { DashboardScopeProvider } from "../components/DashboardScopeContext"
 import { DashboardSectionNavigator } from "../components/DashboardSectionNavigator"
+import "../components/DashboardTypography.css"
 import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
 import { LoginPage } from "../pages/LoginPage"
