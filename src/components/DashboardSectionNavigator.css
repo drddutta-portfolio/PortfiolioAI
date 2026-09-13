@@ -1,0 +1,100 @@
+.dashboard-section-navigator {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0 0 0.9rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid rgba(31, 90, 61, 0.18);
+  border-radius: 16px;
+  background: rgba(250, 252, 250, 0.94);
+  box-shadow: 0 8px 28px rgba(38, 74, 55, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.dashboard-section-navigator-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: max-content;
+}
+
+.dashboard-section-navigator-copy span {
+  color: #315f48;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dashboard-section-navigator-copy small {
+  margin-top: 0.1rem;
+  color: #748078;
+  font-size: 0.68rem;
+}
+
+.dashboard-section-navigator-links {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.dashboard-section-navigator-links::-webkit-scrollbar {
+  display: none;
+}
+
+.dashboard-section-navigator-links a,
+.dashboard-section-navigator-top {
+  flex: 0 0 auto;
+  border: 1px solid #dce7df;
+  border-radius: 999px;
+  padding: 0.42rem 0.7rem;
+  color: #355944;
+  background: #fff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+}
+
+.dashboard-section-navigator-links a:hover,
+.dashboard-section-navigator-top:hover {
+  border-color: #8db29d;
+  background: #f2f8f4;
+  transform: translateY(-1px);
+}
+
+.dashboard-section-anchor {
+  scroll-margin-top: 5.5rem;
+}
+
+@media (max-width: 920px) {
+  .dashboard-section-navigator {
+    grid-template-columns: 1fr auto;
+  }
+
+  .dashboard-section-navigator-copy {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-section-navigator {
+    top: 0.35rem;
+    gap: 0.45rem;
+    padding: 0.55rem;
+    border-radius: 14px;
+  }
+
+  .dashboard-section-navigator-links a,
+  .dashboard-section-navigator-top {
+    padding: 0.4rem 0.62rem;
+    font-size: 0.7rem;
+  }
+}
