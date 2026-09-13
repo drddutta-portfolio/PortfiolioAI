@@ -12,6 +12,11 @@ function baseInput(overrides: Partial<PositionSizingInput> = {}): PositionSizing
     assetClass: "EQUITY",
     currentWeight: "2.75",
     minimumScoreReadyCoverage: "0.70",
+    researchProfile: {
+      profileCode: "BANK",
+      profileVersion: "BANK_V1",
+      readiness: "READY",
+    },
     owner: {
       portfolioRole: "CORE",
       targetWeight: null,
@@ -34,13 +39,14 @@ function baseInput(overrides: Partial<PositionSizingInput> = {}): PositionSizing
   return {
     ...input,
     ...overrides,
+    researchProfile: { ...input.researchProfile, ...(overrides.researchProfile ?? {}) },
     owner: { ...input.owner, ...(overrides.owner ?? {}) },
     recommendation: { ...input.recommendation, ...(overrides.recommendation ?? {}) },
   }
 }
 
 describe("assessPositionSizingV1", () => {
-  it("reproduces the bounded HDFCBANK 3–4% reference range without hard-coding the security", () => {
+  it("reproduces the bounded HDFCBANK 3–4% reference range only with READY BANK profile lineage", () => {
     const result = assessPositionSizingV1(baseInput({
       securityId: "hdfcbank-security",
       currentWeight: "2.75",
@@ -50,6 +56,8 @@ describe("assessPositionSizingV1", () => {
     expect(result).toMatchObject({
       engineVersion: POSITION_SIZING_ENGINE_VERSION,
       securityId: "hdfcbank-security",
+      researchProfileCode: "BANK",
+      researchProfileVersion: "BANK_V1",
       assessmentState: "READY",
       currentWeight: "2.75",
       suggestedMinimumWeight: "3",
@@ -65,10 +73,50 @@ describe("assessPositionSizingV1", () => {
     expect(result.reasonCodes).toContain("OWNER_TARGET_WITHIN_ENGINE_RANGE")
   })
 
-  it("is profile-agnostic for a non-financial equity when validated upstream sizing guidance exists", () => {
+  it("blocks an equity when its sector research profile is not yet READY even if a range is supplied", () => {
     const result = assessPositionSizingV1(baseInput({
-      securityId: "nonfinancial-security",
+      securityId: "unready-it-security",
+      researchProfile: {
+        profileCode: "IT_SERVICES",
+        profileVersion: "IT_SERVICES_V1",
+        readiness: "PROFILE_PENDING",
+      },
+      recommendation: {
+        ...baseInput().recommendation,
+        suggestedWeightMinimum: "2",
+        suggestedWeightMaximum: "3",
+      },
+    }))
+
+    expect(result.assessmentState).toBe("BLOCKED_PREREQUISITE")
+    expect(result.recommendedAction).toBeNull()
+    expect(result.suggestedMinimumWeight).toBeNull()
+    expect(result.suggestedMaximumWeight).toBeNull()
+    expect(result.reasonCodes).toEqual(["RESEARCH_PROFILE_NOT_READY"])
+  })
+
+  it("blocks an equity when the upstream research profile code/version is missing", () => {
+    const result = assessPositionSizingV1(baseInput({
+      researchProfile: {
+        profileCode: null,
+        profileVersion: null,
+        readiness: "READY",
+      },
+    }))
+
+    expect(result.assessmentState).toBe("BLOCKED_PREREQUISITE")
+    expect(result.reasonCodes).toEqual(["MISSING_RESEARCH_PROFILE"])
+  })
+
+  it("remains profile-agnostic only after a non-financial profile contract is explicitly READY", () => {
+    const result = assessPositionSizingV1(baseInput({
+      securityId: "nonfinancial-contract-fixture",
       currentWeight: "2.4",
+      researchProfile: {
+        profileCode: "IT_SERVICES",
+        profileVersion: "IT_SERVICES_V1_TEST_FIXTURE",
+        readiness: "READY",
+      },
       owner: { portfolioRole: "SATELLITE", targetWeight: "2.5", minimumWeight: null, maximumWeight: null, isFrozen: false },
       recommendation: {
         recommendationRunId: "recommendation-nonfinancial",
@@ -84,6 +132,7 @@ describe("assessPositionSizingV1", () => {
     }))
 
     expect(result.assessmentState).toBe("READY")
+    expect(result.researchProfileCode).toBe("IT_SERVICES")
     expect(result.suggestedMinimumWeight).toBe("2")
     expect(result.suggestedTargetWeight).toBe("2.5")
     expect(result.suggestedMaximumWeight).toBe("3")
@@ -114,7 +163,7 @@ describe("assessPositionSizingV1", () => {
     expect(result.reasonCodes).toEqual(["SCORE_COVERAGE_BELOW_POLICY"])
   })
 
-  it("marks ETFs NOT_APPLICABLE before applying equity recommendation logic", () => {
+  it("marks ETFs NOT_APPLICABLE before applying equity research-profile logic", () => {
     const result = assessPositionSizingV1(baseInput({ assetClass: "ETF", securityId: "etf-security" }))
 
     expect(result.assessmentState).toBe("NOT_APPLICABLE")
