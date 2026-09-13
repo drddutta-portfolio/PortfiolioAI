@@ -77,10 +77,10 @@ export function AppRoutes() {
                 <div id="dashboard-overview" className="dashboard-section-anchor"><DashboardPage /></div>
                 <div id="dashboard-performance" className="dashboard-section-anchor"><DashboardAllocationPerformance /></div>
                 <div id="dashboard-structure" className="dashboard-section-anchor"><DashboardDecisionLayer /></div>
-                <div id="dashboard-risk" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="risk" label="Portfolio Risk & Concentration" defaultOpen><DashboardRiskConcentration /></DashboardCollapsibleSection></div>
-                <div id="dashboard-monitoring" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="monitoring" label="Monitoring & Configuration Coverage"><DashboardMonitoringReadiness /></DashboardCollapsibleSection></div>
-                <div id="dashboard-research" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="research" label="Research & Intelligence Status"><DashboardResearchIntelligence /></DashboardCollapsibleSection></div>
-                <div id="dashboard-intelligence" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="intelligence" label="Portfolio Intelligence Snapshot"><DashboardPortfolioIntelligence /></DashboardCollapsibleSection></div>
+                <div id="dashboard-risk" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="risk" label="Portfolio Risk & Concentration" anchorId="dashboard-risk" defaultOpen><DashboardRiskConcentration /></DashboardCollapsibleSection></div>
+                <div id="dashboard-monitoring" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="monitoring" label="Monitoring & Configuration Coverage" anchorId="dashboard-monitoring"><DashboardMonitoringReadiness /></DashboardCollapsibleSection></div>
+                <div id="dashboard-research" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="research" label="Research & Intelligence Status" anchorId="dashboard-research"><DashboardResearchIntelligence /></DashboardCollapsibleSection></div>
+                <div id="dashboard-intelligence" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="intelligence" label="Portfolio Intelligence Snapshot" anchorId="dashboard-intelligence"><DashboardPortfolioIntelligence /></DashboardCollapsibleSection></div>
                 <div id="dashboard-news" className="dashboard-section-anchor"><DashboardNewsPreview /></div>
               </>
             </AppShell>
