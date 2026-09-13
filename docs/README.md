@@ -17,6 +17,7 @@
 | What engineering, security, testing, and calculation rules must Codex follow? | `PortfolioAI_Development_Rules.md` |
 | What is actually complete, live, incomplete, or next? | `PortfolioAI_Development_Status.md` |
 | Which requirements have been requested and whether they are satisfied? | `PortfolioAI_Requirements_Register.md` |
+| What is the approved integration/execution sequence from the current implementation state? | `PortfolioAI_Integration_and_Execution_Plan.md` |
 | What happened in an old implementation stage? | Read the relevant `Stage_*` or `*_Completion.md` record |
 
 ---
@@ -32,7 +33,9 @@ When documents appear to conflict, use this order of authority unless the owner 
 5. `PortfolioAI_Product_UI_and_Decision_Workflow.md`
 6. `PortfolioAI_Development_Status.md`
 7. `PortfolioAI_Requirements_Register.md`
-8. Stage-specific plans and completion records
+8. Stage-specific plans, execution plans, and completion records
+
+`PortfolioAI_Integration_and_Execution_Plan.md` is the current repository-governed execution roadmap. It coordinates sequencing from the present implementation state, but remains subordinate to the canonical architecture above and does not silently redefine it.
 
 A stage-specific plan may define how a particular stage is implemented, but it must not silently redefine the global architecture.
 
@@ -52,12 +55,13 @@ These are the documents developers should consult routinely:
 - `PortfolioAI_Development_Status.md`
 - `PortfolioAI_Requirements_Register.md`
 
-### B. Stage-specific plans
+### B. Stage-specific and execution plans
 
-These explain how a bounded stage should be implemented. They are authoritative only within their approved stage boundary.
+These explain how bounded work should be implemented. They are authoritative only within their approved boundary and remain subordinate to canonical architecture.
 
 Examples:
 
+- `PortfolioAI_Integration_and_Execution_Plan.md`
 - `Owner_Reviewed_Stage_7_2_Production_Fundamental_Intelligence_and_Research_Workspace_Plan.md`
 - other future `Stage_*_Plan.md` documents
 
@@ -80,21 +84,34 @@ If a document becomes superseded, do not delete it unless specifically approved.
 
 ---
 
-## 4. Current research and intelligence stage map
+## 4. Current research, intelligence, and execution map
 
-The intended separation is:
+The intended architectural separation remains:
 
 - **Stage 7.1C — Trusted Trendlyne pilot** — complete
 - **Stage 7.2A — Provider quota/control/freshness/kill-switch foundation** — complete
 - **Stage 7.2B — Controlled Cohort A rollout** — complete
-- **Stage 7.2C — Research Workspace** — complete
-- **Stage 7.2C.1 — Research Workspace information-architecture/UI refinement** — current refinement work
-- **Stage 7.2D — Research Coverage and operations UX** — pending
-- **Stage 7.2E — Broader eligible-equity research rollout** — pending
-- **Stage 7.2F — Scheduled/event-driven research refresh** — pending
-- **Stage 7.3 — Angel One historical market data and market intelligence** — planned architecture stage; not yet authorized for implementation
-- **Stage 8 — Deterministic investment intelligence** — pending
-- **Later — Alerts, Action Center, Why Stocks Moved, AI Investment Committee, Theme Outlook** — pending
+- **Stage 7.2C / 7.2C.1 — Research Workspace and investor-first refinement** — complete
+- **Stage 7.2D–F — broader research coverage/operations/scheduling** — not portfolio-wide complete; remaining work is absorbed into the R3/R4/R11 sequence in the Integration & Execution Plan
+- **Stage 7.3 — Angel One historical market data and market intelligence** — reference/pilot work exists, but portfolio-wide rollout is incomplete
+- **Stage 8 — Deterministic investment intelligence** — reference implementation/pilot has started; portfolio-wide rollout is incomplete
+- **Dashboard D34 — Core Health / Exit-Risk readiness surface** — UI complete and merged; it does not imply the formal engines are complete
+- **Dashboard D35 — Position Sizing Health** — UI implementation complete in PR #78; merge/deployment state must remain distinct from implementation completion
+- **R0 — Documentation reconciliation** — current checkpoint
+- **R1 / D35B — deterministic Position Sizing Engine contract + reference implementation** — approved next implementation after R0 sign-off
+- **R2 — Portfolio Coverage Registry / Orchestrator** — follows the D35B reference contract
+- **Later — portfolio-wide research/history/scoring/recommendation/sizing, Core Health, Exit Risk, Movement, Action Center, scheduling, optional AI Investment Committee** — gated by the Integration & Execution Plan
+
+### Completion terminology
+
+Use these labels instead of the ambiguous word “complete”:
+
+1. **UI COMPLETE** — the consumer interface works.
+2. **ENGINE CONTRACT COMPLETE** — deterministic algorithm/storage/tests work on reference cases.
+3. **PILOT COMPLETE** — a controlled real cohort has passed.
+4. **PORTFOLIO-WIDE COVERAGE COMPLETE** — every eligible holding was processed or explicitly marked unresolved/not applicable.
+5. **AUTOMATION COMPLETE** — scheduler/event orchestration is safely operational.
+6. **PRODUCT CAPABILITY COMPLETE** — use only when the relevant lower-level gates genuinely justify it.
 
 ### Mental model
 
@@ -151,6 +168,7 @@ To avoid documentation sprawl:
 | Ownership/shareholding | Trendlyne structured evidence |
 | Valuation evidence | Trendlyne and approved PortfolioAI calculations using authoritative market inputs |
 | Documents/research appearances | Trendlyne or other approved document sources, with provenance |
+| Official NSE News | NSE/official-source evidence normalized and stored by PortfolioAI |
 | Portfolio P/L and weights | PortfolioAI accounting using authoritative price inputs |
 | Momentum/Quality/Growth/Core/Exit scores | PortfolioAI deterministic versioned engines |
 | Explanations | PortfolioAI deterministic explanations first; optional AI synthesis later |
