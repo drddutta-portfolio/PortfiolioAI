@@ -1,11 +1,13 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select extensions.plan(20);
+select extensions.plan(22);
 
 select extensions.has_table('public','position_sizing_assessments','D35B assessment table exists');
 select extensions.has_column('public','position_sizing_assessments','engine_version','engine version is persisted');
 select extensions.has_column('public','position_sizing_assessments','evaluation_key','idempotency key is persisted');
 select extensions.has_column('public','position_sizing_assessments','assessment_state','assessment state is persisted');
+select extensions.has_column('public','position_sizing_assessments','research_profile_code','research profile code is persisted');
+select extensions.has_column('public','position_sizing_assessments','research_profile_version','research profile version is persisted');
 select extensions.has_column('public','position_sizing_assessments','suggested_target_weight','target weight is persisted');
 select extensions.has_column('public','position_sizing_assessments','suggested_minimum_weight','minimum weight is persisted');
 select extensions.has_column('public','position_sizing_assessments','suggested_maximum_weight','maximum weight is persisted');
