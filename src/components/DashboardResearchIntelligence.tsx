@@ -15,8 +15,6 @@ const DOMAINS = [
   ["Documents", "documents"],
 ] as const
 
-type DomainKey = typeof DOMAINS[number][1]
-
 type AttentionTier = "REVIEW_REQUIRED" | "CONFLICTING" | "MISSING" | "STALE"
 const ATTENTION_PRIORITY: Readonly<Record<AttentionTier, number>> = { REVIEW_REQUIRED: 7, CONFLICTING: 6, MISSING: 4, STALE: 3 }
 
@@ -76,10 +74,12 @@ export function DashboardResearchIntelligence() {
         if (row[key] === "FRESH") freshDomainSlots += 1
       })
     })
+
     const freshEvidencePercent = applicableDomainSlots ? Math.round((freshDomainSlots / applicableDomainSlots) * 100) : 0
     const fullyFresh = counts.FRESH ?? 0
-    const hardIssues = (counts.CONFLICTING ?? 0) + (counts.REVIEW_REQUIRED ?? 0)
-    return { counts, applicable: applicable.length, latest, freshDomainSlots, applicableDomainSlots, freshEvidencePercent, fullyFresh, hardIssues }
+    const missingHoldings = rows.filter((row) => DOMAINS.some(([, key]) => row[key] === "MISSING")).length
+    const hardIssues = rows.filter((row) => DOMAINS.some(([, key]) => row[key] === "CONFLICTING" || row[key] === "REVIEW_REQUIRED")).length
+    return { applicable: applicable.length, latest, freshDomainSlots, applicableDomainSlots, freshEvidencePercent, fullyFresh, missingHoldings, hardIssues }
   }, [coverage.data])
 
   const attention = useMemo(() => [...coverage.data]
@@ -113,7 +113,7 @@ export function DashboardResearchIntelligence() {
       <div className="dashboard-research-summary">
         <article className="research-summary-card hero"><span>Fresh evidence coverage</span><strong>{summary.freshEvidencePercent}%</strong><small>{summary.freshDomainSlots} of {summary.applicableDomainSlots} applicable evidence slots fresh</small></article>
         <article className="research-summary-card neutral"><span>Fully fresh holdings</span><strong>{summary.fullyFresh}</strong><small>{summary.fullyFresh} of {summary.applicable} holdings fresh across every applicable domain</small></article>
-        <article className="research-summary-card missing"><span>Missing</span><strong>{summary.counts.MISSING ?? 0}</strong><small>Holdings missing one or more required evidence domains</small></article>
+        <article className="research-summary-card missing"><span>Missing evidence</span><strong>{summary.missingHoldings}</strong><small>Holdings missing one or more required evidence domains</small></article>
         <article className="research-summary-card critical"><span>Conflicting / review</span><strong>{summary.hardIssues}</strong><small>Holdings with evidence requiring owner attention before reliance</small></article>
         <article className="research-summary-card neutral"><span>Latest evidence</span><strong>{summary.latest ? new Intl.DateTimeFormat("en-IN", { day: "2-digit", month: "short" }).format(new Date(summary.latest)) : "—"}</strong><small>{ageLabel(summary.latest)}</small></article>
       </div>
