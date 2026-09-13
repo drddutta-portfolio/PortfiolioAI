@@ -193,12 +193,15 @@ function buildGroupHoldings(positions: readonly PortfolioPosition[], enrichment:
   return groups
 }
 
-function summarizeSegments(segments: readonly AllocationSegment[], regularLimit = 6) {
+function summarizeSegments(segments: readonly AllocationSegment[], minimumWeight: number | null = null) {
   const special = segments.filter((segment) => segment.special === "ETF" || segment.special === "UNCLASSIFIED")
   const regular = segments.filter((segment) => !segment.special)
-  if (regular.length <= regularLimit) return [...regular, ...special]
-  const visible = regular.slice(0, regularLimit)
-  const remainder = regular.slice(regularLimit)
+  if (minimumWeight === null) return [...regular, ...special]
+
+  const visible = regular.filter((segment) => segment.weight.greaterThanOrEqualTo(minimumWeight))
+  const remainder = regular.filter((segment) => segment.weight.lessThan(minimumWeight))
+  if (!remainder.length) return [...visible, ...special]
+
   const others = remainder.reduce((acc, segment) => ({
     label: "Other sectors",
     value: acc.value.plus(segment.value),
@@ -239,7 +242,7 @@ function allocationColor(title: string, segment: AllocationSegment, index: numbe
 }
 
 function AllocationDonut({ title, segments, classifiedCoverage, empty }: { title: string; segments: readonly AllocationSegment[]; classifiedCoverage: string; empty: string }) {
-  const display = summarizeSegments(segments)
+  const display = summarizeSegments(segments, title === "Sector allocation" ? 1.5 : null)
   const [tooltip, setTooltip] = useState<{ segment: AllocationSegment; x: number; y: number } | null>(null)
   if (!display.length) return <section className="dap-chart-card"><div className="dap-chart-heading"><div><h3>{title}</h3><p>Portfolio weight by current priced value</p></div><span>{classifiedCoverage} classified</span></div><div className="dap-chart-empty">{empty}</div></section>
 
@@ -389,6 +392,6 @@ export function DashboardAllocationPerformance() {
       <PerformanceTable title="Sector performance" rows={sectorRows} groupHoldings={sectorGroupHoldings} empty="No trusted sector classifications are stored yet." />
       <PerformanceTable title="Market-cap performance" rows={marketCapRows} empty="No trusted market-cap categories are stored yet. ETFs will appear independently when present." />
     </div>
-    <p className="dap-method">Allocation donuts use current priced value and explicitly retain ETF / Unclassified slices so missing evidence is visible. Hover a donut slice for its allocation details; hover a sector name or holdings count to inspect the constituent stocks sorted by return. Return = supported unrealised P&amp;L ÷ supported invested cost within that group. Return contribution is the group P&amp;L divided by total supported portfolio cost, expressed in percentage points. Coverage remains explicit.</p>
+    <p className="dap-method">Allocation donuts use current priced value and explicitly retain ETF / Unclassified slices so missing evidence is visible. Sector donut slices are shown individually from 1.5% portfolio weight upward; smaller sectors are grouped into Other sectors. Hover a donut slice for its allocation details; hover a sector name or holdings count to inspect the constituent stocks sorted by return. Return = supported unrealised P&amp;L ÷ supported invested cost within that group. Return contribution is the group P&amp;L divided by total supported portfolio cost, expressed in percentage points. Coverage remains explicit.</p>
   </section>
 }
