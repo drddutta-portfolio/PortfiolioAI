@@ -4,7 +4,7 @@
 
 Implementation branch: `dashboard-allocation-performance`
 
-Production enrichment and Dashboard activation are in progress. Allocation visuals are owner-reviewed; market-cap and sector classification are complete for the current non-ETF equity portfolio; D26 allocation-vs-performance positioning and D30 shared Portfolio Scope behavior are implemented for review.
+Production enrichment and Dashboard activation are in progress. Allocation visuals are owner-reviewed; market-cap and sector classification are complete for the current non-ETF equity portfolio; D26 allocation-vs-performance positioning, D30 shared Portfolio Scope behavior, and the D31 production classification-integrity audit are complete. D32 responsive/readability polish is in progress.
 
 ## Production enrichment audit
 
@@ -111,10 +111,10 @@ Transparent classification rules:
 
 The matrix surfaces four descriptive quadrants:
 
-- Portfolio strength — high allocation / stronger return
-- Review priority — high allocation / weaker return
-- Emerging strength — lower allocation / stronger return
-- Low-priority drag — lower allocation / weaker return
+- Portfolio strength — large exposure / outperforming selected scope
+- Review priority — large exposure / underperforming selected scope
+- Emerging strength — small exposure / outperforming selected scope
+- Low-priority drag — small exposure / underperforming selected scope
 
 The panel prints both thresholds, includes allocation and return for every eligible sector, and explicitly states that it does not create buy/sell/add/reduce recommendations. Sectors without supported accounting return are excluded from the matrix rather than estimated.
 
@@ -143,6 +143,47 @@ Supported scopes are the same scopes already exposed by the Dashboard:
 
 Scope filtering remains presentation-only. It does not create another portfolio, change role assignments, mutate transactions, or alter stored evidence.
 
+## D31 coverage and integrity validation
+
+A production read-only audit on 2026-09-13 reconciled the current open-holding universe against the canonical classification views:
+
+- 249 open holdings
+- 9 ETF holdings
+- 240 current non-ETF equities
+- 240 / 240 non-ETF equities with canonical sector classification
+- 240 / 240 non-ETF equities with canonical Large/Mid/Small market-cap classification
+- 0 current sector classification conflicts
+- 0 stale current sector classifications
+- 0 stale current market-cap classifications
+- market-cap category counts reconcile exactly to 240: 48 Large Cap + 54 Mid Cap + 138 Small Cap
+
+Frontend arithmetic remains evidence-aware:
+
+- allocation weights use current priced value only
+- null prices are excluded from the priced denominator and remain visible in row coverage counts
+- sector allocation keeps ETFs as an explicit separate slice rather than assigning them a sector
+- market-cap allocation keeps ETFs as a separate bucket rather than forcing them into Large/Mid/Small
+- sector and market-cap returns use only holdings with both supported invested cost and supported unrealised P&L
+- return contribution uses the supported scoped cost denominator consistently
+- the D26 matrix uses the same scoped sector rows and the selected scope's supported unrealised-return baseline
+- scope filtering changes presentation/calculation input only and never mutates stored portfolio evidence
+
+An ETF-only scope has no applicable non-ETF classification denominator; this is a presentation edge case for D32 and must not be interpreted as missing equity classification.
+
+## D32 readability / responsive polish in progress
+
+Owner review identified that several dense Dashboard layers used text below comfortable desktop reading size. The typography pass therefore raises normal explanatory copy and row metadata while preserving compact uppercase labels.
+
+Completed readability adjustments include:
+
+- Portfolio Structure & Action Center / Decision Layer
+- Portfolio Risk & Concentration
+- Monitoring & Configuration Coverage
+- Research & Intelligence Status
+- Portfolio Intelligence Snapshot
+
+The target hierarchy is roughly 13–14px for normal explanatory copy, 12–13px for row/body values, and 10.5–11.5px only for secondary metadata/uppercase labels. Final D32 review will also cover the command-centre overview and responsive table wrapping.
+
 ## Collapsible Dashboard behavior
 
 Lower-priority sections are collapsible with state stored in browser localStorage:
@@ -158,10 +199,8 @@ Command Index navigation automatically opens a collapsed target.
 
 This stage does not mutate holdings, transactions, roles, targets, or recommendations. Dashboard rendering itself makes no provider calls. Provider-backed enrichment is explicit, bounded, accounted, provenance-preserving, and separate from UI rendering.
 
-The Stage-7 immutable-evidence trigger remains enforced. No safeguard was disabled to complete D21–D30.
+The Stage-7 immutable-evidence trigger remains enforced. No safeguard was disabled to complete D21–D31.
 
-## Remaining planned stages
+## Remaining planned stage
 
-- D24/D25: final sector and market-cap performance validation
-- D31: final coverage/integrity validation
-- D32: responsive visual polish and merge
+- D32: complete command-centre typography/responsive polish, owner visual review, and merge preparation
