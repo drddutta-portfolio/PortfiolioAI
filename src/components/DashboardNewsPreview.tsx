@@ -28,6 +28,7 @@ type NewsRpcClient = {
 }
 
 const newsRpc = supabase as unknown as NewsRpcClient
+const DASHBOARD_NEWS_LIMIT = 50
 
 function prettify(value: string) {
   return value.toLowerCase().replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase())
@@ -50,7 +51,8 @@ function toneClass(value: string) {
   const normalized = value.toUpperCase()
   if (normalized === "POSITIVE") return "positive"
   if (normalized === "NEGATIVE") return "negative"
-  return "neutral"
+  if (normalized === "NEUTRAL") return "neutral"
+  return "unclassified"
 }
 
 function importanceClass(value: string) {
@@ -98,7 +100,7 @@ export function DashboardNewsPreview() {
       const result = await newsRpc.rpc("get_portfolio_news_feed_v2", {
         p_portfolio_id: portfolios[0].id,
         p_security_ids: null,
-        p_limit: 6,
+        p_limit: DASHBOARD_NEWS_LIMIT,
         p_before: null,
       })
       if (cancelled) return
@@ -134,29 +136,32 @@ export function DashboardNewsPreview() {
       {state === "ERROR" ? <div className="dashboard-live-news-empty"><strong>News could not be loaded.</strong><span>{error ?? "Unknown error"}</span></div> : null}
       {state === "EMPTY" ? <div className="dashboard-live-news-empty"><strong>No captured announcements yet.</strong><span>The panel will populate automatically when matched NSE news is ingested.</span></div> : null}
 
-      {state === "READY" ? <div className="dashboard-live-news-list">
-        {rows.map((row) => <article className="dashboard-live-news-row" key={row.news_item_id}>
-          <div className="dashboard-live-news-company">
-            <Link to={`/app/research/${row.security_id}`}>{row.symbol}</Link>
-            <span>{row.company_name}</span>
-          </div>
-          <div className="dashboard-live-news-copy">
-            <a href={row.source_url} target="_blank" rel="noreferrer">{row.headline}</a>
-            <div className="dashboard-live-news-meta">
-              <span>{formatPublishedAt(row.published_at)}</span>
-              <span>{row.source_name || "NSE"}</span>
-              <span>{prettify(row.category || "UNCLASSIFIED")}</span>
+      {state === "READY" ? <div className="dashboard-live-news-list" role="feed" aria-label="Latest portfolio news">
+        {rows.map((row) => {
+          const rowTone = toneClass(row.tone_state)
+          return <article className={`dashboard-live-news-row tone-${rowTone}`} key={row.news_item_id}>
+            <div className="dashboard-live-news-company">
+              <Link to={`/app/research/${row.security_id}`}>{row.symbol}</Link>
+              <span>{row.company_name}</span>
             </div>
-          </div>
-          <div className="dashboard-live-news-badges">
-            <span className={`news-importance ${importanceClass(row.importance_state)}`}>{prettify(row.importance_state || "UNCLASSIFIED")}</span>
-            <span className={`news-tone ${toneClass(row.tone_state)}`}>{prettify(row.tone_state || "UNCLASSIFIED")}</span>
-          </div>
-        </article>)}
+            <div className="dashboard-live-news-copy">
+              <a href={row.source_url} target="_blank" rel="noreferrer">{row.headline}</a>
+              <div className="dashboard-live-news-meta">
+                <span>{formatPublishedAt(row.published_at)}</span>
+                <span>{row.source_name || "NSE"}</span>
+                <span>{prettify(row.category || "UNCLASSIFIED")}</span>
+              </div>
+            </div>
+            <div className="dashboard-live-news-badges">
+              <span className={`news-importance ${importanceClass(row.importance_state)}`}>{prettify(row.importance_state || "UNCLASSIFIED")}</span>
+              <span className={`news-tone ${rowTone}`}>{prettify(row.tone_state || "UNCLASSIFIED")}</span>
+            </div>
+          </article>
+        })}
       </div> : null}
 
       <div className="dashboard-live-news-footer">
-        <span>Shows the six most recent captured announcements for held securities.</span>
+        <span>Latest {Math.min(rows.length, DASHBOARD_NEWS_LIMIT)} captured announcements · scroll to browse more.</span>
         <Link to="/app/research">Open research coverage →</Link>
       </div>
     </div>,
