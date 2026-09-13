@@ -4,10 +4,11 @@ import "./DashboardCollapsibleSection.css"
 interface Props extends PropsWithChildren {
   readonly storageKey: string
   readonly label: string
+  readonly anchorId?: string
   readonly defaultOpen?: boolean
 }
 
-export function DashboardCollapsibleSection({ storageKey, label, defaultOpen = false, children }: Props) {
+export function DashboardCollapsibleSection({ storageKey, label, anchorId, defaultOpen = false, children }: Props) {
   const [open, setOpen] = useState(() => {
     if (typeof window === "undefined") return defaultOpen
     const stored = window.localStorage.getItem(`portfolioai.dashboard.section.${storageKey}`)
@@ -17,6 +18,16 @@ export function DashboardCollapsibleSection({ storageKey, label, defaultOpen = f
   useEffect(() => {
     window.localStorage.setItem(`portfolioai.dashboard.section.${storageKey}`, open ? "open" : "closed")
   }, [open, storageKey])
+
+  useEffect(() => {
+    if (!anchorId) return
+    const openFromHash = () => {
+      if (window.location.hash === `#${anchorId}`) setOpen(true)
+    }
+    openFromHash()
+    window.addEventListener("hashchange", openFromHash)
+    return () => window.removeEventListener("hashchange", openFromHash)
+  }, [anchorId])
 
   return (
     <section className={`dashboard-collapsible ${open ? "is-open" : "is-closed"}`}>
