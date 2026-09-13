@@ -4,7 +4,7 @@
 
 Implementation branch: `dashboard-allocation-performance`
 
-Production enrichment and Dashboard activation are in progress. Allocation visuals are owner-reviewed; market-cap and sector classification are complete for the current non-ETF equity portfolio; D26 allocation-vs-performance positioning is now implemented for review.
+Production enrichment and Dashboard activation are in progress. Allocation visuals are owner-reviewed; market-cap and sector classification are complete for the current non-ETF equity portfolio; D26 allocation-vs-performance positioning and D30 shared Portfolio Scope behavior are implemented for review.
 
 ## Production enrichment audit
 
@@ -82,10 +82,10 @@ The AMFI observations retain source URL, workbook hash, as-of date, rank, INR ma
 The Dashboard now includes:
 
 - Sector allocation donut with ETF and classification coverage
-- Sector slices shown individually at 1.5% portfolio weight or above; smaller sectors grouped into `Other sectors`
+- Sector slices shown individually at 1.5% scope weight or above; smaller sectors grouped into `Other sectors`
 - Market-Cap allocation donut with contrasting Large / Mid / Small / ETF colors
 - classification coverage displayed in each donut centre
-- hover/focus tooltips on donut slices with group name, holdings, current value and portfolio weight
+- hover/focus tooltips on donut slices with group name, holdings, current value and scope weight
 - `Other sectors` tooltip detail showing included sector names
 - Sector Performance table
 - Market-Cap Performance table
@@ -104,10 +104,10 @@ D26 adds a read-only sector positioning matrix below the detailed performance ta
 
 Transparent classification rules:
 
-- High allocation = sector portfolio weight >= 5%
-- Low allocation = sector portfolio weight < 5%
-- Strong performance = sector supported unrealised return >= current portfolio supported unrealised return
-- Weak performance = sector supported unrealised return < current portfolio supported unrealised return
+- High allocation = sector weight within the selected scope >= 5%
+- Low allocation = sector weight within the selected scope < 5%
+- Strong performance = sector supported unrealised return >= selected scope supported unrealised return
+- Weak performance = sector supported unrealised return < selected scope supported unrealised return
 
 The matrix surfaces four descriptive quadrants:
 
@@ -117,6 +117,31 @@ The matrix surfaces four descriptive quadrants:
 - Low-priority drag — lower allocation / weaker return
 
 The panel prints both thresholds, includes allocation and return for every eligible sector, and explicitly states that it does not create buy/sell/add/reduce recommendations. Sectors without supported accounting return are excluded from the matrix rather than estimated.
+
+## D30 shared Portfolio Scope behavior
+
+D30 connects the Allocation & Performance layer to the existing Dashboard `Portfolio scope` selector without introducing a second selector.
+
+A dashboard scope provider mirrors the authoritative top-level selector and exposes the selected scope to downstream command-centre panels. The Allocation & Performance layer now recalculates from the selected holding set for:
+
+- Sector allocation donut
+- Market-cap allocation donut
+- classification coverage cards
+- ETF count
+- Sector Performance table
+- Market-Cap Performance table
+- constituent-stock popovers
+- return contribution denominator
+- supported-return baseline
+- Allocation-vs-Performance matrix
+
+Supported scopes are the same scopes already exposed by the Dashboard:
+
+- Consolidated Portfolio
+- Portfolio role scopes such as Core / Satellite / Thematic / ETF / Other / Unclassified when present
+- active Theme scopes
+
+Scope filtering remains presentation-only. It does not create another portfolio, change role assignments, mutate transactions, or alter stored evidence.
 
 ## Collapsible Dashboard behavior
 
@@ -133,11 +158,10 @@ Command Index navigation automatically opens a collapsed target.
 
 This stage does not mutate holdings, transactions, roles, targets, or recommendations. Dashboard rendering itself makes no provider calls. Provider-backed enrichment is explicit, bounded, accounted, provenance-preserving, and separate from UI rendering.
 
-The Stage-7 immutable-evidence trigger remains enforced. No safeguard was disabled to complete D21–D26.
+The Stage-7 immutable-evidence trigger remains enforced. No safeguard was disabled to complete D21–D30.
 
 ## Remaining planned stages
 
 - D24/D25: final sector and market-cap performance validation
-- D30: shared Portfolio Scope behavior
 - D31: final coverage/integrity validation
 - D32: responsive visual polish and merge
