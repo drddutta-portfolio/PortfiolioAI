@@ -126,6 +126,7 @@ insert into public.refresh_domain_policies(
     "linked_document_parsing_enabled":true,
     "deterministic_classification_enabled":true,
     "max_linked_document_fetches_per_run":3,
+    "max_linked_document_work_items_per_run":3,
     "max_matched_items_per_run":100,
     "max_feed_bytes":1048576,
     "max_document_bytes":5242880,
