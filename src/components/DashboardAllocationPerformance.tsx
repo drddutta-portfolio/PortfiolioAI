@@ -1,11 +1,12 @@
 import Decimal from "decimal.js"
 import { useMemo, useRef, useState } from "react"
 import type { MouseEvent as ReactMouseEvent } from "react"
+import { usePortfolioEnrichment } from "../features/enrichment/usePortfolioEnrichment"
+import type { SecurityEnrichment } from "../features/enrichment/types"
 import { formatMoney } from "../features/portfolio/format"
 import type { PortfolioPosition } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
-import { usePortfolioEnrichment } from "../features/enrichment/usePortfolioEnrichment"
-import type { SecurityEnrichment } from "../features/enrichment/types"
+import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./DashboardScopeContext"
 import "./DashboardAllocationPerformance.css"
 
 type SortKey = "weight" | "return" | "pnl" | "impact" | "holdings"
@@ -260,7 +261,7 @@ function matrixBucket(row: GroupRow, baselineReturn: Decimal): MatrixBucket {
   return "lowPriority"
 }
 
-function AllocationPerformanceMatrix({ rows, baselineReturn }: { rows: readonly GroupRow[]; baselineReturn: Decimal | null }) {
+function AllocationPerformanceMatrix({ rows, baselineReturn, scopeLabel }: { rows: readonly GroupRow[]; baselineReturn: Decimal | null; scopeLabel: string }) {
   const eligible = rows.filter((row) => row.returnPct !== null)
   if (!eligible.length || baselineReturn === null) return null
 
@@ -277,7 +278,7 @@ function AllocationPerformanceMatrix({ rows, baselineReturn }: { rows: readonly 
 
   return <section className="dap-matrix-card" aria-label="Sector allocation versus performance matrix">
     <div className="dap-matrix-heading">
-      <div><p className="eyebrow">Allocation vs performance</p><h3>Where is sector exposure helping or lagging?</h3><p>Descriptive positioning only. It does not generate a buy, sell, add or reduce recommendation.</p></div>
+      <div><p className="eyebrow">Allocation vs performance</p><h3>Where is sector exposure helping or lagging?</h3><p>Descriptive positioning within {scopeLabel}. It does not generate a buy, sell, add or reduce recommendation.</p></div>
       <div className="dap-matrix-thresholds"><span>High allocation ≥ 5%</span><span>Strong return ≥ {signed(baselineReturn)}</span></div>
     </div>
     <div className="dap-matrix-grid">
@@ -292,7 +293,7 @@ function AllocationPerformanceMatrix({ rows, baselineReturn }: { rows: readonly 
         </div>
       </article>)}
     </div>
-    <p className="dap-matrix-note">Performance is compared with the portfolio's supported unrealised return using the same accounting-covered holdings as the tables above. Sector weights use current priced portfolio value.</p>
+    <p className="dap-matrix-note">Performance is compared with {scopeLabel}'s supported unrealised return using the same accounting-covered holdings as the tables above. Sector weights use current priced value within the selected scope.</p>
   </section>
 }
 
@@ -324,7 +325,7 @@ function AllocationDonut({ title, segments, classifiedCoverage, empty }: { title
           {arcs.map(({ segment, index, start, weight, color }) => <circle key={`${segment.label}-${index}`} className="dap-donut-arc" cx="50" cy="50" r="40" fill="none" stroke={color} strokeWidth="18" pathLength="100" strokeDasharray={`${weight} ${Math.max(0, 100 - weight)}`} strokeDashoffset={-start} transform="rotate(-90 50 50)" tabIndex={0} aria-label={`${segment.label}, ${segment.holdings} holdings, ${segment.weight.toDecimalPlaces(1).toFixed(1)} percent, ${formatMoney(segment.value.toFixed())}`} onMouseEnter={(event) => showTooltip(event, segment)} onMouseMove={(event) => showTooltip(event, segment)} onFocus={() => setTooltip({ segment, x: 12, y: 12 })} onBlur={() => setTooltip(null)} />)}
         </svg>
         <div className="dap-donut-center"><strong>{classifiedCoverage}</strong><span>classified</span></div>
-        {tooltip ? <div className="dap-donut-tooltip" style={{ left: tooltip.x, top: tooltip.y }} role="tooltip"><strong>{tooltip.segment.label}</strong><span>{tooltip.segment.holdings} holding{tooltip.segment.holdings === 1 ? "" : "s"}</span><span>{formatMoney(tooltip.segment.value.toFixed())}</span><b>{tooltip.segment.weight.toDecimalPlaces(1).toFixed(1)}% of priced portfolio</b>{tooltip.segment.details?.length ? <small>Includes: {tooltip.segment.details.slice(0, 8).join(", ")}{tooltip.segment.details.length > 8 ? ` +${tooltip.segment.details.length - 8} more` : ""}</small> : null}</div> : null}
+        {tooltip ? <div className="dap-donut-tooltip" style={{ left: tooltip.x, top: tooltip.y }} role="tooltip"><strong>{tooltip.segment.label}</strong><span>{tooltip.segment.holdings} holding{tooltip.segment.holdings === 1 ? "" : "s"}</span><span>{formatMoney(tooltip.segment.value.toFixed())}</span><b>{tooltip.segment.weight.toDecimalPlaces(1).toFixed(1)}% of priced scope</b>{tooltip.segment.details?.length ? <small>Includes: {tooltip.segment.details.slice(0, 8).join(", ")}{tooltip.segment.details.length > 8 ? ` +${tooltip.segment.details.length - 8} more` : ""}</small> : null}</div> : null}
       </div>
       <div className="dap-chart-legend">{display.map((segment, index) => { const color = allocationColor(title, segment, index); return <div key={segment.label}><i style={{ background: color }} /><span><b>{segment.label}</b><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed())}</small></span><strong>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</strong></div> })}</div>
     </div>
@@ -365,9 +366,12 @@ function PerformanceTable({ title, rows, empty, groupHoldings }: { title: string
 
 export function DashboardAllocationPerformance() {
   const { portfolio, isLoading, error } = usePortfolioView()
+  const { scopeKey } = useDashboardScope()
   const enrichment = usePortfolioEnrichment(portfolio?.openPositions.map((p) => p.securityId) ?? [])
   if (isLoading || error || !portfolio) return null
-  const positions = portfolio.openPositions
+
+  const positions = positionsForDashboardScope(portfolio.openPositions, scopeKey)
+  const scopeLabel = dashboardScopeLabel(scopeKey, portfolio)
   const equityPositions = positions.filter((p) => p.assetClass !== "ETF")
   const sectorClassified = equityPositions.filter((p) => Boolean(enrichment.bySecurityId.get(p.securityId)?.sector?.trim())).length
   const marketCapClassifiedEquities = equityPositions.filter((p) => ["LARGE_CAP", "MID_CAP", "SMALL_CAP"].includes(enrichment.bySecurityId.get(p.securityId)?.marketCapCategory ?? "")).length
@@ -383,17 +387,17 @@ export function DashboardAllocationPerformance() {
   const baselineReturn = supportedPortfolioReturn(positions)
 
   return <section className="dashboard-allocation-performance" aria-label="Sector and market-cap performance">
-    <div className="dap-heading"><div><p className="eyebrow">Allocation &amp; performance</p><h2>Sector and market-cap performance</h2><p>Classification-backed allocation and supported return aggregation. Missing classifications are excluded rather than guessed.</p></div><span>Consolidated portfolio</span></div>
+    <div className="dap-heading"><div><p className="eyebrow">Allocation &amp; performance</p><h2>Sector and market-cap performance</h2><p>Classification-backed allocation and supported return aggregation for the selected Dashboard scope. Missing classifications are excluded rather than guessed.</p></div><span>{scopeLabel}</span></div>
     <div className="dap-coverage-grid">
-      <article><small>Sector classification</small><strong>{sectorCoverage}</strong><p>{sectorClassified}/{equityPositions.length} non-ETF holdings classified</p></article>
-      <article><small>Market-cap classification</small><strong>{marketCapCoverage}</strong><p>{marketCapClassifiedEquities}/{equityPositions.length} non-ETF holdings classified</p></article>
-      <article><small>ETF bucket</small><strong>{etfCount}</strong><p>ETFs are shown separately from equity market-cap categories</p></article>
-      <article><small>Enrichment state</small><strong>{enrichment.state.replaceAll("_", " ")}</strong><p>Canonical stored enrichment only</p></article>
+      <article><small>Sector classification</small><strong>{sectorCoverage}</strong><p>{sectorClassified}/{equityPositions.length} scoped non-ETF holdings classified</p></article>
+      <article><small>Market-cap classification</small><strong>{marketCapCoverage}</strong><p>{marketCapClassifiedEquities}/{equityPositions.length} scoped non-ETF holdings classified</p></article>
+      <article><small>ETF bucket</small><strong>{etfCount}</strong><p>ETFs in the selected scope are shown separately from equity market-cap categories</p></article>
+      <article><small>Scoped holdings</small><strong>{positions.length}</strong><p>{scopeLabel}</p></article>
     </div>
-    {classificationIncomplete ? <div className="dap-warning"><strong>Classification coverage is intentionally partial.</strong><span> PortfolioAI shows only canonical trusted evidence; unresolved or missing source identities remain Unclassified rather than being guessed.</span></div> : null}
-    <div className="dap-chart-grid"><AllocationDonut title="Sector allocation" segments={sectorSegments} classifiedCoverage={sectorCoverage} empty="Sector allocation will appear when trusted sector classifications and current prices are available." /><AllocationDonut title="Market-cap allocation" segments={marketCapSegments} classifiedCoverage={marketCapCoverage} empty="Market-cap allocation will appear when trusted classifications and current prices are available." /></div>
-    <div className="dap-table-grid"><PerformanceTable title="Sector performance" rows={sectorRows} groupHoldings={sectorGroupHoldings} empty="No trusted sector classifications are stored yet." /><PerformanceTable title="Market-cap performance" rows={marketCapRows} empty="No trusted market-cap categories are stored yet. ETFs will appear independently when present." /></div>
-    <AllocationPerformanceMatrix rows={sectorRows} baselineReturn={baselineReturn} />
-    <p className="dap-method">Allocation donuts use current priced value and explicitly retain ETF / Unclassified slices so missing evidence is visible. Sector donut slices are shown individually from 1.5% portfolio weight upward; smaller sectors are grouped into Other sectors. Hover a donut slice for its allocation details; hover a sector name or holdings count to inspect the constituent stocks sorted by return. Return = supported unrealised P&amp;L ÷ supported invested cost within that group. Return contribution is the group P&amp;L divided by total supported portfolio cost, expressed in percentage points. Coverage remains explicit.</p>
+    {classificationIncomplete ? <div className="dap-warning"><strong>Classification coverage is intentionally partial for this scope.</strong><span> PortfolioAI shows only canonical trusted evidence; unresolved or missing source identities remain Unclassified rather than being guessed.</span></div> : null}
+    <div className="dap-chart-grid"><AllocationDonut title="Sector allocation" segments={sectorSegments} classifiedCoverage={sectorCoverage} empty={`No trusted priced sector allocation is available in ${scopeLabel}.`} /><AllocationDonut title="Market-cap allocation" segments={marketCapSegments} classifiedCoverage={marketCapCoverage} empty={`No trusted priced market-cap allocation is available in ${scopeLabel}.`} /></div>
+    <div className="dap-table-grid"><PerformanceTable title="Sector performance" rows={sectorRows} groupHoldings={sectorGroupHoldings} empty={`No trusted sector classifications are available in ${scopeLabel}.`} /><PerformanceTable title="Market-cap performance" rows={marketCapRows} empty={`No trusted market-cap categories are available in ${scopeLabel}.`} /></div>
+    <AllocationPerformanceMatrix rows={sectorRows} baselineReturn={baselineReturn} scopeLabel={scopeLabel} />
+    <p className="dap-method">All allocation, return, contribution and matrix calculations use the currently selected Dashboard scope. Allocation donuts use current priced value and explicitly retain ETF / Unclassified slices so missing evidence is visible. Sector donut slices are shown individually from 1.5% scope weight upward; smaller sectors are grouped into Other sectors. Hover a donut slice for its allocation details; hover a sector name or holdings count to inspect the constituent stocks sorted by return. Return = supported unrealised P&amp;L ÷ supported invested cost within that group. Return contribution is the group P&amp;L divided by total supported scoped cost, expressed in percentage points. Coverage remains explicit.</p>
   </section>
 }
