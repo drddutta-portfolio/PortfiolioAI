@@ -42,6 +42,13 @@
   scroll-margin-top: 6.5rem;
 }
 
+/* News is the final dashboard section. Give the final anchor enough remaining
+   page height for the browser to place it beneath the sticky command index;
+   otherwise News and Intelligence can appear to stop at the same scroll point. */
+#dashboard-news {
+  min-height: calc(100vh - 7rem);
+}
+
 /* Improve touch affordance for chart/table interactions. */
 .dap-donut-arc,
 .dap-group-trigger,
@@ -144,6 +151,10 @@
 @media (max-width: 520px) {
   .dashboard-section-anchor {
     scroll-margin-top: 5.75rem;
+  }
+
+  #dashboard-news {
+    min-height: calc(100vh - 6rem);
   }
 
   .dashboard-section-navigator {
