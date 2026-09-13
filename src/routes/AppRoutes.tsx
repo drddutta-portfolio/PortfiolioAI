@@ -4,6 +4,7 @@ import { RedirectIfAuthenticated } from "../auth/RedirectIfAuthenticated"
 import { RequireAuth } from "../auth/RequireAuth"
 import { AppShell } from "../components/AppShell"
 import { DashboardDecisionLayer } from "../components/DashboardDecisionLayer"
+import { DashboardMonitoringReadiness } from "../components/DashboardMonitoringReadiness"
 import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
 import { DashboardPortfolioIntelligence } from "../components/DashboardPortfolioIntelligence"
 import { DashboardResearchIntelligence } from "../components/DashboardResearchIntelligence"
@@ -72,6 +73,7 @@ export function AppRoutes() {
                 <DashboardPage />
                 <DashboardDecisionLayer />
                 <DashboardRiskConcentration />
+                <DashboardMonitoringReadiness />
                 <DashboardResearchIntelligence />
                 <DashboardPortfolioIntelligence />
                 <DashboardNewsPreview />
