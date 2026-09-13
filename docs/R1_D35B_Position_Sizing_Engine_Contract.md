@@ -1,6 +1,6 @@
 # R1 / D35B — Position Sizing Engine Contract
 
-**Status:** Reference implementation under review  
+**Status:** Engine contract verified; ready for merge review  
 **Completion target:** ENGINE CONTRACT COMPLETE only  
 **Portfolio-wide coverage:** Not claimed  
 **Production migration applied:** No  
@@ -172,7 +172,7 @@ The additive migration introduces `position_sizing_assessments` with:
 - source recommendation-run lineage;
 - creation timestamp.
 
-A `READY` persisted assessment requires non-null profile code/version and score/recommendation lineage.
+A `READY` persisted assessment requires non-null profile code/version and score/recommendation lineage. Upstream profile readiness is part of the canonical deterministic input snapshot used for reproducibility and idempotency.
 
 Source score and recommendation foreign keys use restrictive deletion semantics so a retained READY assessment cannot silently lose its deterministic lineage through source-row deletion.
 
@@ -203,11 +203,11 @@ The contract tests deliberately different cases.
 
 Uses `BANK / BANK_V1` research-profile lineage, the known 3–4% upstream reference guidance and adequate score coverage. The pure engine derives a 3.5% midpoint and can return `ADD` when current weight is below 3% and upstream action bias is `ACCUMULATE`.
 
-**Important:** HDFCBANK is not hard-coded in the engine; `BANK_V1` is supplied as validated upstream context.
+**Important:** HDFCBANK is not hard-coded in the engine; `BANK_V1` is supplied as validated upstream context. HDFCBANK is the only genuine current research-backed `READY` sizing reference claimed by R1.
 
 ### 2. Unready non-bank security
 
-A stock may have an apparently valid 2–3% range, but if its sector/research profile is `PROFILE_PENDING` or otherwise not `READY`, D35B must return `BLOCKED_PREREQUISITE` with no range/action.
+A stock may have an apparently valid 2–3% range, but if its sector/research profile is `PROFILE_PENDING` or otherwise not `READY`, D35B returns `BLOCKED_PREREQUISITE` with no range/action.
 
 This proves that supplying a range cannot bypass sector-specific research readiness.
 
@@ -225,7 +225,7 @@ A stock with score-ready coverage below policy returns `INSUFFICIENT_EVIDENCE`, 
 
 An ETF returns `NOT_APPLICABLE`, no range and no action.
 
-## 10. Additional guard tests
+## 10. Guard tests and executed verification
 
 The TypeScript reference tests verify:
 
@@ -244,6 +244,27 @@ The SQL contract test verifies:
 - owner-scoped RLS policy exists;
 - browser writes are denied;
 - service role can append but cannot rewrite/delete assessment history.
+
+### Executed verification — 13 September 2026
+
+A temporary GitHub Actions verification workflow was used solely to obtain a real branch checkout and reproducible execution environment. It was removed from the branch after verification.
+
+The final verification run passed:
+
+- `npm ci`;
+- R1 Vitest suite — 10/10 tests passed;
+- targeted strict TypeScript compilation for the R1 engine/tests;
+- targeted ESLint for the R1 engine/tests;
+- repository `npm run typecheck`;
+- repository `npm run lint`;
+- repository `npm run build`;
+- isolated disposable Supabase/Postgres prerequisite bootstrap;
+- application of `20260913235000_create_position_sizing_assessments.sql` in the disposable database;
+- R1 pgTAP contract test.
+
+A full blank replay of historical repository migrations was also attempted but stopped at a pre-existing MOTHERSON identity migration that intentionally expects reviewed production-seeded evidence. That historical data coupling is unrelated to R1. To test R1 itself without changing historical migrations, the successful final SQL run used a disposable Supabase Postgres instance with only R1's required prerequisite public tables while using the Supabase-provided roles/auth infrastructure.
+
+No production database was touched during verification.
 
 ## 11. Current real-world coverage boundary
 
@@ -271,19 +292,16 @@ R1 does not:
 - claim all Blueprint sizing factors already have portfolio-wide evidence;
 - enable automatic trading or automatic exits.
 
-## 13. Approval gates
+## 13. Approval gates after engine-contract merge
 
 Before a production sizing assessment can be persisted:
 
-1. approve/merge the sector-research architecture reference;
-2. review and merge the R1 code/schema contract;
-3. run TypeScript/test/lint/build checks in a full repository checkout;
-4. run the migration and pgTAP test against a disposable/local Supabase environment;
-5. inspect the resulting schema/RLS diff;
-6. obtain explicit owner approval before applying the migration to production;
-7. inspect the real pilot cohort using current stored evidence;
-8. run a bounded manual dry run;
-9. inspect outputs and lineage;
-10. only then consider a trusted persistence/orchestration path.
+1. merge the reviewed R1 code/schema contract;
+2. separately inspect the production migration plan and current schema state;
+3. obtain explicit owner approval before applying the migration to production;
+4. inspect the real pilot cohort using current stored evidence;
+5. run a bounded manual dry run;
+6. inspect outputs and lineage;
+7. only then consider a trusted persistence/orchestration path.
 
-Passing R1 means **ENGINE CONTRACT COMPLETE**. It does not mean PILOT COMPLETE, PORTFOLIO-WIDE COVERAGE COMPLETE or AUTOMATION COMPLETE.
+Passing and merging R1 means **ENGINE CONTRACT COMPLETE**. It does not mean PILOT COMPLETE, PORTFOLIO-WIDE COVERAGE COMPLETE or AUTOMATION COMPLETE.
