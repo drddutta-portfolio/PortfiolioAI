@@ -6,6 +6,7 @@ import { AppShell } from "../components/AppShell"
 import { DashboardPage } from "../pages/DashboardPage"
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage"
 import { LoginPage } from "../pages/LoginPage"
+import { N5NewsDryRunPage } from "../pages/N5NewsDryRunPage"
 import { NotFoundPage } from "../pages/NotFoundPage"
 import { UpdatePasswordPage } from "../pages/UpdatePasswordPage"
 import { PageLoader } from "../components/PageLoader"
@@ -106,6 +107,14 @@ export function AppRoutes() {
               <Suspense fallback={<PageLoader label="Loading the Import Centre" />}>
                 <ImportPage />
               </Suspense>
+            </AppShell>
+          }
+        />
+        <Route
+          path="/app/internal/n5-news-dry-run"
+          element={
+            <AppShell>
+              <N5NewsDryRunPage />
             </AppShell>
           }
         />
