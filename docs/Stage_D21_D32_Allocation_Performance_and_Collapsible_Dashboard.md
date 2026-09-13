@@ -4,7 +4,7 @@
 
 Implementation branch: `dashboard-allocation-performance`
 
-Production enrichment and Dashboard activation are in progress. The UI is visually approved; backend classification coverage has now been materially populated.
+Production enrichment and Dashboard activation are in progress. Allocation visuals are owner-reviewed; backend classification coverage is now materially populated and the interactive chart/table layer is under final review.
 
 ## Production enrichment audit
 
@@ -18,51 +18,32 @@ Initial audit on 2026-09-13 found 272 canonical enrichment rows but zero normali
 
 Migration `20260913154500_promote_stored_trendlyne_sector_industry_evidence.sql` promotes only previously stored, deterministically linked Trendlyne classification evidence.
 
-It:
+It seeds the controlled industry taxonomy, creates verified provider mappings, writes append-only SECTOR/INDUSTRY observations and selects current evidence without ticker/name/theme inference.
 
-- seeds `PORTFOLIOAI_INDUSTRY` taxonomy version 1;
-- creates only sector/industry values explicitly present in provider evidence;
-- creates verified `TRENDLYNE_MCP` source mappings;
-- writes append-only `SECTOR` and `INDUSTRY` observations;
-- selects current observations through `security_attribute_decisions`;
-- performs no ticker/name/theme inference.
+The initial stored-evidence pass classified 25 current equities. A bounded Trendlyne classification cohort then accepted 23 of 40 planned identities and normalized 11 newly observed exact provider sector/industry pairs while preserving the Stage-7 immutable-evidence trigger.
 
-This first pass classified 25 current equities.
+### Owner STOCK MASTER sector evidence
 
-### Bounded classification cohort
+The owner-provided `PortFolio-1 (1)(3).xlsx` STOCK MASTER sector column was then ingested as `STOCK_MASTER` evidence rather than being represented as provider evidence.
 
-Production then deployed a classification-only Trendlyne refresh with:
+Current sector coverage is:
 
-- hard per-run maximum: 40 calls;
-- existing provider daily limit: 50 internal attempts;
-- provider budget reservation and settlement;
-- ingestion lease;
-- run/run-item accounting;
-- one `search_entities` call per target;
-- exact canonical symbol + ISIN match required;
-- no automatic taxonomy decision for a previously unseen source pair.
+- 212 / 240 current non-ETF equities = 88.3% by holding count
+- 28 non-ETF equities remain without canonical sector evidence
+- the Dashboard donut can show 27 Unclassified when one of those holdings lacks a usable current priced value, because the donut is current-value weighted
 
-The dry run planned 40 highest-current-value unclassified equities and projected daily Trendlyne usage from 4 to 44, within the 50-call limit.
+Unresolved securities remain Unclassified until trusted owner/provider/reference evidence is available; they are not guessed from company names.
 
-Live run `5d96186d-65c1-4baf-987e-e650c9b11e52` completed `SUCCEEDED`:
+### Trendlyne usage-accounting correction
 
-- requested: 40
-- attempted provider calls: 40
-- accepted: 23
-- rejected: 17
-- failed: 0
-- immediately normalized through pre-existing verified mappings: 12
-- newly observed exact source-sector/source-industry pairs: 11
-- provider usage after the run: 44 / 50 for the UTC day
+The production audit found that PortfolioAI had conflated internal provider attempts with the MCPPro account-page tool-call counter. Forty `SEARCH_ENTITIES` operations were recorded as internal attempts, while the Trendlyne account page showed only four tool calls consumed.
 
-The 11 new exact pairs were reviewed and mapped by forward migration `20260913163000_verify_new_trendlyne_classification_pairs.sql`. An initial attempt to rewrite provider observations was rejected by the Stage-7 immutability trigger; the final migration preserves the observations unchanged and only adds canonical master values, verified mappings, and current selection decisions.
+PortfolioAI now reports these separately:
 
-After mapping, sector coverage is:
+- internal safety attempts: operational control-plane count
+- provider-usage estimate: provider-billable/tool-call estimate aligned to the observed MCPPro counter
 
-- 48 / 240 current non-ETF equities = 20.0% by holding count
-- 42.3% of current equity priced value
-
-No further Trendlyne classification calls are made once the daily safety budget is near its limit.
+The internal safety guard remains independent of the paid provider allowance.
 
 ## D21 market-cap classification
 
@@ -71,72 +52,54 @@ The active policy is `SEBI_AMFI_FULL_MARKET_CAP_RANK_V1`:
 - Large Cap = full-market-cap rank 1–100
 - Mid Cap = rank 101–250
 - Small Cap = rank 251+
-- missing trusted rank evidence remains unclassified
 
-PortfolioAI does not derive these categories from arbitrary rupee thresholds.
+PortfolioAI does not derive final categories from arbitrary rupee thresholds.
 
 ### Official AMFI source
 
-Production registered `AMFI_OFFICIAL` and deployed `refresh-amfi-market-cap-classification` against the official AMFI 30-Jun-2026 workbook:
+Production registered `AMFI_OFFICIAL` and ingested the official AMFI 30-Jun-2026 workbook after validating a contiguous 5,427-company full-market-cap rank universe.
 
-`https://portal.amfiindia.com/spages/AverageMarketCapitalization30Jun2026.xlsx`
+The first pass matched 189 / 240 equities by trusted ISIN. A second official-reference fallback matched all 51 remaining equities uniquely by exact NSE symbol against the same validated AMFI universe.
 
-The function validates the workbook before any write:
+The symbol-fallback live run `b31c04df-11bc-4a37-9e5b-3626f65c2fec` completed `SUCCEEDED`:
 
-- contiguous ranks beginning at 1;
-- minimum universe size 251;
-- duplicate rank/ISIN rejection;
-- rank/category consistency;
-- byte limit and fetch timeout;
-- matching by trusted ISIN evidence rather than ticker inference.
-
-Dry run validation:
-
-- official universe: 5,427 companies
-- current non-ETF equity targets: 240
-- trusted AMFI matches: 189
-- no trusted ISIN: 49
-- trusted ISIN not in AMFI universe: 2
-- identity conflicts: 0
-- planned Large Cap: 47
-- planned Mid Cap: 51
-- planned Small Cap: 91
-- writes: 0
-
-Live run `d367fc34-73d4-4403-9309-ad00bc084229` completed `SUCCEEDED`:
-
-- accepted: 189
-- rejected: 51
+- requested: 51
+- accepted: 51
+- rejected: 0
 - conflicting: 0
-- failed: 0
-- Large Cap: 47
-- Mid Cap: 51
-- Small Cap: 91
-- insufficient-evidence assessments: 2
+- Large Cap added: 1
+- Mid Cap added: 3
+- Small Cap added: 47
 
-Current market-cap classification coverage is:
+Current market-cap classification is therefore:
 
-- 189 / 240 current non-ETF equities = 78.8% by holding count
-- 80.7% of current equity priced value
+- 240 / 240 current non-ETF equities = 100%
+- Large Cap: 48
+- Mid Cap: 54
+- Small Cap: 138
+- ETF remains a separate Dashboard bucket
 
-The AMFI observations retain source URL, workbook hash, as-of date, full-market-cap rank, INR market cap, and policy evidence. They are fresh through 31-Dec-2026 for this half-year reference list.
+The AMFI observations retain source URL, workbook hash, as-of date, rank, INR market cap and identity basis. The owner workbook's rupee-threshold Large/Mid/Small formulas are not used as canonical classification because the active PortfolioAI policy is rank-based.
 
 ## UI foundation
 
 The Dashboard now includes:
 
 - Sector allocation donut with explicit ETF and Unclassified slices
-- Market-Cap allocation donut with Large / Mid / Small / ETF / Unclassified
+- Market-Cap allocation donut with contrasting Large / Mid / Small / ETF colors
 - classification coverage displayed in each donut centre
-- leading sector groups plus `Other sectors`
+- hover/focus tooltips on donut slices with group name, holdings, current value and portfolio weight
+- `Other sectors` tooltip detail showing included sector names
 - Sector Performance table
 - Market-Cap Performance table
 - supported-return and return-contribution semantics
 - explicit priced/accounting coverage per row
 - sortable holdings / weight / P&L / return / contribution columns
+- interactive Sector Performance group/holdings cells that open a floating constituent-stock panel
+- constituent panel sorted by unrealised return descending and showing symbol/company, return, unrealised P&L and current value
 - `Performance` in the Dashboard Command Index
 
-Missing classifications remain visible and are never guessed.
+The interactive allocation layer uses only already-loaded portfolio/enrichment data and makes no provider calls.
 
 ## Collapsible Dashboard behavior
 
@@ -157,12 +120,9 @@ The Stage-7 immutable-evidence trigger remains enforced. No safeguard was disabl
 
 ## Remaining planned stages
 
-- D21: continue classification coverage only within provider/accounting limits
-- D22/D23: allocation activation and coverage validation
-- D24/D25: sector and market-cap performance validation
+- resolve the remaining 28 sector classifications through trusted owner/provider/reference evidence
+- D24/D25: final sector and market-cap performance validation
 - D26: allocation-vs-performance matrix
-- D27/D28: collapsible sections and remembered state
-- D29: command-index integration
 - D30: shared Portfolio Scope behavior
 - D31: final coverage/integrity validation
 - D32: responsive visual polish and merge
