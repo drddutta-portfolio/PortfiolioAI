@@ -3,6 +3,7 @@ import "./DashboardSectionNavigator.css"
 
 const SECTIONS = [
   ["dashboard-overview", "Overview"],
+  ["dashboard-daily-move", "Daily Move"],
   ["dashboard-performance", "Performance"],
   ["dashboard-structure", "Structure"],
   ["dashboard-risk", "Risk"],

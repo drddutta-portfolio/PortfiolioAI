@@ -5,6 +5,7 @@ import { RequireAuth } from "../auth/RequireAuth"
 import { AppShell } from "../components/AppShell"
 import { DashboardAllocationPerformance } from "../components/DashboardAllocationPerformance"
 import { DashboardCollapsibleSection } from "../components/DashboardCollapsibleSection"
+import { DashboardDailyMovement } from "../components/DashboardDailyMovement"
 import { DashboardDecisionLayer } from "../components/DashboardDecisionLayer"
 import { DashboardMonitoringReadiness } from "../components/DashboardMonitoringReadiness"
 import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
@@ -78,6 +79,7 @@ export function AppRoutes() {
               <DashboardScopeProvider>
                 <DashboardSectionNavigator />
                 <div id="dashboard-overview" className="dashboard-section-anchor"><DashboardPage /></div>
+                <div id="dashboard-daily-move" className="dashboard-section-anchor"><DashboardDailyMovement /></div>
                 <div id="dashboard-performance" className="dashboard-section-anchor"><DashboardAllocationPerformance /></div>
                 <div id="dashboard-structure" className="dashboard-section-anchor"><DashboardDecisionLayer /></div>
                 <div id="dashboard-risk" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="risk" label="Portfolio Risk & Concentration" anchorId="dashboard-risk" defaultOpen><DashboardRiskConcentration /></DashboardCollapsibleSection></div>
