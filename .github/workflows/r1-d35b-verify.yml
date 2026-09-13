@@ -50,24 +50,53 @@ jobs:
 
   verify-sql:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: ghcr.io/supabase/postgres:17.6.1.167
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 54322:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      PGPASSWORD: postgres
+      PGHOST: 127.0.0.1
+      PGPORT: 54322
+      PGUSER: postgres
+      PGDATABASE: postgres
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Supabase CLI
-        uses: supabase/setup-cli@v1
-        with:
-          version: latest
+      - name: Install PostgreSQL client
+        run: sudo apt-get update -qq && sudo apt-get install -y postgresql-client
 
-      - name: Start disposable local Supabase
-        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor
+      - name: Bootstrap only R1 prerequisite schema
+        run: |
+          psql -v ON_ERROR_STOP=1 <<'SQL'
+          create extension if not exists pgcrypto;
+          create schema if not exists auth;
+          create schema if not exists extensions;
+          create extension if not exists pgtap with schema extensions;
+          do $$
+          begin
+            if not exists (select 1 from pg_roles where rolname = 'anon') then create role anon nologin; end if;
+            if not exists (select 1 from pg_roles where rolname = 'authenticated') then create role authenticated nologin; end if;
+            if not exists (select 1 from pg_roles where rolname = 'service_role') then create role service_role nologin; end if;
+          end $$;
+          create or replace function auth.uid() returns uuid language sql stable as $$ select null::uuid $$;
+          create table public.portfolios (id uuid primary key default gen_random_uuid(), user_id uuid not null);
+          create table public.securities (id uuid primary key default gen_random_uuid());
+          create table public.stock_score_runs (id uuid primary key default gen_random_uuid());
+          create table public.stock_recommendation_runs (id uuid primary key default gen_random_uuid());
+          SQL
 
-      - name: Reset disposable database through migrations
-        run: supabase db reset
+      - name: Apply R1 migration in disposable database
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20260913235000_create_position_sizing_assessments.sql
 
       - name: Run R1 pgTAP contract
-        run: supabase test db supabase/tests/r1_d35b_position_sizing_assessments_test.sql
-
-      - name: Stop disposable local Supabase
-        if: always()
-        run: supabase stop --no-backup
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/r1_d35b_position_sizing_assessments_test.sql
