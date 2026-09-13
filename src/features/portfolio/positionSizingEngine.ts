@@ -18,6 +18,14 @@ export type PositionSizingAction =
   | "FREEZE"
   | "EXIT_REVIEW"
 
+export type ResearchProfileReadiness =
+  | "READY"
+  | "PARTIAL"
+  | "INSUFFICIENT_EVIDENCE"
+  | "PROFILE_PENDING"
+  | "BLOCKED_REVIEW"
+  | "NOT_APPLICABLE"
+
 export type UpstreamActionBias = "ACCUMULATE" | "HOLD" | "REDUCE" | "EXIT_CANDIDATE" | "WAIT"
 export type RecommendationTransitionStatus =
   | "INITIAL"
@@ -30,6 +38,8 @@ export type RecommendationTransitionStatus =
 
 export type PositionSizingReasonCode =
   | "ASSET_CLASS_NOT_EQUITY"
+  | "MISSING_RESEARCH_PROFILE"
+  | "RESEARCH_PROFILE_NOT_READY"
   | "MISSING_SOURCE_RECOMMENDATION"
   | "MISSING_SOURCE_SCORE"
   | "UPSTREAM_RECOMMENDATION_INSUFFICIENT"
@@ -52,6 +62,12 @@ export type PositionSizingReasonCode =
   | "OWNER_TARGET_ABOVE_ENGINE_RANGE"
   | "OWNER_MINIMUM_ABOVE_ENGINE_RANGE"
   | "OWNER_MAXIMUM_BELOW_ENGINE_RANGE"
+
+export interface PositionSizingResearchProfileContext {
+  readonly profileCode: string | null
+  readonly profileVersion: string | null
+  readonly readiness: ResearchProfileReadiness
+}
 
 export interface PositionSizingSourceRecommendation {
   readonly recommendationRunId: string | null
@@ -79,6 +95,7 @@ export interface PositionSizingInput {
   readonly assetClass: string
   readonly currentWeight: string | null
   readonly minimumScoreReadyCoverage: string
+  readonly researchProfile: PositionSizingResearchProfileContext
   readonly owner: PositionSizingOwnerContext
   readonly recommendation: PositionSizingSourceRecommendation
 }
@@ -87,6 +104,8 @@ export interface PositionSizingAssessment {
   readonly engineVersion: typeof POSITION_SIZING_ENGINE_VERSION
   readonly portfolioId: string
   readonly securityId: string
+  readonly researchProfileCode: string | null
+  readonly researchProfileVersion: string | null
   readonly assessmentState: PositionSizingAssessmentState
   readonly currentWeight: string | null
   readonly suggestedTargetWeight: string | null
@@ -138,6 +157,8 @@ function baseAssessment(input: PositionSizingInput): Omit<PositionSizingAssessme
     engineVersion: POSITION_SIZING_ENGINE_VERSION,
     portfolioId: input.portfolioId,
     securityId: input.securityId,
+    researchProfileCode: input.researchProfile.profileCode,
+    researchProfileVersion: input.researchProfile.profileVersion,
     currentWeight: input.currentWeight,
     evidenceCoverage: input.recommendation.scoreReadyCoverage,
     evidenceConfidence: input.recommendation.evidenceConfidence,
@@ -201,11 +222,10 @@ function addOwnerComparisonReasons(
 /**
  * D35B reference sizing contract.
  *
- * V1 deliberately does not recreate Quality/Growth/Valuation/Risk calculations. It consumes
- * the versioned recommendation/score lineage and validated upstream weight guidance, then
- * makes the portfolio-position decision deterministically. Missing prerequisites fail closed.
- * Owner settings are comparison context only; this function never mutates or treats them as
- * PortfolioAI-generated targets.
+ * V1 does not recreate sector/profile research or Quality/Growth/Valuation/Risk
+ * calculations. It requires an approved READY research profile plus persisted
+ * score/recommendation lineage and validated upstream weight guidance. Missing
+ * prerequisites fail closed. Owner settings are comparison context only.
  */
 export function assessPositionSizingV1(input: PositionSizingInput): PositionSizingAssessment {
   if (input.assetClass.toUpperCase() !== "EQUITY") {
@@ -214,6 +234,16 @@ export function assessPositionSizingV1(input: PositionSizingInput): PositionSizi
     ])
   }
 
+  if (!input.researchProfile.profileCode || !input.researchProfile.profileVersion) {
+    return stopped(input, "BLOCKED_PREREQUISITE", ["MISSING_RESEARCH_PROFILE"], [
+      "An approved sector/research profile code and version are required before position sizing can be assessed.",
+    ])
+  }
+  if (input.researchProfile.readiness !== "READY") {
+    return stopped(input, "BLOCKED_PREREQUISITE", ["RESEARCH_PROFILE_NOT_READY"], [
+      `Research profile ${input.researchProfile.profileCode} is ${input.researchProfile.readiness}; D35B cannot become READY until the upstream sector/profile research contract is READY.`,
+    ])
+  }
   if (!input.recommendation.recommendationRunId) {
     return stopped(input, "BLOCKED_PREREQUISITE", ["MISSING_SOURCE_RECOMMENDATION"], [
       "A persisted upstream recommendation run is required before position sizing can be assessed.",
