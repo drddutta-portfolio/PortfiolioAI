@@ -4,7 +4,7 @@
 
 Implementation branch: `dashboard-allocation-performance`
 
-Production enrichment and Dashboard activation are in progress. Allocation visuals are owner-reviewed; market-cap and sector classification are now complete for the current non-ETF equity portfolio, and the interactive chart/table layer is under final review.
+Production enrichment and Dashboard activation are in progress. Allocation visuals are owner-reviewed; market-cap and sector classification are complete for the current non-ETF equity portfolio; D26 allocation-vs-performance positioning is now implemented for review.
 
 ## Production enrichment audit
 
@@ -32,21 +32,7 @@ That increased sector coverage to 212 / 240 current non-ETF equities (88.3%).
 
 Migration `20260913172000_complete_sector_gap_review.sql` closes the final 28 sector gaps through owner-reviewed canonical classification evidence. The review uses the owner STOCK MASTER taxonomy where an exact/alternate symbol is available, and otherwise uses current exchange/company/reference evidence recorded in the source payload. It does not infer sectors from ticker names alone.
 
-The final reviewed mappings include, among others:
-
-- CIEINDIA / SHARDAMOTR → Automobile and Auto Components
-- EPL / GOODLUCK / PENIND / SBCL / SHAKTIPUMP → Capital Goods
-- GNFC / IPL / PRIVISCL / TATVA / VINATIORGA → Chemicals
-- ICICIAMC / TATACAP → Financial Services
-- JTLIND / VAML → Metals & Mining
-- SOLARA → Pharma
-- UTLSOLAR → Renewable Energy
-- V2RETAIL / YATRA → Consumer Services
-- BLUSPRING / QUESS → Services
-- EBGNG → Information Technology
-- IONEXCHANG → Waste Managment, using the owner STOCK MASTER alternate symbol `IONEXCHANGE`
-
-Current sector coverage is therefore:
+Current sector coverage is:
 
 - 240 / 240 current non-ETF equities = 100% by holding count
 - no remaining canonical sector gaps in the current non-ETF equity portfolio
@@ -81,16 +67,6 @@ Production registered `AMFI_OFFICIAL` and ingested the official AMFI 30-Jun-2026
 
 The first pass matched 189 / 240 equities by trusted ISIN. A second official-reference fallback matched all 51 remaining equities uniquely by exact NSE symbol against the same validated AMFI universe.
 
-The symbol-fallback live run `b31c04df-11bc-4a37-9e5b-3626f65c2fec` completed `SUCCEEDED`:
-
-- requested: 51
-- accepted: 51
-- rejected: 0
-- conflicting: 0
-- Large Cap added: 1
-- Mid Cap added: 3
-- Small Cap added: 47
-
 Current market-cap classification is therefore:
 
 - 240 / 240 current non-ETF equities = 100%
@@ -105,7 +81,8 @@ The AMFI observations retain source URL, workbook hash, as-of date, rank, INR ma
 
 The Dashboard now includes:
 
-- Sector allocation donut with explicit ETF and Unclassified slices
+- Sector allocation donut with ETF and classification coverage
+- Sector slices shown individually at 1.5% portfolio weight or above; smaller sectors grouped into `Other sectors`
 - Market-Cap allocation donut with contrasting Large / Mid / Small / ETF colors
 - classification coverage displayed in each donut centre
 - hover/focus tooltips on donut slices with group name, holdings, current value and portfolio weight
@@ -120,6 +97,26 @@ The Dashboard now includes:
 - `Performance` in the Dashboard Command Index
 
 The interactive allocation layer uses only already-loaded portfolio/enrichment data and makes no provider calls.
+
+## D26 allocation vs performance matrix
+
+D26 adds a read-only sector positioning matrix below the detailed performance tables.
+
+Transparent classification rules:
+
+- High allocation = sector portfolio weight >= 5%
+- Low allocation = sector portfolio weight < 5%
+- Strong performance = sector supported unrealised return >= current portfolio supported unrealised return
+- Weak performance = sector supported unrealised return < current portfolio supported unrealised return
+
+The matrix surfaces four descriptive quadrants:
+
+- Portfolio strength — high allocation / stronger return
+- Review priority — high allocation / weaker return
+- Emerging strength — lower allocation / stronger return
+- Low-priority drag — lower allocation / weaker return
+
+The panel prints both thresholds, includes allocation and return for every eligible sector, and explicitly states that it does not create buy/sell/add/reduce recommendations. Sectors without supported accounting return are excluded from the matrix rather than estimated.
 
 ## Collapsible Dashboard behavior
 
@@ -136,12 +133,11 @@ Command Index navigation automatically opens a collapsed target.
 
 This stage does not mutate holdings, transactions, roles, targets, or recommendations. Dashboard rendering itself makes no provider calls. Provider-backed enrichment is explicit, bounded, accounted, provenance-preserving, and separate from UI rendering.
 
-The Stage-7 immutable-evidence trigger remains enforced. No safeguard was disabled to complete D21.
+The Stage-7 immutable-evidence trigger remains enforced. No safeguard was disabled to complete D21–D26.
 
 ## Remaining planned stages
 
 - D24/D25: final sector and market-cap performance validation
-- D26: allocation-vs-performance matrix
 - D30: shared Portfolio Scope behavior
 - D31: final coverage/integrity validation
 - D32: responsive visual polish and merge
