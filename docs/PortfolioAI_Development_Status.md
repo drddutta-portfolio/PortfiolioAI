@@ -1,7 +1,7 @@
 # PortfolioAI — Development Status
 
 **Status:** Living implementation and handover record  
-**Current milestone:** R2E Single Source of Truth architecture/enforcement in draft PR #84; R2D production projection remains separately gated  
+**Current milestone:** R2D authenticated read-only portfolio coverage projection deployed to production; R3/R4 evidence/profile expansion is the next repository work  
 **Last reviewed:** 14 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -56,7 +56,7 @@ The current application-wide classification authority is the reviewed enrichment
 
 `current_security_enrichment_v1`
 
-Dashboard Allocation & Performance already consumes this source for sector, industry and market-cap classification. R2E/PR #84 aligns shared portfolio consumers with the same authority so Dashboard, Holdings, Portfolio Structure, Research, Research Coverage and future decision surfaces cannot maintain competing user-visible classifications.
+Dashboard Allocation & Performance consumes this source for sector, industry and market-cap classification. R2E aligns shared portfolio consumers with the same authority so Dashboard, Holdings, Portfolio Structure, Research, Research Coverage and future decision surfaces cannot maintain competing user-visible classifications.
 
 Current production coverage baseline:
 
@@ -71,7 +71,7 @@ Research profiles/subprofiles remain separate downstream methodology and may not
 
 - D34 Core Health / Exit-Risk readiness is UI COMPLETE / merged. It exposes advisory/readiness evidence and does not fabricate formal Core Health or Exit-Risk engine states.
 - D35 Position Sizing Health UI implementation is complete in PR #78; merge/deployment state remains separate from implementation completion.
-- PR #84 is refactoring existing Dashboard evidence reads behind shared repositories/hooks as part of R2E; no production data source is changed by that repository refactor.
+- R2E refactored existing Dashboard evidence reads behind shared repositories/hooks; no competing production data authority was introduced.
 
 ## D. Research, provider control, and News state
 
@@ -161,25 +161,46 @@ R2C read-only production baseline:
 - 240/240 equities have current sector labels through the Dashboard enrichment authority;
 - research/history/scoring/recommendation breadth remains narrow as described above.
 
-The earlier experimental R2 mapping of source labels into a separate 20-sector user-visible taxonomy is superseded for application display. PortfolioAI now preserves the Dashboard classification as the shared application classification; research profile routing remains separate.
+The earlier experimental R2 mapping of source labels into a separate 20-sector user-visible taxonomy is superseded for application display. PortfolioAI preserves the Dashboard classification as the shared application classification; research profile routing remains separate.
 
 ### R2D production integration
 
-R2D has a design contract for an authenticated, owner-scoped, read-only app-facing coverage projection.
+R2D is now **PRODUCTION INTEGRATION COMPLETE for the authenticated read-only endpoint**.
 
-It is **NOT deployed**.
+Production implementation:
 
-Creating an RPC/view/Edge Function, grant, policy or other production object for R2D remains a production change and requires explicit owner approval for that specific action.
+- `public.get_portfolio_coverage_registry_v1(uuid, uuid)` is deployed as a `STABLE SECURITY INVOKER` function;
+- `anon` and `authenticated` have no direct execute privilege;
+- only `service_role` may execute the database function;
+- the function independently checks that the supplied portfolio belongs to the supplied authenticated user id;
+- Edge Function `portfolio-coverage-registry` is deployed with JWT verification enabled;
+- the Edge Function validates the signed-in user, independently checks portfolio ownership, then calls the service-only database projection;
+- application code has a shared `loadPortfolioCoverageRegistry()` repository boundary rather than direct browser access to provider-control tables;
+- response is compact and aggregate-only for market history; raw candles and document bodies are not returned;
+- response explicitly reports `providerCalls: 0` and `budgetConsumed: 0`.
+
+Production verification established:
+
+- correct owner id returns 249 open holdings;
+- deliberately incorrect user id is rejected with SQLSTATE `42501` / `PORTFOLIO_NOT_AUTHORIZED`;
+- registry sector coverage is 240/240 equities and uses `current_security_enrichment_v1`;
+- HDFCBANK returns `Banking` and `LARGE_CAP`, matching the Dashboard enrichment source exactly;
+- HDFCBANK recommendation history remains `PREVIEW` with null `sourceScoreRunId`, so R2D does not fabricate persisted score lineage;
+- `sizingPersistenceAvailable` remains false because the R1 production sizing table has not been applied;
+- provider usage-event, ingestion-run, score-run, recommendation-run and fundamental-observation counts were unchanged before/after R2D verification;
+- no provider call, provider-budget use, evidence mutation, recommendation mutation or sizing mutation occurred.
+
+The production Edge Function is deployed, but an end-to-end HTTP call using the owner's actual browser JWT was not available to the repository/tooling session. The authenticated HTTP path follows the same existing `auth.getUser()` production pattern used by other verified Edge Functions; database ownership enforcement and service-only execution were independently verified.
 
 ## G. R2E — Single Source of Truth Architecture
 
-R2E is the current repository milestone in draft PR #84.
+R2E is **MERGED / REPOSITORY ARCHITECTURE COMPLETE** via PR #84.
 
 Its governing rule is:
 
 > **One business fact, one authority, one deterministic owner, many consistent views.**
 
-R2E introduces/enforces:
+R2E introduced/enforces:
 
 - canonical `PortfolioAI_Single_Source_of_Truth_Architecture.md`;
 - machine-readable `src/contracts/canonicalDataAuthorities.ts`;
@@ -190,11 +211,9 @@ R2E introduces/enforces:
 - shared Dashboard evidence repository/hooks replacing direct presentation-layer Supabase reads discovered by the guard;
 - shared classification overlay so portfolio consumer pages receive the same sector/industry facts as Dashboard.
 
-The architecture guard intentionally treats presentation-layer direct canonical-storage access as drift rather than allowlisting it.
+The architecture guard treats presentation-layer direct canonical-storage access as drift rather than allowlisting it.
 
-R2E remains **IN PR / NOT MERGED** until PR #84 is explicitly approved for merge.
-
-No production database mutation, migration application, provider call, deployment, scheduler change, RLS/grant change or provider-budget consumption is part of R2E.
+R2E itself made no production database mutation, provider call, scheduler change, RLS/grant change or provider-budget consumption.
 
 ## H. Completion terminology
 
@@ -213,8 +232,8 @@ Current examples:
 - D35: UI implementation complete in PR #78; merge status separate.
 - R1/D35B: ENGINE CONTRACT COMPLETE / merged; production persistence not applied.
 - R2: COVERAGE CONTRACT COMPLETE; R2C READ-ONLY COVERAGE BASELINE COMPLETE.
-- R2D: DESIGN CONTRACT COMPLETE / production implementation not applied.
-- R2E: repository implementation in draft PR #84 until verified/approved/merged.
+- R2D: authenticated read-only production endpoint deployed and verified within the stated boundary.
+- R2E: repository architecture/enforcement merged.
 - Stage 8 scoring/recommendation: REFERENCE IMPLEMENTATION / PILOT ONLY, portfolio-wide incomplete.
 - News Intelligence: automated operational capability for its defined official-NSE scope.
 
@@ -236,16 +255,16 @@ These are explicit limitations, not invitations to fabricate values:
 - ETFs/non-equity assets must not be forced through equity-only scoring/sizing contracts;
 - `INSUFFICIENT_EVIDENCE`, `NOT_APPLICABLE`, conflict/review states and missing values are valid outputs and must remain explicit.
 
-## J. Next work after R2E
+## J. Next work
 
-After PR #84 is verified and explicitly approved/merged, the next development decision should follow the Integration & Execution Plan while preserving the R2E authority rules.
+With R2E merged and R2D deployed, the next repository sequence returns to the Integration & Execution Plan:
 
-The immediate choices are:
+1. **R3 — research evidence breadth expansion** using the existing provider-control/budget/freshness safeguards; and
+2. **R4 — sector/research-profile contracts and validation**, prioritized by actual portfolio impact.
 
-1. **R2D production integration** — requires explicit production approval before any database/view/RPC/Edge Function deployment; or
-2. continue repository-side R3/R4 evidence/profile work that does not require a production mutation, subject to its own scoped plan.
+R3/R4 must use shared application classification only as classification evidence; sector-specific research profiles remain their own versioned methodology contracts and must fail closed when mandatory evidence/source/history requirements are unmet.
 
-R3/R4 must use the shared application classification only as classification evidence; sector-specific research profiles remain their own versioned methodology contracts and must fail closed when mandatory evidence/source/history requirements are unmet.
+Any production provider cohort, broad refresh, scheduler activation, or additional database deployment still requires its own explicit production approval.
 
 ## K. Non-negotiable controls for all next stages
 
