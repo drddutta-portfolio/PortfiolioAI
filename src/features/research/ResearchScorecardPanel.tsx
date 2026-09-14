@@ -1,20 +1,6 @@
 import "./ResearchScorecardPanel.css"
+import { researchProfileUiContract } from "./researchProfileUiContract"
 import type { DimensionScore, SecurityScoringSnapshot } from "./scoringTypes"
-
-const DIMENSION_ORDER = [
-  "QUALITY", "GROWTH", "CAPITAL_EFFICIENCY", "CASH_FLOW", "BALANCE_SHEET_CREDIT",
-  "BUSINESS_DURABILITY", "VALUATION", "MOMENTUM", "OWNERSHIP_GOVERNANCE", "RISK",
-] as const
-
-const SECTION_GROUPS = [
-  { label: "Quality & Growth", codes: ["QUALITY", "GROWTH"] },
-  { label: "Financial Strength", codes: ["CAPITAL_EFFICIENCY", "CASH_FLOW", "BALANCE_SHEET_CREDIT"] },
-  { label: "Business Durability", codes: ["BUSINESS_DURABILITY"] },
-  { label: "Valuation", codes: ["VALUATION"] },
-  { label: "Momentum", codes: ["MOMENTUM"] },
-  { label: "Ownership", codes: ["OWNERSHIP_GOVERNANCE"] },
-  { label: "Risk", codes: ["RISK"] },
-] as const
 
 const OVERALL_PREVIEW_COVERAGE_GATE = 0.70
 
@@ -22,19 +8,6 @@ const label = (value: string) => value.replaceAll("_", " ").toLocaleLowerCase().
 const percent = (value: number | null) => value === null ? "Unavailable" : `${Math.round(value * 100)}%`
 const score = (value: number | null) => value === null ? "—" : value.toFixed(0)
 const profileSourceLabel = (source: SecurityScoringSnapshot["profileSource"]) => source === "REVIEWED_ASSIGNMENT" ? "Reviewed profile" : source === "SECTOR_RULE" ? "Sector-resolved profile" : "General fallback"
-
-function dimensionLabel(profileCode: string, dimensionCode: string) {
-  if (profileCode !== "PHARMA_V1") return label(dimensionCode)
-  const pharmaLabels: Readonly<Record<string, string>> = {
-    CAPITAL_EFFICIENCY: "Capital Efficiency",
-    CASH_FLOW: "Cash Quality",
-    BALANCE_SHEET_CREDIT: "Financial Strength / Leverage",
-    BUSINESS_DURABILITY: "Business Durability",
-    OWNERSHIP_GOVERNANCE: "Ownership & Governance",
-    RISK: "Regulatory & Market Risk",
-  }
-  return pharmaLabels[dimensionCode] ?? label(dimensionCode)
-}
 
 function scoreBand(value: number) {
   if (value >= 80) return "Strong"
@@ -79,6 +52,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
   if (error) return <section className="research-callout research-callout-neutral"><strong>Scoring framework unavailable</strong><p>{error}</p></section>
   if (!snapshot) return null
 
+  const ui = researchProfileUiContract(snapshot.profileCode)
   const byCode = new Map(snapshot.dimensions.map((dimension) => [dimension.dimensionCode, dimension]))
   const hasRun = Boolean(snapshot.runState)
   const previewScore = hasRun ? null : previewOverallScore(snapshot.dimensions, snapshot.scoreReadyCoverage)
@@ -113,12 +87,12 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
       </div>
 
       <div className="investment-clarity-strip" aria-label="Section score summary">
-        {SECTION_GROUPS.map((group) => {
+        {ui.scoreSectionGroups.map((group) => {
           const summary = sectionSummary(snapshot.dimensions, group.codes)
           return <article key={group.label}>
             <span>{group.label}</span>
             <strong>{summary.score === null ? "—" : `${summary.score.toFixed(0)}`}</strong>
-            <small>{summary.evidenceCoverage === null ? "Not applicable" : `${Math.round(summary.evidenceCoverage * 100)}% evidence · ${Math.round((summary.scoreReadyCoverage ?? 0) * 100)}% score-ready`}</small>
+            <small>{summary.evidenceCoverage === null ? "Insufficient evidence" : `${Math.round(summary.evidenceCoverage * 100)}% evidence · ${Math.round((summary.scoreReadyCoverage ?? 0) * 100)}% score-ready`}</small>
           </article>
         })}
       </div>
@@ -132,16 +106,17 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
         </div>
       </div>
       <div className="score-heatmap" aria-label="Investment score heatmap">
-        {DIMENSION_ORDER.map((dimensionCode) => {
+        {ui.dimensionOrder.map((dimensionCode) => {
           const dimension = byCode.get(dimensionCode)
           const heatState = dimension?.heatState ?? "INSUFFICIENT"
-          const profileNotApplicable = snapshot.profileCode === "BANK_NBFC" && dimensionCode === "CASH_FLOW"
+          const profileNotApplicable = ui.notApplicableDimensions.includes(dimensionCode)
           const notApplicable = profileNotApplicable || Boolean(dimension && dimension.dimensionWeight === 0)
           const heatClass = notApplicable ? "heat-not-applicable" : `heat-${heatState.toLocaleLowerCase()}`
           const signals = dimension?.signals ?? []
+          const dimensionLabel = ui.dimensionLabels[dimensionCode] ?? label(dimensionCode)
           return <details key={dimensionCode} className={`score-heat-cell ${heatClass}`}>
             <summary>
-              <span>{dimensionLabel(snapshot.profileCode, dimensionCode)}</span>
+              <span>{dimensionLabel}</span>
               <strong>{notApplicable ? "N/A" : score(dimension?.rawScore ?? null)}</strong>
               <small>{notApplicable ? "Not applicable to this scoring profile" : dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Insufficient evidence"}</small>
               <em>{notApplicable ? "Not Applicable" : label(heatState)}</em>
@@ -159,7 +134,9 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
       <p className="assessment-note">PortfolioAI recommendation and your portfolio choice are intentionally separate. Any future Core/Satellite suggestion will be advisory; your selected role remains user-controlled.</p>
     </section>
 
-    <section className="panel external-ratings-panel" aria-labelledby="external-ratings-title">
+    {ui.externalRatingsMode === "COMPACT" && snapshot.ratings.length === 0 ? <section className="panel external-ratings-panel" aria-labelledby="external-ratings-title">
+      <div className="ratings-header"><div><p className="eyebrow">Credit evidence</p><h2 id="external-ratings-title">External credit ratings</h2><p>No material cached ratings. Absence of a rating is insufficient evidence, not a negative signal.</p></div><div><strong>0</strong><span>rated instruments</span></div></div>
+    </section> : <section className="panel external-ratings-panel" aria-labelledby="external-ratings-title">
       <div className="ratings-header">
         <div><p className="eyebrow">Credit evidence</p><h2 id="external-ratings-title">External ratings</h2><p>Multi-agency, instrument-level evidence. Expand an agency only when you need the instrument detail.</p></div>
         <div><strong>{ratingsByAgency.size}</strong><span>agencies</span><strong>{snapshot.ratings.length}</strong><span>rated instruments</span></div>
@@ -173,6 +150,6 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           <div className="rating-instrument-list">{sorted.map((rating) => <article key={rating.id}><div><strong>{rating.instrumentDescription ?? (rating.instrumentType ? label(rating.instrumentType) : "Instrument")}</strong><span>{rating.ratingSymbol}{rating.outlook ? ` / ${label(rating.outlook)}` : ""}</span></div><small>{rating.ratingAction ? label(rating.ratingAction) : "Action unavailable"} · {ratingDate(rating.ratingDate)}</small></article>)}</div>
         </details>
       })}</div> : <div className="data-empty"><strong>No external agency ratings cached</strong><p>Absence of a rating is treated as insufficient evidence, not a negative score.</p></div>}
-    </section>
+    </section>}
   </>
 }
