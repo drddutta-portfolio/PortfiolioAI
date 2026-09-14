@@ -1,4 +1,5 @@
 import "./ResearchScorecardPanel.css"
+import "./ResearchScorecardPolish.css"
 import { researchProfileUiContract } from "./researchProfileUiContract"
 import type { DimensionScore, SecurityScoringSnapshot } from "./scoringTypes"
 
@@ -57,6 +58,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
   const hasRun = Boolean(snapshot.runState)
   const previewScore = hasRun ? null : previewOverallScore(snapshot.dimensions, snapshot.scoreReadyCoverage)
   const displayedOverallScore = hasRun ? snapshot.overallScore : previewScore
+  const hasOverallEvidence = (snapshot.evidenceCoverage ?? 0) > 0
   const overallStatus = hasRun
     ? label(snapshot.runState ?? "PARTIAL")
     : previewScore === null
@@ -74,9 +76,9 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           <p>{snapshot.modelName} · model {snapshot.modelStatus.toLocaleLowerCase()}</p>
           <small>{profileSourceLabel(snapshot.profileSource)}</small>
         </div>
-        <div className="overall-score-box">
+        <div className={`overall-score-box${displayedOverallScore === null ? " evidence-only-score" : ""}`}>
           <span>Overall stock score</span>
-          <strong>{score(displayedOverallScore)}</strong>
+          <strong>{displayedOverallScore === null ? hasOverallEvidence ? "Not score-ready" : "No validated evidence" : score(displayedOverallScore)}</strong>
           <small>{overallStatus}</small>
         </div>
         <div className="score-coverage-box">
@@ -89,10 +91,11 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
       <div className="investment-clarity-strip" aria-label="Section score summary">
         {ui.scoreSectionGroups.map((group) => {
           const summary = sectionSummary(snapshot.dimensions, group.codes)
-          return <article key={group.label}>
+          const hasEvidence = (summary.evidenceCoverage ?? 0) > 0
+          return <article key={group.label} className={summary.score === null ? "evidence-only-score" : undefined}>
             <span>{group.label}</span>
-            <strong>{summary.score === null ? "—" : `${summary.score.toFixed(0)}`}</strong>
-            <small>{summary.evidenceCoverage === null ? "Insufficient evidence" : `${Math.round(summary.evidenceCoverage * 100)}% evidence · ${Math.round((summary.scoreReadyCoverage ?? 0) * 100)}% score-ready`}</small>
+            <strong>{summary.score === null ? hasEvidence ? "Not score-ready" : "No validated evidence" : `${summary.score.toFixed(0)}`}</strong>
+            <small>{summary.evidenceCoverage === null ? "Evidence unavailable" : `${Math.round(summary.evidenceCoverage * 100)}% evidence · ${Math.round((summary.scoreReadyCoverage ?? 0) * 100)}% score-ready`}</small>
           </article>
         })}
       </div>
@@ -111,16 +114,18 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           const heatState = dimension?.heatState ?? "INSUFFICIENT"
           const profileNotApplicable = ui.notApplicableDimensions.includes(dimensionCode)
           const notApplicable = profileNotApplicable || Boolean(dimension && dimension.dimensionWeight === 0)
+          const evidenceOnly = !notApplicable && (dimension?.rawScore ?? null) === null
+          const noEvidence = evidenceOnly && (dimension?.evidenceCoverage ?? 0) <= 0
           const heatClass = notApplicable ? "heat-not-applicable" : `heat-${heatState.toLocaleLowerCase()}`
           const signals = dimension?.signals ?? []
           const dimensionLabel = ui.dimensionLabels[dimensionCode] ?? label(dimensionCode)
-          return <details key={dimensionCode} className={`score-heat-cell ${heatClass}`}>
+          return <details key={dimensionCode} className={`score-heat-cell ${heatClass}${evidenceOnly ? " evidence-only-heat" : ""}`}>
             <summary>
               <span>{dimensionLabel}</span>
-              <strong>{notApplicable ? "N/A" : score(dimension?.rawScore ?? null)}</strong>
-              <small>{notApplicable ? "Not applicable to this scoring profile" : dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Insufficient evidence"}</small>
-              <em>{notApplicable ? "Not Applicable" : label(heatState)}</em>
-              {!notApplicable ? <b>Why this score?</b> : null}
+              <strong>{notApplicable ? "N/A" : noEvidence ? "No validated evidence yet" : evidenceOnly ? "Insufficient for score" : score(dimension?.rawScore ?? null)}</strong>
+              <small>{notApplicable ? "Not applicable to this scoring profile" : dimension ? noEvidence ? "Evidence has not yet met validation requirements" : evidenceOnly ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence reviewed` : `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Evidence unavailable"}</small>
+              <em>{notApplicable ? "Not Applicable" : noEvidence ? "No evidence" : evidenceOnly ? "Evidence only" : label(heatState)}</em>
+              {!notApplicable ? <b>{evidenceOnly ? "View evidence" : "Why this score?"}</b> : null}
             </summary>
             {!notApplicable ? <div className="heat-evidence-panel">
               {signals.length ? signals.map((signal) => <article key={signal.inputCode} className={`heat-signal signal-${signal.state.toLocaleLowerCase()}`}>

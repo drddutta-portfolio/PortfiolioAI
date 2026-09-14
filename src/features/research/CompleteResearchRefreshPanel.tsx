@@ -152,16 +152,16 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       <span>{result.providerSucceeded} of {result.providerCalls} provider calls succeeded. Any accepted research evidence has been reloaded.</span>
     </div> : null}</> : <div className="section-heading">
       <div>
-        <p className="eyebrow">Owner-controlled research readiness</p>
-        <h2 id="complete-research-refresh-title">Profile Research Modules</h2>
-        <p>The selected profile controls which evidence modules are available. Provider execution remains unavailable until each profile-specific source and promotion contract is approved.</p>
+        <p className="eyebrow">Research coverage</p>
+        <h2 id="complete-research-refresh-title">Research refresh not yet enabled</h2>
+        <p>These Pharma research areas are ready to receive evidence as their approved refresh capabilities become available.</p>
       </div>
-      <span className="profile-refresh-status"><strong>Fail closed</strong><span>Generic provider refresh unavailable</span></span>
+      <span className="profile-refresh-status"><strong>Not yet available</strong><span>Execution is disabled</span></span>
     </div>}
 
     {ui.refreshModules.length ? <div className="profile-refresh-workspace" aria-label={`${ui.profileCode} research modules`}>
       <div className="profile-refresh-heading">
-        <div><p className="eyebrow">Profile-driven research workspace</p><h3>{ui.profileCode} specialist research</h3></div>
+        <div><p className="eyebrow">Specialist research</p><h3>Pharma research modules</h3></div>
         <span>{ui.refreshModules.length} modules</span>
       </div>
       {ui.refreshModules.map((module) => <div className="complete-refresh-plan" key={module.code}>
@@ -184,7 +184,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
           </> : <p className="assessment-note">{module.note}</p>}
           {marketResult ? <div className="notice notice-success" role="status"><strong>Market history refreshed.</strong><span>{marketResult.candlesStored} daily candles stored. {marketResult.derivedMetrics.length} deterministic market metrics were derived and Research scoring has been reloaded.</span></div> : null}
         </> : <>
-          <div className="profile-refresh-status"><strong>Contract defined</strong><span>Execution remains gated</span></div>
+          <div className="profile-refresh-status"><strong>Research module available</strong><span>Execution is not yet enabled</span></div>
           <p className="assessment-note">{module.note}</p>
         </>}
       </div>)}

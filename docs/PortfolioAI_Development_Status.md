@@ -1,8 +1,8 @@
 # PortfolioAI — Development Status
 
 **Status:** Living implementation and handover record  
-**Current milestone:** R2D authenticated read-only portfolio coverage projection deployed to production; R3/R4 evidence/profile expansion is the next repository work  
-**Last reviewed:** 14 September 2026
+**Current milestone:** R4M shared profile-driven Research workspace is a repository-only local review candidate in draft PR #100
+**Last reviewed:** 15 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
@@ -215,6 +215,19 @@ The architecture guard treats presentation-layer direct canonical-storage access
 
 R2E itself made no production database mutation, provider call, scheduler change, RLS/grant change or provider-budget consumption.
 
+### R4M — shared profile-driven Research workspace
+
+R4M is **UI COMPLETE / LOCAL REVIEW CANDIDATE** in draft PR #100; merge and production state remain separate.
+
+- HDFCBANK / BANK_NBFC remains the mature regression reference.
+- TORNTPHARM / PHARMA_V1 uses the same Research page, hierarchy and interaction language while its profile contract supplies Pharma metrics, labels, applicability, refresh modules and readiness requirements.
+- Shared score surfaces distinguish scored, evidence-only, no-evidence and not-applicable states. PHARMA_V1 remains fail-closed; no numeric Pharma score curves were invented.
+- The reusable readiness summary receives profile-specific groups and details through an adapter. All 13 PHARMA_V1 contracts remain inspectable.
+- The UI pass made no migration, database/evidence write, provider call, score/recommendation/sizing write, Edge Function deployment or scheduler change.
+- Authenticated automated visual review was not run because an existing qualified-recommendation render path may record preview tracking. Owner localhost review remains the final visual gate.
+
+Detailed implementation and review boundaries are recorded in `R4M_Profile_Driven_Research_Workspace_Plan.md`.
+
 ## H. Completion terminology
 
 Use these labels instead of the ambiguous word “complete”:
@@ -257,7 +270,9 @@ These are explicit limitations, not invitations to fabricate values:
 
 ## J. Next work
 
-With R2E merged and R2D deployed, the next repository sequence returns to the Integration & Execution Plan:
+The immediate next step is owner localhost review of draft PR #100, followed by explicit merge direction if accepted. No production action is implied by that review.
+
+After R4M disposition, the broader repository sequence remains:
 
 1. **R3 — research evidence breadth expansion** using the existing provider-control/budget/freshness safeguards; and
 2. **R4 — sector/research-profile contracts and validation**, prioritized by actual portfolio impact.

@@ -36,8 +36,9 @@ export interface ResearchProfileUiContract {
   readonly dimensionOrder: readonly string[]
   readonly dimensionLabels: Readonly<Record<string, string>>
   readonly notApplicableDimensions: readonly string[]
+  readonly excludedValuationMetricCodes: readonly string[]
   readonly externalRatingsMode: ExternalRatingsMode
-  readonly readinessPanel: "PHARMA_V1" | "NONE"
+  readonly readinessMode: "PROFILE_CONTRACT" | "NONE"
   readonly refreshModules: readonly ResearchRefreshModule[]
   readonly completeResearchRefreshMode: "ENABLED" | "PROFILE_GATED"
 }
@@ -168,36 +169,36 @@ const PHARMA_SECTION_GROUPS = [
 const PHARMA_REFRESH_MODULES: readonly ResearchRefreshModule[] = [
   {
     code: "PHARMA_CORE_FUNDAMENTALS",
-    eyebrow: "PHARMA_V1 · Core fundamentals",
-    title: "Complete Pharma core evidence",
-    description: "Revenue, operating-margin, ROCE, PAT/EPS, cash-conversion and leverage history are evaluated as one coherent Pharma evidence set.",
+    eyebrow: "Pharma fundamentals",
+    title: "Pharma Fundamentals",
+    description: "Revenue, margins, capital efficiency, earnings, cash conversion and financial strength in one Pharma-focused view.",
     actionKind: "INFORMATIONAL",
-    note: "Canonical write/promotion remains explicitly gated. The current TORNTPHARM Phase-A manifest is not executed from this UI.",
+    note: "Execution is not yet enabled for this profile.",
   },
   {
     code: "PHARMA_BUSINESS_DURABILITY",
-    eyebrow: "PHARMA_V1 · Business durability",
-    title: "R&D, launches & pipeline",
-    description: "Tracks R&D intensity and productivity context together with material launches, approvals and pipeline milestones.",
+    eyebrow: "Business durability",
+    title: "Business Durability",
+    description: "R&D intensity and productivity alongside material launches, approvals and pipeline milestones.",
     actionKind: "INFORMATIONAL",
     note: "Higher R&D spend is not automatically positive; productivity and evidence quality remain part of the contract.",
   },
   {
     code: "PHARMA_REGULATORY",
-    eyebrow: "PHARMA_V1 · Regulatory risk",
-    title: "Official regulatory & site evidence",
-    description: "Tracks material manufacturing-site status, inspections, unresolved actions and remediation using official issuer/regulator evidence where applicable.",
+    eyebrow: "Regulatory risk",
+    title: "Regulatory Risk",
+    description: "Material manufacturing-site status, inspections, unresolved actions and remediation from appropriate official evidence.",
     actionKind: "INFORMATIONAL",
-    note: "No provider discovery is executed merely by viewing this workspace.",
+    note: "Research will appear when approved official evidence is available.",
   },
   {
     code: "PHARMA_MARKET_VALUATION",
-    eyebrow: "PHARMA_V1 · Market evidence",
-    title: "Build Momentum & Market Risk from Angel One",
-    description: "Loads daily market history and derives PortfolioAI 12M/6M momentum, 1Y maximum drawdown and 1Y volatility from the authoritative market-data source.",
+    eyebrow: "Market & valuation",
+    title: "Market & Valuation",
+    description: "Daily market history supports momentum, drawdown and volatility analysis using the approved market-data source.",
     actionKind: "MARKET_HISTORY",
     actionLabel: "Plan market history refresh",
-    note: "Benchmark-relative strength remains separately gated until the approved Pharma benchmark contract is implemented.",
+    note: "Market-history planning is available. Benchmark-relative analysis is not yet enabled for this profile.",
   },
 ]
 
@@ -210,8 +211,9 @@ const GENERAL_CONTRACT: ResearchProfileUiContract = {
   dimensionOrder: COMMON_DIMENSION_ORDER,
   dimensionLabels: {},
   notApplicableDimensions: [],
+  excludedValuationMetricCodes: [],
   externalRatingsMode: "FULL",
-  readinessPanel: "NONE",
+  readinessMode: "NONE",
   refreshModules: [],
   completeResearchRefreshMode: "ENABLED",
 }
@@ -238,8 +240,9 @@ const PHARMA_V1_CONTRACT: ResearchProfileUiContract = {
     RISK: "Regulatory & Market Risk",
   },
   notApplicableDimensions: [],
+  excludedValuationMetricCodes: ["PBV_ADJUSTED_PROVIDER"],
   externalRatingsMode: "COMPACT",
-  readinessPanel: "PHARMA_V1",
+  readinessMode: "PROFILE_CONTRACT",
   refreshModules: PHARMA_REFRESH_MODULES,
   completeResearchRefreshMode: "PROFILE_GATED",
 }

@@ -1,5 +1,6 @@
 import { buildPharmaCanonicalHistoryView } from "./pharmaCanonicalHistoryView"
-import { buildPharmaReadinessView, type PharmaReadinessDisplayState } from "./pharmaReadinessViewModel"
+import { buildPharmaReadinessSummaryGroups, buildPharmaReadinessView, type PharmaReadinessDisplayState } from "./pharmaReadinessViewModel"
+import { ResearchReadinessPanel } from "./ResearchReadinessPanel"
 import type { SecurityResearch } from "./types"
 import "./PharmaResearchReadinessPanel.css"
 
@@ -19,32 +20,8 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
   const history = buildPharmaCanonicalHistoryView(research)
   if (!view || !history) return null
 
-  return <section className="pharma-readiness-panel" aria-labelledby="pharma-readiness-title">
-    <header>
-      <div>
-        <p className="eyebrow">Sector-specific research contract</p>
-        <h2 id="pharma-readiness-title">PHARMA_V1 Research Readiness</h2>
-        <p>One common Research workflow, with Pharma-specific evidence requirements underneath. Evidence coverage and score readiness remain separate.</p>
-      </div>
-      <div className="pharma-readiness-summary">
-        <span className="pharma-readiness-state">Insufficient evidence</span>
-        <strong>{view.validatedSourceDomains}/{view.totalDomainCount}</strong>
-        <small>contracts with validated source</small>
-        <em>{view.mandatoryDomainCount} mandatory · {view.normalizationReadyDomains} normalization-ready</em>
-      </div>
-    </header>
-
-    <div className="pharma-readiness-quick-grid" aria-label="PHARMA_V1 contract readiness summary">
-      {view.domains.map((domain) => <article key={domain.metricCode} className={`pharma-quick-domain pharma-quick-${domain.state.toLocaleLowerCase()}`}>
-        <div><span>{domain.requirement}{domain.applicability === "CONDITIONAL" ? " · Conditional" : ""}</span><strong>{domain.label}</strong></div>
-        <b>{stateLabel[domain.state]}</b>
-        <small>{domain.canonicalObservationCount}/{domain.minimumObservations} minimum evidence count</small>
-      </article>)}
-    </div>
-
-    <details className="pharma-readiness-details">
-      <summary><strong>View full PHARMA_V1 contract readiness</strong><span>{view.totalDomainCount} research contracts</span><b>Details</b></summary>
-      <div className="pharma-readiness-grid">
+  const ready = view.validatedSourceDomains + view.normalizationReadyDomains
+  const details = <><div className="pharma-readiness-grid">
         {view.domains.map((domain) => <article key={domain.metricCode} className={`pharma-domain pharma-domain-${domain.state.toLocaleLowerCase()}`}>
           <div className="pharma-domain-head">
             <div><span>{domain.requirement}{domain.applicability === "CONDITIONAL" ? ` · Conditional${domain.conditionCode ? ` · ${domain.conditionCode}` : ""}` : ""}</span><h3>{domain.label}</h3></div>
@@ -56,9 +33,21 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
             <span>Minimum / preferred: <strong>{domain.minimumObservations} / {domain.preferredObservations}</strong></span>
           </footer>
         </article>)}
-      </div>
-    </details>
+      </div><div className="pharma-readiness-note">
+        <strong>No PHARMA_V1 score is being generated yet.</strong>
+        <p>{view.notice}</p>
+        <small>Normalization contract: {view.normalizationVersion} · Current mandatory blockers: {view.blockers.join(" · ") || "None"}</small>
+      </div></>
 
+  return <ResearchReadinessPanel
+    title="PHARMA_V1 Research Readiness"
+    detail="A compact view of Pharma evidence coverage. Evidence and score readiness remain separate."
+    ready={ready}
+    total={view.totalDomainCount}
+    groups={buildPharmaReadinessSummaryGroups(view)}
+    detailsLabel="View all PHARMA_V1 research contracts"
+    details={details}
+  >
     <details className="pharma-canonical-history" aria-label="Canonical Pharma history">
       <summary className="pharma-history-head">
         <div>
@@ -96,10 +85,5 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
       <p className="pharma-history-caution"><strong>Why this still does not create a score:</strong> canonical history can improve evidence coverage without satisfying every PHARMA_V1 scoring gate. Missing, conditional, event-based and market evidence remain explicitly visible instead of being inferred.</p>
     </details>
 
-    <div className="pharma-readiness-note">
-      <strong>No PHARMA_V1 score is being generated yet.</strong>
-      <p>{view.notice}</p>
-      <small>Normalization contract: {view.normalizationVersion} · Current mandatory blockers: {view.blockers.join(" · ") || "None"}</small>
-    </div>
-  </section>
+  </ResearchReadinessPanel>
 }

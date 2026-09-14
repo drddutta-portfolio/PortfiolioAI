@@ -52,6 +52,36 @@ export interface PharmaReadinessViewModel {
   readonly notice: string
 }
 
+export interface PharmaReadinessSummaryGroup {
+  readonly code: string
+  readonly label: string
+  readonly ready: number
+  readonly total: number
+}
+
+const READINESS_GROUPS = [
+  { code: "CORE_FINANCIAL", label: "Core financial evidence", metrics: ["PHARMA_REVENUE_GROWTH_HISTORY", "PHARMA_OPERATING_MARGIN_HISTORY", "PHARMA_ROCE_HISTORY", "PHARMA_PAT_EPS_HISTORY", "PHARMA_CASH_CONVERSION_HISTORY", "PHARMA_BALANCE_SHEET_LEVERAGE"] },
+  { code: "DURABILITY_GROWTH", label: "Durability & growth evidence", metrics: ["PHARMA_DOMESTIC_REVENUE_GROWTH", "PHARMA_EXPORT_US_REVENUE_GROWTH", "PHARMA_RND_INTENSITY", "PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE"] },
+  { code: "REGULATORY", label: "Regulatory evidence", metrics: ["PHARMA_REGULATORY_SITE_STATUS"] },
+  { code: "OWNERSHIP_VALUATION", label: "Ownership & valuation", metrics: ["PHARMA_OWNERSHIP_GOVERNANCE", "PHARMA_VALUATION_CONTEXT"] },
+] as const satisfies readonly { readonly code: string; readonly label: string; readonly metrics: readonly PharmaMetricCode[] }[]
+
+export function buildPharmaReadinessSummaryGroups(view: PharmaReadinessViewModel): readonly PharmaReadinessSummaryGroup[] {
+  const byCode = new Map(view.domains.map((domain) => [domain.metricCode, domain]))
+  return READINESS_GROUPS.map((group) => {
+    const domains = group.metrics.flatMap((metricCode) => {
+      const domain = byCode.get(metricCode)
+      return domain ? [domain] : []
+    })
+    return {
+      code: group.code,
+      label: group.label,
+      ready: domains.filter((domain) => domain.state === "VALIDATED_SOURCE" || domain.state === "NORMALIZATION_READY").length,
+      total: domains.length,
+    }
+  })
+}
+
 const DOMAIN_LABELS: Readonly<Record<PharmaMetricCode, string>> = {
   PHARMA_REVENUE_GROWTH_HISTORY: "Revenue history",
   PHARMA_OPERATING_MARGIN_HISTORY: "Operating margin history",

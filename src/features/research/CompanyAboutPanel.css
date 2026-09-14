@@ -49,6 +49,16 @@
   color: #687a70;
 }
 
+.company-about-muted > strong,
+.company-about-muted > span {
+  display: block;
+}
+
+.company-about-muted > strong {
+  margin-bottom: .16rem;
+  color: #30463a;
+}
+
 /* Use our own left-hand scrollbar instead of the operating-system overlay
    scrollbar. This keeps the control permanently visible on macOS as well as
    Windows/Linux, while the text itself stays normal left-to-right. */
@@ -160,6 +170,17 @@
     height: 68px;
     min-height: 68px;
     max-height: 68px;
+  }
+
+  .research-page .company-about-panel.company-about-empty {
+    min-height: 88px;
+    max-height: 96px;
+  }
+
+  .research-page .company-about-panel.company-about-empty .company-about-scroll-shell {
+    height: auto;
+    min-height: 34px;
+    max-height: 40px;
   }
 }
 

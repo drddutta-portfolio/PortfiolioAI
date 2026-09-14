@@ -1,4 +1,3 @@
-import { PharmaResearchReadinessPanel } from "./PharmaResearchReadinessPanel"
 import { ResearchSectionScore } from "./ResearchSectionScore"
 import { GROWTH_CODES, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatResearchMetric, latestByCode, metricLabel } from "./researchPolicy"
 import { researchProfileUiContract, type ResearchWorkspaceSection } from "./researchProfileUiContract"
@@ -77,7 +76,6 @@ export function FinancialsWorkspace({ research, snapshot }: { readonly research:
   if (ui.financialWorkspaceSections.length) {
     const sectionCodes = ui.financialWorkspaceSections.flatMap((section) => section.codes)
     return <><ResearchSectionScore snapshot={snapshot} section="FINANCIALS" />
-      {ui.readinessPanel === "PHARMA_V1" ? <PharmaResearchReadinessPanel research={research} /> : null}
       <div className="workspace-heading"><div><p className="eyebrow">Profile-specific financial evidence</p><h2>{snapshot?.profileName ?? ui.profileCode} financial dashboard</h2><p>The page structure stays consistent while this profile selects the financial evidence that matters for its business model.</p></div></div>
       <div className="financial-group-grid">{ui.financialWorkspaceSections.map((section) => profileSectionCards(section, latest))}</div>
       <HistoryTable rows={rows} columns={sectionCodes} />
@@ -142,7 +140,7 @@ function valuationBucket(code: string) {
 export function ValuationWorkspace({ research, snapshot }: { readonly research: SecurityResearch; readonly snapshot: SecurityScoringSnapshot | null }) {
   const ui = researchProfileUiContract(snapshot?.profileCode)
   const rows = research.metrics.filter((metric) => VALUATION_CODES.has(metric.code))
-  const primaryRows = ui.profileCode === "PHARMA_V1" ? rows.filter((metric) => metric.code !== "PBV_ADJUSTED_PROVIDER") : rows
+  const primaryRows = rows.filter((metric) => !ui.excludedValuationMetricCodes.includes(metric.code))
   const latest = [...latestByCode(primaryRows).values()]
   const buckets = new Map<string, ResearchMetric[]>()
   for (const metric of latest) { const bucket = valuationBucket(metric.code); buckets.set(bucket, [...(buckets.get(bucket) ?? []), metric]) }

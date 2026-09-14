@@ -1,0 +1,35 @@
+.research-page .research-readiness-groups {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .5rem;
+  padding: .75rem;
+}
+
+.research-page .research-readiness-groups article {
+  display: grid;
+  gap: .2rem;
+  min-width: 0;
+  padding: .65rem .7rem;
+  border: 1px solid #e0e8e3;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.research-page .research-readiness-groups span {
+  color: #627168;
+  font-size: .62rem;
+  line-height: 1.25;
+}
+
+.research-page .research-readiness-groups strong {
+  color: #294f3b;
+  font-size: .82rem;
+}
+
+@media (max-width: 820px) {
+  .research-page .research-readiness-groups { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
+  .research-page .research-readiness-groups { grid-template-columns: 1fr; }
+}

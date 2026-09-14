@@ -1,0 +1,38 @@
+.advisory-unavailable {
+  min-height: 150px;
+  align-content: center !important;
+  gap: .45rem !important;
+  background: linear-gradient(135deg, rgba(244, 249, 246, .96), rgba(234, 244, 238, .86)) !important;
+}
+
+.advisory-unavailable > strong { font-size: 1.2rem !important; }
+.advisory-unavailable > small { max-width: 62ch; line-height: 1.45; }
+
+.advisory-unavailable-status {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .4rem;
+  margin-top: .35rem;
+}
+
+.advisory-unavailable-status > span {
+  display: grid;
+  gap: .08rem;
+  padding: .42rem .48rem;
+  border: 1px solid #d9e5de;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .76);
+  color: #40584b;
+  font-size: .7rem;
+}
+
+.advisory-unavailable-status b {
+  color: #718078;
+  font-size: .55rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  .advisory-unavailable-status { grid-template-columns: 1fr; }
+}

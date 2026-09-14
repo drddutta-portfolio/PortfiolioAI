@@ -1,0 +1,35 @@
+@media (min-width: 1201px) {
+  .investment-clarity-strip { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1200px) and (min-width: 801px) {
+  .investment-clarity-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.evidence-only-score > strong {
+  max-width: 14ch;
+  font-size: .88rem !important;
+  line-height: 1.25 !important;
+  color: #42564b;
+}
+
+.investment-clarity-strip .evidence-only-score {
+  align-content: center;
+  background: #f8faf9;
+}
+
+.evidence-only-heat > summary {
+  gap: .24rem;
+  min-height: 118px;
+  align-content: start;
+}
+
+.evidence-only-heat > summary > strong {
+  font-size: .9rem;
+  line-height: 1.25;
+  color: #3f5348;
+}
+
+.evidence-only-heat > summary > em {
+  color: #64748b;
+}

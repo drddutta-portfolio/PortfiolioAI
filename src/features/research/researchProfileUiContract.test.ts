@@ -35,7 +35,9 @@ describe("researchProfileUiContract", () => {
     expect(pharma.dimensionLabels.BALANCE_SHEET_CREDIT).toBe("Financial Strength / Leverage")
     expect(pharma.dimensionLabels.RISK).toBe("Regulatory & Market Risk")
     expect(pharma.externalRatingsMode).toBe("COMPACT")
-    expect(pharma.readinessPanel).toBe("PHARMA_V1")
+    expect(pharma.readinessMode).toBe("PROFILE_CONTRACT")
+    expect(pharma.excludedValuationMetricCodes).toEqual(["PBV_ADJUSTED_PROVIDER"])
+    expect(researchProfileUiContract("BANK_NBFC").excludedValuationMetricCodes).toEqual([])
   })
 
   it("registers the four PHARMA_V1 specialist research modules", () => {
@@ -48,6 +50,14 @@ describe("researchProfileUiContract", () => {
     ])
     expect(pharma.refreshModules.filter((module) => module.actionKind === "MARKET_HISTORY")).toHaveLength(1)
     expect(pharma.refreshModules.find((module) => module.code === "PHARMA_MARKET_VALUATION")?.actionKind).toBe("MARKET_HISTORY")
+    expect(pharma.refreshModules.map((module) => module.title)).toEqual([
+      "Pharma Fundamentals",
+      "Business Durability",
+      "Regulatory Risk",
+      "Market & Valuation",
+    ])
+    expect(JSON.stringify(pharma.refreshModules)).not.toContain("TORNTPHARM")
+    expect(JSON.stringify(pharma.refreshModules)).not.toContain("Canonical write/promotion")
     expect(pharma.completeResearchRefreshMode).toBe("PROFILE_GATED")
     expect(researchProfileUiContract("BANK_NBFC").completeResearchRefreshMode).toBe("ENABLED")
   })
@@ -86,7 +96,7 @@ describe("researchProfileUiContract", () => {
   it("falls back safely for unknown profiles without inventing a sector contract", () => {
     const fallback = researchProfileUiContract("UNREGISTERED_PROFILE")
     expect(fallback.profileCode).toBe("GENERAL")
-    expect(fallback.readinessPanel).toBe("NONE")
+    expect(fallback.readinessMode).toBe("NONE")
     expect(fallback.refreshModules).toHaveLength(0)
     expect(fallback.financialWorkspaceSections).toHaveLength(0)
     expect(fallback.qualityGrowthWorkspaceSections).toHaveLength(0)
