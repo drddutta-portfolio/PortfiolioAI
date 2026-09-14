@@ -2,36 +2,36 @@ import { describe, expect, it } from "vitest"
 import { mapSectorToPortfolioAiV1 } from "./sectorResearchMapping"
 
 describe("mapSectorToPortfolioAiV1", () => {
-  it("maps equivalent FMCG labels to one canonical sector", () => {
-    expect(mapSectorToPortfolioAiV1("Fast Moving Consumer Goods", null).canonicalSectorCode).toBe("FMCG")
-    expect(mapSectorToPortfolioAiV1("FMCG", null).canonicalSectorCode).toBe("FMCG")
-    expect(mapSectorToPortfolioAiV1("Consumer Staples", null).canonicalSectorCode).toBe("FMCG")
+  it("preserves dashboard sector labels exactly instead of consolidating them", () => {
+    expect(mapSectorToPortfolioAiV1("Fast Moving Consumer Goods", null).applicationSector).toBe("Fast Moving Consumer Goods")
+    expect(mapSectorToPortfolioAiV1("FMCG", null).applicationSector).toBe("FMCG")
+    expect(mapSectorToPortfolioAiV1("Consumer Staples", null).applicationSector).toBe("Consumer Staples")
   })
 
-  it("maps pharma and healthcare source labels to the same canonical sector", () => {
-    expect(mapSectorToPortfolioAiV1("Pharma", null).canonicalSectorCode).toBe("PHARMA_HEALTHCARE")
-    expect(mapSectorToPortfolioAiV1("Healthcare", null).canonicalSectorCode).toBe("PHARMA_HEALTHCARE")
+  it("keeps Pharma and Healthcare as separate application sectors", () => {
+    expect(mapSectorToPortfolioAiV1("Pharma", null).applicationSector).toBe("Pharma")
+    expect(mapSectorToPortfolioAiV1("Healthcare", null).applicationSector).toBe("Healthcare")
   })
 
-  it("maps energy and power families separately", () => {
-    expect(mapSectorToPortfolioAiV1("Oil Gas & Consumable Fuels", null).canonicalSectorCode).toBe("OIL_GAS_ENERGY")
-    expect(mapSectorToPortfolioAiV1("Renewable Energy", null).canonicalSectorCode).toBe("POWER_UTILITIES")
+  it("keeps Banking and Financial Services as separate application sectors", () => {
+    expect(mapSectorToPortfolioAiV1("Banking", null).applicationSector).toBe("Banking")
+    expect(mapSectorToPortfolioAiV1("Financial Services", null).applicationSector).toBe("Financial Services")
   })
 
-  it("does not guess ambiguous broad labels", () => {
+  it("accepts broad dashboard labels as valid classifications without guessing a research profile", () => {
     const result = mapSectorToPortfolioAiV1("Consumer Services", "Hotels")
-    expect(result.state).toBe("REVIEW_REQUIRED")
-    expect(result.canonicalSectorCode).toBeNull()
+    expect(result.state).toBe("MAPPED")
+    expect(result.applicationSector).toBe("Consumer Services")
     expect(result.proposedResearchProfileCode).toBeNull()
   })
 
-  it("keeps banking research subprofile unresolved at sector-only granularity", () => {
-    const result = mapSectorToPortfolioAiV1("Banking", null)
-    expect(result.canonicalSectorCode).toBe("BANKING_FINANCIAL_SERVICES")
-    expect(result.proposedResearchProfileCode).toBeNull()
+  it("can propose a research profile without changing the dashboard sector", () => {
+    const result = mapSectorToPortfolioAiV1("Information Technology", "IT Services")
+    expect(result.applicationSector).toBe("Information Technology")
+    expect(result.proposedResearchProfileCode).toBe("IT_SERVICES_TECH")
   })
 
-  it("returns missing when source sector is absent", () => {
+  it("returns missing only when the shared enrichment sector is absent", () => {
     expect(mapSectorToPortfolioAiV1(null, null).state).toBe("MISSING")
   })
 })
