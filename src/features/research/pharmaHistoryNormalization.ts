@@ -41,15 +41,11 @@ export interface NormalizedOperatingMarginSeries {
 
 const ANNUAL_REVENUE_LABELS: Readonly<Record<PharmaAnnualPeriod, string>> = {
   Y0: "Operating Rev. Ann.",
-  Y1: "Rev. Ann. 1Y ago",
-  Y2: "Rev. Ann. 2Y ago",
-  Y3: "Rev. Ann. 3Y ago",
-  Y4: "Rev. Ann. 4Y ago",
-  Y5: "Rev. Ann. 5Y ago",
-}
-
-const ANNUAL_REVENUE_ALIASES: Partial<Readonly<Record<PharmaAnnualPeriod, readonly string[]>>> = {
-  Y1: ["Total Rev. Ann. 1Y Ago"],
+  Y1: "Operating Rev. Ann. 1Y Ago",
+  Y2: "Operating Rev. Ann. 2Y Ago",
+  Y3: "Operating Rev. Ann. 3Y Ago",
+  Y4: "Operating Rev. Ann. 4Y Ago",
+  Y5: "Operating Rev. Ann. 5Y Ago",
 }
 
 const ANNUAL_CFO_LABELS: Readonly<Record<PharmaAnnualPeriod, string>> = {
@@ -109,7 +105,6 @@ function normalizeMappedSeries<P extends string>(
   values: readonly ProviderHistoryValue[],
   labels: Readonly<Record<P, string>>,
   minimumObservations: number,
-  aliases: Partial<Readonly<Record<P, readonly string[]>>> = {},
 ): NormalizedHistorySeries<P> {
   const byLabel = exactValueMap(values)
   const points: NormalizedHistoryPoint<P>[] = []
@@ -117,8 +112,8 @@ function normalizeMappedSeries<P extends string>(
   const invalidLabels: string[] = []
 
   for (const period of Object.keys(labels) as P[]) {
-    const candidates = [labels[period], ...(aliases[period] ?? [])]
-    const item = candidates.map((label) => byLabel.get(normalizeLabel(label))).find(Boolean)
+    const sourceLabel = labels[period]
+    const item = byLabel.get(normalizeLabel(sourceLabel))
     if (!item) {
       missingPeriods.push(period)
       continue
@@ -143,7 +138,7 @@ function normalizeMappedSeries<P extends string>(
 }
 
 export function normalizePharmaAnnualRevenue(values: readonly ProviderHistoryValue[]) {
-  return normalizeMappedSeries(values, ANNUAL_REVENUE_LABELS, 3, ANNUAL_REVENUE_ALIASES)
+  return normalizeMappedSeries(values, ANNUAL_REVENUE_LABELS, 3)
 }
 
 export function normalizePharmaAnnualCfo(values: readonly ProviderHistoryValue[]) {
@@ -197,7 +192,7 @@ export const PHARMA_HISTORY_NORMALIZATION_CONTRACT = {
   provider: "TRENDLYNE_MCP",
   providerTool: "get_parameter_values_multi_stock",
   rules: {
-    annualRevenue: "Exact validated provider labels (including reviewed aliases) are normalized to Y0-Y5; a provider CAGR/aggregate cannot substitute for the raw annual series.",
+    annualRevenue: "Only exact operating-revenue annual labels may satisfy the series. Generic Rev. Ann. or Total Rev. Ann. values are not interchangeable with Operating Rev. Ann. and are never substituted.",
     annualCfo: "Exact annual CFO labels are normalized to Y0-Y5; CFO alone does not satisfy PHARMA cash-conversion readiness.",
     operatingMargin: "PortfolioAI derives each quarterly OPM from matched-period operating profit / operating revenue × 100 using Decimal arithmetic.",
     missingData: "Missing, invalid or unmatched period values remain missing/invalid and are never coerced to zero.",
