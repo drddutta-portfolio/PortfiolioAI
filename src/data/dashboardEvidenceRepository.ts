@@ -87,6 +87,10 @@ function exact(value: unknown): string | null {
   return null
 }
 
+function scalarText(value: unknown, fallback: string) {
+  return typeof value === "string" || typeof value === "number" ? String(value) : fallback
+}
+
 export async function loadLatestDashboardRecommendations(
   portfolioId: string,
   securityIds: readonly string[],
@@ -184,17 +188,17 @@ export async function loadDashboardNewsFeed(
   return result.data.map((raw: unknown) => {
     const row = raw && typeof raw === "object" && !Array.isArray(raw) ? raw as Record<string, unknown> : {}
     return {
-      newsItemId: String(row.news_item_id ?? ""),
-      securityId: String(row.security_id ?? ""),
-      symbol: String(row.symbol ?? ""),
-      companyName: String(row.company_name ?? ""),
-      headline: String(row.headline ?? ""),
-      category: String(row.category ?? "UNCLASSIFIED"),
-      importanceState: String(row.importance_state ?? "UNCLASSIFIED"),
-      toneState: String(row.tone_state ?? "UNCLASSIFIED"),
+      newsItemId: scalarText(row.news_item_id, ""),
+      securityId: scalarText(row.security_id, ""),
+      symbol: scalarText(row.symbol, ""),
+      companyName: scalarText(row.company_name, ""),
+      headline: scalarText(row.headline, ""),
+      category: scalarText(row.category, "UNCLASSIFIED"),
+      importanceState: scalarText(row.importance_state, "UNCLASSIFIED"),
+      toneState: scalarText(row.tone_state, "UNCLASSIFIED"),
       publishedAt: typeof row.published_at === "string" ? row.published_at : null,
-      sourceName: String(row.source_name ?? "NSE"),
-      sourceUrl: String(row.source_url ?? ""),
+      sourceName: scalarText(row.source_name, "NSE"),
+      sourceUrl: scalarText(row.source_url, ""),
     }
   })
 }
