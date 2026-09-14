@@ -1,21 +1,18 @@
 import Decimal from "decimal.js"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import { Link } from "react-router-dom"
-import type { SupabaseClient } from "@supabase/supabase-js"
-import type { PortfolioPosition, PortfolioRole } from "../features/portfolio/types"
+import type { DashboardMonitoringSetting } from "../data/dashboardEvidenceRepository"
+import { useDashboardMonitoringSettings, useDashboardRecommendations } from "../features/dashboard/useDashboardEvidence"
 import { formatMoney } from "../features/portfolio/format"
+import type { PortfolioPosition, PortfolioRole } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
-import { supabase } from "../lib/supabase"
 import "./DashboardDecisionLayer.css"
 
 type Tone = "critical" | "warning" | "positive" | "neutral"
-type RecommendationRow = { security_id: string; suggested_role: string | null; action_bias: string | null; change_signal: string | null; transition_status: string | null; created_at: string }
-type SettingRow = { security_id: string; target_price: number | string | null; stop_loss_price: number | string | null; target_price_alert_enabled: boolean | null; stop_loss_alert_enabled: boolean | null }
 type ActionItem = { id: string; securityId: string; symbol: string; company: string; label: string; detail: string; tone: Tone; priority: number }
 type ThemeRow = { id: string; name: string; exposure: Decimal; currentValue: Decimal; coveredCost: Decimal; coveredPnl: Decimal; coveredCount: number; holdingCount: number; best: PortfolioPosition | null; maxAllocation: string | null }
 type RoleRow = { role: PortfolioRole; label: string; exposure: Decimal; currentValue: Decimal; coveredCost: Decimal; coveredPnl: Decimal; coveredCount: number; holdingCount: number; largest: PortfolioPosition | null; targetCount: number }
 
-const db = supabase as unknown as SupabaseClient
 const ROLE_ORDER: readonly PortfolioRole[] = ["CORE", "SATELLITE", "THEMATIC", "ETF", "OTHER", "UNCLASSIFIED"]
 
 function d(value: string | number | null | undefined) {
@@ -70,15 +67,15 @@ function themes(positions: readonly PortfolioPosition[]): readonly ThemeRow[] {
   return [...map.values()].map((row) => ({ ...row, exposure: pricedTotal.isZero() ? new Decimal(0) : row.currentValue.div(pricedTotal).times(100) })).sort((a, b) => b.currentValue.comparedTo(a.currentValue))
 }
 
-function localActions(positions: readonly PortfolioPosition[], settings: ReadonlyMap<string, SettingRow>) {
+function localActions(positions: readonly PortfolioPosition[], settings: ReadonlyMap<string, DashboardMonitoringSetting>) {
   const actions: ActionItem[] = []
   positions.forEach((position) => {
     const current = d(position.currentPrice)
     const setting = settings.get(position.securityId)
-    const target = d(setting?.target_price)
-    const stop = d(setting?.stop_loss_price)
-    if (current && target && setting?.target_price_alert_enabled !== false && current.gte(target)) actions.push({ id: `${position.securityId}:target`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Target price reached", detail: `${formatMoney(position.currentPrice)} ≥ configured target ${formatMoney(target.toFixed())}`, tone: "positive", priority: 90 })
-    if (current && stop && setting?.stop_loss_alert_enabled !== false && current.lte(stop)) actions.push({ id: `${position.securityId}:stop`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Stop-loss level reached", detail: `${formatMoney(position.currentPrice)} ≤ configured stop ${formatMoney(stop.toFixed())}`, tone: "critical", priority: 100 })
+    const target = d(setting?.targetPrice)
+    const stop = d(setting?.stopLossPrice)
+    if (current && target && setting?.targetPriceAlertEnabled !== false && current.gte(target)) actions.push({ id: `${position.securityId}:target`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Target price reached", detail: `${formatMoney(position.currentPrice)} ≥ configured target ${formatMoney(target.toFixed())}`, tone: "positive", priority: 90 })
+    if (current && stop && setting?.stopLossAlertEnabled !== false && current.lte(stop)) actions.push({ id: `${position.securityId}:stop`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Stop-loss level reached", detail: `${formatMoney(position.currentPrice)} ≤ configured stop ${formatMoney(stop.toFixed())}`, tone: "critical", priority: 100 })
     const weight = d(position.portfolioWeightPercent); const min = d(position.settings.minimumWeight); const max = d(position.settings.maximumWeight)
     if (weight && max && weight.gt(max)) actions.push({ id: `${position.securityId}:max`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Above configured sizing range", detail: `${pct(weight, 2)} portfolio weight vs ${pct(max, 2)} maximum`, tone: "warning", priority: 70 })
     else if (weight && min && weight.lt(min)) actions.push({ id: `${position.securityId}:min`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Below configured sizing range", detail: `${pct(weight, 2)} portfolio weight vs ${pct(min, 2)} minimum`, tone: "neutral", priority: 35 })
@@ -89,45 +86,25 @@ function localActions(positions: readonly PortfolioPosition[], settings: Readonl
 
 export function DashboardDecisionLayer() {
   const { portfolio, isLoading, error } = usePortfolioView()
-  const [recommendations, setRecommendations] = useState<ReadonlyMap<string, RecommendationRow>>(new Map())
-  const [settings, setSettings] = useState<ReadonlyMap<string, SettingRow>>(new Map())
-  const [loadError, setLoadError] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!portfolio?.portfolio.id || !portfolio.openPositions.length) return
-    let cancelled = false
-    const portfolioId = portfolio.portfolio.id
-    const securityIds = portfolio.openPositions.map((position) => position.securityId)
-    async function load() {
-      const [recs, settingRows] = await Promise.all([
-        db.from("stock_recommendation_runs").select("security_id,suggested_role,action_bias,change_signal,transition_status,created_at").eq("portfolio_id", portfolioId).in("security_id", securityIds).order("created_at", { ascending: false }),
-        db.from("portfolio_security_settings").select("security_id,target_price,stop_loss_price,target_price_alert_enabled,stop_loss_alert_enabled").eq("portfolio_id", portfolioId).in("security_id", securityIds),
-      ])
-      if (cancelled) return
-      if (recs.error || settingRows.error) { setLoadError(recs.error?.message ?? settingRows.error?.message ?? "Decision evidence could not be loaded."); return }
-      const latest = new Map<string, RecommendationRow>()
-      ;((recs.data ?? []) as RecommendationRow[]).forEach((row) => { if (!latest.has(row.security_id)) latest.set(row.security_id, row) })
-      const settingMap = new Map<string, SettingRow>()
-      ;((settingRows.data ?? []) as SettingRow[]).forEach((row) => settingMap.set(row.security_id, row))
-      setRecommendations(latest); setSettings(settingMap); setLoadError(null)
-    }
-    void load(); return () => { cancelled = true }
-  }, [portfolio])
+  const securityIds = useMemo(() => portfolio?.openPositions.map((position) => position.securityId) ?? [], [portfolio])
+  const recommendations = useDashboardRecommendations(portfolio?.portfolio.id ?? null, securityIds)
+  const monitoringSettings = useDashboardMonitoringSettings(portfolio?.portfolio.id ?? null, securityIds)
+  const loadError = recommendations.error ?? monitoringSettings.error
 
   const roleRows = useMemo(() => roles(portfolio?.openPositions ?? []), [portfolio])
   const themeRows = useMemo(() => themes(portfolio?.openPositions ?? []), [portfolio])
   const actions = useMemo(() => {
     if (!portfolio) return []
-    const result = localActions(portfolio.openPositions, settings)
+    const result = localActions(portfolio.openPositions, monitoringSettings.data)
     portfolio.openPositions.forEach((position) => {
-      const rec = recommendations.get(position.securityId)
-      const bias = rec?.action_bias?.toUpperCase() ?? ""
-      if (!rec?.action_bias || ["HOLD", "NEUTRAL", "PENDING"].includes(bias)) return
-      const tone = recommendationTone(rec.action_bias)
-      result.push({ id: `${position.securityId}:advisory`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: `${pretty(rec.action_bias)} · persisted advisory`, detail: `${pretty(rec.suggested_role)} · ${pretty(rec.transition_status)}${rec.change_signal ? ` · ${pretty(rec.change_signal)}` : ""}`, tone, priority: tone === "critical" ? 85 : 60 })
+      const rec = recommendations.data.get(position.securityId)
+      const bias = rec?.actionBias?.toUpperCase() ?? ""
+      if (!rec?.actionBias || ["HOLD", "NEUTRAL", "PENDING"].includes(bias)) return
+      const tone = recommendationTone(rec.actionBias)
+      result.push({ id: `${position.securityId}:advisory`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: `${pretty(rec.actionBias)} · persisted advisory`, detail: `${pretty(rec.suggestedRole)} · ${pretty(rec.transitionStatus)}${rec.changeSignal ? ` · ${pretty(rec.changeSignal)}` : ""}`, tone, priority: tone === "critical" ? 85 : 60 })
     })
     return result.sort((a, b) => b.priority - a.priority || a.symbol.localeCompare(b.symbol)).slice(0, 12)
-  }, [portfolio, recommendations, settings])
+  }, [portfolio, recommendations.data, monitoringSettings.data])
 
   if (isLoading || error || !portfolio) return null
   return <section className="dashboard-next-layer" aria-label="Dashboard decision layer">
