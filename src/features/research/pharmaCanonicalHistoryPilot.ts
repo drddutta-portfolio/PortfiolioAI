@@ -2,13 +2,16 @@ import {
   derivePharmaQuarterlyOperatingMargin,
   normalizePharmaAnnualCfo,
   normalizePharmaAnnualRevenue,
+  type PharmaAnnualPeriod,
+  type PharmaQuarterPeriod,
   type ProviderHistoryValue,
 } from "./pharmaHistoryNormalization"
+import { TORNTPHARM_PERIOD_IDENTITY, torntpharmPeriodEnd } from "./pharmaPeriodIdentity"
 import type { ParsedTrendlyneDiscovery } from "./pharmaStoredDiscoveryParser"
 
 export const PHARMA_CANONICAL_HISTORY_PILOT_VERSION = "PHARMA_CANONICAL_HISTORY_PILOT_V1" as const
 
-export type PharmaPilotWriteState = "BLOCKED_PERIOD_IDENTITY" | "BLOCKED_PROVIDER_CONFLICT"
+export type PharmaPilotWriteState = "READY_AFTER_GATED_SCHEMA_AND_EVIDENCE_CAPTURE" | "BLOCKED_PROVIDER_CONFLICT"
 
 export interface PharmaStoredDiscoveryInput {
   readonly sourceRecordId: string
@@ -18,24 +21,28 @@ export interface PharmaStoredDiscoveryInput {
 export interface PharmaPilotObservationPreview {
   readonly idempotencyKey: string
   readonly metricCode: "REVENUE_ANNUAL" | "CFO_ANNUAL" | "OPM_QUARTER_DERIVED"
-  readonly periodKey: string
+  readonly periodKey: PharmaAnnualPeriod | PharmaQuarterPeriod
   readonly periodType: "YEAR" | "QUARTER"
+  readonly periodEnd: string
   readonly numericValue: string
   readonly canonicalUnit: "INR_CRORE" | "PERCENT"
-  readonly sourceCode: "TRENDLYNE_MCP" | "PORTFOLIOAI"
+  readonly sourceCode: "TRENDLYNE_MCP"
+  readonly calculationOwner: "PROVIDER_VALUE" | "PORTFOLIOAI_DERIVED"
   readonly sourceRecordIds: readonly string[]
   readonly sourceLabels: readonly string[]
-  readonly periodEnd: null
   readonly writeState: PharmaPilotWriteState
-  readonly blocker: string
+  readonly blocker: string | null
 }
 
 export interface PharmaCanonicalHistoryPilotPreview {
   readonly version: typeof PHARMA_CANONICAL_HISTORY_PILOT_VERSION
   readonly symbol: "TORNTPHARM"
+  readonly periodIdentityVersion: typeof TORNTPHARM_PERIOD_IDENTITY.version
+  readonly periodIdentityEvidenceUrls: readonly string[]
   readonly observations: readonly PharmaPilotObservationPreview[]
   readonly providerConflicts: readonly string[]
-  readonly productionWriteCount: 0
+  readonly proposedWriteCount: number
+  readonly executedProductionWriteCount: 0
   readonly notice: string
 }
 
@@ -78,37 +85,38 @@ function sourceRecordIdsForLabels(values: readonly ProvenancedProviderHistoryVal
 
 function previewObservation(
   metricCode: PharmaPilotObservationPreview["metricCode"],
-  periodKey: string,
+  periodKey: PharmaPilotObservationPreview["periodKey"],
   periodType: PharmaPilotObservationPreview["periodType"],
   numericValue: string,
   canonicalUnit: PharmaPilotObservationPreview["canonicalUnit"],
-  sourceCode: PharmaPilotObservationPreview["sourceCode"],
+  calculationOwner: PharmaPilotObservationPreview["calculationOwner"],
   sourceRecordIds: readonly string[],
   sourceLabels: readonly string[],
-  writeState: PharmaPilotWriteState,
-  blocker: string,
 ): PharmaPilotObservationPreview {
+  const periodEnd = torntpharmPeriodEnd(periodKey)
   return {
-    idempotencyKey: `${PHARMA_CANONICAL_HISTORY_PILOT_VERSION}:${sourceRecordIds.join("+")}:${metricCode}:${periodKey}`,
+    idempotencyKey: `${PHARMA_CANONICAL_HISTORY_PILOT_VERSION}:${sourceRecordIds.join("+")}:${metricCode}:${periodEnd}`,
     metricCode,
     periodKey,
     periodType,
+    periodEnd,
     numericValue,
     canonicalUnit,
-    sourceCode,
+    sourceCode: "TRENDLYNE_MCP",
+    calculationOwner,
     sourceRecordIds,
     sourceLabels,
-    periodEnd: null,
-    writeState,
-    blocker,
+    writeState: "READY_AFTER_GATED_SCHEMA_AND_EVIDENCE_CAPTURE",
+    blocker: "Production still requires the separately approved canonical metric-definition migration plus persistence of the reviewed official period-identity evidence.",
   }
 }
 
 /**
- * Builds the exact production-write preview from stored provider evidence.
- * R4H V1 intentionally writes nothing because Trendlyne discovery labels are
- * relative (Y1/Q3) and do not prove the fiscal/quarter period_end required for
- * canonical time-series observations. Dates must never be guessed.
+ * Builds the exact candidate write set from stored provider evidence. The
+ * reporting dates are resolved only because issuer/exchange evidence establishes
+ * TORNTPHARM's Apr-Mar fiscal year, FY26 year-end and Q1 FY27 quarter-end.
+ * Generic/total-revenue labels are intentionally excluded from operating-revenue
+ * history even when they carry useful numbers.
  */
 export function buildTorntpharmCanonicalHistoryPilot(
   inputs: readonly PharmaStoredDiscoveryInput[],
@@ -118,9 +126,12 @@ export function buildTorntpharmCanonicalHistoryPilot(
     return {
       version: PHARMA_CANONICAL_HISTORY_PILOT_VERSION,
       symbol: "TORNTPHARM",
+      periodIdentityVersion: TORNTPHARM_PERIOD_IDENTITY.version,
+      periodIdentityEvidenceUrls: TORNTPHARM_PERIOD_IDENTITY.evidence.map((item) => item.url),
       observations: [],
       providerConflicts: merged.conflicts,
-      productionWriteCount: 0,
+      proposedWriteCount: 0,
+      executedProductionWriteCount: 0,
       notice: "Provider-label conflicts block canonical history ingestion. No value may be selected implicitly.",
     }
   }
@@ -129,25 +140,27 @@ export function buildTorntpharmCanonicalHistoryPilot(
   const annualRevenue = normalizePharmaAnnualRevenue(providerValues)
   const annualCfo = normalizePharmaAnnualCfo(providerValues)
   const quarterlyOpm = derivePharmaQuarterlyOperatingMargin(providerValues)
-  const blocker = "Exact provider fiscal/quarter period_end is not yet proven. Relative labels such as 1Y ago / 2Q ago must not be converted to calendar dates by inference."
   const observations: PharmaPilotObservationPreview[] = []
 
   for (const point of annualRevenue.points) {
-    observations.push(previewObservation("REVENUE_ANNUAL", point.period, "YEAR", point.value, "INR_CRORE", "TRENDLYNE_MCP", sourceRecordIdsForLabels(merged.values, [point.sourceLabel]), [point.sourceLabel], "BLOCKED_PERIOD_IDENTITY", blocker))
+    observations.push(previewObservation("REVENUE_ANNUAL", point.period, "YEAR", point.value, "INR_CRORE", "PROVIDER_VALUE", sourceRecordIdsForLabels(merged.values, [point.sourceLabel]), [point.sourceLabel]))
   }
   for (const point of annualCfo.points) {
-    observations.push(previewObservation("CFO_ANNUAL", point.period, "YEAR", point.value, "INR_CRORE", "TRENDLYNE_MCP", sourceRecordIdsForLabels(merged.values, [point.sourceLabel]), [point.sourceLabel], "BLOCKED_PERIOD_IDENTITY", blocker))
+    observations.push(previewObservation("CFO_ANNUAL", point.period, "YEAR", point.value, "INR_CRORE", "PROVIDER_VALUE", sourceRecordIdsForLabels(merged.values, [point.sourceLabel]), [point.sourceLabel]))
   }
   for (const point of quarterlyOpm.points) {
-    observations.push(previewObservation("OPM_QUARTER_DERIVED", point.period, "QUARTER", point.marginPercent, "PERCENT", "PORTFOLIOAI", sourceRecordIdsForLabels(merged.values, point.sourceLabels), point.sourceLabels, "BLOCKED_PERIOD_IDENTITY", blocker))
+    observations.push(previewObservation("OPM_QUARTER_DERIVED", point.period, "QUARTER", point.marginPercent, "PERCENT", "PORTFOLIOAI_DERIVED", sourceRecordIdsForLabels(merged.values, point.sourceLabels), point.sourceLabels))
   }
 
   return {
     version: PHARMA_CANONICAL_HISTORY_PILOT_VERSION,
     symbol: "TORNTPHARM",
+    periodIdentityVersion: TORNTPHARM_PERIOD_IDENTITY.version,
+    periodIdentityEvidenceUrls: TORNTPHARM_PERIOD_IDENTITY.evidence.map((item) => item.url),
     observations,
     providerConflicts: [],
-    productionWriteCount: 0,
-    notice: "This is a deterministic write preview only. Canonical insertion remains blocked until exact period identities and required metric definitions are approved.",
+    proposedWriteCount: observations.length,
+    executedProductionWriteCount: 0,
+    notice: "Deterministic candidate rows are prepared, but this repository stage executes zero production writes. The pilot must persist official period evidence and apply the approved metric definitions before insertion.",
   }
 }
