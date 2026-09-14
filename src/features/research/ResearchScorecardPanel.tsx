@@ -3,12 +3,13 @@ import type { DimensionScore, SecurityScoringSnapshot } from "./scoringTypes"
 
 const DIMENSION_ORDER = [
   "QUALITY", "GROWTH", "CAPITAL_EFFICIENCY", "CASH_FLOW", "BALANCE_SHEET_CREDIT",
-  "VALUATION", "MOMENTUM", "OWNERSHIP_GOVERNANCE", "RISK",
+  "BUSINESS_DURABILITY", "VALUATION", "MOMENTUM", "OWNERSHIP_GOVERNANCE", "RISK",
 ] as const
 
 const SECTION_GROUPS = [
   { label: "Quality & Growth", codes: ["QUALITY", "GROWTH"] },
   { label: "Financial Strength", codes: ["CAPITAL_EFFICIENCY", "CASH_FLOW", "BALANCE_SHEET_CREDIT"] },
+  { label: "Business Durability", codes: ["BUSINESS_DURABILITY"] },
   { label: "Valuation", codes: ["VALUATION"] },
   { label: "Momentum", codes: ["MOMENTUM"] },
   { label: "Ownership", codes: ["OWNERSHIP_GOVERNANCE"] },
@@ -21,6 +22,19 @@ const label = (value: string) => value.replaceAll("_", " ").toLocaleLowerCase().
 const percent = (value: number | null) => value === null ? "Unavailable" : `${Math.round(value * 100)}%`
 const score = (value: number | null) => value === null ? "—" : value.toFixed(0)
 const profileSourceLabel = (source: SecurityScoringSnapshot["profileSource"]) => source === "REVIEWED_ASSIGNMENT" ? "Reviewed profile" : source === "SECTOR_RULE" ? "Sector-resolved profile" : "General fallback"
+
+function dimensionLabel(profileCode: string, dimensionCode: string) {
+  if (profileCode !== "PHARMA_V1") return label(dimensionCode)
+  const pharmaLabels: Readonly<Record<string, string>> = {
+    CAPITAL_EFFICIENCY: "Capital Efficiency",
+    CASH_FLOW: "Cash Quality",
+    BALANCE_SHEET_CREDIT: "Financial Strength / Leverage",
+    BUSINESS_DURABILITY: "Business Durability",
+    OWNERSHIP_GOVERNANCE: "Ownership & Governance",
+    RISK: "Regulatory & Market Risk",
+  }
+  return pharmaLabels[dimensionCode] ?? label(dimensionCode)
+}
 
 function scoreBand(value: number) {
   if (value >= 80) return "Strong"
@@ -127,7 +141,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           const signals = dimension?.signals ?? []
           return <details key={dimensionCode} className={`score-heat-cell ${heatClass}`}>
             <summary>
-              <span>{label(dimensionCode)}</span>
+              <span>{dimensionLabel(snapshot.profileCode, dimensionCode)}</span>
               <strong>{notApplicable ? "N/A" : score(dimension?.rawScore ?? null)}</strong>
               <small>{notApplicable ? "Not applicable to this scoring profile" : dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Insufficient evidence"}</small>
               <em>{notApplicable ? "Not Applicable" : label(heatState)}</em>
@@ -136,7 +150,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
             {!notApplicable ? <div className="heat-evidence-panel">
               {signals.length ? signals.map((signal) => <article key={signal.inputCode} className={`heat-signal signal-${signal.state.toLocaleLowerCase()}`}>
                 <div><strong>{signal.label}</strong><span>{signal.state === "SCORED" ? `${signal.normalizedScore?.toFixed(0) ?? "—"}/100` : label(signal.state)}</span></div>
-                <small>{signal.value === null ? "Value unavailable" : `Value ${signal.value}`} · {signal.weight.toFixed(0)}% of dimension</small>
+                <small>{signal.value === null ? "Value unavailable" : `Evidence periods/components ${signal.value}`} · {signal.weight.toFixed(0)}% of dimension</small>
               </article>) : <p>No reviewed metric inputs are configured for this dimension yet.</p>}
             </div> : null}
           </details>
