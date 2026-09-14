@@ -1,23 +1,11 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import { Link } from "react-router-dom"
-import type { SupabaseClient } from "@supabase/supabase-js"
+import { useDashboardMonitoringSettings, useDashboardRecommendations } from "../features/dashboard/useDashboardEvidence"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { useResearchCoverage } from "../features/research/useResearchCoverage"
-import { supabase } from "../lib/supabase"
 import "./DashboardMonitoringReadiness.css"
 
-type AlertSettingRow = {
-  security_id: string
-  target_price: number | string | null
-  stop_loss_price: number | string | null
-  target_price_alert_enabled: boolean | null
-  stop_loss_alert_enabled: boolean | null
-}
-
-type RecommendationRow = { security_id: string; created_at: string }
 type GapItem = { securityId: string; symbol: string; company: string; issues: readonly string[]; priority: number; weight: number }
-
-const db = supabase as unknown as SupabaseClient
 
 function percent(count: number, total: number) {
   if (!total) return "0%"
@@ -31,44 +19,11 @@ function barWidth(count: number, total: number) {
 
 export function DashboardMonitoringReadiness() {
   const { portfolio, isLoading, error } = usePortfolioView()
-  const positions = portfolio?.openPositions ?? []
+  const positions = useMemo(() => portfolio?.openPositions ?? [], [portfolio])
+  const securityIds = useMemo(() => positions.map((position) => position.securityId), [positions])
   const research = useResearchCoverage(positions)
-  const [alertSettings, setAlertSettings] = useState<ReadonlyMap<string, AlertSettingRow>>(new Map())
-  const [recommendations, setRecommendations] = useState<ReadonlySet<string>>(new Set())
-  const [loadError, setLoadError] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!portfolio?.portfolio.id || !positions.length) return
-    let cancelled = false
-    const securityIds = positions.map((position) => position.securityId)
-    async function load() {
-      const [settingsResult, recommendationResult] = await Promise.all([
-        db.from("portfolio_security_settings")
-          .select("security_id,target_price,stop_loss_price,target_price_alert_enabled,stop_loss_alert_enabled")
-          .eq("portfolio_id", portfolio!.portfolio.id)
-          .in("security_id", securityIds),
-        db.from("stock_recommendation_runs")
-          .select("security_id,created_at")
-          .eq("portfolio_id", portfolio!.portfolio.id)
-          .in("security_id", securityIds)
-          .order("created_at", { ascending: false }),
-      ])
-      if (cancelled) return
-      if (settingsResult.error || recommendationResult.error) {
-        setLoadError(settingsResult.error?.message ?? recommendationResult.error?.message ?? "Monitoring configuration could not be loaded.")
-        return
-      }
-      const settingsMap = new Map<string, AlertSettingRow>()
-      ;((settingsResult.data ?? []) as AlertSettingRow[]).forEach((row) => settingsMap.set(row.security_id, row))
-      const recommendationSet = new Set<string>()
-      ;((recommendationResult.data ?? []) as RecommendationRow[]).forEach((row) => recommendationSet.add(row.security_id))
-      setAlertSettings(settingsMap)
-      setRecommendations(recommendationSet)
-      setLoadError(null)
-    }
-    void load()
-    return () => { cancelled = true }
-  }, [portfolio, positions])
+  const monitoringSettings = useDashboardMonitoringSettings(portfolio?.portfolio.id ?? null, securityIds)
+  const recommendations = useDashboardRecommendations(portfolio?.portfolio.id ?? null, securityIds)
 
   const researchById = useMemo(() => new Map(research.data.map((row) => [row.securityId, row])), [research.data])
 
@@ -81,12 +36,12 @@ export function DashboardMonitoringReadiness() {
     const frozen = positions.filter((position) => position.settings.isFrozen).length
     const freshPrice = positions.filter((position) => position.currentValue !== null && !position.isPriceStale).length
     const researchEvidence = positions.filter((position) => Boolean(researchById.get(position.securityId)?.latestEvidenceAt)).length
-    const advisoryCoverage = positions.filter((position) => recommendations.has(position.securityId)).length
+    const advisoryCoverage = positions.filter((position) => recommendations.data.has(position.securityId)).length
     const priceAlerts = positions.filter((position) => {
-      const row = alertSettings.get(position.securityId)
+      const row = monitoringSettings.data.get(position.securityId)
       if (!row) return false
-      const targetEnabled = row.target_price !== null && row.target_price_alert_enabled !== false
-      const stopEnabled = row.stop_loss_price !== null && row.stop_loss_alert_enabled !== false
+      const targetEnabled = row.targetPrice !== null && row.targetPriceAlertEnabled !== false
+      const stopEnabled = row.stopLossPrice !== null && row.stopLossAlertEnabled !== false
       return targetEnabled || stopEnabled
     }).length
 
@@ -110,10 +65,10 @@ export function DashboardMonitoringReadiness() {
       if (position.role === "UNCLASSIFIED") { issues.push("Role not assigned"); priority += 20 }
       if (position.settings.targetWeight === null) { issues.push("Target weight not set"); priority += 12 }
       if (position.settings.minimumWeight === null || position.settings.maximumWeight === null) { issues.push("Sizing range incomplete"); priority += 10 }
-      const alerts = alertSettings.get(position.securityId)
-      const hasPriceAlert = Boolean(alerts && ((alerts.target_price !== null && alerts.target_price_alert_enabled !== false) || (alerts.stop_loss_price !== null && alerts.stop_loss_alert_enabled !== false)))
+      const alerts = monitoringSettings.data.get(position.securityId)
+      const hasPriceAlert = Boolean(alerts && ((alerts.targetPrice !== null && alerts.targetPriceAlertEnabled !== false) || (alerts.stopLossPrice !== null && alerts.stopLossAlertEnabled !== false)))
       if (!hasPriceAlert) { issues.push("No target/stop monitoring"); priority += 8 }
-      if (!recommendations.has(position.securityId)) { issues.push("No persisted advisory"); priority += 4 }
+      if (!recommendations.data.has(position.securityId)) { issues.push("No persisted advisory"); priority += 4 }
       const weight = Number(position.portfolioWeightPercent ?? 0)
       priority += Math.min(15, Math.max(0, weight))
       return { securityId: position.securityId, symbol: position.symbol, company: position.company, issues, priority, weight }
@@ -122,9 +77,11 @@ export function DashboardMonitoringReadiness() {
       .slice(0, 12)
 
     return { total, roleAssigned, targetWeight, sizingRange, priceAlerts, freshPrice, researchEvidence, advisoryCoverage, watchlisted, frozen, coverageRows, gaps }
-  }, [positions, researchById, recommendations, alertSettings])
+  }, [positions, researchById, recommendations.data, monitoringSettings.data])
 
   if (isLoading || error || !portfolio) return null
+
+  const loadError = monitoringSettings.error ?? recommendations.error ?? research.error
 
   return <section className="dashboard-monitoring" aria-label="Monitoring and configuration readiness">
     <div className="dashboard-monitoring-heading">
@@ -136,7 +93,7 @@ export function DashboardMonitoringReadiness() {
       <Link to="/app/structure">Open portfolio structure →</Link>
     </div>
 
-    {loadError || research.error ? <div className="dashboard-monitoring-notice">Some readiness evidence could not be loaded: {loadError ?? research.error}</div> : null}
+    {loadError ? <div className="dashboard-monitoring-notice">Some readiness evidence could not be loaded: {loadError}</div> : null}
 
     <div className="dashboard-monitoring-summary">
       <article><span>Roles assigned</span><strong>{percent(model.roleAssigned, model.total)}</strong><small>{model.roleAssigned} of {model.total} current holdings</small></article>

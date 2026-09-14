@@ -12,6 +12,7 @@
 | --- | --- |
 | What is PortfolioAI ultimately supposed to become? | `PortfolioAI_Master_Blueprint.md` |
 | Where does each stock-research or market metric come from, and who calculates it? | `PortfolioAI_Research_and_Intelligence_Architecture.md` |
+| How do we guarantee that the same business fact is identical across Dashboard, Holdings, Research and every other page? | `PortfolioAI_Single_Source_of_Truth_Architecture.md` |
 | How is data stored, related, secured, versioned, and traced? | `PortfolioAI_Database_Architecture.md` |
 | What should the application screens and workflows look like? | `PortfolioAI_Product_UI_and_Decision_Workflow.md` |
 | What engineering, security, testing, and calculation rules must Codex follow? | `PortfolioAI_Development_Rules.md` |
@@ -28,12 +29,13 @@ When documents appear to conflict, use this order of authority unless the owner 
 
 1. `PortfolioAI_Master_Blueprint.md`
 2. `PortfolioAI_Research_and_Intelligence_Architecture.md` for source ownership, derived metrics, scoring lineage, and intelligence boundaries
-3. `PortfolioAI_Database_Architecture.md`
-4. `PortfolioAI_Development_Rules.md`
-5. `PortfolioAI_Product_UI_and_Decision_Workflow.md`
-6. `PortfolioAI_Development_Status.md`
-7. `PortfolioAI_Requirements_Register.md`
-8. Stage-specific plans, execution plans, and completion records
+3. `PortfolioAI_Single_Source_of_Truth_Architecture.md` for application-wide canonical business facts, shared access paths, and cross-page consistency
+4. `PortfolioAI_Database_Architecture.md`
+5. `PortfolioAI_Development_Rules.md`
+6. `PortfolioAI_Product_UI_and_Decision_Workflow.md`
+7. `PortfolioAI_Development_Status.md`
+8. `PortfolioAI_Requirements_Register.md`
+9. Stage-specific plans, execution plans, and completion records
 
 `PortfolioAI_Integration_and_Execution_Plan.md` is the current repository-governed execution roadmap. It coordinates sequencing from the present implementation state, but remains subordinate to the canonical architecture above and does not silently redefine it.
 
@@ -49,6 +51,7 @@ These are the documents developers should consult routinely:
 
 - `PortfolioAI_Master_Blueprint.md`
 - `PortfolioAI_Research_and_Intelligence_Architecture.md`
+- `PortfolioAI_Single_Source_of_Truth_Architecture.md`
 - `PortfolioAI_Database_Architecture.md`
 - `PortfolioAI_Product_UI_and_Decision_Workflow.md`
 - `PortfolioAI_Development_Rules.md`
@@ -97,9 +100,10 @@ The intended architectural separation remains:
 - **Stage 8 — Deterministic investment intelligence** — reference implementation/pilot has started; portfolio-wide rollout is incomplete
 - **Dashboard D34 — Core Health / Exit-Risk readiness surface** — UI complete and merged; it does not imply the formal engines are complete
 - **Dashboard D35 — Position Sizing Health** — UI implementation complete in PR #78; merge/deployment state must remain distinct from implementation completion
-- **R0 — Documentation reconciliation** — current checkpoint
-- **R1 / D35B — deterministic Position Sizing Engine contract + reference implementation** — approved next implementation after R0 sign-off
-- **R2 — Portfolio Coverage Registry / Orchestrator** — follows the D35B reference contract
+- **R0 — Documentation reconciliation** — complete
+- **R1 / D35B — deterministic Position Sizing Engine contract + reference implementation** — ENGINE CONTRACT COMPLETE; production persistence remains separately gated
+- **R2 — Portfolio Coverage Registry / Orchestrator** — coverage contract and read-only baseline complete; production app-facing projection remains separately gated
+- **R2E — Single Source of Truth Architecture** — repository architecture/enforcement work in progress until its PR is merged
 - **Later — portfolio-wide research/history/scoring/recommendation/sizing, Core Health, Exit Risk, Movement, Action Center, scheduling, optional AI Investment Committee** — gated by the Integration & Execution Plan
 
 ### Completion terminology
@@ -123,21 +127,27 @@ This separation should remain explicit in code, database contracts, and UI label
 
 ---
 
-## 5. Source-responsibility rule
+## 5. Source-responsibility and single-source rules
 
-Never add a new metric or score without first answering:
+Never add a new metric, score, classification or application business fact without first answering:
 
 1. What is the raw authoritative source?
-2. Is the value raw, normalized, derived, scored, or interpreted?
+2. Is the value raw, normalized, derived, scored, interpreted or owner-controlled?
 3. Which PortfolioAI engine calculates it, if any?
 4. What version of the formula/engine produced it?
 5. What input period and source records were used?
 6. What should the UI call it?
-7. Can AI explain it, and can AI alter it?
+7. What shared repository/service/view-model exposes it to application pages?
+8. Does an authority for the same business fact already exist?
+9. Can AI explain it, and can AI alter it?
 
 The authoritative source-and-calculation rules live in:
 
 `PortfolioAI_Research_and_Intelligence_Architecture.md`
+
+The application-wide one-fact/one-authority and cross-page-consistency rules live in:
+
+`PortfolioAI_Single_Source_of_Truth_Architecture.md`
 
 ---
 
@@ -170,11 +180,12 @@ To avoid documentation sprawl:
 | Documents/research appearances | Trendlyne or other approved document sources, with provenance |
 | Official NSE News | NSE/official-source evidence normalized and stored by PortfolioAI |
 | Portfolio P/L and weights | PortfolioAI accounting using authoritative price inputs |
+| Sector / industry / market-cap application classification | `current_security_enrichment_v1` through shared enrichment access |
 | Momentum/Quality/Growth/Core/Exit scores | PortfolioAI deterministic versioned engines |
 | Explanations | PortfolioAI deterministic explanations first; optional AI synthesis later |
 | Final investment decision | Human portfolio owner |
 
-See `PortfolioAI_Research_and_Intelligence_Architecture.md` for the full rules.
+See `PortfolioAI_Research_and_Intelligence_Architecture.md` for the full source/calculation rules and `PortfolioAI_Single_Source_of_Truth_Architecture.md` for shared application consumption rules.
 
 ---
 
@@ -182,4 +193,6 @@ See `PortfolioAI_Research_and_Intelligence_Architecture.md` for the full rules.
 
 > **The bigger risk is not lack of data; it is having lots of data without knowing which number is authoritative.**
 
-PortfolioAI must therefore keep raw provider data, deterministic calculations, composite scores, and AI explanations clearly separated and traceable.
+PortfolioAI must therefore keep raw provider data, deterministic calculations, composite scores, AI explanations, and user-facing application views clearly separated and traceable.
+
+> **One business fact, one authority, one deterministic owner, many consistent views.**

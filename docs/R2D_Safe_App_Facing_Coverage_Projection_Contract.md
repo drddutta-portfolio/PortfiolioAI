@@ -4,6 +4,8 @@ Status: **DESIGN CONTRACT COMPLETE / PRODUCTION IMPLEMENTATION NOT APPLIED**
 
 R2D defines how the PortfolioAI application may consume the R2 Portfolio Coverage Registry without weakening existing RLS or exposing service-side provider-control data directly to the browser.
 
+R2D is subordinate to `PortfolioAI_Single_Source_of_Truth_Architecture.md`: it must expose existing canonical facts through shared application access paths and must not create a second classification, market-data, scoring, recommendation, or sizing authority.
+
 ## 1. Goal
 
 Expose a read-only, owner-scoped snapshot of cached coverage facts for the current portfolio so the application can run the deterministic R2A/R2B projection and summary logic.
@@ -17,7 +19,8 @@ R2D must not:
 - change holdings, roles, themes, targets, or transactions;
 - broaden browser grants on provider-control tables;
 - expose service-role credentials;
-- infer or fabricate missing research evidence.
+- infer or fabricate missing research evidence;
+- create a second application-visible sector, industry, market-cap, price, score, recommendation, or sizing definition.
 
 ## 2. Security boundary
 
@@ -64,7 +67,7 @@ The endpoint is read-only and may return cached facts for all current open holdi
 
 ## 4. Minimum per-security facts
 
-Each response record should contain only facts needed by `projectPortfolioCoverageV1` or its repository adapter:
+Each response record should contain only facts needed by `projectPortfolioCoverageV1` or its repository adapter.
 
 ### Portfolio/security identity
 
@@ -78,12 +81,17 @@ Each response record should contain only facts needed by `projectPortfolioCovera
 
 From `current_security_enrichment_v1`:
 
-- source sector
-- source industry
-- enrichment state
-- enrichment `fresh_until`
+- exact application sector label;
+- exact application industry label;
+- exact application market-cap category where needed by the consumer;
+- enrichment state;
+- enrichment `fresh_until`.
 
-Do not use null `securities.sector_id/industry_id` as the current authority while the reviewed enrichment layer is the active classification source.
+`current_security_enrichment_v1` is the current application-wide classification authority used by Dashboard. R2D must return the same values and must not normalize them into a second user-visible taxonomy.
+
+Do not use null `securities.sector_id/industry_id` as a competing current authority while the reviewed enrichment layer is the approved application classification source.
+
+Research-profile grouping remains a separate downstream methodology concern. It may interpret the canonical application classification but cannot replace it.
 
 ### Identity coverage
 
@@ -100,11 +108,11 @@ The endpoint may derive this from cached security identity evidence / refresh st
 
 Return normalized cached coverage metadata, not the full fundamental dataset:
 
-- evidence present / absent
-- current cache freshness state where safely derivable
-- whether unresolved conflict/review state is known
-- latest `fresh_until`
-- `next_eligible_refresh_at` only when sourced from the approved refresh-state cache
+- evidence present / absent;
+- current cache freshness state where safely derivable;
+- whether unresolved conflict/review state is known;
+- latest `fresh_until`;
+- `next_eligible_refresh_at` only when sourced from the approved refresh-state cache.
 
 Presence of historical fundamental rows is not sufficient to claim profile readiness.
 
@@ -116,9 +124,9 @@ Return normalized ownership coverage/freshness metadata only.
 
 Return:
 
-- document count or presence
-- latest relevant document timestamp
-- normalized current document coverage state
+- document count or presence;
+- latest relevant document timestamp;
+- normalized current document coverage state.
 
 Do not return document bodies in this endpoint.
 
@@ -126,11 +134,11 @@ Do not return document bodies in this endpoint.
 
 Return compact aggregate metadata only:
 
-- provider code
-- candle count
-- first candle date
-- latest candle date
-- normalized freshness/readiness state
+- provider code;
+- candle count;
+- first candle date;
+- latest candle date;
+- normalized freshness/readiness state.
 
 Do **not** return all OHLCV rows through R2D.
 
@@ -138,9 +146,9 @@ Do **not** return all OHLCV rows through R2D.
 
 Return reviewed scoring-profile assignment metadata separately from research-profile readiness:
 
-- assigned scoring profile code
-- assignment status
-- assignment basis
+- assigned scoring profile code;
+- assignment status;
+- assignment basis.
 
 The endpoint must not convert a scoring assignment into `RESEARCH_PROFILE = READY`.
 
@@ -148,12 +156,12 @@ The endpoint must not convert a scoring assignment into `RESEARCH_PROFILE = READ
 
 Return latest persisted `stock_score_runs` metadata when present:
 
-- score run id
-- scoring profile
-- run state
-- evidence coverage
-- evidence confidence
-- as-of date
+- score run id;
+- scoring profile;
+- run state;
+- evidence coverage;
+- evidence confidence;
+- as-of date.
 
 If no persisted score run exists, return null/missing. Do not reconstruct a persisted run from UI calculations.
 
@@ -161,12 +169,12 @@ If no persisted score run exists, return null/missing. Do not reconstruct a pers
 
 Return latest persisted recommendation metadata when present:
 
-- recommendation run id
-- source score run id
-- run state
-- transition status
-- score-ready coverage
-- evidence confidence
+- recommendation run id;
+- source score run id;
+- run state;
+- transition status;
+- score-ready coverage;
+- evidence confidence.
 
 A `PREVIEW` row with `source_score_run_id = null` must not be represented as canonical score-linked READY lineage.
 
@@ -176,18 +184,31 @@ Return whether the R1 `position_sizing_assessments` persistence contract exists/
 
 Until then, R2 should report sizing persistence as unavailable.
 
-## 5. Canonical-sector mapping remains application deterministic logic
+## 5. Application classification remains the shared Dashboard classification
 
-R2D should return the cached source sector/industry, not overwrite them with a new database classification.
+R2D must return the exact cached sector/industry/market-cap classification used by Dashboard. R2 must not create a parallel user-visible canonical sector taxonomy.
 
-`mapSectorToPortfolioAiV1` remains the versioned deterministic mapping contract in application code. This preserves:
+The application rule is:
 
-- source classification provenance;
-- mapping versioning;
-- explicit `REVIEW_REQUIRED` behavior;
-- separation between source sector, PortfolioAI canonical sector, and research subprofile.
+```text
+current_security_enrichment_v1
+        ↓
+shared enrichment repository / view model
+        ↓
+Dashboard / Holdings / Structure / Research / Coverage / future consumers
+```
 
-A future reviewed database persistence layer may store canonical mapping decisions, but R2D does not require such a production change now.
+Research profile selection is a separate concern:
+
+```text
+application classification
+        ↓
+research profile / subprofile
+        ↓
+profile-specific evidence and scoring
+```
+
+A future reviewed persistence layer may add research-profile decisions, but it must not silently change the application sector/industry/market-cap classification.
 
 ## 6. Research-profile readiness remains fail-closed
 
@@ -230,8 +251,10 @@ Before production deployment/application, R2D must prove:
 8. ETF/non-equity rows remain eligible for `NOT_APPLICABLE` treatment;
 9. HDFCBANK preview history is not misrepresented as persisted score lineage;
 10. response contains compact market-history aggregates, not raw candles;
-11. R2 deterministic tests remain green;
-12. repository typecheck/lint/build remain green.
+11. returned sector/industry/market-cap values match the shared Dashboard classification source;
+12. R2 deterministic tests remain green;
+13. `npm run check:architecture` remains green;
+14. repository typecheck/lint/build remain green.
 
 ## 10. Production approval gate
 

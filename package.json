@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint .",
+    "lint:architecture": "eslint src/contracts src/data/dashboardEvidenceRepository.ts src/features/dashboard/useDashboardEvidence.ts src/features/portfolio/sharedClassification.ts src/features/portfolio/usePortfolioView.ts src/features/research/sectorResearchMapping.ts src/features/research/portfolioCoverageProjection.ts src/components/DashboardAllocationPerformance.tsx src/components/DashboardCoreExitRisk.tsx src/components/DashboardDailyMovement.tsx src/components/DashboardDecisionLayer.tsx src/components/DashboardMonitoringReadiness.tsx src/components/DashboardNewsPreview.tsx src/components/DashboardPortfolioIntelligence.tsx scripts/check-data-boundaries.mjs",
+    "check:architecture": "node scripts/check-data-boundaries.mjs",
     "lint:edge": "eslint --config eslint.edge.config.js supabase/functions",
     "test:edge": "vitest run --config vitest.edge.config.ts",
     "test": "vitest run"

@@ -1,20 +1,11 @@
 import Decimal from "decimal.js"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import { Link } from "react-router-dom"
+import { useDashboardDailyMarketSnapshots } from "../features/dashboard/useDashboardEvidence"
 import { formatMoney } from "../features/portfolio/format"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
-import { supabase } from "../lib/supabase"
 import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./DashboardScopeContext"
 import "./DashboardDailyMovement.css"
-
-type DailyPriceRow = {
-  security_id: string
-  price: string
-  previous_close: string | null
-  price_timestamp: string | null
-  retrieved_at: string
-  market_session_status: string
-}
 
 type MovementRow = {
   securityId: string
@@ -49,42 +40,17 @@ function tone(value: Decimal | null) {
 export function DashboardDailyMovement() {
   const { portfolio, isLoading, error } = usePortfolioView()
   const { scopeKey } = useDashboardScope()
-  const [prices, setPrices] = useState<DailyPriceRow[]>([])
-  const [loadState, setLoadState] = useState<"LOADING" | "READY" | "ERROR">("LOADING")
-
-  useEffect(() => {
-    if (!portfolio?.openPositions.length) return
-    let cancelled = false
-    const ids = portfolio.openPositions.map((position) => position.securityId)
-    async function load() {
-      setLoadState("LOADING")
-      const { data, error: queryError } = await supabase
-        .from("market_price_latest")
-        .select("security_id,price,previous_close,price_timestamp,retrieved_at,market_session_status")
-        .eq("provider_code", "ANGEL_ONE")
-        .in("security_id", ids)
-      if (cancelled) return
-      if (queryError) {
-        setPrices([])
-        setLoadState("ERROR")
-        return
-      }
-      setPrices((data ?? []) as DailyPriceRow[])
-      setLoadState("READY")
-    }
-    void load()
-    return () => { cancelled = true }
-  }, [portfolio])
+  const securityIds = useMemo(() => portfolio?.openPositions.map((position) => position.securityId) ?? [], [portfolio])
+  const snapshots = useDashboardDailyMarketSnapshots(securityIds)
 
   const model = useMemo(() => {
     if (!portfolio) return null
     const scoped = positionsForDashboardScope(portfolio.openPositions, scopeKey)
-    const bySecurity = new Map(prices.map((row) => [row.security_id, row]))
     const rows: MovementRow[] = []
     scoped.forEach((position) => {
-      const cached = bySecurity.get(position.securityId)
-      if (!cached?.previous_close || position.currentPrice === null) return
-      const previousClose = new Decimal(cached.previous_close)
+      const cached = snapshots.data.get(position.securityId)
+      if (!cached?.previousClose || position.currentPrice === null) return
+      const previousClose = new Decimal(cached.previousClose)
       const currentPrice = new Decimal(position.currentPrice)
       const quantity = new Decimal(position.quantity)
       if (previousClose.lte(0) || quantity.isZero()) return
@@ -109,7 +75,7 @@ export function DashboardDailyMovement() {
     const dayReturn = previousValue.gt(0) ? totalPnl.div(previousValue).times(100) : null
     const contributors = [...rows].sort((a, b) => b.dayPnl.comparedTo(a.dayPnl)).slice(0, 5)
     const detractors = [...rows].sort((a, b) => a.dayPnl.comparedTo(b.dayPnl)).slice(0, 5)
-    const status = prices.some((row) => row.market_session_status === "OPEN" || row.market_session_status === "PRE_OPEN") ? "LIVE" : "LATEST_SESSION"
+    const status = [...snapshots.data.values()].some((row) => row.marketSessionStatus === "OPEN" || row.marketSessionStatus === "PRE_OPEN") ? "LIVE" : "LATEST_SESSION"
     return {
       scoped,
       rows,
@@ -123,7 +89,7 @@ export function DashboardDailyMovement() {
       status,
       scopeLabel: dashboardScopeLabel(scopeKey, portfolio),
     }
-  }, [portfolio, prices, scopeKey])
+  }, [portfolio, scopeKey, snapshots.data])
 
   if (isLoading || error || !portfolio || !model) return null
 
@@ -141,7 +107,7 @@ export function DashboardDailyMovement() {
       <span>{model.scopeLabel}</span>
     </div>
 
-    {loadState === "ERROR" ? <div className="ddm-notice">Daily movement evidence could not be read from the cached market-data layer.</div> : null}
+    {snapshots.error ? <div className="ddm-notice">Daily movement evidence could not be read from the cached market-data layer.</div> : null}
 
     <div className="ddm-summary-grid">
       <article className={tone(model.totalPnl)}><small>{sessionLabel} P&amp;L</small><strong>{signedMoney(model.totalPnl)}</strong><span>{signedPercent(model.dayReturn)}</span></article>
