@@ -1,8 +1,9 @@
-export const PHARMA_SOURCE_READINESS_VERSION = "PHARMA_SOURCE_READINESS_V1" as const
+export const PHARMA_SOURCE_READINESS_VERSION = "PHARMA_SOURCE_READINESS_V2" as const
 
 export type PharmaSourceReadinessState =
   | "CACHE_PARTIAL"
   | "PROVIDER_CAPABILITY_OBSERVED"
+  | "PROVIDER_HISTORY_VALIDATED"
   | "SOURCE_CONTRACT_PENDING"
   | "HISTORY_CONTRACT_PENDING"
   | "OFFICIAL_SOURCE_CONTRACT_PENDING"
@@ -19,64 +20,65 @@ export interface PharmaSourceReadinessItem {
 
 /**
  * Source-readiness is deliberately separate from research-profile readiness.
- * An observed provider label proves only that a capability was seen in a stored
- * discovery response. It does not automatically approve the label as a canonical
- * source contract or prove that required history can be ingested idempotently.
+ * Provider-history validation proves only that the reviewed Trendlyne tool can
+ * return the needed raw history for the reference security. It does not promote
+ * raw discovery captures into canonical research evidence, and it does not make
+ * PHARMA_V1 scoring/recommendation ready before normalization and ingestion.
  */
 export const PHARMA_V1_SOURCE_READINESS: readonly PharmaSourceReadinessItem[] = [
   {
     metricCode: "PHARMA_REVENUE_GROWTH_HISTORY",
-    state: "HISTORY_CONTRACT_PENDING",
+    state: "PROVIDER_HISTORY_VALIDATED",
     canonicalEvidenceCodes: ["REVENUE_TTM"],
-    observedProviderLabels: ["Operating Rev. growth TTM %"],
-    approvedSource: null,
+    observedProviderLabels: ["Operating Rev. Ann.", "Rev. Ann. 1Y ago", "Rev. Ann. 2Y ago", "Rev. Ann. 3Y ago", "Rev. Ann. 4Y ago", "Rev. Ann. 5Y ago"],
+    approvedSource: "TRENDLYNE_MCP",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "Current cache contains only snapshot/provisional revenue evidence. Stored discovery shows revenue-growth capability, but the reviewed multi-period history ingestion contract is not yet approved.",
+    reason: "R4E/R4F live discovery validated annual revenue history for TORNTPHARM through the reviewed get_parameter_values_multi_stock contract. Canonical period normalization and ingestion are still pending.",
   },
   {
     metricCode: "PHARMA_OPERATING_MARGIN_HISTORY",
-    state: "HISTORY_CONTRACT_PENDING",
+    state: "PROVIDER_HISTORY_VALIDATED",
     canonicalEvidenceCodes: ["OPM_TTM"],
-    observedProviderLabels: ["OPM TTM %", "OPM Ann. 1Y ago %"],
-    approvedSource: "TRENDLYNE_MCP",
+    observedProviderLabels: ["Operating Profit Qtr", "Operating Profit 1Q Ago", "Operating Rev. Qtr", "Operating Rev. 2Q ago", "Operating Rev. 3Q ago", "Operating Rev. 4Q ago", "Operating Rev. 5Q ago", "Operating Rev. 6Q ago", "Operating Rev. 7Q ago", "Operating Rev. 8Q ago"],
+    approvedSource: "TRENDLYNE_MCP + PORTFOLIOAI",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "OPM_TTM is reviewed and stored discovery proves historical margin labels exist, but PHARMA_V1 requires at least eight comparable quarters rather than one TTM/annual point.",
+    reason: "Live discovery validated quarterly operating-profit and revenue history. PortfolioAI should derive OPM deterministically from matched periods rather than depend on inconsistent provider margin labels; canonical ingestion is still pending.",
   },
   {
     metricCode: "PHARMA_ROCE_HISTORY",
     state: "HISTORY_CONTRACT_PENDING",
     canonicalEvidenceCodes: ["ROCE_ANNUAL"],
-    observedProviderLabels: ["ROCE Ann. %", "ROCE Ann. 3Y Avg %"],
+    observedProviderLabels: ["ROCE Ann. %", "ROCE Ann. 1Y Ago %"],
     approvedSource: "TRENDLYNE_MCP",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "ROCE_ANNUAL is reviewed and the stored provider discovery proves historical ROCE capability, but the exact annual-series ingestion contract required for 3–5 years is not yet approved.",
+    reason: "Current and 1Y annual ROCE were validated in live discovery, but the complete 3–5 year raw annual series required by PHARMA_V1 remains unproven.",
   },
   {
     metricCode: "PHARMA_PAT_EPS_HISTORY",
     state: "HISTORY_CONTRACT_PENDING",
     canonicalEvidenceCodes: ["NET_PROFIT_TTM", "EPS_DILUTED", "EPS_GROWTH_YOY"],
-    observedProviderLabels: ["Net Profit 3Y Growth %", "Cash EPS 3Y Growth %", "Net Profit Qtr Growth YoY %"],
+    observedProviderLabels: ["Net Profit Ann.", "Net Profit Ann. 2Y Ago", "Net Profit Ann. 3Y Ago", "Net Profit Ann. 4Y Ago", "Net Profit Ann. 5Y Ago", "Cash EPS Ann. 1Y Ago", "Cash EPS Ann. 3Y ago", "Cash EPS Ann. 5Y ago"],
     approvedSource: "TRENDLYNE_MCP",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "Stored discovery proves multi-year profit/EPS growth labels exist, while production cache is snapshot-heavy. A reviewed canonical PAT/EPS history contract remains necessary before readiness can be satisfied.",
+    reason: "Live discovery proved useful multi-year PAT and cash-EPS fields, but the normalized complete period-by-period PAT/EPS lineage required by PHARMA_V1 is not yet approved.",
   },
   {
     metricCode: "PHARMA_CASH_CONVERSION_HISTORY",
     state: "SOURCE_CONTRACT_PENDING",
     canonicalEvidenceCodes: ["CFO_ANNUAL"],
-    observedProviderLabels: ["Operating Cash Flow 3Y Growth %", "Operating Cash Flow 5Y Growth %", "Operating Cash Flow YoY Growth %"],
-    approvedSource: null,
+    observedProviderLabels: ["Cash from Operating Act. Ann. 1Y Ago", "Cash from Operating Act. Ann. 2Y Ago", "Cash from Operating Act. Ann. 3Y Ago", "Cash from Operating Act. Ann. 4Y Ago", "Cash from Operating Act. Ann. 5Y Ago"],
+    approvedSource: "TRENDLYNE_MCP",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "CFO_ANNUAL is still provisional and PHARMA_V1 also requires matched PAT and capex/FCF semantics. Provider cash-growth labels alone cannot prove cash conversion.",
+    reason: "Annual CFO history is validated, but PHARMA_V1 cash conversion also requires matched PAT plus a reviewed capex/FCF contract. Investing cash flow must not be substituted for capex.",
   },
   {
     metricCode: "PHARMA_BALANCE_SHEET_LEVERAGE",
     state: "SOURCE_CONTRACT_PENDING",
     canonicalEvidenceCodes: [],
-    observedProviderLabels: [],
+    observedProviderLabels: ["Interest Coverage Ratio Ann. 1Y Ago", "Short Term Debt Ann. 1Y ago", "Interest TTM"],
     approvedSource: null,
     canUseExistingCacheWithoutProviderCall: false,
-    reason: "No reviewed canonical debt/cash/interest-coverage input contract currently satisfies the PHARMA_V1 leverage requirement. Prior generic discovery requested debt-equity and interest coverage but the TORNTPHARM exact-label capture did not validate them.",
+    reason: "Live discovery exposed partial leverage evidence, including interest coverage and short-term debt, but the matched total-debt, cash/net-debt and operating-earnings history contract is still unresolved.",
   },
   {
     metricCode: "PHARMA_REGULATORY_SITE_STATUS",
@@ -85,7 +87,7 @@ export const PHARMA_V1_SOURCE_READINESS: readonly PharmaSourceReadinessItem[] = 
     observedProviderLabels: [],
     approvedSource: null,
     canUseExistingCacheWithoutProviderCall: false,
-    reason: "Material regulated-export exposure requires official regulator/issuer evidence. Trendlyne must not be treated as the canonical authority for regulatory site status without a separately reviewed official-source contract.",
+    reason: "Material regulated-export exposure requires official regulator/issuer evidence. Trendlyne discovery does not replace the separate official-source contract for regulatory-site status.",
   },
   {
     metricCode: "PHARMA_DOMESTIC_REVENUE_GROWTH",
@@ -133,10 +135,10 @@ export const PHARMA_V1_SOURCE_READINESS: readonly PharmaSourceReadinessItem[] = 
       "SHAREHOLDING_DII_PERCENT",
       "SHAREHOLDING_MUTUAL_FUND_PERCENT",
     ],
-    observedProviderLabels: ["Institutional holding current Qtr %", "FII holding current Qtr %", "Promoter pledge change QoQ %"],
+    observedProviderLabels: ["Institutional holding current Qtr %", "FII holding current Qtr %", "Promoter holding change QoQ %"],
     approvedSource: "TRENDLYNE_MCP",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "Several ownership metrics are reviewed and cached, but PHARMA_V1 requires multi-quarter ownership trend plus governance-event overlay; current Pharma cache has only one shareholding quarter for the covered names.",
+    reason: "Several ownership metrics are reviewed and cached, but PHARMA_V1 requires multi-quarter ownership trend plus governance-event overlay; current Pharma cache remains incomplete for that history.",
   },
   {
     metricCode: "PHARMA_VALUATION_CONTEXT",
