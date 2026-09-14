@@ -40,9 +40,17 @@
   color: #294f3b;
 }
 
-.research-page .pharma-readiness-summary small {
+.research-page .pharma-readiness-summary small,
+.research-page .pharma-readiness-summary em {
   color: #78857e;
   font-size: .58rem;
+  font-style: normal;
+}
+
+.research-page .pharma-readiness-summary em {
+  margin-top: .08rem;
+  color: #315a78;
+  font-weight: 700;
 }
 
 .research-page .pharma-readiness-state {
@@ -101,6 +109,16 @@
   font-size: .5rem;
   text-transform: uppercase;
   letter-spacing: .03em;
+}
+
+.research-page .pharma-domain-normalization_ready {
+  border-color: #cddfec;
+  background: #fbfdff;
+}
+
+.research-page .pharma-domain-normalization_ready .pharma-domain-head b {
+  background: #e7f0f8;
+  color: #315f80;
 }
 
 .research-page .pharma-domain-validated_source .pharma-domain-head b {
