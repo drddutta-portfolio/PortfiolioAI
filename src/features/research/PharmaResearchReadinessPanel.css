@@ -30,7 +30,7 @@
 }
 
 .research-page .pharma-readiness-summary {
-  min-width: 145px;
+  min-width: 165px;
   display: grid;
   justify-items: end;
   gap: .08rem;
@@ -66,8 +66,116 @@
   letter-spacing: .035em;
 }
 
+.research-page .pharma-readiness-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .45rem;
+  padding: .75rem;
+}
+
+.research-page .pharma-quick-domain {
+  min-width: 0;
+  display: grid;
+  gap: .28rem;
+  padding: .55rem .6rem;
+  border: 1px solid #e1e8e4;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.research-page .pharma-quick-domain > div {
+  min-width: 0;
+}
+
+.research-page .pharma-quick-domain span {
+  display: block;
+  margin-bottom: .08rem;
+  color: #87938c;
+  font-size: .47rem;
+  font-weight: 800;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+
+.research-page .pharma-quick-domain strong {
+  display: block;
+  color: #2a4135;
+  font-size: .64rem;
+  line-height: 1.25;
+}
+
+.research-page .pharma-quick-domain b {
+  width: fit-content;
+  padding: .13rem .34rem;
+  border-radius: 999px;
+  background: #f2f4f3;
+  color: #68756e;
+  font-size: .47rem;
+  text-transform: uppercase;
+  letter-spacing: .025em;
+}
+
+.research-page .pharma-quick-domain small {
+  color: #7c8981;
+  font-size: .49rem;
+}
+
+.research-page .pharma-quick-validated_source b,
+.research-page .pharma-quick-normalization_ready b {
+  background: #e7f5ed;
+  color: #246442;
+}
+
+.research-page .pharma-quick-partial b {
+  background: #edf4fa;
+  color: #315f80;
+}
+
+.research-page .pharma-quick-official_source_pending b {
+  background: #fff1e4;
+  color: #8d581a;
+}
+
+.research-page .pharma-readiness-details {
+  margin: 0 .75rem .75rem;
+  border: 1px solid #dde6e1;
+  border-radius: 9px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.research-page .pharma-readiness-details > summary,
+.research-page .pharma-canonical-history > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.research-page .pharma-readiness-details > summary::-webkit-details-marker,
+.research-page .pharma-canonical-history > summary::-webkit-details-marker {
+  display: none;
+}
+
+.research-page .pharma-readiness-details > summary {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: .75rem;
+  padding: .65rem .72rem;
+  color: #344a3e;
+  font-size: .6rem;
+}
+
+.research-page .pharma-readiness-details > summary span {
+  color: #7a8780;
+}
+
+.research-page .pharma-readiness-details > summary b {
+  color: #315a78;
+  font-size: .55rem;
+}
+
 .research-page .pharma-canonical-history {
-  margin: .75rem;
+  margin: 0 .75rem .75rem;
   padding: .75rem;
   border: 1px solid #d8e5de;
   border-radius: 10px;
@@ -79,6 +187,10 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: .75rem;
+  margin: 0;
+}
+
+.research-page .pharma-canonical-history[open] .pharma-history-head {
   margin-bottom: .65rem;
 }
 
@@ -167,6 +279,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: .55rem;
   padding: .75rem;
+  border-top: 1px solid #eef2ef;
 }
 
 .research-page .pharma-domain {
@@ -242,8 +355,13 @@
 .research-page .pharma-readiness-note p { margin: .2rem 0; color: #60717d; font-size: .59rem; line-height: 1.4; }
 .research-page .pharma-readiness-note small { color: #75838c; font-size: .52rem; }
 
+@media (max-width: 1100px) {
+  .research-page .pharma-readiness-quick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 @media (max-width: 960px) {
   .research-page .pharma-history-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .research-page .pharma-readiness-quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 780px) {
@@ -252,5 +370,7 @@
   .research-page .pharma-history-head { flex-direction: column; }
   .research-page .pharma-readiness-summary { justify-items: start; }
   .research-page .pharma-readiness-grid,
-  .research-page .pharma-history-summary-grid { grid-template-columns: 1fr; }
+  .research-page .pharma-history-summary-grid,
+  .research-page .pharma-readiness-quick-grid { grid-template-columns: 1fr; }
+  .research-page .pharma-readiness-details > summary { grid-template-columns: 1fr; gap: .2rem; }
 }
