@@ -79,7 +79,7 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
         </div>
         <p>{domain.detail}</p>
         <footer>
-          <span>Canonical reviewed observations: <strong>{domain.canonicalObservationCount}</strong></span>
+          <span>{domain.observationCountLabel}: <strong>{domain.canonicalObservationCount}</strong></span>
           <span>Contract minimum: <strong>{domain.minimumObservations}</strong></span>
         </footer>
       </article>)}
