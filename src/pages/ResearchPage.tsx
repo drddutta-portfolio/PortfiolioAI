@@ -9,7 +9,8 @@ import { CompleteResearchRefreshPanel } from "../features/research/CompleteResea
 import { FinancialsWorkspace, OwnershipWorkspace, QualityGrowthWorkspace, ValuationWorkspace } from "../features/research/ResearchEvidenceWorkspace"
 import { PharmaResearchReadinessPanel } from "../features/research/PharmaResearchReadinessPanel"
 import { PositionDecisionControls } from "../features/research/PositionDecisionControls"
-import { GROWTH_CODES, latestByCode, metricLabel, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatResearchMetric } from "../features/research/researchPolicy"
+import { latestByCode, metricLabel, coverageStatus, formatResearchMetric } from "../features/research/researchPolicy"
+import { researchSnapshotGroups } from "../features/research/researchPresentationPolicy"
 import { ResearchScorecardPanel } from "../features/research/ResearchScorecardPanel"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "../features/research/types"
 import { useSecurityResearch } from "../features/research/useSecurityResearch"
@@ -94,12 +95,7 @@ function TabPanel({ tab, position, research, scoring, onTabChange }: { readonly 
 
 function Overview({ position, research, scoring, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly scoring: ScoringHook; readonly onViewEvidence: () => void }) {
   const metrics = latestByCode(research.metrics)
-  const groups = [
-    { title: "Quality at a glance", codes: [...QUALITY_CODES] },
-    { title: "Growth at a glance", codes: [...GROWTH_CODES] },
-    { title: "Valuation snapshot", codes: [...VALUATION_CODES] },
-    { title: "Ownership snapshot", codes: [...OWNERSHIP_CODES] },
-  ]
+  const groups = researchSnapshotGroups(scoring.data?.profileCode)
   const conflicts = research.metrics.filter((metric) => metric.status === "CONFLICTING").length
   const provisional = research.metrics.filter((metric) => metric.status === "PROVISIONAL").length
   const reviewRequired = research.documents.filter((document) => document.status === "REVIEW_REQUIRED").length
