@@ -21,74 +21,80 @@ function securityKey(securityIds: readonly string[]) {
   return [...securityIds].sort().join(":")
 }
 
+function useStableSecurityIds(securityIds: readonly string[]) {
+  const idsKey = securityKey(securityIds)
+  const stableIds = useMemo(() => idsKey ? idsKey.split(":") : [], [idsKey])
+  return { idsKey, stableIds }
+}
+
 export function useDashboardRecommendations(portfolioId: string | null, securityIds: readonly string[]) {
-  const idsKey = useMemo(() => securityKey(securityIds), [securityIds])
+  const { idsKey, stableIds } = useStableSecurityIds(securityIds)
   const key = `${portfolioId ?? ""}|${idsKey}`
   const [state, setState] = useState<AsyncState<ReadonlyMap<string, DashboardRecommendationEvidence>> | null>(null)
 
   useEffect(() => {
     let active = true
-    if (!portfolioId || !securityIds.length) {
+    if (!portfolioId || !stableIds.length) {
       setState({ key, data: new Map(), error: null })
       return () => { active = false }
     }
-    void loadLatestDashboardRecommendations(portfolioId, securityIds)
+    void loadLatestDashboardRecommendations(portfolioId, stableIds)
       .then((data) => { if (active) setState({ key, data, error: null }) })
       .catch((reason: unknown) => { if (active) setState({ key, data: new Map(), error: displayError(reason) }) })
     return () => { active = false }
-  }, [key, portfolioId, securityIds])
+  }, [key, portfolioId, stableIds])
 
   return {
     data: state?.key === key ? state.data : new Map<string, DashboardRecommendationEvidence>(),
     error: state?.key === key ? state.error : null,
-    isLoading: Boolean(portfolioId && securityIds.length) && state?.key !== key,
+    isLoading: Boolean(portfolioId && stableIds.length) && state?.key !== key,
   }
 }
 
 export function useDashboardMonitoringSettings(portfolioId: string | null, securityIds: readonly string[]) {
-  const idsKey = useMemo(() => securityKey(securityIds), [securityIds])
+  const { idsKey, stableIds } = useStableSecurityIds(securityIds)
   const key = `${portfolioId ?? ""}|${idsKey}`
   const [state, setState] = useState<AsyncState<ReadonlyMap<string, DashboardMonitoringSetting>> | null>(null)
 
   useEffect(() => {
     let active = true
-    if (!portfolioId || !securityIds.length) {
+    if (!portfolioId || !stableIds.length) {
       setState({ key, data: new Map(), error: null })
       return () => { active = false }
     }
-    void loadDashboardMonitoringSettings(portfolioId, securityIds)
+    void loadDashboardMonitoringSettings(portfolioId, stableIds)
       .then((data) => { if (active) setState({ key, data, error: null }) })
       .catch((reason: unknown) => { if (active) setState({ key, data: new Map(), error: displayError(reason) }) })
     return () => { active = false }
-  }, [key, portfolioId, securityIds])
+  }, [key, portfolioId, stableIds])
 
   return {
     data: state?.key === key ? state.data : new Map<string, DashboardMonitoringSetting>(),
     error: state?.key === key ? state.error : null,
-    isLoading: Boolean(portfolioId && securityIds.length) && state?.key !== key,
+    isLoading: Boolean(portfolioId && stableIds.length) && state?.key !== key,
   }
 }
 
 export function useDashboardDailyMarketSnapshots(securityIds: readonly string[]) {
-  const key = useMemo(() => securityKey(securityIds), [securityIds])
+  const { idsKey: key, stableIds } = useStableSecurityIds(securityIds)
   const [state, setState] = useState<AsyncState<ReadonlyMap<string, DashboardDailyMarketSnapshot>> | null>(null)
 
   useEffect(() => {
     let active = true
-    if (!securityIds.length) {
+    if (!stableIds.length) {
       setState({ key, data: new Map(), error: null })
       return () => { active = false }
     }
-    void loadDashboardDailyMarketSnapshots(securityIds)
+    void loadDashboardDailyMarketSnapshots(stableIds)
       .then((data) => { if (active) setState({ key, data, error: null }) })
       .catch((reason: unknown) => { if (active) setState({ key, data: new Map(), error: displayError(reason) }) })
     return () => { active = false }
-  }, [key, securityIds])
+  }, [key, stableIds])
 
   return {
     data: state?.key === key ? state.data : new Map<string, DashboardDailyMarketSnapshot>(),
     error: state?.key === key ? state.error : null,
-    isLoading: Boolean(securityIds.length) && state?.key !== key,
+    isLoading: Boolean(stableIds.length) && state?.key !== key,
   }
 }
 
