@@ -75,28 +75,39 @@ export function assessPharmaV1Evidence(inputCode: string, rows: readonly PharmaS
   }
 
   if (inputCode === "PHARMA_ROCE_HISTORY") {
-    const annual = distinctPeriods(rows, ["ROCE_ANNUAL"], now).size
+    const annual = distinctPeriods(rows, ["ROCE_ANNUAL", "ROCE_MANAGEMENT_ANNUAL"], now).size
     return assessment(inputCode, "ROCE history", annual, 3)
   }
 
   if (inputCode === "PHARMA_PAT_EPS_HISTORY") {
-    const pat = distinctPeriods(rows, ["NET_PROFIT_ANNUAL", "PAT_ANNUAL"], now).size
-    const eps = distinctPeriods(rows, ["EPS_DILUTED_ANNUAL", "EPS_DILUTED"], now).size
-    const observed = matchedPeriods(rows, [["NET_PROFIT_ANNUAL", "PAT_ANNUAL"], ["EPS_DILUTED_ANNUAL", "EPS_DILUTED"]], now).size
+    const patCodes = ["PAT_ATTRIBUTABLE_ANNUAL", "NET_PROFIT_ANNUAL", "PAT_ANNUAL"]
+    const epsCodes = ["EPS_DILUTED_ANNUAL", "EPS_DILUTED"]
+    const pat = distinctPeriods(rows, patCodes, now).size
+    const eps = distinctPeriods(rows, epsCodes, now).size
+    const observed = matchedPeriods(rows, [patCodes, epsCodes], now).size
     const evidenceFraction = (fraction(pat, 3) + fraction(eps, 3)) / 2
     return assessment(inputCode, "PAT / EPS history", observed, 3, evidenceFraction)
   }
 
   if (inputCode === "PHARMA_CASH_CONVERSION_HISTORY") {
+    const patCodes = ["PAT_ATTRIBUTABLE_ANNUAL", "NET_PROFIT_ANNUAL", "PAT_ANNUAL"]
+    const fcfOrCapexCodes = ["FREE_CASH_FLOW_ANNUAL", "FCF_ANNUAL", "CAPEX_ANNUAL"]
     const cfo = distinctPeriods(rows, ["CFO_ANNUAL"], now).size
-    const pat = distinctPeriods(rows, ["NET_PROFIT_ANNUAL", "PAT_ANNUAL"], now).size
-    const fcfOrCapex = distinctPeriods(rows, ["FREE_CASH_FLOW_ANNUAL", "FCF_ANNUAL", "CAPEX_ANNUAL"], now).size
-    const observed = matchedPeriods(rows, [["CFO_ANNUAL"], ["NET_PROFIT_ANNUAL", "PAT_ANNUAL"], ["FREE_CASH_FLOW_ANNUAL", "FCF_ANNUAL", "CAPEX_ANNUAL"]], now).size
+    const pat = distinctPeriods(rows, patCodes, now).size
+    const fcfOrCapex = distinctPeriods(rows, fcfOrCapexCodes, now).size
+    const observed = matchedPeriods(rows, [["CFO_ANNUAL"], patCodes, fcfOrCapexCodes], now).size
     const evidenceFraction = (fraction(cfo, 3) + fraction(pat, 3) + fraction(fcfOrCapex, 3)) / 3
     return assessment(inputCode, "Cash conversion", observed, 3, evidenceFraction)
   }
 
   if (inputCode === "PHARMA_BALANCE_SHEET_LEVERAGE") {
+    const netDebtEbitda = distinctPeriods(rows, ["NET_DEBT_EBITDA_ANNUAL"], now).size
+    if (netDebtEbitda >= 3) {
+      const interestCoverage = distinctPeriods(rows, ["INTEREST_COVERAGE_ANNUAL", "INTEREST_COVERAGE"], now).size
+      const evidenceFraction = (fraction(netDebtEbitda, 3) * 0.8) + (fraction(interestCoverage, 1) * 0.2)
+      return assessment(inputCode, "Financial strength / leverage", netDebtEbitda, 3, evidenceFraction)
+    }
+
     const debt = distinctPeriods(rows, ["TOTAL_DEBT_ANNUAL", "TOTAL_DEBT"], now).size
     const cash = distinctPeriods(rows, ["CASH_EQUIVALENTS_ANNUAL", "CASH_AND_EQUIVALENTS_ANNUAL", "CASH_AND_EQUIVALENTS"], now).size
     const ebitda = distinctPeriods(rows, ["EBITDA_ANNUAL", "EBITDA_TTM"], now).size
@@ -104,6 +115,14 @@ export function assessPharmaV1Evidence(inputCode: string, rows: readonly PharmaS
     const observed = matchedPeriods(rows, [["TOTAL_DEBT_ANNUAL", "TOTAL_DEBT"], ["CASH_EQUIVALENTS_ANNUAL", "CASH_AND_EQUIVALENTS_ANNUAL", "CASH_AND_EQUIVALENTS"], ["EBITDA_ANNUAL", "EBITDA_TTM"]], now).size
     const evidenceFraction = (fraction(debt, 3) + fraction(cash, 3) + fraction(ebitda, 3) + fraction(coverage, 3)) / 4
     return assessment(inputCode, "Financial strength / leverage", observed, 3, evidenceFraction)
+  }
+
+  if (inputCode === "PHARMA_RND_INTENSITY") {
+    const spend = distinctPeriods(rows, ["RND_EXPENSE_ANNUAL"], now).size
+    const intensity = distinctPeriods(rows, ["RND_INTENSITY_PERCENT"], now).size
+    const observed = Math.max(spend, intensity)
+    const evidenceFraction = Math.max(fraction(spend, 3), fraction(intensity, 3))
+    return assessment(inputCode, "R&D intensity and history", observed, 3, evidenceFraction)
   }
 
   if (inputCode === "PHARMA_OWNERSHIP_GOVERNANCE") {
