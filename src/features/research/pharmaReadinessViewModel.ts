@@ -6,8 +6,17 @@ export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V1" as const
 
 export type PharmaReadinessDisplayState = "VALIDATED_SOURCE" | "PARTIAL" | "PENDING" | "OFFICIAL_SOURCE_PENDING"
 
+type CorePharmaMetricCode =
+  | "PHARMA_REVENUE_GROWTH_HISTORY"
+  | "PHARMA_OPERATING_MARGIN_HISTORY"
+  | "PHARMA_ROCE_HISTORY"
+  | "PHARMA_PAT_EPS_HISTORY"
+  | "PHARMA_CASH_CONVERSION_HISTORY"
+  | "PHARMA_BALANCE_SHEET_LEVERAGE"
+  | "PHARMA_REGULATORY_SITE_STATUS"
+
 export interface PharmaReadinessDomain {
-  readonly metricCode: string
+  readonly metricCode: CorePharmaMetricCode
   readonly label: string
   readonly requirement: "MANDATORY" | "IMPORTANT"
   readonly state: PharmaReadinessDisplayState
@@ -29,7 +38,7 @@ export interface PharmaReadinessViewModel {
   readonly notice: string
 }
 
-const DOMAIN_LABELS: Readonly<Record<string, string>> = {
+const DOMAIN_LABELS: Readonly<Record<CorePharmaMetricCode, string>> = {
   PHARMA_REVENUE_GROWTH_HISTORY: "Revenue history",
   PHARMA_OPERATING_MARGIN_HISTORY: "Operating margin history",
   PHARMA_ROCE_HISTORY: "ROCE history",
@@ -39,7 +48,15 @@ const DOMAIN_LABELS: Readonly<Record<string, string>> = {
   PHARMA_REGULATORY_SITE_STATUS: "Regulatory site evidence",
 }
 
-const CORE_CODES = Object.keys(DOMAIN_LABELS)
+const CORE_CODES: readonly CorePharmaMetricCode[] = [
+  "PHARMA_REVENUE_GROWTH_HISTORY",
+  "PHARMA_OPERATING_MARGIN_HISTORY",
+  "PHARMA_ROCE_HISTORY",
+  "PHARMA_PAT_EPS_HISTORY",
+  "PHARMA_CASH_CONVERSION_HISTORY",
+  "PHARMA_BALANCE_SHEET_LEVERAGE",
+  "PHARMA_REGULATORY_SITE_STATUS",
+]
 
 function countCanonicalObservations(metrics: readonly ResearchMetric[], codes: readonly string[]) {
   if (!codes.length) return 0
@@ -64,7 +81,7 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
     if (!contract || !source) return []
     return [{
       metricCode,
-      label: DOMAIN_LABELS[metricCode] ?? metricCode,
+      label: DOMAIN_LABELS[metricCode],
       requirement: contract.requirementLevel,
       state: displayState(source.state),
       sourceState: source.state,
