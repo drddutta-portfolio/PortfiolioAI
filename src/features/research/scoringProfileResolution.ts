@@ -11,7 +11,7 @@ function normalized(value: string | null) {
   return value?.trim().toUpperCase() ?? ""
 }
 
-function isPharmaMethodology(sector: string | null, industry: string | null) {
+export function isPharmaScoringContext(sector: string | null, industry: string | null) {
   const sectorKey = normalized(sector)
   const industryKey = normalized(industry)
   return sectorKey === "PHARMA" || industryKey === "PHARMACEUTICALS"
@@ -20,7 +20,7 @@ function isPharmaMethodology(sector: string | null, industry: string | null) {
 function inferredProfile(sector: string | null, industry: string | null): { readonly code: string; readonly source: ScoringProfileSource } {
   const haystack = `${sector ?? ""} ${industry ?? ""}`.trim().toUpperCase()
   if (!haystack) return { code: "GENERAL", source: "GENERAL_FALLBACK" }
-  if (isPharmaMethodology(sector, industry)) return { code: "PHARMA_V1", source: "SECTOR_RULE" }
+  if (isPharmaScoringContext(sector, industry)) return { code: "PHARMA_V1", source: "SECTOR_RULE" }
   if (/\bBANK\b|NBFC|LENDING/.test(haystack)) return { code: "BANK_NBFC", source: "SECTOR_RULE" }
   if (/IT|TECHNOLOGY|SOFTWARE/.test(haystack)) return { code: "IT_TECH", source: "SECTOR_RULE" }
   if (/INDUSTRIAL|CAPITAL GOODS|ENGINEERING/.test(haystack)) return { code: "INDUSTRIALS_CAPITAL_GOODS", source: "SECTOR_RULE" }
@@ -45,7 +45,7 @@ export function resolveScoringProfile(
   industry: string | null,
   reviewedAssignmentCode: string | null,
 ): ScoringProfileResolution {
-  if (reviewedAssignmentCode === "PHARMA_HEALTHCARE" && isPharmaMethodology(sector, industry)) {
+  if (reviewedAssignmentCode === "PHARMA_HEALTHCARE" && isPharmaScoringContext(sector, industry)) {
     return {
       profileCode: "PHARMA_V1",
       ruleProfile: "PHARMA_V1",
