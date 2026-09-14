@@ -1,3 +1,4 @@
+import type { SupabaseClient } from "@supabase/supabase-js"
 import { supabase } from "../lib/supabase"
 
 export interface DashboardRecommendationEvidence {
@@ -45,6 +46,42 @@ export interface DashboardNewsFeedItem {
   readonly sourceUrl: string
 }
 
+interface RecommendationDbRow {
+  readonly security_id: string
+  readonly overall_score: unknown
+  readonly score_ready_coverage: unknown
+  readonly evidence_confidence: unknown
+  readonly suggested_role: string | null
+  readonly action_bias: string | null
+  readonly current_user_role: string | null
+  readonly change_signal: string | null
+  readonly transition_status: string | null
+  readonly persistence_count: number | null
+  readonly created_at: string
+}
+
+interface MonitoringSettingDbRow {
+  readonly security_id: string
+  readonly target_price: unknown
+  readonly stop_loss_price: unknown
+  readonly target_price_alert_enabled: boolean | null
+  readonly stop_loss_alert_enabled: boolean | null
+}
+
+interface DailyMarketDbRow {
+  readonly security_id: string
+  readonly price: unknown
+  readonly previous_close: unknown
+  readonly price_timestamp: string | null
+  readonly retrieved_at: string
+  readonly market_session_status: string
+}
+
+// Some production objects used by the already-deployed Dashboard are newer than the
+// checked-in generated database types. Keep that compatibility boundary inside the
+// repository rather than leaking untyped database access into presentation code.
+const db = supabase as unknown as SupabaseClient
+
 function exact(value: unknown): string | null {
   if (typeof value === "string" || typeof value === "number") return String(value)
   return null
@@ -55,7 +92,7 @@ export async function loadLatestDashboardRecommendations(
   securityIds: readonly string[],
 ): Promise<ReadonlyMap<string, DashboardRecommendationEvidence>> {
   if (!securityIds.length) return new Map()
-  const result = await supabase
+  const result = await db
     .from("stock_recommendation_runs")
     .select("security_id,overall_score,score_ready_coverage,evidence_confidence,suggested_role,action_bias,current_user_role,change_signal,transition_status,persistence_count,created_at")
     .eq("portfolio_id", portfolioId)
@@ -64,7 +101,7 @@ export async function loadLatestDashboardRecommendations(
   if (result.error) throw result.error
 
   const latest = new Map<string, DashboardRecommendationEvidence>()
-  for (const row of result.data ?? []) {
+  for (const row of (result.data ?? []) as RecommendationDbRow[]) {
     if (latest.has(row.security_id)) continue
     latest.set(row.security_id, {
       securityId: row.security_id,
@@ -88,14 +125,14 @@ export async function loadDashboardMonitoringSettings(
   securityIds: readonly string[],
 ): Promise<ReadonlyMap<string, DashboardMonitoringSetting>> {
   if (!securityIds.length) return new Map()
-  const result = await supabase
+  const result = await db
     .from("portfolio_security_settings")
     .select("security_id,target_price,stop_loss_price,target_price_alert_enabled,stop_loss_alert_enabled")
     .eq("portfolio_id", portfolioId)
     .in("security_id", [...securityIds])
   if (result.error) throw result.error
 
-  return new Map((result.data ?? []).map((row) => [row.security_id, {
+  return new Map(((result.data ?? []) as MonitoringSettingDbRow[]).map((row) => [row.security_id, {
     securityId: row.security_id,
     targetPrice: exact(row.target_price),
     stopLossPrice: exact(row.stop_loss_price),
@@ -108,7 +145,7 @@ export async function loadDashboardDailyMarketSnapshots(
   securityIds: readonly string[],
 ): Promise<ReadonlyMap<string, DashboardDailyMarketSnapshot>> {
   if (!securityIds.length) return new Map()
-  const result = await supabase
+  const result = await db
     .from("market_price_latest")
     .select("security_id,price,previous_close,price_timestamp,retrieved_at,market_session_status")
     .eq("provider_code", "ANGEL_ONE")
@@ -116,7 +153,7 @@ export async function loadDashboardDailyMarketSnapshots(
   if (result.error) throw result.error
 
   const rows = new Map<string, DashboardDailyMarketSnapshot>()
-  for (const row of result.data ?? []) {
+  for (const row of (result.data ?? []) as DailyMarketDbRow[]) {
     const price = exact(row.price)
     if (price === null) continue
     rows.set(row.security_id, {
@@ -135,7 +172,7 @@ export async function loadDashboardNewsFeed(
   portfolioId: string,
   limit: number,
 ): Promise<readonly DashboardNewsFeedItem[]> {
-  const result = await supabase.rpc("get_portfolio_news_feed_v2", {
+  const result = await db.rpc("get_portfolio_news_feed_v2", {
     p_portfolio_id: portfolioId,
     p_security_ids: null,
     p_limit: limit,
@@ -144,8 +181,8 @@ export async function loadDashboardNewsFeed(
   if (result.error) throw result.error
   if (!Array.isArray(result.data)) return []
 
-  return result.data.map((raw) => {
-    const row = raw as Record<string, unknown>
+  return result.data.map((raw: unknown) => {
+    const row = raw && typeof raw === "object" && !Array.isArray(raw) ? raw as Record<string, unknown> : {}
     return {
       newsItemId: String(row.news_item_id ?? ""),
       securityId: String(row.security_id ?? ""),
