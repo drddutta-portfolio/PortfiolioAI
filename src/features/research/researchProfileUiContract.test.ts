@@ -48,6 +48,8 @@ describe("researchProfileUiContract", () => {
     ])
     expect(pharma.refreshModules.filter((module) => module.actionKind === "MARKET_HISTORY")).toHaveLength(1)
     expect(pharma.refreshModules.find((module) => module.code === "PHARMA_MARKET_VALUATION")?.actionKind).toBe("MARKET_HISTORY")
+    expect(pharma.completeResearchRefreshMode).toBe("PROFILE_GATED")
+    expect(researchProfileUiContract("BANK_NBFC").completeResearchRefreshMode).toBe("ENABLED")
   })
 
   it("uses the metric codes registered by the current PHARMA_V1 parent evidence contract", () => {

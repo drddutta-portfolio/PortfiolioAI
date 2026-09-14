@@ -39,6 +39,7 @@ export interface ResearchProfileUiContract {
   readonly externalRatingsMode: ExternalRatingsMode
   readonly readinessPanel: "PHARMA_V1" | "NONE"
   readonly refreshModules: readonly ResearchRefreshModule[]
+  readonly completeResearchRefreshMode: "ENABLED" | "PROFILE_GATED"
 }
 
 const OWNERSHIP_CODES = [
@@ -212,6 +213,7 @@ const GENERAL_CONTRACT: ResearchProfileUiContract = {
   externalRatingsMode: "FULL",
   readinessPanel: "NONE",
   refreshModules: [],
+  completeResearchRefreshMode: "ENABLED",
 }
 
 const BANK_NBFC_CONTRACT: ResearchProfileUiContract = {
@@ -239,6 +241,7 @@ const PHARMA_V1_CONTRACT: ResearchProfileUiContract = {
   externalRatingsMode: "COMPACT",
   readinessPanel: "PHARMA_V1",
   refreshModules: PHARMA_REFRESH_MODULES,
+  completeResearchRefreshMode: "PROFILE_GATED",
 }
 
 const CONTRACTS: Readonly<Record<string, ResearchProfileUiContract>> = {
