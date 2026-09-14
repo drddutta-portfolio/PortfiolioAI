@@ -1,4 +1,4 @@
-export const PHARMA_HISTORY_DISCOVERY_VERSION = "PHARMA_HISTORY_DISCOVERY_V1" as const
+export const PHARMA_HISTORY_DISCOVERY_VERSION = "PHARMA_HISTORY_DISCOVERY_V2" as const
 
 export interface PharmaHistoryDiscoveryTerm {
   readonly code: string
@@ -7,40 +7,30 @@ export interface PharmaHistoryDiscoveryTerm {
 }
 
 /**
- * Parameter discovery only. These searches are intentionally narrow and exist
- * to prove provider field/history semantics before any value retrieval or
- * canonical research ingestion is attempted.
+ * Live R4E validation proved that Trendlyne's `search_parameters` tool is not
+ * available on the current MCP contract. The validated discovery path is the
+ * already-observed `get_parameter_values_multi_stock` tool with exact stock
+ * identity language and narrowly-scoped history requests.
+ *
+ * These queries remain discovery-only. They may prove provider field/value
+ * availability, but they do not promote canonical observations or make a
+ * PHARMA_V1 metric READY by themselves.
  */
 export const PHARMA_HISTORY_DISCOVERY_TERMS: readonly PharmaHistoryDiscoveryTerm[] = [
   {
-    code: "REVENUE_HISTORY",
-    query: "annual operating revenue historical current 1 year ago 2 years ago 3 years ago 4 years ago revenue annual",
-    purpose: "Find period-specific annual revenue fields suitable for a comparable 3-5 year raw history series.",
+    code: "EARNINGS_ROCE_HISTORY",
+    query: "Exact stock Torrent Pharmaceuticals (TORNTPHARM), Trendlyne instrument 1409. Return exact parameter labels and values for annual operating revenue, net profit/PAT, cash EPS/diluted EPS, and ROCE for current annual period and 1 year ago, 2 years ago, 3 years ago, 4 years ago, 5 years ago where available. Do not substitute another company.",
+    purpose: "Prove period-specific annual revenue, earnings/EPS and ROCE evidence for the reviewed PHARMA reference stock.",
   },
   {
-    code: "OPERATING_MARGIN_HISTORY",
-    query: "operating profit margin OPM quarterly historical current 1 quarter ago 2 quarters ago 3 quarters ago 4 quarters ago 8 quarters ago",
-    purpose: "Find period-specific quarterly OPM/margin fields suitable for an 8-12 quarter comparable history.",
+    code: "OPM_QUARTER_HISTORY",
+    query: "Exact stock Torrent Pharmaceuticals (TORNTPHARM), Trendlyne instrument 1409. Return exact parameter labels and values for operating profit margin OPM, operating profit and operating revenue for current quarter and 1Q ago, 2Q ago, 3Q ago, 4Q ago, 5Q ago, 6Q ago, 7Q ago, 8Q ago, 9Q ago, 10Q ago, 11Q ago, 12Q ago where available. Do not substitute another company.",
+    purpose: "Prove quarter-specific margin inputs, preferring raw operating profit and revenue that PortfolioAI can use to derive OPM deterministically.",
   },
   {
-    code: "ROCE_HISTORY",
-    query: "ROCE annual historical current 1 year ago 2 years ago 3 years ago 4 years ago return on capital employed",
-    purpose: "Find period-specific annual ROCE fields instead of provider-computed multi-year averages.",
-  },
-  {
-    code: "PAT_EPS_HISTORY",
-    query: "net profit PAT EPS annual historical current 1 year ago 2 years ago 3 years ago 4 years ago",
-    purpose: "Find period-specific annual PAT and EPS fields underlying growth/consistency calculations.",
-  },
-  {
-    code: "CASH_CONVERSION_HISTORY",
-    query: "cash flow from operations CFO annual historical capex capital expenditure free cash flow current 1 year ago 2 years ago 3 years ago",
-    purpose: "Find period-specific CFO and capex/FCF fields for matched-period cash conversion.",
-  },
-  {
-    code: "BALANCE_SHEET_LEVERAGE",
-    query: "debt equity interest coverage total debt cash net debt EBITDA annual historical current 1 year ago 2 years ago 3 years ago",
-    purpose: "Find reviewed leverage/debt/cash/interest-cover inputs for PHARMA financial-strength history.",
+    code: "CASH_LEVERAGE_HISTORY",
+    query: "Exact stock Torrent Pharmaceuticals (TORNTPHARM), Trendlyne instrument 1409. Return exact parameter labels and values for cash from operating activities/CFO, capital expenditure/capex, free cash flow, total debt, cash and bank balance, net debt, debt-equity, interest coverage and EBITDA for current annual period and 1 year ago, 2 years ago, 3 years ago, 4 years ago where available. Do not substitute another company.",
+    purpose: "Prove period-specific cash-conversion and leverage inputs without promoting provider-computed aggregates as canonical history.",
   },
 ] as const
 
