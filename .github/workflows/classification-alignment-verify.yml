@@ -24,7 +24,7 @@ jobs:
       - name: Targeted tests
         run: npx vitest run src/features/research/sectorResearchMapping.test.ts src/features/research/portfolioCoverageProjection.test.ts
       - name: Targeted typecheck
-        run: npx tsc --ignoreConfig --noEmit --strict --skipLibCheck --jsx react-jsx --target ES2022 --module ESNext --moduleResolution Bundler src/features/research/sectorResearchMapping.ts src/features/research/sectorResearchMapping.test.ts src/features/research/portfolioCoverageProjection.ts src/features/research/portfolioCoverageProjection.test.ts src/features/portfolio/sharedClassification.ts src/features/portfolio/usePortfolioView.ts
+        run: npx tsc --ignoreConfig --noEmit --strict --skipLibCheck --types vite/client,vitest/globals --jsx react-jsx --target ES2022 --module ESNext --moduleResolution Bundler src/features/research/sectorResearchMapping.ts src/features/research/sectorResearchMapping.test.ts src/features/research/portfolioCoverageProjection.ts src/features/research/portfolioCoverageProjection.test.ts src/features/portfolio/sharedClassification.ts src/features/portfolio/usePortfolioView.ts
       - name: Targeted lint
         run: npx eslint src/features/research/sectorResearchMapping.ts src/features/research/sectorResearchMapping.test.ts src/features/research/portfolioCoverageProjection.ts src/features/research/portfolioCoverageProjection.test.ts src/features/portfolio/sharedClassification.ts src/features/portfolio/usePortfolioView.ts
       - name: Repository typecheck diagnostic
