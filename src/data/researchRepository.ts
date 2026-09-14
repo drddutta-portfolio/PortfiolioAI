@@ -13,8 +13,10 @@ function sourceField(definition: unknown) {
   const field = object?.trendlyne_field ?? object?.provider_label
   return typeof field === "string" && field.trim() ? field : null
 }
-function contractReviewed(definition: unknown) {
-  return definitionObject(definition)?.selection === "REVIEWED"
+function contractReviewed(definition: unknown, periodType: string | null, periodEnd: string | null) {
+  const object = definitionObject(definition)
+  if (object?.selection === "REVIEWED") return true
+  return object?.trendlyne_history_selection === "REVIEWED" && periodType === "YEAR" && Boolean(periodEnd)
 }
 
 export async function loadSecurityResearch(securityId: string): Promise<SecurityResearch> {
@@ -39,7 +41,7 @@ export async function loadSecurityResearch(securityId: string): Promise<Security
       periodStart: row.period_start, periodEnd: row.period_end, periodType: row.period_type,
       scope: row.consolidation_scope, unit: row.unit, currency: row.currency, retrievedAt: row.retrieved_at,
       freshUntil: row.fresh_until,
-      status: evidenceStatus(row.evidence_status, row.fresh_until, isSelected, contractReviewed(definition?.definition)),
+      status: evidenceStatus(row.evidence_status, row.fresh_until, isSelected, contractReviewed(definition?.definition, row.period_type, row.period_end)),
       selected: isSelected,
     }
   })

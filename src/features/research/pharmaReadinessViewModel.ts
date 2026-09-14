@@ -2,7 +2,7 @@ import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 import { PHARMA_V1_SOURCE_READINESS, type PharmaSourceReadinessState } from "./pharmaSourceReadiness"
 import type { ResearchMetric, SecurityResearch } from "./types"
 
-export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V4" as const
+export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V5" as const
 
 export type PharmaReadinessDisplayState = "NORMALIZATION_READY" | "VALIDATED_SOURCE" | "PARTIAL" | "PENDING" | "OFFICIAL_SOURCE_PENDING"
 
@@ -60,9 +60,25 @@ const CORE_CODES: readonly CorePharmaMetricCode[] = [
   "PHARMA_REGULATORY_SITE_STATUS",
 ]
 
+const R4H_REVIEWED_HISTORY_CODES = new Set([
+  "REVENUE_ANNUAL",
+  "OPERATING_REVENUE_QUARTER",
+  "OPERATING_PROFIT_QUARTER",
+  "CFO_ANNUAL",
+])
+
 function countCanonicalObservations(metrics: readonly ResearchMetric[], codes: readonly string[]) {
   if (!codes.length) return 0
-  return metrics.filter((metric) => codes.includes(metric.code) && metric.selected && metric.status !== "UNAVAILABLE").length
+  const distinct = new Set<string>()
+  for (const metric of metrics) {
+    if (!codes.includes(metric.code)) continue
+    const accepted = R4H_REVIEWED_HISTORY_CODES.has(metric.code)
+      ? metric.status === "VERIFIED" && Boolean(metric.periodEnd)
+      : metric.selected && metric.status !== "UNAVAILABLE"
+    if (!accepted) continue
+    distinct.add(`${metric.code}:${metric.periodEnd ?? metric.id}`)
+  }
+  return distinct.size
 }
 
 function displayState(sourceState: PharmaSourceReadinessState): PharmaReadinessDisplayState {
@@ -105,6 +121,6 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
     normalizationReadyDomains: 0,
     mandatoryDomainCount: domains.length,
     blockers,
-    notice: "R4H has prepared a conflict-aware TORNTPHARM raw-history ingestion manifest, but PHARMA_V1 remains fail-closed. Annual operating-revenue history is semantically incomplete, quarterly operating history has missing/conflicting periods, and CFO alone does not satisfy cash conversion. No PHARMA_V1 score or recommendation is generated from these discovery records.",
+    notice: "R4H canonical history is now stored and visible below, but PHARMA_V1 remains fail-closed. Annual operating-revenue history is still semantically incomplete, quarterly operating history has missing/conflicting periods, and CFO alone does not satisfy cash conversion. No PHARMA_V1 score or recommendation is generated until the remaining mandatory evidence contracts are satisfied.",
   }
 }
