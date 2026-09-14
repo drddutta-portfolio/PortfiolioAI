@@ -25,7 +25,7 @@ jobs:
       - name: Enforce presentation data boundaries
         run: npm run check:architecture
       - name: Verify canonical authority contracts
-        run: npx vitest run src/contracts/canonicalDataAuthorities.test.ts src/features/research/sectorResearchMapping.test.ts src/features/research/researchProfileRouting.test.ts src/features/research/portfolioCoverageProjection.test.ts src/features/research/pharmaResearchProfile.test.ts
+        run: npx vitest run src/contracts/canonicalDataAuthorities.test.ts src/features/research/sectorResearchMapping.test.ts src/features/research/researchProfileRouting.test.ts src/features/research/portfolioCoverageProjection.test.ts src/features/research/pharmaResearchProfile.test.ts src/features/research/pharmaSourceReadiness.test.ts
       - name: Typecheck
         run: npm run typecheck
       - name: Lint architecture boundary
