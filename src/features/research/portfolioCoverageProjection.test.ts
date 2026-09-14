@@ -36,13 +36,27 @@ function base(overrides: Partial<CachedCoverageSecurityInput> = {}): CachedCover
 }
 
 describe("projectPortfolioCoverageV1", () => {
-  it("uses the dashboard sector unchanged while keeping proposed IT research profile pending", () => {
+  it("uses the dashboard sector unchanged while keeping a routed IT research profile pending", () => {
     const record = projectPortfolioCoverageV1(base())
     expect(record.applicationSector).toBe("Information Technology")
     expect(record.canonicalSector).toBe("Information Technology")
-    expect(record.researchProfileCode).toBe("IT_SERVICES_TECH")
+    expect(record.researchProfileCode).toBe("IT_SERVICES")
+    expect(record.proposedResearchProfileCode).toBe("IT_SERVICES")
+    expect(record.researchProfileRoutingState).toBe("ROUTED")
     expect(record.researchProfileReadiness).toBe("PROFILE_PENDING")
     expect(record.domains.RESEARCH_PROFILE.state).toBe("BLOCKED_PREREQUISITE")
+  })
+
+  it("uses industry evidence to prevent a false IT-services methodology", () => {
+    const record = projectPortfolioCoverageV1(base({
+      symbol: "MTARTECH",
+      sourceIndustry: "Aerospace & Defence",
+    }))
+    expect(record.applicationSector).toBe("Information Technology")
+    expect(record.proposedResearchProfileCode).toBe("DEFENCE_AEROSPACE")
+    expect(record.researchProfileRoutingState).toBe("ROUTED")
+    expect(record.researchProfileRoutingReason).toBe("INDUSTRY_DEFENCE_AEROSPACE")
+    expect(record.researchProfileReadiness).toBe("PROFILE_PENDING")
   })
 
   it("allows an explicitly ready reviewed research profile to progress without changing the dashboard sector", () => {
@@ -64,10 +78,12 @@ describe("projectPortfolioCoverageV1", () => {
     expect(record.applicationSector).toBe("Services")
     expect(record.domains.CLASSIFICATION.state).toBe("FRESH")
     expect(record.researchProfileReadiness).toBe("PROFILE_PENDING")
+    expect(record.researchProfileRoutingState).toBe("PROFILE_PENDING")
   })
 
   it("keeps non-equity holdings out of the equity research chain", () => {
     const record = projectPortfolioCoverageV1(base({ assetClass: "ETF", sourceSector: null, sourceIndustry: null }))
+    expect(record.researchProfileRoutingState).toBe("NOT_APPLICABLE")
     expect(record.domains.RESEARCH_PROFILE.state).toBe("NOT_APPLICABLE")
     expect(record.domains.SCORING.state).toBe("NOT_APPLICABLE")
     expect(record.domains.POSITION_SIZING.state).toBe("NOT_APPLICABLE")
