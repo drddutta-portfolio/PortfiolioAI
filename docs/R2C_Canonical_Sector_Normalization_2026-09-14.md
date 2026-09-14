@@ -1,79 +1,87 @@
-# R2C Canonical Sector Normalization — 2026-09-14
+# R2C Application Classification Alignment — 2026-09-14
 
-Status: **READ-ONLY BASELINE / DETERMINISTIC MAPPING V1**
+Status: **CORRECTED APPLICATION-WIDE CLASSIFICATION CONTRACT**
 
-This baseline applies the R2 exact-label normalization rules to the 240 currently open equity holdings using the source-sector labels already present in `current_security_enrichment_v1`.
+This document supersedes the earlier idea of maintaining a second PortfolioAI sector taxonomy for R2.
 
-No provider calls, database writes, migrations, deployments, or scheduler changes were performed.
+## Decision
 
-## Result
+PortfolioAI has one application-wide sector and market-cap classification source:
 
-| Mapping result | Equity holdings |
-| --- | ---: |
-| Deterministically mapped to an approved PortfolioAI canonical sector | 210 |
-| Held for explicit review rather than guessed | 30 |
-| Missing/unrecognized outside those groups | 0 |
-| Total equities | 240 |
+`current_security_enrichment_v1`
 
-The 30 review-required holdings are produced by intentionally broad or ambiguous source labels:
+The Dashboard already consumes this source through:
 
-- `Consumer Services` — 11
-- `Waste Managment` — 7
-- `Material` — 4
-- `Services` — 4
-- `Ship Building` — 2
-- `Consumer Discretionary` — 2
+`loadSecurityEnrichment()` → `usePortfolioEnrichment()` → `enrichmentAllocation()`
 
-These labels are not silently coerced into a research sector. Industry/company context must be reviewed before mapping.
+R2 and every other application page must use the same classification values.
 
-## Deterministically mapped canonical distribution
+## Sector rule
 
-| PortfolioAI canonical sector | Holdings |
-| --- | ---: |
-| BANKING_FINANCIAL_SERVICES | 37 |
-| PHARMA_HEALTHCARE | 32 |
-| INFRASTRUCTURE_CAPITAL_GOODS | 30 |
-| INFORMATION_TECHNOLOGY | 19 |
-| CHEMICALS_FERTILIZERS | 14 |
-| CONSUMER_DURABLES | 13 |
-| AUTO_AUTO_ANCILLARIES | 12 |
-| FMCG | 12 |
-| OIL_GAS_ENERGY | 11 |
-| METALS_MINING | 10 |
-| TEXTILES | 7 |
-| POWER_UTILITIES | 6 |
-| DEFENCE | 2 |
-| REAL_ESTATE | 2 |
-| TELECOMMUNICATIONS | 2 |
-| CEMENT_CONSTRUCTION_MATERIALS | 1 |
+For an equity holding:
 
-The following approved canonical sectors currently have no deterministic holding assignment from the exact-label V1 mapping and may still emerge from review of the 30 ambiguous holdings or future portfolio changes:
+- `current_security_enrichment_v1.sector` is the application sector label.
+- The label must be preserved exactly for grouping, filtering, counts and display.
+- R2 must not merge, rename, normalize or replace that label with another user-visible sector taxonomy.
+- If the Dashboard says `Banking`, the same security must be `Banking` in Research Coverage, Holdings, Portfolio Structure, scoring context and any future Action Center.
+- If the Dashboard says `Financial Services`, it remains `Financial Services`; it is not merged into `Banking`.
+- Likewise `Pharma` and `Healthcare`, `FMCG` and `Fast Moving Consumer Goods`, `Power` and `Renewable Energy`, and every other existing Dashboard sector remain distinct unless the shared enrichment record itself is later changed through the approved classification process.
 
-- MEDIA_ENTERTAINMENT
-- AGRICULTURE_ALLIED
-- AVIATION_LOGISTICS
-- NEW_AGE_DIGITAL
+## Market-cap rule
 
-## Important boundary
+The same principle applies to market-cap classification:
 
-Canonical sector mapping does **not** imply research-profile readiness.
+- `current_security_enrichment_v1.market_cap_category` is the shared application market-cap bucket.
+- `LARGE_CAP`, `MID_CAP`, `SMALL_CAP` and ETF/non-equity treatment must be derived from the same enrichment record used by the Dashboard.
+- No page may maintain an independent market-cap bucket for the same security.
 
-For example:
+## Research profiles are separate from sectors
 
-- `BANKING_FINANCIAL_SERVICES` still requires a subtype such as BANK, NBFC/LENDING, INSURANCE, AMC/market infrastructure, etc.
-- `PHARMA_HEALTHCARE` may require PHARMA, HOSPITAL, or DIAGNOSTICS.
-- `INFRASTRUCTURE_CAPITAL_GOODS` may require capital-goods/engineering versus construction/EPC treatment.
-- Other canonical sectors may also require subtype overlays where business economics materially differ.
+Sector classification and research methodology are related but not identical.
 
-Therefore a security may be `CLASSIFICATION = FRESH` while still being `RESEARCH_PROFILE = PROFILE_PENDING`.
+A research profile may group multiple application sectors when their economics and required metrics are genuinely compatible. For example, a research-profile family may eventually cover more than one Dashboard sector. That internal grouping must never alter the sector displayed for the security.
 
-## R2 policy
+Therefore:
 
-1. Preserve the original source sector and industry.
-2. Store/derive a separate canonical PortfolioAI sector.
-3. Preserve the exact mapping basis.
-4. Do not guess ambiguous broad labels.
-5. Keep research-profile code/readiness separate from canonical sector.
-6. Existing scoring-profile assignments may inform proposed research-profile mapping but cannot make a research profile READY by themselves.
+`Dashboard sector → optional research-profile mapping → profile-specific evidence/scoring`
 
-The implementation is in `src/features/research/sectorResearchMapping.ts` and is covered by deterministic unit tests.
+not:
+
+`Dashboard sector → rewritten PortfolioAI sector → research`
+
+Research-profile readiness remains independent. A security can have a valid Dashboard sector while its R4 research profile is still `PROFILE_PENDING`.
+
+## Current production classification coverage
+
+The read-only R2C inventory found:
+
+- 240 open equity holdings;
+- 240/240 have a sector value in `current_security_enrichment_v1`;
+- 48/240 currently have industry detail;
+- 9 non-equity holdings are handled separately.
+
+Accordingly, sector classification coverage for the current equity portfolio is **100% at the Dashboard sector level**.
+
+The earlier 210/240 mapped + 30 review-required result referred only to the now-superseded secondary taxonomy mapping. Those 30 holdings are not unclassified in the application; they already have valid Dashboard sector labels such as `Consumer Services`, `Waste Managment`, `Material`, `Services`, `Ship Building`, and `Consumer Discretionary`.
+
+## Single-source-of-truth requirement
+
+All PortfolioAI pages must draw classification data from the same shared enrichment source or from a shared selector/service whose only classification authority is that source.
+
+Pages must not:
+
+1. read a separate local sector mapping for display;
+2. infer sector from ticker/company name;
+3. merge Dashboard sectors for convenience;
+4. maintain page-specific market-cap calculations;
+5. silently fall back to stale `securities.sector_id` / `industry_id` values while the enrichment view is authoritative.
+
+If a future classification correction is made, it should be made once in the shared classification/enrichment layer and automatically appear consistently throughout the application.
+
+## Implementation
+
+`src/features/research/sectorResearchMapping.ts` now preserves the Dashboard sector as `applicationSector` and may only propose a downstream research-profile family separately.
+
+`src/features/research/portfolioCoverageProjection.ts` now aggregates by the exact application sector label rather than by a secondary canonical-sector code.
+
+This keeps R2 aligned with the existing Dashboard instead of creating an isolated classification system.
