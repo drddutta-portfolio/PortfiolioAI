@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react"
+import { loadPharmaV1ScoringSnapshot } from "../../data/pharmaScoringRepository"
 import { loadSecurityScoringSnapshot } from "../../data/scoringRepository"
 import { displayError } from "../../lib/displayError"
+import { isPharmaScoringContext } from "./scoringProfileResolution"
 import type { SecurityScoringSnapshot } from "./scoringTypes"
 
 const scoringCache = new Map<string, SecurityScoringSnapshot>()
 const scoringListeners = new Map<string, Set<(snapshot: SecurityScoringSnapshot) => void>>()
 
 function snapshotRank(snapshot: SecurityScoringSnapshot) {
+  const methodologyRank = snapshot.profileCode === "PHARMA_V1" ? 4 : snapshot.profileCode === "BANK_NBFC" ? 3 : 2
   const profileRank = snapshot.profileSource === "REVIEWED_ASSIGNMENT" ? 3 : snapshot.profileSource === "SECTOR_RULE" ? 2 : 1
   const overallRank = snapshot.overallScore === null ? 0 : 1
-  return [profileRank, overallRank, snapshot.scoreReadyCoverage ?? 0, snapshot.evidenceConfidence ?? 0] as const
+  return [methodologyRank, profileRank, overallRank, snapshot.scoreReadyCoverage ?? 0, snapshot.evidenceConfidence ?? 0] as const
 }
 
 function betterSnapshot(current: SecurityScoringSnapshot | undefined, incoming: SecurityScoringSnapshot) {
@@ -57,7 +60,10 @@ export function useSecurityScoring(securityId: string | null, sector: string | n
     const unsubscribe = subscribe(securityId, (snapshot) => { if (active) setData(snapshot) })
 
     setError(null)
-    void loadSecurityScoringSnapshot(securityId, sector, industry)
+    const loader = isPharmaScoringContext(sector, industry)
+      ? loadPharmaV1ScoringSnapshot(securityId)
+      : loadSecurityScoringSnapshot(securityId, sector, industry)
+    void loader
       .then((value) => { if (active) setData(publishSnapshot(securityId, value)) })
       .catch((reason: unknown) => { if (active) setError(displayError(reason)) })
 
