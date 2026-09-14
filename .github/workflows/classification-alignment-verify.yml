@@ -1,0 +1,31 @@
+name: Classification Alignment Verification
+
+on:
+  push:
+    branches:
+      - r2-dashboard-classification-alignment
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Targeted tests
+        run: npx vitest run src/features/research/sectorResearchMapping.test.ts src/features/research/portfolioCoverageProjection.test.ts
+      - name: Repository typecheck
+        run: npm run typecheck
+      - name: Repository lint
+        run: npm run lint
+      - name: Repository build
+        run: npm run build
