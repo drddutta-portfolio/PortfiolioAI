@@ -3,8 +3,8 @@ import { PHARMA_SOURCE_READINESS_VERSION, PHARMA_V1_SOURCE_READINESS, pharmaSour
 import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 
 describe("PHARMA_V1_SOURCE_READINESS", () => {
-  it("is versioned from the owner-approved R4E/R4F live discovery", () => {
-    expect(PHARMA_SOURCE_READINESS_VERSION).toBe("PHARMA_SOURCE_READINESS_V2")
+  it("is versioned after the R4H conflict-aware source review", () => {
+    expect(PHARMA_SOURCE_READINESS_VERSION).toBe("PHARMA_SOURCE_READINESS_V4")
   })
 
   it("covers every PHARMA_V1 metric exactly once", () => {
@@ -14,22 +14,24 @@ describe("PHARMA_V1_SOURCE_READINESS", () => {
     expect(new Set(sourceCodes).size).toBe(sourceCodes.length)
   })
 
-  it("records validated raw annual revenue history without promoting it to canonical profile readiness", () => {
+  it("keeps annual revenue history pending after detecting operating-vs-total revenue semantic mismatch", () => {
     expect(pharmaSourceReadiness("PHARMA_REVENUE_GROWTH_HISTORY")).toMatchObject({
-      state: "PROVIDER_HISTORY_VALIDATED",
-      approvedSource: "TRENDLYNE_MCP",
+      state: "HISTORY_CONTRACT_PENDING",
+      approvedSource: null,
+      canonicalEvidenceCodes: ["REVENUE_ANNUAL"],
       canUseExistingCacheWithoutProviderCall: true,
     })
   })
 
-  it("uses raw operating profit and revenue as the validated deterministic OPM input path", () => {
+  it("keeps operating-margin history pending because the retained raw series is incomplete and conflicted", () => {
     const item = pharmaSourceReadiness("PHARMA_OPERATING_MARGIN_HISTORY")
     expect(item).toMatchObject({
-      state: "PROVIDER_HISTORY_VALIDATED",
+      state: "HISTORY_CONTRACT_PENDING",
       approvedSource: "TRENDLYNE_MCP + PORTFOLIOAI",
+      canonicalEvidenceCodes: ["OPERATING_REVENUE_QUARTER", "OPERATING_PROFIT_QUARTER"],
     })
-    expect(item?.observedProviderLabels).toContain("Operating Profit Qtr")
-    expect(item?.observedProviderLabels).toContain("Operating Rev. Qtr")
+    expect(item?.observedProviderLabels).toContain("Operating Profit 6Qtr Ago")
+    expect(item?.reason).toContain("duplicate-value conflict")
   })
 
   it("keeps ROCE history pending because only current and 1Y annual points were validated", () => {
@@ -39,11 +41,12 @@ describe("PHARMA_V1_SOURCE_READINESS", () => {
     })
   })
 
-  it("keeps cash conversion pending because validated CFO history alone is insufficient", () => {
+  it("keeps cash conversion pending even though five historical CFO points are usable", () => {
     const item = pharmaSourceReadiness("PHARMA_CASH_CONVERSION_HISTORY")
     expect(item?.state).toBe("SOURCE_CONTRACT_PENDING")
     expect(item?.canonicalEvidenceCodes).toContain("CFO_ANNUAL")
     expect(item?.approvedSource).toBe("TRENDLYNE_MCP")
+    expect(item?.reason).toContain("CFO alone")
   })
 
   it("keeps leverage partial despite observed interest-coverage evidence", () => {

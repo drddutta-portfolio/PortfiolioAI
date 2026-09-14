@@ -3,23 +3,28 @@ import {
   derivePharmaQuarterlyOperatingMargin,
   normalizePharmaAnnualCfo,
   normalizePharmaAnnualRevenue,
+  normalizePharmaQuarterlyOperatingProfit,
   PHARMA_HISTORY_NORMALIZATION_CONTRACT,
+  PHARMA_HISTORY_NORMALIZATION_VERSION,
 } from "./pharmaHistoryNormalization"
 
 describe("PHARMA history normalization", () => {
-  it("normalizes validated annual revenue labels without using provider growth aggregates", () => {
+  it("is versioned for the R4H raw-history contract", () => {
+    expect(PHARMA_HISTORY_NORMALIZATION_VERSION).toBe("PHARMA_HISTORY_NORMALIZATION_V2")
+  })
+
+  it("keeps operating revenue semantically strict and rejects total/generic revenue substitutions", () => {
     const result = normalizePharmaAnnualRevenue([
       { label: "Operating Rev. Ann.", value: "13979.73" },
-      { label: "Rev. Ann. 1Y ago", value: "11835" },
-      { label: "Rev. Ann. 2Y ago", value: "10456" },
+      { label: "Total Rev. Ann. 1Y Ago", value: "11539.36" },
+      { label: "Rev. Ann. 2Y ago", value: "10785.75" },
       { label: "Rev. Ann. 3Y ago", value: "9665.29" },
       { label: "Rev. Ann. 3Y Growth %", value: "20.4" },
     ])
 
-    expect(result.state).toBe("READY")
-    expect(result.points.map((point) => point.period)).toEqual(["Y0", "Y1", "Y2", "Y3"])
-    expect(result.points.map((point) => point.value)).toEqual(["13979.73", "11835", "10456", "9665.29"])
-    expect(result.missingPeriods).toEqual(["Y4", "Y5"])
+    expect(result.state).toBe("PARTIAL")
+    expect(result.points).toEqual([{ period: "Y0", value: "13979.73", sourceLabel: "Operating Rev. Ann." }])
+    expect(result.missingPeriods).toEqual(["Y1", "Y2", "Y3", "Y4", "Y5"])
   })
 
   it("keeps missing annual CFO periods missing rather than coercing them to zero", () => {
@@ -33,6 +38,15 @@ describe("PHARMA history normalization", () => {
     expect(result.points.map((point) => point.period)).toEqual(["Y1", "Y3"])
     expect(result.invalidLabels).toEqual(["Cash from Operating Act. Ann. 2Y Ago"])
     expect(result.points.some((point) => point.value === "0")).toBe(false)
+  })
+
+  it("accepts only reviewed Qtr spelling aliases after parser conflict handling", () => {
+    const result = normalizePharmaQuarterlyOperatingProfit([
+      { label: "Operating Profit Qtr", value: "1664" },
+      { label: "Operating Profit 7Qtr Ago", value: "939" },
+    ])
+    expect(result.points).toContainEqual({ period: "Q7", value: "939", sourceLabel: "Operating Profit 7Qtr Ago" })
+    expect(result.missingPeriods).toContain("Q6")
   })
 
   it("derives OPM from matched quarterly operating profit and revenue with exact decimal arithmetic", () => {
@@ -51,7 +65,7 @@ describe("PHARMA history normalization", () => {
       { label: "Operating Rev. 5Q ago", value: "2959" },
       { label: "Operating Profit 6Q Ago", value: "914" },
       { label: "Operating Rev. 6Q ago", value: "2809" },
-      { label: "Operating Profit 7Q Ago", value: "939" },
+      { label: "Operating Profit 7Qtr Ago", value: "939" },
       { label: "Operating Rev. 7Q ago", value: "2889" },
     ])
 
@@ -61,7 +75,7 @@ describe("PHARMA history normalization", () => {
       period: "Q0",
       operatingProfit: "1664",
       operatingRevenue: "4921",
-      marginPercent: "33.814266",
+      marginPercent: "33.814265",
     })
     expect(result.missingPeriods).toEqual(["Q8"])
   })
@@ -79,8 +93,10 @@ describe("PHARMA history normalization", () => {
     expect(result.points).toHaveLength(0)
   })
 
-  it("documents the validated provider tool and deterministic OPM ownership", () => {
+  it("documents semantic guards and deterministic downstream OPM ownership", () => {
     expect(PHARMA_HISTORY_NORMALIZATION_CONTRACT.providerTool).toBe("get_parameter_values_multi_stock")
+    expect(PHARMA_HISTORY_NORMALIZATION_CONTRACT.rules.annualRevenue).toContain("not interchangeable")
+    expect(PHARMA_HISTORY_NORMALIZATION_CONTRACT.rules.quarterlyInputs).toContain("conflicts")
     expect(PHARMA_HISTORY_NORMALIZATION_CONTRACT.rules.operatingMargin).toContain("PortfolioAI derives")
     expect(PHARMA_HISTORY_NORMALIZATION_CONTRACT.rules.missingData).toContain("never coerced to zero")
   })

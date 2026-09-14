@@ -1,6 +1,6 @@
 import Decimal from "decimal.js"
 
-export const PHARMA_HISTORY_NORMALIZATION_VERSION = "PHARMA_HISTORY_NORMALIZATION_V1" as const
+export const PHARMA_HISTORY_NORMALIZATION_VERSION = "PHARMA_HISTORY_NORMALIZATION_V2" as const
 
 export type PharmaAnnualPeriod = "Y0" | "Y1" | "Y2" | "Y3" | "Y4" | "Y5"
 export type PharmaQuarterPeriod = "Q0" | "Q1" | "Q2" | "Q3" | "Q4" | "Q5" | "Q6" | "Q7" | "Q8"
@@ -39,46 +39,46 @@ export interface NormalizedOperatingMarginSeries {
   readonly invalidPeriods: readonly PharmaQuarterPeriod[]
 }
 
-const ANNUAL_REVENUE_LABELS: Readonly<Record<PharmaAnnualPeriod, string>> = {
-  Y0: "Operating Rev. Ann.",
-  Y1: "Rev. Ann. 1Y ago",
-  Y2: "Rev. Ann. 2Y ago",
-  Y3: "Rev. Ann. 3Y ago",
-  Y4: "Rev. Ann. 4Y ago",
-  Y5: "Rev. Ann. 5Y ago",
+const ANNUAL_REVENUE_LABELS: Readonly<Record<PharmaAnnualPeriod, readonly string[]>> = {
+  Y0: ["Operating Rev. Ann."],
+  Y1: ["Operating Rev. Ann. 1Y Ago"],
+  Y2: ["Operating Rev. Ann. 2Y Ago"],
+  Y3: ["Operating Rev. Ann. 3Y Ago"],
+  Y4: ["Operating Rev. Ann. 4Y Ago"],
+  Y5: ["Operating Rev. Ann. 5Y Ago"],
 }
 
-const ANNUAL_CFO_LABELS: Readonly<Record<PharmaAnnualPeriod, string>> = {
-  Y0: "Cash from Operating Act. Ann.",
-  Y1: "Cash from Operating Act. Ann. 1Y Ago",
-  Y2: "Cash from Operating Act. Ann. 2Y Ago",
-  Y3: "Cash from Operating Act. Ann. 3Y Ago",
-  Y4: "Cash from Operating Act. Ann. 4Y Ago",
-  Y5: "Cash from Operating Act. Ann. 5Y Ago",
+const ANNUAL_CFO_LABELS: Readonly<Record<PharmaAnnualPeriod, readonly string[]>> = {
+  Y0: ["Cash from Operating Act. Ann."],
+  Y1: ["Cash from Operating Act. Ann. 1Y Ago"],
+  Y2: ["Cash from Operating Act. Ann. 2Y Ago"],
+  Y3: ["Cash from Operating Act. Ann. 3Y Ago"],
+  Y4: ["Cash from Operating Act. Ann. 4Y Ago"],
+  Y5: ["Cash from Operating Act. Ann. 5Y Ago"],
 }
 
-const QUARTER_REVENUE_LABELS: Readonly<Record<PharmaQuarterPeriod, string>> = {
-  Q0: "Operating Rev. Qtr",
-  Q1: "Operating Rev. 1Q ago",
-  Q2: "Operating Rev. 2Q ago",
-  Q3: "Operating Rev. 3Q ago",
-  Q4: "Operating Rev. 4Q ago",
-  Q5: "Operating Rev. 5Q ago",
-  Q6: "Operating Rev. 6Q ago",
-  Q7: "Operating Rev. 7Q ago",
-  Q8: "Operating Rev. 8Q ago",
+const QUARTER_REVENUE_LABELS: Readonly<Record<PharmaQuarterPeriod, readonly string[]>> = {
+  Q0: ["Operating Rev. Qtr"],
+  Q1: ["Operating Rev. 1Q ago"],
+  Q2: ["Operating Rev. 2Q ago"],
+  Q3: ["Operating Rev. 3Q ago"],
+  Q4: ["Operating Rev. 4Q ago"],
+  Q5: ["Operating Rev. 5Q ago"],
+  Q6: ["Operating Rev. 6Q ago"],
+  Q7: ["Operating Rev. 7Q ago"],
+  Q8: ["Operating Rev. 8Q ago"],
 }
 
-const QUARTER_PROFIT_LABELS: Readonly<Record<PharmaQuarterPeriod, string>> = {
-  Q0: "Operating Profit Qtr",
-  Q1: "Operating Profit 1Q Ago",
-  Q2: "Operating Profit 2Q Ago",
-  Q3: "Operating Profit 3Q Ago",
-  Q4: "Operating Profit 4Q Ago",
-  Q5: "Operating Profit 5Q Ago",
-  Q6: "Operating Profit 6Q Ago",
-  Q7: "Operating Profit 7Q Ago",
-  Q8: "Operating Profit 8Q Ago",
+const QUARTER_PROFIT_LABELS: Readonly<Record<PharmaQuarterPeriod, readonly string[]>> = {
+  Q0: ["Operating Profit Qtr"],
+  Q1: ["Operating Profit 1Q Ago"],
+  Q2: ["Operating Profit 2Q Ago"],
+  Q3: ["Operating Profit 3Q Ago"],
+  Q4: ["Operating Profit 4Q Ago"],
+  Q5: ["Operating Profit 5Q Ago", "Operating Profit 5Qtr Ago"],
+  Q6: ["Operating Profit 6Q Ago", "Operating Profit 6Qtr Ago"],
+  Q7: ["Operating Profit 7Q Ago", "Operating Profit 7Qtr Ago"],
+  Q8: ["Operating Profit 8Q Ago", "Operating Profit 8Qtr Ago"],
 }
 
 function normalizeLabel(value: string) {
@@ -101,9 +101,17 @@ function parseFiniteDecimal(value: string | number | null): Decimal | null {
   }
 }
 
+function firstExactLabel(byLabel: ReadonlyMap<string, ProviderHistoryValue>, labels: readonly string[]) {
+  for (const label of labels) {
+    const match = byLabel.get(normalizeLabel(label))
+    if (match) return match
+  }
+  return null
+}
+
 function normalizeMappedSeries<P extends string>(
   values: readonly ProviderHistoryValue[],
-  labels: Readonly<Record<P, string>>,
+  labels: Readonly<Record<P, readonly string[]>>,
   minimumObservations: number,
 ): NormalizedHistorySeries<P> {
   const byLabel = exactValueMap(values)
@@ -112,8 +120,7 @@ function normalizeMappedSeries<P extends string>(
   const invalidLabels: string[] = []
 
   for (const period of Object.keys(labels) as P[]) {
-    const sourceLabel = labels[period]
-    const item = byLabel.get(normalizeLabel(sourceLabel))
+    const item = firstExactLabel(byLabel, labels[period])
     if (!item) {
       missingPeriods.push(period)
       continue
@@ -145,6 +152,14 @@ export function normalizePharmaAnnualCfo(values: readonly ProviderHistoryValue[]
   return normalizeMappedSeries(values, ANNUAL_CFO_LABELS, 3)
 }
 
+export function normalizePharmaQuarterlyOperatingRevenue(values: readonly ProviderHistoryValue[]) {
+  return normalizeMappedSeries(values, QUARTER_REVENUE_LABELS, 8)
+}
+
+export function normalizePharmaQuarterlyOperatingProfit(values: readonly ProviderHistoryValue[]) {
+  return normalizeMappedSeries(values, QUARTER_PROFIT_LABELS, 8)
+}
+
 export function derivePharmaQuarterlyOperatingMargin(values: readonly ProviderHistoryValue[]): NormalizedOperatingMarginSeries {
   const byLabel = exactValueMap(values)
   const points: NormalizedOperatingMarginPoint[] = []
@@ -152,10 +167,8 @@ export function derivePharmaQuarterlyOperatingMargin(values: readonly ProviderHi
   const invalidPeriods: PharmaQuarterPeriod[] = []
 
   for (const period of Object.keys(QUARTER_REVENUE_LABELS) as PharmaQuarterPeriod[]) {
-    const revenueLabel = QUARTER_REVENUE_LABELS[period]
-    const profitLabel = QUARTER_PROFIT_LABELS[period]
-    const revenueItem = byLabel.get(normalizeLabel(revenueLabel))
-    const profitItem = byLabel.get(normalizeLabel(profitLabel))
+    const revenueItem = firstExactLabel(byLabel, QUARTER_REVENUE_LABELS[period])
+    const profitItem = firstExactLabel(byLabel, QUARTER_PROFIT_LABELS[period])
     if (!revenueItem || !profitItem) {
       missingPeriods.push(period)
       continue
@@ -192,9 +205,10 @@ export const PHARMA_HISTORY_NORMALIZATION_CONTRACT = {
   provider: "TRENDLYNE_MCP",
   providerTool: "get_parameter_values_multi_stock",
   rules: {
-    annualRevenue: "Exact validated provider labels are normalized to Y0-Y5; a provider CAGR/aggregate cannot substitute for the raw annual series.",
+    annualRevenue: "Only exact operating-revenue annual labels may satisfy the series. Generic Rev. Ann. or Total Rev. Ann. values are not interchangeable with Operating Rev. Ann. and are never substituted.",
     annualCfo: "Exact annual CFO labels are normalized to Y0-Y5; CFO alone does not satisfy PHARMA cash-conversion readiness.",
-    operatingMargin: "PortfolioAI derives each quarterly OPM from matched-period operating profit / operating revenue × 100 using Decimal arithmetic.",
-    missingData: "Missing, invalid or unmatched period values remain missing/invalid and are never coerced to zero.",
+    quarterlyInputs: "Reviewed provider spelling aliases such as 6Qtr/7Qtr are accepted only when the parser has already ruled out duplicate-value conflicts for that exact label.",
+    operatingMargin: "PortfolioAI derives each quarterly OPM from matched-period operating profit / operating revenue × 100 using Decimal arithmetic. The raw operating-profit and operating-revenue observations remain the canonical evidence; the derived margin is not written as provider evidence.",
+    missingData: "Missing, invalid, conflicting or unmatched period values remain missing/invalid and are never coerced to zero.",
   },
 } as const

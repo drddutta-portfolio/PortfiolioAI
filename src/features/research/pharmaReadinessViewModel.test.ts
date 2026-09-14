@@ -43,30 +43,34 @@ describe("buildPharmaReadinessView", () => {
     expect(buildPharmaReadinessView(research("Healthcare"))).toBeNull()
   })
 
-  it("keeps PHARMA_V1 fail-closed while exposing the reviewed normalization-ready domains", () => {
+  it("keeps PHARMA_V1 fail-closed after the R4H partial/conflicting history review", () => {
     const view = buildPharmaReadinessView(research("Pharma"))
     expect(view?.profileVersion).toBe("PHARMA_V1")
-    expect(view?.normalizationVersion).toBe("PHARMA_HISTORY_NORMALIZATION_V1")
+    expect(view?.normalizationVersion).toBe("PHARMA_HISTORY_NORMALIZATION_V2")
     expect(view?.state).toBe("INSUFFICIENT_EVIDENCE")
-    expect(view?.validatedSourceDomains).toBe(2)
-    expect(view?.normalizationReadyDomains).toBe(2)
-    expect(view?.domains.find((domain) => domain.metricCode === "PHARMA_REVENUE_GROWTH_HISTORY")?.state).toBe("NORMALIZATION_READY")
-    expect(view?.domains.find((domain) => domain.metricCode === "PHARMA_OPERATING_MARGIN_HISTORY")?.state).toBe("NORMALIZATION_READY")
-    expect(view?.blockers).toContain("ROCE history")
+    expect(view?.validatedSourceDomains).toBe(0)
+    expect(view?.normalizationReadyDomains).toBe(0)
+    expect(view?.domains.find((domain) => domain.metricCode === "PHARMA_REVENUE_GROWTH_HISTORY")?.state).toBe("PENDING")
+    expect(view?.domains.find((domain) => domain.metricCode === "PHARMA_OPERATING_MARGIN_HISTORY")?.state).toBe("PENDING")
+    expect(view?.blockers).toContain("Revenue history")
+    expect(view?.blockers).toContain("Operating margin history")
     expect(view?.blockers).toContain("Regulatory site evidence")
   })
 
-  it("counts only canonical selected research observations, never raw provider discovery", () => {
+  it("counts only canonical raw history codes, never old TTM snapshots as history", () => {
     const view = buildPharmaReadinessView(research("Pharma", [
       metric("REVENUE_TTM"),
       metric("OPM_TTM"),
+      metric("REVENUE_ANNUAL"),
+      { ...metric("OPERATING_REVENUE_QUARTER", "2026-06-30"), periodType: "QUARTER" },
+      { ...metric("OPERATING_PROFIT_QUARTER", "2026-06-30"), periodType: "QUARTER" },
       { ...metric("ROCE_ANNUAL"), selected: false },
     ]))
     const revenue = view?.domains.find((domain) => domain.metricCode === "PHARMA_REVENUE_GROWTH_HISTORY")
     const margin = view?.domains.find((domain) => domain.metricCode === "PHARMA_OPERATING_MARGIN_HISTORY")
     const roce = view?.domains.find((domain) => domain.metricCode === "PHARMA_ROCE_HISTORY")
     expect(revenue?.canonicalObservationCount).toBe(1)
-    expect(margin?.canonicalObservationCount).toBe(1)
+    expect(margin?.canonicalObservationCount).toBe(2)
     expect(roce?.canonicalObservationCount).toBe(0)
     expect(view?.state).toBe("INSUFFICIENT_EVIDENCE")
   })
@@ -75,6 +79,7 @@ describe("buildPharmaReadinessView", () => {
     const view = buildPharmaReadinessView(research("Pharma", [metric("REVENUE_TTM"), metric("OPM_TTM")]))
     expect(view?.domains.find((domain) => domain.metricCode === "PHARMA_REVENUE_GROWTH_HISTORY")?.minimumObservations).toBe(3)
     expect(view?.domains.find((domain) => domain.metricCode === "PHARMA_OPERATING_MARGIN_HISTORY")?.minimumObservations).toBe(8)
-    expect(view?.state).toBe("INSUFFICIENT_EVIDENCE")
+    expect(view?.domains.find((domain) => domain.metricCode === "PHARMA_REVENUE_GROWTH_HISTORY")?.canonicalObservationCount).toBe(0)
+    expect(view?.domains.find((domain) => domain.metricCode === "PHARMA_OPERATING_MARGIN_HISTORY")?.canonicalObservationCount).toBe(0)
   })
 })

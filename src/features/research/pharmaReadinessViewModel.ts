@@ -2,7 +2,7 @@ import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 import { PHARMA_V1_SOURCE_READINESS, type PharmaSourceReadinessState } from "./pharmaSourceReadiness"
 import type { ResearchMetric, SecurityResearch } from "./types"
 
-export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V2" as const
+export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V4" as const
 
 export type PharmaReadinessDisplayState = "NORMALIZATION_READY" | "VALIDATED_SOURCE" | "PARTIAL" | "PENDING" | "OFFICIAL_SOURCE_PENDING"
 
@@ -29,7 +29,7 @@ export interface PharmaReadinessDomain {
 export interface PharmaReadinessViewModel {
   readonly profileCode: "PHARMA"
   readonly profileVersion: "PHARMA_V1"
-  readonly normalizationVersion: "PHARMA_HISTORY_NORMALIZATION_V1"
+  readonly normalizationVersion: "PHARMA_HISTORY_NORMALIZATION_V2"
   readonly state: "INSUFFICIENT_EVIDENCE"
   readonly canonicalSector: "Pharma"
   readonly domains: readonly PharmaReadinessDomain[]
@@ -60,18 +60,12 @@ const CORE_CODES: readonly CorePharmaMetricCode[] = [
   "PHARMA_REGULATORY_SITE_STATUS",
 ]
 
-const NORMALIZATION_READY_CODES = new Set<CorePharmaMetricCode>([
-  "PHARMA_REVENUE_GROWTH_HISTORY",
-  "PHARMA_OPERATING_MARGIN_HISTORY",
-])
-
 function countCanonicalObservations(metrics: readonly ResearchMetric[], codes: readonly string[]) {
   if (!codes.length) return 0
   return metrics.filter((metric) => codes.includes(metric.code) && metric.selected && metric.status !== "UNAVAILABLE").length
 }
 
-function displayState(metricCode: CorePharmaMetricCode, sourceState: PharmaSourceReadinessState): PharmaReadinessDisplayState {
-  if (NORMALIZATION_READY_CODES.has(metricCode) && sourceState === "PROVIDER_HISTORY_VALIDATED") return "NORMALIZATION_READY"
+function displayState(sourceState: PharmaSourceReadinessState): PharmaReadinessDisplayState {
   if (sourceState === "PROVIDER_HISTORY_VALIDATED") return "VALIDATED_SOURCE"
   if (sourceState === "OFFICIAL_SOURCE_CONTRACT_PENDING") return "OFFICIAL_SOURCE_PENDING"
   if (sourceState === "CACHE_PARTIAL" || sourceState === "PROVIDER_CAPABILITY_OBSERVED") return "PARTIAL"
@@ -91,7 +85,7 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
       metricCode,
       label: DOMAIN_LABELS[metricCode],
       requirement: contract.requirementLevel,
-      state: displayState(metricCode, source.state),
+      state: displayState(source.state),
       sourceState: source.state,
       canonicalObservationCount: countCanonicalObservations(research.metrics, source.canonicalEvidenceCodes),
       minimumObservations: contract.history.minimumObservations,
@@ -99,18 +93,18 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
     }]
   })
 
-  const blockers = domains.filter((domain) => domain.state !== "NORMALIZATION_READY" && domain.state !== "VALIDATED_SOURCE").map((domain) => domain.label)
+  const blockers = domains.filter((domain) => domain.state !== "VALIDATED_SOURCE").map((domain) => domain.label)
   return {
     profileCode: "PHARMA",
     profileVersion: "PHARMA_V1",
-    normalizationVersion: "PHARMA_HISTORY_NORMALIZATION_V1",
+    normalizationVersion: "PHARMA_HISTORY_NORMALIZATION_V2",
     state: "INSUFFICIENT_EVIDENCE",
     canonicalSector: "Pharma",
     domains,
-    validatedSourceDomains: domains.filter((domain) => domain.state === "NORMALIZATION_READY" || domain.state === "VALIDATED_SOURCE").length,
-    normalizationReadyDomains: domains.filter((domain) => domain.state === "NORMALIZATION_READY").length,
+    validatedSourceDomains: domains.filter((domain) => domain.state === "VALIDATED_SOURCE").length,
+    normalizationReadyDomains: 0,
     mandatoryDomainCount: domains.length,
     blockers,
-    notice: "Revenue and operating-margin history now have reviewed normalization contracts. They are still not canonical research observations until a separately approved ingestion pilot promotes validated values with provenance. No PHARMA_V1 score or recommendation is generated from discovery data.",
+    notice: "R4H has prepared a conflict-aware TORNTPHARM raw-history ingestion manifest, but PHARMA_V1 remains fail-closed. Annual operating-revenue history is semantically incomplete, quarterly operating history has missing/conflicting periods, and CFO alone does not satisfy cash conversion. No PHARMA_V1 score or recommendation is generated from these discovery records.",
   }
 }
