@@ -3,11 +3,11 @@ import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 import { PHARMA_V1_SOURCE_READINESS, type PharmaSourceReadinessState } from "./pharmaSourceReadiness"
 import type { ResearchMetric, SecurityResearch } from "./types"
 
-export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V6" as const
+export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V7" as const
 
 export type PharmaReadinessDisplayState = "NORMALIZATION_READY" | "VALIDATED_SOURCE" | "PARTIAL" | "PENDING" | "OFFICIAL_SOURCE_PENDING"
 
-type CorePharmaMetricCode =
+type PharmaMetricCode =
   | "PHARMA_REVENUE_GROWTH_HISTORY"
   | "PHARMA_OPERATING_MARGIN_HISTORY"
   | "PHARMA_ROCE_HISTORY"
@@ -15,16 +15,25 @@ type CorePharmaMetricCode =
   | "PHARMA_CASH_CONVERSION_HISTORY"
   | "PHARMA_BALANCE_SHEET_LEVERAGE"
   | "PHARMA_REGULATORY_SITE_STATUS"
+  | "PHARMA_DOMESTIC_REVENUE_GROWTH"
+  | "PHARMA_EXPORT_US_REVENUE_GROWTH"
+  | "PHARMA_RND_INTENSITY"
+  | "PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE"
+  | "PHARMA_OWNERSHIP_GOVERNANCE"
+  | "PHARMA_VALUATION_CONTEXT"
 
 export interface PharmaReadinessDomain {
-  readonly metricCode: CorePharmaMetricCode
+  readonly metricCode: PharmaMetricCode
   readonly label: string
   readonly requirement: "MANDATORY" | "IMPORTANT"
+  readonly applicability: "APPLICABLE" | "CONDITIONAL"
+  readonly conditionCode: string | null
   readonly state: PharmaReadinessDisplayState
   readonly sourceState: PharmaSourceReadinessState
   readonly canonicalObservationCount: number
   readonly observationCountLabel: string
   readonly minimumObservations: number
+  readonly preferredObservations: number
   readonly detail: string
 }
 
@@ -38,21 +47,28 @@ export interface PharmaReadinessViewModel {
   readonly validatedSourceDomains: number
   readonly normalizationReadyDomains: number
   readonly mandatoryDomainCount: number
+  readonly totalDomainCount: number
   readonly blockers: readonly string[]
   readonly notice: string
 }
 
-const DOMAIN_LABELS: Readonly<Record<CorePharmaMetricCode, string>> = {
+const DOMAIN_LABELS: Readonly<Record<PharmaMetricCode, string>> = {
   PHARMA_REVENUE_GROWTH_HISTORY: "Revenue history",
   PHARMA_OPERATING_MARGIN_HISTORY: "Operating margin history",
   PHARMA_ROCE_HISTORY: "ROCE history",
   PHARMA_PAT_EPS_HISTORY: "PAT / EPS history",
   PHARMA_CASH_CONVERSION_HISTORY: "Cash conversion",
-  PHARMA_BALANCE_SHEET_LEVERAGE: "Balance-sheet strength",
+  PHARMA_BALANCE_SHEET_LEVERAGE: "Financial strength / leverage",
   PHARMA_REGULATORY_SITE_STATUS: "Regulatory site evidence",
+  PHARMA_DOMESTIC_REVENUE_GROWTH: "Domestic revenue growth",
+  PHARMA_EXPORT_US_REVENUE_GROWTH: "Export / US revenue growth",
+  PHARMA_RND_INTENSITY: "R&D intensity",
+  PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE: "Pipeline / launches / approvals",
+  PHARMA_OWNERSHIP_GOVERNANCE: "Ownership & governance",
+  PHARMA_VALUATION_CONTEXT: "Valuation context",
 }
 
-const CORE_CODES: readonly CorePharmaMetricCode[] = [
+const PROFILE_CODES: readonly PharmaMetricCode[] = [
   "PHARMA_REVENUE_GROWTH_HISTORY",
   "PHARMA_OPERATING_MARGIN_HISTORY",
   "PHARMA_ROCE_HISTORY",
@@ -60,6 +76,12 @@ const CORE_CODES: readonly CorePharmaMetricCode[] = [
   "PHARMA_CASH_CONVERSION_HISTORY",
   "PHARMA_BALANCE_SHEET_LEVERAGE",
   "PHARMA_REGULATORY_SITE_STATUS",
+  "PHARMA_DOMESTIC_REVENUE_GROWTH",
+  "PHARMA_EXPORT_US_REVENUE_GROWTH",
+  "PHARMA_RND_INTENSITY",
+  "PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE",
+  "PHARMA_OWNERSHIP_GOVERNANCE",
+  "PHARMA_VALUATION_CONTEXT",
 ]
 
 const R4H_REVIEWED_HISTORY_CODES = new Set([
@@ -83,7 +105,7 @@ function countCanonicalObservations(metrics: readonly ResearchMetric[], codes: r
   return distinct.size
 }
 
-function domainObservationCount(research: SecurityResearch, metricCode: CorePharmaMetricCode, canonicalEvidenceCodes: readonly string[]) {
+function domainObservationCount(research: SecurityResearch, metricCode: PharmaMetricCode, canonicalEvidenceCodes: readonly string[]) {
   const history = buildPharmaCanonicalHistoryView(research)
   if (metricCode === "PHARMA_OPERATING_MARGIN_HISTORY") {
     return {
@@ -115,7 +137,7 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
 
   const metricsByCode = new Map(PHARMA_RESEARCH_PROFILE_V1.metrics.map((metric) => [metric.metricCode, metric]))
   const readinessByCode = new Map(PHARMA_V1_SOURCE_READINESS.map((item) => [item.metricCode, item]))
-  const domains = CORE_CODES.flatMap((metricCode): PharmaReadinessDomain[] => {
+  const domains = PROFILE_CODES.flatMap((metricCode): PharmaReadinessDomain[] => {
     const contract = metricsByCode.get(metricCode)
     const source = readinessByCode.get(metricCode)
     if (!contract || !source) return []
@@ -124,16 +146,20 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
       metricCode,
       label: DOMAIN_LABELS[metricCode],
       requirement: contract.requirementLevel,
+      applicability: contract.applicability,
+      conditionCode: contract.conditionCode,
       state: displayState(source.state),
       sourceState: source.state,
       canonicalObservationCount: observationCount.count,
       observationCountLabel: observationCount.label,
       minimumObservations: contract.history.minimumObservations,
+      preferredObservations: contract.history.preferredObservations,
       detail: source.reason,
     }]
   })
 
-  const blockers = domains.filter((domain) => domain.state !== "VALIDATED_SOURCE").map((domain) => domain.label)
+  const mandatoryDomains = domains.filter((domain) => domain.requirement === "MANDATORY")
+  const blockers = mandatoryDomains.filter((domain) => domain.state !== "VALIDATED_SOURCE" && domain.state !== "NORMALIZATION_READY").map((domain) => domain.label)
   return {
     profileCode: "PHARMA",
     profileVersion: "PHARMA_V1",
@@ -142,9 +168,10 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
     canonicalSector: "Pharma",
     domains,
     validatedSourceDomains: domains.filter((domain) => domain.state === "VALIDATED_SOURCE").length,
-    normalizationReadyDomains: 0,
-    mandatoryDomainCount: domains.length,
+    normalizationReadyDomains: domains.filter((domain) => domain.state === "NORMALIZATION_READY").length,
+    mandatoryDomainCount: mandatoryDomains.length,
+    totalDomainCount: domains.length,
     blockers,
-    notice: "R4H canonical history is now stored and visible below, but PHARMA_V1 remains fail-closed. Annual operating-revenue history is still semantically incomplete, quarterly operating history has missing/conflicting periods, and CFO alone does not satisfy cash conversion. No PHARMA_V1 score or recommendation is generated until the remaining mandatory evidence contracts are satisfied.",
+    notice: "PHARMA_V1 remains fail-closed until the mandatory evidence contracts are satisfied. Partial source capability, cached observations and profile-specific UI coverage do not by themselves create a score or recommendation.",
   }
 }
