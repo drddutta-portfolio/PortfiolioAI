@@ -8,6 +8,12 @@ export interface ResearchScoreSectionGroup {
   readonly codes: readonly string[]
 }
 
+export interface ResearchWorkspaceSection {
+  readonly title: string
+  readonly subtitle: string
+  readonly codes: readonly string[]
+}
+
 export type ExternalRatingsMode = "FULL" | "COMPACT"
 export type ResearchRefreshActionKind = "MARKET_HISTORY" | "INFORMATIONAL"
 
@@ -25,6 +31,8 @@ export interface ResearchProfileUiContract {
   readonly profileCode: string
   readonly snapshotGroups: readonly ResearchSnapshotGroup[]
   readonly scoreSectionGroups: readonly ResearchScoreSectionGroup[]
+  readonly financialWorkspaceSections: readonly ResearchWorkspaceSection[]
+  readonly qualityGrowthWorkspaceSections: readonly ResearchWorkspaceSection[]
   readonly dimensionOrder: readonly string[]
   readonly dimensionLabels: Readonly<Record<string, string>>
   readonly notApplicableDimensions: readonly string[]
@@ -84,15 +92,15 @@ const GENERAL_SNAPSHOT_GROUPS: readonly ResearchSnapshotGroup[] = [
 const PHARMA_SNAPSHOT_GROUPS: readonly ResearchSnapshotGroup[] = [
   {
     title: "Quality & capital efficiency",
-    codes: ["OPM_TTM", "ROCE_ANNUAL", "CFO_ANNUAL"],
+    codes: ["OPM_TTM", "ROCE_MANAGEMENT_ANNUAL", "CFO_ANNUAL", "FREE_CASH_FLOW_ANNUAL"],
   },
   {
     title: "Growth at a glance",
-    codes: ["REVENUE_TTM", "NET_PROFIT_TTM", "EPS_GROWTH_YOY", "EPS_DILUTED"],
+    codes: ["REVENUE_ANNUAL", "PAT_ATTRIBUTABLE_ANNUAL", "EPS_DILUTED_ANNUAL", "INDIA_REVENUE_ANNUAL", "USA_REVENUE_ANNUAL"],
   },
   {
     title: "Financial strength",
-    codes: ["TOTAL_DEBT_ANNUAL", "CASH_EQUIVALENTS_ANNUAL", "NET_DEBT_ANNUAL", "NET_DEBT_EBITDA_ANNUAL", "INTEREST_COVERAGE_ANNUAL"],
+    codes: ["TOTAL_DEBT_ANNUAL", "CASH_EQUIVALENTS_ANNUAL", "NET_DEBT_EBITDA_ANNUAL", "INTEREST_COVERAGE_ANNUAL", "EBITDA_ANNUAL"],
   },
   {
     title: "Business durability",
@@ -103,6 +111,47 @@ const PHARMA_SNAPSHOT_GROUPS: readonly ResearchSnapshotGroup[] = [
     codes: ["MARKET_CAP_PROVIDER_RAW", "MARKET_CAP", "PE_TTM", "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT", "EV_EBITDA", "FCF_YIELD_PERCENT"],
   },
   { title: "Ownership & governance", codes: OWNERSHIP_CODES },
+]
+
+const PHARMA_FINANCIAL_WORKSPACE_SECTIONS: readonly ResearchWorkspaceSection[] = [
+  {
+    title: "Earnings & operating performance",
+    subtitle: "Annual and quarterly operating evidence used to establish business scale and profitability.",
+    codes: ["REVENUE_ANNUAL", "OPERATING_REVENUE_QUARTER", "OPERATING_PROFIT_QUARTER", "PAT_ATTRIBUTABLE_ANNUAL", "EPS_DILUTED_ANNUAL", "EBITDA_ANNUAL"],
+  },
+  {
+    title: "Cash quality",
+    subtitle: "Matched-period operating cash generation, investment and PortfolioAI-derived free cash flow.",
+    codes: ["CFO_ANNUAL", "CAPEX_ANNUAL", "FREE_CASH_FLOW_ANNUAL"],
+  },
+  {
+    title: "Capital efficiency",
+    subtitle: "Consistent annual return-on-capital evidence without mixing incompatible methodologies.",
+    codes: ["ROCE_MANAGEMENT_ANNUAL", "ROCE_ANNUAL"],
+  },
+  {
+    title: "Financial strength / leverage",
+    subtitle: "Debt burden, liquidity and debt-service capacity using matched annual evidence.",
+    codes: ["TOTAL_DEBT_ANNUAL", "SHORT_TERM_DEBT_ANNUAL", "CASH_EQUIVALENTS_ANNUAL", "NET_DEBT_EBITDA_ANNUAL", "INTEREST_COVERAGE_ANNUAL"],
+  },
+]
+
+const PHARMA_QUALITY_GROWTH_WORKSPACE_SECTIONS: readonly ResearchWorkspaceSection[] = [
+  {
+    title: "Quality & margin durability",
+    subtitle: "Operating-margin evidence and capital efficiency are evaluated as multi-period histories, not single snapshots.",
+    codes: ["OPM_TTM", "OPERATING_REVENUE_QUARTER", "OPERATING_PROFIT_QUARTER", "ROCE_MANAGEMENT_ANNUAL", "CFO_ANNUAL", "FREE_CASH_FLOW_ANNUAL"],
+  },
+  {
+    title: "Growth & earnings",
+    subtitle: "Revenue, attributable PAT and diluted EPS with geographic growth evidence where separately disclosed.",
+    codes: ["REVENUE_ANNUAL", "PAT_ATTRIBUTABLE_ANNUAL", "EPS_DILUTED_ANNUAL", "INDIA_REVENUE_ANNUAL", "USA_REVENUE_ANNUAL", "GERMANY_REVENUE_ANNUAL", "BRAZIL_REVENUE_ANNUAL", "OTHER_INTERNATIONAL_REVENUE_ANNUAL"],
+  },
+  {
+    title: "Business durability",
+    subtitle: "R&D investment is interpreted with productivity, launch, approval and pipeline context rather than rewarded mechanically.",
+    codes: ["RND_EXPENSE_ANNUAL", "RND_INTENSITY_PERCENT", "PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE"],
+  },
 ]
 
 const PHARMA_SECTION_GROUPS = [
@@ -155,6 +204,8 @@ const GENERAL_CONTRACT: ResearchProfileUiContract = {
   profileCode: "GENERAL",
   snapshotGroups: GENERAL_SNAPSHOT_GROUPS,
   scoreSectionGroups: COMMON_SECTION_GROUPS,
+  financialWorkspaceSections: [],
+  qualityGrowthWorkspaceSections: [],
   dimensionOrder: COMMON_DIMENSION_ORDER,
   dimensionLabels: {},
   notApplicableDimensions: [],
@@ -173,6 +224,8 @@ const PHARMA_V1_CONTRACT: ResearchProfileUiContract = {
   profileCode: "PHARMA_V1",
   snapshotGroups: PHARMA_SNAPSHOT_GROUPS,
   scoreSectionGroups: PHARMA_SECTION_GROUPS,
+  financialWorkspaceSections: PHARMA_FINANCIAL_WORKSPACE_SECTIONS,
+  qualityGrowthWorkspaceSections: PHARMA_QUALITY_GROWTH_WORKSPACE_SECTIONS,
   dimensionOrder: COMMON_DIMENSION_ORDER,
   dimensionLabels: {
     CAPITAL_EFFICIENCY: "Capital Efficiency",
