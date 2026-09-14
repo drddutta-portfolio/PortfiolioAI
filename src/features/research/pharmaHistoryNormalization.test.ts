@@ -3,10 +3,16 @@ import {
   derivePharmaQuarterlyOperatingMargin,
   normalizePharmaAnnualCfo,
   normalizePharmaAnnualRevenue,
+  normalizePharmaQuarterlyOperatingProfit,
   PHARMA_HISTORY_NORMALIZATION_CONTRACT,
+  PHARMA_HISTORY_NORMALIZATION_VERSION,
 } from "./pharmaHistoryNormalization"
 
 describe("PHARMA history normalization", () => {
+  it("is versioned for the R4H raw-history contract", () => {
+    expect(PHARMA_HISTORY_NORMALIZATION_VERSION).toBe("PHARMA_HISTORY_NORMALIZATION_V2")
+  })
+
   it("keeps operating revenue semantically strict and rejects total/generic revenue substitutions", () => {
     const result = normalizePharmaAnnualRevenue([
       { label: "Operating Rev. Ann.", value: "13979.73" },
@@ -34,6 +40,15 @@ describe("PHARMA history normalization", () => {
     expect(result.points.some((point) => point.value === "0")).toBe(false)
   })
 
+  it("accepts only reviewed Qtr spelling aliases after parser conflict handling", () => {
+    const result = normalizePharmaQuarterlyOperatingProfit([
+      { label: "Operating Profit Qtr", value: "1664" },
+      { label: "Operating Profit 7Qtr Ago", value: "939" },
+    ])
+    expect(result.points).toContainEqual({ period: "Q7", value: "939", sourceLabel: "Operating Profit 7Qtr Ago" })
+    expect(result.missingPeriods).toContain("Q6")
+  })
+
   it("derives OPM from matched quarterly operating profit and revenue with exact decimal arithmetic", () => {
     const result = derivePharmaQuarterlyOperatingMargin([
       { label: "Operating Profit Qtr", value: "1664" },
@@ -50,7 +65,7 @@ describe("PHARMA history normalization", () => {
       { label: "Operating Rev. 5Q ago", value: "2959" },
       { label: "Operating Profit 6Q Ago", value: "914" },
       { label: "Operating Rev. 6Q ago", value: "2809" },
-      { label: "Operating Profit 7Q Ago", value: "939" },
+      { label: "Operating Profit 7Qtr Ago", value: "939" },
       { label: "Operating Rev. 7Q ago", value: "2889" },
     ])
 
@@ -78,9 +93,10 @@ describe("PHARMA history normalization", () => {
     expect(result.points).toHaveLength(0)
   })
 
-  it("documents the validated provider tool, semantic revenue guard and deterministic OPM ownership", () => {
+  it("documents semantic guards and deterministic downstream OPM ownership", () => {
     expect(PHARMA_HISTORY_NORMALIZATION_CONTRACT.providerTool).toBe("get_parameter_values_multi_stock")
     expect(PHARMA_HISTORY_NORMALIZATION_CONTRACT.rules.annualRevenue).toContain("not interchangeable")
+    expect(PHARMA_HISTORY_NORMALIZATION_CONTRACT.rules.quarterlyInputs).toContain("conflicts")
     expect(PHARMA_HISTORY_NORMALIZATION_CONTRACT.rules.operatingMargin).toContain("PortfolioAI derives")
     expect(PHARMA_HISTORY_NORMALIZATION_CONTRACT.rules.missingData).toContain("never coerced to zero")
   })
