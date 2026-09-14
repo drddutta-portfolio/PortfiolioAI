@@ -9,6 +9,17 @@ export interface ResearchScoreSectionGroup {
 }
 
 export type ExternalRatingsMode = "FULL" | "COMPACT"
+export type ResearchRefreshActionKind = "MARKET_HISTORY" | "INFORMATIONAL"
+
+export interface ResearchRefreshModule {
+  readonly code: string
+  readonly eyebrow: string
+  readonly title: string
+  readonly description: string
+  readonly actionKind: ResearchRefreshActionKind
+  readonly actionLabel?: string
+  readonly note?: string
+}
 
 export interface ResearchProfileUiContract {
   readonly profileCode: string
@@ -19,6 +30,7 @@ export interface ResearchProfileUiContract {
   readonly notApplicableDimensions: readonly string[]
   readonly externalRatingsMode: ExternalRatingsMode
   readonly readinessPanel: "PHARMA_V1" | "NONE"
+  readonly refreshModules: readonly ResearchRefreshModule[]
 }
 
 const OWNERSHIP_CODES = [
@@ -80,11 +92,11 @@ const PHARMA_SNAPSHOT_GROUPS: readonly ResearchSnapshotGroup[] = [
   },
   {
     title: "Financial strength",
-    codes: ["TOTAL_DEBT_ANNUAL", "CASH_AND_EQUIVALENTS_ANNUAL", "NET_DEBT_ANNUAL", "NET_DEBT_TO_EBITDA", "INTEREST_COVERAGE"],
+    codes: ["TOTAL_DEBT_ANNUAL", "CASH_EQUIVALENTS_ANNUAL", "NET_DEBT_ANNUAL", "NET_DEBT_EBITDA_ANNUAL", "INTEREST_COVERAGE_ANNUAL"],
   },
   {
     title: "Business durability",
-    codes: ["RND_EXPENSE_ANNUAL", "RND_TO_REVENUE_PERCENT", "PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE"],
+    codes: ["RND_EXPENSE_ANNUAL", "RND_INTENSITY_PERCENT", "PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE"],
   },
   {
     title: "Valuation snapshot",
@@ -103,6 +115,42 @@ const PHARMA_SECTION_GROUPS = [
   { label: "Risk", codes: ["RISK"] },
 ] as const
 
+const PHARMA_REFRESH_MODULES: readonly ResearchRefreshModule[] = [
+  {
+    code: "PHARMA_CORE_FUNDAMENTALS",
+    eyebrow: "PHARMA_V1 · Core fundamentals",
+    title: "Complete Pharma core evidence",
+    description: "Revenue, operating-margin, ROCE, PAT/EPS, cash-conversion and leverage history are evaluated as one coherent Pharma evidence set.",
+    actionKind: "INFORMATIONAL",
+    note: "Canonical write/promotion remains explicitly gated. The current TORNTPHARM Phase-A manifest is not executed from this UI.",
+  },
+  {
+    code: "PHARMA_BUSINESS_DURABILITY",
+    eyebrow: "PHARMA_V1 · Business durability",
+    title: "R&D, launches & pipeline",
+    description: "Tracks R&D intensity and productivity context together with material launches, approvals and pipeline milestones.",
+    actionKind: "INFORMATIONAL",
+    note: "Higher R&D spend is not automatically positive; productivity and evidence quality remain part of the contract.",
+  },
+  {
+    code: "PHARMA_REGULATORY",
+    eyebrow: "PHARMA_V1 · Regulatory risk",
+    title: "Official regulatory & site evidence",
+    description: "Tracks material manufacturing-site status, inspections, unresolved actions and remediation using official issuer/regulator evidence where applicable.",
+    actionKind: "INFORMATIONAL",
+    note: "No provider discovery is executed merely by viewing this workspace.",
+  },
+  {
+    code: "PHARMA_MARKET_VALUATION",
+    eyebrow: "PHARMA_V1 · Market evidence",
+    title: "Build Momentum & Market Risk from Angel One",
+    description: "Loads daily market history and derives PortfolioAI 12M/6M momentum, 1Y maximum drawdown and 1Y volatility from the authoritative market-data source.",
+    actionKind: "MARKET_HISTORY",
+    actionLabel: "Plan market history refresh",
+    note: "Benchmark-relative strength remains separately gated until the approved Pharma benchmark contract is implemented.",
+  },
+]
+
 const GENERAL_CONTRACT: ResearchProfileUiContract = {
   profileCode: "GENERAL",
   snapshotGroups: GENERAL_SNAPSHOT_GROUPS,
@@ -112,6 +160,7 @@ const GENERAL_CONTRACT: ResearchProfileUiContract = {
   notApplicableDimensions: [],
   externalRatingsMode: "FULL",
   readinessPanel: "NONE",
+  refreshModules: [],
 }
 
 const BANK_NBFC_CONTRACT: ResearchProfileUiContract = {
@@ -136,6 +185,7 @@ const PHARMA_V1_CONTRACT: ResearchProfileUiContract = {
   notApplicableDimensions: [],
   externalRatingsMode: "COMPACT",
   readinessPanel: "PHARMA_V1",
+  refreshModules: PHARMA_REFRESH_MODULES,
 }
 
 const CONTRACTS: Readonly<Record<string, ResearchProfileUiContract>> = {
