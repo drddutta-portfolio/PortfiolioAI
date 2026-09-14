@@ -104,9 +104,17 @@ export function coverageStatus(metric: ResearchMetric | undefined): ResearchEvid
   return metric?.status ?? "UNAVAILABLE"
 }
 
+function number(value: string) {
+  const parsed = Number(value)
+  return Number.isFinite(parsed) ? new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(parsed) : value
+}
+
 export function formatResearchMetric(metric: ResearchMetric | undefined) {
   if (!metric?.value) return "Unavailable"
-  if (metric.unit?.includes("PERCENT")) return `${metric.value}%`
+  if (metric.unit?.includes("PERCENT")) return `${number(metric.value)}%`
+  if (metric.unit === "INR_CRORE") return `₹${number(metric.value)} Cr`
+  if (metric.unit === "INR_PER_SHARE") return `₹${number(metric.value)}`
+  if (metric.unit === "RATIO") return `${number(metric.value)}×`
   if (metric.currency === "INR" || metric.unit === "INR") return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(Number(metric.value))
   return metric.value
 }
