@@ -3,8 +3,8 @@ import { PHARMA_SOURCE_READINESS_VERSION, PHARMA_V1_SOURCE_READINESS, pharmaSour
 import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 
 describe("PHARMA_V1_SOURCE_READINESS", () => {
-  it("is versioned from the owner-approved R4E/R4F live discovery", () => {
-    expect(PHARMA_SOURCE_READINESS_VERSION).toBe("PHARMA_SOURCE_READINESS_V2")
+  it("is versioned after the R4H semantic/source review", () => {
+    expect(PHARMA_SOURCE_READINESS_VERSION).toBe("PHARMA_SOURCE_READINESS_V3")
   })
 
   it("covers every PHARMA_V1 metric exactly once", () => {
@@ -14,10 +14,11 @@ describe("PHARMA_V1_SOURCE_READINESS", () => {
     expect(new Set(sourceCodes).size).toBe(sourceCodes.length)
   })
 
-  it("records validated raw annual revenue history without promoting it to canonical profile readiness", () => {
+  it("downgrades annual revenue history after detecting operating-vs-total revenue semantic mismatch", () => {
     expect(pharmaSourceReadiness("PHARMA_REVENUE_GROWTH_HISTORY")).toMatchObject({
-      state: "PROVIDER_HISTORY_VALIDATED",
-      approvedSource: "TRENDLYNE_MCP",
+      state: "HISTORY_CONTRACT_PENDING",
+      approvedSource: null,
+      canonicalEvidenceCodes: ["REVENUE_ANNUAL"],
       canUseExistingCacheWithoutProviderCall: true,
     })
   })
@@ -27,6 +28,7 @@ describe("PHARMA_V1_SOURCE_READINESS", () => {
     expect(item).toMatchObject({
       state: "PROVIDER_HISTORY_VALIDATED",
       approvedSource: "TRENDLYNE_MCP + PORTFOLIOAI",
+      canonicalEvidenceCodes: ["OPM_QUARTER_DERIVED"],
     })
     expect(item?.observedProviderLabels).toContain("Operating Profit Qtr")
     expect(item?.observedProviderLabels).toContain("Operating Rev. Qtr")
