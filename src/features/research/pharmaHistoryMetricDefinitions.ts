@@ -13,10 +13,10 @@ export interface ProposedPharmaHistoryMetricDefinition {
 }
 
 /**
- * R4H repository contract only. These definitions describe the canonical metric
- * identities required to store PHARMA history without abusing TTM metrics.
- * They do not create database rows; a versioned migration remains separately
- * gated before production ingestion.
+ * R4H repository contract only. These definitions describe the minimum new
+ * canonical metric identities required for the pilot without abusing TTM
+ * metrics. Raw quarterly profit/revenue remain in retained source records; only
+ * the PortfolioAI-derived quarterly OPM needs a canonical derived metric.
  */
 export const PROPOSED_PHARMA_HISTORY_METRIC_DEFINITIONS: readonly ProposedPharmaHistoryMetricDefinition[] = [
   {
@@ -27,29 +27,7 @@ export const PROPOSED_PHARMA_HISTORY_METRIC_DEFINITIONS: readonly ProposedPharma
     statementScope: "INCOME_STATEMENT",
     periodType: "YEAR",
     calculationOwner: "TRENDLYNE_MCP",
-    providerLabels: ["Operating Rev. Ann.", "Total Rev. Ann. 1Y Ago", "Rev. Ann. 1Y ago", "Rev. Ann. 2Y ago", "Rev. Ann. 3Y ago", "Rev. Ann. 4Y ago", "Rev. Ann. 5Y ago"],
-    definitionRequiredInProduction: true,
-  },
-  {
-    code: "OPERATING_REVENUE_QUARTER",
-    name: "Operating revenue quarterly",
-    valueKind: "NUMERIC",
-    canonicalUnit: "INR_CRORE",
-    statementScope: "INCOME_STATEMENT",
-    periodType: "QUARTER",
-    calculationOwner: "TRENDLYNE_MCP",
-    providerLabels: ["Operating Rev. Qtr", "Operating Rev. 1Q ago", "Operating Rev. 2Q ago", "Operating Rev. 3Q ago", "Operating Rev. 4Q ago", "Operating Rev. 5Q ago", "Operating Rev. 6Q ago", "Operating Rev. 7Q ago", "Operating Rev. 8Q ago"],
-    definitionRequiredInProduction: true,
-  },
-  {
-    code: "OPERATING_PROFIT_QUARTER",
-    name: "Operating profit quarterly",
-    valueKind: "NUMERIC",
-    canonicalUnit: "INR_CRORE",
-    statementScope: "INCOME_STATEMENT",
-    periodType: "QUARTER",
-    calculationOwner: "TRENDLYNE_MCP",
-    providerLabels: ["Operating Profit Qtr", "Operating Profit 1Q Ago", "Operating Profit 2Q Ago", "Operating Profit 3Q Ago", "Operating Profit 4Q Ago", "Operating Profit 5Q Ago", "Operating Profit 6Q Ago", "Operating Profit 7Q Ago", "Operating Profit 8Q Ago"],
+    providerLabels: ["Operating Rev. Ann.", "Operating Rev. Ann. 1Y Ago", "Operating Rev. Ann. 2Y Ago", "Operating Rev. Ann. 3Y Ago", "Operating Rev. Ann. 4Y Ago", "Operating Rev. Ann. 5Y Ago"],
     definitionRequiredInProduction: true,
   },
   {
