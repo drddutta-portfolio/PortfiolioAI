@@ -1,6 +1,7 @@
 import { PharmaResearchReadinessPanel } from "./PharmaResearchReadinessPanel"
 import { ResearchSectionScore } from "./ResearchSectionScore"
-import { GROWTH_CODES, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatResearchMetric, latestByCode } from "./researchPolicy"
+import { GROWTH_CODES, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatResearchMetric, latestByCode, metricLabel } from "./researchPolicy"
+import { researchProfileUiContract, type ResearchWorkspaceSection } from "./researchProfileUiContract"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "./types"
 import type { SecurityScoringSnapshot } from "./scoringTypes"
 import "./ResearchEvidenceWorkspace.css"
@@ -33,10 +34,26 @@ function latestCards(rows: readonly ResearchMetric[], empty: string) {
   </article>)}</div>
 }
 
+function profileSectionCards(section: ResearchWorkspaceSection, latest: ReadonlyMap<string, ResearchMetric>) {
+  return <section className="professional-panel" key={section.title}>
+    <header><div><h3>{section.title}</h3><p>{section.subtitle}</p></div><span>{section.codes.filter((code) => latest.has(code)).length}/{section.codes.length} available</span></header>
+    <div className="professional-metric-grid compact">{section.codes.map((code) => {
+      const metric = latest.get(code)
+      return <article key={code} className={!metric ? "metric-missing" : ""}>
+        <div><span>{metric?.label ?? metricLabel(code)}</span><Status value={coverageStatus(metric)} /></div>
+        <strong>{metric ? formatResearchMetric(metric) : "—"}</strong>
+        <small>{metric ? period(metric) : "No cached observation"}</small>
+        {metric ? <em>{metric.provider}</em> : null}
+      </article>
+    })}</div>
+  </section>
+}
+
 function HistoryTable({ rows, columns }: { readonly rows: readonly ResearchMetric[]; readonly columns?: readonly string[] }) {
   const clean = latestPerCodePeriod(rows)
   if (!clean.length) return null
   const filtered = columns?.length ? clean.filter((row) => columns.includes(row.code)) : clean
+  if (!filtered.length) return null
   return <details className="evidence-history" open={false}>
     <summary><strong>Evidence history</strong><span>{filtered.length} period-qualified observations</span><b>Show history</b></summary>
     <div className="professional-table-wrap"><table className="professional-table"><thead><tr><th>Metric</th><th>Value</th><th>Period</th><th>Status</th><th>Source</th></tr></thead><tbody>{filtered.map((metric) => <tr key={`${metric.code}-${metric.periodType}-${metric.periodEnd}`}><td><strong>{metric.label}</strong><small>{metric.code}</small></td><td>{formatResearchMetric(metric)}</td><td>{period(metric)}</td><td><Status value={metric.status} /></td><td>{metric.provider}</td></tr>)}</tbody></table></div>
@@ -53,15 +70,27 @@ function metricGroup(metric: ResearchMetric) {
 }
 
 export function FinancialsWorkspace({ research, snapshot }: { readonly research: SecurityResearch; readonly snapshot: SecurityScoringSnapshot | null }) {
+  const ui = researchProfileUiContract(snapshot?.profileCode)
   const rows = research.metrics.filter((metric) => !OWNERSHIP_CODES.has(metric.code) && !VALUATION_CODES.has(metric.code))
+  const latest = latestByCode(rows)
+
+  if (ui.financialWorkspaceSections.length) {
+    const sectionCodes = ui.financialWorkspaceSections.flatMap((section) => section.codes)
+    return <><ResearchSectionScore snapshot={snapshot} section="FINANCIALS" />
+      {ui.readinessPanel === "PHARMA_V1" ? <PharmaResearchReadinessPanel research={research} /> : null}
+      <div className="workspace-heading"><div><p className="eyebrow">Profile-specific financial evidence</p><h2>{snapshot?.profileName ?? ui.profileCode} financial dashboard</h2><p>The page structure stays consistent while this profile selects the financial evidence that matters for its business model.</p></div></div>
+      <div className="financial-group-grid">{ui.financialWorkspaceSections.map((section) => profileSectionCards(section, latest))}</div>
+      <HistoryTable rows={rows} columns={sectionCodes} />
+    </>
+  }
+
   const groups = new Map<string, ResearchMetric[]>()
-  for (const metric of latestByCode(rows).values()) {
+  for (const metric of latest.values()) {
     const group = metricGroup(metric)
     groups.set(group, [...(groups.get(group) ?? []), metric])
   }
   const order = ["Profitability & returns", "Asset quality & capital", "Growth", "Earnings & cash evidence", "Other fundamentals"]
   return <><ResearchSectionScore snapshot={snapshot} section="FINANCIALS" />
-    <PharmaResearchReadinessPanel research={research} />
     <div className="workspace-heading"><div><p className="eyebrow">Financial evidence</p><h2>Financial strength dashboard</h2><p>Latest trusted observations are grouped by investment purpose; history remains available without cluttering the main view.</p></div></div>
     <div className="financial-group-grid">{order.flatMap((name) => { const metrics = groups.get(name) ?? []; return metrics.length ? [<section key={name} className="professional-panel"><h3>{name}</h3>{latestCards(metrics, "No evidence available")}</section>] : [] })}</div>
     <HistoryTable rows={rows} />
@@ -69,7 +98,18 @@ export function FinancialsWorkspace({ research, snapshot }: { readonly research:
 }
 
 export function QualityGrowthWorkspace({ research, snapshot }: { readonly research: SecurityResearch; readonly snapshot: SecurityScoringSnapshot | null }) {
+  const ui = researchProfileUiContract(snapshot?.profileCode)
   const latest = latestByCode(research.metrics)
+
+  if (ui.qualityGrowthWorkspaceSections.length) {
+    const sectionCodes = ui.qualityGrowthWorkspaceSections.flatMap((section) => section.codes)
+    return <><ResearchSectionScore snapshot={snapshot} section="QUALITY_GROWTH" />
+      <div className="workspace-heading"><div><p className="eyebrow">Profile-specific business performance</p><h2>Quality, Growth & Durability</h2><p>{snapshot?.profileName ?? ui.profileCode} uses its own evidence contract inside the same PortfolioAI Research workflow.</p></div></div>
+      <div className="quality-growth-grid">{ui.qualityGrowthWorkspaceSections.map((section) => profileSectionCards(section, latest))}</div>
+      <HistoryTable rows={research.metrics} columns={sectionCodes} />
+    </>
+  }
+
   const groups = [{ title: "Quality", subtitle: "Durability, profitability and operating strength", codes: [...QUALITY_CODES] }, { title: "Growth", subtitle: "Earnings and business expansion", codes: [...GROWTH_CODES] }]
   return <><ResearchSectionScore snapshot={snapshot} section="QUALITY_GROWTH" />
     <div className="workspace-heading"><div><p className="eyebrow">Business performance</p><h2>Quality & Growth</h2><p>Reviewed evidence is separated into quality and growth so a strong company is not confused with a fast-growing company.</p></div></div>
@@ -94,14 +134,16 @@ export function OwnershipWorkspace({ research, snapshot }: { readonly research: 
 
 function valuationBucket(code: string) {
   if (/SELF_HISTORY|5Y|3Y/u.test(code)) return "Historical context"
-  if (/PE|PBV|PRICE_TO|YIELD/u.test(code)) return "Market multiples"
+  if (/PE|PBV|PRICE_TO|YIELD|EV_EBITDA/u.test(code)) return "Market multiples"
   if (/MARKET_CAP/u.test(code)) return "Market context"
   return "Other valuation evidence"
 }
 
 export function ValuationWorkspace({ research, snapshot }: { readonly research: SecurityResearch; readonly snapshot: SecurityScoringSnapshot | null }) {
+  const ui = researchProfileUiContract(snapshot?.profileCode)
   const rows = research.metrics.filter((metric) => VALUATION_CODES.has(metric.code))
-  const latest = [...latestByCode(rows).values()]
+  const primaryRows = ui.profileCode === "PHARMA_V1" ? rows.filter((metric) => metric.code !== "PBV_ADJUSTED_PROVIDER") : rows
+  const latest = [...latestByCode(primaryRows).values()]
   const buckets = new Map<string, ResearchMetric[]>()
   for (const metric of latest) { const bucket = valuationBucket(metric.code); buckets.set(bucket, [...(buckets.get(bucket) ?? []), metric]) }
   return <><ResearchSectionScore snapshot={snapshot} section="VALUATION" />
