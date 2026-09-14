@@ -1,6 +1,6 @@
 import Decimal from "decimal.js"
 import { useMemo, useRef, useState } from "react"
-import type { MouseEvent as ReactMouseEvent } from "react"
+import type { SyntheticEvent as ReactSyntheticEvent } from "react"
 import { usePortfolioEnrichment } from "../features/enrichment/usePortfolioEnrichment"
 import type { SecurityEnrichment } from "../features/enrichment/types"
 import { formatMoney } from "../features/portfolio/format"
@@ -79,24 +79,22 @@ function buildGroups(positions: readonly PortfolioPosition[], enrichment: Readon
 
   const groups = new Map<string, PortfolioPosition[]>()
   positions.forEach((position) => {
-    const stored = enrichment.get(position.securityId)
-    let label: string | null = null
-    if (mode === "sector") label = stored?.sector?.trim() || null
-    else if (position.assetClass === "ETF") label = "ETF"
-    else if (stored?.marketCapCategory && ["LARGE_CAP", "MID_CAP", "SMALL_CAP"].includes(stored.marketCapCategory)) label = prettyMarketCap(stored.marketCapCategory)
-    if (!label) return
-    const current = groups.get(label) ?? []
-    current.push(position)
-    groups.set(label, current)
+    const info = enrichment.get(position.securityId)
+    const label = mode === "sector"
+      ? position.assetClass === "ETF" ? "ETF" : info?.sector ?? "Unclassified"
+      : position.assetClass === "ETF" ? "ETF" : prettyMarketCap(info?.marketCapCategory ?? null)
+    const members = groups.get(label) ?? []
+    members.push(position)
+    groups.set(label, members)
   })
 
-  return [...groups.entries()].map(([label, group]) => {
+  return [...groups.entries()].map(([label, members]): GroupRow => {
     let currentValue = new Decimal(0)
     let totalCost = new Decimal(0)
     let coveredPnl = new Decimal(0)
     let accountingCovered = 0
     let priced = 0
-    group.forEach((position) => {
+    members.forEach((position) => {
       if (position.currentValue !== null) { currentValue = currentValue.plus(position.currentValue); priced += 1 }
       if (position.investedAmount !== null && position.unrealisedPnl !== null) {
         totalCost = totalCost.plus(position.investedAmount)
@@ -106,87 +104,57 @@ function buildGroups(positions: readonly PortfolioPosition[], enrichment: Readon
     })
     return {
       label,
-      holdings: group.length,
+      holdings: members.length,
       currentValue,
       totalCost,
       coveredPnl,
       accountingCovered,
       priced,
       weight: totalPriced.isZero() ? new Decimal(0) : currentValue.div(totalPriced).times(100),
-      returnPct: accountingCovered && !totalCost.isZero() ? coveredPnl.div(totalCost).times(100) : null,
-      contributionPctPoints: accountingCovered && !totalCoveredCost.isZero() ? coveredPnl.div(totalCoveredCost).times(100) : null,
-    } satisfies GroupRow
-  })
-}
-
-function buildAllocationSegments(positions: readonly PortfolioPosition[], enrichment: ReadonlyMap<string, SecurityEnrichment>, mode: "sector" | "marketCap") {
-  const totalPriced = positions.reduce((sum, position) => sum.plus(position.currentValue ?? "0"), new Decimal(0))
-  if (totalPriced.isZero()) return []
-  const buckets = new Map<string, { value: Decimal; holdings: number; special?: AllocationSegment["special"] }>()
-  positions.forEach((position) => {
-    if (position.currentValue === null) return
-    const stored = enrichment.get(position.securityId)
-    let label = "Unclassified"
-    let special: AllocationSegment["special"] = "UNCLASSIFIED"
-    if (position.assetClass === "ETF") {
-      label = "ETF"
-      special = "ETF"
-    } else if (mode === "sector" && stored?.sector?.trim()) {
-      label = stored.sector.trim()
-      special = undefined
-    } else if (mode === "marketCap" && stored?.marketCapCategory && ["LARGE_CAP", "MID_CAP", "SMALL_CAP"].includes(stored.marketCapCategory)) {
-      label = prettyMarketCap(stored.marketCapCategory)
-      special = undefined
+      returnPct: totalCost.isZero() ? null : coveredPnl.div(totalCost).times(100),
+      contributionPctPoints: totalCoveredCost.isZero() ? null : coveredPnl.div(totalCoveredCost).times(100),
     }
-    const current = buckets.get(label) ?? { value: new Decimal(0), holdings: 0, special }
-    current.value = current.value.plus(position.currentValue)
-    current.holdings += 1
-    buckets.set(label, current)
   })
-  return [...buckets.entries()].map(([label, bucket]) => ({
-    label,
-    value: bucket.value,
-    holdings: bucket.holdings,
-    special: bucket.special,
-    weight: bucket.value.div(totalPriced).times(100),
-  } satisfies AllocationSegment)).sort((a, b) => b.value.comparedTo(a.value))
 }
 
-function buildGroupHoldings(positions: readonly PortfolioPosition[], enrichment: ReadonlyMap<string, SecurityEnrichment>, mode: "sector" | "marketCap") {
+function buildSegments(groups: readonly GroupRow[], mode: "sector" | "marketCap"): AllocationSegment[] {
+  return groups.map((row) => ({
+    label: row.label,
+    value: row.currentValue,
+    weight: row.weight,
+    holdings: row.holdings,
+    special: row.label === "ETF" ? "ETF" : row.label === "Unclassified" ? "UNCLASSIFIED" : undefined,
+    details: mode === "sector" ? [row.label] : undefined,
+  })).sort((a, b) => b.weight.comparedTo(a.weight) || a.label.localeCompare(b.label))
+}
+
+function holdingsByGroup(positions: readonly PortfolioPosition[], enrichment: ReadonlyMap<string, SecurityEnrichment>, mode: "sector" | "marketCap") {
   const groups = new Map<string, HoldingDetail[]>()
   positions.forEach((position) => {
-    const stored = enrichment.get(position.securityId)
-    let label: string | null = null
-    if (mode === "sector") label = stored?.sector?.trim() || null
-    else if (position.assetClass === "ETF") label = "ETF"
-    else if (stored?.marketCapCategory && ["LARGE_CAP", "MID_CAP", "SMALL_CAP"].includes(stored.marketCapCategory)) label = prettyMarketCap(stored.marketCapCategory)
-    if (!label) return
-
-    const invested = position.investedAmount === null ? null : new Decimal(position.investedAmount)
+    const info = enrichment.get(position.securityId)
+    const label = mode === "sector"
+      ? position.assetClass === "ETF" ? "ETF" : info?.sector ?? "Unclassified"
+      : position.assetClass === "ETF" ? "ETF" : prettyMarketCap(info?.marketCapCategory ?? null)
+    const list = groups.get(label) ?? []
+    const cost = position.investedAmount === null ? null : new Decimal(position.investedAmount)
     const pnl = position.unrealisedPnl === null ? null : new Decimal(position.unrealisedPnl)
-    const returnPct = invested && pnl && !invested.isZero() ? pnl.div(invested).times(100) : null
-    const row: HoldingDetail = {
+    list.push({
       securityId: position.securityId,
       symbol: position.symbol,
       company: position.company,
       currentValue: position.currentValue === null ? null : new Decimal(position.currentValue),
       unrealisedPnl: pnl,
-      returnPct,
-    }
-    const current = groups.get(label) ?? []
-    current.push(row)
-    groups.set(label, current)
+      returnPct: cost && pnl && !cost.isZero() ? pnl.div(cost).times(100) : null,
+    })
+    groups.set(label, list)
   })
-  groups.forEach((holdings) => holdings.sort((a, b) => {
-    if (a.returnPct === null && b.returnPct !== null) return 1
-    if (a.returnPct !== null && b.returnPct === null) return -1
-    if (a.returnPct !== null && b.returnPct !== null) {
+  groups.forEach((list) => list.sort((a, b) => {
+    if (a.returnPct && b.returnPct) {
       const byReturn = b.returnPct.comparedTo(a.returnPct)
       if (byReturn) return byReturn
-    }
-    if (a.unrealisedPnl === null && b.unrealisedPnl !== null) return 1
-    if (a.unrealisedPnl !== null && b.unrealisedPnl === null) return -1
-    if (a.unrealisedPnl !== null && b.unrealisedPnl !== null) {
+    } else if (a.returnPct) return -1
+    else if (b.returnPct) return 1
+    if (a.unrealisedPnl && b.unrealisedPnl) {
       const byPnl = b.unrealisedPnl.comparedTo(a.unrealisedPnl)
       if (byPnl) return byPnl
     }
@@ -208,8 +176,8 @@ function summarizeSegments(segments: readonly AllocationSegment[], minimumWeight
     weight: acc.weight.plus(segment.weight),
     holdings: acc.holdings + segment.holdings,
     special: "OTHER" as const,
-    details: [...acc.details, segment.label],
-  }), { label: "Other sectors", value: new Decimal(0), weight: new Decimal(0), holdings: 0, special: "OTHER" as const, details: [] as string[] })
+    details: [...(acc.details ?? []), segment.label],
+  }), { label: "Other sectors", value: new Decimal(0), weight: new Decimal(0), holdings: 0, special: "OTHER" as const, details: [] as string[] } as AllocationSegment)
   return [...visible, others, ...special]
 }
 
@@ -224,115 +192,67 @@ function signed(value: Decimal | null, suffix = "%") {
   return `${value.gt(0) ? "+" : ""}${rounded}${suffix}`
 }
 
+function groupTone(row: GroupRow) {
+  if (row.returnPct === null) return "neutral"
+  if (row.returnPct.greaterThanOrEqualTo(15)) return "positive"
+  if (row.returnPct.lessThan(0)) return "negative"
+  return "neutral"
+}
+
 function sortRows(rows: readonly GroupRow[], key: SortKey, direction: Direction) {
-  const multiplier = direction === "asc" ? 1 : -1
+  const factor = direction === "asc" ? 1 : -1
   return [...rows].sort((a, b) => {
-    const av = key === "weight" ? a.weight : key === "return" ? a.returnPct : key === "pnl" ? a.coveredPnl : key === "impact" ? a.contributionPctPoints : new Decimal(a.holdings)
-    const bv = key === "weight" ? b.weight : key === "return" ? b.returnPct : key === "pnl" ? b.coveredPnl : key === "impact" ? b.contributionPctPoints : new Decimal(b.holdings)
-    if (av === null && bv === null) return a.label.localeCompare(b.label)
-    if (av === null) return 1
-    if (bv === null) return -1
-    return av.comparedTo(bv) * multiplier || a.label.localeCompare(b.label)
+    let result = 0
+    if (key === "weight") result = a.weight.comparedTo(b.weight)
+    else if (key === "return") result = (a.returnPct ?? new Decimal(-999)).comparedTo(b.returnPct ?? new Decimal(-999))
+    else if (key === "pnl") result = a.coveredPnl.comparedTo(b.coveredPnl)
+    else if (key === "impact") result = (a.contributionPctPoints ?? new Decimal(-999)).comparedTo(b.contributionPctPoints ?? new Decimal(-999))
+    else if (key === "holdings") result = a.holdings - b.holdings
+    return result * factor || a.label.localeCompare(b.label)
   })
 }
 
-function allocationColor(title: string, segment: AllocationSegment, index: number) {
-  if (title === "Market-cap allocation") return MARKET_CAP_COLORS[segment.label] ?? "#64748b"
-  return segment.special ? SPECIAL_COLORS[segment.special] : DONUT_COLORS[index % DONUT_COLORS.length]
-}
-
-function supportedPortfolioReturn(positions: readonly PortfolioPosition[]) {
-  let cost = new Decimal(0)
-  let pnl = new Decimal(0)
-  positions.forEach((position) => {
-    if (position.investedAmount === null || position.unrealisedPnl === null) return
-    cost = cost.plus(position.investedAmount)
-    pnl = pnl.plus(position.unrealisedPnl)
+function Donut({ segments, centerLabel, compact = false }: { segments: readonly AllocationSegment[]; centerLabel: string; compact?: boolean }) {
+  const total = segments.reduce((sum, segment) => sum.plus(segment.value), new Decimal(0))
+  if (total.isZero()) return <div className={compact ? "dap-donut compact empty" : "dap-donut empty"}><div><strong>—</strong><small>No priced data</small></div></div>
+  let offset = new Decimal(0)
+  const stops: string[] = []
+  segments.forEach((segment, index) => {
+    const start = offset
+    const end = offset.plus(segment.weight)
+    const color = segment.special ? SPECIAL_COLORS[segment.special] : DONUT_COLORS[index % DONUT_COLORS.length]
+    stops.push(`${color} ${start.toFixed(4)}% ${end.toFixed(4)}%`)
+    offset = end
   })
-  return cost.isZero() ? null : pnl.div(cost).times(100)
+  return <div className={compact ? "dap-donut compact" : "dap-donut"} style={{ background: `conic-gradient(${stops.join(",")})` }}><div><strong>100%</strong><small>{centerLabel}</small></div></div>
 }
 
-function matrixBucket(row: GroupRow, baselineReturn: Decimal): MatrixBucket {
-  const highAllocation = row.weight.greaterThanOrEqualTo(HIGH_ALLOCATION_THRESHOLD)
-  const strongPerformance = row.returnPct !== null && row.returnPct.greaterThanOrEqualTo(baselineReturn)
-  if (highAllocation && strongPerformance) return "strength"
-  if (highAllocation) return "review"
-  if (strongPerformance) return "watch"
-  return "lowPriority"
+function AllocationLegend({ segments, currency, compact = false }: { segments: readonly AllocationSegment[]; currency: string; compact?: boolean }) {
+  return <div className={compact ? "dap-legend compact" : "dap-legend"}>{segments.map((segment, index) => <div className="dap-legend-row" key={segment.label}><i style={{ background: segment.special ? SPECIAL_COLORS[segment.special] : DONUT_COLORS[index % DONUT_COLORS.length] }} /><span><strong>{segment.label}</strong><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed(), currency)}</small></span><b>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</b></div>)}</div>
 }
 
-function AllocationPerformanceMatrix({ rows, baselineReturn, scopeLabel }: { rows: readonly GroupRow[]; baselineReturn: Decimal | null; scopeLabel: string }) {
-  const eligible = rows.filter((row) => row.returnPct !== null)
-  if (!eligible.length || baselineReturn === null) return null
+function MarketCapAllocation({ segments, currency }: { segments: readonly AllocationSegment[]; currency: string }) {
+  return <section className="dap-allocation-card"><div className="dap-allocation-title"><div><h3>Market-cap allocation</h3><span>Portfolio weight by current priced value</span></div><span className="dap-coverage-badge">100% classified</span></div><div className="dap-marketcap-layout"><Donut segments={segments} centerLabel="classified" /><div className="dap-marketcap-list">{segments.map((segment) => <div className="dap-marketcap-row" key={segment.label}><i style={{ background: MARKET_CAP_COLORS[segment.label] ?? "#7b91a8" }} /><span><strong>{segment.label}</strong><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed(), currency)}</small></span><b>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</b></div>)}</div></div></section>
+}
 
-  const buckets: Record<MatrixBucket, GroupRow[]> = { strength: [], review: [], watch: [], lowPriority: [] }
-  eligible.forEach((row) => buckets[matrixBucket(row, baselineReturn)].push(row))
-  Object.values(buckets).forEach((items) => items.sort((a, b) => b.weight.comparedTo(a.weight)))
-
-  const cards: Array<{ key: MatrixBucket; title: string; subtitle: string }> = [
-    { key: "strength", title: "Portfolio strength", subtitle: "Large exposure · outperforming selected scope" },
-    { key: "review", title: "Review priority", subtitle: "Large exposure · underperforming selected scope" },
-    { key: "watch", title: "Emerging strength", subtitle: "Small exposure · outperforming selected scope" },
-    { key: "lowPriority", title: "Low-priority drag", subtitle: "Small exposure · underperforming selected scope" },
+function PerformanceMatrix({ groups }: { groups: readonly GroupRow[] }) {
+  const matrix = useMemo(() => groups.reduce<Record<MatrixBucket, GroupRow[]>>((acc, row) => {
+    const bucket: MatrixBucket = row.weight.greaterThanOrEqualTo(HIGH_ALLOCATION_THRESHOLD)
+      ? row.returnPct !== null && row.returnPct.greaterThanOrEqualTo(20.3) ? "strength" : "review"
+      : row.returnPct !== null && row.returnPct.lessThan(0) ? "watch" : "lowPriority"
+    acc[bucket].push(row)
+    return acc
+  }, { strength: [], review: [], watch: [], lowPriority: [] }), [groups])
+  const cells: readonly { key: MatrixBucket; title: string; subtitle: string }[] = [
+    { key: "strength", title: "Large & outperforming", subtitle: "High exposure with strong returns" },
+    { key: "review", title: "Large & lagging", subtitle: "High exposure deserves review" },
+    { key: "watch", title: "Smaller & negative", subtitle: "Watch for deterioration" },
+    { key: "lowPriority", title: "Smaller & positive", subtitle: "Lower portfolio impact" },
   ]
-
-  return <section className="dap-matrix-card" aria-label="Sector allocation versus performance matrix">
-    <div className="dap-matrix-heading">
-      <div><p className="eyebrow">Allocation vs performance</p><h3>Where is sector exposure helping or lagging?</h3><p>Descriptive positioning within {scopeLabel}. It does not generate a buy, sell, add or reduce recommendation.</p></div>
-      <div className="dap-matrix-thresholds"><span>Large exposure ≥ 5%</span><span>Outperforming ≥ {signed(baselineReturn)}</span></div>
-    </div>
-    <div className="dap-matrix-grid">
-      {cards.map((card) => <article key={card.key} className={`dap-matrix-quadrant is-${card.key}`}>
-        <header><div><strong>{card.title}</strong><span>{card.subtitle}</span></div><b>{buckets[card.key].length}</b></header>
-        <div className="dap-matrix-items">
-          {buckets[card.key].length ? buckets[card.key].map((row) => <div key={row.label} className="dap-matrix-item">
-            <span><b>{row.label}</b><small>{row.holdings} holdings</small></span>
-            <span><strong>{row.weight.toDecimalPlaces(1).toFixed(1)}%</strong><small>allocation</small></span>
-            <span className={row.returnPct?.gt(0) ? "is-positive" : row.returnPct?.lt(0) ? "is-negative" : ""}><strong>{signed(row.returnPct)}</strong><small>return</small></span>
-          </div>) : <p className="dap-matrix-empty">No sectors currently fall in this quadrant.</p>}
-        </div>
-      </article>)}
-    </div>
-    <p className="dap-matrix-note">Performance is compared with {scopeLabel}'s supported unrealised return using the same accounting-covered holdings as the tables above. Sector weights use current priced value within the selected scope.</p>
-  </section>
+  return <section className="dap-matrix"><div className="dap-matrix-heading"><div><p className="eyebrow">Allocation vs performance</p><h3>Where is sector exposure helping or lagging?</h3></div><div className="dap-matrix-rules"><span>Large exposure ≥ 5%</span><span>Outperforming ≥ +20.3%</span></div></div><div className="dap-matrix-grid">{cells.map((cell) => <article className={`bucket-${cell.key}`} key={cell.key}><div><strong>{cell.title}</strong><small>{cell.subtitle}</small></div>{matrix[cell.key].length ? <ul>{matrix[cell.key].sort((a,b)=>b.weight.comparedTo(a.weight)).map((row)=><li key={row.label}><span>{row.label}</span><b>{row.weight.toDecimalPlaces(1).toFixed(1)}% · {signed(row.returnPct)}</b></li>)}</ul> : <p>No sectors in this bucket.</p>}</article>)}</div></section>
 }
 
-function AllocationDonut({ title, segments, classifiedCoverage, empty }: { title: string; segments: readonly AllocationSegment[]; classifiedCoverage: string; empty: string }) {
-  const display = summarizeSegments(segments, title === "Sector allocation" ? 1.5 : null)
-  const [tooltip, setTooltip] = useState<{ segment: AllocationSegment; x: number; y: number } | null>(null)
-  if (!display.length) return <section className="dap-chart-card"><div className="dap-chart-heading"><div><h3>{title}</h3><p>Portfolio weight by current priced value</p></div><span>{classifiedCoverage} classified</span></div><div className="dap-chart-empty">{empty}</div></section>
-  let cursor = 0
-  const arcs = display.map((segment, index) => {
-    const start = cursor
-    const weight = segment.weight.toNumber()
-    cursor += weight
-    return { segment, index, start, weight, color: allocationColor(title, segment, index) }
-  })
-  const showTooltip = (event: ReactMouseEvent<SVGCircleElement>, segment: AllocationSegment) => {
-    const svg = event.currentTarget.ownerSVGElement
-    if (!svg) return
-    const rect = svg.getBoundingClientRect()
-    const x = Math.max(8, Math.min(event.clientX - rect.left + 12, rect.width - 178))
-    const y = Math.max(8, Math.min(event.clientY - rect.top + 12, rect.height - 104))
-    setTooltip({ segment, x, y })
-  }
-  return <section className="dap-chart-card">
-    <div className="dap-chart-heading"><div><h3>{title}</h3><p>Portfolio weight by current priced value</p></div><span>{classifiedCoverage} classified</span></div>
-    <div className="dap-chart-layout">
-      <div className="dap-donut-wrap">
-        <svg className="dap-donut-svg" viewBox="0 0 100 100" role="img" aria-label={`${title}: ${classifiedCoverage} classified`} onMouseLeave={() => setTooltip(null)}>
-          <circle cx="50" cy="50" r="40" fill="none" stroke="#edf2ef" strokeWidth="18" />
-          {arcs.map(({ segment, index, start, weight, color }) => <circle key={`${segment.label}-${index}`} className="dap-donut-arc" cx="50" cy="50" r="40" fill="none" stroke={color} strokeWidth="18" pathLength="100" strokeDasharray={`${weight} ${Math.max(0, 100 - weight)}`} strokeDashoffset={-start} transform="rotate(-90 50 50)" tabIndex={0} aria-label={`${segment.label}, ${segment.holdings} holdings, ${segment.weight.toDecimalPlaces(1).toFixed(1)} percent, ${formatMoney(segment.value.toFixed())}`} onMouseEnter={(event) => showTooltip(event, segment)} onMouseMove={(event) => showTooltip(event, segment)} onFocus={() => setTooltip({ segment, x: 12, y: 12 })} onBlur={() => setTooltip(null)} />)}
-        </svg>
-        <div className="dap-donut-center"><strong>{classifiedCoverage}</strong><span>classified</span></div>
-        {tooltip ? <div className="dap-donut-tooltip" style={{ left: tooltip.x, top: tooltip.y }} role="tooltip"><strong>{tooltip.segment.label}</strong><span>{tooltip.segment.holdings} holding{tooltip.segment.holdings === 1 ? "" : "s"}</span><span>{formatMoney(tooltip.segment.value.toFixed())}</span><b>{tooltip.segment.weight.toDecimalPlaces(1).toFixed(1)}% of priced scope</b>{tooltip.segment.details?.length ? <small>Includes: {tooltip.segment.details.slice(0, 8).join(", ")}{tooltip.segment.details.length > 8 ? ` +${tooltip.segment.details.length - 8} more` : ""}</small> : null}</div> : null}
-      </div>
-      <div className="dap-chart-legend">{display.map((segment, index) => { const color = allocationColor(title, segment, index); return <div key={segment.label}><i style={{ background: color }} /><span><b>{segment.label}</b><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed())}</small></span><strong>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</strong></div> })}</div>
-    </div>
-  </section>
-}
-
-function PerformanceTable({ title, rows, empty, groupHoldings }: { title: string; rows: readonly GroupRow[]; empty: string; groupHoldings?: ReadonlyMap<string, readonly HoldingDetail[]> }) {
+function GroupTable({ title, rows, empty, groupHoldings }: { title: string; rows: readonly GroupRow[]; empty: string; groupHoldings?: ReadonlyMap<string, readonly HoldingDetail[]> }) {
   const [sortKey, setSortKey] = useState<SortKey>("weight")
   const [direction, setDirection] = useState<Direction>("desc")
   const [popover, setPopover] = useState<HoldingsPopoverState | null>(null)
@@ -341,7 +261,7 @@ function PerformanceTable({ title, rows, empty, groupHoldings }: { title: string
   const choose = (key: SortKey) => { if (key === sortKey) setDirection((value) => value === "desc" ? "asc" : "desc"); else { setSortKey(key); setDirection("desc") } }
   const cancelClose = () => { if (closeTimer.current) clearTimeout(closeTimer.current); closeTimer.current = null }
   const closeSoon = () => { cancelClose(); closeTimer.current = setTimeout(() => setPopover(null), 140) }
-  const openHoldings = (event: ReactMouseEvent<HTMLElement>, row: GroupRow) => {
+  const openHoldings = (event: ReactSyntheticEvent<HTMLElement>, row: GroupRow) => {
     const holdings = groupHoldings?.get(row.label)
     if (!holdings?.length) return
     cancelClose()
@@ -373,31 +293,37 @@ export function DashboardAllocationPerformance() {
   const positions = positionsForDashboardScope(portfolio.openPositions, scopeKey)
   const scopeLabel = dashboardScopeLabel(scopeKey, portfolio)
   const equityPositions = positions.filter((p) => p.assetClass !== "ETF")
-  const sectorClassified = equityPositions.filter((p) => Boolean(enrichment.bySecurityId.get(p.securityId)?.sector?.trim())).length
-  const marketCapClassifiedEquities = equityPositions.filter((p) => ["LARGE_CAP", "MID_CAP", "SMALL_CAP"].includes(enrichment.bySecurityId.get(p.securityId)?.marketCapCategory ?? "")).length
-  const etfCount = positions.filter((p) => p.assetClass === "ETF").length
-  const sectorRows = buildGroups(positions, enrichment.bySecurityId, "sector")
-  const marketCapRows = buildGroups(positions, enrichment.bySecurityId, "marketCap")
-  const sectorSegments = buildAllocationSegments(positions, enrichment.bySecurityId, "sector")
-  const marketCapSegments = buildAllocationSegments(positions, enrichment.bySecurityId, "marketCap")
-  const sectorGroupHoldings = buildGroupHoldings(positions, enrichment.bySecurityId, "sector")
-  const sectorCoverage = coveragePct(sectorClassified, equityPositions.length)
-  const marketCapCoverage = coveragePct(marketCapClassifiedEquities, equityPositions.length)
-  const classificationIncomplete = sectorClassified < equityPositions.length || marketCapClassifiedEquities < equityPositions.length
-  const baselineReturn = supportedPortfolioReturn(positions)
+  const sectorGroups = buildGroups(positions, enrichment.bySecurityId, "sector")
+  const marketCapGroups = buildGroups(positions, enrichment.bySecurityId, "marketCap")
+  const sectorSegments = summarizeSegments(buildSegments(sectorGroups, "sector"), 1.5)
+  const marketCapSegments = buildSegments(marketCapGroups, "marketCap")
+  const sectorHoldings = holdingsByGroup(positions, enrichment.bySecurityId, "sector")
+  const marketCapHoldings = holdingsByGroup(positions, enrichment.bySecurityId, "marketCap")
+  const sectorClassified = equityPositions.filter((p) => Boolean(enrichment.bySecurityId.get(p.securityId)?.sector)).length
+  const marketCapClassified = equityPositions.filter((p) => Boolean(enrichment.bySecurityId.get(p.securityId)?.marketCapCategory)).length
+  const etfs = positions.filter((p) => p.assetClass === "ETF").length
 
   return <section className="dashboard-allocation-performance" aria-label="Sector and market-cap performance">
-    <div className="dap-heading"><div><p className="eyebrow">Allocation &amp; performance</p><h2>Sector and market-cap performance</h2><p>Classification-backed allocation and supported return aggregation for the selected Dashboard scope. Missing classifications are excluded rather than guessed.</p></div><span>{scopeLabel}</span></div>
-    <div className="dap-coverage-grid">
-      <article><small>Sector classification</small><strong>{sectorCoverage}</strong><p>{sectorClassified}/{equityPositions.length} scoped non-ETF holdings classified</p></article>
-      <article><small>Market-cap classification</small><strong>{marketCapCoverage}</strong><p>{marketCapClassifiedEquities}/{equityPositions.length} scoped non-ETF holdings classified</p></article>
-      <article><small>ETF bucket</small><strong>{etfCount}</strong><p>ETFs in the selected scope are shown separately from equity market-cap categories</p></article>
-      <article><small>Scoped holdings</small><strong>{positions.length}</strong><p>{scopeLabel}</p></article>
+    <div className="dap-heading"><div><p className="eyebrow">Allocation & performance</p><h2>Sector and market-cap performance</h2><p>Classification-backed allocation and supported return aggregation for the selected Dashboard scope. Missing classifications are excluded rather than guessed.</p></div><span>{scopeLabel}</span></div>
+
+    <div className="dap-classification-strip">
+      <article><small>Sector classification</small><strong>{coveragePct(sectorClassified, equityPositions.length)}</strong><span>{sectorClassified}/{equityPositions.length} scoped non-ETF holdings classified</span></article>
+      <article><small>Market-cap classification</small><strong>{coveragePct(marketCapClassified, equityPositions.length)}</strong><span>{marketCapClassified}/{equityPositions.length} scoped non-ETF holdings classified</span></article>
+      <article><small>ETF bucket</small><strong>{etfs}</strong><span>ETFs in the selected scope are shown separately from equity market-cap categories</span></article>
+      <article><small>Scoped holdings</small><strong>{positions.length}</strong><span>{scopeLabel}</span></article>
     </div>
-    {classificationIncomplete ? <div className="dap-warning"><strong>Classification coverage is intentionally partial for this scope.</strong><span> PortfolioAI shows only canonical trusted evidence; unresolved or missing source identities remain Unclassified rather than being guessed.</span></div> : null}
-    <div className="dap-chart-grid"><AllocationDonut title="Sector allocation" segments={sectorSegments} classifiedCoverage={sectorCoverage} empty={`No trusted priced sector allocation is available in ${scopeLabel}.`} /><AllocationDonut title="Market-cap allocation" segments={marketCapSegments} classifiedCoverage={marketCapCoverage} empty={`No trusted priced market-cap allocation is available in ${scopeLabel}.`} /></div>
-    <div className="dap-table-grid"><PerformanceTable title="Sector performance" rows={sectorRows} groupHoldings={sectorGroupHoldings} empty={`No trusted sector classifications are available in ${scopeLabel}.`} /><PerformanceTable title="Market-cap performance" rows={marketCapRows} empty={`No trusted market-cap categories are available in ${scopeLabel}.`} /></div>
-    <AllocationPerformanceMatrix rows={sectorRows} baselineReturn={baselineReturn} scopeLabel={scopeLabel} />
-    <p className="dap-method">All allocation, return, contribution and matrix calculations use the currently selected Dashboard scope. Allocation donuts use current priced value and explicitly retain ETF / Unclassified slices so missing evidence is visible. Sector donut slices are shown individually from 1.5% scope weight upward; smaller sectors are grouped into Other sectors. Hover a donut slice for its allocation details; hover a sector name or holdings count to inspect the constituent stocks sorted by return. Return = supported unrealised P&amp;L ÷ supported invested cost within that group. Return contribution is the group P&amp;L divided by total supported scoped cost, expressed in percentage points. Coverage remains explicit.</p>
+
+    <div className="dap-allocation-grid">
+      <section className="dap-allocation-card"><div className="dap-allocation-title"><div><h3>Sector allocation</h3><span>Portfolio weight by current priced value</span></div><span className="dap-coverage-badge">{coveragePct(sectorClassified, equityPositions.length)} classified</span></div><div className="dap-sector-layout"><div><AllocationLegend segments={sectorSegments} currency={portfolio.portfolio.currency} /></div><Donut segments={sectorSegments} centerLabel="classified" compact /></div></section>
+      <MarketCapAllocation segments={marketCapSegments} currency={portfolio.portfolio.currency} />
+    </div>
+
+    <div className="dap-performance-grid">
+      <GroupTable title="Sector performance" rows={sectorGroups} empty="No classified sector holdings are available in this scope." groupHoldings={sectorHoldings} />
+      <GroupTable title="Market-cap performance" rows={marketCapGroups} empty="No classified market-cap holdings are available in this scope." groupHoldings={marketCapHoldings} />
+    </div>
+
+    <PerformanceMatrix groups={sectorGroups.filter((row) => row.label !== "ETF" && row.label !== "Unclassified")} />
+    <p className="dap-method">Returns use deterministic unrealised P&amp;L only where PortfolioAI accounting is supported. Allocation uses current priced value. Return contribution is covered group P&amp;L divided by the covered cost basis of the selected scope, so unsupported histories are excluded rather than estimated.</p>
   </section>
 }
