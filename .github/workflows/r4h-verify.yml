@@ -1,0 +1,38 @@
+name: R4H verification
+
+on:
+  push:
+    branches:
+      - r4h-torntpharm-canonical-history-pilot
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: R4H targeted tests
+        run: >-
+          npx vitest run
+          src/features/research/pharmaStoredDiscoveryParser.test.ts
+          src/features/research/pharmaHistoryNormalization.test.ts
+          src/features/research/pharmaPeriodIdentity.test.ts
+          src/features/research/pharmaCanonicalHistoryPilot.test.ts
+          src/features/research/pharmaSourceReadiness.test.ts
+          src/features/research/pharmaReadinessViewModel.test.ts
+      - name: Architecture guard
+        run: npm run check:architecture
+      - name: Architecture lint
+        run: npm run lint:architecture
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
