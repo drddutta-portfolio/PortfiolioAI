@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js"
 import { supabase } from "../lib/supabase"
+import { assessPharmaV1Evidence, pharmaProfileForCanonicalSector, resolveScoringRuleProfile } from "../features/research/pharmaScoringEvidence"
 import type { DimensionScore, ExternalRatingObservation, HeatState, MetricScoreSignal, ScoringProfileSource, SecurityScoringSnapshot } from "../features/research/scoringTypes"
 
 // Stage 8 tables were added after the last generated Database snapshot. Keep this
@@ -62,13 +63,15 @@ type RatingOrdinalRule = {
 }
 
 function profileForSector(sector: string | null, industry: string | null): { readonly code: string; readonly source: ScoringProfileSource } {
+  const pharma = pharmaProfileForCanonicalSector(sector)
+  if (pharma) return { code: pharma, source: "SECTOR_RULE" }
+
   const haystack = `${sector ?? ""} ${industry ?? ""}`.trim().toUpperCase()
   if (!haystack) return { code: "GENERAL", source: "GENERAL_FALLBACK" }
   if (/\bBANK\b|NBFC|LENDING/.test(haystack)) return { code: "BANK_NBFC", source: "SECTOR_RULE" }
   if (/IT|TECHNOLOGY|SOFTWARE/.test(haystack)) return { code: "IT_TECH", source: "SECTOR_RULE" }
   if (/INDUSTRIAL|CAPITAL GOODS|ENGINEERING/.test(haystack)) return { code: "INDUSTRIALS_CAPITAL_GOODS", source: "SECTOR_RULE" }
   if (/FMCG|CONSUMER/.test(haystack)) return { code: "CONSUMER_FMCG", source: "SECTOR_RULE" }
-  if (/PHARMA|HEALTHCARE/.test(haystack)) return { code: "PHARMA_HEALTHCARE", source: "SECTOR_RULE" }
   if (/AUTO|AUTOMOBILE/.test(haystack)) return { code: "AUTO_COMPONENTS", source: "SECTOR_RULE" }
   if (/POWER|ENERGY|UTILIT|OIL|GAS/.test(haystack)) return { code: "ENERGY_UTILITIES", source: "SECTOR_RULE" }
   if (/METAL|MINING|COMMODIT/.test(haystack)) return { code: "METALS_COMMODITIES", source: "SECTOR_RULE" }
@@ -204,6 +207,22 @@ function previewDimensions(
     let scoredContribution = 0
     const signals: MetricScoreSignal[] = dimensionRules.map((rule) => {
       const weight = effectiveWeight(rule)
+
+      if (rule.input_kind === "DERIVED" && rule.input_code.startsWith("PHARMA_") && rule.rule_state === "REVIEWED") {
+        const assessed = assessPharmaV1Evidence(rule.input_code, observations)
+        if (assessed) {
+          evidenceWeight += weight * assessed.evidenceFraction
+          return {
+            inputCode: rule.input_code,
+            label: assessed.label,
+            weight,
+            state: assessed.evidenceFraction > 0 ? "AVAILABLE_UNSCORED" : "MISSING",
+            value: assessed.observedCount,
+            normalizedScore: null,
+          }
+        }
+      }
+
       if (rule.rule_state === "PENDING_SOURCE") return { inputCode: rule.input_code, label: rule.input_code.replaceAll("_", " "), weight, state: "PENDING_SOURCE", value: null, normalizedScore: null }
 
       if (rule.input_kind === "DERIVED" && rule.input_code === "INSTITUTIONAL_OWNERSHIP_TREND") {
@@ -269,10 +288,12 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
   if (assignmentResult.error) throw assignmentResult.error
 
   const inferred = profileForSector(sector, industry)
-  const assignedCode = typeof assignmentResult.data?.scoring_profile_code === "string" ? assignmentResult.data.scoring_profile_code : null
+  const rawAssignedCode = typeof assignmentResult.data?.scoring_profile_code === "string" ? assignmentResult.data.scoring_profile_code : null
+  const legacyPharmaAssignment = rawAssignedCode === "PHARMA_HEALTHCARE" && pharmaProfileForCanonicalSector(sector) === "PHARMA_V1"
+  const assignedCode = legacyPharmaAssignment ? "PHARMA_V1" : rawAssignedCode
   const profileCode = assignedCode ?? inferred.code
   const profileSource: ScoringProfileSource = assignedCode ? "REVIEWED_ASSIGNMENT" : inferred.source
-  const ruleProfile = profileCode === "BANK_NBFC" ? "BANK_NBFC" : "GENERAL"
+  const ruleProfile = resolveScoringRuleProfile(profileCode)
 
   const [modelResult, profileResult, ratingsResult, observationsResult, marketObservationsResult] = await Promise.all([
     scoringDb.from("scoring_models").select("id,name,status").eq("code", "PAI_STOCK_SCORE").eq("version", 1).maybeSingle(),
