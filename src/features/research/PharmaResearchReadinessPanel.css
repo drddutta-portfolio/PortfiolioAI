@@ -1,0 +1,174 @@
+.research-page .pharma-readiness-panel {
+  margin: 0 0 .8rem;
+  border: 1px solid #d8e3dd;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fbfdfc 0%, #f5f9f7 100%);
+  overflow: hidden;
+}
+
+.research-page .pharma-readiness-panel > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: .85rem .95rem;
+  border-bottom: 1px solid #e2e9e5;
+}
+
+.research-page .pharma-readiness-panel h2,
+.research-page .pharma-readiness-panel h3 {
+  margin: 0;
+  color: #20382c;
+}
+
+.research-page .pharma-readiness-panel header p:not(.eyebrow) {
+  margin: .25rem 0 0;
+  color: #69776f;
+  font-size: .7rem;
+  line-height: 1.4;
+}
+
+.research-page .pharma-readiness-summary {
+  min-width: 145px;
+  display: grid;
+  justify-items: end;
+  gap: .08rem;
+}
+
+.research-page .pharma-readiness-summary > strong {
+  font-size: 1.35rem;
+  color: #294f3b;
+}
+
+.research-page .pharma-readiness-summary small {
+  color: #78857e;
+  font-size: .58rem;
+}
+
+.research-page .pharma-readiness-state {
+  display: inline-flex;
+  padding: .2rem .45rem;
+  border-radius: 999px;
+  background: #fff3d7;
+  color: #875f0a;
+  font-size: .56rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .035em;
+}
+
+.research-page .pharma-readiness-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .55rem;
+  padding: .75rem;
+}
+
+.research-page .pharma-domain {
+  min-width: 0;
+  padding: .68rem;
+  border: 1px solid #e1e8e4;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.research-page .pharma-domain-head {
+  display: flex;
+  justify-content: space-between;
+  gap: .6rem;
+  align-items: flex-start;
+}
+
+.research-page .pharma-domain-head span {
+  display: block;
+  margin-bottom: .12rem;
+  color: #839087;
+  font-size: .5rem;
+  font-weight: 800;
+  letter-spacing: .045em;
+}
+
+.research-page .pharma-domain h3 {
+  font-size: .76rem;
+}
+
+.research-page .pharma-domain-head b {
+  flex: 0 0 auto;
+  padding: .16rem .38rem;
+  border-radius: 999px;
+  background: #f2f4f3;
+  color: #66736c;
+  font-size: .5rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.research-page .pharma-domain-validated_source .pharma-domain-head b {
+  background: #e7f5ed;
+  color: #246442;
+}
+
+.research-page .pharma-domain-official_source_pending .pharma-domain-head b {
+  background: #fff1e4;
+  color: #8d581a;
+}
+
+.research-page .pharma-domain > p {
+  min-height: 2.7rem;
+  margin: .45rem 0;
+  color: #67746d;
+  font-size: .59rem;
+  line-height: 1.4;
+}
+
+.research-page .pharma-domain footer {
+  display: flex;
+  justify-content: space-between;
+  gap: .5rem;
+  padding-top: .42rem;
+  border-top: 1px solid #eef2ef;
+  color: #7b8780;
+  font-size: .53rem;
+}
+
+.research-page .pharma-domain footer strong {
+  color: #344a3e;
+}
+
+.research-page .pharma-readiness-note {
+  margin: 0 .75rem .75rem;
+  padding: .65rem .72rem;
+  border: 1px solid #d9e5ef;
+  border-radius: 9px;
+  background: #f4f8fc;
+}
+
+.research-page .pharma-readiness-note > strong {
+  color: #315a78;
+  font-size: .67rem;
+}
+
+.research-page .pharma-readiness-note p {
+  margin: .2rem 0;
+  color: #60717d;
+  font-size: .59rem;
+  line-height: 1.4;
+}
+
+.research-page .pharma-readiness-note small {
+  color: #75838c;
+  font-size: .52rem;
+}
+
+@media (max-width: 780px) {
+  .research-page .pharma-readiness-panel > header,
+  .research-page .pharma-domain footer {
+    flex-direction: column;
+  }
+  .research-page .pharma-readiness-summary {
+    justify-items: start;
+  }
+  .research-page .pharma-readiness-grid {
+    grid-template-columns: 1fr;
+  }
+}
