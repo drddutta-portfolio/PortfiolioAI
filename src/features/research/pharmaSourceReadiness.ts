@@ -1,4 +1,4 @@
-export const PHARMA_SOURCE_READINESS_VERSION = "PHARMA_SOURCE_READINESS_V3" as const
+export const PHARMA_SOURCE_READINESS_VERSION = "PHARMA_SOURCE_READINESS_V4" as const
 
 export type PharmaSourceReadinessState =
   | "CACHE_PARTIAL"
@@ -20,9 +20,9 @@ export interface PharmaSourceReadinessItem {
 
 /**
  * Source-readiness is deliberately separate from research-profile readiness.
- * Provider-history validation proves only that reviewed evidence can support the
- * required semantics. It never promotes raw discovery into canonical research
- * observations or makes PHARMA_V1 scoring/recommendation ready by itself.
+ * Retained provider evidence can be useful without satisfying the complete
+ * PHARMA_V1 history contract. R4H promotes only semantically exact, conflict-free
+ * observations and never turns partial ingestion into scoring readiness.
  */
 export const PHARMA_V1_SOURCE_READINESS: readonly PharmaSourceReadinessItem[] = [
   {
@@ -32,16 +32,16 @@ export const PHARMA_V1_SOURCE_READINESS: readonly PharmaSourceReadinessItem[] = 
     observedProviderLabels: ["Operating Rev. Ann.", "Total Rev. Ann. 1Y Ago", "Rev. Ann. 2Y ago", "Rev. Ann. 3Y ago", "Rev. Ann. 4Y ago", "Rev. Ann. 5Y ago"],
     approvedSource: null,
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "R4H found a semantic mismatch in the stored Trendlyne series: current Operating Rev. Ann. is operating revenue, while historical Total Rev./Rev. Ann. fields represent total income/revenue and are not interchangeable. Only the current operating-revenue point is eligible until a semantically consistent multi-year contract is proven.",
+    reason: "R4H found a semantic mismatch in the stored Trendlyne series: current Operating Rev. Ann. is operating revenue, while historical Total Rev./Rev. Ann. fields are not the same concept. Only the exact current operating-revenue point is eligible; multi-year revenue-growth readiness remains blocked.",
   },
   {
     metricCode: "PHARMA_OPERATING_MARGIN_HISTORY",
-    state: "PROVIDER_HISTORY_VALIDATED",
-    canonicalEvidenceCodes: ["OPM_QUARTER_DERIVED"],
-    observedProviderLabels: ["Operating Profit Qtr", "Operating Profit 1Q Ago", "Operating Rev. Qtr", "Operating Rev. 1Q ago", "Operating Rev. 2Q ago", "Operating Rev. 3Q ago", "Operating Rev. 4Q ago", "Operating Rev. 5Q ago", "Operating Rev. 6Q ago", "Operating Rev. 7Q ago", "Operating Rev. 8Q ago"],
+    state: "HISTORY_CONTRACT_PENDING",
+    canonicalEvidenceCodes: ["OPERATING_REVENUE_QUARTER", "OPERATING_PROFIT_QUARTER"],
+    observedProviderLabels: ["Operating Profit Qtr", "Operating Profit 1Q Ago", "Operating Profit 2Q Ago", "Operating Profit 3Q Ago", "Operating Profit 4Q Ago", "Operating Profit 6Qtr Ago", "Operating Profit 7Qtr Ago", "Operating Rev. Qtr", "Operating Rev. 2Q ago", "Operating Rev. 3Q ago", "Operating Rev. 4Q ago", "Operating Rev. 5Q ago", "Operating Rev. 6Q ago", "Operating Rev. 7Q ago", "Operating Rev. 8Q ago"],
     approvedSource: "TRENDLYNE_MCP + PORTFOLIOAI",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "Live discovery validated matched quarterly operating-profit and operating-revenue history. R4H resolves the relative periods through reviewed issuer/exchange evidence and PortfolioAI derives OPM deterministically; canonical persistence still requires the gated metric definition and official-period evidence capture.",
+    reason: "R4H validated a useful raw quarterly operating-profit/revenue path and exact period identity, but the retained capture is incomplete and contains a duplicate-value conflict for Operating Profit 6Qtr Ago. Conflict-free raw points may be ingested, while the PHARMA_V1 8-quarter operating-margin history remains pending.",
   },
   {
     metricCode: "PHARMA_ROCE_HISTORY",
@@ -68,7 +68,7 @@ export const PHARMA_V1_SOURCE_READINESS: readonly PharmaSourceReadinessItem[] = 
     observedProviderLabels: ["Cash from Operating Act. Ann. 1Y Ago", "Cash from Operating Act. Ann. 2Y Ago", "Cash from Operating Act. Ann. 3Y Ago", "Cash from Operating Act. Ann. 4Y Ago", "Cash from Operating Act. Ann. 5Y Ago"],
     approvedSource: "TRENDLYNE_MCP",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "Annual CFO history is validated and its period identity is resolvable for TORNTPHARM, but PHARMA_V1 cash conversion also requires matched PAT plus a reviewed capex/FCF contract. Investing cash flow must not be substituted for capex.",
+    reason: "Five historical annual CFO points are conflict-free and period-resolvable for TORNTPHARM, but PHARMA_V1 cash conversion also requires matched PAT plus a reviewed capex/FCF contract. CFO alone cannot make this domain ready.",
   },
   {
     metricCode: "PHARMA_BALANCE_SHEET_LEVERAGE",
