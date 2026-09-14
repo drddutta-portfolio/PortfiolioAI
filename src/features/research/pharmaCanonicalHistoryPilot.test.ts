@@ -18,13 +18,12 @@ function build(v2 = V2, v3 = V3) {
 }
 
 describe("R4H TORNTPHARM canonical history preview", () => {
-  it("uses explicit annual-revenue history identity instead of REVENUE_TTM", () => {
+  it("uses explicit operating-revenue history identity and rejects total/generic revenue substitutions", () => {
     const preview = build()
     const revenue = preview.observations.filter((item) => item.metricCode === "REVENUE_ANNUAL")
-    expect(revenue).toHaveLength(4)
-    expect(revenue.map((item) => item.periodKey)).toEqual(["Y0", "Y1", "Y2", "Y3"])
-    expect(revenue.some((item) => item.metricCode === ("REVENUE_TTM" as never))).toBe(false)
-    expect(revenue.find((item) => item.periodKey === "Y1")?.sourceLabels).toEqual(["Total Rev. Ann. 1Y Ago"])
+    expect(revenue).toHaveLength(1)
+    expect(revenue[0]).toMatchObject({ periodKey: "Y0", periodEnd: "2026-03-31", numericValue: "13979.73" })
+    expect(revenue.some((item) => item.numericValue === "11539.36" || item.numericValue === "10785.75")).toBe(false)
   })
 
   it("keeps exact stored source-record provenance per normalized point", () => {
@@ -33,19 +32,28 @@ describe("R4H TORNTPHARM canonical history preview", () => {
     expect(preview.observations.find((item) => item.metricCode === "CFO_ANNUAL")?.sourceRecordIds).toEqual([V3_ID])
   })
 
+  it("resolves relative annual and quarterly periods only through the reviewed TORNTPHARM calendar contract", () => {
+    const preview = build()
+    expect(preview.observations.find((item) => item.metricCode === "CFO_ANNUAL" && item.periodKey === "Y1")?.periodEnd).toBe("2025-03-31")
+    expect(preview.observations.find((item) => item.metricCode === "OPM_QUARTER_DERIVED" && item.periodKey === "Q0")?.periodEnd).toBe("2026-06-30")
+    expect(preview.periodIdentityVersion).toBe("TORNTPHARM_PERIOD_IDENTITY_V1")
+    expect(preview.periodIdentityEvidenceUrls.length).toBeGreaterThanOrEqual(3)
+  })
+
   it("derives quarterly OPM deterministically from matched profit and revenue", () => {
     const preview = build()
     const q0 = preview.observations.find((item) => item.metricCode === "OPM_QUARTER_DERIVED" && item.periodKey === "Q0")
     expect(q0?.numericValue).toBe("33.814265")
-    expect(q0?.sourceCode).toBe("PORTFOLIOAI")
+    expect(q0?.sourceCode).toBe("TRENDLYNE_MCP")
+    expect(q0?.calculationOwner).toBe("PORTFOLIOAI_DERIVED")
     expect(q0?.sourceLabels).toEqual(["Operating Profit Qtr", "Operating Rev. Qtr"])
   })
 
-  it("never produces a writable production observation while period identity is unresolved", () => {
+  it("prepares deterministic rows but executes no production write", () => {
     const preview = build()
-    expect(preview.productionWriteCount).toBe(0)
-    expect(preview.observations.length).toBeGreaterThan(0)
-    expect(preview.observations.every((item) => item.periodEnd === null && item.writeState === "BLOCKED_PERIOD_IDENTITY")).toBe(true)
+    expect(preview.proposedWriteCount).toBe(6)
+    expect(preview.executedProductionWriteCount).toBe(0)
+    expect(preview.observations.every((item) => item.writeState === "READY_AFTER_GATED_SCHEMA_AND_EVIDENCE_CAPTURE")).toBe(true)
   })
 
   it("fails closed when separate stored captures disagree on the same provider label", () => {
@@ -53,7 +61,8 @@ describe("R4H TORNTPHARM canonical history preview", () => {
     const preview = build(V2, conflictingV3)
     expect(preview.observations).toEqual([])
     expect(preview.providerConflicts).toContain("Operating Rev. Ann.")
-    expect(preview.productionWriteCount).toBe(0)
+    expect(preview.proposedWriteCount).toBe(0)
+    expect(preview.executedProductionWriteCount).toBe(0)
   })
 
   it("produces stable idempotency keys for the same stored evidence", () => {
@@ -62,7 +71,7 @@ describe("R4H TORNTPHARM canonical history preview", () => {
 })
 
 describe("proposed PHARMA historical metric definitions", () => {
-  it("defines annual revenue separately from the existing TTM concept", () => {
+  it("defines annual operating revenue separately from the existing TTM concept", () => {
     expect(proposedPharmaHistoryMetric("REVENUE_ANNUAL")).toMatchObject({
       periodType: "YEAR",
       canonicalUnit: "INR_CRORE",
