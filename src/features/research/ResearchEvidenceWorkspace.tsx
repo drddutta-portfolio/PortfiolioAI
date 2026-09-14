@@ -1,3 +1,4 @@
+import { PharmaResearchReadinessPanel } from "./PharmaResearchReadinessPanel"
 import { ResearchSectionScore } from "./ResearchSectionScore"
 import { GROWTH_CODES, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatResearchMetric, latestByCode } from "./researchPolicy"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "./types"
@@ -60,6 +61,7 @@ export function FinancialsWorkspace({ research, snapshot }: { readonly research:
   }
   const order = ["Profitability & returns", "Asset quality & capital", "Growth", "Earnings & cash evidence", "Other fundamentals"]
   return <><ResearchSectionScore snapshot={snapshot} section="FINANCIALS" />
+    <PharmaResearchReadinessPanel research={research} />
     <div className="workspace-heading"><div><p className="eyebrow">Financial evidence</p><h2>Financial strength dashboard</h2><p>Latest trusted observations are grouped by investment purpose; history remains available without cluttering the main view.</p></div></div>
     <div className="financial-group-grid">{order.flatMap((name) => { const metrics = groups.get(name) ?? []; return metrics.length ? [<section key={name} className="professional-panel"><h3>{name}</h3>{latestCards(metrics, "No evidence available")}</section>] : [] })}</div>
     <HistoryTable rows={rows} />
