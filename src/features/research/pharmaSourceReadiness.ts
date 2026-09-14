@@ -1,4 +1,4 @@
-export const PHARMA_SOURCE_READINESS_VERSION = "PHARMA_SOURCE_READINESS_V4" as const
+export const PHARMA_SOURCE_READINESS_VERSION = "PHARMA_SOURCE_READINESS_V5" as const
 
 export type PharmaSourceReadinessState =
   | "CACHE_PARTIAL"
@@ -20,9 +20,10 @@ export interface PharmaSourceReadinessItem {
 
 /**
  * Source-readiness is deliberately separate from research-profile readiness.
- * Retained provider evidence can be useful without satisfying the complete
- * PHARMA_V1 history contract. R4H promotes only semantically exact, conflict-free
- * observations and never turns partial ingestion into scoring readiness.
+ * Retained provider or issuer evidence can be useful without satisfying the full
+ * PHARMA_V1 history contract. R4M knows the R4L parent metric contract, but that
+ * does not imply the repository migration or planned TORNTPHARM evidence writes
+ * have been applied to production.
  */
 export const PHARMA_V1_SOURCE_READINESS: readonly PharmaSourceReadinessItem[] = [
   {
@@ -30,99 +31,99 @@ export const PHARMA_V1_SOURCE_READINESS: readonly PharmaSourceReadinessItem[] = 
     state: "HISTORY_CONTRACT_PENDING",
     canonicalEvidenceCodes: ["REVENUE_ANNUAL"],
     observedProviderLabels: ["Operating Rev. Ann.", "Total Rev. Ann. 1Y Ago", "Rev. Ann. 2Y ago", "Rev. Ann. 3Y ago", "Rev. Ann. 4Y ago", "Rev. Ann. 5Y ago"],
-    approvedSource: null,
+    approvedSource: "ISSUER_ANNUAL_REPORT / COMPANY_EXCHANGE_FILING",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "R4H found a semantic mismatch in the stored Trendlyne series: current Operating Rev. Ann. is operating revenue, while historical Total Rev./Rev. Ann. fields are not the same concept. Only the exact current operating-revenue point is eligible; multi-year revenue-growth readiness remains blocked.",
+    reason: "Current provider history mixes operating-revenue and broader total-revenue semantics. The R4L parent contract therefore requires a consistent reviewed operating-revenue series; the planned official TORNTPHARM evidence set is separately production-gated.",
   },
   {
     metricCode: "PHARMA_OPERATING_MARGIN_HISTORY",
     state: "HISTORY_CONTRACT_PENDING",
     canonicalEvidenceCodes: ["OPERATING_REVENUE_QUARTER", "OPERATING_PROFIT_QUARTER"],
     observedProviderLabels: ["Operating Profit Qtr", "Operating Profit 1Q Ago", "Operating Profit 2Q Ago", "Operating Profit 3Q Ago", "Operating Profit 4Q Ago", "Operating Profit 6Qtr Ago", "Operating Profit 7Qtr Ago", "Operating Rev. Qtr", "Operating Rev. 2Q ago", "Operating Rev. 3Q ago", "Operating Rev. 4Q ago", "Operating Rev. 5Q ago", "Operating Rev. 6Q ago", "Operating Rev. 7Q ago", "Operating Rev. 8Q ago"],
-    approvedSource: "TRENDLYNE_MCP + PORTFOLIOAI",
+    approvedSource: "REVIEWED CANONICAL EVIDENCE + PORTFOLIOAI",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "R4H validated a useful raw quarterly operating-profit/revenue path and exact period identity, but the retained capture is incomplete and contains a duplicate-value conflict for Operating Profit 6Qtr Ago. Conflict-free raw points may be ingested, while the PHARMA_V1 8-quarter operating-margin history remains pending.",
+    reason: "Only matched semantically consistent quarterly revenue/profit periods count. The retained provider history is useful but incomplete/conflicted; official issuer evidence is the preferred completion path.",
   },
   {
     metricCode: "PHARMA_ROCE_HISTORY",
     state: "HISTORY_CONTRACT_PENDING",
-    canonicalEvidenceCodes: ["ROCE_ANNUAL"],
+    canonicalEvidenceCodes: ["ROCE_MANAGEMENT_ANNUAL"],
     observedProviderLabels: ["ROCE Ann. %", "ROCE Ann. 1Y Ago %"],
-    approvedSource: "TRENDLYNE_MCP",
+    approvedSource: "ISSUER_ANNUAL_REPORT",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "Current and 1Y annual ROCE were validated, but the complete 3–5 year raw annual series required by PHARMA_V1 remains unproven.",
+    reason: "PHARMA_V1 now requires a consistent issuer-reported ROCE series. Provider-calculated ROCE must not be mixed into the same history unless methodology equivalence is reviewed.",
   },
   {
     metricCode: "PHARMA_PAT_EPS_HISTORY",
     state: "HISTORY_CONTRACT_PENDING",
-    canonicalEvidenceCodes: ["NET_PROFIT_TTM", "EPS_DILUTED", "EPS_GROWTH_YOY"],
+    canonicalEvidenceCodes: ["PAT_ATTRIBUTABLE_ANNUAL", "EPS_DILUTED_ANNUAL"],
     observedProviderLabels: ["Net Profit Ann.", "Net Profit Ann. 2Y Ago", "Net Profit Ann. 3Y Ago", "Net Profit Ann. 4Y Ago", "Net Profit Ann. 5Y Ago", "Cash EPS Ann. 1Y Ago", "Cash EPS Ann. 3Y ago", "Cash EPS Ann. 5Y ago"],
-    approvedSource: "TRENDLYNE_MCP",
+    approvedSource: "ISSUER_ANNUAL_REPORT / COMPANY_EXCHANGE_FILING",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "Live discovery proved useful multi-year PAT and cash-EPS fields, but the normalized complete period-by-period PAT/EPS lineage required by PHARMA_V1 is not yet approved.",
+    reason: "The parent contract uses PAT attributable to owners and diluted EPS with matched annual periods. Cash EPS is explicitly rejected as a diluted-EPS substitute.",
   },
   {
     metricCode: "PHARMA_CASH_CONVERSION_HISTORY",
-    state: "SOURCE_CONTRACT_PENDING",
-    canonicalEvidenceCodes: ["CFO_ANNUAL"],
+    state: "HISTORY_CONTRACT_PENDING",
+    canonicalEvidenceCodes: ["CFO_ANNUAL", "PAT_ATTRIBUTABLE_ANNUAL", "CAPEX_ANNUAL", "FREE_CASH_FLOW_ANNUAL"],
     observedProviderLabels: ["Cash from Operating Act. Ann. 1Y Ago", "Cash from Operating Act. Ann. 2Y Ago", "Cash from Operating Act. Ann. 3Y Ago", "Cash from Operating Act. Ann. 4Y Ago", "Cash from Operating Act. Ann. 5Y Ago"],
-    approvedSource: "TRENDLYNE_MCP",
+    approvedSource: "ISSUER_ANNUAL_REPORT + PORTFOLIOAI_DERIVED",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "Five historical annual CFO points are conflict-free and period-resolvable for TORNTPHARM, but PHARMA_V1 cash conversion also requires matched PAT plus a reviewed capex/FCF contract. CFO alone cannot make this domain ready.",
+    reason: "CFO alone is insufficient. PHARMA_V1 requires matched CFO, attributable PAT and capex/FCF history; PortfolioAI-derived FCF is CFO minus approved capex.",
   },
   {
     metricCode: "PHARMA_BALANCE_SHEET_LEVERAGE",
-    state: "SOURCE_CONTRACT_PENDING",
-    canonicalEvidenceCodes: [],
+    state: "HISTORY_CONTRACT_PENDING",
+    canonicalEvidenceCodes: ["TOTAL_DEBT_ANNUAL", "CASH_EQUIVALENTS_ANNUAL", "EBITDA_ANNUAL", "NET_DEBT_EBITDA_ANNUAL", "INTEREST_COVERAGE_ANNUAL"],
     observedProviderLabels: ["Interest Coverage Ratio Ann. 1Y Ago", "Short Term Debt Ann. 1Y ago", "Interest TTM"],
-    approvedSource: null,
+    approvedSource: "ISSUER_ANNUAL_REPORT",
     canUseExistingCacheWithoutProviderCall: false,
-    reason: "Live discovery exposed partial leverage evidence, but the matched total-debt, cash/net-debt and operating-earnings history contract remains unresolved.",
+    reason: "The R4L parent contract defines total debt, cash, EBITDA, net-debt/EBITDA and interest coverage with matched annual semantics. Short-term debt must never substitute for total debt.",
   },
   {
     metricCode: "PHARMA_REGULATORY_SITE_STATUS",
     state: "OFFICIAL_SOURCE_CONTRACT_PENDING",
     canonicalEvidenceCodes: [],
     observedProviderLabels: [],
-    approvedSource: null,
+    approvedSource: "OFFICIAL REGULATOR / ISSUER EVIDENCE",
     canUseExistingCacheWithoutProviderCall: false,
-    reason: "Material regulated-export exposure requires official regulator/issuer evidence. Trendlyne discovery does not replace the separate official-source contract for regulatory-site status.",
+    reason: "Material regulated-export exposure requires official regulator/issuer event evidence for current site status, unresolved actions and remediation. Numeric fundamental rows are not a substitute.",
   },
   {
     metricCode: "PHARMA_DOMESTIC_REVENUE_GROWTH",
-    state: "SOURCE_CONTRACT_PENDING",
-    canonicalEvidenceCodes: [],
+    state: "HISTORY_CONTRACT_PENDING",
+    canonicalEvidenceCodes: ["INDIA_REVENUE_ANNUAL"],
     observedProviderLabels: [],
-    approvedSource: null,
+    approvedSource: "ISSUER_ANNUAL_REPORT",
     canUseExistingCacheWithoutProviderCall: false,
-    reason: "No reviewed canonical domestic-formulations segment history contract exists yet.",
+    reason: "The parent contract now has an India-revenue annual evidence code. The conditional domestic-growth contract still needs enough consistent periods before it can be evaluated.",
   },
   {
     metricCode: "PHARMA_EXPORT_US_REVENUE_GROWTH",
-    state: "SOURCE_CONTRACT_PENDING",
-    canonicalEvidenceCodes: [],
+    state: "HISTORY_CONTRACT_PENDING",
+    canonicalEvidenceCodes: ["USA_REVENUE_ANNUAL"],
     observedProviderLabels: [],
-    approvedSource: null,
+    approvedSource: "ISSUER_ANNUAL_REPORT",
     canUseExistingCacheWithoutProviderCall: false,
-    reason: "No reviewed canonical regulated-export/US revenue history contract exists yet.",
+    reason: "The parent contract now has a USA-revenue annual evidence code. The conditional export/US growth contract still needs sufficient consistent history when regulated-export exposure is material.",
   },
   {
     metricCode: "PHARMA_RND_INTENSITY",
-    state: "SOURCE_CONTRACT_PENDING",
-    canonicalEvidenceCodes: [],
+    state: "HISTORY_CONTRACT_PENDING",
+    canonicalEvidenceCodes: ["RND_EXPENSE_ANNUAL", "RND_INTENSITY_PERCENT"],
     observedProviderLabels: [],
-    approvedSource: null,
+    approvedSource: "ISSUER_ANNUAL_REPORT + PORTFOLIOAI_DERIVED",
     canUseExistingCacheWithoutProviderCall: false,
-    reason: "No reviewed canonical R&D expense/intensity history metric currently exists in the production definition set.",
+    reason: "R4L defines reviewed R&D expenditure plus PortfolioAI-derived R&D intensity. Higher spend is not automatically positive; productivity context remains necessary.",
   },
   {
     metricCode: "PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE",
     state: "SOURCE_CONTRACT_PENDING",
     canonicalEvidenceCodes: [],
     observedProviderLabels: [],
-    approvedSource: null,
+    approvedSource: "ISSUER / OFFICIAL / REVIEWED DOCUMENT EVIDENCE",
     canUseExistingCacheWithoutProviderCall: false,
-    reason: "Pipeline/launch/approval events need a reviewed issuer/official/document evidence contract before they can affect business durability.",
+    reason: "Pipeline, launches and approvals require a canonical event/document evidence target before they can influence Business Durability. They must not be forced into unrelated numeric fundamental fields.",
   },
   {
     metricCode: "PHARMA_OWNERSHIP_GOVERNANCE",
@@ -144,9 +145,9 @@ export const PHARMA_V1_SOURCE_READINESS: readonly PharmaSourceReadinessItem[] = 
     state: "CACHE_PARTIAL",
     canonicalEvidenceCodes: ["PE_TTM"],
     observedProviderLabels: ["PE 3Yr Average"],
-    approvedSource: "ANGEL_ONE + reviewed PortfolioAI research evidence",
+    approvedSource: "ANGEL_ONE + REVIEWED PORTFOLIOAI RESEARCH EVIDENCE",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "Current authoritative market price and reviewed PE evidence can contribute, but PHARMA_V1 valuation still needs reviewed earnings/cash history and peer/self-history context. Quarantined provider PBV is not promoted.",
+    reason: "Current authoritative market price and reviewed P/E evidence can contribute, but PHARMA_V1 valuation still needs reviewed earnings/cash history and peer/self-history context. Provider P/B remains non-primary for Pharma.",
   },
 ] as const
 
