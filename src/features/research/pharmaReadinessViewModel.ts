@@ -1,8 +1,9 @@
+import { buildPharmaCanonicalHistoryView } from "./pharmaCanonicalHistoryView"
 import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 import { PHARMA_V1_SOURCE_READINESS, type PharmaSourceReadinessState } from "./pharmaSourceReadiness"
 import type { ResearchMetric, SecurityResearch } from "./types"
 
-export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V5" as const
+export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V6" as const
 
 export type PharmaReadinessDisplayState = "NORMALIZATION_READY" | "VALIDATED_SOURCE" | "PARTIAL" | "PENDING" | "OFFICIAL_SOURCE_PENDING"
 
@@ -22,6 +23,7 @@ export interface PharmaReadinessDomain {
   readonly state: PharmaReadinessDisplayState
   readonly sourceState: PharmaSourceReadinessState
   readonly canonicalObservationCount: number
+  readonly observationCountLabel: string
   readonly minimumObservations: number
   readonly detail: string
 }
@@ -81,6 +83,26 @@ function countCanonicalObservations(metrics: readonly ResearchMetric[], codes: r
   return distinct.size
 }
 
+function domainObservationCount(research: SecurityResearch, metricCode: CorePharmaMetricCode, canonicalEvidenceCodes: readonly string[]) {
+  const history = buildPharmaCanonicalHistoryView(research)
+  if (metricCode === "PHARMA_OPERATING_MARGIN_HISTORY") {
+    return {
+      count: history?.quarterlyOpm.length ?? 0,
+      label: "Matched evaluable periods",
+    }
+  }
+  if (metricCode === "PHARMA_REVENUE_GROWTH_HISTORY") {
+    return {
+      count: history?.annualRevenue.length ?? 0,
+      label: "Canonical reviewed periods",
+    }
+  }
+  return {
+    count: countCanonicalObservations(research.metrics, canonicalEvidenceCodes),
+    label: "Canonical reviewed observations",
+  }
+}
+
 function displayState(sourceState: PharmaSourceReadinessState): PharmaReadinessDisplayState {
   if (sourceState === "PROVIDER_HISTORY_VALIDATED") return "VALIDATED_SOURCE"
   if (sourceState === "OFFICIAL_SOURCE_CONTRACT_PENDING") return "OFFICIAL_SOURCE_PENDING"
@@ -97,13 +119,15 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
     const contract = metricsByCode.get(metricCode)
     const source = readinessByCode.get(metricCode)
     if (!contract || !source) return []
+    const observationCount = domainObservationCount(research, metricCode, source.canonicalEvidenceCodes)
     return [{
       metricCode,
       label: DOMAIN_LABELS[metricCode],
       requirement: contract.requirementLevel,
       state: displayState(source.state),
       sourceState: source.state,
-      canonicalObservationCount: countCanonicalObservations(research.metrics, source.canonicalEvidenceCodes),
+      canonicalObservationCount: observationCount.count,
+      observationCountLabel: observationCount.label,
       minimumObservations: contract.history.minimumObservations,
       detail: source.reason,
     }]
