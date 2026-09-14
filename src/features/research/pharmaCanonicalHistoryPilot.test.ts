@@ -5,6 +5,8 @@ import { proposedPharmaHistoryMetric } from "./pharmaHistoryMetricDefinitions"
 
 const V2_ID = "e4c0c920-c3b2-47b9-bda4-26638b407237"
 const V3_ID = "2ba94f8c-d34e-4658-926c-5694c21cc9e5"
+const V2_CAPTURED_AT = "2026-09-14T09:07:26.158Z"
+const V3_CAPTURED_AT = "2026-09-14T09:08:57.330Z"
 
 const V2 = `Operating Rev. Ann.\nTORNTPHARM:13979.73\nOTHER:1
 
@@ -48,7 +50,43 @@ Operating Rev. 7Q ago\nTORNTPHARM:2889
 
 Operating Rev. 8Q ago\nTORNTPHARM:2859`
 
-const V3 = `Cash from Operating Act. Ann. 1Y Ago\nTORNTPHARM:2585.11
+const V3 = `Operating Rev. Ann.\nTORNTPHARM:13979.73
+
+---
+
+Operating Rev. Qtr\nTORNTPHARM:4921
+
+---
+
+Operating Rev. 2Q ago\nTORNTPHARM:3303
+
+---
+
+Operating Rev. 3Q ago\nTORNTPHARM:3302
+
+---
+
+Operating Rev. 4Q ago\nTORNTPHARM:3178
+
+---
+
+Operating Rev. 5Q ago\nTORNTPHARM:2959
+
+---
+
+Operating Rev. 6Q ago\nTORNTPHARM:2809
+
+---
+
+Operating Rev. 7Q ago\nTORNTPHARM:2889
+
+---
+
+Operating Rev. 8Q ago\nTORNTPHARM:2859
+
+---
+
+Cash from Operating Act. Ann. 1Y Ago\nTORNTPHARM:2585.11
 
 ---
 
@@ -100,8 +138,8 @@ Operating Profit 7Qtr Ago\nTORNTPHARM:939`
 
 function build(v2 = V2, v3 = V3) {
   return buildTorntpharmCanonicalHistoryPilot([
-    { sourceRecordId: V2_ID, discovery: parseTrendlyneMultiStockMarkdown(v2, "TORNTPHARM") },
-    { sourceRecordId: V3_ID, discovery: parseTrendlyneMultiStockMarkdown(v3, "TORNTPHARM") },
+    { sourceRecordId: V2_ID, capturedAt: V2_CAPTURED_AT, discovery: parseTrendlyneMultiStockMarkdown(v2, "TORNTPHARM") },
+    { sourceRecordId: V3_ID, capturedAt: V3_CAPTURED_AT, discovery: parseTrendlyneMultiStockMarkdown(v3, "TORNTPHARM") },
   ])
 }
 
@@ -118,9 +156,14 @@ describe("R4H TORNTPHARM canonical history preview", () => {
     const preview = build()
     const cfo = preview.observations.filter((item) => item.metricCode === "CFO_ANNUAL")
     expect(cfo).toHaveLength(5)
-    expect(cfo.find((item) => item.periodKey === "Y1")).toMatchObject({ periodEnd: "2025-03-31", numericValue: "2585.11" })
-    expect(cfo.find((item) => item.periodKey === "Y5")).toMatchObject({ periodEnd: "2021-03-31", numericValue: "2010.69" })
-    expect(cfo.every((item) => item.sourceRecordIds.includes(V3_ID))).toBe(true)
+    expect(cfo.find((item) => item.periodKey === "Y1")).toMatchObject({ periodEnd: "2025-03-31", numericValue: "2585.11", sourceRecordId: V3_ID })
+    expect(cfo.find((item) => item.periodKey === "Y5")).toMatchObject({ periodEnd: "2021-03-31", numericValue: "2010.69", sourceRecordId: V3_ID })
+  })
+
+  it("selects the newest agreeing retained capture as the one writable source_record_id", () => {
+    const q0 = build().observations.find((item) => item.metricCode === "OPERATING_REVENUE_QUARTER" && item.periodKey === "Q0")
+    expect(q0).toMatchObject({ sourceRecordId: V3_ID, corroboratingSourceRecordIds: [V2_ID] })
+    expect(q0?.idempotencyKey).toContain(V3_ID)
   })
 
   it("keeps quarterly operating-profit and revenue as raw canonical evidence", () => {
@@ -131,6 +174,7 @@ describe("R4H TORNTPHARM canonical history preview", () => {
     expect(preview.observations.find((item) => item.metricCode === "OPERATING_PROFIT_QUARTER" && item.periodKey === "Q7")).toMatchObject({
       periodEnd: "2024-09-30",
       numericValue: "939",
+      sourceRecordId: V3_ID,
       sourceLabels: ["Operating Profit 7Qtr Ago"],
     })
   })
@@ -165,6 +209,7 @@ describe("R4H TORNTPHARM canonical history preview", () => {
 
   it("prepares the exact candidate row count but executes zero production writes", () => {
     const preview = build()
+    expect(preview.version).toBe("PHARMA_CANONICAL_HISTORY_PILOT_V3")
     expect(preview.proposedWriteCount).toBe(20)
     expect(preview.executedProductionWriteCount).toBe(0)
     expect(preview.periodIdentityVersion).toBe("TORNTPHARM_PERIOD_IDENTITY_V1")
