@@ -61,10 +61,32 @@ describe("researchProfileUiContract", () => {
     expect(pharmaSnapshotCodes).toContain("RND_INTENSITY_PERCENT")
   })
 
+  it("routes detailed Financials and Quality & Growth through Pharma-specific sections", () => {
+    const pharma = researchProfileUiContract("PHARMA_V1")
+    const financialCodes = pharma.financialWorkspaceSections.flatMap((section) => section.codes)
+    const qualityGrowthCodes = pharma.qualityGrowthWorkspaceSections.flatMap((section) => section.codes)
+
+    expect(pharma.financialWorkspaceSections.map((section) => section.title)).toEqual([
+      "Earnings & operating performance",
+      "Cash quality",
+      "Capital efficiency",
+      "Financial strength / leverage",
+    ])
+    expect(financialCodes).toContain("PAT_ATTRIBUTABLE_ANNUAL")
+    expect(financialCodes).toContain("FREE_CASH_FLOW_ANNUAL")
+    expect(financialCodes).toContain("NET_DEBT_EBITDA_ANNUAL")
+    expect(qualityGrowthCodes).toContain("RND_INTENSITY_PERCENT")
+    expect(qualityGrowthCodes).toContain("INDIA_REVENUE_ANNUAL")
+    expect(qualityGrowthCodes).not.toContain("ADVANCES_GROWTH_YOY")
+    expect(qualityGrowthCodes).not.toContain("GROSS_NPA_PERCENT")
+  })
+
   it("falls back safely for unknown profiles without inventing a sector contract", () => {
     const fallback = researchProfileUiContract("UNREGISTERED_PROFILE")
     expect(fallback.profileCode).toBe("GENERAL")
     expect(fallback.readinessPanel).toBe("NONE")
     expect(fallback.refreshModules).toHaveLength(0)
+    expect(fallback.financialWorkspaceSections).toHaveLength(0)
+    expect(fallback.qualityGrowthWorkspaceSections).toHaveLength(0)
   })
 })
