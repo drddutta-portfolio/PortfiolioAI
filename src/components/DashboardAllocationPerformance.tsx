@@ -118,7 +118,7 @@ function buildGroups(positions: readonly PortfolioPosition[], enrichment: Readon
 }
 
 function buildSegments(groups: readonly GroupRow[], mode: "sector" | "marketCap"): AllocationSegment[] {
-  return groups.map((row) => ({
+  return groups.map((row): AllocationSegment => ({
     label: row.label,
     value: row.currentValue,
     weight: row.weight,
@@ -190,13 +190,6 @@ function signed(value: Decimal | null, suffix = "%") {
   if (value === null) return "—"
   const rounded = value.toDecimalPlaces(1).toFixed(1)
   return `${value.gt(0) ? "+" : ""}${rounded}${suffix}`
-}
-
-function groupTone(row: GroupRow) {
-  if (row.returnPct === null) return "neutral"
-  if (row.returnPct.greaterThanOrEqualTo(15)) return "positive"
-  if (row.returnPct.lessThan(0)) return "negative"
-  return "neutral"
 }
 
 function sortRows(rows: readonly GroupRow[], key: SortKey, direction: Direction) {
