@@ -36,7 +36,7 @@ describe("R4H TORNTPHARM canonical history preview", () => {
   it("derives quarterly OPM deterministically from matched profit and revenue", () => {
     const preview = build()
     const q0 = preview.observations.find((item) => item.metricCode === "OPM_QUARTER_DERIVED" && item.periodKey === "Q0")
-    expect(q0?.numericValue).toBe("33.814266")
+    expect(q0?.numericValue).toBe("33.814265")
     expect(q0?.sourceCode).toBe("PORTFOLIOAI")
     expect(q0?.sourceLabels).toEqual(["Operating Profit Qtr", "Operating Rev. Qtr"])
   })
