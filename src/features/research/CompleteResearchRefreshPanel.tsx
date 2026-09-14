@@ -5,14 +5,17 @@ import { executeCompleteResearchRefresh, planCompleteResearchRefresh, type Compl
 import { executeMarketHistoryRefresh, planMarketHistoryRefresh, type MarketHistoryRefreshPlan, type MarketHistoryRefreshResult } from "../../data/marketHistoryRefreshRepository"
 import { executeValuationEvidenceRefresh, planValuationEvidenceRefresh, type ValuationEvidenceRefreshPlan, type ValuationEvidenceRefreshResult } from "../../data/valuationEvidenceRefreshRepository"
 import { displayError } from "../../lib/displayError"
+import { researchProfileUiContract } from "./researchProfileUiContract"
 import "./CompleteResearchRefreshPanel.css"
 
-export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, onCompleted }: {
+export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, profileCode, onCompleted }: {
   readonly portfolioId: string
   readonly securityId: string
   readonly symbol: string
+  readonly profileCode: string | null | undefined
   readonly onCompleted: () => void
 }) {
+  const ui = researchProfileUiContract(profileCode)
   const [plan, setPlan] = useState<CompleteResearchRefreshPlan | null>(null)
   const [result, setResult] = useState<CompleteResearchRefreshResult | null>(null)
   const [marketPlan, setMarketPlan] = useState<MarketHistoryRefreshPlan | null>(null)
@@ -149,7 +152,38 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       <span>{result.providerSucceeded} of {result.providerCalls} provider calls succeeded. Any accepted research evidence has been reloaded.</span>
     </div> : null}
 
-    {symbol === "HDFCBANK" ? <>
+    {ui.refreshModules.length ? <div className="profile-refresh-workspace" aria-label={`${ui.profileCode} research modules`}>
+      <div className="profile-refresh-heading">
+        <div><p className="eyebrow">Profile-driven research workspace</p><h3>{ui.profileCode} specialist research</h3></div>
+        <span>{ui.refreshModules.length} modules</span>
+      </div>
+      {ui.refreshModules.map((module) => <div className="complete-refresh-plan" key={module.code}>
+        <div>
+          <p className="eyebrow">{module.eyebrow}</p>
+          <h3>{module.title}</h3>
+          <p>{module.description}</p>
+        </div>
+        {module.actionKind === "MARKET_HISTORY" ? <>
+          <button type="button" className="button button-secondary" disabled={busy !== null} onClick={createMarketPlan}>{busy === "MARKET_PLAN" ? "Planning…" : marketPlan ? "Re-plan market refresh" : module.actionLabel ?? "Plan market history refresh"}</button>
+          {marketPlan ? <>
+            <div className="summary-grid">
+              <Metric label="Angel One calls" value={String(marketPlan.estimatedProviderCalls)} />
+              <Metric label="History window" value={`${marketPlan.historyDays} days`} />
+              <Metric label="Interval" value={marketPlan.interval} />
+              <Metric label="Existing latest candle" value={marketPlan.latestExistingCandle ? new Date(marketPlan.latestExistingCandle).toLocaleDateString("en-IN") : "None"} />
+            </div>
+            <p className="assessment-note">{module.note}</p>
+            <button type="button" className="button button-primary" disabled={busy !== null} onClick={executeMarket}>{busy === "MARKET_EXECUTE" ? "Refreshing market history…" : `Run market history refresh · ${marketPlan.estimatedProviderCalls} call`}</button>
+          </> : <p className="assessment-note">{module.note}</p>}
+          {marketResult ? <div className="notice notice-success" role="status"><strong>Market history refreshed.</strong><span>{marketResult.candlesStored} daily candles stored. {marketResult.derivedMetrics.length} deterministic market metrics were derived and Research scoring has been reloaded.</span></div> : null}
+        </> : <>
+          <div className="profile-refresh-status"><strong>Contract defined</strong><span>Execution remains gated</span></div>
+          <p className="assessment-note">{module.note}</p>
+        </>}
+      </div>)}
+    </div> : null}
+
+    {ui.profileCode === "BANK_NBFC" && symbol === "HDFCBANK" ? <>
       <div className="complete-refresh-plan">
         <div>
           <p className="eyebrow">Stage 8.8D.2 · Valuation evidence</p>
