@@ -34,10 +34,7 @@ export function useDashboardRecommendations(portfolioId: string | null, security
 
   useEffect(() => {
     let active = true
-    if (!portfolioId || !stableIds.length) {
-      setState({ key, data: new Map(), error: null })
-      return () => { active = false }
-    }
+    if (!portfolioId || !stableIds.length) return () => { active = false }
     void loadLatestDashboardRecommendations(portfolioId, stableIds)
       .then((data) => { if (active) setState({ key, data, error: null }) })
       .catch((reason: unknown) => { if (active) setState({ key, data: new Map(), error: displayError(reason) }) })
@@ -45,8 +42,8 @@ export function useDashboardRecommendations(portfolioId: string | null, security
   }, [key, portfolioId, stableIds])
 
   return {
-    data: state?.key === key ? state.data : new Map<string, DashboardRecommendationEvidence>(),
-    error: state?.key === key ? state.error : null,
+    data: portfolioId && stableIds.length && state?.key === key ? state.data : new Map<string, DashboardRecommendationEvidence>(),
+    error: portfolioId && stableIds.length && state?.key === key ? state.error : null,
     isLoading: Boolean(portfolioId && stableIds.length) && state?.key !== key,
   }
 }
@@ -58,10 +55,7 @@ export function useDashboardMonitoringSettings(portfolioId: string | null, secur
 
   useEffect(() => {
     let active = true
-    if (!portfolioId || !stableIds.length) {
-      setState({ key, data: new Map(), error: null })
-      return () => { active = false }
-    }
+    if (!portfolioId || !stableIds.length) return () => { active = false }
     void loadDashboardMonitoringSettings(portfolioId, stableIds)
       .then((data) => { if (active) setState({ key, data, error: null }) })
       .catch((reason: unknown) => { if (active) setState({ key, data: new Map(), error: displayError(reason) }) })
@@ -69,8 +63,8 @@ export function useDashboardMonitoringSettings(portfolioId: string | null, secur
   }, [key, portfolioId, stableIds])
 
   return {
-    data: state?.key === key ? state.data : new Map<string, DashboardMonitoringSetting>(),
-    error: state?.key === key ? state.error : null,
+    data: portfolioId && stableIds.length && state?.key === key ? state.data : new Map<string, DashboardMonitoringSetting>(),
+    error: portfolioId && stableIds.length && state?.key === key ? state.error : null,
     isLoading: Boolean(portfolioId && stableIds.length) && state?.key !== key,
   }
 }
@@ -81,10 +75,7 @@ export function useDashboardDailyMarketSnapshots(securityIds: readonly string[])
 
   useEffect(() => {
     let active = true
-    if (!stableIds.length) {
-      setState({ key, data: new Map(), error: null })
-      return () => { active = false }
-    }
+    if (!stableIds.length) return () => { active = false }
     void loadDashboardDailyMarketSnapshots(stableIds)
       .then((data) => { if (active) setState({ key, data, error: null }) })
       .catch((reason: unknown) => { if (active) setState({ key, data: new Map(), error: displayError(reason) }) })
@@ -92,8 +83,8 @@ export function useDashboardDailyMarketSnapshots(securityIds: readonly string[])
   }, [key, stableIds])
 
   return {
-    data: state?.key === key ? state.data : new Map<string, DashboardDailyMarketSnapshot>(),
-    error: state?.key === key ? state.error : null,
+    data: stableIds.length && state?.key === key ? state.data : new Map<string, DashboardDailyMarketSnapshot>(),
+    error: stableIds.length && state?.key === key ? state.error : null,
     isLoading: Boolean(stableIds.length) && state?.key !== key,
   }
 }
@@ -104,10 +95,7 @@ export function useDashboardNewsFeed(portfolioId: string | null, limit: number) 
 
   useEffect(() => {
     let active = true
-    if (!portfolioId) {
-      setState({ key, data: [], error: null })
-      return () => { active = false }
-    }
+    if (!portfolioId) return () => { active = false }
     void loadDashboardNewsFeed(portfolioId, limit)
       .then((data) => { if (active) setState({ key, data, error: null }) })
       .catch((reason: unknown) => { if (active) setState({ key, data: [], error: displayError(reason) }) })
@@ -115,8 +103,8 @@ export function useDashboardNewsFeed(portfolioId: string | null, limit: number) 
   }, [key, limit, portfolioId])
 
   return {
-    data: state?.key === key ? state.data : [],
-    error: state?.key === key ? state.error : null,
+    data: portfolioId && state?.key === key ? state.data : [],
+    error: portfolioId && state?.key === key ? state.error : null,
     isLoading: Boolean(portfolioId) && state?.key !== key,
   }
 }
