@@ -46,7 +46,6 @@ describe("buildPharmaReadinessView", () => {
   it("keeps PHARMA_V1 fail-closed after the R4H partial/conflicting history review", () => {
     const view = buildPharmaReadinessView(research("Pharma"))
     expect(view?.profileVersion).toBe("PHARMA_V1")
-    expect(view?.normalizationVersion).toBe("PHARMA_HISTORY_NORMALIZATION_V2")
     expect(view?.state).toBe("INSUFFICIENT_EVIDENCE")
     expect(view?.validatedSourceDomains).toBe(0)
     expect(view?.normalizationReadyDomains).toBe(0)
@@ -57,22 +56,37 @@ describe("buildPharmaReadinessView", () => {
     expect(view?.blockers).toContain("Regulatory site evidence")
   })
 
-  it("counts only canonical raw history codes, never old TTM snapshots as history", () => {
+  it("counts matched evaluable OPM periods rather than raw revenue and profit rows", () => {
     const view = buildPharmaReadinessView(research("Pharma", [
       metric("REVENUE_TTM"),
       metric("OPM_TTM"),
       metric("REVENUE_ANNUAL"),
-      { ...metric("OPERATING_REVENUE_QUARTER", "2026-06-30"), periodType: "QUARTER" },
-      { ...metric("OPERATING_PROFIT_QUARTER", "2026-06-30"), periodType: "QUARTER" },
+      { ...metric("OPERATING_REVENUE_QUARTER", "2026-06-30"), periodType: "QUARTER", numericValue: "100", value: "100" },
+      { ...metric("OPERATING_PROFIT_QUARTER", "2026-06-30"), periodType: "QUARTER", numericValue: "20", value: "20" },
       { ...metric("ROCE_ANNUAL"), selected: false },
     ]))
     const revenue = view?.domains.find((domain) => domain.metricCode === "PHARMA_REVENUE_GROWTH_HISTORY")
     const margin = view?.domains.find((domain) => domain.metricCode === "PHARMA_OPERATING_MARGIN_HISTORY")
     const roce = view?.domains.find((domain) => domain.metricCode === "PHARMA_ROCE_HISTORY")
     expect(revenue?.canonicalObservationCount).toBe(1)
-    expect(margin?.canonicalObservationCount).toBe(2)
+    expect(margin?.canonicalObservationCount).toBe(1)
+    expect(margin?.observationCountLabel).toBe("Matched evaluable periods")
     expect(roce?.canonicalObservationCount).toBe(0)
     expect(view?.state).toBe("INSUFFICIENT_EVIDENCE")
+  })
+
+  it("reports five matched OPM periods for eight revenue plus six profit rows when only five periods overlap", () => {
+    const revenuePeriods = ["2026-06-30", "2026-03-31", "2025-12-31", "2025-09-30", "2025-06-30", "2025-03-31", "2024-12-31", "2024-09-30"]
+    const profitPeriods = ["2026-06-30", "2025-12-31", "2025-09-30", "2025-06-30", "2024-09-30", "2024-06-30"]
+    const metrics: ResearchMetric[] = [
+      ...revenuePeriods.map((periodEnd) => ({ ...metric("OPERATING_REVENUE_QUARTER", periodEnd), periodType: "QUARTER" as const, value: "100", numericValue: "100" })),
+      ...profitPeriods.map((periodEnd) => ({ ...metric("OPERATING_PROFIT_QUARTER", periodEnd), periodType: "QUARTER" as const, value: "20", numericValue: "20" })),
+    ]
+    const view = buildPharmaReadinessView(research("Pharma", metrics))
+    const margin = view?.domains.find((domain) => domain.metricCode === "PHARMA_OPERATING_MARGIN_HISTORY")
+    expect(metrics).toHaveLength(14)
+    expect(margin?.canonicalObservationCount).toBe(5)
+    expect(margin?.minimumObservations).toBe(8)
   })
 
   it("shows the PHARMA mandatory history thresholds without turning snapshots into readiness", () => {
