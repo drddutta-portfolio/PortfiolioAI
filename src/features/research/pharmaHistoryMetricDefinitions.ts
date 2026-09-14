@@ -1,22 +1,22 @@
-export const PHARMA_HISTORY_METRIC_DEFINITIONS_VERSION = "PHARMA_HISTORY_METRIC_DEFINITIONS_V1" as const
+export const PHARMA_HISTORY_METRIC_DEFINITIONS_VERSION = "PHARMA_HISTORY_METRIC_DEFINITIONS_V2" as const
 
 export interface ProposedPharmaHistoryMetricDefinition {
   readonly code: string
   readonly name: string
   readonly valueKind: "NUMERIC"
-  readonly canonicalUnit: "INR_CRORE" | "PERCENT"
-  readonly statementScope: "INCOME_STATEMENT" | "RATIO"
+  readonly canonicalUnit: "INR_CRORE"
+  readonly statementScope: "INCOME_STATEMENT"
   readonly periodType: "YEAR" | "QUARTER"
-  readonly calculationOwner: "TRENDLYNE_MCP" | "PORTFOLIOAI"
+  readonly calculationOwner: "TRENDLYNE_MCP"
   readonly providerLabels: readonly string[]
   readonly definitionRequiredInProduction: boolean
 }
 
 /**
- * R4H repository contract only. These definitions describe the minimum new
- * canonical metric identities required for the pilot without abusing TTM
- * metrics. Raw quarterly profit/revenue remain in retained source records; only
- * the PortfolioAI-derived quarterly OPM needs a canonical derived metric.
+ * R4H repository contract only. These are the new raw-evidence identities
+ * required by the TORNTPHARM pilot. Quarterly OPM is intentionally NOT a
+ * fundamental provider observation: PortfolioAI derives it downstream from the
+ * matched raw operating-profit and operating-revenue observations.
  */
 export const PROPOSED_PHARMA_HISTORY_METRIC_DEFINITIONS: readonly ProposedPharmaHistoryMetricDefinition[] = [
   {
@@ -31,14 +31,25 @@ export const PROPOSED_PHARMA_HISTORY_METRIC_DEFINITIONS: readonly ProposedPharma
     definitionRequiredInProduction: true,
   },
   {
-    code: "OPM_QUARTER_DERIVED",
-    name: "Operating profit margin quarterly — PortfolioAI derived",
+    code: "OPERATING_REVENUE_QUARTER",
+    name: "Operating revenue quarterly",
     valueKind: "NUMERIC",
-    canonicalUnit: "PERCENT",
-    statementScope: "RATIO",
+    canonicalUnit: "INR_CRORE",
+    statementScope: "INCOME_STATEMENT",
     periodType: "QUARTER",
-    calculationOwner: "PORTFOLIOAI",
-    providerLabels: [],
+    calculationOwner: "TRENDLYNE_MCP",
+    providerLabels: ["Operating Rev. Qtr", "Operating Rev. 1Q ago", "Operating Rev. 2Q ago", "Operating Rev. 3Q ago", "Operating Rev. 4Q ago", "Operating Rev. 5Q ago", "Operating Rev. 6Q ago", "Operating Rev. 7Q ago", "Operating Rev. 8Q ago"],
+    definitionRequiredInProduction: true,
+  },
+  {
+    code: "OPERATING_PROFIT_QUARTER",
+    name: "Operating profit quarterly",
+    valueKind: "NUMERIC",
+    canonicalUnit: "INR_CRORE",
+    statementScope: "INCOME_STATEMENT",
+    periodType: "QUARTER",
+    calculationOwner: "TRENDLYNE_MCP",
+    providerLabels: ["Operating Profit Qtr", "Operating Profit 1Q Ago", "Operating Profit 2Q Ago", "Operating Profit 3Q Ago", "Operating Profit 4Q Ago", "Operating Profit 5Q Ago", "Operating Profit 5Qtr Ago", "Operating Profit 6Q Ago", "Operating Profit 6Qtr Ago", "Operating Profit 7Q Ago", "Operating Profit 7Qtr Ago", "Operating Profit 8Q Ago", "Operating Profit 8Qtr Ago"],
     definitionRequiredInProduction: true,
   },
 ] as const
