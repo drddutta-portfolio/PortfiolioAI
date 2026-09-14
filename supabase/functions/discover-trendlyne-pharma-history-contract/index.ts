@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
-import { TrendlyneMcpClient } from "../_shared/trendlyne.ts"
+import { TrendlyneObservedMcpClient } from "../_shared/trendlyne-observed.ts"
 import {
   PHARMA_HISTORY_DISCOVERY_MAX_PROVIDER_CALLS,
   PHARMA_HISTORY_DISCOVERY_REFERENCE,
@@ -15,9 +15,9 @@ const reply = (status: number, body: Record<string, unknown>) =>
   new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } })
 
 const SOURCE_CODE = "TRENDLYNE_MCP"
-const DATA_DOMAIN = "PHARMA_HISTORY_CONTRACT_DISCOVERY"
-const OPERATION_CLASS = "SEARCH_PARAMETERS"
-const CAPTURE_RECORD_KIND = "PHARMA_HISTORY_CONTRACT_DISCOVERY"
+const DATA_DOMAIN = "PHARMA_HISTORY_CONTRACT_DISCOVERY_V2"
+const OPERATION_CLASS = "GET_PARAMETER_VALUES_MULTI_STOCK"
+const CAPTURE_RECORD_KIND = "PHARMA_HISTORY_CONTRACT_DISCOVERY_V2"
 const MAX_CAPTURE_BYTES = 512 * 1024
 const ACCOUNTING_WRITE_ATTEMPTS = 3
 
@@ -85,7 +85,7 @@ async function finishItem(
     p_attempted_call_count: attemptedCallCount,
     p_accepted_record_count: 0,
     p_metadata: {
-      mode: "PHARMA_HISTORY_CONTRACT_DISCOVERY_ONLY",
+      mode: "PHARMA_HISTORY_TARGETED_DISCOVERY_ONLY",
       contract_version: PHARMA_HISTORY_DISCOVERY_VERSION,
       canonical_promotion_performed: false,
       research_writes_performed: 0,
@@ -98,23 +98,23 @@ async function persistCapture(
   admin: Admin,
   runId: string,
   securityId: string,
-  searches: Readonly<Record<string, string>>,
+  results: Readonly<Record<string, string>>,
 ) {
   const rawPayload = {
-    mode: "PHARMA_HISTORY_CONTRACT_DISCOVERY_ONLY",
+    mode: "PHARMA_HISTORY_TARGETED_DISCOVERY_ONLY",
     contract_version: PHARMA_HISTORY_DISCOVERY_VERSION,
     run_id: runId,
     security_id: securityId,
     security_symbol: PHARMA_HISTORY_DISCOVERY_REFERENCE.symbol,
     provider_instrument_id: PHARMA_HISTORY_DISCOVERY_REFERENCE.providerInstrumentId,
-    provider_tool: "search_parameters",
-    terms: PHARMA_HISTORY_DISCOVERY_TERMS,
-    searches,
+    provider_tool: "get_parameter_values_multi_stock",
+    queries: PHARMA_HISTORY_DISCOVERY_TERMS,
+    results,
   }
   const serialized = JSON.stringify(rawPayload)
   if (new TextEncoder().encode(serialized).byteLength > MAX_CAPTURE_BYTES) throw new Error("CAPTURE_PAYLOAD_TOO_LARGE")
   const payloadHash = await sha256Hex(serialized)
-  const result = await admin.from("data_source_records").upsert({
+  const result = await admin.from("data_source_records").insert({
     source_code: SOURCE_CODE,
     ingestion_run_id: runId,
     record_kind: CAPTURE_RECORD_KIND,
@@ -123,14 +123,11 @@ async function persistCapture(
     payload_hash: payloadHash,
     raw_payload: rawPayload,
     terms_snapshot: {
-      mode: "PHARMA_HISTORY_CONTRACT_DISCOVERY_ONLY",
+      mode: "PHARMA_HISTORY_TARGETED_DISCOVERY_ONLY",
       contract_version: PHARMA_HISTORY_DISCOVERY_VERSION,
       canonical_promotion_performed: false,
       research_writes_performed: 0,
     },
-  }, {
-    onConflict: "source_code,record_kind,external_record_id,payload_hash",
-    ignoreDuplicates: true,
   })
   if (result.error) throw new Error("CAPTURE_PERSISTENCE_FAILED")
   return payloadHash
@@ -230,10 +227,10 @@ Deno.serve(async (request) => {
       attempted_call_count: 0,
       policy_version: control.data.policy_version,
       metadata: {
-        mode: "PHARMA_HISTORY_CONTRACT_DISCOVERY_ONLY",
+        mode: "PHARMA_HISTORY_TARGETED_DISCOVERY_ONLY",
         contract_version: PHARMA_HISTORY_DISCOVERY_VERSION,
         reference: PHARMA_HISTORY_DISCOVERY_REFERENCE,
-        terms: PHARMA_HISTORY_DISCOVERY_TERMS,
+        queries: PHARMA_HISTORY_DISCOVERY_TERMS,
       },
     }).select("id").single()
     if (run.error) throw new Error("RUN_ACCOUNTING_FAILED")
@@ -244,7 +241,7 @@ Deno.serve(async (request) => {
       security_id: security.data.id,
       data_domain: DATA_DOMAIN,
       status: "PLANNED",
-      metadata: { contract_version: PHARMA_HISTORY_DISCOVERY_VERSION, terms: PHARMA_HISTORY_DISCOVERY_TERMS },
+      metadata: { contract_version: PHARMA_HISTORY_DISCOVERY_VERSION, queries: PHARMA_HISTORY_DISCOVERY_TERMS },
     }).select("id").single()
     if (runItem.error) {
       await admin.from("data_ingestion_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), error_summary: "RUN_ITEM_ACCOUNTING_FAILED" }).eq("id", runId)
@@ -275,31 +272,29 @@ Deno.serve(async (request) => {
     }
 
     const reservationId = String(reservationRow.reservation_id)
-    const searches: Record<string, string> = {}
+    const results: Record<string, string> = {}
     let attempted = 0
     let succeeded = 0
     let failed = 0
     let terminalError: Error | null = null
     let capturePayloadHash: string | null = null
 
-    try {
-      const client = new TrendlyneMcpClient(mcpUrl)
-      for (const term of PHARMA_HISTORY_DISCOVERY_TERMS) {
-        attempted += 1
-        const attemptedAt = new Date().toISOString()
-        try {
-          searches[term.code] = await client.searchParameters(term.query)
-          succeeded += 1
-          await recordUsage(admin, runId, runItemId, security.data.id, attempted, attemptedAt, "SUCCEEDED", null)
-        } catch {
-          failed += 1
-          await recordUsage(admin, runId, runItemId, security.data.id, attempted, attemptedAt, "FAILED", "PROVIDER_REQUEST_FAILED")
-          throw new Error("PHARMA_HISTORY_CONTRACT_DISCOVERY_FAILED")
-        }
+    const client = new TrendlyneObservedMcpClient(mcpUrl)
+    for (const term of PHARMA_HISTORY_DISCOVERY_TERMS) {
+      attempted += 1
+      const attemptedAt = new Date().toISOString()
+      try {
+        results[term.code] = await client.getParameterValuesMultiStock(term.query, "stock")
+        succeeded += 1
+        await recordUsage(admin, runId, runItemId, security.data.id, attempted, attemptedAt, "SUCCEEDED", null)
+      } catch (error) {
+        failed += 1
+        const message = error instanceof Error ? error.message : "PROVIDER_REQUEST_FAILED"
+        const safeErrorCode = message === "PROVIDER_TOOL_CONTRACT_ERROR" ? message : "PROVIDER_REQUEST_FAILED"
+        await recordUsage(admin, runId, runItemId, security.data.id, attempted, attemptedAt, "FAILED", safeErrorCode)
+        terminalError = new Error(safeErrorCode)
+        break
       }
-      capturePayloadHash = await persistCapture(admin, runId, security.data.id, searches)
-    } catch (error) {
-      terminalError = error instanceof Error ? error : new Error("PHARMA_HISTORY_CONTRACT_DISCOVERY_FAILED")
     }
 
     const released = PHARMA_HISTORY_DISCOVERY_MAX_PROVIDER_CALLS - attempted
@@ -310,6 +305,14 @@ Deno.serve(async (request) => {
       p_released_units: released,
     })
     if (settlement.error) terminalError = new Error("BUDGET_SETTLEMENT_FAILED")
+
+    if (!terminalError) {
+      try {
+        capturePayloadHash = await persistCapture(admin, runId, security.data.id, results)
+      } catch (error) {
+        terminalError = error instanceof Error ? error : new Error("CAPTURE_PERSISTENCE_FAILED")
+      }
+    }
 
     try {
       await finishItem(admin, runItemId, terminalError ? "FAILED" : "ACCEPTED", terminalError ? terminalError.message : null, attempted)
@@ -327,10 +330,10 @@ Deno.serve(async (request) => {
       skipped_count: 0,
       error_summary: terminalError ? terminalError.message : null,
       metadata: {
-        mode: "PHARMA_HISTORY_CONTRACT_DISCOVERY_ONLY",
+        mode: "PHARMA_HISTORY_TARGETED_DISCOVERY_ONLY",
         contract_version: PHARMA_HISTORY_DISCOVERY_VERSION,
         reference: PHARMA_HISTORY_DISCOVERY_REFERENCE,
-        terms: PHARMA_HISTORY_DISCOVERY_TERMS,
+        queries: PHARMA_HISTORY_DISCOVERY_TERMS,
         consumed_units: succeeded,
         failed_units: failed,
         released_units: released,
@@ -341,10 +344,20 @@ Deno.serve(async (request) => {
       },
     }).eq("id", runId)
 
-    if (terminalError) throw terminalError
+    if (terminalError) {
+      return reply(502, {
+        error: "PHARMA history discovery failed safely.",
+        code: terminalError.message,
+        providerCalls: attempted,
+        budgetConsumed: succeeded,
+        budgetFailed: failed,
+        budgetReleased: released,
+        runId,
+      })
+    }
 
     return reply(200, {
-      mode: "PHARMA_HISTORY_CONTRACT_DISCOVERY_ONLY",
+      mode: "PHARMA_HISTORY_TARGETED_DISCOVERY_ONLY",
       contractVersion: PHARMA_HISTORY_DISCOVERY_VERSION,
       security: security.data.symbol,
       providerInstrumentId: PHARMA_HISTORY_DISCOVERY_REFERENCE.providerInstrumentId,
@@ -354,7 +367,6 @@ Deno.serve(async (request) => {
       budgetReleased: released,
       researchWritesPerformed: 0,
       canonicalPromotionPerformed: false,
-      valuesRetrieved: false,
       capturePayloadHash,
       runId,
     })

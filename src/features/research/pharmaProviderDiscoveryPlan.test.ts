@@ -8,7 +8,7 @@ import {
 
 describe("PHARMA history provider discovery plan", () => {
   it("is versioned and bounded to the reviewed pharma reference", () => {
-    expect(PHARMA_HISTORY_DISCOVERY_VERSION).toBe("PHARMA_HISTORY_DISCOVERY_V1")
+    expect(PHARMA_HISTORY_DISCOVERY_VERSION).toBe("PHARMA_HISTORY_DISCOVERY_V2")
     expect(PHARMA_HISTORY_DISCOVERY_REFERENCE).toEqual({
       symbol: "TORNTPHARM",
       applicationSector: "Pharma",
@@ -16,29 +16,29 @@ describe("PHARMA history provider discovery plan", () => {
     })
   })
 
-  it("uses a fixed maximum provider-call budget equal to the number of discovery terms", () => {
-    expect(PHARMA_HISTORY_DISCOVERY_TERMS).toHaveLength(6)
+  it("uses the validated three-call Trendlyne value-discovery contract", () => {
+    expect(PHARMA_HISTORY_DISCOVERY_TERMS).toHaveLength(3)
     expect(PHARMA_HISTORY_DISCOVERY_MAX_PROVIDER_CALLS).toBe(PHARMA_HISTORY_DISCOVERY_TERMS.length)
-    expect(PHARMA_HISTORY_DISCOVERY_MAX_PROVIDER_CALLS).toBeLessThanOrEqual(6)
+    expect(PHARMA_HISTORY_DISCOVERY_MAX_PROVIDER_CALLS).toBe(3)
   })
 
-  it("discovers parameters only for the unresolved mandatory longitudinal domains", () => {
+  it("covers earnings/ROCE, quarter margin inputs, and cash/leverage gaps", () => {
     expect(PHARMA_HISTORY_DISCOVERY_TERMS.map((term) => term.code)).toEqual([
-      "REVENUE_HISTORY",
-      "OPERATING_MARGIN_HISTORY",
-      "ROCE_HISTORY",
-      "PAT_EPS_HISTORY",
-      "CASH_CONVERSION_HISTORY",
-      "BALANCE_SHEET_LEVERAGE",
+      "EARNINGS_ROCE_HISTORY",
+      "OPM_QUARTER_HISTORY",
+      "CASH_LEVERAGE_HISTORY",
     ])
   })
 
-  it("requires period-specific history language rather than generic growth aggregates", () => {
+  it("uses exact stock identity language and asks for raw period-specific inputs", () => {
     for (const term of PHARMA_HISTORY_DISCOVERY_TERMS) {
-      expect(term.query.length).toBeGreaterThan(20)
-      expect(term.purpose.length).toBeGreaterThan(20)
+      expect(term.query).toContain("TORNTPHARM")
+      expect(term.query).toContain("1409")
+      expect(term.query.length).toBeGreaterThan(100)
+      expect(term.purpose.length).toBeGreaterThan(40)
     }
-    expect(PHARMA_HISTORY_DISCOVERY_TERMS.find((term) => term.code === "REVENUE_HISTORY")?.query).toContain("1 year ago")
-    expect(PHARMA_HISTORY_DISCOVERY_TERMS.find((term) => term.code === "OPERATING_MARGIN_HISTORY")?.query).toContain("1 quarter ago")
+    expect(PHARMA_HISTORY_DISCOVERY_TERMS.find((term) => term.code === "OPM_QUARTER_HISTORY")?.query).toContain("operating profit")
+    expect(PHARMA_HISTORY_DISCOVERY_TERMS.find((term) => term.code === "OPM_QUARTER_HISTORY")?.query).toContain("operating revenue")
+    expect(PHARMA_HISTORY_DISCOVERY_TERMS.find((term) => term.code === "CASH_LEVERAGE_HISTORY")?.query).toContain("interest coverage")
   })
 })
