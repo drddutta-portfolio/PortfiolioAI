@@ -43,7 +43,27 @@ describe("buildPharmaReadinessView", () => {
     expect(buildPharmaReadinessView(research("Healthcare"))).toBeNull()
   })
 
-  it("keeps PHARMA_V1 fail-closed after the R4H partial/conflicting history review", () => {
+  it("represents all 13 PHARMA_V1 parent research contracts", () => {
+    const view = buildPharmaReadinessView(research("Pharma"))
+    expect(view?.totalDomainCount).toBe(13)
+    expect(view?.domains.map((domain) => domain.metricCode)).toEqual([
+      "PHARMA_REVENUE_GROWTH_HISTORY",
+      "PHARMA_OPERATING_MARGIN_HISTORY",
+      "PHARMA_ROCE_HISTORY",
+      "PHARMA_PAT_EPS_HISTORY",
+      "PHARMA_CASH_CONVERSION_HISTORY",
+      "PHARMA_BALANCE_SHEET_LEVERAGE",
+      "PHARMA_REGULATORY_SITE_STATUS",
+      "PHARMA_DOMESTIC_REVENUE_GROWTH",
+      "PHARMA_EXPORT_US_REVENUE_GROWTH",
+      "PHARMA_RND_INTENSITY",
+      "PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE",
+      "PHARMA_OWNERSHIP_GOVERNANCE",
+      "PHARMA_VALUATION_CONTEXT",
+    ])
+  })
+
+  it("keeps PHARMA_V1 fail-closed after the partial/conflicting history review", () => {
     const view = buildPharmaReadinessView(research("Pharma"))
     expect(view?.profileVersion).toBe("PHARMA_V1")
     expect(view?.state).toBe("INSUFFICIENT_EVIDENCE")
