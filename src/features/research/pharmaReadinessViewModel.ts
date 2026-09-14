@@ -2,7 +2,7 @@ import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 import { PHARMA_V1_SOURCE_READINESS, type PharmaSourceReadinessState } from "./pharmaSourceReadiness"
 import type { ResearchMetric, SecurityResearch } from "./types"
 
-export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V2" as const
+export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V3" as const
 
 export type PharmaReadinessDisplayState = "NORMALIZATION_READY" | "VALIDATED_SOURCE" | "PARTIAL" | "PENDING" | "OFFICIAL_SOURCE_PENDING"
 
@@ -61,7 +61,6 @@ const CORE_CODES: readonly CorePharmaMetricCode[] = [
 ]
 
 const NORMALIZATION_READY_CODES = new Set<CorePharmaMetricCode>([
-  "PHARMA_REVENUE_GROWTH_HISTORY",
   "PHARMA_OPERATING_MARGIN_HISTORY",
 ])
 
@@ -111,6 +110,6 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
     normalizationReadyDomains: domains.filter((domain) => domain.state === "NORMALIZATION_READY").length,
     mandatoryDomainCount: domains.length,
     blockers,
-    notice: "Revenue and operating-margin history now have reviewed normalization contracts. They are still not canonical research observations until a separately approved ingestion pilot promotes validated values with provenance. No PHARMA_V1 score or recommendation is generated from discovery data.",
+    notice: "Quarterly operating-margin history has a reviewed normalization path. Annual revenue history remains blocked because stored provider history mixes operating revenue with total revenue; PortfolioAI will not merge those semantics. No PHARMA_V1 score or recommendation is generated from discovery data.",
   }
 }
