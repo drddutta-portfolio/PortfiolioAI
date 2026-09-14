@@ -43,11 +43,15 @@ describe("buildPharmaReadinessView", () => {
     expect(buildPharmaReadinessView(research("Healthcare"))).toBeNull()
   })
 
-  it("keeps PHARMA_V1 fail-closed even when provider source history was validated", () => {
+  it("keeps PHARMA_V1 fail-closed while exposing the reviewed normalization-ready domains", () => {
     const view = buildPharmaReadinessView(research("Pharma"))
     expect(view?.profileVersion).toBe("PHARMA_V1")
+    expect(view?.normalizationVersion).toBe("PHARMA_HISTORY_NORMALIZATION_V1")
     expect(view?.state).toBe("INSUFFICIENT_EVIDENCE")
     expect(view?.validatedSourceDomains).toBe(2)
+    expect(view?.normalizationReadyDomains).toBe(2)
+    expect(view?.domains.find((domain) => domain.metricCode === "PHARMA_REVENUE_GROWTH_HISTORY")?.state).toBe("NORMALIZATION_READY")
+    expect(view?.domains.find((domain) => domain.metricCode === "PHARMA_OPERATING_MARGIN_HISTORY")?.state).toBe("NORMALIZATION_READY")
     expect(view?.blockers).toContain("ROCE history")
     expect(view?.blockers).toContain("Regulatory site evidence")
   })
