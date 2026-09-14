@@ -48,6 +48,10 @@ const ANNUAL_REVENUE_LABELS: Readonly<Record<PharmaAnnualPeriod, string>> = {
   Y5: "Rev. Ann. 5Y ago",
 }
 
+const ANNUAL_REVENUE_ALIASES: Partial<Readonly<Record<PharmaAnnualPeriod, readonly string[]>>> = {
+  Y1: ["Total Rev. Ann. 1Y Ago"],
+}
+
 const ANNUAL_CFO_LABELS: Readonly<Record<PharmaAnnualPeriod, string>> = {
   Y0: "Cash from Operating Act. Ann.",
   Y1: "Cash from Operating Act. Ann. 1Y Ago",
@@ -105,6 +109,7 @@ function normalizeMappedSeries<P extends string>(
   values: readonly ProviderHistoryValue[],
   labels: Readonly<Record<P, string>>,
   minimumObservations: number,
+  aliases: Partial<Readonly<Record<P, readonly string[]>>> = {},
 ): NormalizedHistorySeries<P> {
   const byLabel = exactValueMap(values)
   const points: NormalizedHistoryPoint<P>[] = []
@@ -112,8 +117,8 @@ function normalizeMappedSeries<P extends string>(
   const invalidLabels: string[] = []
 
   for (const period of Object.keys(labels) as P[]) {
-    const sourceLabel = labels[period]
-    const item = byLabel.get(normalizeLabel(sourceLabel))
+    const candidates = [labels[period], ...(aliases[period] ?? [])]
+    const item = candidates.map((label) => byLabel.get(normalizeLabel(label))).find(Boolean)
     if (!item) {
       missingPeriods.push(period)
       continue
@@ -138,7 +143,7 @@ function normalizeMappedSeries<P extends string>(
 }
 
 export function normalizePharmaAnnualRevenue(values: readonly ProviderHistoryValue[]) {
-  return normalizeMappedSeries(values, ANNUAL_REVENUE_LABELS, 3)
+  return normalizeMappedSeries(values, ANNUAL_REVENUE_LABELS, 3, ANNUAL_REVENUE_ALIASES)
 }
 
 export function normalizePharmaAnnualCfo(values: readonly ProviderHistoryValue[]) {
@@ -192,7 +197,7 @@ export const PHARMA_HISTORY_NORMALIZATION_CONTRACT = {
   provider: "TRENDLYNE_MCP",
   providerTool: "get_parameter_values_multi_stock",
   rules: {
-    annualRevenue: "Exact validated provider labels are normalized to Y0-Y5; a provider CAGR/aggregate cannot substitute for the raw annual series.",
+    annualRevenue: "Exact validated provider labels (including reviewed aliases) are normalized to Y0-Y5; a provider CAGR/aggregate cannot substitute for the raw annual series.",
     annualCfo: "Exact annual CFO labels are normalized to Y0-Y5; CFO alone does not satisfy PHARMA cash-conversion readiness.",
     operatingMargin: "PortfolioAI derives each quarterly OPM from matched-period operating profit / operating revenue × 100 using Decimal arithmetic.",
     missingData: "Missing, invalid or unmatched period values remain missing/invalid and are never coerced to zero.",
