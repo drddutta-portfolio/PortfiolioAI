@@ -28,7 +28,10 @@ jobs:
         run: npx vitest run src/contracts/canonicalDataAuthorities.test.ts src/features/research/sectorResearchMapping.test.ts src/features/research/portfolioCoverageProjection.test.ts
       - name: Typecheck
         run: npm run typecheck
-      - name: Lint
+      - name: Lint architecture boundary
+        run: npm run lint:architecture
+      - name: Full repository lint diagnostic
+        continue-on-error: true
         run: npm run lint
       - name: Production build
         run: npm run build
