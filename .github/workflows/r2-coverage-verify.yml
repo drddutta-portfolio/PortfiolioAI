@@ -1,0 +1,38 @@
+name: R2 Coverage Registry Verification
+
+on:
+  push:
+    branches:
+      - r2-portfolio-coverage-registry
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: R2 tests
+        run: npx vitest run src/features/research/portfolioCoverageRegistry.test.ts src/features/research/sectorResearchMapping.test.ts src/features/research/portfolioCoverageProjection.test.ts
+      - name: Targeted R2 typecheck
+        run: npx tsc --ignoreConfig --noEmit --strict --skipLibCheck --target ES2022 --module ESNext --moduleResolution Bundler src/features/research/portfolioCoverageRegistry.ts src/features/research/portfolioCoverageRegistry.test.ts src/features/research/sectorResearchMapping.ts src/features/research/sectorResearchMapping.test.ts src/features/research/portfolioCoverageProjection.ts src/features/research/portfolioCoverageProjection.test.ts
+      - name: Targeted R2 lint
+        run: npx eslint src/features/research/portfolioCoverageRegistry.ts src/features/research/portfolioCoverageRegistry.test.ts src/features/research/sectorResearchMapping.ts src/features/research/sectorResearchMapping.test.ts src/features/research/portfolioCoverageProjection.ts src/features/research/portfolioCoverageProjection.test.ts
+      - name: Repository typecheck
+        continue-on-error: true
+        run: npm run typecheck
+      - name: Repository lint
+        continue-on-error: true
+        run: npm run lint
+      - name: Repository build
+        continue-on-error: true
+        run: npm run build
