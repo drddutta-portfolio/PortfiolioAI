@@ -6,16 +6,7 @@ This document records the first portfolio-wide R2C coverage inventory generated 
 
 ## 1. Purpose
 
-R2C converts the R2 coverage-registry contract into a real portfolio-wide truth table. It answers:
-
-- what is currently held,
-- which holdings are eligible for equity research,
-- which classification evidence already exists,
-- where canonical research evidence exists,
-- where research profiles are still pending,
-- where market history exists,
-- where deterministic score/recommendation/sizing persistence exists,
-- and what blocks the next downstream stage.
+R2C converts the R2 coverage-registry contract into a real portfolio-wide truth table. It answers what is currently held, which classifications already exist, where research evidence exists, where research profiles remain pending, where market history exists, and where downstream scoring/recommendation/sizing lineage is still missing.
 
 R2C is descriptive only. It does not fetch missing evidence and does not create investment recommendations.
 
@@ -32,11 +23,11 @@ Read-only production query over `current_holdings` found:
 
 The 9 non-equity holdings are not to be forced through the equity research/scoring/recommendation/sizing chain. Their equity-research domains should report `NOT_APPLICABLE` unless a future asset-specific engine is introduced.
 
-## 3. Classification coverage
+## 3. Application-wide classification authority
 
 The raw `securities.sector_id` / `industry_id` columns are not the current classification authority for this portfolio: all 249 open holdings currently have null raw sector/industry links.
 
-The reviewed enrichment layer (`current_security_enrichment_v1`) is therefore the correct R2 classification source.
+The shared reviewed enrichment projection `current_security_enrichment_v1` is the application-wide classification authority. It is already consumed by Dashboard → Allocation & performance and must also be consumed by R2, Research, Holdings, Portfolio Structure and future decision surfaces.
 
 For the 240 equity holdings:
 
@@ -50,13 +41,14 @@ For the 240 equity holdings:
 
 Interpretation:
 
-- **Sector-level classification is portfolio-wide.**
+- **Sector-level classification is portfolio-wide: 240/240 equities.**
 - **Industry-level specificity is not portfolio-wide.**
-- R2 must preserve `PARTIAL` where industry or other enrichment dimensions remain incomplete; it must not falsely downgrade sector coverage to missing.
+- A `PARTIAL` enrichment state does not mean sector is missing when the sector value is already present.
+- R2 must use exactly the same sector label shown by the Dashboard, not a secondary user-visible taxonomy.
 
 ## 4. Current sector distribution of the 240 equities
 
-The current enrichment layer reports the following sector labels:
+The shared enrichment layer reports the following application sector labels:
 
 | Sector label | Holdings |
 | --- | ---: |
@@ -93,11 +85,17 @@ The current enrichment layer reports the following sector labels:
 | Consumer Staples | 1 |
 | Textiles Apparels & Accessories | 1 |
 
-These are source labels, not yet the final 20-sector PortfolioAI taxonomy. R2/R4 must map them deterministically into the approved canonical sector taxonomy without erasing the original source label.
+These labels are the application classification for the current portfolio because they are the same labels used by Dashboard → Allocation & performance.
 
-Examples requiring normalization include `Pharma` + `Healthcare`, `Fast Moving Consumer Goods` + `FMCG` + `Consumer Staples`, and related energy/power labels. Labels such as `Waste Managment`, `Gems and Jewellery`, `Ship Building`, and generic `Services` require explicit reviewed mapping rather than silent guessing.
+R2 must not merge `Banking` with `Financial Services`, `Pharma` with `Healthcare`, or any other Dashboard sectors for display/counting purposes. Research-profile grouping is a separate downstream methodology concern only.
 
-## 5. Structured research evidence breadth
+## 5. Market-cap classification authority
+
+Dashboard market-cap performance also reads the same `current_security_enrichment_v1` projection, specifically `market_cap_category`.
+
+Therefore all pages must use the same market-cap category for the same security. No independent page-level market-cap bucketing should be maintained.
+
+## 6. Structured research evidence breadth
 
 Read-only production evidence counts show:
 
@@ -121,50 +119,36 @@ Read-only production evidence counts show:
 
 This is consistent with the known pilot-first history and must not be interpreted as portfolio-wide research completeness.
 
-## 6. Important evidence caveat: conflict rows are historical evidence, not automatically current blockers
+## 7. Important evidence caveat
 
 All 25 securities with fundamental observations have at least one historical `CONFLICTING` observation somewhere in their evidence history. This does **not** mean all 25 stocks should automatically be considered currently conflicted.
 
-The first live R2C check found no rows in `fundamental_observation_decisions` selecting a canonical observation for these holdings. Therefore R2 must distinguish:
-
-1. raw evidence exists,
-2. raw evidence includes conflicts,
-3. a reviewed canonical observation has been selected,
-4. profile-specific mandatory evidence is ready.
+The first live R2C check found no rows in `fundamental_observation_decisions` selecting a canonical observation for these holdings. Therefore R2 must distinguish raw evidence presence, historical conflict, reviewed canonical selection, and profile-specific mandatory evidence readiness.
 
 Until that distinction is implemented, R2 should conservatively report research evidence as present but **not claim profile/scoring readiness** from observation count alone.
 
-## 7. Scoring and recommendation persistence caveat
+## 8. Scoring and recommendation persistence caveat
 
 Production currently contains no rows in `stock_score_runs` for the 240 open equities.
 
 HDFCBANK does have persisted recommendation-preview history in `stock_recommendation_runs`, including stable BANK_NBFC preview rows with score-ready coverage and 3–4% suggested-weight guidance. Those recommendation rows currently have `source_score_run_id = null` and `run_state = PREVIEW`.
 
-Therefore R2 must not describe HDFCBANK as having a persisted canonical score-run lineage today. The correct statement is:
+Therefore R2 must not describe HDFCBANK as having a persisted canonical score-run lineage today. HDFCBANK remains the deepest validated research/scoring/recommendation reference path, recommendation-preview persistence exists, canonical `stock_score_runs` persistence is absent, and D35B position-sizing persistence is not yet applied to production.
 
-- HDFCBANK has the deepest validated research/scoring/recommendation **reference path**,
-- recommendation preview persistence exists,
-- canonical `stock_score_runs` persistence is currently absent,
-- and the new D35B position-sizing persistence migration is not yet applied to production.
+## 9. Research-profile readiness rule
 
-This is exactly why R1 was designed to fail closed when proper upstream lineage is unavailable.
+Existing `security_scoring_profile_assignments` are scoring-methodology assignments. They must not automatically promote a security to an approved R4 sector-research profile.
 
-## 8. Research-profile readiness rule for R2
+A valid application sector is not the same as a ready research profile. For example, every current equity can be sector-classified while most remain `PROFILE_PENDING` for sector-specific research methodology.
 
-Existing `security_scoring_profile_assignments` are scoring-methodology assignments. They must **not** automatically promote a security to an approved R4 sector-research profile.
+Research profiles may internally group compatible application sectors, but that grouping must never alter the sector classification displayed to the user.
 
-R2 therefore applies this rule:
-
-- HDFCBANK may be treated as the current genuine BANK research reference case for architecture/pilot reporting.
-- Other existing non-bank scoring assignments remain `PROFILE_PENDING` for the new sector-research architecture until their R4 contracts and mandatory evidence rules are validated.
-- A reviewed scoring-profile assignment can help propose a research-profile mapping, but cannot by itself make `RESEARCH_PROFILE = READY`.
-
-## 9. R2C blocker interpretation today
+## 10. R2C blocker interpretation today
 
 At the portfolio level, the earliest broad blockers are:
 
 1. **Research-profile contract coverage** — most equities do not yet have an approved R4 research-profile contract/readiness state.
-2. **Profile-specific research evidence breadth** — only a minority have any structured fundamental evidence, and current mandatory-profile completeness has not yet been established.
+2. **Profile-specific research evidence breadth** — only a minority have structured fundamental evidence.
 3. **Market-history breadth** — only one equity currently has the full Angel One daily-history path.
 4. **Persisted deterministic scoring lineage** — no current `stock_score_runs` rows for open holdings.
 5. **Recommendation breadth** — only HDFCBANK has persisted preview history.
@@ -172,12 +156,13 @@ At the portfolio level, the earliest broad blockers are:
 
 Core Health and Exit Risk remain future engines and should continue to report `BLOCKED_PREREQUISITE` rather than fabricated readiness.
 
-## 10. R2B implementation implications
+## 11. R2 implementation implications
 
-R2B should project existing truth rather than create duplicate truth:
+R2 should project existing truth rather than create duplicate truth:
 
 - `current_holdings` is the open-holding population source.
-- `current_security_enrichment_v1` is the current classification/enrichment source for R2.
+- `current_security_enrichment_v1` is the shared sector, industry and market-cap classification source.
+- Dashboard and all other pages must resolve classification through the same source/shared selector.
 - raw `securities.sector_id/industry_id` must not be treated as the current classification authority while they remain null.
 - `security_refresh_states` is provider/cache metadata, not proof of profile-specific research completeness.
 - `fundamental_observations` / review decisions describe evidence and reconciliation state.
@@ -187,22 +172,16 @@ R2B should project existing truth rather than create duplicate truth:
 - `stock_score_runs` and `stock_recommendation_runs` describe persisted downstream lineage when present.
 - position sizing must remain unavailable in production until the R1 migration is explicitly approved and applied.
 
-The browser must not receive broader service-role access merely to render R2. If some control-plane tables are intentionally non-browser-readable, R2B should expose a minimal safe projection through a reviewed server-side/view contract rather than weakening RLS.
+The browser must not receive broader service-role access merely to render R2. If some control-plane tables are intentionally non-browser-readable, R2 should expose a minimal safe projection through a reviewed server-side boundary rather than weakening RLS.
 
-## 11. Next R2 step
+## 12. Single-source consistency rule
 
-The next R2 implementation slice should:
+Every application surface displaying sector, industry or market-cap classification must show the same data for the same security.
 
-1. add deterministic normalization from current source-sector labels to the approved PortfolioAI canonical 20-sector taxonomy;
-2. preserve source sector/industry labels and mapping basis;
-3. define proposed research subprofile mappings separately from readiness;
-4. compute one portfolio-wide coverage record per open holding;
-5. aggregate counts by canonical sector, proposed research profile, first blocker, and downstream-ready domain;
-6. keep provider-call execution disabled;
-7. require a separate explicit production approval for any future schema/view/Edge Function needed to expose the registry safely in the application.
+A classification correction must be made once in the shared enrichment/classification layer and then propagate everywhere. Page-specific copies, hidden remapping tables, ticker-name inference and independent market-cap classification are prohibited.
 
-## 12. Completion status
+## 13. Completion status
 
 This baseline is **R2C COVERAGE BASELINE COMPLETE** for the read-only inventory performed on 2026-09-14.
 
-It is **not** R2 overall completion, portfolio-wide research completion, scoring completion, recommendation completion, or sizing completion.
+It is **not** portfolio-wide research completion, scoring completion, recommendation completion, sizing completion, or R2 production integration completion.
