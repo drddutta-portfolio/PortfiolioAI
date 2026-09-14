@@ -2,6 +2,67 @@
 -- Repository migration only until separately approved for production.
 -- This migration writes no fundamental observations and performs no provider calls.
 
+-- Fail closed if another migration/process has already claimed one of these codes
+-- with incompatible semantics. `on conflict do nothing` is safe only after this
+-- compatibility assertion has passed.
+do $$
+begin
+  if exists (
+    select 1
+    from public.fundamental_metric_definitions
+    where code = 'REVENUE_ANNUAL'
+      and (
+        value_kind <> 'NUMERIC'
+        or canonical_unit <> 'INR_CRORE'
+        or statement_scope <> 'INCOME_STATEMENT'
+        or coalesce(definition->>'period_type','') <> 'YEAR'
+        or coalesce(definition->>'semantic_guard','') <> 'OPERATING_REVENUE_ONLY'
+      )
+  ) then
+    raise exception 'R4H metric-code conflict: REVENUE_ANNUAL already exists with incompatible semantics';
+  end if;
+
+  if exists (
+    select 1
+    from public.fundamental_metric_definitions
+    where code = 'OPERATING_REVENUE_QUARTER'
+      and (
+        value_kind <> 'NUMERIC'
+        or canonical_unit <> 'INR_CRORE'
+        or statement_scope <> 'INCOME_STATEMENT'
+        or coalesce(definition->>'period_type','') <> 'QUARTER'
+      )
+  ) then
+    raise exception 'R4H metric-code conflict: OPERATING_REVENUE_QUARTER already exists with incompatible semantics';
+  end if;
+
+  if exists (
+    select 1
+    from public.fundamental_metric_definitions
+    where code = 'OPERATING_PROFIT_QUARTER'
+      and (
+        value_kind <> 'NUMERIC'
+        or canonical_unit <> 'INR_CRORE'
+        or statement_scope <> 'INCOME_STATEMENT'
+        or coalesce(definition->>'period_type','') <> 'QUARTER'
+        or coalesce(definition->>'conflict_policy','') <> 'FAIL_CLOSED_PER_PERIOD'
+      )
+  ) then
+    raise exception 'R4H metric-code conflict: OPERATING_PROFIT_QUARTER already exists with incompatible semantics';
+  end if;
+
+  if not exists (
+    select 1
+    from public.fundamental_metric_definitions
+    where code = 'CFO_ANNUAL'
+      and value_kind = 'NUMERIC'
+      and canonical_unit = 'INR_CRORE'
+  ) then
+    raise exception 'R4H prerequisite missing/incompatible: CFO_ANNUAL canonical definition';
+  end if;
+end
+$$;
+
 insert into public.fundamental_metric_definitions (
   code,
   name,
