@@ -37,8 +37,8 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
     <div className="pharma-canonical-history" aria-label="Canonical Pharma history">
       <div className="pharma-history-head">
         <div>
-          <p className="eyebrow">Canonical history now stored</p>
-          <h3>TORNTPHARM evidence imported by R4H</h3>
+          <p className="eyebrow">Canonical Pharma financial history</p>
+          <h3>Reviewed canonical evidence</h3>
         </div>
         <span>{history.annualCfo.length + history.annualRevenue.length + history.quarterlyOperatingRevenue.length + history.quarterlyOperatingProfit.length} reviewed raw observations</span>
       </div>
