@@ -6,6 +6,7 @@ import {
   type ResearchProfileReadiness,
   type SourceCoverageInput,
 } from "./portfolioCoverageRegistry"
+import { routeResearchProfileV1, type ResearchProfileRoutingState } from "./researchProfileRouting"
 import { mapSectorToPortfolioAiV1 } from "./sectorResearchMapping"
 
 export interface CachedCoverageSecurityInput {
@@ -36,6 +37,9 @@ export interface ProjectedPortfolioCoverageRecord extends PortfolioCoverageRecor
   readonly sourceIndustry: string | null
   readonly applicationSector: string | null
   readonly classificationMappingBasis: string
+  readonly proposedResearchProfileCode: string | null
+  readonly researchProfileRoutingState: ResearchProfileRoutingState
+  readonly researchProfileRoutingReason: string
 }
 
 export interface CoverageSummary {
@@ -56,7 +60,15 @@ export function projectPortfolioCoverageV1(input: CachedCoverageSecurityInput): 
       ? "FRESH"
       : "MISSING"
 
-  const researchProfileCode = input.researchProfileCode ?? sectorMapping.proposedResearchProfileCode
+  const routing = routeResearchProfileV1({
+    assetClass: input.assetClass,
+    applicationSector: sectorMapping.applicationSector,
+    applicationIndustry: input.sourceIndustry,
+  })
+
+  // Routing is methodology planning only. It must never promote a holding to
+  // research-profile READY until a reviewed/versioned profile assignment exists.
+  const researchProfileCode = input.researchProfileCode ?? routing.profileCode
   const researchProfileVersion = input.researchProfileVersion
   const researchProfileReadiness = input.researchProfileCode
     ? input.researchProfileReadiness
@@ -94,6 +106,9 @@ export function projectPortfolioCoverageV1(input: CachedCoverageSecurityInput): 
     sourceIndustry: input.sourceIndustry,
     applicationSector: sectorMapping.applicationSector,
     classificationMappingBasis: sectorMapping.mappingBasis,
+    proposedResearchProfileCode: routing.profileCode,
+    researchProfileRoutingState: routing.state,
+    researchProfileRoutingReason: routing.reasonCode,
   }
 }
 
