@@ -78,10 +78,13 @@ Each response record should contain only facts needed by `projectPortfolioCovera
 
 From `current_security_enrichment_v1`:
 
-- source sector
-- source industry
+- sector
+- industry
+- market-cap category
 - enrichment state
 - enrichment `fresh_until`
+
+These values are the shared application classification authority used by Dashboard → Allocation & performance. R2D must return them unchanged.
 
 Do not use null `securities.sector_id/industry_id` as the current authority while the reviewed enrichment layer is the active classification source.
 
@@ -176,18 +179,24 @@ Return whether the R1 `position_sizing_assessments` persistence contract exists/
 
 Until then, R2 should report sizing persistence as unavailable.
 
-## 5. Canonical-sector mapping remains application deterministic logic
+## 5. Application classification is shared, not remapped
 
-R2D should return the cached source sector/industry, not overwrite them with a new database classification.
+R2D must preserve the exact sector, industry and market-cap classification already supplied by `current_security_enrichment_v1`.
 
-`mapSectorToPortfolioAiV1` remains the versioned deterministic mapping contract in application code. This preserves:
+There is no second user-visible R2 sector taxonomy.
 
-- source classification provenance;
-- mapping versioning;
-- explicit `REVIEW_REQUIRED` behavior;
-- separation between source sector, PortfolioAI canonical sector, and research subprofile.
+`mapSectorToPortfolioAiV1` may propose an internal research-profile family, but it must not rewrite, merge or rename the application sector. For example:
 
-A future reviewed database persistence layer may store canonical mapping decisions, but R2D does not require such a production change now.
+- `Banking` remains `Banking`;
+- `Financial Services` remains `Financial Services`;
+- `Pharma` remains `Pharma`;
+- `Healthcare` remains `Healthcare`.
+
+The same security must show the same classification on Dashboard, Holdings, Portfolio Structure, Research Coverage, Research and future decision surfaces.
+
+A future classification correction must be applied once in the shared classification/enrichment layer and then propagate everywhere. Page-specific classification copies or independent market-cap bucketing are not permitted.
+
+Research-profile grouping remains separate from application sector classification.
 
 ## 6. Research-profile readiness remains fail-closed
 
@@ -230,8 +239,10 @@ Before production deployment/application, R2D must prove:
 8. ETF/non-equity rows remain eligible for `NOT_APPLICABLE` treatment;
 9. HDFCBANK preview history is not misrepresented as persisted score lineage;
 10. response contains compact market-history aggregates, not raw candles;
-11. R2 deterministic tests remain green;
-12. repository typecheck/lint/build remain green.
+11. sector/industry/market-cap values match `current_security_enrichment_v1` exactly;
+12. Dashboard, Holdings, Portfolio Structure, Research Coverage and Research display the same classification for the same security;
+13. R2 deterministic tests remain green;
+14. repository typecheck/lint/build remain green.
 
 ## 10. Production approval gate
 
