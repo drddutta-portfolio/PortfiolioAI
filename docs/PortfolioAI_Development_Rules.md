@@ -6,8 +6,22 @@ These rules apply to every coding agent and human contributor working on Portfol
 
 - GitHub repository is the source of truth for application code and canonical specifications.
 - `docs/PortfolioAI_Master_Blueprint.md` defines the intended product architecture.
+- `docs/PortfolioAI_Single_Source_of_Truth_Architecture.md` defines the cross-application rule for canonical business facts, shared access paths, and cross-page consistency.
 - Do not silently change product rules while coding.
 - If implementation requires a material architecture change, document it before implementing it.
+
+### 1.1 One business fact, one authority
+
+- A data item that means the same thing must have one canonical authority across PortfolioAI.
+- Different pages are views of the same system; they must not become independent mini-applications with separate queries, formulas, taxonomies, or fallback values for the same fact.
+- UI components may format, sort, filter, group and present canonical facts. They must not redefine business facts or duplicate domain calculations.
+- New pages must consume the approved shared repository/service/hook/view-model path for existing facts.
+- Presentation files under `src/pages/**` and `src/components/**` must not directly query canonical Supabase storage.
+- If a new business fact is introduced, its authority and calculation owner must be documented and added to the machine-readable canonical authority registry before or with implementation.
+- Missing, stale, conflicting, review-required, not-applicable and insufficient-evidence states must remain explicit and consistent across surfaces.
+- Research/scoring profiles may interpret canonical classification but may not silently replace the sector/industry/market-cap classification displayed by the application.
+- A derived value must have one deterministic owner. Do not reimplement portfolio weight, P&L, scoring, recommendation, sizing, or another existing business formula inside a page/component.
+- Architecture exceptions require an explicit reviewed change to the canonical source/calculation contract; a local workaround in one screen is not an exception.
 
 ## 2. Coding-Agent Independence
 
@@ -90,6 +104,8 @@ The specification must remain independent of Codex, Claude Code, Lovable or any 
 
 Every deterministic engine must have unit tests. Importers require validation and duplicate tests. Important financial calculations require hand-verified examples. Security and RLS should be tested before production use.
 
+For shared business facts, tests should also verify architectural consistency where practical. The repository `check:architecture` guard and canonical-authority tests are mandatory controls; do not disable or bypass them merely to make a pull request pass.
+
 ## 12. User Experience
 
 The user is a non-coder and the product is a personal investment terminal. UI must be professional, readable, responsive and information-dense without becoming confusing. Tables should support filtering, sorting and useful column configuration.
@@ -105,6 +121,7 @@ For each material feature:
 - state the problem;
 - state the intended behaviour;
 - identify affected modules/data;
+- identify the canonical authority for every new business fact shown or calculated;
 - implement;
 - test;
 - document any schema/configuration changes;
@@ -113,3 +130,10 @@ For each material feature:
 ## 15. Definition of Done
 
 A feature is not complete merely because the UI renders. It must have the required data model, validation, deterministic logic, error handling, security considerations, tests where applicable, and documentation/configuration needed for another developer or coding agent to continue safely.
+
+For application-facing features, Definition of Done additionally requires:
+
+- `npm run check:architecture` passes;
+- no competing source/calculation path is introduced for an existing canonical fact;
+- shared facts shown on multiple surfaces resolve from the same authority;
+- the canonical authority registry remains accurate.
