@@ -6,7 +6,7 @@ import {
   type ResearchProfileReadiness,
   type SourceCoverageInput,
 } from "./portfolioCoverageRegistry"
-import { mapSectorToPortfolioAiV1, type CanonicalSectorCode } from "./sectorResearchMapping"
+import { mapSectorToPortfolioAiV1 } from "./sectorResearchMapping"
 
 export interface CachedCoverageSecurityInput {
   readonly portfolioId: string
@@ -34,7 +34,7 @@ export interface CachedCoverageSecurityInput {
 export interface ProjectedPortfolioCoverageRecord extends PortfolioCoverageRecord {
   readonly sourceSector: string | null
   readonly sourceIndustry: string | null
-  readonly canonicalSectorCode: CanonicalSectorCode | null
+  readonly applicationSector: string | null
   readonly classificationMappingBasis: string
 }
 
@@ -42,7 +42,7 @@ export interface CoverageSummary {
   readonly holdings: number
   readonly equities: number
   readonly nonEquities: number
-  readonly byCanonicalSector: Readonly<Record<string, number>>
+  readonly byApplicationSector: Readonly<Record<string, number>>
   readonly byFirstBlockingDomain: Readonly<Record<string, number>>
   readonly byDomainState: Readonly<Record<CoverageDomain, Readonly<Record<CoverageState, number>>>>
 }
@@ -54,9 +54,7 @@ export function projectPortfolioCoverageV1(input: CachedCoverageSecurityInput): 
     ? "FRESH"
     : sectorMapping.state === "MAPPED"
       ? "FRESH"
-      : sectorMapping.state === "MISSING"
-        ? "MISSING"
-        : "REVIEW_REQUIRED"
+      : "MISSING"
 
   const researchProfileCode = input.researchProfileCode ?? sectorMapping.proposedResearchProfileCode
   const researchProfileVersion = input.researchProfileVersion
@@ -71,7 +69,7 @@ export function projectPortfolioCoverageV1(input: CachedCoverageSecurityInput): 
     securityId: input.securityId,
     symbol: input.symbol,
     assetClass: input.assetClass,
-    canonicalSector: sectorMapping.canonicalSectorCode,
+    canonicalSector: sectorMapping.applicationSector,
     canonicalIndustry: input.sourceIndustry,
     identityState: input.identityState,
     classificationState,
@@ -94,7 +92,7 @@ export function projectPortfolioCoverageV1(input: CachedCoverageSecurityInput): 
     ...record,
     sourceSector: input.sourceSector,
     sourceIndustry: input.sourceIndustry,
-    canonicalSectorCode: sectorMapping.canonicalSectorCode,
+    applicationSector: sectorMapping.applicationSector,
     classificationMappingBasis: sectorMapping.mappingBasis,
   }
 }
@@ -130,15 +128,15 @@ function emptyStateCounts(): Record<CoverageState, number> {
 }
 
 export function summarizePortfolioCoverageV1(records: readonly ProjectedPortfolioCoverageRecord[]): CoverageSummary {
-  const byCanonicalSector: Record<string, number> = {}
+  const byApplicationSector: Record<string, number> = {}
   const byFirstBlockingDomain: Record<string, number> = {}
   const byDomainState = Object.fromEntries(DOMAINS.map((domain) => [domain, emptyStateCounts()])) as Record<CoverageDomain, Record<CoverageState, number>>
 
   let equities = 0
   for (const record of records) {
     if (record.assetClass.toUpperCase() === "EQUITY") equities += 1
-    const sector = record.canonicalSectorCode ?? "UNMAPPED"
-    byCanonicalSector[sector] = (byCanonicalSector[sector] ?? 0) + 1
+    const sector = record.applicationSector ?? "UNCLASSIFIED"
+    byApplicationSector[sector] = (byApplicationSector[sector] ?? 0) + 1
     const blocker = record.firstBlockingDomain ?? "NONE"
     byFirstBlockingDomain[blocker] = (byFirstBlockingDomain[blocker] ?? 0) + 1
     for (const domain of DOMAINS) {
@@ -151,7 +149,7 @@ export function summarizePortfolioCoverageV1(records: readonly ProjectedPortfoli
     holdings: records.length,
     equities,
     nonEquities: records.length - equities,
-    byCanonicalSector,
+    byApplicationSector,
     byFirstBlockingDomain,
     byDomainState,
   }
