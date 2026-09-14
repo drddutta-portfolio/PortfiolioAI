@@ -3,6 +3,7 @@ import type { SecurityResearch } from "./types"
 import "./PharmaResearchReadinessPanel.css"
 
 const stateLabel: Readonly<Record<PharmaReadinessDisplayState, string>> = {
+  NORMALIZATION_READY: "Normalization ready",
   VALIDATED_SOURCE: "Source validated",
   PARTIAL: "Partial",
   PENDING: "Pending",
@@ -18,12 +19,13 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
       <div>
         <p className="eyebrow">Sector-specific research contract</p>
         <h2 id="pharma-readiness-title">PHARMA_V1 Research Readiness</h2>
-        <p>Provider capability and canonical research readiness are shown separately. Raw discovery never becomes a score by itself.</p>
+        <p>Provider capability, normalization readiness and canonical research evidence are deliberately separate. Raw discovery never becomes a score by itself.</p>
       </div>
       <div className="pharma-readiness-summary">
         <span className="pharma-readiness-state">Insufficient evidence</span>
         <strong>{view.validatedSourceDomains}/{view.mandatoryDomainCount}</strong>
         <small>core source domains validated</small>
+        <em>{view.normalizationReadyDomains} normalization-ready</em>
       </div>
     </header>
 
@@ -44,7 +46,7 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
     <div className="pharma-readiness-note">
       <strong>No PHARMA_V1 score is being generated yet.</strong>
       <p>{view.notice}</p>
-      <small>Current blockers: {view.blockers.join(" · ")}</small>
+      <small>Normalization contract: {view.normalizationVersion} · Current blockers: {view.blockers.join(" · ")}</small>
     </div>
   </section>
 }
