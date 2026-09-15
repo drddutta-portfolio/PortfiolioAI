@@ -1,6 +1,6 @@
 # R4N — PHARMA_V1 Business-Model Subprofile Architecture
 
-**Status:** final architecture candidate; owner approval pending; documentation only
+**Status:** architecture direction approved for documentation/fixture-only R4N-A/R4N-B work; candidate assignments remain provisional
 **Parent profile:** `PHARMA_V1`
 **Reference security for the first subprofile:** TORNTPHARM
 **Proposed subprofile:** `DOMESTIC_FORMULATIONS`
@@ -23,7 +23,7 @@ The proposed stored enum is:
 
 Allowed transitions are `PROVISIONAL -> REVIEWED`, `PROVISIONAL -> DISPUTED`, `REVIEWED -> DISPUTED`, and `PROVISIONAL|REVIEWED|DISPUTED -> RETIRED`. Corrections create a new version and retire the old version; they do not overwrite history.
 
-TORNTPHARM remains `PROVISIONAL` until explicit owner approval.
+TORNTPHARM remains `PROVISIONAL` while it is used as the first implementation pilot. Pilot selection does not make its subprofile assignment canonical. Promotion to `REVIEWED` requires a separate evidence-backed assignment review.
 
 PortfolioAI should retain one parent profile and add a separate subprofile axis:
 
@@ -112,6 +112,8 @@ Only the reviewed primary subprofile anchors methodology. Secondary exposures ca
 
 Assignment versions are immutable positive integers scoped to `security_id + profile_code`. Effective intervals may not overlap for two active reviewed primary assignments. Conflicts or an unknown subprofile fail closed to the parent profile and expose a review blocker.
 
+The fallback is research-safe: parent `PHARMA_V1` evidence may remain visible, but an unresolved, missing or conflicting required subprofile assignment blocks effective-contract completion, top-line readiness, score readiness, scoring and recommendation. Parent-only rendering must never imply that the issuer has been sufficiently modeled.
+
 The eventual canonical authority and shared repository path must be added to `src/contracts/canonicalDataAuthorities.ts` before or with implementation.
 
 ### Requirement contract
@@ -197,7 +199,7 @@ For the first pilot, TORNTPHARM is reviewed against:
 ```text
 profile_code: PHARMA_V1
 primary_subprofile_code: DOMESTIC_FORMULATIONS
-assignment_state: REVIEWED_CANDIDATE until owner approval
+assignment_state: PROVISIONAL
 ```
 
 The existing 42-row manifest must first be treated as parent financial evidence and mapped against the effective `PHARMA_V1 + DOMESTIC_FORMULATIONS` contract. It must not be described as completing the subprofile unless the domestic-franchise requirements are also satisfied or explicitly unresolved.
@@ -239,6 +241,34 @@ Let `E` be the effective requirements after parent/subprofile composition. Condi
 
 If a denominator is zero, the displayed state is `NOT_APPLICABLE`, not 0%. Mandatory readiness completion authorizes neither scoring nor recommendation.
 
+The shared top-line Research Readiness value is exclusively `mandatory_readiness`. Important and Supplementary coverage must be displayed separately and must not be blended into the top-line numerator or denominator. An unresolved required subprofile assignment displays a blocker even when all available parent requirements are ready.
+
+## Provisional candidate register
+
+The owner-supplied mapping is a review set, not a canonical classification list. Every Pharma assignment below begins as `PROVISIONAL`; each requires canonical security identity, business-model evidence, effective date, provenance, confidence and secondary-exposure review before promotion to `REVIEWED`.
+
+| Proposed primary subprofile | Provisional candidates |
+|---|---|
+| `API_BULK_DRUGS` | ALIVUS, SUPRIYA, SOLARA, PAR |
+| `DOMESTIC_FORMULATIONS` | TORNTPHARM, SUNPHARMA, ERIS, EMCURE, MANKIND |
+| `GLOBAL_GENERICS` | CAPLIPOINT, AUROPHARMA, GRANULES, GLENMARK, WOCKPHARMA, ZYDUSLIFE, LUPIN, CIPLA, NATCOPHARM |
+| `BIOPHARMA_BIOSIMILARS` | BIOCON |
+| `CDMO_CRAMS` | LAURUSLABS, ONESOURCE, PPLPHARMA, AKUMS, SYNGENE, JUBLPHARMA |
+
+Mixed-model review is especially important for SUNPHARMA, CIPLA, ZYDUSLIFE, GLENMARK, LAURUSLABS, PPLPHARMA and BIOCON. This list is not exhaustive: any candidate may receive typed secondary exposures when supported by reviewed evidence. Secondary exposures may activate evidence requirements but cannot create blended scoring without an approved aggregation methodology.
+
+ZYDUSWELL is recorded separately as `OUTSIDE_PHARMA_V1 / CONSUMER_HEALTH_REVIEW`. This is an exclusion from the current Pharma methodology and a future-family review state, not a final Consumer/FMCG profile assignment.
+
+The initial pilot sequence is:
+
+1. TORNTPHARM — `DOMESTIC_FORMULATIONS` candidate.
+2. One reviewed API/Bulk candidate.
+3. One reviewed Global Generics candidate.
+4. BIOCON — `BIOPHARMA_BIOSIMILARS` candidate with secondary-exposure review.
+5. One reviewed CDMO/CRAMS candidate.
+
+The remaining cohort is not onboarded until the corresponding reference pilot passes its contract, evidence, readiness and UI regression gates.
+
 ## Acceptance gates
 
 R4N architecture is ready for implementation only when the owner approves:
@@ -247,7 +277,7 @@ R4N architecture is ready for implementation only when the owner approves:
 2. assignment authority and versioning;
 3. contract-composition precedence;
 4. the revised five subprofile matrices;
-5. the TORNTPHARM `DOMESTIC_FORMULATIONS` assignment;
+5. TORNTPHARM as the first provisional `DOMESTIC_FORMULATIONS` pilot candidate;
 6. materiality rules for conditional export/regulatory requirements;
 7. source/licensing expectations for non-public franchise evidence;
 8. explicit separation of evidence readiness from scoring readiness.

@@ -12,6 +12,7 @@ export type CanonicalFactKey =
   | "SECTOR"
   | "INDUSTRY"
   | "MARKET_CAP_CATEGORY"
+  | "RESEARCH_SUBPROFILE_ASSIGNMENT"
   | "PORTFOLIO_ROLE"
   | "THEMES"
   | "FUNDAMENTAL_EVIDENCE"
@@ -167,6 +168,17 @@ export const CANONICAL_DATA_AUTHORITIES = {
     missingDataBehavior: "PRESERVE_NULL",
     pageLocalDerivationAllowed: false,
     notes: "Large/Mid/Small-cap buckets must not be independently recalculated by pages.",
+  }),
+  RESEARCH_SUBPROFILE_ASSIGNMENT: authority({
+    fact: "RESEARCH_SUBPROFILE_ASSIGNMENT",
+    label: "Research subprofile assignment",
+    layer: "NORMALIZED",
+    canonicalAuthority: "PortfolioAI versioned research-subprofile assignment authority",
+    canonicalSourceObject: "Approved versioned research-subprofile assignment contract; fixture candidates are noncanonical",
+    sharedAccessPath: "resolvePharmaSubprofileAssignment() -> effective research-contract service",
+    missingDataBehavior: "PRESERVE_STATE",
+    pageLocalDerivationAllowed: false,
+    notes: "Sector/industry remain owned by current_security_enrichment_v1. Missing, provisional, disputed or conflicting required subprofiles permit parent evidence display but block readiness, scoring and recommendation.",
   }),
   PORTFOLIO_ROLE: authority({
     fact: "PORTFOLIO_ROLE",

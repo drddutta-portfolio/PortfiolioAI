@@ -217,7 +217,7 @@ R2E itself made no production database mutation, provider call, scheduler change
 
 ### R4M — shared profile-driven Research workspace
 
-R4M is **UI COMPLETE / LOCAL REVIEW CANDIDATE** in draft PR #100; merge and production state remain separate.
+R4M is **UI COMPLETE / MERGED** in PR #100 at merge commit `de54ed1fa9569e9db0c14cfa8dac6dfbc2638c9f`; deployment and production state remain separate.
 
 - HDFCBANK / BANK_NBFC remains the mature regression reference.
 - TORNTPHARM / PHARMA_V1 uses the same Research page, hierarchy and interaction language while its profile contract supplies Pharma metrics, labels, applicability, refresh modules and readiness requirements.
@@ -225,7 +225,17 @@ R4M is **UI COMPLETE / LOCAL REVIEW CANDIDATE** in draft PR #100; merge and prod
 - The reusable readiness summary receives profile-specific groups and details through an adapter. All 13 PHARMA_V1 contracts remain inspectable.
 - The legacy HDFCBANK refresh-module JSX branch has been removed. Typed profile/reference-security eligibility metadata now feeds the shared refresh-module renderer while preserving the bounded HDFCBANK pilot and keeping other BANK_NBFC securities fail-closed.
 - The UI pass made no migration, database/evidence write, provider call, score/recommendation/sizing write, Edge Function deployment or scheduler change.
-- Authenticated automated visual review was not run because an existing qualified-recommendation render path may record preview tracking. Owner localhost review remains the final visual gate.
+- The authenticated localhost visual review found no unresolved shared-UI differences between HDFCBANK and TORNTPHARM.
+
+### R4N-A/R4N-B — Research contract freeze and Pharma subprofile foundation
+
+R4N-A/R4N-B is **LOCAL CONTRACT IMPLEMENTATION IN PROGRESS** on `r4n-pharma-subprofile-architecture`.
+
+- The universal Research workspace is frozen as `R4M_V1`; future profiles supply configuration and data rather than page trees.
+- The typed `PHARMA_V1` subprofile assignment contract preserves immutable versions, effective intervals, review provenance, secondary exposures and fail-closed resolution.
+- The owner-supplied 25-stock Pharma mapping is a noncanonical provisional fixture register; ZYDUSWELL is separately `OUTSIDE_PHARMA_V1 / CONSUMER_HEALTH_REVIEW`.
+- Missing, provisional, disputed or conflicting required subprofile assignment permits parent evidence display but blocks readiness, scoring and recommendation.
+- No migration, database assignment, provider action, evidence ingestion, scoring method or production mutation is part of R4N-A/R4N-B.
 
 Detailed implementation and review boundaries are recorded in `R4M_Profile_Driven_Research_Workspace_Plan.md`.
 
@@ -271,7 +281,7 @@ These are explicit limitations, not invitations to fabricate values:
 
 ## J. Next work
 
-The immediate next step is owner localhost review of draft PR #100, followed by explicit merge direction if accepted. No production action is implied by that review.
+The immediate next step is completion and review of the local R4N-A/R4N-B contract/fixture implementation. Schema design, migration creation or application, production assignments, evidence ingestion, provider execution and scoring remain separately gated.
 
 After R4M disposition, the broader repository sequence remains:
 

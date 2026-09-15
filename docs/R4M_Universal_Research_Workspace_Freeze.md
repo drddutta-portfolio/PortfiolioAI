@@ -1,6 +1,6 @@
 # R4M — Universal Research Workspace Freeze
 
-**Status:** contract freeze candidate; local code blocker resolved, owner review and PR #100 merge remain pending
+**Status:** frozen as `R4M_V1`; PR #100 owner-approved and merged at `de54ed1fa9569e9db0c14cfa8dac6dfbc2638c9f`
 **Reference implementations:** HDFCBANK / `BANK_NBFC`; TORNTPHARM / `PHARMA_V1`
 **Scope:** application surface and extension contracts only
 
