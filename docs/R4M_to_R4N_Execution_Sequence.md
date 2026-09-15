@@ -1,7 +1,7 @@
 # PortfolioAI — R4M to PHARMA_V1 Subprofile Execution Sequence
 
-**Status:** proposed owner-controlled sequence  
-**Scope:** closes R4M, freezes the universal Research workspace, then designs and pilots `PHARMA_V1 + DOMESTIC_FORMULATIONS`.  
+**Status:** proposed owner-controlled sequence
+**Scope:** closes R4M, freezes the universal Research workspace, then designs and pilots `PHARMA_V1 + DOMESTIC_FORMULATIONS`.
 **Safety:** no step implicitly authorizes production mutation, provider execution, deployment or scoring.
 
 ## Gate 1 — Close R4M visual review
@@ -14,6 +14,8 @@
 **Exit:** owner accepts both pages as one Research application; CI is green; no unresolved category-B UI difference remains.
 
 Current evidence: authenticated review has confirmed the common page hierarchy, suggestion structure, interpretation placement/state, refresh shell, tabs, score/heatmap shell, external-ratings shell and readiness shell. Profile-specific data and capability states remain intentionally different.
+
+**Open blocker:** the shared refresh component retains a legacy HDFCBANK symbol branch for reference-stock modules. The stricter freeze contract requires capability metadata instead. Resolve it in a separately approved local code change, or record an explicit temporary owner exception, before merging R4M.
 
 ## Gate 2 — Approve and merge R4M
 

@@ -1,14 +1,29 @@
 # R4N — PHARMA_V1 Business-Model Subprofile Architecture
 
-**Status:** owner-review candidate; documentation only  
-**Parent profile:** `PHARMA_V1`  
-**Reference security for the first subprofile:** TORNTPHARM  
-**Proposed subprofile:** `DOMESTIC_FORMULATIONS`  
+**Status:** final architecture candidate; owner approval pending; documentation only
+**Parent profile:** `PHARMA_V1`
+**Reference security for the first subprofile:** TORNTPHARM
+**Proposed subprofile:** `DOMESTIC_FORMULATIONS`
 **Scope:** contract design only; no schema change, evidence ingestion, scoring curve, provider execution or production mutation is authorized.
 
 ## Decision
 
 The supplied plan and matrix identify a real methodology gap. A single common Pharma contract is a sound parent, but it is not sufficient as the complete analytical contract for API manufacturers, domestic branded formulations, global generics, biosimilars and CDMO/CRAMS businesses.
+
+## Canonical assignment lifecycle
+
+The proposed stored enum is:
+
+- `PROVISIONAL`: candidate assignment with retained evidence, not canonical for production methodology.
+- `REVIEWED`: owner/authorized reviewer accepted the assignment.
+- `DISPUTED`: conflicting evidence prevents deterministic use.
+- `RETIRED`: historical assignment closed by a later effective version.
+
+`CANDIDATE` is workflow language represented by `PROVISIONAL`; it is not a second stored state. `ACTIVE` is derived, not stored: a `REVIEWED` assignment is active when its effective interval contains the evaluation date and no disputed/replacement version supersedes it.
+
+Allowed transitions are `PROVISIONAL -> REVIEWED`, `PROVISIONAL -> DISPUTED`, `REVIEWED -> DISPUTED`, and `PROVISIONAL|REVIEWED|DISPUTED -> RETIRED`. Corrections create a new version and retire the old version; they do not overwrite history.
+
+TORNTPHARM remains `PROVISIONAL` until explicit owner approval.
 
 PortfolioAI should retain one parent profile and add a separate subprofile axis:
 
@@ -76,6 +91,26 @@ source_reference
 reason_code
 secondary_exposures          optional, non-scoring until approved
 ```
+
+Secondary exposures must be typed child records, not opaque JSON:
+
+```text
+assignment_id
+exposure_code
+materiality                 IMMATERIAL | EMERGING | MATERIAL | DOMINANT | UNKNOWN
+confidence                  LOW | MEDIUM | HIGH
+assignment_state            PROVISIONAL | REVIEWED | DISPUTED | RETIRED
+effective_from
+effective_to                nullable
+source_reference
+reason_code
+reviewed_by
+reviewed_at
+```
+
+Only the reviewed primary subprofile anchors methodology. Secondary exposures can activate evidence requirements and risk overlays; they cannot generate or blend multiple scores until a mixed-model methodology is approved.
+
+Assignment versions are immutable positive integers scoped to `security_id + profile_code`. Effective intervals may not overlap for two active reviewed primary assignments. Conflicts or an unknown subprofile fail closed to the parent profile and expose a review blocker.
 
 The eventual canonical authority and shared repository path must be added to `src/contracts/canonicalDataAuthorities.ts` before or with implementation.
 
@@ -192,6 +227,18 @@ The Research page continues to display one shared readiness shell. Its effective
 
 No Pharma score, recommendation, role suggestion or sizing range may be produced until separate methodology approval supplies versioned curves, weights, gates and regression cases.
 
+### Exact readiness formulas
+
+Let `E` be the effective requirements after parent/subprofile composition. Conditional requirements enter `E` only when a reviewed activation condition is `ACTIVE`; `NOT_APPLICABLE` requirements are excluded.
+
+- `mandatory_readiness = ready mandatory requirements / active mandatory requirements`.
+- `important_coverage = requirements with sufficient validated evidence / active important requirements`.
+- `supplementary_coverage = requirements with sufficient validated evidence / active supplementary requirements`.
+- `evidence_coverage = sum(validated_evidence_fraction for each requirement in E) / count(E)`, where each fraction is deterministically bounded from 0 to 1 by that requirement's readiness rule. No cross-requirement weights exist until explicitly approved.
+- `score_readiness = score-ready scoring inputs / active scoring inputs`, calculated only by an approved versioned scoring contract. Until Pharma scoring methodology is approved, it is `0%`/not score-ready and never inferred from evidence readiness.
+
+If a denominator is zero, the displayed state is `NOT_APPLICABLE`, not 0%. Mandatory readiness completion authorizes neither scoring nor recommendation.
+
 ## Acceptance gates
 
 R4N architecture is ready for implementation only when the owner approves:
@@ -204,4 +251,3 @@ R4N architecture is ready for implementation only when the owner approves:
 6. materiality rules for conditional export/regulatory requirements;
 7. source/licensing expectations for non-public franchise evidence;
 8. explicit separation of evidence readiness from scoring readiness.
-
