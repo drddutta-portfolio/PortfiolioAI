@@ -1,6 +1,6 @@
 # R4N migration baseline cutover plan
 
-Status: **DESIGN COMPLETE / CUTOVER NOT STARTED**
+Status: **GATE 1 ARTIFACTS GENERATED / CUTOVER NOT STARTED**
 
 ## Decision
 
@@ -120,3 +120,13 @@ Separate approval is required for:
 5. any production migration-history repair or schema application.
 
 The immediate next step is gate 1 only. No database or active migration history changes are authorized by this document.
+
+## 9. Gate 1 result — 15 September 2026
+
+- All 78 current migration files were copied byte-for-byte to `supabase/migrations_legacy/20260915_pre_r4n_baseline/`.
+- The generated manifest records 78 files, 74 unique versions, four duplicate-version groups, SHA-256 checksums and coarse migration classifications.
+- A disposable full-history replay generated a schema-only candidate and an explicitly allowlisted reference/configuration data candidate.
+- No fixture identity or business row appears in either candidate export.
+- The reference export raised an expected curation warning for the self-referential `scoring_profiles` relationship; the candidate README requires a constraint-preserving two-phase load rather than disabling triggers.
+- A separate operational-default candidate is opt-in and inert by default.
+- These candidates are review inputs, not executable active migrations. Active migration files, ordinary local and production were not changed.
