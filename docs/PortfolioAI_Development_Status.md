@@ -239,6 +239,7 @@ R4N-A/R4N-B is **LOCAL CONTRACT IMPLEMENTATION COMPLETE / DRAFT PR #101** on `r4
 - The frozen TORNTPHARM 42-row official-evidence proposal now has an exact fixture and pure dry-run classifier against `PHARMA_V1 + DOMESTIC_FORMULATIONS`. It maps 36 rows to six parent mandatory requirements and keeps six R&D rows contextual; it satisfies zero subprofile-specific or condition-activation requirements and performs no ingestion.
 - A pure local ingestion validator now checks security/profile identity, metric units, periods, numeric values, source artifacts, derived formula/input lineage, duplicate candidates and conflicts with existing facts. A separate schema-design note defines the append-only assignment authority and RLS boundary.
 - Owner-approved migration SQL now proposes the global contract registry, append-only assignment history, secondary exposures, reviewed-interval exclusion, held-security read policies and service-only mutation privileges. The migration and its pgTAP contract test are committed for review but have not been applied or executed against a database.
+- A local baseline replay audit found one historical MOTHERSON state prerequisite and four duplicate migration-version pairs. `docs/R4N_Local_Migration_Replay_Audit_and_Fixture_Strategy.md` defines a disposable-stack, deterministic test-fixture approach that leaves committed migrations, the ordinary local database and production unchanged. Execution remains pending owner review of that exact strategy.
 - No migration, database assignment, provider action, evidence ingestion, scoring method or production mutation is part of R4N-A/R4N-B.
 
 Detailed implementation and review boundaries are recorded in `R4M_Profile_Driven_Research_Workspace_Plan.md`.
@@ -285,7 +286,7 @@ These are explicit limitations, not invitations to fabricate values:
 
 ## J. Next work
 
-The immediate next step is owner review followed by an explicitly approved local migration application and pgTAP/RLS verification. Production application, production assignment, evidence ingestion, provider execution and scoring remain separately gated.
+The immediate next step is owner confirmation of the audited disposable replay strategy, followed by isolated local migration application and pgTAP/RLS verification. Production application, production assignment, evidence ingestion, provider execution and scoring remain separately gated.
 
 After R4M disposition, the broader repository sequence remains:
 
