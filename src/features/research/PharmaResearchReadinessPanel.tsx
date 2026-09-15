@@ -40,12 +40,12 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
       </div></>
 
   return <ResearchReadinessPanel
-    title="PHARMA_V1 Research Readiness"
+    title="Pharmaceuticals Research Readiness"
     detail="A compact view of Pharma evidence coverage. Evidence and score readiness remain separate."
     ready={ready}
     total={view.totalDomainCount}
     groups={buildPharmaReadinessSummaryGroups(view)}
-    detailsLabel="View all PHARMA_V1 research contracts"
+    detailsLabel="View all Pharmaceuticals research contracts"
     details={details}
   >
     <details className="pharma-canonical-history" aria-label="Canonical Pharma history">

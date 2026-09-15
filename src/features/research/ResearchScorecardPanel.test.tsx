@@ -48,6 +48,9 @@ describe("ResearchScorecardPanel shared score states", () => {
     expect(screen.getByText("34% evidence reviewed")).toBeInTheDocument()
     expect(screen.getAllByText("No validated evidence yet").length).toBeGreaterThan(0)
     expect(screen.getAllByText("View evidence", { exact: false }).length).toBeGreaterThan(0)
+    const growth = screen.getByText("Growth").closest("summary")
+    expect(growth).not.toBeNull()
+    expect(within(growth!).queryByText("View evidence", { exact: false })).not.toBeInTheDocument()
     expect(screen.queryByText("—")).not.toBeInTheDocument()
   })
 

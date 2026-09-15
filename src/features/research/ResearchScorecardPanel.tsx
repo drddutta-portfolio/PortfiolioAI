@@ -72,7 +72,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
       <div className="scoring-summary-head">
         <div>
           <p className="eyebrow">Investment decision cockpit</p>
-          <h2 id="stock-scorecard-title">{snapshot.profileName}</h2>
+          <h2 id="stock-scorecard-title">{ui.profileDisplayName}</h2>
           <p>{snapshot.modelName} · model {snapshot.modelStatus.toLocaleLowerCase()}</p>
           <small>{profileSourceLabel(snapshot.profileSource)}</small>
         </div>
@@ -125,7 +125,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
               <strong>{notApplicable ? "N/A" : noEvidence ? "No validated evidence yet" : evidenceOnly ? "Insufficient for score" : score(dimension?.rawScore ?? null)}</strong>
               <small>{notApplicable ? "Not applicable to this scoring profile" : dimension ? noEvidence ? "Evidence has not yet met validation requirements" : evidenceOnly ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence reviewed` : `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Evidence unavailable"}</small>
               <em>{notApplicable ? "Not Applicable" : noEvidence ? "No evidence" : evidenceOnly ? "Evidence only" : label(heatState)}</em>
-              {!notApplicable ? <b>{evidenceOnly ? "View evidence" : "Why this score?"}</b> : null}
+              {!notApplicable && !noEvidence ? <b>{evidenceOnly ? "View evidence" : "Why this score?"}</b> : null}
             </summary>
             {!notApplicable ? <div className="heat-evidence-panel">
               {signals.length ? signals.map((signal) => <article key={signal.inputCode} className={`heat-signal signal-${signal.state.toLocaleLowerCase()}`}>

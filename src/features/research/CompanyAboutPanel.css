@@ -173,14 +173,14 @@
   }
 
   .research-page .company-about-panel.company-about-empty {
-    min-height: 88px;
-    max-height: 96px;
+    min-height: 106px;
+    max-height: none;
   }
 
   .research-page .company-about-panel.company-about-empty .company-about-scroll-shell {
     height: auto;
-    min-height: 34px;
-    max-height: 40px;
+    min-height: 46px;
+    max-height: none;
   }
 }
 

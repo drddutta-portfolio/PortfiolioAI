@@ -228,7 +228,7 @@ export function PositionDecisionControls({
         <RecommendationInterpretationPanel portfolioId={portfolioId} securityId={securityId} enabled={Boolean(tracking && recommendation && recommendation.suggestedRole !== "INSUFFICIENT")} />
       </div>
 
-      <aside className="key-insights-panel" aria-labelledby="key-insights-title">
+      <aside className={`key-insights-panel${recommendationUnavailable ? " key-insights-unavailable" : ""}`} aria-labelledby="key-insights-title">
         <header><span className="key-insights-icon" aria-hidden="true">▥</span><div><h3 id="key-insights-title">Key Insights</h3><p>Quick view of the most important research signals.</p></div></header>
         <div className="key-insight-list">
           <article><span className="key-insight-badge" aria-hidden="true">☆</span><div><small>Role</small><strong>{recommendation ? recommendationLabel(recommendation.suggestedRole) : "Not yet available"}</strong><p>{recommendation ? suggestionDetail : `Awaiting ${unavailableProfile} recommendation.`}</p></div></article>

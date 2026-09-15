@@ -1,9 +1,12 @@
 .advisory-unavailable {
-  min-height: 150px;
+  min-height: 0;
   align-content: center !important;
   gap: .45rem !important;
   background: linear-gradient(135deg, rgba(244, 249, 246, .96), rgba(234, 244, 238, .86)) !important;
 }
+
+.key-insights-unavailable .key-insight-list article { padding-top: .46rem; padding-bottom: .46rem; }
+.key-insights-unavailable .key-insight-list p { line-height: 1.25; }
 
 .advisory-unavailable > strong { font-size: 1.2rem !important; }
 .advisory-unavailable > small { max-width: 62ch; line-height: 1.45; }

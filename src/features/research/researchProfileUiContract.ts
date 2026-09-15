@@ -29,6 +29,7 @@ export interface ResearchRefreshModule {
 
 export interface ResearchProfileUiContract {
   readonly profileCode: string
+  readonly profileDisplayName: string
   readonly snapshotGroups: readonly ResearchSnapshotGroup[]
   readonly scoreSectionGroups: readonly ResearchScoreSectionGroup[]
   readonly financialWorkspaceSections: readonly ResearchWorkspaceSection[]
@@ -71,7 +72,7 @@ const COMMON_SECTION_GROUPS = [
   { label: "Business Durability", codes: ["BUSINESS_DURABILITY"] },
   { label: "Valuation", codes: ["VALUATION"] },
   { label: "Momentum", codes: ["MOMENTUM"] },
-  { label: "Ownership", codes: ["OWNERSHIP_GOVERNANCE"] },
+  { label: "Ownership & Governance", codes: ["OWNERSHIP_GOVERNANCE"] },
   { label: "Risk", codes: ["RISK"] },
 ] as const
 
@@ -88,7 +89,7 @@ const GENERAL_SNAPSHOT_GROUPS: readonly ResearchSnapshotGroup[] = [
     title: "Valuation snapshot",
     codes: ["MARKET_CAP_PROVIDER_RAW", "MARKET_CAP", "PE_TTM", "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT", "PBV_ADJUSTED_PROVIDER"],
   },
-  { title: "Ownership snapshot", codes: OWNERSHIP_CODES },
+  { title: "Ownership & governance", codes: OWNERSHIP_CODES },
 ]
 
 const PHARMA_SNAPSHOT_GROUPS: readonly ResearchSnapshotGroup[] = [
@@ -204,12 +205,13 @@ const PHARMA_REFRESH_MODULES: readonly ResearchRefreshModule[] = [
 
 const GENERAL_CONTRACT: ResearchProfileUiContract = {
   profileCode: "GENERAL",
+  profileDisplayName: "General Research",
   snapshotGroups: GENERAL_SNAPSHOT_GROUPS,
   scoreSectionGroups: COMMON_SECTION_GROUPS,
   financialWorkspaceSections: [],
   qualityGrowthWorkspaceSections: [],
   dimensionOrder: COMMON_DIMENSION_ORDER,
-  dimensionLabels: {},
+  dimensionLabels: { OWNERSHIP_GOVERNANCE: "Ownership & Governance" },
   notApplicableDimensions: [],
   excludedValuationMetricCodes: [],
   externalRatingsMode: "FULL",
@@ -221,11 +223,14 @@ const GENERAL_CONTRACT: ResearchProfileUiContract = {
 const BANK_NBFC_CONTRACT: ResearchProfileUiContract = {
   ...GENERAL_CONTRACT,
   profileCode: "BANK_NBFC",
+  profileDisplayName: "Banks / NBFCs",
   notApplicableDimensions: ["CASH_FLOW"],
+  readinessMode: "PROFILE_CONTRACT",
 }
 
 const PHARMA_V1_CONTRACT: ResearchProfileUiContract = {
   profileCode: "PHARMA_V1",
+  profileDisplayName: "Pharmaceuticals",
   snapshotGroups: PHARMA_SNAPSHOT_GROUPS,
   scoreSectionGroups: PHARMA_SECTION_GROUPS,
   financialWorkspaceSections: PHARMA_FINANCIAL_WORKSPACE_SECTIONS,

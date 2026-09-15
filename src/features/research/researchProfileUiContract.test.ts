@@ -34,10 +34,14 @@ describe("researchProfileUiContract", () => {
     expect(pharma.dimensionLabels.CASH_FLOW).toBe("Cash Quality")
     expect(pharma.dimensionLabels.BALANCE_SHEET_CREDIT).toBe("Financial Strength / Leverage")
     expect(pharma.dimensionLabels.RISK).toBe("Regulatory & Market Risk")
+    expect(pharma.profileDisplayName).toBe("Pharmaceuticals")
     expect(pharma.externalRatingsMode).toBe("COMPACT")
     expect(pharma.readinessMode).toBe("PROFILE_CONTRACT")
     expect(pharma.excludedValuationMetricCodes).toEqual(["PBV_ADJUSTED_PROVIDER"])
     expect(researchProfileUiContract("BANK_NBFC").excludedValuationMetricCodes).toEqual([])
+    expect(researchProfileUiContract("BANK_NBFC").readinessMode).toBe("PROFILE_CONTRACT")
+    expect(researchProfileUiContract("BANK_NBFC").scoreSectionGroups.map((group) => group.label)).toContain("Ownership & Governance")
+    expect(researchProfileUiContract("BANK_NBFC").profileDisplayName).toBe("Banks / NBFCs")
   })
 
   it("registers the four PHARMA_V1 specialist research modules", () => {

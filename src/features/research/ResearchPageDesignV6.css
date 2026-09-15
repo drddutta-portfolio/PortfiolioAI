@@ -21,10 +21,11 @@
 
   .research-page .research-title h1 {
     max-width: 100%;
-    font-size: clamp(1.55rem, 2.35vw, 2.65rem);
+    font-size: clamp(1.5rem, 2vw, 2.25rem);
     line-height: 1.02;
-    overflow-wrap: anywhere;
-    text-wrap: balance;
+    overflow-wrap: normal;
+    word-break: normal;
+    white-space: nowrap;
   }
 
   /* About sits to the right of the security identity. */
@@ -34,6 +35,11 @@
     min-height: 106px;
     max-height: 132px;
     padding: .7rem .84rem .76rem;
+  }
+
+  .research-page .company-about-panel.company-about-empty {
+    min-height: 106px;
+    max-height: none;
   }
 
   .research-page .company-about-scroll {

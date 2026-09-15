@@ -124,8 +124,8 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
   return <section className="panel complete-research-refresh" aria-labelledby="complete-research-refresh-title">
     {ui.completeResearchRefreshMode === "ENABLED" ? <><div className="section-heading">
       <div>
-        <p className="eyebrow">Owner-controlled deep refresh</p>
-        <h2 id="complete-research-refresh-title">Complete Research Refresh</h2>
+        <p className="eyebrow">Owner-controlled research refresh</p>
+        <h2 id="complete-research-refresh-title">Research Refresh</h2>
         <p>Refreshes this stock's core fundamentals, detailed scoring metrics, ownership and document/evidence discovery. Planning itself uses zero Trendlyne calls.</p>
       </div>
       <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void createPlan()}>{busy === "PLAN" ? "Planning…" : plan ? "Re-plan" : "Plan complete refresh"}</button>
@@ -152,18 +152,14 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       <span>{result.providerSucceeded} of {result.providerCalls} provider calls succeeded. Any accepted research evidence has been reloaded.</span>
     </div> : null}</> : <div className="section-heading">
       <div>
-        <p className="eyebrow">Research coverage</p>
-        <h2 id="complete-research-refresh-title">Research refresh not yet enabled</h2>
+        <p className="eyebrow">Owner-controlled research refresh</p>
+        <h2 id="complete-research-refresh-title">Research Refresh</h2>
         <p>These Pharma research areas are ready to receive evidence as their approved refresh capabilities become available.</p>
       </div>
       <span className="profile-refresh-status"><strong>Not yet available</strong><span>Execution is disabled</span></span>
     </div>}
 
     {ui.refreshModules.length ? <div className="profile-refresh-workspace" aria-label={`${ui.profileCode} research modules`}>
-      <div className="profile-refresh-heading">
-        <div><p className="eyebrow">Specialist research</p><h3>Pharma research modules</h3></div>
-        <span>{ui.refreshModules.length} modules</span>
-      </div>
       {ui.refreshModules.map((module) => <div className="complete-refresh-plan" key={module.code}>
         <div>
           <p className="eyebrow">{module.eyebrow}</p>

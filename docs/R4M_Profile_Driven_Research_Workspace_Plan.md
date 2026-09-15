@@ -71,6 +71,20 @@ Unnecessary UI differences removed: oversized empty About space, repeated `Pendi
 
 The HDFCBANK-only complete-refresh controls remain as an explicitly bounded reference-stock provider pilot. They reuse the common refresh-card system and do not create a separate Research page or component tree. Generalizing that operational capability requires approved capability metadata and is outside this UI-only pass.
 
+### Owner screenshot reconciliation
+
+A second side-by-side review using owner-supplied TORNTPHARM and HDFCBANK screenshots identified and corrected remaining shell drift:
+
+- long security names remain on one responsive line instead of breaking individual characters;
+- uncached About text receives content-driven height and is not clipped;
+- recommendation-unavailable pages retain a compact Decision Workspace and the shared, disabled PortfolioAI Interpretation region;
+- both profiles use one `Research Refresh` heading and direct four-card refresh grid, without a Pharma-only nested workspace;
+- BANK_NBFC now uses the same readiness shell, driven by its applicable scoring dimensions, while PHARMA_V1 continues to supply its 13 evidence contracts;
+- profile names and Ownership & Governance terminology are investor-facing and consistent;
+- no-evidence heatmap cells no longer offer a misleading `View evidence` action.
+
+These corrections change presentation and derived display summaries only. They add no canonical facts, scoring methods, provider execution, persistence or production behavior.
+
 ## Review boundary
 
 R4M does not approve or apply the TORNTPHARM official-evidence manifest, add numeric PHARMA_V1 score curves, deploy an Edge Function, change a scheduler, or perform a provider-backed refresh. Those actions require separate owner approval.
