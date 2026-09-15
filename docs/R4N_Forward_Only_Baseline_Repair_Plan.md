@@ -1,6 +1,6 @@
 # R4N forward-only baseline repair plan
 
-Status: **MIGRATIONS PREPARED / NOT APPLIED**
+Status: **DISPOSABLE VERIFICATION PASSED / ORDINARY LOCAL AND PRODUCTION NOT APPLIED**
 
 ## Scope
 
@@ -48,6 +48,24 @@ The migrations will first be appended to the already proven disposable replay ha
 - ordinary local and production migration histories remain unchanged.
 
 Only after those results are reviewed should the ordinary local application be separately executed.
+
+## Disposable verification result — 15 September 2026
+
+The full historical chain, R4N and both forward repairs replayed successfully in an isolated stack using the previously approved temporary compatibility harness.
+
+- Migration ledger: 82 entries; `20260915133028` applied last.
+- R4N and repair pgTAP suites: 29/29 tests passed.
+- Database lint: no schema errors.
+- Schema diff against the complete disposable migration chain: empty.
+- NEWS V6: disabled, closed and `freshness_basis='DISABLED'`.
+- `refresh_domain_policy_disabled`: present and validated with the canonical definition.
+- Weight-context function: SECURITY DEFINER and `search_path=public` preserved; authenticated execution allowed and anonymous execution denied.
+- R4N state: five contracts, zero assignments and zero secondary exposures.
+- Fundamental evidence, external ratings, score runs, recommendation runs and sizing assessments: zero rows.
+- pg_net request queue: zero rows.
+- The disposable stack, volumes and temporary directory were destroyed.
+- The ordinary local ledger remains at seven applied migrations through `20260907123000`; R4N and both repairs remain unapplied there.
+- No linked or production mutation command was executed.
 
 ## Duplicate historical versions
 
