@@ -1,6 +1,6 @@
 # R4N migration baseline cutover plan
 
-Status: **GATE 1 ARTIFACTS GENERATED / CUTOVER NOT STARTED**
+Status: **GATE 2 CURATION AND DISPOSABLE EQUIVALENCE VERIFIED / CUTOVER NOT STARTED**
 
 ## Decision
 
@@ -130,3 +130,31 @@ The immediate next step is gate 1 only. No database or active migration history 
 - The reference export raised an expected curation warning for the self-referential `scoring_profiles` relationship; the candidate README requires a constraint-preserving two-phase load rather than disabling triggers.
 - A separate operational-default candidate is opt-in and inert by default.
 - These candidates are review inputs, not executable active migrations. Active migration files, ordinary local and production were not changed.
+
+## 10. Gate 2 result — 15 September 2026
+
+- Deterministic curated schema, reference-registry, reference-contract and inert
+  local-operational artifacts now live under
+  `supabase/migration_baselines/20260915_curated/`; they remain outside the active
+  migration directory.
+- The schema baseline now supplies the reviewed extension preamble and neutralizes
+  fresh-bootstrap default privileges before object creation. Captured explicit
+  grants then restore the repaired full-history ACL state.
+- Replay timestamps are deterministically mapped to ordered millisecond offsets,
+  preserving strict effective-date intervals. The first flat-timestamp attempt
+  correctly failed the `refresh_domain_policy_dates` constraint and was discarded.
+- `scoring_profiles` loads parent-first with its self-referential foreign key
+  continuously enforced. No constraints, triggers or RLS policies are disabled.
+- A clean disposable baseline-only replay passed. Its public schema dump is
+  byte-identical to the gate-1 schema candidate generated from the repaired
+  full-history replay; database lint is clean and schema diff is empty.
+- The R4N and forward-repair pgTAP suites passed 29/29 assertions. Direct checks
+  found 85/85 public tables with RLS, zero cron jobs, zero business/evidence/
+  score/recommendation/sizing rows, five R4N contracts and the repaired closed
+  NEWS V6 policy state.
+- The repository-wide pgTAP run passed 13 of 14 files. The Stage 7.2A provider
+  control-plane test is pinned to superseded historical defaults and failed on
+  current final-state values; this is documented as legacy test drift rather than
+  bypassed.
+- The disposable stack is destroyed after verification. Active migrations,
+  ordinary local and production remain unchanged.
