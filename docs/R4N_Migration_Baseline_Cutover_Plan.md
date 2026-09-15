@@ -206,3 +206,22 @@ The immediate next step is gate 1 only. No database or active migration history 
   this database gate.
 - Production was not accessed or changed. Any production inventory or history
   bridge remains separately gated.
+
+## 13. Production-history read-only gate result — 16 September 2026
+
+- The owner-authorized read-only inventory found that production is not equivalent
+  to the reviewed baseline target. The bridge is stopped and production remains
+  unchanged.
+- Migration history has 31 shared versions, 46 active-local-only versions and 62
+  production-only versions. The difference is materially broader than missing
+  baseline marker entries.
+- Public schema, global reference counts and scheduler state also differ. Production
+  has broader classification registries, lacks the R4N subprofile tables, contains
+  a production-only AMFI fallback function and has two active NEWS cron jobs.
+- Read-only statistics confirm real portfolio, transaction, evidence and
+  recommendation data. No reset, broad registry load or fresh-baseline execution is
+  safe against production.
+- Consequently, no migration-history repair, migration application, data write,
+  provider action, deployment or scheduler mutation was performed.
+- The exact evidence and required forward-only reconciliation sequence are recorded
+  in `docs/R4N_Production_History_Bridge_Read_Only_Audit_2026-09-16.md`.
