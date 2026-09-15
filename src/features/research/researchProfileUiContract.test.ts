@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { researchProfileUiContract } from "./researchProfileUiContract"
+import { researchProfileUiContract, researchRefreshModulesForSecurity } from "./researchProfileUiContract"
 
 const BANK_ONLY_CODES = [
   "ADVANCES_GROWTH_YOY",
@@ -66,6 +66,22 @@ describe("researchProfileUiContract", () => {
     expect(JSON.stringify(pharma.refreshModules)).not.toContain("Canonical write/promotion")
     expect(pharma.completeResearchRefreshMode).toBe("PROFILE_GATED")
     expect(researchProfileUiContract("BANK_NBFC").completeResearchRefreshMode).toBe("ENABLED")
+  })
+
+  it("selects reference-bank refresh capabilities from typed eligibility metadata", () => {
+    expect(researchRefreshModulesForSecurity("BANK_NBFC", "HDFCBANK").map((module) => module.actionKind)).toEqual([
+      "VALUATION_EVIDENCE",
+      "MARKET_HISTORY",
+      "BANK_BENCHMARK",
+      "BANK_GROWTH_DISCOVERY",
+    ])
+    expect(researchRefreshModulesForSecurity("BANK_NBFC", "ICICIBANK")).toEqual([])
+  })
+
+  it("keeps profile-wide Pharma modules independent of the selected symbol", () => {
+    expect(researchRefreshModulesForSecurity("PHARMA_V1", "TORNTPHARM")).toEqual(
+      researchRefreshModulesForSecurity("PHARMA_V1", "SUNPHARMA"),
+    )
   })
 
   it("uses the metric codes registered by the current PHARMA_V1 parent evidence contract", () => {

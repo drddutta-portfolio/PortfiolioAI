@@ -223,6 +223,7 @@ R4M is **UI COMPLETE / LOCAL REVIEW CANDIDATE** in draft PR #100; merge and prod
 - TORNTPHARM / PHARMA_V1 uses the same Research page, hierarchy and interaction language while its profile contract supplies Pharma metrics, labels, applicability, refresh modules and readiness requirements.
 - Shared score surfaces distinguish scored, evidence-only, no-evidence and not-applicable states. PHARMA_V1 remains fail-closed; no numeric Pharma score curves were invented.
 - The reusable readiness summary receives profile-specific groups and details through an adapter. All 13 PHARMA_V1 contracts remain inspectable.
+- The legacy HDFCBANK refresh-module JSX branch has been removed. Typed profile/reference-security eligibility metadata now feeds the shared refresh-module renderer while preserving the bounded HDFCBANK pilot and keeping other BANK_NBFC securities fail-closed.
 - The UI pass made no migration, database/evidence write, provider call, score/recommendation/sizing write, Edge Function deployment or scheduler change.
 - Authenticated automated visual review was not run because an existing qualified-recommendation render path may record preview tracking. Owner localhost review remains the final visual gate.
 

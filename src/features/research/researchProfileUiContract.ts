@@ -15,8 +15,11 @@ export interface ResearchWorkspaceSection {
 }
 
 export type ExternalRatingsMode = "FULL" | "COMPACT"
-export type ResearchRefreshActionKind = "MARKET_HISTORY" | "INFORMATIONAL"
+export type ResearchRefreshActionKind = "VALUATION_EVIDENCE" | "MARKET_HISTORY" | "BANK_BENCHMARK" | "BANK_GROWTH_DISCOVERY" | "INFORMATIONAL"
 export type ResearchRefreshModuleState = "AVAILABLE_TO_PLAN" | "PLANNED" | "EXECUTION_DISABLED" | "EXECUTABLE" | "NOT_AVAILABLE"
+export type ResearchRefreshModuleEligibility =
+  | { readonly mode: "PROFILE" }
+  | { readonly mode: "REFERENCE_SECURITY"; readonly symbol: string }
 
 export interface ResearchRefreshModule {
   readonly code: string
@@ -25,9 +28,56 @@ export interface ResearchRefreshModule {
   readonly description: string
   readonly actionKind: ResearchRefreshActionKind
   readonly state: ResearchRefreshModuleState
+  readonly eligibility?: ResearchRefreshModuleEligibility
   readonly actionLabel?: string
   readonly note?: string
 }
+
+const BANK_NBFC_REFRESH_MODULES: readonly ResearchRefreshModule[] = [
+  {
+    code: "BANK_VALUATION_EVIDENCE",
+    eyebrow: "Stage 8.8D.2 · Valuation evidence",
+    title: "Refresh stale valuation evidence",
+    description: "Refreshes only the reference bank's approved 5-year P/E self-history valuation evidence used by the BANK/NBFC recommendation gate. Planning uses zero calls; execution uses exactly one Trendlyne call.",
+    actionKind: "VALUATION_EVIDENCE",
+    state: "AVAILABLE_TO_PLAN",
+    eligibility: { mode: "REFERENCE_SECURITY", symbol: "HDFCBANK" },
+    actionLabel: "Plan valuation refresh",
+    note: "This targeted action does not refresh prices, change your role, change target weight, create a score run or trade. It only revalidates the approved valuation input.",
+  },
+  {
+    code: "BANK_MARKET_EVIDENCE",
+    eyebrow: "Stage 8.6E · Market evidence",
+    title: "Build Momentum & Risk from Angel One",
+    description: "Loads daily price history and derives PortfolioAI's own 12M/6M momentum, 1Y max drawdown and 1Y volatility. Trendlyne technical scores are not used.",
+    actionKind: "MARKET_HISTORY",
+    state: "AVAILABLE_TO_PLAN",
+    eligibility: { mode: "REFERENCE_SECURITY", symbol: "HDFCBANK" },
+    actionLabel: "Plan market history refresh",
+    note: "Momentum currently scores from absolute 12M + 6M returns. Risk uses GNPA + NNPA + max drawdown. The benchmark step below adds NIFTY Bank relative strength.",
+  },
+  {
+    code: "BANK_BENCHMARK_RELATIVE_MOMENTUM",
+    eyebrow: "Stage 8.6F · Benchmark-relative momentum",
+    title: "Add NIFTY Bank Relative Strength",
+    description: "Fetches NIFTY Bank daily history from Angel One, aligns it to the selected bank's stored daily closes and derives 12M relative strength as stock return minus benchmark return.",
+    actionKind: "BANK_BENCHMARK",
+    state: "AVAILABLE_TO_PLAN",
+    eligibility: { mode: "REFERENCE_SECURITY", symbol: "HDFCBANK" },
+    actionLabel: "Plan NIFTY Bank benchmark",
+    note: "The benchmark instrument is resolved from the current Angel One instrument master using exact accepted aliases before any history is stored. No Trendlyne technical signal is involved.",
+  },
+  {
+    code: "BANK_GROWTH_DISCOVERY",
+    eyebrow: "Reference-stock completion",
+    title: "Discover missing bank growth fields",
+    description: "Targets Advances Growth YoY and Deposits Growth YoY only. This is discovery evidence, not automatic promotion or scoring.",
+    actionKind: "BANK_GROWTH_DISCOVERY",
+    state: "EXECUTABLE",
+    eligibility: { mode: "REFERENCE_SECURITY", symbol: "HDFCBANK" },
+    actionLabel: "Run growth discovery · 1 Trendlyne call",
+  },
+]
 
 export interface ResearchProfileUiContract {
   readonly profileCode: string
@@ -232,6 +282,7 @@ const BANK_NBFC_CONTRACT: ResearchProfileUiContract = {
   profileDisplayName: "Banks / NBFCs",
   notApplicableDimensions: ["CASH_FLOW"],
   readinessMode: "PROFILE_CONTRACT",
+  refreshModules: BANK_NBFC_REFRESH_MODULES,
 }
 
 const PHARMA_V1_CONTRACT: ResearchProfileUiContract = {
@@ -269,4 +320,11 @@ const CONTRACTS: Readonly<Record<string, ResearchProfileUiContract>> = {
  */
 export function researchProfileUiContract(profileCode: string | null | undefined): ResearchProfileUiContract {
   return profileCode ? (CONTRACTS[profileCode] ?? GENERAL_CONTRACT) : GENERAL_CONTRACT
+}
+
+export function researchRefreshModulesForSecurity(profileCode: string | null | undefined, symbol: string): readonly ResearchRefreshModule[] {
+  return researchProfileUiContract(profileCode).refreshModules.filter((module) => {
+    const eligibility = module.eligibility ?? { mode: "PROFILE" }
+    return eligibility.mode === "PROFILE" || eligibility.symbol === symbol
+  })
 }

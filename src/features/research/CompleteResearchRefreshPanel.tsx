@@ -5,7 +5,7 @@ import { executeCompleteResearchRefresh, planCompleteResearchRefresh, type Compl
 import { executeMarketHistoryRefresh, planMarketHistoryRefresh, type MarketHistoryRefreshPlan, type MarketHistoryRefreshResult } from "../../data/marketHistoryRefreshRepository"
 import { executeValuationEvidenceRefresh, planValuationEvidenceRefresh, type ValuationEvidenceRefreshPlan, type ValuationEvidenceRefreshResult } from "../../data/valuationEvidenceRefreshRepository"
 import { displayError } from "../../lib/displayError"
-import { researchProfileUiContract } from "./researchProfileUiContract"
+import { researchProfileUiContract, researchRefreshModulesForSecurity } from "./researchProfileUiContract"
 import "./CompleteResearchRefreshPanel.css"
 
 export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, profileCode, onCompleted }: {
@@ -16,6 +16,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
   readonly onCompleted: () => void
 }) {
   const ui = researchProfileUiContract(profileCode)
+  const refreshModules = researchRefreshModulesForSecurity(profileCode, symbol)
   const [plan, setPlan] = useState<CompleteResearchRefreshPlan | null>(null)
   const [result, setResult] = useState<CompleteResearchRefreshResult | null>(null)
   const [marketPlan, setMarketPlan] = useState<MarketHistoryRefreshPlan | null>(null)
@@ -113,7 +114,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
   }
 
   const discoverGrowth = async () => {
-    const accepted = window.confirm("This targeted HDFCBANK growth discovery will use exactly 1 Trendlyne call and will not promote any metric automatically. Continue?")
+    const accepted = window.confirm(`This targeted ${symbol} growth discovery will use exactly 1 Trendlyne call and will not promote any metric automatically. Continue?`)
     if (!accepted) return
     setBusy("GROWTH"); setError(null); setGrowthResult(null)
     try { setGrowthResult(await discoverBankGrowthContract(portfolioId, securityId)) }
@@ -159,14 +160,27 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       <button type="button" className="button button-secondary" disabled title="Complete refresh execution is not yet enabled for this profile">Plan complete refresh</button>
     </div>}
 
-    {ui.refreshModules.length ? <div className="profile-refresh-workspace" aria-label={`${ui.profileCode} research modules`}>
-      {ui.refreshModules.map((module) => <div className="complete-refresh-plan" key={module.code}>
+    {refreshModules.length ? <div className="profile-refresh-workspace" aria-label={`${ui.profileCode} research modules`}>
+      {refreshModules.map((module) => <div className="complete-refresh-plan" key={module.code}>
         <div>
           <p className="eyebrow">{module.eyebrow}</p>
           <h3>{module.title}</h3>
           <p>{module.description}</p>
         </div>
-        {module.state === "AVAILABLE_TO_PLAN" && module.actionKind === "MARKET_HISTORY" ? <>
+        {module.state === "AVAILABLE_TO_PLAN" && module.actionKind === "VALUATION_EVIDENCE" ? <>
+          <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void createValuationPlan()}>{busy === "VALUATION_PLAN" ? "Planning…" : valuationPlan ? "Re-plan valuation refresh" : module.actionLabel}</button>
+          {valuationPlan ? <>
+            <div className="summary-grid">
+              <Metric label="Trendlyne calls" value={String(valuationPlan.estimatedProviderCalls)} />
+              <Metric label="Today's internal usage" value={`${valuationPlan.dailyObservedUsage}/${valuationPlan.dailyLimit}`} />
+              <Metric label="Latest value" value={valuationPlan.latestValue === null ? "Unavailable" : `${valuationPlan.latestValue.toFixed(2)}%`} />
+              <Metric label="Quota gate" value={valuationPlan.executionAllowed ? "Ready" : "Blocked"} />
+            </div>
+            <p className="assessment-note">{module.note}</p>
+            <button type="button" className="button button-primary" disabled={!valuationPlan.executionAllowed || busy !== null} onClick={() => void executeValuation()}>{busy === "VALUATION_EXECUTE" ? "Refreshing valuation…" : "Run valuation refresh · 1 Trendlyne call"}</button>
+          </> : null}
+          {valuationResult ? <div className="notice notice-success" role="status"><strong>Valuation evidence refreshed.</strong><span>5-year P/E self-history implied upside is now {valuationResult.value.toFixed(2)}%. Research scoring and PortfolioAI advisory have been reloaded.</span></div> : null}
+        </> : module.state === "AVAILABLE_TO_PLAN" && module.actionKind === "MARKET_HISTORY" ? <>
           <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void createMarketPlan()}>{busy === "MARKET_PLAN" ? "Planning…" : marketPlan ? "Re-plan market refresh" : module.actionLabel ?? "Plan market history refresh"}</button>
           {marketPlan ? <>
             <div className="summary-grid">
@@ -179,6 +193,22 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
             <button type="button" className="button button-primary" disabled={busy !== null} onClick={() => void executeMarket()}>{busy === "MARKET_EXECUTE" ? "Refreshing market history…" : `Run market history refresh · ${marketPlan.estimatedProviderCalls} call`}</button>
           </> : <p className="assessment-note">{module.note}</p>}
           {marketResult ? <div className="notice notice-success" role="status"><strong>Market history refreshed.</strong><span>{marketResult.candlesStored} daily candles stored. {marketResult.derivedMetrics.length} deterministic market metrics were derived and Research scoring has been reloaded.</span></div> : null}
+        </> : module.state === "AVAILABLE_TO_PLAN" && module.actionKind === "BANK_BENCHMARK" ? <>
+          <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void createBenchmarkPlan()}>{busy === "BENCHMARK_PLAN" ? "Planning…" : benchmarkPlan ? "Re-plan benchmark refresh" : module.actionLabel}</button>
+          {benchmarkPlan ? <>
+            <div className="summary-grid">
+              <Metric label="Angel One calls" value={String(benchmarkPlan.estimatedProviderCalls)} />
+              <Metric label="Benchmark" value={benchmarkPlan.benchmark} />
+              <Metric label="History window" value={`${benchmarkPlan.historyDays} days`} />
+              <Metric label="Existing benchmark candle" value={benchmarkPlan.latestBenchmarkCandle ? new Date(benchmarkPlan.latestBenchmarkCandle).toLocaleDateString("en-IN") : "None"} />
+            </div>
+            <p className="assessment-note">{module.note}</p>
+            <button type="button" className="button button-primary" disabled={busy !== null} onClick={() => void executeBenchmark()}>{busy === "BENCHMARK_EXECUTE" ? "Refreshing NIFTY Bank…" : `Run NIFTY Bank benchmark · ${benchmarkPlan.estimatedProviderCalls} call`}</button>
+          </> : null}
+          {benchmarkResult ? <div className="notice notice-success" role="status"><strong>NIFTY Bank relative strength added.</strong><span>{symbol} 12M return {benchmarkResult.stockReturn12M.toFixed(2)}% vs NIFTY Bank {benchmarkResult.benchmarkReturn12M.toFixed(2)}%; relative strength {benchmarkResult.relativeStrength12M.toFixed(2)} percentage points. Research scoring has been reloaded.</span></div> : null}
+        </> : module.state === "EXECUTABLE" && module.actionKind === "BANK_GROWTH_DISCOVERY" ? <>
+          <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void discoverGrowth()}>{busy === "GROWTH" ? "Discovering…" : module.actionLabel}</button>
+          {growthResult ? <div className="notice notice-success" role="status"><strong>Growth contract discovery captured.</strong><span>1 Trendlyne call used. No metric was promoted automatically; the capture is ready for semantic review.</span></div> : null}
         </> : <>
           <div className="profile-refresh-status"><strong>{module.state === "NOT_AVAILABLE" ? "Not available" : "Not enabled yet"}</strong><span>{module.state === "NOT_AVAILABLE" ? "This module is not available for the selected profile" : "Planning and execution are disabled"}</span></div>
           <button type="button" className="button button-secondary" disabled title={module.state === "NOT_AVAILABLE" ? "Not available for this profile" : "Execution is not yet enabled for this profile"}>{module.actionLabel ?? "Plan refresh"}</button>
@@ -187,77 +217,6 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       </div>)}
     </div> : null}
 
-    {ui.profileCode === "BANK_NBFC" && symbol === "HDFCBANK" ? <>
-      <div className="complete-refresh-plan">
-        <div>
-          <p className="eyebrow">Stage 8.8D.2 · Valuation evidence</p>
-          <h3>Refresh stale valuation evidence</h3>
-          <p>Refreshes only HDFCBANK's approved 5-year P/E self-history valuation evidence used by the BANK/NBFC recommendation gate. Planning uses zero calls; execution uses exactly one Trendlyne call.</p>
-        </div>
-        <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void createValuationPlan()}>{busy === "VALUATION_PLAN" ? "Planning…" : valuationPlan ? "Re-plan valuation refresh" : "Plan valuation refresh"}</button>
-        {valuationPlan ? <>
-          <div className="summary-grid">
-            <Metric label="Trendlyne calls" value={String(valuationPlan.estimatedProviderCalls)} />
-            <Metric label="Today's internal usage" value={`${valuationPlan.dailyObservedUsage}/${valuationPlan.dailyLimit}`} />
-            <Metric label="Latest value" value={valuationPlan.latestValue === null ? "Unavailable" : `${valuationPlan.latestValue.toFixed(2)}%`} />
-            <Metric label="Quota gate" value={valuationPlan.executionAllowed ? "Ready" : "Blocked"} />
-          </div>
-          <p className="assessment-note">This targeted action does not refresh prices, change your role, change target weight, create a score run or trade. It only revalidates the approved valuation input.</p>
-          <button type="button" className="button button-primary" disabled={!valuationPlan.executionAllowed || busy !== null} onClick={() => void executeValuation()}>{busy === "VALUATION_EXECUTE" ? "Refreshing valuation…" : "Run valuation refresh · 1 Trendlyne call"}</button>
-        </> : null}
-        {valuationResult ? <div className="notice notice-success" role="status"><strong>Valuation evidence refreshed.</strong><span>5-year P/E self-history implied upside is now {valuationResult.value.toFixed(2)}%. Research scoring and PortfolioAI advisory have been reloaded.</span></div> : null}
-      </div>
-
-      <div className="complete-refresh-plan">
-        <div>
-          <p className="eyebrow">Stage 8.6E · Market evidence</p>
-          <h3>Build Momentum & Risk from Angel One</h3>
-          <p>Loads daily price history and derives PortfolioAI's own 12M/6M momentum, 1Y max drawdown and 1Y volatility. Trendlyne technical scores are not used.</p>
-        </div>
-        <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void createMarketPlan()}>{busy === "MARKET_PLAN" ? "Planning…" : marketPlan ? "Re-plan market refresh" : "Plan market history refresh"}</button>
-        {marketPlan ? <>
-          <div className="summary-grid">
-            <Metric label="Angel One calls" value={String(marketPlan.estimatedProviderCalls)} />
-            <Metric label="History window" value={`${marketPlan.historyDays} days`} />
-            <Metric label="Interval" value={marketPlan.interval} />
-            <Metric label="Existing latest candle" value={marketPlan.latestExistingCandle ? new Date(marketPlan.latestExistingCandle).toLocaleDateString("en-IN") : "None"} />
-          </div>
-          <p className="assessment-note">Momentum currently scores from absolute 12M + 6M returns. Risk uses GNPA + NNPA + max drawdown. The benchmark step below adds NIFTY Bank relative strength.</p>
-          <button type="button" className="button button-primary" disabled={busy !== null} onClick={() => void executeMarket()}>{busy === "MARKET_EXECUTE" ? "Refreshing market history…" : `Run market history refresh · ${marketPlan.estimatedProviderCalls} call`}</button>
-        </> : null}
-        {marketResult ? <div className="notice notice-success" role="status"><strong>Market history refreshed.</strong><span>{marketResult.candlesStored} daily candles stored. {marketResult.derivedMetrics.length} deterministic market metrics were derived and Research scoring has been reloaded.</span></div> : null}
-      </div>
-
-      <div className="complete-refresh-plan">
-        <div>
-          <p className="eyebrow">Stage 8.6F · Benchmark-relative momentum</p>
-          <h3>Add NIFTY Bank Relative Strength</h3>
-          <p>Fetches NIFTY Bank daily history from Angel One, aligns it to HDFCBANK's stored daily closes and derives 12M relative strength as stock return minus benchmark return.</p>
-        </div>
-        <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void createBenchmarkPlan()}>{busy === "BENCHMARK_PLAN" ? "Planning…" : benchmarkPlan ? "Re-plan benchmark refresh" : "Plan NIFTY Bank benchmark"}</button>
-        {benchmarkPlan ? <>
-          <div className="summary-grid">
-            <Metric label="Angel One calls" value={String(benchmarkPlan.estimatedProviderCalls)} />
-            <Metric label="Benchmark" value={benchmarkPlan.benchmark} />
-            <Metric label="History window" value={`${benchmarkPlan.historyDays} days`} />
-            <Metric label="Existing benchmark candle" value={benchmarkPlan.latestBenchmarkCandle ? new Date(benchmarkPlan.latestBenchmarkCandle).toLocaleDateString("en-IN") : "None"} />
-          </div>
-          <p className="assessment-note">The benchmark instrument is resolved from the current Angel One instrument master using exact accepted aliases before any history is stored. No Trendlyne technical signal is involved.</p>
-          <button type="button" className="button button-primary" disabled={busy !== null} onClick={() => void executeBenchmark()}>{busy === "BENCHMARK_EXECUTE" ? "Refreshing NIFTY Bank…" : `Run NIFTY Bank benchmark · ${benchmarkPlan.estimatedProviderCalls} call`}</button>
-        </> : null}
-        {benchmarkResult ? <div className="notice notice-success" role="status"><strong>NIFTY Bank relative strength added.</strong><span>HDFCBANK 12M return {benchmarkResult.stockReturn12M.toFixed(2)}% vs NIFTY Bank {benchmarkResult.benchmarkReturn12M.toFixed(2)}%; relative strength {benchmarkResult.relativeStrength12M.toFixed(2)} percentage points. Research scoring has been reloaded.</span></div> : null}
-      </div>
-
-      <div className="complete-refresh-plan">
-        <div>
-          <p className="eyebrow">Reference-stock completion</p>
-          <h3>Discover missing bank growth fields</h3>
-          <p>Targets Advances Growth YoY and Deposits Growth YoY only. This is discovery evidence, not automatic promotion or scoring.</p>
-        </div>
-        <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void discoverGrowth()}>{busy === "GROWTH" ? "Discovering…" : "Run growth discovery · 1 Trendlyne call"}</button>
-        {growthResult ? <div className="notice notice-success" role="status"><strong>Growth contract discovery captured.</strong><span>1 Trendlyne call used. No metric was promoted automatically; the capture is ready for semantic review.</span></div> : null}
-      </div>
-    </> : null}
   </section>
 }
 

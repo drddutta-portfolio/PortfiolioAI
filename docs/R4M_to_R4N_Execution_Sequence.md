@@ -15,7 +15,7 @@
 
 Current evidence: authenticated review has confirmed the common page hierarchy, suggestion structure, interpretation placement/state, refresh shell, tabs, score/heatmap shell, external-ratings shell and readiness shell. Profile-specific data and capability states remain intentionally different.
 
-**Open blocker:** the shared refresh component retains a legacy HDFCBANK symbol branch for reference-stock modules. The stricter freeze contract requires capability metadata instead. Resolve it in a separately approved local code change, or record an explicit temporary owner exception, before merging R4M.
+**Resolved blocker:** the shared refresh component no longer contains a HDFCBANK-specific rendering branch. Typed profile/reference-security capability metadata now selects the reference pilot modules through the common renderer. PR #100 still requires final owner review and merge approval.
 
 ## Gate 2 — Approve and merge R4M
 

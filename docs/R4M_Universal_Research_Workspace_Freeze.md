@@ -1,6 +1,6 @@
 # R4M — Universal Research Workspace Freeze
 
-**Status:** contract freeze candidate; one R4M code blocker, owner approval and PR #100 merge remain pending
+**Status:** contract freeze candidate; local code blocker resolved, owner review and PR #100 merge remain pending
 **Reference implementations:** HDFCBANK / `BANK_NBFC`; TORNTPHARM / `PHARMA_V1`
 **Scope:** application surface and extension contracts only
 
@@ -98,11 +98,11 @@ The common structure is status, role/recommendation, action bias, suggested rang
 - provider calls triggered by rendering;
 - profile-specific CSS that creates a separate application shell.
 
-The existing HDFCBANK reference-stock operational refresh pilot is legacy bounded behavior, not a pattern for future profiles. It should eventually move to capability metadata.
+The existing HDFCBANK reference-stock operational refresh pilot is bounded behavior, not a pattern for future profiles. Its four modules are selected through typed reference-security eligibility metadata inside the shared profile contract.
 
-## Known freeze blocker
+## Resolved freeze blocker
 
-`CompleteResearchRefreshPanel.tsx` still contains a legacy `profileCode === BANK_NBFC && symbol === HDFCBANK` rendering branch for the reference-stock refresh modules. It does not create a separate page, but it violates the stricter frozen rule against symbol-specific UI code. R4M should not be declared merge-ready under the current execution brief until that branch is replaced by typed refresh-capability/module metadata, or the owner explicitly approves a temporary exception. This documentation stage does not authorize that code change.
+The legacy `profileCode === BANK_NBFC && symbol === HDFCBANK` rendering branch has been removed from `CompleteResearchRefreshPanel.tsx`. The shared renderer now consumes typed action and eligibility metadata from `researchProfileUiContract.ts`; HDFCBANK remains explicitly scoped as the reference-security pilot without creating stock-specific presentation JSX. Regression tests prove both the HDFCBANK entitlement and fail-closed behavior for another BANK_NBFC security.
 
 ## Contract guard specification
 
