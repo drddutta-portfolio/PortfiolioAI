@@ -1,10 +1,15 @@
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, render, screen, waitFor, within } from "@testing-library/react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { PositionDecisionControls } from "./PositionDecisionControls"
 
 const repository = vi.hoisted(() => ({
   recordRecommendationPreview: vi.fn(),
   savePositionDecisionSettings: vi.fn(),
+  policy: null as Record<string, unknown> | null,
+  profileCode: "PHARMA_V1",
+  profileName: "Pharmaceuticals · PHARMA_V1",
+  overallScore: null as number | null,
+  scoreReadyCoverage: 0,
 }))
 
 vi.mock("../../data/positionDecisionRepository", () => ({
@@ -14,22 +19,22 @@ vi.mock("../../data/positionDecisionRepository", () => ({
 vi.mock("../../data/recommendationPolicyRepository", () => ({
   loadPortfolioProfileExposure: vi.fn().mockResolvedValue(null),
   loadRecommendationHistory: vi.fn().mockResolvedValue([]),
-  loadRecommendationPolicy: vi.fn().mockResolvedValue(null),
+  loadRecommendationPolicy: vi.fn().mockImplementation(() => Promise.resolve(repository.policy)),
   recordRecommendationPreview: repository.recordRecommendationPreview,
 }))
 vi.mock("./RecommendationInterpretationPanel", () => ({ RecommendationInterpretationPanel: () => null }))
 vi.mock("./useSecurityScoring", () => ({
   useSecurityScoring: () => ({
     data: {
-      profileCode: "PHARMA_V1",
-      profileName: "Pharmaceuticals · PHARMA_V1",
+      profileCode: repository.profileCode,
+      profileName: repository.profileName,
       profileSource: "REVIEWED_ASSIGNMENT",
       modelName: "PortfolioAI Stock Score V1",
       modelStatus: "DRAFT",
       runState: null,
-      overallScore: null,
+      overallScore: repository.overallScore,
       evidenceCoverage: .12,
-      scoreReadyCoverage: 0,
+      scoreReadyCoverage: repository.scoreReadyCoverage,
       evidenceConfidence: 12,
       asOfDate: null,
       dimensions: [],
@@ -42,24 +47,48 @@ vi.mock("./useSecurityScoring", () => ({
 }))
 
 describe("PositionDecisionControls recommendation availability", () => {
-  afterEach(() => { cleanup(); repository.recordRecommendationPreview.mockClear() })
+  afterEach(() => { cleanup(); repository.recordRecommendationPreview.mockClear(); repository.policy = null; repository.profileCode = "PHARMA_V1"; repository.profileName = "Pharmaceuticals · PHARMA_V1"; repository.overallScore = null; repository.scoreReadyCoverage = 0 })
 
   it("uses the shared unavailable state and never records a recommendation while rendering", () => {
     render(<PositionDecisionControls
       portfolioId="portfolio-1"
       securityId="security-1"
-      currentRole="UNCLASSIFIED"
+      currentRole="OTHER"
       currentWeight="1.32"
-      fallbackTargetWeight={null}
+      fallbackTargetWeight="2.5"
       fallbackInvestmentHorizon={null}
       currency="INR"
     />)
-    expect(screen.getAllByText("Not yet available").length).toBeGreaterThan(0)
-    expect(screen.getByLabelText("Recommendation readiness")).toHaveTextContent("Evidence12%Score-ready0%RecommendationNot available")
-    expect(screen.getByText("PortfolioAI suggestion").closest("section")).toHaveClass("advisory-is-unavailable")
-    expect(document.querySelector(".advisory-is-unavailable > .advisory-unavailable")).not.toBeNull()
+    const advisory = screen.getByText("PortfolioAI suggestion").closest("section")
+    expect(advisory).not.toBeNull()
+    expect(within(advisory!).getByText("Not ready")).toBeInTheDocument()
+    expect(within(advisory!).getByText("Recommendation pending")).toBeInTheDocument()
+    expect(within(advisory!).getByText("Pending")).toBeInTheDocument()
+    expect(within(advisory!).getByText("Not available")).toBeInTheDocument()
+    expect(within(advisory!).getByText("1.32%")).toBeInTheDocument()
+    expect(within(advisory!).getByText("2.5%")).toBeInTheDocument()
+    expect(within(advisory!).getByText("Other")).toBeInTheDocument()
+    expect(within(advisory!).queryByText("Core candidate")).not.toBeInTheDocument()
+    expect(within(advisory!).queryByText("Accumulate gradually")).not.toBeInTheDocument()
+    expect(within(advisory!).queryByText("3–4%")).not.toBeInTheDocument()
     expect(screen.getByText("Awaiting recommendation policy.")).toBeInTheDocument()
     expect(screen.getByText("Awaiting allocation policy.")).toBeInTheDocument()
     expect(repository.recordRecommendationPreview).not.toHaveBeenCalled()
+  })
+
+  it("preserves the mature available recommendation structure", async () => {
+    repository.profileCode = "BANK_NBFC"; repository.profileName = "Banks / NBFCs"; repository.overallScore = 80; repository.scoreReadyCoverage = .72
+    repository.policy = { profileCode: "BANK_NBFC", policyVersion: 1, status: "DRAFT", minScoreReadyCoverage: .7, coreMinScore: 75, satelliteMinScore: 60, watchMinScore: 40, mandatoryDimensionFloors: {}, cautionRules: {}, sectorFocus: {}, persistenceRules: { upgradeConfirmations: 2, downgradeConfirmations: 2 }, weightPolicy: { singleStockMax: 8, core: { standard: [3, 4] }, highConvictionScore: 90, cautionScore: 70, momentumCautionBelow: null, riskCautionBelow: null, momentumCap: null, riskCap: null, profileConcentrationSoftCap: null, profileConcentrationHardCap: null, minProfileCoverageForConcentration: 70 }, notes: null }
+    repository.recordRecommendationPreview.mockResolvedValue({ id: "tracking-1", suggestedRole: "CORE_CANDIDATE", actionBias: "ACCUMULATE", suggestedWeightMin: 3, suggestedWeightMax: 4, changeSignal: null, transitionStatus: "STABLE", persistenceCount: 4, createdAt: "2026-09-15T00:00:00Z" })
+    render(<PositionDecisionControls portfolioId="portfolio-1" securityId="security-1" currentRole="CORE" currentWeight="0.53" fallbackTargetWeight="1.5" fallbackInvestmentHorizon="18" currency="INR" />)
+    const advisory = screen.getByText("PortfolioAI suggestion").closest("section")
+    expect(advisory).not.toBeNull()
+    await waitFor(() => expect(within(advisory!).getByText("Core candidate")).toBeInTheDocument())
+    expect(within(advisory!).getByText("Action bias")).toBeInTheDocument()
+    expect(within(advisory!).getByText("Accumulate toward range")).toBeInTheDocument()
+    expect(within(advisory!).getByText("3–4%")).toBeInTheDocument()
+    expect(within(advisory!).getByText("0.53%")).toBeInTheDocument()
+    expect(within(advisory!).getByText("1.5%")).toBeInTheDocument()
+    expect(within(advisory!).getByText("Portfolio context")).toBeInTheDocument()
   })
 })

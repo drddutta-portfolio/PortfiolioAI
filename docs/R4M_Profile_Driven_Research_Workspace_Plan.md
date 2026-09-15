@@ -82,8 +82,9 @@ A second side-by-side review using owner-supplied TORNTPHARM and HDFCBANK screen
 - BANK_NBFC now uses the same readiness shell, driven by its applicable scoring dimensions, while PHARMA_V1 continues to supply its 13 evidence contracts;
 - profile names and Ownership & Governance terminology are investor-facing and consistent;
 - no-evidence heatmap cells no longer offer a misleading `View evidence` action.
-- the recommendation-unavailable card spans the full shared PortfolioAI suggestion panel instead of leaving the scored action column empty.
-- unavailable suggestion content stretches through the shared advisory footprint, while Interpretation and complete-refresh actions retain their common button positions in a disabled, fail-closed state.
+- recommendation-unavailable profiles retain the same status, recommendation, action-bias and allocation/context regions as a scored recommendation instead of substituting a profile-specific empty-state layout;
+- unavailable recommendation and allocation fields are explicitly labelled as pending or unavailable, while current weight, owner target and portfolio role continue to show their canonical user-controlled values;
+- Interpretation and complete-refresh actions retain their common button positions in a disabled, fail-closed state.
 
 These corrections change presentation and derived display summaries only. They add no canonical facts, scoring methods, provider execution, persistence or production behavior.
 
