@@ -33,3 +33,14 @@
 .evidence-only-heat > summary > em {
   color: #64748b;
 }
+
+.score-heat-cell > summary > b.heat-footer-disabled {
+  color: #748078;
+  border-color: #d2dad5;
+  background: #f4f6f5;
+  cursor: default;
+}
+
+.score-heat-cell > summary > b.heat-footer-disabled::after {
+  content: "";
+}

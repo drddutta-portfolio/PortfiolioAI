@@ -50,7 +50,7 @@ describe("ResearchScorecardPanel shared score states", () => {
     expect(screen.getAllByText("View evidence", { exact: false }).length).toBeGreaterThan(0)
     const growth = screen.getByText("Growth").closest("summary")
     expect(growth).not.toBeNull()
-    expect(within(growth!).queryByText("View evidence", { exact: false })).not.toBeInTheDocument()
+    expect(within(growth!).getByText("Evidence unavailable")).toHaveAttribute("aria-disabled", "true")
     expect(screen.queryByText("—")).not.toBeInTheDocument()
   })
 
@@ -60,5 +60,14 @@ describe("ResearchScorecardPanel shared score states", () => {
     expect(cashFlow).not.toBeNull()
     expect(within(cashFlow!).getByText("N/A")).toBeInTheDocument()
     expect(within(cashFlow!).getByText("Not applicable to this scoring profile")).toBeInTheDocument()
+    expect(within(cashFlow!).getByText("Not applicable")).toHaveAttribute("aria-disabled", "true")
+  })
+
+  it("uses one external ratings shell title for empty and populated states", () => {
+    const empty = snapshot("PHARMA_V1", [])
+    const { rerender } = render(<ResearchScorecardPanel snapshot={empty} isLoading={false} error={null} />)
+    expect(screen.getByRole("heading", { name: "External ratings" })).toBeInTheDocument()
+    rerender(<ResearchScorecardPanel snapshot={{ ...snapshot("BANK_NBFC", []), ratings: [{ id: "rating-1", agencyCode: "CARE", ratingSymbol: "AAA", outlook: "STABLE", ratingDate: null, ratingAction: null, instrumentType: null, instrumentDescription: null, sourceUrl: "https://example.test/rating", retrievedAt: "2026-09-15T00:00:00Z", freshUntil: "2026-10-15T00:00:00Z", evidenceStatus: "VERIFIED" }] }} isLoading={false} error={null} />)
+    expect(screen.getByRole("heading", { name: "External ratings" })).toBeInTheDocument()
   })
 })

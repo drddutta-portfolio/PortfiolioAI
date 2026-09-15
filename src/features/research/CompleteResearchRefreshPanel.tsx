@@ -166,7 +166,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
           <h3>{module.title}</h3>
           <p>{module.description}</p>
         </div>
-        {module.actionKind === "MARKET_HISTORY" ? <>
+        {module.state === "AVAILABLE_TO_PLAN" && module.actionKind === "MARKET_HISTORY" ? <>
           <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void createMarketPlan()}>{busy === "MARKET_PLAN" ? "Planning…" : marketPlan ? "Re-plan market refresh" : module.actionLabel ?? "Plan market history refresh"}</button>
           {marketPlan ? <>
             <div className="summary-grid">
@@ -180,7 +180,8 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
           </> : <p className="assessment-note">{module.note}</p>}
           {marketResult ? <div className="notice notice-success" role="status"><strong>Market history refreshed.</strong><span>{marketResult.candlesStored} daily candles stored. {marketResult.derivedMetrics.length} deterministic market metrics were derived and Research scoring has been reloaded.</span></div> : null}
         </> : <>
-          <div className="profile-refresh-status"><strong>Research module available</strong><span>Execution is not yet enabled</span></div>
+          <div className="profile-refresh-status"><strong>{module.state === "NOT_AVAILABLE" ? "Not available" : "Not enabled yet"}</strong><span>{module.state === "NOT_AVAILABLE" ? "This module is not available for the selected profile" : "Planning and execution are disabled"}</span></div>
+          <button type="button" className="button button-secondary" disabled title={module.state === "NOT_AVAILABLE" ? "Not available for this profile" : "Execution is not yet enabled for this profile"}>{module.actionLabel ?? "Plan refresh"}</button>
           <p className="assessment-note">{module.note}</p>
         </>}
       </div>)}

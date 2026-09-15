@@ -120,12 +120,12 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           const signals = dimension?.signals ?? []
           const dimensionLabel = ui.dimensionLabels[dimensionCode] ?? label(dimensionCode)
           return <details key={dimensionCode} className={`score-heat-cell ${heatClass}${evidenceOnly ? " evidence-only-heat" : ""}`}>
-            <summary>
+            <summary aria-disabled={notApplicable || noEvidence} onClick={(event) => { if (notApplicable || noEvidence) event.preventDefault() }}>
               <span>{dimensionLabel}</span>
               <strong>{notApplicable ? "N/A" : noEvidence ? "No validated evidence yet" : evidenceOnly ? "Insufficient for score" : score(dimension?.rawScore ?? null)}</strong>
               <small>{notApplicable ? "Not applicable to this scoring profile" : dimension ? noEvidence ? "Evidence has not yet met validation requirements" : evidenceOnly ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence reviewed` : `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Evidence unavailable"}</small>
               <em>{notApplicable ? "Not Applicable" : noEvidence ? "No evidence" : evidenceOnly ? "Evidence only" : label(heatState)}</em>
-              {!notApplicable && !noEvidence ? <b>{evidenceOnly ? "View evidence" : "Why this score?"}</b> : null}
+              <b className={notApplicable || noEvidence ? "heat-footer-disabled" : undefined} aria-disabled={notApplicable || noEvidence}>{notApplicable ? "Not applicable" : noEvidence ? "Evidence unavailable" : evidenceOnly ? "View evidence" : "Why this score?"}</b>
             </summary>
             {!notApplicable ? <div className="heat-evidence-panel">
               {signals.length ? signals.map((signal) => <article key={signal.inputCode} className={`heat-signal signal-${signal.state.toLocaleLowerCase()}`}>
@@ -140,7 +140,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
     </section>
 
     {ui.externalRatingsMode === "COMPACT" && snapshot.ratings.length === 0 ? <section className="panel external-ratings-panel" aria-labelledby="external-ratings-title">
-      <div className="ratings-header"><div><p className="eyebrow">Credit evidence</p><h2 id="external-ratings-title">External credit ratings</h2><p>No material cached ratings. Absence of a rating is insufficient evidence, not a negative signal.</p></div><div><strong>0</strong><span>rated instruments</span></div></div>
+      <div className="ratings-header"><div><p className="eyebrow">Credit evidence</p><h2 id="external-ratings-title">External ratings</h2><p>No material cached ratings. Absence of a rating is insufficient evidence, not a negative signal.</p></div><div><strong>0</strong><span>rated instruments</span></div></div>
     </section> : <section className="panel external-ratings-panel" aria-labelledby="external-ratings-title">
       <div className="ratings-header">
         <div><p className="eyebrow">Credit evidence</p><h2 id="external-ratings-title">External ratings</h2><p>Multi-agency, instrument-level evidence. Expand an agency only when you need the instrument detail.</p></div>

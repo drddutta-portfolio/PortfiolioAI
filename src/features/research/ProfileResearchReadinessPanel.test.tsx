@@ -14,6 +14,7 @@ describe("ProfileResearchReadinessPanel", () => {
     render(<ProfileResearchReadinessPanel profileCode="BANK_NBFC" research={research} snapshot={snapshot} />)
     expect(screen.getByText("Banks / NBFCs Research Readiness")).toBeInTheDocument()
     expect(screen.getByText("1/9")).toBeInTheDocument()
-    expect(screen.getByText("scoring dimensions ready")).toBeInTheDocument()
+    expect(screen.getByText("readiness requirements ready")).toBeInTheDocument()
+    expect(screen.getByText("A compact view of profile readiness requirements. BANK_NBFC requirements are satisfied by validated, score-ready dimensions.")).toBeInTheDocument()
   })
 })

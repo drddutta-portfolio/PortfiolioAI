@@ -19,7 +19,7 @@ function ScoringReadinessPanel({ profileCode, snapshot }: { readonly profileCode
     return <article key={code}><span>{label}</span><strong>{dimension?.rawScore == null ? "Not score-ready" : `Score ${dimension.rawScore.toFixed(0)}`}</strong><small>{dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Evidence unavailable"}</small></article>
   })}</div>
 
-  return <ResearchReadinessPanel title={`${ui.profileDisplayName} Research Readiness`} detail="A compact view of validated scoring readiness. Evidence coverage and score readiness remain separate." ready={ready} total={applicable.length} groups={groups} detailsLabel={`View all ${ui.profileDisplayName} scoring dimensions`} details={details} itemLabel="scoring dimensions" />
+  return <ResearchReadinessPanel title={`${ui.profileDisplayName} Research Readiness`} detail="A compact view of profile readiness requirements. BANK_NBFC requirements are satisfied by validated, score-ready dimensions." ready={ready} total={applicable.length} groups={groups} detailsLabel={`View all ${ui.profileDisplayName} readiness requirements`} details={details} itemLabel="readiness requirements" />
 }
 
 export function ProfileResearchReadinessPanel({ profileCode, research, snapshot }: {

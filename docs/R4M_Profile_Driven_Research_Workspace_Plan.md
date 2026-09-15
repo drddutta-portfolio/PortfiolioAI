@@ -88,6 +88,13 @@ A second side-by-side review using owner-supplied TORNTPHARM and HDFCBANK screen
 
 These corrections change presentation and derived display summaries only. They add no canonical facts, scoring methods, provider execution, persistence or production behavior.
 
+### Final consistency semantics
+
+- Research readiness represents **profile readiness requirements** in the shared shell. BANK_NBFC maps its validated score-ready dimensions into those requirements; PHARMA_V1 maps its 13 validated evidence contracts. The requirement sources differ by methodology, but the shared numerator/denominator always means satisfied profile prerequisites.
+- Refresh modules declare a shared lifecycle state. PHARMA_V1 informational modules remain `EXECUTION_DISABLED`; its approved market-history path is `AVAILABLE_TO_PLAN`. Disabled modules keep the same status-and-control geometry without gaining execution capability.
+- Heatmap footers are state-derived: scored, evidence-only, no-validated-evidence and not-applicable cards retain one footer position while exposing only valid interactions.
+- Status vocabulary is deterministic: **Not available** means no approved method or capability; **Not ready** means an existing capability lacks prerequisites; **Pending** means a result is awaiting completion; **Not started** means tracking/evaluation has not begun; **No validated result** means evaluation exists without an approved conclusion.
+
 ## Review boundary
 
 R4M does not approve or apply the TORNTPHARM official-evidence manifest, add numeric PHARMA_V1 score curves, deploy an Edge Function, change a scheduler, or perform a provider-backed refresh. Those actions require separate owner approval.

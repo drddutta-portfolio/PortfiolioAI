@@ -16,6 +16,7 @@ export interface ResearchWorkspaceSection {
 
 export type ExternalRatingsMode = "FULL" | "COMPACT"
 export type ResearchRefreshActionKind = "MARKET_HISTORY" | "INFORMATIONAL"
+export type ResearchRefreshModuleState = "AVAILABLE_TO_PLAN" | "PLANNED" | "EXECUTION_DISABLED" | "EXECUTABLE" | "NOT_AVAILABLE"
 
 export interface ResearchRefreshModule {
   readonly code: string
@@ -23,6 +24,7 @@ export interface ResearchRefreshModule {
   readonly title: string
   readonly description: string
   readonly actionKind: ResearchRefreshActionKind
+  readonly state: ResearchRefreshModuleState
   readonly actionLabel?: string
   readonly note?: string
 }
@@ -174,6 +176,7 @@ const PHARMA_REFRESH_MODULES: readonly ResearchRefreshModule[] = [
     title: "Pharma Fundamentals",
     description: "Revenue, margins, capital efficiency, earnings, cash conversion and financial strength in one Pharma-focused view.",
     actionKind: "INFORMATIONAL",
+    state: "EXECUTION_DISABLED",
     note: "Execution is not yet enabled for this profile.",
   },
   {
@@ -182,6 +185,7 @@ const PHARMA_REFRESH_MODULES: readonly ResearchRefreshModule[] = [
     title: "Business Durability",
     description: "R&D intensity and productivity alongside material launches, approvals and pipeline milestones.",
     actionKind: "INFORMATIONAL",
+    state: "EXECUTION_DISABLED",
     note: "Higher R&D spend is not automatically positive; productivity and evidence quality remain part of the contract.",
   },
   {
@@ -190,6 +194,7 @@ const PHARMA_REFRESH_MODULES: readonly ResearchRefreshModule[] = [
     title: "Regulatory Risk",
     description: "Material manufacturing-site status, inspections, unresolved actions and remediation from appropriate official evidence.",
     actionKind: "INFORMATIONAL",
+    state: "EXECUTION_DISABLED",
     note: "Research will appear when approved official evidence is available.",
   },
   {
@@ -198,6 +203,7 @@ const PHARMA_REFRESH_MODULES: readonly ResearchRefreshModule[] = [
     title: "Market & Valuation",
     description: "Daily market history supports momentum, drawdown and volatility analysis using the approved market-data source.",
     actionKind: "MARKET_HISTORY",
+    state: "AVAILABLE_TO_PLAN",
     actionLabel: "Plan market history refresh",
     note: "Market-history planning is available. Benchmark-relative analysis is not yet enabled for this profile.",
   },

@@ -54,6 +54,8 @@ describe("researchProfileUiContract", () => {
     ])
     expect(pharma.refreshModules.filter((module) => module.actionKind === "MARKET_HISTORY")).toHaveLength(1)
     expect(pharma.refreshModules.find((module) => module.code === "PHARMA_MARKET_VALUATION")?.actionKind).toBe("MARKET_HISTORY")
+    expect(pharma.refreshModules.find((module) => module.code === "PHARMA_MARKET_VALUATION")?.state).toBe("AVAILABLE_TO_PLAN")
+    expect(pharma.refreshModules.filter((module) => module.actionKind === "INFORMATIONAL").every((module) => module.state === "EXECUTION_DISABLED")).toBe(true)
     expect(pharma.refreshModules.map((module) => module.title)).toEqual([
       "Pharma Fundamentals",
       "Business Durability",
