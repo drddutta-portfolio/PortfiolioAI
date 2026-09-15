@@ -3,7 +3,7 @@ import {readFileSync} from "node:fs"
 
 const root=process.cwd()
 const edge=readFileSync(`${root}/supabase/functions/refresh-security-enrichment/index.ts`,"utf8")
-const migration=readFileSync(`${root}/supabase/migrations/20260909100000_create_stage7_2a_provider_control_plane.sql`,"utf8")
+const migration=readFileSync(`${root}/supabase/migrations_legacy/20260915_pre_r4n_baseline/20260909100000_create_stage7_2a_provider_control_plane.sql`,"utf8")
 
 describe("Stage 7.2A provider control boundary",()=>{
   it("checks the kill switch before constructing the MCP client",()=>{

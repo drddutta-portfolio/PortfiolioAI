@@ -1,6 +1,6 @@
 # R4N migration baseline cutover plan
 
-Status: **ACTIVE COMPATIBILITY-MARKER CUTOVER VERIFIED / ORDINARY LOCAL AND PRODUCTION NOT CUT OVER**
+Status: **ACTIVE AND ORDINARY-LOCAL CUTOVER VERIFIED / PRODUCTION NOT CUT OVER**
 
 ## Decision
 
@@ -180,3 +180,29 @@ The immediate next step is gate 1 only. No database or active migration history 
   R4N assignment writes.
 - The proof stack and volumes were destroyed. The ordinary local database was not
   reset or migrated, and production was not inspected or changed.
+
+## 12. Ordinary-local rebuild result — 15 September 2026
+
+- PR #101's post-cutover architecture check passed before the owner-authorized
+  ordinary-local reset began.
+- The pre-reset inventory captured the seven-entry legacy ledger and counted every
+  existing public table. Auth users and every user/business table contained zero
+  rows; only the expected `market_data_providers` reference row existed.
+- `supabase db reset --local` rebuilt the ordinary local database from all 77
+  unique active versions. The operational-default migration remained inert and
+  created no cron jobs.
+- Post-reset checks found 77/77 unique ledger versions, 85/85 public tables with
+  RLS, zero auth users, zero business/evidence/score/recommendation/sizing rows,
+  five R4N contracts, closed NEWS V6 state and service-only R4N assignment writes.
+- R4N/repair pgTAP passed 29/29, schema diff is empty and database lint has no
+  errors. One inherited warning remains: `get_portfolio_coverage_registry_v1` is
+  marked `STABLE` while the linter detects a volatile expression.
+- Seven source-inspection Vitest files were updated to read immutable historical
+  SQL from the legacy archive instead of retired active filenames. The complete
+  application suite then passed 82/82 files and 444/444 tests; typecheck,
+  architecture guard and production build also passed.
+- Repository-wide ESLint still reports pre-existing application errors unrelated
+  to the migration cutover. They were not weakened, suppressed or broadened into
+  this database gate.
+- Production was not accessed or changed. Any production inventory or history
+  bridge remains separately gated.

@@ -2,7 +2,7 @@
 import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 
-const sql = readFileSync(new URL("../../migrations/20260907160000_create_stage5_manual_transactions.sql", import.meta.url), "utf8")
+const sql = readFileSync(new URL("../../migrations_legacy/20260915_pre_r4n_baseline/20260907160000_create_stage5_manual_transactions.sql", import.meta.url), "utf8")
 
 describe("Stage 5 trusted-write migration", () => {
   it("keeps the ledger browser read-only and narrows RPC execution", () => {

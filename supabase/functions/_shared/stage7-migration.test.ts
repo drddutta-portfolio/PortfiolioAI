@@ -2,11 +2,11 @@
 import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 
-const identity = readFileSync(new URL("../../migrations/20260908110000_create_stage7_provenance_and_security_identity.sql",import.meta.url),"utf8")
-const enrichment = readFileSync(new URL("../../migrations/20260908111000_create_stage7_enrichment_observations.sql",import.meta.url),"utf8")
-const policy = readFileSync(new URL("../../migrations/20260908112000_create_stage7_market_cap_policy_and_views.sql",import.meta.url),"utf8")
-const leaseFix = readFileSync(new URL("../../migrations/20260908115000_fix_stage7_ingestion_lease_retry_after.sql",import.meta.url),"utf8")
-const resilience = readFileSync(new URL("../../migrations/20260908120000_add_stage7_document_and_fundamental_reconciliation.sql",import.meta.url),"utf8")
+const identity = readFileSync(new URL("../../migrations_legacy/20260915_pre_r4n_baseline/20260908110000_create_stage7_provenance_and_security_identity.sql",import.meta.url),"utf8")
+const enrichment = readFileSync(new URL("../../migrations_legacy/20260915_pre_r4n_baseline/20260908111000_create_stage7_enrichment_observations.sql",import.meta.url),"utf8")
+const policy = readFileSync(new URL("../../migrations_legacy/20260915_pre_r4n_baseline/20260908112000_create_stage7_market_cap_policy_and_views.sql",import.meta.url),"utf8")
+const leaseFix = readFileSync(new URL("../../migrations_legacy/20260915_pre_r4n_baseline/20260908115000_fix_stage7_ingestion_lease_retry_after.sql",import.meta.url),"utf8")
+const resilience = readFileSync(new URL("../../migrations_legacy/20260915_pre_r4n_baseline/20260908120000_add_stage7_document_and_fundamental_reconciliation.sql",import.meta.url),"utf8")
 
 describe("Stage 7 migration contracts", () => {
   it("keeps raw evidence immutable to browser roles and deduplicated", () => {
