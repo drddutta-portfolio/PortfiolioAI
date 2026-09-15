@@ -205,7 +205,7 @@ export function PositionDecisionControls({
             </div>
           </section>
 
-          <section className="portfolioai-advisory" aria-labelledby="portfolioai-advisory-title">
+          <section className={`portfolioai-advisory${recommendationUnavailable ? " advisory-is-unavailable" : ""}`} aria-labelledby="portfolioai-advisory-title">
             <header className="advisory-heading"><div className="advisory-title-wrap"><span className="decision-panel-icon advisory-icon" aria-hidden="true">✦</span><div><h3 id="portfolioai-advisory-title">PortfolioAI suggestion</h3><p>Sector-aware research recommendation preview.</p></div></div>{tracking ? <span className={`recommendation-transition ${transitionClass(tracking.transitionStatus)}`}>{transitionLabel(tracking.transitionStatus)}</span> : null}</header>
             <div className={`advisory-primary${recommendationUnavailable ? " advisory-unavailable" : ""}`}><strong>{recommendation ? recommendationLabel(recommendation.suggestedRole) : recommendationUnavailable ? "Not yet available" : "Evaluating…"}</strong><small>{recommendationUnavailable ? `A recommendation will appear after the ${unavailableProfile} methodology is approved and the required evidence becomes score-ready.` : suggestionDetail}</small>{recommendationUnavailable ? <div className="advisory-unavailable-status" aria-label="Recommendation readiness"><span><b>Evidence</b>{evidenceCoverage}</span><span><b>Score-ready</b>{scoreReadyCoverage}</span><span><b>Recommendation</b>Not available</span></div> : null}{recommendation?.cautions.length ? <div className="advisory-cautions" aria-label="Recommendation cautions">{recommendation.cautions.map((caution) => <span key={caution}>{caution}</span>)}</div> : null}</div>
 

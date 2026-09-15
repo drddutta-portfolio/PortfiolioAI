@@ -82,6 +82,7 @@ A second side-by-side review using owner-supplied TORNTPHARM and HDFCBANK screen
 - BANK_NBFC now uses the same readiness shell, driven by its applicable scoring dimensions, while PHARMA_V1 continues to supply its 13 evidence contracts;
 - profile names and Ownership & Governance terminology are investor-facing and consistent;
 - no-evidence heatmap cells no longer offer a misleading `View evidence` action.
+- the recommendation-unavailable card spans the full shared PortfolioAI suggestion panel instead of leaving the scored action column empty.
 
 These corrections change presentation and derived display summaries only. They add no canonical facts, scoring methods, provider execution, persistence or production behavior.
 

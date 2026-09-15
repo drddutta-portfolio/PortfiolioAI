@@ -5,6 +5,15 @@
   background: linear-gradient(135deg, rgba(244, 249, 246, .96), rgba(234, 244, 238, .86)) !important;
 }
 
+.research-page .portfolioai-advisory.advisory-is-unavailable {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.research-page .portfolioai-advisory.advisory-is-unavailable > .advisory-heading,
+.research-page .portfolioai-advisory.advisory-is-unavailable > .advisory-unavailable {
+  grid-column: 1 / -1;
+}
+
 .key-insights-unavailable .key-insight-list article { padding-top: .46rem; padding-bottom: .46rem; }
 .key-insights-unavailable .key-insight-list p { line-height: 1.25; }
 
