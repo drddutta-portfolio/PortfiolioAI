@@ -1,0 +1,7 @@
+-- PortfolioAI migration-baseline compatibility marker.
+-- Historical version: 20260910200000
+-- Original SQL is preserved byte-for-byte in:
+-- supabase/migrations_legacy/20260915_pre_r4n_baseline/20260910200000_create_scoring_metric_rules.sql
+-- supabase/migrations_legacy/20260915_pre_r4n_baseline/20260910200000_verify_bank_metric_mappings_from_live_capture.sql
+-- Final effects are incorporated into the verified 20260915140000/1 baseline.
+-- Intentionally no-op.

@@ -1,0 +1,6 @@
+-- PortfolioAI migration-baseline compatibility marker.
+-- Historical version: 20260912220000
+-- Original SQL is preserved byte-for-byte in:
+-- supabase/migrations_legacy/20260915_pre_r4n_baseline/20260912220000_create_news_intelligence_pilot_foundation.sql
+-- Final effects are incorporated into the verified 20260915140000/1 baseline.
+-- Intentionally no-op.

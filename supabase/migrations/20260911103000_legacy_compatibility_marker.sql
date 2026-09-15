@@ -1,0 +1,6 @@
+-- PortfolioAI migration-baseline compatibility marker.
+-- Historical version: 20260911103000
+-- Original SQL is preserved byte-for-byte in:
+-- supabase/migrations_legacy/20260915_pre_r4n_baseline/20260911103000_add_bank_pe_5y_self_history_valuation.sql
+-- Final effects are incorporated into the verified 20260915140000/1 baseline.
+-- Intentionally no-op.

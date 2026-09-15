@@ -1,2 +1,0 @@
--- Production migration-history alignment marker.
--- Intentionally no schema/data changes.

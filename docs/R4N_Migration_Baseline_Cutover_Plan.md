@@ -1,6 +1,6 @@
 # R4N migration baseline cutover plan
 
-Status: **GATE 2 CURATION AND DISPOSABLE EQUIVALENCE VERIFIED / CUTOVER NOT STARTED**
+Status: **ACTIVE COMPATIBILITY-MARKER CUTOVER VERIFIED / ORDINARY LOCAL AND PRODUCTION NOT CUT OVER**
 
 ## Decision
 
@@ -158,3 +158,25 @@ The immediate next step is gate 1 only. No database or active migration history 
   bypassed.
 - The disposable stack is destroyed after verification. Active migrations,
   ordinary local and production remain unchanged.
+
+## 11. Active compatibility-marker cutover result — 15 September 2026
+
+- After PR #101's architecture check passed, the owner-authorized active-history
+  cutover replaced the 78 pre-baseline SQL files with 74 unique no-op markers.
+- Every original active file was checksum-verified against both the immutable
+  archive and gate-1 manifest before any replacement occurred. Any missing,
+  additional or changed active file causes the cutover generator to abort.
+- The four duplicate-version pairs now have one active ledger identity per
+  timestamp. Both original files, checksums and effects remain preserved in the
+  legacy archive/manifest and incorporated into the baseline.
+- Three active baseline migrations follow the markers:
+  `20260915140000` schema, `20260915140001` reference registry and
+  `20260915140002` inert local operational defaults.
+- A clean disposable replay applied all 77 unique versions. Its public schema dump
+  is byte-identical to the repaired full-history candidate; database lint is clean,
+  schema diff is empty and the R4N/repair pgTAP suites pass 29/29 assertions.
+- Direct checks found 85/85 public tables with RLS, zero cron jobs, zero business/
+  evidence/score/recommendation/sizing rows, five R4N contracts, and service-only
+  R4N assignment writes.
+- The proof stack and volumes were destroyed. The ordinary local database was not
+  reset or migrated, and production was not inspected or changed.

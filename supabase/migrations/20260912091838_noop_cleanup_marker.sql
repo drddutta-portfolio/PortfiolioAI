@@ -1,2 +1,0 @@
--- Production migration-history cleanup marker.
--- Intentionally no schema/data changes.
