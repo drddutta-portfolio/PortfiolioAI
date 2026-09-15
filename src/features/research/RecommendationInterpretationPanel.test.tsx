@@ -12,6 +12,7 @@ describe("RecommendationInterpretationPanel", () => {
     render(<RecommendationInterpretationPanel portfolioId="portfolio-1" securityId="security-1" enabled={false} />)
     expect(screen.getByText("PortfolioAI interpretation")).toBeInTheDocument()
     expect(screen.getByText("Available after a validated recommendation")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Generate AI interpretation" })).toBeDisabled()
     expect(repository.planRecommendationInterpretation).not.toHaveBeenCalled()
   })
 })

@@ -57,6 +57,7 @@ describe("PositionDecisionControls recommendation availability", () => {
     expect(screen.getAllByText("Not yet available").length).toBeGreaterThan(0)
     expect(screen.getByLabelText("Recommendation readiness")).toHaveTextContent("Evidence12%Score-ready0%RecommendationNot available")
     expect(screen.getByText("PortfolioAI suggestion").closest("section")).toHaveClass("advisory-is-unavailable")
+    expect(document.querySelector(".advisory-is-unavailable > .advisory-unavailable")).not.toBeNull()
     expect(screen.getByText("Awaiting recommendation policy.")).toBeInTheDocument()
     expect(screen.getByText("Awaiting allocation policy.")).toBeInTheDocument()
     expect(repository.recordRecommendationPreview).not.toHaveBeenCalled()

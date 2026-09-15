@@ -57,6 +57,7 @@ export function RecommendationInterpretationPanel({ portfolioId, securityId, ena
         <h3 id="ai-interpretation-title">PortfolioAI interpretation</h3>
         <p>Explains an existing deterministic recommendation without changing any score or portfolio decision.</p>
       </div>
+      <button type="button" className="button button-primary" disabled title="A validated recommendation is required">Generate AI interpretation</button>
     </header>
     <div className="ai-ready-state"><strong>Available after a validated recommendation</strong><span>Interpretation remains disabled until this profile has a score-ready recommendation to explain.</span></div>
   </section>

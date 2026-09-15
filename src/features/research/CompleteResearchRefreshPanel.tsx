@@ -156,7 +156,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
         <h2 id="complete-research-refresh-title">Research Refresh</h2>
         <p>These Pharma research areas are ready to receive evidence as their approved refresh capabilities become available.</p>
       </div>
-      <span className="profile-refresh-status"><strong>Not yet available</strong><span>Execution is disabled</span></span>
+      <button type="button" className="button button-secondary" disabled title="Complete refresh execution is not yet enabled for this profile">Plan complete refresh</button>
     </div>}
 
     {ui.refreshModules.length ? <div className="profile-refresh-workspace" aria-label={`${ui.profileCode} research modules`}>
