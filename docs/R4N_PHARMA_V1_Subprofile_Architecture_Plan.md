@@ -1,6 +1,6 @@
 # R4N — PHARMA_V1 Business-Model Subprofile Architecture
 
-**Status:** architecture direction approved for documentation/fixture-only R4N-A/R4N-B work; candidate assignments remain provisional
+**Status:** local contract implementation complete in draft PR #101; candidate assignments remain provisional
 **Parent profile:** `PHARMA_V1`
 **Reference security for the first subprofile:** TORNTPHARM
 **Proposed subprofile:** `DOMESTIC_FORMULATIONS`
@@ -281,3 +281,7 @@ R4N architecture is ready for implementation only when the owner approves:
 6. materiality rules for conditional export/regulatory requirements;
 7. source/licensing expectations for non-public franchise evidence;
 8. explicit separation of evidence readiness from scoring readiness.
+
+## Local implementation result
+
+The repository now contains machine-readable `V1` contracts for all five subprofiles and a deterministic composer that applies parent requirements once, validates overrides/additions and rejects any non-null Pharma score curve. The shared readiness summary reports active Mandatory, Important and Supplementary requirements separately. This is an engine/contract implementation only: it is not connected to production storage, live Research-page resolution, evidence ingestion or scoring.

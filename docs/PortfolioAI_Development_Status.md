@@ -229,12 +229,13 @@ R4M is **UI COMPLETE / MERGED** in PR #100 at merge commit `de54ed1fa9569e9db0c1
 
 ### R4N-A/R4N-B — Research contract freeze and Pharma subprofile foundation
 
-R4N-A/R4N-B is **LOCAL CONTRACT IMPLEMENTATION IN PROGRESS** on `r4n-pharma-subprofile-architecture`.
+R4N-A/R4N-B is **LOCAL CONTRACT IMPLEMENTATION COMPLETE / DRAFT PR #101** on `r4n-pharma-subprofile-architecture`.
 
 - The universal Research workspace is frozen as `R4M_V1`; future profiles supply configuration and data rather than page trees.
 - The typed `PHARMA_V1` subprofile assignment contract preserves immutable versions, effective intervals, review provenance, secondary exposures and fail-closed resolution.
 - The owner-supplied 25-stock Pharma mapping is a noncanonical provisional fixture register; ZYDUSWELL is separately `OUTSIDE_PHARMA_V1 / CONSUMER_HEALTH_REVIEW`.
 - Missing, provisional, disputed or conflicting required subprofile assignment permits parent evidence display but blocks readiness, scoring and recommendation.
+- Machine-readable V1 evidence/readiness contracts now compose all five subprofiles onto the parent exactly once. Top-line readiness uses active Mandatory requirements only; Important and Supplementary coverage remain separate.
 - No migration, database assignment, provider action, evidence ingestion, scoring method or production mutation is part of R4N-A/R4N-B.
 
 Detailed implementation and review boundaries are recorded in `R4M_Profile_Driven_Research_Workspace_Plan.md`.
