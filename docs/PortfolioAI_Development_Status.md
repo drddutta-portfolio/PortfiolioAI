@@ -236,6 +236,7 @@ R4N-A/R4N-B is **LOCAL CONTRACT IMPLEMENTATION COMPLETE / DRAFT PR #101** on `r4
 - The owner-supplied 25-stock Pharma mapping is a noncanonical provisional fixture register; ZYDUSWELL is separately `OUTSIDE_PHARMA_V1 / CONSUMER_HEALTH_REVIEW`.
 - Missing, provisional, disputed or conflicting required subprofile assignment permits parent evidence display but blocks readiness, scoring and recommendation.
 - Machine-readable V1 evidence/readiness contracts now compose all five subprofiles onto the parent exactly once. Top-line readiness uses active Mandatory requirements only; Important and Supplementary coverage remain separate.
+- The frozen TORNTPHARM 42-row official-evidence proposal now has an exact fixture and pure dry-run classifier against `PHARMA_V1 + DOMESTIC_FORMULATIONS`. It maps 36 rows to six parent mandatory requirements and keeps six R&D rows contextual; it satisfies zero subprofile-specific or condition-activation requirements and performs no ingestion.
 - No migration, database assignment, provider action, evidence ingestion, scoring method or production mutation is part of R4N-A/R4N-B.
 
 Detailed implementation and review boundaries are recorded in `R4M_Profile_Driven_Research_Workspace_Plan.md`.
@@ -282,7 +283,7 @@ These are explicit limitations, not invitations to fabricate values:
 
 ## J. Next work
 
-The immediate next step is completion and review of the local R4N-A/R4N-B contract/fixture implementation. Schema design, migration creation or application, production assignments, evidence ingestion, provider execution and scoring remain separately gated.
+The immediate next step is owner review of the local R4N contract and TORNTPHARM manifest dry-run implementation. Any schema design, migration creation or application, production assignment, evidence ingestion, provider execution and scoring remain separately gated.
 
 After R4M disposition, the broader repository sequence remains:
 
