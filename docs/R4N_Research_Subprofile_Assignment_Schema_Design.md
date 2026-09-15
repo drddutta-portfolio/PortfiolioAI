@@ -1,6 +1,8 @@
 # R4N — Research Subprofile Assignment Schema Design
 
-**Status:** design for owner review; no migration created or applied
+**Status:** repository migration created for review; not applied to any database
+
+**Migration:** `20260915094042_create_research_subprofile_assignments.sql`
 
 ## Authority boundary
 
@@ -55,6 +57,6 @@ The shared resolver returns one of `RESOLVED`, `MISSING`, `PROVISIONAL`, `DISPUT
 - Reviewer identity and historical rows remain auditable.
 - No policy may broaden access to user-owned portfolio, transaction or research evidence data.
 
-## Migration preconditions
+## Application preconditions
 
-Before migration creation, confirm the contract registry storage strategy, reviewer authority model, exact overlap constraint implementation and whether assignments are global research facts or user-scoped reviewed judgments. These decisions affect keys and RLS and therefore require owner approval before SQL is authored.
+The owner approved global canonical assignments, service/admin-only writes, append-only reviewed history, database-enforced non-overlap and fail-closed unresolved states. Before applying the migration, run it in an approved local database, execute `r4n_research_subprofile_assignments_test.sql`, inspect the schema diff and security advisors, regenerate database types, and review the resulting resolver/repository implementation. Production application remains separately gated.

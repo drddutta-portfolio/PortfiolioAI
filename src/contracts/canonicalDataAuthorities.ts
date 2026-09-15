@@ -174,7 +174,7 @@ export const CANONICAL_DATA_AUTHORITIES = {
     label: "Research subprofile assignment",
     layer: "NORMALIZED",
     canonicalAuthority: "PortfolioAI versioned research-subprofile assignment authority",
-    canonicalSourceObject: "Approved versioned research-subprofile assignment contract; fixture candidates are noncanonical",
+    canonicalSourceObject: "research_subprofile_assignments after approved migration application; typed reviewed assignment contract beforehand; fixture candidates are noncanonical",
     sharedAccessPath: "resolvePharmaSubprofileAssignment() -> effective research-contract service",
     missingDataBehavior: "PRESERVE_STATE",
     pageLocalDerivationAllowed: false,
