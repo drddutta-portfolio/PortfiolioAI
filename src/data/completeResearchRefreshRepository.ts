@@ -1,4 +1,5 @@
 import { supabase } from "../lib/supabase"
+import { completeResearchRefreshRequest } from "../features/research/completeResearchRefreshContract"
 
 export interface CompleteResearchRefreshPlan {
   readonly mode: "COMPLETE_RESEARCH_REFRESH_PLAN"
@@ -32,20 +33,19 @@ export interface CompleteResearchRefreshResult {
 }
 
 const invoke = async <T>(body: Record<string, unknown>): Promise<T> => {
-  const { data, error } = await supabase.functions.invoke("complete-research-refresh", { body })
-  if (error) throw error
+  const response = await supabase.functions.invoke("complete-research-refresh", { body }) as {
+    readonly data: unknown
+    readonly error: unknown
+  }
+  const { data, error } = response
+  if (error) throw error instanceof Error ? error : new Error("Complete Research Refresh request failed.")
   if (!data || typeof data !== "object") throw new Error("Complete Research Refresh returned no result.")
   if ("error" in data && typeof data.error === "string") throw new Error(data.error)
   return data as T
 }
 
-export const planCompleteResearchRefresh = (portfolioId: string, securityId: string) =>
-  invoke<CompleteResearchRefreshPlan>({ action: "PLAN", portfolioId, securityId })
+export const planCompleteResearchRefresh = (portfolioId: string, securityId: string, profileCode: string) =>
+  invoke<CompleteResearchRefreshPlan>(completeResearchRefreshRequest("PLAN", portfolioId, securityId, profileCode))
 
-export const executeCompleteResearchRefresh = (portfolioId: string, securityId: string) =>
-  invoke<CompleteResearchRefreshResult>({
-    action: "EXECUTE",
-    portfolioId,
-    securityId,
-    confirmation: "OWNER_CONFIRMED_COMPLETE_RESEARCH_REFRESH",
-  })
+export const executeCompleteResearchRefresh = (portfolioId: string, securityId: string, profileCode: string) =>
+  invoke<CompleteResearchRefreshResult>(completeResearchRefreshRequest("EXECUTE", portfolioId, securityId, profileCode))

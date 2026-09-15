@@ -22,7 +22,7 @@ function inferredProfile(sector: string | null, industry: string | null): { read
   if (!haystack) return { code: "GENERAL", source: "GENERAL_FALLBACK" }
   if (isPharmaScoringContext(sector, industry)) return { code: "PHARMA_V1", source: "SECTOR_RULE" }
   if (/\bBANK\b|NBFC|LENDING/.test(haystack)) return { code: "BANK_NBFC", source: "SECTOR_RULE" }
-  if (/IT|TECHNOLOGY|SOFTWARE/.test(haystack)) return { code: "IT_TECH", source: "SECTOR_RULE" }
+  if (/\bIT\b|TECHNOLOGY|SOFTWARE/.test(haystack)) return { code: "IT_TECH", source: "SECTOR_RULE" }
   if (/INDUSTRIAL|CAPITAL GOODS|ENGINEERING/.test(haystack)) return { code: "INDUSTRIALS_CAPITAL_GOODS", source: "SECTOR_RULE" }
   if (/FMCG|CONSUMER/.test(haystack)) return { code: "CONSUMER_FMCG", source: "SECTOR_RULE" }
   if (/AUTO|AUTOMOBILE/.test(haystack)) return { code: "AUTO_COMPONENTS", source: "SECTOR_RULE" }

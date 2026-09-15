@@ -14,8 +14,8 @@ describe("researchSnapshotGroups", () => {
     expect(pharmaCodes).not.toContain("NET_NPA_PERCENT")
     expect(pharmaCodes).not.toContain("PBV_ADJUSTED_PROVIDER")
     expect(pharmaCodes).toContain("OPM_TTM")
-    expect(pharmaCodes).toContain("ROCE_ANNUAL")
-    expect(pharmaCodes).toContain("REVENUE_TTM")
+    expect(pharmaCodes).toContain("ROCE_MANAGEMENT_ANNUAL")
+    expect(pharmaCodes).toContain("REVENUE_ANNUAL")
     expect(pharmaCodes).toContain("PE_TTM")
   })
 

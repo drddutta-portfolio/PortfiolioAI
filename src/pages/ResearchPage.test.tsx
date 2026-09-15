@@ -58,8 +58,8 @@ describe("ResearchPage", () => {
     expect(screen.getByText("5.00%")).toBeInTheDocument()
     expect(screen.getByText("Zerodha")).toBeInTheDocument()
     expect(screen.getByText("Angel One")).toBeInTheDocument()
-    expect(screen.getByText("Target price").closest("article")).toHaveTextContent("Unavailable")
-    expect(screen.getByText("Stop loss").closest("article")).toHaveTextContent("Unavailable")
+    expect(screen.getByText("Target price").closest("article")).toHaveTextContent("Not setNot configured")
+    expect(screen.getByText("Stop loss").closest("article")).toHaveTextContent("Not setNot configured")
   })
   it("uses Overview as a research cockpit without repeating position cards", () => {
     renderPage()
@@ -67,7 +67,7 @@ describe("ResearchPage", () => {
     expect(panel).toHaveTextContent("Quality at a glance")
     expect(panel).toHaveTextContent("ROE18%")
     expect(panel).toHaveTextContent("Growth at a glance")
-    expect(panel).toHaveTextContent("Revenue (TTM)1000")
+    expect(panel).toHaveTextContent("Revenue (TTM)₹1,000 Cr")
     expect(panel).toHaveTextContent("Provider Adjusted P/B4.2")
     expect(panel).toHaveTextContent("CONFLICTING")
     expect(panel).toHaveTextContent("Promoter51%")
@@ -81,8 +81,8 @@ describe("ResearchPage", () => {
   it("changes tabs and filters evidence without a provider or budget action", () => {
     renderPage()
     fireEvent.click(screen.getByRole("tab", { name: "Valuation" }))
-    expect(screen.getByText("Provider Adjusted P/B")).toBeInTheDocument()
-    expect(screen.getByText("CONFLICTING")).toBeInTheDocument()
+    expect(screen.getAllByText("Provider Adjusted P/B")).not.toHaveLength(0)
+    expect(screen.getAllByText("CONFLICTING")).not.toHaveLength(0)
     fireEvent.click(screen.getByRole("tab", { name: "Evidence" }))
     fireEvent.change(screen.getByLabelText("Status"), { target: { value: "CONFLICTING" } })
     expect(screen.getByText("Competing / unselected")).toBeInTheDocument()
@@ -90,8 +90,9 @@ describe("ResearchPage", () => {
   })
   it("retains ownership period and does not fabricate a trend", () => {
     renderPage(); fireEvent.click(screen.getByRole("tab", { name: "Ownership" }))
-    expect(screen.getByText(/One reporting period is available/)).toBeInTheDocument()
-    expect(screen.getByText(/30 Jun 2026/)).toBeInTheDocument()
+    expect(screen.getByText("reporting periods").closest("div")).toHaveTextContent("1reporting periods")
+    expect(screen.getByRole("heading", { name: "Quarterly ownership trend" })).toBeInTheDocument()
+    expect(screen.getAllByText(/30 Jun 2026/)).not.toHaveLength(0)
     expect(providerCall).not.toHaveBeenCalled()
   })
   it("shows review-required document metadata without an open action", () => {
