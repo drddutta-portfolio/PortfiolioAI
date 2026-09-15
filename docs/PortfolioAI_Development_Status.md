@@ -286,7 +286,7 @@ These are explicit limitations, not invitations to fabricate values:
 
 ## J. Next work
 
-The immediate next step is to decide whether to repair the two newly confirmed historical replay defects and the pre-existing `get_portfolio_profile_weight_context_v1` lint error through new forward-only migrations. R4N remains unapplied to the ordinary local database and production. Production application, production assignment, evidence ingestion, provider execution and scoring remain separately gated.
+Two forward-only repair migrations are now prepared but unapplied. They canonicalize final pg_cron/NEWS-policy state without touching schedules and replace only the ambiguous internal alias in `get_portfolio_profile_weight_context_v1`. `docs/R4N_Forward_Only_Baseline_Repair_Plan.md` records their exact expected changes and verification gates. The duplicate historical versions remain a separate baseline/squash concern because a forward migration cannot repair legacy ledger identities. The immediate next step is owner review of this plan followed by disposable-stack verification; ordinary-local and production application remain unapplied. Production assignment, evidence ingestion, provider execution and scoring remain separately gated.
 
 After R4M disposition, the broader repository sequence remains:
 
