@@ -1,7 +1,9 @@
 # R4N local migration replay audit and fixture strategy
 
-Status: **AUDIT COMPLETE / EXECUTION NOT STARTED**  
-Scope: local disposable Supabase only  
+Status: **DISPOSABLE REPLAY COMPLETE / ORDINARY LOCAL AND PRODUCTION UNCHANGED**
+
+Scope: local disposable Supabase only
+
 Production impact: none
 
 ## 1. Purpose and safety boundary
@@ -120,6 +122,27 @@ The replay must stop if:
 - any committed migration differs between the repository and temporary copy except the four filename-only version normalizations;
 - the ordinary local or linked production migration history changes.
 
-## 5. Decision requested
+## 5. Execution result — 15 September 2026
 
-The audited strategy is ready for owner review. No migration has been applied under this strategy. The next action is to execute this isolated replay exactly as specified after confirmation.
+The owner approved the strategy and the replay was executed in a separately named temporary Supabase stack. Every committed repository migration remained byte-identical; only the four documented filenames were normalized in the temporary copy.
+
+Two additional historical replay dependencies surfaced and were reported before continuation:
+
+1. `20260913130000_add_stored_evidence_news_reclassification_v2.sql` references `cron.job` before the repository creates `pg_cron` in `20260913133000`. A temporary structural prerequisite created `pg_cron` at `20260913125500`; it added no business data.
+2. `20260913133000_reconcile_n5_scheduler_production_state.sql` retires NEWS policy V6 with `is_enabled=false` but does not set the `freshness_basis='DISABLED'` value required by the existing `refresh_domain_policy_disabled` constraint. A temporary trigger at `20260913132500` normalized only that retirement transition and was removed at `20260913133500`. The final constraint and schema were preserved.
+
+After these reported compatibility repairs:
+
+- all 76 repository migrations replayed successfully;
+- the four temporary filename normalizations, one MOTHERSON fixture migration and three temporary structural/cleanup migrations produced an 80-entry disposable ledger;
+- R4N `20260915094042` applied last;
+- the R4N pgTAP suite passed all 19 tests;
+- direct checks passed for five registered contracts, zero assignments, zero secondary exposures, RLS on all three tables, all three expected policies, grants and update/delete immutability;
+- the temporary compatibility trigger/function were absent from the final schema;
+- evidence observations, score runs, recommendation runs and sizing assessments all remained empty;
+- the only user, portfolio, security and transaction rows were the four deterministic test-fixture records; every transaction price/amount/cost field was null;
+- the pg_net request queue contained zero rows;
+- the disposable stack, volumes and directory were destroyed;
+- the ordinary local migration ledger remained unchanged through `20260907123000`, and no linked/production mutation command was executed.
+
+The database linter also found a pre-existing, non-R4N error in `public.get_portfolio_profile_weight_context_v1`: `total_position_count` is ambiguous. This did not affect migration replay or the R4N tests and was not repaired within this scoped verification.
