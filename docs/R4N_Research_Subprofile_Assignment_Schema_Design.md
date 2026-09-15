@@ -1,8 +1,8 @@
 # R4N — Research Subprofile Assignment Schema Design
 
-**Status:** repository migration created for review; not applied to any database
+**Status:** repository migrations created and verified locally; production unapplied
 
-**Migration:** `20260915094042_create_research_subprofile_assignments.sql`
+**Migrations:** baseline contract `20260915094042_create_research_subprofile_assignments.sql` and production-compatible forward reconciliation `20260915190026_reconcile_r4n_research_subprofiles.sql`
 
 ## Authority boundary
 

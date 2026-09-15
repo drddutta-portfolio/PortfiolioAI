@@ -225,3 +225,26 @@ The immediate next step is gate 1 only. No database or active migration history 
   provider action, deployment or scheduler mutation was performed.
 - The exact evidence and required forward-only reconciliation sequence are recorded
   in `docs/R4N_Production_History_Bridge_Read_Only_Audit_2026-09-16.md`.
+
+## 14. R4N forward-only production-shape proof — 16 September 2026
+
+- A new additive migration,
+  `20260915190026_reconcile_r4n_research_subprofiles.sql`, carries only the R4N
+  research-subprofile authority into an existing compatible schema. It excludes
+  assignments, scoring activation, position sizing, cron, providers and ledger
+  repair.
+- The migration passed against a disposable schema-only representation of
+  production, including 19/19 pgTAP assertions, deterministic owner/cross-owner RLS
+  checks, immutable-history checks and a safe second application.
+- The three R4N tables increased the production-shape public-table count from 81 to
+  84, with RLS enabled on 84/84. Five contracts and zero assignments/exposures
+  remained after fixture rollback.
+- The production-only AMFI fallback function was preserved and the migration did
+  not introduce `position_sizing_assessments`.
+- Full schema lint exposed inherited production-shape issues and expected missing
+  extension/vault dependencies in the public-only clone. These were documented,
+  not masked or incidentally changed.
+- The disposable database and synthetic fixture were destroyed. Production and the
+  ordinary local database were unchanged.
+- The exact proof and remaining deployment gate are recorded in
+  `docs/R4N_Forward_Only_Production_Shape_Proof_2026-09-16.md`.
