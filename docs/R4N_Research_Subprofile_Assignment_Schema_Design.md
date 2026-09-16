@@ -2,7 +2,7 @@
 
 **Status:** repository migrations created and verified locally; production unapplied
 
-**Migrations:** baseline contract `20260915094042_create_research_subprofile_assignments.sql` and production-compatible forward reconciliation `20260915190026_reconcile_r4n_research_subprofiles.sql`
+**Migrations:** baseline contract `20260915094042_create_research_subprofile_assignments.sql`; production-compatible forward reconciliation `20260915190026_reconcile_r4n_research_subprofiles.sql`; and the separately bounded NEWS/function repairs listed in `docs/R4N_Production_Forward_Deployment_Package.md`
 
 ## Authority boundary
 

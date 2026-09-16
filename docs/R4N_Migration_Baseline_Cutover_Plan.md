@@ -248,3 +248,23 @@ The immediate next step is gate 1 only. No database or active migration history 
   ordinary local database were unchanged.
 - The exact proof and remaining deployment gate are recorded in
   `docs/R4N_Forward_Only_Production_Shape_Proof_2026-09-16.md`.
+
+## 15. Remaining repairs and isolated deployment proof — 16 September 2026
+
+- Production pre-state confirmed the weight-context ambiguity and an incorrectly
+  enabled but closed NEWS V6 row; NEWS V7 and both active scheduler definitions
+  remain the governed current state.
+- Two new forward migrations repair only those confirmed final-state defects. They
+  do not schedule, unschedule, invoke providers or modify business rows.
+- The full three-migration candidate set passed 35/35 pgTAP assertions, runtime
+  function execution, cron fingerprint preservation and error-level database lint
+  against a disposable production-shaped database.
+- An isolated CLI bundle failed closed when a synthetic remote ledger version was
+  missing from its local markers. With the already-applied version represented by a
+  comment-only marker, dry run and execution selected exactly the three approved
+  forward migrations and no unrelated active-local version.
+- The disposable database and bundle were destroyed. Production, its ledger, cron,
+  providers and business data remained unchanged.
+- Exact checksums, preflight and validation queries, deployment commands and the
+  forward-recovery plan are in
+  `docs/R4N_Production_Forward_Deployment_Package.md`.

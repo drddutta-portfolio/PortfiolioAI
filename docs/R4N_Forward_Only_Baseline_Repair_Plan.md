@@ -2,6 +2,11 @@
 
 Status: **DISPOSABLE VERIFICATION PASSED / ORDINARY LOCAL AND PRODUCTION NOT APPLIED**
 
+The production-compatible successors and isolated deployment proof are documented
+in `docs/R4N_Production_Forward_Deployment_Package.md`. The original repair SQL in
+the immutable legacy archive remains historical evidence and is not the production
+deployment candidate.
+
 ## Scope
 
 Two new migrations repair the final database contract without editing any historical migration:
