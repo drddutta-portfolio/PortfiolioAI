@@ -1,598 +1,246 @@
 # PortfolioAI — ChatGPT Cumulative Development Handoff
 
 **Purpose:** Persistent, cumulative engineering handoff between ChatGPT and Codex.  
-**Rule:** This file is append-only in spirit. It must preserve every development stage completed from this checkpoint onward, not merely the latest state.  
+**Rule:** This file preserves every development stage from the ChatGPT takeover checkpoint onward. Historical entries remain even when later sections supersede their stop points.  
 **Owner:** Dr. Dibyendu Dutta  
 **Repository:** `drddutta-portfolio/PortfiolioAI`  
 **Created:** 16 September 2026  
-**Current working line:** `r4n-pharma-subprofile-architecture` / PR #101  
-**Current verified PR head:** `6e55c8e44e3dde3359f418715db60944c2abee36`
+**Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
 
 ---
 
-## 1. How this file must be used
+## 1. Permanent engineering rules
 
-After every meaningful PortfolioAI build, fix, migration design, test cycle, UI review, deployment gate, pilot, or architecture decision performed with ChatGPT:
-
-1. Update **Current State**.
-2. Append a new entry to **Cumulative Build History**.
-3. Update **Forward Development Path** only when the architecture or approved sequence changes.
-4. Record exact branch / PR / commit identifiers when known.
-5. Record verification results.
-6. Record whether production was touched.
-7. Record every remaining gate requiring owner approval.
-8. Never delete prior completed-stage entries merely because they are superseded.
-9. Mark superseded decisions explicitly instead of rewriting history.
-10. Before handing work back to Codex, give Codex this entire file, not just the latest section.
-
-This file is a handoff/history artifact, not a replacement for the repository’s canonical architecture documents. Where this file conflicts with canonical repository documents, the canonical hierarchy in the repository governs; the conflict must be surfaced and reconciled.
-
----
-
-## 2. Permanent PortfolioAI engineering rules
-
-### 2.1 Universal Research workspace
-- PortfolioAI uses one universal Stock Research workspace.
-- Do not create symbol-specific or sector-specific page trees unless architecture explicitly requires it.
-- Sector / research profile / subprofile changes:
-  - analytical content,
-  - evidence requirements,
-  - applicability,
-  - refresh modules,
-  - terminology where needed,
-  - readiness contracts,
-  - methodology.
-- They do **not** change the shared Research page shell.
-
-### 2.2 Canonical authorities
-- `current_security_enrichment_v1` is the canonical authority for application sector / industry / market-cap classification.
-- Research profile and research subprofile are separate canonical/versioned authorities.
-- Research methodology must not rewrite user-visible sector/industry/market-cap classification.
-
-### 2.3 Evidence and scoring semantics
+- One universal Stock Research workspace. Do not create symbol-specific or sector-specific page trees unless architecture explicitly requires it.
+- `current_security_enrichment_v1` remains canonical for application sector / industry / market-cap classification.
+- Research profile and research subprofile are separate canonical/versioned authorities and must not rewrite user-facing classification.
 - Missing evidence is **not zero**.
-- N/A is allowed only when explicitly not applicable.
-- Missing/provisional/disputed/conflicting required research-subprofile assignment must fail closed.
-- Do not invent score curves, weights, thresholds, recommendations, or methodology.
-- HDFCBANK / BANK_NBFC is a visual and interaction reference, not universal methodology.
+- N/A is valid only when explicitly not applicable.
+- Missing/provisional/disputed/conflicting required subprofile state must fail closed.
+- Never invent scoring curves, thresholds, weights, recommendations, or methodology.
+- HDFCBANK / BANK_NBFC is a visual/interaction reference, not universal methodology.
 - PHARMA_V1 owns Pharma methodology.
-- Core and Satellite are separate methodologies.
-- Modified Quality-Growth / QGVM-style diagnostic belongs to Core selection, not Satellite.
+- Core and Satellite are separate methodologies; failing a strict Core quality-growth screen does not automatically imply Satellite or Exit.
 
-### 2.4 PHARMA_V1 subprofiles
-Current V1 business-model subprofiles:
+Current PHARMA_V1 subprofiles:
 1. `API_BULK_DRUGS`
 2. `DOMESTIC_FORMULATIONS`
 3. `GLOBAL_GENERICS`
 4. `BIOPHARMA_BIOSIMILARS`
 5. `CDMO_CRAMS`
 
-### 2.5 Production safety
-Never assume permission to:
-- merge PRs,
-- deploy the application,
-- deploy Edge Functions,
-- apply Supabase migrations,
-- alter migration history,
-- change cron/schedulers,
-- call external/paid providers,
-- ingest evidence,
-- create research assignments,
-- write scores,
-- write recommendations,
-- write position sizing,
-- modify production data.
+### Production safety
+Never assume permission to merge, deploy, apply migrations, alter migration history, change cron/schedulers, call paid providers, ingest evidence, create assignments, write scores/recommendations/sizing, or modify production data. Every such action requires explicit owner authorization for that exact action.
 
-Every such action requires explicit owner authorization for that exact action.
-
-Before any production-impacting recommendation:
-1. verify current repository state;
-2. verify the exact production state relevant to the action;
-3. state the safe next gate;
-4. state what still requires explicit approval.
+Before a production-impacting action: verify repo state, verify live production state, state the next safe gate, and identify remaining approvals.
 
 ---
 
-## 3. Current state — checkpoint at takeover
+## 2. Inherited takeover baseline
 
-### 3.1 Git / PR
-- Repository: `drddutta-portfolio/PortfiolioAI`
-- Active development branch: `r4n-pharma-subprofile-architecture`
-- PR: **#101 — R4N: freeze Research contracts and add Pharma subprofile foundation**
-- PR status: **OPEN / DRAFT / UNMERGED**
-- Verified PR head after Codex corrections:
-  `6e55c8e44e3dde3359f418715db60944c2abee36`
-- Architecture Guard on this head: **GREEN**
-- `PORTFOLIOAI_CURRENT_STATE_AUDIT.md` remains unrelated/untracked and was intentionally not committed.
-
-### 3.2 Latest Codex correction set now pushed
-Codex completed and pushed:
-- fail-closed resolution for active disputed/provisional overlaps;
-- effective interval semantics aligned with PostgreSQL half-open `[from, to)`;
-- regression tests;
-- a new forward migration for complete secondary-exposure lifecycle/provenance contract;
-- stale deployment/status documentation corrections;
-- whitespace cleanup in candidate baseline files.
-
-### 3.3 Local verification already completed
-Latest reported local verification:
-- local Supabase reset + full migration replay: PASS
-- R4N pgTAP: **41/41**
-- application tests: **446/446**
-- Edge tests: **140/140**
-- TypeScript: PASS
-- architecture guard: PASS
-- focused lint: PASS
-- architecture lint: PASS
-- production build: PASS
-- schema diff: PASS
-- RLS checks: PASS
-- database lint: PASS except known inherited volatility warning
-- secret scan: PASS
-- `git diff --check`: PASS
-- public tables with RLS: **85/85**
-- research assignments: empty
-- secondary exposures: empty
-- Edge lint retains three unrelated pre-existing errors
-- local cron environment intentionally has zero jobs; the three production-cron assertions are not valid for the inert local environment.
-
-### 3.4 Production-state caution
-Do **not** infer exact production migration state solely from this handoff.
-
-Current branch documentation states that the R4N production schema is deployed, while the newly added secondary-exposure reconciliation migration is production-unapplied.
-
-The most recent Codex run described here made **no production migration, assignment, provider call, evidence ingestion, score, recommendation, sizing, or scheduler change**.
-
-Therefore, before any future production action, perform a fresh read-only production preflight and determine:
-- which R4N migrations are already in the production ledger;
-- whether the new secondary-exposure reconciliation migration is absent/pending;
-- current R4N table/contract/assignment/exposure state;
-- NEWS policy/cron state where relevant;
-- relevant business-row preservation counts;
-- backup/recovery readiness.
-
----
-
-## 4. Immediate unfinished work
-
-### Stage LUI-1 — Authenticated localhost UI review
-
-**Status:** NOT YET COMPLETED.
-
-Codex stopped immediately before creating the minimum local-only fixtures required for authenticated UI review.
-
-Required local-only fixture:
-- one synthetic local authenticated owner;
-- minimum portfolio/holding rows required by the application;
-- HDFCBANK;
-- TORNTPHARM;
-- canonical application classification required for BANK_NBFC / PHARMA_V1 routing.
-
-Must remain absent during the first review:
-- research-subprofile assignments;
-- secondary exposures;
-- fundamental/research evidence;
-- scores;
-- recommendations;
-- position sizing;
-- provider calls;
-- scheduler jobs.
-
-### Localhost acceptance checks
-
-#### HDFCBANK
-- same universal Research page shell;
-- resolves through BANK_NBFC;
-- existing bank labels/metrics/applicability preserved;
-- no Pharma terminology leakage;
-- no regression in readiness/heatmap/refresh/presentation.
-
-#### TORNTPHARM
-- same universal Research page shell;
-- resolves at PHARMA_V1 parent profile level;
-- no BANK_NBFC metric leakage;
-- PHARMA labels/applicability/Business Durability/external ratings render correctly;
-- no subtype is silently inferred while assignment tables are empty.
-
-#### Fail-closed semantics
-With no reviewed subprofile assignment:
-- no `DOMESTIC_FORMULATIONS` or other subtype may be fabricated;
-- subtype-specific readiness/scoring must not become READY;
-- missing evidence must not become zero;
-- N/A only for explicit non-applicability;
-- missing/provisional/disputed/conflicting assignment blocks downstream readiness/scoring/recommendation as designed.
-
-#### Browser health
-Inspect:
-- console errors;
-- React warnings relevant to this work;
-- failed network requests;
-- unexpected production URLs;
-- external/provider calls;
-- incorrect Supabase endpoint.
-
-**Production must remain untouched.**
-
----
-
-## 5. Forward development path from here
-
-This is the current intended sequence. Each gate must be revalidated against the repository before execution.
-
-### Gate A — Finish localhost UI proof
-1. Prove frontend points only to local Supabase.
-2. Create disposable minimum local fixtures.
-3. Run authenticated localhost UI.
-4. Compare HDFCBANK and TORNTPHARM.
-5. Capture defects/screenshots.
-6. Fix repository/UI defects only if needed.
-7. Re-run relevant automated tests.
-8. Owner visually approves localhost behavior.
-
-### Gate B — Stabilize PR #101
-1. Ensure all localhost-derived corrections are committed to PR #101.
-2. Re-run Architecture Guard / CI.
-3. Reconcile status documentation.
-4. Keep PR draft until owner is satisfied.
-5. Do not merge merely because CI is green.
-
-### Gate C — Read-only production preflight
-Before any migration/deployment:
-1. inspect current remote migration ledger;
-2. verify exact checksum of every pending forward migration;
-3. verify current R4N tables/contracts/assignments/exposures;
-4. verify RLS/grants;
-5. verify business-row preservation baselines;
-6. verify cron/NEWS state where affected;
-7. verify backup/recovery state;
-8. abort if production state differs materially from the approved package.
-
-No write occurs in this gate.
-
-### Gate D — Production schema reconciliation, only if separately authorized
-If a forward R4N migration remains pending:
-- apply only the explicitly authorized, checksum-verified forward migration(s);
-- use the repository-approved production deployment mechanism;
-- never use migration repair;
-- never rewrite migration ledger/history;
-- never use ordinary broad `db push` if the documented isolated deployment package is still required;
-- validate expected state immediately afterward.
-
-This authorization does not authorize assignment/evidence/scoring/recommendation work.
-
-### Gate E — Reviewed Pharma subprofile assignments
-After schema is stable:
-1. review the owner’s Pharma stock mapping;
-2. convert only reviewed decisions into canonical assignment records;
-3. preserve effective intervals/provenance/reviewer state;
-4. use secondary exposures only where explicitly justified;
-5. keep provisional/disputed cases fail-closed;
-6. verify resolver behavior.
-
-Likely first reference:
-- TORNTPHARM → reviewed `DOMESTIC_FORMULATIONS` only after explicit approval and canonical write.
-
-### Gate F — TORNTPHARM official-evidence pilot
-Use TORNTPHARM as the controlled PHARMA_V1 reference implementation:
-1. validate official-source evidence package;
-2. dry-run classifier/validator;
-3. confirm parent vs subtype evidence mapping;
-4. confirm derived metric lineage;
-5. ingest only after explicit approval;
-6. verify stored provenance and readiness;
-7. no score invention.
-
-### Gate G — PHARMA_V1 scoring methodology
-Before numeric scoring:
-1. finalize and approve methodology;
-2. define evidence-to-score curves/thresholds/weights explicitly;
-3. version the scoring contract;
-4. test missing/conflicting evidence;
-5. preserve evidence-only states where no numeric methodology is approved.
-
-No generic BANK_NBFC scoring may be copied into Pharma.
-
-### Gate H — TORNTPHARM scored pilot
-After methodology approval:
-1. compute deterministic score;
-2. persist lineage only through approved path;
-3. test UI scorecard/readiness;
-4. verify reproducibility;
-5. keep recommendation as a separate downstream gate.
-
-### Gate I — Recommendation layer
-Only after score lineage and readiness are valid:
-1. define/confirm recommendation contract;
-2. connect evidence + score lineage;
-3. pilot on TORNTPHARM;
-4. persist only with explicit owner approval;
-5. preserve human decision authority.
-
-### Gate J — Expand PHARMA_V1 coverage
-Roll out by subprofile in controlled cohorts:
-- Domestic Formulations;
-- Global Generics;
-- API/Bulk Drugs;
-- CDMO/CRAMS;
-- Biopharma/Biosimilars.
-
-For each cohort:
-- assignment review;
-- evidence contract;
-- official/provider source plan;
-- ingestion validation;
-- readiness;
-- scoring only where methodology is approved;
-- regression against universal Research UI.
-
-### Gate K — Portfolio-wide Research profile expansion
-After PHARMA_V1 is mature:
-- add new profile families using the same universal workspace;
-- do not create new page trees;
-- register methodology/evidence/readiness contracts by profile;
-- maintain `current_security_enrichment_v1` as classification authority.
-
-### Gate L — Core/Satellite decision architecture
-Keep distinct:
-- Core Selection / QG(QGVM-style) diagnostic;
-- Core Health;
-- Satellite Opportunity methodology;
-- Exit Radar;
-- Position Sizing;
-- Movement/rebalancing.
-
-Do not classify a security as Satellite merely because it fails a Core quality-growth screen.
-
-### Gate M — Coverage and automation
-Only after individual engines are proven:
-- controlled portfolio-wide evidence coverage;
-- coverage/readiness registry integration;
-- bounded refresh orchestration;
-- scheduler activation only where separately approved;
-- provider budget/accounting controls preserved;
-- no background paid-provider activity from normal browsing.
-
----
-
-## 6. Cumulative Build History
-
-### Entry 000 — Takeover baseline
+### Entry 000 — Takeover from Codex
 **Date:** 16 September 2026  
-**Actor:** ChatGPT takeover from Codex  
 **Branch:** `r4n-pharma-subprofile-architecture`  
 **PR:** #101  
-**Head:** `6e55c8e44e3dde3359f418715db60944c2abee36`
+**Codex head:** `6e55c8e44e3dde3359f418715db60944c2abee36`
 
-**Inherited completed work:**
+Inherited completed work:
 - R4M universal profile-driven Research workspace.
 - R4N Research contract freeze and Pharma subprofile architecture.
-- assignment-resolution corrections for provisional/disputed overlap.
-- PostgreSQL half-open effective interval semantics.
-- secondary-exposure lifecycle/provenance forward migration authored but not assumed deployed.
-- local migration replay and broad verification passed.
-- PR Architecture Guard green.
-- production untouched by the latest Codex correction run.
+- Fail-closed assignment resolution for provisional/disputed overlap.
+- PostgreSQL half-open `[from,to)` effective-interval semantics.
+- Forward migration for complete secondary-exposure lifecycle/provenance authored but not assumed deployed.
+- Local full migration replay passed.
+- R4N pgTAP 41/41, app tests 446/446, Edge tests 140/140.
+- TypeScript, Architecture Guard, focused lint, architecture lint, production build, schema diff, RLS checks, secret scan and `git diff --check` passed.
+- 85/85 public tables with RLS.
+- Assignments and secondary exposures empty at takeover.
+- Three unrelated pre-existing Edge lint errors retained.
 
-**Unfinished at takeover:**
-- authenticated localhost UI review with disposable local-only fixtures.
+Unfinished at takeover: authenticated localhost Research UI proof for HDFCBANK and TORNTPHARM.
 
-**Next safe action:**
-- finish localhost UI proof without touching production or paid providers.
+---
 
-**Owner approvals still required later for:**
-- any production migration;
-- PR merge;
-- production deployment;
-- canonical subprofile assignment writes;
-- evidence ingestion;
-- scoring methodology/score writes;
-- recommendation writes;
-- sizing writes;
-- scheduler/provider activity.
+## 3. Entry 001 — LUI-1 fixture design and dependency audit
 
-### Entry 001 — LUI-1 fixture design and repository dependency audit
 **Date:** 16 September 2026  
 **Actor:** ChatGPT  
-**Branch inspected:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101  
-**Verified head:** `6e55c8e44e3dde3359f418715db60944c2abee36`
+**Branch:** `r4n-pharma-subprofile-architecture`
 
-**Goal:** Resume from Codex credit exhaustion and prepare the minimum authenticated localhost Research UI proof without touching production.
+Verified that the Research page requires an authenticated active portfolio plus transaction-derived open positions; securities alone are insufficient. Confirmed local frontend/Supabase endpoints and confirmed profile resolution for the no-assignment proof:
+- Banking / bank industry -> `BANK_NBFC`
+- Pharma / Pharmaceuticals -> `PHARMA_V1`
 
-**Work completed:**
-- Re-verified PR #101 is the active draft at head `6e55c8e...`.
-- Inspected `ResearchPage`, portfolio loading, profile resolution, Pharma scoring repository, local Supabase config and application environment contract.
-- Confirmed the Research page requires a real active portfolio plus transaction-derived open positions; securities alone are insufficient.
-- Confirmed local frontend target is `http://localhost:5173` and local Supabase API/DB/Studio ports are 54321/54322/54323.
-- Confirmed profile resolution is sector/industry driven for the initial no-assignment review:
-  - Banking / bank industry -> `BANK_NBFC`
-  - Pharma / Pharmaceuticals -> `PHARMA_V1`
-- Confirmed `current_security_enrichment_v1` derives sector/industry from selected security-attribute observations, so the fixture uses that canonical path rather than relying only on legacy `securities.sector_id`.
-- Performed read-only production schema introspection only to verify current columns/constraints needed to make the local fixture schema-correct.
-- Authored `PORTFOLIOAI_LUI1_LOCAL_FIXTURE.sql` as a disposable local-only fixture:
-  - one owner-bound portfolio,
-  - one local broker/account,
-  - HDFCBANK + TORNTPHARM,
-  - two opening-position transactions,
-  - canonical local classification observations/decisions,
-  - no subprofile assignment,
-  - no secondary exposure,
-  - no research evidence,
-  - no score/recommendation/sizing write,
-  - no provider or scheduler activity.
+Created a disposable local-only fixture plan with one portfolio, local broker/account, HDFCBANK, TORNTPHARM, opening positions and canonical classification observations/decisions. Explicitly excluded subprofile assignments, secondary exposures, evidence, scores, recommendations, sizing, provider calls and scheduler activity.
 
-**Production touched:** NO.  
-Only read-only schema/view inspection was performed against production.
-
-**Current required owner/local action:**
-1. Start local Supabase on the PR #101 branch.
-2. Create exactly one local Auth user in local Studio.
-3. Run the LUI-1 local fixture SQL against the local database.
-4. Configure the frontend to local Supabase only and run `npm run dev`.
-5. Open the HDFCBANK and TORNTPHARM Research URLs and perform the browser-level acceptance review.
-
-**Next safe gate:** Execute the local fixture and authenticated localhost visual/browser review.
-
-**Explicit approvals still required:** all production migration/deployment/merge/assignment/evidence/scoring/recommendation/sizing/scheduler actions.
+Only read-only production schema/view inspection was used to make the local fixture schema-correct. Production writes: **NONE**.
 
 ---
 
-## 7. Update template for every future build
+## 4. Entry 002 — LUI-1 authenticated localhost proof
 
-Copy this block and append it below the previous entry.
-
-### Entry NNN — <stage name>
-**Date:**  
-**Actor:** ChatGPT / owner-guided Supabase / Codex  
-**Branch:**  
-**PR:**  
-**Commit(s):**  
-
-**Goal:**  
-
-**Changes made:**  
-- 
-
-**Files/components/migrations affected:**  
-- 
-
-**Database/Supabase action:**  
-- None / local-only / read-only production / authorized production write
-
-**Production touched:** NO / YES  
-If YES, exact authorization and action:
-
-**Verification:**  
-- tests:
-- build:
-- lint:
-- schema:
-- RLS:
-- browser:
-- network:
-- other:
-
-**Result:** PASS / PARTIAL / FAIL
-
-**Known limitations / debt:**  
-- 
-
-**Canonical decisions added or changed:**  
-- 
-
-**Next safe gate:**  
-
-**Explicit approvals still required:**  
-- 
-
----
-
-## 8. Codex handback instruction
-
-When Codex credits return, provide Codex this entire file and instruct:
-
-> Read this cumulative handoff first, then inspect the current GitHub branch, PR, canonical repository docs, and current Supabase state relevant to the next gate. Treat the handoff as historical context, not as a substitute for current verification. Preserve all production-safety gates. Continue from the newest unfinished stage and append your completed work back into this cumulative history rather than replacing it with a latest-state-only summary.
-
----
-
-## 9. Current stop point
-
-**STOP POINT:** Begin Stage LUI-1: disposable local fixture + authenticated localhost Research UI review.
-
-No production action is authorized by this file.
-
----
-
-## 10. Current state update — LUI-1 completed
-
-**Status:** PASS on 16 September 2026.
-
-This section supersedes the earlier Section 4 status and Section 9 stop point, which are retained as historical checkpoints.
-
-### Entry 002 — LUI-1 authenticated localhost Research UI proof
 **Date:** 16 September 2026  
-**Actor:** ChatGPT + owner-guided local Supabase/browser review  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101
+**Actor:** ChatGPT + owner-guided local Supabase/browser review
 
-**Goal:** Complete the disposable authenticated localhost proof for the universal Research workspace without touching production or paid providers.
+### Local setup and fixture behavior
+- `.env.local` pointed Vite only to `http://127.0.0.1:54321` with local publishable key, `VITE_APP_URL=http://localhost:5173`, and `VITE_MARKET_DATA_ENABLED=false`.
+- Initial fixture V1 deliberately aborted because local reset data already contained HDFCBANK/TORNTPHARM with different UUIDs; PostgreSQL rolled back completely and verification returned zero partial fixture rows.
+- Existing local IDs confirmed:
+  - HDFCBANK `a4000000-0000-0000-0000-000000000001`
+  - TORNTPHARM `a4000000-0000-0000-0000-000000000002`
+- Fixture V2 reused those IDs and committed successfully.
+- Local portfolio `LOCAL UI Research Review` contained two active opening positions.
+- HDFCBANK canonical classification: Banking / Private Sector Bank.
+- TORNTPHARM canonical classification: Pharma / Pharmaceuticals.
+- Market-cap evidence intentionally absent, therefore enrichment remained `PARTIAL` rather than being fabricated.
+- No research-subprofile assignments, secondary exposures, evidence, persisted scores/recommendations/sizing, provider calls or scheduler activity were created.
+- A local Auth ownership mismatch initially hid the fixture through RLS; the disposable local fixture portfolio was reassigned to the authenticated local user, after which the two holdings rendered. This validated ownership/RLS behavior and did not touch production.
 
-**Changes / local setup:**
-- Created `.env.local` pointing Vite to local Supabase only:
-  - `VITE_SUPABASE_URL=http://127.0.0.1:54321`
-  - local publishable key
-  - `VITE_APP_URL=http://localhost:5173`
-  - `VITE_MARKET_DATA_ENABLED=false`
-- Initial fixture attempt aborted on a deliberate safety assertion because local reset data already contained HDFCBANK and TORNTPHARM with pre-existing security UUIDs.
-- PostgreSQL returned `ROLLBACK`; verification showed zero partial fixture portfolio/enrichment/transaction rows after the failed attempt.
-- Existing local security identities were confirmed:
-  - HDFCBANK: `a4000000-0000-0000-0000-000000000001`
-  - TORNTPHARM: `a4000000-0000-0000-0000-000000000002`
-- Corrected fixture V2 reused those existing local security IDs and committed successfully.
-- Local portfolio `LOCAL UI Research Review` was created with two opening positions and canonical classification evidence.
-- Fixture portfolio ownership was reassigned locally to the authenticated local `dr.d.dutta@gmail.com` user after the browser session revealed a second local Auth user; this was local-only and validated RLS ownership behavior.
-
-**Local fixture result:**
-- HDFCBANK -> Banking / Private Sector Bank.
-- TORNTPHARM -> Pharma / Pharmaceuticals.
-- Two active opening positions present.
-- Market-cap classification intentionally absent, leaving enrichment `PARTIAL` rather than fabricating evidence.
-- No research-subprofile assignment created.
-- No secondary exposure created.
-- No research/fundamental evidence seeded.
-- No persisted score/recommendation/sizing write created.
-- No provider refresh or scheduler activity enabled.
-
-**HDFCBANK browser verification:** PASS.
-- Shared universal Research shell rendered.
-- Resolved to `Banks / NBFCs` / BANK_NBFC sector-resolved behavior.
-- Canonical sector/industry rendered correctly.
+### HDFCBANK verification — PASS
+- Universal Research shell rendered.
+- Resolved through BANK_NBFC / Banks & NBFCs sector rule.
 - No Pharma terminology leakage.
-- Missing price/cost/P&L/evidence remained `Unavailable` rather than zero.
-- Recommendation/decision state remained pending/fail-closed with no invented score or recommendation.
+- Missing price/cost/P&L/evidence remained `Unavailable`, not zero.
+- No fabricated score or recommendation.
 
-**TORNTPHARM browser verification:** PASS.
+### TORNTPHARM verification — PASS
 - Same universal Research shell rendered.
-- Canonical Pharma / Pharmaceuticals classification rendered correctly.
-- PHARMA_V1 recommendation/readiness context visible.
-- No BANK_NBFC metric leakage.
-- No subtype such as `DOMESTIC_FORMULATIONS` was silently inferred.
-- Recommendation stayed `NOT READY` / pending with missing methodology/evidence explicit.
-- Pharma scorecard showed 0% verified evidence and 0% score-ready, with dimensions explicitly `No validated evidence` rather than numeric zero scores.
-- Business Durability rendered as a real Pharma dimension and was **not** incorrectly marked N/A.
-- Business Durability inputs (R&D Expenditure, R&D Intensity, Pipeline / Launch / Approval Evidence) were `Unavailable`, as expected with no evidence.
-- External ratings showed 0 rated instruments and explicitly treated absence as insufficient evidence rather than a negative signal.
-- Pharma Research Readiness showed 0/13 requirements ready.
-- Canonical Pharma financial/history panels remained unavailable rather than fabricated.
+- PHARMA_V1 context visible with canonical Pharma / Pharmaceuticals classification.
+- No BANK_NBFC leakage.
+- No `DOMESTIC_FORMULATIONS` or other subtype silently inferred while assignments were empty.
+- Recommendation remained `NOT READY` / pending.
+- Scorecard showed 0% verified evidence and 0% score-ready while dimensions remained `No validated evidence`, not numeric zero scores.
+- Business Durability rendered as a real Pharma dimension and was not incorrectly N/A.
+- R&D Expenditure, R&D Intensity, and Pipeline / Launch / Approval Evidence remained `Unavailable` with no evidence.
+- External ratings showed 0 rated instruments and treated absence as insufficient evidence rather than a negative signal.
+- Pharma Research Readiness showed 0/13 ready.
 
-**Browser/network isolation:** PASS.
-- Verified an actual Research fetch request used `http://127.0.0.1:54321/rest/v1/...` with HTTP 200.
-- Filtering Network requests by `supabase.co` returned zero requests.
-- No production Supabase traffic observed during the verified page load.
-- No paid-provider refresh button was used.
-- Console displayed a Chrome async-listener/message-channel error pattern without a PortfolioAI stack trace; treated as browser-extension noise for this gate, not as an application defect.
+### Browser/network isolation — PASS
+- Actual Research request used `http://127.0.0.1:54321/rest/v1/...` and returned HTTP 200.
+- Filtering Network by `supabase.co` returned zero requests.
+- No paid-provider refresh was used.
+- The only Console message observed was a Chrome async-listener/message-channel pattern without a PortfolioAI stack trace; treated as browser-extension noise for this gate.
 
+**Result:** LUI-1 PASS.  
 **Production touched:** NO.
-- No production migration applied.
-- No production data modified.
-- No assignment/evidence/score/recommendation/sizing/scheduler/provider write occurred.
 
-**Result:** **LUI-1 PASS.**
+Commit recording this localhost proof: `d6d0f1afa5e83b936c32ac23ebc3a11136b230fd`.
 
-**Next safe gate:** Gate B — stabilize PR #101: inspect current PR head after documentation commits, reconcile the LUI-1 completion into repository status docs if appropriate, run/verify Architecture Guard and CI, and keep the PR draft until owner approval. No merge or production action is implied.
+---
 
-**Explicit approvals still required:**
-- PR merge;
-- any production migration or deployment;
-- canonical subprofile assignments;
-- evidence ingestion;
-- scoring methodology or persisted scores;
-- recommendation writes;
-- sizing writes;
-- scheduler/provider activity.
+## 5. Entry 003 — Gate B: stabilize PR #101
 
-### Current stop point
+**Date:** 16 September 2026  
+**Actor:** ChatGPT  
+**Verified head:** `d6d0f1afa5e83b936c32ac23ebc3a11136b230fd`
 
-**STOP POINT:** Stage LUI-1 is complete. Proceed to **Gate B — stabilize PR #101** using repository-only/read-only verification first.
+Repository/PR verification:
+- PR #101 remained OPEN / DRAFT / UNMERGED and mergeable.
+- Architecture Guard reran on the exact current head and passed.
+- Detailed job inspection found no failed/skipped architecture-critical steps: presentation-boundary enforcement, canonical-contract checks, TypeScript, architecture lint, full lint diagnostic and production build all passed.
+- No unresolved PR review comments or discussion threads.
+- Localhost proof revealed no application-code defect requiring a code change.
 
-No production action is authorized by this update.
+PR description stabilization:
+- The PR body was stale and still claimed no migration/schema change.
+- It was corrected to describe the evolved R4N scope, the three earlier authorized/deployed reconciliation migrations, the later still-unapplied secondary-exposure reconciliation migration, the localhost proof, validation counts and remaining gates.
+- This metadata edit did not merge or deploy anything.
+
+**Result:** Gate B PASS.  
+**Production touched:** NO.
+
+---
+
+## 6. Entry 004 — Gate C: fresh read-only production preflight
+
+**Date:** 16 September 2026  
+**Actor:** ChatGPT using connected Supabase/GitHub read-only inspection  
+**Supabase project:** `uxiyufbsbgzzdujzcdxe`
+
+### Migration ledger
+Production contains exactly the expected earlier R4N reconciliation migrations:
+1. `20260915190026_reconcile_r4n_research_subprofiles`
+2. `20260915193011_reconcile_news_policy_final_state`
+3. `20260915193024_reconcile_portfolio_weight_context`
+
+`20260916100032_reconcile_r4n_secondary_exposure_contract` is absent and genuinely pending.
+
+### Live preservation baseline
+- research_subprofile_contracts: 5
+- research_subprofile_assignments: 0
+- research_subprofile_secondary_exposures: 0
+- portfolios: 1
+- transactions: 492
+- securities: 273
+- fundamental_observations: 458
+- stock_recommendation_runs: 4
+
+These match the documented post-R4N baseline.
+
+### Pending-table shape
+`research_subprofile_secondary_exposures` still has the pre-reconciliation 10-column shape; lifecycle/confidence/effective-interval/reviewer-provenance columns from `20260916100032` are absent. No partial application detected.
+
+### RLS / grants
+- RLS enabled on research_subprofile_contracts, research_subprofile_assignments and research_subprofile_secondary_exposures.
+- Authenticated access remains SELECT-only.
+- Mutation remains service-role-only.
+
+### NEWS / cron preservation
+- NSE NEWS V6 remains disabled/closed with disabled freshness semantics.
+- NSE NEWS V7 remains current/enabled with 1800-second elapsed-time freshness.
+- Active cron jobs remain unchanged:
+  - `portfolioai-nse-announcements-20m` — `7,27,47 * * * *`
+  - `portfolioai-news-reconcile-5m` — `3-59/5 * * * *`
+
+### Backup / recovery readiness
+- `Manual Supabase Database Backup` exists on `main` and uses PostgreSQL 17 pg_dump, pg_restore archive validation, AES-256-CBC/PBKDF2 encryption, private Supabase Storage upload, SHA-256 byte-for-byte verification and cleanup.
+- Workflow run `35077675837`, attempt 4, completed successfully on 16 September 2026.
+- Production bucket `portfolioai-db-backups` contains the matching encrypted object and `.sha256` object under `manual/2026-09-16T09-28-57Z/`.
+- Encrypted object observed size: 4,599,872 bytes; checksum object: 65 bytes.
+
+**Result:** Gate C read-only preflight PASS.  
+**Production touched:** NO. All Gate C database queries were read-only.
+
+---
+
+## 7. Current production state and next gate
+
+PR #101 remains **OPEN / DRAFT / UNMERGED**.
+
+The next possible step is **Gate D — production schema reconciliation** for the still-pending migration:
+
+`20260916100032_reconcile_r4n_secondary_exposure_contract.sql`
+
+No production write is authorized by this handoff. Before Gate D execution:
+1. fetch the exact migration file from the current branch;
+2. verify/pin its SHA-256 checksum;
+3. verify the isolated repository-approved deployment procedure;
+4. recheck that the live preconditions/baselines remain unchanged immediately before execution;
+5. obtain explicit owner authorization to apply that exact migration.
+
+That authorization would not authorize PR merge, application deployment, Edge deployment, assignment creation, evidence ingestion, scoring, recommendations, sizing, provider calls or scheduler changes.
+
+---
+
+## 8. Forward development path
+
+- Gate D: production schema reconciliation only if explicitly authorized.
+- Gate E: reviewed Pharma subprofile assignments with provenance/effective intervals; TORNTPHARM may become `DOMESTIC_FORMULATIONS` only after explicit review/approval.
+- Gate F: TORNTPHARM official-evidence pilot; dry-run/validate first, ingest only after approval.
+- Gate G: approve/version PHARMA_V1 scoring curves/thresholds/weights before numeric scoring.
+- Gate H: deterministic TORNTPHARM scored pilot.
+- Gate I: recommendation layer as a separate downstream gate.
+- Gate J: controlled PHARMA_V1 rollout by subprofile cohorts.
+- Gate K: add other sector/profile families through the same universal Research workspace.
+- Gate L: keep Core Selection, Core Health, Satellite Opportunity, Exit Radar and Position Sizing as separate decision methodologies.
+- Gate M: portfolio-wide coverage/automation only after the individual engines are proven and provider accounting/scheduler safety remains intact.
+
+---
+
+## 9. Codex handback instruction
+
+When Codex credits return:
+
+> Read this cumulative handoff first, then independently inspect the current GitHub branch/PR, canonical repository docs, and current Supabase state relevant to the next gate. Treat this handoff as historical context, not a substitute for current verification. Preserve all production-safety gates. Continue from the newest unfinished stage and append completed work back into this cumulative history rather than replacing it with a latest-state-only summary.
+
+**CURRENT STOP POINT:** Gate B and Gate C are complete. Gate D requires a fresh exact migration/checksum/deployment verification and explicit owner authorization before any production write.
