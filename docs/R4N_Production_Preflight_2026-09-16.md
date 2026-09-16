@@ -1,6 +1,6 @@
 # R4N production forward-deployment preflight — 16 September 2026
 
-Status: **SQL PREFLIGHT PASSED / BACKUP GATE FAILED / PRODUCTION UNCHANGED**
+Status: **SQL PREFLIGHT + ALTERNATIVE RECOVERY PROOF + DRY RUN PASSED / PRODUCTION UNCHANGED**
 
 ## Scope and controls
 
@@ -79,22 +79,51 @@ A private temporary logical export was captured outside the repository:
 - public/application schema: 439,234 bytes;
 - public/application data: 30,153,187 bytes.
 
-The files were checksummed and permission-restricted. A full restore could not be
-proven in a standalone local database because Supabase logical dumps deliberately
-exclude platform-managed `pg_cron`, `extensions` and `vault` schemas on which the
-application schema depends. The disposable database was destroyed after the
-failed-closed verification attempts. This logical export does not replace a
-verified Supabase platform backup.
+The first standalone-database restore could not be proven because Supabase logical
+dumps deliberately exclude platform-managed `pg_cron`, `extensions` and `vault`
+schemas. The owner then approved a restore-tested alternative recovery artifact.
+
+The production schema and explicitly scoped `public` application data were
+restored into a second isolated Supabase stack with migrations and seed disabled.
+The single captured owner row from `auth.users` was restored only to validate the
+public ownership relationships. Verification found:
+
+- 180 public foreign keys checked with zero orphan references;
+- exact preservation of 1 portfolio, 489 transactions, 273 securities, 458
+  fundamental observations and 4 recommendation runs;
+- 81/81 public tables with RLS enabled;
+- all three R4N relations absent, matching production pre-state; and
+- NEWS and portfolio-weight function state matching the live preflight.
+
+The verified permission-restricted artifact is stored outside Git at
+`/Users/drdibyendudutta/Documents/ChatGPT/PortfolioAI_Backups/portfolioai-production-application-2026-09-16.tgz`
+with SHA-256
+`a46c7b7a8eb60bedd80340344c0e7bd8d4e282ab2ca4528214688b1271787350`.
+The packaged files were extracted and their individual checksums revalidated. The
+disposable stack and temporary copies were destroyed.
+
+This artifact proves PortfolioAI application-data recovery. It does not replace a
+complete hosted Supabase platform backup: hosted Auth state beyond the referenced
+owner, Storage, Vault, migration ledger and `pg_cron` remain platform-managed.
+
+## Final isolated deployment dry run
+
+The current remote ledger contained 93 unique versions. An isolated bundle was
+rebuilt with one comment-only compatibility marker per remote version and only the
+three checksum-pinned forward migrations. After reusing the linked project's
+non-secret IPv4 pooler routing metadata, `supabase db push --dry-run` selected
+exactly, and only, these migrations in order:
+
+1. `20260915190026_reconcile_r4n_research_subprofiles.sql`;
+2. `20260915193011_reconcile_news_policy_final_state.sql`;
+3. `20260915193024_reconcile_portfolio_weight_context.sql`.
+
+The temporary bundle was destroyed. No migration was applied.
 
 ## Decision and next gate
 
-Production deployment remains blocked. Before requesting execution approval:
-
-1. establish and verify a Supabase platform backup or another owner-approved,
-   fully restore-tested recovery artifact;
-2. re-run the live read-only preflight if production state changes;
-3. rebuild the isolated compatibility-marker bundle from the current remote
-   ledger;
-4. require the dry run to list exactly the three checksum-pinned migrations; and
-5. request separate explicit authorization for the production write.
-
+The approved alternative recovery proof and isolated dry run are complete.
+Production remains unchanged. The next and only remaining gate is separate,
+explicit authorization for the production write using a freshly rebuilt bundle.
+If production state changes before authorization, repeat the live preflight and
+dry run first.
