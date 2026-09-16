@@ -258,21 +258,54 @@ That authorization does **not** authorize PR merge, application/Edge deployment,
 
 ---
 
-## 8. Current production state and next gate
+## 8. Entry 006 — Gate D authorized; immediate preflight passed; dry-run pending
 
-PR #101 remains **OPEN / DRAFT / UNMERGED**.
+**Date:** 16 September 2026  
+**Actor:** ChatGPT + owner authorization
 
-The next possible step is **Gate D execution — production schema reconciliation only** for:
+Owner explicitly authorized only:
 
 `20260916100032_reconcile_r4n_secondary_exposure_contract.sql`
 
-No production write has occurred. Gate D may proceed only after the exact owner authorization above.
+Immediate preflight after authorization:
+- remote migration ledger still contains predecessor versions `20260915190026`, `20260915193011`, and `20260915193024`;
+- target version `20260916100032` is still absent;
+- `research_subprofile_secondary_exposures` remains empty;
+- `research_subprofile_assignments` remains 0;
+- `research_subprofile_contracts` remains 5;
+- transactions remain 492;
+- securities remain 273;
+- fundamental observations remain 458;
+- recommendation runs remain 4;
+- live secondary-exposure table still has the expected pre-reconciliation 10-column shape;
+- exact migration content was re-read from the current PR branch;
+- SHA-256 was recomputed as `17715c03fe12ad0fa46d1b09a76bd5aae4828c39336e2f0d57db39d250918605`, matching the prepared package.
+
+Execution mechanism decision:
+- the connected Supabase migration action was **not** used because it does not expose a way to preserve the repository migration version `20260916100032` explicitly;
+- using that shortcut could create migration-ledger drift, which would violate the reviewed Gate D deployment contract;
+- therefore Gate D execution remains on the isolated CLI bundle path documented in `docs/R4N_Secondary_Exposure_Production_Gate.md`.
+
+**Current status:** AUTHORIZED, PRE-FLIGHT PASS, NOT YET APPLIED.  
+**Production touched by this entry:** NO.
+
+The next required step is the isolated bundle build plus `supabase db push --dry-run`. The dry-run must show exactly one pending migration, version `20260916100032`, before the already-authorized `supabase db push --yes` may be run from the same unchanged temporary workdir.
 
 ---
 
-## 9. Forward development path
+## 9. Current production state and next gate
 
-- Gate D: production schema reconciliation only if explicitly authorized.
+PR #101 remains **OPEN / DRAFT / UNMERGED**.
+
+Gate D is now explicitly authorized for the single migration above, but production is unchanged until the isolated CLI dry-run passes and the exact migration is pushed from the same temporary bundle.
+
+No PR merge, application/Edge deployment, research-subprofile assignment, secondary-exposure row creation, evidence ingestion, scoring, recommendation, sizing, provider execution, or scheduler change is authorized.
+
+---
+
+## 10. Forward development path
+
+- Gate D: complete the authorized single-migration dry-run, apply it only if the dry-run selects exactly `20260916100032`, then perform full post-deployment validation.
 - Gate E: reviewed Pharma subprofile assignments with provenance/effective intervals; TORNTPHARM may become `DOMESTIC_FORMULATIONS` only after explicit review/approval.
 - Gate F: TORNTPHARM official-evidence pilot; dry-run/validate first, ingest only after approval.
 - Gate G: approve/version PHARMA_V1 scoring curves/thresholds/weights before numeric scoring.
@@ -285,10 +318,10 @@ No production write has occurred. Gate D may proceed only after the exact owner 
 
 ---
 
-## 10. Codex handback instruction
+## 11. Codex handback instruction
 
 When Codex credits return:
 
 > Read this cumulative handoff first, then independently inspect the current GitHub branch/PR, canonical repository docs, and current Supabase state relevant to the next gate. Treat this handoff as historical context, not a substitute for current verification. Preserve all production-safety gates. Continue from the newest unfinished stage and append completed work back into this cumulative history rather than replacing it with a latest-state-only summary.
 
-**CURRENT STOP POINT:** Gate D package is prepared and CI-green. No production write has occurred. Gate D execution requires exact owner authorization for migration `20260916100032_reconcile_r4n_secondary_exposure_contract.sql` only.
+**CURRENT STOP POINT:** Gate D is explicitly authorized and immediate production preflight has passed. Production is still unchanged. Run the isolated single-migration bundle dry-run next; apply only if it selects exactly migration `20260916100032`.
