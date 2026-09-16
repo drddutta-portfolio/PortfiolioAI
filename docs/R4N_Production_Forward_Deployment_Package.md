@@ -1,6 +1,15 @@
 # R4N production forward-deployment package
 
-Status: **DISPOSABLE PROOF + LIVE PREFLIGHT + ALTERNATIVE RECOVERY PROOF + DRY RUN PASSED / PRODUCTION AUTHORIZATION NOT REQUESTED**
+Status: **DEPLOYED AND VALIDATED IN PRODUCTION — 16 SEPTEMBER 2026**
+
+The owner authorized the exact three-migration write after a successful external
+backup. A fresh preflight found three newly entered, owner-confirmed transactions;
+their creation timestamps preceded the completed backup, so the preservation
+baseline was explicitly revised from 489 to 492 transactions. The isolated bundle
+was rebuilt from the then-current 93-version remote ledger, its dry run selected
+only the three checksum-pinned migrations below, and that exact unchanged bundle
+was applied. The complete result is recorded in
+`docs/R4N_Production_Deployment_2026-09-16.md`.
 
 ## Exact approved migration candidate set
 

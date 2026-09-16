@@ -1,6 +1,12 @@
 # R4N production forward-deployment preflight — 16 September 2026
 
-Status: **SQL PREFLIGHT + ALTERNATIVE RECOVERY PROOF + DRY RUN PASSED / PRODUCTION UNCHANGED**
+Status: **SUPERSEDED BY AUTHORIZED PRODUCTION DEPLOYMENT**
+
+The original 489-transaction snapshot was superseded immediately before
+deployment by three owner-confirmed transactions created at 08:51–08:53 UTC.
+They preceded the successfully completed backup run, and the owner explicitly
+authorized their inclusion as the 492-row preservation baseline. See
+`docs/R4N_Production_Deployment_2026-09-16.md` for the final execution record.
 
 ## Scope and controls
 
