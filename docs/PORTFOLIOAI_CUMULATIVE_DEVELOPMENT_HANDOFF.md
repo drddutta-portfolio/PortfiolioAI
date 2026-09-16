@@ -188,9 +188,11 @@ These match the documented post-R4N baseline.
 ### NEWS / cron preservation
 - NSE NEWS V6 remains disabled/closed with disabled freshness semantics.
 - NSE NEWS V7 remains current/enabled with 1800-second elapsed-time freshness.
-- Active cron jobs remain unchanged:
+- Active cron jobs were recorded here as:
   - `portfolioai-nse-announcements-20m` — `7,27,47 * * * *`
   - `portfolioai-news-reconcile-5m` — `3-59/5 * * * *`
+
+**Historical-note correction:** Entry 007 below records that this cron-name/schedule snapshot was stale. The Gate D migration did not touch cron. Current live cron state was re-read after Gate D and is authoritative there.
 
 ### Backup / recovery readiness
 - `Manual Supabase Database Backup` exists on `main` and uses PostgreSQL 17 pg_dump, pg_restore archive validation, AES-256-CBC/PBKDF2 encryption, private Supabase Storage upload, SHA-256 byte-for-byte verification and cleanup.
@@ -284,29 +286,101 @@ Immediate preflight after authorization:
 Execution mechanism decision:
 - the connected Supabase migration action was **not** used because it does not expose a way to preserve the repository migration version `20260916100032` explicitly;
 - using that shortcut could create migration-ledger drift, which would violate the reviewed Gate D deployment contract;
-- therefore Gate D execution remains on the isolated CLI bundle path documented in `docs/R4N_Secondary_Exposure_Production_Gate.md`.
+- therefore Gate D execution remained on the isolated CLI bundle path documented in `docs/R4N_Secondary_Exposure_Production_Gate.md`.
 
-**Current status:** AUTHORIZED, PRE-FLIGHT PASS, NOT YET APPLIED.  
+**Current status at this historical checkpoint:** AUTHORIZED, PRE-FLIGHT PASS, NOT YET APPLIED.  
 **Production touched by this entry:** NO.
 
-The next required step is the isolated bundle build plus `supabase db push --dry-run`. The dry-run must show exactly one pending migration, version `20260916100032`, before the already-authorized `supabase db push --yes` may be run from the same unchanged temporary workdir.
+The next required step at this checkpoint was the isolated bundle build plus `supabase db push --dry-run`.
 
 ---
 
-## 9. Current production state and next gate
+## 9. Entry 007 — Gate D executed and post-deployment validated
 
-PR #101 remains **OPEN / DRAFT / UNMERGED**.
+**Date:** 16 September 2026  
+**Actor:** ChatGPT + owner-executed isolated Supabase CLI push
 
-Gate D is now explicitly authorized for the single migration above, but production is unchanged until the isolated CLI dry-run passes and the exact migration is pushed from the same temporary bundle.
+### Dry-run
+The checksum-pinned isolated production bundle was built successfully. `supabase db push --dry-run` selected exactly one pending migration:
 
-No PR merge, application/Edge deployment, research-subprofile assignment, secondary-exposure row creation, evidence ingestion, scoring, recommendation, sizing, provider execution, or scheduler change is authorized.
+`20260916100032_reconcile_r4n_secondary_exposure_contract.sql`
+
+No other migration was selected.
+
+### Authorized production push
+From the same unchanged temporary bundle, the owner ran `supabase db push --yes`. The CLI applied only:
+
+`20260916100032_reconcile_r4n_secondary_exposure_contract.sql`
+
+### Immediate production validation
+Connected production Supabase verification confirmed:
+- migration ledger contains `20260916100032` exactly once as `reconcile_r4n_secondary_exposure_contract`;
+- `research_subprofile_secondary_exposures` remains **0 rows**;
+- `research_subprofile_assignments` remains **0 rows**;
+- `research_subprofile_contracts` remains **5 rows**;
+- preserved business counts remain:
+  - transactions: 492;
+  - securities: 273;
+  - fundamental_observations: 458;
+  - stock_recommendation_runs: 4;
+- secondary-exposure table now has the seven intended lifecycle/provenance columns:
+  - `assignment_status`
+  - `confidence_state`
+  - `effective_from`
+  - `effective_to`
+  - `reason_code`
+  - `reviewed_by`
+  - `reviewed_at`
+- expected status, confidence, materiality, interval, reason, review-completeness and retirement-completeness constraints exist;
+- `research_subprofile_secondary_reviewed_by_idx` exists;
+- RLS remains enabled on `research_subprofile_secondary_exposures`;
+- authenticated role remains SELECT-only on this table; service-role-only mutation posture remains intact.
+
+### NEWS / cron preservation and Gate C correction
+The migration SQL only alters `research_subprofile_secondary_exposures`; it does not schedule, unschedule, invoke or modify cron jobs. The current R4N NEWS reconciliation migration also explicitly states that it never schedules, unschedules or invokes a cron job.
+
+Fresh production reads after Gate D confirmed:
+- NEWS policy V6: disabled/closed with `freshness_basis = DISABLED`;
+- NEWS policy V7: enabled/current with `freshness_basis = ELAPSED_TIME`;
+- current active cron jobs are:
+  - `portfolioai-n5-nse-news-30min` — `*/30 * * * *` — `select public.invoke_nse_news_pipeline_scheduled_v1();`
+  - `portfolioai-news-evidence-classification-30min` — `5,35 * * * *` — `select public.reclassify_unclassified_news_from_stored_evidence_v1(100);`
+
+These live cron names/schedules supersede the stale cron snapshot recorded in Entry 004. There is no evidence that Gate D changed cron state.
+
+### Scope boundary preserved
+Gate D did **not**:
+- merge PR #101;
+- deploy the application or Edge Functions;
+- create any research-subprofile assignment or secondary-exposure business row;
+- ingest evidence;
+- execute paid/external providers;
+- write scores, recommendations or sizing;
+- change schedulers or cron definitions.
+
+**Result:** Gate D COMPLETE / PASS.  
+**Production touched:** YES, only the explicitly authorized schema migration `20260916100032_reconcile_r4n_secondary_exposure_contract.sql`.
 
 ---
 
-## 10. Forward development path
+## 10. Current production and repository state
 
-- Gate D: complete the authorized single-migration dry-run, apply it only if the dry-run selects exactly `20260916100032`, then perform full post-deployment validation.
-- Gate E: reviewed Pharma subprofile assignments with provenance/effective intervals; TORNTPHARM may become `DOMESTIC_FORMULATIONS` only after explicit review/approval.
+- PR #101 remains **OPEN / DRAFT / UNMERGED**.
+- Working branch remains `r4n-pharma-subprofile-architecture`.
+- Production contains the four R4N reconciliation migrations through `20260916100032`.
+- PHARMA_V1 contract rows: 5.
+- Reviewed/provisional research-subprofile assignments: 0 production rows.
+- Secondary-exposure rows: 0 production rows.
+- The owner has a fresh local clone of `r4n-pharma-subprofile-architecture` running via Vite against **local Supabase only** using `VITE_SUPABASE_URL=http://127.0.0.1:54321` and `VITE_MARKET_DATA_ENABLED=false`.
+- Local UI still uses the minimal HDFCBANK + TORNTPHARM fixture unless additional local data is deliberately seeded.
+
+The next development stage is **Gate E — reviewed Pharma subprofile assignments**. Production assignment creation is not yet authorized.
+
+---
+
+## 11. Forward development path
+
+- Gate E: design/review exact Pharma subprofile assignments with provenance/effective intervals; no production assignment write until separately authorized. TORNTPHARM may become `DOMESTIC_FORMULATIONS` only after explicit review/approval.
 - Gate F: TORNTPHARM official-evidence pilot; dry-run/validate first, ingest only after approval.
 - Gate G: approve/version PHARMA_V1 scoring curves/thresholds/weights before numeric scoring.
 - Gate H: deterministic TORNTPHARM scored pilot.
@@ -318,10 +392,10 @@ No PR merge, application/Edge deployment, research-subprofile assignment, second
 
 ---
 
-## 11. Codex handback instruction
+## 12. Codex handback instruction
 
 When Codex credits return:
 
 > Read this cumulative handoff first, then independently inspect the current GitHub branch/PR, canonical repository docs, and current Supabase state relevant to the next gate. Treat this handoff as historical context, not a substitute for current verification. Preserve all production-safety gates. Continue from the newest unfinished stage and append completed work back into this cumulative history rather than replacing it with a latest-state-only summary.
 
-**CURRENT STOP POINT:** Gate D is explicitly authorized and immediate production preflight has passed. Production is still unchanged. Run the isolated single-migration bundle dry-run next; apply only if it selects exactly migration `20260916100032`.
+**CURRENT STOP POINT:** Gate D is complete and production-validated. The local R4N application is running against local Supabase. Begin Gate E with a read-only/design review of proposed PHARMA_V1 subprofile assignments; do not create production assignments without a new explicit owner authorization.
