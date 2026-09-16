@@ -1,0 +1,175 @@
+name: Manual Supabase Database Backup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-supabase-db-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: Backup production database to Supabase Storage
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      PROD_DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
+      BACKUP_SUPABASE_URL: ${{ secrets.BACKUP_SUPABASE_URL }}
+      BACKUP_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.BACKUP_SUPABASE_SERVICE_ROLE_KEY }}
+      BACKUP_ENCRYPTION_PASSPHRASE: ${{ secrets.BACKUP_ENCRYPTION_PASSPHRASE }}
+      BACKUP_BUCKET: portfolioai-db-backups
+
+    steps:
+      - name: Check required secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            PROD_DATABASE_URL \
+            BACKUP_SUPABASE_URL \
+            BACKUP_SUPABASE_SERVICE_ROLE_KEY \
+            BACKUP_ENCRYPTION_PASSPHRASE
+          do
+            if [ -z "${!name:-}" ]; then
+              echo "Required GitHub Actions secret is missing: $name" >&2
+              exit 1
+            fi
+          done
+
+      - name: Create logical PostgreSQL backup
+        id: dump
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+
+          workdir="$(mktemp -d)"
+          echo "workdir=$workdir" >> "$GITHUB_OUTPUT"
+
+          timestamp="$(date -u +'%Y-%m-%dT%H-%M-%SZ')"
+          object_path="manual/${timestamp}/portfolioai-${timestamp}-${GITHUB_RUN_ID}.tar.gz.enc"
+          echo "timestamp=$timestamp" >> "$GITHUB_OUTPUT"
+          echo "object_path=$object_path" >> "$GITHUB_OUTPUT"
+
+          # Use PostgreSQL 17 client tools so the dump client is not older than
+          # current supported Supabase PostgreSQL server versions.
+          docker run --rm \
+            -e PROD_DATABASE_URL \
+            -v "$workdir:/backup" \
+            postgres:17-alpine \
+            sh -ceu 'pg_dump "$PROD_DATABASE_URL" --format=custom --no-owner --no-acl --file=/backup/database.dump'
+
+          # Prove that pg_restore can parse the archive before it is encrypted/uploaded.
+          docker run --rm \
+            -v "$workdir:/backup:ro" \
+            postgres:17-alpine \
+            sh -ceu 'pg_restore --list /backup/database.dump >/dev/null'
+
+          dump_sha="$(sha256sum "$workdir/database.dump" | awk '{print $1}')"
+          dump_size="$(stat -c '%s' "$workdir/database.dump")"
+
+          cat > "$workdir/manifest.txt" <<EOF
+          PortfolioAI logical PostgreSQL backup
+          created_utc=$timestamp
+          github_repository=$GITHUB_REPOSITORY
+          github_run_id=$GITHUB_RUN_ID
+          github_sha=$GITHUB_SHA
+          dump_format=postgresql_custom
+          dump_sha256=$dump_sha
+          dump_size_bytes=$dump_size
+          pg_dump_image=postgres:17-alpine
+          EOF
+
+          tar -C "$workdir" -czf "$workdir/portfolioai-backup.tar.gz" database.dump manifest.txt
+
+      - name: Encrypt backup before upload
+        id: encrypt
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          workdir="${{ steps.dump.outputs.workdir }}"
+          encrypted="$workdir/portfolioai-backup.tar.gz.enc"
+
+          openssl enc -aes-256-cbc \
+            -salt \
+            -pbkdf2 \
+            -iter 200000 \
+            -in "$workdir/portfolioai-backup.tar.gz" \
+            -out "$encrypted" \
+            -pass env:BACKUP_ENCRYPTION_PASSPHRASE
+
+          sha256sum "$encrypted" | awk '{print $1}' > "$encrypted.sha256"
+          echo "encrypted=$encrypted" >> "$GITHUB_OUTPUT"
+          echo "checksum=$encrypted.sha256" >> "$GITHUB_OUTPUT"
+
+      - name: Upload encrypted backup to private Supabase Storage bucket
+        shell: bash
+        run: |
+          set -euo pipefail
+          object_path="${{ steps.dump.outputs.object_path }}"
+          encrypted="${{ steps.encrypt.outputs.encrypted }}"
+          checksum="${{ steps.encrypt.outputs.checksum }}"
+
+          base_url="${BACKUP_SUPABASE_URL%/}"
+
+          curl --fail-with-body --silent --show-error \
+            -X POST \
+            "$base_url/storage/v1/object/$BACKUP_BUCKET/$object_path" \
+            -H "Authorization: Bearer $BACKUP_SUPABASE_SERVICE_ROLE_KEY" \
+            -H "apikey: $BACKUP_SUPABASE_SERVICE_ROLE_KEY" \
+            -H "Content-Type: application/octet-stream" \
+            -H "x-upsert: false" \
+            --data-binary "@$encrypted"
+
+          curl --fail-with-body --silent --show-error \
+            -X POST \
+            "$base_url/storage/v1/object/$BACKUP_BUCKET/$object_path.sha256" \
+            -H "Authorization: Bearer $BACKUP_SUPABASE_SERVICE_ROLE_KEY" \
+            -H "apikey: $BACKUP_SUPABASE_SERVICE_ROLE_KEY" \
+            -H "Content-Type: text/plain" \
+            -H "x-upsert: false" \
+            --data-binary "@$checksum"
+
+      - name: Verify stored backup byte-for-byte
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          workdir="${{ steps.dump.outputs.workdir }}"
+          object_path="${{ steps.dump.outputs.object_path }}"
+          encrypted="${{ steps.encrypt.outputs.encrypted }}"
+          base_url="${BACKUP_SUPABASE_URL%/}"
+          downloaded="$workdir/verified-download.enc"
+
+          curl --fail-with-body --silent --show-error \
+            "$base_url/storage/v1/object/authenticated/$BACKUP_BUCKET/$object_path" \
+            -H "Authorization: Bearer $BACKUP_SUPABASE_SERVICE_ROLE_KEY" \
+            -H "apikey: $BACKUP_SUPABASE_SERVICE_ROLE_KEY" \
+            -o "$downloaded"
+
+          expected="$(sha256sum "$encrypted" | awk '{print $1}')"
+          actual="$(sha256sum "$downloaded" | awk '{print $1}')"
+
+          if [ "$expected" != "$actual" ]; then
+            echo "Uploaded backup verification failed: SHA-256 mismatch." >&2
+            exit 1
+          fi
+
+          echo "Encrypted backup verified successfully in Supabase Storage."
+          echo "Bucket: $BACKUP_BUCKET"
+          echo "Object: $object_path"
+          echo "SHA-256: $actual"
+
+      - name: Remove temporary backup files
+        if: always()
+        shell: bash
+        run: |
+          workdir="${{ steps.dump.outputs.workdir }}"
+          if [ -n "$workdir" ] && [ -d "$workdir" ]; then
+            rm -rf "$workdir"
+          fi
