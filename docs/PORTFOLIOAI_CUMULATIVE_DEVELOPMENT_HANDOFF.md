@@ -500,3 +500,99 @@ When Codex credits return, provide Codex this entire file and instruct:
 **STOP POINT:** Begin Stage LUI-1: disposable local fixture + authenticated localhost Research UI review.
 
 No production action is authorized by this file.
+
+---
+
+## 10. Current state update — LUI-1 completed
+
+**Status:** PASS on 16 September 2026.
+
+This section supersedes the earlier Section 4 status and Section 9 stop point, which are retained as historical checkpoints.
+
+### Entry 002 — LUI-1 authenticated localhost Research UI proof
+**Date:** 16 September 2026  
+**Actor:** ChatGPT + owner-guided local Supabase/browser review  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101
+
+**Goal:** Complete the disposable authenticated localhost proof for the universal Research workspace without touching production or paid providers.
+
+**Changes / local setup:**
+- Created `.env.local` pointing Vite to local Supabase only:
+  - `VITE_SUPABASE_URL=http://127.0.0.1:54321`
+  - local publishable key
+  - `VITE_APP_URL=http://localhost:5173`
+  - `VITE_MARKET_DATA_ENABLED=false`
+- Initial fixture attempt aborted on a deliberate safety assertion because local reset data already contained HDFCBANK and TORNTPHARM with pre-existing security UUIDs.
+- PostgreSQL returned `ROLLBACK`; verification showed zero partial fixture portfolio/enrichment/transaction rows after the failed attempt.
+- Existing local security identities were confirmed:
+  - HDFCBANK: `a4000000-0000-0000-0000-000000000001`
+  - TORNTPHARM: `a4000000-0000-0000-0000-000000000002`
+- Corrected fixture V2 reused those existing local security IDs and committed successfully.
+- Local portfolio `LOCAL UI Research Review` was created with two opening positions and canonical classification evidence.
+- Fixture portfolio ownership was reassigned locally to the authenticated local `dr.d.dutta@gmail.com` user after the browser session revealed a second local Auth user; this was local-only and validated RLS ownership behavior.
+
+**Local fixture result:**
+- HDFCBANK -> Banking / Private Sector Bank.
+- TORNTPHARM -> Pharma / Pharmaceuticals.
+- Two active opening positions present.
+- Market-cap classification intentionally absent, leaving enrichment `PARTIAL` rather than fabricating evidence.
+- No research-subprofile assignment created.
+- No secondary exposure created.
+- No research/fundamental evidence seeded.
+- No persisted score/recommendation/sizing write created.
+- No provider refresh or scheduler activity enabled.
+
+**HDFCBANK browser verification:** PASS.
+- Shared universal Research shell rendered.
+- Resolved to `Banks / NBFCs` / BANK_NBFC sector-resolved behavior.
+- Canonical sector/industry rendered correctly.
+- No Pharma terminology leakage.
+- Missing price/cost/P&L/evidence remained `Unavailable` rather than zero.
+- Recommendation/decision state remained pending/fail-closed with no invented score or recommendation.
+
+**TORNTPHARM browser verification:** PASS.
+- Same universal Research shell rendered.
+- Canonical Pharma / Pharmaceuticals classification rendered correctly.
+- PHARMA_V1 recommendation/readiness context visible.
+- No BANK_NBFC metric leakage.
+- No subtype such as `DOMESTIC_FORMULATIONS` was silently inferred.
+- Recommendation stayed `NOT READY` / pending with missing methodology/evidence explicit.
+- Pharma scorecard showed 0% verified evidence and 0% score-ready, with dimensions explicitly `No validated evidence` rather than numeric zero scores.
+- Business Durability rendered as a real Pharma dimension and was **not** incorrectly marked N/A.
+- Business Durability inputs (R&D Expenditure, R&D Intensity, Pipeline / Launch / Approval Evidence) were `Unavailable`, as expected with no evidence.
+- External ratings showed 0 rated instruments and explicitly treated absence as insufficient evidence rather than a negative signal.
+- Pharma Research Readiness showed 0/13 requirements ready.
+- Canonical Pharma financial/history panels remained unavailable rather than fabricated.
+
+**Browser/network isolation:** PASS.
+- Verified an actual Research fetch request used `http://127.0.0.1:54321/rest/v1/...` with HTTP 200.
+- Filtering Network requests by `supabase.co` returned zero requests.
+- No production Supabase traffic observed during the verified page load.
+- No paid-provider refresh button was used.
+- Console displayed a Chrome async-listener/message-channel error pattern without a PortfolioAI stack trace; treated as browser-extension noise for this gate, not as an application defect.
+
+**Production touched:** NO.
+- No production migration applied.
+- No production data modified.
+- No assignment/evidence/score/recommendation/sizing/scheduler/provider write occurred.
+
+**Result:** **LUI-1 PASS.**
+
+**Next safe gate:** Gate B — stabilize PR #101: inspect current PR head after documentation commits, reconcile the LUI-1 completion into repository status docs if appropriate, run/verify Architecture Guard and CI, and keep the PR draft until owner approval. No merge or production action is implied.
+
+**Explicit approvals still required:**
+- PR merge;
+- any production migration or deployment;
+- canonical subprofile assignments;
+- evidence ingestion;
+- scoring methodology or persisted scores;
+- recommendation writes;
+- sizing writes;
+- scheduler/provider activity.
+
+### Current stop point
+
+**STOP POINT:** Stage LUI-1 is complete. Proceed to **Gate B — stabilize PR #101** using repository-only/read-only verification first.
+
+No production action is authorized by this update.
