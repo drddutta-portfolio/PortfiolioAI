@@ -1,14 +1,14 @@
 # R4N — Research Subprofile Assignment Schema Design
 
-**Status:** repository migrations created and verified locally; production unapplied
+**Status:** core schema deployed and validated in production on 16 September 2026; assignments and secondary exposures remain empty and separately gated
 
-**Migrations:** baseline contract `20260915094042_create_research_subprofile_assignments.sql`; production-compatible forward reconciliation `20260915190026_reconcile_r4n_research_subprofiles.sql`; and the separately bounded NEWS/function repairs listed in `docs/R4N_Production_Forward_Deployment_Package.md`
+**Migrations:** baseline contract `20260915094042_create_research_subprofile_assignments.sql`; deployed production-compatible forward reconciliation `20260915190026_reconcile_r4n_research_subprofiles.sql`; locally verified and production-unapplied secondary-exposure contract reconciliation `20260916100032_reconcile_r4n_secondary_exposure_contract.sql`; and the separately bounded NEWS/function repairs listed in `docs/R4N_Production_Forward_Deployment_Package.md`
 
 ## Authority boundary
 
 `current_security_enrichment_v1` remains the sole application-wide authority for sector, industry and market-cap classification. Research subprofile assignment is a separate methodology fact whose proposed canonical authority is an append-only assignment relation keyed by security id. UI code consumes only the resolved effective research contract and never infers a subprofile from symbol, sector labels or company text.
 
-## Proposed relations
+## Implemented relations
 
 ### `research_subprofile_assignments`
 
@@ -30,10 +30,13 @@ Rows are never updated to rewrite history. A correction closes the prior effecti
 - assignment id FK;
 - secondary subprofile code;
 - evidence/rationale;
-- optional materiality state;
+- lifecycle state and confidence;
+- effective-from and optional effective-to timestamps;
+- materiality state: `IMMATERIAL`, `EMERGING`, `MATERIAL`, `DOMINANT` or `UNKNOWN`;
+- reviewed-by and reviewed-at provenance;
 - stable uniqueness on assignment plus secondary code.
 
-Secondary exposures provide overlays and review context. They do not blend score curves or replace the primary effective contract.
+Secondary exposures provide overlays and review context. They do not blend score curves or replace the primary effective contract. The deployed core table does not yet persist the complete typed lifecycle/provenance contract; the unapplied forward reconciliation above adds it without creating or promoting any exposure.
 
 ## Required constraints
 
@@ -59,4 +62,4 @@ The shared resolver returns one of `RESOLVED`, `MISSING`, `PROVISIONAL`, `DISPUT
 
 ## Application preconditions
 
-The owner approved global canonical assignments, service/admin-only writes, append-only reviewed history, database-enforced non-overlap and fail-closed unresolved states. Before applying the migration, run it in an approved local database, execute `r4n_research_subprofile_assignments_test.sql`, inspect the schema diff and security advisors, regenerate database types, and review the resulting resolver/repository implementation. Production application remains separately gated.
+The owner approved global canonical assignments, service/admin-only writes, append-only reviewed history, database-enforced non-overlap and fail-closed unresolved states. The core schema migration was applied and validated in production with zero assignments and zero secondary exposures. Any follow-up schema reconciliation must use a new forward migration and pass the local database contract tests, schema diff, security checks and generated-type review before separate production authorization. Production assignments and application activation remain separately gated.

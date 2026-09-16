@@ -523,4 +523,3 @@ INSERT INTO public.scoring_profile_sector_rules (id, scoring_profile_code, secto
 --
 -- PostgreSQL database dump complete
 --
-

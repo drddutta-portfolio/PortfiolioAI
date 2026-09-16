@@ -1,8 +1,8 @@
 # PortfolioAI — Development Status
 
 **Status:** Living implementation and handover record  
-**Current milestone:** R4M shared profile-driven Research workspace is a repository-only local review candidate in draft PR #100
-**Last reviewed:** 15 September 2026
+**Current milestone:** R4N production schema is deployed; draft PR #101 is under final contract-correctness review before merge and the first assignment gate
+**Last reviewed:** 16 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
@@ -229,7 +229,7 @@ R4M is **UI COMPLETE / MERGED** in PR #100 at merge commit `de54ed1fa9569e9db0c1
 
 ### R4N-A/R4N-B — Research contract freeze and Pharma subprofile foundation
 
-R4N-A/R4N-B is **LOCAL CONTRACT IMPLEMENTATION COMPLETE / DRAFT PR #101** on `r4n-pharma-subprofile-architecture`.
+R4N-A/R4N-B is **PRODUCTION SCHEMA DEPLOYED / CONTRACT IMPLEMENTATION IN DRAFT PR #101** on `r4n-pharma-subprofile-architecture`.
 
 - The universal Research workspace is frozen as `R4M_V1`; future profiles supply configuration and data rather than page trees.
 - The typed `PHARMA_V1` subprofile assignment contract preserves immutable versions, effective intervals, review provenance, secondary exposures and fail-closed resolution.
@@ -238,9 +238,9 @@ R4N-A/R4N-B is **LOCAL CONTRACT IMPLEMENTATION COMPLETE / DRAFT PR #101** on `r4
 - Machine-readable V1 evidence/readiness contracts now compose all five subprofiles onto the parent exactly once. Top-line readiness uses active Mandatory requirements only; Important and Supplementary coverage remain separate.
 - The frozen TORNTPHARM 42-row official-evidence proposal now has an exact fixture and pure dry-run classifier against `PHARMA_V1 + DOMESTIC_FORMULATIONS`. It maps 36 rows to six parent mandatory requirements and keeps six R&D rows contextual; it satisfies zero subprofile-specific or condition-activation requirements and performs no ingestion.
 - A pure local ingestion validator now checks security/profile identity, metric units, periods, numeric values, source artifacts, derived formula/input lineage, duplicate candidates and conflicts with existing facts. A separate schema-design note defines the append-only assignment authority and RLS boundary.
-- Owner-approved migration SQL now proposes the global contract registry, append-only assignment history, secondary exposures, reviewed-interval exclusion, held-security read policies and service-only mutation privileges. The migration and its pgTAP contract test are committed for review but have not been applied or executed against a database.
+- The global contract registry, append-only assignment history, secondary exposures, reviewed-interval exclusion, held-security read policies and service-only mutation privileges are deployed in production with five contract rows and zero assignments/exposures. A new production-unapplied forward migration reconciles secondary-exposure lifecycle, confidence, effective-interval and reviewer provenance with the approved typed contract; it creates no exposure and requires separate production authorization. The complete active migration chain replays locally with that migration, its environment-appropriate R4N pgTAP suite passes 41/41, the public schema diff is empty, all 85 public tables retain RLS, and database lint has only the inherited coverage-registry volatility warning.
 - A disposable local baseline replay verified the complete history and R4N migration without changing committed historical migrations, the ordinary local database or production. The replay required the documented MOTHERSON fixture and four temporary filename normalizations, plus two reported structural compatibility repairs for historical NEWS/pg_cron ordering and disabled-policy retirement. R4N applied last in the disposable stack; all 19 pgTAP tests and direct schema/RLS/grant/immutability/empty-state/no-network checks passed. The stack and volumes were destroyed. `docs/R4N_Local_Migration_Replay_Audit_and_Fixture_Strategy.md` records the full result.
-- No migration, database assignment, provider action, evidence ingestion, scoring method or production mutation is part of R4N-A/R4N-B.
+- The production deployment was limited to the three recorded checksum-pinned migrations. No database assignment, secondary exposure, provider action, evidence ingestion, scoring method, recommendation or sizing write was part of that deployment.
 
 Detailed implementation and review boundaries are recorded in `R4M_Profile_Driven_Research_Workspace_Plan.md`.
 

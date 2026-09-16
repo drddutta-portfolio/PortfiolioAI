@@ -240,5 +240,8 @@ the NEWS V6/V7, two scheduler rows and one empty portfolio fixture.
 - Existing fixture rows were preserved and no R4N assignment was created.
 - The disposable database and isolated bundle were destroyed.
 
-Production remains unchanged. This document is the review package before any
-production authorization request.
+Production deployment completed on 16 September 2026 using the exact reviewed
+bundle above. The resulting state and validation evidence are recorded in
+`docs/R4N_Production_Deployment_2026-09-16.md`. No assignment, secondary exposure,
+provider, evidence, score, recommendation or sizing action was authorized by that
+deployment.

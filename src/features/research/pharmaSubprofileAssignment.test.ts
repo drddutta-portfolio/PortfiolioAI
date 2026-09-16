@@ -46,6 +46,28 @@ describe("resolvePharmaSubprofileAssignment", () => {
     if (conflict.status === "PARENT_ONLY_BLOCKED") expect(conflict.blocker).toBe("CONFLICTING_REVIEWED_ASSIGNMENTS")
   })
 
+  it("fails closed when an active disputed or provisional assignment overlaps a reviewed assignment", () => {
+    const disputed = resolvePharmaSubprofileAssignment([
+      assignment(),
+      assignment({ assignmentVersion: 2, assignmentState: "DISPUTED", reviewedBy: null, reviewedAt: null }),
+    ], "security-torntpharm", "2026-09-15")
+    expect(disputed).toEqual({ status: "PARENT_ONLY_BLOCKED", profileCode: "PHARMA_V1", assignment: null, blocksReadiness: true, blocker: "DISPUTED_ASSIGNMENT" })
+
+    const provisional = resolvePharmaSubprofileAssignment([
+      assignment(),
+      assignment({ assignmentVersion: 2, assignmentState: "PROVISIONAL", reviewedBy: null, reviewedAt: null }),
+    ], "security-torntpharm", "2026-09-15")
+    expect(provisional).toEqual({ status: "PARENT_ONLY_BLOCKED", profileCode: "PHARMA_V1", assignment: null, blocksReadiness: true, blocker: "PROVISIONAL_ASSIGNMENT" })
+  })
+
+  it("uses the same half-open effective interval as the database", () => {
+    const closed = assignment({ effectiveTo: "2026-09-15" })
+    expect(resolvePharmaSubprofileAssignment([closed], "security-torntpharm", "2026-09-14").status).toBe("RESOLVED")
+    const boundary = resolvePharmaSubprofileAssignment([closed], "security-torntpharm", "2026-09-15")
+    expect(boundary).toEqual({ status: "PARENT_ONLY_BLOCKED", profileCode: "PHARMA_V1", assignment: null, blocksReadiness: true, blocker: "NO_ACTIVE_REVIEWED_ASSIGNMENT" })
+    expect(() => resolvePharmaSubprofileAssignment([assignment({ effectiveTo: "2026-01-01" })], "security-torntpharm", "2026-01-01")).toThrow("effective interval")
+  })
+
   it("rejects invalid versions, dates and missing reviewed provenance", () => {
     expect(() => resolvePharmaSubprofileAssignment([assignment({ assignmentVersion: 0 })], "security-torntpharm", "2026-09-15")).toThrow("positive integer")
     expect(() => resolvePharmaSubprofileAssignment([assignment({ effectiveTo: "2025-12-31" })], "security-torntpharm", "2026-09-15")).toThrow("effective interval")
