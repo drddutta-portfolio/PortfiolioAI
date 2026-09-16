@@ -203,26 +203,74 @@ These match the documented post-R4N baseline.
 
 ---
 
-## 7. Current production state and next gate
+## 7. Entry 005 — Gate D package prepared, not executed
 
-PR #101 remains **OPEN / DRAFT / UNMERGED**.
+**Date:** 16 September 2026  
+**Actor:** ChatGPT  
+**Prepared head before handoff update:** `ea88697ceb2ffe809cc2f3d5668220eb17e5207e`
 
-The next possible step is **Gate D — production schema reconciliation** for the still-pending migration:
+Prepared exact production package for the still-pending migration:
 
 `20260916100032_reconcile_r4n_secondary_exposure_contract.sql`
 
-No production write is authorized by this handoff. Before Gate D execution:
-1. fetch the exact migration file from the current branch;
-2. verify/pin its SHA-256 checksum;
-3. verify the isolated repository-approved deployment procedure;
-4. recheck that the live preconditions/baselines remain unchanged immediately before execution;
-5. obtain explicit owner authorization to apply that exact migration.
+Pinned SHA-256:
 
-That authorization would not authorize PR merge, application deployment, Edge deployment, assignment creation, evidence ingestion, scoring, recommendations, sizing, provider calls or scheduler changes.
+`17715c03fe12ad0fa46d1b09a76bd5aae4828c39336e2f0d57db39d250918605`
+
+Repository additions:
+- `scripts/buildR4NSecondaryExposureProductionDeploymentBundle.mjs`
+- `docs/R4N_Secondary_Exposure_Production_Gate.md`
+
+Safety properties of the new single-migration bundle builder:
+- verifies the exact source checksum before building anything;
+- parses the linked remote migration ledger and refuses an unparseable ledger;
+- requires the three known predecessor R4N migrations to already exist remotely;
+- refuses if `20260916100032` is already applied;
+- constructs an isolated temporary workdir with compatibility markers for already-applied remote versions;
+- copies only `20260916100032_reconcile_r4n_secondary_exposure_contract.sql` as the new migration candidate;
+- does not itself apply production changes.
+
+Live production compatibility was rechecked read-only:
+- `research_subprofile_secondary_exposures` has the expected pre-reconciliation columns, including `materiality_state`;
+- row count remains 0, satisfying the migration's fail-closed precondition;
+- no partial lifecycle/provenance reconciliation was detected.
+
+CI validation on head `ea88697ceb2ffe809cc2f3d5668220eb17e5207e`:
+- PortfolioAI Architecture Guard run `35097055921` completed successfully;
+- presentation data boundaries passed;
+- canonical authority contracts passed;
+- strict TypeScript passed;
+- architecture lint passed;
+- full repository lint diagnostic passed;
+- production build passed;
+- no CI step failed.
+
+**Result:** Gate D package is READY FOR EXPLICIT OWNER AUTHORIZATION, but Gate D has **not** been executed.  
+**Production touched by this entry:** NO.
+
+Exact authorization scope required for the next step:
+
+> Authorize applying production migration `20260916100032_reconcile_r4n_secondary_exposure_contract.sql` only.
+
+Even with that authorization, the execution must still perform a final immediate preflight and dry-run first, and must abort if the live ledger, table row count, checksum, predecessor state, or dry-run selection differs from the reviewed package.
+
+That authorization does **not** authorize PR merge, application/Edge deployment, research-subprofile assignments, secondary-exposure row creation, evidence ingestion, scoring, recommendations, sizing, provider calls, or scheduler changes.
 
 ---
 
-## 8. Forward development path
+## 8. Current production state and next gate
+
+PR #101 remains **OPEN / DRAFT / UNMERGED**.
+
+The next possible step is **Gate D execution — production schema reconciliation only** for:
+
+`20260916100032_reconcile_r4n_secondary_exposure_contract.sql`
+
+No production write has occurred. Gate D may proceed only after the exact owner authorization above.
+
+---
+
+## 9. Forward development path
 
 - Gate D: production schema reconciliation only if explicitly authorized.
 - Gate E: reviewed Pharma subprofile assignments with provenance/effective intervals; TORNTPHARM may become `DOMESTIC_FORMULATIONS` only after explicit review/approval.
@@ -237,10 +285,10 @@ That authorization would not authorize PR merge, application deployment, Edge de
 
 ---
 
-## 9. Codex handback instruction
+## 10. Codex handback instruction
 
 When Codex credits return:
 
 > Read this cumulative handoff first, then independently inspect the current GitHub branch/PR, canonical repository docs, and current Supabase state relevant to the next gate. Treat this handoff as historical context, not a substitute for current verification. Preserve all production-safety gates. Continue from the newest unfinished stage and append completed work back into this cumulative history rather than replacing it with a latest-state-only summary.
 
-**CURRENT STOP POINT:** Gate B and Gate C are complete. Gate D requires a fresh exact migration/checksum/deployment verification and explicit owner authorization before any production write.
+**CURRENT STOP POINT:** Gate D package is prepared and CI-green. No production write has occurred. Gate D execution requires exact owner authorization for migration `20260916100032_reconcile_r4n_secondary_exposure_contract.sql` only.
