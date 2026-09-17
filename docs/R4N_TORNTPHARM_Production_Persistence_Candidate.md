@@ -1,25 +1,24 @@
 # R4N — TORNTPHARM Production Persistence Candidate
 
-**Status:** FRESH READ-ONLY PRODUCTION PREFLIGHT PASS — PRODUCTION WRITE NOT AUTHORIZED  
+**Status:** PRODUCTION PERSISTENCE COMPLETE — POST-WRITE VALIDATION PASS  
 **Date:** 17 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 ## Scope boundary
 
-This package was first prepared and validated on localhost, then followed by a separately authorized fresh **read-only** production preflight. No production write was performed.
+This package was first prepared and validated on localhost, then passed a fresh read-only production preflight. The owner subsequently explicitly authorized only the reviewed TORNTPHARM Gate E persistence action described below.
 
-This step did **not**:
-- create or modify a production assignment row;
-- create or modify a production secondary-exposure row;
+The production action did **not**:
 - ingest evidence;
 - call any paid/external provider;
 - write scores, recommendations, or sizing;
 - alter cron/schedulers;
 - deploy application or Edge Functions;
 - merge PR #101;
-- apply a migration.
+- apply a migration;
+- create any research-subprofile row for another security.
 
-## Reviewed decision to persist
+## Reviewed decision persisted
 
 Primary assignment:
 
@@ -33,6 +32,7 @@ effective_from: 2026-03-31T00:00:00Z
 effective_to: null
 assignment_basis: OWNER_REVIEWED_GATE_E_2026_09_17
 source_reference: TORNTPHARM_AR_2025_26; TORNTPHARM_AR_2024_25; TORNTPHARM_Q4_FY25_26_EARNINGS_CALL
+reviewed_at: 2026-09-17T13:05:43Z
 ```
 
 Approved secondary exposures:
@@ -44,6 +44,7 @@ confidence: MEDIUM
 status: REVIEWED
 reason_code: ISSUER_DEFINED_GENERIC_BUSINESS_REVENUE_SHARE_GTE_10
 source_reference: TORNTPHARM_AR_2025_26; TORNTPHARM_Q2_FY25_26_EARNINGS_CALL
+reviewed_at: 2026-09-17T13:05:43Z
 
 CDMO_CRAMS / CDMO_CRAMS_V1
 materiality: EMERGING
@@ -51,31 +52,30 @@ confidence: MEDIUM
 status: REVIEWED
 reason_code: OWNER_REVIEWED_STRATEGIC_EMERGING_CDMO_CAPABILITY
 source_reference: TORNTPHARM_JB_PHARMA_ACQUISITION_RELEASE_2025_06_29; TORNTPHARM_AR_2025_26
+reviewed_at: 2026-09-17T13:05:43Z
 ```
 
-The database schema does not persist a separate numeric `assignment_version` column. The Gate E `assignmentVersionCandidate = 1` is represented operationally by the requirement that no prior PHARMA assignment history exists for TORNTPHARM before the first canonical row is inserted.
+The database schema does not persist a separate numeric `assignment_version` column. Gate E `assignmentVersionCandidate = 1` is represented operationally by this being the first PHARMA assignment row for TORNTPHARM.
 
 ## Candidate execution artifact
 
-Prepared:
+Prepared and locally dry-run validated:
 
 `scripts/r4n_torntpharm_reviewed_assignment_persistence_candidate.sql`
 
-Safety properties:
+Safety properties include:
 
-1. Requires explicit target `security_id`, reviewer email, and `reviewed_at` timestamp as psql variables.
-2. Resolves the supplied security UUID and aborts unless it is exactly `TORNTPHARM` on `NSE`.
-3. Resolves reviewer identity from `auth.users` and requires a unique match.
-4. Requires the reviewer to own a portfolio containing the target security.
-5. Requires the three immutable PHARMA_V1 contracts needed by the reviewed decision.
-6. Inserts the primary row only when no PHARMA assignment exists; if one row already exists, it must be an exact idempotent match or the script aborts.
-7. Rejects any unexpected secondary exposure.
-8. Existing `GLOBAL_GENERICS` or `CDMO_CRAMS` rows must match the reviewed decision exactly.
-9. Inserts only missing approved secondary rows.
-10. Requires exactly two approved secondary rows after the candidate transaction.
-11. Defaults to `ROLLBACK`. It commits only if the caller deliberately passes `-v commit_authorized=true`.
-
-The `commit_authorized` variable is only a technical guard. Passing it as true is prohibited unless the owner separately authorizes the exact production persistence action after reviewing this preflight.
+1. explicit target security, reviewer, and review timestamp;
+2. exact TORNTPHARM/NSE identity validation;
+3. unique reviewer resolution;
+4. reviewer portfolio ownership check;
+5. required PHARMA_V1 contract checks;
+6. fail-closed handling for pre-existing assignments;
+7. rejection of unexpected secondary exposures;
+8. exact-match requirements for existing approved rows;
+9. insertion of only the two approved secondary rows;
+10. exactly-two-secondary postcondition;
+11. local script default of rollback unless commit is deliberately authorized.
 
 ## Localhost validation
 
@@ -113,7 +113,7 @@ region: ap-northeast-1
 PostgreSQL: 17.6.1.166
 ```
 
-Fresh read-only SQL verified:
+Fresh read-only SQL verified immediately before the authorized write:
 
 ```text
 TORNTPHARM / NSE security matches: 1
@@ -124,7 +124,7 @@ reviewer auth-user matches: 1
 reviewer owns a production portfolio containing TORNTPHARM: YES
 ```
 
-Required immutable contracts all exist exactly:
+Required immutable contracts all existed exactly:
 
 ```text
 DOMESTIC_FORMULATIONS / DOMESTIC_FORMULATIONS_V1: present
@@ -133,46 +133,82 @@ CDMO_CRAMS / CDMO_CRAMS_V1: present
 ```
 
 Schema safety was rechecked read-only:
-- `research_subprofile_assignments` contains the reviewed lifecycle/provenance columns required by the candidate;
-- `research_subprofile_secondary_exposures` contains `assignment_status`, `confidence_state`, `effective_from`, `effective_to`, `reason_code`, `reviewed_by`, and `reviewed_at`;
-- expected review-completeness, confidence, status, interval, foreign-key and non-overlap constraints are present;
-- RLS is enabled on both assignment and secondary-exposure tables;
-- role `authenticated` has `SELECT` only on both tables.
+- reviewed lifecycle/provenance columns were present on both assignment tables;
+- expected review-completeness, confidence, status, interval, foreign-key and non-overlap constraints were present;
+- RLS was enabled on both assignment and secondary-exposure tables;
+- role `authenticated` had `SELECT` only on both tables.
 
-No conflicting target row was found. Therefore the first canonical TORNTPHARM PHARMA assignment remains eligible to be represented as assignment-version candidate 1.
+## Explicit owner authorization
 
-## Production provenance parameters prepared, not executed
+The owner explicitly authorized only:
 
-Proposed exact production parameters for a future separately authorized write are:
+> Authorized production persistence of the reviewed TORNTPHARM Gate E assignment only: DOMESTIC_FORMULATIONS as the primary REVIEWED assignment, GLOBAL_GENERICS as MATERIAL, and CDMO_CRAMS as EMERGING, using the reviewed persistence candidate package.
+
+No broader production authorization was inferred from that statement.
+
+## Production persistence execution
+
+After one final immediate read-only recheck confirmed the preflight was unchanged, the authorized transaction was executed against production project `uxiyufbsbgzzdujzcdxe`.
+
+Created primary assignment:
 
 ```text
-target_security_id = da69b3eb-0343-44f8-912c-288b826118cc
-reviewer_email = dr.d.dutta@gmail.com
-reviewed_at = 2026-09-17T13:05:43Z
+assignment_id: 2833dec7-466c-4491-9a0a-47693dce3673
+security_id: da69b3eb-0343-44f8-912c-288b826118cc
+primary_subprofile: DOMESTIC_FORMULATIONS
+assignment_status: REVIEWED
+confidence_state: HIGH
+effective_from: 2026-03-31T00:00:00Z
+reviewed_at: 2026-09-17T13:05:43Z
 ```
 
-`reviewed_at = 2026-09-17T13:05:43Z` is the Git commit timestamp of the immutable human-review approval artifact `cccb40ac7a119698fb46ed3e0658bea1377f3a7d` and is used as the audit anchor for the recorded review decision rather than the arbitrary localhost fixture timestamp.
+Created exactly two secondary exposures attached to that assignment:
 
-## Exact future execution shape — NOT AUTHORIZED NOW
+```text
+CDMO_CRAMS
+materiality_state: EMERGING
+confidence_state: MEDIUM
+assignment_status: REVIEWED
 
-If and only if the owner later explicitly authorizes this exact production persistence action, the execution should use the already-reviewed script with the production target parameters above and `commit_authorized=true`.
+GLOBAL_GENERICS
+materiality_state: MATERIAL
+confidence_state: MEDIUM
+assignment_status: REVIEWED
+```
 
-Before that execution, perform one final immediate read-only recheck that:
-- TORNTPHARM still resolves to the same production UUID;
-- PHARMA assignment count is still zero;
-- no secondary exposure row has appeared;
-- reviewer identity still resolves uniquely and still owns a portfolio containing TORNTPHARM;
-- all three required contracts still exist;
-- branch/script content is unchanged from the reviewed package.
+## Immediate post-write production validation
 
-If any condition differs, abort and re-review.
+Fresh read-only validation after commit confirmed:
 
-## Gate status after fresh preflight
+```text
+TORNTPHARM PHARMA assignment count: 1
+attached secondary-exposure count: 2
+unexpected secondary-exposure count: 0
+primary exact-match validation: true
+GLOBAL_GENERICS exact-match validation: true
+CDMO_CRAMS exact-match validation: true
+```
+
+Therefore the committed production state exactly matches the owner-reviewed Gate E decision.
+
+## Scope preserved after execution
+
+The authorized write created only:
+- one TORNTPHARM reviewed primary research-subprofile assignment;
+- one TORNTPHARM `GLOBAL_GENERICS` reviewed secondary exposure;
+- one TORNTPHARM `CDMO_CRAMS` reviewed secondary exposure.
+
+No application deployment occurred, so the production UI will only display these new research-subprofile facts after the Research-header consumption code from this R4N branch is separately approved, merged/deployed, or otherwise released through the normal application deployment path.
+
+## Gate status after persistence
 
 - Human review: COMPLETE / APPROVED.
 - Local reviewed persistence + UI proof: PASS.
-- Persistence candidate script: PREPARED.
-- Local idempotency validation: PASS.
+- Persistence candidate script: PREPARED / LOCAL DRY-RUN PASS.
 - Fresh production read-only preflight: PASS.
-- Production persistence: NOT AUTHORIZED / NOT PERFORMED.
-- Production rows created by this step: 0.
+- Production persistence: COMPLETE.
+- Immediate post-write validation: PASS.
+- Production TORNTPHARM PHARMA assignment rows: 1.
+- Production TORNTPHARM secondary-exposure rows: 2.
+- PR #101 merge: NOT AUTHORIZED / NOT PERFORMED.
+- Application deployment: NOT AUTHORIZED / NOT PERFORMED.
