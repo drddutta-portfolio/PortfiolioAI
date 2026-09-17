@@ -44,6 +44,7 @@ export type PharmaSubprofileReviewBlocker =
   | "CONFLICTING_PRIMARY_MODEL_EVIDENCE"
   | "SECONDARY_EXPOSURE_REVIEW_INCOMPLETE"
   | "UNRESOLVED_SECONDARY_EXPOSURE_MATERIALITY"
+  | "DOMINANT_SECONDARY_EXPOSURE_RECLASSIFICATION_REQUIRED"
   | "CONDITIONAL_MATERIALITY_REVIEW_INCOMPLETE"
 
 export interface BuildPharmaSubprofileReviewPackageInput {
@@ -103,6 +104,10 @@ function hasUnresolvedSecondaryExposureMateriality(items: readonly PharmaSubprof
   return items.some((item) => item.materiality === "UNKNOWN")
 }
 
+function hasDominantSecondaryExposure(items: readonly PharmaSubprofileSecondaryExposureAssessment[]) {
+  return items.some((item) => item.materiality === "DOMINANT")
+}
+
 function buildBlockers(input: BuildPharmaSubprofileReviewPackageInput): PharmaSubprofileReviewBlocker[] {
   const blockers: PharmaSubprofileReviewBlocker[] = []
   const eligibleEvidence = promotionEligibleSubprofileEvidence(input.evidenceItems)
@@ -115,6 +120,7 @@ function buildBlockers(input: BuildPharmaSubprofileReviewPackageInput): PharmaSu
   if (hasConflictingPrimaryModelEvidence(input.evidenceItems)) blockers.push("CONFLICTING_PRIMARY_MODEL_EVIDENCE")
   if (!input.secondaryExposuresReviewed) blockers.push("SECONDARY_EXPOSURE_REVIEW_INCOMPLETE")
   if (hasUnresolvedSecondaryExposureMateriality(input.secondaryExposureAssessment)) blockers.push("UNRESOLVED_SECONDARY_EXPOSURE_MATERIALITY")
+  if (hasDominantSecondaryExposure(input.secondaryExposureAssessment)) blockers.push("DOMINANT_SECONDARY_EXPOSURE_RECLASSIFICATION_REQUIRED")
   if (!input.conditionalMaterialityReviewed) blockers.push("CONDITIONAL_MATERIALITY_REVIEW_INCOMPLETE")
 
   return blockers
