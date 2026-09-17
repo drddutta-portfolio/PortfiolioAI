@@ -174,6 +174,99 @@
   font-size: .55rem;
 }
 
+.research-page .pharma-subprofile-readiness {
+  margin: 0 .75rem .75rem;
+  padding: .75rem;
+  border: 1px solid #d8e5de;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbf8 100%);
+}
+
+.research-page .pharma-subprofile-readiness-muted {
+  background: #fafbfa;
+}
+
+.research-page .pharma-subprofile-readiness-muted > p {
+  margin: .35rem 0 0;
+  color: #6e7a73;
+  font-size: .58rem;
+  line-height: 1.4;
+}
+
+.research-page .pharma-subprofile-readiness-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.research-page .pharma-subprofile-readiness-head > div:first-child > p:last-child {
+  max-width: 48rem;
+  margin: .2rem 0 0;
+  color: #6c7972;
+  font-size: .56rem;
+  line-height: 1.4;
+}
+
+.research-page .pharma-subprofile-readiness-total {
+  min-width: 145px;
+  display: grid;
+  justify-items: end;
+  gap: .05rem;
+}
+
+.research-page .pharma-subprofile-readiness-total strong {
+  color: #244d37;
+  font-size: 1.15rem;
+}
+
+.research-page .pharma-subprofile-readiness-total span {
+  color: #7a8780;
+  font-size: .52rem;
+}
+
+.research-page .pharma-subprofile-readiness-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .5rem;
+  margin-top: .65rem;
+}
+
+.research-page .pharma-subprofile-readiness-grid article {
+  min-width: 0;
+  padding: .6rem;
+  border: 1px solid #e3eae6;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.research-page .pharma-subprofile-readiness-grid span,
+.research-page .pharma-subprofile-readiness-grid strong,
+.research-page .pharma-subprofile-readiness-grid small {
+  display: block;
+}
+
+.research-page .pharma-subprofile-readiness-grid span {
+  color: #819087;
+  font-size: .5rem;
+  font-weight: 800;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+
+.research-page .pharma-subprofile-readiness-grid strong {
+  margin-top: .14rem;
+  color: #29483a;
+  font-size: .72rem;
+}
+
+.research-page .pharma-subprofile-readiness-grid small {
+  margin-top: .18rem;
+  color: #738078;
+  font-size: .5rem;
+  line-height: 1.35;
+}
+
 .research-page .pharma-canonical-history {
   margin: 0 .75rem .75rem;
   padding: .75rem;
@@ -356,21 +449,26 @@
 .research-page .pharma-readiness-note small { color: #75838c; font-size: .52rem; }
 
 @media (max-width: 1100px) {
-  .research-page .pharma-readiness-quick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .research-page .pharma-readiness-quick-grid,
+  .research-page .pharma-subprofile-readiness-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-width: 960px) {
   .research-page .pharma-history-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .research-page .pharma-readiness-quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .research-page .pharma-readiness-quick-grid,
+  .research-page .pharma-subprofile-readiness-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 780px) {
   .research-page .pharma-readiness-panel > header,
   .research-page .pharma-domain footer,
-  .research-page .pharma-history-head { flex-direction: column; }
-  .research-page .pharma-readiness-summary { justify-items: start; }
+  .research-page .pharma-history-head,
+  .research-page .pharma-subprofile-readiness-head { flex-direction: column; }
+  .research-page .pharma-readiness-summary,
+  .research-page .pharma-subprofile-readiness-total { justify-items: start; }
   .research-page .pharma-readiness-grid,
   .research-page .pharma-history-summary-grid,
-  .research-page .pharma-readiness-quick-grid { grid-template-columns: 1fr; }
+  .research-page .pharma-readiness-quick-grid,
+  .research-page .pharma-subprofile-readiness-grid { grid-template-columns: 1fr; }
   .research-page .pharma-readiness-details > summary { grid-template-columns: 1fr; gap: .2rem; }
 }
