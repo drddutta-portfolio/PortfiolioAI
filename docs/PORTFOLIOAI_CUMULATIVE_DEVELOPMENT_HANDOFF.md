@@ -580,3 +580,117 @@ When Codex credits return:
 > Read this cumulative handoff first, then independently inspect the current GitHub branch/PR, canonical repository docs, and current Supabase state relevant to the next gate. Treat this handoff as historical context, not a substitute for current verification. Preserve all production-safety gates. Continue from the newest unfinished stage and append completed work back into this cumulative history rather than replacing it with a latest-state-only summary.
 
 **CURRENT STOP POINT:** TORNTPHARM's Gate E reference implementation is fully **locally validated** through reviewed decision, local persistence, fail-closed resolver consumption, Research-header rendering, and fresh full local validation. Production still has zero research-subprofile assignments and zero secondary-exposure rows. The next safe step is a fresh read-only production preflight plus preparation of the exact idempotent TORNTPHARM production-persistence package; do not write it, merge PR #101, deploy, ingest evidence, call paid providers, score, recommend, size, or modify schedulers without a new explicit owner authorization.
+
+---
+
+## 16. Entry 011 — Gate E production persistence explicitly authorized and validated
+
+**Date:** 17 September 2026  
+**Actor:** ChatGPT + owner explicit authorization
+
+After localhost idempotency validation and a fresh read-only production preflight, the owner explicitly authorized only the reviewed TORNTPHARM Gate E assignment persistence.
+
+The production write created exactly:
+- one reviewed primary assignment: `DOMESTIC_FORMULATIONS`, `REVIEWED`, `HIGH`, effective from `2026-03-31`;
+- one reviewed `GLOBAL_GENERICS` secondary exposure: `MATERIAL`, `MEDIUM`;
+- one reviewed `CDMO_CRAMS` secondary exposure: `EMERGING`, `MEDIUM`.
+
+Production assignment ID: `2833dec7-466c-4491-9a0a-47693dce3673`.
+
+Immediate validation confirmed:
+- TORNTPHARM PHARMA assignment count = 1;
+- secondary exposure count = 2;
+- unexpected secondary exposure count = 0;
+- primary exact match = true;
+- Global Generics exact match = true;
+- CDMO / CRAMS exact match = true.
+
+No PR merge, application deployment, Edge Function deployment, evidence ingestion, scoring, recommendation, sizing, provider call, migration, or scheduler change occurred in this persistence action.
+
+**Result:** Gate E production persistence PASS for the exact owner-authorized TORNTPHARM reviewed assignment only.
+
+---
+
+## 17. Entry 012 — Local-first development workflow adopted for remaining R4N work
+
+**Date:** 17 September 2026  
+**Owner direction:** keep subsequent development explicitly local until meaningful visual changes are visible and reviewed.
+
+The required working loop for remaining R4N development is:
+
+```text
+GitHub R4N branch
+        ↓
+Develop / update code
+        ↓
+Update cumulative development handoff at meaningful checkpoint
+        ↓
+Owner git pull
+        ↓
+Local code on owner's Mac
+        ↓
+Existing local Supabase
+        ↓
+Local Vite app
+        ↓
+localhost UI
+        ↓
+Owner visual approval
+        ↓
+Full local validation
+        ↓
+Update cumulative handoff with authoritative validation result
+        ↓
+Next gate
+```
+
+Fixed rules:
+- `main` remains untouched during development;
+- production Supabase remains untouched unless the owner explicitly authorizes a specific production action;
+- existing local Supabase is reused rather than recreated unnecessarily;
+- meaningful gates should produce visible localhost changes where applicable;
+- visual review precedes completion of UI-facing gates;
+- full local test/typecheck/architecture/build validation follows visual approval;
+- the cumulative handoff must be updated at meaningful implementation and final-validation checkpoints.
+
+---
+
+## 18. Entry 013 — Gate F profile-driven Research workspace visual milestone
+
+**Date:** 17 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate F began with a localhost-first visible workspace slice for TORNTPHARM. Added:
+- `src/features/research/pharmaResearchWorkspaceModel.ts`
+- `src/features/research/pharmaResearchWorkspaceModel.test.ts`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+- Research Overview wiring in `src/pages/ResearchPage.tsx`.
+
+The localhost Research Overview now visibly renders a **Business model research map** driven by the reviewed assignment rather than by generic Pharma assumptions.
+
+Observed localhost behavior:
+- primary model = `Domestic Formulations`;
+- primary evidence lane count = 8 business-model-specific requirements;
+- current local fixture state = `0/8 verified`, all missing requirements shown as `Unavailable` rather than zero;
+- `GLOBAL_GENERICS / MATERIAL` activates a separate evidence overlay;
+- `CDMO_CRAMS / EMERGING` renders as an explicit emerging watchlist and does not activate a full CDMO scorecard;
+- the UI states that scoring methodology is not yet approved;
+- secondary exposures remain separate and do not blend into a score.
+
+The owner visually reviewed the first Gate F workspace and explicitly approved the **Gate F visual direction**.
+
+Post-approval polish added:
+- human-readable labels for Domestic Formulations, Global Generics and CDMO workspace metrics;
+- stronger visual emphasis for the primary evidence summary;
+- tighter secondary-exposure cards and overlay requirement spacing;
+- focused test coverage for the friendly display labels.
+
+Current polish head before local pull/validation: `d0e5fc6e89aefa5ccc501292c56510dddf37d70b`.
+
+**Production touched by Gate F development:** NO.  
+**Scoring methodology:** still unapproved / fail-closed.  
+**Evidence ingestion:** not performed.  
+**Full post-polish local validation:** PENDING.
+
+**CURRENT STOP POINT:** Gate F visual direction is owner-approved and the minor polish is committed on the R4N branch. The next required step is owner `git pull`, localhost recheck of the polished workspace, then the full local validation suite. Do not perform any further production action.
