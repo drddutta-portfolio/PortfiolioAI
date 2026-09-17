@@ -1,7 +1,7 @@
 -- R4N Gate E local-only fixture for the owner-reviewed TORNTPHARM assignment.
 -- SAFETY: run only against the local Supabase database on 127.0.0.1:54322.
--- This script deliberately asserts the known disposable local TORNTPHARM UUID;
--- it aborts on any environment where that exact local fixture identity is absent.
+-- This script deliberately asserts the known disposable local TORNTPHARM UUID
+-- and the explicitly reviewed local user email; it aborts elsewhere.
 -- It creates no evidence, scores, recommendations, provider calls or scheduler state.
 
 begin;
@@ -10,7 +10,7 @@ do $$
 declare
   v_security_id uuid;
   v_reviewer_id uuid;
-  v_owner_count integer;
+  v_reviewer_count integer;
   v_assignment_id uuid;
   v_existing_count integer;
   v_reviewed_at timestamptz := '2026-09-17 18:30:00+05:30'::timestamptz;
@@ -28,25 +28,23 @@ begin
     raise exception 'Local-only safety guard failed: unexpected TORNTPHARM security id %. Fixture aborted.', v_security_id;
   end if;
 
-  select count(distinct p.user_id)
-    into v_owner_count
-  from public.transactions t
-  join public.portfolios p on p.id = t.portfolio_id
-  where t.security_id = v_security_id;
+  select count(*), min(id)
+    into v_reviewer_count, v_reviewer_id
+  from auth.users
+  where lower(email) = 'dr.d.dutta@gmail.com';
 
-  if v_owner_count <> 1 then
-    raise exception 'Expected exactly one local portfolio owner for TORNTPHARM; found %. Fixture aborted.', v_owner_count;
+  if v_reviewer_count <> 1 or v_reviewer_id is null then
+    raise exception 'Expected exactly one local reviewer auth user dr.d.dutta@gmail.com; found %. Fixture aborted.', v_reviewer_count;
   end if;
 
-  select distinct p.user_id
-    into v_reviewer_id
-  from public.transactions t
-  join public.portfolios p on p.id = t.portfolio_id
-  where t.security_id = v_security_id
-  limit 1;
-
-  if v_reviewer_id is null or not exists (select 1 from auth.users where id = v_reviewer_id) then
-    raise exception 'Local portfolio owner is not an auth.users reviewer; fixture aborted.';
+  if not exists (
+    select 1
+    from public.transactions t
+    join public.portfolios p on p.id = t.portfolio_id
+    where t.security_id = v_security_id
+      and p.user_id = v_reviewer_id
+  ) then
+    raise exception 'Expected local reviewer does not own a portfolio containing TORNTPHARM; fixture aborted.';
   end if;
 
   if not exists (
