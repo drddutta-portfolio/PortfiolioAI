@@ -742,3 +742,36 @@ GitHub `PortfolioAI Architecture Guard` for the polished implementation head als
 **PR #101:** remains unmerged.
 
 **CURRENT STOP POINT:** The first Gate F profile-driven Research workspace slice is owner-approved and fully locally validated. Continue Gate F locally only. The next development work should deepen the TORNTPHARM evidence workspace/readiness behavior without production writes, evidence ingestion, scoring, recommendation, sizing, provider calls, scheduler changes, PR merge, or deployment unless separately authorized.
+
+---
+
+## 20. Entry 015 — Gate F subprofile evidence-completeness slice prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**Implementation head before handoff update:** `ffb56f0fc4b5914224d52bf9cb03f3e6a649f3e9`
+
+The next local-only Gate F slice deepens the existing Pharma Research Readiness panel so it can consume the same reviewed subprofile authority already used by the Business model research map.
+
+Implementation changes:
+- `ProfileResearchReadinessPanel` now receives the environment-resolved `securityId` and forwards it only to the PHARMA_V1 readiness path;
+- `PharmaResearchReadinessPanel` now resolves the active reviewed Pharma subprofile assignment through the existing fail-closed repository hook;
+- the readiness panel reuses `buildPharmaResearchWorkspaceModel` rather than creating a second subprofile interpretation path;
+- a new **Reviewed business-model evidence / Subprofile evidence completeness** section summarizes the currently counted evidence requirements separately from the parent PHARMA_V1 readiness contract.
+
+The new visible readiness summary is deliberately non-scoring:
+- primary `Domestic Formulations` shows verified / total, unavailable, and attention counts;
+- `GLOBAL_GENERICS / MATERIAL` contributes only its active evidence-overlay requirements to the displayed evidence-completeness denominator;
+- `CDMO_CRAMS / EMERGING` is shown as an emerging watch and is explicitly excluded from the readiness denominator because no EMERGING-specific requirement contract has been approved;
+- the panel states that this is **evidence completeness only** and does not define or imply a score, recommendation, Gate G weighting, threshold, or curve;
+- Gate G remains the required owner-approved boundary before any numeric scoring methodology is introduced.
+
+No local Supabase mutation is required for this slice; it consumes the already-reviewed local assignment and existing cached local research evidence.
+
+**Production touched:** NO.  
+**Evidence ingestion:** NO.  
+**Scoring/recommendation/sizing:** NO.  
+**Provider calls / scheduler changes / deployment / PR merge:** NO.
+
+**CURRENT STOP POINT:** This second Gate F visual slice is committed and documented on the R4N branch but has not yet been pulled or visually validated on localhost. Next step: owner `git pull`, refresh the TORNTPHARM Overview against existing local Supabase, inspect the new **Subprofile evidence completeness** block, then approve/refine visually before the full local validation chain.
