@@ -75,6 +75,7 @@ describe("buildPharmaResearchWorkspaceModel", () => {
 
     expect(model.primary.displayName).toBe("Domestic Formulations")
     expect(model.primary.requirements.some((item) => item.metricCode === "PHARMA_FIELD_FORCE_PRODUCTIVITY" && item.status === "VERIFIED")).toBe(true)
+    expect(model.primary.requirements.find((item) => item.metricCode === "PHARMA_FIELD_FORCE_PRODUCTIVITY")?.label).toBe("Field Force Productivity")
     expect(model.primary.requirements.some((item) => item.status === "UNAVAILABLE")).toBe(true)
     expect(model.scoringState).toBe("UNAPPROVED")
 
@@ -82,6 +83,7 @@ describe("buildPharmaResearchWorkspaceModel", () => {
     const cdmo = model.secondaries.find((item) => item.exposureCode === "CDMO_CRAMS")
     expect(generics?.mode).toBe("EVIDENCE_OVERLAY")
     expect(generics?.requirements.length).toBeGreaterThan(0)
+    expect(generics?.requirements.find((item) => item.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH")?.label).toBe("Export / US Revenue Growth")
     expect(cdmo?.mode).toBe("EMERGING_WATCH")
     expect(cdmo?.requirements).toHaveLength(0)
   })
