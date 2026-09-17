@@ -16,6 +16,7 @@ export function ResearchReadinessPanel({
   groups,
   detailsLabel,
   details,
+  supplementary,
   children,
   itemLabel = "research contracts",
 }: {
@@ -26,6 +27,7 @@ export function ResearchReadinessPanel({
   readonly groups: readonly ResearchReadinessGroup[]
   readonly detailsLabel: string
   readonly details: ReactNode
+  readonly supplementary?: ReactNode
   readonly children?: ReactNode
   readonly itemLabel?: string
 }) {
@@ -43,6 +45,7 @@ export function ResearchReadinessPanel({
       <summary><strong>{detailsLabel}</strong><span>{total} {itemLabel}</span><b>Details</b></summary>
       {details}
     </details>
+    {supplementary}
     {children}
   </section>
 }
