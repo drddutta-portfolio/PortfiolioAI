@@ -775,3 +775,44 @@ No local Supabase mutation is required for this slice; it consumes the already-r
 **Provider calls / scheduler changes / deployment / PR merge:** NO.
 
 **CURRENT STOP POINT:** This second Gate F visual slice is committed and documented on the R4N branch but has not yet been pulled or visually validated on localhost. Next step: owner `git pull`, refresh the TORNTPHARM Overview against existing local Supabase, inspect the new **Subprofile evidence completeness** block, then approve/refine visually before the full local validation chain.
+
+---
+
+## 21. Entry 016 — Gate F readiness render-path hardening after localhost omission
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After Entry 015, both local Vite dev and a fresh Vite preview still rendered the older Pharmaceuticals Research Readiness composition: the contracts disclosure was immediately followed by **Canonical Pharma financial history**, while neither the intended **Subprofile evidence completeness** section nor its fail-closed unavailable fallback appeared.
+
+Repository/runtime-path inspection established:
+- the current R4N source contained the new subprofile-readiness strings and the production build contained them in the generated ResearchPage bundle;
+- `ProfileResearchReadinessPanel` selected the PHARMA_V1 readiness component for Pharma;
+- `ResearchReadinessPanel` did render its generic React children;
+- the visible canonical Pharma history is itself a child of that same shared readiness shell, so the defect was not a wholesale loss of the children collection;
+- the existing tests covered BANK_NBFC profile selection and the shared readiness disclosure, but did not guard the Pharma subprofile supplementary slot/order.
+
+To harden the exact failing composition boundary without changing evidence or scoring logic:
+- `ResearchReadinessPanel` now exposes an explicit optional `supplementary` ReactNode slot immediately after the research-contract disclosure and before ordinary children;
+- `PharmaResearchReadinessPanel` passes `subprofileReadiness` through that named slot;
+- canonical Pharma financial history remains the ordinary child after the supplementary slot;
+- `ResearchReadinessPanel.test.tsx` now asserts that supplementary readiness content renders visibly and precedes canonical Pharma history.
+
+Repository-side checkpoint:
+- shared-shell change commit: `222edab75c8120da065cc5a61ad7847327eb8481`;
+- Pharma slot wiring commit: `f9b8011a140bde7b48f955f7271bee67ea5d838e`;
+- render-order regression coverage commit: `76106f87a501bfbb11a4c1229b3fe9ae6d692589`;
+- PortfolioAI Architecture Guard run #177 completed **SUCCESS** on `76106f87a501bfbb11a4c1229b3fe9ae6d692589`;
+- Vercel branch status on that head was **SUCCESS**.
+
+This repository-side success is not being treated as localhost visual proof. The exact browser-level mechanism behind the earlier first-child omission was not independently reproduced in the connector-only environment; instead, the failing UI boundary has been made explicit and covered by a regression test. Per the adopted local-first workflow, owner visual verification remains the next gate and the full local validation chain is intentionally deferred until after that visual result.
+
+**Production touched:** NO.  
+**Production Supabase:** unchanged.  
+**Evidence ingestion / provider calls:** NO.  
+**Scoring / recommendation / sizing:** NO.  
+**Schedulers:** unchanged.  
+**PR #101:** remains unmerged.
+
+**CURRENT STOP POINT:** Pull the latest R4N branch locally, reuse the existing local Supabase/Vite setup, and inspect TORNTPHARM → Research → Overview. The required visual order is **View all Pharmaceuticals research contracts → Subprofile evidence completeness → Canonical Pharma financial history**. If the new block is visible, obtain owner visual approval first; only then run the full local validation chain and append its authoritative result to this cumulative handoff before the next gate.
