@@ -28,13 +28,23 @@ begin
     raise exception 'Local-only safety guard failed: unexpected TORNTPHARM security id %. Fixture aborted.', v_security_id;
   end if;
 
-  select count(*), min(id)
-    into v_reviewer_count, v_reviewer_id
+  select count(*)
+    into v_reviewer_count
   from auth.users
   where lower(email) = 'dr.d.dutta@gmail.com';
 
-  if v_reviewer_count <> 1 or v_reviewer_id is null then
+  if v_reviewer_count <> 1 then
     raise exception 'Expected exactly one local reviewer auth user dr.d.dutta@gmail.com; found %. Fixture aborted.', v_reviewer_count;
+  end if;
+
+  select id
+    into v_reviewer_id
+  from auth.users
+  where lower(email) = 'dr.d.dutta@gmail.com'
+  limit 1;
+
+  if v_reviewer_id is null then
+    raise exception 'Local reviewer auth user dr.d.dutta@gmail.com could not be resolved; fixture aborted.';
   end if;
 
   if not exists (
