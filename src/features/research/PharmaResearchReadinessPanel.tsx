@@ -98,9 +98,9 @@ export function PharmaResearchReadinessPanel({ securityId, research }: { readonl
     groups={buildPharmaReadinessSummaryGroups(view)}
     detailsLabel="View all Pharmaceuticals research contracts"
     details={details}
+    supplementary={subprofileReadiness}
     itemLabel="readiness requirements"
   >
-    {subprofileReadiness}
     <details className="pharma-canonical-history" aria-label="Canonical Pharma history">
       <summary className="pharma-history-head">
         <div>
