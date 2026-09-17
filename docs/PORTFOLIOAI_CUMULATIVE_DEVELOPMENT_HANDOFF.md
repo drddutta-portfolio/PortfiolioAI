@@ -694,3 +694,51 @@ Current polish head before local pull/validation: `d0e5fc6e89aefa5ccc501292c5651
 **Full post-polish local validation:** PENDING.
 
 **CURRENT STOP POINT:** Gate F visual direction is owner-approved and the minor polish is committed on the R4N branch. The next required step is owner `git pull`, localhost recheck of the polished workspace, then the full local validation suite. Do not perform any further production action.
+
+---
+
+## 19. Entry 014 — Gate F polished localhost workspace fully validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation + GitHub CI verification  
+**Validated implementation head:** `d0e5fc6e89aefa5ccc501292c56510dddf37d70b`
+
+After pulling the polished Gate F workspace, the owner reopened the TORNTPHARM Research Overview on localhost and confirmed the polished **Business model research map** renders correctly.
+
+Visible localhost state confirmed:
+- primary model remains `Domestic Formulations` with reviewed/high-confidence authority;
+- primary evidence summary remains `0/8 verified` in the current local fixture;
+- missing requirements remain explicitly `Unavailable` rather than numeric zero;
+- `CDMO / CRAMS` remains an `EMERGING` watchlist and does not incorrectly activate a full CDMO scorecard;
+- `Global Generics` remains a `MATERIAL` evidence overlay;
+- scoring remains explicitly marked **not yet approved**;
+- secondary exposures remain separate from the primary methodology and do not blend into a score.
+
+The owner then ran the full chained local validation command:
+
+```bash
+npm test && npm run typecheck && npm run check:architecture && npm run lint:architecture && npm run build
+```
+
+The command chain reached the final Vite production build and returned successfully to the shell prompt, which confirms every preceding command in the `&&` chain passed:
+- `npm test`: PASS;
+- `npm run typecheck`: PASS;
+- `npm run check:architecture`: PASS;
+- `npm run lint:architecture`: PASS;
+- `npm run build`: PASS.
+
+Build details observed:
+- Vite 8.2.2;
+- 204 modules transformed;
+- build completed in 247 ms;
+- only the existing non-blocking warning about some chunks exceeding 500 kB after minification was shown.
+
+GitHub `PortfolioAI Architecture Guard` for the polished implementation head also completed successfully: run #166 / workflow run `35258432651`.
+
+**Result:** Gate F visual workspace slice = **LOCALLY VALIDATED / PASS**.  
+**Production touched by this validation:** NO.  
+**Evidence ingestion:** still not performed.  
+**Scoring methodology:** still unapproved / fail-closed.  
+**PR #101:** remains unmerged.
+
+**CURRENT STOP POINT:** The first Gate F profile-driven Research workspace slice is owner-approved and fully locally validated. Continue Gate F locally only. The next development work should deepen the TORNTPHARM evidence workspace/readiness behavior without production writes, evidence ingestion, scoring, recommendation, sizing, provider calls, scheduler changes, PR merge, or deployment unless separately authorized.
