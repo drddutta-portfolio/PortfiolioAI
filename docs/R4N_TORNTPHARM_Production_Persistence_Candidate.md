@@ -1,19 +1,23 @@
 # R4N — TORNTPHARM Production Persistence Candidate
 
-**Status:** LOCALHOST IDEMPOTENCY DRY-RUN VALIDATED — NO PRODUCTION PREFLIGHT PERFORMED IN THIS STEP  
+**Status:** FRESH READ-ONLY PRODUCTION PREFLIGHT PASS — PRODUCTION WRITE NOT AUTHORIZED  
 **Date:** 17 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 ## Scope boundary
 
-The owner explicitly requested that this preparation remain on localhost and not query or write production Supabase. Accordingly:
+This package was first prepared and validated on localhost, then followed by a separately authorized fresh **read-only** production preflight. No production write was performed.
 
-- no fresh production database query was performed in this step;
-- no production assignment or secondary-exposure row was created;
-- no provider, evidence-ingestion, scoring, recommendation, sizing, scheduler, deployment, merge, or migration action was performed;
-- the production identifiers below are retained only from the last reviewed Gate E package and are **not treated as freshly revalidated**.
-
-A real production persistence action remains blocked until a later, separately authorized **fresh read-only production preflight** confirms identity, zero/conflict state, reviewer identity, constraints, and the exact target rows immediately before any write.
+This step did **not**:
+- create or modify a production assignment row;
+- create or modify a production secondary-exposure row;
+- ingest evidence;
+- call any paid/external provider;
+- write scores, recommendations, or sizing;
+- alter cron/schedulers;
+- deploy application or Edge Functions;
+- merge PR #101;
+- apply a migration.
 
 ## Reviewed decision to persist
 
@@ -49,7 +53,7 @@ reason_code: OWNER_REVIEWED_STRATEGIC_EMERGING_CDMO_CAPABILITY
 source_reference: TORNTPHARM_JB_PHARMA_ACQUISITION_RELEASE_2025_06_29; TORNTPHARM_AR_2025_26
 ```
 
-The database schema does not persist a separate numeric `assignment_version` column. The Gate E `assignmentVersionCandidate = 1` therefore remains a review/package concept represented operationally by the requirement that no prior PHARMA assignment history exists for TORNTPHARM before the first canonical row is inserted.
+The database schema does not persist a separate numeric `assignment_version` column. The Gate E `assignmentVersionCandidate = 1` is represented operationally by the requirement that no prior PHARMA assignment history exists for TORNTPHARM before the first canonical row is inserted.
 
 ## Candidate execution artifact
 
@@ -59,7 +63,7 @@ Prepared:
 
 Safety properties:
 
-1. Requires an explicit target `security_id`, reviewer email, and `reviewed_at` timestamp as psql variables.
+1. Requires explicit target `security_id`, reviewer email, and `reviewed_at` timestamp as psql variables.
 2. Resolves the supplied security UUID and aborts unless it is exactly `TORNTPHARM` on `NSE`.
 3. Resolves reviewer identity from `auth.users` and requires a unique match.
 4. Requires the reviewer to own a portfolio containing the target security.
@@ -71,63 +75,104 @@ Safety properties:
 10. Requires exactly two approved secondary rows after the candidate transaction.
 11. Defaults to `ROLLBACK`. It commits only if the caller deliberately passes `-v commit_authorized=true`.
 
-The `commit_authorized` mechanism is an additional guard, not production authorization. Passing the variable in the future is prohibited unless the owner has separately authorized the exact production write after fresh read-only preflight.
+The `commit_authorized` variable is only a technical guard. Passing it as true is prohibited unless the owner separately authorizes the exact production persistence action after reviewing this preflight.
 
-## Localhost validation target
+## Localhost validation
 
-Current local Gate E fixture uses:
+The localhost reference environment used:
 
 ```text
 security_id: a4000000-0000-0000-0000-000000000002
 reviewer email: dr.d.dutta@gmail.com
-reviewed_at already persisted locally: 2026-09-17T13:00:00Z
+reviewed_at in the local fixture: 2026-09-17T13:00:00Z
 ```
 
-Because the localhost fixture already contains the exact reviewed assignment and two secondary rows, running the candidate with `commit_authorized=false` proves its **idempotent-match path** and then rolls back. No local rows change.
-
-Exact localhost dry-run command:
-
-```bash
-psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" \
-  -v target_security_id='a4000000-0000-0000-0000-000000000002' \
-  -v reviewer_email='dr.d.dutta@gmail.com' \
-  -v reviewed_at='2026-09-17T13:00:00Z' \
-  -v commit_authorized=false \
-  -f scripts/r4n_torntpharm_reviewed_assignment_persistence_candidate.sql
-```
-
-## Localhost idempotency dry-run result
-
-Owner executed the exact command above against local Supabase on `127.0.0.1:54322`.
+Owner executed the candidate against local Supabase with `commit_authorized=false`.
 
 Observed result:
-
 - target TORNTPHARM/NSE identity resolved successfully;
-- reviewer `dr.d.dutta@gmail.com` resolved successfully;
-- existing reviewed primary assignment matched exactly:
-  - `DOMESTIC_FORMULATIONS`
-  - `REVIEWED`
-  - `HIGH`
-  - effective from `2026-03-31T00:00:00Z`;
+- reviewer resolved successfully;
+- existing reviewed primary assignment matched exactly as `DOMESTIC_FORMULATIONS / REVIEWED / HIGH`;
 - existing `CDMO_CRAMS` secondary matched exactly as `EMERGING / MEDIUM / REVIEWED`;
 - existing `GLOBAL_GENERICS` secondary matched exactly as `MATERIAL / MEDIUM / REVIEWED`;
 - exactly two verification rows were displayed;
 - the script printed `SAFE DEFAULT: commit_authorized=false; rolling back transaction.`;
 - transaction ended with `ROLLBACK`.
 
-**Result:** localhost idempotent-match validation PASS. The candidate script proved that it can recognize the already-reviewed target state and exit without mutating local data when commit authorization is false.
+**Result:** localhost idempotent-match validation PASS.
 
-## Production values intentionally not finalized in this localhost-only step
+## Fresh read-only production preflight — 17 September 2026
 
-The earlier Gate E review package recorded production TORNTPHARM UUID `da69b3eb-0343-44f8-912c-288b826118cc`, but this step does not revalidate it and therefore does not treat it as execution-ready.
+Production project independently resolved as:
 
-The human-review decision artifact was committed at `2026-09-17T13:05:43Z`. That timestamp may be used as a candidate audit anchor for `reviewed_at`, but it is **not finalized here**. A future production preflight must explicitly confirm the chosen reviewer identity and reviewed-at provenance before execution.
+```text
+project: Project-PortfolioAI
+project_ref: uxiyufbsbgzzdujzcdxe
+status: ACTIVE_HEALTHY
+region: ap-northeast-1
+PostgreSQL: 17.6.1.166
+```
 
-## Gate status after localhost validation
+Fresh read-only SQL verified:
+
+```text
+TORNTPHARM / NSE security matches: 1
+production security_id: da69b3eb-0343-44f8-912c-288b826118cc
+existing PHARMA assignments for TORNTPHARM: 0
+secondary rows attached to TORNTPHARM assignments: 0
+reviewer auth-user matches: 1
+reviewer owns a production portfolio containing TORNTPHARM: YES
+```
+
+Required immutable contracts all exist exactly:
+
+```text
+DOMESTIC_FORMULATIONS / DOMESTIC_FORMULATIONS_V1: present
+GLOBAL_GENERICS / GLOBAL_GENERICS_V1: present
+CDMO_CRAMS / CDMO_CRAMS_V1: present
+```
+
+Schema safety was rechecked read-only:
+- `research_subprofile_assignments` contains the reviewed lifecycle/provenance columns required by the candidate;
+- `research_subprofile_secondary_exposures` contains `assignment_status`, `confidence_state`, `effective_from`, `effective_to`, `reason_code`, `reviewed_by`, and `reviewed_at`;
+- expected review-completeness, confidence, status, interval, foreign-key and non-overlap constraints are present;
+- RLS is enabled on both assignment and secondary-exposure tables;
+- role `authenticated` has `SELECT` only on both tables.
+
+No conflicting target row was found. Therefore the first canonical TORNTPHARM PHARMA assignment remains eligible to be represented as assignment-version candidate 1.
+
+## Production provenance parameters prepared, not executed
+
+Proposed exact production parameters for a future separately authorized write are:
+
+```text
+target_security_id = da69b3eb-0343-44f8-912c-288b826118cc
+reviewer_email = dr.d.dutta@gmail.com
+reviewed_at = 2026-09-17T13:05:43Z
+```
+
+`reviewed_at = 2026-09-17T13:05:43Z` is the Git commit timestamp of the immutable human-review approval artifact `cccb40ac7a119698fb46ed3e0658bea1377f3a7d` and is used as the audit anchor for the recorded review decision rather than the arbitrary localhost fixture timestamp.
+
+## Exact future execution shape — NOT AUTHORIZED NOW
+
+If and only if the owner later explicitly authorizes this exact production persistence action, the execution should use the already-reviewed script with the production target parameters above and `commit_authorized=true`.
+
+Before that execution, perform one final immediate read-only recheck that:
+- TORNTPHARM still resolves to the same production UUID;
+- PHARMA assignment count is still zero;
+- no secondary exposure row has appeared;
+- reviewer identity still resolves uniquely and still owns a portfolio containing TORNTPHARM;
+- all three required contracts still exist;
+- branch/script content is unchanged from the reviewed package.
+
+If any condition differs, abort and re-review.
+
+## Gate status after fresh preflight
 
 - Human review: COMPLETE / APPROVED.
 - Local reviewed persistence + UI proof: PASS.
 - Persistence candidate script: PREPARED.
 - Local idempotency validation: PASS.
-- Fresh production preflight: NOT PERFORMED BY OWNER REQUEST.
+- Fresh production read-only preflight: PASS.
 - Production persistence: NOT AUTHORIZED / NOT PERFORMED.
+- Production rows created by this step: 0.
