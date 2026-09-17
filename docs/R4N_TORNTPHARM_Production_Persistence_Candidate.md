@@ -1,6 +1,6 @@
 # R4N — TORNTPHARM Production Persistence Candidate
 
-**Status:** PREPARED FOR LOCALHOST VALIDATION ONLY — NO PRODUCTION PREFLIGHT PERFORMED IN THIS STEP  
+**Status:** LOCALHOST IDEMPOTENCY DRY-RUN VALIDATED — NO PRODUCTION PREFLIGHT PERFORMED IN THIS STEP  
 **Date:** 17 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`
 
@@ -83,7 +83,7 @@ reviewer email: dr.d.dutta@gmail.com
 reviewed_at already persisted locally: 2026-09-17T13:00:00Z
 ```
 
-Because the localhost fixture already contains the exact reviewed assignment and two secondary rows, running the candidate with `commit_authorized=false` should prove its **idempotent-match path** and then roll back. No local rows should change.
+Because the localhost fixture already contains the exact reviewed assignment and two secondary rows, running the candidate with `commit_authorized=false` proves its **idempotent-match path** and then rolls back. No local rows change.
 
 Exact localhost dry-run command:
 
@@ -96,15 +96,26 @@ psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" \
   -f scripts/r4n_torntpharm_reviewed_assignment_persistence_candidate.sql
 ```
 
-Expected behavior:
+## Localhost idempotency dry-run result
 
-- TORNTPHARM identity passes;
-- reviewer resolves uniquely;
-- existing primary row matches exactly;
-- existing `GLOBAL_GENERICS` and `CDMO_CRAMS` rows match exactly;
-- exactly two rows are displayed in the verification output;
-- final message states the safe default is rolling back;
-- database state is unchanged.
+Owner executed the exact command above against local Supabase on `127.0.0.1:54322`.
+
+Observed result:
+
+- target TORNTPHARM/NSE identity resolved successfully;
+- reviewer `dr.d.dutta@gmail.com` resolved successfully;
+- existing reviewed primary assignment matched exactly:
+  - `DOMESTIC_FORMULATIONS`
+  - `REVIEWED`
+  - `HIGH`
+  - effective from `2026-03-31T00:00:00Z`;
+- existing `CDMO_CRAMS` secondary matched exactly as `EMERGING / MEDIUM / REVIEWED`;
+- existing `GLOBAL_GENERICS` secondary matched exactly as `MATERIAL / MEDIUM / REVIEWED`;
+- exactly two verification rows were displayed;
+- the script printed `SAFE DEFAULT: commit_authorized=false; rolling back transaction.`;
+- transaction ended with `ROLLBACK`.
+
+**Result:** localhost idempotent-match validation PASS. The candidate script proved that it can recognize the already-reviewed target state and exit without mutating local data when commit authorization is false.
 
 ## Production values intentionally not finalized in this localhost-only step
 
@@ -112,11 +123,11 @@ The earlier Gate E review package recorded production TORNTPHARM UUID `da69b3eb-
 
 The human-review decision artifact was committed at `2026-09-17T13:05:43Z`. That timestamp may be used as a candidate audit anchor for `reviewed_at`, but it is **not finalized here**. A future production preflight must explicitly confirm the chosen reviewer identity and reviewed-at provenance before execution.
 
-## Gate status after this preparation
+## Gate status after localhost validation
 
 - Human review: COMPLETE / APPROVED.
 - Local reviewed persistence + UI proof: PASS.
 - Persistence candidate script: PREPARED.
-- Local idempotency validation: PENDING OWNER RUN.
+- Local idempotency validation: PASS.
 - Fresh production preflight: NOT PERFORMED BY OWNER REQUEST.
 - Production persistence: NOT AUTHORIZED / NOT PERFORMED.
