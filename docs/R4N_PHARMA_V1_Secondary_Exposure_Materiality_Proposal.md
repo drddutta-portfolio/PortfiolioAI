@@ -1,12 +1,13 @@
-# R4N — PHARMA_V1 Secondary-Exposure Materiality Proposal
+# R4N — PHARMA_V1 Secondary-Exposure Materiality V1
 
-**Status:** DRAFT FOR OWNER REVIEW — NOT AN APPROVED METHODOLOGY  
+**Status:** OWNER APPROVED — IMPLEMENTED LOCALLY ON R4N  
+**Owner approval:** 17 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`  
-**Scope:** Gate E review methodology only. This document does not authorize production writes, assignment promotion, scoring, recommendations, provider calls, or scheduler changes.
+**Scope:** Gate E review methodology only. This approval does not authorize production writes, assignment promotion, scoring, recommendations, provider calls, or scheduler changes.
 
-## Why this proposal exists
+## Why this rule exists
 
-R4N already defines secondary Pharma business-model exposures as:
+R4N defines secondary Pharma business-model exposures as:
 
 - `IMMATERIAL`
 - `EMERGING`
@@ -14,11 +15,11 @@ R4N already defines secondary Pharma business-model exposures as:
 - `DOMINANT`
 - `UNKNOWN`
 
-The schema and TypeScript contract intentionally do not assign numeric thresholds to those states. Gate E now requires an explicit reviewed materiality rule before a provisional assignment can be considered ready for human review.
+The schema and TypeScript contract intentionally did not assign numeric thresholds to those states until Gate E review. The owner has now approved the V1 materiality thresholds and guardrails below.
 
-The rule must remain separate from the primary-subprofile decision. A secondary exposure can activate evidence requirements or risk overlays, but it cannot create or blend a second score.
+The rule remains separate from the primary-subprofile decision. A secondary exposure can activate evidence requirements or risk overlays, but it cannot create or blend a second score.
 
-## Proposed V1 materiality rule
+## Approved V1 materiality rule
 
 ### Measurement basis
 
@@ -35,9 +36,9 @@ Requirements:
 5. Profit, assets, capacity, customer concentration, regulatory exposure and management description may be retained as corroborating evidence, but must not silently substitute for revenue share without an explicit reason code.
 6. If the business-model numerator cannot be established from retained evidence, materiality remains `UNKNOWN`.
 
-### Proposed states
+### Approved states
 
-| State | Proposed V1 rule | Review consequence |
+| State | V1 rule | Review consequence |
 |---|---|---|
 | `UNKNOWN` | Evidence is insufficient, incomparable, ambiguous, or does not isolate the business-model exposure. | Fail closed; Gate E review package remains provisional. |
 | `IMMATERIAL` | Business-model-attributable revenue is **<5%** of comparable company revenue **and** there is no reviewed qualitative trigger showing disproportionate strategic/regulatory importance. | Does not activate business-model-specific conditional requirements by default. |
@@ -47,9 +48,9 @@ Requirements:
 
 ## Basis for the 10% anchor
 
-The 10% `MATERIAL` anchor is deliberately aligned with the quantitative reporting threshold in **Ind AS 108 Operating Segments**, where a segment is separately reportable when revenue, profit/loss, or assets meet the 10% test. PortfolioAI is not treating Ind AS 108 as a business-model-classification rule; it is using the 10% level only as an externally grounded materiality anchor for the internal research contract.
+The 10% `MATERIAL` anchor is aligned with the quantitative reporting threshold in **Ind AS 108 Operating Segments**, where a segment is separately reportable when revenue, profit/loss, or assets meet the 10% test. PortfolioAI is not treating Ind AS 108 as a business-model-classification rule; it uses the 10% level only as an externally grounded materiality anchor for the internal research contract.
 
-The proposed 5% `EMERGING` floor is an internal conservative review threshold and therefore requires explicit owner approval before implementation.
+The 5% `EMERGING` floor is an owner-approved internal conservative review threshold.
 
 ## Qualitative override guardrails
 
@@ -91,15 +92,19 @@ Therefore the current Gate E position remains:
 - assignment lifecycle: `PROVISIONAL`;
 - review package: fail closed until secondary-exposure materiality review is complete.
 
-## Implementation gate
+## Implementation status
 
-This proposal must not be encoded into the active contract until the owner explicitly approves the V1 thresholds and guardrails.
+The approved V1 rule is encoded in `src/features/research/pharmaSecondaryExposureMateriality.ts` with focused tests in `pharmaSecondaryExposureMateriality.test.ts`.
 
-If approved, implementation should:
+The resolver:
 
-1. add a pure deterministic materiality resolver with explicit inputs and reason codes;
-2. retain `UNKNOWN` whenever evidence cannot support a comparable revenue share;
-3. require a reasoned qualitative override rather than an implicit override;
-4. add boundary tests at 5%, 10% and 50%;
-5. ensure `DOMINANT` secondary exposure triggers a primary-subprofile conflict/reclassification blocker;
-6. keep all secondary exposures non-scoring until a mixed-model scoring methodology is separately approved.
+1. uses the approved 5%, 10% and 50% quantitative boundaries;
+2. retains `UNKNOWN` whenever comparable business-model-attributable revenue cannot be established;
+3. requires provenance-complete qualitative overrides with `MEDIUM` or `HIGH` confidence and an effective date;
+4. refuses an override that attempts to downgrade a stronger quantitative state;
+5. flags `DOMINANT` exposure for primary-subprofile reclassification review;
+6. remains pure, non-scoring and free of provider/database I/O.
+
+The Gate E review-package contract separately blocks `READY_FOR_REVIEW` when any secondary exposure remains `UNKNOWN` or is `DOMINANT` and therefore requires primary-subprofile reclassification review.
+
+No production persistence, assignment promotion, evidence ingestion, scoring or recommendation is authorized by this implementation.
