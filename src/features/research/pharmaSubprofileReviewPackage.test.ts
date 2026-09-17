@@ -98,7 +98,7 @@ describe("buildPharmaSubprofileReviewPackage", () => {
     expect(missingDate.blockers).toContain("MISSING_EFFECTIVE_FROM")
   })
 
-  it("retains an UNKNOWN secondary exposure as provisional and does not score or promote it", () => {
+  it("keeps an UNKNOWN secondary exposure provisional until materiality is resolved", () => {
     const result = buildPharmaSubprofileReviewPackage(input({
       secondaryExposureAssessment: [{
         exposureCode: "GLOBAL_GENERICS",
@@ -108,11 +108,26 @@ describe("buildPharmaSubprofileReviewPackage", () => {
       }],
     }))
 
+    expect(result.reviewDecision).toBe("KEEP_PROVISIONAL")
+    expect(result.blockers).toContain("UNRESOLVED_SECONDARY_EXPOSURE_MATERIALITY")
+    expect(result.proposedAssignment).toBeNull()
+  })
+
+  it("allows a reviewed secondary exposure with resolved materiality to remain a provisional draft", () => {
+    const result = buildPharmaSubprofileReviewPackage(input({
+      secondaryExposureAssessment: [{
+        exposureCode: "GLOBAL_GENERICS",
+        materiality: "MATERIAL",
+        confidence: "MEDIUM",
+        evidenceReferences: ["secondary-exposure-review"],
+      }],
+    }))
+
     expect(result.reviewDecision).toBe("READY_FOR_REVIEW")
     expect(result.proposedAssignment?.secondaryExposures).toEqual([{
       exposureCode: "GLOBAL_GENERICS",
-      materiality: "UNKNOWN",
-      confidence: "LOW",
+      materiality: "MATERIAL",
+      confidence: "MEDIUM",
       assignmentState: "PROVISIONAL",
       effectiveFrom: "2026-09-15",
       effectiveTo: null,
