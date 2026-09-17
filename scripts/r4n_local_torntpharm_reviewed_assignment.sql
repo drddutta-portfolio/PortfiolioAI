@@ -28,17 +28,24 @@ begin
     raise exception 'Local-only safety guard failed: unexpected TORNTPHARM security id %. Fixture aborted.', v_security_id;
   end if;
 
-  select count(distinct p.user_id), min(p.user_id)
-    into v_owner_count, v_reviewer_id
+  select count(distinct p.user_id)
+    into v_owner_count
   from public.transactions t
   join public.portfolios p on p.id = t.portfolio_id
   where t.security_id = v_security_id;
 
-  if v_owner_count <> 1 or v_reviewer_id is null then
+  if v_owner_count <> 1 then
     raise exception 'Expected exactly one local portfolio owner for TORNTPHARM; found %. Fixture aborted.', v_owner_count;
   end if;
 
-  if not exists (select 1 from auth.users where id = v_reviewer_id) then
+  select distinct p.user_id
+    into v_reviewer_id
+  from public.transactions t
+  join public.portfolios p on p.id = t.portfolio_id
+  where t.security_id = v_security_id
+  limit 1;
+
+  if v_reviewer_id is null or not exists (select 1 from auth.users where id = v_reviewer_id) then
     raise exception 'Local portfolio owner is not an auth.users reviewer; fixture aborted.';
   end if;
 
