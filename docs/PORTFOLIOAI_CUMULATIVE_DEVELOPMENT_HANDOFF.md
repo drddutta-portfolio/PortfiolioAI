@@ -363,24 +363,98 @@ Gate D did **not**:
 
 ---
 
-## 10. Current production and repository state
+## 10. Entry 008 — Gate E local review-package audit, implementation and validation
+
+**Date:** 17 September 2026  
+**Actor:** ChatGPT + owner-guided local validation  
+**Implementation commit:** `82a5f9029203723acc79f35ad9a111b73c8f944a`
+
+### Read-only audit findings
+Gate E began with local/read-only inspection only. Local Supabase baseline remained:
+- `research_subprofile_contracts`: 5 rows;
+- `research_subprofile_assignments`: 0 rows;
+- `research_subprofile_secondary_exposures`: 0 rows.
+
+The provisional candidate registry remains owner-proposed only. TORNTPHARM is proposed as `DOMESTIC_FORMULATIONS` with `reviewState = PROVISIONAL`, `confidence = LOW`, no effective date, and no proposed secondary exposure.
+
+The existing assignment resolver was preserved. It already fails closed for missing, provisional, disputed, conflicting, or inactive reviewed assignments and requires reviewer provenance/effective date for `REVIEWED` state.
+
+The older TORNTPHARM canonical-history/retained-completion modules were confirmed to use historical production identity/evidence IDs from the R4H pilot. The local TORNTPHARM fixture uses a different environment-specific UUID. Those historical IDs were intentionally left untouched; Gate E must consume an environment-resolved `securityId` instead of hard-coding either production or local fixture identity.
+
+Local `data_source_records` inspection found only a `LOCAL_UI_FIXTURE` / `SECURITY_CLASSIFICATION` record for TORNTPHARM. That record is identity/classification context only and does not provide business-model evidence sufficient to promote `DOMESTIC_FORMULATIONS` to `REVIEWED`.
+
+### Review-package implementation
+Added:
+- `src/features/research/pharmaSubprofileReviewPackage.ts`
+- `src/features/research/pharmaSubprofileReviewPackage.test.ts`
+
+The review package is deliberately side-effect-free and performs no database/provider I/O. It sits between the provisional candidate registry and the canonical assignment write path.
+
+Key behavior:
+- accepts an environment-resolved `securityId`;
+- separates promotion-eligible subprofile evidence from parent/context/identity-only evidence;
+- returns one of `KEEP_PROVISIONAL`, `READY_FOR_REVIEW`, or `DISPUTED`;
+- requires at least MEDIUM confidence, non-empty eligible subprofile evidence, an effective-date candidate, no primary-model conflict, resolved conditional materiality review, resolved secondary-exposure review, and a valid positive assignment version before `READY_FOR_REVIEW`;
+- treats `LOCAL_IDENTITY_FIXTURE` evidence as contextual/non-promotional;
+- retains secondary exposures as provisional review artifacts and never creates a blended score;
+- even when a package is `READY_FOR_REVIEW`, any constructed assignment draft remains `PROVISIONAL` with `reviewedBy = null` and `reviewedAt = null`;
+- never auto-promotes to `REVIEWED` and never writes to Supabase.
+
+For the current TORNTPHARM local fixture-only evidence state, the expected result remains `KEEP_PROVISIONAL` with no promotable reviewed assignment.
+
+### Validation
+Owner ran local validation against the pulled R4N branch:
+- focused Gate E test file: **7/7 passed**;
+- full application suite: **453/453 tests passed across 83/83 files**;
+- `npm run typecheck`: PASS;
+- `npm run check:architecture`: PASS;
+- GitHub `PortfolioAI Architecture Guard` run `35182282195`: SUCCESS;
+- `npm run build`: PASS (only the existing Vite >500 kB chunk warning; no build failure).
+
+Local tracked working tree remained clean after validation. Three pre-existing local-only untracked files remain outside Git:
+- `PORTFOLIOAI_CURRENT_STATE_AUDIT.md`
+- `PORTFOLIOAI_LUI1_LOCAL_FIXTURE.sql`
+- `PORTFOLIOAI_LUI1_LOCAL_FIXTURE_V2.sql`
+
+No local Supabase business-data write was performed during Gate E audit/implementation validation. No provider call was performed.
+
+### Scope boundary preserved
+Gate E implementation did **not**:
+- create any local or production research-subprofile assignment row;
+- create any local or production secondary-exposure row;
+- ingest official/company/regulator evidence;
+- call external/paid providers;
+- write scores, recommendations, or sizing;
+- deploy the application or Edge Functions;
+- merge PR #101;
+- modify production database/schema/data/schedulers.
+
+**Result:** Gate E review-package implementation and local validation COMPLETE / PASS.  
+**Production touched:** NO.
+
+The next unfinished Gate E work is evidence-backed human review of TORNTPHARM's proposed `DOMESTIC_FORMULATIONS` assignment. Current local fixture evidence is insufficient for promotion, so the assignment must remain provisional until business-model provenance is gathered/reviewed and a separate assignment-write action is explicitly authorized.
+
+---
+
+## 11. Current production and repository state
 
 - PR #101 remains **OPEN / DRAFT / UNMERGED**.
 - Working branch remains `r4n-pharma-subprofile-architecture`.
+- Gate E review-package implementation commit is `82a5f9029203723acc79f35ad9a111b73c8f944a`; this handoff update is a later documentation-only commit on the same branch.
 - Production contains the four R4N reconciliation migrations through `20260916100032`.
 - PHARMA_V1 contract rows: 5.
 - Reviewed/provisional research-subprofile assignments: 0 production rows.
 - Secondary-exposure rows: 0 production rows.
-- The owner has a fresh local clone of `r4n-pharma-subprofile-architecture` running via Vite against **local Supabase only** using `VITE_SUPABASE_URL=http://127.0.0.1:54321` and `VITE_MARKET_DATA_ENABLED=false`.
-- Local UI still uses the minimal HDFCBANK + TORNTPHARM fixture unless additional local data is deliberately seeded.
+- Local Gate E implementation is validated but no assignment has been written.
+- TORNTPHARM remains a provisional `DOMESTIC_FORMULATIONS` candidate; current local identity fixture evidence is insufficient for reviewed promotion.
 
-The next development stage is **Gate E — reviewed Pharma subprofile assignments**. Production assignment creation is not yet authorized.
+Production assignment creation remains unauthorized.
 
 ---
 
-## 11. Forward development path
+## 12. Forward development path
 
-- Gate E: design/review exact Pharma subprofile assignments with provenance/effective intervals; no production assignment write until separately authorized. TORNTPHARM may become `DOMESTIC_FORMULATIONS` only after explicit review/approval.
+- Gate E next: gather/review business-model provenance for TORNTPHARM and produce an evidence-backed human review decision. Keep `PROVISIONAL` unless the reviewed evidence supports promotion; any database assignment write remains separately gated and requires explicit owner authorization.
 - Gate F: TORNTPHARM official-evidence pilot; dry-run/validate first, ingest only after approval.
 - Gate G: approve/version PHARMA_V1 scoring curves/thresholds/weights before numeric scoring.
 - Gate H: deterministic TORNTPHARM scored pilot.
@@ -392,10 +466,10 @@ The next development stage is **Gate E — reviewed Pharma subprofile assignment
 
 ---
 
-## 12. Codex handback instruction
+## 13. Codex handback instruction
 
 When Codex credits return:
 
 > Read this cumulative handoff first, then independently inspect the current GitHub branch/PR, canonical repository docs, and current Supabase state relevant to the next gate. Treat this handoff as historical context, not a substitute for current verification. Preserve all production-safety gates. Continue from the newest unfinished stage and append completed work back into this cumulative history rather than replacing it with a latest-state-only summary.
 
-**CURRENT STOP POINT:** Gate D is complete and production-validated. The local R4N application is running against local Supabase. Begin Gate E with a read-only/design review of proposed PHARMA_V1 subprofile assignments; do not create production assignments without a new explicit owner authorization.
+**CURRENT STOP POINT:** Gate E local review-package implementation is complete and validated. TORNTPHARM remains provisional because current local evidence proves identity/classification only, not the business-model basis required for `DOMESTIC_FORMULATIONS`. Continue Gate E with evidence-backed human review; do not create any production assignment, ingest evidence, call paid providers, or modify production without a new explicit owner authorization.
