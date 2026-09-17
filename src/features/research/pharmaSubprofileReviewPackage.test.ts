@@ -113,6 +113,21 @@ describe("buildPharmaSubprofileReviewPackage", () => {
     expect(result.proposedAssignment).toBeNull()
   })
 
+  it("requires primary-subprofile reclassification review for a DOMINANT secondary exposure", () => {
+    const result = buildPharmaSubprofileReviewPackage(input({
+      secondaryExposureAssessment: [{
+        exposureCode: "GLOBAL_GENERICS",
+        materiality: "DOMINANT",
+        confidence: "HIGH",
+        evidenceReferences: ["secondary-exposure-review"],
+      }],
+    }))
+
+    expect(result.reviewDecision).toBe("KEEP_PROVISIONAL")
+    expect(result.blockers).toContain("DOMINANT_SECONDARY_EXPOSURE_RECLASSIFICATION_REQUIRED")
+    expect(result.proposedAssignment).toBeNull()
+  })
+
   it("allows a reviewed secondary exposure with resolved materiality to remain a provisional draft", () => {
     const result = buildPharmaSubprofileReviewPackage(input({
       secondaryExposureAssessment: [{
