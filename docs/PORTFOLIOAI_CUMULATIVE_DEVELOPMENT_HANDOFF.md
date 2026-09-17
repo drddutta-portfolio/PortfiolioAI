@@ -436,40 +436,147 @@ The next unfinished Gate E work is evidence-backed human review of TORNTPHARM's 
 
 ---
 
-## 11. Current production and repository state
+## 11. Entry 009 — Gate E evidence review, owner decision and local persistence/UI proof
+
+**Date:** 17 September 2026  
+**Actor:** ChatGPT + owner human review + local Supabase/browser validation
+
+### Evidence/materiality methodology and review outcome
+The owner approved the Gate E V1 secondary-exposure materiality rule. The approved internal research rule uses comparable business-model-attributable revenue where possible, fails closed to `UNKNOWN` when numerator/denominator scope is not defensible, and allows only provenance-complete reviewed qualitative overrides. Numeric anchor states are `IMMATERIAL`, `EMERGING`, `MATERIAL`, `DOMINANT`, with `UNKNOWN` for unresolved cases.
+
+TORNTPHARM's official-evidence review produced the owner-reviewed business-model decision:
+- primary `DOMESTIC_FORMULATIONS` — `HIGH` confidence;
+- secondary `GLOBAL_GENERICS` — `MATERIAL`, `MEDIUM` confidence;
+- secondary `CDMO_CRAMS` — `EMERGING`, `MEDIUM` confidence;
+- effective from `2026-03-31`;
+- conditional export/regulatory/site evidence activation approved because the Global Generics exposure is material.
+
+The owner explicitly approved the Gate E assignment as `REVIEWED` for the reviewed decision artifact. This approval did **not** authorize production persistence.
+
+Supporting review artifacts on the R4N branch include:
+- `docs/R4N_PHARMA_V1_Secondary_Exposure_Materiality_Proposal.md`
+- `docs/R4N_TORNTPHARM_Gate_E_Secondary_Exposure_Evidence_Review.md`
+- `docs/R4N_TORNTPHARM_Gate_E_Assignment_Review_Package.md`
+- `docs/R4N_TORNTPHARM_Gate_E_Human_Review_Decision.md`
+
+### Application consumption path
+Added the local/read application path needed to consume canonical reviewed research-subprofile assignments and display them without overwriting canonical sector/industry classification:
+- `src/data/researchSubprofileRepository.ts`
+- `src/data/researchSubprofileRepository.test.ts`
+- `src/features/research/usePharmaSubprofileResolution.ts`
+- `src/features/research/PharmaSubprofileSummary.tsx`
+- Research-page header wiring.
+
+The Research header now keeps canonical classification separate from research methodology. For a resolved reviewed assignment it can show:
+- primary subprofile + review state;
+- reviewed secondary exposures + materiality;
+- canonical sector / canonical industry unchanged beneath them.
+
+### Local-only persistence fixture
+Added `scripts/r4n_local_torntpharm_reviewed_assignment.sql` for local validation only. Safety characteristics:
+- explicitly targets the known local TORNTPHARM security identity `a4000000-0000-0000-0000-000000000002`;
+- resolves the explicitly reviewed local auth user and verifies that user owns a local portfolio containing TORNTPHARM;
+- aborts on unexpected local identity/reviewer/contract/assignment state;
+- creates no evidence, score, recommendation, sizing, provider-call or scheduler state;
+- is idempotent for the exact expected reviewed local assignment/exposure shape.
+
+Two initial fixture attempts failed closed and rolled back completely:
+1. the first guard detected two local portfolio owners and created zero rows;
+2. the hardened reviewer lookup then hit PostgreSQL's unsupported `min(uuid)` aggregate and again rolled back with zero rows.
+
+The fixture was corrected to count the expected auth user separately and retrieve its UUID without `min(uuid)`. The third run committed successfully.
+
+Local persisted reference state after successful execution:
+- primary `DOMESTIC_FORMULATIONS` — `REVIEWED`, `HIGH`;
+- effective from `2026-03-31`;
+- secondary `GLOBAL_GENERICS` — `MATERIAL`, `REVIEWED`, `MEDIUM`;
+- secondary `CDMO_CRAMS` — `EMERGING`, `REVIEWED`, `MEDIUM`.
+
+### Local browser proof
+Authenticated localhost Research UI was opened against local Supabase only. The TORNTPHARM Research header rendered:
+- `Scoring profile: Pharmaceuticals · Sector-resolved`;
+- `Primary subprofile: Domestic Formulations · Reviewed`;
+- `CDMO / CRAMS · Emerging`;
+- `Global Generics · Material`;
+- `Canonical sector: Pharma`;
+- `Canonical industry: Pharmaceuticals`.
+
+This proves the intended authority separation end-to-end: canonical application classification remains Pharma/Pharmaceuticals, while the reviewed research-methodology layer independently exposes the primary and material/emerging secondary Pharma business models.
+
+**Production touched:** NO. The assignment/exposure write was to local Supabase only.
+
+---
+
+## 12. Entry 010 — TORNTPHARM Gate E reference implementation fully locally validated
+
+**Date:** 17 September 2026  
+**Actor:** owner-run local validation + GitHub CI verification
+
+Fresh full local validation was run after the reviewed-assignment repository/UI integration and successful local persistence proof:
+- `npm test`: **82/82 test files passed; 446/446 tests passed**;
+- `npm run typecheck`: PASS;
+- `npm run check:architecture`: PASS — presentation code contains no direct canonical storage access;
+- `npm run lint:architecture`: PASS;
+- `npm run build`: PASS;
+- Vite build completed successfully; the only observed build diagnostic was the existing informational warning that some chunks exceed 500 kB after minification.
+
+GitHub `PortfolioAI Architecture Guard` on the same development line also completed successfully (run #151 / workflow run `35227433349`).
+
+This fresh validation is the authoritative current local-suite result for the current branch state and supersedes older historical test-count snapshots where counts differ.
+
+### Locally validated reference implementation status
+TORNTPHARM is now a complete **local Gate E reference implementation** covering:
+1. reviewed business-model evidence decision;
+2. approved secondary-exposure materiality handling;
+3. human review provenance decision;
+4. local canonical assignment/secondary-exposure persistence;
+5. fail-closed repository resolution;
+6. Research-header presentation of primary and secondary subprofiles;
+7. preservation of canonical sector/industry authority;
+8. full local test/typecheck/architecture-lint/build validation.
+
+No production assignment row, production secondary-exposure row, evidence ingestion, score, recommendation, sizing write, provider call, scheduler change, PR merge or application deployment occurred in this validation step.
+
+**Result:** TORNTPHARM Gate E reference implementation = **LOCALLY VALIDATED / PASS**.  
+**Production persistence:** NOT AUTHORIZED / NOT PERFORMED.
+
+---
+
+## 13. Current production and repository state
 
 - PR #101 remains **OPEN / DRAFT / UNMERGED**.
 - Working branch remains `r4n-pharma-subprofile-architecture`.
-- Gate E review-package implementation commit is `82a5f9029203723acc79f35ad9a111b73c8f944a`; this handoff update is a later documentation-only commit on the same branch.
+- Latest pre-handoff implementation head validated locally was `7ad74955c455c2fdc78a5662b4a11d5616b7dea9`; this cumulative-handoff update is a later documentation-only commit on the same branch.
 - Production contains the four R4N reconciliation migrations through `20260916100032`.
 - PHARMA_V1 contract rows: 5.
-- Reviewed/provisional research-subprofile assignments: 0 production rows.
-- Secondary-exposure rows: 0 production rows.
-- Local Gate E implementation is validated but no assignment has been written.
-- TORNTPHARM remains a provisional `DOMESTIC_FORMULATIONS` candidate; current local identity fixture evidence is insufficient for reviewed promotion.
+- Production research-subprofile assignments: 0 rows.
+- Production secondary-exposure rows: 0 rows.
+- Local Supabase contains the reviewed TORNTPHARM reference assignment and its two reviewed secondary exposures for localhost validation only.
+- TORNTPHARM's Gate E human-review decision is recorded as reviewed, and its end-to-end persistence/resolver/UI path is locally validated.
+- The canonical UI separation is proven locally: `Pharma / Pharmaceuticals` remains canonical classification while `Domestic Formulations`, `Global Generics`, and `CDMO / CRAMS` are displayed as research-methodology facts.
 
 Production assignment creation remains unauthorized.
 
 ---
 
-## 12. Forward development path
+## 14. Forward development path
 
-- Gate E next: gather/review business-model provenance for TORNTPHARM and produce an evidence-backed human review decision. Keep `PROVISIONAL` unless the reviewed evidence supports promotion; any database assignment write remains separately gated and requires explicit owner authorization.
-- Gate F: TORNTPHARM official-evidence pilot; dry-run/validate first, ingest only after approval.
+- Gate E production boundary: before any production assignment persistence, perform a fresh read-only production preflight and prepare an exact idempotent persistence package. Do not write until the owner separately authorizes that exact production action.
+- Gate F: TORNTPHARM official-evidence pilot; dry-run/validate first, ingest only after approval. Reuse the reviewed subprofile contract to activate only the applicable Domestic Formulations requirements plus approved secondary-exposure overlays/conditional regulatory requirements.
 - Gate G: approve/version PHARMA_V1 scoring curves/thresholds/weights before numeric scoring.
 - Gate H: deterministic TORNTPHARM scored pilot.
 - Gate I: recommendation layer as a separate downstream gate.
-- Gate J: controlled PHARMA_V1 rollout by subprofile cohorts.
+- Gate J: controlled PHARMA_V1 rollout by subprofile cohorts; the TORNTPHARM Gate E reference flow should become reusable so routine cases do not require the owner to repeat a six-item manual review unless evidence is ambiguous/conflicting or a judgment override is required.
 - Gate K: add other sector/profile families through the same universal Research workspace.
 - Gate L: keep Core Selection, Core Health, Satellite Opportunity, Exit Radar and Position Sizing as separate decision methodologies.
 - Gate M: portfolio-wide coverage/automation only after the individual engines are proven and provider accounting/scheduler safety remains intact.
 
 ---
 
-## 13. Codex handback instruction
+## 15. Codex handback instruction
 
 When Codex credits return:
 
 > Read this cumulative handoff first, then independently inspect the current GitHub branch/PR, canonical repository docs, and current Supabase state relevant to the next gate. Treat this handoff as historical context, not a substitute for current verification. Preserve all production-safety gates. Continue from the newest unfinished stage and append completed work back into this cumulative history rather than replacing it with a latest-state-only summary.
 
-**CURRENT STOP POINT:** Gate E local review-package implementation is complete and validated. TORNTPHARM remains provisional because current local evidence proves identity/classification only, not the business-model basis required for `DOMESTIC_FORMULATIONS`. Continue Gate E with evidence-backed human review; do not create any production assignment, ingest evidence, call paid providers, or modify production without a new explicit owner authorization.
+**CURRENT STOP POINT:** TORNTPHARM's Gate E reference implementation is fully **locally validated** through reviewed decision, local persistence, fail-closed resolver consumption, Research-header rendering, and fresh full local validation. Production still has zero research-subprofile assignments and zero secondary-exposure rows. The next safe step is a fresh read-only production preflight plus preparation of the exact idempotent TORNTPHARM production-persistence package; do not write it, merge PR #101, deploy, ingest evidence, call paid providers, score, recommend, size, or modify schedulers without a new explicit owner authorization.
