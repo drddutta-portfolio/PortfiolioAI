@@ -4165,3 +4165,83 @@ Still NOT authorized:
 - paid-provider calls.
 
 **CURRENT STOP POINT:** Owner should `git pull` to receive this recorded authorization checkpoint, then execute exactly `PORTFOLIOAI_ALLOW_LOCAL_PREREQUISITE_MUTATION=YES npm run r4n:mutate:prerequisites` against the running local Supabase. Return the complete terminal output before any next mutation is considered.
+
+
+---
+
+## 61. Entry 056 — First authorized local prerequisite mutation failed closed on malformed copied hashes; transaction rolled back
+
+**Date:** 18 September 2026  
+**Actor:** owner-run authorized local execution + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner executed the explicitly authorized command:
+
+`PORTFOLIOAI_ALLOW_LOCAL_PREREQUISITE_MUTATION=YES npm run r4n:mutate:prerequisites`
+
+### Guard results
+
+- explicit local mutation approval flag: **PASS**
+- local-only database guard: **PASS**
+- target scope announced correctly:
+  - one metric-definition row;
+  - four immutable source-record prerequisites;
+  - zero fundamental observations.
+
+### Execution failure
+
+The transaction entered `BEGIN`, passed the preflight block, and attempted the metric/source prerequisite inserts.
+
+PostgreSQL then rejected the first `data_source_records` insert with:
+
+`data_source_records_payload_hash_check`
+
+because the copied payload hash did not satisfy the canonical `^[a-f0-9]{64}$` constraint.
+
+The process stopped under `ON_ERROR_STOP` before `COMMIT`.
+
+Therefore the transaction did **not** persist the earlier metric-definition insert or any source-record insert.
+
+### Root cause
+
+The mutation SQL had manually copied hash strings from the earlier dry-run output/HANDOFF.
+
+Recomputation directly from the canonical manifest showed that all four copied hashes were incorrect; three were 65 characters long and one was 64 characters but still did not match the canonical payload hash.
+
+Correct manifest-derived SHA-256 values are:
+
+- Q1: `bd8ab87c01a1e1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f`
+- Q2: `3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fcec5f2`
+- Q3: `3df20aaaff6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7`
+- Q4: `dd80f6f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e90922998b53`
+
+### Correction
+
+Updated:
+
+- `scripts/r4n/torntpharm-local-prerequisite-mutation.sql`
+- `src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts`
+
+The SQL now carries the correct manifest-derived hashes.
+
+The safety test no longer trusts duplicated hash literals. It now:
+
+1. imports the canonical materialization manifest;
+2. recursively canonicalizes each raw payload;
+3. recomputes SHA-256;
+4. requires every hash to match `^[a-f0-9]{64}$`;
+5. requires the mutation SQL to contain the recomputed hash;
+6. still verifies Q4 = 16% and rejected Q4 31% absent.
+
+### Scope boundary
+
+- First authorized local mutation attempt: **FAILED CLOSED**
+- Persistent local metric-definition write: **NO**
+- Persistent local source-record write: **NO**
+- Fundamental-observation write: **NO**
+- Production mutation: **NO**
+- Existing authorization scope changed: **NO**
+
+The owner's prior authorization remains limited to this exact local-only prerequisite mutation (1 metric-definition row maximum, 4 immutable source records maximum, 0 fundamental observations, no production changes).
+
+**CURRENT STOP POINT:** Owner should `git pull`, run `npx vitest run src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts` and focused ESLint for that test. If clean, the already-authorized guarded local mutation may be retried with `PORTFOLIOAI_ALLOW_LOCAL_PREREQUISITE_MUTATION=YES npm run r4n:mutate:prerequisites`.
