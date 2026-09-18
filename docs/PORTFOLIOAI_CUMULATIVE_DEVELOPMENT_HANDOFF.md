@@ -3785,3 +3785,77 @@ remains:
 **Result:** Prerequisite Materialization Dry Run V1 preparation checkpoint = **VALIDATED**.
 
 **CURRENT STOP POINT:** The next safe R4N decision is whether to execute the non-writing command `npm run r4n:dry-run:prerequisites`. That command has no database connection and would only compute the four SHA-256 hashes and print the exact proposed SQL; it would still perform zero writes.
+
+
+---
+
+## 56. Entry 051 — Prerequisite materialization dry-run executed successfully
+
+**Date:** 18 September 2026  
+**Actor:** owner-run local execution  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner executed the validated non-writing command:
+
+`npm run r4n:dry-run:prerequisites`
+
+### Execution result
+
+Observed header state:
+
+- `DATABASE_CONNECTION=NO`
+- `WRITES_EXECUTED=0`
+- serialization: `RECURSIVE_LEXICOGRAPHIC_KEY_SORT_V1`
+- hash algorithm: `SHA256`
+
+The executor deterministically serialized and hashed all four canonical reviewed issuer payloads.
+
+### Materialized dry-run hashes
+
+- `TORRENT_Q1_FY26_RELEASE` — 2025-06-30 — 19%  
+  SHA-256: `b8a8b87c01a1ea1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f`
+
+- `TORRENT_Q2_FY26_RELEASE` — 2025-09-30 — 26%  
+  SHA-256: `3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fceec5f2`
+
+- `TORRENT_Q3_FY26_RELEASE` — 2025-12-31 — 19%  
+  SHA-256: `3df20aaafb6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7`
+
+- `TORRENT_Q4_FY26_RELEASE` — 2026-03-31 — 16% comparable base-business growth  
+  SHA-256: `d08cf8f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e990922998b53`
+
+The rejected Q4 31% claim remained excluded.
+
+### SQL preview
+
+The executor printed the exact proposed SQL for:
+
+1. one `public.fundamental_metric_definitions` row; and
+2. four `public.data_source_records` rows.
+
+No SQL was executed.
+
+### Dry-run summary
+
+- metric-definition rows: **1**
+- source-record rows: **4**
+- payload hashes computed: **4**
+- database connections: **0**
+- writes executed: **0**
+- mutation authorized: **NO**
+
+### Scope boundary
+
+- Hash computation: **YES**
+- SQL preview generation: **YES**
+- Database connection: **NO**
+- Metric-definition insert: **NO**
+- Source-record insert: **NO**
+- Fundamental-observation insert: **NO**
+- Local DB mutation: **NO**
+- Production Supabase mutation: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Prerequisite Materialization Dry Run V1 execution = **PASS / ZERO-WRITE**.
+
+**CURRENT STOP POINT:** The next safe R4N gate is to prepare a local-only prerequisite mutation proposal/executor that would insert exactly one metric-definition row and four immutable source-record rows using the verified hashes above, but must remain non-executed until separately approved by the owner.
