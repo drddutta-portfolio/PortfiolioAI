@@ -2455,3 +2455,92 @@ Added:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview → Evidence operations & review controls, and inspect the updated **Ingestion eligibility proposal**. Expected summary: numeric validator accepted 4, numeric quarantined 0, event contract accepted 2, event storage blocked 2, proposed writes 0. Obtain visual approval before focused/full validation.
+
+
+---
+
+## 41. Entry 036 — Numeric validator V2 and Pharma regulatory event evidence V1 visually approved and locally validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner visually reviewed the updated **Gate F · Candidate-to-ingestion proposal / Ingestion eligibility proposal** after versioning the numeric evidence validator and adding the Pharma regulatory event-evidence contract.
+
+### Localhost visual verification — PASS
+
+The proposal panel correctly shows:
+- reviewed candidates: **6**;
+- numeric candidates: **4**;
+- numeric validator accepted: **4**;
+- numeric validator quarantined: **0**;
+- regulatory event candidates: **2**;
+- event contract accepted: **2**;
+- event contract quarantined: **0**;
+- event storage blocked: **2**;
+- rejected claims excluded: **1**;
+- proposed writes: **0**;
+- explicit **Proposal only · 0 writes** state.
+
+Per-candidate dispositions are correct:
+- four Export / US Revenue Growth observations → `SEPARATE_INGESTION_APPROVAL_REQUIRED`;
+- two FDA Indrad events → `EVENT_STORAGE_IMPLEMENTATION_REQUIRED`.
+
+The decision-gate text correctly states that structural acceptance does not authorize a write.
+
+### Contract versions validated
+
+Numeric evidence validator:
+- `R4N_NUMERIC_EVIDENCE_V2`
+- approved registry includes `PHARMA_EXPORT_US_REVENUE_GROWTH → PERCENT`.
+
+Regulatory event evidence:
+- `PHARMA_REGULATORY_EVENT_EVIDENCE_V1`
+- site-specific US FDA warning → closeout chain validation;
+- explicit facility and regulatory-chain identity;
+- source provenance;
+- chronological transition rules;
+- duplicate protection;
+- no company-wide scope inference.
+
+### Local validation
+
+The supplied terminal capture directly confirms:
+- Edge test suite: **27/27 test files passed; 140/140 tests passed**;
+- production build: **PASS** under Vite 8.2.2;
+- **214 modules transformed**;
+- only the existing non-blocking warning about chunks exceeding 500 kB after minification remained.
+
+Focused ESLint was then run on all files changed by this contract slice:
+
+- `src/features/research/researchEvidenceIngestionValidator.ts`
+- `src/features/research/researchEvidenceIngestionValidator.test.ts`
+- `src/features/research/pharmaRegulatoryEventEvidenceContract.ts`
+- `src/features/research/pharmaRegulatoryEventEvidenceContract.test.ts`
+- `src/features/research/torntpharmCandidateToIngestionProposal.ts`
+- `src/features/research/torntpharmCandidateToIngestionProposal.test.ts`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Focused changed-file lint result: **PASS with no output, errors or warnings**.
+
+Repository-wide lint remains subject to the already-documented pre-existing unrelated debt and is not represented as clean.
+
+### Validation classification
+
+**OWNER VISUALLY APPROVED / FOCUSED CHANGED-FILE VALIDATION PASS**
+
+### Scope boundary
+
+- Numeric structural acceptance widened only for the already-approved PHARMA_V1 metric: **YES**
+- Evidence ingestion: **NO**
+- Local evidence write: **NO**
+- Production Supabase mutation: **NO**
+- Regulatory event storage table/migration: **NO**
+- Paid/licensed provider calls: **NO**
+- Scoring / recommendation / sizing: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Numeric Validator V2 + Pharma Regulatory Event Evidence V1 checkpoint = **VALIDATED**.
+
+**CURRENT STOP POINT:** The four reviewed US-growth observations are structurally eligible under Numeric Validator V2 but still require separate ingestion approval. The two reviewed FDA Indrad events are structurally valid under Regulatory Event Evidence V1 but remain blocked because canonical event persistence/write infrastructure does not yet exist. The next safe R4N step is to prepare, without executing, (1) the first local numeric ingestion package for the four US-growth rows and (2) a canonical regulatory-event persistence schema/migration proposal. Neither action authorizes a write.
