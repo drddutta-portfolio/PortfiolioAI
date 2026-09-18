@@ -3088,3 +3088,102 @@ Still NOT authorized:
 - PR #101 merge.
 
 **CURRENT STOP POINT:** Owner should `git pull`, then run `npm run r4n:preflight:numeric` and `npm run r4n:replay:regulatory`. Return the terminal outputs for interpretation. No additional approval is needed for these two checks because the owner has explicitly authorized them.
+
+
+---
+
+## 48. Entry 043 — First local execution: regulatory replay PASS; numeric preflight helper corrected
+
+**Date:** 18 September 2026  
+**Actor:** owner-run local execution + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner executed both explicitly authorized local-only checks.
+
+### A. Regulatory migration replay — PASS
+
+Command:
+
+`npm run r4n:replay:regulatory`
+
+Observed result:
+
+- Local-only guard: **PASS**
+- proposal SQL entered transaction successfully;
+- proposed source registry insert executed inside transaction;
+- proposed table/indexes/trigger/RLS/policy/grants/view were created inside transaction;
+- proposal postcondition blocks completed;
+- transaction ended in `ROLLBACK`;
+- replay result: **PASS**
+- migration history unchanged: **YES**
+- proposed table absent after rollback: **YES**
+- proposed view absent after rollback: **YES**
+- `US_FDA_OFFICIAL` registry count unchanged: **YES**
+- persistent schema changes: **0**
+
+This validates the rollback-only regulatory schema proposal against local Supabase without leaving any persistent database change.
+
+### B. Numeric read-only preflight — interrupted by SQL helper defect
+
+Command:
+
+`npm run r4n:preflight:numeric`
+
+The local-only guard passed and the script entered a read-only transaction.
+
+The initial prerequisite query showed:
+
+- TORNTPHARM security rows: **1**
+- active reviewed Domestic Formulations assignments: **1**
+- metric definition rows: **0**
+- metric-definition expected-contract match: **false**
+
+The script then stopped before classifying the four rows because PostgreSQL does not provide a `min(uuid)` aggregate.
+
+Observed error:
+
+`ERROR: function min(uuid) does not exist`
+
+This is a defect in the local preflight SQL helper, not a database evidence conflict and not a write failure.
+
+### Correction
+
+The two UUID-selection CTEs in:
+
+`scripts/r4n/torntpharm-local-numeric-preflight.sql`
+
+now select the single security UUID with:
+
+`(array_agg(id ORDER BY id::text))[1]`
+
+after separately counting matching security rows.
+
+Corrective commit:
+
+`52ee4b207556e40dc5acdb904ba6ba1057e64b89`
+
+The preflight remains:
+- local-only;
+- `BEGIN TRANSACTION READ ONLY`;
+- rollback-ended;
+- zero-write;
+- fail-closed.
+
+### Important data-state signal already revealed
+
+Even before the helper error, the local prerequisite query confirmed that the local database currently has **no registered `PHARMA_EXPORT_US_REVENUE_GROWTH` metric definition**.
+
+Therefore a completed rerun is expected to classify the four rows as blocked unless/until that metric-definition prerequisite is separately prepared and approved. The rerun is still required to confirm source-record and existing-fact states.
+
+### Scope boundary
+
+- Local read-only query executed: **YES**
+- Local evidence write: **NO**
+- Metric-definition mutation: **NO**
+- Source-record creation: **NO**
+- Regulatory rollback-only replay executed: **YES**
+- Persistent regulatory schema change: **NO**
+- Production Supabase mutation: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull` and rerun only `npm run r4n:preflight:numeric`. The regulatory replay does not need to be repeated. Return the completed numeric preflight output for interpretation.
