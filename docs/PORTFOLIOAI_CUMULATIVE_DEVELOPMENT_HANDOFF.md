@@ -5715,3 +5715,74 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G1 cards in TORNTPHARM → Research → Gate G, and run focused local validation. Only after G1 validation should development proceed to **G2 — Overlay Modifier Contract**.
+
+
+---
+
+## 81. Entry 076 — Gate G1 adaptive Pharma classification contract validated
+
+**Date:** 18 September 2026  
+**Actor:** owner visual review + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G1 has completed its required localhost visual and focused validation checkpoint.
+
+### Owner visual review
+
+TORNTPHARM → Research → Gate G was reviewed on localhost.
+
+The two G1 glass-box cards are visible and aligned with the existing Gate G methodology surface:
+
+- **G1 · Adaptive classification contract**
+- **G1 · Fail-closed classification boundary**
+
+The cards correctly preserve the proposal-only / fail-closed interpretation and do not imply score activation or assignment mutation.
+
+### Focused validation
+
+Owner-confirmed commands and results:
+
+- focused Vitest across:
+  - `pharmaAdaptiveClassificationContract.test.ts`
+  - `pharmaGateGScoringMethodProposal.test.ts`
+  - `pharmaSegmentGrowthCurveProposal.test.ts`
+  - `pharmaOperatingMarginCurveProposal.test.ts`
+  → **4 test files passed / 26 tests passed**
+
+- focused ESLint across the G1 contract/test, Gate G methodology proposal, segment-growth proposal/test, operating-margin proposal/test, and `PharmaResearchWorkspacePanel.tsx`
+  → **PASS**
+
+- `npm run typecheck`
+  → **PASS**
+
+- `npm run build`
+  → **PASS**
+
+Build emitted only the existing non-blocking Vite large-chunk advisory; no build failure occurred.
+
+### G1 status
+
+- adaptive classification contract designed: **YES**
+- owner visual review: **PASS**
+- focused tests: **PASS**
+- focused lint: **PASS**
+- strict TypeScript: **PASS**
+- production build: **PASS**
+- G1 methodology status: **VALIDATED / NOT ACTIVE**
+
+### Safety boundary remains unchanged
+
+- canonical assignment write: **NO**
+- schema migration: **NO**
+- overlay modifier execution: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+- paid-provider call: **NO**
+- scheduler change: **NO**
+
+**CURRENT STOP POINT:** G1 is now validated. The next permitted Gate G design task is **G2 — Overlay Modifier Contract**, still proposal-only and non-executable. Before implementing G2, inspect the canonical adaptive plan and current G1/Gate G contracts at the then-current branch head.
