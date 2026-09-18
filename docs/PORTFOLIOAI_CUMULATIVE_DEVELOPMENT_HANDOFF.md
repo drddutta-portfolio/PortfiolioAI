@@ -7297,3 +7297,160 @@ G5.5 validation confirms that the mismatch is visible and fail-closed; it does *
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G5.5 is validated. The next permitted G5 parent curve family is **Risk**, but implementation must first inspect `PHARMA_REGULATORY_SITE_STATUS`, the broader PHARMA_V1 Risk evidence lanes, and the relationship to G4 so regulatory risk is not double-counted.
+
+
+---
+
+## 98. Entry 093 — Gate G5.6 Regulatory & Market Risk framework prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5 has continued with **G5.6 — Regulatory & Market Risk** as a proposal-only common parent curve framework.
+
+### Dimension alignment
+
+Unlike several earlier G5 families, the parent regulatory-risk metric already aligns with canonical Gate G:
+
+`PHARMA_REGULATORY_SITE_STATUS.dimension = RISK`
+
+Canonical dimension:
+
+`RISK`
+
+Alignment state:
+
+`ALIGNED`
+
+No taxonomy reconciliation is required.
+
+### Regulatory risk evidence preserved
+
+Existing conditional parent metric:
+
+`PHARMA_REGULATORY_SITE_STATUS`
+
+Preserved requirements:
+
+- applies when `REGULATED_EXPORT_EXPOSURE` exists;
+- official regulator/issuer evidence required;
+- current unresolved regulatory actions represented;
+- latest material inspection/remediation state represented;
+- site/product/geography scope discipline preserved;
+- single-site closeout cannot imply company-wide regulatory clearance.
+
+### Market-risk evidence incorporated as candidate inputs
+
+The existing market-data foundation already stores deterministic derived evidence in:
+
+`market_metric_observations`
+
+from canonical daily OHLCV in:
+
+`market_price_history`
+
+Candidate Risk inputs:
+
+- `MAX_DRAWDOWN_1Y`
+- `VOLATILITY_1Y`
+
+Existing definitions are preserved:
+
+- drawdown = trailing-one-year maximum peak-to-trough daily-close decline;
+- volatility = annualized sample standard deviation of daily log returns using `sqrt(252)`.
+
+These derivations are already auditable and provider-independent.
+
+However, reviewed numeric market-risk scoring rules currently belong to the BANK_NBFC pilot, not PHARMA_V1.
+
+Therefore:
+
+`PHARMA market-risk score rule state = UNAPPROVED`
+
+No BANK/NBFC threshold or score rule is inherited.
+
+### Risk methodology framework
+
+New proposal:
+
+`PHARMA_REGULATORY_MARKET_RISK_CURVE_V1_PROPOSAL`
+
+Candidate framework:
+
+- `REGULATORY_RISK_CONTEXT`
+- `MARKET_DRAWDOWN`
+- `MARKET_VOLATILITY_CONTEXT`
+
+The following remain unapproved:
+
+- component weights;
+- regulatory-risk bands;
+- drawdown bands;
+- volatility bands.
+
+Volatility requires approved Pharma peer/benchmark context before numeric normalization.
+
+### G4 separation and anti-double-counting
+
+G4 remains the owner of:
+
+- critical regulatory/governance blocking;
+- high-risk gate treatment;
+- unknown regulatory materiality review;
+- remediation gate interpretation;
+- any future transparent governance/regulatory cap.
+
+G5.6 therefore prohibits:
+
+- a second hidden penalty for a G4 blocked/critical event;
+- a second hidden penalty for a G4 high-risk event;
+- an additional regulatory cap embedded inside the weighted Risk dimension.
+
+Regulatory event context may remain visible for explainability only.
+
+### Missing-evidence boundary
+
+Missing regulatory or market-risk evidence cannot silently become neutral.
+
+No numeric Pharma Risk score is available when required evidence or methodology remains incomplete.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaRiskCurveProposal.ts`
+- `src/features/research/pharmaRiskCurveProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G5_6_Regulatory_Market_Risk_Framework_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G5.6 · Regulatory & Market Risk framework**
+- **G5.6 · G4 separation & market-rule boundary**
+
+### Explicit boundary
+
+- Risk framework proposal: **YES**
+- dimension alignment: **ALIGNED**
+- Pharma market-risk score rules reviewed: **NO**
+- BANK/NBFC risk thresholds inherited: **NO**
+- component weights approved: **NO**
+- drawdown bands approved: **NO**
+- volatility bands approved: **NO**
+- regulatory bands approved: **NO**
+- G4 second hidden penalty: **NO**
+- numeric Risk curve ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.6 cards in TORNTPHARM → Research → Gate G, then run focused G5.6 validation. Do not proceed to Momentum until G5.6 is validated.
