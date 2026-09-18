@@ -4,6 +4,7 @@ import { buildTorntpharmEvidencePilotPreview } from "./pharmaEvidencePilotPrevie
 import { buildPharmaBusinessModelEvidenceAcquisitionPlan, type PharmaBusinessModelEvidenceAcquisitionItem } from "./pharmaBusinessModelEvidenceAcquisitionContract"
 import { buildTorntpharmPublicOfficialSourceDiscoveryPlan } from "./torntpharmPublicOfficialSourceDiscovery"
 import { buildTorntpharmArtifactContentReviewPlan } from "./torntpharmArtifactContentReviewPlan"
+import { buildTorntpharmReadOnlyContentReviewDryRun } from "./torntpharmReadOnlyContentReviewDryRun"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -115,6 +116,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const acquisitionPlan = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaBusinessModelEvidenceAcquisitionPlan(model) : null
   const publicSourceDiscovery = acquisitionPlan ? buildTorntpharmPublicOfficialSourceDiscoveryPlan(acquisitionPlan) : null
   const artifactReviewPlan = acquisitionPlan && publicSourceDiscovery ? buildTorntpharmArtifactContentReviewPlan(acquisitionPlan, publicSourceDiscovery) : null
+  const contentReviewDryRun = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmReadOnlyContentReviewDryRun() : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -284,6 +286,55 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         </article>)}
       </div>
       <p className="pharma-evidence-pilot-note"><strong>Interpretation:</strong> 12/12 public/official-first requirements now have enough exact candidate documents to cover their minimum planning horizon, but that does not satisfy any evidence requirement. Content review, compatibility checks and freshness review remain outstanding for every row.</p>
+    </section> : null}
+
+    {contentReviewDryRun ? <section className="pharma-content-review-dry-run" aria-labelledby="pharma-content-review-title">
+      <div className="pharma-evidence-pilot-head">
+        <div>
+          <p className="eyebrow">Gate F · Read-only content review</p>
+          <h3 id="pharma-content-review-title">Public document content-review dry-run</h3>
+          <p>Six public/official artifacts have been inspected in read-only mode. Proposed candidates and rejected claims remain outside canonical evidence storage and no ingestion write is authorized.</p>
+        </div>
+        <span className="pharma-workspace-lock">Read-only · No ingestion</span>
+      </div>
+      <div className="pharma-content-review-summary">
+        <div><span>Artifacts reviewed</span><strong>{contentReviewDryRun.summary.reviewedArtifacts}</strong><small>4 issuer quarterlies · 2 FDA regulator documents</small></div>
+        <div><span>Proposed candidates</span><strong>{contentReviewDryRun.summary.proposedCandidates}</strong><small>4 US-growth observations · 2 Indrad regulator events</small></div>
+        <div><span>Rejected claims</span><strong>{contentReviewDryRun.summary.rejectedClaims}</strong><small>Scope-incompatible claim kept out of candidate history</small></div>
+        <div><span>Ingestion writes</span><strong>{contentReviewDryRun.summary.ingestionWrites}</strong><small>Nothing promoted to canonical evidence</small></div>
+      </div>
+
+      <div className="pharma-content-review-grid">
+        {contentReviewDryRun.requirementResults.map((result) => <article key={result.metricCode}>
+          <div className="pharma-source-requirement-head">
+            <div>
+              <strong>{result.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH" ? "Export / US Revenue Growth" : "Regulatory Site Status"}</strong>
+              <small>{result.proposedObservationCount} proposed observations · minimum {result.minimumRequired}</small>
+            </div>
+            <span>{titleCase(result.proposalState)}</span>
+          </div>
+          <p>{result.remainingGap}</p>
+        </article>)}
+      </div>
+
+      <div className="pharma-content-review-candidates">
+        {contentReviewDryRun.proposedCandidates.map((candidate) => <article key={candidate.artifactCode + candidate.observationDate + candidate.value}>
+          <div>
+            <strong>{candidate.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH" ? "US revenue growth" : "Indrad regulator event"}</strong>
+            <small>{candidate.observationDate} · {candidate.artifactCode}</small>
+          </div>
+          <span>{candidate.unit === "PERCENT" ? `${candidate.value}%` : titleCase(candidate.value)}</span>
+          <p>{candidate.basis}</p>
+          <small>{candidate.provenanceSummary}</small>
+        </article>)}
+      </div>
+
+      {contentReviewDryRun.rejectedClaims.map((rejected) => <article className="pharma-content-review-rejection" key={rejected.artifactCode + rejected.claim}>
+        <div><strong>Rejected from comparable series</strong><span>{rejected.claim}</span></div>
+        <p>{rejected.reason}</p>
+      </article>)}
+
+      <p className="pharma-evidence-pilot-note"><strong>Boundary:</strong> proposed candidates are review outputs only. Regulatory Site Status remains partial-scope because only the Indrad warning/closeout chain has been reviewed, and no company-wide current regulatory-clearance claim is made.</p>
     </section> : null}
 
   </section>
