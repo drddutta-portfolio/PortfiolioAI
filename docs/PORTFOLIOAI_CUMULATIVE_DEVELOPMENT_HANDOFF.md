@@ -4303,3 +4303,69 @@ All four are 64-character lowercase hexadecimal SHA-256 values derived from the 
 - Existing owner authorization for the exact local prerequisite mutation remains in force.
 
 **CURRENT STOP POINT:** Owner should `git pull`, rerun `npx vitest run src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts` and focused ESLint for that test. If clean, retry the already-authorized local-only prerequisite mutation command.
+
+
+---
+
+## 63. Entry 058 — Authorized local prerequisite mutation succeeded
+
+**Date:** 18 September 2026  
+**Actor:** owner-run authorized local execution  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reran the corrected mutation flow after the manifest-derived hash serializer test was aligned with the dry-run executor.
+
+### Focused safety validation before execution
+
+- `npx vitest run src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts` → **PASS**
+- test files: **1/1 passed**
+- tests: **5/5 passed**
+- focused ESLint for the SQL safety test → **PASS**
+
+### Authorized local-only mutation
+
+Command:
+
+`PORTFOLIOAI_ALLOW_LOCAL_PREREQUISITE_MUTATION=YES npm run r4n:mutate:prerequisites`
+
+Observed guards:
+
+- explicit local mutation approval flag: **PASS**
+- local-only database guard: **PASS**
+
+Observed transaction:
+
+- `BEGIN`
+- preflight block: **PASS**
+- metric-definition insert: **1 row**
+- immutable source-record insert: **4 rows**
+- postcondition verification: **PASS**
+- `COMMIT`
+
+### Persisted local prerequisite state
+
+Persisted to local Supabase only:
+
+- `fundamental_metric_definitions`: **1** row for `PHARMA_EXPORT_US_REVENUE_GROWTH`
+- `data_source_records`: **4** immutable issuer source records
+- `fundamental_observations`: **0** rows inserted
+
+Verified postconditions:
+
+- metric-definition target count: **1**
+- source-record target count: **4**
+- fundamental observations inserted: **0**
+
+### Scope boundary
+
+- Local prerequisite mutation: **SUCCESS**
+- Persistent local prerequisite rows: **5 maximum / 5 inserted on this first successful run**
+- Fundamental-observation write: **NO**
+- Production Supabase mutation: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+- Scoring/recommendation/position-sizing changes: **NO**
+
+**Result:** Local prerequisite materialization = **SUCCESS / LOCAL-ONLY / 0 EVIDENCE-OBSERVATION WRITES**.
+
+**CURRENT STOP POINT:** The next safe R4N action is to rerun the read-only numeric preflight. Expected result: the metric-definition and source-record blockers should clear, with the four reviewed US-growth rows becoming `INSERT_CANDIDATE` if no existing-fact conflicts are present. No observation insert is authorized yet.
