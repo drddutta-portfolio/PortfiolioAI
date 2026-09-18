@@ -7232,3 +7232,68 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.5 cards in TORNTPHARM → Research → Gate G, then run focused G5.5 validation. Do not proceed to Risk until G5.5 is validated.
+
+
+---
+
+## 97. Entry 092 — Gate G5.5 Ownership / Governance framework validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5.5 has completed its validation checkpoint as a **proposal-only Ownership / Governance framework**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G5.5 Ownership / Governance plus G5.4, G5.3, G5.2, G5.1, G1–G4, and existing Gate G curve proposals → **PASS**
+- focused ESLint for the G5.5/G5.4/G5.3/G5.2/G5.1/G1–G4/Gate G methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G5.5 status
+
+- Ownership / Governance framework: **VALIDATED / NOT ACTIVE**
+- minimum 4 / preferred 8 shareholding-quarter history contract: **VALIDATED**
+- latest shareholding quarter required: **VALIDATED**
+- current material governance events required: **VALIDATED**
+- promoter absence not automatically negative: **VALIDATED**
+- candidate framework `OWNERSHIP_STRUCTURE_AND_STABILITY + PLEDGE_AND_CONTROL_RISK + GOVERNANCE_EVENT_CONTEXT`: **VALIDATED AS FRAMEWORK ONLY**
+- mechanical promoter/institutional/pledge scoring prohibition: **VALIDATED**
+- G4 event second hidden penalty: **NO**
+- hidden double-counting: **NO**
+- additional embedded governance cap inside dimension: **NO**
+- component weights: **UNAPPROVED**
+- ownership/pledge/event-context numeric bands: **UNAPPROVED**
+- numeric Ownership / Governance curve ready: **NO**
+
+### Dimension-alignment boundary remains open
+
+The canonical PHARMA_V1 architecture assigns this family to:
+
+`OWNERSHIP_GOVERNANCE`
+
+while the older parent evidence contract still records:
+
+`PHARMA_OWNERSHIP_GOVERNANCE.dimension = GOVERNANCE`
+
+This mismatch remains intentionally unresolved.
+
+G5.5 validation confirms that the mismatch is visible and fail-closed; it does **not** authorize a silent remap.
+
+### Safety boundary remains unchanged
+
+- parent dimension reconciliation applied: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G5.5 is validated. The next permitted G5 parent curve family is **Risk**, but implementation must first inspect `PHARMA_REGULATORY_SITE_STATUS`, the broader PHARMA_V1 Risk evidence lanes, and the relationship to G4 so regulatory risk is not double-counted.
