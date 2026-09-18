@@ -6175,3 +6175,120 @@ Build emitted only the existing non-blocking Vite large-chunk advisory; no build
 - scheduler change: **NO**
 
 **CURRENT STOP POINT:** G3 is now validated. The next permitted Gate G design task is **G4 — Governance / Regulatory Gate Contract**, still proposal-only and non-executable. Before implementing G4, inspect the canonical adaptive plan and the current G1/G2/G3/Gate G contracts at the then-current branch head.
+
+
+---
+
+## 86. Entry 081 — Gate G4 Pharma governance / regulatory gate contract prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G4 has been implemented as a **proposal-only governance / regulatory gate contract** under the canonical PHARMA_V1 adaptive scoring/classification architecture.
+
+### New contract
+
+`PHARMA_V1_GOVERNANCE_REGULATORY_GATE_V1_PROPOSAL`
+
+Repository artifacts:
+
+- `src/features/research/pharmaGovernanceRegulatoryGateContract.ts`
+- `src/features/research/pharmaGovernanceRegulatoryGateContract.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G4_Governance_Regulatory_Gate_Contract_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Governance blocking rules
+
+Gate G4 now formalizes the pre-aggregation governance gate:
+
+- explicit governance blocked-review state → `BLOCKED_REVIEW`
+- reviewed critical governance event → `BLOCKED_REVIEW`
+- reviewed high-risk governance event → `HIGH_RISK`
+
+High risk remains:
+
+- non-blocking by default;
+- prominent in Interpretation;
+- only eligible for a future separately versioned transparent constraint.
+
+Exact high-risk cap value remains:
+
+`null / UNAPPROVED`
+
+### Regulatory materiality rules
+
+A regulatory event cannot influence the gate until the affected facility/product/geography is established.
+
+If regulatory economic materiality is unknown:
+
+`REVIEW_REQUIRED`
+
+PortfolioAI must not infer or invent exposure.
+
+After scope and materiality are established:
+
+- critical + known material → `BLOCKED_REVIEW`
+- high + known material → `HIGH_RISK`
+
+### Remediation handling
+
+Remediation does not erase the historical regulatory event.
+
+A closeout state is retained as separate evidence and requires subsequent outcome context before PortfolioAI treats the chain as resolved for gate interpretation.
+
+Therefore:
+
+`CLOSED_OUT` + missing subsequent outcome context → `REVIEW_REQUIRED`
+
+Historical event retention remains explicit.
+
+### Anti-double-counting
+
+Ownership / Governance already remains a weighted PHARMA_V1 dimension.
+
+Gate G4 therefore emits no hidden additional numeric governance/regulatory penalty.
+
+Encoded boundaries:
+
+- hidden double-counting allowed: **NO**
+- additional numeric penalty enabled: **NO**
+- high-risk cap value: **UNAPPROVED / null**
+- score execution: **NO**
+
+Any future high-risk cap must be separately versioned and transparent.
+
+### Relationship to G3
+
+G3 already consumes a governance/review blocker as a fail-closed readiness input.
+
+G4 defines the upstream governance/regulatory gate states that may supply that blocker.
+
+No scoring adapter is activated.
+
+### UI review surface
+
+Gate G now includes:
+
+- **G4 · Governance / regulatory gate**
+- **G4 · Materiality, remediation & anti-double-counting**
+
+### Explicit boundary
+
+- governance/regulatory architecture proposal: **YES**
+- high-risk numeric cap approved: **NO**
+- additional numeric penalty: **NO**
+- score preview execution: **NO**
+- numeric score execution: **NO**
+- persisted score run: **NO**
+- schema migration: **NO**
+- regulatory event write: **NO**
+- recommendation / position sizing: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G4 cards in TORNTPHARM → Research → Gate G, then run focused G4 validation. Only after G4 validation should Gate G proceed to **G5 — additional core scoring curves**.
