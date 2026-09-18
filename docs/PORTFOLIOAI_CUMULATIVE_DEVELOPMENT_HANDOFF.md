@@ -3492,3 +3492,58 @@ Corrective commit:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull` and rerun `npm run typecheck` and `npm run build`. If both pass, continue with the focused prerequisite-package validation. No UI re-review is required because the correction is type-narrowing only.
+
+
+---
+
+## 52. Entry 047 — Canonical prerequisite package validation completed
+
+**Date:** 18 September 2026  
+**Actor:** owner-run local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Following the type-narrowing correction in `torntpharmCanonicalPrerequisitePackage.ts`, the owner completed the requested local validation sequence successfully.
+
+### Owner-confirmed validation
+
+Completed successfully:
+
+- `npm run typecheck`
+- `npm run build`
+- `npm run test`
+- `npm run test:edge`
+- focused ESLint on:
+  - `src/features/research/torntpharmCanonicalPrerequisitePackage.ts`
+  - `src/features/research/torntpharmCanonicalPrerequisitePackage.test.ts`
+  - `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+No further UI re-review was required because the corrective change was type-narrowing only.
+
+### Validated package state
+
+`TORNTPHARM_CANONICAL_PREREQUISITE_PACKAGE_V1`
+
+remains:
+
+- metric definitions prepared: **1**
+- source records prepared: **4**
+- payload hashes materialized: **0**
+- proposed writes: **0**
+- mutation authorized: **false**
+- rejected Q4 31% claim excluded
+- Q4 comparable base-business value retained at **16%**
+
+### Scope boundary
+
+- Metric-definition insert: **NO**
+- Payload-hash materialization: **NO**
+- Source-record insert: **NO**
+- Fundamental-observation insert: **NO**
+- Local mutation: **NO**
+- Production Supabase mutation: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Canonical Prerequisite Package V1 checkpoint = **VALIDATED**.
+
+**CURRENT STOP POINT:** The next safe R4N gate is to prepare a local-only prerequisite materialization dry-run/executor that deterministically serializes the four canonical source payloads, computes their SHA-256 hashes, and shows the exact metric-definition/source-record rows that would be inserted. The gate must remain non-writing until separately approved.
