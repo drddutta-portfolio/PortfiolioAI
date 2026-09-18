@@ -1514,3 +1514,83 @@ Per the local-first workflow, this implementation checkpoint is **not yet visual
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Exact document review plan** section. Expected summary: 12 exact artifacts, 4 annual + 5 quarterly + 2 regulator + 1 exchange filing, 12/12 minimum planning coverage, 5/12 preferred planning coverage, and 0 evidence reviewed. Obtain visual approval before the full local validation chain.
+
+
+---
+
+## 31. Entry 026 — Gate F artifact-level content review planning visually approved and locally validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After pulling Entry 025, the owner reopened TORNTPHARM → Research → Overview and visually reviewed the new **Gate F · Artifact-level review planning / Exact document review plan**.
+
+### Localhost visual verification — PASS
+
+The rendered plan correctly shows:
+- **12 exact artifacts planned**;
+- **4 annual reports**;
+- **5 quarterly result releases**;
+- **2 regulator documents**;
+- **1 exchange filing**;
+- **12 requirements planned**;
+- **12/12 minimum planning horizons covered**;
+- **5/12 preferred planning horizons covered**;
+- **0 evidence reviewed**;
+- every requirement remains **NOT REVIEWED**.
+
+The lower Global Generics rows also rendered correctly, including:
+- Regulatory Site Status;
+- Export / US Revenue Growth;
+- Pipeline / Launch / Approval Evidence;
+- US Generic Price Erosion;
+- Generics Volume / Mix;
+- Complex / Specialty Generics Mix.
+
+The per-requirement gap model correctly keeps candidate-document planning separate from reviewed evidence. Example: Export / US Revenue Growth has 5 candidate quarterly documents against a 4-quarter minimum / 8-quarter preferred contract, therefore:
+- minimum planning gap = 0;
+- preferred planning gap = 3;
+- reviewed observations = 0;
+- minimum reviewed-evidence gap = 4.
+
+The owner visually approved the artifact-level planning presentation.
+
+### Local validation
+
+The owner then ran the requested local validation sequence:
+- `git status`
+- `git branch --show-current`
+- `git rev-parse HEAD`
+- `npm run typecheck`
+- `npm run lint`
+- `npm run check:architecture`
+- `npm run lint:architecture`
+- `npm run lint:edge`
+- `npm run test`
+- `npm run test:edge`
+- `npm run build`
+
+The supplied terminal capture directly confirms:
+- Edge test suite: **27/27 test files passed; 140/140 tests passed**;
+- production build: **PASS** under Vite 8.2.2;
+- **211 modules transformed**;
+- build completed successfully;
+- only the existing non-blocking warning about chunks exceeding 500 kB after minification remained.
+
+No failure was reported from the preceding owner-run commands in the requested sequence.
+
+### Scope boundary
+
+- Production application deployment: **NO**
+- Production Supabase mutation: **NO**
+- Evidence ingestion: **NO**
+- Content fetch / evidence review: **NO**
+- Paid/licensed provider calls: **NO**
+- Numeric scoring / recommendation / sizing changes: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Gate F artifact-level content review planning slice = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
+
+**CURRENT STOP POINT:** The 12 exact public/official artifacts are now planned and locally validated, but no document content has yet been reviewed into evidence. The next safe Gate F step is a separately authorized **read-only content-review dry run** against a small public/official subset, producing proposed evidence candidates and explicit rejection/gap reasons while performing no ingestion.
