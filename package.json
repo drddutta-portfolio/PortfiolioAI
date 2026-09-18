@@ -12,7 +12,9 @@
     "check:architecture": "node scripts/check-data-boundaries.mjs",
     "lint:edge": "eslint --config eslint.edge.config.js supabase/functions",
     "test:edge": "vitest run --config vitest.edge.config.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "r4n:preflight:numeric": "bash scripts/r4n/run-torntpharm-local-numeric-preflight.sh",
+    "r4n:replay:regulatory": "bash scripts/r4n/run-regulatory-event-migration-replay.sh"
   },
   "dependencies": {
     "@e965/xlsx": "^0.20.3",
