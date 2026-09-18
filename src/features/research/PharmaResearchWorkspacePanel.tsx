@@ -55,7 +55,7 @@ function SecondaryExposureCard({ exposure }: { readonly exposure: PharmaWorkspac
   </article>
 }
 
-export function PharmaResearchWorkspacePanel({ securityId, research }: { readonly securityId: string; readonly research: SecurityResearch }) {
+export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: { readonly securityId: string; readonly symbol: string; readonly research: SecurityResearch }) {
   const resolution = usePharmaSubprofileResolution(securityId)
   const evaluationDate = useMemo(() => new Date().toISOString().slice(0, 10), [])
 
