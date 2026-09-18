@@ -64,7 +64,7 @@ security_rows AS (
     AND is_active
 ),
 security_state AS (
-  SELECT count(*) AS security_count, min(id) AS security_id
+  SELECT count(*) AS security_count, (array_agg(id ORDER BY id::text))[1] AS security_id
   FROM security_rows
 ),
 assignment_state AS (
@@ -176,7 +176,7 @@ expected(period_end, expected_value, artifact_code, source_url) AS (
     (DATE '2026-03-31', 16::numeric, 'TORRENT_Q4_FY26_RELEASE', 'https://www.torrentpharma.com/docs/Torrent_Pharma_Press_release_Q4_25_26_e5822c6449.pdf')
 ),
 s AS (
-  SELECT count(*) AS security_count, min(id) AS security_id
+  SELECT count(*) AS security_count, (array_agg(id ORDER BY id::text))[1] AS security_id
   FROM public.securities
   WHERE symbol = 'TORNTPHARM' AND exchange = 'NSE' AND is_active
 ),
