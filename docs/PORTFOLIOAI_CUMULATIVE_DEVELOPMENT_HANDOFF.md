@@ -7508,3 +7508,161 @@ Owner-confirmed results:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G5.6 is validated. The final permitted G5 parent curve family is **Momentum**, but implementation must first inspect the existing market-momentum evidence, current BANK_NBFC pilot rules, and confirm that no bank-specific threshold or benchmark assumption is inherited into PHARMA_V1.
+
+
+---
+
+## 100. Entry 095 — Gate G5.7 Momentum framework prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5 has continued with its final parent family, **G5.7 — Momentum**, as a proposal-only framework.
+
+### Canonical dimension and parent-contract gap
+
+Canonical Gate G dimension:
+
+`MOMENTUM`
+
+Current dedicated PHARMA_V1 parent Momentum metric contract:
+
+`NONE`
+
+State:
+
+`MISSING_DEDICATED_PHARMA_PARENT_CONTRACT`
+
+The repository already contains deterministic market-momentum evidence, but `pharmaResearchProfile.ts` has no dedicated Pharma Momentum metric entry.
+
+G5.7 therefore preserves the missing-parent-contract condition as a fail-closed prerequisite rather than silently inventing or activating one.
+
+### Existing market evidence reused as candidate inputs
+
+Candidate Momentum evidence already available in the market-data foundation:
+
+- `PRICE_MOMENTUM_12M`
+- `PRICE_MOMENTUM_6M`
+- `RELATIVE_STRENGTH_12M`
+
+Raw authority:
+
+`market_price_history`
+
+Derived evidence store:
+
+`market_metric_observations`
+
+Existing absolute-return derivation semantics are preserved:
+
+- close-to-close return;
+- calendar lookback target;
+- first trading day on/after target;
+- 14-day tolerance.
+
+Relative-strength semantics remain:
+
+`stock return - approved benchmark return`
+
+### Momentum methodology framework
+
+New proposal:
+
+`PHARMA_MARKET_MOMENTUM_CURVE_V1_PROPOSAL`
+
+Candidate framework:
+
+- `ABSOLUTE_MOMENTUM_12M`
+- `ABSOLUTE_MOMENTUM_6M`
+- `BENCHMARK_RELATIVE_STRENGTH_12M`
+
+The following remain unapproved:
+
+- component weights;
+- absolute-momentum bands;
+- relative-strength bands.
+
+### BANK_NBFC pilot separation
+
+Existing BANK_NBFC reviewed rules are not inherited.
+
+Explicitly prohibited:
+
+- Bank 12M weight inheritance;
+- Bank 6M weight inheritance;
+- NIFTY Bank benchmark inheritance;
+- Trendlyne technical Momentum score use.
+
+Current Pharma benchmark state:
+
+`PHARMA_BENCHMARK_UNAPPROVED`
+
+Relative-strength scoring remains disabled until a Pharma benchmark contract is explicitly approved.
+
+### Missing-evidence boundary
+
+Missing relative-strength evidence cannot become neutral.
+
+No denominator substitution or silent zero is allowed.
+
+### G5 family coverage
+
+All seven G5 core parent families now have proposal frameworks:
+
+1. G5.1 ROCE / Capital Efficiency
+2. G5.2 Cash Conversion
+3. G5.3 Balance Sheet / Leverage
+4. G5.4 Valuation
+5. G5.5 Ownership / Governance
+6. G5.6 Regulatory & Market Risk
+7. G5.7 Momentum
+
+This does not activate G5 scoring.
+
+Outstanding prerequisites remain, including:
+
+- legacy dimension reconciliation for G5.1/G5.2/G5.3/G5.5;
+- missing dedicated Pharma Momentum parent metric contract;
+- unapproved component weights and numeric bands;
+- unapproved Pharma benchmark;
+- G6 subprofile-specific thresholds.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaMomentumCurveProposal.ts`
+- `src/features/research/pharmaMomentumCurveProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G5_7_Momentum_Framework_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G5.7 · Momentum framework**
+- **G5.7 · Parent-contract & benchmark boundary**
+
+### Explicit boundary
+
+- Momentum framework proposal: **YES**
+- dedicated Pharma parent Momentum contract: **MISSING**
+- Pharma benchmark approved: **NO**
+- BANK/NBFC weights inherited: **NO**
+- NIFTY Bank benchmark inherited: **NO**
+- Trendlyne technical Momentum score used: **NO**
+- component weights approved: **NO**
+- numeric bands approved: **NO**
+- numeric Momentum curve ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.7 cards in TORNTPHARM → Research → Gate G, then run focused G5.7 validation. Only after G5.7 validation should Gate G advance to **G6 — Subprofile-Specific Curves**.
