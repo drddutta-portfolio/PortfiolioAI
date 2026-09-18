@@ -6748,3 +6748,119 @@ A separate versioned reconciliation is required before any active scoring path c
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G5.2 is validated. The next permitted G5 parent curve family is **Balance Sheet / Leverage**, but implementation must first inspect `PHARMA_BALANCE_SHEET_LEVERAGE`, its evidence inputs, and the legacy-to-canonical dimension mapping before defining methodology.
+
+
+---
+
+## 92. Entry 087 — Gate G5.3 Balance Sheet / Leverage framework prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5 has continued with **G5.3 — Balance Sheet / Leverage** as a proposal-only common parent curve framework.
+
+### Existing Balance Sheet / Leverage evidence contract preserved
+
+Existing parent metric:
+
+`PHARMA_BALANCE_SHEET_LEVERAGE`
+
+Preserved requirements:
+
+- minimum **3** comparable annual periods;
+- preferred **5** comparable annual periods;
+- latest balance-sheet period required;
+- reviewed debt, cash and operating-earnings evidence with matched periods required;
+- a point-in-time snapshot alone is insufficient for the proposed curve;
+- lower leverage remains directionally better.
+
+### Dimension alignment gap surfaced
+
+The canonical adaptive architecture assigns this family to:
+
+`BALANCE_SHEET_CREDIT`
+
+However, the older lower-level parent evidence contract records:
+
+`PHARMA_BALANCE_SHEET_LEVERAGE.dimension = FINANCIAL_STRENGTH`
+
+and the current lower-level `ResearchMetricContract` taxonomy does not expose `BALANCE_SHEET_CREDIT`.
+
+G5.3 records:
+
+- canonical dimension: `BALANCE_SHEET_CREDIT`
+- current parent-contract dimension: `FINANCIAL_STRENGTH`
+- alignment state: `REQUIRES_VERSIONED_PARENT_RECONCILIATION`
+
+No silent remapping is applied.
+
+### Balance Sheet / Leverage methodology framework
+
+New proposal:
+
+`PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_V1_PROPOSAL`
+
+Candidate shared framework:
+
+- `NET_DEBT_LEVERAGE`
+- `INTEREST_COVERAGE`
+- `BALANCE_SHEET_TREND_AND_RESILIENCE`
+
+The following remain unapproved:
+
+- component weights;
+- leverage bands;
+- interest-cover bands;
+- trend/resilience bands.
+
+### Cash semantics and context boundary
+
+G5.3 explicitly requires:
+
+- reviewed cash/cash-equivalent definitions before cash offsets debt;
+- explicit treatment of net-cash cases;
+- no automatic best score merely because net debt is negative;
+- acquisition/expansion context before leverage trend is interpreted.
+
+No universal numeric leverage or interest-cover thresholds are created.
+
+All five canonical Pharma subprofiles retain null threshold slots.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaBalanceSheetLeverageCurveProposal.ts`
+- `src/features/research/pharmaBalanceSheetLeverageCurveProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G5_3_Balance_Sheet_Leverage_Framework_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G5.3 · Balance Sheet / Leverage framework**
+- **G5.3 · Dimension alignment & leverage-context boundary**
+
+### Explicit boundary
+
+- Balance Sheet / Leverage framework proposal: **YES**
+- dimension reconciliation applied: **NO**
+- universal leverage bands: **NO**
+- universal interest-cover bands: **NO**
+- subprofile thresholds approved: **NO**
+- component weights approved: **NO**
+- numeric curve ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.3 cards in TORNTPHARM → Research → Gate G, then run focused G5.3 validation. Do not proceed to Valuation until G5.3 is validated.
