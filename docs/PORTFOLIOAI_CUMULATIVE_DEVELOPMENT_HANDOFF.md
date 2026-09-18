@@ -1226,3 +1226,101 @@ No failure was reported from the preceding owner-run commands in the requested s
 **Result:** Gate F business-model evidence acquisition/manifest contract = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
 
 **CURRENT STOP POINT:** The 14-requirement TORNTPHARM business-model evidence acquisition contract is designed, visible and locally validated. The next safe Gate F step is a **public/official source-discovery dry run** for the 12 PUBLIC_OFFICIAL_FIRST requirements only: identify candidate issuer/exchange/regulator artifacts and map them to requirement/history gaps without ingesting evidence or calling licensed providers. Keep Brand & Therapy Leadership licensed-source work separately gated, and do not use the Chronic / Acute Mix licensed fallback unless issuer evidence proves insufficient and separate approval is obtained.
+
+
+---
+
+## 28. Entry 023 — Gate F public / official source-discovery dry run prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The next local-only Gate F slice maps the 12 `PUBLIC_OFFICIAL_FIRST` TORNTPHARM business-model requirements to candidate public issuer/listed-company/regulator artifacts without reviewing or ingesting evidence.
+
+### New discovery contract
+
+Added:
+- `src/features/research/torntpharmPublicOfficialSourceDiscovery.ts`
+- `src/features/research/torntpharmPublicOfficialSourceDiscovery.test.ts`
+- `docs/R4N_TORNTPHARM_Gate_F_Public_Official_Source_Discovery.md`
+
+Updated:
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+
+The discovery contract is intentionally separate from acquisition planning and evidence ingestion. It records only that a candidate public/official source exists.
+
+### Public / official artifact spine
+
+The dry run currently records **8 discovered artifacts**:
+- Torrent annual-reports archive;
+- Torrent Integrated Annual Report 2025-26;
+- Torrent Integrated Annual Report 2023-24;
+- Torrent quarterly-results archive;
+- Torrent Q4 FY26 results release;
+- Torrent SEBI / LODR disclosure archive;
+- FDA 2019 Indrad warning letter;
+- FDA 2024 Indrad closeout letter.
+
+The regulatory mapping preserves both the historical FDA action and the later closeout so an old warning cannot be treated as the current regulator state by itself.
+
+### Discovery invariants
+
+For the 12 public/official-first requirements:
+- scoped requirements: **12**;
+- mapped requirements: **12**;
+- discovered artifacts: **8**;
+- issuer/listed-company artifacts: **6**;
+- regulator artifacts: **2**;
+- source hubs: **3**;
+- every requirement state = `CANDIDATE_SOURCE_FOUND`;
+- every evidence state = `NOT_REVIEWED`;
+- `sourceFetchAuthorized = false`;
+- `ingestionAuthorized = false`.
+
+The two licensed-gated requirements remain excluded:
+- Brand & Therapy Leadership;
+- Chronic / Acute Mix.
+
+### Visible localhost milestone
+
+For TORNTPHARM only, the Pharma Research workspace now renders:
+
+**Gate F · Public / official discovery / Public / official source discovery**
+
+The panel shows:
+- 12 requirements in scope;
+- 12 mapped;
+- 8 official artifacts;
+- 6 issuer/listed-company and 2 regulator artifacts;
+- 3 source hubs;
+- evidence reviewed = 0;
+- compact artifact registry;
+- per-requirement candidate artifact codes and remaining history/content-review gap;
+- explicit **Discovery only · No fetch** state.
+
+No source-fetch button, provider action, evidence promotion, or ingestion action is exposed.
+
+### Validation state
+
+Regression coverage asserts:
+- 12/12 public/official-first mapping;
+- exact 8 / 6 / 2 / 3 artifact summary;
+- every mapped requirement remains NOT_REVIEWED;
+- source fetch and ingestion authorization remain false;
+- licensed-gated metrics are excluded;
+- both FDA action and closeout artifacts remain linked to Regulatory Site Status.
+
+Per the local-first workflow, this implementation checkpoint is **not yet visually approved** and full local validation is deferred until after owner localhost review.
+
+**Production touched:** NO.  
+**Production Supabase:** unchanged.  
+**Evidence ingestion:** NO.  
+**Source fetch/provider calls:** NO.  
+**Paid/licensed provider calls:** NO.  
+**Scoring / recommendation / sizing:** NO.  
+**Schedulers:** unchanged.  
+**PR #101:** remains draft/open/unmerged.
+
+**CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Public / official source discovery** section. Expected summary: 12 requirements in scope, 12 mapped, 8 official artifacts, 6 issuer/listed-company + 2 regulator, 3 source hubs, and 0 evidence reviewed. Obtain visual approval before the full local validation chain.
