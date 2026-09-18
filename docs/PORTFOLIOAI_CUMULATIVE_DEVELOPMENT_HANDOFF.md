@@ -2924,3 +2924,85 @@ Corrective commit:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull` and rerun the local validation sequence from `npm run typecheck` onward. No UI re-review is required because the correction is test-only.
+
+
+---
+
+## 46. Entry 041 — Local numeric preflight and regulatory migration replay checkpoint validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner visually approved the prepared **Local numeric preflight** and **Regulatory migration replay** cards, then completed the corrected local validation sequence after pulling the readonly-test fix.
+
+### Corrective pull confirmation
+
+Local HEAD was confirmed at:
+
+`c32ce86d905167cb5c17fe219a121807ff3c8e52`
+
+After that pull:
+
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- Vite modules transformed: **218**
+- only the existing non-blocking >500 kB chunk warning remained.
+
+### Full test validation
+
+The supplied terminal capture confirms:
+
+- frontend/unit test suite: **97/97 test files passed**
+- frontend/unit tests: **511/511 passed**
+- Edge test suite: **27/27 test files passed**
+- Edge tests: **140/140 passed**
+
+### Focused changed-file lint
+
+Focused ESLint was run on:
+
+- `src/features/research/torntpharmLocalNumericPreflight.ts`
+- `src/features/research/torntpharmLocalNumericPreflight.test.ts`
+- `src/features/research/pharmaRegulatoryEventMigrationReplayPlan.ts`
+- `src/features/research/pharmaRegulatoryEventMigrationReplayPlan.test.ts`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Result: **PASS with no output, errors or warnings**.
+
+Repository-wide lint remains subject to the already-documented pre-existing unrelated debt and is not represented as clean.
+
+### Validation classification
+
+**OWNER VISUALLY APPROVED / FOCUSED CHANGED-FILE VALIDATION PASS**
+
+### Gate state
+
+Local numeric preflight:
+- contract: `TORNTPHARM_LOCAL_NUMERIC_PREFLIGHT_V1`
+- status: **PREPARED · NOT EXECUTED**
+- local DB queried: **NO**
+- write authorized: **NO**
+
+Regulatory migration replay:
+- contract: `PHARMA_REGULATORY_EVENT_MIGRATION_REPLAY_PLAN_V1`
+- status: **PREPARED · NOT EXECUTED**
+- migration replay executed: **NO**
+- schema apply authorized: **NO**
+- production execution authorized: **NO**
+
+### Scope boundary
+
+- Local database query: **NO**
+- Local evidence write: **NO**
+- Source-record materialization: **NO**
+- Metric-definition mutation: **NO**
+- Regulatory migration replay execution: **NO**
+- Regulatory schema apply: **NO**
+- Production Supabase mutation: **NO**
+- Production execution authorization: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Local Numeric Preflight + Regulatory Migration Replay Preparation checkpoint = **VALIDATED**.
+
+**CURRENT STOP POINT:** The next safe R4N decision is whether to execute, on local Supabase only, (1) the read-only numeric preflight queries and (2) the rollback-only regulatory migration replay. Neither action authorizes any evidence insert, source-record creation, metric-definition mutation, persistent schema change, or production change.
