@@ -29,6 +29,7 @@ import { PHARMA_RISK_CURVE_PROPOSAL } from "./pharmaRiskCurveProposal"
 import { PHARMA_MOMENTUM_CURVE_PROPOSAL } from "./pharmaMomentumCurveProposal"
 import { PHARMA_G6_LAYERING_BOUNDARY, pharmaG6CurveContractForPrimary } from "./pharmaG6SubprofileCurveApplicability"
 import { PHARMA_DOMESTIC_VALUATION_SELF_HISTORY_CURVE } from "./pharmaDomesticValuationSelfHistoryCurveProposal"
+import { PHARMA_G6_DOMESTIC_VALUATION_FCF_IDENTITY } from "./pharmaG6DomesticValuationFcfIdentity"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -383,6 +384,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Domestic Formulations only · Whole Valuation dimension not ready</small>
               <p>Peer-relative valuation and FCF corroboration remain unapproved, BANK/NBFC dimension weights are not inherited, and unsupported Pharma primaries fail closed rather than receiving Domestic thresholds.</p>
               <span>Absolute P/E bands: NO · BANK weights inherited: NO · Whole dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.3 · FCF-yield evidence identity lock</strong>
+              <small>{PHARMA_G6_DOMESTIC_VALUATION_FCF_IDENTITY.proposalVersion}</small>
+              <p>Domestic Valuation cash-flow corroboration is conceptually valid, but the repository currently uses both FCF_YIELD and FCF_YIELD_PERCENT without one approved canonical metric definition tying them together.</p>
+              <span>Metric identity: AMBIGUOUS · Numeric thresholds: BLOCKED</span>
+            </article>
+            <article>
+              <strong>G6.3 · Numeric-threshold blocker</strong>
+              <small>Canonical formula, unit and alias reconciliation required</small>
+              <p>No FCF-yield scoring bands may be introduced until the canonical metric code, formula, unit, price/market-cap authority, negative-FCF treatment and alias semantics are explicitly versioned.</p>
+              <span>Canonical definition: MISSING · Alias reconciliation: PENDING · Whole dimension ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
