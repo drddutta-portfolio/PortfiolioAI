@@ -5050,3 +5050,127 @@ No Gate G scoring methodology has been approved or executed by this closure.
 - production deploy: **NO**
 - production Supabase mutation: **NO**
 - Gate G scoring: **NOT STARTED / NOT APPROVED**
+
+
+---
+
+## 73. Entry 068 — Gate G scoring methodology design checkpoint prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate F is closed. Gate G has now started with a design-only methodology checkpoint.
+
+### Repository inspection findings
+
+The existing PHARMA_V1 scoring architecture already provides the correct foundation:
+
+- R4I registered a dedicated PHARMA_V1 scoring profile;
+- R4L later completed the parent profile to **10 weighted dimensions**, including Business Durability;
+- current PHARMA_V1 dimension weights total 100%;
+- existing score-readiness gates remain 60% per weighted dimension and 70% for overall read-only preview, with all weighted dimensions required to cross their own gates;
+- existing Pharma history/evidence rules intentionally carry `score_curve_state = PENDING` where numeric normalization has not been approved.
+
+Current PHARMA_V1 parent dimension weights:
+
+- QUALITY 13%
+- GROWTH 15%
+- CAPITAL_EFFICIENCY 10%
+- CASH_FLOW 10%
+- BALANCE_SHEET_CREDIT 10%
+- BUSINESS_DURABILITY 10%
+- VALUATION 12%
+- MOMENTUM 8%
+- OWNERSHIP_GOVERNANCE 6%
+- RISK 6%
+
+### Gate G design model
+
+Added:
+
+- `src/features/research/pharmaGateGScoringMethodProposal.ts`
+- `src/features/research/pharmaGateGScoringMethodProposal.test.ts`
+
+Proposal version:
+
+`PHARMA_V1_GATE_G_SCORING_METHOD_PROPOSAL_V1`
+
+State:
+
+`DESIGN_ONLY`
+
+### TORNTPHARM subprofile participation
+
+Primary:
+
+- Domestic Formulations
+- role: **PRIMARY_SCORE_DRIVER**
+- included in PHARMA_V1 scoring requirements.
+
+Material overlay:
+
+- Global Generics
+- role: **MATERIAL_EVIDENCE_OVERLAY**
+- may change approved evidence composition inside affected dimensions;
+- must not create or blend a second independent stock score;
+- denominator effect: **WITHIN_DIMENSION_ONLY**.
+
+Emerging watch:
+
+- CDMO / CRAMS
+- role: **EMERGING_WATCH_EXCLUDED**
+- remains visible in research;
+- excluded from score readiness and scoring denominator until a separately versioned emerging-specific scoring contract is approved.
+
+### Preserved safety gates
+
+- dimension minimum score-ready coverage: **60%**
+- overall minimum score-ready coverage: **70%**
+- every weighted dimension must be ready before an overall preview can appear.
+
+### Explicit non-activation state
+
+- numeric curve approval: **PENDING_APPROVAL**
+- score execution enabled: **NO**
+- recommendation enabled: **NO**
+- position sizing enabled: **NO**
+
+### Glass-box UI
+
+Added a compact collapsed layer:
+
+**Gate G · Scoring methodology design**
+
+inside the Pharmaceuticals deep-research workspace.
+
+It displays:
+
+- weighted dimension count and total;
+- dimension and overall readiness gates;
+- current curve-approval state;
+- primary scoring model;
+- material scoring overlay;
+- emerging scoring watch;
+- preserved dimension weights;
+- score/recommendation/position-sizing execution boundary.
+
+### Documentation
+
+Added:
+
+`docs/R4N_TORNTPHARM_Gate_G_Scoring_Methodology_Design_V1.md`
+
+### Scope boundary
+
+- Gate G started: **YES**
+- scoring architecture proposal prepared: **YES**
+- numeric normalization curves approved: **NO**
+- score run executed: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production Supabase mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, open localhost TORNTPHARM Research, expand **Gate G · Scoring methodology design**, and visually review the dimension weights, readiness gates, primary/material/emerging participation model, and execution boundary. After visual approval, run focused local validation before any numeric scoring curve is proposed.
