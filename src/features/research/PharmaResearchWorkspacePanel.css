@@ -973,3 +973,96 @@
   .pharma-content-review-candidates article > small { grid-column: 1; }
   .pharma-content-review-rejection > div { flex-direction: column; }
 }
+
+
+/* R4N cross-profile consistency: keep Pharma deep research compact by default. */
+.pharma-workspace-panel {
+  margin-top: 1rem;
+}
+
+.pharma-deep-layer {
+  margin-top: .7rem;
+  border: 1px solid #dfe7e2;
+  border-radius: .78rem;
+  background: #fff;
+  overflow: hidden;
+}
+
+.pharma-deep-layer > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .78rem .85rem;
+  cursor: pointer;
+  list-style: none;
+  background: #fbfdfb;
+}
+
+.pharma-deep-layer > summary::-webkit-details-marker {
+  display: none;
+}
+
+.pharma-deep-layer > summary > div {
+  display: grid;
+  gap: .15rem;
+}
+
+.pharma-deep-layer > summary span {
+  color: #20332a;
+  font-size: .82rem;
+  font-weight: 800;
+}
+
+.pharma-deep-layer > summary small {
+  color: #718078;
+  font-size: .68rem;
+  line-height: 1.35;
+}
+
+.pharma-deep-layer > summary b {
+  flex: 0 0 auto;
+  color: #3a5b4a;
+  font-size: .68rem;
+  font-weight: 800;
+}
+
+.pharma-deep-layer[open] > summary {
+  border-bottom: 1px solid #e3e9e5;
+}
+
+.pharma-deep-layer[open] > summary b::before {
+  content: "Close ";
+}
+
+.pharma-deep-layer[open] > summary b {
+  font-size: 0;
+}
+
+.pharma-deep-layer[open] > summary b::after {
+  content: "Close details";
+  font-size: .68rem;
+}
+
+.pharma-deep-layer > .pharma-workspace-grid {
+  margin-top: 0;
+  padding: .8rem;
+}
+
+.pharma-deep-layer-body {
+  padding: .15rem .75rem .8rem;
+}
+
+.pharma-evidence-operations .pharma-evidence-pilot,
+.pharma-evidence-operations .pharma-acquisition-plan,
+.pharma-evidence-operations .pharma-source-discovery,
+.pharma-evidence-operations .pharma-artifact-review-plan,
+.pharma-evidence-operations .pharma-content-review-dry-run {
+  margin-top: .65rem;
+}
+
+@media (max-width: 620px) {
+  .pharma-deep-layer > summary {
+    align-items: flex-start;
+  }
+}
