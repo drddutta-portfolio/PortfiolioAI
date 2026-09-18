@@ -2190,3 +2190,57 @@ Per the local-first workflow, this checkpoint is **not yet visually approved** a
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, expand **Evidence operations & review controls**, and inspect **Ingestion eligibility proposal**. Expected summary: 6 reviewed candidates, 4 numeric candidates, 2 event candidates, 0 validator accepted, 4 validator quarantined, 2 event-schema blocked, 1 rejected claim excluded, and 0 proposed writes.
+
+
+---
+
+## 38. Entry 033 — Candidate-to-ingestion validator blocker semantics corrected
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Owner localhost review of the new **Ingestion eligibility proposal** exposed one semantic issue in the displayed validator blocker.
+
+### Issue found
+
+The four reviewed Export / US Revenue Growth candidates use the correct `PERCENT` unit, but the current canonical validator does not yet register the metric code `PHARMA_EXPORT_US_REVENUE_GROWTH`.
+
+Because the validator previously used a single unit-registry lookup, an unknown metric surfaced as:
+
+`UNIT_MISMATCH`
+
+This was technically misleading. The unit is not wrong; the metric is unsupported by the current validator contract.
+
+### Correction
+
+`researchEvidenceIngestionValidator.ts` now distinguishes:
+
+- `UNSUPPORTED_METRIC` — metric code is absent from the approved metric/unit registry;
+- `UNIT_MISMATCH` — metric is approved but the candidate unit does not match the approved unit.
+
+No metric was added to the approved registry and no acceptance behavior was widened.
+
+The four TORNTPHARM US-growth candidates therefore remain quarantined, but now for the correct reason:
+
+`UNSUPPORTED_METRIC`
+
+### Regression coverage
+
+Tests now separately assert:
+- an unknown Pharma metric with PERCENT unit → `UNSUPPORTED_METRIC`;
+- a known canonical metric with the wrong unit → `UNIT_MISMATCH`;
+- candidate-to-ingestion proposal rows surface `UNSUPPORTED_METRIC`;
+- all prior zero-write / event-schema / rejected-claim protections remain intact.
+
+### Scope boundary
+
+- Validator acceptance widened: **NO**
+- Evidence ingestion: **NO**
+- Production Supabase mutation: **NO**
+- Regulatory event schema added: **NO**
+- Paid/licensed provider calls: **NO**
+- Scoring / recommendation / sizing: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull` and re-open the same **Ingestion eligibility proposal** panel. The four Export / US Revenue Growth rows should now display **Current validator: UNSUPPORTED_METRIC** instead of **UNIT_MISMATCH**. Obtain visual confirmation before full local validation.
