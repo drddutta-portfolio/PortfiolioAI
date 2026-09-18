@@ -870,3 +870,74 @@ The owner reported completion of the requested validation sequence without a fai
 **Result:** Gate F subprofile evidence-completeness slice = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
 
 **CURRENT STOP POINT:** The second Gate F readiness slice is now visible and locally validated on the R4N development branch. PR #101 remains open/draft/unmerged. Continue only to the next explicitly agreed local development gate; do not deploy, merge, ingest evidence, call paid providers, introduce numeric scoring/recommendations/sizing, modify schedulers, or make production changes without the relevant explicit authorization.
+
+
+---
+
+## 23. Entry 018 — Gate F official-evidence pilot dry-run workspace prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The next local-only Gate F slice exposes the existing TORNTPHARM official-manifest pilot as a visible **dry-run preview** inside the shared Pharma Research workspace without performing any ingestion or database mutation.
+
+### Architecture and safety
+
+The existing TORNTPHARM official manifest contains 42 candidate observations intended primarily for canonical financial-history evidence. Its earlier preview used the historical production TORNTPHARM UUID. That production identity is retained only as a legacy fixture constant for existing validator coverage.
+
+New runtime behavior:
+- `buildTorntpharmIngestionPreview(securityId)` rebuilds the same immutable 42-row candidate set against the current environment-resolved security UUID;
+- no runtime path infers or substitutes the production UUID;
+- the existing pure ingestion validator is reused;
+- the preview performs no repository, Supabase, provider, network, scoring, recommendation, sizing, or scheduler action.
+
+Added:
+- `src/features/research/pharmaEvidencePilotPreview.ts`
+- `src/features/research/pharmaEvidencePilotPreview.test.ts`
+
+Updated:
+- `src/features/research/torntpharmIngestionPreview.ts`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+- `src/pages/ResearchPage.tsx`
+
+### Visible dry-run contract
+
+For the TORNTPHARM pilot only, the universal Pharma workspace now exposes an **Evidence ingestion dry-run** section that shows:
+- total candidate observations;
+- validation-ready observations;
+- direct-official lineage count;
+- PortfolioAI-derived lineage count;
+- quarantine count;
+- projected impact against the counted business-model requirements.
+
+The projection deliberately keeps canonical-history evidence separate from business-model evidence. The current 42-row manifest contains financial-history/raw evidence families and does **not** directly fulfill the 14 counted Domestic Formulations + Global Generics business-model requirements.
+
+Expected current preview:
+- candidate observations: **42**;
+- validation-ready: **42**;
+- direct official: **33**;
+- PortfolioAI derived: **9**;
+- quarantined: **0**;
+- projected counted subprofile completeness from this manifest alone: **0/14**;
+- Primary model: **0/8 projected**;
+- Global Generics material overlay: **0/6 projected**.
+
+This is intentionally informative rather than optimistic: a valid ingestion manifest does not become evidence for unrelated subprofile metrics merely because it is official or financially useful.
+
+### Validation state
+
+A focused pure-model regression test was added for the expected 42 / 33 / 9 / 0 and 0/14 projection contract.
+
+Per the adopted local-first workflow, this implementation checkpoint is **not yet visually approved** and full local validation is intentionally deferred until after the owner pulls and inspects the localhost UI.
+
+**Production touched:** NO.  
+**Production Supabase:** unchanged.  
+**Evidence ingestion:** NO.  
+**Provider calls:** NO.  
+**Scoring / recommendation / sizing:** NO.  
+**Schedulers:** unchanged.  
+**PR #101:** remains draft/open/unmerged.
+
+**CURRENT STOP POINT:** Owner should `git pull`, restart/use the local Vite app against the existing local Supabase fixture, and inspect TORNTPHARM → Research → Overview. The new visible section should be **Gate F · Official evidence pilot / Evidence ingestion dry-run** and should show 42 candidates, 33 direct official, 9 derived, 0 quarantined, and 0/14 projected business-model completeness. Obtain visual approval before the full local validation chain.
