@@ -1060,3 +1060,102 @@ No failure was reported from the preceding owner-run commands in the requested s
 **Result:** Gate F official-evidence pilot dry-run slice = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
 
 **CURRENT STOP POINT:** The TORNTPHARM official-manifest dry-run is now visible and locally validated. The next Gate F work should remain local-first and should prepare the business-model-specific evidence acquisition/manifest contract needed to address the 14 currently unmet Domestic Formulations + Global Generics requirements. Do not ingest evidence, deploy, merge PR #101, call paid providers, introduce scoring/recommendations/sizing, modify schedulers, or make production changes without the relevant explicit authorization.
+
+
+---
+
+## 26. Entry 021 — Gate F business-model evidence acquisition/manifest contract prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The next local-only Gate F slice converts the 14 currently unmet TORNTPHARM business-model requirements into an explicit acquisition/manifest planning contract without fetching or ingesting evidence.
+
+### New reusable acquisition contract
+
+Added:
+- `src/features/research/pharmaBusinessModelEvidenceAcquisitionContract.ts`
+- `src/features/research/pharmaBusinessModelEvidenceAcquisitionContract.test.ts`
+- `docs/R4N_TORNTPHARM_Gate_F_Business_Model_Evidence_Acquisition_Contract.md`
+
+Updated:
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+
+The acquisition layer derives requirement/history/source authority from the existing canonical PHARMA_V1 + subprofile contracts rather than redefining those contracts.
+
+For each counted business-model metric it adds a planning-only acquisition strategy:
+- source lanes;
+- access gate;
+- acquisition method;
+- required evidence shape;
+- explicit fail-closed rule.
+
+### Access gates
+
+The design distinguishes:
+- `PUBLIC_OFFICIAL_FIRST` — issuer/exchange/regulator evidence first;
+- `PUBLIC_OR_LICENSED` — issuer disclosure may satisfy the contract, with a licensed fallback only if separately approved;
+- `LICENSED_REQUIRED` — issuer self-description alone cannot complete the evidence contract.
+
+No licensed provider call is authorized.
+
+### TORNTPHARM plan invariants
+
+The current reviewed model produces exactly:
+- **14** planned requirements;
+- **8 mandatory**;
+- **5 important**;
+- **1 supplementary**;
+- **12 public/official-first**;
+- **1 public-or-licensed**;
+- **1 licensed-source required**;
+- **3 controlled derivations** from explicitly disclosed compatible inputs;
+- **0 CDMO / CRAMS acquisition rows**, because the CDMO exposure remains Emerging-only and has no approved Emerging-specific requirement contract;
+- `ingestionAuthorized = false`.
+
+Important access boundaries:
+- **Brand & Therapy Leadership** requires issuer evidence plus an approved licensed market source; issuer self-description alone is not sufficient.
+- **Chronic / Acute Mix** may use issuer disclosure first, with a licensed source only as an approved fallback.
+- Domestic Revenue Growth, Field Force Productivity and Export / US Revenue Growth may be derived only from explicitly disclosed, scope-compatible direct inputs.
+- Qualitative commentary must not be converted into fabricated numeric observations.
+
+### Visible localhost milestone
+
+For TORNTPHARM only, the Pharma Research workspace now renders a planning-only **Gate F · Business-model evidence contract / Evidence acquisition plan** section after the official-manifest dry-run.
+
+The panel exposes:
+- the 14-requirement summary;
+- public/official vs licensed access gates;
+- controlled-derivation count;
+- separate Domestic Formulations (8) and Global Generics (6) acquisition lists;
+- per-requirement history target, acquisition method, source lanes, evidence shape and fail-closed rule;
+- explicit **Planned · No ingestion** state.
+
+No source-fetch, provider-call, ingest or scoring action is exposed.
+
+### Validation state
+
+Regression coverage asserts:
+- 14 unique acquisition items;
+- 8 primary + 6 material-overlay items;
+- exact 8 / 5 / 1 requirement-level counts;
+- exact 12 / 1 / 1 access-gate counts;
+- 3 controlled derivations;
+- licensed requirement for Brand & Therapy Leadership;
+- public-or-licensed state for Chronic / Acute Mix;
+- no CDMO rows while CDMO remains Emerging;
+- ingestion authorization remains false.
+
+Per the local-first workflow, this implementation checkpoint has **not yet been visually approved** and full local validation is intentionally deferred until after owner localhost review.
+
+**Production touched:** NO.  
+**Production Supabase:** unchanged.  
+**Evidence ingestion:** NO.  
+**Source acquisition/provider calls:** NO.  
+**Scoring / recommendation / sizing:** NO.  
+**Schedulers:** unchanged.  
+**PR #101:** remains draft/open/unmerged.
+
+**CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Evidence acquisition plan** section. Expected summary: 14 planned requirements, 8 mandatory / 5 important / 1 supplementary, 12 public/official-first, 2 licensed-source gates (1 required + 1 optional fallback), and 3 controlled derivations. Obtain visual approval before full local validation.
