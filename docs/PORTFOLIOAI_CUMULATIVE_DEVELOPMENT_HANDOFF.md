@@ -4117,3 +4117,51 @@ remains:
 **Result:** Local Prerequisite Mutation Proposal V1 checkpoint = **VALIDATED**.
 
 **CURRENT STOP POINT:** The next safe R4N action is the separately approval-gated execution of the local-only prerequisite mutation: at most one `fundamental_metric_definitions` row and four immutable `data_source_records` rows, with zero `fundamental_observations` writes. Do not execute unless the owner explicitly approves this exact local mutation.
+
+
+---
+
+## 60. Entry 055 — Owner explicitly authorized local-only prerequisite mutation
+
+**Date:** 18 September 2026  
+**Actor:** owner explicit authorization  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner explicitly authorized this exact local-only mutation:
+
+- insert at most **1** `fundamental_metric_definitions` row;
+- insert at most **4** immutable `data_source_records` rows;
+- insert **0** `fundamental_observations` rows;
+- target **local Supabase only**;
+- make **no production changes**.
+
+Authorized command contract:
+
+`PORTFOLIOAI_ALLOW_LOCAL_PREREQUISITE_MUTATION=YES npm run r4n:mutate:prerequisites`
+
+The prepared runner still enforces:
+- approval flag before DB discovery;
+- localhost / 127.0.0.1 database only;
+- approved `COMPANY_EXCHANGE_FILING` source-registry state;
+- metric-definition conflict abort;
+- source-record conflict abort;
+- idempotent inserts;
+- postcondition verification.
+
+### Scope boundary
+
+Authorized:
+- local prerequisite metric/source materialization only.
+
+Still NOT authorized:
+- any `fundamental_observations` insert;
+- scoring;
+- recommendation;
+- position sizing;
+- production Supabase mutation;
+- deployment;
+- PR #101 merge;
+- scheduler changes;
+- paid-provider calls.
+
+**CURRENT STOP POINT:** Owner should `git pull` to receive this recorded authorization checkpoint, then execute exactly `PORTFOLIOAI_ALLOW_LOCAL_PREREQUISITE_MUTATION=YES npm run r4n:mutate:prerequisites` against the running local Supabase. Return the complete terminal output before any next mutation is considered.
