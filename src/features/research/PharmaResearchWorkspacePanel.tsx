@@ -21,6 +21,7 @@ import { PHARMA_OVERLAY_MODIFIER_CONTRACT } from "./pharmaOverlayModifierContrac
 import { PHARMA_READINESS_MAPPING_CONTRACT } from "./pharmaReadinessMappingContract"
 import { PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT } from "./pharmaGovernanceRegulatoryGateContract"
 import { PHARMA_ROCE_CURVE_PROPOSAL } from "./pharmaRoceCurveProposal"
+import { PHARMA_CASH_CONVERSION_CURVE_PROPOSAL } from "./pharmaCashConversionCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -263,6 +264,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Canonical: {titleCase(PHARMA_ROCE_CURVE_PROPOSAL.canonicalDimension)} · Current parent contract: {titleCase(PHARMA_ROCE_CURVE_PROPOSAL.currentParentContractDimension)}</small>
               <p>The canonical model places ROCE in Capital Efficiency, while the older parent evidence contract still labels it Quality. This must be reconciled explicitly, and every Pharma subprofile still needs its own approved ROCE threshold contract before numeric scoring.</p>
               <span>Alignment: REQUIRED · Universal ROCE bands: NO · Subprofile thresholds: PENDING</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G5.2 · Cash Conversion framework</strong>
+              <small>{PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.proposalVersion}</small>
+              <p>Cash Conversion preserves the minimum {PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.history.minimumComparableAnnualPeriods}-year / preferred {PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.history.preferredComparableAnnualPeriods}-year history contract and requires matched CFO, PAT and capex/FCF periods. CFO alone is not sufficient.</p>
+              <span>Proposal only · Numeric curve not ready · No score execution</span>
+            </article>
+            <article>
+              <strong>G5.2 · Dimension alignment & capex-context boundary</strong>
+              <small>Canonical: {titleCase(PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.canonicalDimension)} · Current parent contract: {titleCase(PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.currentParentContractDimension)}</small>
+              <p>The canonical model places this metric in Cash Flow, while the older parent evidence contract still labels it Earnings Cash Quality. Universal numeric bands remain prohibited and FCF interpretation requires capex-intensity context.</p>
+              <span>Alignment: REQUIRED · Universal bands: NO · Capex context: REQUIRED</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
