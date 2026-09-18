@@ -6,9 +6,16 @@ describe("TORNTPHARM prerequisite materialization manifest", () => {
   it("stays exactly aligned with the validated prerequisite package", () => {
     const pkg = buildTorntpharmCanonicalPrerequisitePackage()
     expect(manifest.metricDefinition).toEqual(pkg.metricDefinition)
-    expect(manifest.sourceRecords).toEqual(
-      pkg.sourceRecords.map(({ payloadHash: _payloadHash, payloadHashAlgorithm: _algorithm, payloadHashState: _state, termsSnapshot: _terms, materializationAuthorized: _authorized, ...row }) => row),
-    )
+
+    const sourceRecordsForManifest = pkg.sourceRecords.map((record) => ({
+      sourceCode: record.sourceCode,
+      recordKind: record.recordKind,
+      externalRecordId: record.externalRecordId,
+      sourceUrl: record.sourceUrl,
+      rawPayload: record.rawPayload,
+    }))
+
+    expect(manifest.sourceRecords).toEqual(sourceRecordsForManifest)
   })
 
   it("remains explicitly non-writing and excludes the rejected Q4 31% claim", () => {
