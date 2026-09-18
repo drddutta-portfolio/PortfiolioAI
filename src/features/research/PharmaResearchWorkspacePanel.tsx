@@ -31,6 +31,7 @@ import { PHARMA_G6_LAYERING_BOUNDARY, pharmaG6CurveContractForPrimary } from "./
 import { PHARMA_DOMESTIC_VALUATION_SELF_HISTORY_CURVE } from "./pharmaDomesticValuationSelfHistoryCurveProposal"
 import { PHARMA_G6_DOMESTIC_VALUATION_FCF_IDENTITY } from "./pharmaG6DomesticValuationFcfIdentity"
 import { PHARMA_FCF_YIELD_METRIC_CONTRACT } from "./pharmaFcfYieldMetricContract"
+import { PHARMA_FCF_YIELD_DERIVATION_VERSION } from "./pharmaFcfYieldDerivationProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -413,6 +414,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>(FREE_CASH_FLOW_ANNUAL / CURRENT_MARKET_CAP) × 100</small>
               <p>The numerator uses reviewed PortfolioAI free cash flow. The denominator must reflect current authoritative market-price semantics; stale or provider-only market-cap authority cannot override that contract. Negative FCF yield remains negative evidence.</p>
               <span>Unit: PERCENT · Numeric bands: NO · Storage migration: NO · Whole dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.6 · Canonical FCF-yield registration proposal</strong>
+              <small>{PHARMA_FCF_YIELD_METRIC_CONTRACT.canonicalMetricCode} · {PHARMA_FCF_YIELD_METRIC_CONTRACT.contractVersion}</small>
+              <p>The repository now has a proposal-only canonical definition for FCF_YIELD_PERCENT with NUMERIC / PERCENT / VALUATION semantics. The SQL artifact lives under docs/sql and deliberately rolls back, so no database state is changed.</p>
+              <span>Repository proposal: YES · Local migration: NO · Production migration: NO</span>
+            </article>
+            <article>
+              <strong>G6.6 · Deterministic derivation & alias-safe evidence</strong>
+              <small>{PHARMA_FCF_YIELD_DERIVATION_VERSION}</small>
+              <p>FCF yield is derived as annual free cash flow divided by current market cap × 100. Negative FCF remains negative evidence, invalid market cap fails closed, and FCF_YIELD remains an alias fallback that cannot double-count the canonical component.</p>
+              <span>Canonical code: FCF_YIELD_PERCENT · Alias double-counting: NO · Numeric score bands: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
