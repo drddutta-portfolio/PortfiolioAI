@@ -38,7 +38,7 @@ describe("TORNTPHARM local numeric preflight", () => {
       "fundamental_metric_definitions",
       "data_source_records",
       "fundamental_observations",
-      "pharma_subprofile_assignments",
+      "research_subprofile_assignments",
     ])
     expect(plan.expectedRows).toHaveLength(4)
     expect(plan.writeAuthorized).toBe(false)
