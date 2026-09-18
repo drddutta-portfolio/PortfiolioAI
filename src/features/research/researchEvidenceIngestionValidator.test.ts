@@ -46,10 +46,18 @@ describe("research evidence ingestion validator", () => {
 
   it("distinguishes unsupported metrics from genuine unit mismatches", () => {
     const row = TORNTPHARM_INGESTION_PREVIEW[0]!
-    const unsupported = { ...row, metricCode: "PHARMA_EXPORT_US_REVENUE_GROWTH", unit: "PERCENT" as const }
+    const unsupported = { ...row, metricCode: "PHARMA_UNKNOWN_METRIC", unit: "PERCENT" as const }
     expect(validateEvidenceIngestionCandidates([unsupported]).quarantined[0]?.issueCodes).toContain("UNSUPPORTED_METRIC")
     const wrongUnit = { ...row, unit: "PERCENT" as const }
     expect(validateEvidenceIngestionCandidates([wrongUnit]).quarantined[0]?.issueCodes).toContain("UNIT_MISMATCH")
+  })
+
+  it("accepts the versioned Pharma US-growth metric with PERCENT semantics", () => {
+    const row = TORNTPHARM_INGESTION_PREVIEW[0]!
+    const pharmaGrowth = { ...row, metricCode: "PHARMA_EXPORT_US_REVENUE_GROWTH", unit: "PERCENT" as const }
+    const result = validateEvidenceIngestionCandidates([pharmaGrowth])
+    expect(result.accepted).toHaveLength(1)
+    expect(result.quarantined).toHaveLength(0)
   })
 
   it("rejects calendar-invalid periods and non-numeric values", () => {
