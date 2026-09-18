@@ -14,7 +14,8 @@
     "test:edge": "vitest run --config vitest.edge.config.ts",
     "test": "vitest run",
     "r4n:preflight:numeric": "bash scripts/r4n/run-torntpharm-local-numeric-preflight.sh",
-    "r4n:replay:regulatory": "bash scripts/r4n/run-regulatory-event-migration-replay.sh"
+    "r4n:replay:regulatory": "bash scripts/r4n/run-regulatory-event-migration-replay.sh",
+    "r4n:dry-run:prerequisites": "node scripts/r4n/torntpharm-prerequisite-materialization-dry-run.mjs"
   },
   "dependencies": {
     "@e965/xlsx": "^0.20.3",
