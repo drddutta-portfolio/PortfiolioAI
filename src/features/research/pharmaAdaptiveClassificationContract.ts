@@ -84,6 +84,12 @@ function reviewedRows(rows: readonly PharmaAnnualExposureObservation[]) {
     .sort((a, b) => b.periodEnd.localeCompare(a.periodEnd))
 }
 
+function isPreviousAnnualPeriod(newer: string, older: string) {
+  const newerYear = Number(newer.slice(0, 4))
+  const olderYear = Number(older.slice(0, 4))
+  return newer.slice(4) === older.slice(4) && newerYear - olderYear === 1
+}
+
 function economicShare(row: PharmaAnnualExposureObservation) {
   const available = [row.revenueSharePercent, row.profitSharePercent].filter((value): value is number => value !== null)
   return available.length ? Math.max(...available) : null
@@ -132,10 +138,14 @@ function classifySecondary(rows: readonly PharmaAnnualExposureObservation[]): Ph
   }
 
   let consecutiveMaterialPeriods = 0
+  let priorPeriod: string | null = null
   for (const row of rows) {
+    if (priorPeriod !== null && !isPreviousAnnualPeriod(priorPeriod, row.periodEnd)) break
     const share = economicShare(row)
-    if (share !== null && share >= PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT.materialOverlayThresholdPercent) consecutiveMaterialPeriods += 1
-    else break
+    if (share !== null && share >= PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT.materialOverlayThresholdPercent) {
+      consecutiveMaterialPeriods += 1
+      priorPeriod = row.periodEnd
+    } else break
   }
 
   if (consecutiveMaterialPeriods >= PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT.annualPeriodsRequired) {
@@ -211,6 +221,18 @@ export function buildPharmaAdaptiveClassificationProposal(
   }
 
   const trailingPeriods = periods.slice(0, PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT.primaryRequiresStableLeadershipPeriods)
+  if (!isPreviousAnnualPeriod(trailingPeriods[0]!, trailingPeriods[1]!)) {
+    return {
+      contractVersion: PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT_VERSION,
+      state: "PROPOSAL_ONLY",
+      classificationState: "INSUFFICIENT_EVIDENCE",
+      primaryCandidate: null,
+      exposures: [],
+      effectiveDatingRequired: true,
+      scoreExecutionEnabled: false,
+      reasonCodes: ["PRIMARY_REQUIRES_CONSECUTIVE_ANNUAL_PERIODS"],
+    }
+  }
   const leaders = trailingPeriods.map((period) => leadersForPeriod(reviewed.filter((row) => row.periodEnd === period)))
   if (leaders.some((item) => item.conflict)) {
     return {
