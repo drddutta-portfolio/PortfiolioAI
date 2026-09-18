@@ -14,6 +14,7 @@ import { buildTorntpharmCanonicalPrerequisitePackage } from "./torntpharmCanonic
 import { buildTorntpharmLocalPrerequisiteMutationProposal } from "./torntpharmLocalPrerequisiteMutationProposal"
 import { buildTorntpharmLocalObservationMutationProposal } from "./torntpharmLocalObservationMutationProposal"
 import { buildPharmaGateGScoringMethodProposal } from "./pharmaGateGScoringMethodProposal"
+import { PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL } from "./pharmaSegmentGrowthCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -187,6 +188,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <p>{overlay.note}</p>
               <span>{overlay.denominatorEffect === "WITHIN_DIMENSION_ONLY" ? "No second score · within-dimension evidence only" : "Excluded from score denominator"}</span>
             </article>)}
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>First proposed curve family</strong>
+              <small>{PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.proposalVersion}</small>
+              <p>Segment growth uses 60% four-quarter median growth level, 25% positive-quarter consistency and 15% latest-versus-prior-three trend. The same methodology is proposed for Domestic Revenue Growth and Export / US Revenue Growth.</p>
+              <span>Proposal only · Activation approved: NO</span>
+            </article>
+            <article>
+              <strong>History & fail-closed boundary</strong>
+              <small>Minimum 4 comparable reviewed quarters · preferred 8</small>
+              <p>Latest period is mandatory. Rejected or scope-incompatible claims are excluded before normalization; a broken comparable series produces no score rather than a substituted value.</p>
+              <span>Score execution: NO</span>
+            </article>
           </div>
           <div className="pharma-persistence-package-grid">
             <article>
