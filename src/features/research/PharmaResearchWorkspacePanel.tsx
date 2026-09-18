@@ -363,9 +363,9 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
       </div>
       <div className="pharma-ingestion-proposal-summary">
         <div><span>Reviewed candidates</span><strong>{ingestionProposal.summary.reviewedCandidates}</strong><small>{ingestionProposal.summary.numericCandidates} numeric · {ingestionProposal.summary.eventCandidates} event-state</small></div>
-        <div><span>Validator accepted</span><strong>{ingestionProposal.summary.validatorAccepted}</strong><small>{ingestionProposal.summary.validatorQuarantined} numeric candidates quarantined</small></div>
-        <div><span>Event schema blocked</span><strong>{ingestionProposal.summary.eventSchemaBlocked}</strong><small>Regulatory states need a versioned event-evidence contract</small></div>
-        <div><span>Proposed writes</span><strong>{ingestionProposal.summary.proposedWrites}</strong><small>{ingestionProposal.summary.rejectedClaimsExcluded} rejected claim excluded</small></div>
+        <div><span>Numeric validator accepted</span><strong>{ingestionProposal.summary.validatorAccepted}</strong><small>{ingestionProposal.summary.validatorQuarantined} numeric candidates quarantined</small></div>
+        <div><span>Event contract accepted</span><strong>{ingestionProposal.summary.eventContractAccepted}</strong><small>{ingestionProposal.summary.eventStorageBlocked} accepted events still blocked by missing canonical storage/write path</small></div>
+        <div><span>Proposed writes</span><strong>{ingestionProposal.summary.proposedWrites}</strong><small>{ingestionProposal.summary.rejectedClaimsExcluded} rejected claim excluded · {ingestionProposal.summary.eventContractQuarantined} event-contract quarantined</small></div>
       </div>
       <div className="pharma-ingestion-proposal-items">
         {ingestionProposal.items.map((item) => <article key={item.artifactCode + item.observationDate + item.value}>
@@ -377,7 +377,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
           <small>{item.rationale}</small>
         </article>)}
       </div>
-      <p className="pharma-evidence-pilot-note"><strong>Decision gate:</strong> no reviewed candidate is currently eligible for a write. The numeric validator contract must first be versioned for Export / US Revenue Growth, and regulatory events require their own event-evidence storage/validation contract. The rejected Q4 31% claim remains excluded.</p>
+      <p className="pharma-evidence-pilot-note"><strong>Decision gate:</strong> the four US-growth candidates are now structurally accepted by numeric validator V2, and both FDA events are valid under the versioned regulatory event-evidence contract. Writes remain blocked: numeric ingestion still requires separate approval, regulatory event storage/write infrastructure is not implemented, and the rejected Q4 31% claim remains excluded.</p>
     </section> : null}
 
       </div>
