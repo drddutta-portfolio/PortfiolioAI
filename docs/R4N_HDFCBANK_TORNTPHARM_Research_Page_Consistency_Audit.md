@@ -127,3 +127,26 @@ Any new profile should satisfy this rule:
 > Profile-specific content may change after the shared overview spine, but the page must still be immediately recognizable as the same PortfolioAI Research experience.
 
 Do not force BANK_NBFC research content onto PHARMA_V1, or PHARMA_V1 content onto future sectors, merely to achieve visual sameness.
+
+
+## Compact Pharma deep-research presentation
+
+A second audit pass found that, although the shared Overview hierarchy was corrected, the Pharma-only deep-research workspace still opened as several consecutive full-height Gate F panels. That preserved research logic but gave TORNTPHARM substantially more visual depth than HDFCBANK at first glance.
+
+The R4N presentation contract is therefore refined:
+
+- the shared PortfolioAI Overview remains fully visible;
+- the Pharma workspace begins after Research Health;
+- the Pharma workspace always shows a compact model summary;
+- deeper Pharma research is grouped into two collapsed-by-default layers:
+  1. **Business model & exposure map**
+  2. **Evidence operations & review controls**
+- all existing Gate F panels remain intact inside those layers;
+- no evidence, acquisition, review, readiness or scoring logic changes.
+
+The redundant outer serif `Sector research workspace` heading was removed. The compact workspace itself now carries the identity:
+
+**Sector research workspace · Pharmaceuticals**  
+**Pharmaceuticals deep research**
+
+This keeps TORNTPHARM visually aligned with HDFCBANK while allowing materially different Pharma research depth.
