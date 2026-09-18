@@ -5325,3 +5325,62 @@ The Gate G glass-box now displays:
 - production mutation: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, open localhost TORNTPHARM Research → **Gate G · Scoring methodology design**, and visually review the new proposed segment-growth curve cards. After visual approval, run focused local validation before any curve can move toward approval or implementation.
+
+
+---
+
+## 76. Entry 071 — Gate G segment-growth curve proposal validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner completed focused local validation for the first PHARMA_V1 normalization-curve proposal.
+
+### Validated curve proposal
+
+`PHARMA_SEGMENT_GROWTH_CURVE_V1_PROPOSAL`
+
+Applies to:
+
+- `PHARMA_DOMESTIC_REVENUE_GROWTH`
+- `PHARMA_EXPORT_US_REVENUE_GROWTH`
+
+Composite design:
+
+- growth level: **60%**
+- positive-quarter consistency: **25%**
+- latest-versus-prior-three trend: **15%**
+
+History boundary:
+
+- minimum comparable quarters: **4**
+- preferred comparable quarters: **8**
+- latest period required;
+- rejected/scope-incompatible claims excluded;
+- broken comparable series fails closed.
+
+### Owner-confirmed validation
+
+- `pharmaGateGScoringMethodProposal.test.ts`: **6/6 passed**
+- `pharmaSegmentGrowthCurveProposal.test.ts`: **6/6 passed**
+- focused test total: **12/12 passed**
+- focused ESLint: **PASS**
+- `npm run typecheck`: **PASS**
+- `npm run build`: **PASS**
+- build transformed **223 modules**
+- only the existing non-blocking >500 kB Vite chunk warning remained.
+
+### Activation boundary remains unchanged
+
+- curve proposal validated: **YES**
+- curve activation approved: **NO**
+- scoring adapter implementation: **NO**
+- scoring-rule migration: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation impact: **NO**
+- position-sizing impact: **NO**
+- production mutation: **NO**
+
+**CURRENT STOP POINT:** The segment-growth curve proposal is validated as a methodology artifact. The next Gate G slice should define the next Pharma curve family as proposal-only, without activating any score execution.
