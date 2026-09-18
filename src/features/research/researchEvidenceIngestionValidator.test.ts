@@ -44,6 +44,14 @@ describe("research evidence ingestion validator", () => {
     expect(result.quarantined[1]?.issueCodes).toEqual(expect.arrayContaining(["UNIT_MISMATCH", "MISSING_SOURCE_ARTIFACT", "DUPLICATE_CANDIDATE"]))
   })
 
+  it("distinguishes unsupported metrics from genuine unit mismatches", () => {
+    const row = TORNTPHARM_INGESTION_PREVIEW[0]!
+    const unsupported = { ...row, metricCode: "PHARMA_EXPORT_US_REVENUE_GROWTH", unit: "PERCENT" as const }
+    expect(validateEvidenceIngestionCandidates([unsupported]).quarantined[0]?.issueCodes).toContain("UNSUPPORTED_METRIC")
+    const wrongUnit = { ...row, unit: "PERCENT" as const }
+    expect(validateEvidenceIngestionCandidates([wrongUnit]).quarantined[0]?.issueCodes).toContain("UNIT_MISMATCH")
+  })
+
   it("rejects calendar-invalid periods and non-numeric values", () => {
     const row = TORNTPHARM_INGESTION_PREVIEW[0]!
     const result = validateEvidenceIngestionCandidates([{ ...row, periodEnd: "2026-02-31", value: "unknown" }])
