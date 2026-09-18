@@ -5228,3 +5228,100 @@ The owner completed the focused local validation for the Gate G PHARMA_V1 scorin
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** The next safe Gate G slice is to define the first versioned PHARMA_V1 normalization-curve contracts as reviewable methodology artifacts only. Curves must remain non-executable and score runs disabled until separately approved.
+
+
+---
+
+## 75. Entry 070 — Gate G first PHARMA_V1 normalization-curve proposal prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The next Gate G slice has been prepared as a methodology-only proposal for the first numeric Pharma curve family.
+
+### First proposed curve family
+
+Proposal version:
+
+`PHARMA_SEGMENT_GROWTH_CURVE_V1_PROPOSAL`
+
+Applies to:
+
+- `PHARMA_DOMESTIC_REVENUE_GROWTH`
+- `PHARMA_EXPORT_US_REVENUE_GROWTH`
+
+The curve remains **PROPOSAL_ONLY** and is not wired into score execution.
+
+### Required history
+
+- minimum comparable reviewed quarters: **4**
+- preferred comparable reviewed quarters: **8**
+- latest completed quarter required;
+- rejected/scope-incompatible claims excluded before scoring;
+- broken comparable series fails closed and produces no score.
+
+### Proposed composite
+
+**Growth level — 60%**
+
+Statistic: median of latest 4 comparable YoY segment-growth quarters.
+
+Bands:
+- >=20% → 100
+- >=15% and <20% → 85
+- >=10% and <15% → 70
+- >=5% and <10% → 55
+- >=0% and <5% → 40
+- <0% → 20
+
+**Consistency — 25%**
+
+Statistic: positive-growth quarters among latest 4.
+
+Scores:
+- 4/4 → 100
+- 3/4 → 75
+- 2/4 → 50
+- 1/4 → 25
+- 0/4 → 0
+
+**Trend — 15%**
+
+Statistic: latest quarter growth minus median of prior 3 comparable growth rates.
+
+Bands:
+- >=+5 percentage points → 100
+- >=0 and <+5 → 75
+- >=-5 and <0 → 50
+- >=-10 and <-5 → 25
+- <-10 → 0
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaSegmentGrowthCurveProposal.ts`
+- `src/features/research/pharmaSegmentGrowthCurveProposal.test.ts`
+- `docs/R4N_TORNTPHARM_Gate_G_Segment_Growth_Curve_Proposal_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+The Gate G glass-box now displays:
+- **First proposed curve family**
+- **History & fail-closed boundary**
+
+### Explicit non-activation boundary
+
+- activation approved: **NO**
+- scoring adapter implementation: **NO**
+- scoring-rule migration: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation impact: **NO**
+- position-sizing impact: **NO**
+- production mutation: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, open localhost TORNTPHARM Research → **Gate G · Scoring methodology design**, and visually review the new proposed segment-growth curve cards. After visual approval, run focused local validation before any curve can move toward approval or implementation.
