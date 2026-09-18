@@ -23,6 +23,7 @@ import { PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT } from "./pharmaGovernanceRe
 import { PHARMA_ROCE_CURVE_PROPOSAL } from "./pharmaRoceCurveProposal"
 import { PHARMA_CASH_CONVERSION_CURVE_PROPOSAL } from "./pharmaCashConversionCurveProposal"
 import { PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL } from "./pharmaBalanceSheetLeverageCurveProposal"
+import { PHARMA_VALUATION_CURVE_PROPOSAL } from "./pharmaValuationCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -293,6 +294,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Canonical: {titleCase(PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.canonicalDimension)} · Current parent contract: {titleCase(PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.currentParentContractDimension)}</small>
               <p>The canonical model places this family in Balance Sheet / Credit, while the older parent contract still labels it Financial Strength. Universal leverage bands remain prohibited; cash semantics, net-cash treatment and acquisition/expansion context must be explicit.</p>
               <span>Alignment: REQUIRED · Universal bands: NO · Context: REQUIRED</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G5.4 · Valuation framework</strong>
+              <small>{PHARMA_VALUATION_CURVE_PROPOSAL.proposalVersion}</small>
+              <p>Valuation already aligns directly with the canonical Valuation dimension. The framework uses self-history, business-model-appropriate peers and cash-flow corroboration across P/E, EV/EBITDA and FCF yield while keeping component weights and numeric bands unapproved.</p>
+              <span>Proposal only · Dimension aligned · Numeric curve not ready</span>
+            </article>
+            <article>
+              <strong>G5.4 · Price authority, peer-context & denominator boundary</strong>
+              <small>Authoritative price required · P/BV excluded for Pharma</small>
+              <p>Current authoritative market price and reviewed earnings/cash inputs are mandatory. Provider valuation labels cannot override price authority, peer cohorts must respect the Pharma business model, and broken or one-off-distorted denominators require explicit treatment.</p>
+              <span>Universal absolute bands: NO · Peer context: REQUIRED · P/BV: EXCLUDED</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
