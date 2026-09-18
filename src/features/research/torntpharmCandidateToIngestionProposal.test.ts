@@ -36,7 +36,7 @@ describe("TORNTPHARM candidate-to-ingestion proposal", () => {
   it("shows that the current validator contract quarantines the US-growth metric instead of silently accepting it", () => {
     const result = buildTorntpharmCandidateToIngestionProposal(SECURITY_ID, 1)
     const rows = result.items.filter((item) => item.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH")
-    expect(rows.every((item) => item.validatorIssueCodes.includes("UNIT_MISMATCH"))).toBe(true)
+    expect(rows.every((item) => item.validatorIssueCodes.includes("UNSUPPORTED_METRIC"))).toBe(true)
   })
 
   it("keeps FDA event-state evidence outside the numeric ingestion manifest", () => {
