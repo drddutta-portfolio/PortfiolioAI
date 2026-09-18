@@ -1,6 +1,8 @@
 import Decimal from "decimal.js"
 import type { TorntpharmOfficialManifestRow } from "./torntpharmOfficialManifestFixture"
 
+export const EVIDENCE_INGESTION_VALIDATOR_CONTRACT_VERSION = "R4N_NUMERIC_EVIDENCE_V2" as const
+
 export interface EvidenceIngestionCandidate extends TorntpharmOfficialManifestRow {
   readonly securityId: string
   readonly profileVersion: string
@@ -32,6 +34,7 @@ const UNIT_BY_METRIC: Readonly<Record<string, TorntpharmOfficialManifestRow["uni
   CAPEX_ANNUAL: "INR_CR", FREE_CASH_FLOW_ANNUAL: "INR_CR", ROCE_MANAGEMENT_ANNUAL: "PERCENT",
   NET_DEBT_EBITDA_ANNUAL: "MULTIPLE", INTEREST_COVERAGE_ANNUAL: "MULTIPLE", TOTAL_DEBT_ANNUAL: "INR_CR",
   CASH_EQUIVALENTS_ANNUAL: "INR_CR", EBITDA_ANNUAL: "INR_CR", RND_EXPENSE_ANNUAL: "INR_CR", RND_INTENSITY_PERCENT: "PERCENT",
+  PHARMA_EXPORT_US_REVENUE_GROWTH: "PERCENT",
 }
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu
