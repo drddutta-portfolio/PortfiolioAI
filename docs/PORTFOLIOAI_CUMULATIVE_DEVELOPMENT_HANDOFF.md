@@ -816,3 +816,57 @@ This repository-side success is not being treated as localhost visual proof. The
 **PR #101:** remains unmerged.
 
 **CURRENT STOP POINT:** Pull the latest R4N branch locally, reuse the existing local Supabase/Vite setup, and inspect TORNTPHARM → Research → Overview. The required visual order is **View all Pharmaceuticals research contracts → Subprofile evidence completeness → Canonical Pharma financial history**. If the new block is visible, obtain owner visual approval first; only then run the full local validation chain and append its authoritative result to this cumulative handoff before the next gate.
+
+
+---
+
+## 22. Entry 017 — Gate F subprofile evidence-completeness visual approval and local validation
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After pulling the readiness render-path hardening, the owner restarted the local Vite dev process and reopened TORNTPHARM → Research → Overview against the existing local Supabase fixture.
+
+### Localhost visual verification — PASS
+
+The Pharmaceuticals Research Readiness panel now renders in the required order:
+
+1. `View all Pharmaceuticals research contracts`
+2. **Subprofile evidence completeness**
+3. **Canonical Pharma financial history**
+
+The visible reviewed business-model state is:
+- primary model: **Domestic Formulations**;
+- material overlays: **1**;
+- emerging watches: **1**;
+- emerging watch shown as **CDMO / CRAMS** and explicitly excluded from the readiness denominator;
+- scoring state: **Not approved**;
+- current evidence-completeness count: **0/14 counted requirements verified**.
+
+This confirms that the supplementary subprofile-readiness slot is mounted in the intended runtime path and that the earlier localhost omission is resolved after restarting Vite on the pulled source. No browser-cache deletion, Supabase reset, port change, production deployment, or production data change was required.
+
+### Local validation
+
+The owner then ran the requested local validation sequence. The supplied terminal output confirms:
+- Edge test suite: **27/27 test files passed; 140/140 tests passed**;
+- production build: **PASS** under Vite 8.2.2;
+- 204 modules transformed;
+- build completed successfully;
+- only the existing non-blocking warning that some chunks exceed 500 kB after minification remained.
+
+The owner reported completion of the requested validation sequence without a failing command. This handoff records the owner-run local validation as PASS for this checkpoint; the visible terminal capture specifically preserves the Edge-suite and final build evidence.
+
+### Scope boundary
+
+- Production application deployment: **NO**
+- Production Supabase mutation: **NO**
+- Evidence ingestion: **NO**
+- Paid/external provider calls: **NO**
+- Numeric scoring / recommendation / sizing changes: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Gate F subprofile evidence-completeness slice = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
+
+**CURRENT STOP POINT:** The second Gate F readiness slice is now visible and locally validated on the R4N development branch. PR #101 remains open/draft/unmerged. Continue only to the next explicitly agreed local development gate; do not deploy, merge, ingest evidence, call paid providers, introduce numeric scoring/recommendations/sizing, modify schedulers, or make production changes without the relevant explicit authorization.
