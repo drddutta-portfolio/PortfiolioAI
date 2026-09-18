@@ -8137,3 +8137,92 @@ Owner-confirmed results:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.2 is validated. The next permitted G6 task is to select the next Domestic Formulations-specific threshold slice. Before implementation, inspect which G5 parent family is both canonically aligned and supported by sufficiently mature evidence so the next numeric curve does not bypass unresolved taxonomy, benchmark, or missing-parent-contract prerequisites.
+
+
+---
+
+## 106. Entry 101 — Gate G6.3 Domestic Valuation FCF identity lock prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.3 — Domestic Valuation Cash-Flow Corroboration Evidence Identity Lock**.
+
+### Why G6.3 is a blocker rather than a numeric curve
+
+The intended next Valuation lane was FCF-yield corroboration.
+
+Repository inspection confirmed:
+
+- `PHARMA_VALUATION_CONTEXT` semantically includes FCF yield;
+- G5.4 validates FCF yield as a supported Valuation evidence family;
+- Pharma UI references `FCF_YIELD_PERCENT`;
+- `pharmaScoringEvidence.ts` references `FCF_YIELD`;
+- `pharmaResearchProfile.ts` does not bind `PHARMA_VALUATION_CONTEXT` to a concrete FCF-yield metric code;
+- no current canonical metric definition was found reconciling those identifiers.
+
+### Current state
+
+`currentMetricIdentityState = AMBIGUOUS`
+
+Observed concrete identifiers:
+
+- `FCF_YIELD`
+- `FCF_YIELD_PERCENT`
+
+### Fail-closed requirement
+
+Numeric FCF-yield thresholds are prohibited until a versioned canonical contract defines:
+
+- canonical metric code;
+- formula;
+- canonical unit;
+- FCF period/scope;
+- price or market-cap authority;
+- negative-FCF treatment;
+- freshness semantics;
+- alias reconciliation.
+
+### Relationship to G6.2
+
+G6.2 remains valid:
+
+- Domestic Formulations P/E self-history curve: **VALIDATED / NOT ACTIVE**
+- whole Valuation dimension ready: **NO**
+
+G6.3 records the evidence-identity blocker for the Cash-Flow Corroboration lane.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaG6DomesticValuationFcfIdentity.ts`
+- `src/features/research/pharmaG6DomesticValuationFcfIdentity.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_3_Domestic_Valuation_FCF_Identity_Lock_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.3 · FCF-yield evidence identity lock**
+- **G6.3 · Numeric-threshold blocker**
+
+### Explicit boundary
+
+- FCF-yield concept inside Valuation: **VALID**
+- concrete canonical metric identity: **AMBIGUOUS**
+- numeric thresholds allowed: **NO**
+- whole Valuation dimension ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.3 blocker cards, then run focused G6.3 validation. Only after validation should the project either reconcile the FCF-yield metric identity or select another subprofile-specific family.
