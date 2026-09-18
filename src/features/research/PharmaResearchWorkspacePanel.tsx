@@ -6,6 +6,8 @@ import { buildTorntpharmPublicOfficialSourceDiscoveryPlan } from "./torntpharmPu
 import { buildTorntpharmArtifactContentReviewPlan } from "./torntpharmArtifactContentReviewPlan"
 import { buildTorntpharmReadOnlyContentReviewDryRun } from "./torntpharmReadOnlyContentReviewDryRun"
 import { buildTorntpharmCandidateToIngestionProposal } from "./torntpharmCandidateToIngestionProposal"
+import { buildTorntpharmLocalNumericIngestionPackage } from "./torntpharmLocalNumericIngestionPackage"
+import { buildPharmaRegulatoryEventPersistenceProposal } from "./pharmaRegulatoryEventPersistenceProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -119,6 +121,8 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const artifactReviewPlan = acquisitionPlan && publicSourceDiscovery ? buildTorntpharmArtifactContentReviewPlan(acquisitionPlan, publicSourceDiscovery) : null
   const contentReviewDryRun = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmReadOnlyContentReviewDryRun() : null
   const ingestionProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmCandidateToIngestionProposal(securityId, resolution.data.assignment.assignmentVersion) : null
+  const localNumericPackage = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalNumericIngestionPackage(securityId, resolution.data.assignment.assignmentVersion) : null
+  const eventPersistenceProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaRegulatoryEventPersistenceProposal(securityId, resolution.data.assignment.assignmentVersion) : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -378,6 +382,39 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         </article>)}
       </div>
       <p className="pharma-evidence-pilot-note"><strong>Decision gate:</strong> the four US-growth candidates are now structurally accepted by numeric validator V2, and both FDA events are valid under the versioned regulatory event-evidence contract. Writes remain blocked: numeric ingestion still requires separate approval, regulatory event storage/write infrastructure is not implemented, and the rejected Q4 31% claim remains excluded.</p>
+    </section> : null}
+
+
+    {localNumericPackage && eventPersistenceProposal ? <section className="pharma-persistence-package" aria-labelledby="pharma-persistence-package-title">
+      <div className="pharma-evidence-pilot-head">
+        <div>
+          <p className="eyebrow">Gate F · Prepared persistence packages</p>
+          <h3 id="pharma-persistence-package-title">Local write package & event-schema proposal</h3>
+          <p>The next persistence artifacts are prepared for review only. Neither the numeric package nor the regulatory-event schema proposal can write or migrate anything yet.</p>
+        </div>
+        <span className="pharma-workspace-lock">Prepared only · 0 writes</span>
+      </div>
+      <div className="pharma-persistence-package-summary">
+        <div><span>Numeric rows prepared</span><strong>{localNumericPackage.summary.observationRowsPrepared}</strong><small>Target: {localNumericPackage.rows[0]?.canonicalTarget ?? "fundamental_observations"}</small></div>
+        <div><span>Metric registry needed</span><strong>{localNumericPackage.summary.metricDefinitionRegistrationRequired}</strong><small>{localNumericPackage.metricDefinitionProposal.code} · PERCENT</small></div>
+        <div><span>Source records needed</span><strong>{localNumericPackage.summary.sourceRecordsRequired}</strong><small>Immutable issuer provenance rows required before insert</small></div>
+        <div><span>Event persistence</span><strong>Proposed</strong><small>{eventPersistenceProposal.proposedTable} · not applied</small></div>
+      </div>
+      <div className="pharma-persistence-package-grid">
+        <article>
+          <strong>Local numeric ingestion package</strong>
+          <small>{localNumericPackage.packageVersion}</small>
+          <p>Four validator-accepted US-growth rows are mapped to the existing canonical fundamental-observation store. Metric registration, source-record materialization, conflict preflight and separate write approval remain required.</p>
+          <span>Write authorized: NO</span>
+        </article>
+        <article>
+          <strong>Regulatory event persistence proposal</strong>
+          <small>{eventPersistenceProposal.proposalVersion}</small>
+          <p>Append-only site-specific event storage, held-security RLS and service-role-only mutation are proposed. FDA source registration remains inactive and rights-unverified.</p>
+          <span>Schema apply authorized: NO · Event write authorized: NO</span>
+        </article>
+      </div>
+      <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> the SQL proposal lives under docs/sql, not supabase/migrations, and is not an executable migration. The local numeric package also contains no database writer.</p>
     </section> : null}
 
       </div>
