@@ -1066,3 +1066,82 @@
     align-items: flex-start;
   }
 }
+
+
+.pharma-ingestion-proposal {
+  margin-top: .65rem;
+  padding: 1rem;
+  border: 1px solid #e4dcc9;
+  border-radius: .9rem;
+  background: #fffdf8;
+}
+
+.pharma-ingestion-proposal-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+.pharma-ingestion-proposal-summary > div {
+  padding: .72rem .78rem;
+  border: 1px solid #e8e2d4;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-ingestion-proposal-summary span,
+.pharma-ingestion-proposal-summary small {
+  display: block;
+  color: #7a786f;
+}
+
+.pharma-ingestion-proposal-summary span {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.pharma-ingestion-proposal-summary strong {
+  display: block;
+  margin: .18rem 0;
+  color: #3b3425;
+  font-size: 1.08rem;
+}
+
+.pharma-ingestion-proposal-items {
+  display: grid;
+  gap: .45rem;
+  margin-top: .7rem;
+}
+
+.pharma-ingestion-proposal-items article {
+  padding: .62rem .66rem;
+  border: 1px solid #ebe5d8;
+  border-radius: .62rem;
+  background: #fff;
+}
+
+.pharma-ingestion-proposal-items p,
+.pharma-ingestion-proposal-items > article > small {
+  color: #766f62;
+  font-size: .68rem;
+  line-height: 1.45;
+}
+
+.pharma-ingestion-proposal-items p {
+  margin: .4rem 0;
+}
+
+.pharma-ingestion-proposal-items > article > small {
+  display: block;
+}
+
+@media (max-width: 980px) {
+  .pharma-ingestion-proposal-summary { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-ingestion-proposal-summary { grid-template-columns: 1fr; }
+}
