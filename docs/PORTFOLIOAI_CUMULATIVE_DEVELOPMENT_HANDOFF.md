@@ -8080,3 +8080,60 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G6.2 cards in TORNTPHARM → Research → Gate G, then run focused G6.2 validation. Only after validation should the next Domestic Formulations G6 threshold slice be selected.
+
+
+---
+
+## 105. Entry 100 — Gate G6.2 Domestic Valuation Self-History curve validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.2 has completed validation as a **proposal-only Domestic Formulations Valuation self-history curve**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.2 plus G6.1 and all validated G5/G1–G4/Gate G proposal contracts → **PASS**
+- focused ESLint for the G6.2/G6.1/G5/G1–G4/Gate G methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.2 status
+
+- supported Primary: `DOMESTIC_FORMULATIONS`
+- metric: `PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT`
+- self-history relative valuation bands: **VALIDATED / NOT ACTIVE**
+- >=25% → 100
+- >=10% and <25% → 80
+- >=-5% and <10% → 60
+- >=-20% and <-5% → 40
+- <-20% → 20
+- absolute P/E bands used: **NO**
+- current authoritative market price required: **VALIDATED**
+- current reviewed earnings required: **VALIDATED**
+- stale price allowed: **NO**
+- provider valuation label may override price authority: **NO**
+- BANK_NBFC 60/25/15 Valuation weighting inherited: **NO**
+- bank P/B or valuation-to-ROE logic inherited: **NO**
+- peer-relative valuation component: **UNAPPROVED**
+- FCF corroboration component: **UNAPPROVED**
+- whole Valuation dimension ready: **NO**
+- unsupported Pharma primaries receive Domestic bands: **NO / FAIL CLOSED**
+- activation approved: **NO**
+- score execution: **NO**
+
+### Safety boundary remains unchanged
+
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.2 is validated. The next permitted G6 task is to select the next Domestic Formulations-specific threshold slice. Before implementation, inspect which G5 parent family is both canonically aligned and supported by sufficiently mature evidence so the next numeric curve does not bypass unresolved taxonomy, benchmark, or missing-parent-contract prerequisites.
