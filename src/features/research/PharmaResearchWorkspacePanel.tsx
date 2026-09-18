@@ -1,5 +1,6 @@
 import { useMemo } from "react"
 import "./PharmaResearchWorkspacePanel.css"
+import { buildTorntpharmEvidencePilotPreview } from "./pharmaEvidencePilotPreview"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -72,6 +73,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   }
 
   const model = buildPharmaResearchWorkspaceModel(resolution.data.assignment, research.metrics, evaluationDate)
+  const evidencePilot = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmEvidencePilotPreview(securityId, model) : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -111,5 +113,33 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         {model.secondaries.length ? model.secondaries.map((exposure) => <SecondaryExposureCard key={exposure.exposureCode} exposure={exposure} />) : <p className="pharma-workspace-empty">No active reviewed secondary exposures.</p>}
       </aside>
     </div>
+
+    {evidencePilot ? <section className="pharma-evidence-pilot" aria-labelledby="pharma-evidence-pilot-title">
+      <div className="pharma-evidence-pilot-head">
+        <div>
+          <p className="eyebrow">Gate F · Official evidence pilot</p>
+          <h3 id="pharma-evidence-pilot-title">Evidence ingestion dry-run</h3>
+          <p>Validated candidate observations are projected against the reviewed business-model requirements before any database write. Canonical financial-history evidence does not automatically satisfy subprofile-specific evidence contracts.</p>
+        </div>
+        <span className="pharma-workspace-lock">Dry-run · No write</span>
+      </div>
+      <div className="pharma-evidence-pilot-summary">
+        <div><span>Candidate observations</span><strong>{evidencePilot.candidateCount}</strong><small>{evidencePilot.acceptedCount} validation-ready</small></div>
+        <div><span>Direct official</span><strong>{evidencePilot.directOfficialCount}</strong><small>Issuer / official lineage</small></div>
+        <div><span>PortfolioAI derived</span><strong>{evidencePilot.derivedCount}</strong><small>Formula + direct-input lineage required</small></div>
+        <div><span>Quarantined</span><strong>{evidencePilot.quarantinedCount}</strong><small>Must be zero before an ingestion proposal</small></div>
+      </div>
+      <div className="pharma-evidence-impact">
+        <div>
+          <span>Projected subprofile completeness</span>
+          <strong>{evidencePilot.countedRequirementReady}/{evidencePilot.countedRequirementTotal}</strong>
+          <small>would meet minimum observation requirements from this manifest alone</small>
+        </div>
+        <div className="pharma-evidence-scope-list">
+          {evidencePilot.scopes.map((scope) => <span key={scope.label}><strong>{scope.label}</strong>{scope.ready}/{scope.total} projected</span>)}
+        </div>
+      </div>
+      <p className="pharma-evidence-pilot-note"><strong>Interpretation:</strong> this 42-row pilot is currently useful for canonical financial-history evidence, but it does not directly fulfill the 14 counted Domestic Formulations + Global Generics business-model requirements. Those requirements need their own approved evidence contracts and source observations.</p>
+    </section> : null}
   </section>
 }
