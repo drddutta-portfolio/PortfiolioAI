@@ -7939,3 +7939,144 @@ Primary remains the curve driver. Material Overlay remains within-dimension only
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.1 is validated. The next permitted G6 task is the first genuinely new subprofile-specific numeric threshold family. Before choosing and implementing it, inspect the validated G5 parent frameworks and the active Primary contract so the first threshold family is economically defensible and does not bypass unresolved parent-taxonomy prerequisites.
+
+
+---
+
+## 104. Entry 099 — Gate G6.2 Domestic Valuation Self-History curve prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with the first genuinely new subprofile-specific numeric threshold family:
+
+**G6.2 — Domestic Formulations Valuation Self-History**
+
+### Why this family was selected first
+
+Several G5 parent families still have unresolved taxonomy prerequisites:
+
+- ROCE / Capital Efficiency
+- Cash Conversion
+- Balance Sheet / Leverage
+- Ownership / Governance
+
+Momentum still lacks a dedicated Pharma parent metric contract and approved Pharma benchmark.
+
+Valuation already aligns directly with canonical `VALUATION`, so it is the safest G6 numeric family to extend without bypassing an unresolved parent-taxonomy prerequisite.
+
+### Scope
+
+Primary subprofile:
+
+`DOMESTIC_FORMULATIONS`
+
+Metric:
+
+`PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT`
+
+Subcomponent:
+
+`SELF_HISTORY_RELATIVE_VALUATION`
+
+This is a proposal-only subcomponent curve. It does not make the whole Valuation dimension score-ready.
+
+### Domestic Formulations V1 self-history bands
+
+Proposed score curve:
+
+- implied upside >= 25% → 100
+- >= 10% and <25% → 80
+- >= -5% and <10% → 60
+- >= -20% and <-5% → 40
+- < -20% → 20
+
+These bands use the company’s own five-year P/E history and deliberately avoid absolute Pharma P/E cutoffs.
+
+### Evidence boundary
+
+Required:
+
+- current authoritative market price;
+- current reviewed earnings base;
+- preferred five-year self-history;
+- stale price prohibited;
+- provider valuation labels cannot override price authority.
+
+G5.4 distorted-denominator handling remains in force.
+
+### BANK_NBFC separation
+
+The BANK_NBFC self-history implementation was inspected as an internal precedent for deterministic self-history evidence.
+
+G6.2 does **not** inherit:
+
+- the Bank/NBFC 60/25/15 Valuation dimension weighting;
+- bank P/B logic;
+- valuation-to-ROE logic;
+- bank benchmark assumptions.
+
+The Domestic Formulations curve is separately versioned.
+
+### Incomplete-dimension boundary
+
+G5.4 also requires:
+
+- `PEER_RELATIVE_VALUATION`
+- `CASH_FLOW_CORROBORATION`
+
+Those components remain **UNAPPROVED**.
+
+Therefore:
+
+- whole Valuation dimension ready: **NO**
+- peer-relative component approved: **NO**
+- FCF corroboration approved: **NO**
+- numeric score execution: **NO**
+
+### Cross-subprofile boundary
+
+This curve applies only to `DOMESTIC_FORMULATIONS`.
+
+It must fail closed for:
+
+- `GLOBAL_GENERICS`
+- `API_BULK_DRUGS`
+- `CDMO_CRAMS`
+- `BIOPHARMA_BIOSIMILARS`
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaDomesticValuationSelfHistoryCurveProposal.ts`
+- `src/features/research/pharmaDomesticValuationSelfHistoryCurveProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_2_Domestic_Valuation_Self_History_Curve_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.2 · Domestic valuation self-history curve**
+- **G6.2 · Scope & incomplete-dimension boundary**
+
+### Explicit boundary
+
+- numeric self-history threshold family: **PROPOSED**
+- whole Valuation dimension ready: **NO**
+- absolute P/E bands used: **NO**
+- BANK/NBFC dimension weights inherited: **NO**
+- unsupported Pharma primaries receive Domestic thresholds: **NO**
+- activation approved: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G6.2 cards in TORNTPHARM → Research → Gate G, then run focused G6.2 validation. Only after validation should the next Domestic Formulations G6 threshold slice be selected.
