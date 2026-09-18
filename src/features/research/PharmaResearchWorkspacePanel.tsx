@@ -17,6 +17,7 @@ import { buildPharmaGateGScoringMethodProposal } from "./pharmaGateGScoringMetho
 import { PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL } from "./pharmaSegmentGrowthCurveProposal"
 import { PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL } from "./pharmaOperatingMarginCurveProposal"
 import { PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT } from "./pharmaAdaptiveClassificationContract"
+import { PHARMA_OVERLAY_MODIFIER_CONTRACT } from "./pharmaOverlayModifierContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -203,6 +204,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Revenue + profit evidence · effective-dated review</small>
               <p>Revenue/profit Primary disagreement, missing consecutive annual evidence, or an unconfirmed structural Primary change returns review required instead of an inferred classification. Unreviewed evidence cannot classify.</p>
               <span>Ambiguity: REVIEW REQUIRED · Effective dating: REQUIRED</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G2 · Overlay modifier contract</strong>
+              <small>{PHARMA_OVERLAY_MODIFIER_CONTRACT.version}</small>
+              <p>Material overlays may modify only dimensions explicitly touched by their versioned subprofile evidence contract. Economic materiality, evidence completeness, evidence confidence and an approved normalized overlay signal are all required inputs.</p>
+              <span>Proposal only · Formula pending · No modifier execution</span>
+            </article>
+            <article>
+              <strong>G2 · Combined-cap & contradiction boundary</strong>
+              <small>One shared cap per dimension · exact value unapproved</small>
+              <p>All material overlays affecting one dimension must share a single combined cap. Missing overlay evidence cannot become neutral, unresolved contradictions require review, and Emerging Watch remains numerically excluded.</p>
+              <span>Combined cap: REQUIRED · Exact cap: PENDING · Emerging Watch: EXCLUDED</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
