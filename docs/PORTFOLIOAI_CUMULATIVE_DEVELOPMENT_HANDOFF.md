@@ -1788,3 +1788,97 @@ No failure was reported from the preceding owner-run commands in the requested s
 **Result:** Gate F read-only public content-review dry-run slice = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
 
 **CURRENT STOP POINT:** The first read-only source-content review is now proven end-to-end for two TORNTPHARM requirements. The next safe step should be a HDFCBANK ↔ TORNTPHARM Research-page consistency audit before expanding additional Pharma review UI, so the final product keeps a shared visual/UX grammar while retaining sector-specific evidence contracts. Separately, any candidate-to-ingestion proposal or actual evidence write remains approval-gated.
+
+
+---
+
+## 34. Entry 029 — HDFCBANK ↔ TORNTPHARM Research-page consistency audit and hierarchy correction prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+A cross-profile Research-page consistency audit was performed after the first TORNTPHARM read-only content-review dry run.
+
+### Owner design requirement
+
+The page must follow this product rule:
+
+> HDFCBANK and TORNTPHARM may have materially different research criteria and sector-specific research sections, but at a glance they must look like the same PortfolioAI product.
+
+The audit therefore distinguishes **visual/product consistency** from **research-content sameness**.
+
+### Audit result
+
+Most top-level Research components are already shared across profiles:
+- security/header shell;
+- position dashboard;
+- decision controls;
+- Research Refresh placement;
+- seven Research tabs;
+- Research at a glance heading;
+- three-card context strip;
+- Investment Decision Cockpit / scorecard;
+- Research Readiness shell;
+- Investment heatmap visual grammar;
+- snapshot/cockpit cards;
+- Research Health;
+- Documents / Evidence patterns.
+
+The principal visual drift was ordering.
+
+Before this correction, TORNTPHARM inserted the full Pharma deep-research workspace immediately after the context strip, before the shared scorecard/readiness/cockpit flow. HDFCBANK did not. This made the pages feel different at first glance even though the shared components themselves were reusable.
+
+### R4N hierarchy correction
+
+`src/pages/ResearchPage.tsx` now preserves this shared Overview spine for every profile:
+
+1. Research at a glance
+2. Context strip
+3. Investment Decision Cockpit / ResearchScorecardPanel
+4. Profile Research Readiness
+5. Snapshot cockpit
+6. Research Health
+
+Only after that shared spine, TORNTPHARM adds:
+
+**Sector research workspace**
+
+followed by the existing Pharma-specific deep-research workspace.
+
+No Pharma research content was removed or forced into BANK_NBFC structures.
+
+### Allowed profile divergence
+
+Sector/profile-specific content may continue to differ in:
+- profile/subprofile identity;
+- metric and evidence contracts;
+- dimension labels/applicability;
+- readiness details and counts;
+- snapshot metrics;
+- Financials / Quality & Growth content;
+- refresh modules;
+- source/acquisition/review workflows;
+- Pharma subprofile/overlay logic;
+- BANK_NBFC-specific evidence and completion workflows.
+
+The governing rule is now documented in:
+- `docs/R4N_HDFCBANK_TORNTPHARM_Research_Page_Consistency_Audit.md`
+
+### Validation state
+
+A source-level ordering check confirms the shared order is now:
+
+`ResearchScorecardPanel → ProfileResearchReadinessPanel → research-cockpit → research-health → Sector research workspace → PharmaResearchWorkspacePanel`.
+
+Per the established local-first workflow, this hierarchy correction is **not yet visually approved** and full local validation is intentionally deferred until after owner side-by-side localhost review.
+
+**Production touched:** NO.  
+**Production Supabase:** unchanged.  
+**Evidence ingestion:** NO.  
+**Paid/licensed provider calls:** NO.  
+**Scoring / recommendation / sizing changes:** NO.  
+**Schedulers:** unchanged.  
+**PR #101:** remains draft/open/unmerged.
+
+**CURRENT STOP POINT:** Owner should `git pull`, open both HDFCBANK and TORNTPHARM Research → Overview locally, and compare the first-glance hierarchy. The common Overview spine should now feel consistent while TORNTPHARM's sector-specific deep research begins only after Research Health under **Sector research workspace**. Obtain visual approval before full local validation.
