@@ -5489,3 +5489,65 @@ The Gate G glass-box now shows:
 - production mutation: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually review the new Operating Margin proposal cards in **Gate G · Scoring methodology design**, and then run focused local validation before this methodology artifact can be marked validated.
+
+
+---
+
+## 78. Entry 073 — Gate G operating-margin curve proposal validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner completed focused local validation for the second PHARMA_V1 normalization-curve proposal.
+
+### Validated curve proposal
+
+`PHARMA_OPERATING_MARGIN_CURVE_V1_PROPOSAL`
+
+Scope:
+
+- metric: `PHARMA_OPERATING_MARGIN_HISTORY`
+- primary subprofile: **DOMESTIC_FORMULATIONS** only.
+
+Composite design:
+
+- margin level: **50%**
+- margin stability: **30%**
+- margin trend: **20%**
+
+History boundary:
+
+- minimum comparable quarters: **8**
+- preferred comparable quarters: **12**
+- latest period required;
+- matched operating-revenue and operating-profit periods required;
+- incompatible periods excluded;
+- unsupported primary Pharma subprofiles fail closed to **NO SCORE**.
+
+### Owner-confirmed validation
+
+- focused Vitest across:
+  - `pharmaOperatingMarginCurveProposal.test.ts`
+  - `pharmaSegmentGrowthCurveProposal.test.ts`
+  - `pharmaGateGScoringMethodProposal.test.ts`
+  → **PASS**
+- focused ESLint for the Gate G methodology/curve slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- no new blocking build issue reported.
+
+### Activation boundary remains unchanged
+
+- operating-margin proposal validated: **YES**
+- segment-growth proposal validated: **YES**
+- curve activation approved: **NO**
+- scoring adapter implementation: **NO**
+- scoring-rule migration: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation impact: **NO**
+- position-sizing impact: **NO**
+- production mutation: **NO**
+
+**CURRENT STOP POINT:** Two Gate G curve families are now validated as methodology artifacts. The next safe Gate G slice should define another core Pharma curve family as proposal-only, with score execution remaining disabled.
