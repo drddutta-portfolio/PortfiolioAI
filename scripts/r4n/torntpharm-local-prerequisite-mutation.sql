@@ -49,25 +49,25 @@ BEGIN
       (
         'TORRENT_Q1_FY26_RELEASE',
         'https://www.torrentpharma.com/assets/Torrent_Pharma_Press_Release_Q1_FY_26_Results_a857463993.pdf',
-        'b8a8b87c01a1ea1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f',
+        'bd8ab87c01a1e1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f',
         '{"artifactCode":"TORRENT_Q1_FY26_RELEASE","artifactPeriod":"Q1 FY2025-26","artifactTitle":"Torrent Pharma Q1 FY26 Results Release","basis":"US business revenue YoY growth — reported Torrent business","contractVersion":"TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1","metricCode":"PHARMA_EXPORT_US_REVENUE_GROWTH","observationDate":"2025-06-30","provenanceSummary":"Issuer Q1 FY26 release states US business revenues of Rs 308 crore, up 19% YoY.","reviewState":"READ_ONLY_REVIEWED","reviewedValue":"19","unit":"PERCENT"}'::jsonb
       ),
       (
         'TORRENT_Q2_FY26_RELEASE',
         'https://www.torrentpharma.com/docs/Torrent_Pharma_Press_release_Q2_25_26_90203574c9.pdf',
-        '3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fceec5f2',
+        '3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fcec5f2',
         '{"artifactCode":"TORRENT_Q2_FY26_RELEASE","artifactPeriod":"Q2 FY2025-26","artifactTitle":"Torrent Pharma Q2 FY26 Results Release","basis":"US business revenue YoY growth — reported Torrent business","contractVersion":"TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1","metricCode":"PHARMA_EXPORT_US_REVENUE_GROWTH","observationDate":"2025-09-30","provenanceSummary":"Issuer Q2 FY26 release states US business revenues of Rs 337 crore, up 26% YoY.","reviewState":"READ_ONLY_REVIEWED","reviewedValue":"26","unit":"PERCENT"}'::jsonb
       ),
       (
         'TORRENT_Q3_FY26_RELEASE',
         'https://www.torrentpharma.com/docs/Press_release_Q3_25_26_V6_9c697bb7fe.pdf',
-        '3df20aaafb6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7',
+        '3df20aaaff6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7',
         '{"artifactCode":"TORRENT_Q3_FY26_RELEASE","artifactPeriod":"Q3 FY2025-26","artifactTitle":"Torrent Pharma Q3 FY26 Results Release","basis":"US business revenue YoY growth — reported Torrent business","contractVersion":"TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1","metricCode":"PHARMA_EXPORT_US_REVENUE_GROWTH","observationDate":"2025-12-31","provenanceSummary":"Issuer Q3 FY26 release states US business revenues of Rs 321 crore, up 19% YoY.","reviewState":"READ_ONLY_REVIEWED","reviewedValue":"19","unit":"PERCENT"}'::jsonb
       ),
       (
         'TORRENT_Q4_FY26_RELEASE',
         'https://www.torrentpharma.com/docs/Torrent_Pharma_Press_release_Q4_25_26_e5822c6449.pdf',
-        'd08cf8f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e990922998b53',
+        'dd80f6f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e90922998b53',
         '{"artifactCode":"TORRENT_Q4_FY26_RELEASE","artifactPeriod":"Q4 FY2025-26","artifactTitle":"Torrent Pharma Q4 FY26 Results Release","basis":"US base-business revenue YoY growth — excludes JB acquisition effect","contractVersion":"TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1","metricCode":"PHARMA_EXPORT_US_REVENUE_GROWTH","observationDate":"2026-03-31","provenanceSummary":"Issuer Q4 FY26 release separately states US base-business revenue grew 16% YoY; this is used instead of the 31% reported figure to preserve pre-acquisition scope compatibility.","reviewState":"READ_ONLY_REVIEWED","reviewedValue":"16","unit":"PERCENT"}'::jsonb
       )
   )
@@ -117,7 +117,7 @@ WITH expected(source_code, record_kind, external_record_id, source_url, payload_
       'ISSUER_RESULTS_RELEASE',
       'TORRENT_Q1_FY26_RELEASE',
       'https://www.torrentpharma.com/assets/Torrent_Pharma_Press_Release_Q1_FY_26_Results_a857463993.pdf',
-      'b8a8b87c01a1ea1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f',
+      'bd8ab87c01a1e1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f',
       '{"artifactCode":"TORRENT_Q1_FY26_RELEASE","artifactPeriod":"Q1 FY2025-26","artifactTitle":"Torrent Pharma Q1 FY26 Results Release","basis":"US business revenue YoY growth — reported Torrent business","contractVersion":"TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1","metricCode":"PHARMA_EXPORT_US_REVENUE_GROWTH","observationDate":"2025-06-30","provenanceSummary":"Issuer Q1 FY26 release states US business revenues of Rs 308 crore, up 19% YoY.","reviewState":"READ_ONLY_REVIEWED","reviewedValue":"19","unit":"PERCENT"}'::jsonb,
       '{"sourceClass":"PUBLIC_PRIMARY_ISSUER","retentionScope":"METADATA_AND_EXTRACTED_PUBLIC_FACTS_ONLY","reviewedContentOnly":true}'::jsonb
     ),
@@ -126,7 +126,7 @@ WITH expected(source_code, record_kind, external_record_id, source_url, payload_
       'ISSUER_RESULTS_RELEASE',
       'TORRENT_Q2_FY26_RELEASE',
       'https://www.torrentpharma.com/docs/Torrent_Pharma_Press_release_Q2_25_26_90203574c9.pdf',
-      '3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fceec5f2',
+      '3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fcec5f2',
       '{"artifactCode":"TORRENT_Q2_FY26_RELEASE","artifactPeriod":"Q2 FY2025-26","artifactTitle":"Torrent Pharma Q2 FY26 Results Release","basis":"US business revenue YoY growth — reported Torrent business","contractVersion":"TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1","metricCode":"PHARMA_EXPORT_US_REVENUE_GROWTH","observationDate":"2025-09-30","provenanceSummary":"Issuer Q2 FY26 release states US business revenues of Rs 337 crore, up 26% YoY.","reviewState":"READ_ONLY_REVIEWED","reviewedValue":"26","unit":"PERCENT"}'::jsonb,
       '{"sourceClass":"PUBLIC_PRIMARY_ISSUER","retentionScope":"METADATA_AND_EXTRACTED_PUBLIC_FACTS_ONLY","reviewedContentOnly":true}'::jsonb
     ),
@@ -135,7 +135,7 @@ WITH expected(source_code, record_kind, external_record_id, source_url, payload_
       'ISSUER_RESULTS_RELEASE',
       'TORRENT_Q3_FY26_RELEASE',
       'https://www.torrentpharma.com/docs/Press_release_Q3_25_26_V6_9c697bb7fe.pdf',
-      '3df20aaafb6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7',
+      '3df20aaaff6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7',
       '{"artifactCode":"TORRENT_Q3_FY26_RELEASE","artifactPeriod":"Q3 FY2025-26","artifactTitle":"Torrent Pharma Q3 FY26 Results Release","basis":"US business revenue YoY growth — reported Torrent business","contractVersion":"TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1","metricCode":"PHARMA_EXPORT_US_REVENUE_GROWTH","observationDate":"2025-12-31","provenanceSummary":"Issuer Q3 FY26 release states US business revenues of Rs 321 crore, up 19% YoY.","reviewState":"READ_ONLY_REVIEWED","reviewedValue":"19","unit":"PERCENT"}'::jsonb,
       '{"sourceClass":"PUBLIC_PRIMARY_ISSUER","retentionScope":"METADATA_AND_EXTRACTED_PUBLIC_FACTS_ONLY","reviewedContentOnly":true}'::jsonb
     ),
@@ -144,7 +144,7 @@ WITH expected(source_code, record_kind, external_record_id, source_url, payload_
       'ISSUER_RESULTS_RELEASE',
       'TORRENT_Q4_FY26_RELEASE',
       'https://www.torrentpharma.com/docs/Torrent_Pharma_Press_release_Q4_25_26_e5822c6449.pdf',
-      'd08cf8f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e990922998b53',
+      'dd80f6f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e90922998b53',
       '{"artifactCode":"TORRENT_Q4_FY26_RELEASE","artifactPeriod":"Q4 FY2025-26","artifactTitle":"Torrent Pharma Q4 FY26 Results Release","basis":"US base-business revenue YoY growth — excludes JB acquisition effect","contractVersion":"TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1","metricCode":"PHARMA_EXPORT_US_REVENUE_GROWTH","observationDate":"2026-03-31","provenanceSummary":"Issuer Q4 FY26 release separately states US base-business revenue grew 16% YoY; this is used instead of the 31% reported figure to preserve pre-acquisition scope compatibility.","reviewState":"READ_ONLY_REVIEWED","reviewedValue":"16","unit":"PERCENT"}'::jsonb,
       '{"sourceClass":"PUBLIC_PRIMARY_ISSUER","retentionScope":"METADATA_AND_EXTRACTED_PUBLIC_FACTS_ONLY","reviewedContentOnly":true}'::jsonb
     )
@@ -200,10 +200,10 @@ BEGIN
   WHERE source_code = 'COMPANY_EXCHANGE_FILING'
     AND record_kind = 'ISSUER_RESULTS_RELEASE'
     AND (
-      (external_record_id = 'TORRENT_Q1_FY26_RELEASE' AND payload_hash = 'b8a8b87c01a1ea1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f')
-      OR (external_record_id = 'TORRENT_Q2_FY26_RELEASE' AND payload_hash = '3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fceec5f2')
-      OR (external_record_id = 'TORRENT_Q3_FY26_RELEASE' AND payload_hash = '3df20aaafb6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7')
-      OR (external_record_id = 'TORRENT_Q4_FY26_RELEASE' AND payload_hash = 'd08cf8f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e990922998b53')
+      (external_record_id = 'TORRENT_Q1_FY26_RELEASE' AND payload_hash = 'bd8ab87c01a1e1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f')
+      OR (external_record_id = 'TORRENT_Q2_FY26_RELEASE' AND payload_hash = '3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fcec5f2')
+      OR (external_record_id = 'TORRENT_Q3_FY26_RELEASE' AND payload_hash = '3df20aaaff6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7')
+      OR (external_record_id = 'TORRENT_Q4_FY26_RELEASE' AND payload_hash = 'dd80f6f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e90922998b53')
     );
 
   IF v_source_count <> 4 THEN
