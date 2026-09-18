@@ -1,4 +1,15 @@
-import { buildTorntpharmReadOnlyContentReviewDryRun } from "./torntpharmReadOnlyContentReviewDryRun"
+import { buildTorntpharmReadOnlyContentReviewDryRun, type TorntpharmProposedEvidenceCandidate } from "./torntpharmReadOnlyContentReviewDryRun"
+
+type TorntpharmUsGrowthCandidate = TorntpharmProposedEvidenceCandidate & {
+  readonly metricCode: "PHARMA_EXPORT_US_REVENUE_GROWTH"
+  readonly unit: "PERCENT"
+}
+
+function isTorntpharmUsGrowthCandidate(
+  item: TorntpharmProposedEvidenceCandidate,
+): item is TorntpharmUsGrowthCandidate {
+  return item.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH" && item.unit === "PERCENT"
+}
 
 export const TORNTPHARM_CANONICAL_PREREQUISITE_PACKAGE_VERSION =
   "TORNTPHARM_CANONICAL_PREREQUISITE_PACKAGE_V1" as const
@@ -73,9 +84,7 @@ export interface TorntpharmCanonicalPrerequisitePackage {
 export function buildTorntpharmCanonicalPrerequisitePackage(): TorntpharmCanonicalPrerequisitePackage {
   const review = buildTorntpharmReadOnlyContentReviewDryRun()
   const artifacts = new Map(review.reviewedArtifacts.map((item) => [item.code, item]))
-  const numericCandidates = review.proposedCandidates.filter(
-    (item) => item.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH",
-  )
+  const numericCandidates = review.proposedCandidates.filter(isTorntpharmUsGrowthCandidate)
 
   if (numericCandidates.length !== 4) {
     throw new Error(`Expected 4 reviewed US-growth candidates, found ${numericCandidates.length}`)
