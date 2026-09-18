@@ -11,6 +11,15 @@ describe("research evidence ingestion validator", () => {
     expect(new Set(result.idempotencyKeys)).toHaveLength(42)
   })
 
+
+  it("accepts canonical PostgreSQL UUID values used by local fixtures", () => {
+    const row = TORNTPHARM_INGESTION_PREVIEW[0]!
+    const localFixtureRow = { ...row, securityId: "a4000000-0000-0000-0000-000000000002" }
+    const result = validateEvidenceIngestionCandidates([localFixtureRow])
+    expect(result.accepted).toHaveLength(1)
+    expect(result.quarantined).toHaveLength(0)
+  })
+
   it("requires explicit formula and direct-input lineage for every derived row", () => {
     const derived = TORNTPHARM_INGESTION_PREVIEW.filter((row) => row.lineage === "PORTFOLIOAI_DERIVED")
     expect(derived).toHaveLength(9)
