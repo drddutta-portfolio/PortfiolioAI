@@ -8950,3 +8950,125 @@ It still has **not** been persisted as a local migration and has **not** been ap
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.7 is complete. The next permitted G6 task is to design the Domestic Formulations FCF-yield numeric threshold proposal, using the now-validated canonical metric identity and derivation contract, while keeping all persistence and score execution disabled.
+
+
+---
+
+## 115. Entry 110 — Gate G6.8 Domestic Formulations FCF-yield corroboration curve prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.8 — Domestic Formulations FCF-Yield Corroboration Curve**.
+
+### Prerequisites completed
+
+Before G6.8:
+
+- G6.4 canonical FCF-yield metric identity validated;
+- G6.5 local persisted-alias preflight completed with no definitions/observations;
+- G6.6 canonical registration + deterministic derivation proposal validated;
+- G6.7 rollback-only local schema execution proof passed.
+
+Therefore the FCF-yield identity and formula are sufficiently stable for a proposal-only numeric corroboration curve.
+
+### Scope
+
+Primary:
+
+`DOMESTIC_FORMULATIONS`
+
+Dimension:
+
+`VALUATION`
+
+Component:
+
+`CASH_FLOW_CORROBORATION`
+
+Metric:
+
+`FCF_YIELD_PERCENT`
+
+### Proposed V1 bands
+
+- >= 5.0% → 100
+- >= 3.0% and <5.0% → 80
+- >= 1.5% and <3.0% → 60
+- >= 0% and <1.5% → 40
+- <0% → 20
+
+### Economic interpretation
+
+Approximate inverse FCF-multiple context:
+
+- 5% yield ≈ 20x annual FCF
+- 3% yield ≈ 33.3x annual FCF
+- 1.5% yield ≈ 66.7x annual FCF
+
+The curve is deliberately broad and acts only as cash-flow corroboration.
+
+It is **not** an intrinsic valuation model or standalone cheap/expensive verdict.
+
+### Negative FCF handling
+
+Negative FCF remains adverse evidence.
+
+It is not clamped to zero, treated as missing, or neutralized.
+
+### Incomplete Valuation boundary
+
+After G6.8:
+
+- Domestic self-history subcurve: **PROPOSED / VALIDATED EARLIER**
+- Domestic FCF-yield corroboration subcurve: **PROPOSED**
+- peer-relative Valuation component: **UNAPPROVED**
+- component weights: **UNAPPROVED**
+- whole Valuation dimension ready: **NO**
+
+### Cross-subprofile boundary
+
+The G6.8 bands apply only to Domestic Formulations.
+
+They must fail closed for:
+
+- Global Generics
+- API/Bulk Drugs
+- CDMO/CRAMS
+- Biopharma/Biosimilars
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaDomesticFcfYieldCurveProposal.ts`
+- `src/features/research/pharmaDomesticFcfYieldCurveProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_8_Domestic_FCF_Yield_Curve_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.8 · Domestic FCF-yield corroboration curve**
+- **G6.8 · Corroboration-only boundary**
+
+### Explicit boundary
+
+- numeric FCF-yield bands proposed: **YES**
+- standalone Valuation verdict: **NO**
+- component weights approved: **NO**
+- peer-relative Valuation approved: **NO**
+- whole Valuation dimension ready: **NO**
+- persistent FCF-yield registration: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.8 cards in TORNTPHARM → Research → Gate G, then run focused G6.8 validation. Only after validation should the next Domestic Formulations-specific G6 slice be selected.
