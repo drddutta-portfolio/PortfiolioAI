@@ -16,6 +16,7 @@ import { buildTorntpharmLocalObservationMutationProposal } from "./torntpharmLoc
 import { buildPharmaGateGScoringMethodProposal } from "./pharmaGateGScoringMethodProposal"
 import { PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL } from "./pharmaSegmentGrowthCurveProposal"
 import { PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL } from "./pharmaOperatingMarginCurveProposal"
+import { PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT } from "./pharmaAdaptiveClassificationContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -189,6 +190,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <p>{overlay.note}</p>
               <span>{overlay.denominatorEffect === "WITHIN_DIMENSION_ONLY" ? "No second score · within-dimension evidence only" : "Excluded from score denominator"}</span>
             </article>)}
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G1 · Adaptive classification contract</strong>
+              <small>{PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT.version}</small>
+              <p>Primary classification requires stable leadership across {PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT.primaryRequiresStableLeadershipPeriods} consecutive annual periods. Material Overlay requires ≥{PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT.materialOverlayThresholdPercent}% revenue or profit for {PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT.annualPeriodsRequired} consecutive annual periods; Emerging Watch begins at {PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT.emergingWatchLowerBoundPercent}% or from separately reviewed evidence of growth toward materiality.</p>
+              <span>Proposal only · No assignment write · No score execution</span>
+            </article>
+            <article>
+              <strong>G1 · Fail-closed classification boundary</strong>
+              <small>Revenue + profit evidence · effective-dated review</small>
+              <p>Revenue/profit Primary disagreement, missing consecutive annual evidence, or an unconfirmed structural Primary change returns review required instead of an inferred classification. Unreviewed evidence cannot classify.</p>
+              <span>Ambiguity: REVIEW REQUIRED · Effective dating: REQUIRED</span>
+            </article>
           </div>
           <div className="pharma-persistence-package-grid">
             <article>
