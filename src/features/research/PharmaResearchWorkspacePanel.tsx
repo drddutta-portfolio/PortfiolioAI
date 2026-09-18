@@ -13,6 +13,7 @@ import { buildPharmaRegulatoryEventMigrationReplayPlan } from "./pharmaRegulator
 import { buildTorntpharmCanonicalPrerequisitePackage } from "./torntpharmCanonicalPrerequisitePackage"
 import { buildTorntpharmLocalPrerequisiteMutationProposal } from "./torntpharmLocalPrerequisiteMutationProposal"
 import { buildTorntpharmLocalObservationMutationProposal } from "./torntpharmLocalObservationMutationProposal"
+import { buildPharmaGateGScoringMethodProposal } from "./pharmaGateGScoringMethodProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -133,6 +134,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const canonicalPrerequisitePackage = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmCanonicalPrerequisitePackage() : null
   const localPrerequisiteMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalPrerequisiteMutationProposal() : null
   const localObservationMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalObservationMutationProposal() : null
+  const gateGScoringProposal = buildPharmaGateGScoringMethodProposal(model)
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -150,6 +152,59 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
       <div><span>Secondary exposures</span><strong>{model.secondaries.length}</strong><small>{model.secondaries.length ? model.secondaries.map((item) => `${item.displayName} · ${titleCase(item.materiality)}`).join(" · ") : "None active"}</small></div>
       <div><span>Effective from</span><strong>{model.primary.effectiveFrom}</strong><small>Reviewed assignment authority</small></div>
     </div>
+
+    <details className="pharma-deep-layer pharma-scoring-methodology">
+      <summary>
+        <div><span>Gate G · Scoring methodology design</span><small>PHARMA_V1 dimensions, subprofile participation and readiness gates · no numeric curves approved</small></div>
+        <b>Open details</b>
+      </summary>
+      <div className="pharma-deep-layer-body">
+        <section className="pharma-persistence-package" aria-labelledby="pharma-gate-g-methodology-title">
+          <div className="pharma-evidence-pilot-head">
+            <div>
+              <p className="eyebrow">Gate G · Methodology contract</p>
+              <h3 id="pharma-gate-g-methodology-title">PHARMA_V1 scoring design</h3>
+              <p>The scoring architecture is reviewable before any curve is approved. Primary and material business-model evidence participate inside one PHARMA_V1 score; emerging watches stay outside the denominator.</p>
+            </div>
+            <span className="pharma-workspace-lock">Design only · No score run</span>
+          </div>
+          <div className="pharma-persistence-package-summary">
+            <div><span>Weighted dimensions</span><strong>{gateGScoringProposal.dimensionWeights.length}</strong><small>{gateGScoringProposal.dimensionWeights.reduce((sum, item) => sum + item.weight, 0)}% total weight</small></div>
+            <div><span>Dimension gate</span><strong>{Math.round(gateGScoringProposal.dimensionMinimumScoreReadyCoverage * 100)}%</strong><small>Minimum score-ready coverage per weighted dimension</small></div>
+            <div><span>Overall preview gate</span><strong>{Math.round(gateGScoringProposal.overallMinimumScoreReadyCoverage * 100)}%</strong><small>All weighted dimensions must also be score-ready</small></div>
+            <div><span>Curve approval</span><strong>Pending</strong><small>No numeric Pharma score curve is approved yet</small></div>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>Primary scoring model</strong>
+              <small>{gateGScoringProposal.primary.displayName}</small>
+              <p>{gateGScoringProposal.primary.note}</p>
+              <span>Role: PRIMARY SCORE DRIVER</span>
+            </article>
+            {gateGScoringProposal.overlays.map((overlay) => <article key={overlay.code}>
+              <strong>{overlay.role === "MATERIAL_EVIDENCE_OVERLAY" ? "Material scoring overlay" : "Emerging scoring watch"}</strong>
+              <small>{overlay.displayName}</small>
+              <p>{overlay.note}</p>
+              <span>{overlay.denominatorEffect === "WITHIN_DIMENSION_ONLY" ? "No second score · within-dimension evidence only" : "Excluded from score denominator"}</span>
+            </article>)}
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>Dimension weights</strong>
+              <small>{gateGScoringProposal.proposalVersion}</small>
+              <p>{gateGScoringProposal.dimensionWeights.map((item) => `${titleCase(item.dimensionCode)} ${item.weight}%`).join(" · ")}</p>
+              <span>Existing PHARMA_V1 parent weights preserved</span>
+            </article>
+            <article>
+              <strong>Execution boundary</strong>
+              <small>Score execution remains disabled</small>
+              <p>Numeric normalization curves, score-run persistence, recommendation logic and position sizing all remain outside this design checkpoint.</p>
+              <span>Score run: NO · Recommendation: NO · Position sizing: NO</span>
+            </article>
+          </div>
+        </section>
+      </div>
+    </details>
 
     <details className="pharma-deep-layer">
       <summary>
