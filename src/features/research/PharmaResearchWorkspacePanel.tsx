@@ -425,14 +425,14 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         <article>
           <strong>Local numeric preflight</strong>
           <small>{localNumericPreflight.preflightVersion}</small>
-          <p>{localNumericPreflight.requiredLookups.length} canonical local lookups prepared for metric definition, source records, existing facts and reviewed assignment. No local database snapshot has been queried yet.</p>
-          <span>Status: PREPARED · NOT EXECUTED</span>
+          <p>{localNumericPreflight.requiredLookups.length} canonical local lookups were executed against local Supabase. The preflight found the reviewed assignment and security identity, with 4 rows blocked by missing metric-definition and source-record prerequisites and 0 existing-fact conflicts.</p>
+          <span>Status: EXECUTED · NOT READY · 4 BLOCKED · 0 CONFLICTS</span>
         </article>
         <article>
           <strong>Regulatory migration replay</strong>
           <small>{eventMigrationReplay.planVersion}</small>
-          <p>{eventMigrationReplay.assertions.length} replay assertions prepared for local Supabase, including RLS, immutability, grants, site scope and post-rollback absence.</p>
-          <span>Status: PREPARED · NOT EXECUTED</span>
+          <p>{eventMigrationReplay.assertions.length} replay assertions were exercised against local Supabase. The proposal completed and rolled back cleanly with migration history unchanged and no proposed objects left behind.</p>
+          <span>Status: EXECUTED · PASS · 0 PERSISTENT CHANGES</span>
         </article>
       </div> : null}
       {canonicalPrerequisitePackage ? <div className="pharma-persistence-package-grid">
