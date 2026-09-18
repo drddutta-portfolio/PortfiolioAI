@@ -2695,3 +2695,83 @@ Added:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview → Evidence operations & review controls, and inspect **Local write package & event-schema proposal**. Obtain visual approval before focused/local validation. Any actual local write or migration conversion remains separately approval-gated.
+
+
+---
+
+## 43. Entry 038 — Prepared persistence packages visually approved and locally validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner visually reviewed the new **Gate F · Prepared persistence packages / Local write package & event-schema proposal** section and confirmed that the glass-box research-engine presentation is acceptable during development.
+
+### Development-mode UX decision
+
+The owner explicitly approved keeping the research engine visible during R4N so that:
+- evidence acquisition logic can be inspected;
+- source and compatibility errors can be detected early;
+- validator and schema blockers remain transparent;
+- persistence prerequisites can be verified before any write.
+
+The intended later product state remains:
+- research engine primarily backgrounded;
+- investor-facing conclusions/results shown in the foreground;
+- detailed research audit/evidence operations still available on demand.
+
+### Localhost visual verification — PASS
+
+The prepared persistence package panel correctly shows:
+- Numeric rows prepared: **4**
+- Metric registry needed: **1**
+- Source records needed: **4**
+- Event persistence: **Proposed**
+- canonical numeric target: `fundamental_observations`
+- proposed regulatory event table: `research_regulatory_event_observations`
+- local numeric write authorized: **NO**
+- regulatory schema apply authorized: **NO**
+- regulatory event write authorized: **NO**
+- explicit **Prepared only · 0 writes** state.
+
+The SQL proposal remains under `docs/sql`, not `supabase/migrations`, and remains a review artifact rather than an executable migration.
+
+### Local validation
+
+The supplied terminal capture directly confirms:
+- Edge test suite: **27/27 test files passed; 140/140 tests passed**;
+- production build: **PASS** under Vite 8.2.2;
+- **216 modules transformed**;
+- only the existing non-blocking warning about chunks exceeding 500 kB after minification remained.
+
+Focused ESLint was run on:
+- `src/features/research/torntpharmLocalNumericIngestionPackage.ts`
+- `src/features/research/torntpharmLocalNumericIngestionPackage.test.ts`
+- `src/features/research/pharmaRegulatoryEventPersistenceProposal.ts`
+- `src/features/research/pharmaRegulatoryEventPersistenceProposal.test.ts`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Focused changed-file lint result: **PASS with no output, errors or warnings**.
+
+Repository-wide lint remains subject to the already-documented pre-existing unrelated debt and is not represented as clean.
+
+### Validation classification
+
+**OWNER VISUALLY APPROVED / FOCUSED CHANGED-FILE VALIDATION PASS**
+
+### Scope boundary
+
+- Local numeric evidence insert: **NO**
+- Metric-definition database mutation: **NO**
+- Source-record materialization: **NO**
+- Regulatory event migration apply: **NO**
+- FDA source activation: **NO**
+- Production Supabase mutation: **NO**
+- Paid/licensed provider calls: **NO**
+- Scoring / recommendation / sizing: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Prepared Persistence Packages checkpoint = **VALIDATED**.
+
+**CURRENT STOP POINT:** The next safe R4N step is to prepare a local-only preflight package for the four numeric rows and a migration-replay validation package for the regulatory-event schema proposal, without executing either one. These packages should resolve the exact local prerequisites (metric registry, source records, existing-fact conflicts, migration replay assertions) while preserving explicit owner approval before any write or schema application.
