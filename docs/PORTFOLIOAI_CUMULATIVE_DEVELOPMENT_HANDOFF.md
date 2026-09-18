@@ -4872,3 +4872,62 @@ No change was needed for the Evidence tab because it already renders the complet
 1. Overview → Growth at a glance shows **Export / US Revenue Growth = 16%** as the latest quarter;
 2. Quality & Growth → Growth & earnings shows the same latest canonical metric and its Evidence History exposes the four quarter series;
 3. Evidence tab contains the four `PHARMA_EXPORT_US_REVENUE_GROWTH` rows. After visual confirmation, run focused validation and close Gate F.
+
+
+---
+
+## 71. Entry 066 — Foreground Research UI visually verified against canonical TORNTPHARM observations
+
+**Date:** 18 September 2026  
+**Actor:** owner localhost visual verification  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Following the PHARMA_V1 foreground presentation wiring correction, the owner visually verified the canonical TORNTPHARM US-growth observations on localhost.
+
+### Verified foreground surfaces
+
+**Overview → Growth at a glance**
+- `Export / US Revenue Growth`
+- latest value: **16%**
+- period: **Quarter · 31 Mar 2026**
+- status: **VERIFIED**
+
+**Quality & Growth → Growth & earnings**
+- `Export / US Revenue Growth`
+- latest value: **16%**
+- period: **Quarter · 31 Mar 2026**
+- provider: `COMPANY_EXCHANGE_FILING`
+- status: **VERIFIED**
+
+**Evidence ledger**
+All four canonical quarter observations are visible:
+
+- 30 Jun 2025 → **19%**
+- 30 Sep 2025 → **26%**
+- 31 Dec 2025 → **19%**
+- 31 Mar 2026 → **16%**
+
+All four display **VERIFIED** status.
+
+### Selection-state note
+
+The Evidence ledger currently displays the four observations as **Competing / unselected** because no `fundamental_observation_decisions` selection row was created by Gate F.
+
+This does not prevent the rows from being VERIFIED because the registered metric contract is reviewed and the persisted observations use evidence_status `AVAILABLE`.
+
+No observation-selection policy or scoring decision was authorized in Gate F. Any later requirement to select a canonical observation explicitly should be handled by a separate decision/scoring contract rather than silently added to the evidence-write gate.
+
+### Gate F outcome now demonstrated end to end
+
+- reviewed source claim → **YES**
+- incompatible Q4 31% claim rejected → **YES**
+- canonical prerequisite metric/source records → **YES**
+- canonical four-quarter observations → **YES**
+- read-only preflight sees 4 `ALREADY_PRESENT` / 0 conflicts / 0 blockers → **YES**
+- foreground Overview reads latest canonical value → **YES**
+- foreground Quality & Growth reads latest canonical value → **YES**
+- Evidence ledger exposes all four canonical quarter rows → **YES**
+- production mutation → **NO**
+- scoring/recommendation change → **NO**
+
+**CURRENT STOP POINT:** Run final focused validation for the PHARMA_V1 US-growth foreground presentation and the Gate F observation contracts. If clean, record the final validation checkpoint and close Gate F.
