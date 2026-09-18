@@ -8707,3 +8707,121 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.6 cards in TORNTPHARM → Research → Gate G, then run focused G6.6 validation. No local or production SQL should be executed from the proposal artifact without a separate approval checkpoint.
+
+
+---
+
+## 112. Entry 107 — Gate G6.6 canonical FCF-yield registration & derivation proposal validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.6 has completed validation as a **proposal-only canonical FCF-yield registration and derivation contract**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.6 plus G6.4/G6.3/G6.2/G6.1 and all validated G5/G1–G4/Gate G proposal contracts → **PASS**
+- focused ESLint for the same methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### Canonical metric state
+
+Canonical code:
+
+`FCF_YIELD_PERCENT`
+
+Canonical unit:
+
+`PERCENT`
+
+Statement scope:
+
+`VALUATION`
+
+Calculation owner:
+
+`PORTFOLIOAI`
+
+Legacy alias:
+
+`FCF_YIELD`
+
+Alias behavior:
+
+- compatibility fallback only;
+- may not create a second Valuation evidence component;
+- canonical and legacy identities together still count once.
+
+### Deterministic derivation state
+
+Canonical formula:
+
+`(FREE_CASH_FLOW_ANNUAL / CURRENT_MARKET_CAP) * 100`
+
+Numerator:
+
+- `FREE_CASH_FLOW_ANNUAL`
+- reviewed parent formula `CFO_ANNUAL - CAPEX_ANNUAL`
+
+Fail-closed behavior:
+
+- non-finite FCF → no derived value;
+- zero/negative/non-finite market cap → no derived value;
+- negative FCF → preserved as negative FCF yield;
+- no clamping to zero or neutral.
+
+### Evidence adapter state
+
+`pharmaScoringEvidence.ts` now recognizes the Valuation cash-flow corroboration component through the alias group:
+
+- `FCF_YIELD_PERCENT`
+- `FCF_YIELD`
+
+This identity reconciliation changes evidence counting only.
+
+It does **not** activate numeric Pharma scoring.
+
+### SQL proposal status
+
+Repository proposal:
+
+`docs/sql/R4N_PHARMA_FCF_YIELD_PERCENT_V1_REGISTRATION_PROPOSAL.sql`
+
+Safety state:
+
+- stored outside `supabase/migrations/`: **YES**
+- transaction wrapped: **YES**
+- preflight guards: **YES**
+- postcondition guards: **YES**
+- deliberate `ROLLBACK`: **YES**
+- executed locally: **NO**
+- executed in production: **NO**
+
+### G6.6 status
+
+- canonical metric registration proposal: **VALIDATED / NOT APPLIED**
+- deterministic derivation proposal: **VALIDATED / NOT ACTIVE**
+- evidence alias handling: **VALIDATED**
+- local metric definition persisted: **NO**
+- production metric definition persisted: **NO**
+- FCF-yield observations created: **NO**
+- numeric FCF-yield score bands: **UNAPPROVED**
+- whole Valuation dimension ready: **NO**
+- score execution: **NO**
+
+### Safety boundary remains unchanged
+
+- local DB mutation: **NO**
+- production DB mutation: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.6 is validated. The next permitted task is to choose between (A) a local rollback-only execution proof of the G6.6 SQL proposal, or (B) designing the Domestic Formulations FCF-yield numeric threshold proposal while keeping persistence unapplied. The safer sequence is to prove the SQL proposal locally first, then design numeric bands only after the canonical definition has passed that local dry-run checkpoint.
