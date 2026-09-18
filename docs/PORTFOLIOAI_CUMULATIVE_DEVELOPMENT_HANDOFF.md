@@ -3006,3 +3006,85 @@ Regulatory migration replay:
 **Result:** Local Numeric Preflight + Regulatory Migration Replay Preparation checkpoint = **VALIDATED**.
 
 **CURRENT STOP POINT:** The next safe R4N decision is whether to execute, on local Supabase only, (1) the read-only numeric preflight queries and (2) the rollback-only regulatory migration replay. Neither action authorizes any evidence insert, source-record creation, metric-definition mutation, persistent schema change, or production change.
+
+
+---
+
+## 47. Entry 042 — Local-only numeric preflight and regulatory replay executors prepared after owner authorization
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT, following explicit owner authorization to execute the two local-only checks  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner explicitly authorized execution of:
+
+1. the read-only TORNTPHARM local numeric preflight; and
+2. the rollback-only Pharma regulatory migration replay.
+
+Because ChatGPT cannot directly execute commands inside the owner's Mac/local Supabase environment, guarded local runner scripts were prepared so the owner can execute the authorized checks with one command each.
+
+### Added execution artifacts
+
+- `scripts/r4n/torntpharm-local-numeric-preflight.sql`
+- `scripts/r4n/run-torntpharm-local-numeric-preflight.sh`
+- `scripts/r4n/run-regulatory-event-migration-replay.sh`
+
+Added npm commands:
+
+- `npm run r4n:preflight:numeric`
+- `npm run r4n:replay:regulatory`
+
+### Numeric preflight executor
+
+The numeric preflight:
+
+- resolves TORNTPHARM from local `public.securities`;
+- requires exactly one active reviewed Domestic Formulations assignment;
+- checks `PHARMA_EXPORT_US_REVENUE_GROWTH` in `fundamental_metric_definitions`;
+- resolves the four reviewed Q1-Q4 FY26 artifacts against local `data_source_records`;
+- checks existing `fundamental_observations` for exact facts or conflicts;
+- classifies each row as `INSERT_CANDIDATE`, `ALREADY_PRESENT`, `CONFLICT`, or `BLOCKED`;
+- runs inside `BEGIN TRANSACTION READ ONLY`;
+- ends in `ROLLBACK`;
+- performs **0 writes**.
+
+The executor hard-refuses any DB URL that is not clearly local (`127.0.0.1` or `localhost`).
+
+### Regulatory replay executor
+
+The replay runner:
+
+- hard-refuses non-local DB URLs;
+- captures Supabase migration-history state before replay;
+- captures pre-existing FDA source-registry/object state;
+- refuses replay if the proposed event table/view already exists;
+- runs the proposal SQL under `ON_ERROR_STOP=1`;
+- relies on the proposal's own transaction + `ROLLBACK`;
+- verifies after replay that:
+  - migration history is unchanged;
+  - `US_FDA_OFFICIAL` source-registry count is unchanged;
+  - proposed event table is absent;
+  - proposed current-state view is absent;
+  - persistent schema changes = 0.
+
+### Important schema correction
+
+The local preflight executor was aligned to the actual canonical `data_source_records` schema. There is no dedicated `source_artifact_code` column in that table, so source-record resolution now uses exact `source_url`, `external_record_id`, or explicit artifact identifiers carried in `raw_payload`. No source record is invented.
+
+### Scope boundary
+
+Authorized:
+- local read-only preflight query: **YES**
+- local rollback-only migration replay: **YES**
+
+Still NOT authorized:
+- local evidence insert;
+- source-record creation;
+- metric-definition mutation;
+- persistent regulatory schema application;
+- production Supabase mutation;
+- production migration replay;
+- deployment;
+- PR #101 merge.
+
+**CURRENT STOP POINT:** Owner should `git pull`, then run `npm run r4n:preflight:numeric` and `npm run r4n:replay:regulatory`. Return the terminal outputs for interpretation. No additional approval is needed for these two checks because the owner has explicitly authorized them.
