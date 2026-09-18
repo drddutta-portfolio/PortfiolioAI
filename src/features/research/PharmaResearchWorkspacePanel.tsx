@@ -28,6 +28,7 @@ import { PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL } from "./pharmaOwnershipGov
 import { PHARMA_RISK_CURVE_PROPOSAL } from "./pharmaRiskCurveProposal"
 import { PHARMA_MOMENTUM_CURVE_PROPOSAL } from "./pharmaMomentumCurveProposal"
 import { PHARMA_G6_LAYERING_BOUNDARY, pharmaG6CurveContractForPrimary } from "./pharmaG6SubprofileCurveApplicability"
+import { PHARMA_DOMESTIC_VALUATION_SELF_HISTORY_CURVE } from "./pharmaDomesticValuationSelfHistoryCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -368,6 +369,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Primary contract drives curves · Material Overlay stays within-dimension · Emerging excluded</small>
               <p>TORNTPHARM remains Primary Domestic Formulations, Material Overlay Global Generics and Emerging Watch CDMO/CRAMS. The overlay cannot create a second stock score and Emerging Watch cannot enter numeric scoring.</p>
               <span>Primary contract: {pharmaG6CurveContractForPrimary("DOMESTIC_FORMULATIONS").subprofileCode} · Overlay score: {PHARMA_G6_LAYERING_BOUNDARY.materialOverlayCreatesIndependentStockScore ? "YES" : "NO"} · Emerging score: {PHARMA_G6_LAYERING_BOUNDARY.emergingWatchCreatesIndependentStockScore ? "YES" : "NO"}</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.2 · Domestic valuation self-history curve</strong>
+              <small>{PHARMA_DOMESTIC_VALUATION_SELF_HISTORY_CURVE.proposalVersion}</small>
+              <p>Domestic Formulations valuation now has a proposal-only self-history score curve using current P/E versus the company’s own five-year average P/E. It uses relative valuation rather than an absolute Pharma P/E cutoff.</p>
+              <span>≥25%: 100 · ≥10%: 80 · ≥-5%: 60 · ≥-20%: 40 · &lt;-20%: 20</span>
+            </article>
+            <article>
+              <strong>G6.2 · Scope & incomplete-dimension boundary</strong>
+              <small>Domestic Formulations only · Whole Valuation dimension not ready</small>
+              <p>Peer-relative valuation and FCF corroboration remain unapproved, BANK/NBFC dimension weights are not inherited, and unsupported Pharma primaries fail closed rather than receiving Domestic thresholds.</p>
+              <span>Absolute P/E bands: NO · BANK weights inherited: NO · Whole dimension ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
