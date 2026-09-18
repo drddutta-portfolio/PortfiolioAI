@@ -4369,3 +4369,67 @@ Verified postconditions:
 **Result:** Local prerequisite materialization = **SUCCESS / LOCAL-ONLY / 0 EVIDENCE-OBSERVATION WRITES**.
 
 **CURRENT STOP POINT:** The next safe R4N action is to rerun the read-only numeric preflight. Expected result: the metric-definition and source-record blockers should clear, with the four reviewed US-growth rows becoming `INSERT_CANDIDATE` if no existing-fact conflicts are present. No observation insert is authorized yet.
+
+
+---
+
+## 64. Entry 059 — Read-only numeric preflight now fully ready for separate observation-write approval
+
+**Date:** 18 September 2026  
+**Actor:** owner-run local execution  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reran:
+
+`npm run r4n:preflight:numeric`
+
+after successful local prerequisite materialization.
+
+### Canonical prerequisite state
+
+Observed:
+
+- TORNTPHARM security rows: **1**
+- active reviewed Domestic Formulations assignments: **1**
+- `PHARMA_EXPORT_US_REVENUE_GROWTH` metric-definition rows: **1**
+- metric-definition matches expected contract: **true**
+
+### Four reviewed US-growth rows
+
+All four rows resolved to immutable local source records and had no existing-fact conflict:
+
+- 2025-06-30 — 19% — `TORRENT_Q1_FY26_RELEASE` → `INSERT_CANDIDATE`
+- 2025-09-30 — 26% — `TORRENT_Q2_FY26_RELEASE` → `INSERT_CANDIDATE`
+- 2025-12-31 — 19% — `TORRENT_Q3_FY26_RELEASE` → `INSERT_CANDIDATE`
+- 2026-03-31 — 16% — `TORRENT_Q4_FY26_RELEASE` → `INSERT_CANDIDATE`
+
+For all four rows:
+
+- exact existing count: **0**
+- conflicting existing count: **0**
+- blockers: **none**
+
+### Preflight summary
+
+- rows checked: **4**
+- insert candidates: **4**
+- already present: **0**
+- conflicts: **0**
+- blocked: **0**
+- preflight state: **READY_FOR_SEPARATE_WRITE_APPROVAL**
+- write authorization: **NO**
+
+The preflight remained read-only and ended in `ROLLBACK`.
+
+### Scope boundary
+
+- Prerequisites materialized locally: **YES**
+- Four observation rows eligible: **YES**
+- Observation write authorized: **NO**
+- Fundamental-observation insert performed: **NO**
+- Production Supabase mutation: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Numeric preflight = **READY FOR SEPARATE OBSERVATION-WRITE APPROVAL**.
+
+**CURRENT STOP POINT:** The next safe R4N gate is to prepare a local-only 4-row `fundamental_observations` insertion proposal/executor using the reviewed values and the now-resolved immutable source-record ids. The package must remain non-executed until separately approved by the owner.
