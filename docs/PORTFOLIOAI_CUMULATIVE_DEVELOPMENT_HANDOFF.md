@@ -7883,3 +7883,59 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G6.1 cards in TORNTPHARM → Research → Gate G, then run focused G6.1 validation. Only after this applicability lock is validated should G6 introduce the first new subprofile-specific numeric threshold family.
+
+
+---
+
+## 103. Entry 098 — Gate G6.1 Subprofile Curve Applicability Lock validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.1 has completed validation as a **proposal-only subprofile curve applicability lock**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.1 plus all validated G5/G1–G4/Gate G proposal contracts → **PASS**
+- focused ESLint for the G6.1/G5/G1–G4/Gate G methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.1 status
+
+- five canonical Pharma Primary subprofiles covered: **VALIDATED**
+- Domestic Formulations Segment Growth applicability: **VALIDATED / NOT ACTIVE**
+- Global Generics Export/US Segment Growth applicability: **VALIDATED / NOT ACTIVE**
+- Domestic Formulations Operating Margin scope: **VALIDATED / NOT ACTIVE**
+- Operating Margin reuse outside Domestic Formulations: **PROHIBITED / FAIL CLOSED**
+- Segment Growth reuse for API/Bulk Drugs, CDMO/CRAMS, Biopharma/Biosimilars: **PROHIBITED / FAIL CLOSED**
+- all seven G5 parent families remain `SUBPROFILE_THRESHOLDS_REQUIRED`
+- Domestic thresholds auto-reused for other primaries: **NO**
+- Material Overlay independent stock score: **NO**
+- Emerging Watch independent/numeric score: **NO**
+
+### TORNTPHARM layering remains unchanged
+
+- Primary: `DOMESTIC_FORMULATIONS`
+- Material Overlay: `GLOBAL_GENERICS`
+- Emerging Watch: `CDMO_CRAMS`
+
+Primary remains the curve driver. Material Overlay remains within-dimension only under G2. Emerging Watch remains excluded from score readiness and numeric scoring.
+
+### Safety boundary remains unchanged
+
+- new numeric threshold family activated: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.1 is validated. The next permitted G6 task is the first genuinely new subprofile-specific numeric threshold family. Before choosing and implementing it, inspect the validated G5 parent frameworks and the active Primary contract so the first threshold family is economically defensible and does not bypass unresolved parent-taxonomy prerequisites.
