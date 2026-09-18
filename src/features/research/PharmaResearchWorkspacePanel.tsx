@@ -26,6 +26,7 @@ import { PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL } from "./pharmaBalanceShe
 import { PHARMA_VALUATION_CURVE_PROPOSAL } from "./pharmaValuationCurveProposal"
 import { PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL } from "./pharmaOwnershipGovernanceCurveProposal"
 import { PHARMA_RISK_CURVE_PROPOSAL } from "./pharmaRiskCurveProposal"
+import { PHARMA_MOMENTUM_CURVE_PROPOSAL } from "./pharmaMomentumCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -338,6 +339,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>G4 owns critical/high-risk gates · Pharma market-risk rules pending</small>
               <p>Regulatory event context may remain visible inside Risk, but the same G4 event cannot receive a second hidden penalty or embedded cap. BANK/NBFC market-risk thresholds are not inherited; Pharma drawdown/volatility bands require separate review.</p>
               <span>G4 second penalty: NO · BANK thresholds inherited: NO · Pharma bands: PENDING</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G5.7 · Momentum framework</strong>
+              <small>{PHARMA_MOMENTUM_CURVE_PROPOSAL.proposalVersion}</small>
+              <p>Momentum uses existing deterministic 12-month, 6-month and benchmark-relative market evidence, but PHARMA_V1 still lacks a dedicated parent Momentum metric contract. No BANK/NBFC weighting or benchmark assumption is inherited.</p>
+              <span>Proposal only · Parent contract missing · Numeric curve not ready</span>
+            </article>
+            <article>
+              <strong>G5.7 · Parent-contract & benchmark boundary</strong>
+              <small>Canonical: Momentum · Pharma benchmark unapproved</small>
+              <p>Relative-strength scoring requires an explicitly approved Pharma benchmark. NIFTY Bank is not inherited, missing relative strength cannot become neutral, and the BANK/NBFC 12M/6M weights remain isolated to that pilot.</p>
+              <span>Parent contract: REQUIRED · BANK weights inherited: NO · Pharma benchmark: PENDING</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
