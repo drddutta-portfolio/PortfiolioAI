@@ -8417,3 +8417,73 @@ Alias behavior:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.3 and G6.4 are validated. Before introducing Domestic FCF-yield numeric score bands, first inspect the actual persisted/local metric definitions and observations for `FCF_YIELD` / `FCF_YIELD_PERCENT` and determine whether alias reconciliation is needed in storage. Numeric thresholds must not be layered on top of duplicate or unresolved persisted identities.
+
+
+---
+
+## 109. Entry 104 — Gate G6.5 local FCF-yield alias preflight prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.5 — Local FCF-Yield Persisted Alias Preflight**.
+
+### Purpose
+
+Before any persisted alias reconciliation or Domestic FCF-yield numeric score bands, the actual local Supabase state must be inspected for:
+
+- `FCF_YIELD`
+- `FCF_YIELD_PERCENT`
+
+### Prepared read-only artifacts
+
+Added:
+
+- `scripts/r4n/g6-5-fcf-yield-alias-preflight.sql`
+- `scripts/r4n/run-g6-5-fcf-yield-alias-preflight.sh`
+- `docs/R4N_PHARMA_V1_Gate_G6_5_Local_FCF_Yield_Alias_Preflight.md`
+
+### Safety
+
+The runner:
+
+- resolves `DB_URL` from local Supabase CLI state;
+- refuses non-local hosts;
+- allows only `127.0.0.1` or `localhost`;
+- executes the SQL inside `BEGIN TRANSACTION READ ONLY`;
+- ends with `ROLLBACK`;
+- performs zero writes.
+
+### Preflight outputs
+
+The report inspects:
+
+- TORNTPHARM security identity;
+- both metric definitions;
+- TORNTPHARM observations under both identifiers;
+- exact alias duplicates;
+- alias conflicts;
+- global observation usage counts;
+- final preflight classification.
+
+Possible classifications include:
+
+- `NO_PERSISTED_OBSERVATIONS`
+- `LEGACY_ONLY_RECONCILIATION_REQUIRED`
+- `CANONICAL_ONLY_NO_ALIAS_OBSERVATION_MIGRATION_NEEDED`
+- `RECONCILIATION_REQUIRED_EXACT_DUPLICATES`
+- `BLOCKED_ALIAS_CONFLICT`
+- `REVIEW_REQUIRED`
+
+### Explicit boundary
+
+- preflight prepared: **YES**
+- local execution performed by ChatGPT: **NO**
+- write authorized: **NO**
+- persisted alias reconciliation: **NO**
+- numeric FCF-yield score bands: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, then run `bash scripts/r4n/run-g6-5-fcf-yield-alias-preflight.sh` from the repository root and share the output. Do not run any write/migration step until the read-only result is reviewed.
