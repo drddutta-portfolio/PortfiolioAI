@@ -4734,3 +4734,75 @@ Still NOT authorized:
 - paid-provider calls.
 
 **CURRENT STOP POINT:** Owner should `git pull` to receive this recorded authorization checkpoint, then execute exactly `PORTFOLIOAI_ALLOW_LOCAL_OBSERVATION_MUTATION=YES npm run r4n:mutate:observations` against the running local Supabase. Return the complete terminal output before any next action is considered.
+
+
+---
+
+## 69. Entry 064 — Authorized local TORNTPHARM observation mutation succeeded
+
+**Date:** 18 September 2026  
+**Actor:** owner-run authorized local execution  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner executed the explicitly authorized local-only observation mutation:
+
+`PORTFOLIOAI_ALLOW_LOCAL_OBSERVATION_MUTATION=YES npm run r4n:mutate:observations`
+
+### Guard results
+
+Observed:
+
+- explicit local observation mutation approval flag: **PASS**
+- local-only database guard: **PASS**
+- production database reachability through runner: **NO**
+
+### Transaction result
+
+Observed:
+
+- `BEGIN`
+- preflight block: **PASS**
+- `INSERT 0 4`
+- postconditions: **PASS**
+- exact reviewed observation count: **4**
+- conflicting observation count: **0**
+- `COMMIT`
+
+### Persisted local observations
+
+Inserted into local Supabase only:
+
+- 2025-06-30 → **19%**
+- 2025-09-30 → **26%**
+- 2025-12-31 → **19%**
+- 2026-03-31 → **16%**
+
+Metric:
+
+`PHARMA_EXPORT_US_REVENUE_GROWTH`
+
+Canonical semantics:
+
+- unit: `PERCENT`
+- period type: `QUARTER`
+- consolidation scope: `UNKNOWN`
+- evidence status: `AVAILABLE`
+- immutable source-record lineage preserved
+
+The rejected Q4 31% claim remained excluded.
+
+### Scope boundary
+
+- Local fundamental-observation insert: **SUCCESS**
+- Local observation rows inserted: **4**
+- Conflicting local observations: **0**
+- Production Supabase mutation: **NO**
+- Additional evidence rows: **NO**
+- Regulatory event persistence: **NO**
+- Scoring/recommendation/position-sizing changes: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** TORNTPHARM local US-growth observation materialization = **SUCCESS / LOCAL-ONLY / 4 REVIEWED ROWS / 0 CONFLICTS**.
+
+**CURRENT STOP POINT:** The next safe R4N action is to verify that the Research page now reads and displays these canonical local observations correctly, then rerun the read-only numeric preflight to confirm the four rows transition from `INSERT_CANDIDATE` to `ALREADY_PRESENT`. After localhost evidence display verification and final local validation, Gate F can be closed.
