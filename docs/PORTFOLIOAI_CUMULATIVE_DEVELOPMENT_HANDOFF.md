@@ -991,3 +991,72 @@ No evidence was ingested and no database write was performed.
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Pull the latest R4N branch and re-open the TORNTPHARM Evidence ingestion dry-run panel. The corrected localhost expectation is 42 validation-ready and 0 quarantined. Visual approval remains pending until that corrected state is observed; full local validation remains deferred until after visual approval.
+
+
+---
+
+## 25. Entry 020 — Gate F official-evidence pilot dry-run visually approved and locally validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After pulling the UUID-validation fix, the owner reopened TORNTPHARM → Research → Overview and visually confirmed the **Gate F · Official evidence pilot / Evidence ingestion dry-run** panel in its corrected state.
+
+### Localhost visual verification — PASS
+
+The visible dry-run state now shows:
+- candidate observations: **42**;
+- validation-ready: **42**;
+- direct official lineage: **33**;
+- PortfolioAI-derived lineage: **9**;
+- quarantined: **0**;
+- projected subprofile completeness: **0/14**;
+- Primary model: **0/8 projected**;
+- Global Generics: **0/6 projected**.
+
+This confirms:
+- the environment-aware local security UUID is accepted by the validator;
+- the 42-row manifest is internally validation-ready;
+- no row is quarantined;
+- canonical financial-history observations remain correctly separated from the 14 counted Domestic Formulations + Global Generics business-model evidence requirements.
+
+The owner visually approved this corrected dry-run presentation.
+
+### Local validation
+
+The owner then ran the requested local validation sequence:
+- `git status`
+- `git branch --show-current`
+- `git rev-parse HEAD`
+- `npm run typecheck`
+- `npm run lint`
+- `npm run check:architecture`
+- `npm run lint:architecture`
+- `npm run lint:edge`
+- `npm run test`
+- `npm run test:edge`
+- `npm run build`
+
+The supplied terminal capture directly confirms:
+- Edge test suite: **27/27 test files passed; 140/140 tests passed**;
+- production build: **PASS** under Vite 8.2.2;
+- **208 modules transformed**;
+- build completed successfully;
+- only the existing non-blocking warning about chunks exceeding 500 kB after minification remained.
+
+No failure was reported from the preceding owner-run commands in the requested sequence.
+
+### Scope boundary
+
+- Production application deployment: **NO**
+- Production Supabase mutation: **NO**
+- Evidence ingestion: **NO**
+- Paid/external provider calls: **NO**
+- Numeric scoring / recommendation / sizing changes: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Gate F official-evidence pilot dry-run slice = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
+
+**CURRENT STOP POINT:** The TORNTPHARM official-manifest dry-run is now visible and locally validated. The next Gate F work should remain local-first and should prepare the business-model-specific evidence acquisition/manifest contract needed to address the 14 currently unmet Domestic Formulations + Global Generics requirements. Do not ingest evidence, deploy, merge PR #101, call paid providers, introduce scoring/recommendations/sizing, modify schedulers, or make production changes without the relevant explicit authorization.
