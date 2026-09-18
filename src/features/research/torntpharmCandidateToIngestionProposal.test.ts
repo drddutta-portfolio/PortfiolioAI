@@ -10,9 +10,11 @@ describe("TORNTPHARM candidate-to-ingestion proposal", () => {
       reviewedCandidates: 6,
       numericCandidates: 4,
       eventCandidates: 2,
-      validatorAccepted: 0,
-      validatorQuarantined: 4,
-      eventSchemaBlocked: 2,
+      validatorAccepted: 4,
+      validatorQuarantined: 0,
+      eventContractAccepted: 2,
+      eventContractQuarantined: 0,
+      eventStorageBlocked: 2,
       rejectedClaimsExcluded: 1,
       proposedWrites: 0,
     })
@@ -30,20 +32,22 @@ describe("TORNTPHARM candidate-to-ingestion proposal", () => {
     ])
     expect(result.numericProjection.every((item) => item.lineage === "DIRECT_OFFICIAL")).toBe(true)
     expect(result.items.filter((item) => item.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH")).toHaveLength(4)
-    expect(result.items.filter((item) => item.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH").every((item) => item.disposition === "VALIDATOR_CONTRACT_EXTENSION_REQUIRED")).toBe(true)
+    expect(result.items.filter((item) => item.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH").every((item) => item.disposition === "SEPARATE_INGESTION_APPROVAL_REQUIRED")).toBe(true)
   })
 
-  it("shows that the current validator contract quarantines the US-growth metric instead of silently accepting it", () => {
+  it("accepts the US-growth metric structurally but keeps ingestion separately approval-gated", () => {
     const result = buildTorntpharmCandidateToIngestionProposal(SECURITY_ID, 1)
     const rows = result.items.filter((item) => item.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH")
-    expect(rows.every((item) => item.validatorIssueCodes.includes("UNSUPPORTED_METRIC"))).toBe(true)
+    expect(rows).toHaveLength(4)
+    expect(rows.every((item) => item.validatorIssueCodes.length === 0)).toBe(true)
+    expect(rows.every((item) => item.disposition === "SEPARATE_INGESTION_APPROVAL_REQUIRED")).toBe(true)
   })
 
   it("keeps FDA event-state evidence outside the numeric ingestion manifest", () => {
     const result = buildTorntpharmCandidateToIngestionProposal(SECURITY_ID, 1)
     const events = result.items.filter((item) => item.metricCode === "PHARMA_REGULATORY_SITE_STATUS")
     expect(events).toHaveLength(2)
-    expect(events.every((item) => item.disposition === "EVENT_EVIDENCE_SCHEMA_REQUIRED")).toBe(true)
+    expect(events.every((item) => item.disposition === "EVENT_STORAGE_IMPLEMENTATION_REQUIRED")).toBe(true)
     expect(result.numericProjection.some((item) => item.metricCode === "PHARMA_REGULATORY_SITE_STATUS")).toBe(false)
   })
 
