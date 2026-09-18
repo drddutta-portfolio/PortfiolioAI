@@ -1712,3 +1712,79 @@ Per the local-first workflow, this implementation checkpoint is **not yet visual
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Public document content-review dry-run** section. Expected summary: 6 reviewed artifacts, 6 proposed candidates, 1 rejected claim, 2 requirements piloted, and 0 ingestion writes. Obtain visual approval before the full local validation chain.
+
+
+---
+
+## 33. Entry 028 — Gate F read-only public content-review dry run visually approved and locally validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After pulling Entry 027, the owner reopened TORNTPHARM → Research → Overview and visually reviewed the new **Gate F · Read-only content review / Public document content-review dry-run**.
+
+### Localhost visual verification — PASS
+
+The rendered dry-run correctly shows:
+- **6 artifacts reviewed**;
+- **6 proposed candidates**;
+- **1 rejected claim**;
+- **0 ingestion writes**;
+- Export / US Revenue Growth = **Minimum Candidate History Present**;
+- Regulatory Site Status = **Partial Scope Review**;
+- explicit **Read-only · No ingestion** state.
+
+The proposed US-growth candidate series is visibly:
+- Q1 FY26: **19%**;
+- Q2 FY26: **26%**;
+- Q3 FY26: **19%**;
+- Q4 FY26: **16% base-business**.
+
+The Q4 FY26 reported **31%** US-growth claim is visibly rejected from the comparable four-quarter series because Q4 consolidated results include JB Pharma from 21 January 2026; the same release's 16% base-business US-growth figure is used as the scope-compatible candidate instead.
+
+The FDA Indrad chain is rendered as two site-scoped proposed events:
+- 2019-10-08: `WARNING_LETTER_ACTIVE`;
+- 2024-09-04: `WARNING_LETTER_CLOSED_OUT`.
+
+The boundary text correctly keeps the regulatory result partial-scope and does not convert the Indrad closeout into a company-wide current regulatory-clearance claim.
+
+The owner visually approved the dry-run presentation.
+
+### Local validation
+
+The owner then ran the requested local validation sequence:
+- `git status`
+- `git branch --show-current`
+- `git rev-parse HEAD`
+- `npm run typecheck`
+- `npm run lint`
+- `npm run check:architecture`
+- `npm run lint:architecture`
+- `npm run lint:edge`
+- `npm run test`
+- `npm run test:edge`
+- `npm run build`
+
+The supplied terminal capture directly confirms:
+- Edge test suite: **27/27 test files passed; 140/140 tests passed**;
+- production build: **PASS** under Vite 8.2.2;
+- **212 modules transformed**;
+- build completed successfully;
+- only the existing non-blocking warning about chunks exceeding 500 kB after minification remained.
+
+No failure was reported from the preceding owner-run commands in the requested sequence.
+
+### Scope boundary
+
+- Production application deployment: **NO**
+- Production Supabase mutation: **NO**
+- Evidence ingestion: **NO**
+- Paid/licensed provider calls: **NO**
+- Numeric scoring / recommendation / sizing changes: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Gate F read-only public content-review dry-run slice = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
+
+**CURRENT STOP POINT:** The first read-only source-content review is now proven end-to-end for two TORNTPHARM requirements. The next safe step should be a HDFCBANK ↔ TORNTPHARM Research-page consistency audit before expanding additional Pharma review UI, so the final product keeps a shared visual/UX grammar while retaining sector-specific evidence contracts. Separately, any candidate-to-ingestion proposal or actual evidence write remains approval-gated.
