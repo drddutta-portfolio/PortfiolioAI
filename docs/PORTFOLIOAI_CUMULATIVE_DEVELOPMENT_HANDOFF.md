@@ -8226,3 +8226,107 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.3 blocker cards, then run focused G6.3 validation. Only after validation should the project either reconcile the FCF-yield metric identity or select another subprofile-specific family.
+
+
+---
+
+## 107. Entry 102 — Gate G6.4 canonical FCF-yield metric contract prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.4 — PHARMA FCF Yield Canonical Metric Contract**.
+
+### G6.3 blocker review
+
+G6.3 confirmed an identity mismatch:
+
+- Pharma UI: `FCF_YIELD_PERCENT`
+- scoring evidence: `FCF_YIELD`
+
+The parent Valuation contract references FCF yield semantically but does not name one concrete metric code.
+
+### Canonical identity selected
+
+G6.4 proposes:
+
+`FCF_YIELD_PERCENT`
+
+as the canonical PHARMA_V1 cash-flow-corroboration metric.
+
+Legacy alias:
+
+`FCF_YIELD`
+
+Alias behavior:
+
+- maps to the canonical percent identity;
+- must not create a second independent observation;
+- conflicting duplicates must not be averaged silently.
+
+### Canonical formula
+
+`(FREE_CASH_FLOW_ANNUAL / CURRENT_MARKET_CAP) * 100`
+
+Calculation owner:
+
+`PORTFOLIOAI`
+
+Numerator:
+
+- `FREE_CASH_FLOW_ANNUAL`
+- existing reviewed formula: `CFO_ANNUAL - CAPEX_ANNUAL`
+- latest completed annual period required;
+- negative FCF preserved as negative evidence.
+
+Denominator:
+
+- concept: current market cap;
+- must preserve current authoritative market-price semantics;
+- stale market-cap evidence is prohibited;
+- provider market-cap labels may not override price authority.
+
+### What G6.4 does not authorize
+
+- storage migration: **NO**
+- historical observation rewrite: **NO**
+- numeric FCF-yield score bands: **NO**
+- Valuation component weights: **NO**
+- whole Valuation dimension readiness: **NO**
+- score execution: **NO**
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaFcfYieldMetricContract.ts`
+- `src/features/research/pharmaFcfYieldMetricContract.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_4_FCF_Yield_Canonical_Metric_Contract_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.4 · Canonical FCF-yield metric**
+- **G6.4 · Formula & authority boundary**
+
+### Explicit boundary
+
+- canonical metric selected: **YES — FCF_YIELD_PERCENT**
+- legacy alias retained: **YES — FCF_YIELD**
+- canonical formula proposed: **YES**
+- storage/alias migration approved: **NO**
+- numeric thresholds approved: **NO**
+- whole Valuation dimension ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, inspect the G6.4 cards, then run focused G6.3 + G6.4 validation. Only after validation should the project decide whether to define Domestic FCF-yield numeric bands or first implement the persisted alias reconciliation.
