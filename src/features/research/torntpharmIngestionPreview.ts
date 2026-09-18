@@ -26,11 +26,20 @@ function directInputs(row: TorntpharmOfficialManifestRow): readonly string[] {
   return []
 }
 
-export const TORNTPHARM_INGESTION_PREVIEW: readonly EvidenceIngestionCandidate[] = TORNTPHARM_OFFICIAL_MANIFEST_FIXTURE.map((row) => ({
-  ...row,
-  securityId: TORNTPHARM_SECURITY_ID,
-  profileVersion: TORNTPHARM_EFFECTIVE_PROFILE_VERSION,
-  sourceArtifactCode: sourceArtifact(row),
-  derivedFormulaCode: derivedFormula(row),
-  directInputKeys: directInputs(row),
-}))
+export function buildTorntpharmIngestionPreview(securityId: string): readonly EvidenceIngestionCandidate[] {
+  return TORNTPHARM_OFFICIAL_MANIFEST_FIXTURE.map((row) => ({
+    ...row,
+    securityId,
+    profileVersion: TORNTPHARM_EFFECTIVE_PROFILE_VERSION,
+    sourceArtifactCode: sourceArtifact(row),
+    derivedFormulaCode: derivedFormula(row),
+    directInputKeys: directInputs(row),
+  }))
+}
+
+/**
+ * Legacy production-identity fixture retained for existing validator coverage.
+ * Runtime/local preview surfaces should use buildTorntpharmIngestionPreview(securityId)
+ * so environment-specific security identities are never inferred.
+ */
+export const TORNTPHARM_INGESTION_PREVIEW: readonly EvidenceIngestionCandidate[] = buildTorntpharmIngestionPreview(TORNTPHARM_SECURITY_ID)
