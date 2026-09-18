@@ -1159,3 +1159,70 @@ Per the local-first workflow, this implementation checkpoint has **not yet been 
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Evidence acquisition plan** section. Expected summary: 14 planned requirements, 8 mandatory / 5 important / 1 supplementary, 12 public/official-first, 2 licensed-source gates (1 required + 1 optional fallback), and 3 controlled derivations. Obtain visual approval before full local validation.
+
+
+---
+
+## 27. Entry 022 — Gate F business-model evidence acquisition contract visually approved and locally validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After pulling Entry 021, the owner reopened TORNTPHARM → Research → Overview and visually reviewed the new **Gate F · Business-model evidence contract / Evidence acquisition plan**.
+
+### Localhost visual verification — PASS
+
+The rendered planning contract correctly shows:
+- **14 planned requirements**;
+- **8 mandatory / 5 important / 1 supplementary**;
+- **12 public/official-first** acquisition lanes;
+- **2 licensed-source gates** — 1 required + 1 optional fallback;
+- **3 controlled derivations** from explicitly disclosed compatible inputs;
+- separate **Domestic Formulations · 8 requirements** and **Global Generics · 6 requirements** columns;
+- **Planned · No ingestion** state;
+- per-requirement history target, acquisition method, source lanes, evidence shape and fail-closed rule;
+- **Brand & Therapy Leadership** marked **Licensed source required**;
+- **Chronic / Acute Mix** marked **Public or licensed**;
+- no CDMO acquisition rows while CDMO / CRAMS remains Emerging-only.
+
+The owner visually approved the contract presentation.
+
+### Local validation
+
+The owner then ran the requested local validation sequence:
+- `git status`
+- `git branch --show-current`
+- `git rev-parse HEAD`
+- `npm run typecheck`
+- `npm run lint`
+- `npm run check:architecture`
+- `npm run lint:architecture`
+- `npm run lint:edge`
+- `npm run test`
+- `npm run test:edge`
+- `npm run build`
+
+The supplied terminal capture directly confirms:
+- Edge test suite: **27/27 test files passed; 140/140 tests passed**;
+- production build: **PASS** under Vite 8.2.2;
+- **209 modules transformed**;
+- build completed successfully;
+- only the existing non-blocking warning about chunks exceeding 500 kB after minification remained.
+
+No failure was reported from the preceding owner-run commands in the requested sequence.
+
+### Scope boundary
+
+- Production application deployment: **NO**
+- Production Supabase mutation: **NO**
+- Evidence ingestion: **NO**
+- Source acquisition/provider calls: **NO**
+- Paid/licensed provider calls: **NO**
+- Numeric scoring / recommendation / sizing changes: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Gate F business-model evidence acquisition/manifest contract = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
+
+**CURRENT STOP POINT:** The 14-requirement TORNTPHARM business-model evidence acquisition contract is designed, visible and locally validated. The next safe Gate F step is a **public/official source-discovery dry run** for the 12 PUBLIC_OFFICIAL_FIRST requirements only: identify candidate issuer/exchange/regulator artifacts and map them to requirement/history gaps without ingesting evidence or calling licensed providers. Keep Brand & Therapy Leadership licensed-source work separately gated, and do not use the Chronic / Acute Mix licensed fallback unless issuer evidence proves insufficient and separate approval is obtained.
