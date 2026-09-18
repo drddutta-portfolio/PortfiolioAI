@@ -7100,3 +7100,135 @@ Owner-confirmed results:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G5.4 is validated. The next permitted G5 parent curve family is **Ownership / Governance**, but implementation must first inspect `PHARMA_OWNERSHIP_GOVERNANCE`, its ownership-history and governance-event semantics, and its relationship to the already validated G4 governance gate so hidden double-counting is not introduced.
+
+
+---
+
+## 96. Entry 091 — Gate G5.5 Ownership / Governance framework prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5 has continued with **G5.5 — Ownership / Governance** as a proposal-only common parent curve framework.
+
+### Existing evidence contract preserved
+
+Existing parent metric:
+
+`PHARMA_OWNERSHIP_GOVERNANCE`
+
+Preserved requirements:
+
+- minimum **4** comparable shareholding quarters;
+- preferred **8** comparable quarters;
+- latest completed shareholding quarter required;
+- current material governance events required;
+- promoter absence is not automatically negative.
+
+Existing normalization semantics remain:
+
+`ownership_trend_pledge_and_governance_event_overlay`
+
+### Dimension alignment gap surfaced
+
+Canonical adaptive architecture:
+
+`OWNERSHIP_GOVERNANCE`
+
+Older lower-level parent evidence contract:
+
+`GOVERNANCE`
+
+G5.5 records:
+
+- canonical dimension: `OWNERSHIP_GOVERNANCE`
+- current parent-contract dimension: `GOVERNANCE`
+- alignment state: `REQUIRES_VERSIONED_PARENT_RECONCILIATION`
+
+No silent remapping is applied.
+
+### Ownership / Governance methodology framework
+
+New proposal:
+
+`PHARMA_OWNERSHIP_GOVERNANCE_CURVE_V1_PROPOSAL`
+
+Candidate framework:
+
+- `OWNERSHIP_STRUCTURE_AND_STABILITY`
+- `PLEDGE_AND_CONTROL_RISK`
+- `GOVERNANCE_EVENT_CONTEXT`
+
+The following remain unapproved:
+
+- component weights;
+- ownership bands;
+- pledge bands;
+- event-context bands.
+
+### G4 separation and anti-double-counting
+
+G4 remains the sole owner of:
+
+- critical governance blocking;
+- high-risk gate treatment;
+- any future separately versioned transparent governance cap.
+
+G5.5 therefore prohibits:
+
+- a second hidden penalty for a G4 critical/blocked event;
+- a second hidden penalty for a G4 high-risk event;
+- an additional gate cap embedded inside the weighted Ownership / Governance dimension.
+
+Governance-event context may remain visible for explainability only.
+
+### Mechanical ownership scoring prohibited
+
+G5.5 explicitly rejects automatic assumptions that:
+
+- higher promoter ownership is always better;
+- promoter absence is automatically negative;
+- zero promoter pledge automatically earns the best score;
+- higher institutional ownership is automatically positive.
+
+Ownership must be interpreted through stability, control structure, pledge history, dilution/concentration and reviewed governance events.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaOwnershipGovernanceCurveProposal.ts`
+- `src/features/research/pharmaOwnershipGovernanceCurveProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G5_5_Ownership_Governance_Framework_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G5.5 · Ownership / Governance framework**
+- **G5.5 · G4 separation & anti-double-counting boundary**
+
+### Explicit boundary
+
+- Ownership / Governance framework proposal: **YES**
+- dimension reconciliation applied: **NO**
+- component weights approved: **NO**
+- ownership numeric bands approved: **NO**
+- pledge numeric bands approved: **NO**
+- governance-event numeric bands approved: **NO**
+- G4 second hidden penalty: **NO**
+- hidden double-counting: **NO**
+- numeric curve ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.5 cards in TORNTPHARM → Research → Gate G, then run focused G5.5 validation. Do not proceed to Risk until G5.5 is validated.
