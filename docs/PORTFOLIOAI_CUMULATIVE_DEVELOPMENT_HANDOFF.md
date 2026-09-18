@@ -3187,3 +3187,95 @@ Therefore a completed rerun is expected to classify the four rows as blocked unl
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull` and rerun only `npm run r4n:preflight:numeric`. The regulatory replay does not need to be repeated. Return the completed numeric preflight output for interpretation.
+
+
+---
+
+## 49. Entry 044 — Local numeric preflight executed successfully; exact blockers confirmed
+
+**Date:** 18 September 2026  
+**Actor:** owner-run local execution  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reran the corrected local-only numeric preflight:
+
+`npm run r4n:preflight:numeric`
+
+### Execution result — PASS as a read-only diagnostic
+
+Local-only guard: **PASS**
+
+The preflight ran inside:
+
+`BEGIN TRANSACTION READ ONLY`
+
+and completed with:
+
+`ROLLBACK`
+
+No insert, update or delete occurred.
+
+### Canonical identity / contract prerequisites
+
+Observed local state:
+
+- TORNTPHARM active NSE security rows: **1**
+- active reviewed Domestic Formulations assignments: **1**
+- `PHARMA_EXPORT_US_REVENUE_GROWTH` metric-definition rows: **0**
+- metric definition matches expected contract: **false**
+
+### Four reviewed US-growth rows
+
+All four reviewed rows were checked:
+
+- 2025-06-30 — 19% — `TORRENT_Q1_FY26_RELEASE`
+- 2025-09-30 — 26% — `TORRENT_Q2_FY26_RELEASE`
+- 2025-12-31 — 19% — `TORRENT_Q3_FY26_RELEASE`
+- 2026-03-31 — 16% — `TORRENT_Q4_FY26_RELEASE`
+
+For each row:
+
+- source record: **MISSING**
+- exact existing observation count: **0**
+- conflicting existing observation count: **0**
+- disposition: **BLOCKED**
+
+Blockers on every row:
+
+- `METRIC_DEFINITION_MISSING_OR_MISMATCHED`
+- `SOURCE_RECORD_MISSING`
+
+### Preflight summary
+
+- rows checked: **4**
+- insert candidates: **0**
+- already present: **0**
+- conflicts: **0**
+- blocked: **4**
+- preflight state: **NOT_READY**
+- write authorization: **NO**
+
+### Interpretation
+
+The preflight confirms there is no conflicting existing TORNTPHARM US-growth evidence locally.
+
+The only current blockers are missing canonical prerequisites:
+
+1. one `fundamental_metric_definitions` registration for `PHARMA_EXPORT_US_REVENUE_GROWTH`;
+2. four immutable `data_source_records` rows corresponding to the reviewed Q1-Q4 FY26 issuer releases.
+
+This is the expected fail-closed behavior.
+
+### Scope boundary
+
+- Local DB read executed: **YES**
+- Local evidence insert: **NO**
+- Metric-definition mutation: **NO**
+- Source-record materialization: **NO**
+- Conflicting existing facts detected: **NO**
+- Production Supabase mutation: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Local numeric preflight execution = **SUCCESSFUL READ-ONLY DIAGNOSTIC / NOT READY FOR WRITE**.
+
+**CURRENT STOP POINT:** The next safe R4N gate is to prepare, without executing, (1) the canonical metric-definition registration package for `PHARMA_EXPORT_US_REVENUE_GROWTH` and (2) four immutable source-record materialization packages for the reviewed Q1-Q4 FY26 issuer releases. Both remain separately approval-gated before any local mutation.
