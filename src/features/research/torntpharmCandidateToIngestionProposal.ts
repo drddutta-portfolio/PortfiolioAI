@@ -1,10 +1,12 @@
 import type { EvidenceIngestionCandidate, EvidenceValidationIssueCode } from "./researchEvidenceIngestionValidator"
 import { validateEvidenceIngestionCandidates } from "./researchEvidenceIngestionValidator"
 import { buildTorntpharmReadOnlyContentReviewDryRun } from "./torntpharmReadOnlyContentReviewDryRun"
+import { validatePharmaRegulatoryEventEvidenceCandidates, type PharmaRegulatoryEventValidationIssueCode } from "./pharmaRegulatoryEventEvidenceContract"
 
 export type CandidateIngestionDisposition =
   | "VALIDATOR_CONTRACT_EXTENSION_REQUIRED"
   | "EVENT_EVIDENCE_SCHEMA_REQUIRED"
+  | "EVENT_STORAGE_IMPLEMENTATION_REQUIRED"
   | "SEPARATE_INGESTION_APPROVAL_REQUIRED"
 
 export interface CandidateIngestionProposalItem {
@@ -14,7 +16,7 @@ export interface CandidateIngestionProposalItem {
   readonly value: string
   readonly unit: string
   readonly disposition: CandidateIngestionDisposition
-  readonly validatorIssueCodes: readonly EvidenceValidationIssueCode[]
+  readonly validatorIssueCodes: readonly (EvidenceValidationIssueCode | PharmaRegulatoryEventValidationIssueCode)[]
   readonly rationale: string
 }
 
@@ -33,7 +35,9 @@ export interface TorntpharmCandidateToIngestionProposal {
     readonly eventCandidates: number
     readonly validatorAccepted: number
     readonly validatorQuarantined: number
-    readonly eventSchemaBlocked: number
+    readonly eventContractAccepted: number
+    readonly eventContractQuarantined: number
+    readonly eventStorageBlocked: number
     readonly rejectedClaimsExcluded: number
     readonly proposedWrites: 0
   }
@@ -86,16 +90,43 @@ export function buildTorntpharmCandidateToIngestionProposal(
     rationale: "The row is structurally accepted by the validator, but this proposal contract still does not authorize a write. A separately approved ingestion gate is required.",
   }))
 
-  const eventItems: CandidateIngestionProposalItem[] = events.map((item) => ({
-    metricCode: item.metricCode,
-    artifactCode: item.artifactCode,
-    observationDate: item.observationDate,
-    value: item.value,
-    unit: item.unit,
-    disposition: "EVENT_EVIDENCE_SCHEMA_REQUIRED",
-    validatorIssueCodes: [],
-    rationale: "Regulatory event states must not be coerced into the numeric manifest. A versioned event-evidence storage and validation contract is required before ingestion can be proposed.",
-  }))
+  const artifactsByCode = new Map(review.reviewedArtifacts.map((item) => [item.code, item]))
+  const eventValidation = validatePharmaRegulatoryEventEvidenceCandidates(events.map((item) => ({
+    securityId,
+    metricCode: "PHARMA_REGULATORY_SITE_STATUS" as const,
+    eventDate: item.observationDate,
+    eventState: item.value as "WARNING_LETTER_ACTIVE" | "WARNING_LETTER_CLOSED_OUT",
+    regulatorCode: "US_FDA" as const,
+    facilityKey: "FEI_3005029956",
+    facilityName: "Indrad finished-dosage facility",
+    regulatoryChainId: "FDA_WL_320_20_03",
+    sourceArtifactCode: item.artifactCode,
+    sourceReference: artifactsByCode.get(item.artifactCode)?.locator ?? "",
+    scope: "SITE_SPECIFIC" as const,
+  })))
+
+  const eventItems: CandidateIngestionProposalItem[] = [
+    ...eventValidation.accepted.map((item) => ({
+      metricCode: item.metricCode,
+      artifactCode: item.sourceArtifactCode,
+      observationDate: item.eventDate,
+      value: item.eventState,
+      unit: "EVENT_STATE",
+      disposition: "EVENT_STORAGE_IMPLEMENTATION_REQUIRED" as const,
+      validatorIssueCodes: [],
+      rationale: "The event is valid under the versioned Pharma regulatory event-evidence contract, but no canonical event-evidence storage/write path is implemented or authorized yet.",
+    })),
+    ...eventValidation.quarantined.map(({ row, issueCodes }) => ({
+      metricCode: row.metricCode,
+      artifactCode: row.sourceArtifactCode,
+      observationDate: row.eventDate,
+      value: row.eventState,
+      unit: "EVENT_STATE",
+      disposition: "EVENT_EVIDENCE_SCHEMA_REQUIRED" as const,
+      validatorIssueCodes: issueCodes,
+      rationale: "The regulatory event fails the current event-evidence contract and must remain quarantined.",
+    })),
+  ]
 
   return {
     contractVersion: "TORNTPHARM_CANDIDATE_TO_INGESTION_PROPOSAL_V1",
@@ -112,7 +143,9 @@ export function buildTorntpharmCandidateToIngestionProposal(
       eventCandidates: events.length,
       validatorAccepted: validation.accepted.length,
       validatorQuarantined: validation.quarantined.length,
-      eventSchemaBlocked: events.length,
+      eventContractAccepted: eventValidation.accepted.length,
+      eventContractQuarantined: eventValidation.quarantined.length,
+      eventStorageBlocked: eventValidation.accepted.length,
       rejectedClaimsExcluded: review.rejectedClaims.length,
       proposedWrites: 0,
     },
