@@ -11,6 +11,7 @@ import { buildPharmaRegulatoryEventPersistenceProposal } from "./pharmaRegulator
 import { buildTorntpharmLocalNumericPreflightPlan } from "./torntpharmLocalNumericPreflight"
 import { buildPharmaRegulatoryEventMigrationReplayPlan } from "./pharmaRegulatoryEventMigrationReplayPlan"
 import { buildTorntpharmCanonicalPrerequisitePackage } from "./torntpharmCanonicalPrerequisitePackage"
+import { buildTorntpharmLocalPrerequisiteMutationProposal } from "./torntpharmLocalPrerequisiteMutationProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -129,6 +130,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const localNumericPreflight = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalNumericPreflightPlan(securityId, resolution.data.assignment.assignmentVersion) : null
   const eventMigrationReplay = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaRegulatoryEventMigrationReplayPlan(securityId, resolution.data.assignment.assignmentVersion) : null
   const canonicalPrerequisitePackage = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmCanonicalPrerequisitePackage() : null
+  const localPrerequisiteMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalPrerequisiteMutationProposal() : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -463,6 +465,21 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
           <span>Database connection: NO · Mutation authorized: NO</span>
         </article>
       </div> : null}
+      {localPrerequisiteMutationProposal ? <div className="pharma-persistence-package-grid">
+        <article>
+          <strong>Local prerequisite mutation proposal</strong>
+          <small>{localPrerequisiteMutationProposal.proposalVersion}</small>
+          <p>Prepared to insert at most {localPrerequisiteMutationProposal.metricDefinitionRowsMaximum} metric definition and {localPrerequisiteMutationProposal.sourceRecordRowsMaximum} immutable source records into local Supabase only. Fundamental observation writes remain zero.</p>
+          <span>Status: PREPARED · NOT APPROVED · NOT EXECUTED</span>
+        </article>
+        <article>
+          <strong>Mutation execution boundary</strong>
+          <small>npm run r4n:mutate:prerequisites</small>
+          <p>The runner refuses execution unless the explicit approval flag is present before database discovery, then enforces local-only DB, source-registry, conflict, idempotency and postcondition guards.</p>
+          <span>Execution approved: NO · Fundamental observations: 0</span>
+        </article>
+      </div> : null}
+
     </section> : null}
 
       </div>
