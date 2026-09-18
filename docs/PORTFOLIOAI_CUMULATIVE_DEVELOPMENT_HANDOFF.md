@@ -6933,3 +6933,118 @@ A separate versioned reconciliation is required before any active scoring path c
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G5.3 is validated. The next permitted G5 parent curve family is **Valuation**, but implementation must first inspect `PHARMA_VALUATION_CONTEXT`, its current evidence semantics, and whether the canonical `VALUATION` dimension already aligns without a taxonomy reconciliation.
+
+
+---
+
+## 94. Entry 089 — Gate G5.4 Valuation framework prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5 has continued with **G5.4 — Valuation** as a proposal-only common parent curve framework.
+
+### Dimension alignment
+
+Unlike G5.1–G5.3, the Valuation parent contract already aligns with the canonical Gate G dimension:
+
+`PHARMA_VALUATION_CONTEXT.dimension = VALUATION`
+
+Canonical dimension:
+
+`VALUATION`
+
+Alignment state:
+
+`ALIGNED`
+
+No dimension reconciliation layer is required.
+
+### Existing Valuation evidence contract preserved
+
+Existing parent metric:
+
+`PHARMA_VALUATION_CONTEXT`
+
+Preserved requirements:
+
+- TTM / point-in-time / annual evidence;
+- minimum **1** annual observation;
+- preferred **5** annual observations for self-history context;
+- current authoritative market price required;
+- current reviewed earnings/cash evidence required;
+- provider valuation labels are evidence only and cannot override price authority;
+- normalization semantics remain `pe_ev_ebitda_fcf_yield_vs_history_and_peers`.
+
+### Valuation methodology framework
+
+New proposal:
+
+`PHARMA_VALUATION_CONTEXT_CURVE_V1_PROPOSAL`
+
+Candidate shared framework:
+
+- `SELF_HISTORY_RELATIVE_VALUATION`
+- `PEER_RELATIVE_VALUATION`
+- `CASH_FLOW_CORROBORATION`
+
+Supported evidence families:
+
+- P/E
+- EV/EBITDA
+- FCF yield
+
+Component weights remain unapproved.
+
+### Absolute-band and peer-context boundary
+
+No universal absolute Pharma valuation bands are created.
+
+Encoded boundaries:
+
+- universal absolute multiple bands: **NO**
+- peer cohort must respect business model: **YES**
+- subprofile threshold/context contracts: **UNAPPROVED**
+- price-to-book included: **NO**
+- negative/non-meaningful denominators require explicit handling: **YES**
+- acquisition/one-off earnings normalization required: **YES**
+
+The existing PHARMA_V1 profile exclusion of `PBV_ADJUSTED_PROVIDER` remains preserved.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaValuationCurveProposal.ts`
+- `src/features/research/pharmaValuationCurveProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G5_4_Valuation_Framework_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G5.4 · Valuation framework**
+- **G5.4 · Price authority, peer-context & denominator boundary**
+
+### Explicit boundary
+
+- Valuation framework proposal: **YES**
+- dimension reconciliation required: **NO**
+- universal absolute valuation bands: **NO**
+- component weights approved: **NO**
+- subprofile threshold/context contracts approved: **NO**
+- numeric valuation curve ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.4 cards in TORNTPHARM → Research → Gate G, then run focused G5.4 validation. Do not proceed to Ownership / Governance until G5.4 is validated.
