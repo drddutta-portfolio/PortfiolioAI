@@ -4610,3 +4610,72 @@ This is a presentation-state correction only. It does not re-run the database pr
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull` and visually confirm the refreshed **Local numeric preflight** card on localhost together with the prepared **Local evidence observation proposal**. After visual approval, run full local validation for the observation-mutation proposal; only then may the exact four-row local observation mutation be separately authorized.
+
+
+---
+
+## 67. Entry 062 — Local observation mutation proposal checkpoint validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner completed the full local validation for the prepared four-row TORNTPHARM observation-write proposal.
+
+### Owner-confirmed validation
+
+- Edge test suite: **27/27 files passed**
+- Edge tests: **140/140 passed**
+- production build: **PASS**
+- Vite modules transformed: **221**
+- focused SQL safety test:
+  - `npx vitest run src/features/research/torntpharmLocalObservationMutationSql.test.ts`
+  - **1/1 file passed**
+  - **6/6 tests passed**
+- focused ESLint for:
+  - `torntpharmLocalObservationMutationProposal.ts`
+  - `torntpharmLocalObservationMutationSql.test.ts`
+  - `PharmaResearchWorkspacePanel.tsx`
+  → **PASS**
+- runner syntax:
+  - `bash -n scripts/r4n/run-torntpharm-local-observation-mutation.sh`
+  → **PASS**
+- only the existing non-blocking >500 kB Vite chunk warning remained.
+
+### Validated observation mutation proposal
+
+`TORNTPHARM_LOCAL_OBSERVATION_MUTATION_PROPOSAL_V1`
+
+Prepared rows:
+
+- 2025-06-30 → 19%
+- 2025-09-30 → 26%
+- 2025-12-31 → 19%
+- 2026-03-31 → 16%
+
+Validated safeguards:
+
+- approval flag before DB discovery;
+- local database only;
+- unique TORNTPHARM security identity;
+- current reviewed Domestic Formulations assignment required;
+- active matching metric contract required;
+- all four immutable source records required;
+- conflicting existing fact abort;
+- exact existing fact idempotent skip;
+- postcondition verification;
+- rejected Q4 31% value excluded.
+
+### Scope boundary
+
+- Observation mutation proposal: **VALIDATED**
+- Observation execution approved: **NO**
+- Observation mutation executed: **NO**
+- Local fundamental-observation writes: **0**
+- Production Supabase mutation: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Local Observation Mutation Proposal V1 checkpoint = **VALIDATED**.
+
+**CURRENT STOP POINT:** The next safe R4N action is the separately approval-gated local-only insertion of up to four reviewed `fundamental_observations` rows for TORNTPHARM. Do not execute unless the owner explicitly authorizes these exact four local evidence writes.
