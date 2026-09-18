@@ -8487,3 +8487,93 @@ Possible classifications include:
 - deployment: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, then run `bash scripts/r4n/run-g6-5-fcf-yield-alias-preflight.sh` from the repository root and share the output. Do not run any write/migration step until the read-only result is reviewed.
+
+
+---
+
+## 110. Entry 105 — Gate G6.5 local FCF-yield alias preflight completed
+
+**Date:** 19 September 2026  
+**Actor:** owner local execution + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.5 read-only local preflight has completed.
+
+### Execution safety
+
+Owner executed:
+
+`bash scripts/r4n/run-g6-5-fcf-yield-alias-preflight.sh`
+
+Confirmed output:
+
+- local-only guard: **PASS**
+- transaction mode: **READ ONLY**
+- final transaction action: **ROLLBACK**
+- writes performed: **0**
+- write authorization: **NO**
+
+### Local persisted state
+
+TORNTPHARM identity:
+
+- symbol: `TORNTPHARM`
+- exchange: `NSE`
+- active security row: **1**
+
+Metric definitions:
+
+- `FCF_YIELD`: **0 rows**
+- `FCF_YIELD_PERCENT`: **0 rows**
+- definition state: `NO_FCF_YIELD_DEFINITIONS`
+
+TORNTPHARM observations:
+
+- `FCF_YIELD`: **0**
+- `FCF_YIELD_PERCENT`: **0**
+- observation state: `NO_PERSISTED_FCF_YIELD_OBSERVATIONS`
+
+Alias comparison:
+
+- exact duplicate pairs: **0**
+- conflicting pairs: **0**
+
+Global usage across all securities:
+
+- `FCF_YIELD`: **0 observations**
+- `FCF_YIELD_PERCENT`: **0 observations**
+
+Final preflight state:
+
+`NO_PERSISTED_OBSERVATIONS`
+
+### Architectural conclusion
+
+No persisted alias reconciliation or historical observation migration is required.
+
+The prior mismatch was a code/contract identity inconsistency only:
+
+- UI referenced `FCF_YIELD_PERCENT`
+- scoring evidence referenced `FCF_YIELD`
+- no persisted definition or observation existed under either code
+
+Therefore the next safe step is to introduce one canonical repository metric definition/derivation for:
+
+`FCF_YIELD_PERCENT`
+
+under the validated G6.4 formula/authority contract.
+
+### Explicit boundary
+
+- alias observation migration required: **NO**
+- duplicate cleanup required: **NO**
+- conflicting observation remediation required: **NO**
+- canonical metric definition currently persisted locally: **NO**
+- numeric FCF-yield bands approved: **NO**
+- local mutation authorized: **NO**
+- production mutation authorized: **NO**
+- score execution: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.5 preflight is complete. The next permitted task is a repository-only proposal for canonical `FCF_YIELD_PERCENT` metric registration/derivation. Do not execute any local or production migration without a separate approval checkpoint.
