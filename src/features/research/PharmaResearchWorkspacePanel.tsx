@@ -18,6 +18,7 @@ import { PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL } from "./pharmaSegmentGrowthCurve
 import { PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL } from "./pharmaOperatingMarginCurveProposal"
 import { PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT } from "./pharmaAdaptiveClassificationContract"
 import { PHARMA_OVERLAY_MODIFIER_CONTRACT } from "./pharmaOverlayModifierContract"
+import { PHARMA_READINESS_MAPPING_CONTRACT } from "./pharmaReadinessMappingContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -218,6 +219,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>One shared cap per dimension · exact value unapproved</small>
               <p>All material overlays affecting one dimension must share a single combined cap. Missing overlay evidence cannot become neutral, unresolved contradictions require review, and Emerging Watch remains numerically excluded.</p>
               <span>Combined cap: REQUIRED · Exact cap: PENDING · Emerging Watch: EXCLUDED</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G3 · Readiness mapping contract</strong>
+              <small>{PHARMA_READINESS_MAPPING_CONTRACT.version}</small>
+              <p>Visible readiness resolves deterministically to READY, PARTIAL, INSUFFICIENT EVIDENCE, PROFILE PENDING, BLOCKED REVIEW or NOT APPLICABLE. A weighted dimension requires at least {Math.round(PHARMA_READINESS_MAPPING_CONTRACT.dimensionMinimumScoreReadyCoverage * 100)}% score-ready coverage plus satisfied mandatory blockers.</p>
+              <span>Proposal only · Emerging Watch excluded · No score execution</span>
+            </article>
+            <article>
+              <strong>G3 · Overall fail-closed readiness gate</strong>
+              <small>{Math.round(PHARMA_READINESS_MAPPING_CONTRACT.overallMinimumScoreReadyCoverage * 100)}% overall coverage is necessary, not sufficient</small>
+              <p>Overall preview requires the common Pharma core, Primary subprofile and every weighted dimension to be READY. Partial material-overlay evidence can keep an affected dimension PARTIAL; Primary or governance/review failure blocks the company.</p>
+              <span>Every weighted dimension: READY · Primary: READY · Common core: READY</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
