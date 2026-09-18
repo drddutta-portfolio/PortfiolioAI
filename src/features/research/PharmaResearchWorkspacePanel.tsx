@@ -30,6 +30,7 @@ import { PHARMA_MOMENTUM_CURVE_PROPOSAL } from "./pharmaMomentumCurveProposal"
 import { PHARMA_G6_LAYERING_BOUNDARY, pharmaG6CurveContractForPrimary } from "./pharmaG6SubprofileCurveApplicability"
 import { PHARMA_DOMESTIC_VALUATION_SELF_HISTORY_CURVE } from "./pharmaDomesticValuationSelfHistoryCurveProposal"
 import { PHARMA_G6_DOMESTIC_VALUATION_FCF_IDENTITY } from "./pharmaG6DomesticValuationFcfIdentity"
+import { PHARMA_FCF_YIELD_METRIC_CONTRACT } from "./pharmaFcfYieldMetricContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -398,6 +399,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Canonical formula, unit and alias reconciliation required</small>
               <p>No FCF-yield scoring bands may be introduced until the canonical metric code, formula, unit, price/market-cap authority, negative-FCF treatment and alias semantics are explicitly versioned.</p>
               <span>Canonical definition: MISSING · Alias reconciliation: PENDING · Whole dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.4 · Canonical FCF-yield metric</strong>
+              <small>{PHARMA_FCF_YIELD_METRIC_CONTRACT.contractVersion}</small>
+              <p>FCF_YIELD_PERCENT is the proposed canonical Pharma valuation cash-flow corroboration metric. FCF_YIELD remains a legacy alias only and must not create a second independent observation.</p>
+              <span>Canonical code: FCF_YIELD_PERCENT · Legacy alias: FCF_YIELD · Double-counting: NO</span>
+            </article>
+            <article>
+              <strong>G6.4 · Formula & authority boundary</strong>
+              <small>(FREE_CASH_FLOW_ANNUAL / CURRENT_MARKET_CAP) × 100</small>
+              <p>The numerator uses reviewed PortfolioAI free cash flow. The denominator must reflect current authoritative market-price semantics; stale or provider-only market-cap authority cannot override that contract. Negative FCF yield remains negative evidence.</p>
+              <span>Unit: PERCENT · Numeric bands: NO · Storage migration: NO · Whole dimension ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
