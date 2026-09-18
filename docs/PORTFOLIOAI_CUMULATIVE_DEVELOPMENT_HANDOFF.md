@@ -2244,3 +2244,94 @@ Tests now separately assert:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull` and re-open the same **Ingestion eligibility proposal** panel. The four Export / US Revenue Growth rows should now display **Current validator: UNSUPPORTED_METRIC** instead of **UNIT_MISMATCH**. Obtain visual confirmation before full local validation.
+
+
+---
+
+## 39. Entry 034 — Candidate-to-ingestion proposal visually approved and validation status resolved
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner visually reviewed the **Gate F · Candidate-to-ingestion proposal / Ingestion eligibility proposal** panel after the validator semantics correction.
+
+### Localhost visual verification — PASS
+
+The panel correctly shows:
+- reviewed candidates: **6**;
+- numeric candidates: **4**;
+- regulatory event candidates: **2**;
+- validator accepted: **0**;
+- validator quarantined: **4**;
+- event-schema blocked: **2**;
+- rejected claims excluded: **1**;
+- proposed writes: **0**;
+- explicit **Proposal only · 0 writes** state.
+
+The four Export / US Revenue Growth rows correctly display:
+
+`Current validator: UNSUPPORTED_METRIC`
+
+rather than the misleading `UNIT_MISMATCH` label.
+
+The two FDA regulatory events remain blocked behind:
+
+`EVENT_EVIDENCE_SCHEMA_REQUIRED`
+
+and are not projected into the numeric manifest.
+
+The Q4 FY26 reported 31% US-growth claim remains excluded from the proposal set.
+
+### Validation results
+
+Owner-run validation produced:
+
+- Architecture Guard: **PASS**
+- Edge tests: **27/27 test files passed; 140/140 tests passed**
+- Production build: **PASS**
+- Vite modules transformed: **213**
+- Existing non-blocking >500 kB chunk warning only
+
+Repository-wide lint still reports pre-existing unrelated debt. This was investigated before classifying the checkpoint.
+
+The following files shown in the lint output were verified byte-identical to the earlier R4N baseline commit `d6d0f1afa5e83b936c32ac23ebc3a11136b230fd`:
+- `supabase/functions/_shared/angel-one.ts`
+- `supabase/functions/discover-trendlyne-bank-growth-contract/index.ts`
+- `supabase/functions/run-nse-news-pipeline/index.ts`
+- `src/features/research/useSecurityScoring.ts`
+
+Therefore those repository-wide lint failures were not introduced by the present Gate F slice.
+
+A focused lint was then run on the files changed by this slice:
+
+- `src/features/research/torntpharmCandidateToIngestionProposal.ts`
+- `src/features/research/torntpharmCandidateToIngestionProposal.test.ts`
+- `src/features/research/researchEvidenceIngestionValidator.ts`
+- `src/features/research/researchEvidenceIngestionValidator.test.ts`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Focused changed-file lint result: **PASS with no output, errors or warnings**.
+
+### Validation classification
+
+This checkpoint is therefore classified as:
+
+**OWNER VISUALLY APPROVED / FOCUSED CHANGED-FILE VALIDATION PASS**
+
+with a documented repository-wide lint caveat due to pre-existing unrelated debt.
+
+It is **not** correct to claim the entire repository is lint-clean.
+
+### Scope boundary
+
+- Evidence ingestion: **NO**
+- Validator acceptance widened: **NO**
+- Regulatory event schema deployed: **NO**
+- Production Supabase mutation: **NO**
+- Paid/licensed provider calls: **NO**
+- Scoring / recommendation / sizing: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Candidate-to-ingestion proposal logic is now visually approved and locally validated at the changed-file scope. The next safe R4N step is to version the canonical numeric validator contract for `PHARMA_EXPORT_US_REVENUE_GROWTH` and separately design the regulatory event-evidence contract. Any actual ingestion remains separately approval-gated.
