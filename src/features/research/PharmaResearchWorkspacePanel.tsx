@@ -2,6 +2,7 @@ import { useMemo } from "react"
 import "./PharmaResearchWorkspacePanel.css"
 import { buildTorntpharmEvidencePilotPreview } from "./pharmaEvidencePilotPreview"
 import { buildPharmaBusinessModelEvidenceAcquisitionPlan, type PharmaBusinessModelEvidenceAcquisitionItem } from "./pharmaBusinessModelEvidenceAcquisitionContract"
+import { buildTorntpharmPublicOfficialSourceDiscoveryPlan } from "./torntpharmPublicOfficialSourceDiscovery"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -111,6 +112,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const model = buildPharmaResearchWorkspaceModel(resolution.data.assignment, research.metrics, evaluationDate)
   const evidencePilot = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmEvidencePilotPreview(securityId, model) : null
   const acquisitionPlan = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaBusinessModelEvidenceAcquisitionPlan(model) : null
+  const publicSourceDiscovery = acquisitionPlan ? buildTorntpharmPublicOfficialSourceDiscoveryPlan(acquisitionPlan) : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -204,6 +206,40 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         </section>
       </div>
       <p className="pharma-evidence-pilot-note"><strong>Access boundary:</strong> Brand & Therapy Leadership requires an approved licensed market source. Chronic / Acute Mix may use issuer disclosure first and an approved licensed source only if needed. No licensed-source call is authorized by this contract.</p>
+    </section> : null}
+
+    {publicSourceDiscovery ? <section className="pharma-source-discovery" aria-labelledby="pharma-source-discovery-title">
+      <div className="pharma-evidence-pilot-head">
+        <div>
+          <p className="eyebrow">Gate F · Public / official discovery</p>
+          <h3 id="pharma-source-discovery-title">Public / official source discovery</h3>
+          <p>Candidate issuer, listed-company and regulator artifacts are mapped to the 12 public/official-first requirements. Discovery is not evidence review: every requirement remains NOT REVIEWED until source content and history are examined.</p>
+        </div>
+        <span className="pharma-workspace-lock">Discovery only · No fetch</span>
+      </div>
+      <div className="pharma-source-discovery-summary">
+        <div><span>Requirements in scope</span><strong>{publicSourceDiscovery.summary.scopedRequirements}</strong><small>{publicSourceDiscovery.summary.mappedRequirements} mapped to candidate sources</small></div>
+        <div><span>Official artifacts</span><strong>{publicSourceDiscovery.summary.discoveredArtifacts}</strong><small>{publicSourceDiscovery.summary.issuerArtifacts} issuer/listed-company · {publicSourceDiscovery.summary.regulatorArtifacts} regulator</small></div>
+        <div><span>Source hubs</span><strong>{publicSourceDiscovery.summary.sourceHubs}</strong><small>Used to enumerate history in the next review step</small></div>
+        <div><span>Evidence reviewed</span><strong>0</strong><small>Discovery does not promote evidence state</small></div>
+      </div>
+      <div className="pharma-source-artifacts">
+        {publicSourceDiscovery.artifacts.map((artifact) => <article key={artifact.code}>
+          <div><strong>{artifact.title}</strong><small>{titleCase(artifact.sourceLane)} · {titleCase(artifact.kind)}</small></div>
+          <span>{artifact.periodOrDate}</span>
+        </article>)}
+      </div>
+      <div className="pharma-source-requirements">
+        {publicSourceDiscovery.requirements.map((item) => <article key={item.metricCode}>
+          <div className="pharma-source-requirement-head">
+            <div><strong>{item.label}</strong><small>{item.scopeLabel} · {titleCase(item.requirementLevel)} · minimum {item.minimumObservations} / preferred {item.preferredObservations} {titleCase(item.historyUnit).toLocaleLowerCase()}</small></div>
+            <span>Candidate source found</span>
+          </div>
+          <p>{item.candidateArtifactCodes.join(" · ")}</p>
+          <small><strong>Gap:</strong> {item.gap}</small>
+        </article>)}
+      </div>
+      <p className="pharma-evidence-pilot-note"><strong>Boundary:</strong> Brand & Therapy Leadership and Chronic / Acute Mix are intentionally excluded from this 12-row public/official-first dry run because their licensed-source gates remain separately controlled.</p>
     </section> : null}
 
   </section>
