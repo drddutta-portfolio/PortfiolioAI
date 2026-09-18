@@ -34,7 +34,7 @@ const UNIT_BY_METRIC: Readonly<Record<string, TorntpharmOfficialManifestRow["uni
   CASH_EQUIVALENTS_ANNUAL: "INR_CR", EBITDA_ANNUAL: "INR_CR", RND_EXPENSE_ANNUAL: "INR_CR", RND_INTENSITY_PERCENT: "PERCENT",
 }
 
-const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu
+const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu
 const datePattern = /^\d{4}-\d{2}-\d{2}$/u
 
 function isIsoDate(value: string): boolean {
