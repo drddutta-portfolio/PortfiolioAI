@@ -7666,3 +7666,83 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.7 cards in TORNTPHARM → Research → Gate G, then run focused G5.7 validation. Only after G5.7 validation should Gate G advance to **G6 — Subprofile-Specific Curves**.
+
+
+---
+
+## 101. Entry 096 — Gate G5 core parent curve families validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5 has completed its final validation checkpoint. All seven core parent curve-family proposals are now **VALIDATED / NOT ACTIVE**.
+
+### Final G5.7 validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G5.7 Momentum plus G5.6, G5.5, G5.4, G5.3, G5.2, G5.1, G1–G4, and existing Gate G curve proposals → **PASS**
+- focused ESLint for the complete G5/G1–G4/Gate G methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G5.7 Momentum status
+
+- Momentum framework: **VALIDATED / NOT ACTIVE**
+- canonical dimension `MOMENTUM`: **VALIDATED**
+- dedicated PHARMA_V1 parent Momentum metric contract: **MISSING**
+- parent contract required before activation: **YES**
+- candidate inputs `PRICE_MOMENTUM_12M`, `PRICE_MOMENTUM_6M`, `RELATIVE_STRENGTH_12M`: **VALIDATED AS EVIDENCE LANES ONLY**
+- raw authority `market_price_history`: **VALIDATED**
+- derived evidence store `market_metric_observations`: **VALIDATED**
+- BANK_NBFC 12M/6M weights inherited: **NO**
+- NIFTY Bank benchmark inherited: **NO**
+- Trendlyne technical Momentum score used: **NO**
+- Pharma benchmark: **UNAPPROVED**
+- component weights / absolute bands / relative-strength bands: **UNAPPROVED**
+- numeric Momentum curve ready: **NO**
+
+### Gate G5 family status
+
+All seven core parent families are now validated as proposal frameworks:
+
+1. G5.1 — ROCE / Capital Efficiency → **VALIDATED / NOT ACTIVE**
+2. G5.2 — Cash Conversion → **VALIDATED / NOT ACTIVE**
+3. G5.3 — Balance Sheet / Leverage → **VALIDATED / NOT ACTIVE**
+4. G5.4 — Valuation → **VALIDATED / NOT ACTIVE**
+5. G5.5 — Ownership / Governance → **VALIDATED / NOT ACTIVE**
+6. G5.6 — Regulatory & Market Risk → **VALIDATED / NOT ACTIVE**
+7. G5.7 — Momentum → **VALIDATED / NOT ACTIVE**
+
+### Outstanding prerequisites before any numeric execution
+
+The following remain intentionally unresolved:
+
+- G5.1 parent taxonomy reconciliation:
+  `QUALITY → CAPITAL_EFFICIENCY`
+- G5.2 parent taxonomy reconciliation:
+  `EARNINGS_CASH_QUALITY → CASH_FLOW`
+- G5.3 parent taxonomy reconciliation:
+  `FINANCIAL_STRENGTH → BALANCE_SHEET_CREDIT`
+- G5.5 parent taxonomy reconciliation:
+  `GOVERNANCE → OWNERSHIP_GOVERNANCE`
+- dedicated PHARMA_V1 parent Momentum metric contract: **MISSING**
+- Pharma benchmark contract: **UNAPPROVED**
+- G5 numeric component weights: **UNAPPROVED**
+- G5 numeric level/band thresholds: **UNAPPROVED**
+- G6 subprofile-specific thresholds: **NOT YET DESIGNED**
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Gate G5 is complete and validated as architecture only. The next permitted stage is **G6 — Subprofile-Specific Curves**. Before implementing G6, re-read the canonical adaptive scoring/classification plan and inspect the current Primary/Material/Emerging subprofile contracts so each threshold family is tied to the correct business model and no Domestic Formulations threshold is silently reused for other Pharma subprofiles.
