@@ -3279,3 +3279,153 @@ This is the expected fail-closed behavior.
 **Result:** Local numeric preflight execution = **SUCCESSFUL READ-ONLY DIAGNOSTIC / NOT READY FOR WRITE**.
 
 **CURRENT STOP POINT:** The next safe R4N gate is to prepare, without executing, (1) the canonical metric-definition registration package for `PHARMA_EXPORT_US_REVENUE_GROWTH` and (2) four immutable source-record materialization packages for the reviewed Q1-Q4 FY26 issuer releases. Both remain separately approval-gated before any local mutation.
+
+
+---
+
+## 50. Entry 045 — Canonical prerequisite package prepared after successful local preflight
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Following the successful local numeric preflight, the exact missing canonical prerequisites have now been prepared as a non-writing package.
+
+### Local preflight context
+
+The executed local read-only preflight had already confirmed:
+
+- TORNTPHARM security identity: **present and unique**
+- reviewed Domestic Formulations assignment: **present and unique**
+- existing US-growth observations: **0**
+- conflicting US-growth observations: **0**
+- metric-definition rows for `PHARMA_EXPORT_US_REVENUE_GROWTH`: **0**
+- reviewed issuer source records for Q1-Q4 FY26: **0**
+- all four numeric rows: **BLOCKED**
+- write authorization: **NO**
+
+### Canonical prerequisite package
+
+Added:
+
+- `src/features/research/torntpharmCanonicalPrerequisitePackage.ts`
+- `src/features/research/torntpharmCanonicalPrerequisitePackage.test.ts`
+
+Contract:
+
+`TORNTPHARM_CANONICAL_PREREQUISITE_PACKAGE_V1`
+
+Prepared database prerequisites:
+
+#### 1. Metric-definition registration proposal
+
+Prepared:
+
+- code: `PHARMA_EXPORT_US_REVENUE_GROWTH`
+- name: `Export / US Revenue Growth`
+- value kind: `NUMERIC`
+- canonical unit: `PERCENT`
+- statement scope: `PHARMA_BUSINESS_MODEL`
+- freshness seconds: **10,368,000**
+- provider: `COMPANY_EXCHANGE_FILING`
+- selection: `REVIEWED`
+- period type: `QUARTER`
+- semantic guard: `SEPARATELY_DISCLOSED_US_OR_EXPORT_REVENUE_GROWTH_ONLY`
+- mapping version: `PHARMA_V1_GLOBAL_GENERICS_V1`
+- active: **true**
+
+No database insert has occurred.
+
+#### 2. Four immutable source-record proposals
+
+Prepared artifacts:
+
+- `TORRENT_Q1_FY26_RELEASE` → 2025-06-30 → 19%
+- `TORRENT_Q2_FY26_RELEASE` → 2025-09-30 → 26%
+- `TORRENT_Q3_FY26_RELEASE` → 2025-12-31 → 19%
+- `TORRENT_Q4_FY26_RELEASE` → 2026-03-31 → 16% comparable base-business growth
+
+Each proposed source record uses:
+
+- source code: `COMPANY_EXCHANGE_FILING`
+- record kind: `ISSUER_RESULTS_RELEASE`
+- external record id: reviewed artifact code
+- exact reviewed source URL
+- canonical reviewed raw payload
+- SHA-256 payload-hash requirement
+- reviewed public-fact retention scope
+
+The rejected Q4 31% claim is absent from the canonical source payloads.
+
+### Payload-hash boundary
+
+Immutable payload hashes are **not fabricated during preparation**.
+
+Each source record currently has:
+
+- hash algorithm: `SHA256`
+- hash state: `COMPUTE_AT_MATERIALIZATION_FROM_CANONICAL_RAW_PAYLOAD`
+- payload hash: `null`
+
+Hash computation remains a later separately approved materialization step.
+
+### Existing source registry
+
+No new company/issuer source registry is required.
+
+The existing canonical source:
+
+`COMPANY_EXCHANGE_FILING`
+
+is already defined as active, entitlement-verified and retention-rights-verified, with fundamentals and primary-evidence capability.
+
+### Glass-box UI synchronization
+
+The existing execution cards were corrected to reflect actual local execution state:
+
+**Local numeric preflight**
+- status: **EXECUTED · NOT READY · 4 BLOCKED · 0 CONFLICTS**
+
+**Regulatory migration replay**
+- status: **EXECUTED · PASS · 0 PERSISTENT CHANGES**
+
+A new glass-box card now displays:
+
+**Canonical prerequisite package**
+- 1 metric-definition row prepared
+- 4 immutable issuer source-record envelopes prepared
+- payload hashes materialized: 0
+- status: **PREPARED · NOT EXECUTED · 0 WRITES**
+- mutation authorized: **NO**
+
+### Documentation
+
+Added:
+
+`docs/R4N_TORNTPHARM_Gate_F_Canonical_Prerequisite_Package_V1.md`
+
+### Source-level verification
+
+Confirmed:
+
+- metric definitions prepared: **1**
+- source records prepared: **4**
+- payload hashes materialized: **0**
+- proposed writes: **0**
+- mutation authorized: **false**
+- rejected Q4 31% claim absent
+- local numeric execution status shown accurately
+- regulatory replay execution status shown accurately
+
+### Scope boundary
+
+- Metric-definition insert: **NO**
+- Payload-hash materialization: **NO**
+- Source-record insert: **NO**
+- Fundamental-observation insert: **NO**
+- Local mutation: **NO**
+- Production Supabase mutation: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview → Evidence operations & review controls → **Local write package & event-schema proposal**, and visually verify the new **Canonical prerequisite package** card plus the corrected execution-status cards. Obtain visual approval before local validation.
