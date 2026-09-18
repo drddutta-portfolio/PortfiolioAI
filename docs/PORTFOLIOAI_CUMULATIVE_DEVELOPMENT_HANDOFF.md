@@ -8893,3 +8893,60 @@ Expected clean G6.7 result:
 - deployment: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, then run `bash scripts/r4n/run-g6-7-fcf-yield-registration-rollback-proof.sh` from the repository root and share the complete terminal output. Do not execute any persistent migration or production action.
+
+
+---
+
+## 114. Entry 109 — Gate G6.7 local rollback-only FCF-yield registration proof completed
+
+**Date:** 19 September 2026  
+**Actor:** owner local execution + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.7 local rollback-only proof has completed successfully.
+
+### Owner execution
+
+Executed:
+
+`bash scripts/r4n/run-g6-7-fcf-yield-registration-rollback-proof.sh`
+
+### Safety result
+
+- local-only guard: **PASS**
+- pre-execution `FCF_YIELD` definition count: **0**
+- pre-execution `FCF_YIELD_PERCENT` definition count: **0**
+- proposal transaction started: **YES**
+- proposal preflight block: **PASS**
+- proposal insert inside transaction: **PASS**
+- proposal postcondition block: **PASS**
+- deliberate `ROLLBACK`: **PASS**
+- post-rollback `FCF_YIELD` definition count: **0**
+- post-rollback `FCF_YIELD_PERCENT` definition count: **0**
+- persisted definition state changed: **NO**
+- write authorization: **NO**
+
+### Architectural conclusion
+
+The canonical registration proposal:
+
+`docs/sql/R4N_PHARMA_FCF_YIELD_PERCENT_V1_REGISTRATION_PROPOSAL.sql`
+
+is locally schema-compatible and satisfies its own preflight/postcondition guards.
+
+It still has **not** been persisted as a local migration and has **not** been applied to production.
+
+### Explicit boundary
+
+- rollback proof: **PASS**
+- canonical SQL proposal locally executable: **YES**
+- local persistent registration: **NO**
+- production persistent registration: **NO**
+- observations created: **NO**
+- numeric FCF-yield score bands: **NO**
+- whole Valuation dimension ready: **NO**
+- score execution: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.7 is complete. The next permitted G6 task is to design the Domestic Formulations FCF-yield numeric threshold proposal, using the now-validated canonical metric identity and derivation contract, while keeping all persistence and score execution disabled.
