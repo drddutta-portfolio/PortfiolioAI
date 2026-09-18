@@ -6292,3 +6292,92 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G4 cards in TORNTPHARM → Research → Gate G, then run focused G4 validation. Only after G4 validation should Gate G proceed to **G5 — additional core scoring curves**.
+
+
+---
+
+## 87. Entry 082 — Gate G4 Pharma governance / regulatory gate contract validated
+
+**Date:** 18 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G4 has completed its required localhost visual and focused validation checkpoint.
+
+### Owner visual review
+
+TORNTPHARM → Research → Gate G was reviewed on localhost.
+
+The two G4 glass-box cards are visible and aligned with the existing Gate G methodology surface:
+
+- **G4 · Governance / regulatory gate**
+- **G4 · Materiality, remediation & anti-double-counting**
+
+The cards correctly preserve critical blocking, non-blocking high-risk treatment, unknown regulatory materiality review, remediation history retention, and the anti-double-counting boundary.
+
+### Focused validation
+
+Owner-confirmed results:
+
+- focused Vitest across:
+  - `pharmaGovernanceRegulatoryGateContract.test.ts`
+  - `pharmaReadinessMappingContract.test.ts`
+  - `pharmaOverlayModifierContract.test.ts`
+  - `pharmaAdaptiveClassificationContract.test.ts`
+  - `pharmaGateGScoringMethodProposal.test.ts`
+  - `pharmaSegmentGrowthCurveProposal.test.ts`
+  - `pharmaOperatingMarginCurveProposal.test.ts`
+  → **7 test files passed / 54 tests passed**
+
+- focused ESLint across the G4 contract/test, G3 contract/test, G2 contract/test, G1 contract/test, Gate G methodology proposal, segment-growth proposal/test, operating-margin proposal/test, and `PharmaResearchWorkspacePanel.tsx`
+  → **PASS**
+
+- `npm run typecheck`
+  → **PASS**
+
+- `npm run build`
+  → **PASS**
+
+Build emitted only the existing non-blocking Vite large-chunk advisory; no build failure occurred.
+
+### G4 status
+
+- governance / regulatory gate architecture contract: **VALIDATED / NOT ACTIVE**
+- critical governance blocking: **VALIDATED**
+- high-risk non-blocking treatment: **VALIDATED**
+- unknown regulatory materiality review boundary: **VALIDATED**
+- no inferred exposure: **VALIDATED**
+- remediation history retention: **VALIDATED**
+- closeout requires subsequent outcome context: **VALIDATED**
+- hidden double-counting prohibition: **VALIDATED**
+- high-risk numeric cap: **UNAPPROVED**
+- additional numeric penalty: **NO**
+
+### G1–G4 architecture sequence
+
+The adaptive architecture lock sequence is now complete:
+
+- G1 Classification Contract: **VALIDATED / NOT ACTIVE**
+- G2 Overlay Modifier Contract: **VALIDATED / NOT ACTIVE**
+- G3 Readiness Mapping Contract: **VALIDATED / NOT ACTIVE**
+- G4 Governance / Regulatory Gate Contract: **VALIDATED / NOT ACTIVE**
+
+This completes the architecture prerequisites required before resuming additional core scoring-curve design.
+
+### Safety boundary remains unchanged
+
+- score preview execution: **NO**
+- numeric score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- regulatory event write: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+- paid-provider call: **NO**
+- scheduler change: **NO**
+
+**CURRENT STOP POINT:** G1–G4 are now validated. The next permitted Gate G task is **G5 — additional core scoring curves**, beginning with a fresh inspection of the canonical adaptive plan and existing validated curve proposals. Any new curve remains proposal-only / not active until separately validated.
