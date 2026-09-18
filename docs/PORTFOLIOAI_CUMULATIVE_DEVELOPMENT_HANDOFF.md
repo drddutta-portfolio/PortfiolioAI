@@ -4052,3 +4052,68 @@ This test statically verifies, without any DB connection:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, run the new focused test `npx vitest run src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts`, and rerun focused ESLint including that test. If both pass, this mutation-proposal preparation checkpoint can be closed and actual local prerequisite mutation can be separately considered.
+
+
+---
+
+## 59. Entry 054 — Local prerequisite mutation proposal checkpoint validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Following the SQL validation correction, the owner reran the requested focused validation and confirmed the checkpoint clean.
+
+### Owner-confirmed validation
+
+- `npx vitest run src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts` → **PASS**
+- focused ESLint including:
+  - `torntpharmLocalPrerequisiteMutationProposal.ts`
+  - `torntpharmLocalPrerequisiteMutationProposal.test.ts`
+  - `torntpharmLocalPrerequisiteMutationSql.test.ts`
+  - `PharmaResearchWorkspacePanel.tsx`
+  → **PASS**
+
+Previously confirmed in the same checkpoint:
+
+- Edge test suite: **27/27 files passed**
+- Edge tests: **140/140 passed**
+- production build: **PASS**
+- focused mutation-proposal lint: **PASS**
+- shell syntax check for the guarded runner: **PASS**
+- existing non-blocking >500 kB Vite chunk warning only.
+
+### Validated mutation proposal state
+
+`TORNTPHARM_LOCAL_PREREQUISITE_MUTATION_PROPOSAL_V1`
+
+remains:
+
+- target: **LOCAL_SUPABASE_ONLY**
+- metric-definition rows maximum: **1**
+- immutable source-record rows maximum: **4**
+- fundamental-observation rows: **0**
+- explicit approval flag required before DB discovery;
+- local DB guard required;
+- source-registry approval required;
+- metric conflict abort;
+- source-record conflict abort;
+- idempotent insert behavior;
+- postcondition verification;
+- execution approved: **false**
+- executed: **false**
+
+### Scope boundary
+
+- Local prerequisite mutation proposal: **VALIDATED**
+- Local DB mutation executed: **NO**
+- Metric-definition insert: **NO**
+- Source-record insert: **NO**
+- Fundamental-observation insert: **NO**
+- Production Supabase mutation: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Local Prerequisite Mutation Proposal V1 checkpoint = **VALIDATED**.
+
+**CURRENT STOP POINT:** The next safe R4N action is the separately approval-gated execution of the local-only prerequisite mutation: at most one `fundamental_metric_definitions` row and four immutable `data_source_records` rows, with zero `fundamental_observations` writes. Do not execute unless the owner explicitly approves this exact local mutation.
