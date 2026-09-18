@@ -6381,3 +6381,133 @@ This completes the architecture prerequisites required before resuming additiona
 - scheduler change: **NO**
 
 **CURRENT STOP POINT:** G1–G4 are now validated. The next permitted Gate G task is **G5 — additional core scoring curves**, beginning with a fresh inspection of the canonical adaptive plan and existing validated curve proposals. Any new curve remains proposal-only / not active until separately validated.
+
+
+---
+
+## 88. Entry 083 — Gate G5.1 ROCE / Capital Efficiency framework prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5 has started with **G5.1 — ROCE / Capital Efficiency** as a proposal-only common parent curve framework.
+
+### Canonical alignment check
+
+Before implementation, the current `PORTFOLIOAI_PHARMA_V1_ADAPTIVE_SCORING_CLASSIFICATION_PLAN.md` was re-read from the active branch head.
+
+The plan requires G5 to begin with:
+
+- ROCE / Capital Efficiency;
+- then Cash Conversion;
+- Balance Sheet / Leverage;
+- Valuation;
+- Ownership / Governance;
+- Risk;
+- Momentum.
+
+The plan also explicitly permits shared methodology shapes while requiring subprofile-specific thresholds where economics differ.
+
+### Existing ROCE evidence contract preserved
+
+Existing parent metric:
+
+`PHARMA_ROCE_HISTORY`
+
+Preserved requirements:
+
+- minimum **3** comparable annual periods;
+- preferred **5** comparable annual periods;
+- latest annual period required;
+- consistent calculation semantics required;
+- single snapshot insufficient.
+
+### Dimension alignment gap discovered and surfaced
+
+The canonical adaptive architecture assigns ROCE to:
+
+`CAPITAL_EFFICIENCY`
+
+However, the older lower-level parent evidence contract still records:
+
+`PHARMA_ROCE_HISTORY.dimension = QUALITY`
+
+and the current lower-level `ResearchMetricContract` taxonomy does not yet expose `CAPITAL_EFFICIENCY`.
+
+G5.1 does not silently reinterpret this.
+
+The new proposal records:
+
+- canonical dimension: `CAPITAL_EFFICIENCY`
+- current parent-contract dimension: `QUALITY`
+- alignment state: `REQUIRES_VERSIONED_PARENT_RECONCILIATION`
+
+No score path is activated.
+
+### ROCE methodology framework
+
+New proposal:
+
+`PHARMA_ROCE_CAPITAL_EFFICIENCY_CURVE_V1_PROPOSAL`
+
+The candidate shared methodology shape is:
+
+`Level + Stability + Trend`
+
+But G5.1 deliberately leaves the following unapproved:
+
+- component weights;
+- level bands;
+- stability bands;
+- trend bands.
+
+### Subprofile threshold boundary
+
+No universal numeric ROCE thresholds are created.
+
+All five canonical Pharma subprofiles currently have explicit null threshold slots:
+
+- `DOMESTIC_FORMULATIONS`
+- `GLOBAL_GENERICS`
+- `API_BULK_DRUGS`
+- `CDMO_CRAMS`
+- `BIOPHARMA_BIOSIMILARS`
+
+This preserves the canonical rule that shared methodology does not imply shared thresholds.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaRoceCurveProposal.ts`
+- `src/features/research/pharmaRoceCurveProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G5_1_ROCE_Capital_Efficiency_Framework_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G5.1 · ROCE / Capital Efficiency framework**
+- **G5.1 · Dimension alignment & threshold boundary**
+
+### Explicit boundary
+
+- ROCE framework proposal: **YES**
+- dimension reconciliation applied: **NO**
+- universal ROCE numeric bands: **NO**
+- subprofile ROCE thresholds approved: **NO**
+- component weights approved: **NO**
+- numeric curve ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.1 cards in TORNTPHARM → Research → Gate G, then run focused G5.1 validation. Do not proceed to the next G5 family until this checkpoint is validated and the dimension-alignment boundary is accepted.
