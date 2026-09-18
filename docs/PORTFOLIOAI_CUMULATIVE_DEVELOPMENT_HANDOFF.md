@@ -2877,3 +2877,50 @@ Added:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview → Evidence operations & review controls, and inspect the two new prepared-status cards under **Local write package & event-schema proposal**. Obtain visual approval before local validation. After that, the next decision is whether to execute the preflight against local Supabase and separately replay the rollback-only regulatory SQL locally.
+
+
+---
+
+## 45. Entry 040 — Local preflight validation interrupted by readonly test mutation; test-only correction prepared
+
+**Date:** 18 September 2026  
+**Actor:** owner-run validation + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner visually approved the new **Local numeric preflight** and **Regulatory migration replay** prepared-status cards, then started the normal local validation sequence.
+
+### Validation interruption
+
+The build/typecheck stage failed in:
+
+`src/features/research/torntpharmLocalNumericPreflight.test.ts`
+
+with four TypeScript `TS2540` errors because the tests attempted to assign new values directly into readonly snapshot properties:
+
+- `existingObservations`
+- `sourceRecords`
+- `metricDefinition`
+
+The production preflight model is intentionally readonly and was correct. The defect was confined to test construction.
+
+### Correction
+
+The tests now create immutable modified snapshot copies using object spread instead of mutating readonly properties in place.
+
+No production preflight logic changed.
+
+Corrective commit:
+
+`624d7b1119ddbfdc0284835e0e7c346c2b23a847`
+
+### Scope boundary
+
+- Production logic changed: **NO**
+- Local database queried: **NO**
+- Local evidence write: **NO**
+- Migration replay executed: **NO**
+- Schema applied: **NO**
+- Production Supabase mutation: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull` and rerun the local validation sequence from `npm run typecheck` onward. No UI re-review is required because the correction is test-only.
