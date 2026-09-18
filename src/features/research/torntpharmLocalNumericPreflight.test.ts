@@ -59,14 +59,16 @@ describe("TORNTPHARM local numeric preflight", () => {
   })
 
   it("treats exact existing facts as already present rather than duplicate inserts", () => {
-    const snapshot = readySnapshot()
-    snapshot.existingObservations = [{
-      metricCode: "PHARMA_EXPORT_US_REVENUE_GROWTH",
-      periodEnd: "2025-06-30",
-      periodType: "QUARTER",
-      numericValue: "19",
-      unit: "PERCENT",
-    }]
+    const snapshot = {
+      ...readySnapshot(),
+      existingObservations: [{
+        metricCode: "PHARMA_EXPORT_US_REVENUE_GROWTH",
+        periodEnd: "2025-06-30",
+        periodType: "QUARTER",
+        numericValue: "19",
+        unit: "PERCENT",
+      }],
+    }
     const result = evaluateTorntpharmLocalNumericPreflight(snapshot)
     expect(result.rows[0]?.disposition).toBe("ALREADY_PRESENT")
     expect(result.summary.alreadyPresent).toBe(1)
@@ -75,14 +77,16 @@ describe("TORNTPHARM local numeric preflight", () => {
   })
 
   it("fails closed on a conflicting existing quarter value", () => {
-    const snapshot = readySnapshot()
-    snapshot.existingObservations = [{
-      metricCode: "PHARMA_EXPORT_US_REVENUE_GROWTH",
-      periodEnd: "2025-09-30",
-      periodType: "QUARTER",
-      numericValue: "31",
-      unit: "PERCENT",
-    }]
+    const snapshot = {
+      ...readySnapshot(),
+      existingObservations: [{
+        metricCode: "PHARMA_EXPORT_US_REVENUE_GROWTH",
+        periodEnd: "2025-09-30",
+        periodType: "QUARTER",
+        numericValue: "31",
+        unit: "PERCENT",
+      }],
+    }
     const result = evaluateTorntpharmLocalNumericPreflight(snapshot)
     expect(result.rows[1]?.disposition).toBe("CONFLICT")
     expect(result.blockers).toContain("EXISTING_FACT_CONFLICT")
@@ -90,8 +94,8 @@ describe("TORNTPHARM local numeric preflight", () => {
   })
 
   it("fails closed when even one required source record is missing", () => {
-    const snapshot = readySnapshot()
-    snapshot.sourceRecords = snapshot.sourceRecords.slice(0, 3)
+    const base = readySnapshot()
+    const snapshot = { ...base, sourceRecords: base.sourceRecords.slice(0, 3) }
     const result = evaluateTorntpharmLocalNumericPreflight(snapshot)
     expect(result.summary.blocked).toBe(1)
     expect(result.blockers).toContain("SOURCE_RECORDS_INCOMPLETE")
@@ -99,8 +103,7 @@ describe("TORNTPHARM local numeric preflight", () => {
   })
 
   it("fails closed when the database metric definition is absent or mismatched", () => {
-    const snapshot = readySnapshot()
-    snapshot.metricDefinition = null
+    const snapshot = { ...readySnapshot(), metricDefinition: null }
     const result = evaluateTorntpharmLocalNumericPreflight(snapshot)
     expect(result.summary.blocked).toBe(4)
     expect(result.blockers).toContain("METRIC_DEFINITION_MISSING_OR_MISMATCHED")
