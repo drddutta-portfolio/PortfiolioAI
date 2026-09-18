@@ -3547,3 +3547,121 @@ remains:
 **Result:** Canonical Prerequisite Package V1 checkpoint = **VALIDATED**.
 
 **CURRENT STOP POINT:** The next safe R4N gate is to prepare a local-only prerequisite materialization dry-run/executor that deterministically serializes the four canonical source payloads, computes their SHA-256 hashes, and shows the exact metric-definition/source-record rows that would be inserted. The gate must remain non-writing until separately approved.
+
+
+---
+
+## 53. Entry 048 — Prerequisite materialization dry-run executor prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The next Gate F checkpoint has been prepared at the top of the standard workflow: code first, HANDOFF second, then owner `git pull` and localhost visual review.
+
+### Added dry-run materialization manifest
+
+Added:
+
+`scripts/r4n/torntpharm-prerequisite-materialization-manifest.json`
+
+Contract:
+
+`TORNTPHARM_PREREQUISITE_MATERIALIZATION_DRY_RUN_V1`
+
+The manifest contains:
+
+- one validated metric-definition proposal for `PHARMA_EXPORT_US_REVENUE_GROWTH`;
+- four reviewed Q1-Q4 FY26 issuer source-record proposals;
+- exact reviewed source URLs;
+- exact reviewed canonical raw payloads;
+- explicit execution policy:
+  - database connection allowed: **false**
+  - writes allowed: **false**
+  - hash algorithm: `SHA256`
+  - serialization: `RECURSIVE_LEXICOGRAPHIC_KEY_SORT_V1`.
+
+### Added non-writing executor
+
+Added:
+
+`scripts/r4n/torntpharm-prerequisite-materialization-dry-run.mjs`
+
+Added npm command:
+
+`npm run r4n:dry-run:prerequisites`
+
+The executor:
+
+- opens **no database connection**;
+- recursively sorts object keys lexicographically;
+- serializes each canonical raw payload deterministically;
+- computes SHA-256 hashes over UTF-8 canonical JSON;
+- prints each artifact/date/value/hash/canonical payload;
+- prints exact proposed SQL for:
+  - one `fundamental_metric_definitions` row;
+  - four `data_source_records` rows;
+- executes **0 SQL statements**;
+- performs **0 writes**.
+
+The executor fails closed if:
+- DB connections are not explicitly prohibited by the manifest;
+- writes are not explicitly prohibited;
+- metric code changes unexpectedly;
+- source-record count is not four;
+- any materialization payload contains the rejected Q4 31% value.
+
+### Manifest drift protection
+
+Added:
+
+`src/features/research/torntpharmPrerequisiteMaterializationManifest.test.ts`
+
+The test requires the materialization manifest to remain aligned with the already validated:
+
+`TORNTPHARM_CANONICAL_PREREQUISITE_PACKAGE_V1`
+
+and separately asserts:
+- DB connection policy = false;
+- write policy = false;
+- four source records;
+- rejected 31% value absent;
+- Q4 reviewed value remains 16%.
+
+### Glass-box UI checkpoint
+
+Inside **Gate F · Prepared persistence packages**, a new pair of cards now appears:
+
+**Prerequisite materialization dry-run**
+- contract: `TORNTPHARM_PREREQUISITE_MATERIALIZATION_DRY_RUN_V1`
+- 4 canonical payloads
+- 4 SHA-256 hashes to be computed on execution
+- exact metric/source SQL preview
+- status: **PREPARED · NOT EXECUTED · 0 WRITES**
+
+**Dry-run execution boundary**
+- command: `npm run r4n:dry-run:prerequisites`
+- database connection: **NO**
+- mutation authorized: **NO**
+
+### Documentation
+
+Added:
+
+`docs/R4N_TORNTPHARM_Gate_F_Prerequisite_Materialization_Dry_Run_V1.md`
+
+### Scope boundary
+
+- Dry-run executor prepared: **YES**
+- Dry-run executed: **NO**
+- Payload hashes computed: **NO**
+- Database connection: **NO**
+- Metric-definition insert: **NO**
+- Source-record insert: **NO**
+- Fundamental-observation insert: **NO**
+- Local DB mutation: **NO**
+- Production Supabase mutation: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, run the local Vite app, reopen TORNTPHARM → Research → Overview → Evidence operations & review controls → **Local write package & event-schema proposal**, and visually verify the new **Prerequisite materialization dry-run** and **Dry-run execution boundary** cards. Do not execute the dry-run command yet. Obtain visual approval before full local validation.
