@@ -19,6 +19,7 @@ import { PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL } from "./pharmaOperatingMarginC
 import { PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT } from "./pharmaAdaptiveClassificationContract"
 import { PHARMA_OVERLAY_MODIFIER_CONTRACT } from "./pharmaOverlayModifierContract"
 import { PHARMA_READINESS_MAPPING_CONTRACT } from "./pharmaReadinessMappingContract"
+import { PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT } from "./pharmaGovernanceRegulatoryGateContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -233,6 +234,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>{Math.round(PHARMA_READINESS_MAPPING_CONTRACT.overallMinimumScoreReadyCoverage * 100)}% overall coverage is necessary, not sufficient</small>
               <p>Overall preview requires the common Pharma core, Primary subprofile and every weighted dimension to be READY. Partial material-overlay evidence can keep an affected dimension PARTIAL; Primary or governance/review failure blocks the company.</p>
               <span>Every weighted dimension: READY · Primary: READY · Common core: READY</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G4 · Governance / regulatory gate</strong>
+              <small>{PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT.version}</small>
+              <p>Critical governance events or an explicit blocked-review state stop preview readiness before aggregation. High-risk states remain prominent but non-blocking unless a separately versioned transparent constraint is later approved.</p>
+              <span>Proposal only · Critical: BLOCKS · High risk: NON-BLOCKING · Cap: UNAPPROVED</span>
+            </article>
+            <article>
+              <strong>G4 · Materiality, remediation & anti-double-counting</strong>
+              <small>Regulatory scope + materiality + remediation + subsequent outcome</small>
+              <p>Unknown regulatory materiality requires review and exposure is never inferred. Closeout does not erase the historical event, and no hidden extra governance/regulatory penalty may duplicate the weighted Ownership / Governance dimension.</p>
+              <span>Unknown materiality: REVIEW REQUIRED · Hidden double-counting: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
