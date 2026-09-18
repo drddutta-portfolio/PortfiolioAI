@@ -2775,3 +2775,105 @@ Repository-wide lint remains subject to the already-documented pre-existing unre
 **Result:** Prepared Persistence Packages checkpoint = **VALIDATED**.
 
 **CURRENT STOP POINT:** The next safe R4N step is to prepare a local-only preflight package for the four numeric rows and a migration-replay validation package for the regulatory-event schema proposal, without executing either one. These packages should resolve the exact local prerequisites (metric registry, source records, existing-fact conflicts, migration replay assertions) while preserving explicit owner approval before any write or schema application.
+
+
+---
+
+## 44. Entry 039 — Local numeric preflight and regulatory migration replay packages prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The next Gate F engine checkpoint has been prepared without querying or mutating the local database and without applying any migration.
+
+### A. Local numeric preflight
+
+Added:
+- `src/features/research/torntpharmLocalNumericPreflight.ts`
+- `src/features/research/torntpharmLocalNumericPreflight.test.ts`
+
+Contract:
+`TORNTPHARM_LOCAL_NUMERIC_PREFLIGHT_V1`
+
+The preflight plan targets the real canonical local tables:
+- `fundamental_metric_definitions`
+- `data_source_records`
+- `fundamental_observations`
+- `research_subprofile_assignments`
+
+The evaluator consumes a supplied local snapshot and classifies each of the four reviewed US-growth rows as:
+- `INSERT_CANDIDATE`
+- `ALREADY_PRESENT`
+- `CONFLICT`
+- `BLOCKED`
+
+Fail-closed behavior:
+- missing/mismatched metric definition blocks;
+- missing source record blocks;
+- exact existing fact becomes `ALREADY_PRESENT`;
+- conflicting existing quarter value becomes `CONFLICT`;
+- even a fully clean preflight only reaches `readyForSeparateWriteApproval = true`;
+- `writeAuthorized` remains **false**.
+
+No local DB snapshot has been queried yet.
+
+### B. Regulatory migration replay preparation
+
+Added:
+- `src/features/research/pharmaRegulatoryEventMigrationReplayPlan.ts`
+- `src/features/research/pharmaRegulatoryEventMigrationReplayPlan.test.ts`
+
+Contract:
+`PHARMA_REGULATORY_EVENT_MIGRATION_REPLAY_PLAN_V1`
+
+Execution target:
+`LOCAL_SUPABASE_ONLY`
+
+The replay plan targets the non-migration review artifact:
+
+`docs/sql/R4N_PHARMA_REGULATORY_EVENT_EVIDENCE_V1_MIGRATION_PROPOSAL.sql`
+
+Prepared assertions:
+- pre-existing object absent;
+- canonical prerequisites present;
+- proposed table created inside transaction;
+- RLS enabled;
+- authenticated mutation denied;
+- service-role mutation allowed;
+- immutable trigger present;
+- site-specific / US FDA scope enforced;
+- security-invoker current-state view;
+- rollback removes proposed objects;
+- migration history unchanged.
+
+The proposal SQL remains outside `supabase/migrations` and no schema application is authorized.
+
+### UI checkpoint
+
+Inside **Gate F · Prepared persistence packages**, two new glass-box status cards now appear:
+
+- **Local numeric preflight**
+  - status: **PREPARED · NOT EXECUTED**
+- **Regulatory migration replay**
+  - status: **PREPARED · NOT EXECUTED**
+
+### Documentation
+
+Added:
+
+`docs/R4N_TORNTPHARM_Gate_F_Local_Preflight_And_Migration_Replay.md`
+
+### Scope boundary
+
+- Local database query: **NO**
+- Local numeric evidence insert: **NO**
+- Source-record materialization: **NO**
+- Metric-definition mutation: **NO**
+- Regulatory migration replay execution: **NO**
+- Regulatory schema apply: **NO**
+- Production Supabase mutation: **NO**
+- Production execution authorization: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview → Evidence operations & review controls, and inspect the two new prepared-status cards under **Local write package & event-schema proposal**. Obtain visual approval before local validation. After that, the next decision is whether to execute the preflight against local Supabase and separately replay the rollback-only regulatory SQL locally.
