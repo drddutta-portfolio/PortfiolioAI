@@ -138,7 +138,7 @@ export function buildTorntpharmLocalNumericPreflightPlan(
       },
       {
         code: "ASSIGNMENT_LOOKUP",
-        table: "pharma_subprofile_assignments",
+        table: "research_subprofile_assignments",
         purpose: "Confirm the local reviewed assignment version still matches the package.",
       },
     ],
