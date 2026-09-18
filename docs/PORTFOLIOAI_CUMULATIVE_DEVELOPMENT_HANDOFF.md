@@ -3985,3 +3985,70 @@ Added:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, run the local Vite app, and visually inspect the new **Local prerequisite mutation proposal** and **Mutation execution boundary** cards. Do not run the mutation command. After visual approval, run full local validation; only then can actual local mutation be separately considered.
+
+
+---
+
+## 58. Entry 053 — Mutation-proposal validation mostly passed; non-writing SQL contract test added
+
+**Date:** 18 September 2026  
+**Actor:** owner-run validation + ChatGPT validation correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner completed the requested local validation for the prepared local prerequisite mutation proposal.
+
+### Confirmed results
+
+From the supplied terminal output:
+
+- Edge test suite: **27/27 files passed**
+- Edge tests: **140/140 passed**
+- production build: **PASS**
+- Vite modules transformed: **220**
+- focused ESLint for the mutation-proposal slice: **PASS**
+- shell syntax check:
+  - `bash -n scripts/r4n/run-torntpharm-local-prerequisite-mutation.sh`
+  - **PASS**
+- only the existing non-blocking >500 kB chunk warning remained.
+
+### Validation correction
+
+The attempted command:
+
+`psql ... --file scripts/r4n/torntpharm-local-prerequisite-mutation.sql --help >/dev/null 2>&1 || true`
+
+did **not** parse or exercise the SQL because `--help` causes `psql` to exit after showing help.
+
+Therefore SQL validation was not falsely recorded as complete.
+
+### Added non-writing SQL safety contract test
+
+Added:
+
+`src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts`
+
+This test statically verifies, without any DB connection:
+
+- exactly one `fundamental_metric_definitions` insert path;
+- one `data_source_records` insert path;
+- no `fundamental_observations` insert;
+- approved-source precondition;
+- metric-definition conflict abort;
+- source-record conflict abort;
+- idempotency guards;
+- postcondition checks;
+- all four verified payload hashes;
+- Q4 reviewed value remains 16%;
+- rejected Q4 31% value absent;
+- explicit `BEGIN` / `COMMIT` transaction boundary.
+
+### Scope boundary
+
+- SQL safety test added: **YES**
+- Database connection for this correction: **NO**
+- Local mutation: **NO**
+- Mutation execution approved: **NO**
+- Production Supabase mutation: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, run the new focused test `npx vitest run src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts`, and rerun focused ESLint including that test. If both pass, this mutation-proposal preparation checkpoint can be closed and actual local prerequisite mutation can be separately considered.
