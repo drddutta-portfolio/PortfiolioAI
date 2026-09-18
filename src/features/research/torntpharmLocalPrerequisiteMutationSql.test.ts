@@ -1,11 +1,29 @@
+import { createHash } from "node:crypto"
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { describe, expect, it } from "vitest"
+import manifest from "../../../scripts/r4n/torntpharm-prerequisite-materialization-manifest.json"
 
 const sql = readFileSync(
   resolve(process.cwd(), "scripts/r4n/torntpharm-local-prerequisite-mutation.sql"),
   "utf8",
 )
+
+function canonicalize(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonicalize)
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, item]) => [key, canonicalize(item)]),
+    )
+  }
+  return value
+}
+
+function canonicalJson(value: unknown): string {
+  return JSON.stringify(canonicalize(value))
+}
 
 describe("TORNTPHARM local prerequisite mutation SQL contract", () => {
   it("keeps the mutation scope limited to one metric definition and source-record prerequisites", () => {
@@ -29,11 +47,17 @@ describe("TORNTPHARM local prerequisite mutation SQL contract", () => {
     expect(sql).toContain("POSTCONDITION_SOURCE_RECORD_COUNT_NOT_FOUR")
   })
 
-  it("carries the four verified hashes and excludes the rejected Q4 31% materialization", () => {
-    expect(sql).toContain("b8a8b87c01a1ea1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f")
-    expect(sql).toContain("3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fceec5f2")
-    expect(sql).toContain("3df20aaafb6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7")
-    expect(sql).toContain("d08cf8f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e990922998b53")
+  it("uses manifest-derived 64-character SHA-256 hashes and excludes rejected Q4 31%", () => {
+    const hashes = manifest.sourceRecords.map((record) =>
+      createHash("sha256").update(canonicalJson(record.rawPayload), "utf8").digest("hex"),
+    )
+
+    expect(hashes).toHaveLength(4)
+    for (const hash of hashes) {
+      expect(hash).toMatch(/^[a-f0-9]{64}$/)
+      expect(sql).toContain(hash)
+    }
+
     expect(sql).toContain('"reviewedValue":"16"')
     expect(sql).not.toContain('"reviewedValue":"31"')
   })
