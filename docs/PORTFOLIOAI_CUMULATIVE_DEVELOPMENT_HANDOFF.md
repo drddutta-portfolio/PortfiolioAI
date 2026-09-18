@@ -7048,3 +7048,55 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.4 cards in TORNTPHARM → Research → Gate G, then run focused G5.4 validation. Do not proceed to Ownership / Governance until G5.4 is validated.
+
+
+---
+
+## 95. Entry 090 — Gate G5.4 Valuation framework validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5.4 has completed its validation checkpoint as a **proposal-only Valuation framework**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G5.4 Valuation plus G5.3, G5.2, G5.1, G1–G4, and existing Gate G curve proposals → **PASS**
+- focused ESLint for the G5.4/G5.3/G5.2/G5.1/G1–G4/Gate G methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G5.4 status
+
+- Valuation framework: **VALIDATED / NOT ACTIVE**
+- canonical/current dimension alignment `VALUATION`: **VALIDATED / ALIGNED**
+- authoritative market price requirement: **VALIDATED**
+- reviewed earnings/cash input requirement: **VALIDATED**
+- provider valuation labels cannot override price authority: **VALIDATED**
+- candidate framework `SELF_HISTORY_RELATIVE_VALUATION + PEER_RELATIVE_VALUATION + CASH_FLOW_CORROBORATION`: **VALIDATED AS FRAMEWORK ONLY**
+- supported evidence families P/E, EV/EBITDA, FCF yield: **VALIDATED**
+- peer cohort must respect business model: **VALIDATED**
+- P/BV excluded from Pharma valuation: **VALIDATED**
+- negative/non-meaningful denominator handling requirement: **VALIDATED**
+- acquisition/one-off earnings normalization requirement: **VALIDATED**
+- component weights: **UNAPPROVED**
+- universal absolute multiple bands: **NO**
+- subprofile threshold/context contracts: **UNAPPROVED**
+- numeric Valuation curve ready: **NO**
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G5.4 is validated. The next permitted G5 parent curve family is **Ownership / Governance**, but implementation must first inspect `PHARMA_OWNERSHIP_GOVERNANCE`, its ownership-history and governance-event semantics, and its relationship to the already validated G4 governance gate so hidden double-counting is not introduced.
