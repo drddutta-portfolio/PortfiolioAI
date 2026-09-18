@@ -20,6 +20,7 @@ import { PHARMA_ADAPTIVE_CLASSIFICATION_CONTRACT } from "./pharmaAdaptiveClassif
 import { PHARMA_OVERLAY_MODIFIER_CONTRACT } from "./pharmaOverlayModifierContract"
 import { PHARMA_READINESS_MAPPING_CONTRACT } from "./pharmaReadinessMappingContract"
 import { PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT } from "./pharmaGovernanceRegulatoryGateContract"
+import { PHARMA_ROCE_CURVE_PROPOSAL } from "./pharmaRoceCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -248,6 +249,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Regulatory scope + materiality + remediation + subsequent outcome</small>
               <p>Unknown regulatory materiality requires review and exposure is never inferred. Closeout does not erase the historical event, and no hidden extra governance/regulatory penalty may duplicate the weighted Ownership / Governance dimension.</p>
               <span>Unknown materiality: REVIEW REQUIRED · Hidden double-counting: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G5.1 · ROCE / Capital Efficiency framework</strong>
+              <small>{PHARMA_ROCE_CURVE_PROPOSAL.proposalVersion}</small>
+              <p>ROCE keeps its existing minimum {PHARMA_ROCE_CURVE_PROPOSAL.history.minimumComparableAnnualPeriods}-year / preferred {PHARMA_ROCE_CURVE_PROPOSAL.history.preferredComparableAnnualPeriods}-year reviewed history contract. The shared methodology shape is Level + Stability + Trend, but component weights and numeric bands remain unapproved.</p>
+              <span>Proposal only · Numeric curve not ready · No score execution</span>
+            </article>
+            <article>
+              <strong>G5.1 · Dimension alignment & threshold boundary</strong>
+              <small>Canonical: {titleCase(PHARMA_ROCE_CURVE_PROPOSAL.canonicalDimension)} · Current parent contract: {titleCase(PHARMA_ROCE_CURVE_PROPOSAL.currentParentContractDimension)}</small>
+              <p>The canonical model places ROCE in Capital Efficiency, while the older parent evidence contract still labels it Quality. This must be reconciled explicitly, and every Pharma subprofile still needs its own approved ROCE threshold contract before numeric scoring.</p>
+              <span>Alignment: REQUIRED · Universal ROCE bands: NO · Subprofile thresholds: PENDING</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
