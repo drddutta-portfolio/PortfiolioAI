@@ -15,6 +15,7 @@ import { buildTorntpharmLocalPrerequisiteMutationProposal } from "./torntpharmLo
 import { buildTorntpharmLocalObservationMutationProposal } from "./torntpharmLocalObservationMutationProposal"
 import { buildPharmaGateGScoringMethodProposal } from "./pharmaGateGScoringMethodProposal"
 import { PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL } from "./pharmaSegmentGrowthCurveProposal"
+import { PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL } from "./pharmaOperatingMarginCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -201,6 +202,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Minimum 4 comparable reviewed quarters · preferred 8</small>
               <p>Latest period is mandatory. Rejected or scope-incompatible claims are excluded before normalization; a broken comparable series produces no score rather than a substituted value.</p>
               <span>Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>Second proposed curve family</strong>
+              <small>{PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL.proposalVersion}</small>
+              <p>Operating Margin Quality for Domestic Formulations V1 uses 50% eight-quarter median margin level, 30% margin stability and 20% four-quarter trend. It requires matched operating-revenue and operating-profit periods.</p>
+              <span>Domestic Formulations only · Activation approved: NO</span>
+            </article>
+            <article>
+              <strong>Margin curve fail-closed boundary</strong>
+              <small>Minimum 8 comparable quarters · preferred 12</small>
+              <p>Other primary Pharma subprofiles do not inherit these level bands. Unsupported subprofiles remain unscored until their own margin-level contract is versioned.</p>
+              <span>Unsupported subprofiles: NO SCORE · Execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
