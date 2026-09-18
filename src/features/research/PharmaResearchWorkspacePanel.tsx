@@ -10,6 +10,7 @@ import { buildTorntpharmLocalNumericIngestionPackage } from "./torntpharmLocalNu
 import { buildPharmaRegulatoryEventPersistenceProposal } from "./pharmaRegulatoryEventPersistenceProposal"
 import { buildTorntpharmLocalNumericPreflightPlan } from "./torntpharmLocalNumericPreflight"
 import { buildPharmaRegulatoryEventMigrationReplayPlan } from "./pharmaRegulatoryEventMigrationReplayPlan"
+import { buildTorntpharmCanonicalPrerequisitePackage } from "./torntpharmCanonicalPrerequisitePackage"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -127,6 +128,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const eventPersistenceProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaRegulatoryEventPersistenceProposal(securityId, resolution.data.assignment.assignmentVersion) : null
   const localNumericPreflight = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalNumericPreflightPlan(securityId, resolution.data.assignment.assignmentVersion) : null
   const eventMigrationReplay = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaRegulatoryEventMigrationReplayPlan(securityId, resolution.data.assignment.assignmentVersion) : null
+  const canonicalPrerequisitePackage = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmCanonicalPrerequisitePackage() : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -431,6 +433,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
           <small>{eventMigrationReplay.planVersion}</small>
           <p>{eventMigrationReplay.assertions.length} replay assertions prepared for local Supabase, including RLS, immutability, grants, site scope and post-rollback absence.</p>
           <span>Status: PREPARED · NOT EXECUTED</span>
+        </article>
+      </div> : null}
+      {canonicalPrerequisitePackage ? <div className="pharma-persistence-package-grid">
+        <article>
+          <strong>Canonical prerequisite package</strong>
+          <small>{canonicalPrerequisitePackage.packageVersion}</small>
+          <p>{canonicalPrerequisitePackage.summary.metricDefinitionsPrepared} metric-definition row and {canonicalPrerequisitePackage.summary.sourceRecordsPrepared} immutable issuer source-record envelopes are prepared. Payload hashes are intentionally deferred until a separately approved materialization step.</p>
+          <span>Status: PREPARED · NOT EXECUTED · 0 WRITES</span>
+        </article>
+        <article>
+          <strong>Prerequisite mutation boundary</strong>
+          <small>{canonicalPrerequisitePackage.sourceRegistryPrecondition.sourceCode}</small>
+          <p>Existing source registry must remain active, entitlement-verified and retention-rights-verified. Metric registration, SHA-256 payload hashing and source-record inserts are still separately approval-gated.</p>
+          <span>Mutation authorized: NO</span>
         </article>
       </div> : null}
     </section> : null}
