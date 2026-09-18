@@ -5174,3 +5174,57 @@ Added:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, open localhost TORNTPHARM Research, expand **Gate G · Scoring methodology design**, and visually review the dimension weights, readiness gates, primary/material/emerging participation model, and execution boundary. After visual approval, run focused local validation before any numeric scoring curve is proposed.
+
+
+---
+
+## 74. Entry 069 — Gate G methodology-design checkpoint validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner completed the focused local validation for the Gate G PHARMA_V1 scoring-methodology design checkpoint.
+
+### Validated artifacts
+
+- `src/features/research/pharmaGateGScoringMethodProposal.ts`
+- `src/features/research/pharmaGateGScoringMethodProposal.test.ts`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Owner-confirmed validation
+
+- focused Vitest for the Gate G methodology proposal: **PASS**
+- focused ESLint for the Gate G methodology slice: **PASS**
+- `npm run typecheck`: **PASS**
+- `npm run build`: **PASS**
+- no new blocking build issue reported.
+
+### Visually verified methodology state
+
+- 10 PHARMA_V1 weighted dimensions;
+- total dimension weight = 100%;
+- dimension score-ready gate = 60%;
+- overall preview gate = 70%;
+- every weighted dimension must also be score-ready;
+- Domestic Formulations = **PRIMARY_SCORE_DRIVER**;
+- Global Generics = **MATERIAL_EVIDENCE_OVERLAY**;
+- CDMO / CRAMS = **EMERGING_WATCH_EXCLUDED**;
+- numeric curve approval = **PENDING**;
+- score run = **NO**;
+- recommendation = **NO**;
+- position sizing = **NO**.
+
+### Scope boundary
+
+- Gate G methodology-design checkpoint: **VALIDATED**
+- numeric normalization curves approved: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production Supabase mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** The next safe Gate G slice is to define the first versioned PHARMA_V1 normalization-curve contracts as reviewable methodology artifacts only. Curves must remain non-executable and score runs disabled until separately approved.
