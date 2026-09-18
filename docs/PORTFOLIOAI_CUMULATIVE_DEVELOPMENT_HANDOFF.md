@@ -3429,3 +3429,66 @@ Confirmed:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview → Evidence operations & review controls → **Local write package & event-schema proposal**, and visually verify the new **Canonical prerequisite package** card plus the corrected execution-status cards. Obtain visual approval before local validation.
+
+
+---
+
+## 51. Entry 046 — Canonical prerequisite package validation interrupted by candidate-union typing; safe type guard added
+
+**Date:** 18 September 2026  
+**Actor:** owner-run validation + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner visually approved the canonical prerequisite package and started local validation.
+
+### Validation interruption
+
+The build/typecheck stage failed in:
+
+`src/features/research/torntpharmCanonicalPrerequisitePackage.ts`
+
+with two TypeScript `TS2322` errors because `TorntpharmProposedEvidenceCandidate` is typed broadly enough to include both:
+
+- `PHARMA_EXPORT_US_REVENUE_GROWTH`
+- `PHARMA_REGULATORY_SITE_STATUS`
+
+and both:
+
+- `PERCENT`
+- `EVENT_STATE`
+
+The runtime filter selected only US-growth candidates, but TypeScript did not preserve the narrower metric/unit relationship through the ordinary filter.
+
+### Correction
+
+A dedicated type guard was added:
+
+`isTorntpharmUsGrowthCandidate(...)`
+
+It requires both:
+- `metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH"`
+- `unit === "PERCENT"`
+
+The prerequisite package now filters through that guard before building canonical source-record payloads.
+
+This is a type-safety correction only:
+- research values unchanged;
+- source URLs unchanged;
+- 16% Q4 comparable value unchanged;
+- rejected 31% claim remains excluded;
+- no DB behavior changed;
+- no mutation added.
+
+Corrective commit:
+
+`cce364b6749f41c004295bc643e8691449fe78f2`
+
+### Scope boundary
+
+- Production logic semantics changed: **NO**
+- Database mutation: **NO**
+- Local evidence write: **NO**
+- Production Supabase mutation: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull` and rerun `npm run typecheck` and `npm run build`. If both pass, continue with the focused prerequisite-package validation. No UI re-review is required because the correction is type-narrowing only.
