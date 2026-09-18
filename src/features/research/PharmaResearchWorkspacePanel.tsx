@@ -27,6 +27,7 @@ import { PHARMA_VALUATION_CURVE_PROPOSAL } from "./pharmaValuationCurveProposal"
 import { PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL } from "./pharmaOwnershipGovernanceCurveProposal"
 import { PHARMA_RISK_CURVE_PROPOSAL } from "./pharmaRiskCurveProposal"
 import { PHARMA_MOMENTUM_CURVE_PROPOSAL } from "./pharmaMomentumCurveProposal"
+import { PHARMA_G6_LAYERING_BOUNDARY, pharmaG6CurveContractForPrimary } from "./pharmaG6SubprofileCurveApplicability"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -353,6 +354,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Canonical: Momentum · Pharma benchmark unapproved</small>
               <p>Relative-strength scoring requires an explicitly approved Pharma benchmark. NIFTY Bank is not inherited, missing relative strength cannot become neutral, and the BANK/NBFC 12M/6M weights remain isolated to that pilot.</p>
               <span>Parent contract: REQUIRED · BANK weights inherited: NO · Pharma benchmark: PENDING</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.1 · Subprofile curve applicability lock</strong>
+              <small>Primary-specific curve scope · No new numeric bands</small>
+              <p>Domestic Formulations keeps the validated Domestic Revenue Growth and Domestic-only Operating Margin proposals. Global Generics may use the validated Export / US Growth curve, while API/Bulk Drugs, CDMO/CRAMS and Biopharma/Biosimilars remain fail-closed for those unsupported curve families.</p>
+              <span>Domestic threshold reuse: NO · Unsupported primaries: FAIL CLOSED</span>
+            </article>
+            <article>
+              <strong>G6.1 · Primary / Overlay / Emerging boundary</strong>
+              <small>Primary contract drives curves · Material Overlay stays within-dimension · Emerging excluded</small>
+              <p>TORNTPHARM remains Primary Domestic Formulations, Material Overlay Global Generics and Emerging Watch CDMO/CRAMS. The overlay cannot create a second stock score and Emerging Watch cannot enter numeric scoring.</p>
+              <span>Primary contract: {pharmaG6CurveContractForPrimary("DOMESTIC_FORMULATIONS").subprofileCode} · Overlay score: {PHARMA_G6_LAYERING_BOUNDARY.materialOverlayCreatesIndependentStockScore ? "YES" : "NO"} · Emerging score: {PHARMA_G6_LAYERING_BOUNDARY.emergingWatchCreatesIndependentStockScore ? "YES" : "NO"}</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
