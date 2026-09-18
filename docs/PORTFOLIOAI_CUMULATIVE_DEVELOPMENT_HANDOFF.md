@@ -5639,3 +5639,79 @@ Future work must not:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Read the canonical adaptive scoring/classification plan before further PHARMA_V1 Gate G implementation. Next safe development task is G1 — version the classification/materiality contract. G2–G4 follow before any additional scoring curve family is added.
+
+
+---
+
+## 80. Entry 075 — Gate G1 adaptive Pharma classification contract prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G1 has been implemented as a **proposal-only adaptive classification contract** under the canonical PHARMA_V1 adaptive scoring/classification architecture.
+
+### New contract
+
+`PHARMA_V1_ADAPTIVE_CLASSIFICATION_V1_PROPOSAL`
+
+Repository artifacts:
+
+- `src/features/research/pharmaAdaptiveClassificationContract.ts`
+- `src/features/research/pharmaAdaptiveClassificationContract.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G1_Adaptive_Classification_Contract_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Classification rules encoded
+
+- Primary requires stable leadership across **2 consecutive annual periods**.
+- Material Overlay requires at least **15%** of consolidated revenue or profit for **2 consecutive annual periods**.
+- Emerging Watch begins at **5%**, or from separately reviewed evidence explicitly showing growth toward materiality.
+- One year above 15% is not enough for Material Overlay; it remains Emerging Watch.
+- Below 5% normally remains below scoring materiality, while independent governance/regulatory/risk events remain eligible for Interpretation.
+- Revenue-share and profit-share evidence are preserved separately.
+- Materiality basis is explicit: `REVENUE`, `PROFIT`, `BOTH`, or `NONE`.
+- Provisional/disputed/unreviewed evidence cannot classify.
+- Effective dating remains required for any eventual accepted assignment.
+
+### Fail-closed rules encoded
+
+Gate G1 returns `REVIEW_REQUIRED` or `INSUFFICIENT_EVIDENCE` instead of inferring a classification when:
+
+- reviewed classification evidence is absent;
+- fewer than two annual periods exist;
+- annual periods are not consecutive;
+- revenue and profit imply different Primary leaders;
+- Primary leadership is unstable across the two required periods;
+- a proposed Primary reassignment lacks separately confirmed structural-change evidence;
+- usable revenue/profit materiality evidence is missing.
+
+### Existing assignment architecture preserved
+
+The existing effective-dated reviewed assignment model remains authoritative.
+
+Gate G1 sits **above** it as a deterministic proposal layer. It does not write, replace, or silently mutate canonical assignments.
+
+### UI review surface
+
+Gate G now includes:
+
+- **G1 · Adaptive classification contract**
+- **G1 · Fail-closed classification boundary**
+
+### Explicit boundary
+
+- classification proposal: **YES**
+- classification assignment write: **NO**
+- schema migration: **NO**
+- overlay modifier execution: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation / position sizing: **NO**
+- production mutation: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G1 cards in TORNTPHARM → Research → Gate G, and run focused local validation. Only after G1 validation should development proceed to **G2 — Overlay Modifier Contract**.
