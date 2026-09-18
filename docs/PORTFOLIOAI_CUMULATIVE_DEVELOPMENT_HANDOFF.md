@@ -4806,3 +4806,69 @@ The rejected Q4 31% claim remained excluded.
 **Result:** TORNTPHARM local US-growth observation materialization = **SUCCESS / LOCAL-ONLY / 4 REVIEWED ROWS / 0 CONFLICTS**.
 
 **CURRENT STOP POINT:** The next safe R4N action is to verify that the Research page now reads and displays these canonical local observations correctly, then rerun the read-only numeric preflight to confirm the four rows transition from `INSERT_CANDIDATE` to `ALREADY_PRESENT`. After localhost evidence display verification and final local validation, Gate F can be closed.
+
+
+---
+
+## 70. Entry 065 — Canonical TORNTPHARM US-growth evidence wired into foreground Pharma Research UI
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT after owner screenshot review  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After successful local insertion of the four reviewed TORNTPHARM US-growth observations, localhost screenshots confirmed that the Gate F review engine still displayed the reviewed 19% / 26% / 19% / 16% values, but the normal PHARMA_V1 foreground presentation did not yet surface the new canonical metric.
+
+### Root cause
+
+The canonical loader was already correct:
+
+`src/data/researchRepository.ts`
+
+loads all `fundamental_observations` rows for the security and maps `PHARMA_EXPORT_US_REVENUE_GROWTH` through the registered metric definition into `research.metrics`.
+
+However, the PHARMA_V1 presentation contract did not include `PHARMA_EXPORT_US_REVENUE_GROWTH` in:
+
+- Overview → **Growth at a glance**
+- Quality & Growth → **Growth & earnings**
+
+Therefore the canonical evidence existed in `research.metrics` but was not selected for those foreground cards.
+
+### Presentation-only correction
+
+Updated:
+
+`src/features/research/researchProfileUiContract.ts`
+
+Added `PHARMA_EXPORT_US_REVENUE_GROWTH` to:
+
+1. PHARMA_V1 **Growth at a glance** snapshot group;
+2. PHARMA_V1 **Growth & earnings** Quality & Growth workspace section.
+
+No scoring weights, scoring curves, evidence contracts, database state, or Gate G methodology changed.
+
+### Regression coverage
+
+Added:
+
+`src/features/research/researchProfileUiContract.pharmaUsGrowth.test.ts`
+
+The test asserts that PHARMA_V1 exposes the canonical US-growth metric in both foreground locations.
+
+### Existing Evidence ledger behavior
+
+No change was needed for the Evidence tab because it already renders the complete `research.metrics` collection. Once the canonical rows are loaded, they are available there automatically.
+
+### Scope boundary
+
+- Canonical local observations already persisted: **YES**
+- Foreground presentation wiring corrected: **YES**
+- Database mutation in this correction: **NO**
+- Scoring/recommendation change: **NO**
+- Production Supabase mutation: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, refresh localhost, and visually verify:
+1. Overview → Growth at a glance shows **Export / US Revenue Growth = 16%** as the latest quarter;
+2. Quality & Growth → Growth & earnings shows the same latest canonical metric and its Evidence History exposes the four quarter series;
+3. Evidence tab contains the four `PHARMA_EXPORT_US_REVENUE_GROWTH` rows. After visual confirmation, run focused validation and close Gate F.
