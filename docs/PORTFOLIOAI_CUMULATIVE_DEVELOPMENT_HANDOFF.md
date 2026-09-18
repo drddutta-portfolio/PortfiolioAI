@@ -5978,3 +5978,125 @@ Owner-confirmed results:
 - scheduler change: **NO**
 
 **CURRENT STOP POINT:** G2 is now validated. The next permitted Gate G design task is **G3 — Readiness Mapping Contract**, still proposal-only and non-executable. Before implementing G3, inspect the canonical adaptive plan and current G1/G2/Gate G contracts at the then-current branch head.
+
+
+---
+
+## 84. Entry 079 — Gate G3 Pharma readiness mapping contract prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G3 has been implemented as a **proposal-only readiness mapping contract** under the canonical PHARMA_V1 adaptive scoring/classification architecture.
+
+### New contract
+
+`PHARMA_V1_READINESS_MAPPING_V1_PROPOSAL`
+
+Repository artifacts:
+
+- `src/features/research/pharmaReadinessMappingContract.ts`
+- `src/features/research/pharmaReadinessMappingContract.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G3_Readiness_Mapping_Contract_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Visible readiness states formalized
+
+Gate G3 maps deterministic internal conditions to:
+
+- `READY`
+- `PARTIAL`
+- `INSUFFICIENT_EVIDENCE`
+- `PROFILE_PENDING`
+- `BLOCKED_REVIEW`
+- `NOT_APPLICABLE`
+
+### Dimension readiness
+
+The existing **60%** dimension score-ready coverage gate is preserved.
+
+A dimension can become `READY` only when:
+
+- it is applicable;
+- Pharma profile resolution is complete;
+- no review blocker exists;
+- mandatory blocking conditions are satisfied;
+- score-ready coverage is at least 60%;
+- relevant Material Overlay evidence does not leave the dimension incomplete.
+
+A non-applicable dimension is excluded from the denominator.
+
+### Material Overlay readiness
+
+Missing or incomplete Material Overlay evidence does not become neutral.
+
+If an affected dimension otherwise has sufficient Primary/base evidence but the Material Overlay remains incomplete:
+
+`PARTIAL`
+
+and numeric score readiness remains false.
+
+### Emerging Watch readiness boundary
+
+Emerging Watch is excluded from readiness effects.
+
+It cannot:
+
+- improve readiness;
+- reduce readiness;
+- enter dimension denominator logic;
+- enter overall score-ready denominator logic.
+
+### Overall readiness
+
+The existing **70%** overall score-ready coverage gate is preserved but is explicitly treated as necessary, not sufficient.
+
+Overall PHARMA_V1 preview requires:
+
+- resolved profile;
+- common PHARMA_V1 core = `READY`;
+- Primary subprofile = `READY`;
+- every weighted dimension = `READY`;
+- overall score-ready coverage >= 70%;
+- no governance/review blocker.
+
+Primary failure therefore remains company-level fail-closed regardless of aggregate coverage.
+
+### Governance boundary preserved for G4
+
+G3 accepts a governance/review blocker only as an input to fail readiness closed.
+
+It does **not** define:
+
+- critical governance-event classification;
+- high-risk cap mechanics;
+- regulatory materiality;
+- remediation handling;
+- anti-double-counting rules.
+
+Those remain reserved for G4.
+
+### UI review surface
+
+Gate G now includes:
+
+- **G3 · Readiness mapping contract**
+- **G3 · Overall fail-closed readiness gate**
+
+### Explicit boundary
+
+- readiness architecture proposal: **YES**
+- score preview execution: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- schema migration: **NO**
+- recommendation / position sizing: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G3 cards in TORNTPHARM → Research → Gate G, then run focused G3 validation. Only after G3 validation should development proceed to **G4 — Governance / Regulatory Gate Contract**.
