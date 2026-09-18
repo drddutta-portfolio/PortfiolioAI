@@ -1882,3 +1882,91 @@ Per the established local-first workflow, this hierarchy correction is **not yet
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, open both HDFCBANK and TORNTPHARM Research → Overview locally, and compare the first-glance hierarchy. The common Overview spine should now feel consistent while TORNTPHARM's sector-specific deep research begins only after Research Health under **Sector research workspace**. Obtain visual approval before full local validation.
+
+
+---
+
+## 35. Entry 030 — Pharma deep-research workspace compacted for cross-profile visual consistency
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+A second HDFCBANK ↔ TORNTPHARM visual consistency pass was performed after owner comparison screenshots.
+
+### Owner rule preserved
+
+The governing requirement remains:
+
+> HDFCBANK and TORNTPHARM may differ materially in research criteria and sector-specific research sections, but at a glance they must look like the same PortfolioAI product.
+
+The shared Overview spine already matched through Research Readiness / snapshot cockpit / Research Health. The remaining visual drift came from the Pharma-only workspace expanding into multiple full-height Gate F panels immediately after the shared Overview.
+
+### R4N compacting change
+
+Updated:
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+- `src/pages/ResearchPage.tsx`
+- `docs/R4N_HDFCBANK_TORNTPHARM_Research_Page_Consistency_Audit.md`
+
+The Pharma workspace now shows a compact always-visible header and model summary:
+
+**Sector research workspace · Pharmaceuticals**  
+**Pharmaceuticals deep research**
+
+All deep content is grouped into two collapsed-by-default layers:
+
+1. **Business model & exposure map**
+   - primary Domestic Formulations evidence lanes;
+   - reviewed secondary exposures;
+   - Global Generics material overlay;
+   - CDMO / CRAMS emerging watch.
+
+2. **Evidence operations & review controls**
+   - Evidence ingestion dry-run;
+   - Evidence acquisition plan;
+   - Public / official source discovery;
+   - Exact document review plan;
+   - Public document content-review dry-run.
+
+The redundant large serif `Sector research workspace` page heading was removed.
+
+### Important non-changes
+
+No research logic was removed or altered.
+
+Still preserved:
+- Pharma subprofile resolution;
+- 14 counted business-model requirements;
+- acquisition/source contracts;
+- artifact planning;
+- read-only reviewed candidate series;
+- Q4 US-growth scope rejection;
+- site-scoped FDA regulatory chain;
+- readiness contracts;
+- scoring boundaries.
+
+No panel is deleted; they are simply hidden behind explicit owner-expandable detail layers by default.
+
+### Source-level verification
+
+Confirmed on branch:
+- `Pharmaceuticals deep research` header exists;
+- both `pharma-deep-layer` sections exist;
+- neither details layer is marked `open`, so both are collapsed by default;
+- all five Gate F operational panel titles remain present;
+- redundant outer Sector Research heading is absent;
+- Pharma workspace still appears after Research Health.
+
+Per the local-first workflow, this compacting checkpoint is **not yet visually approved** and full local validation is deferred until owner localhost review.
+
+**Production touched:** NO.  
+**Production Supabase:** unchanged.  
+**Evidence ingestion:** NO.  
+**Paid/licensed provider calls:** NO.  
+**Scoring / recommendation / sizing changes:** NO.  
+**Schedulers:** unchanged.  
+**PR #101:** remains draft/open/unmerged.
+
+**CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the compact Pharma workspace immediately below Research Health. The page should now show the small Pharma summary plus two collapsed detail rows instead of several full Gate F panels. Obtain visual approval before full local validation.
