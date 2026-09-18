@@ -5,6 +5,7 @@ import { buildTorntpharmReadOnlyContentReviewDryRun } from "./torntpharmReadOnly
 export type CandidateIngestionDisposition =
   | "VALIDATOR_CONTRACT_EXTENSION_REQUIRED"
   | "EVENT_EVIDENCE_SCHEMA_REQUIRED"
+  | "SEPARATE_INGESTION_APPROVAL_REQUIRED"
 
 export interface CandidateIngestionProposalItem {
   readonly metricCode: string
@@ -80,7 +81,7 @@ export function buildTorntpharmCandidateToIngestionProposal(
     observationDate: row.periodEnd,
     value: row.value,
     unit: row.unit,
-    disposition: "VALIDATOR_CONTRACT_EXTENSION_REQUIRED",
+    disposition: "SEPARATE_INGESTION_APPROVAL_REQUIRED",
     validatorIssueCodes: [],
     rationale: "The row is structurally accepted by the validator, but this proposal contract still does not authorize a write. A separately approved ingestion gate is required.",
   }))
