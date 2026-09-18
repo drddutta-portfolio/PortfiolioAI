@@ -113,10 +113,7 @@ function Overview({ position, research, scoring, onViewEvidence }: { readonly po
     {ui.readinessMode === "PROFILE_CONTRACT" ? <ProfileResearchReadinessPanel securityId={position.securityId} profileCode={ui.profileCode} research={research} snapshot={scoring.data} /> : null}
     <div className="research-cockpit">{groups.map((group) => <section className="cockpit-panel" key={group.title}><h2>{group.title}</h2><div className="snapshot-list">{group.codes.map((code) => { const metric = metrics.get(code); return <div key={code}><span>{metric?.label ?? metricLabelForCode(code)}</span><strong>{formatResearchMetric(metric)}</strong><small>{metric ? period(metric) : "Unavailable"}</small><Status value={coverageStatus(metric)} /></div> })}</div></section>)}</div>
     <section className="research-health"><div><p className="eyebrow">Research health</p><h2>{coverage} coverage</h2><p>{research.metrics.length} cached observations · {stale ? "mixed freshness" : research.metrics.length ? "current cache" : "freshness unavailable"}</p></div><dl><div><dt>Conflicts</dt><dd>{conflicts}</dd></div><div><dt>Review required</dt><dd>{reviewRequired}</dd></div><div><dt>Provisional</dt><dd>{provisional}</dd></div></dl><button type="button" className="button button-secondary" onClick={onViewEvidence}>View Evidence</button></section>
-    {scoring.data?.profileCode === "PHARMA_V1" ? <>
-      <SectionHeading title="Sector research workspace" detail="Profile-specific deep research follows the shared PortfolioAI overview. Pharma evidence contracts, source review and subprofile logic may differ by sector without changing the core page grammar." />
-      <PharmaResearchWorkspacePanel securityId={position.securityId} symbol={position.symbol} research={research} />
-    </> : null}
+    {scoring.data?.profileCode === "PHARMA_V1" ? <PharmaResearchWorkspacePanel securityId={position.securityId} symbol={position.symbol} research={research} /> : null}
   </>
 }
 
