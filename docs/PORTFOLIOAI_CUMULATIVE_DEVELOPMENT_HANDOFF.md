@@ -2544,3 +2544,154 @@ Repository-wide lint remains subject to the already-documented pre-existing unre
 **Result:** Numeric Validator V2 + Pharma Regulatory Event Evidence V1 checkpoint = **VALIDATED**.
 
 **CURRENT STOP POINT:** The four reviewed US-growth observations are structurally eligible under Numeric Validator V2 but still require separate ingestion approval. The two reviewed FDA Indrad events are structurally valid under Regulatory Event Evidence V1 but remain blocked because canonical event persistence/write infrastructure does not yet exist. The next safe R4N step is to prepare, without executing, (1) the first local numeric ingestion package for the four US-growth rows and (2) a canonical regulatory-event persistence schema/migration proposal. Neither action authorizes a write.
+
+
+---
+
+## 42. Entry 037 — Local numeric ingestion package and regulatory-event persistence proposal prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The next two Gate F persistence artifacts have been prepared without executing either one.
+
+### A. Local numeric ingestion package
+
+Added:
+- `src/features/research/torntpharmLocalNumericIngestionPackage.ts`
+- `src/features/research/torntpharmLocalNumericIngestionPackage.test.ts`
+
+Contract version:
+
+`TORNTPHARM_LOCAL_NUMERIC_INGESTION_V1`
+
+Prepared rows:
+- 2025-06-30 — 19%
+- 2025-09-30 — 26%
+- 2025-12-31 — 19%
+- 2026-03-31 — 16% base-business
+
+Canonical target:
+
+`public.fundamental_observations`
+
+All four rows are:
+- `PHARMA_EXPORT_US_REVENUE_GROWTH`;
+- `QUARTER`;
+- `PERCENT`;
+- direct official lineage;
+- source code `COMPANY_EXCHANGE_FILING`.
+
+The rejected Q4 31% claim is absent.
+
+The package deliberately keeps unresolved database prerequisites explicit:
+- local security identity resolution;
+- reviewed subprofile assignment match;
+- database metric-definition registration;
+- four immutable `data_source_records` provenance rows;
+- existing-fact conflict/idempotency preflight;
+- separate owner write approval.
+
+The package proposes but does not apply the database metric-definition contract:
+- code: `PHARMA_EXPORT_US_REVENUE_GROWTH`;
+- value kind: `NUMERIC`;
+- canonical unit: `PERCENT`;
+- statement scope: `PHARMA_BUSINESS_MODEL`;
+- freshness seconds: 10,368,000;
+- mapping version: `PHARMA_V1_GLOBAL_GENERICS_V1`;
+- source priority: `COMPANY_EXCHANGE_FILING`.
+
+Current package state:
+- validator-accepted rows: **4**;
+- observation rows prepared: **4**;
+- source records required: **4**;
+- metric-definition registrations required: **1**;
+- proposed writes: **0**;
+- `dryRunOnly = true`;
+- `writeAuthorized = false`.
+
+### B. Regulatory-event persistence proposal
+
+Added:
+- `src/features/research/pharmaRegulatoryEventPersistenceProposal.ts`
+- `src/features/research/pharmaRegulatoryEventPersistenceProposal.test.ts`
+- `docs/sql/R4N_PHARMA_REGULATORY_EVENT_EVIDENCE_V1_MIGRATION_PROPOSAL.sql`
+
+Proposal version:
+
+`PHARMA_REGULATORY_EVENT_PERSISTENCE_PROPOSAL_V1`
+
+The SQL is intentionally stored under `docs/sql`, not `supabase/migrations`, and deliberately ends in `ROLLBACK`.
+
+Proposed canonical objects:
+- table: `public.research_regulatory_event_observations`;
+- current-state view: `public.current_research_regulatory_site_state_v1`;
+- regulator source code: `US_FDA_OFFICIAL`.
+
+The proposed FDA source registry remains:
+- inactive;
+- entitlement-unverified;
+- retention-rights-unverified.
+
+No source activation claim is made.
+
+Proposed storage guarantees:
+- append-only evidence;
+- existing Stage 7 immutable-evidence trigger;
+- security FK;
+- source-record FK;
+- source-code FK;
+- site-specific scope only;
+- US FDA regulator only for V1;
+- warning-letter active / closeout event states;
+- logical idempotency identity;
+- authenticated held-security SELECT through RLS;
+- authenticated mutation denied;
+- service-role mutation only;
+- security-invoker current-state view.
+
+Current event proposal state:
+- event contract accepted: **2**;
+- event contract quarantined: **0**;
+- canonical storage implemented: **false**;
+- migration under Supabase migration directory: **false**;
+- schema apply authorized: **false**;
+- event write authorized: **false**.
+
+### UI checkpoint
+
+Inside the collapsed **Evidence operations & review controls** layer, a new compact panel now renders:
+
+**Gate F · Prepared persistence packages**  
+**Local write package & event-schema proposal**
+
+Expected summary:
+- Numeric rows prepared: **4**
+- Metric registry needed: **1**
+- Source records needed: **4**
+- Event persistence: **Proposed**
+- Write authorized: **NO**
+- Schema apply authorized: **NO**
+- Event write authorized: **NO**
+
+### Documentation
+
+Added:
+
+`docs/R4N_TORNTPHARM_Gate_F_Prepared_Persistence_Packages.md`
+
+### Scope boundary
+
+- Local numeric evidence insert: **NO**
+- Source-record materialization: **NO**
+- Metric-definition database mutation: **NO**
+- Regulatory event table creation: **NO**
+- FDA source activation: **NO**
+- Production Supabase mutation: **NO**
+- Paid/licensed provider calls: **NO**
+- Scoring / recommendation / sizing: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview → Evidence operations & review controls, and inspect **Local write package & event-schema proposal**. Obtain visual approval before focused/local validation. Any actual local write or migration conversion remains separately approval-gated.
