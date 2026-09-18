@@ -7454,3 +7454,57 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.6 cards in TORNTPHARM → Research → Gate G, then run focused G5.6 validation. Do not proceed to Momentum until G5.6 is validated.
+
+
+---
+
+## 99. Entry 094 — Gate G5.6 Regulatory & Market Risk framework validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5.6 has completed its validation checkpoint as a **proposal-only Regulatory & Market Risk framework**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G5.6 Risk plus G5.5, G5.4, G5.3, G5.2, G5.1, G1–G4, and existing Gate G curve proposals → **PASS**
+- focused ESLint for the G5.6/G5.5/G5.4/G5.3/G5.2/G5.1/G1–G4/Gate G methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G5.6 status
+
+- Regulatory & Market Risk framework: **VALIDATED / NOT ACTIVE**
+- canonical/current dimension alignment `RISK`: **VALIDATED / ALIGNED**
+- regulated-export conditionality: **VALIDATED**
+- official regulatory evidence requirement: **VALIDATED**
+- current unresolved-action + latest remediation-state requirement: **VALIDATED**
+- single-site closeout cannot imply company-wide clearance: **VALIDATED**
+- candidate market-risk inputs `MAX_DRAWDOWN_1Y` + `VOLATILITY_1Y`: **VALIDATED AS EVIDENCE LANES ONLY**
+- market raw authority `market_price_history`: **VALIDATED**
+- derived evidence store `market_metric_observations`: **VALIDATED**
+- BANK/NBFC risk thresholds inherited into Pharma: **NO**
+- Pharma market-risk score rule: **UNAPPROVED**
+- volatility peer/benchmark context requirement: **VALIDATED**
+- G4 blocked/critical event second hidden penalty: **NO**
+- G4 high-risk event second hidden penalty: **NO**
+- additional embedded regulatory cap inside Risk: **NO**
+- component weights / regulatory bands / drawdown bands / volatility bands: **UNAPPROVED**
+- numeric Risk curve ready: **NO**
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G5.6 is validated. The final permitted G5 parent curve family is **Momentum**, but implementation must first inspect the existing market-momentum evidence, current BANK_NBFC pilot rules, and confirm that no bank-specific threshold or benchmark assumption is inherited into PHARMA_V1.
