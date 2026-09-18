@@ -1,6 +1,7 @@
 import { useMemo } from "react"
 import "./PharmaResearchWorkspacePanel.css"
 import { buildTorntpharmEvidencePilotPreview } from "./pharmaEvidencePilotPreview"
+import { buildPharmaBusinessModelEvidenceAcquisitionPlan, type PharmaBusinessModelEvidenceAcquisitionItem } from "./pharmaBusinessModelEvidenceAcquisitionContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -56,6 +57,41 @@ function SecondaryExposureCard({ exposure }: { readonly exposure: PharmaWorkspac
   </article>
 }
 
+
+function acquisitionAccessLabel(value: PharmaBusinessModelEvidenceAcquisitionItem["accessGate"]) {
+  if (value === "PUBLIC_OFFICIAL_FIRST") return "Public / official first"
+  if (value === "PUBLIC_OR_LICENSED") return "Public or licensed"
+  return "Licensed source required"
+}
+
+function acquisitionMethodLabel(value: PharmaBusinessModelEvidenceAcquisitionItem["acquisitionMethod"]) {
+  if (value === "DOCUMENT_EXTRACTION") return "Document extraction"
+  if (value === "EVENT_REVIEW") return "Event review"
+  if (value === "DERIVED_FROM_DISCLOSED_INPUTS") return "Derived from disclosed inputs"
+  if (value === "LICENSED_DATA_REVIEW") return "Licensed data review"
+  return "Composite review"
+}
+
+function AcquisitionRequirementList({ items }: { readonly items: readonly PharmaBusinessModelEvidenceAcquisitionItem[] }) {
+  return <div className="pharma-acquisition-list">
+    {items.map((item) => <article className="pharma-acquisition-item" key={item.metricCode}>
+      <div className="pharma-acquisition-item-head">
+        <div>
+          <strong>{item.label}</strong>
+          <small>{titleCase(item.requirementLevel)} · minimum {item.minimumObservations} / preferred {item.preferredObservations} {titleCase(item.historyUnit).toLocaleLowerCase()}</small>
+        </div>
+        <span>{acquisitionAccessLabel(item.accessGate)}</span>
+      </div>
+      <div className="pharma-acquisition-item-meta">
+        <span>{acquisitionMethodLabel(item.acquisitionMethod)}</span>
+        <span>{item.sourceLanes.map(titleCase).join(" · ")}</span>
+      </div>
+      <p>{item.evidenceShape}</p>
+      <small className="pharma-acquisition-fail-closed"><strong>Fail closed:</strong> {item.failClosedRule}</small>
+    </article>)}
+  </div>
+}
+
 export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: { readonly securityId: string; readonly symbol: string; readonly research: SecurityResearch }) {
   const resolution = usePharmaSubprofileResolution(securityId)
   const evaluationDate = useMemo(() => new Date().toISOString().slice(0, 10), [])
@@ -74,6 +110,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
 
   const model = buildPharmaResearchWorkspaceModel(resolution.data.assignment, research.metrics, evaluationDate)
   const evidencePilot = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmEvidencePilotPreview(securityId, model) : null
+  const acquisitionPlan = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaBusinessModelEvidenceAcquisitionPlan(model) : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -141,5 +178,33 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
       </div>
       <p className="pharma-evidence-pilot-note"><strong>Interpretation:</strong> this 42-row pilot is currently useful for canonical financial-history evidence, but it does not directly fulfill the 14 counted Domestic Formulations + Global Generics business-model requirements. Those requirements need their own approved evidence contracts and source observations.</p>
     </section> : null}
+    {acquisitionPlan ? <section className="pharma-acquisition-plan" aria-labelledby="pharma-acquisition-plan-title">
+      <div className="pharma-evidence-pilot-head">
+        <div>
+          <p className="eyebrow">Gate F · Business-model evidence contract</p>
+          <h3 id="pharma-acquisition-plan-title">Evidence acquisition plan</h3>
+          <p>The 14 unmet requirements now have explicit source, history, acquisition and fail-closed contracts. This is a planning manifest only: it does not fetch a source, call a licensed provider, or authorize ingestion.</p>
+        </div>
+        <span className="pharma-workspace-lock">Planned · No ingestion</span>
+      </div>
+      <div className="pharma-acquisition-summary">
+        <div><span>Planned requirements</span><strong>{acquisitionPlan.summary.total}</strong><small>{acquisitionPlan.summary.mandatory} mandatory · {acquisitionPlan.summary.important} important · {acquisitionPlan.summary.supplementary} supplementary</small></div>
+        <div><span>Public / official first</span><strong>{acquisitionPlan.summary.publicOfficialFirst}</strong><small>No paid provider required as the first acquisition lane</small></div>
+        <div><span>Licensed-source gates</span><strong>{acquisitionPlan.summary.licensedRequired + acquisitionPlan.summary.publicOrLicensed}</strong><small>{acquisitionPlan.summary.licensedRequired} required · {acquisitionPlan.summary.publicOrLicensed} optional fallback</small></div>
+        <div><span>Controlled derivations</span><strong>{acquisitionPlan.summary.derivedFromDisclosedInputs}</strong><small>Only from explicitly disclosed compatible inputs</small></div>
+      </div>
+      <div className="pharma-acquisition-grid">
+        <section>
+          <div className="pharma-secondary-heading"><p className="eyebrow">Primary model</p><h3>Domestic Formulations · 8 requirements</h3></div>
+          <AcquisitionRequirementList items={acquisitionPlan.items.filter((item) => item.scope === "PRIMARY_MODEL")} />
+        </section>
+        <section>
+          <div className="pharma-secondary-heading"><p className="eyebrow">Material overlay</p><h3>Global Generics · 6 requirements</h3></div>
+          <AcquisitionRequirementList items={acquisitionPlan.items.filter((item) => item.scope === "MATERIAL_OVERLAY")} />
+        </section>
+      </div>
+      <p className="pharma-evidence-pilot-note"><strong>Access boundary:</strong> Brand & Therapy Leadership requires an approved licensed market source. Chronic / Acute Mix may use issuer disclosure first and an approved licensed source only if needed. No licensed-source call is authorized by this contract.</p>
+    </section> : null}
+
   </section>
 }
