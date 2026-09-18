@@ -8,6 +8,8 @@ import { buildTorntpharmReadOnlyContentReviewDryRun } from "./torntpharmReadOnly
 import { buildTorntpharmCandidateToIngestionProposal } from "./torntpharmCandidateToIngestionProposal"
 import { buildTorntpharmLocalNumericIngestionPackage } from "./torntpharmLocalNumericIngestionPackage"
 import { buildPharmaRegulatoryEventPersistenceProposal } from "./pharmaRegulatoryEventPersistenceProposal"
+import { buildTorntpharmLocalNumericPreflightPlan } from "./torntpharmLocalNumericPreflight"
+import { buildPharmaRegulatoryEventMigrationReplayPlan } from "./pharmaRegulatoryEventMigrationReplayPlan"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -123,6 +125,8 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const ingestionProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmCandidateToIngestionProposal(securityId, resolution.data.assignment.assignmentVersion) : null
   const localNumericPackage = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalNumericIngestionPackage(securityId, resolution.data.assignment.assignmentVersion) : null
   const eventPersistenceProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaRegulatoryEventPersistenceProposal(securityId, resolution.data.assignment.assignmentVersion) : null
+  const localNumericPreflight = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalNumericPreflightPlan(securityId, resolution.data.assignment.assignmentVersion) : null
+  const eventMigrationReplay = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaRegulatoryEventMigrationReplayPlan(securityId, resolution.data.assignment.assignmentVersion) : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -415,6 +419,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         </article>
       </div>
       <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> the SQL proposal lives under docs/sql, not supabase/migrations, and is not an executable migration. The local numeric package also contains no database writer.</p>
+      {localNumericPreflight && eventMigrationReplay ? <div className="pharma-persistence-package-grid">
+        <article>
+          <strong>Local numeric preflight</strong>
+          <small>{localNumericPreflight.preflightVersion}</small>
+          <p>{localNumericPreflight.requiredLookups.length} canonical local lookups prepared for metric definition, source records, existing facts and reviewed assignment. No local database snapshot has been queried yet.</p>
+          <span>Status: PREPARED · NOT EXECUTED</span>
+        </article>
+        <article>
+          <strong>Regulatory migration replay</strong>
+          <small>{eventMigrationReplay.planVersion}</small>
+          <p>{eventMigrationReplay.assertions.length} replay assertions prepared for local Supabase, including RLS, immutability, grants, site scope and post-rollback absence.</p>
+          <span>Status: PREPARED · NOT EXECUTED</span>
+        </article>
+      </div> : null}
     </section> : null}
 
       </div>
