@@ -17,7 +17,7 @@ export interface ExistingEvidenceIdentity {
   readonly unit: TorntpharmOfficialManifestRow["unit"]
 }
 
-export type EvidenceValidationIssueCode = "INVALID_SECURITY_ID" | "INVALID_PROFILE_VERSION" | "INVALID_PERIOD" | "INVALID_NUMERIC_VALUE" | "UNIT_MISMATCH" | "MISSING_SOURCE_ARTIFACT" | "INVALID_DERIVED_LINEAGE" | "DUPLICATE_CANDIDATE" | "CONFLICTING_EXISTING_FACT"
+export type EvidenceValidationIssueCode = "INVALID_SECURITY_ID" | "INVALID_PROFILE_VERSION" | "INVALID_PERIOD" | "INVALID_NUMERIC_VALUE" | "UNSUPPORTED_METRIC" | "UNIT_MISMATCH" | "MISSING_SOURCE_ARTIFACT" | "INVALID_DERIVED_LINEAGE" | "DUPLICATE_CANDIDATE" | "CONFLICTING_EXISTING_FACT"
 
 export interface EvidenceValidationResult {
   readonly accepted: readonly EvidenceIngestionCandidate[]
@@ -61,7 +61,9 @@ export function validateEvidenceIngestionCandidates(candidates: readonly Evidenc
     if (!/^PHARMA_V1\+DOMESTIC_FORMULATIONS_V\d+$/u.test(row.profileVersion)) issues.push("INVALID_PROFILE_VERSION")
     if (!isIsoDate(row.periodEnd)) issues.push("INVALID_PERIOD")
     try { if (!new Decimal(row.value).isFinite()) issues.push("INVALID_NUMERIC_VALUE") } catch { issues.push("INVALID_NUMERIC_VALUE") }
-    if (UNIT_BY_METRIC[row.metricCode] !== row.unit) issues.push("UNIT_MISMATCH")
+    const expectedUnit = UNIT_BY_METRIC[row.metricCode]
+    if (expectedUnit === undefined) issues.push("UNSUPPORTED_METRIC")
+    else if (expectedUnit !== row.unit) issues.push("UNIT_MISMATCH")
     if (!row.sourceArtifactCode.trim()) issues.push("MISSING_SOURCE_ARTIFACT")
     if (row.lineage === "PORTFOLIOAI_DERIVED" ? !row.derivedFormulaCode || row.directInputKeys.length === 0 : row.derivedFormulaCode !== null || row.directInputKeys.length > 0) issues.push("INVALID_DERIVED_LINEAGE")
     if (seen.has(key)) issues.push("DUPLICATE_CANDIDATE")
