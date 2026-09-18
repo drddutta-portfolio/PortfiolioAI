@@ -3859,3 +3859,129 @@ No SQL was executed.
 **Result:** Prerequisite Materialization Dry Run V1 execution = **PASS / ZERO-WRITE**.
 
 **CURRENT STOP POINT:** The next safe R4N gate is to prepare a local-only prerequisite mutation proposal/executor that would insert exactly one metric-definition row and four immutable source-record rows using the verified hashes above, but must remain non-executed until separately approved by the owner.
+
+
+---
+
+## 57. Entry 052 — Local prerequisite mutation proposal prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Following successful zero-write prerequisite materialization dry-run execution, the next Gate F checkpoint has been prepared at the top of the standard workflow.
+
+### Prepared local-only mutation executor
+
+Added:
+
+- `scripts/r4n/torntpharm-local-prerequisite-mutation.sql`
+- `scripts/r4n/run-torntpharm-local-prerequisite-mutation.sh`
+- `src/features/research/torntpharmLocalPrerequisiteMutationProposal.ts`
+- `src/features/research/torntpharmLocalPrerequisiteMutationProposal.test.ts`
+
+Added npm command:
+
+`npm run r4n:mutate:prerequisites`
+
+### Exact mutation scope
+
+Maximum local persistent inserts:
+
+- `fundamental_metric_definitions`: **1**
+- `data_source_records`: **4**
+- `fundamental_observations`: **0**
+
+No evidence observations are inserted by this gate.
+
+### Explicit approval boundary
+
+The runner refuses execution unless the environment contains:
+
+`PORTFOLIOAI_ALLOW_LOCAL_PREREQUISITE_MUTATION=YES`
+
+This approval check occurs **before local DB discovery**.
+
+Without the flag:
+- no Supabase DB URL lookup;
+- no database connection;
+- no SQL execution.
+
+The runner separately refuses any DB URL not clearly using `localhost` or `127.0.0.1`.
+
+### Fail-closed database checks
+
+Before mutation, the SQL requires:
+
+- `COMPANY_EXCHANGE_FILING` registry exists in the expected approved state;
+- source is active;
+- entitlement verified;
+- retention rights verified;
+- no conflicting existing metric-definition semantics;
+- no same-artifact source record with a different hash, payload or URL.
+
+Any conflict aborts the transaction.
+
+### Idempotency
+
+Canonical DB protections confirmed:
+
+- `fundamental_metric_definitions` primary key = `code`;
+- `data_source_records` dedup key =
+  `(source_code, record_kind, external_record_id, payload_hash)`.
+
+Additional application-level conflict checks prevent silent version drift for the same issuer artifact identity.
+
+### Verified hashes carried into the proposal
+
+- Q1: `b8a8b87c01a1ea1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f`
+- Q2: `3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fceec5f2`
+- Q3: `3df20aaafb6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7`
+- Q4: `d08cf8f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e990922998b53`
+
+Q4 remains the reviewed comparable **16%** base-business value. The rejected 31% claim remains excluded.
+
+### Postconditions
+
+Before commit, the local SQL verifies:
+
+- one matching metric-definition row exists;
+- four matching source records exist;
+- this gate has no fundamental-observation write path.
+
+### Glass-box UI checkpoint
+
+A new pair of cards now appears under **Prepared persistence packages**:
+
+**Local prerequisite mutation proposal**
+- local Supabase only;
+- up to 1 metric-definition + 4 immutable source-record inserts;
+- fundamental observations: 0;
+- status: **PREPARED · NOT APPROVED · NOT EXECUTED**.
+
+**Mutation execution boundary**
+- command: `npm run r4n:mutate:prerequisites`;
+- approval flag required before DB discovery;
+- local-only guard;
+- source-registry, conflict, idempotency and postcondition guards;
+- execution approved: **NO**.
+
+### Documentation
+
+Added:
+
+`docs/R4N_TORNTPHARM_Gate_F_Local_Prerequisite_Mutation_Proposal_V1.md`
+
+### Scope boundary
+
+- Local mutation proposal prepared: **YES**
+- Execution approved: **NO**
+- Executor executed: **NO**
+- Metric-definition insert: **NO**
+- Source-record insert: **NO**
+- Fundamental-observation insert: **NO**
+- Production Supabase mutation: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, run the local Vite app, and visually inspect the new **Local prerequisite mutation proposal** and **Mutation execution boundary** cards. Do not run the mutation command. After visual approval, run full local validation; only then can actual local mutation be separately considered.
