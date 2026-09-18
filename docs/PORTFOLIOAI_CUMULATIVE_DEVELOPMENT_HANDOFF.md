@@ -8825,3 +8825,71 @@ Safety state:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.6 is validated. The next permitted task is to choose between (A) a local rollback-only execution proof of the G6.6 SQL proposal, or (B) designing the Domestic Formulations FCF-yield numeric threshold proposal while keeping persistence unapplied. The safer sequence is to prove the SQL proposal locally first, then design numeric bands only after the canonical definition has passed that local dry-run checkpoint.
+
+
+---
+
+## 113. Entry 108 — Gate G6.7 local rollback-only FCF-yield registration proof prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.7 — Local Rollback-Only Execution Proof** for the canonical FCF-yield registration proposal.
+
+### Purpose
+
+G6.7 is designed to prove that:
+
+`docs/sql/R4N_PHARMA_FCF_YIELD_PERCENT_V1_REGISTRATION_PROPOSAL.sql`
+
+is compatible with the current local Supabase schema while leaving no persisted metric-definition state behind.
+
+### Prepared artifacts
+
+Added:
+
+- `scripts/r4n/run-g6-7-fcf-yield-registration-rollback-proof.sh`
+- `docs/R4N_PHARMA_V1_Gate_G6_7_FCF_Yield_Local_Rollback_Proof.md`
+
+### Safety behavior
+
+The runner:
+
+- resolves the database URL from local Supabase CLI state;
+- refuses non-local database URLs;
+- permits only localhost / 127.0.0.1;
+- captures counts for `FCF_YIELD` and `FCF_YIELD_PERCENT` before execution;
+- executes the exact G6.6 SQL proposal;
+- relies on the proposal's deliberate `ROLLBACK`;
+- captures counts again after rollback;
+- fails if persisted definition counts changed.
+
+### Expected current baseline
+
+From G6.5:
+
+- `FCF_YIELD` definitions: **0**
+- `FCF_YIELD_PERCENT` definitions: **0**
+
+Expected clean G6.7 result:
+
+- proposal preflight: **PASS**
+- proposal postconditions inside transaction: **PASS**
+- rollback: **PASS**
+- persisted `FCF_YIELD` definitions after run: **0**
+- persisted `FCF_YIELD_PERCENT` definitions after run: **0**
+- write authorization: **NO**
+
+### Explicit boundary
+
+- rollback-only proof prepared: **YES**
+- executed by ChatGPT: **NO**
+- persistent local metric registration: **NO**
+- production metric registration: **NO**
+- observation creation: **NO**
+- numeric FCF-yield bands: **NO**
+- score execution: **NO**
+- deployment: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, then run `bash scripts/r4n/run-g6-7-fcf-yield-registration-rollback-proof.sh` from the repository root and share the complete terminal output. Do not execute any persistent migration or production action.
