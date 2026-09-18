@@ -1407,3 +1407,110 @@ No failure was reported from the preceding owner-run commands in the requested s
 **Result:** Gate F public / official source-discovery dry-run slice = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
 
 **CURRENT STOP POINT:** The public/official source spine for all 12 PUBLIC_OFFICIAL_FIRST requirements is now visible and locally validated. The next safe Gate F step is **artifact-level content review planning**: enumerate exact periods/documents from the source hubs, classify whether each artifact is likely to contain the required evidence shape, and compute per-requirement history gaps while keeping every evidence state NOT_REVIEWED and performing no ingestion.
+
+
+---
+
+## 30. Entry 025 — Gate F artifact-level content review planning prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The next local-only Gate F slice converts the previously discovered public/official source hubs into an exact artifact-level content review queue for the 12 `PUBLIC_OFFICIAL_FIRST` TORNTPHARM business-model requirements.
+
+### New artifact-level planning contract
+
+Added:
+- `src/features/research/torntpharmArtifactContentReviewPlan.ts`
+- `src/features/research/torntpharmArtifactContentReviewPlan.test.ts`
+- `docs/R4N_TORNTPHARM_Gate_F_Artifact_Content_Review_Plan.md`
+
+Updated:
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+
+### Exact review queue
+
+The plan freezes **12 exact public/official artifacts**:
+- 4 annual reports: FY2022-23, FY2023-24, FY2024-25, FY2025-26;
+- 5 quarterly releases: Q4 FY25, Q1 FY26, Q2 FY26, Q3 FY26, Q4 FY26;
+- 2 FDA documents: 2019 Indrad warning letter and 2024 Indrad closeout letter;
+- 1 listed-company filing: 21 January 2026 Regulation 30 filing for completion of the JB Chemicals acquisition.
+
+Every artifact remains `NOT_REVIEWED`.
+
+### Relevance planning
+
+Artifact-to-requirement links are classified conservatively as:
+- `LIKELY_RELEVANT`;
+- `POSSIBLY_RELEVANT`.
+
+These are planning labels only and do not promote evidence state.
+
+Disclosure-sensitive requirements are intentionally conservative. For example, the five quarterly releases remain only `POSSIBLY_RELEVANT` for US Generic Price Erosion until explicit compatible price/ASP evidence is actually reviewed.
+
+### Planning coverage vs reviewed evidence
+
+The model separately tracks:
+- candidate-document planning coverage;
+- minimum planning gap;
+- preferred planning gap;
+- reviewed-observation count;
+- minimum reviewed-evidence gap.
+
+Current invariant:
+- requirements planned: **12**;
+- exact artifacts planned: **12**;
+- annual reports: **4**;
+- quarterly releases: **5**;
+- regulator documents: **2**;
+- exchange filings: **1**;
+- requirements with minimum planning horizon covered: **12/12**;
+- requirements with preferred planning horizon covered: **5/12**;
+- evidence reviewed: **0**;
+- all requirements remain `NOT_REVIEWED`.
+
+Example: Export / US Revenue Growth has 5 quarterly candidate documents against a 4-quarter minimum / 8-quarter preferred contract, so minimum planning gap is 0 and preferred planning gap is 3; reviewed observations remain 0 and minimum reviewed-evidence gap remains 4.
+
+### Safety invariants
+
+- `contentFetchAuthorized = false`;
+- `evidenceReviewAuthorized = false`;
+- `ingestionAuthorized = false`;
+- no paid/licensed provider call;
+- no production write;
+- no scoring/recommendation/sizing;
+- no scheduler change.
+
+### Visible localhost milestone
+
+For TORNTPHARM only, the Pharma Research workspace now renders:
+
+**Gate F · Artifact-level review planning / Exact document review plan**
+
+The panel exposes:
+- 12 exact planned artifacts;
+- document-type counts;
+- 12/12 minimum planning coverage;
+- 5/12 preferred planning coverage;
+- evidence reviewed = 0;
+- exact document periods;
+- per-requirement candidate-document count;
+- minimum/preferred planning gaps;
+- minimum reviewed-evidence gap;
+- `LIKELY` vs `POSSIBLE` relevance labels;
+- explicit **Planning only · 0 reviewed** state.
+
+Per the local-first workflow, this implementation checkpoint is **not yet visually approved** and full local validation is deferred until after owner localhost review.
+
+**Production touched:** NO.  
+**Production Supabase:** unchanged.  
+**Evidence ingestion:** NO.  
+**Content fetch / evidence review:** NO.  
+**Paid/licensed provider calls:** NO.  
+**Scoring / recommendation / sizing:** NO.  
+**Schedulers:** unchanged.  
+**PR #101:** remains draft/open/unmerged.
+
+**CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Exact document review plan** section. Expected summary: 12 exact artifacts, 4 annual + 5 quarterly + 2 regulator + 1 exchange filing, 12/12 minimum planning coverage, 5/12 preferred planning coverage, and 0 evidence reviewed. Obtain visual approval before the full local validation chain.
