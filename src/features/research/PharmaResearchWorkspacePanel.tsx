@@ -3,6 +3,7 @@ import "./PharmaResearchWorkspacePanel.css"
 import { buildTorntpharmEvidencePilotPreview } from "./pharmaEvidencePilotPreview"
 import { buildPharmaBusinessModelEvidenceAcquisitionPlan, type PharmaBusinessModelEvidenceAcquisitionItem } from "./pharmaBusinessModelEvidenceAcquisitionContract"
 import { buildTorntpharmPublicOfficialSourceDiscoveryPlan } from "./torntpharmPublicOfficialSourceDiscovery"
+import { buildTorntpharmArtifactContentReviewPlan } from "./torntpharmArtifactContentReviewPlan"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -113,6 +114,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const evidencePilot = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmEvidencePilotPreview(securityId, model) : null
   const acquisitionPlan = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaBusinessModelEvidenceAcquisitionPlan(model) : null
   const publicSourceDiscovery = acquisitionPlan ? buildTorntpharmPublicOfficialSourceDiscoveryPlan(acquisitionPlan) : null
+  const artifactReviewPlan = acquisitionPlan && publicSourceDiscovery ? buildTorntpharmArtifactContentReviewPlan(acquisitionPlan, publicSourceDiscovery) : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -240,6 +242,48 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         </article>)}
       </div>
       <p className="pharma-evidence-pilot-note"><strong>Boundary:</strong> Brand & Therapy Leadership and Chronic / Acute Mix are intentionally excluded from this 12-row public/official-first dry run because their licensed-source gates remain separately controlled.</p>
+    </section> : null}
+
+    {artifactReviewPlan ? <section className="pharma-artifact-review-plan" aria-labelledby="pharma-artifact-review-title">
+      <div className="pharma-evidence-pilot-head">
+        <div>
+          <p className="eyebrow">Gate F · Artifact-level review planning</p>
+          <h3 id="pharma-artifact-review-title">Exact document review plan</h3>
+          <p>Exact annual, quarterly, regulator and exchange documents are lined up for content review. Planning coverage is kept separate from reviewed evidence: no document has been reviewed into an evidence state yet.</p>
+        </div>
+        <span className="pharma-workspace-lock">Planning only · 0 reviewed</span>
+      </div>
+      <div className="pharma-artifact-review-summary">
+        <div><span>Exact artifacts planned</span><strong>{artifactReviewPlan.summary.exactArtifactsPlanned}</strong><small>{artifactReviewPlan.summary.annualReports} annual · {artifactReviewPlan.summary.quarterlyReleases} quarterly · {artifactReviewPlan.summary.regulatorDocuments} regulator · {artifactReviewPlan.summary.exchangeFilings} exchange</small></div>
+        <div><span>Requirements planned</span><strong>{artifactReviewPlan.summary.requirementsPlanned}</strong><small>{artifactReviewPlan.summary.minimumPlanningCovered} cover minimum planning horizon</small></div>
+        <div><span>Preferred horizon covered</span><strong>{artifactReviewPlan.summary.preferredPlanningCovered}</strong><small>Candidate-document planning only</small></div>
+        <div><span>Evidence reviewed</span><strong>{artifactReviewPlan.summary.evidenceReviewed}</strong><small>All rows remain NOT REVIEWED</small></div>
+      </div>
+      <div className="pharma-artifact-targets">
+        {artifactReviewPlan.artifacts.map((artifact) => <article key={artifact.code}>
+          <div><strong>{artifact.title}</strong><small>{titleCase(artifact.documentType)}</small></div>
+          <span>{artifact.period}</span>
+        </article>)}
+      </div>
+      <div className="pharma-artifact-requirements">
+        {artifactReviewPlan.requirements.map((item) => <article key={item.metricCode}>
+          <div className="pharma-source-requirement-head">
+            <div>
+              <strong>{item.label}</strong>
+              <small>{item.scopeLabel} · minimum {item.minimumObservations} / preferred {item.preferredObservations} {titleCase(item.historyUnit).toLocaleLowerCase()}</small>
+            </div>
+            <span>{item.evidenceState.replaceAll("_", " ")}</span>
+          </div>
+          <div className="pharma-artifact-gap-grid">
+            <span><strong>{item.planningCoverageCount}</strong> candidate docs</span>
+            <span><strong>{item.minimumPlanningGap}</strong> minimum planning gap</span>
+            <span><strong>{item.preferredPlanningGap}</strong> preferred planning gap</span>
+            <span><strong>{item.minimumReviewedEvidenceGap}</strong> reviewed-evidence gap</span>
+          </div>
+          <p>{item.artifactReviews.map((review) => `${review.artifactCode} · ${review.relevance === "LIKELY_RELEVANT" ? "Likely" : "Possible"}`).join(" | ")}</p>
+        </article>)}
+      </div>
+      <p className="pharma-evidence-pilot-note"><strong>Interpretation:</strong> 12/12 public/official-first requirements now have enough exact candidate documents to cover their minimum planning horizon, but that does not satisfy any evidence requirement. Content review, compatibility checks and freshness review remain outstanding for every row.</p>
     </section> : null}
 
   </section>
