@@ -6511,3 +6511,66 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.1 cards in TORNTPHARM → Research → Gate G, then run focused G5.1 validation. Do not proceed to the next G5 family until this checkpoint is validated and the dimension-alignment boundary is accepted.
+
+
+---
+
+## 89. Entry 084 — Gate G5.1 ROCE / Capital Efficiency framework validated
+
+**Date:** 18 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5.1 has completed its validation checkpoint as a **proposal-only ROCE / Capital Efficiency framework**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G5.1 ROCE plus the validated G1–G4 and existing Gate G curve proposals → **PASS**
+- focused ESLint for the G5.1/G1–G4/Gate G methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G5.1 status
+
+- ROCE / Capital Efficiency framework: **VALIDATED / NOT ACTIVE**
+- minimum 3 / preferred 5 annual-history contract: **VALIDATED**
+- latest annual period requirement: **VALIDATED**
+- consistent calculation semantics requirement: **VALIDATED**
+- candidate methodology shape `Level + Stability + Trend`: **VALIDATED AS FRAMEWORK ONLY**
+- component weights: **UNAPPROVED**
+- universal ROCE numeric bands: **NO**
+- subprofile-specific ROCE thresholds: **UNAPPROVED**
+- numeric ROCE curve ready: **NO**
+
+### Dimension-alignment boundary remains open
+
+The canonical PHARMA_V1 architecture assigns ROCE to:
+
+`CAPITAL_EFFICIENCY`
+
+while the older parent evidence contract still records:
+
+`PHARMA_ROCE_HISTORY.dimension = QUALITY`
+
+This mismatch remains intentionally unresolved.
+
+G5.1 validation confirms that the mismatch is visible and fail-closed; it does **not** authorize a silent remap.
+
+A separate versioned reconciliation is required before any active scoring path can treat ROCE as Capital Efficiency.
+
+### Safety boundary remains unchanged
+
+- parent dimension reconciliation applied: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G5.1 is validated. The next permitted G5 parent curve family is **Cash Conversion**, but implementation must first inspect the existing `PHARMA_CASH_CONVERSION_HISTORY` evidence contract and reconcile any legacy-to-canonical dimension mismatch before defining methodology.
