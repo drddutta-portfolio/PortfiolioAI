@@ -151,7 +151,7 @@ const PHARMA_SNAPSHOT_GROUPS: readonly ResearchSnapshotGroup[] = [
   },
   {
     title: "Growth at a glance",
-    codes: ["REVENUE_ANNUAL", "PAT_ATTRIBUTABLE_ANNUAL", "EPS_DILUTED_ANNUAL", "INDIA_REVENUE_ANNUAL", "USA_REVENUE_ANNUAL"],
+    codes: ["REVENUE_ANNUAL", "PAT_ATTRIBUTABLE_ANNUAL", "EPS_DILUTED_ANNUAL", "INDIA_REVENUE_ANNUAL", "USA_REVENUE_ANNUAL", "PHARMA_EXPORT_US_REVENUE_GROWTH"],
   },
   {
     title: "Financial strength",
@@ -200,7 +200,7 @@ const PHARMA_QUALITY_GROWTH_WORKSPACE_SECTIONS: readonly ResearchWorkspaceSectio
   {
     title: "Growth & earnings",
     subtitle: "Revenue, attributable PAT and diluted EPS with geographic growth evidence where separately disclosed.",
-    codes: ["REVENUE_ANNUAL", "PAT_ATTRIBUTABLE_ANNUAL", "EPS_DILUTED_ANNUAL", "INDIA_REVENUE_ANNUAL", "USA_REVENUE_ANNUAL", "GERMANY_REVENUE_ANNUAL", "BRAZIL_REVENUE_ANNUAL", "OTHER_INTERNATIONAL_REVENUE_ANNUAL"],
+    codes: ["REVENUE_ANNUAL", "PAT_ATTRIBUTABLE_ANNUAL", "EPS_DILUTED_ANNUAL", "INDIA_REVENUE_ANNUAL", "USA_REVENUE_ANNUAL", "PHARMA_EXPORT_US_REVENUE_GROWTH", "GERMANY_REVENUE_ANNUAL", "BRAZIL_REVENUE_ANNUAL", "OTHER_INTERNATIONAL_REVENUE_ANNUAL"],
   },
   {
     title: "Business durability",
