@@ -1,0 +1,109 @@
+{
+  "contractVersion": "TORNTPHARM_PREREQUISITE_MATERIALIZATION_DRY_RUN_V1",
+  "metricDefinition": {
+    "code": "PHARMA_EXPORT_US_REVENUE_GROWTH",
+    "name": "Export / US Revenue Growth",
+    "valueKind": "NUMERIC",
+    "canonicalUnit": "PERCENT",
+    "statementScope": "PHARMA_BUSINESS_MODEL",
+    "freshnessSeconds": 10368000,
+    "definition": {
+      "provider": "COMPANY_EXCHANGE_FILING",
+      "selection": "REVIEWED",
+      "periodType": "QUARTER",
+      "semanticGuard": "SEPARATELY_DISCLOSED_US_OR_EXPORT_REVENUE_GROWTH_ONLY",
+      "mappingVersion": "PHARMA_V1_GLOBAL_GENERICS_V1",
+      "sourcePriority": [
+        "COMPANY_EXCHANGE_FILING"
+      ],
+      "rejectedSubstitutes": [
+        "TOTAL_INTERNATIONAL_REVENUE_GROWTH_WITHOUT_COMPATIBLE_SCOPE"
+      ]
+    },
+    "isActive": true
+  },
+  "sourceRecords": [
+    {
+      "sourceCode": "COMPANY_EXCHANGE_FILING",
+      "recordKind": "ISSUER_RESULTS_RELEASE",
+      "externalRecordId": "TORRENT_Q1_FY26_RELEASE",
+      "sourceUrl": "https://www.torrentpharma.com/assets/Torrent_Pharma_Press_Release_Q1_FY_26_Results_a857463993.pdf",
+      "rawPayload": {
+        "contractVersion": "TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1",
+        "artifactCode": "TORRENT_Q1_FY26_RELEASE",
+        "artifactTitle": "Torrent Pharma Q1 FY26 Results Release",
+        "artifactPeriod": "Q1 FY2025-26",
+        "reviewState": "READ_ONLY_REVIEWED",
+        "metricCode": "PHARMA_EXPORT_US_REVENUE_GROWTH",
+        "observationDate": "2025-06-30",
+        "reviewedValue": "19",
+        "unit": "PERCENT",
+        "basis": "US business revenue YoY growth — reported Torrent business",
+        "provenanceSummary": "Issuer Q1 FY26 release states US business revenues of Rs 308 crore, up 19% YoY."
+      }
+    },
+    {
+      "sourceCode": "COMPANY_EXCHANGE_FILING",
+      "recordKind": "ISSUER_RESULTS_RELEASE",
+      "externalRecordId": "TORRENT_Q2_FY26_RELEASE",
+      "sourceUrl": "https://www.torrentpharma.com/docs/Torrent_Pharma_Press_release_Q2_25_26_90203574c9.pdf",
+      "rawPayload": {
+        "contractVersion": "TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1",
+        "artifactCode": "TORRENT_Q2_FY26_RELEASE",
+        "artifactTitle": "Torrent Pharma Q2 FY26 Results Release",
+        "artifactPeriod": "Q2 FY2025-26",
+        "reviewState": "READ_ONLY_REVIEWED",
+        "metricCode": "PHARMA_EXPORT_US_REVENUE_GROWTH",
+        "observationDate": "2025-09-30",
+        "reviewedValue": "26",
+        "unit": "PERCENT",
+        "basis": "US business revenue YoY growth — reported Torrent business",
+        "provenanceSummary": "Issuer Q2 FY26 release states US business revenues of Rs 337 crore, up 26% YoY."
+      }
+    },
+    {
+      "sourceCode": "COMPANY_EXCHANGE_FILING",
+      "recordKind": "ISSUER_RESULTS_RELEASE",
+      "externalRecordId": "TORRENT_Q3_FY26_RELEASE",
+      "sourceUrl": "https://www.torrentpharma.com/docs/Press_release_Q3_25_26_V6_9c697bb7fe.pdf",
+      "rawPayload": {
+        "contractVersion": "TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1",
+        "artifactCode": "TORRENT_Q3_FY26_RELEASE",
+        "artifactTitle": "Torrent Pharma Q3 FY26 Results Release",
+        "artifactPeriod": "Q3 FY2025-26",
+        "reviewState": "READ_ONLY_REVIEWED",
+        "metricCode": "PHARMA_EXPORT_US_REVENUE_GROWTH",
+        "observationDate": "2025-12-31",
+        "reviewedValue": "19",
+        "unit": "PERCENT",
+        "basis": "US business revenue YoY growth — reported Torrent business",
+        "provenanceSummary": "Issuer Q3 FY26 release states US business revenues of Rs 321 crore, up 19% YoY."
+      }
+    },
+    {
+      "sourceCode": "COMPANY_EXCHANGE_FILING",
+      "recordKind": "ISSUER_RESULTS_RELEASE",
+      "externalRecordId": "TORRENT_Q4_FY26_RELEASE",
+      "sourceUrl": "https://www.torrentpharma.com/docs/Torrent_Pharma_Press_release_Q4_25_26_e5822c6449.pdf",
+      "rawPayload": {
+        "contractVersion": "TORNTPHARM_READ_ONLY_CONTENT_REVIEW_V1",
+        "artifactCode": "TORRENT_Q4_FY26_RELEASE",
+        "artifactTitle": "Torrent Pharma Q4 FY26 Results Release",
+        "artifactPeriod": "Q4 FY2025-26",
+        "reviewState": "READ_ONLY_REVIEWED",
+        "metricCode": "PHARMA_EXPORT_US_REVENUE_GROWTH",
+        "observationDate": "2026-03-31",
+        "reviewedValue": "16",
+        "unit": "PERCENT",
+        "basis": "US base-business revenue YoY growth — excludes JB acquisition effect",
+        "provenanceSummary": "Issuer Q4 FY26 release separately states US base-business revenue grew 16% YoY; this is used instead of the 31% reported figure to preserve pre-acquisition scope compatibility."
+      }
+    }
+  ],
+  "executionPolicy": {
+    "databaseConnectionAllowed": false,
+    "writesAllowed": false,
+    "hashAlgorithm": "SHA256",
+    "serialization": "RECURSIVE_LEXICOGRAPHIC_KEY_SORT_V1"
+  }
+}
