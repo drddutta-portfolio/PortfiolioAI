@@ -32,6 +32,7 @@ import { PHARMA_DOMESTIC_VALUATION_SELF_HISTORY_CURVE } from "./pharmaDomesticVa
 import { PHARMA_G6_DOMESTIC_VALUATION_FCF_IDENTITY } from "./pharmaG6DomesticValuationFcfIdentity"
 import { PHARMA_FCF_YIELD_METRIC_CONTRACT } from "./pharmaFcfYieldMetricContract"
 import { PHARMA_FCF_YIELD_DERIVATION_VERSION } from "./pharmaFcfYieldDerivationProposal"
+import { PHARMA_DOMESTIC_FCF_YIELD_CURVE } from "./pharmaDomesticFcfYieldCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -428,6 +429,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>{PHARMA_FCF_YIELD_DERIVATION_VERSION}</small>
               <p>FCF yield is derived as annual free cash flow divided by current market cap × 100. Negative FCF remains negative evidence, invalid market cap fails closed, and FCF_YIELD remains an alias fallback that cannot double-count the canonical component.</p>
               <span>Canonical code: FCF_YIELD_PERCENT · Alias double-counting: NO · Numeric score bands: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.8 · Domestic FCF-yield corroboration curve</strong>
+              <small>{PHARMA_DOMESTIC_FCF_YIELD_CURVE.proposalVersion}</small>
+              <p>Domestic Formulations now has a proposal-only cash-flow corroboration curve using canonical FCF_YIELD_PERCENT. The curve rewards stronger cash yield, preserves negative FCF as adverse evidence, and does not act as a standalone valuation verdict.</p>
+              <span>≥5%: 100 · ≥3%: 80 · ≥1.5%: 60 · ≥0%: 40 · &lt;0%: 20</span>
+            </article>
+            <article>
+              <strong>G6.8 · Corroboration-only boundary</strong>
+              <small>Domestic Formulations only · Peer-relative valuation still unapproved</small>
+              <p>The FCF-yield curve is only one Valuation component. Peer-relative valuation and component weights remain unapproved, so the 12% Valuation dimension is still not score-ready.</p>
+              <span>Standalone verdict: NO · Component weights: PENDING · Whole dimension ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
