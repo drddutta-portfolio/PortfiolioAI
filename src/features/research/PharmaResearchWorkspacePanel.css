@@ -284,3 +284,128 @@
   .pharma-workspace-summary { grid-template-columns: 1fr; }
   .pharma-workspace-requirement { grid-template-columns: 1fr; }
 }
+
+
+.pharma-evidence-pilot {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #dce7df;
+  border-radius: .9rem;
+  background: linear-gradient(180deg, #fbfefc 0%, #f5faf7 100%);
+}
+
+.pharma-evidence-pilot-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pharma-evidence-pilot-head h3 {
+  margin: 0;
+  color: #17231d;
+}
+
+.pharma-evidence-pilot-head > div > p:last-child,
+.pharma-evidence-pilot-note {
+  color: #68746d;
+  line-height: 1.5;
+}
+
+.pharma-evidence-pilot-head > div > p:last-child {
+  max-width: 60rem;
+  margin: .45rem 0 0;
+}
+
+.pharma-evidence-pilot-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+.pharma-evidence-pilot-summary > div,
+.pharma-evidence-impact {
+  border: 1px solid #e1e7e2;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-evidence-pilot-summary > div {
+  padding: .72rem .78rem;
+}
+
+.pharma-evidence-pilot-summary span,
+.pharma-evidence-pilot-summary small,
+.pharma-evidence-impact span,
+.pharma-evidence-impact small {
+  display: block;
+  color: #77817b;
+}
+
+.pharma-evidence-pilot-summary span,
+.pharma-evidence-impact > div:first-child > span {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.pharma-evidence-pilot-summary strong,
+.pharma-evidence-impact strong {
+  display: block;
+  color: #1d3027;
+}
+
+.pharma-evidence-pilot-summary strong {
+  margin: .18rem 0;
+  font-size: 1.08rem;
+}
+
+.pharma-evidence-impact {
+  display: grid;
+  grid-template-columns: minmax(220px, .8fr) minmax(0, 1.2fr);
+  gap: .8rem;
+  margin-top: .65rem;
+  padding: .78rem;
+}
+
+.pharma-evidence-impact > div:first-child > strong {
+  margin: .15rem 0;
+  font-size: 1.15rem;
+  color: #174f3b;
+}
+
+.pharma-evidence-scope-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .45rem;
+}
+
+.pharma-evidence-scope-list > span {
+  padding: .55rem .62rem;
+  border-radius: .6rem;
+  background: #f6f9f7;
+}
+
+.pharma-evidence-scope-list strong {
+  margin-bottom: .12rem;
+  font-size: .78rem;
+}
+
+.pharma-evidence-pilot-note {
+  margin: .72rem 0 0;
+  padding-top: .7rem;
+  border-top: 1px solid #e2e8e4;
+}
+
+@media (max-width: 980px) {
+  .pharma-evidence-pilot-summary { grid-template-columns: 1fr 1fr; }
+  .pharma-evidence-impact { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-evidence-pilot-head { flex-direction: column; }
+  .pharma-evidence-pilot-summary,
+  .pharma-evidence-scope-list { grid-template-columns: 1fr; }
+}
