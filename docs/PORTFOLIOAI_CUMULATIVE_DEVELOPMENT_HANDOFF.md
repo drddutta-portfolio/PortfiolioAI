@@ -6100,3 +6100,78 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G3 cards in TORNTPHARM → Research → Gate G, then run focused G3 validation. Only after G3 validation should development proceed to **G4 — Governance / Regulatory Gate Contract**.
+
+
+---
+
+## 85. Entry 080 — Gate G3 Pharma readiness mapping contract validated
+
+**Date:** 18 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G3 has completed its required localhost visual and focused validation checkpoint.
+
+### Owner visual review
+
+TORNTPHARM → Research → Gate G was reviewed on localhost.
+
+The two G3 glass-box cards are visible and aligned with the existing Gate G methodology surface:
+
+- **G3 · Readiness mapping contract**
+- **G3 · Overall fail-closed readiness gate**
+
+The cards correctly preserve the visible readiness vocabulary, the 60% dimension gate, the 70% overall gate, Emerging Watch exclusion, and the requirement that the common PHARMA_V1 core, Primary subprofile, and every weighted dimension be READY before overall preview readiness.
+
+### Focused validation
+
+Owner-confirmed results:
+
+- focused Vitest across:
+  - `pharmaReadinessMappingContract.test.ts`
+  - `pharmaOverlayModifierContract.test.ts`
+  - `pharmaAdaptiveClassificationContract.test.ts`
+  - `pharmaGateGScoringMethodProposal.test.ts`
+  - `pharmaSegmentGrowthCurveProposal.test.ts`
+  - `pharmaOperatingMarginCurveProposal.test.ts`
+  → **6 test files passed / 44 tests passed**
+
+- focused ESLint across the G3 contract/test, G2 contract/test, G1 contract/test, Gate G methodology proposal, segment-growth proposal/test, operating-margin proposal/test, and `PharmaResearchWorkspacePanel.tsx`
+  → **PASS**
+
+- `npm run typecheck`
+  → **PASS**
+
+- `npm run build`
+  → **PASS**
+
+Build emitted only the existing non-blocking Vite large-chunk advisory; no build failure occurred.
+
+### G3 status
+
+- readiness mapping architecture contract: **VALIDATED / NOT ACTIVE**
+- 60% dimension score-ready gate: **VALIDATED**
+- 70% overall preview gate: **VALIDATED**
+- every weighted dimension must be READY: **VALIDATED**
+- common PHARMA_V1 core must be READY: **VALIDATED**
+- Primary subprofile must be READY: **VALIDATED**
+- incomplete Material Overlay may keep affected dimension PARTIAL: **VALIDATED**
+- Emerging Watch readiness exclusion: **VALIDATED**
+- NOT_APPLICABLE denominator exclusion: **VALIDATED**
+- governance detailed mechanics: **DEFERRED TO G4**
+
+### Safety boundary remains unchanged
+
+- score preview execution: **NO**
+- numeric score execution: **NO**
+- persisted score run: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+- paid-provider call: **NO**
+- scheduler change: **NO**
+
+**CURRENT STOP POINT:** G3 is now validated. The next permitted Gate G design task is **G4 — Governance / Regulatory Gate Contract**, still proposal-only and non-executable. Before implementing G4, inspect the canonical adaptive plan and the current G1/G2/G3/Gate G contracts at the then-current branch head.
