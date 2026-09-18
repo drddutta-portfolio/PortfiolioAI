@@ -12,6 +12,7 @@ import { buildTorntpharmLocalNumericPreflightPlan } from "./torntpharmLocalNumer
 import { buildPharmaRegulatoryEventMigrationReplayPlan } from "./pharmaRegulatoryEventMigrationReplayPlan"
 import { buildTorntpharmCanonicalPrerequisitePackage } from "./torntpharmCanonicalPrerequisitePackage"
 import { buildTorntpharmLocalPrerequisiteMutationProposal } from "./torntpharmLocalPrerequisiteMutationProposal"
+import { buildTorntpharmLocalObservationMutationProposal } from "./torntpharmLocalObservationMutationProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -131,6 +132,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const eventMigrationReplay = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildPharmaRegulatoryEventMigrationReplayPlan(securityId, resolution.data.assignment.assignmentVersion) : null
   const canonicalPrerequisitePackage = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmCanonicalPrerequisitePackage() : null
   const localPrerequisiteMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalPrerequisiteMutationProposal() : null
+  const localObservationMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalObservationMutationProposal() : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -479,6 +481,21 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
           <span>Execution approved: NO · Fundamental observations: 0</span>
         </article>
       </div> : null}
+      {localObservationMutationProposal ? <div className="pharma-persistence-package-grid">
+        <article>
+          <strong>Local evidence observation proposal</strong>
+          <small>{localObservationMutationProposal.proposalVersion}</small>
+          <p>Prepared to insert at most {localObservationMutationProposal.observationRowsMaximum} reviewed PHARMA_EXPORT_US_REVENUE_GROWTH observations into local Supabase only: Q1 19%, Q2 26%, Q3 19% and Q4 16%.</p>
+          <span>Status: PREPARED · NOT APPROVED · NOT EXECUTED</span>
+        </article>
+        <article>
+          <strong>Observation execution boundary</strong>
+          <small>npm run r4n:mutate:observations</small>
+          <p>The runner requires a separate approval flag before DB discovery and then rechecks security identity, reviewed assignment, metric contract, immutable source records, conflicts, idempotency and postconditions.</p>
+          <span>Execution approved: NO · Production writes: 0</span>
+        </article>
+      </div> : null}
+
 
     </section> : null}
 
