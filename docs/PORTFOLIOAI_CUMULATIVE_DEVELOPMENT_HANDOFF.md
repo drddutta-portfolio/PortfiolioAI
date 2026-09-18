@@ -8577,3 +8577,133 @@ under the validated G6.4 formula/authority contract.
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.5 preflight is complete. The next permitted task is a repository-only proposal for canonical `FCF_YIELD_PERCENT` metric registration/derivation. Do not execute any local or production migration without a separate approval checkpoint.
+
+
+---
+
+## 111. Entry 106 — Gate G6.6 canonical FCF-yield registration & derivation proposal prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.6 — Canonical FCF_YIELD_PERCENT Registration & Derivation Proposal**.
+
+### G6.5 prerequisite confirmed
+
+The completed local read-only G6.5 preflight established:
+
+- `FCF_YIELD` definition rows: **0**
+- `FCF_YIELD_PERCENT` definition rows: **0**
+- TORNTPHARM observations under either identity: **0**
+- global observations under either identity: **0**
+- alias duplicate pairs: **0**
+- alias conflict pairs: **0**
+
+Therefore no persisted alias migration or cleanup is required before a canonical definition can be proposed.
+
+### Canonical definition proposal
+
+Canonical metric:
+
+`FCF_YIELD_PERCENT`
+
+Proposed registration semantics:
+
+- value kind: `NUMERIC`
+- canonical unit: `PERCENT`
+- statement scope: `VALUATION`
+- calculation owner: `PORTFOLIOAI`
+- freshness: 86400 seconds
+- mapping version: `PHARMA_FCF_YIELD_PERCENT_V1`
+
+Legacy alias:
+
+`FCF_YIELD`
+
+The alias is compatibility-only and must never create a second Valuation component.
+
+### Deterministic derivation proposal
+
+Formula:
+
+`(FREE_CASH_FLOW_ANNUAL / CURRENT_MARKET_CAP) * 100`
+
+Numerator:
+
+- `FREE_CASH_FLOW_ANNUAL`
+- reviewed parent formula `CFO_ANNUAL - CAPEX_ANNUAL`
+
+Derivation behavior:
+
+- finite positive market cap required;
+- zero/negative/non-finite market cap fails closed;
+- negative free cash flow remains negative yield;
+- no clamping to zero/neutral.
+
+### Evidence adapter reconciliation
+
+`pharmaScoringEvidence.ts` now treats Valuation cash-flow corroboration as one alias group:
+
+- canonical: `FCF_YIELD_PERCENT`
+- legacy fallback: `FCF_YIELD`
+
+If both identifiers are present, they still count as one Valuation evidence component.
+
+This changes evidence identity handling only; it does not execute a numeric Pharma score.
+
+### SQL proposal safety
+
+Added:
+
+`docs/sql/R4N_PHARMA_FCF_YIELD_PERCENT_V1_REGISTRATION_PROPOSAL.sql`
+
+The SQL is intentionally outside `supabase/migrations/`.
+
+It:
+
+- begins a transaction;
+- checks prerequisites and alias conflicts;
+- proposes one canonical metric definition;
+- verifies postconditions;
+- deliberately ends with `ROLLBACK`.
+
+It is not an executable migration checkpoint.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaFcfYieldDerivationProposal.ts`
+- `src/features/research/pharmaFcfYieldDerivationProposal.test.ts`
+- `docs/sql/R4N_PHARMA_FCF_YIELD_PERCENT_V1_REGISTRATION_PROPOSAL.sql`
+- `docs/R4N_PHARMA_V1_Gate_G6_6_FCF_Yield_Registration_Derivation_Proposal_V1.md`
+
+Updated:
+
+- `src/features/research/pharmaScoringEvidence.ts`
+- `src/features/research/pharmaScoringEvidence.test.ts`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.6 · Canonical FCF-yield registration proposal**
+- **G6.6 · Deterministic derivation & alias-safe evidence**
+
+### Explicit boundary
+
+- canonical repository definition proposed: **YES**
+- deterministic derivation proposed: **YES**
+- evidence adapter canonicalized: **YES**
+- local DB mutation: **NO**
+- production DB mutation: **NO**
+- observations created: **NO**
+- numeric FCF-yield score bands: **NO**
+- whole Valuation dimension ready: **NO**
+- score execution: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.6 cards in TORNTPHARM → Research → Gate G, then run focused G6.6 validation. No local or production SQL should be executed from the proposal artifact without a separate approval checkpoint.
