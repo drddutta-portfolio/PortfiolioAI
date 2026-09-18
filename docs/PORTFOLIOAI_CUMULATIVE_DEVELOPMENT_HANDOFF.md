@@ -2052,3 +2052,141 @@ No failure was reported from the preceding owner-run commands in the requested s
 **Result:** HDFCBANK ↔ TORNTPHARM Research-page visual-consistency checkpoint = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
 
 **CURRENT STOP POINT:** Shared cross-profile visual grammar is now stable enough to continue Pharma evidence work without further first-glance layout drift. The next safe R4N decision is whether to expand additional read-only Pharma evidence review or prepare a candidate-to-ingestion proposal contract for the already reviewed TORNTPHARM pilot candidates. Any actual evidence write remains separately approval-gated.
+
+
+---
+
+## 37. Entry 032 — Gate F candidate-to-ingestion proposal contract prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+A proposal-only candidate-to-ingestion gate has now been prepared for the six already reviewed TORNTPHARM evidence candidates.
+
+### Purpose
+
+The goal is to determine whether reviewed evidence is actually compatible with the current canonical ingestion contracts before any write is attempted.
+
+This gate deliberately performs no database mutation.
+
+Added:
+- `src/features/research/torntpharmCandidateToIngestionProposal.ts`
+- `src/features/research/torntpharmCandidateToIngestionProposal.test.ts`
+- `docs/R4N_TORNTPHARM_Gate_F_Candidate_To_Ingestion_Proposal.md`
+
+Updated:
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+
+### Important architectural finding
+
+The reviewed evidence is now ahead of the current ingestion schema.
+
+The existing `researchEvidenceIngestionValidator` and official manifest support numeric evidence units:
+- INR_CR
+- INR_PER_SHARE
+- PERCENT
+- MULTIPLE
+
+but the validator metric/unit registry currently covers the canonical financial-history metrics only.
+
+It does **not** yet version:
+- `PHARMA_EXPORT_US_REVENUE_GROWTH`;
+- event-state evidence for `PHARMA_REGULATORY_SITE_STATUS`.
+
+### Numeric candidate proposal
+
+The four reviewed Export / US Revenue Growth candidates are projected into the existing numeric ingestion shape:
+
+- 2025-06-30: 19%
+- 2025-09-30: 26%
+- 2025-12-31: 19%
+- 2026-03-31: 16% base-business
+
+They retain:
+- direct official lineage;
+- source artifact code;
+- period-end date;
+- PERCENT unit;
+- current PHARMA_V1 + Domestic Formulations assignment version.
+
+Under the current validator contract all four remain quarantined rather than silently accepted.
+
+Disposition:
+`VALIDATOR_CONTRACT_EXTENSION_REQUIRED`
+
+### Regulatory event proposal
+
+The two reviewed FDA Indrad events are intentionally **not** coerced into the numeric manifest:
+
+- 2019-10-08: WARNING_LETTER_ACTIVE
+- 2024-09-04: WARNING_LETTER_CLOSED_OUT
+
+Disposition:
+`EVENT_EVIDENCE_SCHEMA_REQUIRED`
+
+A separately versioned event-evidence storage and validation contract is required before these events can be proposed for ingestion.
+
+### Rejected claim protection
+
+The Q4 FY26 reported US-growth claim of **31%** remains excluded from the ingestion proposal entirely.
+
+Only the reviewed 16% base-business Q4 candidate appears in the comparable series.
+
+### Current proposal summary
+
+- reviewed candidates: **6**
+- numeric candidates: **4**
+- event candidates: **2**
+- validator accepted: **0**
+- validator quarantined: **4**
+- event-schema blocked: **2**
+- rejected claims excluded: **1**
+- proposed writes: **0**
+- `ingestionAuthorized = false`
+
+### Visible localhost milestone
+
+A new section now exists inside the collapsed:
+
+**Evidence operations & review controls**
+
+section:
+
+**Gate F · Candidate-to-ingestion proposal**  
+**Ingestion eligibility proposal**
+
+The panel shows:
+- reviewed candidate count;
+- numeric/event split;
+- validator accepted/quarantined counts;
+- event-schema blockers;
+- proposed writes = 0;
+- per-candidate disposition and current validator issue codes;
+- explicit proposal-only / zero-write boundary.
+
+Because the parent Evidence Operations layer remains collapsed by default, this does not re-expand the top-level Research page.
+
+### Source-level verification
+
+Confirmed:
+- proposal writes remain 0;
+- ingestion authorization remains false;
+- regulatory event evidence is absent from the numeric projection;
+- rejected Q4 31% value is absent from the numeric projection;
+- proposal UI remains inside the collapsed Evidence Operations layer.
+
+Per the local-first workflow, this checkpoint is **not yet visually approved** and full local validation is deferred until after owner localhost review.
+
+**Production touched:** NO.  
+**Production Supabase:** unchanged.  
+**Evidence ingestion:** NO.  
+**Validator silently widened:** NO.  
+**Regulatory events coerced to numeric values:** NO.  
+**Paid/licensed provider calls:** NO.  
+**Scoring / recommendation / sizing:** NO.  
+**Schedulers:** unchanged.  
+**PR #101:** remains draft/open/unmerged.
+
+**CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, expand **Evidence operations & review controls**, and inspect **Ingestion eligibility proposal**. Expected summary: 6 reviewed candidates, 4 numeric candidates, 2 event candidates, 0 validator accepted, 4 validator quarantined, 2 event-schema blocked, 1 rejected claim excluded, and 0 proposed writes.
