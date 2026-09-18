@@ -4245,3 +4245,61 @@ The safety test no longer trusts duplicated hash literals. It now:
 The owner's prior authorization remains limited to this exact local-only prerequisite mutation (1 metric-definition row maximum, 4 immutable source records maximum, 0 fundamental observations, no production changes).
 
 **CURRENT STOP POINT:** Owner should `git pull`, run `npx vitest run src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts` and focused ESLint for that test. If clean, the already-authorized guarded local mutation may be retried with `PORTFOLIOAI_ALLOW_LOCAL_PREREQUISITE_MUTATION=YES npm run r4n:mutate:prerequisites`.
+
+
+---
+
+## 62. Entry 057 — Local sync was correct; mutation-hash test serializer aligned with dry-run executor
+
+**Date:** 18 September 2026  
+**Actor:** owner local verification + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner verified:
+
+- current branch: `r4n-pharma-subprofile-architecture`;
+- local HEAD: `97eed734283001b99824e00101ed3f4ad5723dab`;
+- tracked working tree: clean;
+- only unrelated untracked local fixture/audit files were present.
+
+Therefore the prior suspicion of a local pull/sync mismatch was incorrect.
+
+### Actual cause of focused hash-test failure
+
+The dry-run executor canonicalizes JSON objects with:
+
+`Object.keys(record).sort()`
+
+The mutation SQL safety test had been recomputing hashes with:
+
+`localeCompare`
+
+Those are not guaranteed to produce the same ordering for this contract, so the test could derive a different canonical byte sequence and reject the correct SQL hashes.
+
+### Correction
+
+Updated:
+
+`src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts`
+
+The test now uses the exact same recursive lexicographic key-sort implementation as:
+
+`scripts/r4n/torntpharm-prerequisite-materialization-dry-run.mjs`
+
+Correct canonical SHA-256 values remain:
+
+- Q1: `bd8ab87c01a1e1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f`
+- Q2: `3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fcec5f2`
+- Q3: `3df20aaaff6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7`
+- Q4: `dd80f6f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e90922998b53`
+
+All four are 64-character lowercase hexadecimal SHA-256 values derived from the canonical manifest payloads.
+
+### Scope boundary
+
+- Local tracked code unexpectedly stale: **NO**
+- Test serializer mismatch: **YES, corrected**
+- Database mutation during this correction: **NO**
+- Existing owner authorization for the exact local prerequisite mutation remains in force.
+
+**CURRENT STOP POINT:** Owner should `git pull`, rerun `npx vitest run src/features/research/torntpharmLocalPrerequisiteMutationSql.test.ts` and focused ESLint for that test. If clean, retry the already-authorized local-only prerequisite mutation command.
