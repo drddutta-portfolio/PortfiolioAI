@@ -7746,3 +7746,140 @@ The following remain intentionally unresolved:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Gate G5 is complete and validated as architecture only. The next permitted stage is **G6 — Subprofile-Specific Curves**. Before implementing G6, re-read the canonical adaptive scoring/classification plan and inspect the current Primary/Material/Emerging subprofile contracts so each threshold family is tied to the correct business model and no Domestic Formulations threshold is silently reused for other Pharma subprofiles.
+
+
+---
+
+## 102. Entry 097 — Gate G6.1 Subprofile Curve Applicability Lock prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has started with **G6.1 — Subprofile Curve Applicability Lock**.
+
+### Canonical plan re-read
+
+Before implementation, the current `PORTFOLIOAI_PHARMA_V1_ADAPTIVE_SCORING_CLASSIFICATION_PLAN.md` was re-read from the active branch head.
+
+The plan requires G6 to complete missing thresholds for every Pharma primary model and explicitly prohibits automatic reuse of Domestic Formulations thresholds across other subprofiles.
+
+### Subprofile contracts inspected
+
+The current five canonical Primary contracts were inspected:
+
+- `DOMESTIC_FORMULATIONS`
+- `GLOBAL_GENERICS`
+- `API_BULK_DRUGS`
+- `CDMO_CRAMS`
+- `BIOPHARMA_BIOSIMILARS`
+
+Their mandatory evidence lanes materially differ, confirming that G6 must remain business-model-specific.
+
+Examples:
+
+- Domestic Formulations: Domestic Revenue Growth, Field Force Productivity, Brand/Therapy Leadership, Domestic Exposure Materiality Review
+- Global Generics: Export/US Revenue Growth, Regulatory Site Status, Pipeline/Approval evidence, US Generic Price Erosion
+- API/Bulk Drugs: Regulatory Site Status, Customer Concentration, Capacity Utilization, cycle-aware Valuation
+- CDMO/CRAMS: Regulatory Site Status, Revenue Visibility, Client Concentration, Capacity Utilization
+- Biopharma/Biosimilars: mandatory R&D/productivity, molecule/geography/stage pipeline evidence, Patent/Litigation Timeline
+
+### Existing validated numeric proposals preserved
+
+#### Segment Growth
+
+`PHARMA_SEGMENT_GROWTH_CURVE_V1_PROPOSAL`
+
+Permitted metric scope:
+
+- Domestic Formulations → `PHARMA_DOMESTIC_REVENUE_GROWTH`
+- Global Generics → `PHARMA_EXPORT_US_REVENUE_GROWTH`
+
+No Segment Growth numeric curve is approved for API/Bulk Drugs, CDMO/CRAMS or Biopharma/Biosimilars.
+
+#### Operating Margin
+
+`PHARMA_OPERATING_MARGIN_CURVE_V1_PROPOSAL`
+
+Permitted Primary scope:
+
+- Domestic Formulations → **VALIDATED / NOT ACTIVE**
+- all other Primary subprofiles → **UNSUPPORTED / FAIL CLOSED**
+
+Domestic margin bands are not reusable outside Domestic Formulations.
+
+### G5 parent-family status inside G6
+
+For all five Primary subprofiles, the seven G5 parent families remain:
+
+`SUBPROFILE_THRESHOLDS_REQUIRED`
+
+for:
+
+- ROCE / Capital Efficiency
+- Cash Conversion
+- Balance Sheet / Leverage
+- Valuation
+- Ownership / Governance
+- Regulatory & Market Risk
+- Momentum
+
+G6.1 creates no new numeric bands.
+
+### Layering boundary preserved
+
+Primary:
+- uses the applicable subprofile curve contract.
+
+Material Overlay:
+- may affect approved evidence inside relevant dimensions through G2;
+- does not create a second independent stock score.
+
+Emerging Watch:
+- remains excluded from score readiness and numeric scoring;
+- cannot create an independent stock score.
+
+### TORNTPHARM
+
+Current reviewed assignment remains:
+
+- Primary: Domestic Formulations
+- Material Overlay: Global Generics
+- Emerging Watch: CDMO / CRAMS
+
+Therefore Domestic Formulations remains the Primary curve driver. Global Generics may only act through approved overlay mechanics, while CDMO/CRAMS remains non-scoring while Emerging.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaG6SubprofileCurveApplicability.ts`
+- `src/features/research/pharmaG6SubprofileCurveApplicability.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_1_Subprofile_Curve_Applicability_Lock_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.1 · Subprofile curve applicability lock**
+- **G6.1 · Primary / Overlay / Emerging boundary**
+
+### Explicit boundary
+
+- applicability registry: **YES**
+- new numeric thresholds: **NO**
+- Domestic thresholds auto-reused: **NO**
+- Material Overlay independent score: **NO**
+- Emerging Watch numeric scoring: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G6.1 cards in TORNTPHARM → Research → Gate G, then run focused G6.1 validation. Only after this applicability lock is validated should G6 introduce the first new subprofile-specific numeric threshold family.
