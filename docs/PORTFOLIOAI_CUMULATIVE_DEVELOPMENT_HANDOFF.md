@@ -1594,3 +1594,121 @@ No failure was reported from the preceding owner-run commands in the requested s
 **Result:** Gate F artifact-level content review planning slice = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
 
 **CURRENT STOP POINT:** The 12 exact public/official artifacts are now planned and locally validated, but no document content has yet been reviewed into evidence. The next safe Gate F step is a separately authorized **read-only content-review dry run** against a small public/official subset, producing proposed evidence candidates and explicit rejection/gap reasons while performing no ingestion.
+
+
+---
+
+## 32. Entry 027 — Gate F read-only public content-review dry run prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+A first read-only content-review dry run has now been prepared against a deliberately small public/official TORNTPHARM subset. The goal is to test whether actual source content can be converted into proposed evidence candidates and explicit rejection/gap reasons without writing anything to canonical evidence storage.
+
+### Reviewed artifact subset
+
+The pilot reviews exactly **6 public/official artifacts**:
+- Torrent Q1 FY26 results release;
+- Torrent Q2 FY26 results release;
+- Torrent Q3 FY26 results release;
+- Torrent Q4 FY26 results release;
+- FDA 2019 Indrad warning letter;
+- FDA 2024 Indrad closeout letter.
+
+Added:
+- `src/features/research/torntpharmReadOnlyContentReviewDryRun.ts`
+- `src/features/research/torntpharmReadOnlyContentReviewDryRun.test.ts`
+- `docs/R4N_TORNTPHARM_Gate_F_Read_Only_Content_Review_Dry_Run.md`
+
+Updated:
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+
+### Pilot 1 — Export / US Revenue Growth
+
+Issuer releases explicitly disclose US revenue growth of:
+- Q1 FY26: **19% YoY**;
+- Q2 FY26: **26% YoY**;
+- Q3 FY26: **19% YoY**.
+
+Q4 FY26 is deliberately normalized for scope:
+- reported US revenue growth = **31% YoY**;
+- the same release separately discloses **16% YoY base-business US growth**;
+- Q4 FY26 consolidated results include JB Pharma from 21 January 2026.
+
+The reported 31% claim is therefore **rejected from the comparable four-quarter candidate series**. The proposed Q4 observation uses the explicitly disclosed 16% base-business growth to preserve pre-acquisition scope compatibility with Q1-Q3.
+
+Proposed candidate series:
+- 2025-06-30: 19%;
+- 2025-09-30: 26%;
+- 2025-12-31: 19%;
+- 2026-03-31: 16% base-business.
+
+Dry-run state:
+- proposed observations: **4**;
+- minimum history requirement: **4 quarters**;
+- proposed minimum gap: **0**;
+- proposal state: `MINIMUM_CANDIDATE_HISTORY_PRESENT`;
+- ingestion writes: **0**.
+
+These remain proposals only and are not promoted to canonical evidence.
+
+### Pilot 2 — Regulatory Site Status
+
+The FDA chain is kept site-scoped:
+- 8 October 2019 warning letter: significant CGMP violations at the Indrad facility after the April 2019 inspection;
+- 4 September 2024 closeout letter: FDA states that, based on its evaluation, the firm appears to have addressed the violations in Warning Letter 320-20-03, while future inspections/regulatory activity will assess sustainability.
+
+Proposed event candidates:
+- 2019-10-08: `WARNING_LETTER_ACTIVE`;
+- 2024-09-04: `WARNING_LETTER_CLOSED_OUT`.
+
+Dry-run state:
+- `PARTIAL_SCOPE_REVIEW`;
+- the pilot does **not** assert company-wide regulatory clearance because other material US-facing manufacturing sites and any later regulator actions remain outside this small review subset.
+
+### Dry-run invariants
+
+- reviewed artifacts: **6**;
+- proposed candidates: **6**;
+- rejected claims: **1**;
+- requirements piloted: **2**;
+- ingestion writes: **0**;
+- `ingestionAuthorized = false`.
+
+Regression coverage asserts:
+- exact 19 / 26 / 19 / 16 four-quarter candidate series;
+- Q4 31% reported claim remains rejected from the comparable series;
+- Q4 16% candidate is explicitly base-business;
+- FDA warning + closeout remain two dated site-scoped events;
+- regulatory result remains partial-scope rather than company-wide clearance;
+- no ingestion authorization.
+
+### Visible localhost milestone
+
+For TORNTPHARM only, the Pharma Research workspace now renders:
+
+**Gate F · Read-only content review / Public document content-review dry-run**
+
+The panel shows:
+- 6 reviewed artifacts;
+- 6 proposed candidates;
+- 1 rejected claim;
+- 0 ingestion writes;
+- two pilot requirement summaries;
+- each proposed candidate with date, source artifact, value/state, basis and provenance summary;
+- the rejected Q4 31% claim with its scope-compatibility reason;
+- explicit **Read-only · No ingestion** state.
+
+Per the local-first workflow, this implementation checkpoint is **not yet visually approved** and full local validation is deferred until after owner localhost review.
+
+**Production touched:** NO.  
+**Production Supabase:** unchanged.  
+**Evidence ingestion:** NO.  
+**Paid/licensed provider calls:** NO.  
+**Scoring / recommendation / sizing:** NO.  
+**Schedulers:** unchanged.  
+**PR #101:** remains draft/open/unmerged.
+
+**CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Public document content-review dry-run** section. Expected summary: 6 reviewed artifacts, 6 proposed candidates, 1 rejected claim, 2 requirements piloted, and 0 ingestion writes. Obtain visual approval before the full local validation chain.
