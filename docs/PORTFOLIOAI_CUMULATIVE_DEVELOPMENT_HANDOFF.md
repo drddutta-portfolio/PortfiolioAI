@@ -5906,3 +5906,75 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G2 cards in TORNTPHARM → Research → Gate G, then run focused G2 validation. Only after G2 validation should development proceed to **G3 — Readiness Mapping Contract**.
+
+
+---
+
+## 83. Entry 078 — Gate G2 Pharma overlay modifier contract validated
+
+**Date:** 18 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G2 has completed its required localhost visual and focused validation checkpoint.
+
+### Owner visual review
+
+TORNTPHARM → Research → Gate G was reviewed on localhost.
+
+The two G2 glass-box cards are visible and aligned with the existing Gate G methodology surface:
+
+- **G2 · Overlay modifier contract**
+- **G2 · Combined-cap & contradiction boundary**
+
+The cards correctly preserve proposal-only behavior, one combined cap per dimension, unresolved-contradiction review, and Emerging Watch numeric exclusion.
+
+### Focused validation
+
+Owner-confirmed results:
+
+- focused Vitest across:
+  - `pharmaOverlayModifierContract.test.ts`
+  - `pharmaAdaptiveClassificationContract.test.ts`
+  - `pharmaGateGScoringMethodProposal.test.ts`
+  - `pharmaSegmentGrowthCurveProposal.test.ts`
+  - `pharmaOperatingMarginCurveProposal.test.ts`
+  → **5 test files passed / 34 tests passed**
+
+- focused ESLint across the G2 contract/test, G1 contract/test, Gate G methodology proposal, segment-growth proposal/test, operating-margin proposal/test, and `PharmaResearchWorkspacePanel.tsx`
+  → **PASS**
+
+- `npm run typecheck`
+  → **PASS**
+
+- `npm run build`
+  → **PASS**
+
+### G2 status
+
+- overlay modifier architecture contract: **VALIDATED / NOT ACTIVE**
+- eligible-dimension derivation: **VALIDATED**
+- missing-evidence fail-closed behavior: **VALIDATED**
+- unresolved-contradiction fail-closed behavior: **VALIDATED**
+- Emerging Watch numeric exclusion: **VALIDATED**
+- one combined per-dimension cap requirement: **VALIDATED**
+- exact cap value: **UNAPPROVED**
+- exact modifier formula: **UNAPPROVED**
+
+### Safety boundary remains unchanged
+
+- second stock score: **NO**
+- Primary/Overlay score averaging: **NO**
+- numeric modifier execution: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+- paid-provider call: **NO**
+- scheduler change: **NO**
+
+**CURRENT STOP POINT:** G2 is now validated. The next permitted Gate G design task is **G3 — Readiness Mapping Contract**, still proposal-only and non-executable. Before implementing G3, inspect the canonical adaptive plan and current G1/G2/Gate G contracts at the then-current branch head.
