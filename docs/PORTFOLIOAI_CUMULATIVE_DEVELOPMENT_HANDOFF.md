@@ -5384,3 +5384,108 @@ History boundary:
 - production mutation: **NO**
 
 **CURRENT STOP POINT:** The segment-growth curve proposal is validated as a methodology artifact. The next Gate G slice should define the next Pharma curve family as proposal-only, without activating any score execution.
+
+
+---
+
+## 77. Entry 072 — Gate G operating-margin curve proposal prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The second Gate G PHARMA_V1 normalization-curve proposal has been prepared.
+
+### Proposal
+
+`PHARMA_OPERATING_MARGIN_CURVE_V1_PROPOSAL`
+
+Applies to:
+
+- metric: `PHARMA_OPERATING_MARGIN_HISTORY`
+- primary subprofile: **DOMESTIC_FORMULATIONS** only.
+
+Other primary Pharma subprofiles fail closed until separate margin-level contracts are versioned.
+
+### Evidence boundary
+
+The parent Pharma research contract requires:
+
+- minimum comparable quarters: **8**
+- preferred comparable quarters: **12**
+- latest completed period required;
+- matched operating-revenue and operating-profit periods required;
+- semantically incompatible periods excluded.
+
+### Proposed composite
+
+**Margin level — 50%**
+
+Statistic: median of latest 8 compatible operating-margin quarters.
+
+Domestic Formulations V1 bands:
+- >=25% → 100
+- >=20% and <25% → 85
+- >=16% and <20% → 70
+- >=12% and <16% → 55
+- >=8% and <12% → 35
+- <8% → 15
+
+**Margin stability — 30%**
+
+Statistic: interquartile range of latest 8 operating-margin quarters.
+
+Bands:
+- <2 pp → 100
+- >=2 and <4 pp → 80
+- >=4 and <6 pp → 60
+- >=6 and <9 pp → 40
+- >=9 pp → 20
+
+**Margin trend — 20%**
+
+Statistic: median(latest 4 quarters) minus median(prior 4 quarters).
+
+Bands:
+- >=+3 pp → 100
+- >=+1 and <+3 pp → 80
+- >=-1 and <+1 pp → 60
+- >=-3 and <-1 pp → 40
+- <-3 pp → 20
+
+### Why subprofile-specific
+
+The Pharma parent contract marks operating margin as `RANGE`, not a universal higher-is-better signal.
+
+Therefore Domestic Formulations level bands must not silently become universal thresholds for Global Generics, API/Bulk Drugs, CDMO/CRAMS, Biopharma/Biosimilars or other Pharma primary models.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaOperatingMarginCurveProposal.ts`
+- `src/features/research/pharmaOperatingMarginCurveProposal.test.ts`
+- `docs/R4N_TORNTPHARM_Gate_G_Operating_Margin_Curve_Proposal_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+The Gate G glass-box now shows:
+
+- **Second proposed curve family**
+- **Margin curve fail-closed boundary**
+
+### Activation boundary
+
+- proposal prepared: **YES**
+- activation approved: **NO**
+- scoring adapter implementation: **NO**
+- scoring-rule migration: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation impact: **NO**
+- position-sizing impact: **NO**
+- production mutation: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually review the new Operating Margin proposal cards in **Gate G · Scoring methodology design**, and then run focused local validation before this methodology artifact can be marked validated.
