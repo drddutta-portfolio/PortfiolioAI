@@ -941,3 +941,53 @@ Per the adopted local-first workflow, this implementation checkpoint is **not ye
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, restart/use the local Vite app against the existing local Supabase fixture, and inspect TORNTPHARM → Research → Overview. The new visible section should be **Gate F · Official evidence pilot / Evidence ingestion dry-run** and should show 42 candidates, 33 direct official, 9 derived, 0 quarantined, and 0/14 projected business-model completeness. Obtain visual approval before the full local validation chain.
+
+
+---
+
+## 24. Entry 019 — Gate F evidence-pilot localhost validation defect fixed
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT + owner localhost visual review  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner pulled Entry 018 and visually inspected TORNTPHARM → Research → Overview.
+
+The new **Evidence ingestion dry-run** panel rendered correctly, but the first localhost validation state was incorrect:
+- candidate observations: 42;
+- direct official: 33;
+- PortfolioAI derived: 9;
+- validation-ready: **0**;
+- quarantined: **42**.
+
+### Root cause
+
+The environment-aware preview correctly rebound the manifest to the local TORNTPHARM security UUID:
+
+`a4000000-0000-0000-0000-000000000002`
+
+That value is accepted by PostgreSQL's `uuid` type and is the intentional local fixture identity. The ingestion validator, however, was stricter than the database contract: it required RFC version and variant nibbles and therefore rejected all local fixture rows as `INVALID_SECURITY_ID`.
+
+This was a validator defect, not an evidence or ingestion defect.
+
+### Fix
+
+`researchEvidenceIngestionValidator.ts` now validates canonical UUID textual syntax:
+
+`8-4-4-4-12 hexadecimal groups`
+
+It no longer requires RFC-generated version/variant metadata that is not required by the canonical PostgreSQL UUID storage contract.
+
+Regression coverage was added to prove that the known local fixture UUID is accepted without quarantine.
+
+No evidence was ingested and no database write was performed.
+
+**Production touched:** NO.  
+**Production Supabase:** unchanged.  
+**Evidence ingestion:** NO.  
+**Provider calls:** NO.  
+**Scoring / recommendation / sizing:** NO.  
+**Schedulers:** unchanged.  
+**PR #101:** remains draft/open/unmerged.
+
+**CURRENT STOP POINT:** Pull the latest R4N branch and re-open the TORNTPHARM Evidence ingestion dry-run panel. The corrected localhost expectation is 42 validation-ready and 0 quarantined. Visual approval remains pending until that corrected state is observed; full local validation remains deferred until after visual approval.
