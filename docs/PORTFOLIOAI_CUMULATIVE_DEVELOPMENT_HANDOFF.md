@@ -1324,3 +1324,86 @@ Per the local-first workflow, this implementation checkpoint is **not yet visual
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Public / official source discovery** section. Expected summary: 12 requirements in scope, 12 mapped, 8 official artifacts, 6 issuer/listed-company + 2 regulator, 3 source hubs, and 0 evidence reviewed. Obtain visual approval before the full local validation chain.
+
+
+---
+
+## 29. Entry 024 — Gate F public / official source-discovery dry run visually approved and locally validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After pulling Entry 023, the owner reopened TORNTPHARM → Research → Overview and visually reviewed the new **Gate F · Public / official discovery / Public / official source discovery** panel.
+
+### Localhost visual verification — PASS
+
+The rendered discovery panel correctly shows:
+- **12 requirements in scope**;
+- **12 mapped** to candidate public/official source families;
+- **8 official artifacts**;
+- **6 issuer/listed-company artifacts**;
+- **2 regulator artifacts**;
+- **3 source hubs**;
+- **0 evidence reviewed**;
+- explicit **Discovery only · No fetch** state.
+
+The artifact registry visibly preserves:
+- Torrent annual-report archive;
+- Torrent Integrated Annual Report 2025-26;
+- Torrent Integrated Annual Report 2023-24;
+- Torrent quarterly-results archive;
+- Torrent Q4 FY26 results release;
+- Torrent SEBI / LODR disclosure archive;
+- FDA 2019 Indrad warning letter;
+- FDA 2024 Indrad closeout letter.
+
+The lower discovery list also rendered correctly, including the remaining Global Generics rows:
+- Export / US Revenue Growth;
+- Pipeline / Launch / Approval Evidence;
+- US Generic Price Erosion;
+- Generics Volume / Mix;
+- Complex / Specialty Generics Mix.
+
+Each row remains **Candidate source found** with an explicit remaining history/content-review gap. The boundary message correctly keeps **Brand & Therapy Leadership** and **Chronic / Acute Mix** outside this 12-row public/official-first dry run because their licensed-source gates remain separately controlled.
+
+The owner visually approved the discovery presentation.
+
+### Local validation
+
+The owner then ran the requested local validation sequence:
+- `git status`
+- `git branch --show-current`
+- `git rev-parse HEAD`
+- `npm run typecheck`
+- `npm run lint`
+- `npm run check:architecture`
+- `npm run lint:architecture`
+- `npm run lint:edge`
+- `npm run test`
+- `npm run test:edge`
+- `npm run build`
+
+The supplied terminal capture directly confirms:
+- Edge test suite: **27/27 test files passed; 140/140 tests passed**;
+- production build: **PASS** under Vite 8.2.2;
+- **210 modules transformed**;
+- build completed successfully;
+- only the existing non-blocking warning about chunks exceeding 500 kB after minification remained.
+
+No failure was reported from the preceding owner-run commands in the requested sequence.
+
+### Scope boundary
+
+- Production application deployment: **NO**
+- Production Supabase mutation: **NO**
+- Evidence ingestion: **NO**
+- Source fetch/provider calls: **NO**
+- Paid/licensed provider calls: **NO**
+- Numeric scoring / recommendation / sizing changes: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**Result:** Gate F public / official source-discovery dry-run slice = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
+
+**CURRENT STOP POINT:** The public/official source spine for all 12 PUBLIC_OFFICIAL_FIRST requirements is now visible and locally validated. The next safe Gate F step is **artifact-level content review planning**: enumerate exact periods/documents from the source hubs, classify whether each artifact is likely to contain the required evidence shape, and compute per-requirement history gaps while keeping every evidence state NOT_REVIEWED and performing no ingestion.
