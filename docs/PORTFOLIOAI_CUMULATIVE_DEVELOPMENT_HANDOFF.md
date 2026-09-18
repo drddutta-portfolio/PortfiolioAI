@@ -4560,3 +4560,53 @@ Added:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, run local Vite, and visually verify the new **Local evidence observation proposal** and **Observation execution boundary** cards. Do not run the observation mutation command. After visual approval, run full local validation and only then separately consider authorizing the exact four-row local observation mutation.
+
+
+---
+
+## 66. Entry 061 — Numeric preflight glass-box card refreshed to latest verified state
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+During localhost visual review of the prepared local observation mutation proposal, the owner identified that the older **Local numeric preflight** card still displayed the historical blocked state from before prerequisite materialization.
+
+The underlying read-only preflight had already been rerun successfully and verified:
+
+- rows checked: **4**
+- insert candidates: **4**
+- already present: **0**
+- conflicts: **0**
+- blocked: **0**
+- preflight state: **READY_FOR_SEPARATE_WRITE_APPROVAL**
+- write authorization: **NO**
+
+### UI correction
+
+Updated:
+
+`src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+The glass-box card now states:
+
+- all four reviewed US-growth rows resolve to immutable source records;
+- existing facts: **0**
+- conflicts: **0**
+- blockers: **0**
+- status: **EXECUTED · READY FOR SEPARATE WRITE APPROVAL**
+- insert candidates: **4**
+
+This is a presentation-state correction only. It does not re-run the database preflight and does not alter any persistence or authorization behavior.
+
+### Scope boundary
+
+- UI glass-box state corrected: **YES**
+- Database read/write performed by this correction: **NO**
+- Observation mutation approved: **NO**
+- Observation mutation executed: **NO**
+- Production Supabase mutation: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull` and visually confirm the refreshed **Local numeric preflight** card on localhost together with the prepared **Local evidence observation proposal**. After visual approval, run full local validation for the observation-mutation proposal; only then may the exact four-row local observation mutation be separately authorized.
