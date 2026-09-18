@@ -449,6 +449,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
           <span>Mutation authorized: NO</span>
         </article>
       </div> : null}
+      {canonicalPrerequisitePackage ? <div className="pharma-persistence-package-grid">
+        <article>
+          <strong>Prerequisite materialization dry-run</strong>
+          <small>TORNTPHARM_PREREQUISITE_MATERIALIZATION_DRY_RUN_V1</small>
+          <p>One non-writing local executor is prepared to deterministically serialize the 4 canonical source payloads, compute 4 SHA-256 hashes, and print the exact metric-definition and source-record SQL that would be inserted.</p>
+          <span>Status: PREPARED · NOT EXECUTED · 0 WRITES</span>
+        </article>
+        <article>
+          <strong>Dry-run execution boundary</strong>
+          <small>npm run r4n:dry-run:prerequisites</small>
+          <p>The executor contains no database connection and no database writer. Its output is review material only; any local prerequisite mutation requires a later separate approval gate.</p>
+          <span>Database connection: NO · Mutation authorized: NO</span>
+        </article>
+      </div> : null}
     </section> : null}
 
       </div>
