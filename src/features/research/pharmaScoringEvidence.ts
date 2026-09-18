@@ -131,9 +131,16 @@ export function assessPharmaV1Evidence(inputCode: string, rows: readonly PharmaS
   }
 
   if (inputCode === "PHARMA_VALUATION_CONTEXT") {
-    const componentCodes = ["PE_TTM", "EV_EBITDA", "FCF_YIELD", "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT"]
-    const available = componentCodes.filter((code) => usable(rows, code, now).length > 0).length
-    return assessment(inputCode, "Valuation context", available, componentCodes.length)
+    const componentGroups = [
+      ["PE_TTM"],
+      ["EV_EBITDA"],
+      ["FCF_YIELD_PERCENT", "FCF_YIELD"],
+      ["PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT"],
+    ] as const
+    const available = componentGroups.filter(
+      (codes) => codes.some((code) => usable(rows, code, now).length > 0),
+    ).length
+    return assessment(inputCode, "Valuation context", available, componentGroups.length)
   }
 
   return null
