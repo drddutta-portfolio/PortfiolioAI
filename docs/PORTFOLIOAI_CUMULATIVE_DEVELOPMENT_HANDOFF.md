@@ -4679,3 +4679,58 @@ Validated safeguards:
 **Result:** Local Observation Mutation Proposal V1 checkpoint = **VALIDATED**.
 
 **CURRENT STOP POINT:** The next safe R4N action is the separately approval-gated local-only insertion of up to four reviewed `fundamental_observations` rows for TORNTPHARM. Do not execute unless the owner explicitly authorizes these exact four local evidence writes.
+
+
+---
+
+## 68. Entry 063 — Owner explicitly authorized local-only TORNTPHARM observation mutation
+
+**Date:** 18 September 2026  
+**Actor:** owner explicit authorization  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner explicitly authorized this exact local-only evidence mutation:
+
+- insert up to **4** `fundamental_observations` rows for TORNTPHARM;
+- metric: `PHARMA_EXPORT_US_REVENUE_GROWTH`;
+- Q1 FY26 / 2025-06-30 → **19%**;
+- Q2 FY26 / 2025-09-30 → **26%**;
+- Q3 FY26 / 2025-12-31 → **19%**;
+- Q4 FY26 / 2026-03-31 → **16%**;
+- target **local Supabase only**;
+- make **no production changes**.
+
+Authorized command contract:
+
+`PORTFOLIOAI_ALLOW_LOCAL_OBSERVATION_MUTATION=YES npm run r4n:mutate:observations`
+
+The prepared runner still enforces:
+
+- approval flag before DB discovery;
+- localhost / 127.0.0.1 database only;
+- unique active NSE TORNTPHARM identity;
+- reviewed PHARMA_V1 / Domestic Formulations assignment;
+- active matching metric contract;
+- all four immutable issuer-result source records;
+- conflict abort;
+- idempotent exact-fact skip;
+- postcondition verification.
+
+### Scope boundary
+
+Authorized:
+- the exact four local reviewed US-growth evidence observations above.
+
+Still NOT authorized:
+- any production Supabase mutation;
+- any additional evidence rows;
+- regulatory event persistence;
+- scoring;
+- recommendation;
+- position sizing;
+- deployment;
+- PR #101 merge;
+- scheduler changes;
+- paid-provider calls.
+
+**CURRENT STOP POINT:** Owner should `git pull` to receive this recorded authorization checkpoint, then execute exactly `PORTFOLIOAI_ALLOW_LOCAL_OBSERVATION_MUTATION=YES npm run r4n:mutate:observations` against the running local Supabase. Return the complete terminal output before any next action is considered.
