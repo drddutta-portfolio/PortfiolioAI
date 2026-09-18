@@ -1145,3 +1145,98 @@
 @media (max-width: 620px) {
   .pharma-ingestion-proposal-summary { grid-template-columns: 1fr; }
 }
+
+
+.pharma-persistence-package {
+  margin-top: .65rem;
+  padding: 1rem;
+  border: 1px solid #dfe6e1;
+  border-radius: .9rem;
+  background: #fbfdfb;
+}
+
+.pharma-persistence-package-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+.pharma-persistence-package-summary > div {
+  padding: .72rem .78rem;
+  border: 1px solid #e2e8e4;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-persistence-package-summary span,
+.pharma-persistence-package-summary small {
+  display: block;
+  color: #748078;
+}
+
+.pharma-persistence-package-summary span {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.pharma-persistence-package-summary strong {
+  display: block;
+  margin: .18rem 0;
+  color: #20352b;
+  font-size: 1.08rem;
+}
+
+.pharma-persistence-package-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .7rem;
+}
+
+.pharma-persistence-package-grid article {
+  padding: .72rem .78rem;
+  border: 1px solid #e2e8e4;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-persistence-package-grid strong,
+.pharma-persistence-package-grid small,
+.pharma-persistence-package-grid span {
+  display: block;
+}
+
+.pharma-persistence-package-grid strong {
+  color: #20352b;
+  font-size: .82rem;
+}
+
+.pharma-persistence-package-grid small,
+.pharma-persistence-package-grid p,
+.pharma-persistence-package-grid span {
+  color: #748078;
+  font-size: .68rem;
+  line-height: 1.45;
+}
+
+.pharma-persistence-package-grid p {
+  margin: .45rem 0;
+}
+
+.pharma-persistence-package-grid span {
+  color: #355a47;
+  font-weight: 800;
+}
+
+@media (max-width: 980px) {
+  .pharma-persistence-package-summary,
+  .pharma-persistence-package-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-persistence-package-summary,
+  .pharma-persistence-package-grid { grid-template-columns: 1fr; }
+}
