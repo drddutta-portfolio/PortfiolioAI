@@ -6864,3 +6864,72 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.3 cards in TORNTPHARM → Research → Gate G, then run focused G5.3 validation. Do not proceed to Valuation until G5.3 is validated.
+
+
+---
+
+## 93. Entry 088 — Gate G5.3 Balance Sheet / Leverage framework validated
+
+**Date:** 18 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5.3 has completed its validation checkpoint as a **proposal-only Balance Sheet / Leverage framework**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G5.3 Balance Sheet / Leverage plus G5.2, G5.1, G1–G4, and existing Gate G curve proposals → **10 test files passed / 74 tests passed**
+- focused ESLint for the G5.3/G5.2/G5.1/G1–G4/Gate G methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+Build emitted only the existing non-blocking Vite large-chunk advisory; no build failure occurred.
+
+### G5.3 status
+
+- Balance Sheet / Leverage framework: **VALIDATED / NOT ACTIVE**
+- minimum 3 / preferred 5 annual-history contract: **VALIDATED**
+- matched debt, cash and operating-earnings requirement: **VALIDATED**
+- point-in-time-only evidence insufficient: **VALIDATED**
+- candidate framework `NET_DEBT_LEVERAGE + INTEREST_COVERAGE + BALANCE_SHEET_TREND_AND_RESILIENCE`: **VALIDATED AS FRAMEWORK ONLY**
+- reviewed cash semantics requirement: **VALIDATED**
+- explicit net-cash treatment requirement: **VALIDATED**
+- acquisition/expansion context requirement: **VALIDATED**
+- component weights: **UNAPPROVED**
+- universal leverage bands: **NO**
+- universal interest-cover bands: **NO**
+- subprofile-specific thresholds: **UNAPPROVED**
+- numeric Balance Sheet / Leverage curve ready: **NO**
+
+### Dimension-alignment boundary remains open
+
+The canonical PHARMA_V1 architecture assigns this family to:
+
+`BALANCE_SHEET_CREDIT`
+
+while the older parent evidence contract still records:
+
+`PHARMA_BALANCE_SHEET_LEVERAGE.dimension = FINANCIAL_STRENGTH`
+
+This mismatch remains intentionally unresolved.
+
+G5.3 validation confirms that the mismatch is visible and fail-closed; it does **not** authorize a silent remap.
+
+A separate versioned reconciliation is required before any active scoring path can treat this family as canonical Balance Sheet / Credit.
+
+### Safety boundary remains unchanged
+
+- parent dimension reconciliation applied: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G5.3 is validated. The next permitted G5 parent curve family is **Valuation**, but implementation must first inspect `PHARMA_VALUATION_CONTEXT`, its current evidence semantics, and whether the canonical `VALUATION` dimension already aligns without a taxonomy reconciliation.
