@@ -2335,3 +2335,123 @@ It is **not** correct to claim the entire repository is lint-clean.
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Candidate-to-ingestion proposal logic is now visually approved and locally validated at the changed-file scope. The next safe R4N step is to version the canonical numeric validator contract for `PHARMA_EXPORT_US_REVENUE_GROWTH` and separately design the regulatory event-evidence contract. Any actual ingestion remains separately approval-gated.
+
+
+---
+
+## 40. Entry 035 — Numeric validator V2 and Pharma regulatory event evidence V1 prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The next Gate F contract step has been prepared without performing any evidence write.
+
+### Numeric evidence validator V2
+
+The canonical numeric ingestion validator is now explicitly versioned:
+
+`R4N_NUMERIC_EVIDENCE_V2`
+
+The approved metric/unit registry now includes:
+
+`PHARMA_EXPORT_US_REVENUE_GROWTH → PERCENT`
+
+This metric already exists in the approved PHARMA_V1 research contract and is mandatory for the reviewed Global Generics material overlay.
+
+The four reviewed TORNTPHARM US-growth candidates now pass numeric structural validation:
+
+- 2025-06-30: 19%
+- 2025-09-30: 26%
+- 2025-12-31: 19%
+- 2026-03-31: 16% base-business
+
+They are no longer `UNSUPPORTED_METRIC`.
+
+Their disposition is now:
+
+`SEPARATE_INGESTION_APPROVAL_REQUIRED`
+
+Structural acceptance does not authorize a write.
+
+### Pharma regulatory event evidence V1
+
+Added:
+- `src/features/research/pharmaRegulatoryEventEvidenceContract.ts`
+- `src/features/research/pharmaRegulatoryEventEvidenceContract.test.ts`
+
+Contract version:
+
+`PHARMA_REGULATORY_EVENT_EVIDENCE_V1`
+
+The event contract validates site-specific regulatory evidence with:
+- security identity;
+- event date/state;
+- regulator;
+- facility identity;
+- warning-chain identity;
+- source artifact/reference;
+- explicit `SITE_SPECIFIC` scope;
+- chronological warning → closeout transition rules;
+- duplicate protection;
+- deterministic idempotency keys.
+
+The reviewed Indrad chain is structurally accepted:
+- 2019-10-08 — `WARNING_LETTER_ACTIVE`
+- 2024-09-04 — `WARNING_LETTER_CLOSED_OUT`
+
+The contract explicitly does not convert the site-specific closeout into company-wide regulatory clearance.
+
+### Candidate-to-ingestion proposal state after contract versioning
+
+The existing proposal now evaluates to:
+
+- reviewed candidates: **6**
+- numeric candidates: **4**
+- numeric validator accepted: **4**
+- numeric validator quarantined: **0**
+- regulatory event candidates: **2**
+- event contract accepted: **2**
+- event contract quarantined: **0**
+- event storage blocked: **2**
+- rejected Q4 31% claim excluded: **1**
+- proposed writes: **0**
+- `ingestionAuthorized = false`
+
+Regulatory event disposition is now:
+
+`EVENT_STORAGE_IMPLEMENTATION_REQUIRED`
+
+The event contract exists and accepts the two reviewed events, but no canonical event-evidence persistence/write path exists yet.
+
+### Visible localhost milestone
+
+Inside the collapsed **Evidence operations & review controls** layer, the **Ingestion eligibility proposal** summary now should show:
+
+- Numeric validator accepted: **4**
+- numeric quarantined: **0**
+- Event contract accepted: **2**
+- event storage blocked: **2**
+- Proposed writes: **0**
+
+Per-candidate dispositions should show:
+- US-growth rows → separate ingestion approval required;
+- FDA events → event storage implementation required.
+
+### Documentation
+
+Added:
+
+`docs/R4N_TORNTPHARM_Gate_F_Numeric_Validator_V2_And_Regulatory_Event_Evidence_V1.md`
+
+### Scope boundary
+
+- Evidence ingestion: **NO**
+- Production Supabase mutation: **NO**
+- Event-evidence storage table/migration: **NO**
+- Paid/licensed provider calls: **NO**
+- Scoring / recommendation / sizing: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview → Evidence operations & review controls, and inspect the updated **Ingestion eligibility proposal**. Expected summary: numeric validator accepted 4, numeric quarantined 0, event contract accepted 2, event storage blocked 2, proposed writes 0. Obtain visual approval before focused/full validation.
