@@ -121,9 +121,9 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
       <div>
-        <p className="eyebrow">Gate F · Profile-driven research</p>
-        <h2 id="pharma-workspace-title">Business model research map</h2>
-        <p>The visible evidence lanes now follow the reviewed Pharma business model. Missing evidence stays unavailable and secondary exposures do not blend into another score.</p>
+        <p className="eyebrow">Sector research workspace · Pharmaceuticals</p>
+        <h2 id="pharma-workspace-title">Pharmaceuticals deep research</h2>
+        <p>Profile-specific evidence follows the reviewed Pharma business model. Open the detailed layers only when you need the underlying requirements, sources or review controls.</p>
       </div>
       <span className="pharma-workspace-lock">Scoring methodology not yet approved</span>
     </div>
@@ -135,7 +135,12 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
       <div><span>Effective from</span><strong>{model.primary.effectiveFrom}</strong><small>Reviewed assignment authority</small></div>
     </div>
 
-    <div className="pharma-workspace-grid">
+    <details className="pharma-deep-layer">
+      <summary>
+        <div><span>Business model & exposure map</span><small>Primary evidence lanes, material overlays and emerging watches</small></div>
+        <b>Open details</b>
+      </summary>
+      <div className="pharma-workspace-grid">
       <article className="pharma-primary-card">
         <div className="pharma-primary-card-head">
           <div>
@@ -155,8 +160,15 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         </div>
         {model.secondaries.length ? model.secondaries.map((exposure) => <SecondaryExposureCard key={exposure.exposureCode} exposure={exposure} />) : <p className="pharma-workspace-empty">No active reviewed secondary exposures.</p>}
       </aside>
-    </div>
+      </div>
+    </details>
 
+    <details className="pharma-deep-layer pharma-evidence-operations">
+      <summary>
+        <div><span>Evidence operations & review controls</span><small>Ingestion dry-run, acquisition contract, source discovery, document planning and read-only review</small></div>
+        <b>Open details</b>
+      </summary>
+      <div className="pharma-deep-layer-body">
     {evidencePilot ? <section className="pharma-evidence-pilot" aria-labelledby="pharma-evidence-pilot-title">
       <div className="pharma-evidence-pilot-head">
         <div>
@@ -337,5 +349,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
       <p className="pharma-evidence-pilot-note"><strong>Boundary:</strong> proposed candidates are review outputs only. Regulatory Site Status remains partial-scope because only the Indrad warning/closeout chain has been reviewed, and no company-wide current regulatory-clearance claim is made.</p>
     </section> : null}
 
+      </div>
+    </details>
   </section>
 }
