@@ -22,6 +22,7 @@ import { PHARMA_READINESS_MAPPING_CONTRACT } from "./pharmaReadinessMappingContr
 import { PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT } from "./pharmaGovernanceRegulatoryGateContract"
 import { PHARMA_ROCE_CURVE_PROPOSAL } from "./pharmaRoceCurveProposal"
 import { PHARMA_CASH_CONVERSION_CURVE_PROPOSAL } from "./pharmaCashConversionCurveProposal"
+import { PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL } from "./pharmaBalanceSheetLeverageCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -278,6 +279,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Canonical: {titleCase(PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.canonicalDimension)} · Current parent contract: {titleCase(PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.currentParentContractDimension)}</small>
               <p>The canonical model places this metric in Cash Flow, while the older parent evidence contract still labels it Earnings Cash Quality. Universal numeric bands remain prohibited and FCF interpretation requires capex-intensity context.</p>
               <span>Alignment: REQUIRED · Universal bands: NO · Capex context: REQUIRED</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G5.3 · Balance Sheet / Leverage framework</strong>
+              <small>{PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.proposalVersion}</small>
+              <p>Balance Sheet / Leverage preserves the minimum {PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.history.minimumComparableAnnualPeriods}-year / preferred {PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.history.preferredComparableAnnualPeriods}-year history contract and requires matched debt, cash and operating-earnings evidence. One point-in-time snapshot is not sufficient.</p>
+              <span>Proposal only · Numeric curve not ready · No score execution</span>
+            </article>
+            <article>
+              <strong>G5.3 · Dimension alignment & leverage-context boundary</strong>
+              <small>Canonical: {titleCase(PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.canonicalDimension)} · Current parent contract: {titleCase(PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.currentParentContractDimension)}</small>
+              <p>The canonical model places this family in Balance Sheet / Credit, while the older parent contract still labels it Financial Strength. Universal leverage bands remain prohibited; cash semantics, net-cash treatment and acquisition/expansion context must be explicit.</p>
+              <span>Alignment: REQUIRED · Universal bands: NO · Context: REQUIRED</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
