@@ -1970,3 +1970,85 @@ Per the local-first workflow, this compacting checkpoint is **not yet visually a
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the compact Pharma workspace immediately below Research Health. The page should now show the small Pharma summary plus two collapsed detail rows instead of several full Gate F panels. Obtain visual approval before full local validation.
+
+
+---
+
+## 36. Entry 031 — HDFCBANK ↔ TORNTPHARM visual-consistency checkpoint visually approved and locally validated
+
+**Date:** 18 September 2026  
+**Actor:** owner-run localhost review + local validation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After pulling Entry 030, the owner reviewed the compact TORNTPHARM Research Overview beneath Research Health and confirmed that the cross-profile design objective had been achieved.
+
+### Localhost visual verification — PASS
+
+The shared first-glance PortfolioAI grammar now remains consistent between HDFCBANK and TORNTPHARM.
+
+For TORNTPHARM, the Pharma-specific continuation now appears as a compact sector workspace:
+
+- **Sector research workspace · Pharmaceuticals**
+- **Pharmaceuticals deep research**
+- always-visible four-card summary:
+  - Primary model: Domestic Formulations
+  - Primary evidence: 0/8 verified
+  - Secondary exposures: 2
+  - Effective from: 2026-03-31
+- two collapsed-by-default detail layers:
+  1. **Business model & exposure map**
+  2. **Evidence operations & review controls**
+- scoring-methodology boundary remains visible.
+
+The previously expanded Gate F modules remain available inside the collapsed controls but no longer dominate the page at first glance.
+
+The owner visually approved this presentation.
+
+### Product rule confirmed
+
+The cross-profile design contract is now:
+
+> HDFCBANK and TORNTPHARM may differ materially in research criteria, metrics, evidence contracts and sector-specific research sections, but at a glance they must look like the same PortfolioAI product.
+
+This means:
+- shared page hierarchy and visual grammar remain consistent;
+- sector research content is allowed to differ;
+- Pharma-specific depth remains preserved without forcing BANK_NBFC structure/content symmetry.
+
+### Local validation
+
+The owner then ran the requested local validation sequence:
+- `git status`
+- `git branch --show-current`
+- `git rev-parse HEAD`
+- `npm run typecheck`
+- `npm run lint`
+- `npm run check:architecture`
+- `npm run lint:architecture`
+- `npm run lint:edge`
+- `npm run test`
+- `npm run test:edge`
+- `npm run build`
+
+The supplied terminal capture directly confirms:
+- Edge test suite: **27/27 test files passed; 140/140 tests passed**;
+- production build: **PASS** under Vite 8.2.2;
+- **212 modules transformed**;
+- build completed successfully;
+- only the existing non-blocking warning about chunks exceeding 500 kB after minification remained.
+
+No failure was reported from the preceding owner-run commands in the requested sequence.
+
+### Scope boundary
+
+- Production application deployment: **NO**
+- Production Supabase mutation: **NO**
+- Evidence ingestion: **NO**
+- Paid/licensed provider calls: **NO**
+- Numeric scoring / recommendation / sizing changes: **NO**
+- Scheduler changes: **NO**
+- PR #101 merge: **NO**
+
+**Result:** HDFCBANK ↔ TORNTPHARM Research-page visual-consistency checkpoint = **OWNER VISUALLY APPROVED / LOCALLY VALIDATED PASS**.
+
+**CURRENT STOP POINT:** Shared cross-profile visual grammar is now stable enough to continue Pharma evidence work without further first-glance layout drift. The next safe R4N decision is whether to expand additional read-only Pharma evidence review or prepare a candidate-to-ingestion proposal contract for the already reviewed TORNTPHARM pilot candidates. Any actual evidence write remains separately approval-gated.
