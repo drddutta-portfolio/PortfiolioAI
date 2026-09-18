@@ -8330,3 +8330,90 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, inspect the G6.4 cards, then run focused G6.3 + G6.4 validation. Only after validation should the project decide whether to define Domestic FCF-yield numeric bands or first implement the persisted alias reconciliation.
+
+
+---
+
+## 108. Entry 103 — Gate G6.3 + G6.4 FCF-yield identity contract validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.3 and G6.4 have completed validation as **proposal-only evidence-identity / canonical-metric contracts**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.3 + G6.4 plus G6.2, G6.1 and all validated G5/G1–G4/Gate G proposal contracts → **PASS**
+- focused ESLint for the same methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.3 status
+
+- Domestic Valuation cash-flow corroboration concept: **VALIDATED**
+- previously observed identifier ambiguity: **VALIDATED**
+- `FCF_YIELD` vs `FCF_YIELD_PERCENT`: **EXPLICITLY SURFACED**
+- numeric thresholds while identity ambiguous: **PROHIBITED**
+- whole Valuation dimension ready: **NO**
+
+### G6.4 status
+
+Canonical metric identity:
+
+`FCF_YIELD_PERCENT`
+
+Legacy alias:
+
+`FCF_YIELD`
+
+Canonical unit:
+
+`PERCENT`
+
+Canonical formula:
+
+`(FREE_CASH_FLOW_ANNUAL / CURRENT_MARKET_CAP) * 100`
+
+Numerator authority:
+
+- `FREE_CASH_FLOW_ANNUAL`
+- existing reviewed formula `CFO_ANNUAL - CAPEX_ANNUAL`
+- negative FCF remains negative evidence
+
+Denominator authority:
+
+- current market-cap concept must reflect authoritative current-price semantics
+- stale market-cap evidence prohibited
+- provider-only market-cap labels cannot override price authority
+
+Alias behavior:
+
+- legacy alias may map to the canonical percent code
+- duplicate economic evidence must not be double-counted
+- conflicting values must not be silently averaged
+
+### Still not approved
+
+- persisted alias/storage reconciliation: **NO**
+- historical observation rewrite: **NO**
+- numeric FCF-yield score bands: **NO**
+- Valuation component weights: **NO**
+- peer-relative Valuation component: **UNAPPROVED**
+- whole Valuation dimension ready: **NO**
+- score execution: **NO**
+
+### Safety boundary remains unchanged
+
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.3 and G6.4 are validated. Before introducing Domestic FCF-yield numeric score bands, first inspect the actual persisted/local metric definitions and observations for `FCF_YIELD` / `FCF_YIELD_PERCENT` and determine whether alias reconciliation is needed in storage. Numeric thresholds must not be layered on top of duplicate or unresolved persisted identities.
