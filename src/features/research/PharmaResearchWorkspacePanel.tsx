@@ -429,8 +429,8 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         <article>
           <strong>Local numeric preflight</strong>
           <small>{localNumericPreflight.preflightVersion}</small>
-          <p>{localNumericPreflight.requiredLookups.length} canonical local lookups were executed against local Supabase. The preflight found the reviewed assignment and security identity, with 4 rows blocked by missing metric-definition and source-record prerequisites and 0 existing-fact conflicts.</p>
-          <span>Status: EXECUTED · NOT READY · 4 BLOCKED · 0 CONFLICTS</span>
+          <p>{localNumericPreflight.requiredLookups.length} canonical local lookups were executed against local Supabase. After prerequisite materialization, all 4 reviewed US-growth rows resolve to immutable source records with 0 existing facts, 0 conflicts and 0 blockers.</p>
+          <span>Status: EXECUTED · READY FOR SEPARATE WRITE APPROVAL · 4 INSERT CANDIDATES · 0 BLOCKED · 0 CONFLICTS</span>
         </article>
         <article>
           <strong>Regulatory migration replay</strong>
