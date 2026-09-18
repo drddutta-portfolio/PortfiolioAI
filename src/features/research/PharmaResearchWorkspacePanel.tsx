@@ -25,6 +25,7 @@ import { PHARMA_CASH_CONVERSION_CURVE_PROPOSAL } from "./pharmaCashConversionCur
 import { PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL } from "./pharmaBalanceSheetLeverageCurveProposal"
 import { PHARMA_VALUATION_CURVE_PROPOSAL } from "./pharmaValuationCurveProposal"
 import { PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL } from "./pharmaOwnershipGovernanceCurveProposal"
+import { PHARMA_RISK_CURVE_PROPOSAL } from "./pharmaRiskCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -323,6 +324,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Canonical: {titleCase(PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL.canonicalDimension)} · Current parent contract: {titleCase(PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL.currentParentContractDimension)}</small>
               <p>Critical/high-risk governance events remain owned by G4. The weighted Ownership / Governance dimension may retain event context for explanation but cannot apply a second hidden deduction or embedded gate cap for the same event.</p>
               <span>Alignment: REQUIRED · G4 second penalty: NO · Hidden double-counting: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G5.6 · Regulatory & Market Risk framework</strong>
+              <small>{PHARMA_RISK_CURVE_PROPOSAL.proposalVersion}</small>
+              <p>Risk already aligns with the canonical Risk dimension. The framework combines regulated-export site context with existing deterministic 1-year drawdown and volatility evidence, while Pharma-specific market-risk normalization remains unapproved.</p>
+              <span>Proposal only · Dimension aligned · Numeric curve not ready</span>
+            </article>
+            <article>
+              <strong>G5.6 · G4 separation & market-rule boundary</strong>
+              <small>G4 owns critical/high-risk gates · Pharma market-risk rules pending</small>
+              <p>Regulatory event context may remain visible inside Risk, but the same G4 event cannot receive a second hidden penalty or embedded cap. BANK/NBFC market-risk thresholds are not inherited; Pharma drawdown/volatility bands require separate review.</p>
+              <span>G4 second penalty: NO · BANK thresholds inherited: NO · Pharma bands: PENDING</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
