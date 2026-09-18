@@ -5786,3 +5786,123 @@ Build emitted only the existing non-blocking Vite large-chunk advisory; no build
 - scheduler change: **NO**
 
 **CURRENT STOP POINT:** G1 is now validated. The next permitted Gate G design task is **G2 — Overlay Modifier Contract**, still proposal-only and non-executable. Before implementing G2, inspect the canonical adaptive plan and current G1/Gate G contracts at the then-current branch head.
+
+
+---
+
+## 82. Entry 077 — Gate G2 Pharma overlay modifier contract prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G2 has been implemented as a **proposal-only overlay modifier contract** under the canonical PHARMA_V1 adaptive scoring/classification architecture.
+
+### New contract
+
+`PHARMA_V1_OVERLAY_MODIFIER_V1_PROPOSAL`
+
+Repository artifacts:
+
+- `src/features/research/pharmaOverlayModifierContract.ts`
+- `src/features/research/pharmaOverlayModifierContract.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G2_Overlay_Modifier_Contract_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Overlay dimension eligibility
+
+A Material Overlay may affect only dimensions touched by its **versioned PHARMA_V1 subprofile evidence contract**.
+
+Eligibility is derived from subprofile additions and overrides instead of assuming every secondary business can modify every common dimension.
+
+For the current `GLOBAL_GENERICS` overlay contract the derived eligible dimensions are:
+
+- `GROWTH`
+- `BUSINESS_DURABILITY`
+- `RISK`
+
+Dimensions outside the overlay evidence contract fail closed as:
+
+`NOT_ELIGIBLE_DIMENSION`
+
+### Required modifier inputs
+
+Before a Material Overlay can even become eligible for a future numeric modifier, Gate G2 requires:
+
+- reviewed economic materiality;
+- evidence completeness;
+- evidence confidence;
+- normalized overlay signal;
+- contradiction state.
+
+Missing completeness/confidence/signal resolves to:
+
+`PARTIAL_EVIDENCE`
+
+Missing or incompatible materiality resolves to:
+
+`REVIEW_REQUIRED`
+
+Missing evidence is never converted to a neutral modifier.
+
+### Contradiction handling
+
+Unresolved contradictions return:
+
+`REVIEW_REQUIRED`
+
+Contradictory evidence is not silently averaged.
+
+Only a contradiction explicitly resolved by a versioned methodology contract may continue toward a future modifier.
+
+### Combined cap rule
+
+All Material Overlays affecting the same dimension must eventually share **one combined per-dimension cap**.
+
+Encoded boundaries:
+
+- combined per-dimension cap required: **YES**
+- independent overlay-cap stacking allowed: **NO**
+- exact cap value: **UNAPPROVED / null**
+- exact numeric modifier formula: **UNAPPROVED**
+- numeric modifier output: **null**
+
+No arbitrary ±10%, ±15%, or other cap has been invented.
+
+### Emerging Watch remains non-scoring
+
+`EMERGING_WATCH` always resolves to:
+
+`EXCLUDED_EMERGING_WATCH`
+
+for numeric modifier purposes.
+
+It remains visible for Research interpretation/evidence collection only and does not participate in numeric modifier or score denominator logic.
+
+### UI review surface
+
+Gate G now includes:
+
+- **G2 · Overlay modifier contract**
+- **G2 · Combined-cap & contradiction boundary**
+
+### Explicit boundary
+
+- overlay architecture proposal: **YES**
+- second stock score: **NO**
+- Primary/Overlay score averaging: **NO**
+- numeric modifier formula approved: **NO**
+- exact combined cap approved: **NO**
+- modifier execution: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- schema migration: **NO**
+- recommendation / position sizing: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G2 cards in TORNTPHARM → Research → Gate G, then run focused G2 validation. Only after G2 validation should development proceed to **G3 — Readiness Mapping Contract**.
