@@ -4931,3 +4931,122 @@ No observation-selection policy or scoring decision was authorized in Gate F. An
 - scoring/recommendation change → **NO**
 
 **CURRENT STOP POINT:** Run final focused validation for the PHARMA_V1 US-growth foreground presentation and the Gate F observation contracts. If clean, record the final validation checkpoint and close Gate F.
+
+
+---
+
+## 72. Entry 067 — Gate F closed after end-to-end local evidence verification
+
+**Date:** 18 September 2026  
+**Actor:** owner-run final validation + ChatGPT closure  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate F for the TORNTPHARM PHARMA_V1 pilot is now complete.
+
+### Final focused validation
+
+Owner executed:
+
+- `npx vitest run src/features/research/researchProfileUiContract.pharmaUsGrowth.test.ts src/features/research/torntpharmLocalObservationMutationSql.test.ts`
+  - test files: **2/2 passed**
+  - tests: **8/8 passed**
+- focused ESLint across the PHARMA_V1 foreground wiring and observation-mutation slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- build transformed **221 modules**
+- only the known non-blocking >500 kB Vite chunk warning remained.
+
+Earlier Gate F validation had already confirmed:
+
+- full app tests: **97/97 files / 511/511 tests passed**
+- Edge tests: **27/27 files / 140/140 tests passed**
+- architecture/data-boundary guards: **PASS**
+- local-only prerequisite and observation mutation runners: guarded and validated
+- local regulatory migration replay: **PASS / rollback clean**
+- canonical prerequisite materialization: **SUCCESS**
+- four reviewed canonical observation inserts: **SUCCESS / local-only**
+- production writes: **0**
+
+### Final local canonical evidence state
+
+Metric:
+
+`PHARMA_EXPORT_US_REVENUE_GROWTH`
+
+Canonical reviewed observations now present in local Supabase:
+
+- 30 Jun 2025 → **19%**
+- 30 Sep 2025 → **26%**
+- 31 Dec 2025 → **19%**
+- 31 Mar 2026 → **16%**
+
+Rejected scope-incompatible Q4 31% claim remains excluded.
+
+Read-only numeric preflight after insertion confirmed:
+
+- rows checked: **4**
+- insert candidates: **0**
+- already present: **4**
+- conflicts: **0**
+- blocked: **0**
+- write authorization: **NO**
+- read-only rollback: **PASS**
+
+### Foreground Research UI verified on localhost
+
+Owner visually verified:
+
+**Overview → Growth at a glance**
+- Export / US Revenue Growth = **16%**
+- status: **VERIFIED**
+
+**Quality & Growth → Growth & earnings**
+- Export / US Revenue Growth = **16%**
+- period: Quarter · 31 Mar 2026
+- provider: `COMPANY_EXCHANGE_FILING`
+- status: **VERIFIED**
+
+**Evidence ledger**
+- all four canonical quarter rows visible;
+- all four display **VERIFIED**.
+
+The ledger currently labels them **Competing / unselected** because Gate F did not create `fundamental_observation_decisions` rows. This is intentionally left for a later selection/scoring contract and is not a Gate F blocker.
+
+### Gate F completion criteria satisfied
+
+- public/official discovery contract: **YES**
+- exact document planning: **YES**
+- read-only content review: **YES**
+- rejected incompatible claim retained outside canonical series: **YES**
+- candidate-to-ingestion validation: **YES**
+- prerequisite schema/package preparation: **YES**
+- local prerequisite preflight and materialization: **YES**
+- canonical metric/source prerequisite persistence: **YES**
+- local observation proposal and guarded execution: **YES**
+- four reviewed canonical observations persisted locally: **YES**
+- post-write preflight confirms already-present/no-conflict state: **YES**
+- foreground Research page reads canonical observations: **YES**
+- final focused validation: **PASS**
+- production mutation: **NO**
+- scoring/recommendation/position-sizing changes: **NO**
+
+## Gate F status: CLOSED
+
+Gate F is complete for the TORNTPHARM PHARMA_V1 pilot.
+
+### Next gate
+
+The next planned stage is **Gate G — PHARMA_V1 scoring methodology**.
+
+Gate G must define and version the scoring curves, thresholds and weights that translate approved Pharma evidence into deterministic dimension scores. Gate G must not silently reuse BANK_NBFC scoring logic and must remain profile/subprofile aware.
+
+No Gate G scoring methodology has been approved or executed by this closure.
+
+### Scope boundary at closure
+
+- Gate F: **CLOSED**
+- local TORNTPHARM canonical evidence pilot: **COMPLETE**
+- PR #101 merge: **NO**
+- production deploy: **NO**
+- production Supabase mutation: **NO**
+- Gate G scoring: **NOT STARTED / NOT APPROVED**
