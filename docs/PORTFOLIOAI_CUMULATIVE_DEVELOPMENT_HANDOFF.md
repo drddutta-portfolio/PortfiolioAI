@@ -3665,3 +3665,68 @@ Added:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, run the local Vite app, reopen TORNTPHARM → Research → Overview → Evidence operations & review controls → **Local write package & event-schema proposal**, and visually verify the new **Prerequisite materialization dry-run** and **Dry-run execution boundary** cards. Do not execute the dry-run command yet. Obtain visual approval before full local validation.
+
+
+---
+
+## 54. Entry 049 — Prerequisite materialization dry-run validation interrupted by focused lint; test-only correction prepared
+
+**Date:** 18 September 2026  
+**Actor:** owner-run validation + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner visually approved the prerequisite materialization dry-run cards and started full local validation.
+
+### Validation results before interruption
+
+Confirmed from the supplied terminal output:
+
+- Edge test suite: **27/27 files passed**
+- Edge tests: **140/140 passed**
+- production build: **PASS**
+- Vite modules transformed: **219**
+- only the existing non-blocking >500 kB chunk warning remained
+- `node --check scripts/r4n/torntpharm-prerequisite-materialization-dry-run.mjs` → **PASS**
+
+### Focused lint interruption
+
+Focused ESLint failed only in:
+
+`src/features/research/torntpharmPrerequisiteMaterializationManifest.test.ts`
+
+with five `@typescript-eslint/no-unused-vars` errors caused by destructuring package-only fields into unused underscore-prefixed variables:
+
+- `_payloadHash`
+- `_algorithm`
+- `_state`
+- `_terms`
+- `_authorized`
+
+### Correction
+
+The drift test now explicitly maps each validated source record to the exact manifest shape:
+
+- `sourceCode`
+- `recordKind`
+- `externalRecordId`
+- `sourceUrl`
+- `rawPayload`
+
+This removes unused variables while preserving the same drift-protection semantics.
+
+No production logic changed.
+
+Corrective commit:
+
+`df1dbc1dc27210bc378c8bbdb1cce4cfba8f03e9`
+
+### Scope boundary
+
+- Dry-run execution: **NO**
+- Database connection: **NO**
+- Database mutation: **NO**
+- Production code semantics changed: **NO**
+- Production Supabase mutation: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, rerun focused ESLint for the dry-run slice, and rerun `npm run typecheck` if desired. No UI re-review is required because the correction is test-only.
