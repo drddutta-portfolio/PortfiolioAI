@@ -5551,3 +5551,91 @@ History boundary:
 - production mutation: **NO**
 
 **CURRENT STOP POINT:** Two Gate G curve families are now validated as methodology artifacts. The next safe Gate G slice should define another core Pharma curve family as proposal-only, with score execution remaining disabled.
+
+
+---
+
+## 79. Entry 074 — Canonical PHARMA_V1 adaptive scoring/classification plan adopted
+
+**Date:** 18 September 2026  
+**Actor:** owner plan + ChatGPT adaptation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+A new canonical alignment document has been added:
+
+`docs/PORTFOLIOAI_PHARMA_V1_ADAPTIVE_SCORING_CLASSIFICATION_PLAN.md`
+
+### Why this document is canonical
+
+This document governs future PHARMA_V1 work for:
+
+- business-model classification;
+- Primary / Material Overlay / Emerging Watch layering;
+- materiality thresholds;
+- promotion/demotion rules;
+- readiness behavior;
+- overlay score mechanics;
+- governance gate;
+- regulatory-event materiality;
+- curve-sharing vs subprofile-specific thresholds;
+- Gate G sequencing.
+
+### Alignment precedence
+
+Future Pharma implementation should use this precedence:
+
+1. adaptive scoring/classification plan;
+2. versioned PHARMA_V1 parent/subprofile contracts;
+3. validated Gate G curve proposals;
+4. cumulative HANDOFF;
+5. UI glass-box panels.
+
+The UI must reflect the methodology; it must not redefine it.
+
+### Preserved validated methodology
+
+The plan preserves the two already-validated Gate G proposals:
+
+- `PHARMA_SEGMENT_GROWTH_CURVE_V1_PROPOSAL`
+- `PHARMA_OPERATING_MARGIN_CURVE_V1_PROPOSAL`
+
+Both remain **VALIDATED / NOT ACTIVE**.
+
+### Gate G sequence changed by owner architecture
+
+Do **not** continue immediately to ROCE or additional curve families.
+
+The next required sequence is:
+
+- **G1 Classification Contract**
+- **G2 Overlay Modifier Contract**
+- **G3 Readiness Mapping Contract**
+- **G4 Governance / Regulatory Gate Contract**
+
+Only after G1–G4 are defined and validated should Gate G continue with additional normalization-curve families.
+
+### Mandatory alignment safeguards
+
+Future work must not:
+
+- revert to one generic Pharma methodology;
+- average independent Primary and Overlay stock scores;
+- score Emerging Watch exposures;
+- reuse Domestic Formulations thresholds automatically for other subprofiles;
+- treat missing evidence as zero/neutral;
+- silently blend contradictions;
+- infer materiality without evidence;
+- double-count governance/regulatory penalties;
+- reclassify Primary from a single anomalous period;
+- activate scoring/recommendation/position sizing without separate approval.
+
+### Scope boundary
+
+- canonical adaptive plan added: **YES**
+- scoring activation: **NO**
+- score run: **NO**
+- production mutation: **NO**
+- recommendation/position sizing: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Read the canonical adaptive scoring/classification plan before further PHARMA_V1 Gate G implementation. Next safe development task is G1 — version the classification/materiality contract. G2–G4 follow before any additional scoring curve family is added.
