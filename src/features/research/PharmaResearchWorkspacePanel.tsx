@@ -5,6 +5,7 @@ import { buildPharmaBusinessModelEvidenceAcquisitionPlan, type PharmaBusinessMod
 import { buildTorntpharmPublicOfficialSourceDiscoveryPlan } from "./torntpharmPublicOfficialSourceDiscovery"
 import { buildTorntpharmArtifactContentReviewPlan } from "./torntpharmArtifactContentReviewPlan"
 import { buildTorntpharmReadOnlyContentReviewDryRun } from "./torntpharmReadOnlyContentReviewDryRun"
+import { buildTorntpharmCandidateToIngestionProposal } from "./torntpharmCandidateToIngestionProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -117,6 +118,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const publicSourceDiscovery = acquisitionPlan ? buildTorntpharmPublicOfficialSourceDiscoveryPlan(acquisitionPlan) : null
   const artifactReviewPlan = acquisitionPlan && publicSourceDiscovery ? buildTorntpharmArtifactContentReviewPlan(acquisitionPlan, publicSourceDiscovery) : null
   const contentReviewDryRun = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmReadOnlyContentReviewDryRun() : null
+  const ingestionProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmCandidateToIngestionProposal(securityId, resolution.data.assignment.assignmentVersion) : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -347,6 +349,35 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
       </article>)}
 
       <p className="pharma-evidence-pilot-note"><strong>Boundary:</strong> proposed candidates are review outputs only. Regulatory Site Status remains partial-scope because only the Indrad warning/closeout chain has been reviewed, and no company-wide current regulatory-clearance claim is made.</p>
+    </section> : null}
+
+
+    {ingestionProposal ? <section className="pharma-ingestion-proposal" aria-labelledby="pharma-ingestion-proposal-title">
+      <div className="pharma-evidence-pilot-head">
+        <div>
+          <p className="eyebrow">Gate F · Candidate-to-ingestion proposal</p>
+          <h3 id="pharma-ingestion-proposal-title">Ingestion eligibility proposal</h3>
+          <p>Reviewed candidates are projected against the current canonical ingestion contracts. This section identifies schema and validator blockers only; it does not authorize or perform a write.</p>
+        </div>
+        <span className="pharma-workspace-lock">Proposal only · 0 writes</span>
+      </div>
+      <div className="pharma-ingestion-proposal-summary">
+        <div><span>Reviewed candidates</span><strong>{ingestionProposal.summary.reviewedCandidates}</strong><small>{ingestionProposal.summary.numericCandidates} numeric · {ingestionProposal.summary.eventCandidates} event-state</small></div>
+        <div><span>Validator accepted</span><strong>{ingestionProposal.summary.validatorAccepted}</strong><small>{ingestionProposal.summary.validatorQuarantined} numeric candidates quarantined</small></div>
+        <div><span>Event schema blocked</span><strong>{ingestionProposal.summary.eventSchemaBlocked}</strong><small>Regulatory states need a versioned event-evidence contract</small></div>
+        <div><span>Proposed writes</span><strong>{ingestionProposal.summary.proposedWrites}</strong><small>{ingestionProposal.summary.rejectedClaimsExcluded} rejected claim excluded</small></div>
+      </div>
+      <div className="pharma-ingestion-proposal-items">
+        {ingestionProposal.items.map((item) => <article key={item.artifactCode + item.observationDate + item.value}>
+          <div className="pharma-source-requirement-head">
+            <div><strong>{item.metricCode === "PHARMA_EXPORT_US_REVENUE_GROWTH" ? "Export / US Revenue Growth" : "Regulatory Site Status"}</strong><small>{item.observationDate} · {item.artifactCode} · {item.value}{item.unit === "PERCENT" ? "%" : ""}</small></div>
+            <span>{titleCase(item.disposition)}</span>
+          </div>
+          {item.validatorIssueCodes.length ? <p><strong>Current validator:</strong> {item.validatorIssueCodes.join(" · ")}</p> : null}
+          <small>{item.rationale}</small>
+        </article>)}
+      </div>
+      <p className="pharma-evidence-pilot-note"><strong>Decision gate:</strong> no reviewed candidate is currently eligible for a write. The numeric validator contract must first be versioned for Export / US Revenue Growth, and regulatory events require their own event-evidence storage/validation contract. The rejected Q4 31% claim remains excluded.</p>
     </section> : null}
 
       </div>
