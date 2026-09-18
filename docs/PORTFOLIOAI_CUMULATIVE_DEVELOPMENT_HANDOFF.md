@@ -6574,3 +6574,113 @@ A separate versioned reconciliation is required before any active scoring path c
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G5.1 is validated. The next permitted G5 parent curve family is **Cash Conversion**, but implementation must first inspect the existing `PHARMA_CASH_CONVERSION_HISTORY` evidence contract and reconcile any legacy-to-canonical dimension mismatch before defining methodology.
+
+
+---
+
+## 90. Entry 085 — Gate G5.2 Cash Conversion framework prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G5 has continued with **G5.2 — Cash Conversion** as a proposal-only common parent curve framework.
+
+### Existing Cash Conversion evidence contract preserved
+
+Existing parent metric:
+
+`PHARMA_CASH_CONVERSION_HISTORY`
+
+Preserved requirements:
+
+- minimum **3** comparable annual periods;
+- preferred **5** comparable annual periods;
+- latest annual period required;
+- matched-period CFO, PAT and capex/FCF evidence required;
+- CFO alone is insufficient;
+- single snapshot insufficient.
+
+### Dimension alignment gap surfaced
+
+The canonical adaptive architecture assigns Cash Conversion to:
+
+`CASH_FLOW`
+
+However, the older lower-level parent evidence contract records:
+
+`PHARMA_CASH_CONVERSION_HISTORY.dimension = EARNINGS_CASH_QUALITY`
+
+and the current lower-level `ResearchMetricContract` taxonomy does not expose `CASH_FLOW`.
+
+G5.2 records:
+
+- canonical dimension: `CASH_FLOW`
+- current parent-contract dimension: `EARNINGS_CASH_QUALITY`
+- alignment state: `REQUIRES_VERSIONED_PARENT_RECONCILIATION`
+
+No silent remapping is applied.
+
+### Cash Conversion methodology framework
+
+New proposal:
+
+`PHARMA_CASH_CONVERSION_CURVE_V1_PROPOSAL`
+
+Candidate shared framework:
+
+- `CFO_TO_PAT_CONVERSION`
+- `FCF_CONVERSION`
+- `CONSISTENCY_AND_TREND`
+
+The following remain unapproved:
+
+- component weights;
+- CFO/PAT bands;
+- FCF-conversion bands;
+- consistency/trend bands.
+
+### Subprofile and capex-context boundary
+
+No universal numeric Cash Conversion thresholds are created.
+
+All five canonical Pharma subprofiles retain null threshold slots.
+
+G5.2 additionally requires **capex-intensity context** before FCF conversion can be normalized, preventing investment-heavy models from being mechanically penalized and preventing CFO-only evidence from being over-rewarded.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaCashConversionCurveProposal.ts`
+- `src/features/research/pharmaCashConversionCurveProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G5_2_Cash_Conversion_Framework_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G5.2 · Cash Conversion framework**
+- **G5.2 · Dimension alignment & capex-context boundary**
+
+### Explicit boundary
+
+- Cash Conversion framework proposal: **YES**
+- dimension reconciliation applied: **NO**
+- universal numeric Cash Conversion bands: **NO**
+- subprofile thresholds approved: **NO**
+- component weights approved: **NO**
+- numeric curve ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G5.2 cards in TORNTPHARM → Research → Gate G, then run focused G5.2 validation. Do not proceed to Balance Sheet / Leverage until G5.2 is validated.
