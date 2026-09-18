@@ -4433,3 +4433,130 @@ The preflight remained read-only and ended in `ROLLBACK`.
 **Result:** Numeric preflight = **READY FOR SEPARATE OBSERVATION-WRITE APPROVAL**.
 
 **CURRENT STOP POINT:** The next safe R4N gate is to prepare a local-only 4-row `fundamental_observations` insertion proposal/executor using the reviewed values and the now-resolved immutable source-record ids. The package must remain non-executed until separately approved by the owner.
+
+
+---
+
+## 65. Entry 060 — Local 4-row evidence observation mutation proposal prepared
+
+**Date:** 18 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Following the clean read-only numeric preflight state `READY_FOR_SEPARATE_WRITE_APPROVAL`, the final Gate F local evidence-write proposal has been prepared.
+
+### Prepared local-only observation executor
+
+Added:
+
+- `scripts/r4n/torntpharm-local-observation-mutation.sql`
+- `scripts/r4n/run-torntpharm-local-observation-mutation.sh`
+- `src/features/research/torntpharmLocalObservationMutationProposal.ts`
+- `src/features/research/torntpharmLocalObservationMutationSql.test.ts`
+
+Added npm command:
+
+`npm run r4n:mutate:observations`
+
+### Exact proposed observation scope
+
+Metric:
+
+`PHARMA_EXPORT_US_REVENUE_GROWTH`
+
+Prepared values:
+
+- Q1 FY26 / 2025-06-30 → **19%**
+- Q2 FY26 / 2025-09-30 → **26%**
+- Q3 FY26 / 2025-12-31 → **19%**
+- Q4 FY26 / 2026-03-31 → **16%**
+
+The rejected Q4 31% claim remains excluded.
+
+Maximum local observation inserts:
+
+- `fundamental_observations`: **4**
+
+No production mutation is part of this proposal.
+
+### Explicit approval boundary
+
+The runner refuses before DB discovery unless:
+
+`PORTFOLIOAI_ALLOW_LOCAL_OBSERVATION_MUTATION=YES`
+
+is explicitly supplied.
+
+Without the flag:
+- no Supabase DB URL lookup;
+- no database connection;
+- no SQL execution.
+
+The runner separately refuses non-local DB URLs.
+
+### Fail-closed SQL checks
+
+The transaction requires:
+
+- exactly one active NSE TORNTPHARM security row;
+- exactly one current reviewed PHARMA_V1 / Domestic Formulations assignment;
+- one active `PHARMA_EXPORT_US_REVENUE_GROWTH` metric contract with NUMERIC/PERCENT/PHARMA_BUSINESS_MODEL semantics;
+- all four immutable issuer-result source records;
+- zero conflicting existing quarter observations.
+
+Any mismatch aborts.
+
+### Canonical observation semantics
+
+The proposed rows use:
+
+- source-record ids dynamically resolved from local immutable source records;
+- source code `COMPANY_EXCHANGE_FILING`;
+- numeric value only;
+- unit `PERCENT`;
+- period type `QUARTER`;
+- consolidation scope `UNKNOWN`;
+- source retrieved_at copied into observation retrieved_at;
+- fresh_until derived from source retrieved_at plus registered metric freshness;
+- evidence status `AVAILABLE`.
+
+### Idempotency/postconditions
+
+- exact matching observations are skipped;
+- conflicting same-quarter values/units abort;
+- observations are never overwritten;
+- postconditions require exactly four exact reviewed observations;
+- postconditions require zero conflicts.
+
+### Glass-box UI checkpoint
+
+A new pair of cards now appears under **Prepared persistence packages**:
+
+**Local evidence observation proposal**
+- up to 4 reviewed US-growth observations;
+- Q1 19%, Q2 26%, Q3 19%, Q4 16%;
+- status: **PREPARED · NOT APPROVED · NOT EXECUTED**.
+
+**Observation execution boundary**
+- command: `npm run r4n:mutate:observations`;
+- separate approval required before DB discovery;
+- local-only DB, identity, assignment, metric, source-record, conflict, idempotency and postcondition guards;
+- execution approved: **NO**.
+
+### Documentation
+
+Added:
+
+`docs/R4N_TORNTPHARM_Gate_F_Local_Observation_Mutation_Proposal_V1.md`
+
+### Scope boundary
+
+- Observation mutation proposal prepared: **YES**
+- Execution approved: **NO**
+- Executor executed: **NO**
+- Local fundamental-observation writes: **0**
+- Production Supabase mutation: **NO**
+- Deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, run local Vite, and visually verify the new **Local evidence observation proposal** and **Observation execution boundary** cards. Do not run the observation mutation command. After visual approval, run full local validation and only then separately consider authorizing the exact four-row local observation mutation.
