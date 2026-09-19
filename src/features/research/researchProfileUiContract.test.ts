@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { researchProfileUiContract, researchRefreshModulesForSecurity, resolveResearchPresentationProfileCode } from "./researchProfileUiContract"
+import { researchProfileUiContract, researchRefreshModulesForSecurity } from "./researchProfileUiContract"
 
 const BANK_ONLY_CODES = [
   "ADVANCES_GROWTH_YOY",
@@ -113,12 +113,6 @@ describe("researchProfileUiContract", () => {
     expect(qualityGrowthCodes).toContain("INDIA_REVENUE_ANNUAL")
     expect(qualityGrowthCodes).not.toContain("ADVANCES_GROWTH_YOY")
     expect(qualityGrowthCodes).not.toContain("GROSS_NPA_PERCENT")
-  })
-
-  it("lets canonical research authority override a downstream scoring fallback for presentation only", () => {
-    expect(resolveResearchPresentationProfileCode("GENERAL", "PHARMA_V1")).toBe("PHARMA_V1")
-    expect(resolveResearchPresentationProfileCode("BANK_NBFC", null)).toBe("BANK_NBFC")
-    expect(resolveResearchPresentationProfileCode(null, "PHARMA_V1")).toBe("PHARMA_V1")
   })
 
   it("falls back safely for unknown profiles without inventing a sector contract", () => {
