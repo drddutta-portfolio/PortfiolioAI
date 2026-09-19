@@ -13254,3 +13254,100 @@ Structural semantics:
 **Result:** G6.25 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** The next safe Global Generics Risk methodology step is the first actual market-risk curve decision. Drawdown should be considered first because it has a stable absolute economic interpretation, while volatility still explicitly requires peer/benchmark context.
+
+
+---
+
+## 153. Entry 148 — Gate G6.26 Global Generics drawdown method approval gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.26 — Global Generics Drawdown Method Approval Gate**.
+
+### Starting state
+
+G6.25 remained:
+
+**VALIDATED / NOT ACTIVE**
+
+Current branch head before G6.26 work was:
+
+`f004129cdcdee34184005f6228222e4f1e9c3c78`
+
+### Why G6.26 is an approval gate
+
+The repository contains no approved Pharma-specific drawdown threshold contract that would justify importing BANK_NBFC bands.
+
+Therefore G6.26 does not invent numeric cutoffs.
+
+Instead it enumerates evidence-backed methodology candidates and the prerequisites each would require.
+
+### Candidate methods
+
+- `ABSOLUTE_BANDS`
+- `SAME_SUBPROFILE_PEER_RELATIVE`
+- `BENCHMARK_RELATIVE`
+- `SELF_HISTORY_RELATIVE`
+- `HYBRID_EXPLICITLY_VERSIONED`
+
+No candidate is approved by default.
+
+### Method prerequisites
+
+#### Absolute bands
+Require empirical Pharma evidence supporting the cutoffs.
+
+#### Same-subprofile peer-relative
+Requires a reviewed Global Generics Primary cohort.
+
+#### Benchmark-relative
+Requires an explicitly approved Pharma benchmark.
+
+#### Self-history-relative
+Requires sufficient comparable drawdown history.
+
+#### Hybrid
+Requires at least two independently eligible methods plus explicit versioned weights.
+
+### Prohibited defaults
+
+- BANK_NBFC bands inherited: **NO**
+- missing evidence → zero/neutral: **NO**
+- generic Pharma percentile without reviewed same-primary cohort: **NO**
+- silent benchmark selection: **NO**
+- hidden hybrid weighting: **NO**
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsDrawdownMethodGate.ts`
+- `src/features/research/pharmaGlobalGenericsDrawdownMethodGate.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_26_Global_Generics_Drawdown_Method_Approval_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.26 · Global Generics drawdown method approval gate**
+- **G6.26 · No silent market-risk default**
+
+### Execution boundary
+
+- approved drawdown method: **NO**
+- numeric drawdown curve ready: **NO**
+- whole Risk dimension ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.26 cards in TORNTPHARM → Research → Gate G, then run focused G6.26 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect which candidate drawdown methods are actually evidence-backed before any G6.27 numeric method is approved.
