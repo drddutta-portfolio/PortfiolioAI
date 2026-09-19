@@ -9164,3 +9164,135 @@ They must not automatically apply to:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.8 is validated. The next permitted G6 task is to select the next subprofile-specific threshold slice. For Domestic Formulations Valuation, the remaining missing lane is peer-relative valuation; alternatively, G6 may move to another aligned family if peer-cohort methodology is not yet mature enough.
+
+
+---
+
+## 117. Entry 112 — Gate G6.9 Domestic peer-relative valuation cohort methodology lock prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.9 — Domestic Formulations Peer-Relative Valuation Cohort Methodology Lock**.
+
+### Repository inspection result
+
+The remaining Domestic Formulations Valuation lane is:
+
+`PEER_RELATIVE_VALUATION`
+
+Repository inspection found no existing versioned peer-cohort builder, approved minimum cohort size, approved peer aggregation statistic, approved outlier policy or numeric peer-relative score curve.
+
+G5.4 only establishes the high-level rule that the peer cohort must respect the Pharma business model.
+
+Therefore G6.9 deliberately does not invent numeric peer bands.
+
+### Scope
+
+Primary:
+
+`DOMESTIC_FORMULATIONS`
+
+Dimension:
+
+`VALUATION`
+
+Component:
+
+`PEER_RELATIVE_VALUATION`
+
+### Cohort eligibility lock
+
+Required:
+
+- reviewed Primary subprofile;
+- same Primary subprofile `DOMESTIC_FORMULATIONS`;
+- effective-dated assignment;
+- active security.
+
+Not sufficient:
+
+- Pharma sector match alone;
+- industry match alone;
+- Material Overlay match alone;
+- provider-defined peer lists.
+
+Emerging Watch cannot define peer eligibility.
+
+### Comparability lock
+
+Peer observations require:
+
+- same metric semantics;
+- same period basis;
+- current authoritative market-price semantics;
+- non-stale valuation evidence;
+- explicit exclusion/treatment of negative or non-meaningful denominators;
+- acquisition/one-off normalization where material.
+
+### Candidate peer evidence families
+
+Candidate only:
+
+- `PE_TTM`
+- `EV_EBITDA`
+
+The final metric set remains unapproved.
+
+### Explicitly unresolved
+
+- approved peer metric set: **NO**
+- minimum eligible peer count: **NO**
+- aggregation statistic: **NO**
+- outlier treatment: **NO**
+- relative premium/discount bands: **NO**
+- PE vs EV/EBITDA weighting: **NO**
+- Valuation component weights: **NO**
+- cohort builder implementation: **NO**
+- numeric peer curve ready: **NO**
+- whole Valuation dimension ready: **NO**
+
+### Relationship to existing Domestic Valuation work
+
+Validated / not active:
+
+- G6.2 self-history relative valuation
+- G6.8 FCF-yield cash-flow corroboration
+
+Still incomplete:
+
+- peer-relative valuation methodology
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaDomesticPeerValuationContract.ts`
+- `src/features/research/pharmaDomesticPeerValuationContract.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_9_Domestic_Peer_Valuation_Cohort_Lock_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.9 · Domestic peer-cohort methodology lock**
+- **G6.9 · Peer-relative numeric blocker**
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.9 cards in TORNTPHARM → Research → Gate G, then run focused G6.9 validation. Only after validation should the project define the peer-cohort implementation/minimum-comparability contract or move to another G6 family.
