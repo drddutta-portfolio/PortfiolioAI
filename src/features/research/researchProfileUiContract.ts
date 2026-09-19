@@ -328,3 +328,16 @@ export function researchRefreshModulesForSecurity(profileCode: string | null | u
     return eligibility.mode === "PROFILE" || eligibility.symbol === symbol
   })
 }
+
+
+/**
+ * Chooses the profile contract that drives research presentation.
+ * Canonical reviewed research authority takes precedence over a downstream
+ * scoring fallback. This does not activate or alter numeric scoring.
+ */
+export function resolveResearchPresentationProfileCode(
+  scoringProfileCode: string | null | undefined,
+  canonicalResearchProfileCode: string | null | undefined,
+): string | null | undefined {
+  return canonicalResearchProfileCode ?? scoringProfileCode
+}
