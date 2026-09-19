@@ -45,6 +45,7 @@ import { PHARMA_DOMESTIC_VALUATION_COMBINED_SCORE } from "./pharmaDomesticValuat
 import { PHARMA_GLOBAL_GENERIC_PRICE_EROSION_CURVE } from "./pharmaGlobalGenericPriceErosionCurveProposal"
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_EVIDENCE } from "./pharmaGlobalGenericsPipelineEvidenceContract"
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_STAGE_NORMALIZATION } from "./pharmaGlobalGenericsPipelineStageNormalization"
+import { PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_GATE } from "./pharmaGlobalGenericsPipelineAggregationGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -623,6 +624,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Materiality is a gate, not an invented multiplier</small>
               <p>Delayed/blocked scores 20 and withdrawn/discontinued scores 0, but multiple event scores are not yet averaged, medianed or recency-weighted. Unrelated successes cannot silently cancel adverse material events.</p>
               <span>Materiality multiplier: NO · Event-count bonus: NO · Combined pipeline score: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.21 · Multi-event pipeline aggregation approval gate</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_GATE.contractVersion}</small>
+              <p>All material events may be individually normalized, but no combined pipeline method is approved yet. Median, weighted mean, adverse floor/cap and any alternative remain candidate decisions rather than defaults.</p>
+              <span>Approved aggregation method: NONE · Combined pipeline score: NO · Activation: NO</span>
+            </article>
+            <article>
+              <strong>G6.21 · Adverse visibility & offset boundary</strong>
+              <small>Five methodology decisions remain explicitly approval-gated</small>
+              <p>Every adverse event must remain visible. Event-count bonuses, simple averaging, recency weighting, materiality weighting and numeric economic-relevance multipliers remain unapproved, and unrelated positive events cannot silently offset adverse events.</p>
+              <span>Adverse visibility: REQUIRED · Hidden offset: NO · Methodology approval: REQUIRED</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
