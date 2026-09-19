@@ -1,12 +1,6 @@
 \set ON_ERROR_STOP on
 \pset pager off
 
-\if :{?local_user_email}
-\else
-  \echo 'REFUSING: local_user_email psql variable is required.'
-  \quit 2
-\endif
-
 BEGIN;
 
 \echo ''
@@ -31,27 +25,27 @@ DECLARE
 BEGIN
   /*
    * Local-development guard:
-   * psql runs as local postgres and bypasses RLS, while the browser sees only
-   * portfolios owned by the authenticated Supabase user. Resolve that exact
-   * local user by the email passed by the runner, then mirror the app's
-   * active-portfolio ordering inside that user's RLS-visible scope.
+   * Reuse the already validated PortfolioAI local-fixture pattern from Gate E:
+   * resolve the explicitly reviewed local auth user, count it separately,
+   * then mirror the app's active-portfolio ordering inside that user's scope.
    */
+  SELECT count(*)
+  INTO v_target_portfolio_count
+  FROM auth.users
+  WHERE lower(email) = 'dr.d.dutta@gmail.com';
+
+  IF v_target_portfolio_count <> 1 THEN
+    RAISE EXCEPTION 'Expected exactly one local app auth user dr.d.dutta@gmail.com; found %.', v_target_portfolio_count;
+  END IF;
+
   SELECT id
   INTO v_target_user_id
   FROM auth.users
-  WHERE lower(email) = lower(:'local_user_email')
+  WHERE lower(email) = 'dr.d.dutta@gmail.com'
   LIMIT 1;
 
   IF v_target_user_id IS NULL THEN
-    RAISE EXCEPTION 'LOCAL_FIXTURE_APP_USER_NOT_FOUND';
-  END IF;
-
-  IF (
-    SELECT count(*)
-    FROM auth.users
-    WHERE lower(email) = lower(:'local_user_email')
-  ) <> 1 THEN
-    RAISE EXCEPTION 'LOCAL_FIXTURE_APP_USER_NOT_UNIQUE';
+    RAISE EXCEPTION 'Local app auth user dr.d.dutta@gmail.com could not be resolved.';
   END IF;
 
   SELECT id
@@ -373,7 +367,7 @@ WHERE ch.portfolio_id = (
   FROM public.portfolios p
   JOIN auth.users u ON u.id = p.user_id
   WHERE p.is_active
-    AND lower(u.email) = lower(:'local_user_email')
+    AND lower(u.email) = 'dr.d.dutta@gmail.com'
   ORDER BY p.created_at, p.id
   LIMIT 1
 )
