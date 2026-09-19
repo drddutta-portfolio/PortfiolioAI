@@ -13893,3 +13893,105 @@ This is an intentional incomplete/fail-closed state, not a neutral score.
 **Result:** G6.29 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Global Generics Risk is explicitly incomplete/fail-closed. Move to the next unresolved Global Generics curve family without forcing a Risk score.
+
+
+---
+
+## 161. Entry 156 — Gate G6.30 Global Generics operating margin methodology boundary gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.30 — Global Generics Operating Margin Methodology Boundary Gate**.
+
+### Starting state
+
+G6.29 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+Global Generics Risk is now explicitly incomplete/fail-closed.
+
+The next unresolved Global Generics family in the G6 applicability registry is:
+
+`PHARMA_OPERATING_MARGIN_HISTORY`
+
+Current registry state:
+
+`UNSUPPORTED_FAIL_CLOSED`
+
+because Domestic Formulations Operating Margin thresholds must not be reused.
+
+### Methodology boundary
+
+The parent PHARMA_V1 contract supports reuse of the methodology shape:
+
+- minimum 8 comparable quarters;
+- preferred 12 comparable quarters;
+- latest period required;
+- matched revenue and operating-profit periods required;
+- level component;
+- stability component;
+- trend component.
+
+Candidate statistics preserved as methodology shape:
+
+- `MEDIAN_LATEST_8_OPERATING_MARGIN_PERCENT`
+- `INTERQUARTILE_RANGE_LATEST_8_PERCENTAGE_POINTS`
+- `MEDIAN_LATEST_4_MINUS_MEDIAN_PRIOR_4_PERCENTAGE_POINTS`
+
+### Explicitly not inherited from Domestic Formulations
+
+- 50/30/20 component weights: **NO**
+- level score bands: **NO**
+- stability score bands: **NO**
+- trend score bands: **NO**
+- final weighted aggregation: **NO**
+
+Global Generics still requires its own calibration.
+
+### Evidence helper
+
+Possible states:
+
+- `REVIEW_REQUIRED`
+- `INSUFFICIENT_EVIDENCE`
+- `READY_FOR_METHOD_SELECTION`
+
+`READY_FOR_METHOD_SELECTION` does not mean score-ready.
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsOperatingMarginMethodGate.ts`
+- `src/features/research/pharmaGlobalGenericsOperatingMarginMethodGate.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_30_Global_Generics_Operating_Margin_Methodology_Boundary_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.30 · Global Generics operating-margin methodology boundary**
+- **G6.30 · Global-specific calibration blocker**
+
+### Safety boundary remains unchanged
+
+- Domestic weights inherited: **NO**
+- Domestic bands inherited: **NO**
+- Global Generics operating-margin weights approved: **NO**
+- Global Generics operating-margin bands approved: **NO**
+- numeric Operating Margin curve ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.30 cards in TORNTPHARM → Research → Gate G, then run focused G6.30 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether Global Generics-specific Operating Margin calibration is evidence-supportable; if not, defer numeric normalization rather than importing Domestic thresholds.
