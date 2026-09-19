@@ -33,6 +33,7 @@ import { PHARMA_G6_DOMESTIC_VALUATION_FCF_IDENTITY } from "./pharmaG6DomesticVal
 import { PHARMA_FCF_YIELD_METRIC_CONTRACT } from "./pharmaFcfYieldMetricContract"
 import { PHARMA_FCF_YIELD_DERIVATION_VERSION } from "./pharmaFcfYieldDerivationProposal"
 import { PHARMA_DOMESTIC_FCF_YIELD_CURVE } from "./pharmaDomesticFcfYieldCurveProposal"
+import { PHARMA_DOMESTIC_PEER_VALUATION_CONTRACT } from "./pharmaDomesticPeerValuationContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -443,6 +444,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Domestic Formulations only · Peer-relative valuation still unapproved</small>
               <p>The FCF-yield curve is only one Valuation component. Peer-relative valuation and component weights remain unapproved, so the 12% Valuation dimension is still not score-ready.</p>
               <span>Standalone verdict: NO · Component weights: PENDING · Whole dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.9 · Domestic peer-cohort methodology lock</strong>
+              <small>{PHARMA_DOMESTIC_PEER_VALUATION_CONTRACT.contractVersion}</small>
+              <p>Peer-relative Valuation must use reviewed, effective-dated Domestic Formulations Primary assignments. Sector/industry membership, Material Overlay labels and provider peer lists are not sufficient to define a scoring cohort.</p>
+              <span>Same reviewed Primary: REQUIRED · Generic Pharma peers: NO · Provider peer authority: NO</span>
+            </article>
+            <article>
+              <strong>G6.9 · Peer-relative numeric blocker</strong>
+              <small>Peer count, aggregation statistic, metric mix and relative bands remain unapproved</small>
+              <p>PE_TTM and EV_EBITDA are candidate evidence families, but no peer builder, minimum cohort size, median/percentile rule, outlier treatment or premium/discount score curve is approved yet.</p>
+              <span>Cohort builder: NO · Numeric peer curve: NO · Whole dimension ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
