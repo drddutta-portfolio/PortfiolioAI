@@ -73,6 +73,7 @@ import { PHARMA_GLOBAL_GENERICS_APPLICABILITY_REGISTRY_RECONCILIATION } from "./
 import { PHARMA_G7_OVERLAY_NUMERIC_MODIFIER } from "./pharmaG7OverlayNumericModifierProposal"
 import { PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT } from "./pharmaG7GovernanceHighRiskConstraint"
 import { PHARMA_G7_READ_ONLY_SCORING_ADAPTER } from "./pharmaG7ReadOnlyScoringAdapter"
+import { buildTorntpharmG7ExplainablePreview } from "./pharmaTorntpharmG7ExplainablePreview"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -194,6 +195,9 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const localPrerequisiteMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalPrerequisiteMutationProposal() : null
   const localObservationMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalObservationMutationProposal() : null
   const gateGScoringProposal = buildPharmaGateGScoringMethodProposal(model)
+  const g7TorntpharmPreview = symbol.toLocaleUpperCase() === "TORNTPHARM"
+    ? buildTorntpharmG7ExplainablePreview(model, research.metrics)
+    : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -1045,6 +1049,44 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <span>Overall score with missing weighted dimension: NO · G7.2 wiring: NOT STARTED</span>
             </article>
           </div>
+          {g7TorntpharmPreview ? <div className="pharma-g7-preview">
+            <div className="pharma-g7-preview-head">
+              <div>
+                <strong>G7.2 · TORNTPHARM explainable read-only preview</strong>
+                <small>{g7TorntpharmPreview.contractVersion}</small>
+              </div>
+              <span>Overall Pharma score: Not currently computable</span>
+            </div>
+            <div className="pharma-g7-preview-meta">
+              <span>Primary: Domestic Formulations</span>
+              <span>Material Overlay: Global Generics</span>
+              <span>Emerging Watch: CDMO / CRAMS</span>
+              <span>Governance runtime input: UNRESOLVED</span>
+            </div>
+            <div className="pharma-g7-preview-table-wrap">
+              <table className="pharma-g7-preview-table">
+                <thead>
+                  <tr>
+                    <th>Dimension</th>
+                    <th>Primary evidence</th>
+                    <th>Methodology</th>
+                    <th>Overlay</th>
+                    <th>Final state</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {g7TorntpharmPreview.rows.map((row) => <tr key={row.dimensionCode}>
+                    <td>{titleCase(row.dimensionCode)}</td>
+                    <td>{row.primaryEvidenceTotal > 0 ? `${row.primaryEvidenceVerified}/${row.primaryEvidenceTotal} verified` : "No dimension evidence set"}</td>
+                    <td>{titleCase(row.methodologyState)}</td>
+                    <td>{row.overlayState === "NONE" ? "Not applicable" : titleCase(row.overlayState)}</td>
+                    <td>{row.finalScore === null ? titleCase(row.calculationState) : `${row.finalScore.toFixed(1)} / 100`}</td>
+                  </tr>)}
+                </tbody>
+              </table>
+            </div>
+            <p className="pharma-g7-preview-note">No score is manufactured from evidence coverage alone. Missing methodology, missing dimension aggregation, unresolved overlay inputs or unresolved governance runtime state remain explicit blockers; no hidden reweighting is used.</p>
+          </div> : null}
           <div className="pharma-persistence-package-grid">
             <article>
               <strong>First proposed curve family</strong>
