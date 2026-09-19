@@ -17104,3 +17104,89 @@ The ±10 cap and confidence factors remain explicit methodology proposals rather
 **Result:** G7-P1 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Proceed to G7-P2 — Governance High-Risk Constraint Contract. Preserve G4 blocking behavior and anti-double-counting. Do not invent a hidden Quality/Risk deduction.
+
+
+---
+
+## 195. Entry 190 — Gate G7-P2 Governance High-Risk Constraint Contract prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7 has continued with the second bounded prerequisite:
+
+**G7-P2 — Governance High-Risk Constraint Contract**
+
+### G4 authority preserved
+
+The validated G4 contract remains authoritative:
+
+- `BLOCKED_REVIEW` blocks overall preview;
+- reviewed CRITICAL governance event blocks overall preview;
+- CRITICAL + known-material regulatory event blocks overall preview;
+- HIGH_RISK does not automatically block;
+- unknown regulatory materiality remains REVIEW_REQUIRED;
+- hidden double counting remains prohibited.
+
+### Repository conclusion
+
+No defensible Pharma-specific numeric HIGH_RISK cap is established in the repository.
+
+Therefore the G7-P2 proposal explicitly selects:
+
+`HIGH_RISK = INTERPRETATION_ONLY`
+
+This means:
+
+- overall preview blocked: **NO**
+- Interpretation prominence: **YES**
+- extra Quality deduction: **NO**
+- extra Risk deduction: **NO**
+- overall numeric cap: **NO**
+- overlay penalty: **NO**
+- hidden double counting: **NO**
+
+This is an explicit fail-safe methodology decision rather than an omitted implementation detail.
+
+### Version
+
+`PHARMA_V1_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT_V1_PROPOSAL`
+
+The contract records:
+
+- owner validation required: **YES**
+- G7.1 consumption approved: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+
+### Artifacts
+
+Added:
+
+- `src/features/research/pharmaG7GovernanceHighRiskConstraint.ts`
+- `src/features/research/pharmaG7GovernanceHighRiskConstraint.test.ts`
+- `docs/R4N_PHARMA_V1_G7_P2_Governance_High_Risk_Constraint_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Gate G now exposes:
+
+- **G7-P2 · Governance high-risk constraint**
+- **G7-P2 · Blocking & anti-double-counting boundary**
+
+### Safety boundary
+
+- G7.1 adapter implementation: **NOT STARTED**
+- score execution: **NO**
+- score persistence: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- schema/database mutation: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G7-P2 cards, run focused G7-P2 + G4 Vitest, focused ESLint, `npm run typecheck`, and `npm run build`. Only after owner validation should G7-P2 close and G7.1 begin.
