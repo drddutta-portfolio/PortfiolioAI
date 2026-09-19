@@ -56,6 +56,7 @@ import { PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_METHOD_GATE } from "./pharmaG
 import { PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsVolatilityContextEvidenceSufficiency"
 import { PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_METHOD_GATE } from "./pharmaGlobalGenericsOperatingMarginMethodGate"
 import { PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsOperatingMarginCalibrationEvidence"
+import { PHARMA_GLOBAL_GENERICS_ROCE_METHOD_GATE } from "./pharmaGlobalGenericsRoceMethodGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -788,6 +789,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>No fabricated Global Generics thresholds</small>
               <p>A reviewed same-primary cohort, level/stability/trend band evidence and component-weight evidence are all still absent. The slice remains intentionally fail-closed rather than importing Domestic Formulations calibration.</p>
               <span>Deferral required: YES · Score execution: NO · Activation: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.32 · Global Generics ROCE methodology boundary</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_ROCE_METHOD_GATE.contractVersion}</small>
+              <p>The parent ROCE evidence shape is reusable—3 annual periods minimum, 5 preferred, with level, stability and trend—but Global Generics still has no approved weights or numeric bands.</p>
+              <span>Parent shape: REUSABLE · Global weights: PENDING · Global bands: PENDING</span>
+            </article>
+            <article>
+              <strong>G6.32 · Capital-efficiency alignment blocker</strong>
+              <small>Parent dimension reconciliation is still required</small>
+              <p>The existing ROCE parent proposal still flags a versioned dimension-alignment reconciliation requirement. G6.32 preserves that blocker and does not silently inherit universal or other-subprofile thresholds.</p>
+              <span>Parent reconciliation: REQUIRED · Numeric ROCE curve: NO · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
