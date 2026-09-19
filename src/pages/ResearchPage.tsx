@@ -115,13 +115,19 @@ function Overview({ position, research, scoring, pharmaResolved, onViewEvidence 
   const stale = research.metrics.filter((metric) => metric.status === "STALE").length
   const coverage = research.metrics.length ? "Partial" : "Unavailable"
   return <>
-    {position.symbol.toLocaleUpperCase() === "AUROPHARMA" ? <>
-      <AuropharmaG81ClassificationCard symbol={position.symbol} />
-      <AuropharmaG82SameEnginePanel securityId={position.securityId} symbol={position.symbol} research={research} />
-      <AuropharmaG83ValidationPanel symbol={position.symbol} />
-      <AuropharmaG91ActivationReadinessPanel securityId={position.securityId} symbol={position.symbol} research={research} />
-      <AuropharmaG92CanonicalActivationPanel securityId={position.securityId} symbol={position.symbol} />
-    </> : null}
+    {position.symbol.toLocaleUpperCase() === "AUROPHARMA" ? <details className="pharma-deep-layer pharma-company-audit-history">
+      <summary>
+        <div><span>AUROPHARMA development & validation history</span><small>G8 portability evidence + G9 activation checkpoints · audit detail only</small></div>
+        <b>Open audit history</b>
+      </summary>
+      <div className="pharma-deep-layer-body">
+        <AuropharmaG81ClassificationCard symbol={position.symbol} />
+        <AuropharmaG82SameEnginePanel securityId={position.securityId} symbol={position.symbol} research={research} />
+        <AuropharmaG83ValidationPanel symbol={position.symbol} />
+        <AuropharmaG91ActivationReadinessPanel securityId={position.securityId} symbol={position.symbol} research={research} />
+        <AuropharmaG92CanonicalActivationPanel securityId={position.securityId} symbol={position.symbol} />
+      </div>
+    </details> : null}
     <SectionHeading title="Research at a glance" detail="Designed to give investment clarity first, with the detailed tabs preserving the evidence behind every conclusion." />
     <section className="context-strip" aria-label="Research and portfolio context"><div><span>Research profile</span><strong>{ui.profileDisplayName}</strong><small>{research.industry ?? position.industry ?? (scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed profile · industry pending" : "Industry unavailable")}</small></div><div><span>Portfolio exposure</span><strong>{formatPercent(position.portfolioWeightPercent)} current weight</strong><small>{formatQuantity(position.quantity)} shares · {position.role === "UNCLASSIFIED" ? "role unclassified" : `${titleCase(position.role)} role`}</small></div><div><span>Evidence status</span><strong>{scoring.data?.evidenceCoverage == null ? "Unavailable" : `${Math.round(scoring.data.evidenceCoverage * 100)}% verified`}</strong><small>{scoring.data?.scoreReadyCoverage == null ? "Score readiness unavailable" : `${Math.round(scoring.data.scoreReadyCoverage * 100)}% score-ready`}</small></div></section>
     <ResearchScorecardPanel snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} />
@@ -130,7 +136,7 @@ function Overview({ position, research, scoring, pharmaResolved, onViewEvidence 
     <section className="research-health"><div><p className="eyebrow">Research health</p><h2>{coverage} coverage</h2><p>{research.metrics.length} cached observations · {stale ? "mixed freshness" : research.metrics.length ? "current cache" : "freshness unavailable"}</p></div><dl><div><dt>Conflicts</dt><dd>{conflicts}</dd></div><div><dt>Review required</dt><dd>{reviewRequired}</dd></div><div><dt>Provisional</dt><dd>{provisional}</dd></div></dl><button type="button" className="button button-secondary" onClick={onViewEvidence}>View Evidence</button></section>
     {pharmaResolved ? <>
       <PharmaG93NormalizedResearchPanel securityId={position.securityId} symbol={position.symbol} research={research} />
-      {position.symbol.toLocaleUpperCase() === "TORNTPHARM" ? <PharmaResearchWorkspacePanel securityId={position.securityId} symbol={position.symbol} research={research} /> : null}
+      {position.symbol.toLocaleUpperCase() === "TORNTPHARM" ? <PharmaResearchWorkspacePanel securityId={position.securityId} symbol={position.symbol} research={research} presentationMode="AUDIT_ONLY" /> : null}
     </> : null}
   </>
 }
