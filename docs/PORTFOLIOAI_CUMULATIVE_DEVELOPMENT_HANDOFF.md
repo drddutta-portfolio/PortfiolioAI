@@ -11752,3 +11752,185 @@ An unrelated positive event may not silently offset a delayed, blocked, withdraw
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.20 is validated. The next safe Global Generics step is G6.21 — a separate multi-event pipeline aggregation contract that defines how multiple identified material pipeline events combine without hiding adverse evidence or inventing materiality weights.
+
+
+---
+
+## 141. Entry 136 — Gate G6.21 Global Generics multi-event pipeline aggregation approval gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.21 — Global Generics Multi-Event Pipeline Aggregation Approval Gate**.
+
+### Repository-state prerequisite
+
+G6.20 was first re-verified from the active branch and cumulative HANDOFF.
+
+Confirmed:
+
+- `## 140. Entry 135 — Gate G6.20 Global Generics pipeline stage normalization validated` already exists;
+- no duplicate G6.20 validation entry was added;
+- G6.20 remains **VALIDATED / NOT ACTIVE**;
+- per-event normalization remains the only approved numeric pipeline method so far.
+
+### Aggregation-precedent review
+
+Repository methodology precedents were inspected before introducing G6.21.
+
+Existing approved weighted-mean precedents include:
+
+- Domestic Formulations peer-relative Valuation: 50% PE / 50% EV/EBITDA;
+- Domestic Formulations final Valuation: 40% self-history / 40% peer-relative / 20% FCF corroboration.
+
+These are **not** treated as transferable event-aggregation precedents.
+
+Reason:
+
+- G6.20 explicitly preserves adverse pipeline-event visibility;
+- unrelated positive pipeline events may not silently cancel delayed, blocked, withdrawn or discontinued material events;
+- no approved event-specific aggregation contract was found.
+
+Therefore G6.21 deliberately creates an **approval gate**, not a numeric combiner.
+
+### New G6.21 contract
+
+Added:
+
+`src/features/research/pharmaGlobalGenericsPipelineAggregationGate.ts`
+
+Contract:
+
+`PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_GATE_V1_PROPOSAL`
+
+Scope:
+
+- Primary: `GLOBAL_GENERICS`
+- metric: `PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE`
+- dimension: `BUSINESS_DURABILITY`
+
+Upstream dependencies:
+
+- G6.19 pipeline evidence contract;
+- G6.20 per-event stage normalization.
+
+### Decisions still explicitly unapproved
+
+G6.21 requires later explicit methodology approval for:
+
+1. aggregation method;
+2. recency treatment;
+3. adverse-event treatment;
+4. event-offset policy;
+5. whether economic relevance ever becomes numeric or remains eligibility-only.
+
+### Candidate methods are not defaults
+
+Recorded only as candidates:
+
+- median;
+- weighted mean;
+- adverse floor/cap;
+- another explicitly versioned method.
+
+No candidate is approved by this gate.
+
+### Safeguards locked
+
+- all included events must be individually eligible: **YES**
+- all included events must normalize under G6.20: **YES**
+- adverse events remain visible: **YES**
+- event-count bonus: **NO**
+- simple average: **NOT APPROVED**
+- median: **NOT APPROVED**
+- recency weighting: **NOT APPROVED**
+- materiality weighting: **NOT APPROVED**
+- economic-relevance numeric multiplier: **NOT APPROVED**
+- unrelated positive event silently offsets adverse event: **NO**
+- combined pipeline score ready: **NO**
+
+### Proposal-only readiness helper
+
+Added a non-scoring readiness helper.
+
+Possible states:
+
+- `INSUFFICIENT_EVIDENCE`
+- `REVIEW_REQUIRED`
+- `AWAITING_METHODOLOGY_APPROVAL`
+
+Behavior:
+
+- empty event set → `INSUFFICIENT_EVIDENCE`;
+- any event failing G6.20 normalization → `REVIEW_REQUIRED`;
+- all events individually eligible/normalized → `AWAITING_METHODOLOGY_APPROVAL`.
+
+Even when all events normalize successfully:
+
+`combinedScore = null`
+
+No aggregation method is executed.
+
+### Tests
+
+Added:
+
+`src/features/research/pharmaGlobalGenericsPipelineAggregationGate.test.ts`
+
+Focused assertions cover:
+
+- every aggregation method remains unapproved;
+- combined scoring remains blocked;
+- adverse events remain counted/visible;
+- positive and adverse normalized events are retained without combination;
+- ineligible events fail closed to review;
+- empty event sets remain insufficient evidence.
+
+### Documentation
+
+Added:
+
+`docs/R4N_PHARMA_V1_Gate_G6_21_Global_Generics_Pipeline_Aggregation_Gate_V1.md`
+
+### Glass-box UI
+
+Updated:
+
+`src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Gate G now includes:
+
+- **G6.21 · Multi-event pipeline aggregation approval gate**
+- **G6.21 · Adverse visibility & offset boundary**
+
+The cards explicitly show:
+
+- approved aggregation method: none;
+- combined pipeline score: no;
+- adverse visibility required;
+- hidden offset prohibited;
+- methodology approval required.
+
+### Anti-double-counting boundary
+
+G6.21 does not introduce any regulatory-site numeric penalty.
+
+G4 remains authoritative for governance/regulatory gating, and the same regulatory event must not be counted again as a hidden pipeline penalty.
+
+### Safety boundary remains unchanged
+
+- aggregation method approved: **NO**
+- combined pipeline score: **NO**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G6.21 cards in TORNTPHARM → Research → Gate G, then run focused G6.21 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. Only after validation should any explicit numeric aggregation methodology be proposed or approved.
