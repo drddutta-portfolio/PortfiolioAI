@@ -1,6 +1,7 @@
 import type { PharmaSubprofileCode } from "./pharmaSubprofileAssignment"
 import { PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL_VERSION } from "./pharmaSegmentGrowthCurveProposal"
 import { PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL_VERSION } from "./pharmaOperatingMarginCurveProposal"
+import { PHARMA_GLOBAL_GENERIC_PRICE_EROSION_CURVE_VERSION } from "./pharmaGlobalGenericPriceErosionCurveProposal"
 
 export const PHARMA_G6_SUBPROFILE_CURVE_APPLICABILITY_VERSION =
   "PHARMA_G6_SUBPROFILE_CURVE_APPLICABILITY_V1_PROPOSAL" as const
@@ -15,6 +16,7 @@ export type PharmaG6CurveFamily =
   | "OWNERSHIP_GOVERNANCE"
   | "REGULATORY_MARKET_RISK"
   | "MOMENTUM"
+  | "US_GENERIC_PRICE_EROSION"
 
 export type PharmaG6CurveState =
   | "VALIDATED_NOT_ACTIVE"
@@ -123,6 +125,13 @@ const globalGenerics: PharmaG6SubprofileCurveContract = {
       curveVersion: null,
       metricCodes: ["PHARMA_OPERATING_MARGIN_HISTORY"],
       note: "Domestic Formulations Operating Margin bands must not be reused for Global Generics.",
+    },
+    {
+      family: "US_GENERIC_PRICE_EROSION",
+      state: "VALIDATED_NOT_ACTIVE",
+      curveVersion: PHARMA_GLOBAL_GENERIC_PRICE_EROSION_CURVE_VERSION,
+      metricCodes: ["PHARMA_US_GENERIC_PRICE_EROSION"],
+      note: "Global Generics-specific US price-erosion methodology; disclosed ASP/price evidence only and no residual derivation.",
     },
     ...pendingParentFamilies,
   ],
