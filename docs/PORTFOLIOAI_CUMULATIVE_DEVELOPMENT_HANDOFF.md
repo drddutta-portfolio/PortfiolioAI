@@ -16490,3 +16490,113 @@ G6.24–G6.29 remain authoritative. Regulatory / Market Risk is not reopened.
 **Result:** G6.43 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Perform the Global Generics G6 coverage review against the canonical applicability registry and all validated G6 outcomes before considering G7.
+
+
+---
+
+## 189. Entry 184 — Gate G6.44 Global Generics G6 coverage closure audit prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.44 — Global Generics G6 Coverage Closure Audit**.
+
+### Starting state
+
+G6.43 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+The Global Generics canonical G6 applicability registry and completed G6 gates were then reviewed together.
+
+### Coverage conclusion
+
+All 10 canonical Global Generics G6 families now have an explicit methodology outcome:
+
+- Segment Growth — **VALIDATED / NOT ACTIVE**
+- Operating Margin — **VALIDATED FAIL-CLOSED**
+- ROCE / Capital Efficiency — **VALIDATED FAIL-CLOSED**
+- Cash Conversion — **VALIDATED FAIL-CLOSED**
+- Balance Sheet / Leverage — **VALIDATED FAIL-CLOSED**
+- Valuation — **VALIDATED FAIL-CLOSED**
+- Ownership / Governance — **VALIDATED FAIL-CLOSED**
+- Regulatory / Market Risk — **VALIDATED FAIL-CLOSED**
+- Momentum — **VALIDATED FAIL-CLOSED**
+- US Generic Price Erosion — **VALIDATED / NOT ACTIVE**
+
+Therefore:
+
+`g6MethodologyCoverageComplete = true`
+
+Only Segment Growth and US Generic Price Erosion currently have validated numeric curves, both still not active.
+
+### Registry representation gap
+
+The current applicability registry still uses shared `pendingParentFamilies`.
+
+Seven Global Generics families therefore remain represented as:
+
+`SUBPROFILE_THRESHOLDS_REQUIRED`
+
+despite now having validated fail-closed outcomes:
+
+- ROCE / Capital Efficiency
+- Cash Conversion
+- Balance Sheet / Leverage
+- Valuation
+- Ownership / Governance
+- Regulatory / Market Risk
+- Momentum
+
+The existing registry test also explicitly expects that pending state across all Pharma subprofiles.
+
+### Decision
+
+G6.44 does **not** mutate the applicability registry.
+
+A separate narrow reconciliation is required so that:
+
+- only Global Generics representation changes;
+- Domestic/API/CDMO/Biopharma states remain untouched;
+- deferred families are not mislabeled numeric-ready;
+- score execution stays disabled.
+
+Therefore:
+
+- registry representation current: **NO**
+- registry reconciliation required before G7: **YES**
+- G7 read-only adapter eligible now: **NO**
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsG6CoverageReview.ts`
+- `src/features/research/pharmaGlobalGenericsG6CoverageReview.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_44_Global_Generics_G6_Coverage_Closure_Audit_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.44 · Global Generics G6 coverage closure audit**
+- **G6.44 · Applicability registry reconciliation required**
+
+### Safety boundary remains unchanged
+
+- applicability registry mutation in G6.44: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema/local/production DB mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.44 cards, run focused G6.44 Vitest and ESLint, then `npm run typecheck` and `npm run build`. After validation, prepare a narrow Global Generics applicability-registry reconciliation gate before reconsidering G7 eligibility.
