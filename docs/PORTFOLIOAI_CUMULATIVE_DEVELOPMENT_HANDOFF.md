@@ -10206,3 +10206,114 @@ Therefore:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.13 is validated. The next permitted G6 task is to explicitly define and justify the PE-vs-EV/EBITDA weighting rule for the Domestic peer-relative component, while keeping the overall Valuation dimension inactive.
+
+
+---
+
+## 127. Entry 122 — Gate G6.14 Domestic peer weighting approval gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.14 — Domestic Formulations Peer Weighting Approval Gate**.
+
+### Canonical methodology inspection
+
+The canonical PHARMA_V1 plan and repository contain no approved PE-vs-EV/EBITDA weighting rule.
+
+The permanent engineering rule prohibits inventing scoring weights.
+
+Therefore G6.14 does not silently assign 50/50 or any other default.
+
+### Current weighting state
+
+Required normalized inputs:
+
+- `PE_TTM`
+- `EV_EBITDA`
+
+Approved weighting method:
+
+`null`
+
+Current weights:
+
+- PE: `null`
+- EV/EBITDA: `null`
+
+### Structural rules for a future weighting decision
+
+Any candidate future weighting must:
+
+- use finite non-negative weights;
+- keep each weight within [0,1];
+- sum to one within deterministic tolerance;
+- be separately versioned;
+- receive explicit owner approval.
+
+A structurally valid candidate remains:
+
+`approved = false`
+
+until that explicit methodology approval exists.
+
+### Explicitly prohibited defaults
+
+- hidden default weighting: **NO**
+- automatic equal weighting: **NO**
+- single-metric fallback: **NO**
+- unversioned weighting: **NO**
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaDomesticPeerWeightingGate.ts`
+- `src/features/research/pharmaDomesticPeerWeightingGate.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_14_Domestic_Peer_Weighting_Approval_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.14 · Peer weighting approval gate**
+- **G6.14 · No implicit 50/50 rule**
+
+### Domestic Valuation state
+
+Validated / not active through G6.13:
+
+- self-history relative valuation
+- FCF-yield corroboration
+- peer cohort methodology and builder
+- peer comparability / median aggregation
+- peer premium/discount normalization
+- cross-metric combination readiness
+
+G6.14 now formalizes the explicit weighting approval boundary.
+
+Still unresolved:
+
+- PE-vs-EV/EBITDA approved weights
+- combined peer-component score
+- self-history / peer-relative / FCF component weights
+- final Domestic Valuation readiness closure
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.14 cards in TORNTPHARM → Research → Gate G, then run focused G6.14 validation. After validation, an explicit PE-vs-EV/EBITDA weighting methodology decision is required before the peer-relative component can emit a combined score.
