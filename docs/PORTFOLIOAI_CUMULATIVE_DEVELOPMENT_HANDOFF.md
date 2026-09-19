@@ -13817,3 +13817,79 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.29 cards in TORNTPHARM → Research → Gate G, then run focused G6.29 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, the Global Generics Risk slice can be closed as explicitly incomplete/fail-closed and G6 can move to the next unresolved Global Generics family.
+
+
+---
+
+## 160. Entry 155 — Gate G6.29 Global Generics volatility context evidence sufficiency deferral gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.29 has completed validation as a **proposal-only Global Generics volatility context evidence-sufficiency / deferral gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsVolatilityContextEvidenceSufficiency.test.ts` → **PASS**
+- focused ESLint for the G6.29 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.29 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_EVIDENCE_SUFFICIENCY_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated volatility conclusion
+
+No G6.28 context method is currently evidence-sufficient:
+
+- `SAME_SUBPROFILE_PEER_RELATIVE` → reviewed Global Generics peer cohort not established;
+- `BENCHMARK_RELATIVE` → approved Pharma benchmark not established;
+- `SELF_HISTORY_WITH_EXTERNAL_CONTEXT` → self-history plus external context not established;
+- `HYBRID_EXPLICITLY_VERSIONED` → fewer than two independently eligible context methods.
+
+Therefore:
+
+- approved volatility method: **NONE**
+- numeric volatility curve: **NO**
+- deferral required: **YES**
+- silent benchmark/peer fallback: **NO**
+
+### Global Generics Risk slice status
+
+The Global Generics Risk methodology slice is now explicitly bounded:
+
+- regulatory-site treatment: **VALIDATED / NON-NUMERIC**
+- drawdown evidence identity: **VALIDATED**
+- drawdown numeric normalization: **DEFERRED / FAIL-CLOSED**
+- volatility evidence identity: **VALIDATED**
+- volatility numeric normalization: **DEFERRED / FAIL-CLOSED**
+- Risk component weights: **UNAPPROVED**
+- whole Risk dimension numeric score: **NOT READY**
+
+This is an intentional incomplete/fail-closed state, not a neutral score.
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.29 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Global Generics Risk is explicitly incomplete/fail-closed. Move to the next unresolved Global Generics curve family without forcing a Risk score.
