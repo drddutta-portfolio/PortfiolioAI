@@ -12605,3 +12605,108 @@ Still exactly:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, rerun focused G6.23 Vitest and ESLint, then `npm run typecheck` and `npm run build`. No UI re-review is required for this correction because only strict type-safety handling and the focused test assertion changed.
+
+
+---
+
+## 148. Entry 143 — Gate G6.23 Global Generics combined pipeline score contract validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.23 has completed validation as an **owner-approved but not active Global Generics combined pipeline score contract**.
+
+### Final validation
+
+Following the strict-indexing correction recorded in Entry 142, the owner reran the requested validation and confirmed all checks passed:
+
+- focused Vitest for:
+  - `src/features/research/pharmaGlobalGenericsPipelineCombinedScoreContract.test.ts`
+  - **PASS**
+- focused ESLint for:
+  - `src/features/research/pharmaGlobalGenericsPipelineCombinedScoreContract.ts`
+  - `src/features/research/pharmaGlobalGenericsPipelineCombinedScoreContract.test.ts`
+  - `src/features/research/PharmaResearchWorkspacePanel.tsx`
+  - **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+The earlier G6.23 glass-box UI review remains valid because the corrective changes affected strict type-safety handling and one focused test assertion only; no UI or methodology behavior changed.
+
+### Validated contract
+
+Contract:
+
+`PHARMA_GLOBAL_GENERICS_PIPELINE_COMBINED_SCORE_V1_OWNER_APPROVED`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated aggregation methodology
+
+Pipeline identity:
+
+- product/molecule + geography
+
+Lifecycle treatment:
+
+- historical stages retained for audit;
+- only latest reviewed state per identity enters aggregation;
+- older lifecycle stages are not repeatedly counted.
+
+Same-date contradiction:
+
+- contradictory latest stages for one identity → `REVIEW_REQUIRED`;
+- `combinedScore = null`.
+
+Adverse latest-state rule:
+
+- `DELAYED_OR_BLOCKED`;
+- `WITHDRAWN_OR_DISCONTINUED`;
+
+Any latest adverse identity → `REVIEW_REQUIRED` with no combined score.
+
+Non-adverse aggregation:
+
+- statistic: **MEDIAN**;
+- one latest normalized G6.20 score per distinct identity;
+- even-cardinality median uses the midpoint of the two central ordered scores.
+
+### Validated fail-closed states
+
+- empty event set → `INSUFFICIENT_EVIDENCE`;
+- any event ineligible for G6.20 normalization → `REVIEW_REQUIRED`;
+- same-date contradictory latest stage → `REVIEW_REQUIRED`;
+- any latest adverse identity → `REVIEW_REQUIRED`;
+- only a fully eligible, normalized, non-adverse latest-state set returns `READY` with a numeric combined score.
+
+### Preserved boundaries
+
+- age-based recency weighting: **NO**
+- event-count bonus: **NO**
+- materiality multiplier: **NO**
+- economic-relevance multiplier: **NO**
+- unrelated positive offset against adverse identity: **NO**
+- hidden G4 regulatory double-counting: **NO**
+
+### Activation boundary remains unchanged
+
+- executable combined-score function: **YES**
+- methodology calculation-ready: **YES**
+- application score activation: **NO**
+- score execution wiring: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.23 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** The Global Generics pipeline-evidence methodology chain is now calculation-ready through G6.23 but remains inactive. The next safe G6 step is to inspect the remaining Global Generics-specific mandatory evidence families and choose the next uncompleted subprofile-specific curve family without reusing Domestic Formulations thresholds or activating scoring.
