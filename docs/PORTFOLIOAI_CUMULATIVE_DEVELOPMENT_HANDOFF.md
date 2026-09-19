@@ -11106,3 +11106,133 @@ Completed methodology chain:
 Domestic Formulations Valuation is now methodology-complete, but Gate G6 itself is **not complete** because additional subprofile-specific curve families remain for the other PHARMA_V1 primary models.
 
 **CURRENT STOP POINT:** G6.17 is validated. Domestic Formulations Valuation is methodology-complete / not active. The next safe G6 task is to select the next remaining subprofile-specific curve family, beginning with the highest-priority non-Domestic PHARMA_V1 primary model.
+
+
+---
+
+## 135. Entry 130 — Gate G6.18 Global Generics US price-erosion curve prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has moved to the next non-Domestic primary model with **G6.18 — Global Generics US Generic Price-Erosion Curve**.
+
+### Why Global Generics is next
+
+Global Generics is already a material overlay in the TORNTPHARM reference implementation and its contract contains a mandatory pricing-pressure metric:
+
+`PHARMA_US_GENERIC_PRICE_EROSION`
+
+The shared Segment Growth proposal already covers:
+
+`PHARMA_EXPORT_US_REVENUE_GROWTH`
+
+Therefore the next missing structurally important Global Generics Growth lane is price erosion.
+
+### Evidence boundary
+
+The metric requires disclosed price/ASP evidence.
+
+Prohibited:
+
+- residual derivation from revenue and volume without an approved method;
+- inferred price erosion from scope-incompatible claims;
+- reuse of Domestic thresholds.
+
+History:
+
+- minimum comparable quarters: **4**
+- preferred comparable quarters: **8**
+- latest comparable period required: **YES**
+
+### Proposed methodology
+
+Composite:
+
+- level: **70%**
+- trend: **30%**
+
+Level statistic:
+
+`MEDIAN_LATEST_4_COMPARABLE_PRICE_EROSION_PERCENT`
+
+Proposed level bands:
+
+- <0% → 100
+- 0% to <3% → 85
+- 3% to <5% → 70
+- 5% to <8% → 55
+- 8% to <12% → 35
+- >=12% → 15
+
+Trend statistic:
+
+`LATEST_MINUS_MEDIAN_PRIOR_3_PERCENTAGE_POINTS`
+
+Lower / more negative is better.
+
+Proposed trend bands:
+
+- <-3 pp → 100
+- -3 pp to <0 pp → 80
+- 0 pp to <3 pp → 60
+- 3 pp to <6 pp → 40
+- >=6 pp → 20
+
+### Global Generics Growth boundary
+
+Revenue growth and price erosion remain separate signals.
+
+Strong Export/US Revenue Growth must not erase severe pricing pressure.
+
+Improving pricing must not substitute for missing growth evidence.
+
+### Applicability registry
+
+Added a Global Generics-specific G6 family:
+
+`US_GENERIC_PRICE_EROSION`
+
+Registered as:
+
+`VALIDATED_NOT_ACTIVE`
+
+for:
+
+`GLOBAL_GENERICS`
+
+with no automatic cross-subprofile threshold reuse.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericPriceErosionCurveProposal.ts`
+- `src/features/research/pharmaGlobalGenericPriceErosionCurveProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_18_Global_Generics_Price_Erosion_Curve_V1.md`
+
+Updated:
+
+- `src/features/research/pharmaG6SubprofileCurveApplicability.ts`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.18 · Global Generics US price-erosion curve**
+- **G6.18 · Global-only evidence boundary**
+
+### Explicit boundary
+
+- Global Generics price-erosion numeric curve proposed: **YES**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- cross-subprofile threshold reuse: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.18 cards in TORNTPHARM → Research → Gate G, then run focused validation. G6 remains open after G6.18.
