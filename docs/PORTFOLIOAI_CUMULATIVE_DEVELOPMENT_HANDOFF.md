@@ -16115,3 +16115,129 @@ A separate versioned parent reconciliation is still required.
 **Result:** G6.41 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Inspect the remaining Global Generics families against already completed G6 work. Do not duplicate the G6.24–G6.29 Regulatory / Market Risk methodology if it is already explicitly closed fail-closed; move to the next genuinely unresolved family.
+
+
+---
+
+## 185. Entry 180 — Gate G6.42 Global Generics momentum methodology boundary gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.42 — Global Generics Momentum Methodology Boundary Gate**.
+
+### Starting state
+
+G6.41 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+The remaining Global Generics families were then re-checked against prior G6 work.
+
+### Regulatory / Market Risk not reopened
+
+The Risk slice is already intentionally incomplete/fail-closed from G6.24–G6.29:
+
+- regulatory-site treatment: validated / non-duplicative;
+- drawdown evidence identity: validated;
+- drawdown numeric normalization: deferred;
+- volatility evidence identity: validated;
+- volatility numeric normalization: deferred;
+- component weights: unapproved;
+- whole Risk dimension ready: **NO**.
+
+Therefore G6.42 does not duplicate or overwrite the existing Risk methodology.
+
+### Next genuinely unresolved family
+
+The next unresolved family is:
+
+`MOMENTUM`
+
+with candidate metrics:
+
+- `PRICE_MOMENTUM_12M`
+- `PRICE_MOMENTUM_6M`
+- `RELATIVE_STRENGTH_12M`
+
+### Existing Pharma Momentum blockers
+
+The parent proposal currently records:
+
+`MISSING_DEDICATED_PHARMA_PARENT_CONTRACT`
+
+and:
+
+`PHARMA_BENCHMARK_UNAPPROVED`
+
+Therefore:
+
+- dedicated Pharma parent Momentum contract required before activation: **YES**
+- approved Pharma benchmark required before relative-strength scoring: **YES**
+- current approved Pharma benchmark: **NONE**
+
+### Reusable evidence identity
+
+- raw market authority: `MARKET_PRICE_HISTORY`
+- derived evidence store: `MARKET_METRIC_OBSERVATIONS`
+- absolute momentum definition: `CLOSE_TO_CLOSE_RETURN_WITH_14_DAY_LOOKBACK_TOLERANCE`
+- relative strength definition: `STOCK_RETURN_MINUS_APPROVED_BENCHMARK_RETURN`
+
+### BANK_NBFC pilot separation
+
+The following are explicitly not inherited:
+
+- BANK 12-month weight;
+- BANK 6-month weight;
+- NIFTY BANK benchmark;
+- Trendlyne technical score.
+
+### Global Generics-specific decisions still unresolved
+
+- component weights: **UNAPPROVED**
+- absolute-momentum bands: **UNAPPROVED**
+- relative-strength bands: **UNAPPROVED**
+- approved benchmark: **NONE**
+- final aggregation: **UNAPPROVED**
+- missing relative strength may become neutral: **NO**
+
+Therefore:
+
+`numericMomentumCurveReady = false`
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsMomentumMethodGate.ts`
+- `src/features/research/pharmaGlobalGenericsMomentumMethodGate.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_42_Global_Generics_Momentum_Methodology_Boundary_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.42 · Global Generics momentum methodology boundary**
+- **G6.42 · BANK pilot separation**
+
+### Safety boundary remains unchanged
+
+- dedicated Pharma parent Momentum contract: **MISSING**
+- approved Pharma benchmark: **NO**
+- BANK_NBFC methodology inheritance: **NO**
+- Global Generics numeric Momentum curve: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema/local/production DB mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.42 cards in TORNTPHARM → Research → Gate G, then run focused G6.42 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether the repository can support a dedicated Pharma parent Momentum contract and an approved Pharma benchmark methodology without importing BANK_NBFC assumptions.
