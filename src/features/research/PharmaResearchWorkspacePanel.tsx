@@ -36,6 +36,7 @@ import { PHARMA_DOMESTIC_FCF_YIELD_CURVE } from "./pharmaDomesticFcfYieldCurvePr
 import { PHARMA_DOMESTIC_PEER_VALUATION_CONTRACT } from "./pharmaDomesticPeerValuationContract"
 import { PHARMA_DOMESTIC_PEER_COHORT_BUILDER_VERSION } from "./pharmaDomesticPeerCohortBuilder"
 import { PHARMA_DOMESTIC_PEER_COMPARABILITY } from "./pharmaDomesticPeerComparabilityContract"
+import { PHARMA_DOMESTIC_PEER_PREMIUM_DISCOUNT } from "./pharmaDomesticPeerPremiumDiscountProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -488,6 +489,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>PE_TTM and EV_EBITDA aggregated independently</small>
               <p>Comparable peer multiples use a median with no hidden winsorization. Both PE and EV/EBITDA cohorts must satisfy comparability before the full peer-relative component can be considered complete; premium/discount bands and metric weights remain unapproved.</p>
               <span>Aggregation: MEDIAN · Winsorization: NO · Numeric peer curve: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.12 · Peer premium/discount normalization</strong>
+              <small>{PHARMA_DOMESTIC_PEER_PREMIUM_DISCOUNT.proposalVersion}</small>
+              <p>Domestic Formulations peer-relative Valuation now has a proposal-only calculation convention for PE_TTM and EV_EBITDA: peer median divided by target multiple minus one, expressed as a percentage. Positive values mean discount; negative values mean premium.</p>
+              <span>≥25%: 100 · ≥10%: 80 · ≥-5%: 60 · ≥-20%: 40 · &lt;-20%: 20</span>
+            </article>
+            <article>
+              <strong>G6.12 · Cross-metric combination boundary</strong>
+              <small>PE and EV/EBITDA normalize independently</small>
+              <p>No averaging or weighting between PE and EV/EBITDA is approved yet. G6.12 can normalize each comparable metric family, but it cannot emit a combined peer-component score or activate the Valuation dimension.</p>
+              <span>PE/EV weighting: NO · Combined peer score: NO · Whole dimension ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
