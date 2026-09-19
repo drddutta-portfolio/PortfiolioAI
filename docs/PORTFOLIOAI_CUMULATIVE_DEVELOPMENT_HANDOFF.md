@@ -18538,3 +18538,94 @@ The G8.1-specific focused Vitest file is not part of that existing PR workflow a
 G8.1 remains **OPEN / OWNER VALIDATION REQUIRED** until the focused G8.1 test and localhost visual review pass.
 
 **CURRENT STOP POINT:** Pull the G8.1 implementation, run the focused G8.1 test plus the requested local lint/typecheck/build checks, open AUROPHARMA → Research, visually validate the G8.1 classification/evidence card, and stop. Do not enter G8.2 until explicit owner approval.
+
+
+---
+
+## 211. Entry 206 — G8.1 formally closed; G8.2 three-layer same-engine preview implemented
+
+**Date:** 19 September 2026  
+**Actor:** owner visual validation + ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+### G8.1 closure
+
+Owner visually validated the AUROPHARMA G8.1 Classification & Evidence Lock card.
+
+Owner-local validation also passed:
+
+- focused G8.1 Vitest: **8/8 PASS**;
+- focused ESLint: **PASS**;
+- architecture guard: **PASS**;
+- typecheck: **PASS**;
+- build: **PASS**.
+
+Therefore:
+
+> **G8.1 = COMPLETE / REVIEWED CLASSIFICATION LOCKED / NOT ACTIVE**
+
+Locked reviewed architecture:
+
+- Primary: **GLOBAL_GENERICS**;
+- Material Overlay: **none reviewed**;
+- Emerging Watch: **API_BULK_DRUGS**;
+- BIOPHARMA_BIOSIMILARS: **REVIEW_REQUIRED**.
+
+### Permanent three-layer PHARMA_V1 invariant
+
+Owner clarified and approved the intended reusable Pharma research architecture:
+
+1. **Common Pharma Core** — parent PHARMA_V1 research applicable to every Pharma company.
+2. **Primary business model** — the company's predominant reviewed Pharma subprofile.
+3. **Secondary exposures** — reviewed overlap into other Pharma subprofiles, role-aware as Material / Emerging / monitoring / unresolved.
+
+Raw evidence remains **security/company scoped**.
+
+Interpretation remains **company + active reviewed architecture + role scoped**.
+
+This invariant is now represented by:
+
+- `src/features/research/pharmaThreeLayerResearchArchitecture.ts`;
+- focused architecture tests.
+
+### G8.2 implementation
+
+Added:
+
+- `src/features/research/auropharmaG8SameEnginePreview.ts`;
+- `src/features/research/auropharmaG8SameEnginePreview.test.ts`;
+- `src/features/research/AuropharmaG82SameEnginePanel.tsx`;
+- `docs/R4N_G8_2_AUROPHARMA_Same_Engine_Read_Only_Preview_V1.md`.
+
+Updated:
+
+- AUROPHARMA Research Overview;
+- G8.1 badge now records owner validation;
+- cumulative handoff.
+
+G8.2 creates only an **in-memory reviewed preview architecture** from the G8.1 result. It does not persist a canonical assignment.
+
+The preview resolves methodology using the existing Global Generics G6 applicability contract and executes dimensions through the existing **G7.1 read-only adapter**.
+
+No Domestic Formulations fallback is used.
+
+Current expected result:
+
+> **AUROPHARMA overall Pharma score = NOT CURRENTLY COMPUTABLE**
+
+API/Bulk is retained as Emerging and excluded from numeric/readiness denominators. Biosimilars remains unresolved.
+
+### Safety
+
+- production mutation: **NO**
+- production migration: **NO**
+- canonical assignment persistence: **NO**
+- evidence persistence: **NO**
+- score persistence: **NO**
+- recommendation/sizing mutation: **NO**
+- shared enrichment refresh/mutation: **NO**
+- scheduler change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** owner should pull G8.2, run the focused validation commands, hard-refresh AUROPHARMA → Research → Overview, and visually validate the new three-layer PHARMA_V1 + same-engine dimension preview. Do not enter G8.3 until explicit approval.

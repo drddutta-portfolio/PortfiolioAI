@@ -30,7 +30,7 @@ export function AuropharmaG81ClassificationCard({ symbol }: { readonly symbol: s
         <h3 id="auropharma-g8-1-title">Reviewed business-model evidence</h3>
         <p>Two consecutive annual periods were run through the unchanged G1 classification contract. This review does not create a canonical assignment or execute scoring.</p>
       </div>
-      <span className="pharma-workspace-lock">Reviewed evidence · Owner UI validation pending</span>
+      <span className="pharma-workspace-lock">Reviewed evidence · G8.1 validated</span>
     </div>
 
     <div className="pharma-persistence-package-summary">
