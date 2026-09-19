@@ -13424,3 +13424,77 @@ No candidate is approved by default.
 **Result:** G6.26 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Inspect current repository evidence and architecture to determine which drawdown methodology candidate is actually supportable before any G6.27 numeric drawdown contract is proposed.
+
+
+---
+
+## 155. Entry 150 — Gate G6.27 Global Generics drawdown evidence sufficiency deferral gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.27 — Global Generics Drawdown Evidence Sufficiency / Deferral Gate**.
+
+### Starting state
+
+G6.26 was validated as a drawdown methodology approval gate.
+
+The current repository was then inspected for evidence sufficient to support any of the approved candidate-method paths.
+
+### Evidence-sufficiency conclusion
+
+No G6.26 candidate is currently supportable.
+
+Blockers:
+
+- `ABSOLUTE_BANDS` → empirical Pharma drawdown bands not established;
+- `SAME_SUBPROFILE_PEER_RELATIVE` → reviewed Global Generics Primary peer cohort not established;
+- `BENCHMARK_RELATIVE` → approved Pharma benchmark not established;
+- `SELF_HISTORY_RELATIVE` → sufficient comparable self-history not established;
+- `HYBRID_EXPLICITLY_VERSIONED` → fewer than two independently eligible methods.
+
+### Why numeric deferral is required
+
+The canonical architecture prohibits:
+
+- BANK_NBFC threshold inheritance;
+- generic Pharma peer substitution;
+- silent benchmark selection;
+- invented absolute cutoffs;
+- hidden hybrid weighting.
+
+Therefore no numeric drawdown curve is introduced.
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsDrawdownEvidenceSufficiency.ts`
+- `src/features/research/pharmaGlobalGenericsDrawdownEvidenceSufficiency.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_27_Global_Generics_Drawdown_Evidence_Sufficiency_Deferral_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.27 · Drawdown evidence sufficiency / deferral gate**
+- **G6.27 · Explicit drawdown blockers**
+
+### Safety boundary remains unchanged
+
+- approved drawdown method: **NO**
+- numeric drawdown curve ready: **NO**
+- whole Risk dimension ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.27 cards in TORNTPHARM → Research → Gate G, then run focused G6.27 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, move to the other unresolved market-risk lane — volatility normalization / peer or benchmark context — while preserving the same evidence-sufficiency discipline.
