@@ -17950,3 +17950,139 @@ G8 does not:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Before G8.1, inspect the ordinary local fixture/data setup and add AUROPHARMA as the minimum local canonical Research target without fabricating research evidence. Validate that AUROPHARMA appears in localhost Research Coverage while HDFCBANK and TORNTPHARM remain unchanged. Then begin G8.1 official-evidence classification review.
+
+
+---
+
+## 204. Entry 199 — AUROPHARMA local Research target fixture prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The pre-G8 local-development prerequisite has been implemented as a **local-only script**, not as a production migration.
+
+### Purpose
+
+The localhost Research Coverage page enumerates `portfolio.openPositions`, which ultimately derives from the transaction-backed `current_holdings` projection.
+
+Therefore a canonical security row alone would not make AUROPHARMA visible.
+
+The local prerequisite must establish:
+
+1. canonical AUROPHARMA security identity;
+2. active NSE listing;
+3. one explicitly synthetic local ownership link in the same ordinary local portfolio already containing HDFCBANK and TORNTPHARM.
+
+### Canonical local identity
+
+Fixture identity:
+
+- company: `Aurobindo Pharma Limited`
+- symbol: `AUROPHARMA`
+- exchange: `NSE`
+- ISIN: `INE406A01037`
+- series: `EQ`
+- asset class: `EQUITY`
+
+The identity values were checked against official NSE/issuer material before fixture preparation.
+
+### Local portfolio guard
+
+The fixture targets only a portfolio that already has positive current holdings for both:
+
+- HDFCBANK
+- TORNTPHARM
+
+Exactly one such portfolio must exist or the script aborts.
+
+The pre-existing HDFCBANK and TORNTPHARM quantities are captured before mutation and asserted unchanged afterward.
+
+### Pharma routing
+
+AUROPHARMA reuses the existing local TORNTPHARM sector id.
+
+No industry is copied or inferred.
+
+No classification-evidence rows are created.
+
+### Synthetic current-holding link
+
+If AUROPHARMA is not already a current holding, the fixture inserts one:
+
+- transaction type: `OPENING_POSITION`
+- quantity: `1`
+- date: `NULL`
+- broker account: `NULL`
+- unit price: `NULL`
+- gross amount: `NULL`
+- charges: `NULL`
+- taxes: `NULL`
+- net amount: `NULL`
+- source type: `LOCAL_G8_FIXTURE`
+- data quality: `NEEDS_REVIEW`
+
+The row is explicitly labelled as a local test-only ownership link. It is not a claimed trade, cost basis, portfolio valuation or research fact.
+
+### Research evidence boundary
+
+The fixture inserts **zero** rows into:
+
+- `fundamental_observations`
+- `research_documents`
+- `security_identity_observations`
+- `research_subprofile_assignments`
+- score runs
+- recommendation runs
+- position-sizing outputs
+
+Therefore AUROPHARMA is expected to appear initially with Missing research evidence. This is intentional.
+
+### Shared application behavior
+
+Repository inspection confirmed that PortfolioAI includes any non-zero position in `openPositions` even when price is unavailable.
+
+Therefore the synthetic quantity-only local holding is sufficient for Research Coverage enumeration and does not require fabricated market-price evidence.
+
+### Artifacts
+
+Added:
+
+- `scripts/r4n/auropharma-local-research-target.sql`
+- `scripts/r4n/run-auropharma-local-research-target.sh`
+- `src/features/research/auropharmaLocalResearchTargetSql.test.ts`
+- `docs/R4N_G8_AUROPHARMA_Local_Research_Target_Prerequisite.md`
+
+### Local execution command
+
+From repository root:
+
+```bash
+bash scripts/r4n/run-auropharma-local-research-target.sh
+```
+
+The runner defaults to:
+
+`postgresql://postgres:postgres@127.0.0.1:54322/postgres`
+
+and refuses non-localhost database URLs.
+
+### Expected localhost postcondition
+
+Research Coverage should show:
+
+- Open holdings: **3**
+- HDFCBANK: unchanged
+- TORNTPHARM: unchanged
+- AUROPHARMA: present and equity eligible
+- AUROPHARMA research evidence domains: initially **Missing**
+- provider calls caused by fixture: **0**
+
+### Current status
+
+- repository fixture: **PREPARED**
+- local fixture applied: **NOT YET OWNER-VALIDATED**
+- production mutation: **NO**
+- G8.1 started: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, run the local AUROPHARMA fixture runner, refresh localhost Research Coverage, and confirm HDFCBANK + TORNTPHARM + AUROPHARMA are present with the first two unchanged. Only then record this prerequisite as validated and start G8.1.
