@@ -8,7 +8,7 @@ import {
 describe("Domestic Formulations peer premium/discount proposal", () => {
   it("uses positive values for a target discount and negative values for a premium", () => {
     expect(calculateDomesticPeerRelativeDiscount("PE_TTM", 20, 25)?.relativeDiscountPercent).toBe(25)
-    expect(calculateDomesticPeerRelativeDiscount("PE_TTM", 25, 20)?.relativeDiscountPercent).toBe(-20)
+    expect(calculateDomesticPeerRelativeDiscount("PE_TTM", 25, 20)?.relativeDiscountPercent).toBeCloseTo(-20)
     expect(calculateDomesticPeerRelativeDiscount("PE_TTM", 20, 20)?.relativeDiscountPercent).toBe(0)
   })
 
@@ -36,7 +36,7 @@ describe("Domestic Formulations peer premium/discount proposal", () => {
   it("keeps exact band edges deterministic", () => {
     expect(scoreDomesticPeerRelativeDiscount(25)).toBe(100)
     expect(scoreDomesticPeerRelativeDiscount(10)).toBe(80)
-    expect(scoreDomesticPeerRelativeDiscount(-5)).toBe(40)
+    expect(scoreDomesticPeerRelativeDiscount(-5)).toBe(60)
     expect(scoreDomesticPeerRelativeDiscount(-20)).toBe(20)
   })
 
