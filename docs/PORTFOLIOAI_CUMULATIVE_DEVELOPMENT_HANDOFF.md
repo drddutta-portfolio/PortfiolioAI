@@ -10999,3 +10999,110 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.17 cards in TORNTPHARM → Research → Gate G, then run focused G6.17 validation. If validation passes, Domestic Formulations Valuation can be treated as methodology-complete / not active, and G6 can move to the next remaining subprofile-specific curve family.
+
+
+---
+
+## 134. Entry 129 — Gate G6.17 Domestic Valuation combined score contract validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.17 has completed validation as an **owner-approved but not active Domestic Formulations Valuation combined score contract**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.17 plus the complete Domestic Valuation methodology chain → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### Owner-approved Domestic Valuation weighting
+
+Approved component weights:
+
+- self-history relative valuation: **40%**
+- peer-relative valuation: **40%**
+- FCF-yield cash-flow corroboration: **20%**
+
+Combined formula:
+
+`Valuation Score = (Self-History × 0.40) + (Peer-Relative × 0.40) + (FCF Corroboration × 0.20)`
+
+All three component scores are mandatory.
+
+Missing or invalid component evidence fails closed with no renormalization.
+
+### Explicit upstream dependency
+
+The 40% peer-relative component inherits the G6.15 owner-approved internal peer weighting:
+
+- PE peer-relative normalized score: **50%**
+- EV/EBITDA peer-relative normalized score: **50%**
+
+Canonical upstream contract:
+
+`PHARMA_DOMESTIC_PEER_COMBINED_SCORE_V1_OWNER_APPROVED`
+
+Cross-reference:
+
+`G6.15_TO_G6.17`
+
+### Mandatory revisit triggers
+
+1. **Persistent three-component disagreement**
+   - revisit if self-history, peer-relative and FCF corroboration persistently disagree;
+   - automatic numeric disagreement threshold remains **NOT APPROVED**.
+
+2. **FCF structural distortion**
+   - revisit the FCF weight if capex, M&A, working-capital or similar recurring cash-flow effects materially distort the corroboration signal.
+
+3. **Peer comparability materially changes**
+   - revisit the peer-relative weight if the Domestic peer set becomes materially weaker or stronger.
+
+### Anti-drift rules
+
+- hidden component reweighting: **NO**
+- missing-component renormalization: **NO**
+- silent replacement of 40/40/20: **NO**
+- future changes require explicit versioned methodology revision: **YES**
+
+### Domestic Formulations Valuation methodology status
+
+The Domestic Formulations Valuation methodology is now:
+
+**METHODOLOGY-COMPLETE / NOT ACTIVE**
+
+Completed methodology chain:
+
+- G6.2 — self-history relative valuation
+- G6.8 — FCF-yield corroboration
+- G6.9 — peer cohort methodology
+- G6.10 — deterministic peer builder
+- G6.11 — peer minimum comparability and median aggregation
+- G6.12 — peer premium/discount normalization
+- G6.13 — peer cross-metric readiness lock
+- G6.14 — peer weighting approval gate
+- G6.15 — owner-approved 50/50 PE-vs-EV/EBITDA peer combined score
+- G6.16 — Valuation component weighting approval gate
+- G6.17 — owner-approved 40/40/20 Domestic Valuation combined score
+
+### Still not active
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- recommendation impact: **NO**
+- position-sizing impact: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+### Gate G6 broader status
+
+Domestic Formulations Valuation is now methodology-complete, but Gate G6 itself is **not complete** because additional subprofile-specific curve families remain for the other PHARMA_V1 primary models.
+
+**CURRENT STOP POINT:** G6.17 is validated. Domestic Formulations Valuation is methodology-complete / not active. The next safe G6 task is to select the next remaining subprofile-specific curve family, beginning with the highest-priority non-Domestic PHARMA_V1 primary model.
