@@ -57,6 +57,7 @@ import { PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_EVIDENCE_SUFFICIENCY } from "
 import { PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_METHOD_GATE } from "./pharmaGlobalGenericsOperatingMarginMethodGate"
 import { PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsOperatingMarginCalibrationEvidence"
 import { PHARMA_GLOBAL_GENERICS_ROCE_METHOD_GATE } from "./pharmaGlobalGenericsRoceMethodGate"
+import { PHARMA_GLOBAL_GENERICS_ROCE_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsRoceCalibrationEvidence"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -803,6 +804,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Parent dimension reconciliation is still required</small>
               <p>The existing ROCE parent proposal still flags a versioned dimension-alignment reconciliation requirement. G6.32 preserves that blocker and does not silently inherit universal or other-subprofile thresholds.</p>
               <span>Parent reconciliation: REQUIRED · Numeric ROCE curve: NO · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.33 · ROCE calibration evidence sufficiency</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_ROCE_CALIBRATION_EVIDENCE.contractVersion}</small>
+              <p>No reviewed Global Generics ROCE calibration set, same-primary peer cohort or evidence-backed level/stability/trend bands and weights are established. Numeric calibration is therefore deferred.</p>
+              <span>Calibration available: NO · Other-subprofile fallback: NO · Numeric curve: NO</span>
+            </article>
+            <article>
+              <strong>G6.33 · Parent ROCE dimension alignment blocker</strong>
+              <small>Current parent metric dimension: QUALITY · canonical ROCE dimension: CAPITAL EFFICIENCY</small>
+              <p>The mismatch remains explicit and unresolved. A separate versioned parent-contract reconciliation is required before ROCE may contribute a numeric Capital Efficiency score.</p>
+              <span>Parent reconciliation performed: NO · Deferral required: YES · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
