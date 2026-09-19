@@ -14399,3 +14399,103 @@ G6.32 did not bypass or rewrite that contract.
 **Result:** G6.32 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Inspect repository evidence for Global Generics ROCE calibration and inspect canonical dimension contracts to determine whether the parent ROCE alignment blocker can be reconciled safely before any numeric Capital Efficiency methodology proceeds.
+
+
+---
+
+## 167. Entry 162 — Gate G6.33 Global Generics ROCE calibration and parent alignment deferral gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.33 — Global Generics ROCE Calibration Evidence Sufficiency / Parent Alignment Deferral Gate**.
+
+### Starting state
+
+G6.32 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+Repository inspection then found two independent blockers.
+
+### Calibration evidence blocker
+
+No defensible Global Generics-specific ROCE calibration basis is established:
+
+- Global Generics ROCE calibration set: **NOT ESTABLISHED**
+- reviewed same-primary peer cohort: **NOT ESTABLISHED**
+- level-band evidence: **NOT ESTABLISHED**
+- stability-band evidence: **NOT ESTABLISHED**
+- trend-band evidence: **NOT ESTABLISHED**
+- component-weight evidence: **NOT ESTABLISHED**
+
+Therefore:
+
+- Global-specific calibration available: **NO**
+- other-subprofile fallback allowed: **NO**
+- numeric ROCE curve ready: **NO**
+- deferral required: **YES**
+
+### Parent dimension-alignment blocker
+
+The canonical parent PHARMA_V1 profile currently assigns:
+
+`PHARMA_ROCE_HISTORY → QUALITY`
+
+The G5.1/G6.32 ROCE methodology correctly targets:
+
+`CAPITAL_EFFICIENCY`
+
+This mismatch remains explicit.
+
+Required architecture action:
+
+`PARENT_ROCE_DIMENSION_RECONCILIATION_REQUIRED`
+
+G6.33 does **not** modify the parent profile.
+
+A separate versioned parent-contract reconciliation is required before numeric ROCE contribution to Capital Efficiency can become eligible.
+
+### What remains valid
+
+The parent ROCE evidence/methodology shape remains valid:
+
+- minimum 3 comparable annual periods;
+- preferred 5;
+- latest period required;
+- consistent calculation semantics required;
+- Level + Stability + Trend structure.
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsRoceCalibrationEvidence.ts`
+- `src/features/research/pharmaGlobalGenericsRoceCalibrationEvidence.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_33_Global_Generics_ROCE_Calibration_Alignment_Deferral_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.33 · ROCE calibration evidence sufficiency**
+- **G6.33 · Parent ROCE dimension alignment blocker**
+
+### Safety boundary remains unchanged
+
+- parent ROCE reconciliation performed: **NO**
+- Global Generics ROCE numeric calibration: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- parent contract mutation: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.33 cards in TORNTPHARM → Research → Gate G, then run focused G6.33 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, close the Global Generics ROCE slice as explicitly incomplete/fail-closed and move to the next unresolved Global Generics family. Parent ROCE dimension reconciliation remains a separate versioned architecture task.
