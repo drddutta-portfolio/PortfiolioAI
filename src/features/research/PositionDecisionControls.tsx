@@ -51,7 +51,6 @@ export function PositionDecisionControls({
   fallbackInvestmentHorizon,
   currency,
   onSaved,
-  canonicalResearchProfileCode,
 }: {
   readonly portfolioId: string
   readonly securityId: string
@@ -61,7 +60,6 @@ export function PositionDecisionControls({
   readonly fallbackInvestmentHorizon: string | null
   readonly currency: string
   readonly onSaved?: () => void
-  readonly canonicalResearchProfileCode?: string | null
 }) {
   const fallback = useMemo<PositionDecisionSettings>(() => ({
     id: null, portfolioRole: editableRole(currentRole), targetWeight: fallbackTargetWeight, targetPrice: null, stopLossPrice: null,
@@ -115,11 +113,10 @@ export function PositionDecisionControls({
   }, [portfolioId, securityId])
 
   const currentProfileCode = scoring.data?.profileCode ?? null
-  const scoringAuthorityMatchesResearch = !canonicalResearchProfileCode || currentProfileCode === canonicalResearchProfileCode
-  const recommendationPolicy = scoringAuthorityMatchesResearch && recommendationPolicyState?.profileCode === currentProfileCode ? recommendationPolicyState.policy : null
+  const recommendationPolicy = recommendationPolicyState?.profileCode === currentProfileCode ? recommendationPolicyState.policy : null
   const exposureKey = currentProfileCode ? `${portfolioId}:${securityId}:${currentProfileCode}` : null
   const profileExposure = profileExposureState?.key === exposureKey ? profileExposureState.exposure : null
-  const recommendation = useMemo(() => scoringAuthorityMatchesResearch && scoring.data && recommendationPolicy ? buildRecommendationPreview(scoring.data, recommendationPolicy) : null, [recommendationPolicy, scoring.data, scoringAuthorityMatchesResearch])
+  const recommendation = useMemo(() => scoring.data && recommendationPolicy ? buildRecommendationPreview(scoring.data, recommendationPolicy) : null, [recommendationPolicy, scoring.data])
   const settingsLoaded = settingsLoadedSecurityId === securityId
 
   const fallbackCurrentWeight = currentWeight == null ? null : Number(currentWeight)
@@ -133,7 +130,7 @@ export function PositionDecisionControls({
 
   useEffect(() => {
     let active = true
-    if (!settingsLoaded || !scoringAuthorityMatchesResearch || !scoring.data || !recommendationPolicy || !recommendation || !actionPreview || recommendation.suggestedRole === "INSUFFICIENT") return () => { active = false }
+    if (!settingsLoaded || !scoring.data || !recommendationPolicy || !recommendation || !actionPreview || recommendation.suggestedRole === "INSUFFICIENT") return () => { active = false }
     const evaluationKey = JSON.stringify({
       profile: scoring.data.profileCode, policy: recommendationPolicy.policyVersion, asOf: scoring.data.asOfDate, overall: recommendation.overallScore,
       ready: recommendation.scoreReadyCoverage, confidence: scoring.data.evidenceConfidence,
@@ -167,7 +164,7 @@ export function PositionDecisionControls({
       if (active) setHistory(rows)
     }).catch(() => { /* preserve previous tracking/history */ })
     return () => { active = false }
-  }, [actionPreview, effectiveCurrentWeight, portfolioId, recommendation, recommendationPolicy, scoring.data, scoringAuthorityMatchesResearch, securityId, settings.portfolioRole, settingsLoaded, weightPreview])
+  }, [actionPreview, effectiveCurrentWeight, portfolioId, recommendation, recommendationPolicy, scoring.data, securityId, settings.portfolioRole, settingsLoaded, weightPreview])
 
   const save = async () => {
     setSaving(true); setError(null)
@@ -181,17 +178,13 @@ export function PositionDecisionControls({
     } catch (saveError: unknown) { setError(displayError(saveError)) } finally { setSaving(false) }
   }
 
-  const suggestionDetail = !scoringAuthorityMatchesResearch && canonicalResearchProfileCode
-    ? `${canonicalResearchProfileCode} research active · numeric scoring not currently computable`
-    : recommendation ? `${recommendation.sectorProfile} · ${recommendation.policyStatus.toLocaleLowerCase()} policy` : scoring.isLoading ? "Evaluating sector-specific profile…" : recommendationPolicy ? "Recommendation evidence is being evaluated." : "Recommendation methodology is not yet available for this research profile."
+  const suggestionDetail = recommendation ? `${recommendation.sectorProfile} · ${recommendation.policyStatus.toLocaleLowerCase()} policy` : scoring.isLoading ? "Evaluating sector-specific profile…" : recommendationPolicy ? "Recommendation evidence is being evaluated." : "Recommendation methodology is not yet available for this research profile."
   const confirmationTarget = tracking?.changeSignal === "DOWNGRADE" ? recommendationPolicy?.persistenceRules.downgradeConfirmations : recommendationPolicy?.persistenceRules.upgradeConfirmations ?? 2
   const primaryCaution = recommendation?.cautions[0] ?? null
   const evidenceConfidenceValue = scoring.data?.evidenceConfidence
   const evidenceConfidence = typeof evidenceConfidenceValue === "number" && Number.isFinite(evidenceConfidenceValue) ? `${Math.round(evidenceConfidenceValue)}%` : "Pending"
   const recommendationUnavailable = !recommendation && !scoring.isLoading
-  const unavailableProfile = !scoringAuthorityMatchesResearch && canonicalResearchProfileCode
-    ? `${canonicalResearchProfileCode} canonical research profile`
-    : scoring.data?.profileName ?? "this research profile"
+  const unavailableProfile = scoring.data?.profileName ?? "this research profile"
 
   return <section className="position-controls" aria-label="Position controls">
     <div className="research-decision-layout">

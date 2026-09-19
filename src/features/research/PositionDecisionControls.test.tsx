@@ -76,59 +76,6 @@ describe("PositionDecisionControls recommendation availability", () => {
     expect(repository.recordRecommendationPreview).not.toHaveBeenCalled()
   })
 
-
-  it("blocks a GENERAL fallback advisory when canonical PHARMA_V1 research authority is active", async () => {
-    repository.profileCode = "GENERAL"
-    repository.profileName = "General Research"
-    repository.overallScore = 82
-    repository.scoreReadyCoverage = .9
-    repository.policy = {
-      profileCode: "GENERAL",
-      policyVersion: 1,
-      status: "DRAFT",
-      minScoreReadyCoverage: .7,
-      coreMinScore: 75,
-      satelliteMinScore: 60,
-      watchMinScore: 40,
-      mandatoryDimensionFloors: {},
-      cautionRules: {},
-      sectorFocus: {},
-      persistenceRules: { upgradeConfirmations: 2, downgradeConfirmations: 2 },
-      weightPolicy: {
-        singleStockMax: 8,
-        core: { standard: [3, 4] },
-        highConvictionScore: 90,
-        cautionScore: 70,
-        momentumCautionBelow: null,
-        riskCautionBelow: null,
-        momentumCap: null,
-        riskCap: null,
-        profileConcentrationSoftCap: null,
-        profileConcentrationHardCap: null,
-        minProfileCoverageForConcentration: 70,
-      },
-      notes: null,
-    }
-
-    render(<PositionDecisionControls
-      portfolioId="portfolio-1"
-      securityId="security-1"
-      currentRole="OTHER"
-      currentWeight="1.0"
-      fallbackTargetWeight={null}
-      fallbackInvestmentHorizon={null}
-      currency="INR"
-      canonicalResearchProfileCode="PHARMA_V1"
-    />)
-
-    const advisory = screen.getByText("PortfolioAI suggestion").closest("section")
-    expect(advisory).not.toBeNull()
-    await waitFor(() => expect(within(advisory!).getByText("Recommendation pending")).toBeInTheDocument())
-    expect(within(advisory!).getByText(/PHARMA_V1 canonical research profile/)).toBeInTheDocument()
-    expect(within(advisory!).queryByText("Core candidate")).not.toBeInTheDocument()
-    expect(repository.recordRecommendationPreview).not.toHaveBeenCalled()
-  })
-
   it("preserves the mature available recommendation structure", async () => {
     repository.profileCode = "BANK_NBFC"; repository.profileName = "Banks / NBFCs"; repository.overallScore = 80; repository.scoreReadyCoverage = .72
     repository.policy = { profileCode: "BANK_NBFC", policyVersion: 1, status: "DRAFT", minScoreReadyCoverage: .7, coreMinScore: 75, satelliteMinScore: 60, watchMinScore: 40, mandatoryDimensionFloors: {}, cautionRules: {}, sectorFocus: {}, persistenceRules: { upgradeConfirmations: 2, downgradeConfirmations: 2 }, weightPolicy: { singleStockMax: 8, core: { standard: [3, 4] }, highConvictionScore: 90, cautionScore: 70, momentumCautionBelow: null, riskCautionBelow: null, momentumCap: null, riskCap: null, profileConcentrationSoftCap: null, profileConcentrationHardCap: null, minProfileCoverageForConcentration: 70 }, notes: null }
