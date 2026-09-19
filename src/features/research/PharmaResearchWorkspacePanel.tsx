@@ -38,6 +38,7 @@ import { PHARMA_DOMESTIC_PEER_COHORT_BUILDER_VERSION } from "./pharmaDomesticPee
 import { PHARMA_DOMESTIC_PEER_COMPARABILITY } from "./pharmaDomesticPeerComparabilityContract"
 import { PHARMA_DOMESTIC_PEER_PREMIUM_DISCOUNT } from "./pharmaDomesticPeerPremiumDiscountProposal"
 import { PHARMA_DOMESTIC_PEER_COMBINATION } from "./pharmaDomesticPeerCombinationContract"
+import { PHARMA_DOMESTIC_PEER_WEIGHTING_GATE } from "./pharmaDomesticPeerWeightingGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -518,6 +519,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>No approved PE-vs-EV/EBITDA combination rule exists yet</small>
               <p>Equal weighting, weighted mean, best-of, worst-of and single-metric fallback are all unapproved. Even with both normalized inputs present, the state is only ready for an explicit weighting decision and the combined peer score remains null.</p>
               <span>PE weight: NONE · EV/EBITDA weight: NONE · Combined peer score: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.14 · Peer weighting approval gate</strong>
+              <small>{PHARMA_DOMESTIC_PEER_WEIGHTING_GATE.contractVersion}</small>
+              <p>No canonical PE-vs-EV/EBITDA weight exists yet. Both normalized inputs may be structurally ready, but any weighting rule must be explicitly versioned and owner-approved before a combined Domestic peer score can exist.</p>
+              <span>PE weight: NONE · EV/EBITDA weight: NONE · Explicit approval: REQUIRED</span>
+            </article>
+            <article>
+              <strong>G6.14 · No implicit 50/50 rule</strong>
+              <small>Equal weighting is a methodology decision, not a default</small>
+              <p>A candidate pair such as 50/50 may be structurally valid because the weights sum to one, but it remains unapproved. Hidden defaults, single-metric fallback and unversioned weighting are prohibited.</p>
+              <span>Equal-weight default: NO · Hidden default: NO · Combined peer score: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
