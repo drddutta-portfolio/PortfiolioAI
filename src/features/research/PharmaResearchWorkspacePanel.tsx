@@ -72,6 +72,7 @@ import { PHARMA_GLOBAL_GENERICS_G6_COVERAGE_REVIEW } from "./pharmaGlobalGeneric
 import { PHARMA_GLOBAL_GENERICS_APPLICABILITY_REGISTRY_RECONCILIATION } from "./pharmaGlobalGenericsApplicabilityRegistryReconciliation"
 import { PHARMA_G7_OVERLAY_NUMERIC_MODIFIER } from "./pharmaG7OverlayNumericModifierProposal"
 import { PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT } from "./pharmaG7GovernanceHighRiskConstraint"
+import { PHARMA_G7_READ_ONLY_SCORING_ADAPTER } from "./pharmaG7ReadOnlyScoringAdapter"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -1028,6 +1029,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Proposal only · G7.1 consumption remains blocked</small>
               <p>BLOCKED_REVIEW and CRITICAL states still block the overall preview. REVIEW_REQUIRED stays non-numeric. The same governance/regulatory event cannot simultaneously create multiple hidden deductions.</p>
               <span>Owner validation: REQUIRED · G7.1 consumption approved: NO · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G7.1 · Read-only scoring adapter</strong>
+              <small>{PHARMA_G7_READ_ONLY_SCORING_ADAPTER.version}</small>
+              <p>The pure adapter calculates only from approved numeric dimension results, applies validated overlay/governance contracts, preserves fixed Pharma weights and never persists a score.</p>
+              <span>Read-only: YES · Persistence: NO · Hidden reweighting: NO</span>
+            </article>
+            <article>
+              <strong>G7.1 · Fail-closed aggregation boundary</strong>
+              <small>60% readiness is a gate, not a missing-component formula</small>
+              <p>A readiness-passing dimension still needs a versioned numeric dimension-score contract. Missing methodology never becomes zero or neutral, and any unavailable weighted dimension blocks the overall preview instead of renormalizing the rest.</p>
+              <span>Overall score with missing weighted dimension: NO · G7.2 wiring: NOT STARTED</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
