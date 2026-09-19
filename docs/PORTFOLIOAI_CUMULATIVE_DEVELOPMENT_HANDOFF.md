@@ -9072,3 +9072,95 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.8 cards in TORNTPHARM → Research → Gate G, then run focused G6.8 validation. Only after validation should the next Domestic Formulations-specific G6 slice be selected.
+
+
+---
+
+## 116. Entry 111 — Gate G6.8 Domestic Formulations FCF-yield corroboration curve validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.8 has completed validation as a **proposal-only Domestic Formulations FCF-yield corroboration curve**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.8 plus G6.6/G6.4/G6.3/G6.2/G6.1 and all validated G5/G1–G4/Gate G proposal contracts → **PASS**
+- focused ESLint for the same methodology slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.8 status
+
+Supported Primary:
+
+`DOMESTIC_FORMULATIONS`
+
+Dimension:
+
+`VALUATION`
+
+Component:
+
+`CASH_FLOW_CORROBORATION`
+
+Metric:
+
+`FCF_YIELD_PERCENT`
+
+Validated proposal bands:
+
+- >=5.0% → 100
+- >=3.0% and <5.0% → 80
+- >=1.5% and <3.0% → 60
+- >=0% and <1.5% → 40
+- <0% → 20
+
+### Interpretation boundary
+
+The curve is corroboration-only.
+
+It does not:
+
+- create a standalone cheap/expensive verdict;
+- replace self-history valuation;
+- replace peer-relative valuation;
+- activate the 12% Valuation dimension by itself.
+
+Negative FCF remains adverse evidence and is not neutralized.
+
+### Remaining Valuation prerequisites
+
+- self-history subcurve: **VALIDATED / NOT ACTIVE**
+- FCF-yield corroboration subcurve: **VALIDATED / NOT ACTIVE**
+- peer-relative Valuation component: **UNAPPROVED**
+- component weights: **UNAPPROVED**
+- whole Valuation dimension ready: **NO**
+
+### Cross-subprofile boundary
+
+The G6.8 bands remain Domestic Formulations only.
+
+They must not automatically apply to:
+
+- Global Generics
+- API/Bulk Drugs
+- CDMO/CRAMS
+- Biopharma/Biosimilars
+
+### Safety boundary remains unchanged
+
+- persistent FCF-yield registration: **NO**
+- local DB mutation: **NO**
+- production DB mutation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.8 is validated. The next permitted G6 task is to select the next subprofile-specific threshold slice. For Domestic Formulations Valuation, the remaining missing lane is peer-relative valuation; alternatively, G6 may move to another aligned family if peer-cohort methodology is not yet mature enough.
