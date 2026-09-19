@@ -81,11 +81,20 @@ function identityKey(item: PharmaGlobalGenericsPipelineEvidenceItem) {
   return `${item.productOrMolecule.trim().toLocaleUpperCase()}::${item.geography.trim().toLocaleUpperCase()}`
 }
 
-function median(values: readonly number[]) {
+function median(values: readonly number[]): number | null {
+  if (!values.length) return null
+
   const sorted = [...values].sort((a, b) => a - b)
   const middle = Math.floor(sorted.length / 2)
-  if (sorted.length % 2 === 1) return sorted[middle]
-  return (sorted[middle - 1] + sorted[middle]) / 2
+  const upper = sorted[middle]
+
+  if (upper === undefined) return null
+  if (sorted.length % 2 === 1) return upper
+
+  const lower = sorted[middle - 1]
+  if (lower === undefined) return null
+
+  return (lower + upper) / 2
 }
 
 function isAdverseStage(stage: PharmaGlobalGenericsPipelineStage) {
@@ -134,7 +143,20 @@ export function combineGlobalGenericsPipelineScores(
 
   for (const entries of grouped.values()) {
     const sorted = [...entries].sort((a, b) => a.item.eventDate.localeCompare(b.item.eventDate))
-    const latestDate = sorted[sorted.length - 1].item.eventDate
+    const latestSortedEntry = sorted.at(-1)
+
+    if (!latestSortedEntry) {
+      return {
+        state: "INSUFFICIENT_EVIDENCE",
+        combinedScore: null,
+        distinctPipelineIdentityCount: grouped.size,
+        adverseIdentityCount: 0,
+        latestIdentityStates: [],
+        reason: "NO_ELIGIBLE_EVENTS",
+      }
+    }
+
+    const latestDate = latestSortedEntry.item.eventDate
     const latestEntries = sorted.filter((entry) => entry.item.eventDate === latestDate)
     const latestStages = new Set(latestEntries.map((entry) => entry.item.stage))
 
@@ -150,7 +172,7 @@ export function combineGlobalGenericsPipelineScores(
     }
 
     const latest = latestEntries[0]
-    if (!latest.normalized) {
+    if (!latest || !latest.normalized) {
       return {
         state: "REVIEW_REQUIRED",
         combinedScore: null,
@@ -189,9 +211,22 @@ export function combineGlobalGenericsPipelineScores(
     }
   }
 
+  const combinedScore = median(latestIdentityStates.map((item) => item.normalizedScore))
+
+  if (combinedScore === null) {
+    return {
+      state: "INSUFFICIENT_EVIDENCE",
+      combinedScore: null,
+      distinctPipelineIdentityCount: latestIdentityStates.length,
+      adverseIdentityCount: 0,
+      latestIdentityStates,
+      reason: "NO_ELIGIBLE_EVENTS",
+    }
+  }
+
   return {
     state: "READY",
-    combinedScore: median(latestIdentityStates.map((item) => item.normalizedScore)),
+    combinedScore,
     distinctPipelineIdentityCount: latestIdentityStates.length,
     adverseIdentityCount: 0,
     latestIdentityStates,
