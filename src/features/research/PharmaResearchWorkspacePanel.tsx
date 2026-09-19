@@ -75,6 +75,7 @@ import { PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT } from "./pharmaG7GovernanceH
 import { PHARMA_G7_READ_ONLY_SCORING_ADAPTER } from "./pharmaG7ReadOnlyScoringAdapter"
 import { buildTorntpharmG7ExplainablePreview } from "./pharmaTorntpharmG7ExplainablePreview"
 import { PHARMA_G7_RESEARCH_GAP_REGISTER, PHARMA_G7_VALIDATION_INVARIANTS } from "./pharmaG7ValidationAndResearchGapRegister"
+import { AuropharmaG81ClassificationCard } from "./AuropharmaG81ClassificationCard"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -169,10 +170,13 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const resolution = usePharmaSubprofileResolution(securityId)
   const evaluationDate = useMemo(() => new Date().toISOString().slice(0, 10), [])
 
-  if (resolution.isLoading) return <section className="pharma-workspace-panel"><p className="muted">Loading reviewed Pharma business model…</p></section>
-  if (resolution.error) return <section className="pharma-workspace-panel"><div className="notice notice-error">Reviewed Pharma business model could not be loaded.</div></section>
+  const auropharmaG81Review = <AuropharmaG81ClassificationCard symbol={symbol} />
+
+  if (resolution.isLoading) return <section className="pharma-workspace-panel">{auropharmaG81Review}<p className="muted">Loading reviewed Pharma business model…</p></section>
+  if (resolution.error) return <section className="pharma-workspace-panel">{auropharmaG81Review}<div className="notice notice-error">Reviewed Pharma business model could not be loaded.</div></section>
   if (!resolution.data || resolution.data.status !== "RESOLVED") {
     return <section className="pharma-workspace-panel pharma-workspace-blocked">
+      {auropharmaG81Review}
       <div>
         <p className="eyebrow">Pharma research model</p>
         <h2>Subprofile review required</h2>
@@ -201,6 +205,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
     : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
+    {auropharmaG81Review}
     <div className="pharma-workspace-titlebar">
       <div>
         <p className="eyebrow">Sector research workspace · Pharmaceuticals</p>

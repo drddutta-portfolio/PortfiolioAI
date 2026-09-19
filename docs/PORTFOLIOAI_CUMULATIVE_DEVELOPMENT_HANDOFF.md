@@ -18426,3 +18426,104 @@ Expected:
 - no provider call
 
 **CURRENT STOP POINT:** Open localhost Research Coverage and confirm all three securities are visible, with AUROPHARMA initially Missing across research-evidence domains. After that visual proof, mark the AUROPHARMA local prerequisite fully validated and begin G8.1.
+
+
+---
+
+## 210. Entry 205 — G8.1 AUROPHARMA classification & evidence lock implemented
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7 remains formally closed as **COMPLETE / READ-ONLY / NOT ACTIVE**. No G7.4 was created.
+
+The AUROPHARMA localhost prerequisite validated at head `df449bb94f7650b626d9634c94b8a2391c22eaea` is treated as complete and was not redone.
+
+### Bounded official-evidence review
+
+G8.1 used only the official Aurobindo annual-report/results/transcript set needed for classification.
+
+Role-determining annual figures:
+
+- FY25 consolidated revenue: ₹31,724 Cr;
+- FY25 US formulations: ₹14,816 Cr;
+- FY25 Europe formulations: ₹8,356 Cr;
+- FY25 API: ₹4,323 Cr;
+- FY26 consolidated revenue: ₹33,653 Cr;
+- FY26 US formulations: ₹14,408 Cr;
+- FY26 Europe formulations: ₹10,315 Cr;
+- FY26 API: ₹4,047 Cr.
+
+The Global Generics classification input deliberately uses only US + Europe formulations as a conservative lower bound:
+
+- FY25: 73.04%;
+- FY26: 73.46%.
+
+API economic share:
+
+- FY25: 13.63%;
+- FY26: 12.03%.
+
+### Reviewed G8.1 result
+
+The existing G1 adaptive-classification contract was reused unchanged.
+
+Result:
+
+- Primary candidate: **GLOBAL_GENERICS**;
+- reviewed Material Overlay: **none**;
+- Emerging Watch: **API_BULK_DRUGS**;
+- BIOPHARMA_BIOSIMILARS: **REVIEW_REQUIRED** because no comparable economic share is disclosed.
+
+This rejects the discovery hypothesis that API should be a Material Overlay. The G1 15% threshold is an economic-share threshold, and API is below 15% in both reviewed annual periods.
+
+Biosimilars was also not forced into Emerging Watch. Official pipeline/commercialisation commentary does not substitute for the missing revenue/profit-share evidence required by the current G1 implementation.
+
+### Comparability / distortion checks
+
+The implementation records explicit role-determining checks for:
+
+- consolidated-denominator consistency;
+- conservative Global Generics scope mapping;
+- the earlier API transfer to wholly owned Apitoria;
+- unavailable business-level profit-share disclosure;
+- acquisition/effective-date effects, including Khandelwal and the post-FY26 Lannett transaction.
+
+Evidence is locked through **31 March 2026**, with **31 March 2026** as the proposed effective date for this review fixture. Later structural/business-mix changes require a new effective-period review.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/auropharmaG8ClassificationEvidence.ts`;
+- `src/features/research/auropharmaG8ClassificationEvidence.test.ts`;
+- `src/features/research/AuropharmaG81ClassificationCard.tsx`;
+- `docs/R4N_G8_1_AUROPHARMA_Classification_Evidence_Lock_V1.md`.
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`;
+- this cumulative handoff.
+
+The AUROPHARMA Research workspace now exposes a compact G8.1 review card even while the canonical subprofile assignment remains absent. The ordinary fail-closed "Subprofile review required" state remains underneath it.
+
+### Safety boundary
+
+- production mutation: **NO**
+- production migration: **NO**
+- canonical subprofile assignment write: **NO**
+- raw research-evidence persistence: **NO**
+- score curve creation: **NO**
+- score persistence: **NO**
+- recommendation/sizing mutation: **NO**
+- provider refresh/call: **NO**
+- scheduler change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+### Validation state
+
+Repository implementation is prepared. G8.1 remains **OPEN / OWNER VALIDATION REQUIRED** until focused tests, ESLint, typecheck, build and localhost visual review pass.
+
+**CURRENT STOP POINT:** Pull the G8.1 implementation, run the focused validation chain, open AUROPHARMA → Research, visually validate the G8.1 classification/evidence card, and stop. Do not enter G8.2 until explicit owner approval.
