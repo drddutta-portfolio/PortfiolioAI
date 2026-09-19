@@ -16671,3 +16671,143 @@ Therefore:
 **Result:** G6.44 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Inspect every consumer/test of `PharmaG6CurveState` and `pharmaG6SubprofileCurveApplicability`, then prepare a narrow Global Generics applicability-registry reconciliation gate. Other Pharma subprofiles must remain unchanged unless current repository evidence explicitly requires otherwise.
+
+
+---
+
+## 191. Entry 186 — Gate G6.45 Global Generics applicability registry reconciliation gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.45 — Global Generics Applicability Registry Reconciliation Gate**.
+
+### Starting state
+
+G6.44 was first formally closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+The live repository was then inspected before changing the applicability architecture.
+
+PR #101 remained:
+
+- **OPEN**
+- **DRAFT**
+- **UNMERGED**
+
+### Repository inspection conclusion
+
+The applicability registry had three states:
+
+- `VALIDATED_NOT_ACTIVE`
+- `SUBPROFILE_THRESHOLDS_REQUIRED`
+- `UNSUPPORTED_FAIL_CLOSED`
+
+Later Global Generics G6 work now requires a fourth semantic state:
+
+`VALIDATED_FAIL_CLOSED`
+
+This means the methodology outcome is explicitly validated, but no approved numeric curve exists and the family must remain fail-closed.
+
+The runtime registry consumer inspection found no scoring adapter using these states. The current application consumer is the Gate G glass-box display. Existing readiness contracts remain independently fail-closed and score execution remains disabled.
+
+### Versioned registry reconciliation
+
+The applicability contract version is proposed to move from:
+
+`PHARMA_G6_SUBPROFILE_CURVE_APPLICABILITY_V1_PROPOSAL`
+
+to:
+
+`PHARMA_G6_SUBPROFILE_CURVE_APPLICABILITY_V2_PROPOSAL`
+
+The state union now includes:
+
+`VALIDATED_FAIL_CLOSED`
+
+### Global Generics representation
+
+After this proposal:
+
+- `SEGMENT_GROWTH` → **VALIDATED_NOT_ACTIVE**
+- `OPERATING_MARGIN` → **VALIDATED_FAIL_CLOSED**
+- `ROCE_CAPITAL_EFFICIENCY` → **VALIDATED_FAIL_CLOSED**
+- `CASH_CONVERSION` → **VALIDATED_FAIL_CLOSED**
+- `BALANCE_SHEET_LEVERAGE` → **VALIDATED_FAIL_CLOSED**
+- `VALUATION` → **VALIDATED_FAIL_CLOSED**
+- `OWNERSHIP_GOVERNANCE` → **VALIDATED_FAIL_CLOSED**
+- `REGULATORY_MARKET_RISK` → **VALIDATED_FAIL_CLOSED**
+- `MOMENTUM` → **VALIDATED_FAIL_CLOSED**
+- `US_GENERIC_PRICE_EROSION` → **VALIDATED_NOT_ACTIVE**
+
+Every `VALIDATED_FAIL_CLOSED` Global Generics entry keeps `curveVersion = null`.
+
+### Operating Margin correction
+
+Global Generics Operating Margin previously appeared as `UNSUPPORTED_FAIL_CLOSED`.
+
+Later G6 work established that the methodology lane is supported and validated, but Global-specific calibration remains deferred and Domestic bands remain prohibited.
+
+Therefore its truthful current representation is now `VALIDATED_FAIL_CLOSED`.
+
+API/Bulk Drugs, CDMO/CRAMS and Biopharma/Biosimilars Operating Margin states remain `UNSUPPORTED_FAIL_CLOSED`.
+
+### Other Pharma primaries preserved
+
+The shared `pendingParentFamilies` structure was deliberately left unchanged for:
+
+- `DOMESTIC_FORMULATIONS`
+- `API_BULK_DRUGS`
+- `CDMO_CRAMS`
+- `BIOPHARMA_BIOSIMILARS`
+
+Their seven G5-derived parent families remain `SUBPROFILE_THRESHOLDS_REQUIRED`.
+
+No Global Generics conclusion is projected onto another primary.
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsApplicabilityRegistryReconciliation.ts`
+- `src/features/research/pharmaGlobalGenericsApplicabilityRegistryReconciliation.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_45_Global_Generics_Applicability_Registry_Reconciliation_V1.md`
+
+Updated:
+
+- `src/features/research/pharmaG6SubprofileCurveApplicability.ts`
+- `src/features/research/pharmaG6SubprofileCurveApplicability.test.ts`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.45 · Global Generics applicability registry reconciliation**
+- **G6.45 · Validation and G7 boundary**
+
+### G7 boundary
+
+Preparing G6.45 does not start G7.
+
+- registry aligned by proposal: **YES**
+- owner validation: **PENDING**
+- G7 read-only adapter eligible now: **NO**
+- G7 may be reconsidered after successful reconciliation validation: **YES**
+
+### Safety boundary remains unchanged
+
+- new numeric thresholds: **NO**
+- curve activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema/local/production DB mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.45 cards, run focused Vitest for `pharmaG6SubprofileCurveApplicability.test.ts` and `pharmaGlobalGenericsApplicabilityRegistryReconciliation.test.ts`, run focused ESLint for the G6.45 slice and `PharmaResearchWorkspacePanel.tsx`, then run `npm run typecheck` and `npm run build`. Do not start G7 until G6.45 is validated.
