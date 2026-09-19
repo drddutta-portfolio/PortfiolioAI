@@ -59,6 +59,7 @@ import { PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_CALIBRATION_EVIDENCE } from "./
 import { PHARMA_GLOBAL_GENERICS_ROCE_METHOD_GATE } from "./pharmaGlobalGenericsRoceMethodGate"
 import { PHARMA_GLOBAL_GENERICS_ROCE_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsRoceCalibrationEvidence"
 import { PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_METHOD_GATE } from "./pharmaGlobalGenericsCashConversionMethodGate"
+import { PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsCashConversionCalibrationEvidence"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -833,6 +834,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Parent dimension reconciliation remains required</small>
               <p>The parent metric still sits in Earnings & Cash Quality while the canonical methodology targets Cash Flow. G6.34 preserves that mismatch and rejects universal or other-subprofile threshold fallback.</p>
               <span>Parent reconciliation: REQUIRED · Numeric cash-conversion curve: NO · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.35 · Cash-conversion calibration evidence sufficiency</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_CALIBRATION_EVIDENCE.contractVersion}</small>
+              <p>No reviewed Global Generics Cash Conversion calibration set, same-primary cohort or evidence-backed CFO-to-PAT / FCF / consistency bands and weights are established. Numeric calibration is therefore deferred.</p>
+              <span>Calibration available: NO · Other-subprofile fallback: NO · Numeric curve: NO</span>
+            </article>
+            <article>
+              <strong>G6.35 · Parent Cash Flow dimension alignment blocker</strong>
+              <small>Current parent metric dimension: EARNINGS CASH QUALITY · canonical dimension: CASH FLOW</small>
+              <p>The mismatch remains explicit and unresolved. A separate versioned parent-contract reconciliation is required before Cash Conversion may contribute a numeric Cash Flow score.</p>
+              <span>Parent reconciliation performed: NO · Deferral required: YES · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
