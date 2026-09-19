@@ -10545,3 +10545,105 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.15 cards in TORNTPHARM → Research → Gate G, then run focused G6.15 validation. After validation, the next Domestic Valuation step is to define weights across self-history, peer-relative, and FCF-yield corroboration.
+
+
+---
+
+## 130. Entry 125 — Gate G6.15 Domestic peer combined score contract validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.15 has completed validation as an **owner-approved but not active Domestic Formulations peer combined score contract**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.15 plus G6.14/G6.13/G6.12/G6.11/G6.10/G6.9 and the active Domestic Valuation methodology slice → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### Owner-approved peer combination methodology
+
+Approved weights:
+
+- PE peer-relative normalized score: **50%**
+- EV/EBITDA peer-relative normalized score: **50%**
+
+Combined formula:
+
+`Combined Peer Score = (PE Score × 0.50) + (EV/EBITDA Score × 0.50)`
+
+Both normalized inputs remain mandatory.
+
+Missing or invalid input fails closed with no combined score.
+
+### Mandatory revisit trigger 1 — backtest divergence
+
+The weighting must be revisited if later backtesting shows material divergence between PE-based and EV/EBITDA-based peer-relative scores for the Domestic Formulations peer set.
+
+Current state:
+
+- revisit trigger: **YES**
+- automatic numeric divergence threshold: **NO / NOT INVENTED**
+
+A later threshold may be versioned only when actual backtesting evidence supports one.
+
+### Mandatory revisit trigger 2 — leverage heterogeneity
+
+The weighting must be revisited if meaningfully different leverage enters the Domestic peer cohort.
+
+Examples:
+
+- M&A-funded entrant
+- materially different net-debt profile
+
+This recognizes that EV/EBITDA's debt-neutrality may become more informative when capital structures materially diverge.
+
+### Anti-drift rules
+
+- single-metric fallback: **NO**
+- hidden reweighting: **NO**
+- silent replacement of the 50/50 rule: **NO**
+- any future weight change requires explicit versioned methodology revision: **YES**
+
+### Peer-relative component state
+
+The Domestic peer-relative component now has a complete proposal calculation path when all G6.9–G6.12 evidence/comparability prerequisites are met.
+
+Methodology status:
+
+- combined peer score contract: **VALIDATED**
+- owner-approved weights: **YES**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+
+### Whole Domestic Valuation state
+
+Still unresolved:
+
+- weighting across self-history relative valuation;
+- peer-relative valuation;
+- FCF-yield cash-flow corroboration.
+
+Therefore:
+
+`whole Valuation dimension ready = NO`
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.15 is validated. The next permitted Domestic Valuation methodology step is to define and justify the weights across the three validated components: self-history relative valuation, peer-relative valuation, and FCF-yield cash-flow corroboration.
