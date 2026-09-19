@@ -10,15 +10,26 @@ const source = readFileSync(
 describe("G9.3 canonical Pharma research reachability", () => {
   it("renders normalized Pharma research from canonical subprofile resolution, not legacy scoring-profile identity", () => {
     expect(source).toContain('const pharmaResolution = usePharmaSubprofileResolution(position?.securityId ?? null)')
-    expect(source).toContain('pharmaResolved={pharmaResolution.data?.status === "RESOLVED"}')
+    expect(source).toContain('const pharmaResolved = pharmaResolution.data?.status === "RESOLVED"')
     expect(source).toContain('{pharmaResolved ? <>')
     expect(source).toContain('<PharmaG93NormalizedResearchPanel')
     expect(source).not.toContain('{scoring.data?.profileCode === "PHARMA_V1" ? <>\n      <PharmaG93NormalizedResearchPanel')
+  })
+
+  it("routes the complete Pharma research presentation from canonical authority", () => {
+    expect(source).toContain("resolveResearchPresentationProfileCode(")
+    expect(source).toContain('pharmaResolved ? "PHARMA_V1" : null')
+    expect(source).toContain("profileCode={presentationProfileCode}")
+    expect(source).toContain("researchProfileUiContract(presentationProfileCode)")
+    expect(source).toContain("researchSnapshotGroups(presentationProfileCode)")
+    expect(source).toContain("presentationProfileCode={presentationProfileCode}")
+    expect(source).toContain("<CanonicalPharmaScoringBoundaryPanel />")
   })
 
   it("keeps scoring identity and canonical research identity visibly separate", () => {
     expect(source).toContain("<strong>Scoring profile:</strong>")
     expect(source).toContain("<strong>Research profile:</strong> Pharmaceuticals · PHARMA_V1 · Canonical assignment")
     expect(source).toContain('enabled={pharmaResolved || scoring.data?.profileCode === "PHARMA_V1"}')
+    expect(source).toContain('canonicalResearchProfileCode={pharmaResolved ? "PHARMA_V1" : null}')
   })
 })
