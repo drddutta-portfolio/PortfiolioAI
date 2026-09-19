@@ -19516,3 +19516,83 @@ Because focused ESLint had one failure, G9.2 remains **OPEN** until the owner pu
 The previous G9.2 localhost visual approval remains valid because this correction is type/lint-only and does not alter UI/runtime semantics.
 
 **CURRENT STOP POINT:** pull the lint-only correction and rerun the G9.2 local validation. Do not close G9.2 or start G9.3 until all validation is green and the final checkpoint is recorded.
+
+
+---
+
+## 222. Entry 217 — G9.2 full local validation passed; G9.2 formally closed
+
+**Date:** 20 September 2026  
+**Actor:** owner local validation + ChatGPT final checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner pulled the lint-only correction at branch head `edaf22441179dc112bbeefa5e7ef80e23c391906` and reran the complete G9.2 validation sequence.
+
+### Final local validation result
+
+All requested validation passed.
+
+Validated:
+
+- focused G9.2/G9.1/G8 repository Vitest suite: **PASS**
+- focused ESLint: **PASS**
+- `npm run check:architecture`: **PASS**
+- `npm run typecheck`: **PASS**
+- `npm run build`: **PASS**
+
+The prior G9.2 localhost visual approval remains authoritative.
+
+### Confirmed G9.2 local canonical state
+
+AUROPHARMA resolves through the normal local canonical assignment pathway as:
+
+- parent profile: `PHARMA_V1`
+- Primary: `GLOBAL_GENERICS`
+- assignment state: `REVIEWED`
+- confidence: `HIGH`
+- effective from: `2026-03-31`
+- reviewed secondary: `API_BULK_DRUGS = EMERGING`
+
+`BIOPHARMA_BIOSIMILARS` remains absent from active reviewed Primary/secondary authority.
+
+TORNTPHARM remains independently resolved as:
+
+- Primary `DOMESTIC_FORMULATIONS`
+- Global Generics `MATERIAL` secondary exposure
+
+with no shared assignment authority.
+
+### Preserved fail-closed downstream state
+
+G9.2 did not activate:
+
+- numeric scoring;
+- score persistence;
+- recommendation activation/persistence;
+- position sizing;
+- provider refresh;
+- scheduler changes;
+- production deployment.
+
+Production assignment persistence remains prohibited.
+
+### Formal result
+
+> **G9.2 = COMPLETE / AUROPHARMA LOCAL CANONICAL RESEARCH ACTIVATION VALIDATED / PRODUCTION PERSISTENCE NOT AUTHORIZED**
+
+### Next checkpoint
+
+Proceed only to:
+
+> **G9.3 — Reciprocal PHARMA_V1 Normalization + Final Activation Validation**
+
+G9.3 must normalize the permanent Pharma UI/architecture vice versa:
+
+- reusable G8 three-layer architecture back into TORNTPHARM;
+- shared G1–G7 methodology surfaces into AUROPHARMA;
+- preserve company-specific evidence/tooling;
+- prove TORNTPHARM semantic before/after equivalence;
+- render AUROPHARMA overlay methodology as distinct `NOT ENGAGED` where no Material Overlay exists;
+- retain persisted-data isolation and Biosimilars active-row absence regression coverage.
+
+**CURRENT STOP POINT:** G9.2 is closed. Begin G9.3 implementation only; do not alter production, scoring/recommendation/sizing activation, deployment, scheduler state, or PR merge status.
