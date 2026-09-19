@@ -16241,3 +16241,85 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.42 cards in TORNTPHARM → Research → Gate G, then run focused G6.42 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether the repository can support a dedicated Pharma parent Momentum contract and an approved Pharma benchmark methodology without importing BANK_NBFC assumptions.
+
+
+---
+
+## 186. Entry 181 — Gate G6.42 Global Generics momentum methodology boundary gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.42 has completed validation as a **proposal-only Global Generics Momentum methodology boundary gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsMomentumMethodGate.test.ts` → **PASS**
+- focused ESLint for the G6.42 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.42 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_MOMENTUM_METHOD_GATE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated evidence boundary
+
+Reusable evidence identity:
+
+- `PRICE_MOMENTUM_12M`
+- `PRICE_MOMENTUM_6M`
+- `RELATIVE_STRENGTH_12M`
+- raw authority: `MARKET_PRICE_HISTORY`
+- derived store: `MARKET_METRIC_OBSERVATIONS`
+- absolute momentum definition: `CLOSE_TO_CLOSE_RETURN_WITH_14_DAY_LOOKBACK_TOLERANCE`
+- relative-strength definition: `STOCK_RETURN_MINUS_APPROVED_BENCHMARK_RETURN`
+
+### Validated unresolved blockers
+
+- dedicated Pharma parent Momentum contract: **MISSING**
+- approved Pharma benchmark: **NO**
+- Global Generics component weights: **UNAPPROVED**
+- absolute-momentum bands: **UNAPPROVED**
+- relative-strength bands: **UNAPPROVED**
+- final aggregation: **UNAPPROVED**
+
+### BANK_NBFC separation preserved
+
+- BANK 12-month weight inherited: **NO**
+- BANK 6-month weight inherited: **NO**
+- NIFTY BANK benchmark inherited: **NO**
+- Trendlyne technical score allowed: **NO**
+
+### Regulatory / Market Risk remains closed fail-closed
+
+G6.24–G6.29 remain authoritative for the Global Generics Risk slice:
+
+- no Risk re-open;
+- drawdown normalization deferred;
+- volatility normalization deferred;
+- whole Risk dimension not ready.
+
+### Safety boundary remains unchanged
+
+- Global Generics numeric Momentum curve: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema/local/production DB mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.42 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Inspect whether repository evidence can support a dedicated Pharma parent Momentum contract and an approved Pharma benchmark methodology without importing BANK_NBFC assumptions. If unsupported, defer Momentum explicitly.
