@@ -67,6 +67,7 @@ import { PHARMA_GLOBAL_GENERICS_VALUATION_CALIBRATION_EVIDENCE } from "./pharmaG
 import { PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_METHOD_GATE } from "./pharmaGlobalGenericsOwnershipGovernanceMethodGate"
 import { PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsOwnershipGovernanceCalibrationEvidence"
 import { PHARMA_GLOBAL_GENERICS_MOMENTUM_METHOD_GATE } from "./pharmaGlobalGenericsMomentumMethodGate"
+import { PHARMA_GLOBAL_GENERICS_MOMENTUM_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsMomentumEvidenceSufficiency"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -953,6 +954,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>No BANK_NBFC weights, NIFTY BANK benchmark or provider technical score may leak into Pharma</small>
               <p>Global Generics still requires its own component weights, momentum bands, relative-strength bands, approved benchmark and final aggregation. Missing relative strength cannot silently become neutral.</p>
               <span>BANK inheritance: NO · Global calibration: PENDING · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.43 · Momentum parent-contract / benchmark evidence sufficiency</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_MOMENTUM_EVIDENCE_SUFFICIENCY.contractVersion}</small>
+              <p>The Momentum evidence identity is valid, but the repository still lacks a dedicated Pharma parent Momentum contract, an approved Pharma benchmark, Global-specific calibration bands, weights and final aggregation.</p>
+              <span>Parent contract: NO · Approved benchmark: NO · Whole Momentum dimension: NOT READY</span>
+            </article>
+            <article>
+              <strong>G6.43 · Explicit Momentum deferral</strong>
+              <small>No benchmark-by-analogy and no hidden BANK fallback</small>
+              <p>NIFTY BANK, BANK_NBFC momentum weights and provider technical scores remain ineligible for Pharma. Relative strength cannot be scored until a Pharma benchmark is explicitly approved.</p>
+              <span>Deferral required: YES · BANK fallback: NO · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
