@@ -20206,3 +20206,50 @@ Selective rollback commit:
 G9.3 normalization is **not complete** and the normalized-template experiment is no longer the active UI direction.
 
 **CURRENT STOP POINT:** owner should `git pull`, verify head `ea75aaea64a23a58a530fb77a68462f2c6451571`, run the existing Local Supabase + Local Vite environment, and visually confirm that both TORNTPHARM and AUROPHARMA have returned to their older designs. Do not run full validation until visual restoration is confirmed.
+
+
+---
+
+## 228. Entry 223 — Selective UI rollback visually approved on both Pharma reference stocks
+
+**Date:** 20 September 2026  
+**Actor:** owner localhost visual confirmation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner confirmed that both reference Pharma stocks have returned to their intended older designs after the selective G9.3 UI rollback.
+
+### Visual restoration result
+
+**TORNTPHARM:** restored to its pre-G9.3 deep-research layout.
+
+**AUROPHARMA:** restored to its pre-G9.3 G8/G9 sequential layout.
+
+The owner confirmed both are back to the older designs.
+
+### Current checkpoint status
+
+> **ROLLBACK VISUAL RESTORATION = PASS**
+
+The next required step under the locked workflow is full local technical validation of the restored baseline before any further G9.3 implementation.
+
+### Important direction for revised G9.3
+
+Do not again replace both pages with a new normalized visual template.
+
+The revised G9.3 direction must preserve the established designs and add only carefully scoped reciprocal/shared PHARMA_V1 capabilities where justified.
+
+In particular:
+
+- preserve TORNTPHARM Gate G → G6.45 → G7 methodology presentation;
+- preserve AUROPHARMA G8.1/G8.2/G8.3/G9.1/G9.2 presentation;
+- preserve all company-specific evidence and audit tooling;
+- distinguish reusable PHARMA_V1 methodology from company-specific implementation history;
+- add shared/relevant methodology incrementally rather than flattening both pages into one replacement layout.
+
+### Safety state
+
+No database mutation, evidence mutation, assignment mutation, score persistence, recommendation persistence, position-sizing activation, provider refresh, deployment, scheduler change or PR merge occurred.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+**CURRENT STOP POINT:** run full local validation against the restored post-G9.2 presentation baseline. Do not begin the revised G9.3 implementation until that validation passes and the handoff is updated with the final rollback checkpoint.
