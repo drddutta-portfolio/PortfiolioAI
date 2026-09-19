@@ -17772,3 +17772,181 @@ This does **not** mean TORNTPHARM currently has a complete numeric overall Pharm
 No G7.4 is required or permitted for routine follow-up. Any new methodology issue discovered during G8 must be recorded through the Research-Gap Register and resolved through a versioned methodology or controlled-expansion decision.
 
 **CURRENT STOP POINT:** G7 is formally closed. Before implementing G8, inspect the canonical G8 definition and select the appropriate second-company validation target using the existing reviewed Pharma business-model architecture.
+
+
+---
+
+## 203. Entry 198 — Gate G8 plan locked — AUROPHARMA local-development prerequisite
+
+**Date:** 19 September 2026  
+**Actor:** owner clarification + ChatGPT planning checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7 remains formally closed:
+
+**G7 = COMPLETE / READ-ONLY / NOT ACTIVE**
+
+The canonical G8 definition was reviewed. G8 is:
+
+> Run the same engine on a second mixed Pharma reference.
+
+The canonical validation plan prefers Aurobindo Pharma or Cipla.
+
+### G8 second-company target
+
+Selected reference:
+
+**Aurobindo Pharma / AUROPHARMA**
+
+Reason:
+
+- TORNTPHARM validates `DOMESTIC_FORMULATIONS` Primary + `GLOBAL_GENERICS` Material Overlay + `CDMO_CRAMS` Emerging Watch.
+- AUROPHARMA is the stronger independent mixed-company challenge because the discovery hypothesis is:
+  - Primary: `GLOBAL_GENERICS`
+  - Material Overlay: `API_BULK_DRUGS`
+  - Emerging Watch: `BIOPHARMA_BIOSIMILARS`
+- This tests a role transition for Global Generics, a different Material Overlay family and a different Emerging Watch family while reusing the same G7 engine.
+
+The discovery hypothesis remains non-authoritative until G8.1 evidence review.
+
+### Local-development prerequisite discovered before G8.1
+
+PortfolioAI is currently being developed and validated against the **ordinary local Supabase development database** and localhost UI.
+
+The current local Research Coverage surface contains:
+
+- HDFCBANK
+- TORNTPHARM
+
+AUROPHARMA is **not currently present in the ordinary local development dataset**.
+
+Therefore G8 must not assume AUROPHARMA already exists in the local research pipeline.
+
+Before G8.1 can be exercised end-to-end through localhost, prepare a **local-only AUROPHARMA development fixture / canonical-security prerequisite** using the existing local fixture strategy.
+
+This prerequisite must:
+
+- create/resolve AUROPHARMA as a canonical local security;
+- provide only the minimum local identity/eligibility records required for the Research page to load it;
+- remain isolated to ordinary local development;
+- not fabricate financial/evidence observations merely to make readiness look complete;
+- not mutate production;
+- not change production migration state;
+- not create a production deployment;
+- preserve current HDFCBANK and TORNTPHARM local fixtures/behavior.
+
+Adding AUROPHARMA locally is a **pre-G8.1 setup prerequisite**, not G8.0 and not a fourth G8 checkpoint.
+
+### Locked G8 sequence
+
+G8 is hard-capped to three checkpoints:
+
+1. **G8.1 — AUROPHARMA Classification & Evidence Lock**
+2. **G8.2 — Same-Engine AUROPHARMA Read-only Preview**
+3. **G8.3 — Portability / Isolation / Leakage Validation + Research-Gap Update**
+
+Then:
+
+**G9 — Activation Approval Gate**
+
+No G8.4 for routine follow-up.
+
+### G8.1 evidence rule
+
+Use a bounded official-source set:
+
+- latest annual/integrated report;
+- prior annual report for two-year persistence;
+- latest official earnings presentation/results where relevant;
+- official structural disclosures only where needed.
+
+Role-determining figures must receive explicit comparability/distortion review.
+
+The G1 15% Material Overlay threshold is an **economic-share threshold** based on revenue/profit share, not a growth-rate threshold.
+
+Check, where role-determining:
+
+- revenue/profit share denominator consistency;
+- acquisitions/disposals;
+- segment-definition changes;
+- business transfers/restructuring;
+- one-offs/base effects;
+- consolidated-vs-segment scope.
+
+G8.1 may validly return `REVIEW_REQUIRED`; no role may be forced.
+
+### G8.2 portability boundary
+
+Use **G7.1 unchanged**.
+
+Explicitly validate:
+
+- readiness is derived from active company assignment + role + applicable requirement contract, not subprofile code alone;
+- Global Generics Overlay behavior for TORNTPHARM cannot contaminate Global Generics Primary behavior for AUROPHARMA;
+- raw evidence remains security/company scoped;
+- interpretation/readiness/scoring remains company + active assignment + role scoped;
+- preview may read shared enrichment state but must not trigger enrichment refresh, mutation, recomputation or score persistence;
+- missing Global Generics Primary methodology fails closed rather than borrowing Domestic thresholds;
+- API/Bulk Material Overlay never becomes a second stock score;
+- Biopharma/Biosimilars Emerging Watch remains non-scoring.
+
+A valid expected result is:
+
+**AUROPHARMA overall Pharma score: Not currently computable**
+
+if required Global Generics Primary methodology remains unresolved.
+
+### G8.3 closure tests
+
+G8.3 must validate:
+
+1. no Domestic → Global threshold leakage;
+2. no Global → API overlay threshold leakage;
+3. Global Generics Overlay→Primary role transition does not create a second-score architecture;
+4. API Overlay cannot become an independent stock score;
+5. Biopharma Emerging cannot enter scoring/readiness/overlay evidence;
+6. no BANK_NBFC leakage;
+7. unavailable Global dimensions do not trigger denominator renormalization;
+8. governance anti-double-counting survives;
+9. TORNTPHARM evidence cannot satisfy AUROPHARMA requirements;
+10. role-specific Global Generics interpretation remains isolated between companies;
+11. no shared enrichment refresh/mutation/write-through occurs during preview;
+12. AUROPHARMA assignment changes do not alter TORNTPHARM assignment.
+
+New Aurobindo methodology gaps must extend the existing Research-Gap Register rather than be solved by expanding G8.
+
+### Engine-change test
+
+The key G8 portability question is:
+
+> Did G7.1 require material redesign merely to run AUROPHARMA?
+
+- genuine generic architecture defect → fix within G8.3;
+- missing business-specific methodology → register the gap; do not redesign the engine.
+
+### G8 non-goals
+
+G8 does not:
+
+- finish every Global Generics calibration;
+- finish API/Bulk primary curves;
+- finish Biopharma/Biosimilar primary curves;
+- persist scores;
+- activate recommendations;
+- alter position sizing;
+- create production scoring schema;
+- start a peer-cohort research marathon;
+- attempt portfolio-wide Pharma rollout;
+- reopen G6.
+
+### Current safety boundary
+
+- production mutation: **NO**
+- production migration: **NO**
+- score persistence: **NO**
+- recommendation change: **NO**
+- position sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Before G8.1, inspect the ordinary local fixture/data setup and add AUROPHARMA as the minimum local canonical Research target without fabricating research evidence. Validate that AUROPHARMA appears in localhost Research Coverage while HDFCBANK and TORNTPHARM remain unchanged. Then begin G8.1 official-evidence classification review.
