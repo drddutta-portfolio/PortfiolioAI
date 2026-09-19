@@ -84,7 +84,7 @@ function ResearchHeader({ position, research, scoring, pharmaResolved, currency,
       <MetricCard label="Current value" value={formatMoney(position.currentValue, currency)} detail="At cached CMP" />
       <PnlCard position={position} currency={currency} />
       <article className="research-metric-card broker-card"><span>Brokers / demat</span><div className="broker-chips">{brokers.length ? brokers.map((broker) => <span key={broker.broker} title={`${formatQuantity(broker.quantity)} shares`}>{broker.broker}</span>) : <strong>Unavailable</strong>}</div><small>{brokers.length ? `${brokers.length} account${brokers.length === 1 ? "" : "s"}` : "Attribution incomplete"}</small></article>
-      <PositionDecisionControls portfolioId={portfolioId} securityId={position.securityId} currentRole={position.role} currentWeight={position.portfolioWeightPercent} fallbackTargetWeight={position.settings.targetWeight} fallbackInvestmentHorizon={position.settings.investmentHorizon} currency={currency} onSaved={onPositionSaved} />
+      <PositionDecisionControls portfolioId={portfolioId} securityId={position.securityId} currentRole={position.role} currentWeight={position.portfolioWeightPercent} fallbackTargetWeight={position.settings.targetWeight} fallbackInvestmentHorizon={position.settings.investmentHorizon} currency={currency} canonicalResearchProfileCode={pharmaResolved ? "PHARMA_V1" : null} onSaved={onPositionSaved} />
     </div></section>
   </header>
 }
