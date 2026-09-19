@@ -20,9 +20,12 @@ describe("AUROPHARMA local G8 Research target fixture", () => {
     expect(sql).toContain("'EQ'")
   })
 
-  it("targets only the local portfolio already containing HDFCBANK and TORNTPHARM", () => {
-    expect(sql).toContain("s.symbol IN ('HDFCBANK', 'TORNTPHARM')")
-    expect(sql).toContain("LOCAL_FIXTURE_TARGET_PORTFOLIO_NOT_FOUND")
+  it("targets exactly the same active portfolio the application loads", () => {
+    expect(sql).toContain("FROM public.portfolios")
+    expect(sql).toContain("WHERE is_active")
+    expect(sql).toContain("ORDER BY created_at, id")
+    expect(sql).toContain("LOCAL_FIXTURE_APP_PORTFOLIO_EXPECTED_TWO_HOLDINGS")
+    expect(sql).toContain("LOCAL_FIXTURE_APP_PORTFOLIO_REFERENCE_HOLDINGS_MISMATCH")
     expect(sql).toContain("HDFCBANK_HOLDING_CHANGED")
     expect(sql).toContain("TORNTPHARM_HOLDING_CHANGED")
   })
@@ -42,6 +45,13 @@ describe("AUROPHARMA local G8 Research target fixture", () => {
     expect(sql).not.toMatch(/INSERT INTO public\.research_subprofile_assignments/i)
     expect(sql).not.toMatch(/INSERT INTO public\.security_score_runs/i)
     expect(sql).not.toMatch(/INSERT INTO public\.recommendation_runs/i)
+  })
+
+  it("cleans up only misplaced synthetic AUROPHARMA fixture transactions", () => {
+    expect(sql).toContain("DELETE FROM public.transactions")
+    expect(sql).toContain("source_type = 'LOCAL_G8_FIXTURE'")
+    expect(sql).toContain("deduplication_key = 'LOCAL_G8_FIXTURE:AUROPHARMA'")
+    expect(sql).toContain("portfolio_id <> v_portfolio_id")
   })
 
   it("is idempotent for security, listing and current-holding creation", () => {
