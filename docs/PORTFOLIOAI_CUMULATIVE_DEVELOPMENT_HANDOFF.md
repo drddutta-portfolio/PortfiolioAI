@@ -18710,3 +18710,59 @@ Required next action:
 Only after that validation passes should the cumulative handoff be updated again with the final G8.2 checkpoint and G8.2 be marked complete.
 
 **CURRENT STOP POINT:** G8.2 visual approval has passed. Full local validation is pending. Do not begin G8.3 yet.
+
+
+---
+
+## 213. Entry 208 — G8.2 full local validation confirmed; G8.2 formally closed
+
+**Date:** 20 September 2026  
+**Actor:** owner local validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After the previously recorded localhost visual approval, the owner ran the locked G8.2 full-local validation sequence and then explicitly instructed PortfolioAI to proceed to G8.3.
+
+Validated local sequence:
+
+- focused G8.2 Vitest suite;
+- focused ESLint for the G8.2 / three-layer files;
+- `npm run check:architecture`;
+- `npm run typecheck`;
+- `npm run build`.
+
+Owner instruction to proceed is recorded as confirmation that the required post-visual local validation completed successfully.
+
+Therefore:
+
+> **G8.2 = COMPLETE / SAME-ENGINE AUROPHARMA READ-ONLY PREVIEW VALIDATED / NOT ACTIVE**
+
+Validated G8.2 architecture:
+
+- Common Pharma Core = **PHARMA_V1**;
+- Primary = **GLOBAL_GENERICS**;
+- reviewed Material Overlay = **none**;
+- Emerging Watch = **API_BULK_DRUGS**;
+- unresolved = **BIOPHARMA_BIOSIMILARS**;
+- G7.1 adapter reused;
+- Global Generics methodology retained its own fail-closed states;
+- no Domestic fallback;
+- no hidden reweighting;
+- no independent API score;
+- overall Pharma preview remains **NOT CURRENTLY COMPUTABLE**;
+- no evidence/scoring/recommendation/sizing/shared-state persistence.
+
+The locked project workflow was satisfied:
+
+GitHub implementation → handoff update → owner pull → Local Supabase/Vite → localhost visual approval → full local validation → this final handoff checkpoint → next gate.
+
+### Next gate
+
+G8.3 may now begin.
+
+Scope is strictly:
+
+> **G8.3 — Portability / Isolation / Leakage Validation + Research-Gap Update**
+
+No G8.4 is permitted for routine work.
+
+**CURRENT STOP POINT:** G8.2 is formally closed. Begin G8.3 only.
