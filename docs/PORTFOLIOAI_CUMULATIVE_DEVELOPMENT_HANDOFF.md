@@ -9992,3 +9992,14 @@ Remaining before a complete Domestic Valuation methodology:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.12 is validated. The next permitted G6 task is to define the PE-vs-EV/EBITDA combination rule for the Domestic peer-relative component, while keeping the overall Valuation dimension inactive.
+
+
+### Final post-fix validation confirmation
+
+After the two G6.12 test-only assertion corrections, the owner reran the remaining validation stages:
+
+- focused ESLint for the G6.12 Domestic Valuation slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+The final validated state therefore reflects the corrected tests and a clean lint/type/build pass on the resulting branch head.
