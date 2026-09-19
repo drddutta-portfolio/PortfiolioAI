@@ -19596,3 +19596,153 @@ G9.3 must normalize the permanent Pharma UI/architecture vice versa:
 - retain persisted-data isolation and Biosimilars active-row absence regression coverage.
 
 **CURRENT STOP POINT:** G9.2 is closed. Begin G9.3 implementation only; do not alter production, scoring/recommendation/sizing activation, deployment, scheduler state, or PR merge status.
+
+
+---
+
+## 223. Entry 218 — G9.3 reciprocal PHARMA_V1 normalization implemented for two-stock visual comparison
+
+**Date:** 20 September 2026  
+**Actor:** ChatGPT implementation checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G9.2 is formally closed. Work has advanced only to the final hard-capped checkpoint:
+
+> **G9.3 — Reciprocal PHARMA_V1 Normalization + Final Activation Validation**
+
+### Purpose
+
+G9.3 removes the historical presentation asymmetry between TORNTPHARM and AUROPHARMA while preserving company-specific evidence, assignment authority and score semantics.
+
+The intended permanent product grammar is:
+
+```text
+PHARMA_V1
+  -> Common Pharma core
+  -> Reviewed Primary business model
+  -> Reviewed secondary roles
+  -> Shared methodology
+  -> Evidence / readiness
+  -> Read-only score state
+  -> Research gaps / audit history
+```
+
+### Implementation
+
+Added:
+
+- `src/features/research/pharmaG93NormalizedResearch.ts`
+- `src/features/research/pharmaG93NormalizedResearch.test.ts`
+- `src/features/research/PharmaG93NormalizedResearchPanel.tsx`
+- `src/features/research/pharmaG93NormalizationGuards.test.ts`
+- `scripts/r4n/pharma-g9-3-persistence-regression.sql`
+- `scripts/r4n/run-pharma-g9-3-persistence-regression.sh`
+- `docs/R4N_G9_3_Reciprocal_PHARMA_V1_Normalization_V1.md`
+
+Updated:
+
+- `src/pages/ResearchPage.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+
+### Reciprocal normalization
+
+TORNTPHARM now receives the reusable three-layer Pharma architecture in the normalized panel:
+
+- Common Core: `PHARMA_V1`
+- Primary: `DOMESTIC_FORMULATIONS`
+- Material Overlay: `GLOBAL_GENERICS`
+- Emerging Watch: `CDMO_CRAMS`
+
+AUROPHARMA now receives the shared methodology surface driven by its canonical assignment:
+
+- Common Core: `PHARMA_V1`
+- Primary: `GLOBAL_GENERICS`
+- Material Overlay: none
+- Emerging Watch: `API_BULK_DRUGS`
+- unresolved: `BIOPHARMA_BIOSIMILARS`
+
+Shared methodology entries cover:
+
+- Gate G
+- G1
+- G2
+- G3
+- G4
+- G7-P1
+- G7-P2
+- G7.1
+
+### Distinct NOT ENGAGED state
+
+Because AUROPHARMA has no reviewed Material Overlay, G2 and G7-P1 render through a distinct:
+
+`NOT ENGAGED`
+
+branch.
+
+This is intentionally different from zero, empty, unavailable, failed or neutral modifier states.
+
+The normalized panel marks the state with a dedicated UI branch/class and explanatory text that no zero/default modifier is emitted.
+
+### TORNTPHARM semantic continuity protection
+
+G9.3 introduces a semantic before/after regression model for TORNTPHARM.
+
+The legacy and normalized snapshots compare:
+
+- Primary;
+- secondary role/materiality/mode;
+- overall preview state;
+- overall score;
+- all dimension methodology/calculation states;
+- evidence counts;
+- overlay state;
+- Primary score;
+- overlay modifier;
+- final dimension score;
+- reason codes.
+
+The dedicated test requires deep equality so the new shared presentation cannot silently change TORNTPHARM investment semantics.
+
+### Persisted-data isolation regression
+
+A local-only read-only SQL regression now asserts:
+
+- TORNTPHARM remains Domestic Primary;
+- TORNTPHARM Global Generics remains Material Overlay;
+- TORNTPHARM CDMO remains Emerging;
+- AUROPHARMA remains Global Generics Primary;
+- AUROPHARMA API remains Emerging;
+- assignment identities remain distinct;
+- AUROPHARMA Global Generics is not duplicated as a secondary role;
+- AUROPHARMA API is not promoted to Material;
+- AUROPHARMA Biosimilars remains absent from active reviewed Primary/secondary authority.
+
+The SQL uses `BEGIN READ ONLY` and `ROLLBACK`.
+
+### Current UI composition
+
+The new normalized panel is mounted for canonical PHARMA_V1 securities.
+
+For this first G9.3 visual-normalization pass:
+
+- TORNTPHARM receives the new normalized shared architecture panel and retains its existing TORNTPHARM-specific/development deep-research workspace beneath it;
+- AUROPHARMA receives the new normalized shared architecture/methodology panel and no longer mounts the old TORNTPHARM-heavy deep-research monolith.
+
+This is intentionally not declared final until the owner compares complete screenshots from both companies.
+
+### Safety boundary
+
+No production mutation, assignment change, evidence write, score execution/persistence, recommendation activation/persistence, sizing activation/persistence, provider refresh, scheduler change, deployment or PR merge occurred.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+Per the owner-locked workflow, implementation and this handoff update occur before owner pull.
+
+G9.3 is **NOT COMPLETE**.
+
+Full local validation is intentionally deferred until after the two-stock visual comparison and any required vice-versa UI corrections.
+
+**CURRENT STOP POINT:** owner should pull the latest branch, use the already validated Local Supabase G9.2 canonical state, run Local Vite, and provide fresh full Pharma-related Overview screenshots for both TORNTPHARM and AUROPHARMA. Compare them for reciprocal omissions, duplicate shared sections and company-specific leakage. Make any final vice-versa corrections before full G9.3 validation. Do not close G9 and do not start another gate.
