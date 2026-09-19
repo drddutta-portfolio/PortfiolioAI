@@ -13653,3 +13653,77 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.28 cards in TORNTPHARM → Research → Gate G, then run focused G6.28 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether any context method is actually evidence-backed; if none is, defer numeric volatility scoring.
+
+
+---
+
+## 158. Entry 153 — Gate G6.28 Global Generics volatility context method approval gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.28 has completed validation as a **proposal-only Global Generics volatility context methodology approval gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsVolatilityContextMethodGate.test.ts` → **PASS**
+- focused ESLint for the G6.28 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.28 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_METHOD_GATE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated context rule
+
+Standalone absolute volatility scoring remains prohibited.
+
+Candidate methods remain:
+
+- `SAME_SUBPROFILE_PEER_RELATIVE`
+- `BENCHMARK_RELATIVE`
+- `SELF_HISTORY_WITH_EXTERNAL_CONTEXT`
+- `HYBRID_EXPLICITLY_VERSIONED`
+
+No candidate is approved by default.
+
+### Validated prerequisites
+
+- peer-relative requires a reviewed Global Generics Primary cohort;
+- benchmark-relative requires an explicitly approved Pharma benchmark;
+- self-history requires sufficient comparable history plus external context;
+- hybrid requires at least two independently eligible context methods plus explicit versioned weights.
+
+### Validated prohibited defaults
+
+- BANK_NBFC thresholds inherited: **NO**
+- standalone absolute-volatility scoring: **NO**
+- generic Pharma peer set without reviewed Primary: **NO**
+- silent benchmark selection: **NO**
+- hidden hybrid weighting: **NO**
+- missing evidence → neutral: **NO**
+
+### Safety boundary remains unchanged
+
+- approved volatility method: **NO**
+- numeric volatility curve ready: **NO**
+- whole Risk dimension ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.28 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Inspect current repository evidence for a reviewed Global Generics cohort, approved Pharma benchmark, and sufficient self-history plus external context. If no candidate is supportable, defer numeric volatility normalization explicitly.
