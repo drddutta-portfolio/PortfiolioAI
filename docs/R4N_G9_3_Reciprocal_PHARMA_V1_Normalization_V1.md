@@ -177,3 +177,49 @@ G9.3 normalization does not:
 12. record final G9.3/G9 checkpoint.
 
 **CURRENT STOP POINT:** two-stock localhost screenshot comparison. Do not run full G9.3 validation and do not close G9 until the vice-versa visual normalization review is complete.
+
+
+## Full-page canonical research-profile authority correction
+
+The complete-page visual comparison showed that canonical subprofile resolution alone was not enough: AUROPHARMA still inherited General Research presentation in several places because those surfaces used the downstream scoring snapshot profile.
+
+G9.3 therefore establishes a stronger permanent rule:
+
+> **Canonical reviewed research-profile authority drives research presentation; downstream scoring-profile authority drives numeric scoring only.**
+
+For a canonical PHARMA_V1 security whose numeric Pharma scoring is not yet computable:
+
+- Research profile = PHARMA_V1;
+- Overview snapshot groups = PHARMA_V1;
+- Pharma readiness = PHARMA_V1;
+- Research Refresh modules = PHARMA_V1;
+- Financials workspace = PHARMA_V1;
+- Quality & Growth workspace = PHARMA_V1;
+- Valuation exclusions/presentation = PHARMA_V1;
+- General/Bank-only research metrics must not be selected merely because the scoring hook falls back;
+- numeric score remains fail-closed;
+- General Research scoring/recommendation must not substitute for the unavailable Pharma numeric methodology.
+
+### Advisory fail-closed rule
+
+When canonical research authority is PHARMA_V1 but the downstream scoring profile is not PHARMA_V1:
+
+- no General recommendation preview is accepted;
+- no General recommendation preview is recorded;
+- no General suggested weight is emitted;
+- the Decision Workspace remains read-only and shows the canonical Pharma recommendation as pending until approved Pharma scoring/recommendation authority exists.
+
+This preserves the user's manual investment-plan controls while preventing cross-profile advisory leakage.
+
+### Permanent template boundary
+
+G9.3 is building one reusable **PHARMA_V1 sector/profile template**, not one universal template for every stock.
+
+PortfolioAI retains:
+
+- a common application shell;
+- profile/sector-specific research templates;
+- subprofile/business-model role configuration;
+- company-specific evidence and audit history.
+
+No validated TORNTPHARM or AUROPHARMA evidence/audit functionality is deleted by this normalization.
