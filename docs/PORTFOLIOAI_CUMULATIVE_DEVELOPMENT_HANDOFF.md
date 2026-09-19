@@ -18524,6 +18524,17 @@ The AUROPHARMA Research workspace now exposes a compact G8.1 review card even wh
 
 ### Validation state
 
-Repository implementation is prepared. G8.1 remains **OPEN / OWNER VALIDATION REQUIRED** until focused tests, ESLint, typecheck, build and localhost visual review pass.
+GitHub PR validation for implementation commit `43c400f5c4be47b6172eae77794d1e00b4b94d8f` completed successfully:
 
-**CURRENT STOP POINT:** Pull the G8.1 implementation, run the focused validation chain, open AUROPHARMA → Research, visually validate the G8.1 classification/evidence card, and stop. Do not enter G8.2 until explicit owner approval.
+- Architecture Guard: PASS;
+- canonical authority contract tests: PASS;
+- TypeScript: PASS;
+- architecture lint: PASS;
+- full repository lint diagnostic: PASS;
+- production build: PASS.
+
+The G8.1-specific focused Vitest file is not part of that existing PR workflow and therefore remains an owner-run local validation command together with localhost visual review.
+
+G8.1 remains **OPEN / OWNER VALIDATION REQUIRED** until the focused G8.1 test and localhost visual review pass.
+
+**CURRENT STOP POINT:** Pull the G8.1 implementation, run the focused G8.1 test plus the requested local lint/typecheck/build checks, open AUROPHARMA → Research, visually validate the G8.1 classification/evidence card, and stop. Do not enter G8.2 until explicit owner approval.
