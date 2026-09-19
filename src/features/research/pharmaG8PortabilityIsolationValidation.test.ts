@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs"
-import { fileURLToPath } from "node:url"
+import { resolve } from "node:path"
 import { describe, expect, it } from "vitest"
 import { PHARMA_G8_3_PORTABILITY_VALIDATION } from "./pharmaG8PortabilityIsolationValidation"
 import { PHARMA_G8_RESEARCH_GAP_REGISTER } from "./pharmaG8ResearchGapRegister"
@@ -44,7 +44,7 @@ describe("G8.3 portability, isolation and leakage validation", () => {
 
   it("statically guards the AUROPHARMA G8 preview against mutation APIs", () => {
     const source = readFileSync(
-      fileURLToPath(new URL("./auropharmaG8SameEnginePreview.ts", import.meta.url)),
+      resolve(process.cwd(), "src/features/research/auropharmaG8SameEnginePreview.ts"),
       "utf8",
     )
     for (const forbidden of [
@@ -62,7 +62,7 @@ describe("G8.3 portability, isolation and leakage validation", () => {
 
   it("statically verifies security-scoped research queries", () => {
     const source = readFileSync(
-      fileURLToPath(new URL("../../data/researchRepository.ts", import.meta.url)),
+      resolve(process.cwd(), "src/data/researchRepository.ts"),
       "utf8",
     )
     const securityScopedQueries = source.match(/\.eq\("security_id", securityId\)/gu) ?? []
