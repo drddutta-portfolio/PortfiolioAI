@@ -16811,3 +16811,115 @@ Preparing G6.45 does not start G7.
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.45 cards, run focused Vitest for `pharmaG6SubprofileCurveApplicability.test.ts` and `pharmaGlobalGenericsApplicabilityRegistryReconciliation.test.ts`, run focused ESLint for the G6.45 slice and `PharmaResearchWorkspacePanel.tsx`, then run `npm run typecheck` and `npm run build`. Do not start G7 until G6.45 is validated.
+
+
+---
+
+## 192. Entry 187 — Gate G6.45 Global Generics applicability registry reconciliation gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.45 has completed validation as a **proposal-only Global Generics applicability-registry reconciliation gate**.
+
+### Validation
+
+Owner reported the requested G6.45 validation as:
+
+**PASS**
+
+This closes the reconciliation checkpoint.
+
+### Validated registry contract
+
+`PHARMA_G6_SUBPROFILE_CURVE_APPLICABILITY_V2_PROPOSAL`
+
+The registry now truthfully distinguishes:
+
+- `VALIDATED_NOT_ACTIVE`
+- `VALIDATED_FAIL_CLOSED`
+- `SUBPROFILE_THRESHOLDS_REQUIRED`
+- `UNSUPPORTED_FAIL_CLOSED`
+
+### Validated Global Generics representation
+
+- `SEGMENT_GROWTH` → **VALIDATED_NOT_ACTIVE**
+- `OPERATING_MARGIN` → **VALIDATED_FAIL_CLOSED**
+- `ROCE_CAPITAL_EFFICIENCY` → **VALIDATED_FAIL_CLOSED**
+- `CASH_CONVERSION` → **VALIDATED_FAIL_CLOSED**
+- `BALANCE_SHEET_LEVERAGE` → **VALIDATED_FAIL_CLOSED**
+- `VALUATION` → **VALIDATED_FAIL_CLOSED**
+- `OWNERSHIP_GOVERNANCE` → **VALIDATED_FAIL_CLOSED**
+- `REGULATORY_MARKET_RISK` → **VALIDATED_FAIL_CLOSED**
+- `MOMENTUM` → **VALIDATED_FAIL_CLOSED**
+- `US_GENERIC_PRICE_EROSION` → **VALIDATED_NOT_ACTIVE**
+
+Every `VALIDATED_FAIL_CLOSED` entry remains non-numeric with `curveVersion = null`.
+
+### Cross-subprofile isolation validated
+
+The reconciliation changes only Global Generics semantics.
+
+The existing states for:
+
+- `DOMESTIC_FORMULATIONS`
+- `API_BULK_DRUGS`
+- `CDMO_CRAMS`
+- `BIOPHARMA_BIOSIMILARS`
+
+remain unchanged unless separately reviewed in later controlled-expansion work.
+
+### G6 closure decision
+
+Following the canonical plan review, G6.45 is the **final G6.x checkpoint for the current TORNTPHARM/reference implementation**.
+
+No G6.46 should be created merely to document another deferred calibration, representation cleanup, or architectural observation.
+
+For the current reference implementation:
+
+**G6 — Subprofile-Specific Curves = COMPLETE / VALIDATED FOR CURRENT REFERENCE SCOPE**
+
+This does **not** mean every Pharma subprofile has a complete active numeric methodology.
+
+Instead:
+
+- validated numeric curves remain proposal-only/not active;
+- unresolved calibration remains explicitly fail-closed;
+- unsupported/unreviewed subprofile families remain unresolved or unsupported;
+- no missing evidence becomes zero/neutral;
+- no hidden reweighting is allowed;
+- additional API/Bulk, CDMO/CRAMS and Biopharma/Biosimilars calibration belongs to later controlled expansion/reference-company work, not an endless G6.x chain.
+
+### Next canonical stage
+
+The next planned stage is:
+
+**G7 — Read-only Scoring Adapter**
+
+G7 must remain:
+
+- non-persisting;
+- fully explainable;
+- fail-closed;
+- unable to create recommendations or position sizing;
+- unable to write scoring results;
+- unable to activate unapproved curves.
+
+If G7 exposes a genuine implementation contradiction, that issue should be treated as a G7 blocker rather than automatically reopening G6 numbering.
+
+### Safety boundary remains unchanged
+
+- score persistence: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- scoring-rule migration: **NO**
+- schema/local/production DB mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.45 = **VALIDATED / NOT ACTIVE**.
+
+**G6 RESULT:** **CLOSED FOR CURRENT TORNTPHARM / REFERENCE IMPLEMENTATION**.
+
+**CURRENT STOP POINT:** Prepare G7 — Read-only Scoring Adapter from the validated G6 contracts. Do not create G6.46 unless an actual correctness defect is discovered in the validated G6.45 reconciliation.
