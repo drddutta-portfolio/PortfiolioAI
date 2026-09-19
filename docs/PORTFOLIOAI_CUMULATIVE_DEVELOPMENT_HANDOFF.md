@@ -18293,3 +18293,73 @@ This allows the owner to identify the same local login email shown in the browse
 - score/recommendation/position-sizing mutation: **NO**.
 
 **CURRENT STOP POINT:** Owner should pull the user-aware fixture, run the runner once without `PORTFOLIOAI_LOCAL_USER_EMAIL` to print candidate local users/portfolios, identify the browser login email, then rerun with that email explicitly. Hard-refresh localhost and confirm 3 holdings.
+
+
+---
+
+## 208. Entry 203 — AUROPHARMA fixture aligned to validated Gate E local-auth pattern
+
+**Date:** 19 September 2026  
+**Actor:** owner localhost validation + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The user-aware AUROPHARMA fixture attempt failed before mutation with:
+
+```text
+ERROR: syntax error at or near ":"
+WHERE lower(email) = lower(:'local_user_email')
+```
+
+### Cause
+
+The psql variable token was placed inside a dollar-quoted PL/pgSQL `DO` block.
+
+psql does not interpolate that token inside the function body, so PostgreSQL received the literal colon and rejected the statement during parsing.
+
+Because execution stopped inside the open transaction before COMMIT, this failed attempt produced no committed mutation.
+
+### Older HANDOFF precedent reviewed
+
+The earlier validated local fixture history was re-read.
+
+Entry 002 records that the original localhost fixture initially had an Auth ownership/RLS mismatch and was corrected by associating the disposable local fixture portfolio with the authenticated local user.
+
+Entry 010 / Gate E local persistence uses the proven pattern in:
+
+`scripts/r4n_local_torntpharm_reviewed_assignment.sql`
+
+That script:
+
+- explicitly expects local auth user `dr.d.dutta@gmail.com`;
+- counts that auth user separately;
+- resolves its UUID with a separate SELECT;
+- verifies that user's portfolio ownership;
+- avoids psql-variable interpolation inside a `DO` block;
+- is intentionally local-only.
+
+### AUROPHARMA correction
+
+The AUROPHARMA fixture now reuses the same validated pattern:
+
+- hard-coded local-only reviewed auth email: `dr.d.dutta@gmail.com`;
+- require exactly one matching `auth.users` row;
+- resolve that UUID separately;
+- choose that user's earliest active portfolio;
+- require the visible precondition HDFCBANK + TORNTPHARM only;
+- remove only misplaced synthetic `LOCAL_G8_FIXTURE:AUROPHARMA` transactions from other portfolios;
+- insert the synthetic AUROPHARMA opening-position link into the correct user-owned portfolio;
+- verify HDFCBANK/TORNTPHARM quantities remain unchanged;
+- verify the correct portfolio ends with exactly three positive holdings.
+
+The runner no longer requires `PORTFOLIOAI_LOCAL_USER_EMAIL`.
+
+### Safety
+
+- local Supabase only;
+- production mutation: **NO**;
+- research evidence writes: **0**;
+- score/recommendation/sizing writes: **0**;
+- real transaction deletion: **NO**;
+- failed syntax attempt committed writes: **0**.
+
+**CURRENT STOP POINT:** Owner should pull the Gate-E-pattern correction, run the fixture contract test, then run `bash scripts/r4n/run-auropharma-local-research-target.sh`. After PASS, hard-refresh localhost Holdings and Research Coverage. Expected visible state: HDFCBANK + TORNTPHARM + AUROPHARMA.
