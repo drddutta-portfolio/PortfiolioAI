@@ -1314,3 +1314,14 @@
     display: grid;
   }
 }
+
+
+.pharma-methodology-not-engaged {
+  border-style: dashed !important;
+  background: #faf8f2 !important;
+}
+
+.pharma-methodology-not-engaged span {
+  color: #7a5c1f !important;
+  letter-spacing: .04em;
+}
