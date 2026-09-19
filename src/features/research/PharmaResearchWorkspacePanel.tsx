@@ -41,6 +41,7 @@ import { PHARMA_DOMESTIC_PEER_COMBINATION } from "./pharmaDomesticPeerCombinatio
 import { PHARMA_DOMESTIC_PEER_WEIGHTING_GATE } from "./pharmaDomesticPeerWeightingGate"
 import { PHARMA_DOMESTIC_PEER_COMBINED_SCORE } from "./pharmaDomesticPeerCombinedScoreContract"
 import { PHARMA_DOMESTIC_VALUATION_WEIGHTING_GATE } from "./pharmaDomesticValuationWeightingGate"
+import { PHARMA_DOMESTIC_VALUATION_COMBINED_SCORE } from "./pharmaDomesticValuationCombinedScoreContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -563,6 +564,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Missing evidence must not silently rewrite the Valuation methodology</small>
               <p>Equal thirds are not assumed, and missing-component renormalization is prohibited. A candidate such as 40/40/20 may be structurally valid, but it remains unapproved until an explicit methodology decision is made.</p>
               <span>Equal-thirds default: NO · Missing-component renormalization: NO · Whole dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.17 · Domestic Valuation combined score — 40/40/20 approved</strong>
+              <small>{PHARMA_DOMESTIC_VALUATION_COMBINED_SCORE.contractVersion}</small>
+              <p>The owner-approved Domestic Formulations Valuation methodology weights self-history at 40%, peer-relative at 40%, and FCF-yield corroboration at 20%. All three components are mandatory; missing input fails closed with no renormalization.</p>
+              <span>Self-history: 40% · Peer-relative: 40% · FCF corroboration: 20% · Active scoring: NO</span>
+            </article>
+            <article>
+              <strong>G6.17 · Valuation revisit & upstream dependency</strong>
+              <small>Peer-relative 40% inherits the G6.15 PE/EV-EBITDA 50/50 contract</small>
+              <p>Revisit 40/40/20 if the three components persistently disagree, FCF becomes structurally distorted by capex/M&amp;A cycles, or peer comparability materially becomes weaker or stronger. No automatic disagreement threshold is approved yet.</p>
+              <span>G6.15 inheritance: YES · Three revisit triggers: YES · Hidden reweighting: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
