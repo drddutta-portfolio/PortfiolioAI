@@ -39,6 +39,7 @@ import { PHARMA_DOMESTIC_PEER_COMPARABILITY } from "./pharmaDomesticPeerComparab
 import { PHARMA_DOMESTIC_PEER_PREMIUM_DISCOUNT } from "./pharmaDomesticPeerPremiumDiscountProposal"
 import { PHARMA_DOMESTIC_PEER_COMBINATION } from "./pharmaDomesticPeerCombinationContract"
 import { PHARMA_DOMESTIC_PEER_WEIGHTING_GATE } from "./pharmaDomesticPeerWeightingGate"
+import { PHARMA_DOMESTIC_PEER_COMBINED_SCORE } from "./pharmaDomesticPeerCombinedScoreContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -533,6 +534,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Equal weighting is a methodology decision, not a default</small>
               <p>A candidate pair such as 50/50 may be structurally valid because the weights sum to one, but it remains unapproved. Hidden defaults, single-metric fallback and unversioned weighting are prohibited.</p>
               <span>Equal-weight default: NO · Hidden default: NO · Combined peer score: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.15 · Peer combined score — 50/50 approved</strong>
+              <small>{PHARMA_DOMESTIC_PEER_COMBINED_SCORE.contractVersion}</small>
+              <p>The owner-approved starting methodology combines normalized PE_TTM and EV_EBITDA peer-relative scores at 50% each. Both inputs remain mandatory; missing or invalid input fails closed and no single-metric fallback is allowed.</p>
+              <span>PE: 50% · EV/EBITDA: 50% · Hidden reweighting: NO · Active scoring: NO</span>
+            </article>
+            <article>
+              <strong>G6.15 · Mandatory weighting revisit triggers</strong>
+              <small>50/50 is approved as a starting methodology, not a silent permanent default</small>
+              <p>Revisit the weighting if backtesting later shows material PE-vs-EV/EBITDA score divergence, or if meaningfully different peer leverage enters the Domestic cohort, such as an M&amp;A-funded entrant or materially different net-debt profile.</p>
+              <span>Backtest divergence: REVIEW · Leverage heterogeneity: REVIEW · Numeric divergence threshold: NOT APPROVED</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
