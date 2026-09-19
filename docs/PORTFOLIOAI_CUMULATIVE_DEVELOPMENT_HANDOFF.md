@@ -16015,3 +16015,103 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.41 cards in TORNTPHARM → Research → Gate G, then run focused G6.41 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, close the Global Generics Ownership / Governance slice as explicitly incomplete/fail-closed and move to the next unresolved Global Generics family.
+
+
+---
+
+## 184. Entry 179 — Gate G6.41 Global Generics ownership governance calibration and parent alignment deferral gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.41 has completed validation as a **proposal-only Global Generics Ownership / Governance calibration evidence-sufficiency / parent-alignment deferral gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsOwnershipGovernanceCalibrationEvidence.test.ts` → **PASS**
+- focused ESLint for the G6.41 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.41 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_CALIBRATION_EVIDENCE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated calibration conclusion
+
+Global Generics-specific Ownership / Governance calibration remains unsupported by current repository evidence:
+
+- calibration set: **NOT ESTABLISHED**
+- reviewed same-primary ownership cohort: **NOT ESTABLISHED**
+- ownership-band evidence: **NOT ESTABLISHED**
+- pledge/control-risk band evidence: **NOT ESTABLISHED**
+- governance-event-context band evidence: **NOT ESTABLISHED**
+- component-weight evidence: **NOT ESTABLISHED**
+- final aggregation: **NOT ESTABLISHED**
+
+Therefore:
+
+- Global-specific Ownership / Governance calibration: **NO**
+- numeric Ownership / Governance curve: **NO**
+- deferral required: **YES**
+
+### Validated parent alignment blocker
+
+Current parent metric dimension:
+
+`GOVERNANCE`
+
+Canonical methodology dimension:
+
+`OWNERSHIP_GOVERNANCE`
+
+The parent-contract mismatch remains explicit and unresolved.
+
+A separate versioned parent reconciliation is still required.
+
+### Validated G4 anti-double-counting lock
+
+- second hidden penalty for G4 critical/blocked events: **NO**
+- second hidden penalty for G4 high-risk events: **NO**
+- extra hidden gate cap inside Ownership / Governance: **NO**
+- event context may remain visible: **YES**
+
+### Mechanical shortcuts remain prohibited
+
+- promoter percentage mechanical scoring: **NO**
+- institutional ownership mechanical bonus: **NO**
+- zero pledge automatically best: **NO**
+
+### Global Generics Ownership / Governance slice status
+
+- parent methodology shape: **VALIDATED**
+- Global-specific numeric calibration: **DEFERRED / FAIL-CLOSED**
+- parent dimension alignment: **UNRESOLVED**
+- G4 anti-double-counting lock: **PRESERVED**
+- numeric Ownership / Governance score: **NOT READY**
+
+### Safety boundary remains unchanged
+
+- parent profile mutation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.41 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Inspect the remaining Global Generics families against already completed G6 work. Do not duplicate the G6.24–G6.29 Regulatory / Market Risk methodology if it is already explicitly closed fail-closed; move to the next genuinely unresolved family.
