@@ -155,7 +155,7 @@ export async function loadPharmaSubprofileResolution(
       .in("assignment_id", assignmentIds)
       .order("subprofile_code", { ascending: true })
     if (secondariesResult.error) throw secondariesResult.error
-    secondaryRows = (secondariesResult.data ?? []) as SecondaryRow[]
+    secondaryRows = secondariesResult.data ?? []
   }
 
   return resolvePharmaSubprofileAssignment(
