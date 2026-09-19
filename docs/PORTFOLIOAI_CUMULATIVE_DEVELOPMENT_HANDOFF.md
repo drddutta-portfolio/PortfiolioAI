@@ -12233,3 +12233,101 @@ The cards explicitly state:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.22 cards in TORNTPHARM → Research → Gate G, then run focused G6.22 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, the owner must explicitly approve or modify the G6.22 methodology before any executable G6.23 combined pipeline score contract can be implemented.
+
+
+---
+
+## 144. Entry 139 — Gate G6.22 Global Generics pipeline aggregation method proposal validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.22 has completed validation as a **proposal-only Global Generics pipeline aggregation methodology proposal**.
+
+### Visual validation
+
+Owner supplied a TORNTPHARM → Research → Gate G screenshot.
+
+Visually confirmed:
+
+- **G6.22 · Pipeline aggregation method proposal** renders correctly;
+- **G6.22 · Adverse-state review rule** renders correctly;
+- latest state per identity: **YES**;
+- non-adverse statistic: **MEDIAN**;
+- owner approval: **PENDING**;
+- adverse latest state: **REVIEW REQUIRED**;
+- recency weight: **NO**;
+- executable combiner: **NO**.
+
+No unexpected foreground Research redesign was introduced.
+
+### Owner-completed local validation
+
+Owner confirmed completion of the requested G6.22 validation sequence:
+
+- focused Vitest for `pharmaGlobalGenericsPipelineAggregationMethodProposal.test.ts`;
+- focused ESLint for the G6.22 methodology slice and `PharmaResearchWorkspacePanel.tsx`;
+- `npm run typecheck`;
+- `npm run build`.
+
+Checkpoint status recorded as:
+
+**PASS / VALIDATED**
+
+### Validated proposed methodology
+
+Contract:
+
+`PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_METHOD_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE / OWNER APPROVAL STILL REQUIRED**
+
+Validated proposal:
+
+1. pipeline identity = **product or molecule + geography**;
+2. retain all historical lifecycle stages for audit;
+3. only the **latest reviewed material state** per identity is eligible for aggregation;
+4. same-date contradictory latest states require **REVIEW_REQUIRED**;
+5. any latest state of:
+   - `DELAYED_OR_BLOCKED`
+   - `WITHDRAWN_OR_DISCONTINUED`
+   blocks numeric aggregation and returns **REVIEW_REQUIRED**;
+6. if all latest states are non-adverse, proposed cross-identity statistic = **MEDIAN**;
+7. no age-based recency weighting;
+8. materiality remains eligibility-only;
+9. economic relevance remains eligibility-only;
+10. no event-count bonus;
+11. no materiality/economic-relevance multiplier;
+12. no unrelated positive-event offset against an adverse latest state.
+
+### Why no executable combiner yet
+
+G6.22 validates the proposal contract only.
+
+Owner methodology approval has not yet been recorded.
+
+Therefore:
+
+- executable combined-score function: **NO**
+- combined pipeline score ready: **NO**
+- activation: **NO**
+- score execution: **NO**
+
+### Safety boundary remains unchanged
+
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.22 proposal = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** An explicit owner methodology decision is now required. The owner must approve or modify the five proposed choices — pipeline identity, adverse-event treatment, non-adverse median aggregation, recency treatment, and eligibility-only treatment of materiality/economic relevance — before G6.23 may implement an executable combined pipeline score contract.
