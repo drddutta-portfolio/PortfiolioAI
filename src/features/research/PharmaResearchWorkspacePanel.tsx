@@ -42,6 +42,7 @@ import { PHARMA_DOMESTIC_PEER_WEIGHTING_GATE } from "./pharmaDomesticPeerWeighti
 import { PHARMA_DOMESTIC_PEER_COMBINED_SCORE } from "./pharmaDomesticPeerCombinedScoreContract"
 import { PHARMA_DOMESTIC_VALUATION_WEIGHTING_GATE } from "./pharmaDomesticValuationWeightingGate"
 import { PHARMA_DOMESTIC_VALUATION_COMBINED_SCORE } from "./pharmaDomesticValuationCombinedScoreContract"
+import { PHARMA_GLOBAL_GENERIC_PRICE_EROSION_CURVE } from "./pharmaGlobalGenericPriceErosionCurveProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -578,6 +579,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Peer-relative 40% inherits the G6.15 PE/EV-EBITDA 50/50 contract</small>
               <p>Revisit 40/40/20 if the three components persistently disagree, FCF becomes structurally distorted by capex/M&amp;A cycles, or peer comparability materially becomes weaker or stronger. No automatic disagreement threshold is approved yet.</p>
               <span>G6.15 inheritance: YES · Three revisit triggers: YES · Hidden reweighting: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.18 · Global Generics US price-erosion curve</strong>
+              <small>{PHARMA_GLOBAL_GENERIC_PRICE_EROSION_CURVE.proposalVersion}</small>
+              <p>Global Generics now has a proposal-only price-pressure curve for disclosed US generic ASP/price erosion. Level carries 70% and trend 30%; lower erosion is better and residual inference from revenue/volume is prohibited.</p>
+              <span>Level: 70% · Trend: 30% · Minimum history: 4 quarters · Activation: NO</span>
+            </article>
+            <article>
+              <strong>G6.18 · Global-only evidence boundary</strong>
+              <small>Mandatory Global Generics Growth evidence · no Domestic threshold reuse</small>
+              <p>Price erosion remains separate from Export/US Revenue Growth. Strong growth cannot erase severe pricing pressure, and improved pricing cannot substitute for missing growth evidence.</p>
+              <span>Disclosed ASP/price evidence: REQUIRED · Residual derivation: NO · Cross-subprofile reuse: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
