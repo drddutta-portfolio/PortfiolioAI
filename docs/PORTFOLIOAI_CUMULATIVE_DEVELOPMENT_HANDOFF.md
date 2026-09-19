@@ -11934,3 +11934,112 @@ G4 remains authoritative for governance/regulatory gating, and the same regulato
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the new G6.21 cards in TORNTPHARM → Research → Gate G, then run focused G6.21 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. Only after validation should any explicit numeric aggregation methodology be proposed or approved.
+
+
+---
+
+## 142. Entry 137 — Gate G6.21 Global Generics multi-event pipeline aggregation approval gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.21 has completed validation as a **proposal-only Global Generics multi-event pipeline aggregation approval gate**.
+
+### Automated validation
+
+Owner-confirmed results:
+
+- focused Vitest:
+  - `src/features/research/pharmaGlobalGenericsPipelineAggregationGate.test.ts`
+  - **PASS — 4/4 tests**
+- focused ESLint covering:
+  - `src/features/research/pharmaGlobalGenericsPipelineAggregationGate.ts`
+  - `src/features/research/pharmaGlobalGenericsPipelineAggregationGate.test.ts`
+  - `src/features/research/PharmaResearchWorkspacePanel.tsx`
+  - **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- production Vite build completed successfully;
+- only the existing non-blocking >500 kB chunk-size warning remained.
+
+### Visual validation
+
+Owner supplied a TORNTPHARM → Research → Gate G screenshot.
+
+Visually confirmed:
+
+- **G6.21 · Multi-event pipeline aggregation approval gate** renders correctly;
+- **G6.21 · Adverse visibility & offset boundary** renders correctly;
+- approved aggregation method is visibly **NONE**;
+- combined pipeline score is visibly **NO**;
+- activation is visibly **NO**;
+- adverse visibility is visibly **REQUIRED**;
+- hidden offset is visibly **NO**;
+- methodology approval is visibly **REQUIRED**.
+
+No unexpected foreground Research redesign was introduced.
+
+### G6.21 validated methodology boundary
+
+Contract:
+
+`PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_GATE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+Validated rules:
+
+- all included events must be individually eligible: **YES**
+- all included events must normalize under G6.20: **YES**
+- adverse events remain visible: **YES**
+- event-count bonus: **NO**
+- simple average: **NOT APPROVED**
+- median: **NOT APPROVED**
+- recency weighting: **NOT APPROVED**
+- materiality weighting: **NOT APPROVED**
+- economic-relevance numeric multiplier: **NOT APPROVED**
+- unrelated positive event silently offsets adverse event: **NO**
+- combined pipeline score ready: **NO**
+
+### Validated readiness behavior
+
+Possible non-scoring states remain:
+
+- `INSUFFICIENT_EVIDENCE`
+- `REVIEW_REQUIRED`
+- `AWAITING_METHODOLOGY_APPROVAL`
+
+Even when every event is individually eligible and normalized:
+
+`combinedScore = null`
+
+No aggregation method is executed.
+
+### G4 anti-double-counting boundary preserved
+
+G6.21 does not add a regulatory-site numeric penalty.
+
+G4 remains authoritative for governance/regulatory gating, and pipeline aggregation cannot duplicate the same regulatory event as a hidden numeric penalty.
+
+### Safety boundary remains unchanged
+
+- numeric aggregation method approved: **NO**
+- combined pipeline score: **NO**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.21 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** The next Global Generics methodology step is an explicit aggregation-method approval decision. No numeric combined pipeline score may be implemented until the owner explicitly approves the aggregation method, adverse-event treatment, recency policy, event-offset policy, and any numeric role for economic relevance.
