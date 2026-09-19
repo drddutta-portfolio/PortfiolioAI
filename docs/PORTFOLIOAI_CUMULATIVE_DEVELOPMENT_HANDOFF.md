@@ -19746,3 +19746,99 @@ G9.3 is **NOT COMPLETE**.
 Full local validation is intentionally deferred until after the two-stock visual comparison and any required vice-versa UI corrections.
 
 **CURRENT STOP POINT:** owner should pull the latest branch, use the already validated Local Supabase G9.2 canonical state, run Local Vite, and provide fresh full Pharma-related Overview screenshots for both TORNTPHARM and AUROPHARMA. Compare them for reciprocal omissions, duplicate shared sections and company-specific leakage. Make any final vice-versa corrections before full G9.3 validation. Do not close G9 and do not start another gate.
+
+
+---
+
+## 224. Entry 219 — G9.3 visual comparison exposed AUROPHARMA reachability defect; canonical-assignment routing corrected
+
+**Date:** 20 September 2026  
+**Actor:** owner visual comparison + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner provided fresh localhost screenshots for both reference Pharma companies during the mandatory G9.3 two-stock visual-normalization review.
+
+### Visual finding
+
+TORNTPHARM displayed the new G9.3 normalized PHARMA_V1 architecture correctly.
+
+AUROPHARMA did not display the new normalized G9.3 panel even though G9.2 had already validated and persisted the canonical local reviewed assignment.
+
+The AUROPHARMA header still showed:
+
+- scoring profile: General Research / General fallback;
+- canonical sector/industry: awaiting classification.
+
+The old AUROPHARMA G8 audit cards remained visible, but the new shared G9.3 architecture was absent.
+
+### Root cause
+
+`ResearchPage.tsx` mounted the normalized Pharma panel behind:
+
+`scoring.data?.profileCode === "PHARMA_V1"`
+
+This coupled permanent Pharma research UI reachability to the legacy scoring-profile identity.
+
+That dependency is incorrect after G9.2 because:
+
+- canonical Pharma research authority is supplied by `research_subprofile_assignments`;
+- numeric scoring-profile activation is a separate downstream authority and remains fail-closed for AUROPHARMA;
+- a valid canonical Pharma research assignment must therefore be sufficient to render the shared Pharma research architecture.
+
+TORNTPHARM happened to satisfy both authorities, so the defect was hidden there.
+
+### Correction
+
+`ResearchPage.tsx` now loads canonical Pharma subprofile resolution at page level and passes a `pharmaResolved` state through the Research header / tab composition.
+
+The G9.3 normalized panel now mounts when:
+
+`pharmaResolution.data?.status === "RESOLVED"`
+
+rather than requiring the scoring snapshot profile to already equal `PHARMA_V1`.
+
+The header now keeps the two authorities visibly separate:
+
+- **Scoring profile:** may still show General fallback until scoring activation is genuinely approved;
+- **Research profile:** Pharmaceuticals · PHARMA_V1 · Canonical assignment, when a reviewed canonical Pharma assignment resolves.
+
+`PharmaSubprofileSummary` is also enabled from canonical Pharma resolution, so AUROPHARMA can show its reviewed Global Generics Primary / API Emerging architecture without falsely claiming numeric Pharma scoring is active.
+
+### Regression guard
+
+Added:
+
+`src/pages/ResearchPage.g93CanonicalPharmaReachability.test.ts`
+
+It asserts that:
+
+- G9.3 normalized Pharma UI is driven by canonical subprofile resolution;
+- the old scoring-profile gate is not required for normalized panel reachability;
+- scoring identity and canonical research identity remain visibly distinct.
+
+### Safety / semantic boundary
+
+This correction changes presentation/routing only.
+
+It does not:
+
+- change AUROPHARMA's scoring profile;
+- activate numeric scoring;
+- persist a score;
+- activate recommendations;
+- activate position sizing;
+- mutate assignments;
+- write evidence;
+- touch production;
+- deploy;
+- merge PR #101.
+
+### Workflow state
+
+G9.3 remains **OPEN**.
+
+The initial two-stock visual review is **not yet approved** because AUROPHARMA failed to render the normalized architecture before this correction.
+
+The owner should pull the correction and repeat the AUROPHARMA/TORNTPHARM visual comparison before any full G9.3 validation.
+
+**CURRENT STOP POINT:** owner pull + hard refresh both reference Pharma Overview pages + fresh screenshots. Confirm AUROPHARMA now shows the shared G9.3 architecture and canonical Pharma research identity while scoring remains separately fail-closed. Do not run full G9.3 validation yet.
