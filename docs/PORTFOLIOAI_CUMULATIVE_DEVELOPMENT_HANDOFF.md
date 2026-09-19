@@ -12531,3 +12531,77 @@ The UI explicitly shows:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.23 cards in TORNTPHARM → Research → Gate G, then run focused G6.23 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. Only after validation should G6.23 be marked VALIDATED / NOT ACTIVE.
+
+
+---
+
+## 147. Entry 142 — Gate G6.23 validation interrupted by strict TypeScript indexing; corrective hardening prepared
+
+**Date:** 19 September 2026  
+**Actor:** owner-run validation + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner started G6.23 local validation.
+
+### Validation interruption
+
+`npm run build` / TypeScript compilation failed under strict indexed-access checking.
+
+Observed errors were limited to the newly added G6.23 combined pipeline contract and its focused test:
+
+- median helper indexed array elements without proving they existed;
+- latest sorted event accessed `sorted[sorted.length - 1]` without an explicit non-empty guard;
+- latest same-date event accessed `latestEntries[0]` without proving presence;
+- final combined score could be inferred as `number | undefined`;
+- focused test accessed `latestIdentityStates[0]` directly.
+
+### Interpretation
+
+This was a compile-time safety failure, not a methodology failure.
+
+The approved G6.22/G6.23 aggregation logic remains unchanged.
+
+No score execution, DB mutation, persistence or production action occurred.
+
+### Correction
+
+Updated:
+
+- `src/features/research/pharmaGlobalGenericsPipelineCombinedScoreContract.ts`
+- `src/features/research/pharmaGlobalGenericsPipelineCombinedScoreContract.test.ts`
+
+Corrective behavior:
+
+- median now returns `number | null` and explicitly guards empty input;
+- upper/lower median elements are checked before use;
+- latest sorted event uses an explicit `.at(-1)` presence guard;
+- latest same-date event is explicitly checked before dereference;
+- impossible/empty internal states fail closed rather than relying on array-shape assumptions;
+- final combined score is proved non-null before READY is returned;
+- test assertion now uses `.find(...)` plus optional chaining instead of unsafe index access.
+
+### Methodology unchanged
+
+Still exactly:
+
+- pipeline identity = product/molecule + geography;
+- latest reviewed state per identity only;
+- same-date contradictory latest stages → `REVIEW_REQUIRED`;
+- any latest adverse identity → `REVIEW_REQUIRED`;
+- all non-adverse latest states → MEDIAN;
+- no age weighting;
+- no event-count bonus;
+- no materiality/economic-relevance multiplier;
+- no unrelated positive offset against an adverse identity.
+
+### Scope boundary
+
+- methodology changed: **NO**
+- score activation: **NO**
+- persisted score run: **NO**
+- DB/schema mutation: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, rerun focused G6.23 Vitest and ESLint, then `npm run typecheck` and `npm run build`. No UI re-review is required for this correction because only strict type-safety handling and the focused test assertion changed.
