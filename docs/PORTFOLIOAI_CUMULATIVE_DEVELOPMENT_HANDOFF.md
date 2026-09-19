@@ -19966,3 +19966,128 @@ G9.3 remains **OPEN**.
 Full local validation is still intentionally deferred until owner visual approval of this final normalized presentation.
 
 **CURRENT STOP POINT:** owner should pull the current branch and repeat the two-stock Overview visual comparison. Expected permanent layout: one shared normalized PHARMA_V1 layer on both stocks, followed by collapsed company-specific audit/history. If visually approved, proceed to full G9.3 validation; otherwise correct remaining presentation asymmetry before validation.
+
+
+---
+
+## 226. Entry 221 — G9.3 full-page Pharma template normalization implemented; canonical research authority separated from scoring authority
+
+**Date:** 20 September 2026  
+**Actor:** owner full-page visual review + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner supplied complete Overview-page screenshots for both TORNTPHARM and AUROPHARMA during the mandatory G9.3 vice-versa visual review.
+
+### Full-page finding
+
+The shared G9.3 normalized architecture was correct, but AUROPHARMA still inherited multiple `GENERAL` presentation surfaces because those surfaces were driven by the downstream scoring snapshot rather than the already-reviewed canonical Pharma assignment.
+
+Observed AUROPHARMA leakage included:
+
+- Research at a glance = General Research;
+- generic snapshot groups containing bank/general metrics such as NPA, Advances Growth and Deposits Growth;
+- General Research investment scorecard/heatmap presentation;
+- General refresh framing rather than PHARMA_V1 modules;
+- detailed research workspaces selecting presentation from the downstream scoring profile;
+- Decision Workspace still able to look up a General recommendation policy while canonical Pharma research was already active.
+
+This contradicted the G9 activation principle that research authority and numeric scoring authority are independent.
+
+### Permanent authority rule
+
+G9.3 now locks:
+
+> **Canonical reviewed research-profile authority drives research presentation. Downstream scoring-profile authority drives numeric scoring only.**
+
+For a security with a reviewed canonical PHARMA_V1 assignment:
+
+- research presentation profile = PHARMA_V1;
+- research snapshot groups = PHARMA_V1;
+- profile readiness = PHARMA_V1;
+- refresh modules = PHARMA_V1;
+- Financials presentation = PHARMA_V1;
+- Quality & Growth presentation = PHARMA_V1;
+- Valuation presentation/exclusions = PHARMA_V1;
+- shared Pharma architecture/methodology = PHARMA_V1.
+
+Numeric scoring remains independently governed by the scoring engine and may remain unavailable.
+
+### Implementation
+
+Updated:
+
+- `src/features/research/researchProfileUiContract.ts`
+  - added `resolveResearchPresentationProfileCode(...)`;
+  - canonical research profile takes presentation precedence over a downstream scoring fallback only.
+- `src/features/research/ResearchEvidenceWorkspace.tsx`
+  - Financials, Quality & Growth and Valuation accept an explicit presentation-profile override.
+- `src/pages/ResearchPage.tsx`
+  - computes `presentationProfileCode` from canonical Pharma authority;
+  - routes Research Refresh, Overview, readiness and detailed research workspaces through that presentation authority;
+  - keeps the scoring profile label separate;
+  - replaces the misleading General scoring cockpit with a fail-closed Pharma scoring-boundary panel when canonical Pharma research is active but numeric Pharma scoring is unavailable.
+- `src/features/research/CanonicalPharmaScoringBoundaryPanel.tsx`
+  - explicitly states PHARMA_V1 research is active while numeric score is not currently computable;
+  - forbids General fallback scoring as a substitute.
+- `src/features/research/PositionDecisionControls.tsx`
+  - accepts canonical research-profile authority;
+  - blocks a downstream recommendation when the scoring profile does not match the canonical research profile;
+  - prevents General fallback recommendation/weight output from substituting for unavailable Pharma scoring.
+- `src/features/research/researchProfileUiContract.test.ts`
+- `src/pages/ResearchPage.g93CanonicalPharmaReachability.test.ts`
+- `src/features/research/PositionDecisionControls.test.tsx`
+
+Updated G9.3 contract:
+
+- `docs/R4N_G9_3_Reciprocal_PHARMA_V1_Normalization_V1.md`
+
+### Expected AUROPHARMA result after pull
+
+AUROPHARMA may still correctly show in the header:
+
+- downstream Scoring profile: General Research / fallback;
+- Research profile: Pharmaceuticals / PHARMA_V1 / Canonical assignment.
+
+But the permanent research product below must now be Pharma-specific:
+
+- Pharma Research Refresh modules;
+- Research at a glance = Pharmaceuticals;
+- no NPA / Advances / Deposits groups from General/Bank presentation;
+- PHARMA_V1 Research Readiness;
+- Pharma-specific Quality/Capital Efficiency, Growth, Financial Strength, Business Durability, Valuation and Ownership groups;
+- canonical shared G9.3 architecture;
+- numeric scoring boundary = NOT CURRENTLY COMPUTABLE / no General fallback score;
+- recommendation and suggested weight remain unavailable until Pharma scoring/recommendation authority exists;
+- Financials / Quality & Growth / Valuation tabs use the Pharma presentation contract.
+
+### Template architecture clarification
+
+No validated content from either reference company is deleted.
+
+G9.3 is building one reusable **PHARMA_V1 template for all Pharma stocks**, inside the common PortfolioAI Research shell.
+
+It is not building one universal sector-agnostic template for every stock.
+
+The architecture remains:
+
+```text
+PortfolioAI common Research shell
+    -> sector/profile template (PHARMA_V1, BANK_NBFC, future profiles...)
+    -> reviewed Primary/secondary business-model roles
+    -> company-scoped evidence
+    -> company-specific audit/development history
+```
+
+### Safety state
+
+No assignment write, evidence write, score execution/persistence, recommendation persistence, sizing activation/persistence, provider refresh, scheduler change, deployment or PR merge occurred in this correction.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+G9.3 remains **OPEN**.
+
+Full local validation is intentionally deferred.
+
+**CURRENT STOP POINT:** owner should pull the latest branch, run the existing Local Supabase + Local Vite environment, and provide fresh full-page screenshots for both TORNTPHARM and AUROPHARMA. Visual review must confirm that both now use the same PHARMA_V1 permanent template grammar while retaining different business-model roles and company-specific audit history. Only after visual approval should full G9.3 validation run.
