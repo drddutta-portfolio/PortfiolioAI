@@ -18141,3 +18141,85 @@ Therefore:
 - production mutation: **NO**
 
 **CURRENT STOP POINT:** Owner should pull the selector correction, rerun the fixture contract test, then rerun the local fixture script. If successful, refresh Research Coverage and confirm exactly three holdings with AUROPHARMA initially Missing across research evidence domains.
+
+
+---
+
+## 206. Entry 201 — AUROPHARMA fixture corrected to exact application portfolio
+
+**Date:** 19 September 2026  
+**Actor:** owner localhost validation + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The second local fixture execution completed successfully and printed:
+
+- AUROPHARMA
+- HDFCBANK
+- TORNTPHARM
+
+from the fixture-selected portfolio.
+
+However, the localhost Holdings page still displayed only:
+
+- HDFCBANK
+- TORNTPHARM
+
+with 2 open holdings.
+
+### Root cause
+
+The fixture selector still did not exactly match the application's portfolio-selection rule.
+
+The application loads:
+
+- active portfolios only;
+- ordered by `created_at`;
+- `LIMIT 1`.
+
+The fixture instead selected the earliest active portfolio matching a HDFCBANK + TORNTPHARM shape.
+
+In a local database containing duplicate/legacy portfolio contexts, these may be different portfolios.
+
+### Correction
+
+The fixture now targets exactly the same portfolio as the application:
+
+```text
+WHERE is_active
+ORDER BY created_at, id
+LIMIT 1
+```
+
+Before mutation it asserts that this exact app portfolio has:
+
+- exactly 2 positive current holdings;
+- those holdings are HDFCBANK and TORNTPHARM.
+
+After mutation it asserts:
+
+- exactly 3 positive current holdings;
+- HDFCBANK quantity unchanged;
+- TORNTPHARM quantity unchanged;
+- AUROPHARMA positive current holding exists.
+
+### Reconciliation of previous local-only fixture row
+
+Because the prior successful run may have inserted AUROPHARMA into a different legacy local portfolio, the corrected fixture removes only misplaced synthetic rows matching all of:
+
+- security = AUROPHARMA;
+- source_type = `LOCAL_G8_FIXTURE`;
+- source_provider = `PORTFOLIOAI`;
+- deduplication_key = `LOCAL_G8_FIXTURE:AUROPHARMA`;
+- portfolio_id differs from the actual app-selected portfolio.
+
+No real/non-fixture transaction is touched.
+
+### Safety boundary
+
+- production mutation: **NO**
+- real transaction deletion: **NO**
+- research evidence fabrication: **NO**
+- score/recommendation mutation: **NO**
+- HDFCBANK/TORNTPHARM quantity change: **NO**
+
+**CURRENT STOP POINT:** Owner should pull the exact-app-portfolio correction, rerun the fixture guard test and local fixture runner, then hard-refresh localhost Holdings/Research Coverage. Expected visible app state: exactly 3 open holdings — HDFCBANK, TORNTPHARM and AUROPHARMA.
