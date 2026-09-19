@@ -12893,3 +12893,74 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.24 cards in TORNTPHARM → Research → Gate G, then run focused G6.24 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. Only after validation should G6.24 be marked VALIDATED / NOT ACTIVE.
+
+
+---
+
+## 150. Entry 145 — Gate G6.24 Global Generics regulatory-site treatment lock validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.24 has completed validation as a **proposal-only Global Generics regulatory-site treatment / anti-double-counting lock**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsRegulatorySiteTreatmentContract.test.ts` → **PASS**
+- focused ESLint for the G6.24 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+The earlier visual review of both G6.24 cards also passed.
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_REGULATORY_SITE_TREATMENT_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated treatment boundary
+
+- G4 remains authoritative for regulatory block/review/high-risk state;
+- no second numeric penalty for G4 blocked review;
+- no second numeric penalty for G4 high risk;
+- regulatory numeric score inside Risk: **NO**;
+- regulatory numeric cap inside Risk: **NO**;
+- remediation does not erase historical events;
+- single-site closeout cannot imply company-wide clearance;
+- missing regulatory evidence cannot become neutral;
+- regulatory context may remain visible inside Risk.
+
+### Risk-dimension state
+
+Still unresolved:
+
+- Pharma-specific trailing 1-year drawdown normalization;
+- Pharma-specific volatility normalization / benchmark context;
+- Risk component weighting.
+
+Therefore:
+
+`wholeRiskDimensionReady = false`
+
+### Safety boundary remains unchanged
+
+- score activation: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.24 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** The next safe Global Generics Risk step is to define the market-risk normalization boundary for trailing 1-year drawdown and volatility without inheriting BANK_NBFC thresholds.
