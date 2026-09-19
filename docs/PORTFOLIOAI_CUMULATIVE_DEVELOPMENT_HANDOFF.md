@@ -17433,3 +17433,96 @@ Confirmed:
 **Result:** G7.1 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Proceed to G7.2 — TORNTPHARM Explainable Read-only Preview. Wire the existing reviewed TORNTPHARM architecture into the read-only adapter without creating or persisting new evidence or scores.
+
+
+---
+
+## 199. Entry 194 — Gate G7.2 TORNTPHARM Explainable Read-only Preview prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7.2 has been prepared as the first TORNTPHARM-specific explainable read-only preview.
+
+### Reviewed architecture preserved
+
+The preview requires and verifies:
+
+- Primary: `DOMESTIC_FORMULATIONS`
+- Material Overlay: `GLOBAL_GENERICS`
+- Emerging Watch: `CDMO_CRAMS`
+
+It fails fast if the reviewed architecture differs.
+
+### Adapter integration
+
+All ten weighted PHARMA_V1 dimensions are passed through the validated G7.1 **dimension adapter**.
+
+Each row exposes:
+
+- Primary evidence verified / total;
+- methodology state;
+- calculation state;
+- overlay readiness/effect;
+- final score if available;
+- reason codes;
+- methodology lineage.
+
+### Current expected overall outcome
+
+The preview deliberately does not manufacture a complete score.
+
+The current runtime model does not yet expose a complete canonical G4 governance input containing all required severity/materiality/remediation fields.
+
+TORNTPHARM does have reviewed site-specific regulatory-event evidence, including the historical Indrad warning-letter/closeout chain, but that does not justify assuming `GOVERNANCE_CLEAR`.
+
+Therefore:
+
+- governance runtime input resolved: **NO**
+- overall score: **NULL**
+- overall preview: **NOT CURRENTLY COMPUTABLE**
+- hidden reweighting: **NO**
+
+### Evidence is not score
+
+Even where Primary evidence is VERIFIED or Material Overlay evidence is READY, G7.2 does not duplicate curve mathematics in the UI or infer missing numeric modifier inputs.
+
+Evidence coverage alone never becomes a numeric score.
+
+### Overlay boundary
+
+Global Generics overlay-eligible dimensions remain within the existing G2/G7-P1 boundary.
+
+Where reviewed materiality percentage, normalized overlay signal or another numeric modifier input is unavailable in the foreground runtime model, the overlay modifier remains null rather than neutral.
+
+CDMO / CRAMS Emerging Watch remains numerically excluded.
+
+### Artifacts
+
+Added:
+
+- `src/features/research/pharmaTorntpharmG7ExplainablePreview.ts`
+- `src/features/research/pharmaTorntpharmG7ExplainablePreview.test.ts`
+- `docs/R4N_PHARMA_V1_G7_2_TORNTPHARM_Explainable_Read_Only_Preview_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+
+The Gate G surface now includes a compact G7.2 TORNTPHARM preview table.
+
+### Safety boundary
+
+- score execution: **NO**
+- persisted score run: **NO**
+- evidence write: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- database/schema mutation: **NO**
+- provider calls: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G7.2 table, run focused G7.2 + G7.1 Vitest, focused ESLint, `npm run typecheck`, and `npm run build`. Only after owner validation should G7.3 begin.
