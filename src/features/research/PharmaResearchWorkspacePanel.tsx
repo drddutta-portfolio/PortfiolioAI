@@ -35,6 +35,7 @@ import { PHARMA_FCF_YIELD_DERIVATION_VERSION } from "./pharmaFcfYieldDerivationP
 import { PHARMA_DOMESTIC_FCF_YIELD_CURVE } from "./pharmaDomesticFcfYieldCurveProposal"
 import { PHARMA_DOMESTIC_PEER_VALUATION_CONTRACT } from "./pharmaDomesticPeerValuationContract"
 import { PHARMA_DOMESTIC_PEER_COHORT_BUILDER_VERSION } from "./pharmaDomesticPeerCohortBuilder"
+import { PHARMA_DOMESTIC_PEER_COMPARABILITY } from "./pharmaDomesticPeerComparabilityContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -473,6 +474,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Peer universe can be built, but score readiness remains blocked</small>
               <p>No minimum peer count, comparable-evidence threshold, aggregation statistic, outlier rule or premium/discount curve is approved yet. Eligible peers can be identified without pretending the cohort is score-ready.</p>
               <span>Minimum peer count: UNAPPROVED · Numeric peer curve: NO · Whole dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.11 · Peer minimum-comparability contract</strong>
+              <small>{PHARMA_DOMESTIC_PEER_COMPARABILITY.contractVersion}</small>
+              <p>Domestic Formulations peer-relative Valuation now has a proposal-only minimum cohort contract: at least three comparable peers are required, with five preferred. Fewer than three comparable peers fails closed as insufficient evidence.</p>
+              <span>Minimum peers: 3 · Preferred: 5 · Missing peers: FAIL CLOSED</span>
+            </article>
+            <article>
+              <strong>G6.11 · Median aggregation boundary</strong>
+              <small>PE_TTM and EV_EBITDA aggregated independently</small>
+              <p>Comparable peer multiples use a median with no hidden winsorization. Both PE and EV/EBITDA cohorts must satisfy comparability before the full peer-relative component can be considered complete; premium/discount bands and metric weights remain unapproved.</p>
+              <span>Aggregation: MEDIAN · Winsorization: NO · Numeric peer curve: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
