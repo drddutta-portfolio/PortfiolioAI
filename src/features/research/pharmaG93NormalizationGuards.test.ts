@@ -14,6 +14,14 @@ const runner = readFileSync(
   resolve(process.cwd(), "scripts/r4n/run-pharma-g9-3-persistence-regression.sh"),
   "utf8",
 )
+const workspace = readFileSync(
+  resolve(process.cwd(), "src/features/research/PharmaResearchWorkspacePanel.tsx"),
+  "utf8",
+)
+const researchPage = readFileSync(
+  resolve(process.cwd(), "src/pages/ResearchPage.tsx"),
+  "utf8",
+)
 
 describe("G9.3 UI and persisted-data regression guards", () => {
   it("renders NOT ENGAGED through a distinct UI branch", () => {
@@ -35,6 +43,17 @@ describe("G9.3 UI and persisted-data regression guards", () => {
   it("keeps AUROPHARMA Biosimilars absent from active reviewed authority", () => {
     expect(sql).toContain("'BIOPHARMA_BIOSIMILARS'")
     expect(sql).toContain("AUROPHARMA Biosimilars must remain absent from active reviewed authority")
+  })
+
+  it("keeps shared architecture separate from company-specific audit history", () => {
+    expect(workspace).toContain('presentationMode?: "FULL" | "AUDIT_ONLY"')
+    expect(workspace).toContain('const auditOnly = presentationMode === "AUDIT_ONLY"')
+    expect(workspace).toContain("TORNTPHARM research operations & audit")
+    expect(researchPage).toContain('presentationMode="AUDIT_ONLY"')
+    expect(researchPage).toContain("AUROPHARMA development & validation history")
+    expect(researchPage.indexOf("<PharmaG93NormalizedResearchPanel")).toBeLessThan(
+      researchPage.indexOf("AUROPHARMA development & validation history"),
+    )
   })
 
   it("is read-only and local-only", () => {
