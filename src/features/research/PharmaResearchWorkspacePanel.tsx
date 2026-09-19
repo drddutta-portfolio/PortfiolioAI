@@ -69,6 +69,7 @@ import { PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_CALIBRATION_EVIDENCE } from
 import { PHARMA_GLOBAL_GENERICS_MOMENTUM_METHOD_GATE } from "./pharmaGlobalGenericsMomentumMethodGate"
 import { PHARMA_GLOBAL_GENERICS_MOMENTUM_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsMomentumEvidenceSufficiency"
 import { PHARMA_GLOBAL_GENERICS_G6_COVERAGE_REVIEW } from "./pharmaGlobalGenericsG6CoverageReview"
+import { PHARMA_GLOBAL_GENERICS_APPLICABILITY_REGISTRY_RECONCILIATION } from "./pharmaGlobalGenericsApplicabilityRegistryReconciliation"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -983,6 +984,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Seven Global Generics registry entries still show threshold work as pending</small>
               <p>The shared pending-parent-family representation now lags the validated Global Generics outcomes. G7 remains blocked until a narrow registry-only reconciliation is validated without changing other Pharma subprofiles.</p>
               <span>Stale registry families: 7 · Registry reconciliation: REQUIRED · G7 eligible: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.45 · Global Generics applicability registry reconciliation</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_APPLICABILITY_REGISTRY_RECONCILIATION.contractVersion}</small>
+              <p>The registry now has an explicit VALIDATED_FAIL_CLOSED state for Global Generics methodology outcomes that are validated but intentionally lack an approved numeric curve. The change is scoped to Global Generics only.</p>
+              <span>Validated not active: 2 · Validated fail-closed: 8 · Other primaries changed: NO</span>
+            </article>
+            <article>
+              <strong>G6.45 · Validation and G7 boundary</strong>
+              <small>Registry aligned by proposal · Owner validation still required</small>
+              <p>VALIDATED_FAIL_CLOSED never creates a score, zero, neutral value or hidden reweighting. G7 remains blocked until this reconciliation passes focused tests, lint, typecheck, build and visual inspection.</p>
+              <span>Score execution: NO · Owner validation: PENDING · G7 eligible now: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
