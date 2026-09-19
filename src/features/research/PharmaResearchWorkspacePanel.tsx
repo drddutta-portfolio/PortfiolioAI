@@ -43,6 +43,7 @@ import { PHARMA_DOMESTIC_PEER_COMBINED_SCORE } from "./pharmaDomesticPeerCombine
 import { PHARMA_DOMESTIC_VALUATION_WEIGHTING_GATE } from "./pharmaDomesticValuationWeightingGate"
 import { PHARMA_DOMESTIC_VALUATION_COMBINED_SCORE } from "./pharmaDomesticValuationCombinedScoreContract"
 import { PHARMA_GLOBAL_GENERIC_PRICE_EROSION_CURVE } from "./pharmaGlobalGenericPriceErosionCurveProposal"
+import { PHARMA_GLOBAL_GENERICS_PIPELINE_EVIDENCE } from "./pharmaGlobalGenericsPipelineEvidenceContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -593,6 +594,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Mandatory Global Generics Growth evidence · no Domestic threshold reuse</small>
               <p>Price erosion remains separate from Export/US Revenue Growth. Strong growth cannot erase severe pricing pressure, and improved pricing cannot substitute for missing growth evidence.</p>
               <span>Disclosed ASP/price evidence: REQUIRED · Residual derivation: NO · Cross-subprofile reuse: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.19 · Global Generics pipeline evidence contract</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_PIPELINE_EVIDENCE.contractVersion}</small>
+              <p>Mandatory Global Generics durability evidence must identify the product or molecule, geography, dated stage, materiality, economic relevance and source. Filing, tentative approval, final approval, launch and commercial traction remain distinct states.</p>
+              <span>Minimum material events: 1 · Preferred: 4 · Materiality: REQUIRED · Numeric curve: NO</span>
+            </article>
+            <article>
+              <strong>G6.19 · Count-only scoring blocker</strong>
+              <small>Approval and launch counts are evidence, not automatic durability scores</small>
+              <p>More approvals or launches do not automatically mean a stronger score. Delayed, blocked, withdrawn and discontinued events remain in the evidence history, and regulatory-site penalties stay outside this contract to avoid double-counting.</p>
+              <span>Approval count auto-positive: NO · Launch count auto-positive: NO · Regulatory double-counting: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
