@@ -52,6 +52,7 @@ import { PHARMA_GLOBAL_GENERICS_REGULATORY_SITE_TREATMENT } from "./pharmaGlobal
 import { PHARMA_GLOBAL_GENERICS_MARKET_RISK_NORMALIZATION_GATE } from "./pharmaGlobalGenericsMarketRiskNormalizationGate"
 import { PHARMA_GLOBAL_GENERICS_DRAWDOWN_METHOD_GATE } from "./pharmaGlobalGenericsDrawdownMethodGate"
 import { PHARMA_GLOBAL_GENERICS_DRAWDOWN_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsDrawdownEvidenceSufficiency"
+import { PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_METHOD_GATE } from "./pharmaGlobalGenericsVolatilityContextMethodGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -728,6 +729,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Each candidate remains blocked for a named evidence reason</small>
               <p>Empirical Pharma bands, a reviewed Global Generics cohort, an approved Pharma benchmark and sufficient comparable self-history are all still missing; a hybrid cannot exist until at least two methods become eligible.</p>
               <span>Deferral required: YES · BANK fallback: NO · Whole Risk dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.28 · Global Generics volatility context method gate</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_METHOD_GATE.contractVersion}</small>
+              <p>Volatility requires context by contract, so standalone absolute bands are excluded. Candidate approaches are reviewed same-subprofile peers, an approved Pharma benchmark, self-history with external corroboration, or an explicitly versioned hybrid.</p>
+              <span>Absolute-only scoring: NO · Approved method: NONE · Owner approval: REQUIRED</span>
+            </article>
+            <article>
+              <strong>G6.28 · Context prerequisite blocker</strong>
+              <small>No generic peer set or silent benchmark selection</small>
+              <p>Peer-relative normalization requires a reviewed Global Generics cohort, benchmark-relative requires an approved Pharma benchmark, and self-history cannot stand alone without external context.</p>
+              <span>BANK thresholds inherited: NO · Silent benchmark: NO · Numeric volatility curve: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
