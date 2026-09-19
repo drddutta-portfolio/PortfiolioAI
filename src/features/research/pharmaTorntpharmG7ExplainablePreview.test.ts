@@ -68,14 +68,14 @@ const model: PharmaResearchWorkspaceModel = {
 
 describe("G7.2 TORNTPHARM explainable preview", () => {
   it("preserves the reviewed Primary / Material / Emerging architecture", () => {
-    const result = buildTorntpharmG7ExplainablePreview(model, [])
+    const result = buildTorntpharmG7ExplainablePreview(model)
     expect(result.primarySubprofile).toBe("DOMESTIC_FORMULATIONS")
     expect(result.materialOverlay).toBe("GLOBAL_GENERICS")
     expect(result.emergingWatch).toBe("CDMO_CRAMS")
   })
 
   it("runs all ten weighted dimensions through the G7.1 dimension adapter", () => {
-    const result = buildTorntpharmG7ExplainablePreview(model, [])
+    const result = buildTorntpharmG7ExplainablePreview(model)
     expect(result.rows).toHaveLength(10)
     expect(result.rows.map((row) => row.dimensionCode)).toEqual([
       "QUALITY",
@@ -92,7 +92,7 @@ describe("G7.2 TORNTPHARM explainable preview", () => {
   })
 
   it("does not manufacture a Primary dimension score from evidence coverage alone", () => {
-    const result = buildTorntpharmG7ExplainablePreview(model, [])
+    const result = buildTorntpharmG7ExplainablePreview(model)
     const growth = result.rows.find((row) => row.dimensionCode === "GROWTH")
     expect(growth?.primaryEvidenceVerified).toBe(1)
     expect(growth?.primaryEvidenceTotal).toBe(1)
@@ -101,7 +101,7 @@ describe("G7.2 TORNTPHARM explainable preview", () => {
   })
 
   it("does not treat complete material-overlay evidence as a neutral or invented modifier", () => {
-    const result = buildTorntpharmG7ExplainablePreview(model, [])
+    const result = buildTorntpharmG7ExplainablePreview(model)
     const growth = result.rows.find((row) => row.dimensionCode === "GROWTH")
     expect(growth?.overlayState).toBe("READY")
     expect(growth?.overlayModifierPoints).toBeNull()
@@ -109,7 +109,7 @@ describe("G7.2 TORNTPHARM explainable preview", () => {
   })
 
   it("keeps the overall score unavailable while governance runtime input is unresolved", () => {
-    const result = buildTorntpharmG7ExplainablePreview(model, [])
+    const result = buildTorntpharmG7ExplainablePreview(model)
     expect(result.governanceRuntimeInputResolved).toBe(false)
     expect(result.overallPreviewState).toBe("NOT_CURRENTLY_COMPUTABLE")
     expect(result.overallScore).toBeNull()
@@ -117,21 +117,21 @@ describe("G7.2 TORNTPHARM explainable preview", () => {
   })
 
   it("does not silently transfer pending Domestic methodology into a numeric result", () => {
-    const result = buildTorntpharmG7ExplainablePreview(model, [])
+    const result = buildTorntpharmG7ExplainablePreview(model)
     const momentum = result.rows.find((row) => row.dimensionCode === "MOMENTUM")
     expect(momentum?.methodologyState).toBe("SUBPROFILE_THRESHOLDS_REQUIRED")
     expect(momentum?.finalScore).toBeNull()
   })
 
   it("keeps Business Durability fail-closed without an approved dimension aggregation", () => {
-    const result = buildTorntpharmG7ExplainablePreview(model, [])
+    const result = buildTorntpharmG7ExplainablePreview(model)
     const durability = result.rows.find((row) => row.dimensionCode === "BUSINESS_DURABILITY")
     expect(durability?.methodologyState).toBe("NO_APPROVED_DIMENSION_AGGREGATION")
     expect(durability?.finalScore).toBeNull()
   })
 
   it("records no score execution or persistence", () => {
-    const result = buildTorntpharmG7ExplainablePreview(model, [])
+    const result = buildTorntpharmG7ExplainablePreview(model)
     expect(result.scoreExecutionEnabled).toBe(false)
     expect(result.persistedScoreRunEnabled).toBe(false)
   })
