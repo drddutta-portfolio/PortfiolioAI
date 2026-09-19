@@ -48,6 +48,7 @@ import { PHARMA_GLOBAL_GENERICS_PIPELINE_STAGE_NORMALIZATION } from "./pharmaGlo
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_GATE } from "./pharmaGlobalGenericsPipelineAggregationGate"
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_METHOD_PROPOSAL } from "./pharmaGlobalGenericsPipelineAggregationMethodProposal"
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_COMBINED_SCORE } from "./pharmaGlobalGenericsPipelineCombinedScoreContract"
+import { PHARMA_GLOBAL_GENERICS_REGULATORY_SITE_TREATMENT } from "./pharmaGlobalGenericsRegulatorySiteTreatmentContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -668,6 +669,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Contradictory or adverse latest states produce no numeric aggregate</small>
               <p>Any ineligible event, same-date contradictory latest state, or latest delayed/blocked/withdrawn/discontinued identity returns REVIEW REQUIRED with a null combined score. Historical lifecycle states remain auditable and are not repeatedly counted.</p>
               <span>Adverse offset: NO · Persisted score run: NO · Recommendation impact: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.24 · Global Generics regulatory-site treatment lock</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_REGULATORY_SITE_TREATMENT.contractVersion}</small>
+              <p>Regulatory-site evidence remains mandatory where regulated export exposure exists, but G4 stays authoritative for block, review and high-risk states. The Risk dimension may surface that context without applying a second hidden deduction.</p>
+              <span>G4 authority: PRESERVED · Regulatory numeric score: NO · Double-counting: NO</span>
+            </article>
+            <article>
+              <strong>G6.24 · Risk-dimension separation boundary</strong>
+              <small>Regulatory context visible · market drawdown/volatility methodology still incomplete</small>
+              <p>Official facility/product/geography evidence and remediation history remain required. Single-site closeout cannot imply company-wide clearance, missing regulatory evidence cannot become neutral, and the whole Global Generics Risk dimension remains not ready.</p>
+              <span>Whole Risk dimension ready: NO · Market-risk bands: PENDING · Activation: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
