@@ -17583,3 +17583,97 @@ Validated items:
 **Result:** G7.2 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Proceed to G7.3 — Validation, Leakage Tests & Research-Gap Register. G7.3 is the final bounded G7 stage; no G7.4 should be created for routine follow-up work.
+
+
+---
+
+## 201. Entry 196 — Gate G7.3 Validation, Leakage Tests & Research-Gap Register prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7.3 has been prepared as the **final bounded G7 checkpoint**.
+
+### Validation invariants
+
+The G7.3 contract fixes:
+
+- hidden reweighting allowed: **NO**
+- independent overlay-cap stacking: **NO**
+- hidden governance double counting: **NO**
+- BANK_NBFC fallback into Pharma: **NO**
+- Domestic threshold transfer to other Pharma primaries: **NO**
+- Emerging Watch entering Material Overlay evidence pool: **NO**
+- Emerging Watch numeric score participation: **NO**
+- independent Overlay stock score: **NO**
+- score persistence: **NO**
+
+### TORNTPHARM research-gap register
+
+Eight explicit current TORNTPHARM blockers are registered:
+
+1. canonical G4 governance/regulatory runtime input unresolved;
+2. Business Durability whole-dimension aggregation absent;
+3. Domestic ROCE/Capital Efficiency thresholds unapproved;
+4. Domestic Cash Conversion thresholds unapproved;
+5. Domestic Balance Sheet/Leverage thresholds unapproved;
+6. Domestic Ownership/Governance thresholds unapproved;
+7. Pharma Risk bands/normalization unapproved;
+8. Pharma Momentum benchmark/bands/weights/aggregation unapproved.
+
+Each gap records category, affected subprofile/dimension, methodology/evidence state, blocking effect, future stage, required decision/evidence, lineage and revisit trigger.
+
+### Controlled expansion register
+
+Unresolved or unsupported Primary methodology for:
+
+- `API_BULK_DRUGS`
+- `CDMO_CRAMS`
+- `BIOPHARMA_BIOSIMILARS`
+
+is derived from the current G6 applicability registry and assigned to `CONTROLLED_EXPANSION`.
+
+These gaps do not block closing G7 as a read-only/fail-closed reference implementation, but they block those subprofiles from becoming numerically scored Primaries until their own reference-company work is complete.
+
+Domestic/Global thresholds cannot be borrowed.
+
+### Leakage tests
+
+The G7.3 tests prove:
+
+- one combined overlay cap remains enforced;
+- an unavailable weighted dimension blocks overall score instead of triggering denominator renormalization;
+- known TORNTPHARM blockers are explicitly registered;
+- remaining non-reference Primary gaps are assigned to controlled expansion;
+- the register cannot execute or persist a score.
+
+### Artifacts
+
+Added:
+
+- `src/features/research/pharmaG7ValidationAndResearchGapRegister.ts`
+- `src/features/research/pharmaG7ValidationAndResearchGapRegister.test.ts`
+- `docs/R4N_PHARMA_V1_G7_3_Validation_Leakage_Research_Gap_Register_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Gate G now exposes:
+
+- **G7.3 · Validation & leakage boundary**
+- **G7.3 · Outstanding research register**
+
+### Safety boundary
+
+- G7 closure: **PENDING OWNER VALIDATION**
+- persisted score: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- database/schema mutation: **NO**
+- provider calls: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G7.3 cards, run focused G7.3 + G7.2 + G7.1 tests, focused ESLint, `npm run typecheck`, and `npm run build`. If all pass, record G7.3 validation and close G7 as **COMPLETE / READ-ONLY / NOT ACTIVE**, then proceed to G8. No G7.4 should be created for routine follow-up.
