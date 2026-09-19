@@ -18086,3 +18086,58 @@ Research Coverage should show:
 - G8.1 started: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, run the local AUROPHARMA fixture runner, refresh localhost Research Coverage, and confirm HDFCBANK + TORNTPHARM + AUROPHARMA are present with the first two unchanged. Only then record this prerequisite as validated and start G8.1.
+
+
+---
+
+## 205. Entry 200 — AUROPHARMA local fixture selector corrected after first localhost attempt
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT fix  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner pulled and validated the AUROPHARMA local fixture contract:
+
+- `auropharmaLocalResearchTargetSql.test.ts` → **7/7 PASS**
+
+The first local fixture execution then failed before any mutation with:
+
+`LOCAL_FIXTURE_TARGET_PORTFOLIO_NOT_UNIQUE`
+
+### Cause
+
+The initial fixture required the entire local database to contain exactly one portfolio holding both HDFCBANK and TORNTPHARM.
+
+The actual application does not use that rule. Research Coverage loads one active portfolio, ordered by creation time, through the normal portfolio repository.
+
+The local database may therefore contain duplicate/legacy portfolio contexts even though localhost Research Coverage shows only the intended two-holding portfolio.
+
+### Correction
+
+The fixture now matches the visible localhost precondition instead:
+
+- portfolio is active;
+- positive current holdings are exactly two;
+- those two are HDFCBANK and TORNTPHARM;
+- no additional current holding is present;
+- if duplicate local fixture portfolios match, the earliest active match is selected deterministically;
+- if no exact two-holding match exists, the fixture aborts with `LOCAL_FIXTURE_TARGET_PORTFOLIO_NOT_FOUND`.
+
+The postcondition query similarly requires exactly three positive holdings after mutation:
+
+- HDFCBANK
+- TORNTPHARM
+- AUROPHARMA
+
+### Safety
+
+The failed first execution occurred inside an explicit transaction and aborted before COMMIT.
+
+Therefore:
+
+- AUROPHARMA local fixture mutation from the failed attempt: **NO**
+- HDFCBANK mutation: **NO**
+- TORNTPHARM mutation: **NO**
+- production mutation: **NO**
+
+**CURRENT STOP POINT:** Owner should pull the selector correction, rerun the fixture contract test, then rerun the local fixture script. If successful, refresh Research Coverage and confirm exactly three holdings with AUROPHARMA initially Missing across research evidence domains.
