@@ -9684,3 +9684,104 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.11 cards in TORNTPHARM → Research → Gate G, then run focused G6.11 validation. Only after validation should G6 define the peer premium/discount calculation and numeric normalization curve.
+
+
+---
+
+## 122. Entry 117 — Gate G6.11 Domestic peer minimum-comparability contract validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.11 has completed validation as a **proposal-only Domestic Formulations peer minimum-comparability and aggregation contract**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.11 plus G6.10/G6.9 and the active Domestic Valuation methodology slice → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.11 validated methodology
+
+Minimum eligible comparable peers:
+
+`3`
+
+Preferred eligible comparable peers:
+
+`5`
+
+Aggregation statistic:
+
+`MEDIAN`
+
+Outlier treatment:
+
+`NO_WINSORIZATION_V1_MEDIAN_ONLY`
+
+### Comparability requirements
+
+Validated requirements include:
+
+- same metric code within aggregation;
+- same period basis;
+- same consolidation scope;
+- fresh evidence;
+- selected/reviewed evidence;
+- negative or economically meaningless denominators excluded;
+- acquisition/one-off distortions require review.
+
+### Candidate peer metric families
+
+- `PE_TTM`
+- `EV_EBITDA`
+
+Each metric family is aggregated independently.
+
+The full peer-relative component requires both metric families to satisfy the minimum comparability contract.
+
+One qualifying metric family alone is not sufficient.
+
+### Still unapproved
+
+- PE versus EV/EBITDA weighting: **NO**
+- premium/discount calculation convention: **NO**
+- premium/discount score bands: **NO**
+- peer-relative numeric score: **NO**
+- overall Valuation component weights: **NO**
+- whole Valuation dimension ready: **NO**
+
+### Domestic Valuation state
+
+Validated / not active:
+
+- G6.2 — self-history relative valuation
+- G6.8 — FCF-yield cash-flow corroboration
+- G6.9 — peer-cohort methodology lock
+- G6.10 — deterministic peer eligibility builder
+- G6.11 — minimum-comparability and median aggregation contract
+
+Remaining before peer-relative numeric scoring:
+
+- premium/discount calculation convention
+- peer-relative numeric normalization curve
+- PE vs EV/EBITDA weighting
+- overall Valuation component weights
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.11 is validated. The next permitted G6 task is to define the peer premium/discount calculation convention and numeric normalization proposal for Domestic Formulations, while keeping score execution disabled.
