@@ -22,7 +22,7 @@ describe("AUROPHARMA local G8 Research target fixture", () => {
 
   it("targets only the local portfolio already containing HDFCBANK and TORNTPHARM", () => {
     expect(sql).toContain("s.symbol IN ('HDFCBANK', 'TORNTPHARM')")
-    expect(sql).toContain("LOCAL_FIXTURE_TARGET_PORTFOLIO_NOT_UNIQUE")
+    expect(sql).toContain("LOCAL_FIXTURE_TARGET_PORTFOLIO_NOT_FOUND")
     expect(sql).toContain("HDFCBANK_HOLDING_CHANGED")
     expect(sql).toContain("TORNTPHARM_HOLDING_CHANGED")
   })
