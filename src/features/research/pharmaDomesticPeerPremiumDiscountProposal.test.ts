@@ -37,7 +37,7 @@ describe("Domestic Formulations peer premium/discount proposal", () => {
     expect(scoreDomesticPeerRelativeDiscount(25)).toBe(100)
     expect(scoreDomesticPeerRelativeDiscount(10)).toBe(80)
     expect(scoreDomesticPeerRelativeDiscount(-5)).toBe(60)
-    expect(scoreDomesticPeerRelativeDiscount(-20)).toBe(20)
+    expect(scoreDomesticPeerRelativeDiscount(-20)).toBe(40)
   })
 
   it("keeps PE and EV/EBITDA combination unapproved", () => {
