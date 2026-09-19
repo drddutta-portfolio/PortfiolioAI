@@ -196,7 +196,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const localObservationMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalObservationMutationProposal() : null
   const gateGScoringProposal = buildPharmaGateGScoringMethodProposal(model)
   const g7TorntpharmPreview = symbol.toLocaleUpperCase() === "TORNTPHARM"
-    ? buildTorntpharmG7ExplainablePreview(model, research.metrics)
+    ? buildTorntpharmG7ExplainablePreview(model)
     : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
