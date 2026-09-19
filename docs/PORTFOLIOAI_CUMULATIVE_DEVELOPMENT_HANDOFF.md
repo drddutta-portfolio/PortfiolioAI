@@ -9494,3 +9494,84 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.10 cards in TORNTPHARM → Research → Gate G, then run focused G6.10 validation. Only after validation should a separate contract decide minimum peer count / comparable-evidence requirements / aggregation statistics.
+
+
+---
+
+## 120. Entry 115 — Gate G6.10 Domestic peer-cohort builder validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.10 has completed validation as a **proposal-only deterministic Domestic Formulations peer-cohort builder**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.10 plus G6.9 and the active Domestic Valuation methodology slice → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.10 status
+
+The deterministic peer builder is validated to admit only candidates that:
+
+- are not the target security;
+- are active securities;
+- have a PHARMA_V1 assignment that resolves successfully on the evaluation date;
+- have an active reviewed assignment;
+- have Primary exactly `DOMESTIC_FORMULATIONS`.
+
+### Validated exclusion reasons
+
+- `TARGET_SECURITY`
+- `INACTIVE_SECURITY`
+- `SUBPROFILE_UNRESOLVED`
+- `PRIMARY_MISMATCH`
+
+The builder reuses the existing fail-closed subprofile assignment resolver.
+
+### Still unapproved
+
+- minimum eligible peer count: **NO**
+- minimum comparable valuation evidence per peer: **NO**
+- aggregation statistic: **NO**
+- outlier treatment: **NO**
+- premium/discount normalization bands: **NO**
+- PE vs EV/EBITDA weighting: **NO**
+- numeric peer-relative score: **NO**
+- whole Valuation dimension ready: **NO**
+
+### Domestic Valuation state
+
+Validated / not active:
+
+- G6.2 — self-history relative valuation
+- G6.8 — FCF-yield cash-flow corroboration
+- G6.9 — peer-cohort methodology lock
+- G6.10 — deterministic peer eligibility builder
+
+Remaining before peer-relative numeric scoring:
+
+- minimum peer-count contract
+- comparable-evidence contract
+- aggregation/outlier contract
+- relative premium/discount curve
+- Valuation component weights
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.10 is validated. The next permitted G6 task is to define the minimum peer-count / comparable-evidence / aggregation-statistic contract for Domestic Formulations peer-relative Valuation, while keeping numeric peer scoring disabled until that methodology is explicitly approved.
