@@ -10863,3 +10863,139 @@ Therefore:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.16 is validated. The next methodology step requires an explicit owner-approved split across self-history relative valuation, peer-relative valuation, and FCF-yield cash-flow corroboration before the Domestic Formulations Valuation dimension can be completed.
+
+
+---
+
+## 133. Entry 128 — Gate G6.17 Domestic Valuation combined score contract prepared
+
+**Date:** 19 September 2026  
+**Actor:** owner methodology approval + ChatGPT implementation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.17 — Domestic Formulations Valuation Combined Score Contract**.
+
+### Explicit owner methodology approval
+
+The owner approved:
+
+- self-history relative valuation: **40%**
+- peer-relative valuation: **40%**
+- FCF-yield cash-flow corroboration: **20%**
+
+The owner also required explicit revisit triggers and an explicit upstream cross-reference to the G6.15 peer-combination assumption.
+
+### Combined Valuation formula
+
+When all three component scores are valid:
+
+`Valuation Score = (Self-History × 0.40) + (Peer-Relative × 0.40) + (FCF Corroboration × 0.20)`
+
+All three inputs are mandatory.
+
+Missing or invalid component evidence returns:
+
+`INSUFFICIENT_EVIDENCE`
+
+No missing-component renormalization is allowed.
+
+### Upstream G6.15 dependency
+
+The 40% peer-relative component inherits:
+
+- PE peer-relative normalized score: **50%**
+- EV/EBITDA peer-relative normalized score: **50%**
+
+Canonical upstream contract:
+
+`PHARMA_DOMESTIC_PEER_COMBINED_SCORE_V1_OWNER_APPROVED`
+
+Cross-reference:
+
+`G6.15_TO_G6.17`
+
+This dependency is explicit for future auditability.
+
+### Rationale
+
+Self-history and peer-relative valuation are co-equal primary lenses because:
+
+- own multi-year valuation history is meaningful for a durable branded-formulations business;
+- genuinely similar branded-formulations peers exist;
+- current evidence does not establish that either relative lens is systematically superior.
+
+FCF-yield is capped at 20% because it is corroboration rather than a standalone valuation verdict, and annual FCF may be distorted by:
+
+- working-capital timing;
+- one-off capex;
+- launch-related inventory build;
+- acquisition/M&A cash-flow effects.
+
+### Mandatory revisit trigger 1 — persistent three-component disagreement
+
+Revisit 40/40/20 if self-history, peer-relative and FCF corroboration persistently disagree.
+
+Current state:
+
+- trigger present: **YES**
+- automatic numeric disagreement threshold: **NO / NOT INVENTED**
+
+### Mandatory revisit trigger 2 — FCF structural distortion
+
+Revisit the FCF 20% weight if the cash-flow signal becomes structurally distorted by capex or M&A cycles.
+
+### Mandatory revisit trigger 3 — peer comparability changes
+
+Revisit the peer-relative 40% weight if peer comparability materially becomes weaker or stronger.
+
+### Anti-drift rules
+
+- hidden component reweighting: **NO**
+- missing-component renormalization: **NO**
+- silent replacement of 40/40/20: **NO**
+- future changes require explicit versioned methodology revision: **YES**
+
+### Domestic Valuation methodology state
+
+The Domestic Formulations Valuation methodology is now **calculation-ready / not active** when all upstream evidence prerequisites are satisfied.
+
+- combined Valuation score contract: **OWNER-APPROVED**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation impact: **NO**
+- position-sizing impact: **NO**
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaDomesticValuationCombinedScoreContract.ts`
+- `src/features/research/pharmaDomesticValuationCombinedScoreContract.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_17_Domestic_Valuation_Combined_Score_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.17 · Domestic Valuation combined score — 40/40/20 approved**
+- **G6.17 · Valuation revisit & upstream dependency**
+
+### Safety boundary remains unchanged
+
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.17 cards in TORNTPHARM → Research → Gate G, then run focused G6.17 validation. If validation passes, Domestic Formulations Valuation can be treated as methodology-complete / not active, and G6 can move to the next remaining subprofile-specific curve family.
