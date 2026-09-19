@@ -60,6 +60,7 @@ import { PHARMA_GLOBAL_GENERICS_ROCE_METHOD_GATE } from "./pharmaGlobalGenericsR
 import { PHARMA_GLOBAL_GENERICS_ROCE_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsRoceCalibrationEvidence"
 import { PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_METHOD_GATE } from "./pharmaGlobalGenericsCashConversionMethodGate"
 import { PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsCashConversionCalibrationEvidence"
+import { PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_METHOD_GATE } from "./pharmaGlobalGenericsBalanceSheetMethodGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -848,6 +849,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Current parent metric dimension: EARNINGS CASH QUALITY · canonical dimension: CASH FLOW</small>
               <p>The mismatch remains explicit and unresolved. A separate versioned parent-contract reconciliation is required before Cash Conversion may contribute a numeric Cash Flow score.</p>
               <span>Parent reconciliation performed: NO · Deferral required: YES · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.36 · Global Generics balance-sheet methodology boundary</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_METHOD_GATE.contractVersion}</small>
+              <p>The parent leverage evidence shape is reusable—3 annual periods minimum, 5 preferred, matched debt/cash/operating-earnings evidence, explicit net-cash treatment and acquisition context—but Global Generics still has no approved weights or bands.</p>
+              <span>Parent shape: REUSABLE · Global weights: PENDING · Global bands: PENDING</span>
+            </article>
+            <article>
+              <strong>G6.36 · Balance-sheet dimension alignment blocker</strong>
+              <small>Parent dimension reconciliation remains required</small>
+              <p>The parent metric remains in Financial Strength while the canonical leverage methodology targets Balance Sheet / Credit. G6.36 preserves that mismatch and rejects universal or other-subprofile threshold fallback.</p>
+              <span>Parent reconciliation: REQUIRED · Numeric balance-sheet curve: NO · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
