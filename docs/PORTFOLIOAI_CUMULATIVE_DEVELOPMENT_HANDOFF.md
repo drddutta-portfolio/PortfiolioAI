@@ -20091,3 +20091,118 @@ G9.3 remains **OPEN**.
 Full local validation is intentionally deferred.
 
 **CURRENT STOP POINT:** owner should pull the latest branch, run the existing Local Supabase + Local Vite environment, and provide fresh full-page screenshots for both TORNTPHARM and AUROPHARMA. Visual review must confirm that both now use the same PHARMA_V1 permanent template grammar while retaining different business-model roles and company-specific audit history. Only after visual approval should full G9.3 validation run.
+
+
+---
+
+## 227. Entry 222 — Selective G9.3 UI rollback restores pre-G9.3 designs without touching research/data
+
+**Date:** 20 September 2026  
+**Actor:** owner instruction + ChatGPT rollback checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner explicitly requested restoration of the older Research-page designs for **both TORNTPHARM and AUROPHARMA**, with a hard requirement that no data, research, methodology or validated gate work be lost.
+
+### Rollback strategy
+
+The branch was **not reset**.
+
+Instead, the presentation layer was selectively restored to the exact post-G9.2 closure baseline:
+
+`511ea5b716b20aaf1e1ed3ca77f38990175184d7`
+
+This preserves all later Git history while restoring the earlier visual composition.
+
+### Restored presentation files
+
+The following files were restored exactly to their post-G9.2 versions:
+
+- `src/pages/ResearchPage.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+- `src/features/research/PharmaResearchWorkspacePanel.css`
+- `src/features/research/ResearchEvidenceWorkspace.tsx`
+- `src/features/research/researchProfileUiContract.ts`
+- `src/features/research/researchProfileUiContract.test.ts`
+- `src/features/research/PositionDecisionControls.tsx`
+- `src/features/research/PositionDecisionControls.test.tsx`
+
+### Expected restored designs
+
+**TORNTPHARM**
+
+Restores the full older Pharmaceuticals deep-research design, including the visible methodology sequence through:
+
+- Gate G
+- G1–G4
+- G5.1–G5.7
+- G6.1–G6.45
+- G7-P1 / G7-P2 / G7.1 / G7.2 / G7.3
+
+plus its company-specific evidence/source/ingestion/review tooling.
+
+**AUROPHARMA**
+
+Restores the older sequential AUROPHARMA design containing:
+
+- G8.1 classification/evidence lock
+- G8.2 same-engine preview
+- G8.3 portability/isolation validation
+- G9.1 activation-readiness
+- G9.2 canonical local activation panel
+
+without the later G9.3 shared-template presentation refactor.
+
+### Removed only abandoned G9.3 layout tests
+
+The following tests were removed because they asserted the now-abandoned G9.3 normalized layout and would intentionally fail after restoration:
+
+- `src/pages/ResearchPage.g93CanonicalPharmaReachability.test.ts`
+- `src/features/research/pharmaG93NormalizationGuards.test.ts`
+- `src/features/research/pharmaG93NormalizedResearch.test.ts`
+
+These were presentation-experiment tests, not research evidence or methodology data. Their history remains preserved in Git.
+
+### Explicitly preserved research/data
+
+Integrity checks after the rollback confirmed that all of the following remain present:
+
+- AUROPHARMA G9.2 local canonical activation SQL/package
+- AUROPHARMA G9.1 readiness contract
+- AUROPHARMA G8 same-engine preview
+- TORNTPHARM G7 explainable preview
+- PHARMA_V1 G6 subprofile applicability contracts
+- G6.45 Global Generics applicability-registry reconciliation document
+- G9.2 AUROPHARMA canonical activation contract
+
+No Supabase mutation was performed by the rollback.
+
+The already-created **Local Supabase G9.2 canonical AUROPHARMA assignment remains untouched**.
+
+### Safety state
+
+- production mutation: NO
+- local database mutation during rollback: NO
+- assignment deletion/change: NO
+- research evidence deletion/change: NO
+- G1–G6.45 methodology deletion/change: NO
+- G7/G8/G9.1/G9.2 research deletion/change: NO
+- score persistence: NO
+- recommendation/sizing mutation: NO
+- provider refresh: NO
+- deployment: NO
+- scheduler change: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### New rollback head
+
+Selective rollback commit:
+
+`ea75aaea64a23a58a530fb77a68462f2c6451571`
+
+### Workflow state
+
+G9.3 normalization is **not complete** and the normalized-template experiment is no longer the active UI direction.
+
+**CURRENT STOP POINT:** owner should `git pull`, verify head `ea75aaea64a23a58a530fb77a68462f2c6451571`, run the existing Local Supabase + Local Vite environment, and visually confirm that both TORNTPHARM and AUROPHARMA have returned to their older designs. Do not run full validation until visual restoration is confirmed.
