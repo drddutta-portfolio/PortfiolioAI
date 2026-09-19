@@ -99,7 +99,10 @@ describe("PHARMA_GLOBAL_GENERICS_PIPELINE_COMBINED_SCORE", () => {
 
     expect(result.state).toBe("READY")
     expect(result.adverseIdentityCount).toBe(0)
-    expect(result.latestIdentityStates[0].historicalEventCount).toBe(2)
+    const moleculeAUs = result.latestIdentityStates.find(
+      (item) => item.productOrMolecule === "Molecule A" && item.geography === "US",
+    )
+    expect(moleculeAUs?.historicalEventCount).toBe(2)
     expect(result.combinedScore).toBe(77.5)
   })
 
