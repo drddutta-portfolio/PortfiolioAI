@@ -19247,3 +19247,79 @@ Per the owner-locked workflow, implementation and this handoff update occur befo
 G9.1 is **NOT COMPLETE** and full local validation is intentionally deferred until after localhost visual approval.
 
 **CURRENT STOP POINT:** owner should `git pull`, verify the new branch HEAD, use the existing Local Supabase + Local Vite environment, hard-refresh AUROPHARMA → Research → Overview, and visually inspect the G9.1 panel. Only after visual approval should the full local G9.1 validation chain run. Do not start G9.2 and do not persist the canonical AUROPHARMA assignment yet.
+
+
+---
+
+## 219. Entry 214 — G9.1 localhost visual approval and full local validation passed; G9.1 formally closed
+
+**Date:** 20 September 2026  
+**Actor:** owner local validation + ChatGPT final checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner completed the locked G9.1 workflow after pulling branch head `32a6f5723e821e1e02bc271d1836868c1cf96e77`.
+
+### Localhost visual approval
+
+AUROPHARMA → Research → Overview displayed the G9.1 activation-readiness panel correctly.
+
+Visually confirmed:
+
+- `PHARMA_V1 = READY`;
+- `GLOBAL_GENERICS = READY_FOR_ACTIVATION`;
+- `API_BULK_DRUGS = READY_EMERGING`;
+- `BIOPHARMA_BIOSIMILARS = REVIEW_REQUIRED`;
+- readiness denominator = Primary role only;
+- role-aware interpretation scope = `COMPANY_ACTIVE_ASSIGNMENT_ROLE`;
+- Global Generics contributes Primary requirements;
+- API Emerging contributes zero readiness requirements;
+- numeric scoring = `BLOCKED_METHODOLOGY`;
+- recommendation = `BLOCKED_UPSTREAM_SCORING`;
+- position sizing = `BLOCKED_UPSTREAM_RECOMMENDATION`;
+- production mutation = OFF;
+- score execution = OFF.
+
+Therefore:
+
+> **G9.1 VISUAL APPROVAL = PASS**
+
+### Full local validation
+
+The owner then ran the complete G9.1 validation sequence and reported all commands passing.
+
+Validated:
+
+- focused G9.1 + G8/G7 regression Vitest suite: PASS;
+- focused ESLint: PASS;
+- `npm run check:architecture`: PASS;
+- `npm run typecheck`: PASS;
+- `npm run build`: PASS.
+
+No failing local validation remains for G9.1.
+
+### Formal G9.1 result
+
+> **G9.1 = COMPLETE / AUROPHARMA ACTIVATION-READINESS & AUTHORITY CONTRACT VALIDATED / NO PERSISTENCE**
+
+The following remain OFF after G9.1:
+
+- canonical assignment persistence;
+- production mutation;
+- score execution;
+- score persistence;
+- recommendation activation/persistence;
+- position-sizing activation/persistence;
+- provider refresh;
+- scheduler change;
+- deployment;
+- PR merge.
+
+### Next checkpoint
+
+The next hard-capped checkpoint is:
+
+> **G9.2 — AUROPHARMA Canonical Research Activation**
+
+G9.2 must begin local-only and must not cross the production boundary without explicit owner approval naming the exact production action.
+
+**CURRENT STOP POINT:** G9.1 is closed. Begin G9.2 local canonical persistence implementation only; preserve score/recommendation/sizing fail-closed behavior.
