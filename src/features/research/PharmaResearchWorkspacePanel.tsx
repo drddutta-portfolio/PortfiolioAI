@@ -50,6 +50,7 @@ import { PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_METHOD_PROPOSAL } from "./p
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_COMBINED_SCORE } from "./pharmaGlobalGenericsPipelineCombinedScoreContract"
 import { PHARMA_GLOBAL_GENERICS_REGULATORY_SITE_TREATMENT } from "./pharmaGlobalGenericsRegulatorySiteTreatmentContract"
 import { PHARMA_GLOBAL_GENERICS_MARKET_RISK_NORMALIZATION_GATE } from "./pharmaGlobalGenericsMarketRiskNormalizationGate"
+import { PHARMA_GLOBAL_GENERICS_DRAWDOWN_METHOD_GATE } from "./pharmaGlobalGenericsDrawdownMethodGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -698,6 +699,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Structurally valid evidence can become methodology-ready without becoming score-ready</small>
               <p>Volatility still requires an approved Pharma peer/benchmark context, no benchmark has been selected, component weights remain unapproved, and missing market-risk evidence cannot become neutral.</p>
               <span>Benchmark: PENDING · Component weights: PENDING · Whole Risk dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.26 · Global Generics drawdown method approval gate</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_DRAWDOWN_METHOD_GATE.contractVersion}</small>
+              <p>Five drawdown-normalization approaches are now explicitly reviewable—absolute bands, same-subprofile peer-relative, benchmark-relative, self-history-relative, or a versioned hybrid—but none is approved by default.</p>
+              <span>Approved method: NONE · Owner approval: REQUIRED · Numeric drawdown curve: NO</span>
+            </article>
+            <article>
+              <strong>G6.26 · No silent market-risk default</strong>
+              <small>Each candidate method has an evidence prerequisite</small>
+              <p>Absolute bands require empirical Pharma evidence, peer-relative requires a reviewed Global Generics cohort, benchmark-relative requires an approved Pharma benchmark, and hybrid weighting must be explicit and versioned.</p>
+              <span>BANK bands inherited: NO · Silent benchmark: NO · Hidden hybrid weighting: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
