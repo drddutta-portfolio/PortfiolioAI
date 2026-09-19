@@ -12382,3 +12382,152 @@ It does **not** authorize:
 - PR #101 merge.
 
 **CURRENT STOP POINT:** Implement G6.23 as an owner-approved but not active code contract, with focused tests, methodology documentation and glass-box UI. Validate locally before treating G6.23 as validated.
+
+
+---
+
+## 146. Entry 141 — Gate G6.23 Global Generics combined pipeline score contract prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.23 — Global Generics Combined Pipeline Score Contract**.
+
+### Owner-approved upstream methodology
+
+G6.22 methodology approval was first recorded separately in Entry 140.
+
+Approved method:
+
+`LATEST_STATE_PER_PIPELINE_IDENTITY_THEN_MEDIAN_IF_NO_ADVERSE`
+
+### Combined score contract
+
+Added:
+
+`src/features/research/pharmaGlobalGenericsPipelineCombinedScoreContract.ts`
+
+Contract:
+
+`PHARMA_GLOBAL_GENERICS_PIPELINE_COMBINED_SCORE_V1_OWNER_APPROVED`
+
+State:
+
+`OWNER_APPROVED_NOT_ACTIVE`
+
+### Pipeline identity and lifecycle de-duplication
+
+Identity:
+
+- product or molecule;
+- geography.
+
+For each distinct identity:
+
+- historical events remain retained for audit;
+- only the latest reviewed state enters cross-identity aggregation;
+- older lifecycle stages do not receive repeated score credit.
+
+The implementation returns per-identity audit output including:
+
+- product/molecule;
+- geography;
+- latest event date;
+- latest stage;
+- normalized score;
+- historical event count.
+
+### Fail-closed behavior
+
+The combiner returns no numeric score when:
+
+- event set is empty → `INSUFFICIENT_EVIDENCE`;
+- any event fails G6.20 eligibility/normalization → `REVIEW_REQUIRED`;
+- the same pipeline identity has contradictory stages on the same latest date → `REVIEW_REQUIRED`;
+- any distinct pipeline identity has latest state:
+  - `DELAYED_OR_BLOCKED`; or
+  - `WITHDRAWN_OR_DISCONTINUED`
+  → `REVIEW_REQUIRED`.
+
+In all review-required states:
+
+`combinedScore = null`
+
+### Non-adverse aggregation
+
+When all distinct latest states are eligible, normalized and non-adverse:
+
+- aggregate statistic: **MEDIAN**;
+- one latest normalized score per distinct product/molecule + geography identity;
+- even-cardinality median = midpoint of the two central ordered scores.
+
+### Preserved methodology boundaries
+
+- age-based recency weighting: **NO**
+- event-count bonus: **NO**
+- materiality multiplier: **NO**
+- economic-relevance multiplier: **NO**
+- unrelated positive-event offset against adverse identity: **NO**
+- G4 regulatory-site penalty duplication: **NO**
+
+### Tests
+
+Added:
+
+`src/features/research/pharmaGlobalGenericsPipelineCombinedScoreContract.test.ts`
+
+Coverage includes:
+
+- owner-approved / not-active contract state;
+- lifecycle de-duplication;
+- same molecule across different geographies treated as distinct identities;
+- median across non-adverse latest states;
+- later non-adverse state superseding older adverse lifecycle state for the same identity;
+- adverse latest-state blocking;
+- same-date contradiction blocking;
+- ineligible-event blocking;
+- empty-event insufficient evidence.
+
+### Documentation
+
+Added:
+
+`docs/R4N_PHARMA_V1_Gate_G6_23_Global_Generics_Combined_Pipeline_Score_V1.md`
+
+### Glass-box UI
+
+Updated:
+
+`src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Gate G now includes:
+
+- **G6.23 · Combined pipeline score contract**
+- **G6.23 · Fail-closed combined-score boundary**
+
+The UI explicitly shows:
+
+- methodology owner-approved;
+- combined score function present;
+- activation: no;
+- adverse offset: no;
+- persisted score run: no;
+- recommendation impact: no.
+
+### Safety boundary remains unchanged
+
+- calculation-ready contract: **YES**
+- application score activation: **NO**
+- score execution wiring: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.23 cards in TORNTPHARM → Research → Gate G, then run focused G6.23 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. Only after validation should G6.23 be marked VALIDATED / NOT ACTIVE.
