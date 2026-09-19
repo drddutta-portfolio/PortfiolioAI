@@ -165,7 +165,7 @@ function AcquisitionRequirementList({ items }: { readonly items: readonly Pharma
   </div>
 }
 
-export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: { readonly securityId: string; readonly symbol: string; readonly research: SecurityResearch }) {
+export function PharmaResearchWorkspacePanel({ securityId, symbol, research, presentationMode = "FULL" }: { readonly securityId: string; readonly symbol: string; readonly research: SecurityResearch; readonly presentationMode?: "FULL" | "AUDIT_ONLY" }) {
   const resolution = usePharmaSubprofileResolution(securityId)
   const evaluationDate = useMemo(() => new Date().toISOString().slice(0, 10), [])
 
@@ -200,24 +200,26 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
     ? buildTorntpharmG7ExplainablePreview(model)
     : null
 
+  const auditOnly = presentationMode === "AUDIT_ONLY"
+
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
       <div>
-        <p className="eyebrow">Sector research workspace · Pharmaceuticals</p>
-        <h2 id="pharma-workspace-title">Pharmaceuticals deep research</h2>
-        <p>Profile-specific evidence follows the reviewed Pharma business model. Open the detailed layers only when you need the underlying requirements, sources or review controls.</p>
+        <p className="eyebrow">{auditOnly ? "Company-specific research audit · TORNTPHARM" : "Sector research workspace · Pharmaceuticals"}</p>
+        <h2 id="pharma-workspace-title">{auditOnly ? "TORNTPHARM research operations & audit" : "Pharmaceuticals deep research"}</h2>
+        <p>{auditOnly ? "Historical evidence-ingestion, source-review and local validation tooling retained for auditability. Shared PHARMA_V1 architecture and methodology are shown once in the normalized product layer above." : "Profile-specific evidence follows the reviewed Pharma business model. Open the detailed layers only when you need the underlying requirements, sources or review controls."}</p>
       </div>
-      <span className="pharma-workspace-lock">Scoring methodology not yet approved</span>
+      <span className="pharma-workspace-lock">{auditOnly ? "Company-specific audit tooling" : "Scoring methodology not yet approved"}</span>
     </div>
 
-    <div className="pharma-workspace-summary" aria-label="Pharma research model summary">
+    {!auditOnly ? <div className="pharma-workspace-summary" aria-label="Pharma research model summary">
       <div><span>Primary model</span><strong>{model.primary.displayName}</strong><small>Reviewed · {titleCase(model.primary.confidence)} confidence</small></div>
       <div><span>Primary evidence</span><strong>{model.primary.verified}/{model.primary.requirements.length} verified</strong><small>{model.primary.unavailable} unavailable · {model.primary.reviewAttention} need attention</small></div>
       <div><span>Secondary exposures</span><strong>{model.secondaries.length}</strong><small>{model.secondaries.length ? model.secondaries.map((item) => `${item.displayName} · ${titleCase(item.materiality)}`).join(" · ") : "None active"}</small></div>
       <div><span>Effective from</span><strong>{model.primary.effectiveFrom}</strong><small>Reviewed assignment authority</small></div>
-    </div>
+    </div> : null}
 
-    <details className="pharma-deep-layer pharma-scoring-methodology">
+    {!auditOnly ? <details className="pharma-deep-layer pharma-scoring-methodology">
       <summary>
         <div><span>Gate G · Scoring methodology design</span><small>PHARMA_V1 dimensions, subprofile participation and readiness gates · no numeric curves approved</small></div>
         <b>Open details</b>
@@ -1146,9 +1148,9 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
           </div>
         </section>
       </div>
-    </details>
+    </details> : null}
 
-    <details className="pharma-deep-layer">
+    {!auditOnly ? <details className="pharma-deep-layer">
       <summary>
         <div><span>Business model & exposure map</span><small>Primary evidence lanes, material overlays and emerging watches</small></div>
         <b>Open details</b>
@@ -1174,7 +1176,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         {model.secondaries.length ? model.secondaries.map((exposure) => <SecondaryExposureCard key={exposure.exposureCode} exposure={exposure} />) : <p className="pharma-workspace-empty">No active reviewed secondary exposures.</p>}
       </aside>
       </div>
-    </details>
+    </details> : null}
 
     <details className="pharma-deep-layer pharma-evidence-operations">
       <summary>
