@@ -64,6 +64,7 @@ import { PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_METHOD_GATE } from "./pharmaGlobal
 import { PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsBalanceSheetCalibrationEvidence"
 import { PHARMA_GLOBAL_GENERICS_VALUATION_METHOD_GATE } from "./pharmaGlobalGenericsValuationMethodGate"
 import { PHARMA_GLOBAL_GENERICS_VALUATION_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsValuationCalibrationEvidence"
+import { PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_METHOD_GATE } from "./pharmaGlobalGenericsOwnershipGovernanceMethodGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -908,6 +909,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Parent methodology valid · Global calibration missing</small>
               <p>The parent Valuation dimension is aligned, but Global Generics still lacks an approved peer metric mix, peer-relative bands and component aggregation. Missing-component renormalization and hidden reweighting remain prohibited.</p>
               <span>Deferral required: YES · Hidden fallback: NO · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.40 · Global Generics ownership / governance methodology boundary</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_METHOD_GATE.contractVersion}</small>
+              <p>The parent evidence shape is reusable—4 shareholding quarters minimum, 8 preferred, latest ownership data plus current material governance-event review—but Global Generics has no approved weights or numeric bands.</p>
+              <span>Parent shape: REUSABLE · Mechanical ownership shortcuts: NO · Numeric curve: NO</span>
+            </article>
+            <article>
+              <strong>G6.40 · Governance alignment and anti-double-counting blocker</strong>
+              <small>Parent dimension reconciliation required · G4 remains authoritative for blocking/high-risk events</small>
+              <p>The parent metric still sits in Governance while the methodology targets Ownership / Governance. G4 events may remain visible as context, but no second hidden penalty or additional gate cap is allowed inside this dimension.</p>
+              <span>Parent reconciliation: REQUIRED · Hidden G4 penalty: NO · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
