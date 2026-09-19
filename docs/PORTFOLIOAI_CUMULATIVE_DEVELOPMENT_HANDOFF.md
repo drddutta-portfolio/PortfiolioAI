@@ -15817,3 +15817,96 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.40 cards in TORNTPHARM → Research → Gate G, then run focused G6.40 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether Global Generics-specific Ownership / Governance calibration is evidence-supportable; if not, defer numeric normalization and preserve the separate parent-dimension reconciliation requirement.
+
+
+---
+
+## 182. Entry 177 — Gate G6.40 Global Generics ownership governance methodology boundary gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.40 has completed validation as a **proposal-only Global Generics Ownership / Governance methodology boundary gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsOwnershipGovernanceMethodGate.test.ts` → **PASS**
+- focused ESLint for the G6.40 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.40 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_METHOD_GATE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated reusable parent methodology shape
+
+- minimum 4 comparable shareholding quarters;
+- preferred 8 quarters;
+- latest shareholding quarter required;
+- current material governance events required;
+- ownership structure and stability;
+- pledge and control risk;
+- governance-event context;
+- promoter absence not automatically negative.
+
+### Validated parent alignment blocker
+
+Current parent metric dimension:
+
+`GOVERNANCE`
+
+Canonical methodology dimension:
+
+`OWNERSHIP_GOVERNANCE`
+
+A separate versioned parent reconciliation remains required.
+
+### Validated G4 anti-double-counting boundary
+
+- second hidden penalty for G4 critical/blocked events: **NO**
+- second hidden penalty for G4 high-risk events: **NO**
+- additional hidden gate cap inside dimension: **NO**
+- governance-event context may remain visible: **YES**
+
+### Validated unresolved Global Generics decisions
+
+- component weights: **UNAPPROVED**
+- ownership bands: **UNAPPROVED**
+- pledge bands: **UNAPPROVED**
+- governance-event context bands: **UNAPPROVED**
+- final aggregation: **UNAPPROVED**
+- promoter-percentage mechanical thresholds: **UNAPPROVED**
+- institutional-ownership mechanical bonus: **UNAPPROVED**
+
+Mechanical shortcuts remain prohibited:
+
+- zero pledge = automatically best score: **NO**
+- promoter absolute percentage alone sufficient: **NO**
+- institutional ownership automatically positive: **NO**
+
+### Safety boundary remains unchanged
+
+- numeric Ownership/Governance curve: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.40 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Inspect repository evidence for a defensible Global Generics-specific Ownership/Governance calibration. If evidence is insufficient, defer numeric normalization explicitly while preserving the separate parent-dimension reconciliation requirement and G4 anti-double-counting lock.
