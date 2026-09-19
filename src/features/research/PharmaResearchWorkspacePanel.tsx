@@ -34,6 +34,7 @@ import { PHARMA_FCF_YIELD_METRIC_CONTRACT } from "./pharmaFcfYieldMetricContract
 import { PHARMA_FCF_YIELD_DERIVATION_VERSION } from "./pharmaFcfYieldDerivationProposal"
 import { PHARMA_DOMESTIC_FCF_YIELD_CURVE } from "./pharmaDomesticFcfYieldCurveProposal"
 import { PHARMA_DOMESTIC_PEER_VALUATION_CONTRACT } from "./pharmaDomesticPeerValuationContract"
+import { PHARMA_DOMESTIC_PEER_COHORT_BUILDER_VERSION } from "./pharmaDomesticPeerCohortBuilder"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -458,6 +459,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Peer count, aggregation statistic, metric mix and relative bands remain unapproved</small>
               <p>PE_TTM and EV_EBITDA are candidate evidence families, but no peer builder, minimum cohort size, median/percentile rule, outlier treatment or premium/discount score curve is approved yet.</p>
               <span>Cohort builder: NO · Numeric peer curve: NO · Whole dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.10 · Domestic peer-cohort builder</strong>
+              <small>{PHARMA_DOMESTIC_PEER_COHORT_BUILDER_VERSION}</small>
+              <p>The deterministic cohort builder now admits only active securities whose PHARMA_V1 assignment resolves to a reviewed Domestic Formulations Primary on the evaluation date. Target, inactive, unresolved and Primary-mismatched securities are excluded explicitly.</p>
+              <span>Same reviewed Primary: ENFORCED · Unresolved assignments: EXCLUDED · Provider peers: NOT USED</span>
+            </article>
+            <article>
+              <strong>G6.10 · Minimum-comparability boundary</strong>
+              <small>Peer universe can be built, but score readiness remains blocked</small>
+              <p>No minimum peer count, comparable-evidence threshold, aggregation statistic, outlier rule or premium/discount curve is approved yet. Eligible peers can be identified without pretending the cohort is score-ready.</p>
+              <span>Minimum peer count: UNAPPROVED · Numeric peer curve: NO · Whole dimension ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
