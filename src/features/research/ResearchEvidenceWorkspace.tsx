@@ -68,15 +68,15 @@ function metricGroup(metric: ResearchMetric) {
   return "Other fundamentals"
 }
 
-export function FinancialsWorkspace({ research, snapshot, presentationProfileCode }: { readonly research: SecurityResearch; readonly snapshot: SecurityScoringSnapshot | null; readonly presentationProfileCode?: string | null }) {
-  const ui = researchProfileUiContract(presentationProfileCode ?? snapshot?.profileCode)
+export function FinancialsWorkspace({ research, snapshot }: { readonly research: SecurityResearch; readonly snapshot: SecurityScoringSnapshot | null }) {
+  const ui = researchProfileUiContract(snapshot?.profileCode)
   const rows = research.metrics.filter((metric) => !OWNERSHIP_CODES.has(metric.code) && !VALUATION_CODES.has(metric.code))
   const latest = latestByCode(rows)
 
   if (ui.financialWorkspaceSections.length) {
     const sectionCodes = ui.financialWorkspaceSections.flatMap((section) => section.codes)
     return <><ResearchSectionScore snapshot={snapshot} section="FINANCIALS" />
-      <div className="workspace-heading"><div><p className="eyebrow">Profile-specific financial evidence</p><h2>{ui.profileDisplayName} financial dashboard</h2><p>The page structure stays consistent while this profile selects the financial evidence that matters for its business model.</p></div></div>
+      <div className="workspace-heading"><div><p className="eyebrow">Profile-specific financial evidence</p><h2>{snapshot?.profileName ?? ui.profileCode} financial dashboard</h2><p>The page structure stays consistent while this profile selects the financial evidence that matters for its business model.</p></div></div>
       <div className="financial-group-grid">{ui.financialWorkspaceSections.map((section) => profileSectionCards(section, latest))}</div>
       <HistoryTable rows={rows} columns={sectionCodes} />
     </>
@@ -95,14 +95,14 @@ export function FinancialsWorkspace({ research, snapshot, presentationProfileCod
   </>
 }
 
-export function QualityGrowthWorkspace({ research, snapshot, presentationProfileCode }: { readonly research: SecurityResearch; readonly snapshot: SecurityScoringSnapshot | null; readonly presentationProfileCode?: string | null }) {
-  const ui = researchProfileUiContract(presentationProfileCode ?? snapshot?.profileCode)
+export function QualityGrowthWorkspace({ research, snapshot }: { readonly research: SecurityResearch; readonly snapshot: SecurityScoringSnapshot | null }) {
+  const ui = researchProfileUiContract(snapshot?.profileCode)
   const latest = latestByCode(research.metrics)
 
   if (ui.qualityGrowthWorkspaceSections.length) {
     const sectionCodes = ui.qualityGrowthWorkspaceSections.flatMap((section) => section.codes)
     return <><ResearchSectionScore snapshot={snapshot} section="QUALITY_GROWTH" />
-      <div className="workspace-heading"><div><p className="eyebrow">Profile-specific business performance</p><h2>Quality, Growth & Durability</h2><p>{ui.profileDisplayName} uses its own evidence contract inside the same PortfolioAI Research workflow.</p></div></div>
+      <div className="workspace-heading"><div><p className="eyebrow">Profile-specific business performance</p><h2>Quality, Growth & Durability</h2><p>{snapshot?.profileName ?? ui.profileCode} uses its own evidence contract inside the same PortfolioAI Research workflow.</p></div></div>
       <div className="quality-growth-grid">{ui.qualityGrowthWorkspaceSections.map((section) => profileSectionCards(section, latest))}</div>
       <HistoryTable rows={research.metrics} columns={sectionCodes} />
     </>
@@ -137,8 +137,8 @@ function valuationBucket(code: string) {
   return "Other valuation evidence"
 }
 
-export function ValuationWorkspace({ research, snapshot, presentationProfileCode }: { readonly research: SecurityResearch; readonly snapshot: SecurityScoringSnapshot | null; readonly presentationProfileCode?: string | null }) {
-  const ui = researchProfileUiContract(presentationProfileCode ?? snapshot?.profileCode)
+export function ValuationWorkspace({ research, snapshot }: { readonly research: SecurityResearch; readonly snapshot: SecurityScoringSnapshot | null }) {
+  const ui = researchProfileUiContract(snapshot?.profileCode)
   const rows = research.metrics.filter((metric) => VALUATION_CODES.has(metric.code))
   const primaryRows = rows.filter((metric) => !ui.excludedValuationMetricCodes.includes(metric.code))
   const latest = [...latestByCode(primaryRows).values()]
