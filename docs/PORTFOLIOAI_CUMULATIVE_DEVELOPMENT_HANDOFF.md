@@ -15910,3 +15910,108 @@ Mechanical shortcuts remain prohibited:
 **Result:** G6.40 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Inspect repository evidence for a defensible Global Generics-specific Ownership/Governance calibration. If evidence is insufficient, defer numeric normalization explicitly while preserving the separate parent-dimension reconciliation requirement and G4 anti-double-counting lock.
+
+
+---
+
+## 183. Entry 178 — Gate G6.41 Global Generics ownership governance calibration and parent alignment deferral gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.41 — Global Generics Ownership / Governance Calibration Evidence Sufficiency / Parent Alignment Deferral Gate**.
+
+### Starting state
+
+G6.40 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+Repository inspection found no defensible Global Generics-specific Ownership / Governance calibration basis.
+
+### Calibration evidence blocker
+
+Current blockers:
+
+- Global Generics Ownership / Governance calibration set: **NOT ESTABLISHED**
+- reviewed same-primary ownership cohort: **NOT ESTABLISHED**
+- ownership-band evidence: **NOT ESTABLISHED**
+- pledge/control-risk band evidence: **NOT ESTABLISHED**
+- governance-event-context band evidence: **NOT ESTABLISHED**
+- component-weight evidence: **NOT ESTABLISHED**
+- final aggregation: **NOT ESTABLISHED**
+
+Therefore:
+
+- Global-specific calibration available: **NO**
+- numeric Ownership / Governance curve ready: **NO**
+- deferral required: **YES**
+
+### Parent dimension-alignment blocker
+
+The canonical parent PHARMA_V1 profile currently assigns:
+
+`PHARMA_OWNERSHIP_GOVERNANCE → GOVERNANCE`
+
+The G5.5/G6.40 methodology targets:
+
+`OWNERSHIP_GOVERNANCE`
+
+This mismatch remains explicit.
+
+Required architecture action:
+
+`PARENT_OWNERSHIP_GOVERNANCE_DIMENSION_RECONCILIATION_REQUIRED`
+
+G6.41 does **not** modify the parent profile.
+
+### G4 anti-double-counting lock
+
+The G4 governance/regulatory gate remains authoritative for blocked and high-risk event handling.
+
+G6.41 preserves:
+
+- second hidden G4 penalty: **NO**
+- extra hidden gate cap inside Ownership / Governance: **NO**
+- governance-event context may remain visible: **YES**
+
+### Mechanical shortcuts remain prohibited
+
+- promoter percentage mechanical scoring: **NO**
+- institutional ownership mechanical bonus: **NO**
+- zero pledge automatically best: **NO**
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsOwnershipGovernanceCalibrationEvidence.ts`
+- `src/features/research/pharmaGlobalGenericsOwnershipGovernanceCalibrationEvidence.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_41_Global_Generics_Ownership_Governance_Calibration_Alignment_Deferral_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.41 · Ownership / governance calibration evidence sufficiency**
+- **G6.41 · Parent alignment and G4 double-counting lock**
+
+### Safety boundary remains unchanged
+
+- parent Ownership / Governance reconciliation performed: **NO**
+- G4 anti-double-counting lock: **PRESERVED**
+- Global Generics Ownership / Governance numeric calibration: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- parent contract mutation: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.41 cards in TORNTPHARM → Research → Gate G, then run focused G6.41 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, close the Global Generics Ownership / Governance slice as explicitly incomplete/fail-closed and move to the next unresolved Global Generics family.
