@@ -112,6 +112,12 @@ The runner defaults to the ordinary local Supabase URL:
 
 It refuses a connection string that does not contain `127.0.0.1` or `localhost`.
 
+Following the already validated Gate E local-fixture pattern, the SQL explicitly resolves the local app auth user:
+
+`dr.d.dutta@gmail.com`
+
+and then targets that user's earliest active portfolio. This is intentionally local-only and avoids postgres/RLS ambiguity.
+
 ## Expected verification
 
 The SQL prints HDFCBANK, TORNTPHARM and AUROPHARMA from the same current-holdings portfolio.
