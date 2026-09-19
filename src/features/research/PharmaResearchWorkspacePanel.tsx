@@ -71,6 +71,7 @@ import { PHARMA_GLOBAL_GENERICS_MOMENTUM_EVIDENCE_SUFFICIENCY } from "./pharmaGl
 import { PHARMA_GLOBAL_GENERICS_G6_COVERAGE_REVIEW } from "./pharmaGlobalGenericsG6CoverageReview"
 import { PHARMA_GLOBAL_GENERICS_APPLICABILITY_REGISTRY_RECONCILIATION } from "./pharmaGlobalGenericsApplicabilityRegistryReconciliation"
 import { PHARMA_G7_OVERLAY_NUMERIC_MODIFIER } from "./pharmaG7OverlayNumericModifierProposal"
+import { PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT } from "./pharmaG7GovernanceHighRiskConstraint"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -1012,6 +1013,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <strong>G7-P1 · Validation & consumption boundary</strong>
               <small>Proposal only · G7.1 consumption remains blocked</small>
               <p>PARTIAL, insufficient, blocked or Emerging Watch states stay non-numeric. Independent cap stacking remains prohibited, and the proposal cannot be consumed by the G7.1 adapter until owner validation is recorded.</p>
+              <span>Owner validation: REQUIRED · G7.1 consumption approved: NO · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G7-P2 · Governance high-risk constraint</strong>
+              <small>{PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.version}</small>
+              <p>G4 blocking behavior is preserved. HIGH_RISK remains non-blocking and Interpretation-only because no defensible Pharma numeric cap is established; no extra Quality, Risk or overall score penalty is invented.</p>
+              <span>HIGH_RISK numeric cap: NONE · Hidden double counting: NO</span>
+            </article>
+            <article>
+              <strong>G7-P2 · Blocking & anti-double-counting boundary</strong>
+              <small>Proposal only · G7.1 consumption remains blocked</small>
+              <p>BLOCKED_REVIEW and CRITICAL states still block the overall preview. REVIEW_REQUIRED stays non-numeric. The same governance/regulatory event cannot simultaneously create multiple hidden deductions.</p>
               <span>Owner validation: REQUIRED · G7.1 consumption approved: NO · Score execution: NO</span>
             </article>
           </div>
