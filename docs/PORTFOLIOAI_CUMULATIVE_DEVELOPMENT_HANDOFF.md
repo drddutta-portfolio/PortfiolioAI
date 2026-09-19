@@ -13995,3 +13995,70 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.30 cards in TORNTPHARM → Research → Gate G, then run focused G6.30 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether Global Generics-specific Operating Margin calibration is evidence-supportable; if not, defer numeric normalization rather than importing Domestic thresholds.
+
+
+---
+
+## 162. Entry 157 — Gate G6.30 Global Generics operating margin methodology boundary gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.30 has completed validation as a **proposal-only Global Generics operating-margin methodology boundary gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsOperatingMarginMethodGate.test.ts` → **PASS**
+- focused ESLint for the G6.30 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.30 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_METHOD_GATE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated methodology boundary
+
+Reusable parent PHARMA_V1 structure:
+
+- minimum 8 comparable quarters;
+- preferred 12 comparable quarters;
+- latest period required;
+- matched revenue / operating-profit periods required;
+- Level + Stability + Trend interpretation.
+
+Candidate statistics remain:
+
+- `MEDIAN_LATEST_8_OPERATING_MARGIN_PERCENT`
+- `INTERQUARTILE_RANGE_LATEST_8_PERCENTAGE_POINTS`
+- `MEDIAN_LATEST_4_MINUS_MEDIAN_PRIOR_4_PERCENTAGE_POINTS`
+
+Explicitly not inherited from Domestic Formulations:
+
+- 50/30/20 weights;
+- level bands;
+- stability bands;
+- trend bands;
+- final weighted aggregation.
+
+### Safety boundary remains unchanged
+
+- Global Generics operating-margin numeric curve: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.30 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Inspect current repository evidence for a defensible Global Generics-specific operating-margin calibration. If the evidence is insufficient, defer numeric normalization explicitly instead of importing Domestic Formulations thresholds.
