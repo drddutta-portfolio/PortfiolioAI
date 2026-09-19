@@ -13351,3 +13351,76 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.26 cards in TORNTPHARM → Research → Gate G, then run focused G6.26 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect which candidate drawdown methods are actually evidence-backed before any G6.27 numeric method is approved.
+
+
+---
+
+## 154. Entry 149 — Gate G6.26 Global Generics drawdown method approval gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.26 has completed validation as a **proposal-only Global Generics drawdown methodology approval gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsDrawdownMethodGate.test.ts` → **PASS**
+- focused ESLint for the G6.26 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.26 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_DRAWDOWN_METHOD_GATE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated candidate-method boundary
+
+Candidate methods remain:
+
+- `ABSOLUTE_BANDS`
+- `SAME_SUBPROFILE_PEER_RELATIVE`
+- `BENCHMARK_RELATIVE`
+- `SELF_HISTORY_RELATIVE`
+- `HYBRID_EXPLICITLY_VERSIONED`
+
+No candidate is approved by default.
+
+### Validated prerequisites
+
+- absolute bands require empirical Pharma evidence;
+- peer-relative requires a reviewed Global Generics Primary cohort;
+- benchmark-relative requires an explicitly approved Pharma benchmark;
+- self-history-relative requires sufficient comparable history;
+- hybrid requires at least two independently eligible methods plus explicit versioned weights.
+
+### Validated prohibited defaults
+
+- BANK_NBFC bands inherited: **NO**
+- missing evidence → zero/neutral: **NO**
+- generic Pharma percentile without reviewed same-primary cohort: **NO**
+- silent benchmark selection: **NO**
+- hidden hybrid weighting: **NO**
+
+### Safety boundary remains unchanged
+
+- approved drawdown method: **NO**
+- numeric drawdown curve ready: **NO**
+- whole Risk dimension ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.26 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Inspect current repository evidence and architecture to determine which drawdown methodology candidate is actually supportable before any G6.27 numeric drawdown contract is proposed.
