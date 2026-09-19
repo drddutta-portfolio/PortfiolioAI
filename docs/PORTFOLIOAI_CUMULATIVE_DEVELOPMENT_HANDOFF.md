@@ -12710,3 +12710,186 @@ Non-adverse aggregation:
 **Result:** G6.23 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** The Global Generics pipeline-evidence methodology chain is now calculation-ready through G6.23 but remains inactive. The next safe G6 step is to inspect the remaining Global Generics-specific mandatory evidence families and choose the next uncompleted subprofile-specific curve family without reusing Domestic Formulations thresholds or activating scoring.
+
+
+---
+
+## 149. Entry 144 — Gate G6.24 Global Generics regulatory-site treatment lock prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.24 — Global Generics Regulatory Site Status Treatment / Anti-Double-Counting Lock**.
+
+### Starting state
+
+Verified branch HEAD before G6.24:
+
+`5e9e3235d2b92059113597179fc8c02e2d193de6`
+
+G6.23 remained:
+
+**VALIDATED / NOT ACTIVE**
+
+### Why regulatory-site treatment is next
+
+The current Global Generics-specific methodology chain already covers:
+
+- Export / US Revenue Growth;
+- US Generic Price Erosion;
+- Pipeline / Launch / Approval Evidence.
+
+The remaining Global Generics-specific mandatory lane is:
+
+`PHARMA_REGULATORY_SITE_STATUS`
+
+where regulated export exposure exists.
+
+However this metric is already intertwined with:
+
+- G4 governance/regulatory gating;
+- G5.6 Regulatory & Market Risk;
+- the permanent anti-double-counting rule.
+
+Therefore G6.24 deliberately does **not** introduce a new numeric regulatory score.
+
+### New treatment contract
+
+Added:
+
+`src/features/research/pharmaGlobalGenericsRegulatorySiteTreatmentContract.ts`
+
+Contract:
+
+`PHARMA_GLOBAL_GENERICS_REGULATORY_SITE_TREATMENT_V1_PROPOSAL`
+
+Scope:
+
+- Primary: `GLOBAL_GENERICS`
+- metric: `PHARMA_REGULATORY_SITE_STATUS`
+- canonical dimension: `RISK`
+
+### Evidence boundary
+
+Required:
+
+- official regulatory/issuer evidence;
+- affected facility/product/geography established;
+- regulatory materiality established;
+- current unresolved actions represented;
+- latest material inspection/remediation state represented.
+
+Explicitly prohibited:
+
+- inferring company-wide clearance from one site closeout;
+- treating missing regulatory evidence as neutral.
+
+### G4 authority preserved
+
+G4 remains authoritative for:
+
+- `BLOCKED_REVIEW`;
+- `REVIEW_REQUIRED`;
+- `HIGH_RISK`;
+- materiality review;
+- remediation/history retention.
+
+G6.24 may surface the same regulatory context inside the Risk dimension but may not re-score it numerically.
+
+### Anti-double-counting lock
+
+Validated proposal boundaries:
+
+- second numeric penalty for G4 blocked review: **NO**
+- second numeric penalty for G4 high risk: **NO**
+- regulatory numeric score inside Risk: **NO**
+- regulatory numeric cap inside Risk: **NO**
+- remediation erases historical event: **NO**
+- regulatory context remains visible: **YES**
+
+### Risk-dimension separation
+
+The parent Risk methodology still contains distinct lanes for:
+
+- regulatory context;
+- trailing 1-year drawdown;
+- trailing 1-year volatility context.
+
+G6.24 addresses regulatory treatment only.
+
+Still unresolved:
+
+- Pharma drawdown normalization bands;
+- Pharma volatility/benchmark context;
+- component weighting.
+
+Therefore:
+
+`wholeRiskDimensionReady = false`
+
+### Projection helper
+
+Added a proposal-only helper that maps an existing G4 result into Global Generics Risk context:
+
+- `BLOCKED_REVIEW` → `BLOCKED_REVIEW`
+- `REVIEW_REQUIRED` → `REVIEW_REQUIRED`
+- `HIGH_RISK` → `HIGH_RISK_CONTEXT`
+- `CLEAR` → `CLEAR_CONTEXT`
+
+It always preserves:
+
+- `regulatoryNumericScore = null`
+- `additionalNumericPenalty = null`
+- `wholeRiskDimensionReady = false`
+
+### Tests
+
+Added:
+
+`src/features/research/pharmaGlobalGenericsRegulatorySiteTreatmentContract.test.ts`
+
+Coverage includes:
+
+- G4 authority and no second numeric penalty;
+- critical material event → blocked review with no numeric score;
+- high-risk context visible without a second deduction;
+- unknown materiality remains review-required;
+- closed-out historical event retained;
+- whole Risk dimension remains incomplete.
+
+### Documentation
+
+Added:
+
+`docs/R4N_PHARMA_V1_Gate_G6_24_Global_Generics_Regulatory_Site_Treatment_Lock_V1.md`
+
+### Glass-box UI
+
+Updated:
+
+`src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Gate G now includes:
+
+- **G6.24 · Global Generics regulatory-site treatment lock**
+- **G6.24 · Risk-dimension separation boundary**
+
+### Safety boundary remains unchanged
+
+- numeric regulatory curve: **NO**
+- second G4 penalty: **NO**
+- whole Risk dimension ready: **NO**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.24 cards in TORNTPHARM → Research → Gate G, then run focused G6.24 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. Only after validation should G6.24 be marked VALIDATED / NOT ACTIVE.
