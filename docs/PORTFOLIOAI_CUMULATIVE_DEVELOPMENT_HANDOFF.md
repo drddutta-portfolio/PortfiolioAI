@@ -17251,3 +17251,120 @@ This is an explicit methodology decision based on the absence of defensible nume
 **Result:** G7-P2 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** G7 prerequisites are complete. Proceed to G7.1 — Adapter Contract & Fail-Closed Calculation Engine. The adapter may consume validated proposal contracts for read-only preview only; it must remain non-persisting and fail closed.
+
+
+---
+
+## 197. Entry 192 — Gate G7.1 Read-only Scoring Adapter prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7.1 has been prepared as the first actual read-only calculation engine.
+
+### Core adapter
+
+Version:
+
+`PHARMA_V1_G7_READ_ONLY_SCORING_ADAPTER_V1_PROPOSAL`
+
+The adapter is pure TypeScript and:
+
+- consumes canonical PHARMA_V1 fixed dimension weights;
+- consumes G3 readiness;
+- consumes validated G7-P1 overlay modifier mechanics;
+- consumes validated G7-P2 governance behavior;
+- accepts only versioned numeric Primary dimension-score results;
+- emits explicit methodology lineage;
+- never persists a score;
+- never mutates recommendations or position sizing.
+
+### Critical aggregation boundary
+
+Repository review found no generic approved formula for converting a partially covered dimension into a numeric dimension score merely because score-ready coverage is >=60%.
+
+Therefore G7.1 treats 60% as a readiness gate only.
+
+A numeric dimension result requires both:
+
+1. readiness = score-ready; and
+2. an approved/versioned dimension-specific numeric score contract/result.
+
+Missing methodology cannot become zero, neutral, or a hidden renormalized value.
+
+### Overall aggregation
+
+The existing ten PHARMA_V1 weights are consumed from one canonical exported constant.
+
+Overall preview is permitted only when:
+
+- exact ten weighted dimensions are present;
+- overall readiness passes;
+- every weighted dimension has a numeric final result;
+- governance is not blocking.
+
+If any weighted dimension lacks a numeric result:
+
+`Overall Pharma score: Not currently computable`
+
+No remaining dimension weight is increased.
+
+### Overlay and Emerging behavior
+
+Material Overlay may alter only the Primary dimension result through the validated G7-P1 modifier.
+
+No separate overlay stock score exists.
+
+Emerging Watch remains numerically excluded and does not alter the Primary numeric result.
+
+### Governance behavior
+
+G7-P2 remains authoritative:
+
+- BLOCKED_REVIEW/CRITICAL may block overall preview;
+- HIGH_RISK remains Interpretation-only with no numeric penalty;
+- no hidden double counting.
+
+### Methodology lineage
+
+Each result includes versioned lineage for:
+
+- G7.1 adapter;
+- G3 readiness;
+- G7-P1;
+- G7-P2;
+- dimension-score contract;
+- supplied methodology decision lineage.
+
+### Artifacts
+
+Added:
+
+- `src/features/research/pharmaG7ReadOnlyScoringAdapter.ts`
+- `src/features/research/pharmaG7ReadOnlyScoringAdapter.test.ts`
+- `docs/R4N_PHARMA_V1_G7_1_Read_Only_Scoring_Adapter_V1.md`
+
+Updated:
+
+- `src/features/research/pharmaGateGScoringMethodProposal.ts` — exports the existing canonical dimension-weight constant; values unchanged.
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Gate G now exposes:
+
+- **G7.1 · Read-only scoring adapter**
+- **G7.1 · Fail-closed aggregation boundary**
+
+### Safety boundary
+
+- TORNTPHARM G7.2 preview wiring: **NOT STARTED**
+- database writes: **NO**
+- score persistence: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- provider calls: **NO**
+- schema migration: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, inspect the two G7.1 cards, run focused G7.1 + G7-P1 + G7-P2 + readiness tests, focused ESLint, `npm run typecheck`, and `npm run build`. Only after owner validation should G7.2 wire TORNTPHARM into the adapter.
