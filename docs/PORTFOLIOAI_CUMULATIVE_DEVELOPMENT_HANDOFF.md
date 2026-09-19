@@ -16323,3 +16323,101 @@ G6.24–G6.29 remain authoritative for the Global Generics Risk slice:
 **Result:** G6.42 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Inspect whether repository evidence can support a dedicated Pharma parent Momentum contract and an approved Pharma benchmark methodology without importing BANK_NBFC assumptions. If unsupported, defer Momentum explicitly.
+
+
+---
+
+## 187. Entry 182 — Gate G6.43 Global Generics momentum parent-contract benchmark deferral gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.43 — Global Generics Momentum Parent-Contract / Benchmark Evidence Sufficiency Deferral Gate**.
+
+### Starting state
+
+G6.42 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+Repository inspection then found no evidence-backed basis to create the missing Pharma Momentum prerequisites.
+
+### Current blockers
+
+- dedicated Pharma parent Momentum contract: **NOT ESTABLISHED**
+- approved Pharma benchmark: **NOT ESTABLISHED**
+- Global Generics Momentum calibration set: **NOT ESTABLISHED**
+- absolute-momentum band evidence: **NOT ESTABLISHED**
+- relative-strength band evidence: **NOT ESTABLISHED**
+- component-weight evidence: **NOT ESTABLISHED**
+- final aggregation: **NOT ESTABLISHED**
+
+Therefore:
+
+- evidence identity validated: **YES**
+- dedicated Pharma parent Momentum contract available: **NO**
+- approved Pharma benchmark available: **NO**
+- BANK_NBFC pilot may be fallback: **NO**
+- Global-specific calibration available: **NO**
+- relative-strength score ready: **NO**
+- numeric Momentum curve ready: **NO**
+- whole Momentum dimension ready: **NO**
+- deferral required: **YES**
+
+### What remains valid
+
+- `PRICE_MOMENTUM_12M`
+- `PRICE_MOMENTUM_6M`
+- `RELATIVE_STRENGTH_12M`
+- raw authority: `MARKET_PRICE_HISTORY`
+- derived store: `MARKET_METRIC_OBSERVATIONS`
+- absolute momentum definition: `CLOSE_TO_CLOSE_RETURN_WITH_14_DAY_LOOKBACK_TOLERANCE`
+- relative strength definition: `STOCK_RETURN_MINUS_APPROVED_BENCHMARK_RETURN`
+
+### Explicit prohibitions
+
+- NIFTY BANK as Pharma benchmark by analogy: **NO**
+- BANK_NBFC momentum weights as fallback: **NO**
+- provider technical score as Momentum authority: **NO**
+- fabricated benchmark: **NO**
+- fabricated bands: **NO**
+- missing relative strength becoming neutral: **NO**
+- hidden reweighting around missing relative strength: **NO**
+
+### Regulatory / Market Risk remains closed fail-closed
+
+G6.24–G6.29 remain authoritative and are not reopened.
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsMomentumEvidenceSufficiency.ts`
+- `src/features/research/pharmaGlobalGenericsMomentumEvidenceSufficiency.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_43_Global_Generics_Momentum_Parent_Benchmark_Evidence_Sufficiency_Deferral_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.43 · Momentum parent-contract / benchmark evidence sufficiency**
+- **G6.43 · Explicit Momentum deferral**
+
+### Safety boundary remains unchanged
+
+- Global Generics Momentum numeric calibration: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema/local/production DB mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.43 cards in TORNTPHARM → Research → Gate G, then run focused G6.43 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, close Global Generics Momentum as explicitly incomplete/fail-closed and perform a G6 Global Generics coverage review before considering G7.
