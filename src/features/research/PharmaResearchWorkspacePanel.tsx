@@ -66,6 +66,7 @@ import { PHARMA_GLOBAL_GENERICS_VALUATION_METHOD_GATE } from "./pharmaGlobalGene
 import { PHARMA_GLOBAL_GENERICS_VALUATION_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsValuationCalibrationEvidence"
 import { PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_METHOD_GATE } from "./pharmaGlobalGenericsOwnershipGovernanceMethodGate"
 import { PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsOwnershipGovernanceCalibrationEvidence"
+import { PHARMA_GLOBAL_GENERICS_MOMENTUM_METHOD_GATE } from "./pharmaGlobalGenericsMomentumMethodGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -938,6 +939,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Current parent dimension: GOVERNANCE · canonical dimension: OWNERSHIP / GOVERNANCE</small>
               <p>The parent mismatch remains unresolved and G4 remains authoritative for blocked/high-risk governance or regulatory events. No second hidden penalty or extra gate cap may be introduced here.</p>
               <span>Parent reconciliation performed: NO · G4 anti-double-counting: LOCKED · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.42 · Global Generics momentum methodology boundary</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_MOMENTUM_METHOD_GATE.contractVersion}</small>
+              <p>The evidence identity is defined for 12-month momentum, 6-month momentum and 12-month relative strength, but a dedicated Pharma parent Momentum contract and approved Pharma benchmark are still missing.</p>
+              <span>Parent contract: MISSING · Pharma benchmark: UNAPPROVED · Numeric curve: NO</span>
+            </article>
+            <article>
+              <strong>G6.42 · BANK pilot separation</strong>
+              <small>No BANK_NBFC weights, NIFTY BANK benchmark or provider technical score may leak into Pharma</small>
+              <p>Global Generics still requires its own component weights, momentum bands, relative-strength bands, approved benchmark and final aggregation. Missing relative strength cannot silently become neutral.</p>
+              <span>BANK inheritance: NO · Global calibration: PENDING · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
