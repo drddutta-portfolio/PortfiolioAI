@@ -9785,3 +9785,105 @@ Remaining before peer-relative numeric scoring:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.11 is validated. The next permitted G6 task is to define the peer premium/discount calculation convention and numeric normalization proposal for Domestic Formulations, while keeping score execution disabled.
+
+
+---
+
+## 123. Entry 118 — Gate G6.12 Domestic peer premium/discount normalization prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.12 — Domestic Formulations Peer Premium/Discount & Numeric Normalization Proposal**.
+
+### G6.11 post-validation type-safety fix
+
+After G6.11 validation, strict TypeScript identified possible undefined indexed access inside the `median()` helper.
+
+The helper was corrected with explicit guarded access.
+
+Owner reran:
+
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+No methodology or median output changed.
+
+### G6.12 calculation convention
+
+For each peer valuation family:
+
+`(PEER_MEDIAN_MULTIPLE / TARGET_MULTIPLE - 1) * 100`
+
+Sign convention:
+
+- positive → target discount to peer median;
+- zero → at peer median;
+- negative → target premium to peer median.
+
+Applies independently to:
+
+- `PE_TTM`
+- `EV_EBITDA`
+
+### Fail-closed requirements
+
+Target and peer median multiples must both be:
+
+- finite;
+- positive;
+- economically meaningful under G6.11.
+
+Invalid/non-positive multiples do not produce a relative valuation observation.
+
+### Proposed per-metric normalization bands
+
+- >= +25% → 100
+- >= +10% and < +25% → 80
+- >= -5% and < +10% → 60
+- >= -20% and < -5% → 40
+- < -20% → 20
+
+These match the broad relative-value percentage ladder used by the Domestic self-history curve while preserving separate evidence lanes.
+
+### Still unapproved
+
+- simple PE/EV averaging: **NO**
+- PE vs EV/EBITDA weighting: **NO**
+- combined peer-component score: **NO**
+- self-history vs peer vs FCF component weights: **NO**
+- whole Valuation dimension ready: **NO**
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaDomesticPeerPremiumDiscountProposal.ts`
+- `src/features/research/pharmaDomesticPeerPremiumDiscountProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_12_Domestic_Peer_Premium_Discount_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.12 · Peer premium/discount normalization**
+- **G6.12 · Cross-metric combination boundary**
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.12 cards in TORNTPHARM → Research → Gate G, then run focused G6.12 validation. Only after validation should G6 define the PE-vs-EV/EBITDA combination rule and then the overall Domestic Valuation component weights.
