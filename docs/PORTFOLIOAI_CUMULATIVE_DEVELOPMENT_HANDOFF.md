@@ -16923,3 +16923,123 @@ If G7 exposes a genuine implementation contradiction, that issue should be treat
 **G6 RESULT:** **CLOSED FOR CURRENT TORNTPHARM / REFERENCE IMPLEMENTATION**.
 
 **CURRENT STOP POINT:** Prepare G7 — Read-only Scoring Adapter from the validated G6 contracts. Do not create G6.46 unless an actual correctness defect is discovered in the validated G6.45 reconciliation.
+
+
+---
+
+## 193. Entry 188 — Gate G7-P1 Material Overlay numeric modifier and combined-cap contract prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7 has started with the first bounded prerequisite:
+
+**G7-P1 — Material Overlay Numeric Modifier & Combined-Cap Contract**
+
+G6 remains closed. This is not a reopened G6.x checkpoint.
+
+### Existing authority preserved
+
+The validated G2 overlay architecture remains authoritative:
+
+- Primary remains the scoring driver;
+- Material Overlay may affect only eligible dimensions;
+- no independent Overlay stock score;
+- reviewed economic materiality required;
+- evidence completeness required;
+- evidence confidence required;
+- normalized overlay signal required;
+- unresolved contradictions fail closed;
+- one combined per-dimension cap;
+- independent cap stacking prohibited;
+- Emerging Watch numerically excluded;
+- missing evidence never becomes neutral.
+
+### Candidate formula proposed
+
+Version:
+
+`PHARMA_V1_G7_OVERLAY_NUMERIC_MODIFIER_V1_PROPOSAL`
+
+Candidate formula:
+
+```text
+CAP_POINTS
+× (ECONOMIC_MATERIALITY_PERCENT / 100)
+× EVIDENCE_COMPLETENESS
+× CONFIDENCE_FACTOR
+× NORMALIZED_OVERLAY_SIGNAL
+```
+
+Candidate confidence factors:
+
+- LOW = 0.50
+- MEDIUM = 0.75
+- HIGH = 1.00
+
+Materiality uses direct reviewed economic-share scaling rather than another invented breakpoint.
+
+### Candidate combined cap
+
+One combined per-dimension cap:
+
+`±10 points`
+
+The value is explicitly a conservative methodology proposal, not an empirical fact.
+
+The contract records:
+
+- empirically calibrated: **NO**
+- owner validation required: **YES**
+- G7.1 consumption approved: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+
+### Readiness boundary
+
+Only `READY` overlay readiness may emit a proposed numeric modifier.
+
+The following remain non-numeric:
+
+- PARTIAL
+- INSUFFICIENT_EVIDENCE
+- BLOCKED_REVIEW
+- EMERGING_WATCH
+
+This intentionally avoids inventing a second readiness multiplier.
+
+### Combined-cap and output bounds
+
+Multiple future overlays affecting one dimension are summed and clamped to the single combined ±10-point cap.
+
+Final dimension result remains bounded to 0–100.
+
+### Artifacts added
+
+- `src/features/research/pharmaG7OverlayNumericModifierProposal.ts`
+- `src/features/research/pharmaG7OverlayNumericModifierProposal.test.ts`
+- `docs/R4N_PHARMA_V1_G7_P1_Overlay_Numeric_Modifier_Combined_Cap_Contract_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Gate G now exposes two G7-P1 review cards:
+
+- **G7-P1 · Material Overlay numeric modifier proposal**
+- **G7-P1 · Validation & consumption boundary**
+
+### Safety boundary
+
+- G7.1 adapter implementation: **NOT STARTED**
+- G7-P2: **NOT STARTED**
+- score execution: **NO**
+- score persistence: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- schema/database mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G7-P1 cards, run focused G7-P1 + G2 Vitest, focused ESLint, `npm run typecheck`, and `npm run build`. Only after owner validation should G7-P1 be closed and G7-P2 begin.
