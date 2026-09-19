@@ -9575,3 +9575,112 @@ Remaining before peer-relative numeric scoring:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.10 is validated. The next permitted G6 task is to define the minimum peer-count / comparable-evidence / aggregation-statistic contract for Domestic Formulations peer-relative Valuation, while keeping numeric peer scoring disabled until that methodology is explicitly approved.
+
+
+---
+
+## 121. Entry 116 — Gate G6.11 Domestic peer minimum-comparability contract prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.11 — Domestic Formulations Peer Minimum-Comparability & Aggregation Contract**.
+
+### Purpose
+
+G6.10 implemented deterministic peer eligibility.
+
+G6.11 now proposes the minimum cohort/comparability requirements and aggregation statistic needed before any numeric peer-relative curve can exist.
+
+### Proposed cohort size
+
+- minimum eligible comparable peers: **3**
+- preferred eligible comparable peers: **5**
+
+Fewer than three comparable peers for a metric family resolves to:
+
+`INSUFFICIENT_EVIDENCE`
+
+Broad-sector substitutes remain prohibited.
+
+### Aggregation
+
+Proposed statistic:
+
+`MEDIAN`
+
+Outlier policy:
+
+`NO_WINSORIZATION_V1_MEDIAN_ONLY`
+
+Rationale:
+
+- deterministic;
+- robust to one unusually high/low multiple;
+- avoids introducing an arbitrary winsorization percentile;
+- remains simple to explain and audit.
+
+### Candidate peer metrics
+
+- `PE_TTM`
+- `EV_EBITDA`
+
+Each metric family is aggregated independently.
+
+The full peer-relative component requires both metric families to satisfy minimum comparability.
+
+One metric family alone does not make the component complete.
+
+### Comparability requirements
+
+Required:
+
+- same metric code within aggregation;
+- same period basis;
+- same consolidation scope;
+- fresh evidence;
+- selected/reviewed evidence;
+- explicit exclusion of negative or economically meaningless denominators;
+- acquisition/one-off distortions require review.
+
+### Still unapproved
+
+- PE versus EV/EBITDA weighting: **NO**
+- premium/discount calculation convention: **NO**
+- premium/discount score bands: **NO**
+- peer-relative numeric score: **NO**
+- whole Valuation dimension ready: **NO**
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaDomesticPeerComparabilityContract.ts`
+- `src/features/research/pharmaDomesticPeerComparabilityContract.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_11_Domestic_Peer_Comparability_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.11 · Peer minimum-comparability contract**
+- **G6.11 · Median aggregation boundary**
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.11 cards in TORNTPHARM → Research → Gate G, then run focused G6.11 validation. Only after validation should G6 define the peer premium/discount calculation and numeric normalization curve.
