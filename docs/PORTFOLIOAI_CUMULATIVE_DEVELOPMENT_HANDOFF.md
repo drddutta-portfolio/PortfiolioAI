@@ -10113,3 +10113,96 @@ Still unresolved:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.13 cards in TORNTPHARM → Research → Gate G, then run focused G6.13 validation. A later methodology checkpoint must explicitly approve PE-vs-EV/EBITDA weighting before a combined peer-relative score can exist.
+
+
+---
+
+## 126. Entry 121 — Gate G6.13 Domestic peer cross-metric combination lock validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.13 has completed validation as a **proposal-only Domestic Formulations peer cross-metric combination approval lock**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.13 plus G6.12/G6.11/G6.10/G6.9 and the active Domestic Valuation methodology slice → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.13 validated combination boundary
+
+Required normalized peer inputs:
+
+- `PE_TTM`
+- `EV_EBITDA`
+
+Validated rules:
+
+- both metric families required;
+- neither metric may substitute for the other;
+- missing input fails closed;
+- invalid input fails closed;
+- single-metric fallback prohibited.
+
+### Explicitly unapproved combination methods
+
+- equal-weight arithmetic mean: **NO**
+- weighted mean: **NO**
+- best-of: **NO**
+- worst-of: **NO**
+- fallback to one metric: **NO**
+
+Current explicit weights:
+
+- PE weight: `null`
+- EV/EBITDA weight: `null`
+
+When both normalized inputs are present, the state is only:
+
+`READY_FOR_WEIGHTING_DECISION`
+
+The combined peer score remains:
+
+`null`
+
+### Domestic Valuation state
+
+Validated / not active:
+
+- G6.2 — self-history relative valuation
+- G6.8 — FCF-yield cash-flow corroboration
+- G6.9 — peer-cohort methodology lock
+- G6.10 — deterministic peer eligibility builder
+- G6.11 — minimum-comparability and median aggregation
+- G6.12 — peer premium/discount calculation and per-metric normalization
+- G6.13 — peer cross-metric combination readiness lock
+
+Still unresolved:
+
+- PE-vs-EV/EBITDA weighting rule
+- combined peer-relative score contract
+- self-history vs peer-relative vs FCF component weights
+- final Domestic Valuation readiness closure
+
+Therefore:
+
+`whole Valuation dimension ready = NO`
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.13 is validated. The next permitted G6 task is to explicitly define and justify the PE-vs-EV/EBITDA weighting rule for the Domestic peer-relative component, while keeping the overall Valuation dimension inactive.
