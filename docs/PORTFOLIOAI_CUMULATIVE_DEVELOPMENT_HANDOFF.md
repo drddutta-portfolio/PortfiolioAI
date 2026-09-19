@@ -11570,3 +11570,101 @@ Regulatory-site severity remains governed by the separate G4 governance/regulato
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.19 is validated. The next safe Global Generics step is to define a separate pipeline normalization methodology for stage, commercial traction, materiality and adverse events while keeping score execution disabled.
+
+
+---
+
+## 139. Entry 134 — Gate G6.20 Global Generics pipeline stage normalization prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.20 — Global Generics Pipeline Stage Normalization**.
+
+### Purpose
+
+G6.19 validated the evidence identity contract.
+
+G6.20 now proposes per-event numeric stage normalization while keeping multi-event aggregation blocked.
+
+### Proposed stage scores
+
+- `FILED_OR_SUBMITTED` → 40
+- `TENTATIVE_APPROVAL` → 55
+- `FINAL_APPROVAL` → 70
+- `LAUNCHED` → 85
+- `COMMERCIAL_TRACTION_CONFIRMED` → 100
+- `DELAYED_OR_BLOCKED` → 20
+- `WITHDRAWN_OR_DISCONTINUED` → 0
+
+### Eligibility boundary
+
+An event normalizes only if:
+
+- product/molecule identity exists;
+- geography exists;
+- event date exists;
+- source/reference exists;
+- materiality is established;
+- economic relevance is established.
+
+### Materiality treatment
+
+Materiality acts only as an eligibility gate.
+
+G6.20 does **not** approve a numeric materiality multiplier or inferred exposure percentage.
+
+### Aggregation blocker
+
+Explicitly unapproved:
+
+- event-count bonus;
+- simple average across events;
+- median across events;
+- recency-weighted aggregation;
+- materiality-weighted aggregation.
+
+Therefore:
+
+`combinedPipelineScoreReady = false`
+
+### Adverse-event visibility
+
+Delayed, blocked, withdrawn and discontinued events receive explicit adverse stage scores.
+
+An unrelated positive event may not silently cancel an adverse material event.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsPipelineStageNormalization.ts`
+- `src/features/research/pharmaGlobalGenericsPipelineStageNormalization.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_20_Global_Generics_Pipeline_Stage_Normalization_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.20 · Global Generics pipeline stage normalization**
+- **G6.20 · Multi-event aggregation blocker**
+
+### Safety boundary remains unchanged
+
+- combined pipeline score: **NO**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.20 cards in TORNTPHARM → Research → Gate G, then run focused G6.20 validation. Only after validation should a separate multi-event aggregation contract be considered.
