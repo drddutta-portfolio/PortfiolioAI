@@ -32,7 +32,7 @@ export interface PharmaGateGScoringMethodProposal {
   readonly positionSizingEnabled: false
 }
 
-const PHARMA_V1_DIMENSION_WEIGHTS: readonly PharmaGateGDimensionWeight[] = [
+export const PHARMA_V1_DIMENSION_WEIGHTS: readonly PharmaGateGDimensionWeight[] = [
   { dimensionCode: "QUALITY", weight: 13 },
   { dimensionCode: "GROWTH", weight: 15 },
   { dimensionCode: "CAPITAL_EFFICIENCY", weight: 10 },
