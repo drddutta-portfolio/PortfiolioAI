@@ -15358,3 +15358,97 @@ A separate versioned parent reconciliation is still required.
 **Result:** G6.37 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Close the Global Generics Balance Sheet slice as explicitly incomplete/fail-closed and move to the next unresolved Global Generics family in the G6 applicability registry.
+
+
+---
+
+## 177. Entry 172 — Gate G6.38 Global Generics valuation methodology boundary gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.38 — Global Generics Valuation Methodology Boundary Gate**.
+
+### Starting state
+
+G6.37 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+The next unresolved Global Generics family in the G6 applicability registry is:
+
+`PHARMA_VALUATION_CONTEXT`
+
+under:
+
+`VALUATION`
+
+### Parent valuation boundary
+
+The parent valuation proposal is already dimension-aligned and establishes the reusable methodology shape:
+
+- self-history-relative valuation;
+- peer-relative valuation;
+- cash-flow corroboration;
+- PE, EV/EBITDA and FCF yield evidence families;
+- current authoritative market price required;
+- current reviewed earnings/cash inputs required;
+- peer cohort must respect business model;
+- negative/non-meaningful denominators require explicit treatment;
+- acquisition and one-off normalization required.
+
+### Domestic Formulations methodology that does not transfer
+
+Existing Domestic owner-approved choices remain Domestic-specific:
+
+- final valuation weights 40% self-history / 40% peer-relative / 20% FCF corroboration: **NOT INHERITED**
+- peer-relative PE/EV-EBITDA blend 50% / 50%: **NOT INHERITED**
+- Domestic bands: **NOT INHERITED**
+
+### Global Generics-specific decisions still unresolved
+
+- component weights: **UNAPPROVED**
+- self-history bands: **UNAPPROVED**
+- peer-relative metric mix: **UNAPPROVED**
+- peer-relative bands: **UNAPPROVED**
+- FCF corroboration method: **UNAPPROVED**
+- final aggregation: **UNAPPROVED**
+
+Missing-component renormalization and hidden reweighting remain prohibited.
+
+Therefore:
+
+`numericValuationCurveReady = false`
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsValuationMethodGate.ts`
+- `src/features/research/pharmaGlobalGenericsValuationMethodGate.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_38_Global_Generics_Valuation_Methodology_Boundary_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.38 · Global Generics valuation methodology boundary**
+- **G6.38 · Global-specific valuation calibration blocker**
+
+### Safety boundary remains unchanged
+
+- Global Generics Valuation numeric curve: **NO**
+- Domestic calibration inheritance: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.38 cards in TORNTPHARM → Research → Gate G, then run focused G6.38 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether Global Generics-specific valuation calibration is evidence-supportable; if not, defer numeric valuation rather than importing Domestic Formulations choices.
