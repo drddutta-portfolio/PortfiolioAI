@@ -19125,3 +19125,125 @@ GitHub implementation → handoff update → owner pull → Local Supabase/Vite 
 The next stage is **G9**.
 
 **CURRENT STOP POINT:** G8 is formally closed. Do not make further G8 changes unless a genuine regression is discovered. Stop at the G9 boundary and begin G9 only after an explicit G9 plan / owner instruction.
+
+
+---
+
+## 218. Entry 213 — G9 plan locked; G9.1 AUROPHARMA activation-readiness implemented for owner visual review
+
+**Date:** 20 September 2026  
+**Actor:** ChatGPT implementation checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G8 remains formally closed. Work has advanced to the hard-capped G9 sequence only after the owner explicitly instructed continuation.
+
+### Canonical G9 plan
+
+Added:
+
+`docs/PortfolioAI_G9_Final_Implementation_Plan.md`
+
+Locked sequence:
+
+1. G9.1 — AUROPHARMA Activation-Readiness & Authority Contract
+2. G9.2 — AUROPHARMA Canonical Research Activation
+3. G9.3 — Reciprocal PHARMA_V1 Normalization + Final Activation Validation
+4. next major stage
+
+There is no G9.4 for routine follow-up.
+
+The plan preserves the six independent activation layers and incorporates the precision corrections approved before implementation:
+
+- Biosimilars is tested for absence from active reviewed Primary/secondary authority, not merely UI state;
+- persistence isolation is defined as security/assignment isolation + role binding rather than inventing a literal `(company, role)` database key;
+- TORNTPHARM G9.3 continuity will use semantic deep equality rather than brittle byte-for-byte serialization equality.
+
+### G9.1 implementation
+
+Added:
+
+- `src/features/research/auropharmaG91ActivationReadiness.ts`
+- `src/features/research/auropharmaG91ActivationReadiness.test.ts`
+- `src/features/research/AuropharmaG91ActivationReadinessPanel.tsx`
+- `docs/R4N_G9_1_AUROPHARMA_Activation_Readiness_Authority_Contract_V1.md`
+
+Updated:
+
+- `src/pages/ResearchPage.tsx`
+
+G9.1 creates a non-persisted AUROPHARMA assignment candidate for the future G9.2 local canonical persistence step:
+
+- profile: `PHARMA_V1`;
+- Primary: `GLOBAL_GENERICS`;
+- assignment state: `REVIEWED`;
+- confidence: `HIGH`;
+- effective from: `2026-03-31`;
+- reviewed secondary: `API_BULK_DRUGS = EMERGING`;
+- `BIOPHARMA_BIOSIMILARS` is intentionally absent from the activation candidate and remains `REVIEW_REQUIRED`.
+
+### Independent activation states
+
+G9.1 explicitly represents:
+
+- parent Pharma profile: `READY`;
+- Primary assignment: `READY_FOR_ACTIVATION`;
+- API Emerging: `READY_EMERGING`;
+- Biosimilars: `REVIEW_REQUIRED`;
+- numeric scoring: `BLOCKED_METHODOLOGY`;
+- recommendation: `BLOCKED_UPSTREAM_SCORING`;
+- position sizing: `BLOCKED_UPSTREAM_RECOMMENDATION`.
+
+The contract remains non-persisting:
+
+- canonical assignment persisted: false;
+- production mutation enabled: false;
+- score execution enabled: false;
+- recommendation persistence enabled: false;
+- position-sizing persistence enabled: false.
+
+### G9.1 role-aware readiness re-check
+
+The future-persistence candidate is run through the shared three-layer/workspace contracts.
+
+G9.1 fails closed unless:
+
+- Global Generics is the Primary;
+- API resolves as `EMERGING_WATCH`;
+- API contributes zero requirements to the readiness denominator;
+- Biosimilars remains unresolved;
+- interpretation scope remains `COMPANY_ACTIVE_ASSIGNMENT_ROLE`.
+
+This re-confirms the property on the G9.1 candidate rather than merely inheriting G8.2 preview behavior.
+
+### UI
+
+AUROPHARMA → Research → Overview now mounts the G9.1 panel after the completed G8.1/G8.2/G8.3 audit panels.
+
+Expected visible G9.1 states:
+
+- Research profile: PHARMA_V1 · Ready
+- Canonical candidate: Global Generics · Ready for activation
+- Secondary: API / Bulk Drugs · Emerging
+- Unresolved: Biopharma / Biosimilars · Review Required
+- Readiness denominator: Primary role only
+- Numeric scoring: Blocked Methodology
+- Recommendation: Blocked Upstream Scoring
+- Position sizing: Blocked Upstream Recommendation
+- Production mutation: OFF
+- score execution: OFF
+
+### Safety boundary
+
+No local or production assignment persistence has occurred.
+
+No production database mutation, production migration, evidence write, score persistence, recommendation activation/persistence, position-sizing activation/persistence, provider refresh, deployment, scheduler change or PR merge has occurred.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Mandatory workflow state
+
+Per the owner-locked workflow, implementation and this handoff update occur before owner pull.
+
+G9.1 is **NOT COMPLETE** and full local validation is intentionally deferred until after localhost visual approval.
+
+**CURRENT STOP POINT:** owner should `git pull`, verify the new branch HEAD, use the existing Local Supabase + Local Vite environment, hard-refresh AUROPHARMA → Research → Overview, and visually inspect the G9.1 panel. Only after visual approval should the full local G9.1 validation chain run. Do not start G9.2 and do not persist the canonical AUROPHARMA assignment yet.
