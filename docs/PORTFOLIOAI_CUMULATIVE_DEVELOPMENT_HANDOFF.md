@@ -18766,3 +18766,113 @@ Scope is strictly:
 No G8.4 is permitted for routine work.
 
 **CURRENT STOP POINT:** G8.2 is formally closed. Begin G8.3 only.
+
+
+---
+
+## 214. Entry 209 — G8.3 portability / isolation / leakage validation implemented
+
+**Date:** 20 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G8.2 was formally closed at Entry 208 under the locked build/validation workflow.
+
+G8.3 is now implemented as the final G8 checkpoint.
+
+### G8.3 validation contract
+
+Added a reusable validation package covering all 12 locked G8.3 cases:
+
+1. Domestic → Global leakage;
+2. Global → API leakage;
+3. Global Generics Overlay → Primary transition;
+4. API secondary-exposure independent-score prevention;
+5. Emerging exclusion;
+6. BANK_NBFC isolation;
+7. denominator-renormalization prohibition;
+8. governance anti-double-counting;
+9. cross-security evidence isolation;
+10. role-specific interpretation isolation;
+11. shared-state mutation isolation;
+12. company-assignment isolation.
+
+The implementation compares the existing TORNTPHARM G7.2 preview and AUROPHARMA G8.2 preview, reuses G7 validation invariants, checks assignment resolution by security identity, and adds static guards for security-scoped evidence queries and mutation-free preview code.
+
+### Engine-change test
+
+Result encoded by the validation contract:
+
+> **PORTABLE WITHOUT G7.1 REDESIGN**
+
+Both reference companies consume the same G7.1 adapter version.
+
+Different behavior is produced by company assignment + role + applicable methodology, not by a second scoring engine.
+
+### Research-Gap Register extension
+
+Added:
+
+`src/features/research/pharmaG8ResearchGapRegister.ts`
+
+The existing G7 register is preserved and extended with AUROPHARMA / Global Generics Primary gaps covering:
+
+- Growth evidence acquisition;
+- Operating Margin;
+- ROCE / Capital Efficiency;
+- Cash Conversion;
+- Balance Sheet / Leverage;
+- Business Durability;
+- Valuation;
+- Momentum;
+- Ownership / Governance;
+- Regulatory / Market Risk.
+
+Each gap carries stable ID, subprofile, role, dimension, methodology state, evidence state, AUROPHARMA blocking state, overlay effect, future stage, required evidence/decision, lineage and revisit trigger.
+
+No gap is solved by silently changing the engine.
+
+### Artifacts
+
+Added:
+
+- `src/features/research/pharmaG8ResearchGapRegister.ts`;
+- `src/features/research/pharmaG8PortabilityIsolationValidation.ts`;
+- `src/features/research/pharmaG8PortabilityIsolationValidation.test.ts`;
+- `src/features/research/AuropharmaG83ValidationPanel.tsx`;
+- `docs/R4N_G8_3_Portability_Isolation_Leakage_Validation_V1.md`.
+
+Updated:
+
+- `src/pages/ResearchPage.tsx`;
+- cumulative handoff.
+
+### UI
+
+AUROPHARMA Overview now includes one compact G8.3 card showing:
+
+- 12/12 locked validation cases;
+- engine-change result;
+- AUROPHARMA research-gap count;
+- activation OFF;
+- per-case evidence.
+
+### Safety
+
+- production mutation: **NO**
+- production migration: **NO**
+- canonical assignment persistence: **NO**
+- evidence persistence: **NO**
+- provider refresh: **NO**
+- shared enrichment refresh/mutation: **NO**
+- score persistence: **NO**
+- recommendation/sizing mutation: **NO**
+- scheduler change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+### Workflow checkpoint
+
+Per the locked project workflow, G8.3 is **not closed yet**.
+
+**CURRENT STOP POINT:** owner should pull this G8.3 implementation, run Local Supabase/Vite, hard-refresh AUROPHARMA → Research → Overview, visually validate the G8.3 card first, then run full local validation. After the validation result is recorded in the cumulative handoff, and only then, G8 may close and G9 may begin.

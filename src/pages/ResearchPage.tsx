@@ -7,6 +7,7 @@ import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { CompanyAboutPanel } from "../features/research/CompanyAboutPanel"
 import { AuropharmaG81ClassificationCard } from "../features/research/AuropharmaG81ClassificationCard"
 import { AuropharmaG82SameEnginePanel } from "../features/research/AuropharmaG82SameEnginePanel"
+import { AuropharmaG83ValidationPanel } from "../features/research/AuropharmaG83ValidationPanel"
 import { CompleteResearchRefreshPanel } from "../features/research/CompleteResearchRefreshPanel"
 import { PharmaResearchWorkspacePanel } from "../features/research/PharmaResearchWorkspacePanel"
 import { PharmaSubprofileSummary } from "../features/research/PharmaSubprofileSummary"
@@ -112,6 +113,7 @@ function Overview({ position, research, scoring, onViewEvidence }: { readonly po
     {position.symbol.toLocaleUpperCase() === "AUROPHARMA" ? <>
       <AuropharmaG81ClassificationCard symbol={position.symbol} />
       <AuropharmaG82SameEnginePanel securityId={position.securityId} symbol={position.symbol} research={research} />
+      <AuropharmaG83ValidationPanel symbol={position.symbol} />
     </> : null}
     <SectionHeading title="Research at a glance" detail="Designed to give investment clarity first, with the detailed tabs preserving the evidence behind every conclusion." />
     <section className="context-strip" aria-label="Research and portfolio context"><div><span>Research profile</span><strong>{ui.profileDisplayName}</strong><small>{research.industry ?? position.industry ?? (scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed profile · industry pending" : "Industry unavailable")}</small></div><div><span>Portfolio exposure</span><strong>{formatPercent(position.portfolioWeightPercent)} current weight</strong><small>{formatQuantity(position.quantity)} shares · {position.role === "UNCLASSIFIED" ? "role unclassified" : `${titleCase(position.role)} role`}</small></div><div><span>Evidence status</span><strong>{scoring.data?.evidenceCoverage == null ? "Unavailable" : `${Math.round(scoring.data.evidenceCoverage * 100)}% verified`}</strong><small>{scoring.data?.scoreReadyCoverage == null ? "Score readiness unavailable" : `${Math.round(scoring.data.scoreReadyCoverage * 100)}% score-ready`}</small></div></section>
