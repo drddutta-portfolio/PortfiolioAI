@@ -15702,3 +15702,118 @@ Therefore:
 **Result:** G6.39 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Close the Global Generics Valuation slice as explicitly incomplete/fail-closed and move to the next unresolved Global Generics family in the G6 applicability registry.
+
+
+---
+
+## 181. Entry 176 — Gate G6.40 Global Generics ownership governance methodology boundary gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.40 — Global Generics Ownership / Governance Methodology Boundary Gate**.
+
+### Starting state
+
+G6.39 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+The next unresolved Global Generics family in the G6 applicability registry is:
+
+`PHARMA_OWNERSHIP_GOVERNANCE`
+
+under:
+
+`OWNERSHIP_GOVERNANCE`
+
+### Parent G5.5 boundary
+
+The existing parent Ownership / Governance proposal establishes:
+
+- minimum 4 comparable shareholding quarters;
+- preferred 8 quarters;
+- latest shareholding quarter required;
+- current material governance events required;
+- promoter absence is not automatically negative;
+- ownership structure and stability;
+- pledge and control risk;
+- governance-event context.
+
+### Parent dimension-alignment blocker
+
+Current parent metric dimension:
+
+`GOVERNANCE`
+
+Canonical methodology dimension:
+
+`OWNERSHIP_GOVERNANCE`
+
+The parent proposal records:
+
+`REQUIRES_VERSIONED_PARENT_RECONCILIATION`
+
+G6.40 preserves the mismatch and does not rewrite the parent profile.
+
+### G4 anti-double-counting boundary
+
+Governance/regulatory events already handled by G4 may remain visible as context, but:
+
+- critical/blocked events may not receive a second hidden numeric penalty;
+- high-risk events may not receive a second hidden numeric penalty;
+- an additional hidden gate cap inside this dimension is not allowed.
+
+### Global Generics-specific decisions still unresolved
+
+- component weights: **UNAPPROVED**
+- ownership bands: **UNAPPROVED**
+- pledge bands: **UNAPPROVED**
+- governance-event context bands: **UNAPPROVED**
+- final aggregation: **UNAPPROVED**
+- mechanical promoter-percentage thresholds: **UNAPPROVED**
+- mechanical institutional-ownership bonuses: **UNAPPROVED**
+
+Automatic shortcuts remain prohibited:
+
+- zero pledge = automatically best score: **NO**
+- promoter absolute percentage alone sufficient: **NO**
+- institutional ownership automatically positive: **NO**
+
+Therefore:
+
+`numericOwnershipGovernanceCurveReady = false`
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsOwnershipGovernanceMethodGate.ts`
+- `src/features/research/pharmaGlobalGenericsOwnershipGovernanceMethodGate.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_40_Global_Generics_Ownership_Governance_Methodology_Boundary_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.40 · Global Generics ownership / governance methodology boundary**
+- **G6.40 · Governance alignment and anti-double-counting blocker**
+
+### Safety boundary remains unchanged
+
+- parent Ownership/Governance reconciliation resolved: **NO**
+- G4 hidden double counting: **NO**
+- Global Generics Ownership/Governance numeric curve: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.40 cards in TORNTPHARM → Research → Gate G, then run focused G6.40 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether Global Generics-specific Ownership / Governance calibration is evidence-supportable; if not, defer numeric normalization and preserve the separate parent-dimension reconciliation requirement.
