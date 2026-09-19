@@ -4,7 +4,7 @@ import { PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL_VERSION } from "./pharmaOperatin
 import { PHARMA_GLOBAL_GENERIC_PRICE_EROSION_CURVE_VERSION } from "./pharmaGlobalGenericPriceErosionCurveProposal"
 
 export const PHARMA_G6_SUBPROFILE_CURVE_APPLICABILITY_VERSION =
-  "PHARMA_G6_SUBPROFILE_CURVE_APPLICABILITY_V1_PROPOSAL" as const
+  "PHARMA_G6_SUBPROFILE_CURVE_APPLICABILITY_V2_PROPOSAL" as const
 
 export type PharmaG6CurveFamily =
   | "SEGMENT_GROWTH"
@@ -20,6 +20,7 @@ export type PharmaG6CurveFamily =
 
 export type PharmaG6CurveState =
   | "VALIDATED_NOT_ACTIVE"
+  | "VALIDATED_FAIL_CLOSED"
   | "SUBPROFILE_THRESHOLDS_REQUIRED"
   | "UNSUPPORTED_FAIL_CLOSED"
 
@@ -121,10 +122,59 @@ const globalGenerics: PharmaG6SubprofileCurveContract = {
     },
     {
       family: "OPERATING_MARGIN",
-      state: "UNSUPPORTED_FAIL_CLOSED",
+      state: "VALIDATED_FAIL_CLOSED",
       curveVersion: null,
       metricCodes: ["PHARMA_OPERATING_MARGIN_HISTORY"],
-      note: "Domestic Formulations Operating Margin bands must not be reused for Global Generics.",
+      note: "Global Generics Operating Margin methodology is validated, but Global-specific calibration is deferred; Domestic bands remain prohibited.",
+    },
+    {
+      family: "ROCE_CAPITAL_EFFICIENCY",
+      state: "VALIDATED_FAIL_CLOSED",
+      curveVersion: null,
+      metricCodes: ["PHARMA_ROCE_HISTORY"],
+      note: "Global Generics ROCE methodology is validated, but calibration is deferred and parent-dimension reconciliation remains unresolved.",
+    },
+    {
+      family: "CASH_CONVERSION",
+      state: "VALIDATED_FAIL_CLOSED",
+      curveVersion: null,
+      metricCodes: ["PHARMA_CASH_CONVERSION_HISTORY"],
+      note: "Global Generics Cash Conversion methodology is validated, but calibration is deferred and parent-dimension reconciliation remains unresolved.",
+    },
+    {
+      family: "BALANCE_SHEET_LEVERAGE",
+      state: "VALIDATED_FAIL_CLOSED",
+      curveVersion: null,
+      metricCodes: ["PHARMA_BALANCE_SHEET_LEVERAGE"],
+      note: "Global Generics Balance Sheet / Leverage methodology is validated, but calibration is deferred and parent-dimension reconciliation remains unresolved.",
+    },
+    {
+      family: "VALUATION",
+      state: "VALIDATED_FAIL_CLOSED",
+      curveVersion: null,
+      metricCodes: ["PHARMA_VALUATION_CONTEXT"],
+      note: "Global Generics Valuation methodology is validated, but Global-specific calibration remains deferred and Domestic valuation choices do not transfer.",
+    },
+    {
+      family: "OWNERSHIP_GOVERNANCE",
+      state: "VALIDATED_FAIL_CLOSED",
+      curveVersion: null,
+      metricCodes: ["PHARMA_OWNERSHIP_GOVERNANCE"],
+      note: "Global Generics Ownership / Governance methodology is validated, but calibration and parent-dimension reconciliation remain deferred; G4 anti-double-counting stays authoritative.",
+    },
+    {
+      family: "REGULATORY_MARKET_RISK",
+      state: "VALIDATED_FAIL_CLOSED",
+      curveVersion: null,
+      metricCodes: ["PHARMA_REGULATORY_SITE_STATUS", "MAX_DRAWDOWN_1Y", "VOLATILITY_1Y"],
+      note: "Global Generics regulatory/risk evidence treatment is validated, but drawdown and volatility normalization plus whole-dimension scoring remain deferred.",
+    },
+    {
+      family: "MOMENTUM",
+      state: "VALIDATED_FAIL_CLOSED",
+      curveVersion: null,
+      metricCodes: ["PRICE_MOMENTUM_12M", "PRICE_MOMENTUM_6M", "RELATIVE_STRENGTH_12M"],
+      note: "Global Generics Momentum evidence identity is validated, but the Pharma parent contract, benchmark, bands, weights and aggregation remain unestablished.",
     },
     {
       family: "US_GENERIC_PRICE_EROSION",
@@ -133,7 +183,6 @@ const globalGenerics: PharmaG6SubprofileCurveContract = {
       metricCodes: ["PHARMA_US_GENERIC_PRICE_EROSION"],
       note: "Global Generics-specific US price-erosion methodology; disclosed ASP/price evidence only and no residual derivation.",
     },
-    ...pendingParentFamilies,
   ],
 }
 
