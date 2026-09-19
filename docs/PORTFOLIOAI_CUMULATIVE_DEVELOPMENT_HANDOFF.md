@@ -18629,3 +18629,84 @@ API/Bulk is retained as Emerging and excluded from numeric/readiness denominator
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** owner should pull G8.2, run the focused validation commands, hard-refresh AUROPHARMA → Research → Overview, and visually validate the new three-layer PHARMA_V1 + same-engine dimension preview. Do not enter G8.3 until explicit approval.
+
+
+---
+
+## 212. Entry 207 — Mandatory PortfolioAI build / validation workflow locked; G8.2 visual approval recorded
+
+**Date:** 20 September 2026  
+**Actor:** owner process clarification + ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner defined the mandatory execution order for all remaining PortfolioAI development gates.
+
+### Locked build / validation sequence
+
+```text
+GitHub R4N branch
+        ↓
+Develop / update code
+        ↓
+Update PortfolioAI — ChatGPT Cumulative Development Handoff
+        ↓
+git pull
+        ↓
+Local code on owner Mac
+        ↓
+Local Supabase
+        ↓
+Local Vite app
+        ↓
+localhost UI
+        ↓
+Owner visual approval
+        ↓
+Full local validation
+        ↓
+Update cumulative handoff with validation result / final checkpoint
+        ↓
+Next gate
+```
+
+This sequence is now an explicit project workflow invariant.
+
+Important consequences:
+
+- handoff update occurs **before** owner pull/localhost validation;
+- visual approval occurs **before** full local validation;
+- a gate is not formally closed merely because GitHub CI is green;
+- a gate is not formally closed merely because the localhost UI looks correct;
+- formal closure requires the post-visual full local validation result to be recorded in the cumulative handoff;
+- only after that final checkpoint may work advance to the next gate.
+
+### G8.2 current checkpoint
+
+Owner visually reviewed the AUROPHARMA G8.2 three-layer same-engine preview on localhost.
+
+Visual result confirmed:
+
+- Common Pharma Core = `PHARMA_V1`;
+- Primary business model = `GLOBAL_GENERICS`;
+- Secondary exposure = `API_BULK_DRUGS · EMERGING`;
+- unresolved exposure = `BIOPHARMA_BIOSIMILARS`;
+- same G7.1 read-only adapter lineage is visible;
+- ten-dimension preview is visible;
+- Global Generics methodology states fail closed where incomplete;
+- no Domestic Formulations fallback is visible;
+- overall Pharma preview = `NOT CURRENTLY COMPUTABLE`;
+- no score persistence, recommendation change, position-sizing change or shared-state mutation is shown.
+
+Therefore:
+
+> **G8.2 VISUAL APPROVAL = PASS**
+
+However, under the newly locked workflow, **G8.2 is not yet formally closed**.
+
+Required next action:
+
+> Run the full local G8.2 validation set on the owner's Mac after visual approval.
+
+Only after that validation passes should the cumulative handoff be updated again with the final G8.2 checkpoint and G8.2 be marked complete.
+
+**CURRENT STOP POINT:** G8.2 visual approval has passed. Full local validation is pending. Do not begin G8.3 yet.
