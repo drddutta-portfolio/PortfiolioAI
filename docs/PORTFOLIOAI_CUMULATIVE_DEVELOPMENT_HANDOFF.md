@@ -15626,3 +15626,79 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.39 cards in TORNTPHARM → Research → Gate G, then run focused G6.39 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, close the Global Generics Valuation slice as explicitly incomplete/fail-closed and move to the next unresolved Global Generics family.
+
+
+---
+
+## 180. Entry 175 — Gate G6.39 Global Generics valuation calibration deferral gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.39 has completed validation as a **proposal-only Global Generics Valuation calibration evidence-sufficiency / deferral gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsValuationCalibrationEvidence.test.ts` → **PASS**
+- focused ESLint for the G6.39 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.39 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_VALUATION_CALIBRATION_EVIDENCE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated calibration conclusion
+
+Global Generics-specific Valuation calibration remains unsupported by current repository evidence:
+
+- valuation calibration set: **NOT ESTABLISHED**
+- reviewed same-primary peer cohort: **NOT ESTABLISHED**
+- self-history calibration: **NOT ESTABLISHED**
+- peer-relative metric mix: **NOT ESTABLISHED**
+- peer-relative bands: **NOT ESTABLISHED**
+- FCF corroboration method: **NOT ESTABLISHED**
+- component-weight evidence: **NOT ESTABLISHED**
+- final aggregation: **NOT ESTABLISHED**
+
+Therefore:
+
+- Global-specific Valuation calibration: **NO**
+- Domestic calibration fallback: **NO**
+- numeric Valuation curve: **NO**
+- deferral required: **YES**
+
+### Global Generics Valuation slice status
+
+- parent methodology shape: **VALIDATED**
+- parent dimension alignment: **ALIGNED**
+- Global-specific numeric calibration: **DEFERRED / FAIL-CLOSED**
+- Domestic 40/40/20 weighting inherited: **NO**
+- Domestic peer 50/50 PE–EV/EBITDA blend inherited: **NO**
+- missing-component renormalization: **NO**
+- hidden reweighting: **NO**
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.39 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Close the Global Generics Valuation slice as explicitly incomplete/fail-closed and move to the next unresolved Global Generics family in the G6 applicability registry.
