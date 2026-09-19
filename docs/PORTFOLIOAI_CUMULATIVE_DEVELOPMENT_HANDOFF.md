@@ -19022,3 +19022,106 @@ Because one focused test still failed during the second full-local validation:
 Previous visual approval remains valid because this correction is test-only.
 
 **CURRENT STOP POINT:** pull this narrower static-guard correction and rerun the full G8.3 local validation. Do not close G8 or start G9 until all focused tests pass and the final handoff checkpoint is recorded.
+
+
+---
+
+## 217. Entry 212 — G8.3 full local validation passed; G8 formally closed
+
+**Date:** 20 September 2026  
+**Actor:** owner local validation + ChatGPT final checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reran the complete G8.3 post-visual local validation after the two test-harness-only corrections.
+
+### Final local validation result
+
+Focused Vitest:
+
+- test files: **7 passed / 7 total**
+- tests: **42 passed / 42 total**
+- failures: **0**
+
+Validated suites included:
+
+- G8.3 portability / isolation / leakage validation;
+- G7.3 validation / Research-Gap Register;
+- G7.1 read-only scoring adapter;
+- TORNTPHARM G7.2 explainable preview;
+- AUROPHARMA G8.2 same-engine preview;
+- PHARMA_V1 three-layer research architecture;
+- research-subprofile repository mapping / assignment isolation.
+
+Other local validation:
+
+- focused ESLint: **PASS**
+- `npm run check:architecture`: **PASS**
+- `npm run typecheck`: **PASS**
+- `npm run build`: **PASS**
+
+Production build completed successfully.
+
+### G8.3 final result
+
+The locked G8.3 portability/isolation contract is fully validated:
+
+- 12/12 isolation/leakage checks: **PASS**
+- engine-change test: **PORTABLE WITHOUT G7.1 REDESIGN**
+- AUROPHARMA Global Generics Primary gaps are registered rather than silently repaired
+- no Domestic → Global methodology leakage
+- no Global → API leakage
+- Global Generics role transition works as TORNTPHARM Material Overlay vs AUROPHARMA Primary under the same G7.1 adapter
+- API Emerging remains excluded from numeric interpretation
+- BANK_NBFC fallback remains prohibited
+- no denominator renormalization
+- governance anti-double-counting preserved
+- raw evidence remains security/company scoped
+- role interpretation remains company + active assignment + role scoped
+- shared-state mutation paths remain disabled
+- company assignment resolution remains isolated by security
+
+Therefore:
+
+> **G8.3 = COMPLETE / PORTABILITY-ISOLATION VALIDATED / NOT ACTIVE**
+
+### G8 formal closure
+
+All hard-capped G8 checkpoints are now complete:
+
+- **G8.1 — COMPLETE**
+- **G8.2 — COMPLETE**
+- **G8.3 — COMPLETE**
+
+There is **no G8.4**.
+
+Formal G8 status:
+
+> **G8 = COMPLETE / SECOND-COMPANY PORTABILITY VALIDATED / NOT ACTIVE**
+
+### Preserved safety state
+
+- production mutation: **NO**
+- production migration: **NO**
+- canonical AUROPHARMA assignment persistence: **NO**
+- evidence persistence: **NO**
+- provider refresh: **NO**
+- score persistence: **NO**
+- recommendation mutation: **NO**
+- position-sizing mutation: **NO**
+- scheduler change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+PR #101 remains **OPEN / DRAFT / UNMERGED**.
+
+### Locked workflow completion
+
+The mandatory PortfolioAI workflow was satisfied end-to-end:
+
+GitHub implementation → handoff update → owner pull → Local Supabase/Vite → localhost visual approval → full local validation → this final handoff checkpoint.
+
+### Next boundary
+
+The next stage is **G9**.
+
+**CURRENT STOP POINT:** G8 is formally closed. Do not make further G8 changes unless a genuine regression is discovered. Stop at the G9 boundary and begin G9 only after an explicit G9 plan / owner instruction.
