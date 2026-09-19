@@ -17368,3 +17368,68 @@ Gate G now exposes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, inspect the two G7.1 cards, run focused G7.1 + G7-P1 + G7-P2 + readiness tests, focused ESLint, `npm run typecheck`, and `npm run build`. Only after owner validation should G7.2 wire TORNTPHARM into the adapter.
+
+
+---
+
+## 198. Entry 193 — Gate G7.1 Read-only Scoring Adapter validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7.1 has completed owner validation.
+
+### Validation result
+
+Owner reported:
+
+**ALL PASS**
+
+Validated items:
+
+- two G7.1 Gate G review cards visible and correct;
+- focused Vitest for `pharmaG7ReadOnlyScoringAdapter.test.ts` → PASS;
+- focused Vitest for G7-P1 overlay modifier → PASS;
+- focused Vitest for G7-P2 governance constraint → PASS;
+- focused Vitest for readiness mapping → PASS;
+- focused ESLint for the G7.1 slice → PASS;
+- `npm run typecheck` → PASS;
+- `npm run build` → PASS.
+
+### Validated adapter behavior
+
+G7.1 is validated as **READ-ONLY / NON-PERSISTING / NOT ACTIVE**.
+
+Confirmed:
+
+- fixed PHARMA_V1 weights are consumed from one canonical source;
+- 60% dimension readiness is a gate only, not a missing-component aggregation rule;
+- a numeric dimension result still requires an approved/versioned numeric dimension-score contract/result;
+- VALIDATED_FAIL_CLOSED remains non-numeric;
+- SUBPROFILE_THRESHOLDS_REQUIRED remains non-numeric;
+- UNSUPPORTED_FAIL_CLOSED remains non-numeric;
+- Material Overlay modifies only eligible dimensions through the validated G7-P1 contract;
+- Emerging Watch remains numerically excluded;
+- governance blocking is enforced through G7-P2;
+- HIGH_RISK remains Interpretation-only;
+- no hidden reweighting occurs;
+- if any weighted dimension lacks a numeric result, overall score remains unavailable;
+- methodology lineage is emitted;
+- no score persistence, recommendation or position-sizing mutation occurs.
+
+### G7.1 state
+
+- owner validation: **PASS**
+- read-only adapter validated: **YES**
+- production activation: **NO**
+- persisted score run: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- schema/database mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G7.1 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Proceed to G7.2 — TORNTPHARM Explainable Read-only Preview. Wire the existing reviewed TORNTPHARM architecture into the read-only adapter without creating or persisting new evidence or scores.
