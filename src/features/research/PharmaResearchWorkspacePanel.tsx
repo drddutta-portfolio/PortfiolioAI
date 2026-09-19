@@ -37,6 +37,7 @@ import { PHARMA_DOMESTIC_PEER_VALUATION_CONTRACT } from "./pharmaDomesticPeerVal
 import { PHARMA_DOMESTIC_PEER_COHORT_BUILDER_VERSION } from "./pharmaDomesticPeerCohortBuilder"
 import { PHARMA_DOMESTIC_PEER_COMPARABILITY } from "./pharmaDomesticPeerComparabilityContract"
 import { PHARMA_DOMESTIC_PEER_PREMIUM_DISCOUNT } from "./pharmaDomesticPeerPremiumDiscountProposal"
+import { PHARMA_DOMESTIC_PEER_COMBINATION } from "./pharmaDomesticPeerCombinationContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -503,6 +504,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>PE and EV/EBITDA normalize independently</small>
               <p>No averaging or weighting between PE and EV/EBITDA is approved yet. G6.12 can normalize each comparable metric family, but it cannot emit a combined peer-component score or activate the Valuation dimension.</p>
               <span>PE/EV weighting: NO · Combined peer score: NO · Whole dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.13 · Peer cross-metric combination lock</strong>
+              <small>{PHARMA_DOMESTIC_PEER_COMBINATION.contractVersion}</small>
+              <p>Both normalized PE_TTM and EV_EBITDA peer-relative scores are required before the Domestic peer component can advance. Neither metric may silently substitute for the other, and missing/invalid input fails closed.</p>
+              <span>Both metrics: REQUIRED · Single-metric fallback: NO · Missing input: FAIL CLOSED</span>
+            </article>
+            <article>
+              <strong>G6.13 · Explicit weighting blocker</strong>
+              <small>No approved PE-vs-EV/EBITDA combination rule exists yet</small>
+              <p>Equal weighting, weighted mean, best-of, worst-of and single-metric fallback are all unapproved. Even with both normalized inputs present, the state is only ready for an explicit weighting decision and the combined peer score remains null.</p>
+              <span>PE weight: NONE · EV/EBITDA weight: NONE · Combined peer score: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
