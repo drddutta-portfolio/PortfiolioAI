@@ -12964,3 +12964,178 @@ Therefore:
 **Result:** G6.24 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** The next safe Global Generics Risk step is to define the market-risk normalization boundary for trailing 1-year drawdown and volatility without inheriting BANK_NBFC thresholds.
+
+
+---
+
+## 151. Entry 146 — Gate G6.25 Global Generics market-risk normalization gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.25 — Global Generics Market-Risk Normalization Gate**.
+
+### Starting state
+
+G6.24 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+The remaining Global Generics Risk methodology gaps were confirmed as:
+
+- Pharma-specific trailing 1-year drawdown normalization;
+- Pharma-specific 1-year volatility normalization / peer or benchmark context;
+- component weighting.
+
+### Why G6.25 is an approval gate rather than a numeric curve
+
+Repository inspection found no approved Pharma market-risk threshold contract that would justify importing BANK_NBFC bands.
+
+Therefore G6.25 freezes metric identity, authority and fail-closed evidence semantics without inventing numeric thresholds.
+
+### New contract
+
+Added:
+
+`src/features/research/pharmaGlobalGenericsMarketRiskNormalizationGate.ts`
+
+Contract:
+
+`PHARMA_GLOBAL_GENERICS_MARKET_RISK_NORMALIZATION_GATE_V1_PROPOSAL`
+
+Scope:
+
+- Primary: `GLOBAL_GENERICS`
+- canonical dimension: `RISK`
+
+### Drawdown identity
+
+Metric:
+
+`MAX_DRAWDOWN_1Y`
+
+Definition:
+
+`TRAILING_1Y_MAX_PEAK_TO_TROUGH_DAILY_CLOSE`
+
+Authority:
+
+- raw: `MARKET_PRICE_HISTORY`
+- derived: `MARKET_METRIC_OBSERVATIONS`
+
+Unit:
+
+`PERCENT`
+
+Structural semantics:
+
+- expected range: -100% to 0%;
+- smaller absolute loss is directionally better;
+- numeric Pharma bands: **UNAPPROVED**.
+
+### Volatility identity
+
+Metric:
+
+`VOLATILITY_1Y`
+
+Definition:
+
+`ANNUALIZED_SAMPLE_STDDEV_DAILY_LOG_RETURNS_SQRT_252`
+
+Authority:
+
+- raw: `MARKET_PRICE_HISTORY`
+- derived: `MARKET_METRIC_OBSERVATIONS`
+
+Unit:
+
+`PERCENT`
+
+Structural semantics:
+
+- volatility must be non-negative;
+- lower is directionally better only with appropriate context;
+- peer/benchmark context required;
+- peer/benchmark contract: **UNAPPROVED**;
+- numeric Pharma bands: **UNAPPROVED**.
+
+### Explicit non-inheritance
+
+- BANK_NBFC thresholds inherited: **NO**
+- absolute drawdown bands approved: **NO**
+- absolute volatility bands approved: **NO**
+- relative-volatility bands approved: **NO**
+- Pharma benchmark approved: **NO**
+- Risk component weights approved: **NO**
+
+### Fail-closed evidence helper
+
+Added a structural evidence-readiness helper.
+
+Possible states:
+
+- `INSUFFICIENT_EVIDENCE`
+- `REVIEW_REQUIRED`
+- `READY_FOR_METHODOLOGY`
+
+Behavior:
+
+- either input missing → `INSUFFICIENT_EVIDENCE`;
+- invalid metric semantics → `REVIEW_REQUIRED`;
+- both structurally valid → `READY_FOR_METHODOLOGY`.
+
+`READY_FOR_METHODOLOGY` is explicitly not score readiness.
+
+### Tests
+
+Added:
+
+`src/features/research/pharmaGlobalGenericsMarketRiskNormalizationGate.test.ts`
+
+Coverage includes:
+
+- metric identity / formula lock;
+- no BANK_NBFC threshold inheritance;
+- no benchmark or component-weight default;
+- missing evidence fails closed;
+- invalid drawdown/volatility semantics require review;
+- structurally valid evidence advances only to methodology readiness.
+
+### Documentation
+
+Added:
+
+`docs/R4N_PHARMA_V1_Gate_G6_25_Global_Generics_Market_Risk_Normalization_Gate_V1.md`
+
+### Glass-box UI
+
+Updated:
+
+`src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+Gate G now includes:
+
+- **G6.25 · Global Generics market-risk normalization gate**
+- **G6.25 · Benchmark & weighting blocker**
+
+### Safety boundary remains unchanged
+
+- Pharma drawdown curve: **NO**
+- Pharma volatility curve: **NO**
+- benchmark approved: **NO**
+- component weights approved: **NO**
+- whole Risk dimension ready: **NO**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.25 cards in TORNTPHARM → Research → Gate G, then run focused G6.25 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. Only after validation should G6.25 be marked VALIDATED / NOT ACTIVE.
