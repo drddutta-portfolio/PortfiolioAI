@@ -46,6 +46,7 @@ import { PHARMA_GLOBAL_GENERIC_PRICE_EROSION_CURVE } from "./pharmaGlobalGeneric
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_EVIDENCE } from "./pharmaGlobalGenericsPipelineEvidenceContract"
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_STAGE_NORMALIZATION } from "./pharmaGlobalGenericsPipelineStageNormalization"
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_GATE } from "./pharmaGlobalGenericsPipelineAggregationGate"
+import { PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_METHOD_PROPOSAL } from "./pharmaGlobalGenericsPipelineAggregationMethodProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -638,6 +639,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Five methodology decisions remain explicitly approval-gated</small>
               <p>Every adverse event must remain visible. Event-count bonuses, simple averaging, recency weighting, materiality weighting and numeric economic-relevance multipliers remain unapproved, and unrelated positive events cannot silently offset adverse events.</p>
               <span>Adverse visibility: REQUIRED · Hidden offset: NO · Methodology approval: REQUIRED</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.22 · Pipeline aggregation method proposal</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_METHOD_PROPOSAL.proposalVersion}</small>
+              <p>Proposed method: keep the latest reviewed state for each product/molecule + geography identity, then use the median only when every latest state is non-adverse. Older lifecycle stages remain visible for audit but do not get counted repeatedly.</p>
+              <span>Latest state per identity: YES · Non-adverse statistic: MEDIAN · Owner approval: PENDING</span>
+            </article>
+            <article>
+              <strong>G6.22 · Adverse-state review rule</strong>
+              <small>Delayed/blocked or withdrawn/discontinued latest state blocks numeric aggregation</small>
+              <p>If any distinct pipeline identity has an adverse latest material state, the proposal returns REVIEW REQUIRED rather than applying an invented numeric cap or allowing other successes to offset it. Recency has no age-based weight, and materiality/economic relevance remain eligibility-only.</p>
+              <span>Adverse latest state: REVIEW REQUIRED · Recency weight: NO · Executable combiner: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
