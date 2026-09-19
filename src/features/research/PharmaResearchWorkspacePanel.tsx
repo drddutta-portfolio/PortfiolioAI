@@ -61,6 +61,7 @@ import { PHARMA_GLOBAL_GENERICS_ROCE_CALIBRATION_EVIDENCE } from "./pharmaGlobal
 import { PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_METHOD_GATE } from "./pharmaGlobalGenericsCashConversionMethodGate"
 import { PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsCashConversionCalibrationEvidence"
 import { PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_METHOD_GATE } from "./pharmaGlobalGenericsBalanceSheetMethodGate"
+import { PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsBalanceSheetCalibrationEvidence"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -863,6 +864,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Parent dimension reconciliation remains required</small>
               <p>The parent metric remains in Financial Strength while the canonical leverage methodology targets Balance Sheet / Credit. G6.36 preserves that mismatch and rejects universal or other-subprofile threshold fallback.</p>
               <span>Parent reconciliation: REQUIRED · Numeric balance-sheet curve: NO · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.37 · Balance-sheet calibration evidence sufficiency</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_CALIBRATION_EVIDENCE.contractVersion}</small>
+              <p>No reviewed Global Generics Balance Sheet calibration set, same-primary cohort or evidence-backed leverage, interest-coverage, trend/resilience bands and weights are established. Numeric calibration is therefore deferred.</p>
+              <span>Calibration available: NO · Other-subprofile fallback: NO · Numeric curve: NO</span>
+            </article>
+            <article>
+              <strong>G6.37 · Parent Balance Sheet / Credit alignment blocker</strong>
+              <small>Current parent metric dimension: FINANCIAL STRENGTH · canonical dimension: BALANCE SHEET / CREDIT</small>
+              <p>The mismatch remains explicit and unresolved. A separate versioned parent-contract reconciliation is required before leverage may contribute a numeric Balance Sheet / Credit score.</p>
+              <span>Parent reconciliation performed: NO · Deferral required: YES · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
