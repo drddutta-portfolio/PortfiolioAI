@@ -12331,3 +12331,54 @@ Therefore:
 **Result:** G6.22 proposal = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** An explicit owner methodology decision is now required. The owner must approve or modify the five proposed choices — pipeline identity, adverse-event treatment, non-adverse median aggregation, recency treatment, and eligibility-only treatment of materiality/economic relevance — before G6.23 may implement an executable combined pipeline score contract.
+
+
+---
+
+## 145. Entry 140 — Owner approved G6.22 Global Generics pipeline aggregation methodology
+
+**Date:** 19 September 2026  
+**Actor:** owner explicit methodology approval  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Following G6.22 validation, the owner instructed ChatGPT to **proceed** with the exact methodology presented for approval.
+
+This is recorded as approval of the G6.22 methodology only.
+
+### Approved methodology
+
+1. Pipeline identity = **product/molecule + geography**.
+2. Retain historical lifecycle stages for audit.
+3. Only the **latest reviewed material state** per pipeline identity enters cross-identity aggregation.
+4. Same-date contradictory latest states require **REVIEW_REQUIRED**.
+5. If any latest state is:
+   - `DELAYED_OR_BLOCKED`; or
+   - `WITHDRAWN_OR_DISCONTINUED`
+   then numeric aggregation is blocked and the result is **REVIEW_REQUIRED**.
+6. If all latest states are non-adverse, combine their G6.20 normalized stage scores using the **MEDIAN**.
+7. No age-based recency weighting.
+8. Materiality remains an eligibility gate only.
+9. Economic relevance remains an eligibility gate only.
+10. No event-count bonus.
+11. No materiality multiplier.
+12. No economic-relevance multiplier.
+13. No unrelated positive-event offset against an adverse latest state.
+
+### Authorization boundary
+
+This approval authorizes implementation of a versioned **G6.23 combined pipeline score contract** reflecting the approved methodology.
+
+It does **not** authorize:
+
+- application score activation;
+- persisted score runs;
+- scoring-rule DB migration;
+- schema migration;
+- local DB mutation;
+- production mutation;
+- recommendation change;
+- position-sizing change;
+- deployment;
+- PR #101 merge.
+
+**CURRENT STOP POINT:** Implement G6.23 as an owner-approved but not active code contract, with focused tests, methodology documentation and glass-box UI. Validate locally before treating G6.23 as validated.
