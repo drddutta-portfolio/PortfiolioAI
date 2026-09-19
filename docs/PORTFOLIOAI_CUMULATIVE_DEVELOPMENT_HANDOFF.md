@@ -19323,3 +19323,132 @@ The next hard-capped checkpoint is:
 G9.2 must begin local-only and must not cross the production boundary without explicit owner approval naming the exact production action.
 
 **CURRENT STOP POINT:** G9.1 is closed. Begin G9.2 local canonical persistence implementation only; preserve score/recommendation/sizing fail-closed behavior.
+
+
+---
+
+## 220. Entry 215 — G9.2 AUROPHARMA local canonical research activation implemented for owner persistence + visual review
+
+**Date:** 20 September 2026  
+**Actor:** ChatGPT implementation checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G9.1 is formally closed. Work has advanced only to the next hard-capped checkpoint:
+
+> **G9.2 — AUROPHARMA Canonical Research Activation**
+
+### Implementation
+
+Added:
+
+- `scripts/r4n/auropharma-g9-2-local-canonical-activation.sql`
+- `scripts/r4n/run-auropharma-g9-2-local-canonical-activation.sh`
+- `src/features/research/auropharmaG92LocalCanonicalActivationSql.test.ts`
+- `src/features/research/AuropharmaG92CanonicalActivationPanel.tsx`
+- `docs/R4N_G9_2_AUROPHARMA_Canonical_Research_Activation_V1.md`
+
+Updated:
+
+- `src/pages/ResearchPage.tsx`
+
+### Local canonical persistence contract
+
+The G9.2 local-only package persists the reviewed AUROPHARMA authority already approved through G8/G9.1:
+
+Primary:
+
+- parent profile: `PHARMA_V1`
+- subprofile: `GLOBAL_GENERICS`
+- state: `REVIEWED`
+- confidence: `HIGH`
+- effective from: `2026-03-31`
+
+Secondary:
+
+- `API_BULK_DRUGS`
+- materiality: `EMERGING`
+- state: `REVIEWED`
+- confidence: `HIGH`
+
+`BIOPHARMA_BIOSIMILARS` remains unresolved and is prohibited from active reviewed Primary or secondary authority.
+
+### Local-only safety guards
+
+The shell runner refuses database URLs that do not contain `127.0.0.1` or `localhost`.
+
+The SQL independently requires the target AUROPHARMA security to have:
+
+`creation_source = LOCAL_G8_FIXTURE`
+
+along with the reviewed NSE/ISIN identity. This prevents the production security from satisfying the local persistence package accidentally.
+
+The package also requires the local reviewed owner's active portfolio to contain AUROPHARMA.
+
+### TORNTPHARM isolation prerequisite
+
+Before AUROPHARMA persistence, G9.2 requires the already validated local TORNTPHARM canonical state:
+
+- Primary `DOMESTIC_FORMULATIONS`;
+- Global Generics `MATERIAL` reviewed secondary exposure.
+
+After persistence the SQL asserts:
+
+- AUROPHARMA assignment id and TORNTPHARM assignment id are distinct;
+- AUROPHARMA Global Generics Primary is not duplicated as an AUROPHARMA secondary;
+- the existing TORNTPHARM Global Generics Material Overlay remains under TORNTPHARM's assignment authority.
+
+This implements the G9 security/assignment isolation + role-binding persistence check without inventing a literal `(company, role)` database key.
+
+### Biosimilars data-layer fail-closed guard
+
+The local package aborts if AUROPHARMA has:
+
+- an active reviewed Primary assignment for `BIOPHARMA_BIOSIMILARS`; or
+- an active reviewed secondary exposure for `BIOPHARMA_BIOSIMILARS`.
+
+Unresolved means absent from active canonical authority.
+
+### UI
+
+AUROPHARMA → Research → Overview now includes the G9.2 canonical activation panel.
+
+Before local persistence it should show:
+
+`Canonical local research activation: PENDING`
+
+After successful local persistence and refresh it should show:
+
+- resolver state: `RESOLVED`;
+- Primary: Global Generics · Reviewed · High;
+- reviewed secondary: API / Bulk Drugs · Emerging;
+- Biosimilars authority: No active reviewed row;
+- canonical local research activation: PASS;
+- score: BLOCKED;
+- recommendation: BLOCKED;
+- sizing: BLOCKED.
+
+The ordinary Pharma workspace should also begin resolving through the normal canonical assignment repository rather than the G8 temporary in-memory assignment.
+
+### Explicit mutation boundary
+
+The G9.2 package writes only to Local Supabase canonical assignment relations.
+
+It does **not** write:
+
+- fundamental/research evidence;
+- score runs;
+- recommendation runs;
+- position-sizing assessments;
+- production state.
+
+No provider call, migration, production deployment, scheduler change or PR merge is part of G9.2.
+
+### Workflow state
+
+Per the owner-locked workflow, GitHub implementation and this handoff update occur before owner pull.
+
+G9.2 is **NOT COMPLETE**.
+
+No full local validation has been run yet.
+
+**CURRENT STOP POINT:** owner should pull the current branch, run Local Supabase, execute `bash scripts/r4n/run-auropharma-g9-2-local-canonical-activation.sh`, run Local Vite, hard-refresh AUROPHARMA → Research → Overview, and provide the G9.2 panel / canonical Pharma workspace screenshot for visual approval. Only after visual approval should full G9.2 local validation run. Production persistence remains prohibited and G9.3 must not start yet.
