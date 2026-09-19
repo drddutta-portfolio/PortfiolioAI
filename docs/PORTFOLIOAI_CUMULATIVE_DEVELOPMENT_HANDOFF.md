@@ -14062,3 +14062,83 @@ Explicitly not inherited from Domestic Formulations:
 **Result:** G6.30 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Inspect current repository evidence for a defensible Global Generics-specific operating-margin calibration. If the evidence is insufficient, defer numeric normalization explicitly instead of importing Domestic Formulations thresholds.
+
+
+---
+
+## 163. Entry 158 — Gate G6.31 Global Generics operating margin calibration deferral gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.31 — Global Generics Operating Margin Calibration Evidence Sufficiency / Deferral Gate**.
+
+### Starting state
+
+G6.30 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+Repository inspection then found no defensible Global Generics-specific Operating Margin calibration basis.
+
+### Evidence-sufficiency conclusion
+
+Current blockers:
+
+- Global Generics calibration set: **NOT ESTABLISHED**
+- reviewed Global Generics peer cohort: **NOT ESTABLISHED**
+- level-band evidence: **NOT ESTABLISHED**
+- stability-band evidence: **NOT ESTABLISHED**
+- trend-band evidence: **NOT ESTABLISHED**
+- component-weight evidence: **NOT ESTABLISHED**
+
+Therefore:
+
+- Global-specific calibration available: **NO**
+- Domestic calibration fallback allowed: **NO**
+- numeric Operating Margin curve ready: **NO**
+- deferral required: **YES**
+
+### What remains valid
+
+The parent PHARMA_V1 evidence/methodology shape remains valid:
+
+- minimum 8 comparable quarters;
+- preferred 12 comparable quarters;
+- latest period required;
+- matched revenue and operating-profit periods required;
+- level + stability + trend structure.
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsOperatingMarginCalibrationEvidence.ts`
+- `src/features/research/pharmaGlobalGenericsOperatingMarginCalibrationEvidence.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_31_Global_Generics_Operating_Margin_Calibration_Evidence_Sufficiency_Deferral_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.31 · Operating-margin calibration evidence sufficiency**
+- **G6.31 · Explicit calibration blockers**
+
+### Safety boundary remains unchanged
+
+- Domestic calibration fallback: **NO**
+- Global Generics numeric calibration: **NO**
+- numeric Operating Margin curve ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.31 cards in TORNTPHARM → Research → Gate G, then run focused G6.31 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, the Global Generics Operating Margin slice can be closed as explicitly incomplete/fail-closed and G6 can move to the next unresolved Global Generics family.
