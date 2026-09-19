@@ -70,6 +70,7 @@ import { PHARMA_GLOBAL_GENERICS_MOMENTUM_METHOD_GATE } from "./pharmaGlobalGener
 import { PHARMA_GLOBAL_GENERICS_MOMENTUM_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsMomentumEvidenceSufficiency"
 import { PHARMA_GLOBAL_GENERICS_G6_COVERAGE_REVIEW } from "./pharmaGlobalGenericsG6CoverageReview"
 import { PHARMA_GLOBAL_GENERICS_APPLICABILITY_REGISTRY_RECONCILIATION } from "./pharmaGlobalGenericsApplicabilityRegistryReconciliation"
+import { PHARMA_G7_OVERLAY_NUMERIC_MODIFIER } from "./pharmaG7OverlayNumericModifierProposal"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -998,6 +999,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Registry aligned by proposal · Owner validation still required</small>
               <p>VALIDATED_FAIL_CLOSED never creates a score, zero, neutral value or hidden reweighting. G7 remains blocked until this reconciliation passes focused tests, lint, typecheck, build and visual inspection.</p>
               <span>Score execution: NO · Owner validation: PENDING · G7 eligible now: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G7-P1 · Material Overlay numeric modifier proposal</strong>
+              <small>{PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.version}</small>
+              <p>Candidate formula scales the one combined per-dimension cap by reviewed economic share, evidence completeness, confidence and normalized overlay signal. Only READY Material Overlays may produce a proposed numeric modifier.</p>
+              <span>Combined cap candidate: ±{PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.combinedPerDimensionCapPoints} points · Empirically calibrated: NO</span>
+            </article>
+            <article>
+              <strong>G7-P1 · Validation & consumption boundary</strong>
+              <small>Proposal only · G7.1 consumption remains blocked</small>
+              <p>PARTIAL, insufficient, blocked or Emerging Watch states stay non-numeric. Independent cap stacking remains prohibited, and the proposal cannot be consumed by the G7.1 adapter until owner validation is recorded.</p>
+              <span>Owner validation: REQUIRED · G7.1 consumption approved: NO · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
