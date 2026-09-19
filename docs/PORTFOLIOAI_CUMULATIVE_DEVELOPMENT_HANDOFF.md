@@ -14215,3 +14215,110 @@ Therefore:
 **Result:** G6.31 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Move to the next unresolved Global Generics family in the G6 applicability registry without forcing or borrowing unsupported calibration.
+
+
+---
+
+## 165. Entry 160 — Gate G6.32 Global Generics ROCE methodology boundary gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.32 — Global Generics ROCE / Capital Efficiency Methodology Boundary Gate**.
+
+### Starting state
+
+G6.31 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+The next unresolved Global Generics family in the G6 applicability registry is:
+
+`PHARMA_ROCE_HISTORY`
+
+under:
+
+`ROCE_CAPITAL_EFFICIENCY`
+
+### Parent G5.1 boundary
+
+The existing parent ROCE proposal already establishes:
+
+- minimum 3 comparable annual periods;
+- preferred 5 annual periods;
+- latest period required;
+- consistent calculation semantics required;
+- one snapshot insufficient;
+- Level + Stability + Trend methodology shape.
+
+All subprofile numeric thresholds remain null.
+
+### Parent dimension-alignment blocker
+
+The parent proposal records:
+
+`REQUIRES_VERSIONED_PARENT_RECONCILIATION`
+
+for ROCE dimension alignment.
+
+G6.32 preserves this blocker explicitly.
+
+It does not silently rewrite the parent contract or claim that Capital Efficiency alignment has already been reconciled.
+
+### Global Generics-specific decisions still unresolved
+
+- component weights: **UNAPPROVED**
+- level bands: **UNAPPROVED**
+- stability bands: **UNAPPROVED**
+- trend bands: **UNAPPROVED**
+- final aggregation: **UNAPPROVED**
+- universal numeric bands inherited: **NO**
+- Domestic/other-subprofile bands inherited: **NO**
+
+Therefore:
+
+`numericRoceCurveReady = false`
+
+### Evidence helper
+
+Possible states:
+
+- `REVIEW_REQUIRED`
+- `INSUFFICIENT_EVIDENCE`
+- `READY_FOR_METHOD_SELECTION`
+
+`READY_FOR_METHOD_SELECTION` does not mean score-ready.
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsRoceMethodGate.ts`
+- `src/features/research/pharmaGlobalGenericsRoceMethodGate.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_32_Global_Generics_ROCE_Capital_Efficiency_Methodology_Boundary_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.32 · Global Generics ROCE methodology boundary**
+- **G6.32 · Capital-efficiency alignment blocker**
+
+### Safety boundary remains unchanged
+
+- parent dimension reconciliation resolved: **NO**
+- Global Generics ROCE numeric curve: **NO**
+- universal/other-subprofile threshold inheritance: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.32 cards in TORNTPHARM → Research → Gate G, then run focused G6.32 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether Global Generics-specific ROCE calibration is evidence-supportable and separately reconcile the parent dimension contract before numeric Capital Efficiency scoring.
