@@ -70,8 +70,13 @@ export const PHARMA_DOMESTIC_PEER_COMPARABILITY: PharmaDomesticPeerComparability
 export function median(values: readonly number[]): number | null {
   const finite = values.filter(Number.isFinite).sort((a, b) => a - b)
   if (!finite.length) return null
+
   const middle = Math.floor(finite.length / 2)
-  return finite.length % 2 === 1
-    ? finite[middle]
-    : (finite[middle - 1] + finite[middle]) / 2
+  const upper = finite[middle]
+
+  if (upper === undefined) return null
+  if (finite.length % 2 === 1) return upper
+
+  const lower = finite[middle - 1]
+  return lower === undefined ? null : (lower + upper) / 2
 }
