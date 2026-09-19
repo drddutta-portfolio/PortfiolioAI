@@ -14698,3 +14698,86 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.34 cards in TORNTPHARM → Research → Gate G, then run focused G6.34 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether Global Generics-specific Cash Conversion calibration is evidence-supportable and separately reconcile the parent Cash Flow dimension contract before numeric scoring.
+
+
+---
+
+## 170. Entry 165 — Gate G6.34 Global Generics cash conversion methodology boundary gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.34 has completed validation as a **proposal-only Global Generics Cash Conversion methodology boundary gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsCashConversionMethodGate.test.ts` → **PASS**
+- focused ESLint for the G6.34 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.34 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_METHOD_GATE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated parent methodology boundary
+
+Reusable:
+
+- minimum 3 comparable annual periods;
+- preferred 5 annual periods;
+- latest period required;
+- matched CFO/PAT/capex-FCF periods required;
+- CFO alone insufficient;
+- one snapshot insufficient;
+- capex-intensity context required;
+- CFO-to-PAT conversion + FCF conversion + consistency/trend methodology shape.
+
+### Validated unresolved Global Generics decisions
+
+- component weights: **UNAPPROVED**
+- CFO-to-PAT bands: **UNAPPROVED**
+- FCF-conversion bands: **UNAPPROVED**
+- consistency/trend bands: **UNAPPROVED**
+- final aggregation: **UNAPPROVED**
+- universal bands inherited: **NO**
+- other-subprofile bands inherited: **NO**
+
+### Parent alignment blocker preserved
+
+Current parent metric dimension:
+
+`EARNINGS_CASH_QUALITY`
+
+Canonical Cash Conversion methodology dimension:
+
+`CASH_FLOW`
+
+A separate versioned parent reconciliation remains required.
+
+### Safety boundary remains unchanged
+
+- Global Generics numeric Cash Conversion curve: **NO**
+- parent dimension reconciliation resolved: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.34 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Inspect repository evidence for Global Generics Cash Conversion calibration and then continue to the next unresolved Global Generics family without borrowing unsupported thresholds.
