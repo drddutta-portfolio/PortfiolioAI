@@ -17526,3 +17526,60 @@ The Gate G surface now includes a compact G7.2 TORNTPHARM preview table.
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G7.2 table, run focused G7.2 + G7.1 Vitest, focused ESLint, `npm run typecheck`, and `npm run build`. Only after owner validation should G7.3 begin.
+
+
+---
+
+## 200. Entry 195 — Gate G7.2 TORNTPHARM Explainable Read-only Preview validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7.2 has completed owner validation.
+
+### Validation result
+
+Owner reported:
+
+**PASSED**
+
+Validated items:
+
+- G7.2 TORNTPHARM explainable preview visible and correct;
+- focused Vitest for `pharmaTorntpharmG7ExplainablePreview.test.ts` → PASS;
+- focused Vitest for `pharmaG7ReadOnlyScoringAdapter.test.ts` → PASS;
+- focused ESLint issue corrected and rerun clean;
+- `npm run typecheck` → PASS after updating the preview-builder test signature;
+- `npm run build` → PASS.
+
+### Validated G7.2 behavior
+
+- Primary = `DOMESTIC_FORMULATIONS`;
+- Material Overlay = `GLOBAL_GENERICS`;
+- Emerging Watch = `CDMO_CRAMS`;
+- all ten weighted dimensions are represented;
+- evidence coverage is displayed but never converted into a score by itself;
+- missing numeric methodology remains explicit;
+- missing overlay modifier inputs remain non-neutral;
+- Emerging Watch remains numerically excluded;
+- governance runtime input is not assumed CLEAR;
+- overall Pharma score remains unavailable when required methodology/runtime governance inputs are unresolved;
+- no hidden reweighting occurs;
+- no persistence occurs.
+
+### G7.2 state
+
+- owner validation: **PASS**
+- explainable read-only preview validated: **YES**
+- production activation: **NO**
+- persisted score run: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- schema/database mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G7.2 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Proceed to G7.3 — Validation, Leakage Tests & Research-Gap Register. G7.3 is the final bounded G7 stage; no G7.4 should be created for routine follow-up work.
