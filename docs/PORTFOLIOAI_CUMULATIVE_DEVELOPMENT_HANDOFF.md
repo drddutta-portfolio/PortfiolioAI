@@ -15272,3 +15272,89 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.37 cards in TORNTPHARM → Research → Gate G, then run focused G6.37 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, close the Global Generics Balance Sheet slice as explicitly incomplete/fail-closed and move to the next unresolved Global Generics family. Parent Balance Sheet/Credit dimension reconciliation remains a separate versioned architecture task.
+
+
+---
+
+## 176. Entry 171 — Gate G6.37 Global Generics balance sheet calibration and parent alignment deferral gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.37 has completed validation as a **proposal-only Global Generics Balance Sheet calibration evidence-sufficiency / parent-alignment deferral gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsBalanceSheetCalibrationEvidence.test.ts` → **PASS**
+- focused ESLint for the G6.37 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.37 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_CALIBRATION_EVIDENCE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated calibration conclusion
+
+Global Generics-specific Balance Sheet calibration remains unsupported by current repository evidence:
+
+- calibration set: **NOT ESTABLISHED**
+- reviewed same-primary peer cohort: **NOT ESTABLISHED**
+- leverage-band evidence: **NOT ESTABLISHED**
+- interest-coverage band evidence: **NOT ESTABLISHED**
+- trend/resilience band evidence: **NOT ESTABLISHED**
+- component-weight evidence: **NOT ESTABLISHED**
+
+Therefore:
+
+- Global-specific Balance Sheet calibration: **NO**
+- other-subprofile fallback: **NO**
+- numeric Balance Sheet curve: **NO**
+- deferral required: **YES**
+
+### Validated parent alignment blocker
+
+Current parent metric dimension:
+
+`FINANCIAL_STRENGTH`
+
+Canonical leverage methodology dimension:
+
+`BALANCE_SHEET_CREDIT`
+
+The parent-contract mismatch remains explicit and unresolved.
+
+A separate versioned parent reconciliation is still required.
+
+### Global Generics Balance Sheet slice status
+
+- parent evidence/methodology shape: **VALIDATED**
+- Global-specific numeric calibration: **DEFERRED / FAIL-CLOSED**
+- parent dimension alignment: **UNRESOLVED**
+- numeric Balance Sheet/Credit score: **NOT READY**
+
+### Safety boundary remains unchanged
+
+- parent profile mutation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.37 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Close the Global Generics Balance Sheet slice as explicitly incomplete/fail-closed and move to the next unresolved Global Generics family in the G6 applicability registry.
