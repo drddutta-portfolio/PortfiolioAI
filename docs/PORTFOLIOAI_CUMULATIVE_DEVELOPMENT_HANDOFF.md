@@ -10416,3 +10416,132 @@ Therefore:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.14 is validated. The next methodology step requires an explicit PE-vs-EV/EBITDA weighting decision before a combined peer-relative score can exist. Until then, the peer-relative component and overall Domestic Valuation dimension remain fail closed.
+
+
+---
+
+## 129. Entry 124 — Gate G6.15 Domestic peer combined score contract prepared
+
+**Date:** 19 September 2026  
+**Actor:** owner methodology approval + ChatGPT implementation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.15 — Domestic Formulations Peer Combined Score Contract**.
+
+### Explicit owner methodology approval
+
+The owner approved the following starting methodology:
+
+- PE peer-relative normalized score weight: **50%**
+- EV/EBITDA peer-relative normalized score weight: **50%**
+
+The owner also required explicit revisit triggers so the 50/50 split does not become a silent permanent default.
+
+### Combined peer formula
+
+When both normalized inputs are valid:
+
+`Combined Peer Score = (PE Score × 0.50) + (EV/EBITDA Score × 0.50)`
+
+Both inputs remain mandatory.
+
+Missing/invalid input returns:
+
+`INSUFFICIENT_EVIDENCE`
+
+with no combined score.
+
+### Rationale
+
+The approved 50/50 starting point is evidence-first because:
+
+- both peer metrics are already mandatory;
+- both are independently normalized;
+- no current evidence supports a systematic preference for either metric.
+
+The contract explicitly does **not** claim that 50/50 is permanently optimal.
+
+### Mandatory revisit trigger 1 — score divergence
+
+Revisit the weighting if later backtesting shows material divergence between PE-based and EV/EBITDA-based peer-relative scores for the Domestic Formulations peer set.
+
+Current boundary:
+
+- trigger present: **YES**
+- automatic numeric divergence threshold: **NO / NOT INVENTED**
+
+A future threshold may be versioned only when backtesting evidence supports one.
+
+### Mandatory revisit trigger 2 — leverage heterogeneity
+
+Revisit the weighting if meaningfully different leverage enters the Domestic peer cohort.
+
+Examples:
+
+- M&A-funded entrant
+- materially different net-debt profile
+
+This acknowledges that EV/EBITDA's debt-neutrality may become more informative when capital structures materially diverge.
+
+### Anti-drift rules
+
+- single-metric fallback: **NO**
+- hidden reweighting: **NO**
+- silent replacement of 50/50: **NO**
+- later weight change requires explicit versioned methodology revision: **YES**
+
+### Peer component readiness
+
+The Domestic peer-relative component now has a complete proposal calculation path when all G6.9–G6.12 prerequisites are satisfied.
+
+However:
+
+- activation approved: **NO**
+- score execution enabled: **NO**
+- persisted score run: **NO**
+
+### Whole Domestic Valuation state
+
+Still unresolved:
+
+- weighting across self-history relative valuation;
+- peer-relative valuation;
+- FCF-yield cash-flow corroboration.
+
+Therefore:
+
+`whole Valuation dimension ready = NO`
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaDomesticPeerCombinedScoreContract.ts`
+- `src/features/research/pharmaDomesticPeerCombinedScoreContract.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_15_Domestic_Peer_Combined_Score_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.15 · Peer combined score — 50/50 approved**
+- **G6.15 · Mandatory weighting revisit triggers**
+
+### Safety boundary remains unchanged
+
+- whole Valuation dimension ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.15 cards in TORNTPHARM → Research → Gate G, then run focused G6.15 validation. After validation, the next Domestic Valuation step is to define weights across self-history, peer-relative, and FCF-yield corroboration.
