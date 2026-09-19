@@ -40,6 +40,7 @@ import { PHARMA_DOMESTIC_PEER_PREMIUM_DISCOUNT } from "./pharmaDomesticPeerPremi
 import { PHARMA_DOMESTIC_PEER_COMBINATION } from "./pharmaDomesticPeerCombinationContract"
 import { PHARMA_DOMESTIC_PEER_WEIGHTING_GATE } from "./pharmaDomesticPeerWeightingGate"
 import { PHARMA_DOMESTIC_PEER_COMBINED_SCORE } from "./pharmaDomesticPeerCombinedScoreContract"
+import { PHARMA_DOMESTIC_VALUATION_WEIGHTING_GATE } from "./pharmaDomesticValuationWeightingGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -548,6 +549,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>50/50 is approved as a starting methodology, not a silent permanent default</small>
               <p>Revisit the weighting if backtesting later shows material PE-vs-EV/EBITDA score divergence, or if meaningfully different peer leverage enters the Domestic cohort, such as an M&amp;A-funded entrant or materially different net-debt profile.</p>
               <span>Backtest divergence: REVIEW · Leverage heterogeneity: REVIEW · Numeric divergence threshold: NOT APPROVED</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.16 · Valuation component weighting gate</strong>
+              <small>{PHARMA_DOMESTIC_VALUATION_WEIGHTING_GATE.contractVersion}</small>
+              <p>The three Domestic Valuation components are now methodology-ready, but no canonical split exists across self-history, peer-relative and FCF-yield corroboration. Any final component weighting must be explicitly versioned and owner-approved.</p>
+              <span>Self-history: NONE · Peer-relative: NONE · FCF corroboration: NONE · Approval: REQUIRED</span>
+            </article>
+            <article>
+              <strong>G6.16 · No implicit equal-thirds rule</strong>
+              <small>Missing evidence must not silently rewrite the Valuation methodology</small>
+              <p>Equal thirds are not assumed, and missing-component renormalization is prohibited. A candidate such as 40/40/20 may be structurally valid, but it remains unapproved until an explicit methodology decision is made.</p>
+              <span>Equal-thirds default: NO · Missing-component renormalization: NO · Whole dimension ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
