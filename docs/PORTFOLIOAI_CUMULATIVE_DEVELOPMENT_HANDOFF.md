@@ -14322,3 +14322,80 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.32 cards in TORNTPHARM → Research → Gate G, then run focused G6.32 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether Global Generics-specific ROCE calibration is evidence-supportable and separately reconcile the parent dimension contract before numeric Capital Efficiency scoring.
+
+
+---
+
+## 166. Entry 161 — Gate G6.32 Global Generics ROCE methodology boundary gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.32 has completed validation as a **proposal-only Global Generics ROCE / Capital Efficiency methodology boundary gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsRoceMethodGate.test.ts` → **PASS**
+- focused ESLint for the G6.32 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.32 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_ROCE_METHOD_GATE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated parent methodology boundary
+
+Reusable:
+
+- minimum 3 comparable annual periods;
+- preferred 5 annual periods;
+- latest period required;
+- consistent ROCE calculation semantics required;
+- one snapshot insufficient;
+- Level + Stability + Trend methodology shape.
+
+### Validated unresolved Global Generics decisions
+
+- component weights: **UNAPPROVED**
+- level bands: **UNAPPROVED**
+- stability bands: **UNAPPROVED**
+- trend bands: **UNAPPROVED**
+- final aggregation: **UNAPPROVED**
+- universal numeric bands inherited: **NO**
+- other-subprofile numeric bands inherited: **NO**
+
+### Parent alignment blocker preserved
+
+The parent ROCE proposal continues to state:
+
+`REQUIRES_VERSIONED_PARENT_RECONCILIATION`
+
+G6.32 did not bypass or rewrite that contract.
+
+### Safety boundary remains unchanged
+
+- Global Generics numeric ROCE curve: **NO**
+- parent dimension reconciliation resolved: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.32 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Inspect repository evidence for Global Generics ROCE calibration and inspect canonical dimension contracts to determine whether the parent ROCE alignment blocker can be reconciled safely before any numeric Capital Efficiency methodology proceeds.
