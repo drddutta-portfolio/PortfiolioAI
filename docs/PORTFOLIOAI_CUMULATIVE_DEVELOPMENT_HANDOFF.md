@@ -19452,3 +19452,67 @@ G9.2 is **NOT COMPLETE**.
 No full local validation has been run yet.
 
 **CURRENT STOP POINT:** owner should pull the current branch, run Local Supabase, execute `bash scripts/r4n/run-auropharma-g9-2-local-canonical-activation.sh`, run Local Vite, hard-refresh AUROPHARMA → Research → Overview, and provide the G9.2 panel / canonical Pharma workspace screenshot for visual approval. Only after visual approval should full G9.2 local validation run. Production persistence remains prohibited and G9.3 must not start yet.
+
+
+---
+
+## 221. Entry 216 — G9.2 first full local validation: focused ESLint exposed one unnecessary repository type assertion
+
+**Date:** 20 September 2026  
+**Actor:** owner local validation + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After G9.2 localhost visual approval passed, the owner ran the locked full local validation sequence.
+
+### Result
+
+The focused Vitest suite passed:
+
+- test files: **6 passed / 6 total**
+- tests: **35 passed / 35 total**
+
+Other validation:
+
+- architecture guard: **PASS**
+- typecheck: **PASS**
+- production build: **PASS**
+
+Focused ESLint reported exactly one error in:
+
+`src/data/researchSubprofileRepository.ts`
+
+at the assignment:
+
+`secondaryRows = (secondariesResult.data ?? []) as SecondaryRow[]`
+
+Rule:
+
+`@typescript-eslint/no-unnecessary-type-assertion`
+
+### Root cause
+
+This is a repository typing/lint cleanup only. Supabase's typed return is already assignable to `SecondaryRow[]`, so the explicit `as SecondaryRow[]` assertion is redundant.
+
+The error is unrelated to:
+
+- G9.2 local persistence behavior;
+- AUROPHARMA canonical resolution;
+- TORNTPHARM isolation;
+- Biosimilars fail-closed behavior;
+- scoring/recommendation/sizing boundaries.
+
+### Correction
+
+The unnecessary assertion was removed:
+
+`secondaryRows = secondariesResult.data ?? []`
+
+No query, mapping, runtime behavior, persistence logic, UI state, score state, recommendation state, or sizing state changed.
+
+### Workflow state
+
+Because focused ESLint had one failure, G9.2 remains **OPEN** until the owner pulls this correction and reruns the validation sequence.
+
+The previous G9.2 localhost visual approval remains valid because this correction is type/lint-only and does not alter UI/runtime semantics.
+
+**CURRENT STOP POINT:** pull the lint-only correction and rerun the G9.2 local validation. Do not close G9.2 or start G9.3 until all validation is green and the final checkpoint is recorded.
