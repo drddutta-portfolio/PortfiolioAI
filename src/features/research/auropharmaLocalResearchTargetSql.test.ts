@@ -20,9 +20,9 @@ describe("AUROPHARMA local G8 Research target fixture", () => {
     expect(sql).toContain("'EQ'")
   })
 
-  it("targets the same RLS-visible active portfolio for the explicit local app user", () => {
+  it("targets the same RLS-visible active portfolio for the validated local app user", () => {
     expect(sql).toContain("FROM auth.users")
-    expect(sql).toContain("lower(email) = lower(:'local_user_email')")
+    expect(sql).toContain("lower(email) = 'dr.d.dutta@gmail.com'")
     expect(sql).toContain("user_id = v_target_user_id")
     expect(sql).toContain("ORDER BY created_at, id")
     expect(sql).toContain("LOCAL_FIXTURE_APP_PORTFOLIO_EXPECTED_TWO_HOLDINGS")
@@ -61,15 +61,14 @@ describe("AUROPHARMA local G8 Research target fixture", () => {
     expect(sql).toContain("AUROPHARMA_CURRENT_HOLDING_NOT_CREATED")
   })
 
+  it("does not use psql variable interpolation inside the DO block", () => {
+    expect(sql).not.toContain(":'local_user_email'")
+    expect(sql).not.toContain("\\if :{?local_user_email}")
+  })
+
   it("uses an explicit transaction boundary", () => {
     expect(sql).toMatch(/\bBEGIN;/)
     expect(sql).toMatch(/\bCOMMIT;/)
-  })
-
-  it("requires the localhost login email and passes it into psql", () => {
-    expect(runner).toContain("PORTFOLIOAI_LOCAL_USER_EMAIL")
-    expect(runner).toContain("Local active portfolio candidates:")
-    expect(runner).toContain('-v local_user_email="$LOCAL_USER_EMAIL"')
   })
 
   it("refuses a non-local database URL in the runner", () => {
