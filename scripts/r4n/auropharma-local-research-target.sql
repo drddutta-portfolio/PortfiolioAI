@@ -24,41 +24,40 @@ DECLARE
 BEGIN
   /*
    * Local-development guard:
-   * Research Coverage currently shows exactly two positive holdings:
-   * HDFCBANK + TORNTPHARM. Match that localhost shape rather than requiring
-   * the entire local database to contain only one such portfolio.
-   *
-   * If duplicate local fixture portfolios exist, choose the earliest active
-   * matching portfolio, consistent with the application's active-portfolio
-   * ordering preference. Do not touch a portfolio with additional holdings.
+   * Match the application exactly. PortfolioAI loads the first active portfolio
+   * ordered by created_at, then LIMIT 1.
    */
-  WITH matching_portfolios AS (
-    SELECT
-      p.id AS portfolio_id,
-      p.created_at
-    FROM public.portfolios p
-    JOIN public.current_holdings ch ON ch.portfolio_id = p.id
-    JOIN public.securities s ON s.id = ch.security_id
-    WHERE p.is_active
-      AND ch.current_quantity > 0
-    GROUP BY p.id, p.created_at
-    HAVING count(*) FILTER (WHERE s.symbol IN ('HDFCBANK', 'TORNTPHARM')) = 2
-      AND count(DISTINCT s.symbol) FILTER (WHERE s.symbol IN ('HDFCBANK', 'TORNTPHARM')) = 2
-      AND count(*) = 2
-  )
-  SELECT
-    count(*),
-    (
-      SELECT portfolio_id
-      FROM matching_portfolios
-      ORDER BY created_at, portfolio_id
-      LIMIT 1
-    )
-  INTO v_target_portfolio_count, v_portfolio_id
-  FROM matching_portfolios;
+  SELECT id
+  INTO v_portfolio_id
+  FROM public.portfolios
+  WHERE is_active
+  ORDER BY created_at, id
+  LIMIT 1;
 
-  IF v_target_portfolio_count < 1 OR v_portfolio_id IS NULL THEN
-    RAISE EXCEPTION 'LOCAL_FIXTURE_TARGET_PORTFOLIO_NOT_FOUND';
+  IF v_portfolio_id IS NULL THEN
+    RAISE EXCEPTION 'LOCAL_FIXTURE_ACTIVE_PORTFOLIO_NOT_FOUND';
+  END IF;
+
+  SELECT count(*)
+  INTO v_target_portfolio_count
+  FROM public.current_holdings ch
+  JOIN public.securities s ON s.id = ch.security_id
+  WHERE ch.portfolio_id = v_portfolio_id
+    AND ch.current_quantity > 0;
+
+  IF v_target_portfolio_count <> 2 THEN
+    RAISE EXCEPTION 'LOCAL_FIXTURE_APP_PORTFOLIO_EXPECTED_TWO_HOLDINGS';
+  END IF;
+
+  IF (
+    SELECT count(DISTINCT s.symbol)
+    FROM public.current_holdings ch
+    JOIN public.securities s ON s.id = ch.security_id
+    WHERE ch.portfolio_id = v_portfolio_id
+      AND ch.current_quantity > 0
+      AND s.symbol IN ('HDFCBANK', 'TORNTPHARM')
+  ) <> 2 THEN
+    RAISE EXCEPTION 'LOCAL_FIXTURE_APP_PORTFOLIO_REFERENCE_HOLDINGS_MISMATCH';
   END IF;
 
   SELECT ch.current_quantity
@@ -203,6 +202,18 @@ BEGIN
   );
 
   /*
+   * Reconcile a previous local-only fixture attempt that may have targeted a
+   * different legacy portfolio. These rows are synthetic LOCAL_G8_FIXTURE rows,
+   * so deleting misplaced copies is safe and keeps local state deterministic.
+   */
+  DELETE FROM public.transactions
+  WHERE security_id = v_security_id
+    AND source_type = 'LOCAL_G8_FIXTURE'
+    AND source_provider = 'PORTFOLIOAI'
+    AND deduplication_key = 'LOCAL_G8_FIXTURE:AUROPHARMA'
+    AND portfolio_id <> v_portfolio_id;
+
+  /*
    * Research Coverage enumerates current_holdings.
    * The local ownership link is deliberately synthetic:
    * - quantity = 1 only to make the local target enumerable;
@@ -300,6 +311,15 @@ BEGIN
   ) THEN
     RAISE EXCEPTION 'AUROPHARMA_CURRENT_HOLDING_NOT_CREATED';
   END IF;
+
+  IF (
+    SELECT count(*)
+    FROM public.current_holdings
+    WHERE portfolio_id = v_portfolio_id
+      AND current_quantity > 0
+  ) <> 3 THEN
+    RAISE EXCEPTION 'LOCAL_FIXTURE_APP_PORTFOLIO_EXPECTED_THREE_HOLDINGS_AFTER';
+  END IF;
 END
 $fixture$;
 
@@ -321,17 +341,10 @@ FROM public.current_holdings ch
 JOIN public.securities s ON s.id = ch.security_id
 LEFT JOIN public.sectors sec ON sec.id = s.sector_id
 WHERE ch.portfolio_id = (
-  SELECT p.id
-  FROM public.portfolios p
-  JOIN public.current_holdings ch2 ON ch2.portfolio_id = p.id
-  JOIN public.securities s2 ON s2.id = ch2.security_id
-  WHERE p.is_active
-    AND ch2.current_quantity > 0
-  GROUP BY p.id, p.created_at
-  HAVING count(*) FILTER (WHERE s2.symbol IN ('HDFCBANK', 'TORNTPHARM', 'AUROPHARMA')) = 3
-    AND count(DISTINCT s2.symbol) FILTER (WHERE s2.symbol IN ('HDFCBANK', 'TORNTPHARM', 'AUROPHARMA')) = 3
-    AND count(*) = 3
-  ORDER BY p.created_at, p.id
+  SELECT id
+  FROM public.portfolios
+  WHERE is_active
+  ORDER BY created_at, id
   LIMIT 1
 )
 AND s.symbol IN ('HDFCBANK', 'TORNTPHARM', 'AUROPHARMA')
