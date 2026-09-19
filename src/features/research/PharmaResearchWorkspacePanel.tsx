@@ -47,6 +47,7 @@ import { PHARMA_GLOBAL_GENERICS_PIPELINE_EVIDENCE } from "./pharmaGlobalGenerics
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_STAGE_NORMALIZATION } from "./pharmaGlobalGenericsPipelineStageNormalization"
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_GATE } from "./pharmaGlobalGenericsPipelineAggregationGate"
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_METHOD_PROPOSAL } from "./pharmaGlobalGenericsPipelineAggregationMethodProposal"
+import { PHARMA_GLOBAL_GENERICS_PIPELINE_COMBINED_SCORE } from "./pharmaGlobalGenericsPipelineCombinedScoreContract"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -653,6 +654,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Delayed/blocked or withdrawn/discontinued latest state blocks numeric aggregation</small>
               <p>If any distinct pipeline identity has an adverse latest material state, the proposal returns REVIEW REQUIRED rather than applying an invented numeric cap or allowing other successes to offset it. Recency has no age-based weight, and materiality/economic relevance remain eligibility-only.</p>
               <span>Adverse latest state: REVIEW REQUIRED · Recency weight: NO · Executable combiner: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.23 · Combined pipeline score contract</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_PIPELINE_COMBINED_SCORE.contractVersion}</small>
+              <p>The owner-approved G6.22 method is now encoded deterministically: collapse each product/molecule + geography history to its latest reviewed state and take the median only when all latest states are non-adverse.</p>
+              <span>Methodology: OWNER APPROVED · Combined score function: PRESENT · Activation: NO</span>
+            </article>
+            <article>
+              <strong>G6.23 · Fail-closed combined-score boundary</strong>
+              <small>Contradictory or adverse latest states produce no numeric aggregate</small>
+              <p>Any ineligible event, same-date contradictory latest state, or latest delayed/blocked/withdrawn/discontinued identity returns REVIEW REQUIRED with a null combined score. Historical lifecycle states remain auditable and are not repeatedly counted.</p>
+              <span>Adverse offset: NO · Persisted score run: NO · Recommendation impact: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
