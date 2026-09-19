@@ -62,6 +62,7 @@ import { PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_METHOD_GATE } from "./pharmaGlob
 import { PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsCashConversionCalibrationEvidence"
 import { PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_METHOD_GATE } from "./pharmaGlobalGenericsBalanceSheetMethodGate"
 import { PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsBalanceSheetCalibrationEvidence"
+import { PHARMA_GLOBAL_GENERICS_VALUATION_METHOD_GATE } from "./pharmaGlobalGenericsValuationMethodGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -878,6 +879,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Current parent metric dimension: FINANCIAL STRENGTH · canonical dimension: BALANCE SHEET / CREDIT</small>
               <p>The mismatch remains explicit and unresolved. A separate versioned parent-contract reconciliation is required before leverage may contribute a numeric Balance Sheet / Credit score.</p>
               <span>Parent reconciliation performed: NO · Deferral required: YES · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.38 · Global Generics valuation methodology boundary</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_VALUATION_METHOD_GATE.contractVersion}</small>
+              <p>The parent valuation shape is reusable—self-history, peer-relative and FCF corroboration using PE, EV/EBITDA and FCF yield—but Domestic Formulations calibration does not transfer.</p>
+              <span>Parent dimension: ALIGNED · Domestic 40/40/20: NO · Domestic peer 50/50: NO</span>
+            </article>
+            <article>
+              <strong>G6.38 · Global-specific valuation calibration blocker</strong>
+              <small>No hidden reweighting or missing-component renormalization</small>
+              <p>Global Generics still requires its own component weights, self-history bands, peer metric mix, peer-relative bands, FCF corroboration method and final aggregation contract.</p>
+              <span>Global weights: PENDING · Global bands: PENDING · Numeric valuation curve: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
