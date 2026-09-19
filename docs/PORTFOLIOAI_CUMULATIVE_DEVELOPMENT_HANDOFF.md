@@ -9887,3 +9887,108 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.12 cards in TORNTPHARM → Research → Gate G, then run focused G6.12 validation. Only after validation should G6 define the PE-vs-EV/EBITDA combination rule and then the overall Domestic Valuation component weights.
+
+
+---
+
+## 124. Entry 119 — Gate G6.12 Domestic peer premium/discount normalization validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.12 has completed validation as a **proposal-only Domestic Formulations peer premium/discount calculation and per-metric normalization contract**.
+
+### Validation
+
+Owner-confirmed results after correcting two test-only boundary expectations:
+
+- focused Vitest covering G6.12 plus G6.11/G6.10/G6.9 and the active Domestic Valuation methodology slice → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### Test corrections recorded
+
+Two test assertions were corrected without changing implementation or methodology:
+
+1. floating-point result `-19.999999999999996` for the mathematical `-20%` case now uses a close comparison;
+2. exact inclusive band edges now match the approved ranges:
+   - `-5%` → 60
+   - `-20%` → 40
+   - only values `< -20%` → 20
+
+### G6.12 validated calculation convention
+
+For each comparable peer multiple:
+
+`(PEER_MEDIAN_MULTIPLE / TARGET_MULTIPLE - 1) * 100`
+
+Sign convention:
+
+- positive → target discount to peer median
+- zero → at peer median
+- negative → target premium to peer median
+
+Validated independently for:
+
+- `PE_TTM`
+- `EV_EBITDA`
+
+### Validated per-metric normalization bands
+
+- >= +25% → 100
+- >= +10% and < +25% → 80
+- >= -5% and < +10% → 60
+- >= -20% and < -5% → 40
+- < -20% → 20
+
+### Fail-closed denominator behavior
+
+Target and peer median multiples must both be:
+
+- finite;
+- positive;
+- economically meaningful under the G6.11 comparability contract.
+
+Invalid or non-positive multiples produce no relative valuation observation.
+
+### Still unapproved
+
+- PE vs EV/EBITDA combination rule: **NO**
+- PE vs EV/EBITDA weighting: **NO**
+- combined peer-component score: **NO**
+- self-history vs peer vs FCF Valuation weights: **NO**
+- whole Valuation dimension ready: **NO**
+
+### Domestic Valuation state
+
+Validated / not active:
+
+- G6.2 — self-history relative valuation
+- G6.8 — FCF-yield cash-flow corroboration
+- G6.9 — peer-cohort methodology lock
+- G6.10 — deterministic peer eligibility builder
+- G6.11 — minimum-comparability and median aggregation
+- G6.12 — peer premium/discount calculation and per-metric normalization
+
+Remaining before a complete Domestic Valuation methodology:
+
+- PE vs EV/EBITDA combination rule
+- peer-component score contract
+- self-history / peer-relative / FCF component weights
+- final Valuation readiness closure
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.12 is validated. The next permitted G6 task is to define the PE-vs-EV/EBITDA combination rule for the Domestic peer-relative component, while keeping the overall Valuation dimension inactive.
