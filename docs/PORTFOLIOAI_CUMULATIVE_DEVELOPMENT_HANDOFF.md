@@ -12043,3 +12043,193 @@ G4 remains authoritative for governance/regulatory gating, and pipeline aggregat
 **Result:** G6.21 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** The next Global Generics methodology step is an explicit aggregation-method approval decision. No numeric combined pipeline score may be implemented until the owner explicitly approves the aggregation method, adverse-event treatment, recency policy, event-offset policy, and any numeric role for economic relevance.
+
+
+---
+
+## 143. Entry 138 — Gate G6.22 Global Generics pipeline aggregation method proposal prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.22 — Global Generics Pipeline Aggregation Method Proposal**.
+
+### Starting state
+
+Verified branch HEAD before G6.22:
+
+`c8fd226de3dab4d73b5eeb3920f535029a793e1c`
+
+G6.21 was already:
+
+**VALIDATED / NOT ACTIVE**
+
+The G6.21 approval gate required explicit decisions for:
+
+1. aggregation method;
+2. recency treatment;
+3. adverse-event treatment;
+4. event-offset policy;
+5. economic-relevance numeric role.
+
+### Repository precedent review
+
+The repository was searched for an approved event-specific adverse floor/cap, worst-of, recency-weighted or similar event aggregation precedent.
+
+No suitable approved event-aggregation precedent was found.
+
+Existing weighted-mean precedents remain limited to other methodology families such as Domestic Valuation and are not treated as transferable defaults for pipeline events.
+
+### Proposed method
+
+Contract:
+
+`PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_METHOD_V1_PROPOSAL`
+
+Method:
+
+`LATEST_STATE_PER_PIPELINE_IDENTITY_THEN_MEDIAN_IF_NO_ADVERSE`
+
+This remains:
+
+**PROPOSAL ONLY / OWNER APPROVAL PENDING**
+
+No executable combined-score function is introduced.
+
+### Pipeline identity
+
+A distinct pipeline identity is defined as:
+
+- product or molecule;
+- geography.
+
+The same molecule in different geographies remains a distinct identity because regulatory and commercial status may differ by geography.
+
+### Lifecycle de-duplication
+
+For each product/molecule + geography identity:
+
+- all historical stages remain visible for audit;
+- only the latest reviewed material state would enter aggregation;
+- older filing/approval/launch stages do not get counted repeatedly after a later state exists.
+
+This prevents one opportunity from receiving a mechanical event-count advantage simply by progressing through multiple lifecycle stages.
+
+Same-date contradictory latest stages require:
+
+`REVIEW_REQUIRED`
+
+### Proposed adverse-event treatment
+
+Adverse latest states:
+
+- `DELAYED_OR_BLOCKED`
+- `WITHDRAWN_OR_DISCONTINUED`
+
+If any distinct pipeline identity has one of these as its latest reviewed material state:
+
+`REVIEW_REQUIRED`
+
+No numeric aggregate is proposed in that state.
+
+No adverse cap/floor is invented.
+
+Unrelated positive pipeline identities cannot numerically offset the adverse latest state.
+
+### Proposed non-adverse aggregation
+
+Only when all distinct latest states are non-adverse:
+
+- each latest state remains normalized under G6.20;
+- proposed statistic: **MEDIAN**.
+
+Minimum distinct identities:
+
+- **1**
+
+Preferred:
+
+- **4**
+
+These counts inherit the G6.19 minimum/preferred material-event boundary.
+
+### Why median is proposed
+
+The proposal records median because it:
+
+- avoids a direct event-count bonus;
+- reduces sensitivity to one unusually advanced positive pipeline identity;
+- does not require unapproved materiality/economic magnitude weights;
+- is deterministic and auditable.
+
+Median is not allowed to hide adverse events because any adverse latest state blocks numeric aggregation before median calculation.
+
+### Proposed recency policy
+
+Age-based numeric recency weighting:
+
+**NO**
+
+Recency acts only through latest-state selection per pipeline identity.
+
+Older lifecycle events remain visible for audit.
+
+### Materiality and economic relevance
+
+Both remain:
+
+**ELIGIBILITY GATES ONLY**
+
+Not proposed:
+
+- materiality multiplier;
+- inferred exposure weight;
+- economic-relevance multiplier;
+- provider-derived numeric scaling.
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsPipelineAggregationMethodProposal.ts`
+- `src/features/research/pharmaGlobalGenericsPipelineAggregationMethodProposal.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_22_Global_Generics_Pipeline_Aggregation_Method_Proposal_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.22 · Pipeline aggregation method proposal**
+- **G6.22 · Adverse-state review rule**
+
+The cards explicitly state:
+
+- latest state per identity: yes;
+- non-adverse statistic: median;
+- owner approval: pending;
+- adverse latest state: review required;
+- recency weight: no;
+- executable combiner: no.
+
+### Execution boundary
+
+- executable combined-score function: **NO**
+- combined pipeline score ready: **NO**
+- owner methodology approval: **PENDING**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.22 cards in TORNTPHARM → Research → Gate G, then run focused G6.22 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, the owner must explicitly approve or modify the G6.22 methodology before any executable G6.23 combined pipeline score contract can be implemented.
