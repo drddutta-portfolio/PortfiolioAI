@@ -18363,3 +18363,66 @@ The runner no longer requires `PORTFOLIOAI_LOCAL_USER_EMAIL`.
 - failed syntax attempt committed writes: **0**.
 
 **CURRENT STOP POINT:** Owner should pull the Gate-E-pattern correction, run the fixture contract test, then run `bash scripts/r4n/run-auropharma-local-research-target.sh`. After PASS, hard-refresh localhost Holdings and Research Coverage. Expected visible state: HDFCBANK + TORNTPHARM + AUROPHARMA.
+
+
+---
+
+## 209. Entry 204 — AUROPHARMA local Holdings fixture validated
+
+**Date:** 19 September 2026  
+**Actor:** owner localhost validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The corrected AUROPHARMA local fixture was pulled and rerun using the already validated Gate E local-auth pattern.
+
+### Local result
+
+Authenticated localhost Holdings now visibly shows exactly three open holdings:
+
+- AUROPHARMA — quantity 1
+- HDFCBANK — quantity 10
+- TORNTPHARM — quantity 10
+
+The visible AUROPHARMA row shows:
+
+- company: Aurobindo Pharma Limited
+- asset class: EQUITY
+- exchange: NSE
+- series: EQ
+- accounting state: unresolved / unavailable values preserved
+
+### Validation implications
+
+This proves:
+
+- the fixture now targets the same RLS-visible local user/portfolio as the browser;
+- the synthetic local AUROPHARMA ownership link is visible in the actual application;
+- HDFCBANK remains present;
+- TORNTPHARM remains present;
+- no price, cost basis, P&L or research evidence was fabricated;
+- unavailable values remain unavailable rather than estimated.
+
+### Fixture safety
+
+- production mutation: **NO**
+- research evidence inserted: **0**
+- subprofile assignments inserted: **0**
+- score/recommendation rows inserted: **0**
+- position-sizing changes: **NO**
+- HDFCBANK/TORNTPHARM holdings preserved: **YES**
+
+### Remaining prerequisite validation
+
+The final pre-G8.1 check is the Research Coverage surface.
+
+Expected:
+
+- Open holdings: **3**
+- HDFCBANK present
+- TORNTPHARM present
+- AUROPHARMA present
+- AUROPHARMA equity eligible
+- AUROPHARMA research domains initially **Missing**
+- no provider call
+
+**CURRENT STOP POINT:** Open localhost Research Coverage and confirm all three securities are visible, with AUROPHARMA initially Missing across research-evidence domains. After that visual proof, mark the AUROPHARMA local prerequisite fully validated and begin G8.1.
