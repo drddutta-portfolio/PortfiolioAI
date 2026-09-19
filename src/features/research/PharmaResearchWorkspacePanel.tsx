@@ -54,6 +54,7 @@ import { PHARMA_GLOBAL_GENERICS_DRAWDOWN_METHOD_GATE } from "./pharmaGlobalGener
 import { PHARMA_GLOBAL_GENERICS_DRAWDOWN_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsDrawdownEvidenceSufficiency"
 import { PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_METHOD_GATE } from "./pharmaGlobalGenericsVolatilityContextMethodGate"
 import { PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsVolatilityContextEvidenceSufficiency"
+import { PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_METHOD_GATE } from "./pharmaGlobalGenericsOperatingMarginMethodGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -758,6 +759,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Context remains insufficient by contract</small>
               <p>No reviewed Global Generics peer cohort, approved Pharma benchmark, or sufficient self-history plus external context is established; a hybrid also remains unavailable.</p>
               <span>Deferral required: YES · Silent fallback: NO · Whole Risk dimension ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.30 · Global Generics operating-margin methodology boundary</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_METHOD_GATE.contractVersion}</small>
+              <p>The parent Pharma methodology shape may be reused—8 comparable quarters minimum with level, stability and trend—but Domestic Formulations weights and score bands remain explicitly out of scope.</p>
+              <span>Parent shape: REUSABLE · Domestic weights: NO · Domestic bands: NO</span>
+            </article>
+            <article>
+              <strong>G6.30 · Global-specific calibration blocker</strong>
+              <small>Structurally valid history can become method-ready without becoming score-ready</small>
+              <p>Global Generics still needs its own component weights, level/stability/trend bands and final aggregation contract. Missing or unmatched operating-margin history continues to fail closed.</p>
+              <span>Global weights: PENDING · Global bands: PENDING · Numeric curve ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
