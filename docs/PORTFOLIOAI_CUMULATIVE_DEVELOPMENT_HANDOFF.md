@@ -13139,3 +13139,118 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.25 cards in TORNTPHARM → Research → Gate G, then run focused G6.25 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. Only after validation should G6.25 be marked VALIDATED / NOT ACTIVE.
+
+
+---
+
+## 152. Entry 147 — Gate G6.25 Global Generics market-risk normalization gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.25 has completed validation as a **proposal-only Global Generics market-risk normalization gate**.
+
+### Validation
+
+Owner confirmed all requested checks passed:
+
+- focused Vitest for `pharmaGlobalGenericsMarketRiskNormalizationGate.test.ts` → **PASS**
+- focused ESLint for the G6.25 methodology slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+The earlier glass-box UI review of both G6.25 cards remains the expected review surface.
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_MARKET_RISK_NORMALIZATION_GATE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated evidence identities
+
+#### MAX_DRAWDOWN_1Y
+
+Definition:
+
+`TRAILING_1Y_MAX_PEAK_TO_TROUGH_DAILY_CLOSE`
+
+Authority:
+
+- raw: `MARKET_PRICE_HISTORY`
+- derived: `MARKET_METRIC_OBSERVATIONS`
+
+Unit:
+
+`PERCENT`
+
+Structural range:
+
+- -100% to 0%
+
+Direction:
+
+- smaller absolute loss is directionally better.
+
+#### VOLATILITY_1Y
+
+Definition:
+
+`ANNUALIZED_SAMPLE_STDDEV_DAILY_LOG_RETURNS_SQRT_252`
+
+Authority:
+
+- raw: `MARKET_PRICE_HISTORY`
+- derived: `MARKET_METRIC_OBSERVATIONS`
+
+Unit:
+
+`PERCENT`
+
+Structural semantics:
+
+- volatility must be non-negative;
+- lower is directionally better only with approved peer/benchmark context.
+
+### Validated non-inheritance / blockers
+
+- BANK_NBFC thresholds inherited: **NO**
+- absolute drawdown bands approved: **NO**
+- absolute volatility bands approved: **NO**
+- relative-volatility bands approved: **NO**
+- Pharma benchmark approved: **NO**
+- Risk component weights approved: **NO**
+- missing evidence becomes neutral: **NO**
+- whole Risk dimension ready: **NO**
+
+### Validated evidence-readiness states
+
+- missing either input → `INSUFFICIENT_EVIDENCE`
+- invalid metric semantics → `REVIEW_REQUIRED`
+- both structurally valid → `READY_FOR_METHODOLOGY`
+
+`READY_FOR_METHODOLOGY` is not score readiness.
+
+### Safety boundary remains unchanged
+
+- Pharma drawdown score curve: **NO**
+- Pharma volatility score curve: **NO**
+- benchmark approval: **NO**
+- component weights: **NO**
+- score activation: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.25 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** The next safe Global Generics Risk methodology step is the first actual market-risk curve decision. Drawdown should be considered first because it has a stable absolute economic interpretation, while volatility still explicitly requires peer/benchmark context.
