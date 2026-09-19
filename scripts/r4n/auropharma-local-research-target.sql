@@ -1,6 +1,12 @@
 \set ON_ERROR_STOP on
 \pset pager off
 
+\if :{?local_user_email}
+\else
+  \echo 'REFUSING: local_user_email psql variable is required.'
+  \quit 2
+\endif
+
 BEGIN;
 
 \echo ''
@@ -12,6 +18,7 @@ BEGIN;
 DO $fixture$
 DECLARE
   v_target_portfolio_count integer;
+  v_target_user_id uuid;
   v_portfolio_id uuid;
   v_security_id uuid;
   v_torntpharm_sector_id uuid;
@@ -24,18 +31,39 @@ DECLARE
 BEGIN
   /*
    * Local-development guard:
-   * Match the application exactly. PortfolioAI loads the first active portfolio
-   * ordered by created_at, then LIMIT 1.
+   * psql runs as local postgres and bypasses RLS, while the browser sees only
+   * portfolios owned by the authenticated Supabase user. Resolve that exact
+   * local user by the email passed by the runner, then mirror the app's
+   * active-portfolio ordering inside that user's RLS-visible scope.
    */
+  SELECT id
+  INTO v_target_user_id
+  FROM auth.users
+  WHERE lower(email) = lower(:'local_user_email')
+  LIMIT 1;
+
+  IF v_target_user_id IS NULL THEN
+    RAISE EXCEPTION 'LOCAL_FIXTURE_APP_USER_NOT_FOUND';
+  END IF;
+
+  IF (
+    SELECT count(*)
+    FROM auth.users
+    WHERE lower(email) = lower(:'local_user_email')
+  ) <> 1 THEN
+    RAISE EXCEPTION 'LOCAL_FIXTURE_APP_USER_NOT_UNIQUE';
+  END IF;
+
   SELECT id
   INTO v_portfolio_id
   FROM public.portfolios
   WHERE is_active
+    AND user_id = v_target_user_id
   ORDER BY created_at, id
   LIMIT 1;
 
   IF v_portfolio_id IS NULL THEN
-    RAISE EXCEPTION 'LOCAL_FIXTURE_ACTIVE_PORTFOLIO_NOT_FOUND';
+    RAISE EXCEPTION 'LOCAL_FIXTURE_ACTIVE_PORTFOLIO_NOT_FOUND_FOR_USER';
   END IF;
 
   SELECT count(*)
@@ -341,10 +369,12 @@ FROM public.current_holdings ch
 JOIN public.securities s ON s.id = ch.security_id
 LEFT JOIN public.sectors sec ON sec.id = s.sector_id
 WHERE ch.portfolio_id = (
-  SELECT id
-  FROM public.portfolios
-  WHERE is_active
-  ORDER BY created_at, id
+  SELECT p.id
+  FROM public.portfolios p
+  JOIN auth.users u ON u.id = p.user_id
+  WHERE p.is_active
+    AND lower(u.email) = lower(:'local_user_email')
+  ORDER BY p.created_at, p.id
   LIMIT 1
 )
 AND s.symbol IN ('HDFCBANK', 'TORNTPHARM', 'AUROPHARMA')
