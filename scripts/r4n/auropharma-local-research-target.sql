@@ -24,23 +24,41 @@ DECLARE
 BEGIN
   /*
    * Local-development guard:
-   * target only the one ordinary local portfolio that currently holds BOTH
-   * HDFCBANK and TORNTPHARM. This is intentionally not a generic portfolio seed.
+   * Research Coverage currently shows exactly two positive holdings:
+   * HDFCBANK + TORNTPHARM. Match that localhost shape rather than requiring
+   * the entire local database to contain only one such portfolio.
+   *
+   * If duplicate local fixture portfolios exist, choose the earliest active
+   * matching portfolio, consistent with the application's active-portfolio
+   * ordering preference. Do not touch a portfolio with additional holdings.
    */
-  SELECT count(*), min(candidate.portfolio_id::text)::uuid
-  INTO v_target_portfolio_count, v_portfolio_id
-  FROM (
-    SELECT ch.portfolio_id
-    FROM public.current_holdings ch
+  WITH matching_portfolios AS (
+    SELECT
+      p.id AS portfolio_id,
+      p.created_at
+    FROM public.portfolios p
+    JOIN public.current_holdings ch ON ch.portfolio_id = p.id
     JOIN public.securities s ON s.id = ch.security_id
-    WHERE ch.current_quantity > 0
-      AND s.symbol IN ('HDFCBANK', 'TORNTPHARM')
-    GROUP BY ch.portfolio_id
-    HAVING count(DISTINCT s.symbol) = 2
-  ) candidate;
+    WHERE p.is_active
+      AND ch.current_quantity > 0
+    GROUP BY p.id, p.created_at
+    HAVING count(*) FILTER (WHERE s.symbol IN ('HDFCBANK', 'TORNTPHARM')) = 2
+      AND count(DISTINCT s.symbol) FILTER (WHERE s.symbol IN ('HDFCBANK', 'TORNTPHARM')) = 2
+      AND count(*) = 2
+  )
+  SELECT
+    count(*),
+    (
+      SELECT portfolio_id
+      FROM matching_portfolios
+      ORDER BY created_at, portfolio_id
+      LIMIT 1
+    )
+  INTO v_target_portfolio_count, v_portfolio_id
+  FROM matching_portfolios;
 
-  IF v_target_portfolio_count <> 1 OR v_portfolio_id IS NULL THEN
-    RAISE EXCEPTION 'LOCAL_FIXTURE_TARGET_PORTFOLIO_NOT_UNIQUE';
+  IF v_target_portfolio_count < 1 OR v_portfolio_id IS NULL THEN
+    RAISE EXCEPTION 'LOCAL_FIXTURE_TARGET_PORTFOLIO_NOT_FOUND';
   END IF;
 
   SELECT ch.current_quantity
@@ -303,16 +321,17 @@ FROM public.current_holdings ch
 JOIN public.securities s ON s.id = ch.security_id
 LEFT JOIN public.sectors sec ON sec.id = s.sector_id
 WHERE ch.portfolio_id = (
-  SELECT candidate.portfolio_id
-  FROM (
-    SELECT ch2.portfolio_id
-    FROM public.current_holdings ch2
-    JOIN public.securities s2 ON s2.id = ch2.security_id
-    WHERE ch2.current_quantity > 0
-      AND s2.symbol IN ('HDFCBANK', 'TORNTPHARM')
-    GROUP BY ch2.portfolio_id
-    HAVING count(DISTINCT s2.symbol) = 2
-  ) candidate
+  SELECT p.id
+  FROM public.portfolios p
+  JOIN public.current_holdings ch2 ON ch2.portfolio_id = p.id
+  JOIN public.securities s2 ON s2.id = ch2.security_id
+  WHERE p.is_active
+    AND ch2.current_quantity > 0
+  GROUP BY p.id, p.created_at
+  HAVING count(*) FILTER (WHERE s2.symbol IN ('HDFCBANK', 'TORNTPHARM', 'AUROPHARMA')) = 3
+    AND count(DISTINCT s2.symbol) FILTER (WHERE s2.symbol IN ('HDFCBANK', 'TORNTPHARM', 'AUROPHARMA')) = 3
+    AND count(*) = 3
+  ORDER BY p.created_at, p.id
   LIMIT 1
 )
 AND s.symbol IN ('HDFCBANK', 'TORNTPHARM', 'AUROPHARMA')
