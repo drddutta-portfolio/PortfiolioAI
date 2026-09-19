@@ -10317,3 +10317,102 @@ Still unresolved:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.14 cards in TORNTPHARM → Research → Gate G, then run focused G6.14 validation. After validation, an explicit PE-vs-EV/EBITDA weighting methodology decision is required before the peer-relative component can emit a combined score.
+
+
+---
+
+## 128. Entry 123 — Gate G6.14 Domestic peer weighting approval gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.14 has completed validation as a **proposal-only Domestic Formulations peer weighting approval gate**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.14 plus G6.13/G6.12/G6.11/G6.10/G6.9 and the active Domestic Valuation methodology slice → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.14 validated approval boundary
+
+Required normalized peer inputs:
+
+- `PE_TTM`
+- `EV_EBITDA`
+
+Approved weighting method:
+
+`null`
+
+Current weights:
+
+- PE: `null`
+- EV/EBITDA: `null`
+
+### Validated structural requirements for any future weighting
+
+Any candidate weighting must:
+
+- use finite non-negative weights;
+- keep each weight within [0,1];
+- sum to one within deterministic tolerance;
+- be separately versioned;
+- receive explicit owner approval.
+
+A structurally valid candidate remains:
+
+`approved = false`
+
+until that explicit methodology approval exists.
+
+### Explicit defaults remain prohibited
+
+- hidden default weighting: **NO**
+- automatic equal weighting: **NO**
+- single-metric fallback: **NO**
+- unversioned weighting: **NO**
+
+A 50/50 candidate may be structurally valid, but it is not implicitly approved.
+
+### Domestic Valuation state
+
+Validated / not active:
+
+- G6.2 — self-history relative valuation
+- G6.8 — FCF-yield cash-flow corroboration
+- G6.9 — peer-cohort methodology lock
+- G6.10 — deterministic peer eligibility builder
+- G6.11 — minimum-comparability and median aggregation
+- G6.12 — peer premium/discount calculation and per-metric normalization
+- G6.13 — peer cross-metric combination readiness lock
+- G6.14 — explicit peer weighting approval gate
+
+Still unresolved:
+
+- approved PE-vs-EV/EBITDA weights
+- combined peer-component score
+- self-history / peer-relative / FCF component weights
+- final Domestic Valuation readiness closure
+
+Therefore:
+
+`whole Valuation dimension ready = NO`
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.14 is validated. The next methodology step requires an explicit PE-vs-EV/EBITDA weighting decision before a combined peer-relative score can exist. Until then, the peer-relative component and overall Domestic Valuation dimension remain fail closed.
