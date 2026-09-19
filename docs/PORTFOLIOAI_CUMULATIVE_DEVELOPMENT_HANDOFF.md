@@ -10003,3 +10003,113 @@ After the two G6.12 test-only assertion corrections, the owner reran the remaini
 - `npm run build` → **PASS**
 
 The final validated state therefore reflects the corrected tests and a clean lint/type/build pass on the resulting branch head.
+
+
+---
+
+## 125. Entry 120 — Gate G6.13 Domestic peer cross-metric combination lock prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.13 — Domestic Formulations Peer Cross-Metric Combination Approval Lock**.
+
+### Canonical methodology search
+
+Repository search found no approved PE-vs-EV/EBITDA weighting rule for PHARMA_V1.
+
+The permanent R4N engineering rule prohibits inventing scoring weights.
+
+Therefore G6.13 explicitly avoids a hidden 50/50 average or any other unstated combination.
+
+### Required normalized peer inputs
+
+Both are required:
+
+- `PE_TTM` normalized peer-relative score
+- `EV_EBITDA` normalized peer-relative score
+
+Both must already satisfy G6.9–G6.12.
+
+### Fail-closed behavior
+
+If either input is missing or invalid:
+
+`INSUFFICIENT_EVIDENCE`
+
+Single-metric substitution is prohibited.
+
+### Combination methods explicitly unapproved
+
+- equal-weight mean: **NO**
+- weighted mean: **NO**
+- best-of: **NO**
+- worst-of: **NO**
+- fallback to single metric: **NO**
+
+Current explicit weights:
+
+- PE: `null`
+- EV/EBITDA: `null`
+
+When both normalized inputs exist, the state is only:
+
+`READY_FOR_WEIGHTING_DECISION`
+
+Combined peer score remains:
+
+`null`
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaDomesticPeerCombinationContract.ts`
+- `src/features/research/pharmaDomesticPeerCombinationContract.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_13_Domestic_Peer_Combination_Lock_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.13 · Peer cross-metric combination lock**
+- **G6.13 · Explicit weighting blocker**
+
+### Domestic Valuation state
+
+Validated / not active through G6.12:
+
+- self-history relative curve
+- FCF-yield corroboration
+- peer cohort methodology
+- deterministic peer builder
+- minimum comparability + median aggregation
+- premium/discount normalization
+
+G6.13 now adds the explicit cross-metric combination boundary.
+
+Still unresolved:
+
+- PE-vs-EV/EBITDA weighting
+- combined peer-relative score
+- self-history vs peer-relative vs FCF component weights
+- whole Valuation readiness
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.13 cards in TORNTPHARM → Research → Gate G, then run focused G6.13 validation. A later methodology checkpoint must explicitly approve PE-vs-EV/EBITDA weighting before a combined peer-relative score can exist.
