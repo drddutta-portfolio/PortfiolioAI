@@ -68,6 +68,7 @@ import { PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_METHOD_GATE } from "./pharm
 import { PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsOwnershipGovernanceCalibrationEvidence"
 import { PHARMA_GLOBAL_GENERICS_MOMENTUM_METHOD_GATE } from "./pharmaGlobalGenericsMomentumMethodGate"
 import { PHARMA_GLOBAL_GENERICS_MOMENTUM_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsMomentumEvidenceSufficiency"
+import { PHARMA_GLOBAL_GENERICS_G6_COVERAGE_REVIEW } from "./pharmaGlobalGenericsG6CoverageReview"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -968,6 +969,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>No benchmark-by-analogy and no hidden BANK fallback</small>
               <p>NIFTY BANK, BANK_NBFC momentum weights and provider technical scores remain ineligible for Pharma. Relative strength cannot be scored until a Pharma benchmark is explicitly approved.</p>
               <span>Deferral required: YES · BANK fallback: NO · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.44 · Global Generics G6 coverage closure audit</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_G6_COVERAGE_REVIEW.contractVersion}</small>
+              <p>All 10 canonical Global Generics G6 families now have an explicit methodology outcome. Two have validated numeric curves not active; the other eight remain validated fail-closed.</p>
+              <span>Canonical families: 10/10 · G6 methodology coverage: COMPLETE · Score execution: NO</span>
+            </article>
+            <article>
+              <strong>G6.44 · Applicability registry reconciliation required</strong>
+              <small>Seven Global Generics registry entries still show threshold work as pending</small>
+              <p>The shared pending-parent-family representation now lags the validated Global Generics outcomes. G7 remains blocked until a narrow registry-only reconciliation is validated without changing other Pharma subprofiles.</p>
+              <span>Stale registry families: 7 · Registry reconciliation: REQUIRED · G7 eligible: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
