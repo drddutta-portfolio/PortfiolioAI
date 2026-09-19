@@ -14142,3 +14142,76 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.31 cards in TORNTPHARM → Research → Gate G, then run focused G6.31 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, the Global Generics Operating Margin slice can be closed as explicitly incomplete/fail-closed and G6 can move to the next unresolved Global Generics family.
+
+
+---
+
+## 164. Entry 159 — Gate G6.31 Global Generics operating margin calibration deferral gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.31 has completed validation as a **proposal-only Global Generics operating-margin calibration evidence-sufficiency / deferral gate**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsOperatingMarginCalibrationEvidence.test.ts` → **PASS**
+- focused ESLint for the G6.31 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of the two G6.31 cards → **PASS**
+
+### Validated contract
+
+`PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_CALIBRATION_EVIDENCE_V1_PROPOSAL`
+
+Status:
+
+**VALIDATED / NOT ACTIVE**
+
+### Validated calibration conclusion
+
+The parent Operating Margin methodology shape remains valid, but Global Generics-specific numeric calibration is not currently evidence-supported.
+
+Blockers remain:
+
+- Global Generics calibration set not established;
+- reviewed same-primary peer cohort not established;
+- level-band evidence not established;
+- stability-band evidence not established;
+- trend-band evidence not established;
+- component-weight evidence not established.
+
+Therefore:
+
+- Global-specific calibration available: **NO**
+- Domestic calibration fallback: **NO**
+- numeric Operating Margin curve: **NO**
+- deferral required: **YES**
+
+### Global Generics Operating Margin slice status
+
+- evidence/history boundary: **VALIDATED**
+- reusable methodology shape: **VALIDATED**
+- Global-specific numeric calibration: **DEFERRED / FAIL-CLOSED**
+- Domestic thresholds/weights reused: **NO**
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.31 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Move to the next unresolved Global Generics family in the G6 applicability registry without forcing or borrowing unsupported calibration.
