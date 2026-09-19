@@ -44,6 +44,7 @@ import { PHARMA_DOMESTIC_VALUATION_WEIGHTING_GATE } from "./pharmaDomesticValuat
 import { PHARMA_DOMESTIC_VALUATION_COMBINED_SCORE } from "./pharmaDomesticValuationCombinedScoreContract"
 import { PHARMA_GLOBAL_GENERIC_PRICE_EROSION_CURVE } from "./pharmaGlobalGenericPriceErosionCurveProposal"
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_EVIDENCE } from "./pharmaGlobalGenericsPipelineEvidenceContract"
+import { PHARMA_GLOBAL_GENERICS_PIPELINE_STAGE_NORMALIZATION } from "./pharmaGlobalGenericsPipelineStageNormalization"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -608,6 +609,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Approval and launch counts are evidence, not automatic durability scores</small>
               <p>More approvals or launches do not automatically mean a stronger score. Delayed, blocked, withdrawn and discontinued events remain in the evidence history, and regulatory-site penalties stay outside this contract to avoid double-counting.</p>
               <span>Approval count auto-positive: NO · Launch count auto-positive: NO · Regulatory double-counting: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.20 · Global Generics pipeline stage normalization</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_PIPELINE_STAGE_NORMALIZATION.contractVersion}</small>
+              <p>Each sufficiently identified material pipeline event now has a proposal-only stage normalization. Filing, tentative approval, final approval, launch, confirmed commercial traction and adverse states remain economically distinct.</p>
+              <span>Filed: 40 · Tentative: 55 · Final: 70 · Launched: 85 · Traction: 100</span>
+            </article>
+            <article>
+              <strong>G6.20 · Multi-event aggregation blocker</strong>
+              <small>Materiality is a gate, not an invented multiplier</small>
+              <p>Delayed/blocked scores 20 and withdrawn/discontinued scores 0, but multiple event scores are not yet averaged, medianed or recency-weighted. Unrelated successes cannot silently cancel adverse material events.</p>
+              <span>Materiality multiplier: NO · Event-count bonus: NO · Combined pipeline score: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
