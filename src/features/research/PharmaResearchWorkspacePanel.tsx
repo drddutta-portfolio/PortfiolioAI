@@ -53,6 +53,7 @@ import { PHARMA_GLOBAL_GENERICS_MARKET_RISK_NORMALIZATION_GATE } from "./pharmaG
 import { PHARMA_GLOBAL_GENERICS_DRAWDOWN_METHOD_GATE } from "./pharmaGlobalGenericsDrawdownMethodGate"
 import { PHARMA_GLOBAL_GENERICS_DRAWDOWN_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsDrawdownEvidenceSufficiency"
 import { PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_METHOD_GATE } from "./pharmaGlobalGenericsVolatilityContextMethodGate"
+import { PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsVolatilityContextEvidenceSufficiency"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -743,6 +744,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>No generic peer set or silent benchmark selection</small>
               <p>Peer-relative normalization requires a reviewed Global Generics cohort, benchmark-relative requires an approved Pharma benchmark, and self-history cannot stand alone without external context.</p>
               <span>BANK thresholds inherited: NO · Silent benchmark: NO · Numeric volatility curve: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.29 · Volatility context evidence sufficiency / deferral gate</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_EVIDENCE_SUFFICIENCY.contractVersion}</small>
+              <p>Current repository evidence does not satisfy any G6.28 context prerequisite. Numeric volatility normalization is therefore deferred rather than assigned an arbitrary peer set or benchmark.</p>
+              <span>Eligible context methods: NONE · Approved method: NONE · Numeric curve: NO</span>
+            </article>
+            <article>
+              <strong>G6.29 · Explicit volatility blockers</strong>
+              <small>Context remains insufficient by contract</small>
+              <p>No reviewed Global Generics peer cohort, approved Pharma benchmark, or sufficient self-history plus external context is established; a hybrid also remains unavailable.</p>
+              <span>Deferral required: YES · Silent fallback: NO · Whole Risk dimension ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
