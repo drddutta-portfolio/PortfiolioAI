@@ -18876,3 +18876,77 @@ AUROPHARMA Overview now includes one compact G8.3 card showing:
 Per the locked project workflow, G8.3 is **not closed yet**.
 
 **CURRENT STOP POINT:** owner should pull this G8.3 implementation, run Local Supabase/Vite, hard-refresh AUROPHARMA → Research → Overview, visually validate the G8.3 card first, then run full local validation. After the validation result is recorded in the cumulative handoff, and only then, G8 may close and G9 may begin.
+
+
+---
+
+## 215. Entry 210 — G8.3 first full-local validation exposed Vitest file-URL harness defect
+
+**Date:** 20 September 2026  
+**Actor:** owner local validation + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After G8.3 localhost visual approval passed, the owner ran the locked full-local validation sequence.
+
+### Result
+
+The focused suite produced:
+
+- G7.1 read-only scoring adapter tests: PASS;
+- TORNTPHARM G7.2 explainable preview tests: PASS;
+- G7.3 validation / Research-Gap Register tests: PASS;
+- AUROPHARMA G8.2 same-engine preview tests: PASS;
+- three-layer Pharma architecture tests: PASS;
+- research-subprofile repository tests: PASS;
+- G8.3 portability suite: **5 PASS / 2 FAIL**.
+
+The two G8.3 failures were:
+
+1. static mutation-API guard;
+2. static security-scoped research-query guard.
+
+Both failed before their assertions with:
+
+`TypeError: The URL must be of scheme file`
+
+### Root cause
+
+The G8.3 test file used:
+
+`fileURLToPath(new URL(..., import.meta.url))`
+
+to read repository source files.
+
+Under the local Vitest transformed-module environment, `import.meta.url` is not guaranteed to be a `file:` URL. Therefore the static-guard harness failed while resolving paths even though the guarded runtime contracts themselves had already passed.
+
+This is a **test-harness defect**, not a leakage/isolation failure.
+
+### Correction
+
+The static guards now resolve source paths from the repository working directory:
+
+`resolve(process.cwd(), "...")`
+
+This preserves the same assertions while removing dependence on Vitest's transformed `import.meta.url` scheme.
+
+No production code, G8.3 runtime logic, Research-Gap logic, UI, scoring behavior, assignment behavior, evidence behavior or architecture behavior is changed by this correction.
+
+### Other local validation state from the same run
+
+The owner's screenshots also confirm:
+
+- architecture guard: PASS;
+- typecheck: PASS;
+- production build: PASS.
+
+The build completed successfully.
+
+### Workflow state
+
+Because the full-local validation had two failed harness tests:
+
+> **G8.3 remains OPEN.**
+
+The prior localhost visual approval remains valid because this correction changes only the test harness and no UI/runtime implementation.
+
+**CURRENT STOP POINT:** pull the test-harness correction and rerun the full G8.3 local validation sequence. Do not close G8 or start G9 until all focused tests pass and the final checkpoint is recorded.
