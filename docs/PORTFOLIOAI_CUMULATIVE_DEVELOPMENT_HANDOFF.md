@@ -11668,3 +11668,87 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.20 cards in TORNTPHARM → Research → Gate G, then run focused G6.20 validation. Only after validation should a separate multi-event aggregation contract be considered.
+
+
+---
+
+## 140. Entry 135 — Gate G6.20 Global Generics pipeline stage normalization validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.20 has completed validation as a **proposal-only Global Generics Pipeline Stage Normalization contract**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.20 plus G6.19/G6.18 and Segment Growth → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.20 validated per-event stage normalization
+
+- `FILED_OR_SUBMITTED` → 40
+- `TENTATIVE_APPROVAL` → 55
+- `FINAL_APPROVAL` → 70
+- `LAUNCHED` → 85
+- `COMMERCIAL_TRACTION_CONFIRMED` → 100
+- `DELAYED_OR_BLOCKED` → 20
+- `WITHDRAWN_OR_DISCONTINUED` → 0
+
+### Eligibility boundary
+
+An event receives a normalized stage score only when:
+
+- product/molecule identity is established;
+- geography is established;
+- dated stage is established;
+- evidence source/reference exists;
+- materiality is established;
+- economic relevance is established.
+
+### Materiality boundary
+
+Materiality is an eligibility gate only.
+
+Still unapproved:
+
+- numeric materiality multiplier;
+- inferred exposure percentages;
+- provider-derived materiality scaling.
+
+### Multi-event aggregation remains blocked
+
+Explicitly unapproved:
+
+- event-count bonus;
+- simple average;
+- median;
+- recency weighting;
+- materiality-weighted aggregation.
+
+Therefore:
+
+`combinedPipelineScoreReady = false`
+
+### Contradictory/adverse evidence boundary
+
+An unrelated positive event may not silently offset a delayed, blocked, withdrawn or discontinued material event.
+
+### Safety boundary remains unchanged
+
+- combined pipeline score: **NO**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.20 is validated. The next safe Global Generics step is G6.21 — a separate multi-event pipeline aggregation contract that defines how multiple identified material pipeline events combine without hiding adverse evidence or inventing materiality weights.
