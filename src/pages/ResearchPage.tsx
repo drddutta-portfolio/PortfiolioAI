@@ -11,21 +11,18 @@ import { AuropharmaG83ValidationPanel } from "../features/research/AuropharmaG83
 import { AuropharmaG91ActivationReadinessPanel } from "../features/research/AuropharmaG91ActivationReadinessPanel"
 import { AuropharmaG92CanonicalActivationPanel } from "../features/research/AuropharmaG92CanonicalActivationPanel"
 import { CompleteResearchRefreshPanel } from "../features/research/CompleteResearchRefreshPanel"
-import { CanonicalPharmaScoringBoundaryPanel } from "../features/research/CanonicalPharmaScoringBoundaryPanel"
 import { PharmaResearchWorkspacePanel } from "../features/research/PharmaResearchWorkspacePanel"
-import { PharmaG93NormalizedResearchPanel } from "../features/research/PharmaG93NormalizedResearchPanel"
 import { PharmaSubprofileSummary } from "../features/research/PharmaSubprofileSummary"
 import { FinancialsWorkspace, OwnershipWorkspace, QualityGrowthWorkspace, ValuationWorkspace } from "../features/research/ResearchEvidenceWorkspace"
 import { ProfileResearchReadinessPanel } from "../features/research/ProfileResearchReadinessPanel"
 import { PositionDecisionControls } from "../features/research/PositionDecisionControls"
 import { latestByCode, metricLabel, coverageStatus, formatResearchMetric } from "../features/research/researchPolicy"
 import { researchSnapshotGroups } from "../features/research/researchPresentationPolicy"
-import { researchProfileUiContract, resolveResearchPresentationProfileCode } from "../features/research/researchProfileUiContract"
+import { researchProfileUiContract } from "../features/research/researchProfileUiContract"
 import { ResearchScorecardPanel } from "../features/research/ResearchScorecardPanel"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "../features/research/types"
 import { useSecurityResearch } from "../features/research/useSecurityResearch"
 import { useSecurityScoring } from "../features/research/useSecurityScoring"
-import { usePharmaSubprofileResolution } from "../features/research/usePharmaSubprofileResolution"
 
 const TABS = ["Overview", "Financials", "Quality & Growth", "Ownership", "Valuation", "Documents", "Evidence"] as const
 type Tab = typeof TABS[number]
@@ -38,21 +35,15 @@ export function ResearchPage() {
   const position = portfolio?.openPositions.find((item) => item.securityId === security || item.symbol.toLocaleUpperCase() === security?.toLocaleUpperCase()) ?? null
   const research = useSecurityResearch(position?.securityId ?? null)
   const scoring = useSecurityScoring(position?.securityId ?? null, research.data?.sector ?? position?.sector ?? null, research.data?.industry ?? position?.industry ?? null)
-  const pharmaResolution = usePharmaSubprofileResolution(position?.securityId ?? null)
-  const pharmaResolved = pharmaResolution.data?.status === "RESOLVED"
-  const presentationProfileCode = resolveResearchPresentationProfileCode(
-    scoring.data?.profileCode,
-    pharmaResolved ? "PHARMA_V1" : null,
-  )
   const [tab, setTab] = useState<Tab>("Overview")
   if (portfolioLoading) return <Loading label="Loading cached portfolio context…" />
   if (portfolioError) return <div className="notice notice-error" role="alert">{portfolioError}</div>
   if (!position || !portfolio) return <ResearchNotFound />
   return <section className="research-page">
-    <ResearchHeader position={position} research={research.data} scoring={scoring} pharmaResolved={pharmaResolved} currency={portfolio.portfolio.currency} portfolioId={portfolio.portfolio.id} onPositionSaved={reloadPortfolio} />
-    <CompleteResearchRefreshPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} symbol={position.symbol} profileCode={presentationProfileCode} onCompleted={() => { research.reload(); scoring.reload() }} />
+    <ResearchHeader position={position} research={research.data} scoring={scoring} currency={portfolio.portfolio.currency} portfolioId={portfolio.portfolio.id} onPositionSaved={reloadPortfolio} />
+    <CompleteResearchRefreshPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} symbol={position.symbol} profileCode={scoring.data?.profileCode} onCompleted={() => { research.reload(); scoring.reload() }} />
     <ResearchTabs value={tab} onChange={setTab} />
-    {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : research.data ? <TabPanel tab={tab} position={position} research={research.data} scoring={scoring} pharmaResolved={pharmaResolved} presentationProfileCode={presentationProfileCode} onTabChange={setTab} /> : null}
+    {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : research.data ? <TabPanel tab={tab} position={position} research={research.data} scoring={scoring} onTabChange={setTab} /> : null}
   </section>
 }
 
@@ -65,7 +56,7 @@ export function ResearchIndexPage() {
   return <section className="research-page"><div className="portfolio-hero compact-hero"><div><p className="eyebrow">Cached evidence library</p><h1>Research</h1><p>Open a current holding to inspect its trusted cached research evidence. Browsing this workspace never refreshes a provider.</p></div></div><section className="panel"><label className="research-search"><span>Find a security</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Ticker or company" /></label><div className="research-directory">{positions.map((position) => <Link key={position.securityId} to={`/app/research/${position.securityId}`}><span><strong>{position.symbol}</strong>{position.company}</span><small>{position.exchange} · {position.assetClass} · {position.sector ?? "Sector awaiting canonical classification"}</small></Link>)}</div>{!positions.length ? <Empty title="No matching securities" detail="Adjust the search to find a current holding." /> : null}</section></section>
 }
 
-function ResearchHeader({ position, research, scoring, pharmaResolved, currency, portfolioId, onPositionSaved }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly pharmaResolved: boolean; readonly currency: string; readonly portfolioId: string; readonly onPositionSaved: () => void }) {
+function ResearchHeader({ position, research, scoring, currency, portfolioId, onPositionSaved }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly currency: string; readonly portfolioId: string; readonly onPositionSaved: () => void }) {
   const ui = researchProfileUiContract(scoring.data?.profileCode)
   const marketCap = latestByCode(research?.metrics ?? []).get("MARKET_CAP_PROVIDER_RAW")
   const brokers = position.brokerExposure ?? []
@@ -73,7 +64,7 @@ function ResearchHeader({ position, research, scoring, pharmaResolved, currency,
   const industry = research?.industry ?? position.industry
   const profileSource = scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed" : scoring.data?.profileSource === "SECTOR_RULE" ? "Sector-resolved" : scoring.data ? "General fallback" : null
   return <header className="research-header">
-    <div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><h1>{research?.companyName ?? position.company}</h1><p className="security-identity-line"><strong>{position.symbol}</strong> · {position.exchange} · {titleCase(position.instrumentType)}</p><p><strong>Scoring profile:</strong> {scoring.data ? ui.profileDisplayName : "Loading…"}{profileSource ? ` · ${profileSource}` : ""}</p>{pharmaResolved ? <p><strong>Research profile:</strong> Pharmaceuticals · PHARMA_V1 · Canonical assignment</p> : null}<PharmaSubprofileSummary securityId={position.securityId} enabled={pharmaResolved || scoring.data?.profileCode === "PHARMA_V1"} /><p>Canonical sector: {sector ?? "Awaiting classification"} · Canonical industry: {industry ?? "Awaiting classification"}</p><p>{research?.marketCapCategory ? titleCase(research.marketCapCategory) : "Market-cap category unavailable"} · {position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</p><p className="raw-market-cap">Raw market cap: {formatResearchMetric(marketCap)}</p><div className="identity-chips" aria-label="Themes">{position.themes.length ? position.themes.map((theme) => <span key={theme.id}>{theme.name}</span>) : <span>No themes</span>}</div></div>
+    <div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><h1>{research?.companyName ?? position.company}</h1><p className="security-identity-line"><strong>{position.symbol}</strong> · {position.exchange} · {titleCase(position.instrumentType)}</p><p><strong>Scoring profile:</strong> {scoring.data ? ui.profileDisplayName : "Loading…"}{profileSource ? ` · ${profileSource}` : ""}</p><PharmaSubprofileSummary securityId={position.securityId} enabled={scoring.data?.profileCode === "PHARMA_V1"} /><p>Canonical sector: {sector ?? "Awaiting classification"} · Canonical industry: {industry ?? "Awaiting classification"}</p><p>{research?.marketCapCategory ? titleCase(research.marketCapCategory) : "Market-cap category unavailable"} · {position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</p><p className="raw-market-cap">Raw market cap: {formatResearchMetric(marketCap)}</p><div className="identity-chips" aria-label="Themes">{position.themes.length ? position.themes.map((theme) => <span key={theme.id}>{theme.name}</span>) : <span>No themes</span>}</div></div>
     <CompanyAboutPanel portfolioId={portfolioId} securityId={position.securityId} symbol={position.symbol} companyName={research?.companyName ?? position.company} />
     <section className="position-dashboard" aria-labelledby="position-dashboard-title"><h2 id="position-dashboard-title">Your position</h2><div className="research-head-metrics">
       <MetricCard label="Current price / CMP" value={formatMoney(position.currentPrice, currency)} detail={position.currentPrice === null ? "Unavailable" : `${position.isPriceStale ? "Stale price" : "Current cache"} · ${position.priceProvider ?? "Angel One"}`} />
@@ -84,7 +75,7 @@ function ResearchHeader({ position, research, scoring, pharmaResolved, currency,
       <MetricCard label="Current value" value={formatMoney(position.currentValue, currency)} detail="At cached CMP" />
       <PnlCard position={position} currency={currency} />
       <article className="research-metric-card broker-card"><span>Brokers / demat</span><div className="broker-chips">{brokers.length ? brokers.map((broker) => <span key={broker.broker} title={`${formatQuantity(broker.quantity)} shares`}>{broker.broker}</span>) : <strong>Unavailable</strong>}</div><small>{brokers.length ? `${brokers.length} account${brokers.length === 1 ? "" : "s"}` : "Attribution incomplete"}</small></article>
-      <PositionDecisionControls portfolioId={portfolioId} securityId={position.securityId} currentRole={position.role} currentWeight={position.portfolioWeightPercent} fallbackTargetWeight={position.settings.targetWeight} fallbackInvestmentHorizon={position.settings.investmentHorizon} currency={currency} canonicalResearchProfileCode={pharmaResolved ? "PHARMA_V1" : null} onSaved={onPositionSaved} />
+      <PositionDecisionControls portfolioId={portfolioId} securityId={position.securityId} currentRole={position.role} currentWeight={position.portfolioWeightPercent} fallbackTargetWeight={position.settings.targetWeight} fallbackInvestmentHorizon={position.settings.investmentHorizon} currency={currency} onSaved={onPositionSaved} />
     </div></section>
   </header>
 }
@@ -99,51 +90,42 @@ function ResearchTabs({ value, onChange }: { readonly value: Tab; readonly onCha
   return <div className="research-tabs" role="tablist" aria-label="Research sections">{TABS.map((tab, index) => <button id={`research-tab-${index}`} key={tab} type="button" role="tab" aria-selected={value === tab} aria-controls="research-panel" tabIndex={value === tab ? 0 : -1} onClick={() => onChange(tab)} onKeyDown={(event) => activate(event, index)}>{tab}</button>)}</div>
 }
 
-function TabPanel({ tab, position, research, scoring, pharmaResolved, presentationProfileCode, onTabChange }: { readonly tab: Tab; readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly scoring: ScoringHook; readonly pharmaResolved: boolean; readonly presentationProfileCode: string | null | undefined; readonly onTabChange: (tab: Tab) => void }) {
+function TabPanel({ tab, position, research, scoring, onTabChange }: { readonly tab: Tab; readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly scoring: ScoringHook; readonly onTabChange: (tab: Tab) => void }) {
   return <div id="research-panel" role="tabpanel" tabIndex={0} aria-labelledby={`research-tab-${TABS.indexOf(tab)}`} className="research-panel">
-    {tab === "Overview" ? <Overview position={position} research={research} scoring={scoring} pharmaResolved={pharmaResolved} presentationProfileCode={presentationProfileCode} onViewEvidence={() => onTabChange("Evidence")} /> : null}
-    {tab === "Financials" ? <FinancialsWorkspace research={research} snapshot={scoring.data} presentationProfileCode={presentationProfileCode} /> : null}
-    {tab === "Quality & Growth" ? <QualityGrowthWorkspace research={research} snapshot={scoring.data} presentationProfileCode={presentationProfileCode} /> : null}
+    {tab === "Overview" ? <Overview position={position} research={research} scoring={scoring} onViewEvidence={() => onTabChange("Evidence")} /> : null}
+    {tab === "Financials" ? <FinancialsWorkspace research={research} snapshot={scoring.data} /> : null}
+    {tab === "Quality & Growth" ? <QualityGrowthWorkspace research={research} snapshot={scoring.data} /> : null}
     {tab === "Ownership" ? <OwnershipWorkspace research={research} snapshot={scoring.data} /> : null}
-    {tab === "Valuation" ? <ValuationWorkspace research={research} snapshot={scoring.data} presentationProfileCode={presentationProfileCode} /> : null}
+    {tab === "Valuation" ? <ValuationWorkspace research={research} snapshot={scoring.data} /> : null}
     {tab === "Documents" ? <Documents research={research} /> : null}
     {tab === "Evidence" ? <Evidence research={research} /> : null}
   </div>
 }
 
-function Overview({ position, research, scoring, pharmaResolved, presentationProfileCode, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly scoring: ScoringHook; readonly pharmaResolved: boolean; readonly presentationProfileCode: string | null | undefined; readonly onViewEvidence: () => void }) {
+function Overview({ position, research, scoring, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly scoring: ScoringHook; readonly onViewEvidence: () => void }) {
   const metrics = latestByCode(research.metrics)
-  const ui = researchProfileUiContract(presentationProfileCode)
-  const groups = researchSnapshotGroups(presentationProfileCode)
+  const ui = researchProfileUiContract(scoring.data?.profileCode)
+  const groups = researchSnapshotGroups(scoring.data?.profileCode)
   const conflicts = research.metrics.filter((metric) => metric.status === "CONFLICTING").length
   const provisional = research.metrics.filter((metric) => metric.status === "PROVISIONAL").length
   const reviewRequired = research.documents.filter((document) => document.status === "REVIEW_REQUIRED").length
   const stale = research.metrics.filter((metric) => metric.status === "STALE").length
   const coverage = research.metrics.length ? "Partial" : "Unavailable"
   return <>
+    {position.symbol.toLocaleUpperCase() === "AUROPHARMA" ? <>
+      <AuropharmaG81ClassificationCard symbol={position.symbol} />
+      <AuropharmaG82SameEnginePanel securityId={position.securityId} symbol={position.symbol} research={research} />
+      <AuropharmaG83ValidationPanel symbol={position.symbol} />
+      <AuropharmaG91ActivationReadinessPanel securityId={position.securityId} symbol={position.symbol} research={research} />
+      <AuropharmaG92CanonicalActivationPanel securityId={position.securityId} symbol={position.symbol} />
+    </> : null}
     <SectionHeading title="Research at a glance" detail="Designed to give investment clarity first, with the detailed tabs preserving the evidence behind every conclusion." />
     <section className="context-strip" aria-label="Research and portfolio context"><div><span>Research profile</span><strong>{ui.profileDisplayName}</strong><small>{research.industry ?? position.industry ?? (scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed profile · industry pending" : "Industry unavailable")}</small></div><div><span>Portfolio exposure</span><strong>{formatPercent(position.portfolioWeightPercent)} current weight</strong><small>{formatQuantity(position.quantity)} shares · {position.role === "UNCLASSIFIED" ? "role unclassified" : `${titleCase(position.role)} role`}</small></div><div><span>Evidence status</span><strong>{scoring.data?.evidenceCoverage == null ? "Unavailable" : `${Math.round(scoring.data.evidenceCoverage * 100)}% verified`}</strong><small>{scoring.data?.scoreReadyCoverage == null ? "Score readiness unavailable" : `${Math.round(scoring.data.scoreReadyCoverage * 100)}% score-ready`}</small></div></section>
-    {pharmaResolved && scoring.data?.profileCode !== "PHARMA_V1" ? <CanonicalPharmaScoringBoundaryPanel /> : <ResearchScorecardPanel snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} />}
+    <ResearchScorecardPanel snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} />
     {ui.readinessMode === "PROFILE_CONTRACT" ? <ProfileResearchReadinessPanel securityId={position.securityId} profileCode={ui.profileCode} research={research} snapshot={scoring.data} /> : null}
     <div className="research-cockpit">{groups.map((group) => <section className="cockpit-panel" key={group.title}><h2>{group.title}</h2><div className="snapshot-list">{group.codes.map((code) => { const metric = metrics.get(code); return <div key={code}><span>{metric?.label ?? metricLabelForCode(code)}</span><strong>{formatResearchMetric(metric)}</strong><small>{metric ? period(metric) : "Unavailable"}</small><Status value={coverageStatus(metric)} /></div> })}</div></section>)}</div>
     <section className="research-health"><div><p className="eyebrow">Research health</p><h2>{coverage} coverage</h2><p>{research.metrics.length} cached observations · {stale ? "mixed freshness" : research.metrics.length ? "current cache" : "freshness unavailable"}</p></div><dl><div><dt>Conflicts</dt><dd>{conflicts}</dd></div><div><dt>Review required</dt><dd>{reviewRequired}</dd></div><div><dt>Provisional</dt><dd>{provisional}</dd></div></dl><button type="button" className="button button-secondary" onClick={onViewEvidence}>View Evidence</button></section>
-    {pharmaResolved ? <>
-      <PharmaG93NormalizedResearchPanel securityId={position.securityId} symbol={position.symbol} research={research} />
-      {position.symbol.toLocaleUpperCase() === "TORNTPHARM" ? <PharmaResearchWorkspacePanel securityId={position.securityId} symbol={position.symbol} research={research} presentationMode="AUDIT_ONLY" /> : null}
-      {position.symbol.toLocaleUpperCase() === "AUROPHARMA" ? <details className="pharma-deep-layer pharma-company-audit-history">
-        <summary>
-          <div><span>AUROPHARMA development & validation history</span><small>G8 portability evidence + G9 activation checkpoints · audit detail only</small></div>
-          <b>Open audit history</b>
-        </summary>
-        <div className="pharma-deep-layer-body">
-          <AuropharmaG81ClassificationCard symbol={position.symbol} />
-          <AuropharmaG82SameEnginePanel securityId={position.securityId} symbol={position.symbol} research={research} />
-          <AuropharmaG83ValidationPanel symbol={position.symbol} />
-          <AuropharmaG91ActivationReadinessPanel securityId={position.securityId} symbol={position.symbol} research={research} />
-          <AuropharmaG92CanonicalActivationPanel securityId={position.securityId} symbol={position.symbol} />
-        </div>
-      </details> : null}
-    </> : null}
+    {scoring.data?.profileCode === "PHARMA_V1" ? <PharmaResearchWorkspacePanel securityId={position.securityId} symbol={position.symbol} research={research} /> : null}
   </>
 }
 
