@@ -13562,3 +13562,94 @@ Therefore:
 **Result:** G6.27 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Move to Global Generics volatility normalization / peer-benchmark context and apply the same evidence-sufficiency discipline before any numeric volatility curve is proposed.
+
+
+---
+
+## 157. Entry 152 — Gate G6.28 Global Generics volatility context method approval gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.28 — Global Generics Volatility Context Method Approval Gate**.
+
+### Starting state
+
+G6.27 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+The remaining unresolved market-risk lane is:
+
+`VOLATILITY_1Y`
+
+The parent Risk framework explicitly requires volatility peer or benchmark context.
+
+### Why standalone absolute volatility scoring is excluded
+
+The architecture already states:
+
+- lower volatility is meaningful only with context;
+- BANK/NBFC bands are not inherited;
+- missing evidence cannot become neutral.
+
+Therefore G6.28 does not include a standalone absolute-band candidate.
+
+### Candidate methods
+
+- `SAME_SUBPROFILE_PEER_RELATIVE`
+- `BENCHMARK_RELATIVE`
+- `SELF_HISTORY_WITH_EXTERNAL_CONTEXT`
+- `HYBRID_EXPLICITLY_VERSIONED`
+
+No method is approved by default.
+
+### Method prerequisites
+
+- peer-relative → reviewed Global Generics Primary cohort required;
+- benchmark-relative → explicitly approved Pharma benchmark required;
+- self-history → sufficient comparable history plus external context required;
+- hybrid → at least two independently eligible methods plus explicit versioned weights.
+
+### Prohibited defaults
+
+- BANK_NBFC thresholds inherited: **NO**
+- standalone absolute-volatility scoring: **NO**
+- generic Pharma peer set without reviewed Primary: **NO**
+- silent benchmark selection: **NO**
+- hidden hybrid weighting: **NO**
+- missing evidence → neutral: **NO**
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsVolatilityContextMethodGate.ts`
+- `src/features/research/pharmaGlobalGenericsVolatilityContextMethodGate.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_28_Global_Generics_Volatility_Context_Method_Approval_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.28 · Global Generics volatility context method gate**
+- **G6.28 · Context prerequisite blocker**
+
+### Safety boundary remains unchanged
+
+- approved volatility method: **NO**
+- numeric volatility curve ready: **NO**
+- whole Risk dimension ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.28 cards in TORNTPHARM → Research → Gate G, then run focused G6.28 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, inspect whether any context method is actually evidence-backed; if none is, defer numeric volatility scoring.
