@@ -18223,3 +18223,73 @@ No real/non-fixture transaction is touched.
 - HDFCBANK/TORNTPHARM quantity change: **NO**
 
 **CURRENT STOP POINT:** Owner should pull the exact-app-portfolio correction, rerun the fixture guard test and local fixture runner, then hard-refresh localhost Holdings/Research Coverage. Expected visible app state: exactly 3 open holdings — HDFCBANK, TORNTPHARM and AUROPHARMA.
+
+
+---
+
+## 207. Entry 202 — AUROPHARMA fixture made local-auth-user aware
+
+**Date:** 19 September 2026  
+**Actor:** owner localhost validation + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After the exact-portfolio selector correction, localhost Holdings still showed only:
+
+- HDFCBANK
+- TORNTPHARM
+
+with 2 open holdings.
+
+### Root cause
+
+The application runs under the authenticated Supabase browser user and RLS therefore restricts `portfolios` to rows where:
+
+`portfolios.user_id = auth.uid()`
+
+The local fixture runner connects as local `postgres`, which bypasses RLS and can see active portfolios belonging to all local auth users.
+
+Therefore:
+
+`ORDER BY created_at LIMIT 1`
+
+under postgres is not equivalent to the same query in the browser's authenticated/RLS-visible scope.
+
+### Correction
+
+The local fixture now requires:
+
+`PORTFOLIOAI_LOCAL_USER_EMAIL`
+
+The SQL:
+
+1. resolves exactly one `auth.users` row for that email;
+2. limits active portfolio selection to `portfolios.user_id = resolved_user_id`;
+3. applies the same `ORDER BY created_at, id LIMIT 1` rule inside that user's scope;
+4. asserts the visible precondition is exactly two holdings: HDFCBANK + TORNTPHARM;
+5. reconciles only misplaced synthetic AUROPHARMA fixture transactions from other portfolios;
+6. adds AUROPHARMA to the correct user's portfolio;
+7. asserts the postcondition is exactly three holdings.
+
+### Runner diagnostic
+
+If `PORTFOLIOAI_LOCAL_USER_EMAIL` is omitted, the runner now performs **no mutation**.
+
+Instead it prints all active local portfolio candidates with:
+
+- auth user email;
+- portfolio id;
+- created_at;
+- positive current holdings.
+
+This allows the owner to identify the same local login email shown in the browser before mutation.
+
+### Safety
+
+- fixture remains localhost-only;
+- production mutation: **NO**;
+- research evidence fabrication: **NO**;
+- real transaction deletion: **NO**;
+- only misplaced rows with exact `LOCAL_G8_FIXTURE:AUROPHARMA` provenance may be reconciled;
+- score/recommendation/position-sizing mutation: **NO**.
+
+**CURRENT STOP POINT:** Owner should pull the user-aware fixture, run the runner once without `PORTFOLIOAI_LOCAL_USER_EMAIL` to print candidate local users/portfolios, identify the browser login email, then rerun with that email explicitly. Hard-refresh localhost and confirm 3 holdings.
