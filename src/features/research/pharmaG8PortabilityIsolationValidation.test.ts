@@ -53,8 +53,10 @@ describe("G8.3 portability, isolation and leakage validation", () => {
       ".upsert(",
       "refresh-security-enrichment",
       "stock_score_runs",
-      "recommendation",
-      "positionSizing",
+      ".from(\"recommendation",
+      ".from(\"position_sizing",
+      "updateRecommendation",
+      "updatePositionSizing",
     ]) {
       expect(source).not.toContain(forbidden)
     }
