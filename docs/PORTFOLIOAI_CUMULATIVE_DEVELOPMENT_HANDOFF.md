@@ -17043,3 +17043,64 @@ Gate G now exposes two G7-P1 review cards:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G7-P1 cards, run focused G7-P1 + G2 Vitest, focused ESLint, `npm run typecheck`, and `npm run build`. Only after owner validation should G7-P1 be closed and G7-P2 begin.
+
+
+---
+
+## 194. Entry 189 — Gate G7-P1 Material Overlay numeric modifier and combined-cap contract validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7-P1 has completed owner validation.
+
+### Validation result
+
+Owner reported:
+
+**ALL PASS**
+
+Validated items:
+
+- two G7-P1 Gate G review cards visible and correct;
+- focused Vitest for `pharmaG7OverlayNumericModifierProposal.test.ts` → PASS;
+- focused Vitest for `pharmaOverlayModifierContract.test.ts` → PASS;
+- focused ESLint for the G7-P1 contract/test and workspace panel → PASS;
+- `npm run typecheck` → PASS;
+- `npm run build` → PASS.
+
+### Methodology outcome
+
+Validated as **PROPOSAL-ONLY / NOT ACTIVE**:
+
+- direct reviewed economic-share scaling;
+- direct evidence-completeness scaling;
+- confidence factors LOW 0.50 / MEDIUM 0.75 / HIGH 1.00;
+- normalized overlay signal in [-1,+1];
+- READY-only numeric eligibility;
+- PARTIAL / INSUFFICIENT_EVIDENCE / BLOCKED_REVIEW / EMERGING_WATCH remain non-numeric;
+- one combined per-dimension cap candidate of ±10 points;
+- independent cap stacking prohibited;
+- final dimension score bounded to 0–100;
+- no second Overlay stock score;
+- no hidden reweighting.
+
+The ±10 cap and confidence factors remain explicit methodology proposals rather than claims of empirical calibration.
+
+### G7-P1 state
+
+- owner validation: **PASS**
+- proposal validated: **YES**
+- production activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- schema/database mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G7-P1 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Proceed to G7-P2 — Governance High-Risk Constraint Contract. Preserve G4 blocking behavior and anti-double-counting. Do not invent a hidden Quality/Risk deduction.
