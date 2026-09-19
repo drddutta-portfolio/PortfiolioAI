@@ -18950,3 +18950,75 @@ Because the full-local validation had two failed harness tests:
 The prior localhost visual approval remains valid because this correction changes only the test harness and no UI/runtime implementation.
 
 **CURRENT STOP POINT:** pull the test-harness correction and rerun the full G8.3 local validation sequence. Do not close G8 or start G9 until all focused tests pass and the final checkpoint is recorded.
+
+
+---
+
+## 216. Entry 211 — G8.3 second local validation exposed over-broad static-guard false positive
+
+**Date:** 20 September 2026  
+**Actor:** owner local validation + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After the path-resolution harness correction, the owner reran the full G8.3 local validation.
+
+### Result
+
+The focused test set improved to:
+
+- 6 test files passed;
+- 1 test file failed;
+- 41 tests passed;
+- 1 test failed.
+
+Architecture guard, typecheck and production build passed.
+
+The remaining failure was:
+
+`statically guards the AUROPHARMA G8 preview against mutation APIs`
+
+### Root cause
+
+The static guard prohibited the broad substring:
+
+`positionSizing`
+
+The AUROPHARMA read-only preview intentionally contains:
+
+`positionSizingEnabled: false`
+
+That property is itself a safety declaration proving that position sizing is disabled. The broad substring guard therefore treated the explicit OFF-state as if it were a mutation API.
+
+This is a **false positive in the static test**, not a G8.3 isolation failure.
+
+### Correction
+
+The broad tokens:
+
+- `recommendation`;
+- `positionSizing`
+
+are replaced by mutation-oriented signatures such as:
+
+- recommendation table/write access;
+- position-sizing table/write access;
+- `updateRecommendation`;
+- `updatePositionSizing`.
+
+The existing explicit assertions remain authoritative:
+
+- `recommendationEnabled === false`;
+- `positionSizingEnabled === false`;
+- `sharedStateMutationEnabled === false`.
+
+No runtime code, UI, scoring behavior, assignment behavior, evidence behavior, Research-Gap behavior or architecture contract is changed.
+
+### Workflow state
+
+Because one focused test still failed during the second full-local validation:
+
+> **G8.3 remains OPEN.**
+
+Previous visual approval remains valid because this correction is test-only.
+
+**CURRENT STOP POINT:** pull this narrower static-guard correction and rerun the full G8.3 local validation. Do not close G8 or start G9 until all focused tests pass and the final handoff checkpoint is recorded.
