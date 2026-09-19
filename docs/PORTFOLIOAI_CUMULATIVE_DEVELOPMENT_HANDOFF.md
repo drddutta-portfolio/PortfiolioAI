@@ -17190,3 +17190,64 @@ Gate G now exposes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G7-P2 cards, run focused G7-P2 + G4 Vitest, focused ESLint, `npm run typecheck`, and `npm run build`. Only after owner validation should G7-P2 close and G7.1 begin.
+
+
+---
+
+## 196. Entry 191 — Gate G7-P2 Governance High-Risk Constraint Contract validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7-P2 has completed owner validation.
+
+### Validation result
+
+Owner reported:
+
+**ALL PASS**
+
+Validated items:
+
+- two G7-P2 Gate G review cards visible and correct;
+- focused Vitest for `pharmaG7GovernanceHighRiskConstraint.test.ts` → PASS;
+- focused Vitest for `pharmaGovernanceRegulatoryGateContract.test.ts` → PASS;
+- focused ESLint for the G7-P2 contract/test and workspace panel → PASS;
+- `npm run typecheck` → PASS;
+- `npm run build` → PASS.
+
+### Methodology outcome
+
+Validated as **PROPOSAL-ONLY / NOT ACTIVE**:
+
+- `BLOCKED_REVIEW` remains blocking;
+- CRITICAL governance remains blocking;
+- CRITICAL + known-material regulatory event remains blocking;
+- REVIEW_REQUIRED remains non-numeric;
+- HIGH_RISK remains non-blocking;
+- HIGH_RISK numeric cap: **NONE**;
+- HIGH_RISK extra Quality deduction: **NO**;
+- HIGH_RISK extra Risk deduction: **NO**;
+- HIGH_RISK overall numeric cap: **NO**;
+- HIGH_RISK Interpretation prominence: **YES**;
+- hidden double counting: **PROHIBITED**.
+
+This is an explicit methodology decision based on the absence of defensible numeric calibration, not an omitted implementation detail.
+
+### G7-P2 state
+
+- owner validation: **PASS**
+- proposal validated: **YES**
+- production activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- schema/database mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G7-P2 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** G7 prerequisites are complete. Proceed to G7.1 — Adapter Contract & Fail-Closed Calculation Engine. The adapter may consume validated proposal contracts for read-only preview only; it must remain non-persisting and fail closed.
