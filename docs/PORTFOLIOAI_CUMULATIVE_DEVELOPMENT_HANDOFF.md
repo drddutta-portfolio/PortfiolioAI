@@ -19842,3 +19842,127 @@ The initial two-stock visual review is **not yet approved** because AUROPHARMA f
 The owner should pull the correction and repeat the AUROPHARMA/TORNTPHARM visual comparison before any full G9.3 validation.
 
 **CURRENT STOP POINT:** owner pull + hard refresh both reference Pharma Overview pages + fresh screenshots. Confirm AUROPHARMA now shows the shared G9.3 architecture and canonical Pharma research identity while scoring remains separately fail-closed. Do not run full G9.3 validation yet.
+
+
+---
+
+## 225. Entry 220 — G9.3 second visual comparison: shared architecture aligned; product/audit asymmetry corrected
+
+**Date:** 20 September 2026  
+**Actor:** owner two-stock visual comparison + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner repeated the G9.3 localhost comparison after the canonical-assignment reachability correction and supplied fresh screenshots for AUROPHARMA and TORNTPHARM.
+
+### Visual result
+
+The shared normalized PHARMA_V1 layer now renders correctly for both reference companies.
+
+AUROPHARMA displays:
+
+- Common Core: `PHARMA_V1`
+- Primary: `GLOBAL_GENERICS`
+- Material Overlay: none reviewed
+- Emerging Watch: `API_BULK_DRUGS`
+- unresolved: `BIOPHARMA_BIOSIMILARS`
+
+TORNTPHARM displays:
+
+- Common Core: `PHARMA_V1`
+- Primary: `DOMESTIC_FORMULATIONS`
+- Material Overlay: `GLOBAL_GENERICS`
+- Emerging Watch: `CDMO_CRAMS`
+
+Company-scoped evidence and company+assignment+role interpretation are visible on both.
+
+### Remaining asymmetry found
+
+TORNTPHARM still displayed the old `Pharmaceuticals deep research` block beneath the new normalized product layer.
+
+That block repeated:
+
+- Primary model;
+- Primary evidence summary;
+- secondary exposures;
+- Gate G shared methodology;
+- business-model/exposure map.
+
+Those concepts are now part of the shared normalized PHARMA_V1 product layer.
+
+AUROPHARMA, meanwhile, retained separate G8/G9 development cards as historical implementation artifacts.
+
+This left the permanent product visually asymmetric even though the normalized architecture itself was correct.
+
+### Correction — permanent product layer vs audit/history layer
+
+`PharmaResearchWorkspacePanel` now supports:
+
+`presentationMode = FULL | AUDIT_ONLY`
+
+G9.3 uses `AUDIT_ONLY` for TORNTPHARM.
+
+In audit-only mode, the duplicated permanent product surfaces are suppressed:
+
+- no duplicate Pharma summary;
+- no duplicate shared Gate G methodology block;
+- no duplicate business-model/exposure map.
+
+The TORNTPHARM-specific evidence/source/ingestion/review tooling remains available under:
+
+> **TORNTPHARM research operations & audit**
+
+with an explicit company-specific audit label.
+
+### AUROPHARMA audit-history normalization
+
+AUROPHARMA's historical G8/G9 cards are now grouped beneath one collapsed:
+
+> **AUROPHARMA development & validation history**
+
+section.
+
+The permanent shared G9.3 PHARMA_V1 product layer renders before this audit history.
+
+Therefore both reference pages now follow the same presentation rule:
+
+```text
+Shared PHARMA_V1 permanent product layer
+        ↓
+Company-specific audit / development history
+```
+
+rather than allowing historical gate development to define the main product structure.
+
+### Regression coverage
+
+`pharmaG93NormalizationGuards.test.ts` now additionally guards that:
+
+- TORNTPHARM uses `AUDIT_ONLY` presentation for the legacy deep-research workspace;
+- TORNTPHARM audit tooling remains explicitly company-specific;
+- AUROPHARMA G8/G9 artifacts are grouped as development/validation history;
+- the normalized shared panel precedes AUROPHARMA audit history in the main Overview composition.
+
+### Safety / semantic state
+
+This correction is presentation-only.
+
+It does not change:
+
+- canonical assignments;
+- evidence rows;
+- TORNTPHARM semantic scoring preview;
+- AUROPHARMA fail-closed scoring state;
+- recommendation state;
+- position sizing;
+- production state;
+- schedulers;
+- deployment;
+- PR merge state.
+
+### Workflow state
+
+G9.3 remains **OPEN**.
+
+Full local validation is still intentionally deferred until owner visual approval of this final normalized presentation.
+
+**CURRENT STOP POINT:** owner should pull the current branch and repeat the two-stock Overview visual comparison. Expected permanent layout: one shared normalized PHARMA_V1 layer on both stocks, followed by collapsed company-specific audit/history. If visually approved, proceed to full G9.3 validation; otherwise correct remaining presentation asymmetry before validation.
