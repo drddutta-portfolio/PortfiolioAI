@@ -74,6 +74,7 @@ import { PHARMA_G7_OVERLAY_NUMERIC_MODIFIER } from "./pharmaG7OverlayNumericModi
 import { PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT } from "./pharmaG7GovernanceHighRiskConstraint"
 import { PHARMA_G7_READ_ONLY_SCORING_ADAPTER } from "./pharmaG7ReadOnlyScoringAdapter"
 import { buildTorntpharmG7ExplainablePreview } from "./pharmaTorntpharmG7ExplainablePreview"
+import { PHARMA_G7_RESEARCH_GAP_REGISTER, PHARMA_G7_VALIDATION_INVARIANTS } from "./pharmaG7ValidationAndResearchGapRegister"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -1087,6 +1088,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
             </div>
             <p className="pharma-g7-preview-note">No score is manufactured from evidence coverage alone. Missing methodology, missing dimension aggregation, unresolved overlay inputs or unresolved governance runtime state remain explicit blockers; no hidden reweighting is used.</p>
           </div> : null}
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G7.3 · Validation & leakage boundary</strong>
+              <small>{PHARMA_G7_VALIDATION_INVARIANTS.version}</small>
+              <p>Final G7 validation locks the read-only isolation rules: no hidden reweighting, no BANK_NBFC fallback, no Domestic threshold transfer, no Emerging Watch score leakage, no independent overlay-cap stacking and no hidden governance double counting.</p>
+              <span>Score persistence: NO · Second overlay stock score: NO · Hidden reweighting: NO</span>
+            </article>
+            <article>
+              <strong>G7.3 · Outstanding research register</strong>
+              <small>{PHARMA_G7_RESEARCH_GAP_REGISTER.version}</small>
+              <p>Unresolved scoring dependencies are registered instead of being hidden. TORNTPHARM blockers remain explicit; API/Bulk, CDMO/CRAMS and Biopharma/Biosimilars unresolved Primary methodology moves to controlled expansion.</p>
+              <span>TORNTPHARM blockers: {PHARMA_G7_RESEARCH_GAP_REGISTER.torntpharmGaps.length} · Controlled-expansion gaps: {PHARMA_G7_RESEARCH_GAP_REGISTER.controlledExpansionGaps.length}</span>
+            </article>
+          </div>
           <div className="pharma-persistence-package-grid">
             <article>
               <strong>First proposed curve family</strong>
