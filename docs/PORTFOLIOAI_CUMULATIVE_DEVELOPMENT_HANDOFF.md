@@ -14781,3 +14781,105 @@ A separate versioned parent reconciliation remains required.
 **Result:** G6.34 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Inspect repository evidence for Global Generics Cash Conversion calibration and then continue to the next unresolved Global Generics family without borrowing unsupported thresholds.
+
+
+---
+
+## 171. Entry 166 — Gate G6.35 Global Generics cash conversion calibration and parent alignment deferral gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.35 — Global Generics Cash Conversion Calibration Evidence Sufficiency / Parent Alignment Deferral Gate**.
+
+### Starting state
+
+G6.34 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+Repository inspection found no defensible Global Generics-specific Cash Conversion calibration basis.
+
+### Calibration evidence blocker
+
+Current blockers:
+
+- Global Generics Cash Conversion calibration set: **NOT ESTABLISHED**
+- reviewed same-primary peer cohort: **NOT ESTABLISHED**
+- CFO-to-PAT band evidence: **NOT ESTABLISHED**
+- FCF-conversion band evidence: **NOT ESTABLISHED**
+- consistency/trend band evidence: **NOT ESTABLISHED**
+- component-weight evidence: **NOT ESTABLISHED**
+
+Therefore:
+
+- Global-specific calibration available: **NO**
+- other-subprofile fallback allowed: **NO**
+- numeric Cash Conversion curve ready: **NO**
+- deferral required: **YES**
+
+### Parent dimension-alignment blocker
+
+The canonical parent PHARMA_V1 profile currently assigns:
+
+`PHARMA_CASH_CONVERSION_HISTORY → EARNINGS_CASH_QUALITY`
+
+The G5.2/G6.34 Cash Conversion methodology targets:
+
+`CASH_FLOW`
+
+This mismatch remains explicit.
+
+Required architecture action:
+
+`PARENT_CASH_FLOW_DIMENSION_RECONCILIATION_REQUIRED`
+
+G6.35 does **not** modify the parent profile.
+
+A separate versioned parent-contract reconciliation is required before numeric Cash Flow scoring can become eligible.
+
+### What remains valid
+
+The parent Cash Conversion evidence/methodology shape remains valid:
+
+- minimum 3 comparable annual periods;
+- preferred 5;
+- latest period required;
+- matched CFO/PAT/capex-FCF periods required;
+- CFO alone insufficient;
+- capex-intensity context required;
+- CFO-to-PAT + FCF conversion + consistency/trend structure.
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsCashConversionCalibrationEvidence.ts`
+- `src/features/research/pharmaGlobalGenericsCashConversionCalibrationEvidence.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_35_Global_Generics_Cash_Conversion_Calibration_Alignment_Deferral_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.35 · Cash-conversion calibration evidence sufficiency**
+- **G6.35 · Parent Cash Flow dimension alignment blocker**
+
+### Safety boundary remains unchanged
+
+- parent Cash Flow reconciliation performed: **NO**
+- Global Generics Cash Conversion numeric calibration: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- parent contract mutation: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.35 cards in TORNTPHARM → Research → Gate G, then run focused G6.35 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, close the Global Generics Cash Conversion slice as explicitly incomplete/fail-closed and move to the next unresolved Global Generics family. Parent Cash Flow dimension reconciliation remains a separate versioned architecture task.
