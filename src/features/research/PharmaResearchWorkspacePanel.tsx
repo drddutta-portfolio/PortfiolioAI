@@ -65,6 +65,7 @@ import { PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_CALIBRATION_EVIDENCE } from "./pha
 import { PHARMA_GLOBAL_GENERICS_VALUATION_METHOD_GATE } from "./pharmaGlobalGenericsValuationMethodGate"
 import { PHARMA_GLOBAL_GENERICS_VALUATION_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsValuationCalibrationEvidence"
 import { PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_METHOD_GATE } from "./pharmaGlobalGenericsOwnershipGovernanceMethodGate"
+import { PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsOwnershipGovernanceCalibrationEvidence"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -923,6 +924,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Parent dimension reconciliation required · G4 remains authoritative for blocking/high-risk events</small>
               <p>The parent metric still sits in Governance while the methodology targets Ownership / Governance. G4 events may remain visible as context, but no second hidden penalty or additional gate cap is allowed inside this dimension.</p>
               <span>Parent reconciliation: REQUIRED · Hidden G4 penalty: NO · Score execution: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.41 · Ownership / governance calibration evidence sufficiency</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_CALIBRATION_EVIDENCE.contractVersion}</small>
+              <p>No reviewed Global Generics ownership/governance calibration set, same-primary ownership cohort, evidence-backed ownership/pledge/event bands, component weights or final aggregation are established. Numeric calibration is therefore deferred.</p>
+              <span>Calibration available: NO · Mechanical shortcuts: NO · Numeric curve: NO</span>
+            </article>
+            <article>
+              <strong>G6.41 · Parent alignment and G4 double-counting lock</strong>
+              <small>Current parent dimension: GOVERNANCE · canonical dimension: OWNERSHIP / GOVERNANCE</small>
+              <p>The parent mismatch remains unresolved and G4 remains authoritative for blocked/high-risk governance or regulatory events. No second hidden penalty or extra gate cap may be introduced here.</p>
+              <span>Parent reconciliation performed: NO · G4 anti-double-counting: LOCKED · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
