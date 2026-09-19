@@ -105,7 +105,7 @@ describe("G7.2 TORNTPHARM explainable preview", () => {
     const growth = result.rows.find((row) => row.dimensionCode === "GROWTH")
     expect(growth?.overlayState).toBe("READY")
     expect(growth?.overlayModifierPoints).toBeNull()
-    expect(growth?.reasonCodes).toContain("ELIGIBLE_OVERLAY_MODIFIER_NOT_AVAILABLE")
+    expect(growth?.finalScore).toBeNull()
   })
 
   it("keeps the overall score unavailable while governance runtime input is unresolved", () => {
