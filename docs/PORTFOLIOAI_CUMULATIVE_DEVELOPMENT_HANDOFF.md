@@ -17677,3 +17677,98 @@ Gate G now exposes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G7.3 cards, run focused G7.3 + G7.2 + G7.1 tests, focused ESLint, `npm run typecheck`, and `npm run build`. If all pass, record G7.3 validation and close G7 as **COMPLETE / READ-ONLY / NOT ACTIVE**, then proceed to G8. No G7.4 should be created for routine follow-up.
+
+
+---
+
+## 202. Entry 197 — Gate G7.3 Validation, Leakage Tests & Research-Gap Register validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G7.3 has completed owner validation.
+
+### Validation result
+
+Owner reported:
+
+**ALL PASS**
+
+Validated items:
+
+- G7.3 Gate G review cards visible and correct;
+- focused Vitest for `pharmaG7ValidationAndResearchGapRegister.test.ts` → PASS;
+- focused Vitest for `pharmaTorntpharmG7ExplainablePreview.test.ts` → PASS;
+- focused Vitest for `pharmaG7ReadOnlyScoringAdapter.test.ts` → PASS;
+- focused ESLint for the G7.3/G7.2/G7.1 slice → PASS;
+- `npm run typecheck` → PASS;
+- `npm run build` → PASS.
+
+### Validated G7.3 invariants
+
+Confirmed:
+
+- hidden reweighting allowed: **NO**
+- independent overlay-cap stacking: **NO**
+- hidden governance double counting: **NO**
+- BANK_NBFC fallback into Pharma: **NO**
+- Domestic threshold transfer to other Pharma primaries: **NO**
+- Emerging Watch entering Material Overlay evidence pool: **NO**
+- Emerging Watch numeric score participation: **NO**
+- independent Overlay stock score: **NO**
+- score persistence: **NO**
+
+### Research-gap register validated
+
+TORNTPHARM unresolved scoring dependencies remain explicit rather than hidden:
+
+1. canonical G4 governance/regulatory runtime input unresolved;
+2. Business Durability whole-dimension aggregation absent;
+3. Domestic ROCE/Capital Efficiency thresholds unapproved;
+4. Domestic Cash Conversion thresholds unapproved;
+5. Domestic Balance Sheet/Leverage thresholds unapproved;
+6. Domestic Ownership/Governance thresholds unapproved;
+7. Pharma Risk bands/normalization unapproved;
+8. Pharma Momentum benchmark/bands/weights/aggregation unapproved.
+
+Unresolved/unsupported Primary methodology for:
+
+- `API_BULK_DRUGS`
+- `CDMO_CRAMS`
+- `BIOPHARMA_BIOSIMILARS`
+
+remains assigned to controlled expansion. No Domestic/Global threshold borrowing is permitted.
+
+### G7 closure
+
+All bounded G7 checkpoints are now validated:
+
+- G7-P1 — Material Overlay Numeric Modifier & Combined-Cap Contract → **VALIDATED / NOT ACTIVE**
+- G7-P2 — Governance High-Risk Constraint Contract → **VALIDATED / NOT ACTIVE**
+- G7.1 — Read-only Scoring Adapter → **VALIDATED / NOT ACTIVE**
+- G7.2 — TORNTPHARM Explainable Read-only Preview → **VALIDATED / NOT ACTIVE**
+- G7.3 — Validation, Leakage Tests & Research-Gap Register → **VALIDATED / NOT ACTIVE**
+
+**G7 = COMPLETE / READ-ONLY / NOT ACTIVE**
+
+This does **not** mean TORNTPHARM currently has a complete numeric overall Pharma score. The validated G7 result is that the adapter correctly calculates only what is defensible and keeps the overall score unavailable where required methodology/runtime inputs remain unresolved.
+
+### Safety boundary remains unchanged
+
+- production score activation: **NO**
+- persisted score run: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- database/schema mutation: **NO**
+- provider call: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+### Next canonical stage
+
+**G8 — Second-Company Validation**
+
+No G7.4 is required or permitted for routine follow-up. Any new methodology issue discovered during G8 must be recorded through the Research-Gap Register and resolved through a versioned methodology or controlled-expansion decision.
+
+**CURRENT STOP POINT:** G7 is formally closed. Before implementing G8, inspect the canonical G8 definition and select the appropriate second-company validation target using the existing reviewed Pharma business-model architecture.
