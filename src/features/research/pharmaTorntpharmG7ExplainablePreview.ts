@@ -21,7 +21,6 @@ import type {
   PharmaResearchWorkspaceModel,
   PharmaWorkspaceRequirement,
 } from "./pharmaResearchWorkspaceModel"
-import type { ResearchMetric } from "./types"
 
 export const TORNTPHARM_G7_EXPLAINABLE_PREVIEW_VERSION =
   "TORNTPHARM_G7_EXPLAINABLE_READ_ONLY_PREVIEW_V1_PROPOSAL" as const
@@ -261,7 +260,6 @@ function assertTorntpharmArchitecture(model: PharmaResearchWorkspaceModel) {
 
 export function buildTorntpharmG7ExplainablePreview(
   model: PharmaResearchWorkspaceModel,
-  _metrics: readonly ResearchMetric[],
 ): TorntpharmG7ExplainablePreview {
   assertTorntpharmArchitecture(model)
 
