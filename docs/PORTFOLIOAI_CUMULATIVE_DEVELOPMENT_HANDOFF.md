@@ -16600,3 +16600,74 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.44 cards, run focused G6.44 Vitest and ESLint, then `npm run typecheck` and `npm run build`. After validation, prepare a narrow Global Generics applicability-registry reconciliation gate before reconsidering G7 eligibility.
+
+
+---
+
+## 190. Entry 185 — Gate G6.44 Global Generics G6 coverage closure audit validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.44 has completed validation as a **proposal-only Global Generics G6 coverage closure audit**.
+
+### Validation
+
+Owner confirmed all requested validation passed:
+
+- focused Vitest for `pharmaGlobalGenericsG6CoverageReview.test.ts` → **PASS**
+- focused ESLint for the G6.44 slice and `PharmaResearchWorkspacePanel.tsx` → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+- visual inspection of both G6.44 cards → **PASS**
+
+### Validated coverage conclusion
+
+All 10 canonical Global Generics G6 families have an explicit methodology outcome.
+
+- `SEGMENT_GROWTH` → **VALIDATED / NOT ACTIVE**
+- `OPERATING_MARGIN` → **VALIDATED FAIL-CLOSED**
+- `ROCE_CAPITAL_EFFICIENCY` → **VALIDATED FAIL-CLOSED**
+- `CASH_CONVERSION` → **VALIDATED FAIL-CLOSED**
+- `BALANCE_SHEET_LEVERAGE` → **VALIDATED FAIL-CLOSED**
+- `VALUATION` → **VALIDATED FAIL-CLOSED**
+- `OWNERSHIP_GOVERNANCE` → **VALIDATED FAIL-CLOSED**
+- `REGULATORY_MARKET_RISK` → **VALIDATED FAIL-CLOSED**
+- `MOMENTUM` → **VALIDATED FAIL-CLOSED**
+- `US_GENERIC_PRICE_EROSION` → **VALIDATED / NOT ACTIVE**
+
+Therefore:
+
+- canonical family count: **10**
+- explicit outcome count: **10**
+- all canonical families have explicit outcome: **YES**
+- G6 methodology coverage complete: **YES**
+
+### Applicability registry contradiction remains
+
+G6.44 deliberately did not mutate the canonical applicability registry.
+
+The current registry still uses shared `pendingParentFamilies`, which leaves seven Global Generics families represented as `SUBPROFILE_THRESHOLDS_REQUIRED` even though later G6 work has validated explicit fail-closed outcomes for those families.
+
+Therefore:
+
+- registry representation current: **NO**
+- narrow Global Generics registry reconciliation required: **YES**
+- G7 read-only adapter eligible now: **NO**
+
+### Safety boundary remains unchanged
+
+- applicability registry mutation in G6.44: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- schema/local/production DB mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**Result:** G6.44 = **VALIDATED / NOT ACTIVE**.
+
+**CURRENT STOP POINT:** Inspect every consumer/test of `PharmaG6CurveState` and `pharmaG6SubprofileCurveApplicability`, then prepare a narrow Global Generics applicability-registry reconciliation gate. Other Pharma subprofiles must remain unchanged unless current repository evidence explicitly requires otherwise.
