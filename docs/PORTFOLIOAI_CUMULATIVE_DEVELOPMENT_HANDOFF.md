@@ -11236,3 +11236,119 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.18 cards in TORNTPHARM → Research → Gate G, then run focused validation. G6 remains open after G6.18.
+
+
+---
+
+## 136. Entry 131 — Gate G6.18 Global Generics US price-erosion curve validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.18 has completed validation as a **proposal-only Global Generics US Generic Price-Erosion curve**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.18 plus Segment Growth and G6 applicability → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.18 validated methodology
+
+Metric:
+
+`PHARMA_US_GENERIC_PRICE_EROSION`
+
+Supported Primary:
+
+`GLOBAL_GENERICS`
+
+Canonical dimension:
+
+`GROWTH`
+
+Direction:
+
+`LOWER_BETTER`
+
+### Evidence boundary
+
+Validated requirements:
+
+- disclosed ASP/price evidence required;
+- residual price-erosion inference from revenue and volume prohibited;
+- minimum comparable history: **4 quarters**;
+- preferred comparable history: **8 quarters**;
+- latest comparable period required.
+
+### Validated component structure
+
+- level: **70%**
+- trend: **30%**
+
+Level statistic:
+
+`MEDIAN_LATEST_4_COMPARABLE_PRICE_EROSION_PERCENT`
+
+Validated level bands:
+
+- <0% → 100
+- 0% to <3% → 85
+- 3% to <5% → 70
+- 5% to <8% → 55
+- 8% to <12% → 35
+- >=12% → 15
+
+Trend statistic:
+
+`LATEST_MINUS_MEDIAN_PRIOR_3_PERCENTAGE_POINTS`
+
+Lower / more negative is better.
+
+Validated trend bands:
+
+- <-3 pp → 100
+- -3 pp to <0 pp → 80
+- 0 pp to <3 pp → 60
+- 3 pp to <6 pp → 40
+- >=6 pp → 20
+
+### Global Generics Growth boundary
+
+Price erosion remains separate from:
+
+`PHARMA_EXPORT_US_REVENUE_GROWTH`
+
+Strong revenue growth does not erase severe pricing pressure.
+
+Improved pricing does not substitute for missing growth evidence.
+
+### Applicability state
+
+Global Generics G6 family:
+
+`US_GENERIC_PRICE_EROSION`
+
+State:
+
+`VALIDATED_NOT_ACTIVE`
+
+Domestic and other Pharma Primary thresholds remain isolated.
+
+### Safety boundary remains unchanged
+
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.18 is validated. Global Generics now has validated Export/US Revenue Growth and US Generic Price-Erosion methodologies, both not active. The next safe G6 task is the next structurally important Global Generics-specific evidence family.
