@@ -49,6 +49,7 @@ import { PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_GATE } from "./pharmaGlobal
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_AGGREGATION_METHOD_PROPOSAL } from "./pharmaGlobalGenericsPipelineAggregationMethodProposal"
 import { PHARMA_GLOBAL_GENERICS_PIPELINE_COMBINED_SCORE } from "./pharmaGlobalGenericsPipelineCombinedScoreContract"
 import { PHARMA_GLOBAL_GENERICS_REGULATORY_SITE_TREATMENT } from "./pharmaGlobalGenericsRegulatorySiteTreatmentContract"
+import { PHARMA_GLOBAL_GENERICS_MARKET_RISK_NORMALIZATION_GATE } from "./pharmaGlobalGenericsMarketRiskNormalizationGate"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -683,6 +684,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Regulatory context visible · market drawdown/volatility methodology still incomplete</small>
               <p>Official facility/product/geography evidence and remediation history remain required. Single-site closeout cannot imply company-wide clearance, missing regulatory evidence cannot become neutral, and the whole Global Generics Risk dimension remains not ready.</p>
               <span>Whole Risk dimension ready: NO · Market-risk bands: PENDING · Activation: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.25 · Global Generics market-risk normalization gate</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_MARKET_RISK_NORMALIZATION_GATE.contractVersion}</small>
+              <p>Trailing 1-year drawdown and annualized 1-year volatility now have explicit evidence identities and authority contracts, but no Pharma numeric bands are approved. BANK/NBFC thresholds are not inherited.</p>
+              <span>Drawdown bands: NO · Volatility bands: NO · BANK thresholds inherited: NO</span>
+            </article>
+            <article>
+              <strong>G6.25 · Benchmark & weighting blocker</strong>
+              <small>Structurally valid evidence can become methodology-ready without becoming score-ready</small>
+              <p>Volatility still requires an approved Pharma peer/benchmark context, no benchmark has been selected, component weights remain unapproved, and missing market-risk evidence cannot become neutral.</p>
+              <span>Benchmark: PENDING · Component weights: PENDING · Whole Risk dimension ready: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
