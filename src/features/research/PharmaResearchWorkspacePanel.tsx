@@ -55,6 +55,7 @@ import { PHARMA_GLOBAL_GENERICS_DRAWDOWN_EVIDENCE_SUFFICIENCY } from "./pharmaGl
 import { PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_METHOD_GATE } from "./pharmaGlobalGenericsVolatilityContextMethodGate"
 import { PHARMA_GLOBAL_GENERICS_VOLATILITY_CONTEXT_EVIDENCE_SUFFICIENCY } from "./pharmaGlobalGenericsVolatilityContextEvidenceSufficiency"
 import { PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_METHOD_GATE } from "./pharmaGlobalGenericsOperatingMarginMethodGate"
+import { PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_CALIBRATION_EVIDENCE } from "./pharmaGlobalGenericsOperatingMarginCalibrationEvidence"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
@@ -773,6 +774,20 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <small>Structurally valid history can become method-ready without becoming score-ready</small>
               <p>Global Generics still needs its own component weights, level/stability/trend bands and final aggregation contract. Missing or unmatched operating-margin history continues to fail closed.</p>
               <span>Global weights: PENDING · Global bands: PENDING · Numeric curve ready: NO</span>
+            </article>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            <article>
+              <strong>G6.31 · Operating-margin calibration evidence sufficiency</strong>
+              <small>{PHARMA_GLOBAL_GENERICS_OPERATING_MARGIN_CALIBRATION_EVIDENCE.contractVersion}</small>
+              <p>The Global Generics methodology shape remains valid, but the repository does not yet contain a reviewed calibration set or evidence-backed weights/bands. Numeric calibration is therefore deferred.</p>
+              <span>Calibration set: MISSING · Domestic fallback: NO · Numeric curve: NO</span>
+            </article>
+            <article>
+              <strong>G6.31 · Explicit calibration blockers</strong>
+              <small>No fabricated Global Generics thresholds</small>
+              <p>A reviewed same-primary cohort, level/stability/trend band evidence and component-weight evidence are all still absent. The slice remains intentionally fail-closed rather than importing Domestic Formulations calibration.</p>
+              <span>Deferral required: YES · Score execution: NO · Activation: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
