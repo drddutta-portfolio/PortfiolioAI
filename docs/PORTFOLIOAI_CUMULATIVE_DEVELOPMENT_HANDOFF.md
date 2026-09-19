@@ -13727,3 +13727,93 @@ No candidate is approved by default.
 **Result:** G6.28 = **VALIDATED / NOT ACTIVE**.
 
 **CURRENT STOP POINT:** Inspect current repository evidence for a reviewed Global Generics cohort, approved Pharma benchmark, and sufficient self-history plus external context. If no candidate is supportable, defer numeric volatility normalization explicitly.
+
+
+---
+
+## 159. Entry 154 — Gate G6.29 Global Generics volatility context evidence sufficiency deferral gate prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.29 — Global Generics Volatility Context Evidence Sufficiency / Deferral Gate**.
+
+### Starting state
+
+G6.28 was first closed as:
+
+**VALIDATED / NOT ACTIVE**
+
+Repository inspection then found no evidence-backed volatility-context path:
+
+- reviewed Global Generics Primary peer cohort: **NOT ESTABLISHED**
+- approved Pharma benchmark: **NOT ESTABLISHED**
+- sufficient comparable self-history plus external context: **NOT ESTABLISHED**
+
+### Evidence-sufficiency conclusion
+
+No G6.28 candidate is currently supportable.
+
+Blockers:
+
+- `SAME_SUBPROFILE_PEER_RELATIVE` → reviewed Global Generics peer cohort not established;
+- `BENCHMARK_RELATIVE` → approved Pharma benchmark not established;
+- `SELF_HISTORY_WITH_EXTERNAL_CONTEXT` → self-history plus external context not established;
+- `HYBRID_EXPLICITLY_VERSIONED` → fewer than two independently eligible context methods.
+
+### Why numeric deferral is required
+
+The parent Risk framework requires volatility context.
+
+The canonical architecture prohibits:
+
+- BANK_NBFC threshold inheritance;
+- generic Pharma peers without reviewed Primary classification;
+- silent benchmark selection;
+- self-history-only volatility scoring;
+- hidden hybrid weighting;
+- missing evidence → neutral.
+
+Therefore no numeric volatility curve is introduced.
+
+### New artifacts
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsVolatilityContextEvidenceSufficiency.ts`
+- `src/features/research/pharmaGlobalGenericsVolatilityContextEvidenceSufficiency.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_29_Global_Generics_Volatility_Context_Evidence_Sufficiency_Deferral_Gate_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### Glass-box UI
+
+Gate G now includes:
+
+- **G6.29 · Volatility context evidence sufficiency / deferral gate**
+- **G6.29 · Explicit volatility blockers**
+
+### Risk slice status
+
+- regulatory context treatment: validated / non-numeric;
+- drawdown normalization: deferred;
+- volatility normalization: deferred;
+- component weights: unapproved;
+- whole Risk dimension ready: **NO**
+
+### Safety boundary remains unchanged
+
+- approved volatility method: **NO**
+- numeric volatility curve ready: **NO**
+- whole Risk dimension ready: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the two G6.29 cards in TORNTPHARM → Research → Gate G, then run focused G6.29 Vitest and ESLint followed by `npm run typecheck` and `npm run build`. After validation, the Global Generics Risk slice can be closed as explicitly incomplete/fail-closed and G6 can move to the next unresolved Global Generics family.
