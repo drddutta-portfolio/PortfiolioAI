@@ -11467,3 +11467,106 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.19 cards in TORNTPHARM → Research → Gate G, then run focused G6.19 validation. Only after validation should a separate pipeline normalization methodology decide how stage, commercial traction, materiality and adverse events become numeric.
+
+
+---
+
+## 138. Entry 133 — Gate G6.19 Global Generics pipeline evidence contract validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.19 has completed validation as a **proposal-only Global Generics Pipeline / Launch / Approval Evidence Contract**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.19 plus G6.18, Segment Growth and G6 applicability → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.19 validated evidence identity
+
+Metric:
+
+`PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE`
+
+Supported Primary:
+
+`GLOBAL_GENERICS`
+
+Canonical dimension:
+
+`BUSINESS_DURABILITY`
+
+Requirement level:
+
+`MANDATORY`
+
+Every material event must establish:
+
+- product or molecule;
+- geography;
+- dated stage;
+- materiality;
+- economic relevance;
+- source/reference.
+
+### Validated event stages
+
+- `FILED_OR_SUBMITTED`
+- `TENTATIVE_APPROVAL`
+- `FINAL_APPROVAL`
+- `LAUNCHED`
+- `COMMERCIAL_TRACTION_CONFIRMED`
+- `DELAYED_OR_BLOCKED`
+- `WITHDRAWN_OR_DISCONTINUED`
+
+These states remain explicitly non-equivalent.
+
+### History boundary
+
+- minimum material events: **1**
+- preferred material events: **4**
+- latest material events required: **YES**
+
+### Validated numeric blocker
+
+Current state:
+
+`numericNormalizationState = UNAPPROVED`
+
+Explicitly prohibited:
+
+- approval count automatically positive;
+- launch count automatically positive;
+- tentative approval treated as commercial launch;
+- missing materiality/economic relevance treated as neutral.
+
+### Adverse evidence retention
+
+Delayed, blocked, withdrawn and discontinued events remain in the evidence history.
+
+### Regulatory anti-double-counting
+
+G6.19 does not apply a regulatory-site numeric penalty.
+
+Regulatory-site severity remains governed by the separate G4 governance/regulatory gate and any future Global Generics regulatory-risk methodology.
+
+### Safety boundary remains unchanged
+
+- numeric pipeline curve: **NO**
+- activation: **NO**
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.19 is validated. The next safe Global Generics step is to define a separate pipeline normalization methodology for stage, commercial traction, materiality and adverse events while keeping score execution disabled.
