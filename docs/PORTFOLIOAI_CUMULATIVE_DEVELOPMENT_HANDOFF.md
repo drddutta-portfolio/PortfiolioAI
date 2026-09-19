@@ -9402,3 +9402,95 @@ Therefore:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** G6.9 is validated. The next safe G6 task is to define the peer-cohort implementation/minimum-comparability contract for Domestic Formulations, unless a different aligned G6 family is chosen first.
+
+
+---
+
+## 119. Entry 114 — Gate G6.10 Domestic peer-cohort builder prepared
+
+**Date:** 19 September 2026  
+**Actor:** ChatGPT  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6 has continued with **G6.10 — Domestic Formulations Peer-Cohort Builder & Minimum-Comparability Boundary**.
+
+### Purpose
+
+G6.9 locked the methodology prerequisites for peer-relative Valuation.
+
+G6.10 now implements the deterministic **peer eligibility builder** without inventing a minimum peer count or numeric peer score.
+
+### Cohort algorithm
+
+A candidate security is eligible only when:
+
+- it is not the target security;
+- it is active;
+- its PHARMA_V1 assignment resolves successfully on the evaluation date;
+- the active assignment is reviewed;
+- Primary is exactly `DOMESTIC_FORMULATIONS`.
+
+The implementation reuses the existing fail-closed assignment resolver.
+
+### Deterministic exclusions
+
+Explicit exclusion reasons:
+
+- `TARGET_SECURITY`
+- `INACTIVE_SECURITY`
+- `SUBPROFILE_UNRESOLVED`
+- `PRIMARY_MISMATCH`
+
+Provider peer labels, broad Pharma sector membership, Material Overlay and Emerging Watch do not override Primary eligibility.
+
+### Minimum-comparability boundary
+
+No numeric minimum peer count was invented.
+
+Current state:
+
+- minimum peer count: **UNAPPROVED**
+- minimum comparable evidence per peer: **UNAPPROVED**
+- aggregation statistic: **UNAPPROVED**
+- outlier treatment: **UNAPPROVED**
+- premium/discount curve: **UNAPPROVED**
+
+Therefore:
+
+- cohort builder implemented: **YES / PROPOSAL ONLY**
+- cohort score-ready: **NO**
+- numeric peer curve: **NO**
+- whole Valuation dimension ready: **NO**
+
+### Repository artifacts
+
+Added:
+
+- `src/features/research/pharmaDomesticPeerCohortBuilder.ts`
+- `src/features/research/pharmaDomesticPeerCohortBuilder.test.ts`
+- `docs/R4N_PHARMA_V1_Gate_G6_10_Domestic_Peer_Cohort_Builder_V1.md`
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+### UI review surface
+
+Gate G now includes:
+
+- **G6.10 · Domestic peer-cohort builder**
+- **G6.10 · Minimum-comparability boundary**
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.10 cards in TORNTPHARM → Research → Gate G, then run focused G6.10 validation. Only after validation should a separate contract decide minimum peer count / comparable-evidence requirements / aggregation statistics.
