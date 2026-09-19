@@ -9296,3 +9296,109 @@ Gate G now includes:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.9 cards in TORNTPHARM → Research → Gate G, then run focused G6.9 validation. Only after validation should the project define the peer-cohort implementation/minimum-comparability contract or move to another G6 family.
+
+
+---
+
+## 118. Entry 113 — Gate G6.9 Domestic peer-relative valuation cohort methodology lock validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.9 has completed validation as a **proposal-only Domestic Formulations peer-relative valuation cohort methodology lock**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.9 plus the active Domestic Valuation/G6 methodology slice → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.9 status
+
+Supported Primary:
+
+`DOMESTIC_FORMULATIONS`
+
+Dimension:
+
+`VALUATION`
+
+Component:
+
+`PEER_RELATIVE_VALUATION`
+
+Validated cohort rules:
+
+- reviewed Primary subprofile required;
+- same Primary subprofile `DOMESTIC_FORMULATIONS` required;
+- effective-dated active assignment required;
+- active security required;
+- Pharma sector/industry membership alone is insufficient;
+- Material Overlay membership alone is insufficient;
+- Emerging Watch cannot define peer eligibility;
+- provider peer labels are not authoritative.
+
+### Comparability rules validated
+
+Peer valuation evidence must preserve:
+
+- same metric semantics;
+- same period basis;
+- current authoritative market-price semantics;
+- non-stale valuation evidence;
+- explicit treatment/exclusion of negative or non-meaningful denominators;
+- acquisition/one-off normalization where material.
+
+### Candidate evidence families
+
+Candidate only:
+
+- `PE_TTM`
+- `EV_EBITDA`
+
+Still unapproved:
+
+- final peer metric set;
+- minimum peer count;
+- cohort aggregation statistic;
+- outlier treatment;
+- premium/discount normalization bands;
+- PE vs EV/EBITDA weighting;
+- Valuation component weights.
+
+### Domestic Valuation state
+
+Validated / not active:
+
+- G6.2 — self-history relative valuation
+- G6.8 — FCF-yield cash-flow corroboration
+- G6.9 — peer-cohort methodology lock
+
+Still incomplete:
+
+- peer-cohort builder implementation
+- minimum-comparability contract
+- peer-relative numeric curve
+- Valuation component weights
+
+Therefore:
+
+`whole Valuation dimension ready = NO`
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.9 is validated. The next safe G6 task is to define the peer-cohort implementation/minimum-comparability contract for Domestic Formulations, unless a different aligned G6 family is chosen first.
