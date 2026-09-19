@@ -10763,3 +10763,103 @@ Still unresolved:
 - PR #101 merge: **NO**
 
 **CURRENT STOP POINT:** Owner should `git pull`, visually inspect the G6.16 cards in TORNTPHARM → Research → Gate G, then run focused G6.16 validation. After validation, an explicit methodology decision is required for the three-component Domestic Valuation split.
+
+
+---
+
+## 132. Entry 127 — Gate G6.16 Domestic Valuation component weighting approval gate validated
+
+**Date:** 19 September 2026  
+**Actor:** owner validation + ChatGPT checkpoint  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G6.16 has completed validation as a **proposal-only Domestic Formulations Valuation component weighting approval gate**.
+
+### Validation
+
+Owner-confirmed results:
+
+- focused Vitest covering G6.16 plus G6.15/G6.14/G6.13/G6.12/G6.11/G6.10/G6.9 and the active Domestic Valuation methodology slice → **PASS**
+- focused ESLint for the same slice → **PASS**
+- `npm run typecheck` → **PASS**
+- `npm run build` → **PASS**
+
+### G6.16 validated weighting boundary
+
+Parent PHARMA_V1 Valuation dimension weight:
+
+`12%`
+
+Required Domestic Valuation components:
+
+- `SELF_HISTORY_RELATIVE_VALUATION`
+- `PEER_RELATIVE_VALUATION`
+- `CASH_FLOW_CORROBORATION`
+
+Approved component weighting method:
+
+`null`
+
+Current component weights:
+
+- self-history: `null`
+- peer-relative: `null`
+- cash-flow corroboration: `null`
+
+### Validated structural requirements for any future component split
+
+Any candidate split must:
+
+- use finite non-negative weights;
+- keep each weight within [0,1];
+- sum to one within deterministic tolerance;
+- be separately versioned;
+- receive explicit owner approval.
+
+### Explicit defaults remain prohibited
+
+- hidden component weighting: **NO**
+- automatic equal-thirds weighting: **NO**
+- missing-component renormalization: **NO**
+- unversioned weighting: **NO**
+
+A candidate such as 40/40/20 may be structurally valid, but remains unapproved.
+
+### Domestic Valuation state
+
+Validated / not active:
+
+- G6.2 — self-history relative valuation
+- G6.8 — FCF-yield cash-flow corroboration
+- G6.9 — peer-cohort methodology lock
+- G6.10 — deterministic peer eligibility builder
+- G6.11 — minimum-comparability and median aggregation
+- G6.12 — peer premium/discount calculation and per-metric normalization
+- G6.13 — peer cross-metric combination readiness lock
+- G6.14 — peer weighting approval gate
+- G6.15 — owner-approved 50/50 PE-vs-EV/EBITDA peer combined score
+- G6.16 — final Valuation component weighting approval gate
+
+Still unresolved:
+
+- approved self-history / peer-relative / FCF component split
+- final combined Domestic Valuation score contract
+- whole Domestic Valuation readiness closure
+
+Therefore:
+
+`whole Valuation dimension ready = NO`
+
+### Safety boundary remains unchanged
+
+- score execution: **NO**
+- persisted score run: **NO**
+- scoring-rule migration: **NO**
+- local DB mutation: **NO**
+- production mutation: **NO**
+- recommendation change: **NO**
+- position-sizing change: **NO**
+- deployment: **NO**
+- PR #101 merge: **NO**
+
+**CURRENT STOP POINT:** G6.16 is validated. The next methodology step requires an explicit owner-approved split across self-history relative valuation, peer-relative valuation, and FCF-yield cash-flow corroboration before the Domestic Formulations Valuation dimension can be completed.
