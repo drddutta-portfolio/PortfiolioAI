@@ -1,10 +1,10 @@
-import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
+import { PHARMA_RESEARCH_PROFILE_GATE_G } from "./pharmaResearchProfileGateG"
 
 export const PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL_VERSION =
   "PHARMA_OWNERSHIP_GOVERNANCE_CURVE_V1_PROPOSAL" as const
 
 const OWNERSHIP_GOVERNANCE_METRIC_CODE = "PHARMA_OWNERSHIP_GOVERNANCE" as const
-const ownershipMetric = PHARMA_RESEARCH_PROFILE_V1.metrics.find(
+const ownershipMetric = PHARMA_RESEARCH_PROFILE_GATE_G.metrics.find(
   (metric) => metric.metricCode === OWNERSHIP_GOVERNANCE_METRIC_CODE,
 )
 
@@ -18,7 +18,7 @@ export interface PharmaOwnershipGovernanceCurveProposal {
   readonly metricCode: typeof OWNERSHIP_GOVERNANCE_METRIC_CODE
   readonly canonicalDimension: "OWNERSHIP_GOVERNANCE"
   readonly currentParentContractDimension: typeof ownershipMetric.dimension
-  readonly dimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION"
+  readonly dimensionAlignmentState: "ALIGNED_VERSIONED_PARENT"
   readonly history: {
     readonly minimumComparableShareholdingQuarters: 4
     readonly preferredComparableShareholdingQuarters: 8
@@ -57,7 +57,7 @@ export const PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL: PharmaOwnershipGovernan
   metricCode: OWNERSHIP_GOVERNANCE_METRIC_CODE,
   canonicalDimension: "OWNERSHIP_GOVERNANCE",
   currentParentContractDimension: ownershipMetric.dimension,
-  dimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
+  dimensionAlignmentState: "ALIGNED_VERSIONED_PARENT",
   history: {
     minimumComparableShareholdingQuarters: 4,
     preferredComparableShareholdingQuarters: 8,
