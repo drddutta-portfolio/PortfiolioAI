@@ -10,7 +10,7 @@
 **Primary subprofile:** DOMESTIC_FORMULATIONS
 **Gate H score:** 75.1575 / 100
 **Gate H state:** COMPLETE / PASS
-**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 COMPLETE / PASS; I3 IMPLEMENTED / VALIDATION + OWNER VISUAL REVIEW PENDING
+**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 COMPLETE / PASS; I3 COMPLETE / PASS; I4 NOT STARTED
 
 **Owner-approved revised-plan corrections adopted before I1 implementation:**
 
@@ -597,7 +597,20 @@ The shared Research page mounts the reusable PHARMA_V1 panel without creating a 
 
 Safety remains locked: no score/recommendation persistence, weight guidance, action bias, AI interpretation, position sizing, provider call, production mutation, deployment, or PR merge.
 
-**I3 remains IMPLEMENTED / VALIDATION + OWNER VISUAL REVIEW PENDING. Do not start I4 automatically.**
+**I3 = COMPLETE / PASS. I4 remains NOT STARTED. Do not start I4 automatically.**
+
+### I3 final closure — 21 September 2026
+
+The owner completed the final consolidated local validation after all I3 UI-integration corrections and reported **ALL PASS**.
+
+Owner visual review confirmed both reference-company surfaces:
+
+- TORNTPHARM = Satellite Candidate / 75.1575;
+- AUROPHARMA = Insufficient / Not computable / no score reconstruction.
+
+The common stock/research shell remains universal, and Pharma-specific detail remains a sector add-on.
+
+I3 therefore satisfies its exit condition: one deterministic TORNTPHARM recommendation has been produced from the locked Gate H result and approved I2 policy, with complete rationale, fail-closed AUROPHARMA control, and no persistence.
 
 ### I3 core-shell integration clarification
 
