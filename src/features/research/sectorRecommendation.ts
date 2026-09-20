@@ -15,6 +15,7 @@ export interface RecommendationPreview {
 
 function previewOverall(snapshot: SecurityScoringSnapshot) {
   if (snapshot.overallScore !== null) return snapshot.overallScore
+  if (snapshot.profileCode === "PHARMA_V1") return null
   const applicable = snapshot.dimensions.filter((dimension) => dimension.dimensionWeight > 0)
   if (!applicable.length || applicable.some((dimension) => dimension.rawScore === null)) return null
   const totalWeight = applicable.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
