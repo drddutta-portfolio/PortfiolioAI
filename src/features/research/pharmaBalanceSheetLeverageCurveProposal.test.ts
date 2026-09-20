@@ -11,9 +11,9 @@ describe("PHARMA Balance Sheet / Leverage curve proposal", () => {
 
   it("targets canonical Balance Sheet / Credit and surfaces the legacy dimension", () => {
     expect(PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.canonicalDimension).toBe("BALANCE_SHEET_CREDIT")
-    expect(PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.currentParentContractDimension).toBe("FINANCIAL_STRENGTH")
+    expect(PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.currentParentContractDimension).toBe("BALANCE_SHEET_CREDIT")
     expect(PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.dimensionAlignmentState).toBe(
-      "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
+      "ALIGNED_VERSIONED_PARENT",
     )
   })
 
