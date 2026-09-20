@@ -2,7 +2,7 @@
 
 **Date:** 20 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`  
-**Status:** IMPLEMENTED / OWNER REVIEW PENDING  
+**Status:** OWNER APPROVED / NOT ACTIVE / POST-FREEZE VALIDATION PENDING  
 **Target:** TORNTPHARM / PHARMA_V1
 
 ## Purpose
@@ -50,7 +50,7 @@ Rules:
 
 For TORNTPHARM, the Global Generics Material Overlay remains relevant only to dimensions touched by the overlay contract, notably Growth, Business Durability and Risk.
 
-This formula remains non-active until owner approval.
+This formula is now owner-approved for read-only methodology use and remains non-active.
 
 ---
 
@@ -106,7 +106,7 @@ This is not a negative score and not a neutral score. It is an explicit fail-clo
 
 ## 4. G-FINAL-3 closure boundary
 
-G-FINAL-3 methodology can be approved even while TORNTPHARM remains runtime-review-required.
+G-FINAL-3 methodology has been owner-approved while TORNTPHARM remains runtime-review-required.
 
 Approval means:
 
@@ -132,3 +132,21 @@ G-FINAL-4 must still perform the full end-to-end read-only dry run and will show
 - deployment: NO
 - PR merge: NO
 - automatic trading: NO
+
+
+---
+
+## Owner approval record
+
+The owner explicitly approved the consolidated cross-cutting methodology after the pre-freeze validation passed.
+
+Frozen state:
+
+- overlay numeric modifier: `OWNER_APPROVED_NOT_ACTIVE`;
+- governance/regulatory gate: `OWNER_APPROVED_NOT_ACTIVE`;
+- TORNTPHARM runtime mapping: `OWNER_APPROVED_FAIL_CLOSED_RUNTIME`;
+- TORNTPHARM runtime result: `REVIEW_REQUIRED`;
+- G-FINAL-3 implementation state: `OWNER_APPROVED_COMPLETE`;
+- score execution/persistence: OFF.
+
+Only post-freeze validation remains before G-FINAL-3 is formally declared PASS.
