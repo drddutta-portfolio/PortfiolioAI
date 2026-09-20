@@ -11,9 +11,9 @@ describe("PHARMA ROCE / Capital Efficiency curve proposal", () => {
 
   it("targets the canonical Capital Efficiency dimension explicitly", () => {
     expect(PHARMA_ROCE_CURVE_PROPOSAL.canonicalDimension).toBe("CAPITAL_EFFICIENCY")
-    expect(PHARMA_ROCE_CURVE_PROPOSAL.currentParentContractDimension).toBe("QUALITY")
+    expect(PHARMA_ROCE_CURVE_PROPOSAL.currentParentContractDimension).toBe("CAPITAL_EFFICIENCY")
     expect(PHARMA_ROCE_CURVE_PROPOSAL.dimensionAlignmentState).toBe(
-      "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
+      "ALIGNED_VERSIONED_PARENT",
     )
   })
 
