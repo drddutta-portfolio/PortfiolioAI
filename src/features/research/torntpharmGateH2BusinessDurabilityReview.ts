@@ -53,18 +53,21 @@ export const TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_COMPONENTS = [
   ),
   review(
     "FIELD_FORCE_PRODUCTIVITY",
-    "REVIEW_REQUIRED",
+    "STRONG",
     [
-      "Current issuer evidence discloses a large India field force and domestic revenue context.",
-      "The approved contract requires at least three comparable periods of disclosed MR/field-force headcount plus compatible domestic revenue.",
-      "A single current headcount cannot establish multi-period productivity, and employee totals may not be substituted.",
+      "Issuer disclosures provide three directly stated India field-force observations with compatible annual India revenue: FY23 5,500 MRs / Rs 4,984 crore, FY24 about 5,700 / Rs 5,666 crore, and FY25 about 6,400 / Rs 6,393 crore.",
+      "Derived monthly revenue productivity rises from approximately Rs 7.55 lakh per MR in FY23 to Rs 8.28 lakh in FY24 and Rs 8.32 lakh in FY25 despite field-force expansion.",
+      "The assessment uses directly disclosed field-force counts only; total employee counts and inferred MR headcount remain prohibited.",
+      "The candidate remains STRONG rather than VERY_STRONG because no approved external cross-company field-force-productivity benchmark is used.",
     ],
     [
-      "https://www.torrentpharma.com/business-area/india-business/",
-      "https://www.torrentpharma.com/pdf/investors/AR-2024-25_Single_page_view.pdf",
-      "https://www.torrentpharma.com/pdf/investors/AR-2025-26.pdf",
+      "https://www.torrentpharma.com/pdf/investors/Press_Release_Q4_FY23_results.pdf",
+      "https://www.torrentpharma.com/pdf/investors/AR-2023-24.pdf",
+      "https://www.torrentpharma.com/pdf/investors/Torrent_Pharma_Press_Release-Q4-FY24.pdf",
+      "https://www.torrentpharma.com/pdf/investors/AR-2024-25.pdf",
+      "https://www.torrentpharma.com/assets/Torrent_Pharma_Press_release_final_Q4_24_25_4201161339.pdf",
     ],
-    "UNRESOLVED",
+    "NONE_IDENTIFIED",
   ),
   review(
     "RND_PRODUCTIVITY",
@@ -114,7 +117,6 @@ export const TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW = {
   combinedScore: null,
   blockerCodes: [
     "BRAND_THERAPY_LEADERSHIP_LICENSED_MARKET_CROSS_CHECK_REQUIRED",
-    "FIELD_FORCE_PRODUCTIVITY_THREE_PERIOD_COMPARABLE_MR_HEADCOUNT_REQUIRED",
   ] as const,
   providerCallAuthorized: false,
   scoreExecutionEnabled: false,
