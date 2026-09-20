@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`  
 **Created:** 16 September 2026  
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101  
-**Current stage:** Gate H / H3 COMPLETE / PASS; H4 independent verification implemented; consolidated H4 validation pending; Gate H not yet closed
+**Current stage:** Gate H COMPLETE / PASS; first deterministic TORNTPHARM score 75.1575 hand-verified and reproducible; Gate I NOT STARTED
 
 ---
 
@@ -25009,3 +25009,149 @@ H4 changes no Edge Function code and Edge tests are not required for Gate H clos
 `npx vitest run --exclude "supabase/functions/**"`
 
 No Edge test or project-wide test script was modified.
+
+
+---
+
+## 290. Entry 285 — H4 COMPLETE / PASS and Gate H formally closed
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Canonical Gate H closure record:** `docs/PortfolioAI_GATE_H_CLOSURE.md`
+
+The owner reported the final consolidated H4 validation as:
+
+> **ALL PASS**
+
+H4 is therefore formally closed:
+
+> **H4 = COMPLETE / PASS**
+
+Gate H is formally closed:
+
+> **GATE H = COMPLETE**
+
+The first deterministic TORNTPHARM PHARMA_V1 company score is:
+
+> **75.1575 / 100**
+
+Final quality state:
+
+> **REPRODUCIBLE / HAND-VERIFIED / NON-PERSISTING**
+
+### Final Gate H stage state
+
+```text
+H1 = COMPLETE / PASS
+H2 = COMPLETE / PASS
+H3 = COMPLETE / PASS
+H4 = COMPLETE / PASS
+
+GATE H = COMPLETE
+TORNTPHARM FIRST DETERMINISTIC SCORE = COMPLETE
+FIRST DETERMINISTIC SCORE = 75.1575 / 100
+SCORE PERSISTENCE = OFF
+RECOMMENDATION = OFF
+POSITION SIZING = OFF
+```
+
+### H4 verification result
+
+The independent H4 verifier reconstructed all ten H2-locked dimension scores from underlying evidence and approved methodology and reproduced the H3 adapter total exactly.
+
+Independent hand score:
+
+`75.1575 / 100`
+
+H3 adapter score:
+
+`75.1575 / 100`
+
+Determinism:
+
+`PASS`
+
+Anti-leakage / anti-double-counting:
+
+`PASS`
+
+Evidence lineage:
+
+`COMPLETE`
+
+Methodology lineage:
+
+`COMPLETE`
+
+### Final overlay and governance treatment
+
+Global Generics:
+
+- Material business context retained;
+- economic materiality = 12.05%;
+- numeric threshold = 15%;
+- numeric modifier = not applied / null;
+- second stock score = none.
+
+CDMO / CRAMS:
+
+- Emerging Watch;
+- numeric participation = none;
+- denominator effect = none.
+
+Governance:
+
+- current runtime = CLEAR;
+- historical Indrad event retained;
+- no preview block;
+- no second numeric penalty;
+- no score cap.
+
+Historical G-FINAL-3 / H1 / G6 snapshots were repaired to remain immutable at their original approved stage states; the current H2/H3 state remains unchanged.
+
+### Final H4 validation
+
+The final H4 command was:
+
+`git pull && bash scripts/h4-validate-torntpharm-gate-h-closure.sh`
+
+Final owner result:
+
+`ALL PASS`
+
+Validation scope:
+
+- focused H4 + Gate H regressions;
+- full non-Edge application Vitest suite;
+- strict TypeScript;
+- presentation data-boundary architecture guard;
+- focused H4 lint;
+- existing architecture lint;
+- production build;
+- H4 diff whitespace check.
+
+Edge tests were not required because H4 touched no Edge Function code. The native Deno Edge test and project-wide test scripts were left unchanged.
+
+### Safety state
+
+No Gate H closure action performed:
+
+- score persistence;
+- recommendation generation;
+- position sizing;
+- production Supabase mutation;
+- provider call;
+- deployment;
+- PR merge;
+- rollout to another Pharma stock.
+
+### CURRENT STOP POINT
+
+Gate H is closed.
+
+**Gate I = NOT STARTED.**
+
+Do not begin Gate I automatically.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
