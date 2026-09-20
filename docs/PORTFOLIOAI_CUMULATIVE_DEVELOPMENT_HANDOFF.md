@@ -20681,3 +20681,67 @@ PR #101 remains OPEN / DRAFT / UNMERGED.
 G9.3 V2 remains **OPEN**.
 
 **CURRENT STOP POINT:** owner should pull the branch and visually confirm that the provenance labels are readable and unobtrusive in the TORNTPHARM capability layer. Do not begin full local validation or AUROPHARMA until owner visual PASS is recorded.
+
+
+---
+
+## 233. Entry 228 — G9.3 V2 TORNTPHARM owner visual PASS
+
+**Date:** 20 September 2026  
+**Actor:** owner visual approval  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reviewed the corrected TORNTPHARM localhost **PHARMA_V1 architecture, portability & activation state** layer after the G8/G9 provenance labels were added and explicitly reported:
+
+> **Visual PASSED.**
+
+### Visual checkpoint accepted
+
+The approved TORNTPHARM reusable capability layer now visibly and correctly presents:
+
+- `G8.1 capability · Classification & evidence lock`
+- `G8.2 capability · Three-layer Pharma research architecture`
+- `G8.3 capability · Portability / isolation checkpoint`
+- `G9.1 capability · Activation-readiness & authority`
+- `G9.2 capability · Canonical assignment state`
+
+Approved TORNTPHARM semantics remain:
+
+- Primary = `DOMESTIC_FORMULATIONS`;
+- Material Overlay = `GLOBAL_GENERICS`;
+- Emerging Watch = `CDMO_CRAMS`;
+- unresolved exposure = none registered in the current capability view;
+- raw evidence scope = `SECURITY_COMPANY`;
+- interpretation scope = `COMPANY_ACTIVE_ASSIGNMENT_ROLE`;
+- portability invariants = 12/12 PASS;
+- numeric scoring = `BLOCKED_METHODOLOGY`;
+- recommendation = `BLOCKED_UPSTREAM_SCORING`;
+- position sizing = `BLOCKED_UPSTREAM_RECOMMENDATION`;
+- canonical resolver = `RESOLVED`;
+- downstream state = fail closed.
+
+The universal R4M Research shell and all existing Gate G → G7 methodology surfaces remain preserved.
+
+### Safety state
+
+- production mutation: NO
+- production migration: NO
+- assignment mutation: NO
+- evidence mutation: NO
+- score execution/persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+The **owner visual approval gate for the TORNTPHARM-first G9.3 V2 capability checkpoint is CLOSED / PASS**.
+
+G9.3 V2 remains **OPEN**.
+
+**CURRENT STOP POINT:** run the full local validation suite for this TORNTPHARM checkpoint. AUROPHARMA implementation remains blocked until the local validation gate passes and the final TORNTPHARM checkpoint handoff is recorded.
