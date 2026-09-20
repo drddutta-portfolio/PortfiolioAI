@@ -18,7 +18,7 @@ describe("TORNTPHARM H2 derived-statistics candidate", () => {
     expect(row.rawInterestCoverage).toEqual([8.4, 12.43, 9.26])
     expect(row.medianNetDebtEbitda).toBe(0.9)
     expect(row.medianInterestCoverage).toBe(9.26)
-    expect(row.latestMinusPriorMedianNetDebtEbitda).toBe(1.55)
+    expect(row.latestMinusPriorMedianNetDebtEbitda).toBeCloseTo(1.55, 12)
     expect(row.scoreReadyForApprovedEvaluator).toBe(true)
   })
 
