@@ -5,7 +5,7 @@ describe("Gate G FINAL-1 closure candidate", () => {
   it("packages the mature Domestic contracts without activating scoring", () => {
     const candidate = PHARMA_GATE_G_FINAL_1_CLOSURE_CANDIDATE
 
-    expect(candidate.state).toBe("READY_FOR_OWNER_METHODOLOGY_REVIEW")
+    expect(candidate.state).toBe("OWNER_APPROVED_COMPLETE")
     expect(candidate.targetSecurity).toBe("TORNTPHARM")
     expect(candidate.profileCode).toBe("PHARMA_V1")
     expect(candidate.primarySubprofile).toBe("DOMESTIC_FORMULATIONS")
@@ -21,12 +21,14 @@ describe("Gate G FINAL-1 closure candidate", () => {
     expect(candidate.positionSizingEnabled).toBe(false)
   })
 
-  it("keeps owner approval explicit for proposal-only methodology", () => {
-    expect(PHARMA_GATE_G_FINAL_1_CLOSURE_CANDIDATE.ownerApprovalRequiredFor).toEqual([
-      "QUALITY_OPERATING_MARGIN_CURVE",
-      "GROWTH_SEGMENT_GROWTH_CURVE",
-      "READINESS_60_70_EVERY_DIMENSION_RULE",
-      "GOVERNANCE_HIGH_RISK_INTERPRETATION_ONLY_BEHAVIOR",
+  it("records owner approval while keeping Gate H blocked by later Gate G checkpoints", () => {
+    expect(PHARMA_GATE_G_FINAL_1_CLOSURE_CANDIDATE.ownerApprovalRequiredFor).toEqual([])
+    expect(PHARMA_GATE_G_FINAL_1_CLOSURE_CANDIDATE.gFinal1Complete).toBe(true)
+    expect(PHARMA_GATE_G_FINAL_1_CLOSURE_CANDIDATE.remainingGateHBlockers).toEqual([
+      "G_FINAL_2_MISSING_NUMERIC_DIMENSIONS",
+      "G_FINAL_3_MATERIAL_OVERLAY_TREATMENT",
+      "G_FINAL_4_GOVERNANCE_RUNTIME_INPUT",
+      "G_FINAL_5_FULL_SCORE_DRY_RUN",
     ])
     expect(PHARMA_GATE_G_FINAL_1_CLOSURE_CANDIDATE.contracts.valuation.ownerApprovalRequired).toBe(false)
   })
