@@ -10,7 +10,7 @@
 **Primary subprofile:** DOMESTIC_FORMULATIONS
 **Gate H score:** 75.1575 / 100
 **Gate H state:** COMPLETE / PASS
-**Status:** IN PROGRESS — I1 IMPLEMENTED / CONSOLIDATED VALIDATION PENDING
+**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 NOT STARTED
 
 **Owner-approved revised-plan corrections adopted before I1 implementation:**
 
@@ -746,10 +746,33 @@ Only after Gate I closure should the project decide the next separate downstream
 ```text
 Gate H = COMPLETE / PASS
 Gate I plan = REVISED / ADOPTED
-I1 = IMPLEMENTED / VALIDATION PENDING
+I1 = COMPLETE / PASS
 I2 = NOT STARTED
 I3 = NOT STARTED
 I4 = NOT STARTED
 ```
 
-Do not begin I1 until explicitly instructed by the owner.
+Do not begin I2 until explicitly instructed by the owner.
+
+
+---
+
+## I1 completion record
+
+I1 completed successfully on 21 September 2026.
+
+Owner validation result:
+
+> **ALL PASSED**
+
+Final I1 state:
+
+```text
+I1 = COMPLETE / PASS
+PHARMA_V1 RECOMMENDATION AUTHORITY = FROZEN
+PHARMA_V1 NULL-SCORE RECONSTRUCTION = DISABLED
+RECOMMENDATION POLICY THRESHOLDS = NOT YET DEFINED
+I2 = NOT STARTED
+```
+
+No score persistence, recommendation persistence, production mutation, provider call, sizing, deployment or PR merge was authorized or performed.
