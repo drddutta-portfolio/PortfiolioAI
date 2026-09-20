@@ -23183,3 +23183,59 @@ Owner/local focused validation pending.
 - PR merge: NO
 
 **CURRENT STOP POINT:** validate the Ownership / Governance review candidate. If PASS, add the validated candidate to the H2 company-input package and continue directly to the remaining Valuation, Momentum, Risk and Global Generics Material Overlay inputs.
+
+
+---
+
+## 265. Entry 260 — H2 Ownership / Governance validation PASS and input integration
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **H2 OWNERSHIP / GOVERNANCE VALIDATION PASS**
+
+The validated read-only candidate has now been integrated into:
+
+- `src/features/research/torntpharmGateH2InitialScoreInputs.ts`
+- `src/features/research/torntpharmGateH2InitialScoreInputs.test.ts`
+
+### Validated Ownership / Governance input
+
+- Ownership Stability = 75
+- Pledge / Control Risk = 75
+- Non-G4 Governance Context = 50
+- combined Ownership / Governance = **70**
+
+G4-consumed events remain excluded from a second numeric penalty.
+
+### Current validated deterministic H2 company-input set
+
+- Quality = **92**
+- Growth = **78.25**
+- Capital Efficiency = **79**
+- Cash Flow = **93.6**
+- Balance Sheet / Credit = **65**
+- Ownership / Governance = **70**
+
+Business Durability remains unresolved at the full-dimension level because two required components remain fail-closed.
+
+Valuation, Momentum and Risk remain to be completed.
+
+No final overall score has been calculated.
+
+### Safety state
+
+- production mutation: NO
+- evidence write: NO
+- provider refresh: NO
+- paid/licensed provider call: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- deployment: NO
+- PR merge: NO
+
+**CURRENT STOP POINT:** continue H2 with the remaining Valuation, Momentum, Risk and Global Generics Material Overlay inputs using only the latest owner-approved successor methodology contracts.
