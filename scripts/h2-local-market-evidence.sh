@@ -43,7 +43,7 @@ PORTFOLIO_ID="$(psql "$DB_URL" -Atqc "select p.id from public.portfolios p join 
 [[ -n "$PORTFOLIO_ID" ]] || die "No open local TORNTPHARM holding belongs to $LOCAL_EMAIL."
 
 MAPPING_STATE="$(psql "$DB_URL" -Atqc "select coalesce(mapping_status,'') || '|' || coalesce(provider_instrument_id,'') || '|' || coalesce(exchange,'') || '|' || coalesce(trading_symbol,'') from public.market_data_instrument_mappings where security_id='$SECURITY_ID' and provider_code='ANGEL_ONE' limit 1;")"
-[[ "$MAPPING_STATE" == VERIFIED|* ]] || die "TORNTPHARM does not have a VERIFIED local Angel One mapping."
+[[ "$MAPPING_STATE" == VERIFIED\|* ]] || die "TORNTPHARM does not have a VERIFIED local Angel One mapping."
 
 printf 'Local preflight PASS\n'
 printf '  user:      %s\n' "$LOCAL_EMAIL"
