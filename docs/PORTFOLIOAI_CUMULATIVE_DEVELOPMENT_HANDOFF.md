@@ -22484,3 +22484,61 @@ Global Generics overlay remains not score-ready because economic materiality, co
 - production/provider mutations: NONE
 
 **CURRENT STOP POINT:** owner runs H1 focused validation. If PASS, H1 closes and H2 begins with raw-history derivations first, then public-official evidence completion, valuation, market history, overlay and runtime lock.
+
+
+---
+
+## 255. Entry 250 — Gate H H1 validation PASS / checkpoint formally closed
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **H1 VALIDATION PASS**
+
+Validated:
+
+- exact ten-dimension TORNTPHARM Gate H readiness matrix;
+- Gate G evidence-sufficiency lock compatibility;
+- Gate G final dry-run compatibility;
+- strict TypeScript;
+- architecture guard;
+- architecture lint;
+- production build;
+- `git diff --check`.
+
+### Closed state
+
+> **H1 = COMPLETE / PASS**
+
+The authoritative current company-input readiness remains:
+
+- score-ready dimensions: 0 / 10;
+- raw-history minimum already present for Capital Efficiency and Balance Sheet / Credit;
+- all missing evidence remains explicit and fail-closed.
+
+### Next stage
+
+> **H2 — Evidence completion and canonical input lock**
+
+H2 starts with the two raw-history-ready dimensions before any new source acquisition:
+
+1. Capital Efficiency — version and lock exact derived-statistic convention;
+2. Balance Sheet / Credit — version and lock exact derived-statistic convention.
+
+After that, complete the remaining evidence gaps using existing canonical/stored evidence first and public official sources second. Provider refreshes or writes remain separately approval-gated.
+
+### Safety state
+
+- production mutation: NO
+- provider refresh: NO
+- paid API call: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- deployment: NO
+- PR merge: NO
+
+**NEXT CHECKPOINT:** H2.
