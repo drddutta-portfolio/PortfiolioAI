@@ -21372,3 +21372,87 @@ The previously discussed API/Bulk Drugs, CDMO/CRAMS and Biopharma/Biosimilars re
 PR #101 remains OPEN / DRAFT / UNMERGED.
 
 **CURRENT STOP POINT:** begin G-FINAL-1. Do not start Gate H, Gate I or Gate J until Gate G is formally closed.
+
+
+---
+
+## 240. Entry 235 — G-FINAL-1 closure-candidate implementation complete / owner methodology review pending
+
+**Date:** 20 September 2026  
+**Actor:** ChatGPT implementation following owner authorization to proceed  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+### Objective
+
+Begin the finite Gate G closure sequence by freezing the already-mature TORNTPHARM / Domestic Formulations methodology without silently promoting proposal-only contracts to approved state.
+
+### Implemented
+
+Updated:
+
+- `src/features/research/pharmaOperatingMarginCurveProposal.ts`
+  - added a deterministic evaluator for the existing Domestic Quality / Operating Margin proposal;
+  - consumes the already-defined statistics:
+    - median latest-8 operating margin;
+    - latest-8 IQR;
+    - latest-4 minus prior-4 median trend;
+  - preserves the existing 50/30/20 weights and score bands;
+  - remains non-active and non-persisting.
+
+- `src/features/research/pharmaSegmentGrowthCurveProposal.ts`
+  - added a deterministic evaluator for the existing Segment Growth proposal;
+  - consumes the already-defined statistics:
+    - median latest-4 comparable growth;
+    - positive-quarter count out of 4;
+    - latest minus prior-3 median trend;
+  - preserves the existing 60/25/15 weights and score bands;
+  - remains non-active and non-persisting.
+
+Added deterministic reference-case coverage to:
+
+- `pharmaOperatingMarginCurveProposal.test.ts`
+- `pharmaSegmentGrowthCurveProposal.test.ts`
+
+Added:
+
+- `src/features/research/pharmaGateGFinal1ClosureCandidate.ts`
+- `src/features/research/pharmaGateGFinal1ClosureCandidate.test.ts`
+
+The closure candidate packages the mature Gate G methodology state for owner review:
+
+- Quality / Operating Margin — deterministic evaluator available; still proposal-only;
+- Growth / Segment Growth — deterministic evaluator available; still proposal-only;
+- Valuation — deterministic evaluator available and already owner-approved/not active;
+- Readiness — existing 60% dimension / 70% overall / every-weighted-dimension-ready rule;
+- Governance high-risk — existing interpretation-only high-risk behavior, Critical still blocks, no hidden double-counting.
+
+### Explicit owner approval still required before freeze
+
+The closure candidate deliberately keeps `gateHEligible = false`.
+
+Owner methodology approval is still required for:
+
+1. Quality / Operating Margin curve;
+2. Growth / Segment Growth curve;
+3. readiness 60% / 70% / every-weighted-dimension rule;
+4. governance High Risk = interpretation-only behavior with no numeric cap/penalty.
+
+Valuation does not need re-approval because its combined Domestic contract is already recorded as owner-approved/not active.
+
+### Safety state
+
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- position sizing: OFF
+- production mutation: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+### Workflow state
+
+G-FINAL-1 implementation candidate is ready for local validation.
+
+**CURRENT STOP POINT:** pull branch and run focused tests + typecheck + architecture/build/diff checks. If validation passes, present the four proposal-only methodology items to the owner for explicit freeze approval. Do not change them to approved state before that decision.
