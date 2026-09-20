@@ -24426,3 +24426,27 @@ Added:
 This helper performs zero provider calls and zero writes. It prints the latest immutable raw discovery payload in pretty JSON for exact contract review.
 
 **CURRENT STOP POINT:** inspect the pretty-printed local capture; lock exact Trendlyne peer identities and PE_TTM / EV_EBITDA provider labels before any local canonical promotion.
+
+
+---
+
+## 286. Entry 281 — H2 Trendlyne peer identities resolved from local discovery
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The pretty-printed local discovery capture establishes exact Trendlyne identities for the owner-approved peer set:
+
+- MANKIND — entity id `543904`, ISIN `INE634S01028`
+- ERIS — entity id `540596`, ISIN `INE406M01024`
+- EMCURE — entity id `544210`, ISIN `INE168P01015`
+
+The provider response also contains valuation/fundamental output for the requested four-stock set, but the terminal screenshot did not visibly expose the exact PE_TTM and EV/EBITDA label/value lines.
+
+Added:
+
+- `scripts/h2-local-pharma-valuation-metric-lines.sh`
+
+This helper performs zero provider calls and zero writes. It extracts only the relevant P/E / EV-EBITDA lines and the four requested stock value lines from the already captured local payload.
+
+**CURRENT STOP POINT:** run the zero-call metric-line extractor; then lock the exact provider labels/values before any local canonical promotion.
