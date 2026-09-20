@@ -39,7 +39,6 @@ export interface PharmaSegmentGrowthCurveProposal {
   }
   readonly finalScore: "WEIGHTED_COMPONENT_AVERAGE_0_TO_100"
   readonly methodologyApproved: true
-  readonly methodologyApproved: true
   readonly activationApproved: false
   readonly scoreExecutionEnabled: false
 }
@@ -107,6 +106,7 @@ export interface PharmaSegmentGrowthCurveScoreResult {
   readonly consistencyScore: number
   readonly trendScore: number
   readonly combinedScore: number
+  readonly methodologyApproved: true
   readonly activationApproved: false
   readonly scoreExecutionEnabled: false
 }
