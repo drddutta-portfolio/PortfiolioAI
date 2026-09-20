@@ -1,13 +1,29 @@
 import { TORNTPHARM_OFFICIAL_MANIFEST_FIXTURE } from "./torntpharmOfficialManifestFixture"
 
 export const TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE_VERSION =
-  "TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE_V1" as const
+  "TORNTPHARM_GATE_H2_DERIVED_STATISTICS_V1_OWNER_APPROVED" as const
 
 function numeric(metricCode: string): readonly number[] {
   return TORNTPHARM_OFFICIAL_MANIFEST_FIXTURE
     .filter((row) => row.metricCode === metricCode)
     .sort((a, b) => a.periodEnd.localeCompare(b.periodEnd))
     .map((row) => Number(row.value))
+}
+
+function percentileType7(values: readonly number[], p: number): number {
+  if (!values.length || values.some((value) => !Number.isFinite(value))) {
+    throw new Error("Percentile requires finite values")
+  }
+  if (!Number.isFinite(p) || p < 0 || p > 1) {
+    throw new Error("Percentile p must be between 0 and 1")
+  }
+  const sorted = [...values].sort((a, b) => a - b)
+  if (sorted.length === 1) return sorted[0]!
+  const h = (sorted.length - 1) * p
+  const lower = Math.floor(h)
+  const upper = Math.ceil(h)
+  const fraction = h - lower
+  return sorted[lower]! + fraction * (sorted[upper]! - sorted[lower]!)
 }
 
 function median(values: readonly number[]): number {
@@ -35,21 +51,21 @@ const priorLeverage = leverage.slice(0, -1)
 
 export const TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE = {
   version: TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE_VERSION,
-  state: "READ_ONLY_DERIVATION_CANDIDATE" as const,
+  state: "OWNER_APPROVED_DERIVATION_LOCK" as const,
   securitySymbol: "TORNTPHARM" as const,
   capitalEfficiency: {
     rawRocePercent: roce,
     medianRocePercent: median(roce),
     latestMinusPriorMedianPercentagePoints:
       latestRoce - median(priorRoce),
-    interquartileRangeLatestHistoryPercentagePoints: null,
-    iqrState: "CANONICAL_CONVENTION_REQUIRED" as const,
-    scoreReady: false,
+    interquartileRangeLatestHistoryPercentagePoints:
+      percentileType7(roce, 0.75) - percentileType7(roce, 0.25),
+    iqrState: "TYPE_7_LINEAR_INTERPOLATION_OWNER_APPROVED" as const,
+    scoreReady: true,
     reasonCodes: [
-      "MEDIAN_AND_TREND_ARE_DETERMINISTIC_FROM_LOCKED_THREE_YEAR_HISTORY",
-      "IQR_WITH_THREE_OBSERVATIONS_DEPENDS_ON_PERCENTILE_CONVENTION",
-      "NO_CANONICAL_IQR_CONVENTION_FOUND_IN_REPOSITORY",
-      "DO_NOT_CHOOSE_PERCENTILE_CONVENTION_SILENTLY",
+      "MEDIAN_AND_TREND_DETERMINISTIC_FROM_LOCKED_THREE_YEAR_HISTORY",
+      "TYPE_7_LINEAR_INTERPOLATION_OWNER_APPROVED",
+      "Q1_P25_AND_Q3_P75_VERSIONED",
     ] as const,
   },
   balanceSheetCredit: {
