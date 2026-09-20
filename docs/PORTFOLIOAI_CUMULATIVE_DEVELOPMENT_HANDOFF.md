@@ -22542,3 +22542,119 @@ After that, complete the remaining evidence gaps using existing canonical/stored
 - PR merge: NO
 
 **NEXT CHECKPOINT:** H2.
+
+
+---
+
+## 256. Entry 251 — H2 Type-7 ROCE lock + first deterministic inputs + normalization integrity finding
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner explicitly approved:
+
+> **APPROVE H2 ROCE IQR TYPE-7 CONVENTION**
+
+### Capital Efficiency
+
+Type-7 linear percentile interpolation is now owner-approved for the locked TORNTPHARM ROCE IQR derivation.
+
+Locked ROCE inputs:
+
+- FY2024 = 28%
+- FY2025 = 31%
+- FY2026 = 26%
+
+Derived:
+
+- median ROCE = 28%
+- Type-7 IQR = 2.5 pp
+- latest minus prior-two median = -3.5 pp
+
+Read-only component scores:
+
+- level = 85
+- stability = 100
+- trend = 40
+
+Read-only Capital Efficiency candidate:
+
+> **79**
+
+### Balance Sheet / Credit
+
+Locked derived statistics:
+
+- median Net Debt / EBITDA = 0.9x
+- median Interest Coverage = 9.26x
+- latest minus prior-two median leverage = +1.55x
+
+Read-only component scores:
+
+- leverage = 80
+- interest coverage = 70
+- trend/resilience = 20
+
+Read-only Balance Sheet / Credit candidate:
+
+> **65**
+
+### Domestic Growth official evidence
+
+Public official issuer releases now support a four-quarter comparable FY26 India-growth series:
+
+- Q1 FY26 = 11%
+- Q2 FY26 = 12%
+- Q3 FY26 = 14%
+- Q4 FY26 base business = 15%
+
+The Q4 reported figure is not used for the comparable Primary series because JB acquisition effects distort scope; issuer-disclosed base-business growth is used.
+
+Derived Growth statistics:
+
+- median latest 4 = 13%
+- positive quarters = 4 / 4
+- latest minus prior-3 median = +3 pp
+
+Read-only Domestic Growth candidate:
+
+> **78.25**
+
+### Quality evidence
+
+Eight semantically reviewed Operating EBITDA / revenue quarters have been assembled from issuer releases covering FY25 and FY26.
+
+Q1 FY26 uses the issuer's explicit adjustment for acquisition-related one-off cost.
+Q4 FY26 uses the issuer's base-business figures excluding JB/PPA acquisition effects.
+
+Quality raw history is now present, but its derived-statistic package remains to be versioned before a score is emitted.
+
+### H2 integrity finding
+
+A real deterministic-methodology omission was discovered:
+
+- Business Durability aggregation weights exist, but component-to-0–100 normalization does not;
+- Ownership/Governance aggregation weights exist, but component-to-0–100 normalization does not;
+- Risk has drawdown/volatility bands, but no deterministic categorical regulatory-runtime → 0–100 Regulatory Context mapping.
+
+Recorded in:
+
+- `docs/PortfolioAI_GATE_H_H2_COMPONENT_NORMALIZATION_INTEGRITY_AUDIT.md`
+
+This will be fixed as one bounded correction inside H2, not as new H2A/H2B/H2C stages.
+
+No subjective or neutral component scores are permitted.
+
+### Safety state
+
+- production mutation: NO
+- provider refresh: NO
+- paid API call: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- deployment: NO
+- PR merge: NO
+
+**CURRENT STOP POINT:** validate the approved Type-7 derivation and H2 official-evidence package, then resolve the bounded component-normalization correction before Business Durability / Ownership-Governance / Risk can become deterministic.
