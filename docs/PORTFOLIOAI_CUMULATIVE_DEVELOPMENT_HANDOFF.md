@@ -20406,3 +20406,149 @@ No UI implementation, database mutation, evidence mutation, assignment mutation,
 PR #101 remains OPEN / DRAFT / UNMERGED.
 
 **CURRENT STOP POINT:** revised G9.3 V2 plan is now canonical. Next step is implementation checkpoint G9.3-A/B: build the reusable Pharma capability inventory/module contracts first, without changing the shared Research shell or visually redesigning either stock page.
+
+
+---
+
+## 230. Entry 225 — G9.3 V2 TORNTPHARM-first capability completion checkpoint implemented
+
+**Date:** 20 September 2026  
+**Actor:** owner instruction + ChatGPT implementation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner approved implementation of revised G9.3 V2 and explicitly requested that TORNTPHARM be completed first.
+
+This checkpoint intentionally leaves AUROPHARMA's visible page unchanged.
+
+### Objective
+
+Add the reusable capability semantics previously represented by AUROPHARMA G8.1/G8.2/G8.3/G9.1/G9.2 into the existing TORNTPHARM **Pharmaceuticals deep research** workspace without removing or redesigning the Gate G → G6.45 → G7 methodology presentation.
+
+### New reusable capability model
+
+Added:
+
+- `src/features/research/pharmaSectorWorkspaceCapabilities.ts`
+
+This builder consumes:
+
+- one active reviewed PHARMA_V1 assignment;
+- company-scoped research metrics;
+- evaluation date;
+- optional unresolved-exposure declarations.
+
+It produces reusable profile-level capability state for:
+
+1. classification & evidence lock;
+2. three-layer Pharma research architecture;
+3. portability / isolation;
+4. activation-readiness & authority;
+5. canonical assignment state.
+
+The builder is not AUROPHARMA-labelled and contains no stock-specific presentation branch.
+
+### Locked interpretation boundaries
+
+The capability model preserves:
+
+- raw evidence scope = `SECURITY_COMPANY`;
+- interpretation scope = `COMPANY_ACTIVE_ASSIGNMENT_ROLE`;
+- no BANK_NBFC fallback;
+- no hidden denominator reweighting;
+- no hidden G4/G7 governance double counting;
+- no scoring/recommendation/sizing activation.
+
+### New reusable sector capability panel
+
+Added:
+
+- `src/features/research/PharmaSectorCapabilityPanel.tsx`
+
+The panel uses the established Pharma deep-research visual language and exposes, inside one collapsible layer:
+
+- Classification & evidence lock
+- Three-layer Pharma architecture
+- Portability / isolation checkpoint
+- Activation-readiness & authority
+- Canonical assignment state
+
+No new page shell or stock-specific mini-application is introduced.
+
+### TORNTPHARM integration
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+
+For the current checkpoint only, the new reusable capability panel is mounted for TORNTPHARM inside the existing Pharma Deep Research section, immediately after the existing model summary and before Gate G.
+
+Expected TORNTPHARM capability state:
+
+- Primary = `DOMESTIC_FORMULATIONS`
+- Material Overlay = `GLOBAL_GENERICS`
+- Emerging = `CDMO_CRAMS`
+- unresolved = none supplied to this capability view
+- parent PHARMA_V1 authority = READY
+- Primary authority = READY_PRIMARY
+- Material authority = READY_MATERIAL
+- Emerging authority = READY_EMERGING
+- numeric scoring = BLOCKED_METHODOLOGY
+- recommendation = BLOCKED_UPSTREAM_SCORING
+- sizing = BLOCKED_UPSTREAM_RECOMMENDATION
+- canonical assignment resolver = RESOLVED
+
+All existing Gate G / G1–G4 / G5.1–G5.7 / G6.1–G6.45 / G7-P1 / G7-P2 / G7.1 / G7.2 / G7.3 content remains in place below the new reusable capability layer.
+
+### Regression coverage
+
+Added:
+
+- `src/features/research/pharmaSectorWorkspaceCapabilities.test.ts`
+
+Coverage asserts:
+
+- TORNTPHARM Domestic Formulations remains Primary;
+- Global Generics remains Material Overlay;
+- CDMO/CRAMS remains Emerging Watch;
+- architecture resolves the corresponding role modes;
+- portability invariant set remains 12/12;
+- raw evidence remains company scoped;
+- interpretation remains company + assignment + role scoped;
+- all downstream activation flags remain false;
+- unresolved exposure authority stays explicit when supplied;
+- non-reviewed/inactive assignments are rejected.
+
+### UI boundary
+
+This is **not a redesign**.
+
+Preserved:
+
+- universal R4M Research shell;
+- existing TORNTPHARM page order;
+- existing Pharmaceuticals deep research visual language;
+- existing Gate G → G7 methodology surfaces;
+- existing evidence/source/ingestion controls.
+
+AUROPHARMA's visible page has not been modified in this checkpoint.
+
+### Safety state
+
+- database mutation: NO
+- assignment write/change: NO
+- evidence mutation: NO
+- score execution/persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+G9.3 V2 remains **OPEN**.
+
+**CURRENT STOP POINT:** owner should pull the latest branch, run the existing Local Supabase + Local Vite environment, open TORNTPHARM → Research → Overview → Pharmaceuticals deep research, and visually inspect the newly added reusable **PHARMA_V1 architecture, portability & activation state** layer. Do not proceed to AUROPHARMA or full local validation until this TORNTPHARM visual checkpoint is approved.
