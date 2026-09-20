@@ -96,6 +96,30 @@ describe("Gate I1 Pharma recommendation authority", () => {
     expect(result.nonPersisting).toBe(true)
   })
 
+  it("enforces closed-score safety invariants at runtime instead of relying on literal inference", () => {
+    expect(() => buildGateHClosedScoreAuthority(
+      "security-torntpharm",
+      {
+        ...TORNTPHARM_GATE_H3_READ_ONLY_RESULT,
+        emergingWatch: {
+          ...TORNTPHARM_GATE_H3_READ_ONLY_RESULT.emergingWatch,
+          numericParticipation: true,
+        },
+      },
+    )).toThrow("Emerging Watch numeric participation")
+
+    expect(() => buildGateHClosedScoreAuthority(
+      "security-torntpharm",
+      {
+        ...TORNTPHARM_GATE_H3_READ_ONLY_RESULT,
+        globalGenericsOverlay: {
+          ...TORNTPHARM_GATE_H3_READ_ONLY_RESULT.globalGenericsOverlay,
+          numericModifierApplied: true,
+        },
+      },
+    )).toThrow("material overlay numeric modifier")
+  })
+
   it("keeps score-not-computable structurally distinct from assignment failure", () => {
     const securityId = "security-auropharma"
     const scoreAuthority = buildPharmaScoreNotComputableAuthority({
