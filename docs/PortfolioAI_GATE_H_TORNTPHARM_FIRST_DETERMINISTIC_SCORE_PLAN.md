@@ -11,7 +11,36 @@
 **Material Overlay:** GLOBAL_GENERICS  
 **Emerging Watch:** CDMO_CRAMS  
 
-**Status:** PLANNED — NOT STARTED
+**Status:** COMPLETE / CLOSED
+
+---
+
+## Gate H final outcome
+
+Gate H completed successfully on 21 September 2026.
+
+Final state:
+
+```text
+H1 = COMPLETE / PASS
+H2 = COMPLETE / PASS
+H3 = COMPLETE / PASS
+H4 = COMPLETE / PASS
+
+GATE H = COMPLETE
+TORNTPHARM FIRST DETERMINISTIC SCORE = COMPLETE
+FIRST DETERMINISTIC SCORE = 75.1575 / 100
+SCORE PERSISTENCE = OFF
+RECOMMENDATION = OFF
+POSITION SIZING = OFF
+GATE I = NOT STARTED
+```
+
+The score was independently reconstructed from locked evidence and approved methodology, hand-verified against the H3 adapter result, rerun deterministically, and validated through the complete H4 non-Edge engineering suite.
+
+Canonical closure record:
+
+`docs/PortfolioAI_GATE_H_CLOSURE.md`
 
 ---
 
