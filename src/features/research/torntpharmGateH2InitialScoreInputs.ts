@@ -1,5 +1,6 @@
 import {
   evaluateDomesticBalanceSheetCredit,
+  evaluateDomesticCapitalEfficiency,
   PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_VERSION,
 } from "./pharmaDomesticGateGFinal2NumericMethodology"
 import {
@@ -9,8 +10,23 @@ import {
 export const TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS_VERSION =
   "TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS_V1" as const
 
+const capital =
+  TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE.capitalEfficiency
 const balance =
   TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE.balanceSheetCredit
+
+if (capital.interquartileRangeLatestHistoryPercentagePoints === null) {
+  throw new Error("Capital Efficiency IQR must be locked before evaluation")
+}
+
+export const TORNTPHARM_GATE_H2_CAPITAL_EFFICIENCY_READ_ONLY_RESULT =
+  evaluateDomesticCapitalEfficiency({
+    medianRocePercent: capital.medianRocePercent,
+    roceIqrPercentagePoints:
+      capital.interquartileRangeLatestHistoryPercentagePoints,
+    latestMinusPriorMedianPercentagePoints:
+      capital.latestMinusPriorMedianPercentagePoints,
+  })
 
 export const TORNTPHARM_GATE_H2_BALANCE_SHEET_READ_ONLY_RESULT =
   evaluateDomesticBalanceSheetCredit({
@@ -26,8 +42,16 @@ export const TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS = {
   methodologyVersion:
     PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_VERSION,
   capitalEfficiency: {
-    state: "BLOCKED_IQR_CONVENTION_DECISION" as const,
-    score: null,
+    state: "READ_ONLY_SCORE_CANDIDATE" as const,
+    score: TORNTPHARM_GATE_H2_CAPITAL_EFFICIENCY_READ_ONLY_RESULT.combinedScore,
+    componentScores: {
+      level:
+        TORNTPHARM_GATE_H2_CAPITAL_EFFICIENCY_READ_ONLY_RESULT.levelScore,
+      stability:
+        TORNTPHARM_GATE_H2_CAPITAL_EFFICIENCY_READ_ONLY_RESULT.stabilityScore,
+      trend:
+        TORNTPHARM_GATE_H2_CAPITAL_EFFICIENCY_READ_ONLY_RESULT.trendScore,
+    },
   },
   balanceSheetCredit: {
     state: "READ_ONLY_SCORE_CANDIDATE" as const,
