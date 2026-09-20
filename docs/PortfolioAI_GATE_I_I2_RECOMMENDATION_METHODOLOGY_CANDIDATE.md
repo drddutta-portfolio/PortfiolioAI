@@ -164,6 +164,28 @@ The I2 tests cover:
 - no downstream persistence/sizing/action enablement;
 - no TORNTPHARM / AUROPHARMA / BANK_NBFC / HDFCBANK identity embedded in the policy contract.
 
+## First local validation attempt
+
+The first owner-run I2 validation successfully completed:
+
+- focused methodology and regression tests: **5 / 5 test files passed**;
+- focused tests: **35 / 35 passed**;
+- strict TypeScript: PASS;
+- presentation data-boundary architecture guard: PASS.
+
+The run then stopped at focused ESLint on two `@typescript-eslint/no-unnecessary-type-assertion` findings inside `evaluateFloors`.
+
+Both findings were redundant `minimum as number` casts. `Object.entries(floors)` already inferred `minimum` as numeric in this context.
+
+Correction:
+
+- removed the two unnecessary assertions;
+- no threshold, floor, blocker, caution, governance, overlay or fail-closed behavior changed;
+- no test expectation changed;
+- no recommendation was calculated.
+
+I2 remains **CANDIDATE / OWNER REVIEW PENDING** until the complete validation command passes and the owner approves the methodology.
+
 ## Owner approval required
 
 I2 is **not locked** until the owner explicitly approves the candidate methodology.
