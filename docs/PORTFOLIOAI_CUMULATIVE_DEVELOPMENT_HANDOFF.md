@@ -22713,3 +22713,53 @@ No H2A/H2B/H2C stages are introduced.
 - PR merge: NO
 
 **NEXT WORK:** define owner-reviewable deterministic normalization contracts for the three missing component families, validate them, then continue H2 evidence completion.
+
+
+---
+
+## 258. Entry 253 — H2 bounded component-normalization candidate implemented
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The bounded H2 normalization correction has been implemented as one owner-review candidate.
+
+Added:
+
+- `pharmaGateH2ComponentNormalizationCandidate.ts`
+- matching tests
+- `docs/PortfolioAI_GATE_H_H2_COMPONENT_NORMALIZATION_REVIEW.md`
+
+### Candidate qualitative rubric
+
+- VERY_STRONG = 90
+- STRONG = 75
+- NEUTRAL = 50
+- WEAK = 25
+- VERY_WEAK = 10
+- REVIEW_REQUIRED = null
+
+Applies to reviewed qualitative components in:
+
+- Business Durability
+- Ownership / Governance
+
+Every assessment requires evidence, rationale, lineage and contradiction state. Missing or materially contradictory evidence remains `REVIEW_REQUIRED`.
+
+### Candidate Risk regulatory mapping
+
+- CLEAR = 100
+- HIGH_RISK = 100
+- REVIEW_REQUIRED = null
+- BLOCKED_REVIEW = null
+
+This preserves the owner-approved governance rule that High Risk is interpretation-only and may not receive a second hidden numeric penalty.
+
+### Current state
+
+- implementation: COMPLETE
+- methodology approval: PENDING
+- activation: OFF
+- score execution/persistence: OFF
+
+**CURRENT STOP POINT:** validate the candidate and obtain one explicit owner methodology approval before applying the rubric to TORNTPHARM reviewed evidence.
