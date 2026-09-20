@@ -23983,3 +23983,81 @@ The runner requires:
 No credentials are committed.
 
 **CURRENT STOP POINT:** owner should pull and execute the local-only runner. Use the resulting local evidence to finish Momentum and market-data Risk inputs before any production action.
+
+
+---
+
+## 277. Entry 272 — H2 local market evidence acquired; Momentum and Risk resolved
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Owner completed the local-only market evidence acquisition successfully.
+
+### Local evidence
+
+TORNTPHARM:
+
+- PRICE_MOMENTUM_12M = 35.6730391882%
+- PRICE_MOMENTUM_6M = 13.3436373036%
+- MAX_DRAWDOWN_1Y = 10.3193882141% absolute magnitude
+- VOLATILITY_1Y = 22.0003295840%
+
+NIFTY Pharma:
+
+- benchmark 12M return = 18.3205719941%
+- benchmark annualized 1Y volatility = 13.720605%
+
+Derived:
+
+- RELATIVE_STRENGTH_12M = 17.3524673888pp
+- relative-volatility ratio = 1.603452
+- common daily returns = 247
+
+### Deterministic scores
+
+Momentum components:
+
+- 12M absolute = 100
+- 6M absolute = 80
+- 12M relative strength = 100
+
+> **Momentum = 95**
+
+Risk components:
+
+- Regulatory Context = 100
+- Max Drawdown = 100
+- Relative Volatility = 20
+
+> **Risk = 80**
+
+The absolute drawdown observation is stored as a positive magnitude, but the approved Risk evaluator consumes the equivalent signed negative input.
+
+### Safety
+
+All market evidence writes occurred only in local Supabase.
+
+No production evidence was written.
+
+No final company score was run or persisted.
+
+### H2 state
+
+Eight deterministic dimensions are now resolved:
+
+- Quality 92
+- Growth 78.25
+- Capital Efficiency 79
+- Cash Flow 93.6
+- Balance Sheet / Credit 65
+- Ownership / Governance 70
+- Momentum 95
+- Risk 80
+
+Still unresolved:
+
+- Business Durability final combined score: Brand / Therapy Leadership licensed cross-check
+- Valuation: current self-history/current market authority + reviewed Domestic Formulations peer cohort
+
+**CURRENT STOP POINT:** validate the local market evidence lock, then continue only the remaining Business Durability and Valuation blockers. H3 remains closed.
