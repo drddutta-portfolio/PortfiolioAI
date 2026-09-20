@@ -13,6 +13,22 @@ import {
 export const PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE_VERSION =
   "PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_OWNER_APPROVED_V1" as const
 
+export const PHARMA_GATE_G_FINAL_3_TORNTPHARM_RUNTIME_SNAPSHOT = {
+  state: "OWNER_APPROVED_FAIL_CLOSED_RUNTIME" as const,
+  companyWideCurrentRegulatoryScopeEstablished: false,
+  gateState: "REVIEW_REQUIRED" as const,
+  blocksPreview: false,
+  reasonCodes: [
+    "REGULATORY_MATERIALITY_UNKNOWN",
+    "DO_NOT_INFER_EXPOSURE",
+  ] as const,
+  reviewedChain: {
+    eventHistoryRetained: true,
+  },
+  scoreExecutionEnabled: false,
+  persistedScoreRunEnabled: false,
+} as const
+
 export const PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE = {
   version: PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE_VERSION,
   state: "OWNER_APPROVED_COMPLETE" as const,
