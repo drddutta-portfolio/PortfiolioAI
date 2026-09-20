@@ -74,19 +74,27 @@ else
   trap 'kill "$SERVE_PID" >/dev/null 2>&1 || true; rm -f "$TMP_ENV"' EXIT
 
   SERVER_READY=0
-  for _ in {1..30}; do
+  for _ in {1..45}; do
     if ! kill -0 "$SERVE_PID" >/dev/null 2>&1; then
       break
     fi
+
+    # Kong/API gateway is already listening on 54321 even when the function worker
+    # has not booted; in that state it can return 502. Do not treat that as ready.
+    # The H2 function itself returns 405 to an unauthenticated GET before auth logic.
     STATUS_CHECK="$(curl -sS -o /dev/null -w '%{http_code}' "$API_URL/functions/v1/h2-local-pharma-valuation-evidence" || true)"
-    if [[ "$STATUS_CHECK" != "000" ]]; then
+    if [[ "$STATUS_CHECK" == "405" ]]; then
       SERVER_READY=1
       break
     fi
     sleep 1
   done
 
-  [[ "$SERVER_READY" == "1" ]] || die "Local function server failed to start. Review $LOG_FILE."
+  if [[ "$SERVER_READY" != "1" ]]; then
+    echo "Local H2 function did not reach the expected HTTP 405 readiness state." >&2
+    echo "Last readiness HTTP status: ${STATUS_CHECK:-NONE}" >&2
+    die "Local function server failed to become ready. Review $LOG_FILE."
+  fi
 fi
 
 if [[ "$MODE" == "PLAN" ]]; then
