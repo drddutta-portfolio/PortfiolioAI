@@ -18,7 +18,7 @@ case "$DB_URL" in
 esac
 
 echo "H2 local Pharma valuation peer setup"
-echo "LOCAL-ONLY: securities + reviewed Trendlyne identities + EV_EBITDA definition"
+echo "LOCAL-ONLY: securities + derived reviewed Trendlyne identity evidence + EV_EBITDA definition"
 echo
 
 psql "$DB_URL" -v ON_ERROR_STOP=1 -P pager=off <<'SQL'
@@ -27,8 +27,11 @@ begin;
 do $$
 declare
   v_tornt public.securities%rowtype;
-  v_source_id uuid;
-  v_source_retrieved_at timestamptz;
+  v_parent public.data_source_records%rowtype;
+  v_payload jsonb;
+  v_peer record;
+  v_peer_security_id uuid;
+  v_peer_source_id uuid;
 begin
   select *
     into strict v_tornt
@@ -39,124 +42,166 @@ begin
   order by created_at
   limit 1;
 
-  select id, retrieved_at
-    into strict v_source_id, v_source_retrieved_at
+  select *
+    into strict v_parent
   from public.data_source_records
   where source_code='TRENDLYNE_MCP'
     and record_kind='PHARMA_VALUATION_CONTRACT_DISCOVERY_V1'
   order by retrieved_at desc
   limit 1;
 
-  insert into public.securities (
-    symbol, exchange, isin, name, asset_class, instrument_type,
-    sector_id, industry_id, currency, is_active, creation_source, series
-  )
-  select
-    x.symbol,
-    'NSE',
-    x.isin,
-    x.name,
-    'EQUITY',
-    'EQ',
-    v_tornt.sector_id,
-    v_tornt.industry_id,
-    'INR',
-    true,
-    'H2_LOCAL_VALUATION_PEER',
-    'EQ'
-  from (
-    values
-      ('MANKIND','INE634S01028','Mankind Pharma Limited'),
-      ('ERIS','INE406M01024','Eris Lifesciences Limited'),
-      ('EMCURE','INE168P01015','Emcure Pharmaceuticals Limited')
-  ) as x(symbol, isin, name)
-  where not exists (
-    select 1
-    from public.securities s
-    where s.symbol=x.symbol
-      and s.exchange='NSE'
-  );
-
-  if exists (
-    select 1
-    from public.securities s
-    join (
+  for v_peer in
+    select *
+    from (
       values
-        ('MANKIND','INE634S01028'),
-        ('ERIS','INE406M01024'),
-        ('EMCURE','INE168P01015')
-    ) as x(symbol, isin)
-      on x.symbol=s.symbol
-    where s.exchange='NSE'
-      and s.isin is distinct from x.isin
-  ) then
-    raise exception 'Existing local peer security conflicts with locked H2 ISIN.';
-  end if;
+        ('MANKIND','INE634S01028','Mankind Pharma Limited','Mankind Pharma','543904'),
+        ('ERIS','INE406M01024','Eris Lifesciences Limited','Eris Lifesciences','540596'),
+        ('EMCURE','INE168P01015','Emcure Pharmaceuticals Limited','Emcure Pharma','544210')
+    ) as x(symbol, isin, canonical_name, observed_name, provider_instrument_id)
+  loop
+    insert into public.securities (
+      symbol, exchange, isin, name, asset_class, instrument_type,
+      sector_id, industry_id, currency, is_active, creation_source, series
+    )
+    select
+      v_peer.symbol,
+      'NSE',
+      v_peer.isin,
+      v_peer.canonical_name,
+      'EQUITY',
+      'EQ',
+      v_tornt.sector_id,
+      v_tornt.industry_id,
+      'INR',
+      true,
+      'H2_LOCAL_VALUATION_PEER',
+      'EQ'
+    where not exists (
+      select 1
+      from public.securities s
+      where s.symbol=v_peer.symbol
+        and s.exchange='NSE'
+    );
 
-  insert into public.security_identity_observations (
-    security_id,
-    listing_id,
-    source_record_id,
-    source_code,
-    observed_name,
-    observed_isin,
-    observed_exchange,
-    observed_symbol,
-    observed_series,
-    evidence_status,
-    confidence,
-    observed_at,
-    provider_instrument_id
-  )
-  select
-    s.id,
-    null,
-    v_source_id,
-    'TRENDLYNE_MCP',
-    x.observed_name,
-    x.isin,
-    'NSE',
-    x.symbol,
-    'EQ',
-    'MATCHED',
-    1.0000,
-    v_source_retrieved_at,
-    x.provider_instrument_id
-  from (
-    values
-      ('MANKIND','INE634S01028','Mankind Pharma','543904'),
-      ('ERIS','INE406M01024','Eris Lifesciences','540596'),
-      ('EMCURE','INE168P01015','Emcure Pharma','544210')
-  ) as x(symbol, isin, observed_name, provider_instrument_id)
-  join public.securities s
-    on s.symbol=x.symbol
-   and s.exchange='NSE'
-  where not exists (
-    select 1
-    from public.security_identity_observations i
-    where i.security_id=s.id
-      and i.source_code='TRENDLYNE_MCP'
-      and i.provider_instrument_id=x.provider_instrument_id
-      and i.evidence_status='MATCHED'
-  );
+    select id
+      into strict v_peer_security_id
+    from public.securities
+    where symbol=v_peer.symbol
+      and exchange='NSE';
 
-  if exists (
-    select 1
-    from public.security_identity_observations i
-    join public.securities s on s.id=i.security_id
-    join (
-      values
-        ('MANKIND','543904'),
-        ('ERIS','540596'),
-        ('EMCURE','544210')
-    ) as x(symbol, provider_instrument_id)
-      on x.symbol=s.symbol
-    where i.source_code='TRENDLYNE_MCP'
-      and i.evidence_status='MATCHED'
-      and i.provider_instrument_id is distinct from x.provider_instrument_id
-  ) then
-    raise exception 'Existing local matched Trendlyne identity conflicts with locked H2 provider instrument id.';
-  end if;
+    if exists (
+      select 1
+      from public.securities
+      where id=v_peer_security_id
+        and isin is distinct from v_peer.isin
+    ) then
+      raise exception 'Existing local peer % conflicts with locked H2 ISIN %.', v_peer.symbol, v_peer.isin;
+    end if;
+
+    v_payload := jsonb_build_object(
+      'derivation_kind','H2_LOCAL_REVIEWED_IDENTITY_PROMOTION',
+      'parent_discovery_record_id',v_parent.id,
+      'parent_record_kind',v_parent.record_kind,
+      'symbol',v_peer.symbol,
+      'isin',v_peer.isin,
+      'observed_name',v_peer.observed_name,
+      'observed_exchange','NSE',
+      'observed_symbol',v_peer.symbol,
+      'observed_series','EQ',
+      'provider_instrument_id',v_peer.provider_instrument_id,
+      'review_basis','OWNER_APPROVED_H2_LOCAL_PHARMA_VALUATION_PEER_IDENTITY'
+    );
+
+    insert into public.data_source_records (
+      source_code,
+      ingestion_run_id,
+      record_kind,
+      external_record_id,
+      source_observed_at,
+      retrieved_at,
+      payload_hash,
+      raw_payload,
+      source_url,
+      terms_snapshot,
+      published_at
+    )
+    select
+      'TRENDLYNE_MCP',
+      null,
+      'PHARMA_VALUATION_PEER_IDENTITY_DERIVED_V1',
+      'H2_LOCAL_IDENTITY:' || v_peer.symbol || ':' || v_peer.provider_instrument_id || ':' || v_parent.id::text,
+      v_parent.source_observed_at,
+      v_parent.retrieved_at,
+      encode(digest(v_payload::text, 'sha256'), 'hex'),
+      v_payload,
+      v_parent.source_url,
+      v_parent.terms_snapshot,
+      v_parent.published_at
+    where not exists (
+      select 1
+      from public.data_source_records r
+      where r.source_code='TRENDLYNE_MCP'
+        and r.record_kind='PHARMA_VALUATION_PEER_IDENTITY_DERIVED_V1'
+        and r.external_record_id='H2_LOCAL_IDENTITY:' || v_peer.symbol || ':' || v_peer.provider_instrument_id || ':' || v_parent.id::text
+    );
+
+    select id
+      into strict v_peer_source_id
+    from public.data_source_records
+    where source_code='TRENDLYNE_MCP'
+      and record_kind='PHARMA_VALUATION_PEER_IDENTITY_DERIVED_V1'
+      and external_record_id='H2_LOCAL_IDENTITY:' || v_peer.symbol || ':' || v_peer.provider_instrument_id || ':' || v_parent.id::text
+    order by created_at
+    limit 1;
+
+    if exists (
+      select 1
+      from public.security_identity_observations i
+      where i.security_id=v_peer_security_id
+        and i.source_code='TRENDLYNE_MCP'
+        and i.evidence_status='MATCHED'
+        and i.provider_instrument_id is distinct from v_peer.provider_instrument_id
+    ) then
+      raise exception 'Existing local matched Trendlyne identity for % conflicts with locked H2 provider instrument id %.',
+        v_peer.symbol, v_peer.provider_instrument_id;
+    end if;
+
+    insert into public.security_identity_observations (
+      security_id,
+      listing_id,
+      source_record_id,
+      source_code,
+      observed_name,
+      observed_isin,
+      observed_exchange,
+      observed_symbol,
+      observed_series,
+      evidence_status,
+      confidence,
+      observed_at,
+      provider_instrument_id
+    )
+    select
+      v_peer_security_id,
+      null,
+      v_peer_source_id,
+      'TRENDLYNE_MCP',
+      v_peer.observed_name,
+      v_peer.isin,
+      'NSE',
+      v_peer.symbol,
+      'EQ',
+      'MATCHED',
+      1.0000,
+      v_parent.retrieved_at,
+      v_peer.provider_instrument_id
+    where not exists (
+      select 1
+      from public.security_identity_observations i
+      where i.source_record_id=v_peer_source_id
+        and i.source_code='TRENDLYNE_MCP'
+    );
+  end loop;
 end $$;
 
 insert into public.fundamental_metric_definitions (
@@ -220,6 +265,23 @@ order by case symbol
   when 'MANKIND' then 2
   when 'ERIS' then 3
   when 'EMCURE' then 4
+end;
+
+\echo
+\echo 'Derived identity evidence records'
+select
+  r.record_kind,
+  r.external_record_id,
+  r.raw_payload->>'symbol' as symbol,
+  r.raw_payload->>'provider_instrument_id' as provider_instrument_id,
+  r.raw_payload->>'parent_discovery_record_id' as parent_discovery_record_id
+from public.data_source_records r
+where r.source_code='TRENDLYNE_MCP'
+  and r.record_kind='PHARMA_VALUATION_PEER_IDENTITY_DERIVED_V1'
+order by case r.raw_payload->>'symbol'
+  when 'MANKIND' then 1
+  when 'ERIS' then 2
+  when 'EMCURE' then 3
 end;
 
 \echo
