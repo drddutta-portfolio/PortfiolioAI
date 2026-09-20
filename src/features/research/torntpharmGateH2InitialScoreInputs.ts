@@ -13,6 +13,10 @@ import {
 import {
   TORNTPHARM_GATE_H2_OWNERSHIP_GOVERNANCE_REVIEW,
 } from "./torntpharmGateH2OwnershipGovernanceReview"
+import {
+  TORNTPHARM_GATE_H2_MOMENTUM_READ_ONLY_RESULT,
+  TORNTPHARM_GATE_H2_RISK_READ_ONLY_RESULT,
+} from "./torntpharmGateH2LocalMarketEvidence"
 
 export const TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS_VERSION =
   "TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS_V1" as const
@@ -98,6 +102,27 @@ export const TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS = {
       ownershipStability: 75,
       pledgeControlRisk: 75,
       nonG4GovernanceContext: 50,
+    },
+  },
+  momentum: {
+    state: "READ_ONLY_SCORE_CANDIDATE" as const,
+    score: TORNTPHARM_GATE_H2_MOMENTUM_READ_ONLY_RESULT.combinedScore,
+    componentScores: {
+      absolute12m: TORNTPHARM_GATE_H2_MOMENTUM_READ_ONLY_RESULT.absolute12mScore,
+      absolute6m: TORNTPHARM_GATE_H2_MOMENTUM_READ_ONLY_RESULT.absolute6mScore,
+      relativeStrength12m:
+        TORNTPHARM_GATE_H2_MOMENTUM_READ_ONLY_RESULT.relativeStrength12mScore,
+    },
+  },
+  risk: {
+    state: "READ_ONLY_SCORE_CANDIDATE" as const,
+    score: TORNTPHARM_GATE_H2_RISK_READ_ONLY_RESULT.combinedScore,
+    componentScores: {
+      regulatoryContext:
+        TORNTPHARM_GATE_H2_RISK_READ_ONLY_RESULT.regulatoryContextScore,
+      maxDrawdown1Y: TORNTPHARM_GATE_H2_RISK_READ_ONLY_RESULT.maxDrawdownScore,
+      relativeVolatility:
+        TORNTPHARM_GATE_H2_RISK_READ_ONLY_RESULT.relativeVolatilityScore,
     },
   },
   scoreExecutionEnabled: false,
