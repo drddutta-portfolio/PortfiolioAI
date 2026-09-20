@@ -5,7 +5,8 @@
 **Owner:** Dr. Dibyendu Dutta  
 **Repository:** `drddutta-portfolio/PortfiolioAI`  
 **Created:** 16 September 2026  
-**Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
+**Current working line:** `r4n-pharma-subprofile-architecture` / PR #101  
+**Current stage:** Gate H / H3 implemented and locally validated; owner review pending; H4 not started
 
 ---
 
@@ -24511,3 +24512,290 @@ The production build emitted only the existing non-blocking Vite chunk-size advi
 Hosted validation remains non-authoritative because GitHub Actions is failing before runner allocation and Vercel is reporting a build-rate-limit condition, but the complete requested H3 validation suite has now passed locally.
 
 **CURRENT STOP POINT:** present the single H3 owner-review package and await owner approval. Do not begin H4 automatically.
+
+
+---
+
+## 287. Entry 282 — H2 formal closure and H3 consolidated implementation checkpoint
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Validated H3 head before this HANDOFF update:** `dff4ded51d176e2ac5fdcce23e9bbcfba3cb0171`
+
+### H2 final state
+
+Gate H / H2 is formally closed as:
+
+> **H2 = COMPLETE / PASS**
+
+Canonical closure artifact:
+
+- `docs/PortfolioAI_GATE_H_H2_CLOSURE.md`
+
+All ten TORNTPHARM H2 dimension inputs are locked and validation-passed:
+
+| Dimension | H2 locked score |
+|---|---:|
+| Quality | 92 |
+| Growth | 78.25 |
+| Capital Efficiency | 79 |
+| Cash Flow | 93.6 |
+| Balance Sheet / Credit | 65 |
+| Business Durability | 75 |
+| Valuation | 30 |
+| Ownership / Governance | 70 |
+| Momentum | 95 |
+| Risk | 80 |
+
+#### Business Durability lock
+
+Final component state:
+
+- Brand / Therapy Leadership = STRONG / 75
+- Field Force Productivity = STRONG / 75
+- R&D Productivity = STRONG / 75
+- Pipeline / Corporate Execution = STRONG / 75
+
+Frozen G-FINAL-2 weights:
+
+- 35% / 25% / 20% / 20%
+
+Therefore:
+
+`75 × 0.35 + 75 × 0.25 + 75 × 0.20 + 75 × 0.20 = 75`
+
+> **Business Durability = 75**
+
+Owner approval:
+
+`APPROVE H2 BRAND / THERAPY LEADERSHIP — STRONG / 75 — USING INDEPENDENT AIOCD-DERIVED CROSS-CHECK`
+
+The evidence lock uses:
+
+- independent India Ratings reporting that explicitly attributes Torrent/JB India-market evidence to AIOCD data;
+- Torrent FY2025-26 reporting that explicitly cites the AIOCD Pharmatrac March 2026 dataset for the current combined India/therapy table.
+
+No direct licensed AIOCD provider call was made.
+
+Canonical lock:
+
+- `docs/PortfolioAI_GATE_H_H2_BUSINESS_DURABILITY_REVIEW.md`
+
+#### Valuation lock
+
+Owner-approved M&A transition contract:
+
+`PHARMA_DOMESTIC_VALUATION_MA_TRANSITION_V1_OWNER_APPROVED`
+
+Locked inputs:
+
+- Self-history score = 40
+- Peer-relative score = 20
+
+Transition weights:
+
+- Self-history = 50%
+- Peer-relative = 50%
+- FCF corroboration = 0% until comparable post-merger annual FCF exists
+
+Therefore:
+
+`40 × 0.50 + 20 × 0.50 = 30`
+
+> **Valuation = 30**
+
+The base G6.17 40/40/20 contract remains unchanged and resumes when comparable post-merger annual FCF becomes available.
+
+Canonical lock:
+
+- `docs/PortfolioAI_GATE_H_H2_MA_TRANSITION_VALUATION_V1.md`
+
+### H3 consolidated implementation
+
+H3 was intentionally kept as one consolidated stage.
+
+Implemented:
+
+- `TORNTPHARM_GATE_H3_SCORE_INPUT_PACKAGE_V1`
+- `TORNTPHARM_GATE_H3_READ_ONLY_SCORE_V1`
+
+Main implementation:
+
+- `src/features/research/torntpharmGateH3ReadOnlyScore.ts`
+- `src/features/research/torntpharmGateH3ReadOnlyScore.test.ts`
+
+H3 reuses the existing G7 read-only scoring adapter rather than creating a parallel scoring engine.
+
+Fixed PHARMA_V1 dimension weights remain:
+
+| Dimension | Weight |
+|---|---:|
+| Quality | 13% |
+| Growth | 15% |
+| Capital Efficiency | 10% |
+| Cash Flow | 10% |
+| Balance Sheet / Credit | 10% |
+| Business Durability | 10% |
+| Valuation | 12% |
+| Momentum | 8% |
+| Ownership / Governance | 6% |
+| Risk | 6% |
+
+No denominator renormalization is permitted.
+
+### First deterministic read-only TORNTPHARM score
+
+Weighted contributions:
+
+| Dimension | Score | Weight | Contribution |
+|---|---:|---:|---:|
+| Quality | 92 | 13% | 11.9600 |
+| Growth | 78.25 | 15% | 11.7375 |
+| Capital Efficiency | 79 | 10% | 7.9000 |
+| Cash Flow | 93.6 | 10% | 9.3600 |
+| Balance Sheet / Credit | 65 | 10% | 6.5000 |
+| Business Durability | 75 | 10% | 7.5000 |
+| Valuation | 30 | 12% | 3.6000 |
+| Momentum | 95 | 8% | 7.6000 |
+| Ownership / Governance | 70 | 6% | 4.2000 |
+| Risk | 80 | 6% | 4.8000 |
+
+Total:
+
+`11.9600 + 11.7375 + 7.9000 + 9.3600 + 6.5000 + 7.5000 + 3.6000 + 7.6000 + 4.2000 + 4.8000 = 75.1575`
+
+> **H3 deterministic read-only overall score = 75.1575 / 100**
+
+### Global Generics Material Overlay treatment
+
+TORNTPHARM Global Generics remains a reviewed Material business exposure.
+
+Locked economic materiality:
+
+- 12.05%
+
+Approved minimum for numeric overlay participation:
+
+- 15%
+
+Therefore H3 preserves:
+
+- Material business context: YES
+- numeric overlay modifier: NO / null
+- reason: `BELOW_SCORING_MATERIALITY`
+- second independent Global Generics stock score: NO
+
+This is a contract-driven exclusion, not missing-evidence neutralization.
+
+### Emerging Watch
+
+CDMO / CRAMS remains:
+
+- Emerging Watch;
+- visible in research context;
+- excluded from numeric scoring;
+- excluded from score/readiness denominator;
+- no independent stock score.
+
+### Governance / regulatory runtime
+
+Current H3 governance state:
+
+- constraint state: CLEAR
+- overall preview blocked: NO
+- numeric penalty: NONE
+- overall score cap: NONE
+- historical Indrad event retained: YES
+- second regulatory penalty: NO
+
+### H3 UI integration
+
+The shared PHARMA_V1 Research workspace now exposes the H3 read-only result through the existing company-context registry.
+
+For TORNTPHARM the Research UI can display:
+
+- all 10 dimension scores;
+- fixed weights;
+- weighted contributions;
+- overall score;
+- overlay treatment;
+- governance state;
+- methodology lineage;
+- evidence lineage;
+- derived-statistic lineage.
+
+The shared Research-page architecture remains intact.
+
+No separate permanent TORNTPHARM page tree or parallel scoring UI was created.
+
+### H3 validation
+
+One consolidated local validation entry point exists:
+
+`bash scripts/h3-validate-torntpharm-read-only-score.sh`
+
+Owner-run validation on 20 September 2026 passed:
+
+- focused/related test files: 8 / 8 PASS
+- tests: 59 / 59 PASS
+- TypeScript: PASS
+- presentation data-boundary architecture guard: PASS
+- focused H3 lint: PASS
+- existing architecture lint: PASS
+- production build: PASS
+- H3 diff whitespace check: PASS
+- final script result: `H3 VALIDATION PASS`
+
+The production build emitted only the existing non-blocking Vite chunk-size advisory.
+
+Hosted CI/deployment status is not the authority for H3 validation. The complete requested H3 validation suite passed locally.
+
+### H3 safety state
+
+H3 remains:
+
+- read-only: YES
+- non-persisting: YES
+- official score-run persistence: OFF
+- recommendation: OFF
+- position sizing: OFF
+- production Supabase mutation: NO
+- provider call: NO
+- deployment: NO
+- PR #101 merge: NO
+- rollout to other Pharma stocks: NO
+
+### Canonical H3 record
+
+- `docs/PortfolioAI_GATE_H_H3_FIRST_DETERMINISTIC_READ_ONLY_SCORE.md`
+
+### Current Gate H stage state
+
+```text
+H1 = COMPLETE / PASS
+H2 = COMPLETE / PASS
+H3 = IMPLEMENTED / CONSOLIDATED VALIDATION PASS / OWNER REVIEW PENDING
+H4 = NOT STARTED
+```
+
+Gate H is not yet formally closed.
+
+H4 remains the separate independent hand-verification / determinism / anti-leakage / Gate H closure stage.
+
+### CURRENT STOP POINT
+
+Present the single consolidated H3 owner-review package.
+
+Do **not**:
+
+- reopen H2;
+- create H3.1/H3.2 micro-stages;
+- start H4 automatically;
+- persist the H3 score;
+- create recommendation/sizing;
+- touch production;
+- deploy;
+- merge PR #101.
+
+Once the owner accepts H3, move separately to H4 for independent hand verification and formal Gate H closure.
