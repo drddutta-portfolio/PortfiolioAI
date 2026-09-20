@@ -1,6 +1,6 @@
 # PortfolioAI — G9 Final Implementation Plan
 
-**Stage:** G9 — Activation Approval Gate  
+**Stage:** G9 — COMPLETE / PHARMA RESEARCH ACTIVATION ARCHITECTURE VALIDATED  
 **Branch:** `r4n-pharma-subprofile-architecture`  
 **PR:** #101 — OPEN / DRAFT / UNMERGED  
 **Starting state:** G8 COMPLETE / SECOND-COMPANY PORTABILITY VALIDATED / NOT ACTIVE
@@ -399,5 +399,46 @@ G9 closes only after G9.1, G9.2 and G9.3 complete under the locked workflow.
 Final intended state:
 
 > **G9 = COMPLETE / PHARMA RESEARCH ACTIVATION ARCHITECTURE VALIDATED / NUMERIC ACTIVATION STILL FAIL-CLOSED WHERE METHODOLOGY IS INCOMPLETE**
+
+There is **no G9.4**.
+
+
+## G9 closure record — 20 September 2026
+
+G9 is **COMPLETE**.
+
+Final state:
+
+> **G9 = COMPLETE / PHARMA RESEARCH ACTIVATION ARCHITECTURE VALIDATED / NUMERIC ACTIVATION STILL FAIL-CLOSED WHERE METHODOLOGY IS INCOMPLETE**
+
+Closure evidence:
+
+- G9.1 activation-readiness & authority completed;
+- G9.2 AUROPHARMA canonical local research activation completed;
+- G9.3 reusable PHARMA_V1 sector-workspace portability completed across TORNTPHARM and AUROPHARMA;
+- owner visual approval completed for both G9.3 reference-company checkpoints;
+- final local cross-company validation passed:
+  - `npm run typecheck`
+  - `npm test`
+  - `npm run test:edge`
+  - `npm run check:architecture`
+  - `npm run lint:architecture`
+  - `npm run build`
+  - `git diff --check`
+
+G9 closure does **not** authorize or imply:
+
+- production assignment changes;
+- production evidence writes;
+- numeric Pharma scoring activation or persistence;
+- recommendation activation or persistence;
+- position-sizing activation or persistence;
+- provider refresh;
+- scheduler changes;
+- deployment;
+- PR merge;
+- automatic trading.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
 
 There is **no G9.4**.
