@@ -51,7 +51,12 @@ printf '  security:  %s\n' "$SECURITY_ID"
 printf '  mapping:   %s\n' "${MAPPING_STATE:-MISSING}"
 
 LOG_FILE="/tmp/portfolioai-h2-local-functions.log"
-supabase functions serve --env-file "$ENV_FILE" >"$LOG_FILE" 2>&1 &
+
+if pgrep -f "supabase functions serve" >/dev/null 2>&1; then
+  die "A manual 'supabase functions serve' process is already running. Stop it with Ctrl+C in that terminal, then rerun this script so the runner can start the local functions with its validated auth mode."
+fi
+
+supabase functions serve --no-verify-jwt --env-file "$ENV_FILE" >"$LOG_FILE" 2>&1 &
 SERVE_PID=$!
 trap 'kill "$SERVE_PID" >/dev/null 2>&1 || true' EXIT
 
@@ -60,14 +65,33 @@ for _ in {1..30}; do
   sleep 1
 done
 
+kill -0 "$SERVE_PID" >/dev/null 2>&1 || die "Local Edge Functions server failed to start. Review $LOG_FILE."
+
 call_fn() {
   local fn="$1"
   local payload="$2"
-  curl -fsS -X POST "$API_URL/functions/v1/$fn" \
+  local response_file
+  response_file="$(mktemp)"
+  local status
+  status="$(curl -sS -o "$response_file" -w '%{http_code}' -X POST "$API_URL/functions/v1/$fn" \
     -H "Authorization: Bearer $ACCESS_TOKEN" \
     -H "apikey: $ANON_KEY" \
     -H "Content-Type: application/json" \
-    -d "$payload"
+    -d "$payload")" || {
+      cat "$response_file" >&2 || true
+      rm -f "$response_file"
+      die "HTTP transport failure while calling local function $fn."
+    }
+
+  cat "$response_file"
+  if [[ "$status" -lt 200 || "$status" -ge 300 ]]; then
+    printf '\n' >&2
+    printf 'Local function %s returned HTTP %s.\n' "$fn" "$status" >&2
+    printf 'Function log: %s\n' "$LOG_FILE" >&2
+    rm -f "$response_file"
+    return 1
+  fi
+  rm -f "$response_file"
 }
 
 if [[ "$MAPPING_STATE" != VERIFIED\|* ]]; then
