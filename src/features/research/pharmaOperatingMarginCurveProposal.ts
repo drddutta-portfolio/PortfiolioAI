@@ -1,5 +1,5 @@
 export const PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL_VERSION =
-  "PHARMA_OPERATING_MARGIN_CURVE_V1_PROPOSAL" as const
+  "PHARMA_OPERATING_MARGIN_CURVE_V1_OWNER_APPROVED" as const
 
 export interface PharmaOperatingMarginBand {
   readonly minimumInclusive?: number
@@ -9,7 +9,7 @@ export interface PharmaOperatingMarginBand {
 
 export interface PharmaOperatingMarginCurveProposal {
   readonly proposalVersion: typeof PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL_VERSION
-  readonly state: "PROPOSAL_ONLY"
+  readonly state: "OWNER_APPROVED_NOT_ACTIVE"
   readonly metricCode: "PHARMA_OPERATING_MARGIN_HISTORY"
   readonly supportedPrimarySubprofile: "DOMESTIC_FORMULATIONS"
   readonly unsupportedPrimarySubprofilesFailClosed: true
@@ -38,13 +38,15 @@ export interface PharmaOperatingMarginCurveProposal {
     }
   }
   readonly finalScore: "WEIGHTED_COMPONENT_AVERAGE_0_TO_100"
+  readonly methodologyApproved: true
+  readonly methodologyApproved: true
   readonly activationApproved: false
   readonly scoreExecutionEnabled: false
 }
 
 export const PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL: PharmaOperatingMarginCurveProposal = {
   proposalVersion: PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL_VERSION,
-  state: "PROPOSAL_ONLY",
+  state: "OWNER_APPROVED_NOT_ACTIVE",
   metricCode: "PHARMA_OPERATING_MARGIN_HISTORY",
   supportedPrimarySubprofile: "DOMESTIC_FORMULATIONS",
   unsupportedPrimarySubprofilesFailClosed: true,
@@ -92,6 +94,7 @@ export const PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL: PharmaOperatingMarginCurveP
     },
   },
   finalScore: "WEIGHTED_COMPONENT_AVERAGE_0_TO_100",
+  methodologyApproved: true,
   activationApproved: false,
   scoreExecutionEnabled: false,
 }
@@ -105,7 +108,7 @@ export interface PharmaOperatingMarginCurveStatistics {
 
 export interface PharmaOperatingMarginCurveScoreResult {
   readonly proposalVersion: typeof PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL_VERSION
-  readonly state: "DETERMINISTIC_PROPOSAL_RESULT"
+  readonly state: "DETERMINISTIC_OWNER_APPROVED_RESULT"
   readonly levelScore: number
   readonly stabilityScore: number
   readonly trendScore: number
@@ -154,11 +157,12 @@ export function evaluatePharmaOperatingMarginCurveProposal(
 
   return {
     proposalVersion: PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL_VERSION,
-    state: "DETERMINISTIC_PROPOSAL_RESULT",
+    state: "DETERMINISTIC_OWNER_APPROVED_RESULT",
     levelScore,
     stabilityScore,
     trendScore,
     combinedScore,
+    methodologyApproved: true,
     activationApproved: false,
     scoreExecutionEnabled: false,
   }
