@@ -21108,3 +21108,65 @@ PR #101 remains OPEN / DRAFT / UNMERGED.
 G9.3 V2 remains **OPEN**.
 
 **CURRENT STOP POINT:** owner must pull and repeat the AUROPHARMA localhost visual check. Expected result: the separate historical G8.1→G9.2 boxes no longer appear above Research at a glance; the single reusable PHARMA_V1 capability layer remains inside Pharmaceuticals deep research with the correct AUROPHARMA roles. Full cross-company validation remains blocked until owner visual PASS.
+
+
+---
+
+## 237. Entry 232 — G9.3-D AUROPHARMA owner visual PASS
+
+**Date:** 20 September 2026  
+**Actor:** owner visual approval  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reviewed fresh AUROPHARMA localhost screenshots after removal of the duplicate historical G8/G9 Overview mounts and confirmed:
+
+> **The AUROPHARMA page looks clean now.**
+
+### Visual checkpoint accepted
+
+The approved AUROPHARMA G9.3-D product view now shows:
+
+- one reusable **Pharmaceuticals deep research** sector workspace;
+- Primary = `GLOBAL_GENERICS`;
+- Material Overlay = none;
+- Emerging = `API_BULK_DRUGS`;
+- unresolved = `BIOPHARMA_BIOSIMILARS`;
+- one reusable G8.1 / G8.2 / G8.3 / G9.1 / G9.2 capability layer;
+- Gate G → G7 methodology below it;
+- no duplicate AUROPHARMA-specific G8/G9 boxes in the main Overview presentation.
+
+### Scope clarification
+
+This visual PASS applies to the **PHARMA_V1 sector workspace**. It does not imply that Pharma-specific deep-research methodology applies to non-Pharma sectors.
+
+The PortfolioAI architecture remains:
+
+- universal Research shell for all securities;
+- sector/profile-specific deep-research workspace beneath it;
+- PHARMA_V1 methodology only for Pharma securities;
+- other sectors require their own future deep-research criteria/contracts.
+
+### Safety state
+
+- production mutation: NO
+- production migration: NO
+- local database mutation: NO
+- assignment mutation: NO
+- evidence mutation: NO
+- score execution/persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+The **AUROPHARMA G9.3-D visual gate is CLOSED / PASS**.
+
+G9.3 V2 remains **OPEN**.
+
+**CURRENT STOP POINT:** run the final local cross-company PHARMA_V1 validation, proving TORNTPHARM and AUROPHARMA both consume the same reusable Pharma workspace without evidence, role, methodology or activation leakage. Do not close G9.3 or G9 until that validation passes and the final handoff checkpoint is recorded.
