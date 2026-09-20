@@ -5,11 +5,11 @@ import {
 } from "./pharmaOverlayModifierContract"
 
 export const PHARMA_G7_OVERLAY_NUMERIC_MODIFIER_VERSION =
-  "PHARMA_V1_G7_OVERLAY_NUMERIC_MODIFIER_V1_PROPOSAL" as const
+  "PHARMA_V1_G7_OVERLAY_NUMERIC_MODIFIER_V1_OWNER_APPROVED" as const
 
 export const PHARMA_G7_OVERLAY_NUMERIC_MODIFIER = {
   version: PHARMA_G7_OVERLAY_NUMERIC_MODIFIER_VERSION,
-  state: "PROPOSAL_ONLY",
+  state: "OWNER_APPROVED_NOT_ACTIVE",
   sourceOverlayContractVersion: PHARMA_OVERLAY_MODIFIER_CONTRACT.version,
   formula:
     "CAP_POINTS * (ECONOMIC_MATERIALITY_PERCENT / 100) * EVIDENCE_COMPLETENESS * CONFIDENCE_FACTOR * NORMALIZED_OVERLAY_SIGNAL",
@@ -26,8 +26,9 @@ export const PHARMA_G7_OVERLAY_NUMERIC_MODIFIER = {
   finalDimensionLowerBound: 0,
   finalDimensionUpperBound: 100,
   empiricallyCalibrated: false,
-  ownerValidationRequired: true,
-  g71ConsumptionApproved: false,
+  methodologyApproved: true,
+  ownerValidationRequired: false,
+  g71ConsumptionApproved: true,
   scoreExecutionEnabled: false,
   persistedScoreRunEnabled: false,
 } as const
@@ -44,20 +45,20 @@ export interface PharmaG7OverlayNumericModifierInput extends PharmaOverlayModifi
 }
 
 export type PharmaG7OverlayNumericModifierState =
-  | "PROPOSED_NUMERIC_MODIFIER"
+  | "APPROVED_NUMERIC_MODIFIER"
   | "INELIGIBLE_G2"
   | "READINESS_NOT_READY"
   | "EXCLUDED_EMERGING_WATCH"
 
 export interface PharmaG7OverlayNumericModifierResult {
   readonly contractVersion: typeof PHARMA_G7_OVERLAY_NUMERIC_MODIFIER_VERSION
-  readonly state: "PROPOSAL_ONLY"
+  readonly state: "OWNER_APPROVED_NOT_ACTIVE"
   readonly modifierState: PharmaG7OverlayNumericModifierState
   readonly proposedNumericModifierPoints: number | null
   readonly combinedPerDimensionCapPoints: 10
   readonly reasonCodes: readonly string[]
-  readonly ownerValidationRequired: true
-  readonly g71ConsumptionApproved: false
+  readonly ownerValidationRequired: false
+  readonly g71ConsumptionApproved: true
   readonly scoreExecutionEnabled: false
 }
 
@@ -72,14 +73,14 @@ function result(
 ): PharmaG7OverlayNumericModifierResult {
   return {
     contractVersion: PHARMA_G7_OVERLAY_NUMERIC_MODIFIER_VERSION,
-    state: "PROPOSAL_ONLY",
+    state: "OWNER_APPROVED_NOT_ACTIVE",
     modifierState,
     proposedNumericModifierPoints,
     combinedPerDimensionCapPoints:
       PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.combinedPerDimensionCapPoints,
     reasonCodes,
-    ownerValidationRequired: true,
-    g71ConsumptionApproved: false,
+    ownerValidationRequired: false,
+    g71ConsumptionApproved: true,
     scoreExecutionEnabled: false,
   }
 }
@@ -128,10 +129,10 @@ export function buildPharmaG7OverlayNumericModifierProposal(
   const cappedModifier = Math.max(-cap, Math.min(cap, rawModifier))
 
   return result("PROPOSED_NUMERIC_MODIFIER", round(cappedModifier), [
-    "G7_P1_CANDIDATE_FORMULA_APPLIED",
+    "G7_P1_OWNER_APPROVED_FORMULA_APPLIED",
     "DIRECT_ECONOMIC_SHARE_SCALING",
     "READY_OVERLAY_ONLY",
-    "OWNER_VALIDATION_REQUIRED_BEFORE_G7_1_CONSUMPTION",
+    "G7_1_READ_ONLY_CONSUMPTION_APPROVED",
   ])
 }
 
