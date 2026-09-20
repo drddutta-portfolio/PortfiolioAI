@@ -1,11 +1,11 @@
 # PortfolioAI — ChatGPT Cumulative Development Handoff
 
-**Purpose:** Persistent, cumulative engineering handoff between ChatGPT and Codex.  
-**Rule:** This file preserves every development stage from the ChatGPT takeover checkpoint onward. Historical entries remain even when later sections supersede their stop points.  
-**Owner:** Dr. Dibyendu Dutta  
-**Repository:** `drddutta-portfolio/PortfiolioAI`  
-**Created:** 16 September 2026  
-**Current working line:** `r4n-pharma-subprofile-architecture` / PR #101  
+**Purpose:** Persistent, cumulative engineering handoff between ChatGPT and Codex.
+**Rule:** This file preserves every development stage from the ChatGPT takeover checkpoint onward. Historical entries remain even when later sections supersede their stop points.
+**Owner:** Dr. Dibyendu Dutta
+**Repository:** `drddutta-portfolio/PortfiolioAI`
+**Created:** 16 September 2026
+**Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
 **Current stage:** Gate H COMPLETE / PASS; first deterministic TORNTPHARM score 75.1575 hand-verified and reproducible; Gate I NOT STARTED
 
 ---
@@ -40,9 +40,9 @@ Before a production-impacting action: verify repo state, verify live production 
 ## 2. Inherited takeover baseline
 
 ### Entry 000 — Takeover from Codex
-**Date:** 16 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101  
+**Date:** 16 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101
 **Codex head:** `6e55c8e44e3dde3359f418715db60944c2abee36`
 
 Inherited completed work:
@@ -64,8 +64,8 @@ Unfinished at takeover: authenticated localhost Research UI proof for HDFCBANK a
 
 ## 3. Entry 001 — LUI-1 fixture design and dependency audit
 
-**Date:** 16 September 2026  
-**Actor:** ChatGPT  
+**Date:** 16 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Verified that the Research page requires an authenticated active portfolio plus transaction-derived open positions; securities alone are insufficient. Confirmed local frontend/Supabase endpoints and confirmed profile resolution for the no-assignment proof:
@@ -80,7 +80,7 @@ Only read-only production schema/view inspection was used to make the local fixt
 
 ## 4. Entry 002 — LUI-1 authenticated localhost proof
 
-**Date:** 16 September 2026  
+**Date:** 16 September 2026
 **Actor:** ChatGPT + owner-guided local Supabase/browser review
 
 ### Local setup and fixture behavior
@@ -122,7 +122,7 @@ Only read-only production schema/view inspection was used to make the local fixt
 - No paid-provider refresh was used.
 - The only Console message observed was a Chrome async-listener/message-channel pattern without a PortfolioAI stack trace; treated as browser-extension noise for this gate.
 
-**Result:** LUI-1 PASS.  
+**Result:** LUI-1 PASS.
 **Production touched:** NO.
 
 Commit recording this localhost proof: `d6d0f1afa5e83b936c32ac23ebc3a11136b230fd`.
@@ -131,8 +131,8 @@ Commit recording this localhost proof: `d6d0f1afa5e83b936c32ac23ebc3a11136b230fd
 
 ## 5. Entry 003 — Gate B: stabilize PR #101
 
-**Date:** 16 September 2026  
-**Actor:** ChatGPT  
+**Date:** 16 September 2026
+**Actor:** ChatGPT
 **Verified head:** `d6d0f1afa5e83b936c32ac23ebc3a11136b230fd`
 
 Repository/PR verification:
@@ -147,15 +147,15 @@ PR description stabilization:
 - It was corrected to describe the evolved R4N scope, the three earlier authorized/deployed reconciliation migrations, the later still-unapplied secondary-exposure reconciliation migration, the localhost proof, validation counts and remaining gates.
 - This metadata edit did not merge or deploy anything.
 
-**Result:** Gate B PASS.  
+**Result:** Gate B PASS.
 **Production touched:** NO.
 
 ---
 
 ## 6. Entry 004 — Gate C: fresh read-only production preflight
 
-**Date:** 16 September 2026  
-**Actor:** ChatGPT using connected Supabase/GitHub read-only inspection  
+**Date:** 16 September 2026
+**Actor:** ChatGPT using connected Supabase/GitHub read-only inspection
 **Supabase project:** `uxiyufbsbgzzdujzcdxe`
 
 ### Migration ledger
@@ -201,15 +201,15 @@ These match the documented post-R4N baseline.
 - Production bucket `portfolioai-db-backups` contains the matching encrypted object and `.sha256` object under `manual/2026-09-16T09-28-57Z/`.
 - Encrypted object observed size: 4,599,872 bytes; checksum object: 65 bytes.
 
-**Result:** Gate C read-only preflight PASS.  
+**Result:** Gate C read-only preflight PASS.
 **Production touched:** NO. All Gate C database queries were read-only.
 
 ---
 
 ## 7. Entry 005 — Gate D package prepared, not executed
 
-**Date:** 16 September 2026  
-**Actor:** ChatGPT  
+**Date:** 16 September 2026
+**Actor:** ChatGPT
 **Prepared head before handoff update:** `ea88697ceb2ffe809cc2f3d5668220eb17e5207e`
 
 Prepared exact production package for the still-pending migration:
@@ -248,7 +248,7 @@ CI validation on head `ea88697ceb2ffe809cc2f3d5668220eb17e5207e`:
 - production build passed;
 - no CI step failed.
 
-**Result:** Gate D package is READY FOR EXPLICIT OWNER AUTHORIZATION, but Gate D has **not** been executed.  
+**Result:** Gate D package is READY FOR EXPLICIT OWNER AUTHORIZATION, but Gate D has **not** been executed.
 **Production touched by this entry:** NO.
 
 Exact authorization scope required for the next step:
@@ -263,7 +263,7 @@ That authorization does **not** authorize PR merge, application/Edge deployment,
 
 ## 8. Entry 006 — Gate D authorized; immediate preflight passed; dry-run pending
 
-**Date:** 16 September 2026  
+**Date:** 16 September 2026
 **Actor:** ChatGPT + owner authorization
 
 Owner explicitly authorized only:
@@ -289,7 +289,7 @@ Execution mechanism decision:
 - using that shortcut could create migration-ledger drift, which would violate the reviewed Gate D deployment contract;
 - therefore Gate D execution remained on the isolated CLI bundle path documented in `docs/R4N_Secondary_Exposure_Production_Gate.md`.
 
-**Current status at this historical checkpoint:** AUTHORIZED, PRE-FLIGHT PASS, NOT YET APPLIED.  
+**Current status at this historical checkpoint:** AUTHORIZED, PRE-FLIGHT PASS, NOT YET APPLIED.
 **Production touched by this entry:** NO.
 
 The next required step at this checkpoint was the isolated bundle build plus `supabase db push --dry-run`.
@@ -298,7 +298,7 @@ The next required step at this checkpoint was the isolated bundle build plus `su
 
 ## 9. Entry 007 — Gate D executed and post-deployment validated
 
-**Date:** 16 September 2026  
+**Date:** 16 September 2026
 **Actor:** ChatGPT + owner-executed isolated Supabase CLI push
 
 ### Dry-run
@@ -359,15 +359,15 @@ Gate D did **not**:
 - write scores, recommendations or sizing;
 - change schedulers or cron definitions.
 
-**Result:** Gate D COMPLETE / PASS.  
+**Result:** Gate D COMPLETE / PASS.
 **Production touched:** YES, only the explicitly authorized schema migration `20260916100032_reconcile_r4n_secondary_exposure_contract.sql`.
 
 ---
 
 ## 10. Entry 008 — Gate E local review-package audit, implementation and validation
 
-**Date:** 17 September 2026  
-**Actor:** ChatGPT + owner-guided local validation  
+**Date:** 17 September 2026
+**Actor:** ChatGPT + owner-guided local validation
 **Implementation commit:** `82a5f9029203723acc79f35ad9a111b73c8f944a`
 
 ### Read-only audit findings
@@ -430,7 +430,7 @@ Gate E implementation did **not**:
 - merge PR #101;
 - modify production database/schema/data/schedulers.
 
-**Result:** Gate E review-package implementation and local validation COMPLETE / PASS.  
+**Result:** Gate E review-package implementation and local validation COMPLETE / PASS.
 **Production touched:** NO.
 
 The next unfinished Gate E work is evidence-backed human review of TORNTPHARM's proposed `DOMESTIC_FORMULATIONS` assignment. Current local fixture evidence is insufficient for promotion, so the assignment must remain provisional until business-model provenance is gathered/reviewed and a separate assignment-write action is explicitly authorized.
@@ -439,7 +439,7 @@ The next unfinished Gate E work is evidence-backed human review of TORNTPHARM's 
 
 ## 11. Entry 009 — Gate E evidence review, owner decision and local persistence/UI proof
 
-**Date:** 17 September 2026  
+**Date:** 17 September 2026
 **Actor:** ChatGPT + owner human review + local Supabase/browser validation
 
 ### Evidence/materiality methodology and review outcome
@@ -510,7 +510,7 @@ This proves the intended authority separation end-to-end: canonical application 
 
 ## 12. Entry 010 — TORNTPHARM Gate E reference implementation fully locally validated
 
-**Date:** 17 September 2026  
+**Date:** 17 September 2026
 **Actor:** owner-run local validation + GitHub CI verification
 
 Fresh full local validation was run after the reviewed-assignment repository/UI integration and successful local persistence proof:
@@ -538,7 +538,7 @@ TORNTPHARM is now a complete **local Gate E reference implementation** covering:
 
 No production assignment row, production secondary-exposure row, evidence ingestion, score, recommendation, sizing write, provider call, scheduler change, PR merge or application deployment occurred in this validation step.
 
-**Result:** TORNTPHARM Gate E reference implementation = **LOCALLY VALIDATED / PASS**.  
+**Result:** TORNTPHARM Gate E reference implementation = **LOCALLY VALIDATED / PASS**.
 **Production persistence:** NOT AUTHORIZED / NOT PERFORMED.
 
 ---
@@ -586,7 +586,7 @@ When Codex credits return:
 
 ## 16. Entry 011 — Gate E production persistence explicitly authorized and validated
 
-**Date:** 17 September 2026  
+**Date:** 17 September 2026
 **Actor:** ChatGPT + owner explicit authorization
 
 After localhost idempotency validation and a fresh read-only production preflight, the owner explicitly authorized only the reviewed TORNTPHARM Gate E assignment persistence.
@@ -614,7 +614,7 @@ No PR merge, application deployment, Edge Function deployment, evidence ingestio
 
 ## 17. Entry 012 — Local-first development workflow adopted for remaining R4N work
 
-**Date:** 17 September 2026  
+**Date:** 17 September 2026
 **Owner direction:** keep subsequent development explicitly local until meaningful visual changes are visible and reviewed.
 
 The required working loop for remaining R4N development is:
@@ -658,7 +658,7 @@ Fixed rules:
 
 ## 18. Entry 013 — Gate F profile-driven Research workspace visual milestone
 
-**Date:** 17 September 2026  
+**Date:** 17 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate F began with a localhost-first visible workspace slice for TORNTPHARM. Added:
@@ -689,9 +689,9 @@ Post-approval polish added:
 
 Current polish head before local pull/validation: `d0e5fc6e89aefa5ccc501292c56510dddf37d70b`.
 
-**Production touched by Gate F development:** NO.  
-**Scoring methodology:** still unapproved / fail-closed.  
-**Evidence ingestion:** not performed.  
+**Production touched by Gate F development:** NO.
+**Scoring methodology:** still unapproved / fail-closed.
+**Evidence ingestion:** not performed.
 **Full post-polish local validation:** PENDING.
 
 **CURRENT STOP POINT:** Gate F visual direction is owner-approved and the minor polish is committed on the R4N branch. The next required step is owner `git pull`, localhost recheck of the polished workspace, then the full local validation suite. Do not perform any further production action.
@@ -700,8 +700,8 @@ Current polish head before local pull/validation: `d0e5fc6e89aefa5ccc501292c5651
 
 ## 19. Entry 014 — Gate F polished localhost workspace fully validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation + GitHub CI verification  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation + GitHub CI verification
 **Validated implementation head:** `d0e5fc6e89aefa5ccc501292c56510dddf37d70b`
 
 After pulling the polished Gate F workspace, the owner reopened the TORNTPHARM Research Overview on localhost and confirmed the polished **Business model research map** renders correctly.
@@ -736,10 +736,10 @@ Build details observed:
 
 GitHub `PortfolioAI Architecture Guard` for the polished implementation head also completed successfully: run #166 / workflow run `35258432651`.
 
-**Result:** Gate F visual workspace slice = **LOCALLY VALIDATED / PASS**.  
-**Production touched by this validation:** NO.  
-**Evidence ingestion:** still not performed.  
-**Scoring methodology:** still unapproved / fail-closed.  
+**Result:** Gate F visual workspace slice = **LOCALLY VALIDATED / PASS**.
+**Production touched by this validation:** NO.
+**Evidence ingestion:** still not performed.
+**Scoring methodology:** still unapproved / fail-closed.
 **PR #101:** remains unmerged.
 
 **CURRENT STOP POINT:** The first Gate F profile-driven Research workspace slice is owner-approved and fully locally validated. Continue Gate F locally only. The next development work should deepen the TORNTPHARM evidence workspace/readiness behavior without production writes, evidence ingestion, scoring, recommendation, sizing, provider calls, scheduler changes, PR merge, or deployment unless separately authorized.
@@ -748,9 +748,9 @@ GitHub `PortfolioAI Architecture Guard` for the polished implementation head als
 
 ## 20. Entry 015 — Gate F subprofile evidence-completeness slice prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
-**Branch:** `r4n-pharma-subprofile-architecture`  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
+**Branch:** `r4n-pharma-subprofile-architecture`
 **Implementation head before handoff update:** `ffb56f0fc4b5914224d52bf9cb03f3e6a649f3e9`
 
 The next local-only Gate F slice deepens the existing Pharma Research Readiness panel so it can consume the same reviewed subprofile authority already used by the Business model research map.
@@ -770,9 +770,9 @@ The new visible readiness summary is deliberately non-scoring:
 
 No local Supabase mutation is required for this slice; it consumes the already-reviewed local assignment and existing cached local research evidence.
 
-**Production touched:** NO.  
-**Evidence ingestion:** NO.  
-**Scoring/recommendation/sizing:** NO.  
+**Production touched:** NO.
+**Evidence ingestion:** NO.
+**Scoring/recommendation/sizing:** NO.
 **Provider calls / scheduler changes / deployment / PR merge:** NO.
 
 **CURRENT STOP POINT:** This second Gate F visual slice is committed and documented on the R4N branch but has not yet been pulled or visually validated on localhost. Next step: owner `git pull`, refresh the TORNTPHARM Overview against existing local Supabase, inspect the new **Subprofile evidence completeness** block, then approve/refine visually before the full local validation chain.
@@ -781,8 +781,8 @@ No local Supabase mutation is required for this slice; it consumes the already-r
 
 ## 21. Entry 016 — Gate F readiness render-path hardening after localhost omission
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After Entry 015, both local Vite dev and a fresh Vite preview still rendered the older Pharmaceuticals Research Readiness composition: the contracts disclosure was immediately followed by **Canonical Pharma financial history**, while neither the intended **Subprofile evidence completeness** section nor its fail-closed unavailable fallback appeared.
@@ -809,11 +809,11 @@ Repository-side checkpoint:
 
 This repository-side success is not being treated as localhost visual proof. The exact browser-level mechanism behind the earlier first-child omission was not independently reproduced in the connector-only environment; instead, the failing UI boundary has been made explicit and covered by a regression test. Per the adopted local-first workflow, owner visual verification remains the next gate and the full local validation chain is intentionally deferred until after that visual result.
 
-**Production touched:** NO.  
-**Production Supabase:** unchanged.  
-**Evidence ingestion / provider calls:** NO.  
-**Scoring / recommendation / sizing:** NO.  
-**Schedulers:** unchanged.  
+**Production touched:** NO.
+**Production Supabase:** unchanged.
+**Evidence ingestion / provider calls:** NO.
+**Scoring / recommendation / sizing:** NO.
+**Schedulers:** unchanged.
 **PR #101:** remains unmerged.
 
 **CURRENT STOP POINT:** Pull the latest R4N branch locally, reuse the existing local Supabase/Vite setup, and inspect TORNTPHARM → Research → Overview. The required visual order is **View all Pharmaceuticals research contracts → Subprofile evidence completeness → Canonical Pharma financial history**. If the new block is visible, obtain owner visual approval first; only then run the full local validation chain and append its authoritative result to this cumulative handoff before the next gate.
@@ -823,8 +823,8 @@ This repository-side success is not being treated as localhost visual proof. The
 
 ## 22. Entry 017 — Gate F subprofile evidence-completeness visual approval and local validation
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After pulling the readiness render-path hardening, the owner restarted the local Vite dev process and reopened TORNTPHARM → Research → Overview against the existing local Supabase fixture.
@@ -877,8 +877,8 @@ The owner reported completion of the requested validation sequence without a fai
 
 ## 23. Entry 018 — Gate F official-evidence pilot dry-run workspace prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The next local-only Gate F slice exposes the existing TORNTPHARM official-manifest pilot as a visible **dry-run preview** inside the shared Pharma Research workspace without performing any ingestion or database mutation.
@@ -933,12 +933,12 @@ A focused pure-model regression test was added for the expected 42 / 33 / 9 / 0 
 
 Per the adopted local-first workflow, this implementation checkpoint is **not yet visually approved** and full local validation is intentionally deferred until after the owner pulls and inspects the localhost UI.
 
-**Production touched:** NO.  
-**Production Supabase:** unchanged.  
-**Evidence ingestion:** NO.  
-**Provider calls:** NO.  
-**Scoring / recommendation / sizing:** NO.  
-**Schedulers:** unchanged.  
+**Production touched:** NO.
+**Production Supabase:** unchanged.
+**Evidence ingestion:** NO.
+**Provider calls:** NO.
+**Scoring / recommendation / sizing:** NO.
+**Schedulers:** unchanged.
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, restart/use the local Vite app against the existing local Supabase fixture, and inspect TORNTPHARM → Research → Overview. The new visible section should be **Gate F · Official evidence pilot / Evidence ingestion dry-run** and should show 42 candidates, 33 direct official, 9 derived, 0 quarantined, and 0/14 projected business-model completeness. Obtain visual approval before the full local validation chain.
@@ -948,8 +948,8 @@ Per the adopted local-first workflow, this implementation checkpoint is **not ye
 
 ## 24. Entry 019 — Gate F evidence-pilot localhost validation defect fixed
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT + owner localhost visual review  
+**Date:** 18 September 2026
+**Actor:** ChatGPT + owner localhost visual review
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner pulled Entry 018 and visually inspected TORNTPHARM → Research → Overview.
@@ -983,12 +983,12 @@ Regression coverage was added to prove that the known local fixture UUID is acce
 
 No evidence was ingested and no database write was performed.
 
-**Production touched:** NO.  
-**Production Supabase:** unchanged.  
-**Evidence ingestion:** NO.  
-**Provider calls:** NO.  
-**Scoring / recommendation / sizing:** NO.  
-**Schedulers:** unchanged.  
+**Production touched:** NO.
+**Production Supabase:** unchanged.
+**Evidence ingestion:** NO.
+**Provider calls:** NO.
+**Scoring / recommendation / sizing:** NO.
+**Schedulers:** unchanged.
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Pull the latest R4N branch and re-open the TORNTPHARM Evidence ingestion dry-run panel. The corrected localhost expectation is 42 validation-ready and 0 quarantined. Visual approval remains pending until that corrected state is observed; full local validation remains deferred until after visual approval.
@@ -998,8 +998,8 @@ No evidence was ingested and no database write was performed.
 
 ## 25. Entry 020 — Gate F official-evidence pilot dry-run visually approved and locally validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After pulling the UUID-validation fix, the owner reopened TORNTPHARM → Research → Overview and visually confirmed the **Gate F · Official evidence pilot / Evidence ingestion dry-run** panel in its corrected state.
@@ -1067,8 +1067,8 @@ No failure was reported from the preceding owner-run commands in the requested s
 
 ## 26. Entry 021 — Gate F business-model evidence acquisition/manifest contract prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The next local-only Gate F slice converts the 14 currently unmet TORNTPHARM business-model requirements into an explicit acquisition/manifest planning contract without fetching or ingesting evidence.
@@ -1151,12 +1151,12 @@ Regression coverage asserts:
 
 Per the local-first workflow, this implementation checkpoint has **not yet been visually approved** and full local validation is intentionally deferred until after owner localhost review.
 
-**Production touched:** NO.  
-**Production Supabase:** unchanged.  
-**Evidence ingestion:** NO.  
-**Source acquisition/provider calls:** NO.  
-**Scoring / recommendation / sizing:** NO.  
-**Schedulers:** unchanged.  
+**Production touched:** NO.
+**Production Supabase:** unchanged.
+**Evidence ingestion:** NO.
+**Source acquisition/provider calls:** NO.
+**Scoring / recommendation / sizing:** NO.
+**Schedulers:** unchanged.
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Evidence acquisition plan** section. Expected summary: 14 planned requirements, 8 mandatory / 5 important / 1 supplementary, 12 public/official-first, 2 licensed-source gates (1 required + 1 optional fallback), and 3 controlled derivations. Obtain visual approval before full local validation.
@@ -1166,8 +1166,8 @@ Per the local-first workflow, this implementation checkpoint has **not yet been 
 
 ## 27. Entry 022 — Gate F business-model evidence acquisition contract visually approved and locally validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After pulling Entry 021, the owner reopened TORNTPHARM → Research → Overview and visually reviewed the new **Gate F · Business-model evidence contract / Evidence acquisition plan**.
@@ -1233,8 +1233,8 @@ No failure was reported from the preceding owner-run commands in the requested s
 
 ## 28. Entry 023 — Gate F public / official source-discovery dry run prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The next local-only Gate F slice maps the 12 `PUBLIC_OFFICIAL_FIRST` TORNTPHARM business-model requirements to candidate public issuer/listed-company/regulator artifacts without reviewing or ingesting evidence.
@@ -1315,13 +1315,13 @@ Regression coverage asserts:
 
 Per the local-first workflow, this implementation checkpoint is **not yet visually approved** and full local validation is deferred until after owner localhost review.
 
-**Production touched:** NO.  
-**Production Supabase:** unchanged.  
-**Evidence ingestion:** NO.  
-**Source fetch/provider calls:** NO.  
-**Paid/licensed provider calls:** NO.  
-**Scoring / recommendation / sizing:** NO.  
-**Schedulers:** unchanged.  
+**Production touched:** NO.
+**Production Supabase:** unchanged.
+**Evidence ingestion:** NO.
+**Source fetch/provider calls:** NO.
+**Paid/licensed provider calls:** NO.
+**Scoring / recommendation / sizing:** NO.
+**Schedulers:** unchanged.
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Public / official source discovery** section. Expected summary: 12 requirements in scope, 12 mapped, 8 official artifacts, 6 issuer/listed-company + 2 regulator, 3 source hubs, and 0 evidence reviewed. Obtain visual approval before the full local validation chain.
@@ -1331,8 +1331,8 @@ Per the local-first workflow, this implementation checkpoint is **not yet visual
 
 ## 29. Entry 024 — Gate F public / official source-discovery dry run visually approved and locally validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After pulling Entry 023, the owner reopened TORNTPHARM → Research → Overview and visually reviewed the new **Gate F · Public / official discovery / Public / official source discovery** panel.
@@ -1414,8 +1414,8 @@ No failure was reported from the preceding owner-run commands in the requested s
 
 ## 30. Entry 025 — Gate F artifact-level content review planning prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The next local-only Gate F slice converts the previously discovered public/official source hubs into an exact artifact-level content review queue for the 12 `PUBLIC_OFFICIAL_FIRST` TORNTPHARM business-model requirements.
@@ -1505,13 +1505,13 @@ The panel exposes:
 
 Per the local-first workflow, this implementation checkpoint is **not yet visually approved** and full local validation is deferred until after owner localhost review.
 
-**Production touched:** NO.  
-**Production Supabase:** unchanged.  
-**Evidence ingestion:** NO.  
-**Content fetch / evidence review:** NO.  
-**Paid/licensed provider calls:** NO.  
-**Scoring / recommendation / sizing:** NO.  
-**Schedulers:** unchanged.  
+**Production touched:** NO.
+**Production Supabase:** unchanged.
+**Evidence ingestion:** NO.
+**Content fetch / evidence review:** NO.
+**Paid/licensed provider calls:** NO.
+**Scoring / recommendation / sizing:** NO.
+**Schedulers:** unchanged.
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Exact document review plan** section. Expected summary: 12 exact artifacts, 4 annual + 5 quarterly + 2 regulator + 1 exchange filing, 12/12 minimum planning coverage, 5/12 preferred planning coverage, and 0 evidence reviewed. Obtain visual approval before the full local validation chain.
@@ -1521,8 +1521,8 @@ Per the local-first workflow, this implementation checkpoint is **not yet visual
 
 ## 31. Entry 026 — Gate F artifact-level content review planning visually approved and locally validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After pulling Entry 025, the owner reopened TORNTPHARM → Research → Overview and visually reviewed the new **Gate F · Artifact-level review planning / Exact document review plan**.
@@ -1601,8 +1601,8 @@ No failure was reported from the preceding owner-run commands in the requested s
 
 ## 32. Entry 027 — Gate F read-only public content-review dry run prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 A first read-only content-review dry run has now been prepared against a deliberately small public/official TORNTPHARM subset. The goal is to test whether actual source content can be converted into proposed evidence candidates and explicit rejection/gap reasons without writing anything to canonical evidence storage.
@@ -1704,12 +1704,12 @@ The panel shows:
 
 Per the local-first workflow, this implementation checkpoint is **not yet visually approved** and full local validation is deferred until after owner localhost review.
 
-**Production touched:** NO.  
-**Production Supabase:** unchanged.  
-**Evidence ingestion:** NO.  
-**Paid/licensed provider calls:** NO.  
-**Scoring / recommendation / sizing:** NO.  
-**Schedulers:** unchanged.  
+**Production touched:** NO.
+**Production Supabase:** unchanged.
+**Evidence ingestion:** NO.
+**Paid/licensed provider calls:** NO.
+**Scoring / recommendation / sizing:** NO.
+**Schedulers:** unchanged.
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the new **Public document content-review dry-run** section. Expected summary: 6 reviewed artifacts, 6 proposed candidates, 1 rejected claim, 2 requirements piloted, and 0 ingestion writes. Obtain visual approval before the full local validation chain.
@@ -1719,8 +1719,8 @@ Per the local-first workflow, this implementation checkpoint is **not yet visual
 
 ## 33. Entry 028 — Gate F read-only public content-review dry run visually approved and locally validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After pulling Entry 027, the owner reopened TORNTPHARM → Research → Overview and visually reviewed the new **Gate F · Read-only content review / Public document content-review dry-run**.
@@ -1795,8 +1795,8 @@ No failure was reported from the preceding owner-run commands in the requested s
 
 ## 34. Entry 029 — HDFCBANK ↔ TORNTPHARM Research-page consistency audit and hierarchy correction prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 A cross-profile Research-page consistency audit was performed after the first TORNTPHARM read-only content-review dry run.
@@ -1874,12 +1874,12 @@ A source-level ordering check confirms the shared order is now:
 
 Per the established local-first workflow, this hierarchy correction is **not yet visually approved** and full local validation is intentionally deferred until after owner side-by-side localhost review.
 
-**Production touched:** NO.  
-**Production Supabase:** unchanged.  
-**Evidence ingestion:** NO.  
-**Paid/licensed provider calls:** NO.  
-**Scoring / recommendation / sizing changes:** NO.  
-**Schedulers:** unchanged.  
+**Production touched:** NO.
+**Production Supabase:** unchanged.
+**Evidence ingestion:** NO.
+**Paid/licensed provider calls:** NO.
+**Scoring / recommendation / sizing changes:** NO.
+**Schedulers:** unchanged.
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, open both HDFCBANK and TORNTPHARM Research → Overview locally, and compare the first-glance hierarchy. The common Overview spine should now feel consistent while TORNTPHARM's sector-specific deep research begins only after Research Health under **Sector research workspace**. Obtain visual approval before full local validation.
@@ -1889,8 +1889,8 @@ Per the established local-first workflow, this hierarchy correction is **not yet
 
 ## 35. Entry 030 — Pharma deep-research workspace compacted for cross-profile visual consistency
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 A second HDFCBANK ↔ TORNTPHARM visual consistency pass was performed after owner comparison screenshots.
@@ -1913,7 +1913,7 @@ Updated:
 
 The Pharma workspace now shows a compact always-visible header and model summary:
 
-**Sector research workspace · Pharmaceuticals**  
+**Sector research workspace · Pharmaceuticals**
 **Pharmaceuticals deep research**
 
 All deep content is grouped into two collapsed-by-default layers:
@@ -1962,12 +1962,12 @@ Confirmed on branch:
 
 Per the local-first workflow, this compacting checkpoint is **not yet visually approved** and full local validation is deferred until owner localhost review.
 
-**Production touched:** NO.  
-**Production Supabase:** unchanged.  
-**Evidence ingestion:** NO.  
-**Paid/licensed provider calls:** NO.  
-**Scoring / recommendation / sizing changes:** NO.  
-**Schedulers:** unchanged.  
+**Production touched:** NO.
+**Production Supabase:** unchanged.
+**Evidence ingestion:** NO.
+**Paid/licensed provider calls:** NO.
+**Scoring / recommendation / sizing changes:** NO.
+**Schedulers:** unchanged.
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, and inspect the compact Pharma workspace immediately below Research Health. The page should now show the small Pharma summary plus two collapsed detail rows instead of several full Gate F panels. Obtain visual approval before full local validation.
@@ -1977,8 +1977,8 @@ Per the local-first workflow, this compacting checkpoint is **not yet visually a
 
 ## 36. Entry 031 — HDFCBANK ↔ TORNTPHARM visual-consistency checkpoint visually approved and locally validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After pulling Entry 030, the owner reviewed the compact TORNTPHARM Research Overview beneath Research Health and confirmed that the cross-profile design objective had been achieved.
@@ -2059,8 +2059,8 @@ No failure was reported from the preceding owner-run commands in the requested s
 
 ## 37. Entry 032 — Gate F candidate-to-ingestion proposal contract prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 A proposal-only candidate-to-ingestion gate has now been prepared for the six already reviewed TORNTPHARM evidence candidates.
@@ -2155,7 +2155,7 @@ A new section now exists inside the collapsed:
 
 section:
 
-**Gate F · Candidate-to-ingestion proposal**  
+**Gate F · Candidate-to-ingestion proposal**
 **Ingestion eligibility proposal**
 
 The panel shows:
@@ -2180,14 +2180,14 @@ Confirmed:
 
 Per the local-first workflow, this checkpoint is **not yet visually approved** and full local validation is deferred until after owner localhost review.
 
-**Production touched:** NO.  
-**Production Supabase:** unchanged.  
-**Evidence ingestion:** NO.  
-**Validator silently widened:** NO.  
-**Regulatory events coerced to numeric values:** NO.  
-**Paid/licensed provider calls:** NO.  
-**Scoring / recommendation / sizing:** NO.  
-**Schedulers:** unchanged.  
+**Production touched:** NO.
+**Production Supabase:** unchanged.
+**Evidence ingestion:** NO.
+**Validator silently widened:** NO.
+**Regulatory events coerced to numeric values:** NO.
+**Paid/licensed provider calls:** NO.
+**Scoring / recommendation / sizing:** NO.
+**Schedulers:** unchanged.
 **PR #101:** remains draft/open/unmerged.
 
 **CURRENT STOP POINT:** Owner should `git pull`, reopen TORNTPHARM → Research → Overview, expand **Evidence operations & review controls**, and inspect **Ingestion eligibility proposal**. Expected summary: 6 reviewed candidates, 4 numeric candidates, 2 event candidates, 0 validator accepted, 4 validator quarantined, 2 event-schema blocked, 1 rejected claim excluded, and 0 proposed writes.
@@ -2197,8 +2197,8 @@ Per the local-first workflow, this checkpoint is **not yet visually approved** a
 
 ## 38. Entry 033 — Candidate-to-ingestion validator blocker semantics corrected
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Owner localhost review of the new **Ingestion eligibility proposal** exposed one semantic issue in the displayed validator blocker.
@@ -2251,8 +2251,8 @@ Tests now separately assert:
 
 ## 39. Entry 034 — Candidate-to-ingestion proposal visually approved and validation status resolved
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner visually reviewed the **Gate F · Candidate-to-ingestion proposal / Ingestion eligibility proposal** panel after the validator semantics correction.
@@ -2342,8 +2342,8 @@ It is **not** correct to claim the entire repository is lint-clean.
 
 ## 40. Entry 035 — Numeric validator V2 and Pharma regulatory event evidence V1 prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The next Gate F contract step has been prepared without performing any evidence write.
@@ -2462,8 +2462,8 @@ Added:
 
 ## 41. Entry 036 — Numeric validator V2 and Pharma regulatory event evidence V1 visually approved and locally validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner visually reviewed the updated **Gate F · Candidate-to-ingestion proposal / Ingestion eligibility proposal** after versioning the numeric evidence validator and adding the Pharma regulatory event-evidence contract.
@@ -2551,8 +2551,8 @@ Repository-wide lint remains subject to the already-documented pre-existing unre
 
 ## 42. Entry 037 — Local numeric ingestion package and regulatory-event persistence proposal prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The next two Gate F persistence artifacts have been prepared without executing either one.
@@ -2664,7 +2664,7 @@ Current event proposal state:
 
 Inside the collapsed **Evidence operations & review controls** layer, a new compact panel now renders:
 
-**Gate F · Prepared persistence packages**  
+**Gate F · Prepared persistence packages**
 **Local write package & event-schema proposal**
 
 Expected summary:
@@ -2702,8 +2702,8 @@ Added:
 
 ## 43. Entry 038 — Prepared persistence packages visually approved and locally validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner visually reviewed the new **Gate F · Prepared persistence packages / Local write package & event-schema proposal** section and confirmed that the glass-box research-engine presentation is acceptable during development.
@@ -2782,8 +2782,8 @@ Repository-wide lint remains subject to the already-documented pre-existing unre
 
 ## 44. Entry 039 — Local numeric preflight and regulatory migration replay packages prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The next Gate F engine checkpoint has been prepared without querying or mutating the local database and without applying any migration.
@@ -2884,8 +2884,8 @@ Added:
 
 ## 45. Entry 040 — Local preflight validation interrupted by readonly test mutation; test-only correction prepared
 
-**Date:** 18 September 2026  
-**Actor:** owner-run validation + ChatGPT correction  
+**Date:** 18 September 2026
+**Actor:** owner-run validation + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner visually approved the new **Local numeric preflight** and **Regulatory migration replay** prepared-status cards, then started the normal local validation sequence.
@@ -2931,8 +2931,8 @@ Corrective commit:
 
 ## 46. Entry 041 — Local numeric preflight and regulatory migration replay checkpoint validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run localhost review + local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run localhost review + local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner visually approved the prepared **Local numeric preflight** and **Regulatory migration replay** cards, then completed the corrected local validation sequence after pulling the readonly-test fix.
@@ -3013,8 +3013,8 @@ Regulatory migration replay:
 
 ## 47. Entry 042 — Local-only numeric preflight and regulatory replay executors prepared after owner authorization
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT, following explicit owner authorization to execute the two local-only checks  
+**Date:** 18 September 2026
+**Actor:** ChatGPT, following explicit owner authorization to execute the two local-only checks
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner explicitly authorized execution of:
@@ -3095,8 +3095,8 @@ Still NOT authorized:
 
 ## 48. Entry 043 — First local execution: regulatory replay PASS; numeric preflight helper corrected
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local execution + ChatGPT correction  
+**Date:** 18 September 2026
+**Actor:** owner-run local execution + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner executed both explicitly authorized local-only checks.
@@ -3194,8 +3194,8 @@ Therefore a completed rerun is expected to classify the four rows as blocked unl
 
 ## 49. Entry 044 — Local numeric preflight executed successfully; exact blockers confirmed
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local execution  
+**Date:** 18 September 2026
+**Actor:** owner-run local execution
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reran the corrected local-only numeric preflight:
@@ -3286,8 +3286,8 @@ This is the expected fail-closed behavior.
 
 ## 50. Entry 045 — Canonical prerequisite package prepared after successful local preflight
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following the successful local numeric preflight, the exact missing canonical prerequisites have now been prepared as a non-writing package.
@@ -3436,8 +3436,8 @@ Confirmed:
 
 ## 51. Entry 046 — Canonical prerequisite package validation interrupted by candidate-union typing; safe type guard added
 
-**Date:** 18 September 2026  
-**Actor:** owner-run validation + ChatGPT correction  
+**Date:** 18 September 2026
+**Actor:** owner-run validation + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner visually approved the canonical prerequisite package and started local validation.
@@ -3499,8 +3499,8 @@ Corrective commit:
 
 ## 52. Entry 047 — Canonical prerequisite package validation completed
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following the type-narrowing correction in `torntpharmCanonicalPrerequisitePackage.ts`, the owner completed the requested local validation sequence successfully.
@@ -3554,8 +3554,8 @@ remains:
 
 ## 53. Entry 048 — Prerequisite materialization dry-run executor prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The next Gate F checkpoint has been prepared at the top of the standard workflow: code first, HANDOFF second, then owner `git pull` and localhost visual review.
@@ -3672,8 +3672,8 @@ Added:
 
 ## 54. Entry 049 — Prerequisite materialization dry-run validation interrupted by focused lint; test-only correction prepared
 
-**Date:** 18 September 2026  
-**Actor:** owner-run validation + ChatGPT correction  
+**Date:** 18 September 2026
+**Actor:** owner-run validation + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner visually approved the prerequisite materialization dry-run cards and started full local validation.
@@ -3737,8 +3737,8 @@ Corrective commit:
 
 ## 55. Entry 050 — Prerequisite materialization dry-run checkpoint validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following the test-only focused-lint correction, the owner reran the requested validation and confirmed completion.
@@ -3792,8 +3792,8 @@ remains:
 
 ## 56. Entry 051 — Prerequisite materialization dry-run executed successfully
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local execution  
+**Date:** 18 September 2026
+**Actor:** owner-run local execution
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner executed the validated non-writing command:
@@ -3813,16 +3813,16 @@ The executor deterministically serialized and hashed all four canonical reviewed
 
 ### Materialized dry-run hashes
 
-- `TORRENT_Q1_FY26_RELEASE` — 2025-06-30 — 19%  
+- `TORRENT_Q1_FY26_RELEASE` — 2025-06-30 — 19%
   SHA-256: `b8a8b87c01a1ea1ade5f1d7bc158804a793caeed8d02f1652e885b94deae8788f`
 
-- `TORRENT_Q2_FY26_RELEASE` — 2025-09-30 — 26%  
+- `TORRENT_Q2_FY26_RELEASE` — 2025-09-30 — 26%
   SHA-256: `3847fc6cadca356c5d1d0b07da2a584a9f90b2c7c3cbaa83237bd5d05fceec5f2`
 
-- `TORRENT_Q3_FY26_RELEASE` — 2025-12-31 — 19%  
+- `TORRENT_Q3_FY26_RELEASE` — 2025-12-31 — 19%
   SHA-256: `3df20aaafb6be4e2f9f2f070489feb8937c97f0d47f6997a3c6c5910224caeb7`
 
-- `TORRENT_Q4_FY26_RELEASE` — 2026-03-31 — 16% comparable base-business growth  
+- `TORRENT_Q4_FY26_RELEASE` — 2026-03-31 — 16% comparable base-business growth
   SHA-256: `d08cf8f86694557b5391ff9085e9e98a1667d4d4fab8994e2626e990922998b53`
 
 The rejected Q4 31% claim remained excluded.
@@ -3866,8 +3866,8 @@ No SQL was executed.
 
 ## 57. Entry 052 — Local prerequisite mutation proposal prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following successful zero-write prerequisite materialization dry-run execution, the next Gate F checkpoint has been prepared at the top of the standard workflow.
@@ -3992,8 +3992,8 @@ Added:
 
 ## 58. Entry 053 — Mutation-proposal validation mostly passed; non-writing SQL contract test added
 
-**Date:** 18 September 2026  
-**Actor:** owner-run validation + ChatGPT validation correction  
+**Date:** 18 September 2026
+**Actor:** owner-run validation + ChatGPT validation correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner completed the requested local validation for the prepared local prerequisite mutation proposal.
@@ -4059,8 +4059,8 @@ This test statically verifies, without any DB connection:
 
 ## 59. Entry 054 — Local prerequisite mutation proposal checkpoint validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following the SQL validation correction, the owner reran the requested focused validation and confirmed the checkpoint clean.
@@ -4124,8 +4124,8 @@ remains:
 
 ## 60. Entry 055 — Owner explicitly authorized local-only prerequisite mutation
 
-**Date:** 18 September 2026  
-**Actor:** owner explicit authorization  
+**Date:** 18 September 2026
+**Actor:** owner explicit authorization
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner explicitly authorized this exact local-only mutation:
@@ -4172,8 +4172,8 @@ Still NOT authorized:
 
 ## 61. Entry 056 — First authorized local prerequisite mutation failed closed on malformed copied hashes; transaction rolled back
 
-**Date:** 18 September 2026  
-**Actor:** owner-run authorized local execution + ChatGPT correction  
+**Date:** 18 September 2026
+**Actor:** owner-run authorized local execution + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner executed the explicitly authorized command:
@@ -4252,8 +4252,8 @@ The owner's prior authorization remains limited to this exact local-only prerequ
 
 ## 62. Entry 057 — Local sync was correct; mutation-hash test serializer aligned with dry-run executor
 
-**Date:** 18 September 2026  
-**Actor:** owner local verification + ChatGPT correction  
+**Date:** 18 September 2026
+**Actor:** owner local verification + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner verified:
@@ -4310,8 +4310,8 @@ All four are 64-character lowercase hexadecimal SHA-256 values derived from the 
 
 ## 63. Entry 058 — Authorized local prerequisite mutation succeeded
 
-**Date:** 18 September 2026  
-**Actor:** owner-run authorized local execution  
+**Date:** 18 September 2026
+**Actor:** owner-run authorized local execution
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reran the corrected mutation flow after the manifest-derived hash serializer test was aligned with the dry-run executor.
@@ -4376,8 +4376,8 @@ Verified postconditions:
 
 ## 64. Entry 059 — Read-only numeric preflight now fully ready for separate observation-write approval
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local execution  
+**Date:** 18 September 2026
+**Actor:** owner-run local execution
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reran:
@@ -4440,8 +4440,8 @@ The preflight remained read-only and ended in `ROLLBACK`.
 
 ## 65. Entry 060 — Local 4-row evidence observation mutation proposal prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following the clean read-only numeric preflight state `READY_FOR_SEPARATE_WRITE_APPROVAL`, the final Gate F local evidence-write proposal has been prepared.
@@ -4567,8 +4567,8 @@ Added:
 
 ## 66. Entry 061 — Numeric preflight glass-box card refreshed to latest verified state
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 During localhost visual review of the prepared local observation mutation proposal, the owner identified that the older **Local numeric preflight** card still displayed the historical blocked state from before prerequisite materialization.
@@ -4617,8 +4617,8 @@ This is a presentation-state correction only. It does not re-run the database pr
 
 ## 67. Entry 062 — Local observation mutation proposal checkpoint validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner completed the full local validation for the prepared four-row TORNTPHARM observation-write proposal.
@@ -4686,8 +4686,8 @@ Validated safeguards:
 
 ## 68. Entry 063 — Owner explicitly authorized local-only TORNTPHARM observation mutation
 
-**Date:** 18 September 2026  
-**Actor:** owner explicit authorization  
+**Date:** 18 September 2026
+**Actor:** owner explicit authorization
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner explicitly authorized this exact local-only evidence mutation:
@@ -4741,8 +4741,8 @@ Still NOT authorized:
 
 ## 69. Entry 064 — Authorized local TORNTPHARM observation mutation succeeded
 
-**Date:** 18 September 2026  
-**Actor:** owner-run authorized local execution  
+**Date:** 18 September 2026
+**Actor:** owner-run authorized local execution
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner executed the explicitly authorized local-only observation mutation:
@@ -4813,8 +4813,8 @@ The rejected Q4 31% claim remained excluded.
 
 ## 70. Entry 065 — Canonical TORNTPHARM US-growth evidence wired into foreground Pharma Research UI
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT after owner screenshot review  
+**Date:** 18 September 2026
+**Actor:** ChatGPT after owner screenshot review
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After successful local insertion of the four reviewed TORNTPHARM US-growth observations, localhost screenshots confirmed that the Gate F review engine still displayed the reviewed 19% / 26% / 19% / 16% values, but the normal PHARMA_V1 foreground presentation did not yet surface the new canonical metric.
@@ -4879,8 +4879,8 @@ No change was needed for the Evidence tab because it already renders the complet
 
 ## 71. Entry 066 — Foreground Research UI visually verified against canonical TORNTPHARM observations
 
-**Date:** 18 September 2026  
-**Actor:** owner localhost visual verification  
+**Date:** 18 September 2026
+**Actor:** owner localhost visual verification
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following the PHARMA_V1 foreground presentation wiring correction, the owner visually verified the canonical TORNTPHARM US-growth observations on localhost.
@@ -4938,8 +4938,8 @@ No observation-selection policy or scoring decision was authorized in Gate F. An
 
 ## 72. Entry 067 — Gate F closed after end-to-end local evidence verification
 
-**Date:** 18 September 2026  
-**Actor:** owner-run final validation + ChatGPT closure  
+**Date:** 18 September 2026
+**Actor:** owner-run final validation + ChatGPT closure
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate F for the TORNTPHARM PHARMA_V1 pilot is now complete.
@@ -5057,8 +5057,8 @@ No Gate G scoring methodology has been approved or executed by this closure.
 
 ## 73. Entry 068 — Gate G scoring methodology design checkpoint prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate F is closed. Gate G has now started with a design-only methodology checkpoint.
@@ -5181,8 +5181,8 @@ Added:
 
 ## 74. Entry 069 — Gate G methodology-design checkpoint validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner completed the focused local validation for the Gate G PHARMA_V1 scoring-methodology design checkpoint.
@@ -5235,8 +5235,8 @@ The owner completed the focused local validation for the Gate G PHARMA_V1 scorin
 
 ## 75. Entry 070 — Gate G first PHARMA_V1 normalization-curve proposal prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The next Gate G slice has been prepared as a methodology-only proposal for the first numeric Pharma curve family.
@@ -5332,8 +5332,8 @@ The Gate G glass-box now displays:
 
 ## 76. Entry 071 — Gate G segment-growth curve proposal validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner completed focused local validation for the first PHARMA_V1 normalization-curve proposal.
@@ -5391,8 +5391,8 @@ History boundary:
 
 ## 77. Entry 072 — Gate G operating-margin curve proposal prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The second Gate G PHARMA_V1 normalization-curve proposal has been prepared.
@@ -5496,8 +5496,8 @@ The Gate G glass-box now shows:
 
 ## 78. Entry 073 — Gate G operating-margin curve proposal validated
 
-**Date:** 18 September 2026  
-**Actor:** owner-run local validation  
+**Date:** 18 September 2026
+**Actor:** owner-run local validation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner completed focused local validation for the second PHARMA_V1 normalization-curve proposal.
@@ -5558,8 +5558,8 @@ History boundary:
 
 ## 79. Entry 074 — Canonical PHARMA_V1 adaptive scoring/classification plan adopted
 
-**Date:** 18 September 2026  
-**Actor:** owner plan + ChatGPT adaptation  
+**Date:** 18 September 2026
+**Actor:** owner plan + ChatGPT adaptation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 A new canonical alignment document has been added:
@@ -5646,8 +5646,8 @@ Future work must not:
 
 ## 80. Entry 075 — Gate G1 adaptive Pharma classification contract prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G1 has been implemented as a **proposal-only adaptive classification contract** under the canonical PHARMA_V1 adaptive scoring/classification architecture.
@@ -5722,8 +5722,8 @@ Gate G now includes:
 
 ## 81. Entry 076 — Gate G1 adaptive Pharma classification contract validated
 
-**Date:** 18 September 2026  
-**Actor:** owner visual review + ChatGPT checkpoint  
+**Date:** 18 September 2026
+**Actor:** owner visual review + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G1 has completed its required localhost visual and focused validation checkpoint.
@@ -5793,8 +5793,8 @@ Build emitted only the existing non-blocking Vite large-chunk advisory; no build
 
 ## 82. Entry 077 — Gate G2 Pharma overlay modifier contract prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G2 has been implemented as a **proposal-only overlay modifier contract** under the canonical PHARMA_V1 adaptive scoring/classification architecture.
@@ -5913,8 +5913,8 @@ Gate G now includes:
 
 ## 83. Entry 078 — Gate G2 Pharma overlay modifier contract validated
 
-**Date:** 18 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 18 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G2 has completed its required localhost visual and focused validation checkpoint.
@@ -5985,8 +5985,8 @@ Owner-confirmed results:
 
 ## 84. Entry 079 — Gate G3 Pharma readiness mapping contract prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G3 has been implemented as a **proposal-only readiness mapping contract** under the canonical PHARMA_V1 adaptive scoring/classification architecture.
@@ -6107,8 +6107,8 @@ Gate G now includes:
 
 ## 85. Entry 080 — Gate G3 Pharma readiness mapping contract validated
 
-**Date:** 18 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 18 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G3 has completed its required localhost visual and focused validation checkpoint.
@@ -6182,8 +6182,8 @@ Build emitted only the existing non-blocking Vite large-chunk advisory; no build
 
 ## 86. Entry 081 — Gate G4 Pharma governance / regulatory gate contract prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G4 has been implemented as a **proposal-only governance / regulatory gate contract** under the canonical PHARMA_V1 adaptive scoring/classification architecture.
@@ -6299,8 +6299,8 @@ Gate G now includes:
 
 ## 87. Entry 082 — Gate G4 Pharma governance / regulatory gate contract validated
 
-**Date:** 18 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 18 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G4 has completed its required localhost visual and focused validation checkpoint.
@@ -6388,8 +6388,8 @@ This completes the architecture prerequisites required before resuming additiona
 
 ## 88. Entry 083 — Gate G5.1 ROCE / Capital Efficiency framework prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5 has started with **G5.1 — ROCE / Capital Efficiency** as a proposal-only common parent curve framework.
@@ -6518,8 +6518,8 @@ Gate G now includes:
 
 ## 89. Entry 084 — Gate G5.1 ROCE / Capital Efficiency framework validated
 
-**Date:** 18 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 18 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5.1 has completed its validation checkpoint as a **proposal-only ROCE / Capital Efficiency framework**.
@@ -6581,8 +6581,8 @@ A separate versioned reconciliation is required before any active scoring path c
 
 ## 90. Entry 085 — Gate G5.2 Cash Conversion framework prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5 has continued with **G5.2 — Cash Conversion** as a proposal-only common parent curve framework.
@@ -6691,8 +6691,8 @@ Gate G now includes:
 
 ## 91. Entry 086 — Gate G5.2 Cash Conversion framework validated
 
-**Date:** 18 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 18 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5.2 has completed its validation checkpoint as a **proposal-only Cash Conversion framework**.
@@ -6755,8 +6755,8 @@ A separate versioned reconciliation is required before any active scoring path c
 
 ## 92. Entry 087 — Gate G5.3 Balance Sheet / Leverage framework prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5 has continued with **G5.3 — Balance Sheet / Leverage** as a proposal-only common parent curve framework.
@@ -6871,8 +6871,8 @@ Gate G now includes:
 
 ## 93. Entry 088 — Gate G5.3 Balance Sheet / Leverage framework validated
 
-**Date:** 18 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 18 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5.3 has completed its validation checkpoint as a **proposal-only Balance Sheet / Leverage framework**.
@@ -6940,8 +6940,8 @@ A separate versioned reconciliation is required before any active scoring path c
 
 ## 94. Entry 089 — Gate G5.4 Valuation framework prepared
 
-**Date:** 18 September 2026  
-**Actor:** ChatGPT  
+**Date:** 18 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5 has continued with **G5.4 — Valuation** as a proposal-only common parent curve framework.
@@ -7055,8 +7055,8 @@ Gate G now includes:
 
 ## 95. Entry 090 — Gate G5.4 Valuation framework validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5.4 has completed its validation checkpoint as a **proposal-only Valuation framework**.
@@ -7107,8 +7107,8 @@ Owner-confirmed results:
 
 ## 96. Entry 091 — Gate G5.5 Ownership / Governance framework prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5 has continued with **G5.5 — Ownership / Governance** as a proposal-only common parent curve framework.
@@ -7239,8 +7239,8 @@ Gate G now includes:
 
 ## 97. Entry 092 — Gate G5.5 Ownership / Governance framework validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5.5 has completed its validation checkpoint as a **proposal-only Ownership / Governance framework**.
@@ -7304,8 +7304,8 @@ G5.5 validation confirms that the mismatch is visible and fail-closed; it does *
 
 ## 98. Entry 093 — Gate G5.6 Regulatory & Market Risk framework prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5 has continued with **G5.6 — Regulatory & Market Risk** as a proposal-only common parent curve framework.
@@ -7461,8 +7461,8 @@ Gate G now includes:
 
 ## 99. Entry 094 — Gate G5.6 Regulatory & Market Risk framework validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5.6 has completed its validation checkpoint as a **proposal-only Regulatory & Market Risk framework**.
@@ -7515,8 +7515,8 @@ Owner-confirmed results:
 
 ## 100. Entry 095 — Gate G5.7 Momentum framework prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5 has continued with its final parent family, **G5.7 — Momentum**, as a proposal-only framework.
@@ -7673,8 +7673,8 @@ Gate G now includes:
 
 ## 101. Entry 096 — Gate G5 core parent curve families validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G5 has completed its final validation checkpoint. All seven core parent curve-family proposals are now **VALIDATED / NOT ACTIVE**.
@@ -7753,8 +7753,8 @@ The following remain intentionally unresolved:
 
 ## 102. Entry 097 — Gate G6.1 Subprofile Curve Applicability Lock prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has started with **G6.1 — Subprofile Curve Applicability Lock**.
@@ -7890,8 +7890,8 @@ Gate G now includes:
 
 ## 103. Entry 098 — Gate G6.1 Subprofile Curve Applicability Lock validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.1 has completed validation as a **proposal-only subprofile curve applicability lock**.
@@ -7946,8 +7946,8 @@ Primary remains the curve driver. Material Overlay remains within-dimension only
 
 ## 104. Entry 099 — Gate G6.2 Domestic Valuation Self-History curve prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with the first genuinely new subprofile-specific numeric threshold family:
@@ -8087,8 +8087,8 @@ Gate G now includes:
 
 ## 105. Entry 100 — Gate G6.2 Domestic Valuation Self-History curve validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.2 has completed validation as a **proposal-only Domestic Formulations Valuation self-history curve**.
@@ -8144,8 +8144,8 @@ Owner-confirmed results:
 
 ## 106. Entry 101 — Gate G6.3 Domestic Valuation FCF identity lock prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.3 — Domestic Valuation Cash-Flow Corroboration Evidence Identity Lock**.
@@ -8233,8 +8233,8 @@ Gate G now includes:
 
 ## 107. Entry 102 — Gate G6.4 canonical FCF-yield metric contract prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.4 — PHARMA FCF Yield Canonical Metric Contract**.
@@ -8337,8 +8337,8 @@ Gate G now includes:
 
 ## 108. Entry 103 — Gate G6.3 + G6.4 FCF-yield identity contract validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.3 and G6.4 have completed validation as **proposal-only evidence-identity / canonical-metric contracts**.
@@ -8424,8 +8424,8 @@ Alias behavior:
 
 ## 109. Entry 104 — Gate G6.5 local FCF-yield alias preflight prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.5 — Local FCF-Yield Persisted Alias Preflight**.
@@ -8494,8 +8494,8 @@ Possible classifications include:
 
 ## 110. Entry 105 — Gate G6.5 local FCF-yield alias preflight completed
 
-**Date:** 19 September 2026  
-**Actor:** owner local execution + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner local execution + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.5 read-only local preflight has completed.
@@ -8584,8 +8584,8 @@ under the validated G6.4 formula/authority contract.
 
 ## 111. Entry 106 — Gate G6.6 canonical FCF-yield registration & derivation proposal prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.6 — Canonical FCF_YIELD_PERCENT Registration & Derivation Proposal**.
@@ -8714,8 +8714,8 @@ Gate G now includes:
 
 ## 112. Entry 107 — Gate G6.6 canonical FCF-yield registration & derivation proposal validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.6 has completed validation as a **proposal-only canonical FCF-yield registration and derivation contract**.
@@ -8832,8 +8832,8 @@ Safety state:
 
 ## 113. Entry 108 — Gate G6.7 local rollback-only FCF-yield registration proof prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.7 — Local Rollback-Only Execution Proof** for the canonical FCF-yield registration proposal.
@@ -8900,8 +8900,8 @@ Expected clean G6.7 result:
 
 ## 114. Entry 109 — Gate G6.7 local rollback-only FCF-yield registration proof completed
 
-**Date:** 19 September 2026  
-**Actor:** owner local execution + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner local execution + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.7 local rollback-only proof has completed successfully.
@@ -8957,8 +8957,8 @@ It still has **not** been persisted as a local migration and has **not** been ap
 
 ## 115. Entry 110 — Gate G6.8 Domestic Formulations FCF-yield corroboration curve prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.8 — Domestic Formulations FCF-Yield Corroboration Curve**.
@@ -9079,8 +9079,8 @@ Gate G now includes:
 
 ## 116. Entry 111 — Gate G6.8 Domestic Formulations FCF-yield corroboration curve validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.8 has completed validation as a **proposal-only Domestic Formulations FCF-yield corroboration curve**.
@@ -9171,8 +9171,8 @@ They must not automatically apply to:
 
 ## 117. Entry 112 — Gate G6.9 Domestic peer-relative valuation cohort methodology lock prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.9 — Domestic Formulations Peer-Relative Valuation Cohort Methodology Lock**.
@@ -9303,8 +9303,8 @@ Gate G now includes:
 
 ## 118. Entry 113 — Gate G6.9 Domestic peer-relative valuation cohort methodology lock validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.9 has completed validation as a **proposal-only Domestic Formulations peer-relative valuation cohort methodology lock**.
@@ -9409,8 +9409,8 @@ Therefore:
 
 ## 119. Entry 114 — Gate G6.10 Domestic peer-cohort builder prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.10 — Domestic Formulations Peer-Cohort Builder & Minimum-Comparability Boundary**.
@@ -9501,8 +9501,8 @@ Gate G now includes:
 
 ## 120. Entry 115 — Gate G6.10 Domestic peer-cohort builder validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.10 has completed validation as a **proposal-only deterministic Domestic Formulations peer-cohort builder**.
@@ -9582,8 +9582,8 @@ Remaining before peer-relative numeric scoring:
 
 ## 121. Entry 116 — Gate G6.11 Domestic peer minimum-comparability contract prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.11 — Domestic Formulations Peer Minimum-Comparability & Aggregation Contract**.
@@ -9691,8 +9691,8 @@ Gate G now includes:
 
 ## 122. Entry 117 — Gate G6.11 Domestic peer minimum-comparability contract validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.11 has completed validation as a **proposal-only Domestic Formulations peer minimum-comparability and aggregation contract**.
@@ -9792,8 +9792,8 @@ Remaining before peer-relative numeric scoring:
 
 ## 123. Entry 118 — Gate G6.12 Domestic peer premium/discount normalization prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.12 — Domestic Formulations Peer Premium/Discount & Numeric Normalization Proposal**.
@@ -9894,8 +9894,8 @@ Gate G now includes:
 
 ## 124. Entry 119 — Gate G6.12 Domestic peer premium/discount normalization validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.12 has completed validation as a **proposal-only Domestic Formulations peer premium/discount calculation and per-metric normalization contract**.
@@ -10010,8 +10010,8 @@ The final validated state therefore reflects the corrected tests and a clean lin
 
 ## 125. Entry 120 — Gate G6.13 Domestic peer cross-metric combination lock prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.13 — Domestic Formulations Peer Cross-Metric Combination Approval Lock**.
@@ -10120,8 +10120,8 @@ Still unresolved:
 
 ## 126. Entry 121 — Gate G6.13 Domestic peer cross-metric combination lock validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.13 has completed validation as a **proposal-only Domestic Formulations peer cross-metric combination approval lock**.
@@ -10213,8 +10213,8 @@ Therefore:
 
 ## 127. Entry 122 — Gate G6.14 Domestic peer weighting approval gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.14 — Domestic Formulations Peer Weighting Approval Gate**.
@@ -10324,8 +10324,8 @@ Still unresolved:
 
 ## 128. Entry 123 — Gate G6.14 Domestic peer weighting approval gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.14 has completed validation as a **proposal-only Domestic Formulations peer weighting approval gate**.
@@ -10423,8 +10423,8 @@ Therefore:
 
 ## 129. Entry 124 — Gate G6.15 Domestic peer combined score contract prepared
 
-**Date:** 19 September 2026  
-**Actor:** owner methodology approval + ChatGPT implementation  
+**Date:** 19 September 2026
+**Actor:** owner methodology approval + ChatGPT implementation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.15 — Domestic Formulations Peer Combined Score Contract**.
@@ -10552,8 +10552,8 @@ Gate G now includes:
 
 ## 130. Entry 125 — Gate G6.15 Domestic peer combined score contract validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.15 has completed validation as an **owner-approved but not active Domestic Formulations peer combined score contract**.
@@ -10654,8 +10654,8 @@ Therefore:
 
 ## 131. Entry 126 — Gate G6.16 Domestic Valuation component weighting approval gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.16 — Domestic Formulations Valuation Component Weighting Approval Gate**.
@@ -10770,8 +10770,8 @@ Still unresolved:
 
 ## 132. Entry 127 — Gate G6.16 Domestic Valuation component weighting approval gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.16 has completed validation as a **proposal-only Domestic Formulations Valuation component weighting approval gate**.
@@ -10870,8 +10870,8 @@ Therefore:
 
 ## 133. Entry 128 — Gate G6.17 Domestic Valuation combined score contract prepared
 
-**Date:** 19 September 2026  
-**Actor:** owner methodology approval + ChatGPT implementation  
+**Date:** 19 September 2026
+**Actor:** owner methodology approval + ChatGPT implementation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.17 — Domestic Formulations Valuation Combined Score Contract**.
@@ -11006,8 +11006,8 @@ Gate G now includes:
 
 ## 134. Entry 129 — Gate G6.17 Domestic Valuation combined score contract validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.17 has completed validation as an **owner-approved but not active Domestic Formulations Valuation combined score contract**.
@@ -11113,8 +11113,8 @@ Domestic Formulations Valuation is now methodology-complete, but Gate G6 itself 
 
 ## 135. Entry 130 — Gate G6.18 Global Generics US price-erosion curve prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has moved to the next non-Domestic primary model with **G6.18 — Global Generics US Generic Price-Erosion Curve**.
@@ -11243,8 +11243,8 @@ Gate G now includes:
 
 ## 136. Entry 131 — Gate G6.18 Global Generics US price-erosion curve validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.18 has completed validation as a **proposal-only Global Generics US Generic Price-Erosion curve**.
@@ -11359,8 +11359,8 @@ Domestic and other Pharma Primary thresholds remain isolated.
 
 ## 137. Entry 132 — Gate G6.19 Global Generics pipeline evidence contract prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.19 — Global Generics Pipeline / Launch / Approval Evidence Contract**.
@@ -11474,8 +11474,8 @@ Gate G now includes:
 
 ## 138. Entry 133 — Gate G6.19 Global Generics pipeline evidence contract validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.19 has completed validation as a **proposal-only Global Generics Pipeline / Launch / Approval Evidence Contract**.
@@ -11577,8 +11577,8 @@ Regulatory-site severity remains governed by the separate G4 governance/regulato
 
 ## 139. Entry 134 — Gate G6.20 Global Generics pipeline stage normalization prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.20 — Global Generics Pipeline Stage Normalization**.
@@ -11675,8 +11675,8 @@ Gate G now includes:
 
 ## 140. Entry 135 — Gate G6.20 Global Generics pipeline stage normalization validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.20 has completed validation as a **proposal-only Global Generics Pipeline Stage Normalization contract**.
@@ -11759,8 +11759,8 @@ An unrelated positive event may not silently offset a delayed, blocked, withdraw
 
 ## 141. Entry 136 — Gate G6.21 Global Generics multi-event pipeline aggregation approval gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.21 — Global Generics Multi-Event Pipeline Aggregation Approval Gate**.
@@ -11941,8 +11941,8 @@ G4 remains authoritative for governance/regulatory gating, and the same regulato
 
 ## 142. Entry 137 — Gate G6.21 Global Generics multi-event pipeline aggregation approval gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.21 has completed validation as a **proposal-only Global Generics multi-event pipeline aggregation approval gate**.
@@ -12050,8 +12050,8 @@ G4 remains authoritative for governance/regulatory gating, and pipeline aggregat
 
 ## 143. Entry 138 — Gate G6.22 Global Generics pipeline aggregation method proposal prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.22 — Global Generics Pipeline Aggregation Method Proposal**.
@@ -12240,8 +12240,8 @@ The cards explicitly state:
 
 ## 144. Entry 139 — Gate G6.22 Global Generics pipeline aggregation method proposal validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.22 has completed validation as a **proposal-only Global Generics pipeline aggregation methodology proposal**.
@@ -12338,8 +12338,8 @@ Therefore:
 
 ## 145. Entry 140 — Owner approved G6.22 Global Generics pipeline aggregation methodology
 
-**Date:** 19 September 2026  
-**Actor:** owner explicit methodology approval  
+**Date:** 19 September 2026
+**Actor:** owner explicit methodology approval
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following G6.22 validation, the owner instructed ChatGPT to **proceed** with the exact methodology presented for approval.
@@ -12389,8 +12389,8 @@ It does **not** authorize:
 
 ## 146. Entry 141 — Gate G6.23 Global Generics combined pipeline score contract prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.23 — Global Generics Combined Pipeline Score Contract**.
@@ -12538,8 +12538,8 @@ The UI explicitly shows:
 
 ## 147. Entry 142 — Gate G6.23 validation interrupted by strict TypeScript indexing; corrective hardening prepared
 
-**Date:** 19 September 2026  
-**Actor:** owner-run validation + ChatGPT correction  
+**Date:** 19 September 2026
+**Actor:** owner-run validation + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner started G6.23 local validation.
@@ -12612,8 +12612,8 @@ Still exactly:
 
 ## 148. Entry 143 — Gate G6.23 Global Generics combined pipeline score contract validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.23 has completed validation as an **owner-approved but not active Global Generics combined pipeline score contract**.
@@ -12717,8 +12717,8 @@ Non-adverse aggregation:
 
 ## 149. Entry 144 — Gate G6.24 Global Generics regulatory-site treatment lock prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.24 — Global Generics Regulatory Site Status Treatment / Anti-Double-Counting Lock**.
@@ -12900,8 +12900,8 @@ Gate G now includes:
 
 ## 150. Entry 145 — Gate G6.24 Global Generics regulatory-site treatment lock validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.24 has completed validation as a **proposal-only Global Generics regulatory-site treatment / anti-double-counting lock**.
@@ -12971,8 +12971,8 @@ Therefore:
 
 ## 151. Entry 146 — Gate G6.25 Global Generics market-risk normalization gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.25 — Global Generics Market-Risk Normalization Gate**.
@@ -13146,8 +13146,8 @@ Gate G now includes:
 
 ## 152. Entry 147 — Gate G6.25 Global Generics market-risk normalization gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.25 has completed validation as a **proposal-only Global Generics market-risk normalization gate**.
@@ -13261,8 +13261,8 @@ Structural semantics:
 
 ## 153. Entry 148 — Gate G6.26 Global Generics drawdown method approval gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.26 — Global Generics Drawdown Method Approval Gate**.
@@ -13358,8 +13358,8 @@ Gate G now includes:
 
 ## 154. Entry 149 — Gate G6.26 Global Generics drawdown method approval gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.26 has completed validation as a **proposal-only Global Generics drawdown methodology approval gate**.
@@ -13431,8 +13431,8 @@ No candidate is approved by default.
 
 ## 155. Entry 150 — Gate G6.27 Global Generics drawdown evidence sufficiency deferral gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.27 — Global Generics Drawdown Evidence Sufficiency / Deferral Gate**.
@@ -13505,8 +13505,8 @@ Gate G now includes:
 
 ## 156. Entry 151 — Gate G6.27 Global Generics drawdown evidence sufficiency deferral gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.27 has completed validation as a **proposal-only Global Generics drawdown evidence-sufficiency / deferral gate**.
@@ -13569,8 +13569,8 @@ Therefore:
 
 ## 157. Entry 152 — Gate G6.28 Global Generics volatility context method approval gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.28 — Global Generics Volatility Context Method Approval Gate**.
@@ -13660,8 +13660,8 @@ Gate G now includes:
 
 ## 158. Entry 153 — Gate G6.28 Global Generics volatility context method approval gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.28 has completed validation as a **proposal-only Global Generics volatility context methodology approval gate**.
@@ -13734,8 +13734,8 @@ No candidate is approved by default.
 
 ## 159. Entry 154 — Gate G6.29 Global Generics volatility context evidence sufficiency deferral gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.29 — Global Generics Volatility Context Evidence Sufficiency / Deferral Gate**.
@@ -13824,8 +13824,8 @@ Gate G now includes:
 
 ## 160. Entry 155 — Gate G6.29 Global Generics volatility context evidence sufficiency deferral gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.29 has completed validation as a **proposal-only Global Generics volatility context evidence-sufficiency / deferral gate**.
@@ -13900,8 +13900,8 @@ This is an intentional incomplete/fail-closed state, not a neutral score.
 
 ## 161. Entry 156 — Gate G6.30 Global Generics operating margin methodology boundary gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.30 — Global Generics Operating Margin Methodology Boundary Gate**.
@@ -14002,8 +14002,8 @@ Gate G now includes:
 
 ## 162. Entry 157 — Gate G6.30 Global Generics operating margin methodology boundary gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.30 has completed validation as a **proposal-only Global Generics operating-margin methodology boundary gate**.
@@ -14069,8 +14069,8 @@ Explicitly not inherited from Domestic Formulations:
 
 ## 163. Entry 158 — Gate G6.31 Global Generics operating margin calibration deferral gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.31 — Global Generics Operating Margin Calibration Evidence Sufficiency / Deferral Gate**.
@@ -14149,8 +14149,8 @@ Gate G now includes:
 
 ## 164. Entry 159 — Gate G6.31 Global Generics operating margin calibration deferral gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.31 has completed validation as a **proposal-only Global Generics operating-margin calibration evidence-sufficiency / deferral gate**.
@@ -14222,8 +14222,8 @@ Therefore:
 
 ## 165. Entry 160 — Gate G6.32 Global Generics ROCE methodology boundary gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.32 — Global Generics ROCE / Capital Efficiency Methodology Boundary Gate**.
@@ -14329,8 +14329,8 @@ Gate G now includes:
 
 ## 166. Entry 161 — Gate G6.32 Global Generics ROCE methodology boundary gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.32 has completed validation as a **proposal-only Global Generics ROCE / Capital Efficiency methodology boundary gate**.
@@ -14406,8 +14406,8 @@ G6.32 did not bypass or rewrite that contract.
 
 ## 167. Entry 162 — Gate G6.33 Global Generics ROCE calibration and parent alignment deferral gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.33 — Global Generics ROCE Calibration Evidence Sufficiency / Parent Alignment Deferral Gate**.
@@ -14506,8 +14506,8 @@ Gate G now includes:
 
 ## 168. Entry 163 — Gate G6.33 Global Generics ROCE calibration and parent alignment deferral gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.33 has completed validation as a **proposal-only Global Generics ROCE calibration evidence-sufficiency / parent-alignment deferral gate**.
@@ -14592,8 +14592,8 @@ A separate versioned parent reconciliation is still required.
 
 ## 169. Entry 164 — Gate G6.34 Global Generics cash conversion methodology boundary gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.34 — Global Generics Cash Conversion Methodology Boundary Gate**.
@@ -14705,8 +14705,8 @@ Gate G now includes:
 
 ## 170. Entry 165 — Gate G6.34 Global Generics cash conversion methodology boundary gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.34 has completed validation as a **proposal-only Global Generics Cash Conversion methodology boundary gate**.
@@ -14788,8 +14788,8 @@ A separate versioned parent reconciliation remains required.
 
 ## 171. Entry 166 — Gate G6.35 Global Generics cash conversion calibration and parent alignment deferral gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.35 — Global Generics Cash Conversion Calibration Evidence Sufficiency / Parent Alignment Deferral Gate**.
@@ -14890,8 +14890,8 @@ Gate G now includes:
 
 ## 172. Entry 167 — Gate G6.35 Global Generics cash conversion calibration and parent alignment deferral gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.35 has completed validation as a **proposal-only Global Generics Cash Conversion calibration evidence-sufficiency / parent-alignment deferral gate**.
@@ -14976,8 +14976,8 @@ A separate versioned parent reconciliation is still required.
 
 ## 173. Entry 168 — Gate G6.36 Global Generics balance sheet methodology boundary gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.36 — Global Generics Balance Sheet / Leverage Methodology Boundary Gate**.
@@ -15091,8 +15091,8 @@ Gate G now includes:
 
 ## 174. Entry 169 — Gate G6.36 Global Generics balance sheet methodology boundary gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.36 has completed validation as a **proposal-only Global Generics Balance Sheet / Leverage methodology boundary gate**.
@@ -15176,8 +15176,8 @@ A separate versioned parent reconciliation remains required.
 
 ## 175. Entry 170 — Gate G6.37 Global Generics balance sheet calibration and parent alignment deferral gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.37 — Global Generics Balance Sheet Calibration Evidence Sufficiency / Parent Alignment Deferral Gate**.
@@ -15279,8 +15279,8 @@ Gate G now includes:
 
 ## 176. Entry 171 — Gate G6.37 Global Generics balance sheet calibration and parent alignment deferral gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.37 has completed validation as a **proposal-only Global Generics Balance Sheet calibration evidence-sufficiency / parent-alignment deferral gate**.
@@ -15365,8 +15365,8 @@ A separate versioned parent reconciliation is still required.
 
 ## 177. Entry 172 — Gate G6.38 Global Generics valuation methodology boundary gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.38 — Global Generics Valuation Methodology Boundary Gate**.
@@ -15459,8 +15459,8 @@ Gate G now includes:
 
 ## 178. Entry 173 — Gate G6.38 Global Generics valuation methodology boundary gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.38 has completed validation as a **proposal-only Global Generics Valuation methodology boundary gate**.
@@ -15538,8 +15538,8 @@ Missing-component renormalization and hidden reweighting remain prohibited.
 
 ## 179. Entry 174 — Gate G6.39 Global Generics valuation calibration deferral gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.39 — Global Generics Valuation Calibration Evidence Sufficiency / Deferral Gate**.
@@ -15633,8 +15633,8 @@ Gate G now includes:
 
 ## 180. Entry 175 — Gate G6.39 Global Generics valuation calibration deferral gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.39 has completed validation as a **proposal-only Global Generics Valuation calibration evidence-sufficiency / deferral gate**.
@@ -15709,8 +15709,8 @@ Therefore:
 
 ## 181. Entry 176 — Gate G6.40 Global Generics ownership governance methodology boundary gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.40 — Global Generics Ownership / Governance Methodology Boundary Gate**.
@@ -15824,8 +15824,8 @@ Gate G now includes:
 
 ## 182. Entry 177 — Gate G6.40 Global Generics ownership governance methodology boundary gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.40 has completed validation as a **proposal-only Global Generics Ownership / Governance methodology boundary gate**.
@@ -15917,8 +15917,8 @@ Mechanical shortcuts remain prohibited:
 
 ## 183. Entry 178 — Gate G6.41 Global Generics ownership governance calibration and parent alignment deferral gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.41 — Global Generics Ownership / Governance Calibration Evidence Sufficiency / Parent Alignment Deferral Gate**.
@@ -16022,8 +16022,8 @@ Gate G now includes:
 
 ## 184. Entry 179 — Gate G6.41 Global Generics ownership governance calibration and parent alignment deferral gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.41 has completed validation as a **proposal-only Global Generics Ownership / Governance calibration evidence-sufficiency / parent-alignment deferral gate**.
@@ -16122,8 +16122,8 @@ A separate versioned parent reconciliation is still required.
 
 ## 185. Entry 180 — Gate G6.42 Global Generics momentum methodology boundary gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.42 — Global Generics Momentum Methodology Boundary Gate**.
@@ -16248,8 +16248,8 @@ Gate G now includes:
 
 ## 186. Entry 181 — Gate G6.42 Global Generics momentum methodology boundary gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.42 has completed validation as a **proposal-only Global Generics Momentum methodology boundary gate**.
@@ -16330,8 +16330,8 @@ G6.24–G6.29 remain authoritative for the Global Generics Risk slice:
 
 ## 187. Entry 182 — Gate G6.43 Global Generics momentum parent-contract benchmark deferral gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.43 — Global Generics Momentum Parent-Contract / Benchmark Evidence Sufficiency Deferral Gate**.
@@ -16428,8 +16428,8 @@ Gate G now includes:
 
 ## 188. Entry 183 — Gate G6.43 Global Generics momentum parent-contract benchmark deferral gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.43 has completed validation as a **proposal-only Global Generics Momentum parent-contract / benchmark evidence-sufficiency deferral gate**.
@@ -16497,8 +16497,8 @@ G6.24–G6.29 remain authoritative. Regulatory / Market Risk is not reopened.
 
 ## 189. Entry 184 — Gate G6.44 Global Generics G6 coverage closure audit prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.44 — Global Generics G6 Coverage Closure Audit**.
@@ -16607,8 +16607,8 @@ Gate G now includes:
 
 ## 190. Entry 185 — Gate G6.44 Global Generics G6 coverage closure audit validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.44 has completed validation as a **proposal-only Global Generics G6 coverage closure audit**.
@@ -16678,8 +16678,8 @@ Therefore:
 
 ## 191. Entry 186 — Gate G6.45 Global Generics applicability registry reconciliation gate prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6 has continued with **G6.45 — Global Generics Applicability Registry Reconciliation Gate**.
@@ -16818,8 +16818,8 @@ Preparing G6.45 does not start G7.
 
 ## 192. Entry 187 — Gate G6.45 Global Generics applicability registry reconciliation gate validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G6.45 has completed validation as a **proposal-only Global Generics applicability-registry reconciliation gate**.
@@ -16930,8 +16930,8 @@ If G7 exposes a genuine implementation contradiction, that issue should be treat
 
 ## 193. Entry 188 — Gate G7-P1 Material Overlay numeric modifier and combined-cap contract prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7 has started with the first bounded prerequisite:
@@ -17050,8 +17050,8 @@ Gate G now exposes two G7-P1 review cards:
 
 ## 194. Entry 189 — Gate G7-P1 Material Overlay numeric modifier and combined-cap contract validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7-P1 has completed owner validation.
@@ -17111,8 +17111,8 @@ The ±10 cap and confidence factors remain explicit methodology proposals rather
 
 ## 195. Entry 190 — Gate G7-P2 Governance High-Risk Constraint Contract prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7 has continued with the second bounded prerequisite:
@@ -17197,8 +17197,8 @@ Gate G now exposes:
 
 ## 196. Entry 191 — Gate G7-P2 Governance High-Risk Constraint Contract validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7-P2 has completed owner validation.
@@ -17258,8 +17258,8 @@ This is an explicit methodology decision based on the absence of defensible nume
 
 ## 197. Entry 192 — Gate G7.1 Read-only Scoring Adapter prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7.1 has been prepared as the first actual read-only calculation engine.
@@ -17375,8 +17375,8 @@ Gate G now exposes:
 
 ## 198. Entry 193 — Gate G7.1 Read-only Scoring Adapter validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7.1 has completed owner validation.
@@ -17440,8 +17440,8 @@ Confirmed:
 
 ## 199. Entry 194 — Gate G7.2 TORNTPHARM Explainable Read-only Preview prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7.2 has been prepared as the first TORNTPHARM-specific explainable read-only preview.
@@ -17533,8 +17533,8 @@ The Gate G surface now includes a compact G7.2 TORNTPHARM preview table.
 
 ## 200. Entry 195 — Gate G7.2 TORNTPHARM Explainable Read-only Preview validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7.2 has completed owner validation.
@@ -17590,8 +17590,8 @@ Validated items:
 
 ## 201. Entry 196 — Gate G7.3 Validation, Leakage Tests & Research-Gap Register prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7.3 has been prepared as the **final bounded G7 checkpoint**.
@@ -17684,8 +17684,8 @@ Gate G now exposes:
 
 ## 202. Entry 197 — Gate G7.3 Validation, Leakage Tests & Research-Gap Register validated
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7.3 has completed owner validation.
@@ -17779,8 +17779,8 @@ No G7.4 is required or permitted for routine follow-up. Any new methodology issu
 
 ## 203. Entry 198 — Gate G8 plan locked — AUROPHARMA local-development prerequisite
 
-**Date:** 19 September 2026  
-**Actor:** owner clarification + ChatGPT planning checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner clarification + ChatGPT planning checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7 remains formally closed:
@@ -17957,8 +17957,8 @@ G8 does not:
 
 ## 204. Entry 199 — AUROPHARMA local Research target fixture prepared
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The pre-G8 local-development prerequisite has been implemented as a **local-only script**, not as a production migration.
@@ -18093,8 +18093,8 @@ Research Coverage should show:
 
 ## 205. Entry 200 — AUROPHARMA local fixture selector corrected after first localhost attempt
 
-**Date:** 19 September 2026  
-**Actor:** owner validation + ChatGPT fix  
+**Date:** 19 September 2026
+**Actor:** owner validation + ChatGPT fix
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner pulled and validated the AUROPHARMA local fixture contract:
@@ -18148,8 +18148,8 @@ Therefore:
 
 ## 206. Entry 201 — AUROPHARMA fixture corrected to exact application portfolio
 
-**Date:** 19 September 2026  
-**Actor:** owner localhost validation + ChatGPT correction  
+**Date:** 19 September 2026
+**Actor:** owner localhost validation + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The second local fixture execution completed successfully and printed:
@@ -18230,8 +18230,8 @@ No real/non-fixture transaction is touched.
 
 ## 207. Entry 202 — AUROPHARMA fixture made local-auth-user aware
 
-**Date:** 19 September 2026  
-**Actor:** owner localhost validation + ChatGPT correction  
+**Date:** 19 September 2026
+**Actor:** owner localhost validation + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After the exact-portfolio selector correction, localhost Holdings still showed only:
@@ -18300,8 +18300,8 @@ This allows the owner to identify the same local login email shown in the browse
 
 ## 208. Entry 203 — AUROPHARMA fixture aligned to validated Gate E local-auth pattern
 
-**Date:** 19 September 2026  
-**Actor:** owner localhost validation + ChatGPT correction  
+**Date:** 19 September 2026
+**Actor:** owner localhost validation + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The user-aware AUROPHARMA fixture attempt failed before mutation with:
@@ -18370,8 +18370,8 @@ The runner no longer requires `PORTFOLIOAI_LOCAL_USER_EMAIL`.
 
 ## 209. Entry 204 — AUROPHARMA local Holdings fixture validated
 
-**Date:** 19 September 2026  
-**Actor:** owner localhost validation + ChatGPT checkpoint  
+**Date:** 19 September 2026
+**Actor:** owner localhost validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The corrected AUROPHARMA local fixture was pulled and rerun using the already validated Gate E local-auth pattern.
@@ -18433,8 +18433,8 @@ Expected:
 
 ## 210. Entry 205 — G8.1 AUROPHARMA classification & evidence lock implemented
 
-**Date:** 19 September 2026  
-**Actor:** ChatGPT  
+**Date:** 19 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G7 remains formally closed as **COMPLETE / READ-ONLY / NOT ACTIVE**. No G7.4 was created.
@@ -18545,8 +18545,8 @@ G8.1 remains **OPEN / OWNER VALIDATION REQUIRED** until the focused G8.1 test an
 
 ## 211. Entry 206 — G8.1 formally closed; G8.2 three-layer same-engine preview implemented
 
-**Date:** 19 September 2026  
-**Actor:** owner visual validation + ChatGPT  
+**Date:** 19 September 2026
+**Actor:** owner visual validation + ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 ### G8.1 closure
@@ -18636,8 +18636,8 @@ API/Bulk is retained as Emerging and excluded from numeric/readiness denominator
 
 ## 212. Entry 207 — Mandatory PortfolioAI build / validation workflow locked; G8.2 visual approval recorded
 
-**Date:** 20 September 2026  
-**Actor:** owner process clarification + ChatGPT  
+**Date:** 20 September 2026
+**Actor:** owner process clarification + ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner defined the mandatory execution order for all remaining PortfolioAI development gates.
@@ -18717,8 +18717,8 @@ Only after that validation passes should the cumulative handoff be updated again
 
 ## 213. Entry 208 — G8.2 full local validation confirmed; G8.2 formally closed
 
-**Date:** 20 September 2026  
-**Actor:** owner local validation + ChatGPT checkpoint  
+**Date:** 20 September 2026
+**Actor:** owner local validation + ChatGPT checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After the previously recorded localhost visual approval, the owner ran the locked G8.2 full-local validation sequence and then explicitly instructed PortfolioAI to proceed to G8.3.
@@ -18773,8 +18773,8 @@ No G8.4 is permitted for routine work.
 
 ## 214. Entry 209 — G8.3 portability / isolation / leakage validation implemented
 
-**Date:** 20 September 2026  
-**Actor:** ChatGPT  
+**Date:** 20 September 2026
+**Actor:** ChatGPT
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G8.2 was formally closed at Entry 208 under the locked build/validation workflow.
@@ -18883,8 +18883,8 @@ Per the locked project workflow, G8.3 is **not closed yet**.
 
 ## 215. Entry 210 — G8.3 first full-local validation exposed Vitest file-URL harness defect
 
-**Date:** 20 September 2026  
-**Actor:** owner local validation + ChatGPT correction  
+**Date:** 20 September 2026
+**Actor:** owner local validation + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After G8.3 localhost visual approval passed, the owner ran the locked full-local validation sequence.
@@ -18957,8 +18957,8 @@ The prior localhost visual approval remains valid because this correction change
 
 ## 216. Entry 211 — G8.3 second local validation exposed over-broad static-guard false positive
 
-**Date:** 20 September 2026  
-**Actor:** owner local validation + ChatGPT correction  
+**Date:** 20 September 2026
+**Actor:** owner local validation + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After the path-resolution harness correction, the owner reran the full G8.3 local validation.
@@ -19029,8 +19029,8 @@ Previous visual approval remains valid because this correction is test-only.
 
 ## 217. Entry 212 — G8.3 full local validation passed; G8 formally closed
 
-**Date:** 20 September 2026  
-**Actor:** owner local validation + ChatGPT final checkpoint  
+**Date:** 20 September 2026
+**Actor:** owner local validation + ChatGPT final checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reran the complete G8.3 post-visual local validation after the two test-harness-only corrections.
@@ -19132,8 +19132,8 @@ The next stage is **G9**.
 
 ## 218. Entry 213 — G9 plan locked; G9.1 AUROPHARMA activation-readiness implemented for owner visual review
 
-**Date:** 20 September 2026  
-**Actor:** ChatGPT implementation checkpoint  
+**Date:** 20 September 2026
+**Actor:** ChatGPT implementation checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G8 remains formally closed. Work has advanced to the hard-capped G9 sequence only after the owner explicitly instructed continuation.
@@ -19254,8 +19254,8 @@ G9.1 is **NOT COMPLETE** and full local validation is intentionally deferred unt
 
 ## 219. Entry 214 — G9.1 localhost visual approval and full local validation passed; G9.1 formally closed
 
-**Date:** 20 September 2026  
-**Actor:** owner local validation + ChatGPT final checkpoint  
+**Date:** 20 September 2026
+**Actor:** owner local validation + ChatGPT final checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner completed the locked G9.1 workflow after pulling branch head `32a6f5723e821e1e02bc271d1836868c1cf96e77`.
@@ -19330,8 +19330,8 @@ G9.2 must begin local-only and must not cross the production boundary without ex
 
 ## 220. Entry 215 — G9.2 AUROPHARMA local canonical research activation implemented for owner persistence + visual review
 
-**Date:** 20 September 2026  
-**Actor:** ChatGPT implementation checkpoint  
+**Date:** 20 September 2026
+**Actor:** ChatGPT implementation checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G9.1 is formally closed. Work has advanced only to the next hard-capped checkpoint:
@@ -19459,8 +19459,8 @@ No full local validation has been run yet.
 
 ## 221. Entry 216 — G9.2 first full local validation: focused ESLint exposed one unnecessary repository type assertion
 
-**Date:** 20 September 2026  
-**Actor:** owner local validation + ChatGPT correction  
+**Date:** 20 September 2026
+**Actor:** owner local validation + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After G9.2 localhost visual approval passed, the owner ran the locked full local validation sequence.
@@ -19523,8 +19523,8 @@ The previous G9.2 localhost visual approval remains valid because this correctio
 
 ## 222. Entry 217 — G9.2 full local validation passed; G9.2 formally closed
 
-**Date:** 20 September 2026  
-**Actor:** owner local validation + ChatGPT final checkpoint  
+**Date:** 20 September 2026
+**Actor:** owner local validation + ChatGPT final checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner pulled the lint-only correction at branch head `edaf22441179dc112bbeefa5e7ef80e23c391906` and reran the complete G9.2 validation sequence.
@@ -19603,8 +19603,8 @@ G9.3 must normalize the permanent Pharma UI/architecture vice versa:
 
 ## 223. Entry 218 — G9.3 reciprocal PHARMA_V1 normalization implemented for two-stock visual comparison
 
-**Date:** 20 September 2026  
-**Actor:** ChatGPT implementation checkpoint  
+**Date:** 20 September 2026
+**Actor:** ChatGPT implementation checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G9.2 is formally closed. Work has advanced only to the final hard-capped checkpoint:
@@ -19753,8 +19753,8 @@ Full local validation is intentionally deferred until after the two-stock visual
 
 ## 224. Entry 219 — G9.3 visual comparison exposed AUROPHARMA reachability defect; canonical-assignment routing corrected
 
-**Date:** 20 September 2026  
-**Actor:** owner visual comparison + ChatGPT correction  
+**Date:** 20 September 2026
+**Actor:** owner visual comparison + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner provided fresh localhost screenshots for both reference Pharma companies during the mandatory G9.3 two-stock visual-normalization review.
@@ -19849,8 +19849,8 @@ The owner should pull the correction and repeat the AUROPHARMA/TORNTPHARM visual
 
 ## 225. Entry 220 — G9.3 second visual comparison: shared architecture aligned; product/audit asymmetry corrected
 
-**Date:** 20 September 2026  
-**Actor:** owner two-stock visual comparison + ChatGPT correction  
+**Date:** 20 September 2026
+**Actor:** owner two-stock visual comparison + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner repeated the G9.3 localhost comparison after the canonical-assignment reachability correction and supplied fresh screenshots for AUROPHARMA and TORNTPHARM.
@@ -19973,8 +19973,8 @@ Full local validation is still intentionally deferred until owner visual approva
 
 ## 226. Entry 221 — G9.3 full-page Pharma template normalization implemented; canonical research authority separated from scoring authority
 
-**Date:** 20 September 2026  
-**Actor:** owner full-page visual review + ChatGPT correction  
+**Date:** 20 September 2026
+**Actor:** owner full-page visual review + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner supplied complete Overview-page screenshots for both TORNTPHARM and AUROPHARMA during the mandatory G9.3 vice-versa visual review.
@@ -20098,8 +20098,8 @@ Full local validation is intentionally deferred.
 
 ## 227. Entry 222 — Selective G9.3 UI rollback restores pre-G9.3 designs without touching research/data
 
-**Date:** 20 September 2026  
-**Actor:** owner instruction + ChatGPT rollback checkpoint  
+**Date:** 20 September 2026
+**Actor:** owner instruction + ChatGPT rollback checkpoint
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner explicitly requested restoration of the older Research-page designs for **both TORNTPHARM and AUROPHARMA**, with a hard requirement that no data, research, methodology or validated gate work be lost.
@@ -20213,8 +20213,8 @@ G9.3 normalization is **not complete** and the normalized-template experiment is
 
 ## 228. Entry 223 — Selective UI rollback visually approved on both Pharma reference stocks
 
-**Date:** 20 September 2026  
-**Actor:** owner localhost visual confirmation  
+**Date:** 20 September 2026
+**Actor:** owner localhost visual confirmation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner confirmed that both reference Pharma stocks have returned to their intended older designs after the selective G9.3 UI rollback.
@@ -20260,8 +20260,8 @@ PR #101 remains OPEN / DRAFT / UNMERGED.
 
 ## 229. Entry 224 — G9.3 plan reformed around shared Research shell + reusable PHARMA_V1 sector workspace
 
-**Date:** 20 September 2026  
-**Actor:** owner proposal + repository UI architecture audit + ChatGPT plan revision  
+**Date:** 20 September 2026
+**Actor:** owner proposal + repository UI architecture audit + ChatGPT plan revision
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner proposed a revised G9.3 direction:
@@ -20413,8 +20413,8 @@ PR #101 remains OPEN / DRAFT / UNMERGED.
 
 ## 230. Entry 225 — G9.3 V2 TORNTPHARM-first capability completion checkpoint implemented
 
-**Date:** 20 September 2026  
-**Actor:** owner instruction + ChatGPT implementation  
+**Date:** 20 September 2026
+**Actor:** owner instruction + ChatGPT implementation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner approved implementation of revised G9.3 V2 and explicitly requested that TORNTPHARM be completed first.
@@ -20559,8 +20559,8 @@ G9.3 V2 remains **OPEN**.
 
 ## 231. Entry 226 — G9.3 V2 TORNTPHARM capability visual-review corrections applied
 
-**Date:** 20 September 2026  
-**Actor:** ChatGPT repo inspection following owner-supplied localhost screenshots  
+**Date:** 20 September 2026
+**Actor:** ChatGPT repo inspection following owner-supplied localhost screenshots
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The TORNTPHARM reusable capability layer was reviewed against:
@@ -20635,8 +20635,8 @@ G9.3 V2 remains **OPEN**.
 
 ## 232. Entry 227 — G9.3 V2 Pharma capability provenance labels added
 
-**Date:** 20 September 2026  
-**Actor:** owner request + ChatGPT implementation  
+**Date:** 20 September 2026
+**Actor:** owner request + ChatGPT implementation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following the corrected TORNTPHARM visual review, the owner asked where the generalized G8.1 / G8.2 / G8.3 / G9.1 / G9.2 capabilities were represented.
@@ -20688,8 +20688,8 @@ G9.3 V2 remains **OPEN**.
 
 ## 233. Entry 228 — G9.3 V2 TORNTPHARM owner visual PASS
 
-**Date:** 20 September 2026  
-**Actor:** owner visual approval  
+**Date:** 20 September 2026
+**Actor:** owner visual approval
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reviewed the corrected TORNTPHARM localhost **PHARMA_V1 architecture, portability & activation state** layer after the G8/G9 provenance labels were added and explicitly reported:
@@ -20752,8 +20752,8 @@ G9.3 V2 remains **OPEN**.
 
 ## 234. Entry 229 — G9.3 V2 TORNTPHARM-first capability checkpoint CLOSED / PASS
 
-**Date:** 20 September 2026  
-**Actor:** owner local validation + ChatGPT checkpoint closure  
+**Date:** 20 September 2026
+**Actor:** owner local validation + ChatGPT checkpoint closure
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner completed the full local validation suite for the visually approved TORNTPHARM G9.3 V2 capability checkpoint and reported:
@@ -20842,8 +20842,8 @@ G9.3 V2 itself remains **OPEN**.
 
 ## 234. Entry 229 — G9.3 V2 TORNTPHARM full local validation PASS / checkpoint closed
 
-**Date:** 20 September 2026  
-**Actor:** owner-executed local validation + ChatGPT review  
+**Date:** 20 September 2026
+**Actor:** owner-executed local validation + ChatGPT review
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner completed the full local validation gate after the formal TORNTPHARM visual PASS.
@@ -20932,8 +20932,8 @@ No AUROPHARMA implementation has been made by this entry.
 
 ## 235. Entry 230 — G9.3-D AUROPHARMA consumes reusable PHARMA_V1 capability workspace
 
-**Date:** 20 September 2026  
-**Actor:** owner continuation + ChatGPT implementation  
+**Date:** 20 September 2026
+**Actor:** owner continuation + ChatGPT implementation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The formally closed TORNTPHARM-first G9.3 V2 checkpoint has now advanced to **G9.3-D — AUROPHARMA consumption of the completed reusable PHARMA_V1 sector workspace**.
@@ -21040,8 +21040,8 @@ G9.3 V2 remains **OPEN**.
 
 ## 236. Entry 231 — G9.3-D AUROPHARMA duplicate historical G8/G9 overview mounts removed
 
-**Date:** 20 September 2026  
-**Actor:** owner visual review + ChatGPT correction  
+**Date:** 20 September 2026
+**Actor:** owner visual review + ChatGPT correction
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner supplied fresh AUROPHARMA localhost screenshots after the reusable PHARMA_V1 capability workspace was applied.
@@ -21115,8 +21115,8 @@ G9.3 V2 remains **OPEN**.
 
 ## 237. Entry 232 — G9.3-D AUROPHARMA owner visual PASS
 
-**Date:** 20 September 2026  
-**Actor:** owner visual approval  
+**Date:** 20 September 2026
+**Actor:** owner visual approval
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reviewed fresh AUROPHARMA localhost screenshots after removal of the duplicate historical G8/G9 Overview mounts and confirmed:
@@ -21177,8 +21177,8 @@ G9.3 V2 remains **OPEN**.
 
 ## 238. Entry 233 — G9.3 V2 final cross-company validation PASS / G9 closed
 
-**Date:** 20 September 2026  
-**Actor:** owner-executed local validation + ChatGPT closure review  
+**Date:** 20 September 2026
+**Actor:** owner-executed local validation + ChatGPT closure review
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following AUROPHARMA visual PASS, the owner ran the final local PHARMA_V1 cross-company validation and reported:
@@ -21266,8 +21266,8 @@ PR #101 remains **OPEN / DRAFT / UNMERGED**.
 
 ## 239. Entry 234 — Gate G Final Closure Audit opened
 
-**Date:** 20 September 2026  
-**Actor:** owner roadmap correction + ChatGPT repository audit  
+**Date:** 20 September 2026
+**Actor:** owner roadmap correction + ChatGPT repository audit
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner clarified that the higher-level product roadmap remains:
@@ -21379,8 +21379,8 @@ PR #101 remains OPEN / DRAFT / UNMERGED.
 
 ## 240. Entry 235 — G-FINAL-1 closure-candidate implementation complete / owner methodology review pending
 
-**Date:** 20 September 2026  
-**Actor:** ChatGPT implementation following owner authorization to proceed  
+**Date:** 20 September 2026
+**Actor:** ChatGPT implementation following owner authorization to proceed
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 ### Objective
@@ -21463,8 +21463,8 @@ G-FINAL-1 implementation candidate is ready for local validation.
 
 ## 241. Entry 236 — G-FINAL-1 methodology freeze owner-approved / post-approval validation pending
 
-**Date:** 20 September 2026  
-**Actor:** owner approval + ChatGPT implementation  
+**Date:** 20 September 2026
+**Actor:** owner approval + ChatGPT implementation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner explicitly approved the four G-FINAL-1 methodology items after the pre-approval validation passed.
@@ -21544,8 +21544,8 @@ Remaining Gate H blockers:
 
 ## 242. Entry 237 — G-FINAL-1 post-approval validation PASS / checkpoint closed
 
-**Date:** 20 September 2026  
-**Actor:** owner-executed local validation + ChatGPT closure review  
+**Date:** 20 September 2026
+**Actor:** owner-executed local validation + ChatGPT closure review
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner completed the required post-approval validation after the G-FINAL-1 methodology freeze and reported:
@@ -21604,8 +21604,8 @@ Gate H remains blocked by:
 
 ## 243. Entry 238 — G-FINAL-2 audit complete / dimension-reconciliation candidate prepared
 
-**Date:** 20 September 2026  
-**Actor:** ChatGPT read-only audit + non-active candidate implementation  
+**Date:** 20 September 2026
+**Actor:** ChatGPT read-only audit + non-active candidate implementation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 ### Audit result
@@ -21695,8 +21695,8 @@ The candidate:
 
 ## 244. Entry 239 — G-FINAL-2A promoted / G-FINAL-2B evidence sufficiency locked
 
-**Date:** 20 September 2026  
-**Actor:** owner validation + ChatGPT versioned parent promotion and evidence lock  
+**Date:** 20 September 2026
+**Actor:** owner validation + ChatGPT versioned parent promotion and evidence lock
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -21773,8 +21773,8 @@ No missing evidence is converted to neutral.
 
 ## 245. Entry 240 — G-FINAL-2 consolidated implementation complete / owner freeze pending
 
-**Date:** 20 September 2026  
-**Actor:** owner-directed consolidation + ChatGPT implementation  
+**Date:** 20 September 2026
+**Actor:** owner-directed consolidation + ChatGPT implementation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -21848,8 +21848,8 @@ The candidate deliberately does not claim owner approval for unseen numeric thre
 
 ## 246. Entry 241 — G-FINAL-2 owner-approved methodology freeze applied / post-freeze validation pending
 
-**Date:** 20 September 2026  
-**Actor:** owner methodology approval + ChatGPT freeze implementation  
+**Date:** 20 September 2026
+**Actor:** owner methodology approval + ChatGPT freeze implementation
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -21930,8 +21930,8 @@ The pre-freeze validation passed before owner approval. The owner-approved code 
 
 ## 247. Entry 242 — G-FINAL-2 post-freeze validation PASS / checkpoint formally closed
 
-**Date:** 20 September 2026  
-**Actor:** owner-executed local validation + ChatGPT closure record  
+**Date:** 20 September 2026
+**Actor:** owner-executed local validation + ChatGPT closure record
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner completed the consolidated post-freeze validation and reported:
@@ -21999,7 +21999,7 @@ Gate H remains blocked until both pass.
 
 ## 248. Entry 243 — G-FINAL-3 consolidated cross-cutting candidate implemented
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G-FINAL-2 was formally closed after post-freeze validation PASS.
@@ -22066,7 +22066,7 @@ No company-wide clearance is inferred.
 
 ## 249. Entry 244 — G-FINAL-3 owner-approved freeze applied / post-freeze validation pending
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -22135,7 +22135,7 @@ The pre-freeze validation passed before owner approval. One post-freeze validati
 
 ## 250. Entry 245 — G-FINAL-3 post-freeze validation PASS / checkpoint formally closed
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -22201,7 +22201,7 @@ Only one canonical checkpoint remains:
 
 ## 251. Entry 246 — G-FINAL-4 end-to-end dry run implemented / final validation pending
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 G-FINAL-3 was formally closed after post-freeze validation PASS.
@@ -22279,7 +22279,7 @@ Current candidate:
 
 ## 252. Entry 247 — G-FINAL-4 validation PASS / Gate G formally closed
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -22375,7 +22375,7 @@ Current Gate H entry condition:
 
 ## 253. Entry 248 — Gate H capped execution plan created
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate G is formally closed as:
@@ -22434,7 +22434,7 @@ Only then may Gate I begin.
 
 ## 254. Entry 249 — Gate H H1 exact TORNTPHARM input-readiness audit implemented
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Gate H H1 has been implemented as a read-only audit of all ten weighted PHARMA_V1 dimensions.
@@ -22491,7 +22491,7 @@ Global Generics overlay remains not score-ready because economic materiality, co
 
 ## 255. Entry 250 — Gate H H1 validation PASS / checkpoint formally closed
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -22549,7 +22549,7 @@ After that, complete the remaining evidence gaps using existing canonical/stored
 
 ## 256. Entry 251 — H2 Type-7 ROCE lock + first deterministic inputs + normalization integrity finding
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner explicitly approved:
@@ -22665,7 +22665,7 @@ No subjective or neutral component scores are permitted.
 
 ## 257. Entry 252 — H2 initial lock validation PASS / bounded normalization correction begins
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -22720,7 +22720,7 @@ No H2A/H2B/H2C stages are introduced.
 
 ## 258. Entry 253 — H2 bounded component-normalization candidate implemented
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The bounded H2 normalization correction has been implemented as one owner-review candidate.
@@ -22770,7 +22770,7 @@ This preserves the owner-approved governance rule that High Risk is interpretati
 
 ## 259. Entry 254 — H2 component-normalization rubric owner-approved and frozen
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -22823,7 +22823,7 @@ No production evidence mutation, provider refresh, score persistence, recommenda
 
 ## 260. Entry 255 — H2 Quality and Cash Flow deterministic input locks implemented
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 H2 continued directly after the owner-approved component-normalization freeze. No H2A/H2B/H2C micro-stage was created.
@@ -22935,7 +22935,7 @@ PR #101 remains OPEN / DRAFT / UNMERGED.
 
 ## 261. Entry 256 — H2 Quality + Cash Flow validation PASS
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -22986,7 +22986,7 @@ No overall TORNTPHARM score has been calculated.
 
 ## 262. Entry 257 — H2 Business Durability reviewed-evidence candidate prepared
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 H2 continued directly with Business Durability after the Quality + Cash Flow validation PASS.
@@ -23055,7 +23055,7 @@ Owner/local focused validation is pending.
 
 ## 263. Entry 258 — H2 Business Durability review validation PASS
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -23111,7 +23111,7 @@ No licensed provider call has been made or authorized.
 
 ## 264. Entry 259 — H2 Ownership / Governance review candidate prepared
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 H2 continued directly with Ownership / Governance after the Business Durability validation PASS.
@@ -23190,7 +23190,7 @@ Owner/local focused validation pending.
 
 ## 265. Entry 260 — H2 Ownership / Governance validation PASS and input integration
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -23246,7 +23246,7 @@ No final overall score has been calculated.
 
 ## 266. Entry 261 — H2 Ownership input integration validation PASS
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -23300,7 +23300,7 @@ No final overall score has been calculated.
 
 ## 267. Entry 262 — H2 remaining evidence blocker lock prepared
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After the Ownership input integration validation PASS, H2 performed a read-only canonical production inspection before any provider refresh.
@@ -23381,7 +23381,7 @@ No provider refresh or licensed call was performed.
 
 ## 268. Entry 263 — H2 remaining evidence lock validation PASS
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -23441,7 +23441,7 @@ Separate explicit owner approval remains required before:
 
 ## 269. Entry 264 — H2 read-only blocker reduction: Field Force + overlay semantics
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After the remaining-evidence lock validation PASS, H2 continued only with read-only public/official research.
@@ -23509,7 +23509,7 @@ No market-data refresh or licensed-provider call was performed.
 
 ## 270. Entry 265 — H2 Field Force + Overlay reconciliation validation PASS
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -23546,7 +23546,7 @@ No provider refresh, licensed source call, production evidence mutation, score e
 
 ## 271. Entry 266 — H2 regulatory runtime resolved from official evidence
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 H2 continued with read-only official-source regulatory research only.
@@ -23608,7 +23608,7 @@ No provider refresh, licensed call, production mutation, evidence write or score
 
 ## 272. Entry 267 — H2 regulatory runtime validation PASS + hard H2 stop rule
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -23671,7 +23671,7 @@ Global Generics overlay numeric participation is already resolved as `BELOW_SCOR
 
 ## 272. Entry 267 — H2 regulatory runtime resolution validation PASS
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -23719,7 +23719,7 @@ No provider refresh, licensed source call, production evidence mutation, score e
 
 ## 273. Entry 268 — H2 NIFTY Pharma benchmark refresh plumbing prepared locally
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After the regulatory runtime validation PASS, H2 inspected the remaining market-history path.
@@ -23792,7 +23792,7 @@ Still required:
 
 ## 274. Entry 269 — H2 NIFTY Pharma benchmark plumbing validation PASS
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -23843,7 +23843,7 @@ Still required:
 
 ## 275. Entry 270 — H2 exact market + valuation authorization package prepared
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After NIFTY Pharma benchmark plumbing validation PASS, H2 reached the first point where provider-backed production evidence acquisition is unavoidable.
@@ -23900,7 +23900,7 @@ No action in the package has yet been executed.
 
 ## 276. Entry 271 — H2 local-only evidence execution path prepared
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Owner approved:
@@ -23990,7 +23990,7 @@ No credentials are committed.
 
 ## 277. Entry 272 — H2 local market evidence acquired; Momentum and Risk resolved
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Owner completed the local-only market evidence acquisition successfully.
@@ -24068,7 +24068,7 @@ Still unresolved:
 
 ## 278. Entry 273 — H2 local market evidence lock validation PASS
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner reported:
@@ -24125,7 +24125,7 @@ Only:
 
 ## 279. Entry 274 — H2 final blockers consolidated
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 After local market evidence validation PASS, H2 consolidated the only remaining two incomplete dimensions.
@@ -24174,7 +24174,7 @@ No final score has been calculated.
 
 ## 280. Entry 275 — H2 Domestic Formulations peer set owner approval
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner approved:
@@ -24216,7 +24216,7 @@ It does **not** authorize:
 
 ## 281. Entry 276 — H2 peer cohort locked; local valuation evidence audit prepared
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 Following owner approval of the H2 Domestic Formulations peer set, the read-only cohort has been locked in repository artifacts.
@@ -24259,7 +24259,7 @@ No provider call, no database write, no assignment persistence and no score exec
 
 ## 282. Entry 277 — H2 local valuation prerequisite audit prepared
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The first local valuation evidence audit showed:
@@ -24293,7 +24293,7 @@ No provider call or database mutation is performed.
 
 ## 283. Entry 278 — H2 local Pharma valuation contract discovery prepared
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The local valuation prerequisite audit established:
@@ -24350,7 +24350,7 @@ Only local provider accounting + immutable raw discovery capture are permitted a
 
 ## 284. Entry 279 — H2 local Pharma valuation contract discovery authorized
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner explicitly approved:
@@ -24402,7 +24402,7 @@ Local operational accounting and immutable raw discovery capture only.
 
 ## 285. Entry 280 — H2 local Pharma valuation contract discovery completed
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The owner executed the authorized local Pharma valuation contract discovery successfully.
@@ -24433,7 +24433,7 @@ This helper performs zero provider calls and zero writes. It prints the latest i
 
 ## 286. Entry 281 — H2 Trendlyne peer identities resolved from local discovery
 
-**Date:** 20 September 2026  
+**Date:** 20 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 
 The pretty-printed local discovery capture establishes exact Trendlyne identities for the owner-approved peer set:
@@ -24518,9 +24518,9 @@ Hosted validation remains non-authoritative because GitHub Actions is failing be
 
 ## 287. Entry 282 — H2 formal closure and H3 consolidated implementation checkpoint
 
-**Date:** 20 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Date:** 20 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
 **Validated H3 head before this HANDOFF update:** `dff4ded51d176e2ac5fdcce23e9bbcfba3cb0171`
 
 ### H2 final state
@@ -25015,9 +25015,9 @@ No Edge test or project-wide test script was modified.
 
 ## 290. Entry 285 — H4 COMPLETE / PASS and Gate H formally closed
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
 **Canonical Gate H closure record:** `docs/PortfolioAI_GATE_H_CLOSURE.md`
 
 The owner reported the final consolidated H4 validation as:
