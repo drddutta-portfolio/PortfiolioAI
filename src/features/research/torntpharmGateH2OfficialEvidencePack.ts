@@ -1,4 +1,7 @@
 import {
+  evaluateDomesticCashFlow,
+} from "./pharmaDomesticGateGFinal2NumericMethodology"
+import {
   evaluatePharmaOperatingMarginCurveProposal,
 } from "./pharmaOperatingMarginCurveProposal"
 import {
@@ -21,6 +24,8 @@ export const TORNTPHARM_GATE_H2_OFFICIAL_SOURCES = {
     "https://www.torrentpharma.com/docs/Press_release_Q3_25_26_V6_9c697bb7fe.pdf",
   q4Fy26:
     "https://www.torrentpharma.com/docs/Torrent_Pharma_Press_release_Q4_25_26_e5822c6449.pdf",
+  annualReportFy25:
+    "https://www.torrentpharma.com/pdf/investors/AR-2024-25_Single_page_view.pdf",
   annualReportFy26:
     "https://www.torrentpharma.com/pdf/investors/AR-2025-26.pdf",
 } as const
@@ -174,6 +179,53 @@ export const TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT =
     TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS,
   )
 
+export const TORNTPHARM_GATE_H2_CASH_FLOW_SERIES = [
+  {
+    periodEnd: "2024-03-31",
+    cfoCrore: 3266.08,
+    patCrore: 1656.38,
+    capexCrore: 432.78,
+    fcfCrore: 2833.30,
+    source: TORNTPHARM_GATE_H2_OFFICIAL_SOURCES.annualReportFy25,
+  },
+  {
+    periodEnd: "2025-03-31",
+    cfoCrore: 2585.11,
+    patCrore: 1911.25,
+    capexCrore: 611.87,
+    fcfCrore: 1973.24,
+    source: TORNTPHARM_GATE_H2_OFFICIAL_SOURCES.annualReportFy25,
+  },
+  {
+    periodEnd: "2026-03-31",
+    cfoCrore: 3022.71,
+    patCrore: 2163.37,
+    capexCrore: 677.39,
+    fcfCrore: 2345.32,
+    source: TORNTPHARM_GATE_H2_OFFICIAL_SOURCES.annualReportFy26,
+  },
+] as const
+
+export const TORNTPHARM_GATE_H2_CFO_TO_PAT_SERIES =
+  TORNTPHARM_GATE_H2_CASH_FLOW_SERIES.map((row) => row.cfoCrore / row.patCrore)
+
+export const TORNTPHARM_GATE_H2_FCF_TO_PAT_SERIES =
+  TORNTPHARM_GATE_H2_CASH_FLOW_SERIES.map((row) => row.fcfCrore / row.patCrore)
+
+export const TORNTPHARM_GATE_H2_CASH_FLOW_STATISTICS = {
+  medianCfoToPat: median(TORNTPHARM_GATE_H2_CFO_TO_PAT_SERIES),
+  medianFcfToPat: median(TORNTPHARM_GATE_H2_FCF_TO_PAT_SERIES),
+  positiveFcfYearsOutOf3:
+    TORNTPHARM_GATE_H2_CASH_FLOW_SERIES.filter((row) => row.fcfCrore > 0)
+      .length as 0 | 1 | 2 | 3,
+  latestCfoToPatMinusPriorMedian:
+    TORNTPHARM_GATE_H2_CFO_TO_PAT_SERIES.at(-1)!
+    - median(TORNTPHARM_GATE_H2_CFO_TO_PAT_SERIES.slice(0, -1)),
+} as const
+
+export const TORNTPHARM_GATE_H2_CASH_FLOW_READ_ONLY_RESULT =
+  evaluateDomesticCashFlow(TORNTPHARM_GATE_H2_CASH_FLOW_STATISTICS)
+
 export const TORNTPHARM_GATE_H2_OFFICIAL_EVIDENCE_PACK = {
   version: TORNTPHARM_GATE_H2_OFFICIAL_EVIDENCE_PACK_VERSION,
   state: "READ_ONLY_OFFICIAL_EVIDENCE_REVIEW" as const,
@@ -183,6 +235,20 @@ export const TORNTPHARM_GATE_H2_OFFICIAL_EVIDENCE_PACK = {
     score:
       TORNTPHARM_GATE_H2_DOMESTIC_GROWTH_READ_ONLY_RESULT.combinedScore,
     scoreReadyCandidate: true,
+  },
+  cashFlow: {
+    matchedAnnualPeriodCount: TORNTPHARM_GATE_H2_CASH_FLOW_SERIES.length,
+    minimumMatchedAnnualPeriodsPresent:
+      TORNTPHARM_GATE_H2_CASH_FLOW_SERIES.length === 3,
+    derivedStatistics: TORNTPHARM_GATE_H2_CASH_FLOW_STATISTICS,
+    score: TORNTPHARM_GATE_H2_CASH_FLOW_READ_ONLY_RESULT.combinedScore,
+    scoreReadyCandidate: true,
+    reasonCodes: [
+      "THREE_MATCHED_CFO_PAT_FCF_ANNUAL_PERIODS_LOCKED",
+      "FY2024_AND_FY2025_CFO_CONFIRMED_FROM_OFFICIAL_CONSOLIDATED_CASH_FLOW_STATEMENT",
+      "FY2026_CFO_ALREADY_PRESENT_IN_LOCKED_OFFICIAL_MANIFEST",
+      "FCF_REMAINS_CFO_MINUS_CAPEX_WITH_EXISTING_LOCKED_VALUES",
+    ] as const,
   },
   qualityOperatingMargin: {
     matchedComparableQuarterCount:
