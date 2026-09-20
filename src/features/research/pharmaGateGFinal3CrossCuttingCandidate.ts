@@ -11,11 +11,11 @@ import {
 } from "./pharmaGovernanceRegulatoryGateContract"
 
 export const PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE_VERSION =
-  "PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE_V1" as const
+  "PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_OWNER_APPROVED_V1" as const
 
 export const PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE = {
   version: PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE_VERSION,
-  state: "READY_FOR_OWNER_METHODOLOGY_REVIEW" as const,
+  state: "OWNER_APPROVED_COMPLETE" as const,
   overlay: {
     contractVersion: PHARMA_G7_OVERLAY_NUMERIC_MODIFIER_VERSION,
     formula: PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.formula,
@@ -28,7 +28,7 @@ export const PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE = {
       PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.partialReadinessNumericModifierAllowed,
     independentOverlayCapStackingAllowed:
       PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.independentOverlayCapStackingAllowed,
-    ownerApprovalRequired: true,
+    ownerApprovalRequired: false,
   },
   governanceRuntime: {
     contractVersion: PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT_VERSION,
@@ -38,9 +38,10 @@ export const PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE = {
     hiddenDoubleCountingAllowed: false,
     unknownRegulatoryMaterialityRequiresReview: true,
     remediationErasesHistoricalEvent: false,
-    ownerApprovalRequired: true,
+    ownerApprovalRequired: false,
   },
-  gFinal3Complete: false,
+  gFinal3Complete: true,
+  remainingGateGBlockers: ["G_FINAL_4_END_TO_END_READ_ONLY_DRY_RUN"] as const,
   gateHEligible: false,
   scoreExecutionEnabled: false,
   persistedScoreRunEnabled: false,
