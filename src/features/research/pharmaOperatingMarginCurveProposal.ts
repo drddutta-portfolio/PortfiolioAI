@@ -39,7 +39,6 @@ export interface PharmaOperatingMarginCurveProposal {
   }
   readonly finalScore: "WEIGHTED_COMPONENT_AVERAGE_0_TO_100"
   readonly methodologyApproved: true
-  readonly methodologyApproved: true
   readonly activationApproved: false
   readonly scoreExecutionEnabled: false
 }
@@ -113,6 +112,7 @@ export interface PharmaOperatingMarginCurveScoreResult {
   readonly stabilityScore: number
   readonly trendScore: number
   readonly combinedScore: number
+  readonly methodologyApproved: true
   readonly activationApproved: false
   readonly scoreExecutionEnabled: false
 }
