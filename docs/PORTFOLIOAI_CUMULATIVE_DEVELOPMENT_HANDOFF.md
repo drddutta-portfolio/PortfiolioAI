@@ -23785,3 +23785,54 @@ Still required:
 7. current valuation authority / self-history refresh as required.
 
 **CURRENT STOP POINT:** validate the local NIFTY Pharma benchmark plumbing. Do not deploy or execute it without a later exact owner authorization.
+
+
+---
+
+## 274. Entry 269 — H2 NIFTY Pharma benchmark plumbing validation PASS
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **H2 NIFTY PHARMA BENCHMARK PLUMBING PASS**
+
+Validated:
+
+- local `refresh-pharma-benchmark` implementation;
+- TORNTPHARM-only scope;
+- NIFTY Pharma-only benchmark identity;
+- exact Angel One AMXIDX resolution;
+- 400-day history window;
+- deterministic common-anchor 12M relative-strength semantics;
+- separate confirmation token `OWNER_CONFIRMED_PHARMA_BENCHMARK_REFRESH`;
+- Deno test;
+- focused ESLint;
+- strict TypeScript;
+- production build;
+- `git diff --check`.
+
+### Deployment / provider state
+
+- Edge deployment: NO
+- market-history provider call: NO
+- benchmark provider call: NO
+- production benchmark write: NO
+- production market-history write: NO
+- score execution: OFF
+- score persistence: OFF
+
+### Remaining H2 work
+
+Further progress now requires actual evidence acquisition rather than additional methodology/plumbing.
+
+Still required:
+
+1. TORNTPHARM Angel One market-history refresh.
+2. Deployment + execution of the validated NIFTY Pharma benchmark refresher.
+3. current self-history valuation refresh as required.
+4. licensed Brand / Therapy Leadership cross-check.
+5. reviewed/effective-dated minimum three-peer Domestic Formulations cohort and comparable PE + EV/EBITDA evidence.
+
+**CURRENT STOP POINT:** prepare one exact bounded authorization package for these remaining evidence-acquisition actions; do not execute any provider call, licensed source call, production write or deployment without explicit owner approval.
