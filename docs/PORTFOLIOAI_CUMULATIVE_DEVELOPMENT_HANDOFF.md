@@ -21259,3 +21259,116 @@ Therefore:
 PR #101 remains **OPEN / DRAFT / UNMERGED**.
 
 **CURRENT STOP POINT:** G9 is formally closed. Do not invent G9.4. Before beginning the next major stage, inspect the canonical roadmap/execution-sequence documents and define the next stage from repository authority. No production action is implied by G9 closure.
+
+
+---
+
+## 239. Entry 234 — Gate G Final Closure Audit opened
+
+**Date:** 20 September 2026  
+**Actor:** owner roadmap correction + ChatGPT repository audit  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner clarified that the higher-level product roadmap remains:
+
+```text
+Gate F — canonical evidence
+Gate G — scoring methodology
+Gate H — deterministic TORNTPHARM score
+Gate I — recommendation logic
+Gate J — Pharma rollout
+Gate K — other sector engines
+Gate L — portfolio decision methodology
+Gate M — portfolio-wide automation
+```
+
+Accordingly, the completed G9 architecture/portability stage does not mean TORNTPHARM or AUROPHARMA are end-to-end complete.
+
+### Canonical audit added
+
+Added:
+
+- `docs/PortfolioAI_GATE_G_FINAL_CLOSURE_AUDIT.md`
+
+The audit inspects the current G1→G7 methodology contracts, the G7 gap register, the read-only scoring adapter, overlay modifier proposal, governance constraint, Domestic curve applicability, and existing owner-approved valuation contract.
+
+### Gate G conclusion
+
+TORNTPHARM is **not yet ready for Gate H**.
+
+The current canonical G7 research-gap register contains eight TORNTPHARM blockers:
+
+1. `G7-GAP-TORN-GOVERNANCE-RUNTIME`
+2. `G7-GAP-DOMESTIC-BUSINESS-DURABILITY`
+3. `G7-GAP-DOMESTIC-ROCE`
+4. `G7-GAP-DOMESTIC-CASH-CONVERSION`
+5. `G7-GAP-DOMESTIC-BALANCE-SHEET`
+6. `G7-GAP-DOMESTIC-OWNERSHIP-GOVERNANCE`
+7. `G7-GAP-PHARMA-RISK-BANDS`
+8. `G7-GAP-PHARMA-MOMENTUM`
+
+All eight currently block TORNTPHARM overall numeric preview readiness.
+
+### Dimension methodology state
+
+Already substantially defined but not Gate-H active:
+
+- Quality — Domestic Operating Margin curve proposal;
+- Growth — Segment Growth curve proposal;
+- Valuation — owner-approved Domestic combined valuation contract.
+
+Still missing deterministic numeric closure:
+
+- Capital Efficiency;
+- Cash Flow;
+- Balance Sheet / Credit;
+- Business Durability;
+- Momentum;
+- Ownership / Governance;
+- Risk.
+
+Cross-cutting unresolved items:
+
+- Primary evidence-to-score wiring into the G7 adapter;
+- Global Generics Material Overlay numeric modifier approval;
+- canonical G4 governance/regulatory runtime mapping;
+- G7-P2 governance constraint approval;
+- readiness contract approval;
+- hand-verifiable full-score dry-run.
+
+### Finite Gate G closure sequence
+
+The audit caps remaining Gate G work as:
+
+- **G-FINAL-1** — freeze mature Quality/Growth/Valuation + readiness/governance contracts;
+- **G-FINAL-2** — complete the seven missing Domestic numeric dimensions;
+- **G-FINAL-3** — finalize TORNTPHARM Global Generics Material Overlay treatment;
+- **G-FINAL-4** — resolve canonical governance/regulatory runtime input;
+- **G-FINAL-5** — build and hand-verify a complete read-only TORNTPHARM score dry run.
+
+Only then may Gate G close as:
+
+> **Gate G = COMPLETE / ENGINE CONTRACT COMPLETE**
+
+and Gate H may begin.
+
+### Controlled expansion boundary
+
+The previously discussed API/Bulk Drugs, CDMO/CRAMS and Biopharma/Biosimilars reference-company expansion is deferred to **Gate J**, not started now.
+
+### Safety state
+
+- production mutation: NO
+- production migration: NO
+- score persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+**CURRENT STOP POINT:** begin G-FINAL-1. Do not start Gate H, Gate I or Gate J until Gate G is formally closed.
