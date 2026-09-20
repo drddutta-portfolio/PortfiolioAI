@@ -6,7 +6,7 @@
 **PR:** #101 — KEEP OPEN / DRAFT / UNMERGED
 **Target:** TORNTPHARM / PHARMA_V1
 **Stage:** H4 — Independent Verification + Determinism + Gate H Closure
-**Status:** IMPLEMENTED / CONSOLIDATED VALIDATION PENDING / GATE H NOT YET CLOSED
+**Status:** COMPLETE / PASS — GATE H CLOSED
 
 ## Purpose
 
@@ -443,13 +443,58 @@ This runs:
 
 Edge tests are not required because H4 touches no Edge Function code.
 
+## Final consolidated H4 validation result
+
+The owner reran the complete H4 validation command after the floating-point, historical-snapshot, and Deno test-runner boundary corrections:
+
+```bash
+git pull && bash scripts/h4-validate-torntpharm-gate-h-closure.sh
+```
+
+Owner result:
+
+> **ALL PASS**
+
+This confirms PASS for the H4 validation sequence:
+
+1. focused H4 + Gate H regression tests;
+2. full non-Edge application Vitest suite;
+3. strict TypeScript;
+4. presentation data-boundary architecture guard;
+5. focused H4 lint;
+6. existing architecture lint;
+7. production build;
+8. H4 `git diff --check`.
+
+Edge tests were not required because H4 touched no Edge Function code.
+
+Final independent verification result:
+
+- hand-calculated score = **75.1575 / 100**;
+- H3 adapter score = **75.1575 / 100**;
+- exact score match = PASS;
+- repeated calculation determinism = PASS;
+- anti-leakage = PASS;
+- anti-double-counting = PASS;
+- evidence lineage = COMPLETE;
+- methodology lineage = COMPLETE;
+- persistence = OFF;
+- recommendation = OFF;
+- position sizing = OFF.
+
+> **H4 = COMPLETE / PASS**
+
+> **GATE H = COMPLETE**
+
+> **TORNTPHARM FIRST DETERMINISTIC SCORE = 75.1575 / 100 — REPRODUCIBLE / HAND-VERIFIED / NON-PERSISTING**
+
+Gate I remains **NOT STARTED**.
+
 ## Gate H closure condition
 
-Gate H is not closed until the consolidated H4 validation returns:
+The consolidated H4 validation has passed.
 
-`H4 VALIDATION PASS`
-
-On that result, the authorized closure state will be:
+The final authorized closure state is:
 
 ```text
 H1 = COMPLETE / PASS
@@ -465,4 +510,6 @@ RECOMMENDATION = OFF
 POSITION SIZING = OFF
 ```
 
-Gate I remains NOT STARTED until Gate H closure is recorded.
+Gate H closure is now recorded.
+
+Gate I remains **NOT STARTED** and requires a separate explicit start.
