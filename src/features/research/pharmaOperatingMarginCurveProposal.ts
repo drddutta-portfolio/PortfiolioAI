@@ -95,3 +95,71 @@ export const PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL: PharmaOperatingMarginCurveP
   activationApproved: false,
   scoreExecutionEnabled: false,
 }
+
+
+export interface PharmaOperatingMarginCurveStatistics {
+  readonly medianLatest8OperatingMarginPercent: number
+  readonly interquartileRangeLatest8PercentagePoints: number
+  readonly medianLatest4MinusPrior4PercentagePoints: number
+}
+
+export interface PharmaOperatingMarginCurveScoreResult {
+  readonly proposalVersion: typeof PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL_VERSION
+  readonly state: "DETERMINISTIC_PROPOSAL_RESULT"
+  readonly levelScore: number
+  readonly stabilityScore: number
+  readonly trendScore: number
+  readonly combinedScore: number
+  readonly activationApproved: false
+  readonly scoreExecutionEnabled: false
+}
+
+function scoreNumericBand(
+  value: number,
+  bands: readonly PharmaOperatingMarginBand[],
+): number {
+  if (!Number.isFinite(value)) {
+    throw new Error("Operating Margin curve statistic must be finite")
+  }
+  const band = bands.find((item) =>
+    (item.minimumInclusive === undefined || value >= item.minimumInclusive)
+    && (item.maximumExclusive === undefined || value < item.maximumExclusive))
+  if (!band) throw new Error("Operating Margin curve statistic does not match a score band")
+  return band.score
+}
+
+export function evaluatePharmaOperatingMarginCurveProposal(
+  statistics: PharmaOperatingMarginCurveStatistics,
+): PharmaOperatingMarginCurveScoreResult {
+  if (statistics.interquartileRangeLatest8PercentagePoints < 0) {
+    throw new Error("Operating Margin IQR cannot be negative")
+  }
+
+  const levelScore = scoreNumericBand(
+    statistics.medianLatest8OperatingMarginPercent,
+    PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL.components.level.bands,
+  )
+  const stabilityScore = scoreNumericBand(
+    statistics.interquartileRangeLatest8PercentagePoints,
+    PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL.components.stability.bands,
+  )
+  const trendScore = scoreNumericBand(
+    statistics.medianLatest4MinusPrior4PercentagePoints,
+    PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL.components.trend.bands,
+  )
+  const combinedScore =
+    levelScore * 0.5
+    + stabilityScore * 0.3
+    + trendScore * 0.2
+
+  return {
+    proposalVersion: PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL_VERSION,
+    state: "DETERMINISTIC_PROPOSAL_RESULT",
+    levelScore,
+    stabilityScore,
+    trendScore,
+    combinedScore,
+    activationApproved: false,
+    scoreExecutionEnabled: false,
+  }
+}
