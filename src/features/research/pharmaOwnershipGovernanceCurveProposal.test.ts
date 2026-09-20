@@ -11,9 +11,9 @@ describe("PHARMA Ownership / Governance curve proposal", () => {
 
   it("targets canonical Ownership / Governance and surfaces the legacy dimension", () => {
     expect(PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL.canonicalDimension).toBe("OWNERSHIP_GOVERNANCE")
-    expect(PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL.currentParentContractDimension).toBe("GOVERNANCE")
+    expect(PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL.currentParentContractDimension).toBe("OWNERSHIP_GOVERNANCE")
     expect(PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL.dimensionAlignmentState).toBe(
-      "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
+      "ALIGNED_VERSIONED_PARENT",
     )
   })
 
