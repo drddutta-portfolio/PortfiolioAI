@@ -35,19 +35,29 @@ No licensed provider call is authorized.
 
 ### Field Force Productivity
 
-State:
+Candidate state:
 
-`REVIEW_REQUIRED`
+`STRONG`
 
 Normalized score:
 
-`null`
+`75`
 
-Reason:
+Direct issuer disclosures now provide three comparable annual India field-force/revenue observations:
 
-Current issuer evidence discloses a large India field force and domestic revenue context, but the approved contract requires a minimum three-period comparable series of disclosed MR/field-force headcount plus compatible domestic revenue.
+- FY23: 5,500 MRs / ₹4,984 crore India revenue;
+- FY24: ~5,700 / ₹5,666 crore;
+- FY25: ~6,400 / ₹6,393 crore.
 
-A single current headcount cannot establish productivity, and total employee count may not be substituted.
+Derived monthly revenue productivity per MR is approximately:
+
+- FY23: ₹7.55 lakh;
+- FY24: ₹8.28 lakh;
+- FY25: ₹8.32 lakh.
+
+The series therefore shows improving productivity despite field-force expansion.
+
+No employee-total inference is used. The candidate remains STRONG rather than VERY_STRONG because no approved external cross-company field-force-productivity benchmark is used.
 
 ### R&D Productivity
 
@@ -90,7 +100,7 @@ The candidate stops below VERY_STRONG because longer-term integration outcomes r
 
 Ready components:
 
-`2 / 4`
+`3 / 4`
 
 Business Durability combined score:
 
@@ -98,10 +108,9 @@ Business Durability combined score:
 
 No missing-component renormalization is allowed.
 
-## Current blockers
+## Current blocker
 
 1. `BRAND_THERAPY_LEADERSHIP_LICENSED_MARKET_CROSS_CHECK_REQUIRED`
-2. `FIELD_FORCE_PRODUCTIVITY_THREE_PERIOD_COMPARABLE_MR_HEADCOUNT_REQUIRED`
 
 ## Safety
 
