@@ -1,5 +1,3 @@
-import { PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL } from "./pharmaOwnershipGovernanceCurveProposal"
-
 export const PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_METHOD_GATE_VERSION =
   "PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_METHOD_GATE_V1_PROPOSAL" as const
 
@@ -9,7 +7,7 @@ export interface PharmaGlobalGenericsOwnershipGovernanceMethodGateContract {
   readonly supportedPrimarySubprofile: "GLOBAL_GENERICS"
   readonly metricCode: "PHARMA_OWNERSHIP_GOVERNANCE"
   readonly canonicalDimension: "OWNERSHIP_GOVERNANCE"
-  readonly parentDimensionAlignmentState: typeof PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL.dimensionAlignmentState
+  readonly parentDimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION"
   readonly parentDimensionReconciliationRequired: true
   readonly history: {
     readonly minimumComparableShareholdingQuarters: 4
@@ -55,7 +53,7 @@ export const PHARMA_GLOBAL_GENERICS_OWNERSHIP_GOVERNANCE_METHOD_GATE:
     supportedPrimarySubprofile: "GLOBAL_GENERICS",
     metricCode: "PHARMA_OWNERSHIP_GOVERNANCE",
     canonicalDimension: "OWNERSHIP_GOVERNANCE",
-    parentDimensionAlignmentState: PHARMA_OWNERSHIP_GOVERNANCE_CURVE_PROPOSAL.dimensionAlignmentState,
+    parentDimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
     parentDimensionReconciliationRequired: true,
     history: {
       minimumComparableShareholdingQuarters: 4,
