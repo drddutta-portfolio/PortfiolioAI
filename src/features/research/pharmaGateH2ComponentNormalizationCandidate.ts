@@ -3,7 +3,7 @@ import type {
 } from "./pharmaGovernanceRegulatoryGateContract"
 
 export const PHARMA_GATE_H2_COMPONENT_NORMALIZATION_CANDIDATE_VERSION =
-  "PHARMA_GATE_H2_COMPONENT_NORMALIZATION_V1_CANDIDATE" as const
+  "PHARMA_GATE_H2_COMPONENT_NORMALIZATION_V1_OWNER_APPROVED" as const
 
 export type ReviewedQualitativeComponentState =
   | "VERY_STRONG"
@@ -15,7 +15,7 @@ export type ReviewedQualitativeComponentState =
 
 export const PHARMA_GATE_H2_COMPONENT_NORMALIZATION_CANDIDATE = {
   version: PHARMA_GATE_H2_COMPONENT_NORMALIZATION_CANDIDATE_VERSION,
-  state: "READY_FOR_OWNER_METHODOLOGY_REVIEW" as const,
+  state: "OWNER_APPROVED_NOT_ACTIVE" as const,
   qualitativeRubric: {
     VERY_STRONG: 90,
     STRONG: 75,
@@ -54,7 +54,7 @@ export const PHARMA_GATE_H2_COMPONENT_NORMALIZATION_CANDIDATE = {
       "BLOCKED_REVIEW_REMAINS_NON_NUMERIC_AND_BLOCKING",
     ] as const,
   },
-  methodologyApproved: false,
+  methodologyApproved: true,
   activationApproved: false,
   scoreExecutionEnabled: false,
   persistedScoreRunEnabled: false,
