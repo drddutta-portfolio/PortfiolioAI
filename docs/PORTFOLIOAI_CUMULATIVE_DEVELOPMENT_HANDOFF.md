@@ -24456,9 +24456,9 @@ This helper performs zero provider calls and zero writes. It extracts only the r
 
 ## Gate H H3 handoff — First deterministic read-only TORNTPHARM score implemented
 
-**Date:** 20 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Date:** 20 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
 **Stage:** H3 — implementation complete; consolidated validation pending
 
 H3 now has one versioned read-only score-input/result contract:

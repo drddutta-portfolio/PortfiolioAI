@@ -1,10 +1,10 @@
 # PortfolioAI — Gate H H3 First Deterministic Read-Only TORNTPHARM Score
 
-**Date:** 20 September 2026  
-**Repository:** `drddutta-portfolio/PortfiolioAI`  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — KEEP OPEN / DRAFT / UNMERGED  
-**Stage:** H3 — FIRST DETERMINISTIC READ-ONLY TORNTPHARM SCORE  
+**Date:** 20 September 2026
+**Repository:** `drddutta-portfolio/PortfiolioAI`
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — KEEP OPEN / DRAFT / UNMERGED
+**Stage:** H3 — FIRST DETERMINISTIC READ-ONLY TORNTPHARM SCORE
 **Status:** IMPLEMENTED / CONSOLIDATED VALIDATION PENDING / OWNER REVIEW PENDING
 
 ## Purpose
@@ -167,9 +167,9 @@ Production remains untouched.
 
 ## Stage boundary
 
-H1 = COMPLETE / PASS  
-H2 = COMPLETE / PASS  
-H3 = IMPLEMENTED / VALIDATION PENDING  
+H1 = COMPLETE / PASS
+H2 = COMPLETE / PASS
+H3 = IMPLEMENTED / VALIDATION PENDING
 H4 = NOT STARTED
 
 Gate H is **not** closed by this document. H4 remains the separate independent hand-verification and closure stage.
