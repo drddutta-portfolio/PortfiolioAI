@@ -2,7 +2,7 @@
 
 **Date:** 20 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`  
-**Status:** IMPLEMENTATION COMPLETE / OWNER FREEZE PENDING  
+**Status:** OWNER APPROVED / NOT ACTIVE / POST-FREEZE VALIDATION PENDING  
 **Target:** TORNTPHARM / PHARMA_V1 / DOMESTIC_FORMULATIONS
 
 ## Purpose
@@ -183,13 +183,23 @@ These are evidence blockers, not reasons to invent neutral scores.
 - PR merge: NO
 - automatic trading: NO
 
-## Closure condition
+## Owner freeze decision
 
-G-FINAL-2 closes only after:
+The owner explicitly approved the consolidated seven-dimension methodology on 20 September 2026 after the pre-freeze validation passed.
 
-1. local validation passes;
-2. the owner explicitly approves this consolidated seven-dimension methodology;
-3. the candidate state is promoted to OWNER_APPROVED_NOT_ACTIVE;
-4. the G7 read-only adapter is pointed at the approved contract versions while remaining non-persisting.
+The methodology is now:
+
+- `OWNER_APPROVED_NOT_ACTIVE`;
+- linked into the TORNTPHARM read-only methodology lineage;
+- non-persisting;
+- non-recommending;
+- non-sizing;
+- still fail-closed where evidence is incomplete.
+
+## Final closure condition
+
+Only the post-freeze validation remains. Once the focused tests, TypeScript, architecture checks, build, and `git diff --check` pass:
+
+> **G-FINAL-2 = COMPLETE / PASS**
 
 No further G-FINAL-2 lettered checkpoints are required.
