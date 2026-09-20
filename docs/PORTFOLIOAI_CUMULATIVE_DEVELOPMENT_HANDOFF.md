@@ -21170,3 +21170,92 @@ The **AUROPHARMA G9.3-D visual gate is CLOSED / PASS**.
 G9.3 V2 remains **OPEN**.
 
 **CURRENT STOP POINT:** run the final local cross-company PHARMA_V1 validation, proving TORNTPHARM and AUROPHARMA both consume the same reusable Pharma workspace without evidence, role, methodology or activation leakage. Do not close G9.3 or G9 until that validation passes and the final handoff checkpoint is recorded.
+
+
+---
+
+## 238. Entry 233 — G9.3 V2 final cross-company validation PASS / G9 closed
+
+**Date:** 20 September 2026  
+**Actor:** owner-executed local validation + ChatGPT closure review  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Following AUROPHARMA visual PASS, the owner ran the final local PHARMA_V1 cross-company validation and reported:
+
+> **ALL SEVEN PASS**
+
+Passed commands:
+
+- `npm run typecheck`
+- `npm test`
+- `npm run test:edge`
+- `npm run check:architecture`
+- `npm run lint:architecture`
+- `npm run build`
+- `git diff --check`
+
+The known repository-wide `npm run lint` debt remains inherited/global and outside this G9.3 closure gate; no checkpoint-modified file has been identified as the source of that existing failure.
+
+### Final G9.3 cross-company state
+
+**TORNTPHARM**
+- Primary = `DOMESTIC_FORMULATIONS`
+- Material Overlay = `GLOBAL_GENERICS`
+- Emerging = `CDMO_CRAMS`
+- unresolved = none in current capability view
+
+**AUROPHARMA**
+- Primary = `GLOBAL_GENERICS`
+- Material Overlay = none
+- Emerging = `API_BULK_DRUGS`
+- unresolved = `BIOPHARMA_BIOSIMILARS`
+
+Validated shared architecture:
+
+- one universal PortfolioAI Research shell;
+- one reusable PHARMA_V1 Pharmaceuticals deep-research workspace;
+- company-scoped raw evidence = `SECURITY_COMPANY`;
+- interpretation scope = `COMPANY_ACTIVE_ASSIGNMENT_ROLE`;
+- Global Generics correctly changes role between TORNTPHARM Material Overlay and AUROPHARMA Primary;
+- Emerging exposures remain excluded from score/readiness denominators;
+- unresolved Biosimilars remains review-required and non-active;
+- no BANK_NBFC fallback into Pharma;
+- no TORNTPHARM CDMO/Domestic role leakage into AUROPHARMA;
+- no AUROPHARMA Primary semantics leak into TORNTPHARM overlay interpretation;
+- no score/recommendation/sizing activation from workspace completion;
+- Gate G → G7 methodology remains preserved.
+
+### Closure
+
+The canonical G9.3 plan states that G9.3 closes after both reference stocks consume the reusable PHARMA_V1 sector workspace without data, methodology or role leakage and without changing the shared PortfolioAI shell.
+
+Those closure criteria are now satisfied.
+
+> **G9.3 = COMPLETE / PASS**
+
+The canonical G9 plan contains no G9.4 and specifies that successful G9.3 closure closes G9 as:
+
+> **G9 = COMPLETE / PHARMA RESEARCH ACTIVATION ARCHITECTURE VALIDATED / NUMERIC ACTIVATION STILL FAIL-CLOSED WHERE METHODOLOGY IS INCOMPLETE**
+
+Therefore:
+
+> **G9 = COMPLETE**
+
+### Safety state at closure
+
+- production mutation: NO
+- production migration: NO
+- production assignment mutation: NO
+- production evidence mutation: NO
+- score execution/persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+PR #101 remains **OPEN / DRAFT / UNMERGED**.
+
+**CURRENT STOP POINT:** G9 is formally closed. Do not invent G9.4. Before beginning the next major stage, inspect the canonical roadmap/execution-sequence documents and define the next stage from repository authority. No production action is implied by G9 closure.
