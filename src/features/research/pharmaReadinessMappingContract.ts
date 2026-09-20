@@ -1,9 +1,9 @@
 export const PHARMA_READINESS_MAPPING_CONTRACT_VERSION =
-  "PHARMA_V1_READINESS_MAPPING_V1_PROPOSAL" as const
+  "PHARMA_V1_READINESS_MAPPING_V1_OWNER_APPROVED" as const
 
 export const PHARMA_READINESS_MAPPING_CONTRACT = {
   version: PHARMA_READINESS_MAPPING_CONTRACT_VERSION,
-  state: "PROPOSAL_ONLY",
+  state: "OWNER_APPROVED_NOT_ACTIVE",
   dimensionMinimumScoreReadyCoverage: 0.6,
   overallMinimumScoreReadyCoverage: 0.7,
   requiresEveryWeightedDimensionReady: true,
@@ -11,6 +11,7 @@ export const PHARMA_READINESS_MAPPING_CONTRACT = {
   requiresPrimaryReady: true,
   emergingWatchIncludedInReadinessDenominator: false,
   missingMaterialOverlayMayBecomeNeutral: false,
+  methodologyApproved: true,
   scoreExecutionEnabled: false,
 } as const
 
@@ -41,7 +42,7 @@ export interface PharmaDimensionReadinessInput {
 
 export interface PharmaDimensionReadinessResult {
   readonly contractVersion: typeof PHARMA_READINESS_MAPPING_CONTRACT_VERSION
-  readonly state: "PROPOSAL_ONLY"
+  readonly state: "OWNER_APPROVED_NOT_ACTIVE"
   readonly visibleState: PharmaVisibleReadinessState
   readonly scoreReady: boolean
   readonly denominatorEligible: boolean
@@ -60,7 +61,7 @@ export interface PharmaOverallReadinessInput {
 
 export interface PharmaOverallReadinessResult {
   readonly contractVersion: typeof PHARMA_READINESS_MAPPING_CONTRACT_VERSION
-  readonly state: "PROPOSAL_ONLY"
+  readonly state: "OWNER_APPROVED_NOT_ACTIVE"
   readonly visibleState: Exclude<PharmaVisibleReadinessState, "NOT_APPLICABLE">
   readonly previewEligible: boolean
   readonly reasonCodes: readonly string[]
@@ -82,7 +83,7 @@ function dimensionResult(
 ): PharmaDimensionReadinessResult {
   return {
     contractVersion: PHARMA_READINESS_MAPPING_CONTRACT_VERSION,
-    state: "PROPOSAL_ONLY",
+    state: "OWNER_APPROVED_NOT_ACTIVE",
     visibleState,
     scoreReady,
     denominatorEligible,
@@ -141,7 +142,7 @@ function overallResult(
 ): PharmaOverallReadinessResult {
   return {
     contractVersion: PHARMA_READINESS_MAPPING_CONTRACT_VERSION,
-    state: "PROPOSAL_ONLY",
+    state: "OWNER_APPROVED_NOT_ACTIVE",
     visibleState,
     previewEligible,
     reasonCodes,
