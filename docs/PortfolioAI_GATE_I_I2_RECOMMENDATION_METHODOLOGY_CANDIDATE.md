@@ -243,3 +243,35 @@ I4 = NOT STARTED
 ```
 
 **STOP:** Do not start I3 without a separate owner instruction.
+
+
+## Post-lock validation of the exact owner-approved head
+
+After the owner-approved lock commit `ec6e3c18f35ab5a5065e9ff309d8326791550bb9`, the owner pulled the branch and reran:
+
+`git pull && bash scripts/i2-validate-pharma-recommendation-methodology.sh`
+
+The exact locked-head validation completed successfully through all seven stages:
+
+- focused I2 + I1 + Gate H regressions: PASS;
+- strict TypeScript: PASS;
+- presentation data-boundary architecture guard: PASS;
+- focused I2 lint: PASS;
+- existing architecture lint: PASS;
+- production build: PASS;
+- I2 diff whitespace check: PASS.
+
+Terminal closure:
+
+```text
+I2 LOCK VALIDATION PASS
+Policy state: OWNER APPROVED / LOCKED
+Recommendation persistence: OFF
+Score persistence: OFF
+I2: COMPLETE / PASS
+I3: NOT STARTED
+```
+
+The Vite large-chunk message remained a warning only.
+
+This post-lock run validates the exact owner-approved source state and does not change the locked methodology or authorize I3.

@@ -25678,3 +25678,58 @@ I4 = NOT STARTED
 **STOP BEFORE I3.** Do not start I3 without a separate owner instruction.
 
 PR #101 remains OPEN / DRAFT / UNMERGED.
+
+
+---
+
+## 296. Entry 291 — Gate I2 exact locked-head validation PASS
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Validated locked head:** `ec6e3c18f35ab5a5065e9ff309d8326791550bb9`
+
+After the owner-approved I2 lock was committed, the owner ran:
+
+`git pull && bash scripts/i2-validate-pharma-recommendation-methodology.sh`
+
+The exact locked head passed all seven validation stages:
+
+- focused I2 + I1 + Gate H regressions = PASS;
+- strict TypeScript = PASS;
+- presentation data-boundary architecture guard = PASS;
+- focused I2 lint = PASS;
+- existing architecture lint = PASS;
+- production build = PASS;
+- I2 diff whitespace check = PASS.
+
+Terminal closure:
+
+```text
+I2 LOCK VALIDATION PASS
+Policy state: OWNER APPROVED / LOCKED
+Core threshold candidate: 80
+Satellite threshold candidate: 65
+Watch threshold candidate: 50
+Avoid: fully evaluable overall score below 50
+Recommendation persistence: OFF
+Score persistence: OFF
+I2: COMPLETE / PASS
+I3: NOT STARTED
+```
+
+The Vite chunk-size message was warning-only and did not fail the build.
+
+This validation confirms the exact source state of the owner-approved I2 policy lock. No score/recommendation persistence, production mutation, provider call, AI interpretation, weight guidance, action bias, position sizing, deployment, or PR merge occurred.
+
+### CURRENT STOP POINT
+
+```text
+Gate H = COMPLETE / PASS
+I1 = COMPLETE / PASS
+I2 = COMPLETE / PASS — exact locked head validated
+I3 = NOT STARTED
+I4 = NOT STARTED
+```
+
+**STOP BEFORE I3.** A separate owner instruction is required to begin I3.
