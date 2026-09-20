@@ -18,19 +18,20 @@ const readyInput = {
   overlayReadiness: "READY" as const,
 }
 
-describe("G7-P1 overlay numeric modifier proposal", () => {
-  it("remains proposal-only and cannot be consumed by G7.1 before owner validation", () => {
-    expect(PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.state).toBe("PROPOSAL_ONLY")
+describe("G7-P1 overlay numeric modifier", () => {
+  it("is owner-approved for read-only G7.1 consumption while execution remains off", () => {
+    expect(PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.state).toBe("OWNER_APPROVED_NOT_ACTIVE")
     expect(PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.combinedPerDimensionCapPoints).toBe(10)
     expect(PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.empiricallyCalibrated).toBe(false)
-    expect(PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.ownerValidationRequired).toBe(true)
-    expect(PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.g71ConsumptionApproved).toBe(false)
+    expect(PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.methodologyApproved).toBe(true)
+    expect(PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.ownerValidationRequired).toBe(false)
+    expect(PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.g71ConsumptionApproved).toBe(true)
     expect(PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.scoreExecutionEnabled).toBe(false)
   })
 
   it("uses direct economic-share scaling in the candidate formula", () => {
     const result = buildPharmaG7OverlayNumericModifierProposal(readyInput)
-    expect(result.modifierState).toBe("PROPOSED_NUMERIC_MODIFIER")
+    expect(result.modifierState).toBe("APPROVED_NUMERIC_MODIFIER")
     expect(result.proposedNumericModifierPoints).toBe(1)
   })
 
