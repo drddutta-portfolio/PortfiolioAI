@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`  
 **Created:** 16 September 2026  
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101  
-**Current stage:** Gate H / H3 implemented and locally validated; owner review pending; H4 not started
+**Current stage:** Gate H / H3 COMPLETE / PASS; first deterministic read-only TORNTPHARM score owner-approved at 75.1575; H4 not started
 
 ---
 
@@ -24799,3 +24799,149 @@ Do **not**:
 - merge PR #101.
 
 Once the owner accepts H3, move separately to H4 for independent hand verification and formal Gate H closure.
+
+
+---
+
+## 288. Entry 283 — H3 formal closure and first deterministic TORNTPHARM score owner approval
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Canonical H3 closure commit before this HANDOFF update:** `884d5239a295effd85c3c81acf048f4cb6add189`
+
+### Owner approval
+
+The owner approved H3 exactly as:
+
+> `H3 VALIDATION PASS — APPROVE FIRST DETERMINISTIC READ-ONLY TORNTPHARM SCORE 75.1575`
+
+H3 is therefore formally closed as:
+
+> **H3 = COMPLETE / PASS**
+
+Canonical H3 record:
+
+- `docs/PortfolioAI_GATE_H_H3_FIRST_DETERMINISTIC_READ_ONLY_SCORE.md`
+
+### Approved first deterministic TORNTPHARM score
+
+The first real deterministic PHARMA_V1 TORNTPHARM company score is:
+
+> **75.1575 / 100**
+
+The score remains:
+
+- read-only: YES
+- non-persisting: YES
+- official score-run persistence: OFF
+- recommendation: OFF
+- position sizing: OFF
+- production Supabase mutation: NO
+- provider call for H3: NO
+- deployment: NO
+- PR #101 merge: NO
+- rollout to other Pharma stocks: NO
+
+### Locked H3 dimension inputs and contributions
+
+| Dimension | Score | Weight | Contribution |
+|---|---:|---:|---:|
+| Quality | 92 | 13% | 11.9600 |
+| Growth | 78.25 | 15% | 11.7375 |
+| Capital Efficiency | 79 | 10% | 7.9000 |
+| Cash Flow | 93.6 | 10% | 9.3600 |
+| Balance Sheet / Credit | 65 | 10% | 6.5000 |
+| Business Durability | 75 | 10% | 7.5000 |
+| Valuation | 30 | 12% | 3.6000 |
+| Momentum | 95 | 8% | 7.6000 |
+| Ownership / Governance | 70 | 6% | 4.2000 |
+| Risk | 80 | 6% | 4.8000 |
+
+Total fixed weight = **100%**.
+
+No denominator renormalization is used.
+
+### Overlay and cross-cutting treatment
+
+Global Generics:
+
+- reviewed business exposure remains Material;
+- locked economic materiality = 12.05%;
+- approved numeric-overlay threshold = 15%;
+- numeric modifier = not applied / null;
+- reason = `BELOW_SCORING_MATERIALITY`;
+- no independent second stock score.
+
+CDMO / CRAMS:
+
+- Emerging Watch;
+- visible for research context;
+- numeric participation = NO;
+- denominator effect = NO;
+- independent stock score = NO.
+
+Governance / regulatory runtime:
+
+- state = CLEAR;
+- historical Indrad event retained;
+- overall preview block = NO;
+- additional numeric penalty = NONE;
+- overall score cap = NONE;
+- second regulatory penalty = NO.
+
+### Validation closure
+
+The single consolidated H3 validation passed:
+
+- 8 / 8 test files;
+- 59 / 59 tests;
+- TypeScript;
+- presentation data-boundary architecture guard;
+- focused H3 lint;
+- existing architecture lint;
+- production build;
+- H3 diff whitespace check.
+
+Final validation result:
+
+`H3 VALIDATION PASS`
+
+The production build emitted only the existing non-blocking Vite chunk-size advisory.
+
+### Gate H stage state after H3 closure
+
+```text
+H1 = COMPLETE / PASS
+H2 = COMPLETE / PASS
+H3 = COMPLETE / PASS
+H4 = NOT STARTED
+```
+
+Gate H itself is **not yet closed**.
+
+H4 remains the separate final stage for:
+
+- independent hand verification of the 75.1575 calculation;
+- determinism confirmation;
+- anti-leakage / anti-double-counting confirmation;
+- final Gate H closure decision.
+
+### CURRENT STOP POINT
+
+H3 is closed.
+
+Do **not** start H4 automatically.
+
+Do **not**:
+
+- reopen H2 or H3;
+- persist the H3 score;
+- create recommendation or position sizing;
+- touch production Supabase;
+- call a provider merely for H4;
+- deploy;
+- merge PR #101;
+- start Gate I.
+
+The next development action, only when explicitly requested, is **H4 — independent verification + determinism + Gate H closure**.
