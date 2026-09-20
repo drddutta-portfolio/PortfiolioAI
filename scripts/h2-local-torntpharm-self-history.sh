@@ -51,18 +51,24 @@ SECURITY_ID="$(psql "$DB_URL" -Atqc "select id from public.securities where symb
 IDENTITY_COUNT="$(psql "$DB_URL" -Atqc "select count(*) from public.security_identity_observations where security_id='$SECURITY_ID' and source_code='TRENDLYNE_MCP' and evidence_status='MATCHED' and provider_instrument_id='1409';")"
 [[ "$IDENTITY_COUNT" -ge 1 ]] || die "TORNTPHARM matched Trendlyne identity 1409 is missing. Run scripts/h2-local-torntpharm-trendlyne-identity-setup.sh first."
 
-PORTFOLIO_ID="$(psql "$DB_URL" -Atqc "select p.id from public.portfolios p join public.current_holdings h on h.portfolio_id=p.id where p.user_id='$USER_ID' and h.security_id='$SECURITY_ID' and h.current_quantity::numeric <> 0 order by p.started_at nulls last, p.id limit 1;" 2>/dev/null || true)"
-if [[ -z "$PORTFOLIO_ID" ]]; then
-  PORTFOLIO_ID="$(psql "$DB_URL" -Atqc "select p.id from public.portfolios p join public.current_holdings h on h.portfolio_id=p.id where p.user_id='$USER_ID' and h.security_id='$SECURITY_ID' and h.current_quantity::numeric <> 0 order by p.id limit 1;")"
-fi
+PORTFOLIO_ID="$(psql "$DB_URL" -Atqc "select p.id from public.portfolios p join public.current_holdings h on h.portfolio_id=p.id where p.user_id='$USER_ID' and h.security_id='$SECURITY_ID' and h.current_quantity::numeric <> 0 order by p.id limit 1;")"
 [[ -n "$PORTFOLIO_ID" ]] || die "No open local TORNTPHARM holding belongs to $LOCAL_EMAIL."
 
 LOG_FILE="/tmp/portfolioai-h2-local-torntpharm-self-history.log"
+SERVE_PID=""
+READY_RESPONSE="$(mktemp)"
+RESPONSE="$(mktemp)"
+
+cleanup() {
+  rm -f "$READY_RESPONSE" "$RESPONSE"
+  if [[ -n "$SERVE_PID" ]]; then
+    kill "$SERVE_PID" >/dev/null 2>&1 || true
+  fi
+}
+trap cleanup EXIT
 
 if [[ "$REUSE_FUNCTION_SERVER" == "1" ]]; then
   pgrep -f "supabase functions serve" >/dev/null 2>&1 || die "H2_REUSE_FUNCTION_SERVER=1 but no local functions server is running."
-  SERVE_PID=""
-  trap ':' EXIT
 else
   if pgrep -f "supabase functions serve" >/dev/null 2>&1; then
     die "A manual 'supabase functions serve' process is already running. Stop it or export H2_REUSE_FUNCTION_SERVER=1."
@@ -70,46 +76,65 @@ else
 
   supabase functions serve --no-verify-jwt --env-file "$ENV_FILE" --debug >"$LOG_FILE" 2>&1 &
   SERVE_PID=$!
-  trap 'kill "$SERVE_PID" >/dev/null 2>&1 || true' EXIT
+fi
 
-  SERVER_READY=0
-  for _ in {1..45}; do
-    if ! kill -0 "$SERVE_PID" >/dev/null 2>&1; then break; fi
-    STATUS_CHECK="$(curl -sS -o /dev/null -w '%{http_code}' "$API_URL/functions/v1/refresh-valuation-evidence" || true)"
-    if [[ "$STATUS_CHECK" == "405" ]]; then
-      SERVER_READY=1
-      break
-    fi
-    sleep 1
-  done
-  [[ "$SERVER_READY" == "1" ]] || die "Local refresh-valuation-evidence function failed to become ready. Review $LOG_FILE."
+# Strong readiness proof: authenticated PLAN exercises the real function worker,
+# auth, local DB, Trendlyne identity, metric definition and provider controls.
+# PLAN is contractually zero provider calls and zero fundamental writes.
+PLAN_PAYLOAD="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"PLAN",portfolioId:$p,securityId:$s}')"
+SERVER_READY=0
+READY_STATUS="000"
+
+for _ in {1..45}; do
+  if [[ -n "$SERVE_PID" ]] && ! kill -0 "$SERVE_PID" >/dev/null 2>&1; then
+    break
+  fi
+
+  : > "$READY_RESPONSE"
+  READY_STATUS="$(curl --max-time 8 -sS -o "$READY_RESPONSE" -w '%{http_code}' -X POST "$API_URL/functions/v1/refresh-valuation-evidence" \
+    -H "Authorization: Bearer $ACCESS_TOKEN" \
+    -H "apikey: $ANON_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$PLAN_PAYLOAD" || true)"
+
+  if [[ "$READY_STATUS" == "200" ]] \
+    && jq -e '.mode == "VALUATION_EVIDENCE_REFRESH_PLAN" and .providerCalls == 0 and .security == "TORNTPHARM" and .providerInstrumentId == "1409"' "$READY_RESPONSE" >/dev/null 2>&1; then
+    SERVER_READY=1
+    break
+  fi
+  sleep 1
+done
+
+if [[ "$SERVER_READY" != "1" ]]; then
+  echo "Authenticated zero-call PLAN readiness failed." >&2
+  echo "Last HTTP status: $READY_STATUS" >&2
+  if [[ -s "$READY_RESPONSE" ]]; then
+    echo "Last response:" >&2
+    cat "$READY_RESPONSE" >&2
+    echo >&2
+  fi
+  die "Local refresh-valuation-evidence function failed to become fully ready. Review $LOG_FILE."
 fi
 
 if [[ "$MODE" == "PLAN" ]]; then
-  PAYLOAD="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"PLAN",portfolioId:$p,securityId:$s}')"
-else
-  PAYLOAD="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"EXECUTE",portfolioId:$p,securityId:$s,confirmation:"OWNER_CONFIRMED_VALUATION_EVIDENCE_REFRESH"}')"
+  jq . "$READY_RESPONSE"
+  echo
+  echo "PLAN complete: zero provider calls and zero self-history writes."
+  exit 0
 fi
 
-RESPONSE="$(mktemp)"
-trap 'rm -f "$RESPONSE"; if [[ -n "${SERVE_PID:-}" ]]; then kill "$SERVE_PID" >/dev/null 2>&1 || true; fi' EXIT
+EXECUTE_PAYLOAD="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"EXECUTE",portfolioId:$p,securityId:$s,confirmation:"OWNER_CONFIRMED_VALUATION_EVIDENCE_REFRESH"}')"
 
 STATUS="$(curl --max-time 90 -sS -o "$RESPONSE" -w '%{http_code}' -X POST "$API_URL/functions/v1/refresh-valuation-evidence" \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -H "apikey: $ANON_KEY" \
   -H "Content-Type: application/json" \
-  -d "$PAYLOAD")"
+  -d "$EXECUTE_PAYLOAD")"
 
 if jq . "$RESPONSE" >/dev/null 2>&1; then jq . "$RESPONSE"; else cat "$RESPONSE"; fi
 
 if [[ "$STATUS" -lt 200 || "$STATUS" -ge 300 ]]; then
-  die "Local TORNTPHARM self-history $MODE failed with HTTP $STATUS. Review $LOG_FILE."
-fi
-
-if [[ "$MODE" == "PLAN" ]]; then
-  echo
-  echo "PLAN complete: zero provider calls and zero self-history writes."
-  exit 0
+  die "Local TORNTPHARM self-history EXECUTE failed with HTTP $STATUS. Review $LOG_FILE."
 fi
 
 echo
