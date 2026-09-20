@@ -23502,3 +23502,40 @@ This is a runtime semantic reconciliation, not a methodology change.
 No market-data refresh or licensed-provider call was performed.
 
 **CURRENT STOP POINT:** validate this read-only blocker-reduction slice, then continue H2 with regulatory-scope research and exact authorization decision for the remaining market/licensed inputs.
+
+
+---
+
+## 270. Entry 265 — H2 Field Force + Overlay reconciliation validation PASS
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **H2 FIELD FORCE + OVERLAY RECONCILIATION PASS**
+
+Validated:
+
+- Field Force Productivity = `STRONG -> 75`;
+- Business Durability ready components = 3 / 4;
+- Brand / Therapy Leadership remains the sole Business Durability blocker;
+- Global Generics remains `MATERIAL` as a reviewed business exposure;
+- Global Generics numeric overlay role = `BELOW_SCORING_MATERIALITY`;
+- no numeric overlay modifier applies at approximately 12.05% economic share;
+- strict TypeScript;
+- focused Vitest;
+- focused ESLint;
+- production build;
+- `git diff --check`.
+
+### Current remaining H2 blockers
+
+1. Brand / Therapy Leadership licensed-market-source cross-check.
+2. Company-wide current regulatory scope / subsequent-outcome context.
+3. Current authoritative TORNTPHARM + NIFTY Pharma market history.
+4. Reviewed Domestic Formulations peer cohort / current valuation authority.
+
+No provider refresh, licensed source call, production evidence mutation, score execution or persistence has occurred.
+
+**CURRENT STOP POINT:** continue H2 with read-only regulatory-scope research first, then resolve exact authorization needs for remaining market/licensed evidence.
