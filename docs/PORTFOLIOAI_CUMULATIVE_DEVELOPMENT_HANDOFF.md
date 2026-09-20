@@ -25279,3 +25279,29 @@ I4 = NOT STARTED
 ```
 
 Do not start I2 until I1 validation passes and the owner approves the I1 architecture.
+
+
+### I1 first validation attempt — TypeScript boundary correction
+
+The owner ran:
+
+`git pull && bash scripts/i1-validate-pharma-recommendation-authority.sh`
+
+Focused I1 validation passed:
+
+- **5 / 5 test files**;
+- **30 / 30 tests**.
+
+The run then stopped at strict TypeScript because the H3 function return type exposes `emergingWatch.numericParticipation` as `boolean`, while the I1 adapter input had required the literal TypeScript type `false`.
+
+This was corrected without weakening the runtime contract:
+
+- I1 accepts the upstream boolean type;
+- runtime authority construction requires `numericParticipation === false`;
+- runtime authority construction also requires the Global Generics numeric modifier to remain unapplied;
+- Gate H read-only/non-persisting invariants remain enforced;
+- regression tests cover violation of these invariants.
+
+No scoring or recommendation methodology changed.
+
+**I1 remains IMPLEMENTED / VALIDATION PENDING / OWNER REVIEW PENDING.**
