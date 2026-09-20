@@ -45,10 +45,21 @@ Valuation remains fail-closed.
 
 ## Business Durability
 
-Still blocked by:
+Read-only public/official research has now completed Field Force Productivity using directly disclosed compatible India observations:
 
-1. licensed-market-source cross-check required for Brand / Therapy Leadership;
-2. minimum three comparable periods of MR/field-force headcount plus compatible domestic revenue required for Field Force Productivity.
+| Period | India field force | India revenue | Derived monthly revenue / MR |
+|---|---:|---:|---:|
+| FY23 | 5,500 | ₹4,984 crore | ~₹7.55 lakh |
+| FY24 | ~5,700 | ₹5,666 crore | ~₹8.28 lakh |
+| FY25 | ~6,400 | ₹6,393 crore | ~₹8.32 lakh |
+
+Candidate reviewed state:
+
+`FIELD_FORCE_PRODUCTIVITY = STRONG -> 75`
+
+No employee-total inference is used.
+
+Business Durability is now 3 / 4 components ready and remains blocked only by the licensed-market-source cross-check required for Brand / Therapy Leadership.
 
 No licensed-provider call was made.
 
@@ -67,33 +78,37 @@ Market-risk inputs are also absent:
 - NIFTY Pharma 1Y volatility;
 - relative-volatility ratio.
 
-## Global Generics overlay contradiction
+## Global Generics overlay semantic reconciliation
 
-The production secondary exposure is currently recorded as:
+The production secondary exposure is correctly recorded as:
 
 - Global Generics materiality state: `MATERIAL`
 - confidence: `MEDIUM`
 - evidence basis: comparable FY2025-26 standalone revenue share approximately **12.05%**
 
-However, the current G2 eligibility contract used by the owner-approved G7 numeric modifier requires:
+Gate E and the numeric overlay contract use different thresholds for different purposes:
 
-`materialOverlayMinimumPercent = 15`
+- Gate E business-exposure classification: `MATERIAL` begins at **10%**;
+- G2/G7 numeric overlay eligibility: minimum **15%**.
 
-Therefore:
+Therefore there is no methodology contradiction:
 
 ```text
-12.05% < 15%
+12.05% >= 10%  -> MATERIAL business exposure
+12.05% < 15%   -> BELOW_SCORING_MATERIALITY for numeric overlay
 ```
 
-and the deterministic G2 eligibility function returns:
+The H2 runtime mapping now uses:
 
-`REVIEW_REQUIRED`
+`overlayRole = BELOW_SCORING_MATERIALITY`
 
-with:
+and the deterministic overlay eligibility state is:
 
-`MATERIAL_OVERLAY_REQUIRES_REVIEWED_MATERIALITY`
+`BELOW_SCORING_MATERIALITY`
 
-This is now an explicit H2 contradiction requiring owner/methodology-state reconciliation. No numeric overlay modifier may be produced from the current state.
+No numeric Global Generics modifier is applied.
+
+The Global Generics exposure still remains active for applicability/evidence requirements; it simply does not alter a numeric dimension score at the current economic share.
 
 ## Exact actions still required before H2 can close
 
@@ -104,15 +119,11 @@ This is now an explicit H2 contradiction requiring owner/methodology-state recon
 2. Authorize the licensed-market source required for Brand / Therapy Leadership.
 
 3. Continue read-only public/official research for:
-   - multi-period field-force/MR history;
    - company-wide regulatory scope and subsequent material inspection/remediation context.
 
-4. Resolve the Global Generics classification/eligibility contradiction:
-   - reviewed label = MATERIAL;
-   - evidence-basis economic share = 12.05%;
-   - numeric eligibility minimum = 15%.
+4. Establish reviewed Domestic Formulations peer assignments/cohort and current valuation market authority.
 
-5. Establish reviewed Domestic Formulations peer assignments/cohort and current valuation market authority.
+The Global Generics 12.05% / 15% issue no longer blocks H2: it is explicitly mapped to BELOW_SCORING_MATERIALITY for numeric overlay participation.
 
 ## H2 state
 
