@@ -6,6 +6,18 @@ import {
 } from "./torntpharmGateH2InitialScoreInputs"
 
 describe("TORNTPHARM H2 initial score inputs", () => {
+  it("produces the deterministic Quality read-only candidate", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.quality).toEqual({
+      state: "READ_ONLY_SCORE_CANDIDATE",
+      score: 92,
+      componentScores: {
+        level: 100,
+        stability: 100,
+        trend: 60,
+      },
+    })
+  })
+
   it("produces the deterministic Balance Sheet / Credit read-only candidate", () => {
     expect(TORNTPHARM_GATE_H2_BALANCE_SHEET_READ_ONLY_RESULT).toEqual({
       leverageScore: 80,
