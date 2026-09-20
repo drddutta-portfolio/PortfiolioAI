@@ -23239,3 +23239,57 @@ No final overall score has been calculated.
 - PR merge: NO
 
 **CURRENT STOP POINT:** continue H2 with the remaining Valuation, Momentum, Risk and Global Generics Material Overlay inputs using only the latest owner-approved successor methodology contracts.
+
+
+---
+
+## 266. Entry 261 — H2 Ownership input integration validation PASS
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **H2 OWNERSHIP INPUT INTEGRATION PASS**
+
+Validated:
+
+- Ownership / Governance candidate integration into `TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS`;
+- Ownership / Governance score = **70**;
+- component scores remain 75 / 75 / 50;
+- G4 anti-double-counting remains preserved;
+- strict TypeScript;
+- focused Vitest;
+- focused ESLint;
+- production build;
+- `git diff --check`.
+
+### Current validated deterministic H2 company inputs
+
+- Quality = **92**
+- Growth = **78.25**
+- Capital Efficiency = **79**
+- Cash Flow = **93.6**
+- Balance Sheet / Credit = **65**
+- Ownership / Governance = **70**
+
+Business Durability remains unresolved because two required components remain fail-closed.
+
+Valuation, Momentum, Risk and Global Generics Material Overlay evidence remain to be locked.
+
+No final overall score has been calculated.
+
+### Safety state
+
+- production mutation: NO
+- evidence write: NO
+- provider refresh: NO
+- paid/licensed provider call: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- deployment: NO
+- PR merge: NO
+
+**CURRENT STOP POINT:** Continue H2 with the remaining Valuation, Momentum, Risk and Global Generics Material Overlay evidence locks using the latest owner-approved successor contracts only.
