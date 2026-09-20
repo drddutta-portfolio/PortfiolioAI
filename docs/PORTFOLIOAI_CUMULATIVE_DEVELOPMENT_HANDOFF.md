@@ -24061,3 +24061,60 @@ Still unresolved:
 - Valuation: current self-history/current market authority + reviewed Domestic Formulations peer cohort
 
 **CURRENT STOP POINT:** validate the local market evidence lock, then continue only the remaining Business Durability and Valuation blockers. H3 remains closed.
+
+
+---
+
+## 278. Entry 273 — H2 local market evidence lock validation PASS
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **H2 LOCAL MARKET EVIDENCE LOCK PASS**
+
+Validated:
+
+- local-only Angel One TORNTPHARM history acquisition;
+- local-only NIFTY Pharma benchmark history acquisition;
+- deterministic 12M/6M momentum;
+- deterministic NIFTY Pharma relative strength;
+- deterministic max drawdown;
+- deterministic stock and benchmark volatility;
+- deterministic relative-volatility ratio;
+- Momentum = **95**;
+- Risk = **80**;
+- no production evidence write;
+- no final company score;
+- no score persistence;
+- strict TypeScript;
+- focused Vitest;
+- focused ESLint;
+- production build;
+- `git diff --check`.
+
+### H2 deterministic dimensions now validated
+
+- Quality = 92
+- Growth = 78.25
+- Capital Efficiency = 79
+- Cash Flow = 93.6
+- Balance Sheet / Credit = 65
+- Ownership / Governance = 70
+- Momentum = 95
+- Risk = 80
+
+### Remaining blockers
+
+Only:
+
+1. Business Durability final combined score:
+   - Brand / Therapy Leadership licensed cross-check.
+
+2. Valuation:
+   - current self-history/current market authority;
+   - reviewed/effective-dated minimum three-peer Domestic Formulations cohort;
+   - comparable PE + EV/EBITDA evidence.
+
+**CURRENT STOP POINT:** complete those two blockers only. H3 remains closed until all ten dimensions are score-ready.
