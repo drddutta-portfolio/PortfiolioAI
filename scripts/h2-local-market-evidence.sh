@@ -108,7 +108,9 @@ call_fn() {
 if [[ "$MAPPING_STATE" != VERIFIED\|* ]]; then
   printf '\nTORNTPHARM Angel One mapping is missing/unverified locally.\n'
   printf 'Running local exact-identity SYNC_MAPPINGS first (instrument-master lookup only).\n'
-  mapping_sync="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"SYNC_MAPPINGS",portfolioId:$p,securityIds:[$s]}')"
+  printf 'Note: local fixture IDs are synthetic/non-RFC UUIDs, so the production sampled-ID filter is intentionally not used.\n'
+  printf 'The local sync may refresh mappings for other open local holdings, but history acquisition still remains restricted to TORNTPHARM.\n'
+  mapping_sync="$(jq -nc --arg p "$PORTFOLIO_ID" '{action:"SYNC_MAPPINGS",portfolioId:$p}')"
   call_fn refresh-market-data "$mapping_sync" | jq .
 
   MAPPING_STATE="$(psql "$DB_URL" -Atqc "select coalesce(mapping_status,'') || '|' || coalesce(provider_instrument_id,'') || '|' || coalesce(exchange,'') || '|' || coalesce(trading_symbol,'') from public.market_data_instrument_mappings where security_id='$SECURITY_ID' and provider_code='ANGEL_ONE' limit 1;")"
