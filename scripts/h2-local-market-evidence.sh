@@ -43,16 +43,15 @@ PORTFOLIO_ID="$(psql "$DB_URL" -Atqc "select p.id from public.portfolios p join 
 [[ -n "$PORTFOLIO_ID" ]] || die "No open local TORNTPHARM holding belongs to $LOCAL_EMAIL."
 
 MAPPING_STATE="$(psql "$DB_URL" -Atqc "select coalesce(mapping_status,'') || '|' || coalesce(provider_instrument_id,'') || '|' || coalesce(exchange,'') || '|' || coalesce(trading_symbol,'') from public.market_data_instrument_mappings where security_id='$SECURITY_ID' and provider_code='ANGEL_ONE' limit 1;")"
-[[ "$MAPPING_STATE" == VERIFIED\|* ]] || die "TORNTPHARM does not have a VERIFIED local Angel One mapping."
 
 printf 'Local preflight PASS\n'
 printf '  user:      %s\n' "$LOCAL_EMAIL"
 printf '  portfolio: %s\n' "$PORTFOLIO_ID"
 printf '  security:  %s\n' "$SECURITY_ID"
-printf '  mapping:   %s\n' "$MAPPING_STATE"
+printf '  mapping:   %s\n' "${MAPPING_STATE:-MISSING}"
 
 LOG_FILE="/tmp/portfolioai-h2-local-functions.log"
-supabase functions serve refresh-market-history refresh-pharma-benchmark --env-file "$ENV_FILE" >"$LOG_FILE" 2>&1 &
+supabase functions serve --env-file "$ENV_FILE" >"$LOG_FILE" 2>&1 &
 SERVE_PID=$!
 trap 'kill "$SERVE_PID" >/dev/null 2>&1 || true' EXIT
 
@@ -70,6 +69,17 @@ call_fn() {
     -H "Content-Type: application/json" \
     -d "$payload"
 }
+
+if [[ "$MAPPING_STATE" != VERIFIED\|* ]]; then
+  printf '\nTORNTPHARM Angel One mapping is missing/unverified locally.\n'
+  printf 'Running local exact-identity SYNC_MAPPINGS first (instrument-master lookup only).\n'
+  mapping_sync="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"SYNC_MAPPINGS",portfolioId:$p,securityIds:[$s]}')"
+  call_fn refresh-market-data "$mapping_sync" | jq .
+
+  MAPPING_STATE="$(psql "$DB_URL" -Atqc "select coalesce(mapping_status,'') || '|' || coalesce(provider_instrument_id,'') || '|' || coalesce(exchange,'') || '|' || coalesce(trading_symbol,'') from public.market_data_instrument_mappings where security_id='$SECURITY_ID' and provider_code='ANGEL_ONE' limit 1;")"
+  [[ "$MAPPING_STATE" == VERIFIED\|* ]] || die "Local Angel One mapping sync did not produce a VERIFIED TORNTPHARM mapping. Review $LOG_FILE."
+  printf 'Verified local mapping: %s\n' "$MAPPING_STATE"
+fi
 
 market_plan="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"PLAN",portfolioId:$p,securityId:$s}')"
 printf '\nTORNTPHARM market-history PLAN\n'
