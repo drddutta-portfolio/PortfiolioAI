@@ -23104,3 +23104,82 @@ No licensed provider call has been made or authorized.
 **Result:** H2 Business Durability review = **VALIDATED / PASS**.
 
 **CURRENT STOP POINT:** Continue H2 directly with Ownership / Governance evidence completion and reviewed qualitative normalization, preserving the G4 anti-double-counting boundary.
+
+
+---
+
+## 264. Entry 259 — H2 Ownership / Governance review candidate prepared
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+H2 continued directly with Ownership / Governance after the Business Durability validation PASS.
+
+Added:
+
+- `src/features/research/torntpharmGateH2OwnershipGovernanceReview.ts`
+- `src/features/research/torntpharmGateH2OwnershipGovernanceReview.test.ts`
+- `docs/PortfolioAI_GATE_H_H2_OWNERSHIP_GOVERNANCE_REVIEW.md`
+
+### Locked ownership history
+
+Four official comparable shareholding observations are now represented:
+
+- 31 Mar 2025 — promoter/promoter group 68.31%; pledged/encumbered 0%
+- 30 Jun 2025 — promoter/promoter group 68.31%; pledged/encumbered 0%
+- 30 Sep 2025 — promoter/promoter group 68.31%; pledged/encumbered 0%
+- 31 Mar 2026 — promoter/promoter group 68.31%; pledged/encumbered 0%
+
+The minimum four-quarter history requirement is met.
+
+The preferred eight-quarter history is not yet present.
+
+### Applied owner-approved qualitative rubric
+
+Candidate component states:
+
+- Ownership Stability = `STRONG -> 75`
+- Pledge / Control Risk = `STRONG -> 75`
+- Non-G4 Governance Context = `NEUTRAL -> 50`
+
+Constraints explicitly preserved:
+
+- promoter percentage itself is not mechanically scored;
+- zero pledge alone is not automatically VERY_STRONG;
+- institutional ownership is not mechanically scored;
+- G4-consumed events cannot reduce this dimension again.
+
+### Read-only candidate
+
+Approved weights:
+
+- Ownership Stability = 45%
+- Pledge / Control Risk = 35%
+- Non-G4 Governance Context = 20%
+
+Read-only candidate:
+
+> **Ownership / Governance = 70**
+
+This is an owner-review candidate only and is not yet added to the validated H2 input set.
+
+### Validation state
+
+Implementation complete.
+
+Owner/local focused validation pending.
+
+### Safety state
+
+- production mutation: NO
+- evidence write: NO
+- provider refresh: NO
+- paid/licensed provider call: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- deployment: NO
+- PR merge: NO
+
+**CURRENT STOP POINT:** validate the Ownership / Governance review candidate. If PASS, add the validated candidate to the H2 company-input package and continue directly to the remaining Valuation, Momentum, Risk and Global Generics Material Overlay inputs.
