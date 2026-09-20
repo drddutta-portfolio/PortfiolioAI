@@ -21992,3 +21992,70 @@ Gate H remains blocked until both pass.
 - automatic trading: NO
 
 **NEXT CHECKPOINT:** begin G-FINAL-3. No additional G-FINAL-2 sub-stages exist.
+
+
+---
+
+## 248. Entry 243 — G-FINAL-3 consolidated cross-cutting candidate implemented
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G-FINAL-2 was formally closed after post-freeze validation PASS.
+
+G-FINAL-3 has now been implemented as one consolidated stage covering:
+
+- Global Generics Material Overlay numeric modifier;
+- Governance / Regulatory runtime mapping.
+
+Added:
+
+- `pharmaGateGFinal3CrossCuttingCandidate.ts`
+- `torntpharmGateGFinal3RuntimeMapping.ts`
+- `pharmaGateGFinal3CrossCuttingCandidate.test.ts`
+- `docs/PortfolioAI_G_FINAL_3_CROSS_CUTTING_REVIEW.md`
+
+### Overlay candidate
+
+Preserves the existing G7-P1 formula:
+
+```text
+10 × materiality fraction × evidence completeness × confidence factor × normalized signal
+```
+
+with:
+
+- combined per-dimension cap ±10;
+- READY-only numeric participation;
+- PARTIAL evidence fail-closed;
+- unresolved contradiction fail-closed;
+- Emerging Watch excluded;
+- no independent cap stacking;
+- no second stock score;
+- final dimension bounded 0–100.
+
+### TORNTPHARM runtime mapping
+
+The currently reviewed evidence establishes the Indrad FDA warning→closeout chain, but not complete company-wide current regulatory scope/materiality.
+
+Therefore the runtime candidate intentionally maps TORNTPHARM to:
+
+- event class: REGULATORY
+- severity: MODERATE
+- site scope: established for Indrad
+- regulatory materiality: UNKNOWN
+- remediation: CLOSED_OUT
+- subsequent outcome established: false
+- runtime result: REVIEW_REQUIRED
+
+No company-wide clearance is inferred.
+
+### Current state
+
+- G-FINAL-3 implementation: COMPLETE
+- owner methodology freeze: PENDING
+- G-FINAL-3 complete: NO
+- Gate H eligible: NO
+- score execution/persistence: OFF
+
+**CURRENT STOP POINT:** run the focused G-FINAL-3 validation. If PASS, owner reviews and approves the overlay formula/cap and the fail-closed governance runtime mapping in one decision. Then freeze G-FINAL-3 and proceed to G-FINAL-4.
