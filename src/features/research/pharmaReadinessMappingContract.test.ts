@@ -10,6 +10,8 @@ describe("PHARMA readiness mapping contract", () => {
     expect(PHARMA_READINESS_MAPPING_CONTRACT.dimensionMinimumScoreReadyCoverage).toBe(0.6)
     expect(PHARMA_READINESS_MAPPING_CONTRACT.overallMinimumScoreReadyCoverage).toBe(0.7)
     expect(PHARMA_READINESS_MAPPING_CONTRACT.requiresEveryWeightedDimensionReady).toBe(true)
+    expect(PHARMA_READINESS_MAPPING_CONTRACT.state).toBe("OWNER_APPROVED_NOT_ACTIVE")
+    expect(PHARMA_READINESS_MAPPING_CONTRACT.methodologyApproved).toBe(true)
     expect(PHARMA_READINESS_MAPPING_CONTRACT.scoreExecutionEnabled).toBe(false)
   })
 
