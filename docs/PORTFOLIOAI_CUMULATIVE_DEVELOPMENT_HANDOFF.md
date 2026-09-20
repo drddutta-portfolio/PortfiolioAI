@@ -21597,3 +21597,94 @@ Gate H remains blocked by:
 - G-FINAL-5 — complete hand-verifiable score dry run.
 
 **NEXT CHECKPOINT:** begin G-FINAL-2 with a read-only methodology audit for Capital Efficiency, Cash Flow, Balance Sheet / Credit, Business Durability, Momentum, Ownership / Governance, and Risk. Do not invent thresholds without evidence/calibration review.
+
+
+---
+
+## 243. Entry 238 — G-FINAL-2 audit complete / dimension-reconciliation candidate prepared
+
+**Date:** 20 September 2026  
+**Actor:** ChatGPT read-only audit + non-active candidate implementation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+### Audit result
+
+G-FINAL-2 confirms that six of the seven remaining weighted dimensions already have proposal scaffolds:
+
+- ROCE / Capital Efficiency;
+- Cash Conversion;
+- Balance Sheet / Credit;
+- Momentum;
+- Ownership / Governance;
+- Risk.
+
+Business Durability remains the true missing whole-dimension numeric aggregation contract.
+
+Added canonical audit:
+
+- `docs/PortfolioAI_G_FINAL_2_NUMERIC_DIMENSION_AUDIT.md`
+
+### Existing TORNTPHARM evidence observations
+
+Current exact official manifest fixture provides:
+
+- ROCE: 2024–2026;
+- Net Debt / EBITDA: 2024–2026;
+- Interest Coverage: 2024–2026;
+- Total Debt / Cash / EBITDA: 2024–2026;
+- PAT: 2024–2026;
+- CAPEX: 2024–2026;
+- FCF: 2024–2026;
+- CFO: only 2026;
+- R&D expense/intensity: 2024–2026.
+
+Therefore:
+- Capital Efficiency has minimum 3-year history;
+- Balance Sheet / Credit has minimum 3-year structure;
+- Cash Flow remains evidence-incomplete because matched CFO history is only one year in the current fixture;
+- Business Durability has partial evidence but no numeric aggregation methodology;
+- Ownership/Governance full history requires confirmation;
+- Risk has partial regulator scope plus market-risk lanes;
+- Momentum needs Pharma benchmark and calibration.
+
+### Parent-dimension reconciliation finding
+
+Four PHARMA_V1 parent metrics still use legacy dimension names:
+
+- `PHARMA_ROCE_HISTORY`: QUALITY → CAPITAL_EFFICIENCY
+- `PHARMA_CASH_CONVERSION_HISTORY`: EARNINGS_CASH_QUALITY → CASH_FLOW
+- `PHARMA_BALANCE_SHEET_LEVERAGE`: FINANCIAL_STRENGTH → BALANCE_SHEET_CREDIT
+- `PHARMA_OWNERSHIP_GOVERNANCE`: GOVERNANCE → OWNERSHIP_GOVERNANCE
+
+A direct in-place mutation of the versioned PHARMA_V1 parent contract was intentionally **not** performed.
+
+### G-FINAL-2A candidate
+
+Added:
+
+- `src/features/research/pharmaGateGDimensionReconciliation.ts`
+- `src/features/research/pharmaGateGDimensionReconciliation.test.ts`
+
+The candidate:
+- records the four explicit legacy → canonical mappings;
+- preserves metric identity;
+- preserves evidence provenance;
+- activates no numeric methodology;
+- prohibits silent direct in-place parent-contract mutation;
+- requires versioned parent-contract promotion;
+- keeps score execution/persistence OFF.
+
+### Safety state
+
+- production mutation: NO
+- parent contract mutation: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+**CURRENT STOP POINT:** owner pulls and validates the G-FINAL-2 audit + reconciliation candidate. After PASS, proceed to the versioned parent-contract reconciliation and then G-FINAL-2B evidence sufficiency lock. Do not invent numeric thresholds before the calibration review.
