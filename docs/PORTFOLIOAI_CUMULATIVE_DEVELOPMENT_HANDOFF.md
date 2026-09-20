@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I1 COMPLETE / PASS; I2 recommendation methodology candidate implemented; validation and owner approval pending; I3 NOT STARTED
+**Current stage:** Gate H COMPLETE / PASS; Gate I1 COMPLETE / PASS; Gate I2 COMPLETE / PASS; I3 NOT STARTED
 
 ---
 
@@ -25569,3 +25569,112 @@ Focused ESLint then found two unnecessary TypeScript assertions in `pharmaRecomm
 The two redundant casts were removed. No I2 methodology or behavior changed.
 
 **I2 remains CANDIDATE IMPLEMENTED / VALIDATION + OWNER APPROVAL PENDING.**
+
+
+---
+
+## 295. Entry 290 — Gate I2 COMPLETE / PASS — owner-approved PHARMA_V1 recommendation policy lock
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Pre-lock branch head:** `010434b72328c13e1d181a8f1fd4768b8549ffa0`
+**Canonical I2 review:** `docs/PortfolioAI_GATE_I_I2_RECOMMENDATION_METHODOLOGY_CANDIDATE.md`
+
+The owner completed the consolidated I2 validation successfully.
+
+Final owner-run candidate validation:
+
+- **5 / 5 focused test files passed**;
+- **35 / 35 focused tests passed**;
+- strict TypeScript = PASS;
+- presentation data-boundary architecture guard = PASS;
+- focused I2 ESLint = PASS;
+- existing architecture lint = PASS;
+- production build = PASS;
+- diff whitespace check = PASS.
+
+The Vite large-chunk message was a warning only and did not fail the build.
+
+The owner then explicitly approved:
+
+> **APPROVED I2 PHARMA_V1 RECOMMENDATION POLICY V1 — CORE 80 / SATELLITE 65 / WATCH 50 — FLOORS AND CAUTIONS AS PROPOSED**
+
+### Locked I2 policy identity
+
+```text
+version = PHARMA_V1_RECOMMENDATION_POLICY_V1_OWNER_APPROVED
+state   = OWNER_APPROVED_LOCKED
+```
+
+The historical implementation filename/symbol retains the `Candidate` suffix for source continuity, but its machine-readable policy version/state is now owner-approved and locked.
+
+### Locked methodology
+
+```text
+CORE_CANDIDATE      >= 80
+SATELLITE_CANDIDATE >= 65
+WATCH               >= 50
+AVOID               < 50 only when fully evaluable
+INSUFFICIENT         structural incompleteness / unresolved / non-computable authority
+```
+
+Core role floors:
+
+- Quality 75;
+- Growth 50;
+- Cash Flow 50;
+- Balance Sheet / Credit 50;
+- Business Durability 75;
+- Ownership / Governance 50;
+- Risk 50.
+
+Satellite role floors:
+
+- all seven role-blocking dimensions = 50.
+
+Other locked treatment:
+
+- Capital Efficiency = no separate recommendation-layer gate;
+- Valuation < 50 = caution only;
+- Momentum < 50 = caution only;
+- failed Core floor -> test Satellite;
+- failed Satellite floor -> Watch when otherwise evaluable;
+- missing mandatory floor data -> Insufficient;
+- no additional numeric global hard blocker;
+- CLEAR governance -> no extra constraint;
+- INTERPRETATION_ONLY_HIGH_RISK -> caution only;
+- REVIEW_REQUIRED / BLOCKED_REVIEW -> Insufficient;
+- Material Overlay / Emerging Watch -> context only, with no independent score, role, recommendation, override, blend, or hidden numeric adjustment.
+
+### Safety
+
+The I2 lock does not:
+
+- calculate the real TORNTPHARM recommendation;
+- calculate the real AUROPHARMA recommendation;
+- persist the Gate H score;
+- persist any recommendation;
+- create `stock_recommendation_runs`;
+- activate a production recommendation policy;
+- mutate Supabase production data;
+- invoke a provider;
+- invoke AI interpretation;
+- invoke weight guidance/action bias;
+- invoke position sizing;
+- deploy;
+- merge PR #101.
+
+### CURRENT STOP POINT
+
+```text
+Gate H = COMPLETE / PASS
+I1 = COMPLETE / PASS
+I2 = COMPLETE / PASS
+I3 = NOT STARTED
+I4 = NOT STARTED
+```
+
+**STOP BEFORE I3.** Do not start I3 without a separate owner instruction.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.

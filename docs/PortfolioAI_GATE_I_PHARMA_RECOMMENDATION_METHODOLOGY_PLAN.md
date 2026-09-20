@@ -10,7 +10,7 @@
 **Primary subprofile:** DOMESTIC_FORMULATIONS
 **Gate H score:** 75.1575 / 100
 **Gate H state:** COMPLETE / PASS
-**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 CANDIDATE IMPLEMENTED / VALIDATION + OWNER APPROVAL PENDING
+**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 COMPLETE / PASS; I3 NOT STARTED
 
 **Owner-approved revised-plan corrections adopted before I1 implementation:**
 
@@ -445,6 +445,39 @@ Suggested family:
 `PHARMA_V1_RECOMMENDATION_POLICY_V1_OWNER_APPROVED`
 
 The policy remains read-only and is not yet materialized into production.
+
+## I2 closure — 21 September 2026
+
+The owner-run consolidated I2 validation passed all seven sections before approval:
+
+- 5 / 5 focused test files;
+- 35 / 35 focused tests;
+- strict TypeScript;
+- presentation data-boundary architecture guard;
+- focused I2 ESLint;
+- existing architecture lint;
+- production build;
+- diff whitespace check.
+
+The owner then explicitly approved:
+
+> **APPROVED I2 PHARMA_V1 RECOMMENDATION POLICY V1 — CORE 80 / SATELLITE 65 / WATCH 50 — FLOORS AND CAUTIONS AS PROPOSED**
+
+The locked policy identity is:
+
+`PHARMA_V1_RECOMMENDATION_POLICY_V1_OWNER_APPROVED`
+
+with state:
+
+`OWNER_APPROVED_LOCKED`
+
+I2 is therefore:
+
+> **COMPLETE / PASS**
+
+No real company recommendation has been calculated by this closure step. Score/recommendation persistence, provider calls, AI interpretation, weight guidance, action bias, position sizing, deployment, and PR merge all remain OFF / not performed.
+
+**I3 remains NOT STARTED and must not begin without a separate owner instruction.**
 
 ---
 

@@ -50,6 +50,15 @@ function evaluate(input: {
 }
 
 describe("PHARMA_V1 Gate I2 recommendation policy candidate", () => {
+  it("locks the owner-approved I2 policy identity before I3", () => {
+    expect(PHARMA_V1_RECOMMENDATION_POLICY_CANDIDATE.version).toBe(
+      "PHARMA_V1_RECOMMENDATION_POLICY_V1_OWNER_APPROVED",
+    )
+    expect(PHARMA_V1_RECOMMENDATION_POLICY_CANDIDATE.state).toBe(
+      "OWNER_APPROVED_LOCKED",
+    )
+  })
+
   it("derives thresholds from PHARMA_V1 semantic anchors rather than a reference-company score", () => {
     expect(PHARMA_V1_RECOMMENDATION_POLICY_CANDIDATE.methodologyBasis).toEqual({
       neutralAnchor: 50,

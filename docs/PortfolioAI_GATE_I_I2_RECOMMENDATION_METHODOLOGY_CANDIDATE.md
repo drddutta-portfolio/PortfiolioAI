@@ -1,21 +1,21 @@
-# PortfolioAI — Gate I / I2 PHARMA_V1 Recommendation Methodology Candidate
+# PortfolioAI — Gate I / I2 PHARMA_V1 Owner-Approved Recommendation Methodology Lock
 
 **Date:** 21 September 2026
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 **Stage:** I2 — PHARMA_V1 Recommendation Methodology Lock
-**Status:** CANDIDATE IMPLEMENTED / VALIDATION PENDING / OWNER METHODOLOGY APPROVAL REQUIRED
+**Status:** COMPLETE / PASS — OWNER APPROVED / LOCKED
 
 ## Purpose
 
-I2 defines the first PHARMA_V1-specific deterministic recommendation policy candidate.
+I2 defines the first owner-approved PHARMA_V1-specific deterministic recommendation policy.
 
 It does not calculate or publish a recommendation for TORNTPHARM or AUROPHARMA.
 
 The policy remains:
 
-> **OWNER_REVIEW_PENDING / READ-ONLY / NON-PERSISTING**
+> **OWNER_APPROVED_LOCKED / READ-ONLY / NON-PERSISTING**
 
 ## Methodology basis
 
@@ -27,7 +27,7 @@ The approved PHARMA_V1 qualitative normalization anchors are:
 - Neutral = 50;
 - Weak = 25.
 
-The recommendation role thresholds are proposed as:
+The recommendation role thresholds are locked as:
 
 | Role | Overall threshold | Rationale |
 |---|---:|---|
@@ -91,7 +91,7 @@ A failed role floor does not automatically create Avoid.
 
 ## Avoid semantics
 
-The candidate contains no extra numeric global hard blocker.
+The locked policy contains no extra numeric global hard blocker.
 
 `AVOID` means:
 
@@ -101,7 +101,7 @@ Structural incompleteness, missing required floor data, unresolved governance, o
 
 ## Cautions
 
-Candidate caution rules:
+Locked caution rules:
 
 | Dimension/context | Trigger | Role effect |
 |---|---:|---|
@@ -113,7 +113,7 @@ Cautions never create a second numeric penalty.
 
 ## Governance behavior
 
-The I2 candidate preserves the owner-approved G7 governance contract:
+The locked I2 policy preserves the owner-approved G7 governance contract:
 
 - `CLEAR` -> no additional recommendation constraint;
 - `INTERPRETATION_ONLY_HIGH_RISK` -> caution only, no cap or penalty;
@@ -164,55 +164,82 @@ The I2 tests cover:
 - no downstream persistence/sizing/action enablement;
 - no TORNTPHARM / AUROPHARMA / BANK_NBFC / HDFCBANK identity embedded in the policy contract.
 
-## First local validation attempt
+## Consolidated validation and owner approval
 
-The first owner-run I2 validation successfully completed:
+The owner ran:
+
+`git pull && bash scripts/i2-validate-pharma-recommendation-methodology.sh`
+
+The complete candidate validation passed:
 
 - focused methodology and regression tests: **5 / 5 test files passed**;
 - focused tests: **35 / 35 passed**;
 - strict TypeScript: PASS;
-- presentation data-boundary architecture guard: PASS.
+- presentation data-boundary architecture guard: PASS;
+- focused I2 ESLint: PASS;
+- existing architecture lint: PASS;
+- production build: PASS;
+- I2 diff whitespace check: PASS.
 
-The run then stopped at focused ESLint on two `@typescript-eslint/no-unnecessary-type-assertion` findings inside `evaluateFloors`.
+The production build emitted only the existing non-failing Vite large-chunk warning.
 
-Both findings were redundant `minimum as number` casts. `Object.entries(floors)` already inferred `minimum` as numeric in this context.
+The owner then explicitly approved:
 
-Correction:
+> **APPROVED I2 PHARMA_V1 RECOMMENDATION POLICY V1 — CORE 80 / SATELLITE 65 / WATCH 50 — FLOORS AND CAUTIONS AS PROPOSED**
 
-- removed the two unnecessary assertions;
-- no threshold, floor, blocker, caution, governance, overlay or fail-closed behavior changed;
-- no test expectation changed;
-- no recommendation was calculated.
+The machine-readable policy identity is therefore locked as:
 
-I2 remains **CANDIDATE / OWNER REVIEW PENDING** until the complete validation command passes and the owner approves the methodology.
+- version: `PHARMA_V1_RECOMMENDATION_POLICY_V1_OWNER_APPROVED`;
+- state: `OWNER_APPROVED_LOCKED`.
 
-## Owner approval required
+The post-approval source transition changes policy identity/state and lock coverage only. It does not change any approved threshold, floor, caution, governance, overlay, blocker, fail-closed, persistence, sizing, or action behavior.
 
-I2 is **not locked** until the owner explicitly approves the candidate methodology.
+## I2 closure
 
-The approval decision should cover:
+I2 is formally closed:
 
-1. Core >= 80;
-2. Satellite >= 65;
-3. Watch >= 50;
-4. Avoid < 50;
-5. Core floors;
-6. Satellite floors;
-7. Valuation/Momentum caution-only treatment;
-8. no additional numeric global hard blocker;
-9. governance fail-closed/caution behavior;
-10. overlay context-only behavior.
+> **I2 = COMPLETE / PASS**
 
-Suggested approval phrase:
+Locked methodology:
 
-`APPROVE I2 PHARMA_V1 RECOMMENDATION POLICY V1 — CORE 80 / SATELLITE 65 / WATCH 50 — FLOORS AND CAUTIONS AS PROPOSED`
+1. Core candidate: overall score >= 80;
+2. Satellite candidate: overall score >= 65;
+3. Watch: overall score >= 50;
+4. Avoid: fully evaluable overall score < 50;
+5. missing/unresolved/non-computable authority state -> Insufficient;
+6. Core floors: Quality 75, Business Durability 75, and the other five role-blocking dimensions at least 50;
+7. Satellite floors: all seven role-blocking dimensions at least 50;
+8. Capital Efficiency: no separate recommendation-layer gate;
+9. Valuation and Momentum below 50: caution only;
+10. no additional numeric global hard blocker;
+11. governance Review Required / Blocked Review: fail closed to Insufficient;
+12. Material Overlay / Emerging Watch: context only, with no independent score, role, override, blend, or hidden numeric adjustment.
+
+## Safety state
+
+I2 closure does not:
+
+- calculate the real TORNTPHARM recommendation;
+- calculate the real AUROPHARMA recommendation;
+- persist a score or recommendation;
+- create `stock_recommendation_runs`;
+- materialize or activate a production recommendation-policy row;
+- mutate Supabase production data;
+- call external providers;
+- invoke AI interpretation;
+- invoke weight guidance/action bias;
+- invoke position sizing;
+- deploy;
+- merge PR #101.
 
 ## Current state
 
 ```text
 Gate H = COMPLETE / PASS
 I1 = COMPLETE / PASS
-I2 = CANDIDATE IMPLEMENTED / VALIDATION PENDING / OWNER APPROVAL PENDING
+I2 = COMPLETE / PASS
 I3 = NOT STARTED
 I4 = NOT STARTED
 ```
+
+**STOP:** Do not start I3 without a separate owner instruction.

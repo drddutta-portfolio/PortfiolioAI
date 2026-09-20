@@ -2,7 +2,7 @@ import type { PharmaG7DimensionCode } from "./pharmaG7ReadOnlyScoringAdapter"
 import type { PharmaRecommendationSuggestedRole } from "./pharmaRecommendationAuthority"
 
 export const PHARMA_V1_RECOMMENDATION_POLICY_CANDIDATE_VERSION =
-  "PHARMA_V1_RECOMMENDATION_POLICY_V1_CANDIDATE" as const
+  "PHARMA_V1_RECOMMENDATION_POLICY_V1_OWNER_APPROVED" as const
 
 export type PharmaRecommendationDimensionTreatment =
   | "ROLE_BLOCKING_FLOOR"
@@ -38,7 +38,7 @@ export interface PharmaRecommendationFloorEvaluation {
 
 export interface PharmaRecommendationPolicyEvaluation {
   readonly policyVersion: typeof PHARMA_V1_RECOMMENDATION_POLICY_CANDIDATE_VERSION
-  readonly policyState: "OWNER_REVIEW_PENDING"
+  readonly policyState: "OWNER_APPROVED_LOCKED"
   readonly suggestedRole: PharmaRecommendationSuggestedRole
   readonly overallScore: number | null
   readonly evaluatedRoleThreshold:
@@ -75,7 +75,7 @@ const SATELLITE_FLOORS = {
 
 export const PHARMA_V1_RECOMMENDATION_POLICY_CANDIDATE = {
   version: PHARMA_V1_RECOMMENDATION_POLICY_CANDIDATE_VERSION,
-  state: "OWNER_REVIEW_PENDING",
+  state: "OWNER_APPROVED_LOCKED",
   profileCode: "PHARMA_V1",
   methodologyBasis: {
     neutralAnchor: 50,
@@ -270,7 +270,7 @@ function result(
 ): PharmaRecommendationPolicyEvaluation {
   return {
     policyVersion: PHARMA_V1_RECOMMENDATION_POLICY_CANDIDATE_VERSION,
-    policyState: "OWNER_REVIEW_PENDING",
+    policyState: "OWNER_APPROVED_LOCKED",
     suggestedRole,
     overallScore: input.overallScore,
     evaluatedRoleThreshold,
