@@ -21688,3 +21688,81 @@ The candidate:
 - PR merge: NO
 
 **CURRENT STOP POINT:** owner pulls and validates the G-FINAL-2 audit + reconciliation candidate. After PASS, proceed to the versioned parent-contract reconciliation and then G-FINAL-2B evidence sufficiency lock. Do not invent numeric thresholds before the calibration review.
+
+
+---
+
+## 244. Entry 239 — G-FINAL-2A promoted / G-FINAL-2B evidence sufficiency locked
+
+**Date:** 20 September 2026  
+**Actor:** owner validation + ChatGPT versioned parent promotion and evidence lock  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **G-FINAL-2A CANDIDATE VALIDATION PASS**
+
+### G-FINAL-2A promotion
+
+The historical `PHARMA_RESEARCH_PROFILE_V1` remains preserved.
+
+Added a new versioned Gate G parent profile:
+
+- `PHARMA_V1_GATE_G_DIMENSIONS_V1`
+
+This reconciles exactly four parent metric dimensions:
+
+- `PHARMA_ROCE_HISTORY` → `CAPITAL_EFFICIENCY`
+- `PHARMA_CASH_CONVERSION_HISTORY` → `CASH_FLOW`
+- `PHARMA_BALANCE_SHEET_LEVERAGE` → `BALANCE_SHEET_CREDIT`
+- `PHARMA_OWNERSHIP_GOVERNANCE` → `OWNERSHIP_GOVERNANCE`
+
+Metric identity, requirement level, evidence source semantics, calculation ownership, and score-curve state are preserved.
+
+The effective Pharma subprofile composer now consumes the versioned Gate G parent profile.
+
+The ROCE, Cash Conversion, Balance Sheet/Leverage, and Ownership/Governance proposal contracts now report:
+
+- canonical parent dimension aligned;
+- `dimensionAlignmentState = ALIGNED_VERSIONED_PARENT`;
+- numeric curve still proposal-only;
+- score execution still OFF.
+
+The reconciliation registry is now:
+
+- `state = PROMOTED_VERSIONED_PARENT`
+- parent version = `PHARMA_V1_GATE_G_DIMENSIONS_V1`
+
+### G-FINAL-2B evidence sufficiency lock
+
+Added:
+
+- `torntpharmGateGFinal2EvidenceSufficiency.ts`
+- matching tests
+
+Locked current read-only TORNTPHARM evidence state:
+
+- **Capital Efficiency** — minimum 3-year ROCE history present; calibration still unapproved
+- **Cash Flow** — insufficient; only one CFO annual observation in the exact current official fixture while 3 matched years are required
+- **Balance Sheet / Credit** — minimum 3-year leverage/coverage/debt/cash/EBITDA structure present; calibration still unapproved
+- **Business Durability** — partial; 3-year R&D intensity exists but whole-dimension aggregation and broader Domestic durability evidence are not locked
+- **Momentum** — insufficient for Gate G; company fixture + Pharma benchmark not locked
+- **Ownership / Governance** — insufficient; minimum 4-quarter ownership history not locked in current Gate G fixture
+- **Risk** — scope incomplete; Indrad warning→closeout chain reviewed, but company-wide current regulatory scope and Gate G market-risk fixture remain incomplete
+
+No missing evidence is converted to neutral.
+
+### Safety state
+
+- production mutation: NO
+- historical PHARMA_V1 source mutation: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+**CURRENT STOP POINT:** owner validates the promoted versioned parent profile plus G-FINAL-2B evidence sufficiency lock. After PASS, proceed to G-FINAL-2C calibration candidates. Do not approve numeric thresholds without explicit owner methodology review.
