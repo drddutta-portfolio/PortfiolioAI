@@ -21537,3 +21537,63 @@ Remaining Gate H blockers:
 - automatic trading: NO
 
 **CURRENT STOP POINT:** owner must pull and run post-approval focused validation. G-FINAL-1 is not formally closed until that validation passes.
+
+
+---
+
+## 242. Entry 237 — G-FINAL-1 post-approval validation PASS / checkpoint closed
+
+**Date:** 20 September 2026  
+**Actor:** owner-executed local validation + ChatGPT closure review  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner completed the required post-approval validation after the G-FINAL-1 methodology freeze and reported:
+
+> **G-FINAL-1 POST-APPROVAL VALIDATION PASS**
+
+Validated:
+
+- focused G-FINAL-1 tests;
+- strict TypeScript;
+- architecture guard;
+- architecture lint;
+- production build;
+- `git diff --check`.
+
+### Closed methodology contracts
+
+The following Gate G methodology is now frozen as **OWNER_APPROVED_NOT_ACTIVE**:
+
+- Domestic Quality / Operating Margin;
+- Domestic Growth / Segment Growth;
+- PHARMA_V1 readiness gates;
+- G7-P2 governance High Risk behavior.
+
+Domestic Valuation remains previously owner-approved/not-active.
+
+### Safety state
+
+All execution boundaries remain unchanged:
+
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- provider refresh: NO
+- deployment: NO
+- scheduler change: NO
+- PR merge: NO
+- automatic trading: NO
+
+### Closure state
+
+> **G-FINAL-1 = COMPLETE / PASS**
+
+Gate H remains blocked by:
+
+- G-FINAL-2 — seven missing numeric dimensions;
+- G-FINAL-3 — TORNTPHARM Global Generics Material Overlay treatment;
+- G-FINAL-4 — canonical governance/regulatory runtime input;
+- G-FINAL-5 — complete hand-verifiable score dry run.
+
+**NEXT CHECKPOINT:** begin G-FINAL-2 with a read-only methodology audit for Capital Efficiency, Cash Flow, Balance Sheet / Credit, Business Durability, Momentum, Ownership / Governance, and Risk. Do not invent thresholds without evidence/calibration review.
