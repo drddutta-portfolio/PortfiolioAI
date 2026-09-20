@@ -20628,3 +20628,56 @@ PR #101 remains OPEN / DRAFT / UNMERGED.
 G9.3 V2 remains **OPEN**.
 
 **CURRENT STOP POINT:** pull the corrected branch and repeat the TORNTPHARM localhost visual inspection. Formal owner visual PASS has **not** yet been recorded. Do not run the full local validation gate and do not start AUROPHARMA until the corrected TORNTPHARM capability layer receives owner visual approval.
+
+
+---
+
+## 232. Entry 227 — G9.3 V2 Pharma capability provenance labels added
+
+**Date:** 20 September 2026  
+**Actor:** owner request + ChatGPT implementation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Following the corrected TORNTPHARM visual review, the owner asked where the generalized G8.1 / G8.2 / G8.3 / G9.1 / G9.2 capabilities were represented.
+
+The reusable capability sections were already present semantically, but their historical checkpoint lineage was not visually explicit.
+
+### Change applied
+
+Updated:
+
+- `src/features/research/PharmaSectorCapabilityPanel.tsx`
+
+Added lightweight provenance prefixes only:
+
+- `G8.1 capability · Classification & evidence lock`
+- `G8.2 capability · Three-layer Pharma research architecture`
+- `G8.3 capability · Portability / isolation checkpoint`
+- `G9.1 capability · Activation-readiness & authority`
+- `G9.2 capability · Canonical assignment state`
+
+This is a traceability enhancement only.
+
+No layout redesign, section reordering, methodology change, activation change, stock-specific branch, or shared-shell change was introduced.
+
+### Safety state
+
+- production mutation: NO
+- production migration: NO
+- assignment mutation: NO
+- evidence mutation: NO
+- score execution/persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+G9.3 V2 remains **OPEN**.
+
+**CURRENT STOP POINT:** owner should pull the branch and visually confirm that the provenance labels are readable and unobtrusive in the TORNTPHARM capability layer. Do not begin full local validation or AUROPHARMA until owner visual PASS is recorded.
