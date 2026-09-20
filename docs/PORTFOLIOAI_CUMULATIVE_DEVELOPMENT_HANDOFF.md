@@ -24118,3 +24118,52 @@ Only:
    - comparable PE + EV/EBITDA evidence.
 
 **CURRENT STOP POINT:** complete those two blockers only. H3 remains closed until all ten dimensions are score-ready.
+
+
+---
+
+## 279. Entry 274 — H2 final blockers consolidated
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After local market evidence validation PASS, H2 consolidated the only remaining two incomplete dimensions.
+
+### Business Durability
+
+Only Brand / Therapy Leadership remains unresolved.
+
+The exact external licensed source family is now identified as:
+
+- AIOCD Pharmatrac / AIOCD-AWACS
+
+Issuer-cited licensed data is orientation evidence only; direct licensed cross-check remains required by Gate F.
+
+### Valuation
+
+Self-history:
+
+- one already-authorized local Trendlyne refresh remains required for `PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT`.
+
+Peer cohort read-only review:
+
+- MANKIND -> strong Domestic Formulations evidence / HIGH candidate confidence;
+- ERIS -> strong Domestic Formulations evidence / HIGH candidate confidence;
+- EMCURE -> Domestic Formulations supported / MEDIUM candidate confidence, with material international/global-generics exposure;
+- SUNPHARMA -> India business is highly material but Primary Domestic Formulations is not cleanly established for peer-cohort use because international/specialty businesses are also large.
+
+Minimum viable peer review set:
+
+- MANKIND
+- ERIS
+- EMCURE
+
+No assignment has been promoted or persisted.
+
+Peer valuation still requires fresh comparable PE_TTM + EV_EBITDA for all three reviewed peers.
+
+### H2 remains open
+
+No final score has been calculated.
+
+**CURRENT STOP POINT:** perform the already-authorized local TORNTPHARM self-history refresh; obtain one consolidated owner peer-classification decision; identify/provide licensed AIOCD Pharmatrac evidence access for Brand/Therapy Leadership.
