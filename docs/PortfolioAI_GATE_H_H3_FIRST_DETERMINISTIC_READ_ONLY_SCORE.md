@@ -5,7 +5,7 @@
 **Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — KEEP OPEN / DRAFT / UNMERGED
 **Stage:** H3 — FIRST DETERMINISTIC READ-ONLY TORNTPHARM SCORE
-**Status:** IMPLEMENTED / CONSOLIDATED VALIDATION PENDING / OWNER REVIEW PENDING
+**Status:** IMPLEMENTED / CONSOLIDATED VALIDATION PASS / OWNER REVIEW PENDING
 
 ## Purpose
 
@@ -149,6 +149,22 @@ bash scripts/h3-validate-torntpharm-read-only-score.sh
 
 It runs the focused H3 tests, related Gate G/G7/H2 regressions, TypeScript, the presentation data-boundary guard, focused H3 lint, existing architecture lint, production build, and `git diff --check` across the H3 change range.
 
+### Consolidated validation result
+
+Owner-run validation on 20 September 2026 completed successfully:
+
+- test files: **8 passed / 8**
+- tests: **59 passed / 59**
+- TypeScript: **PASS**
+- presentation data-boundary architecture guard: **PASS**
+- focused H3 lint: **PASS**
+- existing architecture lint: **PASS**
+- production build: **PASS**
+- H3 diff whitespace check: **PASS**
+- final script result: `H3 VALIDATION PASS`
+
+The production build emitted the existing Vite chunk-size advisory for large generated bundles; it did not fail the build and is not an H3 scoring blocker.
+
 ## Safety boundary
 
 H3 does **not** authorize or perform:
@@ -169,7 +185,7 @@ Production remains untouched.
 
 H1 = COMPLETE / PASS
 H2 = COMPLETE / PASS
-H3 = IMPLEMENTED / VALIDATION PENDING
+H3 = IMPLEMENTED / VALIDATION PASS / OWNER REVIEW PENDING
 H4 = NOT STARTED
 
 Gate H is **not** closed by this document. H4 remains the separate independent hand-verification and closure stage.
