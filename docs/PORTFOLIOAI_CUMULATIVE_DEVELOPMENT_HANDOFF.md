@@ -20835,3 +20835,93 @@ The **TORNTPHARM-first G9.3 V2 capability checkpoint is CLOSED / PASS**.
 G9.3 V2 itself remains **OPEN**.
 
 **NEXT CHECKPOINT:** begin G9.3-D by making AUROPHARMA consume the same completed reusable PHARMA_V1 capability/workspace architecture, preserving AUROPHARMA's own canonical role state and unresolved Biosimilars semantics. No production action is authorized.
+
+
+---
+
+## 234. Entry 229 — G9.3 V2 TORNTPHARM full local validation PASS / checkpoint closed
+
+**Date:** 20 September 2026  
+**Actor:** owner-executed local validation + ChatGPT review  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner completed the full local validation gate after the formal TORNTPHARM visual PASS.
+
+### Validation results
+
+Passed:
+
+- `npm run typecheck` — PASS
+- `npm test` — PASS
+  - 174 test files passed
+  - 965 tests passed
+- `npm run test:edge` — PASS
+  - 27 test files passed
+  - 140 tests passed
+- `npm run check:architecture` — PASS
+- `npm run lint:architecture` — PASS
+- `npm run build` — PASS
+- `git diff --check` — PASS
+
+### Repository-wide lint diagnostic
+
+`npm run lint` did not pass and reported 79 problems (75 errors, 4 warnings), including React Hooks `set-state-in-effect` findings in existing files such as:
+
+- `src/features/research/useSecurityResearch.ts`
+- `src/features/research/useSecurityScoring.ts`
+
+This is **not a G9.3 TORNTPHARM regression**.
+
+Direct commit-range verification from the pre-correction G9.3 checkpoint head `f1f060c3e5034d045afcdc923bd72acf8e28762a` through the visual-PASS handoff head showed that this checkpoint changed only:
+
+- `src/features/research/PharmaSectorCapabilityPanel.tsx`
+- `docs/PORTFOLIOAI_CUMULATIVE_DEVELOPMENT_HANDOFF.md`
+
+The failing hook files were not changed by this checkpoint.
+
+The focused architecture lint and all TypeScript/test/build/diff gates passed, so the inherited repository-wide lint debt is recorded separately and does not block closure of this TORNTPHARM G9.3 capability checkpoint.
+
+### TORNTPHARM checkpoint closure
+
+The TORNTPHARM-first reusable PHARMA_V1 capability layer is now:
+
+- implemented;
+- visually approved by the owner;
+- semantically aligned with the G9.3 V2 plan;
+- locally validated;
+- fail-closed for numeric scoring / recommendation / sizing;
+- preserving the universal R4M Research shell;
+- preserving all Gate G → G7 methodology surfaces;
+- carrying visible G8.1 / G8.2 / G8.3 / G9.1 / G9.2 provenance labels.
+
+### Safety state
+
+- production mutation: NO
+- production migration: NO
+- assignment mutation: NO
+- evidence mutation: NO
+- score execution/persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+The **TORNTPHARM-first G9.3 V2 checkpoint is CLOSED / PASS**.
+
+G9.3 V2 remains **OPEN** because AUROPHARMA must now consume the same completed PHARMA_V1 sector-workspace architecture.
+
+**NEXT CHECKPOINT:** begin G9.3-D for AUROPHARMA by applying the completed reusable capability architecture through canonical company + assignment + role contracts, preserving:
+- Primary = GLOBAL_GENERICS;
+- Material Overlay = none;
+- Emerging = API_BULK_DRUGS;
+- unresolved = BIOPHARMA_BIOSIMILARS;
+- no TORNTPHARM evidence/methodology leakage;
+- no score/recommendation/sizing activation.
+
+No AUROPHARMA implementation has been made by this entry.
