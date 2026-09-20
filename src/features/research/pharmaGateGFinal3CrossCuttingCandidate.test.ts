@@ -2,11 +2,8 @@ import { describe, expect, it } from "vitest"
 import {
   evaluateGateGFinal3OverlayCandidate,
   PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE,
+  PHARMA_GATE_G_FINAL_3_TORNTPHARM_RUNTIME_SNAPSHOT,
 } from "./pharmaGateGFinal3CrossCuttingCandidate"
-import {
-  TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING,
-  TORNTPHARM_GATE_G_FINAL_3_RUNTIME_RESULT,
-} from "./torntpharmGateGFinal3RuntimeMapping"
 
 describe("G-FINAL-3 cross-cutting methodology", () => {
   it("records owner-approved cross-cutting methodology without activation", () => {
@@ -56,30 +53,19 @@ describe("G-FINAL-3 cross-cutting methodology", () => {
     expect(result.proposedNumericModifierPoints).toBe(1)
   })
 
-  it("keeps TORNTPHARM governance runtime review-required without inferring company-wide clearance", () => {
-    expect(TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING.state).toBe("OWNER_APPROVED_FAIL_CLOSED_RUNTIME")
-    expect(
-      TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING
-        .companyWideCurrentRegulatoryScopeEstablished,
-    ).toBe(false)
-    expect(TORNTPHARM_GATE_G_FINAL_3_RUNTIME_RESULT.gateState).toBe(
-      "REVIEW_REQUIRED",
-    )
-    expect(TORNTPHARM_GATE_G_FINAL_3_RUNTIME_RESULT.blocksPreview).toBe(false)
-    expect(TORNTPHARM_GATE_G_FINAL_3_RUNTIME_RESULT.reasonCodes).toContain(
-      "REGULATORY_MATERIALITY_UNKNOWN",
-    )
+  it("keeps the frozen G-FINAL-3 TORNTPHARM runtime review-required without inferring company-wide clearance", () => {
+    const snapshot = PHARMA_GATE_G_FINAL_3_TORNTPHARM_RUNTIME_SNAPSHOT
+    expect(snapshot.state).toBe("OWNER_APPROVED_FAIL_CLOSED_RUNTIME")
+    expect(snapshot.companyWideCurrentRegulatoryScopeEstablished).toBe(false)
+    expect(snapshot.gateState).toBe("REVIEW_REQUIRED")
+    expect(snapshot.blocksPreview).toBe(false)
+    expect(snapshot.reasonCodes).toContain("REGULATORY_MATERIALITY_UNKNOWN")
   })
 
-  it("retains the historical event and does not enable score execution", () => {
-    expect(
-      TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING.reviewedChain.eventHistoryRetained,
-    ).toBe(true)
-    expect(
-      TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING.scoreExecutionEnabled,
-    ).toBe(false)
-    expect(
-      TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING.persistedScoreRunEnabled,
-    ).toBe(false)
+  it("retains the frozen historical event and does not enable score execution", () => {
+    const snapshot = PHARMA_GATE_G_FINAL_3_TORNTPHARM_RUNTIME_SNAPSHOT
+    expect(snapshot.reviewedChain.eventHistoryRetained).toBe(true)
+    expect(snapshot.scoreExecutionEnabled).toBe(false)
+    expect(snapshot.persistedScoreRunEnabled).toBe(false)
   })
 })
