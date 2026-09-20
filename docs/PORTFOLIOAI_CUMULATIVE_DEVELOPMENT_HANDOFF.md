@@ -20745,3 +20745,93 @@ The **owner visual approval gate for the TORNTPHARM-first G9.3 V2 capability che
 G9.3 V2 remains **OPEN**.
 
 **CURRENT STOP POINT:** run the full local validation suite for this TORNTPHARM checkpoint. AUROPHARMA implementation remains blocked until the local validation gate passes and the final TORNTPHARM checkpoint handoff is recorded.
+
+
+---
+
+## 234. Entry 229 — G9.3 V2 TORNTPHARM-first capability checkpoint CLOSED / PASS
+
+**Date:** 20 September 2026  
+**Actor:** owner local validation + ChatGPT checkpoint closure  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner completed the full local validation suite for the visually approved TORNTPHARM G9.3 V2 capability checkpoint and reported:
+
+> **ALL PASS**
+
+### Validation commands reported PASS
+
+- `npm run typecheck`
+- `npm test`
+- `npm run test:edge`
+- `npm run check:architecture`
+- `npm run lint:architecture`
+- `npm run lint`
+- `npm run build`
+- `git diff --check`
+
+Mutation-capable local commands were intentionally not part of this gate:
+
+- `npm run r4n:mutate:prerequisites`
+- `npm run r4n:mutate:observations`
+
+### TORNTPHARM checkpoint closure
+
+The TORNTPHARM-first reusable PHARMA_V1 capability layer is now accepted as:
+
+- visually approved by owner;
+- semantically aligned with G9.3 V2;
+- full-local-validation PASS;
+- additive to the existing TORNTPHARM Pharma deep-research methodology stack;
+- non-activating for numeric scoring, recommendation and sizing.
+
+Accepted role state:
+
+- Primary = `DOMESTIC_FORMULATIONS`
+- Material Overlay = `GLOBAL_GENERICS`
+- Emerging Watch = `CDMO_CRAMS`
+- unresolved exposure = none registered in this capability view
+
+Accepted reusable capability lineage:
+
+- G8.1 → Classification & Evidence Lock
+- G8.2 → Three-Layer Pharma Research Architecture
+- G8.3 → Portability / Isolation Checkpoint
+- G9.1 → Activation-Readiness & Authority
+- G9.2 → Canonical Assignment State
+
+All existing validated TORNTPHARM methodology remains preserved:
+
+- Gate G
+- G1–G4
+- G5.1–G5.7
+- G6.1–G6.45
+- G7-P1
+- G7-P2
+- G7.1
+- G7.2
+- G7.3
+
+### Safety state
+
+- production mutation: NO
+- production migration: NO
+- assignment mutation: NO
+- evidence mutation: NO
+- score execution/persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+The **TORNTPHARM-first G9.3 V2 capability checkpoint is CLOSED / PASS**.
+
+G9.3 V2 itself remains **OPEN**.
+
+**NEXT CHECKPOINT:** begin G9.3-D by making AUROPHARMA consume the same completed reusable PHARMA_V1 capability/workspace architecture, preserving AUROPHARMA's own canonical role state and unresolved Biosimilars semantics. No production action is authorized.
