@@ -104,5 +104,50 @@ where benchmark_code='NIFTY_PHARMA' and provider_code='ANGEL_ONE'
 group by benchmark_code;
 "
 
-printf '\nPASS boundary: all writes above are local Supabase only.\n'
+printf '\nH2 Risk relative-volatility derivation from local raw histories\n'
+psql "$DB_URL" -P pager=off -c "
+with common_closes as (
+  select
+    s.period_start::date as d,
+    s.close::numeric as stock_close,
+    b.close::numeric as benchmark_close
+  from public.market_price_history s
+  join public.market_benchmark_price_history b
+    on b.period_start::date = s.period_start::date
+   and b.benchmark_code='NIFTY_PHARMA'
+   and b.provider_code='ANGEL_ONE'
+   and b.interval='ONE_DAY'
+  where s.security_id='$SECURITY_ID'
+    and s.provider_code='ANGEL_ONE'
+    and s.interval='ONE_DAY'
+),
+bounded as (
+  select *
+  from common_closes
+  where d >= (select max(d) - 365 from common_closes)
+),
+returns as (
+  select
+    d,
+    ln(stock_close / lag(stock_close) over (order by d)) as stock_lr,
+    ln(benchmark_close / lag(benchmark_close) over (order by d)) as benchmark_lr
+  from bounded
+),
+vols as (
+  select
+    stddev_samp(stock_lr) * sqrt(252) as stock_vol,
+    stddev_samp(benchmark_lr) * sqrt(252) as benchmark_vol,
+    count(*) filter (where stock_lr is not null and benchmark_lr is not null) as common_daily_returns
+  from returns
+)
+select
+  round((stock_vol * 100)::numeric, 6) as torntpharm_volatility_1y_percent,
+  round((benchmark_vol * 100)::numeric, 6) as nifty_pharma_volatility_1y_percent,
+  round((stock_vol / nullif(benchmark_vol,0))::numeric, 6) as relative_volatility_ratio,
+  common_daily_returns
+from vols;
+"
+
+printf '\nNOTE: MAX_DRAWDOWN_1Y is stored as an absolute positive magnitude; the approved Risk evaluator consumes its negative signed form.\n'
+printf 'PASS boundary: all writes above are local Supabase only.\n'
 printf 'Function log: %s\n' "$LOG_FILE"
