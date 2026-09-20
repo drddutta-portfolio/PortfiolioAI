@@ -23664,3 +23664,51 @@ Regulatory runtime is no longer a blocker.
 Global Generics overlay numeric participation is already resolved as `BELOW_SCORING_MATERIALITY` at the current ~12.05% economic share.
 
 **CURRENT STOP POINT:** finish only the remaining evidence inputs above; when they are locked and all ten dimensions are numeric, close H2 immediately and begin H3.
+
+
+---
+
+## 272. Entry 267 — H2 regulatory runtime resolution validation PASS
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **H2 REGULATORY RUNTIME RESOLUTION PASS**
+
+Validated:
+
+- company-wide current US-facing regulatory scope established from official evidence;
+- historical Indrad event retained;
+- remediation/subsequent outcome context established;
+- governance/regulatory runtime = `CLEAR`;
+- Regulatory Context normalization = **100**;
+- no second hidden regulatory penalty;
+- no high-risk numeric cap;
+- strict TypeScript;
+- focused Vitest;
+- focused ESLint;
+- production build;
+- `git diff --check`.
+
+### Current Risk state
+
+Regulatory Context is now score-ready at **100**.
+
+Risk remains incomplete only because market-risk evidence is absent:
+
+- TORNTPHARM 1Y max drawdown;
+- TORNTPHARM 1Y volatility;
+- NIFTY Pharma 1Y volatility;
+- relative-volatility ratio.
+
+### Current remaining H2 blockers
+
+1. Brand / Therapy Leadership licensed-market-source cross-check.
+2. Current authoritative market history for Valuation / Momentum / Risk.
+3. Reviewed Domestic Formulations peer cohort / current valuation authority.
+
+No provider refresh, licensed source call, production evidence mutation, score execution or persistence has occurred.
+
+**CURRENT STOP POINT:** continue H2 with read-only peer-cohort evidence review, then determine the exact remaining authorization required for market/licensed evidence.
