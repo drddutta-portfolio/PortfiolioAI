@@ -23601,3 +23601,66 @@ Risk remains non-score-ready because market evidence is still absent:
 No provider refresh, licensed call, production mutation, evidence write or score persistence occurred.
 
 **CURRENT STOP POINT:** validate regulatory runtime resolution, then remaining H2 blockers are market history/valuation-peer evidence plus licensed Brand / Therapy Leadership.
+
+
+---
+
+## 272. Entry 267 — H2 regulatory runtime validation PASS + hard H2 stop rule
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **H2 REGULATORY RUNTIME RESOLUTION PASS**
+
+Validated:
+
+- current TORNTPHARM governance/regulatory runtime = `CLEAR`;
+- historical Indrad event retained;
+- Regulatory Context normalized score = **100**;
+- no second hidden regulatory penalty;
+- no high-risk numeric cap;
+- strict TypeScript;
+- focused Vitest;
+- focused ESLint;
+- production build;
+- `git diff --check`.
+
+### Hard H2 stop rule
+
+H2 must stop immediately when all of the following are true:
+
+1. all 10 weighted TORNTPHARM dimensions are score-ready;
+2. all raw/derived/reviewed company inputs are frozen into:
+   `TORNTPHARM_GATE_H_SCORE_INPUT_PACKAGE_V1`;
+3. governance runtime is resolved;
+4. required Global Generics overlay treatment is explicitly resolved as either:
+   - numeric READY; or
+   - contract-valid non-participation / below-scoring materiality;
+5. no required weighted dimension is missing, neutralized or renormalized away.
+
+At that exact point:
+
+> **H2 = COMPLETE**
+
+No further H2 substage, suffix, micro-gate or methodology checkpoint is permitted unless a genuinely new structural blocker is discovered.
+
+The next action must then be:
+
+> **H3 — first deterministic read-only TORNTPHARM score**
+
+H3, not H2, owns the first full-company score calculation.
+
+### Remaining H2 blockers at this point
+
+- Business Durability: Brand / Therapy Leadership licensed-market cross-check;
+- Valuation: current authoritative market input + reviewed Domestic Formulations peer evidence;
+- Momentum: TORNTPHARM and NIFTY Pharma market history;
+- Risk: market drawdown / volatility inputs.
+
+Regulatory runtime is no longer a blocker.
+
+Global Generics overlay numeric participation is already resolved as `BELOW_SCORING_MATERIALITY` at the current ~12.05% economic share.
+
+**CURRENT STOP POINT:** finish only the remaining evidence inputs above; when they are locked and all ten dimensions are numeric, close H2 immediately and begin H3.
