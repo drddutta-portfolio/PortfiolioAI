@@ -54,6 +54,18 @@ describe("TORNTPHARM H2 initial score inputs", () => {
     ).toBe(79)
   })
 
+  it("includes the validated Ownership / Governance read-only candidate", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.ownershipGovernance).toEqual({
+      state: "READ_ONLY_SCORE_CANDIDATE",
+      score: 70,
+      componentScores: {
+        ownershipStability: 75,
+        pledgeControlRisk: 75,
+        nonG4GovernanceContext: 50,
+      },
+    })
+  })
+
   it("keeps all score execution and persistence off", () => {
     expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.scoreExecutionEnabled).toBe(false)
     expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.persistedScoreRunEnabled).toBe(false)
