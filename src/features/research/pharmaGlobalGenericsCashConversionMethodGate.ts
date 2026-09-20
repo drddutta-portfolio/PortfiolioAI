@@ -1,5 +1,3 @@
-import { PHARMA_CASH_CONVERSION_CURVE_PROPOSAL } from "./pharmaCashConversionCurveProposal"
-
 export const PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_METHOD_GATE_VERSION =
   "PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_METHOD_GATE_V1_PROPOSAL" as const
 
@@ -9,7 +7,7 @@ export interface PharmaGlobalGenericsCashConversionMethodGateContract {
   readonly supportedPrimarySubprofile: "GLOBAL_GENERICS"
   readonly metricCode: "PHARMA_CASH_CONVERSION_HISTORY"
   readonly canonicalDimension: "CASH_FLOW"
-  readonly parentDimensionAlignmentState: typeof PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.dimensionAlignmentState
+  readonly parentDimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION"
   readonly parentDimensionReconciliationRequired: true
   readonly history: {
     readonly minimumComparableAnnualPeriods: 3
@@ -48,7 +46,7 @@ export const PHARMA_GLOBAL_GENERICS_CASH_CONVERSION_METHOD_GATE:
     supportedPrimarySubprofile: "GLOBAL_GENERICS",
     metricCode: "PHARMA_CASH_CONVERSION_HISTORY",
     canonicalDimension: "CASH_FLOW",
-    parentDimensionAlignmentState: PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.dimensionAlignmentState,
+    parentDimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
     parentDimensionReconciliationRequired: true,
     history: {
       minimumComparableAnnualPeriods: 3,
