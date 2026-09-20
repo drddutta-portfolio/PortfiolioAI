@@ -36,10 +36,10 @@ describe("TORNTPHARM H2 remaining evidence lock", () => {
     ).toBe(false)
   })
 
-  it("preserves the regulatory REVIEW_REQUIRED runtime", () => {
+  it("records the resolved regulatory CLEAR runtime", () => {
     expect(
       TORNTPHARM_GATE_H2_CANONICAL_READ_ONLY_SNAPSHOT.governanceRuntime.gateState,
-    ).toBe("REVIEW_REQUIRED")
+    ).toBe("CLEAR")
   })
 
   it("reconciles Material business exposure with below-scoring overlay materiality", () => {
