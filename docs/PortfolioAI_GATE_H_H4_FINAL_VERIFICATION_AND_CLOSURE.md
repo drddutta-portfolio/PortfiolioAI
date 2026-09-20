@@ -394,6 +394,34 @@ The repair freezes those historical snapshots in their own artifacts. It does **
 
 The affected historical regression tests are now included in H4 focused validation before the full application suite.
 
+## Full-suite harness correction — Deno Edge test exclusion
+
+The next H4 validation attempt progressed past all application assertions and reported:
+
+- **1,089 tests passed**;
+- **1 failed suite**;
+- no failed application assertion.
+
+The remaining suite failure was:
+
+`supabase/functions/refresh-pharma-benchmark/index.test.ts`
+
+That file is a native Deno test and imports:
+
+- `jsr:@std/assert`;
+- `Deno.readTextFile`;
+- `Deno.test`.
+
+The default project `npm test` command uses Node/Vitest and therefore cannot resolve that Deno-only module. This is a test-runner boundary mismatch, not an H4 application or scoring regression.
+
+H4 touches no Edge Function code, and Edge tests are explicitly outside the H4 validation requirement. Therefore the H4 "full application" step now runs:
+
+```bash
+npx vitest run --exclude "supabase/functions/**"
+```
+
+This preserves the repository-wide `npm test` command and all Edge tests unchanged while making the H4 validation scope explicit: full non-Edge application tests plus the focused H4/Gate-H regressions.
+
 ## Consolidated H4 validation
 
 Run exactly:
