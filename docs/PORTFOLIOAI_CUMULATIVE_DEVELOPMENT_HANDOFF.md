@@ -24490,4 +24490,10 @@ Canonical H3 record:
 
 - `docs/PortfolioAI_GATE_H_H3_FIRST_DETERMINISTIC_READ_ONLY_SCORE.md`
 
-**CURRENT STOP POINT:** complete the single consolidated H3 validation pass, then present one owner review package. Do not begin H4 automatically.
+A one-command local validation entry point is now available:
+
+`bash scripts/h3-validate-torntpharm-read-only-score.sh`
+
+Hosted validation is currently not authoritative: GitHub Actions is failing before runner allocation (zero executed steps, the same condition was already present on the H2 head), and the Vercel status is failing on its build-rate-limit rather than an application build error.
+
+**CURRENT STOP POINT:** run the single consolidated H3 validation command above, then present one owner review package. Do not begin H4 automatically.

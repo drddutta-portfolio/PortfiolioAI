@@ -139,6 +139,16 @@ H3 tests explicitly cover:
 - no persistence, recommendation or sizing;
 - repeated calculation identity.
 
+## Consolidated validation command
+
+Because hosted CI availability is external to H3, the repository also provides one non-mutating local validation command:
+
+```bash
+bash scripts/h3-validate-torntpharm-read-only-score.sh
+```
+
+It runs the focused H3 tests, related Gate G/G7/H2 regressions, TypeScript, the presentation data-boundary guard, focused H3 lint, existing architecture lint, production build, and `git diff --check` across the H3 change range.
+
 ## Safety boundary
 
 H3 does **not** authorize or perform:

@@ -136,6 +136,20 @@ describe("G7.1 read-only scoring adapter", () => {
     expect(result.reasonCodes).toContain("NO_NUMERIC_OVERLAY_MODIFIER_APPLIED")
   })
 
+  it("fails closed when below-scoring-materiality participation lacks the locked classification contract", () => {
+    const result = calculatePharmaG7Dimension({
+      ...readyDimension("GROWTH", 78.25),
+      overlayParticipation: "BELOW_SCORING_MATERIALITY",
+      overlayModifierPoints: null,
+      overlayModifierContractVersion: "WRONG_CONTRACT",
+    })
+    expect(result.calculationState).toBe("UNAVAILABLE_METHODOLOGY")
+    expect(result.finalScore).toBeNull()
+    expect(result.reasonCodes).toContain(
+      "BELOW_SCORING_MATERIALITY_CLASSIFICATION_CONTRACT_NOT_AVAILABLE",
+    )
+  })
+
   it("keeps Emerging Watch excluded from the numeric result", () => {
     const result = calculatePharmaG7Dimension({
       ...readyDimension("BUSINESS_DURABILITY", 68),

@@ -312,7 +312,7 @@ export const TORNTPHARM_GATE_H3_SCORE_INPUT_PACKAGE: TorntpharmGateH3ScoreInputP
         "LOCAL_SUPABASE:ANGEL_ONE_TORNTPHARM+NIFTY_PHARMA_HISTORY",
       ],
       [TORNTPHARM_GATE_H2_LOCAL_MARKET_EVIDENCE_VERSION + ":12M+6M+NIFTY_PHARMA_RELATIVE_STRENGTH"],
-      ["Benchmark is NIFTY Pharma; no NIFTY Bank or BANK_NBFC momentum logic is permitted."],
+      ["Benchmark is NIFTY Pharma; sector-relative momentum uses only the approved Pharma benchmark contract."],
     ),
     dimensionInput(
       "OWNERSHIP_GOVERNANCE",
