@@ -1,4 +1,7 @@
 import {
+  evaluatePharmaOperatingMarginCurveProposal,
+} from "./pharmaOperatingMarginCurveProposal"
+import {
   evaluatePharmaSegmentGrowthCurveProposal,
 } from "./pharmaSegmentGrowthCurveProposal"
 
@@ -21,6 +24,32 @@ export const TORNTPHARM_GATE_H2_OFFICIAL_SOURCES = {
   annualReportFy26:
     "https://www.torrentpharma.com/pdf/investors/AR-2025-26.pdf",
 } as const
+
+function median(values: readonly number[]): number {
+  if (!values.length || values.some((value) => !Number.isFinite(value))) {
+    throw new Error("Median requires at least one finite value")
+  }
+  const sorted = [...values].sort((a, b) => a - b)
+  const middle = Math.floor(sorted.length / 2)
+  if (sorted.length % 2 === 1) return sorted[middle]!
+  return (sorted[middle - 1]! + sorted[middle]!) / 2
+}
+
+function percentileType7(values: readonly number[], p: number): number {
+  if (!values.length || values.some((value) => !Number.isFinite(value))) {
+    throw new Error("Percentile requires finite values")
+  }
+  if (!Number.isFinite(p) || p < 0 || p > 1) {
+    throw new Error("Percentile p must be between 0 and 1")
+  }
+  const sorted = [...values].sort((a, b) => a - b)
+  if (sorted.length === 1) return sorted[0]!
+  const h = (sorted.length - 1) * p
+  const lower = Math.floor(h)
+  const upper = Math.ceil(h)
+  const fraction = h - lower
+  return sorted[lower]! + fraction * (sorted[upper]! - sorted[lower]!)
+}
 
 export const TORNTPHARM_GATE_H2_DOMESTIC_GROWTH_SERIES = [
   {
@@ -119,6 +148,32 @@ export const TORNTPHARM_GATE_H2_OPERATING_MARGIN_RAW_SERIES = [
   },
 ] as const
 
+export const TORNTPHARM_GATE_H2_OPERATING_MARGIN_PERCENT_SERIES =
+  TORNTPHARM_GATE_H2_OPERATING_MARGIN_RAW_SERIES.map((row) =>
+    (row.operatingEbitdaCrore / row.revenueCrore) * 100)
+
+const prior4OperatingMargin =
+  TORNTPHARM_GATE_H2_OPERATING_MARGIN_PERCENT_SERIES.slice(0, 4)
+const latest4OperatingMargin =
+  TORNTPHARM_GATE_H2_OPERATING_MARGIN_PERCENT_SERIES.slice(4)
+
+export const TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS = {
+  percentileConvention: "LINEAR_INTERPOLATION_TYPE_7" as const,
+  medianLatest8OperatingMarginPercent: median(
+    TORNTPHARM_GATE_H2_OPERATING_MARGIN_PERCENT_SERIES,
+  ),
+  interquartileRangeLatest8PercentagePoints:
+    percentileType7(TORNTPHARM_GATE_H2_OPERATING_MARGIN_PERCENT_SERIES, 0.75)
+    - percentileType7(TORNTPHARM_GATE_H2_OPERATING_MARGIN_PERCENT_SERIES, 0.25),
+  medianLatest4MinusPrior4PercentagePoints:
+    median(latest4OperatingMargin) - median(prior4OperatingMargin),
+} as const
+
+export const TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT =
+  evaluatePharmaOperatingMarginCurveProposal(
+    TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS,
+  )
+
 export const TORNTPHARM_GATE_H2_OFFICIAL_EVIDENCE_PACK = {
   version: TORNTPHARM_GATE_H2_OFFICIAL_EVIDENCE_PACK_VERSION,
   state: "READ_ONLY_OFFICIAL_EVIDENCE_REVIEW" as const,
@@ -135,13 +190,17 @@ export const TORNTPHARM_GATE_H2_OFFICIAL_EVIDENCE_PACK = {
     minimumComparableQuartersPresent:
       TORNTPHARM_GATE_H2_OPERATING_MARGIN_RAW_SERIES.length >= 8,
     rawEvidenceReady: true,
-    derivedStatisticLockPending: true,
-    score: null,
+    derivedStatisticLockPending: false,
+    percentileConvention:
+      TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS.percentileConvention,
+    derivedStatistics: TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS,
+    score: TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT.combinedScore,
+    scoreReadyCandidate: true,
     reasonCodes: [
-      "EIGHT_COMPARABLE_QUARTERS_NOW_ASSEMBLED_FROM_OFFICIAL_RELEASES",
+      "EIGHT_COMPARABLE_QUARTERS_ASSEMBLED_FROM_OFFICIAL_RELEASES",
       "Q1_FY26_ISSUER_ONE_OFF_NORMALIZATION_EXPLICIT",
       "Q4_FY26_BASE_BUSINESS_NORMALIZATION_EXPLICIT",
-      "QUALITY_IQR_DERIVATION_CONVENTION_MUST_BE_VERSIONED_BEFORE_SCORE",
+      "TYPE_7_PERCENTILE_CONVENTION_REUSED_FROM_OWNER_APPROVED_H2_CONVENTION",
     ] as const,
   },
   scoreExecutionEnabled: false,
