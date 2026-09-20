@@ -2,8 +2,9 @@ import { describe, expect, it } from "vitest"
 import { evaluatePharmaOperatingMarginCurveProposal, PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL } from "./pharmaOperatingMarginCurveProposal"
 
 describe("PHARMA operating margin curve proposal", () => {
-  it("remains proposal-only and non-executable", () => {
-    expect(PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL.state).toBe("PROPOSAL_ONLY")
+  it("is owner-approved but remains non-executable", () => {
+    expect(PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL.state).toBe("OWNER_APPROVED_NOT_ACTIVE")
+    expect(PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL.methodologyApproved).toBe(true)
     expect(PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL.activationApproved).toBe(false)
     expect(PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL.scoreExecutionEnabled).toBe(false)
   })
@@ -46,12 +47,13 @@ describe("PHARMA operating margin curve proposal", () => {
       interquartileRangeLatest8PercentagePoints: 3,
       medianLatest4MinusPrior4PercentagePoints: 2,
     })).toEqual({
-      proposalVersion: "PHARMA_OPERATING_MARGIN_CURVE_V1_PROPOSAL",
-      state: "DETERMINISTIC_PROPOSAL_RESULT",
+      proposalVersion: "PHARMA_OPERATING_MARGIN_CURVE_V1_OWNER_APPROVED",
+      state: "DETERMINISTIC_OWNER_APPROVED_RESULT",
       levelScore: 85,
       stabilityScore: 80,
       trendScore: 80,
       combinedScore: 82.5,
+      methodologyApproved: true,
       activationApproved: false,
       scoreExecutionEnabled: false,
     })
