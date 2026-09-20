@@ -8,16 +8,17 @@ import {
   TORNTPHARM_GATE_G_FINAL_3_RUNTIME_RESULT,
 } from "./torntpharmGateGFinal3RuntimeMapping"
 
-describe("G-FINAL-3 cross-cutting candidate", () => {
-  it("packages the overlay and governance contracts without activation", () => {
+describe("G-FINAL-3 cross-cutting methodology", () => {
+  it("records owner-approved cross-cutting methodology without activation", () => {
     const candidate = PHARMA_GATE_G_FINAL_3_CROSS_CUTTING_CANDIDATE
-    expect(candidate.state).toBe("READY_FOR_OWNER_METHODOLOGY_REVIEW")
+    expect(candidate.state).toBe("OWNER_APPROVED_COMPLETE")
     expect(candidate.overlay.combinedPerDimensionCapPoints).toBe(10)
-    expect(candidate.overlay.ownerApprovalRequired).toBe(true)
+    expect(candidate.overlay.ownerApprovalRequired).toBe(false)
     expect(candidate.governanceRuntime.highRiskBehavior).toBe("INTERPRETATION_ONLY")
     expect(candidate.governanceRuntime.highRiskNumericCap).toBeNull()
     expect(candidate.governanceRuntime.hiddenDoubleCountingAllowed).toBe(false)
-    expect(candidate.gFinal3Complete).toBe(false)
+    expect(candidate.gFinal3Complete).toBe(true)
+    expect(candidate.remainingGateGBlockers).toEqual(["G_FINAL_4_END_TO_END_READ_ONLY_DRY_RUN"])
     expect(candidate.gateHEligible).toBe(false)
     expect(candidate.scoreExecutionEnabled).toBe(false)
     expect(candidate.persistedScoreRunEnabled).toBe(false)
@@ -51,10 +52,12 @@ describe("G-FINAL-3 cross-cutting candidate", () => {
       contradictionState: "NONE",
       overlayReadiness: "READY",
     })
+    expect(result.modifierState).toBe("APPROVED_NUMERIC_MODIFIER")
     expect(result.proposedNumericModifierPoints).toBe(1)
   })
 
   it("keeps TORNTPHARM governance runtime review-required without inferring company-wide clearance", () => {
+    expect(TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING.state).toBe("OWNER_APPROVED_FAIL_CLOSED_RUNTIME")
     expect(
       TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING
         .companyWideCurrentRegulatoryScopeEstablished,
