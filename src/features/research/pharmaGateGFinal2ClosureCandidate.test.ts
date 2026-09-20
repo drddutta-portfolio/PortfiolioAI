@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest"
 import { PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE } from "./pharmaGateGFinal2ClosureCandidate"
 
-describe("consolidated G-FINAL-2 closure candidate", () => {
-  it("records implementation completeness without claiming owner freeze", () => {
+describe("consolidated G-FINAL-2 closure", () => {
+  it("records owner-approved G-FINAL-2 completion while Gate H remains blocked", () => {
     expect(PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE.state).toBe(
-      "IMPLEMENTATION_COMPLETE_OWNER_FREEZE_PENDING",
+      "OWNER_APPROVED_COMPLETE",
     )
     expect(
       PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE
@@ -12,8 +12,12 @@ describe("consolidated G-FINAL-2 closure candidate", () => {
     ).toBe(true)
     expect(
       PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE.gFinal2OwnerFreezeComplete,
-    ).toBe(false)
-    expect(PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE.gFinal2Complete).toBe(false)
+    ).toBe(true)
+    expect(PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE.gFinal2Complete).toBe(true)
+    expect(PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE.remainingGateGBlockers).toEqual([
+      "G_FINAL_3_CROSS_CUTTING_CONTROLS",
+      "G_FINAL_4_END_TO_END_READ_ONLY_DRY_RUN",
+    ])
   })
 
   it("has deterministic evaluators for all seven remaining dimensions", () => {
