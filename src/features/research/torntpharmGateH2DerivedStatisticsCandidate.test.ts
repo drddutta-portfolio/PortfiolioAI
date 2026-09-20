@@ -22,6 +22,26 @@ describe("TORNTPHARM H2 derived-statistics candidate", () => {
     expect(row.scoreReadyForApprovedEvaluator).toBe(true)
   })
 
+  it("derives Quality level, Type-7 IQR and trend from the locked eight-quarter history", () => {
+    const row =
+      TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE.qualityOperatingMargin
+    expect(row.rawOperatingMarginPercent).toHaveLength(8)
+    expect(row.percentileConvention).toBe("LINEAR_INTERPOLATION_TYPE_7")
+    expect(row.medianLatest8OperatingMarginPercent).toBeCloseTo(
+      32.64442710817307,
+      12,
+    )
+    expect(row.interquartileRangeLatest8PercentagePoints).toBeCloseTo(
+      0.30431458013040924,
+      12,
+    )
+    expect(row.medianLatest4MinusPrior4PercentagePoints).toBeCloseTo(
+      0.34859494903484745,
+      12,
+    )
+    expect(row.scoreReadyForApprovedEvaluator).toBe(true)
+  })
+
   it("keeps derivation read-only and non-persisting", () => {
     expect(TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE.scoreExecutionEnabled).toBe(false)
     expect(TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE.persistedScoreRunEnabled).toBe(false)
