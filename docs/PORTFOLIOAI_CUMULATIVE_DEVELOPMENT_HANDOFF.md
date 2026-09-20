@@ -24395,3 +24395,34 @@ Local operational accounting and immutable raw discovery capture only.
 - PR merge.
 
 **CURRENT STOP POINT:** execute the local discovery once, capture the exact provider identities/labels/values, and review the returned contract before any promotion or persistence.
+
+
+---
+
+## 285. Entry 280 — H2 local Pharma valuation contract discovery completed
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner executed the authorized local Pharma valuation contract discovery successfully.
+
+Observed completion state:
+
+- local raw record kind: `PHARMA_VALUATION_CONTRACT_DISCOVERY_V1`;
+- canonical promotion performed: **false**;
+- research writes performed: **0**;
+- peer security creation: **none**;
+- identity promotion: **none**;
+- metric-definition promotion: **none**;
+- fundamental-observation promotion: **none**;
+- production mutation: **none**.
+
+The captured provider response contains the peer identity-search results and the four-stock valuation result, but the terminal rendering is escaped/condensed.
+
+Added:
+
+- `scripts/h2-local-pharma-valuation-discovery-review.sh`
+
+This helper performs zero provider calls and zero writes. It prints the latest immutable raw discovery payload in pretty JSON for exact contract review.
+
+**CURRENT STOP POINT:** inspect the pretty-printed local capture; lock exact Trendlyne peer identities and PE_TTM / EV_EBITDA provider labels before any local canonical promotion.
