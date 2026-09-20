@@ -165,6 +165,7 @@ export function PharmaSectorCapabilityPanel({
           <article><strong>Primary authority</strong><small>{classification.primary.displayName}</small><p>Current reviewed Primary role.</p><span>{stateLabel(capabilities.activation.primaryAuthority)}</span></article>
           <article><strong>Material Overlay authority</strong><small>{classification.materialOverlays.map((item) => item.displayName).join(" · ") || "None reviewed"}</small><p>Only reviewed Material exposures may engage overlay methodology.</p><span>{stateLabel(capabilities.activation.materialOverlayAuthority)}</span></article>
           <article><strong>Emerging authority</strong><small>{classification.emergingWatches.map((item) => item.displayName).join(" · ") || "None reviewed"}</small><p>Emerging exposures remain research context only.</p><span>{stateLabel(capabilities.activation.emergingAuthority)}</span></article>
+          <article><strong>Unresolved exposure authority</strong><small>{classification.unresolvedExposures.map((item) => item.displayName).join(" · ") || "None registered"}</small><p>Unresolved exposures remain explicit review blockers and are never promoted into active methodology.</p><span>{stateLabel(capabilities.activation.unresolvedAuthority)}</span></article>
           <article><strong>Numeric scoring</strong><small>PHARMA_V1 methodology</small><p>Incomplete methodology stays fail-closed; no score is manufactured for completeness.</p><span>{stateLabel(capabilities.activation.numericScoring)}</span></article>
           <article><strong>Recommendation</strong><small>Deterministic recommendation</small><p>Blocked until approved upstream scoring exists.</p><span>{stateLabel(capabilities.activation.recommendation)}</span></article>
           <article><strong>Position sizing</strong><small>Portfolio sizing</small><p>Blocked until approved recommendation lineage exists.</p><span>{stateLabel(capabilities.activation.positionSizing)}</span></article>
@@ -183,8 +184,15 @@ export function PharmaSectorCapabilityPanel({
 
         <div className="pharma-persistence-package-summary">
           <div><span>Resolver state</span><strong>{capabilities.canonicalAssignment.resolverState}</strong><small>Security-scoped canonical assignment</small></div>
+          <div><span>Current Primary</span><strong>{classification.primary.displayName}</strong><small>{stateLabel(classification.primary.confidence)} confidence · {stateLabel(classification.primary.assignmentState)}</small></div>
+          <div><span>Reviewed secondaries</span><strong>{[
+            ...classification.materialOverlays.map((item) => `${item.displayName} · Material`),
+            ...classification.emergingWatches.map((item) => `${item.displayName} · Emerging`),
+          ].join(" · ") || "None reviewed"}</strong><small>Role and materiality remain assignment-bound</small></div>
+          <div><span>Unresolved exposures</span><strong>{classification.unresolvedExposures.map((item) => item.displayName).join(" · ") || "None registered"}</strong><small>{classification.unresolvedExposures.length ? "Review required before any promotion" : "No unresolved exposure supplied to this capability view"}</small></div>
           <div><span>Assignment version</span><strong>v{capabilities.canonicalAssignment.assignmentVersion}</strong><small>{capabilities.canonicalAssignment.reasonCode}</small></div>
           <div><span>Effective from</span><strong>{capabilities.canonicalAssignment.effectiveFrom}</strong><small>{capabilities.canonicalAssignment.effectiveTo ? `Until ${capabilities.canonicalAssignment.effectiveTo}` : "Open-ended active interval"}</small></div>
+          <div><span>Review provenance</span><strong>{capabilities.canonicalAssignment.reviewedBy || "Reviewer recorded"}</strong><small>{capabilities.canonicalAssignment.reviewedAt || capabilities.canonicalAssignment.sourceReference}</small></div>
           <div><span>Downstream state</span><strong>Fail closed</strong><small>Score · recommendation · sizing remain blocked</small></div>
         </div>
 
