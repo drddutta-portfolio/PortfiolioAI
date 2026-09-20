@@ -78,6 +78,7 @@ import { PHARMA_G7_RESEARCH_GAP_REGISTER, PHARMA_G7_VALIDATION_INVARIANTS } from
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import { buildPharmaSectorWorkspaceCapabilities } from "./pharmaSectorWorkspaceCapabilities"
+import { pharmaSectorWorkspaceCompanyContext } from "./pharmaSectorWorkspaceCompanyContext"
 import { PharmaSectorCapabilityPanel } from "./PharmaSectorCapabilityPanel"
 import type { SecurityResearch } from "./types"
 
@@ -201,13 +202,13 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const g7TorntpharmPreview = symbol.toLocaleUpperCase() === "TORNTPHARM"
     ? buildTorntpharmG7ExplainablePreview(model)
     : null
-  const sectorCapabilities = symbol.toLocaleUpperCase() === "TORNTPHARM"
-    ? buildPharmaSectorWorkspaceCapabilities(
-      resolution.data.assignment,
-      research.metrics,
-      evaluationDate,
-    )
-    : null
+  const sectorWorkspaceContext = pharmaSectorWorkspaceCompanyContext(symbol)
+  const sectorCapabilities = buildPharmaSectorWorkspaceCapabilities(
+    resolution.data.assignment,
+    research.metrics,
+    evaluationDate,
+    sectorWorkspaceContext.unresolvedExposures,
+  )
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
