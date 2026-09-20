@@ -4,6 +4,7 @@ import {
   PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_VERSION,
 } from "./pharmaDomesticGateGFinal2NumericMethodology"
 import {
+  TORNTPHARM_GATE_H2_CASH_FLOW_READ_ONLY_RESULT,
   TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT,
 } from "./torntpharmGateH2OfficialEvidencePack"
 import {
@@ -51,6 +52,16 @@ export const TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS = {
       level: TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT.levelScore,
       stability: TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT.stabilityScore,
       trend: TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT.trendScore,
+    },
+  },
+  cashFlow: {
+    state: "READ_ONLY_SCORE_CANDIDATE" as const,
+    score: TORNTPHARM_GATE_H2_CASH_FLOW_READ_ONLY_RESULT.combinedScore,
+    componentScores: {
+      cfoToPat: TORNTPHARM_GATE_H2_CASH_FLOW_READ_ONLY_RESULT.cfoToPatScore,
+      fcfToPat: TORNTPHARM_GATE_H2_CASH_FLOW_READ_ONLY_RESULT.fcfToPatScore,
+      consistencyTrend:
+        TORNTPHARM_GATE_H2_CASH_FLOW_READ_ONLY_RESULT.consistencyTrendScore,
     },
   },
   capitalEfficiency: {
