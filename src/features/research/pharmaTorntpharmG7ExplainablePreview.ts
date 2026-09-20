@@ -15,6 +15,9 @@ import {
   PHARMA_DOMESTIC_VALUATION_COMBINED_SCORE,
 } from "./pharmaDomesticValuationCombinedScoreContract"
 import {
+  PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_VERSION,
+} from "./pharmaDomesticGateGFinal2NumericMethodology"
+import {
   PHARMA_G7_OVERLAY_NUMERIC_MODIFIER_VERSION,
 } from "./pharmaG7OverlayNumericModifierProposal"
 import type {
@@ -140,6 +143,16 @@ function overlayReadinessForDimension(
   return "INSUFFICIENT_EVIDENCE"
 }
 
+const G_FINAL_2_APPROVED_DIMENSIONS = new Set<PharmaG7DimensionCode>([
+  "CAPITAL_EFFICIENCY",
+  "CASH_FLOW",
+  "BALANCE_SHEET_CREDIT",
+  "BUSINESS_DURABILITY",
+  "MOMENTUM",
+  "OWNERSHIP_GOVERNANCE",
+  "RISK",
+])
+
 function methodologyStateForDimension(
   dimensionCode: PharmaG7DimensionCode,
 ): {
@@ -147,11 +160,11 @@ function methodologyStateForDimension(
   readonly contractVersion: string | null
   readonly decisionId: string
 } {
-  if (dimensionCode === "BUSINESS_DURABILITY") {
+  if (G_FINAL_2_APPROVED_DIMENSIONS.has(dimensionCode)) {
     return {
-      state: "NO_APPROVED_DIMENSION_AGGREGATION",
-      contractVersion: null,
-      decisionId: "G7.2_BUSINESS_DURABILITY",
+      state: "APPROVED_NUMERIC_CONTRACT",
+      contractVersion: PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_VERSION,
+      decisionId: "G_FINAL_2_DOMESTIC_NUMERIC_METHODOLOGY",
     }
   }
 
