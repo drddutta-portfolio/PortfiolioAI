@@ -1,5 +1,3 @@
-import { PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL } from "./pharmaBalanceSheetLeverageCurveProposal"
-
 export const PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_METHOD_GATE_VERSION =
   "PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_METHOD_GATE_V1_PROPOSAL" as const
 
@@ -9,7 +7,7 @@ export interface PharmaGlobalGenericsBalanceSheetMethodGateContract {
   readonly supportedPrimarySubprofile: "GLOBAL_GENERICS"
   readonly metricCode: "PHARMA_BALANCE_SHEET_LEVERAGE"
   readonly canonicalDimension: "BALANCE_SHEET_CREDIT"
-  readonly parentDimensionAlignmentState: typeof PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.dimensionAlignmentState
+  readonly parentDimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION"
   readonly parentDimensionReconciliationRequired: true
   readonly history: {
     readonly minimumComparableAnnualPeriods: 3
@@ -50,7 +48,7 @@ export const PHARMA_GLOBAL_GENERICS_BALANCE_SHEET_METHOD_GATE:
     supportedPrimarySubprofile: "GLOBAL_GENERICS",
     metricCode: "PHARMA_BALANCE_SHEET_LEVERAGE",
     canonicalDimension: "BALANCE_SHEET_CREDIT",
-    parentDimensionAlignmentState: PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL.dimensionAlignmentState,
+    parentDimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
     parentDimensionReconciliationRequired: true,
     history: {
       minimumComparableAnnualPeriods: 3,
