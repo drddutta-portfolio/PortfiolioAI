@@ -162,7 +162,7 @@ export function evaluatePharmaGovernanceRegulatoryGate(
   if (input.severity === "HIGH") {
     return result(input, "HIGH_RISK", false, true, true, [
       "GOVERNANCE_HIGH_RISK",
-      "NUMERIC_HIGH_RISK_CAP_UNAPPROVED",
+      "HIGH_RISK_INTERPRETATION_ONLY_NO_NUMERIC_CAP",
     ])
   }
 
