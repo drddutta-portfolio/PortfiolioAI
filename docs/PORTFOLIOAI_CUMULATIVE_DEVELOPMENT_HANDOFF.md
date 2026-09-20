@@ -22368,3 +22368,62 @@ Current Gate H entry condition:
 - automatic trading: NO
 
 **NEXT STAGE:** Gate H — TORNTPHARM evidence completion and first deterministic company score.
+
+
+---
+
+## 253. Entry 248 — Gate H capped execution plan created
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate G is formally closed as:
+
+> **COMPLETE / ENGINE CONTRACT COMPLETE**
+
+A dedicated Gate H plan has now been added:
+
+- `docs/PortfolioAI_GATE_H_TORNTPHARM_FIRST_DETERMINISTIC_SCORE_PLAN.md`
+
+Gate H is deliberately capped at four stages:
+
+1. **H1 — Exact 10-dimension evidence readiness audit**
+2. **H2 — Evidence completion and canonical input lock**
+3. **H3 — First deterministic read-only TORNTPHARM score**
+4. **H4 — Independent verification and Gate H closure**
+
+There are no H1A/H1B/H2A-style micro-stages unless a genuinely new structural blocker is discovered.
+
+### Important Gate H boundary
+
+Gate H must re-audit all ten dimensions against actual TORNTPHARM inputs. Approved methodology alone does not imply company input readiness.
+
+Known likely gaps include:
+
+- Quality comparable Operating Margin history;
+- Growth Primary Domestic series / overlay input completeness;
+- Cash Flow matched CFO history;
+- Business Durability reviewed normalized components;
+- Valuation three-component inputs;
+- Momentum TORNTPHARM + NIFTY Pharma market history;
+- Ownership/Governance multi-quarter history;
+- Risk company-wide regulatory scope + market risk;
+- overlay materiality/completeness/confidence/signal inputs.
+
+Capital Efficiency and Balance Sheet already have meaningful multi-year official fixture structure, but H1 must still verify the exact derived statistics needed by the approved score contracts.
+
+### Gate H default safety posture
+
+Read-only by default.
+
+No production evidence write, provider refresh, paid API call, score persistence, recommendation, sizing, scheduler change, deployment, PR merge or trading action is authorized by the plan.
+
+### Gate H closure target
+
+Gate H closes only when:
+
+> **FIRST DETERMINISTIC TORNTPHARM SCORE = REPRODUCIBLE / HAND-VERIFIED / NON-PERSISTING**
+
+Only then may Gate I begin.
+
+**NEXT STEP:** H1 — build the exact all-10 TORNTPHARM score-input readiness matrix from current canonical/local evidence and stored source records.
