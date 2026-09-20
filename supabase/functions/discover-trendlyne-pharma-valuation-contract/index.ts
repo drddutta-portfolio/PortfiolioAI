@@ -133,6 +133,23 @@ async function persistCapture(
   return payloadHash
 }
 
+const PROVIDER_REQUEST_TIMEOUT_MS = 45_000
+
+const timeoutFetch: typeof fetch = async (input, init = {}) => {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), PROVIDER_REQUEST_TIMEOUT_MS)
+  try {
+    return await fetch(input, { ...init, signal: controller.signal })
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error("PROVIDER_REQUEST_TIMEOUT")
+    }
+    throw error
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: cors })
   if (request.method !== "POST") return reply(405, { error: "Method not allowed." })
@@ -255,7 +272,7 @@ Deno.serve(async (request) => {
     }
 
     const reservationId = String(reservationRow.reservation_id)
-    const client = new TrendlyneObservedMcpClient(mcpUrl)
+    const client = new TrendlyneObservedMcpClient(mcpUrl, timeoutFetch)
     const identities: Record<string, string> = {}
     let metricResult = ""
     let attempted = 0
