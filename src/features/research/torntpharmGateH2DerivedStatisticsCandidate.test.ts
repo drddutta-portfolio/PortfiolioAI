@@ -2,14 +2,14 @@ import { describe, expect, it } from "vitest"
 import { TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE } from "./torntpharmGateH2DerivedStatisticsCandidate"
 
 describe("TORNTPHARM H2 derived-statistics candidate", () => {
-  it("derives unambiguous ROCE level and trend without inventing an IQR convention", () => {
+  it("derives ROCE level, Type-7 IQR and trend deterministically", () => {
     const row = TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE.capitalEfficiency
     expect(row.rawRocePercent).toEqual([28, 31, 26])
     expect(row.medianRocePercent).toBe(28)
     expect(row.latestMinusPriorMedianPercentagePoints).toBe(-3.5)
-    expect(row.interquartileRangeLatestHistoryPercentagePoints).toBeNull()
-    expect(row.iqrState).toBe("CANONICAL_CONVENTION_REQUIRED")
-    expect(row.scoreReady).toBe(false)
+    expect(row.interquartileRangeLatestHistoryPercentagePoints).toBe(2.5)
+    expect(row.iqrState).toBe("TYPE_7_LINEAR_INTERPOLATION_OWNER_APPROVED")
+    expect(row.scoreReady).toBe(true)
   })
 
   it("derives all Balance Sheet statistics deterministically from locked history", () => {
