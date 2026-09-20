@@ -22928,3 +22928,54 @@ Owner/local focused validation is still required before the Quality and Cash Flo
 PR #101 remains OPEN / DRAFT / UNMERGED.
 
 **CURRENT STOP POINT:** run focused H2 Quality + Cash Flow validation. If PASS, continue H2 directly with Business Durability / Ownership-Governance reviewed evidence normalization and the remaining Valuation, Momentum, Risk and Material Overlay inputs.
+
+
+---
+
+## 261. Entry 256 — H2 Quality + Cash Flow validation PASS
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **ALL PASS**
+
+for the requested H2 Quality + Cash Flow validation sequence.
+
+Validated:
+
+- strict TypeScript;
+- focused H2 Vitest for official-evidence, derived-statistics and initial-score-input packages;
+- focused ESLint for the same H2 slice;
+- production build;
+- `git diff --check`.
+
+### Formally validated H2 company inputs
+
+- Quality = **92**
+- Growth = **78.25**
+- Capital Efficiency = **79**
+- Cash Flow = **93.6**
+- Balance Sheet / Credit = **65**
+
+These remain read-only company-score inputs only.
+
+No overall TORNTPHARM score has been calculated.
+
+### Safety state
+
+- production mutation: NO
+- evidence write: NO
+- provider refresh: NO
+- paid/licensed provider call: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- deployment: NO
+- PR merge: NO
+
+**Result:** H2 Quality + Cash Flow slice = **VALIDATED / PASS**.
+
+**CURRENT STOP POINT:** Continue H2 directly with Business Durability and Ownership / Governance reviewed evidence normalization, preserving the licensed-source gate for Brand / Therapy Leadership and the prohibition on inferring field-force headcount from total employees.
