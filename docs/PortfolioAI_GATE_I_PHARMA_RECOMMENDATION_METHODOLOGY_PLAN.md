@@ -10,7 +10,7 @@
 **Primary subprofile:** DOMESTIC_FORMULATIONS
 **Gate H score:** 75.1575 / 100
 **Gate H state:** COMPLETE / PASS
-**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 COMPLETE / PASS; I3 COMPLETE / PASS; I4 NOT STARTED
+**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 COMPLETE / PASS; I3 COMPLETE / PASS; I4 IMPLEMENTED / VALIDATION + GATE I CLOSURE REVIEW PENDING
 
 **Owner-approved revised-plan corrections adopted before I1 implementation:**
 
@@ -710,6 +710,33 @@ Edge tests only if Gate I actually changes Edge Function code.
 Gate I closes only when:
 
 > **FIRST PHARMA RECOMMENDATION = DETERMINISTIC / HAND-VERIFIED / EXPLAINABLE / NON-PERSISTING**
+
+## I4 implementation checkpoint — 21 September 2026
+
+The owner explicitly authorized I4 after I3 closed COMPLETE / PASS.
+
+Implemented:
+
+- `src/features/research/pharmaGateI4IndependentVerification.ts`;
+- `src/features/research/pharmaGateI4IndependentVerification.test.ts`;
+- `docs/PortfolioAI_GATE_I_I4_INDEPENDENT_VERIFICATION.md`;
+- `scripts/i4-validate-pharma-recommendation-closure.sh`.
+
+The independent hand fixture reproduces:
+
+- TORNTPHARM overall = 75.1575;
+- Core threshold not reached;
+- Satellite threshold reached;
+- 7 / 7 Satellite floors passed;
+- Valuation caution only;
+- governance CLEAR with no second penalty;
+- Material Overlay context only;
+- Emerging Watch context only;
+- final role = SATELLITE_CANDIDATE.
+
+The I4 verifier also proves exact preservation of all ten Gate H dimension scores, repeated-output determinism, AUROPHARMA fail-closed behavior, anti-leakage and downstream safety flags.
+
+**I4 is not yet closed. Gate I remains open until consolidated I4 validation passes and the closure checkpoint is recorded.**
 
 ---
 

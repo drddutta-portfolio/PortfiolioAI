@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I1 COMPLETE / PASS; Gate I2 COMPLETE / PASS; Gate I3 COMPLETE / PASS; I4 NOT STARTED
+**Current stage:** Gate H COMPLETE / PASS; Gate I1 COMPLETE / PASS; Gate I2 COMPLETE / PASS; Gate I3 COMPLETE / PASS; I4 IMPLEMENTED / VALIDATION + GATE I CLOSURE REVIEW PENDING
 
 ---
 
@@ -26130,3 +26130,89 @@ I4 = NOT STARTED
 ```
 
 **STOP BEFORE I4.** A separate owner instruction is required to begin I4.
+
+
+---
+
+## 303. Entry 298 — Gate I4 independent verification implemented
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**I4 base head:** `d051d7a8f05d11c902a451de73c8fb5fd2572ba3`
+
+The owner explicitly authorized I4.
+
+### Implemented
+
+Added:
+
+- `src/features/research/pharmaGateI4IndependentVerification.ts`;
+- `src/features/research/pharmaGateI4IndependentVerification.test.ts`;
+- `docs/PortfolioAI_GATE_I_I4_INDEPENDENT_VERIFICATION.md`;
+- `scripts/i4-validate-pharma-recommendation-closure.sh`.
+
+Updated:
+
+- Gate I plan;
+- architecture CI coverage;
+- cumulative HANDOFF.
+
+### Independent hand result
+
+```text
+Overall = 75.1575
+Core >= 80 = FAIL
+Satellite >= 65 = PASS
+Satellite floors = 7 / 7 PASS
+Valuation caution = YES
+Momentum caution = NO
+Governance = CLEAR
+Global hard blocker = NONE
+Final role = SATELLITE_CANDIDATE
+```
+
+### I4 proof coverage
+
+The verifier checks:
+
+- exact Gate H overall score preservation;
+- exact preservation of all ten Gate H dimensions;
+- no recommendation-side reconstruction;
+- no hidden renormalization;
+- no BANK_NBFC threshold/floor leakage;
+- no NIFTY Bank logic;
+- no HDFCBANK-specific assumptions;
+- no Global Generics second recommendation;
+- no CDMO Emerging numeric role input;
+- no governance double counting;
+- deterministic identical repeated output;
+- AUROPHARMA remains INSUFFICIENT / SCORE_NOT_COMPUTABLE / zero exposed dimensions;
+- recommendation persistence OFF;
+- score persistence OFF;
+- weight guidance OFF;
+- action bias OFF;
+- AI interpretation OFF;
+- position sizing OFF;
+- provider refresh not invoked;
+- production mutation not invoked.
+
+The source audit verifies the I3 recommendation adapter has no dependency on mutation, sizing, AI interpretation or provider-refresh modules. Existing shared-shell tests continue to assert that the I3 read-only extension does not call recommendation persistence.
+
+### Validation command
+
+Run:
+
+`git pull && bash scripts/i4-validate-pharma-recommendation-closure.sh`
+
+### CURRENT STOP POINT
+
+```text
+Gate H = COMPLETE / PASS
+I1 = COMPLETE / PASS
+I2 = COMPLETE / PASS
+I3 = COMPLETE / PASS
+I4 = IMPLEMENTED / VALIDATION + GATE I CLOSURE REVIEW PENDING
+```
+
+Do not close Gate I until the consolidated I4 validation passes.
