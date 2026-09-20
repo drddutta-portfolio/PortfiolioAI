@@ -5,7 +5,7 @@ import {
   PHARMA_GATE_H2_COMPONENT_NORMALIZATION_CANDIDATE,
 } from "./pharmaGateH2ComponentNormalizationCandidate"
 
-describe("H2 component-normalization candidate", () => {
+describe("H2 component-normalization rubric", () => {
   it("provides a deterministic reviewed-evidence ordinal rubric", () => {
     expect(normalizeReviewedQualitativeComponent("VERY_STRONG")).toBe(90)
     expect(normalizeReviewedQualitativeComponent("STRONG")).toBe(75)
@@ -35,12 +35,12 @@ describe("H2 component-normalization candidate", () => {
     expect(normalizeRegulatoryRuntimeContext("BLOCKED_REVIEW")).toBeNull()
   })
 
-  it("remains owner-review-only and non-executing", () => {
+  it("is owner-approved but remains non-active and non-executing", () => {
     expect(PHARMA_GATE_H2_COMPONENT_NORMALIZATION_CANDIDATE.state).toBe(
-      "READY_FOR_OWNER_METHODOLOGY_REVIEW",
+      "OWNER_APPROVED_NOT_ACTIVE",
     )
     expect(PHARMA_GATE_H2_COMPONENT_NORMALIZATION_CANDIDATE.methodologyApproved)
-      .toBe(false)
+      .toBe(true)
     expect(PHARMA_GATE_H2_COMPONENT_NORMALIZATION_CANDIDATE.scoreExecutionEnabled)
       .toBe(false)
     expect(
