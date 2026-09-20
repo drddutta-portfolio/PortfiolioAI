@@ -22128,3 +22128,69 @@ The pre-freeze validation passed before owner approval. One post-freeze validati
 - automatic trading: NO
 
 **CURRENT STOP POINT:** run the focused post-freeze G-FINAL-3 validation. If PASS, formally close G-FINAL-3 and proceed directly to the final G-FINAL-4 dry run.
+
+
+---
+
+## 250. Entry 245 — G-FINAL-3 post-freeze validation PASS / checkpoint formally closed
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **G-FINAL-3 POST-FREEZE VALIDATION PASS**
+
+Validated:
+
+- owner-approved Global Generics overlay modifier;
+- owner-approved governance/regulatory gate;
+- G7-P2 governance high-risk constraint;
+- consolidated G-FINAL-3 cross-cutting contract;
+- G7 read-only scoring adapter;
+- strict TypeScript;
+- architecture guard;
+- architecture lint;
+- production build;
+- `git diff --check`.
+
+### Closed state
+
+> **G-FINAL-3 = COMPLETE / PASS**
+
+Approved cross-cutting methodology now includes:
+
+- Global Generics Material Overlay numeric formula and ±10 combined per-dimension cap;
+- READY-only overlay participation;
+- no neutralization of missing/partial evidence;
+- no Emerging Watch numeric participation;
+- no second stock score;
+- owner-approved governance/regulatory interpretation rules;
+- owner-approved fail-closed TORNTPHARM runtime mapping.
+
+TORNTPHARM's current runtime remains:
+
+> `REVIEW_REQUIRED`
+
+because company-wide current regulatory materiality has not been established.
+
+### Remaining Gate G work
+
+Only one canonical checkpoint remains:
+
+> **G-FINAL-4 — end-to-end read-only TORNTPHARM scoring integration + hand-verifiable dry run**
+
+### Safety state
+
+- production mutation: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+**NEXT CHECKPOINT:** G-FINAL-4. No additional G-FINAL-3 sub-stages exist.
