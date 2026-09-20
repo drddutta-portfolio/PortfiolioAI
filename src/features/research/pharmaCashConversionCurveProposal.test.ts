@@ -12,10 +12,10 @@ describe("PHARMA Cash Conversion curve proposal", () => {
   it("targets the canonical Cash Flow dimension explicitly", () => {
     expect(PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.canonicalDimension).toBe("CASH_FLOW")
     expect(PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.currentParentContractDimension).toBe(
-      "EARNINGS_CASH_QUALITY",
+      "CASH_FLOW",
     )
     expect(PHARMA_CASH_CONVERSION_CURVE_PROPOSAL.dimensionAlignmentState).toBe(
-      "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
+      "ALIGNED_VERSIONED_PARENT",
     )
   })
 
