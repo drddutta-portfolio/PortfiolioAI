@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { buildPharmaSectorWorkspaceCapabilities } from "./pharmaSectorWorkspaceCapabilities"
+import { pharmaSectorWorkspaceCompanyContext } from "./pharmaSectorWorkspaceCompanyContext"
 import type { PharmaSubprofileAssignment } from "./pharmaSubprofileAssignment"
 
 function torntpharmAssignment(): PharmaSubprofileAssignment {
@@ -75,6 +76,18 @@ function auropharmaAssignment(): PharmaSubprofileAssignment {
     ],
   }
 }
+
+describe("PHARMA_V1 sector workspace supplemental company context", () => {
+  it("keeps AUROPHARMA unresolved Biosimilars explicit without changing TORNTPHARM", () => {
+    expect(pharmaSectorWorkspaceCompanyContext("AUROPHARMA").unresolvedExposures).toEqual([
+      {
+        exposureCode: "BIOPHARMA_BIOSIMILARS",
+        reasonCode: "NO_REVENUE_OR_PROFIT_SHARE",
+      },
+    ])
+    expect(pharmaSectorWorkspaceCompanyContext("TORNTPHARM").unresolvedExposures).toEqual([])
+  })
+})
 
 describe("PHARMA_V1 reusable sector workspace capabilities", () => {
   it("resolves TORNTPHARM through the reusable G8/G9 capability model without changing roles", () => {
