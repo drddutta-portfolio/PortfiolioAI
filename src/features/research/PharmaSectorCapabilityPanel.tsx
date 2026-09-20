@@ -28,7 +28,7 @@ export function PharmaSectorCapabilityPanel({
       <section className="pharma-persistence-package" aria-labelledby="pharma-sector-classification-lock-title">
         <div className="pharma-evidence-pilot-head">
           <div>
-            <p className="eyebrow">Classification & evidence lock</p>
+            <p className="eyebrow">G8.1 capability · Classification & evidence lock</p>
             <h3 id="pharma-sector-classification-lock-title">Reviewed business-model authority</h3>
             <p>The reusable classification surface reads the current reviewed assignment and active secondary roles. It does not create, promote or rewrite an assignment.</p>
           </div>
@@ -70,7 +70,7 @@ export function PharmaSectorCapabilityPanel({
       <section className="pharma-persistence-package" aria-labelledby="pharma-sector-three-layer-title">
         <div className="pharma-evidence-pilot-head">
           <div>
-            <p className="eyebrow">Three-layer Pharma research architecture</p>
+            <p className="eyebrow">G8.2 capability · Three-layer Pharma research architecture</p>
             <h3 id="pharma-sector-three-layer-title">Common core + Primary + reviewed secondary roles</h3>
             <p>The same PHARMA_V1 architecture is interpreted through company + active assignment + role while raw evidence stays company scoped.</p>
           </div>
@@ -119,7 +119,7 @@ export function PharmaSectorCapabilityPanel({
       <section className="pharma-persistence-package" aria-labelledby="pharma-sector-portability-title">
         <div className="pharma-evidence-pilot-head">
           <div>
-            <p className="eyebrow">Portability / isolation checkpoint</p>
+            <p className="eyebrow">G8.3 capability · Portability / isolation checkpoint</p>
             <h3 id="pharma-sector-portability-title">Shared-engine leakage protections</h3>
             <p>The reusable workspace inherits the validated cross-company and cross-role isolation invariants rather than creating stock-specific engine behavior.</p>
           </div>
@@ -153,7 +153,7 @@ export function PharmaSectorCapabilityPanel({
       <section className="pharma-persistence-package" aria-labelledby="pharma-sector-activation-title">
         <div className="pharma-evidence-pilot-head">
           <div>
-            <p className="eyebrow">Activation-readiness & authority</p>
+            <p className="eyebrow">G9.1 capability · Activation-readiness & authority</p>
             <h3 id="pharma-sector-activation-title">Research, scoring, recommendation and sizing stay independently gated</h3>
             <p>Canonical research authority does not activate numeric scoring or any downstream portfolio action.</p>
           </div>
@@ -175,7 +175,7 @@ export function PharmaSectorCapabilityPanel({
       <section className="pharma-persistence-package" aria-labelledby="pharma-sector-canonical-assignment-title">
         <div className="pharma-evidence-pilot-head">
           <div>
-            <p className="eyebrow">Canonical assignment state</p>
+            <p className="eyebrow">G9.2 capability · Canonical assignment state</p>
             <h3 id="pharma-sector-canonical-assignment-title">Current reviewed PHARMA_V1 resolver state</h3>
             <p>The sector workspace reads the ordinary canonical assignment authority already resolved for this security.</p>
           </div>
