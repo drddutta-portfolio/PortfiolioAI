@@ -195,12 +195,12 @@ function evaluateFloors(
     assertScore(observed, code)
     return {
       dimensionCode: code,
-      minimum: minimum as number,
+      minimum,
       observed,
       state:
         observed === null
           ? "MISSING"
-          : observed >= (minimum as number)
+          : observed >= minimum
             ? "PASS"
             : "FAIL",
     }
