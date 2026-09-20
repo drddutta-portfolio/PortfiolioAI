@@ -1,6 +1,6 @@
 # R4N — G9.3 PHARMA_V1 Sector Workspace Completion V2
 
-**Status:** ACTIVE IMPLEMENTATION PLAN — NO UI REDESIGN  
+**Status:** COMPLETE — PHARMA_V1 SECTOR WORKSPACE VALIDATED / NO UI REDESIGN  
 **Branch:** `r4n-pharma-subprofile-architecture`  
 **PR:** #101 — OPEN / DRAFT / UNMERGED  
 **Supersedes:** `R4N_G9_3_Reciprocal_PHARMA_V1_Normalization_V1.md`
@@ -235,3 +235,36 @@ Then G9 closes as:
 > **G9 = COMPLETE / PHARMA RESEARCH ACTIVATION ARCHITECTURE VALIDATED / NUMERIC ACTIVATION STILL FAIL-CLOSED WHERE METHODOLOGY IS INCOMPLETE**
 
 There is no G9.4.
+
+
+## Completion record — 20 September 2026
+
+G9.3 V2 is **COMPLETE / PASS**.
+
+Owner visual approval and final local validation confirmed that both reference companies consume the reusable PHARMA_V1 sector workspace through the shared PortfolioAI Research shell:
+
+- TORNTPHARM:
+  - Primary = DOMESTIC_FORMULATIONS
+  - Material Overlay = GLOBAL_GENERICS
+  - Emerging = CDMO_CRAMS
+- AUROPHARMA:
+  - Primary = GLOBAL_GENERICS
+  - Material Overlay = none
+  - Emerging = API_BULK_DRUGS
+  - Unresolved = BIOPHARMA_BIOSIMILARS
+
+Final local validation passed:
+
+- `npm run typecheck`
+- `npm test`
+- `npm run test:edge`
+- `npm run check:architecture`
+- `npm run lint:architecture`
+- `npm run build`
+- `git diff --check`
+
+The known repository-wide `npm run lint` debt remains outside this checkpoint and is not treated as a G9.3 regression.
+
+No production mutation, production migration, score persistence, recommendation activation/persistence, sizing activation/persistence, provider refresh, scheduler change, deployment or PR merge was authorized or performed by this closure.
+
+Per the canonical plan, there is **no G9.4**.
