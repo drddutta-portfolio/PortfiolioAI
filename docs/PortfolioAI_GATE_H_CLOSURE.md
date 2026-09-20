@@ -1,10 +1,10 @@
 # PortfolioAI — Gate H Closure Record
 
-**Date:** 21 September 2026  
-**Repository:** `drddutta-portfolio/PortfiolioAI`  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
-**Target:** TORNTPHARM / PHARMA_V1  
+**Date:** 21 September 2026
+**Repository:** `drddutta-portfolio/PortfiolioAI`
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Target:** TORNTPHARM / PHARMA_V1
 **Status:** COMPLETE / PASS
 
 ## Closure declaration
