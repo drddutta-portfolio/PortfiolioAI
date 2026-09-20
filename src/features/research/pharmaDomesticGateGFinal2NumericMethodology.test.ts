@@ -10,11 +10,12 @@ import {
   PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY,
 } from "./pharmaDomesticGateGFinal2NumericMethodology"
 
-describe("Domestic G-FINAL-2 numeric methodology candidate", () => {
-  it("remains owner-reviewable and non-executing", () => {
+describe("Domestic G-FINAL-2 numeric methodology", () => {
+  it("is owner-approved but remains non-active and non-executing", () => {
     const contract = PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY
-    expect(contract.state).toBe("READY_FOR_OWNER_METHODOLOGY_REVIEW")
-    expect(contract.ownerApprovalRequired).toBe(true)
+    expect(contract.state).toBe("OWNER_APPROVED_NOT_ACTIVE")
+    expect(contract.methodologyApproved).toBe(true)
+    expect(contract.ownerApprovalRequired).toBe(false)
     expect(contract.activationApproved).toBe(false)
     expect(contract.scoreExecutionEnabled).toBe(false)
     expect(contract.persistedScoreRunEnabled).toBe(false)
