@@ -4,6 +4,9 @@ import {
   PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_VERSION,
 } from "./pharmaDomesticGateGFinal2NumericMethodology"
 import {
+  TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT,
+} from "./torntpharmGateH2OfficialEvidencePack"
+import {
   TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE,
 } from "./torntpharmGateH2DerivedStatisticsCandidate"
 
@@ -41,6 +44,15 @@ export const TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS = {
   securitySymbol: "TORNTPHARM" as const,
   methodologyVersion:
     PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_VERSION,
+  quality: {
+    state: "READ_ONLY_SCORE_CANDIDATE" as const,
+    score: TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT.combinedScore,
+    componentScores: {
+      level: TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT.levelScore,
+      stability: TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT.stabilityScore,
+      trend: TORNTPHARM_GATE_H2_QUALITY_READ_ONLY_RESULT.trendScore,
+    },
+  },
   capitalEfficiency: {
     state: "READ_ONLY_SCORE_CANDIDATE" as const,
     score: TORNTPHARM_GATE_H2_CAPITAL_EFFICIENCY_READ_ONLY_RESULT.combinedScore,
