@@ -23434,3 +23434,71 @@ Separate explicit owner approval remains required before:
 - production evidence mutation.
 
 **CURRENT STOP POINT:** resolve read-only evidence blockers first; do not introduce new H2 methodology stages.
+
+
+---
+
+## 269. Entry 264 — H2 read-only blocker reduction: Field Force + overlay semantics
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After the remaining-evidence lock validation PASS, H2 continued only with read-only public/official research.
+
+### Field Force Productivity completed
+
+Direct issuer disclosures now provide a minimum three-period compatible India series:
+
+- FY23: field force 5,500; India revenue ₹4,984 crore
+- FY24: field force ~5,700; India revenue ₹5,666 crore
+- FY25: field force ~6,400; India revenue ₹6,393 crore
+
+Derived monthly India revenue per MR:
+
+- FY23 ≈ ₹7.55 lakh
+- FY24 ≈ ₹8.28 lakh
+- FY25 ≈ ₹8.32 lakh
+
+The series supports:
+
+- Field Force Productivity = `STRONG -> 75`
+
+No employee-total inference is used.
+
+Business Durability is now:
+
+- Brand / Therapy Leadership = REVIEW_REQUIRED / null
+- Field Force Productivity = STRONG / 75
+- R&D Productivity = STRONG / 75
+- Pipeline / Corporate Execution = STRONG / 75
+
+Ready components = **3 / 4**.
+
+The only remaining Business Durability blocker is the licensed-market-source cross-check for Brand / Therapy Leadership.
+
+### Global Generics 12.05% / 15% issue reconciled
+
+Gate E classification semantics and G2/G7 numeric-overlay semantics are distinct:
+
+- Gate E `MATERIAL` business exposure threshold begins at 10%;
+- numeric Material Overlay participation requires 15%.
+
+Therefore TORNTPHARM Global Generics at approximately 12.05% is:
+
+- still `MATERIAL` as a reviewed secondary business exposure;
+- `BELOW_SCORING_MATERIALITY` for numeric overlay participation.
+
+No numeric overlay modifier applies at the current economic share.
+
+This is a runtime semantic reconciliation, not a methodology change.
+
+### Remaining H2 blockers
+
+- licensed Brand / Therapy Leadership market cross-check;
+- current authoritative market history for Valuation/Momentum/Risk;
+- reviewed Domestic Formulations peer cohort;
+- company-wide current regulatory scope/subsequent outcome context.
+
+No market-data refresh or licensed-provider call was performed.
+
+**CURRENT STOP POINT:** validate this read-only blocker-reduction slice, then continue H2 with regulatory-scope research and exact authorization decision for the remaining market/licensed inputs.
