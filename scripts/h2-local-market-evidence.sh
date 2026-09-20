@@ -51,21 +51,28 @@ printf '  security:  %s\n' "$SECURITY_ID"
 printf '  mapping:   %s\n' "${MAPPING_STATE:-MISSING}"
 
 LOG_FILE="/tmp/portfolioai-h2-local-functions.log"
+REUSE_FUNCTION_SERVER="${H2_REUSE_FUNCTION_SERVER:-0}"
 
-if pgrep -f "supabase functions serve" >/dev/null 2>&1; then
-  die "A manual 'supabase functions serve' process is already running. Stop it with Ctrl+C in that terminal, then rerun this script so the runner can start the local functions with its validated auth mode."
+if [[ "$REUSE_FUNCTION_SERVER" == "1" ]]; then
+  pgrep -f "supabase functions serve" >/dev/null 2>&1 || die "H2_REUSE_FUNCTION_SERVER=1 but no 'supabase functions serve' process is running."
+  SERVE_PID=""
+  trap ':' EXIT
+else
+  if pgrep -f "supabase functions serve" >/dev/null 2>&1; then
+    die "A manual 'supabase functions serve' process is already running. Either stop it, or export H2_REUSE_FUNCTION_SERVER=1 to reuse it."
+  fi
+
+  supabase functions serve --no-verify-jwt --env-file "$ENV_FILE" --debug >"$LOG_FILE" 2>&1 &
+  SERVE_PID=$!
+  trap 'kill "$SERVE_PID" >/dev/null 2>&1 || true' EXIT
+
+  for _ in {1..30}; do
+    if curl -sS -o /dev/null "$API_URL/functions/v1/refresh-market-history"; then break; fi
+    sleep 1
+  done
+
+  kill -0 "$SERVE_PID" >/dev/null 2>&1 || die "Local Edge Functions server failed to start. Review $LOG_FILE."
 fi
-
-supabase functions serve --no-verify-jwt --env-file "$ENV_FILE" >"$LOG_FILE" 2>&1 &
-SERVE_PID=$!
-trap 'kill "$SERVE_PID" >/dev/null 2>&1 || true' EXIT
-
-for _ in {1..30}; do
-  if curl -sS -o /dev/null "$API_URL/functions/v1/refresh-market-history"; then break; fi
-  sleep 1
-done
-
-kill -0 "$SERVE_PID" >/dev/null 2>&1 || die "Local Edge Functions server failed to start. Review $LOG_FILE."
 
 call_fn() {
   local fn="$1"
@@ -87,7 +94,11 @@ call_fn() {
   if [[ "$status" -lt 200 || "$status" -ge 300 ]]; then
     printf '\n' >&2
     printf 'Local function %s returned HTTP %s.\n' "$fn" "$status" >&2
-    printf 'Function log: %s\n' "$LOG_FILE" >&2
+    if [[ "$REUSE_FUNCTION_SERVER" == "1" ]]; then
+      printf 'Function error should be visible in the foreground functions terminal.\n' >&2
+    else
+      printf 'Function log: %s\n' "$LOG_FILE" >&2
+    fi
     rm -f "$response_file"
     return 1
   fi
