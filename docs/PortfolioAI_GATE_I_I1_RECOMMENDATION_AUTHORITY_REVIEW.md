@@ -188,6 +188,32 @@ I1 performs no:
 - deployment;
 - PR merge.
 
+## First local validation attempt
+
+The first owner-run I1 validation completed the focused test step successfully:
+
+- **5 test files passed**;
+- **30 tests passed**.
+
+Validation then stopped at strict TypeScript with two instances of the same compatibility issue:
+
+```text
+GateHClosedReadOnlyScoreLike.emergingWatch.numericParticipation
+expected literal type: false
+upstream H3 inferred return type: boolean
+```
+
+This was a TypeScript boundary issue, not a recommendation-authority or scoring failure.
+
+Correction:
+
+- the I1 adapter now accepts the upstream `boolean` type at its input boundary;
+- `buildGateHClosedScoreAuthority` explicitly requires the runtime value to equal `false`;
+- the builder also explicitly checks that the material-overlay numeric modifier remains unapplied and the Gate H result remains read-only / non-persisting;
+- focused regression tests now prove these safety invariants fail closed if violated.
+
+No Gate H score, methodology, recommendation threshold, assignment authority, or persistence behavior changed.
+
 ## Consolidated validation
 
 Run:
