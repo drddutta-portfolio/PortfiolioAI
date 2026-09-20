@@ -18,6 +18,18 @@ describe("TORNTPHARM H2 initial score inputs", () => {
     })
   })
 
+  it("produces the deterministic Cash Flow read-only candidate", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.cashFlow).toEqual({
+      state: "READ_ONLY_SCORE_CANDIDATE",
+      score: 93.6,
+      componentScores: {
+        cfoToPat: 100,
+        fcfToPat: 100,
+        consistencyTrend: 68,
+      },
+    })
+  })
+
   it("produces the deterministic Balance Sheet / Credit read-only candidate", () => {
     expect(TORNTPHARM_GATE_H2_BALANCE_SHEET_READ_ONLY_RESULT).toEqual({
       leverageScore: 80,
