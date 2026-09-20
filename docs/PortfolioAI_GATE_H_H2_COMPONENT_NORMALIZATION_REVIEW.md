@@ -2,7 +2,7 @@
 
 **Date:** 20 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`  
-**Status:** OWNER REVIEW REQUIRED  
+**Status:** OWNER APPROVED / NOT ACTIVE  
 **Scope:** bounded H2 correction only
 
 ## Purpose
@@ -133,3 +133,25 @@ After approval, H2 can apply this deterministic rubric to reviewed TORNTPHARM ev
 ## Proposed approval phrase
 
 > **APPROVE H2 COMPONENT NORMALIZATION RUBRIC**
+
+
+---
+
+## Owner approval record
+
+The owner explicitly approved the H2 component-normalization rubric after validation passed.
+
+Frozen version:
+
+`PHARMA_GATE_H2_COMPONENT_NORMALIZATION_V1_OWNER_APPROVED`
+
+Frozen state:
+
+- methodology approved: YES
+- activation approved: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+
+The approved rubric may now be applied to reviewed TORNTPHARM evidence inside H2.
