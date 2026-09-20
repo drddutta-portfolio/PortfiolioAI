@@ -5,7 +5,7 @@
 **Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 **I3 base head:** `4564614e4f7efcb8b5204d86d59a1d4af7ec5537`
-**Status:** IMPLEMENTED / VALIDATION + OWNER VISUAL REVIEW PENDING
+**Status:** COMPLETE / PASS
 
 ## Purpose
 
@@ -253,3 +253,89 @@ Sector add-on explains sector recommendation logic only
 ```
 
 No universal stock-page component, role-setting behavior, or non-Pharma UI was changed by this correction.
+
+
+## Final validation and closure
+
+After the final core-shell integration corrections, the owner reran:
+
+`git pull && bash scripts/i3-validate-pharma-first-recommendation.sh`
+
+Result:
+
+> **ALL PASS**
+
+The final local validation confirms:
+
+- focused I3 + I2 + I1 + Gate H regressions = PASS;
+- strict TypeScript = PASS;
+- presentation data-boundary architecture guard = PASS;
+- focused I3 lint = PASS;
+- existing architecture lint = PASS;
+- production build = PASS;
+- I3 diff whitespace = PASS.
+
+Owner visual review confirmed:
+
+**TORNTPHARM**
+- universal Decision Workspace preserved;
+- PortfolioAI suggestion = Satellite candidate;
+- authoritative score = 75.1575;
+- 7 / 7 applicable Satellite floors passed;
+- Valuation caution visible;
+- action bias unavailable;
+- suggested weight unavailable;
+- persistence/tracking unavailable;
+- Pharma detail matches the core summary.
+
+**AUROPHARMA**
+- universal Decision Workspace preserved;
+- PortfolioAI suggestion = Insufficient;
+- authoritative score = Not computable;
+- no score reconstruction;
+- role gate = Not evaluated;
+- Global Generics Primary methodology incomplete;
+- action bias unavailable;
+- suggested weight unavailable;
+- persistence/tracking unavailable;
+- Pharma detail matches the core summary.
+
+The permanent UI architecture remains:
+
+```text
+Universal stock/research core shell
+    ->
+sector/profile-oriented add-ons
+```
+
+No broad stock-page redesign or Pharma-specific page fork was introduced.
+
+## I3 closure
+
+> **I3 = COMPLETE / PASS**
+
+Final deterministic reference results:
+
+```text
+TORNTPHARM
+  overall score = 75.1575
+  role = SATELLITE_CANDIDATE
+
+AUROPHARMA
+  score state = SCORE_NOT_COMPUTABLE
+  role = INSUFFICIENT
+```
+
+No recommendation persistence, score persistence, weight guidance, action bias, AI interpretation, position sizing, provider call, production mutation, deployment, PR merge, or order placement occurred.
+
+## Current state
+
+```text
+Gate H = COMPLETE / PASS
+I1 = COMPLETE / PASS
+I2 = COMPLETE / PASS
+I3 = COMPLETE / PASS
+I4 = NOT STARTED
+```
+
+**STOP BEFORE I4.** Do not start I4 without a separate owner instruction.
