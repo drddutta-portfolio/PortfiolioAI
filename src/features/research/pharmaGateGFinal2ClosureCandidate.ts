@@ -14,7 +14,7 @@ export const PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE_VERSION =
 
 export const PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE = {
   version: PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE_VERSION,
-  state: "IMPLEMENTATION_COMPLETE_OWNER_FREEZE_PENDING" as const,
+  state: "OWNER_APPROVED_COMPLETE" as const,
   targetSecurity: "TORNTPHARM" as const,
   primarySubprofile: "DOMESTIC_FORMULATIONS" as const,
   parentDimensionReconciliation: {
@@ -56,8 +56,12 @@ export const PHARMA_GATE_G_FINAL_2_CLOSURE_CANDIDATE = {
     "RISK_COMPANY_WIDE_REGULATORY_SCOPE_AND_MARKET_FIXTURE",
   ] as const,
   gFinal2MethodologyImplementationComplete: true,
-  gFinal2OwnerFreezeComplete: false,
-  gFinal2Complete: false,
+  gFinal2OwnerFreezeComplete: true,
+  gFinal2Complete: true,
+  remainingGateGBlockers: [
+    "G_FINAL_3_CROSS_CUTTING_CONTROLS",
+    "G_FINAL_4_END_TO_END_READ_ONLY_DRY_RUN",
+  ] as const,
   gateHEligible: false,
   scoreExecutionEnabled: false,
   persistedScoreRunEnabled: false,
