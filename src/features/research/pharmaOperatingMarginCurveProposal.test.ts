@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL } from "./pharmaOperatingMarginCurveProposal"
+import { evaluatePharmaOperatingMarginCurveProposal, PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL } from "./pharmaOperatingMarginCurveProposal"
 
 describe("PHARMA operating margin curve proposal", () => {
   it("remains proposal-only and non-executable", () => {
@@ -40,4 +40,29 @@ describe("PHARMA operating margin curve proposal", () => {
     const negative = PHARMA_OPERATING_MARGIN_CURVE_PROPOSAL.components.trend.bands.find((band) => band.maximumExclusive === -3)
     expect(negative?.score).toBe(20)
   })
+  it("evaluates the frozen proposal bands deterministically without activating scoring", () => {
+    expect(evaluatePharmaOperatingMarginCurveProposal({
+      medianLatest8OperatingMarginPercent: 22,
+      interquartileRangeLatest8PercentagePoints: 3,
+      medianLatest4MinusPrior4PercentagePoints: 2,
+    })).toEqual({
+      proposalVersion: "PHARMA_OPERATING_MARGIN_CURVE_V1_PROPOSAL",
+      state: "DETERMINISTIC_PROPOSAL_RESULT",
+      levelScore: 85,
+      stabilityScore: 80,
+      trendScore: 80,
+      combinedScore: 82.5,
+      activationApproved: false,
+      scoreExecutionEnabled: false,
+    })
+  })
+
+  it("keeps invalid derived statistics fail-closed", () => {
+    expect(() => evaluatePharmaOperatingMarginCurveProposal({
+      medianLatest8OperatingMarginPercent: 22,
+      interquartileRangeLatest8PercentagePoints: -1,
+      medianLatest4MinusPrior4PercentagePoints: 2,
+    })).toThrow("IQR cannot be negative")
+  })
+
 })
