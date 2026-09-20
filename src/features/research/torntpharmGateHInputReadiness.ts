@@ -3,8 +3,8 @@ import {
   TORNTPHARM_PROPOSED_EVIDENCE_CANDIDATES,
 } from "./torntpharmReadOnlyContentReviewDryRun"
 import {
-  TORNTPHARM_GATE_G_FINAL_3_RUNTIME_RESULT,
-} from "./torntpharmGateGFinal3RuntimeMapping"
+  PHARMA_GATE_G_FINAL_3_TORNTPHARM_RUNTIME_SNAPSHOT,
+} from "./pharmaGateGFinal3CrossCuttingCandidate"
 
 export const TORNTPHARM_GATE_H_INPUT_READINESS_VERSION =
   "TORNTPHARM_GATE_H_INPUT_READINESS_V1" as const
@@ -332,7 +332,7 @@ export const TORNTPHARM_GATE_H_INPUT_READINESS = {
       existingEvidence: [
         `REGULATORY_EVENT_CANDIDATE_COUNT_${regulatoryCandidateCount}`,
         "INDRAD_WARNING_TO_CLOSEOUT_CHAIN_REVIEWED",
-        `GOVERNANCE_RUNTIME_STATE_${TORNTPHARM_GATE_G_FINAL_3_RUNTIME_RESULT.gateState}`,
+        `GOVERNANCE_RUNTIME_STATE_${PHARMA_GATE_G_FINAL_3_TORNTPHARM_RUNTIME_SNAPSHOT.gateState}`,
         "NO_TORNTPHARM_GATE_H_DRAWDOWN_VOLATILITY_FIXTURE_FOUND",
       ],
       missingInputs: [
@@ -360,7 +360,7 @@ export const TORNTPHARM_GATE_H_INPUT_READINESS = {
   ] as const satisfies readonly TorntpharmGateHInputReadinessRow[],
   crossCutting: {
     governanceRuntimeState:
-      TORNTPHARM_GATE_G_FINAL_3_RUNTIME_RESULT.gateState,
+      PHARMA_GATE_G_FINAL_3_TORNTPHARM_RUNTIME_SNAPSHOT.gateState,
     globalGenericsOverlay: {
       candidateGrowthHistoryCount: exportGrowthCandidateCount,
       canonicalScoreInputReady: false,
