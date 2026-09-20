@@ -22059,3 +22059,72 @@ No company-wide clearance is inferred.
 - score execution/persistence: OFF
 
 **CURRENT STOP POINT:** run the focused G-FINAL-3 validation. If PASS, owner reviews and approves the overlay formula/cap and the fail-closed governance runtime mapping in one decision. Then freeze G-FINAL-3 and proceed to G-FINAL-4.
+
+
+---
+
+## 249. Entry 244 — G-FINAL-3 owner-approved freeze applied / post-freeze validation pending
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **G-FINAL-3 VALIDATION PASS — APPROVE CROSS-CUTTING METHODOLOGY**
+
+### Freeze applied
+
+The Global Generics Material Overlay numeric modifier is now:
+
+- version: `PHARMA_V1_G7_OVERLAY_NUMERIC_MODIFIER_V1_OWNER_APPROVED`
+- state: `OWNER_APPROVED_NOT_ACTIVE`
+- methodology approved: YES
+- read-only G7.1 consumption approved: YES
+- combined per-dimension cap: ±10
+- score execution/persistence: OFF
+
+The governance/regulatory gate is now:
+
+- version: `PHARMA_V1_GOVERNANCE_REGULATORY_GATE_V1_OWNER_APPROVED`
+- state: `OWNER_APPROVED_NOT_ACTIVE`
+- Critical / blocked-review semantics preserved
+- High Risk remains interpretation-only
+- no numeric high-risk cap
+- no hidden double counting
+- score execution: OFF
+
+The TORNTPHARM runtime mapping is now:
+
+- version: `TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING_V1_OWNER_APPROVED`
+- state: `OWNER_APPROVED_FAIL_CLOSED_RUNTIME`
+- runtime result: `REVIEW_REQUIRED`
+
+No company-wide regulatory clearance or neutral score is inferred from the reviewed Indrad warning→closeout chain.
+
+### G-FINAL-3 closure state
+
+The consolidated G-FINAL-3 contract now records:
+
+- `state = OWNER_APPROVED_COMPLETE`
+- `gFinal3Complete = true`
+- remaining Gate G blocker = `G_FINAL_4_END_TO_END_READ_ONLY_DRY_RUN`
+- `gateHEligible = false`
+
+### Formal validation boundary
+
+The pre-freeze validation passed before owner approval. One post-freeze validation pass is still required before G-FINAL-3 is formally declared **COMPLETE / PASS**.
+
+### Safety state
+
+- production mutation: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+**CURRENT STOP POINT:** run the focused post-freeze G-FINAL-3 validation. If PASS, formally close G-FINAL-3 and proceed directly to the final G-FINAL-4 dry run.
