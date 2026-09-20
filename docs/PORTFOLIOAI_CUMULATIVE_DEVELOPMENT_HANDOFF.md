@@ -24167,3 +24167,45 @@ Peer valuation still requires fresh comparable PE_TTM + EV_EBITDA for all three 
 No final score has been calculated.
 
 **CURRENT STOP POINT:** perform the already-authorized local TORNTPHARM self-history refresh; obtain one consolidated owner peer-classification decision; identify/provide licensed AIOCD Pharmatrac evidence access for Brand/Therapy Leadership.
+
+
+---
+
+## 280. Entry 275 — H2 Domestic Formulations peer set owner approval
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner approved:
+
+> **APPROVE H2 DOMESTIC FORMULATIONS PEER SET — MANKIND, ERIS, EMCURE**
+
+### H2 peer cohort decision
+
+For the TORNTPHARM Domestic Formulations valuation lane, the minimum owner-reviewed peer set is now:
+
+- MANKIND — Primary Domestic Formulations / HIGH confidence
+- ERIS — Primary Domestic Formulations / HIGH confidence
+- EMCURE — Primary Domestic Formulations / MEDIUM confidence, with material international / Global Generics secondary exposure
+
+### Explicit exclusions
+
+- TORNTPHARM is the target and cannot be its own peer.
+- SUNPHARMA is not included in this minimum H2 peer set because Primary Domestic Formulations is not cleanly established enough for this valuation cohort.
+- broad Pharma-sector peers are not permitted.
+- provider peer labels remain non-authoritative.
+
+### Persistence boundary
+
+This owner approval locks the H2 valuation cohort for read-only scoring work.
+
+It does **not** authorize:
+
+- production `research_subprofile_assignments` writes;
+- production secondary-exposure writes;
+- unrelated peer promotion;
+- score persistence;
+- recommendation/sizing;
+- PR merge.
+
+**CURRENT STOP POINT:** lock this cohort in the H2 read-only input package and acquire comparable PE_TTM + EV_EBITDA evidence for MANKIND, ERIS and EMCURE.
