@@ -76,6 +76,51 @@ describe("PositionDecisionControls recommendation availability", () => {
     expect(repository.recordRecommendationPreview).not.toHaveBeenCalled()
   })
 
+  it("keeps the universal Decision Workspace shell while rendering a read-only sector recommendation add-on", () => {
+    const addon = {
+      contractVersion: "PHARMA_GATE_I3_READ_ONLY_RECOMMENDATION_V1",
+      profileCode: "PHARMA_V1",
+      profileLabel: "Pharmaceuticals · PHARMA_V1",
+      suggestedRole: "SATELLITE_CANDIDATE" as const,
+      roleLabel: "Satellite candidate",
+      state: "READY" as const,
+      statusLabel: "Read-only",
+      detail: "Gate I3 deterministic recommendation · authoritative score 75.1575 · non-persisting",
+      cautions: ["Valuation is below the PHARMA_V1 neutral anchor."],
+      overallScore: 75.1575,
+      policyVersion: "PHARMA_V1_RECOMMENDATION_POLICY_V1_OWNER_APPROVED",
+      actionUnavailableReason: "Read-only sector recommendation only. Action bias remains outside Gate I.",
+      weightUnavailableReason: "Read-only sector recommendation only. Allocation guidance remains outside Gate I.",
+      trackingUnavailableReason: "Recommendation persistence and transition tracking remain disabled for this read-only sector result.",
+      persistenceEnabled: false as const,
+      actionBiasEnabled: false as const,
+      weightGuidanceEnabled: false as const,
+      aiInterpretationEnabled: false as const,
+    }
+
+    render(<PositionDecisionControls
+      portfolioId="portfolio-1"
+      securityId="security-1"
+      currentRole="CORE"
+      currentWeight="1.32"
+      fallbackTargetWeight="2.5"
+      fallbackInvestmentHorizon={null}
+      currency="INR"
+      sectorRecommendationAddonEnabled
+      sectorRecommendationAddon={addon}
+    />)
+
+    expect(screen.getByText("Decision Workspace")).toBeInTheDocument()
+    expect(screen.getByText("Your investment plan")).toBeInTheDocument()
+    expect(screen.getByText("PortfolioAI suggestion")).toBeInTheDocument()
+    expect(screen.getAllByText("Satellite candidate").length).toBeGreaterThan(0)
+    expect(screen.getByText("Read-only")).toBeInTheDocument()
+    expect(screen.getByText("Valuation is below the PHARMA_V1 neutral anchor.")).toBeInTheDocument()
+    expect(screen.getByText("Action bias").closest("section")).toHaveTextContent("Not available")
+    expect(screen.getByText("Suggested weight range").closest("section")).toHaveTextContent("Not available")
+    expect(repository.recordRecommendationPreview).not.toHaveBeenCalled()
+  })
+
   it("preserves the mature available recommendation structure", async () => {
     repository.profileCode = "BANK_NBFC"; repository.profileName = "Banks / NBFCs"; repository.overallScore = 80; repository.scoreReadyCoverage = .72
     repository.policy = { profileCode: "BANK_NBFC", policyVersion: 1, status: "DRAFT", minScoreReadyCoverage: .7, coreMinScore: 75, satelliteMinScore: 60, watchMinScore: 40, mandatoryDimensionFloors: {}, cautionRules: {}, sectorFocus: {}, persistenceRules: { upgradeConfirmations: 2, downgradeConfirmations: 2 }, weightPolicy: { singleStockMax: 8, core: { standard: [3, 4] }, highConvictionScore: 90, cautionScore: 70, momentumCautionBelow: null, riskCautionBelow: null, momentumCap: null, riskCap: null, profileConcentrationSoftCap: null, profileConcentrationHardCap: null, minProfileCoverageForConcentration: 70 }, notes: null }

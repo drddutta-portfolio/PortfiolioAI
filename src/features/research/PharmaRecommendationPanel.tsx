@@ -76,8 +76,8 @@ export function PharmaRecommendationPanel({
   return <section className="panel scoring-summary-panel" aria-labelledby="pharma-i3-recommendation-title">
     <div className="scoring-summary-head">
       <div>
-        <p className="eyebrow">PortfolioAI suggestion</p>
-        <h2 id="pharma-i3-recommendation-title">PHARMA_V1 research role</h2>
+        <p className="eyebrow">Sector add-on · Pharmaceuticals</p>
+        <h2 id="pharma-i3-recommendation-title">PHARMA_V1 recommendation detail</h2>
         <p>Gate I3 deterministic recommendation · read-only · non-persisting</p>
         <small>{result.policyVersion}</small>
       </div>

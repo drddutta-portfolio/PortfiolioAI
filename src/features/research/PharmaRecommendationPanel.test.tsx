@@ -70,7 +70,7 @@ describe("PharmaRecommendationPanel Gate I3", () => {
       currentUserRole="CORE"
     />)
 
-    expect(screen.getByRole("heading", { name: "PHARMA_V1 research role" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "PHARMA_V1 recommendation detail" })).toBeInTheDocument()
     expect(screen.getAllByText("Satellite candidate").length).toBeGreaterThan(0)
     expect(screen.getByText("75.1575")).toBeInTheDocument()
     expect(screen.getByText("Core")).toBeInTheDocument()

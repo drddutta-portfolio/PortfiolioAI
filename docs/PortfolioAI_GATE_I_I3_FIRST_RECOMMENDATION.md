@@ -177,3 +177,31 @@ I4 = NOT STARTED
 ```
 
 Do not start I4 automatically.
+
+
+## Core-shell / sector-add-on integration correction
+
+Owner visual review confirmed the I3 detail panel itself was correct, but exposed a contradictory presentation: the universal Decision Workspace still showed its older generic `Recommendation pending` state while the Pharma sector add-on showed the valid I3 result.
+
+The owner reaffirmed the stock-page architecture:
+
+```text
+Universal stock/research core shell
+    ->
+sector/profile-oriented add-ons
+```
+
+The correction preserves that rule.
+
+The universal Decision Workspace remains the same component for every stock. It now accepts a generic read-only sector-recommendation extension contract. PHARMA_V1 supplies the Gate I3 result through that generic extension point.
+
+Consequences:
+
+- the core shell's existing `PortfolioAI suggestion` surface shows the sector-authoritative I3 role;
+- the detailed PHARMA_V1 panel remains below as a sector add-on and is labelled `PHARMA_V1 recommendation detail`;
+- no permanent Pharma-specific stock-page fork is introduced;
+- BANK/NBFC and other existing core-shell behavior remains on the legacy shared path;
+- read-only sector add-ons explicitly suppress recommendation persistence, action bias, weight guidance, tracking and AI interpretation;
+- the core shell and sector add-on no longer contradict one another.
+
+This correction is presentation/orchestration only. The approved I2 methodology and deterministic I3 result are unchanged.

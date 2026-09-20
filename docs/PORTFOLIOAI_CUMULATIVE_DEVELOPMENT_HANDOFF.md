@@ -25850,3 +25850,70 @@ I4 = NOT STARTED
 ```
 
 Do not start I4 automatically.
+
+
+---
+
+## 298. Entry 293 — I3 visual review correction preserves universal core shell + sector add-ons
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+Owner visual review of TORNTPHARM confirmed the deterministic I3 detail was correct:
+
+- Satellite Candidate;
+- score 75.1575;
+- 7/7 Satellite floors passed;
+- valuation caution visible;
+- Global Generics / CDMO context only;
+- persistence and sizing off.
+
+The review also exposed a presentation contradiction: the universal Decision Workspace still showed `Recommendation pending` while the Pharma detail below showed Satellite Candidate.
+
+The owner explicitly reaffirmed the product architecture:
+
+```text
+Universal stock/research core shell
+    ->
+sector-oriented add-ons
+```
+
+### Correction
+
+Added a generic read-only sector-recommendation extension contract for the shared Decision Workspace.
+
+PHARMA_V1 now maps the I3 result into that generic contract. The common stock template remains intact; no Pharma-specific page fork is created.
+
+The core shell continues to own:
+
+- Decision Workspace;
+- Your investment plan;
+- PortfolioAI suggestion;
+- Key Insights;
+- AI interpretation shell.
+
+The Pharma sector add-on continues below with detailed PHARMA_V1 recommendation evidence, floors, cautions and context.
+
+For Gate I3 read-only sector results, the core shell explicitly keeps:
+
+- recommendation persistence = OFF;
+- transition tracking = OFF;
+- action bias = OFF;
+- suggested weight = OFF;
+- AI interpretation = OFF.
+
+The legacy persistent recommendation path remains unchanged for profiles that already use it.
+
+### I3 state
+
+Methodology/result unchanged:
+
+```text
+TORNTPHARM = SATELLITE_CANDIDATE / 75.1575
+AUROPHARMA = INSUFFICIENT / SCORE_NOT_COMPUTABLE
+```
+
+I3 remains open until the corrected core-shell + sector-add-on visual composition is locally validated.
+
+I4 remains NOT STARTED.

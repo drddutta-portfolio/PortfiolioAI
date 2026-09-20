@@ -599,6 +599,21 @@ Safety remains locked: no score/recommendation persistence, weight guidance, act
 
 **I3 remains IMPLEMENTED / VALIDATION + OWNER VISUAL REVIEW PENDING. Do not start I4 automatically.**
 
+### I3 core-shell integration clarification
+
+Owner visual review reaffirmed the permanent Research-page composition:
+
+```text
+universal stock/research core shell
+    ->
+sector/profile-oriented add-ons
+```
+
+I3 therefore does not replace or fork the common stock template. The existing universal Decision Workspace remains shared by all stocks and receives sector-authoritative recommendation data only through a generic read-only extension contract.
+
+PHARMA_V1 keeps its detailed recommendation explanation as a sector add-on below the core shell. The core `PortfolioAI suggestion` summary and the Pharma detail must agree, while persistence, action bias, allocation guidance, transition tracking and AI interpretation remain disabled for Gate I.
+
+
 ---
 
 # 9. I4 — Independent verification and Gate I closure

@@ -6,6 +6,7 @@ import type { PortfolioRole } from "../portfolio/types"
 import { buildActionBiasPreview } from "./actionRecommendation"
 import { RecommendationInterpretationPanel } from "./RecommendationInterpretationPanel"
 import { buildRecommendationPreview, recommendationLabel, type RecommendationPreview } from "./sectorRecommendation"
+import type { ReadOnlyResearchRecommendationAddon } from "./researchRecommendationAddon"
 import { buildSuggestedWeightPreview, formatWeightRange } from "./weightRecommendation"
 import { useSecurityScoring } from "./useSecurityScoring"
 import "./PositionDecisionControls.css"
@@ -51,6 +52,9 @@ export function PositionDecisionControls({
   fallbackInvestmentHorizon,
   currency,
   onSaved,
+  sectorRecommendationAddonEnabled = false,
+  sectorRecommendationAddon = null,
+  sectorRecommendationAddonLoading = false,
 }: {
   readonly portfolioId: string
   readonly securityId: string
@@ -60,6 +64,9 @@ export function PositionDecisionControls({
   readonly fallbackInvestmentHorizon: string | null
   readonly currency: string
   readonly onSaved?: () => void
+  readonly sectorRecommendationAddonEnabled?: boolean
+  readonly sectorRecommendationAddon?: ReadOnlyResearchRecommendationAddon | null
+  readonly sectorRecommendationAddonLoading?: boolean
 }) {
   const fallback = useMemo<PositionDecisionSettings>(() => ({
     id: null, portfolioRole: editableRole(currentRole), targetWeight: fallbackTargetWeight, targetPrice: null, stopLossPrice: null,
@@ -92,31 +99,32 @@ export function PositionDecisionControls({
   useEffect(() => {
     let active = true
     const profileCode = scoring.data?.profileCode
-    if (!profileCode) return () => { active = false }
+    if (!profileCode || sectorRecommendationAddonEnabled) return () => { active = false }
     void loadRecommendationPolicy(profileCode).then((policy) => { if (active) setRecommendationPolicyState({ profileCode, policy }) }).catch(() => { if (active) setRecommendationPolicyState({ profileCode, policy: null }) })
     return () => { active = false }
-  }, [scoring.data?.profileCode])
+  }, [scoring.data?.profileCode, sectorRecommendationAddonEnabled])
 
   useEffect(() => {
     let active = true
     const profileCode = scoring.data?.profileCode
-    if (!profileCode) return () => { active = false }
+    if (!profileCode || sectorRecommendationAddonEnabled) return () => { active = false }
     const key = `${portfolioId}:${securityId}:${profileCode}`
     void loadPortfolioProfileExposure(portfolioId, securityId, profileCode).then((exposure) => { if (active) setProfileExposureState({ key, exposure }) }).catch(() => { if (active) setProfileExposureState({ key, exposure: null }) })
     return () => { active = false }
-  }, [portfolioId, scoring.data?.profileCode, securityId])
+  }, [portfolioId, scoring.data?.profileCode, securityId, sectorRecommendationAddonEnabled])
 
   useEffect(() => {
     let active = true
+    if (sectorRecommendationAddonEnabled) return () => { active = false }
     void loadRecommendationHistory(portfolioId, securityId).then((rows) => { if (!active) return; setHistory(rows); if (rows.length) setTracking(rows[0] ?? null) }).catch(() => { /* optional */ })
     return () => { active = false }
-  }, [portfolioId, securityId])
+  }, [portfolioId, securityId, sectorRecommendationAddonEnabled])
 
   const currentProfileCode = scoring.data?.profileCode ?? null
   const recommendationPolicy = recommendationPolicyState?.profileCode === currentProfileCode ? recommendationPolicyState.policy : null
   const exposureKey = currentProfileCode ? `${portfolioId}:${securityId}:${currentProfileCode}` : null
   const profileExposure = profileExposureState?.key === exposureKey ? profileExposureState.exposure : null
-  const recommendation = useMemo(() => scoring.data && recommendationPolicy ? buildRecommendationPreview(scoring.data, recommendationPolicy) : null, [recommendationPolicy, scoring.data])
+  const recommendation = useMemo(() => !sectorRecommendationAddonEnabled && scoring.data && recommendationPolicy ? buildRecommendationPreview(scoring.data, recommendationPolicy) : null, [recommendationPolicy, scoring.data, sectorRecommendationAddonEnabled])
   const settingsLoaded = settingsLoadedSecurityId === securityId
 
   const fallbackCurrentWeight = currentWeight == null ? null : Number(currentWeight)
@@ -130,7 +138,7 @@ export function PositionDecisionControls({
 
   useEffect(() => {
     let active = true
-    if (!settingsLoaded || !scoring.data || !recommendationPolicy || !recommendation || !actionPreview || recommendation.suggestedRole === "INSUFFICIENT") return () => { active = false }
+    if (sectorRecommendationAddonEnabled || !settingsLoaded || !scoring.data || !recommendationPolicy || !recommendation || !actionPreview || recommendation.suggestedRole === "INSUFFICIENT") return () => { active = false }
     const evaluationKey = JSON.stringify({
       profile: scoring.data.profileCode, policy: recommendationPolicy.policyVersion, asOf: scoring.data.asOfDate, overall: recommendation.overallScore,
       ready: recommendation.scoreReadyCoverage, confidence: scoring.data.evidenceConfidence,
@@ -164,7 +172,7 @@ export function PositionDecisionControls({
       if (active) setHistory(rows)
     }).catch(() => { /* preserve previous tracking/history */ })
     return () => { active = false }
-  }, [actionPreview, effectiveCurrentWeight, portfolioId, recommendation, recommendationPolicy, scoring.data, securityId, settings.portfolioRole, settingsLoaded, weightPreview])
+  }, [actionPreview, effectiveCurrentWeight, portfolioId, recommendation, recommendationPolicy, scoring.data, securityId, sectorRecommendationAddonEnabled, settings.portfolioRole, settingsLoaded, weightPreview])
 
   const save = async () => {
     setSaving(true); setError(null)
@@ -178,12 +186,33 @@ export function PositionDecisionControls({
     } catch (saveError: unknown) { setError(displayError(saveError)) } finally { setSaving(false) }
   }
 
-  const suggestionDetail = recommendation ? `${recommendation.sectorProfile} · ${recommendation.policyStatus.toLocaleLowerCase()} policy` : scoring.isLoading ? "Evaluating sector-specific profile…" : recommendationPolicy ? "Recommendation evidence is being evaluated." : "Recommendation methodology is not yet available for this research profile."
-  const confirmationTarget = tracking?.changeSignal === "DOWNGRADE" ? recommendationPolicy?.persistenceRules.downgradeConfirmations : recommendationPolicy?.persistenceRules.upgradeConfirmations ?? 2
-  const primaryCaution = recommendation?.cautions[0] ?? null
+  const visibleTracking = sectorRecommendationAddonEnabled ? null : tracking
+  const visibleHistory = sectorRecommendationAddonEnabled ? [] : history
+  const displayedRole =
+    sectorRecommendationAddon?.roleLabel
+    ?? (recommendation ? recommendationLabel(recommendation.suggestedRole) : null)
+  const suggestionDetail =
+    sectorRecommendationAddon?.detail
+    ?? (recommendation
+      ? `${recommendation.sectorProfile} · ${recommendation.policyStatus.toLocaleLowerCase()} policy`
+      : scoring.isLoading || sectorRecommendationAddonLoading
+        ? "Evaluating sector-specific profile…"
+        : recommendationPolicy
+          ? "Recommendation evidence is being evaluated."
+          : "Recommendation methodology is not yet available for this research profile.")
+  const displayCautions =
+    sectorRecommendationAddon?.cautions ?? recommendation?.cautions ?? []
+  const confirmationTarget =
+    visibleTracking?.changeSignal === "DOWNGRADE"
+      ? recommendationPolicy?.persistenceRules.downgradeConfirmations
+      : recommendationPolicy?.persistenceRules.upgradeConfirmations ?? 2
+  const primaryCaution = displayCautions[0] ?? null
   const evidenceConfidenceValue = scoring.data?.evidenceConfidence
   const evidenceConfidence = typeof evidenceConfidenceValue === "number" && Number.isFinite(evidenceConfidenceValue) ? `${Math.round(evidenceConfidenceValue)}%` : "Pending"
-  const recommendationUnavailable = !recommendation && !scoring.isLoading
+  const recommendationUnavailable =
+    !sectorRecommendationAddonEnabled && !recommendation && !scoring.isLoading
+  const addonPending =
+    sectorRecommendationAddonEnabled && !sectorRecommendationAddon
   const unavailableProfile = scoring.data?.profileName ?? "this research profile"
 
   return <section className="position-controls" aria-label="Position controls">
@@ -204,39 +233,39 @@ export function PositionDecisionControls({
           </section>
 
           <section className="portfolioai-advisory" aria-labelledby="portfolioai-advisory-title">
-            <header className="advisory-heading"><div className="advisory-title-wrap"><span className="decision-panel-icon advisory-icon" aria-hidden="true">✦</span><div><h3 id="portfolioai-advisory-title">PortfolioAI suggestion</h3><p>Sector-aware research recommendation preview.</p></div></div>{tracking ? <span className={`recommendation-transition ${transitionClass(tracking.transitionStatus)}`}>{transitionLabel(tracking.transitionStatus)}</span> : recommendationUnavailable ? <span className="recommendation-transition transition-evidence-pending">Not ready</span> : null}</header>
-            <div className="advisory-primary"><strong>{recommendation ? recommendationLabel(recommendation.suggestedRole) : recommendationUnavailable ? "Recommendation pending" : "Evaluating…"}</strong><small>{recommendationUnavailable ? `${unavailableProfile} · Awaiting validated profile-specific recommendation.` : suggestionDetail}</small>{recommendation?.cautions.length ? <div className="advisory-cautions" aria-label="Recommendation cautions">{recommendation.cautions.map((caution) => <span key={caution}>{caution}</span>)}</div> : null}</div>
+            <header className="advisory-heading"><div className="advisory-title-wrap"><span className="decision-panel-icon advisory-icon" aria-hidden="true">✦</span><div><h3 id="portfolioai-advisory-title">PortfolioAI suggestion</h3><p>Sector-aware research recommendation preview.</p></div></div>{sectorRecommendationAddon ? <span className="recommendation-transition transition-stable">{sectorRecommendationAddon.statusLabel}</span> : visibleTracking ? <span className={`recommendation-transition ${transitionClass(visibleTracking.transitionStatus)}`}>{transitionLabel(visibleTracking.transitionStatus)}</span> : recommendationUnavailable ? <span className="recommendation-transition transition-evidence-pending">Not ready</span> : addonPending ? <span className="recommendation-transition transition-evidence-pending">Evaluating</span> : null}</header>
+            <div className="advisory-primary"><strong>{displayedRole ?? (recommendationUnavailable ? "Recommendation pending" : "Evaluating…")}</strong><small>{recommendationUnavailable ? `${unavailableProfile} · Awaiting validated profile-specific recommendation.` : suggestionDetail}</small>{displayCautions.length ? <div className="advisory-cautions" aria-label="Recommendation cautions">{displayCautions.map((caution) => <span key={caution}>{caution}</span>)}</div> : null}</div>
 
             {actionPreview ? <section className={`action-bias action-${actionPreview.tone.toLocaleLowerCase()}`} aria-label="PortfolioAI action bias">
               <div className="action-bias-main"><span>Action bias</span><strong>{actionPreview.label}</strong><small>{actionPreview.headline}</small></div>
               <details><summary>Why this action?</summary><ul>{actionPreview.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></details>
-            </section> : recommendationUnavailable ? <section className="action-bias action-neutral" aria-label="PortfolioAI action bias"><div className="action-bias-main"><span>Action bias</span><strong>Pending</strong><small>Awaiting approved recommendation methodology and score-ready evidence.</small></div><details><summary>Why unavailable?</summary><ul><li>No action is inferred until a validated recommendation is available.</li></ul></details></section> : null}
+            </section> : sectorRecommendationAddonEnabled ? <section className="action-bias action-neutral" aria-label="PortfolioAI action bias"><div className="action-bias-main"><span>Action bias</span><strong>Not available</strong><small>{sectorRecommendationAddon?.actionUnavailableReason ?? "Awaiting read-only sector recommendation."}</small></div><details><summary>Why unavailable?</summary><ul><li>{sectorRecommendationAddon?.actionUnavailableReason ?? "No action is inferred while the sector recommendation is still loading."}</li></ul></details></section> : recommendationUnavailable ? <section className="action-bias action-neutral" aria-label="PortfolioAI action bias"><div className="action-bias-main"><span>Action bias</span><strong>Pending</strong><small>Awaiting approved recommendation methodology and score-ready evidence.</small></div><details><summary>Why unavailable?</summary><ul><li>No action is inferred until a validated recommendation is available.</li></ul></details></section> : null}
 
             {weightPreview ? <section className={`weight-preview weight-${weightPreview.position.toLocaleLowerCase().replaceAll("_", "-")}`} aria-label="PortfolioAI suggested weight range">
               <div className="weight-preview-main"><span>Suggested weight range</span><strong>{formatWeightRange(weightPreview)}</strong><small>{weightPreview.label}</small></div>
               <div className="weight-preview-context"><span><b>Current</b>{weightPreview.currentWeight === null ? "Unavailable" : `${weightPreview.currentWeight.toFixed(2)}%`}</span><span><b>Your target</b>{weightPreview.userTargetWeight === null ? "Not set" : `${weightPreview.userTargetWeight}%`}</span>{weightPreview.profileExposure !== null ? <span><b>Known {recommendation?.sectorProfile ?? "profile"} exposure</b>{weightPreview.profileExposure.toFixed(2)}%</span> : <span><b>Portfolio context</b>Classification coverage pending</span>}</div>
               <details className="weight-rationale"><summary>Why this range?</summary><ul>{weightPreview.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></details>
-            </section> : recommendationUnavailable ? <section className="weight-preview weight-unavailable" aria-label="PortfolioAI suggested weight range"><div className="weight-preview-main"><span>Suggested weight range</span><strong>Not available</strong><small>Awaiting approved allocation policy</small></div><div className="weight-preview-context"><span><b>Current</b>{effectiveCurrentWeight === null ? "Unavailable" : `${effectiveCurrentWeight.toFixed(2)}%`}</span><span><b>Your target</b>{settings.targetWeight === null ? "Not set" : `${settings.targetWeight}%`}</span><span><b>Portfolio context</b>{currentRole === "UNCLASSIFIED" ? "Unclassified" : title(settings.portfolioRole)}</span></div><details className="weight-rationale"><summary>Why unavailable?</summary><ul><li>No suggested range is produced until an approved allocation policy is available.</li></ul></details></section> : null}
+            </section> : sectorRecommendationAddonEnabled ? <section className="weight-preview weight-unavailable" aria-label="PortfolioAI suggested weight range"><div className="weight-preview-main"><span>Suggested weight range</span><strong>Not available</strong><small>{sectorRecommendationAddon?.weightUnavailableReason ?? "Awaiting read-only sector recommendation."}</small></div><div className="weight-preview-context"><span><b>Current</b>{effectiveCurrentWeight === null ? "Unavailable" : `${effectiveCurrentWeight.toFixed(2)}%`}</span><span><b>Your target</b>{settings.targetWeight === null ? "Not set" : `${settings.targetWeight}%`}</span><span><b>Portfolio context</b>{currentRole === "UNCLASSIFIED" ? "Unclassified" : title(settings.portfolioRole)}</span></div><details className="weight-rationale"><summary>Why unavailable?</summary><ul><li>{sectorRecommendationAddon?.weightUnavailableReason ?? "No suggested range is produced while the sector recommendation is still loading."}</li></ul></details></section> : recommendationUnavailable ? <section className="weight-preview weight-unavailable" aria-label="PortfolioAI suggested weight range"><div className="weight-preview-main"><span>Suggested weight range</span><strong>Not available</strong><small>Awaiting approved allocation policy</small></div><div className="weight-preview-context"><span><b>Current</b>{effectiveCurrentWeight === null ? "Unavailable" : `${effectiveCurrentWeight.toFixed(2)}%`}</span><span><b>Your target</b>{settings.targetWeight === null ? "Not set" : `${settings.targetWeight}%`}</span><span><b>Portfolio context</b>{currentRole === "UNCLASSIFIED" ? "Unclassified" : title(settings.portfolioRole)}</span></div><details className="weight-rationale"><summary>Why unavailable?</summary><ul><li>No suggested range is produced until an approved allocation policy is available.</li></ul></details></section> : null}
 
-            {tracking ? <div className="advisory-tracking-summary"><div><span>Tracking status</span><strong>{tracking.persistenceCount} consecutive qualifying evaluation{tracking.persistenceCount === 1 ? "" : "s"} recorded</strong><small>Role changes require {confirmationTarget} confirmations.</small></div><span aria-hidden="true">›</span></div> : null}
-            <div className="advisory-footer"><div><strong>Read-only pilot · does not change your role or weight</strong><small>This is a research preview. Your selected role, holdings, target weight, target price and stop loss remain under your control.</small></div>{history.length ? <details className="recommendation-history"><summary>Tracking history</summary><div>{history.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{item.actionBias ? `${title(item.actionBias)} · ` : ""}{rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax) ? `${rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax)} · ` : ""}{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : <span className="tracking-history-empty">Tracking history will appear after the first qualifying evaluation.</span>}</div>
+            {visibleTracking ? <div className="advisory-tracking-summary"><div><span>Tracking status</span><strong>{visibleTracking.persistenceCount} consecutive qualifying evaluation{visibleTracking.persistenceCount === 1 ? "" : "s"} recorded</strong><small>Role changes require {confirmationTarget} confirmations.</small></div><span aria-hidden="true">›</span></div> : null}
+            <div className="advisory-footer"><div><strong>Read-only pilot · does not change your role or weight</strong><small>This is a research preview. Your selected role, holdings, target weight, target price and stop loss remain under your control.</small></div>{visibleHistory.length ? <details className="recommendation-history"><summary>Tracking history</summary><div>{visibleHistory.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{item.actionBias ? `${title(item.actionBias)} · ` : ""}{rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax) ? `${rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax)} · ` : ""}{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : <span className="tracking-history-empty">Tracking history will appear after the first qualifying evaluation.</span>}</div>
           </section>
         </div>
 
-        <RecommendationInterpretationPanel portfolioId={portfolioId} securityId={securityId} enabled={Boolean(tracking && recommendation && recommendation.suggestedRole !== "INSUFFICIENT")} />
+        <RecommendationInterpretationPanel portfolioId={portfolioId} securityId={securityId} enabled={Boolean(!sectorRecommendationAddonEnabled && visibleTracking && recommendation && recommendation.suggestedRole !== "INSUFFICIENT")} />
       </div>
 
       <aside className={`key-insights-panel${recommendationUnavailable ? " key-insights-unavailable" : ""}`} aria-labelledby="key-insights-title">
         <header><span className="key-insights-icon" aria-hidden="true">▥</span><div><h3 id="key-insights-title">Key Insights</h3><p>Quick view of the most important research signals.</p></div></header>
         <div className="key-insight-list">
-          <article><span className="key-insight-badge" aria-hidden="true">☆</span><div><small>Role</small><strong>{recommendation ? recommendationLabel(recommendation.suggestedRole) : "Not yet available"}</strong><p>{recommendation ? suggestionDetail : `Awaiting ${unavailableProfile} recommendation.`}</p></div></article>
-          <article><span className="key-insight-badge" aria-hidden="true">◎</span><div><small>Action bias</small><strong>{actionPreview?.label ?? "Not yet available"}</strong><p>{actionPreview?.headline ?? "Awaiting recommendation policy."}</p></div></article>
-          <article><span className="key-insight-badge" aria-hidden="true">◔</span><div><small>Suggested weight range</small><strong>{weightPreview ? formatWeightRange(weightPreview) : "Not yet available"}</strong><p>{weightPreview?.label ?? "Awaiting allocation policy."}</p></div></article>
+          <article><span className="key-insight-badge" aria-hidden="true">☆</span><div><small>Role</small><strong>{displayedRole ?? "Not yet available"}</strong><p>{displayedRole ? suggestionDetail : `Awaiting ${unavailableProfile} recommendation.`}</p></div></article>
+          <article><span className="key-insight-badge" aria-hidden="true">◎</span><div><small>Action bias</small><strong>{actionPreview?.label ?? "Not yet available"}</strong><p>{actionPreview?.headline ?? sectorRecommendationAddon?.actionUnavailableReason ?? "Awaiting recommendation policy."}</p></div></article>
+          <article><span className="key-insight-badge" aria-hidden="true">◔</span><div><small>Suggested weight range</small><strong>{weightPreview ? formatWeightRange(weightPreview) : "Not yet available"}</strong><p>{weightPreview?.label ?? sectorRecommendationAddon?.weightUnavailableReason ?? "Awaiting allocation policy."}</p></div></article>
           <article className={primaryCaution ? "key-insight-caution" : undefined}><span className="key-insight-badge" aria-hidden="true">↗</span><div><small>Primary caution</small><strong>{primaryCaution ? "Watch" : "No validated caution"}</strong><p>{primaryCaution ?? "No recommendation caution is available yet."}</p></div></article>
-          <article><span className="key-insight-badge" aria-hidden="true">✓</span><div><small>Tracking status</small><strong>{tracking ? `${tracking.persistenceCount} qualifying evaluation${tracking.persistenceCount === 1 ? "" : "s"}` : "Not started"}</strong><p>{tracking ? `Role changes require ${confirmationTarget} confirmations.` : "Begins after a qualifying evaluation."}</p></div></article>
+          <article><span className="key-insight-badge" aria-hidden="true">✓</span><div><small>Tracking status</small><strong>{visibleTracking ? `${visibleTracking.persistenceCount} qualifying evaluation${visibleTracking.persistenceCount === 1 ? "" : "s"}` : "Not started"}</strong><p>{visibleTracking ? `Role changes require ${confirmationTarget} confirmations.` : sectorRecommendationAddon?.trackingUnavailableReason ?? "Begins after a qualifying evaluation."}</p></div></article>
           <article><span className="key-insight-badge" aria-hidden="true">▤</span><div><small>Evidence confidence</small><strong>{evidenceConfidence}</strong><p>Confidence is reported from the current deterministic scoring snapshot.</p></div></article>
         </div>
-        <div className="key-insights-readonly"><strong>Read-only advisory</strong><p>Your selected role, holdings, target weight, target price and stop loss remain under your control.</p>{history.length ? <details className="recommendation-history key-insights-history"><summary>Tracking history</summary><div>{history.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{item.actionBias ? `${title(item.actionBias)} · ` : ""}{rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax) ? `${rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax)} · ` : ""}{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : null}</div>
+        <div className="key-insights-readonly"><strong>Read-only advisory</strong><p>Your selected role, holdings, target weight, target price and stop loss remain under your control.</p>{visibleHistory.length ? <details className="recommendation-history key-insights-history"><summary>Tracking history</summary><div>{visibleHistory.map((item) => <div key={item.id}><span className={`history-dot ${transitionClass(item.transitionStatus)}`} aria-hidden="true" /><span>{recommendationLabel(item.suggestedRole as RecommendationPreview["suggestedRole"])}</span><small>{item.actionBias ? `${title(item.actionBias)} · ` : ""}{rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax) ? `${rangeLabel(item.suggestedWeightMin, item.suggestedWeightMax)} · ` : ""}{transitionLabel(item.transitionStatus)} · {dateLabel(item.createdAt)}</small></div>)}</div></details> : null}</div>
       </aside>
     </div>
 

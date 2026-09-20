@@ -20,6 +20,7 @@ import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from ".
 import { useSecurityResearch } from "../features/research/useSecurityResearch"
 import { usePharmaSubprofileResolution } from "../features/research/usePharmaSubprofileResolution"
 import { useSecurityScoring } from "../features/research/useSecurityScoring"
+import { useResearchRecommendationAddon } from "../features/research/useResearchRecommendationAddon"
 
 const TABS = ["Overview", "Financials", "Quality & Growth", "Ownership", "Valuation", "Documents", "Evidence"] as const
 type Tab = typeof TABS[number]
@@ -55,6 +56,7 @@ export function ResearchIndexPage() {
 
 function ResearchHeader({ position, research, scoring, currency, portfolioId, onPositionSaved }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly currency: string; readonly portfolioId: string; readonly onPositionSaved: () => void }) {
   const ui = researchProfileUiContract(scoring.data?.profileCode)
+  const recommendationAddon = useResearchRecommendationAddon({ securityId: position.securityId, securitySymbol: position.symbol, profileCode: scoring.data?.profileCode ?? null })
   const marketCap = latestByCode(research?.metrics ?? []).get("MARKET_CAP_PROVIDER_RAW")
   const brokers = position.brokerExposure ?? []
   const sector = research?.sector ?? position.sector
@@ -72,7 +74,7 @@ function ResearchHeader({ position, research, scoring, currency, portfolioId, on
       <MetricCard label="Current value" value={formatMoney(position.currentValue, currency)} detail="At cached CMP" />
       <PnlCard position={position} currency={currency} />
       <article className="research-metric-card broker-card"><span>Brokers / demat</span><div className="broker-chips">{brokers.length ? brokers.map((broker) => <span key={broker.broker} title={`${formatQuantity(broker.quantity)} shares`}>{broker.broker}</span>) : <strong>Unavailable</strong>}</div><small>{brokers.length ? `${brokers.length} account${brokers.length === 1 ? "" : "s"}` : "Attribution incomplete"}</small></article>
-      <PositionDecisionControls portfolioId={portfolioId} securityId={position.securityId} currentRole={position.role} currentWeight={position.portfolioWeightPercent} fallbackTargetWeight={position.settings.targetWeight} fallbackInvestmentHorizon={position.settings.investmentHorizon} currency={currency} onSaved={onPositionSaved} />
+      <PositionDecisionControls portfolioId={portfolioId} securityId={position.securityId} currentRole={position.role} currentWeight={position.portfolioWeightPercent} fallbackTargetWeight={position.settings.targetWeight} fallbackInvestmentHorizon={position.settings.investmentHorizon} currency={currency} onSaved={onPositionSaved} sectorRecommendationAddonEnabled={recommendationAddon.enabled} sectorRecommendationAddonLoading={recommendationAddon.isLoading} sectorRecommendationAddon={recommendationAddon.data} />
     </div></section>
   </header>
 }

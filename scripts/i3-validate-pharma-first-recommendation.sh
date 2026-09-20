@@ -11,6 +11,7 @@ echo "[1/7] Focused I3 + I2 + I1 + Gate H regressions"
 npx vitest run \
   src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts \
   src/features/research/PharmaRecommendationPanel.test.tsx \
+  src/features/research/PositionDecisionControls.test.tsx \
   src/features/research/pharmaRecommendationPolicyCandidate.test.ts \
   src/features/research/pharmaRecommendationAuthority.test.ts \
   src/features/research/sectorRecommendation.pharmaV1Strict.test.ts \
@@ -29,6 +30,11 @@ npx eslint \
   src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts \
   src/features/research/PharmaRecommendationPanel.tsx \
   src/features/research/PharmaRecommendationPanel.test.tsx \
+  src/features/research/pharmaGateI3RecommendationAddon.ts \
+  src/features/research/researchRecommendationAddon.ts \
+  src/features/research/useResearchRecommendationAddon.ts \
+  src/features/research/PositionDecisionControls.tsx \
+  src/features/research/PositionDecisionControls.test.tsx \
   src/pages/ResearchPage.tsx
 
 echo "[5/7] Existing architecture lint"
