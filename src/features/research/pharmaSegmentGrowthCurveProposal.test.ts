@@ -2,8 +2,9 @@ import { describe, expect, it } from "vitest"
 import { evaluatePharmaSegmentGrowthCurveProposal, PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL } from "./pharmaSegmentGrowthCurveProposal"
 
 describe("PHARMA segment-growth curve proposal", () => {
-  it("remains proposal-only and non-executable", () => {
-    expect(PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.state).toBe("PROPOSAL_ONLY")
+  it("is owner-approved but remains non-executable", () => {
+    expect(PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.state).toBe("OWNER_APPROVED_NOT_ACTIVE")
+    expect(PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.methodologyApproved).toBe(true)
     expect(PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.activationApproved).toBe(false)
     expect(PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.scoreExecutionEnabled).toBe(false)
   })
@@ -45,12 +46,13 @@ describe("PHARMA segment-growth curve proposal", () => {
       positiveQuartersOutOfLatest4: 3,
       latestMinusMedianPrior3PercentagePoints: 2,
     })).toEqual({
-      proposalVersion: "PHARMA_SEGMENT_GROWTH_CURVE_V1_PROPOSAL",
-      state: "DETERMINISTIC_PROPOSAL_RESULT",
+      proposalVersion: "PHARMA_SEGMENT_GROWTH_CURVE_V1_OWNER_APPROVED",
+      state: "DETERMINISTIC_OWNER_APPROVED_RESULT",
       levelScore: 70,
       consistencyScore: 75,
       trendScore: 75,
       combinedScore: 72,
+      methodologyApproved: true,
       activationApproved: false,
       scoreExecutionEnabled: false,
     })
