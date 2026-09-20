@@ -116,17 +116,17 @@ describe("G7.2 TORNTPHARM explainable preview", () => {
     expect(result.reasonCodes).toContain("GOVERNANCE_RUNTIME_INPUT_NOT_CANONICALLY_RESOLVED")
   })
 
-  it("does not silently transfer pending Domestic methodology into a numeric result", () => {
+  it("recognizes approved Momentum methodology but emits no score without locked evidence input", () => {
     const result = buildTorntpharmG7ExplainablePreview(model)
     const momentum = result.rows.find((row) => row.dimensionCode === "MOMENTUM")
-    expect(momentum?.methodologyState).toBe("SUBPROFILE_THRESHOLDS_REQUIRED")
+    expect(momentum?.methodologyState).toBe("APPROVED_NUMERIC_CONTRACT")
     expect(momentum?.finalScore).toBeNull()
   })
 
-  it("keeps Business Durability fail-closed without an approved dimension aggregation", () => {
+  it("recognizes approved Business Durability aggregation but still fails closed without reviewed component scores", () => {
     const result = buildTorntpharmG7ExplainablePreview(model)
     const durability = result.rows.find((row) => row.dimensionCode === "BUSINESS_DURABILITY")
-    expect(durability?.methodologyState).toBe("NO_APPROVED_DIMENSION_AGGREGATION")
+    expect(durability?.methodologyState).toBe("APPROVED_NUMERIC_CONTRACT")
     expect(durability?.finalScore).toBeNull()
   })
 
