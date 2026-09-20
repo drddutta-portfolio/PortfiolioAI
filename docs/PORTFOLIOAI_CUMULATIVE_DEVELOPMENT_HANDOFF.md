@@ -21766,3 +21766,78 @@ No missing evidence is converted to neutral.
 - PR merge: NO
 
 **CURRENT STOP POINT:** owner validates the promoted versioned parent profile plus G-FINAL-2B evidence sufficiency lock. After PASS, proceed to G-FINAL-2C calibration candidates. Do not approve numeric thresholds without explicit owner methodology review.
+
+
+---
+
+## 245. Entry 240 — G-FINAL-2 consolidated implementation complete / owner freeze pending
+
+**Date:** 20 September 2026  
+**Actor:** owner-directed consolidation + ChatGPT implementation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **G-FINAL-2B VALIDATION PASS**
+
+and explicitly instructed:
+
+> **Complete the G-Final-2**
+
+The Gate G final plan has been simplified to four main stages:
+
+- G-FINAL-1 — mature methodology freeze — COMPLETE
+- G-FINAL-2 — all remaining Domestic numeric dimensions
+- G-FINAL-3 — Material Overlay + governance/regulatory runtime
+- G-FINAL-4 — end-to-end read-only score integration and hand-verifiable dry run
+
+There are no separate G-FINAL-2C/2D/2E or G-FINAL-5 checkpoints in the simplified canonical plan.
+
+### G-FINAL-2 implementation completed
+
+Added:
+
+- `pharmaDomesticGateGFinal2NumericMethodology.ts`
+- matching deterministic reference-case tests
+- `pharmaGateGFinal2ClosureCandidate.ts`
+- matching closure-candidate tests
+- `docs/PortfolioAI_G_FINAL_2_CONSOLIDATED_METHODOLOGY_REVIEW.md`
+
+The consolidated candidate defines deterministic methodology for:
+
+1. Capital Efficiency
+2. Cash Flow
+3. Balance Sheet / Credit
+4. Business Durability
+5. Momentum
+6. Ownership / Governance
+7. Risk
+
+NIFTY Pharma is the proposed Pharma-sector benchmark for relative momentum and relative-volatility context.
+
+### Current G-FINAL-2 state
+
+- dimension reconciliation: PROMOTED / versioned parent
+- evidence sufficiency: LOCKED
+- deterministic evaluators: IMPLEMENTED for all seven dimensions
+- reference cases: IMPLEMENTED
+- owner methodology freeze: PENDING
+- G-FINAL-2 complete: NO until owner freeze + post-freeze validation
+- Gate H eligible: NO
+
+The candidate deliberately does not claim owner approval for unseen numeric thresholds.
+
+### Safety state
+
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- production mutation: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+**CURRENT STOP POINT:** run one consolidated local validation set. If PASS, owner reviews and explicitly freezes the seven-dimension methodology in one decision. Then promote G-FINAL-2 to OWNER_APPROVED_NOT_ACTIVE, point the read-only adapter at approved contract versions, validate once, and close G-FINAL-2.
