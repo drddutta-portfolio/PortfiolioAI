@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
   TORNTPHARM_GATE_H2_BALANCE_SHEET_READ_ONLY_RESULT,
+  TORNTPHARM_GATE_H2_CAPITAL_EFFICIENCY_READ_ONLY_RESULT,
   TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS,
 } from "./torntpharmGateH2InitialScoreInputs"
 
@@ -17,13 +18,16 @@ describe("TORNTPHARM H2 initial score inputs", () => {
     ).toBe(65)
   })
 
-  it("keeps Capital Efficiency blocked until the IQR convention is explicitly locked", () => {
-    expect(
-      TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.capitalEfficiency.state,
-    ).toBe("BLOCKED_IQR_CONVENTION_DECISION")
+  it("produces the owner-approved deterministic Capital Efficiency read-only candidate", () => {
+    expect(TORNTPHARM_GATE_H2_CAPITAL_EFFICIENCY_READ_ONLY_RESULT).toEqual({
+      levelScore: 85,
+      stabilityScore: 100,
+      trendScore: 40,
+      combinedScore: 79,
+    })
     expect(
       TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.capitalEfficiency.score,
-    ).toBeNull()
+    ).toBe(79)
   })
 
   it("keeps all score execution and persistence off", () => {
