@@ -1,5 +1,5 @@
 export const PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_VERSION =
-  "PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_V1_CANDIDATE" as const
+  "PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_V1_OWNER_APPROVED" as const
 
 export interface NumericBand {
   readonly minimumInclusive?: number
@@ -27,7 +27,7 @@ function scoreBand(value: number, bands: readonly NumericBand[], label: string) 
 
 export const PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY = {
   version: PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_VERSION,
-  state: "READY_FOR_OWNER_METHODOLOGY_REVIEW" as const,
+  state: "OWNER_APPROVED_NOT_ACTIVE" as const,
   supportedPrimarySubprofile: "DOMESTIC_FORMULATIONS" as const,
   benchmark: {
     code: "NIFTY_PHARMA" as const,
@@ -176,7 +176,8 @@ export const PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY = {
     regulatoryContextScoreSuppliedByGovernanceRuntimeContract: true,
     g4ConsumedEventsMayReceiveSecondPenalty: false,
   },
-  ownerApprovalRequired: true,
+  methodologyApproved: true,
+  ownerApprovalRequired: false,
   activationApproved: false,
   scoreExecutionEnabled: false,
   persistedScoreRunEnabled: false,
