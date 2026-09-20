@@ -22272,3 +22272,99 @@ Current candidate:
 - automatic trading: NO
 
 **CURRENT STOP POINT:** run the final G-FINAL-4 validation. If PASS, Gate G can be formally closed as **ENGINE CONTRACT COMPLETE**, and Gate H can begin with TORNTPHARM evidence completion + first deterministic company score.
+
+
+---
+
+## 252. Entry 247 — G-FINAL-4 validation PASS / Gate G formally closed
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **G-FINAL-4 VALIDATION PASS**
+
+Validated:
+
+- end-to-end G-FINAL-4 dry run;
+- G7 read-only scoring adapter;
+- owner-approved overlay modifier;
+- owner-approved G-FINAL-2 numeric methodology;
+- owner-approved Quality / Operating Margin;
+- owner-approved Growth / Segment Growth;
+- owner-approved Domestic Valuation combined score;
+- owner-approved G-FINAL-3 cross-cutting methodology;
+- strict TypeScript;
+- architecture guard;
+- architecture lint;
+- production build;
+- `git diff --check`.
+
+### Gate G engine-contract result
+
+The synthetic full-engine dry run passed all ten weighted dimensions through the real read-only adapter.
+
+The independently hand-checked overall result matched exactly:
+
+> **73.435**
+
+Verified invariants:
+
+- all ten dimensions present;
+- fixed canonical weights only;
+- no hidden reweighting;
+- approved overlay modifiers applied within dimensions only;
+- no second stock score;
+- governance semantics preserved;
+- score execution OFF;
+- score persistence OFF;
+- recommendation OFF;
+- sizing OFF.
+
+### TORNTPHARM current-state result
+
+The real current company dry run remains fail-closed:
+
+- `overallPreviewState = NOT_CURRENTLY_COMPUTABLE`
+- `overallScore = null`
+- governance runtime = `REVIEW_REQUIRED`
+- first deterministic TORNTPHARM score ready = NO
+
+This is caused by unresolved company-specific evidence inputs, not by incomplete scoring methodology.
+
+### Formal closure
+
+> **G-FINAL-4 = COMPLETE / PASS**
+
+> **GATE G = COMPLETE / ENGINE CONTRACT COMPLETE**
+
+### Gate H boundary
+
+Gate H may now begin.
+
+Gate H scope is:
+
+1. complete the remaining TORNTPHARM company-specific evidence required by the approved contracts;
+2. calculate the first deterministic TORNTPHARM score only when all required dimension inputs are score-ready;
+3. keep persistence OFF unless separately approved;
+4. keep recommendation and position-sizing logic OFF until their later gates.
+
+Current Gate H entry condition:
+
+> `FAIL_CLOSED_EVIDENCE_COMPLETION_REQUIRED`
+
+### Safety state
+
+- production mutation: NO
+- score execution activation: NO
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+**NEXT STAGE:** Gate H — TORNTPHARM evidence completion and first deterministic company score.
