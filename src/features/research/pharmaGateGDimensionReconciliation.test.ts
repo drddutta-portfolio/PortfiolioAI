@@ -19,9 +19,9 @@ describe("Gate G dimension reconciliation candidate", () => {
       expect(entry.numericMethodologyActivated).toBe(false)
     }
 
-    expect(PHARMA_GATE_G_DIMENSION_RECONCILIATION.state).toBe("CANDIDATE_NOT_ACTIVE")
+    expect(PHARMA_GATE_G_DIMENSION_RECONCILIATION.state).toBe("PROMOTED_VERSIONED_PARENT")
     expect(PHARMA_GATE_G_DIMENSION_RECONCILIATION.directInPlaceParentContractMutationAllowed).toBe(false)
-    expect(PHARMA_GATE_G_DIMENSION_RECONCILIATION.requiresVersionedParentContractPromotion).toBe(true)
+    expect(PHARMA_GATE_G_DIMENSION_RECONCILIATION.requiresVersionedParentContractPromotion).toBe(false)\n    expect(PHARMA_GATE_G_DIMENSION_RECONCILIATION.promotedParentProfileVersion).toBe("PHARMA_V1_GATE_G_DIMENSIONS_V1")
     expect(PHARMA_GATE_G_DIMENSION_RECONCILIATION.scoreExecutionEnabled).toBe(false)
     expect(PHARMA_GATE_G_DIMENSION_RECONCILIATION.persistedScoreRunEnabled).toBe(false)
   })
