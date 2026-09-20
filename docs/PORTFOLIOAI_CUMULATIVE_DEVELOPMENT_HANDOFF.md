@@ -24286,3 +24286,60 @@ The script is read-only and reports:
 No provider call or database mutation is performed.
 
 **CURRENT STOP POINT:** run the prerequisite audit once, then build the minimal local peer-security/identity and valuation acquisition path from actual local schema/contracts rather than guessing.
+
+
+---
+
+## 283. Entry 278 — H2 local Pharma valuation contract discovery prepared
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The local valuation prerequisite audit established:
+
+- TORNTPHARM exists locally;
+- MANKIND / ERIS / EMCURE are absent from local `securities`;
+- no local Trendlyne identities exist for the target/peer valuation set;
+- `PE_TTM` is registered locally;
+- `EV_EBITDA` is not registered locally;
+- no local PE / EV-EBITDA / self-history observations exist.
+
+To avoid guessing provider identities or field labels, H2 now includes a dedicated local-only discovery path.
+
+Added:
+
+- `supabase/functions/_shared/pharma-valuation-discovery.ts`
+- `supabase/functions/discover-trendlyne-pharma-valuation-contract/index.ts`
+- `supabase/functions/discover-trendlyne-pharma-valuation-contract/index.test.ts`
+- `docs/PortfolioAI_GATE_H_H2_PHARMA_VALUATION_CONTRACT_DISCOVERY_AUTHORIZATION.md`
+
+### Exact requested discovery envelope
+
+New Trendlyne calls:
+
+1. MANKIND identity search
+2. ERIS identity search
+3. EMCURE identity search
+4. exact four-stock PE_TTM + EV/EBITDA contract/value query
+
+Maximum = **4 Trendlyne calls**.
+
+### Explicitly excluded
+
+Discovery does not:
+
+- create peer securities;
+- promote identities;
+- register EV_EBITDA;
+- insert fundamental observations;
+- persist peer assignments;
+- calculate valuation score;
+- touch production.
+
+Only local provider accounting + immutable raw discovery capture are permitted after explicit owner authorization.
+
+### Requested owner authorization
+
+`APPROVE H2 LOCAL PHARMA VALUATION CONTRACT DISCOVERY — MAX 4 TRENDLYNE CALLS`
+
+**CURRENT STOP POINT:** await exact owner authorization before executing the 4-call local discovery.
