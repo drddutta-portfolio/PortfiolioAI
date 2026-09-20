@@ -22194,3 +22194,81 @@ Only one canonical checkpoint remains:
 - automatic trading: NO
 
 **NEXT CHECKPOINT:** G-FINAL-4. No additional G-FINAL-3 sub-stages exist.
+
+
+---
+
+## 251. Entry 246 — G-FINAL-4 end-to-end dry run implemented / final validation pending
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+G-FINAL-3 was formally closed after post-freeze validation PASS.
+
+G-FINAL-4 is now implemented as the final Gate G checkpoint.
+
+Added:
+
+- `pharmaGateGFinal4EndToEndDryRun.ts`
+- `pharmaGateGFinal4EndToEndDryRun.test.ts`
+- `docs/PortfolioAI_G_FINAL_4_END_TO_END_DRY_RUN_REVIEW.md`
+
+### Full-engine synthetic dry run
+
+A hand-verifiable ten-dimension fixture now flows through the real G7 read-only adapter.
+
+Approved overlay modifiers are applied to:
+
+- Growth: +1.00
+- Business Durability: -0.50
+- Risk: +0.75
+
+Final weighted overall score:
+
+> **73.435**
+
+The independent hand calculation matches the adapter result exactly.
+
+No hidden reweighting is used and no second stock score is created.
+
+### TORNTPHARM current-state dry run
+
+The current TORNTPHARM company state remains deliberately fail-closed:
+
+- `overallPreviewState = NOT_CURRENTLY_COMPUTABLE`
+- `overallScore = null`
+- governance runtime = `REVIEW_REQUIRED`
+- first deterministic TORNTPHARM score ready = NO
+
+This is caused by unresolved company-specific evidence, not by missing methodology.
+
+The dry run explicitly separates:
+
+- **Gate G engine-contract completeness**, which is now reproducible;
+- **Gate H company-score readiness**, which still requires evidence completion.
+
+### G-FINAL-4 closure candidate
+
+Current candidate:
+
+- synthetic engine dry run ready: YES
+- synthetic hand-check match: YES
+- Gate G closure eligible candidate: YES
+- TORNTPHARM first score ready: NO
+- Gate H entry state: `FAIL_CLOSED_EVIDENCE_COMPLETION_REQUIRED`
+- score execution/persistence: OFF
+
+### Safety state
+
+- production mutation: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+**CURRENT STOP POINT:** run the final G-FINAL-4 validation. If PASS, Gate G can be formally closed as **ENGINE CONTRACT COMPLETE**, and Gate H can begin with TORNTPHARM evidence completion + first deterministic company score.
