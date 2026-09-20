@@ -122,9 +122,23 @@ market_plan="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"P
 printf '\nTORNTPHARM market-history PLAN\n'
 call_fn refresh-market-history "$market_plan" | jq .
 
-market_execute="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"EXECUTE",portfolioId:$p,securityId:$s,confirmation:"OWNER_CONFIRMED_MARKET_HISTORY_REFRESH"}')"
-printf '\nTORNTPHARM market-history EXECUTE\n'
-call_fn refresh-market-history "$market_execute" | jq .
+fresh_market_metrics="$(psql "$DB_URL" -Atqc "
+select count(distinct metric_code)
+from public.market_metric_observations
+where security_id='$SECURITY_ID'
+  and provider_code='ANGEL_ONE'
+  and metric_code in ('PRICE_MOMENTUM_12M','PRICE_MOMENTUM_6M','MAX_DRAWDOWN_1Y','VOLATILITY_1Y')
+  and evidence_status='AVAILABLE'
+  and fresh_until > now();
+")"
+
+if [[ "$fresh_market_metrics" == "4" ]]; then
+  printf '\nTORNTPHARM market-history EXECUTE skipped: all four required market metrics are already fresh locally.\n'
+else
+  market_execute="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"EXECUTE",portfolioId:$p,securityId:$s,confirmation:"OWNER_CONFIRMED_MARKET_HISTORY_REFRESH"}')"
+  printf '\nTORNTPHARM market-history EXECUTE\n'
+  call_fn refresh-market-history "$market_execute" | jq .
+fi
 
 benchmark_plan="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"PLAN",portfolioId:$p,securityId:$s}')"
 printf '\nNIFTY Pharma benchmark PLAN\n'
@@ -132,7 +146,30 @@ call_fn refresh-pharma-benchmark "$benchmark_plan" | jq .
 
 benchmark_execute="$(jq -nc --arg p "$PORTFOLIO_ID" --arg s "$SECURITY_ID" '{action:"EXECUTE",portfolioId:$p,securityId:$s,confirmation:"OWNER_CONFIRMED_PHARMA_BENCHMARK_REFRESH"}')"
 printf '\nNIFTY Pharma benchmark EXECUTE\n'
-call_fn refresh-pharma-benchmark "$benchmark_execute" | jq .
+
+benchmark_response="$(mktemp)"
+benchmark_status="$(curl -sS -o "$benchmark_response" -w '%{http_code}' -X POST "$API_URL/functions/v1/refresh-pharma-benchmark" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "apikey: $ANON_KEY" \
+  -H "Content-Type: application/json" \
+  -d "$benchmark_execute")"
+
+if [[ "$benchmark_status" == "429" ]] && jq -e '.code == "MARKET_DATA_RATE_LIMITED"' "$benchmark_response" >/dev/null 2>&1; then
+  printf 'Local REFRESH_HISTORY lease is cooling down. Waiting 65 seconds, then retrying NIFTY Pharma once...\n'
+  sleep 65
+  benchmark_status="$(curl -sS -o "$benchmark_response" -w '%{http_code}' -X POST "$API_URL/functions/v1/refresh-pharma-benchmark" \
+    -H "Authorization: Bearer $ACCESS_TOKEN" \
+    -H "apikey: $ANON_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$benchmark_execute")"
+fi
+
+cat "$benchmark_response" | jq .
+if [[ "$benchmark_status" -lt 200 || "$benchmark_status" -ge 300 ]]; then
+  rm -f "$benchmark_response"
+  die "NIFTY Pharma benchmark execution failed with HTTP $benchmark_status."
+fi
+rm -f "$benchmark_response"
 
 printf '\nLocal verification\n'
 psql "$DB_URL" -P pager=off -c "
