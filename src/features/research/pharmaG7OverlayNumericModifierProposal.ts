@@ -128,7 +128,7 @@ export function buildPharmaG7OverlayNumericModifierProposal(
   const cap = PHARMA_G7_OVERLAY_NUMERIC_MODIFIER.combinedPerDimensionCapPoints
   const cappedModifier = Math.max(-cap, Math.min(cap, rawModifier))
 
-  return result("PROPOSED_NUMERIC_MODIFIER", round(cappedModifier), [
+  return result("APPROVED_NUMERIC_MODIFIER", round(cappedModifier), [
     "G7_P1_OWNER_APPROVED_FORMULA_APPLIED",
     "DIRECT_ECONOMIC_SHARE_SCALING",
     "READY_OVERLAY_ONLY",
