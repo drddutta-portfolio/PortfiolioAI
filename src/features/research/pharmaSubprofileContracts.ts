@@ -1,4 +1,4 @@
-import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
+import { PHARMA_RESEARCH_PROFILE_GATE_G } from "./pharmaResearchProfileGateG"
 import type { PharmaSubprofileCode } from "./pharmaSubprofileAssignment"
 import type { ResearchMetricContract, ResearchMetricEvidence, ResearchProfileContract } from "./researchProfileContract"
 
@@ -107,7 +107,7 @@ export const PHARMA_SUBPROFILE_CONTRACTS = {
 
 export function composePharmaSubprofileContract(subprofileCode: PharmaSubprofileCode): ResearchProfileContract {
   const subprofile = PHARMA_SUBPROFILE_CONTRACTS[subprofileCode]
-  const metrics = new Map<string, ResearchMetricContract>(PHARMA_RESEARCH_PROFILE_V1.metrics.map((metric) => [metric.metricCode, metric]))
+  const metrics = new Map<string, ResearchMetricContract>(PHARMA_RESEARCH_PROFILE_GATE_G.metrics.map((metric) => [metric.metricCode, metric]))
   for (const override of subprofile.overrides) {
     const parent = metrics.get(override.metricCode)
     if (!parent) throw new Error(`Unknown PHARMA_V1 override metric: ${override.metricCode}`)
@@ -121,7 +121,7 @@ export function composePharmaSubprofileContract(subprofileCode: PharmaSubprofile
   if (effective.some((metric) => metric.scoreCurveVersion !== null)) throw new Error("Pharma scoring remains unapproved")
   return {
     profileCode: "PHARMA",
-    profileVersion: `PHARMA_V1+${subprofile.contractVersion}`,
+    profileVersion: `${PHARMA_RESEARCH_PROFILE_GATE_G.profileVersion}+${subprofile.contractVersion}`,
     displayName: `Pharmaceuticals · ${subprofile.displayName}`,
     metrics: effective,
   }
