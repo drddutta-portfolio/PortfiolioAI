@@ -10,8 +10,7 @@ export function useResearchRecommendationAddon(input: {
   readonly profileCode: string | null
 }): ResearchRecommendationAddonState {
   const symbol = input.securitySymbol.toLocaleUpperCase()
-  const pharmaEnabled = input.profileCode === "PHARMA_V1"
-    && (symbol === "TORNTPHARM" || symbol === "AUROPHARMA")
+  const pharmaEnabled = symbol === "TORNTPHARM" || symbol === "AUROPHARMA"
   const pharmaResolution = usePharmaSubprofileResolution(
     pharmaEnabled ? input.securityId : null,
   )

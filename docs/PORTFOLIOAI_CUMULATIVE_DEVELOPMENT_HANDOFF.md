@@ -25951,3 +25951,62 @@ The newly added shared-shell test was also corrected to scope repeated labels su
 No methodology, score, role result, persistence rule, or production state changed.
 
 I3 remains open pending a clean local rerun.
+
+
+---
+
+## 300. Entry 295 — AUROPHARMA I3 reachability fix preserves research authority vs score authority separation
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+Owner visual review confirmed the corrected TORNTPHARM core-shell integration, but AUROPHARMA showed no I3 UI change.
+
+### Root cause
+
+The initial generic read-only sector bridge required:
+
+`scoring.data.profileCode === PHARMA_V1`
+
+That was inappropriate for the AUROPHARMA negative control.
+
+AUROPHARMA can have canonical PHARMA_V1 **research/assignment authority** while its numeric score authority remains:
+
+`SCORE_NOT_COMPUTABLE`
+
+because Global Generics Primary methodology is incomplete.
+
+### Correction
+
+The I3 bridge now activates only for the two explicit reference symbols:
+
+- TORNTPHARM;
+- AUROPHARMA.
+
+It then relies on the canonical Pharma assignment resolver for the company-specific authority state.
+
+The detailed PHARMA_V1 recommendation panel also follows canonical resolved Pharma assignment, not numeric score-profile readiness alone.
+
+### Preserved boundaries
+
+- all unrelated stock pages remain on the existing universal core-shell path;
+- no common stock template redesign;
+- no broad Pharma rollout;
+- no score reconstruction for AUROPHARMA;
+- no recommendation persistence;
+- no action bias;
+- no suggested weight;
+- no AI interpretation;
+- no production mutation.
+
+Expected AUROPHARMA result after refresh:
+
+```text
+PortfolioAI suggestion = Insufficient
+Authoritative score = Not computable
+No score reconstruction
+Reason = GLOBAL_GENERICS_PRIMARY_METHODOLOGY_INCOMPLETE
+```
+
+I3 remains open pending clean local validation + AUROPHARMA visual PASS.

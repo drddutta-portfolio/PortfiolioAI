@@ -205,3 +205,28 @@ Consequences:
 - the core shell and sector add-on no longer contradict one another.
 
 This correction is presentation/orchestration only. The approved I2 methodology and deterministic I3 result are unchanged.
+
+
+## AUROPHARMA visual reachability correction
+
+Owner visual review showed the corrected TORNTPHARM core shell and Pharma detail, but AUROPHARMA displayed no I3 change.
+
+Root cause:
+
+The first core-shell bridge activation was incorrectly gated by the current **numeric scoring snapshot profile** being `PHARMA_V1`.
+
+That is too strict for the AUROPHARMA negative control. AUROPHARMA has canonical PHARMA_V1 research assignment authority, but its numeric score authority is deliberately `SCORE_NOT_COMPUTABLE` because Global Generics Primary methodology is incomplete.
+
+The I3 reference bridge is therefore now keyed to the two explicit I3 reference symbols plus canonical Pharma assignment resolution, not to numeric score-profile readiness.
+
+This preserves the architectural distinction:
+
+```text
+research/profile authority
+!=
+numeric score authority
+```
+
+The shared core-shell extension remains restricted to TORNTPHARM and AUROPHARMA only. Unrelated stock pages remain on their existing path.
+
+The detailed PHARMA_V1 recommendation panel also follows canonical resolved Pharma assignment, so AUROPHARMA can display the intended fail-closed `INSUFFICIENT / Not computable` state without fabricating a score.

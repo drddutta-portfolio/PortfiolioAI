@@ -12,6 +12,7 @@ npx vitest run \
   src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts \
   src/features/research/PharmaRecommendationPanel.test.tsx \
   src/features/research/PositionDecisionControls.test.tsx \
+  src/features/research/useResearchRecommendationAddon.test.ts \
   src/features/research/pharmaRecommendationPolicyCandidate.test.ts \
   src/features/research/pharmaRecommendationAuthority.test.ts \
   src/features/research/sectorRecommendation.pharmaV1Strict.test.ts \
@@ -33,6 +34,7 @@ npx eslint \
   src/features/research/pharmaGateI3RecommendationAddon.ts \
   src/features/research/researchRecommendationAddon.ts \
   src/features/research/useResearchRecommendationAddon.ts \
+  src/features/research/useResearchRecommendationAddon.test.ts \
   src/features/research/PositionDecisionControls.tsx \
   src/features/research/PositionDecisionControls.test.tsx \
   src/pages/ResearchPage.tsx
