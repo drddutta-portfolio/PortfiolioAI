@@ -1,5 +1,5 @@
 export const PHARMA_GATE_G_DIMENSION_RECONCILIATION_VERSION =
-  "PHARMA_GATE_G_DIMENSION_RECONCILIATION_V1_CANDIDATE" as const
+  "PHARMA_GATE_G_DIMENSION_RECONCILIATION_V1_PROMOTED" as const
 
 export type PharmaGateGLegacyParentDimension =
   | "QUALITY"
@@ -28,7 +28,7 @@ export interface PharmaGateGDimensionReconciliationEntry {
 
 export const PHARMA_GATE_G_DIMENSION_RECONCILIATION = {
   version: PHARMA_GATE_G_DIMENSION_RECONCILIATION_VERSION,
-  state: "CANDIDATE_NOT_ACTIVE" as const,
+  state: "PROMOTED_VERSIONED_PARENT" as const,
   profileCode: "PHARMA_V1" as const,
   entries: [
     {
@@ -65,7 +65,8 @@ export const PHARMA_GATE_G_DIMENSION_RECONCILIATION = {
     },
   ] as const satisfies readonly PharmaGateGDimensionReconciliationEntry[],
   directInPlaceParentContractMutationAllowed: false,
-  requiresVersionedParentContractPromotion: true,
+  requiresVersionedParentContractPromotion: false,
+  promotedParentProfileVersion: "PHARMA_V1_GATE_G_DIMENSIONS_V1" as const,
   scoreExecutionEnabled: false,
   persistedScoreRunEnabled: false,
 } as const
