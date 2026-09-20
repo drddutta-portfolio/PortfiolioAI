@@ -67,16 +67,15 @@ describe("PharmaRecommendationPanel Gate I3", () => {
       securityId="torn-security"
       symbol="TORNTPHARM"
       assignmentResolution={resolved(tornAssignment())}
-      currentUserRole="CORE"
     />)
 
     expect(screen.getByRole("heading", { name: "PHARMA_V1 recommendation detail" })).toBeInTheDocument()
     expect(screen.getAllByText("Satellite candidate").length).toBeGreaterThan(0)
     expect(screen.getByText("75.1575")).toBeInTheDocument()
-    expect(screen.getByText("Core")).toBeInTheDocument()
+    expect(screen.getByText("Core workspace")).toBeInTheDocument()
     expect(screen.getByText("7/7 applicable floors passed")).toBeInTheDocument()
     expect(screen.getByText(/Valuation is below the PHARMA_V1 neutral anchor/u)).toBeInTheDocument()
-    expect(screen.getByText(/PortfolioAI suggested research role ≠ your selected portfolio role/u)).toBeInTheDocument()
+    expect(screen.getByText(/PortfolioAI suggested research role ≠ your selected portfolio role in the core Decision Workspace/u)).toBeInTheDocument()
     expect(screen.getByText("No recommendation row · no weight or action bias")).toBeInTheDocument()
   })
 
@@ -85,7 +84,6 @@ describe("PharmaRecommendationPanel Gate I3", () => {
       securityId="auro-security"
       symbol="AUROPHARMA"
       assignmentResolution={resolved(buildAuropharmaG91AssignmentCandidate("auro-security"))}
-      currentUserRole="SATELLITE"
     />)
 
     expect(screen.getAllByText("Insufficient").length).toBeGreaterThan(0)
@@ -99,7 +97,6 @@ describe("PharmaRecommendationPanel Gate I3", () => {
       securityId="other-security"
       symbol="OTHERPHARMA"
       assignmentResolution={resolved({ ...tornAssignment(), securityId: "other-security" })}
-      currentUserRole="UNCLASSIFIED"
     />)
     expect(container).toBeEmptyDOMElement()
   })

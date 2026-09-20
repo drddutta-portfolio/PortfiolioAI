@@ -230,3 +230,26 @@ numeric score authority
 The shared core-shell extension remains restricted to TORNTPHARM and AUROPHARMA only. Unrelated stock pages remain on their existing path.
 
 The detailed PHARMA_V1 recommendation panel also follows canonical resolved Pharma assignment, so AUROPHARMA can display the intended fail-closed `INSUFFICIENT / Not computable` state without fabricating a score.
+
+
+## Sector-detail portfolio-role ownership clarification
+
+AUROPHARMA visual review exposed one remaining presentation mismatch:
+
+- the universal Decision Workspace showed its own portfolio-role state;
+- the Pharma sector detail repeated a separately derived portfolio-role label.
+
+That duplication is architecturally unnecessary and can create conflicting labels because the core shell owns user portfolio decisions.
+
+The Pharma detail panel therefore no longer repeats the selected portfolio role. It now shows:
+
+`Portfolio role authority = Core workspace`
+
+This preserves the permanent ownership rule:
+
+```text
+Universal core shell owns user portfolio decisions
+Sector add-on explains sector recommendation logic only
+```
+
+No universal stock-page component, role-setting behavior, or non-Pharma UI was changed by this correction.

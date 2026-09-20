@@ -26010,3 +26010,44 @@ Reason = GLOBAL_GENERICS_PRIMARY_METHODOLOGY_INCOMPLETE
 ```
 
 I3 remains open pending clean local validation + AUROPHARMA visual PASS.
+
+
+---
+
+## 301. Entry 296 — I3 sector detail stops duplicating user portfolio-role authority
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+AUROPHARMA visual review passed the intended fail-closed recommendation behavior:
+
+- core PortfolioAI suggestion = Insufficient;
+- authoritative score = Not computable;
+- no score reconstruction;
+- action bias = Not available;
+- suggested weight = Not available;
+- Pharma detail = Insufficient / Global Generics methodology incomplete.
+
+One presentation inconsistency remained: the Pharma sector detail repeated the user's portfolio-role label independently of the universal Decision Workspace.
+
+### Correction
+
+The Pharma detail now displays:
+
+`Portfolio role authority = Core workspace`
+
+instead of restating a separate selected-role value.
+
+This reinforces the permanent architecture:
+
+```text
+Universal stock/research core shell
+    owns user portfolio decisions
+Sector/profile add-on
+    owns sector recommendation explanation
+```
+
+No shared stock-page layout, role editing, portfolio settings, or non-reference stock behavior changed.
+
+I3 remains open pending one clean consolidated validation after this presentation-only correction.

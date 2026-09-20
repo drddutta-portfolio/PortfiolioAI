@@ -52,12 +52,10 @@ export function PharmaRecommendationPanel({
   securityId,
   symbol,
   assignmentResolution,
-  currentUserRole,
 }: {
   readonly securityId: string
   readonly symbol: string
   readonly assignmentResolution: PharmaSubprofileResolution | null
-  readonly currentUserRole: string
 }) {
   if (!assignmentResolution) return null
 
@@ -100,8 +98,8 @@ export function PharmaRecommendationPanel({
         <small>Advisory research output</small>
       </article>
       <article>
-        <span>Your selected portfolio role</span>
-        <strong>{currentUserRole === "UNCLASSIFIED" ? "Unclassified" : titleCase(currentUserRole)}</strong>
+        <span>Portfolio role authority</span>
+        <strong>Core workspace</strong>
         <small>User-controlled · unchanged by I3</small>
       </article>
       <article>
@@ -137,7 +135,7 @@ export function PharmaRecommendationPanel({
       : null}
 
     <p className="assessment-note">
-      PortfolioAI suggested research role ≠ your selected portfolio role. I3 does not change holdings, target weight, target price, stop loss, portfolio settings or orders.
+      PortfolioAI suggested research role ≠ your selected portfolio role in the core Decision Workspace. I3 does not change holdings, target weight, target price, stop loss, portfolio settings or orders.
     </p>
   </section>
 }
