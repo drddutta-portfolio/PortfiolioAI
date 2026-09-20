@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL } from "./pharmaSegmentGrowthCurveProposal"
+import { evaluatePharmaSegmentGrowthCurveProposal, PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL } from "./pharmaSegmentGrowthCurveProposal"
 
 describe("PHARMA segment-growth curve proposal", () => {
   it("remains proposal-only and non-executable", () => {
@@ -39,4 +39,29 @@ describe("PHARMA segment-growth curve proposal", () => {
     expect(PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.components.consistency.scores["4"]).toBe(100)
     expect(PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.components.consistency.scores["0"]).toBe(0)
   })
+  it("evaluates the frozen proposal bands deterministically without activating scoring", () => {
+    expect(evaluatePharmaSegmentGrowthCurveProposal({
+      medianLatest4ComparableQuartersPercent: 12,
+      positiveQuartersOutOfLatest4: 3,
+      latestMinusMedianPrior3PercentagePoints: 2,
+    })).toEqual({
+      proposalVersion: "PHARMA_SEGMENT_GROWTH_CURVE_V1_PROPOSAL",
+      state: "DETERMINISTIC_PROPOSAL_RESULT",
+      levelScore: 70,
+      consistencyScore: 75,
+      trendScore: 75,
+      combinedScore: 72,
+      activationApproved: false,
+      scoreExecutionEnabled: false,
+    })
+  })
+
+  it("keeps non-finite derived statistics fail-closed", () => {
+    expect(() => evaluatePharmaSegmentGrowthCurveProposal({
+      medianLatest4ComparableQuartersPercent: Number.NaN,
+      positiveQuartersOutOfLatest4: 3,
+      latestMinusMedianPrior3PercentagePoints: 2,
+    })).toThrow("must be finite")
+  })
+
 })
