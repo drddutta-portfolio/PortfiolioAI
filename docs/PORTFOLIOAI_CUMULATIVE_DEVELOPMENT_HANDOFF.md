@@ -20925,3 +20925,111 @@ G9.3 V2 remains **OPEN** because AUROPHARMA must now consume the same completed 
 - no score/recommendation/sizing activation.
 
 No AUROPHARMA implementation has been made by this entry.
+
+
+---
+
+## 235. Entry 230 — G9.3-D AUROPHARMA consumes reusable PHARMA_V1 capability workspace
+
+**Date:** 20 September 2026  
+**Actor:** owner continuation + ChatGPT implementation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The formally closed TORNTPHARM-first G9.3 V2 checkpoint has now advanced to **G9.3-D — AUROPHARMA consumption of the completed reusable PHARMA_V1 sector workspace**.
+
+### Read-only architecture finding before implementation
+
+Repository inspection confirmed:
+
+- AUROPHARMA already retains its restored historical G8.1 / G8.2 / G8.3 / G9.1 / G9.2 surfaces;
+- `PharmaResearchWorkspacePanel` already contains the shared Gate G → G7 methodology stack and is assignment-driven;
+- the new reusable `PharmaSectorCapabilityPanel` was still artificially mounted only for TORNTPHARM;
+- AUROPHARMA's reviewed unresolved Biosimilars state is intentionally not an active canonical assignment/exposure row;
+- canonical PHARMA_V1 research assignment authority can exist independently of downstream numeric-scoring authority.
+
+### Implementation
+
+Added:
+
+- `src/features/research/pharmaSectorWorkspaceCompanyContext.ts`
+
+This is a data-only supplemental context registry. It does not create a presentation branch or stock-specific component tree.
+
+Current supplemental state:
+
+- AUROPHARMA:
+  - unresolved = `BIOPHARMA_BIOSIMILARS`
+  - reason = `NO_REVENUE_OR_PROFIT_SHARE`
+- TORNTPHARM:
+  - unresolved = none
+
+The AUROPHARMA unresolved declaration is derived from the already-reviewed G8.1 classification evidence lock and is not promoted into a canonical active exposure.
+
+Updated:
+
+- `src/features/research/PharmaResearchWorkspacePanel.tsx`
+  - removed the TORNTPHARM-only gate around `buildPharmaSectorWorkspaceCapabilities(...)`;
+  - every resolved PHARMA_V1 assignment now consumes the same reusable capability builder/panel;
+  - company-specific unresolved declarations enter only as supplemental evidence context.
+
+- `src/pages/ResearchPage.tsx`
+  - the Pharma sector workspace may now render from canonical reviewed PHARMA_V1 assignment authority even when downstream numeric-scoring authority remains fail-closed or on a fallback profile;
+  - research-workspace authority and numeric-scoring authority remain independent.
+
+- `src/features/research/pharmaSectorWorkspaceCapabilities.test.ts`
+  - added AUROPHARMA coverage;
+  - added supplemental-context isolation coverage.
+
+### Expected AUROPHARMA reusable capability state
+
+- Primary = `GLOBAL_GENERICS`
+- Material Overlay = none
+- Emerging Watch = `API_BULK_DRUGS`
+- Unresolved = `BIOPHARMA_BIOSIMILARS`
+- raw evidence scope = `SECURITY_COMPANY`
+- interpretation scope = `COMPANY_ACTIVE_ASSIGNMENT_ROLE`
+- Material authority = `NOT_ENGAGED`
+- Emerging authority = `READY_EMERGING`
+- unresolved authority = `REVIEW_REQUIRED`
+- numeric scoring = `BLOCKED_METHODOLOGY`
+- recommendation = `BLOCKED_UPSTREAM_SCORING`
+- position sizing = `BLOCKED_UPSTREAM_RECOMMENDATION`
+- canonical resolver = `RESOLVED`
+
+The reusable tests explicitly reject leakage of TORNTPHARM roles into AUROPHARMA:
+
+- no Global Generics secondary/overlay role for AUROPHARMA;
+- no CDMO/CRAMS secondary role for AUROPHARMA;
+- API remains Emerging only;
+- Biosimilars remains unresolved only.
+
+### UI preservation boundary
+
+This checkpoint does **not** remove or redesign AUROPHARMA's restored historical G8/G9 sequential surfaces.
+
+It adds the reusable completed PHARMA_V1 sector-workspace capability layer through the same component architecture already approved on TORNTPHARM.
+
+No Gate G → G7 methodology surface is removed.
+
+### Safety state
+
+- production mutation: NO
+- production migration: NO
+- local database mutation by this implementation: NO
+- canonical assignment write/change: NO
+- evidence mutation: NO
+- score execution/persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+G9.3 V2 remains **OPEN**.
+
+**CURRENT STOP POINT:** owner must pull the branch and perform the mandatory AUROPHARMA localhost visual inspection before any full local validation or G9.3 closure. Confirm that the reusable G8.1/G8.2/G8.3/G9.1/G9.2 capability layer appears inside AUROPHARMA Pharmaceuticals deep research with the expected Global Generics / API / Biosimilars roles, while the restored historical AUROPHARMA G8/G9 surfaces remain intact. Do not close G9.3 until visual approval and full local cross-company validation pass.
