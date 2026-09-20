@@ -1,3 +1,7 @@
+import {
+  TORNTPHARM_GATE_H2_OPERATING_MARGIN_PERCENT_SERIES,
+  TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS,
+} from "./torntpharmGateH2OfficialEvidencePack"
 import { TORNTPHARM_OFFICIAL_MANIFEST_FIXTURE } from "./torntpharmOfficialManifestFixture"
 
 export const TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE_VERSION =
@@ -79,6 +83,26 @@ export const TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE = {
     reasonCodes: [
       "ALL_REQUIRED_DERIVED_STATISTICS_ARE_UNAMBIGUOUS",
       "THREE_YEAR_RAW_HISTORY_LOCKED",
+    ] as const,
+  },
+  qualityOperatingMargin: {
+    rawOperatingMarginPercent: TORNTPHARM_GATE_H2_OPERATING_MARGIN_PERCENT_SERIES,
+    percentileConvention:
+      TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS.percentileConvention,
+    medianLatest8OperatingMarginPercent:
+      TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS
+        .medianLatest8OperatingMarginPercent,
+    interquartileRangeLatest8PercentagePoints:
+      TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS
+        .interquartileRangeLatest8PercentagePoints,
+    medianLatest4MinusPrior4PercentagePoints:
+      TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS
+        .medianLatest4MinusPrior4PercentagePoints,
+    scoreReadyForApprovedEvaluator: true,
+    reasonCodes: [
+      "EIGHT_QUARTER_OFFICIAL_OPERATING_MARGIN_HISTORY_LOCKED",
+      "TYPE_7_LINEAR_INTERPOLATION_REUSED_FROM_OWNER_APPROVED_H2_CONVENTION",
+      "LATEST_FOUR_VS_PRIOR_FOUR_TREND_DETERMINISTIC",
     ] as const,
   },
   scoreExecutionEnabled: false,
