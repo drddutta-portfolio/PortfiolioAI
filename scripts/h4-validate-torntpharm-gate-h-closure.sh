@@ -16,7 +16,13 @@ npx vitest run \
   src/features/research/pharmaG7GovernanceHighRiskConstraint.test.ts \
   src/features/research/torntpharmGateH2BusinessDurabilityReview.test.ts \
   src/features/research/pharmaDomesticValuationMaTransitionContract.test.ts \
-  src/features/research/torntpharmGateH2RegulatoryRuntimeResolution.test.ts
+  src/features/research/torntpharmGateH2RegulatoryRuntimeResolution.test.ts \
+  src/features/research/pharmaGateGFinal3CrossCuttingCandidate.test.ts \
+  src/features/research/torntpharmGateHInputReadiness.test.ts \
+  src/features/research/pharmaGlobalGenericsRoceMethodGate.test.ts \
+  src/features/research/pharmaGlobalGenericsCashConversionMethodGate.test.ts \
+  src/features/research/pharmaGlobalGenericsBalanceSheetMethodGate.test.ts \
+  src/features/research/pharmaGlobalGenericsOwnershipGovernanceMethodGate.test.ts
 
 echo "[2/8] Full application test suite"
 npm test
