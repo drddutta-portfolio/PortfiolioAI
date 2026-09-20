@@ -24343,3 +24343,55 @@ Only local provider accounting + immutable raw discovery capture are permitted a
 `APPROVE H2 LOCAL PHARMA VALUATION CONTRACT DISCOVERY — MAX 4 TRENDLYNE CALLS`
 
 **CURRENT STOP POINT:** await exact owner authorization before executing the 4-call local discovery.
+
+
+---
+
+## 284. Entry 279 — H2 local Pharma valuation contract discovery authorized
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner explicitly approved:
+
+> **APPROVE H2 LOCAL PHARMA VALUATION CONTRACT DISCOVERY — MAX 4 TRENDLYNE CALLS**
+
+### Authorized scope
+
+Local Supabase only.
+
+Maximum Trendlyne provider calls:
+
+1. MANKIND identity search
+2. ERIS identity search
+3. EMCURE identity search
+4. one exact four-stock valuation contract/value query for:
+   - TORNTPHARM
+   - MANKIND
+   - ERIS
+   - EMCURE
+
+Requested valuation fields:
+
+- trailing P/E / PE TTM
+- EV/EBITDA
+
+### Authorized writes
+
+Local operational accounting and immutable raw discovery capture only.
+
+### Explicitly not authorized
+
+- peer security creation;
+- Trendlyne identity promotion;
+- EV_EBITDA metric-definition registration;
+- fundamental observation insertion;
+- peer assignment persistence;
+- production mutation;
+- score calculation;
+- score persistence;
+- recommendation/sizing;
+- scheduler change;
+- PR merge.
+
+**CURRENT STOP POINT:** execute the local discovery once, capture the exact provider identities/labels/values, and review the returned contract before any promotion or persistence.
