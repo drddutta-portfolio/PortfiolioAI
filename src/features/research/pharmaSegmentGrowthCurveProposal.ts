@@ -1,5 +1,5 @@
 export const PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL_VERSION =
-  "PHARMA_SEGMENT_GROWTH_CURVE_V1_PROPOSAL" as const
+  "PHARMA_SEGMENT_GROWTH_CURVE_V1_OWNER_APPROVED" as const
 
 export interface PharmaSegmentGrowthBand {
   readonly minimumInclusive?: number
@@ -9,7 +9,7 @@ export interface PharmaSegmentGrowthBand {
 
 export interface PharmaSegmentGrowthCurveProposal {
   readonly proposalVersion: typeof PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL_VERSION
-  readonly state: "PROPOSAL_ONLY"
+  readonly state: "OWNER_APPROVED_NOT_ACTIVE"
   readonly appliesTo: readonly [
     "PHARMA_DOMESTIC_REVENUE_GROWTH",
     "PHARMA_EXPORT_US_REVENUE_GROWTH"
@@ -38,13 +38,15 @@ export interface PharmaSegmentGrowthCurveProposal {
     }
   }
   readonly finalScore: "WEIGHTED_COMPONENT_AVERAGE_0_TO_100"
+  readonly methodologyApproved: true
+  readonly methodologyApproved: true
   readonly activationApproved: false
   readonly scoreExecutionEnabled: false
 }
 
 export const PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL: PharmaSegmentGrowthCurveProposal = {
   proposalVersion: PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL_VERSION,
-  state: "PROPOSAL_ONLY",
+  state: "OWNER_APPROVED_NOT_ACTIVE",
   appliesTo: [
     "PHARMA_DOMESTIC_REVENUE_GROWTH",
     "PHARMA_EXPORT_US_REVENUE_GROWTH",
@@ -86,6 +88,7 @@ export const PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL: PharmaSegmentGrowthCurvePropo
     },
   },
   finalScore: "WEIGHTED_COMPONENT_AVERAGE_0_TO_100",
+  methodologyApproved: true,
   activationApproved: false,
   scoreExecutionEnabled: false,
 }
@@ -99,7 +102,7 @@ export interface PharmaSegmentGrowthCurveStatistics {
 
 export interface PharmaSegmentGrowthCurveScoreResult {
   readonly proposalVersion: typeof PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL_VERSION
-  readonly state: "DETERMINISTIC_PROPOSAL_RESULT"
+  readonly state: "DETERMINISTIC_OWNER_APPROVED_RESULT"
   readonly levelScore: number
   readonly consistencyScore: number
   readonly trendScore: number
@@ -144,11 +147,12 @@ export function evaluatePharmaSegmentGrowthCurveProposal(
 
   return {
     proposalVersion: PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL_VERSION,
-    state: "DETERMINISTIC_PROPOSAL_RESULT",
+    state: "DETERMINISTIC_OWNER_APPROVED_RESULT",
     levelScore,
     consistencyScore,
     trendScore,
     combinedScore,
+    methodologyApproved: true,
     activationApproved: false,
     scoreExecutionEnabled: false,
   }
