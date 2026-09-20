@@ -22658,3 +22658,58 @@ No subjective or neutral component scores are permitted.
 - PR merge: NO
 
 **CURRENT STOP POINT:** validate the approved Type-7 derivation and H2 official-evidence package, then resolve the bounded component-normalization correction before Business Durability / Ownership-Governance / Risk can become deterministic.
+
+
+---
+
+## 257. Entry 252 — H2 initial lock validation PASS / bounded normalization correction begins
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **H2 INITIAL LOCK VALIDATION PASS**
+
+Validated:
+
+- owner-approved Type-7 ROCE derivation;
+- deterministic Capital Efficiency read-only candidate = 79;
+- deterministic Balance Sheet / Credit read-only candidate = 65;
+- official-source Domestic Growth package and read-only candidate = 78.25;
+- eight-quarter Quality raw Operating EBITDA / revenue evidence package;
+- strict TypeScript;
+- architecture guard;
+- architecture lint;
+- production build;
+- `git diff --check`.
+
+### Closed H2 initial-lock state
+
+The initial H2 derivation/evidence lock is now validated.
+
+### Remaining bounded H2 correction
+
+H2 exposed three deterministic normalization omissions:
+
+1. Business Durability component evidence → 0–100 component scores;
+2. Ownership / Governance component evidence → 0–100 component scores;
+3. Risk regulatory runtime context → 0–100 regulatory-context score.
+
+These are handled as one bounded H2 correction.
+
+No H2A/H2B/H2C stages are introduced.
+
+### Safety state
+
+- production mutation: NO
+- provider refresh: NO
+- paid API call: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- deployment: NO
+- PR merge: NO
+
+**NEXT WORK:** define owner-reviewable deterministic normalization contracts for the three missing component families, validate them, then continue H2 evidence completion.
