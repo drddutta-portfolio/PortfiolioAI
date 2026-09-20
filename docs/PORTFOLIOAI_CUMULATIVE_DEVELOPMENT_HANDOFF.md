@@ -25917,3 +25917,37 @@ AUROPHARMA = INSUFFICIENT / SCORE_NOT_COMPUTABLE
 I3 remains open until the corrected core-shell + sector-add-on visual composition is locally validated.
 
 I4 remains NOT STARTED.
+
+
+---
+
+## 299. Entry 294 — I3 shared-shell guard narrowed to reference stocks; test selector correction
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The first local validation after the core-shell / sector-add-on integration reported one focused test failure.
+
+A review of the integration also identified an important scope hardening opportunity: the generic sector-recommendation bridge should not activate for every PHARMA_V1 security during I3, because Gate I3 is intentionally limited to the two reference controls.
+
+### Correction
+
+The read-only I3 bridge is now enabled only when both conditions are true:
+
+- profile = `PHARMA_V1`;
+- symbol = `TORNTPHARM` or `AUROPHARMA`.
+
+Therefore:
+
+- all non-Pharma stocks remain on the pre-existing universal core-shell path;
+- other Pharma stocks outside the two I3 reference controls also remain on their pre-existing core-shell path;
+- only TORNTPHARM and AUROPHARMA receive the temporary Gate I3 read-only sector recommendation extension.
+
+No common stock-page structure, layout grammar, Decision Workspace ownership, or non-reference recommendation behavior is intentionally changed.
+
+The newly added shared-shell test was also corrected to scope repeated labels such as `Action bias` and `Suggested weight range` inside the PortfolioAI advisory card rather than querying duplicate labels in Key Insights.
+
+No methodology, score, role result, persistence rule, or production state changed.
+
+I3 remains open pending a clean local rerun.
