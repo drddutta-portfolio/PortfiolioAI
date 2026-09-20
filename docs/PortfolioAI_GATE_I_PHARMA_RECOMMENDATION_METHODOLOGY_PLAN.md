@@ -1,5 +1,5 @@
 # PortfolioAI — Gate I Plan
-## PHARMA_V1 Recommendation Methodology and First Deterministic Read-Only TORNTPHARM Recommendation
+## PHARMA_V1 Recommendation Methodology, First TORNTPHARM Recommendation, and AUROPHARMA Fail-Closed Control
 
 **Date:** 21 September 2026
 **Repository:** `drddutta-portfolio/PortfiolioAI`
@@ -10,7 +10,20 @@
 **Primary subprofile:** DOMESTIC_FORMULATIONS
 **Gate H score:** 75.1575 / 100
 **Gate H state:** COMPLETE / PASS
-**Status:** PLANNED — NOT STARTED
+**Status:** IN PROGRESS — I1 IMPLEMENTED / CONSOLIDATED VALIDATION PENDING
+
+**Owner-approved revised-plan corrections adopted before I1 implementation:**
+
+- TORNTPHARM Gate H score 75.1575 is closed / hand-verified / reproducible / **non-persisting**; score persistence remains OFF.
+- Canonical assignment identity is security-scoped plus `PHARMA / PHARMA_V1` profile/version scoped; Primary/secondary roles are resolved from that assignment rather than being lookup keys.
+- Recommendation input composes canonical assignment authority with a separate explicit score authority.
+- Score state is structurally discriminated as `SCORE_READY` vs `SCORE_NOT_COMPUTABLE`; assignment state is independently `RESOLVED` vs blocked.
+- AUROPHARMA is the I3 fail-closed negative control, not a second completed-score recommendation pilot.
+- Missing role-floor data and evaluated role-floor failure must remain distinct in I2.
+- A failed role-specific floor makes that role ineligible and falls through the approved role ladder; only an approved global blocker may directly force Avoid/blocker.
+- Material Overlay context cannot create an independent score, role or recommendation.
+- I4 must prove zero mutation-capable path invocation, not merely unchanged stored values.
+
 
 ---
 
@@ -176,7 +189,7 @@ Gate I is explicitly capped at:
 ```text
 I1 — Recommendation authority / architecture reconciliation
 I2 — PHARMA_V1 recommendation methodology lock
-I3 — First deterministic read-only TORNTPHARM recommendation
+I3 — First recommendation + fail-closed AUROPHARMA reference control
 I4 — Independent verification and Gate I closure
 ```
 
@@ -435,11 +448,15 @@ The policy remains read-only and is not yet materialized into production.
 
 ---
 
-# 8. I3 — First deterministic read-only TORNTPHARM recommendation
+# 8. I3 — First Recommendation + Fail-Closed Reference Control
 
 ## Purpose
 
-Apply the I2-approved recommendation policy once to the closed Gate H TORNTPHARM input package.
+Apply the I2-approved recommendation policy to TORNTPHARM as the first real completed-score recommendation and to AUROPHARMA as the real fail-closed negative control.
+
+TORNTPHARM uses the closed Gate H score of 75.1575.
+
+AUROPHARMA remains `SCORE_NOT_COMPUTABLE` because Global Generics Primary methodology is incomplete and must resolve to explicit fail-closed `INSUFFICIENT` in I3 without score reconstruction.
 
 ## Calculation order
 
@@ -728,8 +745,8 @@ Only after Gate I closure should the project decide the next separate downstream
 
 ```text
 Gate H = COMPLETE / PASS
-Gate I plan = CREATED
-I1 = NOT STARTED
+Gate I plan = REVISED / ADOPTED
+I1 = IMPLEMENTED / VALIDATION PENDING
 I2 = NOT STARTED
 I3 = NOT STARTED
 I4 = NOT STARTED

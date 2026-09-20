@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I plan created; I1 NOT STARTED
+**Current stage:** Gate H COMPLETE / PASS; revised Gate I plan adopted; I1 implemented; consolidated validation and owner review pending
 
 ---
 
@@ -25207,3 +25207,75 @@ I4 = NOT STARTED
 Do not begin I1 automatically.
 
 PR #101 remains OPEN / DRAFT / UNMERGED.
+
+
+---
+
+## 292. Entry 287 — Gate I1 recommendation authority implemented / validation pending
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Gate I base head:** `c787c518dc8f1604073ccfc6b90dd02315c04b2b`
+
+The owner-authorized revised Gate I plan has been adopted.
+
+I1 implementation is now present.
+
+### Added
+
+- `src/features/research/pharmaRecommendationAuthority.ts`
+- `src/features/research/pharmaRecommendationAuthority.test.ts`
+- `src/features/research/sectorRecommendation.pharmaV1Strict.test.ts`
+- `docs/PortfolioAI_GATE_I_I1_RECOMMENDATION_AUTHORITY_REVIEW.md`
+- `scripts/i1-validate-pharma-recommendation-authority.sh`
+
+### I1 architecture decisions implemented
+
+1. Canonical assignment authority remains security scoped and `PHARMA / PHARMA_V1` profile/version scoped.
+2. Recommendation input composes assignment authority with a separate score authority; no assignment table is treated as a score store.
+3. Score authority is discriminated:
+   - `SCORE_READY`;
+   - `SCORE_NOT_COMPUTABLE`.
+4. Assignment authority is independently discriminated:
+   - `RESOLVED`;
+   - `BLOCKED`.
+5. PHARMA_V1 recommendation policy identity is native to `PHARMA_V1`; legacy `PHARMA_HEALTHCARE` policy usage is forbidden for Gate I.
+6. The generic recommendation helper's missing-overall-score reconstruction is disabled for `profileCode = PHARMA_V1`.
+7. Closed score authority requires all ten dimensions, finite scores and full readiness.
+8. Cross-security score/assignment mismatch and Primary-subprofile mismatch fail structurally.
+9. AUROPHARMA can be represented as `SCORE_NOT_COMPUTABLE` with reason `GLOBAL_GENERICS_PRIMARY_METHODOLOGY_INCOMPLETE` without exposing partial dimensions to recommendation.
+10. No recommendation thresholds, floors, blockers or cautions have been invented in I1.
+
+### Safety
+
+No I1 change:
+
+- persisted the Gate H score;
+- wrote a recommendation run;
+- mutated canonical assignments;
+- changed production Supabase;
+- invoked a provider;
+- invoked AI interpretation;
+- invoked position sizing;
+- deployed;
+- merged PR #101.
+
+### Validation command
+
+Run:
+
+`git pull && bash scripts/i1-validate-pharma-recommendation-authority.sh`
+
+### CURRENT STOP POINT
+
+```text
+Gate H = COMPLETE / PASS
+Gate I plan = REVISED / ADOPTED
+I1 = IMPLEMENTED / VALIDATION PENDING / OWNER REVIEW PENDING
+I2 = NOT STARTED
+I3 = NOT STARTED
+I4 = NOT STARTED
+```
+
+Do not start I2 until I1 validation passes and the owner approves the I1 architecture.

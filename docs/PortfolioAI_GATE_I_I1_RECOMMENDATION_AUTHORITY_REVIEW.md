@@ -1,0 +1,223 @@
+# PortfolioAI — Gate I / I1 Recommendation Authority and Architecture Reconciliation
+
+**Date:** 21 September 2026
+**Repository:** `drddutta-portfolio/PortfiolioAI`
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Stage:** I1 — Recommendation Authority / Architecture Reconciliation
+**Status:** IMPLEMENTED / CONSOLIDATED VALIDATION PENDING / OWNER REVIEW PENDING
+
+## Purpose
+
+I1 freezes the authority boundary through which PHARMA_V1 scoring may later enter recommendation methodology.
+
+I1 does **not** define recommendation thresholds, floors, blockers, cautions, or a TORNTPHARM role.
+
+## Implemented authority contract
+
+Added:
+
+- `src/features/research/pharmaRecommendationAuthority.ts`
+- `src/features/research/pharmaRecommendationAuthority.test.ts`
+- `src/features/research/sectorRecommendation.pharmaV1Strict.test.ts`
+
+Version:
+
+`PHARMA_GATE_I1_RECOMMENDATION_AUTHORITY_V1`
+
+### Canonical assignment authority
+
+Recommendation inputs consume the existing PHARMA_V1 assignment resolution contract.
+
+Identity remains:
+
+```text
+security_id
++ parent_profile_code = PHARMA
++ parent_profile_version = PHARMA_V1
+```
+
+The recommendation-input assembler accepts the already resolved `PharmaSubprofileResolution`; it does not infer Primary or secondary roles from symbol, company name, sector label, or category text.
+
+### Score authority is separate
+
+I1 does not pretend the assignment repository stores the Gate H score.
+
+The input assembler composes:
+
+```text
+canonical assignment authority
+        +
+explicit score authority
+        ↓
+Gate I recommendation input
+```
+
+For a closed score, `buildGateHClosedScoreAuthority` requires:
+
+- finite authoritative overall score;
+- exactly ten PHARMA_V1 dimensions;
+- finite score for every dimension;
+- full readiness coverage for every dimension;
+- read-only / non-persisting source result.
+
+The TORNTPHARM H3/H4 score remains exactly 75.1575.
+
+### Typed score state
+
+I1 distinguishes:
+
+```text
+SCORE_READY
+SCORE_NOT_COMPUTABLE
+```
+
+A score-not-computable authority contains:
+
+- `overallScore = null`;
+- no recommendation-consumable partial dimension score array;
+- explicit reason code;
+- explicit upstream contract lineage.
+
+This prevents a nullable score field from silently becoming a partial-score recommendation path.
+
+### Typed assignment state
+
+I1 separately distinguishes:
+
+```text
+RESOLVED
+BLOCKED
+```
+
+Assignment failure and score non-computability therefore cannot collapse into one ambiguous null state.
+
+### PHARMA_V1 policy identity
+
+I1 freezes a PHARMA_V1-native recommendation policy identity:
+
+```text
+research authority:
+  PHARMA / PHARMA_V1
+
+recommendation policy code:
+  PHARMA_V1
+
+policy storage state:
+  NOT_MATERIALIZED
+
+legacy PHARMA_HEALTHCARE usage:
+  FORBIDDEN_FOR_GATE_I
+```
+
+No production recommendation-policy row was created or changed.
+
+## Legacy score-reconstruction fallback
+
+The existing generic recommendation helper can reconstruct an overall preview from available weighted dimensions when `overallScore` is null.
+
+That legacy behavior remains available outside PHARMA_V1 for backward compatibility.
+
+For `profileCode = PHARMA_V1`, it is now disabled:
+
+```text
+overallScore = null
+    ↓
+no reconstruction
+    ↓
+overallScore remains null
+    ↓
+recommendation helper fails closed as INSUFFICIENT
+```
+
+The regression test deliberately supplies complete, high-scoring dimensions with a null overall score and verifies that PHARMA_V1 still returns `INSUFFICIENT`.
+
+A companion legacy test verifies that the generic fallback remains unchanged for non-PHARMA_V1 profiles.
+
+## Cross-company authority isolation
+
+The I1 assembler rejects:
+
+- score authority whose `securityId` differs from the selected security;
+- canonical assignment whose security differs from the selected security;
+- assignment Primary subprofile that conflicts with score-authority Primary subprofile.
+
+This is the recommendation-layer counterpart to earlier scoring/assignment isolation rules.
+
+## AUROPHARMA negative-control readiness
+
+I1 can represent the approved AUROPHARMA state without constructing a partial score:
+
+```text
+Primary = GLOBAL_GENERICS
+score authority = SCORE_NOT_COMPUTABLE
+overallScore = null
+reason = GLOBAL_GENERICS_PRIMARY_METHODOLOGY_INCOMPLETE
+recommendation eligibility = FAIL_CLOSED
+```
+
+I1 does not yet map that eligibility state to the final recommendation ontology; that happens in I2/I3 after recommendation policy approval.
+
+## No methodology invented
+
+I1 creates no:
+
+- Core threshold;
+- Satellite threshold;
+- Watch threshold;
+- dimension floor;
+- hard blocker;
+- caution threshold;
+- weight guidance;
+- action bias.
+
+Those remain I2 work.
+
+## Safety
+
+I1 performs no:
+
+- score persistence;
+- recommendation persistence;
+- assignment mutation;
+- production Supabase mutation;
+- provider call;
+- Edge Function call;
+- AI interpretation;
+- position sizing;
+- deployment;
+- PR merge.
+
+## Consolidated validation
+
+Run:
+
+```bash
+git pull && bash scripts/i1-validate-pharma-recommendation-authority.sh
+```
+
+The script validates:
+
+1. I1 authority + strict-fallback + canonical assignment + Gate H/AUROPHARMA regressions;
+2. strict TypeScript;
+3. presentation data-boundary architecture guard;
+4. focused I1 ESLint;
+5. existing architecture lint;
+6. production build;
+7. I1 diff whitespace.
+
+No Edge tests are required because I1 changes no Edge Function code.
+
+## I1 closure condition
+
+I1 closes only after the consolidated validation passes and owner approves the architecture boundary.
+
+Current state:
+
+```text
+Gate H = COMPLETE / PASS
+I1 = IMPLEMENTED / VALIDATION PENDING / OWNER REVIEW PENDING
+I2 = NOT STARTED
+I3 = NOT STARTED
+I4 = NOT STARTED
+```
