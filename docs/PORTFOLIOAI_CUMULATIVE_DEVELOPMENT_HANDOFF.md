@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`  
 **Created:** 16 September 2026  
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101  
-**Current stage:** Gate H / H3 COMPLETE / PASS; first deterministic read-only TORNTPHARM score owner-approved at 75.1575; H4 not started
+**Current stage:** Gate H / H3 COMPLETE / PASS; H4 independent verification implemented; consolidated H4 validation pending; Gate H not yet closed
 
 ---
 
@@ -24945,3 +24945,56 @@ Do **not**:
 - start Gate I.
 
 The next development action, only when explicitly requested, is **H4 — independent verification + determinism + Gate H closure**.
+
+
+---
+
+## 289. Entry 284 — H4 independent verification implementation checkpoint
+
+**Date:** 20 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**H4 base head:** `3a52fb7b1930a1067e75af83bb583a10051b77d1`
+
+H4 has been implemented as one final verification stage, without reopening H2/H3 and without introducing a second production scoring engine.
+
+Added:
+
+- `src/features/research/torntpharmGateH4IndependentVerification.ts`
+- `src/features/research/torntpharmGateH4IndependentVerification.test.ts`
+- `scripts/h4-validate-torntpharm-gate-h-closure.sh`
+- `docs/PortfolioAI_GATE_H_H4_FINAL_VERIFICATION_AND_CLOSURE.md`
+
+The verification independently reconstructs all ten dimension scores from locked raw evidence / reviewed component states and approved contracts, then compares the hand result to H3 only at the final cross-check.
+
+Independent hand result:
+
+> **75.1575 / 100**
+
+H3 adapter result:
+
+> **75.1575 / 100**
+
+Static H4 verification also covers:
+
+- Global Generics 12.05% below the 15% numeric threshold;
+- no numeric overlay modifier;
+- CDMO / CRAMS Emerging Watch numeric exclusion;
+- governance independently resolving CLEAR;
+- historical regulatory event retained without a second penalty;
+- no BANK_NBFC leakage;
+- no NIFTY Bank leakage;
+- NIFTY Pharma benchmark retained;
+- no second Global Generics stock score;
+- no missing-evidence neutralization;
+- no hidden denominator renormalization;
+- repeated H3 calculation identity;
+- score persistence/recommendation/sizing remain OFF.
+
+**CURRENT STOP POINT:** run the single consolidated H4 validation command:
+
+`git pull && bash scripts/h4-validate-torntpharm-gate-h-closure.sh`
+
+Do not close Gate H unless that command returns `H4 VALIDATION PASS`.
+
+Do not start Gate I automatically.
