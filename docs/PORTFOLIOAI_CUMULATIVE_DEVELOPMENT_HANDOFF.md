@@ -21923,3 +21923,72 @@ The pre-freeze validation passed before owner approval. The owner-approved code 
 - automatic trading: NO
 
 **CURRENT STOP POINT:** run the consolidated post-freeze G-FINAL-2 validation. If PASS, formally close G-FINAL-2 and proceed directly to G-FINAL-3. No G-FINAL-2C/2D/2E stages exist.
+
+
+---
+
+## 247. Entry 242 — G-FINAL-2 post-freeze validation PASS / checkpoint formally closed
+
+**Date:** 20 September 2026  
+**Actor:** owner-executed local validation + ChatGPT closure record  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner completed the consolidated post-freeze validation and reported:
+
+> **G-FINAL-2 POST-FREEZE VALIDATION PASS**
+
+Validated:
+
+- owner-approved seven-dimension methodology tests;
+- G-FINAL-2 closure manifest tests;
+- TORNTPHARM G7 explainable preview tests;
+- G7 read-only scoring adapter tests;
+- TORNTPHARM G-FINAL-2 evidence sufficiency tests;
+- Gate G parent-profile tests;
+- dimension reconciliation tests;
+- Pharma subprofile contract tests;
+- strict TypeScript;
+- architecture guard;
+- architecture lint;
+- production build;
+- `git diff --check`.
+
+### Closed state
+
+> **G-FINAL-2 = COMPLETE / PASS**
+
+The following Domestic Formulations dimensions now have owner-approved deterministic methodology contracts:
+
+- Capital Efficiency
+- Cash Flow
+- Balance Sheet / Credit
+- Business Durability
+- Momentum
+- Ownership / Governance
+- Risk
+
+Together with G-FINAL-1, all ten weighted PHARMA_V1 dimensions now have approved methodology contracts.
+
+### Remaining Gate G work
+
+Only two canonical checkpoints remain:
+
+- **G-FINAL-3** — Material Overlay + governance/regulatory runtime
+- **G-FINAL-4** — full end-to-end read-only TORNTPHARM scoring integration + hand-verifiable dry run
+
+Gate H remains blocked until both pass.
+
+### Safety state
+
+- production mutation: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+**NEXT CHECKPOINT:** begin G-FINAL-3. No additional G-FINAL-2 sub-stages exist.
