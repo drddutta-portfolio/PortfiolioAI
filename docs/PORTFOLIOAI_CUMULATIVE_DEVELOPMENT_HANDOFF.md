@@ -25547,3 +25547,25 @@ I4 = NOT STARTED
 ```
 
 Do not start I3 automatically.
+
+
+### I2 first validation attempt — focused lint cleanup
+
+The owner ran:
+
+`git pull && bash scripts/i2-validate-pharma-recommendation-methodology.sh`
+
+Results before the stop:
+
+- **5 / 5 focused test files passed**;
+- **35 / 35 tests passed**;
+- strict TypeScript = PASS;
+- presentation data-boundary architecture guard = PASS.
+
+Focused ESLint then found two unnecessary TypeScript assertions in `pharmaRecommendationPolicyCandidate.ts`:
+
+`minimum as number`
+
+The two redundant casts were removed. No I2 methodology or behavior changed.
+
+**I2 remains CANDIDATE IMPLEMENTED / VALIDATION + OWNER APPROVAL PENDING.**
