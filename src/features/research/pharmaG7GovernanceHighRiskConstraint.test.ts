@@ -15,14 +15,16 @@ const base = {
 }
 
 describe("G7-P2 governance high-risk constraint", () => {
-  it("remains proposal-only and has no numeric high-risk cap", () => {
-    expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.state).toBe("PROPOSAL_ONLY")
+  it("is owner-approved, non-active and has no numeric high-risk cap", () => {
+    expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.state).toBe("OWNER_APPROVED_NOT_ACTIVE")
     expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.highRiskBehavior).toBe("INTERPRETATION_ONLY")
     expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.highRiskNumericCapValue).toBeNull()
     expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.highRiskDimensionPenaltyEnabled).toBe(false)
     expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.highRiskOverallCapEnabled).toBe(false)
     expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.hiddenDoubleCountingAllowed).toBe(false)
-    expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.g71ConsumptionApproved).toBe(false)
+    expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.methodologyApproved).toBe(true)
+    expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.ownerValidationRequired).toBe(false)
+    expect(PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT.g71ConsumptionApproved).toBe(true)
   })
 
   it("preserves explicit blocked-review behavior", () => {
