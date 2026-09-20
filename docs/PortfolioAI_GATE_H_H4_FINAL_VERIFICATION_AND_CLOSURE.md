@@ -293,6 +293,25 @@ CDMO / CRAMS remains Emerging Watch:
 - denominator participation = none;
 - second stock score = none.
 
+## Explicit lineage manifest
+
+The H4 verifier exposes evidence lineage separately from the score result for every weighted dimension.
+
+Evidence authorities include:
+
+- Quality — the exact issuer quarterly releases referenced by the eight locked operating-margin rows;
+- Growth — the four exact issuer result releases used for the comparable Domestic growth series;
+- Capital Efficiency — `TORNTPHARM_OFFICIAL_MANIFEST_FIXTURE:ROCE_MANAGEMENT_ANNUAL`, transcribed from the owner-reviewed R4L official evidence manifest;
+- Cash Flow — the FY2024-25 and FY2025-26 issuer annual reports used for matched CFO/PAT/CAPEX/FCF;
+- Balance Sheet / Credit — the locked official-manifest Net Debt/EBITDA and Interest Coverage series;
+- Business Durability — all component source-lineage entries from the owner-approved H2 review;
+- Valuation — `docs/PortfolioAI_GATE_H_H2_MA_TRANSITION_VALUATION_V1.md`;
+- Momentum — local Supabase Angel One TORNTPHARM + NIFTY Pharma history, as-of 17 Sep 2026;
+- Ownership / Governance — the four exact official shareholding-pattern documents;
+- Risk — local Angel One market history plus the owner-approved regulatory runtime mapping.
+
+The verifier also exposes the methodology contract version used for every dimension, the fixed-weight contract, the overlay contract, and the governance constraint/runtime contract.
+
 ## Anti-leakage verification
 
 H4 explicitly tests:

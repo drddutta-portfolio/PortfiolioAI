@@ -142,6 +142,21 @@ describe("Gate H H4 independent TORNTPHARM verification", () => {
     })
   })
 
+  it("preserves explicit evidence and methodology lineage for every weighted dimension", () => {
+    for (const lineage of Object.values(result.evidenceLineage)) {
+      expect(lineage.length).toBeGreaterThan(0)
+    }
+    expect(result.methodologyLineage.overallWeights).toBe(
+      "PHARMA_V1_GATE_G_SCORING_METHOD_PROPOSAL_V1",
+    )
+    expect(result.methodologyLineage.VALUATION).toContain(
+      "PHARMA_DOMESTIC_VALUATION_MA_TRANSITION_V1_OWNER_APPROVED",
+    )
+    expect(result.methodologyLineage.overlay).toBe(
+      "PHARMA_V1_OVERLAY_MODIFIER_V1_PROPOSAL",
+    )
+  })
+
   it("proves deterministic repeated calculation and preservation of the read-only safety boundary", () => {
     expect(result.determinism.repeatedCalculationIdentical).toBe(true)
     expect(result.determinism.firstOverallScore).toBe(75.1575)
