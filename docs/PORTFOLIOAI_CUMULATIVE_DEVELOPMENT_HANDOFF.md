@@ -24209,3 +24209,46 @@ It does **not** authorize:
 - PR merge.
 
 **CURRENT STOP POINT:** lock this cohort in the H2 read-only input package and acquire comparable PE_TTM + EV_EBITDA evidence for MANKIND, ERIS and EMCURE.
+
+
+---
+
+## 281. Entry 276 — H2 peer cohort locked; local valuation evidence audit prepared
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Following owner approval of the H2 Domestic Formulations peer set, the read-only cohort has been locked in repository artifacts.
+
+Added:
+
+- `src/features/research/torntpharmGateH2DomesticPeerSet.ts`
+- `src/features/research/torntpharmGateH2DomesticPeerSet.test.ts`
+- `docs/PortfolioAI_GATE_H_H2_DOMESTIC_PEER_SET_LOCK.md`
+- `scripts/h2-local-valuation-evidence-audit.sh`
+
+### Locked H2 peer set
+
+- MANKIND — DOMESTIC_FORMULATIONS / HIGH
+- ERIS — DOMESTIC_FORMULATIONS / HIGH
+- EMCURE — DOMESTIC_FORMULATIONS / MEDIUM with material international / Global Generics context retained
+
+### Valuation evidence strategy
+
+Before requesting any additional Trendlyne peer calls, H2 will first inspect the local fixture for existing usable evidence.
+
+The local audit reports:
+
+- security presence;
+- latest PE_TTM;
+- latest EV_EBITDA;
+- latest TORNTPHARM PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT;
+- latest MARKET_CAP_PROVIDER_RAW;
+- evidence status and freshness;
+- per-metric 3-peer readiness count.
+
+The audit is read-only.
+
+No provider call, no database write, no assignment persistence and no score execution are performed by this audit.
+
+**CURRENT STOP POINT:** owner should pull and run `bash scripts/h2-local-valuation-evidence-audit.sh`; use the result to decide the exact minimum additional valuation evidence acquisition.
