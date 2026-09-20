@@ -5,7 +5,7 @@
 **Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — KEEP OPEN / DRAFT / UNMERGED
 **Stage:** H3 — FIRST DETERMINISTIC READ-ONLY TORNTPHARM SCORE
-**Status:** IMPLEMENTED / CONSOLIDATED VALIDATION PASS / OWNER REVIEW PENDING
+**Status:** COMPLETE / PASS — OWNER APPROVED
 
 ## Purpose
 
@@ -165,6 +165,22 @@ Owner-run validation on 20 September 2026 completed successfully:
 
 The production build emitted the existing Vite chunk-size advisory for large generated bundles; it did not fail the build and is not an H3 scoring blocker.
 
+## Owner approval and H3 closure
+
+Owner approval recorded exactly as:
+
+`H3 VALIDATION PASS — APPROVE FIRST DETERMINISTIC READ-ONLY TORNTPHARM SCORE 75.1575`
+
+Closure state:
+
+> **H3 = COMPLETE / PASS**
+
+The approved first deterministic TORNTPHARM PHARMA_V1 company score is:
+
+> **75.1575 / 100 — READ-ONLY / NON-PERSISTING**
+
+This approval closes H3 only. It does not authorize persistence, recommendation, position sizing, production mutation, deployment, PR merge, or H4 execution.
+
 ## Safety boundary
 
 H3 does **not** authorize or perform:
@@ -185,7 +201,7 @@ Production remains untouched.
 
 H1 = COMPLETE / PASS
 H2 = COMPLETE / PASS
-H3 = IMPLEMENTED / VALIDATION PASS / OWNER REVIEW PENDING
+H3 = COMPLETE / PASS
 H4 = NOT STARTED
 
 Gate H is **not** closed by this document. H4 remains the separate independent hand-verification and closure stage.
