@@ -65,15 +65,28 @@ else
     rm -f "$TMP_ENV"
     die "A manual 'supabase functions serve' process is already running. Stop it or export H2_REUSE_FUNCTION_SERVER=1."
   fi
-  supabase functions serve h2-local-pharma-valuation-evidence --no-verify-jwt --env-file "$TMP_ENV" --debug >"$LOG_FILE" 2>&1 &
+
+  # Match the repository's established local Edge Functions startup pattern.
+  # Serving all local functions avoids Supabase CLI positional-profile parsing issues
+  # seen on CLI 2.72.x when a function name is supplied before the flags.
+  supabase functions serve --no-verify-jwt --env-file "$TMP_ENV" --debug >"$LOG_FILE" 2>&1 &
   SERVE_PID=$!
   trap 'kill "$SERVE_PID" >/dev/null 2>&1 || true; rm -f "$TMP_ENV"' EXIT
 
+  SERVER_READY=0
   for _ in {1..30}; do
-    if curl -sS -o /dev/null "$API_URL/functions/v1/h2-local-pharma-valuation-evidence"; then break; fi
+    if ! kill -0 "$SERVE_PID" >/dev/null 2>&1; then
+      break
+    fi
+    STATUS_CHECK="$(curl -sS -o /dev/null -w '%{http_code}' "$API_URL/functions/v1/h2-local-pharma-valuation-evidence" || true)"
+    if [[ "$STATUS_CHECK" != "000" ]]; then
+      SERVER_READY=1
+      break
+    fi
     sleep 1
   done
-  kill -0 "$SERVE_PID" >/dev/null 2>&1 || die "Local function server failed to start. Review $LOG_FILE."
+
+  [[ "$SERVER_READY" == "1" ]] || die "Local function server failed to start. Review $LOG_FILE."
 fi
 
 if [[ "$MODE" == "PLAN" ]]; then
@@ -83,14 +96,19 @@ else
 fi
 
 RESPONSE="$(mktemp)"
+trap 'rm -f "$RESPONSE" "$TMP_ENV"; if [[ -n "${SERVE_PID:-}" ]]; then kill "$SERVE_PID" >/dev/null 2>&1 || true; fi' EXIT
+
 STATUS="$(curl --max-time 90 -sS -o "$RESPONSE" -w '%{http_code}' -X POST "$API_URL/functions/v1/h2-local-pharma-valuation-evidence" \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -H "apikey: $ANON_KEY" \
   -H "Content-Type: application/json" \
   -d "$PAYLOAD")"
 
-cat "$RESPONSE" | jq .
-rm -f "$RESPONSE"
+if jq . "$RESPONSE" >/dev/null 2>&1; then
+  jq . "$RESPONSE"
+else
+  cat "$RESPONSE"
+fi
 
 if [[ "$STATUS" -lt 200 || "$STATUS" -ge 300 ]]; then
   die "Local H2 valuation $MODE failed with HTTP $STATUS. Review $LOG_FILE."
