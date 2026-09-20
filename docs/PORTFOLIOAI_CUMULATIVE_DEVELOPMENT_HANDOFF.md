@@ -24998,3 +24998,14 @@ Static H4 verification also covers:
 Do not close Gate H unless that command returns `H4 VALIDATION PASS`.
 
 Do not start Gate I automatically.
+
+
+### H4 validation harness note — Deno Edge test boundary
+
+A full `npm test` attempt reached **1,089 passed tests** with no failed application assertion, but Vitest also discovered the native Deno test `supabase/functions/refresh-pharma-benchmark/index.test.ts`, which imports `jsr:@std/assert` and cannot be executed by the Node/Vitest runner.
+
+H4 changes no Edge Function code and Edge tests are not required for Gate H closure. The H4 validation script therefore now defines the full application suite as:
+
+`npx vitest run --exclude "supabase/functions/**"`
+
+No Edge test or project-wide test script was modified.
