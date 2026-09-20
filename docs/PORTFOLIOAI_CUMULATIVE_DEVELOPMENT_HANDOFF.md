@@ -24805,9 +24805,9 @@ Once the owner accepts H3, move separately to H4 for independent hand verificati
 
 ## 288. Entry 283 — H3 formal closure and first deterministic TORNTPHARM score owner approval
 
-**Date:** 20 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Date:** 20 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
 **Canonical H3 closure commit before this HANDOFF update:** `884d5239a295effd85c3c81acf048f4cb6add189`
 
 ### Owner approval
