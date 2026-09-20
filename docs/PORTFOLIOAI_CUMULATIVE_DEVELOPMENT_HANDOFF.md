@@ -22427,3 +22427,60 @@ Gate H closes only when:
 Only then may Gate I begin.
 
 **NEXT STEP:** H1 — build the exact all-10 TORNTPHARM score-input readiness matrix from current canonical/local evidence and stored source records.
+
+
+---
+
+## 254. Entry 249 — Gate H H1 exact TORNTPHARM input-readiness audit implemented
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Gate H H1 has been implemented as a read-only audit of all ten weighted PHARMA_V1 dimensions.
+
+Added:
+
+- `src/features/research/torntpharmGateHInputReadiness.ts`
+- `src/features/research/torntpharmGateHInputReadiness.test.ts`
+- `docs/PortfolioAI_GATE_H_H1_TORNTPHARM_INPUT_READINESS_AUDIT.md`
+
+### H1 result
+
+Current fully score-ready dimensions:
+
+> **0 / 10**
+
+Raw-history minimum is already present for:
+
+- Capital Efficiency
+- Balance Sheet / Credit
+
+These should move first in H2 to versioned deterministic derived-statistic locks.
+
+Current evidence blockers:
+
+- Quality — 0 matched operating-margin quarters in exact fixture vs 8 required;
+- Growth — Primary Domestic four-quarter series not locked; four Global Generics US-growth candidates remain proposal inputs;
+- Cash Flow — only one CFO annual period;
+- Business Durability — four normalized reviewed components missing;
+- Valuation — real TORNTPHARM self-history/peer/cash-flow component package missing;
+- Momentum — market-history fixture missing;
+- Ownership/Governance — four-quarter package and normalized components missing;
+- Risk — governance runtime REVIEW_REQUIRED plus drawdown/volatility missing.
+
+### Cross-cutting state
+
+Global Generics overlay remains not score-ready because economic materiality, completeness, confidence, normalized signal and contradiction state are not yet locked.
+
+### H1 status
+
+- implementation: COMPLETE
+- local validation: PENDING
+- H2 eligible: YES after validation
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- production/provider mutations: NONE
+
+**CURRENT STOP POINT:** owner runs H1 focused validation. If PASS, H1 closes and H2 begins with raw-history derivations first, then public-official evidence completion, valuation, market history, overlay and runtime lock.
