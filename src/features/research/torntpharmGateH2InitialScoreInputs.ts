@@ -10,6 +10,9 @@ import {
 import {
   TORNTPHARM_GATE_H2_DERIVED_STATISTICS_CANDIDATE,
 } from "./torntpharmGateH2DerivedStatisticsCandidate"
+import {
+  TORNTPHARM_GATE_H2_OWNERSHIP_GOVERNANCE_REVIEW,
+} from "./torntpharmGateH2OwnershipGovernanceReview"
 
 export const TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS_VERSION =
   "TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS_V1" as const
@@ -86,6 +89,15 @@ export const TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS = {
         TORNTPHARM_GATE_H2_BALANCE_SHEET_READ_ONLY_RESULT.interestCoverageScore,
       trendResilience:
         TORNTPHARM_GATE_H2_BALANCE_SHEET_READ_ONLY_RESULT.trendResilienceScore,
+    },
+  },
+  ownershipGovernance: {
+    state: "READ_ONLY_SCORE_CANDIDATE" as const,
+    score: TORNTPHARM_GATE_H2_OWNERSHIP_GOVERNANCE_REVIEW.combinedScore,
+    componentScores: {
+      ownershipStability: 75,
+      pledgeControlRisk: 75,
+      nonG4GovernanceContext: 50,
     },
   },
   scoreExecutionEnabled: false,
