@@ -77,6 +77,8 @@ import { buildTorntpharmG7ExplainablePreview } from "./pharmaTorntpharmG7Explain
 import { PHARMA_G7_RESEARCH_GAP_REGISTER, PHARMA_G7_VALIDATION_INVARIANTS } from "./pharmaG7ValidationAndResearchGapRegister"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
+import { buildPharmaSectorWorkspaceCapabilities } from "./pharmaSectorWorkspaceCapabilities"
+import { PharmaSectorCapabilityPanel } from "./PharmaSectorCapabilityPanel"
 import type { SecurityResearch } from "./types"
 
 function titleCase(value: string) {
@@ -199,6 +201,13 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const g7TorntpharmPreview = symbol.toLocaleUpperCase() === "TORNTPHARM"
     ? buildTorntpharmG7ExplainablePreview(model)
     : null
+  const sectorCapabilities = symbol.toLocaleUpperCase() === "TORNTPHARM"
+    ? buildPharmaSectorWorkspaceCapabilities(
+      resolution.data.assignment,
+      research.metrics,
+      evaluationDate,
+    )
+    : null
 
   return <section className="pharma-workspace-panel" aria-labelledby="pharma-workspace-title">
     <div className="pharma-workspace-titlebar">
@@ -216,6 +225,8 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
       <div><span>Secondary exposures</span><strong>{model.secondaries.length}</strong><small>{model.secondaries.length ? model.secondaries.map((item) => `${item.displayName} · ${titleCase(item.materiality)}`).join(" · ") : "None active"}</small></div>
       <div><span>Effective from</span><strong>{model.primary.effectiveFrom}</strong><small>Reviewed assignment authority</small></div>
     </div>
+
+    {sectorCapabilities ? <PharmaSectorCapabilityPanel capabilities={sectorCapabilities} /> : null}
 
     <details className="pharma-deep-layer pharma-scoring-methodology">
       <summary>
