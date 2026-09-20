@@ -23712,3 +23712,76 @@ Risk remains incomplete only because market-risk evidence is absent:
 No provider refresh, licensed source call, production evidence mutation, score execution or persistence has occurred.
 
 **CURRENT STOP POINT:** continue H2 with read-only peer-cohort evidence review, then determine the exact remaining authorization required for market/licensed evidence.
+
+
+---
+
+## 273. Entry 268 — H2 NIFTY Pharma benchmark refresh plumbing prepared locally
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After the regulatory runtime validation PASS, H2 inspected the remaining market-history path.
+
+### Structural blocker found
+
+Existing production `refresh-market-history` is restricted to held equities and can refresh TORNTPHARM.
+
+The only deployed benchmark refresher is `refresh-bank-benchmark`, hard-restricted to HDFCBANK + NIFTY Bank.
+
+Therefore the approved PHARMA_V1 NIFTY Pharma benchmark could not be acquired through an existing Pharma-specific benchmark path.
+
+### Local-only implementation
+
+Added:
+
+- `supabase/functions/refresh-pharma-benchmark/index.ts`
+- `supabase/functions/refresh-pharma-benchmark/index.test.ts`
+- `docs/PortfolioAI_GATE_H_H2_NIFTY_PHARMA_BENCHMARK_REFRESH.md`
+
+The implementation reuses the proven benchmark mechanics while being explicitly restricted to:
+
+- TORNTPHARM
+- NIFTY Pharma
+- Angel One AMXIDX exact identity resolution
+- 400-day history
+- deterministic 12M common-anchor relative strength
+- provider lease / cooldown
+- separate explicit confirmation token
+
+Execution confirmation required:
+
+`OWNER_CONFIRMED_PHARMA_BENCHMARK_REFRESH`
+
+### Important boundary
+
+This function has NOT been deployed.
+
+No provider call has been made.
+
+No benchmark/history/metric row has been written.
+
+### Peer cohort status
+
+Read-only inspection confirms:
+
+- MANKIND and ERIS have strong official evidence of Domestic Formulations identity;
+- EMCURE has a substantial separately disclosed India branded business;
+- however production still contains no reviewed/effective-dated peer assignments for these companies;
+- the G6.11 minimum peer cohort therefore remains unsatisfied.
+
+No provisional peer was silently promoted.
+
+### Remaining H2 authorization/evidence boundary
+
+Still required:
+
+1. validation of the local Pharma benchmark refresher;
+2. explicit approval before any Edge deployment;
+3. explicit approval before TORNTPHARM market-history execution;
+4. explicit approval before NIFTY Pharma benchmark execution;
+5. licensed Brand / Therapy Leadership cross-check;
+6. reviewed/effective-dated minimum three-peer Domestic Formulations cohort plus comparable PE and EV/EBITDA evidence;
+7. current valuation authority / self-history refresh as required.
+
+**CURRENT STOP POINT:** validate the local NIFTY Pharma benchmark plumbing. Do not deploy or execute it without a later exact owner authorization.
