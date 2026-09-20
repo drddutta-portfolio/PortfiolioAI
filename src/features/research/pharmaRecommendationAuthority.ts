@@ -174,7 +174,7 @@ interface GateHClosedReadOnlyScoreLike {
   }
   readonly emergingWatch: {
     readonly code: "CDMO_CRAMS"
-    readonly numericParticipation: false
+    readonly numericParticipation: boolean
   }
   readonly evidenceLineage: readonly string[]
   readonly methodologyLineage: readonly {
@@ -200,6 +200,25 @@ export function buildGateHClosedScoreAuthority(
   assertFiniteScore(result.overallScore, "overall score")
   if (result.dimensions.length !== 10) {
     throw new Error("Gate I1 closed-score authority requires all ten PHARMA_V1 dimensions")
+  }
+  if (result.emergingWatch.numericParticipation !== false) {
+    throw new Error(
+      "Gate I1 closed-score authority requires Emerging Watch numeric participation to remain disabled",
+    )
+  }
+  if (result.globalGenericsOverlay.numericModifierApplied !== false) {
+    throw new Error(
+      "Gate I1 closed-score authority requires the locked material overlay numeric modifier to remain unapplied",
+    )
+  }
+  if (
+    result.readOnly !== true
+    || result.nonPersisting !== true
+    || result.persistedScoreRunEnabled !== false
+  ) {
+    throw new Error(
+      "Gate I1 closed-score authority requires the Gate H read-only non-persisting safety boundary",
+    )
   }
 
   const dimensions = result.dimensions.map((dimension) => {
