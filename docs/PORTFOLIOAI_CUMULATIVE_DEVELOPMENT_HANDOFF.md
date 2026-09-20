@@ -20552,3 +20552,79 @@ PR #101 remains OPEN / DRAFT / UNMERGED.
 G9.3 V2 remains **OPEN**.
 
 **CURRENT STOP POINT:** owner should pull the latest branch, run the existing Local Supabase + Local Vite environment, open TORNTPHARM → Research → Overview → Pharmaceuticals deep research, and visually inspect the newly added reusable **PHARMA_V1 architecture, portability & activation state** layer. Do not proceed to AUROPHARMA or full local validation until this TORNTPHARM visual checkpoint is approved.
+
+
+---
+
+## 231. Entry 226 — G9.3 V2 TORNTPHARM capability visual-review corrections applied
+
+**Date:** 20 September 2026  
+**Actor:** ChatGPT repo inspection following owner-supplied localhost screenshots  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The TORNTPHARM reusable capability layer was reviewed against:
+
+- `docs/R4N_G9_3_PHARMA_V1_Sector_Workspace_Completion_V2.md`;
+- `docs/PortfolioAI_G9_Final_Implementation_Plan.md`;
+- the current reusable capability model/panel implementation;
+- the owner-supplied localhost screenshots summarized at the checkpoint.
+
+### Review result before correction
+
+The visual language, placement and TORNTPHARM role semantics were consistent with the restored Pharma workspace baseline:
+
+- universal R4M Research shell preserved;
+- capability layer remains inside Pharmaceuticals deep research;
+- placement remains after the existing model summary and before Gate G;
+- Primary = Domestic Formulations;
+- Material Overlay = Global Generics;
+- Emerging Watch = CDMO / CRAMS;
+- portability = 12/12 PASS;
+- raw evidence scope = SECURITY_COMPANY;
+- interpretation scope = COMPANY_ACTIVE_ASSIGNMENT_ROLE;
+- scoring / recommendation / sizing remain fail-closed.
+
+However, formal visual PASS was withheld because two G9.3 V2 contract surfaces were incomplete:
+
+1. **Activation-readiness & authority** did not visibly expose `unresolvedAuthority`, even though the reusable model already carried it.
+2. **Canonical assignment state** did not visibly expose the current Primary, reviewed secondary roles/materiality, unresolved exposures, and review/confidence context required by the canonical G9.3 plan.
+
+### Correction applied
+
+Updated:
+
+- `src/features/research/PharmaSectorCapabilityPanel.tsx`
+
+Added, without redesigning the shared page:
+
+- an explicit **Unresolved exposure authority** card in Activation-readiness & authority;
+- canonical-state rows for:
+  - Current Primary + confidence / reviewed state;
+  - Reviewed secondaries + Material/Emerging role;
+  - Unresolved exposures;
+  - Review provenance;
+  - existing resolver/version/effective-date/downstream fail-closed state retained.
+
+No Gate G → G7 content was removed or altered.
+
+### Safety state
+
+- production mutation: NO
+- production migration: NO
+- assignment mutation: NO
+- evidence mutation: NO
+- score execution/persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+G9.3 V2 remains **OPEN**.
+
+**CURRENT STOP POINT:** pull the corrected branch and repeat the TORNTPHARM localhost visual inspection. Formal owner visual PASS has **not** yet been recorded. Do not run the full local validation gate and do not start AUROPHARMA until the corrected TORNTPHARM capability layer receives owner visual approval.
