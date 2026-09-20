@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; first deterministic TORNTPHARM score 75.1575 hand-verified and reproducible; Gate I NOT STARTED
+**Current stage:** Gate H COMPLETE / PASS; Gate I plan created; I1 NOT STARTED
 
 ---
 
@@ -25153,5 +25153,57 @@ Gate H is closed.
 **Gate I = NOT STARTED.**
 
 Do not begin Gate I automatically.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+
+---
+
+## 291. Entry 286 — Gate I plan created / implementation not started
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Canonical Gate I plan:** `docs/PortfolioAI_GATE_I_PHARMA_RECOMMENDATION_METHODOLOGY_PLAN.md`
+
+Gate H remains formally closed:
+
+> **GATE H = COMPLETE / PASS**
+
+Gate I planning is complete, but implementation has not started.
+
+The Gate I plan is capped at four stages:
+
+```text
+I1 — Recommendation authority / architecture reconciliation
+I2 — PHARMA_V1 recommendation methodology lock
+I3 — First deterministic read-only TORNTPHARM recommendation
+I4 — Independent verification and Gate I closure
+```
+
+Key architecture findings carried into Gate I:
+
+- the canonical Pharma research authority is `profileCode = PHARMA`, `profileVersion = PHARMA_V1`;
+- the older recommendation scaffold uses legacy scoring-profile identities such as `PHARMA_HEALTHCARE`, so Gate I must define an explicit versioned identity bridge;
+- the legacy recommendation preview helper contains a fallback overall-score reconstruction path that may renormalize available dimension weights; PHARMA_V1 must consume the closed Gate H overall score directly and fail closed if it is absent;
+- Gate H score persistence remains OFF;
+- recommendation persistence / transition history remains OFF for the first Pharma recommendation;
+- weight guidance, action bias, AI interpretation and D35B position sizing remain downstream and blocked during Gate I;
+- BANK_NBFC thresholds/floors/cautions must not leak into PHARMA_V1 recommendation methodology.
+
+Gate I’s first real output will therefore be one deterministic, explainable, read-only, non-persisting TORNTPHARM recommendation role after an owner-approved PHARMA_V1 recommendation policy exists.
+
+### CURRENT STOP POINT
+
+```text
+Gate H = COMPLETE / PASS
+Gate I plan = CREATED
+I1 = NOT STARTED
+I2 = NOT STARTED
+I3 = NOT STARTED
+I4 = NOT STARTED
+```
+
+Do not begin I1 automatically.
 
 PR #101 remains OPEN / DRAFT / UNMERGED.
