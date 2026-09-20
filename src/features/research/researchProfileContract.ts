@@ -12,7 +12,7 @@ export interface ResearchMetricHistoryRequirement {
 
 export interface ResearchMetricContract {
   readonly metricCode: string
-  readonly dimension: "QUALITY" | "GROWTH" | "FINANCIAL_STRENGTH" | "EARNINGS_CASH_QUALITY" | "BUSINESS_DURABILITY" | "VALUATION" | "RISK" | "GOVERNANCE"
+  readonly dimension: "QUALITY" | "GROWTH" | "CAPITAL_EFFICIENCY" | "CASH_FLOW" | "BALANCE_SHEET_CREDIT" | "FINANCIAL_STRENGTH" | "EARNINGS_CASH_QUALITY" | "BUSINESS_DURABILITY" | "VALUATION" | "MOMENTUM" | "RISK" | "OWNERSHIP_GOVERNANCE" | "GOVERNANCE"
   readonly applicability: ResearchMetricApplicability
   readonly requirementLevel: ResearchMetricRequirement
   readonly periodTypes: readonly string[]
