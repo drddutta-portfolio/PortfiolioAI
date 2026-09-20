@@ -2,84 +2,81 @@
 
 **Date:** 20 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`  
-**Status:** H2 NOT YET CLOSED / VALUATION CLOSED / ONE BUSINESS-DURABILITY BLOCKER REMAINS
+**Status:** H2 CLOSURE CANDIDATE / ALL DIMENSION INPUTS RESOLVED / FINAL VALIDATION PENDING
 
 ## Current H2 deterministic dimension state
 
-Nine dimensions are now validated and score-ready at the H2 dimension level:
+All ten TORNTPHARM H2 dimension inputs are now deterministic:
 
 - Quality = 92
 - Growth = 78.25
 - Capital Efficiency = 79
 - Cash Flow = 93.6
 - Balance Sheet / Credit = 65
+- Business Durability = 75
+- Valuation = 30 under `PHARMA_DOMESTIC_VALUATION_MA_TRANSITION_V1_OWNER_APPROVED`
 - Ownership / Governance = 70
 - Momentum = 95
 - Risk = 80
-- Valuation = 30 under `PHARMA_DOMESTIC_VALUATION_MA_TRANSITION_V1_OWNER_APPROVED`
 
-One dimension remains incomplete:
+This document deliberately does **not** aggregate those ten dimension values into an H3 company score.
 
-- Business Durability
-
-No H3 final company score may be calculated until Business Durability is completed.
+H3 remains closed until H2 final validation passes and H3 is separately started.
 
 ---
 
-## 1. Business Durability — sole remaining H2 blocker
+## 1. Business Durability — RESOLVED
 
-Current reviewed components:
+Owner-approved component state:
 
-- Brand / Therapy Leadership = REVIEW_REQUIRED / null
+- Brand / Therapy Leadership = STRONG / 75
 - Field Force Productivity = STRONG / 75
 - R&D Productivity = STRONG / 75
 - Pipeline / Corporate Execution = STRONG / 75
 
-Ready components = 3 / 4.
+Ready components = 4 / 4.
 
-### Exact licensed evidence requirement
+Approved G-FINAL-2 weights:
 
-The Gate F acquisition contract requires:
+- Brand / Therapy Leadership = 35%
+- Field Force Productivity = 25%
+- R&D Productivity = 20%
+- Pipeline / Corporate Execution = 20%
 
-- external licensed Indian pharmaceutical market evidence;
-- company/brand/therapy rank and/or market-share evidence;
-- current/recent period;
-- independently sourced rather than only issuer self-description.
+Calculation:
 
-The identified licensed source family is:
+`75 × 0.35 + 75 × 0.25 + 75 × 0.20 + 75 × 0.20 = 75`
 
-`AIOCD Pharmatrac / AIOCD-AWACS`
+> **Business Durability = 75**
 
-Issuer-reported FY26 orientation evidence includes:
+### Brand / Therapy Leadership cross-check
 
-- combined Torrent + JB Pharma ranked 5th in IPM;
-- top-five positions across multiple therapy areas;
-- Cardiac #1;
-- CNS #3;
-- GI #3;
-- Pain Management #5;
-- Derma #5;
-- 75% chronic/sub-chronic revenue share.
+The owner approved:
 
-These issuer statements remain orientation evidence only and do not satisfy the licensed cross-check by themselves.
+`APPROVE H2 BRAND / THERAPY LEADERSHIP — STRONG / 75 — USING INDEPENDENT AIOCD-DERIVED CROSS-CHECK`
 
-### Exact H2 completion shape
+Evidence lineage:
 
-Acceptable licensed evidence should provide, for Torrent Pharmaceuticals or the reviewed post-acquisition business scope:
+1. India Ratings & Research independently reports AIOCD-derived Torrent/JB market-share, IPM-rank and therapy-position evidence:
+   - `https://www.indiaratings.co.in/pressrelease/80734`
+2. Torrent FY2025-26 reporting explicitly cites AIOCD Pharmatrac Dataset March 2026 for current combined Torrent + JB IPM and therapy rankings:
+   - `https://www.torrentpharma.com/pdf/investors/AR-2025-26.pdf`
 
-1. company-level India market rank and/or share;
-2. at least the major therapy-level rank/share relevant to Torrent's leadership claim;
-3. period/date;
-4. source/vendor identity;
-5. enough context to distinguish Torrent standalone vs Torrent + JB Pharma combined scope.
+H2 acceptance mode:
 
-Without this, Brand / Therapy Leadership remains `REVIEW_REQUIRED`.
+`INDEPENDENT_AIOCD_DERIVED_REPORT_PLUS_CURRENT_ISSUER_AIOCD_PHARMATRAC_TABLE`
 
-No freeform numeric inference is permitted.
+No direct licensed AIOCD provider call was made.
+
+This is a bounded TORNTPHARM H2 evidence decision and does not rewrite the generic licensed-source requirement for other securities.
+
+Canonical lock:
+
+`docs/PortfolioAI_GATE_H_H2_BUSINESS_DURABILITY_REVIEW.md`
 
 ---
 
-## 2. Valuation — CLOSED at H2 dimension level
+## 2. Valuation — RESOLVED
 
 ### Fresh self-history evidence
 
@@ -138,19 +135,15 @@ Therefore:
 
 `Peer-Relative Score = 20`
 
-### FCF-yield M&A comparability blocker
+### M&A transition FCF treatment
 
-The base G6.17 contract remains:
+Base G6.17 remains unchanged:
 
 - Self-history 40%
 - Peer-relative 40%
 - FCF corroboration 20%
 
-The H2 FCF-yield prerequisite audit found no valid current local FCF-yield derivation path, and the available completed annual FCF is not comparable to the current post-transaction valuation denominator because of the current M&A scope transition.
-
-The base G6.17 contract explicitly identifies M&A/capex FCF distortion as a mandatory methodology revisit trigger.
-
-The owner therefore approved a versioned TORNTPHARM-specific transition contract:
+Because the completed annual FCF and current post-transaction valuation denominator are not comparable in scope, the owner approved:
 
 `PHARMA_DOMESTIC_VALUATION_MA_TRANSITION_V1_OWNER_APPROVED`
 
@@ -160,50 +153,36 @@ Transition weights:
 - Peer-relative = 50%
 - FCF corroboration = 0%
 
-This is an explicit methodology version, not hidden missing-component renormalization.
-
-### H2 transition Valuation result
+Calculation:
 
 `(40 × 0.50) + (20 × 0.50) = 30`
 
 > **Valuation = 30**
 
-### Transition exit rule
+The transition expires when comparable post-merger completed annual FCF becomes available; Valuation then reverts to the base 40/40/20 contract.
 
-When comparable post-merger completed annual FCF becomes available:
-
-1. the transition contract expires;
-2. the FCF-yield lane must be recomputed under the approved current-market-cap authority contract;
-3. Valuation reverts to the base 40/40/20 G6.17 contract.
-
-No permanent extension is automatic.
-
-Canonical H2 transition document:
+Canonical lock:
 
 `docs/PortfolioAI_GATE_H_H2_MA_TRANSITION_VALUATION_V1.md`
 
 ---
 
-## 3. H2 remaining work
+## 3. H2 closure condition
 
-Only one substantive evidence blocker remains:
+There are no unresolved evidence or methodology blockers remaining inside H2.
 
-### Brand / Therapy Leadership licensed cross-check
+Only final implementation validation remains:
 
-Required source family:
+- focused Business Durability contract test;
+- TypeScript typecheck.
 
-`AIOCD Pharmatrac / AIOCD-AWACS`
+If both pass:
 
-No licensed call has yet been made.
+> **H2 = COMPLETE / PASS**
 
-Required evidence remains:
+The next stage may then be H3, but H3 must be started separately.
 
-- company rank/share;
-- major therapy rank/share;
-- current/recent period;
-- standalone vs combined Torrent + JB scope clarity.
-
-Once that component is resolved, Business Durability can be finalized and H2 can be formally closed.
+No H3 score should be calculated as part of H2 closure.
 
 ---
 
@@ -211,9 +190,9 @@ Once that component is resolved, Business Durability can be finalized and H2 can
 
 - H3 final company score: **CLOSED**
 - H3 score calculation: **NO**
+- official score persistence: **NO**
 - production DB mutation: **NO**
-- production peer assignment persistence: **NO**
-- licensed AIOCD call: **NO**
+- direct licensed AIOCD call: **NO**
 - recommendation: **NO**
 - sizing: **NO**
 - scheduler change: **NO**
