@@ -98,7 +98,7 @@ Deno.serve(async (request) => {
     const latestBenchmark = await admin.from("market_benchmark_price_history").select("period_start").eq("benchmark_code", BENCHMARK_CODE).eq("provider_code", MARKET_DATA_PROVIDER).eq("interval", "ONE_DAY").order("period_start", { ascending: false }).limit(1).maybeSingle()
     if (latestBenchmark.error) throw latestBenchmark.error
 
-    if (body.action === "PLAN") return json(200, { mode: "PHARMA_BENCHMARK_REFRESH_PLAN", providerCalls: 0, estimatedProviderCalls: 1, benchmark: BENCHMARK_NAME, benchmarkCode: BENCHMARK_CODE, historyDays: HISTORY_DAYS, latestBenchmarkCandle: latestBenchmark.data?.period_start ?? null, stockHistoryObservations: stockRows.length, metricAfterRefresh: "RELATIVE_STRENGTH_12M", note: "Planning uses zero Angel One historical calls. Execution resolves the NIFTY Bank AMXIDX instrument exactly from the current Angel One master before fetching history." })
+    if (body.action === "PLAN") return json(200, { mode: "PHARMA_BENCHMARK_REFRESH_PLAN", providerCalls: 0, estimatedProviderCalls: 1, benchmark: BENCHMARK_NAME, benchmarkCode: BENCHMARK_CODE, historyDays: HISTORY_DAYS, latestBenchmarkCandle: latestBenchmark.data?.period_start ?? null, stockHistoryObservations: stockRows.length, metricAfterRefresh: "RELATIVE_STRENGTH_12M", note: "Planning uses zero Angel One historical calls. Execution resolves the NIFTY Pharma AMXIDX instrument exactly from the current Angel One master before fetching history." })
     if (body.confirmation !== CONFIRMATION) return json(409, { error: "Explicit owner confirmation is required.", providerCalls: 0 })
 
     const holder = crypto.randomUUID()
