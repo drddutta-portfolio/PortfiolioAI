@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I1 COMPLETE / PASS; I2 NOT STARTED
+**Current stage:** Gate H COMPLETE / PASS; Gate I1 COMPLETE / PASS; I2 recommendation methodology candidate implemented; validation and owner approval pending; I3 NOT STARTED
 
 ---
 
@@ -25399,3 +25399,151 @@ I4 = NOT STARTED
 Do not start I2 automatically.
 
 PR #101 remains OPEN / DRAFT / UNMERGED.
+
+
+---
+
+## 294. Entry 289 — Gate I2 recommendation methodology candidate implemented
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**I2 base head:** `f5ee94d264d3692929043bd3f7851991361c079f`
+**Canonical I2 candidate review:** `docs/PortfolioAI_GATE_I_I2_RECOMMENDATION_METHODOLOGY_CANDIDATE.md`
+
+I2 candidate implementation is present.
+
+### Candidate policy
+
+`PHARMA_V1_RECOMMENDATION_POLICY_V1_CANDIDATE`
+
+State:
+
+`OWNER_REVIEW_PENDING`
+
+### Proposed overall thresholds
+
+```text
+CORE_CANDIDATE      >= 80
+SATELLITE_CANDIDATE >= 65
+WATCH               >= 50
+AVOID               < 50, only for a fully evaluable score
+```
+
+Threshold construction is independent of TORNTPHARM's 75.1575 score.
+
+Methodology anchors:
+
+- PHARMA_V1 Neutral = 50;
+- PHARMA_V1 Strong qualitative component = 75;
+- Core = 80, above the Strong component anchor;
+- Satellite = 65, midpoint between Watch 50 and Core 80.
+
+### Proposed dimension treatment
+
+Role-blocking floors:
+
+- Quality;
+- Growth;
+- Cash Flow;
+- Balance Sheet / Credit;
+- Business Durability;
+- Ownership / Governance;
+- Risk.
+
+Core floors:
+
+- Quality 75;
+- Growth 50;
+- Cash Flow 50;
+- Balance Sheet / Credit 50;
+- Business Durability 75;
+- Ownership / Governance 50;
+- Risk 50.
+
+Satellite floors:
+
+- all seven role-blocking dimensions = 50.
+
+Other dimensions:
+
+- Capital Efficiency = no separate recommendation-layer gate;
+- Valuation = caution only below 50;
+- Momentum = caution only below 50.
+
+### Missing versus failed floor
+
+- missing required floor data -> `INSUFFICIENT`;
+- evaluated Core floor fail -> Core ineligible, continue to Satellite;
+- evaluated Satellite floor fail -> Satellite ineligible, continue to Watch;
+- floor failure does not automatically mean Avoid.
+
+### Governance
+
+- CLEAR -> no extra recommendation constraint;
+- INTERPRETATION_ONLY_HIGH_RISK -> caution only;
+- REVIEW_REQUIRED -> INSUFFICIENT;
+- BLOCKED_REVIEW -> INSUFFICIENT.
+
+No second regulatory numeric penalty or recommendation cap is introduced.
+
+### Overlay
+
+Material Overlay / Emerging Watch remain context-only.
+
+No independent overlay:
+
+- score;
+- role;
+- recommendation;
+- override;
+- blend;
+- numeric penalty.
+
+### Global hard blockers
+
+No additional numeric global hard blocker is proposed in V1.
+
+`AVOID` is reserved for a fully evaluable overall score below 50.
+
+Structural incompleteness maps to `INSUFFICIENT`.
+
+### Safety
+
+I2 candidate implementation does not:
+
+- calculate a real TORNTPHARM recommendation;
+- calculate a real AUROPHARMA recommendation;
+- persist score or recommendation;
+- activate a production recommendation policy;
+- mutate Supabase;
+- invoke a provider;
+- invoke AI interpretation;
+- invoke weight guidance/action bias;
+- invoke position sizing;
+- deploy;
+- merge PR #101.
+
+### Validation
+
+Run:
+
+`git pull && bash scripts/i2-validate-pharma-recommendation-methodology.sh`
+
+### OWNER APPROVAL PENDING
+
+Suggested approval phrase after validation:
+
+`APPROVE I2 PHARMA_V1 RECOMMENDATION POLICY V1 — CORE 80 / SATELLITE 65 / WATCH 50 — FLOORS AND CAUTIONS AS PROPOSED`
+
+### CURRENT STOP POINT
+
+```text
+Gate H = COMPLETE / PASS
+I1 = COMPLETE / PASS
+I2 = CANDIDATE IMPLEMENTED / VALIDATION + OWNER APPROVAL PENDING
+I3 = NOT STARTED
+I4 = NOT STARTED
+```
+
+Do not start I3 automatically.
