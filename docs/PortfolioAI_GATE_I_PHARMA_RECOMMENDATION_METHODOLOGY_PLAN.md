@@ -10,7 +10,7 @@
 **Primary subprofile:** DOMESTIC_FORMULATIONS
 **Gate H score:** 75.1575 / 100
 **Gate H state:** COMPLETE / PASS
-**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 NOT STARTED
+**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 CANDIDATE IMPLEMENTED / VALIDATION + OWNER APPROVAL PENDING
 
 **Owner-approved revised-plan corrections adopted before I1 implementation:**
 
@@ -747,7 +747,7 @@ Only after Gate I closure should the project decide the next separate downstream
 Gate H = COMPLETE / PASS
 Gate I plan = REVISED / ADOPTED
 I1 = COMPLETE / PASS
-I2 = NOT STARTED
+I2 = CANDIDATE IMPLEMENTED / VALIDATION + OWNER APPROVAL PENDING
 I3 = NOT STARTED
 I4 = NOT STARTED
 ```
@@ -776,3 +776,39 @@ I2 = NOT STARTED
 ```
 
 No score persistence, recommendation persistence, production mutation, provider call, sizing, deployment or PR merge was authorized or performed.
+
+
+---
+
+## I2 candidate implementation record
+
+The first PHARMA_V1 recommendation methodology candidate is now implemented.
+
+Candidate version:
+
+`PHARMA_V1_RECOMMENDATION_POLICY_V1_CANDIDATE`
+
+Proposed overall role ladder:
+
+```text
+CORE_CANDIDATE      >= 80
+SATELLITE_CANDIDATE >= 65
+WATCH               >= 50
+AVOID               < 50, only when fully evaluable
+INSUFFICIENT         = structural/missing/unresolved state
+```
+
+The thresholds were derived from the PHARMA_V1 semantic anchors rather than from TORNTPHARM's known score:
+
+- Neutral anchor = 50;
+- Strong component anchor = 75;
+- Core aggregate threshold = 80;
+- Satellite threshold = midpoint between 50 and 80 = 65.
+
+Role floors, caution-only dimensions, governance behavior, missing-vs-failed floor behavior, overlay independence and fail-closed semantics are documented in:
+
+`docs/PortfolioAI_GATE_I_I2_RECOMMENDATION_METHODOLOGY_CANDIDATE.md`
+
+I2 is not locked until consolidated validation passes and the owner explicitly approves the methodology.
+
+Do not start I3.
