@@ -83,11 +83,16 @@ describe("Gate H H4 independent TORNTPHARM verification", () => {
       trend: 40,
     })
 
-    expect(dimensions.BALANCE_SHEET_CREDIT.derivedStatistics).toEqual({
-      medianNetDebtEbitda: 0.9,
-      medianInterestCoverage: 9.26,
-      latestMinusPriorMedianNetDebtEbitda: 1.55,
-    })
+    expect(
+      dimensions.BALANCE_SHEET_CREDIT.derivedStatistics.medianNetDebtEbitda,
+    ).toBe(0.9)
+    expect(
+      dimensions.BALANCE_SHEET_CREDIT.derivedStatistics.medianInterestCoverage,
+    ).toBe(9.26)
+    expect(
+      dimensions.BALANCE_SHEET_CREDIT.derivedStatistics
+        .latestMinusPriorMedianNetDebtEbitda,
+    ).toBeCloseTo(1.55, 12)
     expect(dimensions.BALANCE_SHEET_CREDIT.componentScores).toEqual({
       leverage: 80,
       interestCoverage: 70,

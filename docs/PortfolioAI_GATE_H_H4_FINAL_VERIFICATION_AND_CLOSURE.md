@@ -350,6 +350,24 @@ It does not:
 - merge PR #101;
 - start Gate I.
 
+## First local validation attempt
+
+The first owner-run H4 validation attempt stopped in the focused H4 test suite on one assertion only:
+
+- independently derived leverage trend expected mathematically: `1.55`;
+- JavaScript binary floating-point representation observed: `1.5499999999999998`.
+
+This did **not** change:
+
+- the approved leverage-trend score band;
+- Balance Sheet / Credit score = 65;
+- any weighted contribution;
+- overall score = 75.1575.
+
+The verifier continues to evaluate the unrounded numeric value against the approved scoring band. Only the test assertion was corrected from exact binary equality to `toBeCloseTo(1.55, 12)`.
+
+No methodology, evidence, dimension score, weight, or H3 result was changed.
+
 ## Consolidated H4 validation
 
 Run exactly:
