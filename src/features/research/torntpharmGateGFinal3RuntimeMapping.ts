@@ -6,7 +6,7 @@ import {
 } from "./pharmaGateGFinal3CrossCuttingCandidate"
 
 export const TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING_VERSION =
-  "TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING_V1_CANDIDATE" as const
+  "TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING_V1_OWNER_APPROVED" as const
 
 const warning = TORNTPHARM_PROPOSED_EVIDENCE_CANDIDATES.find(
   (item) =>
@@ -22,7 +22,7 @@ const closeout = TORNTPHARM_PROPOSED_EVIDENCE_CANDIDATES.find(
 
 export const TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING = {
   version: TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING_VERSION,
-  state: "READ_ONLY_RUNTIME_CANDIDATE" as const,
+  state: "OWNER_APPROVED_FAIL_CLOSED_RUNTIME" as const,
   securitySymbol: "TORNTPHARM" as const,
   reviewedChain: {
     warningLetterPresent: Boolean(warning),
@@ -47,6 +47,7 @@ export const TORNTPHARM_GATE_G_FINAL_3_RUNTIME_MAPPING = {
     "REGULATORY_MATERIALITY_NOT_INFERRED",
     "SUBSEQUENT_OUTCOME_CONTEXT_NOT_ESTABLISHED",
   ] as const,
+  methodologyApproved: true,
   scoreExecutionEnabled: false,
   persistedScoreRunEnabled: false,
 } as const
