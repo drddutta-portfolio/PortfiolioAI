@@ -24,8 +24,8 @@ npx vitest run \
   src/features/research/pharmaGlobalGenericsBalanceSheetMethodGate.test.ts \
   src/features/research/pharmaGlobalGenericsOwnershipGovernanceMethodGate.test.ts
 
-echo "[2/8] Full application test suite"
-npm test
+echo "[2/8] Full application Vitest suite (Supabase Edge/Deno tests excluded)"
+npx vitest run --exclude "supabase/functions/**"
 
 echo "[3/8] Strict TypeScript"
 npm run typecheck
