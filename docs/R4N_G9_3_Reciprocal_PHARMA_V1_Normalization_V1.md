@@ -1,5 +1,7 @@
 # R4N — G9.3 Reciprocal PHARMA_V1 Normalization V1
 
+> **SUPERSEDED BY G9.3 V2.** This document records the abandoned full-page normalization experiment for historical/audit purposes only. It is not the active implementation plan.
+
 **Status:** IMPLEMENTED FOR TWO-STOCK LOCAL VISUAL NORMALIZATION REVIEW — NOT YET VALIDATED  
 **Branch:** `r4n-pharma-subprofile-architecture`  
 **Stage:** G9.3 of the hard-capped G9 sequence  
