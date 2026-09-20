@@ -21456,3 +21456,84 @@ Valuation does not need re-approval because its combined Domestic contract is al
 G-FINAL-1 implementation candidate is ready for local validation.
 
 **CURRENT STOP POINT:** pull branch and run focused tests + typecheck + architecture/build/diff checks. If validation passes, present the four proposal-only methodology items to the owner for explicit freeze approval. Do not change them to approved state before that decision.
+
+
+---
+
+## 241. Entry 236 — G-FINAL-1 methodology freeze owner-approved / post-approval validation pending
+
+**Date:** 20 September 2026  
+**Actor:** owner approval + ChatGPT implementation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner explicitly approved the four G-FINAL-1 methodology items after the pre-approval validation passed.
+
+### Owner-approved methodology freeze
+
+The following are now recorded as **OWNER_APPROVED_NOT_ACTIVE**:
+
+1. **Domestic Quality / Operating Margin**
+   - minimum 8 comparable matched quarters;
+   - 50% level / 30% stability / 20% trend;
+   - existing Domestic score bands preserved;
+   - deterministic evaluator available;
+   - scoring activation remains OFF.
+
+2. **Domestic Growth / Segment Growth**
+   - minimum 4 comparable quarters, 8 preferred;
+   - 60% level / 25% consistency / 15% trend;
+   - existing segment-growth score bands preserved;
+   - deterministic evaluator available;
+   - scoring activation remains OFF.
+
+3. **PHARMA_V1 readiness**
+   - dimension score-ready coverage >= 60%;
+   - overall score-ready coverage >= 70%;
+   - every weighted dimension must be READY;
+   - common core and Primary must be READY;
+   - Emerging Watch excluded from readiness/score denominator;
+   - missing Material Overlay evidence may not silently become neutral;
+   - scoring activation remains OFF.
+
+4. **Governance High Risk behavior**
+   - Critical / blocked-review remains blocking;
+   - High Risk is interpretation-only;
+   - no numeric penalty;
+   - no overall score cap;
+   - no hidden double counting;
+   - unresolved regulatory materiality remains review-required;
+   - G7.1 read-only adapter consumption is now methodology-approved;
+   - scoring activation remains OFF.
+
+Domestic Valuation remains the previously owner-approved/not-active combined contract.
+
+### G-FINAL-1 manifest
+
+`pharmaGateGFinal1ClosureCandidate.ts` now records:
+
+- `state = OWNER_APPROVED_COMPLETE`;
+- `gFinal1Complete = true`;
+- no remaining owner approval required inside G-FINAL-1;
+- `gateHEligible = false` because G-FINAL-2 through G-FINAL-5 remain unresolved.
+
+Remaining Gate H blockers:
+
+- G-FINAL-2 missing numeric dimensions;
+- G-FINAL-3 Material Overlay treatment;
+- G-FINAL-4 governance runtime input;
+- G-FINAL-5 full-score dry run.
+
+### Safety state
+
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- position sizing: OFF
+- production mutation: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+**CURRENT STOP POINT:** owner must pull and run post-approval focused validation. G-FINAL-1 is not formally closed until that validation passes.
