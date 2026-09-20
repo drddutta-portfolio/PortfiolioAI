@@ -21033,3 +21033,78 @@ PR #101 remains OPEN / DRAFT / UNMERGED.
 G9.3 V2 remains **OPEN**.
 
 **CURRENT STOP POINT:** owner must pull the branch and perform the mandatory AUROPHARMA localhost visual inspection before any full local validation or G9.3 closure. Confirm that the reusable G8.1/G8.2/G8.3/G9.1/G9.2 capability layer appears inside AUROPHARMA Pharmaceuticals deep research with the expected Global Generics / API / Biosimilars roles, while the restored historical AUROPHARMA G8/G9 surfaces remain intact. Do not close G9.3 until visual approval and full local cross-company validation pass.
+
+
+---
+
+## 236. Entry 231 — G9.3-D AUROPHARMA duplicate historical G8/G9 overview mounts removed
+
+**Date:** 20 September 2026  
+**Actor:** owner visual review + ChatGPT correction  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner supplied fresh AUROPHARMA localhost screenshots after the reusable PHARMA_V1 capability workspace was applied.
+
+### Visual finding
+
+The new reusable capability layer rendered correctly inside **Pharmaceuticals deep research** with:
+
+- Primary = Global Generics;
+- Material Overlay = none;
+- Emerging = API / Bulk Drugs;
+- unresolved = Biopharma / Biosimilars;
+- G8.1 / G8.2 / G8.3 / G9.1 / G9.2 provenance visible;
+- Gate G → G7 methodology available below.
+
+However, the older AUROPHARMA-specific G8.1 / G8.2 / G8.3 / G9.1 / G9.2 panels were still mounted separately at the top of the Overview page.
+
+This duplicated the same capability semantics after G9.3-D had generalized them into the reusable PHARMA_V1 sector workspace.
+
+### Correction applied
+
+Updated:
+
+- `src/pages/ResearchPage.tsx`
+
+Removed only the five obsolete AUROPHARMA-specific **Overview presentation mounts** and their imports:
+
+- `AuropharmaG81ClassificationCard`
+- `AuropharmaG82SameEnginePanel`
+- `AuropharmaG83ValidationPanel`
+- `AuropharmaG91ActivationReadinessPanel`
+- `AuropharmaG92CanonicalActivationPanel`
+
+The underlying historical contracts, builders, tests and Git history remain preserved in the repository.
+
+The live product UI now has one reusable PHARMA_V1 capability representation rather than duplicate company-specific and reusable surfaces.
+
+### Methodology preservation
+
+No Gate G → G7 methodology was removed.
+
+No AUROPHARMA classification evidence, G8 portability validation, G9.1 readiness contract, G9.2 canonical activation logic, or research-gap state was deleted from source history/contracts.
+
+This is a presentation de-duplication only.
+
+### Safety state
+
+- production mutation: NO
+- production migration: NO
+- local database mutation: NO
+- canonical assignment mutation: NO
+- evidence mutation: NO
+- score execution/persistence: NO
+- recommendation activation/persistence: NO
+- sizing activation/persistence: NO
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+### Workflow state
+
+G9.3 V2 remains **OPEN**.
+
+**CURRENT STOP POINT:** owner must pull and repeat the AUROPHARMA localhost visual check. Expected result: the separate historical G8.1→G9.2 boxes no longer appear above Research at a glance; the single reusable PHARMA_V1 capability layer remains inside Pharmaceuticals deep research with the correct AUROPHARMA roles. Full cross-company validation remains blocked until owner visual PASS.
