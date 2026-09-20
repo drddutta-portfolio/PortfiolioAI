@@ -24252,3 +24252,37 @@ The audit is read-only.
 No provider call, no database write, no assignment persistence and no score execution are performed by this audit.
 
 **CURRENT STOP POINT:** owner should pull and run `bash scripts/h2-local-valuation-evidence-audit.sh`; use the result to decide the exact minimum additional valuation evidence acquisition.
+
+
+---
+
+## 282. Entry 277 — H2 local valuation prerequisite audit prepared
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The first local valuation evidence audit showed:
+
+- TORNTPHARM exists locally;
+- MANKIND, ERIS and EMCURE are absent from local `securities`;
+- no local PE_TTM / EV_EBITDA / self-history observations exist for the target or approved peers.
+
+Therefore no peer-relative valuation calculation is currently possible from the local fixture.
+
+Added:
+
+- `scripts/h2-local-valuation-prerequisite-audit.sh`
+
+The script is read-only and reports:
+
+- exact `public.securities` schema;
+- existing target/peer security rows;
+- Trendlyne identity observations;
+- required metric definitions;
+- Trendlyne source entitlement state;
+- Trendlyne ingestion controls;
+- any existing local PE/EV-EBITDA/self-history observations.
+
+No provider call or database mutation is performed.
+
+**CURRENT STOP POINT:** run the prerequisite audit once, then build the minimal local peer-security/identity and valuation acquisition path from actual local schema/contracts rather than guessing.
