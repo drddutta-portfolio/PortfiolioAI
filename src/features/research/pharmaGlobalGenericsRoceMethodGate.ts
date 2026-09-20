@@ -1,5 +1,3 @@
-import { PHARMA_ROCE_CURVE_PROPOSAL } from "./pharmaRoceCurveProposal"
-
 export const PHARMA_GLOBAL_GENERICS_ROCE_METHOD_GATE_VERSION =
   "PHARMA_GLOBAL_GENERICS_ROCE_METHOD_GATE_V1_PROPOSAL" as const
 
@@ -9,7 +7,7 @@ export interface PharmaGlobalGenericsRoceMethodGateContract {
   readonly supportedPrimarySubprofile: "GLOBAL_GENERICS"
   readonly metricCode: "PHARMA_ROCE_HISTORY"
   readonly canonicalDimension: "CAPITAL_EFFICIENCY"
-  readonly parentDimensionAlignmentState: typeof PHARMA_ROCE_CURVE_PROPOSAL.dimensionAlignmentState
+  readonly parentDimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION"
   readonly parentDimensionReconciliationRequired: true
   readonly history: {
     readonly minimumComparableAnnualPeriods: 3
@@ -46,7 +44,7 @@ export const PHARMA_GLOBAL_GENERICS_ROCE_METHOD_GATE:
     supportedPrimarySubprofile: "GLOBAL_GENERICS",
     metricCode: "PHARMA_ROCE_HISTORY",
     canonicalDimension: "CAPITAL_EFFICIENCY",
-    parentDimensionAlignmentState: PHARMA_ROCE_CURVE_PROPOSAL.dimensionAlignmentState,
+    parentDimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
     parentDimensionReconciliationRequired: true,
     history: {
       minimumComparableAnnualPeriods: 3,
