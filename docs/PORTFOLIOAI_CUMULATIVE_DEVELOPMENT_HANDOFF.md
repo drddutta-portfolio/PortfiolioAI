@@ -23893,3 +23893,93 @@ Peer cohort remains separately reviewed; no provisional candidate may be promote
 No action in the package has yet been executed.
 
 **CURRENT STOP POINT:** await exact owner authorization before deployment/provider calls/production evidence writes.
+
+
+---
+
+## 276. Entry 271 — H2 local-only evidence execution path prepared
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+Owner approved:
+
+> **APPROVE H2 MARKET + VALUATION EVIDENCE ACQUISITION PACKAGE**
+
+Owner additionally clarified that Angel One API calls are not user-quota-limited. This removes any assumption that Angel One calls are a scarce paid-call budget. It does not broaden H2 scope.
+
+A critical environment clarification followed: current H2 execution/testing is intended for the **local Supabase stack**, not the connected online Project-PortfolioAI Supabase project.
+
+### Production safety check
+
+A remote deployment attempt was interrupted before completion.
+
+Read-only verification immediately afterward showed:
+
+- remote `refresh-pharma-benchmark` deployment: **ABSENT**
+- production change from that attempt: **NONE**
+
+No further remote action is authorized in this local-validation phase.
+
+### Local-only runner
+
+Added:
+
+- `scripts/h2-local-market-evidence.sh`
+
+The runner:
+
+1. verifies local Supabase is running;
+2. signs into local Auth using caller-supplied local credentials;
+3. discovers the matching local user;
+4. discovers the user's local open TORNTPHARM holding;
+5. verifies a local VERIFIED Angel One mapping;
+6. serves only:
+   - `refresh-market-history`
+   - `refresh-pharma-benchmark`
+7. calls PLAN first for each;
+8. executes only with the already owner-approved confirmation tokens;
+9. writes only to local Supabase;
+10. verifies:
+   - PRICE_MOMENTUM_12M
+   - PRICE_MOMENTUM_6M
+   - MAX_DRAWDOWN_1Y
+   - VOLATILITY_1Y
+   - RELATIVE_STRENGTH_12M
+   - NIFTY Pharma benchmark candle count/range;
+11. derives the H2 Risk relative-volatility ratio read-only from aligned local raw histories.
+
+No authentication bypass was introduced.
+
+### Relative-volatility handling
+
+The current market-metric schema has no canonical `RELATIVE_VOLATILITY_RATIO` metric code.
+
+Therefore H2 does not mutate the schema merely to persist the ratio.
+
+The local runner derives:
+
+- TORNTPHARM annualized daily-log-return volatility;
+- NIFTY Pharma annualized daily-log-return volatility;
+- `TORNTPHARM_VOL / NIFTY_PHARMA_VOL`
+
+from aligned 1Y raw history.
+
+The approved Risk evaluator consumes that ratio directly.
+
+`MAX_DRAWDOWN_1Y` is stored as a positive absolute drawdown magnitude by the market-history function; the approved Risk evaluator expects the signed negative percentage, so H2 must convert `x` to `-x` at the deterministic input-mapping boundary.
+
+### Important local prerequisites
+
+The runner requires:
+
+- local Supabase running;
+- `psql`, `curl`, `jq`, Supabase CLI;
+- `supabase/.env.local` containing local Angel One secrets;
+- caller-provided local login via:
+  - `H2_LOCAL_EMAIL`
+  - `H2_LOCAL_PASSWORD`
+
+No credentials are committed.
+
+**CURRENT STOP POINT:** owner should pull and execute the local-only runner. Use the resulting local evidence to finish Momentum and market-data Risk inputs before any production action.
