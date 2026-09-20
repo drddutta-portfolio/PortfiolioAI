@@ -20253,3 +20253,156 @@ No database mutation, evidence mutation, assignment mutation, score persistence,
 PR #101 remains OPEN / DRAFT / UNMERGED.
 
 **CURRENT STOP POINT:** run full local validation against the restored post-G9.2 presentation baseline. Do not begin the revised G9.3 implementation until that validation passes and the handoff is updated with the final rollback checkpoint.
+
+
+---
+
+## 229. Entry 224 — G9.3 plan reformed around shared Research shell + reusable PHARMA_V1 sector workspace
+
+**Date:** 20 September 2026  
+**Actor:** owner proposal + repository UI architecture audit + ChatGPT plan revision  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner proposed a revised G9.3 direction:
+
+1. reciprocally add missing capabilities between TORNTPHARM and AUROPHARMA;
+2. complete the TORNTPHARM Pharma Deep Research section and make the completed capability set available to AUROPHARMA;
+3. standardize UI at two levels:
+   - a general shell for all stocks;
+   - sector-specific alterations for Pharma.
+
+A repository audit was performed before implementation.
+
+### Existing authoritative UI architecture found
+
+The audit confirmed that R4M already froze the core UI rule:
+
+> Every security uses one Research page and one interaction grammar. New profiles/subprofiles extend the shared page through contracts; they do not create separate page/component trees.
+
+Relevant authoritative sources include:
+
+- `docs/R4M_Universal_Research_Workspace_Freeze.md`
+- `docs/R4M_Profile_Driven_Research_Workspace_Plan.md`
+- `docs/R4N_HDFCBANK_TORNTPHARM_Research_Page_Consistency_Audit.md`
+- `docs/R4J_PHARMA_Profile_Aware_Presentation.md`
+- `src/features/research/researchWorkspaceContract.ts`
+- `src/features/research/researchProfileUiContract.ts`
+
+Therefore the owner's proposal is adopted with one architectural refinement:
+
+- do **not** literally copy AUROPHARMA-labelled G8/G9 cards into TORNTPHARM;
+- generalize those capabilities into reusable PHARMA_V1 modules;
+- preserve one shared Research shell for all stocks;
+- preserve one reusable Pharma sector workspace for all Pharma stocks;
+- drive company-specific differences from canonical assignment + role + evidence.
+
+### Revised G9.3 architecture
+
+Two standardization layers are now explicit.
+
+#### Layer 1 — universal Research shell
+
+Shared by BANK_NBFC, PHARMA_V1 and future profiles:
+
+- security header;
+- company summary;
+- portfolio/price context;
+- Decision Workspace;
+- PortfolioAI Suggestion;
+- AI Interpretation;
+- Key Insights;
+- Research Refresh;
+- common tabs;
+- Research at a glance;
+- score/heatmap/ratings/readiness shells;
+- Documents/Evidence interaction grammar.
+
+#### Layer 2 — sector/profile workspace
+
+PHARMA_V1 owns the sector-specific deep-research extension.
+
+The completed Pharma workspace will combine reusable capabilities currently split between TORNTPHARM and AUROPHARMA.
+
+### Reusable capability contribution from TORNTPHARM
+
+- Gate G
+- G1–G4
+- G5.1–G5.7
+- G6.1–G6.45
+- G7-P1 / G7-P2 / G7.1 / G7.2 / G7.3
+- model summary / exposure map
+- evidence/source/document/ingestion controls
+
+### Reusable capability contribution from AUROPHARMA
+
+The semantics represented by:
+
+- G8.1 classification & evidence lock
+- G8.2 three-layer same-engine architecture/preview
+- G8.3 portability/isolation/leakage validation
+- G9.1 activation-readiness & authority
+- G9.2 canonical assignment state
+
+must be generalized into reusable PHARMA_V1 modules.
+
+### Reference-company role resolution
+
+TORNTPHARM:
+
+- Primary = DOMESTIC_FORMULATIONS
+- Material Overlay = GLOBAL_GENERICS
+- Emerging = CDMO_CRAMS
+
+AUROPHARMA:
+
+- Primary = GLOBAL_GENERICS
+- Material Overlay = none
+- Emerging = API_BULK_DRUGS
+- unresolved = BIOPHARMA_BIOSIMILARS
+
+The same reusable Pharma workspace must interpret those roles independently without evidence or methodology leakage.
+
+### UI boundary
+
+G9.3 V2 is **not a visual redesign stage**.
+
+The restored pre-G9.3 visual designs remain the baseline.
+
+Allowed:
+
+- add missing reusable Pharma modules;
+- generalize current stock-specific capability panels;
+- use collapsible depth;
+- preserve all existing validated methodology and evidence controls.
+
+Not allowed:
+
+- replace the shared Research shell;
+- remove TORNTPHARM Gate G–G7 methodology;
+- flatten both pages into a simplified replacement UI;
+- create separate permanent TORNTPHARM/AUROPHARMA mini-applications;
+- activate scoring/recommendation/sizing.
+
+### Canonical documentation changes
+
+Updated:
+
+- `docs/PortfolioAI_G9_Final_Implementation_Plan.md`
+
+Superseded historical experiment:
+
+- `docs/R4N_G9_3_Reciprocal_PHARMA_V1_Normalization_V1.md`
+
+New active G9.3 plan:
+
+- `docs/R4N_G9_3_PHARMA_V1_Sector_Workspace_Completion_V2.md`
+
+### Safety state
+
+Planning/docs only.
+
+No UI implementation, database mutation, evidence mutation, assignment mutation, score persistence, recommendation persistence, sizing activation, provider refresh, deployment, scheduler change or PR merge occurred.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+**CURRENT STOP POINT:** revised G9.3 V2 plan is now canonical. Next step is implementation checkpoint G9.3-A/B: build the reusable Pharma capability inventory/module contracts first, without changing the shared Research shell or visually redesigning either stock page.
