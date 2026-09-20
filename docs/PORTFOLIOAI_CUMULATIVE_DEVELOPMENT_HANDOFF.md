@@ -23293,3 +23293,84 @@ No final overall score has been calculated.
 - PR merge: NO
 
 **CURRENT STOP POINT:** Continue H2 with the remaining Valuation, Momentum, Risk and Global Generics Material Overlay evidence locks using the latest owner-approved successor contracts only.
+
+
+---
+
+## 267. Entry 262 — H2 remaining evidence blocker lock prepared
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After the Ownership input integration validation PASS, H2 performed a read-only canonical production inspection before any provider refresh.
+
+Added:
+
+- `src/features/research/torntpharmGateH2RemainingEvidenceLock.ts`
+- `src/features/research/torntpharmGateH2RemainingEvidenceLock.test.ts`
+- `docs/PortfolioAI_GATE_H_H2_REMAINING_EVIDENCE_LOCK.md`
+
+### Canonical findings
+
+At the 20 September 2026 snapshot:
+
+- TORNTPHARM `market_metric_observations` rows = 0
+- TORNTPHARM `market_price_history` rows = 0
+- latest located `PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT` = -14.87%, but fresh only through 18 September 2026
+- current authoritative market-price history therefore remains absent for H2
+- production has only one reviewed PHARMA Primary assignment: TORNTPHARM -> DOMESTIC_FORMULATIONS
+- canonical reviewed Domestic Formulations peer cohort is therefore absent
+
+### Remaining dimension blockers
+
+Business Durability:
+- licensed market cross-check required for Brand / Therapy Leadership
+- three-period comparable MR/field-force history still required
+
+Valuation:
+- current authoritative market-price authority absent
+- latest self-history observation stale at snapshot
+- reviewed Domestic Formulations peer cohort absent
+- current market-cap authority for FCF yield absent
+
+Momentum:
+- TORNTPHARM canonical daily history absent
+- NIFTY Pharma canonical benchmark history absent
+- 12M/6M/relative-strength inputs absent
+
+Risk:
+- regulatory runtime remains REVIEW_REQUIRED
+- max drawdown and relative-volatility inputs absent
+
+### Global Generics materiality contradiction discovered
+
+Production secondary exposure currently records:
+
+- Global Generics materiality state = MATERIAL
+- confidence = MEDIUM
+- evidence basis economic share = approximately 12.05%
+
+But the G2 eligibility contract consumed by G7 requires:
+
+- minimum Material Overlay percent = 15%
+
+Therefore the deterministic eligibility check returns:
+
+- `REVIEW_REQUIRED`
+- `MATERIAL_OVERLAY_REQUIRES_REVIEWED_MATERIALITY`
+
+No numeric Global Generics modifier may be produced from the current contradictory state.
+
+### Authorization boundary
+
+H2 cannot safely close without:
+
+1. separately authorized market-history refresh/import for TORNTPHARM and NIFTY Pharma;
+2. separately authorized licensed-market source for Brand / Therapy Leadership;
+3. read-only public/official completion for field-force and company-wide regulatory scope;
+4. owner reconciliation of the 12.05% versus 15% Global Generics materiality conflict;
+5. reviewed Domestic Formulations peer cohort evidence.
+
+No provider refresh or licensed call was performed.
+
+**CURRENT STOP POINT:** validate the remaining-evidence blocker lock, then resolve the explicit authorization/evidence blockers without creating a new H2 sub-stage.
