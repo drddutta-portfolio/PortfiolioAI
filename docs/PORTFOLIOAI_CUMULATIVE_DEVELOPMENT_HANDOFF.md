@@ -22816,3 +22816,115 @@ H2 may now apply the rubric to reviewed TORNTPHARM evidence.
 No production evidence mutation, provider refresh, score persistence, recommendation, sizing, deployment or PR merge is authorized.
 
 **CURRENT STOP POINT:** continue H2 evidence completion and company-score input lock.
+
+
+---
+
+## 260. Entry 255 — H2 Quality and Cash Flow deterministic input locks implemented
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+H2 continued directly after the owner-approved component-normalization freeze. No H2A/H2B/H2C micro-stage was created.
+
+### Quality
+
+The existing eight-quarter official Operating EBITDA / revenue package was converted into deterministic operating-margin statistics.
+
+The already owner-approved H2 Type-7 linear percentile convention was reused for the Quality IQR; no new percentile convention was introduced.
+
+Locked statistics:
+
+- median latest 8 operating margin = 32.64442710817307%
+- Type-7 IQR = 0.30431458013040924 pp
+- latest-4 median minus prior-4 median = +0.34859494903484745 pp
+
+Owner-approved Quality curve component results:
+
+- level = 100
+- stability = 100
+- trend = 60
+
+Read-only Quality candidate:
+
+> **92**
+
+Added documentation:
+
+- `docs/PortfolioAI_GATE_H_H2_QUALITY_DERIVED_STATISTIC_LOCK.md`
+
+### Cash Flow
+
+The missing historical CFO values were completed from official Torrent Pharma annual-report evidence without any provider call.
+
+Matched annual package:
+
+- FY2024 CFO = 3266.08 cr; PAT = 1656.38 cr; FCF = 2833.30 cr
+- FY2025 CFO = 2585.11 cr; PAT = 1911.25 cr; FCF = 1973.24 cr
+- FY2026 CFO = 3022.71 cr; PAT = 2163.37 cr; FCF = 2345.32 cr
+
+Locked statistics:
+
+- median CFO/PAT = 1.3972228513846454
+- median FCF/PAT = 1.0841048919047598
+- positive FCF years = 3/3
+- latest CFO/PAT minus prior-two median = -0.26497394893599835
+
+Owner-approved Cash Flow curve component results:
+
+- CFO/PAT = 100
+- FCF/PAT = 100
+- consistency/trend = 68
+
+Read-only Cash Flow candidate:
+
+> **93.6**
+
+Added documentation:
+
+- `docs/PortfolioAI_GATE_H_H2_CASH_FLOW_INPUT_LOCK.md`
+
+### Updated H2 implementation
+
+Updated:
+
+- `torntpharmGateH2OfficialEvidencePack.ts`
+- `torntpharmGateH2OfficialEvidencePack.test.ts`
+- `torntpharmGateH2DerivedStatisticsCandidate.ts`
+- `torntpharmGateH2DerivedStatisticsCandidate.test.ts`
+- `torntpharmGateH2InitialScoreInputs.ts`
+- `torntpharmGateH2InitialScoreInputs.test.ts`
+
+The H2 read-only score-input package now exposes deterministic candidates for:
+
+- Quality = 92
+- Growth = 78.25
+- Capital Efficiency = 79
+- Cash Flow = 93.6
+- Balance Sheet / Credit = 65
+
+No final overall score is calculated.
+
+### Validation state
+
+Implementation is complete for this slice.
+
+Owner/local focused validation is still required before the Quality and Cash Flow locks are classified as PASS.
+
+### Safety state
+
+- production mutation: NO
+- evidence write: NO
+- provider refresh: NO
+- paid API call: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+**CURRENT STOP POINT:** run focused H2 Quality + Cash Flow validation. If PASS, continue H2 directly with Business Durability / Ownership-Governance reviewed evidence normalization and the remaining Valuation, Momentum, Risk and Material Overlay inputs.
