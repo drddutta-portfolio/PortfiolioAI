@@ -22763,3 +22763,56 @@ This preserves the owner-approved governance rule that High Risk is interpretati
 - score execution/persistence: OFF
 
 **CURRENT STOP POINT:** validate the candidate and obtain one explicit owner methodology approval before applying the rubric to TORNTPHARM reviewed evidence.
+
+
+---
+
+## 259. Entry 254 — H2 component-normalization rubric owner-approved and frozen
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **H2 NORMALIZATION VALIDATION PASS — APPROVE H2 COMPONENT NORMALIZATION RUBRIC**
+
+The bounded H2 normalization correction is now frozen as:
+
+- version: `PHARMA_GATE_H2_COMPONENT_NORMALIZATION_V1_OWNER_APPROVED`
+- state: `OWNER_APPROVED_NOT_ACTIVE`
+- methodology approved: YES
+- activation approved: NO
+- score execution/persistence: OFF
+
+### Approved qualitative component rubric
+
+- VERY_STRONG = 90
+- STRONG = 75
+- NEUTRAL = 50
+- WEAK = 25
+- VERY_WEAK = 10
+- REVIEW_REQUIRED = null
+
+Applies to reviewed qualitative components in:
+
+- Business Durability;
+- Ownership / Governance.
+
+Missing evidence or unresolved material contradictions remain `REVIEW_REQUIRED`.
+
+### Approved Risk regulatory-context normalization
+
+- CLEAR = 100
+- HIGH_RISK = 100
+- REVIEW_REQUIRED = null
+- BLOCKED_REVIEW = null
+
+This preserves the owner-approved G7-P2 rule that High Risk is interpretation-only and does not receive a second numeric penalty.
+
+### H2 continuation
+
+H2 may now apply the rubric to reviewed TORNTPHARM evidence.
+
+No production evidence mutation, provider refresh, score persistence, recommendation, sizing, deployment or PR merge is authorized.
+
+**CURRENT STOP POINT:** continue H2 evidence completion and company-score input lock.
