@@ -46,8 +46,9 @@ TORNT_SECURITY_ID="$(psql "$DB_URL" -Atqc "select id from public.securities wher
 OPEN_HOLDING="$(psql "$DB_URL" -Atqc "select count(*) from public.current_holdings where portfolio_id='$PORTFOLIO_ID' and security_id='$TORNT_SECURITY_ID' and current_quantity::numeric <> 0;")"
 [[ "$OPEN_HOLDING" == "1" ]] || die "TORNTPHARM must be an open local holding for discovery accounting."
 
-TRENDLYNE_ENV_PRESENT="$(grep -E '^TRENDLYNE_MCP_URL=' "$ENV_FILE" | wc -l | tr -d ' ')"
-[[ "$TRENDLYNE_ENV_PRESENT" == "1" ]] || die "TRENDLYNE_MCP_URL is missing from $ENV_FILE."
+if ! grep -qE '^TRENDLYNE_MCP_URL=.+' "$ENV_FILE"; then
+  die "TRENDLYNE_MCP_URL is missing from $ENV_FILE. Add the local Trendlyne MCP endpoint before running this discovery."
+fi
 
 printf 'Local valuation discovery preflight PASS\n'
 printf '  user:      %s\n' "$LOCAL_EMAIL"
