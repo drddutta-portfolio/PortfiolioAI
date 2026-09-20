@@ -1,9 +1,9 @@
 export const PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT_VERSION =
-  "PHARMA_V1_GOVERNANCE_REGULATORY_GATE_V1_PROPOSAL" as const
+  "PHARMA_V1_GOVERNANCE_REGULATORY_GATE_V1_OWNER_APPROVED" as const
 
 export const PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT = {
   version: PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT_VERSION,
-  state: "PROPOSAL_ONLY",
+  state: "OWNER_APPROVED_NOT_ACTIVE",
   criticalEventBlocksPreview: true,
   highRiskAutomaticallyBlocksPreview: false,
   highRiskConstraintContractRequiredBeforeNumericCap: true,
@@ -12,6 +12,7 @@ export const PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT = {
   remediationErasesHistoricalEvent: false,
   hiddenDoubleCountingAllowed: false,
   additionalNumericPenaltyEnabled: false,
+  methodologyApproved: true,
   scoreExecutionEnabled: false,
 } as const
 
@@ -48,7 +49,7 @@ export type PharmaGovernanceRegulatoryGateState =
 
 export interface PharmaGovernanceRegulatoryGateResult {
   readonly contractVersion: typeof PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT_VERSION
-  readonly state: "PROPOSAL_ONLY"
+  readonly state: "OWNER_APPROVED_NOT_ACTIVE"
   readonly gateState: PharmaGovernanceRegulatoryGateState
   readonly blocksPreview: boolean
   readonly interpretationProminenceRequired: boolean
@@ -70,7 +71,7 @@ function result(
 ): PharmaGovernanceRegulatoryGateResult {
   return {
     contractVersion: PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT_VERSION,
-    state: "PROPOSAL_ONLY",
+    state: "OWNER_APPROVED_NOT_ACTIVE",
     gateState,
     blocksPreview,
     interpretationProminenceRequired,
@@ -141,7 +142,7 @@ export function evaluatePharmaGovernanceRegulatoryGate(
     ) {
       return result(input, "HIGH_RISK", false, true, true, [
         "HIGH_RISK_MATERIAL_REGULATORY_EVENT",
-        "NUMERIC_HIGH_RISK_CAP_UNAPPROVED",
+        "HIGH_RISK_INTERPRETATION_ONLY_NO_NUMERIC_CAP",
       ])
     }
 
