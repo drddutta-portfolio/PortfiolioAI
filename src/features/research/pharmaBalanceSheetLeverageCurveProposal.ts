@@ -1,11 +1,11 @@
-import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
+import { PHARMA_RESEARCH_PROFILE_GATE_G } from "./pharmaResearchProfileGateG"
 import { PHARMA_SUBPROFILE_CODES, type PharmaSubprofileCode } from "./pharmaSubprofileAssignment"
 
 export const PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL_VERSION =
   "PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_V1_PROPOSAL" as const
 
 const BALANCE_SHEET_METRIC_CODE = "PHARMA_BALANCE_SHEET_LEVERAGE" as const
-const balanceSheetMetric = PHARMA_RESEARCH_PROFILE_V1.metrics.find(
+const balanceSheetMetric = PHARMA_RESEARCH_PROFILE_GATE_G.metrics.find(
   (metric) => metric.metricCode === BALANCE_SHEET_METRIC_CODE,
 )
 
@@ -19,7 +19,7 @@ export interface PharmaBalanceSheetLeverageCurveProposal {
   readonly metricCode: typeof BALANCE_SHEET_METRIC_CODE
   readonly canonicalDimension: "BALANCE_SHEET_CREDIT"
   readonly currentParentContractDimension: typeof balanceSheetMetric.dimension
-  readonly dimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION"
+  readonly dimensionAlignmentState: "ALIGNED_VERSIONED_PARENT"
   readonly history: {
     readonly minimumComparableAnnualPeriods: 3
     readonly preferredComparableAnnualPeriods: 5
@@ -59,7 +59,7 @@ export const PHARMA_BALANCE_SHEET_LEVERAGE_CURVE_PROPOSAL: PharmaBalanceSheetLev
   metricCode: BALANCE_SHEET_METRIC_CODE,
   canonicalDimension: "BALANCE_SHEET_CREDIT",
   currentParentContractDimension: balanceSheetMetric.dimension,
-  dimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
+  dimensionAlignmentState: "ALIGNED_VERSIONED_PARENT",
   history: {
     minimumComparableAnnualPeriods: 3,
     preferredComparableAnnualPeriods: 5,
