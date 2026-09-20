@@ -23836,3 +23836,60 @@ Still required:
 5. reviewed/effective-dated minimum three-peer Domestic Formulations cohort and comparable PE + EV/EBITDA evidence.
 
 **CURRENT STOP POINT:** prepare one exact bounded authorization package for these remaining evidence-acquisition actions; do not execute any provider call, licensed source call, production write or deployment without explicit owner approval.
+
+
+---
+
+## 275. Entry 270 — H2 exact market + valuation authorization package prepared
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+After NIFTY Pharma benchmark plumbing validation PASS, H2 reached the first point where provider-backed production evidence acquisition is unavoidable.
+
+Prepared:
+
+- `docs/PortfolioAI_GATE_H_H2_EXACT_REMAINING_EVIDENCE_AUTHORIZATION_PACKAGE.md`
+
+### Exact requested scope
+
+A. Deploy only `refresh-pharma-benchmark`.
+
+B. Execute TORNTPHARM `refresh-market-history`:
+- one Angel One historical call;
+- 400-day daily history;
+- derive 12M / 6M momentum, max drawdown and volatility.
+
+C. Execute `refresh-pharma-benchmark`:
+- one Angel One NIFTY Pharma historical call;
+- exact AMXIDX identity;
+- derive TORNTPHARM relative strength vs NIFTY Pharma.
+
+D. Execute TORNTPHARM `refresh-valuation-evidence`:
+- one Trendlyne call;
+- exact metric `PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT`.
+
+Maximum provider-call envelope = **3**.
+
+### Explicitly excluded
+
+- Brand / Therapy licensed call;
+- peer assignment persistence;
+- peer valuation refreshes;
+- score run/persistence;
+- recommendation/sizing;
+- scheduler changes;
+- unrelated deployment;
+- PR merge.
+
+Brand / Therapy remains separately gated until the exact licensed source/query/call contract is identified.
+
+Peer cohort remains separately reviewed; no provisional candidate may be promoted merely to satisfy the valuation minimum.
+
+### Requested approval phrase
+
+`APPROVE H2 MARKET + VALUATION EVIDENCE ACQUISITION PACKAGE`
+
+No action in the package has yet been executed.
+
+**CURRENT STOP POINT:** await exact owner authorization before deployment/provider calls/production evidence writes.
