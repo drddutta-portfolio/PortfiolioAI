@@ -13,12 +13,12 @@ describe("TORNTPHARM H2 Business Durability review candidate", () => {
     expect(brand?.normalizedScore).toBeNull()
   })
 
-  it("does not infer field-force productivity from a single disclosed headcount", () => {
+  it("uses three directly disclosed field-force / India-revenue periods", () => {
     const fieldForce = TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_COMPONENTS.find(
       (row) => row.component === "FIELD_FORCE_PRODUCTIVITY",
     )
-    expect(fieldForce?.reviewedState).toBe("REVIEW_REQUIRED")
-    expect(fieldForce?.normalizedScore).toBeNull()
+    expect(fieldForce?.reviewedState).toBe("STRONG")
+    expect(fieldForce?.normalizedScore).toBe(75)
   })
 
   it("maps reviewed R&D and pipeline evidence through the approved rubric", () => {
@@ -35,7 +35,7 @@ describe("TORNTPHARM H2 Business Durability review candidate", () => {
   })
 
   it("keeps the whole dimension non-numeric until all four components are ready", () => {
-    expect(TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW.readyComponentCount).toBe(2)
+    expect(TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW.readyComponentCount).toBe(3)
     expect(TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW.requiredComponentCount).toBe(4)
     expect(TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW.allComponentsScoreReady).toBe(false)
     expect(TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW.combinedScore).toBeNull()
