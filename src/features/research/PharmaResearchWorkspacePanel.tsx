@@ -73,7 +73,6 @@ import { PHARMA_GLOBAL_GENERICS_APPLICABILITY_REGISTRY_RECONCILIATION } from "./
 import { PHARMA_G7_OVERLAY_NUMERIC_MODIFIER } from "./pharmaG7OverlayNumericModifierProposal"
 import { PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT } from "./pharmaG7GovernanceHighRiskConstraint"
 import { PHARMA_G7_READ_ONLY_SCORING_ADAPTER } from "./pharmaG7ReadOnlyScoringAdapter"
-import { TORNTPHARM_GATE_H3_READ_ONLY_RESULT } from "./torntpharmGateH3ReadOnlyScore"
 import { PHARMA_G7_RESEARCH_GAP_REGISTER, PHARMA_G7_VALIDATION_INVARIANTS } from "./pharmaG7ValidationAndResearchGapRegister"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
@@ -199,10 +198,8 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const localPrerequisiteMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalPrerequisiteMutationProposal() : null
   const localObservationMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalObservationMutationProposal() : null
   const gateGScoringProposal = buildPharmaGateGScoringMethodProposal(model)
-  const h3TorntpharmScore = symbol.toLocaleUpperCase() === "TORNTPHARM"
-    ? TORNTPHARM_GATE_H3_READ_ONLY_RESULT
-    : null
   const sectorWorkspaceContext = pharmaSectorWorkspaceCompanyContext(symbol)
+  const h3CompanyScore = sectorWorkspaceContext.readOnlyCompanyScore
   const sectorCapabilities = buildPharmaSectorWorkspaceCapabilities(
     resolution.data.assignment,
     research.metrics,
@@ -231,7 +228,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
 
     <details className="pharma-deep-layer pharma-scoring-methodology">
       <summary>
-        <div><span>Gate G · Scoring methodology design</span><small>PHARMA_V1 dimensions, subprofile participation and readiness gates · no numeric curves approved</small></div>
+        <div><span>Gate G · Scoring methodology design</span><small>PHARMA_V1 dimensions, subprofile participation and readiness gates · methodology locked · persistence off</small></div>
         <b>Open details</b>
       </summary>
       <div className="pharma-deep-layer-body">
@@ -240,15 +237,15 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
             <div>
               <p className="eyebrow">Gate G · Methodology contract</p>
               <h3 id="pharma-gate-g-methodology-title">PHARMA_V1 scoring design</h3>
-              <p>The scoring architecture is reviewable before any curve is approved. Primary and material business-model evidence participate inside one PHARMA_V1 score; emerging watches stay outside the denominator.</p>
+              <p>The owner-approved scoring architecture remains inspectable in read-only mode. Primary and material business-model evidence participate inside one PHARMA_V1 score; emerging watches stay outside the denominator.</p>
             </div>
-            <span className="pharma-workspace-lock">Design only · No score run</span>
+            <span className="pharma-workspace-lock">Methodology locked · Persistence off</span>
           </div>
           <div className="pharma-persistence-package-summary">
             <div><span>Weighted dimensions</span><strong>{gateGScoringProposal.dimensionWeights.length}</strong><small>{gateGScoringProposal.dimensionWeights.reduce((sum, item) => sum + item.weight, 0)}% total weight</small></div>
             <div><span>Dimension gate</span><strong>{Math.round(gateGScoringProposal.dimensionMinimumScoreReadyCoverage * 100)}%</strong><small>Minimum score-ready coverage per weighted dimension</small></div>
             <div><span>Overall preview gate</span><strong>{Math.round(gateGScoringProposal.overallMinimumScoreReadyCoverage * 100)}%</strong><small>All weighted dimensions must also be score-ready</small></div>
-            <div><span>Curve approval</span><strong>Pending</strong><small>No numeric Pharma score curve is approved yet</small></div>
+            <div><span>Methodology state</span><strong>Locked</strong><small>H3 consumes approved contracts read-only; official score persistence remains off</small></div>
           </div>
           <div className="pharma-persistence-package-grid">
             <article>
@@ -1029,9 +1026,9 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
             </article>
             <article>
               <strong>G7-P1 · Validation & consumption boundary</strong>
-              <small>Proposal only · G7.1 consumption remains blocked</small>
-              <p>PARTIAL, insufficient, blocked or Emerging Watch states stay non-numeric. Independent cap stacking remains prohibited, and the proposal cannot be consumed by the G7.1 adapter until owner validation is recorded.</p>
-              <span>Owner validation: REQUIRED · G7.1 consumption approved: NO · Score execution: NO</span>
+              <small>Owner approved · Read-only G7.1 consumption</small>
+              <p>PARTIAL, insufficient, blocked or Emerging Watch states stay non-numeric. Independent cap stacking remains prohibited; approved G7.1 consumption remains read-only and non-persisting.</p>
+              <span>Owner validation: COMPLETE · G7.1 consumption approved: YES · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
@@ -1043,9 +1040,9 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
             </article>
             <article>
               <strong>G7-P2 · Blocking & anti-double-counting boundary</strong>
-              <small>Proposal only · G7.1 consumption remains blocked</small>
+              <small>Owner approved · Read-only G7.1 consumption</small>
               <p>BLOCKED_REVIEW and CRITICAL states still block the overall preview. REVIEW_REQUIRED stays non-numeric. The same governance/regulatory event cannot simultaneously create multiple hidden deductions.</p>
-              <span>Owner validation: REQUIRED · G7.1 consumption approved: NO · Score execution: NO</span>
+              <span>Owner validation: COMPLETE · G7.1 consumption approved: YES · Score execution: NO</span>
             </article>
           </div>
           <div className="pharma-persistence-package-grid">
@@ -1059,22 +1056,22 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <strong>G7.1 · Fail-closed aggregation boundary</strong>
               <small>60% readiness is a gate, not a missing-component formula</small>
               <p>A readiness-passing dimension still needs a versioned numeric dimension-score contract. Missing methodology never becomes zero or neutral, and any unavailable weighted dimension blocks the overall preview instead of renormalizing the rest.</p>
-              <span>Overall score with missing weighted dimension: NO · G7.2 wiring: NOT STARTED</span>
+              <span>Overall score with missing weighted dimension: NO · H3 reuses this adapter read-only</span>
             </article>
           </div>
-          {h3TorntpharmScore ? <div className="pharma-g7-preview">
+          {h3CompanyScore ? <div className="pharma-g7-preview">
             <div className="pharma-g7-preview-head">
               <div>
                 <strong>H3 · TORNTPHARM first deterministic read-only score</strong>
-                <small>{h3TorntpharmScore.contractVersion}</small>
+                <small>{h3CompanyScore.contractVersion}</small>
               </div>
-              <span>Overall Pharma score: {h3TorntpharmScore.overallScore === null ? "Fail closed" : `${h3TorntpharmScore.overallScore.toFixed(4)} / 100`}</span>
+              <span>Overall Pharma score: {h3CompanyScore.overallScore === null ? "Fail closed" : `${h3CompanyScore.overallScore.toFixed(4)} / 100`}</span>
             </div>
             <div className="pharma-g7-preview-meta">
               <span>Primary: Domestic Formulations</span>
-              <span>Global Generics: 12.05% · below 15% numeric threshold</span>
+              <span>Global Generics: {h3CompanyScore.globalGenericsOverlay.economicMaterialityPercent.toFixed(2)}% · below {h3CompanyScore.globalGenericsOverlay.minimumNumericMaterialityPercent}% numeric threshold</span>
               <span>CDMO / CRAMS: Emerging Watch · numeric exclusion</span>
-              <span>Governance: {titleCase(h3TorntpharmScore.governance.constraintState)}</span>
+              <span>Governance: {titleCase(h3CompanyScore.governance.constraintState)}</span>
               <span>Persistence: OFF</span>
             </div>
             <div className="pharma-g7-preview-table-wrap">
@@ -1091,12 +1088,12 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
                   </tr>
                 </thead>
                 <tbody>
-                  {h3TorntpharmScore.dimensions.map((row) => <tr key={row.dimensionCode}>
+                  {h3CompanyScore.dimensions.map((row) => <tr key={row.dimensionCode}>
                     <td>{titleCase(row.dimensionCode)}</td>
                     <td>{row.primaryScore.toFixed(2)}</td>
                     <td>{row.weight}%</td>
                     <td>{row.weightedContribution === null ? "—" : row.weightedContribution.toFixed(4)}</td>
-                    <td>{row.overlayTreatment === "BELOW_SCORING_MATERIALITY" ? "Below numeric materiality · +0" : "Not applicable"}</td>
+                    <td>{row.overlayTreatment === "BELOW_SCORING_MATERIALITY" ? "Below numeric materiality · no modifier" : "Not applicable"}</td>
                     <td>{row.finalScore === null ? "Fail closed" : `${row.finalScore.toFixed(2)} / 100`}</td>
                     <td>
                       <details>

@@ -15,6 +15,9 @@ import {
   PHARMA_G7_OVERLAY_NUMERIC_MODIFIER_VERSION,
 } from "./pharmaG7OverlayNumericModifierProposal"
 import {
+  PHARMA_OVERLAY_MODIFIER_CONTRACT_VERSION,
+} from "./pharmaOverlayModifierContract"
+import {
   evaluatePharmaG7GovernanceConstraint,
   PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT_VERSION,
 } from "./pharmaG7GovernanceHighRiskConstraint"
@@ -289,15 +292,34 @@ export function calculatePharmaG7Dimension(
   }
 
   if (input.overlayParticipation === "BELOW_SCORING_MATERIALITY") {
+    if (
+      input.overlayModifierContractVersion
+      !== PHARMA_OVERLAY_MODIFIER_CONTRACT_VERSION
+    ) {
+      return {
+        dimensionCode: input.dimensionCode,
+        calculationState: "UNAVAILABLE_METHODOLOGY",
+        readinessState: "PARTIAL",
+        primaryScore: input.primaryScore,
+        overlayModifierPoints: null,
+        finalScore: null,
+        reasonCodes: [
+          "BELOW_SCORING_MATERIALITY_CLASSIFICATION_CONTRACT_NOT_AVAILABLE",
+        ],
+        methodologyLineage: lineage,
+      }
+    }
+
     return {
       dimensionCode: input.dimensionCode,
       calculationState: "CALCULATED",
       readinessState: "READY",
       primaryScore: input.primaryScore,
-      overlayModifierPoints: 0,
+      overlayModifierPoints: null,
       finalScore: input.primaryScore,
       reasonCodes: [
         "MATERIAL_OVERLAY_BELOW_SCORING_MATERIALITY_NUMERICALLY_EXCLUDED",
+        "NO_NUMERIC_OVERLAY_MODIFIER_APPLIED",
       ],
       methodologyLineage: lineage,
     }

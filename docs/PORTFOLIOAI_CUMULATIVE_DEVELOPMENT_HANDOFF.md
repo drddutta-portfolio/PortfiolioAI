@@ -24471,7 +24471,7 @@ The contract consumes the ten formally closed H2 dimension inputs and reuses the
 Current deterministic H3 result:
 
 - overall score = **75.1575 / 100**;
-- Global Generics = material business context retained, but 12.05% is below the approved 15% numeric-overlay threshold, so modifier = 0;
+- Global Generics = material business context retained, but 12.05% is below the approved 15% numeric-overlay threshold, so no numeric modifier is applied;
 - CDMO / CRAMS = Emerging Watch, numerically excluded;
 - governance runtime = CLEAR;
 - historical Indrad event retained;
@@ -24482,7 +24482,7 @@ Current deterministic H3 result:
 - recommendation = OFF;
 - position sizing = OFF.
 
-The existing Pharma Research workspace now exposes the ten dimension scores, weights, contributions, overlay treatment, governance state and lineage without redesigning the shared workspace.
+The existing Pharma Research workspace now exposes the ten dimension scores, weights, contributions, overlay treatment, governance state and lineage without redesigning the shared workspace. H3 is routed through the existing company-context registry rather than a new permanent symbol-specific UI branch.
 
 A focused H3 validation step was added to the existing PR architecture workflow so the new H3 test plus related G7/H2 regressions run together with TypeScript, architecture checks/lint, production build and `git diff --check`.
 

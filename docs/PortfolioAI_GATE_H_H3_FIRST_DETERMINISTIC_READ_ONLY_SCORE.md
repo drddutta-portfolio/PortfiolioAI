@@ -58,7 +58,7 @@ Therefore the current H3 treatment is:
 
 - material business context remains visible;
 - Global Generics touches the approved overlay dimensions;
-- numeric modifier = 0 because the locked exposure is explicitly `BELOW_SCORING_MATERIALITY`;
+- numeric modifier = **not applied / null** because the locked exposure is explicitly `BELOW_SCORING_MATERIALITY`;
 - no neutral substitution is used for missing evidence;
 - no second Global Generics stock score is created.
 
@@ -107,6 +107,7 @@ Implementation:
 - `src/features/research/torntpharmGateH3ReadOnlyScore.ts`
 - `src/features/research/torntpharmGateH3ReadOnlyScore.test.ts`
 - existing `pharmaG7ReadOnlyScoringAdapter.ts` reused with an explicit below-scoring-materiality participation state;
+- `pharmaSectorWorkspaceCompanyContext.ts` used as the shared company-level preview registry, avoiding a new permanent symbol branch in the Research component;
 - existing Pharma Research workspace reused for read-only display;
 - no score table or persistence path added.
 

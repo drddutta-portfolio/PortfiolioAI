@@ -7,6 +7,7 @@ import {
   type PharmaG7DimensionCode,
 } from "./pharmaG7ReadOnlyScoringAdapter"
 import { PHARMA_G7_OVERLAY_NUMERIC_MODIFIER_VERSION } from "./pharmaG7OverlayNumericModifierProposal"
+import { PHARMA_OVERLAY_MODIFIER_CONTRACT_VERSION } from "./pharmaOverlayModifierContract"
 
 const dimensions: readonly PharmaG7DimensionCode[] = [
   "QUALITY",
@@ -118,20 +119,21 @@ describe("G7.1 read-only scoring adapter", () => {
     expect(result.finalScore).toBe(72.5)
   })
 
-  it("keeps a reviewed material business overlay numeric-neutral only when the locked contract classifies it below scoring materiality", () => {
+  it("keeps a reviewed material business overlay non-numeric when the locked contract classifies it below scoring materiality", () => {
     const result = calculatePharmaG7Dimension({
       ...readyDimension("GROWTH", 78.25),
       overlayParticipation: "BELOW_SCORING_MATERIALITY",
       overlayModifierPoints: null,
-      overlayModifierContractVersion: "PHARMA_V1_OVERLAY_MODIFIER_V1_PROPOSAL",
+      overlayModifierContractVersion: PHARMA_OVERLAY_MODIFIER_CONTRACT_VERSION,
     })
     expect(result.calculationState).toBe("CALCULATED")
     expect(result.primaryScore).toBe(78.25)
-    expect(result.overlayModifierPoints).toBe(0)
+    expect(result.overlayModifierPoints).toBeNull()
     expect(result.finalScore).toBe(78.25)
     expect(result.reasonCodes).toContain(
       "MATERIAL_OVERLAY_BELOW_SCORING_MATERIALITY_NUMERICALLY_EXCLUDED",
     )
+    expect(result.reasonCodes).toContain("NO_NUMERIC_OVERLAY_MODIFIER_APPLIED")
   })
 
   it("keeps Emerging Watch excluded from the numeric result", () => {

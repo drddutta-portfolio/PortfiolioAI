@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { PHARMA_V1_DIMENSION_WEIGHTS } from "./pharmaGateGScoringMethodProposal"
+import { pharmaSectorWorkspaceCompanyContext } from "./pharmaSectorWorkspaceCompanyContext"
 import {
   calculateTorntpharmGateH3ReadOnlyScore,
   TORNTPHARM_GATE_H3_GLOBAL_GENERICS_OVERLAY_DIMENSIONS,
@@ -116,7 +117,7 @@ describe("Gate H H3 TORNTPHARM deterministic read-only score", () => {
           (row) => row.dimensionCode === code,
         )
       expect(dimension?.overlayTreatment).toBe("BELOW_SCORING_MATERIALITY")
-      expect(dimension?.overlayModifierPoints).toBe(0)
+      expect(dimension?.overlayModifierPoints).toBeNull()
       expect(dimension?.finalScore).toBe(dimension?.primaryScore)
     }
   })
@@ -155,6 +156,19 @@ describe("Gate H H3 TORNTPHARM deterministic read-only score", () => {
     expect(TORNTPHARM_GATE_H3_READ_ONLY_RESULT.benchmarkCode).toBe(
       "NIFTY_PHARMA",
     )
+  })
+
+  it("is exposed through the shared company-context registry only for TORNTPHARM", () => {
+    expect(
+      pharmaSectorWorkspaceCompanyContext("TORNTPHARM").readOnlyCompanyScore
+        ?.overallScore,
+    ).toBe(75.1575)
+    expect(
+      pharmaSectorWorkspaceCompanyContext("AUROPHARMA").readOnlyCompanyScore,
+    ).toBeNull()
+    expect(
+      pharmaSectorWorkspaceCompanyContext("UNKNOWN").readOnlyCompanyScore,
+    ).toBeNull()
   })
 
   it("is read-only, non-persisting, non-recommending and non-sizing", () => {
