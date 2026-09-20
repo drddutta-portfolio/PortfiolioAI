@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; revised Gate I plan adopted; I1 implemented; consolidated validation and owner review pending
+**Current stage:** Gate H COMPLETE / PASS; Gate I1 COMPLETE / PASS; I2 NOT STARTED
 
 ---
 
@@ -25305,3 +25305,97 @@ This was corrected without weakening the runtime contract:
 No scoring or recommendation methodology changed.
 
 **I1 remains IMPLEMENTED / VALIDATION PENDING / OWNER REVIEW PENDING.**
+
+
+---
+
+## 293. Entry 288 — Gate I1 COMPLETE / PASS
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Canonical I1 review:** `docs/PortfolioAI_GATE_I_I1_RECOMMENDATION_AUTHORITY_REVIEW.md`
+
+The owner reran:
+
+`git pull && bash scripts/i1-validate-pharma-recommendation-authority.sh`
+
+Final owner result:
+
+> **ALL PASSED**
+
+I1 is therefore formally closed:
+
+> **I1 = COMPLETE / PASS**
+
+### Frozen I1 authority decisions
+
+- canonical assignment authority remains security-scoped and `PHARMA / PHARMA_V1` profile/version scoped;
+- recommendation input composes canonical assignment authority with a separate explicit score authority;
+- score state is discriminated as `SCORE_READY` vs `SCORE_NOT_COMPUTABLE`;
+- assignment state is independently discriminated as `RESOLVED` vs blocked;
+- PHARMA_V1 recommendation policy identity is native to `PHARMA_V1`;
+- legacy `PHARMA_HEALTHCARE` recommendation-policy usage is forbidden for Gate I;
+- PHARMA_V1 missing-overall-score reconstruction / weight renormalization is disabled;
+- cross-security authority mismatch fails closed;
+- assignment Primary / score Primary mismatch fails closed;
+- AUROPHARMA may remain explicitly `SCORE_NOT_COMPUTABLE` without exposing partial-score recommendation input.
+
+### Validation closure
+
+The consolidated I1 validation passed:
+
+- focused I1 + authority regressions;
+- strict TypeScript;
+- presentation data-boundary architecture guard;
+- focused I1 ESLint;
+- existing architecture lint;
+- production build;
+- diff whitespace check.
+
+Edge tests were not required because I1 changed no Edge Function code.
+
+### Methodology boundary
+
+I1 defined **no**:
+
+- Core threshold;
+- Satellite threshold;
+- Watch threshold;
+- dimension floor;
+- hard blocker;
+- caution threshold;
+- recommendation for TORNTPHARM;
+- recommendation for AUROPHARMA.
+
+Those remain I2/I3 work.
+
+### Safety state
+
+No I1 action:
+
+- persisted the Gate H score;
+- persisted a recommendation;
+- mutated canonical assignment data;
+- changed production Supabase;
+- invoked a provider;
+- invoked AI interpretation;
+- invoked weight guidance;
+- invoked position sizing;
+- deployed;
+- merged PR #101.
+
+### CURRENT STOP POINT
+
+```text
+Gate H = COMPLETE / PASS
+Gate I plan = REVISED / ADOPTED
+I1 = COMPLETE / PASS
+I2 = NOT STARTED
+I3 = NOT STARTED
+I4 = NOT STARTED
+```
+
+Do not start I2 automatically.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
