@@ -368,6 +368,32 @@ The verifier continues to evaluate the unrounded numeric value against the appro
 
 No methodology, evidence, dimension score, weight, or H3 result was changed.
 
+## Full-suite historical-snapshot regression discovered
+
+After the floating-point assertion correction, the H4-focused tests advanced into the full application suite.
+
+The full suite exposed six visible inherited assertion failures in historical Gate G/H1 artifacts. These were not H4 score failures:
+
+1. G-FINAL-3 historical TORNTPHARM runtime expected `REVIEW_REQUIRED`, but its test imported the later H2-resolved current runtime (`CLEAR`).
+2. H1 historical readiness expected `REVIEW_REQUIRED`, but its source dynamically imported the later H2-resolved current runtime.
+3. Four Global Generics G6 historical methodology gates correctly retained `parentDimensionReconciliationRequired = true`, but dynamically read the later promoted parent curve state `ALIGNED_VERSIONED_PARENT` instead of their original frozen `REQUIRES_VERSIONED_PARENT_RECONCILIATION`.
+
+Canonical documents confirm the historical expectations are correct:
+
+- G-FINAL-3 froze TORNTPHARM at `REVIEW_REQUIRED` at that stage;
+- H1 recorded Risk as `RUNTIME_REVIEW_REQUIRED`;
+- G6.32 / G6.34 / G6.36 / G6.40 explicitly preserved the parent-dimension reconciliation blocker.
+
+The repair freezes those historical snapshots in their own artifacts. It does **not** alter:
+
+- current H2-resolved TORNTPHARM governance runtime = `CLEAR`;
+- current promoted parent dimension contract = `PHARMA_V1_GATE_G_DIMENSIONS_V1`;
+- any H2/H3 dimension score;
+- H3 overall score = 75.1575;
+- any approved scoring methodology.
+
+The affected historical regression tests are now included in H4 focused validation before the full application suite.
+
 ## Consolidated H4 validation
 
 Run exactly:
