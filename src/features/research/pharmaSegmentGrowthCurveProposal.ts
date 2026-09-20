@@ -89,3 +89,67 @@ export const PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL: PharmaSegmentGrowthCurvePropo
   activationApproved: false,
   scoreExecutionEnabled: false,
 }
+
+
+export interface PharmaSegmentGrowthCurveStatistics {
+  readonly medianLatest4ComparableQuartersPercent: number
+  readonly positiveQuartersOutOfLatest4: 0 | 1 | 2 | 3 | 4
+  readonly latestMinusMedianPrior3PercentagePoints: number
+}
+
+export interface PharmaSegmentGrowthCurveScoreResult {
+  readonly proposalVersion: typeof PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL_VERSION
+  readonly state: "DETERMINISTIC_PROPOSAL_RESULT"
+  readonly levelScore: number
+  readonly consistencyScore: number
+  readonly trendScore: number
+  readonly combinedScore: number
+  readonly activationApproved: false
+  readonly scoreExecutionEnabled: false
+}
+
+function scoreGrowthBand(
+  value: number,
+  bands: readonly PharmaSegmentGrowthBand[],
+): number {
+  if (!Number.isFinite(value)) {
+    throw new Error("Segment Growth curve statistic must be finite")
+  }
+  const band = bands.find((item) =>
+    (item.minimumInclusive === undefined || value >= item.minimumInclusive)
+    && (item.maximumExclusive === undefined || value < item.maximumExclusive))
+  if (!band) throw new Error("Segment Growth curve statistic does not match a score band")
+  return band.score
+}
+
+export function evaluatePharmaSegmentGrowthCurveProposal(
+  statistics: PharmaSegmentGrowthCurveStatistics,
+): PharmaSegmentGrowthCurveScoreResult {
+  const levelScore = scoreGrowthBand(
+    statistics.medianLatest4ComparableQuartersPercent,
+    PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.components.level.bands,
+  )
+  const consistencyScore =
+    PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.components.consistency.scores[
+      String(statistics.positiveQuartersOutOfLatest4) as "0" | "1" | "2" | "3" | "4"
+    ]
+  const trendScore = scoreGrowthBand(
+    statistics.latestMinusMedianPrior3PercentagePoints,
+    PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL.components.trend.bands,
+  )
+  const combinedScore =
+    levelScore * 0.6
+    + consistencyScore * 0.25
+    + trendScore * 0.15
+
+  return {
+    proposalVersion: PHARMA_SEGMENT_GROWTH_CURVE_PROPOSAL_VERSION,
+    state: "DETERMINISTIC_PROPOSAL_RESULT",
+    levelScore,
+    consistencyScore,
+    trendScore,
+    combinedScore,
+    activationApproved: false,
+    scoreExecutionEnabled: false,
+  }
+}
