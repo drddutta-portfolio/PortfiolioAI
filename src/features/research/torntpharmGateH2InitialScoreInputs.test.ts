@@ -66,6 +66,30 @@ describe("TORNTPHARM H2 initial score inputs", () => {
     })
   })
 
+  it("includes the local deterministic Momentum candidate", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.momentum).toEqual({
+      state: "READ_ONLY_SCORE_CANDIDATE",
+      score: 95,
+      componentScores: {
+        absolute12m: 100,
+        absolute6m: 80,
+        relativeStrength12m: 100,
+      },
+    })
+  })
+
+  it("includes the local deterministic Risk candidate", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.risk).toEqual({
+      state: "READ_ONLY_SCORE_CANDIDATE",
+      score: 80,
+      componentScores: {
+        regulatoryContext: 100,
+        maxDrawdown1Y: 100,
+        relativeVolatility: 20,
+      },
+    })
+  })
+
   it("keeps all score execution and persistence off", () => {
     expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.scoreExecutionEnabled).toBe(false)
     expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.persistedScoreRunEnabled).toBe(false)
