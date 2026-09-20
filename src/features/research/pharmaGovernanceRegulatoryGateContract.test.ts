@@ -5,8 +5,9 @@ import {
 } from "./pharmaGovernanceRegulatoryGateContract"
 
 describe("PHARMA governance/regulatory gate contract", () => {
-  it("remains proposal-only and does not invent a high-risk cap or extra penalty", () => {
-    expect(PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT.state).toBe("PROPOSAL_ONLY")
+  it("is owner-approved and does not invent a high-risk cap or extra penalty", () => {
+    expect(PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT.state).toBe("OWNER_APPROVED_NOT_ACTIVE")
+    expect(PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT.methodologyApproved).toBe(true)
     expect(PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT.highRiskCapValue).toBeNull()
     expect(PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT.additionalNumericPenaltyEnabled).toBe(false)
     expect(PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT.hiddenDoubleCountingAllowed).toBe(false)
