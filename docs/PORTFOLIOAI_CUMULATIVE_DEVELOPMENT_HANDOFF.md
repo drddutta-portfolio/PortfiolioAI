@@ -24450,3 +24450,44 @@ Added:
 This helper performs zero provider calls and zero writes. It extracts only the relevant P/E / EV-EBITDA lines and the four requested stock value lines from the already captured local payload.
 
 **CURRENT STOP POINT:** run the zero-call metric-line extractor; then lock the exact provider labels/values before any local canonical promotion.
+
+
+---
+
+## Gate H H3 handoff — First deterministic read-only TORNTPHARM score implemented
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Stage:** H3 — implementation complete; consolidated validation pending
+
+H3 now has one versioned read-only score-input/result contract:
+
+- `TORNTPHARM_GATE_H3_SCORE_INPUT_PACKAGE_V1`
+- `TORNTPHARM_GATE_H3_READ_ONLY_SCORE_V1`
+
+The contract consumes the ten formally closed H2 dimension inputs and reuses the existing G7 read-only scoring adapter.
+
+Current deterministic H3 result:
+
+- overall score = **75.1575 / 100**;
+- Global Generics = material business context retained, but 12.05% is below the approved 15% numeric-overlay threshold, so modifier = 0;
+- CDMO / CRAMS = Emerging Watch, numerically excluded;
+- governance runtime = CLEAR;
+- historical Indrad event retained;
+- no second regulatory penalty;
+- no BANK_NBFC or NIFTY Bank leakage;
+- benchmark = NIFTY Pharma;
+- score persistence = OFF;
+- recommendation = OFF;
+- position sizing = OFF.
+
+The existing Pharma Research workspace now exposes the ten dimension scores, weights, contributions, overlay treatment, governance state and lineage without redesigning the shared workspace.
+
+A focused H3 validation step was added to the existing PR architecture workflow so the new H3 test plus related G7/H2 regressions run together with TypeScript, architecture checks/lint, production build and `git diff --check`.
+
+Canonical H3 record:
+
+- `docs/PortfolioAI_GATE_H_H3_FIRST_DETERMINISTIC_READ_ONLY_SCORE.md`
+
+**CURRENT STOP POINT:** complete the single consolidated H3 validation pass, then present one owner review package. Do not begin H4 automatically.

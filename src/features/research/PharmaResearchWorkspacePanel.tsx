@@ -73,7 +73,7 @@ import { PHARMA_GLOBAL_GENERICS_APPLICABILITY_REGISTRY_RECONCILIATION } from "./
 import { PHARMA_G7_OVERLAY_NUMERIC_MODIFIER } from "./pharmaG7OverlayNumericModifierProposal"
 import { PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT } from "./pharmaG7GovernanceHighRiskConstraint"
 import { PHARMA_G7_READ_ONLY_SCORING_ADAPTER } from "./pharmaG7ReadOnlyScoringAdapter"
-import { buildTorntpharmG7ExplainablePreview } from "./pharmaTorntpharmG7ExplainablePreview"
+import { TORNTPHARM_GATE_H3_READ_ONLY_RESULT } from "./torntpharmGateH3ReadOnlyScore"
 import { PHARMA_G7_RESEARCH_GAP_REGISTER, PHARMA_G7_VALIDATION_INVARIANTS } from "./pharmaG7ValidationAndResearchGapRegister"
 import { buildPharmaResearchWorkspaceModel, type PharmaWorkspaceRequirement, type PharmaWorkspaceSecondaryExposure } from "./pharmaResearchWorkspaceModel"
 import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
@@ -199,8 +199,8 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
   const localPrerequisiteMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalPrerequisiteMutationProposal() : null
   const localObservationMutationProposal = symbol.toLocaleUpperCase() === "TORNTPHARM" ? buildTorntpharmLocalObservationMutationProposal() : null
   const gateGScoringProposal = buildPharmaGateGScoringMethodProposal(model)
-  const g7TorntpharmPreview = symbol.toLocaleUpperCase() === "TORNTPHARM"
-    ? buildTorntpharmG7ExplainablePreview(model)
+  const h3TorntpharmScore = symbol.toLocaleUpperCase() === "TORNTPHARM"
+    ? TORNTPHARM_GATE_H3_READ_ONLY_RESULT
     : null
   const sectorWorkspaceContext = pharmaSectorWorkspaceCompanyContext(symbol)
   const sectorCapabilities = buildPharmaSectorWorkspaceCapabilities(
@@ -217,7 +217,7 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
         <h2 id="pharma-workspace-title">Pharmaceuticals deep research</h2>
         <p>Profile-specific evidence follows the reviewed Pharma business model. Open the detailed layers only when you need the underlying requirements, sources or review controls.</p>
       </div>
-      <span className="pharma-workspace-lock">Scoring methodology not yet approved</span>
+      <span className="pharma-workspace-lock">Read-only scoring · Persistence off</span>
     </div>
 
     <div className="pharma-workspace-summary" aria-label="Pharma research model summary">
@@ -1062,43 +1062,56 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
               <span>Overall score with missing weighted dimension: NO · G7.2 wiring: NOT STARTED</span>
             </article>
           </div>
-          {g7TorntpharmPreview ? <div className="pharma-g7-preview">
+          {h3TorntpharmScore ? <div className="pharma-g7-preview">
             <div className="pharma-g7-preview-head">
               <div>
-                <strong>G7.2 · TORNTPHARM explainable read-only preview</strong>
-                <small>{g7TorntpharmPreview.contractVersion}</small>
+                <strong>H3 · TORNTPHARM first deterministic read-only score</strong>
+                <small>{h3TorntpharmScore.contractVersion}</small>
               </div>
-              <span>Overall Pharma score: Not currently computable</span>
+              <span>Overall Pharma score: {h3TorntpharmScore.overallScore === null ? "Fail closed" : `${h3TorntpharmScore.overallScore.toFixed(4)} / 100`}</span>
             </div>
             <div className="pharma-g7-preview-meta">
               <span>Primary: Domestic Formulations</span>
-              <span>Material Overlay: Global Generics</span>
-              <span>Emerging Watch: CDMO / CRAMS</span>
-              <span>Governance runtime input: UNRESOLVED</span>
+              <span>Global Generics: 12.05% · below 15% numeric threshold</span>
+              <span>CDMO / CRAMS: Emerging Watch · numeric exclusion</span>
+              <span>Governance: {titleCase(h3TorntpharmScore.governance.constraintState)}</span>
+              <span>Persistence: OFF</span>
             </div>
             <div className="pharma-g7-preview-table-wrap">
               <table className="pharma-g7-preview-table">
                 <thead>
                   <tr>
                     <th>Dimension</th>
-                    <th>Primary evidence</th>
-                    <th>Methodology</th>
+                    <th>Primary</th>
+                    <th>Weight</th>
+                    <th>Contribution</th>
                     <th>Overlay</th>
-                    <th>Final state</th>
+                    <th>Final</th>
+                    <th>Lineage</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {g7TorntpharmPreview.rows.map((row) => <tr key={row.dimensionCode}>
+                  {h3TorntpharmScore.dimensions.map((row) => <tr key={row.dimensionCode}>
                     <td>{titleCase(row.dimensionCode)}</td>
-                    <td>{row.primaryEvidenceTotal > 0 ? `${row.primaryEvidenceVerified}/${row.primaryEvidenceTotal} verified` : "No dimension evidence set"}</td>
-                    <td>{titleCase(row.methodologyState)}</td>
-                    <td>{row.overlayState === "NONE" ? "Not applicable" : titleCase(row.overlayState)}</td>
-                    <td>{row.finalScore === null ? titleCase(row.calculationState) : `${row.finalScore.toFixed(1)} / 100`}</td>
+                    <td>{row.primaryScore.toFixed(2)}</td>
+                    <td>{row.weight}%</td>
+                    <td>{row.weightedContribution === null ? "—" : row.weightedContribution.toFixed(4)}</td>
+                    <td>{row.overlayTreatment === "BELOW_SCORING_MATERIALITY" ? "Below numeric materiality · +0" : "Not applicable"}</td>
+                    <td>{row.finalScore === null ? "Fail closed" : `${row.finalScore.toFixed(2)} / 100`}</td>
+                    <td>
+                      <details>
+                        <summary>Inspect</summary>
+                        <small><strong>Method:</strong> {row.primaryScoreContractVersion}</small>
+                        <small><strong>Evidence:</strong> {row.evidenceLineage.join(" · ")}</small>
+                        <small><strong>Derived:</strong> {row.derivedStatisticLineage.join(" · ")}</small>
+                        <small><strong>Reason:</strong> {row.reasonCodes.join(" · ")}</small>
+                      </details>
+                    </td>
                   </tr>)}
                 </tbody>
               </table>
             </div>
-            <p className="pharma-g7-preview-note">No score is manufactured from evidence coverage alone. Missing methodology, missing dimension aggregation, unresolved overlay inputs or unresolved governance runtime state remain explicit blockers; no hidden reweighting is used.</p>
+            <p className="pharma-g7-preview-note">H3 reuses the Gate G/G7 fixed-weight adapter. Global Generics remains visible as material business context but is numerically excluded because the locked 12.05% economic materiality is below the approved 15% scoring threshold. The historical Indrad regulatory event is retained under a CLEAR runtime with no second numeric penalty. This score is read-only, non-persisting, and creates no recommendation or position sizing.</p>
           </div> : null}
           <div className="pharma-persistence-package-grid">
             <article>

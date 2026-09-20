@@ -63,6 +63,7 @@ export type PharmaG7MethodologyState =
 export type PharmaG7OverlayParticipation =
   | "NONE"
   | "ELIGIBLE"
+  | "BELOW_SCORING_MATERIALITY"
   | "EMERGING_WATCH_EXCLUDED"
 
 export interface PharmaG7MethodologyLineageEntry {
@@ -283,6 +284,21 @@ export function calculatePharmaG7Dimension(
       overlayModifierPoints: input.overlayModifierPoints,
       finalScore,
       reasonCodes: ["PRIMARY_SCORE_PLUS_APPROVED_OVERLAY_MODIFIER"],
+      methodologyLineage: lineage,
+    }
+  }
+
+  if (input.overlayParticipation === "BELOW_SCORING_MATERIALITY") {
+    return {
+      dimensionCode: input.dimensionCode,
+      calculationState: "CALCULATED",
+      readinessState: "READY",
+      primaryScore: input.primaryScore,
+      overlayModifierPoints: 0,
+      finalScore: input.primaryScore,
+      reasonCodes: [
+        "MATERIAL_OVERLAY_BELOW_SCORING_MATERIALITY_NUMERICALLY_EXCLUDED",
+      ],
       methodologyLineage: lineage,
     }
   }
