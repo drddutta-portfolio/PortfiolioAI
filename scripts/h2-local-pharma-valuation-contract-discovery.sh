@@ -77,7 +77,10 @@ else
 fi
 
 RESPONSE_FILE="$(mktemp)"
-STATUS="$(curl -sS -o "$RESPONSE_FILE" -w '%{http_code}' -X POST "$API_URL/functions/v1/discover-trendlyne-pharma-valuation-contract" \
+printf 'Executing approved local valuation discovery (max 4 Trendlyne calls)...\n'
+printf 'Each provider request is capped at 45 seconds; overall HTTP wait is capped at 210 seconds.\n'
+
+STATUS="$(curl --max-time 210 -sS -o "$RESPONSE_FILE" -w '%{http_code}' -X POST "$API_URL/functions/v1/discover-trendlyne-pharma-valuation-contract" \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -H "apikey: $ANON_KEY" \
   -H "Content-Type: application/json" \
