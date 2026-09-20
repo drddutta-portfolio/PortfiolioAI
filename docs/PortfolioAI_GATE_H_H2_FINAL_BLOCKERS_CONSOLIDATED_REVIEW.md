@@ -2,11 +2,11 @@
 
 **Date:** 20 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`  
-**Status:** READ-ONLY CONSOLIDATED REVIEW / H2 NOT YET CLOSED
+**Status:** H2 NOT YET CLOSED / VALUATION CLOSED / ONE BUSINESS-DURABILITY BLOCKER REMAINS
 
-## Current H2 state
+## Current H2 deterministic dimension state
 
-Eight dimensions are validated and score-ready:
+Nine dimensions are now validated and score-ready at the H2 dimension level:
 
 - Quality = 92
 - Growth = 78.25
@@ -16,17 +16,17 @@ Eight dimensions are validated and score-ready:
 - Ownership / Governance = 70
 - Momentum = 95
 - Risk = 80
+- Valuation = 30 under `PHARMA_DOMESTIC_VALUATION_MA_TRANSITION_V1_OWNER_APPROVED`
 
-Two dimensions remain incomplete:
+One dimension remains incomplete:
 
 - Business Durability
-- Valuation
 
-No final company score may be calculated before both are completed.
+No H3 final company score may be calculated until Business Durability is completed.
 
 ---
 
-## 1. Business Durability — final blocker
+## 1. Business Durability — sole remaining H2 blocker
 
 Current reviewed components:
 
@@ -46,11 +46,11 @@ The Gate F acquisition contract requires:
 - current/recent period;
 - independently sourced rather than only issuer self-description.
 
-Torrent's FY2025-26 reporting identifies the underlying market dataset family used for its India ranking and therapy assertions as:
+The identified licensed source family is:
 
 `AIOCD Pharmatrac / AIOCD-AWACS`
 
-Issuer-reported FY26 examples include:
+Issuer-reported FY26 orientation evidence includes:
 
 - combined Torrent + JB Pharma ranked 5th in IPM;
 - top-five positions across multiple therapy areas;
@@ -61,7 +61,7 @@ Issuer-reported FY26 examples include:
 - Derma #5;
 - 75% chronic/sub-chronic revenue share.
 
-These issuer statements are useful orientation evidence but do **not** satisfy the licensed cross-check by themselves.
+These issuer statements remain orientation evidence only and do not satisfy the licensed cross-check by themselves.
 
 ### Exact H2 completion shape
 
@@ -79,169 +79,143 @@ No freeform numeric inference is permitted.
 
 ---
 
-## 2. Valuation — self-history lane
+## 2. Valuation — CLOSED at H2 dimension level
 
-The approved local acquisition package already authorizes exactly one targeted Trendlyne refresh for:
+### Fresh self-history evidence
 
-`PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT`
+Local-only Trendlyne refresh completed successfully:
 
-via:
+- metric: `PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT`
+- current value: **-15.90%**
+- evidence status: AVAILABLE / FRESH
+- provider calls: 1
+- production touched: NO
 
-`refresh-valuation-evidence`
+Approved Domestic self-history curve:
 
-Existing stored value:
+- -20% to < -5% -> score 40
 
-- latest located before refresh = -14.87%
-- stale at the 20 September 2026 H2 snapshot
+Therefore:
 
-Therefore a fresh current observation is still required.
+`Self-History Score = 40`
 
-This action remains local-only for H2 validation unless separately approved for production.
+### Fresh reviewed peer evidence
 
----
-
-## 3. Valuation — peer cohort lane
-
-The current owner-supplied provisional Domestic Formulations candidate set is:
-
-- SUNPHARMA
-- ERIS
-- EMCURE
-- MANKIND
-
-TORNTPHARM is the target and excluded from its own peer cohort.
-
-### Read-only official evidence review
-
-#### MANKIND
-
-Official company evidence shows a strongly domestic business model:
-
-- FY24 domestic revenue = ₹9,522 crore;
-- domestic share ≈ 92% of total revenue;
-- broad acute + chronic India formulations portfolio;
-- very large India field-force/distribution footprint.
-
-Assessment:
-
-`DOMESTIC_FORMULATIONS = STRONGLY SUPPORTED`
-
-Candidate confidence:
-
-`HIGH`
-
-#### ERIS
-
-Official company description identifies Eris as:
-
-- a leading domestic branded-formulations company;
-- specialist-doctor focused;
-- concentrated in chronic therapies, especially cardio-metabolic care.
-
-Assessment:
-
-`DOMESTIC_FORMULATIONS = STRONGLY SUPPORTED`
-
-Candidate confidence:
-
-`HIGH`
-
-#### EMCURE
-
-Official FY25 evidence shows:
-
-- India business revenue = ₹36,597 million;
-- India business growth = 16.4%;
-- substantial branded domestic portfolio and therapy expansion;
-- simultaneously material international businesses in Europe and North America.
-
-Assessment:
-
-`DOMESTIC_FORMULATIONS = SUPPORTED, WITH MATERIAL GLOBAL GENERICS OVERLAY`
-
-Candidate confidence:
-
-`MEDIUM`
-
-#### SUNPHARMA
-
-Official FY25 evidence shows:
-
-- India formulations revenue = ₹169 billion;
-- India share ≈ 33% of overall revenue;
-- India market leadership and broad chronic/acute therapy strength;
-- simultaneously very large Global Specialty / international businesses.
-
-Assessment:
-
-`DOMESTIC_FORMULATIONS PRIMARY = NOT YET CLEANLY ESTABLISHED FOR PEER PURPOSES`
-
-Sun Pharma should not be used merely to increase cohort size.
-
-### Minimum viable reviewed peer set
-
-The strongest current read-only review set is therefore:
+Owner-approved peer set:
 
 - MANKIND
 - ERIS
 - EMCURE
 
-This gives the exact minimum of three candidates required by the approved G6.11 peer-comparability contract, but they are **not yet canonical REVIEWED assignments**.
+Fresh local evidence:
 
-No production or local canonical assignment persistence has been performed.
+| Security | PE_TTM | EV_EBITDA |
+|---|---:|---:|
+| TORNTPHARM | 85.02 | 37.11 |
+| MANKIND | 46.51 | 22.33 |
+| ERIS | 28.21 | 17.92 |
+| EMCURE | 35.82 | 16.70 |
 
-### Peer valuation evidence still required
+Peer medians:
 
-For each finally reviewed peer:
+- PE median = 35.82
+- EV/EBITDA median = 17.92
 
-- fresh `PE_TTM`;
-- fresh `EV_EBITDA`;
-- comparable period/consolidation semantics;
-- no negative/economically meaningless denominator;
-- acquisition/one-off review where material.
+Approved G6.12 relative formula:
 
-Both metric families must meet the minimum three-peer count.
+`(Peer Median / Target - 1) × 100`
+
+Results:
+
+- PE relative premium/discount ≈ -57.87% -> normalized score 20
+- EV/EBITDA relative premium/discount ≈ -51.71% -> normalized score 20
+
+Approved G6.15 peer combination:
+
+`(20 × 0.50) + (20 × 0.50) = 20`
+
+Therefore:
+
+`Peer-Relative Score = 20`
+
+### FCF-yield M&A comparability blocker
+
+The base G6.17 contract remains:
+
+- Self-history 40%
+- Peer-relative 40%
+- FCF corroboration 20%
+
+The H2 FCF-yield prerequisite audit found no valid current local FCF-yield derivation path, and the available completed annual FCF is not comparable to the current post-transaction valuation denominator because of the current M&A scope transition.
+
+The base G6.17 contract explicitly identifies M&A/capex FCF distortion as a mandatory methodology revisit trigger.
+
+The owner therefore approved a versioned TORNTPHARM-specific transition contract:
+
+`PHARMA_DOMESTIC_VALUATION_MA_TRANSITION_V1_OWNER_APPROVED`
+
+Transition weights:
+
+- Self-history = 50%
+- Peer-relative = 50%
+- FCF corroboration = 0%
+
+This is an explicit methodology version, not hidden missing-component renormalization.
+
+### H2 transition Valuation result
+
+`(40 × 0.50) + (20 × 0.50) = 30`
+
+> **Valuation = 30**
+
+### Transition exit rule
+
+When comparable post-merger completed annual FCF becomes available:
+
+1. the transition contract expires;
+2. the FCF-yield lane must be recomputed under the approved current-market-cap authority contract;
+3. Valuation reverts to the base 40/40/20 G6.17 contract.
+
+No permanent extension is automatic.
+
+Canonical H2 transition document:
+
+`docs/PortfolioAI_GATE_H_H2_MA_TRANSITION_VALUATION_V1.md`
 
 ---
 
-## 4. What can be completed next without broadening H2
+## 3. H2 remaining work
 
-### Already authorized
+Only one substantive evidence blocker remains:
 
-Local targeted TORNTPHARM self-history refresh:
+### Brand / Therapy Leadership licensed cross-check
 
-- `refresh-valuation-evidence`;
-- one Trendlyne call;
-- exact metric only.
+Required source family:
 
-### Requires explicit owner review
+`AIOCD Pharmatrac / AIOCD-AWACS`
 
-Peer business-model promotion:
+No licensed call has yet been made.
 
-- MANKIND -> DOMESTIC_FORMULATIONS / HIGH
-- ERIS -> DOMESTIC_FORMULATIONS / HIGH
-- EMCURE -> DOMESTIC_FORMULATIONS / MEDIUM + material international/global-generics overlay
+Required evidence remains:
 
-This should be approved as one consolidated peer-review decision, not three micro-gates.
+- company rank/share;
+- major therapy rank/share;
+- current/recent period;
+- standalone vs combined Torrent + JB scope clarity.
 
-### Requires separate source access
-
-Brand / Therapy Leadership:
-
-- exact source family: AIOCD Pharmatrac / AIOCD-AWACS;
-- no generic licensed-source authorization;
-- evidence must be supplied through a licensed account/provider or owner-provided licensed extract.
+Once that component is resolved, Business Durability can be finalized and H2 can be formally closed.
 
 ---
 
 ## Safety boundary
 
-- H3 final company score: CLOSED
-- production DB mutation: NO
-- peer assignment persistence: NO
-- licensed AIOCD call: NO
-- peer valuation provider calls: NO
-- recommendation: NO
-- sizing: NO
-- scheduler change: NO
-- PR merge: NO
+- H3 final company score: **CLOSED**
+- H3 score calculation: **NO**
+- production DB mutation: **NO**
+- production peer assignment persistence: **NO**
+- licensed AIOCD call: **NO**
+- recommendation: **NO**
+- sizing: **NO**
+- scheduler change: **NO**
+- PR #101 merge: **NO**
+- base G6.17 40/40/20 contract overwritten: **NO**
