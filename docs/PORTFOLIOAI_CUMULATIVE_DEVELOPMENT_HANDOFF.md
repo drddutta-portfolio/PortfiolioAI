@@ -23539,3 +23539,65 @@ Validated:
 No provider refresh, licensed source call, production evidence mutation, score execution or persistence has occurred.
 
 **CURRENT STOP POINT:** continue H2 with read-only regulatory-scope research first, then resolve exact authorization needs for remaining market/licensed evidence.
+
+
+---
+
+## 271. Entry 266 — H2 regulatory runtime resolved from official evidence
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+H2 continued with read-only official-source regulatory research only.
+
+### New evidence
+
+Official evidence now establishes:
+
+- FY2024-25 Indrad FDA clearance after VAI classification;
+- FY2024-25 Pithampur FDA clearance after VAI classification;
+- FY2025-26 all four finished-product plants manufacturing for the US market reported FDA-cleared;
+- Dahej USFDA EIR / zero-observation inspection context;
+- Vizag API plant EIR;
+- Bileshwarpura April 2026 USFDA inspection concluded with zero observations.
+
+The historical Indrad warning -> closeout chain remains retained.
+
+### Runtime update
+
+TORNTPHARM regulatory runtime input is now:
+
+- event class = REGULATORY
+- severity = MODERATE
+- affected facility/product/geography established = true
+- regulatory materiality = KNOWN_MATERIAL
+- remediation = CLOSED_OUT
+- subsequent outcome established = true
+- company-wide current regulatory scope established = true
+
+Owner-approved runtime result:
+
+> **CLEAR**
+
+The historical regulatory event remains retained.
+
+No second hidden penalty or cap is introduced.
+
+Approved H2 regulatory normalization therefore supplies:
+
+> **Regulatory Context = 100**
+
+### Remaining Risk blockers
+
+Risk remains non-score-ready because market evidence is still absent:
+
+- 1Y max drawdown;
+- TORNTPHARM 1Y volatility;
+- NIFTY Pharma 1Y volatility;
+- relative-volatility ratio.
+
+### Safety
+
+No provider refresh, licensed call, production mutation, evidence write or score persistence occurred.
+
+**CURRENT STOP POINT:** validate regulatory runtime resolution, then remaining H2 blockers are market history/valuation-peer evidence plus licensed Brand / Therapy Leadership.
