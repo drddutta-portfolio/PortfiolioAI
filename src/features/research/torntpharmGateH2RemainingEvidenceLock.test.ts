@@ -42,7 +42,7 @@ describe("TORNTPHARM H2 remaining evidence lock", () => {
     ).toBe("REVIEW_REQUIRED")
   })
 
-  it("detects the Global Generics 12.05 percent versus 15 percent eligibility conflict", () => {
+  it("reconciles Material business exposure with below-scoring overlay materiality", () => {
     expect(
       TORNTPHARM_GATE_H2_CANONICAL_READ_ONLY_SNAPSHOT.overlay
         .evidenceBasisEconomicMaterialityPercent,
@@ -52,9 +52,9 @@ describe("TORNTPHARM H2 remaining evidence lock", () => {
         .contractMinimumMaterialOverlayPercent,
     ).toBe(15)
     expect(TORNTPHARM_GATE_H2_GLOBAL_GENERICS_ELIGIBILITY_CHECK.modifierState)
-      .toBe("REVIEW_REQUIRED")
+      .toBe("BELOW_SCORING_MATERIALITY")
     expect(TORNTPHARM_GATE_H2_GLOBAL_GENERICS_ELIGIBILITY_CHECK.reasonCodes)
-      .toContain("MATERIAL_OVERLAY_REQUIRES_REVIEWED_MATERIALITY")
+      .toContain("BELOW_SCORING_MATERIALITY")
   })
 
   it("does not allow H2 exit or score persistence", () => {
