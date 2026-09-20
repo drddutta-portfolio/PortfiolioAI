@@ -10,7 +10,7 @@
 **Primary subprofile:** DOMESTIC_FORMULATIONS
 **Gate H score:** 75.1575 / 100
 **Gate H state:** COMPLETE / PASS
-**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 COMPLETE / PASS; I3 NOT STARTED
+**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 COMPLETE / PASS; I3 IMPLEMENTED / VALIDATION + OWNER VISUAL REVIEW PENDING
 
 **Owner-approved revised-plan corrections adopted before I1 implementation:**
 
@@ -564,6 +564,40 @@ I3 must not:
 ## I3 exit condition
 
 I3 passes when one deterministic TORNTPHARM role recommendation is produced from the locked Gate H result and approved I2 policy, with complete rationale and no persistence.
+
+## I3 implementation checkpoint — 21 September 2026
+
+The owner explicitly authorized I3 after the exact I2 locked-head validation passed.
+
+Implemented one read-only deterministic I3 adapter and one reusable PHARMA_V1 recommendation panel.
+
+Current deterministic reference outputs:
+
+- TORNTPHARM -> `SATELLITE_CANDIDATE`;
+- authoritative Gate H score remains exactly `75.1575`;
+- Satellite floors = 7 / 7 PASS;
+- Valuation 30 -> caution only;
+- Momentum 95 -> no caution;
+- governance = CLEAR;
+- Global Generics Material Overlay and CDMO / CRAMS Emerging Watch remain context-only;
+- AUROPHARMA -> `INSUFFICIENT`;
+- AUROPHARMA overall score remains null because `GLOBAL_GENERICS_PRIMARY_METHODOLOGY_INCOMPLETE`;
+- no AUROPHARMA partial dimension reconstruction is allowed.
+
+Implementation artifacts:
+
+- `src/features/research/pharmaGateI3ReadOnlyRecommendation.ts`;
+- `src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts`;
+- `src/features/research/PharmaRecommendationPanel.tsx`;
+- `src/features/research/PharmaRecommendationPanel.test.tsx`;
+- `docs/PortfolioAI_GATE_I_I3_FIRST_RECOMMENDATION.md`;
+- `scripts/i3-validate-pharma-first-recommendation.sh`.
+
+The shared Research page mounts the reusable PHARMA_V1 panel without creating a TORNTPHARM-specific page branch. The panel explicitly separates the PortfolioAI suggested research role from the user's selected portfolio role.
+
+Safety remains locked: no score/recommendation persistence, weight guidance, action bias, AI interpretation, position sizing, provider call, production mutation, deployment, or PR merge.
+
+**I3 remains IMPLEMENTED / VALIDATION + OWNER VISUAL REVIEW PENDING. Do not start I4 automatically.**
 
 ---
 

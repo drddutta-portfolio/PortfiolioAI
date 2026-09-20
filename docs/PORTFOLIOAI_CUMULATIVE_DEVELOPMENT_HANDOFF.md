@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I1 COMPLETE / PASS; Gate I2 COMPLETE / PASS; I3 NOT STARTED
+**Current stage:** Gate H COMPLETE / PASS; Gate I1 COMPLETE / PASS; Gate I2 COMPLETE / PASS; I3 IMPLEMENTED / VALIDATION + OWNER VISUAL REVIEW PENDING; I4 NOT STARTED
 
 ---
 
@@ -25733,3 +25733,120 @@ I4 = NOT STARTED
 ```
 
 **STOP BEFORE I3.** A separate owner instruction is required to begin I3.
+
+
+---
+
+## 297. Entry 292 — Gate I3 first recommendation + AUROPHARMA fail-closed control implemented
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**I3 base head:** `4564614e4f7efcb8b5204d86d59a1d4af7ec5537`
+**Canonical I3 review:** `docs/PortfolioAI_GATE_I_I3_FIRST_RECOMMENDATION.md`
+
+The owner explicitly authorized I3 after the exact I2 owner-approved locked head passed validation.
+
+### Implemented
+
+Added:
+
+- `src/features/research/pharmaGateI3ReadOnlyRecommendation.ts`;
+- `src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts`;
+- `src/features/research/PharmaRecommendationPanel.tsx`;
+- `src/features/research/PharmaRecommendationPanel.test.tsx`;
+- `docs/PortfolioAI_GATE_I_I3_FIRST_RECOMMENDATION.md`;
+- `scripts/i3-validate-pharma-first-recommendation.sh`.
+
+Updated:
+
+- `src/pages/ResearchPage.tsx`;
+- `.github/workflows/architecture-guard.yml`;
+- Gate I plan.
+
+### Deterministic TORNTPHARM output
+
+The I3 adapter consumes the I1 authoritative input contract and the I2 owner-approved policy.
+
+It does not recalculate Gate H.
+
+```text
+Overall score = 75.1575
+Core threshold >= 80 = not reached
+Satellite threshold >= 65 = passed
+Satellite floors = 7 / 7 passed
+Valuation = 30 -> caution only
+Momentum = 95 -> no caution
+Governance = CLEAR
+Final suggested research role = SATELLITE_CANDIDATE
+```
+
+All ten locked Gate H dimension scores are preserved unchanged.
+
+Global Generics remains a Material Overlay context only. CDMO / CRAMS remains Emerging Watch and numerically excluded. No second score or recommendation is created.
+
+### AUROPHARMA negative control
+
+AUROPHARMA remains:
+
+```text
+Primary = GLOBAL_GENERICS
+Score state = SCORE_NOT_COMPUTABLE
+Reason = GLOBAL_GENERICS_PRIMARY_METHODOLOGY_INCOMPLETE
+I3 role = INSUFFICIENT
+Overall score = null
+Exposed partial recommendation dimensions = 0
+```
+
+API / Bulk Drugs remains Emerging context only. No score reconstruction or denominator renormalization is allowed.
+
+### Shared UI
+
+The Research Overview now mounts one reusable PHARMA_V1 recommendation panel for the I3 reference companies.
+
+It visibly separates:
+
+```text
+PortfolioAI suggested research role
+!=
+Your selected portfolio role
+```
+
+The panel does not expose weight guidance, action bias, AI interpretation, trade execution, or persistence actions.
+
+### Safety
+
+- recommendation persistence: OFF
+- score persistence: OFF
+- `stock_recommendation_runs` write: NO
+- recommendation RPC invocation: NO
+- weight guidance: OFF
+- action bias: OFF
+- AI interpretation: OFF
+- position sizing: OFF
+- user portfolio mutation: NO
+- provider calls: NO
+- production Supabase mutation: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+### Validation command
+
+Run:
+
+`git pull && bash scripts/i3-validate-pharma-first-recommendation.sh`
+
+After the command passes, perform one localhost visual review of TORNTPHARM and AUROPHARMA Overview.
+
+### CURRENT STOP POINT
+
+```text
+Gate H = COMPLETE / PASS
+I1 = COMPLETE / PASS
+I2 = COMPLETE / PASS
+I3 = IMPLEMENTED / VALIDATION + OWNER VISUAL REVIEW PENDING
+I4 = NOT STARTED
+```
+
+Do not start I4 automatically.
