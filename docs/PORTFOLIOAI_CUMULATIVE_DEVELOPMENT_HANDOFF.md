@@ -22979,3 +22979,72 @@ No overall TORNTPHARM score has been calculated.
 **Result:** H2 Quality + Cash Flow slice = **VALIDATED / PASS**.
 
 **CURRENT STOP POINT:** Continue H2 directly with Business Durability and Ownership / Governance reviewed evidence normalization, preserving the licensed-source gate for Brand / Therapy Leadership and the prohibition on inferring field-force headcount from total employees.
+
+
+---
+
+## 262. Entry 257 — H2 Business Durability reviewed-evidence candidate prepared
+
+**Date:** 20 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+H2 continued directly with Business Durability after the Quality + Cash Flow validation PASS.
+
+Added:
+
+- `src/features/research/torntpharmGateH2BusinessDurabilityReview.ts`
+- `src/features/research/torntpharmGateH2BusinessDurabilityReview.test.ts`
+- `docs/PortfolioAI_GATE_H_H2_BUSINESS_DURABILITY_REVIEW.md`
+
+### Applied owner-approved normalization rubric
+
+Parent weights remain unchanged:
+
+- Brand / Therapy Leadership = 35%
+- Field Force Productivity = 25%
+- R&D Productivity = 20%
+- Pipeline / Corporate Execution = 20%
+
+Candidate reviewed states:
+
+- Brand / Therapy Leadership = `REVIEW_REQUIRED` → null
+- Field Force Productivity = `REVIEW_REQUIRED` → null
+- R&D Productivity = `STRONG` → 75
+- Pipeline / Corporate Execution = `STRONG` → 75
+
+### Why the dimension remains fail-closed
+
+Brand / Therapy Leadership remains blocked because the approved evidence-acquisition contract requires a licensed-market-source cross-check. Issuer self-description alone is explicitly insufficient, and no licensed provider call has been authorized.
+
+Field Force Productivity remains blocked because current public issuer evidence does not establish the required minimum three-period comparable MR/field-force headcount + compatible domestic revenue package. Total employee counts may not be substituted.
+
+R&D Productivity has three locked annual R&D expense/intensity periods plus official FY2025-26 evidence of differentiated-product development and regulatory approvals.
+
+Pipeline / Corporate Execution has official evidence of multiple FY2025-26 launches, continuing pipeline activity and material corporate execution including the JB Pharma transaction.
+
+### Result
+
+- ready qualitative components = 2 / 4
+- Business Durability numeric score = null
+- missing-component renormalization = prohibited
+- provider call authorized = NO
+
+### Validation state
+
+Implementation is complete for this candidate slice.
+
+Owner/local focused validation is pending.
+
+### Safety state
+
+- licensed provider call: NO
+- production mutation: NO
+- evidence write: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- deployment: NO
+- PR merge: NO
+
+**CURRENT STOP POINT:** validate the Business Durability review candidate. If PASS, continue H2 with Ownership / Governance public-official history and component review while preserving all G4 anti-double-counting rules.
