@@ -2,11 +2,11 @@
 
 **Date:** 20 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`  
-**Status:** H2 CLOSURE CANDIDATE / ALL DIMENSION INPUTS RESOLVED / FINAL VALIDATION PENDING
+**Status:** H2 COMPLETE / PASS
 
 ## Current H2 deterministic dimension state
 
-All ten TORNTPHARM H2 dimension inputs are now deterministic:
+All ten TORNTPHARM H2 dimension inputs are resolved and validation-passed:
 
 - Quality = 92
 - Growth = 78.25
@@ -21,11 +21,11 @@ All ten TORNTPHARM H2 dimension inputs are now deterministic:
 
 This document deliberately does **not** aggregate those ten dimension values into an H3 company score.
 
-H3 remains closed until H2 final validation passes and H3 is separately started.
+H3 remains closed until started separately.
 
 ---
 
-## 1. Business Durability — RESOLVED
+## 1. Business Durability — RESOLVED / PASS
 
 Owner-approved component state:
 
@@ -68,15 +68,13 @@ H2 acceptance mode:
 
 No direct licensed AIOCD provider call was made.
 
-This is a bounded TORNTPHARM H2 evidence decision and does not rewrite the generic licensed-source requirement for other securities.
-
 Canonical lock:
 
 `docs/PortfolioAI_GATE_H_H2_BUSINESS_DURABILITY_REVIEW.md`
 
 ---
 
-## 2. Valuation — RESOLVED
+## 2. Valuation — RESOLVED / PASS
 
 ### Fresh self-history evidence
 
@@ -167,28 +165,27 @@ Canonical lock:
 
 ---
 
-## 3. H2 closure condition
+## 3. H2 final validation
 
-There are no unresolved evidence or methodology blockers remaining inside H2.
+Final H2 validation passed:
 
-Only final implementation validation remains:
+- focused Business Durability contract test: PASS
+- TypeScript typecheck: PASS
+- owner closure declaration: `H2 = COMPLETE / PASS`
 
-- focused Business Durability contract test;
-- TypeScript typecheck.
-
-If both pass:
+There are no unresolved H2 evidence or methodology blockers.
 
 > **H2 = COMPLETE / PASS**
 
-The next stage may then be H3, but H3 must be started separately.
+The next stage is H3, but H3 must be started separately.
 
-No H3 score should be calculated as part of H2 closure.
+No H3 final company score was calculated as part of H2 closure.
 
 ---
 
 ## Safety boundary
 
-- H3 final company score: **CLOSED**
+- H3 final company score: **NOT STARTED**
 - H3 score calculation: **NO**
 - official score persistence: **NO**
 - production DB mutation: **NO**
