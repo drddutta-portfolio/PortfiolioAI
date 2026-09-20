@@ -5,7 +5,7 @@
 **Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 **Stage:** I1 — Recommendation Authority / Architecture Reconciliation
-**Status:** IMPLEMENTED / CONSOLIDATED VALIDATION PENDING / OWNER REVIEW PENDING
+**Status:** COMPLETE / PASS — OWNER VALIDATED
 
 ## Purpose
 
@@ -234,15 +234,57 @@ The script validates:
 
 No Edge tests are required because I1 changes no Edge Function code.
 
+## Final consolidated validation result
+
+The owner reran the complete I1 validation command after the TypeScript boundary correction:
+
+```bash
+git pull && bash scripts/i1-validate-pharma-recommendation-authority.sh
+```
+
+Owner result:
+
+> **ALL PASSED**
+
+This confirms PASS for the full I1 validation sequence:
+
+1. focused I1 + authority regressions;
+2. strict TypeScript;
+3. presentation data-boundary architecture guard;
+4. focused I1 ESLint;
+5. existing architecture lint;
+6. production build;
+7. I1 diff whitespace.
+
+No Edge tests were required because I1 changed no Edge Function code.
+
+Final I1 state:
+
+- canonical PHARMA_V1 assignment authority = FROZEN;
+- separate score authority = FROZEN;
+- `SCORE_READY` vs `SCORE_NOT_COMPUTABLE` = EXPLICIT;
+- assignment `RESOLVED` vs blocked = EXPLICIT;
+- PHARMA_V1 recommendation policy identity = FROZEN;
+- legacy `PHARMA_HEALTHCARE` policy use = FORBIDDEN FOR GATE I;
+- missing-overall-score reconstruction for PHARMA_V1 = DISABLED;
+- cross-security / Primary-subprofile mismatch = FAIL CLOSED;
+- recommendation thresholds/floors/blockers/cautions = NOT YET DEFINED;
+- score persistence = OFF;
+- recommendation persistence = OFF.
+
+> **I1 = COMPLETE / PASS**
+
+I2 remains **NOT STARTED**.
+
 ## I1 closure condition
 
-I1 closes only after the consolidated validation passes and owner approves the architecture boundary.
+The consolidated validation passed and the owner accepted the result.
 
 Current state:
 
 ```text
 Gate H = COMPLETE / PASS
-I1 = IMPLEMENTED / VALIDATION PENDING / OWNER REVIEW PENDING
+I1 = COMPLETE / PASS
 I2 = NOT STARTED
 I3 = NOT STARTED
 I4 = NOT STARTED
