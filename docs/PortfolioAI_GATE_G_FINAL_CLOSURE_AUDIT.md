@@ -203,7 +203,7 @@ The controlled-expansion gaps for API/Bulk Drugs, CDMO/CRAMS and Biopharma/Biosi
 
 ## 6. Gate G closure workplan
 
-Gate G should now be capped into the following finite closure checkpoints.
+The owner explicitly simplified the remaining Gate G closure sequence to avoid unnecessary micro-stages. The canonical closure plan is capped at four main checkpoints.
 
 ### G-FINAL-1 — Freeze already-mature numeric contracts
 
@@ -216,7 +216,9 @@ Gate G should now be capped into the following finite closure checkpoints.
 Deliverable:
 versioned Gate-H-eligible contracts, deterministic reference cases, no score persistence.
 
-### G-FINAL-2 — Complete missing Domestic numeric dimensions
+**Status: COMPLETE / PASS.**
+
+### G-FINAL-2 — Complete all remaining Domestic numeric dimensions
 
 - Capital Efficiency
 - Cash Flow
@@ -226,40 +228,54 @@ versioned Gate-H-eligible contracts, deterministic reference cases, no score per
 - Risk
 - Momentum
 
-Deliverable:
-one approved numeric contract per weighted dimension, with no BANK_NBFC fallback and no hidden reweighting.
+This single stage absorbs the former calibration / evaluator / adapter micro-checkpoints. It includes:
 
-### G-FINAL-3 — Finalize Global Generics Material Overlay treatment for TORNTPHARM
-
-- economic materiality input
-- evidence completeness
-- confidence factor
-- normalized overlay signal
-- eligible dimensions
-- combined per-dimension cap
-- contradiction behavior
+- parent-dimension reconciliation;
+- TORNTPHARM evidence-sufficiency lock;
+- numeric calibration candidates;
+- deterministic evaluators and reference cases;
+- read-only adapter compatibility;
+- explicit owner methodology freeze.
 
 Deliverable:
-approved deterministic modifier contract, or explicit fail-closed decision if evidence/methodology remains insufficient.
+one approved deterministic numeric contract per remaining weighted dimension, with no BANK_NBFC fallback, no hidden reweighting, and no score persistence.
 
-### G-FINAL-4 — Resolve canonical governance/regulatory runtime input
+### G-FINAL-3 — Complete cross-cutting TORNTPHARM controls
+
+This stage combines:
+
+- Global Generics Material Overlay treatment;
+- canonical governance/regulatory runtime mapping.
+
+It includes:
+
+- economic materiality input;
+- evidence completeness;
+- confidence factor;
+- normalized overlay signal;
+- eligible dimensions;
+- combined per-dimension cap;
+- contradiction behavior;
+- deterministic G4/G7-P2 runtime state.
 
 Deliverable:
-deterministic G4/G7-P2 runtime state for TORNTPHARM from reviewed evidence.
+approved deterministic cross-cutting controls, or an explicit fail-closed state where evidence remains insufficient.
 
-### G-FINAL-5 — Build hand-verifiable full-score dry run
+### G-FINAL-4 — End-to-end read-only scoring integration and hand-verifiable dry run
 
 Using no persistence and no recommendation logic:
 
-1. calculate ten Primary dimension scores;
+1. calculate all ten Primary dimension scores;
 2. apply approved Material Overlay modifiers only where eligible;
 3. apply governance blocking semantics;
 4. compute final ten dimension scores;
-5. calculate weighted overall score;
+5. calculate the fixed-weight overall score;
 6. expose complete methodology/evidence lineage;
 7. independently hand-check the result.
 
 Gate G closes only after this dry run is reproducible and every numeric dependency is versioned.
+
+There are no G-FINAL-5 or G-FINAL-2C/2D/2E checkpoints in the simplified canonical plan.
 
 ---
 
