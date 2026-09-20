@@ -1,11 +1,11 @@
-import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
+import { PHARMA_RESEARCH_PROFILE_GATE_G } from "./pharmaResearchProfileGateG"
 import { PHARMA_SUBPROFILE_CODES, type PharmaSubprofileCode } from "./pharmaSubprofileAssignment"
 
 export const PHARMA_ROCE_CURVE_PROPOSAL_VERSION =
   "PHARMA_ROCE_CAPITAL_EFFICIENCY_CURVE_V1_PROPOSAL" as const
 
 const ROCE_METRIC_CODE = "PHARMA_ROCE_HISTORY" as const
-const roceMetric = PHARMA_RESEARCH_PROFILE_V1.metrics.find((metric) => metric.metricCode === ROCE_METRIC_CODE)
+const roceMetric = PHARMA_RESEARCH_PROFILE_GATE_G.metrics.find((metric) => metric.metricCode === ROCE_METRIC_CODE)
 
 if (!roceMetric) {
   throw new Error("PHARMA_ROCE_HISTORY is missing from PHARMA_V1 parent contract")
@@ -17,7 +17,7 @@ export interface PharmaRoceCurveProposal {
   readonly metricCode: typeof ROCE_METRIC_CODE
   readonly canonicalDimension: "CAPITAL_EFFICIENCY"
   readonly currentParentContractDimension: typeof roceMetric.dimension
-  readonly dimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION"
+  readonly dimensionAlignmentState: "ALIGNED_VERSIONED_PARENT"
   readonly history: {
     readonly minimumComparableAnnualPeriods: 3
     readonly preferredComparableAnnualPeriods: 5
@@ -49,7 +49,7 @@ export const PHARMA_ROCE_CURVE_PROPOSAL: PharmaRoceCurveProposal = {
   metricCode: ROCE_METRIC_CODE,
   canonicalDimension: "CAPITAL_EFFICIENCY",
   currentParentContractDimension: roceMetric.dimension,
-  dimensionAlignmentState: "REQUIRES_VERSIONED_PARENT_RECONCILIATION",
+  dimensionAlignmentState: "ALIGNED_VERSIONED_PARENT",
   history: {
     minimumComparableAnnualPeriods: 3,
     preferredComparableAnnualPeriods: 5,
