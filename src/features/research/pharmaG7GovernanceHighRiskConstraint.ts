@@ -5,11 +5,11 @@ import {
 } from "./pharmaGovernanceRegulatoryGateContract"
 
 export const PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT_VERSION =
-  "PHARMA_V1_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT_V1_PROPOSAL" as const
+  "PHARMA_V1_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT_V1_OWNER_APPROVED" as const
 
 export const PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT = {
   version: PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT_VERSION,
-  state: "PROPOSAL_ONLY",
+  state: "OWNER_APPROVED_NOT_ACTIVE",
   sourceGovernanceContractVersion:
     PHARMA_GOVERNANCE_REGULATORY_GATE_CONTRACT.version,
   blockedReviewBlocksOverallPreview: true,
@@ -19,8 +19,9 @@ export const PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT = {
   highRiskDimensionPenaltyEnabled: false,
   highRiskOverallCapEnabled: false,
   hiddenDoubleCountingAllowed: false,
-  ownerValidationRequired: true,
-  g71ConsumptionApproved: false,
+  ownerValidationRequired: false,
+  methodologyApproved: true,
+  g71ConsumptionApproved: true,
   scoreExecutionEnabled: false,
   persistedScoreRunEnabled: false,
 } as const
@@ -33,15 +34,16 @@ export type PharmaG7GovernanceConstraintState =
 
 export interface PharmaG7GovernanceConstraintResult {
   readonly contractVersion: typeof PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT_VERSION
-  readonly state: "PROPOSAL_ONLY"
+  readonly state: "OWNER_APPROVED_NOT_ACTIVE"
   readonly constraintState: PharmaG7GovernanceConstraintState
   readonly blocksOverallPreview: boolean
   readonly numericPenalty: null
   readonly overallScoreCap: null
   readonly interpretationProminenceRequired: boolean
   readonly reasonCodes: readonly string[]
-  readonly ownerValidationRequired: true
-  readonly g71ConsumptionApproved: false
+  readonly ownerValidationRequired: false
+  readonly methodologyApproved: true
+  readonly g71ConsumptionApproved: true
   readonly scoreExecutionEnabled: false
 }
 
@@ -53,15 +55,16 @@ function result(
 ): PharmaG7GovernanceConstraintResult {
   return {
     contractVersion: PHARMA_G7_GOVERNANCE_HIGH_RISK_CONSTRAINT_VERSION,
-    state: "PROPOSAL_ONLY",
+    state: "OWNER_APPROVED_NOT_ACTIVE",
     constraintState,
     blocksOverallPreview,
     numericPenalty: null,
     overallScoreCap: null,
     interpretationProminenceRequired,
     reasonCodes,
-    ownerValidationRequired: true,
-    g71ConsumptionApproved: false,
+    ownerValidationRequired: false,
+    methodologyApproved: true,
+    g71ConsumptionApproved: true,
     scoreExecutionEnabled: false,
   }
 }
