@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest"
 import {
+  TORNTPHARM_GATE_H2_CASH_FLOW_READ_ONLY_RESULT,
+  TORNTPHARM_GATE_H2_CASH_FLOW_SERIES,
+  TORNTPHARM_GATE_H2_CASH_FLOW_STATISTICS,
+  TORNTPHARM_GATE_H2_CFO_TO_PAT_SERIES,
   TORNTPHARM_GATE_H2_DOMESTIC_GROWTH_READ_ONLY_RESULT,
+  TORNTPHARM_GATE_H2_FCF_TO_PAT_SERIES,
   TORNTPHARM_GATE_H2_OFFICIAL_EVIDENCE_PACK,
   TORNTPHARM_GATE_H2_OPERATING_MARGIN_PERCENT_SERIES,
   TORNTPHARM_GATE_H2_OPERATING_MARGIN_RAW_SERIES,
@@ -51,6 +56,27 @@ describe("TORNTPHARM H2 official evidence pack", () => {
       TORNTPHARM_GATE_H2_OPERATING_MARGIN_STATISTICS
         .medianLatest4MinusPrior4PercentagePoints,
     ).toBeCloseTo(0.34859494903484745, 12)
+  })
+
+  it("locks the matched three-year Cash Flow package and deterministic result", () => {
+    expect(TORNTPHARM_GATE_H2_CASH_FLOW_SERIES).toHaveLength(3)
+    expect(TORNTPHARM_GATE_H2_CFO_TO_PAT_SERIES).toHaveLength(3)
+    expect(TORNTPHARM_GATE_H2_FCF_TO_PAT_SERIES).toHaveLength(3)
+    expect(TORNTPHARM_GATE_H2_CASH_FLOW_STATISTICS.medianCfoToPat)
+      .toBeCloseTo(1.3972228513846454, 12)
+    expect(TORNTPHARM_GATE_H2_CASH_FLOW_STATISTICS.medianFcfToPat)
+      .toBeCloseTo(1.0841048919047598, 12)
+    expect(TORNTPHARM_GATE_H2_CASH_FLOW_STATISTICS.positiveFcfYearsOutOf3).toBe(3)
+    expect(
+      TORNTPHARM_GATE_H2_CASH_FLOW_STATISTICS.latestCfoToPatMinusPriorMedian,
+    ).toBeCloseTo(-0.26497394893599835, 12)
+    expect(TORNTPHARM_GATE_H2_CASH_FLOW_READ_ONLY_RESULT).toEqual({
+      cfoToPatScore: 100,
+      fcfToPatScore: 100,
+      consistencyTrendScore: 68,
+      combinedScore: 93.6,
+    })
+    expect(TORNTPHARM_GATE_H2_OFFICIAL_EVIDENCE_PACK.cashFlow.score).toBe(93.6)
   })
 
   it("produces the deterministic read-only Quality candidate", () => {
