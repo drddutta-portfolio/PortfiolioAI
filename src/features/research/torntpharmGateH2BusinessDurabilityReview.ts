@@ -2,9 +2,10 @@ import {
   normalizeReviewedQualitativeComponent,
   type ReviewedQualitativeComponentState,
 } from "./pharmaGateH2ComponentNormalizationCandidate"
+import { evaluateDomesticBusinessDurability } from "./pharmaDomesticGateGFinal2NumericMethodology"
 
 export const TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW_VERSION =
-  "TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW_V1_CANDIDATE" as const
+  "TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW_V2_OWNER_APPROVED" as const
 
 export interface TorntpharmBusinessDurabilityComponentReview {
   readonly component:
@@ -39,17 +40,18 @@ function review(
 export const TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_COMPONENTS = [
   review(
     "BRAND_THERAPY_LEADERSHIP",
-    "REVIEW_REQUIRED",
+    "STRONG",
     [
-      "Issuer evidence describes strong therapy positions and brand scale, but the approved acquisition contract requires licensed-market-source cross-checking.",
-      "Issuer self-description alone is explicitly insufficient for this component.",
-      "No licensed provider call has been authorized.",
+      "Owner-approved H2 evidence decision accepts an independent India Ratings report that explicitly attributes Torrent/JB India-market facts to AIOCD data as the required external cross-check, together with Torrent's current AIOCD Pharmatrac March 2026 sourced combined-entity therapy table.",
+      "India Ratings reports Torrent standalone at about 3.4% IPM share, JB Pharma at about 1.2%, and the combined business at about 4.6% / fifth-largest; it also reports material standalone therapy rankings including cardiac, gastrointestinal and CNS using AIOCD industry data.",
+      "Torrent FY2025-26 reporting, sourced to AIOCD Pharmatrac Dataset March 2026, reports the combined Torrent + JB Pharma business fifth in IPM and top-five across Cardiac (#1), CNS (#3), GI (#3), Pain Management (#5) and Derma (#5).",
+      "The component is deliberately STRONG rather than VERY_STRONG because the independent cross-check does not reproduce every current combined therapy rank individually and the post-acquisition scope is still transitioning.",
     ],
     [
-      "https://www.torrentpharma.com/business-area/india-business/",
+      "https://www.indiaratings.co.in/pressrelease/80734",
       "https://www.torrentpharma.com/pdf/investors/AR-2025-26.pdf",
     ],
-    "UNRESOLVED",
+    "NONE_IDENTIFIED",
   ),
   review(
     "FIELD_FORCE_PRODUCTIVITY",
@@ -102,22 +104,42 @@ export const TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_COMPONENTS = [
   ),
 ] as const satisfies readonly TorntpharmBusinessDurabilityComponentReview[]
 
+function requiredComponentScore(
+  component: TorntpharmBusinessDurabilityComponentReview["component"],
+): number {
+  const row = TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_COMPONENTS.find(
+    (item) => item.component === component,
+  )
+  if (!row || row.normalizedScore === null) {
+    throw new Error(`H2 Business Durability component ${component} is not score-ready`)
+  }
+  return row.normalizedScore
+}
+
 const normalizedScores =
   TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_COMPONENTS.map(
     (component) => component.normalizedScore,
   )
 
+const combined = evaluateDomesticBusinessDurability({
+  brandTherapyLeadershipScore: requiredComponentScore("BRAND_THERAPY_LEADERSHIP"),
+  fieldForceProductivityScore: requiredComponentScore("FIELD_FORCE_PRODUCTIVITY"),
+  rndProductivityScore: requiredComponentScore("RND_PRODUCTIVITY"),
+  pipelineCorporateExecutionScore: requiredComponentScore("PIPELINE_CORPORATE_EXECUTION"),
+})
+
 export const TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW = {
   version: TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_REVIEW_VERSION,
-  state: "OWNER_REVIEW_CANDIDATE" as const,
+  state: "OWNER_APPROVED_H2_LOCK" as const,
   components: TORNTPHARM_GATE_H2_BUSINESS_DURABILITY_COMPONENTS,
   readyComponentCount: normalizedScores.filter((score) => score !== null).length,
   requiredComponentCount: 4,
   allComponentsScoreReady: normalizedScores.every((score) => score !== null),
-  combinedScore: null,
-  blockerCodes: [
-    "BRAND_THERAPY_LEADERSHIP_LICENSED_MARKET_CROSS_CHECK_REQUIRED",
-  ] as const,
+  combinedScore: combined.combinedScore,
+  blockerCodes: [] as const,
+  licensedCrossCheckAcceptance:
+    "INDEPENDENT_AIOCD_DERIVED_REPORT_PLUS_CURRENT_ISSUER_AIOCD_PHARMATRAC_TABLE" as const,
+  licensedProviderCallPerformed: false,
   providerCallAuthorized: false,
   scoreExecutionEnabled: false,
   persistedScoreRunEnabled: false,
