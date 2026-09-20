@@ -21841,3 +21841,85 @@ The candidate deliberately does not claim owner approval for unseen numeric thre
 - automatic trading: NO
 
 **CURRENT STOP POINT:** run one consolidated local validation set. If PASS, owner reviews and explicitly freezes the seven-dimension methodology in one decision. Then promote G-FINAL-2 to OWNER_APPROVED_NOT_ACTIVE, point the read-only adapter at approved contract versions, validate once, and close G-FINAL-2.
+
+
+---
+
+## 246. Entry 241 — G-FINAL-2 owner-approved methodology freeze applied / post-freeze validation pending
+
+**Date:** 20 September 2026  
+**Actor:** owner methodology approval + ChatGPT freeze implementation  
+**Branch:** `r4n-pharma-subprofile-architecture`
+
+The owner reported:
+
+> **G-FINAL-2 VALIDATION PASS — APPROVE CONSOLIDATED METHODOLOGY**
+
+### Owner-approved freeze applied
+
+The consolidated Domestic Formulations seven-dimension contract is now:
+
+- version: `PHARMA_DOMESTIC_GATE_G_FINAL_2_NUMERIC_METHODOLOGY_V1_OWNER_APPROVED`
+- state: `OWNER_APPROVED_NOT_ACTIVE`
+- methodology approved: YES
+- activation approved: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- position sizing: OFF
+
+Covered dimensions:
+
+1. Capital Efficiency
+2. Cash Flow
+3. Balance Sheet / Credit
+4. Business Durability
+5. Momentum
+6. Ownership / Governance
+7. Risk
+
+### Read-only adapter lineage
+
+The TORNTPHARM G7 explainable preview now recognizes these seven dimensions as:
+
+- `APPROVED_NUMERIC_CONTRACT`
+
+using the approved G-FINAL-2 contract version.
+
+This does **not** create scores from missing evidence. `primaryScore` remains null where reviewed calculation inputs are not available, and the adapter continues to fail closed.
+
+### G-FINAL-2 closure manifest
+
+The closure manifest now records:
+
+- `state = OWNER_APPROVED_COMPLETE`
+- `gFinal2MethodologyImplementationComplete = true`
+- `gFinal2OwnerFreezeComplete = true`
+- `gFinal2Complete = true`
+- `gateHEligible = false`
+
+Gate H remains blocked by:
+
+- G-FINAL-3 — Material Overlay + governance/regulatory runtime;
+- G-FINAL-4 — end-to-end read-only scoring integration and hand-verifiable dry run.
+
+Known TORNTPHARM evidence gaps remain explicit and are not converted to neutral scores.
+
+### Formal validation boundary
+
+The pre-freeze validation passed before owner approval. The owner-approved code changes now require one post-freeze validation pass before the checkpoint is formally declared **PASS**.
+
+### Safety state
+
+- production mutation: NO
+- score execution: OFF
+- score persistence: OFF
+- recommendation: OFF
+- sizing: OFF
+- provider refresh: NO
+- scheduler change: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+**CURRENT STOP POINT:** run the consolidated post-freeze G-FINAL-2 validation. If PASS, formally close G-FINAL-2 and proceed directly to G-FINAL-3. No G-FINAL-2C/2D/2E stages exist.
