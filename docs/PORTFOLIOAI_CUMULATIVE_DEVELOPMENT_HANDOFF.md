@@ -27995,3 +27995,43 @@ Safety remains:
 - PR merge = NO.
 
 **CURRENT STOP:** owner should pull and run the market-only resume command. If it passes, proceed directly to parsing/scoring.
+
+
+---
+
+## 325. Entry 320 — Yahoo HTTP 429 bypassed with NSE public historical APIs
+
+**Date:** 21 September 2026
+
+The market-only resume correctly reused all three preserved Trendlyne payloads and made no new Trendlyne call, but Yahoo Finance rejected the first market-history request with:
+
+```text
+YAHOO_HTTP_429
+```
+
+No Trendlyne evidence was lost.
+
+The resume script was updated to stop using Yahoo and instead use NSE's public historical endpoints:
+
+- equity history via `/api/NextApi/apiClient/GetQuoteApi` with `getHistoricalTradeData`;
+- NIFTY Pharma history via `/api/historicalOR/indicesHistory`;
+- cookie/session bootstrap through the public NSE site;
+- equity requests split into 100-day chunks;
+- index requests split into 365-day chunks;
+- request pacing below NSE community-client guidance.
+
+This still performs:
+
+```text
+New Trendlyne calls = 0
+Angel One historical calls = 0
+Public NSE market-history reads only
+Production writes = 0
+Score persistence = 0
+```
+
+The completed evidence output target remains:
+
+`/tmp/portfolioai-g10-2-auropharma-evidence-complete.json`
+
+**CURRENT STOP:** pull latest branch and rerun only `scripts/g10-2-resume-public-market-evidence.sh`.
