@@ -26216,3 +26216,24 @@ I4 = IMPLEMENTED / VALIDATION + GATE I CLOSURE REVIEW PENDING
 ```
 
 Do not close Gate I until the consolidated I4 validation passes.
+
+
+---
+
+## 304. Entry 299 — I4 full-suite command corrected to exclude Edge tests
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The I4 consolidated run passed the focused Gate I4/Gate I checks and then failed at the advertised "full non-Edge application test suite" step because `npm test -- --run` also discovered `supabase/functions/**` tests.
+
+Those Edge tests require their dedicated `vitest.edge.config.ts` / Deno-compatible setup and are outside Gate I because no Edge Function code changed.
+
+The I4 command was corrected to:
+
+`npx vitest run --exclude "supabase/functions/**"`
+
+This is a validation harness correction only. No recommendation methodology, score, role, UI, persistence, production data, or Edge code changed.
+
+I4 remains open pending a clean consolidated rerun.
