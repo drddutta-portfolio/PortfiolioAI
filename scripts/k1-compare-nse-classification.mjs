@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url"
 
 const DEFAULT_OFFICIAL = "artifacts/k1-nse-primary-classification.json"
 const DEFAULT_CANONICAL = "artifacts/k1-current-canonical-classification.json"
+const DEFAULT_IDENTITY_TRANSITIONS = "scripts/k1-reviewed-identity-transitions-2026-09-22.json"
 const DEFAULT_OUTPUT = "artifacts/k1-nse-classification-reconciliation.json"
 
 function argValue(name) {
@@ -39,11 +40,63 @@ function sameIsin(a, b) {
   return normalize(a) === normalize(b)
 }
 
-function classifyPair(canonical, official) {
+function transitionMap(snapshot) {
+  const map = new Map()
+  for (const row of snapshot?.transitions ?? []) {
+    const symbol = clean(row?.symbol)
+    const fromIsin = clean(row?.fromIsin)
+    const toIsin = clean(row?.toIsin)
+    if (!symbol || !fromIsin || !toIsin) throw new Error("IDENTITY_TRANSITION_INCOMPLETE")
+    const key = symbol.toUpperCase()
+    if (map.has(key)) throw new Error(`IDENTITY_TRANSITION_DUPLICATE_SYMBOL:${symbol}`)
+    map.set(key, row)
+  }
+  return map
+}
+
+function identityAssessment(canonical, official, reviewedTransitions) {
+  if (sameIsin(canonical?.isin, official?.isin)) {
+    return {
+      state: "AGREE",
+      reasonCode: "ISIN_AGREES_OR_NOT_COMPARABLE",
+      changeRequired: false,
+      transition: null,
+    }
+  }
+
+  const symbol = clean(canonical?.symbol) ?? clean(official?.symbol)
+  const transition = symbol ? reviewedTransitions.get(symbol.toUpperCase()) ?? null : null
+  const exactTransition =
+    transition &&
+    normalize(transition.fromIsin) === normalize(canonical?.isin) &&
+    normalize(transition.toIsin) === normalize(official?.isin) &&
+    transition.reviewState === "VERIFIED_OFFICIAL_CORPORATE_ACTION" &&
+    clean(transition.evidenceUrl)
+
+  if (exactTransition) {
+    return {
+      state: "VERIFIED_CORPORATE_ACTION_TRANSITION",
+      reasonCode: "CANONICAL_ISIN_SUPERSEDED_BY_OFFICIAL_CORPORATE_ACTION",
+      changeRequired: true,
+      transition,
+    }
+  }
+
+  return {
+    state: "REVIEW_REQUIRED",
+    reasonCode: "ISIN_MISMATCH",
+    changeRequired: false,
+    transition: transition ?? null,
+  }
+}
+
+function classifyPair(canonical, official, reviewedTransitions) {
   if (!official) {
     return {
       state: "OFFICIAL_MISSING",
       reasonCode: "NO_OFFICIAL_NSE_SNAPSHOT_ROW",
+      changeScopes: [],
+      identity: null,
     }
   }
 
@@ -51,13 +104,18 @@ function classifyPair(canonical, official) {
     return {
       state: "OFFICIAL_MISSING",
       reasonCode: "OFFICIAL_NSE_PRIMARY_SECTOR_MISSING",
+      changeScopes: [],
+      identity: null,
     }
   }
 
-  if (!sameIsin(canonical?.isin, official?.isin)) {
+  const identity = identityAssessment(canonical, official, reviewedTransitions)
+  if (identity.state === "REVIEW_REQUIRED") {
     return {
       state: "REVIEW_REQUIRED",
-      reasonCode: "ISIN_MISMATCH",
+      reasonCode: identity.reasonCode,
+      changeScopes: [],
+      identity,
     }
   }
 
@@ -65,11 +123,14 @@ function classifyPair(canonical, official) {
   const officialSector = normalize(official?.sector)
   const canonicalIndustry = normalize(canonical?.industry)
   const officialIndustry = normalize(official?.industry)
+  const changeScopes = identity.changeRequired ? ["IDENTITY"] : []
 
   if (!canonicalSector) {
     return {
       state: "CHANGE_REQUIRED",
       reasonCode: "CANONICAL_PRIMARY_SECTOR_MISSING",
+      changeScopes: [...changeScopes, "SECTOR"],
+      identity,
     }
   }
 
@@ -77,13 +138,19 @@ function classifyPair(canonical, official) {
     return {
       state: "CHANGE_REQUIRED",
       reasonCode: "CANONICAL_PRIMARY_SECTOR_DIFFERS_FROM_NSE",
+      changeScopes: [...changeScopes, "SECTOR", ...(officialIndustry && canonicalIndustry !== officialIndustry ? ["INDUSTRY"] : [])],
+      identity,
     }
   }
 
   if (officialIndustry && !canonicalIndustry) {
     return {
-      state: "DETAIL_MISSING",
-      reasonCode: "CANONICAL_INDUSTRY_MISSING",
+      state: identity.changeRequired ? "CHANGE_REQUIRED" : "DETAIL_MISSING",
+      reasonCode: identity.changeRequired
+        ? "CANONICAL_IDENTITY_REFRESH_AND_INDUSTRY_DETAIL_REQUIRED"
+        : "CANONICAL_INDUSTRY_MISSING",
+      changeScopes: [...changeScopes, "INDUSTRY"],
+      identity,
     }
   }
 
@@ -91,6 +158,17 @@ function classifyPair(canonical, official) {
     return {
       state: "CHANGE_REQUIRED",
       reasonCode: "CANONICAL_INDUSTRY_DIFFERS_FROM_NSE",
+      changeScopes: [...changeScopes, "INDUSTRY"],
+      identity,
+    }
+  }
+
+  if (identity.changeRequired) {
+    return {
+      state: "CHANGE_REQUIRED",
+      reasonCode: identity.reasonCode,
+      changeScopes,
+      identity,
     }
   }
 
@@ -99,10 +177,12 @@ function classifyPair(canonical, official) {
     reasonCode: officialIndustry
       ? "CANONICAL_SECTOR_INDUSTRY_AGREE_WITH_NSE"
       : "CANONICAL_PRIMARY_SECTOR_AGREES_WITH_NSE",
+    changeScopes: [],
+    identity,
   }
 }
 
-export function reconcileNseClassification(canonicalSnapshot, officialSnapshot) {
+export function reconcileNseClassification(canonicalSnapshot, officialSnapshot, identityTransitionSnapshot = { transitions: [] }) {
   const canonicalRows = canonicalSnapshot?.rows
   const officialRows = officialSnapshot?.rows
 
@@ -111,6 +191,7 @@ export function reconcileNseClassification(canonicalSnapshot, officialSnapshot) 
 
   const canonical = rowMap(canonicalRows, "CANONICAL")
   const official = rowMap(officialRows, "OFFICIAL")
+  const reviewedTransitions = transitionMap(identityTransitionSnapshot)
   const symbols = [...new Set([...canonical.keys(), ...official.keys()])].sort()
 
   const rows = symbols.map((symbol) => {
@@ -122,16 +203,27 @@ export function reconcileNseClassification(canonicalSnapshot, officialSnapshot) 
         symbol,
         state: "REVIEW_REQUIRED",
         reasonCode: "OFFICIAL_SYMBOL_NOT_IN_CURRENT_CANONICAL_COHORT",
+        changeScopes: [],
+        identity: null,
         canonical: null,
         official: exchange,
       }
     }
 
-    const assessment = classifyPair(current, exchange)
+    const assessment = classifyPair(current, exchange, reviewedTransitions)
     return {
       symbol,
       state: assessment.state,
       reasonCode: assessment.reasonCode,
+      changeScopes: assessment.changeScopes,
+      identity: assessment.identity
+        ? {
+            state: assessment.identity.state,
+            reasonCode: assessment.identity.reasonCode,
+            evidenceUrl: assessment.identity.transition?.evidenceUrl ?? null,
+            effectiveDate: assessment.identity.transition?.effectiveDate ?? null,
+          }
+        : null,
       canonical: {
         securityId: current.securityId ?? null,
         isin: current.isin ?? null,
@@ -161,15 +253,23 @@ export function reconcileNseClassification(canonicalSnapshot, officialSnapshot) 
     return acc
   }, {})
 
+  const changeScopeCounts = rows.flatMap((row) => row.changeScopes ?? []).reduce((acc, scope) => {
+    acc[scope] = (acc[scope] ?? 0) + 1
+    return acc
+  }, {})
+
   return {
-    contract: "PORTFOLIOAI_K1_NSE_CLASSIFICATION_RECONCILIATION_V1",
+    contract: "PORTFOLIOAI_K1_NSE_CLASSIFICATION_RECONCILIATION_V2",
+    policy: "EXCHANGE_PRIMARY_REVIEW_FIRST_V1",
     generatedAt: new Date().toISOString(),
     canonicalContract: canonicalSnapshot?.contract ?? null,
     officialContract: officialSnapshot?.contract ?? null,
+    identityTransitionContract: identityTransitionSnapshot?.contract ?? null,
     canonicalRowCount: canonicalRows.length,
     officialRowCount: officialRows.length,
     comparisonRowCount: rows.length,
     counts,
+    changeScopeCounts,
     freezeEligible:
       rows.length === canonicalRows.length &&
       (counts.OFFICIAL_MISSING ?? 0) === 0 &&
@@ -185,14 +285,16 @@ async function readJson(file) {
 async function main() {
   const officialPath = argValue("--official") ?? DEFAULT_OFFICIAL
   const canonicalPath = argValue("--canonical") ?? DEFAULT_CANONICAL
+  const identityTransitionsPath = argValue("--identity-transitions") ?? DEFAULT_IDENTITY_TRANSITIONS
   const outputPath = argValue("--output") ?? DEFAULT_OUTPUT
 
-  const [official, canonical] = await Promise.all([
+  const [official, canonical, identityTransitions] = await Promise.all([
     readJson(officialPath),
     readJson(canonicalPath),
+    readJson(identityTransitionsPath),
   ])
 
-  const result = reconcileNseClassification(canonical, official)
+  const result = reconcileNseClassification(canonical, official, identityTransitions)
   await fs.mkdir(path.dirname(outputPath), { recursive: true })
   await fs.writeFile(outputPath, JSON.stringify(result, null, 2) + "\n", "utf8")
 
@@ -200,6 +302,7 @@ async function main() {
   for (const state of order) {
     process.stdout.write(`${state}: ${result.counts[state] ?? 0}\n`)
   }
+  process.stdout.write(`Change scopes: IDENTITY=${result.changeScopeCounts.IDENTITY ?? 0} SECTOR=${result.changeScopeCounts.SECTOR ?? 0} INDUSTRY=${result.changeScopeCounts.INDUSTRY ?? 0}\n`)
   process.stdout.write(`Freeze eligible: ${result.freezeEligible ? "YES" : "NO"}\n`)
   process.stdout.write(`Output: ${outputPath}\n`)
 
