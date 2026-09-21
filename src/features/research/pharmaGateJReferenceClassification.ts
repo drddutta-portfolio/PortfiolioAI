@@ -7,7 +7,7 @@ import { AUROPHARMA_G10_2_CLASSIFICATION_RECONFIRMATION } from "./auropharmaG102
 import type { PharmaSubprofileCode } from "./pharmaSubprofileAssignment"
 
 export interface PharmaGateJReferenceClassificationView {
-  readonly stage: "G10.1" | "G10.2"
+  readonly stage: "G10.1" | "G10.2" | "G10.3"
   readonly checkpoint: "A"
   readonly symbol: string
   readonly companyName: string
@@ -105,9 +105,44 @@ const AUROPHARMA_VIEW: PharmaGateJReferenceClassificationView = {
   persistenceEnabled: false,
 }
 
+
+const BIOCON_VIEW: PharmaGateJReferenceClassificationView = {
+  stage: "G10.3",
+  checkpoint: "A",
+  symbol: "BIOCON",
+  companyName: "Biocon Limited",
+  checkpointState: BIOCON_G10_3_CLASSIFICATION_REVIEW.checkpointState,
+  primary: BIOCON_G10_3_CLASSIFICATION_REVIEW.primary,
+  materialOverlays: BIOCON_G10_3_CLASSIFICATION_REVIEW.materialOverlays,
+  emergingWatches: BIOCON_G10_3_CLASSIFICATION_REVIEW.emergingWatches,
+  unresolvedExposures: [],
+  evidenceThrough: BIOCON_G10_3_CLASSIFICATION_REVIEW.evidenceThrough,
+  proposedEffectiveDate: BIOCON_G10_3_CLASSIFICATION_REVIEW.proposedEffectiveDate,
+  operatingMixLabel: "Issuer-disclosed Biosimilars versus Generics versus CRDMO business-revenue contribution",
+  operatingMixRows: BIOCON_G10_3_ANNUAL_BUSINESS_MIX.map((row) => ({
+    periodEnd: row.periodEnd,
+    summary: `Biosimilars ${row.biosimilarsSharePercent}% · Generics ${row.genericsSharePercent}% · CRDMO ${row.crdmoSharePercent}%`,
+  })),
+  selectionLabel: "Existing sole Biosimilars portability candidate",
+  selectionReason: BIOCON_G10_3_CLASSIFICATION_REVIEW.selectionReason,
+  distortionChecks: BIOCON_G10_3_DISTORTION_CHECKS.map((check) => ({
+    code: check.code,
+    state: check.state,
+    note: check.note,
+  })),
+  lockMode: "NEW_LOCK",
+  scoreStateLabel: "Score not started",
+  boundaryNote:
+    "Checkpoint A locks only business-model classification. Global Generics and CDMO/CRAMS remain Material Overlays, no qualitative pipeline bonus is allowed, and Checkpoint B remains blocked until owner approval.",
+  scoreExecutionEnabled: false,
+  recommendationExecutionEnabled: false,
+  persistenceEnabled: false,
+}
+
 const VIEW_BY_SYMBOL: Readonly<Record<string, PharmaGateJReferenceClassificationView>> = {
   ALIVUS: ALIVUS_VIEW,
   AUROPHARMA: AUROPHARMA_VIEW,
+  BIOCON: BIOCON_VIEW,
 }
 
 export function pharmaGateJReferenceClassification(
