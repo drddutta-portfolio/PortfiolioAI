@@ -3,6 +3,7 @@ import { PHARMA_SUBPROFILE_CONTRACTS } from "./pharmaSubprofileContracts"
 import { ALIVUS_G10_1_READ_ONLY_SCORE_RESULT } from "./alivusG101ReadOnlyScore"
 import { ALIVUS_G10_1_READ_ONLY_RECOMMENDATION } from "./alivusG101RecommendationPreview"
 import { PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE } from "./pharmaGlobalGenericsG102MethodologyCompletionCandidate"\nimport { PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY } from "./pharmaGlobalGenericsG102NumericMethodology"
+import { AUROPHARMA_G10_2_FINAL_RESULT } from "./auropharmaG102FinalResult"
 
 function displayName(code: keyof typeof PHARMA_SUBPROFILE_CONTRACTS) {
   return PHARMA_SUBPROFILE_CONTRACTS[code].displayName
@@ -21,6 +22,7 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
   const renderAlivusCheckpointB = review.symbol === "ALIVUS"
   const renderAuropharmaCheckpointB = review.symbol === "AUROPHARMA"
   const globalCandidate = PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE\n  const approvedGlobalMethod = PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY
+  const finalAuroResult = AUROPHARMA_G10_2_FINAL_RESULT
 
   return <section className="pharma-persistence-package" aria-labelledby="gate-j-reference-classification-title">
     <div className="pharma-evidence-pilot-head">
@@ -128,34 +130,34 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
           <div className="pharma-evidence-pilot-head">
             <div>
               <p className="eyebrow">Gate J · G10.2 · Checkpoint B</p>
-              <h3 id="gate-j-global-generics-checkpoint-b-title">Global Generics methodology completion candidate</h3>
-              <p>Checkpoint B consolidates the old Global Generics G6 fail-closed families into one explicit owner-review decision. No Domestic, API or BANK/NBFC scoring bands are borrowed.</p>
+              <h3 id="gate-j-global-generics-checkpoint-b-title">Global Generics controlled-expansion result</h3>
+              <p>Checkpoint B is complete. The approved Global Generics methodology was exercised against the bounded evidence package and correctly fails closed because mandatory inputs remain incomplete. No partial score is reconstructed.</p>
             </div>
-            <span className="pharma-workspace-lock">Methodology approved · Evidence/score build next</span>
+            <span className="pharma-workspace-lock">Checkpoint B complete · Fail-closed outcome</span>
           </div>
 
           <div className="pharma-persistence-package-summary">
             <div><span>Resolution policy</span><strong>Reference-relative median</strong><small>No fabricated absolute bands</small></div>
             <div><span>Ten-dimension spine</span><strong>Preserved</strong><small>Gate I policy unchanged</small></div>
             <div><span>Approved building blocks</span><strong>{globalCandidate.approvedBuildingBlocks.length}</strong><small>Growth · pipeline · qualitative rubric</small></div>
-            <div><span>Current score state</span><strong>{globalCandidate.scoreState.replaceAll("_", " ")}</strong><small>Evidence package incomplete · no partial score</small></div>
+            <div><span>Current score state</span><strong>{finalAuroResult.scoreState.replaceAll("_", " ")}</strong><small>Gate I recommendation not executed</small></div>
           </div>
 
           <div className="research-callout research-callout-neutral">
-            <strong>Single methodology decision — not a new gate</strong>
-            <p>The owner-approved Global Generics contract now uses reviewed same-primary peer-relative percentiles where Global-specific calibration was previously absent. Required components aggregate by median, and any missing mandatory component fails closed instead of being renormalized away.</p>
+            <strong>Deterministic fail-closed result</strong>
+            <p>The approved contract was not weakened to force a score. Missing mandatory evidence blocks the ten-dimension result, so AUROPHARMA remains non-computable and Gate I is not run.</p>
           </div>
 
           <div className="pharma-persistence-package-grid">
-            {globalCandidate.dimensionDecisions.map((decision) => <article key={decision.dimension}>
-              <strong>{decision.dimension.replaceAll("_", " ")}</strong>
-              <small>OWNER APPROVED METHOD</small>
-              <p>{decision.proposedMethod}</p>
-              <span>{decision.evidenceBoundary}</span>
+            {finalAuroResult.blockerGroups.map((blocker) => <article key={blocker.code}>
+              <strong>{blocker.code.replaceAll("_", " ")}</strong>
+              <small>MANDATORY BLOCKER</small>
+              <p>{blocker.details.join(" ")}</p>
+              <span>No substitution · no renormalization</span>
             </article>)}
           </div>
 
-          <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> Methodology is owner-approved under {approvedGlobalMethod.version}. AUROPHARMA remains non-computable until the bounded reference evidence package is complete. API stays Emerging Watch, Biosimilars stays unresolved, no partial score is reconstructed, and all persistence/sizing/AI actions remain off.</p>
+          <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> Methodology is owner-approved under {approvedGlobalMethod.version}. Final G10.2 state is {finalAuroResult.state.replaceAll("_", " ")}. API stays Emerging Watch, Biosimilars stays unresolved, no partial score is reconstructed, and all persistence/sizing/AI actions remain off.</p>
         </section>
       : null}
   </section>
