@@ -26657,3 +26657,126 @@ The next development action, when explicitly instructed, is:
 > **G10.1 — API_BULK_DRUGS — Checkpoint A: Reference Company Selection & Classification Lock**
 
 No API scoring methodology should be written before that classification lock is complete.
+
+
+---
+
+## 306. Entry 301 — Gate J / G10.1 Checkpoint A implemented — ALIVUS API classification candidate
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Starting head:** `d75c3e68589d27a3163bfc94d060db9354a551b7`
+
+The owner authorized Gate J execution under the fixed sequence:
+
+```text
+GitHub R4N branch
+→ develop/update code
+→ update cumulative HANDOFF
+→ git pull
+→ local code
+→ local Supabase
+→ local Vite app
+→ localhost UI
+→ owner visual approval
+→ full local validation
+→ final HANDOFF checkpoint
+→ next gate
+```
+
+### G10.1 reference selection
+
+The existing provisional API/Bulk register contains:
+
+- ALIVUS
+- SUPRIYA
+- SOLARA
+- PAR
+
+ALIVUS was selected as the G10.1 reference candidate because the issuer's official FY25 and FY26 annual-report disclosures provide a direct, comparable Generic API vs CDMO business-mix split for two consecutive annual periods:
+
+```text
+FY25: Generic API 94% / CDMO 6%
+FY26: Generic API 93% / CDMO 7%
+```
+
+The unchanged G1 adaptive-classification contract therefore resolves:
+
+```text
+Primary candidate = API_BULK_DRUGS
+Material Overlay = none
+Emerging Watch = CDMO_CRAMS
+Classification state = READY_FOR_REVIEW
+```
+
+### Distortion / structural-change review
+
+The classification package explicitly records:
+
+- FY25/FY26 use directly comparable issuer business-mix percentages;
+- Nirma's ownership acquisition and the Glenmark Life Sciences → Alivus rename do not alter the operating-model denominator;
+- FY26 CDMO recovery does not overturn API primary leadership;
+- the August 2026 IQGenX acquisition occurred after the 31 March 2026 evidence date and is a future-period reclassification/materiality review trigger rather than a reason to rewrite FY25/FY26.
+
+No score is visible or computed at Checkpoint A.
+
+### Repository implementation
+
+Added:
+
+- `src/features/research/alivusG101ClassificationEvidence.ts`
+- `src/features/research/alivusG101ClassificationEvidence.test.ts`
+- `src/features/research/pharmaGateJReferenceClassification.ts`
+- `src/features/research/pharmaGateJReferenceClassification.test.ts`
+- `src/features/research/PharmaGateJReferenceClassificationPanel.tsx`
+- `src/features/research/PharmaGateJReferenceClassificationPanel.test.tsx`
+- `scripts/r4n/alivus-g10-1-local-research-target.sql`
+- `scripts/r4n/run-alivus-g10-1-local-research-target.sh`
+- `scripts/g10-1-validate-api-classification-lock.sh`
+- `docs/PortfolioAI_GATE_J_G10_1_API_CLASSIFICATION_LOCK.md`
+
+Updated:
+
+- `src/pages/ResearchPage.tsx`
+- `.github/workflows/architecture-guard.yml`
+- this cumulative HANDOFF.
+
+### UI architecture
+
+A reusable Gate J reference-classification panel was added to the existing universal Research Overview. The page itself does not contain an ALIVUS-specific layout branch; the generic sector add-on resolves an approved reference-review fixture by symbol and returns no panel for unrelated companies.
+
+The Checkpoint A panel deliberately renders **before** a reviewed subprofile assignment exists, so the owner can visually review the classification evidence before any canonical/local assignment lock is made.
+
+### Local-only fixture boundary
+
+The ALIVUS local Research-target script may:
+
+- ensure a local ALIVUS security/listing identity exists;
+- ensure local Pharma sector routing exists;
+- add a synthetic local-only ownership link only when ALIVUS is otherwise absent from Research Coverage.
+
+It inserts:
+
+- **0 research-evidence rows**
+- **0 subprofile-assignment rows**
+- **0 score rows**
+- **0 recommendation rows**
+
+The fixture is localhost-only and refuses a non-local database URL.
+
+### Current stop point
+
+```text
+Gate J / G10.1
+Checkpoint A code = IMPLEMENTED
+Reference candidate = ALIVUS
+Proposed primary = API_BULK_DRUGS
+Secondary state = CDMO_CRAMS / EMERGING_WATCH
+Score execution = NOT STARTED
+Checkpoint B methodology = NOT STARTED
+Owner localhost classification lock = PENDING
+Full local validation = PENDING
+```
+
+Do **not** begin G10.1 Checkpoint B until the owner visually approves the Checkpoint A classification lock.
