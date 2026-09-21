@@ -19,7 +19,7 @@ describe("Gate J reference classification panel", () => {
     expect(view.queryByText("Global Generics methodology completion candidate")).not.toBeInTheDocument()
   })
 
-  it("renders the AUROPHARMA G10.2 re-confirmation and Checkpoint B method candidate without a score", () => {
+  it("renders the AUROPHARMA G10.2 re-confirmation and final fail-closed Checkpoint B result", () => {
     const { container } = render(<PharmaGateJReferenceClassificationPanel symbol="AUROPHARMA" />)
     const view = within(container)
 
@@ -31,10 +31,10 @@ describe("Gate J reference classification panel", () => {
     expect(view.getByText(/FY25: Global Generics ≥ 73.04% · API 13.63%/)).toBeInTheDocument()
     expect(view.getByText(/FY26: Global Generics ≥ 73.46% · API 12.03%/)).toBeInTheDocument()
     expect(view.getByText(/Score not computable · methodology incomplete/)).toBeInTheDocument()
-    expect(view.getByText("Global Generics methodology completion candidate")).toBeInTheDocument()
-    expect(view.getByText("Methodology approved · Evidence/score build next")).toBeInTheDocument()
+    expect(view.getByText("Global Generics controlled-expansion result")).toBeInTheDocument()
+    expect(view.getByText("Checkpoint B complete · Fail-closed outcome")).toBeInTheDocument()
     expect(view.getByText("Reference-relative median")).toBeInTheDocument()
-    expect(view.getAllByText("OWNER APPROVED METHOD").length).toBe(10)
+    expect(view.getAllByText("MANDATORY BLOCKER").length).toBeGreaterThanOrEqual(4)
     expect(view.queryByText("API methodology → score → Gate I recommendation")).not.toBeInTheDocument()
   })
 
