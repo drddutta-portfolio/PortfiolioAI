@@ -1,5 +1,6 @@
 import {
   buildGateHClosedScoreAuthority,
+  buildPharmaReferenceScoreAuthority,
   buildPharmaRecommendationInput,
   buildPharmaScoreNotComputableAuthority,
   type PharmaRecommendationInput,
@@ -18,6 +19,7 @@ import type {
   PharmaSubprofileResolution,
 } from "./pharmaSubprofileAssignment"
 import { TORNTPHARM_GATE_H3_READ_ONLY_RESULT } from "./torntpharmGateH3ReadOnlyScore"
+import { ALIVUS_G10_1_READ_ONLY_SCORE_RESULT } from "./alivusG101ReadOnlyScore"
 
 export const PHARMA_GATE_I3_READ_ONLY_RECOMMENDATION_VERSION =
   "PHARMA_GATE_I3_READ_ONLY_RECOMMENDATION_V1" as const
@@ -311,6 +313,20 @@ export function buildPharmaGateI3ReferenceRecommendation(input: {
     const scoreAuthority = buildGateHClosedScoreAuthority(
       input.securityId,
       TORNTPHARM_GATE_H3_READ_ONLY_RESULT,
+    )
+    return evaluatePharmaGateI3ReadOnlyRecommendation(
+      buildPharmaRecommendationInput({
+        securityId: input.securityId,
+        assignmentResolution: input.assignmentResolution,
+        scoreAuthority,
+      }),
+    )
+  }
+
+  if (symbol === "ALIVUS") {
+    const scoreAuthority = buildPharmaReferenceScoreAuthority(
+      input.securityId,
+      ALIVUS_G10_1_READ_ONLY_SCORE_RESULT,
     )
     return evaluatePharmaGateI3ReadOnlyRecommendation(
       buildPharmaRecommendationInput({

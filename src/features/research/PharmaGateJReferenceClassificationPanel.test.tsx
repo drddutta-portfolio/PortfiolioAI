@@ -13,6 +13,10 @@ describe("Gate J reference classification panel", () => {
     expect(screen.getByText(/FY25: API 94% · CDMO 6%/)).toBeInTheDocument()
     expect(screen.getByText(/FY26: API 93% · CDMO 7%/)).toBeInTheDocument()
     expect(screen.getByText(/Score not started/)).toBeInTheDocument()
+    expect(screen.getByText("API methodology → score → Gate I recommendation")).toBeInTheDocument()
+    expect(screen.getByText("76.6725")).toBeInTheDocument()
+    expect(screen.getByText("SATELLITE CANDIDATE")).toBeInTheDocument()
+    expect(screen.getByText(/Persistence off/)).toBeInTheDocument()
   })
 
   it("renders nothing for unrelated symbols", () => {

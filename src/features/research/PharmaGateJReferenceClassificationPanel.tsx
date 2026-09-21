@@ -1,5 +1,7 @@
 import { pharmaGateJReferenceClassification } from "./pharmaGateJReferenceClassification"
 import { PHARMA_SUBPROFILE_CONTRACTS } from "./pharmaSubprofileContracts"
+import { ALIVUS_G10_1_READ_ONLY_SCORE_RESULT } from "./alivusG101ReadOnlyScore"
+import { ALIVUS_G10_1_READ_ONLY_RECOMMENDATION } from "./alivusG101RecommendationPreview"
 
 function displayName(code: keyof typeof PHARMA_SUBPROFILE_CONTRACTS) {
   return PHARMA_SUBPROFILE_CONTRACTS[code].displayName
@@ -71,5 +73,33 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
     </div>
 
     <p className="pharma-evidence-pilot-note"><strong>Boundary:</strong> Checkpoint A writes no research evidence, assignment, score or recommendation. Checkpoint B remains blocked until the owner approves this classification lock.</p>
+
+    <section className="pharma-persistence-package" aria-labelledby="gate-j-api-checkpoint-b-title">
+      <div className="pharma-evidence-pilot-head">
+        <div>
+          <p className="eyebrow">Gate J · G10.1 · Checkpoint B</p>
+          <h3 id="gate-j-api-checkpoint-b-title">API methodology → score → Gate I recommendation</h3>
+          <p>The locked API classification now runs through one PHARMA_V1 ten-dimension score and the unchanged Gate I recommendation policy. This is a read-only candidate for owner review.</p>
+        </div>
+        <span className="pharma-workspace-lock">Read-only candidate · Persistence off</span>
+      </div>
+      <div className="pharma-persistence-package-summary">
+        <div><span>Deterministic score</span><strong>{ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.overallScore.toFixed(4)}</strong><small>10/10 dimensions · no renormalization</small></div>
+        <div><span>Gate I role</span><strong>{ALIVUS_G10_1_READ_ONLY_RECOMMENDATION.suggestedRole.replaceAll("_", " ")}</strong><small>Unchanged Gate I thresholds/floors</small></div>
+        <div><span>Valuation</span><strong>{ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions.find((item) => item.dimensionCode === "VALUATION")?.finalScore.toFixed(0)}</strong><small>Below neutral anchor · caution only</small></div>
+        <div><span>Momentum</span><strong>{ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions.find((item) => item.dimensionCode === "MOMENTUM")?.finalScore.toFixed(0)}</strong><small>Does not neutralize valuation caution</small></div>
+      </div>
+      <div className="pharma-persistence-package-grid">
+        {ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions.map((dimension) => <article key={dimension.dimensionCode}>
+          <strong>{dimension.dimensionCode.replaceAll("_", " ")}</strong>
+          <small>Score-ready · 100% reference evidence coverage</small>
+          <p>{dimension.finalScore.toFixed(2)}</p>
+          <span>API/Bulk methodology candidate</span>
+        </article>)}
+      </div>
+      <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> CDMO remains Emerging Watch and numerically excluded. Score/recommendation persistence, weight guidance, action bias, position sizing and AI interpretation remain off.</p>
+    </section>
+
+
   </section>
 }

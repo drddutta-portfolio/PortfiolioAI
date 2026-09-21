@@ -68,6 +68,45 @@ export interface PharmaRecommendationScoreReadyAuthority {
   readonly nonPersisting: true
 }
 
+export interface PharmaReferenceReadOnlyScoreLike {
+  readonly securitySymbol: string
+  readonly profileCode: "PHARMA_V1"
+  readonly primarySubprofile: PharmaSubprofileCode
+  readonly contractVersion: string
+  readonly overallScore: number | null
+  readonly dimensions: readonly {
+    readonly dimensionCode: PharmaG7DimensionCode
+    readonly finalScore: number | null
+    readonly primaryScoreContractVersion: string
+    readonly evidenceLineage: readonly string[]
+    readonly methodologyLineage: readonly {
+      readonly decisionId: string
+      readonly contractVersion: string
+    }[]
+    readonly readinessCoverage: number
+  }[]
+  readonly governance: {
+    readonly constraintState: string
+  }
+  readonly materialOverlay: {
+    readonly code: PharmaSubprofileCode | null
+    readonly numericModifierApplied: false
+    readonly secondIndependentStockScore: null
+  }
+  readonly emergingWatch: {
+    readonly code: PharmaSubprofileCode | null
+    readonly numericParticipation: false
+  }
+  readonly evidenceLineage: readonly string[]
+  readonly methodologyLineage: readonly {
+    readonly decisionId: string
+    readonly contractVersion: string
+  }[]
+  readonly readOnly: true
+  readonly nonPersisting: true
+  readonly persistedScoreRunEnabled: false
+}
+
 export interface PharmaRecommendationScoreNotComputableAuthority {
   readonly state: "SCORE_NOT_COMPUTABLE"
   readonly securityId: string
@@ -189,6 +228,67 @@ interface GateHClosedReadOnlyScoreLike {
 function assertFiniteScore(value: number | null, label: string): asserts value is number {
   if (value === null || !Number.isFinite(value)) {
     throw new Error(`Gate I1 closed-score authority requires a finite ${label}`)
+  }
+}
+
+export function buildPharmaReferenceScoreAuthority(
+  securityId: string,
+  result: PharmaReferenceReadOnlyScoreLike,
+): PharmaRecommendationScoreReadyAuthority {
+  if (!securityId) throw new Error("Gate I1 reference score authority requires securityId")
+  assertFiniteScore(result.overallScore, "overall score")
+  if (result.dimensions.length !== 10) {
+    throw new Error("Gate I1 reference score authority requires all ten PHARMA_V1 dimensions")
+  }
+  if (result.emergingWatch.numericParticipation !== false) {
+    throw new Error("Gate I1 reference score authority requires Emerging Watch numeric participation to remain disabled")
+  }
+  if (result.materialOverlay.numericModifierApplied !== false) {
+    throw new Error("Gate I1 reference score authority requires material-overlay numeric modifiers to remain unapplied")
+  }
+  if (result.readOnly !== true || result.nonPersisting !== true || result.persistedScoreRunEnabled !== false) {
+    throw new Error("Gate I1 reference score authority requires a read-only non-persisting score result")
+  }
+
+  const dimensions = result.dimensions.map((dimension) => {
+    assertFiniteScore(dimension.finalScore, dimension.dimensionCode)
+    if (dimension.readinessCoverage !== 1) {
+      throw new Error(`Gate I1 reference score authority requires full readiness for ${dimension.dimensionCode}`)
+    }
+    return {
+      dimensionCode: dimension.dimensionCode,
+      score: dimension.finalScore,
+      scoreContractVersion: dimension.primaryScoreContractVersion,
+      evidenceLineage: dimension.evidenceLineage,
+      methodologyLineage: dimension.methodologyLineage,
+    }
+  })
+
+  return {
+    state: "SCORE_READY",
+    securityId,
+    securitySymbol: result.securitySymbol,
+    parentProfileCode: "PHARMA",
+    parentProfileVersion: result.profileCode,
+    primarySubprofile: result.primarySubprofile,
+    scoreContractVersion: result.contractVersion,
+    overallScore: result.overallScore,
+    dimensions,
+    scoreReadyCoverage: 1,
+    governanceState: result.governance.constraintState,
+    overlayContext: {
+      materialOverlayCode: result.materialOverlay.code,
+      numericModifierApplied: false,
+      secondIndependentStockScore: null,
+    },
+    emergingWatch: {
+      code: result.emergingWatch.code,
+      numericParticipation: false,
+    },
+    evidenceLineage: result.evidenceLineage,
+    methodologyLineage: result.methodologyLineage,
+    readOnly: true,
+    nonPersisting: true,
   }
 }
 

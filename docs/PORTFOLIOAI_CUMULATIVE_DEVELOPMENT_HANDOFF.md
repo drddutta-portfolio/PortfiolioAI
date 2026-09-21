@@ -26856,3 +26856,139 @@ Checkpoint B = NOT STARTED
 ```
 
 Do not begin Checkpoint B until the clean consolidated rerun passes.
+
+
+---
+
+## 309. Entry 304 — G10.1 Checkpoint A COMPLETE / PASS; Checkpoint B consolidated API build implemented
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Checkpoint B base head:** `b76f04c871a82b2e82ad708a89d856b87c8dff2a`
+
+The owner reported the clean rerun of `scripts/g10-1-validate-api-classification-lock.sh` passed.
+
+### Formal Checkpoint A closure
+
+```text
+G10.1 Checkpoint A = COMPLETE / PASS
+Reference = ALIVUS
+Primary = API_BULK_DRUGS
+Material Overlay = none
+Emerging Watch = CDMO_CRAMS
+Classification effective date = 2026-03-31
+```
+
+The classification remains locked against score-driven revision. It may reopen only for new material business evidence through a versioned review.
+
+### Checkpoint B consolidated implementation
+
+Checkpoint B was then started as one build package rather than split into methodology/evidence/score/recommendation sub-gates.
+
+Implemented:
+
+- API/Bulk numeric methodology candidate;
+- bounded ALIVUS evidence snapshot;
+- deterministic ten-dimension read-only score;
+- portable score-authority adapter for non-Domestic PHARMA_V1 references;
+- unchanged Gate I recommendation evaluation;
+- reusable Gate J UI extension inside the existing G10.1 block;
+- local-only reviewed API assignment + CDMO Emerging Watch fixture;
+- consolidated Checkpoint B validator;
+- CI coverage.
+
+### Candidate ALIVUS result
+
+```text
+QUALITY                 94.00
+GROWTH                  69.25
+CAPITAL_EFFICIENCY      84.00
+CASH_FLOW               70.75
+BALANCE_SHEET_CREDIT    95.00
+BUSINESS_DURABILITY     82.50
+VALUATION               35.00
+MOMENTUM               100.00
+OWNERSHIP_GOVERNANCE    75.00
+RISK                     69.00
+
+Overall                 76.6725
+Gate I role              SATELLITE_CANDIDATE
+Valuation caution        YES
+```
+
+The Gate I policy is unchanged. All Satellite floors pass. Core floors also pass; Core is not reached because overall score is below 80.
+
+### API methodology scope
+
+The candidate preserves the common PHARMA_V1 ten-dimension spine.
+
+API-specific interpretation includes:
+
+- eight-quarter margin quality;
+- four-quarter growth consistency;
+- five-year ROICE;
+- three-year FCF/CFO conversion under an explicit FCF identity;
+- net-cash / credit resilience;
+- capacity-utilization, R&D/pipeline, regulated-market reach and backward-integration durability;
+- API cycle-aware PE / EV-EBITDA / FCF-yield valuation;
+- NIFTY Pharma-relative momentum;
+- reviewed ownership/governance;
+- regulatory/site, customer-concentration and API pricing-cycle risk.
+
+### Evidence boundary
+
+The bounded reference snapshot uses issuer annual reports/results/presentations, official shareholding and rating disclosures, the canonical cached ALIVUS price snapshot dated 18 September 2026, public ALIVUS historical-price context and NIFTY Pharma context.
+
+No live provider refresh was invoked by the application. No evidence was promoted to production.
+
+### Isolation and safety
+
+```text
+Domestic/TORNTPHARM methodology changed = NO
+AUROPHARMA fail-closed state changed = NO
+Material Overlay second score = NO
+CDMO Emerging numeric participation = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Weight guidance = OFF
+Action bias = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production mutation = NO
+Deployment = NO
+PR merge = NO
+```
+
+### Local proof next
+
+After `git pull`:
+
+1. run the existing ALIVUS local Research-target fixture if needed;
+2. run `bash scripts/r4n/run-alivus-g10-1-local-reviewed-assignment.sh`;
+3. keep/start local Vite;
+4. open ALIVUS → Research → Overview;
+5. inspect the Gate J block immediately before Research Health.
+
+Expected Checkpoint B block:
+
+```text
+Deterministic score = 76.6725
+Gate I role = SATELLITE CANDIDATE
+Valuation = 35
+Momentum = 100
+CDMO = Emerging Watch / numerically excluded
+Persistence = off
+```
+
+### Current stop point
+
+```text
+G10.1 Checkpoint A = COMPLETE / PASS
+G10.1 Checkpoint B code = IMPLEMENTED
+Checkpoint B localhost owner visual approval = PENDING
+Checkpoint B full local validation = PENDING
+G10.2 = NOT STARTED
+```
+
+Do not close G10.1 or begin G10.2 until Checkpoint B passes owner visual review and the consolidated local validator.
