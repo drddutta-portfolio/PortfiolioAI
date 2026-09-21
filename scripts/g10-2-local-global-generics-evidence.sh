@@ -29,12 +29,17 @@ STATUS_ENV="$(supabase status -o env 2>/dev/null)" || die "Local Supabase is not
 ANON_KEY="$(printf '%s\n' "$STATUS_ENV" | sed -nE 's/^ANON_KEY="?([^"]+)"?$/\1/p' | head -n1)"
 [[ -n "$ANON_KEY" ]] || die "Could not resolve local ANON_KEY."
 
-AUTH_JSON="$(curl -fsS -X POST "$API_URL/auth/v1/token?grant_type=password"   -H "apikey: $ANON_KEY"   -H "Content-Type: application/json"   -d "$(jq -nc --arg email "$LOCAL_EMAIL" --arg password "$LOCAL_PASSWORD" '{email:$email,password:$password}')")"   || die "Local Supabase password sign-in failed."
+AUTH_JSON="$(curl -fsS -X POST "$API_URL/auth/v1/token?grant_type=password" \
+  -H "apikey: $ANON_KEY" \
+  -H "Content-Type: application/json" \
+  -d "$(jq -nc --arg email "$LOCAL_EMAIL" --arg password "$LOCAL_PASSWORD" '{email:$email,password:$password}')")" \
+  || die "Local Supabase password sign-in failed."
 ACCESS_TOKEN="$(printf '%s' "$AUTH_JSON" | jq -r '.access_token // empty')"
 [[ -n "$ACCESS_TOKEN" ]] || die "Local sign-in did not return an access token."
 
 LOG_FILE="/tmp/portfolioai-g10-2-local-functions.log"
 REUSE="${G10_2_REUSE_FUNCTION_SERVER:-0}"
+
 if [[ "$REUSE" == "1" ]]; then
   pgrep -f "supabase functions serve" >/dev/null 2>&1 || die "No local functions server is running."
   SERVE_PID=""
@@ -46,12 +51,49 @@ else
   supabase functions serve g10-2-local-global-generics-evidence --no-verify-jwt --env-file "$ENV_FILE" --debug >"$LOG_FILE" 2>&1 &
   SERVE_PID=$!
   trap 'kill "$SERVE_PID" >/dev/null 2>&1 || true' EXIT
-  for _ in {1..30}; do
-    if curl -sS -o /dev/null "$API_URL/functions/v1/g10-2-local-global-generics-evidence"; then break; fi
-    sleep 1
-  done
-  kill -0 "$SERVE_PID" >/dev/null 2>&1 || die "Local function server failed. Review $LOG_FILE."
 fi
+
+READY_FILE="$(mktemp)"
+ready=0
+printf 'Waiting for G10.2 local Edge Function to become ready...\n'
+for _ in {1..90}; do
+  if [[ -n "$SERVE_PID" ]] && ! kill -0 "$SERVE_PID" >/dev/null 2>&1; then
+    tail -n 120 "$LOG_FILE" >&2 || true
+    rm -f "$READY_FILE"
+    die "Local function server exited before becoming ready."
+  fi
+
+  ready_status="$(curl --max-time 5 -sS -o "$READY_FILE" -w '%{http_code}' -X POST \
+    "$API_URL/functions/v1/g10-2-local-global-generics-evidence" \
+    -H "Authorization: Bearer $ACCESS_TOKEN" \
+    -H "apikey: $ANON_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"action":"PLAN"}' 2>/dev/null || true)"
+
+  if [[ "$ready_status" == "200" ]]; then
+    ready=1
+    break
+  fi
+
+  if [[ "$ready_status" =~ ^4[0-9][0-9]$ ]]; then
+    cat "$READY_FILE" >&2 || true
+    rm -f "$READY_FILE"
+    die "Local function started but rejected its zero-call PLAN with HTTP $ready_status."
+  fi
+
+  sleep 1
+done
+
+if [[ "$ready" != "1" ]]; then
+  printf 'Last readiness response:\n' >&2
+  cat "$READY_FILE" >&2 || true
+  printf '\nLocal function log tail:\n' >&2
+  tail -n 120 "$LOG_FILE" >&2 || true
+  rm -f "$READY_FILE"
+  die "G10.2 local Edge Function did not become ready within 90 seconds."
+fi
+rm -f "$READY_FILE"
+printf 'Local Edge Function readiness PASS (zero-call PLAN returned HTTP 200).\n'
 
 payload="$(jq -nc --arg mode "$MODE" '
   if $mode == "EXECUTE"
@@ -60,7 +102,12 @@ payload="$(jq -nc --arg mode "$MODE" '
   end
 ')"
 
-status="$(curl --max-time 300 -sS -o "$OUTPUT_FILE" -w '%{http_code}' -X POST "$API_URL/functions/v1/g10-2-local-global-generics-evidence"   -H "Authorization: Bearer $ACCESS_TOKEN"   -H "apikey: $ANON_KEY"   -H "Content-Type: application/json"   -d "$payload")"
+status="$(curl --max-time 300 -sS -o "$OUTPUT_FILE" -w '%{http_code}' -X POST \
+  "$API_URL/functions/v1/g10-2-local-global-generics-evidence" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "apikey: $ANON_KEY" \
+  -H "Content-Type: application/json" \
+  -d "$payload")"
 
 cat "$OUTPUT_FILE" | jq .
 
