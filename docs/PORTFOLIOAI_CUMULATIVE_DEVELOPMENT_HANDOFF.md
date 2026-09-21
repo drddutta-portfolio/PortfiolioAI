@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology-completion candidate IMPLEMENTED / OWNER VISUAL APPROVAL PENDING; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology OWNER-APPROVED and executable contract implemented; consolidated AUROPHARMA evidence → score → Gate I build now next; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -27508,3 +27508,110 @@ Checkpoint B final evidence / score / recommendation = NOT YET EXECUTED
 ```
 
 This remains one Checkpoint B. No G10.2-B1/B2 numbering has been introduced.
+
+
+---
+
+## 317. Entry 312 — G10.2 Checkpoint B methodology OWNER APPROVED; executable contract implemented
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+Owner approval received exactly as:
+
+```text
+APPROVE G10.2 GLOBAL GENERICS METHODOLOGY COMPLETION CANDIDATE
+```
+
+The owner also explicitly requested faster execution with fewer development substages.
+
+### Approved contract
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsG102NumericMethodology.ts`
+- `src/features/research/pharmaGlobalGenericsG102NumericMethodology.test.ts`
+
+Version:
+
+```text
+PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY_V1_OWNER_APPROVED
+```
+
+Approved policy:
+
+```text
+REVIEWED_REFERENCE_RELATIVE_MEDIAN_V1
+```
+
+Deterministic primitives now implemented:
+
+- reviewed same-primary peer percentile scoring;
+- explicit HIGHER_BETTER / LOWER_BETTER direction;
+- minimum reviewed peer count = 3;
+- median component aggregation;
+- level / stability / trend helper;
+- hard failure when minimum peer cohort is absent;
+- hard failure for invalid/non-finite component values.
+
+### Isolation locks
+
+```text
+Domestic bands inherited = NO
+API bands inherited = NO
+BANK/NBFC bands inherited = NO
+NIFTY Pharma benchmark = YES
+API Emerging numeric participation = NO
+Unresolved Biosimilars numeric participation = NO
+Partial-score reconstruction = NO
+Hidden renormalization = NO
+```
+
+### UI authority updated
+
+AUROPHARMA Gate J now shows:
+
+```text
+Methodology approved · Evidence/score build next
+```
+
+All ten dimension cards show `OWNER APPROVED METHOD`.
+
+The score remains intentionally blocked until the bounded AUROPHARMA evidence package is complete.
+
+### Accelerated execution rule from this point
+
+Do not create G10.2-B1/B2/B3 or repeated methodology approval stages.
+
+The remainder of Checkpoint B should be executed as one consolidated build:
+
+```text
+approved methodology
+    ↓
+bounded AUROPHARMA + reviewed peer evidence
+    ↓
+all 10 dimensions or fail-closed exact blockers
+    ↓
+one deterministic read-only score
+    ↓
+unchanged Gate I recommendation
+    ↓
+one localhost result review
+    ↓
+one consolidated validation
+    ↓
+Checkpoint B closure
+```
+
+No further methodology-owner approval is required unless a genuine structural contradiction forces a change to the approved contract.
+
+### Safety
+
+- score persistence = OFF
+- recommendation persistence = OFF
+- position sizing = OFF
+- AI interpretation = OFF
+- production mutation = NO
+- deployment = NO
+- PR merge = NO
