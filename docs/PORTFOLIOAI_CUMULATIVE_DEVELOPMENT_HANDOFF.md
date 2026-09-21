@@ -27781,3 +27781,32 @@ OWNER_CONFIRMED_G10_2_LOCAL_GLOBAL_GENERICS_EVIDENCE
 ### Current stop
 
 Run the already-prepared one-command local evidence acquisition. After successful output, continue directly to consolidated parsing → ten-dimension AUROPHARMA score → unchanged Gate I recommendation.
+
+
+---
+
+## 320. Entry 315 — G10.2 local evidence runner readiness race fixed
+
+**Date:** 21 September 2026
+
+Owner-run local evidence acquisition returned HTTP 502 with Supabase gateway message:
+
+```text
+An invalid response was received from the upstream server
+```
+
+The local function log showed Edge Runtime was still initializing and opening the Deno dependency-analysis cache when the EXECUTE request was sent.
+
+Root cause: the runner readiness loop treated any HTTP response, including temporary 502, as readiness.
+
+Fix:
+
+- readiness now uses authenticated zero-call `PLAN`;
+- only HTTP 200 marks the function ready;
+- temporary 5xx responses continue waiting;
+- a real 4xx PLAN rejection fails immediately with body;
+- server exit / 90-second startup timeout prints the function log tail.
+
+No provider calls were consumed by the failed 502 attempt because execution never reached the function body.
+
+No methodology, evidence contract, scoring logic or safety boundary changed.
