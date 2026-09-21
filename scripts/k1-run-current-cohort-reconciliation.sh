@@ -12,6 +12,7 @@ CANONICAL_SOURCE="${K1_CANONICAL_SOURCE:-FROZEN_CURRENT_PORTFOLIO}"
 OFFICIAL_JSON="$ARTIFACT_DIR/k1-nse-primary-classification.json"
 RECON_JSON="$ARTIFACT_DIR/k1-nse-classification-reconciliation.json"
 DELAY_MS="${K1_NSE_DELAY_MS:-350}"
+COHORT_LIMIT="${K1_COHORT_LIMIT:-0}"
 
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 need() { command -v "$1" >/dev/null 2>&1 || die "$1 is required."; }
@@ -55,12 +56,30 @@ esac
 CANONICAL_COUNT="$(jq -r '.rowCount // (.rows | length)' "$CANONICAL_JSON")"
 [[ "$CANONICAL_COUNT" =~ ^[0-9]+$ && "$CANONICAL_COUNT" -gt 0 ]] || die "Canonical snapshot contains no NSE equities."
 
+if ! [[ "$COHORT_LIMIT" =~ ^[0-9]+$ ]]; then
+  die "K1_COHORT_LIMIT must be a non-negative integer."
+fi
+
+if [[ "$COHORT_LIMIT" -gt 0 ]]; then
+  jq --argjson limit "$COHORT_LIMIT" '
+    .rows = (.rows[:$limit])
+    | .rowCount = (.rows | length)
+    | .pilot = true
+    | .pilotLimit = $limit
+  ' "$CANONICAL_JSON" > "$CANONICAL_JSON.tmp"
+  mv "$CANONICAL_JSON.tmp" "$CANONICAL_JSON"
+  CANONICAL_COUNT="$(jq -r '.rowCount' "$CANONICAL_JSON")"
+fi
+
 jq -r '.rows[].symbol' "$CANONICAL_JSON" | sed '/^[[:space:]]*$/d' | sort -u > "$COHORT_TXT"
 COHORT_COUNT="$(wc -l < "$COHORT_TXT" | tr -d ' ')"
 [[ "$COHORT_COUNT" == "$CANONICAL_COUNT" ]] || die "Cohort count ($COHORT_COUNT) does not match canonical row count ($CANONICAL_COUNT)."
 
 printf 'Canonical source: %s\n' "$CANONICAL_SOURCE"
 printf 'Canonical NSE equity cohort: %s\n' "$CANONICAL_COUNT"
+if [[ "$COHORT_LIMIT" -gt 0 ]]; then
+  printf 'Pilot mode: YES (limit=%s)\n' "$COHORT_LIMIT"
+fi
 
 if [[ "$CANONICAL_SOURCE" == "LOCAL" && "$CANONICAL_COUNT" -lt 50 ]]; then
   printf 'WARNING: local portfolio appears to be a reduced development cohort (%s equities).\n' "$CANONICAL_COUNT" >&2
