@@ -554,3 +554,30 @@ K2 = BLOCKED
 ```
 
 No new sector methodology has been built.
+
+
+---
+
+## 16. K1 reusable reconciliation path
+
+The K1 build now includes both sides of the official-vs-canonical comparison.
+
+Added:
+
+- `scripts/k1-current-canonical-classification.sql`
+- `scripts/k1-compare-nse-classification.mjs`
+- `scripts/k1-compare-nse-classification.test.mjs`
+
+The reconciliation output is deterministic and classifies every current NSE operating equity as:
+
+```text
+AGREE
+DETAIL_MISSING
+CHANGE_REQUIRED
+REVIEW_REQUIRED
+OFFICIAL_MISSING
+```
+
+This makes the same logic reusable when newer stocks are added. A newly added stock cannot route directly to a research methodology merely because it resembles an existing holding; official exchange classification must resolve first.
+
+The exact K4 package count remains deliberately **NOT FROZEN** until the 238-current-equity official snapshot has been executed and reconciled.
