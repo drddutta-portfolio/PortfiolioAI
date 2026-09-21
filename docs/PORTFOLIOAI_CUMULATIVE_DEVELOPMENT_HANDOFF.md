@@ -27339,3 +27339,75 @@ G10.2 Checkpoint B = NOT STARTED
 ```
 
 Do not begin Checkpoint B until the consolidated validator passes on the corrected head.
+
+
+---
+
+## 315. Entry 310 — G10.2 Checkpoint A COMPLETE / PASS
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Validated head:** `e31ad1d88e4f1b64b3bf56770cc6bf022eef2ec5`
+
+The owner reported **ALL PASS** for the complete G10.2 Checkpoint A consolidated validator after the localhost visual review had already passed.
+
+### Validated classification authority
+
+```text
+Reference = AUROPHARMA
+Primary = GLOBAL_GENERICS
+Material Overlay = none
+Emerging Watch = API_BULK_DRUGS
+BIOPHARMA_BIOSIMILARS = REVIEW_REQUIRED / unresolved
+
+FY25 Global Generics lower bound = 73.04%
+FY25 API share = 13.63%
+FY26 Global Generics lower bound = 73.46%
+FY26 API share = 12.03%
+
+Score state = SCORE_NOT_COMPUTABLE
+Reason = GLOBAL_GENERICS_PRIMARY_METHODOLOGY_INCOMPLETE
+Partial score reconstruction = FORBIDDEN
+```
+
+### Validation closure
+
+```text
+Focused AUROPHARMA re-confirmation tests = PASS
+Reusable Gate J registry/UI tests = PASS
+G10.1 / Gate I control regressions = PASS
+Full non-Edge application suite = PASS
+Strict TypeScript = PASS
+Architecture guard = PASS
+Focused lint = PASS
+Architecture lint = PASS
+Production build = PASS
+git diff --check = PASS
+```
+
+### Safety closure
+
+```text
+Biosimilars auto-resolution = NO
+API Emerging numeric participation = NO
+Partial score reconstruction = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Weight guidance = OFF
+Action bias = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production mutation = NO
+Deployment = NO
+PR merge = NO
+```
+
+### Formal closure
+
+```text
+G10.2 Checkpoint A = COMPLETE / PASS
+G10.2 Checkpoint B = READY TO START
+```
+
+Checkpoint B may now build the Global Generics methodology using AUROPHARMA as the active reference company while keeping ALIVUS and TORNTPHARM as regression controls.
