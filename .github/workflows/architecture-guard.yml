@@ -58,6 +58,12 @@ jobs:
         run: npx vitest run src/features/research/auropharmaG102ClassificationReconfirmation.test.ts src/features/research/auropharmaG8ClassificationEvidence.test.ts src/features/research/pharmaGateJReferenceClassification.test.ts src/features/research/PharmaGateJReferenceClassificationPanel.test.tsx src/features/research/auropharmaG91ActivationReadiness.test.ts
       - name: Lint Gate J G10.2 classification re-confirmation
         run: npx eslint src/features/research/auropharmaG102ClassificationReconfirmation.ts src/features/research/auropharmaG102ClassificationReconfirmation.test.ts src/features/research/pharmaGateJReferenceClassification.ts src/features/research/pharmaGateJReferenceClassification.test.ts src/features/research/PharmaGateJReferenceClassificationPanel.tsx
+      - name: Verify Gate K K1 exchange-primary classification
+        run: npx vitest run src/features/portfolio/exchangePrimaryClassification.test.ts src/features/research/portfolioCoverageProjection.test.ts src/features/research/sectorResearchMapping.test.ts
+      - name: Verify Gate K K1 reconciliation tooling
+        run: node --test scripts/k1-compare-nse-classification.test.mjs && node --check scripts/k1-fetch-nse-primary-classification.mjs && node --check scripts/k1-compare-nse-classification.mjs
+      - name: Lint Gate K K1 implementation
+        run: npx eslint src/features/portfolio/exchangePrimaryClassification.ts src/features/portfolio/exchangePrimaryClassification.test.ts src/features/research/portfolioCoverageProjection.ts src/features/research/portfolioCoverageProjection.test.ts src/contracts/canonicalDataAuthorities.ts
       - name: Lint Gate H H3 implementation
         run: npx eslint src/features/research/torntpharmGateH3ReadOnlyScore.ts src/features/research/torntpharmGateH3ReadOnlyScore.test.ts src/features/research/pharmaG7ReadOnlyScoringAdapter.ts src/features/research/pharmaG7ReadOnlyScoringAdapter.test.ts src/features/research/pharmaSectorWorkspaceCompanyContext.ts src/features/research/PharmaResearchWorkspacePanel.tsx
       - name: Typecheck
