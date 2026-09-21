@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology OWNER-APPROVED; 3 replacement Trendlyne calls OWNER-APPROVED; consolidated local evidence rerun READY; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology OWNER-APPROVED; Trendlyne-first provider/data contract FROZEN; zero-call preserved-evidence coverage inspection READY; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -28035,3 +28035,72 @@ The completed evidence output target remains:
 `/tmp/portfolioai-g10-2-auropharma-evidence-complete.json`
 
 **CURRENT STOP:** pull latest branch and rerun only `scripts/g10-2-resume-public-market-evidence.sh`.
+
+
+---
+
+## 326. Entry 321 — G10.2 provider/data contract reset to Trendlyne-first; zero-call coverage inspection ready
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+After repeated transport failures, G10.2 data acquisition architecture was formally reset before any further provider call.
+
+### Current documented provider authority
+
+Trendlyne MCP is now the primary G10.2 research-data source because its documented multi-stock parameter tool supports:
+
+- financial statements;
+- financial ratios;
+- price and volume data;
+- technical indicators;
+- historical parameter values;
+- ownership / shareholding / promoter pledge;
+- company-document semantic search for qualitative business evidence.
+
+Angel One remains the secondary exact raw-market-history source because SmartAPI Historical API supports stocks/indices, ONE_DAY candles and up to 2,000 days in one request.
+
+However, current local login is confirmed healthy while `getCandleData` is operationally degraded with HTTP 403 in this session. Therefore no more Angel historical attempts should be made until Trendlyne coverage is exhausted.
+
+### Frozen authority order
+
+```text
+1. Trendlyne MCP — primary structured/fundamental/market/technical/ownership authority
+2. Angel One — secondary raw daily OHLC authority only if still required
+3. NSE/Yahoo fallback code — retained diagnostically, removed from active G10.2 path
+```
+
+### Zero-call inspection added
+
+Added:
+
+- `scripts/g10-2-inspect-preserved-trendlyne-evidence.py`
+- `scripts/g10-2-inspect-preserved-trendlyne-evidence.sh`
+- `docs/PortfolioAI_G10_2_PROVIDER_DATA_CONTRACT.md`
+
+The inspection reads the already-preserved local file:
+
+`/tmp/portfolioai-g10-2-auropharma-evidence.json`
+
+and produces:
+
+`/tmp/portfolioai-g10-2-trendlyne-coverage.json`
+
+It makes **zero provider calls** and reports exact observed families across all ten PHARMA_V1 dimensions.
+
+### Execution rule
+
+Do not make any further provider call until this zero-call inspection has established what the three preserved Trendlyne responses already contain.
+
+After inspection, build at most one narrow Trendlyne multi-stock query for the genuinely missing market/technical/qualitative families, then use Angel One only if an exact mandatory raw-history metric remains unavailable.
+
+### Safety
+
+- additional provider calls now = 0;
+- preserved Trendlyne payload remains authoritative input;
+- score persistence = OFF;
+- recommendation persistence = OFF;
+- production write = NO;
+- deployment = NO;
+- PR merge = NO.
