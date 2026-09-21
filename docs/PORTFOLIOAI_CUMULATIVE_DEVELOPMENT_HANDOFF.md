@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 CDMO_CRAMS / SYNGENE COMPLETE / PASS; G10-FINAL NEXT; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 COMPLETE / PASS; G10-FINAL PORTABILITY / ISOLATION CLOSURE IMPLEMENTED / LOCAL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -29807,3 +29807,204 @@ No G10.5
 
 **Next action:** begin G10-FINAL cross-subprofile portability / isolation closure. No further category build stage exists after G10.4.
 
+---
+
+## 342. Entry 337 — G10-FINAL portability / isolation closure implemented
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Starting authority:** G10.1-G10.4 COMPLETE / PASS
+
+Before implementation, the cumulative handoff was re-read and confirmed current through G10.4 COMPLETE / PASS. No reconciliation repair was required.
+
+Owner instruction:
+
+```text
+Please proceed with G10-FINAL.
+Before that check if the HANDOFF file is updated till now.
+```
+
+### Purpose frozen
+
+G10-FINAL is not another reference-company or methodology build.
+
+Its purpose is to prove and expose the final runtime contract:
+
+```text
+ANY NEW PHARMA STOCK
+        ↓
+PHARMA_V1
+        ↓
+reviewed primary subprofile assignment
+        ↓
+existing subprofile methodology authority
+        ↓
+existing evidence/readiness framework
+        ↓
+deterministic score only when complete
+        ↓
+unchanged Gate I recommendation policy
+```
+
+A new ticker does not require a new Gate J methodology build.
+
+### Runtime portability authority
+
+Added:
+
+- `src/features/research/pharmaGateJFinalPortability.ts`
+- `src/features/research/pharmaGateJFinalPortability.test.ts`
+
+The portability registry covers all five Pharma subprofiles:
+
+```text
+DOMESTIC_FORMULATIONS → TORNTPHARM validation anchor
+API_BULK_DRUGS → ALIVUS validation anchor
+GLOBAL_GENERICS → AUROPHARMA validation anchor
+BIOPHARMA_BIOSIMILARS → BIOCON validation anchor
+CDMO_CRAMS → SYNGENE validation anchor
+```
+
+The anchor symbol is validation lineage only.
+
+```text
+symbolSpecificRuntimeRequired = false
+```
+
+Synthetic future-stock tests now prove that arbitrary reviewed assignments route to each of the five methodology authorities without reference-symbol identity.
+
+### New-stock fail-closed rule
+
+A new Pharma security with no reviewed subprofile assignment resolves to:
+
+```text
+BLOCKED_SUBPROFILE_REVIEW
+methodologyAuthority = null
+scoreExecutionAllowed = false
+recommendationExecutionAllowed = false
+scorePersistenceEnabled = false
+recommendationPersistenceEnabled = false
+```
+
+No subprofile is guessed from ticker, company name, score outcome or reference-company similarity.
+
+### Generic Gate J runtime UI
+
+Added:
+
+- `src/features/research/PharmaGateJPortabilityPanel.tsx`
+- `src/features/research/PharmaGateJPortabilityPanel.test.tsx`
+
+Updated:
+
+- `src/pages/ResearchPage.tsx`
+
+Every Pharma Research Overview can now render:
+
+```text
+Gate J · G10-FINAL · Runtime portability
+Pharma methodology routing
+```
+
+For a resolved reviewed assignment it shows:
+- primary subprofile;
+- methodology authority/version;
+- reference validation stock explicitly labeled as validation-only;
+- unchanged Gate I policy;
+- Material Overlay context;
+- Emerging Watch context.
+
+For an unresolved Pharma stock it shows:
+- Subprofile review required;
+- No methodology guessed;
+- No score;
+- No Gate I recommendation.
+
+The earlier G10.1-G10.4 reference-company panels remain symbol-specific engineering/history evidence only and are not required for runtime portability.
+
+### G10-FINAL closure contract
+
+Added:
+
+- `src/features/research/pharmaGateJFinalClosure.ts`
+- `src/features/research/pharmaGateJFinalClosure.test.ts`
+
+The closure candidate preserves the actual mixed Gate J outcomes:
+
+```text
+G10.1 / ALIVUS = score computable read-only
+G10.2 / AUROPHARMA = deterministic fail-closed
+G10.3 / BIOCON = deterministic fail-closed
+G10.4 / SYNGENE = deterministic fail-closed
+```
+
+G10-FINAL does not force every reference company to produce a score.
+
+### Isolation invariants
+
+```text
+Reference stock identity required at runtime = NO
+New Pharma stock requires new Gate J methodology build = NO
+Material Overlay second independent stock score = PROHIBITED
+Emerging Watch numeric participation = PROHIBITED
+Unresolved exposure auto-resolution = PROHIBITED
+Cross-subprofile band borrowing = PROHIBITED
+Hidden denominator renormalization = PROHIBITED
+Missing mandatory evidence = FAIL CLOSED
+Gate I policy = UNCHANGED
+```
+
+### Safety boundary
+
+```text
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production Supabase mutation = NO
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
+
+### Consolidated validator
+
+Added:
+
+`scripts/g10-final-validate-portability-closure.sh`
+
+It runs eight consolidated groups:
+
+1. G10-FINAL portability + closure contracts;
+2. prior Gate J reference outcomes + Gate I isolation controls;
+3. full non-Edge application suite;
+4. strict TypeScript;
+5. architecture guard;
+6. focused lint + architecture lint;
+7. production build;
+8. diff whitespace.
+
+### Documentation
+
+Added:
+
+`docs/PortfolioAI_GATE_J_G10_FINAL_PORTABILITY_CLOSURE.md`
+
+### Current stop point
+
+```text
+G10.1 = COMPLETE / PASS
+G10.2 = COMPLETE / PASS
+G10.3 = COMPLETE / PASS
+G10.4 = COMPLETE / PASS
+G10-FINAL code = IMPLEMENTED
+Generic new-stock portability UI = IMPLEMENTED
+Local visual review = PENDING
+Consolidated G10-FINAL validation = PENDING
+Gate J overall closure = PENDING
+PR #101 = OPEN / DRAFT / UNMERGED
+```
+
+**Next action:** owner pulls the latest branch, reviews the generic G10-FINAL portability block on a Pharma stock, and runs the single consolidated G10-FINAL validator. Gate J should be marked COMPLETE / PASS only after that validator passes.
