@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 COMPLETE / PASS; G10-FINAL PORTABILITY / ISOLATION CLOSURE IMPLEMENTED / LOCAL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 COMPLETE / PASS; G10-FINAL COMPLETE / PASS; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -30008,3 +30008,128 @@ PR #101 = OPEN / DRAFT / UNMERGED
 ```
 
 **Next action:** owner pulls the latest branch, reviews the generic G10-FINAL portability block on a Pharma stock, and runs the single consolidated G10-FINAL validator. Gate J should be marked COMPLETE / PASS only after that validator passes.
+
+---
+
+## 343. Entry 338 — G10-FINAL validated — Gate J COMPLETE / PASS
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The owner completed the consolidated G10-FINAL portability / isolation validator after localhost visual review.
+
+Final validator output:
+
+```text
+G10-FINAL CANDIDATE VALIDATION PASS
+PHARMA_V1 method authorities: 5/5
+Runtime routing: REVIEWED SUBPROFILE -> EXISTING METHODOLOGY
+Reference-stock identity required at runtime: NO
+New Pharma stock requires new Gate J methodology build: NO
+Missing reviewed subprofile: FAIL CLOSED
+Material Overlay second score: PROHIBITED
+Emerging Watch numeric participation: PROHIBITED
+Gate I policy: UNCHANGED
+Score persistence: OFF
+Recommendation persistence: OFF
+Production mutation/deployment/merge: OFF
+```
+
+### G10-FINAL closure
+
+The final portability contract is now validated:
+
+```text
+ANY NEW PHARMA STOCK
+        ↓
+PHARMA_V1
+        ↓
+reviewed primary subprofile assignment
+        ↓
+existing subprofile methodology authority
+        ↓
+existing PHARMA_V1 evidence/readiness framework
+        ↓
+deterministic score only when complete
+        ↓
+unchanged Gate I recommendation policy
+```
+
+Reference companies remain validation anchors only:
+
+```text
+DOMESTIC_FORMULATIONS → TORNTPHARM
+API_BULK_DRUGS → ALIVUS
+GLOBAL_GENERICS → AUROPHARMA
+BIOPHARMA_BIOSIMILARS → BIOCON
+CDMO_CRAMS → SYNGENE
+```
+
+No symbol-specific runtime methodology selection is required.
+
+### New Pharma stock behavior
+
+If a new Pharma security has no active reviewed subprofile assignment:
+
+```text
+Profile = PHARMA_V1
+Subprofile = REVIEW REQUIRED
+Methodology routing = BLOCKED
+Score = NOT COMPUTABLE
+Gate I recommendation = NOT READY
+Persistence = OFF
+```
+
+Once a reviewed primary subprofile resolves, the corresponding existing methodology authority applies automatically. A new ticker does not create a new Gate J methodology stage.
+
+### Isolation closure
+
+Validated invariants:
+
+```text
+Reference-stock identity required at runtime = NO
+New Pharma stock requires new Gate J methodology build = NO
+Material Overlay second independent stock score = PROHIBITED
+Emerging Watch numeric participation = PROHIBITED
+Unresolved exposure auto-resolution = PROHIBITED
+Cross-subprofile band borrowing = PROHIBITED
+Hidden denominator renormalization = PROHIBITED
+Missing mandatory evidence = FAIL CLOSED
+Gate I policy = UNCHANGED
+```
+
+### Gate J final status
+
+```text
+G10.1 API_BULK_DRUGS / ALIVUS = COMPLETE / PASS
+G10.2 GLOBAL_GENERICS / AUROPHARMA = COMPLETE / PASS
+G10.3 BIOPHARMA_BIOSIMILARS / BIOCON = COMPLETE / PASS
+G10.4 CDMO_CRAMS / SYNGENE = COMPLETE / PASS
+G10-FINAL portability / isolation closure = COMPLETE / PASS
+
+Gate J = COMPLETE / PASS
+No G10.5
+```
+
+### Safety closure
+
+```text
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production Supabase mutation = NO
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
+
+### Final Gate J interpretation
+
+Gate J has completed the controlled expansion of PHARMA_V1 across all five Pharma subprofiles and proved runtime portability to future Pharma holdings without symbol-specific methodology rebuilds.
+
+The reusable production contract is now subprofile-driven rather than reference-company-driven.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
