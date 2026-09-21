@@ -26663,9 +26663,9 @@ No API scoring methodology should be written before that classification lock is 
 
 ## 306. Entry 301 — Gate J / G10.1 Checkpoint A implemented — ALIVUS API classification candidate
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
 **Starting head:** `d75c3e68589d27a3163bfc94d060db9354a551b7`
 
 The owner authorized Gate J execution under the fixed sequence:
@@ -26786,8 +26786,8 @@ Do **not** begin G10.1 Checkpoint B until the owner visually approves the Checkp
 
 ## 307. Entry 302 — G10.1 Checkpoint A classification panel moved to bottom of Overview
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 
 During the first localhost review the owner reported that the Gate J classification block was not easily visible on the stock Research page and requested that it be placed near the bottom of the Overview, immediately before Research Health.
@@ -26813,7 +26813,46 @@ No classification methodology, evidence, score, recommendation, persistence, loc
 
 ```text
 G10.1 Checkpoint A code = IMPLEMENTED
-ALIVUS localhost visual approval = PENDING
+ALIVUS localhost visual approval = PASS
 Full local validation = PENDING
 Checkpoint B = NOT STARTED
 ```
+
+
+---
+
+## 308. Entry 303 — G10.1 visual PASS recorded; whitespace-only validation defect corrected
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The owner supplied the localhost ALIVUS Overview screenshot and the G10.1 Checkpoint A classification block visually passed.
+
+Confirmed on localhost:
+
+```text
+Reference = ALIVUS
+Primary = API_BULK_DRUGS
+Material Overlay = none
+Emerging Watch = CDMO_CRAMS
+FY25 = API 94% / CDMO 6%
+FY26 = API 93% / CDMO 7%
+Score = NOT STARTED
+```
+
+The first consolidated validation then passed through the production build and failed only at the final `git diff --check` step because newly added Markdown lines contained trailing spaces.
+
+This is a documentation-formatting defect only. No classification logic, UI behavior, local fixture, scoring, recommendation, or safety behavior failed.
+
+The affected Markdown files were normalized to remove trailing whitespace.
+
+Current state:
+
+```text
+G10.1 Checkpoint A localhost visual review = PASS
+Full local validation = RERUN REQUIRED
+Checkpoint B = NOT STARTED
+```
+
+Do not begin Checkpoint B until the clean consolidated rerun passes.
