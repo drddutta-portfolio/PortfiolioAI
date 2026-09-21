@@ -28267,3 +28267,27 @@ It unwraps Trendlyne MCP responses, detects parameter blocks, normalizes AUROPHA
 - PR merge = NO.
 
 **CURRENT STOP:** pull latest branch and run the zero-call normalization. After the normalized block output is available, build the AUROPHARMA deterministic ten-dimension score package and unchanged Gate I recommendation.
+
+
+---
+
+## 329. Entry 324 — Strict zero-call Trendlyne normalizer added after over-broad index parsing
+
+**Date:** 21 September 2026
+
+The first normalization run completed but exposed an over-broad parser defect: generic tokens such as "1Y", "return", "momentum" and "EBITDA" admitted many unrelated NIFTY Pharma profile fields (for example FII change, dividend yield, Sharpe ratio and prior-year accounting metrics).
+
+This was a parser problem, not a provider-data failure.
+
+The normalizer was tightened to:
+
+- use strong semantic regexes for only the G10.2 requested metric families;
+- separate stock result parsing from NIFTY Pharma index result parsing;
+- permit only 6M/1Y return fields from the index payload;
+- reject generic "return", "1Y", "momentum" and "EBITDA" matches unless the full metric semantics match;
+- emit canonical metric keys for score construction;
+- report an explicit list of any still-missing core metric families.
+
+No provider call is repeated.
+
+Current stop: rerun only `scripts/g10-2-normalize-trendlyne-evidence.sh` after pulling the latest branch.
