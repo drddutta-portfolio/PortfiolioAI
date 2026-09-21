@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 GLOBAL_GENERICS / AUROPHARMA COMPLETE / PASS WITH DETERMINISTIC FAIL-CLOSED OUTCOME; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 BIOPHARMA_BIOSIMILARS / BIOCON CHECKPOINT A IMPLEMENTED / OWNER LOCALHOST LOCK + FULL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -28786,3 +28786,201 @@ PR #101 = OPEN / DRAFT / UNMERGED
 ```
 
 The next chat should continue Gate J from the next planned controlled-expansion reference/category. Do not reopen G10.2 unless a later approved evidence refresh materially changes one of the explicit blocker groups.
+
+
+---
+
+## 335. Entry 330 — G10.3 / BIOCON Checkpoint A implemented — Biopharma/Biosimilars classification candidate
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Starting head:** `ece6bdb3806d98c9cd7c428e658c4a7307937c36`
+
+After formal G10.2 closure, the canonical Gate J plan was re-read before continuing.
+
+The fixed remaining sequence is:
+
+```text
+G10.3 — BIOPHARMA_BIOSIMILARS
+G10.4 — CDMO_CRAMS
+G10-FINAL — cross-subprofile portability/isolation closure
+```
+
+There is no G10.5. TORNTPHARM remains the permanent Domestic Formulations control.
+
+### G10.3 reference selection
+
+The canonical provisional candidate registry contains exactly one `BIOPHARMA_BIOSIMILARS` candidate:
+
+```text
+BIOCON
+```
+
+BIOCON / Biocon Limited was therefore selected without inventing a new reference company.
+
+Official issuer evidence provides a directly comparable two-period group business-revenue mix:
+
+```text
+FY25
+Biosimilars = 58%
+Generics = 19%
+Research Services = 23%
+
+FY26
+Biosimilars = 60%
+Generics = 18%
+CRDMO = 22%
+```
+
+Under the unchanged G1 adaptive-classification contract this resolves:
+
+```text
+Classification state = READY_FOR_REVIEW
+Primary candidate = BIOPHARMA_BIOSIMILARS
+Material Overlay = GLOBAL_GENERICS
+Material Overlay = CDMO_CRAMS
+Emerging Watch = none
+```
+
+The two Material Overlays are deliberate. Both secondary businesses remain >=15% in both reviewed annual periods and therefore cannot be hidden or demoted merely to simplify G10.3.
+
+### Distortion / comparability review
+
+The Checkpoint A fixture records:
+
+1. `TWO_PERIOD_BUSINESS_MIX_COMPARABILITY = PASS`
+2. `BIOSIMILARS_DOMINANCE_PERSISTS = PASS`
+3. `FY25_ONE_OFFS_EXCLUDED_FROM_ROLE_DENOMINATOR = PASS_WITH_CONTEXT`
+4. `MATERIAL_SECONDARY_BUSINESSES_RETAINED = PASS`
+
+FY25 disclosed one-off items are not allowed to determine classification because the lock uses the issuer's business-revenue contribution mix rather than total income / exceptional gains.
+
+### Repository implementation
+
+Added:
+
+- `src/features/research/bioconG103ClassificationEvidence.ts`
+- `src/features/research/bioconG103ClassificationEvidence.test.ts`
+- `scripts/r4n/biocon-g10-3-local-research-target.sql`
+- `scripts/r4n/run-biocon-g10-3-local-research-target.sh`
+- `scripts/g10-3-validate-biopharma-classification-lock.sh`
+- `docs/PortfolioAI_GATE_J_G10_3_BIOPHARMA_CLASSIFICATION_LOCK.md`
+
+Updated:
+
+- `src/features/research/pharmaGateJReferenceClassification.ts`
+- `src/features/research/pharmaGateJReferenceClassification.test.ts`
+- `src/features/research/PharmaGateJReferenceClassificationPanel.test.tsx`
+- this cumulative HANDOFF.
+
+The existing reusable Gate J classification panel requires no BIOCON-specific page tree. BIOCON is exposed through the common reference registry.
+
+### Critical G10.3 isolation boundary
+
+The canonical Gate J rule is explicitly retained:
+
+```text
+methodology exists
+!=
+company exposure automatically resolved
+```
+
+Therefore future completion of a BIOCON Biosimilars methodology must not silently resolve AUROPHARMA's unresolved Biosimilars exposure. AUROPHARMA remains governed by its own company-specific classification authority.
+
+### Local-only Research target
+
+The BIOCON local fixture follows the existing G10.1 pattern.
+
+It may:
+
+- ensure/reconcile a local BIOCON security/listing identity;
+- route BIOCON through the existing local Pharma sector;
+- add one synthetic local-only ownership link only when BIOCON is absent from local Research Coverage.
+
+It writes:
+
+```text
+Research evidence rows = 0
+Subprofile assignment rows = 0
+Score rows = 0
+Recommendation rows = 0
+```
+
+and refuses a non-local database URL.
+
+### G10.3 Checkpoint A UI target
+
+The reusable Gate J block must show:
+
+```text
+Gate J · G10.3 · Checkpoint A
+Reference company = Biocon Limited / BIOCON
+Primary = Biopharma / Biosimilars
+Material Overlay = Global Generics + CDMO / CRAMS
+Emerging Watch = none
+FY25 = 58 / 19 / 23
+FY26 = 60 / 18 / 22
+Ready for owner lock
+Score not started
+```
+
+No Checkpoint B score/methodology panel is created at this stage.
+
+### Consolidated validator
+
+Added:
+
+`scripts/g10-3-validate-biopharma-classification-lock.sh`
+
+It covers:
+
+- focused BIOCON classification tests;
+- reusable Gate J registry/panel tests;
+- adaptive classification contract regression;
+- candidate-registry regression;
+- Gate I independent-verification regression;
+- ALIVUS G10.1 control;
+- AUROPHARMA G10.2 control;
+- TORNTPHARM Gate H control;
+- full non-Edge application suite;
+- strict TypeScript;
+- architecture guard;
+- focused lint;
+- architecture lint;
+- production build;
+- diff whitespace validation.
+
+### Safety boundary
+
+```text
+Score execution = OFF
+Recommendation execution = OFF
+Score persistence = OFF
+Recommendation persistence = OFF
+Weight guidance = OFF
+Action bias = OFF
+AI interpretation = OFF
+Position sizing = OFF
+Provider calls = NO
+Production Supabase mutation = NO
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
+
+### Current stop point
+
+```text
+G10.1 API_BULK_DRUGS / ALIVUS = COMPLETE / PASS
+G10.2 GLOBAL_GENERICS / AUROPHARMA = COMPLETE / PASS
+G10.3 BIOPHARMA_BIOSIMILARS / BIOCON
+  Checkpoint A code = IMPLEMENTED
+  Owner localhost classification lock = PENDING
+  Full local validation = PENDING
+  Checkpoint B = NOT STARTED
+PR #101 = OPEN / DRAFT / UNMERGED
+```
+
+**Next action:** owner pulls the branch, runs the local BIOCON Research-target fixture, visually reviews the G10.3 block, and then runs the single consolidated G10.3 Checkpoint A validator. Do not begin Checkpoint B before explicit owner classification approval.
