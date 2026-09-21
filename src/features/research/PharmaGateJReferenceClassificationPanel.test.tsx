@@ -59,7 +59,7 @@ describe("Gate J reference classification panel", () => {
     expect(view.getByText(/AUROPHARMA/)).toBeInTheDocument()
   })
 
-  it("renders the SYNGENE G10.4 CDMO/CRAMS classification lock without Checkpoint B", () => {
+  it("renders the SYNGENE G10.4 classification lock and fail-closed Checkpoint B result", () => {
     const { container } = render(<PharmaGateJReferenceClassificationPanel symbol="SYNGENE" />)
     const view = within(container)
 
@@ -69,8 +69,12 @@ describe("Gate J reference classification panel", () => {
     expect(view.getByText("None reviewed")).toBeInTheDocument()
     expect(view.getByText(/FY25: CDMO \/ CRAMS taxonomy coverage 100%/)).toBeInTheDocument()
     expect(view.getByText(/FY26: CDMO \/ CRAMS taxonomy coverage 100%/)).toBeInTheDocument()
-    expect(view.getByText(/Score not started/)).toBeInTheDocument()
-    expect(view.queryByText(/CDMO.*methodology.*score/i)).not.toBeInTheDocument()
+    expect(view.getByText(/Checkpoint A approved · Checkpoint B fail-closed candidate/)).toBeInTheDocument()
+    expect(view.getByText("CDMO / CRAMS controlled-expansion result")).toBeInTheDocument()
+    expect(view.getByText("Checkpoint B candidate · Fail-closed outcome")).toBeInTheDocument()
+    expect(view.getByText("CDMO / CRAMS-specific")).toBeInTheDocument()
+    expect(view.getByText("SCORE NOT COMPUTABLE")).toBeInTheDocument()
+    expect(view.getAllByText("MANDATORY BLOCKER").length).toBeGreaterThanOrEqual(5)
   })
 
   it("renders nothing for unrelated symbols", () => {
