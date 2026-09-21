@@ -30934,3 +30934,106 @@ Deployment = NO
 PR merge = NO
 Automatic trading = NO
 ```
+
+
+---
+
+## 350. Entry 345 — K1 one-command current-cohort reconciliation + UI placement plan
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+### One-command local reconciliation
+
+Added:
+
+`scripts/k1-run-current-cohort-reconciliation.sh`
+
+Purpose:
+
+```text
+local current portfolio
+        ↓
+derive current NSE operating-equity cohort dynamically
+        ↓
+read-only canonical classification snapshot
+        ↓
+read-only official NSE classification fetch
+        ↓
+deterministic comparison
+        ↓
+AGREE / DETAIL_MISSING / CHANGE_REQUIRED / REVIEW_REQUIRED / OFFICIAL_MISSING
+        ↓
+exception report
+```
+
+The runner does **not** depend on the fixed 238-symbol snapshot for future operation. It derives the live local cohort each time, so newly added NSE equities automatically enter the reconciliation flow.
+
+Hard safety rule:
+
+```text
+database URL must be localhost / 127.0.0.1
+otherwise execution is refused
+```
+
+The runner performs no INSERT/UPDATE/DELETE, no score persistence, no recommendation persistence, and no production connection.
+
+### Planned K1 UI placement
+
+K1 is **not** planned as a new standalone page or a large Gate-K-specific panel.
+
+The intended user-facing surface is a compact **Classification & Methodology** status block on the existing per-stock Research page.
+
+Preferred placement:
+
+```text
+Research page
+  → Overview
+  → Research at a glance / score / methodology content
+  → Classification & Methodology status
+  → Research Health
+```
+
+It should remain stock-specific and universal across sectors.
+
+Planned fields:
+
+- canonical primary sector;
+- canonical industry;
+- basic industry when retained for display;
+- classification authority: NSE / BSE / reviewed dual-exchange;
+- classification state: VERIFIED / DETAIL MISSING / REVIEW REQUIRED / AWAITING CLASSIFICATION;
+- resolved research engine / subprofile when one exists;
+- methodology state: READY / PROFILE PENDING / METHODOLOGY NOT AVAILABLE / BLOCKED;
+- concise reason when blocked.
+
+For Pharma, this block will coexist with the Pharma-specific research/subprofile panels; it will not duplicate them.
+
+The UI should be implemented **after** the current-cohort reconciliation contract is proven so it displays canonical state rather than provisional K1 audit assumptions.
+
+### K1 execution constraint
+
+The complete 238-stock official NSE fetch cannot be executed from the current chat container because outbound internet is disabled there.
+
+GitHub Actions also currently creates the Architecture Guard job without assigning a runner.
+
+Therefore the next executable validation is intentionally local:
+
+```bash
+git pull
+bash scripts/k1-run-current-cohort-reconciliation.sh
+```
+
+This is a read-only local reconciliation. The resulting artifact files stay under `artifacts/` and do not mutate the database.
+
+### Current K1 state
+
+```text
+Reusable reconciliation runner = IMPLEMENTED
+Future-stock cohort derivation = IMPLEMENTED
+UI placement = PLANNED, NOT BUILT
+Official current-cohort local execution = REQUIRED
+K4 package count = NOT FROZEN
+K2 = BLOCKED
+```
