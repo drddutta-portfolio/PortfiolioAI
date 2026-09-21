@@ -1,12 +1,12 @@
 # PortfolioAI — Gate J / G10.3 BIOPHARMA_BIOSIMILARS Classification Lock
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
-**Stage:** G10.3 — Checkpoint A  
-**Status:** IMPLEMENTED / LOCALHOST VISUAL + FULL VALIDATION PENDING  
-**Score execution:** OFF  
-**Recommendation execution:** OFF  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Stage:** G10.3 — Checkpoint A
+**Status:** IMPLEMENTED / LOCALHOST VISUAL + FULL VALIDATION PENDING
+**Score execution:** OFF
+**Recommendation execution:** OFF
 **Persistence:** OFF
 
 ## Reference-company selection
