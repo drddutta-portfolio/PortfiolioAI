@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology OWNER-APPROVED; local Global Generics evidence acquisition OWNER-APPROVED / READY TO EXECUTE; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology OWNER-APPROVED; 3 replacement Trendlyne calls OWNER-APPROVED; consolidated local evidence rerun READY; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -27891,3 +27891,59 @@ The five market-history reads will use the public fallback rather than Angel One
 No production write, canonical promotion, score persistence, deployment or PR merge is performed.
 
 **CURRENT STOP:** obtain one narrow approval for the three replacement Trendlyne calls, then rerun the consolidated evidence command once.
+
+
+---
+
+## 323. Entry 318 — G10.2 three replacement Trendlyne calls OWNER APPROVED
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+Owner approval received exactly as:
+
+```text
+APPROVE G10.2 THREE REPLACEMENT TRENDLYNE CALLS
+```
+
+This approval authorizes exactly three replacement Trendlyne provider calls to reacquire the same bounded G10.2 fundamental evidence that was lost from the prior failed composite response.
+
+### Authorized calls
+
+```text
+1. annual fundamentals / ROCE / cash / leverage history
+2. quarterly operating-margin history
+3. valuation + ownership history
+```
+
+### Market-history handling
+
+Angel One historical `getCandleData` is not to be used for this rerun.
+
+The approved local function now uses read-only public market history for:
+
+```text
+AUROPHARMA
+DRREDDY
+LUPIN
+ZYDUSLIFE
+NIFTY Pharma
+```
+
+### Explicitly NOT authorized
+
+- any additional Trendlyne calls beyond these three;
+- Angel One historical calls;
+- production Supabase writes;
+- canonical evidence promotion;
+- score persistence;
+- recommendation persistence;
+- position sizing;
+- deployment;
+- scheduler mutation;
+- PR merge.
+
+### Current stop
+
+Pull the latest branch and rerun the single consolidated local evidence command once. If successful, proceed directly to deterministic parsing, ten-dimension AUROPHARMA score and unchanged Gate I recommendation.
