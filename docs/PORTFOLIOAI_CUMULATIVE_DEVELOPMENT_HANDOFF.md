@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 CDMO_CRAMS / SYNGENE CHECKPOINT A IMPLEMENTED / OWNER LOCALHOST LOCK + FULL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 CDMO_CRAMS / SYNGENE CHECKPOINT A COMPLETE / PASS; CHECKPOINT B NOT STARTED; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -29492,4 +29492,73 @@ Score = not started
 The 100% figure remains explicitly defined as PortfolioAI taxonomy coverage of the reviewed contract research/development/manufacturing operating model, not an issuer-reported single-segment revenue percentage.
 
 Checkpoint B remains blocked until the consolidated Checkpoint A validator passes.
+
+---
+
+## 339. Entry 334 — G10.4 / SYNGENE Checkpoint A validated — COMPLETE / PASS
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The owner completed the single consolidated G10.4 Checkpoint A validator after approving the localhost classification lock.
+
+Final status:
+
+```text
+G10.4 CHECKPOINT A = COMPLETE / PASS
+Reference = SYNGENE
+Primary candidate = CDMO_CRAMS
+Material Overlays = NONE
+Emerging Watch = NONE
+Score execution = OFF
+Recommendation execution = OFF
+Persistence = OFF
+Checkpoint B = NOT STARTED
+```
+
+### Formal interpretation
+
+The classification lock is now closed and frozen for Checkpoint B.
+
+The reviewed operating-model interpretation remains:
+
+```text
+FY25 CDMO_CRAMS taxonomy coverage = 100%
+FY26 CDMO_CRAMS taxonomy coverage = 100%
+```
+
+with the explicit boundary that 100% is PortfolioAI taxonomy coverage of the issuer's contract research/development/manufacturing operating model, not an issuer-reported single-segment revenue percentage.
+
+No product-led Pharma secondary exposure was created, and internal Research Services / development / manufacturing service families remain inside the one CDMO_CRAMS operating-model classification.
+
+### Safety closure
+
+```text
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Provider refresh = NO
+Production Supabase mutation = NO
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
+
+### Gate J position
+
+```text
+G10.1 API_BULK_DRUGS = COMPLETE / PASS
+G10.2 GLOBAL_GENERICS = COMPLETE / PASS
+G10.3 BIOPHARMA_BIOSIMILARS = COMPLETE / PASS
+G10.4 CDMO_CRAMS / SYNGENE
+  Checkpoint A = COMPLETE / PASS
+  Checkpoint B = NOT STARTED
+G10-FINAL = AFTER G10.4
+No G10.5
+```
+
+**Next action:** begin G10.4 Checkpoint B as one consolidated build: CDMO/CRAMS methodology + evidence + deterministic score/result + unchanged Gate I handling, with no extra micro-stages.
 
