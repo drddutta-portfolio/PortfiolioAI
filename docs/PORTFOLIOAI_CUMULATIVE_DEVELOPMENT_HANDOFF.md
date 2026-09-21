@@ -26906,13 +26906,13 @@ GROWTH                  69.25
 CAPITAL_EFFICIENCY      84.00
 CASH_FLOW               70.75
 BALANCE_SHEET_CREDIT    95.00
-BUSINESS_DURABILITY     82.50
+BUSINESS_DURABILITY     83.00
 VALUATION               35.00
 MOMENTUM               100.00
 OWNERSHIP_GOVERNANCE    75.00
 RISK                     69.00
 
-Overall                 76.6725
+Overall                 76.7225
 Gate I role              SATELLITE_CANDIDATE
 Valuation caution        YES
 ```
@@ -26973,7 +26973,7 @@ After `git pull`:
 Expected Checkpoint B block:
 
 ```text
-Deterministic score = 76.6725
+Deterministic score = 76.7225
 Gate I role = SATELLITE CANDIDATE
 Valuation = 35
 Momentum = 100
@@ -26992,3 +26992,67 @@ G10.2 = NOT STARTED
 ```
 
 Do not close G10.1 or begin G10.2 until Checkpoint B passes owner visual review and the consolidated local validator.
+
+
+---
+
+## 310. Entry 305 — G10.1 Checkpoint B localhost visual PASS; arithmetic expectation corrected
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The owner supplied the localhost ALIVUS Gate J screenshots for Checkpoint B.
+
+### Visual result
+
+The UI correctly rendered:
+
+```text
+Deterministic score = 76.7225
+Gate I role = SATELLITE CANDIDATE
+Valuation = 35
+Momentum = 100
+All 10 dimensions visible
+CDMO = Emerging Watch / numerically excluded
+Persistence = off
+```
+
+Checkpoint B localhost visual review therefore **PASS**.
+
+### Arithmetic correction before full validation
+
+The live deterministic calculation and UI exposed a documentation/test expectation typo in the initial Checkpoint B commit.
+
+The actual Business Durability calculation is:
+
+```text
+85 × 0.30
++ 85 × 0.25
++ 85 × 0.25
++ 75 × 0.20
+= 83.00
+```
+
+With the locked PHARMA_V1 dimension weights, that produces:
+
+```text
+Overall = 76.7225
+```
+
+The runtime calculation was correct. The stale expected value `82.50 / 76.6725` existed only in tests, validator output text and documentation.
+
+Those expectations were corrected to the deterministic runtime result.
+
+No methodology band, source input, dimension weight, recommendation policy, classification, UI logic, or safety boundary was changed.
+
+### Current state
+
+```text
+G10.1 Checkpoint A = COMPLETE / PASS
+G10.1 Checkpoint B localhost visual review = PASS
+G10.1 Checkpoint B full validation = PENDING
+G10.2 = NOT STARTED
+```
+
+Run the consolidated Checkpoint B validator only after pulling this correction.
