@@ -32,9 +32,9 @@ describe("Gate J reference classification panel", () => {
     expect(view.getByText(/FY26: Global Generics ≥ 73.46% · API 12.03%/)).toBeInTheDocument()
     expect(view.getByText(/Score not computable · methodology incomplete/)).toBeInTheDocument()
     expect(view.getByText("Global Generics methodology completion candidate")).toBeInTheDocument()
-    expect(view.getByText("Owner approval required · Score still blocked")).toBeInTheDocument()
+    expect(view.getByText("Methodology approved · Evidence/score build next")).toBeInTheDocument()
     expect(view.getByText("Reference-relative median")).toBeInTheDocument()
-    expect(view.getAllByText(/OWNER APPROVAL REQUIRED/).length).toBeGreaterThan(0)
+    expect(view.getAllByText("OWNER APPROVED METHOD").length).toBe(10)
     expect(view.queryByText("API methodology → score → Gate I recommendation")).not.toBeInTheDocument()
   })
 
