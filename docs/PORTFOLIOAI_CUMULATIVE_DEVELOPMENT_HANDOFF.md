@@ -27417,9 +27417,9 @@ Checkpoint B may now build the Global Generics methodology using AUROPHARMA as t
 
 ## 316. Entry 311 — G10.2 Checkpoint B consolidated methodology-completion candidate implemented
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
 **Starting head:** `319afd1af3c6d5c969ad9d2035f32af24a129d80`
 
 G10.2 Checkpoint B has started without creating a B1/B2 stage split.
@@ -27514,8 +27514,8 @@ This remains one Checkpoint B. No G10.2-B1/B2 numbering has been introduced.
 
 ## 317. Entry 312 — G10.2 Checkpoint B methodology OWNER APPROVED; executable contract implemented
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 
 Owner approval received exactly as:
@@ -27621,8 +27621,8 @@ No further methodology-owner approval is required unless a genuine structural co
 
 ## 318. Entry 313 — G10.2 accelerated consolidated evidence runner prepared
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 
 To honor the owner's request for faster execution, the remainder of G10.2 Checkpoint B is being consolidated rather than split into additional substages.
@@ -27720,8 +27720,8 @@ One bounded owner authorization is required for the local provider calls. After 
 
 ## 319. Entry 314 — G10.2 local Global Generics evidence acquisition OWNER APPROVED
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 
 Owner approval received exactly as:
@@ -27897,8 +27897,8 @@ No production write, canonical promotion, score persistence, deployment or PR me
 
 ## 323. Entry 318 — G10.2 three replacement Trendlyne calls OWNER APPROVED
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 
 Owner approval received exactly as:
@@ -28041,8 +28041,8 @@ The completed evidence output target remains:
 
 ## 326. Entry 321 — G10.2 provider/data contract reset to Trendlyne-first; zero-call coverage inspection ready
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 
 After repeated transport failures, G10.2 data acquisition architecture was formally reset before any further provider call.
@@ -28110,8 +28110,8 @@ After inspection, build at most one narrow Trendlyne multi-stock query for the g
 
 ## 327. Entry 322 — G10.2 preserved Trendlyne coverage inspected; two-call gap-fill prepared
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 
 Zero-call inspection of the preserved Trendlyne payload completed successfully.
@@ -28216,8 +28216,8 @@ This evidence will be normalized separately under the already owner-approved qua
 
 ## 328. Entry 323 — G10.2 two-call Trendlyne gap-fill PASS; zero-call normalization prepared
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 
 Owner-run Trendlyne gap-fill completed successfully:
@@ -28490,9 +28490,9 @@ No methodology, runtime scoring logic, UI, evidence state, persistence state or 
 
 ## 334. Entry 329 — G10.2 / AUROPHARMA COMPLETE / PASS — deterministic fail-closed closure
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
 **Final validated head:** `dd61a7a3dd781e9e25ac2ef96f8b677d17d06d8a`
 
 The owner reported:
@@ -28792,9 +28792,9 @@ The next chat should continue Gate J from the next planned controlled-expansion 
 
 ## 335. Entry 330 — G10.3 / BIOCON Checkpoint A implemented — Biopharma/Biosimilars classification candidate
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
 **Starting head:** `ece6bdb3806d98c9cd7c428e658c4a7307937c36`
 
 After formal G10.2 closure, the canonical Gate J plan was re-read before continuing.
