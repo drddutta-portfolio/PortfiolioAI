@@ -31703,3 +31703,34 @@ Correction commit: `9ffd471752e5deaeaeb0d53d436744842b029255`.
 
 Next action remains: pull latest branch and rerun `bash scripts/k1-validate-exchange-primary-classification.sh` before the 10-stock reconciliation rerun.
 
+---
+
+### K1 10-stock reconciliation V2 — PASS
+
+Owner reran the same bounded 10-stock cohort after the reconciliation-policy fix.
+
+Result:
+
+```text
+AGREE                 5
+DETAIL_MISSING        0
+CHANGE_REQUIRED       5
+REVIEW_REQUIRED       0
+OFFICIAL_MISSING      0
+IDENTITY changes      1
+SECTOR changes        4
+INDUSTRY changes      0
+Freeze eligible       YES
+```
+
+Exception behavior matched the intended contract:
+
+- ACMESOLAR → sector change;
+- AKUMS → sector change to official Healthcare while Pharma methodology remains downstream;
+- ALIVUS → sector change to official Healthcare while Pharma methodology remains downstream;
+- ASTRAMICRO → sector change to official Capital Goods;
+- ANGELONE → reviewed identity refresh via official corporate-action ISIN transition.
+
+The bounded pilot therefore closes successfully. There is no remaining unexplained review exception in this cohort.
+
+**K1 next step:** run the full frozen 238-stock reconciliation read-only. Do not mutate canonical production classification yet. After full reconciliation, recalculate the corrected sector inventory and freeze exact K4 package count/order before starting K2.
