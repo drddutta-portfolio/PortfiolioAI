@@ -55,7 +55,7 @@ echo "[8/8] Diff whitespace"
 git diff --check "${G10_1_B_BASE_SHA}"..HEAD
 
 echo
-echo "G10.1 CHECKPOINT B CANDIDATE VALIDATION PASS"
+echo "G10.1 CHECKPOINT B VALIDATION PASS"
 echo "ALIVUS score: 76.7225"
 echo "Gate I role: SATELLITE_CANDIDATE"
 echo "Valuation caution: YES"
@@ -63,3 +63,5 @@ echo "CDMO Emerging numeric participation: NO"
 echo "Score persistence: OFF"
 echo "Recommendation persistence: OFF"
 echo "Weight/action/sizing/AI: OFF"
+
+echo "G10.1: COMPLETE / PASS"
