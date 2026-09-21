@@ -4,7 +4,7 @@
 **Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 **Stage:** G10.1 — Checkpoint B
-**Status:** IMPLEMENTED / LOCALHOST OWNER APPROVAL + FULL VALIDATION PENDING
+**Status:** COMPLETE / PASS
 
 ## Locked classification input
 
@@ -100,3 +100,41 @@ G10.1 closes only after:
 - cumulative HANDOFF final closure entry.
 
 G10.2 must not start before that closure.
+
+
+## Final validation and closure
+
+The owner reported the consolidated local validator:
+
+`bash scripts/g10-1-validate-api-checkpoint-b.sh`
+
+**ALL PASS**.
+
+The final validated result is:
+
+```text
+ALIVUS score = 76.7225
+Gate I role = SATELLITE_CANDIDATE
+Valuation caution = YES
+CDMO Emerging numeric participation = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Weight guidance = OFF
+Action bias = OFF
+Position sizing = OFF
+AI interpretation = OFF
+```
+
+The localhost visual review also passed before this validation.
+
+### G10.1 closure
+
+```text
+G10.1 Checkpoint A = COMPLETE / PASS
+G10.1 Checkpoint B = COMPLETE / PASS
+G10.1 = COMPLETE / PASS
+API_BULK_DRUGS reference architecture = COMPLETE
+Reference company = ALIVUS
+```
+
+G10.2 / Global Generics is the next stage. AUROPHARMA remains the locked reference and its current fail-closed state is preserved until G10.2 genuinely completes the missing methodology.
