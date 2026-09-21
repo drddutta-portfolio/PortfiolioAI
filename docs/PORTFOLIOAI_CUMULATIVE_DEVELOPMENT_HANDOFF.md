@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology OWNER-APPROVED; Trendlyne-first provider/data contract FROZEN; zero-call preserved-evidence coverage inspection READY; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology OWNER-APPROVED; Trendlyne-first provider contract frozen; preserved 3-call coverage inspected; two-call Trendlyne gap-fill READY; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -28104,3 +28104,109 @@ After inspection, build at most one narrow Trendlyne multi-stock query for the g
 - production write = NO;
 - deployment = NO;
 - PR merge = NO.
+
+
+---
+
+## 327. Entry 322 — G10.2 preserved Trendlyne coverage inspected; two-call gap-fill prepared
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+Zero-call inspection of the preserved Trendlyne payload completed successfully.
+
+### Preserved coverage
+
+```text
+QUALITY = OBSERVED
+CAPITAL_EFFICIENCY = OBSERVED
+CASH_FLOW = OBSERVED
+BALANCE_SHEET_CREDIT = OBSERVED
+OWNERSHIP_GOVERNANCE = OBSERVED
+
+GROWTH = NOT OBSERVED
+VALUATION = NOT OBSERVED
+MOMENTUM = NOT OBSERVED
+RISK = NOT OBSERVED
+BUSINESS_DURABILITY = NOT OBSERVED
+```
+
+All four symbols are present:
+
+```text
+AUROPHARMA
+DRREDDY
+LUPIN
+ZYDUSLIFE
+```
+
+### Provider documentation re-check
+
+Trendlyne MCP official documentation confirms:
+
+- `get_parameter_values_multi_stock` supports financial statements, ratios, price/volume data, technical indicators and historical parameter values;
+- ownership/shareholding/pledge is separately supported;
+- document search is intended for qualitative strategy, business risks, segment performance and narrative evidence.
+
+Angel One official documentation confirms Historical API supports stocks and indices, ONE_DAY candles and up to 2,000 days in one daily request.
+
+Therefore the next active step is a Trendlyne-only gap fill, not another Yahoo/NSE/Angel transport experiment.
+
+### Two-call gap fill added
+
+Added:
+
+- `supabase/functions/g10-2-local-trendlyne-gap-fill/index.ts`
+- `supabase/functions/g10-2-local-trendlyne-gap-fill/index.test.ts`
+- `scripts/g10-2-local-trendlyne-gap-fill.sh`
+
+Call 1 — stock multi-parameter request for AUROPHARMA / DRREDDY / LUPIN / ZYDUSLIFE:
+
+```text
+revenue growth 1Y / 3Y
+PE TTM
+EV/EBITDA annual
+FCF yield if available
+6M return
+1Y return
+1Y beta
+1Y volatility or closest available volatility metric
+1Y max drawdown if available
+RSI
+MACD
+Trendlyne Momentum score if available
+```
+
+Call 2 — NIFTY Pharma index request:
+
+```text
+6M return
+1Y return
+```
+
+No unrelated parameter is requested.
+
+### Business durability
+
+Business Durability is intentionally not forced into this structured gap-fill call. Official Aurobindo FY25 evidence already exists for:
+
+- 31 US ANDAs filed and 31 final approvals in FY25;
+- 861 cumulative ANDA filings;
+- ~5% revenue R&D investment;
+- 1,500+ R&D scientists and 9 R&D centers;
+- complex-generics / specialty execution including first transdermal ANDA and complex parenteral work.
+
+This evidence will be normalized separately under the already owner-approved qualitative rubric rather than misusing a structured market-data call.
+
+### Safety
+
+- next provider calls = exactly 2 Trendlyne calls;
+- no Angel One calls;
+- no Yahoo/NSE calls;
+- no production writes;
+- no persistence;
+- no deployment;
+- no PR merge.
+
+**CURRENT STOP:** pull latest branch and run the two-call Trendlyne gap-fill once.
