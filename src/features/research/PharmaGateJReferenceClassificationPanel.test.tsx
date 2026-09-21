@@ -38,6 +38,21 @@ describe("Gate J reference classification panel", () => {
     expect(view.queryByText("API methodology → score → Gate I recommendation")).not.toBeInTheDocument()
   })
 
+  it("renders the BIOCON G10.3 Biosimilars classification lock without a premature Checkpoint B", () => {
+    const { container } = render(<PharmaGateJReferenceClassificationPanel symbol="BIOCON" />)
+    const view = within(container)
+
+    expect(view.getByText("Reference-company classification lock")).toBeInTheDocument()
+    expect(view.getByText("Biocon Limited")).toBeInTheDocument()
+    expect(view.getByText("Biopharma / Biosimilars")).toBeInTheDocument()
+    expect(view.getByText("Global Generics")).toBeInTheDocument()
+    expect(view.getByText("CDMO / CRAMS")).toBeInTheDocument()
+    expect(view.getByText(/FY25: Biosimilars 58% · Generics 19% · CRDMO 23%/)).toBeInTheDocument()
+    expect(view.getByText(/FY26: Biosimilars 60% · Generics 18% · CRDMO 22%/)).toBeInTheDocument()
+    expect(view.getByText(/Score not started/)).toBeInTheDocument()
+    expect(view.queryByText(/Biosimilars methodology → score/)).not.toBeInTheDocument()
+  })
+
   it("renders nothing for unrelated symbols", () => {
     const { container } = render(<PharmaGateJReferenceClassificationPanel symbol="TORNTPHARM" />)
     expect(container).toBeEmptyDOMElement()
