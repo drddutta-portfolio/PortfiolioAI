@@ -31660,3 +31660,22 @@ AKUMS and ALIVUS do not lose PHARMA_V1 merely because their exchange-primary sec
 No production data was changed. No migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
 
 **Next safe step:** rerun the same 10-stock cohort under reconciliation V2. Do not run all 238 yet. If the bounded re-run has zero unexplained `REVIEW_REQUIRED` / `OFFICIAL_MISSING`, proceed to the full read-only 238-stock reconciliation, then recalculate sector inventory and freeze the exact K4 package count/order before K2.
+
+### K1 validator / pilot-output consolidation
+
+The consolidated K1 validator now also executes:
+- `src/features/research/researchProfileRouting.test.ts`;
+- JSON parse validation for `scripts/k1-reviewed-identity-transitions-2026-09-22.json`.
+
+The local-only cohort runner now prints per-exception:
+- reconciliation state;
+- reason code;
+- change scopes;
+- identity state;
+- canonical sector/industry;
+- official NSE sector/industry/basic-industry.
+
+This makes the next 10-stock policy re-run auditable without opening the JSON manually.
+
+Latest implementation head after this consolidation: `a43a52799290efac7a07724fc6de2b9dfc6b5d49`.
+
