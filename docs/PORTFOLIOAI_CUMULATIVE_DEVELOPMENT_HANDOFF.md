@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 EXCHANGE-PRIMARY CLASSIFICATION BUILD IMPLEMENTED / CURRENT-COHORT RECONCILIATION PENDING; K4 SCOPE NOT YET FROZEN; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 RECONCILIATION POLICY IMPLEMENTED / 10-STOCK POLICY RE-RUN PENDING; K4 SCOPE NOT YET FROZEN; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -31622,3 +31622,41 @@ Deployment = NO
 PR merge = NO
 Automatic trading = NO
 ```
+
+---
+
+## K1 exchange-primary reconciliation policy implementation — 22 September 2026
+
+Starting checkpoint:
+- official NSE bulk classification source working locally;
+- 5-stock pilot passed;
+- 10-stock pilot resolved 10/10 official rows;
+- pilot summary: AGREE 5 / CHANGE_REQUIRED 4 / REVIEW_REQUIRED 1;
+- the single review exception was ANGELONE ISIN mismatch.
+
+Implemented on branch `r4n-pharma-subprofile-architecture`:
+
+- upgraded `scripts/k1-compare-nse-classification.mjs` to reconciliation contract V2;
+- added explicit change scopes: `IDENTITY`, `SECTOR`, `INDUSTRY`;
+- preserved fail-closed treatment for unexplained ISIN mismatch;
+- added exact reviewed corporate-action identity-transition handling;
+- added `scripts/k1-reviewed-identity-transitions-2026-09-22.json`;
+- recorded ANGELONE official NSE ISIN transition `INE732I01013 → INE732I01021`, effective 26-Feb-2026;
+- added comparator tests proving arbitrary ISIN mismatches remain blocked and only an exact reviewed transition is accepted as identity refresh;
+- added Research routing regression coverage proving `Healthcare + Pharmaceuticals → PHARMA` while preserving the displayed Healthcare sector.
+
+Policy outcome for pilot exceptions:
+
+```text
+ACMESOLAR   canonical Renewable Energy → official Power        CHANGE_REQUIRED / SECTOR
+AKUMS       canonical Pharma            → official Healthcare   CHANGE_REQUIRED / SECTOR
+ALIVUS      canonical Pharma            → official Healthcare   CHANGE_REQUIRED / SECTOR
+ASTRAMICRO  canonical Industrial        → official Capital Goods CHANGE_REQUIRED / SECTOR
+ANGELONE    old canonical ISIN          → official new ISIN     CHANGE_REQUIRED / IDENTITY
+```
+
+AKUMS and ALIVUS do not lose PHARMA_V1 merely because their exchange-primary sector is Healthcare. Exchange-primary classification and research methodology are separate authorities; pharmaceutical industry evidence can route Healthcare holdings into the PHARMA research profile, after which the reviewed PHARMA_V1 subprofile remains authoritative.
+
+No production data was changed. No migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+**Next safe step:** rerun the same 10-stock cohort under reconciliation V2. Do not run all 238 yet. If the bounded re-run has zero unexplained `REVIEW_REQUIRED` / `OFFICIAL_MISSING`, proceed to the full read-only 238-stock reconciliation, then recalculate sector inventory and freeze the exact K4 package count/order before K2.
