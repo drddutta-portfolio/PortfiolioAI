@@ -31037,3 +31037,143 @@ Official current-cohort local execution = REQUIRED
 K4 package count = NOT FROZEN
 K2 = BLOCKED
 ```
+
+
+---
+
+## 351. Entry 346 — K1 local reconciliation corrected for reduced local portfolio cohort
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The first local execution of:
+
+`bash scripts/k1-run-current-cohort-reconciliation.sh`
+
+revealed that the current local Supabase development dataset contains only two open NSE equities:
+
+```text
+HDFCBANK
+TORNTPHARM
+```
+
+Therefore the runner correctly reported:
+
+```text
+Canonical NSE equity cohort: 2
+```
+
+This is a reduced local research-development cohort, not the full current portfolio. It must not be used as the Gate K current-portfolio classification baseline.
+
+### Frozen 238-stock audit snapshot
+
+A read-only snapshot of the real current portfolio's 238 NSE operating equities was exported from the canonical classification authority and committed as:
+
+`docs/k1/PortfolioAI_K1_CURRENT_PORTFOLIO_CANONICAL_SNAPSHOT_2026-09-22.json`
+
+The snapshot contains only non-sensitive classification metadata:
+
+- symbol;
+- security id;
+- ISIN where available;
+- exchange;
+- asset/instrument type;
+- canonical sector / industry;
+- enrichment state;
+- selected sector / industry evidence source/state.
+
+It contains no:
+
+- quantities;
+- prices;
+- costs;
+- portfolio values;
+- scores;
+- recommendations;
+- user/account identifiers;
+- credentials.
+
+This snapshot is a frozen K1 audit input only. It is not a production write.
+
+### Local reconciliation runner corrected
+
+`scripts/k1-run-current-cohort-reconciliation.sh`
+
+now defaults to:
+
+```text
+K1_CANONICAL_SOURCE=FROZEN_CURRENT_PORTFOLIO
+```
+
+which uses the full 238-stock snapshot while still executing entirely on localhost.
+
+Optional development-only mode remains:
+
+```bash
+K1_CANONICAL_SOURCE=LOCAL bash scripts/k1-run-current-cohort-reconciliation.sh
+```
+
+If the local cohort is unusually small, the runner warns that it is a reduced development cohort.
+
+### NSE fetch diagnostics improved
+
+The first local run also showed:
+
+```text
+HDFCBANK: FAILED
+TORNTPHARM: FAILED
+```
+
+The fetcher previously hid the actual reason.
+
+`scripts/k1-fetch-nse-primary-classification.mjs`
+
+now:
+
+- handles multi-value NSE session cookies more robustly;
+- rejects a missing NSE session cookie explicitly;
+- prints the exact failure reason per symbol.
+
+Example future output:
+
+```text
+HDFCBANK: FAILED (NSE_QUOTE_HTTP_403)
+```
+
+rather than only:
+
+```text
+HDFCBANK: FAILED
+```
+
+### Next local execution
+
+```bash
+git pull
+bash scripts/k1-run-current-cohort-reconciliation.sh
+```
+
+Expected baseline:
+
+```text
+Canonical source: FROZEN_CURRENT_PORTFOLIO
+Canonical NSE equity cohort: 238
+```
+
+If NSE access still fails, the exact HTTP/session error will now be visible and can be corrected without guessing.
+
+### Safety boundary
+
+Unchanged:
+
+```text
+Production mutation = NO
+Production migration = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
