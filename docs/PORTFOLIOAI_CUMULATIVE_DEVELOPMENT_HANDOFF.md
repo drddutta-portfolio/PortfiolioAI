@@ -31177,3 +31177,99 @@ Deployment = NO
 PR merge = NO
 Automatic trading = NO
 ```
+
+
+---
+
+## 352. Entry 347 — K1 bounded pilot mode after NSE 403 rejection
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The first full-cohort local attempt against the official NSE quote endpoint produced authorization failure for the entire cohort:
+
+```text
+requested=238
+resolved=0
+failures=238
+error=NSE_AUTH_HTTP_403
+```
+
+The owner correctly requested that NSE transport/access be debugged on a small pilot before any further full-cohort attempt.
+
+### Pilot mode added
+
+Updated:
+
+`scripts/k1-run-current-cohort-reconciliation.sh`
+
+New environment variable:
+
+`K1_COHORT_LIMIT`
+
+Examples:
+
+```bash
+K1_COHORT_LIMIT=5 bash scripts/k1-run-current-cohort-reconciliation.sh
+K1_COHORT_LIMIT=10 bash scripts/k1-run-current-cohort-reconciliation.sh
+```
+
+When set, the frozen 238-stock canonical snapshot is trimmed locally to the requested pilot size before any official NSE calls are made.
+
+The resulting reconciliation artifact is marked:
+
+```json
+"pilot": true
+```
+
+### Authorization fail-fast added
+
+Updated:
+
+`scripts/k1-fetch-nse-primary-classification.mjs`
+
+After three consecutive NSE `401`/`403` authorization failures, the fetcher now stops immediately instead of continuing through the cohort.
+
+Expected diagnostic behavior:
+
+```text
+[1/5] ...
+[2/5] ...
+[3/5] ...
+Stopping early after 3 consecutive NSE authorization failures.
+```
+
+This prevents unnecessary calls and makes transport debugging fast.
+
+### Interpretation
+
+The uniform `NSE_AUTH_HTTP_403` response indicates the current direct Node/browser-session emulation is being rejected by NSE's web protection. This is a transport/access problem, not a classification-methodology failure.
+
+The official NSE industry-classification page remains the canonical authority policy; the K1 architecture is unchanged.
+
+### Next execution
+
+Use a five-stock pilot first:
+
+```bash
+git pull
+K1_COHORT_LIMIT=5 bash scripts/k1-run-current-cohort-reconciliation.sh
+```
+
+Do not run all 238 until the pilot resolves official evidence successfully.
+
+### Safety state
+
+Unchanged:
+
+```text
+Production mutation = NO
+Production migration = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
