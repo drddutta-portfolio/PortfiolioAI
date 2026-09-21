@@ -136,9 +136,9 @@ const BIOCON_VIEW: PharmaGateJReferenceClassificationView = {
     note: check.note,
   })),
   lockMode: "NEW_LOCK",
-  scoreStateLabel: "Score not started",
+  scoreStateLabel: "Checkpoint A approved · Checkpoint B fail-closed candidate",
   boundaryNote:
-    "Checkpoint A locks only business-model classification. Global Generics and CDMO/CRAMS remain Material Overlays, no qualitative pipeline bonus is allowed, and Checkpoint B remains blocked until owner approval.",
+    "Checkpoint A classification is owner-approved. Global Generics and CDMO/CRAMS remain Material Overlays. Checkpoint B may evaluate Biosimilars methodology and evidence, but missing mandatory evidence must fail closed and no overlay may create a second stock score.",
   scoreExecutionEnabled: false,
   recommendationExecutionEnabled: false,
   persistenceEnabled: false,
