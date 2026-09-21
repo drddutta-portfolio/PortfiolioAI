@@ -51,6 +51,24 @@ describe("Gate J reference classification registry", () => {
     )
   })
 
+  it("exposes G10.4 SYNGENE as a CDMO/CRAMS lock without overlays", () => {
+    expect(pharmaGateJReferenceClassification("syngene")).toEqual(
+      expect.objectContaining({
+        stage: "G10.4",
+        checkpoint: "A",
+        symbol: "SYNGENE",
+        primary: "CDMO_CRAMS",
+        materialOverlays: [],
+        emergingWatches: [],
+        unresolvedExposures: [],
+        lockMode: "NEW_LOCK",
+        scoreExecutionEnabled: false,
+        recommendationExecutionEnabled: false,
+        persistenceEnabled: false,
+      }),
+    )
+  })
+
   it("does not add reference-review UI state to unrelated companies", () => {
     expect(pharmaGateJReferenceClassification("TORNTPHARM")).toBeNull()
     expect(pharmaGateJReferenceClassification("HDFCBANK")).toBeNull()
