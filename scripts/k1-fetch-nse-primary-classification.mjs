@@ -17,10 +17,13 @@ const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-function parseCookieHeader(setCookie) {
-  if (!setCookie) return ""
-  return setCookie
-    .split(/,(?=[^;,]+=)/g)
+function parseCookieHeaders(headers) {
+  const values = typeof headers.getSetCookie === "function"
+    ? headers.getSetCookie()
+    : [headers.get("set-cookie")].filter(Boolean)
+
+  return values
+    .flatMap((value) => String(value).split(/,(?=[^;,]+=)/gu))
     .map((part) => part.split(";")[0]?.trim())
     .filter(Boolean)
     .join("; ")
@@ -36,7 +39,9 @@ async function getNseSessionCookie() {
     redirect: "follow",
   })
   if (!response.ok) throw new Error(`NSE_SESSION_HTTP_${response.status}`)
-  return parseCookieHeader(response.headers.get("set-cookie"))
+  const cookie = parseCookieHeaders(response.headers)
+  if (!cookie) throw new Error("NSE_SESSION_COOKIE_MISSING")
+  return cookie
 }
 
 async function fetchNseQuote(symbol, cookie) {
@@ -106,12 +111,13 @@ async function main() {
       rows.push(normalized)
       process.stdout.write(`[${i + 1}/${symbols.length}] ${symbol}: ${normalized.sector ?? "MISSING"} / ${normalized.industry ?? "MISSING"} / ${normalized.basicIndustry ?? "MISSING"}\n`)
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
       failures.push({
         exchange: "NSE",
         symbol,
-        error: error instanceof Error ? error.message : String(error),
+        error: message,
       })
-      process.stderr.write(`[${i + 1}/${symbols.length}] ${symbol}: FAILED\n`)
+      process.stderr.write(`[${i + 1}/${symbols.length}] ${symbol}: FAILED (${message})\n`)
     }
     if (i + 1 < symbols.length) await sleep(delayMs)
   }
