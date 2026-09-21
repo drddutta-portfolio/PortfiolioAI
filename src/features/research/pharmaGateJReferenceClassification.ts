@@ -4,6 +4,11 @@ import {
   ALIVUS_G10_1_DISTORTION_CHECKS,
 } from "./alivusG101ClassificationEvidence"
 import { AUROPHARMA_G10_2_CLASSIFICATION_RECONFIRMATION } from "./auropharmaG102ClassificationReconfirmation"
+import {
+  BIOCON_G10_3_ANNUAL_BUSINESS_MIX,
+  BIOCON_G10_3_CLASSIFICATION_REVIEW,
+  BIOCON_G10_3_DISTORTION_CHECKS,
+} from "./bioconG103ClassificationEvidence"
 import type { PharmaSubprofileCode } from "./pharmaSubprofileAssignment"
 
 export interface PharmaGateJReferenceClassificationView {
