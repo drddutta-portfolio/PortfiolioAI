@@ -43,13 +43,13 @@ GROWTH                  69.25
 CAPITAL_EFFICIENCY      84.00
 CASH_FLOW               70.75
 BALANCE_SHEET_CREDIT    95.00
-BUSINESS_DURABILITY     82.50
+BUSINESS_DURABILITY     83.00
 VALUATION               35.00
 MOMENTUM               100.00
 OWNERSHIP_GOVERNANCE    75.00
 RISK                     69.00
 
-Overall                 76.6725
+Overall                 76.7225
 ```
 
 The unchanged Gate I recommendation policy resolves:
