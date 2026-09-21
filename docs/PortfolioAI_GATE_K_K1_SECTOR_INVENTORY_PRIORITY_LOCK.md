@@ -581,3 +581,35 @@ OFFICIAL_MISSING
 This makes the same logic reusable when newer stocks are added. A newly added stock cannot route directly to a research methodology merely because it resembles an existing holding; official exchange classification must resolve first.
 
 The exact K4 package count remains deliberately **NOT FROZEN** until the 238-current-equity official snapshot has been executed and reconciled.
+
+---
+
+## 17. K1 reconciliation-policy checkpoint — 22 September 2026
+
+The first 10-stock official-NSE pilot exposed four genuine primary-sector changes plus one identity exception. K1 policy has now been tightened before any full-cohort run.
+
+Locked rules:
+
+1. official NSE/BSE primary sector owns the canonical user-facing sector;
+2. canonical sector differences become review-first `CHANGE_REQUIRED` proposals, never automatic writes;
+3. research profile/subprofile is downstream and cannot rewrite exchange-primary sector;
+4. unexplained ISIN mismatch remains `REVIEW_REQUIRED`;
+5. an exact officially evidenced corporate-action ISIN rollover becomes an identity-scoped `CHANGE_REQUIRED`, not a waived mismatch;
+6. ETFs remain outside operating-company sector methodology;
+7. no nearest-looking research engine fallback is permitted.
+
+AKUMS / ALIVUS coexistence is resolved architecturally:
+
+```text
+NSE sector Healthcare
++ pharmaceutical industry evidence
+→ user-facing sector remains Healthcare
+→ PHARMA research profile may still route
+→ PHARMA_V1 subtype remains independently reviewed
+```
+
+ANGELONE mismatch cause is resolved as the NSE-notified 26-Feb-2026 ISIN change from `INE732I01013` to `INE732I01021` following share subdivision. The canonical identity still requires refresh; K1 itself performs no production mutation.
+
+**Next action:** rerun the same 10-stock cohort under reconciliation V2. Full 238-stock reconciliation remains blocked until that bounded policy re-run passes.
+
+**K4 package count/order:** NOT YET FROZEN.
