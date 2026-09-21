@@ -27810,3 +27810,34 @@ Fix:
 No provider calls were consumed by the failed 502 attempt because execution never reached the function body.
 
 No methodology, evidence contract, scoring logic or safety boundary changed.
+
+
+---
+
+## 321. Entry 316 — G10.2 Angel One session rejection isolated; safe auth preflight added
+
+**Date:** 21 September 2026
+
+The corrected local runner reached a real zero-call PLAN PASS, then EXECUTE failed safely with:
+
+```text
+Angel One rejected the market-data session (HTTP_403)
+```
+
+Because the evidence function performs the three Trendlyne calls before Angel One history, those three Trendlyne tool calls are conservatively treated as already consumed. The full evidence runner must **not** simply be rerun.
+
+Added:
+
+- `scripts/g10-2-angel-auth-preflight.sh`
+
+The preflight:
+
+- reads the existing local Angel credentials without printing them;
+- generates the TOTP locally;
+- calls only Angel One authentication;
+- prints HTTP status, safe Angel error code/message and whether a JWT was returned;
+- never prints API key, PIN, TOTP secret or JWT;
+- makes no historical-data call;
+- makes no database write.
+
+Current stop: run the safe Angel auth preflight. Do not rerun the consolidated 8-call evidence runner yet.
