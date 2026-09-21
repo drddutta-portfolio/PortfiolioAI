@@ -9,7 +9,10 @@ CANONICAL_JSON="$ARTIFACT_DIR/k1-current-canonical-classification.json"
 FROZEN_CANONICAL_JSON="docs/k1/PortfolioAI_K1_CURRENT_PORTFOLIO_CANONICAL_SNAPSHOT_2026-09-22.json"
 COHORT_TXT="$ARTIFACT_DIR/k1-current-nse-equities.txt"
 CANONICAL_SOURCE="${K1_CANONICAL_SOURCE:-FROZEN_CURRENT_PORTFOLIO}"
-OFFICIAL_JSON="$ARTIFACT_DIR/k1-nse-bulk-primary-classification.json"
+BULK_JSON="$ARTIFACT_DIR/k1-nse-bulk-primary-classification.json"
+TARGETED_TXT="$ARTIFACT_DIR/k1-nse-residual-symbols.txt"
+TARGETED_JSON="$ARTIFACT_DIR/k1-nse-targeted-primary-classification.json"
+OFFICIAL_JSON="$ARTIFACT_DIR/k1-nse-primary-classification.json"
 RECON_JSON="$ARTIFACT_DIR/k1-nse-classification-reconciliation.json"
 COHORT_LIMIT="${K1_COHORT_LIMIT:-0}"
 
@@ -32,12 +35,12 @@ esac
 
 mkdir -p "$ARTIFACT_DIR"
 
-printf '\n[K1] 1/5 local-only guard\n'
+printf '\n[K1] 1/6 local-only guard\n'
 printf 'Local database: PASS\n'
 printf 'Database writes: NONE\n'
 printf 'Production access: NONE\n'
 
-printf '\n[K1] 2/5 prepare canonical NSE-equity classification baseline\n'
+printf '\n[K1] 2/6 prepare canonical NSE-equity classification baseline\n'
 
 case "$CANONICAL_SOURCE" in
   FROZEN_CURRENT_PORTFOLIO)
@@ -85,12 +88,81 @@ if [[ "$CANONICAL_SOURCE" == "LOCAL" && "$CANONICAL_COUNT" -lt 50 ]]; then
   printf 'For the current K1 238-stock audit, use the default FROZEN_CURRENT_PORTFOLIO source.\n' >&2
 fi
 
-printf '\n[K1] 3/5 fetch official NSE Indices bulk primary classification\n'
+printf '\n[K1] 3/6 fetch official NSE Indices bulk primary classification\n'
 node scripts/k1-fetch-nse-bulk-classification.mjs \
   --input "$CANONICAL_JSON" \
-  --output "$OFFICIAL_JSON"
+  --output "$BULK_JSON"
 
-printf '\n[K1] 4/5 deterministic official-vs-canonical reconciliation\n'
+RESIDUAL_COUNT="$(jq -r '.residualCount // 0' "$BULK_JSON")"
+[[ "$RESIDUAL_COUNT" =~ ^[0-9]+$ ]] || die "Bulk residual count is invalid."
+
+printf '\n[K1] 4/6 targeted official NSE verification for bulk residuals\n'
+if [[ "$RESIDUAL_COUNT" -gt 0 ]]; then
+  jq -r '.residual[].symbol' "$BULK_JSON" > "$TARGETED_TXT"
+  printf 'Residual targeted-review equities: %s\n' "$RESIDUAL_COUNT"
+  set +e
+  node scripts/k1-fetch-nse-primary-classification.mjs \
+    --input "$TARGETED_TXT" \
+    --output "$TARGETED_JSON"
+  TARGETED_STATUS=$?
+  set -e
+  if [[ "$TARGETED_STATUS" -ne 0 && "$TARGETED_STATUS" -ne 2 ]]; then
+    die "Targeted NSE classification fetch failed with status $TARGETED_STATUS."
+  fi
+else
+  : > "$TARGETED_TXT"
+  cat > "$TARGETED_JSON" <<'JSON'
+{
+  "contract": "PORTFOLIOAI_K1_NSE_PRIMARY_CLASSIFICATION_SNAPSHOT_V1",
+  "source": "NSE_OFFICIAL_QUOTE_EQUITY_INDUSTRY_INFO",
+  "requestedCount": 0,
+  "resolvedCount": 0,
+  "missingSectorCount": 0,
+  "failureCount": 0,
+  "rows": [],
+  "failures": []
+}
+JSON
+  printf 'Residual targeted-review equities: 0\n'
+fi
+
+jq -s '
+  .[0] as $bulk
+  | .[1] as $targeted
+  | ($targeted.rows // []) as $targetedRows
+  | ($targetedRows | map(.symbol) | map(ascii_upcase)) as $targetedSymbols
+  | {
+      contract: "PORTFOLIOAI_K1_NSE_PRIMARY_CLASSIFICATION_MERGED_V1",
+      generatedAt: (now | todateiso8601),
+      source: "NSE_INDICES_BULK_PLUS_NSE_QUOTE_EQUITY_TARGETED_FALLBACK",
+      bulkSource: $bulk.source,
+      bulkSourceUrl: $bulk.sourceUrl,
+      canonicalRowCount: $bulk.canonicalRowCount,
+      bulkResolvedCount: ($bulk.rows | length),
+      targetedRequestedCount: ($targeted.requestedCount // 0),
+      targetedResolvedCount: ($targetedRows | length),
+      targetedFailureCount: ($targeted.failureCount // 0),
+      rows: (
+        (($bulk.rows // []) + $targetedRows)
+        | unique_by(.symbol)
+        | sort_by(.symbol)
+      ),
+      residual: [
+        ($bulk.residual // [])[]
+        | select((.symbol | ascii_upcase) as $s | ($targetedSymbols | index($s) | not))
+      ],
+      failures: ($targeted.failures // [])
+    }
+  | .resolvedCount = (.rows | length)
+  | .residualCount = (.residual | length)
+' "$BULK_JSON" "$TARGETED_JSON" > "$OFFICIAL_JSON"
+
+printf 'Merged official NSE classification: %s/%s resolved; %s residual\n' \
+  "$(jq -r '.resolvedCount' "$OFFICIAL_JSON")" \
+  "$CANONICAL_COUNT" \
+  "$(jq -r '.residualCount' "$OFFICIAL_JSON")"
+
+printf '\n[K1] 5/6 deterministic official-vs-canonical reconciliation\n'
 set +e
 node scripts/k1-compare-nse-classification.mjs \
   --canonical "$CANONICAL_JSON" \
@@ -125,12 +197,14 @@ jq -r '
   | @tsv
 ' "$RECON_JSON" | awk 'BEGIN{FS="\t"; OFS="\t"; print "SYMBOL","STATE","REASON","CHANGE_SCOPES","IDENTITY_STATE","CANONICAL_SECTOR","CANONICAL_INDUSTRY","NSE_SECTOR","NSE_INDUSTRY","NSE_BASIC_INDUSTRY"} {print}'
 
-printf '\n[K1] 5/5 result\n'
+printf '\n[K1] 6/6 result\n'
 FREEZE_ELIGIBLE="$(jq -r '.freezeEligible' "$RECON_JSON")"
 printf 'Freeze eligible: %s\n' "$FREEZE_ELIGIBLE"
 printf 'Canonical snapshot: %s\n' "$CANONICAL_JSON"
-printf 'Official bulk snapshot: %s\n' "$OFFICIAL_JSON"
-printf 'Reconciliation:      %s\n' "$RECON_JSON"
+printf 'Official bulk snapshot: %s\n' "$BULK_JSON"
+printf 'Official targeted snapshot: %s\n' "$TARGETED_JSON"
+printf 'Official merged snapshot: %s\n' "$OFFICIAL_JSON"
+printf 'Reconciliation: %s\n' "$RECON_JSON"
 
 if [[ "$COMPARE_STATUS" -eq 2 ]]; then
   printf '\nK1 reconciliation completed with REVIEW_REQUIRED/OFFICIAL_MISSING exceptions.\n'
