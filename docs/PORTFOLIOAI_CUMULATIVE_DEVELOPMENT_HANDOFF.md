@@ -30700,3 +30700,163 @@ Deployment = NO
 PR merge = NO
 Automatic trading = NO
 ```
+
+
+---
+
+## 348. Entry 343 — K1 reusable exchange-reconciliation tooling completed
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+K1 was extended from a classification resolver into a reusable current-portfolio and future-stock reconciliation workflow.
+
+### Read-only canonical snapshot
+
+Added:
+
+`scripts/k1-current-canonical-classification.sql`
+
+It exports the active portfolio's current NSE operating-equity classification state using SELECTs only.
+
+No canonical decision is mutated.
+
+### Deterministic current-vs-official comparator
+
+Added:
+
+`scripts/k1-compare-nse-classification.mjs`
+
+Comparison states:
+
+```text
+AGREE
+DETAIL_MISSING
+CHANGE_REQUIRED
+REVIEW_REQUIRED
+OFFICIAL_MISSING
+```
+
+Key fail-closed rules:
+
+- ISIN disagreement → REVIEW_REQUIRED;
+- missing official NSE row / primary sector → OFFICIAL_MISSING;
+- primary-sector difference → CHANGE_REQUIRED;
+- official industry available but canonical industry absent → DETAIL_MISSING;
+- industry difference → CHANGE_REQUIRED;
+- extra official symbol outside the current canonical cohort → REVIEW_REQUIRED.
+
+Added tests:
+
+`scripts/k1-compare-nse-classification.test.mjs`
+
+The comparator performs zero database writes.
+
+### Consolidated validator expanded
+
+Updated:
+
+`scripts/k1-validate-exchange-primary-classification.sh`
+
+It now runs:
+
+1. focused exchange-primary domain / routing tests;
+2. reconciliation comparator tests + script syntax checks;
+3. full application test suite;
+4. strict TypeScript;
+5. architecture guard;
+6. architecture lint;
+7. production build;
+8. whitespace integrity.
+
+### Shared authority invariant preserved
+
+The first CI run after making official NSE/BSE provenance explicit exposed an existing architecture invariant: SECTOR, INDUSTRY and MARKET_CAP_CATEGORY intentionally share the same top-level authority label, `PortfolioAI reviewed security enrichment`.
+
+The K1 wording was corrected in:
+
+`src/contracts/canonicalDataAuthorities.ts`
+
+Official NSE/BSE Tier-1 provenance remains explicit in the source object / shared access path / notes, while the common enrichment authority remains intact.
+
+Correction commit:
+
+`81dc43d00f680770d967c01c5324959b98a1b520`
+
+### Future-stock lifecycle now build-backed
+
+```text
+NEW OPERATING EQUITY
+        ↓
+canonical identity created
+        ↓
+official exchange classification absent
+        ↓
+AWAITING_OFFICIAL_EXCHANGE_CLASSIFICATION
+        ↓
+research routing BLOCKED
+        ↓
+NSE/BSE official classification evidence
+        ↓
+one reviewed canonical primary sector
+        ↓
+existing supported engine
+OR
+METHODOLOGY_NOT_AVAILABLE
+```
+
+For ETFs/funds:
+
+```text
+new ETF/fund
+→ company sector NOT_APPLICABLE
+→ equity-company methodology NOT_APPLICABLE
+```
+
+For exchange conflict:
+
+```text
+NSE sector != BSE sector
+or identity / ISIN conflict
+→ REVIEW_REQUIRED
+→ no methodology routing
+```
+
+No name/theme/peer/nearest-sector inference is allowed.
+
+### K1 current stop point
+
+```text
+Exchange-primary resolver = IMPLEMENTED
+Future-stock intake = IMPLEMENTED
+Research-routing block = IMPLEMENTED
+238-current-equity cohort file = IMPLEMENTED
+Official NSE read-only fetcher = IMPLEMENTED
+Canonical read-only snapshot query = IMPLEMENTED
+Deterministic reconciliation comparator = IMPLEMENTED
+Comparator tests = IMPLEMENTED
+Consolidated validator = UPDATED
+
+Official 238-stock snapshot execution = PENDING
+Official-vs-canonical reconciliation result = PENDING
+Post-reconciliation sector inventory = PENDING
+Exact K4 package count = NOT FROZEN
+K2 = BLOCKED
+```
+
+### Safety boundary
+
+Unchanged:
+
+```text
+Production mutation = NO
+Production migrations = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
