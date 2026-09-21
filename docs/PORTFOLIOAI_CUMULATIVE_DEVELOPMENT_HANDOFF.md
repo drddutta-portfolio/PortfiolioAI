@@ -27841,3 +27841,53 @@ The preflight:
 - makes no database write.
 
 Current stop: run the safe Angel auth preflight. Do not rerun the consolidated 8-call evidence runner yet.
+
+
+---
+
+## 322. Entry 317 — Angel authentication PASS; historical endpoint bypass prepared
+
+**Date:** 21 September 2026
+
+Owner ran the safe Angel authentication preflight:
+
+```text
+HTTP_STATUS: 200
+STATUS: True
+MESSAGE: SUCCESS
+JWT_RETURNED: True
+RESULT: PASS
+```
+
+Therefore the stored Angel credentials/TOTP flow are valid.
+
+The earlier `getCandleData` HTTP 403 is isolated to the historical-data path rather than login.
+
+Recent SmartAPI community reports in September 2026 describe the same failure pattern: successful login followed by first-call HTTP 403 / access-rate rejection on `getCandleData`.
+
+### Fast safe fallback prepared
+
+The G10.2 local evidence function was updated to:
+
+- stop depending on Angel One historical candles for this checkpoint;
+- use five read-only Yahoo Finance public-chart history requests for:
+  - AUROPHARMA
+  - DRREDDY
+  - LUPIN
+  - ZYDUSLIFE
+  - NIFTY Pharma (`^CNXPHARMA`);
+- preserve the already-approved raw-close based 12M/6M return, drawdown and volatility derivations;
+- preserve NIFTY Pharma relative-strength / relative-volatility context;
+- return any completed Trendlyne evidence in the error response if a later market-history request fails, preventing another silent loss of already-consumed provider results.
+
+### Call-accounting boundary
+
+The prior failed EXECUTE reached the three Trendlyne calls before Angel history failed. Those three calls are conservatively treated as consumed, but their payloads were not recoverable from that failed response.
+
+Therefore a rerun requires exactly **three replacement Trendlyne calls** to reacquire the same bounded fundamental evidence.
+
+The five market-history reads will use the public fallback rather than Angel One and do not consume Angel One historical calls.
+
+No production write, canonical promotion, score persistence, deployment or PR merge is performed.
+
+**CURRENT STOP:** obtain one narrow approval for the three replacement Trendlyne calls, then rerun the consolidated evidence command once.
