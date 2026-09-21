@@ -94,6 +94,7 @@ async function main() {
   let cookie = await getNseSessionCookie()
   const rows = []
   const failures = []
+  let consecutiveAuthFailures = 0
 
   for (let i = 0; i < symbols.length; i += 1) {
     const symbol = symbols[i]
@@ -109,6 +110,7 @@ async function main() {
 
       const normalized = normalizeQuote(symbol, quote)
       rows.push(normalized)
+      consecutiveAuthFailures = 0
       process.stdout.write(`[${i + 1}/${symbols.length}] ${symbol}: ${normalized.sector ?? "MISSING"} / ${normalized.industry ?? "MISSING"} / ${normalized.basicIndustry ?? "MISSING"}\n`)
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
@@ -118,6 +120,15 @@ async function main() {
         error: message,
       })
       process.stderr.write(`[${i + 1}/${symbols.length}] ${symbol}: FAILED (${message})\n`)
+      if (message === "NSE_AUTH_HTTP_401" || message === "NSE_AUTH_HTTP_403") {
+        consecutiveAuthFailures += 1
+        if (consecutiveAuthFailures >= 3) {
+          process.stderr.write("Stopping early after 3 consecutive NSE authorization failures.\n")
+          break
+        }
+      } else {
+        consecutiveAuthFailures = 0
+      }
     }
     if (i + 1 < symbols.length) await sleep(delayMs)
   }
