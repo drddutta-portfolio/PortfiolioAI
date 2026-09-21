@@ -6,7 +6,9 @@ cd "$ROOT_DIR"
 
 ARTIFACT_DIR="${K1_ARTIFACT_DIR:-artifacts}"
 CANONICAL_JSON="$ARTIFACT_DIR/k1-current-canonical-classification.json"
+FROZEN_CANONICAL_JSON="docs/k1/PortfolioAI_K1_CURRENT_PORTFOLIO_CANONICAL_SNAPSHOT_2026-09-22.json"
 COHORT_TXT="$ARTIFACT_DIR/k1-current-nse-equities.txt"
+CANONICAL_SOURCE="${K1_CANONICAL_SOURCE:-FROZEN_CURRENT_PORTFOLIO}"
 OFFICIAL_JSON="$ARTIFACT_DIR/k1-nse-primary-classification.json"
 RECON_JSON="$ARTIFACT_DIR/k1-nse-classification-reconciliation.json"
 DELAY_MS="${K1_NSE_DELAY_MS:-350}"
@@ -35,8 +37,20 @@ printf 'Local database: PASS\n'
 printf 'Database writes: NONE\n'
 printf 'Production access: NONE\n'
 
-printf '\n[K1] 2/5 snapshot current canonical NSE-equity classification\n'
-psql "$DB_URL" -v ON_ERROR_STOP=1 -Atf scripts/k1-current-canonical-classification.sql > "$CANONICAL_JSON"
+printf '\n[K1] 2/5 prepare canonical NSE-equity classification baseline\n'
+
+case "$CANONICAL_SOURCE" in
+  FROZEN_CURRENT_PORTFOLIO)
+    [[ -f "$FROZEN_CANONICAL_JSON" ]] || die "Missing frozen K1 canonical snapshot: $FROZEN_CANONICAL_JSON"
+    cp "$FROZEN_CANONICAL_JSON" "$CANONICAL_JSON"
+    ;;
+  LOCAL)
+    psql "$DB_URL" -v ON_ERROR_STOP=1 -Atf scripts/k1-current-canonical-classification.sql > "$CANONICAL_JSON"
+    ;;
+  *)
+    die "K1_CANONICAL_SOURCE must be FROZEN_CURRENT_PORTFOLIO or LOCAL."
+    ;;
+esac
 
 CANONICAL_COUNT="$(jq -r '.rowCount // (.rows | length)' "$CANONICAL_JSON")"
 [[ "$CANONICAL_COUNT" =~ ^[0-9]+$ && "$CANONICAL_COUNT" -gt 0 ]] || die "Canonical snapshot contains no NSE equities."
@@ -45,7 +59,13 @@ jq -r '.rows[].symbol' "$CANONICAL_JSON" | sed '/^[[:space:]]*$/d' | sort -u > "
 COHORT_COUNT="$(wc -l < "$COHORT_TXT" | tr -d ' ')"
 [[ "$COHORT_COUNT" == "$CANONICAL_COUNT" ]] || die "Cohort count ($COHORT_COUNT) does not match canonical row count ($CANONICAL_COUNT)."
 
+printf 'Canonical source: %s\n' "$CANONICAL_SOURCE"
 printf 'Canonical NSE equity cohort: %s\n' "$CANONICAL_COUNT"
+
+if [[ "$CANONICAL_SOURCE" == "LOCAL" && "$CANONICAL_COUNT" -lt 50 ]]; then
+  printf 'WARNING: local portfolio appears to be a reduced development cohort (%s equities).\n' "$CANONICAL_COUNT" >&2
+  printf 'For the current K1 238-stock audit, use the default FROZEN_CURRENT_PORTFOLIO source.\n' >&2
+fi
 
 printf '\n[K1] 3/5 fetch read-only official NSE primary classification\n'
 node scripts/k1-fetch-nse-primary-classification.mjs \
