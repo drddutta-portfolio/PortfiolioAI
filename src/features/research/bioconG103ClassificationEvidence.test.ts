@@ -40,14 +40,13 @@ describe("Gate J G10.3 BIOCON Biosimilars classification candidate", () => {
         checkpointState: "READY_FOR_OWNER_LOCK",
         classificationState: "READY_FOR_REVIEW",
         primary: "BIOPHARMA_BIOSIMILARS",
-        materialOverlays: expect.arrayContaining(["GLOBAL_GENERICS", "CDMO_CRAMS"]),
         emergingWatches: [],
         scoreExecutionEnabled: false,
         recommendationExecutionEnabled: false,
         persistenceEnabled: false,
       }),
     )
-    expect(BIOCON_G10_3_CLASSIFICATION_REVIEW.materialOverlays).toHaveLength(2)
+    expect(BIOCON_G10_3_CLASSIFICATION_REVIEW.materialOverlays).toEqual(["CDMO_CRAMS", "GLOBAL_GENERICS"])
   })
 
   it("records denominator, one-off and secondary-business distortion review explicitly", () => {
