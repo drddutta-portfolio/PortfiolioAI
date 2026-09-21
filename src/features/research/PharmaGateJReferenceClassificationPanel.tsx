@@ -16,14 +16,25 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
   const review = pharmaGateJReferenceClassification(symbol)
   if (!review) return null
 
+  const isReconfirmation = review.lockMode === "RECONFIRM_EXISTING_LOCK"
+  const renderAlivusCheckpointB = review.symbol === "ALIVUS"
+
   return <section className="pharma-persistence-package" aria-labelledby="gate-j-reference-classification-title">
     <div className="pharma-evidence-pilot-head">
       <div>
         <p className="eyebrow">Gate J · {review.stage} · Checkpoint {review.checkpoint}</p>
-        <h3 id="gate-j-reference-classification-title">Reference-company classification lock</h3>
-        <p>Classification evidence is frozen before methodology or scoring work begins. Owner approval of this localhost review is required before Checkpoint B can start.</p>
+        <h3 id="gate-j-reference-classification-title">
+          {isReconfirmation ? "Reference-company classification re-confirmation" : "Reference-company classification lock"}
+        </h3>
+        <p>
+          {isReconfirmation
+            ? "The existing reviewed classification is checked again before Global Generics methodology work starts. It is not rebuilt from scratch and cannot be altered because of a later score."
+            : "Classification evidence is frozen before methodology or scoring work begins. Owner approval of this localhost review is required before Checkpoint B can start."}
+        </p>
       </div>
-      <span className="pharma-workspace-lock">Ready for owner lock · Score not started</span>
+      <span className="pharma-workspace-lock">
+        {isReconfirmation ? "Ready for owner re-confirmation" : "Ready for owner lock"} · {review.scoreStateLabel}
+      </span>
     </div>
 
     <div className="pharma-persistence-package-summary">
@@ -35,7 +46,7 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
       <div>
         <span>Primary candidate</span>
         <strong>{displayName(review.primary)}</strong>
-        <small>Stable two-period leadership</small>
+        <small>{isReconfirmation ? "Existing reviewed primary" : "Stable two-period leadership"}</small>
       </div>
       <div>
         <span>Material Overlay</span>
@@ -49,18 +60,25 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
       </div>
     </div>
 
+    {review.unresolvedExposures.length
+      ? <div className="research-callout research-callout-neutral">
+          <strong>Unresolved exposure remains unresolved</strong>
+          <p>{review.unresolvedExposures.map(displayName).join(" · ")} remains REVIEW_REQUIRED and is not silently back-filled by Gate J methodology availability.</p>
+        </div>
+      : null}
+
     <div className="pharma-persistence-package-grid">
       <article>
         <strong>Two-period operating-model mix</strong>
-        <small>Issuer-disclosed Generic API versus CDMO</small>
-        <p>{review.annualMix.map((row) => `${shortDate(row.periodEnd)}: API ${row.primarySharePercent}% · CDMO ${row.cdmoSharePercent}%`).join(" · ")}</p>
-        <span>Evidence through {review.evidenceThrough} · proposed effective date {review.proposedEffectiveDate}</span>
+        <small>{review.operatingMixLabel}</small>
+        <p>{review.operatingMixRows.map((row) => `${shortDate(row.periodEnd)}: ${row.summary}`).join(" · ")}</p>
+        <span>Evidence through {review.evidenceThrough} · effective date {review.proposedEffectiveDate}</span>
       </article>
       <article>
-        <strong>Reference selection</strong>
-        <small>Low-ambiguity API portability candidate</small>
+        <strong>{isReconfirmation ? "Reference re-confirmation" : "Reference selection"}</strong>
+        <small>{review.selectionLabel}</small>
         <p>{review.selectionReason}</p>
-        <span>Classification lock precedes any score visibility</span>
+        <span>{isReconfirmation ? "Existing classification remains locked before score visibility" : "Classification lock precedes any score visibility"}</span>
       </article>
     </div>
 
@@ -72,34 +90,34 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
       </article>)}
     </div>
 
-    <p className="pharma-evidence-pilot-note"><strong>Boundary:</strong> Checkpoint A writes no research evidence, assignment, score or recommendation. Checkpoint B remains blocked until the owner approves this classification lock.</p>
+    <p className="pharma-evidence-pilot-note"><strong>Boundary:</strong> {review.boundaryNote}</p>
 
-    <section className="pharma-persistence-package" aria-labelledby="gate-j-api-checkpoint-b-title">
-      <div className="pharma-evidence-pilot-head">
-        <div>
-          <p className="eyebrow">Gate J · G10.1 · Checkpoint B</p>
-          <h3 id="gate-j-api-checkpoint-b-title">API methodology → score → Gate I recommendation</h3>
-          <p>The locked API classification now runs through one PHARMA_V1 ten-dimension score and the unchanged Gate I recommendation policy. This is a read-only candidate for owner review.</p>
-        </div>
-        <span className="pharma-workspace-lock">Read-only candidate · Persistence off</span>
-      </div>
-      <div className="pharma-persistence-package-summary">
-        <div><span>Deterministic score</span><strong>{ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.overallScore.toFixed(4)}</strong><small>10/10 dimensions · no renormalization</small></div>
-        <div><span>Gate I role</span><strong>{ALIVUS_G10_1_READ_ONLY_RECOMMENDATION.suggestedRole.replaceAll("_", " ")}</strong><small>Unchanged Gate I thresholds/floors</small></div>
-        <div><span>Valuation</span><strong>{ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions.find((item) => item.dimensionCode === "VALUATION")?.finalScore.toFixed(0)}</strong><small>Below neutral anchor · caution only</small></div>
-        <div><span>Momentum</span><strong>{ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions.find((item) => item.dimensionCode === "MOMENTUM")?.finalScore.toFixed(0)}</strong><small>Does not neutralize valuation caution</small></div>
-      </div>
-      <div className="pharma-persistence-package-grid">
-        {ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions.map((dimension) => <article key={dimension.dimensionCode}>
-          <strong>{dimension.dimensionCode.replaceAll("_", " ")}</strong>
-          <small>Score-ready · 100% reference evidence coverage</small>
-          <p>{dimension.finalScore.toFixed(2)}</p>
-          <span>API/Bulk methodology candidate</span>
-        </article>)}
-      </div>
-      <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> CDMO remains Emerging Watch and numerically excluded. Score/recommendation persistence, weight guidance, action bias, position sizing and AI interpretation remain off.</p>
-    </section>
-
-
+    {renderAlivusCheckpointB
+      ? <section className="pharma-persistence-package" aria-labelledby="gate-j-api-checkpoint-b-title">
+          <div className="pharma-evidence-pilot-head">
+            <div>
+              <p className="eyebrow">Gate J · G10.1 · Checkpoint B</p>
+              <h3 id="gate-j-api-checkpoint-b-title">API methodology → score → Gate I recommendation</h3>
+              <p>The locked API classification now runs through one PHARMA_V1 ten-dimension score and the unchanged Gate I recommendation policy. This is a read-only candidate for owner review.</p>
+            </div>
+            <span className="pharma-workspace-lock">Read-only candidate · Persistence off</span>
+          </div>
+          <div className="pharma-persistence-package-summary">
+            <div><span>Deterministic score</span><strong>{ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.overallScore.toFixed(4)}</strong><small>10/10 dimensions · no renormalization</small></div>
+            <div><span>Gate I role</span><strong>{ALIVUS_G10_1_READ_ONLY_RECOMMENDATION.suggestedRole.replaceAll("_", " ")}</strong><small>Unchanged Gate I thresholds/floors</small></div>
+            <div><span>Valuation</span><strong>{ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions.find((item) => item.dimensionCode === "VALUATION")?.finalScore.toFixed(0)}</strong><small>Below neutral anchor · caution only</small></div>
+            <div><span>Momentum</span><strong>{ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions.find((item) => item.dimensionCode === "MOMENTUM")?.finalScore.toFixed(0)}</strong><small>Does not neutralize valuation caution</small></div>
+          </div>
+          <div className="pharma-persistence-package-grid">
+            {ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions.map((dimension) => <article key={dimension.dimensionCode}>
+              <strong>{dimension.dimensionCode.replaceAll("_", " ")}</strong>
+              <small>Score-ready · 100% reference evidence coverage</small>
+              <p>{dimension.finalScore.toFixed(2)}</p>
+              <span>API/Bulk methodology candidate</span>
+            </article>)}
+          </div>
+          <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> CDMO remains Emerging Watch and numerically excluded. Score/recommendation persistence, weight guidance, action bias, position sizing and AI interpretation remain off.</p>
+        </section>
+      : null}
   </section>
 }

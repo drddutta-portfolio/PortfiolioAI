@@ -27145,3 +27145,82 @@ Checkpoint B = NOT STARTED
 ```
 
 G10.2 Checkpoint A is a short classification re-confirmation only. AUROPHARMA's reviewed Global Generics primary classification is not to be rebuilt from scratch, and its unresolved Biosimilars exposure must remain unresolved unless separately reviewed.
+
+
+---
+
+## 312. Entry 307 — G10.2 Checkpoint A implemented — AUROPHARMA Global Generics re-confirmation
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Starting head:** `46e31f8352566014369ac3b71a3f9293527e4d55`
+
+G10.2 has started with the required short Checkpoint A re-confirmation.
+
+The existing G8.1 classification authority was reused rather than rebuilt.
+
+### Re-confirmed classification
+
+```text
+Reference = AUROPHARMA
+Primary = GLOBAL_GENERICS
+Material Overlay = none
+Emerging Watch = API_BULK_DRUGS
+BIOPHARMA_BIOSIMILARS = REVIEW_REQUIRED / unresolved
+Evidence through = 2026-03-31
+```
+
+Two-period role evidence remains:
+
+```text
+FY25 Global Generics lower bound = 73.04%
+FY25 API share = 13.63%
+
+FY26 Global Generics lower bound = 73.46%
+FY26 API share = 12.03%
+```
+
+No new material evidence was introduced by this checkpoint and no reviewed classification fact changed.
+
+### Distortion / structural-change check
+
+The G8.1 comparability checks remain in force:
+
+- consolidated denominator alignment;
+- conservative US + Europe Global Generics lower bound;
+- API transfer does not break consolidated scope;
+- unavailable business-level profit split is not invented;
+- Khandelwal/Lannett effects remain effective-date review triggers rather than back-projected classification changes.
+
+### Fail-closed state deliberately preserved
+
+```text
+Score state = SCORE_NOT_COMPUTABLE
+Reason = GLOBAL_GENERICS_PRIMARY_METHODOLOGY_INCOMPLETE
+Recommendation = INSUFFICIENT
+Partial score reconstruction = FORBIDDEN
+```
+
+Biosimilars remains unresolved and is not silently back-filled.
+
+### UI implementation
+
+The reusable Gate J reference-classification registry/panel now supports both:
+
+- G10.1 ALIVUS completed API reference;
+- G10.2 AUROPHARMA classification re-confirmation.
+
+No stock-specific page tree was added.
+
+### Current stop
+
+```text
+G10.1 = COMPLETE / PASS
+G10.2 Checkpoint A code = IMPLEMENTED
+G10.2 Checkpoint A localhost owner re-confirmation = PENDING
+G10.2 Checkpoint A full validation = PENDING
+G10.2 Checkpoint B = NOT STARTED
+```
+
+Do not start Global Generics methodology work until Checkpoint A passes the owner localhost review and consolidated validation.
