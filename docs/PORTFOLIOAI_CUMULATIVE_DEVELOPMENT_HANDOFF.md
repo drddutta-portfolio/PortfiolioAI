@@ -29058,9 +29058,9 @@ The build is intentionally consolidated: methodology contract, evidence package,
 
 ## 336. Entry 331 — G10.3 / BIOCON Checkpoint B consolidated build implemented
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
 **Checkpoint A authority:** COMPLETE / PASS / owner-approved
 
 Owner authorized:
@@ -29209,4 +29209,3 @@ PR #101 = OPEN / DRAFT / UNMERGED
 ```
 
 **Next action:** owner pulls the latest branch, visually reviews BIOCON's G10.3 Checkpoint B block, and runs the single consolidated Checkpoint B validator. Do not mark G10.3 COMPLETE / PASS until that local validation passes.
-
