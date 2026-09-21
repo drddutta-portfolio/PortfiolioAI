@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology OWNER-APPROVED; Trendlyne-first provider contract frozen; preserved 3-call coverage inspected; two-call Trendlyne gap-fill READY; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B FINAL FAIL-CLOSED RESULT IMPLEMENTED / LOCALHOST REVIEW + FINAL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -28374,3 +28374,76 @@ Each line is either `FOUND` with up to three exact source labels or `NOT FOUND`.
 No provider call is made.
 
 Current stop: run the concise summary and use it to construct at most one final Trendlyne gap-fill call for only genuinely absent fields.
+
+
+---
+
+## 332. Entry 327 — G10.2 Checkpoint B final fail-closed result implemented
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The owner requested that G10.2 be completed quickly rather than extending the evidence-acquisition loop.
+
+The approved Global Generics methodology has now been exercised against the bounded evidence actually obtained. The correct deterministic result is **fail closed**, not a reconstructed partial score.
+
+### Final AUROPHARMA G10.2 authority
+
+```text
+Primary = GLOBAL_GENERICS
+Methodology = OWNER APPROVED
+Checkpoint A = COMPLETE / PASS
+Checkpoint B = COMPLETE / FAIL-CLOSED
+Score = SCORE_NOT_COMPUTABLE
+Gate I recommendation = NOT EXECUTED
+Partial score reconstruction = FORBIDDEN
+Renormalization around missing inputs = FORBIDDEN
+```
+
+Added:
+
+- `src/features/research/auropharmaG102FinalResult.ts`
+- `src/features/research/auropharmaG102FinalResult.test.ts`
+
+Final mandatory blocker groups:
+
+1. Growth price-erosion method/evidence incomplete.
+2. Valuation required peer/self-history/FCF corroboration incomplete.
+3. Momentum required 6M / NIFTY-Pharma-relative evidence incomplete.
+4. Risk required trailing-1Y drawdown/volatility evidence incomplete.
+5. Ownership required exact current + multi-period context not fully normalized.
+
+The five Trendlyne results already acquired remain useful evidence and are not discarded. Angel One login is verified, but the historical endpoint was degraded in this session.
+
+### UI
+
+The reusable AUROPHARMA Gate J block now shows:
+
+```text
+Gate J · G10.2 · Checkpoint B
+Global Generics controlled-expansion result
+Checkpoint B complete · Fail-closed outcome
+```
+
+and lists the mandatory blocker groups instead of continuing to imply that more evidence acquisition is automatically required.
+
+### Final validation
+
+Added:
+
+- `scripts/g10-2-validate-final-fail-closed.sh`
+
+This performs one consolidated validation: focused G10.2 tests, G10.1/Gate I controls, full non-Edge suite, TypeScript, architecture checks, lint, production build and diff whitespace.
+
+### Safety
+
+- score persistence = OFF
+- recommendation persistence = OFF
+- position sizing = OFF
+- AI interpretation = OFF
+- production mutation = NO
+- deployment = NO
+- PR merge = NO
+
+**CURRENT STOP:** localhost visual review of the final G10.2 block, then run the single final validator. If both pass, formally close G10.2.
