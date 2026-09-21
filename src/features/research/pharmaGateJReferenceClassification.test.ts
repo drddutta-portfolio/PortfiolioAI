@@ -33,6 +33,24 @@ describe("Gate J reference classification registry", () => {
     )
   })
 
+  it("exposes G10.3 BIOCON as a new Biosimilars lock with two Material Overlays", () => {
+    expect(pharmaGateJReferenceClassification("biocon")).toEqual(
+      expect.objectContaining({
+        stage: "G10.3",
+        checkpoint: "A",
+        symbol: "BIOCON",
+        primary: "BIOPHARMA_BIOSIMILARS",
+        materialOverlays: expect.arrayContaining(["GLOBAL_GENERICS", "CDMO_CRAMS"]),
+        emergingWatches: [],
+        unresolvedExposures: [],
+        lockMode: "NEW_LOCK",
+        scoreExecutionEnabled: false,
+        recommendationExecutionEnabled: false,
+        persistenceEnabled: false,
+      }),
+    )
+  })
+
   it("does not add reference-review UI state to unrelated companies", () => {
     expect(pharmaGateJReferenceClassification("TORNTPHARM")).toBeNull()
     expect(pharmaGateJReferenceClassification("HDFCBANK")).toBeNull()
