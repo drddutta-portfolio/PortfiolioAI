@@ -23,7 +23,7 @@ describe("Gate J reference classification panel", () => {
     expect(screen.getByText("Reference-company classification re-confirmation")).toBeInTheDocument()
     expect(screen.getByText("Aurobindo Pharma Limited")).toBeInTheDocument()
     expect(screen.getByText("Global Generics")).toBeInTheDocument()
-    expect(screen.getByText("API / Bulk Drugs")).toBeInTheDocument()
+    expect(screen.getAllByText("API / Bulk Drugs").length).toBeGreaterThan(0)
     expect(screen.getByText(/Biopharma \/ Biosimilars remains REVIEW_REQUIRED/)).toBeInTheDocument()
     expect(screen.getByText(/FY25: Global Generics ≥ 73.04% · API 13.63%/)).toBeInTheDocument()
     expect(screen.getByText(/FY26: Global Generics ≥ 73.46% · API 12.03%/)).toBeInTheDocument()
