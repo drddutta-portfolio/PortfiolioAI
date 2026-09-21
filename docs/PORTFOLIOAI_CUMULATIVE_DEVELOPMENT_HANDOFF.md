@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 TECHNICAL AUDIT COMPLETE / OWNER REVIEW LOCK PREPARED; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 EXCHANGE-PRIMARY CLASSIFICATION RECONCILIATION IN PROGRESS; K4 SCOPE NOT YET FROZEN; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -30388,3 +30388,83 @@ Automatic trading = NO
 
 **Next safe action:** owner reviews the K1 lock. After acceptance, mark K1 COMPLETE / PASS and begin K2 only.
 
+
+
+---
+
+## 346. Entry 341 — K1 classification authority revised to NSE/BSE primary sector
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Revision commit:** `f0b3bad519f20a7832f09fefc97bc2570a149f2c`
+
+The owner clarified the canonical K1 sector-classification policy:
+
+- when a stock appears under multiple sector groupings, PortfolioAI should use the stock's **primary official sector classification from NSE/BSE**;
+- currently unclassified operating-company holdings should be classified from official NSE/BSE evidence as that evidence is obtained;
+- secondary business exposure must not create multiple primary sector identities.
+
+### Architecture consequence
+
+The prior first-pass K1 proposal of 10 K4 packages is now explicitly **PROVISIONAL / NOT FROZEN**.
+
+Before K1 can freeze its exact K4 count, the same K1 gate must complete one consolidated exchange-primary reconciliation pass across the current portfolio.
+
+The revised rule is:
+
+```text
+Official NSE/BSE primary classification
+        ↓
+one canonical PortfolioAI primary sector
+        ↓
+optional reviewed sector-specific subprofile / secondary exposure
+        ↓
+research methodology routing
+```
+
+The research subprofile layer remains separate from user-facing canonical sector classification and must not rewrite it.
+
+### Dual-listed / conflicting exchange evidence
+
+Where current NSE and BSE sector classifications materially disagree:
+
+```text
+→ REVIEW_REQUIRED
+→ compare current official exchange evidence
+→ use audited segment-revenue / official classification basis
+→ no nearest-methodology fallback
+```
+
+### Unclassified securities
+
+Operating-company securities currently without sector classification must be resolved from official exchange evidence where available.
+
+ETFs / funds remain outside operating-company sector-methodology routing and should not be assigned a company sector merely to eliminate an UNCLASSIFIED state.
+
+### K1 revised status
+
+```text
+Initial portfolio audit = COMPLETE
+Exchange-primary classification reconciliation = REQUIRED / NEXT
+Exact K4 package count = NOT FROZEN
+Exact K4 order = NOT FROZEN
+K2 = BLOCKED until K1 reconciliation + owner approval
+New sector methodology build = NOT STARTED
+```
+
+### Safety boundary
+
+Unchanged:
+
+```text
+Production Supabase mutation = NO
+Provider refresh = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
