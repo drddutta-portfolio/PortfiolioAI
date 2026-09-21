@@ -9,9 +9,8 @@ CANONICAL_JSON="$ARTIFACT_DIR/k1-current-canonical-classification.json"
 FROZEN_CANONICAL_JSON="docs/k1/PortfolioAI_K1_CURRENT_PORTFOLIO_CANONICAL_SNAPSHOT_2026-09-22.json"
 COHORT_TXT="$ARTIFACT_DIR/k1-current-nse-equities.txt"
 CANONICAL_SOURCE="${K1_CANONICAL_SOURCE:-FROZEN_CURRENT_PORTFOLIO}"
-OFFICIAL_JSON="$ARTIFACT_DIR/k1-nse-primary-classification.json"
+OFFICIAL_JSON="$ARTIFACT_DIR/k1-nse-bulk-primary-classification.json"
 RECON_JSON="$ARTIFACT_DIR/k1-nse-classification-reconciliation.json"
-DELAY_MS="${K1_NSE_DELAY_MS:-350}"
 COHORT_LIMIT="${K1_COHORT_LIMIT:-0}"
 
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
@@ -86,11 +85,10 @@ if [[ "$CANONICAL_SOURCE" == "LOCAL" && "$CANONICAL_COUNT" -lt 50 ]]; then
   printf 'For the current K1 238-stock audit, use the default FROZEN_CURRENT_PORTFOLIO source.\n' >&2
 fi
 
-printf '\n[K1] 3/5 fetch read-only official NSE primary classification\n'
-node scripts/k1-fetch-nse-primary-classification.mjs \
-  --input "$COHORT_TXT" \
-  --output "$OFFICIAL_JSON" \
-  --delay-ms "$DELAY_MS"
+printf '\n[K1] 3/5 fetch official NSE Indices bulk primary classification\n'
+node scripts/k1-fetch-nse-bulk-classification.mjs \
+  --input "$CANONICAL_JSON" \
+  --output "$OFFICIAL_JSON"
 
 printf '\n[K1] 4/5 deterministic official-vs-canonical reconciliation\n'
 set +e
@@ -129,7 +127,7 @@ printf '\n[K1] 5/5 result\n'
 FREEZE_ELIGIBLE="$(jq -r '.freezeEligible' "$RECON_JSON")"
 printf 'Freeze eligible: %s\n' "$FREEZE_ELIGIBLE"
 printf 'Canonical snapshot: %s\n' "$CANONICAL_JSON"
-printf 'Official snapshot:  %s\n' "$OFFICIAL_JSON"
+printf 'Official bulk snapshot: %s\n' "$OFFICIAL_JSON"
 printf 'Reconciliation:      %s\n' "$RECON_JSON"
 
 if [[ "$COMPARE_STATUS" -eq 2 ]]; then
