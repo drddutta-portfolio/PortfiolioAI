@@ -31679,3 +31679,27 @@ This makes the next 10-stock policy re-run auditable without opening the JSON ma
 
 Latest implementation head after this consolidation: `a43a52799290efac7a07724fc6de2b9dfc6b5d49`.
 
+### K1 local validation runner-boundary correction — 22 September 2026
+
+Owner local validation exposed four suite-discovery failures despite 226 Vitest-compatible files passing:
+
+- `scripts/k1-compare-nse-classification.test.mjs` was being discovered by Vitest even though it is a Node `node:test` suite already executed explicitly by the K1 validator;
+- three local-only Supabase function tests using Deno `jsr:` imports were also being discovered by application Vitest and could not be resolved by Vite's Node resolver.
+
+This was a test-runner boundary defect, not a K1 reconciliation logic failure.
+
+Corrected `vite.config.ts` narrowly excludes only:
+- `scripts/**/*.test.mjs`;
+- `supabase/functions/g10-2-local-global-generics-evidence/index.test.ts`;
+- `supabase/functions/g10-2-local-trendlyne-gap-fill/index.test.ts`;
+- `supabase/functions/refresh-pharma-benchmark/index.test.ts`.
+
+The K1 comparator test remains executed explicitly with:
+`node --test scripts/k1-compare-nse-classification.test.mjs`.
+
+No production behavior, research methodology, classification policy, persistence, scheduler, deployment or PR state was changed.
+
+Correction commit: `9ffd471752e5deaeaeb0d53d436744842b029255`.
+
+Next action remains: pull latest branch and rerun `bash scripts/k1-validate-exchange-primary-classification.sh` before the 10-stock reconciliation rerun.
+
