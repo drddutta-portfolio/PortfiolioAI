@@ -27615,3 +27615,102 @@ No further methodology-owner approval is required unless a genuine structural co
 - production mutation = NO
 - deployment = NO
 - PR merge = NO
+
+
+---
+
+## 318. Entry 313 — G10.2 accelerated consolidated evidence runner prepared
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+To honor the owner's request for faster execution, the remainder of G10.2 Checkpoint B is being consolidated rather than split into additional substages.
+
+### Reviewed same-primary peer cohort locked
+
+Reference:
+
+```text
+AUROPHARMA
+```
+
+Reviewed Global Generics peers:
+
+```text
+DRREDDY
+LUPIN
+ZYDUSLIFE
+```
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsG102PeerSet.ts`
+- `src/features/research/pharmaGlobalGenericsG102PeerSet.test.ts`
+- `docs/PortfolioAI_GATE_J_G10_2_GLOBAL_GENERICS_PEER_SET.md`
+
+This peer set is review-only and is not persisted as canonical classification state.
+
+### One-command local evidence acquisition prepared
+
+Added:
+
+- `supabase/functions/g10-2-local-global-generics-evidence/index.ts`
+- `supabase/functions/g10-2-local-global-generics-evidence/index.test.ts`
+- `scripts/g10-2-local-global-generics-evidence.sh`
+
+The local-only evidence capture covers, in one bounded execution:
+
+```text
+Trendlyne calls = 3
+  1. annual fundamentals / ROCE / cash / leverage histories
+  2. quarterly margin histories
+  3. valuation + ownership histories
+
+Angel One historical calls = 5
+  AUROPHARMA
+  DRREDDY
+  LUPIN
+  ZYDUSLIFE
+  NIFTY Pharma
+
+Total estimated provider calls = 8
+```
+
+The runner derives read-only:
+
+- 12M return;
+- 6M return;
+- 1Y maximum drawdown;
+- annualized 1Y volatility;
+- AUROPHARMA relative strength vs NIFTY Pharma;
+- AUROPHARMA relative volatility vs NIFTY Pharma.
+
+The Trendlyne raw evidence result is captured in the same JSON response for deterministic parsing/scoring.
+
+### Explicit execution boundary
+
+PLAN consumes zero provider calls.
+
+EXECUTE requires:
+
+```text
+OWNER_CONFIRMED_G10_2_LOCAL_GLOBAL_GENERICS_EVIDENCE
+```
+
+This is deliberately separate from methodology approval because methodology approval does not itself authorize provider calls.
+
+### Safety
+
+- local execution only;
+- no canonical evidence promotion;
+- no production DB write;
+- no score persistence;
+- no recommendation persistence;
+- no position sizing;
+- no deployment;
+- no PR merge.
+
+### Current stop
+
+One bounded owner authorization is required for the local provider calls. After execution, continue directly to the consolidated AUROPHARMA evidence parsing, ten-dimension score, unchanged Gate I recommendation, one localhost result review and one final validation.
