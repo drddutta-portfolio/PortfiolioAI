@@ -27947,3 +27947,51 @@ NIFTY Pharma
 ### Current stop
 
 Pull the latest branch and rerun the single consolidated local evidence command once. If successful, proceed directly to deterministic parsing, ten-dimension AUROPHARMA score and unchanged Gate I recommendation.
+
+
+---
+
+## 324. Entry 319 — G10.2 preserved Trendlyne payload; market-only local resume prepared
+
+**Date:** 21 September 2026
+
+The replacement evidence run returned HTTP 502 only after all three Trendlyne calls had completed. Unlike the earlier failure, the function now preserved:
+
+```text
+completedTrendlyneCalls = 3
+partialTrendlyneResults = present
+```
+
+Therefore no further Trendlyne provider call is required or authorized.
+
+Added:
+
+- `scripts/g10-2-resume-public-market-evidence.py`
+- `scripts/g10-2-resume-public-market-evidence.sh`
+
+The resume workflow:
+
+- reuses the three preserved Trendlyne payloads from `/tmp/portfolioai-g10-2-auropharma-evidence.json`;
+- makes **zero** new Trendlyne calls;
+- fetches only the five missing public daily market histories directly from the user's Mac;
+- uses Yahoo Finance public chart history for:
+  - AUROPHARMA
+  - DRREDDY
+  - LUPIN
+  - ZYDUSLIFE
+  - NIFTY Pharma;
+- derives 12M return, 6M return, 1Y max drawdown, 1Y annualized volatility, AUROPHARMA relative strength and relative volatility;
+- writes the complete resumed evidence package to:
+  `/tmp/portfolioai-g10-2-auropharma-evidence-complete.json`.
+
+Safety remains:
+
+- new Trendlyne calls = 0;
+- Angel One historical calls = 0;
+- production writes = 0;
+- canonical promotion = 0;
+- score persistence = 0;
+- deployment = NO;
+- PR merge = NO.
+
+**CURRENT STOP:** owner should pull and run the market-only resume command. If it passes, proceed directly to parsing/scoring.
