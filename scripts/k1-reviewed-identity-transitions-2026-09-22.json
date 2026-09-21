@@ -1,0 +1,15 @@
+{
+  "contract": "PORTFOLIOAI_K1_REVIEWED_IDENTITY_TRANSITIONS_V1",
+  "asOfDate": "2026-09-22",
+  "transitions": [
+    {
+      "symbol": "ANGELONE",
+      "fromIsin": "INE732I01013",
+      "toIsin": "INE732I01021",
+      "effectiveDate": "2026-02-26",
+      "reason": "NSE-notified ISIN change following subdivision of equity shares from face value Rs. 10 to Re. 1",
+      "reviewState": "VERIFIED_OFFICIAL_CORPORATE_ACTION",
+      "evidenceUrl": "https://nsearchives.nseindia.com/content/circulars/CML72914.pdf"
+    }
+  ]
+}
