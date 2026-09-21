@@ -14,6 +14,7 @@ describe("Gate J reference classification registry", () => {
         lockMode: "NEW_LOCK",
       }),
     )
+    expect(pharmaGateJReferenceClassification("biocon")?.materialOverlays).toEqual(["CDMO_CRAMS", "GLOBAL_GENERICS"])
   })
 
   it("exposes G10.2 AUROPHARMA as a re-confirmation without resolving Biosimilars", () => {
@@ -40,7 +41,6 @@ describe("Gate J reference classification registry", () => {
         checkpoint: "A",
         symbol: "BIOCON",
         primary: "BIOPHARMA_BIOSIMILARS",
-        materialOverlays: expect.arrayContaining(["GLOBAL_GENERICS", "CDMO_CRAMS"]),
         emergingWatches: [],
         unresolvedExposures: [],
         lockMode: "NEW_LOCK",
