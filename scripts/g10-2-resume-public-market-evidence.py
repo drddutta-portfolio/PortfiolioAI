@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import http.cookiejar
 import json
 import math
 import statistics
@@ -9,20 +10,13 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 SOURCE = Path("/tmp/portfolioai-g10-2-auropharma-evidence.json")
 OUTPUT = Path("/tmp/portfolioai-g10-2-auropharma-evidence-complete.json")
 
-TICKERS = {
-    "AUROPHARMA": "AUROPHARMA.NS",
-    "DRREDDY": "DRREDDY.NS",
-    "LUPIN": "LUPIN.NS",
-    "ZYDUSLIFE": "ZYDUSLIFE.NS",
-    "NIFTY_PHARMA": "^CNXPHARMA",
-}
-
+STOCKS = ("AUROPHARMA", "DRREDDY", "LUPIN", "ZYDUSLIFE")
 REQUIRED_TRENDLYNE = {
     "ANNUAL_FUNDAMENTALS",
     "QUARTERLY_MARGIN_HISTORY",
@@ -30,6 +24,18 @@ REQUIRED_TRENDLYNE = {
 }
 
 DAY = 86400
+NSE_HOME = "https://www.nseindia.com"
+NSE_EQUITY_API = NSE_HOME + "/api/NextApi/apiClient/GetQuoteApi"
+NSE_INDEX_API = NSE_HOME + "/api/historicalOR/indicesHistory"
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                  "AppleWebKit/537.36 (KHTML, like Gecko) "
+                  "Chrome/152.0.0.0 Safari/537.36",
+    "Accept": "application/json,text/plain,*/*",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://www.nseindia.com/get-quotes/equity?symbol=AUROPHARMA",
+}
 
 
 def fail(message: str) -> None:
@@ -55,53 +61,127 @@ def load_partial() -> dict:
     return results
 
 
-def fetch_chart(ticker: str) -> list[tuple[int, float]]:
-    encoded = urllib.parse.quote(ticker, safe="")
-    last_error = "UNKNOWN"
-    for host in ("query1.finance.yahoo.com", "query2.finance.yahoo.com"):
-        url = (
-            f"https://{host}/v8/finance/chart/{encoded}"
-            "?range=2y&interval=1d&events=history&includeAdjustedClose=false"
+class NseSession:
+    def __init__(self) -> None:
+        self.cookies = http.cookiejar.CookieJar()
+        self.opener = urllib.request.build_opener(
+            urllib.request.HTTPCookieProcessor(self.cookies)
         )
-        for attempt in range(1, 4):
-            req = urllib.request.Request(
-                url,
-                headers={
-                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                                  "AppleWebKit/537.36 Chrome/152 Safari/537.36",
-                    "Accept": "application/json,text/plain,*/*",
-                    "Accept-Language": "en-US,en;q=0.9",
+        self._prime()
+
+    def _request(self, url: str, params: dict[str, str] | None = None) -> object:
+        target = url
+        if params:
+            target += "?" + urllib.parse.urlencode(params)
+        req = urllib.request.Request(target, headers=HEADERS)
+        try:
+            with self.opener.open(req, timeout=30) as response:
+                body = response.read().decode("utf-8")
+                return json.loads(body)
+        except urllib.error.HTTPError as exc:
+            if exc.code in (401, 403):
+                self.cookies.clear()
+                self._prime()
+                req = urllib.request.Request(target, headers=HEADERS)
+                with self.opener.open(req, timeout=30) as response:
+                    return json.loads(response.read().decode("utf-8"))
+            raise
+
+    def _prime(self) -> None:
+        req = urllib.request.Request(NSE_HOME + "/option-chain", headers=HEADERS)
+        try:
+            with self.opener.open(req, timeout=30) as response:
+                response.read(256)
+        except urllib.error.HTTPError as exc:
+            fail(f"NSE cookie bootstrap failed: HTTP {exc.code}")
+        except Exception as exc:
+            fail(f"NSE cookie bootstrap failed: {type(exc).__name__}")
+
+    def equity_history(
+        self, symbol: str, from_date: date, to_date: date
+    ) -> list[tuple[int, float]]:
+        rows: list[tuple[int, float]] = []
+        current = from_date
+        while current <= to_date:
+            chunk_end = min(current + timedelta(days=99), to_date)
+            payload = self._request(
+                NSE_EQUITY_API,
+                {
+                    "functionName": "getHistoricalTradeData",
+                    "symbol": symbol,
+                    "series": "EQ",
+                    "fromDate": current.strftime("%d-%m-%Y"),
+                    "toDate": chunk_end.strftime("%d-%m-%Y"),
                 },
             )
-            try:
-                with urllib.request.urlopen(req, timeout=30) as response:
-                    body = json.loads(response.read().decode("utf-8"))
-                chart = body.get("chart") or {}
-                if chart.get("error"):
-                    last_error = "YAHOO_PROVIDER_ERROR"
-                    break
-                result = (chart.get("result") or [None])[0]
-                if not isinstance(result, dict):
-                    last_error = "YAHOO_RESULT_MISSING"
-                    break
-                timestamps = result.get("timestamp") or []
-                quote = (((result.get("indicators") or {}).get("quote") or [{}])[0])
-                closes = quote.get("close") or []
-                rows = []
-                for ts, close in zip(timestamps, closes):
-                    if isinstance(ts, (int, float)) and isinstance(close, (int, float)) and close > 0:
-                        rows.append((int(ts), float(close)))
-                rows.sort()
-                if len(rows) < 120:
-                    last_error = f"YAHOO_HISTORY_INSUFFICIENT_{len(rows)}"
-                    break
-                return rows
-            except urllib.error.HTTPError as exc:
-                last_error = f"YAHOO_HTTP_{exc.code}"
-            except Exception as exc:
-                last_error = f"YAHOO_{type(exc).__name__.upper()}"
-            time.sleep(attempt * 2)
-    fail(f"Public market history failed for {ticker}: {last_error}")
+            data = payload.get("data", payload) if isinstance(payload, dict) else payload
+            if not isinstance(data, list):
+                fail(f"NSE equity response shape invalid for {symbol}.")
+            for item in data:
+                if not isinstance(item, dict):
+                    continue
+                raw_date = item.get("CH_TIMESTAMP") or item.get("mTIMESTAMP")
+                raw_close = item.get("CH_CLOSING_PRICE")
+                if raw_date is None or raw_close is None:
+                    continue
+                parsed = None
+                for fmt in ("%Y-%m-%d", "%d-%b-%Y"):
+                    try:
+                        parsed = datetime.strptime(str(raw_date), fmt).date()
+                        break
+                    except ValueError:
+                        pass
+                if parsed is None:
+                    continue
+                try:
+                    close = float(raw_close)
+                except (TypeError, ValueError):
+                    continue
+                if close <= 0:
+                    continue
+                ts = int(datetime(parsed.year, parsed.month, parsed.day, tzinfo=timezone.utc).timestamp())
+                rows.append((ts, close))
+            current = chunk_end + timedelta(days=1)
+            time.sleep(0.4)
+        return sorted(set(rows))
+
+    def index_history(
+        self, index_name: str, from_date: date, to_date: date
+    ) -> list[tuple[int, float]]:
+        rows: list[tuple[int, float]] = []
+        current = from_date
+        while current <= to_date:
+            chunk_end = min(current + timedelta(days=364), to_date)
+            payload = self._request(
+                NSE_INDEX_API,
+                {
+                    "indexType": index_name.upper(),
+                    "from": current.strftime("%d-%m-%Y"),
+                    "to": chunk_end.strftime("%d-%m-%Y"),
+                },
+            )
+            data = payload.get("data") if isinstance(payload, dict) else None
+            if not isinstance(data, list):
+                fail(f"NSE index response shape invalid for {index_name}.")
+            for item in data:
+                if not isinstance(item, dict):
+                    continue
+                raw_date = item.get("EOD_TIMESTAMP")
+                raw_close = item.get("EOD_CLOSE_INDEX_VAL")
+                if raw_date is None or raw_close is None:
+                    continue
+                try:
+                    parsed = datetime.strptime(str(raw_date), "%d-%b-%Y").date()
+                    close = float(raw_close)
+                except (TypeError, ValueError):
+                    continue
+                if close <= 0:
+                    continue
+                ts = int(datetime(parsed.year, parsed.month, parsed.day, tzinfo=timezone.utc).timestamp())
+                rows.append((ts, close))
+            current = chunk_end + timedelta(days=1)
+            time.sleep(0.4)
+        return sorted(set(rows))
 
 
 def nearest_before(rows: list[tuple[int, float]], target_ts: int) -> tuple[int, float]:
@@ -115,6 +195,8 @@ def nearest_before(rows: list[tuple[int, float]], target_ts: int) -> tuple[int, 
 
 
 def metrics(rows: list[tuple[int, float]]) -> dict:
+    if len(rows) < 120:
+        fail(f"Market history insufficient: only {len(rows)} rows.")
     end_ts, end_close = rows[-1]
     start12_ts, start12 = nearest_before(rows, end_ts - 365 * DAY)
     start6_ts, start6 = nearest_before(rows, end_ts - 182 * DAY)
@@ -146,17 +228,22 @@ def metrics(rows: list[tuple[int, float]]) -> dict:
 
 def main() -> None:
     trendlyne = load_partial()
-    market = {}
-
     print("Reusing 3 preserved Trendlyne results — no new Trendlyne call.")
-    for index, (symbol, ticker) in enumerate(TICKERS.items(), start=1):
-        print(f"[{index}/5] Fetching public daily market history: {symbol}")
-        market[symbol] = metrics(fetch_chart(ticker))
-        if index < len(TICKERS):
-            time.sleep(1)
+    print("Yahoo returned HTTP 429, so market history will use NSE public historical APIs.")
+
+    end = date.today()
+    start = end - timedelta(days=400)
+    nse = NseSession()
+
+    market = {}
+    for index, symbol in enumerate(STOCKS, start=1):
+        print(f"[{index}/5] Fetching NSE daily history: {symbol}")
+        market[symbol] = metrics(nse.equity_history(symbol, start, end))
+
+    print("[5/5] Fetching NSE index history: NIFTY PHARMA")
+    benchmark = metrics(nse.index_history("NIFTY PHARMA", start, end))
 
     auro = market["AUROPHARMA"]
-    benchmark = market["NIFTY_PHARMA"]
 
     output = {
         "mode": "G10_2_GLOBAL_GENERICS_EVIDENCE_CAPTURE_RESUMED",
@@ -165,10 +252,10 @@ def main() -> None:
         "benchmark": "NIFTY_PHARMA",
         "trendlyneCallsThisRun": 0,
         "reusedTrendlyneResults": 3,
-        "publicMarketHistoryCalls": 5,
-        "marketHistorySource": "YAHOO_FINANCE_PUBLIC_CHART_LOCAL_HOST",
+        "publicMarketHistoryReads": 5,
+        "marketHistorySource": "NSE_PUBLIC_HISTORICAL_APIS",
         "trendlyneResults": trendlyne,
-        "market": {key: value for key, value in market.items() if key != "NIFTY_PHARMA"},
+        "market": market,
         "benchmarkMarket": benchmark,
         "auropharmaRelativeStrength12mPercent":
             auro["return12mPercent"] - benchmark["return12mPercent"],
@@ -176,7 +263,7 @@ def main() -> None:
             auro["volatility1YPercent"] / benchmark["volatility1YPercent"],
         "productionWrites": 0,
         "scoreRuns": 0,
-        "note": "Resumed from preserved Trendlyne payload; market history fetched read-only from local host. No canonical promotion or persistence.",
+        "note": "Resumed from preserved Trendlyne payload; market history fetched read-only from NSE public historical APIs. No canonical promotion or persistence.",
     }
 
     OUTPUT.write_text(json.dumps(output, indent=2), encoding="utf-8")
