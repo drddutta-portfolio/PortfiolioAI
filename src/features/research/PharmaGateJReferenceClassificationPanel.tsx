@@ -5,6 +5,9 @@ import { ALIVUS_G10_1_READ_ONLY_RECOMMENDATION } from "./alivusG101Recommendatio
 import { PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE } from "./pharmaGlobalGenericsG102MethodologyCompletionCandidate"
 import { PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY } from "./pharmaGlobalGenericsG102NumericMethodology"
 import { AUROPHARMA_G10_2_FINAL_RESULT } from "./auropharmaG102FinalResult"
+import { BIOCON_G10_3_CHECKPOINT_B_EVIDENCE } from "./bioconG103CheckpointBEvidence"
+import { BIOCON_G10_3_FINAL_RESULT } from "./bioconG103FinalResult"
+import { PHARMA_BIOSIMILARS_G10_3_METHODOLOGY } from "./pharmaBiosimilarsG103Methodology"
 
 function displayName(code: keyof typeof PHARMA_SUBPROFILE_CONTRACTS) {
   return PHARMA_SUBPROFILE_CONTRACTS[code].displayName
@@ -22,6 +25,7 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
   const isReconfirmation = review.lockMode === "RECONFIRM_EXISTING_LOCK"
   const renderAlivusCheckpointB = review.symbol === "ALIVUS"
   const renderAuropharmaCheckpointB = review.symbol === "AUROPHARMA"
+  const renderBioconCheckpointB = review.symbol === "BIOCON"
   const globalCandidate = PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE
   const approvedGlobalMethod = PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY
   const finalAuroResult = AUROPHARMA_G10_2_FINAL_RESULT
@@ -124,6 +128,43 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
             </article>)}
           </div>
           <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> CDMO remains Emerging Watch and numerically excluded. Score/recommendation persistence, weight guidance, action bias, position sizing and AI interpretation remain off.</p>
+        </section>
+      : null}
+
+
+    {renderBioconCheckpointB
+      ? <section className="pharma-persistence-package" aria-labelledby="gate-j-biosimilars-checkpoint-b-title">
+          <div className="pharma-evidence-pilot-head">
+            <div>
+              <p className="eyebrow">Gate J · G10.3 · Checkpoint B</p>
+              <h3 id="gate-j-biosimilars-checkpoint-b-title">Biosimilars controlled-expansion result</h3>
+              <p>The Biosimilars-primary methodology and bounded issuer evidence package have been applied without borrowing bands from another subprofile. Mandatory evidence gaps keep the ten-dimension score fail-closed.</p>
+            </div>
+            <span className="pharma-workspace-lock">Checkpoint B candidate · Fail-closed outcome</span>
+          </div>
+
+          <div className="pharma-persistence-package-summary">
+            <div><span>Methodology</span><strong>Biosimilars-specific</strong><small>{PHARMA_BIOSIMILARS_G10_3_METHODOLOGY.dimensionContracts.length}/10 dimension contracts defined</small></div>
+            <div><span>Material Overlays</span><strong>Global Generics · CDMO / CRAMS</strong><small>Context only · no independent score</small></div>
+            <div><span>Evidence through</span><strong>{BIOCON_G10_3_CHECKPOINT_B_EVIDENCE.evidenceThrough}</strong><small>Issuer-official bounded package</small></div>
+            <div><span>Current score state</span><strong>{BIOCON_G10_3_FINAL_RESULT.scoreState.replaceAll("_", " ")}</strong><small>Gate I recommendation not executed</small></div>
+          </div>
+
+          <div className="research-callout research-callout-neutral">
+            <strong>Deterministic fail-closed result</strong>
+            <p>No partial BIOCON score is reconstructed. Both Material Overlays remain visible, and the existence of a Biosimilars methodology does not resolve AUROPHARMA&apos;s company-specific unresolved Biosimilars exposure.</p>
+          </div>
+
+          <div className="pharma-persistence-package-grid">
+            {BIOCON_G10_3_FINAL_RESULT.blockerGroups.map((blocker) => <article key={blocker.code}>
+              <strong>{blocker.code.replaceAll("_", " ")}</strong>
+              <small>MANDATORY BLOCKER</small>
+              <p>{blocker.details.join(" ")}</p>
+              <span>No substitution · no renormalization</span>
+            </article>)}
+          </div>
+
+          <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> Gate I policy remains unchanged and is not executed without a complete ten-dimension score. Score/recommendation persistence, sizing, AI interpretation, production mutation, deployment and PR merge remain off.</p>
         </section>
       : null}
 
