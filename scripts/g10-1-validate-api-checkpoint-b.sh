@@ -56,7 +56,7 @@ git diff --check "${G10_1_B_BASE_SHA}"..HEAD
 
 echo
 echo "G10.1 CHECKPOINT B CANDIDATE VALIDATION PASS"
-echo "ALIVUS score: 76.6725"
+echo "ALIVUS score: 76.7225"
 echo "Gate I role: SATELLITE_CANDIDATE"
 echo "Valuation caution: YES"
 echo "CDMO Emerging numeric participation: NO"
