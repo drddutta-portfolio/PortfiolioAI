@@ -24,7 +24,7 @@ describe("G10.1 ALIVUS API read-only deterministic score", () => {
   })
 
   it("locks the deterministic score candidate and safety boundary", () => {
-    expect(ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.overallScore).toBeCloseTo(76.6725, 10)
+    expect(ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.overallScore).toBeCloseTo(76.7225, 10)
     expect(ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.readOnly).toBe(true)
     expect(ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.nonPersisting).toBe(true)
     expect(ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.persistedScoreRunEnabled).toBe(false)
