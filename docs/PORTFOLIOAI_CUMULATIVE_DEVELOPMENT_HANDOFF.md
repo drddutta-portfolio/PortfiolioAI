@@ -27293,3 +27293,49 @@ G10.2 Checkpoint B = NOT STARTED
 ```
 
 Do not start Checkpoint B until the consolidated Checkpoint A validator passes on the corrected head.
+
+
+---
+
+## 314. Entry 309 — G10.2 Checkpoint A second validation diagnostic — panel test isolation corrected
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Previous head:** `6601f785bb23b3cb9821cbe0bb4d0fb8239ea33e`
+**Test-isolation fix commit:** `aa433f28c8f7b499818a91f77bf5c47e60666421`
+
+The consolidated validator still reported one AUROPHARMA panel-test failure after the earlier duplicate-label assertion fix.
+
+The exact failure was:
+
+```text
+expected document not to contain element, found:
+API methodology → score → Gate I recommendation
+```
+
+This did not indicate that AUROPHARMA rendered the ALIVUS Checkpoint B block in the application. The component guard remains:
+
+```text
+renderAlivusCheckpointB = review.symbol === "ALIVUS"
+```
+
+The test used global `screen` queries across sequential renders. In this test environment, the previous ALIVUS render remained visible to global document queries, so the AUROPHARMA assertion incorrectly found the earlier ALIVUS Checkpoint B heading.
+
+The panel test was corrected to scope every assertion to the container returned by that individual `render(...)` via Testing Library `within(container)`.
+
+No application logic, classification, methodology, scoring, recommendation, persistence, or production state changed.
+
+### Current stop
+
+```text
+G10.2 Checkpoint A implementation = PASS
+G10.2 Checkpoint A localhost visual review = PASS
+Duplicate-label test defect = CORRECTED
+Cross-test DOM contamination = CORRECTED
+G10.2 Checkpoint A consolidated revalidation = PENDING
+G10.2 Checkpoint A formal closure = PENDING
+G10.2 Checkpoint B = NOT STARTED
+```
+
+Do not begin Checkpoint B until the consolidated validator passes on the corrected head.
