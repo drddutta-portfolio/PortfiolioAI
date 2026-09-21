@@ -385,3 +385,114 @@ Deployment                  = NO
 PR merge                    = NO
 Automatic trading           = NO
 ```
+
+
+---
+
+## 12. Reconciliation tooling completed
+
+K1 now includes a reusable canonical-vs-official comparison path.
+
+### Canonical snapshot
+
+Added:
+
+`scripts/k1-current-canonical-classification.sql`
+
+The query is SELECT-only and exports the current active portfolio's NSE equity classification state with:
+
+- symbol;
+- security id;
+- ISIN;
+- canonical sector / industry;
+- enrichment state;
+- selected sector / industry evidence source;
+- selected evidence state.
+
+Example:
+
+```bash
+mkdir -p artifacts
+psql "$DATABASE_URL" -Atf scripts/k1-current-canonical-classification.sql \
+  > artifacts/k1-current-canonical-classification.json
+```
+
+This command is intentionally not embedded in an automatic workflow because K1 does not authorize unattended production access.
+
+### Deterministic comparator
+
+Added:
+
+`scripts/k1-compare-nse-classification.mjs`
+
+Inputs:
+
+```text
+artifacts/k1-current-canonical-classification.json
+artifacts/k1-nse-primary-classification.json
+```
+
+Outputs:
+
+`artifacts/k1-nse-classification-reconciliation.json`
+
+Per-security states:
+
+```text
+AGREE
+DETAIL_MISSING
+CHANGE_REQUIRED
+REVIEW_REQUIRED
+OFFICIAL_MISSING
+```
+
+Rules:
+
+- canonical sector == NSE sector → sector agrees;
+- canonical industry missing while NSE industry exists → `DETAIL_MISSING`;
+- canonical sector / industry differs from NSE → `CHANGE_REQUIRED`;
+- ISIN mismatch → `REVIEW_REQUIRED`;
+- official NSE classification unavailable → `OFFICIAL_MISSING`;
+- an official symbol outside the current canonical cohort → `REVIEW_REQUIRED`.
+
+The comparator never writes the database.
+
+Run:
+
+```bash
+node scripts/k1-compare-nse-classification.mjs \
+  --canonical artifacts/k1-current-canonical-classification.json \
+  --official artifacts/k1-nse-primary-classification.json \
+  --output artifacts/k1-nse-classification-reconciliation.json
+```
+
+### Comparator tests
+
+Added:
+
+`scripts/k1-compare-nse-classification.test.mjs`
+
+The consolidated K1 validator now includes these tests plus syntax checks for both classification scripts.
+
+### Future holdings
+
+The same reconciliation contract applies to newly added securities:
+
+```text
+new NSE equity
+→ no official snapshot row yet
+→ AWAITING_OFFICIAL_EXCHANGE_CLASSIFICATION
+→ research blocked
+→ official NSE evidence acquired/reviewed
+→ canonical primary sector decision
+→ supported engine OR METHODOLOGY_NOT_AVAILABLE
+
+new BSE-only equity
+→ same contract using BSE official evidence
+
+new ETF/fund
+→ company-sector NOT_APPLICABLE
+→ no nearest equity-sector fallback
+```
+
+No new stock can silently inherit a methodology from its ticker, theme, company name or nearest existing sector.
