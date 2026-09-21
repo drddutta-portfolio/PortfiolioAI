@@ -27056,3 +27056,92 @@ G10.2 = NOT STARTED
 ```
 
 Run the consolidated Checkpoint B validator only after pulling this correction.
+
+
+---
+
+## 311. Entry 306 — G10.1 COMPLETE / PASS — API_BULK_DRUGS reference architecture closed
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Validated head before closure record:** `ac369069123494ae037139b39a5b176615117f91`
+
+The owner reported **ALL PASS** for the final consolidated G10.1 Checkpoint B validator after the localhost visual review had already passed.
+
+### Final validated API reference result
+
+```text
+Reference company          ALIVUS
+Primary subprofile         API_BULK_DRUGS
+Material Overlay           none
+Emerging Watch             CDMO_CRAMS
+
+QUALITY                     94.00
+GROWTH                      69.25
+CAPITAL_EFFICIENCY          84.00
+CASH_FLOW                   70.75
+BALANCE_SHEET_CREDIT        95.00
+BUSINESS_DURABILITY         83.00
+VALUATION                   35.00
+MOMENTUM                   100.00
+OWNERSHIP_GOVERNANCE        75.00
+RISK                        69.00
+
+Overall                     76.7225
+Gate I role                 SATELLITE_CANDIDATE
+Valuation caution           YES
+```
+
+### Validation result
+
+```text
+Focused API methodology tests          PASS
+ALIVUS deterministic score tests       PASS
+Gate I recommendation tests            PASS
+Domestic/API isolation regressions     PASS
+TORNTPHARM control regressions         PASS
+AUROPHARMA fail-closed regressions      PASS
+Full non-Edge app suite                PASS
+Strict TypeScript                      PASS
+Architecture guard                     PASS
+Focused lint                           PASS
+Architecture lint                      PASS
+Production build                       PASS
+git diff --check                       PASS
+```
+
+### Safety closure
+
+```text
+CDMO Emerging numeric participation = NO
+Second independent score = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Weight guidance = OFF
+Action bias = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production mutation = NO
+Deployment = NO
+PR merge = NO
+```
+
+### Formal closure
+
+```text
+G10.1 Checkpoint A = COMPLETE / PASS
+G10.1 Checkpoint B = COMPLETE / PASS
+G10.1 = COMPLETE / PASS
+API_BULK_DRUGS reference architecture = COMPLETE
+```
+
+### Next stage
+
+```text
+G10.2 — GLOBAL_GENERICS / AUROPHARMA
+Checkpoint A = NOT STARTED
+Checkpoint B = NOT STARTED
+```
+
+G10.2 Checkpoint A is a short classification re-confirmation only. AUROPHARMA's reviewed Global Generics primary classification is not to be rebuilt from scratch, and its unresolved Biosimilars exposure must remain unresolved unless separately reviewed.
