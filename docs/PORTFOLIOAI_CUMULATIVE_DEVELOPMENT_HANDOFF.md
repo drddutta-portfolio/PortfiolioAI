@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS (I1–I4 COMPLETE); PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 PHARMA_V1 Controlled Expansion PLAN ADOPTED; G10.1 Checkpoint A NOT STARTED; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -26324,3 +26324,336 @@ PR #101 = OPEN / DRAFT / UNMERGED
 ```
 
 Gate I is closed. Any persistence / portfolio-aware recommendation / sizing work must be a separate downstream gate.
+
+
+---
+
+## 306. Entry 301 — Gate J / G10 PHARMA_V1 Controlled Expansion plan adopted
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Starting head after Gate I closure:** `4f89f025b21aee3698a2df771adf173a97589c7b`
+**Gate I state:** COMPLETE / PASS
+**Gate J identity:** Gate J = G10 — PHARMA_V1 Controlled Expansion
+**Plan file prepared for owner:** `PortfolioAI_GATE_J_G10_PHARMA_V1_CONTROLLED_EXPANSION_PLAN.md`
+
+### Last completed build carried forward
+
+Gate I closed successfully with:
+
+```text
+TORNTPHARM
+  Score = 75.1575
+  Role = SATELLITE_CANDIDATE
+
+AUROPHARMA
+  Score state = SCORE_NOT_COMPUTABLE
+  Role = INSUFFICIENT
+  No score reconstruction
+```
+
+Gate I independent verification passed:
+
+- hand role = SATELLITE_CANDIDATE;
+- adapter role = SATELLITE_CANDIDATE;
+- Gate H score 75.1575 preserved exactly;
+- all ten Gate H dimensions preserved exactly;
+- AUROPHARMA fail-closed control preserved;
+- no BANK_NBFC / NIFTY Bank / HDFCBANK leakage;
+- no Global Generics second recommendation;
+- no CDMO Emerging numeric role input;
+- no governance double counting;
+- repeated output identical;
+- recommendation persistence OFF;
+- score persistence OFF;
+- weight guidance OFF;
+- action bias OFF;
+- position sizing OFF;
+- AI interpretation OFF;
+- provider invocation NO;
+- production mutation NO.
+
+The permanent UI composition remains:
+
+```text
+Universal stock/research core shell
+    ->
+sector/profile-oriented add-ons
+```
+
+### Gate J / G10 hard cap
+
+Gate J is the controlled expansion gate already anticipated by the R4N execution sequence.
+
+The adopted hard cap is:
+
+```text
+G10.1 — API_BULK_DRUGS
+G10.2 — GLOBAL_GENERICS / AUROPHARMA
+G10.3 — BIOPHARMA_BIOSIMILARS
+G10.4 — CDMO_CRAMS
+G10-FINAL — cross-subprofile portability/isolation closure
+```
+
+There is no G10.5.
+
+TORNTPHARM remains the permanent `DOMESTIC_FORMULATIONS` control and is not rebuilt as another G10 stage.
+
+No G10.1A/G10.1B-style stage proliferation is allowed unless a genuine structural blocker is discovered.
+
+### Permanent internal shape of each G10.x
+
+Each G10.x remains one stage but has two mandatory internal checkpoints.
+
+#### Checkpoint A — Classification Lock
+
+Before methodology/scoring work:
+
+- select or re-confirm the reference company;
+- establish a `REVIEWED` primary subprofile assignment;
+- verify dominant primary economics and disclosure sufficiency;
+- check classification-driving figures for one-off, acquisition/divestiture, abnormal-base and accounting/reclassification distortion;
+- lock classification before any score becomes visible.
+
+A locked classification cannot be revised merely because the resulting score or recommendation is inconvenient.
+
+Reclassification is allowed only through new material business evidence and a separately documented/versioned classification decision.
+
+#### Checkpoint B — Methodology + Evidence + Score + Recommendation + Validation
+
+For the locked reference:
+
+- define only the subprofile-specific evidence delta/override to PHARMA_V1;
+- retain the common ten-dimension scoring spine;
+- compute one deterministic read-only score;
+- apply the owner-approved Gate I recommendation policy unchanged;
+- run one consolidated validation;
+- perform localhost visual review only when UI changes materially.
+
+### Gate I safety regression required in every G10.x
+
+Every stage must explicitly preserve:
+
+```text
+missing required floor
+→ INSUFFICIENT
+
+Core floor fail
+→ Core ineligible
+→ continue to Satellite
+
+Satellite floor fail
+→ Satellite ineligible
+→ continue to Watch when otherwise eligible
+
+floor failure alone
+→ NEVER creates AVOID
+
+AVOID
+→ only fully evaluable overall score < 50
+```
+
+Also required every stage:
+
+- overlay cannot create an independent score or role;
+- Emerging Watch cannot silently become primary numeric input;
+- null/missing required input fails closed;
+- no incomplete-score reconstruction;
+- no denominator renormalization;
+- zero recommendation/score writes;
+- recommendation persistence OFF;
+- score persistence OFF;
+- weight guidance OFF;
+- action bias OFF;
+- AI interpretation OFF;
+- position sizing OFF.
+
+### Incremental isolation rule
+
+Isolation is proven at each stage, not deferred to G10-FINAL.
+
+```text
+G10.1 checks against Domestic
+G10.2 checks against Domestic + API
+G10.3 checks against Domestic + API + Global Generics
+G10.4 checks against all four prior subprofiles
+```
+
+G10-FINAL is confirmation, not first discovery.
+
+### Shell continuity rule
+
+Previously validated reference outputs must preserve canonical-result equivalence when the universal shell gains a new subprofile configuration/contract.
+
+Exact canonical values/states/reason codes/dimensions/overlay semantics/safety flags must remain unchanged unless a stage explicitly and correctly supersedes them.
+
+Deterministic serialized fixtures should remain byte-identical after excluding explicitly non-semantic metadata such as timestamps, generated IDs or presentation-only ordering.
+
+### G10.1 — API / Bulk Drugs
+
+New reference company.
+
+Methodology delta will cover, where applicable:
+
+- API/product concentration;
+- regulated-market exposure;
+- backward integration;
+- capacity utilization/economics;
+- pricing/cycle sensitivity;
+- customer concentration;
+- regulatory/site exposure;
+- API-appropriate valuation.
+
+First portability question: can the common PHARMA_V1 spine consume API economics without importing Domestic Formulations assumptions?
+
+### G10.2 — Global Generics / AUROPHARMA
+
+AUROPHARMA is the reference.
+
+Checkpoint A is a short classification re-confirmation because its Global Generics primary classification was already reviewed.
+
+Proof target:
+
+```text
+SCORE_NOT_COMPUTABLE
+        ↓
+complete Global Generics methodology + evidence
+        ↓
+real deterministic PHARMA_V1 score
+        ↓
+Gate I recommendation
+```
+
+No partial-score reconstruction is allowed.
+
+### G10.3 — Biopharma / Biosimilars
+
+New reference company.
+
+Pipeline/development quality, commercialized biosimilars, approvals/launches, partnered-vs-owned economics, R&D productivity, development risk, manufacturing capability and valuation must map through approved contracts into the existing ten dimensions.
+
+No qualitative pipeline bonus is allowed.
+
+Critical isolation rule:
+
+```text
+methodology exists
+!=
+company exposure automatically resolved
+```
+
+Completing the Biosimilars methodology elsewhere must not silently resolve AUROPHARMA's unresolved Biosimilars exposure without an AUROPHARMA-specific classification review.
+
+### G10.4 — CDMO / CRAMS
+
+New reference company.
+
+Methodology delta will cover, where applicable:
+
+- customer concentration;
+- project/order visibility;
+- development vs commercial mix;
+- capacity/capex;
+- molecule/project lifecycle;
+- client stickiness;
+- manufacturing/regulatory quality;
+- margin/ROCE progression;
+- CDMO-appropriate valuation.
+
+### G10-FINAL — closure
+
+All five references run together.
+
+Final verification covers:
+
+- cross-subprofile isolation;
+- deterministic reproduction;
+- overlay/emerging-watch isolation;
+- missing-evidence fail-closed semantics;
+- universal shell continuity;
+- AUROPHARMA Biosimilars remains unresolved unless separately reviewed.
+
+### Gate I recommendation portability falsification
+
+The Gate I policy remains the default common recommendation policy.
+
+Portability is tested using:
+
+1. five real reference companies; and
+2. deterministic boundary fixtures for every subprofile around:
+
+```text
+79.9 / 80.0
+64.9 / 65.0
+49.9 / 50.0
+
+Core floor exactly 75 / just below 75
+Satellite floor exactly 50 / just below 50
+
+missing mandatory floor
+evaluated failed floor
+governance REVIEW_REQUIRED
+governance INTERPRETATION_ONLY_HIGH_RISK
+valuation < 50
+momentum < 50
+```
+
+If portability is falsified, the first question is whether dimension normalization is wrong.
+
+No subprofile-specific threshold may be introduced silently. A genuine contradiction becomes a named methodology blocker requiring separate owner approval.
+
+### Gate J safety boundary
+
+Gate J remains read-only / non-persisting.
+
+Starting Gate J or a G10 stage does not authorize:
+
+- score persistence;
+- recommendation persistence/history;
+- weight guidance;
+- action bias;
+- AI interpretation;
+- position sizing;
+- user portfolio mutation;
+- provider calls without separate approval;
+- production evidence promotion without separate approval;
+- production Supabase mutation without explicit authorization;
+- deployment;
+- PR #101 merge;
+- automatic trading;
+- broad cohort rollout before reference-architecture closure.
+
+### Gate J closure target
+
+```text
+PHARMA_V1
+├── DOMESTIC_FORMULATIONS      COMPLETE (TORNTPHARM)
+├── API_BULK_DRUGS             COMPLETE
+├── GLOBAL_GENERICS            COMPLETE (AUROPHARMA)
+├── BIOPHARMA_BIOSIMILARS      COMPLETE
+└── CDMO_CRAMS                 COMPLETE
+
+Cross-subprofile portability   PASS
+Cross-subprofile isolation     PASS
+Universal Research shell       PRESERVED
+Gate I recommendation policy   PORTABLE / VERIFIED
+AUROPHARMA Biosimilars         STILL UNRESOLVED unless separately reviewed
+Reference architecture         COMPLETE
+```
+
+### Current stop point
+
+```text
+Gate H = COMPLETE / PASS
+Gate I = COMPLETE / PASS
+Gate J / G10 plan = ADOPTED
+G10.1 Checkpoint A = NOT STARTED
+PR #101 = OPEN / DRAFT / UNMERGED
+```
+
+The next development action, when explicitly instructed, is:
+
+> **G10.1 — API_BULK_DRUGS — Checkpoint A: Reference Company Selection & Classification Lock**
+
+No API scoring methodology should be written before that classification lock is complete.
