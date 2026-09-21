@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 CDMO_CRAMS / SYNGENE CHECKPOINT A COMPLETE / PASS; CHECKPOINT B NOT STARTED; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 CDMO_CRAMS / SYNGENE CHECKPOINT A COMPLETE / PASS; CHECKPOINT B CONSOLIDATED BUILD IMPLEMENTED / LOCAL UI + FULL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -29561,4 +29561,172 @@ No G10.5
 ```
 
 **Next action:** begin G10.4 Checkpoint B as one consolidated build: CDMO/CRAMS methodology + evidence + deterministic score/result + unchanged Gate I handling, with no extra micro-stages.
+
+---
+
+## 340. Entry 335 — G10.4 / SYNGENE Checkpoint B consolidated build implemented
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Checkpoint A authority:** COMPLETE / PASS / owner-approved
+
+Owner authorized:
+
+```text
+Begin G10.4 CHECKPOINT B
+```
+
+Checkpoint B is implemented as one consolidated package with no additional micro-stages.
+
+### Execution contract
+
+```text
+Primary methodology = CDMO_CRAMS only
+Reference company = SYNGENE
+Material Overlays = none
+Common PHARMA_V1 ten-dimension spine = preserved
+Gate I recommendation policy = unchanged
+Missing mandatory evidence = FAIL CLOSED
+Partial score reconstruction = prohibited
+Hidden renormalization = prohibited
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production mutation = NO
+Deployment = NO
+PR merge = NO
+```
+
+### Repository package
+
+Added:
+
+- `src/features/research/pharmaCdmoG104Methodology.ts`
+- `src/features/research/pharmaCdmoG104Methodology.test.ts`
+- `src/features/research/syngeneG104CheckpointBEvidence.ts`
+- `src/features/research/syngeneG104CheckpointBEvidence.test.ts`
+- `src/features/research/syngeneG104FinalResult.ts`
+- `src/features/research/syngeneG104FinalResult.test.ts`
+- `scripts/g10-4-validate-cdmo-checkpoint-b.sh`
+- `docs/PortfolioAI_GATE_J_G10_4_CDMO_CHECKPOINT_B.md`
+
+Updated:
+
+- `src/features/research/pharmaGateJReferenceClassification.ts`
+- `src/features/research/PharmaGateJReferenceClassificationPanel.tsx`
+- `src/features/research/PharmaGateJReferenceClassificationPanel.test.tsx`
+- this cumulative handoff.
+
+### CDMO/CRAMS methodology candidate
+
+The methodology defines all ten PHARMA_V1 dimensions specifically for a CDMO/CRAMS-primary company.
+
+Mandatory CDMO-specific evidence includes:
+
+- eight comparable quarterly operating-EBITDA-margin observations for Quality;
+- four comparable growth observations plus an approved revenue-visibility equivalent for Growth;
+- three comparable annual ROCE/ROIC periods with acquisition/CWIP treatment for Capital Efficiency;
+- three matched CFO/PAT/capex/FCF periods for Cash Flow;
+- three comparable annual borrowings/cash/earnings periods for Balance Sheet/Credit;
+- disclosed revenue visibility, client concentration and compatible capacity-utilization evidence for Business Durability;
+- current valuation + self-history + FCF corroboration for Valuation;
+- 12M + 6M + NIFTY Pharma-relative market history for Momentum;
+- four-quarter ownership + pledge/control context for Ownership/Governance;
+- client concentration + current site/quality + trailing market-risk evidence for Risk.
+
+The method explicitly rejects substitution of physical capacity additions for utilization and rejects qualitative pipeline language as a substitute for the approved revenue-visibility contract.
+
+### Bounded SYNGENE evidence package
+
+The bounded issuer package currently preserves evidence including:
+
+```text
+FY25 revenue growth = 4%
+FY25 operating EBITDA margin ≈ 29%
+FY25 operating cash flow = Rs 1,168 Cr
+FY25 net cash = Rs 1,279 Cr
+FY25 large-molecule revenue share = 25%
+FY25 small-molecule CDMO revenue share = 12%
+FY26 revenue from operations = Rs 37,387 Mn
+FY26 PAT before exceptional item = Rs 3,799 Mn
+FY26 active customers ≈ 400
+FY26 scientists = 5,778
+FY26 total workforce = 8,373
+reviewed R&D/manufacturing footprint ≈ 3 Mn sq. ft.
+U.S. biologics facility capacity = 20,000 litres
+```
+
+These observations remain evidence only. They do not create a partial score.
+
+### Deterministic candidate result
+
+Current result:
+
+```text
+SYNGENE G10.4 Checkpoint B
+State = COMPLETE_FAIL_CLOSED
+Score state = SCORE_NOT_COMPUTABLE
+Recommendation state = RECOMMENDATION_NOT_COMPUTABLE
+Gate I = NOT EXECUTED
+```
+
+Current blocker groups:
+
+1. eight-quarter margin history incomplete;
+2. capital-efficiency + matched cash-flow history incomplete;
+3. mandatory client-concentration + capacity-utilization evidence incomplete;
+4. valuation + momentum market package incomplete;
+5. four-quarter ownership normalization incomplete;
+6. client-concentration + trailing market-risk evidence incomplete.
+
+This is a deterministic fail-closed result, not a negative company score.
+
+### UI integration
+
+SYNGENE now renders a G10.4 Checkpoint B block in the existing Gate J area showing:
+
+- CDMO/CRAMS-specific methodology;
+- no Material Overlay;
+- evidence-through date;
+- `SCORE_NOT_COMPUTABLE`;
+- explicit blocker cards;
+- Gate I recommendation not executed;
+- persistence / sizing / AI / production / deployment / merge off.
+
+### Consolidated validator
+
+Added:
+
+`scripts/g10-4-validate-cdmo-checkpoint-b.sh`
+
+It runs eight consolidated groups:
+
+1. CDMO methodology + SYNGENE evidence/final-result tests;
+2. Gate I + prior Gate J isolation controls;
+3. full non-Edge application suite;
+4. strict TypeScript;
+5. architecture guard;
+6. focused lint + architecture lint;
+7. production build;
+8. diff whitespace check.
+
+### Current stop point
+
+```text
+G10.1 API_BULK_DRUGS = COMPLETE / PASS
+G10.2 GLOBAL_GENERICS = COMPLETE / PASS
+G10.3 BIOPHARMA_BIOSIMILARS = COMPLETE / PASS
+G10.4 CDMO_CRAMS / SYNGENE
+  Checkpoint A = COMPLETE / PASS
+  Checkpoint B consolidated code = IMPLEMENTED
+  Deterministic candidate = FAIL-CLOSED / SCORE_NOT_COMPUTABLE
+  Local UI review = PENDING
+  Consolidated local validation = PENDING
+G10-FINAL = AFTER G10.4
+No G10.5
+```
+
+**Next action:** owner pulls the latest branch, visually reviews SYNGENE's G10.4 Checkpoint B block, and runs the single consolidated Checkpoint B validator. Do not mark G10.4 COMPLETE / PASS until that validation passes.
 
