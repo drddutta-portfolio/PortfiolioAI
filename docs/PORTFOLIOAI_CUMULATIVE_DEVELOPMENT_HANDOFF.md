@@ -31734,3 +31734,31 @@ Exception behavior matched the intended contract:
 The bounded pilot therefore closes successfully. There is no remaining unexplained review exception in this cohort.
 
 **K1 next step:** run the full frozen 238-stock reconciliation read-only. Do not mutate canonical production classification yet. After full reconciliation, recalculate the corrected sector inventory and freeze exact K4 package count/order before starting K2.
+
+---
+
+### K1 full-238 first pass — bulk coverage limitation found and corrected
+
+The first full frozen 238-equity reconciliation ran successfully through the bulk source but ended with `freezeEligible = false` because some current NSE equities were absent from the Nifty Total Market constituent file.
+
+Observed tail included:
+
+- VISHNU → `OFFICIAL_MISSING / NO_OFFICIAL_NSE_SNAPSHOT_ROW`
+- YATRA → `OFFICIAL_MISSING / NO_OFFICIAL_NSE_SNAPSHOT_ROW`
+
+This did not establish that NSE lacks classification for those securities. The bulk file is an official Nifty Total Market constituent dataset, not a complete universe of every NSE-listed equity.
+
+K1 runner was therefore corrected to use:
+
+1. official NSE Indices bulk source first;
+2. official NSE quote-equity `industryInfo` only for bulk residual symbols;
+3. merge both official sources;
+4. reconcile against the frozen 238-stock canonical snapshot.
+
+This preserves efficiency while keeping unresolved residuals fail-closed.
+
+Implementation commit: `67eb33441a1643ce97a9f403b26c4f96fb62866d`.
+
+No production mutation, migration, persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+**Next action:** pull latest branch and rerun the full 238-stock reconciliation with no `K1_COHORT_LIMIT`. Review only the remaining `REVIEW_REQUIRED` / `OFFICIAL_MISSING` cases after the targeted fallback has run.
