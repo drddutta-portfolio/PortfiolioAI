@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 CDMO_CRAMS / SYNGENE CHECKPOINT A COMPLETE / PASS; CHECKPOINT B CONSOLIDATED BUILD IMPLEMENTED / LOCAL UI + FULL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 CDMO_CRAMS / SYNGENE COMPLETE / PASS; G10-FINAL NEXT; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -29729,4 +29729,81 @@ No G10.5
 ```
 
 **Next action:** owner pulls the latest branch, visually reviews SYNGENE's G10.4 Checkpoint B block, and runs the single consolidated Checkpoint B validator. Do not mark G10.4 COMPLETE / PASS until that validation passes.
+
+---
+
+## 341. Entry 336 — G10.4 / SYNGENE Checkpoint B validated — G10.4 COMPLETE / PASS
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The owner completed the consolidated G10.4 Checkpoint B validator after localhost visual review.
+
+Final status:
+
+```text
+G10.4 CHECKPOINT B CANDIDATE VALIDATION PASS
+Reference: SYNGENE
+Primary: CDMO_CRAMS
+Material Overlays: NONE
+Score state: SCORE_NOT_COMPUTABLE
+Gate I recommendation: NOT EXECUTED
+Score persistence: OFF
+Recommendation persistence: OFF
+Production mutation/deployment/merge: OFF
+```
+
+### Formal interpretation
+
+This is a deterministic fail-closed PASS, not a negative company score.
+
+The CDMO/CRAMS methodology was successfully exercised without:
+- borrowing numeric bands from another Pharma subprofile;
+- reconstructing a partial score;
+- hidden denominator renormalization;
+- inventing client concentration;
+- treating physical capacity additions as utilization;
+- executing Gate I without a complete ten-dimension score;
+- persisting scores or recommendations.
+
+### G10.4 final status
+
+```text
+Checkpoint A = COMPLETE / PASS
+Checkpoint B = COMPLETE / PASS
+Reference company = SYNGENE
+Primary = CDMO_CRAMS
+Material Overlays = NONE
+Deterministic score state = SCORE_NOT_COMPUTABLE
+Gate I recommendation = NOT EXECUTED
+G10.4 = COMPLETE / PASS
+```
+
+### Safety closure
+
+```text
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production Supabase mutation = NO
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
+
+### Gate J position after G10.4 closure
+
+```text
+G10.1 API_BULK_DRUGS = COMPLETE / PASS
+G10.2 GLOBAL_GENERICS = COMPLETE / PASS
+G10.3 BIOPHARMA_BIOSIMILARS = COMPLETE / PASS
+G10.4 CDMO_CRAMS = COMPLETE / PASS
+G10-FINAL = NEXT
+No G10.5
+```
+
+**Next action:** begin G10-FINAL cross-subprofile portability / isolation closure. No further category build stage exists after G10.4.
 
