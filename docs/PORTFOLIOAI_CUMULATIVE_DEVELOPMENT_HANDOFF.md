@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 BIOPHARMA_BIOSIMILARS / BIOCON COMPLETE / PASS; next planned stage G10.4 CDMO_CRAMS; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 COMPLETE / PASS; G10.4 CDMO_CRAMS / SYNGENE CHECKPOINT A IMPLEMENTED / OWNER LOCALHOST LOCK + FULL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -29287,4 +29287,185 @@ No G10.5
 ```
 
 **Next action:** begin G10.4 — CDMO_CRAMS using the same two-checkpoint hard cap: Checkpoint A classification/reference lock, then one consolidated Checkpoint B methodology + evidence + deterministic result + unchanged Gate I handling.
+
+---
+
+## 338. Entry 333 — G10.4 / SYNGENE Checkpoint A implemented — CDMO/CRAMS classification candidate
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Starting authority:** G10.3 COMPLETE / PASS
+
+The owner authorized continuation into:
+
+```text
+G10.4 — CDMO_CRAMS
+```
+
+The same two-checkpoint hard cap is retained:
+
+```text
+Checkpoint A = reference selection / classification lock
+Checkpoint B = methodology + evidence + deterministic result + unchanged Gate I handling
+No additional G10.4 micro-stages unless a genuine structural blocker is discovered.
+```
+
+### G10.4 reference selection
+
+The canonical provisional `CDMO_CRAMS` candidate registry contains:
+
+```text
+LAURUSLABS
+ONESOURCE
+PPLPHARMA
+AKUMS
+SYNGENE
+JUBLPHARMA
+```
+
+**SYNGENE / Syngene International Limited** is selected as the Checkpoint A reference because it is the lowest-ambiguity operating-model portability candidate in the reviewed set.
+
+Issuer evidence across FY25 and FY26 consistently describes Syngene as a contract research, development and manufacturing organization/platform spanning discovery, development and commercial manufacturing.
+
+PortfolioAI `CDMO_CRAMS` intentionally consolidates those contract-service families into one subprofile.
+
+### Two-period classification fixture
+
+```text
+FY25
+CDMO_CRAMS taxonomy coverage = 100%
+
+FY26
+CDMO_CRAMS taxonomy coverage = 100%
+```
+
+Important interpretation:
+
+```text
+100% = PortfolioAI taxonomy coverage of the reviewed issuer operating model
+100% != issuer-reported single-segment revenue percentage
+```
+
+The unchanged adaptive-classification contract resolves:
+
+```text
+Classification state = READY_FOR_REVIEW
+Primary candidate = CDMO_CRAMS
+Material Overlay = none
+Emerging Watch = none
+```
+
+### Distortion / comparability review
+
+Checkpoint A records:
+
+1. `TWO_PERIOD_OPERATING_MODEL_COMPARABILITY = PASS`
+2. `CRO_AND_CDMO_TAXONOMY_CONSOLIDATION = PASS_WITH_CONTEXT`
+3. `NO_PRODUCT_LED_PHARMA_SECONDARY_EXPOSURE = PASS`
+4. `INTERNAL_SERVICE_MIX_NOT_SECONDARY_SUBPROFILE = PASS`
+
+Customer molecules/programs are not converted into Syngene API, Generics, Domestic Formulations or Biosimilars exposures.
+
+Research Services, development and commercial manufacturing remain internal service families inside the one CDMO/CRAMS operating model.
+
+### Repository implementation
+
+Added:
+
+- `src/features/research/syngeneG104ClassificationEvidence.ts`
+- `src/features/research/syngeneG104ClassificationEvidence.test.ts`
+- `scripts/r4n/syngene-g10-4-local-research-target.sql`
+- `scripts/r4n/run-syngene-g10-4-local-research-target.sh`
+- `scripts/g10-4-validate-cdmo-classification-lock.sh`
+- `docs/PortfolioAI_GATE_J_G10_4_CDMO_CLASSIFICATION_LOCK.md`
+
+Updated:
+
+- `src/features/research/pharmaGateJReferenceClassification.ts`
+- `src/features/research/pharmaGateJReferenceClassification.test.ts`
+- `src/features/research/PharmaGateJReferenceClassificationPanel.test.tsx`
+- this cumulative handoff.
+
+No symbol-specific page tree was added. The reusable Gate J block is used.
+
+### Local-only fixture
+
+The SYNGENE fixture may create/reconcile only local identity/routing and one synthetic local ownership link if needed for Research Coverage.
+
+It writes:
+
+```text
+Research evidence rows = 0
+Subprofile assignment rows = 0
+Score rows = 0
+Recommendation rows = 0
+```
+
+and refuses non-local database URLs.
+
+### UI target
+
+```text
+Gate J · G10.4 · Checkpoint A
+Reference company = Syngene International Limited / SYNGENE
+Primary candidate = CDMO / CRAMS
+Material Overlay = None reviewed
+Emerging Watch = None
+FY25 = CDMO / CRAMS taxonomy coverage 100%
+FY26 = CDMO / CRAMS taxonomy coverage 100%
+Ready for owner lock
+Score not started
+```
+
+### Consolidated Checkpoint A validator
+
+`scripts/g10-4-validate-cdmo-classification-lock.sh` covers:
+
+- focused SYNGENE classification tests;
+- reusable Gate J registry/panel tests;
+- adaptive-classification regression;
+- candidate-registry regression;
+- Gate I safety regression;
+- G10.1/G10.2/G10.3/TORNTPHARM controls;
+- full non-Edge tests;
+- strict TypeScript;
+- architecture guard;
+- focused + architecture lint;
+- production build;
+- diff whitespace.
+
+### Safety boundary
+
+```text
+Score execution = OFF
+Recommendation execution = OFF
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Provider refresh = NO
+Production Supabase mutation = NO
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
+
+### Current stop point
+
+```text
+G10.1 API_BULK_DRUGS = COMPLETE / PASS
+G10.2 GLOBAL_GENERICS = COMPLETE / PASS
+G10.3 BIOPHARMA_BIOSIMILARS = COMPLETE / PASS
+G10.4 CDMO_CRAMS / SYNGENE
+  Checkpoint A code = IMPLEMENTED
+  Owner localhost classification lock = PENDING
+  Full local validation = PENDING
+  Checkpoint B = NOT STARTED
+G10-FINAL = AFTER G10.4
+No G10.5
+```
+
+**Next action:** owner pulls the branch, runs the local SYNGENE Research-target fixture, visually reviews the G10.4 block, approves the classification lock, and then runs the single consolidated G10.4 Checkpoint A validator.
 
