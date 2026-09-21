@@ -38,7 +38,7 @@ describe("Gate J reference classification panel", () => {
     expect(view.queryByText("API methodology → score → Gate I recommendation")).not.toBeInTheDocument()
   })
 
-  it("renders the BIOCON G10.3 Biosimilars classification lock without a premature Checkpoint B", () => {
+  it("renders the BIOCON G10.3 classification lock and fail-closed Checkpoint B result", () => {
     const { container } = render(<PharmaGateJReferenceClassificationPanel symbol="BIOCON" />)
     const view = within(container)
 
@@ -51,8 +51,12 @@ describe("Gate J reference classification panel", () => {
     expect(materialOverlayCard).toHaveTextContent("CDMO / CRAMS")
     expect(view.getByText(/FY25: Biosimilars 58% · Generics 19% · CRDMO 23%/)).toBeInTheDocument()
     expect(view.getByText(/FY26: Biosimilars 60% · Generics 18% · CRDMO 22%/)).toBeInTheDocument()
-    expect(view.getByText(/Score not started/)).toBeInTheDocument()
-    expect(view.queryByText(/Biosimilars methodology → score/)).not.toBeInTheDocument()
+    expect(view.getByText("Biosimilars controlled-expansion result")).toBeInTheDocument()
+    expect(view.getByText("Checkpoint B candidate · Fail-closed outcome")).toBeInTheDocument()
+    expect(view.getByText("Biosimilars-specific")).toBeInTheDocument()
+    expect(view.getByText("SCORE NOT COMPUTABLE")).toBeInTheDocument()
+    expect(view.getAllByText("MANDATORY BLOCKER").length).toBeGreaterThanOrEqual(5)
+    expect(view.getByText(/AUROPHARMA/)).toBeInTheDocument()
   })
 
   it("renders nothing for unrelated symbols", () => {
