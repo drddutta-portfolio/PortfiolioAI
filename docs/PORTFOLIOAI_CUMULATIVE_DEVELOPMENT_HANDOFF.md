@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 PHARMA_V1 Controlled Expansion PLAN ADOPTED; G10.1 Checkpoint A NOT STARTED; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A localhost visual PASS with one stale UI-test multiplicity assertion corrected; consolidated revalidation pending; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -27224,3 +27224,72 @@ G10.2 Checkpoint B = NOT STARTED
 ```
 
 Do not start Global Generics methodology work until Checkpoint A passes the owner localhost review and consolidated validation.
+
+
+---
+
+## 313. Entry 308 — G10.2 Checkpoint A localhost visual PASS; stale UI-test multiplicity assertion corrected
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Visual-reviewed implementation head:** `5f0cba3728817abb4d32192d407892ebf5e231d4`
+**Test-fix commit:** `dcd6b045f895ac037363aeb00b86d38e7cd81098`
+
+The owner visually reviewed AUROPHARMA → Research → Overview and confirmed that the reusable Gate J block immediately before Research Health correctly renders:
+
+```text
+Gate J · G10.2 · Checkpoint A
+Reference = AUROPHARMA
+Primary = GLOBAL_GENERICS
+Material Overlay = none
+Emerging Watch = API_BULK_DRUGS
+BIOPHARMA_BIOSIMILARS = REVIEW_REQUIRED / unresolved
+FY25 Global Generics lower bound = 73.04%
+FY25 API share = 13.63%
+FY26 Global Generics lower bound = 73.46%
+FY26 API share = 12.03%
+Score = SCORE_NOT_COMPUTABLE
+Reason = GLOBAL_GENERICS_PRIMARY_METHODOLOGY_INCOMPLETE
+```
+
+The localhost visual review is therefore **PASS**.
+
+### Consolidated-validation diagnostic
+
+The first focused validation group returned:
+
+```text
+Test Files  1 failed | 3 passed
+Tests       1 failed | 16 passed
+```
+
+The single failure was:
+
+```text
+PharmaGateJReferenceClassificationPanel.test.tsx
+TestingLibraryElementError: Found multiple elements with the text: API / Bulk Drugs
+```
+
+This was not a methodology, selector, or rendered-UI defect. The AUROPHARMA G10.2 panel legitimately contains the same display label in more than one rendered context, while the test used `screen.getByText("API / Bulk Drugs")`, which incorrectly requires exactly one matching element.
+
+The assertion was corrected to verify presence without imposing false uniqueness:
+
+```ts
+expect(screen.getAllByText("API / Bulk Drugs").length).toBeGreaterThan(0)
+```
+
+No production logic, classification, methodology, score state, recommendation state, or UI behavior changed.
+
+### Current stop
+
+```text
+G10.2 Checkpoint A implementation = PASS
+G10.2 Checkpoint A localhost visual review = PASS
+G10.2 Checkpoint A focused test defect = CORRECTED
+G10.2 Checkpoint A consolidated revalidation = PENDING
+G10.2 Checkpoint A formal closure = PENDING
+G10.2 Checkpoint B = NOT STARTED
+```
+
+Do not start Checkpoint B until the consolidated Checkpoint A validator passes on the corrected head.
