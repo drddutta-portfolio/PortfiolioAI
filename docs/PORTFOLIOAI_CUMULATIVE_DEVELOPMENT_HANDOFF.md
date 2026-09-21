@@ -31273,3 +31273,118 @@ Deployment = NO
 PR merge = NO
 Automatic trading = NO
 ```
+
+
+---
+
+## 352. Entry 347 — K1 switched from protected per-symbol NSE API to official NSE Indices bulk classification
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The corrected 238-stock local reconciliation successfully loaded the frozen current-portfolio baseline, but the official per-symbol NSE quote endpoint returned:
+
+```text
+NSE_AUTH_HTTP_403
+```
+
+for all 238 symbols.
+
+This is an NSE anti-bot/session restriction on the quote API, not a local database or PortfolioAI cohort problem.
+
+### Source strategy corrected
+
+K1 now uses the official **NSE Indices / Nifty Total Market** constituent file as the portfolio-wide primary classification source.
+
+Official NSE Indices facts used:
+
+- Nifty Total Market contains 750 stocks;
+- it is composed of the Nifty 500 + Nifty Microcap 250 universe;
+- the official page exposes an Index Constituent CSV;
+- the official constituent CSV URL is:
+
+`https://www.niftyindices.com/IndexConstituent/ind_niftytotalmarket_list.csv`
+
+Added:
+
+`scripts/k1-fetch-nse-bulk-classification.mjs`
+
+The script:
+
+- downloads one official NSE Indices bulk constituent file;
+- maps current PortfolioAI symbols to the official constituent `Industry` classification field used in Nifty constituent files as the current exchange-sector grouping;
+- verifies ISIN where the official file supplies it;
+- emits all non-covered portfolio equities as a **residual targeted-review list**;
+- performs no database writes.
+
+### Current-cohort runner updated
+
+`scripts/k1-run-current-cohort-reconciliation.sh`
+
+now executes:
+
+```text
+frozen 238-stock canonical baseline
+        ↓
+official Nifty Total Market bulk classification
+        ↓
+deterministic official-vs-canonical comparison
+        ↓
+AGREE / CHANGE_REQUIRED / REVIEW_REQUIRED / OFFICIAL_MISSING
+        ↓
+small residual targeted-review list
+```
+
+The protected 238-call quote API is no longer used for the normal portfolio-wide pass.
+
+### Residual policy
+
+Stocks not present in the current Nifty Total Market file are **not inferred**.
+
+They remain:
+
+```text
+OFFICIAL_MISSING / targeted official verification required
+```
+
+and are then checked individually against current NSE/BSE evidence.
+
+This is intentionally safer than substituting a commercial/provider sector or the nearest PortfolioAI methodology.
+
+### Legacy per-symbol fetcher
+
+`scripts/k1-fetch-nse-primary-classification.mjs`
+
+is retained only as diagnostic/targeted tooling. It is no longer the default bulk reconciliation path.
+
+### Next local execution
+
+```bash
+git pull
+bash scripts/k1-run-current-cohort-reconciliation.sh
+```
+
+Expected new Stage 3 output begins with:
+
+```text
+[K1] 3/5 fetch official NSE Indices bulk primary classification
+Nifty Total Market constituents loaded: ...
+Portfolio equities resolved from official bulk source: .../238
+Residual targeted-review equities: ...
+```
+
+### Safety boundary
+
+Unchanged:
+
+```text
+Production mutation = NO
+Production migration = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
