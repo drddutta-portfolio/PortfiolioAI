@@ -645,3 +645,56 @@ This validates the exact policy intended before widening to the full cohort.
 No database mutation was performed.
 
 **Next safe K1 action:** full read-only reconciliation of the frozen 238 NSE operating-equity cohort.
+
+---
+
+## 15. Full-cohort residual fallback correction
+
+The first 238-stock run correctly blocked freeze because the bulk source did not cover every NSE-listed holding.
+
+Root cause:
+
+```text
+Nifty Total Market constituent file
+= official NSE Indices bulk source
+= efficient primary source
+!= complete list of every NSE-listed equity
+```
+
+Therefore a symbol absent from that file must not immediately become `OFFICIAL_MISSING`.
+
+The local-only reconciliation runner now uses a two-stage official-source strategy:
+
+```text
+238 frozen NSE equities
+        ↓
+NSE Indices Nifty Total Market bulk classification
+        ↓
+bulk residual symbols only
+        ↓
+official NSE quote-equity / industryInfo targeted lookup
+        ↓
+merged official snapshot
+        ↓
+deterministic reconciliation
+```
+
+Properties:
+
+- the bulk source remains the preferred efficient path;
+- the per-symbol NSE endpoint is invoked only for residuals;
+- source provenance is preserved in the merged artifact;
+- any residual still unresolved after targeted lookup remains fail-closed;
+- no database write is performed;
+- no scheduler is added;
+- no production access is used by the runner.
+
+Artifacts now include:
+
+- `artifacts/k1-nse-bulk-primary-classification.json`
+- `artifacts/k1-nse-residual-symbols.txt`
+- `artifacts/k1-nse-targeted-primary-classification.json`
+- `artifacts/k1-nse-primary-classification.json` — merged official snapshot
+- `artifacts/k1-nse-classification-reconciliation.json`
+
+This correction specifically addresses cases such as VISHNU and YATRA that were absent from the Nifty Total Market constituent file.
