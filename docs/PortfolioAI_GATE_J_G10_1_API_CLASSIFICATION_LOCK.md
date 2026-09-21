@@ -1,12 +1,12 @@
 # PortfolioAI — Gate J / G10.1 API_BULK_DRUGS Classification Lock
 
-**Date:** 21 September 2026  
-**Branch:** `r4n-pharma-subprofile-architecture`  
-**PR:** #101 — OPEN / DRAFT / UNMERGED  
-**Stage:** G10.1 — Checkpoint A  
-**Status:** IMPLEMENTED / LOCALHOST OWNER APPROVAL PENDING  
-**Score execution:** OFF  
-**Recommendation execution:** OFF  
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Stage:** G10.1 — Checkpoint A
+**Status:** IMPLEMENTED / LOCALHOST VISUAL PASS / FULL VALIDATION PENDING
+**Score execution:** OFF
+**Recommendation execution:** OFF
 **Persistence:** OFF
 
 ## Reference-company selection
@@ -115,7 +115,7 @@ The validation includes focused classification tests, Gate I safety regressions,
 
 ```text
 G10.1 Checkpoint A = IMPLEMENTED
-Owner localhost approval = PENDING
+Owner localhost approval = PASS
 Full local validation = PENDING
 G10.1 Checkpoint B = NOT STARTED
 ```
