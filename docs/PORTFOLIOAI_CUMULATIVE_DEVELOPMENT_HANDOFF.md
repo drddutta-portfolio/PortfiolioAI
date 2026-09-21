@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 EXCHANGE-PRIMARY CLASSIFICATION RECONCILIATION IN PROGRESS; K4 SCOPE NOT YET FROZEN; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 EXCHANGE-PRIMARY CLASSIFICATION BUILD IMPLEMENTED / CURRENT-COHORT RECONCILIATION PENDING; K4 SCOPE NOT YET FROZEN; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -30460,6 +30460,238 @@ Unchanged:
 ```text
 Production Supabase mutation = NO
 Provider refresh = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
+
+
+---
+
+## 347. Entry 342 — K1 exchange-primary classification build implemented
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+K1 moved from classification-policy planning into a production-safe implementation of the exchange-primary classification boundary.
+
+### Live read-only portfolio findings
+
+```text
+Current open holdings = 247
+NSE EQUITY             = 238
+NSE ETF                = 9
+BSE-only current       = 0
+```
+
+The prior ten `UNAVAILABLE` enrichment holdings were decomposed as:
+
+```text
+Operating-company equity:
+CHOLAFIN
+
+ETF / pooled instruments:
+GOLDBEES
+ITBEES
+LOWVOL
+MAFANG
+MIDCAPETF
+MON100
+MONQ50
+NIFTYBEES
+SILVERBEES
+```
+
+Therefore only **one current operating-company equity** is actually unclassified.
+
+Current selected SECTOR decision sources across the 247 open holdings:
+
+```text
+STOCK_MASTER                    208
+OWNER_REVIEWED_CLASSIFICATION   28
+TRENDLYNE_MCP                    1
+NONE                            10
+```
+
+Only 48 holdings currently have selected canonical INDUSTRY evidence.
+
+### Official classification evidence
+
+Official NSE evidence for CHOLAFIN identifies basic industry:
+
+`Non Banking Financial Company (NBFC)`
+
+The official NSE industry-classification structure maps that to:
+
+```text
+Macro-Economic Sector = Financial Services
+Sector                = Financial Services
+Industry              = Finance
+Basic Industry        = Non Banking Financial Company (NBFC)
+```
+
+No production canonical decision was changed in this gate.
+
+### Domain build
+
+Added:
+
+`src/features/portfolio/exchangePrimaryClassification.ts`
+
+Contract behavior:
+
+- one canonical primary sector only;
+- official NSE/BSE evidence is Tier-1;
+- one official exchange may resolve classification when only one is applicable/available;
+- NSE/BSE primary-sector disagreement → `REVIEW_REQUIRED`;
+- deeper industry/basic-industry disagreement → detail review;
+- ETF/fund/non-operating-company instruments → company-sector `NOT_APPLICABLE`;
+- newly added operating equity without official evidence → `AWAITING_OFFICIAL_EXCHANGE_CLASSIFICATION`;
+- research routing stays blocked until classification is usable;
+- no network calls and no writes inside the domain resolver.
+
+Added tests:
+
+`src/features/portfolio/exchangePrimaryClassification.test.ts`
+
+### Research-routing safety fix
+
+Updated:
+
+`src/features/research/portfolioCoverageProjection.ts`
+
+Previously, a cached sector string could cause the CLASSIFICATION domain to appear `FRESH` even when a classification identity should be under review.
+
+Now:
+
+```text
+official classification MISSING
+→ CLASSIFICATION MISSING
+→ RESEARCH_PROFILE blocked
+→ SCORING blocked
+→ RECOMMENDATION blocked
+
+official classification REVIEW_REQUIRED / CONFLICTING
+→ CLASSIFICATION review/conflict
+→ RESEARCH_PROFILE blocked
+→ SCORING blocked
+→ RECOMMENDATION blocked
+```
+
+The user-facing canonical sector is not silently rewritten.
+
+Regression tests were added to `portfolioCoverageProjection.test.ts`.
+
+### Canonical authority registry
+
+Updated:
+
+`src/contracts/canonicalDataAuthorities.ts`
+
+SECTOR / INDUSTRY now explicitly state:
+
+```text
+official NSE/BSE evidence
+→ reviewed classification decision
+→ current_security_enrichment_v1
+→ shared application classification
+```
+
+Research profiles/subprofiles remain downstream and cannot rewrite classification.
+
+### Current-cohort / future-stock tooling
+
+Added current cohort snapshot:
+
+`scripts/k1-current-nse-equities-2026-09-22.txt`
+
+Count:
+
+`238` NSE operating-company equities.
+
+Added read-only official NSE classification fetcher:
+
+`scripts/k1-fetch-nse-primary-classification.mjs`
+
+It reads the bounded symbol cohort and extracts from official NSE quote evidence:
+
+- ISIN;
+- company name;
+- ETF flag;
+- Macro-Economic Sector;
+- Sector;
+- Industry;
+- Basic Industry.
+
+It writes a local JSON review artifact only.
+
+It performs:
+
+```text
+database writes = 0
+score writes = 0
+recommendation writes = 0
+scheduler changes = 0
+deployment = 0
+```
+
+This same intake architecture covers newly added NSE equities. BSE remains the authority for BSE-only future holdings and a review/cross-check authority when exchange evidence conflicts.
+
+### Consolidated validator
+
+Added:
+
+`scripts/k1-validate-exchange-primary-classification.sh`
+
+Validator groups:
+
+1. focused K1 classification/routing tests;
+2. full application test suite;
+3. strict TypeScript;
+4. architecture guard;
+5. architecture lint;
+6. production build;
+7. whitespace integrity.
+
+### K1 documentation
+
+Added:
+
+`docs/PortfolioAI_GATE_K_K1_EXCHANGE_PRIMARY_CLASSIFICATION_BUILD.md`
+
+Updated:
+
+`docs/PortfolioAI_GATE_K_K1_SECTOR_INVENTORY_PRIORITY_LOCK.md`
+
+### Current stop point
+
+```text
+K1 exchange-primary domain build = IMPLEMENTED
+Future-stock classification intake = IMPLEMENTED
+Fail-closed routing integration = IMPLEMENTED
+Current 238-stock NSE cohort = PREPARED
+Read-only official NSE fetcher = IMPLEMENTED
+Consolidated validator = IMPLEMENTED
+
+Official 238-stock snapshot execution = PENDING
+Canonical-vs-official reconciliation manifest = PENDING
+Post-reconciliation sector inventory = PENDING
+Exact K4 package count = NOT FROZEN
+Exact K4 order = NOT FROZEN
+K2 = BLOCKED
+```
+
+### Safety boundary preserved
+
+```text
+Production Supabase mutation = NO
+Production migrations = NO
+Provider persistence = NO
 Score persistence = OFF
 Recommendation persistence = OFF
 Position sizing = OFF
