@@ -194,3 +194,18 @@ I4 = IMPLEMENTED / VALIDATION + GATE I CLOSURE REVIEW PENDING
 ```
 
 Gate I is not closed until the I4 consolidated validation passes and the closure result is recorded.
+
+
+## Validation correction — non-Edge suite isolation
+
+The first full-suite I4 run reached step 3 and attempted to execute Supabase Edge-function tests under the default application Vitest/jsdom configuration.
+
+That was a validation-command scope error, not a Gate I recommendation failure.
+
+The repository already has a separate `vitest.edge.config.ts` for Edge tests. Gate I changed no Edge Function code, so I4's full application regression step must exclude `supabase/functions/**`.
+
+The consolidated I4 script now runs:
+
+`npx vitest run --exclude "supabase/functions/**"`
+
+This preserves the intended I4 requirement: full non-Edge application coverage, while leaving Edge suites on their dedicated configuration.
