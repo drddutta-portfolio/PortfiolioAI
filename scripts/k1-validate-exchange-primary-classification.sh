@@ -8,6 +8,7 @@ printf '\n[K1] 2/8 reconciliation comparator tests\n'
 node --test scripts/k1-compare-nse-classification.test.mjs
 node --check scripts/k1-fetch-nse-primary-classification.mjs
 node --check scripts/k1-compare-nse-classification.mjs
+bash -n scripts/k1-run-current-cohort-reconciliation.sh
 
 printf '\n[K1] 3/8 full application test suite\n'
 npm test -- --run
