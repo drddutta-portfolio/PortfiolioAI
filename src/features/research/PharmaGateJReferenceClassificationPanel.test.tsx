@@ -59,6 +59,20 @@ describe("Gate J reference classification panel", () => {
     expect(view.getByText(/AUROPHARMA/)).toBeInTheDocument()
   })
 
+  it("renders the SYNGENE G10.4 CDMO/CRAMS classification lock without Checkpoint B", () => {
+    const { container } = render(<PharmaGateJReferenceClassificationPanel symbol="SYNGENE" />)
+    const view = within(container)
+
+    expect(view.getByText("Reference-company classification lock")).toBeInTheDocument()
+    expect(view.getByText("Syngene International Limited")).toBeInTheDocument()
+    expect(view.getByText("CDMO / CRAMS")).toBeInTheDocument()
+    expect(view.getByText("None reviewed")).toBeInTheDocument()
+    expect(view.getByText(/FY25: CDMO \/ CRAMS taxonomy coverage 100%/)).toBeInTheDocument()
+    expect(view.getByText(/FY26: CDMO \/ CRAMS taxonomy coverage 100%/)).toBeInTheDocument()
+    expect(view.getByText(/Score not started/)).toBeInTheDocument()
+    expect(view.queryByText(/CDMO.*methodology.*score/i)).not.toBeInTheDocument()
+  })
+
   it("renders nothing for unrelated symbols", () => {
     const { container } = render(<PharmaGateJReferenceClassificationPanel symbol="TORNTPHARM" />)
     expect(container).toBeEmptyDOMElement()
