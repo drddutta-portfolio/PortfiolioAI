@@ -29024,4 +29024,32 @@ G10.3 BIOPHARMA_BIOSIMILARS / BIOCON
 PR #101 = OPEN / DRAFT / UNMERGED
 ```
 
-**Next action:** begin G10.3 Checkpoint B as one consolidated build: Biosimilars methodology + evidence + deterministic score + unchanged Gate I recommendation, preserving both Material Overlays and all fail-closed / non-persistence boundaries.
+**Next action:** G10.3 Checkpoint B is now IN PROGRESS as one consolidated build: Biosimilars methodology + evidence + deterministic score + unchanged Gate I recommendation, preserving both Material Overlays and all fail-closed / non-persistence boundaries.
+
+### G10.3 Checkpoint B start authorization
+
+Owner instruction:
+
+```text
+Update the Handoff file and begin G10.3 Checkpoint B as one consolidated build
+```
+
+Execution contract for this build:
+
+```text
+Checkpoint B = IN PROGRESS
+Primary methodology = BIOPHARMA_BIOSIMILARS only
+Material Overlays = GLOBAL_GENERICS + CDMO_CRAMS retained as within-dimension context only
+Second independent stock score = PROHIBITED
+AUROPHARMA unresolved Biosimilars exposure = remains unresolved
+Missing mandatory evidence = FAIL CLOSED
+No hidden denominator renormalization
+Gate I recommendation policy = UNCHANGED
+Score persistence = OFF
+Recommendation persistence = OFF
+Production mutation = NO
+Deployment = NO
+PR merge = NO
+```
+
+The build is intentionally consolidated: methodology contract, evidence package, deterministic result, Gate I handoff/result, UI integration and one consolidated validator. No additional Checkpoint B micro-stages are introduced.
