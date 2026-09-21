@@ -9,6 +9,7 @@ import { CompleteResearchRefreshPanel } from "../features/research/CompleteResea
 import { PharmaResearchWorkspacePanel } from "../features/research/PharmaResearchWorkspacePanel"
 import { PharmaRecommendationPanel } from "../features/research/PharmaRecommendationPanel"
 import { PharmaGateJReferenceClassificationPanel } from "../features/research/PharmaGateJReferenceClassificationPanel"
+import { PharmaGateJPortabilityPanel } from "../features/research/PharmaGateJPortabilityPanel"
 import { PharmaSubprofileSummary } from "../features/research/PharmaSubprofileSummary"
 import { FinancialsWorkspace, OwnershipWorkspace, QualityGrowthWorkspace, ValuationWorkspace } from "../features/research/ResearchEvidenceWorkspace"
 import { ProfileResearchReadinessPanel } from "../features/research/ProfileResearchReadinessPanel"
@@ -119,6 +120,7 @@ function Overview({ position, research, scoring, onViewEvidence }: { readonly po
     {scoring.data?.profileCode === "PHARMA_V1" || pharmaResolution.data?.status === "RESOLVED" ? <PharmaRecommendationPanel securityId={position.securityId} symbol={position.symbol} assignmentResolution={pharmaResolution.data ?? null} /> : null}
     {ui.readinessMode === "PROFILE_CONTRACT" ? <ProfileResearchReadinessPanel securityId={position.securityId} profileCode={ui.profileCode} research={research} snapshot={scoring.data} /> : null}
     <div className="research-cockpit">{groups.map((group) => <section className="cockpit-panel" key={group.title}><h2>{group.title}</h2><div className="snapshot-list">{group.codes.map((code) => { const metric = metrics.get(code); return <div key={code}><span>{metric?.label ?? metricLabelForCode(code)}</span><strong>{formatResearchMetric(metric)}</strong><small>{metric ? period(metric) : "Unavailable"}</small><Status value={coverageStatus(metric)} /></div> })}</div></section>)}</div>
+    {scoring.data?.profileCode === "PHARMA_V1" || pharmaResolution.data?.status === "RESOLVED" ? <PharmaGateJPortabilityPanel assignmentResolution={pharmaResolution.data ?? null} /> : null}
     <PharmaGateJReferenceClassificationPanel symbol={position.symbol} />
     <section className="research-health"><div><p className="eyebrow">Research health</p><h2>{coverage} coverage</h2><p>{research.metrics.length} cached observations · {stale ? "mixed freshness" : research.metrics.length ? "current cache" : "freshness unavailable"}</p></div><dl><div><dt>Conflicts</dt><dd>{conflicts}</dd></div><div><dt>Review required</dt><dd>{reviewRequired}</dd></div><div><dt>Provisional</dt><dd>{provisional}</dd></div></dl><button type="button" className="button button-secondary" onClick={onViewEvidence}>View Evidence</button></section>
     {scoring.data?.profileCode === "PHARMA_V1" || pharmaResolution.data?.status === "RESOLVED" ? <PharmaResearchWorkspacePanel securityId={position.securityId} symbol={position.symbol} research={research} /> : null}
