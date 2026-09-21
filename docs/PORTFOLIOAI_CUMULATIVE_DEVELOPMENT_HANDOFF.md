@@ -30177,3 +30177,214 @@ Branch strategy remains an explicit owner decision before substantive Gate K imp
 
 **Next action:** start a new chat and execute K1 only, beginning with repository + current portfolio sector inventory inspection.
 
+
+
+---
+
+## 345. Entry 340 — Gate K · K1 portfolio sector inventory / priority lock prepared
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**K1 architecture commit:** `95e06bfda833b67065dff644067ffedc753286b9`
+
+Gate K K1 was executed as a consolidated read-only architecture audit. No sector methodology was built.
+
+Canonical artifact:
+
+`docs/PortfolioAI_GATE_K_K1_SECTOR_INVENTORY_PRIORITY_LOCK.md`
+
+### Live current-portfolio baseline
+
+Read-only production inspection used the canonical `current_holdings`, `current_security_enrichment_v1` and already-stored `market_price_latest` data.
+
+Current active portfolio state:
+
+```text
+Open holdings = 247
+Canonical enrichment AVAILABLE = 48
+Canonical enrichment PARTIAL = 189
+Canonical enrichment UNAVAILABLE = 10
+Canonical industry present = 48
+Stored price coverage = 245 / 247
+```
+
+The portfolio currently contains 33 non-null canonical sector labels plus 10 unclassified holdings.
+
+Because only 48/247 holdings have canonical industry identity, K1 explicitly rejects silent subprofile inference from broad sector labels.
+
+### Existing specialised engines
+
+```text
+PHARMA_V1 = EXISTING / SPECIALISED / Gate J portable
+BANK_NBFC = EXISTING / SPECIALISED / K3 reconciliation required
+```
+
+The older profiles `IT_TECH`, `INDUSTRIALS_CAPITAL_GOODS`, `CONSUMER_FMCG`, `AUTO_COMPONENTS`, `ENERGY_UTILITIES`, `METALS_COMMODITIES`, `INFRA_CONSTRUCTION`, `REAL_ESTATE`, `FIN_SERVICES_NON_LENDER` and `PHARMA_HEALTHCARE` were confirmed as GENERAL-derived scaffolds, not completed specialised methodologies.
+
+### Financial-services boundary
+
+Canonical Banking currently contains 14 holdings.
+
+Nine broad Financial Services holdings were identified only as **K3 lender/NBFC review candidates**:
+
+```text
+CGCL
+HUDCO
+IREDA
+JIOFIN
+LTF
+MUTHOOTFIN
+PNBHOUSING
+SHRIRAMFIN
+TATACAP
+```
+
+Eleven current Financial Services holdings form the candidate non-lender K4 footprint:
+
+```text
+ANGELONE
+CAMS
+GROWW
+HDFCAMC
+ICICIAMC
+MFSL
+NAM-INDIA
+PAYTM
+POLICYBZR
+STARHEALTH
+UTIAMC
+```
+
+ABCAPITAL remains REVIEW_REQUIRED. CHOLAFIN has unavailable canonical enrichment and is not silently routed.
+
+### Canonical conflicts frozen REVIEW_REQUIRED
+
+At minimum:
+
+```text
+AVALON      sector=Information Technology; industry=Heavy Electrical Equipment
+MTARTECH    sector=Information Technology; industry=Aerospace & Defence
+TDPOWERSYS  sector=Energy; industry=Heavy Electrical Equipment
+SKYGOLD     sector=Textiles Apparels & Accessories; industry=Gems & Jewellery
+ABCAPITAL   Financial Services identity insufficient for lender/non-lender routing
+CHOLAFIN    canonical enrichment unavailable
+IRMENERGY   broad Energy identity requires oil/gas review
+KPIGREEN    broad Energy identity requires renewable-power review
+```
+
+No canonical classification was changed.
+
+### Exact K4 package count and order
+
+K1 prepared the following technical lock:
+
+```text
+K4 PACKAGE COUNT = 10
+
+1. IT_TECH
+2. INDUSTRIALS_CAPITAL_GOODS
+3. AUTO_COMPONENTS
+4. CHEMICALS_V1
+5. HEALTHCARE_SERVICES_V1
+6. FIN_SERVICES_NON_LENDER
+7. METALS_COMMODITIES
+8. CONSUMER_FMCG
+9. OIL_GAS_V1
+10. POWER_RENEWABLES_V1
+```
+
+PHARMA_V1 is already complete and BANK_NBFC is handled in K3, so neither counts as a K4 package.
+
+If K3 and all K4 packages later pass, the intended specialised-engine architecture contains 12 total engines:
+
+```text
+2 existing
++ 10 K4
+= 12
+```
+
+### Genuine subprofile assessment
+
+K1 concludes that subprofiles are economically justified for:
+
+```text
+IT_TECH
+INDUSTRIALS_CAPITAL_GOODS
+AUTO_COMPONENTS
+CHEMICALS_V1
+FIN_SERVICES_NON_LENDER
+OIL_GAS_V1
+POWER_RENEWABLES_V1
+```
+
+No mandatory K1 subprofile split is frozen for:
+
+```text
+HEALTHCARE_SERVICES_V1
+METALS_COMMODITIES
+CONSUMER_FMCG
+```
+
+Exact subprofile codes, evidence contracts, curves and thresholds remain K4 Checkpoint-A work and were not built in K1.
+
+### Deferred / no-methodology areas
+
+K1 intentionally does not create K4 packages for:
+
+- ETFs/funds and other non-operating-company instruments;
+- broad heterogeneous Consumer Services / Consumer Durables / Consumer Discretionary;
+- Gems and Jewellery / Textiles Apparels & Accessories;
+- Waste / environmental-infrastructure grouping;
+- Infra / Construction and Real Estate;
+- Telecom;
+- Textiles;
+- generic Services;
+- Shipping / Ship Building;
+- mixed Materials / Construction Materials.
+
+These remain `GENERAL / METHODOLOGY_NOT_AVAILABLE`, `REVIEW_REQUIRED`, or later controlled-expansion candidates. No nearest-looking fallback is allowed.
+
+### Approximate architecture coverage snapshot
+
+Using only already-stored 21 September 2026 prices:
+
+```text
+PHARMA_V1 existing                       ≈ 11.19%
+canonical Banking / BANK_NBFC           ≈  7.29%
+K3 lender/NBFC review candidates        ≈  1.93%
+10 K4 package candidate buckets         ≈ 45.01%
+explicit REVIEW_REQUIRED identities     ≈  7.04%
+deferred / METHODOLOGY_NOT_AVAILABLE    ≈ 27.56%
+```
+
+These figures are for architecture prioritisation only, not live valuation or investment advice.
+
+### K1 status
+
+```text
+K1 technical audit = COMPLETE
+K1 sector build queue = PREPARED
+Exact K4 count = 10
+Exact K4 development order = PREPARED
+New methodology implementation = NOT STARTED
+Owner acceptance before K1 COMPLETE / PASS = REQUIRED
+```
+
+### Safety boundary preserved
+
+```text
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production Supabase mutation = NO
+Provider refresh = NO
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
+
+**Next safe action:** owner reviews the K1 lock. After acceptance, mark K1 COMPLETE / PASS and begin K2 only.
+
