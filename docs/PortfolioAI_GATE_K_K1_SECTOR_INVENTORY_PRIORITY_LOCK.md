@@ -1,6 +1,6 @@
 # PortfolioAI — Gate K · K1 Sector Inventory & Priority Lock
 
-**Status:** K1 EXCHANGE-PRIMARY CLASSIFICATION RECONCILIATION REQUIRED / K4 SCOPE NOT YET FROZEN  
+**Status:** K1 EXCHANGE-PRIMARY CLASSIFICATION BUILD IMPLEMENTED / OFFICIAL CURRENT-COHORT RECONCILIATION PENDING / K4 SCOPE NOT YET FROZEN  
 **Date:** 22 September 2026  
 **Branch:** r4n-pharma-subprofile-architecture  
 **PR:** #101 — KEEP OPEN / DRAFT / UNMERGED  
@@ -475,3 +475,82 @@ Still required inside the same consolidated K1 gate:
 **Production mutation:** NONE
 
 The next safe K1 action is the consolidated **NSE/BSE primary-classification reconciliation pass**. K2 must not begin until that pass is complete and the resulting K1 scope is owner-approved.
+
+
+---
+
+## 15. K1 exchange-primary classification build checkpoint
+
+The classification architecture has now been implemented without production mutation.
+
+Canonical build artifact:
+
+`docs/PortfolioAI_GATE_K_K1_EXCHANGE_PRIMARY_CLASSIFICATION_BUILD.md`
+
+Implemented:
+
+- `src/features/portfolio/exchangePrimaryClassification.ts`
+- `src/features/portfolio/exchangePrimaryClassification.test.ts`
+- `src/features/research/portfolioCoverageProjection.ts` fail-closed exchange-classification routing
+- `src/features/research/portfolioCoverageProjection.test.ts` exchange-state regression coverage
+- `src/contracts/canonicalDataAuthorities.ts` exchange-primary authority clarification
+- `scripts/k1-current-nse-equities-2026-09-22.txt` — current 238-equity NSE cohort
+- `scripts/k1-fetch-nse-primary-classification.mjs` — read-only official NSE snapshot fetcher
+- `scripts/k1-validate-exchange-primary-classification.sh` — consolidated validator
+
+### Corrected unclassified interpretation
+
+The ten current `UNAVAILABLE` holdings are not ten unclassified operating companies.
+
+```text
+1 operating-company equity:
+CHOLAFIN
+
+9 ETFs:
+GOLDBEES
+ITBEES
+LOWVOL
+MAFANG
+MIDCAPETF
+MON100
+MONQ50
+NIFTYBEES
+SILVERBEES
+```
+
+All current open holdings are NSE instruments:
+
+```text
+NSE EQUITY = 238
+NSE ETF    = 9
+```
+
+Official NSE evidence identifies CHOLAFIN as basic industry `Non Banking Financial Company (NBFC)`, which belongs to:
+
+```text
+Macro-Economic Sector = Financial Services
+Sector = Financial Services
+Industry = Finance
+Basic Industry = Non Banking Financial Company (NBFC)
+```
+
+This evidence has **not** been written to production by K1.
+
+### Current stop point
+
+```text
+K1 exchange-primary resolver = IMPLEMENTED
+New-stock fail-closed intake = IMPLEMENTED
+Coverage routing safety fix = IMPLEMENTED
+Current 238 NSE equity cohort snapshot = PREPARED
+Read-only NSE classification fetcher = IMPLEMENTED
+Consolidated validator = IMPLEMENTED
+
+Official 238-stock exchange snapshot = PENDING EXECUTION
+Current canonical-vs-exchange diff = PENDING
+Final reconciled sector inventory = PENDING
+Exact K4 package count = NOT FROZEN
+K2 = BLOCKED
+```
+
+No new sector methodology has been built.
