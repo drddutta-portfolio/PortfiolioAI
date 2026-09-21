@@ -28338,3 +28338,39 @@ Execution rule:
 3. only then make at most one exact Trendlyne gap-fill call for the genuinely absent fields.
 
 No provider call is authorized by this step.
+
+
+---
+
+## 331. Entry 326 — Concise zero-call summary added for seven unresolved Trendlyne fields
+
+**Date:** 21 September 2026
+
+The raw-label audit confirmed at least:
+
+```text
+RETURN_6M = NOT FOUND IN ANY SAVED TRENDLYNE RESPONSE
+```
+
+Because the full audit output is lengthy and difficult to review reliably from terminal screenshots, a concise zero-call summary was added:
+
+- `scripts/g10-2-summarize-missing-trendlyne-fields.py`
+- `scripts/g10-2-summarize-missing-trendlyne-fields.sh`
+
+It reports only one line for each unresolved family:
+
+```text
+FREE_CASH_FLOW
+NET_DEBT
+INTEREST_COVERAGE
+PE_TTM
+EV_EBITDA
+PROMOTER_HOLDING
+RETURN_6M
+```
+
+Each line is either `FOUND` with up to three exact source labels or `NOT FOUND`.
+
+No provider call is made.
+
+Current stop: run the concise summary and use it to construct at most one final Trendlyne gap-fill call for only genuinely absent fields.
