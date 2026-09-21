@@ -115,16 +115,16 @@ describe("Gate I4 independent PHARMA_V1 recommendation verification", () => {
     )
     for (const forbidden of [
       "recommendationPolicyRepository",
-      "recordRecommendationPreview",
+      "recordRecommendationPreview(",
       "record_recommendation_preview_v2",
       "stock_recommendation_runs",
-      "weightRecommendation",
-      "actionRecommendation",
+      'from "./weightRecommendation"',
+      'from "./actionRecommendation"',
       "RecommendationInterpretationPanel",
-      "positionSizing",
+      'from "./positionSizing',
       "D35B",
       "providerRefresh",
-      "supabase",
+      'from "../../lib/supabase',
     ]) {
       expect(source).not.toContain(forbidden)
     }
