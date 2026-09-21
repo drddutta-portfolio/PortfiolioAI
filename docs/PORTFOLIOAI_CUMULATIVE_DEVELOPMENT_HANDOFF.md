@@ -28970,17 +28970,58 @@ PR merge = NO
 Automatic trading = NO
 ```
 
+### Checkpoint A validation closure
+
+Owner explicitly approved:
+
+```text
+APPROVE G10.3 BIOCON CLASSIFICATION LOCK
+```
+
+The local BIOCON fixture completed with zero research-evidence, subprofile-assignment, score and recommendation writes. The localhost Gate J block visually confirmed:
+
+```text
+Primary = BIOPHARMA_BIOSIMILARS
+Material Overlays = GLOBAL_GENERICS + CDMO_CRAMS
+Emerging Watch = none
+Score not started
+```
+
+The consolidated validator then completed successfully through all seven stages, including focused classification tests, Gate I / prior Gate J regressions, full non-Edge tests, strict TypeScript, architecture guard, focused + architecture lint, production build and `git diff --check`.
+
+Final validator output:
+
+```text
+G10.3 CHECKPOINT A CANDIDATE VALIDATION PASS
+Reference: BIOCON
+Primary candidate: BIOPHARMA_BIOSIMILARS
+Material Overlays: GLOBAL_GENERICS + CDMO_CRAMS
+Emerging Watch: NONE
+Score execution: OFF
+Recommendation execution: OFF
+Persistence: OFF
+Checkpoint B: NOT STARTED
+```
+
+During validation, three non-methodology defects were corrected:
+- missing BIOCON evidence imports in the Gate J reference registry;
+- brittle Testing Library assertions for the combined Material Overlay rendering;
+- strict-lint `no-unsafe-assignment` usage in two tests;
+- trailing whitespace in the cumulative handoff and G10.3 lock document.
+
+None of these changed classification, scoring, recommendation policy, persistence, provider behavior or production state.
+
 ### Current stop point
 
 ```text
 G10.1 API_BULK_DRUGS / ALIVUS = COMPLETE / PASS
 G10.2 GLOBAL_GENERICS / AUROPHARMA = COMPLETE / PASS
 G10.3 BIOPHARMA_BIOSIMILARS / BIOCON
-  Checkpoint A code = IMPLEMENTED
-  Owner localhost classification lock = PENDING
-  Full local validation = PENDING
+  Checkpoint A = COMPLETE / PASS
+  Owner classification lock = APPROVED
+  Full local validation = PASS
   Checkpoint B = NOT STARTED
 PR #101 = OPEN / DRAFT / UNMERGED
 ```
 
-**Next action:** owner pulls the branch, runs the local BIOCON Research-target fixture, visually reviews the G10.3 block, and then runs the single consolidated G10.3 Checkpoint A validator. Do not begin Checkpoint B before explicit owner classification approval.
+**Next action:** begin G10.3 Checkpoint B as one consolidated build: Biosimilars methodology + evidence + deterministic score + unchanged Gate I recommendation, preserving both Material Overlays and all fail-closed / non-persistence boundaries.
