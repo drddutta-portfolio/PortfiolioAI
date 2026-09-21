@@ -175,9 +175,9 @@ const SYNGENE_VIEW: PharmaGateJReferenceClassificationView = {
     note: check.note,
   })),
   lockMode: "NEW_LOCK",
-  scoreStateLabel: "Score not started",
+  scoreStateLabel: "Checkpoint A approved · Checkpoint B fail-closed candidate",
   boundaryNote:
-    "Checkpoint A locks only the operating-model classification. The 100% figure is a PortfolioAI taxonomy consolidation of issuer contract research/development/manufacturing services, not an issuer-reported single-segment share. Checkpoint B remains blocked until owner approval.",
+    "Checkpoint A classification is owner-approved. The 100% figure remains a PortfolioAI taxonomy consolidation rather than an issuer-reported single-segment share. Checkpoint B may evaluate CDMO/CRAMS methodology and evidence, but missing mandatory evidence must fail closed.",
   scoreExecutionEnabled: false,
   recommendationExecutionEnabled: false,
   persistenceEnabled: false,
