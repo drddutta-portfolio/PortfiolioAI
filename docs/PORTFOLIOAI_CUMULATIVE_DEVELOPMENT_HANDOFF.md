@@ -26780,3 +26780,40 @@ Full local validation = PENDING
 ```
 
 Do **not** begin G10.1 Checkpoint B until the owner visually approves the Checkpoint A classification lock.
+
+
+---
+
+## 307. Entry 302 — G10.1 Checkpoint A classification panel moved to bottom of Overview
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+During the first localhost review the owner reported that the Gate J classification block was not easily visible on the stock Research page and requested that it be placed near the bottom of the Overview, immediately before Research Health.
+
+### Correction
+
+The reusable `PharmaGateJReferenceClassificationPanel` is now rendered:
+
+```text
+... normal Research Overview content
+Gate J / G10.1 Checkpoint A classification block
+Research Health
+Pharma deep-research workspace
+```
+
+The page-level `PHARMA_V1` conditional wrapper was also removed from this presentation location. The reusable Gate J registry itself remains responsible for returning a panel only for an active Gate J reference fixture (currently ALIVUS), so unrelated stock pages render nothing.
+
+This makes the owner-review checkpoint easy to locate while preserving the universal Research shell and avoiding an ALIVUS-specific page branch.
+
+No classification methodology, evidence, score, recommendation, persistence, local Supabase fixture, or safety boundary changed.
+
+### Current stop point
+
+```text
+G10.1 Checkpoint A code = IMPLEMENTED
+ALIVUS localhost visual approval = PENDING
+Full local validation = PENDING
+Checkpoint B = NOT STARTED
+```
