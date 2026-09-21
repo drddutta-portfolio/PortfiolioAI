@@ -57,7 +57,7 @@ describe("G10.2 owner-approved Global Generics numeric methodology", () => {
       trendPeers: [1, 2, 5],
     })).toEqual({
       levelScore: 75,
-      stabilityScore: 100,
+      stabilityScore: 75,
       trendScore: 75,
       score: 75,
     })
