@@ -31500,3 +31500,125 @@ Deployment = NO
 PR merge = NO
 Automatic trading = NO
 ```
+
+
+---
+
+## 353. Entry 348 — K1 10-stock NSE classification pilot completed
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+A second bounded local reconciliation pilot was executed with:
+
+```bash
+K1_COHORT_LIMIT=10 bash scripts/k1-run-current-cohort-reconciliation.sh
+```
+
+The official NSE Indices bulk source worked successfully.
+
+### Pilot result
+
+```text
+Canonical source: FROZEN_CURRENT_PORTFOLIO
+Canonical NSE equity cohort: 10
+Pilot mode: YES (limit=10)
+
+Nifty Total Market constituents loaded: 755
+Portfolio equities resolved from official bulk source: 10/10
+Residual targeted-review equities: 0
+
+AGREE: 5
+DETAIL_MISSING: 0
+CHANGE_REQUIRED: 4
+REVIEW_REQUIRED: 1
+OFFICIAL_MISSING: 0
+Freeze eligible: NO
+```
+
+### Exceptions
+
+```text
+ACMESOLAR
+  current canonical sector: Renewable Energy
+  official NSE sector: Power
+  state: CHANGE_REQUIRED
+
+AKUMS
+  current canonical sector: Pharma
+  official NSE sector: Healthcare
+  state: CHANGE_REQUIRED
+
+ALIVUS
+  current canonical sector: Pharma
+  official NSE sector: Healthcare
+  state: CHANGE_REQUIRED
+
+ANGELONE
+  current canonical sector: Financial Services
+  official NSE sector: Financial Services
+  state: REVIEW_REQUIRED
+  reason: ISIN_MISMATCH
+
+ASTRAMICRO
+  current canonical sector: Industrial
+  current canonical industry: Aerospace & Defence
+  official NSE sector: Capital Goods
+  state: CHANGE_REQUIRED
+```
+
+### Interpretation
+
+The bulk NSE classification route is now proven to work locally.
+
+The remaining blocker is **classification reconciliation**, not NSE transport.
+
+Important architecture consequence:
+
+- official exchange sector remains the canonical primary-sector authority;
+- research methodology/subprofile may remain more specific than the exchange sector;
+- for example, a company classified by NSE under Healthcare may still route to a Pharma research subprofile if reviewed business evidence supports that, but the user-facing canonical primary sector must not be rewritten by the methodology layer.
+
+ANGELONE requires identity review because the portfolio canonical ISIN and official bulk-source ISIN disagree.
+
+### Current K1 state
+
+```text
+5-stock pilot = PASS
+10-stock pilot = PASS for official-source acquisition
+10-stock reconciliation = NOT FREEZE-ELIGIBLE
+Official bulk path = PROVEN
+Classification exception handling = NEXT
+Full 238-stock run = NOT YET APPROVED
+Exact K4 package count = NOT FROZEN
+K2 = BLOCKED
+```
+
+### Recommended next action
+
+Do **not** immediately run all 238.
+
+First resolve / define handling for:
+
+1. official NSE sector changes;
+2. exchange-sector vs research-subprofile separation;
+3. ISIN mismatch review (ANGELONE);
+4. exact canonical update policy for current portfolio vs future stocks.
+
+Then run a larger pilot or full cohort once these rules are frozen.
+
+### Safety boundary
+
+Unchanged:
+
+```text
+Production mutation = NO
+Production migration = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
