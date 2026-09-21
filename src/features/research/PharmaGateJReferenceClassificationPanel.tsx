@@ -2,6 +2,7 @@ import { pharmaGateJReferenceClassification } from "./pharmaGateJReferenceClassi
 import { PHARMA_SUBPROFILE_CONTRACTS } from "./pharmaSubprofileContracts"
 import { ALIVUS_G10_1_READ_ONLY_SCORE_RESULT } from "./alivusG101ReadOnlyScore"
 import { ALIVUS_G10_1_READ_ONLY_RECOMMENDATION } from "./alivusG101RecommendationPreview"
+import { PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE } from "./pharmaGlobalGenericsG102MethodologyCompletionCandidate"
 
 function displayName(code: keyof typeof PHARMA_SUBPROFILE_CONTRACTS) {
   return PHARMA_SUBPROFILE_CONTRACTS[code].displayName
@@ -18,6 +19,8 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
 
   const isReconfirmation = review.lockMode === "RECONFIRM_EXISTING_LOCK"
   const renderAlivusCheckpointB = review.symbol === "ALIVUS"
+  const renderAuropharmaCheckpointB = review.symbol === "AUROPHARMA"
+  const globalCandidate = PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE
 
   return <section className="pharma-persistence-package" aria-labelledby="gate-j-reference-classification-title">
     <div className="pharma-evidence-pilot-head">
@@ -117,6 +120,42 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
             </article>)}
           </div>
           <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> CDMO remains Emerging Watch and numerically excluded. Score/recommendation persistence, weight guidance, action bias, position sizing and AI interpretation remain off.</p>
+        </section>
+      : null}
+
+    {renderAuropharmaCheckpointB
+      ? <section className="pharma-persistence-package" aria-labelledby="gate-j-global-generics-checkpoint-b-title">
+          <div className="pharma-evidence-pilot-head">
+            <div>
+              <p className="eyebrow">Gate J · G10.2 · Checkpoint B</p>
+              <h3 id="gate-j-global-generics-checkpoint-b-title">Global Generics methodology completion candidate</h3>
+              <p>Checkpoint B consolidates the old Global Generics G6 fail-closed families into one explicit owner-review decision. No Domestic, API or BANK/NBFC scoring bands are borrowed.</p>
+            </div>
+            <span className="pharma-workspace-lock">Owner approval required · Score still blocked</span>
+          </div>
+
+          <div className="pharma-persistence-package-summary">
+            <div><span>Resolution policy</span><strong>Reference-relative median</strong><small>No fabricated absolute bands</small></div>
+            <div><span>Ten-dimension spine</span><strong>Preserved</strong><small>Gate I policy unchanged</small></div>
+            <div><span>Approved building blocks</span><strong>{globalCandidate.approvedBuildingBlocks.length}</strong><small>Growth · pipeline · qualitative rubric</small></div>
+            <div><span>Current score state</span><strong>{globalCandidate.scoreState.replaceAll("_", " ")}</strong><small>{globalCandidate.scoreBlocker.replaceAll("_", " ")}</small></div>
+          </div>
+
+          <div className="research-callout research-callout-neutral">
+            <strong>Single methodology decision — not a new gate</strong>
+            <p>Same-primary peer-relative percentiles are proposed where Global-specific calibration was previously absent; required components aggregate by median, and any missing mandatory component fails closed instead of being renormalized away.</p>
+          </div>
+
+          <div className="pharma-persistence-package-grid">
+            {globalCandidate.dimensionDecisions.map((decision) => <article key={decision.dimension}>
+              <strong>{decision.dimension.replaceAll("_", " ")}</strong>
+              <small>{decision.decisionState.replaceAll("_", " ")}</small>
+              <p>{decision.proposedMethod}</p>
+              <span>{decision.evidenceBoundary}</span>
+            </article>)}
+          </div>
+
+          <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> AUROPHARMA remains non-computable until this methodology is owner-approved and the bounded reference evidence package is complete. API stays Emerging Watch, Biosimilars stays unresolved, no partial score is reconstructed, and all persistence/sizing/AI actions remain off.</p>
         </section>
       : null}
   </section>
