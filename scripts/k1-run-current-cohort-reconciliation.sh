@@ -114,6 +114,8 @@ jq -r '
       .symbol,
       .state,
       .reasonCode,
+      ((.changeScopes // []) | join(",")),
+      (.identity.state // "-"),
       (.canonical.sector // "-"),
       (.canonical.industry // "-"),
       (.official.sector // "-"),
@@ -121,7 +123,7 @@ jq -r '
       (.official.basicIndustry // "-")
     ]
   | @tsv
-' "$RECON_JSON" | awk 'BEGIN{FS="\t"; OFS="\t"; print "SYMBOL","STATE","REASON","CANONICAL_SECTOR","CANONICAL_INDUSTRY","NSE_SECTOR","NSE_INDUSTRY","NSE_BASIC_INDUSTRY"} {print}'
+' "$RECON_JSON" | awk 'BEGIN{FS="\t"; OFS="\t"; print "SYMBOL","STATE","REASON","CHANGE_SCOPES","IDENTITY_STATE","CANONICAL_SECTOR","CANONICAL_INDUSTRY","NSE_SECTOR","NSE_INDUSTRY","NSE_BASIC_INDUSTRY"} {print}'
 
 printf '\n[K1] 5/5 result\n'
 FREEZE_ELIGIBLE="$(jq -r '.freezeEligible' "$RECON_JSON")"
