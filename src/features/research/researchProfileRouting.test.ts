@@ -18,6 +18,16 @@ describe("routeResearchProfileV1", () => {
     })
   })
 
+  it("keeps exchange-primary Healthcare visible while routing pharmaceutical industry evidence to PHARMA", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Healthcare", applicationIndustry: "Pharmaceuticals" })).toMatchObject({
+      applicationSector: "Healthcare",
+      applicationIndustry: "Pharmaceuticals",
+      state: "ROUTED",
+      profileCode: "PHARMA",
+      basis: "SECTOR_AND_INDUSTRY",
+    })
+  })
+
   it("routes Pharma to PHARMA", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Pharma", applicationIndustry: "Pharmaceuticals" })).toMatchObject({
       state: "ROUTED",
