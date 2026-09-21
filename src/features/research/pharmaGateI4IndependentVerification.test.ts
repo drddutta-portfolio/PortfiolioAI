@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 import { describe, expect, it } from "vitest"
 import { PHARMA_GATE_I4_INDEPENDENT_VERIFICATION } from "./pharmaGateI4IndependentVerification"
 
@@ -109,7 +110,7 @@ describe("Gate I4 independent PHARMA_V1 recommendation verification", () => {
 
   it("keeps the I3 recommendation adapter free of mutation, sizing, AI and provider dependencies", () => {
     const source = readFileSync(
-      new URL("./pharmaGateI3ReadOnlyRecommendation.ts", import.meta.url),
+      resolve(process.cwd(), "src/features/research/pharmaGateI3ReadOnlyRecommendation.ts"),
       "utf8",
     )
     for (const forbidden of [
