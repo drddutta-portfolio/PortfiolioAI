@@ -28447,3 +28447,40 @@ This performs one consolidated validation: focused G10.2 tests, G10.1/Gate I con
 - PR merge = NO
 
 **CURRENT STOP:** localhost visual review of the final G10.2 block, then run the single final validator. If both pass, formally close G10.2.
+
+
+---
+
+## 333. Entry 328 — G10.2 final validator stale percentile test corrected
+
+**Date:** 21 September 2026
+
+The final validator reported one failing test in:
+
+`pharmaGlobalGenericsG102NumericMethodology.test.ts`
+
+The implementation returned `stabilityScore = 75` for:
+
+```text
+reference stability = 2
+peer stabilities = [1, 3, 4]
+direction = LOWER_BETTER
+```
+
+This is mathematically correct under the approved percentile helper:
+
+- combined set = [1, 2, 3, 4]
+- lower is better;
+- the reference value 2 is at 3/4 = 75 percentile under the implemented rank convention.
+
+The test incorrectly expected `100`.
+
+Only the test expectation was changed:
+
+```text
+stabilityScore: 100 → 75
+```
+
+No methodology, runtime scoring logic, UI, evidence state, persistence state or recommendation logic changed.
+
+**CURRENT STOP:** pull latest branch and rerun `scripts/g10-2-validate-final-fail-closed.sh`.
