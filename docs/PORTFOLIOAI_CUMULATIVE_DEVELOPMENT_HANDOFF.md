@@ -31388,3 +31388,115 @@ Deployment = NO
 PR merge = NO
 Automatic trading = NO
 ```
+
+
+---
+
+## 353. Entry 348 — K1 official NSE bulk classification 5-stock pilot PASS
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+The owner executed the corrected bounded pilot:
+
+```bash
+K1_COHORT_LIMIT=5 bash scripts/k1-run-current-cohort-reconciliation.sh
+```
+
+### Pilot acquisition result
+
+The runner used:
+
+```text
+Canonical source = FROZEN_CURRENT_PORTFOLIO
+Pilot cohort = 5
+Official source = NSE Indices bulk classification
+```
+
+Official bulk source result:
+
+```text
+Nifty Total Market constituents loaded = 755
+Portfolio equities resolved from official bulk source = 5/5
+Resolution target-review equities = 0
+```
+
+Therefore the replacement bulk acquisition path successfully avoided the earlier direct quote-endpoint 403 problem.
+
+### Deterministic reconciliation result
+
+```text
+AGREE = 2
+DETAIL_MISSING = 0
+CHANGE_REQUIRED = 3
+REVIEW_REQUIRED = 0
+OFFICIAL_MISSING = 0
+Freeze eligible = YES
+```
+
+The three canonical sector correction candidates were:
+
+```text
+ACMESOLAR
+current canonical = Renewable Energy
+official NSE sector = Power
+
+AKUMS
+current canonical = Pharma
+official NSE sector = Healthcare
+
+ALIVUS
+current canonical = Pharma
+official NSE sector = Healthcare
+```
+
+The remaining two pilot names agreed with current canonical sector classification.
+
+### Architecture interpretation
+
+These are classification corrections only.
+
+A corrected exchange-primary sector does **not** automatically remove a valid research methodology/subprofile.
+
+Example:
+
+```text
+official exchange sector = Healthcare
+research business-model subprofile = may still be Pharma-specific
+```
+
+when reviewed business-model evidence supports that research methodology.
+
+Therefore canonical exchange classification and research methodology remain separate authorities.
+
+### Scale-up decision
+
+Do not jump directly from 5 to 238.
+
+Next controlled step:
+
+```bash
+K1_COHORT_LIMIT=10 bash scripts/k1-run-current-cohort-reconciliation.sh
+```
+
+If the 10-stock pilot also shows:
+
+- complete official resolution;
+- no transport failure;
+- no unexplained REVIEW_REQUIRED identity conflicts;
+
+then the current-cohort run can scale to all 238 NSE equities.
+
+### Safety state
+
+```text
+Database mutation = NO
+Production write = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
