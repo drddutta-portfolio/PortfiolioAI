@@ -496,3 +496,116 @@ new ETF/fund
 ```
 
 No new stock can silently inherit a methodology from its ticker, theme, company name or nearest existing sector.
+
+---
+
+## 13. Exact reconciliation policy after 10-stock pilot
+
+K1 now uses a review-first reconciliation policy rather than treating every difference as equivalent.
+
+### Primary-sector changes
+
+For an operating-company equity:
+
+```text
+official NSE sector exists
++ canonical sector differs
+→ CHANGE_REQUIRED
+→ change scope includes SECTOR
+→ proposed canonical user-facing sector = official NSE sector
+→ no automatic database write
+```
+
+A sector difference is not a methodology decision. Research routing is recalculated only after the reviewed canonical classification is available.
+
+### Industry/detail changes
+
+```text
+sector agrees + canonical industry missing
+→ DETAIL_MISSING
+
+sector agrees + canonical industry differs
+→ CHANGE_REQUIRED
+→ change scope includes INDUSTRY
+```
+
+Missing deeper detail does not authorize invention from company name, peers, theme or research profile.
+
+### ISIN mismatches
+
+Default:
+
+```text
+canonical ISIN != official NSE ISIN
+→ REVIEW_REQUIRED
+→ classification freeze blocked
+```
+
+Exception: an ISIN mismatch may proceed only when an exact symbol + old ISIN + new ISIN transition is backed by reviewed official corporate-action evidence. The comparator then records:
+
+```text
+state       = CHANGE_REQUIRED
+changeScope = IDENTITY
+reason      = CANONICAL_ISIN_SUPERSEDED_BY_OFFICIAL_CORPORATE_ACTION
+```
+
+This does not mutate production. It means the identity discrepancy is explained and the canonical ISIN requires a reviewed refresh.
+
+The reviewed transition registry is:
+
+`scripts/k1-reviewed-identity-transitions-2026-09-22.json`
+
+### ANGELONE resolution
+
+ANGELONE is the first reviewed identity-transition case.
+
+Official NSE circular evidence states:
+
+```text
+old ISIN      = INE732I01013
+new ISIN      = INE732I01021
+effective     = 2026-02-26
+reason        = subdivision from Rs. 10 face value to Re. 1
+```
+
+Therefore the 10-stock pilot's ANGELONE `ISIN_MISMATCH` is a stale canonical-identity problem, not an exchange-sector dispute.
+
+### Exchange sector vs research profile
+
+The two layers remain separate:
+
+```text
+official exchange sector
+→ canonical user-facing sector
+→ canonical industry
+→ research profile
+→ reviewed research subprofile
+→ methodology
+```
+
+For pharmaceutical companies classified by NSE under `Healthcare`:
+
+```text
+canonical sector = Healthcare
+industry         = Pharmaceuticals
+research profile = PHARMA
+subprofile       = reviewed PHARMA_V1 subtype
+```
+
+Thus AKUMS and ALIVUS must not be relabelled to `Pharma` merely to preserve PHARMA_V1. Their exchange-primary sector can be `Healthcare` while the downstream Pharma methodology remains valid when pharmaceutical industry/subprofile evidence supports it.
+
+Regression coverage now explicitly locks `Healthcare + Pharmaceuticals → PHARMA` without changing the displayed `Healthcare` sector.
+
+### Next bounded step
+
+Do not run all 238 yet.
+
+First rerun the **same 10-stock cohort** with reconciliation V2. Expected behavior:
+
+- ACMESOLAR: sector change remains explicit;
+- AKUMS: Healthcare primary sector, Pharma methodology downstream;
+- ALIVUS: Healthcare primary sector, Pharma methodology downstream;
+- ASTRAMICRO: Capital Goods primary sector, defence/aerospace methodology may remain downstream;
+- ANGELONE: reviewed corporate-action identity refresh instead of unexplained `REVIEW_REQUIRED`.
+
+Only after this policy re-run passes should K1 proceed to the 238-stock read-only reconciliation.
