@@ -2,7 +2,8 @@ import { pharmaGateJReferenceClassification } from "./pharmaGateJReferenceClassi
 import { PHARMA_SUBPROFILE_CONTRACTS } from "./pharmaSubprofileContracts"
 import { ALIVUS_G10_1_READ_ONLY_SCORE_RESULT } from "./alivusG101ReadOnlyScore"
 import { ALIVUS_G10_1_READ_ONLY_RECOMMENDATION } from "./alivusG101RecommendationPreview"
-import { PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE } from "./pharmaGlobalGenericsG102MethodologyCompletionCandidate"\nimport { PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY } from "./pharmaGlobalGenericsG102NumericMethodology"
+import { PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE } from "./pharmaGlobalGenericsG102MethodologyCompletionCandidate"
+import { PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY } from "./pharmaGlobalGenericsG102NumericMethodology"
 import { AUROPHARMA_G10_2_FINAL_RESULT } from "./auropharmaG102FinalResult"
 
 function displayName(code: keyof typeof PHARMA_SUBPROFILE_CONTRACTS) {
@@ -21,7 +22,8 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
   const isReconfirmation = review.lockMode === "RECONFIRM_EXISTING_LOCK"
   const renderAlivusCheckpointB = review.symbol === "ALIVUS"
   const renderAuropharmaCheckpointB = review.symbol === "AUROPHARMA"
-  const globalCandidate = PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE\n  const approvedGlobalMethod = PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY
+  const globalCandidate = PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE
+  const approvedGlobalMethod = PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY
   const finalAuroResult = AUROPHARMA_G10_2_FINAL_RESULT
 
   return <section className="pharma-persistence-package" aria-labelledby="gate-j-reference-classification-title">
