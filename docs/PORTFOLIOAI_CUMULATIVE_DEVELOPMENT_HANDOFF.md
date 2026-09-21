@@ -29469,3 +29469,27 @@ No G10.5
 
 **Next action:** owner pulls the branch, runs the local SYNGENE Research-target fixture, visually reviews the G10.4 block, approves the classification lock, and then runs the single consolidated G10.4 Checkpoint A validator.
 
+### Owner classification approval
+
+Owner explicitly approved:
+
+```text
+APPROVE G10.4 SYNGENE CLASSIFICATION LOCK
+```
+
+The owner-reviewed localhost UI confirmed:
+
+```text
+Reference company = Syngene International Limited / SYNGENE
+Primary candidate = CDMO_CRAMS
+Material Overlay = none
+Emerging Watch = none
+FY25 taxonomy coverage = 100%
+FY26 taxonomy coverage = 100%
+Score = not started
+```
+
+The 100% figure remains explicitly defined as PortfolioAI taxonomy coverage of the reviewed contract research/development/manufacturing operating model, not an issuer-reported single-segment revenue percentage.
+
+Checkpoint B remains blocked until the consolidated Checkpoint A validator passes.
+
