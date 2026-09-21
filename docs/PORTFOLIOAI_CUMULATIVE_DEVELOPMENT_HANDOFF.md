@@ -30860,3 +30860,77 @@ Deployment = NO
 PR merge = NO
 Automatic trading = NO
 ```
+
+
+---
+
+## 349. Entry 344 — Gate K K1 CI guard integration + runner-state clarification
+
+**Date:** 22 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+K1's focused classification checks are now part of the repository Architecture Guard.
+
+Updated:
+
+`.github/workflows/architecture-guard.yml`
+
+Added CI steps:
+
+```text
+Verify Gate K K1 exchange-primary classification
+Verify Gate K K1 reconciliation tooling
+Lint Gate K K1 implementation
+```
+
+The CI contract now directly covers:
+
+- `exchangePrimaryClassification.test.ts`
+- `portfolioCoverageProjection.test.ts`
+- `sectorResearchMapping.test.ts`
+- `k1-compare-nse-classification.test.mjs`
+- syntax validation for the NSE fetcher and comparator;
+- focused ESLint for K1 implementation files.
+
+### Important CI status clarification
+
+Recent Architecture Guard runs on this branch were reported by GitHub as `failure`, but inspection of the workflow job shows:
+
+```text
+runner_id = 0
+runner_name = ""
+steps = []
+job duration ≈ 2 seconds
+```
+
+Therefore **no workflow step actually executed** in those runs.
+
+This is an Actions runner/provisioning state, not evidence that K1 code/tests failed.
+
+Do not record those runs as either PASS or code FAIL.
+
+Current validation state must remain:
+
+```text
+GitHub Architecture Guard = NOT EXECUTED / RUNNER NOT PROVISIONED
+Local consolidated K1 validator = REQUIRED
+K1 official 238-stock reconciliation = REQUIRED
+```
+
+A separate Vercel status continues to report the account/build-rate-limit condition and is not treated as K1 application validation.
+
+### Safety state
+
+Unchanged:
+
+```text
+Production mutation = NO
+Production migration = NO
+Score persistence = OFF
+Recommendation persistence = OFF
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
