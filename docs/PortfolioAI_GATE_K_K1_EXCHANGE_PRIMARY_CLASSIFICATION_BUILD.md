@@ -609,3 +609,39 @@ First rerun the **same 10-stock cohort** with reconciliation V2. Expected behavi
 - ANGELONE: reviewed corporate-action identity refresh instead of unexplained `REVIEW_REQUIRED`.
 
 Only after this policy re-run passes should K1 proceed to the 238-stock read-only reconciliation.
+
+---
+
+## 14. 10-stock reconciliation V2 validation — PASS
+
+The same bounded 10-stock cohort that exposed the original reconciliation exceptions was rerun after the V2 policy implementation.
+
+Observed result:
+
+```text
+AGREE: 5
+DETAIL_MISSING: 0
+CHANGE_REQUIRED: 5
+REVIEW_REQUIRED: 0
+OFFICIAL_MISSING: 0
+Change scopes: IDENTITY=1 SECTOR=4 INDUSTRY=0
+Freeze eligible: YES
+```
+
+Resolved exception set:
+
+```text
+ACMESOLAR   CHANGE_REQUIRED / SECTOR
+AKUMS       CHANGE_REQUIRED / SECTOR
+ALIVUS      CHANGE_REQUIRED / SECTOR
+ASTRAMICRO  CHANGE_REQUIRED / SECTOR
+ANGELONE    CHANGE_REQUIRED / IDENTITY
+```
+
+ANGELONE no longer appears as unexplained `REVIEW_REQUIRED / ISIN_MISMATCH`; it resolves through the reviewed official corporate-action identity transition.
+
+This validates the exact policy intended before widening to the full cohort.
+
+No database mutation was performed.
+
+**Next safe K1 action:** full read-only reconciliation of the frozen 238 NSE operating-equity cohort.
