@@ -24,7 +24,7 @@ npx vitest run \
   src/features/research/pharmaG7ReadOnlyScoringAdapter.test.ts
 
 echo "[3/8] Full non-Edge application test suite"
-npm test -- --run
+npx vitest run --exclude "supabase/functions/**"
 
 echo "[4/8] Strict TypeScript"
 npm run typecheck
