@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology OWNER-APPROVED and executable contract implemented; consolidated AUROPHARMA evidence → score → Gate I build now next; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology OWNER-APPROVED; local Global Generics evidence acquisition OWNER-APPROVED / READY TO EXECUTE; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -27714,3 +27714,70 @@ This is deliberately separate from methodology approval because methodology appr
 ### Current stop
 
 One bounded owner authorization is required for the local provider calls. After execution, continue directly to the consolidated AUROPHARMA evidence parsing, ten-dimension score, unchanged Gate I recommendation, one localhost result review and one final validation.
+
+
+---
+
+## 319. Entry 314 — G10.2 local Global Generics evidence acquisition OWNER APPROVED
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+Owner approval received exactly as:
+
+```text
+APPROVE G10.2 LOCAL GLOBAL GENERICS EVIDENCE ACQUISITION
+```
+
+This approval authorizes one bounded **local-only** evidence acquisition run for G10.2 Checkpoint B.
+
+### Authorized provider-call envelope
+
+```text
+Trendlyne = 3 calls
+Angel One = 5 historical calls
+Total maximum = 8 provider calls
+```
+
+Target securities / benchmark:
+
+```text
+AUROPHARMA
+DRREDDY
+LUPIN
+ZYDUSLIFE
+NIFTY Pharma
+```
+
+### Authorized evidence scope
+
+- annual fundamentals / ROCE / cash / leverage histories;
+- quarterly operating-margin histories;
+- valuation + ownership histories;
+- 12M and 6M market returns;
+- 1Y max drawdown;
+- 1Y annualized volatility;
+- AUROPHARMA relative strength vs NIFTY Pharma;
+- AUROPHARMA relative volatility vs NIFTY Pharma.
+
+### Explicitly NOT authorized
+
+- production Supabase write;
+- canonical evidence promotion;
+- score persistence;
+- recommendation persistence;
+- position sizing;
+- deployment;
+- scheduler mutation;
+- PR merge.
+
+### Execution token
+
+```text
+OWNER_CONFIRMED_G10_2_LOCAL_GLOBAL_GENERICS_EVIDENCE
+```
+
+### Current stop
+
+Run the already-prepared one-command local evidence acquisition. After successful output, continue directly to consolidated parsing → ten-dimension AUROPHARMA score → unchanged Gate I recommendation.
