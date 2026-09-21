@@ -1,7 +1,4 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
-import { AngelOneProvider, loadAngelOneConfig, type AngelDailyCandle } from "../_shared/angel-one.ts"
-import { mapAngelInstruments } from "../_shared/instrument-mapping.ts"
-import type { ProviderInstrument } from "../_shared/market-data.ts"
 import { TrendlyneObservedMcpClient } from "../_shared/trendlyne-observed.ts"
 
 const cors = {
@@ -20,6 +17,14 @@ const STOCKS = [
   { symbol: "ZYDUSLIFE", name: "Zydus Lifesciences Limited" },
 ] as const
 
+const PUBLIC_MARKET_SYMBOLS = {
+  AUROPHARMA: "AUROPHARMA.NS",
+  DRREDDY: "DRREDDY.NS",
+  LUPIN: "LUPIN.NS",
+  ZYDUSLIFE: "ZYDUSLIFE.NS",
+  NIFTY_PHARMA: "^CNXPHARMA",
+} as const
+
 const TRENDLYNE_QUERIES = [
   {
     code: "ANNUAL_FUNDAMENTALS",
@@ -36,41 +41,62 @@ const TRENDLYNE_QUERIES = [
 ] as const
 
 type RequestBody = { action?: unknown; confirmation?: unknown }
-type MasterRow = Readonly<Record<string, unknown>>
 
-function text(value: unknown) {
-  return typeof value === "string" && value.trim() ? value.trim() : null
+interface PublicDailyCandle {
+  readonly periodStart: string
+  readonly close: number
 }
 
-function exactBenchmark(master: readonly MasterRow[]) {
-  const aliases = new Set(["NIFTY PHARMA", "NIFTYPHARMA", "CNXPHARMA"])
-  const matches = master.filter((row) => {
-    const instrumentType = text(row.instrumenttype)?.toUpperCase()
-    if (instrumentType !== "AMXIDX") return false
-    const candidates = [text(row.symbol), text(row.name)].filter((value): value is string => Boolean(value))
-    return candidates.some((value) => aliases.has(value.toUpperCase().replace(/\s+/g, " ").trim()))
-  }).map((row) => ({
-    token: text(row.token),
-    exchange: text(row.exch_seg),
-    symbol: text(row.symbol),
-  })).filter((row) => row.token && row.exchange && row.symbol)
+async function fetchPublicMarketHistory(ticker: string): Promise<PublicDailyCandle[]> {
+  const url =
+    "https://query1.finance.yahoo.com/v8/finance/chart/"
+    + encodeURIComponent(ticker)
+    + "?range=2y&interval=1d&events=history&includeAdjustedClose=false"
 
-  const byToken = new Map(matches.map((row) => [row.token!, row]))
-  if (byToken.size !== 1) throw new Error("NIFTY_PHARMA_IDENTITY_NOT_UNIQUE")
-  return [...byToken.values()][0]!
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/json",
+      "User-Agent": "PortfolioAI/1.0",
+    },
+  })
+  if (!response.ok) throw new Error("PUBLIC_MARKET_HTTP_" + response.status)
+
+  const payload = await response.json() as {
+    readonly chart?: {
+      readonly result?: readonly {
+        readonly timestamp?: readonly number[]
+        readonly indicators?: {
+          readonly quote?: readonly {
+            readonly close?: readonly (number | null)[]
+          }[]
+        }
+      }[]
+      readonly error?: unknown
+    }
+  }
+
+  if (payload.chart?.error) throw new Error("PUBLIC_MARKET_PROVIDER_ERROR")
+  const result = payload.chart?.result?.[0]
+  const timestamps = result?.timestamp ?? []
+  const quote = result?.indicators?.quote?.[0]
+  const close = quote?.close ?? []
+  const rows: PublicDailyCandle[] = []
+
+  for (let index = 0; index < timestamps.length; index += 1) {
+    const timestamp = timestamps[index]
+    const value = close[index]
+    if (!Number.isFinite(timestamp) || !Number.isFinite(value) || Number(value) <= 0) continue
+    rows.push({
+      periodStart: new Date(Number(timestamp) * 1000).toISOString(),
+      close: Number(value),
+    })
+  }
+
+  if (rows.length < 120) throw new Error("PUBLIC_MARKET_HISTORY_INSUFFICIENT")
+  return rows.sort((a, b) => a.periodStart.localeCompare(b.periodStart))
 }
 
-function kolkataDateTime(ms: number) {
-  const date = new Date(ms + 5.5 * 60 * 60_000)
-  const pad = (value: number) => String(value).padStart(2, "0")
-  return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}`
-}
-
-function dayKey(value: string) {
-  return value.slice(0, 10)
-}
-
-function closes(candles: readonly AngelDailyCandle[]) {
+function closes(candles: readonly PublicDailyCandle[]) {
   return candles
     .map((row) => ({ date: dayKey(row.periodStart), close: Number(row.close) }))
     .filter((row) => Number.isFinite(row.close) && row.close > 0)
@@ -88,7 +114,7 @@ function anchor(rows: readonly { date: string; close: number }[], targetMs: numb
   return selected
 }
 
-function marketMetrics(candles: readonly AngelDailyCandle[]) {
+function marketMetrics(candles: readonly PublicDailyCandle[]) {
   const rows = closes(candles)
   if (rows.length < 120) throw new Error("MARKET_HISTORY_INSUFFICIENT")
   const end = rows.at(-1)!
@@ -157,8 +183,8 @@ Deno.serve(async (request) => {
       mode: "G10_2_GLOBAL_GENERICS_EVIDENCE_PLAN",
       providerCalls: 0,
       estimatedTrendlyneCalls: TRENDLYNE_QUERIES.length,
-      estimatedAngelOneHistoryCalls: STOCKS.length + 1,
-      totalEstimatedProviderCalls: TRENDLYNE_QUERIES.length + STOCKS.length + 1,
+      estimatedPublicMarketHistoryCalls: STOCKS.length + 1,
+      totalEstimatedExternalReads: TRENDLYNE_QUERIES.length + STOCKS.length + 1,
       reference: "AUROPHARMA",
       peers: STOCKS.slice(1).map((item) => item.symbol),
       benchmark: "NIFTY_PHARMA",
@@ -172,74 +198,35 @@ Deno.serve(async (request) => {
   }
   if (!mcpUrl) return reply(409, { error: "TRENDLYNE_MCP_URL is missing.", providerCalls: 0 })
 
+  const trendlyneResults: Record<string, string> = {}
   try {
     const trendlyne = new TrendlyneObservedMcpClient(mcpUrl)
-    const trendlyneResults: Record<string, string> = {}
     for (const item of TRENDLYNE_QUERIES) {
       trendlyneResults[item.code] = await trendlyne.getParameterValuesMultiStock(item.query, "stock")
     }
 
-    const masterResponse = await fetch("https://margincalculator.angelone.in/OpenAPI_File/files/OpenAPIScripMaster.json")
-    if (!masterResponse.ok) throw new Error("ANGEL_INSTRUMENT_MASTER_FAILED")
-    const master = await masterResponse.json() as readonly MasterRow[]
-    const retrievedAt = new Date().toISOString()
-
-    const mapped = mapAngelInstruments(
-      STOCKS.map((stock) => ({
-        id: stock.symbol,
-        symbol: stock.symbol,
-        exchange: "NSE",
-        assetClass: "EQUITY",
-      })),
-      master,
-      retrievedAt,
-    )
-    const unresolved = mapped.filter((row) => row.mappingStatus !== "VERIFIED" || !row.providerInstrumentId || !row.exchange || !row.tradingSymbol)
-    if (unresolved.length) {
-      return reply(409, {
-        error: "One or more peer Angel One identities did not resolve exactly.",
-        unresolved: unresolved.map((row) => ({ securityId: row.securityId, status: row.mappingStatus, evidence: row.evidence })),
-        providerCalls: TRENDLYNE_QUERIES.length,
-      })
-    }
-
-    const provider = new AngelOneProvider(loadAngelOneConfig())
-    const now = Date.now()
-    const from = kolkataDateTime(now - 400 * DAY)
-    const to = kolkataDateTime(now)
-
     const market: Record<string, ReturnType<typeof marketMetrics>> = {}
-    for (const mapping of mapped) {
-      const instrument: ProviderInstrument = {
-        mappingId: mapping.securityId,
-        securityId: mapping.securityId,
-        providerInstrumentId: mapping.providerInstrumentId!,
-        exchange: mapping.exchange!,
-        tradingSymbol: mapping.tradingSymbol!,
-      }
-      const candles = await provider.getDailyHistory(instrument, from, to)
-      market[mapping.securityId] = marketMetrics(candles)
+    for (const stock of STOCKS) {
+      const ticker = PUBLIC_MARKET_SYMBOLS[stock.symbol]
+      const candles = await fetchPublicMarketHistory(ticker)
+      market[stock.symbol] = marketMetrics(candles)
     }
 
-    const benchmark = exactBenchmark(master)
-    const benchmarkCandles = await provider.getDailyHistory({
-      mappingId: "NIFTY_PHARMA",
-      securityId: "NIFTY_PHARMA",
-      providerInstrumentId: benchmark.token!,
-      exchange: benchmark.exchange!,
-      tradingSymbol: benchmark.symbol!,
-    }, from, to)
+    const benchmarkCandles = await fetchPublicMarketHistory(PUBLIC_MARKET_SYMBOLS.NIFTY_PHARMA)
     const benchmarkMetrics = marketMetrics(benchmarkCandles)
 
     const auro = market.AUROPHARMA
-    const relativeStrength12mPercent = auro.return12mPercent - benchmarkMetrics.return12mPercent
-    const relativeVolatility = auro.volatility1YPercent / benchmarkMetrics.volatility1YPercent
+    const relativeStrength12mPercent =
+      auro.return12mPercent - benchmarkMetrics.return12mPercent
+    const relativeVolatility =
+      auro.volatility1YPercent / benchmarkMetrics.volatility1YPercent
 
     return reply(200, {
       mode: "G10_2_GLOBAL_GENERICS_EVIDENCE_CAPTURE",
-      providerCalls: TRENDLYNE_QUERIES.length + STOCKS.length + 1,
+      externalReads: TRENDLYNE_QUERIES.length + STOCKS.length + 1,
       trendlyneCalls: TRENDLYNE_QUERIES.length,
-      angelOneHistoryCalls: STOCKS.length + 1,
+      publicMarketHistoryCalls: STOCKS.length + 1,
+      marketHistorySource: "YAHOO_FINANCE_PUBLIC_CHART",
       reference: "AUROPHARMA",
       peers: STOCKS.slice(1).map((item) => item.symbol),
       benchmark: "NIFTY_PHARMA",
@@ -256,6 +243,8 @@ Deno.serve(async (request) => {
     return reply(502, {
       error: "G10.2 local evidence acquisition failed safely.",
       code: error instanceof Error ? error.message : "G10_2_LOCAL_EVIDENCE_FAILED",
+      completedTrendlyneCalls: Object.keys(trendlyneResults).length,
+      partialTrendlyneResults:
+        Object.keys(trendlyneResults).length ? trendlyneResults : undefined,
     })
-  }
-})
+  }})
