@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B FINAL FAIL-CLOSED RESULT IMPLEMENTED / LOCALHOST REVIEW + FINAL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 GLOBAL_GENERICS / AUROPHARMA COMPLETE / PASS WITH DETERMINISTIC FAIL-CLOSED OUTCOME; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -28484,3 +28484,305 @@ stabilityScore: 100 → 75
 No methodology, runtime scoring logic, UI, evidence state, persistence state or recommendation logic changed.
 
 **CURRENT STOP:** pull latest branch and rerun `scripts/g10-2-validate-final-fail-closed.sh`.
+
+
+---
+
+## 334. Entry 329 — G10.2 / AUROPHARMA COMPLETE / PASS — deterministic fail-closed closure
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Final validated head:** `dd61a7a3dd781e9e25ac2ef96f8b677d17d06d8a`
+
+The owner reported:
+
+```text
+ALL PASSED
+```
+
+for the final consolidated G10.2 validator after the single stale percentile test expectation was corrected.
+
+### Formal Gate J / G10.2 closure
+
+```text
+Reference company = AUROPHARMA
+Primary = GLOBAL_GENERICS
+Material Overlay = none
+Emerging Watch = API_BULK_DRUGS
+BIOPHARMA_BIOSIMILARS = REVIEW_REQUIRED / unresolved
+
+Checkpoint A = COMPLETE / PASS
+Checkpoint B = COMPLETE / PASS
+Checkpoint B outcome = DETERMINISTIC FAIL-CLOSED
+
+Score = SCORE_NOT_COMPUTABLE
+Gate I recommendation = NOT EXECUTED
+Partial score reconstruction = FORBIDDEN
+Missing-component renormalization = FORBIDDEN
+```
+
+This is a successful Gate J controlled-expansion result because the approved Global Generics methodology correctly refused to manufacture a score from incomplete mandatory inputs.
+
+### Checkpoint A authority retained
+
+G10.2 Checkpoint A re-confirmed the existing AUROPHARMA classification without rebuilding it from scratch:
+
+```text
+FY25 Global Generics conservative lower bound = 73.04%
+FY25 API share = 13.63%
+FY26 Global Generics conservative lower bound = 73.46%
+FY26 API share = 12.03%
+```
+
+The primary classification remained `GLOBAL_GENERICS`, API remained `EMERGING_WATCH`, and Biosimilars remained unresolved.
+
+### Checkpoint B methodology
+
+The owner explicitly approved:
+
+```text
+APPROVE G10.2 GLOBAL GENERICS METHODOLOGY COMPLETION CANDIDATE
+```
+
+Approved numeric contract:
+
+```text
+PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY_V1_OWNER_APPROVED
+Policy = REVIEWED_REFERENCE_RELATIVE_MEDIAN_V1
+```
+
+Core methodology rules:
+
+- reviewed same-primary peer-relative percentile normalization;
+- minimum reviewed peer cohort = 3;
+- median component aggregation;
+- missing mandatory inputs fail closed;
+- no Domestic bands inherited;
+- no API bands inherited;
+- no BANK/NBFC bands inherited;
+- no hidden component weights;
+- no hidden renormalization;
+- NIFTY Pharma remains the Pharma benchmark;
+- API Emerging Watch has no numeric participation;
+- unresolved Biosimilars has no numeric participation;
+- G4 regulatory context cannot be penalized a second time.
+
+Reviewed peer cohort:
+
+```text
+DRREDDY
+LUPIN
+ZYDUSLIFE
+```
+
+### Provider/data architecture learned during G10.2
+
+Initial acquisition attempts exposed multiple transport/provider-path issues:
+
+1. Local Supabase Edge Function startup race initially produced gateway HTTP 502.
+2. The readiness loop was fixed to require an authenticated zero-call PLAN HTTP 200 before EXECUTE.
+3. Angel One authentication was tested directly and returned:
+   ```text
+   HTTP_STATUS: 200
+   STATUS: True
+   MESSAGE: SUCCESS
+   JWT_RETURNED: True
+   RESULT: PASS
+   ```
+4. Angel One historical `getCandleData` still returned HTTP 403 during this session, so the problem was isolated to the historical-data path rather than authentication.
+5. Yahoo public market history returned HTTP 429.
+6. NSE public fallback returned an unusable empty history response for the requested path.
+
+These failures were not allowed to weaken the scoring methodology.
+
+The data architecture was then reset and frozen as:
+
+```text
+1. Trendlyne MCP = primary research-data authority
+2. Angel One = secondary exact raw market-history authority only if required
+3. Yahoo/NSE fallback code = diagnostic only, not active G10.2 scoring authority
+```
+
+### Trendlyne evidence acquisition
+
+The owner approved the bounded local evidence acquisition and later exactly three replacement Trendlyne calls after an earlier composite response lost its payload.
+
+The corrected workflow eventually preserved:
+
+```text
+Initial preserved Trendlyne results = 3
+Successful narrow Trendlyne gap-fill results = 2
+Total reusable Trendlyne results = 5
+Production writes = 0
+```
+
+Zero-call coverage inspection showed the original preserved payload already contained evidence families for:
+
+```text
+QUALITY
+CAPITAL_EFFICIENCY
+CASH_FLOW
+BALANCE_SHEET_CREDIT
+OWNERSHIP_GOVERNANCE
+```
+
+A narrow two-call Trendlyne gap-fill then targeted:
+
+- revenue growth;
+- valuation metrics;
+- 6M / 1Y returns;
+- beta / volatility / drawdown where available;
+- RSI / MACD / Trendlyne Momentum Score;
+- NIFTY Pharma 6M / 1Y returns.
+
+That gap-fill completed successfully:
+
+```text
+G10.2 TRENDLYNE GAP-FILL PASS
+Provider calls: 2
+Production writes: 0
+```
+
+### Normalization findings
+
+The five saved Trendlyne responses were parsed locally with zero further provider calls.
+
+Useful normalized evidence included:
+
+- operating-margin / operating-profit histories;
+- ROCE;
+- CFO histories;
+- EBITDA;
+- promoter-pledge context;
+- 1Y stock return;
+- Trendlyne Momentum Score history;
+- multiple other peer-relative fundamental fields.
+
+The strict missing-family audit ultimately showed mandatory unresolved families including:
+
+```text
+FREE_CASH_FLOW
+NET_DEBT
+INTEREST_COVERAGE
+PE_TTM
+EV_EBITDA
+RETURN_6M
+```
+
+Promoter-related evidence existed, but the exact current + multi-period ownership context required by the approved method was not fully normalized.
+
+### Final deterministic blocker groups
+
+Final implementation:
+
+`src/features/research/auropharmaG102FinalResult.ts`
+
+Final state:
+
+```text
+COMPLETE_FAIL_CLOSED
+```
+
+Mandatory blocker groups:
+
+1. `GROWTH_PRICE_EROSION_METHOD_AND_EVIDENCE_INCOMPLETE`
+2. `VALUATION_REQUIRED_COMPONENTS_INCOMPLETE`
+3. `MOMENTUM_REQUIRED_6M_AND_BENCHMARK_EVIDENCE_INCOMPLETE`
+4. `RISK_REQUIRED_DRAWDOWN_VOLATILITY_EVIDENCE_INCOMPLETE`
+5. `OWNERSHIP_REQUIRED_CURRENT_AND_MULTI_PERIOD_CONTEXT_INCOMPLETE`
+
+The Global Generics price-erosion curve also remains proposal-only and cannot silently become an executable numeric rule.
+
+### UI closure
+
+The reusable Gate J block on AUROPHARMA now shows:
+
+```text
+Gate J · G10.2 · Checkpoint B
+Global Generics controlled-expansion result
+Checkpoint B complete · Fail-closed outcome
+```
+
+The UI explicitly shows:
+
+```text
+SCORE NOT COMPUTABLE
+Gate I recommendation not executed
+```
+
+and lists the mandatory blocker groups rather than suggesting further automatic evidence chasing.
+
+No stock-specific page fork was created.
+
+### Final validator
+
+Final validator:
+
+`scripts/g10-2-validate-final-fail-closed.sh`
+
+Validation includes:
+
+- focused G10.2 final-result tests;
+- reusable Gate J panel tests;
+- Global Generics numeric-methodology tests;
+- peer-set tests;
+- AUROPHARMA classification re-confirmation tests;
+- G10.1 regression controls;
+- Gate I regression controls;
+- full non-Edge application test suite;
+- strict TypeScript;
+- architecture guard;
+- focused lint;
+- architecture lint;
+- production build;
+- git diff whitespace validation.
+
+One final test defect was identified:
+
+```text
+reference stability = 2
+peer values = [1, 3, 4]
+direction = LOWER_BETTER
+```
+
+The deterministic percentile result is `75`, but the test incorrectly expected `100`.
+
+Only the test expectation was corrected:
+
+```text
+stabilityScore: 100 → 75
+```
+
+No methodology or runtime scoring logic changed.
+
+The owner then reported:
+
+```text
+ALL PASSED
+```
+
+### Final safety closure
+
+```text
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production Supabase mutation = NO
+Scheduler mutation = NO
+Deployment = NO
+PR merge = NO
+Automatic trading = NO
+```
+
+### Formal status
+
+```text
+G10.1 API_BULK_DRUGS / ALIVUS = COMPLETE / PASS
+G10.2 GLOBAL_GENERICS / AUROPHARMA = COMPLETE / PASS
+G10.2 final outcome = DETERMINISTIC FAIL-CLOSED
+PR #101 = OPEN / DRAFT / UNMERGED
+```
+
+The next chat should continue Gate J from the next planned controlled-expansion reference/category. Do not reopen G10.2 unless a later approved evidence refresh materially changes one of the explicit blocker groups.
