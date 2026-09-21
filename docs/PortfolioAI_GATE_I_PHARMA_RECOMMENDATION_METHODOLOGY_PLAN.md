@@ -10,7 +10,7 @@
 **Primary subprofile:** DOMESTIC_FORMULATIONS
 **Gate H score:** 75.1575 / 100
 **Gate H state:** COMPLETE / PASS
-**Status:** IN PROGRESS — I1 COMPLETE / PASS; I2 COMPLETE / PASS; I3 COMPLETE / PASS; I4 IMPLEMENTED / VALIDATION + GATE I CLOSURE REVIEW PENDING
+**Status:** COMPLETE / PASS — I1, I2, I3, I4 COMPLETE
 
 **Owner-approved revised-plan corrections adopted before I1 implementation:**
 
@@ -736,7 +736,27 @@ The independent hand fixture reproduces:
 
 The I4 verifier also proves exact preservation of all ten Gate H dimension scores, repeated-output determinism, AUROPHARMA fail-closed behavior, anti-leakage and downstream safety flags.
 
-**I4 is not yet closed. Gate I remains open until consolidated I4 validation passes and the closure checkpoint is recorded.**
+**I4 = COMPLETE / PASS. Gate I = COMPLETE / PASS.**
+
+### I4 final closure — 21 September 2026
+
+The owner completed the final consolidated I4 validation and reported **ALL PASS**.
+
+Independent verification confirmed:
+
+- hand role = SATELLITE_CANDIDATE;
+- adapter role = SATELLITE_CANDIDATE;
+- Gate H score preserved exactly at 75.1575;
+- all ten Gate H dimensions preserved exactly;
+- AUROPHARMA remained INSUFFICIENT / SCORE_NOT_COMPUTABLE with zero reconstruction;
+- no BANK_NBFC, NIFTY Bank, or HDFCBANK leakage;
+- no Global Generics second recommendation;
+- no CDMO Emerging numeric role input;
+- no governance double counting;
+- deterministic repeated output;
+- no persistence, sizing, AI interpretation, provider or production mutation path invoked.
+
+Gate I therefore closes COMPLETE / PASS.
 
 ---
 
@@ -863,18 +883,18 @@ Only after Gate I closure should the project decide the next separate downstream
 
 ---
 
-# 15. Current stop point
+# 15. Final Gate I state
 
 ```text
 Gate H = COMPLETE / PASS
-Gate I plan = REVISED / ADOPTED
+Gate I = COMPLETE / PASS
 I1 = COMPLETE / PASS
-I2 = CANDIDATE IMPLEMENTED / VALIDATION + OWNER APPROVAL PENDING
-I3 = NOT STARTED
-I4 = NOT STARTED
+I2 = COMPLETE / PASS
+I3 = COMPLETE / PASS
+I4 = COMPLETE / PASS
 ```
 
-Do not begin I2 until explicitly instructed by the owner.
+Gate I is closed. Recommendation persistence, weight/action guidance, sizing, AI interpretation, deployment and PR merge remain outside Gate I.
 
 
 ---
