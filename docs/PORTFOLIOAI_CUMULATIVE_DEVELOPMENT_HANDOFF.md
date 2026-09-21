@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 BIOPHARMA_BIOSIMILARS / BIOCON CHECKPOINT A IMPLEMENTED / OWNER LOCALHOST LOCK + FULL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 COMPLETE / PASS; G10.3 BIOPHARMA_BIOSIMILARS / BIOCON CHECKPOINT A COMPLETE / PASS; CHECKPOINT B CONSOLIDATED BUILD IMPLEMENTED / LOCAL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -29053,3 +29053,160 @@ PR merge = NO
 ```
 
 The build is intentionally consolidated: methodology contract, evidence package, deterministic result, Gate I handoff/result, UI integration and one consolidated validator. No additional Checkpoint B micro-stages are introduced.
+
+---
+
+## 336. Entry 331 — G10.3 / BIOCON Checkpoint B consolidated build implemented
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Checkpoint A authority:** COMPLETE / PASS / owner-approved
+
+Owner authorized:
+
+```text
+Update the Handoff file and begin G10.3 Checkpoint B as one consolidated build
+```
+
+The Checkpoint B implementation is now laid down as one consolidated package rather than split into additional micro-stages.
+
+### Implemented contract
+
+```text
+Primary methodology = BIOPHARMA_BIOSIMILARS
+Reference company = BIOCON
+Material Overlays = GLOBAL_GENERICS + CDMO_CRAMS
+Common ten-dimension PHARMA_V1 spine = preserved
+Gate I recommendation policy = unchanged
+Second independent stock score = prohibited
+Overlay numeric modifier = prohibited
+Missing mandatory evidence = fail closed
+Partial score reconstruction = prohibited
+Hidden renormalization = prohibited
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production mutation = NO
+Deployment = NO
+PR merge = NO
+```
+
+### Repository package
+
+Added:
+
+- `src/features/research/pharmaBiosimilarsG103Methodology.ts`
+- `src/features/research/pharmaBiosimilarsG103Methodology.test.ts`
+- `src/features/research/bioconG103CheckpointBEvidence.ts`
+- `src/features/research/bioconG103CheckpointBEvidence.test.ts`
+- `src/features/research/bioconG103FinalResult.ts`
+- `src/features/research/bioconG103FinalResult.test.ts`
+- `scripts/g10-3-validate-biopharma-checkpoint-b.sh`
+
+Updated:
+
+- `src/features/research/PharmaGateJReferenceClassificationPanel.tsx`
+- `src/features/research/PharmaGateJReferenceClassificationPanel.test.tsx`
+- `src/features/research/pharmaGateJReferenceClassification.ts`
+
+### Biosimilars methodology candidate
+
+The methodology defines all ten PHARMA_V1 dimension contracts specifically for a Biosimilars-primary company and explicitly refuses to borrow numeric bands from Domestic Formulations, API/Bulk Drugs, Global Generics or BANK_NBFC.
+
+Mandatory evidence requirements include:
+
+- eight comparable Biosimilars EBITDA-margin quarters for Quality;
+- four comparable Biosimilars growth observations plus official launch/approval lineage for Growth;
+- three comparable annual primary-attributable invested-capital return observations for Capital Efficiency;
+- three matched CFO/PAT/capex/FCF periods for Cash Flow;
+- multi-period listed-parent leverage/cash/earnings evidence for Balance Sheet/Credit;
+- molecule/geography/stage pipeline, biologics manufacturing and partner-economics evidence for Business Durability;
+- current valuation + self-history + FCF corroboration for Valuation;
+- 12M + 6M + NIFTY Pharma-relative market history for Momentum;
+- four-quarter ownership + pledge/control context for Ownership/Governance;
+- current site state + molecule/geography-linked patent/litigation timeline + market-risk evidence for Risk.
+
+### Bounded BIOCON evidence package
+
+The issuer-official package currently locks FY26 and Q1 FY27 operating evidence, current launch/approval execution, official shareholding source authority and current regulatory context.
+
+The implementation intentionally does not fabricate missing histories or substitute group-level proxies where the Biosimilars-primary contract requires primary-attributable evidence.
+
+Current deterministic candidate result:
+
+```text
+BIOCON G10.3 Checkpoint B
+State = COMPLETE_FAIL_CLOSED
+Score state = SCORE_NOT_COMPUTABLE
+Recommendation state = RECOMMENDATION_NOT_COMPUTABLE
+Gate I = NOT EXECUTED
+```
+
+Mandatory blocker groups currently include:
+
+1. eight-quarter Biosimilars margin history incomplete;
+2. primary-attributable capital-efficiency history incomplete;
+3. matched cash-flow history incomplete;
+4. valuation + momentum market package incomplete;
+5. four-quarter ownership normalization incomplete;
+6. patent/litigation + trailing market-risk evidence incomplete.
+
+This is a deterministic fail-closed result, not a negative company score.
+
+### Isolation boundary
+
+G10.3 methodology availability does **not** resolve AUROPHARMA's company-specific unresolved Biosimilars exposure.
+
+```text
+AUROPHARMA Biosimilars exposure = UNRESOLVED
+```
+
+Both BIOCON Material Overlays remain visible context only and do not create a second score or recommendation.
+
+### UI integration
+
+BIOCON now renders a G10.3 Checkpoint B block under the existing Gate J area showing:
+
+- Biosimilars-specific methodology;
+- both Material Overlays;
+- evidence-through date;
+- `SCORE_NOT_COMPUTABLE`;
+- explicit mandatory blocker cards;
+- Gate I recommendation not executed;
+- persistence / sizing / AI / production / deployment / merge all off.
+
+### Consolidated validator
+
+Added:
+
+`scripts/g10-3-validate-biopharma-checkpoint-b.sh`
+
+It runs eight consolidated groups:
+
+1. Biosimilars methodology + BIOCON evidence/final-result tests;
+2. Gate I + Gate J isolation controls;
+3. full non-Edge application suite;
+4. strict TypeScript;
+5. architecture guard;
+6. focused lint + architecture lint;
+7. production build;
+8. diff whitespace check.
+
+### Current stop point
+
+```text
+G10.1 API_BULK_DRUGS / ALIVUS = COMPLETE / PASS
+G10.2 GLOBAL_GENERICS / AUROPHARMA = COMPLETE / PASS
+G10.3 BIOPHARMA_BIOSIMILARS / BIOCON
+  Checkpoint A = COMPLETE / PASS
+  Checkpoint B consolidated code = IMPLEMENTED
+  Checkpoint B deterministic candidate = FAIL-CLOSED / SCORE_NOT_COMPUTABLE
+  Local UI review = PENDING
+  Consolidated local validation = PENDING
+PR #101 = OPEN / DRAFT / UNMERGED
+```
+
+**Next action:** owner pulls the latest branch, visually reviews BIOCON's G10.3 Checkpoint B block, and runs the single consolidated Checkpoint B validator. Do not mark G10.3 COMPLETE / PASS until that local validation passes.
+
