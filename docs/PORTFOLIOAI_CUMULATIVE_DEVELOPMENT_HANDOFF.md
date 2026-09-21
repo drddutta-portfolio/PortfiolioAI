@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I1 COMPLETE / PASS; Gate I2 COMPLETE / PASS; Gate I3 COMPLETE / PASS; I4 IMPLEMENTED / VALIDATION + GATE I CLOSURE REVIEW PENDING
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS (I1–I4 COMPLETE); PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -26237,3 +26237,90 @@ The I4 command was corrected to:
 This is a validation harness correction only. No recommendation methodology, score, role, UI, persistence, production data, or Edge code changed.
 
 I4 remains open pending a clean consolidated rerun.
+
+
+---
+
+## 305. Entry 300 — Gate I4 COMPLETE / PASS; Gate I COMPLETE / PASS
+
+**Date:** 21 September 2026
+**Branch:** `r4n-pharma-subprofile-architecture`
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+**Validated pre-closure head:** `5d5ef233e810447c6a85ec09b908caa7520afe60`
+
+The owner completed the final consolidated I4 validation and reported:
+
+> **ALL PASS**
+
+### Independent closure proof
+
+```text
+Hand role = SATELLITE_CANDIDATE
+Adapter role = SATELLITE_CANDIDATE
+Gate H score = 75.1575 preserved exactly
+Ten Gate H dimensions = preserved exactly
+AUROPHARMA = INSUFFICIENT / SCORE_NOT_COMPUTABLE / no reconstruction
+BANK/NBFC leakage = NONE
+NIFTY Bank leakage = NONE
+HDFCBANK-specific leakage = NONE
+Global Generics second recommendation = NONE
+CDMO Emerging numeric role input = NONE
+Governance double counting = NONE
+Repeated output = IDENTICAL
+Recommendation persistence = OFF
+Score persistence = OFF
+Weight guidance = OFF
+Action bias = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Provider invocation = NO
+Production mutation = NO
+```
+
+### Formal closure
+
+> **I4 = COMPLETE / PASS**
+
+> **GATE I = COMPLETE / PASS**
+
+Gate I closure state:
+
+```text
+PHARMA_V1 RECOMMENDATION METHODOLOGY = COMPLETE
+TORNTPHARM FIRST DETERMINISTIC RECOMMENDATION = COMPLETE
+TORNTPHARM ROLE = SATELLITE_CANDIDATE
+TORNTPHARM SCORE = 75.1575
+AUROPHARMA FAIL-CLOSED CONTROL = PASS
+```
+
+### Safety after closure
+
+The following remain outside Gate I and remain OFF / not performed:
+
+- score persistence;
+- recommendation persistence;
+- recommendation-history creation;
+- weight guidance;
+- action bias;
+- AI interpretation;
+- position sizing;
+- user portfolio mutation;
+- provider refresh;
+- production Supabase mutation;
+- deployment;
+- PR #101 merge;
+- automatic trading.
+
+### Current state
+
+```text
+Gate H = COMPLETE / PASS
+Gate I = COMPLETE / PASS
+I1 = COMPLETE / PASS
+I2 = COMPLETE / PASS
+I3 = COMPLETE / PASS
+I4 = COMPLETE / PASS
+PR #101 = OPEN / DRAFT / UNMERGED
+```
+
+Gate I is closed. Any persistence / portfolio-aware recommendation / sizing work must be a separate downstream gate.
