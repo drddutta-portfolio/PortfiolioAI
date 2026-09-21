@@ -28291,3 +28291,50 @@ The normalizer was tightened to:
 No provider call is repeated.
 
 Current stop: rerun only `scripts/g10-2-normalize-trendlyne-evidence.sh` after pulling the latest branch.
+
+
+---
+
+## 330. Entry 325 — Strict normalization exposed seven unresolved core metric families; zero-call raw-label audit added
+
+**Date:** 21 September 2026
+
+Strict normalization completed successfully and produced clean canonical blocks, including:
+
+- CFO histories for AUROPHARMA / DRREDDY / LUPIN / ZYDUSLIFE;
+- EBITDA TTM;
+- promoter pledge;
+- 1Y stock return;
+- Trendlyne Momentum Score histories.
+
+The remaining core metric families were:
+
+```text
+FREE_CASH_FLOW
+NET_DEBT
+INTEREST_COVERAGE
+PE_TTM
+EV_EBITDA
+PROMOTER_HOLDING
+RETURN_6M
+```
+
+These are not yet treated as provider-missing. They may exist under alternate Trendlyne labels.
+
+Added:
+
+- `scripts/g10-2-audit-missing-trendlyne-labels.py`
+- `scripts/g10-2-audit-missing-trendlyne-labels.sh`
+
+The audit searches all five already-saved Trendlyne responses for alternate labels/context and makes zero provider calls.
+
+Execution rule:
+
+1. run the zero-call raw-label audit;
+2. reclassify each of the seven families as:
+   - already present under alternate label;
+   - derivable from already-preserved values;
+   - genuinely absent;
+3. only then make at most one exact Trendlyne gap-fill call for the genuinely absent fields.
+
+No provider call is authorized by this step.
