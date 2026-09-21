@@ -1,6 +1,6 @@
 # PortfolioAI — Gate K · K1 Sector Inventory & Priority Lock
 
-**Status:** K1 TECHNICAL AUDIT COMPLETE / OWNER REVIEW LOCK PREPARED  
+**Status:** K1 EXCHANGE-PRIMARY CLASSIFICATION RECONCILIATION REQUIRED / K4 SCOPE NOT YET FROZEN  
 **Date:** 22 September 2026  
 **Branch:** r4n-pharma-subprofile-architecture  
 **PR:** #101 — KEEP OPEN / DRAFT / UNMERGED  
@@ -42,6 +42,23 @@ K1 used the existing PortfolioAI contracts rather than inventing a new classific
 - security_scoring_profile_assignments was inspected but not changed.
 
 The canonical Gate K plan and the cumulative development handoff were inspected first.
+
+### 2.1 Exchange-primary classification authority — owner decision
+
+K1 now adopts the following classification rule before any K4 package count is frozen:
+
+1. **Official NSE / BSE industry classification is the Tier-1 authority for the holding's primary sector identity.**
+2. A holding must have exactly one PortfolioAI primary sector identity for routing.
+3. Where a company participates in multiple businesses, secondary business exposure does **not** create multiple primary sectors. Secondary economics may later be represented by a reviewed subprofile / overlay if methodology requires it.
+4. For dual-listed securities, compare the latest official NSE and BSE classifications. If they agree at sector level, accept the common sector. If they materially disagree, mark the holding **REVIEW_REQUIRED** and resolve from the latest official exchange classification evidence and audited segment-revenue basis; do not choose the more convenient methodology.
+5. Current PortfolioAI provider-derived sector / industry evidence may be used as supporting evidence, but it cannot overrule a current official exchange classification without reviewed evidence.
+6. Holdings currently `UNCLASSIFIED` must be filled from official NSE/BSE classification evidence where available.
+7. ETFs, index funds and similar pooled instruments remain outside operating-company sector routing even if an exchange page exposes a reference sectoral index.
+8. Any exchange-classification refresh must update the canonical classification authority first. Runtime research routing continues to read the canonical PortfolioAI classification; application code must not scrape NSE/BSE ad hoc during scoring.
+
+NSE Indices publishes a four-tier structure — Macro-Economic Sector, Sector, Industry and Basic Industry — and classifies multi-business companies primarily from audited segment revenue. That hierarchy is the preferred normalization model for PortfolioAI's canonical sector/industry fields.
+
+**Consequence:** the 33-label raw inventory below is a pre-reconciliation snapshot. It is useful for identifying data-quality problems, but it is **not** the final K1 sector inventory.
 
 ---
 
@@ -206,11 +223,11 @@ The portfolio also contains partially classified holdings with missing industrie
 
 ---
 
-## 7. K4 build queue — exact package count
+## 7. K4 build queue — provisional candidate packages pending exchange reconciliation
 
-### K4 PACKAGE COUNT = 10
+### PROVISIONAL K4 CANDIDATE COUNT = 10 — NOT FROZEN
 
-K4 will contain exactly **10 consolidated sector packages**.
+The first-pass audit identified **10 plausible consolidated sector packages**, but the owner has correctly required exchange-primary sector reconciliation before the exact K4 count is frozen.
 
 PHARMA_V1 is already complete and BANK_NBFC is handled by K3, so neither counts toward K4.
 
@@ -227,7 +244,7 @@ The ten K4 packages are:
 9. OIL_GAS_V1
 10. POWER_RENEWABLES_V1
 
-After owner acceptance of K1, this count is frozen. A new sector does not enlarge Gate K silently.
+These ten packages are therefore **candidate packages only**. After all current holdings are normalized to their official NSE/BSE primary sector identity and the unclassified set is resolved as far as official exchange evidence permits, K1 must rerun the inventory. Only that post-reconciliation result may freeze the exact K4 count. A later newly encountered sector still does not silently enlarge Gate K.
 
 ---
 
@@ -387,18 +404,18 @@ Official references:
 
 ---
 
-## 13. K1 frozen decisions
+## 13. K1 provisional decisions pending exchange-primary reconciliation
 
 ### Existing engines
 
 1. PHARMA_V1 — existing; Gate J complete.
 2. BANK_NBFC — existing; K3 reconciliation/portability required.
 
-### Exact K4 package count
+### Current provisional K4 package count
 
-**10**
+**10 candidate packages — NOT YET FROZEN**
 
-### Exact K4 order
+### Current provisional K4 order
 
 1. IT_TECH
 2. INDUSTRIALS_CAPITAL_GOODS
@@ -421,40 +438,40 @@ Official references:
 - classification conflicts: REVIEW_REQUIRED;
 - no unrelated-sector fallback is permitted.
 
-### Total intended specialised-engine architecture after K3 + K4
+### Total specialised-engine count
 
-If K3 and all ten K4 packages later pass:
+**NOT YET FROZEN.**
 
-**12 specialised sector engines total**
-
-= 2 existing (PHARMA_V1 + BANK_NBFC)  
-+ 10 K4 packages.
-
-This is an architecture count only. It does not mean every portfolio holding will be score-computable.
+The earlier first-pass estimate was 12 total specialised engines = 2 existing + 10 candidate K4 packages. That estimate must now be recomputed after the NSE/BSE primary-sector reconciliation and must not be treated as a locked Gate K scope.
 
 ---
 
-## 14. K1 exit state
+## 14. K1 current state
 
-K1 has now produced the required **Gate K Sector Build Queue** with:
+The initial live portfolio audit is complete, but K1 is **not yet at its freeze/exit point**.
 
-- complete live portfolio sector inventory;
+Completed inside K1:
+
+- live current-holdings inventory;
+- first-pass sector grouping;
 - existing-engine identification;
-- explicit new-engine candidates;
-- explicit deferred states;
-- genuine subprofile assessment;
-- reference-stock candidates;
-- benchmark-family candidates;
-- valuation-family candidates;
-- major risk families;
-- exact K4 package count;
-- exact development order.
+- legacy-scaffold audit;
+- candidate reference-stock / benchmark / valuation / risk inventory;
+- identification of obvious classification conflicts.
 
-No methodology implementation has begun.
+Still required inside the same consolidated K1 gate:
 
-**K1 technical lock:** PREPARED  
-**Owner acceptance:** REQUIRED before marking K1 COMPLETE / PASS and before beginning K2.
+1. retrieve / reconcile official NSE/BSE primary classification for every current operating-company holding;
+2. resolve the 10 currently unclassified holdings as far as official exchange evidence permits;
+3. detect and review NSE-vs-BSE classification conflicts;
+4. ensure every operating-company holding has one primary canonical sector only;
+5. rerun sector counts from the reconciled canonical inventory;
+6. reconsider candidate engine grouping / subprofile need from that corrected inventory;
+7. freeze the exact K4 package count and order only then.
 
-The next safe gate after owner acceptance is:
+**K1 status:** IN PROGRESS  
+**K4 package count:** NOT FROZEN  
+**New methodology implementation:** NOT STARTED  
+**Production mutation:** NONE
 
-**K2 — Universal Sector-Engine Contract**
+The next safe K1 action is the consolidated **NSE/BSE primary-classification reconciliation pass**. K2 must not begin until that pass is complete and the resulting K1 scope is owner-approved.
