@@ -5,7 +5,7 @@
 **Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 — OPEN / DRAFT / UNMERGED
 **I4 base head:** `d051d7a8f05d11c902a451de73c8fb5fd2572ba3`
-**Status:** IMPLEMENTED / VALIDATION + GATE I CLOSURE REVIEW PENDING
+**Status:** COMPLETE / PASS — GATE I CLOSURE VERIFIED
 
 ## Purpose
 
@@ -209,3 +209,75 @@ The consolidated I4 script now runs:
 `npx vitest run --exclude "supabase/functions/**"`
 
 This preserves the intended I4 requirement: full non-Edge application coverage, while leaving Edge suites on their dedicated configuration.
+
+
+## Final consolidated validation
+
+The owner reran:
+
+`git pull && bash scripts/i4-validate-pharma-recommendation-closure.sh`
+
+and reported:
+
+> **ALL PASS**
+
+The complete I4 closure validation passed:
+
+- focused I4 + Gate I regressions;
+- related Gate H preservation regressions;
+- full non-Edge application test suite;
+- strict TypeScript;
+- presentation data-boundary architecture guard;
+- focused I4 lint;
+- existing architecture lint;
+- production build;
+- I4 diff whitespace check.
+
+The production build emitted only the existing non-failing Vite chunk-size warning.
+
+Terminal closure confirmed:
+
+```text
+I4 CANDIDATE VALIDATION PASS
+Hand role: SATELLITE_CANDIDATE
+Adapter role: SATELLITE_CANDIDATE
+Gate H score preserved: 75.1575
+Ten dimensions preserved: YES
+AUROPHARMA fail-closed no reconstruction: YES
+BANK/NBFC + NIFTY Bank + HDFCBANK leakage: NONE
+Overlay second recommendation: NONE
+CDMO Emerging numeric role input: NONE
+Governance double counting: NONE
+Repeated output identical: YES
+Recommendation / score persistence: OFF
+Weight guidance / action bias / sizing / AI interpretation: OFF
+Provider / production mutation paths invoked: NO
+```
+
+## I4 closure
+
+> **I4 = COMPLETE / PASS**
+
+The Gate I exit condition is satisfied:
+
+> **FIRST PHARMA RECOMMENDATION = DETERMINISTIC / HAND-VERIFIED / EXPLAINABLE / NON-PERSISTING**
+
+## Gate I closure
+
+```text
+GATE I = COMPLETE / PASS
+PHARMA_V1 RECOMMENDATION METHODOLOGY = COMPLETE
+TORNTPHARM FIRST DETERMINISTIC RECOMMENDATION = COMPLETE
+TORNTPHARM ROLE = SATELLITE_CANDIDATE
+TORNTPHARM SCORE = 75.1575
+AUROPHARMA FAIL-CLOSED CONTROL = PASS
+RECOMMENDATION PERSISTENCE = OFF
+SCORE PERSISTENCE = OFF
+WEIGHT GUIDANCE = OFF
+ACTION BIAS = OFF
+POSITION SIZING = OFF
+AI INTERPRETATION = OFF
+AUTOMATIC PORTFOLIO ACTION = OFF
+```
+
+PR #101 remains OPEN / DRAFT / UNMERGED. No deployment or production mutation is authorized by Gate I closure.
