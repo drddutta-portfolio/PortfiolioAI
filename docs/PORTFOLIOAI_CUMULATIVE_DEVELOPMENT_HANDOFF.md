@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A localhost visual PASS with one stale UI-test multiplicity assertion corrected; consolidated revalidation pending; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J / G10 in progress; G10.1 COMPLETE / PASS; G10.2 Checkpoint A COMPLETE / PASS; G10.2 Checkpoint B methodology-completion candidate IMPLEMENTED / OWNER VISUAL APPROVAL PENDING; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -27411,3 +27411,100 @@ G10.2 Checkpoint B = READY TO START
 ```
 
 Checkpoint B may now build the Global Generics methodology using AUROPHARMA as the active reference company while keeping ALIVUS and TORNTPHARM as regression controls.
+
+
+---
+
+## 316. Entry 311 — G10.2 Checkpoint B consolidated methodology-completion candidate implemented
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED  
+**Starting head:** `319afd1af3c6d5c969ad9d2035f32af24a129d80`
+
+G10.2 Checkpoint B has started without creating a B1/B2 stage split.
+
+### Repository audit before implementation
+
+The prior Global Generics G6 closure remains authoritative:
+
+- Segment Growth = owner-approved numeric building block / not active;
+- Pipeline combined score = owner-approved building block / not active;
+- Operating Margin, ROCE, Cash Conversion, Balance Sheet, Valuation, Ownership/Governance, Risk and Momentum remain validated fail-closed because Global-specific calibration or aggregation was not approved;
+- Domestic, API and BANK/NBFC numeric bands must not be inherited.
+
+Therefore Checkpoint B cannot legitimately create a score by copying prior-subprofile thresholds.
+
+### New consolidated methodology candidate
+
+Added:
+
+- `src/features/research/pharmaGlobalGenericsG102MethodologyCompletionCandidate.ts`
+- `src/features/research/pharmaGlobalGenericsG102MethodologyCompletionCandidate.test.ts`
+- `docs/PortfolioAI_GATE_J_G10_2_GLOBAL_GENERICS_CHECKPOINT_B_METHOD_CANDIDATE.md`
+
+Candidate policy:
+
+```text
+REVIEWED_REFERENCE_RELATIVE_MEDIAN_V1
+```
+
+Core rules:
+
+- use reviewed same-primary peer-relative percentile normalization where Global-specific cross-company calibration is required;
+- use self-history only as explicit corroboration where the parent contract already requires it;
+- aggregate required component scores by median to avoid hidden component weights;
+- missing mandatory input fails closed;
+- no Domestic/API/BANK threshold reuse;
+- G4 regulatory state remains non-duplicative gate/context;
+- NIFTY Pharma is the Pharma market-relative benchmark candidate;
+- API Emerging Watch stays numerically excluded;
+- unresolved Biosimilars stays unresolved and numerically excluded.
+
+### Reusable approved building blocks retained
+
+- owner-approved Export / US Segment Growth curve;
+- owner-approved Global Generics pipeline combined-score contract;
+- owner-approved reviewed qualitative-component normalization rubric.
+
+### UI
+
+The reusable Gate J panel now renders on AUROPHARMA:
+
+```text
+Gate J · G10.2 · Checkpoint B
+Global Generics methodology completion candidate
+Owner approval required · Score still blocked
+```
+
+It shows the proposed method for all ten PHARMA_V1 dimensions and explicitly states the evidence boundary for each.
+
+ALIVUS continues to render the completed G10.1 score/recommendation block unchanged.
+
+### Fail-closed state preserved
+
+```text
+AUROPHARMA score = SCORE_NOT_COMPUTABLE
+Reason = GLOBAL_GENERICS_METHOD_COMPLETION_NOT_OWNER_APPROVED
+Partial score reconstruction = FORBIDDEN
+Recommendation = BLOCKED
+Score persistence = OFF
+Recommendation persistence = OFF
+Position sizing = OFF
+AI interpretation = OFF
+Production mutation = NO
+Deployment = NO
+PR merge = NO
+```
+
+### Current stop
+
+```text
+G10.2 Checkpoint A = COMPLETE / PASS
+G10.2 Checkpoint B methodology candidate = IMPLEMENTED
+Checkpoint B owner localhost visual approval = PENDING
+Checkpoint B methodology execution = BLOCKED UNTIL OWNER APPROVAL
+Checkpoint B final evidence / score / recommendation = NOT YET EXECUTED
+```
+
+This remains one Checkpoint B. No G10.2-B1/B2 numbering has been introduced.
