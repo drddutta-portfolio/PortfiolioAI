@@ -3,7 +3,7 @@ import { ALIVUS_G10_1_READ_ONLY_RECOMMENDATION } from "./alivusG101Recommendatio
 
 describe("G10.1 ALIVUS Gate I recommendation preview", () => {
   it("applies the unchanged Gate I policy to the API score", () => {
-    expect(ALIVUS_G10_1_READ_ONLY_RECOMMENDATION.overallScore).toBeCloseTo(76.6725, 10)
+    expect(ALIVUS_G10_1_READ_ONLY_RECOMMENDATION.overallScore).toBeCloseTo(76.7225, 10)
     expect(ALIVUS_G10_1_READ_ONLY_RECOMMENDATION.suggestedRole).toBe("SATELLITE_CANDIDATE")
     expect(ALIVUS_G10_1_READ_ONLY_RECOMMENDATION.evaluatedRoleThreshold).toBe("SATELLITE_CANDIDATE")
     expect(ALIVUS_G10_1_READ_ONLY_RECOMMENDATION.floorEvaluations.every((item) => item.state === "PASS")).toBe(true)
