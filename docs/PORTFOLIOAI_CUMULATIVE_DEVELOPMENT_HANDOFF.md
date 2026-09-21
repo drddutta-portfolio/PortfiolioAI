@@ -28210,3 +28210,60 @@ This evidence will be normalized separately under the already owner-approved qua
 - no PR merge.
 
 **CURRENT STOP:** pull latest branch and run the two-call Trendlyne gap-fill once.
+
+
+---
+
+## 328. Entry 323 — G10.2 two-call Trendlyne gap-fill PASS; zero-call normalization prepared
+
+**Date:** 21 September 2026  
+**Branch:** `r4n-pharma-subprofile-architecture`  
+**PR:** #101 — OPEN / DRAFT / UNMERGED
+
+Owner-run Trendlyne gap-fill completed successfully:
+
+```text
+G10.2 TRENDLYNE GAP-FILL PASS
+Provider calls: 2
+Production writes: 0
+```
+
+Saved file:
+
+`/tmp/portfolioai-g10-2-trendlyne-gap-fill.json`
+
+This completes the intended provider acquisition set:
+
+- 3 preserved Trendlyne calls from the earlier bounded evidence capture;
+- 2 successful Trendlyne gap-fill calls;
+- total reusable Trendlyne results = 5.
+
+No further provider call is required for the next step.
+
+### Zero-call normalization prepared
+
+Added:
+
+- `scripts/g10-2-normalize-trendlyne-evidence.py`
+- `scripts/g10-2-normalize-trendlyne-evidence.sh`
+
+The script reads:
+
+- `/tmp/portfolioai-g10-2-auropharma-evidence.json`
+- `/tmp/portfolioai-g10-2-trendlyne-gap-fill.json`
+
+and produces:
+
+- `/tmp/portfolioai-g10-2-normalized-evidence.json`
+
+It unwraps Trendlyne MCP responses, detects parameter blocks, normalizes AUROPHARMA / DRREDDY / LUPIN / ZYDUSLIFE / NIFTY Pharma lines, and prints the exact observed values needed for score construction.
+
+### Safety
+
+- provider calls in normalization = 0;
+- production writes = 0;
+- score persistence = OFF;
+- deployment = NO;
+- PR merge = NO.
+
+**CURRENT STOP:** pull latest branch and run the zero-call normalization. After the normalized block output is available, build the AUROPHARMA deterministic ten-dimension score package and unchanged Gate I recommendation.
