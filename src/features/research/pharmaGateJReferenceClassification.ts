@@ -9,10 +9,15 @@ import {
   BIOCON_G10_3_CLASSIFICATION_REVIEW,
   BIOCON_G10_3_DISTORTION_CHECKS,
 } from "./bioconG103ClassificationEvidence"
+import {
+  SYNGENE_G10_4_ANNUAL_BUSINESS_MODEL,
+  SYNGENE_G10_4_CLASSIFICATION_REVIEW,
+  SYNGENE_G10_4_DISTORTION_CHECKS,
+} from "./syngeneG104ClassificationEvidence"
 import type { PharmaSubprofileCode } from "./pharmaSubprofileAssignment"
 
 export interface PharmaGateJReferenceClassificationView {
-  readonly stage: "G10.1" | "G10.2" | "G10.3"
+  readonly stage: "G10.1" | "G10.2" | "G10.3" | "G10.4"
   readonly checkpoint: "A"
   readonly symbol: string
   readonly companyName: string
@@ -144,10 +149,45 @@ const BIOCON_VIEW: PharmaGateJReferenceClassificationView = {
   persistenceEnabled: false,
 }
 
+
+const SYNGENE_VIEW: PharmaGateJReferenceClassificationView = {
+  stage: "G10.4",
+  checkpoint: "A",
+  symbol: "SYNGENE",
+  companyName: "Syngene International Limited",
+  checkpointState: SYNGENE_G10_4_CLASSIFICATION_REVIEW.checkpointState,
+  primary: SYNGENE_G10_4_CLASSIFICATION_REVIEW.primary,
+  materialOverlays: SYNGENE_G10_4_CLASSIFICATION_REVIEW.materialOverlays,
+  emergingWatches: SYNGENE_G10_4_CLASSIFICATION_REVIEW.emergingWatches,
+  unresolvedExposures: [],
+  evidenceThrough: SYNGENE_G10_4_CLASSIFICATION_REVIEW.evidenceThrough,
+  proposedEffectiveDate: SYNGENE_G10_4_CLASSIFICATION_REVIEW.proposedEffectiveDate,
+  operatingMixLabel: "PortfolioAI taxonomy view of issuer contract research, development and manufacturing services",
+  operatingMixRows: SYNGENE_G10_4_ANNUAL_BUSINESS_MODEL.map((row) => ({
+    periodEnd: row.periodEnd,
+    summary: `CDMO / CRAMS taxonomy coverage ${row.cdmoCramsTaxonomySharePercent}%`,
+  })),
+  selectionLabel: "Low-ambiguity integrated CRDMO portability candidate",
+  selectionReason: SYNGENE_G10_4_CLASSIFICATION_REVIEW.selectionReason,
+  distortionChecks: SYNGENE_G10_4_DISTORTION_CHECKS.map((check) => ({
+    code: check.code,
+    state: check.state,
+    note: check.note,
+  })),
+  lockMode: "NEW_LOCK",
+  scoreStateLabel: "Score not started",
+  boundaryNote:
+    "Checkpoint A locks only the operating-model classification. The 100% figure is a PortfolioAI taxonomy consolidation of issuer contract research/development/manufacturing services, not an issuer-reported single-segment share. Checkpoint B remains blocked until owner approval.",
+  scoreExecutionEnabled: false,
+  recommendationExecutionEnabled: false,
+  persistenceEnabled: false,
+}
+
 const VIEW_BY_SYMBOL: Readonly<Record<string, PharmaGateJReferenceClassificationView>> = {
   ALIVUS: ALIVUS_VIEW,
   AUROPHARMA: AUROPHARMA_VIEW,
   BIOCON: BIOCON_VIEW,
+  SYNGENE: SYNGENE_VIEW,
 }
 
 export function pharmaGateJReferenceClassification(
