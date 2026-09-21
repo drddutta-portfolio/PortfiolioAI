@@ -8,6 +8,9 @@ import { AUROPHARMA_G10_2_FINAL_RESULT } from "./auropharmaG102FinalResult"
 import { BIOCON_G10_3_CHECKPOINT_B_EVIDENCE } from "./bioconG103CheckpointBEvidence"
 import { BIOCON_G10_3_FINAL_RESULT } from "./bioconG103FinalResult"
 import { PHARMA_BIOSIMILARS_G10_3_METHODOLOGY } from "./pharmaBiosimilarsG103Methodology"
+import { PHARMA_CDMO_G10_4_METHODOLOGY } from "./pharmaCdmoG104Methodology"
+import { SYNGENE_G10_4_CHECKPOINT_B_EVIDENCE } from "./syngeneG104CheckpointBEvidence"
+import { SYNGENE_G10_4_FINAL_RESULT } from "./syngeneG104FinalResult"
 
 function displayName(code: keyof typeof PHARMA_SUBPROFILE_CONTRACTS) {
   return PHARMA_SUBPROFILE_CONTRACTS[code].displayName
@@ -26,6 +29,7 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
   const renderAlivusCheckpointB = review.symbol === "ALIVUS"
   const renderAuropharmaCheckpointB = review.symbol === "AUROPHARMA"
   const renderBioconCheckpointB = review.symbol === "BIOCON"
+  const renderSyngeneCheckpointB = review.symbol === "SYNGENE"
   const globalCandidate = PHARMA_GLOBAL_GENERICS_G10_2_METHOD_COMPLETION_CANDIDATE
   const approvedGlobalMethod = PHARMA_GLOBAL_GENERICS_G10_2_NUMERIC_METHODOLOGY
   const finalAuroResult = AUROPHARMA_G10_2_FINAL_RESULT
@@ -157,6 +161,42 @@ export function PharmaGateJReferenceClassificationPanel({ symbol }: { readonly s
 
           <div className="pharma-persistence-package-grid">
             {BIOCON_G10_3_FINAL_RESULT.blockerGroups.map((blocker) => <article key={blocker.code}>
+              <strong>{blocker.code.replaceAll("_", " ")}</strong>
+              <small>MANDATORY BLOCKER</small>
+              <p>{blocker.details.join(" ")}</p>
+              <span>No substitution · no renormalization</span>
+            </article>)}
+          </div>
+
+          <p className="pharma-evidence-pilot-note"><strong>Safety:</strong> Gate I policy remains unchanged and is not executed without a complete ten-dimension score. Score/recommendation persistence, sizing, AI interpretation, production mutation, deployment and PR merge remain off.</p>
+        </section>
+      : null}
+
+    {renderSyngeneCheckpointB
+      ? <section className="pharma-persistence-package" aria-labelledby="gate-j-cdmo-checkpoint-b-title">
+          <div className="pharma-evidence-pilot-head">
+            <div>
+              <p className="eyebrow">Gate J · G10.4 · Checkpoint B</p>
+              <h3 id="gate-j-cdmo-checkpoint-b-title">CDMO / CRAMS controlled-expansion result</h3>
+              <p>The CDMO/CRAMS-primary methodology and bounded issuer evidence package have been applied without borrowing bands from another subprofile. Mandatory evidence gaps keep the ten-dimension score fail-closed.</p>
+            </div>
+            <span className="pharma-workspace-lock">Checkpoint B candidate · Fail-closed outcome</span>
+          </div>
+
+          <div className="pharma-persistence-package-summary">
+            <div><span>Methodology</span><strong>CDMO / CRAMS-specific</strong><small>{PHARMA_CDMO_G10_4_METHODOLOGY.dimensionContracts.length}/10 dimension contracts defined</small></div>
+            <div><span>Material Overlays</span><strong>None</strong><small>No independent secondary score</small></div>
+            <div><span>Evidence through</span><strong>{SYNGENE_G10_4_CHECKPOINT_B_EVIDENCE.evidenceThrough}</strong><small>Issuer-official bounded package</small></div>
+            <div><span>Current score state</span><strong>{SYNGENE_G10_4_FINAL_RESULT.scoreState.replaceAll("_", " ")}</strong><small>Gate I recommendation not executed</small></div>
+          </div>
+
+          <div className="research-callout research-callout-neutral">
+            <strong>Deterministic fail-closed result</strong>
+            <p>No partial SYNGENE score is reconstructed. Missing client-concentration, utilization and other mandatory evidence remains unavailable rather than being treated as neutral.</p>
+          </div>
+
+          <div className="pharma-persistence-package-grid">
+            {SYNGENE_G10_4_FINAL_RESULT.blockerGroups.map((blocker) => <article key={blocker.code}>
               <strong>{blocker.code.replaceAll("_", " ")}</strong>
               <small>MANDATORY BLOCKER</small>
               <p>{blocker.details.join(" ")}</p>
