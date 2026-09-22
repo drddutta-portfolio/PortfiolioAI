@@ -79,7 +79,7 @@ function coerceRows(text: string, requested: readonly string[]): ClassificationR
       sector: clean(item.sector ?? item.sector_name),
       industry: clean(item.industry ?? item.industry_name),
       companyName: clean(item.company_name ?? item.companyName ?? item.name),
-    }))
+    })
   }
 
   return rows
