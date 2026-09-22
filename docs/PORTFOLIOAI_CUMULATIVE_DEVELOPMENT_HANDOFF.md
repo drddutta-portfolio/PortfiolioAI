@@ -815,3 +815,43 @@ Product/category metadata remains mandatory. Alcohol remains an excise/regulator
 **CONSUMER_FMCG Checkpoint A = COMPLETE / PASS / FROZEN.**
 
 Checkpoint B is now IN PROGRESS.
+
+
+---
+
+## K4 Package 8 · CONSUMER_FMCG · Checkpoint B implementation — 22 September 2026
+
+Checkpoint A is frozen COMPLETE / PASS.
+
+Implemented:
+- `consumerFmcgK4bScoringMethodology.ts`;
+- `consumerFmcgK4bScoringMethodology.test.ts`;
+- `consumerFmcgK4bIsolationRegression.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_8_CONSUMER_FMCG_CHECKPOINT_B.md`;
+- canonical router extended for BRANDED_CONSUMER_FMCG;
+- registry maps the profile to CONSUMER_FMCG in validation-pending state.
+
+Deterministic scoring:
+- ten dimensions totaling 100;
+- six-decimal stable weighted output;
+- mandatory PRODUCT_CATEGORY_METADATA readiness gate;
+- one branded/staples scoring curve per K1;
+- alcohol remains explicit excise/regulatory risk metadata, not a separate universal curve;
+- symbol-independent methodology;
+- missing mandatory evidence fails closed.
+
+Regression policy:
+- Checkpoint A test aligned before B validation;
+- current-package isolation is lifecycle-stable;
+- completed engines are asserted only as IMPLEMENTED;
+- no hard-coded shrinking pending-package count.
+
+Incremental controls:
+- PHARMA_V1 / BANK_NBFC and K4 Packages 1–7 isolated/preserved;
+- TORNTPHARM golden 75.1575 preserved;
+- AUROPHARMA fail-closed golden preserved;
+- universal Research workspace preserved.
+
+Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
