@@ -15,6 +15,8 @@ export type ResearchProfileCode =
   | "IT_SOFTWARE_PRODUCTS_PLATFORMS"
   | "IT_DIGITAL_INFRA_HARDWARE"
   | "INDUSTRIAL_CAPITAL_GOODS"
+  | "PROJECT_EPC"
+  | "CAPITAL_EQUIPMENT_ELECTRICAL"
   | "DEFENCE_AEROSPACE"
   | "AUTO_OEM"
   | "AUTO_COMPONENTS"
@@ -95,7 +97,7 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
     return result(input, "ROUTED", "DEFENCE_AEROSPACE", "INDUSTRY_OVERRIDE", "INDUSTRY_DEFENCE_AEROSPACE")
   }
   if (industry === "HEAVY_ELECTRICAL_EQUIPMENT" || industry === "OTHER_ELECTRICAL_EQUIPMENT_PRODUCTS") {
-    return result(input, "ROUTED", "INDUSTRIAL_CAPITAL_GOODS", "INDUSTRY_OVERRIDE", "INDUSTRY_INDUSTRIAL_CAPITAL_GOODS")
+    return result(input, "ROUTED", "CAPITAL_EQUIPMENT_ELECTRICAL", "INDUSTRY_OVERRIDE", "INDUSTRY_CAPITAL_EQUIPMENT_ELECTRICAL")
   }
 
   if (sector === "BANKING") {
@@ -157,8 +159,25 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
   }
 
   if (sector === "CAPITAL_GOODS" || sector === "INDUSTRIAL") {
-    if (industry === "HEAVY_ELECTRICAL_EQUIPMENT" || industry === "OTHER_ELECTRICAL_EQUIPMENT_PRODUCTS") {
-      return result(input, "ROUTED", "INDUSTRIAL_CAPITAL_GOODS", "SECTOR_AND_INDUSTRY", "INDUSTRIAL_CAPITAL_GOODS")
+    if (
+      industry === "CIVIL_CONSTRUCTION"
+      || industry === "CONSTRUCTION_ENGINEERING"
+      || industry === "EPC"
+      || industry === "INDUSTRIAL_CONSTRUCTION"
+    ) {
+      return result(input, "ROUTED", "PROJECT_EPC", "SECTOR_AND_INDUSTRY", "PROJECT_EPC")
+    }
+    if (
+      industry === "HEAVY_ELECTRICAL_EQUIPMENT"
+      || industry === "OTHER_ELECTRICAL_EQUIPMENT_PRODUCTS"
+      || industry === "INDUSTRIAL_MACHINERY"
+      || industry === "ELECTRICAL_EQUIPMENT"
+      || industry === "INDUSTRIAL_PRODUCTS"
+    ) {
+      return result(input, "ROUTED", "CAPITAL_EQUIPMENT_ELECTRICAL", "SECTOR_AND_INDUSTRY", "CAPITAL_EQUIPMENT_ELECTRICAL")
+    }
+    if (industry === "AEROSPACE_DEFENCE" || industry === "AEROSPACE_AND_DEFENCE" || industry === "DEFENCE_EQUIPMENT" || industry === "DEFENCE_ELECTRONICS") {
+      return result(input, "ROUTED", "DEFENCE_AEROSPACE", "SECTOR_AND_INDUSTRY", "DEFENCE_AEROSPACE")
     }
     if (!industry) {
       return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "CAPITAL_GOODS_INDUSTRY_REQUIRED")
