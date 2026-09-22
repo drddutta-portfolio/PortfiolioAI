@@ -1,6 +1,6 @@
 # PortfolioAI — Gate K · K1 Sector Inventory & Priority Lock
 
-**Status:** K1 COMPLETE / PASS — 238-EQUITY RECONCILIATION FREEZE ELIGIBLE / FINAL K4 PACKAGE COUNT & ORDER FROZEN
+**Status:** K1 SECTOR RECONCILIATION COMPLETE / PASS — INDUSTRY READINESS LOCK PENDING BEFORE K2
 **Date:** 22 September 2026  
 **Branch:** r4n-pharma-subprofile-architecture  
 **PR:** #101 — KEEP OPEN / DRAFT / UNMERGED  
@@ -750,3 +750,92 @@ PR #101                            OPEN / DRAFT / UNMERGED
 ```
 
 **K1 = COMPLETE / PASS.**
+
+---
+
+## 20. K1 Industry Readiness Lock — architecture invariant
+
+K1 sector reconciliation remains COMPLETE / PASS. Before K2 begins, one final readiness lock is required to prevent PortfolioAI from drifting into sector-only micro-research.
+
+### Permanent research invariant
+
+```text
+Sector          = macro context / portfolio classification
+Industry        = minimum micro-research methodology selector
+Basic Industry  = business-model refinement
+Research Profile/Subprofile = metric applicability + valuation selector
+Company Evidence = scoring evidence
+Score            = company assessment
+Recommendation   = action logic
+```
+
+**A sector label alone must never select a specialised research methodology.**
+
+### Runtime enforcement
+
+`RESEARCH_PROFILE_ROUTING_V2` now fails closed when a specialised profile would otherwise be inferred from sector alone.
+
+Examples:
+
+```text
+Banking + industry missing
+→ PROFILE_PENDING / BANKING_INDUSTRY_REQUIRED
+
+Pharma + industry missing
+→ PROFILE_PENDING / PHARMA_INDUSTRY_REQUIRED
+
+Capital Goods + industry missing
+→ PROFILE_PENDING / CAPITAL_GOODS_INDUSTRY_REQUIRED
+```
+
+Supported industry evidence still routes normally, including:
+
+```text
+Healthcare + Pharmaceuticals → PHARMA
+Healthcare + Hospitals       → HOSPITAL
+Financial Services + NBFC    → NBFC_LENDING
+Capital Goods + Heavy Electrical Equipment → INDUSTRIAL_CAPITAL_GOODS
+Aerospace & Defence industry → DEFENCE_AEROSPACE
+```
+
+### Machine-readable taxonomy authority
+
+Added:
+
+`docs/k1/PortfolioAI_GATE_K_INDUSTRY_RESEARCH_TAXONOMY.json`
+
+This contract records:
+- sector as macro context;
+- industry as methodology selector;
+- business-model/basic-industry refinement;
+- currently supported profile routes;
+- K4 methodology families whose detailed industry taxonomy must still be frozen in each package Checkpoint A;
+- explicit prohibition on sector-only specialised routing.
+
+### Industry readiness audit
+
+Added:
+
+`scripts/k1-industry-readiness-lock.mjs`
+
+Input:
+- `artifacts/k1-final-reconciled-sector-inventory.json`
+- the machine-readable industry taxonomy.
+
+Output:
+- `artifacts/k1-industry-readiness-lock.json`
+
+The audit reports:
+- industry coverage across all 238 equities;
+- basic-industry coverage;
+- distinct industry count;
+- exact industry counts;
+- stocks with missing industry;
+- stocks already routable with the current taxonomy;
+- stocks with industry evidence but taxonomy still pending for future K4 methodology definition.
+
+### K2 gate
+
+K2 must not begin until this audit is executed and reviewed.
+
+The Industry Readiness Lock is a readiness prerequisite, not a reopening of exchange-sector reconciliation and not a new scoring methodology.
