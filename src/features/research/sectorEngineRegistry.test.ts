@@ -57,6 +57,12 @@ describe("SECTOR_ENGINE_CONTRACT_V1", () => {
       lifecycle: "IMPLEMENTED",
     })
     expect(sectorEngineForProfileCode("AUTO_COMPONENTS")?.engineCode).toBe("AUTO_COMPONENTS")
+    expect(sectorEngineForProfileCode("SPECIALTY_CHEMICALS")).toMatchObject({
+      engineCode: "CHEMICALS_V1",
+      lifecycle: "K4_FROZEN_PENDING",
+    })
+    expect(sectorEngineForProfileCode("AGRO_FERTILISER")?.engineCode).toBe("CHEMICALS_V1")
+    expect(sectorEngineForProfileCode("COMMODITY_PROCESS_CHEMICALS")?.engineCode).toBe("CHEMICALS_V1")
   })
 
   it("does not place universal numeric recommendation thresholds in the registry", () => {
