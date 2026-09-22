@@ -857,3 +857,38 @@ Authority rule remains fail-safe:
 
 The merged reference contract is now `PORTFOLIOAI_K1_CLASSIFICATION_REFERENCE_MERGED_V4`.
 The reconciliation contract is now `PORTFOLIOAI_K1_CLASSIFICATION_RECONCILIATION_V5`.
+
+---
+
+## 19. Full 238-stock reconciliation — FREEZE ELIGIBLE / PASS
+
+Owner-local full-cohort execution completed successfully after applying the frozen reviewed residual manifest.
+
+Observed terminal result:
+
+```text
+Freeze eligible: true
+K1 CURRENT-COHORT RECONCILIATION COMPLETE
+No database mutation was performed.
+```
+
+This closes the blocking reconciliation condition for the frozen 238-equity cohort.
+
+K1 still requires one final consolidation step before K2:
+1. derive the corrected reconciled sector inventory;
+2. recompute methodology-package grouping from that corrected inventory;
+3. freeze exact K4 package count/order;
+4. record owner approval.
+
+Added deterministic finalizer:
+
+`scripts/k1-finalize-reconciled-sector-inventory.mjs`
+
+The finalizer:
+- refuses to run unless `freezeEligible=true`;
+- refuses if `REVIEW_REQUIRED` or `OFFICIAL_MISSING` remains;
+- emits one final sector/industry per symbol from the reconciled reference;
+- reports sector counts and source-provenance counts;
+- writes `artifacts/k1-final-reconciled-sector-inventory.json`.
+
+K2 remains blocked until the K4 package count/order is frozen.
