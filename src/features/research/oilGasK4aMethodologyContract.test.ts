@@ -5,8 +5,8 @@ import {
 } from "./oilGasK4aMethodologyContract"
 
 describe("OIL_GAS_V1 K4 Checkpoint A", () => {
-  it("remains non-activating until owner approval", () => {
-    expect(OIL_GAS_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVAL_REQUIRED")
+  it("remains non-activating after Checkpoint A approval until Checkpoint B closes", () => {
+    expect(OIL_GAS_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVED_LOCKED")
     expect(OIL_GAS_K4A_CONTRACT.runtimeActivationAllowed).toBe(false)
     expect(OIL_GAS_K4A_CONTRACT.scorePersistenceEnabled).toBe(false)
     expect(OIL_GAS_K4A_CONTRACT.recommendationPersistenceEnabled).toBe(false)
