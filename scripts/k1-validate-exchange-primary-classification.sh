@@ -12,7 +12,7 @@ node --check scripts/k1-fetch-bse-primary-classification.mjs
 node --check scripts/k1-compare-nse-classification.mjs
 node --check scripts/k1-finalize-reconciled-sector-inventory.mjs
 node --check scripts/k1-industry-readiness-lock.mjs
-bash -n scripts/k1-discover-trendlyne-capabilities.sh
+node --check scripts/k1-enrich-missing-industries.mjs
 node -e 'JSON.parse(require("fs").readFileSync("docs/k1/PortfolioAI_GATE_K_INDUSTRY_RESEARCH_TAXONOMY.json", "utf8"))'
 node -e 'JSON.parse(require("fs").readFileSync("scripts/k1-reviewed-identity-transitions-2026-09-22.json", "utf8"))'
 bash -n scripts/k1-run-current-cohort-reconciliation.sh
