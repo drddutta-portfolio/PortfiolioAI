@@ -38,6 +38,12 @@ describe("SECTOR_ENGINE_CONTRACT_V1", () => {
       engineCode: "IT_TECH",
       lifecycle: "IMPLEMENTED",
     })
+    expect(sectorEngineForProfileCode("PROJECT_EPC")).toMatchObject({
+      engineCode: "INDUSTRIALS_CAPITAL_GOODS",
+      lifecycle: "K4_FROZEN_PENDING",
+    })
+    expect(sectorEngineForProfileCode("CAPITAL_EQUIPMENT_ELECTRICAL")?.engineCode).toBe("INDUSTRIALS_CAPITAL_GOODS")
+    expect(sectorEngineForProfileCode("DEFENCE_AEROSPACE")?.engineCode).toBe("INDUSTRIALS_CAPITAL_GOODS")
   })
 
   it("does not place universal numeric recommendation thresholds in the registry", () => {
