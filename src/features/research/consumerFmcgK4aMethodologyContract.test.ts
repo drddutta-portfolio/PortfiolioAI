@@ -5,8 +5,8 @@ import {
 } from "./consumerFmcgK4aMethodologyContract"
 
 describe("CONSUMER_FMCG K4 Checkpoint A", () => {
-  it("remains non-activating until owner approval", () => {
-    expect(CONSUMER_FMCG_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVAL_REQUIRED")
+  it("remains non-activating after Checkpoint A approval until Checkpoint B closes", () => {
+    expect(CONSUMER_FMCG_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVED_LOCKED")
     expect(CONSUMER_FMCG_K4A_CONTRACT.runtimeActivationAllowed).toBe(false)
     expect(CONSUMER_FMCG_K4A_CONTRACT.scorePersistenceEnabled).toBe(false)
     expect(CONSUMER_FMCG_K4A_CONTRACT.recommendationPersistenceEnabled).toBe(false)
