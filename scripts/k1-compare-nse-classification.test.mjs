@@ -165,3 +165,20 @@ test("records BSE official fallback as exchange evidence", () => {
   assert.equal(result.referenceSourceCounts.BSE_OFFICIAL_QUOTE_HEADER, 1)
 })
 
+
+test("records reviewed secondary residual fallback with distinct provenance", () => {
+  const result = reconcileNseClassification(
+    canonical({ sector: "Consumer Services", industry: null }),
+    official({
+      sector: "Hospitality",
+      industry: "Travel Services",
+      sourceKind: "REVIEWED_SECONDARY_CLASSIFICATION",
+      classificationAuthority: "REVIEWED_SECONDARY_FALLBACK",
+    }),
+  )
+  assert.equal(result.counts.CHANGE_REQUIRED, 1)
+  assert.equal(result.rows[0].reasonCode, "CANONICAL_PRIMARY_SECTOR_DIFFERS_FROM_REVIEWED_SECONDARY")
+  assert.equal(result.rows[0].official.sourceKind, "REVIEWED_SECONDARY_CLASSIFICATION")
+  assert.equal(result.referenceSourceCounts.REVIEWED_SECONDARY_CLASSIFICATION, 1)
+})
+
