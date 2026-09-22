@@ -81,9 +81,10 @@ describe("PHARMA_V1 strict recommendation score authority", () => {
     expect(result.reason).toBe("Sector-specific evidence gate is not yet complete.")
   })
 
-  it("preserves the legacy generic fallback outside PHARMA_V1", () => {
+  it("does not reconstruct a missing overall score for any profile", () => {
     const result = buildRecommendationPreview(snapshot("LEGACY_TEST"), policy)
-    expect(result.overallScore).toBe(100)
-    expect(result.suggestedRole).toBe("CORE_CANDIDATE")
+    expect(result.overallScore).toBeNull()
+    expect(result.suggestedRole).toBe("INSUFFICIENT")
+    expect(result.reason).toBe("Sector-specific evidence gate is not yet complete.")
   })
 })
