@@ -32115,3 +32115,37 @@ Required local sequence:
 6. only then begin K2.
 
 Safety state remains unchanged: no production mutation, migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action.
+
+---
+
+## Canonical architecture propagation — 22 September 2026
+
+The owner approved promoting the Gate K industry-first research principle to the canonical PortfolioAI architecture and synchronizing it across all existing repository branches.
+
+Canonical authority updated on `main`:
+
+`docs/PortfolioAI_Research_and_Intelligence_Architecture.md`
+
+New permanent architecture sections:
+
+- **Research classification and methodology authority**
+- **Fail-closed enforcement and change-control**
+
+Locked invariant:
+
+```text
+Sector          = macro context / portfolio classification
+Industry        = minimum micro-research methodology selector
+Basic Industry  = business-model refinement
+Research Profile/Subprofile = applicability / peers / valuation / risk contract
+Company Evidence = scoring input
+Score            = deterministic assessment
+Recommendation   = action logic
+```
+
+A sector label alone must never select a specialised research methodology, score model, valuation family, peer set, or recommendation policy.
+
+The exact updated architecture file was synchronized to all 110 current repository branches, including `r4n-pharma-subprofile-architecture`. This was documentation synchronization only; no PR was merged, no application code was deployed, and no production data/schema/scheduler state was changed.
+
+R4N continues to enforce the same rule in code through `RESEARCH_PROFILE_ROUTING_V2` and the Gate K industry taxonomy/readiness lock.
+
