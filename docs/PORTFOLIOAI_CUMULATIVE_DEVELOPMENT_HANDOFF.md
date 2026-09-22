@@ -760,3 +760,42 @@ Final state:
 **K4 Package 7 · METALS_COMMODITIES = COMPLETE / PASS / CLOSED.**
 
 K4 Package 8 — CONSUMER_FMCG Checkpoint A is now IN PROGRESS.
+
+
+---
+
+## K4 Package 8 · CONSUMER_FMCG · Checkpoint A implementation — 22 September 2026
+
+METALS_COMMODITIES is closed COMPLETE / PASS.
+
+Added:
+- `consumerFmcgK4aMethodologyContract.ts`;
+- `consumerFmcgK4aMethodologyContract.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_8_CONSUMER_FMCG_CHECKPOINT_A.md`.
+
+Initial profile:
+- BRANDED_CONSUMER_FMCG.
+
+Reference anchors:
+- HINDUNILVR;
+- VBL;
+- LTFOODS;
+- RADICO as alcohol-specific risk control.
+
+Key methodology locks proposed:
+- one initial branded/staples curve per K1;
+- Industry selects methodology; Sector alone cannot;
+- product/category metadata mandatory;
+- alcohol excise/regulatory exposure is explicit risk metadata, not a separate universal score curve;
+- minimum 3 annual years / 8 quarters / 252 trading days;
+- volume/price/mix context where disclosed;
+- raw-material inflation read with margin history;
+- working capital and cash conversion are core evidence;
+- unknown Industry → METHOD_NOT_AVAILABLE;
+- recommendation thresholds remain profile-owned and unset.
+
+No-stale regression policy remains active.
+
+Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
