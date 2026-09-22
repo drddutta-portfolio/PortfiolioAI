@@ -131,3 +131,20 @@ test("does not silently accept an official symbol outside the canonical cohort",
   assert.equal(result.comparisonRowCount, 2)
   assert.equal(result.freezeEligible, false)
 })
+
+test("records Trendlyne fallback as a distinct reviewed classification source", () => {
+  const result = reconcileNseClassification(
+    canonical({ sector: "Consumer Services", industry: null }),
+    official({
+      sector: "Consumer Discretionary",
+      industry: "Travel Services",
+      sourceKind: "TRENDLYNE_MCP_REVIEWED_FALLBACK",
+      classificationAuthority: "REVIEWED_FALLBACK",
+    }),
+  )
+  assert.equal(result.counts.CHANGE_REQUIRED, 1)
+  assert.equal(result.rows[0].reasonCode, "CANONICAL_PRIMARY_SECTOR_DIFFERS_FROM_TRENDLYNE_FALLBACK")
+  assert.equal(result.rows[0].official.sourceKind, "TRENDLYNE_MCP_REVIEWED_FALLBACK")
+  assert.equal(result.referenceSourceCounts.TRENDLYNE_MCP_REVIEWED_FALLBACK, 1)
+})
+
