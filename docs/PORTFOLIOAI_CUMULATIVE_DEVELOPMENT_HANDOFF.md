@@ -32188,3 +32188,39 @@ Next action:
 6. use a real classification/profile MCP tool if one exists, otherwise proceed to bounded public-web industry enrichment.
 
 K2 remains blocked until the Industry Readiness Lock is closed.
+
+---
+
+### K1 Trendlyne capability discovery closed; public industry enrichment active
+
+Owner-local MCP capability discovery failed at the provider boundary with `PROVIDER_HTTP_403`.
+
+Current Trendlyne documentation confirms five MCP capability families:
+- search entities;
+- overview/news/corporate events;
+- parameter values multi-stock;
+- ownership/deals/SAST;
+- document search.
+
+No sector/industry/company-classification metadata tool is advertised.
+
+The experimental `tools/list` discovery path was removed from active R4N code to avoid a dead maintenance path.
+
+Implemented deterministic public fallback:
+
+`scripts/k1-enrich-missing-industries.mjs`
+
+It uses direct Screener company pages by NSE ticker for the 152 stocks currently missing Industry and parses the public four-level classification breadcrumb. Existing K1 Sector remains authoritative and is never overwritten.
+
+Expected outputs:
+- `artifacts/k1-public-industry-enrichment.json`;
+- `artifacts/k1-final-reconciled-research-classification-inventory.json`.
+
+Next owner-local sequence:
+1. `git pull`
+2. `node scripts/k1-enrich-missing-industries.mjs`
+3. rerun:
+   `node scripts/k1-industry-readiness-lock.mjs --inventory artifacts/k1-final-reconciled-research-classification-inventory.json`
+4. review remaining missing/failed symbols and taxonomy-pending rows.
+
+No production mutation, migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
