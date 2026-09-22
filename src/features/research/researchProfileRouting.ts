@@ -12,6 +12,8 @@ export type ResearchProfileCode =
   | "CAPITAL_MARKETS_AMC"
   | "INSURANCE"
   | "FINTECH_PLATFORM"
+  | "STEEL_FERROUS"
+  | "NON_FERROUS_DIVERSIFIED_METALS"
   | "IT_SERVICES"
   | "IT_SOFTWARE_PRODUCTS_PLATFORMS"
   | "IT_DIGITAL_INFRA_HARDWARE"
@@ -237,6 +239,33 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
       return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "CHEMICALS_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "CHEMICALS_SUBPROFILE_PENDING")
+  }
+
+
+  if (sector === "METALS_MINING" || sector === "METALS_AND_MINING" || sector === "METALS") {
+    if (
+      industry === "IRON_STEEL"
+      || industry === "STEEL"
+      || industry === "IRON_STEEL_PRODUCTS"
+      || industry === "FERROUS_METALS"
+    ) {
+      return result(input, "ROUTED", "STEEL_FERROUS", "SECTOR_AND_INDUSTRY", "STEEL_FERROUS")
+    }
+    if (
+      industry === "ALUMINIUM"
+      || industry === "ZINC"
+      || industry === "COPPER"
+      || industry === "NON_FERROUS_METALS"
+      || industry === "DIVERSIFIED_METALS"
+      || industry === "MINERALS_MINING"
+      || industry === "MINING"
+    ) {
+      return result(input, "ROUTED", "NON_FERROUS_DIVERSIFIED_METALS", "SECTOR_AND_INDUSTRY", "NON_FERROUS_DIVERSIFIED_METALS")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "METALS_INDUSTRY_REQUIRED")
+    }
+    return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "METALS_SUBPROFILE_PENDING")
   }
 
   if (sector === "FINANCIAL_SERVICES") {
