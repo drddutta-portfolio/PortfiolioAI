@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { buildPharmaReadinessView } from "./pharmaReadinessViewModel"
+import { buildPharmaReadinessSummaryGroups, buildPharmaReadinessView } from "./pharmaReadinessViewModel"
 import type { ResearchMetric, SecurityResearch } from "./types"
 
 function metric(code: string, periodEnd = "2026-03-31"): ResearchMetric {
@@ -43,7 +43,41 @@ describe("buildPharmaReadinessView", () => {
     expect(buildPharmaReadinessView(research("Healthcare"))).toBeNull()
   })
 
-  it("keeps PHARMA_V1 fail-closed after the R4H partial/conflicting history review", () => {
+  it("represents all 13 PHARMA_V1 parent research contracts", () => {
+    const view = buildPharmaReadinessView(research("Pharma"))
+    expect(view?.totalDomainCount).toBe(13)
+    expect(view?.domains.map((domain) => domain.metricCode)).toEqual([
+      "PHARMA_REVENUE_GROWTH_HISTORY",
+      "PHARMA_OPERATING_MARGIN_HISTORY",
+      "PHARMA_ROCE_HISTORY",
+      "PHARMA_PAT_EPS_HISTORY",
+      "PHARMA_CASH_CONVERSION_HISTORY",
+      "PHARMA_BALANCE_SHEET_LEVERAGE",
+      "PHARMA_REGULATORY_SITE_STATUS",
+      "PHARMA_DOMESTIC_REVENUE_GROWTH",
+      "PHARMA_EXPORT_US_REVENUE_GROWTH",
+      "PHARMA_RND_INTENSITY",
+      "PHARMA_PIPELINE_LAUNCH_APPROVAL_EVIDENCE",
+      "PHARMA_OWNERSHIP_GOVERNANCE",
+      "PHARMA_VALUATION_CONTEXT",
+    ])
+  })
+
+  it("summarizes all 13 contracts through the shared readiness groups", () => {
+    const view = buildPharmaReadinessView(research("Pharma"))
+    expect(view).not.toBeNull()
+    const groups = buildPharmaReadinessSummaryGroups(view!)
+    expect(groups.map((group) => group.label)).toEqual([
+      "Core financial evidence",
+      "Durability & growth evidence",
+      "Regulatory evidence",
+      "Ownership & valuation",
+    ])
+    expect(groups.reduce((sum, group) => sum + group.total, 0)).toBe(13)
+    expect(groups.reduce((sum, group) => sum + group.ready, 0)).toBe(0)
+  })
+
+  it("keeps PHARMA_V1 fail-closed after the partial/conflicting history review", () => {
     const view = buildPharmaReadinessView(research("Pharma"))
     expect(view?.profileVersion).toBe("PHARMA_V1")
     expect(view?.state).toBe("INSUFFICIENT_EVIDENCE")

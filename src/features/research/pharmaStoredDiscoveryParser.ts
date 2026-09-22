@@ -1,6 +1,6 @@
 import Decimal from "decimal.js"
 
-export const PHARMA_STORED_DISCOVERY_PARSER_VERSION = "PHARMA_STORED_DISCOVERY_PARSER_V1" as const
+export const PHARMA_STORED_DISCOVERY_PARSER_VERSION = "PHARMA_STORED_DISCOVERY_PARSER_V2" as const
 
 export interface ParsedTrendlyneValue {
   readonly label: string
@@ -11,6 +11,11 @@ export interface ParsedTrendlyneValue {
 export interface ParsedTrendlyneDiscovery {
   readonly values: readonly ParsedTrendlyneValue[]
   readonly conflicts: readonly string[]
+}
+
+export interface ParsedTrendlyneStoredResults extends ParsedTrendlyneDiscovery {
+  readonly parsedResultKeys: readonly string[]
+  readonly rejectedResultKeys: readonly string[]
 }
 
 function normalizeLabel(value: string) {
@@ -101,4 +106,58 @@ export function extractTrendlyneMarkdownData(value: unknown): string | null {
     }
   }
   return null
+}
+
+/**
+ * Parses an R4H-style stored source record where `results` is an object of
+ * named provider responses (for example EARNINGS_ROCE_HISTORY). Values may be
+ * JSON strings wrapped one or more times. Cross-query disagreement for the same
+ * provider label fails closed as a conflict.
+ */
+export function parseTrendlyneStoredResults(payload: unknown, targetSymbol: string): ParsedTrendlyneStoredResults {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { values: [], conflicts: [], parsedResultKeys: [], rejectedResultKeys: [] }
+  }
+  const results = (payload as { readonly results?: unknown }).results
+  if (!results || typeof results !== "object" || Array.isArray(results)) {
+    return { values: [], conflicts: [], parsedResultKeys: [], rejectedResultKeys: [] }
+  }
+
+  const candidates = new Map<string, ParsedTrendlyneValue[]>()
+  const conflicts = new Set<string>()
+  const parsedResultKeys: string[] = []
+  const rejectedResultKeys: string[] = []
+
+  for (const [resultKey, raw] of Object.entries(results)) {
+    const markdown = extractTrendlyneMarkdownData(raw)
+    if (!markdown) {
+      rejectedResultKeys.push(resultKey)
+      continue
+    }
+    parsedResultKeys.push(resultKey)
+    const parsed = parseTrendlyneMultiStockMarkdown(markdown, targetSymbol)
+    parsed.conflicts.forEach((label) => conflicts.add(normalizeLabel(label)))
+    for (const value of parsed.values) {
+      const key = normalizeLabel(value.label)
+      candidates.set(key, [...(candidates.get(key) ?? []), value])
+    }
+  }
+
+  const values: ParsedTrendlyneValue[] = []
+  for (const [key, items] of candidates) {
+    const distinctValues = new Set(items.map((item) => item.value ?? "<NULL>"))
+    if (distinctValues.size > 1) {
+      conflicts.add(key)
+      continue
+    }
+    if (!conflicts.has(key)) values.push(items[0]!)
+  }
+
+  const conflictLabels = [...conflicts].map((key) => candidates.get(key)?.[0]?.label ?? key)
+  return {
+    values: values.sort((a, b) => a.label.localeCompare(b.label)),
+    conflicts: conflictLabels.sort(),
+    parsedResultKeys: parsedResultKeys.sort(),
+    rejectedResultKeys: rejectedResultKeys.sort(),
+  }
 }

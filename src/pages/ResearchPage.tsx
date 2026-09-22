@@ -7,10 +7,11 @@ import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { CompanyAboutPanel } from "../features/research/CompanyAboutPanel"
 import { CompleteResearchRefreshPanel } from "../features/research/CompleteResearchRefreshPanel"
 import { FinancialsWorkspace, OwnershipWorkspace, QualityGrowthWorkspace, ValuationWorkspace } from "../features/research/ResearchEvidenceWorkspace"
-import { PharmaResearchReadinessPanel } from "../features/research/PharmaResearchReadinessPanel"
+import { ProfileResearchReadinessPanel } from "../features/research/ProfileResearchReadinessPanel"
 import { PositionDecisionControls } from "../features/research/PositionDecisionControls"
 import { latestByCode, metricLabel, coverageStatus, formatResearchMetric } from "../features/research/researchPolicy"
 import { researchSnapshotGroups } from "../features/research/researchPresentationPolicy"
+import { researchProfileUiContract } from "../features/research/researchProfileUiContract"
 import { ResearchScorecardPanel } from "../features/research/ResearchScorecardPanel"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "../features/research/types"
 import { useSecurityResearch } from "../features/research/useSecurityResearch"
@@ -33,7 +34,7 @@ export function ResearchPage() {
   if (!position || !portfolio) return <ResearchNotFound />
   return <section className="research-page">
     <ResearchHeader position={position} research={research.data} scoring={scoring} currency={portfolio.portfolio.currency} portfolioId={portfolio.portfolio.id} onPositionSaved={reloadPortfolio} />
-    <CompleteResearchRefreshPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} symbol={position.symbol} onCompleted={() => { research.reload(); scoring.reload() }} />
+    <CompleteResearchRefreshPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} symbol={position.symbol} profileCode={scoring.data?.profileCode} onCompleted={() => { research.reload(); scoring.reload() }} />
     <ResearchTabs value={tab} onChange={setTab} />
     {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : research.data ? <TabPanel tab={tab} position={position} research={research.data} scoring={scoring} onTabChange={setTab} /> : null}
   </section>
@@ -49,13 +50,14 @@ export function ResearchIndexPage() {
 }
 
 function ResearchHeader({ position, research, scoring, currency, portfolioId, onPositionSaved }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly currency: string; readonly portfolioId: string; readonly onPositionSaved: () => void }) {
+  const ui = researchProfileUiContract(scoring.data?.profileCode)
   const marketCap = latestByCode(research?.metrics ?? []).get("MARKET_CAP_PROVIDER_RAW")
   const brokers = position.brokerExposure ?? []
   const sector = research?.sector ?? position.sector
   const industry = research?.industry ?? position.industry
   const profileSource = scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed" : scoring.data?.profileSource === "SECTOR_RULE" ? "Sector-resolved" : scoring.data ? "General fallback" : null
   return <header className="research-header">
-    <div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><h1>{research?.companyName ?? position.company}</h1><p className="security-identity-line"><strong>{position.symbol}</strong> · {position.exchange} · {titleCase(position.instrumentType)}</p><p><strong>Scoring profile:</strong> {scoring.data?.profileName ?? "Loading…"}{profileSource ? ` · ${profileSource}` : ""}</p><p>Canonical sector: {sector ?? "Awaiting classification"} · Canonical industry: {industry ?? "Awaiting classification"}</p><p>{research?.marketCapCategory ? titleCase(research.marketCapCategory) : "Market-cap category unavailable"} · {position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</p><p className="raw-market-cap">Raw market cap: {formatResearchMetric(marketCap)}</p><div className="identity-chips" aria-label="Themes">{position.themes.length ? position.themes.map((theme) => <span key={theme.id}>{theme.name}</span>) : <span>No themes</span>}</div></div>
+    <div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><h1>{research?.companyName ?? position.company}</h1><p className="security-identity-line"><strong>{position.symbol}</strong> · {position.exchange} · {titleCase(position.instrumentType)}</p><p><strong>Scoring profile:</strong> {scoring.data ? ui.profileDisplayName : "Loading…"}{profileSource ? ` · ${profileSource}` : ""}</p><p>Canonical sector: {sector ?? "Awaiting classification"} · Canonical industry: {industry ?? "Awaiting classification"}</p><p>{research?.marketCapCategory ? titleCase(research.marketCapCategory) : "Market-cap category unavailable"} · {position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</p><p className="raw-market-cap">Raw market cap: {formatResearchMetric(marketCap)}</p><div className="identity-chips" aria-label="Themes">{position.themes.length ? position.themes.map((theme) => <span key={theme.id}>{theme.name}</span>) : <span>No themes</span>}</div></div>
     <CompanyAboutPanel portfolioId={portfolioId} securityId={position.securityId} symbol={position.symbol} companyName={research?.companyName ?? position.company} />
     <section className="position-dashboard" aria-labelledby="position-dashboard-title"><h2 id="position-dashboard-title">Your position</h2><div className="research-head-metrics">
       <MetricCard label="Current price / CMP" value={formatMoney(position.currentPrice, currency)} detail={position.currentPrice === null ? "Unavailable" : `${position.isPriceStale ? "Stale price" : "Current cache"} · ${position.priceProvider ?? "Angel One"}`} />
@@ -95,6 +97,7 @@ function TabPanel({ tab, position, research, scoring, onTabChange }: { readonly 
 
 function Overview({ position, research, scoring, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly scoring: ScoringHook; readonly onViewEvidence: () => void }) {
   const metrics = latestByCode(research.metrics)
+  const ui = researchProfileUiContract(scoring.data?.profileCode)
   const groups = researchSnapshotGroups(scoring.data?.profileCode)
   const conflicts = research.metrics.filter((metric) => metric.status === "CONFLICTING").length
   const provisional = research.metrics.filter((metric) => metric.status === "PROVISIONAL").length
@@ -103,9 +106,9 @@ function Overview({ position, research, scoring, onViewEvidence }: { readonly po
   const coverage = research.metrics.length ? "Partial" : "Unavailable"
   return <>
     <SectionHeading title="Research at a glance" detail="Designed to give investment clarity first, with the detailed tabs preserving the evidence behind every conclusion." />
-    <section className="context-strip" aria-label="Business and portfolio context"><div><span>Business / scoring context</span><strong>{scoring.data?.profileName ?? research.sector ?? position.sector ?? "Unavailable"}</strong><small>{research.industry ?? position.industry ?? (scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed scoring profile; canonical industry pending" : "Industry unavailable")}</small></div><div><span>Your portfolio role</span><strong>{position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</strong><small>{formatPercent(position.portfolioWeightPercent)} current weight · role remains your choice</small></div><div><span>Classification</span><strong>{research.marketCapCategory ? titleCase(research.marketCapCategory) : "Unavailable"}</strong><small>{position.themes.length ? position.themes.map((theme) => theme.name).join(", ") : "No themes"}</small></div></section>
+    <section className="context-strip" aria-label="Research and portfolio context"><div><span>Research profile</span><strong>{ui.profileDisplayName}</strong><small>{research.industry ?? position.industry ?? (scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed profile · industry pending" : "Industry unavailable")}</small></div><div><span>Portfolio exposure</span><strong>{formatPercent(position.portfolioWeightPercent)} current weight</strong><small>{formatQuantity(position.quantity)} shares · {position.role === "UNCLASSIFIED" ? "role unclassified" : `${titleCase(position.role)} role`}</small></div><div><span>Evidence status</span><strong>{scoring.data?.evidenceCoverage == null ? "Unavailable" : `${Math.round(scoring.data.evidenceCoverage * 100)}% verified`}</strong><small>{scoring.data?.scoreReadyCoverage == null ? "Score readiness unavailable" : `${Math.round(scoring.data.scoreReadyCoverage * 100)}% score-ready`}</small></div></section>
     <ResearchScorecardPanel snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} />
-    <PharmaResearchReadinessPanel research={research} />
+    {ui.readinessMode === "PROFILE_CONTRACT" ? <ProfileResearchReadinessPanel profileCode={ui.profileCode} research={research} snapshot={scoring.data} /> : null}
     <div className="research-cockpit">{groups.map((group) => <section className="cockpit-panel" key={group.title}><h2>{group.title}</h2><div className="snapshot-list">{group.codes.map((code) => { const metric = metrics.get(code); return <div key={code}><span>{metric?.label ?? metricLabelForCode(code)}</span><strong>{formatResearchMetric(metric)}</strong><small>{metric ? period(metric) : "Unavailable"}</small><Status value={coverageStatus(metric)} /></div> })}</div></section>)}</div>
     <section className="research-health"><div><p className="eyebrow">Research health</p><h2>{coverage} coverage</h2><p>{research.metrics.length} cached observations · {stale ? "mixed freshness" : research.metrics.length ? "current cache" : "freshness unavailable"}</p></div><dl><div><dt>Conflicts</dt><dd>{conflicts}</dd></div><div><dt>Review required</dt><dd>{reviewRequired}</dd></div><div><dt>Provisional</dt><dd>{provisional}</dd></div></dl><button type="button" className="button button-secondary" onClick={onViewEvidence}>View Evidence</button></section>
   </>

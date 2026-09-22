@@ -1,19 +1,7 @@
 import "./ResearchScorecardPanel.css"
+import "./ResearchScorecardPolish.css"
+import { researchProfileUiContract } from "./researchProfileUiContract"
 import type { DimensionScore, SecurityScoringSnapshot } from "./scoringTypes"
-
-const DIMENSION_ORDER = [
-  "QUALITY", "GROWTH", "CAPITAL_EFFICIENCY", "CASH_FLOW", "BALANCE_SHEET_CREDIT",
-  "VALUATION", "MOMENTUM", "OWNERSHIP_GOVERNANCE", "RISK",
-] as const
-
-const SECTION_GROUPS = [
-  { label: "Quality & Growth", codes: ["QUALITY", "GROWTH"] },
-  { label: "Financial Strength", codes: ["CAPITAL_EFFICIENCY", "CASH_FLOW", "BALANCE_SHEET_CREDIT"] },
-  { label: "Valuation", codes: ["VALUATION"] },
-  { label: "Momentum", codes: ["MOMENTUM"] },
-  { label: "Ownership", codes: ["OWNERSHIP_GOVERNANCE"] },
-  { label: "Risk", codes: ["RISK"] },
-] as const
 
 const OVERALL_PREVIEW_COVERAGE_GATE = 0.70
 
@@ -65,10 +53,12 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
   if (error) return <section className="research-callout research-callout-neutral"><strong>Scoring framework unavailable</strong><p>{error}</p></section>
   if (!snapshot) return null
 
+  const ui = researchProfileUiContract(snapshot.profileCode)
   const byCode = new Map(snapshot.dimensions.map((dimension) => [dimension.dimensionCode, dimension]))
   const hasRun = Boolean(snapshot.runState)
   const previewScore = hasRun ? null : previewOverallScore(snapshot.dimensions, snapshot.scoreReadyCoverage)
   const displayedOverallScore = hasRun ? snapshot.overallScore : previewScore
+  const hasOverallEvidence = (snapshot.evidenceCoverage ?? 0) > 0
   const overallStatus = hasRun
     ? label(snapshot.runState ?? "PARTIAL")
     : previewScore === null
@@ -82,13 +72,13 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
       <div className="scoring-summary-head">
         <div>
           <p className="eyebrow">Investment decision cockpit</p>
-          <h2 id="stock-scorecard-title">{snapshot.profileName}</h2>
+          <h2 id="stock-scorecard-title">{ui.profileDisplayName}</h2>
           <p>{snapshot.modelName} · model {snapshot.modelStatus.toLocaleLowerCase()}</p>
           <small>{profileSourceLabel(snapshot.profileSource)}</small>
         </div>
-        <div className="overall-score-box">
+        <div className={`overall-score-box${displayedOverallScore === null ? " evidence-only-score" : ""}`}>
           <span>Overall stock score</span>
-          <strong>{score(displayedOverallScore)}</strong>
+          <strong>{displayedOverallScore === null ? hasOverallEvidence ? "Not score-ready" : "No validated evidence" : score(displayedOverallScore)}</strong>
           <small>{overallStatus}</small>
         </div>
         <div className="score-coverage-box">
@@ -99,12 +89,13 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
       </div>
 
       <div className="investment-clarity-strip" aria-label="Section score summary">
-        {SECTION_GROUPS.map((group) => {
+        {ui.scoreSectionGroups.map((group) => {
           const summary = sectionSummary(snapshot.dimensions, group.codes)
-          return <article key={group.label}>
+          const hasEvidence = (summary.evidenceCoverage ?? 0) > 0
+          return <article key={group.label} className={summary.score === null ? "evidence-only-score" : undefined}>
             <span>{group.label}</span>
-            <strong>{summary.score === null ? "—" : `${summary.score.toFixed(0)}`}</strong>
-            <small>{summary.evidenceCoverage === null ? "Not applicable" : `${Math.round(summary.evidenceCoverage * 100)}% evidence · ${Math.round((summary.scoreReadyCoverage ?? 0) * 100)}% score-ready`}</small>
+            <strong>{summary.score === null ? hasEvidence ? "Not score-ready" : "No validated evidence" : `${summary.score.toFixed(0)}`}</strong>
+            <small>{summary.evidenceCoverage === null ? "Evidence unavailable" : `${Math.round(summary.evidenceCoverage * 100)}% evidence · ${Math.round((summary.scoreReadyCoverage ?? 0) * 100)}% score-ready`}</small>
           </article>
         })}
       </div>
@@ -118,25 +109,28 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
         </div>
       </div>
       <div className="score-heatmap" aria-label="Investment score heatmap">
-        {DIMENSION_ORDER.map((dimensionCode) => {
+        {ui.dimensionOrder.map((dimensionCode) => {
           const dimension = byCode.get(dimensionCode)
           const heatState = dimension?.heatState ?? "INSUFFICIENT"
-          const profileNotApplicable = snapshot.profileCode === "BANK_NBFC" && dimensionCode === "CASH_FLOW"
+          const profileNotApplicable = ui.notApplicableDimensions.includes(dimensionCode)
           const notApplicable = profileNotApplicable || Boolean(dimension && dimension.dimensionWeight === 0)
+          const evidenceOnly = !notApplicable && (dimension?.rawScore ?? null) === null
+          const noEvidence = evidenceOnly && (dimension?.evidenceCoverage ?? 0) <= 0
           const heatClass = notApplicable ? "heat-not-applicable" : `heat-${heatState.toLocaleLowerCase()}`
           const signals = dimension?.signals ?? []
-          return <details key={dimensionCode} className={`score-heat-cell ${heatClass}`}>
-            <summary>
-              <span>{label(dimensionCode)}</span>
-              <strong>{notApplicable ? "N/A" : score(dimension?.rawScore ?? null)}</strong>
-              <small>{notApplicable ? "Not applicable to this scoring profile" : dimension ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Insufficient evidence"}</small>
-              <em>{notApplicable ? "Not Applicable" : label(heatState)}</em>
-              {!notApplicable ? <b>Why this score?</b> : null}
+          const dimensionLabel = ui.dimensionLabels[dimensionCode] ?? label(dimensionCode)
+          return <details key={dimensionCode} className={`score-heat-cell ${heatClass}${evidenceOnly ? " evidence-only-heat" : ""}`}>
+            <summary aria-disabled={notApplicable || noEvidence} onClick={(event) => { if (notApplicable || noEvidence) event.preventDefault() }}>
+              <span>{dimensionLabel}</span>
+              <strong>{notApplicable ? "N/A" : noEvidence ? "No validated evidence yet" : evidenceOnly ? "Insufficient for score" : score(dimension?.rawScore ?? null)}</strong>
+              <small>{notApplicable ? "Not applicable to this scoring profile" : dimension ? noEvidence ? "Evidence has not yet met validation requirements" : evidenceOnly ? `${Math.round(dimension.evidenceCoverage * 100)}% evidence reviewed` : `${Math.round(dimension.evidenceCoverage * 100)}% evidence · ${Math.round(dimension.scoreReadyCoverage * 100)}% score-ready` : "Evidence unavailable"}</small>
+              <em>{notApplicable ? "Not Applicable" : noEvidence ? "No evidence" : evidenceOnly ? "Evidence only" : label(heatState)}</em>
+              <b className={notApplicable || noEvidence ? "heat-footer-disabled" : undefined} aria-disabled={notApplicable || noEvidence}>{notApplicable ? "Not applicable" : noEvidence ? "Evidence unavailable" : evidenceOnly ? "View evidence" : "Why this score?"}</b>
             </summary>
             {!notApplicable ? <div className="heat-evidence-panel">
               {signals.length ? signals.map((signal) => <article key={signal.inputCode} className={`heat-signal signal-${signal.state.toLocaleLowerCase()}`}>
                 <div><strong>{signal.label}</strong><span>{signal.state === "SCORED" ? `${signal.normalizedScore?.toFixed(0) ?? "—"}/100` : label(signal.state)}</span></div>
-                <small>{signal.value === null ? "Value unavailable" : `Value ${signal.value}`} · {signal.weight.toFixed(0)}% of dimension</small>
+                <small>{signal.value === null ? "Value unavailable" : `Evidence periods/components ${signal.value}`} · {signal.weight.toFixed(0)}% of dimension</small>
               </article>) : <p>No reviewed metric inputs are configured for this dimension yet.</p>}
             </div> : null}
           </details>
@@ -145,7 +139,9 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
       <p className="assessment-note">PortfolioAI recommendation and your portfolio choice are intentionally separate. Any future Core/Satellite suggestion will be advisory; your selected role remains user-controlled.</p>
     </section>
 
-    <section className="panel external-ratings-panel" aria-labelledby="external-ratings-title">
+    {ui.externalRatingsMode === "COMPACT" && snapshot.ratings.length === 0 ? <section className="panel external-ratings-panel" aria-labelledby="external-ratings-title">
+      <div className="ratings-header"><div><p className="eyebrow">Credit evidence</p><h2 id="external-ratings-title">External ratings</h2><p>No material cached ratings. Absence of a rating is insufficient evidence, not a negative signal.</p></div><div><strong>0</strong><span>rated instruments</span></div></div>
+    </section> : <section className="panel external-ratings-panel" aria-labelledby="external-ratings-title">
       <div className="ratings-header">
         <div><p className="eyebrow">Credit evidence</p><h2 id="external-ratings-title">External ratings</h2><p>Multi-agency, instrument-level evidence. Expand an agency only when you need the instrument detail.</p></div>
         <div><strong>{ratingsByAgency.size}</strong><span>agencies</span><strong>{snapshot.ratings.length}</strong><span>rated instruments</span></div>
@@ -159,6 +155,6 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
           <div className="rating-instrument-list">{sorted.map((rating) => <article key={rating.id}><div><strong>{rating.instrumentDescription ?? (rating.instrumentType ? label(rating.instrumentType) : "Instrument")}</strong><span>{rating.ratingSymbol}{rating.outlook ? ` / ${label(rating.outlook)}` : ""}</span></div><small>{rating.ratingAction ? label(rating.ratingAction) : "Action unavailable"} · {ratingDate(rating.ratingDate)}</small></article>)}</div>
         </details>
       })}</div> : <div className="data-empty"><strong>No external agency ratings cached</strong><p>Absence of a rating is treated as insufficient evidence, not a negative score.</p></div>}
-    </section>
+    </section>}
   </>
 }

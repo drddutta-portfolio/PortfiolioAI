@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { extractTrendlyneMarkdownData, parseTrendlyneMultiStockMarkdown } from "./pharmaStoredDiscoveryParser"
+import { extractTrendlyneMarkdownData, parseTrendlyneMultiStockMarkdown, parseTrendlyneStoredResults } from "./pharmaStoredDiscoveryParser"
 
 const SAMPLE = `1409|Torrent Pharma|TORNTPHARM|500420|2026-09-11
 1410|Torrent Power|TORNTPOWER|532779|2026-09-11
@@ -60,5 +60,41 @@ describe("extractTrendlyneMarkdownData", () => {
 
   it("returns null for malformed captures", () => {
     expect(extractTrendlyneMarkdownData("not-json")).toBeNull()
+  })
+})
+
+describe("parseTrendlyneStoredResults", () => {
+  it("parses all named retained result blocks and deduplicates agreeing labels", () => {
+    const payload = {
+      results: {
+        EARNINGS_ROCE_HISTORY: JSON.stringify({ markdown_data: `ROCE Ann. 1Y Ago %\\nTORNTPHARM:28.71\\n\\n---\\n\\nNet Profit Ann. 2Y ago\\nTORNTPHARM:1656.38` }),
+        CASH_LEVERAGE_HISTORY: JSON.stringify({ markdown_data: `ROCE Ann. 1Y Ago %\\nTORNTPHARM:28.710\\n\\n---\\n\\nInterest Coverage Ratio Ann. 1Y Ago\\nTORNTPHARM:14.84` }),
+      },
+    }
+    const parsed = parseTrendlyneStoredResults(payload, "TORNTPHARM")
+    expect(parsed.parsedResultKeys).toEqual(["CASH_LEVERAGE_HISTORY", "EARNINGS_ROCE_HISTORY"])
+    expect(parsed.rejectedResultKeys).toEqual([])
+    expect(parsed.conflicts).toEqual([])
+    expect(parsed.values).toContainEqual({ label: "ROCE Ann. 1Y Ago %", symbol: "TORNTPHARM", value: "28.71" })
+    expect(parsed.values).toContainEqual({ label: "Net Profit Ann. 2Y ago", symbol: "TORNTPHARM", value: "1656.38" })
+  })
+
+  it("fails closed when two retained queries disagree on the same label", () => {
+    const payload = {
+      results: {
+        A: JSON.stringify({ markdown_data: `Operating Profit 6Qtr Ago\\nTORNTPHARM:964` }),
+        B: JSON.stringify({ markdown_data: `Operating Profit 6Qtr Ago\\nTORNTPHARM:914` }),
+      },
+    }
+    const parsed = parseTrendlyneStoredResults(payload, "TORNTPHARM")
+    expect(parsed.values.some((item) => item.label === "Operating Profit 6Qtr Ago")).toBe(false)
+    expect(parsed.conflicts).toEqual(["Operating Profit 6Qtr Ago"])
+  })
+
+  it("reports malformed result blocks without making them evidence", () => {
+    const parsed = parseTrendlyneStoredResults({ results: { GOOD: JSON.stringify({ markdown_data: `Metric A\\nTORNTPHARM:10` }), BAD: "not-json" } }, "TORNTPHARM")
+    expect(parsed.parsedResultKeys).toEqual(["GOOD"])
+    expect(parsed.rejectedResultKeys).toEqual(["BAD"])
+    expect(parsed.values).toHaveLength(1)
   })
 })

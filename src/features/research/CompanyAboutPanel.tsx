@@ -76,23 +76,25 @@ export function CompanyAboutPanel({ portfolioId, securityId, symbol, companyName
     element.scrollTop = ratio * Math.max(0, element.scrollHeight - element.clientHeight)
   }
 
-  return <section className="company-about-panel" aria-labelledby="company-about-title">
+  const hasSummary = Boolean(profile.data?.aboutSummary)
+
+  return <section className={`company-about-panel${hasSummary ? "" : " company-about-empty"}`} aria-labelledby="company-about-title">
     <header className="company-about-header">
       <div className="company-about-heading">
         <div className="company-logo-shell" aria-hidden="true">
           {logoUrl ? <img src={logoUrl} alt="" loading="lazy" /> : <span>{initial}</span>}
         </div>
         <div>
-          <p className="eyebrow" id="company-about-title">About the company</p>
+          <p className="eyebrow" id="company-about-title">About {symbol}</p>
           <strong>{companyName}</strong>
         </div>
       </div>
-      <span className="about-source">{profile.data?.aboutSummary ? "Cached company profile" : "Profile not cached"}</span>
+      <span className="about-source">{hasSummary ? "Cached company profile" : "Profile pending"}</span>
     </header>
 
     <div className="company-about-scroll-shell">
       <div ref={scrollRef} className="company-about-scroll" tabIndex={0} onScroll={updateThumb}>
-        {profile.isLoading ? <p className="company-about-muted">Loading cached company profile…</p> : profile.data?.aboutSummary ? <p>{profile.data.aboutSummary}</p> : <p className="company-about-muted">No cached company description is available yet. Fetch it once to store a normalized About summary and, when available, the company logo.</p>}
+        {profile.isLoading ? <p className="company-about-muted">Loading cached company profile…</p> : profile.data?.aboutSummary ? <p>{profile.data.aboutSummary}</p> : <p className="company-about-muted"><strong>Company profile not cached yet.</strong><span>Profile information will appear after approved company-profile enrichment.</span></p>}
       </div>
       <div className={`company-about-scroll-track${thumb.visible ? " is-visible" : ""}`} aria-hidden={!thumb.visible} onPointerDown={onTrackPointerDown}>
         {thumb.visible ? <button
@@ -109,9 +111,8 @@ export function CompanyAboutPanel({ portfolioId, securityId, symbol, companyName
       </div>
     </div>
 
-    {!profile.data?.aboutSummary || profile.error ? <footer className="company-about-actions">
+    {profile.data?.companyWebsiteUrl || profile.error ? <footer className="company-about-actions">
       {profile.data?.companyWebsiteUrl ? <a href={profile.data.companyWebsiteUrl} target="_blank" rel="noreferrer">Official website ↗</a> : <span />}
-      {!profile.isLoading && !profile.data?.aboutSummary ? <button type="button" className="button button-secondary company-profile-fetch" onClick={() => void profile.discover()} disabled={profile.isDiscovering}>{profile.isDiscovering ? "Fetching…" : "Fetch company profile once"}</button> : null}
       {profile.error ? <small role="alert" className="company-about-error">{profile.error}</small> : null}
     </footer> : null}
   </section>

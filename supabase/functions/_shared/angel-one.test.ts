@@ -37,7 +37,10 @@ describe("Angel One session lifecycle", () => {
       .mockResolvedValueOnce(new Response(JSON.stringify({ status: true, data: { jwtToken: token } }), { status: 200 }))
       .mockResolvedValueOnce(new Response(JSON.stringify({ status: false, errorcode: "AG8001" }), { status: 403 }))
     const request = new AngelOneProvider(config).getLatestPrices([instrument])
-    await expect(request).rejects.toMatchObject({ code: "ANGEL_SESSION_EXPIRED", message: "Market-data provider request failed." })
+    await expect(request).rejects.toMatchObject({
+      code: "ANGEL_SESSION_EXPIRED_AG8001",
+      message: "Angel One rejected the market-data session (AG8001).",
+    })
     expect(fetchMock).toHaveBeenCalledTimes(4)
   })
 })

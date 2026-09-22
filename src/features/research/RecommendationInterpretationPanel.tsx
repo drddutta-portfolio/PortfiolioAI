@@ -23,7 +23,7 @@ export function RecommendationInterpretationPanel({ portfolioId, securityId, ena
 
   useEffect(() => {
     let active = true
-    if (!enabled) { setPlan(null); setInterpretation(null); setGeneratedAt(null); return () => { active = false } }
+    if (!enabled) return () => { active = false }
     void planRecommendationInterpretation(portfolioId, securityId).then((next) => {
       if (!active) return
       setPlan(next)
@@ -50,7 +50,17 @@ export function RecommendationInterpretationPanel({ portfolioId, securityId, ena
     }
   }
 
-  if (!enabled) return null
+  if (!enabled) return <section className="ai-interpretation-panel ai-interpretation-unavailable" aria-labelledby="ai-interpretation-title">
+    <header className="ai-interpretation-heading">
+      <div>
+        <p className="eyebrow">AI interpretation layer</p>
+        <h3 id="ai-interpretation-title">PortfolioAI interpretation</h3>
+        <p>Explains an existing deterministic recommendation without changing any score or portfolio decision.</p>
+      </div>
+      <button type="button" className="button button-primary" disabled title="A validated recommendation is required">Generate AI interpretation</button>
+    </header>
+    <div className="ai-ready-state"><strong>Available after a validated recommendation</strong><span>Interpretation remains disabled until this profile has a score-ready recommendation to explain.</span></div>
+  </section>
 
   return <section className="ai-interpretation-panel" aria-labelledby="ai-interpretation-title">
     <header className="ai-interpretation-heading">

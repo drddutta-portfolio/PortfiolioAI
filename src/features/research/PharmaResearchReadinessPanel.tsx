@@ -1,5 +1,6 @@
 import { buildPharmaCanonicalHistoryView } from "./pharmaCanonicalHistoryView"
-import { buildPharmaReadinessView, type PharmaReadinessDisplayState } from "./pharmaReadinessViewModel"
+import { buildPharmaReadinessSummaryGroups, buildPharmaReadinessView, type PharmaReadinessDisplayState } from "./pharmaReadinessViewModel"
+import { ResearchReadinessPanel } from "./ResearchReadinessPanel"
 import type { SecurityResearch } from "./types"
 import "./PharmaResearchReadinessPanel.css"
 
@@ -19,31 +20,45 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
   const history = buildPharmaCanonicalHistoryView(research)
   if (!view || !history) return null
 
-  return <section className="pharma-readiness-panel" aria-labelledby="pharma-readiness-title">
-    <header>
-      <div>
-        <p className="eyebrow">Sector-specific research contract</p>
-        <h2 id="pharma-readiness-title">PHARMA_V1 Research Readiness</h2>
-        <p>Provider capability, normalization readiness and canonical research evidence are deliberately separate. Raw discovery never becomes a score by itself.</p>
-      </div>
-      <div className="pharma-readiness-summary">
-        <span className="pharma-readiness-state">Insufficient evidence</span>
-        <strong>{view.validatedSourceDomains}/{view.mandatoryDomainCount}</strong>
-        <small>core source domains validated</small>
-        <em>{view.normalizationReadyDomains} normalization-ready</em>
-      </div>
-    </header>
+  const ready = view.validatedSourceDomains + view.normalizationReadyDomains
+  const details = <><div className="pharma-readiness-grid">
+        {view.domains.map((domain) => <article key={domain.metricCode} className={`pharma-domain pharma-domain-${domain.state.toLocaleLowerCase()}`}>
+          <div className="pharma-domain-head">
+            <div><span>{domain.requirement}{domain.applicability === "CONDITIONAL" ? ` · Conditional${domain.conditionCode ? ` · ${domain.conditionCode}` : ""}` : ""}</span><h3>{domain.label}</h3></div>
+            <b>{stateLabel[domain.state]}</b>
+          </div>
+          <p>{domain.detail}</p>
+          <footer>
+            <span>{domain.observationCountLabel}: <strong>{domain.canonicalObservationCount}</strong></span>
+            <span>Minimum / preferred: <strong>{domain.minimumObservations} / {domain.preferredObservations}</strong></span>
+          </footer>
+        </article>)}
+      </div><div className="pharma-readiness-note">
+        <strong>No PHARMA_V1 score is being generated yet.</strong>
+        <p>{view.notice}</p>
+        <small>Normalization contract: {view.normalizationVersion} · Current mandatory blockers: {view.blockers.join(" · ") || "None"}</small>
+      </div></>
 
-    <div className="pharma-canonical-history" aria-label="Canonical Pharma history">
-      <div className="pharma-history-head">
+  return <ResearchReadinessPanel
+    title="Pharmaceuticals Research Readiness"
+    detail="A compact view of profile readiness requirements. PHARMA_V1 requirements are satisfied by validated evidence contracts."
+    ready={ready}
+    total={view.totalDomainCount}
+    groups={buildPharmaReadinessSummaryGroups(view)}
+    detailsLabel="View all Pharmaceuticals research contracts"
+    details={details}
+    itemLabel="readiness requirements"
+  >
+    <details className="pharma-canonical-history" aria-label="Canonical Pharma history">
+      <summary className="pharma-history-head">
         <div>
-          <p className="eyebrow">Canonical history now stored</p>
-          <h3>TORNTPHARM evidence imported by R4H</h3>
+          <p className="eyebrow">Canonical Pharma financial history</p>
+          <h3>Reviewed canonical evidence</h3>
         </div>
-        <span>{history.annualCfo.length + history.annualRevenue.length + history.quarterlyOperatingRevenue.length + history.quarterlyOperatingProfit.length} reviewed raw observations</span>
-      </div>
+        <span>{history.annualCfo.length + history.annualRevenue.length + history.quarterlyOperatingRevenue.length + history.quarterlyOperatingProfit.length} reviewed raw observations · View history</span>
+      </summary>
       <div className="pharma-history-summary-grid">
-        <article><strong>{history.annualRevenue.length}</strong><span>annual operating revenue point</span></article>
+        <article><strong>{history.annualRevenue.length}</strong><span>annual operating revenue periods</span></article>
         <article><strong>{history.annualCfo.length}</strong><span>annual CFO periods</span></article>
         <article><strong>{history.quarterlyOperatingRevenue.length}</strong><span>quarterly revenue periods</span></article>
         <article><strong>{history.quarterlyOperatingProfit.length}</strong><span>quarterly operating-profit periods</span></article>
@@ -68,27 +83,8 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
         </table>
       </div> : null}
 
-      <p className="pharma-history-caution"><strong>Why this still does not create a score:</strong> the annual revenue series has only one semantically valid operating-revenue point, OPM has only {history.quarterlyOpm.length} matched quarters, and PAT/EPS, leverage, capex/FCF and regulatory evidence remain incomplete.</p>
-    </div>
+      <p className="pharma-history-caution"><strong>Why this still does not create a score:</strong> canonical history can improve evidence coverage without satisfying every PHARMA_V1 scoring gate. Missing, conditional, event-based and market evidence remain explicitly visible instead of being inferred.</p>
+    </details>
 
-    <div className="pharma-readiness-grid">
-      {view.domains.map((domain) => <article key={domain.metricCode} className={`pharma-domain pharma-domain-${domain.state.toLocaleLowerCase()}`}>
-        <div className="pharma-domain-head">
-          <div><span>{domain.requirement}</span><h3>{domain.label}</h3></div>
-          <b>{stateLabel[domain.state]}</b>
-        </div>
-        <p>{domain.detail}</p>
-        <footer>
-          <span>{domain.observationCountLabel}: <strong>{domain.canonicalObservationCount}</strong></span>
-          <span>Contract minimum: <strong>{domain.minimumObservations}</strong></span>
-        </footer>
-      </article>)}
-    </div>
-
-    <div className="pharma-readiness-note">
-      <strong>No PHARMA_V1 score is being generated yet.</strong>
-      <p>{view.notice}</p>
-      <small>Normalization contract: {view.normalizationVersion} · Current blockers: {view.blockers.join(" · ")}</small>
-    </div>
-  </section>
+  </ResearchReadinessPanel>
 }
