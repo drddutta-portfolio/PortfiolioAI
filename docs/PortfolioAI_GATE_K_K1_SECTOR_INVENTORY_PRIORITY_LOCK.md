@@ -942,3 +942,43 @@ node scripts/k1-industry-readiness-lock.mjs \
 ```
 
 K2 remains blocked until this rerun is reviewed.
+
+
+---
+
+## 23. K1 Industry Readiness — three reviewed public exceptions encoded
+
+The public Screener enrichment resolved 149 of the 152 previously missing Industry values. The three remaining failures were:
+
+- `HINDUNILVR`
+- `JYOTHYLAB`
+- `POLICYBZR`
+
+All three failed only because the Screener market-classification breadcrumb was absent on the symbol page; the company identity itself was not disputed.
+
+Targeted public evidence plus owner review now records these K1 Industry values:
+
+```text
+HINDUNILVR  → Personal Care / Household Products
+JYOTHYLAB   → Personal Products / Household Care
+POLICYBZR   → Fintech / Insurance Brokerage & Platform
+```
+
+The existing reconciled K1 `Sector` remains authoritative and MUST NOT be overwritten by these reviewed labels. Basic Industry remains null where no finer public classification is sufficiently evidenced.
+
+Machine-readable reviewed-exception authority:
+
+`docs/k1/PortfolioAI_K1_REVIEWED_INDUSTRY_EXCEPTIONS_2026-09-22.json`
+
+`scripts/k1-enrich-missing-industries.mjs` now loads that reviewed-exception file, merges only Industry / Basic Industry for the unresolved cohort, marks the source as `REVIEWED_PUBLIC_CLASSIFICATION`, deletes the corresponding transient failure entries, and preserves Sector.
+
+Expected closeout after owner-local rerun:
+
+```text
+Industry present  = 238 / 238
+Industry missing  = 0
+Sector overwrite  = 0
+Production writes = 0
+```
+
+K1 Industry Readiness is not formally frozen until the owner-local enriched inventory is regenerated and `scripts/k1-industry-readiness-lock.mjs` is rerun against it. K2 remains blocked until that final output is reviewed.
