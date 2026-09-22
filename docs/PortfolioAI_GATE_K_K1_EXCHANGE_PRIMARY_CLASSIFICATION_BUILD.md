@@ -698,3 +698,69 @@ Artifacts now include:
 - `artifacts/k1-nse-classification-reconciliation.json`
 
 This correction specifically addresses cases such as VISHNU and YATRA that were absent from the Nifty Total Market constituent file.
+
+---
+
+## 16. Trendlyne MCP reviewed fallback for persistent residual classification
+
+Owner approved using Trendlyne MCP for sector / industry classification where the official NSE bulk source does not contain a current holding.
+
+Policy:
+
+```text
+NSE official bulk classification available
+→ Tier-1 exchange-primary reference
+
+NSE bulk residual
+→ Trendlyne MCP multi-stock classification
+→ source retained as TRENDLYNE_MCP_REVIEWED_FALLBACK
+→ reusable reviewed K1 artifact
+
+later official NSE/BSE evidence becomes available and conflicts
+→ official exchange evidence wins
+→ reviewed fallback is superseded
+```
+
+Trendlyne does not overwrite or masquerade as NSE evidence. Every fallback row retains distinct provenance.
+
+### Local-only batch capture
+
+Added:
+
+- `supabase/functions/k1-local-trendlyne-classification/index.ts`
+- `scripts/k1-capture-trendlyne-classification.sh`
+
+The Edge Function reuses the existing `TrendlyneObservedMcpClient` and `get_parameter_values_multi_stock` tool.
+
+Current batch contract:
+
+```text
+batch size       = 20 stocks
+current residual = 38 stocks
+estimated calls  = 2 Trendlyne MCP calls
+returned fields  = symbol / ISIN / company name / sector / industry
+production writes = 0
+```
+
+The capture is explicitly local-only and requires:
+- authenticated local Supabase user;
+- existing `TRENDLYNE_MCP_URL`;
+- `K1_LOCAL_TRENDLYNE_CLASSIFICATION_ENABLED=true`;
+- explicit execution confirmation embedded by the owner-run script.
+
+The response is saved to:
+
+`artifacts/k1-trendlyne-classification.json`
+
+### Reuse policy
+
+The normal K1 cohort runner now consumes the saved Trendlyne artifact for NSE-bulk residual symbols. It does **not** call Trendlyne again on each reconciliation.
+
+The merged classification reference keeps:
+- NSE bulk rows as official exchange evidence;
+- Trendlyne rows as reviewed fallback evidence;
+- unresolved rows fail-closed.
+
+The comparator contract is now source-aware and records reference-source counts and source-specific reason codes. Terminal exception output includes `REFERENCE_SOURCE` so Trendlyne rows are never presented as NSE rows.
+
+After the first successful capture and owner review, the non-sensitive classification result can be frozen into a repository K1 manifest so it survives local artifact cleanup and does not require repeated provider calls.
