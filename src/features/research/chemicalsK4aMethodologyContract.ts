@@ -21,7 +21,7 @@ export interface ChemicalsK4aSubprofileContract {
 
 export const CHEMICALS_K4A_CONTRACT = {
   version: CHEMICALS_K4A_CONTRACT_VERSION,
-  state: "CHECKPOINT_A_OWNER_APPROVAL_REQUIRED",
+  state: "CHECKPOINT_A_OWNER_APPROVED_LOCKED",
   engineCode: "CHEMICALS_V1",
   runtimeActivationAllowed: false,
   scorePersistenceEnabled: false,
