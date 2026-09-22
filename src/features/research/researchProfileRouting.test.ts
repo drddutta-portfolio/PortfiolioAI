@@ -132,6 +132,16 @@ describe("routeResearchProfileV1", () => {
     })
   })
 
+  it("routes Consumer/FMCG industries into the branded profile", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Fast Moving Consumer Goods", applicationIndustry: "Packaged Foods" }).profileCode).toBe("BRANDED_CONSUMER_FMCG")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "FMCG", applicationIndustry: "Distilleries & Breweries" }).profileCode).toBe("BRANDED_CONSUMER_FMCG")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Consumer Staples", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "CONSUMER_FMCG_INDUSTRY_REQUIRED",
+    })
+  })
+
   it("routes Metals industries into steel and non-ferrous subprofiles", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Metals & Mining", applicationIndustry: "Iron & Steel" }).profileCode).toBe("STEEL_FERROUS")
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Metals & Mining", applicationIndustry: "Diversified Metals" }).profileCode).toBe("NON_FERROUS_DIVERSIFIED_METALS")
