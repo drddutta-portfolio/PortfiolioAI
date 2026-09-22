@@ -1,0 +1,36 @@
+{
+  "contract": "PORTFOLIOAI_K1_REVIEWED_INDUSTRY_EXCEPTIONS_V1",
+  "frozenAt": "2026-09-22",
+  "purpose": "Close the three public-enrichment classification-path failures without changing the already reconciled canonical Sector.",
+  "rules": {
+    "sectorOverwriteAllowed": false,
+    "industryMayBeFilledWhenPublicEvidenceSupports": true,
+    "basicIndustryMayRemainNullWhenEvidenceDoesNotSupportFinerClassification": true
+  },
+  "rows": [
+    {
+      "symbol": "HINDUNILVR",
+      "industry": "Personal Care / Household Products",
+      "basicIndustry": null,
+      "sourceKind": "REVIEWED_PUBLIC_CLASSIFICATION",
+      "sourceUrl": "https://www.hul.co.in/files/annual-report-2025-26.pdf",
+      "evidenceNote": "Hindustan Unilever annual report documents Beauty & Wellbeing / personal-care businesses; reviewed owner classification accepted for K1 Industry Readiness only."
+    },
+    {
+      "symbol": "JYOTHYLAB",
+      "industry": "Personal Products / Household Care",
+      "basicIndustry": null,
+      "sourceKind": "REVIEWED_PUBLIC_CLASSIFICATION",
+      "sourceUrl": "https://www.jyothylabs.com/products",
+      "evidenceNote": "Jyothy Labs identifies Fabric Care, Home Care, Personal Care and Dish Wash categories; reviewed owner classification accepted for K1 Industry Readiness only."
+    },
+    {
+      "symbol": "POLICYBZR",
+      "industry": "Fintech / Insurance Brokerage & Platform",
+      "basicIndustry": null,
+      "sourceKind": "REVIEWED_PUBLIC_CLASSIFICATION",
+      "sourceUrl": "https://www.pbfintech.in/",
+      "evidenceNote": "PB Fintech describes Policybazaar/Paisabazaar as online insurance and lending platforms and insurance-distribution businesses; reviewed owner classification accepted for K1 Industry Readiness only."
+    }
+  ]
+}
