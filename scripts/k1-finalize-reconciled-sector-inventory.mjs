@@ -38,12 +38,14 @@ async function main() {
   const rows = reconciliation.rows.map((row) => {
     const finalSector = clean(row?.official?.sector) ?? clean(row?.canonical?.sector)
     const finalIndustry = clean(row?.official?.industry) ?? clean(row?.canonical?.industry)
+    const finalBasicIndustry = clean(row?.official?.basicIndustry)
     if (!finalSector) throw new Error(`FINAL_SECTOR_MISSING:${row?.symbol ?? "UNKNOWN"}`)
 
     return {
       symbol: row.symbol,
       finalSector,
       finalIndustry,
+      finalBasicIndustry,
       referenceSource: row?.official?.sourceKind ?? "UNKNOWN",
       reconciliationState: row.state,
       changeScopes: row.changeScopes ?? [],
@@ -51,6 +53,7 @@ async function main() {
       canonicalIndustry: row?.canonical?.industry ?? null,
       referenceSector: row?.official?.sector ?? null,
       referenceIndustry: row?.official?.industry ?? null,
+      referenceBasicIndustry: row?.official?.basicIndustry ?? null,
     }
   })
 
@@ -59,7 +62,7 @@ async function main() {
   const reconciliationCounts = countBy(rows, (row) => row.reconciliationState)
 
   const result = {
-    contract: "PORTFOLIOAI_K1_FINAL_RECONCILED_SECTOR_INVENTORY_V1",
+    contract: "PORTFOLIOAI_K1_FINAL_RECONCILED_SECTOR_INVENTORY_V2",
     generatedAt: new Date().toISOString(),
     sourceReconciliationContract: reconciliation.contract ?? null,
     rowCount: rows.length,
