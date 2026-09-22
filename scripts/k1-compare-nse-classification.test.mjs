@@ -148,3 +148,20 @@ test("records Trendlyne fallback as a distinct reviewed classification source", 
   assert.equal(result.referenceSourceCounts.TRENDLYNE_MCP_REVIEWED_FALLBACK, 1)
 })
 
+
+test("records BSE official fallback as exchange evidence", () => {
+  const result = reconcileNseClassification(
+    canonical({ sector: "Consumer Services", industry: null }),
+    official({
+      sector: "Services",
+      industry: null,
+      sourceKind: "BSE_OFFICIAL_QUOTE_HEADER",
+      classificationAuthority: "OFFICIAL_EXCHANGE_FALLBACK",
+    }),
+  )
+  assert.equal(result.counts.CHANGE_REQUIRED, 1)
+  assert.equal(result.rows[0].reasonCode, "CANONICAL_PRIMARY_SECTOR_DIFFERS_FROM_BSE")
+  assert.equal(result.rows[0].official.sourceKind, "BSE_OFFICIAL_QUOTE_HEADER")
+  assert.equal(result.referenceSourceCounts.BSE_OFFICIAL_QUOTE_HEADER, 1)
+})
+
