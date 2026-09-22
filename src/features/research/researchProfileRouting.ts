@@ -186,11 +186,23 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
   }
 
   if (sector === "AUTOMOBILE_AND_AUTO_COMPONENTS") {
-    if (industry === "CARS_UTILITY_VEHICLES" || industry === "2_3_WHEELERS" || industry === "COMMERCIAL_VEHICLES") {
+    if (
+      industry === "CARS_UTILITY_VEHICLES"
+      || industry === "2_3_WHEELERS"
+      || industry === "COMMERCIAL_VEHICLES"
+      || industry === "TRACTORS_FARM_EQUIPMENT"
+    ) {
       return result(input, "ROUTED", "AUTO_OEM", "SECTOR_AND_INDUSTRY", "AUTO_OEM")
     }
-    if (industry === "AUTO_PARTS_EQUIPMENT" || industry === "AUTO_COMPONENTS") {
+    if (
+      industry === "AUTO_PARTS_EQUIPMENT"
+      || industry === "AUTO_COMPONENTS"
+      || industry === "TYRES_RUBBER_PRODUCTS"
+    ) {
       return result(input, "ROUTED", "AUTO_COMPONENTS", "SECTOR_AND_INDUSTRY", "AUTO_COMPONENTS")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "AUTO_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "AUTO_SUBPROFILE_PENDING")
   }
