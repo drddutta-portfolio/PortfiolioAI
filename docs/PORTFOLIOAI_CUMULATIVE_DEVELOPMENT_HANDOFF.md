@@ -32581,3 +32581,34 @@ A post-promotion audit caught and corrected an accidental temporary change to NB
 **K4 Package 1 · IT_TECH = COMPLETE / PASS / CLOSED.**
 
 K4 Package 2 — INDUSTRIALS_CAPITAL_GOODS Checkpoint A is now IN PROGRESS.
+
+
+---
+
+## K4 Package 2 · INDUSTRIALS_CAPITAL_GOODS · Checkpoint A implementation — 22 September 2026
+
+IT_TECH is closed COMPLETE / PASS.
+
+Added:
+- `industrialsK4aMethodologyContract.ts`;
+- `industrialsK4aMethodologyContract.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_2_INDUSTRIALS_CAPITAL_GOODS_CHECKPOINT_A.md`.
+
+Proposed industrial subprofiles:
+1. PROJECT_EPC — LT reference;
+2. CAPITAL_EQUIPMENT_ELECTRICAL — CGPOWER reference;
+3. DEFENCE_AEROSPACE — BEL reference, ASTRAMICRO control.
+
+Key methodology locks proposed:
+- Industry selects methodology; Sector alone cannot;
+- order-book growth must be reconciled with execution and cancellation risk;
+- working capital / receivables / cash conversion are core evidence;
+- minimum 3 annual years / 8 quarters / 4 order-book periods / 252 trading days;
+- cycle-aware ROCE and margin interpretation;
+- no cross-subprofile peer percentiles;
+- unknown Industry → METHOD_NOT_AVAILABLE;
+- numeric recommendation thresholds remain subprofile-owned and unset.
+
+Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
