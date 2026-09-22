@@ -59,7 +59,7 @@ describe("SECTOR_ENGINE_CONTRACT_V1", () => {
     expect(sectorEngineForProfileCode("AUTO_COMPONENTS")?.engineCode).toBe("AUTO_COMPONENTS")
     expect(sectorEngineForProfileCode("SPECIALTY_CHEMICALS")).toMatchObject({
       engineCode: "CHEMICALS_V1",
-      lifecycle: "K4_FROZEN_PENDING",
+      lifecycle: "IMPLEMENTED",
     })
     expect(sectorEngineForProfileCode("AGRO_FERTILISER")?.engineCode).toBe("CHEMICALS_V1")
     expect(sectorEngineForProfileCode("COMMODITY_PROCESS_CHEMICALS")?.engineCode).toBe("CHEMICALS_V1")
