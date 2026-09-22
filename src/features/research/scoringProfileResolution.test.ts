@@ -20,19 +20,46 @@ describe("resolveScoringProfile", () => {
     })
   })
 
-  it("routes Healthcare/Pharmaceuticals to the Pharma methodology without rewriting its application sector", () => {
+  it("routes Healthcare/Pharmaceuticals to PHARMA_V1 without rewriting the application sector", () => {
     const resolved = resolveScoringProfile("Healthcare", "Pharmaceuticals", null)
     expect(resolved.profileCode).toBe("PHARMA_V1")
     expect(resolved.ruleProfile).toBe("PHARMA_V1")
   })
 
-  it("does not force generic Healthcare into PHARMA_V1", () => {
-    const resolved = resolveScoringProfile("Healthcare", "Hospitals", null)
-    expect(resolved.profileCode).toBe("GENERAL")
-    expect(resolved.ruleProfile).toBe("GENERAL")
+  it("routes Banking + Banks to BANK_NBFC without a symbol-specific assignment", () => {
+    expect(resolveScoringProfile("Banking", "Banks", null)).toMatchObject({
+      profileCode: "BANK_NBFC",
+      ruleProfile: "BANK_NBFC",
+      profileSource: "SECTOR_RULE",
+    })
   })
 
-  it("preserves the BANK_NBFC reference pathway", () => {
+  it("routes Financial Services + NBFC evidence to BANK_NBFC", () => {
+    expect(resolveScoringProfile("Financial Services", "NBFC", null)).toMatchObject({
+      profileCode: "BANK_NBFC",
+      ruleProfile: "BANK_NBFC",
+      profileSource: "SECTOR_RULE",
+    })
+  })
+
+  it("never activates BANK_NBFC from Banking sector alone", () => {
+    expect(resolveScoringProfile("Banking", null, null)).toEqual({
+      profileCode: "GENERAL",
+      ruleProfile: "GENERAL",
+      profileSource: "GENERAL_FALLBACK",
+      legacyAssignmentCode: null,
+    })
+  })
+
+  it("keeps K4 pending profiles fail-closed instead of using their sector label as methodology", () => {
+    expect(resolveScoringProfile("Information Technology", "IT Services", null)).toMatchObject({
+      profileCode: "GENERAL",
+      ruleProfile: "GENERAL",
+      profileSource: "GENERAL_FALLBACK",
+    })
+  })
+
+  it("preserves an explicit reviewed BANK_NBFC assignment", () => {
     expect(resolveScoringProfile("Banking", "Banks", "BANK_NBFC")).toMatchObject({
       profileCode: "BANK_NBFC",
       ruleProfile: "BANK_NBFC",
@@ -40,7 +67,7 @@ describe("resolveScoringProfile", () => {
     })
   })
 
-  it("keeps other reviewed legacy profiles on their existing GENERAL-rule behavior", () => {
+  it("keeps other reviewed legacy profiles on their existing GENERAL-rule behavior until their K4 methodology is approved", () => {
     expect(resolveScoringProfile("Information Technology", "IT Services", "IT_TECH")).toMatchObject({
       profileCode: "IT_TECH",
       ruleProfile: "GENERAL",
