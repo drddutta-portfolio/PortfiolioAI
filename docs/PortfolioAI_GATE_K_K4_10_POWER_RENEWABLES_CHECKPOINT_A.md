@@ -65,3 +65,16 @@ Universal role names may be reused, but numeric thresholds, role floors and AVOI
 ## 7. Checkpoint A acceptance
 
 Owner approval must freeze the three-subprofile split, reference anchors, history/evidence gates, benchmark/valuation families, tariff/offtaker/leverage/grid-risk treatment and fail-closed behavior before Checkpoint B implementation.
+
+
+## 8. Checkpoint A final validation and freeze
+
+Owner-local validation passed:
+- `powerRenewablesK4aMethodologyContract.test.ts` — PASS;
+- `sectorEngineRegistry.test.ts` — PASS;
+- `researchProfileRouting.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+Owner approved proceeding with the three-subprofile Power/Renewables methodology and the frozen tariff/offtaker/leverage/grid-risk boundaries.
+
+**POWER_RENEWABLES_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
