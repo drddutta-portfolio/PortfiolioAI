@@ -9,8 +9,9 @@ export type ResearchProfileRoutingState =
 export type ResearchProfileCode =
   | "BANK"
   | "NBFC_LENDING"
-  | "CAPITAL_MARKET_FINANCIAL"
-  | "DIGITAL_PLATFORM"
+  | "CAPITAL_MARKETS_AMC"
+  | "INSURANCE"
+  | "FINTECH_PLATFORM"
   | "IT_SERVICES"
   | "IT_SOFTWARE_PRODUCTS_PLATFORMS"
   | "IT_DIGITAL_INFRA_HARDWARE"
@@ -239,14 +240,36 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
   }
 
   if (sector === "FINANCIAL_SERVICES") {
-    if (industry === "ASSET_MANAGEMENT_COS" || industry === "BROKING_DISTRIBUTION" || industry === "STOCK_EXCHANGES_DEPOSITORIES") {
-      return result(input, "ROUTED", "CAPITAL_MARKET_FINANCIAL", "SECTOR_AND_INDUSTRY", "CAPITAL_MARKET_FINANCIAL")
+    if (
+      industry === "ASSET_MANAGEMENT_COS"
+      || industry === "ASSET_MANAGEMENT_COMPANY"
+      || industry === "BROKING_DISTRIBUTION"
+      || industry === "STOCK_EXCHANGES_DEPOSITORIES"
+      || industry === "CAPITAL_MARKETS"
+    ) {
+      return result(input, "ROUTED", "CAPITAL_MARKETS_AMC", "SECTOR_AND_INDUSTRY", "CAPITAL_MARKETS_AMC")
     }
-    if (industry === "INTERNET_SOFTWARE_SERVICES") {
-      return result(input, "ROUTED", "DIGITAL_PLATFORM", "SECTOR_AND_INDUSTRY", "FINANCIAL_DIGITAL_PLATFORM")
+    if (
+      industry === "LIFE_INSURANCE"
+      || industry === "GENERAL_INSURANCE"
+      || industry === "HEALTH_INSURANCE"
+      || industry === "INSURANCE"
+    ) {
+      return result(input, "ROUTED", "INSURANCE", "SECTOR_AND_INDUSTRY", "INSURANCE")
+    }
+    if (
+      industry === "FINTECH"
+      || industry === "FINTECH_INSURANCE_BROKERAGE_PLATFORM"
+      || industry === "INTERNET_SOFTWARE_SERVICES"
+      || industry === "DIGITAL_FINANCIAL_PLATFORM"
+    ) {
+      return result(input, "ROUTED", "FINTECH_PLATFORM", "SECTOR_AND_INDUSTRY", "FINTECH_PLATFORM")
     }
     if (industry === "NON_BANKING_FINANCIAL_COMPANY_NBFC" || industry === "NBFC") {
       return result(input, "ROUTED", "NBFC_LENDING", "SECTOR_AND_INDUSTRY", "NBFC_LENDING")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "FINANCIAL_SERVICES_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "FINANCIAL_SERVICES_SUBPROFILE_PENDING")
   }
