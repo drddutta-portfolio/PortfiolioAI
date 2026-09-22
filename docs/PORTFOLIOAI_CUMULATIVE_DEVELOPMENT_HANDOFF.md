@@ -1154,3 +1154,51 @@ K4 global invariants preserved:
 **Gate K4 = COMPLETE / PASS / CLOSED.**
 
 Next planned stage: **K5 — whole-portfolio coexistence and routing validation**.
+
+
+---
+
+## Gate K5 · Cross-Sector Isolation & Whole-Portfolio Validation implementation — 22 September 2026
+
+Gate K4 is closed COMPLETE / PASS.
+
+K5 implementation added:
+- `k5CrossSectorValidation.ts`;
+- `k5CurrentPortfolioRoutingSnapshot.ts` containing the frozen 238-equity K1 routing fixture;
+- `k5CrossSectorIsolation.test.ts`;
+- `k5WholePortfolioRouting.test.ts`;
+- `k5RecommendationPortability.test.ts`;
+- `docs/PortfolioAI_GATE_K_K5_CROSS_SECTOR_WHOLE_PORTFOLIO_VALIDATION.md`.
+
+K5 validation design:
+- registry-driven complete ordered pairwise engine isolation matrix;
+- unique profile ownership;
+- foreign methodology/benchmark/valuation/recommendation authority retrieval prohibited;
+- all ten K4 engines required to remain IMPLEMENTED;
+- every frozen current-portfolio row required to end in an explicit research architecture state;
+- synthetic future-stock portability fixture for every currently SUPPORTED profile;
+- unsupported sectors → METHODOLOGY_NOT_AVAILABLE;
+- missing/conflicting classification → REVIEW_REQUIRED;
+- no nearest-looking sector fallback;
+- pending NBFC_LENDING and DIAGNOSTICS remain fail-closed;
+- universal Research shell preserved;
+- TORNTPHARM/AUROPHARMA golden controls preserved.
+
+Recommendation portability study:
+- universal semantics remain portable;
+- numeric threshold portability = NOT_ESTABLISHED;
+- pre-declared falsification tests encoded before any future portability claim;
+- K5 introduces NO universal numeric recommendation thresholds;
+- sector/profile-specific numeric policy still requires evidence and owner approval.
+
+Safety unchanged:
+- provider calls = 0;
+- production mutation/migration = NO;
+- score/recommendation persistence = OFF;
+- position sizing = OFF;
+- scheduler changes = NO;
+- deployment = NO;
+- PR merge = NO;
+- automatic trading = NO.
+
+**K5 status = IMPLEMENTED / LOCAL VALIDATION PENDING.**
