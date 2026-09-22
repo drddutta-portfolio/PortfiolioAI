@@ -32363,3 +32363,46 @@ The final K2 contract `SECTOR_ENGINE_CONTRACT_V1` is frozen. The legacy non-PHAR
 K3 — BANK_NBFC Reconciliation & Portability Closure — is now IN PROGRESS.
 
 Safety unchanged: no production mutation/migration, no score/recommendation persistence, no scheduler change, no deployment, no PR merge, no automatic trading.
+
+
+---
+
+## K3 BANK_NBFC reconciliation checkpoint — 22 September 2026
+
+K3 has started with a consolidated runtime portability audit.
+
+Implemented:
+- `scoringProfileResolution.ts` now resolves through `RESEARCH_PROFILE_ROUTING_V2` + `SECTOR_ENGINE_REGISTRY`;
+- the duplicate regex-based sector/profile resolver inside `scoringRepository.ts` has been removed;
+- `scoringRepository.ts` now uses the centralized resolver;
+- `scoringProfileResolution.test.ts` expanded for Bank/NBFC industry-first routing;
+- `k3BankNbfcPortability.test.ts` added;
+- `docs/PortfolioAI_GATE_K_K3_BANK_NBFC_RECONCILIATION_AUDIT.md` added.
+
+Current intended runtime behavior:
+- Banking + Banks → BANK_NBFC;
+- Financial Services + NBFC → BANK_NBFC;
+- Banking + missing Industry → GENERAL / fail closed;
+- Healthcare + Pharmaceuticals → PHARMA_V1;
+- K4-pending sector identities do not activate placeholder methodologies.
+
+HDFCBANK-specific audit result:
+- old Trendlyne bank scoring/growth discovery functions remain reference-stock discovery only and may stay HDFCBANK-restricted;
+- `refresh-bank-benchmark` is runtime/operational and remains HDFCBANK-only with NIFTY Bank, so benchmark portability remains an open K3 blocker;
+- Bank-vs-NBFC subprofile/authority split remains open because NIFTY Bank and bank-specific asset-quality logic must not be assumed portable to NBFCs;
+- inherited BANK_NBFC recommendation thresholds remain HDFCBANK-pilot based and require portability review;
+- BANK_NBFC Cash Flow N/A semantics must be preserved and independently validated.
+
+Next owner-local validation:
+```bash
+npx vitest run \
+  src/features/research/scoringProfileResolution.test.ts \
+  src/features/research/k3BankNbfcPortability.test.ts \
+  src/features/research/researchProfileRouting.test.ts
+
+npm run typecheck
+```
+
+K3 is IN PROGRESS, not closed.
+
+Safety unchanged: no production mutation/migration, no provider call, no score/recommendation persistence, no scheduler change, no deployment, no PR merge, no automatic trading.
