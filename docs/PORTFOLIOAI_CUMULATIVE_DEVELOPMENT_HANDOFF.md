@@ -31956,3 +31956,41 @@ Important precision rule:
 No production mutation, migration, persistence, scheduler change, deployment, PR merge or trading action occurred.
 
 Next action: pull latest branch and rerun `bash scripts/k1-run-current-cohort-reconciliation.sh`. Review only the residual/failure rows that remain after the BSE official fallback.
+
+---
+
+### K1 reviewed residual classification manifest — active
+
+After live NSE-targeted, Trendlyne MCP, and BSE-targeted experiments, the remaining problem was confirmed to be source accessibility rather than reconciliation logic.
+
+Owner requested a smart/precise finish. K1 now uses a deterministic frozen fallback instead of repeatedly querying slow-changing classification metadata.
+
+Added:
+
+`docs/k1/PortfolioAI_K1_REVIEWED_SECONDARY_CLASSIFICATION_FALLBACK_2026-09-22.json`
+
+The manifest contains the 38 current NSE-bulk residual equities with reviewed sector/industry evidence from public classification pages and per-row evidence URLs.
+
+Current active hierarchy:
+
+```text
+NSE official bulk
+→ reviewed secondary residual manifest
+→ unresolved only then REVIEW_REQUIRED
+```
+
+Removed from active reconciliation flow:
+- Trendlyne MCP classification capture;
+- live BSE targeted fallback.
+
+These experimental paths are no longer required for routine K1 reconciliation.
+
+The comparator is source-aware:
+- official NSE rows retain NSE provenance;
+- fallback rows are labeled `REVIEWED_SECONDARY_CLASSIFICATION`;
+- fallback differences use explicit `...FROM_REVIEWED_SECONDARY` reason codes;
+- reference-source counts are exposed in the reconciliation artifact.
+
+No production mutation, migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+Next action: pull latest branch and rerun `bash scripts/k1-run-current-cohort-reconciliation.sh`. Expected target is 238/238 merged classification rows with zero `OFFICIAL_MISSING` / zero `REVIEW_REQUIRED`; then compute final reconciled sector inventory and freeze K4 package count/order.
