@@ -21,9 +21,10 @@ describe("OIL_GAS_V1 K4 Checkpoint B isolation and regression", () => {
 
     if (engine?.lifecycle === "K4_FROZEN_PENDING") {
       expect(resolved).toMatchObject({
-        profileCode: "GENERAL",
-        ruleProfile: "GENERAL",
-        profileSource: "GENERAL_FALLBACK",
+        profileCode: null,
+        ruleProfile: null,
+        profileSource: "METHODOLOGY_UNAVAILABLE",
+        methodologyState: "METHODOLOGY_NOT_AVAILABLE",
       })
     } else {
       expect(engine?.lifecycle).toBe("IMPLEMENTED")

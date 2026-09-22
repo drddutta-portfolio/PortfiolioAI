@@ -271,6 +271,26 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
 
   const rawAssignedCode = typeof assignmentResult.data?.scoring_profile_code === "string" ? assignmentResult.data.scoring_profile_code : null
   const resolvedProfile = resolveScoringProfile(sector, industry, rawAssignedCode)
+  if (resolvedProfile.methodologyState !== "AVAILABLE" || resolvedProfile.profileCode === null || resolvedProfile.ruleProfile === null) {
+    return {
+      profileCode: resolvedProfile.methodologyState,
+      profileName: resolvedProfile.methodologyState === "REVIEW_REQUIRED" ? "Research classification review required" : "Research methodology not available",
+      profileSource: resolvedProfile.profileSource,
+      methodologyState: resolvedProfile.methodologyState,
+      methodologyReasonCode: resolvedProfile.reasonCode,
+      modelName: "PortfolioAI scoring",
+      modelStatus: "BLOCKED",
+      runState: null,
+      overallScore: null,
+      evidenceCoverage: null,
+      scoreReadyCoverage: null,
+      evidenceConfidence: null,
+      asOfDate: null,
+      dimensions: [],
+      ratings: [],
+      previewMode: false,
+    }
+  }
   const profileCode = resolvedProfile.profileCode
   const profileSource: ScoringProfileSource = resolvedProfile.profileSource
   const ruleProfile = resolvedProfile.ruleProfile
@@ -332,6 +352,7 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
 
   return {
     profileCode, profileName: profile?.name ?? profileCode.replaceAll("_", " "), profileSource,
+    methodologyState: "AVAILABLE", methodologyReasonCode: null,
     modelName: model.name, modelStatus: model.status, runState: run?.run_state ?? null,
     overallScore: run?.overall_score === null || run?.overall_score === undefined ? null : Number(run.overall_score),
     evidenceCoverage: run ? Number(run.evidence_coverage) : previewEvidenceCoverage,

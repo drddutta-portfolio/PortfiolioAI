@@ -13,11 +13,11 @@ describe("INDUSTRIALS K4 Checkpoint B isolation and regression", () => {
     expect(sectorEngineForProfileCode("IT_SERVICES")?.engineCode).toBe("IT_TECH")
   })
 
-  it("keeps industrial runtime scoring blocked until Checkpoint B closure", () => {
+  it("keeps industrial methodology active after Checkpoint B closure", () => {
     const resolved = resolveScoringProfile("Capital Goods", "Civil Construction", null)
-    expect(resolved.profileCode).toBe("GENERAL")
+    expect(resolved.profileCode).toBe("INDUSTRIALS_CAPITAL_GOODS")
     expect(resolved.ruleProfile).toBe("GENERAL")
-    expect(resolved.profileSource).toBe("GENERAL_FALLBACK")
+    expect(resolved.profileSource).toBe("SECTOR_RULE")
   })
 
   it("preserves the TORNTPHARM golden score", () => {
@@ -33,7 +33,7 @@ describe("INDUSTRIALS K4 Checkpoint B isolation and regression", () => {
 
   it("preserves IT_TECH implemented status while adding Industrials", () => {
     expect(sectorEngineForProfileCode("IT_SERVICES")?.lifecycle).toBe("IMPLEMENTED")
-    expect(sectorEngineForProfileCode("PROJECT_EPC")?.lifecycle).toBe("K4_FROZEN_PENDING")
+    expect(sectorEngineForProfileCode("PROJECT_EPC")?.lifecycle).toBe("IMPLEMENTED")
   })
 
   it("preserves the universal Research workspace shell", () => {

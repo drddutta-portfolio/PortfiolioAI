@@ -12,15 +12,16 @@ describe("IT_TECH K4 Checkpoint B isolation and regression", () => {
     expect(sectorEngineForProfileCode("BANK")?.engineCode).toBe("BANK_NBFC")
   })
 
-  it("keeps IT_TECH runtime activation blocked until Checkpoint B closure", () => {
+  it("keeps IT_TECH active after Checkpoint B closure", () => {
     const resolved = resolveScoringProfile(
       "Information Technology",
       "Computers - Software & Consulting",
       null,
     )
-    expect(resolved.profileCode).toBe("GENERAL")
+    expect(resolved.profileCode).toBe("IT_TECH")
     expect(resolved.ruleProfile).toBe("GENERAL")
-    expect(resolved.profileSource).toBe("GENERAL_FALLBACK")
+    expect(resolved.profileSource).toBe("SECTOR_RULE")
+    expect(resolved.methodologyState).toBe("AVAILABLE")
   })
 
   it("preserves the TORNTPHARM golden score", () => {

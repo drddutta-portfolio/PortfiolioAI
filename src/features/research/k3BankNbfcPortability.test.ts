@@ -13,19 +13,21 @@ describe("Gate K3 BANK_NBFC portability boundary", () => {
 
   it("keeps NBFC_LENDING in the BANK_NBFC family but blocks scoring until its methodology authority exists", () => {
     expect(sectorEngineForProfileCode("NBFC_LENDING")?.engineCode).toBe("BANK_NBFC")
-    expect(sectorEngineForProfileCode("NBFC_LENDING")?.profileAuthorities?.NBFC_LENDING.state).toBe("PENDING_METHODOLOGY")
+    expect(sectorEngineForProfileCode("NBFC_LENDING")?.profileAuthorities?.NBFC_LENDING?.state).toBe("PENDING_METHODOLOGY")
     expect(resolveScoringProfile("Financial Services", "NBFC", null)).toMatchObject({
-      profileCode: "GENERAL",
-      ruleProfile: "GENERAL",
-      profileSource: "GENERAL_FALLBACK",
+      profileCode: null,
+      ruleProfile: null,
+      profileSource: "METHODOLOGY_UNAVAILABLE",
+      methodologyState: "METHODOLOGY_NOT_AVAILABLE",
     })
   })
 
   it("fails closed when Banking lacks Industry", () => {
     expect(resolveScoringProfile("Banking", null, null)).toMatchObject({
-      profileCode: "GENERAL",
-      ruleProfile: "GENERAL",
-      profileSource: "GENERAL_FALLBACK",
+      profileCode: null,
+      ruleProfile: null,
+      profileSource: "METHODOLOGY_UNAVAILABLE",
+      methodologyState: "REVIEW_REQUIRED",
     })
   })
 

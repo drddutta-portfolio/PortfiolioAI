@@ -9,7 +9,7 @@ const scoringCache = new Map<string, SecurityScoringSnapshot>()
 const scoringListeners = new Map<string, Set<(snapshot: SecurityScoringSnapshot) => void>>()
 
 function snapshotRank(snapshot: SecurityScoringSnapshot) {
-  const methodologyRank = snapshot.profileCode === "PHARMA_V1" ? 4 : snapshot.profileCode === "BANK_NBFC" ? 3 : 2
+  const methodologyRank = snapshot.methodologyState && snapshot.methodologyState !== "AVAILABLE" ? 0 : snapshot.profileCode === "PHARMA_V1" ? 4 : snapshot.profileCode === "BANK_NBFC" ? 3 : 2
   const profileRank = snapshot.profileSource === "REVIEWED_ASSIGNMENT" ? 3 : snapshot.profileSource === "SECTOR_RULE" ? 2 : 1
   const overallRank = snapshot.overallScore === null ? 0 : 1
   return [methodologyRank, profileRank, overallRank, snapshot.scoreReadyCoverage ?? 0, snapshot.evidenceConfidence ?? 0] as const
@@ -17,6 +17,8 @@ function snapshotRank(snapshot: SecurityScoringSnapshot) {
 
 function betterSnapshot(current: SecurityScoringSnapshot | undefined, incoming: SecurityScoringSnapshot) {
   if (!current) return incoming
+  if (incoming.methodologyState && incoming.methodologyState !== "AVAILABLE") return incoming
+  if (current.methodologyState && current.methodologyState !== "AVAILABLE") return incoming
   const currentRank = snapshotRank(current)
   const incomingRank = snapshotRank(incoming)
   for (let index = 0; index < currentRank.length; index += 1) {

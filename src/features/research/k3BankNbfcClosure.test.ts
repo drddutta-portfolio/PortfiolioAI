@@ -19,13 +19,13 @@ describe("Gate K3 BANK_NBFC closure contract", () => {
   it("freezes BANK and NBFC_LENDING as separate methodology authorities inside one engine family", () => {
     const engine = sectorEngineForProfileCode("BANK")
     expect(engine?.engineCode).toBe("BANK_NBFC")
-    expect(engine?.profileAuthorities?.BANK.state).toBe("SUPPORTED")
-    expect(engine?.profileAuthorities?.NBFC_LENDING.state).toBe("PENDING_METHODOLOGY")
+    expect(engine?.profileAuthorities?.BANK?.state).toBe("SUPPORTED")
+    expect(engine?.profileAuthorities?.NBFC_LENDING?.state).toBe("PENDING_METHODOLOGY")
   })
 
   it("permits BANK scoring from classification alone but blocks NBFC scoring until its authority exists", () => {
     expect(resolveScoringProfile("Banking", "Banks", null).profileCode).toBe("BANK_NBFC")
-    expect(resolveScoringProfile("Financial Services", "NBFC", null).profileCode).toBe("GENERAL")
+    expect(resolveScoringProfile("Financial Services", "NBFC", null).methodologyState).toBe("METHODOLOGY_NOT_AVAILABLE")
   })
 
   it("makes the NIFTY Bank operational refresh classification-driven rather than HDFCBANK-driven", () => {
@@ -37,7 +37,7 @@ describe("Gate K3 BANK_NBFC closure contract", () => {
 
   it("explicitly prevents NBFC_LENDING from inheriting NIFTY Bank benchmark authority", () => {
     expect(refreshSource).toContain("NBFC_LENDING requires its own approved benchmark authority")
-    expect(sectorEngineForProfileCode("NBFC_LENDING")?.profileAuthorities?.NBFC_LENDING.benchmarkAuthority)
+    expect(sectorEngineForProfileCode("NBFC_LENDING")?.profileAuthorities?.NBFC_LENDING?.benchmarkAuthority)
       .toBe("NBFC_LENDING_BENCHMARK_PENDING")
   })
 

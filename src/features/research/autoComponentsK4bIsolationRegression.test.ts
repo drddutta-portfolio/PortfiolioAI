@@ -15,15 +15,15 @@ describe("AUTO_COMPONENTS K4 Checkpoint B isolation and regression", () => {
     expect(sectorEngineForProfileCode("PROJECT_EPC")?.engineCode).toBe("INDUSTRIALS_CAPITAL_GOODS")
   })
 
-  it("keeps AUTO runtime scoring blocked until Checkpoint B closure", () => {
+  it("keeps AUTO methodology active after Checkpoint B closure", () => {
     const resolved = resolveScoringProfile(
       "Automobile and Auto Components",
       "Cars & Utility Vehicles",
       null,
     )
-    expect(resolved.profileCode).toBe("GENERAL")
+    expect(resolved.profileCode).toBe("AUTO_COMPONENTS")
     expect(resolved.ruleProfile).toBe("GENERAL")
-    expect(resolved.profileSource).toBe("GENERAL_FALLBACK")
+    expect(resolved.profileSource).toBe("SECTOR_RULE")
   })
 
   it("preserves the TORNTPHARM golden score", () => {
@@ -40,7 +40,7 @@ describe("AUTO_COMPONENTS K4 Checkpoint B isolation and regression", () => {
   it("preserves completed K4 engines while adding AUTO", () => {
     expect(sectorEngineForProfileCode("IT_SERVICES")?.lifecycle).toBe("IMPLEMENTED")
     expect(sectorEngineForProfileCode("PROJECT_EPC")?.lifecycle).toBe("IMPLEMENTED")
-    expect(sectorEngineForProfileCode("AUTO_OEM")?.lifecycle).toBe("K4_FROZEN_PENDING")
+    expect(sectorEngineForProfileCode("AUTO_OEM")?.lifecycle).toBe("IMPLEMENTED")
   })
 
   it("preserves the universal Research workspace shell", () => {

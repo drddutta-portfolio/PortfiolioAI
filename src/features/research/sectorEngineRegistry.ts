@@ -92,6 +92,8 @@ export const SECTOR_ENGINE_REGISTRY: readonly SectorEngineRegistryEntry[] = [
   {
     engineCode: "BANK_NBFC",
     displayName: "Banks & NBFCs",
+    // Mixed-family lifecycle is intentional: BANK is supported, while
+    // NBFC_LENDING remains explicitly pending and must fail closed.
     lifecycle: "RECONCILIATION_REQUIRED",
     methodologyAuthority: "BANK_NBFC",
     profileCodes: ["BANK", "NBFC_LENDING"],

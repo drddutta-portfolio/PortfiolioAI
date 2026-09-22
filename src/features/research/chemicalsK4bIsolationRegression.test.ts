@@ -15,11 +15,11 @@ describe("CHEMICALS_V1 K4 Checkpoint B isolation and regression", () => {
     expect(sectorEngineForProfileCode("AUTO_OEM")?.engineCode).toBe("AUTO_COMPONENTS")
   })
 
-  it("keeps Chemicals runtime scoring blocked until Checkpoint B closure", () => {
+  it("keeps Chemicals methodology active after Checkpoint B closure", () => {
     const resolved = resolveScoringProfile("Chemicals", "Specialty Chemicals", null)
-    expect(resolved.profileCode).toBe("GENERAL")
+    expect(resolved.profileCode).toBe("CHEMICALS_V1")
     expect(resolved.ruleProfile).toBe("GENERAL")
-    expect(resolved.profileSource).toBe("GENERAL_FALLBACK")
+    expect(resolved.profileSource).toBe("SECTOR_RULE")
   })
 
   it("preserves the TORNTPHARM golden score", () => {
@@ -37,7 +37,7 @@ describe("CHEMICALS_V1 K4 Checkpoint B isolation and regression", () => {
     expect(sectorEngineForProfileCode("IT_SERVICES")?.lifecycle).toBe("IMPLEMENTED")
     expect(sectorEngineForProfileCode("PROJECT_EPC")?.lifecycle).toBe("IMPLEMENTED")
     expect(sectorEngineForProfileCode("AUTO_OEM")?.lifecycle).toBe("IMPLEMENTED")
-    expect(sectorEngineForProfileCode("SPECIALTY_CHEMICALS")?.lifecycle).toBe("K4_FROZEN_PENDING")
+    expect(sectorEngineForProfileCode("SPECIALTY_CHEMICALS")?.lifecycle).toBe("IMPLEMENTED")
   })
 
   it("preserves the universal Research workspace shell", () => {

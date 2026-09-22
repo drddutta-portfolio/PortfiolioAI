@@ -7,6 +7,8 @@ describe("resolveScoringProfile", () => {
       profileCode: "PHARMA_V1",
       ruleProfile: "PHARMA_V1",
       profileSource: "REVIEWED_ASSIGNMENT",
+      methodologyState: "AVAILABLE",
+      reasonCode: "REVIEWED_PHARMA_ASSIGNMENT",
       legacyAssignmentCode: "PHARMA_HEALTHCARE",
     })
   })
@@ -16,6 +18,8 @@ describe("resolveScoringProfile", () => {
       profileCode: "PHARMA_V1",
       ruleProfile: "PHARMA_V1",
       profileSource: "SECTOR_RULE",
+      methodologyState: "AVAILABLE",
+      reasonCode: "SUPPORTED_ENGINE_ROUTED",
       legacyAssignmentCode: null,
     })
   })
@@ -36,18 +40,22 @@ describe("resolveScoringProfile", () => {
 
   it("recognizes Financial Services + NBFC but fails scoring closed until NBFC methodology is approved", () => {
     expect(resolveScoringProfile("Financial Services", "NBFC", null)).toEqual({
-      profileCode: "GENERAL",
-      ruleProfile: "GENERAL",
-      profileSource: "GENERAL_FALLBACK",
+      profileCode: null,
+      ruleProfile: null,
+      profileSource: "METHODOLOGY_UNAVAILABLE",
+      methodologyState: "METHODOLOGY_NOT_AVAILABLE",
+      reasonCode: "REGISTERED_PROFILE_METHODOLOGY_PENDING",
       legacyAssignmentCode: null,
     })
   })
 
   it("never activates BANK_NBFC from Banking sector alone", () => {
     expect(resolveScoringProfile("Banking", null, null)).toEqual({
-      profileCode: "GENERAL",
-      ruleProfile: "GENERAL",
-      profileSource: "GENERAL_FALLBACK",
+      profileCode: null,
+      ruleProfile: null,
+      profileSource: "METHODOLOGY_UNAVAILABLE",
+      methodologyState: "REVIEW_REQUIRED",
+      reasonCode: "BANKING_INDUSTRY_REQUIRED",
       legacyAssignmentCode: null,
     })
   })
@@ -73,6 +81,22 @@ describe("resolveScoringProfile", () => {
       profileCode: "IT_TECH",
       ruleProfile: "GENERAL",
       profileSource: "REVIEWED_ASSIGNMENT",
+      methodologyState: "AVAILABLE",
+    })
+  })
+
+  it("distinguishes unsupported methodology from missing classification without selecting GENERAL", () => {
+    expect(resolveScoringProfile("Telecommunication", "Telecom Services", null)).toMatchObject({
+      profileCode: null,
+      ruleProfile: null,
+      methodologyState: "METHODOLOGY_NOT_AVAILABLE",
+      profileSource: "METHODOLOGY_UNAVAILABLE",
+    })
+    expect(resolveScoringProfile(null, null, null)).toMatchObject({
+      profileCode: null,
+      ruleProfile: null,
+      methodologyState: "REVIEW_REQUIRED",
+      profileSource: "METHODOLOGY_UNAVAILABLE",
     })
   })
 })

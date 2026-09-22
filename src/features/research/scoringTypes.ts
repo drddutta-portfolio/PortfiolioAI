@@ -1,5 +1,6 @@
 export type HeatState = "STRONG" | "POSITIVE" | "NEUTRAL" | "WEAK" | "RISK" | "INSUFFICIENT"
-export type ScoringProfileSource = "REVIEWED_ASSIGNMENT" | "SECTOR_RULE" | "GENERAL_FALLBACK"
+export type ScoringProfileSource = "REVIEWED_ASSIGNMENT" | "SECTOR_RULE" | "METHODOLOGY_UNAVAILABLE"
+export type ScoringMethodologyState = "AVAILABLE" | "METHODOLOGY_NOT_AVAILABLE" | "REVIEW_REQUIRED"
 
 export interface ExternalRatingObservation {
   readonly id: string
@@ -44,6 +45,8 @@ export interface SecurityScoringSnapshot {
   readonly profileCode: string
   readonly profileName: string
   readonly profileSource: ScoringProfileSource
+  readonly methodologyState?: ScoringMethodologyState
+  readonly methodologyReasonCode?: string | null
   readonly modelName: string
   readonly modelStatus: string
   readonly runState: string | null

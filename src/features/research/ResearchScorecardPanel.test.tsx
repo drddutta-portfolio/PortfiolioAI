@@ -63,6 +63,19 @@ describe("ResearchScorecardPanel shared score states", () => {
     expect(within(cashFlow!).getByText("Not applicable")).toHaveAttribute("aria-disabled", "true")
   })
 
+  it("shows an explicit fail-closed state instead of a GENERAL score preview", () => {
+    render(<ResearchScorecardPanel snapshot={{
+      ...snapshot("METHODOLOGY_NOT_AVAILABLE", []),
+      profileName: "Research methodology not available",
+      profileSource: "METHODOLOGY_UNAVAILABLE",
+      methodologyState: "METHODOLOGY_NOT_AVAILABLE",
+      methodologyReasonCode: "REGISTERED_PROFILE_METHODOLOGY_PENDING",
+    }} isLoading={false} error={null} />)
+    expect(screen.getByText("Research methodology not available")).toBeInTheDocument()
+    expect(screen.getByText(/will not substitute the GENERAL scoring profile/u)).toBeInTheDocument()
+    expect(screen.queryByText("Overall stock score")).not.toBeInTheDocument()
+  })
+
   it("uses one external ratings shell title for empty and populated states", () => {
     const empty = snapshot("PHARMA_V1", [])
     const { rerender } = render(<ResearchScorecardPanel snapshot={empty} isLoading={false} error={null} />)
