@@ -89,3 +89,31 @@ npm run typecheck
 ```
 
 If all pass, CONSUMER_FMCG may be promoted to IMPLEMENTED read-only methodology authority.
+
+
+## 11. Final validation and closure
+
+Owner-local Checkpoint B validation passed completely.
+
+Validated:
+- Checkpoint A regression;
+- deterministic branded-consumer scoring;
+- mandatory product/category metadata readiness gate;
+- alcohol/excise risk treatment;
+- lifecycle-stable isolation regression;
+- canonical routing;
+- registry integrity;
+- scoring-profile integration;
+- K2 recommendation-safety regression;
+- TypeScript;
+- TORNTPHARM 75.1575 golden output;
+- AUROPHARMA fail-closed golden output;
+- universal Research workspace continuity.
+
+Registry promotion:
+- CONSUMER_FMCG lifecycle → `IMPLEMENTED`;
+- BRANDED_CONSUMER_FMCG → `SUPPORTED`;
+- recommendation thresholds remain pending dedicated evidence validation;
+- score/recommendation persistence remain OFF.
+
+**K4 Package 8 · CONSUMER_FMCG = COMPLETE / PASS / CLOSED.**
