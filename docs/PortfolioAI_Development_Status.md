@@ -6,6 +6,24 @@
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
+## Post-K scoring reconciliation closure — 23 September 2026
+
+PKR-1 / PKR-1B is COMPLETE / PASS / CLOSED.
+
+The live Research scoring path is now aligned with the Gate-K fail-closed architecture:
+- unsupported methodology → METHODOLOGY_NOT_AVAILABLE;
+- missing/conflicting classification → REVIEW_REQUIRED;
+- completed K4 methodology may be AVAILABLE while score execution remains PENDING_ADAPTER;
+- K4 engines no longer substitute legacy GENERAL numeric scoring before Program B / R6 activates the correct sector scorer adapter;
+- reviewed K4 assignments cannot bypass this guard;
+- PHARMA_V1 and supported BANK scoring remain available;
+- NBFC_LENDING remains fail-closed;
+- explicit canonical GENERAL assignments remain separately supported where genuinely reviewed.
+
+Local validation passed for targeted regressions, K-FINAL, TypeScript, architecture guard and production build. Full-repository lint retains inherited errors outside this reconciliation and is not a PKR regression.
+
+Program A remains NOT STARTED.
+
 ## Post-Gate-K reconciliation — 23 September 2026
 
 Gate H through Gate K materially advanced the research methodology architecture beyond the older R3/R4 roadmap wording.
