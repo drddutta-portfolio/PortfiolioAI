@@ -145,3 +145,34 @@ npm run typecheck
 ```
 
 If all pass, K3 can close with BANK supported and NBFC_LENDING explicitly fail-closed pending its future dedicated methodology, rather than falsely claiming bank-rule portability.
+
+
+## 13. K3 final validation and closure
+
+Owner-local final validation passed completely:
+
+- `scoringProfileResolution.test.ts` — PASS;
+- `k3BankNbfcPortability.test.ts` — PASS;
+- `k3BankNbfcClosure.test.ts` — PASS;
+- `researchProfileRouting.test.ts` — PASS;
+- `sectorEngineRegistry.test.ts` — PASS;
+- `sectorRecommendation.k2Safety.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+Final K3 state:
+
+```text
+BANK_NBFC engine family               PORTABLE / CLOSED
+BANK methodology authority            SUPPORTED
+NBFC_LENDING methodology authority    EXPLICITLY PENDING / FAIL-CLOSED
+NIFTY Bank runtime benchmark          BANK ONLY / CLASSIFICATION-DRIVEN
+HDFCBANK runtime dependency           NONE
+HDFCBANK validation role              REFERENCE ONLY
+PHARMA isolation                      PASS
+CASH_FLOW lender treatment            N/A / NOT MISSING
+Recommendation safety                 PASS
+Production mutation                   NONE
+PR #101                               OPEN / DRAFT / UNMERGED
+```
+
+**K3 = COMPLETE / PASS / CLOSED.**
