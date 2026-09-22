@@ -100,3 +100,31 @@ npm run typecheck
 ```
 
 If all pass, AUTO_COMPONENTS may be promoted to IMPLEMENTED read-only methodology authority. Recommendation thresholds remain pending and persistence remains OFF.
+
+
+## 11. Final validation and closure
+
+Owner-local Checkpoint B validation passed completely after correction of one stale Checkpoint A expectation.
+
+Validated:
+- AUTO Checkpoint A contract regression;
+- deterministic OEM/components scoring;
+- future-stock portability;
+- industry-first routing;
+- registry integrity;
+- scoring-profile integration;
+- K2 recommendation-safety regression;
+- TypeScript;
+- isolation against PHARMA_V1, BANK_NBFC, IT_TECH and INDUSTRIALS_CAPITAL_GOODS;
+- TORNTPHARM 75.1575 golden output;
+- AUROPHARMA fail-closed golden output;
+- universal Research workspace continuity.
+
+Registry promotion:
+- AUTO_COMPONENTS lifecycle → `IMPLEMENTED`;
+- AUTO_OEM / AUTO_COMPONENTS subprofiles → `SUPPORTED`;
+- EV transition remains exposure/risk/durability metadata only;
+- recommendation thresholds remain pending dedicated evidence validation;
+- score/recommendation persistence remain OFF.
+
+**K4 Package 3 · AUTO_COMPONENTS = COMPLETE / PASS / CLOSED.**
