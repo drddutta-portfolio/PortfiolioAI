@@ -142,3 +142,20 @@ npm run typecheck
 ```
 
 K2 closes only after those validations pass and the owner approves this universal contract.
+
+
+## 9. Runtime reconciliation finding
+
+The post-registry K2 audit found a legacy generic recommendation helper that still reconstructed `overallScore` from dimension scores for non-PHARMA profiles. This contradicted the universal K2 contract even though PHARMA_V1 itself was already strict.
+
+K2 therefore removed that fallback globally. `buildRecommendationPreview` now treats `snapshot.overallScore` as authoritative for every profile and fails closed when it is null.
+
+The same reconciliation also tightened two recommendation-safety behaviors:
+- missing data for any configured mandatory recommendation floor → `INSUFFICIENT`;
+- `AVOID` may only be emitted when an explicit sector `watchMinScore` boundary exists. Without an approved Watch/Avoid boundary, the result is `INSUFFICIENT`, not an invented Avoid decision.
+
+Added regression coverage:
+- `src/features/research/sectorRecommendation.pharmaV1Strict.test.ts` updated to prohibit non-PHARMA reconstruction;
+- `src/features/research/sectorRecommendation.k2Safety.test.ts` added for the universal K2 fail-closed set.
+
+These changes require one final owner-local validation before K2 can close.
