@@ -366,3 +366,32 @@ Final state:
 **K4 Package 4 · CHEMICALS_V1 = COMPLETE / PASS / CLOSED.**
 
 K4 Package 5 — HEALTHCARE_SERVICES_V1 Checkpoint A is now IN PROGRESS.
+
+
+---
+
+## K4 Package 5 · HEALTHCARE_SERVICES_V1 · Checkpoint A implementation — 22 September 2026
+
+CHEMICALS_V1 is closed COMPLETE / PASS.
+
+Added:
+- `healthcareServicesK4aMethodologyContract.ts`;
+- `healthcareServicesK4aMethodologyContract.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_5_HEALTHCARE_SERVICES_CHECKPOINT_A.md`.
+
+Initial scope intentionally contains one subprofile:
+- HOSPITAL_OPERATORS — MAXHEALTH / NH / MEDANTA / YATHARTH references.
+
+Key methodology locks proposed:
+- Industry selects methodology; Sector alone cannot;
+- diagnostics are explicitly excluded from hospital scoring and must fail review pending separate methodology authority;
+- minimum 3 annual years / 8 quarterly observations / 252 trading days;
+- hospital operating evidence includes occupancy, ARPOB/equivalent and bed-ramp context where disclosed;
+- bed additions must reconcile with ramp and ROCE;
+- cash conversion must reconcile with capex/receivables;
+- unknown/non-hospital Healthcare identity → METHOD_NOT_AVAILABLE / review;
+- numeric recommendation thresholds remain subprofile-owned and unset.
+
+Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
