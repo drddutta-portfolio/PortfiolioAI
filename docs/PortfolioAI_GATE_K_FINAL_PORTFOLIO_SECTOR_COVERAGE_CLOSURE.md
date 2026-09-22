@@ -4,7 +4,7 @@
 **Date:** 22 September 2026  
 **Branch:** `r4n-pharma-subprofile-architecture`  
 **PR:** #101 OPEN / DRAFT / UNMERGED  
-**Status:** LOCAL VALIDATION PENDING
+**Status:** COMPLETE / PASS / CLOSED
 
 ## 1. Purpose
 
@@ -119,3 +119,48 @@ Sector-specific research layer = PORTFOLIO COVERAGE COMPLETE
 ```
 
 PR #101 remains OPEN / DRAFT / UNMERGED until a separate explicit merge decision.
+
+
+## 8. Final validation and closure
+
+Owner-local consolidated K-FINAL validation passed completely.
+
+Final closure result:
+- `scripts/k-final-validate-portfolio-coverage.sh` = PASS;
+- K-FINAL portfolio coverage closure test = PASS;
+- K5 cross-sector isolation regression = PASS;
+- K5 whole-portfolio/future-stock routing regression = PASS;
+- K5 recommendation portability regression = PASS;
+- K3 BANK_NBFC N/A semantics regression = PASS;
+- K2 recommendation safety regression = PASS;
+- Pharma read-only downstream-safety regression = PASS;
+- universal Research workspace regression = PASS;
+- TypeScript = PASS.
+
+All 18 canonical Gate K final acceptance conditions are therefore satisfied.
+
+Important closure interpretation remains:
+- portfolio architecture coverage is complete/fail-closed;
+- evidence completeness, score computability, and recommendation eligibility remain company-specific runtime states;
+- unsupported or unresolved holdings remain explicitly unavailable/review-required rather than inheriting an unrelated methodology.
+
+Permanent safety boundaries remain unchanged:
+- no production mutation/migration;
+- no provider refresh;
+- no score persistence;
+- no recommendation persistence;
+- no position sizing activation;
+- no AI interpretation activation under Gate K;
+- no portfolio mutation;
+- no scheduler changes;
+- no deployment;
+- no PR merge;
+- no automatic trading.
+
+**Gate K-FINAL = COMPLETE / PASS / CLOSED.**
+
+**Gate K = COMPLETE / PASS.**
+
+**Sector-specific research layer = PORTFOLIO COVERAGE COMPLETE.**
+
+PR #101 remains OPEN / DRAFT / UNMERGED pending a separate explicit owner decision.
