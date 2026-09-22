@@ -32149,3 +32149,42 @@ The exact updated architecture file was synchronized to all 110 current reposito
 
 R4N continues to enforce the same rule in code through `RESEARCH_PROFILE_ROUTING_V2` and the Gate K industry taxonomy/readiness lock.
 
+---
+
+### K1 Industry Readiness — live Trendlyne capability discovery prepared
+
+Owner-local Industry Readiness audit reported:
+
+```text
+238 equities
+86 industry present
+152 industry missing
+36.13% industry coverage
+0 basic industry
+23 routable with current taxonomy
+63 industry-present / taxonomy-pending
+56 distinct industries
+```
+
+Rather than immediately web-scraping 152 companies, K1 now checks the live Trendlyne MCP tool catalog first.
+
+Implemented:
+- `TrendlyneObservedMcpClient.listTools()`;
+- `supabase/functions/k1-local-trendlyne-capability-discovery/index.ts`;
+- `scripts/k1-discover-trendlyne-capabilities.sh`.
+
+The owner-local discovery performs one MCP `tools/list` request only and records:
+- full advertised tool catalog;
+- classification-relevant tools based on name/description/input schema;
+- no production write;
+- no score or recommendation run.
+
+Next action:
+1. pull latest R4N;
+2. add `K1_LOCAL_TRENDLYNE_CAPABILITY_DISCOVERY_ENABLED=true` to `supabase/.env.local`;
+3. ensure local login variables are available;
+4. run `bash scripts/k1-discover-trendlyne-capabilities.sh`;
+5. inspect `relevantTools`;
+6. use a real classification/profile MCP tool if one exists, otherwise proceed to bounded public-web industry enrichment.
+
+K2 remains blocked until the Industry Readiness Lock is closed.
