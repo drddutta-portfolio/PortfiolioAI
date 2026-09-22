@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js"
 import { supabase } from "../lib/supabase"
-import { assessPharmaV1Evidence, pharmaProfileForCanonicalSector, resolveScoringRuleProfile } from "../features/research/pharmaScoringEvidence"
+import { assessPharmaV1Evidence } from "../features/research/pharmaScoringEvidence"
+import { resolveScoringProfile } from "../features/research/scoringProfileResolution"
 import type { DimensionScore, ExternalRatingObservation, HeatState, MetricScoreSignal, ScoringProfileSource, SecurityScoringSnapshot } from "../features/research/scoringTypes"
 
 // Stage 8 tables were added after the last generated Database snapshot. Keep this
@@ -60,25 +61,6 @@ type RatingOrdinalRule = {
   clamp?: unknown
   eligible_instrument_types?: unknown
   selection_policy?: unknown
-}
-
-function profileForSector(sector: string | null, industry: string | null): { readonly code: string; readonly source: ScoringProfileSource } {
-  const pharma = pharmaProfileForCanonicalSector(sector)
-  if (pharma) return { code: pharma, source: "SECTOR_RULE" }
-
-  const haystack = `${sector ?? ""} ${industry ?? ""}`.trim().toUpperCase()
-  if (!haystack) return { code: "GENERAL", source: "GENERAL_FALLBACK" }
-  if (/\bBANK\b|NBFC|LENDING/.test(haystack)) return { code: "BANK_NBFC", source: "SECTOR_RULE" }
-  if (/IT|TECHNOLOGY|SOFTWARE/.test(haystack)) return { code: "IT_TECH", source: "SECTOR_RULE" }
-  if (/INDUSTRIAL|CAPITAL GOODS|ENGINEERING/.test(haystack)) return { code: "INDUSTRIALS_CAPITAL_GOODS", source: "SECTOR_RULE" }
-  if (/FMCG|CONSUMER/.test(haystack)) return { code: "CONSUMER_FMCG", source: "SECTOR_RULE" }
-  if (/AUTO|AUTOMOBILE/.test(haystack)) return { code: "AUTO_COMPONENTS", source: "SECTOR_RULE" }
-  if (/POWER|ENERGY|UTILIT|OIL|GAS/.test(haystack)) return { code: "ENERGY_UTILITIES", source: "SECTOR_RULE" }
-  if (/METAL|MINING|COMMODIT/.test(haystack)) return { code: "METALS_COMMODITIES", source: "SECTOR_RULE" }
-  if (/INFRA|CONSTRUCTION|EPC/.test(haystack)) return { code: "INFRA_CONSTRUCTION", source: "SECTOR_RULE" }
-  if (/REAL ESTATE|REALTY/.test(haystack)) return { code: "REAL_ESTATE", source: "SECTOR_RULE" }
-  if (/FINANCIAL SERVICES|INSURANCE|ASSET MANAGEMENT/.test(haystack)) return { code: "FIN_SERVICES_NON_LENDER", source: "SECTOR_RULE" }
-  return { code: "GENERAL", source: "GENERAL_FALLBACK" }
 }
 
 function asNumber(value: unknown): number | null {
@@ -287,13 +269,11 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
     .select("scoring_profile_code,assignment_status").eq("security_id", securityId).eq("assignment_status", "REVIEWED").maybeSingle()
   if (assignmentResult.error) throw assignmentResult.error
 
-  const inferred = profileForSector(sector, industry)
   const rawAssignedCode = typeof assignmentResult.data?.scoring_profile_code === "string" ? assignmentResult.data.scoring_profile_code : null
-  const legacyPharmaAssignment = rawAssignedCode === "PHARMA_HEALTHCARE" && pharmaProfileForCanonicalSector(sector) === "PHARMA_V1"
-  const assignedCode = legacyPharmaAssignment ? "PHARMA_V1" : rawAssignedCode
-  const profileCode = assignedCode ?? inferred.code
-  const profileSource: ScoringProfileSource = assignedCode ? "REVIEWED_ASSIGNMENT" : inferred.source
-  const ruleProfile = resolveScoringRuleProfile(profileCode)
+  const resolvedProfile = resolveScoringProfile(sector, industry, rawAssignedCode)
+  const profileCode = resolvedProfile.profileCode
+  const profileSource: ScoringProfileSource = resolvedProfile.profileSource
+  const ruleProfile = resolvedProfile.ruleProfile
 
   const [modelResult, profileResult, ratingsResult, observationsResult, marketObservationsResult] = await Promise.all([
     scoringDb.from("scoring_models").select("id,name,status").eq("code", "PAI_STOCK_SCORE").eq("version", 1).maybeSingle(),
