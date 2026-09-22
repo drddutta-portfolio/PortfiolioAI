@@ -114,7 +114,7 @@ export const SECTOR_ENGINE_REGISTRY: readonly SectorEngineRegistryEntry[] = [
         benchmarkAuthority: "NBFC_LENDING_BENCHMARK_PENDING",
         valuationAuthority: "NBFC_LENDING_VALUATION_PENDING",
         recommendationAuthority: "NBFC_LENDING_RECOMMENDATION_PENDING",
-        state: "SUPPORTED",
+        state: "PENDING_METHODOLOGY",
       },
     },
     fallbackPolicy: "NONE_FAIL_CLOSED",
