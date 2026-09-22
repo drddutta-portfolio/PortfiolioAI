@@ -65,3 +65,16 @@ Universal role names may be reused, but numeric thresholds, role floors and AVOI
 ## 7. Checkpoint A acceptance
 
 Owner approval must freeze the three-subprofile split, mixed-business-control rule, history/evidence gates, benchmark/valuation families, energy-transition treatment and fail-closed behavior before Checkpoint B implementation.
+
+
+## 8. Checkpoint A final validation and freeze
+
+Owner-local validation passed:
+- `oilGasK4aMethodologyContract.test.ts` — PASS;
+- `sectorEngineRegistry.test.ts` — PASS;
+- `researchProfileRouting.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+Owner approved proceeding with the three-subprofile Oil/Gas methodology and the frozen cycle/valuation/risk boundaries.
+
+**OIL_GAS_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
