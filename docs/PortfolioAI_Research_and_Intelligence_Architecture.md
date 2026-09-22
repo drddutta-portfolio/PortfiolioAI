@@ -633,7 +633,191 @@ Current work should continue according to the owner-approved development stage. 
 
 ---
 
-## 18. Non-negotiable summary
+## 18. Research classification and methodology authority
+
+PortfolioAI must keep **portfolio classification** separate from **micro-research methodology selection**.
+
+The canonical hierarchy is:
+
+```text
+Macro-Economic Sector
+        ↓
+Sector
+        ↓
+Industry
+        ↓
+Basic Industry / Business Model
+        ↓
+Research Profile
+        ↓
+Research Subprofile
+        ↓
+Applicable Metrics / Peer Set / Valuation Family / Risk Model
+        ↓
+Company Evidence
+        ↓
+Deterministic Score
+        ↓
+Recommendation / Buy More / Hold / Reduce / Exit logic
+```
+
+The responsibilities of those layers are different:
+
+- **Sector = macro context and portfolio classification.** It describes the broad economic environment and is suitable for allocation, concentration, benchmark context, and sector-level analysis.
+- **Industry = minimum micro-research methodology selector.** It identifies the operating economics required to choose relevant company metrics, peers, valuation logic, and risk factors.
+- **Basic Industry / Business Model = methodology refinement.** It distinguishes economically different businesses that may share the same sector and industry label.
+- **Research Profile / Subprofile = deterministic applicability contract.** It determines which metrics are applicable, which peer universe and benchmark family are valid, which valuation methods are allowed, and which sector/business risks must be evaluated.
+- **Company evidence = scoring input.** Evidence quality, growth, capital efficiency, cash flow, balance sheet, ownership/governance, momentum, valuation, risk and other profile-specific factors are evaluated here.
+- **Score = company assessment.** Scores must remain reproducible from versioned evidence and methodology.
+- **Recommendation = action logic.** Buy More / Hold / Reduce / Exit or equivalent recommendation states must be produced only after the correct methodology, evidence, score, valuation context, risk rules, and stability guardrails are satisfied.
+
+### 18.1 Sector is not a specialised methodology selector
+
+A sector label alone must **never** select a specialised stock-research methodology, scoring profile, valuation model, or recommendation policy.
+
+Examples:
+
+```text
+Healthcare alone
+≠ Pharma methodology
+≠ Hospital methodology
+≠ Diagnostics methodology
+
+Financial Services alone
+≠ Bank methodology
+≠ NBFC methodology
+≠ AMC methodology
+≠ Broker methodology
+≠ Insurance methodology
+≠ Fintech methodology
+
+Capital Goods alone
+≠ EPC methodology
+≠ Electrical Equipment methodology
+≠ Defence/Aerospace methodology
+```
+
+The sector remains visible and canonical for portfolio classification, while the industry/business-model layer determines the appropriate research route.
+
+### 18.2 Industry evidence may route independently of the visible sector label
+
+Exchange-primary or canonical application sector and research methodology are separate layers.
+
+For example:
+
+```text
+Sector = Healthcare
+Industry = Pharmaceuticals
+→ visible sector remains Healthcare
+→ research profile may route to PHARMA
+→ reviewed pharma subprofile selects the detailed methodology
+
+Sector = Healthcare
+Industry = Hospitals
+→ visible sector remains Healthcare
+→ research profile may route to HOSPITAL
+
+Sector = Financial Services
+Industry = Non Banking Financial Company (NBFC)
+→ visible sector remains Financial Services
+→ lender/NBFC methodology may apply
+
+Sector = Capital Goods
+Industry = Aerospace & Defence
+→ visible sector remains Capital Goods
+→ defence/aerospace methodology may apply
+```
+
+Research routing must never rewrite the canonical user-facing sector merely to make a methodology convenient.
+
+### 18.3 Industry and Basic Industry are first-class research data
+
+For every operating-company equity, PortfolioAI should retain, where authoritative evidence exists:
+
+```text
+Primary Sector
+Industry
+Basic Industry / Business Model
+Classification Source
+Classification Evidence State / Review State
+Research Profile
+Research Subprofile
+Methodology Version
+```
+
+Missing industry or business-model evidence is a research-readiness problem, not permission to infer a methodology from company name, theme, peers, ticker, or sector similarity.
+
+---
+
+## 19. Fail-closed enforcement and change-control
+
+The classification-to-methodology hierarchy above is a **system-wide architecture invariant**.
+
+### 19.1 Required runtime behavior
+
+For an operating-company equity:
+
+```text
+Sector known
++ Industry known
++ Industry/business-model route supported
+→ specialised research profile may resolve
+
+Sector known
++ Industry missing
+→ PROFILE_PENDING or REVIEW_REQUIRED
+→ no specialised methodology
+→ no specialised score/recommendation
+
+Sector known
++ Industry present but taxonomy unsupported/ambiguous
+→ PROFILE_PENDING or REVIEW_REQUIRED
+→ no nearest-looking fallback
+```
+
+A specialised score or recommendation must not be generated merely because a broad sector has a similarly named methodology.
+
+### 19.2 Machine-readable taxonomy
+
+The implementation should maintain a versioned machine-readable mapping from:
+
+```text
+Sector + Industry + Basic Industry / Business Model
+→ Research Profile
+→ Research Subprofile
+→ Methodology Version
+```
+
+Stage-specific taxonomy files may evolve as research packages are developed, but they must conform to this canonical architecture and may not weaken the fail-closed rule.
+
+### 19.3 Automated enforcement
+
+Repository tests and architecture guards should reject regressions such as:
+
+- routing a specialised methodology from sector alone;
+- silently converting a canonical sector to match a research profile;
+- assigning a nearest-looking methodology when industry is missing;
+- producing a specialised score/recommendation for an unresolved research profile;
+- using one industry's peer set, valuation family, or operating metrics for a materially different business model.
+
+### 19.4 Branch and documentation rule
+
+This document is the canonical PortfolioAI authority for the classification-to-methodology hierarchy.
+
+Stage plans, handoff documents, completion reports, and branch-specific implementation notes may reference this rule, but must not redefine it.
+
+Any future proposal to change:
+- the role of Sector;
+- the role of Industry / Basic Industry;
+- profile/subprofile routing authority;
+- the fail-closed behavior;
+- or the relationship between methodology, scoring, and recommendation
+
+requires an explicit update to this canonical architecture document and owner review.
+
+---
+
+## 20. Non-negotiable summary
 
 PortfolioAI must always preserve these distinctions:
 
