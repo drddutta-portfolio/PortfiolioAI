@@ -11,6 +11,7 @@ node --check scripts/k1-fetch-nse-bulk-classification.mjs
 node --check scripts/k1-compare-nse-classification.mjs
 node -e 'JSON.parse(require("fs").readFileSync("scripts/k1-reviewed-identity-transitions-2026-09-22.json", "utf8"))'
 bash -n scripts/k1-run-current-cohort-reconciliation.sh
+bash -n scripts/k1-capture-trendlyne-classification.sh
 
 printf '\n[K1] 3/8 full application test suite\n'
 npm test -- --run
