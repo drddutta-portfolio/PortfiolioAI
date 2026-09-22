@@ -508,3 +508,37 @@ Final state:
 **K4 Package 5 · HEALTHCARE_SERVICES_V1 = COMPLETE / PASS / CLOSED.**
 
 K4 Package 6 — FIN_SERVICES_NON_LENDER Checkpoint A is now IN PROGRESS.
+
+
+---
+
+## K4 Package 6 · FIN_SERVICES_NON_LENDER · Checkpoint A implementation — 22 September 2026
+
+HEALTHCARE_SERVICES_V1 is closed COMPLETE / PASS.
+
+Added:
+- `finServicesNonLenderK4aMethodologyContract.ts`;
+- `finServicesNonLenderK4aMethodologyContract.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_6_FIN_SERVICES_NON_LENDER_CHECKPOINT_A.md`.
+
+Proposed mandatory subprofiles:
+1. CAPITAL_MARKETS_AMC — NAM-INDIA / HDFCAMC / ANGELONE / CAMS;
+2. INSURANCE — STARHEALTH;
+3. FINTECH_PLATFORM — PAYTM / POLICYBZR.
+
+Key methodology locks proposed:
+- non-lender Financial Services must not inherit BANK_NBFC lender metrics or thresholds;
+- no NPA / CET1 / deposit-growth methodology leakage;
+- Nifty Bank is not a benchmark authority for this package;
+- subprofile-specific evidence and valuation are mandatory;
+- insurance claims/reserving evidence cannot be replaced by generic margins;
+- fintech growth cannot override cash burn/unit economics;
+- cross-subprofile peer percentiles prohibited;
+- unknown Industry → METHOD_NOT_AVAILABLE;
+- numeric recommendation thresholds remain subprofile-owned and unset.
+
+No-stale regression policy remains active for this package and subsequent K4 packages.
+
+Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
