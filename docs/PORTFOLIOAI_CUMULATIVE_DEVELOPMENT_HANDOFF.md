@@ -799,3 +799,19 @@ No-stale regression policy remains active.
 Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 8 · CONSUMER_FMCG · Checkpoint A FINAL — 22 September 2026
+
+Owner-local tests and TypeScript passed completely.
+
+`CONSUMER_FMCG_K4A_METHODOLOGY_V1` is frozen with one initial profile:
+- BRANDED_CONSUMER_FMCG.
+
+Product/category metadata remains mandatory. Alcohol remains an excise/regulatory risk variant rather than a separate universal score curve.
+
+**CONSUMER_FMCG Checkpoint A = COMPLETE / PASS / FROZEN.**
+
+Checkpoint B is now IN PROGRESS.
