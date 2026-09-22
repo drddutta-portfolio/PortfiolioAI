@@ -11,7 +11,8 @@ function argValue(name) {
 
 const inputPath = argValue("--input") ?? DEFAULT_INPUT
 const outputPath = argValue("--output") ?? DEFAULT_OUTPUT
-const delayMs = Number(argValue("--delay-ms") ?? "350")
+const delayMs = Number(argValue("--delay-ms") ?? "900")
+const maxAttempts = Number(argValue("--max-attempts") ?? "3")
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36"
 
@@ -29,31 +30,75 @@ function parseCookieHeaders(headers) {
     .join("; ")
 }
 
-async function getNseSessionCookie() {
-  const response = await fetch("https://www.nseindia.com/", {
-    headers: {
-      "user-agent": UA,
+function mergeCookies(...cookieStrings) {
+  const byName = new Map()
+  for (const cookieString of cookieStrings) {
+    for (const part of String(cookieString ?? "").split(";")) {
+      const trimmed = part.trim()
+      if (!trimmed) continue
+      const index = trimmed.indexOf("=")
+      if (index <= 0) continue
+      byName.set(trimmed.slice(0, index), trimmed.slice(index + 1))
+    }
+  }
+  return [...byName.entries()].map(([name, value]) => `${name}=${value}`).join("; ")
+}
+
+function browserHeaders(extra = {}) {
+  return {
+    "user-agent": UA,
+    "accept-language": "en-US,en;q=0.9",
+    "cache-control": "no-cache",
+    "pragma": "no-cache",
+    ...extra,
+  }
+}
+
+async function getNseSessionCookie(seedUrl = "https://www.nseindia.com/") {
+  const response = await fetch(seedUrl, {
+    headers: browserHeaders({
       "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      "accept-language": "en-US,en;q=0.9",
-    },
+      "sec-fetch-dest": "document",
+      "sec-fetch-mode": "navigate",
+      "sec-fetch-site": seedUrl === "https://www.nseindia.com/" ? "none" : "same-origin",
+      "upgrade-insecure-requests": "1",
+    }),
     redirect: "follow",
   })
   if (!response.ok) throw new Error(`NSE_SESSION_HTTP_${response.status}`)
-  const cookie = parseCookieHeaders(response.headers)
-  if (!cookie) throw new Error("NSE_SESSION_COOKIE_MISSING")
-  return cookie
+  return parseCookieHeaders(response.headers)
+}
+
+async function warmQuoteSession(symbol, existingCookie = "") {
+  const quotePage = `https://www.nseindia.com/get-quotes/equity?symbol=${encodeURIComponent(symbol)}`
+  const response = await fetch(quotePage, {
+    headers: browserHeaders({
+      "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "cookie": existingCookie,
+      "referer": "https://www.nseindia.com/",
+      "sec-fetch-dest": "document",
+      "sec-fetch-mode": "navigate",
+      "sec-fetch-site": "same-origin",
+      "upgrade-insecure-requests": "1",
+    }),
+    redirect: "follow",
+  })
+  if (!response.ok) throw new Error(`NSE_QUOTE_PAGE_HTTP_${response.status}`)
+  return mergeCookies(existingCookie, parseCookieHeaders(response.headers))
 }
 
 async function fetchNseQuote(symbol, cookie) {
   const url = `https://www.nseindia.com/api/quote-equity?symbol=${encodeURIComponent(symbol)}`
   const response = await fetch(url, {
-    headers: {
-      "user-agent": UA,
+    headers: browserHeaders({
       "accept": "application/json,text/plain,*/*",
-      "accept-language": "en-US,en;q=0.9",
-      "referer": `https://www.nseindia.com/get-quotes/equity?symbol=${encodeURIComponent(symbol)}`,
       "cookie": cookie,
-    },
+      "referer": `https://www.nseindia.com/get-quotes/equity?symbol=${encodeURIComponent(symbol)}`,
+      "sec-fetch-dest": "empty",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-site": "same-origin",
+      "x-requested-with": "XMLHttpRequest",
+    }),
   })
 
   if (response.status === 401 || response.status === 403) {
@@ -63,6 +108,43 @@ async function fetchNseQuote(symbol, cookie) {
   }
   if (!response.ok) throw new Error(`NSE_QUOTE_HTTP_${response.status}`)
   return response.json()
+}
+
+async function fetchNseQuoteWithRetry(symbol, startingCookie) {
+  let cookie = startingCookie
+  let lastError = null
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      if (!cookie) cookie = await getNseSessionCookie()
+      cookie = await warmQuoteSession(symbol, cookie)
+      await sleep(500)
+      const quote = await fetchNseQuote(symbol, cookie)
+      return { quote, cookie, attempts: attempt }
+    } catch (error) {
+      lastError = error
+      const message = error instanceof Error ? error.message : String(error)
+      const retryable =
+        error?.retryWithFreshCookie ||
+        message.startsWith("NSE_SESSION_HTTP_") ||
+        message.startsWith("NSE_QUOTE_PAGE_HTTP_")
+
+      if (!retryable || attempt >= maxAttempts) break
+
+      const backoff = 1200 * attempt
+      process.stderr.write(`${symbol}: retry ${attempt}/${maxAttempts} after ${message}; waiting ${backoff}ms\n`)
+      await sleep(backoff)
+      try {
+        cookie = await getNseSessionCookie(
+          `https://www.nseindia.com/get-quotes/equity?symbol=${encodeURIComponent(symbol)}`,
+        )
+      } catch {
+        cookie = ""
+      }
+    }
+  }
+
+  throw lastError ?? new Error("NSE_QUOTE_UNKNOWN_FAILURE")
 }
 
 function normalizeQuote(symbol, quote) {
@@ -90,28 +172,29 @@ async function main() {
   )]
 
   if (!symbols.length) throw new Error("NO_SYMBOLS")
+  if (!Number.isFinite(delayMs) || delayMs < 0) throw new Error("INVALID_DELAY_MS")
+  if (!Number.isInteger(maxAttempts) || maxAttempts < 1 || maxAttempts > 5) throw new Error("INVALID_MAX_ATTEMPTS")
 
-  let cookie = await getNseSessionCookie()
+  let cookie = ""
+  try {
+    cookie = await getNseSessionCookie()
+  } catch (error) {
+    process.stderr.write(`Initial NSE session warm-up failed: ${error instanceof Error ? error.message : String(error)}; continuing per symbol.\n`)
+  }
+
   const rows = []
   const failures = []
-  let consecutiveAuthFailures = 0
 
   for (let i = 0; i < symbols.length; i += 1) {
     const symbol = symbols[i]
     try {
-      let quote
-      try {
-        quote = await fetchNseQuote(symbol, cookie)
-      } catch (error) {
-        if (!error?.retryWithFreshCookie) throw error
-        cookie = await getNseSessionCookie()
-        quote = await fetchNseQuote(symbol, cookie)
-      }
-
-      const normalized = normalizeQuote(symbol, quote)
+      const fetched = await fetchNseQuoteWithRetry(symbol, cookie)
+      cookie = fetched.cookie
+      const normalized = normalizeQuote(symbol, fetched.quote)
       rows.push(normalized)
-      consecutiveAuthFailures = 0
-      process.stdout.write(`[${i + 1}/${symbols.length}] ${symbol}: ${normalized.sector ?? "MISSING"} / ${normalized.industry ?? "MISSING"} / ${normalized.basicIndustry ?? "MISSING"}\n`)
+      process.stdout.write(
+        `[${i + 1}/${symbols.length}] ${symbol}: ${normalized.sector ?? "MISSING"} / ${normalized.industry ?? "MISSING"} / ${normalized.basicIndustry ?? "MISSING"} (attempts=${fetched.attempts})\n`,
+      )
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       failures.push({
@@ -120,23 +203,16 @@ async function main() {
         error: message,
       })
       process.stderr.write(`[${i + 1}/${symbols.length}] ${symbol}: FAILED (${message})\n`)
-      if (message === "NSE_AUTH_HTTP_401" || message === "NSE_AUTH_HTTP_403") {
-        consecutiveAuthFailures += 1
-        if (consecutiveAuthFailures >= 3) {
-          process.stderr.write("Stopping early after 3 consecutive NSE authorization failures.\n")
-          break
-        }
-      } else {
-        consecutiveAuthFailures = 0
-      }
+      cookie = ""
     }
     if (i + 1 < symbols.length) await sleep(delayMs)
   }
 
   const output = {
-    contract: "PORTFOLIOAI_K1_NSE_PRIMARY_CLASSIFICATION_SNAPSHOT_V1",
+    contract: "PORTFOLIOAI_K1_NSE_PRIMARY_CLASSIFICATION_SNAPSHOT_V2",
     source: "NSE_OFFICIAL_QUOTE_EQUITY_INDUSTRY_INFO",
     sourceEndpoint: "https://www.nseindia.com/api/quote-equity?symbol={SYMBOL}",
+    sessionStrategy: "QUOTE_PAGE_WARMUP_RETRY_V2",
     generatedAt: new Date().toISOString(),
     inputPath,
     requestedCount: symbols.length,
