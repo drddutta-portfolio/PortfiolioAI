@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 BANK_NBFC RECONCILIATION & PORTABILITY IN PROGRESS; K4 SCOPE 10 PACKAGES / FROZEN; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 PACKAGE 1 IT_TECH CHECKPOINT A IN PROGRESS; K4 SCOPE 10 PACKAGES / FROZEN; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -32438,3 +32438,26 @@ HDFCBANK remains a validation anchor, not a runtime requirement.
 Final K3 owner-local validation is now required. K3 is not yet formally closed.
 
 Safety unchanged: no production mutation/migration, no provider call, score persistence OFF, recommendation persistence OFF, no scheduler change, no deployment, PR #101 OPEN/DRAFT/UNMERGED, no automatic trading.
+
+
+---
+
+## K3 FINAL CLOSURE — 22 September 2026
+
+Owner-local final K3 validation passed completely across routing, portability, closure, isolation, K2 recommendation-safety regression and TypeScript.
+
+Frozen K3 architecture:
+- `BANK_NBFC` remains one engine family;
+- `BANK` and `NBFC_LENDING` have separate methodology authorities;
+- BANK uses the inherited Stage 8 bank methodology;
+- NBFC_LENDING remains fail-closed until its dedicated methodology/benchmark/valuation/recommendation authority is approved;
+- NIFTY Bank refresh is classification-driven for `Banking + Banks`, not HDFCBANK-specific;
+- HDFCBANK remains a validation reference only;
+- CASH_FLOW is explicit N/A for lender methodology;
+- PHARMA isolation passes.
+
+**K3 = COMPLETE / PASS / CLOSED.**
+
+K4 Package 1 — `IT_TECH` Checkpoint A is now IN PROGRESS.
+
+Safety remains unchanged: no production mutation/migration, no provider call, score persistence OFF, recommendation persistence OFF, no scheduler change, no deployment, PR #101 OPEN/DRAFT/UNMERGED, no automatic trading.
