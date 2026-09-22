@@ -1034,3 +1034,19 @@ No-stale regression policy remains active.
 Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 10 · POWER_RENEWABLES_V1 · Checkpoint A FINAL — 22 September 2026
+
+Owner-local tests and TypeScript passed completely.
+
+`POWER_RENEWABLES_V1_K4A_METHODOLOGY_V1` is frozen with:
+- REGULATED_NETWORK;
+- GENERATION_INTEGRATED_UTILITY;
+- RENEWABLE_IPP.
+
+**POWER_RENEWABLES_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
+
+Checkpoint B is now IN PROGRESS.
