@@ -94,3 +94,16 @@ Universal role names may be reused, but numeric role thresholds, role floors, ca
 ## 9. Checkpoint A acceptance
 
 Owner approval must freeze the hospital-only initial scope, reference anchors, history/evidence gates, benchmark/valuation families, durability/risk treatment and fail-closed behavior before Checkpoint B scoring/portability implementation.
+
+
+## 10. Checkpoint A final validation and freeze
+
+Owner-local validation passed:
+- `healthcareServicesK4aMethodologyContract.test.ts` — PASS;
+- `sectorEngineRegistry.test.ts` — PASS;
+- `researchProfileRouting.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+Owner approved proceeding with the hospital-only initial scope.
+
+**HEALTHCARE_SERVICES_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
