@@ -6,6 +6,21 @@
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
+## Program A · Checkpoint A1 read-only baseline — 23 September 2026
+
+A1 is repository-implemented as a cache-only planning contract for R3 research-evidence breadth and R5 market-history breadth.
+
+Implemented boundaries:
+- current holdings remain supplied through the existing canonical portfolio/R2 coverage path;
+- Gate-K routing and post-PKR methodology/score-execution states are reused unchanged;
+- eligible research domains retain explicit fresh, stale, missing, conflicting, review-required, not-applicable and ready-to-derive states;
+- market-history planning distinguishes full backfill, incremental overlap and already-current history instead of assuming a fixed 400-day refetch;
+- benchmark inventory is registry-driven and reports only existing BANK/NIFTY Bank and Pharma/NIFTY Pharma adapter support; other mappings remain explicitly unimplemented rather than fabricated;
+- projected Trendlyne and Angel One work remains estimate-only with zero provider calls, reservations or usage records;
+- bounded R3/R5 pilot proposals are derived deterministically from supplied current portfolio data.
+
+No provider execution, production mutation, migration, score/recommendation/sizing persistence, scheduler activation, AI activation, deployment or merge is part of A1. Program B scorer activation remains out of scope.
+
 ## Post-K scoring reconciliation closure — 23 September 2026
 
 PKR-1 / PKR-1B is COMPLETE / PASS / CLOSED.
