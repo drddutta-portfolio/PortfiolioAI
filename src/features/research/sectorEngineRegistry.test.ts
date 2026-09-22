@@ -6,9 +6,17 @@ import {
 } from "./sectorEngineRegistry"
 
 describe("SECTOR_ENGINE_CONTRACT_V1", () => {
-  it("contains exactly the two inherited engines plus the ten frozen K4 packages", () => {
+  it("contains exactly the two inherited engines plus ten K4 packages across implemented/pending lifecycle", () => {
     expect(SECTOR_ENGINE_REGISTRY).toHaveLength(12)
-    expect(SECTOR_ENGINE_REGISTRY.filter((entry) => entry.lifecycle === "K4_FROZEN_PENDING")).toHaveLength(8)
+    const k4Entries = SECTOR_ENGINE_REGISTRY.filter(
+      (entry) => entry.engineCode !== "PHARMA_V1" && entry.engineCode !== "BANK_NBFC",
+    )
+    expect(k4Entries).toHaveLength(10)
+    expect(
+      k4Entries.every(
+        (entry) => entry.lifecycle === "IMPLEMENTED" || entry.lifecycle === "K4_FROZEN_PENDING",
+      ),
+    ).toBe(true)
   })
 
   it("prohibits runtime symbol-specific methodology and cross-sector fallback", () => {
@@ -46,7 +54,7 @@ describe("SECTOR_ENGINE_CONTRACT_V1", () => {
     expect(sectorEngineForProfileCode("DEFENCE_AEROSPACE")?.engineCode).toBe("INDUSTRIALS_CAPITAL_GOODS")
     expect(sectorEngineForProfileCode("AUTO_OEM")).toMatchObject({
       engineCode: "AUTO_COMPONENTS",
-      lifecycle: "K4_FROZEN_PENDING",
+      lifecycle: "IMPLEMENTED",
     })
     expect(sectorEngineForProfileCode("AUTO_COMPONENTS")?.engineCode).toBe("AUTO_COMPONENTS")
   })
