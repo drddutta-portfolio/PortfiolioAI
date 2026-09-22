@@ -98,3 +98,30 @@ npm run typecheck
 ```
 
 If all pass, CHEMICALS_V1 may be promoted to IMPLEMENTED read-only methodology authority. Recommendation thresholds remain pending and persistence remains OFF.
+
+
+## 11. Final validation and closure
+
+Owner-local Checkpoint B validation passed completely after correction of one stale Checkpoint A expectation.
+
+Validated:
+- Chemicals Checkpoint A regression;
+- deterministic specialty/agro/commodity-process scoring;
+- future-stock portability;
+- industry-first routing;
+- registry integrity;
+- scoring-profile integration;
+- K2 recommendation-safety regression;
+- TypeScript;
+- isolation against PHARMA_V1, BANK_NBFC and all previously completed K4 engines;
+- TORNTPHARM 75.1575 golden output;
+- AUROPHARMA fail-closed golden output;
+- universal Research workspace continuity.
+
+Registry promotion:
+- CHEMICALS_V1 lifecycle → `IMPLEMENTED`;
+- SPECIALTY_CHEMICALS / AGRO_FERTILISER / COMMODITY_PROCESS_CHEMICALS → `SUPPORTED`;
+- recommendation thresholds remain pending dedicated evidence validation;
+- score/recommendation persistence remain OFF.
+
+**K4 Package 4 · CHEMICALS_V1 = COMPLETE / PASS / CLOSED.**
