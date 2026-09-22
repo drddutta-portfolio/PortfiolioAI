@@ -5,6 +5,7 @@ import path from "node:path"
 const DEFAULT_INVENTORY = "artifacts/k1-final-reconciled-sector-inventory.json"
 const DEFAULT_CAPTURE = "artifacts/k1-public-industry-enrichment.json"
 const DEFAULT_ENRICHED = "artifacts/k1-final-reconciled-research-classification-inventory.json"
+const DEFAULT_REVIEWED_EXCEPTIONS = "docs/k1/PortfolioAI_K1_REVIEWED_INDUSTRY_EXCEPTIONS_2026-09-22.json"
 
 function argValue(name) {
   const index = process.argv.indexOf(name)
@@ -14,6 +15,7 @@ function argValue(name) {
 const inventoryPath = argValue("--inventory") ?? DEFAULT_INVENTORY
 const capturePath = argValue("--capture") ?? DEFAULT_CAPTURE
 const enrichedPath = argValue("--output") ?? DEFAULT_ENRICHED
+const reviewedExceptionsPath = argValue("--reviewed-exceptions") ?? DEFAULT_REVIEWED_EXCEPTIONS
 const delayMs = Number(argValue("--delay-ms") ?? "850")
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -113,10 +115,36 @@ async function main() {
   const bySymbol = new Map(previousRows.map((row) => [String(row.symbol).toUpperCase(), row]))
   const failures = new Map((Array.isArray(previous?.failures) ? previous.failures : []).map((row) => [String(row.symbol).toUpperCase(), row]))
 
+  const reviewedExceptions = await readJsonIfExists(reviewedExceptionsPath)
+  const reviewedRows = Array.isArray(reviewedExceptions?.rows) ? reviewedExceptions.rows : []
+  for (const exception of reviewedRows) {
+    const symbol = String(exception.symbol ?? "").trim().toUpperCase()
+    if (!symbol || !clean(exception.industry)) continue
+    const sourceRow = missingRows.find((row) => String(row.symbol).trim().toUpperCase() === symbol)
+    if (!sourceRow) continue
+    bySymbol.set(symbol, {
+      symbol,
+      sourceUrl: clean(exception.sourceUrl),
+      sourceKind: clean(exception.sourceKind) ?? "REVIEWED_PUBLIC_CLASSIFICATION",
+      capturedAt: new Date().toISOString(),
+      existingSector: clean(sourceRow.finalSector),
+      sourceMacroEconomicSector: null,
+      sourceSector: null,
+      industry: clean(exception.industry),
+      basicIndustry: clean(exception.basicIndustry),
+      classificationPath: [clean(exception.industry), clean(exception.basicIndustry)].filter(Boolean),
+      sectorComparison: "NOT_USED_SECTOR_PRESERVED",
+      evidenceNote: clean(exception.evidenceNote),
+      reviewedException: true,
+    })
+    failures.delete(symbol)
+  }
+
   process.stdout.write("K1 PUBLIC INDUSTRY ENRICHMENT\n")
   process.stdout.write(`Missing industry symbols: ${missingRows.length}\n`)
   process.stdout.write("Source: Screener public company pages\n")
   process.stdout.write("Sector overwrite: DISABLED\n")
+  process.stdout.write(`Reviewed public exceptions loaded: ${reviewedRows.length}\n`)
   process.stdout.write("Production writes: 0\n\n")
 
   let index = 0
