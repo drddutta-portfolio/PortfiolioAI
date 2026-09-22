@@ -96,15 +96,21 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
   }
 
   if (sector === "BANKING") {
-    if (!industry || industry === "BANKS") {
-      return result(input, "ROUTED", "BANK", industry ? "SECTOR_AND_INDUSTRY" : "REVIEWED_SECTOR_ONLY", "BANKING_BANK")
+    if (industry === "BANKS") {
+      return result(input, "ROUTED", "BANK", "SECTOR_AND_INDUSTRY", "BANKING_BANK")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "BANKING_INDUSTRY_REQUIRED")
     }
     return result(input, "REVIEW_REQUIRED", null, "AMBIGUOUS_OR_UNSUPPORTED", "BANKING_NON_BANK_INDUSTRY")
   }
 
   if (sector === "PHARMA") {
-    if (!industry || industry === "PHARMACEUTICALS") {
-      return result(input, "ROUTED", "PHARMA", industry ? "SECTOR_AND_INDUSTRY" : "REVIEWED_SECTOR_ONLY", "PHARMA_PHARMACEUTICALS")
+    if (industry === "PHARMACEUTICALS") {
+      return result(input, "ROUTED", "PHARMA", "SECTOR_AND_INDUSTRY", "PHARMA_PHARMACEUTICALS")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "PHARMA_INDUSTRY_REQUIRED")
     }
     return result(input, "REVIEW_REQUIRED", null, "AMBIGUOUS_OR_UNSUPPORTED", "PHARMA_UNSUPPORTED_INDUSTRY")
   }
@@ -124,8 +130,11 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
   }
 
   if (sector === "CAPITAL_GOODS" || sector === "INDUSTRIAL") {
-    if (!industry || industry === "HEAVY_ELECTRICAL_EQUIPMENT" || industry === "OTHER_ELECTRICAL_EQUIPMENT_PRODUCTS") {
-      return result(input, "ROUTED", "INDUSTRIAL_CAPITAL_GOODS", industry ? "SECTOR_AND_INDUSTRY" : "REVIEWED_SECTOR_ONLY", "INDUSTRIAL_CAPITAL_GOODS")
+    if (industry === "HEAVY_ELECTRICAL_EQUIPMENT" || industry === "OTHER_ELECTRICAL_EQUIPMENT_PRODUCTS") {
+      return result(input, "ROUTED", "INDUSTRIAL_CAPITAL_GOODS", "SECTOR_AND_INDUSTRY", "INDUSTRIAL_CAPITAL_GOODS")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "CAPITAL_GOODS_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "CAPITAL_GOODS_SUBPROFILE_PENDING")
   }
