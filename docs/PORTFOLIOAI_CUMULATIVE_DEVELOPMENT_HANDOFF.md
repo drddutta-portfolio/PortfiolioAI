@@ -49,3 +49,28 @@ Both failures were stale expectations created by legitimate prior state transiti
 Only the tests were corrected. No runtime methodology, classification, score, recommendation, persistence, provider, scheduler, deployment or production behavior was changed.
 
 Checkpoint B remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
+
+
+---
+
+## K4 Package 2 · INDUSTRIALS_CAPITAL_GOODS FINAL CLOSURE — 22 September 2026
+
+Owner-local corrected Checkpoint B suite and TypeScript passed completely.
+
+Final state:
+- Checkpoint A = COMPLETE / PASS / FROZEN;
+- Checkpoint B = COMPLETE / PASS / CLOSED;
+- registry lifecycle = IMPLEMENTED;
+- supported subprofiles = PROJECT_EPC / CAPITAL_EQUIPMENT_ELECTRICAL / DEFENCE_AEROSPACE;
+- ticker-specific methodology routing = NO;
+- missing mandatory evidence = fail closed;
+- working-capital/cash-conversion evidence remains mandatory;
+- PHARMA_V1 / BANK_NBFC / IT_TECH isolation = PASS;
+- golden controls = PASS;
+- universal Research shell = PASS;
+- score persistence = OFF;
+- recommendation persistence = OFF.
+
+**K4 Package 2 · INDUSTRIALS_CAPITAL_GOODS = COMPLETE / PASS / CLOSED.**
+
+K4 Package 3 — AUTO_COMPONENTS Checkpoint A is now IN PROGRESS.
