@@ -20,6 +20,9 @@ export type ResearchProfileCode =
   | "DEFENCE_AEROSPACE"
   | "AUTO_OEM"
   | "AUTO_COMPONENTS"
+  | "SPECIALTY_CHEMICALS"
+  | "AGRO_FERTILISER"
+  | "COMMODITY_PROCESS_CHEMICALS"
   | "PHARMA"
   | "HOSPITAL"
   | "DIAGNOSTICS"
@@ -205,6 +208,34 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
       return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "AUTO_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "AUTO_SUBPROFILE_PENDING")
+  }
+
+
+  if (sector === "CHEMICALS") {
+    if (industry === "SPECIALTY_CHEMICALS" || industry === "SPECIALITY_CHEMICALS" || industry === "CHEMICALS_SPECIALTY") {
+      return result(input, "ROUTED", "SPECIALTY_CHEMICALS", "SECTOR_AND_INDUSTRY", "SPECIALTY_CHEMICALS")
+    }
+    if (
+      industry === "PESTICIDES_AGROCHEMICALS"
+      || industry === "AGROCHEMICALS"
+      || industry === "FERTILISERS"
+      || industry === "FERTILIZERS"
+      || industry === "FERTILISER_CHEMICALS"
+    ) {
+      return result(input, "ROUTED", "AGRO_FERTILISER", "SECTOR_AND_INDUSTRY", "AGRO_FERTILISER")
+    }
+    if (
+      industry === "COMMODITY_CHEMICALS"
+      || industry === "INDUSTRIAL_CHEMICALS"
+      || industry === "BASIC_CHEMICALS"
+      || industry === "PROCESS_CHEMICALS"
+    ) {
+      return result(input, "ROUTED", "COMMODITY_PROCESS_CHEMICALS", "SECTOR_AND_INDUSTRY", "COMMODITY_PROCESS_CHEMICALS")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "CHEMICALS_INDUSTRY_REQUIRED")
+    }
+    return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "CHEMICALS_SUBPROFILE_PENDING")
   }
 
   if (sector === "FINANCIAL_SERVICES") {
