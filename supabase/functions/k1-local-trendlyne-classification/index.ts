@@ -71,7 +71,7 @@ function coerceRows(text: string, requested: readonly string[]): ClassificationR
     if (!raw || typeof raw !== "object") continue
     const item = raw as Record<string, unknown>
     const symbol = normalizedSymbol(item.symbol ?? item.nse_symbol ?? item.ticker)
-    if (!symbol || !requestedSet.has(symbol) || seen.has( symbol)) continue
+    if (!symbol || !requestedSet.has(symbol) || seen.has(symbol)) continue
     seen.add(symbol)
     rows.push({
       symbol,
