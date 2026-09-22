@@ -159,3 +159,17 @@ Added regression coverage:
 - `src/features/research/sectorRecommendation.k2Safety.test.ts` added for the universal K2 fail-closed set.
 
 These changes require one final owner-local validation before K2 can close.
+
+
+## 10. K2 final validation and closure
+
+Owner-local final validation after the runtime reconciliation passed completely:
+
+- focused K2 registry / PHARMA strict / K2 recommendation-safety suite: PASS;
+- TypeScript: PASS.
+
+The universal contract is therefore frozen as `SECTOR_ENGINE_CONTRACT_V1`.
+
+**K2 = COMPLETE / PASS / CLOSED.**
+
+K3 — BANK_NBFC Reconciliation & Portability Closure — is now unblocked.
