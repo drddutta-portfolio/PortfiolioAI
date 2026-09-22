@@ -366,8 +366,32 @@ export const SECTOR_ENGINE_REGISTRY: readonly SectorEngineRegistryEntry[] = [
     referenceValidationSymbols: ["JINDALSTEL", "HINDALCO", "HINDZINC"],
     runtimeSymbolSpecific: false,
   },
+  {
+    engineCode: "CONSUMER_FMCG",
+    displayName: "Consumer / FMCG",
+    lifecycle: "K4_FROZEN_PENDING",
+    methodologyAuthority: "CONSUMER_FMCG_K4A_METHODOLOGY_V1__K4B_VALIDATION_PENDING",
+    profileCodes: ["BRANDED_CONSUMER_FMCG"],
+    allowedDimensions: COMMON_DIMENSIONS,
+    notApplicableDimensions: [],
+    benchmarkAuthority: "NIFTY_FMCG",
+    valuationAuthority: "BRANDED_CONSUMER_FMCG_VALUATION_V1",
+    recommendationAuthority: "CONSUMER_FMCG_RECOMMENDATION_PENDING",
+    subprofileSupport: "NOT_REQUIRED",
+    profileAuthorities: {
+      BRANDED_CONSUMER_FMCG: {
+        methodologyAuthority: "CONSUMER_FMCG_K4B_SCORING_V1",
+        benchmarkAuthority: "NIFTY_FMCG",
+        valuationAuthority: "BRANDED_CONSUMER_FMCG_VALUATION_V1",
+        recommendationAuthority: "BRANDED_CONSUMER_FMCG_RECOMMENDATION_PENDING",
+        state: "PENDING_METHODOLOGY",
+      },
+    },
+    fallbackPolicy: "NONE_FAIL_CLOSED",
+    referenceValidationSymbols: ["HINDUNILVR", "VBL", "LTFOODS", "RADICO"],
+    runtimeSymbolSpecific: false,
+  },
   ...[
-    "CONSUMER_FMCG",
     "OIL_GAS_V1",
     "POWER_RENEWABLES_V1",
   ].map((engineCode): SectorEngineRegistryEntry => ({
