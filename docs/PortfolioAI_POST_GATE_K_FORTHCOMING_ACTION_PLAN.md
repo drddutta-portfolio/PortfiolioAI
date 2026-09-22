@@ -4,7 +4,7 @@
 **Prepared:** 23 September 2026  
 **Current branch:** `r4n-pharma-subprofile-architecture`  
 **Current PR:** #101 OPEN / DRAFT / UNMERGED  
-**Starting state:** Gate K COMPLETE / PASS; sector-specific research methodology architecture = PORTFOLIO COVERAGE COMPLETE / FAIL-CLOSED for the frozen Gate-K scope.
+**Starting state:** Gate K COMPLETE / PASS; PKR-1 / PKR-1B COMPLETE / PASS / CLOSED; sector-specific research methodology architecture = PORTFOLIO COVERAGE COMPLETE / FAIL-CLOSED for the frozen Gate-K scope.
 
 ---
 
@@ -125,6 +125,26 @@ R11 + R12
 ```
 
 Each Program must be independently reviewed before execution.
+
+## 4A. Post-K reconciliation checkpoint
+
+Before Program A, PKR-1 / PKR-1B reconciled the live scoring path with the Gate-K contract.
+
+Frozen result:
+- unsupported methodology → METHODOLOGY_NOT_AVAILABLE;
+- missing/conflicting classification → REVIEW_REQUIRED;
+- completed K4 methodology → AVAILABLE with score execution PENDING_ADAPTER;
+- completed K4 engines cannot substitute legacy GENERAL numeric scoring;
+- PHARMA_V1 and supported BANK scoring remain active;
+- NBFC_LENDING remains fail-closed;
+- Program B / R6 owns future activation of the real K4 live scorer adapters.
+
+Validated implementation commits:
+- PKR-1: `412e3e36a6f435675d4293c4678c54d0b4acea8e`;
+- PKR-1B: `f22b4efc8607102c51abadd46c62f362fd837084`.
+
+Canonical handoff / status documentation was then updated without changing runtime methodology.
+
 
 ---
 
@@ -781,7 +801,8 @@ No Gate L or Gate M is planned unless a genuinely new architecture problem later
 ## 25. Current status
 
 ```text
-Post-Gate-K plan = FROZEN FOR OWNER REVIEW
+Post-Gate-K plan = CANONICAL / ACTIVE
+PKR-1 / PKR-1B = COMPLETE / PASS / CLOSED
 
 Program A = NOT STARTED
 Program B = NOT STARTED
