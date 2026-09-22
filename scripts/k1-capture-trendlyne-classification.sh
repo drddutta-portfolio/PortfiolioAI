@@ -29,6 +29,10 @@ SYMBOLS_JSON="$(jq -c '[.residual[].symbol] | unique' "$BULK_JSON")"
 SYMBOL_COUNT="$(printf '%s' "$SYMBOLS_JSON" | jq 'length')"
 [[ "$SYMBOL_COUNT" -gt 0 ]] || die "No bulk residual symbols remain; Trendlyne fallback is not needed."
 
+printf '[K1] Trendlyne classification capture starting...\n'
+printf '  residual symbols: %s\n' "$SYMBOL_COUNT"
+printf '  env file: %s\n' "$ENV_FILE"
+
 STATUS_ENV="$(supabase status -o env 2>/dev/null)" || die "Local Supabase is not running. Run: supabase start"
 ANON_KEY="$(printf '%s\n' "$STATUS_ENV" | sed -nE 's/^ANON_KEY="?([^"]+)"?$/\1/p' | head -n1)"
 [[ -n "$ANON_KEY" ]] || die "Could not resolve local ANON_KEY."
@@ -51,6 +55,8 @@ else
   if pgrep -f "supabase functions serve" >/dev/null 2>&1; then
     die "A local functions server is already running. Stop it or export K1_REUSE_FUNCTION_SERVER=1."
   fi
+  printf '[K1] Starting local Edge Function...\n'
+  printf '  log: %s\n' "$LOG_FILE"
   supabase functions serve k1-local-trendlyne-classification --no-verify-jwt --env-file "$ENV_FILE" --debug >"$LOG_FILE" 2>&1 &
   SERVE_PID=$!
   trap 'kill "$SERVE_PID" >/dev/null 2>&1 || true' EXIT
@@ -58,7 +64,14 @@ fi
 
 PLAN_FILE="$(mktemp)"
 ready=0
-for _ in {1..90}; do
+printf '[K1] Waiting for local Edge Function readiness...\n'
+for attempt in {1..90}; do
+  if [[ -n "${SERVE_PID:-}" ]] && ! kill -0 "$SERVE_PID" >/dev/null 2>&1; then
+    printf '\nLocal Edge Function exited before readiness. Log tail:\n' >&2
+    tail -n 120 "$LOG_FILE" >&2 || true
+    rm -f "$PLAN_FILE"
+    die "K1 Trendlyne classification function failed to start."
+  fi
   status="$(curl --max-time 5 -sS -o "$PLAN_FILE" -w '%{http_code}' -X POST \
     "$API_URL/functions/v1/k1-local-trendlyne-classification" \
     -H "Authorization: Bearer $ACCESS_TOKEN" \
@@ -66,9 +79,20 @@ for _ in {1..90}; do
     -H "Content-Type: application/json" \
     -d "$(jq -nc --argjson symbols "$SYMBOLS_JSON" '{action:"PLAN",symbols:$symbols}')" 2>/dev/null || true)"
   if [[ "$status" == "200" ]]; then ready=1; break; fi
+  if (( attempt % 10 == 0 )); then
+    printf '  still waiting... %ss\n' "$attempt"
+  fi
   sleep 1
 done
-[[ "$ready" == "1" ]] || { cat "$PLAN_FILE" >&2 || true; tail -n 120 "$LOG_FILE" >&2 || true; die "K1 Trendlyne classification function did not become ready."; }
+[[ "$ready" == "1" ]] || {
+  printf '\nLast readiness response:\n' >&2
+  cat "$PLAN_FILE" >&2 || true
+  printf '\nLocal function log tail:\n' >&2
+  tail -n 120 "$LOG_FILE" >&2 || true
+  rm -f "$PLAN_FILE"
+  die "K1 Trendlyne classification function did not become ready."
+}
+printf '[K1] Local Edge Function readiness PASS\n'
 
 printf 'K1 Trendlyne classification PLAN\n'
 cat "$PLAN_FILE" | jq '{symbolCount,batchSize,estimatedProviderCalls,productionWrites,scoreRuns}'
