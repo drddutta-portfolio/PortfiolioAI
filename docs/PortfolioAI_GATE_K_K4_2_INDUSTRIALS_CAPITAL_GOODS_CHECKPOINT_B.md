@@ -101,3 +101,30 @@ npm run typecheck
 ```
 
 If all pass, INDUSTRIALS_CAPITAL_GOODS may be promoted to IMPLEMENTED read-only methodology authority. Recommendation thresholds remain pending and persistence remains OFF.
+
+
+## 10. Final validation and closure
+
+Owner-local Checkpoint B validation passed completely after correction of two stale regression expectations.
+
+Validated:
+- Industrials Checkpoint A contract regression;
+- deterministic scoring methodology;
+- future-stock portability;
+- industry-first routing;
+- scoring profile integration;
+- registry integrity;
+- K2 recommendation-safety regression;
+- TypeScript;
+- incremental isolation against PHARMA_V1, BANK_NBFC and IT_TECH;
+- TORNTPHARM 75.1575 golden output;
+- AUROPHARMA fail-closed golden output;
+- universal Research workspace continuity.
+
+Registry promotion:
+- INDUSTRIALS_CAPITAL_GOODS lifecycle → `IMPLEMENTED`;
+- PROJECT_EPC / CAPITAL_EQUIPMENT_ELECTRICAL / DEFENCE_AEROSPACE → `SUPPORTED`;
+- recommendation thresholds remain pending dedicated evidence validation;
+- score/recommendation persistence remain OFF.
+
+**K4 Package 2 · INDUSTRIALS_CAPITAL_GOODS = COMPLETE / PASS / CLOSED.**
