@@ -64,6 +64,9 @@ describe("SECTOR_ENGINE_CONTRACT_V1", () => {
     expect(sectorEngineForProfileCode("AGRO_FERTILISER")?.engineCode).toBe("CHEMICALS_V1")
     expect(sectorEngineForProfileCode("COMMODITY_PROCESS_CHEMICALS")?.engineCode).toBe("CHEMICALS_V1")
     expect(sectorEngineForProfileCode("HOSPITAL")?.engineCode).toBe("HEALTHCARE_SERVICES_V1")
+    expect(sectorEngineForProfileCode("CAPITAL_MARKETS_AMC")?.engineCode).toBe("FIN_SERVICES_NON_LENDER")
+    expect(sectorEngineForProfileCode("INSURANCE")?.engineCode).toBe("FIN_SERVICES_NON_LENDER")
+    expect(sectorEngineForProfileCode("FINTECH_PLATFORM")?.engineCode).toBe("FIN_SERVICES_NON_LENDER")
   })
 
   it("does not place universal numeric recommendation thresholds in the registry", () => {
