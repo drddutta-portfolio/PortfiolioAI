@@ -19,7 +19,7 @@ export interface ConsumerFmcgK4aSubprofileContract {
 
 export const CONSUMER_FMCG_K4A_CONTRACT = {
   version: CONSUMER_FMCG_K4A_CONTRACT_VERSION,
-  state: "CHECKPOINT_A_OWNER_APPROVAL_REQUIRED",
+  state: "CHECKPOINT_A_OWNER_APPROVED_LOCKED",
   engineCode: "CONSUMER_FMCG",
   runtimeActivationAllowed: false,
   scorePersistenceEnabled: false,
