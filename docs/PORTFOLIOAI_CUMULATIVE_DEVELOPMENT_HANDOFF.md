@@ -1303,3 +1303,38 @@ Permanent safety boundaries remain:
 PR #101 remains OPEN / DRAFT / UNMERGED.
 
 **Current checkpoint: K5 IMPLEMENTED / LOCAL VALIDATION PENDING.**
+
+
+---
+
+## Gate K5 · First consolidated validation correction — 22 September 2026
+
+Owner-local consolidated K5 validation result:
+- 8 test files executed;
+- 7 passed / 1 failed;
+- 56 tests passed / 1 failed;
+- the only failure was the synthetic future-stock portability case for `AUTO_OEM`.
+
+Root cause:
+- the K5 synthetic future-stock fixture used sector text `Automobile & Auto Components`;
+- the frozen canonical routing identity is `Automobile and Auto Components`;
+- the router correctly remained fail-closed because the synthetic fixture did not match the canonical classification key;
+- the frozen 238-equity whole-portfolio routing test passed;
+- the dedicated AUTO routing regression already passed;
+- therefore this was a stale/non-canonical synthetic fixture, not a runtime methodology or routing defect.
+
+Correction:
+- updated only the two synthetic AUTO future-stock fixtures in `k5CrossSectorValidation.ts`;
+- `AUTO_OEM` fixture now uses canonical sector `Automobile and Auto Components`;
+- `AUTO_COMPONENTS` fixture now uses the same canonical sector identity;
+- no router broadening was introduced;
+- no methodology, benchmark, valuation, recommendation authority, lifecycle, persistence, provider, scheduler, deployment or production behavior changed.
+
+K5 remains **IMPLEMENTED / LOCAL VALIDATION PENDING** until the consolidated suite is rerun.
+
+Required rerun:
+
+```bash
+git pull
+bash scripts/k5-validate-cross-sector.sh
+```
