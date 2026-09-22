@@ -52,11 +52,11 @@ describe("resolveScoringProfile", () => {
     })
   })
 
-  it("keeps K4 pending profiles fail-closed instead of using their sector label as methodology", () => {
+  it("routes a completed K4 engine identity while preserving its separate read-only scoring authority", () => {
     expect(resolveScoringProfile("Information Technology", "IT Services", null)).toMatchObject({
-      profileCode: "GENERAL",
+      profileCode: "IT_TECH",
       ruleProfile: "GENERAL",
-      profileSource: "GENERAL_FALLBACK",
+      profileSource: "SECTOR_RULE",
     })
   })
 
