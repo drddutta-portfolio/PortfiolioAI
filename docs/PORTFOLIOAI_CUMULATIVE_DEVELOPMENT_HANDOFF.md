@@ -32461,3 +32461,44 @@ Frozen K3 architecture:
 K4 Package 1 — `IT_TECH` Checkpoint A is now IN PROGRESS.
 
 Safety remains unchanged: no production mutation/migration, no provider call, score persistence OFF, recommendation persistence OFF, no scheduler change, no deployment, PR #101 OPEN/DRAFT/UNMERGED, no automatic trading.
+
+
+---
+
+## K4 Package 1 · IT_TECH · Checkpoint A implementation — 22 September 2026
+
+K3 is closed and K4 Package 1 has begun.
+
+The legacy Stage 8 `IT_TECH` profile was confirmed to be only a GENERAL-derived scaffold, not a completed specialised methodology.
+
+Added:
+- `src/features/research/itTechK4aMethodologyContract.ts`;
+- `src/features/research/itTechK4aMethodologyContract.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_1_IT_TECH_CHECKPOINT_A.md`.
+
+Contract:
+`IT_TECH_K4A_METHODOLOGY_V1`
+
+Checkpoint A proposes three economically distinct IT subprofiles:
+1. `IT_SERVICES`;
+2. `SOFTWARE_PRODUCTS_PLATFORMS`;
+3. `DIGITAL_INFRA_HARDWARE`.
+
+Reference anchors:
+- IT_SERVICES: INFY, PERSISTENT; HCLTECH control;
+- DIGITAL_INFRA_HARDWARE: NETWEB;
+- SOFTWARE_PRODUCTS_PLATFORMS: clean reference still to be selected before Checkpoint B.
+
+Methodology principles:
+- Industry is the methodology selector;
+- unknown IT industry → METHOD_NOT_AVAILABLE;
+- minimum history: 3 annual years / 8 quarters / 252 trading days, with longer preferred histories;
+- no single-quarter durable-growth inference;
+- no cross-subprofile peer percentiles;
+- valuation is subprofile-specific;
+- recommendation numeric thresholds remain subprofile-owned and unset;
+- runtime activation remains OFF pending owner approval.
+
+No new score curves, recommendation thresholds, provider calls, persistence, production mutation/migration, scheduler change, deployment, PR merge or trading action occurred.
+
+Checkpoint A now requires owner-local contract validation and owner approval before IT_TECH runtime methodology implementation.
