@@ -96,6 +96,10 @@ function rulesFor(subprofile: ChemicalsK4aSubprofile): readonly ChemicalsSignalR
   ]
 }
 
+function stableScore(value: number) {
+  return Number(value.toFixed(6))
+}
+
 function validScore(value: number | null) {
   return value !== null && Number.isFinite(value) && value >= 0 && value <= 100
 }
@@ -158,11 +162,11 @@ export function scoreChemicalsK4b(
   const totalWeight = Object.values(DIMENSION_WEIGHTS).reduce((sum, weight) => sum + weight, 0)
   if (totalWeight !== 100) throw new Error("CHEMICALS dimension weights must equal 100")
 
-  const overallScore = Object.entries(DIMENSION_WEIGHTS).reduce((sum, [dimensionCode, weight]) => {
+  const overallScore = stableScore(Object.entries(DIMENSION_WEIGHTS).reduce((sum, [dimensionCode, weight]) => {
     const score = dimensionScores[dimensionCode]
     if (score === null || score === undefined) throw new Error(`CHEMICALS dimension ${dimensionCode} is not computable`)
     return sum + score * weight / 100
-  }, 0)
+  }, 0))
 
   return {
     version: CHEMICALS_K4B_SCORING_VERSION,
