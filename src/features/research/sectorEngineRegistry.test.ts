@@ -70,6 +70,9 @@ describe("SECTOR_ENGINE_CONTRACT_V1", () => {
     expect(sectorEngineForProfileCode("STEEL_FERROUS")?.engineCode).toBe("METALS_COMMODITIES")
     expect(sectorEngineForProfileCode("NON_FERROUS_DIVERSIFIED_METALS")?.engineCode).toBe("METALS_COMMODITIES")
     expect(sectorEngineForProfileCode("BRANDED_CONSUMER_FMCG")?.engineCode).toBe("CONSUMER_FMCG")
+    expect(sectorEngineForProfileCode("UPSTREAM_E_AND_P")?.engineCode).toBe("OIL_GAS_V1")
+    expect(sectorEngineForProfileCode("MIDSTREAM_CITY_GAS")?.engineCode).toBe("OIL_GAS_V1")
+    expect(sectorEngineForProfileCode("INTEGRATED_REFINING_PETCHEM")?.engineCode).toBe("OIL_GAS_V1")
   })
 
   it("does not place universal numeric recommendation thresholds in the registry", () => {
