@@ -12,6 +12,8 @@ export type ResearchProfileCode =
   | "CAPITAL_MARKET_FINANCIAL"
   | "DIGITAL_PLATFORM"
   | "IT_SERVICES"
+  | "IT_SOFTWARE_PRODUCTS_PLATFORMS"
+  | "IT_DIGITAL_INFRA_HARDWARE"
   | "INDUSTRIAL_CAPITAL_GOODS"
   | "DEFENCE_AEROSPACE"
   | "AUTO_OEM"
@@ -124,8 +126,32 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
   }
 
   if (sector === "INFORMATION_TECHNOLOGY") {
-    if (industry === "IT_CONSULTING_SOFTWARE" || industry === "IT_SERVICES") {
+    if (
+      industry === "COMPUTERS_SOFTWARE_CONSULTING"
+      || industry === "IT_CONSULTING_SOFTWARE"
+      || industry === "IT_SERVICES"
+      || industry === "IT_SERVICES_CONSULTING"
+      || industry === "SOFTWARE_SERVICES"
+    ) {
       return result(input, "ROUTED", "IT_SERVICES", "SECTOR_AND_INDUSTRY", "IT_SERVICES")
+    }
+    if (
+      industry === "IT_SOFTWARE_PRODUCTS"
+      || industry === "SOFTWARE_PRODUCTS"
+      || industry === "INTERNET_SOFTWARE_SERVICES"
+    ) {
+      return result(input, "ROUTED", "IT_SOFTWARE_PRODUCTS_PLATFORMS", "SECTOR_AND_INDUSTRY", "IT_SOFTWARE_PRODUCTS_PLATFORMS")
+    }
+    if (
+      industry === "COMPUTERS_HARDWARE_EQUIPMENTS"
+      || industry === "COMPUTER_HARDWARE"
+      || industry === "DATA_CENTRE_INFRASTRUCTURE"
+      || industry === "DIGITAL_INFRASTRUCTURE"
+    ) {
+      return result(input, "ROUTED", "IT_DIGITAL_INFRA_HARDWARE", "SECTOR_AND_INDUSTRY", "IT_DIGITAL_INFRA_HARDWARE")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "IT_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "IT_SUBPROFILE_PENDING")
   }
