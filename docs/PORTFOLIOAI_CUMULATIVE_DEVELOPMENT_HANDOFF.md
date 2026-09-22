@@ -1747,3 +1747,61 @@ Next governance step:
 - choose a clean post-K Program A working branch from commit `f22b4efc8607102c51abadd46c62f362fd837084`;
 - do not merge PR #101 without a separate explicit owner decision;
 - Program A A1 must be planned/frozen before Codex implementation.
+
+
+---
+
+## Program A launch · A1 plan freeze — 23 September 2026
+
+Clean Program A branch created:
+- `program-a-evidence-coverage`;
+- branched from reconciled post-K tip `239c209005b549ce4c6eff260d284091afe972fc`;
+- PR #101 remains untouched / OPEN / DRAFT / UNMERGED.
+
+Canonical A1 plan:
+- `docs/PortfolioAI_PROGRAM_A_A1_EVIDENCE_BASELINE_AND_EXECUTION_PLAN.md`.
+
+A1 title:
+- **Read-only Evidence Baseline & Execution Contract Freeze**.
+
+A1 purpose:
+- establish current portfolio eligibility;
+- produce cache-only R3 evidence coverage baseline;
+- produce cache-only R5 market-history baseline;
+- define pure incremental history-window planning;
+- inventory benchmark dependencies;
+- quantify projected provider work without executing it;
+- propose bounded R3/R5 pilot cohorts for the next checkpoint.
+
+Mandatory Codex behavior before build:
+- read the canonical post-K plan, cumulative handoff, architecture audit, A1 plan, Integration & Execution Plan, Research & Intelligence Architecture and relevant current implementation;
+- perform a bounded planning verification only;
+- identify only hard contradictions, reuse points and minimal file-change set;
+- STOP only for a genuine safety/architecture blocker;
+- otherwise proceed directly into A1 implementation in the same Codex task;
+- no open-ended re-audit cycle.
+
+A1 explicitly prohibits:
+- Trendlyne execution;
+- Angel One execution;
+- NSE/provider execution;
+- production mutation/migration;
+- score/recommendation/sizing persistence;
+- scheduler activation;
+- AI activation;
+- portfolio mutation;
+- deployment;
+- PR merge;
+- automatic trading.
+
+Post-PKR scoring safety must remain:
+- unsupported methodology → METHODOLOGY_NOT_AVAILABLE + BLOCKED;
+- missing/conflicting classification → REVIEW_REQUIRED + BLOCKED;
+- completed K4 methodology → AVAILABLE + scoring execution PENDING_ADAPTER;
+- no legacy GENERAL numeric scoring for K4;
+- PHARMA_V1 and supported BANK scoring preserved;
+- NBFC_LENDING fail-closed.
+
+**Program A = IN PROGRESS (planning started).**
+**A1 plan = FROZEN / IMPLEMENTATION NOT STARTED.**
+**Provider execution = NOT AUTHORIZED.**
