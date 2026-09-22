@@ -764,3 +764,56 @@ The merged classification reference keeps:
 The comparator contract is now source-aware and records reference-source counts and source-specific reason codes. Terminal exception output includes `REFERENCE_SOURCE` so Trendlyne rows are never presented as NSE rows.
 
 After the first successful capture and owner review, the non-sensitive classification result can be frozen into a repository K1 manifest so it survives local artifact cleanup and does not require repeated provider calls.
+
+---
+
+## 17. Active fallback simplified to official BSE — Trendlyne MCP removed
+
+Live Trendlyne MCP testing showed that `get_parameter_values_multi_stock` returns financial parameter tables rather than classification metadata. It is therefore not suitable as the active K1 sector/industry source.
+
+K1 has been simplified to:
+
+```text
+NSE official bulk classification
+        ↓
+NSE-bulk residual symbols only
+        ↓
+BSE official targeted quote/search fallback
+        ↓
+merged official exchange reference
+        ↓
+deterministic reconciliation
+```
+
+Added:
+
+- `scripts/k1-fetch-bse-primary-classification.mjs`
+
+The BSE resolver:
+- resolves a residual symbol through BSE smart search;
+- retrieves the official BSE quote header for that BSE security;
+- records BSE `Industry` as the official exchange fallback primary sector;
+- preserves BSE security code / security id / ISIN where available;
+- marks provenance as `BSE_OFFICIAL_QUOTE_HEADER`;
+- never invents a narrower industry when BSE does not provide one;
+- remains read-only and writes only the local K1 artifact.
+
+The merged reconciliation contract is now:
+
+`PORTFOLIOAI_K1_CLASSIFICATION_RECONCILIATION_V4`
+
+with policy:
+
+`EXCHANGE_PRIMARY_NSE_BULK_WITH_BSE_OFFICIAL_FALLBACK_V1`
+
+Trendlyne MCP classification files added during experimentation were removed from the active branch to avoid maintaining a misleading path.
+
+Authority remains:
+
+```text
+NSE official bulk
+> BSE official fallback
+> reviewed secondary/manual evidence only if both exchanges cannot resolve
+```
+
+Detailed research industry/subprofile remains downstream and is not fabricated from BSE's broad industry label.
