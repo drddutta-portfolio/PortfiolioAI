@@ -915,3 +915,19 @@ No-stale regression policy remains active.
 Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 9 · OIL_GAS_V1 · Checkpoint A FINAL — 22 September 2026
+
+Owner-local tests and TypeScript passed completely.
+
+`OIL_GAS_V1_K4A_METHODOLOGY_V1` is frozen with:
+- UPSTREAM_E_AND_P;
+- MIDSTREAM_CITY_GAS;
+- INTEGRATED_REFINING_PETCHEM.
+
+**OIL_GAS_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
+
+Checkpoint B is now IN PROGRESS.
