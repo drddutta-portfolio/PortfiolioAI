@@ -482,3 +482,29 @@ Correction:
 No weights, dimensions, methodology, evidence rules, routing, recommendation logic, persistence, provider behavior, production behavior, scheduler or deployment behavior changed.
 
 HEALTHCARE_SERVICES_V1 Checkpoint B remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
+
+
+---
+
+## K4 Package 5 · HEALTHCARE_SERVICES_V1 FINAL CLOSURE — 22 September 2026
+
+Owner-local corrected Checkpoint B suite and TypeScript passed completely.
+
+Final state:
+- Checkpoint A = COMPLETE / PASS / FROZEN;
+- Checkpoint B = COMPLETE / PASS / CLOSED;
+- registry lifecycle = IMPLEMENTED;
+- supported authority = HOSPITAL;
+- diagnostics remain deliberately outside hospital scoring;
+- ticker-specific methodology routing = NO;
+- missing mandatory evidence = fail closed;
+- PHARMA_V1 / BANK_NBFC / prior K4 engine isolation = PASS;
+- golden controls = PASS;
+- universal Research shell = PASS;
+- stable weighted-score precision = 6 decimals;
+- score persistence = OFF;
+- recommendation persistence = OFF.
+
+**K4 Package 5 · HEALTHCARE_SERVICES_V1 = COMPLETE / PASS / CLOSED.**
+
+K4 Package 6 — FIN_SERVICES_NON_LENDER Checkpoint A is now IN PROGRESS.
