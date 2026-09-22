@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 PACKAGE 1 IT_TECH COMPLETE / PASS / CLOSED; K4 PACKAGE 2 INDUSTRIALS_CAPITAL_GOODS CHECKPOINT A IN PROGRESS; K4 SCOPE 10 PACKAGES / FROZEN; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 PACKAGE 1 IT_TECH COMPLETE / PASS / CLOSED; K4 PACKAGE 2 INDUSTRIALS_CAPITAL_GOODS CHECKPOINT A COMPLETE / PASS; CHECKPOINT B IN PROGRESS; K4 SCOPE 10 PACKAGES / FROZEN; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -32612,3 +32612,21 @@ Key methodology locks proposed:
 Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 2 · INDUSTRIALS_CAPITAL_GOODS · Checkpoint A FINAL — 22 September 2026
+
+Owner-local contract tests and TypeScript passed completely and the owner approved proceeding.
+
+`INDUSTRIALS_CAPITAL_GOODS_K4A_METHODOLOGY_V1` is now frozen with three subprofiles:
+- PROJECT_EPC;
+- CAPITAL_EQUIPMENT_ELECTRICAL;
+- DEFENCE_AEROSPACE.
+
+Runtime activation remains OFF until Checkpoint B portability/isolation validation passes.
+
+**INDUSTRIALS_CAPITAL_GOODS Checkpoint A = COMPLETE / PASS / FROZEN.**
+
+Checkpoint B is now IN PROGRESS.
