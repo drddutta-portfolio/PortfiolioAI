@@ -145,8 +145,8 @@ describe("routeResearchProfileV1", () => {
   })
 
   it("uses Financial Services industry evidence rather than pretending all financial companies are banks", () => {
-    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Asset Management Cos." }).profileCode).toBe("CAPITAL_MARKET_FINANCIAL")
-    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Internet Software & Services" }).profileCode).toBe("DIGITAL_PLATFORM")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Asset Management Cos." }).profileCode).toBe("CAPITAL_MARKETS_AMC")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Internet Software & Services" }).profileCode).toBe("FINTECH_PLATFORM")
   })
 
   it("keeps ambiguous Financial Services holdings pending", () => {
