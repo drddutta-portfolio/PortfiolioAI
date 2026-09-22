@@ -132,6 +132,17 @@ describe("routeResearchProfileV1", () => {
     })
   })
 
+  it("routes Metals industries into steel and non-ferrous subprofiles", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Metals & Mining", applicationIndustry: "Iron & Steel" }).profileCode).toBe("STEEL_FERROUS")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Metals & Mining", applicationIndustry: "Diversified Metals" }).profileCode).toBe("NON_FERROUS_DIVERSIFIED_METALS")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Metals & Mining", applicationIndustry: "Minerals & Mining" }).profileCode).toBe("NON_FERROUS_DIVERSIFIED_METALS")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Metals & Mining", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "METALS_INDUSTRY_REQUIRED",
+    })
+  })
+
   it("routes non-lender Financial Services subprofiles without lender leakage", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Asset Management Company" }).profileCode).toBe("CAPITAL_MARKETS_AMC")
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Health Insurance" }).profileCode).toBe("INSURANCE")
