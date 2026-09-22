@@ -369,14 +369,14 @@ export const SECTOR_ENGINE_REGISTRY: readonly SectorEngineRegistryEntry[] = [
   {
     engineCode: "CONSUMER_FMCG",
     displayName: "Consumer / FMCG",
-    lifecycle: "K4_FROZEN_PENDING",
-    methodologyAuthority: "CONSUMER_FMCG_K4A_METHODOLOGY_V1__K4B_VALIDATION_PENDING",
+    lifecycle: "IMPLEMENTED",
+    methodologyAuthority: "CONSUMER_FMCG_K4B_SCORING_V1",
     profileCodes: ["BRANDED_CONSUMER_FMCG"],
     allowedDimensions: COMMON_DIMENSIONS,
     notApplicableDimensions: [],
     benchmarkAuthority: "NIFTY_FMCG",
     valuationAuthority: "BRANDED_CONSUMER_FMCG_VALUATION_V1",
-    recommendationAuthority: "CONSUMER_FMCG_RECOMMENDATION_PENDING",
+    recommendationAuthority: "CONSUMER_FMCG_READ_ONLY_RECOMMENDATION_PENDING_THRESHOLDS",
     subprofileSupport: "NOT_REQUIRED",
     profileAuthorities: {
       BRANDED_CONSUMER_FMCG: {
@@ -384,7 +384,7 @@ export const SECTOR_ENGINE_REGISTRY: readonly SectorEngineRegistryEntry[] = [
         benchmarkAuthority: "NIFTY_FMCG",
         valuationAuthority: "BRANDED_CONSUMER_FMCG_VALUATION_V1",
         recommendationAuthority: "BRANDED_CONSUMER_FMCG_RECOMMENDATION_PENDING",
-        state: "PENDING_METHODOLOGY",
+        state: "SUPPORTED",
       },
     },
     fallbackPolicy: "NONE_FAIL_CLOSED",
