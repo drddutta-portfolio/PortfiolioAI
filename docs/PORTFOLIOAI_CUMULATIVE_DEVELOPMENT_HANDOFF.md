@@ -692,3 +692,45 @@ Owner-local tests and TypeScript passed completely.
 **METALS_COMMODITIES Checkpoint A = COMPLETE / PASS / FROZEN.**
 
 Checkpoint B is now IN PROGRESS.
+
+
+---
+
+## K4 Package 7 · METALS_COMMODITIES · Checkpoint B implementation — 22 September 2026
+
+Checkpoint A is frozen COMPLETE / PASS.
+
+Implemented:
+- `metalsCommoditiesK4bScoringMethodology.ts`;
+- `metalsCommoditiesK4bScoringMethodology.test.ts`;
+- `metalsCommoditiesK4bIsolationRegression.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_7_METALS_COMMODITIES_CHECKPOINT_B.md`;
+- canonical router extended for STEEL_FERROUS / NON_FERROUS_DIVERSIFIED_METALS;
+- registry maps both profiles to METALS_COMMODITIES in validation-pending state.
+
+Deterministic scoring:
+- ten dimensions totaling 100;
+- six-decimal stable weighted output;
+- mandatory commodity exposure metadata readiness gate;
+- through-cycle normalization;
+- mid-cycle leverage assessment;
+- distinct steel vs non-ferrous growth contracts;
+- spot P/E cannot be sole valuation anchor;
+- symbol-independent methodology;
+- missing mandatory evidence fails closed.
+
+Regression policy:
+- Checkpoint A test aligned before B validation;
+- current-package isolation is lifecycle-stable;
+- completed engines are asserted only as IMPLEMENTED;
+- no hard-coded shrinking pending-package count.
+
+Incremental controls:
+- PHARMA_V1 / BANK_NBFC and K4 Packages 1–6 isolated/preserved;
+- TORNTPHARM golden 75.1575 preserved;
+- AUROPHARMA fail-closed golden preserved;
+- universal Research workspace preserved.
+
+Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
