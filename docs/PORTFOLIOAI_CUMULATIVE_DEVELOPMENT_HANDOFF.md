@@ -1050,3 +1050,44 @@ Owner-local tests and TypeScript passed completely.
 **POWER_RENEWABLES_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
 
 Checkpoint B is now IN PROGRESS.
+
+
+---
+
+## K4 Package 10 · POWER_RENEWABLES_V1 · Checkpoint B implementation — 22 September 2026
+
+Checkpoint A is frozen COMPLETE / PASS.
+
+Implemented:
+- `powerRenewablesK4bScoringMethodology.ts`;
+- `powerRenewablesK4bScoringMethodology.test.ts`;
+- `powerRenewablesK4bIsolationRegression.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_10_POWER_RENEWABLES_CHECKPOINT_B.md`;
+- canonical router extended for REGULATED_NETWORK / GENERATION_INTEGRATED_UTILITY / RENEWABLE_IPP;
+- registry maps all three profiles to POWER_RENEWABLES_V1 in validation-pending state.
+
+Deterministic scoring:
+- ten dimensions totaling 100;
+- six-decimal stable weighted output;
+- mandatory TARIFF_PPA_OFFTAKER_GRID_CONTEXT readiness gate;
+- distinct regulated-network / generation-utility / renewable-IPP growth contracts;
+- leverage/refinancing is core evidence;
+- project/grid/offtaker risk cannot be bypassed by capacity growth;
+- symbol-independent methodology;
+- missing mandatory evidence fails closed.
+
+Regression policy:
+- Checkpoint A test aligned before B validation;
+- current-package isolation is lifecycle-stable;
+- Packages 1–9 are asserted only as IMPLEMENTED;
+- no hard-coded shrinking pending-package count.
+
+Incremental controls:
+- PHARMA_V1 / BANK_NBFC and K4 Packages 1–9 isolated/preserved;
+- TORNTPHARM golden 75.1575 preserved;
+- AUROPHARMA fail-closed golden preserved;
+- universal Research workspace preserved.
+
+Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion and formal K4 closure occur only after owner-local Checkpoint B validation passes.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
