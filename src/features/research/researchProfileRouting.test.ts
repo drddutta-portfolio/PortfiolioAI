@@ -28,6 +28,24 @@ describe("routeResearchProfileV1", () => {
     })
   })
 
+  it("never routes a specialised methodology from sector alone", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Banking", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "BANKING_INDUSTRY_REQUIRED",
+    })
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Pharma", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "PHARMA_INDUSTRY_REQUIRED",
+    })
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Capital Goods", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "CAPITAL_GOODS_INDUSTRY_REQUIRED",
+    })
+  })
+
   it("routes Pharma to PHARMA", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Pharma", applicationIndustry: "Pharmaceuticals" })).toMatchObject({
       state: "ROUTED",
