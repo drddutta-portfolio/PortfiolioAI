@@ -95,6 +95,10 @@ function rulesFor(subprofile: ItTechSubprofile): readonly ItTechSignalRule[] {
   ]
 }
 
+function stableScore(value: number) {
+  return Number(value.toFixed(6))
+}
+
 function validNormalizedScore(value: number | null) {
   return value !== null && Number.isFinite(value) && value >= 0 && value <= 100
 }
@@ -159,11 +163,11 @@ export function scoreItTechK4b(input: ItTechScoringInput): ItTechScoringResult {
   const totalDimensionWeight = Object.values(COMMON_DIMENSION_WEIGHTS).reduce((sum, weight) => sum + weight, 0)
   if (totalDimensionWeight !== 100) throw new Error("IT_TECH dimension weights must equal 100")
 
-  const overallScore = Object.entries(COMMON_DIMENSION_WEIGHTS).reduce((sum, [dimensionCode, weight]) => {
+  const overallScore = stableScore(Object.entries(COMMON_DIMENSION_WEIGHTS).reduce((sum, [dimensionCode, weight]) => {
     const value = dimensionScores[dimensionCode]
     if (value === null || value === undefined) throw new Error(`IT_TECH dimension ${dimensionCode} is not computable`)
     return sum + value * weight / 100
-  }, 0)
+  }, 0))
 
   return {
     version: IT_TECH_K4B_SCORING_VERSION,
