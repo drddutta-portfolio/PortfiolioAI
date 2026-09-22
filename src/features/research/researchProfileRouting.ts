@@ -1,4 +1,4 @@
-export const RESEARCH_PROFILE_ROUTING_VERSION = "RESEARCH_PROFILE_ROUTING_V1" as const
+export const RESEARCH_PROFILE_ROUTING_VERSION = "RESEARCH_PROFILE_ROUTING_V2" as const
 
 export type ResearchProfileRoutingState =
   | "ROUTED"
@@ -71,8 +71,9 @@ function result(
  *
  * This function must never rewrite the application sector/industry displayed to
  * the user. It is deliberately fail-closed: ambiguous broad sectors or missing
- * subtype evidence remain PROFILE_PENDING/REVIEW_REQUIRED rather than receiving
- * a convenient generic profile.
+ * industry/business-model evidence remain PROFILE_PENDING/REVIEW_REQUIRED rather
+ * than receiving a convenient sector-only profile. Sector is macro context only;
+ * industry is the minimum micro-methodology selector.
  */
 export function routeResearchProfileV1(input: ResearchProfileRoutingInput): ResearchProfileRoutingResult {
   if (input.assetClass.trim().toUpperCase() !== "EQUITY") {
