@@ -1529,3 +1529,67 @@ Permanent safety boundaries remain unchanged:
 **Sector-specific research layer = PORTFOLIO COVERAGE COMPLETE.**
 
 PR #101 remains OPEN / DRAFT / UNMERGED pending a separate explicit owner decision.
+
+
+---
+
+## Post-Gate-K architecture / roadmap audit — 23 September 2026
+
+A detailed post-K reconciliation was completed against:
+- PortfolioAI Master Blueprint;
+- Research & Intelligence Architecture;
+- Integration & Execution Plan;
+- Requirements Register;
+- living Development Status;
+- R3/R4 routing plan;
+- actual H→K implementation and closure records.
+
+Audit document:
+- `docs/PortfolioAI_POST_GATE_K_ARCHITECTURE_AND_ROADMAP_AUDIT.md`.
+
+Primary conclusion:
+- **no Gate L or Gate M is currently required or canonically defined**;
+- creating L/M now would duplicate the existing R-roadmap and confuse methodology completion with evidence/execution breadth;
+- Gate K has effectively superseded/completed the old **R4 generic sector/profile Research contract** objective.
+
+What Gate K completed:
+- portfolio-coverage/fail-closed research methodology architecture for the frozen Gate-K scope;
+- 12 registered engine families;
+- one universal Research workspace;
+- industry/business-model methodology selection;
+- future-stock portability;
+- cross-sector isolation;
+- unsupported/review-required fail-safe behavior;
+- deterministic sector scoring methodology authorities;
+- universal recommendation semantics, without assuming portable numeric thresholds.
+
+What remains materially incomplete:
+- R3 portfolio-wide fundamental/research evidence breadth;
+- R5 portfolio-wide historical market evidence;
+- R6 actual company-specific deterministic scoring execution;
+- sector/profile numeric recommendation policy calibration where still pending;
+- R7 recommendation + position-sizing rollout;
+- R8 Core Health / Portfolio Fit / Risk / Exit engines;
+- R9 Movement / meaningful-change detection;
+- R10 Combined Action Center;
+- R11 general scheduled maintenance;
+- R12 optional AI Investment Committee.
+
+Recommended consolidation:
+- Program A = R3 + R5 Evidence Coverage;
+- Program B = R6 + recommendation calibration + R7 Deterministic Portfolio Intelligence;
+- Program C = R8 + R9 + R10 Portfolio Decision Engines;
+- Program D = R11 + R12 Operations & Optional AI.
+
+Immediate governance recommendation:
+- do not add another large development chain to PR #101;
+- PR #101 remains OPEN / DRAFT / UNMERGED and currently carries a very large accumulated scope;
+- freeze the Gate-K handoff and decide PR #101 disposition before beginning Program A on a clean branch;
+- production/provider execution remains separately approval-gated.
+
+Living Development Status was reconciled to reflect:
+- Gate K COMPLETE / PASS;
+- old R4 objective superseded/completed by H→K;
+- next substantive work = R3 + R5 breadth, not Gate L/M.
+
+**Post-K roadmap status: AUDITED / RECONCILED / OWNER REVIEW PENDING.**
