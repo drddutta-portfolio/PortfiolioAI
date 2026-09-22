@@ -560,3 +560,45 @@ Hard separation from BANK_NBFC remains mandatory.
 **FIN_SERVICES_NON_LENDER Checkpoint A = COMPLETE / PASS / FROZEN.**
 
 Checkpoint B is now IN PROGRESS.
+
+
+---
+
+## K4 Package 6 · FIN_SERVICES_NON_LENDER · Checkpoint B implementation — 22 September 2026
+
+Checkpoint A is frozen COMPLETE / PASS.
+
+Implemented:
+- `finServicesNonLenderK4bScoringMethodology.ts`;
+- `finServicesNonLenderK4bScoringMethodology.test.ts`;
+- `finServicesNonLenderK4bIsolationRegression.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_6_FIN_SERVICES_NON_LENDER_CHECKPOINT_B.md`;
+- canonical router now uses CAPITAL_MARKETS_AMC / INSURANCE / FINTECH_PLATFORM;
+- NBFC_LENDING remains separate under BANK_NBFC;
+- registry maps all three non-lender profiles to FIN_SERVICES_NON_LENDER in validation-pending state.
+
+Deterministic scoring:
+- ten dimensions totaling 100;
+- six-decimal stable weighted output;
+- subprofile-specific evidence contracts;
+- no missing-input renormalization;
+- no lender-metric inheritance;
+- symbol-independent methodology;
+- unknown/lender Industry → METHOD_NOT_AVAILABLE for this engine.
+
+Regression policy:
+- Checkpoint A test was proactively aligned before B validation;
+- current-package isolation is lifecycle-stable before/after promotion;
+- completed engines are asserted only as IMPLEMENTED;
+- no hard-coded shrinking pending-package count.
+
+Incremental controls:
+- PHARMA_V1 and BANK_NBFC isolated;
+- K4 Packages 1–5 preserved;
+- TORNTPHARM golden 75.1575 preserved;
+- AUROPHARMA fail-closed golden preserved;
+- universal Research workspace preserved.
+
+Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
