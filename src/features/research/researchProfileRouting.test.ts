@@ -71,6 +71,15 @@ describe("routeResearchProfileV1", () => {
     })
   })
 
+  it("keeps diagnostics separate from hospital methodology", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Healthcare", applicationIndustry: "Hospitals" }).profileCode).toBe("HOSPITAL")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Healthcare", applicationIndustry: "Diagnostics" }).profileCode).toBe("DIAGNOSTICS")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Healthcare", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+    })
+  })
+
   it("fails closed when Information Technology lacks a compatible subtype", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Information Technology", applicationIndustry: null })).toMatchObject({
       state: "PROFILE_PENDING",
