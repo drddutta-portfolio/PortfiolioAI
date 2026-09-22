@@ -38,7 +38,7 @@ function parseJsonArray(text: string): unknown[] {
   const trimmed = text.trim()
   const candidates = [
     trimmed,
-    trimmed.replace(/^```\(?:json)\s*/iu, "").replace(/\s*```$/u, ""),
+    trimmed.replace(/^```(?:json)?\\s*/iu, "").replace(/\\s*```$/u, ""),
   ]
 
   const firstBracket = trimmed.indexOf("[")
