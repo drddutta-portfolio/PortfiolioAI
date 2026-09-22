@@ -288,3 +288,41 @@ Runtime activation remains OFF until Checkpoint B portability/isolation validati
 **CHEMICALS_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
 
 Checkpoint B is now IN PROGRESS.
+
+
+---
+
+## K4 Package 4 · CHEMICALS_V1 · Checkpoint B implementation — 22 September 2026
+
+Checkpoint A is frozen COMPLETE / PASS.
+
+Implemented:
+- `chemicalsK4bScoringMethodology.ts`;
+- `chemicalsK4bScoringMethodology.test.ts`;
+- `chemicalsK4bIsolationRegression.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_4_CHEMICALS_CHECKPOINT_B.md`;
+- canonical router extended for SPECIALTY_CHEMICALS / AGRO_FERTILISER / COMMODITY_PROCESS_CHEMICALS;
+- registry maps all three profiles to CHEMICALS_V1 in validation-pending state.
+
+Deterministic scoring:
+- ten dimensions totaling 100;
+- mandatory evidence/history gates;
+- no missing-input renormalization;
+- distinct growth contracts for specialty, agro/fertiliser and commodity/process chemicals;
+- cycle normalization required;
+- symbol-independent methodology;
+- unknown Industry → METHOD_NOT_AVAILABLE.
+
+Incremental isolation/regression:
+- PHARMA_V1 isolated;
+- BANK_NBFC isolated;
+- completed IT_TECH preserved;
+- completed INDUSTRIALS_CAPITAL_GOODS preserved;
+- completed AUTO_COMPONENTS preserved;
+- TORNTPHARM golden 75.1575 preserved;
+- AUROPHARMA fail-closed golden preserved;
+- universal Research workspace preserved.
+
+Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
