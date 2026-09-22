@@ -32406,3 +32406,35 @@ npm run typecheck
 K3 is IN PROGRESS, not closed.
 
 Safety unchanged: no production mutation/migration, no provider call, no score/recommendation persistence, no scheduler change, no deployment, no PR merge, no automatic trading.
+
+
+---
+
+## K3 methodology split + benchmark portability checkpoint — 22 September 2026
+
+The first K3 local routing validation passed completely.
+
+K3 then completed the Bank-vs-NBFC methodology review.
+
+Frozen decision:
+- `BANK_NBFC` remains one engine family;
+- `BANK` and `NBFC_LENDING` are separate methodology authorities;
+- BANK keeps the inherited Stage 8 bank methodology;
+- NBFC_LENDING must not inherit bank-specific deposit/CET1/NIFTY Bank/recommendation rules;
+- NBFC_LENDING therefore fails scoring closed until its own methodology/benchmark/valuation/recommendation authority is approved.
+
+Implemented:
+- per-profile authorities added to `SECTOR_ENGINE_REGISTRY`;
+- BANK marked SUPPORTED;
+- NBFC_LENDING marked PENDING_METHODOLOGY;
+- scoring resolver fails NBFC_LENDING closed instead of leaking BANK_NBFC rules;
+- `refresh-bank-benchmark` generalized from HDFCBANK-only to any canonically classified `Banking + Banks` equity;
+- NIFTY Bank benchmark explicitly blocked for NBFC_LENDING;
+- CASH_FLOW frozen as explicit N/A for lender methodology;
+- `k3BankNbfcClosure.test.ts` added.
+
+HDFCBANK remains a validation anchor, not a runtime requirement.
+
+Final K3 owner-local validation is now required. K3 is not yet formally closed.
+
+Safety unchanged: no production mutation/migration, no provider call, score persistence OFF, recommendation persistence OFF, no scheduler change, no deployment, PR #101 OPEN/DRAFT/UNMERGED, no automatic trading.
