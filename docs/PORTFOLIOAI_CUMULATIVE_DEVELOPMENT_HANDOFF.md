@@ -1,4 +1,4 @@
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 COMPLETE / PASS / CLOSED across all 10 sector packages; K5 COMPLETE / PASS / CLOSED; K-FINAL IMPLEMENTED / LOCAL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K COMPLETE / PASS; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 COMPLETE / PASS / CLOSED across all 10 sector packages; K5 COMPLETE / PASS / CLOSED; K-FINAL COMPLETE / PASS / CLOSED; sector-specific research layer = PORTFOLIO COVERAGE COMPLETE; PR #101 OPEN / DRAFT / UNMERGED
 
 
 
@@ -1462,3 +1462,70 @@ Permanent safety boundaries remain unchanged:
 **K-FINAL status = IMPLEMENTED / LOCAL VALIDATION PENDING.**
 
 Gate K must not be marked COMPLETE / PASS until the consolidated K-FINAL command passes and the result is recorded.
+
+
+---
+
+## Gate K-FINAL · FINAL CLOSURE — 22 September 2026
+
+Owner-local consolidated K-FINAL validation passed completely.
+
+Final validation outcome:
+- `scripts/k-final-validate-portfolio-coverage.sh` = PASS;
+- K-FINAL portfolio coverage closure test = PASS;
+- K5 cross-sector isolation = PASS;
+- K5 whole-portfolio routing = PASS;
+- K5 future-stock portability = PASS;
+- K5 recommendation portability = PASS;
+- K3 BANK_NBFC N/A semantics = PASS;
+- K2 recommendation safety = PASS;
+- Pharma read-only downstream safety = PASS;
+- universal Research workspace regression = PASS;
+- TypeScript = PASS.
+
+Gate K final acceptance:
+1. every frozen current holding has an explicit research-engine architecture state — PASS;
+2. no stock silently inherits unrelated methodology — PASS;
+3. supported sectors remain portable to future stocks — PASS;
+4. all engines share the universal Research workspace — PASS;
+5. missing mandatory evidence fails closed — PASS;
+6. N/A remains distinct from missing — PASS;
+7. recommendation safety semantics remain preserved — PASS;
+8. cross-sector methodology isolation passes — PASS;
+9. golden control outputs remain stable — PASS;
+10. unsupported sectors safely report METHODOLOGY_NOT_AVAILABLE — PASS;
+11. score persistence remains OFF — PASS;
+12. recommendation persistence remains OFF — PASS;
+13. position sizing remains OFF — PASS;
+14. AI interpretation activation remains OFF under Gate K — PASS;
+15. production mutation/migration remains OFF — PASS;
+16. deployment remains OFF — PASS;
+17. PR merge remains OFF — PASS;
+18. automatic trading remains OFF — PASS.
+
+Closure interpretation:
+- portfolio classification + methodology architecture coverage is now complete/fail-closed;
+- this does not claim all 238 holdings already have full evidence, computable scores or eligible recommendations;
+- supported holdings may remain evidence-dependent;
+- unsupported or unresolved holdings remain explicitly unavailable/review-required.
+
+Permanent safety boundaries remain unchanged:
+- no production mutation/migration;
+- no provider refresh unless separately approved;
+- no score persistence;
+- no recommendation persistence;
+- no position sizing activation;
+- no AI interpretation activation under Gate K;
+- no portfolio mutation;
+- no scheduler changes;
+- no deployment;
+- no PR merge;
+- no automatic trading.
+
+**Gate K-FINAL = COMPLETE / PASS / CLOSED.**
+
+**Gate K = COMPLETE / PASS.**
+
+**Sector-specific research layer = PORTFOLIO COVERAGE COMPLETE.**
+
+PR #101 remains OPEN / DRAFT / UNMERGED pending a separate explicit owner decision.
