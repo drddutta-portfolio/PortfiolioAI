@@ -888,3 +888,57 @@ Decision rule:
 - if no such capability exists, use a deterministic public-web enrichment fallback for only the missing symbols.
 
 K2 remains blocked until Industry Readiness is resolved.
+
+---
+
+## 22. K1 Industry Enrichment fallback — Trendlyne discovery closed / public source active
+
+The one-time Trendlyne MCP capability discovery reached the provider but returned:
+
+```text
+PROVIDER_HTTP_403
+```
+
+Trendlyne's current official MCP documentation lists the same five functional tool families already wrapped by PortfolioAI and does not advertise a company-classification / sector-industry metadata tool.
+
+K1 therefore closes the MCP classification-discovery path. No further provider calls should be spent on this question.
+
+Added:
+
+`scripts/k1-enrich-missing-industries.mjs`
+
+Purpose:
+- operate only on the current `INDUSTRY_MISSING` cohort;
+- resolve each NSE symbol through its deterministic public Screener company URL;
+- parse the four-level public classification breadcrumb exposed under Peer comparison;
+- retain:
+  - Macro-Economic Sector;
+  - Sector;
+  - Industry;
+  - Basic Industry;
+  - source URL;
+  - capture timestamp;
+- never overwrite the already reconciled K1 Sector;
+- enrich only missing Industry / Basic Industry values;
+- checkpoint results incrementally so an interrupted run can resume;
+- preserve failures explicitly for later targeted review.
+
+Source label:
+
+`SCREENER_PUBLIC_CLASSIFICATION`
+
+Output artifacts:
+
+- `artifacts/k1-public-industry-enrichment.json`
+- `artifacts/k1-final-reconciled-research-classification-inventory.json`
+
+The enrichment is read-only with respect to PortfolioAI databases. It does not persist canonical classification, scores, recommendations or any production state.
+
+After capture, rerun Industry Readiness against the enriched inventory:
+
+```bash
+node scripts/k1-industry-readiness-lock.mjs \
+  --inventory artifacts/k1-final-reconciled-research-classification-inventory.json
+```
+
+K2 remains blocked until this rerun is reviewed.
