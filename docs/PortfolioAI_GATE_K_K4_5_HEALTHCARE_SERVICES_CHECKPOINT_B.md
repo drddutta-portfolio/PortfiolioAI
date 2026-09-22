@@ -84,3 +84,31 @@ npm run typecheck
 ```
 
 If all pass, HEALTHCARE_SERVICES_V1 may be promoted to IMPLEMENTED read-only methodology authority. Diagnostics remain separately unresolved; recommendation thresholds and persistence remain OFF.
+
+
+## 10. Final validation and closure
+
+Owner-local Checkpoint B validation passed completely after the stable weighted-score precision correction.
+
+Validated:
+- Healthcare Services Checkpoint A regression;
+- deterministic hospital scoring;
+- lifecycle-stable isolation regression;
+- hospital vs diagnostics boundary;
+- industry-first routing;
+- registry integrity;
+- scoring-profile integration;
+- K2 recommendation-safety regression;
+- TypeScript;
+- TORNTPHARM 75.1575 golden output;
+- AUROPHARMA fail-closed golden output;
+- universal Research workspace continuity.
+
+Registry promotion:
+- HEALTHCARE_SERVICES_V1 lifecycle → `IMPLEMENTED`;
+- HOSPITAL authority → `SUPPORTED`;
+- DIAGNOSTICS remains outside this hospital engine and requires separate methodology;
+- recommendation thresholds remain pending dedicated evidence validation;
+- score/recommendation persistence remain OFF.
+
+**K4 Package 5 · HEALTHCARE_SERVICES_V1 = COMPLETE / PASS / CLOSED.**
