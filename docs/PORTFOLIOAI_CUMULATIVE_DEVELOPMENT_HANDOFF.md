@@ -31903,3 +31903,23 @@ Correction commit: `ef1c5e526f1414f4cda46bc878d8bf813af288b4`.
 
 Next action: pull latest branch and rerun `bash scripts/k1-capture-trendlyne-classification.sh`.
 
+### K1 Trendlyne response-shape parser hardening — 22 September 2026
+
+First live Trendlyne classification capture reached the provider successfully but failed locally after one provider call with:
+
+```text
+TRENDLYNE_CLASSIFICATION_JSON_PARSE_FAILED
+providerCalls = 1
+```
+
+This proved the MCP transport/tool call worked; only the local assumption that the response would be a literal JSON array was wrong.
+
+Updated the K1 Trendlyne parser to:
+- continue accepting embedded JSON arrays/objects;
+- additionally parse markdown table responses with symbol/ISIN/company/sector/industry columns;
+- preserve `rawBatches` in the error artifact on any remaining parse failure.
+
+Implementation commit: `659805c24da89fdd176984d1f8ee1b543ca7991f`.
+
+Next local action: pull latest branch and rerun the one-time Trendlyne capture. If parsing still fails, inspect `.rawBatches[0].raw` from the saved artifact; no further blind provider calls should be made before adapting to that exact response shape.
+
