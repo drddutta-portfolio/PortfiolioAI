@@ -5,8 +5,8 @@ import {
 } from "./healthcareServicesK4aMethodologyContract"
 
 describe("HEALTHCARE_SERVICES_V1 K4 Checkpoint A", () => {
-  it("remains non-activating until owner approval", () => {
-    expect(HEALTHCARE_SERVICES_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVAL_REQUIRED")
+  it("remains non-activating after Checkpoint A approval until Checkpoint B closes", () => {
+    expect(HEALTHCARE_SERVICES_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVED_LOCKED")
     expect(HEALTHCARE_SERVICES_K4A_CONTRACT.runtimeActivationAllowed).toBe(false)
     expect(HEALTHCARE_SERVICES_K4A_CONTRACT.scorePersistenceEnabled).toBe(false)
     expect(HEALTHCARE_SERVICES_K4A_CONTRACT.recommendationPersistenceEnabled).toBe(false)
