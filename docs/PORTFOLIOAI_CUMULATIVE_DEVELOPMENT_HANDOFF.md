@@ -31923,3 +31923,36 @@ Implementation commit: `659805c24da89fdd176984d1f8ee1b543ca7991f`.
 
 Next local action: pull latest branch and rerun the one-time Trendlyne capture. If parsing still fails, inspect `.rawBatches[0].raw` from the saved artifact; no further blind provider calls should be made before adapting to that exact response shape.
 
+---
+
+### K1 source simplification — official BSE fallback active
+
+Owner requested a smart/precise completion path after Trendlyne MCP returned financial parameters instead of classification metadata.
+
+Implemented final active fallback architecture:
+
+```text
+NSE official bulk source
+→ official BSE targeted fallback for NSE-bulk residuals
+→ unresolved only then enters manual/reviewed secondary evidence
+```
+
+Changes:
+- added `scripts/k1-fetch-bse-primary-classification.mjs`;
+- BSE smart-search resolves the BSE security;
+- BSE official quote header supplies the exchange `Industry` classification used as fallback primary sector;
+- BSE rows carry `sourceKind=BSE_OFFICIAL_QUOTE_HEADER`;
+- K1 runner now merges NSE bulk + BSE official rows;
+- comparator V4 has BSE-specific provenance/reason codes;
+- tests cover BSE fallback provenance;
+- validator checks the BSE resolver syntax;
+- experimental Trendlyne classification Edge Function and capture script were removed from the active branch.
+
+Important precision rule:
+- BSE fallback fills primary sector only;
+- detailed industry remains null unless an authoritative field is actually supplied;
+- no inferred industry/subprofile is written from the broad BSE classification.
+
+No production mutation, migration, persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+Next action: pull latest branch and rerun `bash scripts/k1-run-current-cohort-reconciliation.sh`. Review only the residual/failure rows that remain after the BSE official fallback.
