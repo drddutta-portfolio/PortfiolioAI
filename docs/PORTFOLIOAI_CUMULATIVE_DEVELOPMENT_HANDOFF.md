@@ -972,3 +972,29 @@ Incremental controls:
 Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 9 · OIL_GAS_V1 FINAL CLOSURE — 22 September 2026
+
+Owner-local Checkpoint B suite and TypeScript passed completely.
+
+Final state:
+- Checkpoint A = COMPLETE / PASS / FROZEN;
+- Checkpoint B = COMPLETE / PASS / CLOSED;
+- registry lifecycle = IMPLEMENTED;
+- supported subprofiles = UPSTREAM_E_AND_P / MIDSTREAM_CITY_GAS / INTEGRATED_REFINING_PETCHEM;
+- mandatory operating-context readiness gate retained;
+- commodity/refining-cycle normalization mandatory;
+- RELIANCE remains mixed-business control rather than sole authority;
+- symbol-specific methodology routing = NO;
+- missing mandatory evidence = fail closed;
+- golden controls = PASS;
+- universal Research shell = PASS;
+- score persistence = OFF;
+- recommendation persistence = OFF.
+
+**K4 Package 9 · OIL_GAS_V1 = COMPLETE / PASS / CLOSED.**
+
+K4 Package 10 — POWER_RENEWABLES_V1 Checkpoint A is now IN PROGRESS.
