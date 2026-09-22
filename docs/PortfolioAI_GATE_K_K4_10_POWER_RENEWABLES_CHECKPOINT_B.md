@@ -91,3 +91,33 @@ npm run typecheck
 ```
 
 If all pass, POWER_RENEWABLES_V1 may be promoted to IMPLEMENTED read-only methodology authority and K4 may be formally closed.
+
+
+## 11. Final validation and closure
+
+Owner-local Checkpoint B validation passed completely.
+
+Validated:
+- Checkpoint A regression;
+- deterministic scoring for REGULATED_NETWORK / GENERATION_INTEGRATED_UTILITY / RENEWABLE_IPP;
+- mandatory tariff/PPA/offtaker/grid readiness gate;
+- leverage/refinancing evidence;
+- lifecycle-stable isolation regression;
+- canonical routing;
+- registry integrity;
+- scoring-profile integration;
+- K2 recommendation-safety regression;
+- TypeScript;
+- TORNTPHARM 75.1575 golden output;
+- AUROPHARMA fail-closed golden output;
+- universal Research workspace continuity.
+
+Registry promotion:
+- POWER_RENEWABLES_V1 lifecycle → `IMPLEMENTED`;
+- REGULATED_NETWORK / GENERATION_INTEGRATED_UTILITY / RENEWABLE_IPP → `SUPPORTED`;
+- recommendation thresholds remain pending dedicated evidence validation;
+- score/recommendation persistence remain OFF.
+
+**K4 Package 10 · POWER_RENEWABLES_V1 = COMPLETE / PASS / CLOSED.**
+
+With this closure, **K4 = COMPLETE / PASS / CLOSED across all 10 frozen sector packages.**
