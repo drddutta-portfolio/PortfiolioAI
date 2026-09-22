@@ -1,10 +1,26 @@
 # PortfolioAI — Development Status
 
 **Status:** Living implementation and handover record  
-**Current milestone:** R4N production schema is deployed; draft PR #101 is under final contract-correctness review before merge and the first assignment gate
+**Current milestone:** Gate K research-methodology architecture is COMPLETE / PASS with portfolio-coverage/fail-closed routing; PR #101 remains OPEN / DRAFT / UNMERGED; the next substantive program is evidence breadth and market-history coverage, not a new Gate L/M
 **Last reviewed:** 16 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
+
+## Post-Gate-K reconciliation — 23 September 2026
+
+Gate H through Gate K materially advanced the research methodology architecture beyond the older R3/R4 roadmap wording.
+
+Current reconciled state:
+- Gate K is COMPLETE / PASS;
+- the sector-specific research layer is portfolio-coverage complete/fail-closed for the frozen Gate-K scope;
+- one universal Research workspace remains authoritative;
+- PHARMA_V1, BANK_NBFC and ten additional K4 sector-engine families coexist under registry-driven routing/isolation;
+- unsupported methodology remains METHODOLOGY_NOT_AVAILABLE and unresolved/conflicting classification remains REVIEW_REQUIRED;
+- this is methodology/routing coverage, not proof of portfolio-wide company evidence, score-run, recommendation-run or sizing coverage.
+
+The older roadmap item **R4 — Generic sector/profile Research contracts** is therefore superseded/completed by the H→K work, especially Gate K. The remaining canonical work begins with **R3 research-evidence breadth** and **R5 market-history breadth**, followed by readiness-driven R6/R7 execution and later R8–R12 portfolio engines/operations.
+
+No canonical Gate L or Gate M is currently defined or required. See `PortfolioAI_POST_GATE_K_ARCHITECTURE_AND_ROADMAP_AUDIT.md`.
 
 ## A. Project identity
 
@@ -274,7 +290,7 @@ These are explicit limitations, not invitations to fabricate values:
 - historical OHLCV / momentum / volatility / drawdown evidence is not portfolio-wide;
 - fundamental research breadth is far below all eligible equities;
 - research-document breadth is narrow;
-- approved sector-specific research-profile contracts are not yet portfolio-wide;
+- sector/profile methodology architecture is now portfolio-coverage complete/fail-closed under Gate K, but company-specific evidence and score execution are not portfolio-wide;
 - persisted deterministic score-run coverage is not portfolio-wide;
 - recommendation coverage is still a reference path rather than portfolio-wide;
 - formal Position Sizing persistence is not applied to production;
@@ -288,12 +304,18 @@ These are explicit limitations, not invitations to fabricate values:
 
 The owner-authorized migration baseline cutover is active in the repository and verified in the ordinary local database: 78 historical SQL files remain byte-identical in the legacy archive, while the active directory contains 74 unique-version compatibility markers followed by deterministic schema, reference-registry and inert local-operational baseline migrations. A pre-reset inventory proved the ordinary local database contained no auth users or business rows, then `supabase db reset --local` successfully applied all 77 unique versions. Post-reset verification passed 29/29 relevant pgTAP assertions, 82/82 Vitest files and 444/444 tests, typecheck, architecture guard, production build, empty schema diff, error-level database lint, 85/85 public-table RLS, zero scheduler jobs and zero business/evidence/score/recommendation/sizing rows. Historical SQL-inspection tests now read the immutable archive. Known non-blocking debt remains: one database volatility warning, the superseded Stage 7.2A final-state pgTAP expectation, existing repository ESLint errors and the build chunk-size warning. The separately authorized read-only production-history inventory found production/local migration-ledger divergence, so deployment used a reviewed isolated compatibility-marker bundle rather than the ordinary migration directory. The three checksum-pinned forward migrations were applied to production on 16 September 2026 after a successful backup and a refreshed owner-authorized 492-transaction baseline. Post-deployment validation confirmed all three ledger rows, five immutable R4N contracts, zero assignments/exposures, RLS on all three tables, NEWS V6 retired with V7 current, byte-identical cron state, the portfolio-weight ambiguity removed, anonymous execution revoked, and exact preservation of 1 portfolio, 492 transactions, 273 securities, 458 fundamental observations and 4 recommendation runs. Linked database lint passed without errors with the inherited coverage-registry volatility warning. `docs/R4N_Production_Deployment_2026-09-16.md` records the evidence. Assignment, evidence ingestion, provider execution and scoring remain independently gated.
 
-After R4M disposition, the broader repository sequence remains:
+Post-Gate-K, the broader repository sequence is reconciled as:
 
-1. **R3 — research evidence breadth expansion** using the existing provider-control/budget/freshness safeguards; and
-2. **R4 — sector/research-profile contracts and validation**, prioritized by actual portfolio impact.
+1. **R3 — research evidence breadth expansion** using the existing provider-control/budget/freshness safeguards;
+2. **R5 — market-history breadth expansion** through Angel One authority;
+3. **R6 — readiness-driven deterministic scoring rollout** using the Gate-K methodology authorities;
+4. **R7 — recommendation and position-sizing rollout** only after adequate evidence/scoring readiness;
+5. **R8–R10 — Core Health / Portfolio Fit / Risk / Exit / Movement / Combined Action Center**;
+6. **R11–R12 — scheduled maintenance and optional AI synthesis**, only after upstream manual/cohort rollout proves safe.
 
-R3/R4 must use shared application classification only as classification evidence; sector-specific research profiles remain their own versioned methodology contracts and must fail closed when mandatory evidence/source/history requirements are unmet.
+The older **R4 — generic sector/research-profile contracts** objective is superseded/completed by H→K and must not be rebuilt under a new Gate L/M label.
+
+R3/R5/R6 must continue to use shared application classification only as classification evidence; sector-specific research profiles remain their own versioned methodology contracts and must fail closed when mandatory evidence/source/history requirements are unmet.
 
 Any production provider cohort, broad refresh, scheduler activation, or additional database deployment still requires its own explicit production approval.
 
