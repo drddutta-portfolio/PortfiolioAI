@@ -32323,3 +32323,24 @@ npm run typecheck
 K3 has not started. No new sector methodology was created.
 
 Safety remains unchanged: no production mutation/migration, score persistence OFF, recommendation persistence OFF, no scheduler change, no deployment, PR #101 OPEN/DRAFT/UNMERGED, and no automatic trading.
+
+
+---
+
+## K2 runtime reconciliation checkpoint — 22 September 2026
+
+Initial owner-local validation passed:
+- `npm run typecheck` — PASS;
+- `npx vitest run src/features/research/sectorEngineRegistry.test.ts` — PASS, 6/6.
+
+A subsequent runtime audit found one legacy contradiction to the newly frozen universal contract: `sectorRecommendation.ts` reconstructed a null overall score for non-PHARMA profiles. That behavior is now removed globally; authoritative overall score must already exist or recommendation fails closed.
+
+Additional K2 hardening implemented:
+- configured mandatory role-floor data missing → `INSUFFICIENT`;
+- no approved Watch/Avoid boundary → cannot emit `AVOID`;
+- PHARMA strict regression updated so no profile may use the old reconstruction fallback;
+- new `sectorRecommendation.k2Safety.test.ts` covers the universal recommendation safety contract.
+
+K2 is NOT yet formally closed. Final local validation is required against the changed recommendation runtime.
+
+No production mutation/migration, provider call, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
