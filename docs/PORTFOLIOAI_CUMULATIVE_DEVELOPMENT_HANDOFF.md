@@ -855,3 +855,28 @@ Incremental controls:
 Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 8 · CONSUMER_FMCG FINAL CLOSURE — 22 September 2026
+
+Owner-local Checkpoint B suite and TypeScript passed completely.
+
+Final state:
+- Checkpoint A = COMPLETE / PASS / FROZEN;
+- Checkpoint B = COMPLETE / PASS / CLOSED;
+- registry lifecycle = IMPLEMENTED;
+- supported profile = BRANDED_CONSUMER_FMCG;
+- product/category metadata = mandatory readiness gate;
+- alcohol = explicit excise/regulatory risk metadata, not a separate score curve;
+- symbol-specific methodology routing = NO;
+- missing mandatory evidence = fail closed;
+- golden controls = PASS;
+- universal Research shell = PASS;
+- score persistence = OFF;
+- recommendation persistence = OFF.
+
+**K4 Package 8 · CONSUMER_FMCG = COMPLETE / PASS / CLOSED.**
+
+K4 Package 9 — OIL_GAS_V1 Checkpoint A is now IN PROGRESS.
