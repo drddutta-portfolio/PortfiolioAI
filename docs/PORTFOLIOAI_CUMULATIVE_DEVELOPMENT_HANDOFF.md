@@ -140,3 +140,40 @@ Runtime activation remains OFF until Checkpoint B portability/isolation validati
 **AUTO_COMPONENTS Checkpoint A = COMPLETE / PASS / FROZEN.**
 
 Checkpoint B is now IN PROGRESS.
+
+
+---
+
+## K4 Package 3 · AUTO_COMPONENTS · Checkpoint B implementation — 22 September 2026
+
+Checkpoint A is frozen COMPLETE / PASS.
+
+Implemented:
+- `autoComponentsK4bScoringMethodology.ts`;
+- `autoComponentsK4bScoringMethodology.test.ts`;
+- `autoComponentsK4bIsolationRegression.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_3_AUTO_COMPONENTS_CHECKPOINT_B.md`;
+- canonical router extended for AUTO_OEM / AUTO_COMPONENTS coverage including tractors/farm equipment and tyres/rubber products;
+- registry maps both profiles to AUTO_COMPONENTS in validation-pending state.
+
+Deterministic scoring:
+- ten dimensions totaling 100;
+- mandatory evidence/history gates;
+- no missing-input renormalization;
+- distinct OEM vs component growth contracts;
+- EV transition remains durability/risk metadata and never creates a second score;
+- symbol-independent methodology;
+- unknown Industry → METHOD_NOT_AVAILABLE.
+
+Incremental isolation/regression:
+- PHARMA_V1 isolated;
+- BANK_NBFC isolated;
+- completed IT_TECH preserved;
+- completed INDUSTRIALS_CAPITAL_GOODS preserved;
+- TORNTPHARM golden 75.1575 preserved;
+- AUROPHARMA fail-closed golden preserved;
+- universal Research workspace preserved.
+
+Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
