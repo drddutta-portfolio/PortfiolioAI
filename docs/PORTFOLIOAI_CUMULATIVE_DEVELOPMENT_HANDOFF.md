@@ -998,3 +998,39 @@ Final state:
 **K4 Package 9 · OIL_GAS_V1 = COMPLETE / PASS / CLOSED.**
 
 K4 Package 10 — POWER_RENEWABLES_V1 Checkpoint A is now IN PROGRESS.
+
+
+---
+
+## K4 Package 10 · POWER_RENEWABLES_V1 · Checkpoint A implementation — 22 September 2026
+
+OIL_GAS_V1 is closed COMPLETE / PASS.
+
+Added:
+- `powerRenewablesK4aMethodologyContract.ts`;
+- `powerRenewablesK4aMethodologyContract.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_10_POWER_RENEWABLES_CHECKPOINT_A.md`.
+
+Mandatory K1 subprofiles preserved:
+1. REGULATED_NETWORK — POWERGRID;
+2. GENERATION_INTEGRATED_UTILITY — TATAPOWER / NHPC;
+3. RENEWABLE_IPP — ACMESOLAR / KPIGREEN subject to identity review.
+
+Key methodology locks proposed:
+- Industry selects methodology; Sector alone cannot;
+- minimum 5 annual years / 12 operating quarters / 252 trading days;
+- tariff/regulatory context required where material;
+- fuel/resource variability normalized for generation;
+- PPA/offtaker/DISCOM quality required for contracted assets;
+- leverage and refinancing sensitivity are core evidence;
+- capacity growth cannot override cash-flow/execution weakness;
+- transmission/grid-evacuation constraints are explicit risks;
+- no cross-subprofile peer percentiles;
+- unknown Industry → METHOD_NOT_AVAILABLE;
+- recommendation thresholds remain subprofile-owned and unset.
+
+No-stale regression policy remains active.
+
+Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
