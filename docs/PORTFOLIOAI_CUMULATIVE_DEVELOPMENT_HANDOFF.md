@@ -1091,3 +1091,66 @@ Incremental controls:
 Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion and formal K4 closure occur only after owner-local Checkpoint B validation passes.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 10 · POWER_RENEWABLES_V1 FINAL CLOSURE — 22 September 2026
+
+Owner-local final Checkpoint B suite and TypeScript passed completely.
+
+Final state:
+- Checkpoint A = COMPLETE / PASS / FROZEN;
+- Checkpoint B = COMPLETE / PASS / CLOSED;
+- registry lifecycle = IMPLEMENTED;
+- supported subprofiles = REGULATED_NETWORK / GENERATION_INTEGRATED_UTILITY / RENEWABLE_IPP;
+- tariff/PPA/offtaker/grid context = mandatory readiness gate;
+- leverage/refinancing = core evidence;
+- capacity growth cannot bypass cash-flow, execution, counterparty or grid-risk evidence;
+- symbol-specific methodology routing = NO;
+- missing mandatory evidence = fail closed;
+- golden controls = PASS;
+- universal Research shell = PASS;
+- score persistence = OFF;
+- recommendation persistence = OFF.
+
+**K4 Package 10 · POWER_RENEWABLES_V1 = COMPLETE / PASS / CLOSED.**
+
+---
+
+## Gate K4 FINAL CLOSURE — 22 September 2026
+
+All ten K4 packages are now COMPLETE / PASS / CLOSED:
+
+1. IT_TECH
+2. INDUSTRIALS_CAPITAL_GOODS
+3. AUTO_COMPONENTS
+4. CHEMICALS_V1
+5. HEALTHCARE_SERVICES_V1
+6. FIN_SERVICES_NON_LENDER
+7. METALS_COMMODITIES
+8. CONSUMER_FMCG
+9. OIL_GAS_V1
+10. POWER_RENEWABLES_V1
+
+K4 global invariants preserved:
+- Industry is the minimum micro-methodology selector;
+- Sector is macro context only;
+- no ticker-specific runtime methodology;
+- no missing-input renormalization;
+- no cross-subprofile leakage;
+- deterministic read-only scoring;
+- golden Pharma controls preserved;
+- universal Research shell preserved;
+- no score persistence;
+- no recommendation persistence;
+- no provider calls during K4 builds;
+- no production mutation/migration;
+- no scheduler change;
+- no deployment;
+- PR #101 remains OPEN / DRAFT / UNMERGED;
+- no automatic trading.
+
+**Gate K4 = COMPLETE / PASS / CLOSED.**
+
+Next planned stage: **K5 — whole-portfolio coexistence and routing validation**.
