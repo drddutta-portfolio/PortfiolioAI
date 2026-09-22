@@ -5,8 +5,8 @@ import {
 } from "./autoComponentsK4aMethodologyContract"
 
 describe("AUTO_COMPONENTS K4 Checkpoint A", () => {
-  it("remains non-activating until owner approval", () => {
-    expect(AUTO_COMPONENTS_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVAL_REQUIRED")
+  it("remains non-activating after Checkpoint A approval until Checkpoint B closes", () => {
+    expect(AUTO_COMPONENTS_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVED_LOCKED")
     expect(AUTO_COMPONENTS_K4A_CONTRACT.runtimeActivationAllowed).toBe(false)
     expect(AUTO_COMPONENTS_K4A_CONTRACT.scorePersistenceEnabled).toBe(false)
     expect(AUTO_COMPONENTS_K4A_CONTRACT.recommendationPersistenceEnabled).toBe(false)
