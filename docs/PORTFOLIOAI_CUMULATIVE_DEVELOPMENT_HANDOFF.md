@@ -31762,3 +31762,31 @@ Implementation commit: `67eb33441a1643ce97a9f403b26c4f96fb62866d`.
 No production mutation, migration, persistence, scheduler change, deployment, PR merge or trading action occurred.
 
 **Next action:** pull latest branch and rerun the full 238-stock reconciliation with no `K1_COHORT_LIMIT`. Review only the remaining `REVIEW_REQUIRED` / `OFFICIAL_MISSING` cases after the targeted fallback has run.
+
+### K1 targeted NSE fallback hardening — 22 September 2026
+
+The full 238-stock reconciliation produced:
+- AGREE = 131
+- CHANGE_REQUIRED = 69
+- REVIEW_REQUIRED = 0
+- OFFICIAL_MISSING = 38
+- change scopes = SECTOR 68 / IDENTITY 1
+
+The 38 `OFFICIAL_MISSING` cases were traced to source acquisition rather than reconciliation policy. The targeted official NSE quote fallback encountered HTTP 403 on the first three residual symbols (AVTNPL, AWHCL, BLUSPRING) and then stopped by design, leaving the remaining residual cohort unattempted.
+
+NSE's published industry-classification methodology states that all companies listed on NSE are classified and reviewed, so a 403 from the web API must not be interpreted as absence of official classification.
+
+Updated `scripts/k1-fetch-nse-primary-classification.mjs` to:
+- warm the actual quote page for each residual symbol before calling the quote API;
+- preserve and merge session cookies;
+- send browser-equivalent fetch headers;
+- retry per symbol with bounded backoff;
+- continue across the entire residual cohort instead of globally stopping after three authorization failures;
+- preserve fail-closed output for any symbol that still cannot be retrieved.
+
+Implementation commit: `b0cdba988151d173472db6889e09ff92987a7a97`.
+
+No production mutation, migration, persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+Next action: pull latest branch and rerun the full 238-stock reconciliation. If residual `OFFICIAL_MISSING` rows remain after the hardened official fallback, review only those remaining symbols with an alternate official evidence path.
+
