@@ -132,6 +132,17 @@ describe("routeResearchProfileV1", () => {
     })
   })
 
+  it("routes Oil/Gas industries into three K4 subprofiles", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Oil, Gas & Consumable Fuels", applicationIndustry: "Oil Exploration & Production" }).profileCode).toBe("UPSTREAM_E_AND_P")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Oil, Gas & Consumable Fuels", applicationIndustry: "City Gas Distribution" }).profileCode).toBe("MIDSTREAM_CITY_GAS")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Oil, Gas & Consumable Fuels", applicationIndustry: "Refineries" }).profileCode).toBe("INTEGRATED_REFINING_PETCHEM")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Oil, Gas & Consumable Fuels", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "OIL_GAS_INDUSTRY_REQUIRED",
+    })
+  })
+
   it("routes Consumer/FMCG industries into the branded profile", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Fast Moving Consumer Goods", applicationIndustry: "Packaged Foods" }).profileCode).toBe("BRANDED_CONSUMER_FMCG")
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "FMCG", applicationIndustry: "Distilleries & Breweries" }).profileCode).toBe("BRANDED_CONSUMER_FMCG")
