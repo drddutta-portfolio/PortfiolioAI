@@ -21,7 +21,7 @@ export interface FinServicesNonLenderSubprofileContract {
 
 export const FIN_SERVICES_NON_LENDER_K4A_CONTRACT = {
   version: FIN_SERVICES_NON_LENDER_K4A_CONTRACT_VERSION,
-  state: "CHECKPOINT_A_OWNER_APPROVAL_REQUIRED",
+  state: "CHECKPOINT_A_OWNER_APPROVED_LOCKED",
   engineCode: "FIN_SERVICES_NON_LENDER",
   runtimeActivationAllowed: false,
   scorePersistenceEnabled: false,
