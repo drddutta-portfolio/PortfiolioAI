@@ -112,6 +112,17 @@ describe("routeResearchProfileV1", () => {
     })
   })
 
+  it("routes Chemicals industries into three K4 validation subprofiles", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Chemicals", applicationIndustry: "Specialty Chemicals" }).profileCode).toBe("SPECIALTY_CHEMICALS")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Chemicals", applicationIndustry: "Pesticides & Agrochemicals" }).profileCode).toBe("AGRO_FERTILISER")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Chemicals", applicationIndustry: "Commodity Chemicals" }).profileCode).toBe("COMMODITY_PROCESS_CHEMICALS")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Chemicals", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "CHEMICALS_INDUSTRY_REQUIRED",
+    })
+  })
+
   it("uses Financial Services industry evidence rather than pretending all financial companies are banks", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Asset Management Cos." }).profileCode).toBe("CAPITAL_MARKET_FINANCIAL")
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Internet Software & Services" }).profileCode).toBe("DIGITAL_PLATFORM")
