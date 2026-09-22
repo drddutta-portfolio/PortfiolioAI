@@ -1,6 +1,6 @@
 # PortfolioAI — Gate K · K1 Sector Inventory & Priority Lock
 
-**Status:** K1 EXCHANGE-PRIMARY CLASSIFICATION BUILD IMPLEMENTED / OFFICIAL CURRENT-COHORT RECONCILIATION PENDING / K4 SCOPE NOT YET FROZEN  
+**Status:** K1 COMPLETE / PASS — 238-EQUITY RECONCILIATION FREEZE ELIGIBLE / FINAL K4 PACKAGE COUNT & ORDER FROZEN
 **Date:** 22 September 2026  
 **Branch:** r4n-pharma-subprofile-architecture  
 **PR:** #101 — KEEP OPEN / DRAFT / UNMERGED  
@@ -613,3 +613,140 @@ ANGELONE mismatch cause is resolved as the NSE-notified 26-Feb-2026 ISIN change 
 **Next action:** rerun the same 10-stock cohort under reconciliation V2. Full 238-stock reconciliation remains blocked until that bounded policy re-run passes.
 
 **K4 package count/order:** NOT YET FROZEN.
+
+---
+
+## 18. Final reconciled sector inventory — PASS
+
+The deterministic finalizer completed against the freeze-eligible 238-equity reconciliation.
+
+Observed result:
+
+```text
+Rows: 238
+Distinct sectors: 30
+
+Financial Services                  36
+Capital Goods                      31
+Healthcare                         30
+Chemicals                          17
+Consumer Durables                  15
+Information Technology            13
+Metals & Mining                    12
+Fast Moving Consumer Goods         11
+Automobile and Auto Components      9
+Consumer Services                   9
+Construction                        6
+Oil Gas & Consumable Fuels          6
+Power                               6
+Services                            4
+Textiles                            4
+Automobile & Ancillaries            3
+FMCG                                3
+Utilities                           3
+Construction Materials              2
+Diamond & Jewellery                 2
+Hospitality                         2
+Miscellaneous                       2
+Oil & Gas                           2
+Realty                              2
+Telecommunication                   2
+Textiles & Apparel                  2
+Agri                                1
+Diversified                         1
+Plastic Products                    1
+Software & IT Services              1
+```
+
+Reference-source split:
+
+```text
+NSE_INDICES_NIFTY_TOTAL_MARKET_CONSTITUENT  200
+REVIEWED_SECONDARY_CLASSIFICATION           38
+```
+
+This is the final K1 planning inventory for the frozen current cohort.
+
+## 19. Final K4 package scope — FROZEN
+
+The corrected inventory does not justify one engine per exchange sector. The final methodology architecture remains consolidated by economics and routing identity.
+
+### Existing specialised engines — not K4 packages
+
+1. `PHARMA_V1` — existing / complete.
+2. `BANK_NBFC` — existing / K3 portability reconciliation.
+
+### Final K4 package count
+
+**10 packages — FROZEN**
+
+### Final K4 package order
+
+1. `IT_TECH`
+2. `INDUSTRIALS_CAPITAL_GOODS`
+3. `AUTO_COMPONENTS`
+4. `CHEMICALS_V1`
+5. `HEALTHCARE_SERVICES_V1`
+6. `FIN_SERVICES_NON_LENDER`
+7. `METALS_COMMODITIES`
+8. `CONSUMER_FMCG`
+9. `OIL_GAS_V1`
+10. `POWER_RENEWABLES_V1`
+
+Machine-readable freeze artifact:
+
+`docs/k1/PortfolioAI_K1_FINAL_K4_PACKAGE_SCOPE_2026-09-22.json`
+
+### Why Healthcare 30 does not become one Healthcare engine
+
+Exchange-primary `Healthcare` is a user-facing sector, not a methodology identity.
+
+Pharmaceutical companies under Healthcare continue to route downstream into `PHARMA_V1` where industry/subprofile evidence supports that route.
+
+`HEALTHCARE_SERVICES_V1` therefore covers only non-pharma provider/service identities such as hospitals/diagnostics and must fail closed for unsupported healthcare identities.
+
+### Why Financial Services 36 does not become one Financial engine
+
+Lender/NBFC identities continue through the existing `BANK_NBFC` path after K3 reconciliation.
+
+`FIN_SERVICES_NON_LENDER` is limited to non-lender identities such as:
+- capital markets / AMC;
+- insurance;
+- fintech / platform.
+
+### Explicit deferred sectors
+
+The following final primary sectors are **not** promoted into new K4 packages:
+
+- Consumer Durables;
+- Consumer Services;
+- Construction;
+- Services;
+- Textiles;
+- Utilities;
+- Construction Materials;
+- Diamond & Jewellery;
+- Hospitality;
+- Miscellaneous;
+- Realty;
+- Telecommunication;
+- Textiles & Apparel;
+- Agri;
+- Diversified;
+- Plastic Products.
+
+These remain `METHODOLOGY_NOT_AVAILABLE`, `PROFILE_PENDING`, or later reviewed expansion candidates. No nearest-looking fallback is permitted.
+
+### K1 exit state
+
+```text
+238-equity reconciliation          PASS / FREEZE ELIGIBLE
+Final reconciled sector inventory  COMPLETE
+K4 package count                   10 / FROZEN
+K4 package order                   FROZEN
+New methodology implementation     NOT STARTED
+Production mutation                NONE
+PR #101                            OPEN / DRAFT / UNMERGED
+```
+
+**K1 = COMPLETE / PASS.**
