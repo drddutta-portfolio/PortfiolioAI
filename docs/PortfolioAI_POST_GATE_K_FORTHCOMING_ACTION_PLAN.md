@@ -811,3 +811,31 @@ Program D = NOT STARTED
 ```
 
 This document must be reviewed before opening each Program.
+
+
+---
+
+## Program A launch checkpoint — 23 September 2026
+
+Program A working branch:
+- `program-a-evidence-coverage`.
+
+Canonical first checkpoint plan:
+- `docs/PortfolioAI_PROGRAM_A_A1_EVIDENCE_BASELINE_AND_EXECUTION_PLAN.md`.
+
+A1 is a read-only evidence-baseline and execution-contract checkpoint. It must complete before any provider-backed Program A execution.
+
+Codex must verify this plan against the current repository before coding. That verification is intentionally bounded:
+- confirm plan/repo compatibility;
+- identify exact reuse points;
+- identify only hard blockers;
+- otherwise continue directly into implementation;
+- no independent roadmap redesign and no open-ended architecture audit.
+
+Current status:
+```text
+Program A = IN PROGRESS
+A1 plan = FROZEN
+A1 implementation = NOT STARTED
+Provider execution = NOT AUTHORIZED
+```
