@@ -217,3 +217,34 @@ Final state:
 **K4 Package 3 · AUTO_COMPONENTS = COMPLETE / PASS / CLOSED.**
 
 K4 Package 4 — CHEMICALS_V1 Checkpoint A is now IN PROGRESS.
+
+
+---
+
+## K4 Package 4 · CHEMICALS_V1 · Checkpoint A implementation — 22 September 2026
+
+AUTO_COMPONENTS is closed COMPLETE / PASS.
+
+Added:
+- `chemicalsK4aMethodologyContract.ts`;
+- `chemicalsK4aMethodologyContract.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_4_CHEMICALS_CHECKPOINT_A.md`.
+
+Proposed subprofiles:
+1. SPECIALTY_CHEMICALS — PIIND / SRF references; VINATIORGA control;
+2. AGRO_FERTILISER — PIIND / DEEPAKFERT references;
+3. COMMODITY_PROCESS_CHEMICALS — SRF / DEEPAKFERT references.
+
+Key methodology locks proposed:
+- Industry selects methodology; Sector alone cannot;
+- minimum 3 annual years / 8 quarters / 252 trading days;
+- cycle-normalised growth, margin and ROCE interpretation;
+- capacity/utilisation must be reconciled with return on capital;
+- feedstock/global pricing context mandatory where material;
+- no cross-subprofile peer percentiles;
+- unknown Industry → METHOD_NOT_AVAILABLE;
+- numeric recommendation thresholds remain subprofile-owned and unset.
+
+Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
