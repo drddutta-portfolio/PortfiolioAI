@@ -102,7 +102,14 @@ describe("routeResearchProfileV1", () => {
 
   it("distinguishes auto OEMs from auto-component companies", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Automobile and Auto Components", applicationIndustry: "Cars & Utility Vehicles" }).profileCode).toBe("AUTO_OEM")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Automobile and Auto Components", applicationIndustry: "Tractors & Farm Equipment" }).profileCode).toBe("AUTO_OEM")
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Automobile and Auto Components", applicationIndustry: "Auto Parts & Equipment" }).profileCode).toBe("AUTO_COMPONENTS")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Automobile and Auto Components", applicationIndustry: "Tyres & Rubber Products" }).profileCode).toBe("AUTO_COMPONENTS")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Automobile and Auto Components", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "AUTO_INDUSTRY_REQUIRED",
+    })
   })
 
   it("uses Financial Services industry evidence rather than pretending all financial companies are banks", () => {
