@@ -465,3 +465,20 @@ Incremental isolation/regression:
 Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 5 · HEALTHCARE_SERVICES_V1 · Checkpoint B precision correction — 22 September 2026
+
+Owner-local Checkpoint B validation initially reported 1 failed test and 52 passed.
+
+The failure was not a stale lifecycle expectation and not a methodology error. JavaScript floating-point arithmetic produced `73.99999999999999` for a weighted score that is mathematically 74.
+
+Correction:
+- deterministic K4B scorers now apply a stable output rounding step with `Number(value.toFixed(6))` to the final weighted overall score;
+- the same stable precision rule was applied proactively to IT_TECH, INDUSTRIALS_CAPITAL_GOODS, AUTO_COMPONENTS and CHEMICALS_V1 scorers to prevent the same numerical artifact from recurring.
+
+No weights, dimensions, methodology, evidence rules, routing, recommendation logic, persistence, provider behavior, production behavior, scheduler or deployment behavior changed.
+
+HEALTHCARE_SERVICES_V1 Checkpoint B remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
