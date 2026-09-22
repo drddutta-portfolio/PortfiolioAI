@@ -31879,3 +31879,27 @@ Implementation commit: `9b1d60cb9e3f78b3a2b35625b6279d3e848c1d0a`.
 
 No provider call, production mutation, persistence, scheduler change, deployment, PR merge or trading action was performed by this correction.
 
+### K1 Trendlyne function syntax correction — 22 September 2026
+
+Owner-local Edge Function startup log identified an exact TypeScript syntax error in `supabase/functions/k1-local-trendlyne-classification/index.ts` at line 82:
+
+```text
+rows.push({
+  ...
+}))
+```
+
+Corrected to:
+
+```text
+rows.push({
+  ...
+})
+```
+
+This was a local build defect only. Trendlyne MCP had not been called yet.
+
+Correction commit: `ef1c5e526f1414f4cda46bc878d8bf813af288b4`.
+
+Next action: pull latest branch and rerun `bash scripts/k1-capture-trendlyne-classification.sh`.
+
