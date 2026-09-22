@@ -121,3 +121,22 @@ Both failures were stale registry expectations after the legitimate closure of e
 Only regression expectations were updated. No AUTO methodology, routing, scoring, recommendation, production, persistence, provider, scheduler or deployment behavior changed.
 
 AUTO_COMPONENTS Checkpoint A remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
+
+
+---
+
+## K4 Package 3 · AUTO_COMPONENTS · Checkpoint A FINAL — 22 September 2026
+
+Owner-local contract tests and TypeScript passed completely and the owner approved proceeding.
+
+`AUTO_COMPONENTS_K4A_METHODOLOGY_V1` is now frozen with two subprofiles:
+- AUTO_OEM;
+- AUTO_COMPONENTS.
+
+EV transition remains exposure/risk/durability metadata rather than a separate score.
+
+Runtime activation remains OFF until Checkpoint B portability/isolation validation passes.
+
+**AUTO_COMPONENTS Checkpoint A = COMPLETE / PASS / FROZEN.**
+
+Checkpoint B is now IN PROGRESS.
