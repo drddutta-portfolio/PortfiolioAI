@@ -26,6 +26,13 @@ export interface SectorEngineRegistryEntry {
   readonly valuationAuthority: string
   readonly recommendationAuthority: string
   readonly subprofileSupport: "SUPPORTED" | "NOT_REQUIRED" | "TO_BE_DETERMINED"
+  readonly profileAuthorities?: Readonly<Record<string, {
+    readonly methodologyAuthority: string
+    readonly benchmarkAuthority: string
+    readonly valuationAuthority: string
+    readonly recommendationAuthority: string
+    readonly state: "SUPPORTED" | "PENDING_METHODOLOGY"
+  }>>
   readonly fallbackPolicy: SectorEngineFallbackPolicy
   readonly referenceValidationSymbols: readonly string[]
   readonly runtimeSymbolSpecific: false
@@ -93,7 +100,23 @@ export const SECTOR_ENGINE_REGISTRY: readonly SectorEngineRegistryEntry[] = [
     benchmarkAuthority: "BANK_NBFC_EXISTING_REVIEW_REQUIRED",
     valuationAuthority: "BANK_NBFC_EXISTING_REVIEW_REQUIRED",
     recommendationAuthority: "BANK_NBFC_EXISTING_REVIEW_REQUIRED",
-    subprofileSupport: "TO_BE_DETERMINED",
+    subprofileSupport: "SUPPORTED",
+    profileAuthorities: {
+      BANK: {
+        methodologyAuthority: "BANK_NBFC_STAGE_8_BANK_V1",
+        benchmarkAuthority: "NIFTY_BANK",
+        valuationAuthority: "BANK_NBFC_STAGE_8_BANK_VALUATION_V1",
+        recommendationAuthority: "BANK_NBFC_HDFCBANK_PILOT_REVIEW_REQUIRED",
+        state: "SUPPORTED",
+      },
+      NBFC_LENDING: {
+        methodologyAuthority: "NBFC_LENDING_METHODOLOGY_PENDING",
+        benchmarkAuthority: "NBFC_LENDING_BENCHMARK_PENDING",
+        valuationAuthority: "NBFC_LENDING_VALUATION_PENDING",
+        recommendationAuthority: "NBFC_LENDING_RECOMMENDATION_PENDING",
+        state: "PENDING_METHODOLOGY",
+      },
+    },
     fallbackPolicy: "NONE_FAIL_CLOSED",
     referenceValidationSymbols: ["HDFCBANK"],
     runtimeSymbolSpecific: false,
