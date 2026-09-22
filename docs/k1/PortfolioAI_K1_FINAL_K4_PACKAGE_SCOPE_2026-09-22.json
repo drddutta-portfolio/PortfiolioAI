@@ -1,0 +1,133 @@
+{
+  "contract": "PORTFOLIOAI_K1_FINAL_K4_PACKAGE_SCOPE_V1",
+  "frozenAt": "2026-09-22",
+  "basis": "FINAL_RECONCILED_238_EQUITY_SECTOR_INVENTORY",
+  "currentEquityCount": 238,
+  "reconciledPrimarySectorCount": 30,
+  "existingSpecialisedEngines": [
+    {
+      "code": "PHARMA_V1",
+      "status": "EXISTING_COMPLETE",
+      "k4Package": false
+    },
+    {
+      "code": "BANK_NBFC",
+      "status": "EXISTING_K3_PORTABILITY_RECONCILIATION",
+      "k4Package": false
+    }
+  ],
+  "k4PackageCount": 10,
+  "k4Order": [
+    {
+      "order": 1,
+      "code": "IT_TECH",
+      "primarySectors": [
+        "Information Technology",
+        "Software & IT Services"
+      ],
+      "notes": "First K4 package; clean benchmark/evidence contract and best K2 portability proving ground."
+    },
+    {
+      "order": 2,
+      "code": "INDUSTRIALS_CAPITAL_GOODS",
+      "primarySectors": [
+        "Capital Goods"
+      ],
+      "notes": "Large corrected footprint; requires project/EPC, equipment/electronics and defence/aerospace applicability branches."
+    },
+    {
+      "order": 3,
+      "code": "AUTO_COMPONENTS",
+      "primarySectors": [
+        "Automobile and Auto Components",
+        "Automobile & Ancillaries"
+      ],
+      "notes": "OEM vs components methodology split; EV transition remains exposure/risk metadata initially."
+    },
+    {
+      "order": 4,
+      "code": "CHEMICALS_V1",
+      "primarySectors": [
+        "Chemicals"
+      ],
+      "notes": "Specialty vs agro/fertiliser vs commodity/process applicability."
+    },
+    {
+      "order": 5,
+      "code": "HEALTHCARE_SERVICES_V1",
+      "primarySectors": [
+        "Healthcare"
+      ],
+      "notes": "Only non-pharma healthcare service identities enter this package; pharmaceutical identities continue to PHARMA_V1."
+    },
+    {
+      "order": 6,
+      "code": "FIN_SERVICES_NON_LENDER",
+      "primarySectors": [
+        "Financial Services"
+      ],
+      "notes": "Only non-lender identities after BANK_NBFC/K3 separation; capital markets/AMC, insurance and fintech/platform applicability."
+    },
+    {
+      "order": 7,
+      "code": "METALS_COMMODITIES",
+      "primarySectors": [
+        "Metals & Mining"
+      ],
+      "notes": "Commodity/cycle metadata mandatory; fixed subprofile split not frozen at K1."
+    },
+    {
+      "order": 8,
+      "code": "CONSUMER_FMCG",
+      "primarySectors": [
+        "Fast Moving Consumer Goods",
+        "FMCG"
+      ],
+      "notes": "Branded/staples scope only; broad consumer durables/services remain deferred."
+    },
+    {
+      "order": 9,
+      "code": "OIL_GAS_V1",
+      "primarySectors": [
+        "Oil Gas & Consumable Fuels",
+        "Oil & Gas"
+      ],
+      "notes": "Upstream, midstream/city gas and integrated/refining applicability required."
+    },
+    {
+      "order": 10,
+      "code": "POWER_RENEWABLES_V1",
+      "primarySectors": [
+        "Power"
+      ],
+      "notes": "Regulated network, generation/integrated and renewable IPP applicability required."
+    }
+  ],
+  "explicitDeferredPrimarySectors": [
+    "Consumer Durables",
+    "Consumer Services",
+    "Construction",
+    "Services",
+    "Textiles",
+    "Utilities",
+    "Construction Materials",
+    "Diamond & Jewellery",
+    "Hospitality",
+    "Miscellaneous",
+    "Realty",
+    "Telecommunication",
+    "Textiles & Apparel",
+    "Agri",
+    "Diversified",
+    "Plastic Products"
+  ],
+  "policy": {
+    "noNearestSectorFallback": true,
+    "exchangePrimaryDoesNotChooseMethodology": true,
+    "industryCanRouteToExistingSpecialisedEngine": true,
+    "futureNewSectorDoesNotAutoExpandK4": true,
+    "newPackageRequiresSeparateReviewedExpansion": true
+  },
+  "k2Blocked": false,
+  "note": "K1 scope freeze only. No K2 implementation or new methodology has started."
+}
