@@ -1593,3 +1593,60 @@ Living Development Status was reconciled to reflect:
 - next substantive work = R3 + R5 breadth, not Gate L/M.
 
 **Post-K roadmap status: AUDITED / RECONCILED / OWNER REVIEW PENDING.**
+
+
+---
+
+## Post-Gate-K canonical forthcoming action plan — 23 September 2026
+
+Canonical plan created:
+- `docs/PortfolioAI_POST_GATE_K_FORTHCOMING_ACTION_PLAN.md`.
+
+This file is now the required roadmap reference before any new post-K Program begins.
+
+Mandatory review rule:
+- before Program A, B, C or D, review the forthcoming action plan;
+- review this cumulative handoff;
+- inspect the current branch/PR/runtime state;
+- confirm prerequisites and stale assumptions;
+- create a bounded Program-specific plan;
+- obtain separate owner approval for any provider, production, persistence, scheduler, deployment or merge action.
+
+Frozen post-K Program sequence:
+- **Program A — Evidence Coverage = R3 + R5**;
+- **Program B — Deterministic Portfolio Intelligence = R6 + recommendation calibration + R7**;
+- **Program C — Portfolio Decision Engines = R8 + R9 + R10**;
+- **Program D — Operations & Optional AI = R11 + R12**.
+
+Gate L / Gate M:
+- not currently required;
+- not canonically defined;
+- must not be created merely to rename the remaining R-roadmap;
+- a new letter Gate is justified only by a genuinely new architecture problem.
+
+Immediate prerequisite before Program A implementation:
+- freeze Gate-K state;
+- explicitly decide PR #101 disposition / branch strategy;
+- start substantive Program A work on a clean post-K branch after that strategy is frozen.
+
+Current statuses:
+- Gate K = COMPLETE / PASS;
+- Program A = NOT STARTED;
+- Program B = NOT STARTED;
+- Program C = NOT STARTED;
+- Program D = NOT STARTED;
+- PR #101 = OPEN / DRAFT / UNMERGED.
+
+Permanent safety boundaries remain unchanged:
+- no production mutation/migration without explicit approval;
+- no provider execution without explicit approval;
+- no broad Trendlyne cohort without explicit approval;
+- no Angel One history backfill without explicit approval;
+- no score/recommendation/sizing persistence without explicit approval;
+- no scheduler activation;
+- no portfolio mutation;
+- no deployment;
+- no PR merge;
+- no automatic trading.
+
+**Post-K forthcoming action plan = CREATED / CANONICAL / REQUIRED BEFORE EACH PROGRAM.**
