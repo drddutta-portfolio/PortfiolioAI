@@ -11,7 +11,7 @@ COHORT_TXT="$ARTIFACT_DIR/k1-current-nse-equities.txt"
 CANONICAL_SOURCE="${K1_CANONICAL_SOURCE:-FROZEN_CURRENT_PORTFOLIO}"
 BULK_JSON="$ARTIFACT_DIR/k1-nse-bulk-primary-classification.json"
 TARGETED_TXT="$ARTIFACT_DIR/k1-nse-residual-symbols.txt"
-TRENDLYNE_JSON="$ARTIFACT_DIR/k1-trendlyne-classification.json"
+BSE_JSON="$ARTIFACT_DIR/k1-bse-primary-classification.json"
 OFFICIAL_JSON="$ARTIFACT_DIR/k1-nse-primary-classification.json"
 RECON_JSON="$ARTIFACT_DIR/k1-nse-classification-reconciliation.json"
 COHORT_LIMIT="${K1_COHORT_LIMIT:-0}"
@@ -96,74 +96,70 @@ node scripts/k1-fetch-nse-bulk-classification.mjs \
 RESIDUAL_COUNT="$(jq -r '.residualCount // 0' "$BULK_JSON")"
 [[ "$RESIDUAL_COUNT" =~ ^[0-9]+$ ]] || die "Bulk residual count is invalid."
 
-printf '\n[K1] 4/6 apply reusable Trendlyne MCP fallback for bulk residuals\n'
+printf '\n[K1] 4/6 targeted official BSE fallback for NSE-bulk residuals\n'
 if [[ "$RESIDUAL_COUNT" -gt 0 ]]; then
   jq -r '.residual[].symbol' "$BULK_JSON" > "$TARGETED_TXT"
   printf 'Residual equities after NSE bulk source: %s\n' "$RESIDUAL_COUNT"
-  [[ -f "$TRENDLYNE_JSON" ]] || die "Missing $TRENDLYNE_JSON. Run: bash scripts/k1-capture-trendlyne-classification.sh"
+
+  set +e
+  node scripts/k1-fetch-bse-primary-classification.mjs \
+    --input "$TARGETED_TXT" \
+    --output "$BSE_JSON"
+  BSE_STATUS=$?
+  set -e
+
+  if [[ "$BSE_STATUS" -ne 0 && "$BSE_STATUS" -ne 2 ]]; then
+    die "BSE classification fallback failed with status $BSE_STATUS."
+  fi
 else
   : > "$TARGETED_TXT"
-  cat > "$TRENDLYNE_JSON" <<'JSON'
+  cat > "$BSE_JSON" <<'JSON'
 {
-  "mode": "K1_LOCAL_TRENDLYNE_CLASSIFICATION_CAPTURE_V1",
-  "source": "TRENDLYNE_MCP",
-  "symbolCount": 0,
-  "providerCalls": 0,
+  "contract": "PORTFOLIOAI_K1_BSE_PRIMARY_CLASSIFICATION_FALLBACK_V1",
+  "source": "BSE_OFFICIAL_QUOTE_HEADER",
+  "requestedCount": 0,
   "resolvedCount": 0,
-  "unresolvedCount": 0,
-  "unresolved": [],
-  "rows": []
+  "failureCount": 0,
+  "rows": [],
+  "failures": []
 }
 JSON
 fi
 
 jq -s '
   .[0] as $bulk
-  | .[1] as $trend
+  | .[1] as $bse
   | (($bulk.residual // []) | map(.symbol | ascii_upcase)) as $bulkResidualSymbols
-  | (($trend.rows // [])
+  | (($bse.rows // [])
       | map(select(.sector != null and (.sector | tostring | length) > 0))
       | map(select((.symbol | ascii_upcase) as $s | ($bulkResidualSymbols | index($s)) != null))
-      | map({
-          exchange: "NSE",
-          symbol: .symbol,
-          isin: (.isin // null),
-          companyName: (.companyName // .company_name // null),
-          sector: .sector,
-          industry: (.industry // null),
-          basicIndustry: null,
-          macroEconomicSector: null,
-          sourceKind: "TRENDLYNE_MCP_REVIEWED_FALLBACK",
-          classificationAuthority: "REVIEWED_FALLBACK",
-          sourceUrl: null,
-          retrievedAt: ($trend.capturedAt // null)
-        })
-    ) as $trendRows
-  | ($trendRows | map(.symbol | ascii_upcase)) as $trendSymbols
+    ) as $bseRows
+  | ($bseRows | map(.symbol | ascii_upcase)) as $bseSymbols
   | {
-      contract: "PORTFOLIOAI_K1_CLASSIFICATION_REFERENCE_MERGED_V2",
+      contract: "PORTFOLIOAI_K1_CLASSIFICATION_REFERENCE_MERGED_V3",
       generatedAt: (now | todateiso8601),
-      source: "NSE_INDICES_BULK_PLUS_TRENDLYNE_MCP_REVIEWED_FALLBACK",
+      source: "NSE_INDICES_BULK_PLUS_BSE_OFFICIAL_FALLBACK",
       canonicalRowCount: $bulk.canonicalRowCount,
-      bulkResolvedCount: ($bulk.rows | length),
-      trendlyneArtifactMode: ($trend.mode // null),
-      trendlyneCapturedAt: ($trend.capturedAt // null),
-      trendlyneResolvedCount: ($trendRows | length),
+      nseBulkResolvedCount: ($bulk.rows | length),
+      bseRequestedCount: ($bse.requestedCount // 0),
+      bseResolvedCount: ($bseRows | length),
+      bseFailureCount: ($bse.failureCount // 0),
       rows: (
-        (($bulk.rows // []) + $trendRows)
+        (($bulk.rows // []) + $bseRows)
         | unique_by(.symbol)
         | sort_by(.symbol)
       ),
       residual: [
         ($bulk.residual // [])[]
-        | select((.symbol | ascii_upcase) as $s | ($trendSymbols | index($s) | not))
-      ]
+        | select((.symbol | ascii_upcase) as $s | ($bseSymbols | index($s) | not))
+      ],
+      failures: ($bse.failures // [])
     }
   | .resolvedCount = (.rows | length)
   | .residualCount = (.residual | length)
-' "$BULK_JSON" "$TRENDLYNE_JSON" > "$OFFICIAL_JSON"
+' "$BULK_JSON" "$BSE_JSON" > "$OFFICIAL_JSON"
 
-printf 'Merged classification reference: %s/%s resolved; %s residual\n' \
+printf 'Merged official exchange classification: %s/%s resolved; %s residual\n' \
   "$(jq -r '.resolvedCount' "$OFFICIAL_JSON")" \
   "$CANONICAL_COUNT" \
   "$(jq -r '.residualCount' "$OFFICIAL_JSON")"
@@ -209,8 +205,8 @@ FREEZE_ELIGIBLE="$(jq -r '.freezeEligible' "$RECON_JSON")"
 printf 'Freeze eligible: %s\n' "$FREEZE_ELIGIBLE"
 printf 'Canonical snapshot: %s\n' "$CANONICAL_JSON"
 printf 'Official bulk snapshot: %s\n' "$BULK_JSON"
-printf 'Trendlyne fallback artifact: %s\n' "$TRENDLYNE_JSON"
-printf 'Merged classification reference: %s\n' "$OFFICIAL_JSON"
+printf 'BSE official fallback artifact: %s\n' "$BSE_JSON"
+printf 'Merged official exchange reference: %s\n' "$OFFICIAL_JSON"
 printf 'Reconciliation: %s\n' "$RECON_JSON"
 
 if [[ "$COMPARE_STATUS" -eq 2 ]]; then
