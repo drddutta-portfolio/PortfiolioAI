@@ -1,4 +1,4 @@
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 COMPLETE / PASS / CLOSED across all 10 sector packages; K5 IMPLEMENTED / LOCAL VALIDATION PENDING; K-FINAL NOT STARTED; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 COMPLETE / PASS / CLOSED across all 10 sector packages; K5 COMPLETE / PASS / CLOSED; K-FINAL NOT STARTED; PR #101 OPEN / DRAFT / UNMERGED
 
 
 
@@ -1338,3 +1338,55 @@ Required rerun:
 git pull
 bash scripts/k5-validate-cross-sector.sh
 ```
+
+
+---
+
+## Gate K5 · FINAL CLOSURE — 22 September 2026
+
+Owner-local consolidated K5 validation rerun passed completely after the non-canonical AUTO synthetic future-stock fixture was corrected.
+
+Final K5 validation outcome:
+- consolidated runner `scripts/k5-validate-cross-sector.sh` = PASS;
+- cross-sector isolation = PASS;
+- whole-portfolio routing = PASS;
+- future-stock portability = PASS;
+- recommendation portability study = PASS;
+- registry regression = PASS;
+- research profile routing = PASS;
+- scoring profile resolution = PASS;
+- K2 recommendation safety = PASS;
+- universal Research workspace contract = PASS;
+- TypeScript = PASS.
+
+K5 exit conditions are satisfied:
+- all 12 registered engine families coexist without methodology / benchmark / valuation / recommendation authority leakage;
+- complete registry-driven ordered pairwise isolation passes;
+- all ten K4 engines remain in durable IMPLEMENTED state;
+- the frozen 238-equity K1 portfolio routing snapshot resolves only to explicit supported / unavailable / review / not-applicable architecture states;
+- supported future stocks route by canonical classification without ticker-specific methodology;
+- unsupported sectors fail safely to `METHODOLOGY_NOT_AVAILABLE`;
+- missing/conflicting classification fails safely to `REVIEW_REQUIRED`;
+- no nearest-looking fallback exists;
+- the universal Research workspace contract remains intact;
+- TORNTPHARM/AUROPHARMA golden controls remain stable;
+- universal recommendation semantics are portable;
+- universal numeric recommendation thresholds are NOT established as portable and must not be assumed;
+- any future sector/profile-specific numeric recommendation authority still requires evidence and owner approval.
+
+Permanent safety boundaries remain unchanged:
+- no production mutation/migration;
+- no score persistence;
+- no recommendation persistence;
+- no provider refresh unless explicitly approved;
+- no position sizing activation;
+- no scheduler changes;
+- no deployment;
+- no PR merge;
+- no automatic trading.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+**Gate K5 = COMPLETE / PASS / CLOSED.**
+
+Next and final hard-capped Gate K stage: **K-FINAL — Portfolio Sector-Coverage Closure**.
