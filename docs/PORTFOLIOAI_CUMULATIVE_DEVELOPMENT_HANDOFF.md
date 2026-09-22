@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 PACKAGE 1 IT_TECH CHECKPOINT A COMPLETE / PASS; CHECKPOINT B IN PROGRESS; K4 SCOPE 10 PACKAGES / FROZEN; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 PACKAGE 1 IT_TECH COMPLETE / PASS / CLOSED; K4 PACKAGE 2 INDUSTRIALS_CAPITAL_GOODS CHECKPOINT A IN PROGRESS; K4 SCOPE 10 PACKAGES / FROZEN; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -32553,3 +32553,31 @@ Incremental regression:
 Normal runtime activation remains blocked because IT_TECH still has lifecycle `K4_FROZEN_PENDING`. It will be promoted only after owner-local Checkpoint B validation passes.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 1 · IT_TECH FINAL CLOSURE — 22 September 2026
+
+Owner-local Checkpoint B suite and TypeScript passed completely.
+
+Final IT_TECH state:
+- Checkpoint A = COMPLETE / PASS / FROZEN;
+- Checkpoint B = COMPLETE / PASS / CLOSED;
+- registry lifecycle = IMPLEMENTED;
+- three industry-driven subprofiles = IT_SERVICES / IT_SOFTWARE_PRODUCTS_PLATFORMS / IT_DIGITAL_INFRA_HARDWARE;
+- symbol-specific methodology routing = NO;
+- missing mandatory evidence = fail closed;
+- cross-subprofile peer leakage = prohibited;
+- PHARMA and BANK_NBFC isolation = PASS;
+- TORNTPHARM golden score 75.1575 preserved;
+- AUROPHARMA fail-closed golden preserved;
+- universal Research shell preserved;
+- score persistence OFF;
+- recommendation persistence OFF.
+
+A post-promotion audit caught and corrected an accidental temporary change to NBFC_LENDING; its frozen K3 state remains PENDING_METHODOLOGY / fail-closed.
+
+**K4 Package 1 · IT_TECH = COMPLETE / PASS / CLOSED.**
+
+K4 Package 2 — INDUSTRIALS_CAPITAL_GOODS Checkpoint A is now IN PROGRESS.
