@@ -21,7 +21,7 @@ export interface OilGasK4aSubprofileContract {
 
 export const OIL_GAS_K4A_CONTRACT = {
   version: OIL_GAS_K4A_CONTRACT_VERSION,
-  state: "CHECKPOINT_A_OWNER_APPROVAL_REQUIRED",
+  state: "CHECKPOINT_A_OWNER_APPROVED_LOCKED",
   engineCode: "OIL_GAS_V1",
   runtimeActivationAllowed: false,
   scorePersistenceEnabled: false,
