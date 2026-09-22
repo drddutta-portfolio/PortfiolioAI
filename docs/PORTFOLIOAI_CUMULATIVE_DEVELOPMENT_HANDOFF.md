@@ -602,3 +602,18 @@ Incremental controls:
 Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 6 · FIN_SERVICES_NON_LENDER · Checkpoint B routing regression correction — 22 September 2026
+
+Owner-local Checkpoint B validation initially reported 1 failed test and 53 passed.
+
+The failure was a legacy profile-code expectation in `researchProfileRouting.test.ts`:
+- old expected `CAPITAL_MARKET_FINANCIAL` while the frozen Package 6 profile is `CAPITAL_MARKETS_AMC`;
+- old expected `DIGITAL_PLATFORM` while the frozen Package 6 profile is `FINTECH_PLATFORM`.
+
+Only the regression expectations were updated to the frozen K4 profile identities. No routing logic, scoring methodology, lender separation, recommendation behavior, persistence, provider, production, scheduler or deployment behavior changed.
+
+FIN_SERVICES_NON_LENDER Checkpoint B remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
