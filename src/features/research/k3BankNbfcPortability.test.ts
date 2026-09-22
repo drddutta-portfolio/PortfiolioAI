@@ -11,10 +11,13 @@ describe("Gate K3 BANK_NBFC portability boundary", () => {
     })
   })
 
-  it("routes NBFC classification to the BANK_NBFC engine family", () => {
+  it("keeps NBFC_LENDING in the BANK_NBFC family but blocks scoring until its methodology authority exists", () => {
+    expect(sectorEngineForProfileCode("NBFC_LENDING")?.engineCode).toBe("BANK_NBFC")
+    expect(sectorEngineForProfileCode("NBFC_LENDING")?.profileAuthorities?.NBFC_LENDING.state).toBe("PENDING_METHODOLOGY")
     expect(resolveScoringProfile("Financial Services", "NBFC", null)).toMatchObject({
-      profileCode: "BANK_NBFC",
-      ruleProfile: "BANK_NBFC",
+      profileCode: "GENERAL",
+      ruleProfile: "GENERAL",
+      profileSource: "GENERAL_FALLBACK",
     })
   })
 
