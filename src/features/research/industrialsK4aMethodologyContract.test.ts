@@ -5,8 +5,8 @@ import {
 } from "./industrialsK4aMethodologyContract"
 
 describe("INDUSTRIALS_CAPITAL_GOODS K4 Checkpoint A", () => {
-  it("remains non-activating until owner approval", () => {
-    expect(INDUSTRIALS_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVAL_REQUIRED")
+  it("remains non-activating after Checkpoint A approval until Checkpoint B closes", () => {
+    expect(INDUSTRIALS_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVED_LOCKED")
     expect(INDUSTRIALS_K4A_CONTRACT.runtimeActivationAllowed).toBe(false)
     expect(INDUSTRIALS_K4A_CONTRACT.scorePersistenceEnabled).toBe(false)
     expect(INDUSTRIALS_K4A_CONTRACT.recommendationPersistenceEnabled).toBe(false)
