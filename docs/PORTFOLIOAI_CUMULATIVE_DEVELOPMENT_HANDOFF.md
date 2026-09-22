@@ -1650,3 +1650,100 @@ Permanent safety boundaries remain unchanged:
 - no automatic trading.
 
 **Post-K forthcoming action plan = CREATED / CANONICAL / REQUIRED BEFORE EACH PROGRAM.**
+
+
+---
+
+## Post-K Reconciliation Checkpoint PKR-1 / PKR-1B — 23 September 2026
+
+Purpose:
+- reconcile the live Research scoring path and regression suite with the already-closed Gate-K fail-closed architecture before Program A begins;
+- this checkpoint did not start Program A and did not change any financial scoring methodology.
+
+Implementation commits:
+- PKR-1: `412e3e36a6f435675d4293c4678c54d0b4acea8e`
+- PKR-1B: `f22b4efc8607102c51abadd46c62f362fd837084`
+
+### PKR-1 corrections
+
+- TypeScript-safe optional access added to BANK/NBFC profile-authority regression tests;
+- stale pre-closure K4 lifecycle tests updated to durable `IMPLEMENTED` expectations;
+- unsupported/pending methodology no longer falls through to a scoreable `GENERAL` profile;
+- missing/conflicting classification remains `REVIEW_REQUIRED`;
+- unsupported/pending methodology becomes `METHODOLOGY_NOT_AVAILABLE`;
+- fail-closed states short-circuit before scoring-model/evidence queries;
+- Research UI shows explicit blocked state instead of a generic score preview;
+- cached score snapshots cannot override a newer fail-closed state;
+- `BANK_NBFC` family lifecycle remains intentionally `RECONCILIATION_REQUIRED` because BANK is supported while NBFC_LENDING remains `PENDING_METHODOLOGY`;
+- no BANK benchmark/valuation/recommendation leakage into NBFC.
+
+### PKR-1B final live-scoring reconciliation
+
+A second issue was identified during ChatGPT diff audit: completed K4 engines still retained `ruleProfile = GENERAL`, which could have allowed legacy GENERAL numeric previews even though their Gate-K methodologies are sector-specific.
+
+PKR-1B introduced an explicit separation:
+
+```text
+Methodology state
+AVAILABLE
+METHODOLOGY_NOT_AVAILABLE
+REVIEW_REQUIRED
+
+Score-execution state
+AVAILABLE
+PENDING_ADAPTER
+BLOCKED
+```
+
+Final behavior:
+- PHARMA_V1 and supported BANK scoring: methodology AVAILABLE + score execution AVAILABLE;
+- completed K4 engines: methodology AVAILABLE + score execution PENDING_ADAPTER;
+- completed K4 engines retain their sector engine identity but select no GENERAL rule profile;
+- routed and reviewed K4 assignments cannot bypass the guard;
+- unsupported methodology: METHODOLOGY_NOT_AVAILABLE + BLOCKED;
+- missing/conflicting classification: REVIEW_REQUIRED + BLOCKED;
+- NBFC_LENDING remains fail-closed;
+- an explicit canonical GENERAL assignment may remain available where genuinely reviewed/authorized;
+- Program B / R6 remains the owner of actual K4 live scorer-adapter activation.
+
+This means Program A may expand evidence without causing a legacy GENERAL numeric score to appear increasingly authoritative for a K4 company.
+
+### Validation
+
+Owner/Codex local validation reported:
+- PKR-1 focused K3/K4/scoring/UI suite: 201 tests PASS;
+- PKR-1 K-FINAL consolidated suite: 39 tests PASS;
+- PKR-1B focused scoring/UI/K3/K4 suite: 95 tests PASS;
+- PKR-1B K-FINAL including K5 isolation: 39 tests PASS;
+- TypeScript = PASS;
+- architecture guard = PASS;
+- production build = PASS;
+- TORNTPHARM golden control = PASS;
+- AUROPHARMA fail-closed control = PASS;
+- cross-sector isolation = PASS;
+- universal Research workspace = PASS.
+
+Known non-blocking repository debt:
+- full-repository lint still contains 77 pre-existing errors outside PKR-1/PKR-1B;
+- existing Vite chunk-size warning remains.
+
+Safety unchanged:
+- no provider calls;
+- no production mutation/migration;
+- no score/recommendation/sizing persistence activation;
+- no scheduler activation;
+- no AI activation;
+- no portfolio mutation;
+- no deployment;
+- no PR merge;
+- no automatic trading.
+
+**PKR-1 / PKR-1B = COMPLETE / PASS / CLOSED.**
+
+Program A remains NOT STARTED.
+
+Next governance step:
+- freeze PR #101 at this post-K reconciled state;
+- choose a clean post-K Program A working branch from commit `f22b4efc8607102c51abadd46c62f362fd837084`;
+- do not merge PR #101 without a separate explicit owner decision;
+- Program A A1 must be planned/frozen before Codex implementation.
