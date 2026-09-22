@@ -31831,3 +31831,32 @@ Next owner-local sequence:
 5. review resolved/unresolved counts;
 6. run `bash scripts/k1-run-current-cohort-reconciliation.sh`;
 7. if residual count becomes zero, freeze the captured reviewed classification manifest and calculate final reconciled sector inventory / K4 package count.
+
+### K1 Trendlyne residual capture — READY FOR LOCAL EXECUTION
+
+Implementation is complete for the owner-approved Trendlyne MCP fallback.
+
+Current stop point:
+
+```text
+NSE bulk-resolved equities        = retained as Tier-1 exchange evidence
+NSE bulk residual cohort          = 38 from last full run
+Trendlyne batch size               = 20
+Estimated Trendlyne MCP calls      = 2
+Trendlyne capture artifact         = artifacts/k1-trendlyne-classification.json
+Production writes                  = 0
+Capture executed                   = NO
+```
+
+Latest parser correction commit: `832e63c87fbe318528d083d44b22d6a3145dd49c`.
+
+The next action must run locally because it requires the owner's authenticated local Supabase session and local `TRENDLYNE_MCP_URL`:
+
+`bash scripts/k1-capture-trendlyne-classification.sh`
+
+After successful capture, rerun:
+
+`bash scripts/k1-run-current-cohort-reconciliation.sh`
+
+If the merged reference resolves all 238 equities with zero `REVIEW_REQUIRED` / `OFFICIAL_MISSING`, freeze the reviewed non-sensitive Trendlyne residual manifest into the repository and then compute the final reconciled sector inventory / K4 package count and order.
+
