@@ -61,16 +61,15 @@ function parseJsonArray(text: string): unknown[] {
   throw new Error("TRENDLYNE_CLASSIFICATION_JSON_PARSE_FAILED")
 }
 
-function coerceRows(text: string, requested: readonly string[]): ClassificationRow[] {
+function rowsFromObjects(rawRows: unknown[], requested: readonly string[]): ClassificationRow[] {
   const requestedSet = new Set(requested)
-  const rawRows = parseJsonArray(text)
   const rows: ClassificationRow[] = []
   const seen = new Set<string>()
 
   for (const raw of rawRows) {
     if (!raw || typeof raw !== "object") continue
     const item = raw as Record<string, unknown>
-    const symbol = normalizedSymbol(item.symbol ?? item.nse_symbol ?? item.ticker)
+    const symbol = normalizedSymbol(item.symbol ?? item.nse_symbol ?? item.ticker ?? item.stock ?? item.stock_code)
     if (!symbol || !requestedSet.has(symbol) || seen.has(symbol)) continue
     seen.add(symbol)
     rows.push({
@@ -83,6 +82,57 @@ function coerceRows(text: string, requested: readonly string[]): ClassificationR
   }
 
   return rows
+}
+
+function parseMarkdownTable(text: string, requested: readonly string[]): ClassificationRow[] {
+  const lines = text.split(/\r?\n/u).map((line) => line.trim()).filter(Boolean)
+  const tableLines = lines.filter((line) => line.startsWith("|") && line.endsWith("|"))
+  if (tableLines.length < 3) return []
+
+  const cells = (line: string) => line.slice(1, -1).split("|").map((cell) => cell.trim())
+  const headers = cells(tableLines[0]!).map((header) =>
+    header.toLowerCase().replace(/[^a-z0-9]+/gu, "_").replace(/^_+|_+$/gu, "")
+  )
+  const separator = tableLines[1]!
+  if (!/^\|?[\s:|\-]+\|?$/u.test(separator)) return []
+
+  const indexOf = (...names: string[]) => names.map((name) => headers.indexOf(name)).find((index) => index >= 0) ?? -1
+  const symbolIndex = indexOf("symbol", "nse_symbol", "ticker", "stock", "stock_code")
+  const isinIndex = indexOf("isin", "isin_code")
+  const companyIndex = indexOf("company_name", "company", "name")
+  const sectorIndex = indexOf("sector", "sector_name")
+  const industryIndex = indexOf("industry", "industry_name")
+  if (symbolIndex < 0 || (sectorIndex < 0 && industryIndex < 0)) return []
+
+  const requestedSet = new Set(requested)
+  const rows: ClassificationRow[] = []
+  for (const line of tableLines.slice(2)) {
+    const row = cells(line)
+    const symbol = normalizedSymbol(row[symbolIndex])
+    if (!symbol || !requestedSet.has(symbol)) continue
+    rows.push({
+      symbol,
+      isin: isinIndex >= 0 ? clean(row[isinIndex]) : null,
+      companyName: companyIndex >= 0 ? clean(row[companyIndex]) : null,
+      sector: sectorIndex >= 0 ? clean(row[sectorIndex]) : null,
+      industry: industryIndex >= 0 ? clean(row[industryIndex]) : null,
+    })
+  }
+  return rows
+}
+
+function coerceRows(text: string, requested: readonly string[]): ClassificationRow[] {
+  try {
+    const objectRows = rowsFromObjects(parseJsonArray(text), requested)
+    if (objectRows.length) return objectRows
+  } catch {
+    // Continue to table parsing.
+  }
+
+  const tableRows = parseMarkdownTable(text, requested)
+  if (tableRows.length) return tableRows
+
+  throw new Error("TRENDLYNE_CLASSIFICATION_RESPONSE_UNPARSEABLE")
 }
 
 function chunks<T>(values: readonly T[], size: number) {
@@ -176,6 +226,7 @@ Deno.serve(async (request) => {
       code: error instanceof Error ? error.message : "K1_TRENDLYNE_CLASSIFICATION_FAILED",
       providerCalls,
       partialRows: rows,
+      rawBatches,
       productionWrites: 0,
     })
   }
