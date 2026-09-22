@@ -177,3 +177,18 @@ Incremental isolation/regression:
 Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 3 · AUTO_COMPONENTS · Checkpoint B validation correction — 22 September 2026
+
+Owner-local Checkpoint B validation initially reported 1 failed test and 50 passed.
+
+The single failure was a stale Checkpoint A expectation:
+- `autoComponentsK4aMethodologyContract.test.ts` still expected `CHECKPOINT_A_OWNER_APPROVAL_REQUIRED`;
+- the contract had already been owner-approved and frozen to `CHECKPOINT_A_OWNER_APPROVED_LOCKED`.
+
+Only the regression expectation was updated. No AUTO routing, scoring methodology, recommendation behavior, persistence, provider, production, scheduler or deployment behavior changed.
+
+AUTO_COMPONENTS Checkpoint B remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
