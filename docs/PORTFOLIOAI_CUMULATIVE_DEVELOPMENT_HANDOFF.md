@@ -32520,3 +32520,36 @@ Runtime activation remains OFF until Checkpoint B portability/isolation validati
 **IT_TECH Checkpoint A = COMPLETE / PASS / FROZEN.**
 
 Checkpoint B is now IN PROGRESS.
+
+
+---
+
+## K4 Package 1 · IT_TECH · Checkpoint B implementation — 22 September 2026
+
+Checkpoint A is frozen COMPLETE / PASS.
+
+Implemented Checkpoint B:
+- `itTechK4bScoringMethodology.ts`;
+- `itTechK4bScoringMethodology.test.ts`;
+- `itTechK4bIsolationRegression.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_1_IT_TECH_CHECKPOINT_B.md`;
+- canonical router extended for IT_SERVICES / IT_SOFTWARE_PRODUCTS_PLATFORMS / IT_DIGITAL_INFRA_HARDWARE;
+- registry now maps all three profiles to IT_TECH in validation-pending state.
+
+Deterministic scoring:
+- ten dimensions totaling 100;
+- no missing-input renormalization;
+- mandatory history gates enforced;
+- subprofile-specific cash-flow contracts;
+- unknown Industry → METHOD_NOT_AVAILABLE;
+- reference fixtures test mechanics only and are not represented as real company evidence.
+
+Incremental regression:
+- TORNTPHARM golden score = 75.1575 preserved;
+- AUROPHARMA remains SCORE_NOT_COMPUTABLE / recommendation not computable;
+- PHARMA_V1 and BANK_NBFC isolation preserved;
+- universal Research workspace shell preserved.
+
+Normal runtime activation remains blocked because IT_TECH still has lifecycle `K4_FROZEN_PENDING`. It will be promoted only after owner-local Checkpoint B validation passes.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
