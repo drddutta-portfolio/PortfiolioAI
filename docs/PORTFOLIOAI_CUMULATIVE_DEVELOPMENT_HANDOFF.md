@@ -1202,3 +1202,53 @@ Safety unchanged:
 - automatic trading = NO.
 
 **K5 status = IMPLEMENTED / LOCAL VALIDATION PENDING.**
+
+
+---
+
+## Gate K5 · Consolidated validation checkpoint — 22 September 2026
+
+Current K5 candidate implementation was audited against the canonical Gate K plan before any additional methodology work.
+
+Audit result:
+- K5 is correctly implemented as a confirmation gate, not a methodology-building gate;
+- 12 registered engine families imply 132 ordered pairwise isolation checks;
+- methodology / benchmark / valuation / recommendation authority lookups are registry-owned and cross-engine lookup fails closed;
+- every frozen K1 portfolio row is required to resolve to SUPPORTED_ENGINE / METHODOLOGY_NOT_AVAILABLE / REVIEW_REQUIRED / NOT_APPLICABLE;
+- supported future-stock routing is classification-driven rather than ticker-driven;
+- NBFC_LENDING and DIAGNOSTICS remain intentionally fail-closed pending dedicated authority;
+- universal Research shell continuity is explicitly asserted;
+- recommendation universal semantics are retained while numeric-threshold portability remains NOT_ESTABLISHED;
+- pre-declared portability falsification tests are encoded before any future universal-threshold claim;
+- no universal numeric recommendation threshold was introduced.
+
+Consolidation improvement:
+- added `scripts/k5-validate-cross-sector.sh`;
+- this is now the single owner-local K5 closure command;
+- it runs the full K5 isolation, routing, recommendation-portability, registry, profile-routing, scoring-resolution, K2 recommendation-safety, Research-workspace regression set, then TypeScript;
+- no stale pre-approval / pre-promotion lifecycle assertion was added.
+
+CI observation:
+- initial K5 GitHub Architecture Guard run ended before any job step was created/executed, so it does not demonstrate a K5 test failure;
+- separate Vercel status failed on a build-rate-limit condition;
+- no runtime methodology or safety change was made in response.
+
+Safety remains unchanged:
+- provider calls = 0;
+- production mutation/migration = NO;
+- score persistence = OFF;
+- recommendation persistence = OFF;
+- position sizing = OFF;
+- scheduler changes = NO;
+- deployment = NO;
+- PR merge = NO;
+- automatic trading = NO.
+
+**K5 status remains IMPLEMENTED / LOCAL VALIDATION PENDING.**
+
+Required owner-local closure command:
+
+```bash
+git pull
+bash scripts/k5-validate-cross-sector.sh
+```
