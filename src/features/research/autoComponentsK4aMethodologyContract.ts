@@ -20,7 +20,7 @@ export interface AutoK4aSubprofileContract {
 
 export const AUTO_COMPONENTS_K4A_CONTRACT = {
   version: AUTO_COMPONENTS_K4A_CONTRACT_VERSION,
-  state: "CHECKPOINT_A_OWNER_APPROVAL_REQUIRED",
+  state: "CHECKPOINT_A_OWNER_APPROVED_LOCKED",
   engineCode: "AUTO_COMPONENTS",
   runtimeActivationAllowed: false,
   scorePersistenceEnabled: false,
