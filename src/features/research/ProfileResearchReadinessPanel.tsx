@@ -22,11 +22,12 @@ function ScoringReadinessPanel({ profileCode, snapshot }: { readonly profileCode
   return <ResearchReadinessPanel title={`${ui.profileDisplayName} Research Readiness`} detail="A compact view of profile readiness requirements. BANK_NBFC requirements are satisfied by validated, score-ready dimensions." ready={ready} total={applicable.length} groups={groups} detailsLabel={`View all ${ui.profileDisplayName} readiness requirements`} details={details} itemLabel="readiness requirements" />
 }
 
-export function ProfileResearchReadinessPanel({ profileCode, research, snapshot }: {
+export function ProfileResearchReadinessPanel({ securityId, profileCode, research, snapshot }: {
+  readonly securityId: string
   readonly profileCode: string
   readonly research: SecurityResearch
   readonly snapshot: SecurityScoringSnapshot | null
 }) {
-  if (profileCode === "PHARMA_V1") return <PharmaResearchReadinessPanel research={research} />
+  if (profileCode === "PHARMA_V1") return <PharmaResearchReadinessPanel securityId={securityId} research={research} />
   return <ScoringReadinessPanel profileCode={profileCode} snapshot={snapshot} />
 }

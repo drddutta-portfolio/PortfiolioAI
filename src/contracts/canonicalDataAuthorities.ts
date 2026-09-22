@@ -12,6 +12,7 @@ export type CanonicalFactKey =
   | "SECTOR"
   | "INDUSTRY"
   | "MARKET_CAP_CATEGORY"
+  | "RESEARCH_SUBPROFILE_ASSIGNMENT"
   | "PORTFOLIO_ROLE"
   | "THEMES"
   | "FUNDAMENTAL_EVIDENCE"
@@ -140,22 +141,22 @@ export const CANONICAL_DATA_AUTHORITIES = {
     label: "Sector",
     layer: "NORMALIZED",
     canonicalAuthority: "PortfolioAI reviewed security enrichment",
-    canonicalSourceObject: "current_security_enrichment_v1.sector",
-    sharedAccessPath: "loadSecurityEnrichment() / usePortfolioEnrichment() -> shared classification projection",
+    canonicalSourceObject: "current_security_enrichment_v1.sector selected from reviewed security_attribute_decisions",
+    sharedAccessPath: "official NSE/BSE evidence -> reviewed classification decision -> loadSecurityEnrichment() / usePortfolioEnrichment() -> shared classification projection",
     missingDataBehavior: "PRESERVE_NULL",
     pageLocalDerivationAllowed: false,
-    notes: "Research profiles may interpret sectors but may not rewrite the displayed application classification.",
+    notes: "Official NSE/BSE primary sector evidence is Tier-1 for operating-company equities. Research profiles/subprofiles may interpret the canonical sector but may not rewrite it; unresolved exchange evidence fails closed.",
   }),
   INDUSTRY: authority({
     fact: "INDUSTRY",
     label: "Industry",
     layer: "NORMALIZED",
     canonicalAuthority: "PortfolioAI reviewed security enrichment",
-    canonicalSourceObject: "current_security_enrichment_v1.industry",
-    sharedAccessPath: "loadSecurityEnrichment() / usePortfolioEnrichment() -> shared classification projection",
+    canonicalSourceObject: "current_security_enrichment_v1.industry selected from reviewed security_attribute_decisions",
+    sharedAccessPath: "official NSE/BSE evidence -> reviewed classification decision -> loadSecurityEnrichment() / usePortfolioEnrichment() -> shared classification projection",
     missingDataBehavior: "PRESERVE_NULL",
     pageLocalDerivationAllowed: false,
-    notes: "Industry incompleteness remains explicit rather than guessed.",
+    notes: "Industry detail follows reviewed official exchange evidence. Missing or conflicting deeper classification remains explicit and blocks any methodology that requires that detail.",
   }),
   MARKET_CAP_CATEGORY: authority({
     fact: "MARKET_CAP_CATEGORY",
@@ -167,6 +168,17 @@ export const CANONICAL_DATA_AUTHORITIES = {
     missingDataBehavior: "PRESERVE_NULL",
     pageLocalDerivationAllowed: false,
     notes: "Large/Mid/Small-cap buckets must not be independently recalculated by pages.",
+  }),
+  RESEARCH_SUBPROFILE_ASSIGNMENT: authority({
+    fact: "RESEARCH_SUBPROFILE_ASSIGNMENT",
+    label: "Research subprofile assignment",
+    layer: "NORMALIZED",
+    canonicalAuthority: "PortfolioAI versioned research-subprofile assignment authority",
+    canonicalSourceObject: "research_subprofile_assignments after approved migration application; typed reviewed assignment contract beforehand; fixture candidates are noncanonical",
+    sharedAccessPath: "resolvePharmaSubprofileAssignment() -> effective research-contract service",
+    missingDataBehavior: "PRESERVE_STATE",
+    pageLocalDerivationAllowed: false,
+    notes: "Sector/industry remain owned by current_security_enrichment_v1. Missing, provisional, disputed or conflicting required subprofiles permit parent evidence display but block readiness, scoring and recommendation.",
   }),
   PORTFOLIO_ROLE: authority({
     fact: "PORTFOLIO_ROLE",

@@ -6,6 +6,18 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
+    // Keep runner-specific tests out of the application Vitest discovery pass.
+    // - scripts/*.test.mjs uses Node's built-in node:test runner and is invoked explicitly.
+    // - the three local-only Supabase function tests use Deno/jsr imports and must not
+    //   be bundled by Vite's Node resolver.
+    exclude: [
+      "node_modules/**",
+      "dist/**",
+      "scripts/**/*.test.mjs",
+      "supabase/functions/g10-2-local-global-generics-evidence/index.test.ts",
+      "supabase/functions/g10-2-local-trendlyne-gap-fill/index.test.ts",
+      "supabase/functions/refresh-pharma-benchmark/index.test.ts",
+    ],
     // Fork fan-out exhausts this project's desktop execution environment before
     // workers can initialize. Serial threads preserve isolation and test coverage.
     fileParallelism: false,

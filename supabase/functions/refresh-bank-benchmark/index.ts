@@ -23,6 +23,7 @@ function json(status: number, body: Readonly<Record<string, unknown>>) {
   return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } })
 }
 function text(value: unknown) { return typeof value === "string" && value.trim() ? value.trim() : null }
+function key(value: unknown) { return text(value)?.toUpperCase().replace(/[^A-Z0-9]+/gu, "_").replace(/^_+|_+$/gu, "") ?? "" }
 function kolkataDateTime(date: Date) { const local = new Date(date.getTime() + 5.5 * 60 * 60_000); return `${local.toISOString().slice(0, 10)} ${local.toISOString().slice(11, 16)}` }
 function dayKey(value: string) { return value.slice(0, 10) }
 
@@ -90,11 +91,14 @@ Deno.serve(async (request) => {
     const holding = await admin.from("current_holdings").select("security_id,current_quantity").eq("portfolio_id", body.portfolioId).eq("security_id", body.securityId).maybeSingle()
     if (holding.error || !holding.data || /^[-+]?0(?:\.0+)?$/u.test(String(holding.data.current_quantity))) return json(403, { error: "Benchmark refresh is limited to open holdings." })
     const security = await admin.from("securities").select("id,symbol,name,asset_class").eq("id", body.securityId).single()
-    if (security.error || !security.data || security.data.asset_class !== "EQUITY" || security.data.symbol !== "HDFCBANK") return json(409, { error: "This benchmark pilot is restricted to HDFCBANK." })
+    if (security.error || !security.data || security.data.asset_class !== "EQUITY") return json(409, { error: "Bank benchmark refresh requires an equity security." })
+    const classification = await admin.from("current_security_enrichment_v1").select("sector,industry").eq("security_id", body.securityId).maybeSingle()
+    if (classification.error || !classification.data) return json(409, { error: "Reviewed sector/industry classification is required before bank benchmark refresh." })
+    if (key(classification.data.sector) !== "BANKING" || key(classification.data.industry) !== "BANKS") return json(409, { error: "NIFTY Bank benchmark refresh is available only to the BANK methodology (Banking + Banks). NBFC_LENDING requires its own approved benchmark authority." })
     const stockHistory = await admin.from("market_price_history").select("period_start,open,high,low,close,volume,retrieved_at").eq("security_id", body.securityId).eq("provider_code", MARKET_DATA_PROVIDER).eq("interval", "ONE_DAY").order("period_start", { ascending: true })
     if (stockHistory.error) throw stockHistory.error
     const stockRows = (stockHistory.data ?? []) as PriceRow[]
-    if (stockRows.length < 120) return json(409, { error: "Refresh HDFCBANK market history first; at least 120 daily observations are required." })
+    if (stockRows.length < 120) return json(409, { error: "Refresh the bank stock market history first; at least 120 daily observations are required." })
     const latestBenchmark = await admin.from("market_benchmark_price_history").select("period_start").eq("benchmark_code", BENCHMARK_CODE).eq("provider_code", MARKET_DATA_PROVIDER).eq("interval", "ONE_DAY").order("period_start", { ascending: false }).limit(1).maybeSingle()
     if (latestBenchmark.error) throw latestBenchmark.error
 
@@ -103,7 +107,7 @@ Deno.serve(async (request) => {
 
     const holder = crypto.randomUUID()
     await acquireLease(admin, body.portfolioId, holder)
-    const run = await admin.from("market_data_refresh_runs").insert({ portfolio_id: body.portfolioId, provider_code: MARKET_DATA_PROVIDER, requested_by: auth.data.user.id, status: "RUNNING", requested_security_count: 1, metadata: { operation: "REFRESH_BANK_BENCHMARK", security_id: body.securityId, symbol: "HDFCBANK", benchmark: BENCHMARK_CODE, history_days: HISTORY_DAYS } }).select("id").single()
+    const run = await admin.from("market_data_refresh_runs").insert({ portfolio_id: body.portfolioId, provider_code: MARKET_DATA_PROVIDER, requested_by: auth.data.user.id, status: "RUNNING", requested_security_count: 1, metadata: { operation: "REFRESH_BANK_BENCHMARK", security_id: body.securityId, symbol: security.data.symbol, benchmark: BENCHMARK_CODE, history_days: HISTORY_DAYS } }).select("id").single()
     if (run.error) throw run.error
     try {
       const masterResponse = await fetch("https://margincalculator.angelone.in/OpenAPI_File/files/OpenAPIScripMaster.json")
@@ -126,7 +130,7 @@ Deno.serve(async (request) => {
       const metric = await admin.from("market_metric_observations").upsert({ security_id: body.securityId, provider_code: MARKET_DATA_PROVIDER, metric_code: "RELATIVE_STRENGTH_12M", numeric_value: derived.relativeStrength, unit: "PERCENTAGE_POINTS", as_of_date: derived.end, lookback_start: derived.start, lookback_end: derived.end, retrieved_at: retrievedAt, fresh_until: new Date(Date.parse(retrievedAt) + 48 * 60 * 60_000).toISOString(), evidence_status: "AVAILABLE", derivation: { method: "STOCK_12M_RETURN_MINUS_BENCHMARK_12M_RETURN", benchmark_code: BENCHMARK_CODE, common_start: derived.start, common_end: derived.end, stock_return_percent: derived.stockReturn, benchmark_return_percent: derived.benchmarkReturn, stock_start_close: derived.stockStart, stock_end_close: derived.stockEnd, benchmark_start_close: derived.benchmarkStart, benchmark_end_close: derived.benchmarkEnd, source_provider: MARKET_DATA_PROVIDER, benchmark_candles: candles.length, stock_observations: stockRows.length } }, { onConflict: "security_id,provider_code,metric_code,as_of_date" })
       if (metric.error) throw metric.error
 
-      await admin.from("market_data_refresh_runs").update({ status: "SUCCEEDED", completed_at: new Date().toISOString(), fetched_security_count: 1, metadata: { operation: "REFRESH_BANK_BENCHMARK", security_id: body.securityId, symbol: "HDFCBANK", benchmark: BENCHMARK_CODE, benchmark_candles: candles.length, relative_strength_12m: derived.relativeStrength, stock_return_12m: derived.stockReturn, benchmark_return_12m: derived.benchmarkReturn } }).eq("id", run.data.id)
+      await admin.from("market_data_refresh_runs").update({ status: "SUCCEEDED", completed_at: new Date().toISOString(), fetched_security_count: 1, metadata: { operation: "REFRESH_BANK_BENCHMARK", security_id: body.securityId, symbol: security.data.symbol, benchmark: BENCHMARK_CODE, benchmark_candles: candles.length, relative_strength_12m: derived.relativeStrength, stock_return_12m: derived.stockReturn, benchmark_return_12m: derived.benchmarkReturn } }).eq("id", run.data.id)
       return json(200, { mode: "BANK_BENCHMARK_REFRESH", runId: run.data.id, providerCalls: 1, benchmark: BENCHMARK_NAME, benchmarkCandlesStored: candles.length, relativeStrength12M: derived.relativeStrength, stockReturn12M: derived.stockReturn, benchmarkReturn12M: derived.benchmarkReturn, commonStart: derived.start, commonEnd: derived.end, note: "Relative strength is deterministic stock return minus NIFTY Bank return. No official score run or portfolio mutation was performed." })
     } catch (error) {
       const operational = safeError(error)

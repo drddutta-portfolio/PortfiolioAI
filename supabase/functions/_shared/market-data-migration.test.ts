@@ -2,8 +2,8 @@
 import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 
-const sql = readFileSync(new URL("../../migrations/20260907120000_create_market_data_foundation.sql", import.meta.url), "utf8")
-const leaseFixSql = readFileSync(new URL("../../migrations/20260907123000_fix_market_data_lease_retry_after.sql", import.meta.url), "utf8")
+const sql = readFileSync(new URL("../../migrations_legacy/20260915_pre_r4n_baseline/20260907120000_create_market_data_foundation.sql", import.meta.url), "utf8")
+const leaseFixSql = readFileSync(new URL("../../migrations_legacy/20260915_pre_r4n_baseline/20260907123000_fix_market_data_lease_retry_after.sql", import.meta.url), "utf8")
 
 describe("Stage 4 migration security contract", () => {
   it("rejects a mapping id paired with the wrong security/provider", () => {

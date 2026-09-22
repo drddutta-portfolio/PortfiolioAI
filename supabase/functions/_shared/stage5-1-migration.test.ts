@@ -2,7 +2,7 @@
 import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 
-const sql = readFileSync(new URL("../../migrations/20260907190000_complete_stage5_1_transaction_management.sql", import.meta.url), "utf8")
+const sql = readFileSync(new URL("../../migrations_legacy/20260915_pre_r4n_baseline/20260907190000_complete_stage5_1_transaction_management.sql", import.meta.url), "utf8")
 
 describe("Stage 5.1 trusted transaction-management migration", () => {
   it("keeps security-master and ledger writes behind narrow RPCs", () => {

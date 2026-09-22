@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -26,6 +28,44 @@ jobs:
         run: npm run check:architecture
       - name: Verify canonical authority contracts
         run: npx vitest run src/contracts/canonicalDataAuthorities.test.ts src/features/research/sectorResearchMapping.test.ts src/features/research/researchProfileRouting.test.ts src/features/research/portfolioCoverageProjection.test.ts src/features/research/pharmaResearchProfile.test.ts src/features/research/pharmaSourceReadiness.test.ts src/features/research/pharmaHistoricalSourceContracts.test.ts src/features/research/pharmaProviderDiscoveryPlan.test.ts src/features/research/pharmaReadinessViewModel.test.ts
+      - name: Verify Gate H deterministic score and closure invariants
+        run: npx vitest run src/features/research/torntpharmGateH4IndependentVerification.test.ts src/features/research/torntpharmGateH3ReadOnlyScore.test.ts src/features/research/pharmaG7ReadOnlyScoringAdapter.test.ts src/features/research/pharmaG7OverlayNumericModifierProposal.test.ts src/features/research/pharmaG7GovernanceHighRiskConstraint.test.ts src/features/research/pharmaGateGFinal4EndToEndDryRun.test.ts src/features/research/torntpharmGateH2BusinessDurabilityReview.test.ts src/features/research/pharmaDomesticValuationMaTransitionContract.test.ts src/features/research/torntpharmGateH2RegulatoryRuntimeResolution.test.ts
+      - name: Verify Gate I I1 recommendation authority
+        run: npx vitest run src/features/research/pharmaRecommendationAuthority.test.ts src/features/research/sectorRecommendation.pharmaV1Strict.test.ts src/features/research/pharmaSubprofileAssignment.test.ts src/features/research/torntpharmGateH3ReadOnlyScore.test.ts src/features/research/auropharmaG91ActivationReadiness.test.ts
+      - name: Lint Gate I I1 implementation
+        run: npx eslint src/features/research/pharmaRecommendationAuthority.ts src/features/research/pharmaRecommendationAuthority.test.ts src/features/research/sectorRecommendation.ts src/features/research/sectorRecommendation.pharmaV1Strict.test.ts
+      - name: Verify Gate I I2 recommendation methodology candidate
+        run: npx vitest run src/features/research/pharmaRecommendationPolicyCandidate.test.ts src/features/research/pharmaRecommendationAuthority.test.ts src/features/research/sectorRecommendation.pharmaV1Strict.test.ts src/features/research/torntpharmGateH3ReadOnlyScore.test.ts src/features/research/auropharmaG91ActivationReadiness.test.ts
+      - name: Lint Gate I I2 implementation
+        run: npx eslint src/features/research/pharmaRecommendationPolicyCandidate.ts src/features/research/pharmaRecommendationPolicyCandidate.test.ts src/features/research/pharmaRecommendationAuthority.ts
+      - name: Verify Gate I I3 first recommendation
+        run: npx vitest run src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts src/features/research/PharmaRecommendationPanel.test.tsx src/features/research/PositionDecisionControls.test.tsx src/features/research/useResearchRecommendationAddon.test.ts src/features/research/pharmaRecommendationPolicyCandidate.test.ts src/features/research/pharmaRecommendationAuthority.test.ts src/features/research/sectorRecommendation.pharmaV1Strict.test.ts src/features/research/torntpharmGateH3ReadOnlyScore.test.ts src/features/research/auropharmaG91ActivationReadiness.test.ts
+      - name: Lint Gate I I3 implementation
+        run: npx eslint src/features/research/pharmaGateI3ReadOnlyRecommendation.ts src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts src/features/research/PharmaRecommendationPanel.tsx src/features/research/PharmaRecommendationPanel.test.tsx src/features/research/pharmaGateI3RecommendationAddon.ts src/features/research/researchRecommendationAddon.ts src/features/research/useResearchRecommendationAddon.ts src/features/research/useResearchRecommendationAddon.test.ts src/features/research/PositionDecisionControls.tsx src/features/research/PositionDecisionControls.test.tsx src/pages/ResearchPage.tsx
+      - name: Verify Gate I I4 independent recommendation closure
+        run: npx vitest run src/features/research/pharmaGateI4IndependentVerification.test.ts src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts src/features/research/pharmaRecommendationPolicyCandidate.test.ts src/features/research/pharmaRecommendationAuthority.test.ts src/features/research/sectorRecommendation.pharmaV1Strict.test.ts src/features/research/PositionDecisionControls.test.tsx src/features/research/useResearchRecommendationAddon.test.ts src/features/research/torntpharmGateH4IndependentVerification.test.ts src/features/research/torntpharmGateH3ReadOnlyScore.test.ts
+      - name: Lint Gate I I4 implementation
+        run: npx eslint src/features/research/pharmaGateI4IndependentVerification.ts src/features/research/pharmaGateI4IndependentVerification.test.ts src/features/research/pharmaGateI3ReadOnlyRecommendation.ts src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts
+      - name: Verify Gate J G10.1 API classification candidate
+        run: npx vitest run src/features/research/alivusG101ClassificationEvidence.test.ts src/features/research/pharmaGateJReferenceClassification.test.ts src/features/research/PharmaGateJReferenceClassificationPanel.test.tsx src/features/research/pharmaAdaptiveClassificationContract.test.ts src/features/research/pharmaSubprofileCandidateRegistry.test.ts src/features/research/pharmaGateI4IndependentVerification.test.ts
+      - name: Lint Gate J G10.1 classification candidate
+        run: npx eslint src/features/research/alivusG101ClassificationEvidence.ts src/features/research/alivusG101ClassificationEvidence.test.ts src/features/research/pharmaGateJReferenceClassification.ts src/features/research/pharmaGateJReferenceClassification.test.ts src/features/research/PharmaGateJReferenceClassificationPanel.tsx src/features/research/PharmaGateJReferenceClassificationPanel.test.tsx src/pages/ResearchPage.tsx
+      - name: Verify Gate J G10.1 API methodology and read-only recommendation
+        run: npx vitest run src/features/research/pharmaApiG101NumericMethodology.test.ts src/features/research/alivusG101ReadOnlyScore.test.ts src/features/research/alivusG101RecommendationPreview.test.ts src/features/research/PharmaGateJReferenceClassificationPanel.test.tsx src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts src/features/research/pharmaRecommendationPolicyCandidate.test.ts src/features/research/pharmaRecommendationAuthority.test.ts
+      - name: Lint Gate J G10.1 API methodology
+        run: npx eslint src/features/research/pharmaApiG101NumericMethodology.ts src/features/research/pharmaApiG101NumericMethodology.test.ts src/features/research/alivusG101ReadOnlyScore.ts src/features/research/alivusG101ReadOnlyScore.test.ts src/features/research/alivusG101RecommendationPreview.ts src/features/research/alivusG101RecommendationPreview.test.ts src/features/research/pharmaRecommendationAuthority.ts src/features/research/pharmaGateI3ReadOnlyRecommendation.ts src/features/research/PharmaGateJReferenceClassificationPanel.tsx
+      - name: Verify Gate J G10.2 AUROPHARMA classification re-confirmation
+        run: npx vitest run src/features/research/auropharmaG102ClassificationReconfirmation.test.ts src/features/research/auropharmaG8ClassificationEvidence.test.ts src/features/research/pharmaGateJReferenceClassification.test.ts src/features/research/PharmaGateJReferenceClassificationPanel.test.tsx src/features/research/auropharmaG91ActivationReadiness.test.ts
+      - name: Lint Gate J G10.2 classification re-confirmation
+        run: npx eslint src/features/research/auropharmaG102ClassificationReconfirmation.ts src/features/research/auropharmaG102ClassificationReconfirmation.test.ts src/features/research/pharmaGateJReferenceClassification.ts src/features/research/pharmaGateJReferenceClassification.test.ts src/features/research/PharmaGateJReferenceClassificationPanel.tsx
+      - name: Verify Gate K K1 exchange-primary classification
+        run: npx vitest run src/features/portfolio/exchangePrimaryClassification.test.ts src/features/research/portfolioCoverageProjection.test.ts src/features/research/sectorResearchMapping.test.ts
+      - name: Verify Gate K K1 reconciliation tooling
+        run: node --test scripts/k1-compare-nse-classification.test.mjs && node --check scripts/k1-fetch-nse-primary-classification.mjs && node --check scripts/k1-compare-nse-classification.mjs
+      - name: Lint Gate K K1 implementation
+        run: npx eslint src/features/portfolio/exchangePrimaryClassification.ts src/features/portfolio/exchangePrimaryClassification.test.ts src/features/research/portfolioCoverageProjection.ts src/features/research/portfolioCoverageProjection.test.ts src/contracts/canonicalDataAuthorities.ts
+      - name: Lint Gate H H3 implementation
+        run: npx eslint src/features/research/torntpharmGateH3ReadOnlyScore.ts src/features/research/torntpharmGateH3ReadOnlyScore.test.ts src/features/research/pharmaG7ReadOnlyScoringAdapter.ts src/features/research/pharmaG7ReadOnlyScoringAdapter.test.ts src/features/research/pharmaSectorWorkspaceCompanyContext.ts src/features/research/PharmaResearchWorkspacePanel.tsx
       - name: Typecheck
         run: npm run typecheck
       - name: Lint architecture boundary
@@ -35,3 +75,5 @@ jobs:
         run: npm run lint
       - name: Production build
         run: npm run build
+      - name: Git diff whitespace check
+        run: git diff --check HEAD^ HEAD

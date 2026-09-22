@@ -1,0 +1,38 @@
+export const RESEARCH_WORKSPACE_CONTRACT_VERSION = "R4M_V1" as const
+
+export const RESEARCH_WORKSPACE_SECTION_ORDER = [
+  "SECURITY_HEADER",
+  "ABOUT_COMPANY",
+  "PORTFOLIO_PRICE_SUMMARY",
+  "DECISION_WORKSPACE",
+  "PORTFOLIOAI_SUGGESTION",
+  "AI_INTERPRETATION",
+  "KEY_INSIGHTS",
+  "RESEARCH_REFRESH",
+  "RESEARCH_NAVIGATION",
+  "RESEARCH_AT_A_GLANCE",
+  "INVESTMENT_DECISION_COCKPIT",
+  "DIMENSION_SCORE_SUMMARY",
+  "INVESTMENT_HEATMAP",
+  "EXTERNAL_RATINGS",
+  "RESEARCH_READINESS",
+  "DETAILED_RESEARCH",
+] as const
+
+export type ResearchWorkspaceSectionCode = typeof RESEARCH_WORKSPACE_SECTION_ORDER[number]
+export type ResearchScoreDisplayState = "SCORED" | "EVIDENCE_NOT_SCORE_READY" | "NO_VALIDATED_EVIDENCE" | "NOT_APPLICABLE"
+export type ResearchSuggestionAvailability = "AVAILABLE" | "PENDING_METHODOLOGY" | "PENDING_EVIDENCE" | "NOT_APPLICABLE"
+export type ResearchInterpretationAvailability = "AVAILABLE" | "VALIDATED_RECOMMENDATION_REQUIRED" | "NOT_APPLICABLE"
+
+export const RESEARCH_WORKSPACE_EXTENSION_POLICY = {
+  sharedPageTreeRequired: true,
+  symbolSpecificLayoutAllowed: false,
+  profileSpecificPageTreeAllowed: false,
+  profileConfigurationMayDefine: [
+    "METRICS",
+    "APPLICABILITY",
+    "READINESS_REQUIREMENTS",
+    "REFRESH_MODULES",
+    "LABELS",
+  ],
+} as const

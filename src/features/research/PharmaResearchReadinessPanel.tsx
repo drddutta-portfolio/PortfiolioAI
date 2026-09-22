@@ -1,6 +1,9 @@
+import { useMemo } from "react"
 import { buildPharmaCanonicalHistoryView } from "./pharmaCanonicalHistoryView"
 import { buildPharmaReadinessSummaryGroups, buildPharmaReadinessView, type PharmaReadinessDisplayState } from "./pharmaReadinessViewModel"
+import { buildPharmaResearchWorkspaceModel } from "./pharmaResearchWorkspaceModel"
 import { ResearchReadinessPanel } from "./ResearchReadinessPanel"
+import { usePharmaSubprofileResolution } from "./usePharmaSubprofileResolution"
 import type { SecurityResearch } from "./types"
 import "./PharmaResearchReadinessPanel.css"
 
@@ -15,9 +18,11 @@ const stateLabel: Readonly<Record<PharmaReadinessDisplayState, string>> = {
 const dateLabel = (value: string) => new Date(`${value}T00:00:00Z`).toLocaleDateString("en-IN", { month: "short", year: "numeric", timeZone: "UTC" })
 const numberLabel = (value: string) => new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(Number(value))
 
-export function PharmaResearchReadinessPanel({ research }: { readonly research: SecurityResearch }) {
+export function PharmaResearchReadinessPanel({ securityId, research }: { readonly securityId: string; readonly research: SecurityResearch }) {
   const view = buildPharmaReadinessView(research)
   const history = buildPharmaCanonicalHistoryView(research)
+  const resolution = usePharmaSubprofileResolution(securityId)
+  const evaluationDate = useMemo(() => new Date().toISOString().slice(0, 10), [])
   if (!view || !history) return null
 
   const ready = view.validatedSourceDomains + view.normalizationReadyDomains
@@ -39,6 +44,52 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
         <small>Normalization contract: {view.normalizationVersion} · Current mandatory blockers: {view.blockers.join(" · ") || "None"}</small>
       </div></>
 
+  let subprofileReadiness = <section className="pharma-subprofile-readiness pharma-subprofile-readiness-muted">
+    <div><p className="eyebrow">Reviewed business-model evidence</p><h3>Subprofile readiness unavailable</h3></div>
+    <p>{resolution.isLoading ? "Loading the reviewed Pharma subprofile assignment…" : resolution.error ? "The reviewed Pharma subprofile could not be loaded." : "One active reviewed Pharma subprofile assignment is required before business-model evidence completeness can be summarized."}</p>
+  </section>
+
+  if (resolution.data?.status === "RESOLVED") {
+    const model = buildPharmaResearchWorkspaceModel(resolution.data.assignment, research.metrics, evaluationDate)
+    const materialOverlays = model.secondaries.filter((item) => item.mode === "EVIDENCE_OVERLAY")
+    const emergingWatches = model.secondaries.filter((item) => item.mode === "EMERGING_WATCH")
+    const overlayRequirements = materialOverlays.flatMap((item) => item.requirements)
+    const overlayVerified = overlayRequirements.filter((item) => item.status === "VERIFIED").length
+    const primaryVerified = model.primary.verified
+    const primaryTotal = model.primary.requirements.length
+    const totalCounted = primaryTotal + overlayRequirements.length
+    const totalVerified = primaryVerified + overlayVerified
+
+    subprofileReadiness = <section className="pharma-subprofile-readiness" aria-label="Reviewed Pharma business-model evidence completeness">
+      <div className="pharma-subprofile-readiness-head">
+        <div><p className="eyebrow">Reviewed business-model evidence</p><h3>Subprofile evidence completeness</h3><p>This is evidence completeness only. It does not define or imply a score, recommendation, or Gate G weighting.</p></div>
+        <div className="pharma-subprofile-readiness-total"><strong>{totalVerified}/{totalCounted}</strong><span>counted requirements verified</span></div>
+      </div>
+      <div className="pharma-subprofile-readiness-grid">
+        <article>
+          <span>Primary model</span>
+          <strong>{model.primary.displayName}</strong>
+          <small>{primaryVerified}/{primaryTotal} verified · {model.primary.unavailable} unavailable · {model.primary.reviewAttention} need attention</small>
+        </article>
+        <article>
+          <span>Material overlays</span>
+          <strong>{materialOverlays.length}</strong>
+          <small>{overlayVerified}/{overlayRequirements.length} overlay requirements verified</small>
+        </article>
+        <article>
+          <span>Emerging watches</span>
+          <strong>{emergingWatches.length}</strong>
+          <small>{emergingWatches.length ? emergingWatches.map((item) => item.displayName).join(" · ") : "None active"} · excluded from readiness denominator</small>
+        </article>
+        <article>
+          <span>Scoring state</span>
+          <strong>Not approved</strong>
+          <small>Gate G must version scoring curves, thresholds and weights before numeric scoring.</small>
+        </article>
+      </div>
+    </section>
+  }
+
   return <ResearchReadinessPanel
     title="Pharmaceuticals Research Readiness"
     detail="A compact view of profile readiness requirements. PHARMA_V1 requirements are satisfied by validated evidence contracts."
@@ -47,6 +98,7 @@ export function PharmaResearchReadinessPanel({ research }: { readonly research: 
     groups={buildPharmaReadinessSummaryGroups(view)}
     detailsLabel="View all Pharmaceuticals research contracts"
     details={details}
+    supplementary={subprofileReadiness}
     itemLabel="readiness requirements"
   >
     <details className="pharma-canonical-history" aria-label="Canonical Pharma history">

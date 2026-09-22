@@ -62,6 +62,27 @@ describe("PHARMA_V1 scoring evidence adapter", () => {
     expect(result?.evidenceFraction).toBeCloseTo(0.5)
   })
 
+  it("treats FCF_YIELD_PERCENT as the canonical Pharma valuation cash-flow component", () => {
+    const rows = [
+      row("PE_TTM", "2026-09-14"),
+      row("EV_EBITDA", "2026-09-14"),
+      row("FCF_YIELD_PERCENT", "2026-09-14", 4.5),
+      row("PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT", "2026-09-14"),
+    ]
+    const result = assessPharmaV1Evidence("PHARMA_VALUATION_CONTEXT", rows, 0)
+    expect(result).toMatchObject({ observedCount: 4, minimumCount: 4, contractSatisfied: true })
+  })
+
+  it("accepts legacy FCF_YIELD only as an alias fallback and never double-counts both identities", () => {
+    const rows = [
+      row("FCF_YIELD", "2026-09-14", 4.5),
+      row("FCF_YIELD_PERCENT", "2026-09-14", 4.5),
+    ]
+    const result = assessPharmaV1Evidence("PHARMA_VALUATION_CONTEXT", rows, 0)
+    expect(result).toMatchObject({ observedCount: 1, minimumCount: 4, contractSatisfied: false })
+    expect(result?.evidenceFraction).toBeCloseTo(0.25)
+  })
+
   it("ignores stale and conflicting observations", () => {
     const rows: PharmaScoringObservation[] = [
       { ...row("REVENUE_ANNUAL", "2024-03-31"), evidence_status: "CONFLICTING" },

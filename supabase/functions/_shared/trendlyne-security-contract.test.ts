@@ -3,9 +3,9 @@ import {describe,expect,it} from "vitest"
 
 const root=process.cwd()
 const edge=readFileSync(`${root}/supabase/functions/refresh-security-enrichment/index.ts`,"utf8")
-const migration=readFileSync(`${root}/supabase/migrations/20260908200000_enable_trusted_trendlyne_ingestion.sql`,"utf8")
-const identitySchema=readFileSync(`${root}/supabase/migrations/20260908110000_create_stage7_provenance_and_security_identity.sql`,"utf8")
-const observationSchema=readFileSync(`${root}/supabase/migrations/20260908111000_create_stage7_enrichment_observations.sql`,"utf8")
+const migration=readFileSync(`${root}/supabase/migrations_legacy/20260915_pre_r4n_baseline/20260908200000_enable_trusted_trendlyne_ingestion.sql`,"utf8")
+const identitySchema=readFileSync(`${root}/supabase/migrations_legacy/20260915_pre_r4n_baseline/20260908110000_create_stage7_provenance_and_security_identity.sql`,"utf8")
+const observationSchema=readFileSync(`${root}/supabase/migrations_legacy/20260915_pre_r4n_baseline/20260908111000_create_stage7_enrichment_observations.sql`,"utf8")
 
 describe("trusted Trendlyne security and persistence boundary",()=>{
   it("authenticates before creating the service-role client",()=>expect(edge.indexOf("user.auth.getUser()")).toBeLessThan(edge.indexOf("const admin=createClient")))

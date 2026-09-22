@@ -1,4 +1,4 @@
-export const RESEARCH_PROFILE_ROUTING_VERSION = "RESEARCH_PROFILE_ROUTING_V1" as const
+export const RESEARCH_PROFILE_ROUTING_VERSION = "RESEARCH_PROFILE_ROUTING_V2" as const
 
 export type ResearchProfileRoutingState =
   | "ROUTED"
@@ -9,13 +9,30 @@ export type ResearchProfileRoutingState =
 export type ResearchProfileCode =
   | "BANK"
   | "NBFC_LENDING"
-  | "CAPITAL_MARKET_FINANCIAL"
-  | "DIGITAL_PLATFORM"
+  | "CAPITAL_MARKETS_AMC"
+  | "INSURANCE"
+  | "FINTECH_PLATFORM"
+  | "STEEL_FERROUS"
+  | "NON_FERROUS_DIVERSIFIED_METALS"
+  | "BRANDED_CONSUMER_FMCG"
+  | "UPSTREAM_E_AND_P"
+  | "MIDSTREAM_CITY_GAS"
+  | "INTEGRATED_REFINING_PETCHEM"
+  | "REGULATED_NETWORK"
+  | "GENERATION_INTEGRATED_UTILITY"
+  | "RENEWABLE_IPP"
   | "IT_SERVICES"
+  | "IT_SOFTWARE_PRODUCTS_PLATFORMS"
+  | "IT_DIGITAL_INFRA_HARDWARE"
   | "INDUSTRIAL_CAPITAL_GOODS"
+  | "PROJECT_EPC"
+  | "CAPITAL_EQUIPMENT_ELECTRICAL"
   | "DEFENCE_AEROSPACE"
   | "AUTO_OEM"
   | "AUTO_COMPONENTS"
+  | "SPECIALTY_CHEMICALS"
+  | "AGRO_FERTILISER"
+  | "COMMODITY_PROCESS_CHEMICALS"
   | "PHARMA"
   | "HOSPITAL"
   | "DIAGNOSTICS"
@@ -71,8 +88,9 @@ function result(
  *
  * This function must never rewrite the application sector/industry displayed to
  * the user. It is deliberately fail-closed: ambiguous broad sectors or missing
- * subtype evidence remain PROFILE_PENDING/REVIEW_REQUIRED rather than receiving
- * a convenient generic profile.
+ * industry/business-model evidence remain PROFILE_PENDING/REVIEW_REQUIRED rather
+ * than receiving a convenient sector-only profile. Sector is macro context only;
+ * industry is the minimum micro-methodology selector.
  */
 export function routeResearchProfileV1(input: ResearchProfileRoutingInput): ResearchProfileRoutingResult {
   if (input.assetClass.trim().toUpperCase() !== "EQUITY") {
@@ -92,19 +110,25 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
     return result(input, "ROUTED", "DEFENCE_AEROSPACE", "INDUSTRY_OVERRIDE", "INDUSTRY_DEFENCE_AEROSPACE")
   }
   if (industry === "HEAVY_ELECTRICAL_EQUIPMENT" || industry === "OTHER_ELECTRICAL_EQUIPMENT_PRODUCTS") {
-    return result(input, "ROUTED", "INDUSTRIAL_CAPITAL_GOODS", "INDUSTRY_OVERRIDE", "INDUSTRY_INDUSTRIAL_CAPITAL_GOODS")
+    return result(input, "ROUTED", "CAPITAL_EQUIPMENT_ELECTRICAL", "INDUSTRY_OVERRIDE", "INDUSTRY_CAPITAL_EQUIPMENT_ELECTRICAL")
   }
 
   if (sector === "BANKING") {
-    if (!industry || industry === "BANKS") {
-      return result(input, "ROUTED", "BANK", industry ? "SECTOR_AND_INDUSTRY" : "REVIEWED_SECTOR_ONLY", "BANKING_BANK")
+    if (industry === "BANKS") {
+      return result(input, "ROUTED", "BANK", "SECTOR_AND_INDUSTRY", "BANKING_BANK")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "BANKING_INDUSTRY_REQUIRED")
     }
     return result(input, "REVIEW_REQUIRED", null, "AMBIGUOUS_OR_UNSUPPORTED", "BANKING_NON_BANK_INDUSTRY")
   }
 
   if (sector === "PHARMA") {
-    if (!industry || industry === "PHARMACEUTICALS") {
-      return result(input, "ROUTED", "PHARMA", industry ? "SECTOR_AND_INDUSTRY" : "REVIEWED_SECTOR_ONLY", "PHARMA_PHARMACEUTICALS")
+    if (industry === "PHARMACEUTICALS") {
+      return result(input, "ROUTED", "PHARMA", "SECTOR_AND_INDUSTRY", "PHARMA_PHARMACEUTICALS")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "PHARMA_INDUSTRY_REQUIRED")
     }
     return result(input, "REVIEW_REQUIRED", null, "AMBIGUOUS_OR_UNSUPPORTED", "PHARMA_UNSUPPORTED_INDUSTRY")
   }
@@ -117,38 +141,268 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
   }
 
   if (sector === "INFORMATION_TECHNOLOGY") {
-    if (industry === "IT_CONSULTING_SOFTWARE" || industry === "IT_SERVICES") {
+    if (
+      industry === "COMPUTERS_SOFTWARE_CONSULTING"
+      || industry === "IT_CONSULTING_SOFTWARE"
+      || industry === "IT_SERVICES"
+      || industry === "IT_SERVICES_CONSULTING"
+      || industry === "SOFTWARE_SERVICES"
+    ) {
       return result(input, "ROUTED", "IT_SERVICES", "SECTOR_AND_INDUSTRY", "IT_SERVICES")
+    }
+    if (
+      industry === "IT_SOFTWARE_PRODUCTS"
+      || industry === "SOFTWARE_PRODUCTS"
+      || industry === "INTERNET_SOFTWARE_SERVICES"
+    ) {
+      return result(input, "ROUTED", "IT_SOFTWARE_PRODUCTS_PLATFORMS", "SECTOR_AND_INDUSTRY", "IT_SOFTWARE_PRODUCTS_PLATFORMS")
+    }
+    if (
+      industry === "COMPUTERS_HARDWARE_EQUIPMENTS"
+      || industry === "COMPUTER_HARDWARE"
+      || industry === "DATA_CENTRE_INFRASTRUCTURE"
+      || industry === "DIGITAL_INFRASTRUCTURE"
+    ) {
+      return result(input, "ROUTED", "IT_DIGITAL_INFRA_HARDWARE", "SECTOR_AND_INDUSTRY", "IT_DIGITAL_INFRA_HARDWARE")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "IT_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "IT_SUBPROFILE_PENDING")
   }
 
   if (sector === "CAPITAL_GOODS" || sector === "INDUSTRIAL") {
-    if (!industry || industry === "HEAVY_ELECTRICAL_EQUIPMENT" || industry === "OTHER_ELECTRICAL_EQUIPMENT_PRODUCTS") {
-      return result(input, "ROUTED", "INDUSTRIAL_CAPITAL_GOODS", industry ? "SECTOR_AND_INDUSTRY" : "REVIEWED_SECTOR_ONLY", "INDUSTRIAL_CAPITAL_GOODS")
+    if (
+      industry === "CIVIL_CONSTRUCTION"
+      || industry === "CONSTRUCTION_ENGINEERING"
+      || industry === "EPC"
+      || industry === "INDUSTRIAL_CONSTRUCTION"
+    ) {
+      return result(input, "ROUTED", "PROJECT_EPC", "SECTOR_AND_INDUSTRY", "PROJECT_EPC")
+    }
+    if (
+      industry === "HEAVY_ELECTRICAL_EQUIPMENT"
+      || industry === "OTHER_ELECTRICAL_EQUIPMENT_PRODUCTS"
+      || industry === "INDUSTRIAL_MACHINERY"
+      || industry === "ELECTRICAL_EQUIPMENT"
+      || industry === "INDUSTRIAL_PRODUCTS"
+    ) {
+      return result(input, "ROUTED", "CAPITAL_EQUIPMENT_ELECTRICAL", "SECTOR_AND_INDUSTRY", "CAPITAL_EQUIPMENT_ELECTRICAL")
+    }
+    if (industry === "AEROSPACE_DEFENCE" || industry === "AEROSPACE_AND_DEFENCE" || industry === "DEFENCE_EQUIPMENT" || industry === "DEFENCE_ELECTRONICS") {
+      return result(input, "ROUTED", "DEFENCE_AEROSPACE", "SECTOR_AND_INDUSTRY", "DEFENCE_AEROSPACE")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "CAPITAL_GOODS_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "CAPITAL_GOODS_SUBPROFILE_PENDING")
   }
 
   if (sector === "AUTOMOBILE_AND_AUTO_COMPONENTS") {
-    if (industry === "CARS_UTILITY_VEHICLES" || industry === "2_3_WHEELERS" || industry === "COMMERCIAL_VEHICLES") {
+    if (
+      industry === "CARS_UTILITY_VEHICLES"
+      || industry === "2_3_WHEELERS"
+      || industry === "COMMERCIAL_VEHICLES"
+      || industry === "TRACTORS_FARM_EQUIPMENT"
+    ) {
       return result(input, "ROUTED", "AUTO_OEM", "SECTOR_AND_INDUSTRY", "AUTO_OEM")
     }
-    if (industry === "AUTO_PARTS_EQUIPMENT" || industry === "AUTO_COMPONENTS") {
+    if (
+      industry === "AUTO_PARTS_EQUIPMENT"
+      || industry === "AUTO_COMPONENTS"
+      || industry === "TYRES_RUBBER_PRODUCTS"
+    ) {
       return result(input, "ROUTED", "AUTO_COMPONENTS", "SECTOR_AND_INDUSTRY", "AUTO_COMPONENTS")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "AUTO_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "AUTO_SUBPROFILE_PENDING")
   }
 
-  if (sector === "FINANCIAL_SERVICES") {
-    if (industry === "ASSET_MANAGEMENT_COS" || industry === "BROKING_DISTRIBUTION" || industry === "STOCK_EXCHANGES_DEPOSITORIES") {
-      return result(input, "ROUTED", "CAPITAL_MARKET_FINANCIAL", "SECTOR_AND_INDUSTRY", "CAPITAL_MARKET_FINANCIAL")
+
+  if (sector === "CHEMICALS") {
+    if (industry === "SPECIALTY_CHEMICALS" || industry === "SPECIALITY_CHEMICALS" || industry === "CHEMICALS_SPECIALTY") {
+      return result(input, "ROUTED", "SPECIALTY_CHEMICALS", "SECTOR_AND_INDUSTRY", "SPECIALTY_CHEMICALS")
     }
-    if (industry === "INTERNET_SOFTWARE_SERVICES") {
-      return result(input, "ROUTED", "DIGITAL_PLATFORM", "SECTOR_AND_INDUSTRY", "FINANCIAL_DIGITAL_PLATFORM")
+    if (
+      industry === "PESTICIDES_AGROCHEMICALS"
+      || industry === "AGROCHEMICALS"
+      || industry === "FERTILISERS"
+      || industry === "FERTILIZERS"
+      || industry === "FERTILISER_CHEMICALS"
+    ) {
+      return result(input, "ROUTED", "AGRO_FERTILISER", "SECTOR_AND_INDUSTRY", "AGRO_FERTILISER")
+    }
+    if (
+      industry === "COMMODITY_CHEMICALS"
+      || industry === "INDUSTRIAL_CHEMICALS"
+      || industry === "BASIC_CHEMICALS"
+      || industry === "PROCESS_CHEMICALS"
+    ) {
+      return result(input, "ROUTED", "COMMODITY_PROCESS_CHEMICALS", "SECTOR_AND_INDUSTRY", "COMMODITY_PROCESS_CHEMICALS")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "CHEMICALS_INDUSTRY_REQUIRED")
+    }
+    return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "CHEMICALS_SUBPROFILE_PENDING")
+  }
+
+
+  if (sector === "METALS_MINING" || sector === "METALS_AND_MINING" || sector === "METALS") {
+    if (
+      industry === "IRON_STEEL"
+      || industry === "STEEL"
+      || industry === "IRON_STEEL_PRODUCTS"
+      || industry === "FERROUS_METALS"
+    ) {
+      return result(input, "ROUTED", "STEEL_FERROUS", "SECTOR_AND_INDUSTRY", "STEEL_FERROUS")
+    }
+    if (
+      industry === "ALUMINIUM"
+      || industry === "ZINC"
+      || industry === "COPPER"
+      || industry === "NON_FERROUS_METALS"
+      || industry === "DIVERSIFIED_METALS"
+      || industry === "MINERALS_MINING"
+      || industry === "MINING"
+    ) {
+      return result(input, "ROUTED", "NON_FERROUS_DIVERSIFIED_METALS", "SECTOR_AND_INDUSTRY", "NON_FERROUS_DIVERSIFIED_METALS")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "METALS_INDUSTRY_REQUIRED")
+    }
+    return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "METALS_SUBPROFILE_PENDING")
+  }
+
+
+  if (sector === "FAST_MOVING_CONSUMER_GOODS" || sector === "FMCG" || sector === "CONSUMER_STAPLES") {
+    if (
+      industry === "PERSONAL_CARE_HOUSEHOLD_PRODUCTS"
+      || industry === "PERSONAL_PRODUCTS_HOUSEHOLD_CARE"
+      || industry === "PACKAGED_FOODS"
+      || industry === "OTHER_FOOD_BEVERAGES"
+      || industry === "TEA_COFFEE"
+      || industry === "VEGETABLE_OILS_PRODUCTS"
+      || industry === "BEVERAGES"
+      || industry === "FMCG"
+      || industry === "FAST_MOVING_CONSUMER_GOODS"
+      || industry === "CONSUMER_STAPLES"
+      || industry === "ALCOHOLIC_BEVERAGES"
+      || industry === "DISTILLERIES_BREWERIES"
+    ) {
+      return result(input, "ROUTED", "BRANDED_CONSUMER_FMCG", "SECTOR_AND_INDUSTRY", "BRANDED_CONSUMER_FMCG")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "CONSUMER_FMCG_INDUSTRY_REQUIRED")
+    }
+    return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "CONSUMER_FMCG_PROFILE_PENDING")
+  }
+
+
+  if (sector === "OIL_GAS_CONSUMABLE_FUELS" || sector === "OIL_GAS" || sector === "ENERGY") {
+    if (
+      industry === "OIL_EXPLORATION_PRODUCTION"
+      || industry === "OIL_GAS_EXPLORATION"
+      || industry === "EXPLORATION_PRODUCTION"
+      || industry === "UPSTREAM_OIL_GAS"
+    ) {
+      return result(input, "ROUTED", "UPSTREAM_E_AND_P", "SECTOR_AND_INDUSTRY", "UPSTREAM_E_AND_P")
+    }
+    if (
+      industry === "GAS_TRANSMISSION"
+      || industry === "GAS_DISTRIBUTION"
+      || industry === "CITY_GAS_DISTRIBUTION"
+      || industry === "PIPELINES"
+      || industry === "MIDSTREAM_OIL_GAS"
+    ) {
+      return result(input, "ROUTED", "MIDSTREAM_CITY_GAS", "SECTOR_AND_INDUSTRY", "MIDSTREAM_CITY_GAS")
+    }
+    if (
+      industry === "REFINERIES"
+      || industry === "REFINING_MARKETING"
+      || industry === "PETROCHEMICALS"
+      || industry === "INTEGRATED_OIL_GAS"
+      || industry === "OIL_MARKETING_COMPANIES"
+    ) {
+      return result(input, "ROUTED", "INTEGRATED_REFINING_PETCHEM", "SECTOR_AND_INDUSTRY", "INTEGRATED_REFINING_PETCHEM")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "OIL_GAS_INDUSTRY_REQUIRED")
+    }
+    return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "OIL_GAS_SUBPROFILE_PENDING")
+  }
+
+
+  if (
+    sector === "POWER"
+    || sector === "POWER_RENEWABLE_ENERGY"
+    || sector === "POWER_RENEWABLES"
+    || sector === "UTILITIES"
+  ) {
+    if (
+      industry === "POWER_TRANSMISSION"
+      || industry === "ELECTRICITY_TRANSMISSION"
+      || industry === "POWER_GRID"
+      || industry === "TRANSMISSION_DISTRIBUTION"
+    ) {
+      return result(input, "ROUTED", "REGULATED_NETWORK", "SECTOR_AND_INDUSTRY", "REGULATED_NETWORK")
+    }
+    if (
+      industry === "POWER_GENERATION"
+      || industry === "ELECTRIC_UTILITIES"
+      || industry === "INTEGRATED_POWER_UTILITIES"
+      || industry === "HYDRO_POWER"
+      || industry === "THERMAL_POWER"
+    ) {
+      return result(input, "ROUTED", "GENERATION_INTEGRATED_UTILITY", "SECTOR_AND_INDUSTRY", "GENERATION_INTEGRATED_UTILITY")
+    }
+    if (
+      industry === "RENEWABLE_POWER"
+      || industry === "RENEWABLE_ENERGY"
+      || industry === "SOLAR_POWER"
+      || industry === "WIND_POWER"
+      || industry === "INDEPENDENT_POWER_PRODUCER_RENEWABLE"
+    ) {
+      return result(input, "ROUTED", "RENEWABLE_IPP", "SECTOR_AND_INDUSTRY", "RENEWABLE_IPP")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "POWER_RENEWABLES_INDUSTRY_REQUIRED")
+    }
+    return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "POWER_RENEWABLES_SUBPROFILE_PENDING")
+  }
+
+  if (sector === "FINANCIAL_SERVICES") {
+    if (
+      industry === "ASSET_MANAGEMENT_COS"
+      || industry === "ASSET_MANAGEMENT_COMPANY"
+      || industry === "BROKING_DISTRIBUTION"
+      || industry === "STOCK_EXCHANGES_DEPOSITORIES"
+      || industry === "CAPITAL_MARKETS"
+    ) {
+      return result(input, "ROUTED", "CAPITAL_MARKETS_AMC", "SECTOR_AND_INDUSTRY", "CAPITAL_MARKETS_AMC")
+    }
+    if (
+      industry === "LIFE_INSURANCE"
+      || industry === "GENERAL_INSURANCE"
+      || industry === "HEALTH_INSURANCE"
+      || industry === "INSURANCE"
+    ) {
+      return result(input, "ROUTED", "INSURANCE", "SECTOR_AND_INDUSTRY", "INSURANCE")
+    }
+    if (
+      industry === "FINTECH"
+      || industry === "FINTECH_INSURANCE_BROKERAGE_PLATFORM"
+      || industry === "INTERNET_SOFTWARE_SERVICES"
+      || industry === "DIGITAL_FINANCIAL_PLATFORM"
+    ) {
+      return result(input, "ROUTED", "FINTECH_PLATFORM", "SECTOR_AND_INDUSTRY", "FINTECH_PLATFORM")
     }
     if (industry === "NON_BANKING_FINANCIAL_COMPANY_NBFC" || industry === "NBFC") {
       return result(input, "ROUTED", "NBFC_LENDING", "SECTOR_AND_INDUSTRY", "NBFC_LENDING")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "FINANCIAL_SERVICES_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "FINANCIAL_SERVICES_SUBPROFILE_PENDING")
   }

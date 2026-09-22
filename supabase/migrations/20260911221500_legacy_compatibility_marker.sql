@@ -1,0 +1,6 @@
+-- PortfolioAI migration-baseline compatibility marker.
+-- Historical version: 20260911221500
+-- Original SQL is preserved byte-for-byte in:
+-- supabase/migrations_legacy/20260915_pre_r4n_baseline/20260911221500_add_persistent_recommendation_tracking.sql
+-- Final effects are incorporated into the verified 20260915140000/1 baseline.
+-- Intentionally no-op.

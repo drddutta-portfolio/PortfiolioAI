@@ -81,6 +81,45 @@ describe("projectPortfolioCoverageV1", () => {
     expect(record.researchProfileRoutingState).toBe("PROFILE_PENDING")
   })
 
+  it("blocks research routing when official exchange classification is under review", () => {
+    const record = projectPortfolioCoverageV1(base({
+      symbol: "MTARTECH",
+      sourceSector: "Information Technology",
+      sourceIndustry: "Aerospace & Defence",
+      officialClassificationState: "REVIEW_REQUIRED",
+    }))
+
+    expect(record.applicationSector).toBe("Information Technology")
+    expect(record.domains.CLASSIFICATION.state).toBe("REVIEW_REQUIRED")
+    expect(record.researchProfileRoutingState).toBe("REVIEW_REQUIRED")
+    expect(record.proposedResearchProfileCode).toBeNull()
+    expect(record.domains.RESEARCH_PROFILE.state).toBe("BLOCKED_PREREQUISITE")
+  })
+
+  it("blocks a newly added equity until official exchange primary classification exists", () => {
+    const record = projectPortfolioCoverageV1(base({
+      symbol: "NEWCO",
+      sourceSector: null,
+      sourceIndustry: null,
+      officialClassificationState: "MISSING",
+    }))
+
+    expect(record.domains.CLASSIFICATION.state).toBe("MISSING")
+    expect(record.researchProfileRoutingState).toBe("REVIEW_REQUIRED")
+    expect(record.proposedResearchProfileCode).toBeNull()
+    expect(record.domains.SCORING.state).toBe("BLOCKED_PREREQUISITE")
+  })
+
+  it("allows normal methodology routing after official exchange classification resolves", () => {
+    const record = projectPortfolioCoverageV1(base({
+      officialClassificationState: "RESOLVED",
+    }))
+
+    expect(record.domains.CLASSIFICATION.state).toBe("FRESH")
+    expect(record.researchProfileRoutingState).toBe("ROUTED")
+    expect(record.proposedResearchProfileCode).toBe("IT_SERVICES")
+  })
+
   it("keeps non-equity holdings out of the equity research chain", () => {
     const record = projectPortfolioCoverageV1(base({ assetClass: "ETF", sourceSector: null, sourceIndustry: null }))
     expect(record.researchProfileRoutingState).toBe("NOT_APPLICABLE")

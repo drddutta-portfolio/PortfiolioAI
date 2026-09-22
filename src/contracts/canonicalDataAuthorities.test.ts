@@ -13,6 +13,7 @@ const REQUIRED_FACTS: readonly CanonicalFactKey[] = [
   "SECTOR",
   "INDUSTRY",
   "MARKET_CAP_CATEGORY",
+  "RESEARCH_SUBPROFILE_ASSIGNMENT",
   "PORTFOLIO_ROLE",
   "THEMES",
   "FUNDAMENTAL_EVIDENCE",
@@ -53,6 +54,13 @@ describe("canonical data authority registry", () => {
     expect(sector.canonicalSourceObject).toContain("current_security_enrichment_v1")
     expect(industry.canonicalSourceObject).toContain("current_security_enrichment_v1")
     expect(marketCap.canonicalSourceObject).toContain("current_security_enrichment_v1")
+  })
+
+  it("keeps research subprofile assignment separate from application classification", () => {
+    const subprofile = canonicalAuthorityFor("RESEARCH_SUBPROFILE_ASSIGNMENT")
+    expect(subprofile.canonicalAuthority).not.toBe(canonicalAuthorityFor("SECTOR").canonicalAuthority)
+    expect(subprofile.sharedAccessPath).toContain("resolvePharmaSubprofileAssignment")
+    expect(subprofile.notes).toContain("block readiness")
   })
 
   it("keeps owner settings separate from engine outputs", () => {

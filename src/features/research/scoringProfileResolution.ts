@@ -1,44 +1,85 @@
-import type { ScoringProfileSource } from "./scoringTypes"
+import type { ScoringExecutionState, ScoringMethodologyState, ScoringProfileSource } from "./scoringTypes"
+import { routeResearchProfileV1 } from "./researchProfileRouting"
+import { SECTOR_ENGINE_REGISTRY, sectorEngineForProfileCode } from "./sectorEngineRegistry"
 
 export interface ScoringProfileResolution {
-  readonly profileCode: string
-  readonly ruleProfile: string
+  readonly profileCode: string | null
+  readonly ruleProfile: string | null
   readonly profileSource: ScoringProfileSource
+  readonly methodologyState: ScoringMethodologyState
+  readonly scoringExecutionState: ScoringExecutionState
+  readonly reasonCode: string
   readonly legacyAssignmentCode: string | null
 }
 
-function normalized(value: string | null) {
-  return value?.trim().toUpperCase() ?? ""
+function routedEngineProfile(
+  sector: string | null,
+  industry: string | null,
+): Omit<ScoringProfileResolution, "legacyAssignmentCode"> {
+  const routed = routeResearchProfileV1({
+    assetClass: "EQUITY",
+    applicationSector: sector,
+    applicationIndustry: industry,
+  })
+
+  if (routed.state !== "ROUTED" || routed.profileCode === null) {
+    return {
+      profileCode: null,
+      ruleProfile: null,
+      profileSource: "METHODOLOGY_UNAVAILABLE",
+      methodologyState: routed.state === "REVIEW_REQUIRED" || routed.basis === "CLASSIFICATION_MISSING"
+        ? "REVIEW_REQUIRED"
+        : "METHODOLOGY_NOT_AVAILABLE",
+      scoringExecutionState: "BLOCKED",
+      reasonCode: routed.reasonCode,
+    }
+  }
+
+  const engine = sectorEngineForProfileCode(routed.profileCode)
+  if (!engine || engine.lifecycle === "K4_FROZEN_PENDING") {
+    return {
+      profileCode: null,
+      ruleProfile: null,
+      profileSource: "METHODOLOGY_UNAVAILABLE",
+      methodologyState: "METHODOLOGY_NOT_AVAILABLE",
+      scoringExecutionState: "BLOCKED",
+      reasonCode: engine ? "ENGINE_NOT_IMPLEMENTED" : "ROUTED_PROFILE_HAS_NO_REGISTERED_ENGINE",
+    }
+  }
+
+  const profileAuthority = engine.profileAuthorities?.[routed.profileCode]
+  if (profileAuthority?.state === "PENDING_METHODOLOGY") {
+    return {
+      profileCode: null,
+      ruleProfile: null,
+      profileSource: "METHODOLOGY_UNAVAILABLE",
+      methodologyState: "METHODOLOGY_NOT_AVAILABLE",
+      scoringExecutionState: "BLOCKED",
+      reasonCode: "REGISTERED_PROFILE_METHODOLOGY_PENDING",
+    }
+  }
+
+  return {
+    profileCode: engine.engineCode,
+    ruleProfile: engine.engineCode === "BANK_NBFC" || engine.engineCode === "PHARMA_V1" ? engine.engineCode : null,
+    profileSource: "SECTOR_RULE",
+    methodologyState: "AVAILABLE",
+    scoringExecutionState: engine.engineCode === "BANK_NBFC" || engine.engineCode === "PHARMA_V1" ? "AVAILABLE" : "PENDING_ADAPTER",
+    reasonCode: engine.engineCode === "BANK_NBFC" || engine.engineCode === "PHARMA_V1" ? "SUPPORTED_ENGINE_ROUTED" : "SECTOR_SCORING_ADAPTER_PENDING",
+  }
 }
 
 export function isPharmaScoringContext(sector: string | null, industry: string | null) {
-  const sectorKey = normalized(sector)
-  const industryKey = normalized(industry)
-  return sectorKey === "PHARMA" || industryKey === "PHARMACEUTICALS"
-}
-
-function inferredProfile(sector: string | null, industry: string | null): { readonly code: string; readonly source: ScoringProfileSource } {
-  const haystack = `${sector ?? ""} ${industry ?? ""}`.trim().toUpperCase()
-  if (!haystack) return { code: "GENERAL", source: "GENERAL_FALLBACK" }
-  if (isPharmaScoringContext(sector, industry)) return { code: "PHARMA_V1", source: "SECTOR_RULE" }
-  if (/\bBANK\b|NBFC|LENDING/.test(haystack)) return { code: "BANK_NBFC", source: "SECTOR_RULE" }
-  if (/\bIT\b|TECHNOLOGY|SOFTWARE/.test(haystack)) return { code: "IT_TECH", source: "SECTOR_RULE" }
-  if (/INDUSTRIAL|CAPITAL GOODS|ENGINEERING/.test(haystack)) return { code: "INDUSTRIALS_CAPITAL_GOODS", source: "SECTOR_RULE" }
-  if (/FMCG|CONSUMER/.test(haystack)) return { code: "CONSUMER_FMCG", source: "SECTOR_RULE" }
-  if (/AUTO|AUTOMOBILE/.test(haystack)) return { code: "AUTO_COMPONENTS", source: "SECTOR_RULE" }
-  if (/POWER|ENERGY|UTILIT|OIL|GAS/.test(haystack)) return { code: "ENERGY_UTILITIES", source: "SECTOR_RULE" }
-  if (/METAL|MINING|COMMODIT/.test(haystack)) return { code: "METALS_COMMODITIES", source: "SECTOR_RULE" }
-  if (/INFRA|CONSTRUCTION|EPC/.test(haystack)) return { code: "INFRA_CONSTRUCTION", source: "SECTOR_RULE" }
-  if (/REAL ESTATE|REALTY/.test(haystack)) return { code: "REAL_ESTATE", source: "SECTOR_RULE" }
-  if (/FINANCIAL SERVICES|INSURANCE|ASSET MANAGEMENT/.test(haystack)) return { code: "FIN_SERVICES_NON_LENDER", source: "SECTOR_RULE" }
-  return { code: "GENERAL", source: "GENERAL_FALLBACK" }
+  return routedEngineProfile(sector, industry).profileCode === "PHARMA_V1"
 }
 
 /**
- * Resolves the scoring methodology independently from the user-facing application
- * classification. PHARMA_HEALTHCARE is a legacy Stage 8 profile assignment; for
- * canonically classified pharmaceutical companies it aliases to PHARMA_V1 so the
- * Research page cannot silently fall back to GENERAL rules.
+ * Resolves scoring methodology downstream of the K1 industry-first router.
+ *
+ * A sector label alone cannot activate a specialised scoring engine. Only a
+ * reviewed assignment or a ROUTED profile that maps to an implemented/inherited
+ * engine in SECTOR_ENGINE_REGISTRY may do so. Completed K4 methodologies stay
+ * recognised but fail closed until their live score-execution adapter is active.
  */
 export function resolveScoringProfile(
   sector: string | null,
@@ -50,24 +91,32 @@ export function resolveScoringProfile(
       profileCode: "PHARMA_V1",
       ruleProfile: "PHARMA_V1",
       profileSource: "REVIEWED_ASSIGNMENT",
+      methodologyState: "AVAILABLE",
+      scoringExecutionState: "AVAILABLE",
+      reasonCode: "REVIEWED_PHARMA_ASSIGNMENT",
       legacyAssignmentCode: reviewedAssignmentCode,
     }
   }
 
   if (reviewedAssignmentCode) {
+    const reviewedEngine = SECTOR_ENGINE_REGISTRY.find((entry) => entry.engineCode === reviewedAssignmentCode)
+    const activeRuleProfile = reviewedAssignmentCode === "GENERAL" || reviewedAssignmentCode === "BANK_NBFC" || reviewedAssignmentCode === "PHARMA_V1"
+      ? reviewedAssignmentCode
+      : null
     return {
       profileCode: reviewedAssignmentCode,
-      ruleProfile: reviewedAssignmentCode === "BANK_NBFC" ? "BANK_NBFC" : "GENERAL",
+      ruleProfile: activeRuleProfile,
       profileSource: "REVIEWED_ASSIGNMENT",
+      methodologyState: reviewedEngine || activeRuleProfile ? "AVAILABLE" : "METHODOLOGY_NOT_AVAILABLE",
+      scoringExecutionState: activeRuleProfile ? "AVAILABLE" : reviewedEngine ? "PENDING_ADAPTER" : "BLOCKED",
+      reasonCode: activeRuleProfile ? "REVIEWED_SCORING_PROFILE_ASSIGNMENT" : reviewedEngine ? "SECTOR_SCORING_ADAPTER_PENDING" : "REVIEWED_PROFILE_HAS_NO_SCORING_AUTHORITY",
       legacyAssignmentCode: reviewedAssignmentCode,
     }
   }
 
-  const inferred = inferredProfile(sector, industry)
+  const inferred = routedEngineProfile(sector, industry)
   return {
-    profileCode: inferred.code,
-    ruleProfile: inferred.code === "BANK_NBFC" || inferred.code === "PHARMA_V1" ? inferred.code : "GENERAL",
-    profileSource: inferred.source,
+    ...inferred,
     legacyAssignmentCode: null,
   }
 }

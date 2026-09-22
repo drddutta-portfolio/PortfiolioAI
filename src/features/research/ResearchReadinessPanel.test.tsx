@@ -17,12 +17,20 @@ describe("ResearchReadinessPanel", () => {
       ]}
       detailsLabel="View all research contracts"
       details={<div>Thirteen detailed contracts remain available</div>}
-    />)
+      supplementary={<section>Subprofile evidence completeness</section>}
+    >
+      <div>Canonical Pharma financial history</div>
+    </ResearchReadinessPanel>)
     expect(screen.getByText("0/13")).toBeInTheDocument()
     expect(screen.getByLabelText("Example Research Readiness summary")).toHaveTextContent("Core evidence0/6 readyOther evidence0/7 ready")
     const disclosure = screen.getByText("View all research contracts").closest("summary")
     expect(disclosure).not.toBeNull()
     fireEvent.click(disclosure!)
     expect(screen.getByText("Thirteen detailed contracts remain available")).toBeVisible()
+    const supplementary = screen.getByText("Subprofile evidence completeness")
+    const canonicalHistory = screen.getByText("Canonical Pharma financial history")
+    expect(supplementary).toBeVisible()
+    expect(canonicalHistory).toBeVisible()
+    expect(supplementary.compareDocumentPosition(canonicalHistory) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 })

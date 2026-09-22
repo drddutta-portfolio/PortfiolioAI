@@ -8,7 +8,7 @@ const OVERALL_PREVIEW_COVERAGE_GATE = 0.70
 const label = (value: string) => value.replaceAll("_", " ").toLocaleLowerCase().replace(/(^|\s)\S/gu, (match) => match.toLocaleUpperCase())
 const percent = (value: number | null) => value === null ? "Unavailable" : `${Math.round(value * 100)}%`
 const score = (value: number | null) => value === null ? "—" : value.toFixed(0)
-const profileSourceLabel = (source: SecurityScoringSnapshot["profileSource"]) => source === "REVIEWED_ASSIGNMENT" ? "Reviewed profile" : source === "SECTOR_RULE" ? "Sector-resolved profile" : "General fallback"
+const profileSourceLabel = (source: SecurityScoringSnapshot["profileSource"]) => source === "REVIEWED_ASSIGNMENT" ? "Reviewed profile" : source === "SECTOR_RULE" ? "Sector-resolved profile" : "Methodology unavailable"
 
 function scoreBand(value: number) {
   if (value >= 80) return "Strong"
@@ -52,6 +52,8 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error }: {
   if (isLoading) return <section className="panel"><p className="eyebrow">PortfolioAI scoring</p><h2>Loading scoring framework…</h2></section>
   if (error) return <section className="research-callout research-callout-neutral"><strong>Scoring framework unavailable</strong><p>{error}</p></section>
   if (!snapshot) return null
+  if (snapshot.methodologyState && snapshot.methodologyState !== "AVAILABLE") return <section className="research-callout research-callout-neutral"><strong>{snapshot.profileName}</strong><p>{snapshot.methodologyState === "REVIEW_REQUIRED" ? "Canonical classification is missing or requires review. No scoring methodology or generic preview has been selected." : "No approved methodology is available for this classification. PortfolioAI will not substitute the GENERAL scoring profile."}</p><small>{snapshot.methodologyReasonCode?.replaceAll("_", " ") ?? "Fail-closed methodology state"}</small></section>
+  if (snapshot.scoringExecutionState === "PENDING_ADAPTER") return <section className="research-callout research-callout-neutral"><strong>Sector methodology available</strong><p>Scoring execution is pending evidence/adapter rollout. PortfolioAI will not substitute GENERAL scoring rules.</p><small>{snapshot.profileName} · {snapshot.scoringExecutionReasonCode?.replaceAll("_", " ") ?? "Sector scoring adapter pending"}</small></section>
 
   const ui = researchProfileUiContract(snapshot.profileCode)
   const byCode = new Map(snapshot.dimensions.map((dimension) => [dimension.dimensionCode, dimension]))

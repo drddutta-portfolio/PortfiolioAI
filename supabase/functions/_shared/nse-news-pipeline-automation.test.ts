@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 
 const root = process.cwd()
 const edge = readFileSync(`${root}/supabase/functions/run-nse-news-pipeline/index.ts`, "utf8")
-const migration = readFileSync(`${root}/supabase/migrations/20260913090000_prepare_n5_automated_nse_news_pipeline.sql`, "utf8")
+const migration = readFileSync(`${root}/supabase/migrations_legacy/20260915_pre_r4n_baseline/20260913090000_prepare_n5_automated_nse_news_pipeline.sql`, "utf8")
 
 describe("Stage N5 automated NSE news pipeline safety contract", () => {
   it("keeps scheduler and live mutation disabled in the preparation policy", () => {

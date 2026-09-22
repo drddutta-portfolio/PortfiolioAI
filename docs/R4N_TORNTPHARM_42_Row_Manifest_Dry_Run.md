@@ -1,11 +1,13 @@
 # R4N — TORNTPHARM 42-Row Manifest Dry Run
 
-**Status:** analysis only; manifest not applied
+**Status:** executable fixture dry run complete; manifest not applied
 **Security:** TORNTPHARM (`da69b3eb-0343-44f8-912c-288b826118cc`)
 **Candidate assignment:** `PHARMA_V1 + DOMESTIC_FORMULATIONS`, `PROVISIONAL`
 **Source manifest:** `R4L_TORNTPHARM_Official_Evidence_Production_Manifest.md`
 
 ## Result
+
+The frozen manifest is represented by `torntpharmOfficialManifestFixture.ts` and evaluated by the pure, non-writing `dryRunPharmaManifest` function. Regression tests enforce the 42-row reconciliation, effective-contract mapping, fail-closed duplicate/unsupported handling and the Domestic Formulations gaps below.
 
 All 42 proposed observations map to parent PHARMA_V1 requirements. None directly satisfies the new mandatory domestic-revenue, field-force-productivity, brand/therapy-leadership or exposure-materiality-review requirements.
 

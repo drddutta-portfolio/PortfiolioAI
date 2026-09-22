@@ -11,7 +11,7 @@ describe("ProfileResearchReadinessPanel", () => {
   afterEach(cleanup)
 
   it("uses the shared readiness shell for BANK_NBFC", () => {
-    render(<ProfileResearchReadinessPanel profileCode="BANK_NBFC" research={research} snapshot={snapshot} />)
+    render(<ProfileResearchReadinessPanel securityId="security-1" profileCode="BANK_NBFC" research={research} snapshot={snapshot} />)
     expect(screen.getByText("Banks / NBFCs Research Readiness")).toBeInTheDocument()
     expect(screen.getByText("1/9")).toBeInTheDocument()
     expect(screen.getByText("readiness requirements ready")).toBeInTheDocument()

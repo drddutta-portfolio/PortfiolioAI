@@ -1,0 +1,1316 @@
+.pharma-workspace-panel {
+  margin: 1rem 0 1.25rem;
+  padding: clamp(1rem, 2.2vw, 1.5rem);
+  border: 1px solid #d9e2dc;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbf8 100%);
+  box-shadow: 0 10px 26px rgba(25, 60, 44, 0.06);
+}
+
+.pharma-workspace-blocked {
+  border-style: dashed;
+  background: #fbfcfa;
+}
+
+.pharma-workspace-titlebar,
+.pharma-primary-card-head,
+.pharma-secondary-card-head,
+.pharma-overlay-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pharma-workspace-titlebar h2,
+.pharma-primary-card h3,
+.pharma-secondary-heading h3,
+.pharma-secondary-card h4 {
+  margin: 0;
+  color: #17231d;
+}
+
+.pharma-workspace-titlebar > div > p:last-child,
+.pharma-workspace-intro,
+.pharma-secondary-card > p,
+.pharma-workspace-empty {
+  color: #68746d;
+  line-height: 1.55;
+}
+
+.pharma-workspace-titlebar > div > p:last-child {
+  max-width: 58rem;
+  margin: .5rem 0 0;
+}
+
+.pharma-workspace-lock,
+.pharma-primary-pill,
+.pharma-materiality-pill,
+.pharma-workspace-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+
+.pharma-workspace-lock {
+  padding: .45rem .65rem;
+  color: #6e4c18;
+  background: #fff4d8;
+  border: 1px solid #ead8aa;
+}
+
+.pharma-workspace-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 1.2rem 0;
+}
+
+.pharma-workspace-summary > div {
+  min-width: 0;
+  padding: .85rem .9rem;
+  border: 1px solid #e1e7e2;
+  border-radius: .8rem;
+  background: #fff;
+}
+
+.pharma-workspace-summary > div:nth-child(2) {
+  border-color: #cfe0d5;
+  background: linear-gradient(180deg, #fbfefc 0%, #f2f8f4 100%);
+}
+
+.pharma-workspace-summary > div:nth-child(2) strong {
+  font-size: 1.08rem;
+  color: #174f3b;
+}
+
+.pharma-workspace-summary span,
+.pharma-workspace-summary small {
+  display: block;
+  color: #77817b;
+}
+
+.pharma-workspace-summary span {
+  margin-bottom: .35rem;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.pharma-workspace-summary strong {
+  display: block;
+  color: #1d3027;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.pharma-workspace-summary small {
+  margin-top: .25rem;
+  line-height: 1.35;
+}
+
+.pharma-workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(300px, .7fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.pharma-primary-card,
+.pharma-secondary-card {
+  border: 1px solid #dde6e0;
+  border-radius: .9rem;
+  background: #fff;
+}
+
+.pharma-primary-card {
+  padding: 1rem;
+}
+
+.pharma-primary-pill {
+  padding: .4rem .6rem;
+  color: #205b43;
+  background: #e8f4ed;
+  border: 1px solid #cbe4d5;
+}
+
+.pharma-secondary-stack {
+  display: grid;
+  gap: .65rem;
+}
+
+.pharma-secondary-heading {
+  padding: .1rem .15rem .2rem;
+}
+
+.pharma-secondary-heading h3 {
+  font-size: 1rem;
+}
+
+.pharma-secondary-card {
+  padding: .78rem .82rem;
+}
+
+.pharma-secondary-card.mode-evidence_overlay {
+  border-left: 4px solid #2f7657;
+}
+
+.pharma-secondary-card.mode-emerging_watch {
+  border-left: 4px solid #b8892f;
+}
+
+.pharma-secondary-card.mode-blocked,
+.pharma-secondary-card.mode-reclassification_review {
+  border-left: 4px solid #a34b4b;
+}
+
+.pharma-secondary-card.mode-monitor_only {
+  border-left: 4px solid #87948d;
+}
+
+.pharma-materiality-pill {
+  padding: .35rem .55rem;
+  color: #34443b;
+  background: #f0f3f1;
+}
+
+.pharma-overlay-meta {
+  margin-top: .5rem;
+  align-items: center;
+  color: #617069;
+  font-size: .76rem;
+}
+
+.pharma-overlay-meta strong {
+  color: #26372f;
+}
+
+.pharma-secondary-card > p {
+  margin: .55rem 0 0;
+}
+
+.pharma-workspace-requirements {
+  display: grid;
+  gap: .45rem;
+  margin-top: .8rem;
+}
+
+.pharma-workspace-requirement {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .75rem;
+  align-items: center;
+  padding: .68rem .72rem;
+  border: 1px solid #e7ece8;
+  border-radius: .65rem;
+  background: #fafcfb;
+}
+
+.pharma-secondary-card .pharma-workspace-requirements {
+  margin-top: .65rem;
+  gap: .38rem;
+}
+
+.pharma-secondary-card .pharma-workspace-requirement {
+  padding: .58rem .62rem;
+}
+
+.pharma-workspace-requirement strong,
+.pharma-workspace-requirement small {
+  display: block;
+}
+
+.pharma-workspace-requirement strong {
+  color: #223129;
+  font-size: .86rem;
+}
+
+.pharma-workspace-requirement small {
+  margin-top: .16rem;
+  color: #7a847f;
+  font-size: .7rem;
+}
+
+.pharma-workspace-status {
+  padding: .3rem .48rem;
+  border: 1px solid transparent;
+}
+
+.pharma-workspace-status.is-verified {
+  color: #1d5f42;
+  background: #e7f5ec;
+  border-color: #cce7d6;
+}
+
+.pharma-workspace-status.is-unavailable {
+  color: #66716b;
+  background: #f0f2f1;
+  border-color: #e0e5e2;
+}
+
+.pharma-workspace-status.is-attention {
+  color: #8a3131;
+  background: #faeaea;
+  border-color: #efcccc;
+}
+
+.pharma-workspace-status.is-stale,
+.pharma-workspace-status.is-provisional {
+  color: #76531d;
+  background: #fff4dd;
+  border-color: #ead9b9;
+}
+
+@media (max-width: 980px) {
+  .pharma-workspace-summary { grid-template-columns: 1fr 1fr; }
+  .pharma-workspace-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-workspace-titlebar,
+  .pharma-primary-card-head,
+  .pharma-secondary-card-head,
+  .pharma-overlay-meta {
+    flex-direction: column;
+  }
+
+  .pharma-workspace-summary { grid-template-columns: 1fr; }
+  .pharma-workspace-requirement { grid-template-columns: 1fr; }
+}
+
+
+.pharma-evidence-pilot {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #dce7df;
+  border-radius: .9rem;
+  background: linear-gradient(180deg, #fbfefc 0%, #f5faf7 100%);
+}
+
+.pharma-evidence-pilot-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pharma-evidence-pilot-head h3 {
+  margin: 0;
+  color: #17231d;
+}
+
+.pharma-evidence-pilot-head > div > p:last-child,
+.pharma-evidence-pilot-note {
+  color: #68746d;
+  line-height: 1.5;
+}
+
+.pharma-evidence-pilot-head > div > p:last-child {
+  max-width: 60rem;
+  margin: .45rem 0 0;
+}
+
+.pharma-evidence-pilot-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+.pharma-evidence-pilot-summary > div,
+.pharma-evidence-impact {
+  border: 1px solid #e1e7e2;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-evidence-pilot-summary > div {
+  padding: .72rem .78rem;
+}
+
+.pharma-evidence-pilot-summary span,
+.pharma-evidence-pilot-summary small,
+.pharma-evidence-impact span,
+.pharma-evidence-impact small {
+  display: block;
+  color: #77817b;
+}
+
+.pharma-evidence-pilot-summary span,
+.pharma-evidence-impact > div:first-child > span {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.pharma-evidence-pilot-summary strong,
+.pharma-evidence-impact strong {
+  display: block;
+  color: #1d3027;
+}
+
+.pharma-evidence-pilot-summary strong {
+  margin: .18rem 0;
+  font-size: 1.08rem;
+}
+
+.pharma-evidence-impact {
+  display: grid;
+  grid-template-columns: minmax(220px, .8fr) minmax(0, 1.2fr);
+  gap: .8rem;
+  margin-top: .65rem;
+  padding: .78rem;
+}
+
+.pharma-evidence-impact > div:first-child > strong {
+  margin: .15rem 0;
+  font-size: 1.15rem;
+  color: #174f3b;
+}
+
+.pharma-evidence-scope-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .45rem;
+}
+
+.pharma-evidence-scope-list > span {
+  padding: .55rem .62rem;
+  border-radius: .6rem;
+  background: #f6f9f7;
+}
+
+.pharma-evidence-scope-list strong {
+  margin-bottom: .12rem;
+  font-size: .78rem;
+}
+
+.pharma-evidence-pilot-note {
+  margin: .72rem 0 0;
+  padding-top: .7rem;
+  border-top: 1px solid #e2e8e4;
+}
+
+@media (max-width: 980px) {
+  .pharma-evidence-pilot-summary { grid-template-columns: 1fr 1fr; }
+  .pharma-evidence-impact { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-evidence-pilot-head { flex-direction: column; }
+  .pharma-evidence-pilot-summary,
+  .pharma-evidence-scope-list { grid-template-columns: 1fr; }
+}
+
+
+.pharma-acquisition-plan {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #d8e4dc;
+  border-radius: .9rem;
+  background: #fbfdfb;
+}
+
+.pharma-acquisition-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+.pharma-acquisition-summary > div {
+  padding: .72rem .78rem;
+  border: 1px solid #e1e7e2;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-acquisition-summary span,
+.pharma-acquisition-summary small {
+  display: block;
+  color: #77817b;
+}
+
+.pharma-acquisition-summary span {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.pharma-acquisition-summary strong {
+  display: block;
+  margin: .18rem 0;
+  color: #1d3027;
+  font-size: 1.08rem;
+}
+
+.pharma-acquisition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .8rem;
+  margin-top: .8rem;
+}
+
+.pharma-acquisition-grid > section {
+  min-width: 0;
+  padding: .75rem;
+  border: 1px solid #e0e8e2;
+  border-radius: .8rem;
+  background: #fff;
+}
+
+.pharma-acquisition-list {
+  display: grid;
+  gap: .45rem;
+  margin-top: .55rem;
+}
+
+.pharma-acquisition-item {
+  padding: .62rem .66rem;
+  border: 1px solid #e7ece8;
+  border-radius: .62rem;
+  background: #fafcfb;
+}
+
+.pharma-acquisition-item-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .65rem;
+}
+
+.pharma-acquisition-item-head strong,
+.pharma-acquisition-item-head small {
+  display: block;
+}
+
+.pharma-acquisition-item-head > div > strong {
+  color: #223129;
+  font-size: .82rem;
+}
+
+.pharma-acquisition-item-head small,
+.pharma-acquisition-item-meta,
+.pharma-acquisition-item p,
+.pharma-acquisition-fail-closed {
+  color: #748079;
+  font-size: .69rem;
+  line-height: 1.4;
+}
+
+.pharma-acquisition-item-head > span {
+  flex: 0 0 auto;
+  padding: .25rem .4rem;
+  border-radius: 999px;
+  background: #eef4f0;
+  color: #355444;
+  font-size: .62rem;
+  font-weight: 800;
+}
+
+.pharma-acquisition-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem .6rem;
+  margin-top: .35rem;
+  font-weight: 700;
+}
+
+.pharma-acquisition-item p {
+  margin: .35rem 0;
+}
+
+.pharma-acquisition-fail-closed {
+  display: block;
+  padding-top: .35rem;
+  border-top: 1px dashed #e0e6e2;
+}
+
+.pharma-acquisition-fail-closed strong {
+  color: #5a312f;
+}
+
+@media (max-width: 980px) {
+  .pharma-acquisition-summary,
+  .pharma-acquisition-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 760px) {
+  .pharma-acquisition-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-acquisition-summary { grid-template-columns: 1fr; }
+  .pharma-acquisition-item-head { flex-direction: column; }
+}
+
+
+.pharma-source-discovery {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #d8e4dc;
+  border-radius: .9rem;
+  background: linear-gradient(180deg, #fbfefc 0%, #f7fbf8 100%);
+}
+
+.pharma-source-discovery-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+.pharma-source-discovery-summary > div {
+  padding: .72rem .78rem;
+  border: 1px solid #e1e7e2;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-source-discovery-summary span,
+.pharma-source-discovery-summary small {
+  display: block;
+  color: #77817b;
+}
+
+.pharma-source-discovery-summary span {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.pharma-source-discovery-summary strong {
+  display: block;
+  margin: .18rem 0;
+  color: #1d3027;
+  font-size: 1.08rem;
+}
+
+.pharma-source-artifacts,
+.pharma-source-requirements {
+  display: grid;
+  gap: .45rem;
+  margin-top: .7rem;
+}
+
+.pharma-source-artifacts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pharma-source-artifacts article,
+.pharma-source-requirements article {
+  border: 1px solid #e4e9e5;
+  border-radius: .62rem;
+  background: #fff;
+}
+
+.pharma-source-artifacts article {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .6rem;
+  padding: .6rem .65rem;
+}
+
+.pharma-source-artifacts strong,
+.pharma-source-artifacts small {
+  display: block;
+}
+
+.pharma-source-artifacts strong {
+  color: #213129;
+  font-size: .8rem;
+}
+
+.pharma-source-artifacts small,
+.pharma-source-artifacts span {
+  color: #758079;
+  font-size: .66rem;
+}
+
+.pharma-source-requirements article {
+  padding: .62rem .66rem;
+}
+
+.pharma-source-requirement-head {
+  display: flex;
+  justify-content: space-between;
+  gap: .65rem;
+}
+
+.pharma-source-requirement-head strong,
+.pharma-source-requirement-head small {
+  display: block;
+}
+
+.pharma-source-requirement-head strong {
+  color: #223129;
+  font-size: .8rem;
+}
+
+.pharma-source-requirement-head small,
+.pharma-source-requirements p,
+.pharma-source-requirements > article > small {
+  color: #748079;
+  font-size: .68rem;
+  line-height: 1.4;
+}
+
+.pharma-source-requirement-head > span {
+  flex: 0 0 auto;
+  padding: .24rem .4rem;
+  border-radius: 999px;
+  background: #edf5f0;
+  color: #2f6047;
+  font-size: .62rem;
+  font-weight: 800;
+}
+
+.pharma-source-requirements p {
+  margin: .35rem 0;
+  overflow-wrap: anywhere;
+}
+
+.pharma-source-requirements > article > small {
+  display: block;
+  padding-top: .35rem;
+  border-top: 1px dashed #e1e7e3;
+}
+
+@media (max-width: 980px) {
+  .pharma-source-discovery-summary,
+  .pharma-source-artifacts { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-source-discovery-summary,
+  .pharma-source-artifacts { grid-template-columns: 1fr; }
+  .pharma-source-requirement-head,
+  .pharma-source-artifacts article { flex-direction: column; }
+}
+
+
+.pharma-artifact-review-plan {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #d8e4dc;
+  border-radius: .9rem;
+  background: #fbfdfb;
+}
+
+.pharma-artifact-review-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+.pharma-artifact-review-summary > div {
+  padding: .72rem .78rem;
+  border: 1px solid #e1e7e2;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-artifact-review-summary span,
+.pharma-artifact-review-summary small {
+  display: block;
+  color: #77817b;
+}
+
+.pharma-artifact-review-summary span {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.pharma-artifact-review-summary strong {
+  display: block;
+  margin: .18rem 0;
+  color: #1d3027;
+  font-size: 1.08rem;
+}
+
+.pharma-artifact-targets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .45rem;
+  margin-top: .7rem;
+}
+
+.pharma-artifact-targets article {
+  display: flex;
+  justify-content: space-between;
+  gap: .5rem;
+  padding: .55rem .6rem;
+  border: 1px solid #e4e9e5;
+  border-radius: .62rem;
+  background: #fff;
+}
+
+.pharma-artifact-targets strong,
+.pharma-artifact-targets small {
+  display: block;
+}
+
+.pharma-artifact-targets strong {
+  color: #213129;
+  font-size: .76rem;
+}
+
+.pharma-artifact-targets small,
+.pharma-artifact-targets span {
+  color: #758079;
+  font-size: .64rem;
+}
+
+.pharma-artifact-requirements {
+  display: grid;
+  gap: .45rem;
+  margin-top: .7rem;
+}
+
+.pharma-artifact-requirements article {
+  padding: .62rem .66rem;
+  border: 1px solid #e4e9e5;
+  border-radius: .62rem;
+  background: #fff;
+}
+
+.pharma-artifact-gap-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .4rem;
+  margin-top: .4rem;
+}
+
+.pharma-artifact-gap-grid > span {
+  padding: .4rem .45rem;
+  border-radius: .5rem;
+  background: #f6f9f7;
+  color: #748079;
+  font-size: .66rem;
+}
+
+.pharma-artifact-gap-grid strong {
+  color: #234334;
+}
+
+.pharma-artifact-requirements p {
+  margin: .4rem 0 0;
+  color: #748079;
+  font-size: .66rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 980px) {
+  .pharma-artifact-review-summary { grid-template-columns: 1fr 1fr; }
+  .pharma-artifact-targets { grid-template-columns: 1fr 1fr; }
+  .pharma-artifact-gap-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-artifact-review-summary,
+  .pharma-artifact-targets,
+  .pharma-artifact-gap-grid { grid-template-columns: 1fr; }
+  .pharma-artifact-targets article { flex-direction: column; }
+}
+
+
+.pharma-content-review-dry-run {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #d8e4dc;
+  border-radius: .9rem;
+  background: linear-gradient(180deg, #fbfefc 0%, #f7fbf8 100%);
+}
+
+.pharma-content-review-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+.pharma-content-review-summary > div {
+  padding: .72rem .78rem;
+  border: 1px solid #e1e7e2;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-content-review-summary span,
+.pharma-content-review-summary small {
+  display: block;
+  color: #77817b;
+}
+
+.pharma-content-review-summary span {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.pharma-content-review-summary strong {
+  display: block;
+  margin: .18rem 0;
+  color: #1d3027;
+  font-size: 1.08rem;
+}
+
+.pharma-content-review-grid,
+.pharma-content-review-candidates {
+  display: grid;
+  gap: .45rem;
+  margin-top: .7rem;
+}
+
+.pharma-content-review-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pharma-content-review-grid article,
+.pharma-content-review-candidates article,
+.pharma-content-review-rejection {
+  padding: .62rem .66rem;
+  border: 1px solid #e4e9e5;
+  border-radius: .62rem;
+  background: #fff;
+}
+
+.pharma-content-review-grid p,
+.pharma-content-review-candidates p,
+.pharma-content-review-candidates small,
+.pharma-content-review-rejection p {
+  color: #748079;
+  font-size: .68rem;
+  line-height: 1.45;
+}
+
+.pharma-content-review-grid p,
+.pharma-content-review-candidates p,
+.pharma-content-review-rejection p {
+  margin: .4rem 0 0;
+}
+
+.pharma-content-review-candidates article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .35rem .8rem;
+  align-items: start;
+}
+
+.pharma-content-review-candidates article > div strong,
+.pharma-content-review-candidates article > div small {
+  display: block;
+}
+
+.pharma-content-review-candidates article > div strong {
+  color: #223129;
+  font-size: .8rem;
+}
+
+.pharma-content-review-candidates article > div small {
+  color: #748079;
+  font-size: .65rem;
+}
+
+.pharma-content-review-candidates article > span {
+  font-weight: 800;
+  color: #174f3b;
+}
+
+.pharma-content-review-candidates article > p,
+.pharma-content-review-candidates article > small {
+  grid-column: 1 / -1;
+}
+
+.pharma-content-review-rejection {
+  margin-top: .7rem;
+  border-color: #ead6d1;
+  background: #fffafa;
+}
+
+.pharma-content-review-rejection > div {
+  display: flex;
+  justify-content: space-between;
+  gap: .65rem;
+}
+
+.pharma-content-review-rejection > div strong {
+  color: #7a332d;
+}
+
+.pharma-content-review-rejection > div span {
+  color: #704c48;
+  font-size: .7rem;
+  font-weight: 700;
+}
+
+@media (max-width: 980px) {
+  .pharma-content-review-summary,
+  .pharma-content-review-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-content-review-summary,
+  .pharma-content-review-grid { grid-template-columns: 1fr; }
+  .pharma-content-review-candidates article { grid-template-columns: 1fr; }
+  .pharma-content-review-candidates article > p,
+  .pharma-content-review-candidates article > small { grid-column: 1; }
+  .pharma-content-review-rejection > div { flex-direction: column; }
+}
+
+
+/* R4N cross-profile consistency: keep Pharma deep research compact by default. */
+.pharma-workspace-panel {
+  margin-top: 1rem;
+}
+
+.pharma-deep-layer {
+  margin-top: .7rem;
+  border: 1px solid #dfe7e2;
+  border-radius: .78rem;
+  background: #fff;
+  overflow: hidden;
+}
+
+.pharma-deep-layer > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .78rem .85rem;
+  cursor: pointer;
+  list-style: none;
+  background: #fbfdfb;
+}
+
+.pharma-deep-layer > summary::-webkit-details-marker {
+  display: none;
+}
+
+.pharma-deep-layer > summary > div {
+  display: grid;
+  gap: .15rem;
+}
+
+.pharma-deep-layer > summary span {
+  color: #20332a;
+  font-size: .82rem;
+  font-weight: 800;
+}
+
+.pharma-deep-layer > summary small {
+  color: #718078;
+  font-size: .68rem;
+  line-height: 1.35;
+}
+
+.pharma-deep-layer > summary b {
+  flex: 0 0 auto;
+  color: #3a5b4a;
+  font-size: .68rem;
+  font-weight: 800;
+}
+
+.pharma-deep-layer[open] > summary {
+  border-bottom: 1px solid #e3e9e5;
+}
+
+.pharma-deep-layer[open] > summary b::before {
+  content: "Close ";
+}
+
+.pharma-deep-layer[open] > summary b {
+  font-size: 0;
+}
+
+.pharma-deep-layer[open] > summary b::after {
+  content: "Close details";
+  font-size: .68rem;
+}
+
+.pharma-deep-layer > .pharma-workspace-grid {
+  margin-top: 0;
+  padding: .8rem;
+}
+
+.pharma-deep-layer-body {
+  padding: .15rem .75rem .8rem;
+}
+
+.pharma-evidence-operations .pharma-evidence-pilot,
+.pharma-evidence-operations .pharma-acquisition-plan,
+.pharma-evidence-operations .pharma-source-discovery,
+.pharma-evidence-operations .pharma-artifact-review-plan,
+.pharma-evidence-operations .pharma-content-review-dry-run {
+  margin-top: .65rem;
+}
+
+@media (max-width: 620px) {
+  .pharma-deep-layer > summary {
+    align-items: flex-start;
+  }
+}
+
+
+.pharma-ingestion-proposal {
+  margin-top: .65rem;
+  padding: 1rem;
+  border: 1px solid #e4dcc9;
+  border-radius: .9rem;
+  background: #fffdf8;
+}
+
+.pharma-ingestion-proposal-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+.pharma-ingestion-proposal-summary > div {
+  padding: .72rem .78rem;
+  border: 1px solid #e8e2d4;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-ingestion-proposal-summary span,
+.pharma-ingestion-proposal-summary small {
+  display: block;
+  color: #7a786f;
+}
+
+.pharma-ingestion-proposal-summary span {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.pharma-ingestion-proposal-summary strong {
+  display: block;
+  margin: .18rem 0;
+  color: #3b3425;
+  font-size: 1.08rem;
+}
+
+.pharma-ingestion-proposal-items {
+  display: grid;
+  gap: .45rem;
+  margin-top: .7rem;
+}
+
+.pharma-ingestion-proposal-items article {
+  padding: .62rem .66rem;
+  border: 1px solid #ebe5d8;
+  border-radius: .62rem;
+  background: #fff;
+}
+
+.pharma-ingestion-proposal-items p,
+.pharma-ingestion-proposal-items > article > small {
+  color: #766f62;
+  font-size: .68rem;
+  line-height: 1.45;
+}
+
+.pharma-ingestion-proposal-items p {
+  margin: .4rem 0;
+}
+
+.pharma-ingestion-proposal-items > article > small {
+  display: block;
+}
+
+@media (max-width: 980px) {
+  .pharma-ingestion-proposal-summary { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-ingestion-proposal-summary { grid-template-columns: 1fr; }
+}
+
+
+.pharma-persistence-package {
+  margin-top: .65rem;
+  padding: 1rem;
+  border: 1px solid #dfe6e1;
+  border-radius: .9rem;
+  background: #fbfdfb;
+}
+
+.pharma-persistence-package-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+.pharma-persistence-package-summary > div {
+  padding: .72rem .78rem;
+  border: 1px solid #e2e8e4;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-persistence-package-summary span,
+.pharma-persistence-package-summary small {
+  display: block;
+  color: #748078;
+}
+
+.pharma-persistence-package-summary span {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.pharma-persistence-package-summary strong {
+  display: block;
+  margin: .18rem 0;
+  color: #20352b;
+  font-size: 1.08rem;
+}
+
+.pharma-persistence-package-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .7rem;
+}
+
+.pharma-persistence-package-grid article {
+  padding: .72rem .78rem;
+  border: 1px solid #e2e8e4;
+  border-radius: .72rem;
+  background: #fff;
+}
+
+.pharma-persistence-package-grid strong,
+.pharma-persistence-package-grid small,
+.pharma-persistence-package-grid span {
+  display: block;
+}
+
+.pharma-persistence-package-grid strong {
+  color: #20352b;
+  font-size: .82rem;
+}
+
+.pharma-persistence-package-grid small,
+.pharma-persistence-package-grid p,
+.pharma-persistence-package-grid span {
+  color: #748078;
+  font-size: .68rem;
+  line-height: 1.45;
+}
+
+.pharma-persistence-package-grid p {
+  margin: .45rem 0;
+}
+
+.pharma-persistence-package-grid span {
+  color: #355a47;
+  font-weight: 800;
+}
+
+@media (max-width: 980px) {
+  .pharma-persistence-package-summary,
+  .pharma-persistence-package-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 620px) {
+  .pharma-persistence-package-summary,
+  .pharma-persistence-package-grid { grid-template-columns: 1fr; }
+}
+
+
+.pharma-g7-preview {
+  margin-top: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  padding: 16px;
+}
+
+.pharma-g7-preview-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.pharma-g7-preview-head > div {
+  display: grid;
+  gap: 4px;
+}
+
+.pharma-g7-preview-head small,
+.pharma-g7-preview-meta,
+.pharma-g7-preview-note {
+  color: var(--muted-foreground);
+}
+
+.pharma-g7-preview-head > span {
+  font-weight: 700;
+}
+
+.pharma-g7-preview-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 12px 0;
+  font-size: 12px;
+}
+
+.pharma-g7-preview-table-wrap {
+  overflow-x: auto;
+}
+
+.pharma-g7-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.pharma-g7-preview-table th,
+.pharma-g7-preview-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 9px 10px;
+  border-top: 1px solid var(--border);
+}
+
+.pharma-g7-preview-table th {
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+
+.pharma-g7-preview-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+  .pharma-g7-preview-head {
+    display: grid;
+  }
+}

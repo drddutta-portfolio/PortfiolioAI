@@ -63,6 +63,35 @@ describe("ResearchScorecardPanel shared score states", () => {
     expect(within(cashFlow!).getByText("Not applicable")).toHaveAttribute("aria-disabled", "true")
   })
 
+  it("shows an explicit fail-closed state instead of a GENERAL score preview", () => {
+    render(<ResearchScorecardPanel snapshot={{
+      ...snapshot("METHODOLOGY_NOT_AVAILABLE", []),
+      profileName: "Research methodology not available",
+      profileSource: "METHODOLOGY_UNAVAILABLE",
+      methodologyState: "METHODOLOGY_NOT_AVAILABLE",
+      methodologyReasonCode: "REGISTERED_PROFILE_METHODOLOGY_PENDING",
+    }} isLoading={false} error={null} />)
+    expect(screen.getByText("Research methodology not available")).toBeInTheDocument()
+    expect(screen.getByText(/will not substitute the GENERAL scoring profile/u)).toBeInTheDocument()
+    expect(screen.queryByText("Overall stock score")).not.toBeInTheDocument()
+  })
+
+  it("shows a truthful execution-pending state for an available K4 methodology", () => {
+    render(<ResearchScorecardPanel snapshot={{
+      ...snapshot("IT_TECH", []),
+      profileCode: "IT_TECH",
+      profileName: "IT / Technology",
+      methodologyState: "AVAILABLE",
+      scoringExecutionState: "PENDING_ADAPTER",
+      scoringExecutionReasonCode: "SECTOR_SCORING_ADAPTER_PENDING",
+      overallScore: null,
+      dimensions: [],
+    }} isLoading={false} error={null} />)
+    expect(screen.getByText("Sector methodology available")).toBeInTheDocument()
+    expect(screen.getByText(/pending evidence\/adapter rollout/u)).toBeInTheDocument()
+    expect(screen.queryByText("Overall stock score")).not.toBeInTheDocument()
+  })
+
   it("uses one external ratings shell title for empty and populated states", () => {
     const empty = snapshot("PHARMA_V1", [])
     const { rerender } = render(<ResearchScorecardPanel snapshot={empty} isLoading={false} error={null} />)

@@ -1,0 +1,223 @@
+{
+  "contract_version": "PORTFOLIOAI_REFERENCE_REGISTRY_BASELINE_V1",
+  "baseline_date": "2026-09-15",
+  "timestamp_policy": "Unique replay-generated 2026-09-15 SQL timestamp literals are sorted and mapped to stable millisecond offsets from 2026-09-15T00:00:00Z. This preserves ordering and effective intervals; business dates, embedded source timestamps, and historical dates remain unchanged.",
+  "source_candidate_sha256": {
+    "schema": "da08140f2661466322f635a10da2285fbbc3454d47fa4cd0a4f7809599c9a48c",
+    "reference_registry": "a6fd04e897bef71f25acc03ac61aeefe33b3690ba74373637239699f7435b21c",
+    "local_operational_defaults": "e45ba3d252e48d868a4baf2edf6decda689dcbda5a198408f0c6ec5efc5a0305"
+  },
+  "tables": [
+    {
+      "table": "classification_taxonomies",
+      "owner": "classification taxonomy authority",
+      "purpose": "versioned classification taxonomy definitions",
+      "natural_key": [
+        "code",
+        "version"
+      ],
+      "expected_row_count": 2
+    },
+    {
+      "table": "data_sources",
+      "owner": "source registry authority",
+      "purpose": "approved source identity and capability registry",
+      "natural_key": [
+        "code"
+      ],
+      "expected_row_count": 8
+    },
+    {
+      "table": "sectors",
+      "owner": "classification taxonomy authority",
+      "purpose": "canonical sector registry",
+      "natural_key": [
+        "code"
+      ],
+      "expected_row_count": 5
+    },
+    {
+      "table": "industries",
+      "owner": "classification taxonomy authority",
+      "purpose": "canonical industry registry",
+      "natural_key": [
+        "code"
+      ],
+      "expected_row_count": 6
+    },
+    {
+      "table": "classification_source_mappings",
+      "owner": "classification mapping authority",
+      "purpose": "reviewed provider-to-canonical classification mappings",
+      "natural_key": [
+        "source_code",
+        "taxonomy_code",
+        "taxonomy_version",
+        "source_sector",
+        "source_industry"
+      ],
+      "expected_row_count": 6
+    },
+    {
+      "table": "fundamental_metric_definitions",
+      "owner": "fundamental metric registry authority",
+      "purpose": "canonical metric definitions and provenance requirements",
+      "natural_key": [
+        "metric_code"
+      ],
+      "expected_row_count": 47
+    },
+    {
+      "table": "market_benchmarks",
+      "owner": "market benchmark registry authority",
+      "purpose": "canonical benchmark definitions",
+      "natural_key": [
+        "code"
+      ],
+      "expected_row_count": 1
+    },
+    {
+      "table": "market_cap_classification_policies",
+      "owner": "market-cap policy authority",
+      "purpose": "versioned market-cap classification policy",
+      "natural_key": [
+        "code",
+        "version"
+      ],
+      "expected_row_count": 1
+    },
+    {
+      "table": "market_data_providers",
+      "owner": "market-data provider authority",
+      "purpose": "approved market-data provider registry",
+      "natural_key": [
+        "code"
+      ],
+      "expected_row_count": 1
+    },
+    {
+      "table": "provider_ingestion_controls",
+      "owner": "provider control-plane authority",
+      "purpose": "provider ingestion safety limits",
+      "natural_key": [
+        "source_code"
+      ],
+      "expected_row_count": 2
+    },
+    {
+      "table": "rating_agencies",
+      "owner": "ratings registry authority",
+      "purpose": "canonical external rating agency registry",
+      "natural_key": [
+        "code"
+      ],
+      "expected_row_count": 7
+    },
+    {
+      "table": "scoring_profiles",
+      "owner": "scoring profile authority",
+      "purpose": "profile hierarchy used by deterministic scoring contracts",
+      "natural_key": [
+        "code"
+      ],
+      "expected_row_count": 13
+    },
+    {
+      "table": "recommendation_profile_policies",
+      "owner": "recommendation policy authority",
+      "purpose": "versioned profile recommendation policies",
+      "natural_key": [
+        "profile_code",
+        "policy_version"
+      ],
+      "expected_row_count": 12
+    },
+    {
+      "table": "refresh_domain_policies",
+      "owner": "research refresh policy authority",
+      "purpose": "versioned domain refresh and freshness policies",
+      "natural_key": [
+        "domain_code",
+        "policy_version"
+      ],
+      "expected_row_count": 21
+    },
+    {
+      "table": "research_subprofile_contracts",
+      "owner": "research subprofile contract authority",
+      "purpose": "PHARMA_V1 subprofile contract registry",
+      "natural_key": [
+        "parent_profile_code",
+        "parent_profile_version",
+        "subprofile_code",
+        "subprofile_version"
+      ],
+      "expected_row_count": 5
+    },
+    {
+      "table": "scoring_models",
+      "owner": "scoring model authority",
+      "purpose": "versioned deterministic scoring model registry",
+      "natural_key": [
+        "code",
+        "version"
+      ],
+      "expected_row_count": 1
+    },
+    {
+      "table": "scoring_model_dimensions",
+      "owner": "scoring model authority",
+      "purpose": "model dimension definitions",
+      "natural_key": [
+        "scoring_model_id",
+        "dimension_code"
+      ],
+      "expected_row_count": 28
+    },
+    {
+      "table": "scoring_model_metric_rules",
+      "owner": "scoring model authority",
+      "purpose": "deterministic metric-to-dimension rules",
+      "natural_key": [
+        "scoring_model_id",
+        "dimension_code",
+        "input_code"
+      ],
+      "expected_row_count": 70
+    },
+    {
+      "table": "scoring_profile_dimension_overrides",
+      "owner": "scoring profile authority",
+      "purpose": "profile-specific dimension applicability and weights",
+      "natural_key": [
+        "scoring_model_id",
+        "scoring_profile_code",
+        "dimension_code"
+      ],
+      "expected_row_count": 90
+    },
+    {
+      "table": "scoring_profile_metric_overrides",
+      "owner": "scoring profile authority",
+      "purpose": "profile-specific metric applicability and weights",
+      "natural_key": [
+        "scoring_model_id",
+        "scoring_profile_code",
+        "dimension_code",
+        "input_code"
+      ],
+      "expected_row_count": 20
+    },
+    {
+      "table": "scoring_profile_sector_rules",
+      "owner": "scoring profile routing authority",
+      "purpose": "sector and industry routing into scoring profiles",
+      "natural_key": [
+        "scoring_profile_code",
+        "sector_pattern",
+        "industry_pattern"
+      ],
+      "expected_row_count": 31
+    }
+  ]
+}

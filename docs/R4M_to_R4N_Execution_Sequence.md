@@ -15,7 +15,7 @@
 
 Current evidence: authenticated review has confirmed the common page hierarchy, suggestion structure, interpretation placement/state, refresh shell, tabs, score/heatmap shell, external-ratings shell and readiness shell. Profile-specific data and capability states remain intentionally different.
 
-**Resolved blocker:** the shared refresh component no longer contains a HDFCBANK-specific rendering branch. Typed profile/reference-security capability metadata now selects the reference pilot modules through the common renderer. PR #100 still requires final owner review and merge approval.
+**Resolved blocker:** the shared refresh component no longer contains a HDFCBANK-specific rendering branch. Typed profile/reference-security capability metadata now selects the reference pilot modules through the common renderer. PR #100 was owner-approved and merged as commit `de54ed1fa9569e9db0c14cfa8dac6dfbc2638c9f`.
 
 ## Gate 2 — Approve and merge R4M
 
@@ -117,9 +117,9 @@ Only then may an approved operator apply migrations, promote evidence or execute
 
 After the TORNTPHARM pilot passes, select one reviewed reference company for each remaining subprofile. Complete contract, evidence, scoring and pilot gates independently before cohort or portfolio-wide expansion.
 
-## Immediate next decision
+## Approved immediate next work
 
-The next owner decision is whether to approve the revised hierarchy:
+The owner approved the hierarchy for documentation/fixture-only R4N-A/R4N-B work:
 
 ```text
 PHARMA_V1
@@ -130,4 +130,6 @@ PHARMA_V1
   -> CDMO_CRAMS
 ```
 
-If approved, the next work item is a documentation-only `DOMESTIC_FORMULATIONS` effective-contract matrix and a dry-run audit of the 42-row manifest. It is not a production ingestion task.
+All security mappings remain provisional review candidates. Unknown, missing or conflicting required subprofile assignment may expose parent evidence but blocks effective-contract completion, readiness, scoring and recommendation. The shared top-line readiness denominator is active mandatory effective requirements only; Important and Supplementary coverage remain separate.
+
+The immediate work item is to freeze the shared shell contracts, define the typed assignment model and create a fixture-only 26-security candidate register. ZYDUSWELL is represented as `OUTSIDE_PHARMA_V1 / CONSUMER_HEALTH_REVIEW`. This work authorizes no migration, production assignment, ingestion, provider action or scoring implementation.

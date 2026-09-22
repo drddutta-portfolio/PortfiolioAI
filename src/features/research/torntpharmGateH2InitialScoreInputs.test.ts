@@ -1,0 +1,97 @@
+import { describe, expect, it } from "vitest"
+import {
+  TORNTPHARM_GATE_H2_BALANCE_SHEET_READ_ONLY_RESULT,
+  TORNTPHARM_GATE_H2_CAPITAL_EFFICIENCY_READ_ONLY_RESULT,
+  TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS,
+} from "./torntpharmGateH2InitialScoreInputs"
+
+describe("TORNTPHARM H2 initial score inputs", () => {
+  it("produces the deterministic Quality read-only candidate", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.quality).toEqual({
+      state: "READ_ONLY_SCORE_CANDIDATE",
+      score: 92,
+      componentScores: {
+        level: 100,
+        stability: 100,
+        trend: 60,
+      },
+    })
+  })
+
+  it("produces the deterministic Cash Flow read-only candidate", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.cashFlow).toEqual({
+      state: "READ_ONLY_SCORE_CANDIDATE",
+      score: 93.6,
+      componentScores: {
+        cfoToPat: 100,
+        fcfToPat: 100,
+        consistencyTrend: 68,
+      },
+    })
+  })
+
+  it("produces the deterministic Balance Sheet / Credit read-only candidate", () => {
+    expect(TORNTPHARM_GATE_H2_BALANCE_SHEET_READ_ONLY_RESULT).toEqual({
+      leverageScore: 80,
+      interestCoverageScore: 70,
+      trendResilienceScore: 20,
+      combinedScore: 65,
+    })
+    expect(
+      TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.balanceSheetCredit.score,
+    ).toBe(65)
+  })
+
+  it("produces the owner-approved deterministic Capital Efficiency read-only candidate", () => {
+    expect(TORNTPHARM_GATE_H2_CAPITAL_EFFICIENCY_READ_ONLY_RESULT).toEqual({
+      levelScore: 85,
+      stabilityScore: 100,
+      trendScore: 40,
+      combinedScore: 79,
+    })
+    expect(
+      TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.capitalEfficiency.score,
+    ).toBe(79)
+  })
+
+  it("includes the validated Ownership / Governance read-only candidate", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.ownershipGovernance).toEqual({
+      state: "READ_ONLY_SCORE_CANDIDATE",
+      score: 70,
+      componentScores: {
+        ownershipStability: 75,
+        pledgeControlRisk: 75,
+        nonG4GovernanceContext: 50,
+      },
+    })
+  })
+
+  it("includes the local deterministic Momentum candidate", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.momentum).toEqual({
+      state: "READ_ONLY_SCORE_CANDIDATE",
+      score: 95,
+      componentScores: {
+        absolute12m: 100,
+        absolute6m: 80,
+        relativeStrength12m: 100,
+      },
+    })
+  })
+
+  it("includes the local deterministic Risk candidate", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.risk).toEqual({
+      state: "READ_ONLY_SCORE_CANDIDATE",
+      score: 80,
+      componentScores: {
+        regulatoryContext: 100,
+        maxDrawdown1Y: 100,
+        relativeVolatility: 20,
+      },
+    })
+  })
+
+  it("keeps all score execution and persistence off", () => {
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.scoreExecutionEnabled).toBe(false)
+    expect(TORNTPHARM_GATE_H2_INITIAL_SCORE_INPUTS.persistedScoreRunEnabled).toBe(false)
+  })
+})

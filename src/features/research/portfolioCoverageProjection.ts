@@ -17,6 +17,7 @@ export interface CachedCoverageSecurityInput {
   readonly sourceSector: string | null
   readonly sourceIndustry: string | null
   readonly identityState: "FRESH" | "MISSING" | "CONFLICTING" | "REVIEW_REQUIRED"
+  readonly officialClassificationState?: "RESOLVED" | "MISSING" | "REVIEW_REQUIRED" | "CONFLICTING" | "NOT_APPLICABLE"
   readonly researchProfileCode: string | null
   readonly researchProfileVersion: string | null
   readonly researchProfileReadiness: ResearchProfileReadiness
@@ -56,15 +57,39 @@ export function projectPortfolioCoverageV1(input: CachedCoverageSecurityInput): 
   const isEquity = input.assetClass.toUpperCase() === "EQUITY"
   const classificationState = !isEquity
     ? "FRESH"
-    : sectorMapping.state === "MAPPED"
-      ? "FRESH"
-      : "MISSING"
+    : input.officialClassificationState === "CONFLICTING"
+      ? "CONFLICTING"
+      : input.officialClassificationState === "REVIEW_REQUIRED"
+        ? "REVIEW_REQUIRED"
+        : input.officialClassificationState === "MISSING"
+          ? "MISSING"
+          : input.officialClassificationState === "NOT_APPLICABLE"
+            ? "REVIEW_REQUIRED"
+            : sectorMapping.state === "MAPPED"
+              ? "FRESH"
+              : "MISSING"
 
-  const routing = routeResearchProfileV1({
-    assetClass: input.assetClass,
-    applicationSector: sectorMapping.applicationSector,
-    applicationIndustry: input.sourceIndustry,
-  })
+  const classificationAllowsRouting = !isEquity || classificationState === "FRESH"
+  const routing = classificationAllowsRouting
+    ? routeResearchProfileV1({
+        assetClass: input.assetClass,
+        applicationSector: sectorMapping.applicationSector,
+        applicationIndustry: input.sourceIndustry,
+      })
+    : {
+        ...routeResearchProfileV1({
+          assetClass: input.assetClass,
+          applicationSector: null,
+          applicationIndustry: null,
+        }),
+        applicationSector: sectorMapping.applicationSector,
+        applicationIndustry: input.sourceIndustry,
+        state: "REVIEW_REQUIRED" as const,
+        profileCode: null,
+        reasonCode: classificationState === "MISSING"
+          ? "OFFICIAL_EXCHANGE_CLASSIFICATION_MISSING"
+          : "OFFICIAL_EXCHANGE_CLASSIFICATION_REVIEW_REQUIRED",
+      }
 
   // Routing is methodology planning only. It must never promote a holding to
   // research-profile READY until a reviewed/versioned profile assignment exists.

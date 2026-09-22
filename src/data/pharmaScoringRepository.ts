@@ -150,6 +150,8 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
     profileCode: "PHARMA_V1",
     profileName: profile.name,
     profileSource,
+    methodologyState: "AVAILABLE",
+    methodologyReasonCode: null,
     modelName: model.name,
     modelStatus: model.status,
     runState: run?.run_state ?? null,

@@ -1,0 +1,950 @@
+{
+  "manifest_version": "PORTFOLIOAI_MIGRATION_BASELINE_V1",
+  "source_directory": "20260915_pre_r4n_baseline",
+  "migration_count": 78,
+  "unique_version_count": 74,
+  "duplicate_versions": [
+    "20260910200000",
+    "20260910210000",
+    "20260910224000",
+    "20260911021000"
+  ],
+  "migrations": [
+    {
+      "filename": "20260904180000_create_portfolio_foundation.sql",
+      "version": "20260904180000",
+      "sha256": "cacb82702520d40c28c90ab1a3bce1108258ee418e0e5e160d10285fffbc4e7a",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260905120000_create_import_transaction_foundation.sql",
+      "version": "20260905120000",
+      "sha256": "cf8ac87b923d183a0b5d25c464f5e05dc1f96723df6cacbd3f8682972b2bfa27",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260905180000_create_trusted_import_commit.sql",
+      "version": "20260905180000",
+      "sha256": "b8347ae24432c61e04185288d9543de6920e5da508902800e84614345dd15905",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260906183000_accept_raw_transactions_record_kind.sql",
+      "version": "20260906183000",
+      "sha256": "4c2dbff156052b69bc3c1c893ce702f7ebb4d9f9bc0afb44607eddf516e9253c",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260906203000_cache_stock_master_identity_evidence.sql",
+      "version": "20260906203000",
+      "sha256": "6ee44a02c514d69e34fd35b2b12fb85d8426132e60a66da68a26bf3c0d946dd1",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260907120000_create_market_data_foundation.sql",
+      "version": "20260907120000",
+      "sha256": "f1aafeaec1c879cd3f12c2f8e72caccb6730c86ca1c5b8059d32e995ab00c5b1",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260907123000_fix_market_data_lease_retry_after.sql",
+      "version": "20260907123000",
+      "sha256": "ec4e920c96d4a99a2a63f0287974e4996cc63b76930a9d926e82e99594d1e337",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260907130000_verify_motherson_angel_mapping.sql",
+      "version": "20260907130000",
+      "sha256": "c4b47385c727a01f93c05d00284aa4bad274df4770e052750200b75bad594c4b",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260907160000_create_stage5_manual_transactions.sql",
+      "version": "20260907160000",
+      "sha256": "00dc0ac81a071422255a20657ae253361d7ec75c9be2948f421f3367ac19ab39",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260907190000_complete_stage5_1_transaction_management.sql",
+      "version": "20260907190000",
+      "sha256": "8078935298076a03e7cf059e1bda72b5a9f770d97b8d6792a7f5afbbd0f658d3",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260907200000_fix_isin_validation_lint.sql",
+      "version": "20260907200000",
+      "sha256": "47edd0d20007a70d73a5f27fcc1594c30f8af530e840256fed8c1da8a10dc94d",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260907210000_store_security_series_canonically.sql",
+      "version": "20260907210000",
+      "sha256": "886c6397fcdcd04b3bd029b1b47b30bd9a8925c0cd78a5460209161756786be4",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260907220000_create_stage6_portfolio_classification.sql",
+      "version": "20260907220000",
+      "sha256": "c76d9a0af55ff0864bc690f1f050d59f53fe17f1b7632cb1902af29882c29b5c",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260908100000_create_audited_void_and_classification_corrections.sql",
+      "version": "20260908100000",
+      "sha256": "e547b5f173c45111645554080c9eef1f624cde7143a057a265fa0336d5cdfc7f",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260908101000_correct_bbox_canonical_asset_class.sql",
+      "version": "20260908101000",
+      "sha256": "c2f10e4f2b3bfe31458e73365be58915e6f914f4946ac457fd412d84a0a816ae",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260908102000_protect_stage6_audit_events.sql",
+      "version": "20260908102000",
+      "sha256": "a3a244d0615d87aa8a139ef903a2328e687a23a6e2eb3e2270fee4108985dc67",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260908110000_create_stage7_provenance_and_security_identity.sql",
+      "version": "20260908110000",
+      "sha256": "9915e4105c9e69801f13d92a70875088ffc967c49a0b1f0dfdf596e0fa90cfb2",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260908111000_create_stage7_enrichment_observations.sql",
+      "version": "20260908111000",
+      "sha256": "eb237a2a5489fabc86e81ceea1456438c875fee5b851ac91534a4f92ef6aa7e6",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260908112000_create_stage7_market_cap_policy_and_views.sql",
+      "version": "20260908112000",
+      "sha256": "4270ae48bd222d85ad24eaaf477550b3e21b44460f65985fb5ae70f8507cea4d",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260908113000_link_market_data_mappings_to_security_listings.sql",
+      "version": "20260908113000",
+      "sha256": "0e5662d5bc166487be77c63cb735958a47c3834c5cd18fb930d50b4019b645fc",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260908114000_restrict_stage7_enrichment_views_to_entitled_securities.sql",
+      "version": "20260908114000",
+      "sha256": "694a93a38beb19bfdc72534cee70bef79425bd687725290be6b136aea18f3e57",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260908115000_fix_stage7_ingestion_lease_retry_after.sql",
+      "version": "20260908115000",
+      "sha256": "96ffec9cca81303705fcdaf548ba11c49f2aa00899aee0073b15088c4c2bc425",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260908116000_protect_stage7_evidence_and_audit_decisions.sql",
+      "version": "20260908116000",
+      "sha256": "89016c15db7ea93aa1da389060f928ba8fa1199ced27911ff5f6a049ab3f9c6e",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260908117000_fix_stage7_policy_effective_dates.sql",
+      "version": "20260908117000",
+      "sha256": "a994577ca67e630dca5440573c546b7092000260fa2223fff663bdd88f06d172",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260908120000_add_stage7_document_and_fundamental_reconciliation.sql",
+      "version": "20260908120000",
+      "sha256": "ce7b80b23fa64bf0541bddea392aa63371a10fb1447388aeb5fc95dd2328d9bf",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260908200000_enable_trusted_trendlyne_ingestion.sql",
+      "version": "20260908200000",
+      "sha256": "d388a8d9d1907f9726dd0a96c94dd235f61c65b4ed931cdd5063db918d6c0ac8",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260909100000_create_stage7_2a_provider_control_plane.sql",
+      "version": "20260909100000",
+      "sha256": "46240812c2e7cb75d85d08573bab86a635686ffb4f6425dbda51acb8f919f9b5",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260910113000_trendlyne_quota_policy_and_visualizer.sql",
+      "version": "20260910113000",
+      "sha256": "c728032a8980abd3a200ad444e907a6123edb8c22dec47b2406d1393295cd584",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260910121000_register_trendlyne_canonical_metrics.sql",
+      "version": "20260910121000",
+      "sha256": "2abdac874ae5e2b349ee4b33b12e351e988ebdecd7229191ab1b90f2bdf881aa",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260910190000_create_scoring_ratings_foundation.sql",
+      "version": "20260910190000",
+      "sha256": "a3e41b77496de938ed9cc0823ba2440a75b7d2cf8cc8d2b4d579e41811895d44",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260910200000_create_scoring_metric_rules.sql",
+      "version": "20260910200000",
+      "sha256": "d7d745c3e1798825ae33b4a8d4c4d839c75fa22e9dfe8b92cef37139c52d0bec",
+      "duplicate_version_group": "20260910200000",
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260910200000_verify_bank_metric_mappings_from_live_capture.sql",
+      "version": "20260910200000",
+      "sha256": "8a73464857b4158e93db5377624c11ab9d55d837de1836e940f277d8f2cc9b9a",
+      "duplicate_version_group": "20260910200000",
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260910210000_create_sector_scoring_framework.sql",
+      "version": "20260910210000",
+      "sha256": "044e664fb04a8cf798cda1de4e2e23625c36ba54826ea4d573eb5cda0f8eef5d",
+      "duplicate_version_group": "20260910210000",
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260910210000_verify_nonfinancial_metric_mappings.sql",
+      "version": "20260910210000",
+      "sha256": "ee7192de0786ddf4d279fbf9a0a5e3cf8cffa38e397a6353f726bf5d947427a8",
+      "duplicate_version_group": "20260910210000",
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260910220000_add_scoring_profile_assignments_and_promote_hdfcbank_bank_metrics.sql",
+      "version": "20260910220000",
+      "sha256": "a64cc5ce19c0ead29ba9349447b3ba5d18e1cc748ea03f4c97afb9cd169a5bab",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260910223000_add_nonfinancial_scoring_validation_cohort.sql",
+      "version": "20260910223000",
+      "sha256": "88dc9224ae0abdae0d2881097b61927f6f73b264bde5f27250328523e955defc",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260910224000_align_general_scoring_rule_normalization.sql",
+      "version": "20260910224000",
+      "sha256": "bff5678bc5d6b9cfae8fd67a3c32bfaef3cfdcfa9ab667542ec495657792d843",
+      "duplicate_version_group": "20260910224000",
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260910224000_align_manual_fundamentals_refresh_cadence.sql",
+      "version": "20260910224000",
+      "sha256": "7355644c564d0db91937d02135481c3bb4dc465d5b92417d3df6195614b003be",
+      "duplicate_version_group": "20260910224000",
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260910231500_review_safe_trendlyne_evidence_mappings.sql",
+      "version": "20260910231500",
+      "sha256": "af80233e5eb8244dcce66127e5ec0e6983103005d77ca50d01fbd0a9d7b90cd2",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260911011500_backfill_trendlyne_ownership_history.sql",
+      "version": "20260911011500",
+      "sha256": "3ae1619bc22a161de5ce844ccfec6fc44f663dba048b9ec39dbd7e452e615bb6",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260911021000_review_bank_external_rating_signal.sql",
+      "version": "20260911021000",
+      "sha256": "e3f8a868c8f971e85bb4e10f59e19daa588586535a367e78acc78be0d0e23753",
+      "duplicate_version_group": "20260911021000",
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260911021000_stage_8_6c2_bank_growth_primary_evidence.sql",
+      "version": "20260911021000",
+      "sha256": "35e0a530d7df390c0e5b5947c27aaaefecd9f6b982a3746d666fc77986dd4cfe",
+      "duplicate_version_group": "20260911021000",
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260911103000_add_bank_pe_5y_self_history_valuation.sql",
+      "version": "20260911103000",
+      "sha256": "5883d15bb948e7b357959e35ade15e4cb608d8eae86b8ebb092dabc3492b66a5",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260911112000_create_market_metric_observations_and_review_bank_market_rules.sql",
+      "version": "20260911112000",
+      "sha256": "e43889c22a61ea43df56d00e5195915375753396183a685f6f9cfccf80526416",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260911171000_add_nifty_bank_benchmark_relative_strength.sql",
+      "version": "20260911171000",
+      "sha256": "e65737e3229ba339a95dc6a1939a71d6b43cbcef6bf2d457e77a591455f97c65",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260911183500_add_position_price_controls.sql",
+      "version": "20260911183500",
+      "sha256": "ac3541146c4317b17cd60044430ecc5517d81a4b741f94a55173bb5aba384a67",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260911214500_create_sector_aware_recommendation_foundation.sql",
+      "version": "20260911214500",
+      "sha256": "f48d35116bce619b8b70678c585455eab4950e5a7e5a5562af561c7bff20a076",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260911221500_add_persistent_recommendation_tracking.sql",
+      "version": "20260911221500",
+      "sha256": "edc0106518a0b9e16765a9f0db49723719ba9d3cdafada81f945ff7134eeab1c",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260911230000_add_sector_portfolio_aware_weight_policy.sql",
+      "version": "20260911230000",
+      "sha256": "cc7e02ab86b5c47a4afbd820d691cd28347a77d1a52c25f2b0e1fe060c13098b",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260912001500_record_action_bias_and_weight_guidance_v2.sql",
+      "version": "20260912001500",
+      "sha256": "a001cfdd08f497cfa127cb0fb0eec323248d20ceb42029f12c4cad3525985c5d",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260912013500_add_recommendation_ai_interpretation_fields.sql",
+      "version": "20260912013500",
+      "sha256": "573cdb4b985c734e7b552b424a3961cae209d774392f8e8387b715ff786e3b3a",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260912091818_create_company_profile_cache.sql",
+      "version": "20260912091818",
+      "sha256": "6b8fd66dc6353fbc58e2cb46728c28aa556588abfc14b92be65bc5661233482a",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260912091831_noop.sql",
+      "version": "20260912091831",
+      "sha256": "e1e21748e2468128d28e26d28fe7dc4fed9e0f458c204b5b467d808d3737aade",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260912091838_noop_cleanup_marker.sql",
+      "version": "20260912091838",
+      "sha256": "f4502100e68fd8248482a235fe488fa039f3ef1e84f0dbe66327724f36eac72e",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260912220000_create_news_intelligence_pilot_foundation.sql",
+      "version": "20260912220000",
+      "sha256": "1d14b045e491d6ec69c5cdc83f15016bad668a80c8a642d7be70b846d0f018c7",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260912224500_prepare_official_exchange_news_pilot.sql",
+      "version": "20260912224500",
+      "sha256": "7a3ce5f63a01489f1b8783b1d71e41f16127ab9b71862f3b7ea18cda4c411773",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260912233000_prepare_nse_news_normalization_pilot.sql",
+      "version": "20260912233000",
+      "sha256": "697e641437b625d8062e0563eb5e3d6a5d3a9dc025cba9de8e56314ca0e67650",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260913010500_prepare_nse_news_n4b_batch_pilot.sql",
+      "version": "20260913010500",
+      "sha256": "65c551ae6bfbcb69d9f1dab8bb30d69b74108c4691ceaa1f65cdc8ab75c88b67",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260913014500_prepare_nse_news_n4c_linked_document_pilot.sql",
+      "version": "20260913014500",
+      "sha256": "e75661b5c36fe104c8734e6f143fc8c45a69e895435ca7a028f43037708197f4",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260913022500_prepare_nse_news_n4c2_text_extraction_pilot.sql",
+      "version": "20260913022500",
+      "sha256": "c8aec21677b3ca40107181f51d73c53099d0a8b9432b67cb9b93220f28f87232",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260913090000_prepare_n5_automated_nse_news_pipeline.sql",
+      "version": "20260913090000",
+      "sha256": "22518fa2c8575385d0b88589413cad88a6bc660b446723faafd37196e1b1802f",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260913130000_add_stored_evidence_news_reclassification_v2.sql",
+      "version": "20260913130000",
+      "sha256": "dffe7bc8e25d5794897cbdb3e2300980964c3c7addaddca2eafa16ecad612a81",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": true,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260913131500_refine_stored_evidence_news_reclassification_v21.sql",
+      "version": "20260913131500",
+      "sha256": "d87ff783400bf51137aad539407b12725224a92cad7a5d1ac51bace3cecd6f3d",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260913133000_reconcile_n5_scheduler_production_state.sql",
+      "version": "20260913133000",
+      "sha256": "b02321c849d32611ef808e9284473af5ea577977bdc191200491c51ab9b1e335",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": true,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260913154500_promote_stored_trendlyne_sector_industry_evidence.sql",
+      "version": "20260913154500",
+      "sha256": "281094cf575de3fbcdbd0f55431478b8f464342416964667ab6232ff870fa49c",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260913160000_prepare_amfi_market_cap_classification_refresh.sql",
+      "version": "20260913160000",
+      "sha256": "72f3fb749fd5a03aacb7d13fe89b2618a295ab5ecb2c47c65b3138a21fdf4e24",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260913161500_prepare_trendlyne_classification_cohort_refresh.sql",
+      "version": "20260913161500",
+      "sha256": "02918d8ceed5ee9996a1404ae4e918a6d49c7012faa8f1d75e6ba172d6508e43",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260913163000_verify_new_trendlyne_classification_pairs.sql",
+      "version": "20260913163000",
+      "sha256": "e0f971b64de16d1b4052862139a06c9db4cc1ae02c04d752d925fdca00ef483d",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260913172000_complete_sector_gap_review.sql",
+      "version": "20260913172000",
+      "sha256": "6d766ab5c648a8dc2b4d1465a8e35e60f12bb3c7f41948a4f4495dea26e693fe",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260913235000_create_position_sizing_assessments.sql",
+      "version": "20260913235000",
+      "sha256": "00f9a83ab160b8395840094e8b796ddcd9c4a7b02c479a3cfcdbaa64477b8a06",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260914075005_r2d_portfolio_coverage_registry_v1.sql",
+      "version": "20260914075005",
+      "sha256": "d0bf3acd3c40480bdc89fea52de33e25a3b22db24fe59eae0644aeaa7c0f5f0c",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260914123000_register_pharma_history_raw_metrics.sql",
+      "version": "20260914123000",
+      "sha256": "4baff31410a86ef5132c515a790844a7b120c3b35a059f592158b56f764375de",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260914143000_add_pharma_v1_scoring_contract.sql",
+      "version": "20260914143000",
+      "sha256": "cc0c1fc4fdf54d4225f414c1b3163d8698a7b2fc4b22b5a6ebc571b3b4fa20b4",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260914161000_complete_pharma_v1_parent_contract.sql",
+      "version": "20260914161000",
+      "sha256": "cc35f0e56573e8821f96e4cb8219d55760fe26a166b2043e143bb357b4592932",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": false
+      }
+    },
+    {
+      "filename": "20260914162000_register_pharma_v1_parent_evidence_metrics.sql",
+      "version": "20260914162000",
+      "sha256": "80e12db68902d9964cc6c7bf8481a819c5e5e6e9d259c016fee712d6ea66bc2e",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260915094042_create_research_subprofile_assignments.sql",
+      "version": "20260915094042",
+      "sha256": "826224f1b606ed17805fcbfb91467ec00c6e26324bc0745dcec942c571c3e1ba",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260915133027_repair_news_scheduler_baseline_state.sql",
+      "version": "20260915133027",
+      "sha256": "50283102faba41d95bbfba0af6091f8accb8000fa34a3a642ec392c378dfcd71",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": true,
+        "reference_or_configuration_dml": true,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    },
+    {
+      "filename": "20260915133028_fix_portfolio_profile_weight_context_ambiguity.sql",
+      "version": "20260915133028",
+      "sha256": "f1d5df6a9324be489b1933410ef736d8d7a863644ef9d7c7fd09390a28b2b665",
+      "duplicate_version_group": null,
+      "classification": {
+        "schema": false,
+        "reference_or_configuration_dml": false,
+        "operational_scheduling": false,
+        "state_dependent_reconciliation": true
+      }
+    }
+  ]
+}
