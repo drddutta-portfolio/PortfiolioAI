@@ -270,3 +270,21 @@ AUTO_OEM lifecycle expectation was updated to IMPLEMENTED.
 No Chemicals methodology, routing, scoring, recommendation, persistence, provider, production, scheduler or deployment behavior changed.
 
 CHEMICALS_V1 Checkpoint A remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
+
+
+---
+
+## K4 Package 4 · CHEMICALS_V1 · Checkpoint A FINAL — 22 September 2026
+
+Owner-local contract tests and TypeScript passed completely and the owner approved proceeding.
+
+`CHEMICALS_V1_K4A_METHODOLOGY_V1` is now frozen with three subprofiles:
+- SPECIALTY_CHEMICALS;
+- AGRO_FERTILISER;
+- COMMODITY_PROCESS_CHEMICALS.
+
+Runtime activation remains OFF until Checkpoint B portability/isolation validation passes.
+
+**CHEMICALS_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
+
+Checkpoint B is now IN PROGRESS.
