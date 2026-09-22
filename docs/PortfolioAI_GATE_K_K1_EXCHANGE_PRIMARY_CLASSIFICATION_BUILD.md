@@ -817,3 +817,43 @@ NSE official bulk
 ```
 
 Detailed research industry/subprofile remains downstream and is not fabricated from BSE's broad industry label.
+
+---
+
+## 18. Residual classification freeze — reviewed secondary manifest
+
+The official BSE live fallback remained incomplete for a substantial part of the 38-stock NSE-bulk residual cohort. K1 therefore stops retrying fragile live web endpoints for slow-changing classification metadata.
+
+A frozen reviewed residual manifest has been added:
+
+`docs/k1/PortfolioAI_K1_REVIEWED_SECONDARY_CLASSIFICATION_FALLBACK_2026-09-22.json`
+
+Contract:
+
+`PORTFOLIOAI_K1_REVIEWED_SECONDARY_CLASSIFICATION_FALLBACK_V1`
+
+Scope:
+
+- exactly the 38 equities absent from the current NSE Indices Nifty Total Market bulk file;
+- current sector / industry classification captured from public company classification pages;
+- symbol / ISIN recorded where available;
+- evidence URL retained per row;
+- source explicitly tagged `REVIEWED_SECONDARY_CLASSIFICATION`;
+- never represented as NSE or BSE official evidence.
+
+Active K1 source order is now:
+
+```text
+1. NSE official bulk classification
+2. frozen reviewed secondary fallback for NSE-bulk residuals
+3. unresolved → REVIEW_REQUIRED
+```
+
+The normal reconciliation runner no longer makes Trendlyne or BSE targeted calls. Classification is reused deterministically.
+
+Authority rule remains fail-safe:
+- if a later official NSE/BSE classification becomes available for a fallback stock, official exchange evidence supersedes the reviewed secondary row;
+- research methodology remains downstream and cannot rewrite primary classification.
+
+The merged reference contract is now `PORTFOLIOAI_K1_CLASSIFICATION_REFERENCE_MERGED_V4`.
+The reconciliation contract is now `PORTFOLIOAI_K1_CLASSIFICATION_RECONCILIATION_V5`.
