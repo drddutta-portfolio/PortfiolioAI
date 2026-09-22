@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 RECONCILIATION POLICY IMPLEMENTED / 10-STOCK POLICY RE-RUN PENDING; K4 SCOPE NOT YET FROZEN; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 UNIVERSAL SECTOR-ENGINE CONTRACT IMPLEMENTED / OWNER-LOCAL VALIDATION PENDING; K4 SCOPE 10 PACKAGES / FROZEN; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -32275,3 +32275,51 @@ K1 is therefore formally CLOSED / COMPLETE / PASS. The K4 queue remains 10 packa
 K2 — Universal Sector-Engine Architecture Contract — is now unblocked.
 
 Safety remains unchanged: no production mutation/migration, no score/recommendation persistence, no scheduler change, no deployment, no PR merge, and no automatic trading.
+
+
+---
+
+## K2 Universal Sector-Engine Contract — implementation checkpoint — 22 September 2026
+
+K1 is closed and K2 has begun.
+
+Added:
+- `src/features/research/sectorEngineRegistry.ts`;
+- `src/features/research/sectorEngineRegistry.test.ts`;
+- `docs/PortfolioAI_GATE_K_K2_UNIVERSAL_SECTOR_ENGINE_CONTRACT.md`.
+
+Contract version:
+
+`SECTOR_ENGINE_CONTRACT_V1`
+
+The registry contains exactly 12 Gate K engine identities:
+- inherited `PHARMA_V1` — implemented;
+- inherited `BANK_NBFC` — K3 reconciliation required;
+- the ten K1-frozen K4 packages — placeholders only, with no invented methodology.
+
+The universal contract freezes:
+- common recommendation role names and fail-closed semantics;
+- missing mandatory evidence → `SCORE_NOT_COMPUTABLE`;
+- conflicting classification → `REVIEW_REQUIRED`;
+- missing recommendation-floor input → `INSUFFICIENT`;
+- failed role floor → role becomes ineligible and evaluation continues down the approved ladder;
+- explicit N/A is not missing;
+- no reconstruction of a score from incomplete mandatory inputs;
+- recommendation computation performs zero writes;
+- score/recommendation persistence remains OFF;
+- sector-only specialised routing remains prohibited;
+- every engine has `fallbackPolicy = NONE_FAIL_CLOSED`;
+- every engine has `runtimeSymbolSpecific = false`.
+
+Numeric recommendation thresholds, valuation models, benchmark choices, risk blockers and sector-specific scoring curves are explicitly NOT universalized. They remain sector-owned and require their later methodology authority.
+
+K2 owner-local exit validation now required:
+
+```bash
+npx vitest run src/features/research/sectorEngineRegistry.test.ts
+npm run typecheck
+```
+
+K3 has not started. No new sector methodology was created.
+
+Safety remains unchanged: no production mutation/migration, score persistence OFF, recommendation persistence OFF, no scheduler change, no deployment, PR #101 OPEN/DRAFT/UNMERGED, and no automatic trading.
