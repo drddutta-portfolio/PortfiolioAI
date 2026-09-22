@@ -32076,3 +32076,42 @@ Automatic trading            NO
 ```
 
 **K1 is closed. K2 may begin next, but has not started in this commit.**
+
+---
+
+## K1 Industry Readiness Lock — IMPLEMENTED / LOCAL AUDIT PENDING
+
+After K1 sector reconciliation closed PASS, the owner clarified a critical research principle:
+
+```text
+sector = macro context
+industry = micro-research methodology selector
+```
+
+PortfolioAI now codifies this as a permanent architecture invariant.
+
+Implemented:
+
+- `RESEARCH_PROFILE_ROUTING_V2`;
+- removed sector-only specialised routing behavior for Banking, Pharma and Capital Goods;
+- missing industry now returns `PROFILE_PENDING` with explicit reason codes;
+- regression test: sector alone cannot route BANK / PHARMA / INDUSTRIAL_CAPITAL_GOODS;
+- machine-readable taxonomy:
+  `docs/k1/PortfolioAI_GATE_K_INDUSTRY_RESEARCH_TAXONOMY.json`;
+- industry readiness audit:
+  `scripts/k1-industry-readiness-lock.mjs`;
+- final reconciled inventory V2 now carries Basic Industry where official evidence provides it;
+- consolidated K1 validator now syntax/parses the industry-lock artifacts.
+
+The K1 sector reconciliation remains complete. However, **K2 is blocked until the local 238-stock Industry Readiness audit is run and reviewed**.
+
+Required local sequence:
+
+1. pull latest branch;
+2. rerun `node scripts/k1-finalize-reconciled-sector-inventory.mjs` to generate V2 with Basic Industry;
+3. run `node scripts/k1-industry-readiness-lock.mjs`;
+4. review industry coverage, missing-industry symbols and taxonomy-pending rows;
+5. freeze the Industry Readiness Lock;
+6. only then begin K2.
+
+Safety state remains unchanged: no production mutation, migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action.
