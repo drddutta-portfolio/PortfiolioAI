@@ -425,3 +425,43 @@ From this checkpoint onward, K4 regression tests must avoid stale lifecycle assu
 - no test may retain a pre-approval or pre-closure expected state after the state transition is committed.
 
 **HEALTHCARE_SERVICES_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
+
+
+---
+
+## K4 Package 5 · HEALTHCARE_SERVICES_V1 · Checkpoint B implementation — 22 September 2026
+
+Checkpoint A is frozen COMPLETE / PASS.
+
+Implemented:
+- `healthcareServicesK4bScoringMethodology.ts`;
+- `healthcareServicesK4bScoringMethodology.test.ts`;
+- `healthcareServicesK4bIsolationRegression.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_5_HEALTHCARE_SERVICES_CHECKPOINT_B.md`;
+- registry maps `HOSPITAL` to HEALTHCARE_SERVICES_V1 in validation-pending state;
+- diagnostics remain deliberately unmapped from the hospital engine.
+
+Deterministic scoring:
+- ten dimensions totaling 100;
+- hospital-specific operating durability evidence;
+- no missing-input renormalization;
+- diagnostics → REVIEW_REQUIRED / separate methodology required;
+- symbol-independent methodology;
+- score/recommendation persistence remain OFF.
+
+Regression policy improvement:
+- the current package test is lifecycle-stable and valid both before and after promotion;
+- no stale pre-approval/pre-closure expectation is intentionally carried into this B suite;
+- completed packages are asserted only in their durable IMPLEMENTED state.
+
+Incremental isolation/regression:
+- PHARMA_V1 isolated;
+- BANK_NBFC isolated;
+- IT_TECH / INDUSTRIALS_CAPITAL_GOODS / AUTO_COMPONENTS / CHEMICALS_V1 preserved;
+- TORNTPHARM golden 75.1575 preserved;
+- AUROPHARMA fail-closed golden preserved;
+- universal Research workspace preserved.
+
+Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
