@@ -32224,3 +32224,30 @@ Next owner-local sequence:
 4. review remaining missing/failed symbols and taxonomy-pending rows.
 
 No production mutation, migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K1 Industry Readiness closeout checkpoint — 22 September 2026
+
+Public Industry enrichment resolved 149/152 missing rows. Three Screener classification-path failures remained: `HINDUNILVR`, `JYOTHYLAB`, and `POLICYBZR`.
+
+Targeted public evidence and owner review accepted these Industry labels for K1 readiness only:
+
+- HINDUNILVR → Personal Care / Household Products
+- JYOTHYLAB → Personal Products / Household Care
+- POLICYBZR → Fintech / Insurance Brokerage & Platform
+
+Added `docs/k1/PortfolioAI_K1_REVIEWED_INDUSTRY_EXCEPTIONS_2026-09-22.json` and updated `scripts/k1-enrich-missing-industries.mjs` to consume those reviewed exceptions while preserving the already reconciled canonical Sector. Basic Industry remains null when not independently supportable.
+
+Safety preserved:
+- production mutation: NO
+- production migration: NO
+- score persistence: OFF
+- recommendation persistence: OFF
+- scheduler mutation: NO
+- deployment: NO
+- PR merge: NO
+- automatic trading: NO
+
+Next owner-local action: pull the branch, rerun the enrichment script, then rerun the Industry Readiness lock against `artifacts/k1-final-reconciled-research-classification-inventory.json`. K2 remains blocked until the final lock output is reviewed and K1 Industry Readiness is explicitly frozen.
