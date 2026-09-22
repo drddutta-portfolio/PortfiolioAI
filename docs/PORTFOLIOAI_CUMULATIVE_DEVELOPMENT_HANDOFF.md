@@ -31790,3 +31790,44 @@ No production mutation, migration, persistence, scheduler change, deployment, PR
 
 Next action: pull latest branch and rerun the full 238-stock reconciliation. If residual `OFFICIAL_MISSING` rows remain after the hardened official fallback, review only those remaining symbols with an alternate official evidence path.
 
+---
+
+### K1 Trendlyne MCP residual-classification build — 22 September 2026
+
+Owner approved switching the persistent NSE-bulk residual cohort to Trendlyne MCP for sector and industry capture because classification is slow-changing reference data and should be reused after review.
+
+Implemented:
+
+- local-only Edge Function `k1-local-trendlyne-classification`;
+- existing Trendlyne MCP multi-stock tool reused;
+- batches of 20 symbols;
+- expected 38-stock residual cost = about 2 MCP calls;
+- exact requested output: symbol, ISIN, company name, sector, industry;
+- strict symbol allow-listing to prevent peer/substitution leakage;
+- reusable artifact `artifacts/k1-trendlyne-classification.json`;
+- K1 runner now consumes the cached artifact instead of repeatedly querying NSE or Trendlyne;
+- merged classification provenance distinguishes:
+  - official NSE bulk;
+  - `TRENDLYNE_MCP_REVIEWED_FALLBACK`;
+- comparator V3 is source-aware and exposes `referenceSourceCounts`;
+- reconciliation terminal output now displays `REFERENCE_SOURCE`.
+
+Authority rule remains:
+
+```text
+official NSE/BSE evidence, when available, outranks Trendlyne fallback.
+Trendlyne fills only NSE-bulk residuals.
+A future official conflict supersedes the fallback.
+```
+
+No production mutation, migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+Next owner-local sequence:
+
+1. pull latest branch;
+2. ensure `K1_LOCAL_TRENDLYNE_CLASSIFICATION_ENABLED=true` exists in `supabase/.env.local`;
+3. export local login variables;
+4. run `bash scripts/k1-capture-trendlyne-classification.sh`;
+5. review resolved/unresolved counts;
+6. run `bash scripts/k1-run-current-cohort-reconciliation.sh`;
+7. if residual count becomes zero, freeze the captured reviewed classification manifest and calculate final reconciled sector inventory / K4 package count.
