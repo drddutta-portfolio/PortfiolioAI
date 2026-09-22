@@ -34,11 +34,12 @@ describe("resolveScoringProfile", () => {
     })
   })
 
-  it("routes Financial Services + NBFC evidence to BANK_NBFC", () => {
-    expect(resolveScoringProfile("Financial Services", "NBFC", null)).toMatchObject({
-      profileCode: "BANK_NBFC",
-      ruleProfile: "BANK_NBFC",
-      profileSource: "SECTOR_RULE",
+  it("recognizes Financial Services + NBFC but fails scoring closed until NBFC methodology is approved", () => {
+    expect(resolveScoringProfile("Financial Services", "NBFC", null)).toEqual({
+      profileCode: "GENERAL",
+      ruleProfile: "GENERAL",
+      profileSource: "GENERAL_FALLBACK",
+      legacyAssignmentCode: null,
     })
   })
 
