@@ -13,14 +13,21 @@ export interface RecommendationPreview {
   readonly reason: string
 }
 
-function previewOverall(snapshot: SecurityScoringSnapshot) {
-  if (snapshot.overallScore !== null) return snapshot.overallScore
-  if (snapshot.profileCode === "PHARMA_V1") return null
-  const applicable = snapshot.dimensions.filter((dimension) => dimension.dimensionWeight > 0)
-  if (!applicable.length || applicable.some((dimension) => dimension.rawScore === null)) return null
-  const totalWeight = applicable.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
-  if (totalWeight <= 0) return null
-  return applicable.reduce((sum, dimension) => sum + (dimension.rawScore ?? 0) * dimension.dimensionWeight, 0) / totalWeight
+function authoritativeOverall(snapshot: SecurityScoringSnapshot) {
+  return snapshot.overallScore
+}
+
+function missingMandatoryFloorCodes(
+  snapshot: SecurityScoringSnapshot,
+  floorsByRole: RecommendationPolicy["mandatoryDimensionFloors"],
+) {
+  const requiredCodes = new Set(
+    Object.values(floorsByRole).flatMap((floors) => Object.keys(floors)),
+  )
+  return [...requiredCodes].filter((code) => {
+    const dimension = snapshot.dimensions.find((item) => item.dimensionCode === code)
+    return dimension?.rawScore === null || dimension?.rawScore === undefined
+  })
 }
 
 function floorsPass(snapshot: SecurityScoringSnapshot, floors: Readonly<Record<string, number>> | undefined) {
@@ -33,7 +40,7 @@ function floorsPass(snapshot: SecurityScoringSnapshot, floors: Readonly<Record<s
 
 export function buildRecommendationPreview(snapshot: SecurityScoringSnapshot, policy: RecommendationPolicy): RecommendationPreview {
   const scoreReadyCoverage = snapshot.scoreReadyCoverage ?? 0
-  const overallScore = previewOverall(snapshot)
+  const overallScore = authoritativeOverall(snapshot)
   const cautions = Object.entries(policy.cautionRules).flatMap(([dimensionCode, rule]) => {
     if (typeof rule.below !== "number") return []
     const dimension = snapshot.dimensions.find((item) => item.dimensionCode === dimensionCode)
@@ -63,6 +70,19 @@ export function buildRecommendationPreview(snapshot: SecurityScoringSnapshot, po
       sectorProfile: snapshot.profileName,
       policyStatus: policy.status,
       reason: "Sector-specific evidence gate is not yet complete.",
+    }
+  }
+
+  const missingFloorCodes = missingMandatoryFloorCodes(snapshot, policy.mandatoryDimensionFloors)
+  if (missingFloorCodes.length > 0) {
+    return {
+      suggestedRole: "INSUFFICIENT",
+      overallScore,
+      scoreReadyCoverage,
+      cautions,
+      sectorProfile: snapshot.profileName,
+      policyStatus: policy.status,
+      reason: `Mandatory recommendation-floor data is missing: ${missingFloorCodes.join(", ")}.`,
     }
   }
 
@@ -102,14 +122,26 @@ export function buildRecommendationPreview(snapshot: SecurityScoringSnapshot, po
     }
   }
 
+  if (policy.watchMinScore !== null) {
+    return {
+      suggestedRole: "AVOID",
+      overallScore,
+      scoreReadyCoverage,
+      cautions,
+      sectorProfile: snapshot.profileName,
+      policyStatus: policy.status,
+      reason: "Current evidence is below the sector-specific watch threshold.",
+    }
+  }
+
   return {
-    suggestedRole: "AVOID",
+    suggestedRole: "INSUFFICIENT",
     overallScore,
     scoreReadyCoverage,
     cautions,
     sectorProfile: snapshot.profileName,
     policyStatus: policy.status,
-    reason: "Current evidence is below the sector-specific watch threshold.",
+    reason: "A sector-specific Avoid boundary has not been approved.",
   }
 }
 
