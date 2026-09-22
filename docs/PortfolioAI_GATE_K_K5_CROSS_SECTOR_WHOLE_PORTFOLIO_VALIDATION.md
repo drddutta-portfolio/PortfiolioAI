@@ -139,3 +139,21 @@ npm run typecheck
 ```
 
 If all pass, owner review can freeze the recommendation-portability conclusion and close K5.
+
+
+## 10. Consolidated execution path
+
+To keep K5 to a single lifecycle-stable owner-local checkpoint, use:
+
+```bash
+bash scripts/k5-validate-cross-sector.sh
+```
+
+This runner executes the full K5 isolation/routing/portability regression set plus TypeScript. It intentionally contains no stale pre-approval or pre-promotion lifecycle expectation.
+
+Repository CI observation on the initial K5 commit:
+- GitHub Architecture Guard concluded failure before any job step was created or executed; this is not evidence of a test assertion failure.
+- the separate Vercel status failed because of a build-rate-limit condition.
+- neither condition changes K5 methodology or safety state.
+
+K5 remains **LOCAL VALIDATION PENDING** until the consolidated owner-local command passes.
