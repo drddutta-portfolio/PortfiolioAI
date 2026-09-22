@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest"
 import { IT_TECH_K4A_CONTRACT, resolveItTechK4aSubprofile } from "./itTechK4aMethodologyContract"
 
 describe("IT_TECH K4 Checkpoint A methodology contract", () => {
-  it("remains non-activating until owner approval", () => {
-    expect(IT_TECH_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVAL_REQUIRED")
+  it("remains non-activating after Checkpoint A approval until Checkpoint B closes", () => {
+    expect(IT_TECH_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVED_LOCKED")
     expect(IT_TECH_K4A_CONTRACT.runtimeActivationAllowed).toBe(false)
     expect(IT_TECH_K4A_CONTRACT.scorePersistenceEnabled).toBe(false)
     expect(IT_TECH_K4A_CONTRACT.recommendationPersistenceEnabled).toBe(false)
