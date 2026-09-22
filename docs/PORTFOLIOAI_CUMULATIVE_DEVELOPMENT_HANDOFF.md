@@ -880,3 +880,38 @@ Final state:
 **K4 Package 8 · CONSUMER_FMCG = COMPLETE / PASS / CLOSED.**
 
 K4 Package 9 — OIL_GAS_V1 Checkpoint A is now IN PROGRESS.
+
+
+---
+
+## K4 Package 9 · OIL_GAS_V1 · Checkpoint A implementation — 22 September 2026
+
+CONSUMER_FMCG is closed COMPLETE / PASS.
+
+Added:
+- `oilGasK4aMethodologyContract.ts`;
+- `oilGasK4aMethodologyContract.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_9_OIL_GAS_CHECKPOINT_A.md`.
+
+Mandatory K1 subprofiles preserved:
+1. UPSTREAM_E_AND_P — ONGC;
+2. MIDSTREAM_CITY_GAS — GAIL / MGL / IGL;
+3. INTEGRATED_REFINING_PETCHEM — RELIANCE as mixed-business control, not sole authority.
+
+Key methodology locks proposed:
+- Industry selects methodology; Sector alone cannot;
+- minimum 5 annual years / 12 quarterly cycle observations / 252 trading days;
+- commodity and refining-cycle normalization mandatory;
+- reserve/volume/throughput context required by subprofile;
+- administered pricing/tax context required where material;
+- energy-transition risk explicit;
+- mixed-business controls cannot override pure-play economics;
+- no cross-subprofile peer percentiles;
+- unknown Industry → METHOD_NOT_AVAILABLE;
+- recommendation thresholds remain subprofile-owned and unset.
+
+No-stale regression policy remains active.
+
+Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
