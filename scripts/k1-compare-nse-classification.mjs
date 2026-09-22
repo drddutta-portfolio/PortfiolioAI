@@ -91,6 +91,7 @@ function identityAssessment(canonical, official, reviewedTransitions) {
 }
 
 function classifyPair(canonical, official, reviewedTransitions) {
+  const isTrendlyneFallback = official?.sourceKind === "TRENDLYNE_MCP_REVIEWED_FALLBACK"
   if (!official) {
     return {
       state: "OFFICIAL_MISSING",
@@ -137,7 +138,9 @@ function classifyPair(canonical, official, reviewedTransitions) {
   if (canonicalSector !== officialSector) {
     return {
       state: "CHANGE_REQUIRED",
-      reasonCode: "CANONICAL_PRIMARY_SECTOR_DIFFERS_FROM_NSE",
+      reasonCode: isTrendlyneFallback
+        ? "CANONICAL_PRIMARY_SECTOR_DIFFERS_FROM_TRENDLYNE_FALLBACK"
+        : "CANONICAL_PRIMARY_SECTOR_DIFFERS_FROM_NSE",
       changeScopes: [...changeScopes, "SECTOR", ...(officialIndustry && canonicalIndustry !== officialIndustry ? ["INDUSTRY"] : [])],
       identity,
     }
@@ -157,7 +160,9 @@ function classifyPair(canonical, official, reviewedTransitions) {
   if (officialIndustry && canonicalIndustry && officialIndustry !== canonicalIndustry) {
     return {
       state: "CHANGE_REQUIRED",
-      reasonCode: "CANONICAL_INDUSTRY_DIFFERS_FROM_NSE",
+      reasonCode: isTrendlyneFallback
+        ? "CANONICAL_INDUSTRY_DIFFERS_FROM_TRENDLYNE_FALLBACK"
+        : "CANONICAL_INDUSTRY_DIFFERS_FROM_NSE",
       changeScopes: [...changeScopes, "INDUSTRY"],
       identity,
     }
@@ -174,9 +179,13 @@ function classifyPair(canonical, official, reviewedTransitions) {
 
   return {
     state: "AGREE",
-    reasonCode: officialIndustry
-      ? "CANONICAL_SECTOR_INDUSTRY_AGREE_WITH_NSE"
-      : "CANONICAL_PRIMARY_SECTOR_AGREES_WITH_NSE",
+    reasonCode: isTrendlyneFallback
+      ? officialIndustry
+        ? "CANONICAL_SECTOR_INDUSTRY_AGREE_WITH_TRENDLYNE_FALLBACK"
+        : "CANONICAL_PRIMARY_SECTOR_AGREES_WITH_TRENDLYNE_FALLBACK"
+      : officialIndustry
+        ? "CANONICAL_SECTOR_INDUSTRY_AGREE_WITH_NSE"
+        : "CANONICAL_PRIMARY_SECTOR_AGREES_WITH_NSE",
     changeScopes: [],
     identity,
   }
@@ -243,6 +252,8 @@ export function reconcileNseClassification(canonicalSnapshot, officialSnapshot, 
             basicIndustry: exchange.basicIndustry ?? null,
             sourceUrl: exchange.sourceUrl ?? null,
             retrievedAt: exchange.retrievedAt ?? null,
+            sourceKind: exchange.sourceKind ?? null,
+            classificationAuthority: exchange.classificationAuthority ?? null,
           }
         : null,
     }
@@ -253,14 +264,20 @@ export function reconcileNseClassification(canonicalSnapshot, officialSnapshot, 
     return acc
   }, {})
 
+  const referenceSourceCounts = rows.reduce((acc, row) => {
+    const source = row.official?.sourceKind ?? "UNKNOWN"
+    acc[source] = (acc[source] ?? 0) + 1
+    return acc
+  }, {})
+
   const changeScopeCounts = rows.flatMap((row) => row.changeScopes ?? []).reduce((acc, scope) => {
     acc[scope] = (acc[scope] ?? 0) + 1
     return acc
   }, {})
 
   return {
-    contract: "PORTFOLIOAI_K1_NSE_CLASSIFICATION_RECONCILIATION_V2",
-    policy: "EXCHANGE_PRIMARY_REVIEW_FIRST_V1",
+    contract: "PORTFOLIOAI_K1_CLASSIFICATION_RECONCILIATION_V3",
+    policy: "EXCHANGE_PRIMARY_WITH_REVIEWED_TRENDLYNE_FALLBACK_V1",
     generatedAt: new Date().toISOString(),
     canonicalContract: canonicalSnapshot?.contract ?? null,
     officialContract: officialSnapshot?.contract ?? null,
@@ -270,6 +287,7 @@ export function reconcileNseClassification(canonicalSnapshot, officialSnapshot, 
     comparisonRowCount: rows.length,
     counts,
     changeScopeCounts,
+    referenceSourceCounts,
     freezeEligible:
       rows.length === canonicalRows.length &&
       (counts.OFFICIAL_MISSING ?? 0) === 0 &&
