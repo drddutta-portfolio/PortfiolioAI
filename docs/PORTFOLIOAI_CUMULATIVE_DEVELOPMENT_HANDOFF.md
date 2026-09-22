@@ -395,3 +395,18 @@ Key methodology locks proposed:
 Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 5 · HEALTHCARE_SERVICES_V1 · Checkpoint A validation correction — 22 September 2026
+
+Owner-local Checkpoint A validation initially reported 1 failed test and 26 passed.
+
+The single failure was a stale registry lifecycle expectation:
+- `SPECIALTY_CHEMICALS` was still expected to belong to CHEMICALS_V1 with lifecycle `K4_FROZEN_PENDING`;
+- CHEMICALS_V1 had already been closed and promoted to `IMPLEMENTED`.
+
+Only the regression expectation was updated. No Healthcare Services methodology, routing, scoring, recommendation, persistence, provider, production, scheduler or deployment behavior changed.
+
+HEALTHCARE_SERVICES_V1 Checkpoint A remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
