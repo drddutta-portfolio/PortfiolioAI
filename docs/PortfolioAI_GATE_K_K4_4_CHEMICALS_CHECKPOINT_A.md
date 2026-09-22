@@ -66,3 +66,16 @@ Universal role names may be reused, but numeric role thresholds, role floors, ca
 ## 7. Checkpoint A acceptance
 
 Owner approval must freeze the three-subprofile structure, reference anchors, history/evidence gates, benchmark family, valuation families, durability/risk treatment and fail-closed behavior before Checkpoint B scoring/portability implementation.
+
+
+## 8. Checkpoint A final validation and freeze
+
+Owner-local validation passed:
+- `chemicalsK4aMethodologyContract.test.ts` — PASS;
+- `sectorEngineRegistry.test.ts` — PASS;
+- `researchProfileRouting.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+Owner approved proceeding with the three-subprofile Chemicals structure and the frozen evidence/valuation/benchmark/durability boundaries.
+
+**CHEMICALS_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
