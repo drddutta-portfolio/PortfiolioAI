@@ -28,6 +28,11 @@ function routedEngineProfile(
     return { code: "GENERAL", source: "GENERAL_FALLBACK" }
   }
 
+  const profileAuthority = engine.profileAuthorities?.[routed.profileCode]
+  if (profileAuthority?.state === "PENDING_METHODOLOGY") {
+    return { code: "GENERAL", source: "GENERAL_FALLBACK" }
+  }
+
   return { code: engine.engineCode, source: "SECTOR_RULE" }
 }
 
