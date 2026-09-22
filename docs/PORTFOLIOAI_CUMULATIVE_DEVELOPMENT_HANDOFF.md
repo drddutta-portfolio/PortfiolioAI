@@ -1,4 +1,4 @@
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 COMPLETE / PASS / CLOSED across all 10 sector packages; K5 COMPLETE / PASS / CLOSED; K-FINAL NOT STARTED; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 COMPLETE / PASS / CLOSED across all 10 sector packages; K5 COMPLETE / PASS / CLOSED; K-FINAL IMPLEMENTED / LOCAL VALIDATION PENDING; PR #101 OPEN / DRAFT / UNMERGED
 
 
 
@@ -1390,3 +1390,75 @@ PR #101 remains OPEN / DRAFT / UNMERGED.
 **Gate K5 = COMPLETE / PASS / CLOSED.**
 
 Next and final hard-capped Gate K stage: **K-FINAL — Portfolio Sector-Coverage Closure**.
+
+
+---
+
+## Gate K-FINAL · Portfolio Sector-Coverage Closure implementation — 22 September 2026
+
+K5 is closed COMPLETE / PASS.
+
+K-FINAL has been implemented as the final Gate K confirmation/closure package only. No new methodology or threshold policy was introduced.
+
+Added:
+- `src/features/research/kFinalPortfolioCoverage.ts`;
+- `src/features/research/kFinalPortfolioCoverage.test.ts`;
+- `scripts/k-final-validate-portfolio-coverage.sh`;
+- `docs/PortfolioAI_GATE_K_FINAL_PORTFOLIO_SECTOR_COVERAGE_CLOSURE.md`.
+
+Portfolio-wide closure matrix:
+- generated from the frozen 238-equity K1/K5 routing snapshot;
+- every holding resolves to exactly one architecture state:
+  - ARCHITECTURE_READY;
+  - METHODOLOGY_NOT_AVAILABLE;
+  - REVIEW_REQUIRED;
+  - NOT_APPLICABLE;
+- supported holdings are deliberately marked score/recommendation EVIDENCE_DEPENDENT rather than falsely claiming evidence completeness;
+- unsupported methodology fails closed to SCORE_NOT_COMPUTABLE / RECOMMENDATION_NOT_COMPUTABLE;
+- unresolved/conflicting classification remains REVIEW_REQUIRED.
+
+K-FINAL acceptance coverage includes:
+- explicit architecture state for every frozen current holding;
+- no cross-sector methodology leakage;
+- future-stock portability;
+- universal Research workspace continuity;
+- fail-closed missing evidence;
+- N/A distinct from missing;
+- recommendation safety;
+- complete registry-driven isolation;
+- stable Pharma golden controls;
+- unsupported-sector fail-safe behavior;
+- score persistence OFF;
+- recommendation persistence OFF;
+- position sizing OFF;
+- Gate K AI interpretation activation OFF;
+- production mutation/migration OFF;
+- deployment OFF;
+- PR merge OFF;
+- automatic trading OFF.
+
+Consolidated owner-local validation command:
+
+```bash
+git pull
+bash scripts/k-final-validate-portfolio-coverage.sh
+```
+
+The K-FINAL suite is lifecycle-stable and does not reintroduce stale pre-approval/pre-promotion expectations.
+
+Permanent safety boundaries remain unchanged:
+- no production mutation/migration;
+- no score persistence;
+- no recommendation persistence;
+- no provider refresh unless explicitly approved;
+- no position sizing activation;
+- no AI interpretation activation under Gate K;
+- no portfolio mutation;
+- no scheduler changes;
+- no deployment;
+- no PR merge;
+- no automatic trading.
+
+**K-FINAL status = IMPLEMENTED / LOCAL VALIDATION PENDING.**
+
+Gate K must not be marked COMPLETE / PASS until the consolidated K-FINAL command passes and the result is recorded.
