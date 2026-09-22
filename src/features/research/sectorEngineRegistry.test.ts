@@ -8,7 +8,7 @@ import {
 describe("SECTOR_ENGINE_CONTRACT_V1", () => {
   it("contains exactly the two inherited engines plus the ten frozen K4 packages", () => {
     expect(SECTOR_ENGINE_REGISTRY).toHaveLength(12)
-    expect(SECTOR_ENGINE_REGISTRY.filter((entry) => entry.lifecycle === "K4_FROZEN_PENDING")).toHaveLength(9)
+    expect(SECTOR_ENGINE_REGISTRY.filter((entry) => entry.lifecycle === "K4_FROZEN_PENDING")).toHaveLength(8)
   })
 
   it("prohibits runtime symbol-specific methodology and cross-sector fallback", () => {
@@ -40,7 +40,7 @@ describe("SECTOR_ENGINE_CONTRACT_V1", () => {
     })
     expect(sectorEngineForProfileCode("PROJECT_EPC")).toMatchObject({
       engineCode: "INDUSTRIALS_CAPITAL_GOODS",
-      lifecycle: "K4_FROZEN_PENDING",
+      lifecycle: "IMPLEMENTED",
     })
     expect(sectorEngineForProfileCode("CAPITAL_EQUIPMENT_ELECTRICAL")?.engineCode).toBe("INDUSTRIALS_CAPITAL_GOODS")
     expect(sectorEngineForProfileCode("DEFENCE_AEROSPACE")?.engineCode).toBe("INDUSTRIALS_CAPITAL_GOODS")
