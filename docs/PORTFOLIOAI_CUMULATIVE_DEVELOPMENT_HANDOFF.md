@@ -931,3 +931,44 @@ Owner-local tests and TypeScript passed completely.
 **OIL_GAS_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
 
 Checkpoint B is now IN PROGRESS.
+
+
+---
+
+## K4 Package 9 · OIL_GAS_V1 · Checkpoint B implementation — 22 September 2026
+
+Checkpoint A is frozen COMPLETE / PASS.
+
+Implemented:
+- `oilGasK4bScoringMethodology.ts`;
+- `oilGasK4bScoringMethodology.test.ts`;
+- `oilGasK4bIsolationRegression.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_9_OIL_GAS_CHECKPOINT_B.md`;
+- canonical router extended for UPSTREAM_E_AND_P / MIDSTREAM_CITY_GAS / INTEGRATED_REFINING_PETCHEM;
+- registry maps all three profiles to OIL_GAS_V1 in validation-pending state.
+
+Deterministic scoring:
+- ten dimensions totaling 100;
+- six-decimal stable weighted output;
+- mandatory SUBPROFILE_OPERATING_CONTEXT readiness gate;
+- through-cycle commodity/refining normalization;
+- distinct subprofile growth contracts;
+- RELIANCE remains a mixed-business control, not sole methodology authority;
+- symbol-independent methodology;
+- missing mandatory evidence fails closed.
+
+Regression policy:
+- Checkpoint A test aligned before B validation;
+- current-package isolation is lifecycle-stable;
+- completed engines are asserted only as IMPLEMENTED;
+- no hard-coded shrinking pending-package count.
+
+Incremental controls:
+- PHARMA_V1 / BANK_NBFC and K4 Packages 1–8 isolated/preserved;
+- TORNTPHARM golden 75.1575 preserved;
+- AUROPHARMA fail-closed golden preserved;
+- universal Research workspace preserved.
+
+Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
