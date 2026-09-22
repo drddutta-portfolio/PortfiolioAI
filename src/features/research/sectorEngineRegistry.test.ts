@@ -67,6 +67,8 @@ describe("SECTOR_ENGINE_CONTRACT_V1", () => {
     expect(sectorEngineForProfileCode("CAPITAL_MARKETS_AMC")?.engineCode).toBe("FIN_SERVICES_NON_LENDER")
     expect(sectorEngineForProfileCode("INSURANCE")?.engineCode).toBe("FIN_SERVICES_NON_LENDER")
     expect(sectorEngineForProfileCode("FINTECH_PLATFORM")?.engineCode).toBe("FIN_SERVICES_NON_LENDER")
+    expect(sectorEngineForProfileCode("STEEL_FERROUS")?.engineCode).toBe("METALS_COMMODITIES")
+    expect(sectorEngineForProfileCode("NON_FERROUS_DIVERSIFIED_METALS")?.engineCode).toBe("METALS_COMMODITIES")
   })
 
   it("does not place universal numeric recommendation thresholds in the registry", () => {
