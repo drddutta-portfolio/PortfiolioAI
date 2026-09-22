@@ -20,7 +20,7 @@ export interface MetalsCommoditiesK4aSubprofileContract {
 
 export const METALS_COMMODITIES_K4A_CONTRACT = {
   version: METALS_COMMODITIES_K4A_CONTRACT_VERSION,
-  state: "CHECKPOINT_A_OWNER_APPROVAL_REQUIRED",
+  state: "CHECKPOINT_A_OWNER_APPROVED_LOCKED",
   engineCode: "METALS_COMMODITIES",
   runtimeActivationAllowed: false,
   scorePersistenceEnabled: false,
