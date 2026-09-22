@@ -76,3 +76,16 @@ Universal role names may be reused, but numeric role thresholds, role floors, ca
 ## 8. Checkpoint A acceptance
 
 Owner approval must freeze the three-subprofile split, lender separation, reference anchors, evidence/history gates, benchmark/valuation families, durability/risk treatment and fail-closed behavior before Checkpoint B scoring/portability implementation.
+
+
+## 9. Checkpoint A final validation and freeze
+
+Owner-local validation passed:
+- `finServicesNonLenderK4aMethodologyContract.test.ts` — PASS;
+- `sectorEngineRegistry.test.ts` — PASS;
+- `researchProfileRouting.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+Owner approved proceeding with the three-subprofile non-lender Financial Services structure.
+
+**FIN_SERVICES_NON_LENDER Checkpoint A = COMPLETE / PASS / FROZEN.**
