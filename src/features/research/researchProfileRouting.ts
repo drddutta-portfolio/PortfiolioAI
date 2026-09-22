@@ -15,6 +15,9 @@ export type ResearchProfileCode =
   | "STEEL_FERROUS"
   | "NON_FERROUS_DIVERSIFIED_METALS"
   | "BRANDED_CONSUMER_FMCG"
+  | "UPSTREAM_E_AND_P"
+  | "MIDSTREAM_CITY_GAS"
+  | "INTEGRATED_REFINING_PETCHEM"
   | "IT_SERVICES"
   | "IT_SOFTWARE_PRODUCTS_PLATFORMS"
   | "IT_DIGITAL_INFRA_HARDWARE"
@@ -291,6 +294,40 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
       return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "CONSUMER_FMCG_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "CONSUMER_FMCG_PROFILE_PENDING")
+  }
+
+
+  if (sector === "OIL_GAS_CONSUMABLE_FUELS" || sector === "OIL_GAS" || sector === "ENERGY") {
+    if (
+      industry === "OIL_EXPLORATION_PRODUCTION"
+      || industry === "OIL_GAS_EXPLORATION"
+      || industry === "EXPLORATION_PRODUCTION"
+      || industry === "UPSTREAM_OIL_GAS"
+    ) {
+      return result(input, "ROUTED", "UPSTREAM_E_AND_P", "SECTOR_AND_INDUSTRY", "UPSTREAM_E_AND_P")
+    }
+    if (
+      industry === "GAS_TRANSMISSION"
+      || industry === "GAS_DISTRIBUTION"
+      || industry === "CITY_GAS_DISTRIBUTION"
+      || industry === "PIPELINES"
+      || industry === "MIDSTREAM_OIL_GAS"
+    ) {
+      return result(input, "ROUTED", "MIDSTREAM_CITY_GAS", "SECTOR_AND_INDUSTRY", "MIDSTREAM_CITY_GAS")
+    }
+    if (
+      industry === "REFINERIES"
+      || industry === "REFINING_MARKETING"
+      || industry === "PETROCHEMICALS"
+      || industry === "INTEGRATED_OIL_GAS"
+      || industry === "OIL_MARKETING_COMPANIES"
+    ) {
+      return result(input, "ROUTED", "INTEGRATED_REFINING_PETCHEM", "SECTOR_AND_INDUSTRY", "INTEGRATED_REFINING_PETCHEM")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "OIL_GAS_INDUSTRY_REQUIRED")
+    }
+    return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "OIL_GAS_SUBPROFILE_PENDING")
   }
 
   if (sector === "FINANCIAL_SERVICES") {
