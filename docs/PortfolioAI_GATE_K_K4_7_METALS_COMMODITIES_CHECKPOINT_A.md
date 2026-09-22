@@ -70,3 +70,16 @@ Universal role names may be reused, but numeric thresholds, role floors and AVOI
 ## 10. Checkpoint A acceptance
 
 Owner approval must freeze the two-subprofile split, commodity-exposure requirement, reference anchors, through-cycle history/evidence gates, benchmark/valuation families and fail-closed behavior before Checkpoint B implementation.
+
+
+## 11. Checkpoint A final validation and freeze
+
+Owner-local validation passed:
+- `metalsCommoditiesK4aMethodologyContract.test.ts` — PASS;
+- `sectorEngineRegistry.test.ts` — PASS;
+- `researchProfileRouting.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+Owner approved proceeding with the two-subprofile Metals structure and the through-cycle evidence/valuation constraints.
+
+**METALS_COMMODITIES Checkpoint A = COMPLETE / PASS / FROZEN.**
