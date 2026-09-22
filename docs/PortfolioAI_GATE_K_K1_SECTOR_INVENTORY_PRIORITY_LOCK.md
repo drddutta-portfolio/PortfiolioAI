@@ -839,3 +839,52 @@ The audit reports:
 K2 must not begin until this audit is executed and reviewed.
 
 The Industry Readiness Lock is a readiness prerequisite, not a reopening of exchange-sector reconciliation and not a new scoring methodology.
+
+---
+
+## 21. K1 Industry Readiness — Trendlyne MCP capability discovery
+
+Industry Readiness audit result:
+
+```text
+Equities                              238
+Industry present                       86
+Industry missing                      152
+Industry coverage                   36.13%
+Basic industry present                  0
+Routable with current taxonomy         23
+Industry present / taxonomy pending    63
+Distinct industries                    56
+```
+
+Before introducing public-web enrichment for 152 missing industries, K1 must verify the live Trendlyne MCP tool catalog rather than assume that the previously tested `get_parameter_values_multi_stock` tool represents the entire MCP capability surface.
+
+The current PortfolioAI Trendlyne MCP client explicitly wraps five tools:
+
+- `search_entities`
+- `get_parameter_values_multi_stock`
+- `get_overview_news_corp_events`
+- `get_ownership_deals_insider_sast`
+- `get_document_search_results`
+
+The failed classification experiment used only `get_parameter_values_multi_stock`, whose live response contained financial parameters rather than classification metadata.
+
+Added:
+- `TrendlyneObservedMcpClient.listTools()`
+- local-only Edge Function `k1-local-trendlyne-capability-discovery`
+- owner runner `scripts/k1-discover-trendlyne-capabilities.sh`
+
+The discovery makes one MCP `tools/list` protocol request and flags advertised tools whose name, description or schema mentions:
+sector, industry, classification, company profile, metadata, security master, stock details or company details.
+
+It performs:
+- production writes = 0
+- score runs = 0
+- recommendation writes = 0
+- scheduler changes = 0
+
+Decision rule:
+- if the MCP server advertises a reliable classification/profile tool, use that tool for the 152-industry gap;
+- if no such capability exists, use a deterministic public-web enrichment fallback for only the missing symbols.
+
+K2 remains blocked until Industry Readiness is resolved.
