@@ -86,3 +86,16 @@ Universal role names may be reused, but numeric thresholds, role floors and AVOI
 ## 11. Checkpoint A acceptance
 
 Owner approval must freeze the one-profile initial scope, mandatory category metadata, alcohol-risk treatment, reference anchors, history/evidence gates, benchmark/valuation families and fail-closed behavior before Checkpoint B implementation.
+
+
+## 12. Checkpoint A final validation and freeze
+
+Owner-local validation passed:
+- `consumerFmcgK4aMethodologyContract.test.ts` — PASS;
+- `sectorEngineRegistry.test.ts` — PASS;
+- `researchProfileRouting.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+Owner approved proceeding with the one-profile branded/staples methodology and explicit category/alcohol risk metadata treatment.
+
+**CONSUMER_FMCG Checkpoint A = COMPLETE / PASS / FROZEN.**
