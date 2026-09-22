@@ -78,3 +78,70 @@ These cover ticker-independent Bank routing, NBFC family routing, sector-only fa
 - N/A semantics final verification: OPEN
 
 No production mutation, migration, provider call, scheduler change, deployment, PR merge, score persistence, recommendation persistence or trading action was performed.
+
+
+## 9. K3 methodology split decision — FROZEN
+
+The Stage 8 evidence is sufficiently asymmetric to reject one undifferentiated BANK/NBFC numeric methodology.
+
+Frozen architecture:
+
+```text
+BANK_NBFC engine family
+├── BANK
+│   ├── Stage 8 bank methodology
+│   ├── NIFTY Bank benchmark authority
+│   ├── bank valuation authority
+│   └── HDFCBANK remains validation/reference stock only
+└── NBFC_LENDING
+    ├── same engine family
+    ├── dedicated methodology authority required
+    ├── dedicated benchmark authority required
+    ├── dedicated valuation authority required
+    └── dedicated recommendation authority required
+```
+
+Reason: the inherited Stage 8 BANK_NBFC contract contains bank-specific inputs including deposit growth and CET1 and uses NIFTY Bank. These cannot be assumed portable to lending NBFCs.
+
+Runtime safety:
+- BANK routes to `BANK_NBFC`;
+- NBFC_LENDING remains family-routable but scoring fails closed to GENERAL until its own methodology contract exists;
+- no bank benchmark, valuation or recommendation rule leaks into NBFC_LENDING.
+
+## 10. Benchmark portability fix
+
+`refresh-bank-benchmark` is no longer HDFCBANK-specific.
+
+It now:
+- verifies the held security is an equity;
+- reads canonical `current_security_enrichment_v1.sector,industry`;
+- permits NIFTY Bank refresh only for `Banking + Banks`;
+- uses the actual security symbol in operational metadata;
+- explicitly rejects NBFC_LENDING until an NBFC benchmark authority is approved.
+
+The historical Trendlyne discovery functions remain HDFCBANK-only because they are reference-stock contract discovery, not runtime methodology.
+
+## 11. N/A semantics freeze
+
+For the BANK_NBFC lender family:
+- `CASH_FLOW` is explicitly not applicable;
+- it is removed from allowed scoring dimensions;
+- N/A must not be treated as missing.
+
+## 12. K3 closure validation required
+
+Owner-local validation:
+
+```bash
+npx vitest run \
+  src/features/research/scoringProfileResolution.test.ts \
+  src/features/research/k3BankNbfcPortability.test.ts \
+  src/features/research/k3BankNbfcClosure.test.ts \
+  src/features/research/researchProfileRouting.test.ts \
+  src/features/research/sectorEngineRegistry.test.ts \
+  src/features/research/sectorRecommendation.k2Safety.test.ts
+
+npm run typecheck
+```
+
+If all pass, K3 can close with BANK supported and NBFC_LENDING explicitly fail-closed pending its future dedicated methodology, rather than falsely claiming bank-rule portability.
