@@ -21,7 +21,7 @@ export interface IndustrialsK4aSubprofileContract {
 
 export const INDUSTRIALS_K4A_CONTRACT = {
   version: INDUSTRIALS_K4A_CONTRACT_VERSION,
-  state: "CHECKPOINT_A_OWNER_APPROVAL_REQUIRED",
+  state: "CHECKPOINT_A_OWNER_APPROVED_LOCKED",
   engineCode: "INDUSTRIALS_CAPITAL_GOODS",
   runtimeActivationAllowed: false,
   scorePersistenceEnabled: false,
