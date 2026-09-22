@@ -273,14 +273,14 @@ export const SECTOR_ENGINE_REGISTRY: readonly SectorEngineRegistryEntry[] = [
   {
     engineCode: "HEALTHCARE_SERVICES_V1",
     displayName: "Healthcare Services / Hospitals",
-    lifecycle: "K4_FROZEN_PENDING",
-    methodologyAuthority: "HEALTHCARE_SERVICES_V1_K4A_METHODOLOGY_V1__K4B_VALIDATION_PENDING",
+    lifecycle: "IMPLEMENTED",
+    methodologyAuthority: "HEALTHCARE_SERVICES_V1_K4B_SCORING_V1",
     profileCodes: ["HOSPITAL"],
     allowedDimensions: COMMON_DIMENSIONS,
     notApplicableDimensions: [],
     benchmarkAuthority: "NIFTY_HOSPITALS_PRIMARY__NIFTY_HEALTHCARE_CONTEXT",
     valuationAuthority: "HOSPITAL_OPERATORS_VALUATION_V1",
-    recommendationAuthority: "HEALTHCARE_SERVICES_RECOMMENDATION_PENDING",
+    recommendationAuthority: "HEALTHCARE_SERVICES_READ_ONLY_RECOMMENDATION_PENDING_THRESHOLDS",
     subprofileSupport: "NOT_REQUIRED",
     profileAuthorities: {
       HOSPITAL: {
@@ -288,7 +288,7 @@ export const SECTOR_ENGINE_REGISTRY: readonly SectorEngineRegistryEntry[] = [
         benchmarkAuthority: "NIFTY_HOSPITALS_PRIMARY__NIFTY_HEALTHCARE_CONTEXT",
         valuationAuthority: "HOSPITAL_OPERATORS_VALUATION_V1",
         recommendationAuthority: "HOSPITAL_OPERATORS_RECOMMENDATION_PENDING",
-        state: "PENDING_METHODOLOGY",
+        state: "SUPPORTED",
       },
     },
     fallbackPolicy: "NONE_FAIL_CLOSED",
