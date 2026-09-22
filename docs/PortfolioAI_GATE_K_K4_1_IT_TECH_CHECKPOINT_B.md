@@ -109,3 +109,27 @@ npm run typecheck
 ```
 
 If all pass, IT_TECH may be promoted from validation-pending to implemented/read-only routing authority. Recommendation thresholds remain separately pending until explicitly validated; score/recommendation persistence remains OFF.
+
+
+## 11. Final validation and closure
+
+Owner-local Checkpoint B validation passed completely, including:
+- IT_TECH Checkpoint A contract regression;
+- deterministic scoring methodology;
+- portability;
+- isolation;
+- PHARMA golden outputs;
+- canonical routing;
+- scoring-profile regression;
+- K2 recommendation safety;
+- TypeScript.
+
+Registry promotion:
+- IT_TECH lifecycle → `IMPLEMENTED`;
+- all three IT subprofiles remain symbol-independent;
+- score and recommendation persistence remain OFF;
+- recommendation thresholds remain pending dedicated evidence validation.
+
+A post-promotion audit also verified that the previously frozen `NBFC_LENDING = PENDING_METHODOLOGY` state remains unchanged.
+
+**K4 Package 1 · IT_TECH = COMPLETE / PASS / CLOSED.**
