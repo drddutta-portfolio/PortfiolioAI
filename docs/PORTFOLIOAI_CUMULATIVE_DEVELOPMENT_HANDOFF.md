@@ -248,3 +248,25 @@ Key methodology locks proposed:
 Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 4 · CHEMICALS_V1 · Checkpoint A validation correction — 22 September 2026
+
+Owner-local Checkpoint A validation initially reported 2 failed tests and 24 passed.
+
+Both failures were stale registry lifecycle expectations after AUTO_COMPONENTS was legitimately promoted to IMPLEMENTED:
+1. pending K4 package count was still hard-coded as 8, but the correct current count is 7;
+2. AUTO_OEM was still expected to belong to a pending AUTO_COMPONENTS engine, while AUTO_COMPONENTS is now IMPLEMENTED.
+
+To prevent the same avoidable failure after every subsequent K4 package, the registry lifecycle test was improved rather than merely changing 8 → 7:
+- total registry entries must remain 12;
+- excluding inherited PHARMA_V1 and BANK_NBFC, exactly 10 K4 packages must exist;
+- each K4 package must be either IMPLEMENTED or K4_FROZEN_PENDING.
+
+AUTO_OEM lifecycle expectation was updated to IMPLEMENTED.
+
+No Chemicals methodology, routing, scoring, recommendation, persistence, provider, production, scheduler or deployment behavior changed.
+
+CHEMICALS_V1 Checkpoint A remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
