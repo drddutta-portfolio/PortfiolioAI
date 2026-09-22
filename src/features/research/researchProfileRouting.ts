@@ -14,6 +14,7 @@ export type ResearchProfileCode =
   | "FINTECH_PLATFORM"
   | "STEEL_FERROUS"
   | "NON_FERROUS_DIVERSIFIED_METALS"
+  | "BRANDED_CONSUMER_FMCG"
   | "IT_SERVICES"
   | "IT_SOFTWARE_PRODUCTS_PLATFORMS"
   | "IT_DIGITAL_INFRA_HARDWARE"
@@ -266,6 +267,30 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
       return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "METALS_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "METALS_SUBPROFILE_PENDING")
+  }
+
+
+  if (sector === "FAST_MOVING_CONSUMER_GOODS" || sector === "FMCG" || sector === "CONSUMER_STAPLES") {
+    if (
+      industry === "PERSONAL_CARE_HOUSEHOLD_PRODUCTS"
+      || industry === "PERSONAL_PRODUCTS_HOUSEHOLD_CARE"
+      || industry === "PACKAGED_FOODS"
+      || industry === "OTHER_FOOD_BEVERAGES"
+      || industry === "TEA_COFFEE"
+      || industry === "VEGETABLE_OILS_PRODUCTS"
+      || industry === "BEVERAGES"
+      || industry === "FMCG"
+      || industry === "FAST_MOVING_CONSUMER_GOODS"
+      || industry === "CONSUMER_STAPLES"
+      || industry === "ALCOHOLIC_BEVERAGES"
+      || industry === "DISTILLERIES_BREWERIES"
+    ) {
+      return result(input, "ROUTED", "BRANDED_CONSUMER_FMCG", "SECTOR_AND_INDUSTRY", "BRANDED_CONSUMER_FMCG")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "CONSUMER_FMCG_INDUSTRY_REQUIRED")
+    }
+    return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "CONSUMER_FMCG_PROFILE_PENDING")
   }
 
   if (sector === "FINANCIAL_SERVICES") {
