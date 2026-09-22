@@ -677,3 +677,18 @@ No-stale regression policy remains active.
 Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 7 · METALS_COMMODITIES · Checkpoint A FINAL — 22 September 2026
+
+Owner-local tests and TypeScript passed completely.
+
+`METALS_COMMODITIES_K4A_METHODOLOGY_V1` is frozen with:
+- STEEL_FERROUS;
+- NON_FERROUS_DIVERSIFIED_METALS.
+
+**METALS_COMMODITIES Checkpoint A = COMPLETE / PASS / FROZEN.**
+
+Checkpoint B is now IN PROGRESS.
