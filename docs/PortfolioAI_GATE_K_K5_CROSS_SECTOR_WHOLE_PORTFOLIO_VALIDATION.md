@@ -4,7 +4,7 @@
 **Date:** 22 September 2026
 **Branch:** `r4n-pharma-subprofile-architecture`
 **PR:** #101 OPEN / DRAFT / UNMERGED
-**Status:** LOCAL VALIDATION PENDING
+**Status:** COMPLETE / PASS / CLOSED
 
 ## 1. Purpose
 
@@ -157,3 +157,32 @@ Repository CI observation on the initial K5 commit:
 - neither condition changes K5 methodology or safety state.
 
 K5 remains **LOCAL VALIDATION PENDING** until the consolidated owner-local command passes.
+
+
+## 11. Final validation and closure
+
+Owner-local consolidated K5 validation passed completely after the AUTO synthetic future-stock fixture was aligned to the frozen canonical sector identity.
+
+Final validation state:
+- consolidated K5 runner: PASS;
+- all K5 test files: PASS;
+- all K5 tests: PASS;
+- TypeScript: PASS;
+- 12 registered engine families coexist without cross-sector authority leakage;
+- complete ordered pairwise isolation matrix: PASS;
+- frozen 238-equity whole-portfolio routing validation: PASS;
+- supported future-stock portability: PASS;
+- unsupported sector fail-safe → `METHODOLOGY_NOT_AVAILABLE`: PASS;
+- missing/conflicting classification → `REVIEW_REQUIRED`: PASS;
+- no nearest-looking fallback: PASS;
+- universal Research shell continuity: PASS;
+- TORNTPHARM/AUROPHARMA golden controls: PASS;
+- recommendation universal semantics portability: CONFIRMED;
+- universal numeric recommendation-threshold portability: NOT ESTABLISHED / REJECTED AS A DEFAULT ASSUMPTION;
+- sector/profile-specific numeric recommendation authority remains subject to separate evidence and owner approval.
+
+No production mutation, migration, provider refresh, score persistence, recommendation persistence, position sizing, scheduler change, deployment, PR merge, or automatic trading occurred.
+
+**Gate K5 = COMPLETE / PASS / CLOSED.**
+
+Next hard-capped Gate K stage: **K-FINAL — Portfolio Sector-Coverage Closure**.
