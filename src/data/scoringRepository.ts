@@ -271,13 +271,16 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
 
   const rawAssignedCode = typeof assignmentResult.data?.scoring_profile_code === "string" ? assignmentResult.data.scoring_profile_code : null
   const resolvedProfile = resolveScoringProfile(sector, industry, rawAssignedCode)
-  if (resolvedProfile.methodologyState !== "AVAILABLE" || resolvedProfile.profileCode === null || resolvedProfile.ruleProfile === null) {
+  if (resolvedProfile.methodologyState !== "AVAILABLE" || resolvedProfile.scoringExecutionState !== "AVAILABLE" || resolvedProfile.profileCode === null || resolvedProfile.ruleProfile === null) {
+    const executionPending = resolvedProfile.methodologyState === "AVAILABLE" && resolvedProfile.scoringExecutionState === "PENDING_ADAPTER"
     return {
-      profileCode: resolvedProfile.methodologyState,
-      profileName: resolvedProfile.methodologyState === "REVIEW_REQUIRED" ? "Research classification review required" : "Research methodology not available",
+      profileCode: executionPending ? resolvedProfile.profileCode ?? "SCORING_EXECUTION_PENDING" : resolvedProfile.methodologyState,
+      profileName: executionPending ? (resolvedProfile.profileCode ?? "Sector methodology").replaceAll("_", " ") : resolvedProfile.methodologyState === "REVIEW_REQUIRED" ? "Research classification review required" : "Research methodology not available",
       profileSource: resolvedProfile.profileSource,
       methodologyState: resolvedProfile.methodologyState,
       methodologyReasonCode: resolvedProfile.reasonCode,
+      scoringExecutionState: resolvedProfile.scoringExecutionState,
+      scoringExecutionReasonCode: resolvedProfile.reasonCode,
       modelName: "PortfolioAI scoring",
       modelStatus: "BLOCKED",
       runState: null,
@@ -353,6 +356,7 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
   return {
     profileCode, profileName: profile?.name ?? profileCode.replaceAll("_", " "), profileSource,
     methodologyState: "AVAILABLE", methodologyReasonCode: null,
+    scoringExecutionState: "AVAILABLE", scoringExecutionReasonCode: null,
     modelName: model.name, modelStatus: model.status, runState: run?.run_state ?? null,
     overallScore: run?.overall_score === null || run?.overall_score === undefined ? null : Number(run.overall_score),
     evidenceCoverage: run ? Number(run.evidence_coverage) : previewEvidenceCoverage,

@@ -36,8 +36,9 @@ describe("HEALTHCARE_SERVICES_V1 K4 Checkpoint B isolation and regression", () =
       expect(engine?.lifecycle).toBe("IMPLEMENTED")
       expect(resolved).toMatchObject({
         profileCode: "HEALTHCARE_SERVICES_V1",
-        ruleProfile: "GENERAL",
+        ruleProfile: null,
         profileSource: "SECTOR_RULE",
+        scoringExecutionState: "PENDING_ADAPTER",
       })
     }
   })

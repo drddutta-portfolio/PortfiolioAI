@@ -30,8 +30,9 @@ describe("METALS_COMMODITIES K4 Checkpoint B isolation and regression", () => {
       expect(engine?.lifecycle).toBe("IMPLEMENTED")
       expect(resolved).toMatchObject({
         profileCode: "METALS_COMMODITIES",
-        ruleProfile: "GENERAL",
+        ruleProfile: null,
         profileSource: "SECTOR_RULE",
+        scoringExecutionState: "PENDING_ADAPTER",
       })
     }
   })

@@ -22,8 +22,9 @@ describe("AUTO_COMPONENTS K4 Checkpoint B isolation and regression", () => {
       null,
     )
     expect(resolved.profileCode).toBe("AUTO_COMPONENTS")
-    expect(resolved.ruleProfile).toBe("GENERAL")
+    expect(resolved.ruleProfile).toBeNull()
     expect(resolved.profileSource).toBe("SECTOR_RULE")
+    expect(resolved.scoringExecutionState).toBe("PENDING_ADAPTER")
   })
 
   it("preserves the TORNTPHARM golden score", () => {

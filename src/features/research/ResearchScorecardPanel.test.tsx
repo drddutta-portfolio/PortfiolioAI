@@ -76,6 +76,22 @@ describe("ResearchScorecardPanel shared score states", () => {
     expect(screen.queryByText("Overall stock score")).not.toBeInTheDocument()
   })
 
+  it("shows a truthful execution-pending state for an available K4 methodology", () => {
+    render(<ResearchScorecardPanel snapshot={{
+      ...snapshot("IT_TECH", []),
+      profileCode: "IT_TECH",
+      profileName: "IT / Technology",
+      methodologyState: "AVAILABLE",
+      scoringExecutionState: "PENDING_ADAPTER",
+      scoringExecutionReasonCode: "SECTOR_SCORING_ADAPTER_PENDING",
+      overallScore: null,
+      dimensions: [],
+    }} isLoading={false} error={null} />)
+    expect(screen.getByText("Sector methodology available")).toBeInTheDocument()
+    expect(screen.getByText(/pending evidence\/adapter rollout/u)).toBeInTheDocument()
+    expect(screen.queryByText("Overall stock score")).not.toBeInTheDocument()
+  })
+
   it("uses one external ratings shell title for empty and populated states", () => {
     const empty = snapshot("PHARMA_V1", [])
     const { rerender } = render(<ResearchScorecardPanel snapshot={empty} isLoading={false} error={null} />)

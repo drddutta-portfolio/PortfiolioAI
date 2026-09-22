@@ -35,8 +35,9 @@ describe("FIN_SERVICES_NON_LENDER K4 Checkpoint B isolation and regression", () 
       expect(engine?.lifecycle).toBe("IMPLEMENTED")
       expect(resolved).toMatchObject({
         profileCode: "FIN_SERVICES_NON_LENDER",
-        ruleProfile: "GENERAL",
+        ruleProfile: null,
         profileSource: "SECTOR_RULE",
+        scoringExecutionState: "PENDING_ADAPTER",
       })
     }
   })

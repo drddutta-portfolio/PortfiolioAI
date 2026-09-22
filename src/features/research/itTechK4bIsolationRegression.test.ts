@@ -19,9 +19,10 @@ describe("IT_TECH K4 Checkpoint B isolation and regression", () => {
       null,
     )
     expect(resolved.profileCode).toBe("IT_TECH")
-    expect(resolved.ruleProfile).toBe("GENERAL")
+    expect(resolved.ruleProfile).toBeNull()
     expect(resolved.profileSource).toBe("SECTOR_RULE")
     expect(resolved.methodologyState).toBe("AVAILABLE")
+    expect(resolved.scoringExecutionState).toBe("PENDING_ADAPTER")
   })
 
   it("preserves the TORNTPHARM golden score", () => {

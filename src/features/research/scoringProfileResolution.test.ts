@@ -8,6 +8,7 @@ describe("resolveScoringProfile", () => {
       ruleProfile: "PHARMA_V1",
       profileSource: "REVIEWED_ASSIGNMENT",
       methodologyState: "AVAILABLE",
+      scoringExecutionState: "AVAILABLE",
       reasonCode: "REVIEWED_PHARMA_ASSIGNMENT",
       legacyAssignmentCode: "PHARMA_HEALTHCARE",
     })
@@ -19,6 +20,7 @@ describe("resolveScoringProfile", () => {
       ruleProfile: "PHARMA_V1",
       profileSource: "SECTOR_RULE",
       methodologyState: "AVAILABLE",
+      scoringExecutionState: "AVAILABLE",
       reasonCode: "SUPPORTED_ENGINE_ROUTED",
       legacyAssignmentCode: null,
     })
@@ -44,6 +46,7 @@ describe("resolveScoringProfile", () => {
       ruleProfile: null,
       profileSource: "METHODOLOGY_UNAVAILABLE",
       methodologyState: "METHODOLOGY_NOT_AVAILABLE",
+      scoringExecutionState: "BLOCKED",
       reasonCode: "REGISTERED_PROFILE_METHODOLOGY_PENDING",
       legacyAssignmentCode: null,
     })
@@ -55,6 +58,7 @@ describe("resolveScoringProfile", () => {
       ruleProfile: null,
       profileSource: "METHODOLOGY_UNAVAILABLE",
       methodologyState: "REVIEW_REQUIRED",
+      scoringExecutionState: "BLOCKED",
       reasonCode: "BANKING_INDUSTRY_REQUIRED",
       legacyAssignmentCode: null,
     })
@@ -63,8 +67,10 @@ describe("resolveScoringProfile", () => {
   it("routes a completed K4 engine identity while preserving its separate read-only scoring authority", () => {
     expect(resolveScoringProfile("Information Technology", "IT Services", null)).toMatchObject({
       profileCode: "IT_TECH",
-      ruleProfile: "GENERAL",
+      ruleProfile: null,
       profileSource: "SECTOR_RULE",
+      methodologyState: "AVAILABLE",
+      scoringExecutionState: "PENDING_ADAPTER",
     })
   })
 
@@ -76,12 +82,28 @@ describe("resolveScoringProfile", () => {
     })
   })
 
-  it("keeps other reviewed legacy profiles on their existing GENERAL-rule behavior until their K4 methodology is approved", () => {
+  it("keeps reviewed K4 methodology identity but blocks GENERAL execution until its adapter is active", () => {
     expect(resolveScoringProfile("Information Technology", "IT Services", "IT_TECH")).toMatchObject({
       profileCode: "IT_TECH",
-      ruleProfile: "GENERAL",
+      ruleProfile: null,
       profileSource: "REVIEWED_ASSIGNMENT",
       methodologyState: "AVAILABLE",
+      scoringExecutionState: "PENDING_ADAPTER",
+    })
+  })
+
+  it("blocks routed and reviewed AUTO_COMPONENTS from GENERAL execution", () => {
+    expect(resolveScoringProfile("Automobile and Auto Components", "Auto Components", null)).toMatchObject({
+      profileCode: "AUTO_COMPONENTS", ruleProfile: null, methodologyState: "AVAILABLE", scoringExecutionState: "PENDING_ADAPTER",
+    })
+    expect(resolveScoringProfile("Automobile and Auto Components", "Auto Components", "AUTO_COMPONENTS")).toMatchObject({
+      profileCode: "AUTO_COMPONENTS", ruleProfile: null, methodologyState: "AVAILABLE", scoringExecutionState: "PENDING_ADAPTER",
+    })
+  })
+
+  it("preserves an explicitly canonical GENERAL assignment", () => {
+    expect(resolveScoringProfile(null, null, "GENERAL")).toMatchObject({
+      profileCode: "GENERAL", ruleProfile: "GENERAL", methodologyState: "AVAILABLE", scoringExecutionState: "AVAILABLE",
     })
   })
 

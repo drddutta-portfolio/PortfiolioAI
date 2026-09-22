@@ -1,12 +1,13 @@
-import type { ScoringMethodologyState, ScoringProfileSource } from "./scoringTypes"
+import type { ScoringExecutionState, ScoringMethodologyState, ScoringProfileSource } from "./scoringTypes"
 import { routeResearchProfileV1 } from "./researchProfileRouting"
-import { sectorEngineForProfileCode } from "./sectorEngineRegistry"
+import { SECTOR_ENGINE_REGISTRY, sectorEngineForProfileCode } from "./sectorEngineRegistry"
 
 export interface ScoringProfileResolution {
   readonly profileCode: string | null
   readonly ruleProfile: string | null
   readonly profileSource: ScoringProfileSource
   readonly methodologyState: ScoringMethodologyState
+  readonly scoringExecutionState: ScoringExecutionState
   readonly reasonCode: string
   readonly legacyAssignmentCode: string | null
 }
@@ -29,6 +30,7 @@ function routedEngineProfile(
       methodologyState: routed.state === "REVIEW_REQUIRED" || routed.basis === "CLASSIFICATION_MISSING"
         ? "REVIEW_REQUIRED"
         : "METHODOLOGY_NOT_AVAILABLE",
+      scoringExecutionState: "BLOCKED",
       reasonCode: routed.reasonCode,
     }
   }
@@ -40,6 +42,7 @@ function routedEngineProfile(
       ruleProfile: null,
       profileSource: "METHODOLOGY_UNAVAILABLE",
       methodologyState: "METHODOLOGY_NOT_AVAILABLE",
+      scoringExecutionState: "BLOCKED",
       reasonCode: engine ? "ENGINE_NOT_IMPLEMENTED" : "ROUTED_PROFILE_HAS_NO_REGISTERED_ENGINE",
     }
   }
@@ -51,16 +54,18 @@ function routedEngineProfile(
       ruleProfile: null,
       profileSource: "METHODOLOGY_UNAVAILABLE",
       methodologyState: "METHODOLOGY_NOT_AVAILABLE",
+      scoringExecutionState: "BLOCKED",
       reasonCode: "REGISTERED_PROFILE_METHODOLOGY_PENDING",
     }
   }
 
   return {
     profileCode: engine.engineCode,
-    ruleProfile: engine.engineCode === "BANK_NBFC" || engine.engineCode === "PHARMA_V1" ? engine.engineCode : "GENERAL",
+    ruleProfile: engine.engineCode === "BANK_NBFC" || engine.engineCode === "PHARMA_V1" ? engine.engineCode : null,
     profileSource: "SECTOR_RULE",
     methodologyState: "AVAILABLE",
-    reasonCode: "SUPPORTED_ENGINE_ROUTED",
+    scoringExecutionState: engine.engineCode === "BANK_NBFC" || engine.engineCode === "PHARMA_V1" ? "AVAILABLE" : "PENDING_ADAPTER",
+    reasonCode: engine.engineCode === "BANK_NBFC" || engine.engineCode === "PHARMA_V1" ? "SUPPORTED_ENGINE_ROUTED" : "SECTOR_SCORING_ADAPTER_PENDING",
   }
 }
 
@@ -73,8 +78,8 @@ export function isPharmaScoringContext(sector: string | null, industry: string |
  *
  * A sector label alone cannot activate a specialised scoring engine. Only a
  * reviewed assignment or a ROUTED profile that maps to an implemented/inherited
- * engine in SECTOR_ENGINE_REGISTRY may do so. K4 placeholders deliberately
- * remain GENERAL/fail-closed until their methodology package is approved.
+ * engine in SECTOR_ENGINE_REGISTRY may do so. Completed K4 methodologies stay
+ * recognised but fail closed until their live score-execution adapter is active.
  */
 export function resolveScoringProfile(
   sector: string | null,
@@ -87,18 +92,24 @@ export function resolveScoringProfile(
       ruleProfile: "PHARMA_V1",
       profileSource: "REVIEWED_ASSIGNMENT",
       methodologyState: "AVAILABLE",
+      scoringExecutionState: "AVAILABLE",
       reasonCode: "REVIEWED_PHARMA_ASSIGNMENT",
       legacyAssignmentCode: reviewedAssignmentCode,
     }
   }
 
   if (reviewedAssignmentCode) {
+    const reviewedEngine = SECTOR_ENGINE_REGISTRY.find((entry) => entry.engineCode === reviewedAssignmentCode)
+    const activeRuleProfile = reviewedAssignmentCode === "GENERAL" || reviewedAssignmentCode === "BANK_NBFC" || reviewedAssignmentCode === "PHARMA_V1"
+      ? reviewedAssignmentCode
+      : null
     return {
       profileCode: reviewedAssignmentCode,
-      ruleProfile: reviewedAssignmentCode === "BANK_NBFC" ? "BANK_NBFC" : "GENERAL",
+      ruleProfile: activeRuleProfile,
       profileSource: "REVIEWED_ASSIGNMENT",
-      methodologyState: "AVAILABLE",
-      reasonCode: "REVIEWED_SCORING_PROFILE_ASSIGNMENT",
+      methodologyState: reviewedEngine || activeRuleProfile ? "AVAILABLE" : "METHODOLOGY_NOT_AVAILABLE",
+      scoringExecutionState: activeRuleProfile ? "AVAILABLE" : reviewedEngine ? "PENDING_ADAPTER" : "BLOCKED",
+      reasonCode: activeRuleProfile ? "REVIEWED_SCORING_PROFILE_ASSIGNMENT" : reviewedEngine ? "SECTOR_SCORING_ADAPTER_PENDING" : "REVIEWED_PROFILE_HAS_NO_SCORING_AUTHORITY",
       legacyAssignmentCode: reviewedAssignmentCode,
     }
   }

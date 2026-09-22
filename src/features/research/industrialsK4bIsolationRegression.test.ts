@@ -16,7 +16,8 @@ describe("INDUSTRIALS K4 Checkpoint B isolation and regression", () => {
   it("keeps industrial methodology active after Checkpoint B closure", () => {
     const resolved = resolveScoringProfile("Capital Goods", "Civil Construction", null)
     expect(resolved.profileCode).toBe("INDUSTRIALS_CAPITAL_GOODS")
-    expect(resolved.ruleProfile).toBe("GENERAL")
+    expect(resolved.ruleProfile).toBeNull()
+    expect(resolved.scoringExecutionState).toBe("PENDING_ADAPTER")
     expect(resolved.profileSource).toBe("SECTOR_RULE")
   })
 

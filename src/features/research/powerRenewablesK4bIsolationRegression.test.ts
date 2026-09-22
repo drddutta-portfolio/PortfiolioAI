@@ -31,8 +31,9 @@ describe("POWER_RENEWABLES_V1 K4 Checkpoint B isolation and regression", () => {
       expect(engine?.lifecycle).toBe("IMPLEMENTED")
       expect(resolved).toMatchObject({
         profileCode: "POWER_RENEWABLES_V1",
-        ruleProfile: "GENERAL",
+        ruleProfile: null,
         profileSource: "SECTOR_RULE",
+        scoringExecutionState: "PENDING_ADAPTER",
       })
     }
   })

@@ -29,8 +29,9 @@ describe("CONSUMER_FMCG K4 Checkpoint B isolation and regression", () => {
       expect(engine?.lifecycle).toBe("IMPLEMENTED")
       expect(resolved).toMatchObject({
         profileCode: "CONSUMER_FMCG",
-        ruleProfile: "GENERAL",
+        ruleProfile: null,
         profileSource: "SECTOR_RULE",
+        scoringExecutionState: "PENDING_ADAPTER",
       })
     }
   })

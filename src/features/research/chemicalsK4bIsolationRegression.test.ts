@@ -18,7 +18,8 @@ describe("CHEMICALS_V1 K4 Checkpoint B isolation and regression", () => {
   it("keeps Chemicals methodology active after Checkpoint B closure", () => {
     const resolved = resolveScoringProfile("Chemicals", "Specialty Chemicals", null)
     expect(resolved.profileCode).toBe("CHEMICALS_V1")
-    expect(resolved.ruleProfile).toBe("GENERAL")
+    expect(resolved.ruleProfile).toBeNull()
+    expect(resolved.scoringExecutionState).toBe("PENDING_ADAPTER")
     expect(resolved.profileSource).toBe("SECTOR_RULE")
   })
 
