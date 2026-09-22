@@ -1,0 +1,173 @@
+{
+  "contract": "PORTFOLIOAI_GATE_K_INDUSTRY_RESEARCH_TAXONOMY_V1",
+  "frozenAt": null,
+  "status": "K1_INDUSTRY_READINESS_LOCK_IN_PROGRESS",
+  "invariant": {
+    "sector": "MACRO_CONTEXT_ONLY",
+    "industry": "MICRO_METHODOLOGY_SELECTOR",
+    "basicIndustry": "BUSINESS_MODEL_REFINEMENT",
+    "subprofile": "METRIC_APPLICABILITY_AND_VALUATION_SELECTOR",
+    "companyEvidence": "SCORING_EVIDENCE",
+    "recommendationRules": "ACTION_LOGIC",
+    "sectorOnlySpecialisedRoutingAllowed": false
+  },
+  "normalization": "UPPERCASE_NONALNUM_TO_UNDERSCORE",
+  "routes": [
+    {
+      "sectors": [
+        "BANKING"
+      ],
+      "industries": [
+        "BANKS"
+      ],
+      "profileCode": "BANK",
+      "methodologyFamily": "BANK_NBFC",
+      "state": "SUPPORTED"
+    },
+    {
+      "sectors": [
+        "PHARMA",
+        "HEALTHCARE"
+      ],
+      "industries": [
+        "PHARMACEUTICALS"
+      ],
+      "profileCode": "PHARMA",
+      "methodologyFamily": "PHARMA_V1",
+      "state": "SUPPORTED"
+    },
+    {
+      "sectors": [
+        "HEALTHCARE"
+      ],
+      "industries": [
+        "HOSPITALS",
+        "HOSPITAL_HEALTHCARE_SERVICES"
+      ],
+      "profileCode": "HOSPITAL",
+      "methodologyFamily": "HEALTHCARE_SERVICES_V1",
+      "state": "SUPPORTED_PROFILE_FAMILY"
+    },
+    {
+      "sectors": [
+        "HEALTHCARE"
+      ],
+      "industries": [
+        "DIAGNOSTICS",
+        "DIAGNOSTIC_SERVICES"
+      ],
+      "profileCode": "DIAGNOSTICS",
+      "methodologyFamily": "HEALTHCARE_SERVICES_V1",
+      "state": "SUPPORTED_PROFILE_FAMILY"
+    },
+    {
+      "sectors": [
+        "INFORMATION_TECHNOLOGY",
+        "SOFTWARE_IT_SERVICES"
+      ],
+      "industries": [
+        "IT_CONSULTING_SOFTWARE",
+        "IT_SERVICES"
+      ],
+      "profileCode": "IT_SERVICES",
+      "methodologyFamily": "IT_TECH",
+      "state": "SUPPORTED_PROFILE_FAMILY"
+    },
+    {
+      "sectors": [
+        "CAPITAL_GOODS",
+        "INDUSTRIAL"
+      ],
+      "industries": [
+        "HEAVY_ELECTRICAL_EQUIPMENT",
+        "OTHER_ELECTRICAL_EQUIPMENT_PRODUCTS"
+      ],
+      "profileCode": "INDUSTRIAL_CAPITAL_GOODS",
+      "methodologyFamily": "INDUSTRIALS_CAPITAL_GOODS",
+      "state": "SUPPORTED_PROFILE_FAMILY"
+    },
+    {
+      "sectors": [
+        "*"
+      ],
+      "industries": [
+        "AEROSPACE_DEFENCE",
+        "AEROSPACE_AND_DEFENCE"
+      ],
+      "profileCode": "DEFENCE_AEROSPACE",
+      "methodologyFamily": "INDUSTRIALS_CAPITAL_GOODS",
+      "state": "SUPPORTED_PROFILE_FAMILY"
+    },
+    {
+      "sectors": [
+        "AUTOMOBILE_AND_AUTO_COMPONENTS",
+        "AUTOMOBILE_ANCILLARIES"
+      ],
+      "industries": [
+        "CARS_UTILITY_VEHICLES",
+        "2_3_WHEELERS",
+        "COMMERCIAL_VEHICLES"
+      ],
+      "profileCode": "AUTO_OEM",
+      "methodologyFamily": "AUTO_COMPONENTS",
+      "state": "SUPPORTED_PROFILE_FAMILY"
+    },
+    {
+      "sectors": [
+        "AUTOMOBILE_AND_AUTO_COMPONENTS",
+        "AUTOMOBILE_ANCILLARIES"
+      ],
+      "industries": [
+        "AUTO_PARTS_EQUIPMENT",
+        "AUTO_COMPONENTS"
+      ],
+      "profileCode": "AUTO_COMPONENTS",
+      "methodologyFamily": "AUTO_COMPONENTS",
+      "state": "SUPPORTED_PROFILE_FAMILY"
+    },
+    {
+      "sectors": [
+        "FINANCIAL_SERVICES"
+      ],
+      "industries": [
+        "ASSET_MANAGEMENT_COS",
+        "BROKING_DISTRIBUTION",
+        "STOCK_EXCHANGES_DEPOSITORIES"
+      ],
+      "profileCode": "CAPITAL_MARKET_FINANCIAL",
+      "methodologyFamily": "FIN_SERVICES_NON_LENDER",
+      "state": "SUPPORTED_PROFILE_FAMILY"
+    },
+    {
+      "sectors": [
+        "FINANCIAL_SERVICES"
+      ],
+      "industries": [
+        "INTERNET_SOFTWARE_SERVICES"
+      ],
+      "profileCode": "DIGITAL_PLATFORM",
+      "methodologyFamily": "FIN_SERVICES_NON_LENDER",
+      "state": "SUPPORTED_PROFILE_FAMILY"
+    },
+    {
+      "sectors": [
+        "FINANCIAL_SERVICES"
+      ],
+      "industries": [
+        "NON_BANKING_FINANCIAL_COMPANY_NBFC",
+        "NBFC"
+      ],
+      "profileCode": "NBFC_LENDING",
+      "methodologyFamily": "BANK_NBFC",
+      "state": "SUPPORTED"
+    }
+  ],
+  "k4FamiliesPendingIndustryTaxonomy": [
+    "CHEMICALS_V1",
+    "METALS_COMMODITIES",
+    "CONSUMER_FMCG",
+    "OIL_GAS_V1",
+    "POWER_RENEWABLES_V1"
+  ],
+  "rule": "An equity with known sector but missing/unsupported industry must remain PROFILE_PENDING or REVIEW_REQUIRED. No specialised score/recommendation may be produced from sector alone."
+}
