@@ -63,3 +63,16 @@ Universal role names may be reused, but numeric role thresholds, role floors, ca
 ## 8. Checkpoint A acceptance
 
 Owner approval must freeze the OEM/components split, reference anchors, history/evidence gates, benchmark families, valuation families, durability/risk treatment and fail-closed behavior before Checkpoint B scoring/portability implementation.
+
+
+## 9. Checkpoint A final validation and freeze
+
+Owner-local validation passed:
+- `autoComponentsK4aMethodologyContract.test.ts` — PASS;
+- `sectorEngineRegistry.test.ts` — PASS;
+- `researchProfileRouting.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+Owner approved proceeding with the OEM/components split and the frozen evidence/valuation/benchmark/durability boundaries.
+
+**AUTO_COMPONENTS Checkpoint A = COMPLETE / PASS / FROZEN.**
