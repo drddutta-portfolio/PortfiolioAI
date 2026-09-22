@@ -18,6 +18,9 @@ export type ResearchProfileCode =
   | "UPSTREAM_E_AND_P"
   | "MIDSTREAM_CITY_GAS"
   | "INTEGRATED_REFINING_PETCHEM"
+  | "REGULATED_NETWORK"
+  | "GENERATION_INTEGRATED_UTILITY"
+  | "RENEWABLE_IPP"
   | "IT_SERVICES"
   | "IT_SOFTWARE_PRODUCTS_PLATFORMS"
   | "IT_DIGITAL_INFRA_HARDWARE"
@@ -328,6 +331,45 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
       return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "OIL_GAS_INDUSTRY_REQUIRED")
     }
     return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "OIL_GAS_SUBPROFILE_PENDING")
+  }
+
+
+  if (
+    sector === "POWER"
+    || sector === "POWER_RENEWABLE_ENERGY"
+    || sector === "POWER_RENEWABLES"
+    || sector === "UTILITIES"
+  ) {
+    if (
+      industry === "POWER_TRANSMISSION"
+      || industry === "ELECTRICITY_TRANSMISSION"
+      || industry === "POWER_GRID"
+      || industry === "TRANSMISSION_DISTRIBUTION"
+    ) {
+      return result(input, "ROUTED", "REGULATED_NETWORK", "SECTOR_AND_INDUSTRY", "REGULATED_NETWORK")
+    }
+    if (
+      industry === "POWER_GENERATION"
+      || industry === "ELECTRIC_UTILITIES"
+      || industry === "INTEGRATED_POWER_UTILITIES"
+      || industry === "HYDRO_POWER"
+      || industry === "THERMAL_POWER"
+    ) {
+      return result(input, "ROUTED", "GENERATION_INTEGRATED_UTILITY", "SECTOR_AND_INDUSTRY", "GENERATION_INTEGRATED_UTILITY")
+    }
+    if (
+      industry === "RENEWABLE_POWER"
+      || industry === "RENEWABLE_ENERGY"
+      || industry === "SOLAR_POWER"
+      || industry === "WIND_POWER"
+      || industry === "INDEPENDENT_POWER_PRODUCER_RENEWABLE"
+    ) {
+      return result(input, "ROUTED", "RENEWABLE_IPP", "SECTOR_AND_INDUSTRY", "RENEWABLE_IPP")
+    }
+    if (!industry) {
+      return result(input, "PROFILE_PENDING", null, "CLASSIFICATION_MISSING", "POWER_RENEWABLES_INDUSTRY_REQUIRED")
+    }
+    return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "POWER_RENEWABLES_SUBPROFILE_PENDING")
   }
 
   if (sector === "FINANCIAL_SERVICES") {
