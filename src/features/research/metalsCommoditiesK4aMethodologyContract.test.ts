@@ -5,8 +5,8 @@ import {
 } from "./metalsCommoditiesK4aMethodologyContract"
 
 describe("METALS_COMMODITIES K4 Checkpoint A", () => {
-  it("remains non-activating until owner approval", () => {
-    expect(METALS_COMMODITIES_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVAL_REQUIRED")
+  it("remains non-activating after Checkpoint A approval until Checkpoint B closes", () => {
+    expect(METALS_COMMODITIES_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVED_LOCKED")
     expect(METALS_COMMODITIES_K4A_CONTRACT.runtimeActivationAllowed).toBe(false)
     expect(METALS_COMMODITIES_K4A_CONTRACT.scorePersistenceEnabled).toBe(false)
     expect(METALS_COMMODITIES_K4A_CONTRACT.recommendationPersistenceEnabled).toBe(false)
