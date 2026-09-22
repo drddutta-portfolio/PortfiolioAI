@@ -34,7 +34,10 @@ describe("SECTOR_ENGINE_CONTRACT_V1", () => {
     expect(sectorEngineForProfileCode("PHARMA")?.engineCode).toBe("PHARMA_V1")
     expect(sectorEngineForProfileCode("BANK")?.engineCode).toBe("BANK_NBFC")
     expect(sectorEngineForProfileCode("NBFC_LENDING")?.engineCode).toBe("BANK_NBFC")
-    expect(sectorEngineForProfileCode("IT_SERVICES")).toBeNull()
+    expect(sectorEngineForProfileCode("IT_SERVICES")).toMatchObject({
+      engineCode: "IT_TECH",
+      lifecycle: "K4_FROZEN_PENDING",
+    })
   })
 
   it("does not place universal numeric recommendation thresholds in the registry", () => {
