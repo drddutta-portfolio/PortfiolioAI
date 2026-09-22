@@ -617,3 +617,29 @@ The failure was a legacy profile-code expectation in `researchProfileRouting.tes
 Only the regression expectations were updated to the frozen K4 profile identities. No routing logic, scoring methodology, lender separation, recommendation behavior, persistence, provider, production, scheduler or deployment behavior changed.
 
 FIN_SERVICES_NON_LENDER Checkpoint B remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
+
+
+---
+
+## K4 Package 6 · FIN_SERVICES_NON_LENDER FINAL CLOSURE — 22 September 2026
+
+Owner-local corrected Checkpoint B suite and TypeScript passed completely.
+
+Final state:
+- Checkpoint A = COMPLETE / PASS / FROZEN;
+- Checkpoint B = COMPLETE / PASS / CLOSED;
+- registry lifecycle = IMPLEMENTED;
+- supported subprofiles = CAPITAL_MARKETS_AMC / INSURANCE / FINTECH_PLATFORM;
+- lender methodology inheritance = prohibited;
+- NBFC_LENDING remains under BANK_NBFC;
+- symbol-specific methodology routing = NO;
+- missing mandatory evidence = fail closed;
+- six-decimal stable weighted score precision retained;
+- golden controls = PASS;
+- universal Research shell = PASS;
+- score persistence = OFF;
+- recommendation persistence = OFF.
+
+**K4 Package 6 · FIN_SERVICES_NON_LENDER = COMPLETE / PASS / CLOSED.**
+
+K4 Package 7 — METALS_COMMODITIES Checkpoint A is now IN PROGRESS.
