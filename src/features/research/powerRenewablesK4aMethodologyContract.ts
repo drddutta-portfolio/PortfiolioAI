@@ -21,7 +21,7 @@ export interface PowerRenewablesK4aSubprofileContract {
 
 export const POWER_RENEWABLES_K4A_CONTRACT = {
   version: POWER_RENEWABLES_K4A_CONTRACT_VERSION,
-  state: "CHECKPOINT_A_OWNER_APPROVAL_REQUIRED",
+  state: "CHECKPOINT_A_OWNER_APPROVED_LOCKED",
   engineCode: "POWER_RENEWABLES_V1",
   runtimeActivationAllowed: false,
   scorePersistenceEnabled: false,
