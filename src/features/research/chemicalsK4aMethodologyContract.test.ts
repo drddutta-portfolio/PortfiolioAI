@@ -5,8 +5,8 @@ import {
 } from "./chemicalsK4aMethodologyContract"
 
 describe("CHEMICALS_V1 K4 Checkpoint A", () => {
-  it("remains non-activating until owner approval", () => {
-    expect(CHEMICALS_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVAL_REQUIRED")
+  it("remains non-activating after Checkpoint A approval until Checkpoint B closes", () => {
+    expect(CHEMICALS_K4A_CONTRACT.state).toBe("CHECKPOINT_A_OWNER_APPROVED_LOCKED")
     expect(CHEMICALS_K4A_CONTRACT.runtimeActivationAllowed).toBe(false)
     expect(CHEMICALS_K4A_CONTRACT.scorePersistenceEnabled).toBe(false)
     expect(CHEMICALS_K4A_CONTRACT.recommendationPersistenceEnabled).toBe(false)
