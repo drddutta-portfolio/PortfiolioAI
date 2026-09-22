@@ -66,7 +66,7 @@ describe("routeResearchProfileV1", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Information Technology", applicationIndustry: "Heavy Electrical Equipment" })).toMatchObject({
       applicationSector: "Information Technology",
       state: "ROUTED",
-      profileCode: "INDUSTRIAL_CAPITAL_GOODS",
+      profileCode: "CAPITAL_EQUIPMENT_ELECTRICAL",
       basis: "INDUSTRY_OVERRIDE",
     })
   })
@@ -86,6 +86,17 @@ describe("routeResearchProfileV1", () => {
       state: "PROFILE_PENDING",
       profileCode: null,
       reasonCode: "IT_INDUSTRY_REQUIRED",
+    })
+  })
+
+  it("routes industrial industries into the three K4 validation subprofiles without sector-only fallback", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Capital Goods", applicationIndustry: "Civil Construction" }).profileCode).toBe("PROJECT_EPC")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Capital Goods", applicationIndustry: "Heavy Electrical Equipment" }).profileCode).toBe("CAPITAL_EQUIPMENT_ELECTRICAL")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Capital Goods", applicationIndustry: "Aerospace & Defence" }).profileCode).toBe("DEFENCE_AEROSPACE")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Capital Goods", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "CAPITAL_GOODS_INDUSTRY_REQUIRED",
     })
   })
 
