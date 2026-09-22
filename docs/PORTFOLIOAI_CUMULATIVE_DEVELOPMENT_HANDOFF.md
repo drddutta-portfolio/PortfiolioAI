@@ -643,3 +643,37 @@ Final state:
 **K4 Package 6 · FIN_SERVICES_NON_LENDER = COMPLETE / PASS / CLOSED.**
 
 K4 Package 7 — METALS_COMMODITIES Checkpoint A is now IN PROGRESS.
+
+
+---
+
+## K4 Package 7 · METALS_COMMODITIES · Checkpoint A implementation — 22 September 2026
+
+FIN_SERVICES_NON_LENDER is closed COMPLETE / PASS.
+
+Added:
+- `metalsCommoditiesK4aMethodologyContract.ts`;
+- `metalsCommoditiesK4aMethodologyContract.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_7_METALS_COMMODITIES_CHECKPOINT_A.md`.
+
+K1 open question resolved:
+- METALS_COMMODITIES requires two methodology curves:
+  1. STEEL_FERROUS — JINDALSTEL reference;
+  2. NON_FERROUS_DIVERSIFIED_METALS — HINDALCO / HINDZINC references.
+
+Key locks proposed:
+- commodity exposure metadata mandatory;
+- minimum 5 annual years / 12 quarters / 252 trading days;
+- through-cycle normalization mandatory;
+- cost curve/input integration context mandatory;
+- leverage assessed at mid-cycle;
+- spot P/E cannot be the sole valuation anchor;
+- no cross-subprofile peer percentiles;
+- unknown Industry → METHOD_NOT_AVAILABLE;
+- recommendation thresholds remain subprofile-owned and unset.
+
+No-stale regression policy remains active.
+
+Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
