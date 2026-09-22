@@ -31860,3 +31860,22 @@ After successful capture, rerun:
 
 If the merged reference resolves all 238 equities with zero `REVIEW_REQUIRED` / `OFFICIAL_MISSING`, freeze the reviewed non-sensitive Trendlyne residual manifest into the repository and then compute the final reconciled sector inventory / K4 package count and order.
 
+### K1 Trendlyne capture startup UX correction — 22 September 2026
+
+Owner local run appeared to hang after invoking `scripts/k1-capture-trendlyne-classification.sh`.
+
+Root cause: the script entered a silent readiness loop for the new local Edge Function and did not surface progress or early process failure.
+
+Updated the script to:
+- print startup immediately;
+- print residual symbol count and env file;
+- print local function log path;
+- print readiness progress every 10 seconds;
+- detect Edge Function process exit immediately;
+- print the local function log tail on startup failure;
+- print explicit readiness PASS before executing Trendlyne calls.
+
+Implementation commit: `9b1d60cb9e3f78b3a2b35625b6279d3e848c1d0a`.
+
+No provider call, production mutation, persistence, scheduler change, deployment, PR merge or trading action was performed by this correction.
+
