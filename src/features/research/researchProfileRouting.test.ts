@@ -78,6 +78,17 @@ describe("routeResearchProfileV1", () => {
     })
   })
 
+  it("routes IT industries into the three K4 validation subprofiles without sector-only fallback", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Information Technology", applicationIndustry: "Computers - Software & Consulting" }).profileCode).toBe("IT_SERVICES")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Information Technology", applicationIndustry: "IT Software Products" }).profileCode).toBe("IT_SOFTWARE_PRODUCTS_PLATFORMS")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Information Technology", applicationIndustry: "Computer Hardware" }).profileCode).toBe("IT_DIGITAL_INFRA_HARDWARE")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Information Technology", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "IT_INDUSTRY_REQUIRED",
+    })
+  })
+
   it("distinguishes auto OEMs from auto-component companies", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Automobile and Auto Components", applicationIndustry: "Cars & Utility Vehicles" }).profileCode).toBe("AUTO_OEM")
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Automobile and Auto Components", applicationIndustry: "Auto Parts & Equipment" }).profileCode).toBe("AUTO_COMPONENTS")
