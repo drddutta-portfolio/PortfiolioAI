@@ -5,9 +5,9 @@ import {
 } from "./finServicesNonLenderK4aMethodologyContract"
 
 describe("FIN_SERVICES_NON_LENDER K4 Checkpoint A", () => {
-  it("remains non-activating until owner approval", () => {
+  it("remains non-activating after Checkpoint A approval until Checkpoint B closes", () => {
     expect(FIN_SERVICES_NON_LENDER_K4A_CONTRACT.state)
-      .toBe("CHECKPOINT_A_OWNER_APPROVAL_REQUIRED")
+      .toBe("CHECKPOINT_A_OWNER_APPROVED_LOCKED")
     expect(FIN_SERVICES_NON_LENDER_K4A_CONTRACT.runtimeActivationAllowed).toBe(false)
     expect(FIN_SERVICES_NON_LENDER_K4A_CONTRACT.scorePersistenceEnabled).toBe(false)
     expect(FIN_SERVICES_NON_LENDER_K4A_CONTRACT.recommendationPersistenceEnabled).toBe(false)
