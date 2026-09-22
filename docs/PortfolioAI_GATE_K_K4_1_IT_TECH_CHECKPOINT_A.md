@@ -151,3 +151,16 @@ Owner approval must freeze:
 - recommendation ownership.
 
 Only after approval may K4 IT_TECH proceed to deterministic score-method implementation and Checkpoint B reference/portability validation.
+
+
+## 12. Checkpoint A final validation and freeze
+
+Owner-local validation passed:
+- `itTechK4aMethodologyContract.test.ts` — PASS;
+- `sectorEngineRegistry.test.ts` — PASS;
+- `researchProfileRouting.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+Owner approved proceeding with the three-subprofile structure and the frozen evidence/valuation/benchmark/durability boundaries.
+
+**IT_TECH Checkpoint A = COMPLETE / PASS / FROZEN.**
