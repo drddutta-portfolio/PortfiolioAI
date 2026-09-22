@@ -31994,3 +31994,29 @@ The comparator is source-aware:
 No production mutation, migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
 
 Next action: pull latest branch and rerun `bash scripts/k1-run-current-cohort-reconciliation.sh`. Expected target is 238/238 merged classification rows with zero `OFFICIAL_MISSING` / zero `REVIEW_REQUIRED`; then compute final reconciled sector inventory and freeze K4 package count/order.
+
+---
+
+### K1 full-cohort reconciliation freeze — PASS
+
+Owner-local run completed the full frozen 238-equity reconciliation with:
+
+```text
+Freeze eligible: true
+K1 CURRENT-COHORT RECONCILIATION COMPLETE
+No database mutation was performed.
+```
+
+This means there are no remaining blocking `REVIEW_REQUIRED` / `OFFICIAL_MISSING` conditions in the active K1 reconciliation artifact.
+
+Added:
+- `scripts/k1-finalize-reconciled-sector-inventory.mjs`
+
+Purpose:
+- deterministically generate the corrected sector inventory from the freeze-eligible reconciliation artifact;
+- produce exact sector counts and reference-source counts;
+- provide the data required to freeze the final K4 methodology package count/order.
+
+No production mutation, migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+**Next action:** pull latest branch and run `node scripts/k1-finalize-reconciled-sector-inventory.mjs`. Use that output to complete the final K1 scope freeze. K2 remains blocked until this is done.
