@@ -19,7 +19,7 @@ export interface HealthcareServicesK4aSubprofileContract {
 
 export const HEALTHCARE_SERVICES_K4A_CONTRACT = {
   version: HEALTHCARE_SERVICES_K4A_CONTRACT_VERSION,
-  state: "CHECKPOINT_A_OWNER_APPROVAL_REQUIRED",
+  state: "CHECKPOINT_A_OWNER_APPROVED_LOCKED",
   engineCode: "HEALTHCARE_SERVICES_V1",
   runtimeActivationAllowed: false,
   scorePersistenceEnabled: false,
