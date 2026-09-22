@@ -1,3 +1,5 @@
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 COMPLETE / PASS / CLOSED across all 10 sector packages; K5 IMPLEMENTED / LOCAL VALIDATION PENDING; K-FINAL NOT STARTED; PR #101 OPEN / DRAFT / UNMERGED
+
 
 
 ---
@@ -1252,3 +1254,52 @@ Required owner-local closure command:
 git pull
 bash scripts/k5-validate-cross-sector.sh
 ```
+
+
+---
+
+## Gate K5 · Chat rollover checkpoint — 22 September 2026
+
+The owner explicitly instructed that K5 is now to be executed and supplied the canonical Gate K plan for continuity.
+
+Canonical K5 scope reaffirmed:
+- K5 is a confirmation gate, not a new methodology-building stage;
+- complete registry-driven cross-sector isolation must be validated;
+- every registered engine pair must remain isolated for methodology, benchmark, valuation, durability/recommendation authority and fallback behavior;
+- future supported stocks must route by canonical classification without ticker-specific logic;
+- unsupported sectors must fail safely to METHODOLOGY_NOT_AVAILABLE;
+- conflicting or missing canonical classification must fail to REVIEW_REQUIRED rather than use a nearest-looking fallback;
+- the universal Research workspace must remain shared across all engines;
+- recommendation-policy portability must be evaluated using pre-declared falsification tests rather than assumed.
+
+Current K5 repository state at chat rollover:
+- K5 implementation is already present;
+- consolidated K5 validation script exists at `scripts/k5-validate-cross-sector.sh`;
+- frozen 238-equity K1 routing snapshot is part of K5 validation;
+- complete cross-sector isolation/routing/recommendation-portability tests are present;
+- universal numeric recommendation-threshold portability remains NOT_ESTABLISHED;
+- no new methodology or threshold policy was introduced during the latest inspection;
+- no provider refresh was authorized or performed.
+
+Current owner-local closure command remains:
+
+```bash
+git pull
+bash scripts/k5-validate-cross-sector.sh
+```
+
+K5 must not be marked COMPLETE / PASS / CLOSED until that consolidated owner-local validation passes and the result is recorded.
+
+Permanent safety boundaries remain:
+- no production mutation/migration;
+- no score persistence;
+- no recommendation persistence;
+- no provider refresh unless explicitly approved;
+- no scheduler changes;
+- no deployment;
+- no PR merge;
+- no automatic trading.
+
+PR #101 remains OPEN / DRAFT / UNMERGED.
+
+**Current checkpoint: K5 IMPLEMENTED / LOCAL VALIDATION PENDING.**
