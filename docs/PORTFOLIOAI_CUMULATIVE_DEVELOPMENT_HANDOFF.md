@@ -6,7 +6,7 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Created:** 16 September 2026
 **Current working line:** `r4n-pharma-subprofile-architecture` / PR #101
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 UNIVERSAL SECTOR-ENGINE CONTRACT IMPLEMENTED / OWNER-LOCAL VALIDATION PENDING; K4 SCOPE 10 PACKAGES / FROZEN; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K plan FROZEN; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 BANK_NBFC RECONCILIATION & PORTABILITY IN PROGRESS; K4 SCOPE 10 PACKAGES / FROZEN; PR #101 OPEN / DRAFT / UNMERGED
 
 ---
 
@@ -32344,3 +32344,22 @@ Additional K2 hardening implemented:
 K2 is NOT yet formally closed. Final local validation is required against the changed recommendation runtime.
 
 No production mutation/migration, provider call, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K2 FINAL CLOSURE — 22 September 2026
+
+Owner-local final validation after the K2 runtime reconciliation passed completely:
+- `src/features/research/sectorEngineRegistry.test.ts` — PASS;
+- `src/features/research/sectorRecommendation.pharmaV1Strict.test.ts` — PASS;
+- `src/features/research/sectorRecommendation.k2Safety.test.ts` — PASS;
+- `npm run typecheck` — PASS.
+
+The final K2 contract `SECTOR_ENGINE_CONTRACT_V1` is frozen. The legacy non-PHARMA overall-score reconstruction path is removed, missing mandatory recommendation-floor inputs fail closed, and AVOID requires an explicitly approved sector Watch/Avoid boundary.
+
+**K2 = COMPLETE / PASS / CLOSED.**
+
+K3 — BANK_NBFC Reconciliation & Portability Closure — is now IN PROGRESS.
+
+Safety unchanged: no production mutation/migration, no score/recommendation persistence, no scheduler change, no deployment, no PR merge, no automatic trading.
