@@ -33,3 +33,19 @@ Incremental isolation/regression:
 Normal runtime scoring remains blocked while lifecycle = K4_FROZEN_PENDING. Promotion occurs only after owner-local Checkpoint B validation passes.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 2 · Checkpoint B validation correction — 22 September 2026
+
+Owner-local Checkpoint B validation initially reported 2 failed tests and 49 passed.
+
+Both failures were stale expectations created by legitimate prior state transitions:
+
+1. `industrialsK4aMethodologyContract.test.ts` still expected `CHECKPOINT_A_OWNER_APPROVAL_REQUIRED` after Checkpoint A had already been owner-approved and frozen to `CHECKPOINT_A_OWNER_APPROVED_LOCKED`.
+2. `scoringProfileResolution.test.ts` still expected completed `IT_TECH` to fail closed to GENERAL. IT_TECH is now an implemented engine identity, so profile resolution correctly returns `IT_TECH` with `SECTOR_RULE`; its legacy ruleProfile remains GENERAL because specialised IT scoring is separately owned by the read-only K4B authority rather than the old GENERAL-derived database scaffold.
+
+Only the tests were corrected. No runtime methodology, classification, score, recommendation, persistence, provider, scheduler, deployment or production behavior was changed.
+
+Checkpoint B remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
