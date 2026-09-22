@@ -32020,3 +32020,59 @@ Purpose:
 No production mutation, migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
 
 **Next action:** pull latest branch and run `node scripts/k1-finalize-reconciled-sector-inventory.mjs`. Use that output to complete the final K1 scope freeze. K2 remains blocked until this is done.
+
+---
+
+## K1 FINAL — COMPLETE / PASS
+
+The final 238-equity reconciliation and sector inventory are complete.
+
+Final inventory:
+
+```text
+equities                 238
+distinct primary sectors  30
+NSE bulk evidence        200
+reviewed secondary        38
+reconciliation           FREEZE ELIGIBLE
+```
+
+Final K4 scope is now frozen at **10 packages**:
+
+1. IT_TECH
+2. INDUSTRIALS_CAPITAL_GOODS
+3. AUTO_COMPONENTS
+4. CHEMICALS_V1
+5. HEALTHCARE_SERVICES_V1
+6. FIN_SERVICES_NON_LENDER
+7. METALS_COMMODITIES
+8. CONSUMER_FMCG
+9. OIL_GAS_V1
+10. POWER_RENEWABLES_V1
+
+Machine-readable authority:
+
+`docs/k1/PortfolioAI_K1_FINAL_K4_PACKAGE_SCOPE_2026-09-22.json`
+
+Architecture consequences:
+
+- `Healthcare` primary sector does not replace PHARMA_V1; pharmaceutical identities route downstream to PHARMA_V1 from industry/subprofile evidence.
+- `Financial Services` primary sector does not replace BANK_NBFC; lender/NBFC identities remain under the existing lender methodology path after K3 reconciliation.
+- broad heterogeneous consumer/service/construction/textile/utility buckets remain deferred instead of receiving a weak generic sector engine.
+- no future newly encountered sector automatically enlarges Gate K; a separate reviewed expansion is required.
+- no nearest-looking research engine fallback is permitted.
+
+Safety state remains unchanged:
+
+```text
+Production mutation          NO
+Production migration         NO
+Score persistence            OFF
+Recommendation persistence   OFF
+Scheduler mutation           NO
+Deployment                   NO
+PR merge                     NO
+Automatic trading            NO
+```
+
+**K1 is closed. K2 may begin next, but has not started in this commit.**
