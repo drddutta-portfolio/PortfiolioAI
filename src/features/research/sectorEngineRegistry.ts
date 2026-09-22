@@ -95,11 +95,11 @@ export const SECTOR_ENGINE_REGISTRY: readonly SectorEngineRegistryEntry[] = [
     lifecycle: "RECONCILIATION_REQUIRED",
     methodologyAuthority: "BANK_NBFC",
     profileCodes: ["BANK", "NBFC_LENDING"],
-    allowedDimensions: COMMON_DIMENSIONS,
-    notApplicableDimensions: [],
-    benchmarkAuthority: "BANK_NBFC_EXISTING_REVIEW_REQUIRED",
-    valuationAuthority: "BANK_NBFC_EXISTING_REVIEW_REQUIRED",
-    recommendationAuthority: "BANK_NBFC_EXISTING_REVIEW_REQUIRED",
+    allowedDimensions: COMMON_DIMENSIONS.filter((dimension) => dimension !== "CASH_FLOW"),
+    notApplicableDimensions: ["CASH_FLOW"],
+    benchmarkAuthority: "BANK_PROFILE_NIFTY_BANK__NBFC_PROFILE_PENDING",
+    valuationAuthority: "BANK_STAGE_8__NBFC_PENDING",
+    recommendationAuthority: "BANK_HDFCBANK_PILOT_DRAFT__NBFC_PENDING",
     subprofileSupport: "SUPPORTED",
     profileAuthorities: {
       BANK: {
