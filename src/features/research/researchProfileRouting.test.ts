@@ -132,6 +132,17 @@ describe("routeResearchProfileV1", () => {
     })
   })
 
+  it("routes Power/Renewables industries into three K4 subprofiles", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Power", applicationIndustry: "Power Transmission" }).profileCode).toBe("REGULATED_NETWORK")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Power", applicationIndustry: "Hydro Power" }).profileCode).toBe("GENERATION_INTEGRATED_UTILITY")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Power", applicationIndustry: "Renewable Energy" }).profileCode).toBe("RENEWABLE_IPP")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Power", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "POWER_RENEWABLES_INDUSTRY_REQUIRED",
+    })
+  })
+
   it("routes Oil/Gas industries into three K4 subprofiles", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Oil, Gas & Consumable Fuels", applicationIndustry: "Oil Exploration & Production" }).profileCode).toBe("UPSTREAM_E_AND_P")
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Oil, Gas & Consumable Fuels", applicationIndustry: "City Gas Distribution" }).profileCode).toBe("MIDSTREAM_CITY_GAS")
