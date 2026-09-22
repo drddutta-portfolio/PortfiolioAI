@@ -341,3 +341,28 @@ The single failure was a stale Checkpoint A expectation:
 Only the regression expectation was updated. No Chemicals routing, scoring methodology, recommendation behavior, persistence, provider, production, scheduler or deployment behavior changed.
 
 CHEMICALS_V1 Checkpoint B remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
+
+
+---
+
+## K4 Package 4 · CHEMICALS_V1 FINAL CLOSURE — 22 September 2026
+
+Owner-local corrected Checkpoint B suite and TypeScript passed completely.
+
+Final state:
+- Checkpoint A = COMPLETE / PASS / FROZEN;
+- Checkpoint B = COMPLETE / PASS / CLOSED;
+- registry lifecycle = IMPLEMENTED;
+- supported subprofiles = SPECIALTY_CHEMICALS / AGRO_FERTILISER / COMMODITY_PROCESS_CHEMICALS;
+- ticker-specific methodology routing = NO;
+- missing mandatory evidence = fail closed;
+- cycle normalization = mandatory;
+- PHARMA_V1 / BANK_NBFC / prior K4 engine isolation = PASS;
+- golden controls = PASS;
+- universal Research shell = PASS;
+- score persistence = OFF;
+- recommendation persistence = OFF.
+
+**K4 Package 4 · CHEMICALS_V1 = COMPLETE / PASS / CLOSED.**
+
+K4 Package 5 — HEALTHCARE_SERVICES_V1 Checkpoint A is now IN PROGRESS.
