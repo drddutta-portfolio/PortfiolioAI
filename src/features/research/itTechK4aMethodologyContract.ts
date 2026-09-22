@@ -20,7 +20,7 @@ export interface ItTechSubprofileContract {
 
 export const IT_TECH_K4A_CONTRACT = {
   version: IT_TECH_K4A_CONTRACT_VERSION,
-  state: "CHECKPOINT_A_OWNER_APPROVAL_REQUIRED",
+  state: "CHECKPOINT_A_OWNER_APPROVED_LOCKED",
   engineCode: "IT_TECH",
   runtimeActivationAllowed: false,
   scorePersistenceEnabled: false,
