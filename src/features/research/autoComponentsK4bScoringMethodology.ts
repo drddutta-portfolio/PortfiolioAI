@@ -90,6 +90,10 @@ function rulesFor(subprofile: AutoK4aSubprofile): readonly AutoSignalRule[] {
   ]
 }
 
+function stableScore(value: number) {
+  return Number(value.toFixed(6))
+}
+
 function validScore(value: number | null) {
   return value !== null && Number.isFinite(value) && value >= 0 && value <= 100
 }
@@ -152,13 +156,13 @@ export function scoreAutoComponentsK4b(
   const totalWeight = Object.values(DIMENSION_WEIGHTS).reduce((sum, weight) => sum + weight, 0)
   if (totalWeight !== 100) throw new Error("AUTO dimension weights must equal 100")
 
-  const overallScore = Object.entries(DIMENSION_WEIGHTS).reduce((sum, [dimensionCode, weight]) => {
+  const overallScore = stableScore(Object.entries(DIMENSION_WEIGHTS).reduce((sum, [dimensionCode, weight]) => {
     const score = dimensionScores[dimensionCode]
     if (score === null || score === undefined) {
       throw new Error(`AUTO dimension ${dimensionCode} is not computable`)
     }
     return sum + score * weight / 100
-  }, 0)
+  }, 0))
 
   return {
     version: AUTO_COMPONENTS_K4B_SCORING_VERSION,
