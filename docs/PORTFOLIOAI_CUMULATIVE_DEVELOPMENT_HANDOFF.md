@@ -410,3 +410,18 @@ The single failure was a stale registry lifecycle expectation:
 Only the regression expectation was updated. No Healthcare Services methodology, routing, scoring, recommendation, persistence, provider, production, scheduler or deployment behavior changed.
 
 HEALTHCARE_SERVICES_V1 Checkpoint A remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
+
+
+---
+
+## K4 Package 5 · HEALTHCARE_SERVICES_V1 · Checkpoint A FINAL — 22 September 2026
+
+Owner-local tests and TypeScript passed. The hospital-only initial methodology is frozen.
+
+From this checkpoint onward, K4 regression tests must avoid stale lifecycle assumptions:
+- completed engines are asserted as IMPLEMENTED;
+- only the active package may be K4_FROZEN_PENDING;
+- package-count invariants remain dynamic;
+- no test may retain a pre-approval or pre-closure expected state after the state transition is committed.
+
+**HEALTHCARE_SERVICES_V1 Checkpoint A = COMPLETE / PASS / FROZEN.**
