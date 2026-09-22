@@ -73,6 +73,9 @@ describe("SECTOR_ENGINE_CONTRACT_V1", () => {
     expect(sectorEngineForProfileCode("UPSTREAM_E_AND_P")?.engineCode).toBe("OIL_GAS_V1")
     expect(sectorEngineForProfileCode("MIDSTREAM_CITY_GAS")?.engineCode).toBe("OIL_GAS_V1")
     expect(sectorEngineForProfileCode("INTEGRATED_REFINING_PETCHEM")?.engineCode).toBe("OIL_GAS_V1")
+    expect(sectorEngineForProfileCode("REGULATED_NETWORK")?.engineCode).toBe("POWER_RENEWABLES_V1")
+    expect(sectorEngineForProfileCode("GENERATION_INTEGRATED_UTILITY")?.engineCode).toBe("POWER_RENEWABLES_V1")
+    expect(sectorEngineForProfileCode("RENEWABLE_IPP")?.engineCode).toBe("POWER_RENEWABLES_V1")
   })
 
   it("does not place universal numeric recommendation thresholds in the registry", () => {
