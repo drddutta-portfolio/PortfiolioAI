@@ -1,4 +1,6 @@
 import type { ScoringProfileSource } from "./scoringTypes"
+import { routeResearchProfileV1 } from "./researchProfileRouting"
+import { sectorEngineForProfileCode } from "./sectorEngineRegistry"
 
 export interface ScoringProfileResolution {
   readonly profileCode: string
@@ -7,38 +9,39 @@ export interface ScoringProfileResolution {
   readonly legacyAssignmentCode: string | null
 }
 
-function normalized(value: string | null) {
-  return value?.trim().toUpperCase() ?? ""
+function routedEngineProfile(
+  sector: string | null,
+  industry: string | null,
+): { readonly code: string; readonly source: ScoringProfileSource } {
+  const routed = routeResearchProfileV1({
+    assetClass: "EQUITY",
+    applicationSector: sector,
+    applicationIndustry: industry,
+  })
+
+  if (routed.state !== "ROUTED" || routed.profileCode === null) {
+    return { code: "GENERAL", source: "GENERAL_FALLBACK" }
+  }
+
+  const engine = sectorEngineForProfileCode(routed.profileCode)
+  if (!engine || engine.lifecycle === "K4_FROZEN_PENDING") {
+    return { code: "GENERAL", source: "GENERAL_FALLBACK" }
+  }
+
+  return { code: engine.engineCode, source: "SECTOR_RULE" }
 }
 
 export function isPharmaScoringContext(sector: string | null, industry: string | null) {
-  const sectorKey = normalized(sector)
-  const industryKey = normalized(industry)
-  return sectorKey === "PHARMA" || industryKey === "PHARMACEUTICALS"
-}
-
-function inferredProfile(sector: string | null, industry: string | null): { readonly code: string; readonly source: ScoringProfileSource } {
-  const haystack = `${sector ?? ""} ${industry ?? ""}`.trim().toUpperCase()
-  if (!haystack) return { code: "GENERAL", source: "GENERAL_FALLBACK" }
-  if (isPharmaScoringContext(sector, industry)) return { code: "PHARMA_V1", source: "SECTOR_RULE" }
-  if (/\bBANK\b|NBFC|LENDING/.test(haystack)) return { code: "BANK_NBFC", source: "SECTOR_RULE" }
-  if (/\bIT\b|TECHNOLOGY|SOFTWARE/.test(haystack)) return { code: "IT_TECH", source: "SECTOR_RULE" }
-  if (/INDUSTRIAL|CAPITAL GOODS|ENGINEERING/.test(haystack)) return { code: "INDUSTRIALS_CAPITAL_GOODS", source: "SECTOR_RULE" }
-  if (/FMCG|CONSUMER/.test(haystack)) return { code: "CONSUMER_FMCG", source: "SECTOR_RULE" }
-  if (/AUTO|AUTOMOBILE/.test(haystack)) return { code: "AUTO_COMPONENTS", source: "SECTOR_RULE" }
-  if (/POWER|ENERGY|UTILIT|OIL|GAS/.test(haystack)) return { code: "ENERGY_UTILITIES", source: "SECTOR_RULE" }
-  if (/METAL|MINING|COMMODIT/.test(haystack)) return { code: "METALS_COMMODITIES", source: "SECTOR_RULE" }
-  if (/INFRA|CONSTRUCTION|EPC/.test(haystack)) return { code: "INFRA_CONSTRUCTION", source: "SECTOR_RULE" }
-  if (/REAL ESTATE|REALTY/.test(haystack)) return { code: "REAL_ESTATE", source: "SECTOR_RULE" }
-  if (/FINANCIAL SERVICES|INSURANCE|ASSET MANAGEMENT/.test(haystack)) return { code: "FIN_SERVICES_NON_LENDER", source: "SECTOR_RULE" }
-  return { code: "GENERAL", source: "GENERAL_FALLBACK" }
+  return routedEngineProfile(sector, industry).code === "PHARMA_V1"
 }
 
 /**
- * Resolves the scoring methodology independently from the user-facing application
- * classification. PHARMA_HEALTHCARE is a legacy Stage 8 profile assignment; for
- * canonically classified pharmaceutical companies it aliases to PHARMA_V1 so the
- * Research page cannot silently fall back to GENERAL rules.
+ * Resolves scoring methodology downstream of the K1 industry-first router.
+ *
+ * A sector label alone cannot activate a specialised scoring engine. Only a
+ * reviewed assignment or a ROUTED profile that maps to an implemented/inherited
+ * engine in SECTOR_ENGINE_REGISTRY may do so. K4 placeholders deliberately
+ * remain GENERAL/fail-closed until their methodology package is approved.
  */
 export function resolveScoringProfile(
   sector: string | null,
@@ -63,7 +66,7 @@ export function resolveScoringProfile(
     }
   }
 
-  const inferred = inferredProfile(sector, industry)
+  const inferred = routedEngineProfile(sector, industry)
   return {
     profileCode: inferred.code,
     ruleProfile: inferred.code === "BANK_NBFC" || inferred.code === "PHARMA_V1" ? inferred.code : "GENERAL",
