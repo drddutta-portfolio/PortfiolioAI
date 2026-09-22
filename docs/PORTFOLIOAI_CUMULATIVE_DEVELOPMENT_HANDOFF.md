@@ -105,3 +105,19 @@ Key methodology locks proposed:
 Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 3 · AUTO_COMPONENTS · Checkpoint A validation correction — 22 September 2026
+
+Owner-local Checkpoint A validation initially reported 2 failed tests and 24 passed.
+
+Both failures were stale registry expectations after the legitimate closure of earlier K4 packages:
+
+1. the registry test still expected 9 packages in `K4_FROZEN_PENDING`; after IT_TECH and INDUSTRIALS_CAPITAL_GOODS are implemented, the correct count is 8;
+2. the registry test still expected `PROJECT_EPC` to belong to a pending Industrials engine; INDUSTRIALS_CAPITAL_GOODS is now implemented, so the correct lifecycle is `IMPLEMENTED`.
+
+Only regression expectations were updated. No AUTO methodology, routing, scoring, recommendation, production, persistence, provider, scheduler or deployment behavior changed.
+
+AUTO_COMPONENTS Checkpoint A remains LOCAL VALIDATION PENDING until the corrected suite is rerun.
