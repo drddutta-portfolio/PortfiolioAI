@@ -90,3 +90,30 @@ npm run typecheck
 ```
 
 If all pass, METALS_COMMODITIES may be promoted to IMPLEMENTED read-only methodology authority.
+
+
+## 11. Final validation and closure
+
+Owner-local Checkpoint B validation passed completely.
+
+Validated:
+- Checkpoint A regression;
+- deterministic through-cycle scoring;
+- mandatory commodity-exposure readiness gate;
+- lifecycle-stable isolation regression;
+- steel vs non-ferrous routing;
+- registry integrity;
+- scoring-profile integration;
+- K2 recommendation-safety regression;
+- TypeScript;
+- TORNTPHARM 75.1575 golden output;
+- AUROPHARMA fail-closed golden output;
+- universal Research workspace continuity.
+
+Registry promotion:
+- METALS_COMMODITIES lifecycle → `IMPLEMENTED`;
+- STEEL_FERROUS / NON_FERROUS_DIVERSIFIED_METALS → `SUPPORTED`;
+- recommendation thresholds remain pending dedicated evidence validation;
+- score/recommendation persistence remain OFF.
+
+**K4 Package 7 · METALS_COMMODITIES = COMPLETE / PASS / CLOSED.**
