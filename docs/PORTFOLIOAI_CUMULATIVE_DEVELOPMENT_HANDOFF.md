@@ -74,3 +74,34 @@ Final state:
 **K4 Package 2 · INDUSTRIALS_CAPITAL_GOODS = COMPLETE / PASS / CLOSED.**
 
 K4 Package 3 — AUTO_COMPONENTS Checkpoint A is now IN PROGRESS.
+
+
+---
+
+## K4 Package 3 · AUTO_COMPONENTS · Checkpoint A implementation — 22 September 2026
+
+INDUSTRIALS_CAPITAL_GOODS is closed COMPLETE / PASS.
+
+Added:
+- `autoComponentsK4aMethodologyContract.ts`;
+- `autoComponentsK4aMethodologyContract.test.ts`;
+- `docs/PortfolioAI_GATE_K_K4_3_AUTO_COMPONENTS_CHECKPOINT_A.md`.
+
+Proposed subprofiles:
+1. AUTO_OEM — M&M and TVSMOTOR references;
+2. AUTO_COMPONENTS — MOTHERSON and SONACOMS references.
+
+Key methodology locks proposed:
+- Industry selects methodology; Sector alone cannot;
+- OEM and component economics remain separate;
+- EV transition is exposure/risk/durability metadata, not an automatic third score;
+- minimum 3 annual years / 8 quarters / 252 trading days;
+- cash conversion and ROCE/ROIC are mandatory;
+- capex-cycle context is mandatory;
+- no cross-subprofile peer percentiles;
+- unknown Industry → METHOD_NOT_AVAILABLE;
+- numeric recommendation thresholds remain subprofile-owned and unset.
+
+Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
+
+No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
