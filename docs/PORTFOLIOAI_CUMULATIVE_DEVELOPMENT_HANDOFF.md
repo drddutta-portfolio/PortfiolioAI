@@ -542,3 +542,21 @@ No-stale regression policy remains active for this package and subsequent K4 pac
 Runtime activation remains OFF pending owner-local Checkpoint A validation and approval.
 
 No provider calls, production mutation/migration, score/recommendation persistence, scheduler change, deployment, PR merge or trading action occurred.
+
+
+---
+
+## K4 Package 6 · FIN_SERVICES_NON_LENDER · Checkpoint A FINAL — 22 September 2026
+
+Owner-local tests and TypeScript passed. The three-subprofile non-lender Financial Services methodology is frozen.
+
+Frozen subprofiles:
+- CAPITAL_MARKETS_AMC;
+- INSURANCE;
+- FINTECH_PLATFORM.
+
+Hard separation from BANK_NBFC remains mandatory.
+
+**FIN_SERVICES_NON_LENDER Checkpoint A = COMPLETE / PASS / FROZEN.**
+
+Checkpoint B is now IN PROGRESS.
