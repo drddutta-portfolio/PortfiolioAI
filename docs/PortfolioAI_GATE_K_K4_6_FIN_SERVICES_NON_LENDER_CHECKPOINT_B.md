@@ -110,3 +110,31 @@ npm run typecheck
 ```
 
 If all pass, FIN_SERVICES_NON_LENDER may be promoted to IMPLEMENTED read-only methodology authority. Recommendation thresholds remain pending and persistence remains OFF.
+
+
+## 11. Final validation and closure
+
+Owner-local Checkpoint B validation passed completely after correction of the legacy profile-code routing expectation.
+
+Validated:
+- Checkpoint A regression;
+- deterministic scoring across CAPITAL_MARKETS_AMC / INSURANCE / FINTECH_PLATFORM;
+- lifecycle-stable isolation regression;
+- explicit separation from BANK_NBFC / NBFC_LENDING;
+- canonical routing;
+- registry integrity;
+- scoring-profile integration;
+- K2 recommendation-safety regression;
+- TypeScript;
+- TORNTPHARM 75.1575 golden output;
+- AUROPHARMA fail-closed golden output;
+- universal Research workspace continuity.
+
+Registry promotion:
+- FIN_SERVICES_NON_LENDER lifecycle → `IMPLEMENTED`;
+- CAPITAL_MARKETS_AMC / INSURANCE / FINTECH_PLATFORM → `SUPPORTED`;
+- lender methodology inheritance remains prohibited;
+- recommendation thresholds remain pending dedicated evidence validation;
+- score/recommendation persistence remain OFF.
+
+**K4 Package 6 · FIN_SERVICES_NON_LENDER = COMPLETE / PASS / CLOSED.**
