@@ -132,6 +132,18 @@ describe("routeResearchProfileV1", () => {
     })
   })
 
+  it("routes non-lender Financial Services subprofiles without lender leakage", () => {
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Asset Management Company" }).profileCode).toBe("CAPITAL_MARKETS_AMC")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Health Insurance" }).profileCode).toBe("INSURANCE")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Fintech / Insurance Brokerage & Platform" }).profileCode).toBe("FINTECH_PLATFORM")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "NBFC" }).profileCode).toBe("NBFC_LENDING")
+    expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: null })).toMatchObject({
+      state: "PROFILE_PENDING",
+      profileCode: null,
+      reasonCode: "FINANCIAL_SERVICES_INDUSTRY_REQUIRED",
+    })
+  })
+
   it("uses Financial Services industry evidence rather than pretending all financial companies are banks", () => {
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Asset Management Cos." }).profileCode).toBe("CAPITAL_MARKET_FINANCIAL")
     expect(routeResearchProfileV1({ assetClass: "EQUITY", applicationSector: "Financial Services", applicationIndustry: "Internet Software & Services" }).profileCode).toBe("DIGITAL_PLATFORM")
