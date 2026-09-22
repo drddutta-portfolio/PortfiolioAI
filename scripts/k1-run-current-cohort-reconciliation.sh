@@ -11,7 +11,7 @@ COHORT_TXT="$ARTIFACT_DIR/k1-current-nse-equities.txt"
 CANONICAL_SOURCE="${K1_CANONICAL_SOURCE:-FROZEN_CURRENT_PORTFOLIO}"
 BULK_JSON="$ARTIFACT_DIR/k1-nse-bulk-primary-classification.json"
 TARGETED_TXT="$ARTIFACT_DIR/k1-nse-residual-symbols.txt"
-BSE_JSON="$ARTIFACT_DIR/k1-bse-primary-classification.json"
+SECONDARY_JSON="docs/k1/PortfolioAI_K1_REVIEWED_SECONDARY_CLASSIFICATION_FALLBACK_2026-09-22.json"
 OFFICIAL_JSON="$ARTIFACT_DIR/k1-nse-primary-classification.json"
 RECON_JSON="$ARTIFACT_DIR/k1-nse-classification-reconciliation.json"
 COHORT_LIMIT="${K1_COHORT_LIMIT:-0}"
@@ -96,70 +96,61 @@ node scripts/k1-fetch-nse-bulk-classification.mjs \
 RESIDUAL_COUNT="$(jq -r '.residualCount // 0' "$BULK_JSON")"
 [[ "$RESIDUAL_COUNT" =~ ^[0-9]+$ ]] || die "Bulk residual count is invalid."
 
-printf '\n[K1] 4/6 targeted official BSE fallback for NSE-bulk residuals\n'
+printf '\n[K1] 4/6 apply frozen reviewed secondary fallback for NSE-bulk residuals\n'
 if [[ "$RESIDUAL_COUNT" -gt 0 ]]; then
   jq -r '.residual[].symbol' "$BULK_JSON" > "$TARGETED_TXT"
   printf 'Residual equities after NSE bulk source: %s\n' "$RESIDUAL_COUNT"
-
-  set +e
-  node scripts/k1-fetch-bse-primary-classification.mjs \
-    --input "$TARGETED_TXT" \
-    --output "$BSE_JSON"
-  BSE_STATUS=$?
-  set -e
-
-  if [[ "$BSE_STATUS" -ne 0 && "$BSE_STATUS" -ne 2 ]]; then
-    die "BSE classification fallback failed with status $BSE_STATUS."
-  fi
+  [[ -f "$SECONDARY_JSON" ]] || die "Missing reviewed fallback manifest: $SECONDARY_JSON"
 else
   : > "$TARGETED_TXT"
-  cat > "$BSE_JSON" <<'JSON'
-{
-  "contract": "PORTFOLIOAI_K1_BSE_PRIMARY_CLASSIFICATION_FALLBACK_V1",
-  "source": "BSE_OFFICIAL_QUOTE_HEADER",
-  "requestedCount": 0,
-  "resolvedCount": 0,
-  "failureCount": 0,
-  "rows": [],
-  "failures": []
-}
-JSON
 fi
 
 jq -s '
   .[0] as $bulk
-  | .[1] as $bse
+  | .[1] as $secondary
   | (($bulk.residual // []) | map(.symbol | ascii_upcase)) as $bulkResidualSymbols
-  | (($bse.rows // [])
+  | (($secondary.rows // [])
       | map(select(.sector != null and (.sector | tostring | length) > 0))
       | map(select((.symbol | ascii_upcase) as $s | ($bulkResidualSymbols | index($s)) != null))
-    ) as $bseRows
-  | ($bseRows | map(.symbol | ascii_upcase)) as $bseSymbols
+      | map({
+          exchange: "NSE",
+          symbol: .symbol,
+          isin: (.isin // null),
+          companyName: null,
+          sector: .sector,
+          industry: (.industry // null),
+          basicIndustry: null,
+          macroEconomicSector: null,
+          sourceKind: "REVIEWED_SECONDARY_CLASSIFICATION",
+          classificationAuthority: "REVIEWED_SECONDARY_FALLBACK",
+          sourceUrl: (.evidenceUrl // null),
+          retrievedAt: (.reviewedAt // $secondary.asOfDate // null)
+        })
+    ) as $secondaryRows
+  | ($secondaryRows | map(.symbol | ascii_upcase)) as $secondarySymbols
   | {
-      contract: "PORTFOLIOAI_K1_CLASSIFICATION_REFERENCE_MERGED_V3",
+      contract: "PORTFOLIOAI_K1_CLASSIFICATION_REFERENCE_MERGED_V4",
       generatedAt: (now | todateiso8601),
-      source: "NSE_INDICES_BULK_PLUS_BSE_OFFICIAL_FALLBACK",
+      source: "NSE_INDICES_BULK_PLUS_REVIEWED_SECONDARY_FALLBACK",
       canonicalRowCount: $bulk.canonicalRowCount,
       nseBulkResolvedCount: ($bulk.rows | length),
-      bseRequestedCount: ($bse.requestedCount // 0),
-      bseResolvedCount: ($bseRows | length),
-      bseFailureCount: ($bse.failureCount // 0),
+      reviewedSecondaryResolvedCount: ($secondaryRows | length),
+      reviewedSecondaryManifest: "PortfolioAI_K1_REVIEWED_SECONDARY_CLASSIFICATION_FALLBACK_2026-09-22",
       rows: (
-        (($bulk.rows // []) + $bseRows)
+        (($bulk.rows // []) + $secondaryRows)
         | unique_by(.symbol)
         | sort_by(.symbol)
       ),
       residual: [
         ($bulk.residual // [])[]
-        | select((.symbol | ascii_upcase) as $s | ($bseSymbols | index($s) | not))
-      ],
-      failures: ($bse.failures // [])
+        | select((.symbol | ascii_upcase) as $s | ($secondarySymbols | index($s) | not))
+      ]
     }
   | .resolvedCount = (.rows | length)
   | .residualCount = (.residual | length)
-' "$BULK_JSON" "$BSE_JSON" > "$OFFICIAL_JSON"
+' "$BULK_JSON" "$SECONDARY_JSON" > "$OFFICIAL_JSON"
 
-printf 'Merged official exchange classification: %s/%s resolved; %s residual\n' \
+printf 'Merged classification reference: %s/%s resolved; %s residual\n' \
   "$(jq -r '.resolvedCount' "$OFFICIAL_JSON")" \
   "$CANONICAL_COUNT" \
   "$(jq -r '.residualCount' "$OFFICIAL_JSON")"
@@ -205,8 +196,8 @@ FREEZE_ELIGIBLE="$(jq -r '.freezeEligible' "$RECON_JSON")"
 printf 'Freeze eligible: %s\n' "$FREEZE_ELIGIBLE"
 printf 'Canonical snapshot: %s\n' "$CANONICAL_JSON"
 printf 'Official bulk snapshot: %s\n' "$BULK_JSON"
-printf 'BSE official fallback artifact: %s\n' "$BSE_JSON"
-printf 'Merged official exchange reference: %s\n' "$OFFICIAL_JSON"
+printf 'Reviewed secondary fallback manifest: %s\n' "$SECONDARY_JSON"
+printf 'Merged classification reference: %s\n' "$OFFICIAL_JSON"
 printf 'Reconciliation: %s\n' "$RECON_JSON"
 
 if [[ "$COMPARE_STATUS" -eq 2 ]]; then
