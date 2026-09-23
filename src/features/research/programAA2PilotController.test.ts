@@ -1,0 +1,77 @@
+import { describe, expect, it, vi } from "vitest"
+import type { ProgramAA1MaterializedResult } from "./programAA1CacheMaterializer"
+import { buildProgramAA2Plan, executeProgramAA2Plan } from "./programAA2PilotController"
+
+function materialized(): ProgramAA1MaterializedResult {
+  const review = Array.from({ length: 6 }, (_, index) => ({
+    securityId: `review-${index}`, symbol: `REVIEW${index}`, assetClass: "EQUITY", canonicalSector: null, canonicalIndustry: null,
+    researchProfileCode: null, researchSubprofileCode: null, methodologyState: "REVIEW_REQUIRED" as const,
+    scoringExecutionState: "BLOCKED" as const, eligibilityState: "REVIEW_REQUIRED" as const, r3Applicable: false, r5Applicable: false,
+    reasonCode: "APPLICATION_SECTOR_MISSING", portfolioWeightPercent: null,
+  }))
+  const eligible = {
+    securityId: "pharma", symbol: "TORNTPHARM", assetClass: "EQUITY", canonicalSector: "Pharma", canonicalIndustry: "Pharmaceuticals",
+    researchProfileCode: "PHARMA_V1", researchSubprofileCode: "PHARMA", methodologyState: "AVAILABLE" as const,
+    scoringExecutionState: "AVAILABLE" as const, eligibilityState: "ELIGIBLE" as const, r3Applicable: true, r5Applicable: true,
+    reasonCode: "SUPPORTED_ENGINE_ROUTED", portfolioWeightPercent: null,
+  }
+  return {
+    holdings: [], benchmarkEvidence: [],
+    baseline: {
+      version: "PROGRAM_A_A1_EVIDENCE_BASELINE_V1", asOfDate: "2026-09-23", eligibility: [...review, eligible],
+      r3Coverage: ["FUNDAMENTALS", "OWNERSHIP", "VALUATION", "DOCUMENTS"].map((domain) => ({ securityId: "pharma", symbol: "TORNTPHARM", profileCode: "PHARMA_V1", domain: domain as "FUNDAMENTALS", state: "MISSING" as const, freshUntil: null, authoritySource: "cache", blockingReason: "MISSING", estimatedRefreshAction: "REVIEWED_ADAPTER", projectedProviderCalls: 1, sharedCallKey: null })),
+      r5Coverage: [{ securityId: "pharma", symbol: "TORNTPHARM", profileCode: "PHARMA_V1", identityState: "FRESH", earliestStoredCandle: "2025-09-01", latestStoredCandle: "2026-09-18", availableHistoryDays: 382, lookbackSatisfied: true, missingWindow: { version: "PROGRAM_A_A1_MARKET_HISTORY_V1", mode: "INCREMENTAL", requiredStartDate: "2025-09-23", requestStartDate: "2026-09-13", requestEndDate: "2026-09-23", lookbackSatisfied: true, reasonCode: "LATEST_CANDLE_GAP", estimatedProviderCalls: 1 }, derivedMetrics: { PRICE_MOMENTUM_6M: "FRESH", PRICE_MOMENTUM_12M: "FRESH", MAX_DRAWDOWN_1Y: "FRESH", VOLATILITY_1Y: "FRESH", RELATIVE_STRENGTH_12M: "MISSING", BENCHMARK_RELATIVE_VOLATILITY_1Y: "MISSING" }, benchmarkAuthority: "PHARMA_V1", benchmarkCode: "NIFTY_PHARMA", benchmarkReadiness: "MISSING", blockingReason: "BENCHMARK_HISTORY_MISSING" }],
+      benchmarkInventory: [], projectedProviderCost: { providerCalls: 0, budgetConsumed: 0, trendlyne: { holdingsNeedingRefresh: 1, domainRefreshes: 4, estimatedPhysicalCalls: 2, sharedCallGroups: 2 }, angelOne: { holdingsNeedingHistory: 1, fullBackfills: 0, incrementalRefreshes: 1, estimatedSecurityRequests: 1, estimatedBenchmarkRequests: 1 } }, pilotProposal: { r3: [], r5: [] }, providerCalls: 0, budgetConsumed: 0,
+    },
+  }
+}
+
+describe("Program A A2 bounded pilot", () => {
+  it("selects exact bounded cohorts and deterministic incremental actions", async () => {
+    const plan = await buildProgramAA2Plan(materialized())
+    expect(plan.actions.filter((action) => action.stage === "A2A")).toHaveLength(5)
+    expect(plan.actions.find((action) => action.capability === "COMPLETE_RESEARCH_REFRESH")).toMatchObject({ estimatedPhysicalCalls: 4, symbol: "TORNTPHARM" })
+    expect(plan.actions.find((action) => action.capability === "SECURITY_HISTORY")?.historyWindow).toEqual({ from: "2026-09-13", to: "2026-09-23" })
+    expect(plan.providerTotals).toEqual({ trendlyne: 9, angelOneSecurity: 1, angelOneBenchmark: 1, angelOneTotal: 2 })
+    expect(plan.actualProviderCalls).toBe(0)
+    expect(plan.confirmationToken).toBe(`APPROVE_PROGRAM_A_A2_${plan.planId.slice(0, 16).toUpperCase()}`)
+    expect(await buildProgramAA2Plan(materialized())).toEqual(plan)
+  })
+
+  it("refuses non-local execution and stale plans before dispatch", async () => {
+    const plan = await buildProgramAA2Plan(materialized())
+    const dispatch = vi.fn()
+    await expect(executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "https://production.example.com", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "UNEXPECTED_PRODUCTION_DB_TARGET" })
+    const changed = { ...plan, planId: "changed" }
+    await expect(executeProgramAA2Plan({ approvedPlan: plan, currentPlan: changed, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "STALE_PLAN_REPLAN_REQUIRED" })
+    expect(dispatch).not.toHaveBeenCalled()
+  })
+
+  it("requires exact confirmation and stops on the first provider-control failure without retry", async () => {
+    const plan = await buildProgramAA2Plan(materialized())
+    const dispatch = vi.fn().mockRejectedValue(new Error("LEASE_ACQUIRE_FAILED"))
+    const denied = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: "wrong", localSupabaseUrl: "http://localhost:54321", executeAction: dispatch })
+    expect(denied).toMatchObject({ status: "REFUSED", stopReason: "AUTH_OR_CONFIG_ERROR", retries: 0 })
+    const stopped = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://localhost:54321", executeAction: dispatch })
+    expect(stopped).toMatchObject({ status: "PARTIAL_STOPPED", stopReason: "LEASE_CONFLICT", retries: 0, scoreWrites: 0, recommendationWrites: 0, sizingWrites: 0 })
+    expect(dispatch).toHaveBeenCalledTimes(1)
+  })
+
+  it("stops when an adapter reports calls above its approved action budget", async () => {
+    const plan = await buildProgramAA2Plan(materialized())
+    const result = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: (action) => Promise.resolve({ providerCalls: action.estimatedPhysicalCalls + 1, localWrites: 0 }) })
+    expect(result).toMatchObject({ status: "PARTIAL_STOPPED", stopReason: "CALL_BUDGET_EXCEEDED", retries: 0 })
+  })
+
+  it("re-materializes between stages and requires a new approval after classification changes", async () => {
+    const plan = await buildProgramAA2Plan(materialized())
+    const dispatch = vi.fn((action: { estimatedPhysicalCalls: number }) => Promise.resolve({ providerCalls: action.estimatedPhysicalCalls, localWrites: 1 }))
+    const result = await executeProgramAA2Plan({
+      approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken,
+      localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch,
+      reloadCurrentPlan: () => Promise.resolve({ ...plan, planId: "post-classification-cache-state" }),
+    })
+    expect(dispatch).toHaveBeenCalledTimes(5)
+    expect(result).toMatchObject({ status: "PARTIAL_STOPPED", stopReason: "STALE_PLAN_REPLAN_REQUIRED", actualCalls: { TRENDLYNE_MCP: 5, ANGEL_ONE: 0 } })
+  })
+})

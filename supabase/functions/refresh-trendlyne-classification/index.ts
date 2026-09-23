@@ -67,11 +67,18 @@ Deno.serve(async (request) => {
   const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
   if (verified.error || verified.data !== true) return reply(401, { error: "Internal authentication failed." })
 
-  let body: { action?: unknown; limit?: unknown }
+  let body: { action?: unknown; limit?: unknown; portfolioId?: unknown; securityIds?: unknown; confirmation?: unknown }
   try { body = await request.json() } catch { return reply(400, { error: "Invalid JSON body." }) }
-  const action = body.action === "RUN" ? "RUN" : body.action === "DRY_RUN" ? "DRY_RUN" : null
-  const limit = Number(body.limit ?? MAX_LIMIT)
+  const action = body.action === "RUN" ? "RUN" : body.action === "DRY_RUN" ? "DRY_RUN" : body.action === "A2_EXECUTE" ? "A2_EXECUTE" : null
+  const a2SecurityIds = action === "A2_EXECUTE" && Array.isArray(body.securityIds) && body.securityIds.every(id => typeof id === "string") ? body.securityIds as string[] : []
+  const limit = action === "A2_EXECUTE" ? a2SecurityIds.length : Number(body.limit ?? MAX_LIMIT)
   if (!action || !Number.isInteger(limit) || limit < 1 || limit > MAX_LIMIT) return reply(400, { error: "Invalid action or limit." })
+  if (action === "A2_EXECUTE") {
+    const local = (() => { try { const url = new URL(supabaseUrl); return ["localhost", "127.0.0.1"].includes(url.hostname) } catch { return false } })()
+    if (!local) return reply(409, { error: "Program A A2 execution is local-only.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
+    if (body.confirmation !== "OWNER_CONFIRMED_PROGRAM_A_A2_CLASSIFICATION") return reply(409, { error: "Exact Program A A2 confirmation is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+    if (typeof body.portfolioId !== "string" || a2SecurityIds.length < 1 || a2SecurityIds.length > 5 || new Set(a2SecurityIds).size !== a2SecurityIds.length) return reply(400, { error: "A2 requires one to five unique exact security IDs.", code: "CALL_BUDGET_EXCEEDED", providerCalls: 0 })
+  }
 
   const control = await admin.from("provider_ingestion_controls").select("ingestion_enabled,daily_internal_attempt_limit,per_run_internal_attempt_limit,policy_version").eq("source_code", SOURCE_CODE).single()
   const source = await admin.from("data_sources").select("is_active,entitlement_verified,retention_rights_verified").eq("code", SOURCE_CODE).single()
@@ -79,7 +86,9 @@ Deno.serve(async (request) => {
   if (!control.data.ingestion_enabled || !source.data.is_active || !source.data.entitlement_verified || !source.data.retention_rights_verified) return reply(409, { error: "Provider classification refresh is not enabled." })
   if (limit > control.data.per_run_internal_attempt_limit) return reply(400, { error: "Requested limit exceeds the provider per-run control." })
 
-  const holdings = await admin.from("current_holdings").select("security_id,current_quantity")
+  let holdingsQuery = admin.from("current_holdings").select("security_id,current_quantity")
+  if (action === "A2_EXECUTE") holdingsQuery = holdingsQuery.eq("portfolio_id", body.portfolioId as string).in("security_id", a2SecurityIds)
+  const holdings = await holdingsQuery
   if (holdings.error) return reply(500, { error: "Holdings could not be loaded." })
   const openQty = new Map<string, number>()
   for (const row of holdings.data ?? []) if (Number(row.current_quantity) > 0) openQty.set(row.security_id as string, (openQty.get(row.security_id as string) ?? 0) + Number(row.current_quantity))
@@ -92,11 +101,13 @@ Deno.serve(async (request) => {
   if (securities.error || classifications.error || prices.error) return reply(500, { error: "Classification planning data could not be loaded." })
   const sectorBy = new Map((classifications.data ?? []).map((row) => [row.security_id as string, row.sector as string | null]))
   const priceBy = new Map((prices.data ?? []).map((row) => [row.security_id as string, Number(row.price)]))
+  const exactA2Ids = new Set(a2SecurityIds)
   const targets = (securities.data ?? [])
-    .filter((row) => row.asset_class === "EQUITY" && typeof row.isin === "string" && row.isin.length === 12 && !sectorBy.get(row.id as string))
+    .filter((row) => row.asset_class === "EQUITY" && typeof row.isin === "string" && row.isin.length === 12 && (action === "A2_EXECUTE" ? exactA2Ids.has(row.id as string) : !sectorBy.get(row.id as string)))
     .map((row) => ({ id: row.id as string, symbol: row.symbol as string, isin: (row.isin as string).toUpperCase(), currentValue: (openQty.get(row.id as string) ?? 0) * (priceBy.get(row.id as string) ?? 0) }))
     .sort((a, b) => b.currentValue - a.currentValue || a.symbol.localeCompare(b.symbol))
     .slice(0, limit)
+  if (action === "A2_EXECUTE" && (targets.length !== a2SecurityIds.length || targets.some(target => !exactA2Ids.has(target.id)))) return reply(409, { error: "Exact A2 classification cohort is not executable.", code: "CAPABILITY_MISMATCH", providerCalls: 0 })
 
   const today = new Date(); today.setUTCHours(0, 0, 0, 0)
   const usage = await admin.from("provider_usage_events").select("actual_internal_units").eq("source_code", SOURCE_CODE).eq("accounting_class", "PROVIDER_TOOL_ATTEMPT").gte("attempted_at", today.toISOString())
@@ -212,5 +223,5 @@ Deno.serve(async (request) => {
     await admin.from("data_ingestion_runs").update({ status, completed_at: new Date().toISOString(), attempted_call_count: attempted, accepted_count: accepted, rejected_count: rejected, failed_count: failed, fetched_count: accepted, skipped_count: Math.max(0, targets.length - accepted - failed), metadata: { selection: "HIGHEST_CURRENT_VALUE_UNCLASSIFIED_WITH_CANONICAL_ISIN", normalized_count: normalized, pending_mapping_pairs: [...pendingPairs.values()] } }).eq("id", runId)
   }
 
-  return reply(200, { action, runId, targetCount: targets.length, attempted, accepted, rejected, failed, normalized, pendingMappingPairs: [...pendingPairs.values()] })
+  return reply(200, { action, runId, targetCount: targets.length, providerCalls: attempted, attempted, accepted, rejected, failed, normalized, pendingReview: pendingPairs.size, pendingMappingPairs: [...pendingPairs.values()] })
 })

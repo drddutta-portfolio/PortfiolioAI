@@ -18,6 +18,8 @@ type RequestBody = {
   readonly portfolioId?: unknown
   readonly securityId?: unknown
   readonly confirmation?: unknown
+  readonly requestFrom?: unknown
+  readonly requestTo?: unknown
 }
 type AdminClient = ReturnType<typeof createClient>
 type MetricRow = {
@@ -186,8 +188,16 @@ Deno.serve(async (request) => {
       exchange: mapping.exchange,
       tradingSymbol: mapping.trading_symbol,
     }
-    const to = new Date()
-    const from = new Date(to.getTime() - HISTORY_DAYS * DAY)
+    const a2Window = typeof body.requestFrom === "string" && typeof body.requestTo === "string"
+    if ((body.requestFrom === undefined) !== (body.requestTo === undefined)) return json(400, { error: "requestFrom and requestTo must be supplied together.", code: "PROVIDER_SCHEMA_MISMATCH" })
+    if (a2Window) {
+      const local = (() => { try { const url = new URL(supabaseUrl); return ["localhost", "127.0.0.1"].includes(url.hostname) } catch { return false } })()
+      if (!local) return json(409, { error: "Program A A2 execution is local-only.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
+      if (!/^\d{4}-\d{2}-\d{2}$/u.test(body.requestFrom as string) || !/^\d{4}-\d{2}-\d{2}$/u.test(body.requestTo as string)) return json(400, { error: "A2 history window must use ISO dates.", code: "PROVIDER_SCHEMA_MISMATCH" })
+    }
+    const to = a2Window ? new Date(`${body.requestTo as string}T00:00:00.000Z`) : new Date()
+    const from = a2Window ? new Date(`${body.requestFrom as string}T00:00:00.000Z`) : new Date(to.getTime() - HISTORY_DAYS * DAY)
+    if (!Number.isFinite(from.valueOf()) || !Number.isFinite(to.valueOf()) || from > to || to.getTime() - from.getTime() > HISTORY_DAYS * DAY) return json(400, { error: "A2 history window is invalid or exceeds the reviewed adapter maximum.", code: "CALL_BUDGET_EXCEEDED" })
     const latestExisting = await admin.from("market_price_history").select("period_start").eq("security_id", body.securityId).eq("provider_code", MARKET_DATA_PROVIDER).eq("interval", "ONE_DAY").order("period_start", { ascending: false }).limit(1).maybeSingle()
     if (latestExisting.error) throw latestExisting.error
 
@@ -198,7 +208,7 @@ Deno.serve(async (request) => {
       company: security.name,
       provider: MARKET_DATA_PROVIDER,
       interval: "ONE_DAY",
-      historyDays: HISTORY_DAYS,
+      historyDays: Math.ceil((to.getTime() - from.getTime()) / DAY),
       estimatedProviderCalls: 1,
       latestExistingCandle: latestExisting.data?.period_start ?? null,
       metricsAfterRefresh: ["PRICE_MOMENTUM_12M", "PRICE_MOMENTUM_6M", "MAX_DRAWDOWN_1Y", "VOLATILITY_1Y"],
@@ -214,7 +224,7 @@ Deno.serve(async (request) => {
       requested_by: userData.user.id,
       status: "RUNNING",
       requested_security_count: 1,
-      metadata: { operation: "REFRESH_HISTORY", security_id: security.id, symbol: security.symbol, interval: "ONE_DAY", history_days: HISTORY_DAYS },
+      metadata: { operation: "REFRESH_HISTORY", security_id: security.id, symbol: security.symbol, interval: "ONE_DAY", requested_from: body.requestFrom ?? null, requested_to: body.requestTo ?? null, history_days: Math.ceil((to.getTime() - from.getTime()) / DAY) },
     }).select("id").single()
     if (runError) throw runError
 
