@@ -1989,3 +1989,67 @@ Safety unchanged:
 **Program A · A1 = COMPLETE / PASS / CLOSED.**
 **Program A · A2 plan = FROZEN / IMPLEMENTATION NOT STARTED.**
 **Provider execution = NOT AUTHORIZED.**
+
+
+---
+
+## Program A · A2 implementation checkpoint — 23 September 2026
+
+Implementation commit:
+- `94335ffcd561df3f292129156c3913322f5465e1`
+
+Status:
+- implementation = COMPLETE / PASS;
+- provider execution = NOT YET RUN;
+- A2 formal closure = PENDING owner-approved staged execution + validation.
+
+Implemented:
+- deterministic A2 PLAN builder with SHA-256 plan ID and exact confirmation token;
+- exact bounded A2A classification cohort;
+- bounded A2B Complete Research cohort;
+- bounded A2C incremental Angel One history cohort;
+- local-only guards in controller and A2-specific Edge Function paths;
+- existing provider budgets, leases, accounting, lineage and idempotent persistence reused;
+- stale-plan/cache-drift guard;
+- runtime call ceilings;
+- classification conflict / ambiguous identity hard stops;
+- A1 incremental history window passed into existing Angel One history adapter;
+- CLI with explicit PLAN / EXECUTE modes.
+
+Audited current local PLAN:
+- plan ID `cc238e54b2d904c4298b9cdb29f4d02f13067dc2787d289a859e4e5471d995a3`;
+- A2A classification cohort: ALIVUS, AUROPHARMA, BIOCON, HDFCBANK, SYNGENE;
+- A2B provisional cohort: TORNTPHARM via reviewed four-call Complete Research capability;
+- A2C provisional cohort: TORNTPHARM incremental history, 2026-09-12 through 2026-09-23;
+- projected Trendlyne total = 9;
+- projected Angel One total in the generated local plan = 1;
+- actual calls/budget = 0;
+- confirmation token `APPROVE_PROGRAM_A_A2_CC238E54B2D904C4`.
+
+Critical staged-execution behavior:
+- after A2A classification writes, A2 re-materializes the cache and rebuilds the plan;
+- any classification change alters the plan fingerprint;
+- execution therefore stops before A2B with `STALE_PLAN_REPLAN_REQUIRED`;
+- a new PLAN and a new explicit owner approval are required before A2B/A2C;
+- this prevents one approval from silently expanding into deeper evidence/history execution after classification state changes.
+
+Validation reported:
+- 52 focused application tests PASS;
+- 143 Edge/provider-control tests PASS;
+- K-FINAL regressions PASS;
+- TypeScript PASS;
+- architecture guard PASS;
+- changed-file lint PASS;
+- build PASS;
+- no provider contacted during implementation.
+
+Safety unchanged:
+- local Supabase only;
+- no production mutation;
+- no score/recommendation/sizing activation;
+- no scheduler/AI activation;
+- no deployment;
+- no merge;
+- no trading.
+
+**A2 implementation = PASS / READY FOR OWNER REVIEW OF A2A EXECUTION.**
