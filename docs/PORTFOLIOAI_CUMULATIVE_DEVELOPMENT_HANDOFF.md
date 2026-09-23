@@ -2319,3 +2319,64 @@ Validation:
 
 **Program A · A2A = COMPLETE / PASS / CLOSED.**
 **Program A · A2 remains IN PROGRESS; A2B and A2C require their separately reviewed V10 execution boundary.**
+
+
+---
+
+## ChatGPT audit confirmation — Program A · A2A closure — 23 September 2026
+
+Remote audit range:
+- base: `b30db340c8204e98afe15f0eda220cf699d70fe5`
+- closure tip: `5367f3ea53561938ea4a11dcbc1ac0c279372b04`
+- three commits reviewed on `program-a-evidence-coverage`.
+
+Audit conclusion:
+- A2A implementation and local execution are consistent with the frozen prerequisite-first Program A plan;
+- the Trendlyne classification adapter now parses the current provider response contract rather than the obsolete table-only shape;
+- provider identity reconciliation remains exact symbol + canonical ISIN and now also fingerprints canonical company name;
+- provider source values remain immutable while reviewed canonical normalization is stored separately;
+- reviewed mapping-pair additions are explicit and fail-closed rather than ticker inference;
+- current canonical view prefers reviewed `normalized_value` while retaining original `text_value`;
+- canonical `Private Sector Bank` routes to BANK_NBFC/BANK without enabling NBFC_LENDING;
+- no BANK/NBFC scoring formula changed;
+- accepted local evidence writes are now accounted even when a new mapping pair causes a review stop;
+- A2 stage isolation held: after the A2A classification changes, execution stopped before A2B/A2C and a fresh plan was required.
+
+Reviewed local-only migrations:
+- `20260923110816_use_normalized_current_security_classification.sql`;
+- `20260923111000_add_program_a_canonical_taxonomy_prerequisites.sql`;
+- `20260923111115_add_reviewed_trendlyne_pharma_mapping.sql`;
+- `20260923111330_add_reviewed_trendlyne_biotechnology_mapping.sql`;
+- `20260923111553_add_reviewed_trendlyne_bank_mapping.sql`.
+
+These migrations were applied to local Supabase only. Codex reported full migration shadow replay PASS and `supabase db diff --local` = `No schema changes found`. No production migration was applied.
+
+Final A2A cohort state:
+- ALIVUS → Pharma / Pharmaceuticals;
+- AUROPHARMA → Pharma / Pharmaceuticals;
+- BIOCON → Pharma / Pharmaceuticals;
+- HDFCBANK → Banking / Private Sector Bank;
+- SYNGENE → Pharma / Pharmaceuticals.
+
+Fresh V10 zero-call plan after A2A:
+- plan ID `162f683dbcd3701bb1f9b0289bf70de9c24ef184f0805d91da47249129842626`;
+- confirmation token `APPROVE_PROGRAM_A_A2_162F683DBCD3701B`;
+- A2A actions = 0;
+- A2B proposal = one ALIVUS Complete Research action / 4 Trendlyne calls;
+- A2C proposal = 4 Angel One calls;
+- plan-generation provider calls = 0;
+- plan-generation budget consumed = 0.
+
+Safety audit:
+- no production mutation;
+- no production migration;
+- no deployment;
+- no PR merge;
+- no score/recommendation/sizing activation;
+- no scheduler/AI activation;
+- no trading;
+- A2B and A2C remain separately approval-gated.
+
+**ChatGPT audit verdict: Program A · A2A = COMPLETE / PASS / CLOSED.**
+**Program A · A2 = IN PROGRESS.**
+**Current next boundary = separate review of V10 A2B and A2C; neither is authorized yet.**
