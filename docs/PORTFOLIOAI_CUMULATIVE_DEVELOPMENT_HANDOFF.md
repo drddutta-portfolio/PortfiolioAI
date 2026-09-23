@@ -2508,3 +2508,33 @@ Pharma scoring readiness             = automatically established
 The previously built Pharma subprofile architecture remains authoritative and must be consulted before A2B evidence selection and, especially, before Program B / R6 scoring.
 
 **This distinction must not be removed or simplified in future handoffs, plans, scoring adapters, or UI contracts.**
+
+
+---
+
+## Pharma runtime activation guard — canonical reminder — 23 September 2026
+
+A dedicated canonical guard has been added:
+
+- `docs/PortfolioAI_PHARMA_SUBPROFILE_RUNTIME_ACTIVATION_GUARD.md`
+
+Reason:
+- all five Pharma methodology authorities exist;
+- broad A2A `Pharma / Pharmaceuticals` normalization is not sufficient for Pharma scoring;
+- current live Pharma scoring still routes broadly through the parent `PHARMA_V1` path and does not yet safely resolve the reviewed Pharma subprofile before selecting methodology.
+
+Hard rule:
+- no reviewed Pharma subprofile → no numeric score;
+- provisional/disputed/conflicting Pharma subprofile → no numeric score;
+- no cross-subprofile band borrowing;
+- no generic Pharma fallback scorer;
+- Program B / R6 must implement a focused Pharma runtime adapter before general Pharma scoring activation.
+
+Current reviewed/unresolved examples:
+- ALIVUS → API_BULK_DRUGS;
+- AUROPHARMA → GLOBAL_GENERICS;
+- TORNTPHARM → DOMESTIC_FORMULATIONS;
+- BIOCON → provisional BIOPHARMA_BIOSIMILARS only; blocked until reviewed/persisted;
+- SYNGENE → provisional CDMO_CRAMS only; blocked until reviewed/persisted.
+
+This guard must be checked explicitly before A2B evidence selection where subprofile-specific evidence matters and must be satisfied before Program B / R6 score execution.
