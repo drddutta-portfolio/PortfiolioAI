@@ -2891,3 +2891,97 @@ A2C restrictions remain:
 - no trading.
 
 **Current project boundary = fresh post-A2B A2C planning and review.**
+
+
+---
+
+## Program A · A2C first execution partial stop and canonical BANK guard correction — 24 September 2026
+
+The first A2C execution under V13 stopped safely after two successful Angel One
+security-history actions.
+
+Executed V13 plan:
+- plan ID `db9e0e5d9e59e8cd1f187174027088203c965d4f32f861140db7b494fbf4a4af`;
+- confirmation token `APPROVE_PROGRAM_A_A2_DB9E0E5D9E59E8CD`;
+- execution status `PARTIAL_STOPPED`;
+- actual Angel One calls = 2;
+- Trendlyne calls = 0;
+- retries = 0;
+- successful local writes = 492;
+- score / recommendation / sizing writes = 0.
+
+Successful actions:
+- AUROPHARMA market history:
+  - 246 candles stored;
+  - earliest `2025-09-24`;
+  - latest `2026-09-22`;
+  - requested one-year window remained incomplete through `2026-09-24`;
+- HDFCBANK market history:
+  - 246 candles stored;
+  - earliest `2025-09-24`;
+  - latest `2026-09-22`;
+  - requested one-year window remained incomplete through `2026-09-24`.
+
+Safe-stop blocker:
+- NIFTY_BANK benchmark dispatch did not occur;
+- the legacy guard in `refresh-bank-benchmark` accepted only
+  `Banking / Banks`;
+- HDFCBANK's reviewed canonical classification is
+  `Banking / Private Sector Bank`;
+- this is a compatibility defect between the old benchmark guard and the already
+  approved canonical BANK routing authority, not a reason to route HDFCBANK to
+  NBFC_LENDING;
+- TORNTPHARM did not execute because A2C stopped immediately at this blocker.
+
+Post-stop fresh zero-provider plan:
+- plan ID `be56e35fc3bd3e4bccd0816258c3d37cf080bcdb365549c12f92b9c9a363f9ee`;
+- confirmation token `APPROVE_PROGRAM_A_A2_BE56E35FC3BD3E4B`;
+- AUROPHARMA → incremental `2026-09-17 → 2026-09-24`;
+- HDFCBANK → incremental `2026-09-17 → 2026-09-24`;
+- NIFTY_BANK → full benchmark history `2025-09-24 → 2026-09-24`;
+- TORNTPHARM → incremental `2026-09-12 → 2026-09-24`;
+- PLAN provider calls = 0.
+
+ChatGPT audited pushed V13 commit
+`703e028f2a9b3b9fcfade6320ffe0ae8ae066b59` and confirmed:
+- A2C physical Angel One calls are scope-bound with no numeric execution ceiling;
+- approved target scope remains bounded;
+- a 61-second cooldown is enforced between Angel One A2C dispatches;
+- the NIFTY_BANK blocker is the stale exact industry guard in the benchmark Edge
+  function.
+
+Focused correction implemented on `program-a-evidence-coverage`:
+- new shared helper:
+  `supabase/functions/_shared/bank-benchmark-authority.ts`;
+- new focused tests:
+  `supabase/functions/_shared/bank-benchmark-authority.test.ts`;
+- benchmark guard now allows only:
+  - `Banking / Banks`;
+  - `Banking / Private Sector Bank`;
+- NBFC lending, unsupported Banking industries, non-Banking sectors and missing
+  classification remain fail-closed;
+- `refresh-bank-benchmark` now uses the shared authority helper rather than the
+  obsolete exact `Banks` check;
+- no BANK/NBFC scoring or methodology logic changed.
+
+Focused-fix commits:
+- `6d212e4f4d340fd7c239b52bbc45e9edfc61ef78`;
+- `53455c60b3ce9c2497752b4483781d26a07ae0d5`;
+- `88422d5bc227ff33c3ddd397129904f9f1e6bdf5`;
+- `dbab6db1b5a22829670cfaddee9244e637257152`.
+
+Local execution/validation is still required after pulling these commits.
+A2C remains `PARTIAL_STOPPED / IN PROGRESS` until the residual plan is regenerated,
+reviewed and executed locally.
+
+Safety state remains:
+- A2B did not execute;
+- Trendlyne calls = 0;
+- no score/recommendation/sizing activation;
+- no production mutation or migration;
+- no deployment;
+- no PR merge;
+- no scheduler / AI / trading activation.
+
+**Current boundary: pull the canonical BANK guard fix locally, run focused validation,
+regenerate a fresh A2C plan, then resume A2C only.**
