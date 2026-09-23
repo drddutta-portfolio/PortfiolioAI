@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 const SOURCE_CODE = "TRENDLYNE_MCP"
 const MAX_LIMIT = 40
 const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "content-type, apikey, authorization, x-portfolioai-classification-token" }
-const reply = (status: number, body: Record<string, unknown>) => new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } })
+const reply = (status: number, body: Record<string, unknown>) => new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } })\nconst isLocalSupabaseUrl = (value: string) => {\n  try {\n    const url = new URL(value)\n    return ["localhost", "127.0.0.1"].includes(url.hostname) || (url.hostname === "kong" && url.port === "8000")\n  } catch { return false }\n}
 
 const sha = async (value: unknown) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(JSON.stringify(value))))).map((x) => x.toString(16).padStart(2, "0")).join("")
 const nullable = (value: string | undefined) => !value || value === "None" || value === "null" ? null : value.trim()
@@ -74,7 +74,7 @@ Deno.serve(async (request) => {
   const limit = action === "A2_EXECUTE" ? a2SecurityIds.length : Number(body.limit ?? MAX_LIMIT)
   if (!action || !Number.isInteger(limit) || limit < 1 || limit > MAX_LIMIT) return reply(400, { error: "Invalid action or limit." })
   if (action === "A2_EXECUTE") {
-    const local = (() => { try { const url = new URL(supabaseUrl); return ["localhost", "127.0.0.1"].includes(url.hostname) } catch { return false } })()
+    const local = isLocalSupabaseUrl(supabaseUrl)
     if (!local) return reply(409, { error: "Program A A2 execution is local-only.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
     if (body.confirmation !== "OWNER_CONFIRMED_PROGRAM_A_A2_CLASSIFICATION") return reply(409, { error: "Exact Program A A2 confirmation is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
     if (typeof body.portfolioId !== "string" || a2SecurityIds.length < 1 || a2SecurityIds.length > 5 || new Set(a2SecurityIds).size !== a2SecurityIds.length) return reply(400, { error: "A2 requires one to five unique exact security IDs.", code: "CALL_BUDGET_EXCEEDED", providerCalls: 0 })
