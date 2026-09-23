@@ -2648,3 +2648,246 @@ Current reviewed/unresolved examples:
 - SYNGENE → provisional CDMO_CRAMS only; blocked until reviewed/persisted.
 
 This guard must be checked explicitly before A2B evidence selection where subprofile-specific evidence matters and must be satisfied before Program B / R6 score execution.
+
+
+---
+
+## Program A · A2B successful bounded execution and closure — 24 September 2026
+
+The conditionally approved local A2B-only execution completed successfully after
+the V12 provider-identity prerequisite was implemented.
+
+Implementation / closure commit:
+- `2b76b93c557d74cb4a6b00ad9518cd8e17b7cd6b`
+- commit intent: bounded Trendlyne identity discovery + provider-identity-aware A2B
+  planning/execution for ALIVUS;
+- no database migration was created;
+- no production mutation, deployment or merge occurred.
+
+Fresh approved V12 plan:
+- plan ID
+  `5cd6565e901131bb1a58e5003cba7b5ef7834f258f46087b5c0bde1e27914b25`;
+- confirmation token
+  `APPROVE_PROGRAM_A_A2_5CD6565E901131BB`;
+- A2A actions = 0;
+- A2B actions = exactly one: ALIVUS;
+- ALIVUS authority remained:
+  - research profile: `PHARMA_V1`;
+  - reviewed subprofile: `API_BULK_DRUGS`;
+  - assignment state: `REVIEWED`;
+  - contract: `API_BULK_DRUGS_V1`;
+  - methodology:
+    `PHARMA_API_G10_1_NUMERIC_METHODOLOGY_V1_CANDIDATE`;
+- provider identity state before execution:
+  `IDENTITY_DISCOVERY_REQUIRED`;
+- bounded A2B Trendlyne ceiling = 6 calls;
+- PLAN provider calls and writes = 0;
+- A2C remained outside the A2B execution authority.
+
+### Provider-identity resolution result
+
+A2B first established ALIVUS's stable Trendlyne identity through a separate,
+bounded prerequisite path.
+
+Identity discovery:
+1. `SEARCH_ENTITIES` using canonical company name, symbol and ISIN;
+2. `GET_OVERVIEW_NEWS_CORP_EVENTS` to obtain and independently revalidate the
+   stable provider stock ID.
+
+Exact reconciliation basis:
+- canonical security name;
+- exact NSE symbol `ALIVUS`;
+- exact ISIN `INE03Q201024`;
+- Overview identity consistency;
+- company-name normalization;
+- BSE-code consistency where available;
+- no conflicting existing `MATCHED` provider identity.
+
+Verified provider identity:
+- state: `VERIFIED_DURING_PREREQUISITE_DISCOVERY`;
+- Trendlyne provider instrument ID: `606572`;
+- observed company: `Alivus Life Sciences Ltd.`;
+- symbol: `ALIVUS`;
+- ISIN: `INE03Q201024`;
+- exchange / series: `NSE / EQ`;
+- evidence status: `MATCHED`;
+- confidence: `1.0000`.
+
+The identity path persisted:
+- immutable `data_source_records` provenance;
+- canonical `security_identity_observations` evidence;
+- idempotent reuse of the same identity on later runs;
+- fail-closed handling for ambiguity or conflict.
+
+### Actual A2B provider execution
+
+Execution completed with:
+- status: `SUCCEEDED`;
+- Trendlyne calls = 6;
+- Angel One calls = 0;
+- retries = 0;
+- successful local writes reported by the bounded runner = 6;
+- score writes = 0;
+- recommendation writes = 0;
+- sizing writes = 0;
+- A2C execution = 0.
+
+Call sequence:
+1. `SEARCH_ENTITIES` — identity discovery — succeeded;
+2. `GET_OVERVIEW_NEWS_CORP_EVENTS` — identity verification — succeeded;
+3. `GET_OVERVIEW_NEWS_CORP_EVENTS` — Complete Research fundamentals — succeeded;
+4. `GET_PARAMETER_VALUES_MULTI_STOCK` — detailed structured metrics — succeeded;
+5. `GET_OWNERSHIP_DEALS_INSIDER_SAST` — ownership / pledge — succeeded;
+6. `GET_DOCUMENT_SEARCH_RESULTS` — document/evidence discovery — succeeded.
+
+No retry was required.
+
+The successful local-write count represents:
+- two identity/provenance writes;
+- four accepted Complete Research domains.
+
+### ALIVUS evidence added
+
+Canonical local evidence captured from the A2B refresh includes:
+- Revenue TTM;
+- Net profit TTM;
+- CFO annual;
+- ROE annual;
+- ROCE annual;
+- PE TTM;
+- provider market capitalisation;
+- PBV observation retained as `CONFLICTING`;
+- promoter ownership;
+- FII/FPI ownership;
+- DII ownership;
+- mutual-fund ownership;
+- public ownership;
+- promoter pledge;
+- one research document with provider source appearance;
+- verified Trendlyne provider identity and immutable provenance.
+
+The evidence architecture correctly retains point observations as point
+observations. It does not promote them into multi-period Pharma contract evidence
+without the required history.
+
+### API_BULK_DRUGS mandatory evidence still missing
+
+After A2B, the effective `API_BULK_DRUGS_V1` contract still reports these
+mandatory items as missing:
+
+- `PHARMA_REVENUE_GROWTH_HISTORY`;
+- `PHARMA_OPERATING_MARGIN_HISTORY`;
+- `PHARMA_ROCE_HISTORY`;
+- `PHARMA_PAT_EPS_HISTORY`;
+- `PHARMA_CASH_CONVERSION_HISTORY`;
+- `PHARMA_BALANCE_SHEET_LEVERAGE`;
+- `PHARMA_REGULATORY_SITE_STATUS`;
+- `PHARMA_API_CUSTOMER_CONCENTRATION`;
+- `PHARMA_API_CAPACITY_UTILIZATION`.
+
+This is expected and correct. A2B proved current evidence acquisition, identity
+resolution, provenance, canonical mapping and subprofile-aware planning; it did
+not falsely infer multi-period or issuer-disclosed evidence from one current
+snapshot.
+
+### Post-A2B A1 baseline
+
+Rematerialized cache-only baseline:
+- total holdings = 6;
+- eligible = 6;
+- review required = 0;
+- methodology unavailable = 0.
+
+### Validation and ChatGPT audit
+
+Codex-reported validation:
+- focused A1/A2 and Pharma authority tests: PASS;
+- TypeScript: PASS;
+- architecture guard: PASS;
+- changed-file ESLint: PASS;
+- shell syntax: PASS;
+- production build: PASS with the inherited chunk-size warning;
+- `git diff --check`: PASS;
+- secret check: PASS.
+
+ChatGPT subsequently audited pushed commit
+`2b76b93c557d74cb4a6b00ad9518cd8e17b7cd6b` and confirmed:
+
+- A2B call budgeting is truthful:
+  - identity discovery required → 6-call ceiling;
+  - verified existing identity → 4-call ceiling;
+- provider identity readiness participates in the plan fingerprint;
+- conflicting provider identities block A2B;
+- exact symbol + ISIN reconciliation remains fail-closed;
+- canonical provider identity is persisted through the existing Stage-7 identity
+  architecture;
+- A2B runner accounts identity calls and research calls together;
+- A2B stage authority remains isolated from A2C;
+- ALIVUS remains bound to the reviewed `API_BULK_DRUGS` methodology authority;
+- no generic Pharma fallback was introduced;
+- no score, recommendation or sizing path was activated.
+
+One non-blocking implementation note:
+- the new local `resolve-trendlyne-identity` Edge function does not currently
+  require a separate `supabase/config.toml` entry for the tested authenticated
+  local flow and executed successfully;
+- this should only be revisited if a real local-function configuration problem
+  appears later.
+
+### Formal status after A2B
+
+```text
+Program A
+├── A1   COMPLETE / PASS / CLOSED
+├── A2A  COMPLETE / PASS / CLOSED
+├── A2B  COMPLETE / PASS / CLOSED
+└── A2C  NOT EXECUTED
+```
+
+**Program A · A2B = COMPLETE / PASS / CLOSED.**
+
+Program A · A2 remains IN PROGRESS only because A2C has not yet executed.
+
+---
+
+## Current next boundary — A2C fresh post-A2B plan required — 24 September 2026
+
+A2C is the separately approval-gated Angel One market-history pilot.
+
+Its purpose is to fill bounded R5 market-history / benchmark gaps required for
+later deterministic momentum and risk evidence. It must not perform scoring,
+recommendation, sizing or any Program-B runtime activation.
+
+Important rule:
+- do not reuse pre-A2B plan
+  `5cd6565e901131bb1a58e5003cba7b5ef7834f258f46087b5c0bde1e27914b25`;
+- provider identity and research-evidence state changed during A2B, therefore a
+  fresh post-A2B PLAN is required before A2C approval.
+
+Next sequence:
+1. rematerialize the post-A2B cache-only baseline;
+2. generate a fresh V12 A2 plan;
+3. inspect only the A2C actions:
+   - exact security-history targets;
+   - requested date windows;
+   - benchmark-history actions;
+   - Angel One call count;
+4. confirm A2A actions remain zero and no A2B action needs another refresh;
+5. approve A2C separately;
+6. execute `EXECUTE_STAGE ... A2C ...`;
+7. stop after A2C and rematerialize again;
+8. then determine whether Program A is fully COMPLETE / PASS / CLOSED.
+
+A2C restrictions remain:
+- no Trendlyne execution unless separately required by a newly reviewed plan;
+- no scoring;
+- no recommendation;
+- no position sizing;
+- no persistence of scores/recommendations/sizing;
+- no scheduler or AI activation;
+- no production mutation;
+- no deployment;
+- no PR merge;
+- no trading.
+
+**Current project boundary = fresh post-A2B A2C planning and review.**
