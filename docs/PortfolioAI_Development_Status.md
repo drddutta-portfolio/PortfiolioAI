@@ -24,16 +24,16 @@ Important scope clarification:
 - A1.1 proves the planning contract with deterministic tests and frozen current-portfolio fixtures;
 - it does not yet materialize the real current portfolio baseline directly from the owner's actual canonical cache/read-only stores.
 
-A1.2 is therefore required to complete the original A1 objective:
-- read the actual current Portfolio Coverage Registry and canonical cache-only evidence/market stores;
-- materialize real planner inputs;
-- produce the real current R3/R5 baseline;
-- produce actual projected provider-call counts;
-- produce the actual bounded R3/R5 pilot proposal;
-- still execute zero provider calls and zero production writes.
+A1.2 subsequently materialized the planner from actual local cache/read-only data and generated a real baseline for the six-holding `LOCAL UI Research Review` validation cohort.
 
-Canonical A1.2 plan:
-- `docs/PortfolioAI_PROGRAM_A_A1_2_REAL_CACHE_BASELINE_MATERIALIZATION_PLAN.md`.
+Local inventory confirmed that no full owner portfolio dataset is presently available in local Supabase, so the six-holding cohort is accepted as the A1 runtime validation cohort.
+
+Final status:
+- A1.1 = COMPLETE / PASS;
+- A1.2 = COMPLETE / PASS;
+- Program A · A1 = COMPLETE / PASS / CLOSED;
+- Program A = IN PROGRESS;
+- provider execution = NOT YET AUTHORIZED.
 
 No provider execution, production mutation, migration, score/recommendation/sizing persistence, scheduler activation, AI activation, deployment or merge is part of A1. Program B scorer activation remains out of scope.
 
