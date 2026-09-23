@@ -44,6 +44,7 @@ try {
       else throw new Error("UNSUPPORTED_PROVIDER_ENDPOINT")
       if (payload.rejected > 0) { const error = new Error("AMBIGUOUS_PROVIDER_IDENTITY"); error.providerCalls = Number(payload.providerCalls ?? 0); throw error }
       if (payload.conflicts > 0 || payload.pendingReview > 0) { const error = new Error("CLASSIFICATION_CONFLICT"); error.providerCalls = Number(payload.providerCalls ?? 0); throw error }
+      if (payload.failed > 0) { const error = new Error(payload.code ?? "PROVIDER_REQUEST_FAILED"); error.providerCalls = Number(payload.providerCalls ?? 0); throw error }
       return { providerCalls: Number(payload.providerCalls ?? 0), localWrites: Number(payload.accepted ?? payload.candlesStored ?? payload.benchmarkCandlesStored ?? 0) }
     }
     const loadRefreshedMaterialized = () => {

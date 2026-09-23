@@ -16,7 +16,9 @@ function materialized(): ProgramAA1MaterializedResult {
     reasonCode: "SUPPORTED_ENGINE_ROUTED", portfolioWeightPercent: null,
   }
   return {
-    holdings: [], benchmarkEvidence: [],
+    holdings: [],
+    classificationIdentities: review.map((row, index) => ({ securityId: row.securityId, canonicalIsin: `INE0000000${index + 1}`, state: "READY" as const })),
+    benchmarkEvidence: [],
     baseline: {
       version: "PROGRAM_A_A1_EVIDENCE_BASELINE_V1", asOfDate: "2026-09-23", eligibility: [...review, eligible],
       r3Coverage: ["FUNDAMENTALS", "OWNERSHIP", "VALUATION", "DOCUMENTS"].map((domain) => ({ securityId: "pharma", symbol: "TORNTPHARM", profileCode: "PHARMA_V1", domain: domain as "FUNDAMENTALS", state: "MISSING" as const, freshUntil: null, authoritySource: "cache", blockingReason: "MISSING", estimatedRefreshAction: "REVIEWED_ADAPTER", projectedProviderCalls: 1, sharedCallKey: null })),
@@ -47,6 +49,22 @@ describe("Program A A2 bounded pilot", () => {
     expect(dispatch).not.toHaveBeenCalled()
   })
 
+  it("binds canonical ISIN readiness into the plan and fails closed before provider dispatch", async () => {
+    const ready = materialized()
+    const plan = await buildProgramAA2Plan(ready)
+    expect(plan.actions.filter((action) => action.stage === "A2A").every((action) => action.identityPrerequisiteState === "READY" && action.canonicalIsin)).toBe(true)
+
+    const changedIsin = { ...ready, classificationIdentities: ready.classificationIdentities.map((identity, index) => index === 0 ? { ...identity, canonicalIsin: "INE999999999" } : identity) }
+    expect((await buildProgramAA2Plan(changedIsin)).planId).not.toBe(plan.planId)
+
+    const missingIdentity = { ...ready, classificationIdentities: ready.classificationIdentities.map((identity, index) => index === 0 ? { ...identity, canonicalIsin: null, state: "MISSING" as const } : identity) }
+    const blockedPlan = await buildProgramAA2Plan(missingIdentity)
+    expect(blockedPlan.planId).not.toBe(plan.planId)
+    const dispatch = vi.fn()
+    await expect(executeProgramAA2Plan({ approvedPlan: blockedPlan, currentPlan: blockedPlan, confirmationToken: blockedPlan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING" })
+    expect(dispatch).not.toHaveBeenCalled()
+  })
+
   it("requires exact confirmation and stops on the first provider-control failure without retry", async () => {
     const plan = await buildProgramAA2Plan(materialized())
     const dispatch = vi.fn().mockRejectedValue(new Error("LEASE_ACQUIRE_FAILED"))
@@ -73,5 +91,14 @@ describe("Program A A2 bounded pilot", () => {
     })
     expect(dispatch).toHaveBeenCalledTimes(5)
     expect(result).toMatchObject({ status: "PARTIAL_STOPPED", stopReason: "STALE_PLAN_REPLAN_REQUIRED", actualCalls: { TRENDLYNE_MCP: 5, ANGEL_ONE: 0 } })
+  })
+
+  it("preserves safe provider and classification prerequisite codes", async () => {
+    const plan = await buildProgramAA2Plan(materialized())
+    for (const code of ["PROVIDER_HTTP_403", "PROVIDER_REMOTE_1007", "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING"] as const) {
+      const error = Object.assign(new Error(code), { providerCalls: code.startsWith("PROVIDER_") ? 1 : 0 })
+      const result = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: () => Promise.reject(error) })
+      expect(result).toMatchObject({ status: "PARTIAL_STOPPED", stopReason: code })
+    }
   })
 })

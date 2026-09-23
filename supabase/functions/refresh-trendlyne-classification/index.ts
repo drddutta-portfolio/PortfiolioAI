@@ -37,12 +37,16 @@ class McpClient {
   #next = 1
   constructor(private readonly endpoint: string) {}
   async #post(payload: unknown): Promise<unknown> {
-    const headers: Record<string, string> = { "Content-Type": "application/json", "Accept": "application/json, text/event-stream" }
+    const headers: Record<string, string> = { "Content-Type": "application/json", "Accept": "application/json, text/event-stream", "User-Agent": "PortfolioAI/1.0" }
     if (this.#session) headers["Mcp-Session-Id"] = this.#session
     let response: Response
     try { response = await fetch(this.endpoint, { method: "POST", headers, body: JSON.stringify(payload), signal: AbortSignal.timeout(15000) }) }
     catch { throw new Error("PROVIDER_NETWORK_ERROR") }
-    if (!response.ok) throw new Error(`PROVIDER_HTTP_${response.status}`)
+    if (!response.ok) {
+      const body = await response.text()
+      const remoteCode = body.match(/(?:code\s*[:=]\s*)(\d{3,6})/iu)?.[1]
+      throw new Error(remoteCode ? `PROVIDER_REMOTE_${remoteCode}` : `PROVIDER_HTTP_${response.status}`)
+    }
     this.#session = response.headers.get("mcp-session-id") ?? this.#session
     const body = await response.text()
     return body.trim() ? parseMcpResult(body) : null
@@ -114,7 +118,7 @@ Deno.serve(async (request) => {
     .map((row) => ({ id: row.id as string, symbol: row.symbol as string, isin: (row.isin as string).toUpperCase(), currentValue: (openQty.get(row.id as string) ?? 0) * (priceBy.get(row.id as string) ?? 0) }))
     .sort((a, b) => b.currentValue - a.currentValue || a.symbol.localeCompare(b.symbol))
     .slice(0, limit)
-  if (action === "A2_EXECUTE" && (targets.length !== a2SecurityIds.length || targets.some(target => !exactA2Ids.has(target.id)))) return reply(409, { error: "Exact A2 classification cohort is not executable.", code: "CAPABILITY_MISMATCH", providerCalls: 0 })
+  if (action === "A2_EXECUTE" && (targets.length !== a2SecurityIds.length || targets.some(target => !exactA2Ids.has(target.id)))) return reply(409, { error: "Exact A2 classification identity prerequisite is missing.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
 
   const today = new Date(); today.setUTCHours(0, 0, 0, 0)
   const usage = await admin.from("provider_usage_events").select("actual_internal_units").eq("source_code", SOURCE_CODE).eq("accounting_class", "PROVIDER_TOOL_ATTEMPT").gte("attempted_at", today.toISOString())
@@ -156,6 +160,7 @@ Deno.serve(async (request) => {
   const mappedPairs = new Set((mappings.data ?? []).map((row) => `${row.source_sector ?? ""}\u0000${row.source_industry ?? ""}`))
   const mcp = new McpClient(mcpUrl)
   let attempted = 0, failed = 0, accepted = 0, rejected = 0, normalized = 0
+  const failureCodes: string[] = []
   const pendingPairs = new Map<string, { sector: string; industry: string; symbols: string[] }>()
 
   const sourceRecord = async (target: { id: string; symbol: string; isin: string }, candidate: Candidate) => {
@@ -183,6 +188,7 @@ Deno.serve(async (request) => {
       } catch (error) {
         failed++
         const code = error instanceof Error && /^PROVIDER_[A-Z0-9_]+$/.test(error.message) ? error.message : "PROVIDER_REQUEST_FAILED"
+        failureCodes.push(code)
         await admin.rpc("record_provider_usage_event_v1", { p_source_code: SOURCE_CODE, p_ingestion_run_id: runId, p_run_item_id: runItemId, p_security_id: target.id, p_data_domain: "CLASSIFICATION", p_operation_class: "SEARCH_ENTITIES", p_accounting_class: "PROVIDER_TOOL_ATTEMPT", p_estimated_internal_units: 1, p_actual_internal_units: 1, p_attempted_at: attemptedAt, p_completed_at: new Date().toISOString(), p_outcome: "FAILED", p_safe_error_code: code, p_retry_attempt: 0, p_idempotency_key: `${runId}:${target.id}:SEARCH_ENTITIES:1` })
         await admin.rpc("record_refresh_item_result_v1", { p_run_item_id: runItemId, p_status: "FAILED", p_safe_reason_code: code, p_attempted_call_count: 1, p_accepted_record_count: 0, p_metadata: {} })
         continue
@@ -230,5 +236,6 @@ Deno.serve(async (request) => {
     await admin.from("data_ingestion_runs").update({ status, completed_at: new Date().toISOString(), attempted_call_count: attempted, accepted_count: accepted, rejected_count: rejected, failed_count: failed, fetched_count: accepted, skipped_count: Math.max(0, targets.length - accepted - failed), metadata: { selection: "HIGHEST_CURRENT_VALUE_UNCLASSIFIED_WITH_CANONICAL_ISIN", normalized_count: normalized, pending_mapping_pairs: [...pendingPairs.values()] } }).eq("id", runId)
   }
 
-  return reply(200, { action, runId, targetCount: targets.length, providerCalls: attempted, attempted, accepted, rejected, failed, normalized, pendingReview: pendingPairs.size, pendingMappingPairs: [...pendingPairs.values()] })
+  const safeCode = failureCodes[0] ?? (rejected > 0 ? "NO_EXACT_PROVIDER_IDENTITY" : null)
+  return reply(failed > 0 && accepted === 0 ? 502 : 200, { action, runId, targetCount: targets.length, providerCalls: attempted, attempted, accepted, rejected, failed, normalized, pendingReview: pendingPairs.size, code: safeCode, pendingMappingPairs: [...pendingPairs.values()] })
 })

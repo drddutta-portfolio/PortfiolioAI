@@ -22,6 +22,8 @@ with target as (
 ), security_evidence as (
   select coalesce(jsonb_agg(jsonb_build_object(
     'securityId', h.security_id,
+    'canonicalIsin', s.isin,
+    'classificationIdentityState', case when s.isin is not null and btrim(s.isin) <> '' then 'READY' else 'MISSING' end,
     'marketIdentityState', case
       when m.mapping_status = 'VERIFIED' then 'VERIFIED'
       when m.mapping_status = 'AMBIGUOUS' then 'CONFLICTING'
@@ -51,6 +53,7 @@ with target as (
     )
   ) order by h.security_id), '[]'::jsonb) as payload
   from holding_ids h
+  join public.securities s on s.id = h.security_id
   left join lateral (
     select mapping_status
     from public.market_data_instrument_mappings

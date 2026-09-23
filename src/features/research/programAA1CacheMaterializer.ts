@@ -14,6 +14,8 @@ export const PROGRAM_A_A1_CACHE_SNAPSHOT_VERSION = "PROGRAM_A_A1_CACHE_SNAPSHOT_
 
 export interface ProgramACacheSecurityEvidence {
   readonly securityId: string
+  readonly canonicalIsin: string | null
+  readonly classificationIdentityState: "READY" | "MISSING"
   readonly marketIdentityState: "VERIFIED" | "MISSING" | "CONFLICTING" | "REVIEW_REQUIRED"
   readonly marketMetricCodes: readonly MarketMetricCode[]
   readonly externalRatings: {
@@ -39,6 +41,11 @@ export interface ProgramAA1CacheSnapshot {
 
 export interface ProgramAA1MaterializedResult {
   readonly holdings: readonly ProgramAHoldingInput[]
+  readonly classificationIdentities: readonly {
+    readonly securityId: string
+    readonly canonicalIsin: string | null
+    readonly state: "READY" | "MISSING"
+  }[]
   readonly benchmarkEvidence: readonly BenchmarkRuntimeEvidence[]
   readonly baseline: ProgramAA1Baseline
 }
@@ -131,8 +138,11 @@ export function materializeProgramAA1CacheBaseline(snapshot: ProgramAA1CacheSnap
     }
   })
   const benchmarkEvidence = [...snapshot.benchmarkEvidence].sort((a, b) => a.benchmarkCode.localeCompare(b.benchmarkCode))
+  const classificationIdentities = snapshot.securityEvidence
+    .map((evidence) => ({ securityId: evidence.securityId, canonicalIsin: evidence.canonicalIsin, state: evidence.classificationIdentityState }))
+    .sort((a, b) => a.securityId.localeCompare(b.securityId))
   const baseline = buildProgramAA1Baseline({ asOfDate: snapshot.asOfDate, holdings, benchmarkEvidence })
-  return { holdings, benchmarkEvidence, baseline }
+  return { holdings, classificationIdentities, benchmarkEvidence, baseline }
 }
 
 export function renderProgramAA1BaselineReport(baseline: ProgramAA1Baseline): string {
