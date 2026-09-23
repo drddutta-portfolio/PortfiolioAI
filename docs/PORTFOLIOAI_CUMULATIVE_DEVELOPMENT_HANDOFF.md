@@ -1932,3 +1932,60 @@ Final status:
 Next step:
 - plan/freeze the first bounded provider-backed Program A execution checkpoint;
 - no provider execution until that next checkpoint is explicitly approved.
+
+
+---
+
+## Program A · A2 plan freeze — 23 September 2026
+
+Canonical plan:
+- `docs/PortfolioAI_PROGRAM_A_A2_BOUNDED_PROVIDER_PILOT_PLAN.md`.
+
+A2 title:
+- **Prerequisite-First Bounded Provider Pilot**.
+
+A2 is the first provider-backed Program A checkpoint, but provider execution remains gated behind an exact generated PLAN and explicit owner approval.
+
+A1 local runtime evidence showed:
+- six-holding validation cohort;
+- eligible = 1;
+- review required = 5;
+- main immediate blocker = incomplete canonical classification.
+
+Therefore A2 sequence is frozen as:
+1. A2A classification prerequisite pilot for at most five review-blocked securities;
+2. re-materialize the A1 baseline;
+3. A2B bounded R3 evidence pilot for at most three eligible securities;
+4. A2C bounded R5 Angel One history pilot for at most three eligible securities;
+5. re-materialize and validate;
+6. stop.
+
+Hard ceilings:
+- A2A Trendlyne classification calls <= 5;
+- A2B Trendlyne physical calls <= 6;
+- A2A + A2B Trendlyne physical calls <= 10;
+- A2C Angel One security requests <= 3;
+- A2C benchmark requests <= 2;
+- total Angel One historical requests <= 5;
+- retries count toward ceilings.
+
+Mandatory execution contract:
+- PLAN = zero provider calls;
+- Codex may implement and run PLAN only;
+- EXECUTE requires exact owner-approved confirmation after ChatGPT audits the generated plan;
+- local Supabase only;
+- production execution prohibited.
+
+A2 implementation must reuse existing provider control plane, leases, freshness, retry/accounting and idempotent persistence rather than direct ad-hoc provider calls.
+
+Safety unchanged:
+- no score/recommendation/sizing activation;
+- no scheduler change;
+- no AI activation;
+- no deployment;
+- no PR merge;
+- no automatic trading.
+
+**Program A · A1 = COMPLETE / PASS / CLOSED.**
+**Program A · A2 plan = FROZEN / IMPLEMENTATION NOT STARTED.**
+**Provider execution = NOT AUTHORIZED.**
