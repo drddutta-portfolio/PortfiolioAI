@@ -46,4 +46,18 @@ describe("Trendlyne classification identity matching", () => {
     const parsed = parseTrendlyneClassificationResponse("Name | Symbol | BSE | ISIN | Type | Sector | Industry")
     expect(parsed).toMatchObject({ candidates: [], metadata: { parseState: "PARSED_TABLE", parsedCandidateRowCount: 0 } })
   })
+
+  it("parses the current Trendlyne status/data response and nse_code header", () => {
+    const parsed = parseTrendlyneClassificationResponse("status: success\ndata:\n  name | nse_code | bse_code | isin | entity_type | sector | industry\n  Alivus Life Sciences Limited | ALIVUS | 543473 | INE03Q201024 | stock | Healthcare | Pharmaceuticals")
+    expect(parsed).toMatchObject({ candidates: [candidate()], metadata: { parseState: "PARSED_TABLE", responseEnvelope: "PLAIN_TEXT", parsedCandidateRowCount: 1 } })
+  })
+
+  it("recognizes the current empty data array without treating it as schema drift", () => {
+    expect(parseTrendlyneClassificationResponse("status: success\ndata:\n  []")).toMatchObject({ candidates: [], metadata: { parseState: "EMPTY_RESULT", parsedCandidateRowCount: 0 } })
+  })
+
+  it("parses the documented JSON data-array contract", () => {
+    const parsed = parseTrendlyneClassificationResponse(JSON.stringify({ success: true, data: [{ name: candidate().name, nse_code: "ALIVUS", bse_code: "543473", isin: "INE03Q201024", entity_type: "stock", sector: "Healthcare", industry: "Pharmaceuticals" }] }))
+    expect(parsed).toMatchObject({ candidates: [candidate()], metadata: { parseState: "PARSED_TABLE", responseEnvelope: "JSON_DATA_ARRAY", parsedCandidateRowCount: 1 } })
+  })
 })

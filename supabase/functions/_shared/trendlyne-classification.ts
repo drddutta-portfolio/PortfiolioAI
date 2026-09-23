@@ -17,7 +17,7 @@ export type TrendlyneClassificationParseState = "PARSED_TABLE" | "EMPTY_RESULT" 
 
 export interface TrendlyneClassificationParseMetadata {
   readonly parseState: TrendlyneClassificationParseState
-  readonly responseEnvelope: "PLAIN_TEXT" | "JSON_MARKDOWN_DATA" | "JSON_RESULT" | "JSON_DATA" | "UNSUPPORTED_JSON"
+  readonly responseEnvelope: "PLAIN_TEXT" | "JSON_MARKDOWN_DATA" | "JSON_RESULT" | "JSON_DATA" | "JSON_DATA_ARRAY" | "UNSUPPORTED_JSON"
   readonly hasDataMarker: boolean
   readonly hasEndMarker: boolean
   readonly nonEmptyLineCount: number
@@ -39,6 +39,15 @@ const normalizeHeader = (value: string) => value.toLowerCase().replace(/[^a-z0-9
 const splitPipeRow = (line: string) => line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((value) => value.trim())
 const separatorRow = (row: readonly string[]) => row.every((value) => /^:?-{3,}:?$/.test(value))
 
+const candidateFromRecord = (record: Record<string, unknown>): TrendlyneClassificationCandidate => ({
+  name: typeof record.name === "string" ? record.name.trim() : "",
+  symbol: typeof record.nse_code === "string" ? record.nse_code.trim() : typeof record.symbol === "string" ? record.symbol.trim() : "",
+  bseCode: typeof record.bse_code === "string" ? nullable(record.bse_code) : null,
+  isin: typeof record.isin === "string" ? nullable(record.isin) : null,
+  sector: typeof record.sector === "string" ? nullable(record.sector) : null,
+  industry: typeof record.industry === "string" ? nullable(record.industry) : null,
+})
+
 const decodeEnvelope = (text: string): { readonly text: string; readonly envelope: TrendlyneClassificationParseMetadata["responseEnvelope"] } => {
   const trimmed = text.trim()
   if (!trimmed.startsWith("{") && !trimmed.startsWith("[")) return { text, envelope: "PLAIN_TEXT" }
@@ -56,6 +65,17 @@ const decodeEnvelope = (text: string): { readonly text: string; readonly envelop
 }
 
 export function parseTrendlyneClassificationResponse(text: string): { readonly candidates: readonly TrendlyneClassificationCandidate[]; readonly metadata: TrendlyneClassificationParseMetadata } {
+  const trimmed = text.trim()
+  try {
+    const json = JSON.parse(trimmed) as unknown
+    if (json && typeof json === "object" && !Array.isArray(json)) {
+      const data = (json as Record<string, unknown>).data
+      if (Array.isArray(data) && data.every((row) => row && typeof row === "object" && !Array.isArray(row))) {
+        const candidates = data.map((row) => candidateFromRecord(row as Record<string, unknown>))
+        return { candidates, metadata: { parseState: candidates.length ? "PARSED_TABLE" : "EMPTY_RESULT", responseEnvelope: "JSON_DATA_ARRAY", hasDataMarker: true, hasEndMarker: false, nonEmptyLineCount: 1, pipeDelimitedLineCount: 0, parsedCandidateRowCount: candidates.length } }
+      }
+    }
+  } catch { /* Provider currently also returns a status/data text table. */ }
   const decoded = decodeEnvelope(text)
   const hasDataMarker = /(?:^|\s)data:/u.test(decoded.text)
   const hasEndMarker = decoded.text.includes("__END__")
@@ -66,7 +86,7 @@ export function parseTrendlyneClassificationResponse(text: string): { readonly c
   const rows = pipeLines.map(splitPipeRow)
   const headerIndex = rows.findIndex((row) => {
     const headers = row.map(normalizeHeader)
-    return headers.includes("symbol") && headers.includes("isin") && headers.includes("sector") && headers.includes("industry")
+    return (headers.includes("symbol") || headers.includes("nsecode")) && headers.includes("isin") && headers.includes("sector") && headers.includes("industry")
   })
   const baseMetadata = {
     responseEnvelope: decoded.envelope,
@@ -75,7 +95,7 @@ export function parseTrendlyneClassificationResponse(text: string): { readonly c
     nonEmptyLineCount: lines.length,
     pipeDelimitedLineCount: pipeLines.length,
   }
-  if (!decoded.text.trim()) return { candidates: [], metadata: { ...baseMetadata, parseState: "EMPTY_RESULT", parsedCandidateRowCount: 0 } }
+  if (!decoded.text.trim() || (hasDataMarker && lines.length === 1 && lines[0] === "[]")) return { candidates: [], metadata: { ...baseMetadata, parseState: "EMPTY_RESULT", parsedCandidateRowCount: 0 } }
   if (headerIndex < 0 || decoded.envelope === "UNSUPPORTED_JSON") return { candidates: [], metadata: { ...baseMetadata, parseState: "UNRECOGNIZED_RESPONSE", parsedCandidateRowCount: 0 } }
 
   const headers = rows[headerIndex].map(normalizeHeader)
@@ -85,7 +105,7 @@ export function parseTrendlyneClassificationResponse(text: string): { readonly c
     .filter((row) => row.length >= headers.length)
     .map((row) => ({
       name: nullable(row[index("name")]) ?? nullable(row[index("company")]) ?? nullable(row[index("companyname")]) ?? "",
-      symbol: nullable(row[index("symbol")]) ?? "",
+      symbol: nullable(row[index("symbol")]) ?? nullable(row[index("nsecode")]) ?? "",
       bseCode: nullable(row[index("bse")]) ?? nullable(row[index("bsecode")]),
       isin: nullable(row[index("isin")]),
       sector: nullable(row[index("sector")]),

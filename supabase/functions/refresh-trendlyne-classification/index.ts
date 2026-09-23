@@ -72,17 +72,18 @@ Deno.serve(async (request) => {
   const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
   if (verified.error || verified.data !== true) return reply(401, { error: "Internal authentication failed." })
 
-  let body: { action?: unknown; limit?: unknown; portfolioId?: unknown; securityIds?: unknown; confirmation?: unknown }
+  let body: { action?: unknown; limit?: unknown; portfolioId?: unknown; securityIds?: unknown; securityNames?: unknown; confirmation?: unknown }
   try { body = await request.json() } catch { return reply(400, { error: "Invalid JSON body." }) }
   const action = body.action === "RUN" ? "RUN" : body.action === "DRY_RUN" ? "DRY_RUN" : body.action === "A2_EXECUTE" ? "A2_EXECUTE" : null
   const a2SecurityIds = action === "A2_EXECUTE" && Array.isArray(body.securityIds) && body.securityIds.every(id => typeof id === "string") ? body.securityIds as string[] : []
+  const a2SecurityNames = action === "A2_EXECUTE" && Array.isArray(body.securityNames) && body.securityNames.every(name => typeof name === "string" && name.trim().length > 0) ? body.securityNames as string[] : []
   const limit = action === "A2_EXECUTE" ? a2SecurityIds.length : Number(body.limit ?? MAX_LIMIT)
   if (!action || !Number.isInteger(limit) || limit < 1 || limit > MAX_LIMIT) return reply(400, { error: "Invalid action or limit." })
   if (action === "A2_EXECUTE") {
     const local = isLocalSupabaseUrl(supabaseUrl)
     if (!local) return reply(409, { error: "Program A A2 execution is local-only.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
     if (body.confirmation !== "OWNER_CONFIRMED_PROGRAM_A_A2_CLASSIFICATION") return reply(409, { error: "Exact Program A A2 confirmation is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
-    if (typeof body.portfolioId !== "string" || a2SecurityIds.length < 1 || a2SecurityIds.length > 5 || new Set(a2SecurityIds).size !== a2SecurityIds.length) return reply(400, { error: "A2 requires one to five unique exact security IDs.", code: "CALL_BUDGET_EXCEEDED", providerCalls: 0 })
+    if (typeof body.portfolioId !== "string" || a2SecurityIds.length < 1 || a2SecurityIds.length > 5 || new Set(a2SecurityIds).size !== a2SecurityIds.length || a2SecurityNames.length !== a2SecurityIds.length) return reply(400, { error: "A2 requires one to five unique exact security identities.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
   }
 
   const control = await admin.from("provider_ingestion_controls").select("ingestion_enabled,daily_internal_attempt_limit,per_run_internal_attempt_limit,policy_version").eq("source_code", SOURCE_CODE).single()
@@ -100,19 +101,20 @@ Deno.serve(async (request) => {
   const ids = [...openQty.keys()]
   if (!ids.length) return reply(200, { action, targetCount: 0, providerCalls: 0 })
 
-  const securities = await admin.from("securities").select("id,symbol,isin,asset_class").in("id", ids)
+  const securities = await admin.from("securities").select("id,name,symbol,isin,asset_class").in("id", ids)
   const classifications = await admin.from("current_security_classification_v1").select("security_id,sector").in("security_id", ids)
   const prices = await admin.from("market_price_latest").select("security_id,price").in("security_id", ids)
   if (securities.error || classifications.error || prices.error) return reply(500, { error: "Classification planning data could not be loaded." })
   const sectorBy = new Map((classifications.data ?? []).map((row) => [row.security_id as string, row.sector as string | null]))
   const priceBy = new Map((prices.data ?? []).map((row) => [row.security_id as string, Number(row.price)]))
   const exactA2Ids = new Set(a2SecurityIds)
+  const expectedNameById = new Map(a2SecurityIds.map((id, index) => [id, a2SecurityNames[index]]))
   const targets = (securities.data ?? [])
     .filter((row) => row.asset_class === "EQUITY" && typeof row.isin === "string" && row.isin.length === 12 && (action === "A2_EXECUTE" ? exactA2Ids.has(row.id as string) : !sectorBy.get(row.id as string)))
-    .map((row) => ({ id: row.id as string, symbol: row.symbol as string, isin: (row.isin as string).toUpperCase(), currentValue: (openQty.get(row.id as string) ?? 0) * (priceBy.get(row.id as string) ?? 0) }))
+    .map((row) => ({ id: row.id as string, name: row.name as string, symbol: row.symbol as string, isin: (row.isin as string).toUpperCase(), currentValue: (openQty.get(row.id as string) ?? 0) * (priceBy.get(row.id as string) ?? 0) }))
     .sort((a, b) => b.currentValue - a.currentValue || a.symbol.localeCompare(b.symbol))
     .slice(0, limit)
-  if (action === "A2_EXECUTE" && (targets.length !== a2SecurityIds.length || targets.some(target => !exactA2Ids.has(target.id)))) return reply(409, { error: "Exact A2 classification identity prerequisite is missing.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
+  if (action === "A2_EXECUTE" && (targets.length !== a2SecurityIds.length || targets.some(target => !exactA2Ids.has(target.id) || target.name !== expectedNameById.get(target.id)))) return reply(409, { error: "Exact A2 classification identity prerequisite is missing.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
 
   const today = new Date(); today.setUTCHours(0, 0, 0, 0)
   const usage = await admin.from("provider_usage_events").select("actual_internal_units").eq("source_code", SOURCE_CODE).eq("accounting_class", "PROVIDER_TOOL_ATTEMPT").gte("attempted_at", today.toISOString())
@@ -150,22 +152,44 @@ Deno.serve(async (request) => {
     return reply(409, { error: "A classification refresh is already in progress.", runId })
   }
 
-  const mappings = await admin.from("classification_source_mappings").select("source_sector,source_industry,mapping_status").eq("source_code", SOURCE_CODE).eq("mapping_status", "VERIFIED")
-  const mappedPairs = new Set((mappings.data ?? []).map((row) => `${row.source_sector ?? ""}\u0000${row.source_industry ?? ""}`))
+  const mappings = await admin.from("classification_source_mappings").select("source_sector,source_industry,sector_id,industry_id,mapping_status").eq("source_code", SOURCE_CODE).eq("mapping_status", "VERIFIED")
+  const sectorIds = [...new Set((mappings.data ?? []).map((row) => row.sector_id as string | null).filter((id): id is string => Boolean(id)))]
+  const industryIds = [...new Set((mappings.data ?? []).map((row) => row.industry_id as string | null).filter((id): id is string => Boolean(id)))]
+  const [sectors, industries] = await Promise.all([
+    sectorIds.length ? admin.from("sectors").select("id,name").in("id", sectorIds) : Promise.resolve({ data: [], error: null }),
+    industryIds.length ? admin.from("industries").select("id,name").in("id", industryIds) : Promise.resolve({ data: [], error: null }),
+  ])
+  if (mappings.error || sectors.error || industries.error) return reply(503, { error: "Classification mappings are unavailable.", code: "CAPABILITY_MISMATCH", providerCalls: 0 })
+  const sectorNameById = new Map((sectors.data ?? []).map((row) => [row.id as string, row.name as string]))
+  const industryNameById = new Map((industries.data ?? []).map((row) => [row.id as string, row.name as string]))
+  const mappedPairs = new Map((mappings.data ?? []).map((row) => [`${row.source_sector ?? ""}\u0000${row.source_industry ?? ""}`, {
+    sector: sectorNameById.get(row.sector_id as string) ?? null,
+    industry: industryNameById.get(row.industry_id as string) ?? null,
+  }]))
   const mcp = new McpClient(mcpUrl)
   let attempted = 0, failed = 0, accepted = 0, rejected = 0, normalized = 0
   const failureCodes: string[] = []
   const rejectionCodes: TrendlyneClassificationRejectionCode[] = []
   const pendingPairs = new Map<string, { sector: string; industry: string; symbols: string[] }>()
 
-  const sourceRecord = async (target: { id: string; symbol: string; isin: string }, candidate: ReturnType<typeof parseTrendlyneClassificationCandidates>[number]) => {
-    const payload = { query_symbol: target.symbol, exact_isin: target.isin, selected_candidate: candidate }
+  const sourceRecord = async (target: { id: string; name: string; symbol: string; isin: string }, candidate: ReturnType<typeof parseTrendlyneClassificationCandidates>[number], canonicalPair: { sector: string | null; industry: string | null } | null) => {
+    const payload = { query_name: target.name, query_symbol: target.symbol, exact_isin: target.isin, selected_candidate: candidate, canonical_mapping: canonicalPair }
     const payloadHash = await sha(payload)
     const externalId = `CLASSIFICATION:${target.isin}`
     const inserted = await admin.from("data_source_records").upsert({ source_code: SOURCE_CODE, ingestion_run_id: runId, record_kind: "SECURITY_CLASSIFICATION_SEARCH", external_record_id: externalId, payload_hash: payloadHash, raw_payload: payload, terms_snapshot: { approval_source: "OWNER_APPROVED_STAGE_7_1C", normalized_classification_capture: true } }, { onConflict: "source_code,record_kind,external_record_id,payload_hash", ignoreDuplicates: true }).select("id").maybeSingle()
     if (inserted.error) throw inserted.error
     if (inserted.data?.id) return inserted.data.id as string
     const existing = await admin.from("data_source_records").select("id").eq("source_code", SOURCE_CODE).eq("record_kind", "SECURITY_CLASSIFICATION_SEARCH").eq("external_record_id", externalId).eq("payload_hash", payloadHash).single()
+    if (existing.error) throw existing.error
+    return existing.data.id as string
+  }
+
+  const observation = async (input: { securityId: string; sourceRecordId: string; attributeCode: "SECTOR" | "INDUSTRY"; textValue: string; normalizedValue: string | null; freshUntil: string }) => {
+    const row = { security_id: input.securityId, source_record_id: input.sourceRecordId, source_code: SOURCE_CODE, attribute_code: input.attributeCode, text_value: input.textValue, normalized_value: input.normalizedValue, observed_at: new Date().toISOString(), retrieved_at: new Date().toISOString(), fresh_until: input.freshUntil, evidence_status: "AVAILABLE" }
+    const inserted = await admin.from("security_attribute_observations").upsert(row, { onConflict: "source_record_id,security_id,attribute_code", ignoreDuplicates: true }).select("id").maybeSingle()
+    if (inserted.error) throw inserted.error
+    if (inserted.data?.id) return inserted.data.id as string
+    const existing = await admin.from("security_attribute_observations").select("id").eq("source_record_id", input.sourceRecordId).eq("security_id", input.securityId).eq("attribute_code", input.attributeCode).single()
     if (existing.error) throw existing.error
     return existing.data.id as string
   }
@@ -177,7 +201,7 @@ Deno.serve(async (request) => {
       attempted++
       let text: string
       try {
-        text = await mcp.call("search_entities", { query: target.symbol, entity_type: "stock", limit: 10 })
+        text = await mcp.call("search_entities", { query: target.name, entity_type: "stock", limit: 10 })
         const usageResult = await admin.rpc("record_provider_usage_event_v1", { p_source_code: SOURCE_CODE, p_ingestion_run_id: runId, p_run_item_id: runItemId, p_security_id: target.id, p_data_domain: "CLASSIFICATION", p_operation_class: "SEARCH_ENTITIES", p_accounting_class: "PROVIDER_TOOL_ATTEMPT", p_estimated_internal_units: 1, p_actual_internal_units: 1, p_attempted_at: attemptedAt, p_completed_at: new Date().toISOString(), p_outcome: "SUCCEEDED", p_safe_error_code: null, p_retry_attempt: 0, p_idempotency_key: `${runId}:${target.id}:SEARCH_ENTITIES:1` })
         if (usageResult.error) throw new Error("USAGE_ACCOUNTING_FAILED")
       } catch (error) {
@@ -206,17 +230,17 @@ Deno.serve(async (request) => {
       }
 
       const candidate = match.candidate
-      const recordId = await sourceRecord(target, candidate)
-      const freshUntil = new Date(Date.now() + 180 * 86400000).toISOString()
       const pairKey = `${candidate.sector}\u0000${candidate.industry}`
-      const pairMapped = mappedPairs.has(pairKey)
-      const sectorObs = await admin.from("security_attribute_observations").upsert({ security_id: target.id, source_record_id: recordId, source_code: SOURCE_CODE, attribute_code: "SECTOR", text_value: candidate.sector, normalized_value: pairMapped ? candidate.sector : null, observed_at: new Date().toISOString(), retrieved_at: new Date().toISOString(), fresh_until: freshUntil, evidence_status: "AVAILABLE" }, { onConflict: "source_record_id,security_id,attribute_code", ignoreDuplicates: false }).select("id").single()
-      const industryObs = await admin.from("security_attribute_observations").upsert({ security_id: target.id, source_record_id: recordId, source_code: SOURCE_CODE, attribute_code: "INDUSTRY", text_value: candidate.industry, normalized_value: pairMapped ? candidate.industry : null, observed_at: new Date().toISOString(), retrieved_at: new Date().toISOString(), fresh_until: freshUntil, evidence_status: "AVAILABLE" }, { onConflict: "source_record_id,security_id,attribute_code", ignoreDuplicates: false }).select("id").single()
-      if (sectorObs.error || industryObs.error) throw sectorObs.error ?? industryObs.error
+      const canonicalPair = mappedPairs.get(pairKey)
+      const pairMapped = Boolean(canonicalPair?.sector && canonicalPair.industry)
+      const recordId = await sourceRecord(target, candidate, pairMapped ? canonicalPair! : null)
+      const freshUntil = new Date(Date.now() + 180 * 86400000).toISOString()
+      const sectorObservationId = await observation({ securityId: target.id, sourceRecordId: recordId, attributeCode: "SECTOR", textValue: candidate.sector, normalizedValue: pairMapped ? canonicalPair!.sector : null, freshUntil })
+      const industryObservationId = await observation({ securityId: target.id, sourceRecordId: recordId, attributeCode: "INDUSTRY", textValue: candidate.industry, normalizedValue: pairMapped ? canonicalPair!.industry : null, freshUntil })
 
       if (pairMapped) {
-        const sectorDecision = await admin.from("security_attribute_decisions").upsert({ security_id: target.id, attribute_code: "SECTOR", selected_observation_id: sectorObs.data.id, decision_basis: "EVIDENCE_PRIORITY", decided_at: new Date().toISOString(), notes: "Automatically selected from an already verified Trendlyne source-sector/source-industry mapping." }, { onConflict: "security_id,attribute_code" })
-        const industryDecision = await admin.from("security_attribute_decisions").upsert({ security_id: target.id, attribute_code: "INDUSTRY", selected_observation_id: industryObs.data.id, decision_basis: "EVIDENCE_PRIORITY", decided_at: new Date().toISOString(), notes: "Automatically selected from an already verified Trendlyne source-sector/source-industry mapping." }, { onConflict: "security_id,attribute_code" })
+        const sectorDecision = await admin.from("security_attribute_decisions").upsert({ security_id: target.id, attribute_code: "SECTOR", selected_observation_id: sectorObservationId, decision_basis: "EVIDENCE_PRIORITY", decided_at: new Date().toISOString(), notes: "Automatically selected from an already verified Trendlyne source-sector/source-industry mapping." }, { onConflict: "security_id,attribute_code" })
+        const industryDecision = await admin.from("security_attribute_decisions").upsert({ security_id: target.id, attribute_code: "INDUSTRY", selected_observation_id: industryObservationId, decision_basis: "EVIDENCE_PRIORITY", decided_at: new Date().toISOString(), notes: "Automatically selected from an already verified Trendlyne source-sector/source-industry mapping." }, { onConflict: "security_id,attribute_code" })
         if (sectorDecision.error || industryDecision.error) throw sectorDecision.error ?? industryDecision.error
         normalized++
       } else {

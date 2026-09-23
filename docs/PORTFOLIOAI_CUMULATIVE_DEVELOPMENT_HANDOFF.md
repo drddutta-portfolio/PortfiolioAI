@@ -2226,3 +2226,96 @@ explicit owner approval are required.
 
 **Program A · A2 remains IN PROGRESS at A2A.**
 **A2B and A2C remain blocked by the classification stage boundary.**
+
+---
+
+## Program A · A2A Trendlyne contract recovery and closure — 23 September 2026
+
+Owner authorization allowed bounded Trendlyne calls needed to diagnose and clear
+the A2A classification blockade. Provider capability discovery established the
+current `search_entities` contract: exact identity/classification records are
+returned under `data`, using either a `status/data` text table or the documented
+JSON `data[]` envelope. The prior adapter expected an obsolete pipe-table shape.
+
+Verified provider behavior:
+- symbol-only `ALIVUS` returned a valid empty result;
+- canonical ISIN search was semantic and returned a non-exact candidate, which
+  confirms that ISIN may never be accepted without exact result reconciliation;
+- canonical company-name search returned ALIVUS with exact symbol
+  `ALIVUS` and exact ISIN `INE03Q201024`;
+- HDFCBANK returned the documented identity fields and exact ISIN
+  `INE040A01034`.
+
+Implemented contract correction:
+- A2 classification actions bind canonical company name, symbol, ISIN and
+  prerequisite readiness into the plan fingerprint;
+- the runner sends the fingerprinted canonical name to the local Edge adapter;
+- the Edge adapter verifies that the requested name still equals local canonical
+  identity before provider dispatch;
+- the parser supports current `status/data`, documented JSON `data[]`, reviewed
+  Markdown wrappers and valid empty results;
+- candidate acceptance still requires one exact symbol plus exact canonical ISIN
+  and non-null sector/industry;
+- raw source values remain immutable and auditable;
+- safe execution accounting now retains accepted evidence-write counts even when
+  a new mapping pair stops the run for review.
+
+Canonical normalization correction:
+- migration `20260923111000_add_program_a_canonical_taxonomy_prerequisites.sql`
+  materializes the stable Banking/Pharma sector and industry identities required
+  by the reviewed mappings, and normalizes pre-existing local fixture codes
+  without replacing those identities;
+- migration `20260923110816_use_normalized_current_security_classification.sql`
+  makes the security-invoker canonical view prefer reviewed `normalized_value`
+  while retaining raw `text_value` in immutable observations;
+- the adapter resolves reviewed mapping IDs to canonical sector/industry names;
+- a mapping-authority change creates a new hashed source-record version rather
+  than updating prior evidence;
+- exact reviewed mappings were added through migrations for:
+  - `Pharmaceuticals & Biotechnology / Pharmaceuticals` →
+    `Pharma / Pharmaceuticals`;
+  - `Pharmaceuticals & Biotechnology / Biotechnology` →
+    `Pharma / Pharmaceuticals`, supported by the existing BIOCON Gate J G10.3
+    classification lock;
+  - `Banking and Finance / Banks` → `Banking / Private Sector Bank`, supported by
+    the existing HDFCBANK canonical classification;
+- routing now recognizes the canonical `Private Sector Bank` industry as BANK,
+  alongside the legacy generic `Banks` token. No BANK_NBFC scoring formula changed.
+
+Bounded A2A results:
+- V5 proved exact ALIVUS resolution and stopped on its new mapping pair;
+- V7 normalized ALIVUS and AUROPHARMA, then stopped on BIOCON's reviewed pair;
+- V8 normalized BIOCON, then stopped on HDFCBANK's reviewed pair;
+- V9 normalized HDFCBANK and SYNGENE and stopped at
+  `STALE_PLAN_REPLAN_REQUIRED` before A2B;
+- every provider call had zero retries;
+- no Angel One call, score write, recommendation write or sizing write occurred.
+
+Final canonical cohort:
+- ALIVUS → `Pharma / Pharmaceuticals`;
+- AUROPHARMA → `Pharma / Pharmaceuticals`;
+- BIOCON → `Pharma / Pharmaceuticals`;
+- HDFCBANK → `Banking / Private Sector Bank`;
+- SYNGENE → `Pharma / Pharmaceuticals`;
+- TORNTPHARM remains `PHARMA / PHARMACEUTICALS` from its prior authority.
+
+Post-A2A V10 zero-call plan:
+- plan ID `162f683dbcd3701bb1f9b0289bf70de9c24ef184f0805d91da47249129842626`;
+- confirmation token `APPROVE_PROGRAM_A_A2_162F683DBCD3701B`;
+- A2A action count = 0;
+- A2B proposes one four-call ALIVUS Complete Research action;
+- A2C proposes three security-history calls and one NIFTY Bank benchmark call;
+- actual PLAN calls, budget and writes = 0.
+
+Validation:
+- the five A2 migrations applied to local Supabase only;
+- the complete migration history replayed successfully in a shadow database and
+  `supabase db diff --local` reported `No schema changes found`;
+- focused provider-contract, parser, controller, cache-materializer and BANK/NBFC
+  portability tests passed;
+- Edge test suite, typecheck, architecture guard, changed Edge lint and production
+  build passed.
+- no production migration, deployment or merge occurred.
+
+**Program A · A2A = COMPLETE / PASS / CLOSED.**
+**Program A · A2 remains IN PROGRESS; A2B and A2C require their separately reviewed V10 execution boundary.**

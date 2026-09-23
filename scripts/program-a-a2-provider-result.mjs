@@ -13,8 +13,9 @@ function safeCode(value, fallback) {
 
 export function assertProgramAA2ProviderResult(payload) {
   const providerCalls = Number(payload.providerCalls ?? 0)
-  if (payload.rejected > 0) throw Object.assign(new Error(safeCode(payload.code, "PROVIDER_REQUEST_FAILED")), { providerCalls })
-  if (payload.conflicts > 0 || payload.pendingReview > 0) throw Object.assign(new Error("CLASSIFICATION_CONFLICT"), { providerCalls })
-  if (payload.failed > 0) throw Object.assign(new Error(safeCode(payload.code, "PROVIDER_REQUEST_FAILED")), { providerCalls })
-  return { providerCalls, localWrites: Number(payload.accepted ?? payload.candlesStored ?? payload.benchmarkCandlesStored ?? 0) }
+  const localWrites = Number(payload.accepted ?? payload.candlesStored ?? payload.benchmarkCandlesStored ?? 0)
+  if (payload.rejected > 0) throw Object.assign(new Error(safeCode(payload.code, "PROVIDER_REQUEST_FAILED")), { providerCalls, localWrites })
+  if (payload.conflicts > 0 || payload.pendingReview > 0) throw Object.assign(new Error("CLASSIFICATION_CONFLICT"), { providerCalls, localWrites })
+  if (payload.failed > 0) throw Object.assign(new Error(safeCode(payload.code, "PROVIDER_REQUEST_FAILED")), { providerCalls, localWrites })
+  return { providerCalls, localWrites }
 }

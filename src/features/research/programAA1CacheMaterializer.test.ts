@@ -20,7 +20,7 @@ function snapshot(records: readonly PortfolioCoverageRegistryRecord[]): ProgramA
   const registry: PortfolioCoverageRegistryResponse = { registryVersion: "PORTFOLIO_COVERAGE_V1", generatedAt: "2026-09-23T00:00:00Z", providerCalls: 0, budgetConsumed: 0, records }
   return {
     version: PROGRAM_A_A1_CACHE_SNAPSHOT_VERSION, asOfDate: "2026-09-23", registry,
-    securityEvidence: records.map((row, index) => ({ securityId: row.securityId, canonicalIsin: `INE0000000${index + 1}`, classificationIdentityState: "READY", marketIdentityState: "VERIFIED", marketMetricCodes: ["PRICE_MOMENTUM_12M"], externalRatings: { count: 0, state: "MISSING", freshUntil: null }, valuation: { count: 1, state: "FRESH", freshUntil: "2026-12-01" } })),
+    securityEvidence: records.map((row, index) => ({ securityId: row.securityId, canonicalName: `${row.symbol} Limited`, canonicalIsin: `INE0000000${index + 1}`, classificationIdentityState: "READY", marketIdentityState: "VERIFIED", marketMetricCodes: ["PRICE_MOMENTUM_12M"], externalRatings: { count: 0, state: "MISSING", freshUntil: null }, valuation: { count: 1, state: "FRESH", freshUntil: "2026-12-01" } })),
     externalRatingRuleProfiles: ["BANK_NBFC"], benchmarkEvidence: [],
   }
 }

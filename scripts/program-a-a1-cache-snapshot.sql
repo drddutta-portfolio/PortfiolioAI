@@ -22,6 +22,7 @@ with target as (
 ), security_evidence as (
   select coalesce(jsonb_agg(jsonb_build_object(
     'securityId', h.security_id,
+    'canonicalName', s.name,
     'canonicalIsin', s.isin,
     'classificationIdentityState', case when s.isin is not null and btrim(s.isin) <> '' then 'READY' else 'MISSING' end,
     'marketIdentityState', case

@@ -17,7 +17,7 @@ function materialized(): ProgramAA1MaterializedResult {
   }
   return {
     holdings: [],
-    classificationIdentities: review.map((row, index) => ({ securityId: row.securityId, canonicalIsin: `INE0000000${index + 1}`, state: "READY" as const })),
+    classificationIdentities: review.map((row, index) => ({ securityId: row.securityId, canonicalName: `${row.symbol} Limited`, canonicalIsin: `INE0000000${index + 1}`, state: "READY" as const })),
     benchmarkEvidence: [],
     baseline: {
       version: "PROGRAM_A_A1_EVIDENCE_BASELINE_V1", asOfDate: "2026-09-23", eligibility: [...review, eligible],
@@ -52,10 +52,13 @@ describe("Program A A2 bounded pilot", () => {
   it("binds canonical ISIN readiness into the plan and fails closed before provider dispatch", async () => {
     const ready = materialized()
     const plan = await buildProgramAA2Plan(ready)
-    expect(plan.actions.filter((action) => action.stage === "A2A").every((action) => action.identityPrerequisiteState === "READY" && action.canonicalIsin)).toBe(true)
+    expect(plan.actions.filter((action) => action.stage === "A2A").every((action) => action.identityPrerequisiteState === "READY" && action.canonicalName && action.canonicalIsin)).toBe(true)
 
     const changedIsin = { ...ready, classificationIdentities: ready.classificationIdentities.map((identity, index) => index === 0 ? { ...identity, canonicalIsin: "INE999999999" } : identity) }
     expect((await buildProgramAA2Plan(changedIsin)).planId).not.toBe(plan.planId)
+
+    const changedName = { ...ready, classificationIdentities: ready.classificationIdentities.map((identity, index) => index === 0 ? { ...identity, canonicalName: "Changed Name Limited" } : identity) }
+    expect((await buildProgramAA2Plan(changedName)).planId).not.toBe(plan.planId)
 
     const missingIdentity = { ...ready, classificationIdentities: ready.classificationIdentities.map((identity, index) => index === 0 ? { ...identity, canonicalIsin: null, state: "MISSING" as const } : identity) }
     const blockedPlan = await buildProgramAA2Plan(missingIdentity)
@@ -79,6 +82,13 @@ describe("Program A A2 bounded pilot", () => {
     const plan = await buildProgramAA2Plan(materialized())
     const result = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: (action) => Promise.resolve({ providerCalls: action.estimatedPhysicalCalls + 1, localWrites: 0 }) })
     expect(result).toMatchObject({ status: "PARTIAL_STOPPED", stopReason: "CALL_BUDGET_EXCEEDED", retries: 0 })
+  })
+
+  it("retains successful evidence writes reported with a fail-closed stop", async () => {
+    const plan = await buildProgramAA2Plan(materialized())
+    const error = Object.assign(new Error("CLASSIFICATION_CONFLICT"), { providerCalls: 1, localWrites: 1 })
+    const result = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: () => Promise.reject(error) })
+    expect(result).toMatchObject({ status: "PARTIAL_STOPPED", successfulLocalWrites: 1, stopReason: "CLASSIFICATION_CONFLICT" })
   })
 
   it("re-materializes between stages and requires a new approval after classification changes", async () => {

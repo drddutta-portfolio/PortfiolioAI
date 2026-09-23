@@ -11,6 +11,15 @@ describe("Gate K3 BANK_NBFC portability boundary", () => {
     })
   })
 
+  it("routes the canonical Private Sector Bank taxonomy to BANK_NBFC", () => {
+    expect(resolveScoringProfile("Banking", "Private Sector Bank", null)).toMatchObject({
+      profileCode: "BANK_NBFC",
+      ruleProfile: "BANK_NBFC",
+      methodologyState: "AVAILABLE",
+      scoringExecutionState: "AVAILABLE",
+    })
+  })
+
   it("keeps NBFC_LENDING in the BANK_NBFC family but blocks scoring until its methodology authority exists", () => {
     expect(sectorEngineForProfileCode("NBFC_LENDING")?.engineCode).toBe("BANK_NBFC")
     expect(sectorEngineForProfileCode("NBFC_LENDING")?.profileAuthorities?.NBFC_LENDING?.state).toBe("PENDING_METHODOLOGY")

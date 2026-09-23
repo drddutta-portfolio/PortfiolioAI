@@ -14,6 +14,10 @@ describe("Program A A2 provider result propagation", () => {
   })
 
   it("reports zero writes for a rejected response", () => {
-    assert.throws(() => assertProgramAA2ProviderResult({ rejected: 1, accepted: 0, providerCalls: 1, code: "NO_EXACT_PROVIDER_IDENTITY" }), { message: "NO_EXACT_PROVIDER_IDENTITY", providerCalls: 1 })
+    assert.throws(() => assertProgramAA2ProviderResult({ rejected: 1, accepted: 0, providerCalls: 1, code: "NO_EXACT_PROVIDER_IDENTITY" }), { message: "NO_EXACT_PROVIDER_IDENTITY", providerCalls: 1, localWrites: 0 })
+  })
+
+  it("reports accepted evidence writes when pending mapping review stops execution", () => {
+    assert.throws(() => assertProgramAA2ProviderResult({ pendingReview: 1, accepted: 1, providerCalls: 1 }), { message: "CLASSIFICATION_CONFLICT", providerCalls: 1, localWrites: 1 })
   })
 })

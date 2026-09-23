@@ -114,7 +114,7 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
   }
 
   if (sector === "BANKING") {
-    if (industry === "BANKS") {
+    if (industry === "BANKS" || industry === "PRIVATE_SECTOR_BANK") {
       return result(input, "ROUTED", "BANK", "SECTOR_AND_INDUSTRY", "BANKING_BANK")
     }
     if (!industry) {
