@@ -2509,6 +2509,48 @@ The previously built Pharma subprofile architecture remains authoritative and mu
 
 **This distinction must not be removed or simplified in future handoffs, plans, scoring adapters, or UI contracts.**
 
+---
+
+## Program A · A2B Pharma subprofile prerequisite wiring — 23 September 2026
+
+A focused A2B contract correction now binds Pharma Complete Research actions to
+the canonical active reviewed subprofile assignment before provider dispatch.
+
+Implemented:
+- the cache-only snapshot reads persisted `research_subprofile_assignments` for
+  held securities; the provisional candidate registry is not an input;
+- the existing fail-closed Pharma assignment resolver determines whether the
+  assignment is active and reviewed;
+- the resolved assignment version must match the existing effective subprofile
+  contract authority;
+- the A2B action binds the resolved subprofile, `REVIEWED` assignment state,
+  effective contract version and registered Gate-J methodology version into the
+  plan fingerprint;
+- missing, provisional, disputed, conflicting, inactive or contract-mismatched
+  Pharma authority produces no A2B provider action;
+- execution independently refuses a malformed Pharma A2B action with
+  `PHARMA_SUBPROFILE_PREREQUISITE_MISSING` before dispatch;
+- non-Pharma A2B behavior and the indivisible four-call Complete Research
+  capability are unchanged.
+
+Fresh local cache-only V11 plan:
+- plan ID `281076d2367ee4e8b6c799a56454f4d0da2da1522973ed453e5bf4524cf78b5e`;
+- confirmation token `APPROVE_PROGRAM_A_A2_281076D2367EE4E8`;
+- A2A action count = 0;
+- A2B = ALIVUS / `API_BULK_DRUGS` / `API_BULK_DRUGS_V1` /
+  `PHARMA_API_G10_1_NUMERIC_METHODOLOGY_V1_CANDIDATE` / four calls;
+- PLAN provider calls, budget and writes = 0;
+- A2B and A2C were not executed.
+
+Validation:
+- focused A1/A2, assignment, contract and Gate-J portability suite: 38 tests PASS;
+- TypeScript: PASS;
+- architecture guard: PASS;
+- changed-file lint: PASS;
+- production build: PASS with the inherited chunk-size warning.
+
+**Program A · A2B remains PLANNED / NOT EXECUTED pending review of the new V11 plan.**
+
 
 ---
 

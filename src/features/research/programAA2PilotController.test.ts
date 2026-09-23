@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from "vitest"
 import type { ProgramAA1MaterializedResult } from "./programAA1CacheMaterializer"
+import { PHARMA_GATE_J_METHOD_AUTHORITIES } from "./pharmaGateJFinalPortability"
+import { PHARMA_SUBPROFILE_CANDIDATE_REGISTRY } from "./pharmaSubprofileCandidateRegistry"
 import { buildProgramAA2Plan, executeProgramAA2Plan } from "./programAA2PilotController"
 
 function materialized(): ProgramAA1MaterializedResult {
@@ -10,7 +12,7 @@ function materialized(): ProgramAA1MaterializedResult {
     reasonCode: "APPLICATION_SECTOR_MISSING", portfolioWeightPercent: null,
   }))
   const eligible = {
-    securityId: "pharma", symbol: "TORNTPHARM", assetClass: "EQUITY", canonicalSector: "Pharma", canonicalIndustry: "Pharmaceuticals",
+    securityId: "pharma", symbol: "ALIVUS", assetClass: "EQUITY", canonicalSector: "Pharma", canonicalIndustry: "Pharmaceuticals",
     researchProfileCode: "PHARMA_V1", researchSubprofileCode: "PHARMA", methodologyState: "AVAILABLE" as const,
     scoringExecutionState: "AVAILABLE" as const, eligibilityState: "ELIGIBLE" as const, r3Applicable: true, r5Applicable: true,
     reasonCode: "SUPPORTED_ENGINE_ROUTED", portfolioWeightPercent: null,
@@ -18,11 +20,12 @@ function materialized(): ProgramAA1MaterializedResult {
   return {
     holdings: [],
     classificationIdentities: review.map((row, index) => ({ securityId: row.securityId, canonicalName: `${row.symbol} Limited`, canonicalIsin: `INE0000000${index + 1}`, state: "READY" as const })),
+    pharmaSubprofilePrerequisites: [{ securityId: "pharma", state: "READY", resolvedSubprofile: "API_BULK_DRUGS", assignmentState: "REVIEWED", contractVersion: "API_BULK_DRUGS_V1" }],
     benchmarkEvidence: [],
     baseline: {
       version: "PROGRAM_A_A1_EVIDENCE_BASELINE_V1", asOfDate: "2026-09-23", eligibility: [...review, eligible],
-      r3Coverage: ["FUNDAMENTALS", "OWNERSHIP", "VALUATION", "DOCUMENTS"].map((domain) => ({ securityId: "pharma", symbol: "TORNTPHARM", profileCode: "PHARMA_V1", domain: domain as "FUNDAMENTALS", state: "MISSING" as const, freshUntil: null, authoritySource: "cache", blockingReason: "MISSING", estimatedRefreshAction: "REVIEWED_ADAPTER", projectedProviderCalls: 1, sharedCallKey: null })),
-      r5Coverage: [{ securityId: "pharma", symbol: "TORNTPHARM", profileCode: "PHARMA_V1", identityState: "FRESH", earliestStoredCandle: "2025-09-01", latestStoredCandle: "2026-09-18", availableHistoryDays: 382, lookbackSatisfied: true, missingWindow: { version: "PROGRAM_A_A1_MARKET_HISTORY_V1", mode: "INCREMENTAL", requiredStartDate: "2025-09-23", requestStartDate: "2026-09-13", requestEndDate: "2026-09-23", lookbackSatisfied: true, reasonCode: "LATEST_CANDLE_GAP", estimatedProviderCalls: 1 }, derivedMetrics: { PRICE_MOMENTUM_6M: "FRESH", PRICE_MOMENTUM_12M: "FRESH", MAX_DRAWDOWN_1Y: "FRESH", VOLATILITY_1Y: "FRESH", RELATIVE_STRENGTH_12M: "MISSING", BENCHMARK_RELATIVE_VOLATILITY_1Y: "MISSING" }, benchmarkAuthority: "PHARMA_V1", benchmarkCode: "NIFTY_PHARMA", benchmarkReadiness: "MISSING", blockingReason: "BENCHMARK_HISTORY_MISSING" }],
+      r3Coverage: ["FUNDAMENTALS", "OWNERSHIP", "VALUATION", "DOCUMENTS"].map((domain) => ({ securityId: "pharma", symbol: "ALIVUS", profileCode: "PHARMA_V1", domain: domain as "FUNDAMENTALS", state: "MISSING" as const, freshUntil: null, authoritySource: "cache", blockingReason: "MISSING", estimatedRefreshAction: "REVIEWED_ADAPTER", projectedProviderCalls: 1, sharedCallKey: null })),
+      r5Coverage: [{ securityId: "pharma", symbol: "ALIVUS", profileCode: "PHARMA_V1", identityState: "FRESH", earliestStoredCandle: "2025-09-01", latestStoredCandle: "2026-09-18", availableHistoryDays: 382, lookbackSatisfied: true, missingWindow: { version: "PROGRAM_A_A1_MARKET_HISTORY_V1", mode: "INCREMENTAL", requiredStartDate: "2025-09-23", requestStartDate: "2026-09-13", requestEndDate: "2026-09-23", lookbackSatisfied: true, reasonCode: "LATEST_CANDLE_GAP", estimatedProviderCalls: 1 }, derivedMetrics: { PRICE_MOMENTUM_6M: "FRESH", PRICE_MOMENTUM_12M: "FRESH", MAX_DRAWDOWN_1Y: "FRESH", VOLATILITY_1Y: "FRESH", RELATIVE_STRENGTH_12M: "MISSING", BENCHMARK_RELATIVE_VOLATILITY_1Y: "MISSING" }, benchmarkAuthority: "PHARMA_V1", benchmarkCode: "NIFTY_PHARMA", benchmarkReadiness: "MISSING", blockingReason: "BENCHMARK_HISTORY_MISSING" }],
       benchmarkInventory: [], projectedProviderCost: { providerCalls: 0, budgetConsumed: 0, trendlyne: { holdingsNeedingRefresh: 1, domainRefreshes: 4, estimatedPhysicalCalls: 2, sharedCallGroups: 2 }, angelOne: { holdingsNeedingHistory: 1, fullBackfills: 0, incrementalRefreshes: 1, estimatedSecurityRequests: 1, estimatedBenchmarkRequests: 1 } }, pilotProposal: { r3: [], r5: [] }, providerCalls: 0, budgetConsumed: 0,
     },
   }
@@ -32,12 +35,79 @@ describe("Program A A2 bounded pilot", () => {
   it("selects exact bounded cohorts and deterministic incremental actions", async () => {
     const plan = await buildProgramAA2Plan(materialized())
     expect(plan.actions.filter((action) => action.stage === "A2A")).toHaveLength(5)
-    expect(plan.actions.find((action) => action.capability === "COMPLETE_RESEARCH_REFRESH")).toMatchObject({ estimatedPhysicalCalls: 4, symbol: "TORNTPHARM" })
+    expect(plan.actions.find((action) => action.capability === "COMPLETE_RESEARCH_REFRESH")).toMatchObject({
+      estimatedPhysicalCalls: 4, symbol: "ALIVUS", resolvedSubprofile: "API_BULK_DRUGS",
+      subprofileAssignmentState: "REVIEWED", subprofileContractVersion: "API_BULK_DRUGS_V1",
+      methodologyVersion: PHARMA_GATE_J_METHOD_AUTHORITIES.API_BULK_DRUGS.methodologyVersion,
+      selectionReason: "REVIEWED_PHARMA_SUBPROFILE_STALE_OR_MISSING_EVIDENCE",
+    })
     expect(plan.actions.find((action) => action.capability === "SECURITY_HISTORY")?.historyWindow).toEqual({ from: "2026-09-13", to: "2026-09-23" })
     expect(plan.providerTotals).toEqual({ trendlyne: 9, angelOneSecurity: 1, angelOneBenchmark: 1, angelOneTotal: 2 })
     expect(plan.actualProviderCalls).toBe(0)
     expect(plan.confirmationToken).toBe(`APPROVE_PROGRAM_A_A2_${plan.planId.slice(0, 16).toUpperCase()}`)
     expect(await buildProgramAA2Plan(materialized())).toEqual(plan)
+  })
+
+  it("changes the fingerprint when the reviewed Pharma subprofile or contract binding changes", async () => {
+    const api = materialized()
+    const apiPlan = await buildProgramAA2Plan(api)
+    const global = {
+      ...api,
+      pharmaSubprofilePrerequisites: [{ securityId: "pharma", state: "READY" as const, resolvedSubprofile: "GLOBAL_GENERICS" as const, assignmentState: "REVIEWED" as const, contractVersion: "GLOBAL_GENERICS_V1" }],
+    }
+    const globalPlan = await buildProgramAA2Plan(global)
+    expect(globalPlan.planId).not.toBe(apiPlan.planId)
+    expect(globalPlan.actions.find((action) => action.stage === "A2B")).toMatchObject({
+      resolvedSubprofile: "GLOBAL_GENERICS", subprofileContractVersion: "GLOBAL_GENERICS_V1",
+      methodologyVersion: PHARMA_GATE_J_METHOD_AUTHORITIES.GLOBAL_GENERICS.methodologyVersion,
+    })
+
+    const mismatchedContract = { ...api, pharmaSubprofilePrerequisites: [{ ...api.pharmaSubprofilePrerequisites[0]!, state: "CONTRACT_VERSION_MISMATCH" as const, resolvedSubprofile: null, contractVersion: null }] }
+    const blocked = await buildProgramAA2Plan(mismatchedContract)
+    expect(blocked.planId).not.toBe(apiPlan.planId)
+    expect(blocked.actions.some((action) => action.stage === "A2B")).toBe(false)
+  })
+
+  it("blocks missing Pharma authority before dispatch and never promotes provisional candidates", async () => {
+    const ready = materialized()
+    const validPlan = await buildProgramAA2Plan(ready)
+    const invalidActions = validPlan.actions.map((action) => action.stage === "A2B"
+      ? { ...action, resolvedSubprofile: null, subprofileAssignmentState: null, subprofileContractVersion: null, methodologyVersion: null }
+      : action)
+    const malformed = { ...validPlan, actions: invalidActions }
+    const dispatch = vi.fn()
+    await expect(executeProgramAA2Plan({ approvedPlan: malformed, currentPlan: malformed, confirmationToken: malformed.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "PHARMA_SUBPROFILE_PREREQUISITE_MISSING", actualCalls: { TRENDLYNE_MCP: 0, ANGEL_ONE: 0 } })
+    expect(dispatch).not.toHaveBeenCalled()
+
+    for (const symbol of ["BIOCON", "SYNGENE"] as const) {
+      expect(PHARMA_SUBPROFILE_CANDIDATE_REGISTRY.some((candidate) => candidate.symbol === symbol && candidate.reviewState === "PROVISIONAL")).toBe(true)
+      const base = materialized()
+      const candidateOnly = {
+        ...base,
+        pharmaSubprofilePrerequisites: [{ securityId: "pharma", state: "MISSING_ASSIGNMENT" as const, resolvedSubprofile: null, assignmentState: null, contractVersion: null }],
+        baseline: {
+          ...base.baseline,
+          eligibility: base.baseline.eligibility.map((row) => row.securityId === "pharma" ? { ...row, symbol } : row),
+          r3Coverage: base.baseline.r3Coverage.map((row) => row.securityId === "pharma" ? { ...row, symbol } : row),
+        },
+      }
+      expect((await buildProgramAA2Plan(candidateOnly)).actions.some((action) => action.stage === "A2B")).toBe(false)
+    }
+  })
+
+  it("preserves non-Pharma A2B selection without Pharma bindings", async () => {
+    const base = materialized()
+    const nonPharma = {
+      ...base,
+      pharmaSubprofilePrerequisites: [],
+      baseline: {
+        ...base.baseline,
+        eligibility: base.baseline.eligibility.map((row) => row.securityId === "pharma" ? { ...row, symbol: "INFY", canonicalSector: "Information Technology", canonicalIndustry: "IT Services", researchProfileCode: "IT_TECH", researchSubprofileCode: "IT_SERVICES", scoringExecutionState: "PENDING_ADAPTER" as const } : row),
+        r3Coverage: base.baseline.r3Coverage.map((row) => row.securityId === "pharma" ? { ...row, symbol: "INFY", profileCode: "IT_TECH" } : row),
+      },
+    }
+    const action = (await buildProgramAA2Plan(nonPharma)).actions.find((item) => item.stage === "A2B")
+    expect(action).toMatchObject({ symbol: "INFY", researchProfileCode: "IT_TECH", resolvedSubprofile: null, subprofileAssignmentState: null, subprofileContractVersion: null, methodologyVersion: null, estimatedPhysicalCalls: 4 })
   })
 
   it("refuses non-local execution and stale plans before dispatch", async () => {

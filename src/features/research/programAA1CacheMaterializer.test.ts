@@ -21,6 +21,7 @@ function snapshot(records: readonly PortfolioCoverageRegistryRecord[]): ProgramA
   return {
     version: PROGRAM_A_A1_CACHE_SNAPSHOT_VERSION, asOfDate: "2026-09-23", registry,
     securityEvidence: records.map((row, index) => ({ securityId: row.securityId, canonicalName: `${row.symbol} Limited`, canonicalIsin: `INE0000000${index + 1}`, classificationIdentityState: "READY", marketIdentityState: "VERIFIED", marketMetricCodes: ["PRICE_MOMENTUM_12M"], externalRatings: { count: 0, state: "MISSING", freshUntil: null }, valuation: { count: 1, state: "FRESH", freshUntil: "2026-12-01" } })),
+    pharmaSubprofileAssignments: [],
     externalRatingRuleProfiles: ["BANK_NBFC"], benchmarkEvidence: [],
   }
 }
@@ -57,5 +58,23 @@ describe("Program A A1.2 cache materializer", () => {
   it("rejects a registry envelope that is not cache-only", () => {
     const input = snapshot([record()])
     expect(() => materializeProgramAA1CacheBaseline({ ...input, registry: { ...input.registry, providerCalls: 1 as 0 } })).toThrow("cache-only")
+  })
+
+  it("resolves only an active reviewed Pharma assignment with the canonical contract version", () => {
+    const pharma = record({ securityId: "alivus", symbol: "ALIVUS", classification: { sector: "Pharma", industry: "Pharmaceuticals", marketCapCategory: "MID_CAP", enrichmentState: "VERIFIED", freshUntil: null } })
+    const input = snapshot([pharma])
+    const result = materializeProgramAA1CacheBaseline({
+      ...input,
+      pharmaSubprofileAssignments: [{
+        securityId: "alivus", subprofileCode: "API_BULK_DRUGS", subprofileVersion: "API_BULK_DRUGS_V1",
+        assignmentStatus: "REVIEWED", confidenceState: "HIGH", assignmentBasis: "OWNER_REVIEWED",
+        sourceReference: "review", effectiveFrom: "2026-03-31", effectiveTo: null,
+        reviewedBy: "reviewer", reviewedAt: "2026-09-21T04:42:00Z", createdAt: "2026-09-21T04:42:00Z",
+      }],
+    })
+    expect(result.pharmaSubprofilePrerequisites).toEqual([{
+      securityId: "alivus", state: "READY", resolvedSubprofile: "API_BULK_DRUGS",
+      assignmentState: "REVIEWED", contractVersion: "API_BULK_DRUGS_V1",
+    }])
   })
 })

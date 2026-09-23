@@ -1,4 +1,13 @@
 import type { PortfolioCoverageRegistryResponse, PortfolioCoverageSourceState } from "../../data/portfolioCoverageRegistryRepository"
+import { PHARMA_SUBPROFILE_CONTRACTS } from "./pharmaSubprofileContracts"
+import {
+  PHARMA_SUBPROFILE_CODES,
+  resolvePharmaSubprofileAssignment,
+  type PharmaSubprofileAssignment,
+  type PharmaSubprofileCode,
+  type ResearchSubprofileAssignmentState,
+  type ResearchSubprofileConfidence,
+} from "./pharmaSubprofileAssignment"
 import { resolveScoringProfile } from "./scoringProfileResolution"
 import {
   buildProgramAA1Baseline,
@@ -10,7 +19,30 @@ import {
   type ProgramAHoldingInput,
 } from "./programAA1EvidenceBaseline"
 
-export const PROGRAM_A_A1_CACHE_SNAPSHOT_VERSION = "PROGRAM_A_A1_CACHE_SNAPSHOT_V1" as const
+export const PROGRAM_A_A1_CACHE_SNAPSHOT_VERSION = "PROGRAM_A_A1_CACHE_SNAPSHOT_V2" as const
+
+export interface ProgramACachePharmaSubprofileAssignment {
+  readonly securityId: string
+  readonly subprofileCode: PharmaSubprofileCode
+  readonly subprofileVersion: string
+  readonly assignmentStatus: ResearchSubprofileAssignmentState
+  readonly confidenceState: ResearchSubprofileConfidence
+  readonly assignmentBasis: string
+  readonly sourceReference: string
+  readonly effectiveFrom: string | null
+  readonly effectiveTo: string | null
+  readonly reviewedBy: string | null
+  readonly reviewedAt: string | null
+  readonly createdAt: string
+}
+
+export interface ProgramAPharmaSubprofilePrerequisite {
+  readonly securityId: string
+  readonly state: "READY" | "MISSING_ASSIGNMENT" | "PROVISIONAL_ASSIGNMENT" | "DISPUTED_ASSIGNMENT" | "NO_ACTIVE_REVIEWED_ASSIGNMENT" | "CONFLICTING_REVIEWED_ASSIGNMENTS" | "CONTRACT_VERSION_MISMATCH"
+  readonly resolvedSubprofile: PharmaSubprofileCode | null
+  readonly assignmentState: ResearchSubprofileAssignmentState | null
+  readonly contractVersion: string | null
+}
 
 export interface ProgramACacheSecurityEvidence {
   readonly securityId: string
@@ -36,6 +68,7 @@ export interface ProgramAA1CacheSnapshot {
   readonly asOfDate: string
   readonly registry: PortfolioCoverageRegistryResponse
   readonly securityEvidence: readonly ProgramACacheSecurityEvidence[]
+  readonly pharmaSubprofileAssignments: readonly ProgramACachePharmaSubprofileAssignment[]
   readonly externalRatingRuleProfiles: readonly string[]
   readonly benchmarkEvidence: readonly BenchmarkRuntimeEvidence[]
 }
@@ -48,8 +81,60 @@ export interface ProgramAA1MaterializedResult {
     readonly canonicalIsin: string | null
     readonly state: "READY" | "MISSING"
   }[]
+  readonly pharmaSubprofilePrerequisites: readonly ProgramAPharmaSubprofilePrerequisite[]
   readonly benchmarkEvidence: readonly BenchmarkRuntimeEvidence[]
   readonly baseline: ProgramAA1Baseline
+}
+
+function pharmaPrerequisite(
+  securityId: string,
+  rows: readonly ProgramACachePharmaSubprofileAssignment[],
+  evaluationDate: string,
+): ProgramAPharmaSubprofilePrerequisite {
+  const assignments: PharmaSubprofileAssignment[] = [...rows]
+    .sort((left, right) => left.effectiveFrom?.localeCompare(right.effectiveFrom ?? "") || left.createdAt.localeCompare(right.createdAt))
+    .map((row, index) => ({
+      securityId: row.securityId,
+      profileCode: "PHARMA_V1",
+      primarySubprofileCode: row.subprofileCode,
+      assignmentVersion: index + 1,
+      assignmentState: row.assignmentStatus,
+      effectiveFrom: row.effectiveFrom?.slice(0, 10) ?? null,
+      effectiveTo: row.effectiveTo?.slice(0, 10) ?? null,
+      sourceReference: row.sourceReference,
+      reasonCode: row.assignmentBasis,
+      confidence: row.confidenceState,
+      reviewedBy: row.reviewedBy,
+      reviewedAt: row.reviewedAt,
+      secondaryExposures: [],
+    }))
+  const resolution = resolvePharmaSubprofileAssignment(assignments, securityId, evaluationDate)
+  if (resolution.status !== "RESOLVED") {
+    const active = rows.find((row) =>
+      row.securityId === securityId
+      && (row.effectiveFrom === null || row.effectiveFrom.slice(0, 10) <= evaluationDate)
+      && (row.effectiveTo === null || evaluationDate < row.effectiveTo.slice(0, 10)))
+    return {
+      securityId,
+      state: resolution.blocker,
+      resolvedSubprofile: null,
+      assignmentState: active?.assignmentStatus ?? null,
+      contractVersion: null,
+    }
+  }
+  const resolvedSubprofile = resolution.assignment.primarySubprofileCode
+  const raw = rows.find((row) =>
+    row.securityId === securityId
+    && row.assignmentStatus === "REVIEWED"
+    && row.subprofileCode === resolvedSubprofile
+    && row.effectiveFrom !== null
+    && row.effectiveFrom.slice(0, 10) <= evaluationDate
+    && (row.effectiveTo === null || evaluationDate < row.effectiveTo.slice(0, 10)))
+  const contractVersion = PHARMA_SUBPROFILE_CONTRACTS[resolvedSubprofile].contractVersion
+  if (!raw || raw.subprofileVersion !== contractVersion) {
+    return { securityId, state: "CONTRACT_VERSION_MISMATCH", resolvedSubprofile: null, assignmentState: "REVIEWED", contractVersion: null }
+  }
+  return { securityId, state: "READY", resolvedSubprofile, assignmentState: "REVIEWED", contractVersion }
 }
 
 function coverageState(source: PortfolioCoverageSourceState): Exclude<ProgramACoverageState, "NOT_APPLICABLE" | "READY_TO_DERIVE"> {
@@ -124,6 +209,9 @@ export function materializeProgramAA1CacheBaseline(snapshot: ProgramAA1CacheSnap
   if (snapshot.registry.providerCalls !== 0 || snapshot.registry.budgetConsumed !== 0) throw new Error("Program A A1 accepts cache-only registry evidence.")
   const evidenceBySecurity = new Map(snapshot.securityEvidence.map((row) => [row.securityId, row]))
   const ratingProfiles = new Set(snapshot.externalRatingRuleProfiles)
+  for (const assignment of snapshot.pharmaSubprofileAssignments) {
+    if (!PHARMA_SUBPROFILE_CODES.includes(assignment.subprofileCode)) throw new Error(`Unknown PHARMA_V1 subprofile code: ${assignment.subprofileCode}`)
+  }
   const holdings = snapshot.registry.records.map((coverage): ProgramAHoldingInput => {
     const evidence = evidenceBySecurity.get(coverage.securityId)
     if (!evidence) throw new Error(`Cache evidence is missing for ${coverage.symbol}.`)
@@ -143,8 +231,17 @@ export function materializeProgramAA1CacheBaseline(snapshot: ProgramAA1CacheSnap
   const classificationIdentities = snapshot.securityEvidence
     .map((evidence) => ({ securityId: evidence.securityId, canonicalName: evidence.canonicalName, canonicalIsin: evidence.canonicalIsin, state: evidence.classificationIdentityState }))
     .sort((a, b) => a.securityId.localeCompare(b.securityId))
+  const pharmaRowsBySecurity = new Map<string, ProgramACachePharmaSubprofileAssignment[]>()
+  for (const assignment of snapshot.pharmaSubprofileAssignments) {
+    const rows = pharmaRowsBySecurity.get(assignment.securityId) ?? []
+    rows.push(assignment)
+    pharmaRowsBySecurity.set(assignment.securityId, rows)
+  }
+  const pharmaSubprofilePrerequisites = snapshot.securityEvidence
+    .map((evidence) => pharmaPrerequisite(evidence.securityId, pharmaRowsBySecurity.get(evidence.securityId) ?? [], snapshot.asOfDate))
+    .sort((a, b) => a.securityId.localeCompare(b.securityId))
   const baseline = buildProgramAA1Baseline({ asOfDate: snapshot.asOfDate, holdings, benchmarkEvidence })
-  return { holdings, classificationIdentities, benchmarkEvidence, baseline }
+  return { holdings, classificationIdentities, pharmaSubprofilePrerequisites, benchmarkEvidence, baseline }
 }
 
 export function renderProgramAA1BaselineReport(baseline: ProgramAA1Baseline): string {

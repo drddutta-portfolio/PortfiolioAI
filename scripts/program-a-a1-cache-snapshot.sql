@@ -84,6 +84,25 @@ with target as (
     where security_id = h.security_id
       and metric_code in ('MARKET_CAP_PROVIDER_RAW', 'MARKET_CAP', 'PE_TTM', 'PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT', 'PBV_ADJUSTED_PROVIDER', 'EV_EBITDA', 'FCF_YIELD_PERCENT')
   ) v on true
+), pharma_subprofile_assignments as (
+  select coalesce(jsonb_agg(jsonb_build_object(
+    'securityId', a.security_id,
+    'subprofileCode', a.subprofile_code,
+    'subprofileVersion', a.subprofile_version,
+    'assignmentStatus', a.assignment_status,
+    'confidenceState', a.confidence_state,
+    'assignmentBasis', a.assignment_basis,
+    'sourceReference', a.source_reference,
+    'effectiveFrom', a.effective_from,
+    'effectiveTo', a.effective_to,
+    'reviewedBy', a.reviewed_by,
+    'reviewedAt', a.reviewed_at,
+    'createdAt', a.created_at
+  ) order by a.security_id, a.effective_from, a.created_at), '[]'::jsonb) as payload
+  from public.research_subprofile_assignments a
+  join holding_ids h on h.security_id = a.security_id
+  where a.parent_profile_code = 'PHARMA'
+    and a.parent_profile_version = 'PHARMA_V1'
 ), benchmark_evidence as (
   select coalesce(jsonb_agg(jsonb_build_object(
     'benchmarkCode', b.code,
@@ -100,15 +119,17 @@ with target as (
   where b.code in ('NIFTY_BANK', 'NIFTY_PHARMA')
 )
 select jsonb_build_object(
-  'version', 'PROGRAM_A_A1_CACHE_SNAPSHOT_V1',
+  'version', 'PROGRAM_A_A1_CACHE_SNAPSHOT_V2',
   'asOfDate', :'as_of_date',
   'registry', r.payload,
   'securityEvidence', se.payload,
+  'pharmaSubprofileAssignments', psa.payload,
   'externalRatingRuleProfiles', rp.payload,
   'benchmarkEvidence', be.payload
 )::text
 from registry r
 cross join security_evidence se
+cross join pharma_subprofile_assignments psa
 cross join rating_profiles rp
 cross join benchmark_evidence be;
 
