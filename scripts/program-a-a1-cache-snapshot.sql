@@ -25,6 +25,12 @@ with target as (
     'canonicalName', s.name,
     'canonicalIsin', s.isin,
     'classificationIdentityState', case when s.isin is not null and btrim(s.isin) <> '' then 'READY' else 'MISSING' end,
+    'trendlyneIdentityState', case
+      when ti.matched_identity_count > 1 or ti.conflicting_count > 0 then 'BLOCKED_IDENTITY_CONFLICT'
+      when ti.matched_identity_count = 1 and ti.provider_instrument_id is not null then 'VERIFIED_EXISTING_IDENTITY'
+      else 'IDENTITY_DISCOVERY_REQUIRED'
+    end,
+    'trendlyneProviderInstrumentId', case when ti.matched_identity_count = 1 and ti.conflicting_count = 0 then ti.provider_instrument_id else null end,
     'marketIdentityState', case
       when m.mapping_status = 'VERIFIED' then 'VERIFIED'
       when m.mapping_status = 'AMBIGUOUS' then 'CONFLICTING'
@@ -55,6 +61,13 @@ with target as (
   ) order by h.security_id), '[]'::jsonb) as payload
   from holding_ids h
   join public.securities s on s.id = h.security_id
+  left join lateral (
+    select count(distinct provider_instrument_id) filter (where evidence_status = 'MATCHED' and provider_instrument_id is not null)::int as matched_identity_count,
+      count(*) filter (where evidence_status in ('CONFLICTING', 'REVIEW_REQUIRED'))::int as conflicting_count,
+      min(provider_instrument_id) filter (where evidence_status = 'MATCHED' and provider_instrument_id is not null) as provider_instrument_id
+    from public.security_identity_observations
+    where security_id = h.security_id and source_code = 'TRENDLYNE_MCP'
+  ) ti on true
   left join lateral (
     select mapping_status
     from public.market_data_instrument_mappings
@@ -119,7 +132,7 @@ with target as (
   where b.code in ('NIFTY_BANK', 'NIFTY_PHARMA')
 )
 select jsonb_build_object(
-  'version', 'PROGRAM_A_A1_CACHE_SNAPSHOT_V2',
+  'version', 'PROGRAM_A_A1_CACHE_SNAPSHOT_V3',
   'asOfDate', :'as_of_date',
   'registry', r.payload,
   'securityEvidence', se.payload,

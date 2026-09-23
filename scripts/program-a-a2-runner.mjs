@@ -31,6 +31,7 @@ try {
       if (!response.ok || payload.error) {
         const error = new Error(payload.code ?? payload.error ?? "CAPABILITY_MISMATCH")
         error.providerCalls = Number(payload.providerCalls ?? 0)
+        error.localWrites = Number(payload.localWrites ?? 0)
         throw error
       }
       return payload
@@ -38,7 +39,16 @@ try {
     const executeAction = async (action) => {
       let payload
       if (action.capability === "SEARCH_ENTITIES_CLASSIFICATION") payload = await invoke("refresh-trendlyne-classification", { action: "A2_EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityIds: [action.securityId], securityNames: [action.canonicalName], confirmation: "OWNER_CONFIRMED_PROGRAM_A_A2_CLASSIFICATION" }, { "x-portfolioai-classification-token": classificationToken }, false)
-      else if (action.capability === "COMPLETE_RESEARCH_REFRESH") payload = await invoke("complete-research-refresh", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_COMPLETE_RESEARCH_REFRESH" })
+      else if (action.capability === "COMPLETE_RESEARCH_REFRESH") {
+        let identityResult = { providerCalls: 0, localWrites: 0 }
+        if (action.providerIdentityState === "IDENTITY_DISCOVERY_REQUIRED") {
+          const identityPayload = await invoke("resolve-trendlyne-identity", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_PROGRAM_A_A2_IDENTITY_DISCOVERY" })
+          identityResult = assertProgramAA2ProviderResult(identityPayload)
+        }
+        payload = await invoke("complete-research-refresh", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_COMPLETE_RESEARCH_REFRESH" })
+        const researchResult = assertProgramAA2ProviderResult(payload)
+        return { providerCalls: identityResult.providerCalls + researchResult.providerCalls, localWrites: identityResult.localWrites + researchResult.localWrites }
+      }
       else if (action.capability === "SECURITY_HISTORY") payload = await invoke("refresh-market-history", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_MARKET_HISTORY_REFRESH", requestFrom: action.historyWindow.from, requestTo: action.historyWindow.to })
       else if (action.capability === "PHARMA_BENCHMARK_HISTORY") payload = await invoke("refresh-pharma-benchmark", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_PHARMA_BENCHMARK_REFRESH" })
       else if (action.capability === "BANK_BENCHMARK_HISTORY") payload = await invoke("refresh-bank-benchmark", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_BANK_BENCHMARK_REFRESH" })

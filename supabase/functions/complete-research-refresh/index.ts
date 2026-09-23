@@ -342,7 +342,7 @@ Deno.serve(async request => {
       .select("provider_instrument_id,observed_symbol,created_at")
       .eq("security_id", body.securityId).eq("source_code", SOURCE_CODE).eq("evidence_status", "MATCHED")
       .not("provider_instrument_id", "is", null).order("created_at", { ascending: false }).limit(1).maybeSingle()
-    if (identityResult.error || !identityResult.data?.provider_instrument_id) return reply(409, { error: "Verified Trendlyne identity is required before a complete refresh." })
+    if (identityResult.error || !identityResult.data?.provider_instrument_id) return reply(409, { error: "Verified Trendlyne identity is required before a complete refresh.", code: "TRENDLYNE_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
     const identity = identityResult.data as Identity
     if (identity.observed_symbol && identity.observed_symbol !== security.symbol) return reply(409, { error: "Stored Trendlyne identity no longer matches the security symbol." })
     const providerInstrumentId = String(identity.provider_instrument_id)
@@ -568,6 +568,7 @@ Deno.serve(async request => {
       providerCalls: attempted,
       providerSucceeded,
       providerFailed,
+      localWrites: acceptedItems,
       releasedReservationUnits: RESERVED_UNITS - attempted,
       status: finalStatus,
       results,

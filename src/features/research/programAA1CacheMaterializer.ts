@@ -19,7 +19,9 @@ import {
   type ProgramAHoldingInput,
 } from "./programAA1EvidenceBaseline"
 
-export const PROGRAM_A_A1_CACHE_SNAPSHOT_VERSION = "PROGRAM_A_A1_CACHE_SNAPSHOT_V2" as const
+export const PROGRAM_A_A1_CACHE_SNAPSHOT_VERSION = "PROGRAM_A_A1_CACHE_SNAPSHOT_V3" as const
+
+export type ProgramATrendlyneIdentityState = "VERIFIED_EXISTING_IDENTITY" | "IDENTITY_DISCOVERY_REQUIRED" | "BLOCKED_IDENTITY_CONFLICT"
 
 export interface ProgramACachePharmaSubprofileAssignment {
   readonly securityId: string
@@ -49,6 +51,8 @@ export interface ProgramACacheSecurityEvidence {
   readonly canonicalName: string
   readonly canonicalIsin: string | null
   readonly classificationIdentityState: "READY" | "MISSING"
+  readonly trendlyneIdentityState: ProgramATrendlyneIdentityState
+  readonly trendlyneProviderInstrumentId: string | null
   readonly marketIdentityState: "VERIFIED" | "MISSING" | "CONFLICTING" | "REVIEW_REQUIRED"
   readonly marketMetricCodes: readonly MarketMetricCode[]
   readonly externalRatings: {
@@ -80,6 +84,11 @@ export interface ProgramAA1MaterializedResult {
     readonly canonicalName: string
     readonly canonicalIsin: string | null
     readonly state: "READY" | "MISSING"
+  }[]
+  readonly trendlyneIdentities: readonly {
+    readonly securityId: string
+    readonly state: ProgramATrendlyneIdentityState
+    readonly providerInstrumentId: string | null
   }[]
   readonly pharmaSubprofilePrerequisites: readonly ProgramAPharmaSubprofilePrerequisite[]
   readonly benchmarkEvidence: readonly BenchmarkRuntimeEvidence[]
@@ -231,6 +240,9 @@ export function materializeProgramAA1CacheBaseline(snapshot: ProgramAA1CacheSnap
   const classificationIdentities = snapshot.securityEvidence
     .map((evidence) => ({ securityId: evidence.securityId, canonicalName: evidence.canonicalName, canonicalIsin: evidence.canonicalIsin, state: evidence.classificationIdentityState }))
     .sort((a, b) => a.securityId.localeCompare(b.securityId))
+  const trendlyneIdentities = snapshot.securityEvidence
+    .map((evidence) => ({ securityId: evidence.securityId, state: evidence.trendlyneIdentityState, providerInstrumentId: evidence.trendlyneProviderInstrumentId }))
+    .sort((a, b) => a.securityId.localeCompare(b.securityId))
   const pharmaRowsBySecurity = new Map<string, ProgramACachePharmaSubprofileAssignment[]>()
   for (const assignment of snapshot.pharmaSubprofileAssignments) {
     const rows = pharmaRowsBySecurity.get(assignment.securityId) ?? []
@@ -241,7 +253,7 @@ export function materializeProgramAA1CacheBaseline(snapshot: ProgramAA1CacheSnap
     .map((evidence) => pharmaPrerequisite(evidence.securityId, pharmaRowsBySecurity.get(evidence.securityId) ?? [], snapshot.asOfDate))
     .sort((a, b) => a.securityId.localeCompare(b.securityId))
   const baseline = buildProgramAA1Baseline({ asOfDate: snapshot.asOfDate, holdings, benchmarkEvidence })
-  return { holdings, classificationIdentities, pharmaSubprofilePrerequisites, benchmarkEvidence, baseline }
+  return { holdings, classificationIdentities, trendlyneIdentities, pharmaSubprofilePrerequisites, benchmarkEvidence, baseline }
 }
 
 export function renderProgramAA1BaselineReport(baseline: ProgramAA1Baseline): string {

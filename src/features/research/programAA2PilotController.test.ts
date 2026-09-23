@@ -19,7 +19,8 @@ function materialized(): ProgramAA1MaterializedResult {
   }
   return {
     holdings: [],
-    classificationIdentities: review.map((row, index) => ({ securityId: row.securityId, canonicalName: `${row.symbol} Limited`, canonicalIsin: `INE0000000${index + 1}`, state: "READY" as const })),
+    classificationIdentities: [...review.map((row, index) => ({ securityId: row.securityId, canonicalName: `${row.symbol} Limited`, canonicalIsin: `INE0000000${index + 1}`, state: "READY" as const })), { securityId: "pharma", canonicalName: "Alivus Life Sciences Limited", canonicalIsin: "INE03Q201024", state: "READY" as const }],
+    trendlyneIdentities: [{ securityId: "pharma", state: "IDENTITY_DISCOVERY_REQUIRED" as const, providerInstrumentId: null }],
     pharmaSubprofilePrerequisites: [{ securityId: "pharma", state: "READY", resolvedSubprofile: "API_BULK_DRUGS", assignmentState: "REVIEWED", contractVersion: "API_BULK_DRUGS_V1" }],
     benchmarkEvidence: [],
     baseline: {
@@ -36,13 +37,14 @@ describe("Program A A2 bounded pilot", () => {
     const plan = await buildProgramAA2Plan(materialized())
     expect(plan.actions.filter((action) => action.stage === "A2A")).toHaveLength(5)
     expect(plan.actions.find((action) => action.capability === "COMPLETE_RESEARCH_REFRESH")).toMatchObject({
-      estimatedPhysicalCalls: 4, symbol: "ALIVUS", resolvedSubprofile: "API_BULK_DRUGS",
+      estimatedPhysicalCalls: 6, symbol: "ALIVUS", resolvedSubprofile: "API_BULK_DRUGS",
+      providerIdentityState: "IDENTITY_DISCOVERY_REQUIRED", providerInstrumentId: null,
       subprofileAssignmentState: "REVIEWED", subprofileContractVersion: "API_BULK_DRUGS_V1",
       methodologyVersion: PHARMA_GATE_J_METHOD_AUTHORITIES.API_BULK_DRUGS.methodologyVersion,
       selectionReason: "REVIEWED_PHARMA_SUBPROFILE_STALE_OR_MISSING_EVIDENCE",
     })
     expect(plan.actions.find((action) => action.capability === "SECURITY_HISTORY")?.historyWindow).toEqual({ from: "2026-09-13", to: "2026-09-23" })
-    expect(plan.providerTotals).toEqual({ trendlyne: 9, angelOneSecurity: 1, angelOneBenchmark: 1, angelOneTotal: 2 })
+    expect(plan.providerTotals).toEqual({ trendlyne: 11, angelOneSecurity: 1, angelOneBenchmark: 1, angelOneTotal: 2 })
     expect(plan.actualProviderCalls).toBe(0)
     expect(plan.confirmationToken).toBe(`APPROVE_PROGRAM_A_A2_${plan.planId.slice(0, 16).toUpperCase()}`)
     expect(await buildProgramAA2Plan(materialized())).toEqual(plan)
@@ -66,6 +68,20 @@ describe("Program A A2 bounded pilot", () => {
     const blocked = await buildProgramAA2Plan(mismatchedContract)
     expect(blocked.planId).not.toBe(apiPlan.planId)
     expect(blocked.actions.some((action) => action.stage === "A2B")).toBe(false)
+  })
+
+  it("binds Trendlyne identity readiness and its real call budget into A2B", async () => {
+    const discovery = materialized()
+    const discoveryPlan = await buildProgramAA2Plan(discovery)
+    expect(discoveryPlan.actions.find((action) => action.stage === "A2B")).toMatchObject({ providerIdentityState: "IDENTITY_DISCOVERY_REQUIRED", providerInstrumentId: null, estimatedPhysicalCalls: 6 })
+
+    const verified = { ...discovery, trendlyneIdentities: [{ securityId: "pharma", state: "VERIFIED_EXISTING_IDENTITY" as const, providerInstrumentId: "1234" }] }
+    const verifiedPlan = await buildProgramAA2Plan(verified)
+    expect(verifiedPlan.planId).not.toBe(discoveryPlan.planId)
+    expect(verifiedPlan.actions.find((action) => action.stage === "A2B")).toMatchObject({ providerIdentityState: "VERIFIED_EXISTING_IDENTITY", providerInstrumentId: "1234", estimatedPhysicalCalls: 4 })
+
+    const conflicting = { ...discovery, trendlyneIdentities: [{ securityId: "pharma", state: "BLOCKED_IDENTITY_CONFLICT" as const, providerInstrumentId: null }] }
+    expect((await buildProgramAA2Plan(conflicting)).actions.some((action) => action.stage === "A2B")).toBe(false)
   })
 
   it("blocks missing Pharma authority before dispatch and never promotes provisional candidates", async () => {
@@ -107,7 +123,7 @@ describe("Program A A2 bounded pilot", () => {
       },
     }
     const action = (await buildProgramAA2Plan(nonPharma)).actions.find((item) => item.stage === "A2B")
-    expect(action).toMatchObject({ symbol: "INFY", researchProfileCode: "IT_TECH", resolvedSubprofile: null, subprofileAssignmentState: null, subprofileContractVersion: null, methodologyVersion: null, estimatedPhysicalCalls: 4 })
+    expect(action).toMatchObject({ symbol: "INFY", researchProfileCode: "IT_TECH", resolvedSubprofile: null, subprofileAssignmentState: null, subprofileContractVersion: null, methodologyVersion: null, estimatedPhysicalCalls: 6 })
   })
 
   it("refuses non-local execution and stale plans before dispatch", async () => {
@@ -172,7 +188,7 @@ describe("Program A A2 bounded pilot", () => {
     })
     expect(dispatch).toHaveBeenCalledTimes(1)
     expect(dispatch.mock.calls[0]?.[0]).toMatchObject({ stage: "A2B", symbol: "ALIVUS", capability: "COMPLETE_RESEARCH_REFRESH" })
-    expect(result).toMatchObject({ status: "SUCCEEDED", stopReason: null, actualCalls: { TRENDLYNE_MCP: 4, ANGEL_ONE: 0 }, postExecutionA1Summary: summary })
+    expect(result).toMatchObject({ status: "SUCCEEDED", stopReason: null, actualCalls: { TRENDLYNE_MCP: 6, ANGEL_ONE: 0 }, postExecutionA1Summary: summary })
     expect(plan.actions.some((action) => action.stage === "A2C")).toBe(true)
     expect(dispatch.mock.calls.some(([action]) => action.stage === "A2C")).toBe(false)
   })

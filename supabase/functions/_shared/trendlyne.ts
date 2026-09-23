@@ -41,6 +41,20 @@ export function verifyIdentity(expected:CanonicalIdentity,candidates:readonly Om
   return {...actual,sector:candidate.sector,industry:candidate.industry}
 }
 
+export function reconcileTrendlyneIdentityDiscovery(expected:CanonicalIdentity,candidates:readonly Omit<TrendlyneIdentity,"stockId">[],overview:ReturnType<typeof parseOverview>):TrendlyneIdentity {
+  const exact=candidates.filter(candidate=>candidate.symbol===expected.symbol&&candidate.isin?.toUpperCase()===expected.isin?.toUpperCase())
+  if(exact.length===0)throw new Error("NO_EXACT_PROVIDER_IDENTITY")
+  if(exact.length>1)throw new Error("AMBIGUOUS_PROVIDER_IDENTITY")
+  const candidate=exact[0],actual=overview.identity
+  if(actual.symbol!==expected.symbol||candidate.symbol!==expected.symbol)throw new Error("PROVIDER_SYMBOL_MISMATCH")
+  if(!expected.isin||actual.isin?.toUpperCase()!==expected.isin.toUpperCase()||candidate.isin?.toUpperCase()!==expected.isin.toUpperCase())throw new Error("PROVIDER_ISIN_MISMATCH")
+  const canonicalNameIsPlaceholder=normalized(expected.name)===normalized(expected.symbol)
+  if(!canonicalNameIsPlaceholder&&normalized(actual.name)!==normalized(expected.name))throw new Error("PROVIDER_COMPANY_IDENTITY_CONFLICT")
+  if(expected.bseCode&&(actual.bseCode!==expected.bseCode||candidate.bseCode!==expected.bseCode))throw new Error("PROVIDER_BSE_CODE_CONFLICT")
+  if(!actual.stockId)throw new Error("PROVIDER_INSTRUMENT_ID_MISSING")
+  return {...actual,sector:candidate.sector,industry:candidate.industry}
+}
+
 const quarterEnd=(label:string):string|null=>{ const m=/^(Mar|Jun|Sep|Dec) (\d{4})$/.exec(label); if(!m)return null; const month:{[k:string]:string}={Mar:"03-31",Jun:"06-30",Sep:"09-30",Dec:"12-31"}; return `${m[2]}-${month[m[1]]}` }
 export function parseOwnership(text:string):OwnershipValue[]{
   const map:Readonly<Record<string,string>>={Promoter:"SHAREHOLDING_PROMOTER_PERCENT",FII:"SHAREHOLDING_FII_FPI_PERCENT",DII:"SHAREHOLDING_DII_PERCENT",MF:"SHAREHOLDING_MUTUAL_FUND_PERCENT",Public:"SHAREHOLDING_PUBLIC_PERCENT"}

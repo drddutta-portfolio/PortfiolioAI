@@ -2587,6 +2587,38 @@ Stage-boundary validation:
 local A2B-only execution. A2C remains NOT EXECUTED and requires a separate fresh
 plan and approval.**
 
+### A2B Trendlyne provider-identity prerequisite
+
+The first stage-scoped A2B attempt correctly stopped before dispatch because
+ALIVUS had no canonical `TRENDLYNE_MCP` provider identity observation. It used
+zero provider calls and made zero writes.
+
+The V12 contract now binds provider-identity readiness and the provider
+instrument ID, when available, into each A2B action and plan fingerprint. States
+are explicit: `VERIFIED_EXISTING_IDENTITY`, `IDENTITY_DISCOVERY_REQUIRED`, and
+`BLOCKED_IDENTITY_CONFLICT`; successful discovery returns
+`VERIFIED_DURING_PREREQUISITE_DISCOVERY`.
+
+For a missing identity, the bounded local prerequisite performs two calls:
+exact `search_entities` reconciliation against canonical name, NSE symbol and
+ISIN, followed by an overview call that supplies and revalidates the stable
+Trendlyne stock ID. It persists immutable raw provenance and an idempotent
+`MATCHED` `security_identity_observations` row. Ambiguity, symbol/ISIN/name/BSE
+conflict, or an existing conflicting matched identity fails closed. The normal
+four-call Complete Research operation then runs separately against that verified
+ID, for a truthful six-call A2B maximum.
+
+Fresh zero-provider V12 plan:
+- plan ID `5cd6565e901131bb1a58e5003cba7b5ef7834f258f46087b5c0bde1e27914b25`;
+- confirmation token `APPROVE_PROGRAM_A_A2_5CD6565E901131BB`;
+- A2A action count = 0;
+- sole A2B action = ALIVUS / reviewed `API_BULK_DRUGS` /
+  `API_BULK_DRUGS_V1` /
+  `PHARMA_API_G10_1_NUMERIC_METHODOLOGY_V1_CANDIDATE`;
+- provider identity state = `IDENTITY_DISCOVERY_REQUIRED`;
+- bounded A2B Trendlyne calls = 6; PLAN calls and writes = 0;
+- A2C remains separately planned and outside A2B execution authority.
+
 
 ---
 
