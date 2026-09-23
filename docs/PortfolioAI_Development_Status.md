@@ -1,3 +1,30 @@
+## Program A · A2A closure — 23 September 2026
+
+Program A · A2A is COMPLETE / PASS / CLOSED.
+
+The bounded Trendlyne classification prerequisite cohort completed locally and normalized the five pilot holdings into reviewed canonical taxonomy:
+
+- ALIVUS → Pharma / Pharmaceuticals
+- AUROPHARMA → Pharma / Pharmaceuticals
+- BIOCON → Pharma / Pharmaceuticals
+- HDFCBANK → Banking / Private Sector Bank
+- SYNGENE → Pharma / Pharmaceuticals
+
+The Trendlyne adapter now uses the current provider response contract, exact canonical identity reconciliation, safe provider error propagation, reviewed mapping-pair normalization, and immutable raw evidence with canonical normalized values.
+
+A2 stage isolation held correctly: classification changes invalidated the prior plan and stopped progression before A2B/A2C.
+
+Fresh V10 zero-call plan:
+- A2A = 0 actions
+- A2B = ALIVUS Complete Research, 4 projected Trendlyne calls
+- A2C = 4 projected Angel One calls
+- actual PLAN calls/writes = 0
+
+Program A · A2 remains IN PROGRESS.
+A2B and A2C are NOT AUTHORIZED until separate owner review/approval.
+
+No production migration, deployment, merge, score/recommendation/sizing activation, scheduler activation, AI activation, or trading occurred.
+
 # PortfolioAI — Development Status
 
 **Status:** Living implementation and handover record  
