@@ -2053,3 +2053,127 @@ Safety unchanged:
 - no trading.
 
 **A2 implementation = PASS / READY FOR OWNER REVIEW OF A2A EXECUTION.**
+
+
+---
+
+## Program A · A2A first-run rejection diagnosis and contract correction — 23 September 2026
+
+The owner-approved V2 A2A run stopped on its first action, ALIVUS, after one
+successful Trendlyne `search_entities` provider attempt. No classification source
+record, observation or decision was written, and A2B/A2C did not run.
+
+Correlated local append-only audit evidence:
+- ingestion run `c9c24be1-09b3-4ced-a398-7172a7ff756b`;
+- ALIVUS run item `975c2264-6c30-4ca1-9128-52f6c2697c10`;
+- item status `REJECTED`;
+- exact safe reason `NO_EXACT_PROVIDER_IDENTITY`;
+- attempted calls = 1, accepted records = 0;
+- provider usage event outcome = `SUCCEEDED`, proving the transport/tool call completed;
+- no `data_source_records` row exists for the run and the item metadata is empty.
+
+Therefore the incident was not proven ambiguous. The provider response produced
+zero candidates satisfying both the exact canonical ALIVUS ISIN and exact symbol
+contract. The earlier implementation did not retain safe candidate-count
+diagnostics, so the historical evidence cannot distinguish no parsed candidates,
+symbol-only matches, ISIN-only matches or other non-exact candidates. No repeat
+provider call was made merely to diagnose that missing historical detail.
+
+Focused correction:
+- exact canonical-ISIN plus exact-symbol matching remains mandatory and fail-closed;
+- no symbol/name similarity fallback was introduced;
+- `NO_EXACT_PROVIDER_IDENTITY`, `AMBIGUOUS_PROVIDER_IDENTITY` and
+  `CLASSIFICATION_MISSING` now remain distinct from Edge audit through the A2 runner;
+- rejected items retain only non-secret aggregate match counts, never raw provider payloads;
+- rejected-only ingestion runs finish `FAILED`, rather than misleadingly `SUCCEEDED`;
+- arbitrary provider text is collapsed to a safe generic code;
+- the A2 plan contract advances to V3, invalidating the previous V2 plan approval.
+
+Validation:
+- pure classification matcher/rejection-path tests = PASS;
+- runner safe-code propagation and zero-write rejection tests = PASS;
+- A2 controller fingerprint, local-target, budget and stage-boundary regressions = PASS;
+- focused application regressions = 39 PASS;
+- Edge/provider-control suite = 147 PASS;
+- TypeScript, architecture guard, changed-file lint and production build = PASS;
+- no live provider call was made by this correction.
+
+Fresh zero-provider-call plan:
+- version `PROGRAM_A_A2_BOUNDED_PILOT_V3`;
+- plan ID `d0e5319836c579567f94cce1ad25c0485de77b0f9cc46a29d36d53f0545836de`;
+- confirmation token `APPROVE_PROGRAM_A_A2_D0E5319836C57956`;
+- exact A2A cohort remains ALIVUS, AUROPHARMA, BIOCON, HDFCBANK, SYNGENE;
+- all five canonical ISIN prerequisites are `READY`;
+- A2A Trendlyne ceiling = 5, actual PLAN calls/budget/writes = 0.
+
+Remaining sequence:
+1. generate and review a fresh zero-provider-call V3 PLAN;
+2. obtain explicit owner approval for its exact plan ID/token;
+3. run classification-only A2A;
+4. verify local canonical writes and rematerialized A1 baseline;
+5. require `STALE_PLAN_REPLAN_REQUIRED` before any A2B/A2C execution.
+
+**Program A · A2 remains IN PROGRESS.**
+**The prior V2 plan approval must not be reused.**
+
+---
+
+## Program A · A2A V3 safe-shape diagnosis and V4 replan — 23 September 2026
+
+The owner-executed V3 A2A attempt again stopped on ALIVUS after one successful
+Trendlyne tool attempt and before any local classification write. A2B and A2C did
+not run.
+
+Correlated local audit evidence:
+- ingestion run `8adbb1bb-213e-431b-b310-7b91928934e4`;
+- ALIVUS run item `ae073f41-3492-4228-b1b5-82374114e19b`;
+- run status `FAILED`, attempted = 1, accepted = 0, rejected = 1, failed = 0;
+- item status `REJECTED`, safe reason `NO_EXACT_PROVIDER_IDENTITY`, attempted calls = 1, accepted records = 0;
+- safe item counts: candidates = 0, symbol matches = 0, ISIN matches = 0,
+  exact matches = 0, classified exact matches = 0.
+
+This audit inspection made zero provider calls and no writes. The V3 metadata
+proved that the parser produced no candidates, but it could not distinguish a
+valid empty provider table from an unrecognized response envelope or table shape.
+Raw provider content was not retained, so the historical V3 response cannot be
+reconstructed and no unsupported claim about Trendlyne identity data is made.
+
+Focused V4 correction:
+- recognizes the reviewed marked table, plain Markdown pipe tables, compact pipe
+  delimiters, and JSON string envelopes under `markdown_data`, `result`, or `data`;
+- locates required fields by normalized header name instead of fixed column offset;
+- preserves exact canonical symbol plus exact canonical ISIN matching;
+- records only safe parse-shape metadata: parse state, envelope class, marker
+  presence, nonempty-line count, pipe-line count and parsed-row count;
+- distinguishes valid empty results from nonempty unrecognized response shapes;
+- rejects an unrecognized shape as `PROVIDER_SCHEMA_MISMATCH`, with zero writes;
+- retains `NO_EXACT_PROVIDER_IDENTITY` for a successfully parsed table with no
+  exact candidate and retains all other distinct rejection reasons;
+- advances the plan contract to V4, invalidating the V3 plan approval.
+
+Validation:
+- Edge/provider-control suite = 150 PASS;
+- focused A1/A2 application regressions = 20 PASS;
+- runner safe-code propagation suite = 6 PASS;
+- TypeScript and architecture guard = PASS;
+- PLAN generation made zero provider calls and consumed zero provider budget.
+
+Fresh zero-provider-call V4 plan:
+- version `PROGRAM_A_A2_BOUNDED_PILOT_V4`;
+- plan ID `c35d2b1c8d39c6ea7c065fc3dfa63f4f56e2c4a95cb581e5e024a7342197c29e`;
+- confirmation token `APPROVE_PROGRAM_A_A2_C35D2B1C8D39C6EA`;
+- exact A2A cohort remains ALIVUS, AUROPHARMA, BIOCON, HDFCBANK, SYNGENE;
+- all five canonical identity prerequisites are `READY`;
+- HDFCBANK uses canonical local ISIN `INE040A01034`;
+- A2A Trendlyne ceiling = 5; total planned Trendlyne = 9; Angel One = 1;
+- actual PLAN provider calls, budget consumed and writes = 0.
+
+Remaining sequence:
+1. review and explicitly approve the exact V4 plan ID/token;
+2. run classification-only A2A;
+3. inspect the first item safe counts and new parse-shape metadata;
+4. verify any accepted local canonical writes and rematerialized A1 baseline;
+5. require `STALE_PLAN_REPLAN_REQUIRED` before any A2B/A2C execution.
+
+**Program A · A2 remains IN PROGRESS.**
+**No V2 or V3 approval may be reused.**

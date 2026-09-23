@@ -5,6 +5,7 @@ const root = process.cwd()
 const classification = readFileSync(`${root}/supabase/functions/refresh-trendlyne-classification/index.ts`, "utf8")
 const history = readFileSync(`${root}/supabase/functions/refresh-market-history/index.ts`, "utf8")
 const complete = readFileSync(`${root}/supabase/functions/complete-research-refresh/index.ts`, "utf8")
+const runner = readFileSync(`${root}/scripts/program-a-a2-runner.mjs`, "utf8")
 
 describe("Program A A2 provider-control reuse", () => {
   it("requires the exact local-only A2 classification cohort and confirmation", () => {
@@ -18,6 +19,11 @@ describe("Program A A2 provider-control reuse", () => {
     expect(classification).toContain('"User-Agent": "PortfolioAI/1.0"')
     expect(classification).toContain('PROVIDER_REMOTE_')
     expect(classification).toContain('CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING')
+    expect(classification).toContain('rejectionCodes[0]')
+    expect(classification).toContain('p_metadata: { ...parsed.metadata, ...match.metadata }')
+    expect(classification).toContain('p_safe_reason_code: "PROVIDER_SCHEMA_MISMATCH"')
+    expect(runner).toContain('assertProgramAA2ProviderResult(payload)')
+    expect(runner).not.toContain('new Error("AMBIGUOUS_PROVIDER_IDENTITY")')
   })
 
   it("passes the approved incremental window into the existing Angel One adapter", () => {

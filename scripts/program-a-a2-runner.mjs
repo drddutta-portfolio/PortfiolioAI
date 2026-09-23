@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises"
 import { execFileSync } from "node:child_process"
 import { createServer } from "vite"
+import { assertProgramAA2ProviderResult } from "./program-a-a2-provider-result.mjs"
 
 const [mode, snapshotPath, approvedPlanId, confirmationToken] = process.argv.slice(2)
 if (!mode || !snapshotPath || !["PLAN", "EXECUTE"].includes(mode)) throw new Error("Usage: runner PLAN|EXECUTE <snapshot> [plan-id] [confirmation-token]")
@@ -42,10 +43,7 @@ try {
       else if (action.capability === "PHARMA_BENCHMARK_HISTORY") payload = await invoke("refresh-pharma-benchmark", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_PHARMA_BENCHMARK_REFRESH" })
       else if (action.capability === "BANK_BENCHMARK_HISTORY") payload = await invoke("refresh-bank-benchmark", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_BANK_BENCHMARK_REFRESH" })
       else throw new Error("UNSUPPORTED_PROVIDER_ENDPOINT")
-      if (payload.rejected > 0) { const error = new Error("AMBIGUOUS_PROVIDER_IDENTITY"); error.providerCalls = Number(payload.providerCalls ?? 0); throw error }
-      if (payload.conflicts > 0 || payload.pendingReview > 0) { const error = new Error("CLASSIFICATION_CONFLICT"); error.providerCalls = Number(payload.providerCalls ?? 0); throw error }
-      if (payload.failed > 0) { const error = new Error(payload.code ?? "PROVIDER_REQUEST_FAILED"); error.providerCalls = Number(payload.providerCalls ?? 0); throw error }
-      return { providerCalls: Number(payload.providerCalls ?? 0), localWrites: Number(payload.accepted ?? payload.candlesStored ?? payload.benchmarkCandlesStored ?? 0) }
+      return assertProgramAA2ProviderResult(payload)
     }
     const loadRefreshedMaterialized = () => {
       const databaseUrl = process.env.PROGRAM_A_LOCAL_DB_URL ?? "postgresql://postgres:postgres@127.0.0.1:54322/postgres"

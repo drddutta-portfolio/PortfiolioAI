@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+import { matchTrendlyneClassificationCandidate, parseTrendlyneClassificationCandidates, parseTrendlyneClassificationResponse, type TrendlyneClassificationRejectionCode } from "../_shared/trendlyne-classification.ts"
 
 const SOURCE_CODE = "TRENDLYNE_MCP"
 const MAX_LIMIT = 40
@@ -13,13 +14,6 @@ const isLocalSupabaseUrl = (value: string) => {
 }
 
 const sha = async (value: unknown) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(JSON.stringify(value))))).map((x) => x.toString(16).padStart(2, "0")).join("")
-const nullable = (value: string | undefined) => !value || value === "None" || value === "null" ? null : value.trim()
-const tableRows = (text: string, start: string, end: string) => {
-  const block = text.split(start)[1]?.split(end)[0] ?? ""
-  return block.split("\n").map((line) => line.trim()).filter((line) => line.includes(" | ")).map((line) => line.split(" | ").map((x) => x.trim()))
-}
-interface Candidate { name: string; symbol: string; bseCode: string | null; isin: string | null; sector: string | null; industry: string | null }
-const parseCandidates = (text: string): Candidate[] => tableRows(text, "data:", "__END__").slice(1).filter((r) => r.length >= 7).map((r) => ({ name: r[0], symbol: nullable(r[1]) ?? "", bseCode: nullable(r[2]), isin: nullable(r[3]), sector: nullable(r[5]), industry: nullable(r[6]) }))
 
 const parseMcpResult = (body: string): unknown => {
   let payload: Record<string, unknown>
@@ -161,9 +155,10 @@ Deno.serve(async (request) => {
   const mcp = new McpClient(mcpUrl)
   let attempted = 0, failed = 0, accepted = 0, rejected = 0, normalized = 0
   const failureCodes: string[] = []
+  const rejectionCodes: TrendlyneClassificationRejectionCode[] = []
   const pendingPairs = new Map<string, { sector: string; industry: string; symbols: string[] }>()
 
-  const sourceRecord = async (target: { id: string; symbol: string; isin: string }, candidate: Candidate) => {
+  const sourceRecord = async (target: { id: string; symbol: string; isin: string }, candidate: ReturnType<typeof parseTrendlyneClassificationCandidates>[number]) => {
     const payload = { query_symbol: target.symbol, exact_isin: target.isin, selected_candidate: candidate }
     const payloadHash = await sha(payload)
     const externalId = `CLASSIFICATION:${target.isin}`
@@ -194,15 +189,23 @@ Deno.serve(async (request) => {
         continue
       }
 
-      const exact = parseCandidates(text).filter((candidate) => candidate.isin?.toUpperCase() === target.isin && candidate.symbol === target.symbol)
-      if (exact.length !== 1 || !exact[0].sector || !exact[0].industry) {
+      const parsed = parseTrendlyneClassificationResponse(text)
+      if (parsed.metadata.parseState === "UNRECOGNIZED_RESPONSE") {
         rejected++
-        const reason = exact.length > 1 ? "AMBIGUOUS_PROVIDER_IDENTITY" : exact.length === 0 ? "NO_EXACT_PROVIDER_IDENTITY" : "CLASSIFICATION_MISSING"
-        await admin.rpc("record_refresh_item_result_v1", { p_run_item_id: runItemId, p_status: "REJECTED", p_safe_reason_code: reason, p_attempted_call_count: 1, p_accepted_record_count: 0, p_metadata: {} })
+        rejectionCodes.push("PROVIDER_SCHEMA_MISMATCH")
+        await admin.rpc("record_refresh_item_result_v1", { p_run_item_id: runItemId, p_status: "REJECTED", p_safe_reason_code: "PROVIDER_SCHEMA_MISMATCH", p_attempted_call_count: 1, p_accepted_record_count: 0, p_metadata: parsed.metadata })
+        continue
+      }
+      const match = matchTrendlyneClassificationCandidate(parsed.candidates, target)
+      if (match.reason || !match.candidate) {
+        rejected++
+        const reason = match.reason ?? "CLASSIFICATION_MISSING"
+        rejectionCodes.push(reason)
+        await admin.rpc("record_refresh_item_result_v1", { p_run_item_id: runItemId, p_status: "REJECTED", p_safe_reason_code: reason, p_attempted_call_count: 1, p_accepted_record_count: 0, p_metadata: { ...parsed.metadata, ...match.metadata } })
         continue
       }
 
-      const candidate = exact[0]
+      const candidate = match.candidate
       const recordId = await sourceRecord(target, candidate)
       const freshUntil = new Date(Date.now() + 180 * 86400000).toISOString()
       const pairKey = `${candidate.sector}\u0000${candidate.industry}`
@@ -232,10 +235,10 @@ Deno.serve(async (request) => {
     const released = Math.max(0, targets.length - attempted)
     await admin.rpc("settle_provider_budget_v1", { p_reservation_id: reservationId, p_consumed_units: consumed, p_failed_units: failed, p_released_units: released })
     await admin.rpc("release_data_ingestion_lease_v1", { p_source_code: SOURCE_CODE, p_operation: "REFRESH_CLASSIFICATION", p_lease_holder: leaseHolder, p_cooldown_seconds: 0 })
-    const status = failed > 0 ? (accepted > 0 ? "PARTIAL" : "FAILED") : "SUCCEEDED"
+    const status = failed > 0 || rejected > 0 ? (accepted > 0 ? "PARTIAL" : "FAILED") : "SUCCEEDED"
     await admin.from("data_ingestion_runs").update({ status, completed_at: new Date().toISOString(), attempted_call_count: attempted, accepted_count: accepted, rejected_count: rejected, failed_count: failed, fetched_count: accepted, skipped_count: Math.max(0, targets.length - accepted - failed), metadata: { selection: "HIGHEST_CURRENT_VALUE_UNCLASSIFIED_WITH_CANONICAL_ISIN", normalized_count: normalized, pending_mapping_pairs: [...pendingPairs.values()] } }).eq("id", runId)
   }
 
-  const safeCode = failureCodes[0] ?? (rejected > 0 ? "NO_EXACT_PROVIDER_IDENTITY" : null)
+  const safeCode = failureCodes[0] ?? rejectionCodes[0] ?? null
   return reply(failed > 0 && accepted === 0 ? 502 : 200, { action, runId, targetCount: targets.length, providerCalls: attempted, attempted, accepted, rejected, failed, normalized, pendingReview: pendingPairs.size, code: safeCode, pendingMappingPairs: [...pendingPairs.values()] })
 })
