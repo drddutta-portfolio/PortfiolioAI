@@ -2,6 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { AngelOneProvider, loadAngelOneConfig, type AngelDailyCandle } from "../_shared/angel-one.ts"
 import { MARKET_DATA_PROVIDER, type ProviderInstrument } from "../_shared/market-data.ts"
 import { SafeOperationalError, safeError } from "../_shared/security.ts"
+import { isBankBenchmarkEligibleClassification } from "../_shared/bank-benchmark-authority.ts"
 
 const corsHeaders = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type" }
 const BENCHMARK_CODE = "NIFTY_BANK"
@@ -94,7 +95,7 @@ Deno.serve(async (request) => {
     if (security.error || !security.data || security.data.asset_class !== "EQUITY") return json(409, { error: "Bank benchmark refresh requires an equity security." })
     const classification = await admin.from("current_security_enrichment_v1").select("sector,industry").eq("security_id", body.securityId).maybeSingle()
     if (classification.error || !classification.data) return json(409, { error: "Reviewed sector/industry classification is required before bank benchmark refresh." })
-    if (key(classification.data.sector) !== "BANKING" || key(classification.data.industry) !== "BANKS") return json(409, { error: "NIFTY Bank benchmark refresh is available only to the BANK methodology (Banking + Banks). NBFC_LENDING requires its own approved benchmark authority." })
+    if (!isBankBenchmarkEligibleClassification(classification.data.sector, classification.data.industry)) return json(409, { error: "NIFTY Bank benchmark refresh is available only to the approved BANK methodology classifications (Banking + Banks / Private Sector Bank). NBFC_LENDING requires its own approved benchmark authority." })
     const stockHistory = await admin.from("market_price_history").select("period_start,open,high,low,close,volume,retrieved_at").eq("security_id", body.securityId).eq("provider_code", MARKET_DATA_PROVIDER).eq("interval", "ONE_DAY").order("period_start", { ascending: true })
     if (stockHistory.error) throw stockHistory.error
     const stockRows = (stockHistory.data ?? []) as PriceRow[]
