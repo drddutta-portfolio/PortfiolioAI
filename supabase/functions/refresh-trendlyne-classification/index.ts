@@ -3,7 +3,14 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 const SOURCE_CODE = "TRENDLYNE_MCP"
 const MAX_LIMIT = 40
 const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "content-type, apikey, authorization, x-portfolioai-classification-token" }
-const reply = (status: number, body: Record<string, unknown>) => new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } })\nconst isLocalSupabaseUrl = (value: string) => {\n  try {\n    const url = new URL(value)\n    return ["localhost", "127.0.0.1"].includes(url.hostname) || (url.hostname === "kong" && url.port === "8000")\n  } catch { return false }\n}
+const reply = (status: number, body: Record<string, unknown>) => new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } })
+
+const isLocalSupabaseUrl = (value: string) => {
+  try {
+    const url = new URL(value)
+    return ["localhost", "127.0.0.1"].includes(url.hostname) || (url.hostname === "kong" && url.port === "8000")
+  } catch { return false }
+}
 
 const sha = async (value: unknown) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(JSON.stringify(value))))).map((x) => x.toString(16).padStart(2, "0")).join("")
 const nullable = (value: string | undefined) => !value || value === "None" || value === "null" ? null : value.trim()
