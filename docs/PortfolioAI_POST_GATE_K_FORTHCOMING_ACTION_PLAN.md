@@ -839,3 +839,18 @@ A1 plan = FROZEN
 A1 implementation = NOT STARTED
 Provider execution = NOT AUTHORIZED
 ```
+
+
+---
+
+### Pharma R6 runtime prerequisite
+
+Before Program B / R6 activates Pharma scoring, it must satisfy:
+
+- `docs/PortfolioAI_PHARMA_SUBPROFILE_RUNTIME_ACTIVATION_GUARD.md`.
+
+Broad `PHARMA_V1` identity is not sufficient. The runtime must resolve an approved reviewed Pharma subprofile and select its matching methodology authority.
+
+Missing, provisional, disputed, or conflicting subprofile assignment must fail closed with no numeric score.
+
+Score persistence remains separately approval-gated.
