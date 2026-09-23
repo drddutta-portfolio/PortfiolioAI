@@ -1805,3 +1805,91 @@ Post-PKR scoring safety must remain:
 **Program A = IN PROGRESS (planning started).**
 **A1 plan = FROZEN / IMPLEMENTATION NOT STARTED.**
 **Provider execution = NOT AUTHORIZED.**
+
+
+---
+
+## Program A · A1 implementation status — 23 September 2026
+
+### A1.1 — Planner / contract implementation
+
+Commit:
+- `a8ed4867801abee34d3d9ab84c9cbdadbf5ad287`
+
+Status:
+- COMPLETE / PASS.
+
+Implemented:
+- Program A eligibility resolver;
+- deterministic R3 evidence-coverage planner;
+- deterministic R5 market-history planner;
+- pure incremental-history window planning;
+- benchmark dependency inventory;
+- projected provider-cost planner;
+- bounded pilot-cohort proposal;
+- explicit zero-provider / zero-budget safety state.
+
+Important architectural result:
+- completed K4 methodologies remain `AVAILABLE + PENDING_ADAPTER`;
+- no K4 engine falls through to legacy GENERAL numeric scoring;
+- unsupported/review-required methodology stays fail-closed.
+
+### A1.2 — Real cache-only baseline materializer
+
+Commit:
+- `3534c2b69ccb14d3c73d6437b9685882ba1a03e6`
+
+Status:
+- IMPLEMENTATION COMPLETE / PASS.
+
+Implemented:
+- cache-only snapshot SQL using `BEGIN TRANSACTION READ ONLY`;
+- local-only execution guard restricted to localhost / 127.0.0.1 port 54322;
+- materialization of current Portfolio Coverage Registry rows into `ProgramAHoldingInput[]`;
+- canonical R3 materialization for fundamentals, ownership, ratings applicability/evidence, documents, valuation and honest durability-missing state;
+- R5 materialization from Angel One mapping state, stored candle bounds and existing market metrics;
+- runtime benchmark evidence only for implemented NIFTY_BANK / NIFTY_PHARMA support;
+- deterministic JSON + CLI-safe Markdown report;
+- local command `bash scripts/program-a-a1-materialize-local.sh <local-portfolio-uuid> [YYYY-MM-DD]`.
+
+Validation reported:
+- 47 focused tests PASS;
+- K-FINAL consolidated 39 tests PASS;
+- TypeScript PASS;
+- architecture guard PASS;
+- changed-file lint PASS;
+- build PASS;
+- existing chunk-size warning only.
+
+Real local execution:
+- successfully materialized the six-holding `LOCAL UI Research Review` portfolio;
+- eligible = 1;
+- review required = 5;
+- projected Trendlyne calls = 2;
+- projected Angel One security requests = 1;
+- actual provider calls = 0;
+- budget consumed = 0;
+- writes = 0.
+
+Observed data gaps from the local run:
+- classification coverage incomplete for five of six holdings;
+- canonical business-durability materialization unavailable;
+- authoritative portfolio weight remains owned by the client read model and is not persisted in the local database snapshot.
+
+Safety:
+- no Trendlyne call;
+- no Angel One call;
+- no NSE/provider call;
+- no production access;
+- no migration;
+- no score/recommendation/sizing persistence;
+- no scheduler/AI activation;
+- no deployment;
+- no merge;
+- no trading.
+
+A1 engineering implementation is complete. Formal full-portfolio closure requires either:
+1. running the same cache-only materializer against the owner's full current local portfolio dataset, if present locally; or
+2. explicitly accepting the six-holding local portfolio as the A1 runtime validation cohort and carrying full-portfolio data coverage into the next Program A execution checkpoint.
+
+No additional architecture work is required for A1.
