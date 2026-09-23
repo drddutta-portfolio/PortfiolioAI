@@ -24,7 +24,6 @@ function json(status: number, body: Readonly<Record<string, unknown>>) {
   return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } })
 }
 function text(value: unknown) { return typeof value === "string" && value.trim() ? value.trim() : null }
-function key(value: unknown) { return text(value)?.toUpperCase().replace(/[^A-Z0-9]+/gu, "_").replace(/^_+|_+$/gu, "") ?? "" }
 function kolkataDateTime(date: Date) { const local = new Date(date.getTime() + 5.5 * 60 * 60_000); return `${local.toISOString().slice(0, 10)} ${local.toISOString().slice(11, 16)}` }
 function dayKey(value: string) { return value.slice(0, 10) }
 
