@@ -36,6 +36,12 @@ try {
       }
       return payload
     }
+    let lastAngelOneDispatchCompletedAt = 0
+    const waitForAngelOneCooldown = async () => {
+      if (!lastAngelOneDispatchCompletedAt) return
+      const remaining = 61_000 - (Date.now() - lastAngelOneDispatchCompletedAt)
+      if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, remaining))
+    }
     const executeAction = async (action) => {
       let payload
       if (action.capability === "SEARCH_ENTITIES_CLASSIFICATION") payload = await invoke("refresh-trendlyne-classification", { action: "A2_EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityIds: [action.securityId], securityNames: [action.canonicalName], confirmation: "OWNER_CONFIRMED_PROGRAM_A_A2_CLASSIFICATION" }, { "x-portfolioai-classification-token": classificationToken }, false)
@@ -49,9 +55,9 @@ try {
         const researchResult = assertProgramAA2ProviderResult(payload)
         return { providerCalls: identityResult.providerCalls + researchResult.providerCalls, localWrites: identityResult.localWrites + researchResult.localWrites }
       }
-      else if (action.capability === "SECURITY_HISTORY") payload = await invoke("refresh-market-history", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_MARKET_HISTORY_REFRESH", requestFrom: action.historyWindow.from, requestTo: action.historyWindow.to })
-      else if (action.capability === "PHARMA_BENCHMARK_HISTORY") payload = await invoke("refresh-pharma-benchmark", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_PHARMA_BENCHMARK_REFRESH" })
-      else if (action.capability === "BANK_BENCHMARK_HISTORY") payload = await invoke("refresh-bank-benchmark", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_BANK_BENCHMARK_REFRESH" })
+      else if (action.capability === "SECURITY_HISTORY") { await waitForAngelOneCooldown(); payload = await invoke("refresh-market-history", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_MARKET_HISTORY_REFRESH", requestFrom: action.historyWindow.from, requestTo: action.historyWindow.to }); lastAngelOneDispatchCompletedAt = Date.now() }
+      else if (action.capability === "PHARMA_BENCHMARK_HISTORY") { await waitForAngelOneCooldown(); payload = await invoke("refresh-pharma-benchmark", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_PHARMA_BENCHMARK_REFRESH" }); lastAngelOneDispatchCompletedAt = Date.now() }
+      else if (action.capability === "BANK_BENCHMARK_HISTORY") { await waitForAngelOneCooldown(); payload = await invoke("refresh-bank-benchmark", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_BANK_BENCHMARK_REFRESH" }); lastAngelOneDispatchCompletedAt = Date.now() }
       else throw new Error("UNSUPPORTED_PROVIDER_ENDPOINT")
       return assertProgramAA2ProviderResult(payload)
     }

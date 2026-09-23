@@ -64,4 +64,10 @@ describe("Program A A2 provider-control reuse", () => {
     expect(runner).toContain('action.providerIdentityState === "IDENTITY_DISCOVERY_REQUIRED"')
     expect(runner).toContain('resolve-trendlyne-identity')
   })
+
+  it("paces approved A2C actions across the existing Angel One lease cooldown", () => {
+    expect(runner).toContain("waitForAngelOneCooldown")
+    expect(runner).toContain("61_000")
+    expect(runner).toContain("lastAngelOneDispatchCompletedAt = Date.now()")
+  })
 })
