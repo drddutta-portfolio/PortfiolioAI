@@ -10,6 +10,8 @@ export const PROGRAM_A_A2_STOP_CONDITIONS = [
   "UNEXPECTED_PRODUCTION_DB_TARGET", "STALE_PLAN_REPLAN_REQUIRED", "LEASE_CONFLICT",
   "UNSUPPORTED_PROVIDER_ENDPOINT", "SCORING_RECOMMENDATION_SIZING_ACTIVATION_ATTEMPT",
   "PHARMA_SUBPROFILE_PREREQUISITE_MISSING",
+  "EXECUTION_STAGE_AUTHORITY_MISSING", "EXECUTION_STAGE_AUTHORITY_INVALID",
+  "APPROVED_STAGE_HAS_NO_ACTIONS",
 ] as const
 
 export type ProgramAA2Stage = "A2A" | "A2B" | "A2C"
@@ -152,33 +154,31 @@ function pharmaA2BPrerequisiteReady(action: ProgramAA2Action) {
 export async function executeProgramAA2Plan(input: {
   readonly approvedPlan: ProgramAA2Plan
   readonly currentPlan: ProgramAA2Plan
+  readonly approvedStage: ProgramAA2Stage | null
   readonly confirmationToken: string
   readonly localSupabaseUrl: string
   readonly executeAction: (action: ProgramAA2Action) => Promise<{ readonly providerCalls: number; readonly localWrites: number }>
   readonly loadPostExecutionA1Summary?: () => Promise<ProgramAA2ExecutionResult["postExecutionA1Summary"]>
-  readonly reloadCurrentPlan?: () => Promise<ProgramAA2Plan>
 }): Promise<ProgramAA2ExecutionResult> {
   try { assertLocalA2Target(input.localSupabaseUrl) } catch { return refused(input.approvedPlan.planId, "UNEXPECTED_PRODUCTION_DB_TARGET") }
   if (input.approvedPlan.planId !== input.currentPlan.planId) return refused(input.approvedPlan.planId, "STALE_PLAN_REPLAN_REQUIRED")
+  if (input.approvedStage === null || input.approvedStage === undefined) return refused(input.approvedPlan.planId, "EXECUTION_STAGE_AUTHORITY_MISSING")
+  if (!["A2A", "A2B", "A2C"].includes(input.approvedStage)) return refused(input.approvedPlan.planId, "EXECUTION_STAGE_AUTHORITY_INVALID")
   if (input.confirmationToken !== input.approvedPlan.confirmationToken) return refused(input.approvedPlan.planId, "AUTH_OR_CONFIG_ERROR")
-  if (input.currentPlan.actions.some((action) => action.stage === "A2A" && (action.identityPrerequisiteState !== "READY" || !action.canonicalName || !action.canonicalIsin))) return refused(input.approvedPlan.planId, "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING")
-  if (input.currentPlan.actions.some((action) => !pharmaA2BPrerequisiteReady(action))) return refused(input.approvedPlan.planId, "PHARMA_SUBPROFILE_PREREQUISITE_MISSING")
+  const approvedActions = input.currentPlan.actions.filter((action) => action.stage === input.approvedStage)
+  if (!approvedActions.length) return refused(input.approvedPlan.planId, "APPROVED_STAGE_HAS_NO_ACTIONS")
+  if (approvedActions.some((action) => action.stage === "A2A" && (action.identityPrerequisiteState !== "READY" || !action.canonicalName || !action.canonicalIsin))) return refused(input.approvedPlan.planId, "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING")
+  if (approvedActions.some((action) => !pharmaA2BPrerequisiteReady(action))) return refused(input.approvedPlan.planId, "PHARMA_SUBPROFILE_PREREQUISITE_MISSING")
   try { assertCeilings(input.currentPlan.actions) } catch { return refused(input.approvedPlan.planId, "CALL_BUDGET_EXCEEDED") }
   const calls: Record<ProgramAA2Provider, number> = { TRENDLYNE_MCP: 0, ANGEL_ONE: 0 }
   let writes = 0
   const failures: { symbol: string; code: string }[] = []
-  let priorStage: ProgramAA2Stage | null = null
-  for (const action of input.currentPlan.actions) {
-    if (priorStage !== null && action.stage !== priorStage && input.reloadCurrentPlan) {
-      const refreshedPlan = await input.reloadCurrentPlan()
-      if (refreshedPlan.planId !== input.approvedPlan.planId) return withPostSummary({ approvedPlanId: input.approvedPlan.planId, status: "PARTIAL_STOPPED", actualCalls: calls, retries: 0, successfulLocalWrites: writes, failures, stopReason: "STALE_PLAN_REPLAN_REQUIRED", providerBudgetUsed: calls.TRENDLYNE_MCP + calls.ANGEL_ONE, postExecutionA1Summary: null, scoreWrites: 0, recommendationWrites: 0, sizingWrites: 0 }, input.loadPostExecutionA1Summary)
-    }
+  for (const action of approvedActions) {
     try {
       const result = await input.executeAction(action)
       if (result.providerCalls > action.estimatedPhysicalCalls) return withPostSummary({ approvedPlanId: input.approvedPlan.planId, status: "PARTIAL_STOPPED", actualCalls: calls, retries: 0, successfulLocalWrites: writes, failures, stopReason: "CALL_BUDGET_EXCEEDED", providerBudgetUsed: calls.TRENDLYNE_MCP + calls.ANGEL_ONE, postExecutionA1Summary: null, scoreWrites: 0, recommendationWrites: 0, sizingWrites: 0 }, input.loadPostExecutionA1Summary)
       calls[action.provider] += result.providerCalls
       writes += result.localWrites
-      priorStage = action.stage
     } catch (error) {
       const code = error instanceof Error ? error.message : "CAPABILITY_MISMATCH"
       const attemptedCalls = error && typeof error === "object" && "providerCalls" in error && typeof error.providerCalls === "number" ? error.providerCalls : 0

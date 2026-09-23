@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest"
 import type { ProgramAA1MaterializedResult } from "./programAA1CacheMaterializer"
 import { PHARMA_GATE_J_METHOD_AUTHORITIES } from "./pharmaGateJFinalPortability"
 import { PHARMA_SUBPROFILE_CANDIDATE_REGISTRY } from "./pharmaSubprofileCandidateRegistry"
-import { buildProgramAA2Plan, executeProgramAA2Plan } from "./programAA2PilotController"
+import { buildProgramAA2Plan, executeProgramAA2Plan, type ProgramAA2Action } from "./programAA2PilotController"
 
 function materialized(): ProgramAA1MaterializedResult {
   const review = Array.from({ length: 6 }, (_, index) => ({
@@ -76,7 +76,7 @@ describe("Program A A2 bounded pilot", () => {
       : action)
     const malformed = { ...validPlan, actions: invalidActions }
     const dispatch = vi.fn()
-    await expect(executeProgramAA2Plan({ approvedPlan: malformed, currentPlan: malformed, confirmationToken: malformed.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "PHARMA_SUBPROFILE_PREREQUISITE_MISSING", actualCalls: { TRENDLYNE_MCP: 0, ANGEL_ONE: 0 } })
+    await expect(executeProgramAA2Plan({ approvedPlan: malformed, currentPlan: malformed, approvedStage: "A2B", confirmationToken: malformed.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "PHARMA_SUBPROFILE_PREREQUISITE_MISSING", actualCalls: { TRENDLYNE_MCP: 0, ANGEL_ONE: 0 } })
     expect(dispatch).not.toHaveBeenCalled()
 
     for (const symbol of ["BIOCON", "SYNGENE"] as const) {
@@ -113,9 +113,9 @@ describe("Program A A2 bounded pilot", () => {
   it("refuses non-local execution and stale plans before dispatch", async () => {
     const plan = await buildProgramAA2Plan(materialized())
     const dispatch = vi.fn()
-    await expect(executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "https://production.example.com", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "UNEXPECTED_PRODUCTION_DB_TARGET" })
+    await expect(executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, approvedStage: "A2B", confirmationToken: plan.confirmationToken, localSupabaseUrl: "https://production.example.com", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "UNEXPECTED_PRODUCTION_DB_TARGET" })
     const changed = { ...plan, planId: "changed" }
-    await expect(executeProgramAA2Plan({ approvedPlan: plan, currentPlan: changed, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "STALE_PLAN_REPLAN_REQUIRED" })
+    await expect(executeProgramAA2Plan({ approvedPlan: plan, currentPlan: changed, approvedStage: "A2B", confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "STALE_PLAN_REPLAN_REQUIRED" })
     expect(dispatch).not.toHaveBeenCalled()
   })
 
@@ -134,50 +134,64 @@ describe("Program A A2 bounded pilot", () => {
     const blockedPlan = await buildProgramAA2Plan(missingIdentity)
     expect(blockedPlan.planId).not.toBe(plan.planId)
     const dispatch = vi.fn()
-    await expect(executeProgramAA2Plan({ approvedPlan: blockedPlan, currentPlan: blockedPlan, confirmationToken: blockedPlan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING" })
+    await expect(executeProgramAA2Plan({ approvedPlan: blockedPlan, currentPlan: blockedPlan, approvedStage: "A2A", confirmationToken: blockedPlan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING" })
     expect(dispatch).not.toHaveBeenCalled()
   })
 
   it("requires exact confirmation and stops on the first provider-control failure without retry", async () => {
     const plan = await buildProgramAA2Plan(materialized())
     const dispatch = vi.fn().mockRejectedValue(new Error("LEASE_ACQUIRE_FAILED"))
-    const denied = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: "wrong", localSupabaseUrl: "http://localhost:54321", executeAction: dispatch })
+    const denied = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, approvedStage: "A2B", confirmationToken: "wrong", localSupabaseUrl: "http://localhost:54321", executeAction: dispatch })
     expect(denied).toMatchObject({ status: "REFUSED", stopReason: "AUTH_OR_CONFIG_ERROR", retries: 0 })
-    const stopped = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://localhost:54321", executeAction: dispatch })
+    const stopped = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, approvedStage: "A2B", confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://localhost:54321", executeAction: dispatch })
     expect(stopped).toMatchObject({ status: "PARTIAL_STOPPED", stopReason: "LEASE_CONFLICT", retries: 0, scoreWrites: 0, recommendationWrites: 0, sizingWrites: 0 })
     expect(dispatch).toHaveBeenCalledTimes(1)
   })
 
   it("stops when an adapter reports calls above its approved action budget", async () => {
     const plan = await buildProgramAA2Plan(materialized())
-    const result = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: (action) => Promise.resolve({ providerCalls: action.estimatedPhysicalCalls + 1, localWrites: 0 }) })
+    const result = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, approvedStage: "A2B", confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: (action) => Promise.resolve({ providerCalls: action.estimatedPhysicalCalls + 1, localWrites: 0 }) })
     expect(result).toMatchObject({ status: "PARTIAL_STOPPED", stopReason: "CALL_BUDGET_EXCEEDED", retries: 0 })
   })
 
   it("retains successful evidence writes reported with a fail-closed stop", async () => {
     const plan = await buildProgramAA2Plan(materialized())
     const error = Object.assign(new Error("CLASSIFICATION_CONFLICT"), { providerCalls: 1, localWrites: 1 })
-    const result = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: () => Promise.reject(error) })
+    const result = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, approvedStage: "A2B", confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: () => Promise.reject(error) })
     expect(result).toMatchObject({ status: "PARTIAL_STOPPED", successfulLocalWrites: 1, stopReason: "CLASSIFICATION_CONFLICT" })
   })
 
-  it("re-materializes between stages and requires a new approval after classification changes", async () => {
+  it("dispatches only the explicitly approved A2B stage and stops with a post-stage summary", async () => {
     const plan = await buildProgramAA2Plan(materialized())
-    const dispatch = vi.fn((action: { estimatedPhysicalCalls: number }) => Promise.resolve({ providerCalls: action.estimatedPhysicalCalls, localWrites: 1 }))
+    const dispatch = vi.fn((action: ProgramAA2Action) => Promise.resolve({ providerCalls: action.estimatedPhysicalCalls, localWrites: 1 }))
+    const summary = { totalHoldings: 7, eligible: 1, reviewRequired: 5, methodologyUnavailable: 1 }
     const result = await executeProgramAA2Plan({
-      approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken,
+      approvedPlan: plan, currentPlan: plan, approvedStage: "A2B", confirmationToken: plan.confirmationToken,
       localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch,
-      reloadCurrentPlan: () => Promise.resolve({ ...plan, planId: "post-classification-cache-state" }),
+      loadPostExecutionA1Summary: () => Promise.resolve(summary),
     })
-    expect(dispatch).toHaveBeenCalledTimes(5)
-    expect(result).toMatchObject({ status: "PARTIAL_STOPPED", stopReason: "STALE_PLAN_REPLAN_REQUIRED", actualCalls: { TRENDLYNE_MCP: 5, ANGEL_ONE: 0 } })
+    expect(dispatch).toHaveBeenCalledTimes(1)
+    expect(dispatch.mock.calls[0]?.[0]).toMatchObject({ stage: "A2B", symbol: "ALIVUS", capability: "COMPLETE_RESEARCH_REFRESH" })
+    expect(result).toMatchObject({ status: "SUCCEEDED", stopReason: null, actualCalls: { TRENDLYNE_MCP: 4, ANGEL_ONE: 0 }, postExecutionA1Summary: summary })
+    expect(plan.actions.some((action) => action.stage === "A2C")).toBe(true)
+    expect(dispatch.mock.calls.some(([action]) => action.stage === "A2C")).toBe(false)
+  })
+
+  it("refuses missing, invalid, or empty stage authority before dispatch", async () => {
+    const plan = await buildProgramAA2Plan(materialized())
+    const dispatch = vi.fn()
+    await expect(executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, approvedStage: null, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "EXECUTION_STAGE_AUTHORITY_MISSING" })
+    await expect(executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, approvedStage: "A2D" as "A2B", confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "EXECUTION_STAGE_AUTHORITY_INVALID" })
+    const noA2B = { ...plan, actions: plan.actions.filter((action) => action.stage !== "A2B") }
+    await expect(executeProgramAA2Plan({ approvedPlan: noA2B, currentPlan: noA2B, approvedStage: "A2B", confirmationToken: noA2B.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "APPROVED_STAGE_HAS_NO_ACTIONS" })
+    expect(dispatch).not.toHaveBeenCalled()
   })
 
   it("preserves safe provider and classification prerequisite codes", async () => {
     const plan = await buildProgramAA2Plan(materialized())
     for (const code of ["PROVIDER_HTTP_403", "PROVIDER_REMOTE_1007", "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING"] as const) {
       const error = Object.assign(new Error(code), { providerCalls: code.startsWith("PROVIDER_") ? 1 : 0 })
-      const result = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: () => Promise.reject(error) })
+      const result = await executeProgramAA2Plan({ approvedPlan: plan, currentPlan: plan, approvedStage: "A2B", confirmationToken: plan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: () => Promise.reject(error) })
       expect(result).toMatchObject({ status: "PARTIAL_STOPPED", stopReason: code })
     }
   })

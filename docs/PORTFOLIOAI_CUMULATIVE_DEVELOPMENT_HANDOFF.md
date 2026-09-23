@@ -2551,6 +2551,42 @@ Validation:
 
 **Program A · A2B remains PLANNED / NOT EXECUTED pending review of the new V11 plan.**
 
+### A2 stage-specific execution authority
+
+The local A2 execution boundary now requires an explicit approved stage:
+
+```text
+EXECUTE_STAGE <portfolio-id> <date> <A2A|A2B|A2C> <plan-id> <confirmation-token>
+```
+
+Execution filters the fingerprinted plan to that stage and refuses before any
+provider dispatch when stage authority is missing, invalid, or has no planned
+actions. Full-plan stale-plan and provider-ceiling checks remain in force, as do
+the A2A identity and A2B reviewed-Pharma-subprofile prerequisites. A successful
+stage run rematerializes the cache-only A1 summary and stops; it does not advance
+to another stage.
+
+The fresh zero-provider V11 plan remains unchanged:
+- plan ID `281076d2367ee4e8b6c799a56454f4d0da2da1522973ed453e5bf4524cf78b5e`;
+- A2A action count = 0;
+- the sole A2B action is ALIVUS, reviewed `API_BULK_DRUGS`, contract
+  `API_BULK_DRUGS_V1`, methodology
+  `PHARMA_API_G10_1_NUMERIC_METHODOLOGY_V1_CANDIDATE`, four Trendlyne calls;
+- A2C remains separately planned and is not authorized by A2B execution;
+- PLAN provider calls, budget and writes = 0.
+
+Stage-boundary validation:
+- focused A1/A2, Pharma assignment, contract and Gate-J portability suite:
+  39 tests PASS;
+- TypeScript: PASS;
+- architecture guard: PASS;
+- changed-file lint and shell syntax: PASS;
+- production build: PASS with the inherited chunk-size warning.
+
+**The stage-boundary implementation is ready for the conditionally approved
+local A2B-only execution. A2C remains NOT EXECUTED and requires a separate fresh
+plan and approval.**
+
 
 ---
 

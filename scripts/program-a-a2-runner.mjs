@@ -3,8 +3,8 @@ import { execFileSync } from "node:child_process"
 import { createServer } from "vite"
 import { assertProgramAA2ProviderResult } from "./program-a-a2-provider-result.mjs"
 
-const [mode, snapshotPath, approvedPlanId, confirmationToken] = process.argv.slice(2)
-if (!mode || !snapshotPath || !["PLAN", "EXECUTE"].includes(mode)) throw new Error("Usage: runner PLAN|EXECUTE <snapshot> [plan-id] [confirmation-token]")
+const [mode, snapshotPath, approvedStage, approvedPlanId, confirmationToken] = process.argv.slice(2)
+if (!mode || !snapshotPath || !["PLAN", "EXECUTE_STAGE"].includes(mode)) throw new Error("Usage: runner PLAN <snapshot> | EXECUTE_STAGE <snapshot> <A2A|A2B|A2C> <plan-id> <confirmation-token>")
 
 const localUrl = process.env.PROGRAM_A_LOCAL_SUPABASE_URL ?? "http://127.0.0.1:54321"
 const server = await createServer({ appType: "custom", server: { middlewareMode: true }, logLevel: "error" })
@@ -18,7 +18,7 @@ try {
     process.stdout.write(`${JSON.stringify(currentPlan, null, 2)}\n`)
     process.exitCode = 0
   } else {
-    if (!approvedPlanId || !confirmationToken) throw new Error("EXECUTE requires the approved plan id and exact confirmation token.")
+    if (!approvedStage || !approvedPlanId || !confirmationToken) throw new Error("EXECUTE_STAGE requires the approved stage, plan id, and exact confirmation token.")
     const accessToken = process.env.PROGRAM_A_LOCAL_ACCESS_TOKEN
     const anonKey = process.env.PROGRAM_A_LOCAL_ANON_KEY
     const classificationToken = process.env.PROGRAM_A_LOCAL_CLASSIFICATION_TOKEN
@@ -56,8 +56,7 @@ try {
       const rows = refreshed.baseline.eligibility
       return Promise.resolve({ totalHoldings: rows.length, eligible: rows.filter((row) => row.eligibilityState === "ELIGIBLE").length, reviewRequired: rows.filter((row) => row.eligibilityState === "REVIEW_REQUIRED").length, methodologyUnavailable: rows.filter((row) => row.eligibilityState === "METHODOLOGY_NOT_AVAILABLE").length })
     }
-    const reloadCurrentPlan = () => a2Module.buildProgramAA2Plan(loadRefreshedMaterialized())
-    const result = await a2Module.executeProgramAA2Plan({ approvedPlan, currentPlan, confirmationToken, localSupabaseUrl: localUrl, executeAction, loadPostExecutionA1Summary, reloadCurrentPlan })
+    const result = await a2Module.executeProgramAA2Plan({ approvedPlan, currentPlan, approvedStage, confirmationToken, localSupabaseUrl: localUrl, executeAction, loadPostExecutionA1Summary })
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`)
     if (result.status !== "SUCCEEDED") process.exitCode = 2
   }
