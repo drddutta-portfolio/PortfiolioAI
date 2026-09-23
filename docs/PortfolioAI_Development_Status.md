@@ -6,18 +6,34 @@
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
-## Program A · Checkpoint A1 read-only baseline — 23 September 2026
+## Program A · Checkpoint A1 status — 23 September 2026
 
-A1 is repository-implemented as a cache-only planning contract for R3 research-evidence breadth and R5 market-history breadth.
+A1.1 planner/contract implementation is COMPLETE / PASS.
 
-Implemented boundaries:
-- current holdings remain supplied through the existing canonical portfolio/R2 coverage path;
-- Gate-K routing and post-PKR methodology/score-execution states are reused unchanged;
-- eligible research domains retain explicit fresh, stale, missing, conflicting, review-required, not-applicable and ready-to-derive states;
-- market-history planning distinguishes full backfill, incremental overlap and already-current history instead of assuming a fixed 400-day refetch;
-- benchmark inventory is registry-driven and reports only existing BANK/NIFTY Bank and Pharma/NIFTY Pharma adapter support; other mappings remain explicitly unimplemented rather than fabricated;
-- projected Trendlyne and Angel One work remains estimate-only with zero provider calls, reservations or usage records;
-- bounded R3/R5 pilot proposals are derived deterministically from supplied current portfolio data.
+Implemented in A1.1:
+- reusable Program A eligibility resolver;
+- R3 evidence-coverage planner;
+- R5 market-history planner;
+- incremental history-window logic;
+- benchmark dependency inventory;
+- projected provider-cost planner;
+- bounded pilot-cohort selection;
+- zero-provider / zero-write safety contract.
+
+Important scope clarification:
+- A1.1 proves the planning contract with deterministic tests and frozen current-portfolio fixtures;
+- it does not yet materialize the real current portfolio baseline directly from the owner's actual canonical cache/read-only stores.
+
+A1.2 is therefore required to complete the original A1 objective:
+- read the actual current Portfolio Coverage Registry and canonical cache-only evidence/market stores;
+- materialize real planner inputs;
+- produce the real current R3/R5 baseline;
+- produce actual projected provider-call counts;
+- produce the actual bounded R3/R5 pilot proposal;
+- still execute zero provider calls and zero production writes.
+
+Canonical A1.2 plan:
+- `docs/PortfolioAI_PROGRAM_A_A1_2_REAL_CACHE_BASELINE_MATERIALIZATION_PLAN.md`.
 
 No provider execution, production mutation, migration, score/recommendation/sizing persistence, scheduler activation, AI activation, deployment or merge is part of A1. Program B scorer activation remains out of scope.
 
