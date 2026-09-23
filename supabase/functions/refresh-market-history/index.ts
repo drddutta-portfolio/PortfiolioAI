@@ -191,7 +191,7 @@ Deno.serve(async (request) => {
     const a2Window = typeof body.requestFrom === "string" && typeof body.requestTo === "string"
     if ((body.requestFrom === undefined) !== (body.requestTo === undefined)) return json(400, { error: "requestFrom and requestTo must be supplied together.", code: "PROVIDER_SCHEMA_MISMATCH" })
     if (a2Window) {
-      const local = (() => { try { const url = new URL(supabaseUrl); return ["localhost", "127.0.0.1"].includes(url.hostname) } catch { return false } })()
+      const local = isLocalSupabaseUrl(supabaseUrl)
       if (!local) return json(409, { error: "Program A A2 execution is local-only.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
       if (!/^\d{4}-\d{2}-\d{2}$/u.test(body.requestFrom as string) || !/^\d{4}-\d{2}-\d{2}$/u.test(body.requestTo as string)) return json(400, { error: "A2 history window must use ISO dates.", code: "PROVIDER_SCHEMA_MISMATCH" })
     }
