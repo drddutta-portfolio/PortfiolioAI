@@ -46,6 +46,7 @@ describe("Program A A2 bounded pilot", () => {
     expect(plan.actions.find((action) => action.capability === "SECURITY_HISTORY")?.historyWindow).toEqual({ from: "2026-09-13", to: "2026-09-23" })
     expect(plan.providerTotals).toEqual({ trendlyne: 11, angelOneSecurity: 1, angelOneBenchmark: 1, angelOneTotal: 2 })
     expect(plan.actualProviderCalls).toBe(0)
+    expect(plan.a2cPhysicalCallPolicy).toBe("SCOPE_BOUND_NO_NUMERIC_CEILING")
     expect(plan.confirmationToken).toBe(`APPROVE_PROGRAM_A_A2_${plan.planId.slice(0, 16).toUpperCase()}`)
     expect(await buildProgramAA2Plan(materialized())).toEqual(plan)
   })
@@ -191,6 +192,22 @@ describe("Program A A2 bounded pilot", () => {
     expect(result).toMatchObject({ status: "SUCCEEDED", stopReason: null, actualCalls: { TRENDLYNE_MCP: 6, ANGEL_ONE: 0 }, postExecutionA1Summary: summary })
     expect(plan.actions.some((action) => action.stage === "A2C")).toBe(true)
     expect(dispatch.mock.calls.some(([action]) => action.stage === "A2C")).toBe(false)
+  })
+
+  it("keeps A2C scope exact while allowing physical Angel One calls above estimates", async () => {
+    const plan = await buildProgramAA2Plan(materialized())
+    const a2cActions = plan.actions.filter((action) => action.stage === "A2C")
+    const a2cPlan = { ...plan, actions: a2cActions }
+    const dispatch = vi.fn((action: ProgramAA2Action) => Promise.resolve({ providerCalls: action.estimatedPhysicalCalls + 3, localWrites: 1 }))
+    const result = await executeProgramAA2Plan({ approvedPlan: a2cPlan, currentPlan: a2cPlan, approvedStage: "A2C", confirmationToken: a2cPlan.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: dispatch })
+    expect(result).toMatchObject({ status: "SUCCEEDED", actualCalls: { TRENDLYNE_MCP: 0, ANGEL_ONE: 8 }, scoreWrites: 0, recommendationWrites: 0, sizingWrites: 0 })
+    expect(dispatch).toHaveBeenCalledTimes(2)
+    expect(dispatch.mock.calls.every(([action]) => action.stage === "A2C" && action.provider === "ANGEL_ONE")).toBe(true)
+
+    const malformed = { ...a2cPlan, actions: [{ ...a2cActions[0]!, provider: "TRENDLYNE_MCP" as const }] }
+    const blockedDispatch = vi.fn()
+    await expect(executeProgramAA2Plan({ approvedPlan: malformed, currentPlan: malformed, approvedStage: "A2C", confirmationToken: malformed.confirmationToken, localSupabaseUrl: "http://127.0.0.1:54321", executeAction: blockedDispatch })).resolves.toMatchObject({ status: "REFUSED", stopReason: "A2C_SCOPE_MISMATCH", actualCalls: { TRENDLYNE_MCP: 0, ANGEL_ONE: 0 } })
+    expect(blockedDispatch).not.toHaveBeenCalled()
   })
 
   it("refuses missing, invalid, or empty stage authority before dispatch", async () => {

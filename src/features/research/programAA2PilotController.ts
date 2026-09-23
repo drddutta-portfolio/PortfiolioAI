@@ -3,7 +3,7 @@ import { PHARMA_GATE_J_METHOD_AUTHORITIES } from "./pharmaGateJFinalPortability"
 import { PHARMA_SUBPROFILE_CONTRACTS } from "./pharmaSubprofileContracts"
 import type { PharmaSubprofileCode, ResearchSubprofileAssignmentState } from "./pharmaSubprofileAssignment"
 
-export const PROGRAM_A_A2_PLAN_VERSION = "PROGRAM_A_A2_BOUNDED_PILOT_V12" as const
+export const PROGRAM_A_A2_PLAN_VERSION = "PROGRAM_A_A2_BOUNDED_PILOT_V13" as const
 export const PROGRAM_A_A2_STOP_CONDITIONS = [
   "CLASSIFICATION_CONFLICT", "AMBIGUOUS_PROVIDER_IDENTITY", "AUTH_OR_CONFIG_ERROR",
   "PROVIDER_SCHEMA_MISMATCH", "CAPABILITY_MISMATCH", "CALL_BUDGET_EXCEEDED",
@@ -13,6 +13,7 @@ export const PROGRAM_A_A2_STOP_CONDITIONS = [
   "EXECUTION_STAGE_AUTHORITY_MISSING", "EXECUTION_STAGE_AUTHORITY_INVALID",
   "APPROVED_STAGE_HAS_NO_ACTIONS",
   "TRENDLYNE_IDENTITY_PREREQUISITE_MISSING", "BLOCKED_IDENTITY_CONFLICT",
+  "A2C_SCOPE_MISMATCH",
 ] as const
 
 export type ProgramAA2Stage = "A2A" | "A2B" | "A2C"
@@ -54,6 +55,7 @@ export interface ProgramAA2Plan {
   readonly actions: readonly ProgramAA2Action[]
   readonly providerTotals: { readonly trendlyne: number; readonly angelOneSecurity: number; readonly angelOneBenchmark: number; readonly angelOneTotal: number }
   readonly ceilings: { readonly a2aTrendlyne: 5; readonly a2bTrendlyne: 6; readonly combinedTrendlyne: 11; readonly angelOneSecurity: 3; readonly angelOneBenchmark: 2; readonly angelOneTotal: 5 }
+  readonly a2cPhysicalCallPolicy: "SCOPE_BOUND_NO_NUMERIC_CEILING"
   readonly stopConditions: typeof PROGRAM_A_A2_STOP_CONDITIONS
   readonly confirmationToken: string
   readonly actualProviderCalls: 0
@@ -141,9 +143,10 @@ export async function buildProgramAA2Plan(materialized: ProgramAA1MaterializedRe
   }
   const actions = [...classification, ...r3, ...r5]
   const providerTotals = assertCeilings(actions)
-  const fingerprint = { version: PROGRAM_A_A2_PLAN_VERSION, baselineVersion: baseline.version, asOfDate: baseline.asOfDate, eligibility: baseline.eligibility, r3: baseline.r3Coverage, r5: baseline.r5Coverage, actions, providerTotals, ceilings: CEILINGS }
+  const a2cPhysicalCallPolicy = "SCOPE_BOUND_NO_NUMERIC_CEILING" as const
+  const fingerprint = { version: PROGRAM_A_A2_PLAN_VERSION, baselineVersion: baseline.version, asOfDate: baseline.asOfDate, eligibility: baseline.eligibility, r3: baseline.r3Coverage, r5: baseline.r5Coverage, actions, providerTotals, ceilings: CEILINGS, a2cPhysicalCallPolicy }
   const planId = await sha256(stable(fingerprint))
-  return { version: PROGRAM_A_A2_PLAN_VERSION, planId, baselineVersion: baseline.version, asOfDate: baseline.asOfDate, actions, providerTotals, ceilings: CEILINGS, stopConditions: PROGRAM_A_A2_STOP_CONDITIONS, confirmationToken: `APPROVE_PROGRAM_A_A2_${planId.slice(0, 16).toUpperCase()}`, actualProviderCalls: 0, actualBudgetConsumed: 0 }
+  return { version: PROGRAM_A_A2_PLAN_VERSION, planId, baselineVersion: baseline.version, asOfDate: baseline.asOfDate, actions, providerTotals, ceilings: CEILINGS, a2cPhysicalCallPolicy, stopConditions: PROGRAM_A_A2_STOP_CONDITIONS, confirmationToken: `APPROVE_PROGRAM_A_A2_${planId.slice(0, 16).toUpperCase()}`, actualProviderCalls: 0, actualBudgetConsumed: 0 }
 }
 
 export function assertLocalA2Target(url: string) {
@@ -174,6 +177,7 @@ export async function executeProgramAA2Plan(input: {
   if (input.confirmationToken !== input.approvedPlan.confirmationToken) return refused(input.approvedPlan.planId, "AUTH_OR_CONFIG_ERROR")
   const approvedActions = input.currentPlan.actions.filter((action) => action.stage === input.approvedStage)
   if (!approvedActions.length) return refused(input.approvedPlan.planId, "APPROVED_STAGE_HAS_NO_ACTIONS")
+  if (input.approvedStage === "A2C" && approvedActions.some((action) => action.provider !== "ANGEL_ONE" || !action.historyWindow || !["SECURITY_HISTORY", "BANK_BENCHMARK_HISTORY", "PHARMA_BENCHMARK_HISTORY"].includes(action.capability))) return refused(input.approvedPlan.planId, "A2C_SCOPE_MISMATCH")
   if (approvedActions.some((action) => action.stage === "A2A" && (action.identityPrerequisiteState !== "READY" || !action.canonicalName || !action.canonicalIsin))) return refused(input.approvedPlan.planId, "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING")
   if (approvedActions.some((action) => !pharmaA2BPrerequisiteReady(action))) return refused(input.approvedPlan.planId, "PHARMA_SUBPROFILE_PREREQUISITE_MISSING")
   if (approvedActions.some((action) => action.stage === "A2B" && action.providerIdentityState === "BLOCKED_IDENTITY_CONFLICT")) return refused(input.approvedPlan.planId, "BLOCKED_IDENTITY_CONFLICT")
@@ -185,7 +189,7 @@ export async function executeProgramAA2Plan(input: {
   for (const action of approvedActions) {
     try {
       const result = await input.executeAction(action)
-      if (result.providerCalls > action.estimatedPhysicalCalls) return withPostSummary({ approvedPlanId: input.approvedPlan.planId, status: "PARTIAL_STOPPED", actualCalls: calls, retries: 0, successfulLocalWrites: writes, failures, stopReason: "CALL_BUDGET_EXCEEDED", providerBudgetUsed: calls.TRENDLYNE_MCP + calls.ANGEL_ONE, postExecutionA1Summary: null, scoreWrites: 0, recommendationWrites: 0, sizingWrites: 0 }, input.loadPostExecutionA1Summary)
+      if (action.stage !== "A2C" && result.providerCalls > action.estimatedPhysicalCalls) return withPostSummary({ approvedPlanId: input.approvedPlan.planId, status: "PARTIAL_STOPPED", actualCalls: calls, retries: 0, successfulLocalWrites: writes, failures, stopReason: "CALL_BUDGET_EXCEEDED", providerBudgetUsed: calls.TRENDLYNE_MCP + calls.ANGEL_ONE, postExecutionA1Summary: null, scoreWrites: 0, recommendationWrites: 0, sizingWrites: 0 }, input.loadPostExecutionA1Summary)
       calls[action.provider] += result.providerCalls
       writes += result.localWrites
     } catch (error) {
