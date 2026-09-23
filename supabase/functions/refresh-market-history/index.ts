@@ -35,6 +35,13 @@ function json(status: number, body: Readonly<Record<string, unknown>>) {
   return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } })
 }
 
+function isLocalSupabaseUrl(value: string) {
+  try {
+    const url = new URL(value)
+    return ["localhost", "127.0.0.1"].includes(url.hostname) || (url.hostname === "kong" && url.port === "8000")
+  } catch { return false }
+}
+
 function kolkataDateTime(date: Date) {
   const local = new Date(date.getTime() + 5.5 * 60 * 60_000)
   return `${local.toISOString().slice(0, 10)} ${local.toISOString().slice(11, 16)}`
