@@ -1893,3 +1893,42 @@ A1 engineering implementation is complete. Formal full-portfolio closure require
 2. explicitly accepting the six-holding local portfolio as the A1 runtime validation cohort and carrying full-portfolio data coverage into the next Program A execution checkpoint.
 
 No additional architecture work is required for A1.
+
+
+---
+
+## Program A · A1 formal closure — 23 September 2026
+
+Local portfolio inventory check confirmed that the current local Supabase instance contains only the small UI/test portfolios:
+- `10000000-0000-4000-8000-000000000001` — `LOCAL UI Research Review`;
+- `a1000000-0000-4000-8000-000000000001` — `Local UI Review`.
+
+No full owner portfolio dataset is presently available in local Supabase.
+
+Therefore the already-successful six-holding `LOCAL UI Research Review` execution is accepted as the A1 runtime validation cohort.
+
+Accepted runtime result:
+- eligible = 1;
+- review required = 5;
+- projected Trendlyne calls = 2;
+- projected Angel One security requests = 1;
+- actual provider calls = 0;
+- actual budget consumed = 0;
+- writes = 0.
+
+A1 acceptance interpretation:
+- A1's purpose was to prove the real cache-only materialization path and quantify current coverage gaps without provider execution;
+- that objective is satisfied;
+- absence of the full current portfolio in local Supabase is an environment/data-availability issue, not an A1 architecture or implementation blocker;
+- full-portfolio breadth will be handled by subsequent Program A execution checkpoints when the appropriate local/current portfolio scope is available.
+
+Final status:
+- A1.1 = COMPLETE / PASS;
+- A1.2 = COMPLETE / PASS;
+- **Program A · A1 = COMPLETE / PASS / CLOSED**;
+- Program A = IN PROGRESS;
+- provider execution = STILL NOT AUTHORIZED.
+
+Next step:
+- plan/freeze the first bounded provider-backed Program A execution checkpoint;
+- no provider execution until that next checkpoint is explicitly approved.
