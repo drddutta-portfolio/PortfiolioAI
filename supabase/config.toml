@@ -382,3 +382,10 @@ s3_region = "env(S3_REGION)"
 s3_access_key = "env(S3_ACCESS_KEY)"
 # Configures AWS_SECRET_ACCESS_KEY for S3 bucket
 s3_secret_key = "env(S3_SECRET_KEY)"
+
+
+# Internal/local classification refresh uses its own Vault-backed token.
+# Disable gateway JWT verification only for this function so local ES256
+# auth-key handling cannot block the custom-auth request before function code runs.
+[functions.refresh-trendlyne-classification]
+verify_jwt = false
