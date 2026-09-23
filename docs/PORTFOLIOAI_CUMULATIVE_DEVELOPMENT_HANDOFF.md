@@ -2291,13 +2291,15 @@ Bounded A2A results:
 - every provider call had zero retries;
 - no Angel One call, score write, recommendation write or sizing write occurred.
 
-Final canonical cohort:
+Final A2A canonical **sector/industry normalization** cohort:
 - ALIVUS → `Pharma / Pharmaceuticals`;
 - AUROPHARMA → `Pharma / Pharmaceuticals`;
 - BIOCON → `Pharma / Pharmaceuticals`;
 - HDFCBANK → `Banking / Private Sector Bank`;
 - SYNGENE → `Pharma / Pharmaceuticals`;
 - TORNTPHARM remains `PHARMA / PHARMACEUTICALS` from its prior authority.
+
+IMPORTANT: these A2A values are only the canonical sector/industry layer. They are **not** the final Pharma research subprofile or scoring-methodology classification.
 
 Post-A2A V10 zero-call plan:
 - plan ID `162f683dbcd3701bb1f9b0289bf70de9c24ef184f0805d91da47249129842626`;
@@ -2380,3 +2382,129 @@ Safety audit:
 **ChatGPT audit verdict: Program A · A2A = COMPLETE / PASS / CLOSED.**
 **Program A · A2 = IN PROGRESS.**
 **Current next boundary = separate review of V10 A2B and A2C; neither is authorized yet.**
+
+
+---
+
+## Critical Pharma classification hierarchy clarification — 23 September 2026
+
+This clarification is canonical and must be preserved in all future Program A/B work.
+
+### A2A classification is NOT the Pharma scoring subprofile
+
+Program A · A2A resolved the broad canonical provider taxonomy needed for routing prerequisites:
+
+```text
+Provider classification
+        ↓
+Canonical Sector / Industry
+```
+
+For Pharma holdings this currently produces a broad canonical identity such as:
+
+```text
+Sector:   Pharma
+Industry: Pharmaceuticals
+```
+
+That result is **necessary but not sufficient** for Pharma methodology execution.
+
+The Pharma architecture built through Gates G/H/I/J must retain the deeper business-model classification layer:
+
+```text
+Sector
+  ↓
+Industry
+  ↓
+Pharma subprofile / business-model classification
+  ↓
+PHARMA_V1 methodology contract
+  ↓
+Subprofile-specific evidence requirements
+  ↓
+Deterministic scoring
+  ↓
+Recommendation policy
+```
+
+Canonical Pharma subprofiles remain distinct:
+
+- `API_BULK_DRUGS`
+- `DOMESTIC_FORMULATIONS`
+- `GLOBAL_GENERICS`
+- `BIOPHARMA_BIOSIMILARS`
+- `CDMO_CRAMS`
+
+These subprofiles are **not interchangeable** and must not be collapsed into generic `Pharma / Pharmaceuticals`.
+
+### ALIVUS example
+
+Current A2A result:
+
+```text
+ALIVUS
+→ Sector/Industry normalization:
+  Pharma / Pharmaceuticals
+```
+
+This does **not** establish ALIVUS's Pharma scoring subprofile.
+
+For downstream Pharma research/scoring, the separate Pharma subprofile authority must resolve the company to its approved business-model classification. The intended current classification discussed by the owner is:
+
+```text
+ALIVUS
+→ Health Care sector context
+→ Pharma industry
+→ API_BULK_DRUGS Pharma subprofile
+→ PHARMA_V1 / API_BULK_DRUGS methodology
+```
+
+A2A must never overwrite, infer, or replace that subprofile authority merely because the provider returns a broad `Pharmaceuticals` industry.
+
+### Architectural rule
+
+The hierarchy is permanently:
+
+```text
+Sector          = macro context
+Industry        = minimum methodology-routing context
+Basic Industry / business model = refinement
+Pharma subprofile = Pharma-specific metric/applicability/valuation authority
+Company evidence = scoring evidence
+Score           = deterministic assessment
+Recommendation  = downstream action logic
+```
+
+Therefore:
+
+- A2A owns provider-to-canonical sector/industry normalization only;
+- Pharma subprofile authority remains separate;
+- `Pharma / Pharmaceuticals` must never be treated as sufficient authority for choosing the Pharma scoring formula;
+- a Pharma security without a resolved approved subprofile must fail closed before subprofile-specific scoring;
+- Program A evidence acquisition must respect the resolved Pharma subprofile's required domains;
+- Program B / R6 must execute the scorer associated with the approved Pharma subprofile, not a generic Pharmaceuticals scorer;
+- no ticker-specific runtime workaround may replace the canonical subprofile contract.
+
+### Current A2A closure interpretation
+
+A2A remains COMPLETE / PASS / CLOSED because its scope was broad classification prerequisite normalization.
+
+Its closure means:
+
+```text
+Provider classification path        = proven
+Canonical sector/industry mapping    = proven
+Exact identity reconciliation        = proven
+```
+
+It does **not** mean:
+
+```text
+Pharma subprofile classification     = newly proven by A2A
+Pharma subprofile methodology        = replaced by broad industry
+Pharma scoring readiness             = automatically established
+```
+
+The previously built Pharma subprofile architecture remains authoritative and must be consulted before A2B evidence selection and, especially, before Program B / R6 scoring.
+
+**This distinction must not be removed or simplified in future handoffs, plans, scoring adapters, or UI contracts.**
