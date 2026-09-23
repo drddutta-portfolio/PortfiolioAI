@@ -23,8 +23,9 @@ try {
     const classificationToken = process.env.PROGRAM_A_LOCAL_CLASSIFICATION_TOKEN
     if (!accessToken || !anonKey || !classificationToken) throw new Error("EXECUTE requires PROGRAM_A_LOCAL_ACCESS_TOKEN, PROGRAM_A_LOCAL_ANON_KEY, and PROGRAM_A_LOCAL_CLASSIFICATION_TOKEN.")
     const approvedPlan = { ...currentPlan, planId: approvedPlanId }
-    const invoke = async (name, body, headers = {}) => {
-      const response = await fetch(`${localUrl}/functions/v1/${name}`, { method: "POST", headers: { "Content-Type": "application/json", apikey: anonKey, Authorization: `Bearer ${accessToken}`, ...headers }, body: JSON.stringify(body) })
+    const invoke = async (name, body, headers = {}, includeAuthorization = true) => {
+      const authHeaders = includeAuthorization ? { Authorization: `Bearer ${accessToken}` } : {}
+      const response = await fetch(`${localUrl}/functions/v1/${name}`, { method: "POST", headers: { "Content-Type": "application/json", apikey: anonKey, ...authHeaders, ...headers }, body: JSON.stringify(body) })
       const payload = await response.json()
       if (!response.ok || payload.error) {
         const error = new Error(payload.code ?? payload.error ?? "CAPABILITY_MISMATCH")
@@ -35,7 +36,7 @@ try {
     }
     const executeAction = async (action) => {
       let payload
-      if (action.capability === "SEARCH_ENTITIES_CLASSIFICATION") payload = await invoke("refresh-trendlyne-classification", { action: "A2_EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityIds: [action.securityId], confirmation: "OWNER_CONFIRMED_PROGRAM_A_A2_CLASSIFICATION" }, { "x-portfolioai-classification-token": classificationToken })
+      if (action.capability === "SEARCH_ENTITIES_CLASSIFICATION") payload = await invoke("refresh-trendlyne-classification", { action: "A2_EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityIds: [action.securityId], confirmation: "OWNER_CONFIRMED_PROGRAM_A_A2_CLASSIFICATION" }, { "x-portfolioai-classification-token": classificationToken }, false)
       else if (action.capability === "COMPLETE_RESEARCH_REFRESH") payload = await invoke("complete-research-refresh", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_COMPLETE_RESEARCH_REFRESH" })
       else if (action.capability === "SECURITY_HISTORY") payload = await invoke("refresh-market-history", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_MARKET_HISTORY_REFRESH", requestFrom: action.historyWindow.from, requestTo: action.historyWindow.to })
       else if (action.capability === "PHARMA_BENCHMARK_HISTORY") payload = await invoke("refresh-pharma-benchmark", { action: "EXECUTE", portfolioId: snapshot.registry.records[0]?.portfolioId, securityId: action.securityId, confirmation: "OWNER_CONFIRMED_PHARMA_BENCHMARK_REFRESH" })
