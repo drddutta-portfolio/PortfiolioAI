@@ -2177,3 +2177,52 @@ Remaining sequence:
 
 **Program A · A2 remains IN PROGRESS.**
 **No V2 or V3 approval may be reused.**
+
+---
+
+## Program A · A2A V4 execution result — 23 September 2026
+
+The owner explicitly approved V4 plan
+`c35d2b1c8d39c6ea7c065fc3dfa63f4f56e2c4a95cb581e5e024a7342197c29e`
+and its exact confirmation token. The first invocation stopped before dispatch
+because the runner process lacked its three required local environment variables;
+that invocation made zero provider calls. The same approved plan was then invoked
+with credentials resolved only from the running local Supabase instance and local
+Vault, without printing or persisting them.
+
+Bounded execution result:
+- status `PARTIAL_STOPPED`;
+- stop reason `PROVIDER_SCHEMA_MISMATCH`;
+- Trendlyne calls = 1; Angel One calls = 0; retries = 0;
+- successful local classification writes = 0;
+- score, recommendation and sizing writes = 0;
+- A2B and A2C did not execute.
+
+Correlated local audit evidence:
+- ingestion run `f38aa9e7-5cdc-4062-b71f-05810cf6609e`;
+- ALIVUS item `f2eba073-3b49-4b1e-a542-d464596d22e5`;
+- run status `FAILED`, attempted = 1, accepted = 0, rejected = 1, failed = 0;
+- item status `REJECTED`, safe reason `PROVIDER_SCHEMA_MISMATCH`;
+- provider usage outcome `SUCCEEDED`, retry attempt = 0, internal units = 1;
+- source records written for this run = 0;
+- safe parse shape: `UNRECOGNIZED_RESPONSE`, envelope `PLAIN_TEXT`, data marker
+  present, end marker absent, nonempty lines = 1, pipe-delimited lines = 0,
+  parsed candidate rows = 0.
+
+Conclusion:
+- this is not evidence of an ambiguous identity or of no exact ALIVUS identity;
+- Trendlyne returned a successful nonempty one-line response whose shape is not
+  recognized by the approved parser;
+- raw provider content was deliberately not retained, so its schema cannot be
+  reconstructed from this audit and must not be guessed;
+- existing local K1 evidence shows Trendlyne has previously returned nested
+  `markdown_data` and non-header pipe data for a different capture, but that does
+  not prove the V4 ALIVUS response used the same schema.
+
+The V4 approval is consumed and must not be reused. Before another provider call,
+the response contract must be established through provider capability/schema
+evidence or a newly reviewed safe diagnostic plan. A fresh fingerprinted plan and
+explicit owner approval are required.
+
+**Program A · A2 remains IN PROGRESS at A2A.**
+**A2B and A2C remain blocked by the classification stage boundary.**
