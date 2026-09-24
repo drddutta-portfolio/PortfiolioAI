@@ -108,6 +108,7 @@ export function buildProgramCR10LiveActionCenter(
       asOf: r9Row.observedState.observedAt,
       classificationVersion: r9Row.observedState.lineage.classificationVersion,
       r9CurrentR8DecisionRunId: r9Row.observedState.lineage.r8DecisionRunId,
+      r9OwnerContextVersion: r9Row.observedState.ownerContextVersion,
       r7RecommendationState: r9Row.observedState.states.r7RecommendationState,
       r8: r8Row.assessment,
       r9: r9Row.baseline,
