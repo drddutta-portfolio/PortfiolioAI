@@ -238,9 +238,19 @@ export function buildProgramCR10ReferenceValidation() {
     r8Assessment: partialAssessment,
   })
   const partialStale = buildProgramCR9ObservedState({
-    ...partialFresh,
+    securityId: partialAssessment.securityId,
+    portfolioId: partialAssessment.portfolioId,
+    assetClass: "EQUITY",
     observedAt: "2026-09-25T11:00:00.000Z",
+    r6ReadinessState: "READY",
+    r7ReadinessState: "READY",
+    r7RecommendationState: null,
+    r6OverallScore: null,
     evidenceState: "STALE",
+    valuationState: null,
+    momentumState: null,
+    ownerContextVersion: "C4_REFERENCE_OWNER_CONTEXT_V1",
+    classificationVersion: "C4_REFERENCE_CLASSIFICATION_V1",
     r8Assessment: partialAssessment,
   })
   const evidenceComparison = compareProgramCR9ObservedStates(
