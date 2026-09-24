@@ -4318,3 +4318,47 @@ No recommendation execution, sizing execution, provider call, persistence,
 migration, deployment, merge, scheduler change or trading action occurred.
 
 **B3 remains OPEN / OWNER-LOCAL VALIDATION PENDING.**
+
+
+### B3 validation strengthening after Pharma dual-layer audit
+
+After the owner-local B3 candidate runner reached `B3 CANDIDATE VALIDATION PASS`,
+the validation surface was audited specifically for the Pharma architecture.
+
+Confirmed repository behavior:
+- Pharma remains a two-layer research model:
+  - common `PHARMA_V1` parent research;
+  - one reviewed Primary subprofile from the canonical five;
+- the five canonical Primary subprofiles remain:
+  - `API_BULK_DRUGS`;
+  - `DOMESTIC_FORMULATIONS`;
+  - `GLOBAL_GENERICS`;
+  - `BIOPHARMA_BIOSIMILARS`;
+  - `CDMO_CRAMS`;
+- `composePharmaSubprofileContract(...)` composes the common parent exactly once
+  and then applies the Primary subprofile additions/overrides;
+- unresolved/provisional/disputed/conflicting Primary assignments remain
+  fail-closed;
+- Domestic-specific methodology cannot auto-apply to another Pharma Primary;
+- secondary/material overlays do not create an independent second stock score;
+- B3 recommendation readiness now requires the exact Pharma Primary and assignment
+  version, and recommendation lineage retains parent profile + Primary + assignment
+  version + exact source score run.
+
+Validation-gap audit:
+- the first B3 runner already tested the new Program B R7 dual-layer invariant and
+  Gate I recommendation safety;
+- however it did not explicitly re-run the older underlying Pharma assignment,
+  effective-contract composition and subprofile-curve applicability regressions.
+
+B3 validation was therefore strengthened in commit
+`c5393dc631586a9ae42a79e4cc41dfbeb4ba6933` by adding:
+
+- `src/features/research/pharmaSubprofileAssignment.test.ts`;
+- `src/features/research/pharmaSubprofileContracts.test.ts`;
+- `src/features/research/pharmaG6SubprofileCurveApplicability.test.ts`.
+
+This is a test-runner strengthening only. No Pharma methodology, score,
+recommendation, sizing, provider, database or production behavior was changed.
+
+**B3 remains OPEN until the strengthened runner is re-executed locally.**
