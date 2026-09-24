@@ -36,8 +36,11 @@ export function buildProgramCR9C3Validation() {
   const meaningfulPass = [
     first.coreHealthMeaningful,
     first.evidenceMeaningful,
+    first.missingEvidenceMeaningful,
+    first.conflictingEvidenceMeaningful,
     first.assignmentMeaningful,
     first.blockerCleared,
+    first.blockerAppeared,
   ].every((result) => (
     result.transitionState === "MEANINGFUL_CHANGE"
     && result.event !== null
