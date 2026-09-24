@@ -159,17 +159,22 @@ export function buildProgramCR8ReferenceValidationAssessments() {
     reference: ProgramB2ReferenceResult,
     recommendation: ProgramB4RecommendationExecution,
     ownerContext: ProgramCR8OwnerContext,
-  ): ProgramCR8PortfolioDecisionInput => ({
-    version: PROGRAM_C_R8_DECISION_CONTRACT_VERSION,
-    securityId: reference.scoreLineage!.securityId,
-    assetClass: "EQUITY",
-    asOfDate: "2026-09-24",
-    r6: r6Reference(reference),
-    r7: r7Reference(recommendation),
-    ownerContext,
-    portfolioContext: context,
-    canonicalEvidence: [],
-  })
+  ): ProgramCR8PortfolioDecisionInput => {
+    if (!reference.scoreLineage) {
+      throw new Error(`Program C C2 reference input requires score lineage for ${reference.symbol}.`)
+    }
+    return {
+      version: PROGRAM_C_R8_DECISION_CONTRACT_VERSION,
+      securityId: reference.scoreLineage.securityId,
+      assetClass: "EQUITY",
+      asOfDate: "2026-09-24",
+      r6: r6Reference(reference),
+      r7: r7Reference(recommendation),
+      ownerContext,
+      portfolioContext: context,
+      canonicalEvidence: [],
+    }
+  }
 
   const torntAssessment = evaluateProgramCR8PortfolioDecision(
     buildInput(tornt, torntR7, torntOwner),
