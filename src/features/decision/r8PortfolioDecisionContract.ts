@@ -193,6 +193,7 @@ export const PROGRAM_C_R8_PROHIBITED_OUTPUT_FIELDS = [
   "exactTrimPercentage",
   "orderQuantity",
   "orderInstruction",
+  "opaquePortfolioDecisionScore",
 ] as const
 
 export const PROGRAM_C_R8_C1_SAFETY_BOUNDARY = {
@@ -206,6 +207,7 @@ export const PROGRAM_C_R8_C1_SAFETY_BOUNDARY = {
   scoreRecomputation: false,
   recommendationRecomputation: false,
   numericSizingAuthority: false,
+  opaquePortfolioDecisionScoreAllowed: false,
   ownerSettingsMutation: false,
   persistence: false,
   schemaMigration: false,
