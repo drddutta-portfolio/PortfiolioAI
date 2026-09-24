@@ -8045,3 +8045,64 @@ Scheduler/trading = NOT AUTHORIZED
 
 Stop after C4 implementation. C-FINAL requires clean C4 validation, explicit
 owner acceptance of R10 closure and separate authorization.
+
+
+---
+
+### Program C · C4 owner-local validation correction — TypeScript union widening — 25 September 2026
+
+The first owner-local C4 validator run reached TypeScript and stopped with:
+
+```text
+src/features/decision/r10ActionCenterEngine.ts
+TS2345: string[] is not assignable to readonly ProgramCR10AttentionState[]
+```
+
+The issue was limited to a helper signature:
+
+```text
+unique(values: readonly string[])
+```
+
+which widened the canonical R10 attention-state union to plain strings before
+the precedence selector.
+
+Correction:
+
+```text
+unique<T extends string>(values: readonly T[]): T[]
+```
+
+Correction commit:
+
+```text
+5c8c62afe4e57599c1f4619b1415fa430e70e666
+```
+
+No runtime decision logic changed.
+
+No:
+
+- R10 state vocabulary change;
+- precedence change;
+- conflict change;
+- ADD_REVIEW/TRIM_REVIEW promotion;
+- numeric sizing;
+- provider call;
+- persistence;
+- schema migration;
+- owner-setting mutation;
+- production mutation;
+- scheduler;
+- trading
+
+was introduced.
+
+C4/R10 remains implementation-complete and executable-validation pending.
+
+Rerun:
+
+```bash
+git pull --ff-only
+bash scripts/c4-validate-program-c-r10.sh
+```
