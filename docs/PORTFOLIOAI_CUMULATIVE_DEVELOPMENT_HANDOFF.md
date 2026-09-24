@@ -3230,9 +3230,9 @@ by this documentation update.
 
 ## Program B · B0 closure verification and contract freeze — 24 September 2026
 
-**Checkpoint:** B0 — Program A Closure Verification + Program B Contract Freeze  
-**Audit starting HEAD:** `5d4a52c0274f42e2db6078b486713550b854b1a9`  
-**Branch:** `program-a-evidence-coverage`  
+**Checkpoint:** B0 — Program A Closure Verification + Program B Contract Freeze
+**Audit starting HEAD:** `5d4a52c0274f42e2db6078b486713550b854b1a9`
+**Branch:** `program-a-evidence-coverage`
 **Result:** **COMPLETE / PASS / CLOSED — OWNER APPROVAL REQUIRED BEFORE B1**
 
 ### Repository-state verification
@@ -3394,14 +3394,14 @@ validation work is authorized by this B0 closure.
 
 ## Program B · B1 R6 contract architecture candidate — 24 September 2026
 
-**Checkpoint:** B1 — R6 Contract & Architecture / Checkpoint A  
-**Owner authorization:** APPROVED TO BEGIN B1  
-**Starting commit:** `10c87a5d9a2eb5338db51f3f85e5f5ce1ff9a605`  
-**Implementation commits:**  
+**Checkpoint:** B1 — R6 Contract & Architecture / Checkpoint A
+**Owner authorization:** APPROVED TO BEGIN B1
+**Starting commit:** `10c87a5d9a2eb5338db51f3f85e5f5ce1ff9a605`
+**Implementation commits:**
 - `306a4d9ce8de4fb9e6ccdf478767181471b30072` — B1 contract architecture candidate;
 - `b2d37a66380ecf605733dd6f75340002ac97ee80` — strict-TypeScript contract correction.
 
-**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**  
+**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**
 **B2 status:** **NOT STARTED / NOT AUTHORIZED**
 
 ### B1 artifacts added
@@ -3692,15 +3692,15 @@ Safety remained unchanged throughout B1:
 
 ## Program B · B2 R6 execution/validation candidate — 24 September 2026
 
-**Checkpoint:** B2 — R6 Execution & Validation / Checkpoint B  
-**Owner authorization:** APPROVED TO BEGIN B2  
-**Starting commit:** `3a2adc6b8bc04b3645676bf50ce09d3a8ea27720`  
+**Checkpoint:** B2 — R6 Execution & Validation / Checkpoint B
+**Owner authorization:** APPROVED TO BEGIN B2
+**Starting commit:** `3a2adc6b8bc04b3645676bf50ce09d3a8ea27720`
 **Implementation commits:**
 - `1815cb72794e2af8adfe963f6ff18cdf14693427` — R6 deterministic execution/disposition layer;
 - `0a8c79602b898ecc4289e99e0d0edd7c08f02e4a` — shared Research UI readiness/methodology integration;
 - `2ad45fe78abdd176b8d109bd762024c7f545caa6` — widened B2 regression runner.
 
-**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**  
+**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**
 **B3 status:** **NOT STARTED / NOT AUTHORIZED**
 
 ### B2 deterministic reference execution
@@ -4016,14 +4016,14 @@ explicit owner approval.
 
 ## Program B · B3 R7 contract architecture candidate — 24 September 2026
 
-**Checkpoint:** B3 — R7 Contract & Architecture / Checkpoint A  
-**Owner authorization:** APPROVED TO BEGIN B3  
-**Starting commit:** `820d0b1d5e378b18b64e18f8c12d5c1abddae0c2`  
+**Checkpoint:** B3 — R7 Contract & Architecture / Checkpoint A
+**Owner authorization:** APPROVED TO BEGIN B3
+**Starting commit:** `820d0b1d5e378b18b64e18f8c12d5c1abddae0c2`
 **Implementation commits:**
 - `ce2a4d6098b67aa0d9739f085e11f1992a3d45bb` — R7 recommendation/sizing contract architecture candidate;
 - `67c0f9599520710b3cb61649b014799d98670535` — include R6 regressions in B3 validation runner.
 
-**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**  
+**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**
 **B4 status:** **NOT STARTED / NOT AUTHORIZED**
 
 ### B3.1 recommendation-readiness gate
@@ -4470,14 +4470,14 @@ explicit owner approval.
 
 ## Program B · B4 R7 execution/validation candidate — 24 September 2026
 
-**Checkpoint:** B4 — R7 Execution & Validation / Checkpoint B  
-**Owner authorization:** APPROVED TO BEGIN B4  
-**Starting commit:** `5128b575532f8069693a476019732f0f56622a55`  
+**Checkpoint:** B4 — R7 Execution & Validation / Checkpoint B
+**Owner authorization:** APPROVED TO BEGIN B4
+**Starting commit:** `5128b575532f8069693a476019732f0f56622a55`
 **Implementation commits:**
 - `e6c4707ada231118c3718c9fcbefc8e5ae5e273c` — R7 execution/disposition candidate;
 - `80e3171fa190f080ffaec8c20653bacb6ddf0cbd` — static lineage/typing tightening.
 
-**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**  
+**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**
 **B-FINAL status:** **NOT STARTED / NOT AUTHORIZED**
 
 ### B4.1 controlled R7 reference execution
@@ -4844,9 +4844,9 @@ Next stage is **B-FINAL — Program B Closure**, only after explicit owner appro
 
 ## Program B · B-FINAL cross-pipeline closure candidate — 24 September 2026
 
-**Checkpoint:** B-FINAL — Program B cross-pipeline closure  
-**Owner authorization:** APPROVED TO BEGIN B-FINAL  
-**Starting commit:** `5739c9030a9952fffc8f7be1f3afc9462c48ca74`  
+**Checkpoint:** B-FINAL — Program B cross-pipeline closure
+**Owner authorization:** APPROVED TO BEGIN B-FINAL
+**Starting commit:** `5739c9030a9952fffc8f7be1f3afc9462c48ca74`
 **Implementation commits:**
 - `8c33a6e1f03166a13db1512d0a1ebf77f8900108` — B-FINAL audit/test/report/runner/closure document;
 - `6d83dda69740d10dca0779bab1b987b601cb81a5` — static import correction in the final audit layer.
@@ -6154,3 +6154,111 @@ Scheduler/trading = NOT AUTHORIZED
 Stop here. After the owner-local C1 validation is clean, C1 may be formally
 closed only with owner acceptance, and C2 requires explicit separate
 authorization.
+
+
+---
+
+## Program C · C1 formal closure — COMPLETE / PASS / CLOSED — 25 September 2026
+
+The owner confirmed that all required owner-local C1 validation commands passed.
+
+### Validation confirmation
+
+The validated branch state included the documentation-only whitespace correction
+commit:
+
+```text
+2a248bc300ed70ea143ae37164b5f4674485275e
+```
+
+The required C1 validation suite was confirmed clean:
+
+```text
+npm test -- src/features/decision/r8ContractArchitecture.test.ts = PASS
+npm run typecheck = PASS
+npm run check:architecture = PASS
+npm exec eslint -- src/features/decision/*.ts = PASS
+git diff --check 497006335d4648c7f425691fe8598f9b170ddcd3..HEAD = PASS
+```
+
+The PortfolioAI data-boundary architecture guard explicitly reported PASS.
+
+A transient Markdown trailing-whitespace issue in
+`docs/PortfolioAI_PROGRAM_C_C1_R8_CONTRACT_ARCHITECTURE.md` was corrected
+without changing contract logic. The final diff check passed.
+
+### Formal C1 closure state
+
+```text
+C1 = COMPLETE / PASS / CLOSED
+
+R8 contract = FROZEN
+R8 sub-engine vocabularies = FROZEN
+R8 dependency matrix = FROZEN
+R8 portfolio-context snapshot contract = FROZEN
+R8 deterministic run-identity contract = FROZEN
+R8 authority registry = FROZEN
+
+R8 evaluation = NOT STARTED
+portfolio-wide R8 disposition = NOT STARTED
+UI integration = NOT STARTED
+```
+
+The frozen R7 dependency policy remains:
+
+```text
+CORE_HEALTH       = OPTIONAL_CONTEXT
+PORTFOLIO_FIT     = NOT_REQUIRED
+PORTFOLIO_RISK    = NOT_REQUIRED
+EXIT_INTELLIGENCE = OPTIONAL_CONTEXT
+```
+
+### Safety boundary retained at C1 closure
+
+```text
+numeric sizing authority = NO
+opaque portfolio decision score = NO
+provider calls = 0
+AI deterministic decisions = 0
+owner-setting mutation = 0
+persistence = 0
+schema migration = 0
+production mutation = 0
+merge/deployment = 0
+scheduler mutation = 0
+trading = 0
+```
+
+### Repository closure documentation
+
+The C1 contract/architecture document was promoted to formal closed status in:
+
+```text
+docs/PortfolioAI_PROGRAM_C_C1_R8_CONTRACT_ARCHITECTURE.md
+```
+
+Closure documentation commit immediately preceding this handoff append:
+
+```text
+9d7279f5d89c84337c5df59098fb9adc4623ffd9
+```
+
+### Stop boundary / next authorization
+
+```text
+Current stop point = after C1 formal closure
+
+Next possible checkpoint = C2 only
+C2 / R8 execution authorization = NOT YET GRANTED
+
+C3 / R9 = NOT AUTHORIZED
+C4 / R10 = NOT AUTHORIZED
+C-FINAL = NOT AUTHORIZED
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+Do not begin R8 execution, portfolio-wide R8 disposition or consumer integration
+until the owner explicitly authorizes C2.
