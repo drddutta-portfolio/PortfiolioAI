@@ -122,7 +122,7 @@ export function DashboardDailyMovement() {
       <MovementList title="Top detractors" rows={model.detractors} />
     </div>
 
-    <p className="ddm-method">Daily P&amp;L = (current cached price − previous close) × current quantity. It is a market-movement measure, not realised P&amp;L and not the same as total unrealised return.</p>
+    <p className="ddm-method">Daily P&amp;L = (current cached price − previous close) × current quantity. It is a market-movement measure, not realised P&amp;L, not total unrealised return, and not R9 meaningful-change materiality.</p>
   </section>
 }
 
