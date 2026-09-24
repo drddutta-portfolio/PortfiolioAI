@@ -9,6 +9,7 @@ import { DashboardCoreExitRisk } from "../components/DashboardCoreExitRisk"
 import { DashboardDailyMovement } from "../components/DashboardDailyMovement"
 import { DashboardDecisionLayer } from "../components/DashboardDecisionLayer"
 import { DashboardMonitoringReadiness } from "../components/DashboardMonitoringReadiness"
+import { DashboardMeaningfulChanges } from "../components/DashboardMeaningfulChanges"
 import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
 import { DashboardPortfolioIntelligence } from "../components/DashboardPortfolioIntelligence"
 import { DashboardResearchIntelligence } from "../components/DashboardResearchIntelligence"
@@ -81,6 +82,7 @@ export function AppRoutes() {
                 <DashboardSectionNavigator />
                 <div id="dashboard-overview" className="dashboard-section-anchor"><DashboardPage /></div>
                 <div id="dashboard-daily-move" className="dashboard-section-anchor"><DashboardDailyMovement /></div>
+                <div id="dashboard-meaningful-change" className="dashboard-section-anchor"><DashboardMeaningfulChanges /></div>
                 <div id="dashboard-performance" className="dashboard-section-anchor"><DashboardAllocationPerformance /></div>
                 <div id="dashboard-structure" className="dashboard-section-anchor"><DashboardDecisionLayer /></div>
                 <div id="dashboard-health" className="dashboard-section-anchor"><DashboardCoreExitRisk /></div>
