@@ -102,6 +102,22 @@ export function buildProgramCR9ReferenceValidation() {
     freshObserved,
     staleObserved,
   )
+  const missingObserved = observed(tornt.assessment, {
+    observedAt: "2026-09-25T05:00:00.000Z",
+    evidenceState: "MISSING",
+  })
+  const missingEvidenceMeaningful = compareProgramCR9ObservedStates(
+    staleObserved,
+    missingObserved,
+  )
+  const conflictingObserved = observed(tornt.assessment, {
+    observedAt: "2026-09-25T06:00:00.000Z",
+    evidenceState: "CONFLICTING",
+  })
+  const conflictingEvidenceMeaningful = compareProgramCR9ObservedStates(
+    missingObserved,
+    conflictingObserved,
+  )
 
   const assignmentPreviousAssessment = fixtureAssessment(tornt.assessment, {
     decisionRunId: "C3_FIXTURE_R8_TORNTPHARM_ASSIGNMENT_PREVIOUS",
@@ -132,6 +148,13 @@ export function buildProgramCR9ReferenceValidation() {
     blockerPrevious,
     torntCurrent,
   )
+  const blockerCurrent = observed(blockerPreviousAssessment, {
+    observedAt: "2026-09-25T01:30:00.000Z",
+  })
+  const blockerAppeared = compareProgramCR9ObservedStates(
+    torntCurrent,
+    blockerCurrent,
+  )
 
   const outOfOrder = compareProgramCR9ObservedStates(
     staleObserved,
@@ -161,8 +184,11 @@ export function buildProgramCR9ReferenceValidation() {
     immaterial,
     coreHealthMeaningful,
     evidenceMeaningful,
+    missingEvidenceMeaningful,
+    conflictingEvidenceMeaningful,
     assignmentMeaningful,
     blockerCleared,
+    blockerAppeared,
     outOfOrder,
     incomparable,
     deduplicatedEvents: deduplicateProgramCR9Events(duplicateInput),
@@ -172,8 +198,11 @@ export function buildProgramCR9ReferenceValidation() {
       watchObserved,
       freshObserved,
       staleObserved,
+      missingObserved,
+      conflictingObserved,
       assignmentPrevious,
       blockerPrevious,
+      blockerCurrent,
       alivusObserved,
     },
   }
