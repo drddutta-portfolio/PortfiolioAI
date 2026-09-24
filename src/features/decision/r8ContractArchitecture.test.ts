@@ -98,6 +98,7 @@ describe("Program C C1 R8 contract and architecture", () => {
     expect(PROGRAM_C_R8_PROHIBITED_OUTPUT_FIELDS).toContain("exactAddPercentage")
     expect(PROGRAM_C_R8_PROHIBITED_OUTPUT_FIELDS).toContain("exactTrimPercentage")
     expect(PROGRAM_C_R8_PROHIBITED_OUTPUT_FIELDS).toContain("orderQuantity")
+    expect(PROGRAM_C_R8_PROHIBITED_OUTPUT_FIELDS).toContain("opaquePortfolioDecisionScore")
   })
 
   it("fails closed on missing risk authority and keeps Exit advisory", () => {
@@ -111,6 +112,15 @@ describe("Program C C1 R8 contract and architecture", () => {
       overweightAloneCanTriggerExit: false,
       tradeInstructionAllowed: false,
     })
+  })
+
+  it("freezes cross-sector isolation in the dependency contract", () => {
+    expect(programCR8DependencyFor("CORE_HEALTH").prohibitedFallbacks).toContain(
+      "CROSS_SECTOR_RULE_BORROWING",
+    )
+    expect(programCR8DependencyFor("PORTFOLIO_RISK").prohibitedFallbacks).toContain(
+      "CROSS_SECTOR_RISK_RULE_BORROWING",
+    )
   })
 
   it("freezes authority registry entries as C2-not-authorized", () => {
@@ -185,6 +195,7 @@ describe("Program C C1 R8 contract and architecture", () => {
       scoreRecomputation: false,
       recommendationRecomputation: false,
       numericSizingAuthority: false,
+      opaquePortfolioDecisionScoreAllowed: false,
       ownerSettingsMutation: false,
       persistence: false,
       schemaMigration: false,
