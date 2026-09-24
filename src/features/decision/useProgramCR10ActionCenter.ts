@@ -10,7 +10,10 @@ import {
 export function useProgramCR10ActionCenter(
   portfolio: PortfolioViewModel | null,
 ) {
-  const positions = portfolio?.openPositions ?? []
+  const positions = useMemo(
+    () => portfolio?.openPositions ?? [],
+    [portfolio],
+  )
   const securityIds = useMemo(
     () => positions.map((position) => position.securityId),
     [positions],
