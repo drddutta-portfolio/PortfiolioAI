@@ -3,6 +3,8 @@ import { Link } from "react-router-dom"
 import type { DashboardRecommendationEvidence } from "../data/dashboardEvidenceRepository"
 import { useDashboardRecommendations } from "../features/dashboard/useDashboardEvidence"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
+import { useResearchCoverage } from "../features/research/useResearchCoverage"
+import { buildProgramCR8LivePortfolioProjection } from "../features/decision/r8LivePortfolioAdapter"
 import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./DashboardScopeContext"
 import "./DashboardCoreExitRisk.css"
 
@@ -47,6 +49,11 @@ export function DashboardCoreExitRisk() {
   const securityIds = useMemo(() => portfolio?.openPositions.map((position) => position.securityId) ?? [], [portfolio])
   const recommendations = useDashboardRecommendations(portfolio?.portfolio.id ?? null, securityIds)
   const rows = useMemo(() => [...recommendations.data.values()], [recommendations.data])
+  const coverage = useResearchCoverage(portfolio?.openPositions ?? [])
+  const r8Projection = useMemo(
+    () => portfolio ? buildProgramCR8LivePortfolioProjection(portfolio, coverage.data) : null,
+    [coverage.data, portfolio],
+  )
 
   const model = useMemo(() => {
     if (!portfolio) return null
@@ -55,6 +62,7 @@ export function DashboardCoreExitRisk() {
     const scopedRows = rows.filter((row) => scopedIds.has(row.securityId))
     const byId = new Map(scoped.map((position) => [position.securityId, position]))
     const latestById = new Map(scopedRows.map((row) => [row.securityId, row]))
+    const r8ById = new Map((r8Projection?.rows ?? []).map((row) => [row.securityId, row]))
     const core = scoped.filter((position) => position.role === "CORE")
     const coreWithAdvisory = core.flatMap((position) => {
       const row = latestById.get(position.securityId)
@@ -66,6 +74,20 @@ export function DashboardCoreExitRisk() {
       .map((row) => ({ row, position: byId.get(row.securityId), state: advisoryState(row) }))
       .filter((item) => item.state === "review")
       .sort((left, right) => right.row.createdAt.localeCompare(left.row.createdAt))
+    const r8CoreRows = core.flatMap((position) => {
+      const row = r8ById.get(position.securityId)
+      return row ? [{ position, row }] : []
+    })
+    const r8ScopedRows = scoped.flatMap((position) => {
+      const row = r8ById.get(position.securityId)
+      return row ? [{ position, row }] : []
+    })
+    const r8CoreEvaluated = r8CoreRows.filter(
+      ({ row }) => row.presentation.coreHealth.coverage === "EVALUATED",
+    )
+    const r8ExitEvaluated = r8ScopedRows.filter(
+      ({ row }) => row.presentation.exitIntelligence.coverage === "EVALUATED",
+    )
     return {
       scopeLabel: dashboardScopeLabel(scopeKey, portfolio),
       scoped,
@@ -75,8 +97,12 @@ export function DashboardCoreExitRisk() {
       supportive,
       review,
       advisoryEscalations,
+      r8CoreRows,
+      r8ScopedRows,
+      r8CoreEvaluated,
+      r8ExitEvaluated,
     }
-  }, [portfolio, rows, scopeKey])
+  }, [portfolio, r8Projection?.rows, rows, scopeKey])
 
   if (isLoading || error || !portfolio || !model) return null
 
@@ -85,7 +111,7 @@ export function DashboardCoreExitRisk() {
       <div>
         <p className="eyebrow">Core health &amp; exit-risk</p>
         <h2>Where does the portfolio need structural attention?</h2>
-        <p>Read-only summary of persisted advisory evidence. Formal Core Health and Exit-Risk engine statuses are shown only when those engines have actually produced evidence; nothing is inferred from price weakness alone.</p>
+        <p>Read-only summary combining persisted advisory evidence with canonical on-demand R8 Core Health and Exit Intelligence. Missing upstream authority stays blocked or insufficient; nothing is inferred from price weakness alone.</p>
       </div>
       <span>{model.scopeLabel}</span>
     </div>
@@ -110,15 +136,15 @@ export function DashboardCoreExitRisk() {
           <strong>{model.review.length}</strong>
           <span>Advisory escalation only — not formal Exit Risk</span>
         </article>
-        <article className="warning">
-          <small>Formal Core Health engine</small>
-          <strong>NOT YET PERSISTED</strong>
-          <span>No fabricated Core / Watch / At Risk label</span>
+        <article className={model.r8CoreEvaluated.length === model.core.length && model.core.length ? "positive" : "warning"}>
+          <small>Canonical R8 Core Health</small>
+          <strong>{model.r8CoreEvaluated.length}/{model.core.length}</strong>
+          <span>On-demand, read-only; blocked/insufficient states remain explicit</span>
         </article>
-        <article className="warning">
-          <small>Formal Exit-Risk engine</small>
-          <strong>NOT YET PERSISTED</strong>
-          <span>No fabricated Healthy / Exit Watch status</span>
+        <article className={model.r8ExitEvaluated.length === model.scoped.length && model.scoped.length ? "positive" : "warning"}>
+          <small>Canonical R8 Exit Intelligence</small>
+          <strong>{model.r8ExitEvaluated.length}/{model.scoped.length}</strong>
+          <span>On-demand, non-persisted thesis/permanent-loss assessment</span>
         </article>
       </div>
 
@@ -141,18 +167,19 @@ export function DashboardCoreExitRisk() {
         </section>
 
         <section className="dcer-panel">
-          <div className="dcer-subheading"><div><span>Exit-risk readiness</span><strong>Formal engine pending</strong></div><Link to="/app/research">Research →</Link></div>
+          <div className="dcer-subheading"><div><span>Canonical R8 states</span><strong>Core Health + Exit Intelligence</strong></div><Link to="/app/research">Research →</Link></div>
           <div className="dcer-engine-note">
-            <strong>Why this panel does not show a risk score yet</strong>
-            <p>The canonical Exit Radar requires evidence across earnings deterioration, cash flow, capital efficiency, balance sheet, competitive/business deterioration, management/governance, valuation, momentum confirmation and portfolio risk. PortfolioAI does not yet persist a formal assessment across those factors.</p>
+            <strong>Read-only and fail-closed</strong>
+            <p>R8 now evaluates on demand from canonical local portfolio context. Where exact R6 lineage, risk magnitude or thesis-deterioration evidence is not available to this surface, the engine returns blocked or insufficient rather than fabricating a positive state.</p>
           </div>
+          {model.r8ScopedRows.slice(0, 6).map(({ position, row }) => <div className="dcer-readiness-row" key={position.securityId}><span>{position.symbol} · Core: {row.presentation.coreHealth.label}</span><strong>Exit: {row.presentation.exitIntelligence.label}</strong></div>)}
           <div className="dcer-readiness-row"><span>Current persisted advisories in scope</span><strong>{model.scopedRows.length}/{model.scoped.length}</strong></div>
           <div className="dcer-readiness-row"><span>Advisory escalation signals</span><strong>{model.advisoryEscalations.length}</strong></div>
           {model.advisoryEscalations.length ? <div className="dcer-escalations">{model.advisoryEscalations.slice(0, 5).map(({ row, position }) => <article key={row.securityId}><Link to={`/app/research/${row.securityId}`}>{position?.symbol ?? row.securityId.slice(0, 8)}</Link><span>{pretty(row.actionBias)} · {pretty(row.transitionStatus)}{row.changeSignal ? ` · ${pretty(row.changeSignal)}` : ""}</span></article>)}</div> : <p className="dcer-caution">No escalation is present in the currently persisted advisory evidence. This must not be interpreted as “zero exit risk” because formal Exit-Risk coverage is not yet available.</p>}
         </section>
       </div>
 
-      <p className="dcer-method">Core Health and Exit Risk remain separate concepts: position sizing or valuation can justify reducing a stock without implying a thesis-breaking exit. The formal engine layer will plug into this summary when deterministic assessments are persisted.</p>
+      <p className="dcer-method">Core Health and Exit Intelligence remain separate concepts. R8 is evaluated on demand and is not persisted in C2; persisted recommendation metadata remains separate context, and price weakness, valuation or concentration alone cannot become a thesis-breaking exit signal.</p>
     </> : null}
   </section>
 }
