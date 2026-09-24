@@ -7618,3 +7618,430 @@ Current stop point is after formal R9 closure.
 No R10 contract, integrated attention precedence, action-category composition,
 ADD_REVIEW/TRIM_REVIEW authority promotion, or C-FINAL work may begin until the
 owner explicitly authorizes C4.
+
+
+---
+
+## Program C · C4 R10 Contract + Execution + Validation — implementation complete / executable validation pending — 25 September 2026
+
+The owner authorized "C4/R9". Repository authority was applied: C3 already
+closed R9, and the frozen checkpoint map defines C4 as R10. Therefore the
+authorization was executed as C4/R10 only.
+
+### Branch / start state
+
+```text
+repository = drddutta-portfolio/PortfiolioAI
+branch = program-c-portfolio-decision-engines
+C4 starting HEAD = 60bf25caae9d9253c577a3e6809ad5527a23ddda
+C4 source implementation review HEAD = c53f653840b690e4c761ebcebe5bf270687b3bbd
+C4 checkpoint document HEAD before this handoff = 83ccdf934367d2f76dbb7480b0c3804d07dd1797
+```
+
+### C4 R10 artifacts
+
+Added:
+
+```text
+src/features/decision/r10ActionCenterContract.ts
+src/features/decision/r10PrecedenceRegistry.ts
+src/features/decision/r10Identity.ts
+src/features/decision/r10ActionCenterEngine.ts
+src/features/decision/r10ActionCenterViewModel.ts
+src/features/decision/r10OwnerAuthority.ts
+src/features/decision/r10AuthorityRegistry.ts
+src/features/decision/r10LiveActionCenter.ts
+src/features/decision/r10FrozenPortfolioDisposition.ts
+src/features/decision/r10ReferenceValidation.ts
+src/features/decision/r10C4Validation.ts
+src/features/decision/r10ActionCenter.test.ts
+src/features/decision/useProgramCR10ActionCenter.ts
+
+src/components/ProgramCR10AttentionBadge.tsx
+src/components/ProgramCR10AttentionBadge.css
+```
+
+Controlled consumer changes:
+
+```text
+src/components/DashboardDecisionLayer.tsx
+src/pages/ResearchPage.tsx
+src/pages/HoldingsPage.tsx
+```
+
+Validation tooling:
+
+```text
+scripts/program-c-c4-report.mjs
+scripts/program-c-c4-static-safety.mjs
+scripts/c4-validate-program-c-r10.sh
+```
+
+Checkpoint document:
+
+```text
+docs/PortfolioAI_PROGRAM_C_C4_R10_EXECUTION_VALIDATION.md
+```
+
+No C-FINAL implementation was started.
+
+### Canonical R10 states
+
+```text
+EXIT_REVIEW
+REVIEW_REQUIRED
+BLOCKED_PREREQUISITE
+EVIDENCE_REVIEW
+INSUFFICIENT_EVIDENCE
+RISK_REVIEW
+RECOMMENDATION_CHANGE_REVIEW
+CONCENTRATION_REVIEW
+ROLE_REVIEW
+PORTFOLIO_FIT_REVIEW
+THESIS_WEAKENING
+MONITOR
+THESIS_STRENGTHENING
+NO_ACTION_REQUIRED
+NOT_APPLICABLE
+```
+
+The vocabulary is review-oriented and non-executing.
+
+### ADD_REVIEW / TRIM_REVIEW C4 decision
+
+The frozen amendment required explicit proof of approved upstream directional
+authority before promotion.
+
+C4 found no approved numeric/directional sizing authority that would justify
+canonical ADD/TRIM semantics without over-interpreting R7 or owner weight
+settings.
+
+Therefore:
+
+```text
+ADD_REVIEW = candidate-only / NOT PROMOTED
+TRIM_REVIEW = candidate-only / NOT PROMOTED
+
+canonical membership = NO
+numeric sizing authority = NO
+```
+
+This is now encoded in the R10 contract and authority registry.
+
+### Deterministic precedence
+
+Frozen R10 precedence:
+
+```text
+NOT_APPLICABLE
+EXIT_REVIEW
+REVIEW_REQUIRED
+BLOCKED_PREREQUISITE
+EVIDENCE_REVIEW
+INSUFFICIENT_EVIDENCE
+RISK_REVIEW
+RECOMMENDATION_CHANGE_REVIEW
+CONCENTRATION_REVIEW
+ROLE_REVIEW
+PORTFOLIO_FIT_REVIEW
+THESIS_WEAKENING
+MONITOR
+THESIS_STRENGTHENING
+NO_ACTION_REQUIRED
+```
+
+A higher-priority state retains lower-priority supporting/counter signals.
+
+### Conflict preservation
+
+Structured conflicts include:
+
+```text
+FAVOURABLE_RECOMMENDATION_VS_EXIT_RISK
+FAVOURABLE_RECOMMENDATION_VS_PORTFOLIO_RISK
+RECOMMENDATION_ROLE_VS_OWNER_ROLE
+FAVOURABLE_RECOMMENDATION_VS_CONCENTRATION
+POSITIVE_R8_CONTEXT_VS_EVIDENCE_DETERIORATION
+```
+
+Signals are never averaged into a hidden master score.
+
+### Exact upstream lineage
+
+R10 verifies exact security/portfolio identity across R8/R9 and rejects an R9
+current observation referencing a different R8 decision run.
+
+R10 carries:
+
+```text
+classificationVersion
+researchProfileCode
+methodologyId/version
+methodologyRole
+assignmentId/version
+evidenceSnapshotId
+R6 scoreRunId
+R7 recommendationRunId
+portfolioContextSnapshotId
+R8 decisionRunId
+R9 previous/current observed-state ids
+R9 changeEventId
+R9 ruleVersion
+R9 ownerContextVersion
+ownerThresholdContextId
+R10 integratedAttentionId
+```
+
+No missing upstream identity is reconstructed.
+
+### Owner threshold identity correction
+
+During C4 static review, an identity issue was identified before validation:
+owner target/stop settings can alter R10 attention without necessarily altering
+R8/R9.
+
+The R10 deterministic identity was therefore strengthened to include a semantic:
+
+```text
+ownerThresholdContextId
+```
+
+derived from the exact owner target/stop/current-price alert context.
+
+Changing owner threshold context now deterministically changes R10 attention
+identity.
+
+### Owner target / stop semantics
+
+Owner-authored target/stop settings may produce:
+
+```text
+REVIEW_REQUIRED
+```
+
+with exact reason codes such as:
+
+```text
+OWNER_STOP_LOSS_THRESHOLD_REACHED
+OWNER_TARGET_PRICE_THRESHOLD_REACHED
+```
+
+These are review states only.
+
+They do not produce quantity, exact percentage, order or trade instructions.
+
+### Controlled C4 validation fixtures
+
+C4 fixtures cover:
+
+```text
+clean complete state -> NO_ACTION_REQUIRED
+first observation -> MONITOR
+hard Exit Intelligence + favourable recommendation -> EXIT_REVIEW + conflict
+concentration -> CONCENTRATION_REVIEW
+role compatibility -> ROLE_REVIEW
+blocked chain -> BLOCKED_PREREQUISITE
+stale evidence over partial context -> EVIDENCE_REVIEW
+owner stop threshold -> REVIEW_REQUIRED
+R8/R9 run mismatch -> fail closed
+owner threshold context change -> new R10 identity
+```
+
+### Frozen 238-holding R10 disposition
+
+The frozen Program C universe remains:
+
+```text
+PROGRAM_C_VALIDATION_UNIVERSE_V1
+K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22
+238 holdings
+238 EQUITY
+```
+
+R10 consumes closed R8/R9 frozen dispositions.
+
+Because the frozen K5 fixture still lacks canonical security IDs and comparable
+R9 historical state, R10 does not fabricate a full integrated attention ID.
+
+Every holding gets an explicit R10 disposition:
+
+```text
+NOT_APPLICABLE where upstream R8 is non-applicable
+otherwise BLOCKED_PREREQUISITE
+```
+
+Aggregate guarantees:
+
+```text
+dispositionComplete = true
+directionalAddReviewCount = 0
+directionalTrimReviewCount = 0
+providerCalls = 0
+persistedWrites = 0
+```
+
+Portfolio-wide deterministic disposition is complete; positive/action/numeric
+coverage is not claimed.
+
+### One canonical live Action Center
+
+Pure domain path:
+
+```text
+buildProgramCR10LiveActionCenter()
+-> evaluateProgramCR10Attention()
+-> buildProgramCR10ActionCenterView()
+```
+
+Shared application hook:
+
+```text
+useProgramCR10ActionCenter()
+```
+
+The hook waits until cached research coverage and cached owner monitoring values
+have settled before publishing the collection.
+
+### Dashboard integration
+
+`DashboardDecisionLayer` no longer uses local Action Center business logic.
+
+Removed as Action Center authorities:
+
+```text
+localActions()
+recommendationTone()
+persisted recommendation action-bias promotion
+```
+
+The Dashboard canonical Action Center now consumes the shared R10 collection.
+
+Role/theme tables remain descriptive portfolio-structure views.
+
+### Research integration
+
+Research projects the same shared R10 attention fact in the security position
+header through `ProgramCR10AttentionBadge`.
+
+Research does not recompute R10 precedence or conflicts.
+
+### Holdings integration
+
+Open Holdings now exposes a canonical `R10 Action Center` column using the same
+shared attention view.
+
+Closed positions display R10 as not applicable.
+
+Holdings does not implement local R10 priorities.
+
+### Cross-surface authority
+
+Dashboard, Research and Holdings all consume:
+
+```text
+useProgramCR10ActionCenter()
+```
+
+Presentation code does not call `evaluateProgramCR10Attention()` directly.
+
+The same canonical inputs therefore produce the same attention identity/state,
+severity, reasons and conflicts across surfaces.
+
+### R10 authority registry
+
+```text
+executionAuthority = C4_OWNER_AUTHORIZED_READ_ONLY
+actionCenterAuthority = ONE_CANONICAL_R10_COLLECTION
+conflictAuthority = EXPLICIT_PRESERVATION_NO_AVERAGING
+addReviewAuthority = NOT_PROMOTED
+trimReviewAuthority = NOT_PROMOTED
+exitReviewAuthority = R8_EXIT_INTELLIGENCE_ONLY
+numericSizingAuthority = NONE
+aiDecisionAuthority = NONE
+providerAuthority = NONE
+persistenceAuthority = NONE
+ownerMutationAuthority = NONE
+schedulerAuthority = NONE
+tradingAuthority = NONE
+```
+
+### Static source review
+
+Remote inspection of R10 runtime modules found no:
+
+- direct data-repository import;
+- Supabase import;
+- Angel One import;
+- Trendlyne import;
+- OpenAI import;
+- provider-acquisition import;
+- scheduler/brokerage/order repository import;
+- `fetch()`;
+- `Date.now()`;
+- `Math.random()`;
+- insert/update/upsert call;
+- database-style chained delete call.
+
+### Repository boundary
+
+No:
+
+- migration;
+- Edge Function;
+- data repository;
+- provider adapter;
+- workflow;
+- persistence schema;
+- production configuration;
+- scheduler;
+- trading path
+
+was changed.
+
+### Required owner-local validation
+
+Run:
+
+```bash
+git fetch origin
+git switch program-c-portfolio-decision-engines
+git pull --ff-only
+
+bash scripts/c4-validate-program-c-r10.sh
+```
+
+The runner must end with:
+
+```text
+PROGRAM C C4 VALIDATION ALL PASS
+R10 = IMPLEMENTED / VALIDATED / AWAITING OWNER CLOSURE
+```
+
+before C4/R10 may be formally closed.
+
+### Current Program C state
+
+```text
+C0 = COMPLETE / PASS / CLOSED
+C1 = COMPLETE / PASS / CLOSED
+C2 = COMPLETE / PASS / CLOSED
+C3 = COMPLETE / PASS / CLOSED
+
+R8 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+
+C4 implementation = COMPLETE
+C4 static architecture/safety review = PASS
+C4 owner-local executable validation = PENDING
+C4 formal closure = PENDING
+R10 formal closure = PENDING
+
+C-FINAL = NOT AUTHORIZED
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+Stop after C4 implementation. C-FINAL requires clean C4 validation, explicit
+owner acceptance of R10 closure and separate authorization.
