@@ -125,14 +125,15 @@ export function buildProgramCR10ReferenceValidation() {
     throw new Error("Program C C4 reference validation requires TORNTPHARM owner context.")
   }
 
-  const noAction = evaluateProgramCR10Attention(inputFor(
+  const noActionInput = inputFor(
     tornt.assessment,
     r9.noChange,
     r9.observations.torntReplay.lineage.r8DecisionRunId,
     ownerContext,
     "CORE_CANDIDATE",
     r9.observations.torntReplay.lineage.classificationVersion,
-  ))
+  )
+  const noAction = evaluateProgramCR10Attention(noActionInput)
 
   const firstObservation = evaluateProgramCR10Attention(inputFor(
     tornt.assessment,
@@ -293,5 +294,8 @@ export function buildProgramCR10ReferenceValidation() {
     blocked,
     evidenceReview,
     stopThreshold,
+    inputs: {
+      noAction: noActionInput,
+    },
   }
 }
