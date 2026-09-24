@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useSyncExternalStore } from "react"
 import { Link } from "react-router-dom"
 import { buildProgramCR9LiveObservedProjection } from "../features/decision/r9LivePortfolioAdapter"
-import { advanceProgramCR9InMemorySession, type ProgramCR9LiveSessionAdvance } from "../features/decision/r9LiveSession"
-import type { ProgramCR9ObservedState } from "../features/decision/r9ObservedState"
+import { createProgramCR9LiveSessionStore } from "../features/decision/r9LiveSessionStore"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { useResearchCoverage } from "../features/research/useResearchCoverage"
 import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./DashboardScopeContext"
@@ -20,9 +19,12 @@ export function DashboardMeaningfulChanges() {
   const { scopeKey } = useDashboardScope()
   const positions = portfolio?.openPositions ?? []
   const coverage = useResearchCoverage(positions)
-  const previousStates = useRef<ReadonlyMap<string, ProgramCR9ObservedState>>(new Map())
-  const seenEventIds = useRef<ReadonlySet<string>>(new Set())
-  const [session, setSession] = useState<ProgramCR9LiveSessionAdvance | null>(null)
+  const sessionStore = useMemo(() => createProgramCR9LiveSessionStore(), [])
+  const session = useSyncExternalStore(
+    sessionStore.subscribe,
+    sessionStore.getSnapshot,
+    sessionStore.getSnapshot,
+  )
 
   const projection = useMemo(() => {
     if (!portfolio || coverage.isLoading || coverage.error) return null
@@ -30,19 +32,8 @@ export function DashboardMeaningfulChanges() {
   }, [coverage.data, coverage.error, coverage.isLoading, portfolio])
 
   useEffect(() => {
-    if (!projection) {
-      setSession(null)
-      return
-    }
-    const nextSession = advanceProgramCR9InMemorySession(
-      previousStates.current,
-      projection.rows,
-      seenEventIds.current,
-    )
-    previousStates.current = nextSession.nextObservedStates
-    seenEventIds.current = nextSession.nextSeenEventIds
-    setSession(nextSession)
-  }, [projection])
+    sessionStore.ingest(projection)
+  }, [projection, sessionStore])
 
   const model = useMemo(() => {
     if (!portfolio || !session) return null
