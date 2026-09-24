@@ -32,7 +32,7 @@ function favourableRecommendation(value: string | null) {
   return value === "CORE_CANDIDATE" || value === "SATELLITE_CANDIDATE"
 }
 
-function unique(values: readonly string[]) {
+function unique<T extends string>(values: readonly T[]): T[] {
   return [...new Set(values)]
 }
 
