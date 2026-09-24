@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises"
 import { execFileSync } from "node:child_process"
 import { createServer } from "vite"
 import { assertProgramAA2ProviderResult } from "./program-a-a2-provider-result.mjs"
+import { normalizeLocalCredential, verifyLocalUserSession } from "./program-a-local-auth.mjs"
 
 const [mode, snapshotPath, approvedStage, approvedPlanId, confirmationToken] = process.argv.slice(2)
 if (!mode || !snapshotPath || !["PLAN", "EXECUTE_STAGE"].includes(mode)) throw new Error("Usage: runner PLAN <snapshot> | EXECUTE_STAGE <snapshot> <A2A|A2B|A2C> <plan-id> <confirmation-token>")
@@ -19,10 +20,16 @@ try {
     process.exitCode = 0
   } else {
     if (!approvedStage || !approvedPlanId || !confirmationToken) throw new Error("EXECUTE_STAGE requires the approved stage, plan id, and exact confirmation token.")
-    const accessToken = process.env.PROGRAM_A_LOCAL_ACCESS_TOKEN
-    const anonKey = process.env.PROGRAM_A_LOCAL_ANON_KEY
-    const classificationToken = process.env.PROGRAM_A_LOCAL_CLASSIFICATION_TOKEN
-    if (!accessToken || !anonKey || !classificationToken) throw new Error("EXECUTE requires PROGRAM_A_LOCAL_ACCESS_TOKEN, PROGRAM_A_LOCAL_ANON_KEY, and PROGRAM_A_LOCAL_CLASSIFICATION_TOKEN.")
+    const accessToken = normalizeLocalCredential(process.env.PROGRAM_A_LOCAL_ACCESS_TOKEN)
+    const anonKey = normalizeLocalCredential(process.env.PROGRAM_A_LOCAL_ANON_KEY)
+    const classificationToken = normalizeLocalCredential(process.env.PROGRAM_A_LOCAL_CLASSIFICATION_TOKEN)
+    if (!anonKey) throw new Error("AUTH_OR_CONFIG_ERROR")
+    if (approvedStage === "A2A") {
+      if (!classificationToken) throw new Error("AUTH_OR_CONFIG_ERROR")
+    } else {
+      if (!accessToken) throw new Error("AUTH_OR_CONFIG_ERROR")
+      await verifyLocalUserSession({ localUrl, anonKey, accessToken })
+    }
     const approvedPlan = { ...currentPlan, planId: approvedPlanId }
     const invoke = async (name, body, headers = {}, includeAuthorization = true) => {
       const authHeaders = includeAuthorization ? { Authorization: `Bearer ${accessToken}` } : {}

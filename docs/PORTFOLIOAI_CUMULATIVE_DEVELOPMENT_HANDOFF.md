@@ -2985,3 +2985,49 @@ Safety state remains:
 
 **Current boundary: pull the canonical BANK guard fix locally, run focused validation,
 regenerate a fresh A2C plan, then resume A2C only.**
+
+---
+
+## Program A · A2C local-auth blocker diagnosis and fail-closed runner correction — 24 September 2026
+
+The post-BANK-guard A2C attempt labelled `AUROPHARMA / CAPABILITY_MISMATCH`
+did not reach Angel One and made zero writes. The label was not evidence of an
+application capability failure. The runner converted an unrecognised Edge/auth
+error to the generic `CAPABILITY_MISMATCH` stop reason.
+
+Verified local evidence:
+- the authenticated Chrome session contains `sb-127-auth-token` with a
+  775-character, three-segment user JWT;
+- the prior browser-to-shell clipboard transfer was empty/truncated, so the
+  runner did not have the authenticated browser session token;
+- no provider call is necessary to diagnose this boundary;
+- local `/auth/v1/user` verification has not yet completed because the browser
+  JWT has not been transferred into the shell through an approved secure local
+  mechanism.
+
+Focused runner correction:
+- trim local credential environment values before use;
+- require the classification token only for A2A, and require the user JWT only
+  for authenticated A2B/A2C execution;
+- validate normal three-segment JWT shape;
+- verify the user JWT against local `/auth/v1/user` before any A2B/A2C action or
+  provider dispatch;
+- fail closed with `AUTH_OR_CONFIG_ERROR` instead of allowing an auth failure to
+  be misreported as a provider capability mismatch;
+- do not expose the JWT or persist it in repository files.
+
+Validation passed:
+- Program A local-auth/provider-result Node tests: 12/12;
+- A2 controller tests: 14/14;
+- Edge provider-contract, BANK-authority and Angel One tests: 13/13;
+- typecheck;
+- changed-file ESLint;
+- architecture guard;
+- production build;
+- `git diff --check`.
+
+Execution remains stopped before provider dispatch until local `/auth/v1/user`
+returns HTTP 200 with the real browser user JWT. The residual `be56e35...` plan
+was not executed, A2A/A2B were not reopened, and Trendlyne was not called.
+
+**Program A · A2C remains IN PROGRESS / NOT CLOSED.**
