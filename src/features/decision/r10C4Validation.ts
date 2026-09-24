@@ -37,9 +37,10 @@ export function buildProgramCR10C4Validation() {
   const conflictPass = first.exitConflict.conflicts.some(
     (conflict) => conflict.code === "FAVOURABLE_RECOMMENDATION_VS_EXIT_RISK",
   )
+  const canonicalStates: readonly string[] = PROGRAM_C_R10_STATES
   const directionalBoundaryPass = (
-    !PROGRAM_C_R10_STATES.includes("ADD_REVIEW" as never)
-    && !PROGRAM_C_R10_STATES.includes("TRIM_REVIEW" as never)
+    !canonicalStates.includes("ADD_REVIEW")
+    && !canonicalStates.includes("TRIM_REVIEW")
     && !PROGRAM_C_R10_DIRECTIONAL_CANDIDATES.ADD_REVIEW.canonical
     && !PROGRAM_C_R10_DIRECTIONAL_CANDIDATES.TRIM_REVIEW.canonical
   )
