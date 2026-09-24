@@ -39,7 +39,7 @@ export function useProgramCR10ActionCenter(
 
   const data = useMemo(
     () => (
-      portfolio && !coverage.isLoading
+      portfolio && !coverage.isLoading && !monitoring.isLoading
         ? buildProgramCR10LiveActionCenter(
             portfolio,
             coverage.data,
@@ -47,7 +47,7 @@ export function useProgramCR10ActionCenter(
           )
         : null
     ),
-    [coverage.data, coverage.isLoading, monitoringInputs, portfolio],
+    [coverage.data, coverage.isLoading, monitoring.isLoading, monitoringInputs, portfolio],
   )
 
   return {
