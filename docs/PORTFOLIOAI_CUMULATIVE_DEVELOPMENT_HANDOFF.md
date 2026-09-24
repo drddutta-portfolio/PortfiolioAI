@@ -5354,6 +5354,52 @@ Focused result: 38 R6/R7 tests passed; the structural safety scan and
 TypeScript passed. No provider call, migration, production mutation,
 deployment, merge, scheduler mutation or trade occurred.
 
+### C6 — Program B lint, report runner and naming cleanup
+
+**Status:** COMPLETE / PASS
+
+Removed the two unnecessary non-null assertions from the R7 sizing-readiness
+success path after explicitly narrowing the normalized lineage identifiers.
+Renamed the R7 portfolio aggregate `failClosed` field to `notSizingReady`, which
+accurately includes recommendation-ready rows for which no sizing methodology
+is approved. Disabled Vite HMR in the read-only final-report runner to avoid
+WebSocket startup in restricted environments.
+
+B-FINAL now runs scoped lint over the Program B contract, execution,
+presentation, UI, report and safety files. That scope passes. A separate full
+repository lint continues to report historical issues outside this correction;
+in particular, unchanged assertion sites in the scoring repositories are not
+silently broadened into C6 cleanup.
+
+Focused result: 26 R7/final-closure tests passed and scoped Program B lint
+passed after excluding the documented unchanged repository-wide lint debt.
+
+### Program B corrective outcome
+
+```text
+Program B = CORRECTED / VALIDATED / OPEN
+Corrective B-FINAL = PASS
+Formal Program B closure = AWAITING EXPLICIT OWNER APPROVAL
+Production operational = NO
+```
+
+Final corrective evidence: 30 test files / 202 tests passed; the canonical
+final audit returned `overallPass: true`; the structural compute-path scan,
+scoped Program B lint, repository safety allowlist, TypeScript, architecture
+guard, production build and `git diff --check` passed. The five reference UI
+contracts resolve to their expected `PHARMA_V1` Primary roles through the
+Research presentation integration tests.
+
+The separate repository-wide `npm run lint` remains non-green with 77 errors
+and 4 warnings in historical, out-of-scope files. The two specifically reported
+Program B R7 lint errors are fixed, and the scoped corrective files are clean.
+No secret pattern, merge commit, migration, Edge Function, workflow, scheduler
+or trading-path change was found in the corrective diff/history checks.
+
+No production mutation, migration, deployment, merge, scheduler mutation,
+automated recommendation/sizing persistence or trade was authorized or
+performed.
+
 ### C2 — R6 Pharma enforcement and applicability contradictions
 
 **Status:** COMPLETE / PASS

@@ -52,7 +52,7 @@ try {
       totalHoldings: portfolio.totalHoldings,
       recommendationReady: portfolio.recommendationReady,
       sizingReady: portfolio.sizingReady,
-      failClosed: portfolio.failClosed,
+      notSizingReady: portfolio.notSizingReady,
       dispositionComplete: portfolio.dispositionComplete,
       numericRecommendationCoverageComplete: portfolio.numericRecommendationCoverageComplete,
       numericSizingCoverageComplete: portfolio.numericSizingCoverageComplete,

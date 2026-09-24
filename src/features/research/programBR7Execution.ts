@@ -120,7 +120,7 @@ export interface ProgramB4PortfolioDisposition {
   readonly rows: readonly ProgramB4PortfolioDispositionRow[]
   readonly recommendationReady: number
   readonly sizingReady: number
-  readonly failClosed: number
+  readonly notSizingReady: number
   readonly dispositionComplete: true
   readonly numericRecommendationCoverageComplete: boolean
   readonly numericSizingCoverageComplete: boolean
@@ -731,7 +731,7 @@ export function buildProgramB4FrozenPortfolioDisposition(): ProgramB4PortfolioDi
     rows,
     recommendationReady,
     sizingReady,
-    failClosed: rows.length - sizingReady,
+    notSizingReady: rows.length - sizingReady,
     dispositionComplete: true,
     numericRecommendationCoverageComplete: recommendationReady === rows.length,
     numericSizingCoverageComplete: sizingReady === rows.length,

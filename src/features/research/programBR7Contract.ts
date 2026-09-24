@@ -510,6 +510,8 @@ function failSizing(
 export function evaluateProgramBSizingReadiness(
   input: ProgramBSizingReadinessInput,
 ): ProgramBSizingReadinessResult {
+  const recommendationRunId = input.recommendationRunId?.trim()
+  const recommendationScoreRunId = input.recommendationScoreRunId?.trim()
   if (input.assetClass.toUpperCase() !== "EQUITY" || input.recommendationState === "NOT_APPLICABLE") {
     return failSizing(input, "NOT_APPLICABLE", ["ASSET_CLASS_NOT_EQUITY"])
   }
@@ -525,7 +527,7 @@ export function evaluateProgramBSizingReadiness(
   if (input.recommendationState !== "READY") {
     return failSizing(input, "BLOCKED_PREREQUISITE", ["SOURCE_RECOMMENDATION_BLOCKED"])
   }
-  if (!input.recommendationRunId?.trim() || !input.recommendationScoreRunId?.trim()) {
+  if (!recommendationRunId || !recommendationScoreRunId) {
     return failSizing(input, "BLOCKED_PREREQUISITE", ["SOURCE_RECOMMENDATION_LINEAGE_INCOMPLETE"])
   }
 
@@ -557,8 +559,8 @@ export function evaluateProgramBSizingReadiness(
     canSize: true,
     policyId: input.sizingMethodology.policyId,
     policyVersion: input.sizingMethodology.policyVersion,
-    sourceRecommendationRunId: input.recommendationRunId!.trim(),
-    sourceScoreRunId: input.recommendationScoreRunId!.trim(),
+    sourceRecommendationRunId: recommendationRunId,
+    sourceScoreRunId: recommendationScoreRunId,
     reasonCodes: ["SIZING_READINESS_READY"],
   }
 }

@@ -6,6 +6,11 @@
 **Starting commit:** `5739c9030a9952fffc8f7be1f3afc9462c48ca74`  
 **Status:** FINAL VALIDATION PASS — FORMAL PROGRAM B CLOSURE DEFERRED BY OWNER
 
+> Corrective audit addendum (24 September 2026): all confirmed post-validation
+> findings were repaired and the strengthened B-FINAL suite passed. The precise
+> current status is `Program B = CORRECTED / VALIDATED / OPEN`. Formal closure
+> still awaits explicit owner approval; production operational remains `NO`.
+
 ## 1. Purpose
 
 B-FINAL is a closing regression and audit only.
