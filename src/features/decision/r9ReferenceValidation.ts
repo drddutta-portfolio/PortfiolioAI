@@ -1,6 +1,7 @@
 import type { ProgramCR8PortfolioDecisionAssessment } from "./r8PortfolioDecisionContract"
 import { buildProgramCR8ReferenceValidationAssessments } from "./r8ReferenceValidation"
 import { compareProgramCR9ObservedStates, deduplicateProgramCR9Events } from "./r9MeaningfulChangeEngine"
+import type { ProgramCR9MeaningfulChangeEvent } from "./r9MeaningfulChangeContract"
 import { buildProgramCR9ObservedState, type ProgramCR9ObservedStateInput } from "./r9ObservedState"
 
 export const PROGRAM_C_R9_REFERENCE_VALIDATION_VERSION =
@@ -150,7 +151,7 @@ export function buildProgramCR9ReferenceValidation() {
     coreHealthMeaningful.event,
     coreHealthMeaningful.event,
     evidenceMeaningful.event,
-  ].filter((event): event is NonNullable<typeof event> => event !== null)
+  ].filter((event): event is ProgramCR9MeaningfulChangeEvent => event !== null)
 
   return {
     version: PROGRAM_C_R9_REFERENCE_VALIDATION_VERSION,
