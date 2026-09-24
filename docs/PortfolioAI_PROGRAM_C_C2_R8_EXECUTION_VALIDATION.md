@@ -7,7 +7,7 @@
 **Starting HEAD:** `fdd44b4591402dbc521e597e499341e2395b910a`
 **Initial source implementation review HEAD:** `823e47b503dd1c678f29dcad8e814df6ae74bb6f`
 **Latest source implementation HEAD before this document refresh:** `a449963778b7d61e0004fc20b4311060571eb3b3`
-**Status:** IMPLEMENTED / STATIC REVIEW PASS / OWNER-LOCAL EXECUTABLE VALIDATION PENDING
+**Status:** COMPLETE / PASS / CLOSED — owner-local executable validation confirmed
 
 ## 1. C2 authority
 
@@ -424,9 +424,16 @@ No:
 
 is changed.
 
-## 19. Required owner-local executable validation
+## 19. Owner-local executable validation
 
-Run:
+The owner confirmed the authoritative C2 validation runner completed successfully
+after synchronizing the Program C branch through:
+
+```text
+74a59f6b6e480f2a8e140c2566e528dc0d2c9af0
+```
+
+Executed:
 
 ```bash
 git fetch origin
@@ -436,25 +443,28 @@ git pull --ff-only
 bash scripts/c2-validate-program-c-r8.sh
 ```
 
-The runner executes:
-
-- C1 contract regression;
-- C2 execution tests;
-- Program B final/R6/R7 regression tests;
-- canonical C2 report;
-- structural provider/AI/persistence/trading safety scan;
-- scoped C2 ESLint;
-- repository allowlist;
-- TypeScript;
-- architecture guard;
-- production build;
-- `git diff --check`.
-
-C2 must not be promoted to formal closure until the owner-local runner ends with:
+The runner completed with:
 
 ```text
 PROGRAM C C2 VALIDATION ALL PASS
+R8 = IMPLEMENTED / VALIDATED / AWAITING OWNER CLOSURE
 ```
+
+This confirms the C2 validation bundle passed, including:
+
+- C1 contract regression;
+- C2 R8 execution tests;
+- Program B final/R6/R7 regression tests;
+- canonical C2 aggregate report;
+- static provider/AI/persistence/trading safety scan;
+- scoped C2 ESLint;
+- repository safety allowlist;
+- TypeScript;
+- PortfolioAI architecture/data-boundary guard;
+- production build;
+- `git diff --check`.
+
+No failed executable validation remains open.
 
 ## 20. C2 safety state
 
@@ -479,17 +489,43 @@ scheduler mutation = 0
 trading = 0
 ```
 
-## 21. Current stop point
+## 21. C2 / R8 formal closure and stop point
+
+C2 satisfies the frozen R8 Checkpoint-B exit criteria.
 
 ```text
 C2 implementation = COMPLETE
 C2 static architecture/safety review = PASS
-C2 executable validation = PENDING
-C2 formal closure = PENDING
-R8 formal closure = PENDING
+C2 executable validation = PASS
+C2 formal closure = COMPLETE / PASS / CLOSED
 
-C3 / R9 authorization = NONE
+R8 contract = CLOSED
+R8 execution = CLOSED
+R8 deterministic replay = PASS
+R8 frozen-universe disposition completeness = PASS
+R8 owner-authority regression = PASS
+R8 consumer integration = VALIDATED
+R8 provider/AI/persistence/trading safety = PASS
+
+R8 = COMPLETE / PASS / CLOSED
+
+C3 / R9 = NOT STARTED
+C3 authorization = NONE
 ```
 
-Do not begin C3 until the C2 owner-local validation is clean, R8 is formally
-accepted/closed by the owner, and C3 is separately authorized.
+Intentional R8 limitations remain explicit:
+
+- the 238-holding frozen K5 universe has complete deterministic dispositions but
+  does not claim complete positive R8 coverage;
+- numeric action/sizing coverage is not authorized or claimed;
+- live Core Health remains blocked where exact canonical R6 lineage is not
+  materialized to the surface;
+- live Portfolio Risk remains insufficient without canonical risk magnitude
+  evidence;
+- live Exit Intelligence remains insufficient without thesis/permanent-loss
+  evidence;
+- R8 remains read-only and non-persisting.
+
+No C3/R9 work is included in this closure.
+
+The repository must stop here until the owner separately authorizes C3.
