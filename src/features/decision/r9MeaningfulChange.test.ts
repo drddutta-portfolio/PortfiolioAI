@@ -18,6 +18,8 @@ import {
 } from "./r9MeaningfulChangeRegistry"
 import { buildProgramCR9C3Validation } from "./r9C3Validation"
 import { advanceProgramCR9InMemorySession } from "./r9LiveSession"
+import { PROGRAM_C_R9_LIVE_ADAPTER_VERSION } from "./r9LivePortfolioAdapter"
+import { createProgramCR9LiveSessionStore } from "./r9LiveSessionStore"
 import { buildProgramCR9ReferenceValidation } from "./r9ReferenceValidation"
 
 describe("Program C C3 R9 meaningful change", () => {
@@ -179,6 +181,56 @@ describe("Program C C3 R9 meaningful change", () => {
     expect(session.comparisons[0]?.comparison.transitionState).toBe("OUT_OF_ORDER")
     expect(session.nextObservedStates.get(stale.securityId)?.observedStateId)
       .toBe(stale.observedStateId)
+  })
+
+  it("uses an external-store session boundary without changing R9 comparison semantics", () => {
+    const validation = buildProgramCR9ReferenceValidation()
+    const store = createProgramCR9LiveSessionStore()
+    let notificationCount = 0
+    const unsubscribe = store.subscribe(() => {
+      notificationCount += 1
+    })
+
+    const firstRow = {
+      securityId: validation.observations.torntCurrent.securityId,
+      symbol: "TORNTPHARM",
+      company: "Torrent Pharmaceuticals",
+      observedState: validation.observations.torntCurrent,
+      baseline: validation.firstObservation,
+      presentation: {
+        transitionState: "FIRST_OBSERVATION" as const,
+        label: "First Observation",
+        tone: "neutral" as const,
+        baselineLabel: "Baseline Established",
+        meaningfulChangeCount: 0,
+        rawChangeCount: 0,
+        eventId: null,
+        changeLabels: [],
+      },
+    }
+    store.ingest({
+      version: PROGRAM_C_R9_LIVE_ADAPTER_VERSION,
+      rows: [firstRow],
+      omittedSecurityIds: [],
+      reasonCodes: [],
+    })
+    expect(store.getSnapshot()?.comparisons[0]?.comparison.transitionState)
+      .toBe("FIRST_OBSERVATION")
+
+    store.ingest({
+      version: PROGRAM_C_R9_LIVE_ADAPTER_VERSION,
+      rows: [{
+        ...firstRow,
+        observedState: validation.observations.torntReplay,
+      }],
+      omittedSecurityIds: [],
+      reasonCodes: [],
+    })
+    expect(store.getSnapshot()?.comparisons[0]?.comparison.transitionState)
+      .toBe("NO_CHANGE")
+    expect(notificationCount).toBe(2)
+
+    unsubscribe()
   })
 
   it("freezes R9 authority as read-only deterministic materiality only", () => {
