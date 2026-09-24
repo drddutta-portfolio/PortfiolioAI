@@ -58,6 +58,7 @@ export interface ProgramCR10Input {
   readonly symbol: string
   readonly company: string
   readonly asOf: string
+  readonly classificationVersion: string | null
   readonly r7RecommendationState: string | null
   readonly r8: ProgramCR8PortfolioDecisionAssessment
   readonly r9: ProgramCR9ComparisonResult
