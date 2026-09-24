@@ -1,11 +1,11 @@
 # PortfolioAI — Program C · C1 R8 Contract & Architecture
 
-**Checkpoint:** C1 — R8 Contract & Architecture / Checkpoint A  
-**Date:** 24 September 2026  
-**Repository:** `drddutta-portfolio/PortfiolioAI`  
-**Branch:** `program-c-portfolio-decision-engines`  
-**Starting HEAD:** `497006335d4648c7f425691fe8598f9b170ddcd3`  
-**Contract source HEAD before this document:** `c2b97b49d2cb962daae4e4e4517d929486357c95`  
+**Checkpoint:** C1 — R8 Contract & Architecture / Checkpoint A
+**Date:** 24 September 2026
+**Repository:** `drddutta-portfolio/PortfiolioAI`
+**Branch:** `program-c-portfolio-decision-engines`
+**Starting HEAD:** `497006335d4648c7f425691fe8598f9b170ddcd3`
+**Contract source HEAD before this document:** `c2b97b49d2cb962daae4e4e4517d929486357c95`
 **Status:** IMPLEMENTED / STATIC ARCHITECTURE REVIEW PASS / EXECUTABLE REPOSITORY VALIDATION PENDING
 
 ## 1. C1 authority
