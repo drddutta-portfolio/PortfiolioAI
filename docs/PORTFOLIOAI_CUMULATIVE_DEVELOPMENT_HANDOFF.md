@@ -4010,3 +4010,249 @@ Safety remained unchanged throughout B2:
 **STOP BOUNDARY:** B3 has not started and is not authorized by this closure.
 Next stage is **B3 — R7 Contract & Architecture / Checkpoint A**, only after
 explicit owner approval.
+
+
+---
+
+## Program B · B3 R7 contract architecture candidate — 24 September 2026
+
+**Checkpoint:** B3 — R7 Contract & Architecture / Checkpoint A  
+**Owner authorization:** APPROVED TO BEGIN B3  
+**Starting commit:** `820d0b1d5e378b18b64e18f8c12d5c1abddae0c2`  
+**Implementation commits:**
+- `ce2a4d6098b67aa0d9739f085e11f1992a3d45bb` — R7 recommendation/sizing contract architecture candidate;
+- `67c0f9599520710b3cb61649b014799d98670535` — include R6 regressions in B3 validation runner.
+
+**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**  
+**B4 status:** **NOT STARTED / NOT AUTHORIZED**
+
+### B3.1 recommendation-readiness gate
+
+The Program B R7 readiness gate now requires:
+
+```text
+equity applicability
++ SCORED R6 state
++ exact score-run identity
++ complete score lineage
++ approved profile recommendation policy
++ complete mandatory floor inputs
++ resolved caution/risk inputs
+```
+
+Only `READY` returns `canRecommend = true`.
+
+Fail-closed mapping:
+- insufficient/stale R6 score -> `INSUFFICIENT_EVIDENCE`;
+- conflicting/review-required score -> `REVIEW_REQUIRED`;
+- score methodology unavailable -> `METHODOLOGY_NOT_AVAILABLE`;
+- missing score-run or score lineage -> `BLOCKED_PREREQUISITE`;
+- non-equity -> `NOT_APPLICABLE`.
+
+No recommendation score reconstruction exists in the B3 contract.
+
+### B3.2 Gate I safety inheritance
+
+B3 explicitly re-encodes and re-tests:
+
+- missing mandatory recommendation-floor input -> insufficient / fail closed;
+- failed floor remains distinct from missing input and may continue down the
+  approved role ladder;
+- material overlays cannot create an independent portfolio role;
+- null/non-computable authoritative score remains fail-closed;
+- recommendation computation writes remain disabled.
+
+The authoritative numeric recommendation policy carried into Program B is:
+
+`PHARMA_V1_RECOMMENDATION_POLICY_V1_OWNER_APPROVED`.
+
+### B3.3 Program B recommendation-policy registry
+
+A new explicit Program B recommendation authority registry contains exactly one
+approved numeric policy at B3:
+
+```text
+PHARMA_V1
+  threshold scope = PROFILE_SPECIFIC_ONLY
+  source authority = Gate I / I2
+  weight guidance authority = NOT_APPROVED
+  sizing authority = NOT_APPROVED
+```
+
+The legacy BANK/NBFC Stage 8.8A thresholds remain a **DRAFT pilot** and are not
+promoted into Program B authority.
+
+Current resolution therefore is:
+
+```text
+PHARMA_V1 -> RESOLVED
+BANK_NBFC -> METHODOLOGY_NOT_AVAILABLE
+other profiles without separately approved recommendation policy
+  -> METHODOLOGY_NOT_AVAILABLE
+```
+
+### B3.4 Gate K portability boundary
+
+K5 was inspected directly. Its frozen result remains:
+
+```text
+numeric threshold portability = NOT_ESTABLISHED
+decision = DO_NOT_INTRODUCE_UNIVERSAL_NUMERIC_THRESHOLDS
+```
+
+Therefore B3 explicitly freezes:
+- universal numeric recommendation thresholds = forbidden;
+- PHARMA_V1 80 / 65 / 50 thresholds remain PHARMA_V1-only;
+- cross-sector sizing-heuristic borrowing = forbidden.
+
+### B3.5 recommendation lineage
+
+The Program B recommendation-lineage contract requires:
+
+- recommendation run id;
+- security id;
+- exact source score run id;
+- recommendation methodology id/version;
+- score;
+- applicable thresholds;
+- cautions;
+- reason codes;
+- final recommendation;
+- created timestamp.
+
+Recommendation identity changes when the source score-run identity changes.
+
+### B3.6 position-sizing readiness and anti-fallback
+
+Sizing is a separate downstream engine.
+
+A sizing policy authority is exact on:
+
+```text
+profile code
++ methodology role
++ sizing policy id/version
+```
+
+The contract can declare approved factors from:
+- conviction;
+- portfolio role;
+- business quality;
+- growth durability;
+- permanent-loss risk;
+- valuation;
+- volatility;
+- concentration;
+- liquidity;
+- portfolio fit.
+
+Primary/Overlay and cross-sector borrowing are prohibited.
+
+#### Current Program B numeric sizing authority
+
+`PROGRAM_B_SIZING_POLICY_REGISTRY` is intentionally empty.
+
+This is a deliberate authority result, not a missing implementation:
+- no profile/role-specific Program B numeric sizing policy has yet been separately
+  owner-approved;
+- B3 therefore returns `METHODOLOGY_NOT_AVAILABLE` instead of manufacturing a
+  target range.
+
+The existing D35B `POSITION_SIZING_V1` remains a verified downstream receiving
+engine/software contract only. Its historical HDFCBANK pilot weight guidance is
+not inherited as Program B numeric sizing authority.
+
+### B3.7 owner-authority preservation
+
+Owner-controlled fields remain separate:
+
+```text
+targetPrice
+stopLossPrice
+targetWeight
+portfolioRole
+```
+
+Program B machine-output fields are separately named:
+
+```text
+suggestedTargetWeight
+suggestedMinimumWeight
+suggestedMaximumWeight
+recommendedAction
+reasonCodes
+confidence
+assessmentState
+```
+
+The contracts are intentionally field-disjoint.
+
+Program B sizing-action vocabulary is frozen as:
+
+```text
+ADD
+HOLD
+ADD_ON_WEAKNESS
+REDUCE
+TRIM
+FREEZE
+EXIT_REVIEW
+```
+
+These are assessments, not trade instructions.
+
+### B3 artifacts
+
+Added:
+- `src/features/research/programBR7Contract.ts`;
+- `src/features/research/programBR7Contract.test.ts`;
+- `docs/PortfolioAI_PROGRAM_B_B3_R7_CONTRACT_ARCHITECTURE.md`;
+- `scripts/b3-validate-r7-contract.sh`.
+
+Repository diff from B2 closure through the B3 candidate contains only these four
+new files. No migration/provider/database/scheduler/trading code was changed.
+
+### Owner-local validation
+
+Run:
+
+```bash
+git pull
+bash scripts/b3-validate-r7-contract.sh
+```
+
+The consolidated runner covers:
+- B3 R7 contracts;
+- R6 B1/B2 regressions;
+- Gate I recommendation authority/policy safety;
+- K5 recommendation portability;
+- sector recommendation fail-closed regressions;
+- D35B sizing software regressions;
+- owner decision-control regressions;
+- TypeScript;
+- architecture guard;
+- production build;
+- `git diff --check`.
+
+### Safety state
+
+```text
+recommendation computation executed = NO
+recommendation persistence = NO
+sizing computation executed = NO
+sizing persistence = NO
+owner settings mutation = NO
+provider calls = 0
+Angel One calls = 0
+Trendlyne calls = 0
+OpenAI decision calls = 0
+production mutation = NO
+migration = NO
+deployment = NO
+merge = NO
+scheduler change = NO
+trading = NO
+```
+
+**Current stop boundary:** B3 candidate implemented; owner-local validation pending.
+Do not begin B4.
