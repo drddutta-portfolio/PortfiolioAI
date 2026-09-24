@@ -58,14 +58,20 @@ describe("Program C C3 R9 meaningful change", () => {
     expect(result.event?.eventId).toBe(second.coreHealthMeaningful.event?.eventId)
   })
 
-  it("treats stale evidence, assignment changes and blocker changes as meaningful", () => {
+  it("treats stale, missing, conflicting evidence, assignment and blocker transitions as meaningful", () => {
     const validation = buildProgramCR9ReferenceValidation()
 
     expect(validation.evidenceMeaningful.meaningfulChanges.map((change) => change.code))
       .toContain("EVIDENCE_STATE_CHANGED")
+    expect(validation.missingEvidenceMeaningful.meaningfulChanges.map((change) => change.code))
+      .toContain("EVIDENCE_STATE_CHANGED")
+    expect(validation.conflictingEvidenceMeaningful.meaningfulChanges.map((change) => change.code))
+      .toContain("EVIDENCE_STATE_CHANGED")
     expect(validation.assignmentMeaningful.meaningfulChanges.map((change) => change.code))
       .toContain("ASSIGNMENT_VERSION_CHANGED")
     expect(validation.blockerCleared.meaningfulChanges.map((change) => change.code))
+      .toContain("R8_BLOCKER_SET_CHANGED")
+    expect(validation.blockerAppeared.meaningfulChanges.map((change) => change.code))
       .toContain("R8_BLOCKER_SET_CHANGED")
   })
 
