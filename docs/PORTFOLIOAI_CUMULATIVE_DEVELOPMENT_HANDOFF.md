@@ -7374,3 +7374,63 @@ bash scripts/c3-validate-program-c-r9.sh
 ```
 
 C4/R10 remains unauthorized.
+
+
+---
+
+### Program C · C3 owner-local validation correction — static-safety false positives — 25 September 2026
+
+The next C3 validation run confirmed the canonical R9 aggregate report passed:
+
+```text
+overallPass = true
+frozenHoldingCount = 238
+frozenMeaningfulEventCount = 0
+r8RegressionPass = true
+authorityRegistryPass = true
+safetyPass = true
+providerCalls = 0
+persistedWrites = 0
+```
+
+The run then stopped only in `program-c-c3-static-safety.mjs` because:
+
+- `Set.delete(listener)` in the in-memory subscription store matched the
+  validator's overly broad generic `.delete(...)` persistence pattern;
+- the consumer check still expected the pre-lint-fix direct
+  `advanceProgramCR9InMemorySession` call.
+
+Validator correction:
+
+```text
+f65997a9f42abeea2a87a498645e4dcc3adac13e
+```
+
+The validator now:
+
+- permits in-memory `Set.delete(listener)`;
+- still rejects database-style `.from(...).delete(...)`;
+- still rejects persistence-capable imports;
+- recognizes the canonical R9 consumer path through:
+  - `buildProgramCR9LiveObservedProjection`;
+  - `createProgramCR9LiveSessionStore`;
+  - `useSyncExternalStore`.
+
+No R9 business logic or authority changed.
+
+C3 remains:
+
+```text
+implementation = COMPLETE
+canonical R9 aggregate report = PASS
+static validator corrected
+full owner-local executable validation = PENDING
+formal C3/R9 closure = PENDING
+C4/R10 = NOT AUTHORIZED
+```
+
+Rerun:
+
+```bash
+bash scripts/c3-validate-program-c-r9.sh
+```
