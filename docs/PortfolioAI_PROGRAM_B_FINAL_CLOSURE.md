@@ -4,12 +4,13 @@
 **Date:** 24 September 2026  
 **Branch:** `program-a-evidence-coverage`  
 **Starting commit:** `5739c9030a9952fffc8f7be1f3afc9462c48ca74`  
-**Status:** FINAL VALIDATION PASS — FORMAL PROGRAM B CLOSURE DEFERRED BY OWNER
+**Status:** COMPLETE / PASS / CLOSED — OWNER-APPROVED AFTER CORRECTIVE B-FINAL
 
 > Corrective audit addendum (24 September 2026): all confirmed post-validation
-> findings were repaired and the strengthened B-FINAL suite passed. The precise
-> current status is `Program B = CORRECTED / VALIDATED / OPEN`. Formal closure
-> still awaits explicit owner approval; production operational remains `NO`.
+> findings were repaired and the strengthened B-FINAL suite passed. The owner
+> subsequently gave explicit approval to close Program B. The authoritative
+> status is now `Program B = COMPLETE / PASS / CLOSED`. Production operational
+> remains `NO`; merge, deployment and any next program remain separately gated.
 
 ## 1. Purpose
 
@@ -254,3 +255,84 @@ Next program = NOT AUTHORIZED
 
 No closure commit, merge, deployment, production reconciliation, scheduler
 activation or trading action is implied by the successful validation.
+
+## 13. Owner-approved formal Program B closure
+
+After the corrective build was pushed to GitHub and independently re-audited,
+the owner explicitly authorized formal Program B closure on 24 September 2026.
+
+Closure basis:
+
+```text
+Corrective branch HEAD before closure documentation:
+d7c700deb55765b7dca349d524e4dae7c2ba28ca
+
+Corrective B-FINAL = PASS
+30 test files / 202 tests = PASS
+canonical final audit overallPass = true
+TypeScript = PASS
+architecture guard = PASS
+scoped Program B lint = PASS
+production Vite build = PASS
+static compute-path safety = PASS
+repository allowlist = PASS
+git diff --check = PASS
+```
+
+Confirmed corrective outcomes:
+
+- all five Pharma reference assignments resolve to their canonical Primary
+  subprofiles;
+- `PHARMA_V1` cannot reach R6 READY without exactly one valid reviewed Primary;
+- Research presentation consumes the canonical R6 presentation model;
+- generic `PHARMA` is no longer a Pharma methodology-role fallback;
+- R7 consumes the immutable R6-issued score-run id;
+- contradictory applicability states fail closed;
+- owner-controlled target price, stop loss, target weight and role remain
+  protected;
+- R6/R7 compute modules remain provider-, persistence-, scheduler- and
+  trading-free;
+- Program B sizing remains fail-closed because no numeric sizing policy has been
+  owner-approved.
+
+Formal closure state:
+
+```text
+B0 = COMPLETE / PASS / CLOSED
+B1 = COMPLETE / PASS / CLOSED
+B2 = COMPLETE / PASS / CLOSED
+R6 = COMPLETE / PASS / CLOSED
+B3 = COMPLETE / PASS / CLOSED
+B4 = COMPLETE / PASS / CLOSED
+R7 = COMPLETE / PASS / CLOSED
+B-FINAL = COMPLETE / PASS / CLOSED
+
+Program B = COMPLETE / PASS / CLOSED
+```
+
+Intentional limitations remain in force and are not closure defects:
+
+```text
+PORTFOLIO_WIDE_NUMERIC_SCORING_COVERAGE_NOT_COMPLETE
+PORTFOLIO_WIDE_NUMERIC_RECOMMENDATION_COVERAGE_NOT_COMPLETE
+PROGRAM_B_NUMERIC_SIZING_POLICY_NOT_APPROVED
+FROZEN_PORTFOLIO_SNAPSHOT_IS_2026_09_22_NOT_LIVE_PRODUCTION_STATE
+PROGRAM_B_BRANCH_IS_UNMERGED
+PIPELINE_NOT_PRODUCTION_OPERATIONAL
+```
+
+This closure does **not** authorize or imply:
+
+- merge to `main`;
+- production deployment;
+- production reconciliation;
+- production mutation;
+- migration;
+- scheduler activation;
+- recommendation/sizing persistence;
+- trading;
+- commencement of any next program.
+
+**Final Program B status:** `COMPLETE / PASS / CLOSED`.  
+**Production operational:** `NO`.  
+**Next program:** `NOT AUTHORIZED`.

@@ -1,4 +1,4 @@
-**Current stage:** Gate H–K COMPLETE / PASS; Program A A1/A2A/A2B/A2C COMPLETE / PASS / CLOSED; bounded Program A pilot CLOSED; Program B master plan FROZEN; B0 = ACTIVE NEXT CHECKPOINT; PR #101 remains OPEN / DRAFT / UNMERGED unless separately changed.
+**Current stage:** Gate H–K COMPLETE / PASS; Program A COMPLETE / PASS / CLOSED; Program B B0–B4 + R6/R7 + corrective B-FINAL COMPLETE / PASS / CLOSED; Program B = COMPLETE / PASS / CLOSED; branch remains UNMERGED / NOT PRODUCTION OPERATIONAL; next program NOT AUTHORIZED.
 
 
 
@@ -5459,3 +5459,99 @@ with the R6-emitted id.
 
 Focused result: 21 R6/R7/final tests passed; TypeScript, targeted lint and
 `git diff --check` passed.
+
+---
+
+## Program B · FORMAL CLOSURE — owner approved — 24 September 2026
+
+After Codex corrective work was pushed to GitHub and independently checked on
+the remote `program-a-evidence-coverage` branch, the owner explicitly approved
+formal Program B closure.
+
+Corrective branch evidence before this documentation-only closure commit:
+
+```text
+HEAD = d7c700deb55765b7dca349d524e4dae7c2ba28ca
+
+C1 local Pharma assignment repair = COMPLETE / PASS
+C2 R6 Pharma enforcement + applicability contradictions = COMPLETE / PASS
+C3 canonical R6 Research presentation = COMPLETE / PASS
+C4 immutable R6-issued lineage into R7 = COMPLETE / PASS
+C5 structural safety / owner-boundary validation = COMPLETE / PASS
+C6 Program B lint/report/naming cleanup = COMPLETE / PASS
+
+Corrective B-FINAL = PASS
+30 test files / 202 tests = PASS
+canonical final audit overallPass = true
+TypeScript = PASS
+architecture guard = PASS
+scoped Program B lint = PASS
+production Vite build = PASS
+static safety scan = PASS
+repository safety allowlist = PASS
+git diff --check = PASS
+```
+
+The five canonical Pharma reference Primaries are now represented consistently:
+
+```text
+TORNTPHARM -> PHARMA_V1 + DOMESTIC_FORMULATIONS
+ALIVUS     -> PHARMA_V1 + API_BULK_DRUGS
+AUROPHARMA -> PHARMA_V1 + GLOBAL_GENERICS
+BIOCON     -> PHARMA_V1 + BIOPHARMA_BIOSIMILARS
+SYNGENE    -> PHARMA_V1 + CDMO_CRAMS
+```
+
+The special Pharma invariant remains:
+
+```text
+PHARMA_V1 common parent research
+        +
+exactly one valid reviewed Primary Pharma subprofile
+        ↓
+effective Pharma research contract
+```
+
+R6 now enforces that invariant, the Research UI consumes the canonical R6
+presentation model, and R7 carries the exact immutable R6-issued score-run
+identity.
+
+### Formal closure state
+
+```text
+B0 = COMPLETE / PASS / CLOSED
+B1 = COMPLETE / PASS / CLOSED
+B2 = COMPLETE / PASS / CLOSED
+R6 = COMPLETE / PASS / CLOSED
+B3 = COMPLETE / PASS / CLOSED
+B4 = COMPLETE / PASS / CLOSED
+R7 = COMPLETE / PASS / CLOSED
+B-FINAL = COMPLETE / PASS / CLOSED
+
+Program B = COMPLETE / PASS / CLOSED
+```
+
+### Boundaries retained after closure
+
+Program B closure does not overstate capability:
+
+```text
+portfolio-wide disposition = COMPLETE
+portfolio-wide numeric scoring coverage = INCOMPLETE
+portfolio-wide numeric recommendation coverage = INCOMPLETE
+Program B numeric sizing policy = NOT APPROVED
+frozen portfolio fixture = K5 snapshot dated 2026-09-22
+branch merge to main = NO
+production deployment = NO
+production operational = NO
+scheduler activation = NO
+trading = NO
+next program = NOT AUTHORIZED
+```
+
+No production mutation, migration, merge, deployment, persistence enablement,
+scheduler change or trading action was performed as part of formal closure.
+
+This section supersedes the earlier temporary
+`CORRECTED / VALIDATED / OPEN` and `closure deferred` status markers while
+preserving them as historical audit trail.
