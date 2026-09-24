@@ -3621,3 +3621,68 @@ schema or safety boundary changed.
 
 **B1 remains OPEN / OWNER-LOCAL VALIDATION REQUIRED.**
 B2 remains NOT STARTED / NOT AUTHORIZED.
+
+
+---
+
+## Program B · B1 owner-local validation closure — 24 September 2026
+
+Owner-local consolidated B1 validation was rerun after the focused
+`metricCode -> blockingMetric` lineage correction.
+
+Command:
+
+```bash
+git pull
+bash scripts/b1-validate-r6-contract.sh
+```
+
+Owner-reported final result: **ALL PASS**.
+
+Because the runner is fail-fast and reaches its final PASS marker only after all
+steps succeed, this closes the following validation surface:
+
+- B1 R6 contract tests;
+- Gate-K registry, isolation, routing and recommendation-portability regressions;
+- scoring-profile resolution regression;
+- TypeScript;
+- architecture guard;
+- production build;
+- `git diff --check`.
+
+The earlier first-run failure was limited to structured blocker lineage:
+`metricCode` was not copied into emitted `blockingMetric`. The correction at
+`bfe3b714a631df631f201e8ad90267702ebce544` did not alter readiness-state
+precedence, methodology routing, evidence semantics, provider boundaries or any
+numeric-scoring logic.
+
+B1 closure:
+
+```text
+B1.1 scoring-readiness adapter = COMPLETE / PASS / CLOSED
+B1.2 methodology resolver = COMPLETE / PASS / CLOSED
+B1.3 evidence-to-score lineage contract = COMPLETE / PASS / CLOSED
+B1.4 machine-readable blocker/gap contract = COMPLETE / PASS / CLOSED
+
+Program B · B1 = COMPLETE / PASS / CLOSED
+R6 Checkpoint A = CLOSED
+Next stage = B2 — R6 Execution & Validation, only after explicit owner approval
+```
+
+Safety remained unchanged throughout B1:
+- provider calls = 0;
+- Angel One calls = 0;
+- Trendlyne calls = 0;
+- OpenAI decision calls = 0;
+- numeric Program B scoring executed = NO;
+- score persistence = NO;
+- recommendation computation/persistence = NO;
+- position sizing = NO;
+- production mutation = NO;
+- migration = NO;
+- deployment = NO;
+- merge = NO;
+- scheduler change = NO;
+- trading = NO.
+
+**STOP BOUNDARY:** B2 has not started and is not authorized by this closure.
