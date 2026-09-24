@@ -3031,3 +3031,127 @@ returns HTTP 200 with the real browser user JWT. The residual `be56e35...` plan
 was not executed, A2A/A2B were not reopened, and Trendlyne was not called.
 
 **Program A · A2C remains IN PROGRESS / NOT CLOSED.**
+## Program A · A2C Edge-auth fix and unresolved Angel One Edge-runtime rejection — 24 September 2026
+
+Starting repository state:
+- branch `program-a-evidence-coverage`;
+- HEAD `212b663ef44a5a9366d522ffade0b862fe18bb53`;
+- unrelated untracked local fixture/audit files were preserved untouched.
+
+Edge/JWT root cause and correction:
+- local `/auth/v1/user` accepted the fresh 775-character, three-segment ES256
+  browser JWT with HTTP 200;
+- the installed Supabase CLI/runtime gateway rejected that same JWT with HTTP
+  401 `Invalid JWT` before the Edge handler executed;
+- `supabase/config.toml` now sets `verify_jwt = false` only for
+  `refresh-market-history`, `refresh-bank-benchmark`, and
+  `refresh-pharma-benchmark`;
+- all three handlers retain mandatory Authorization-header handling, Supabase
+  Auth `getUser()` validation, portfolio ownership validation and their existing
+  capability/target guards;
+- regression coverage binds the scoped configuration to those internal
+  fail-closed checks;
+- no global bypass or service-role user substitution was introduced.
+
+Live local auth/capability results after restarting the local stack:
+- `/auth/v1/user` valid JWT: HTTP 200;
+- AUROPHARMA market-history PLAN: HTTP 200, provider calls 0;
+- HDFCBANK market-history PLAN: HTTP 200, provider calls 0;
+- NIFTY_BANK benchmark PLAN: HTTP 200, provider calls 0;
+- TORNTPHARM market-history PLAN: HTTP 200, provider calls 0;
+- missing, malformed, random and anonymous credentials: HTTP 401;
+- BANK authority regression remained PASS, including rejection of NBFC lending.
+
+Plan reconciliation:
+- plan ID remained
+  `be56e35fc3bd3e4bccd0816258c3d37cf080bcdb365549c12f92b9c9a363f9ee`;
+- confirmation token remained `APPROVE_PROGRAM_A_A2_BE56E35FC3BD3E4B`;
+- residual A2C actions/windows remained exactly AUROPHARMA `2026-09-17` to
+  `2026-09-24`, HDFCBANK `2026-09-17` to `2026-09-24`, NIFTY_BANK
+  `2025-09-24` to `2026-09-24`, and TORNTPHARM `2026-09-12` to `2026-09-24`;
+- zero-provider plan generation did not schedule A2A and stage execution remained
+  filtered to A2C.
+
+Resumed execution evidence:
+- the first post-restart attempt failed before provider dispatch with
+  `MARKET_DATA_INTERNAL_ERROR` because the restarted embedded function runtime
+  had not loaded the existing untracked `supabase/.env.local` provider secrets;
+- after starting the local function server with that env file, two bounded A2C
+  attempts reached Angel One session creation but failed with
+  `ANGEL_SESSION_EXPIRED_HTTP_403` before historical-data dispatch;
+- a safe host-side login diagnostic using the same configured fields and current
+  TOTP returned HTTP 200, `status=true`, `message=SUCCESS`;
+- explicit User-Agent testing did not change the Edge-runtime rejection and the
+  experimental header change was removed;
+- an unauthenticated credential-forwarding relay was not started because it did
+  not satisfy the approved secure local handling boundary.
+
+Final state for this checkpoint:
+- Angel One historical-data calls = 0;
+- Trendlyne calls = 0;
+- retries that reached historical-data dispatch = 0;
+- successful local evidence writes = 0;
+- failed writes = 0;
+- AUROPHARMA remains 246 rows, `2025-09-24` to `2026-09-22`;
+- HDFCBANK remains 246 rows, `2025-09-24` to `2026-09-22`;
+- NIFTY_BANK remains missing;
+- TORNTPHARM remains 270 rows, `2025-08-17` to `2026-09-17`;
+- post-attempt baseline remains 6 eligible, 0 review-required and 0
+  methodology-unavailable holdings;
+- A2C and the bounded A2 pilot remain **IN PROGRESS / NOT CLOSED** pending a
+  secure resolution of the Edge-runtime-specific Angel One HTTP 403.
+
+No production mutation, migration, deployment, merge, A2A/A2B provider work,
+score/recommendation/sizing write, scheduler activation or trading action was
+performed.
+
+## Program A · A2C bounded execution closure — 24 September 2026
+
+The preceding Edge-runtime blocker was subsequently resolved and the approved
+A2C scope was completed locally. The authoritative local provider-secret source
+was `supabase/.env.local`: both the successful host diagnostic and the explicitly
+started local Edge runtime loaded that file. Safe comparison of every Angel One
+variable used by the adapter showed matching presence, trimmed lengths and
+non-reversible digests, with no leading/trailing whitespace. The main branch and
+this branch use the same direct server/Edge Angel One login contract; neither
+uses a browser proxy or credential relay. A temporary Edge diagnostic then
+returned HTTP 200 / provider `SUCCESS` with the same configuration. The earlier
+403 was therefore an intermittent provider/runtime session rejection, not a
+verified request-contract or secret-value mismatch; no speculative provider
+adapter change was retained.
+
+Execution reconciliation:
+- original approved plan: `be56e35fc3bd3e4bccd0816258c3d37cf080bcdb365549c12f92b9c9a363f9ee`;
+- after successful partial writes made that plan stale, the equivalent residual
+  plan was regenerated as
+  `c4ad4d7daed469ab7e7df216458230e46c6041d6112fbf389438f3de9daee505`;
+- the replacement remained A2C-only and contained the same four securities and
+  benchmark, with incremental overlap windows advanced only by the newly stored
+  evidence;
+- final execution status: `SUCCEEDED`;
+- final execution Angel One calls: 4, retries: 0, writes reported by the
+  controller: 287;
+- including the earlier successful partial attempt, controller-accounted A2C
+  calls were 6 and writes were 297; net new unique stored candles were 277
+  because overlap rows were idempotently upserted;
+- Trendlyne calls: 0; score, recommendation and sizing writes: 0.
+
+Final local coverage:
+- AUROPHARMA: 247 daily rows, `2025-09-24` through `2026-09-23`;
+- HDFCBANK: 247 daily rows, `2025-09-24` through `2026-09-23`;
+- NIFTY_BANK: 271 daily rows, `2025-08-20` through `2026-09-23`, source
+  `ANGEL_ONE`;
+- TORNTPHARM: 274 daily rows, `2025-08-17` through `2026-09-23`.
+
+The 24 September daily candle was not yet final during execution. A fresh
+zero-provider-call V13 plan therefore truthfully proposes three one-call overlap
+refreshes from `2026-09-18` through `2026-09-24` for AUROPHARMA, HDFCBANK and
+TORNTPHARM; it proposes no NIFTY_BANK action. This is an expected intraday
+refresh residual, not missing historical coverage, and no synthetic candle was
+created. The fresh plan itself made zero provider calls and zero writes.
+
+The one-time browser JWT transfer file was mode 600, was never printed or
+committed, and was deleted with absence verified after execution. Program A ·
+A2C is **COMPLETE / PASS / CLOSED** for the approved bounded pilot. No production
+mutation, migration, deployment, merge, A2A/A2B execution, scheduler activation
+or trading action occurred.

@@ -389,3 +389,16 @@ s3_secret_key = "env(S3_SECRET_KEY)"
 # auth-key handling cannot block the custom-auth request before function code runs.
 [functions.refresh-trendlyne-classification]
 verify_jwt = false
+
+# Local Edge gateway builds can reject valid asymmetric ES256 user JWTs before
+# these authenticated A2C handlers run. Each handler therefore performs the
+# authoritative Supabase Auth getUser() validation itself and remains fail-closed
+# for missing, malformed, expired, random, or anonymous bearer credentials.
+[functions.refresh-market-history]
+verify_jwt = false
+
+[functions.refresh-bank-benchmark]
+verify_jwt = false
+
+[functions.refresh-pharma-benchmark]
+verify_jwt = false

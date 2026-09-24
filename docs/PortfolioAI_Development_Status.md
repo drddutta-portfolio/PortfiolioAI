@@ -412,3 +412,50 @@ Any production provider cohort, broad refresh, scheduler activation, or addition
 ## L. Historical implementation records
 
 Detailed historical stage evidence remains in the repository's `Stage_*`, `*_Completion.md`, News Intelligence, Dashboard stage documents and Git history. Historical text remains accurate for its dated checkpoint; this file records the current implementation state subject to the canonical hierarchy above.
+## Program A · A2C Edge-auth correction and provider-runtime blocker — 24 September 2026
+
+Program A · A2C remains **IN PROGRESS / NOT CLOSED**.
+
+The local Supabase Auth service accepted the current ES256 browser JWT while the
+installed local Edge gateway rejected it before function dispatch. Gateway JWT
+verification is now disabled only for the three A2C handlers that continue to
+require an Authorization header, validate the user through Supabase Auth
+`getUser()`, verify portfolio ownership, and apply their existing target and
+capability guards. Valid authenticated PLAN requests now return HTTP 200 with
+zero provider calls; missing, malformed, random and anonymous credentials return
+HTTP 401 from the function-level validation.
+
+The approved residual plan remains unchanged at
+`be56e35fc3bd3e4bccd0816258c3d37cf080bcdb365549c12f92b9c9a363f9ee`.
+All four A2C PLAN-only capability probes pass. Physical execution is still
+blocked because Angel One session creation from the local Edge runtime returns
+HTTP 403, although an equivalent safe host-side diagnostic with the same local
+configuration returns HTTP 200 / `SUCCESS`. The resumed attempts made zero
+historical-data calls and zero writes. No production change, migration,
+deployment, A2A/A2B execution, Trendlyne call, scoring, recommendation, sizing or
+trading action occurred.
+
+## Program A · A2C bounded pilot closed — 24 September 2026
+
+Program A · A2C is **COMPLETE / PASS / CLOSED** for its approved local bounded
+pilot. After explicit loading of the authoritative untracked
+`supabase/.env.local` into the local Edge runtime, Angel One authentication
+returned HTTP 200 / `SUCCESS`. Safe env metadata matched between host and Edge,
+and the main/current branches have the same direct Angel One request contract;
+the prior HTTP 403 was intermittent rather than a demonstrated code or secret
+mismatch.
+
+The equivalent regenerated residual plan
+`c4ad4d7daed469ab7e7df216458230e46c6041d6112fbf389438f3de9daee505`
+completed with four Angel One calls, zero controller retries and 287 writes.
+Together with the preceding successful partial attempt, the bounded A2C work
+made six controller-accounted provider calls and 297 idempotent writes, producing
+277 net new unique daily candles. Final coverage is AUROPHARMA 247 rows,
+HDFCBANK 247 rows, NIFTY_BANK 271 rows and TORNTPHARM 274 rows, all current
+through the latest completed 23 September 2026 trading session.
+
+A fresh zero-call plan correctly retains only three overlap refresh actions for
+the not-yet-final 24 September daily candle and no NIFTY_BANK action. No
+Trendlyne call, production mutation, migration, deployment, merge, scoring,
+recommendation, sizing, scheduling or trading activation occurred. The temporary
+mode-600 JWT file was deleted and its absence verified.

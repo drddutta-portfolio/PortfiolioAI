@@ -4,6 +4,9 @@ import { describe, expect, it } from "vitest"
 const root = process.cwd()
 const classification = readFileSync(`${root}/supabase/functions/refresh-trendlyne-classification/index.ts`, "utf8")
 const history = readFileSync(`${root}/supabase/functions/refresh-market-history/index.ts`, "utf8")
+const bankBenchmark = readFileSync(`${root}/supabase/functions/refresh-bank-benchmark/index.ts`, "utf8")
+const pharmaBenchmark = readFileSync(`${root}/supabase/functions/refresh-pharma-benchmark/index.ts`, "utf8")
+const localConfig = readFileSync(`${root}/supabase/config.toml`, "utf8")
 const complete = readFileSync(`${root}/supabase/functions/complete-research-refresh/index.ts`, "utf8")
 const identity = readFileSync(`${root}/supabase/functions/resolve-trendlyne-identity/index.ts`, "utf8")
 const runner = readFileSync(`${root}/scripts/program-a-a2-runner.mjs`, "utf8")
@@ -69,5 +72,18 @@ describe("Program A A2 provider-control reuse", () => {
     expect(runner).toContain("waitForAngelOneCooldown")
     expect(runner).toContain("61_000")
     expect(runner).toContain("lastAngelOneDispatchCompletedAt = Date.now()")
+  })
+
+  it("lets ES256 requests reach only A2C handlers that enforce Supabase user auth internally", () => {
+    for (const functionName of ["refresh-market-history", "refresh-bank-benchmark", "refresh-pharma-benchmark"]) {
+      expect(localConfig).toContain(`[functions.${functionName}]\nverify_jwt = false`)
+    }
+    for (const source of [history, bankBenchmark, pharmaBenchmark]) {
+      expect(source).toContain('request.headers.get("Authorization")')
+      expect(source).toContain('return json(401, { error: "Authentication required." })')
+      expect(source).toContain("auth.getUser()")
+      expect(source).toContain('return json(401, { error: "Invalid authenticated session." })')
+      expect(source).toContain('.eq("user_id",')
+    }
   })
 })
