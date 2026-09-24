@@ -7302,3 +7302,75 @@ bash scripts/c3-validate-program-c-r9.sh
 
 C3/R9 remains implementation-complete and validation-pending. C4/R10 remains
 unauthorized.
+
+
+---
+
+### Program C · C3 owner-local validation correction — React effect lint — 25 September 2026
+
+The first owner-local C3 validator run reached scoped ESLint and stopped with:
+
+```text
+DashboardMeaningfulChanges.tsx
+react-hooks/set-state-in-effect
+Calling setState synchronously within an effect can trigger cascading renders
+```
+
+This was isolated to the Dashboard R9 session integration. The R9 contract,
+meaningful-change registry, event identity, baseline semantics and safety
+authority were not changed.
+
+Correction:
+
+```text
+added:
+src/features/decision/r9LiveSessionStore.ts
+
+changed:
+src/components/DashboardMeaningfulChanges.tsx
+scripts/program-c-c3-static-safety.mjs
+src/features/decision/r9MeaningfulChange.test.ts
+```
+
+The consumer now uses a `useSyncExternalStore`-compatible in-memory session
+store. The effect synchronizes the canonical R9 projection into that external
+store and no longer calls React `setState` synchronously.
+
+Additional regression coverage proves:
+
+```text
+first projection -> FIRST_OBSERVATION
+next semantically identical projection -> NO_CHANGE
+external-store notifications -> deterministic
+```
+
+The static safety scan now includes the session-store module.
+
+Source correction HEAD before documentation:
+
+```text
+1f890b940aa1421f4d5df361049747b521e57cf4
+```
+
+No:
+
+- provider call;
+- persistence;
+- schema migration;
+- AI materiality;
+- numeric sizing authority;
+- owner mutation;
+- production mutation;
+- scheduler;
+- trading
+
+was introduced.
+
+C3/R9 remains implementation-complete and **executable-validation pending**.
+Rerun the same authoritative command:
+
+```bash
+bash scripts/c3-validate-program-c-r9.sh
+```
+
+C4/R10 remains unauthorized.
