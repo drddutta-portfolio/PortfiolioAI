@@ -3576,3 +3576,48 @@ trading = NO
 
 **Current stop boundary:** B1 candidate implemented; owner-local validation pending.
 Do not begin B2.
+
+
+### B1 owner-local validation attempt 1 — focused blocker-metric correction
+
+Owner-local command:
+
+```bash
+git pull
+bash scripts/b1-validate-r6-contract.sh
+```
+
+First run result:
+- 6 test files executed;
+- 5 test files passed;
+- 1 test file failed;
+- 43 tests passed;
+- 1 test failed;
+- failure was in
+  `programBR6Contract.test.ts > distinguishes missing, stale, conflicting and review-required evidence`.
+
+Observed mismatch:
+- expected blocker `blockingMetric = BANK_ASSET_QUALITY`;
+- received blocker `blockingMetric = undefined`.
+
+Root cause:
+- the B1 input evidence contract names the field `metricCode`;
+- the generic blocker contract names the emitted field `blockingMetric`;
+- the readiness loop passed the evidence object to the blocker helper without
+  explicitly mapping `metricCode -> blockingMetric`;
+- readiness classification itself remained correct; the defect affected structured
+  blocker lineage only.
+
+Correction:
+- commit `bfe3b714a631df631f201e8ad90267702ebce544`;
+- explicit field mapping now passes:
+  - `blockingDomain = evidence.blockingDomain`;
+  - `blockingMetric = evidence.metricCode`;
+  - `state = evidence.state`;
+  - `recommendedNextEvidenceAction = evidence.recommendedNextEvidenceAction`.
+
+No methodology, readiness-state precedence, scoring logic, provider path, database
+schema or safety boundary changed.
+
+**B1 remains OPEN / OWNER-LOCAL VALIDATION REQUIRED.**
+B2 remains NOT STARTED / NOT AUTHORIZED.
