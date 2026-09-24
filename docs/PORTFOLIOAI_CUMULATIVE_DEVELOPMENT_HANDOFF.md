@@ -3686,3 +3686,165 @@ Safety remained unchanged throughout B1:
 - trading = NO.
 
 **STOP BOUNDARY:** B2 has not started and is not authorized by this closure.
+
+
+---
+
+## Program B · B2 R6 execution/validation candidate — 24 September 2026
+
+**Checkpoint:** B2 — R6 Execution & Validation / Checkpoint B  
+**Owner authorization:** APPROVED TO BEGIN B2  
+**Starting commit:** `3a2adc6b8bc04b3645676bf50ce09d3a8ea27720`  
+**Implementation commits:**
+- `1815cb72794e2af8adfe963f6ff18cdf14693427` — R6 deterministic execution/disposition layer;
+- `0a8c79602b898ecc4289e99e0d0edd7c08f02e4a` — shared Research UI readiness/methodology integration;
+- `2ad45fe78abdd176b8d109bd762024c7f545caa6` — widened B2 regression runner.
+
+**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**  
+**B3 status:** **NOT STARTED / NOT AUTHORIZED**
+
+### B2 deterministic reference execution
+
+B2 reuses already-closed deterministic artifacts; it does not invent new scoring
+curves or fetch evidence.
+
+Reference cohort:
+- TORNTPHARM / `DOMESTIC_FORMULATIONS` → existing Gate-H deterministic score;
+- ALIVUS / `API_BULK_DRUGS` → existing G10.1 deterministic score;
+- AUROPHARMA / `GLOBAL_GENERICS` → preserved fail-closed insufficient-evidence state;
+- BIOCON / `BIOPHARMA_BIOSIMILARS` → preserved fail-closed state;
+- SYNGENE / `CDMO_CRAMS` → preserved fail-closed state;
+- HDFCBANK / `BANK` → included, but B2 does not fabricate a new bank score because
+  a cache-pure B2 bank reference score-input snapshot is not materialized in the
+  repository artifact layer.
+
+The HDFCBANK outcome is therefore explicitly
+`BLOCKED_PREREQUISITE / B2_CACHE_PURE_BANK_REFERENCE_INPUT_SNAPSHOT_NOT_MATERIALIZED`
+rather than a reconstructed score.
+
+### Replay and lineage
+
+B2 canonical replay compares deterministic business payload fields only and
+excludes nondeterministic run/timestamp/storage metadata.
+
+Role-scoped evidence identity now requires:
+
+```text
+security
++ methodology role
++ assignment id/version
++ effective-from date
++ evidence id
+```
+
+This prevents same-name subprofile evidence from leaking across companies or
+between Primary/Overlay roles.
+
+### Portfolio-wide disposition pass
+
+Repository-wide disposition uses the frozen:
+
+`K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22`
+
+All 238 equity rows receive a canonical outcome from:
+
+```text
+SCORED
+INSUFFICIENT_EVIDENCE
+STALE_REQUIRED_EVIDENCE
+CONFLICTING_EVIDENCE
+REVIEW_REQUIRED
+METHODOLOGY_NOT_AVAILABLE
+NOT_APPLICABLE
+BLOCKED_PREREQUISITE
+```
+
+If routing is supported but a canonical B2 score-input snapshot is not materialized,
+the row is explicitly blocked rather than scored.
+
+Important scope note:
+- the 238-row K5 snapshot is a frozen 22 September repository validation fixture;
+- later Program A pilot evidence/classification is newer for a small reference
+  subset;
+- therefore the B2 portfolio pass is a **repository-wide frozen-snapshot
+  disposition validation**, not a claim of 24 September production/live-state
+  reconciliation;
+- the controlled reference cohort separately validates the later closed artifacts.
+
+B2 distinguishes:
+- `PORTFOLIO-WIDE DISPOSITION COMPLETE`;
+- `PORTFOLIO-WIDE NUMERIC COVERAGE COMPLETE`.
+
+The candidate is designed to prove the first without falsely asserting the second.
+
+### Controlled applicability/fail-closed controls
+
+- unsupported-methodology control is selected dynamically from the frozen K5
+  portfolio rather than hard-coded by ticker;
+- K5's frozen routing fixture contains equities only, therefore the non-equity
+  applicability test uses an explicit synthetic ETF contract control;
+- this synthetic control is not represented as a real portfolio holding.
+
+### Shared Research UI integration
+
+The universal `ResearchScorecardPanel` now exposes:
+- Score readiness;
+- Methodology;
+- Methodology role;
+- Evidence date / snapshot;
+- Blocked inputs;
+- Fail-closed reason.
+
+`ResearchPage` supplies methodology role through the existing industry-first
+router, with reviewed Pharma Primary subprofile taking precedence when available.
+
+The UI retains the distinction:
+
+```text
+verified evidence coverage != score readiness
+```
+
+No separate Pharma/Bank page tree was introduced.
+
+### Validation runner
+
+Owner-local command:
+
+```bash
+git pull
+bash scripts/b2-validate-r6-execution.sh
+```
+
+The runner:
+- validates B2 execution/replay/disposition;
+- reruns B1 readiness;
+- reruns Gate-H / G10 Pharma controls;
+- reruns K5 isolation/routing/portability;
+- reruns K3 BANK/NBFC boundaries;
+- reruns shared scorecard and Research page tests;
+- prints the canonical 238-row disposition summary;
+- runs TypeScript;
+- runs the architecture guard;
+- runs the production build;
+- runs `git diff --check`.
+
+### Safety state
+
+```text
+provider calls from B2 = 0
+Angel One calls = 0
+Trendlyne calls = 0
+OpenAI decision calls = 0
+score persistence = NO
+recommendation computation/persistence = NO
+position sizing = NO
+production mutation = NO
+migration = NO
+deployment = NO
+merge = NO
+scheduler mutation = NO
+trading = NO
+```
+
+**Current stop boundary:** B2 candidate implemented; owner-local validation pending.
+Do not begin B3.
