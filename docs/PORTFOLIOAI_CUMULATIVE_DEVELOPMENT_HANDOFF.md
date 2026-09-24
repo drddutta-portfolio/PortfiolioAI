@@ -4256,3 +4256,65 @@ trading = NO
 
 **Current stop boundary:** B3 candidate implemented; owner-local validation pending.
 Do not begin B4.
+
+
+### B3 Pharma dual-layer research invariant reinforcement
+
+Owner clarified that Pharma is intentionally different from the ordinary sector
+packages: each Pharma stock must be researched through both the common
+`PHARMA_V1` research foundation and the reviewed Primary Pharma business-model
+subprofile to which it belongs.
+
+The canonical five Primary subprofiles remain:
+
+```text
+API_BULK_DRUGS
+DOMESTIC_FORMULATIONS
+GLOBAL_GENERICS
+BIOPHARMA_BIOSIMILARS
+CDMO_CRAMS
+```
+
+Repository audit confirmed the existing Pharma architecture already defines the
+effective research contract as:
+
+```text
+PHARMA_V1 parent requirement
+  + reviewed Primary subprofile override/addition
+  + reviewed exposure condition
+  + approved universal overlay requirement
+  = effective security Pharma research contract
+```
+
+The five subprofiles remain children of `PHARMA_V1`; they do not replace the
+parent profile.
+
+B3 was tightened before owner-local validation in commit
+`b9587227b09de6bc1a91092ac1a77516a642b315`:
+
+- added a machine-readable
+  `PROGRAM_B_PHARMA_DUAL_LAYER_RESEARCH` invariant;
+- requires Pharma recommendation readiness to carry a canonical Primary subprofile;
+- requires a Pharma subprofile assignment version;
+- rejects a missing Primary as `BLOCKED_PREREQUISITE`;
+- rejects a non-canonical Pharma Primary as `REVIEW_REQUIRED`;
+- recommendation lineage now carries:
+  - research parent profile code;
+  - methodology role / Primary subprofile;
+  - assignment version;
+  in addition to the exact source score run and recommendation-policy identity;
+- recommendation lineage identity changes when the Primary subprofile or assignment
+  version changes;
+- added regression cases proving
+  `PHARMA_V1 + DOMESTIC_FORMULATIONS` cannot collapse into
+  `PHARMA_V1 + GLOBAL_GENERICS`.
+
+This does not create five top-level Pharma profiles and does not make five
+independent stock scores. It preserves the established Pharma-specific layered
+model: common Pharma research plus one Primary business-model research layer,
+with secondary exposures/overlays handled only under separately approved rules.
+
+No recommendation execution, sizing execution, provider call, persistence,
+migration, deployment, merge, scheduler change or trading action occurred.
+
+**B3 remains OPEN / OWNER-LOCAL VALIDATION PENDING.**
