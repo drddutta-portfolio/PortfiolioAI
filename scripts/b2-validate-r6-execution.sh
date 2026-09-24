@@ -14,7 +14,10 @@ npx vitest run \
   src/features/research/k5CrossSectorIsolation.test.ts \
   src/features/research/k5WholePortfolioRouting.test.ts \
   src/features/research/k5RecommendationPortability.test.ts \
-  src/features/research/ResearchScorecardPanel.test.tsx
+  src/features/research/k3BankNbfcClosure.test.ts \
+  src/features/research/k3BankNbfcPortability.test.ts \
+  src/features/research/ResearchScorecardPanel.test.tsx \
+  src/pages/ResearchPage.test.tsx
 
 node scripts/program-b-b2-report.mjs
 
