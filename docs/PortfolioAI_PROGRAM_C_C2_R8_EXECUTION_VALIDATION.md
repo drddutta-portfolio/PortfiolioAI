@@ -5,7 +5,8 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Branch:** `program-c-portfolio-decision-engines`
 **Starting HEAD:** `fdd44b4591402dbc521e597e499341e2395b910a`
-**Source implementation HEAD before this document:** `823e47b503dd1c678f29dcad8e814df6ae74bb6f`
+**Initial source implementation review HEAD:** `823e47b503dd1c678f29dcad8e814df6ae74bb6f`
+**Latest source implementation HEAD before this document refresh:** `a449963778b7d61e0004fc20b4311060571eb3b3`
 **Status:** IMPLEMENTED / STATIC REVIEW PASS / OWNER-LOCAL EXECUTABLE VALIDATION PENDING
 
 ## 1. C2 authority
@@ -224,6 +225,8 @@ Program B R6/R7 lineage exists.
 The validation fixture:
 
 - consumes exact Program B score-run ids;
+- calls the Program B R7 recommendation executor directly, without invoking
+  Program B sizing execution;
 - consumes exact Program B recommendation-run ids;
 - builds a deterministic two-holding portfolio context;
 - exercises Core/non-Core applicability;
@@ -253,6 +256,11 @@ K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22
 ```
 
 Every holding receives an explicit R8 disposition.
+
+The frozen aggregate consumes the existing Program B R7 portfolio aggregate for
+recommendation lineage only and explicitly aborts if any upstream
+`sizingReady` count is non-zero. C2 therefore cannot silently inherit numeric
+sizing authority.
 
 The frozen K5 fixture does not contain the owner role/settings, current portfolio
 weight, canonical risk magnitude evidence or thesis/permanent-loss evidence
