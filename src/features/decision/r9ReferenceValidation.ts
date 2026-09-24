@@ -165,5 +165,15 @@ export function buildProgramCR9ReferenceValidation() {
     outOfOrder,
     incomparable,
     deduplicatedEvents: deduplicateProgramCR9Events(duplicateInput),
+    observations: {
+      torntCurrent,
+      torntReplay,
+      watchObserved,
+      freshObserved,
+      staleObserved,
+      assignmentPrevious,
+      blockerPrevious,
+      alivusObserved,
+    },
   }
 }
