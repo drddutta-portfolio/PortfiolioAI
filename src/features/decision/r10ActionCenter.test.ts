@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest"
+import type { PortfolioViewModel } from "../portfolio/types"
+import type { ResearchCoverageRow } from "../research/researchCoverage"
 import { buildProgramCR8C2Validation } from "./r8C2Validation"
+import { programCR8CanonicalJson } from "./r8Determinism"
 import { buildProgramCR9C3Validation } from "./r9C3Validation"
 import { evaluateProgramCR10Attention } from "./r10ActionCenterEngine"
 import {
@@ -11,6 +14,7 @@ import {
 import { PROGRAM_C_R10_AUTHORITY } from "./r10AuthorityRegistry"
 import { buildProgramCR10C4Validation } from "./r10C4Validation"
 import { buildProgramCR10FrozenPortfolioDisposition } from "./r10FrozenPortfolioDisposition"
+import { buildProgramCR10LiveActionCenter } from "./r10LiveActionCenter"
 import { buildProgramCR10OwnerAuthorityRegression } from "./r10OwnerAuthority"
 import { programCR10Precedence, selectProgramCR10State } from "./r10PrecedenceRegistry"
 import { buildProgramCR10ReferenceValidation } from "./r10ReferenceValidation"
@@ -82,6 +86,77 @@ describe("Program C C4 R10 integrated Action Center", () => {
       ...input,
       r9CurrentR8DecisionRunId: "DIFFERENT_R8_RUN",
     })).toThrow(/same R8 decision run/)
+  })
+
+  it("builds one deterministic live Action Center collection for shared surface consumption", () => {
+    const portfolio = {
+      portfolio: { id: "portfolio-live", name: "Live", currency: "INR" },
+      themes: [],
+      openPositions: [{
+        securityId: "security-live",
+        symbol: "LIVE",
+        company: "Live Ltd",
+        sector: "Pharma",
+        industry: "Pharmaceuticals",
+        assetClass: "EQUITY",
+        role: "CORE",
+        settings: {
+          id: "setting-live",
+          portfolioRole: "CORE",
+          targetWeight: "4",
+          minimumWeight: "2",
+          maximumWeight: "5",
+          priority: null,
+          isWatchlisted: false,
+          isFrozen: false,
+          investmentHorizon: "LONG_TERM",
+          notes: null,
+        },
+        themes: [],
+        quantity: "10",
+        averageCost: "100",
+        currentPrice: "120",
+        currentValue: "1200",
+        portfolioWeightPercent: "4",
+        priceRetrievedAt: "2026-09-25T00:00:00.000Z",
+      }],
+      closedPositions: [],
+    } as unknown as PortfolioViewModel
+
+    const coverage: ResearchCoverageRow[] = [{
+      securityId: "security-live",
+      symbol: "LIVE",
+      company: "Live Ltd",
+      assetClass: "EQUITY",
+      role: "CORE",
+      themes: [],
+      sector: "Pharma",
+      marketCapCategory: null,
+      equityEligible: true,
+      providerIdentity: "FRESH",
+      fundamentals: "FRESH",
+      ownership: "FRESH",
+      valuation: "FRESH",
+      documents: "FRESH",
+      overall: "FRESH",
+      conflictCount: 0,
+      reviewRequiredCount: 0,
+      latestEvidenceAt: "2026-09-24T00:00:00.000Z",
+    }]
+
+    const monitoring = new Map([["security-live", {
+      targetPrice: null,
+      stopLossPrice: null,
+      targetPriceAlertEnabled: true,
+      stopLossAlertEnabled: true,
+    }]])
+
+    const first = buildProgramCR10LiveActionCenter(portfolio, coverage, monitoring)
+    const second = buildProgramCR10LiveActionCenter(portfolio, coverage, monitoring)
+    expect(first.attentions).toHaveLength(1)
+    expect(first.view).toHaveLength(1)
+    expect(first.attentions[0]?.state).toBe("BLOCKED_PREREQUISITE")
+    expect(programCR8CanonicalJson(first)).toBe(programCR8CanonicalJson(second))
   })
 
   it("gives all 238 frozen holdings an explicit R10 disposition without directional sizing states", () => {
