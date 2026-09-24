@@ -5654,3 +5654,194 @@ Conversation history is not the sole continuation authority.
 No R8 source implementation was authorized or performed by the plan-freeze
 documentation step. C0 is the only next authorized checkpoint.
 
+
+---
+
+## Program C · C0 contract freeze + inheritance audit — COMPLETE / PASS — 24 September 2026
+
+C0 was executed under the frozen Program C master plan. No R8/R9/R10 source
+implementation was authorized or performed.
+
+### Repository / branch state
+
+```text
+repository = drddutta-portfolio/PortfiolioAI
+incoming branch = program-a-evidence-coverage
+incoming HEAD = d3b8a755885bd4ecc0be37aa59ea46f2eac0ca41
+
+Program C branch = program-c-portfolio-decision-engines
+branch base = d3b8a755885bd4ecc0be37aa59ea46f2eac0ca41
+C0 checkpoint artifact end HEAD = 63b54da87ff5ea61ef662d9efe1dbdb4e0a879af
+```
+
+The incoming branch was verified as exactly two documentation commits ahead of
+the formal Program B functional baseline
+`6a605f618ab67e3e8ad5d5faa2181796a1f43988`. The only differences were the
+Program C master plan and cumulative handoff; no Program C implementation had
+been introduced.
+
+The new Program C branch was explicitly created from that verified plan-freeze
+state. This is not a merge to `main` and grants no productionization authority.
+
+### C0 checkpoint artifact
+
+Created:
+
+```text
+docs/PortfolioAI_PROGRAM_C_C0_CONTRACT_FREEZE_INHERITANCE_AUDIT.md
+```
+
+This document freezes the Program C continuation state and records the R6/R7
+inheritance audit, validation universe, R8 dependency-matrix obligation, R9
+baseline/idempotency semantics, R10 vocabulary boundary, owner-control boundary,
+provider/AI/persistence boundaries, lineage rules, validation requirements and
+stop conditions.
+
+### R6/R7 inheritance audit
+
+Audited current repository authorities:
+
+- `src/features/research/programBR6Contract.ts`
+- `src/features/research/programBR6Execution.ts`
+- `src/features/research/programBR7Contract.ts`
+- `src/features/research/programBR7Execution.ts`
+- `src/features/research/programBFinalClosure.ts`
+
+Confirmed inheritance:
+
+- R6 readiness remains explicit and fail-closed;
+- R6 issues immutable score-run lineage used downstream;
+- R7 consumes exact R6 score-run identity;
+- Pharma retains `PHARMA_V1 + exactly one reviewed Primary` semantics;
+- recommendation policy remains profile-specific;
+- cross-sector sizing-policy borrowing remains prohibited;
+- `PROGRAM_B_SIZING_POLICY_REGISTRY` remains empty;
+- owner target price, stop loss, target weight and portfolio role remain protected;
+- provider/AI numeric-decision/persistence/production/scheduler/trading safety
+  boundaries remain closed.
+
+Program C must consume these authorities, not reconstruct them.
+
+### Frozen Program C validation universe
+
+C0 explicitly reuses the existing frozen K5 local fixture:
+
+```text
+Program C validation version = PROGRAM_C_VALIDATION_UNIVERSE_V1
+source snapshot = K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22
+snapshot date = 2026-09-22
+holding count = 238
+asset universe = 238 EQUITY / 0 non-equity in fixture
+source authority = src/features/research/k5CurrentPortfolioRoutingSnapshot.ts
+state = frozen local deterministic fixture, not live production
+```
+
+Known limitations are preserved: this is not a live 24 September production
+reconciliation; industry classification is incomplete for part of the fixture;
+portfolio-wide numeric R6 and R7 coverage is intentionally incomplete; numeric
+sizing policy remains unapproved.
+
+Any change to this universe requires an explicit versioned re-freeze and owner
+approval.
+
+### R8 dependency-matrix requirement
+
+C1 must freeze a machine-readable dependency matrix for exactly:
+
+```text
+Core Health
+Portfolio Fit
+Portfolio Risk
+Exit Intelligence
+```
+
+Each must declare mandatory/optional upstream states, portfolio and owner
+context, evidence requirements, applicability, blockers and whether R7 is
+actually required. Missing R7 must not globally block independently valid R8
+sub-engines.
+
+### R9 baseline and idempotency boundary
+
+R9 must distinguish:
+
+```text
+first observation / no comparable baseline
+no change
+raw but immaterial change
+meaningful change
+```
+
+Initial Program C guarantees deterministic event identity, semantic idempotency
+and same-input replay stability only.
+
+It does not claim durable acknowledgement, snooze, persistent notification
+suppression or cross-session seen/unseen state.
+
+### R10 ADD/TRIM boundary
+
+`ADD_REVIEW` / `TRIM_REVIEW` remain candidate-only. They cannot become
+canonical unless C4 proves an already-approved deterministic upstream authority
+supports that direction without inventing numeric sizing policy.
+
+No Program C state may contain quantity, order details, exact add/trim
+percentage, machine-generated target weight or a trade instruction.
+
+### Frozen safety boundary
+
+```text
+numeric sizing authority = NO
+provider calls in R8/R9/R10 compute = 0
+AI deterministic decisions = 0
+automatic persistence = 0
+schema migration = 0
+production mutation = 0
+merge/deployment = 0
+scheduler activation = 0
+trading/order behavior = 0
+owner-setting mutation = 0
+```
+
+### Files changed in C0
+
+```text
+docs/PortfolioAI_PROGRAM_C_C0_CONTRACT_FREEZE_INHERITANCE_AUDIT.md  ADDED
+docs/PORTFOLIOAI_CUMULATIVE_DEVELOPMENT_HANDOFF.md                  APPENDED
+```
+
+No source file, migration, Edge Function, workflow, provider adapter, persistence
+repository, scheduler or trading path was changed.
+
+### C0 closure
+
+```text
+C0 = COMPLETE / PASS
+Program C scope = FROZEN
+R8/R9/R10 ordering = FROZEN
+Program C branch = EXPLICIT
+validation universe = EXPLICIT
+upstream inheritance = AUDITED
+owner/sizing/provider/AI boundaries = FROZEN
+R8 dependency-matrix requirement = FROZEN
+R9 baseline/idempotency semantics = FROZEN
+R10 ADD/TRIM candidate-only rule = FROZEN
+R8 implementation = NOT STARTED
+```
+
+### Stop boundary / next authorization
+
+```text
+Current stop point = after C0
+Next possible checkpoint = C1 only
+C1 authorization = NOT YET GRANTED
+R8 execution / C2 = NOT AUTHORIZED
+R9 / C3 = NOT AUTHORIZED
+R10 / C4 = NOT AUTHORIZED
+C-FINAL = NOT AUTHORIZED
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+Explicit owner approval is required before any C1 contract/architecture work.
+
