@@ -354,6 +354,7 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
   const previewScoreReadyCoverage = totalDimensionWeight > 0 ? weightedEligible.reduce((sum, dimension) => sum + dimension.scoreReadyCoverage * dimension.dimensionWeight, 0) / totalDimensionWeight : 0
 
   return {
+    scoreRunId: run?.id ?? null,
     profileCode, profileName: profile?.name ?? profileCode.replaceAll("_", " "), profileSource,
     methodologyState: "AVAILABLE", methodologyReasonCode: null,
     scoringExecutionState: "AVAILABLE", scoringExecutionReasonCode: null,

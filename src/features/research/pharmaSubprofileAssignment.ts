@@ -36,6 +36,7 @@ export interface ResearchSubprofileExposure {
 }
 
 export interface PharmaSubprofileAssignment {
+  readonly assignmentId?: string
   readonly securityId: string
   readonly profileCode: "PHARMA_V1"
   readonly primarySubprofileCode: PharmaSubprofileCode

@@ -147,6 +147,7 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
   const profileSource: ScoringProfileSource = reviewedLegacyAssignment ? "REVIEWED_ASSIGNMENT" : "SECTOR_RULE"
 
   return {
+    scoreRunId: run?.id ?? null,
     profileCode: "PHARMA_V1",
     profileName: profile.name,
     profileSource,

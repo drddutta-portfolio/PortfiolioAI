@@ -1,6 +1,7 @@
 import "./ResearchScorecardPanel.css"
 import "./ResearchScorecardPolish.css"
 import { researchProfileUiContract } from "./researchProfileUiContract"
+import { programBMethodologyRoleLabel, type ProgramBR6ScoringPresentation } from "./programBR6Presentation"
 import type { DimensionScore, SecurityScoringSnapshot } from "./scoringTypes"
 
 const OVERALL_PREVIEW_COVERAGE_GATE = 0.70
@@ -44,56 +45,30 @@ function ratingDate(value: string | null) {
   return Number.isNaN(parsed.valueOf()) ? "Date unavailable" : new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(parsed)
 }
 
-function programBReadinessState(snapshot: SecurityScoringSnapshot) {
-  if (snapshot.methodologyState === "REVIEW_REQUIRED") return "REVIEW_REQUIRED"
-  if (snapshot.methodologyState === "METHODOLOGY_NOT_AVAILABLE") return "METHODOLOGY_NOT_AVAILABLE"
-  if (snapshot.scoringExecutionState === "PENDING_ADAPTER" || snapshot.scoringExecutionState === "BLOCKED") return "BLOCKED_PREREQUISITE"
-  if (snapshot.overallScore !== null) return "READY"
-  const weighted = snapshot.dimensions.filter((dimension) => dimension.dimensionWeight > 0)
-  if (weighted.length && weighted.every((dimension) => dimension.rawScore !== null) && (snapshot.scoreReadyCoverage ?? 0) >= 0.999999) return "READY"
-  return "INSUFFICIENT_EVIDENCE"
-}
-
-function blockedInputCount(snapshot: SecurityScoringSnapshot) {
-  const signalBlockers = snapshot.dimensions.flatMap((dimension) => dimension.signals ?? [])
-    .filter((signal) => signal.state === "MISSING" || signal.state === "PENDING_SOURCE").length
-  if (signalBlockers > 0) return signalBlockers
-  return snapshot.dimensions.filter((dimension) => dimension.dimensionWeight > 0 && dimension.rawScore === null).length
-}
-
-function failClosedReason(snapshot: SecurityScoringSnapshot, readinessState: string) {
-  if (readinessState === "READY") return "None"
-  return snapshot.methodologyReasonCode
-    ?? snapshot.scoringExecutionReasonCode
-    ?? (readinessState === "INSUFFICIENT_EVIDENCE" ? "MANDATORY_SCORE_INPUTS_INCOMPLETE" : readinessState)
-}
-
-function ScoringContractStrip({ snapshot, methodologyRole }: {
-  readonly snapshot: SecurityScoringSnapshot
-  readonly methodologyRole: string | null
+function ScoringContractStrip({ presentation }: {
+  readonly presentation: ProgramBR6ScoringPresentation
 }) {
-  const readinessState = programBReadinessState(snapshot)
   return <div className="investment-clarity-strip scoring-contract-strip" aria-label="Program B scoring contract">
-    <article><span>Score readiness</span><strong>{label(readinessState)}</strong><small>Evidence coverage is separate from score readiness</small></article>
-    <article><span>Methodology</span><strong>{snapshot.profileCode}</strong><small>{snapshot.methodologyState ?? "AVAILABLE"}</small></article>
-    <article><span>Methodology role</span><strong>{methodologyRole ?? "Role unresolved"}</strong><small>Role is part of score lineage</small></article>
-    <article><span>Evidence date / snapshot</span><strong>{snapshot.asOfDate ?? "Current cache snapshot"}</strong><small>Read-only cached evidence</small></article>
-    <article><span>Blocked inputs</span><strong>{blockedInputCount(snapshot)}</strong><small>Missing or pending mandatory inputs</small></article>
-    <article><span>Fail-closed reason</span><strong>{label(failClosedReason(snapshot, readinessState))}</strong><small>No hidden reconstruction</small></article>
+    <article><span>Score readiness</span><strong>{label(presentation.readinessState)}</strong><small>Evidence coverage is separate from score readiness</small></article>
+    <article><span>Methodology</span><strong>{presentation.researchProfileCode}</strong><small>{presentation.methodologyVersion ?? "Version unresolved"}</small></article>
+    <article><span>Methodology role</span><strong title={presentation.methodologyRole ?? undefined}>{programBMethodologyRoleLabel(presentation.methodologyRole)}</strong><small>{presentation.methodologyRole ?? "Canonical Primary unresolved"}</small></article>
+    <article><span>Evidence date / snapshot</span><strong>{presentation.asOfDate ?? "Date unresolved"}</strong><small>{presentation.evidenceSnapshotIdentity ?? "Snapshot unresolved"}</small></article>
+    <article><span>Blocked inputs</span><strong>{presentation.blockerCount}</strong><small>Canonical R6 blockers</small></article>
+    <article><span>Fail-closed reason</span><strong>{presentation.reasonCodes.length ? presentation.reasonCodes.map(label).join(" · ") : "None"}</strong><small>No hidden reconstruction</small></article>
   </div>
 }
 
-export function ResearchScorecardPanel({ snapshot, isLoading, error, methodologyRole = null }: {
+export function ResearchScorecardPanel({ snapshot, isLoading, error, programB = null }: {
   readonly snapshot: SecurityScoringSnapshot | null
   readonly isLoading: boolean
   readonly error: string | null
-  readonly methodologyRole?: string | null
+  readonly programB?: ProgramBR6ScoringPresentation | null
 }) {
   if (isLoading) return <section className="panel"><p className="eyebrow">PortfolioAI scoring</p><h2>Loading scoring framework…</h2></section>
   if (error) return <section className="research-callout research-callout-neutral"><strong>Scoring framework unavailable</strong><p>{error}</p></section>
   if (!snapshot) return null
-  if (snapshot.methodologyState && snapshot.methodologyState !== "AVAILABLE") return <section className="research-callout research-callout-neutral"><strong>{snapshot.profileName}</strong><p>{snapshot.methodologyState === "REVIEW_REQUIRED" ? "Canonical classification is missing or requires review. No scoring methodology or generic preview has been selected." : "No approved methodology is available for this classification. PortfolioAI will not substitute the GENERAL scoring profile."}</p><small>{snapshot.methodologyReasonCode?.replaceAll("_", " ") ?? "Fail-closed methodology state"}</small><ScoringContractStrip snapshot={snapshot} methodologyRole={methodologyRole} /></section>
-  if (snapshot.scoringExecutionState === "PENDING_ADAPTER") return <section className="research-callout research-callout-neutral"><strong>Sector methodology available</strong><p>Scoring execution is pending evidence/adapter rollout. PortfolioAI will not substitute GENERAL scoring rules.</p><small>{snapshot.profileName} · {snapshot.scoringExecutionReasonCode?.replaceAll("_", " ") ?? "Sector scoring adapter pending"}</small><ScoringContractStrip snapshot={snapshot} methodologyRole={methodologyRole} /></section>
+  if (snapshot.methodologyState && snapshot.methodologyState !== "AVAILABLE") return <section className="research-callout research-callout-neutral"><strong>{snapshot.profileName}</strong><p>{snapshot.methodologyState === "REVIEW_REQUIRED" ? "Canonical classification is missing or requires review. No scoring methodology or generic preview has been selected." : "No approved methodology is available for this classification. PortfolioAI will not substitute the GENERAL scoring profile."}</p><small>{snapshot.methodologyReasonCode?.replaceAll("_", " ") ?? "Fail-closed methodology state"}</small>{programB ? <ScoringContractStrip presentation={programB} /> : null}</section>
+  if (snapshot.scoringExecutionState === "PENDING_ADAPTER") return <section className="research-callout research-callout-neutral"><strong>Sector methodology available</strong><p>Scoring execution is pending evidence/adapter rollout. PortfolioAI will not substitute GENERAL scoring rules.</p><small>{snapshot.profileName} · {snapshot.scoringExecutionReasonCode?.replaceAll("_", " ") ?? "Sector scoring adapter pending"}</small>{programB ? <ScoringContractStrip presentation={programB} /> : null}</section>
 
   const ui = researchProfileUiContract(snapshot.profileCode)
   const byCode = new Map(snapshot.dimensions.map((dimension) => [dimension.dimensionCode, dimension]))
@@ -130,7 +105,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error, methodology
         </div>
       </div>
 
-      <ScoringContractStrip snapshot={snapshot} methodologyRole={methodologyRole} />
+      {programB ? <ScoringContractStrip presentation={programB} /> : null}
 
       <div className="investment-clarity-strip" aria-label="Section score summary">
         {ui.scoreSectionGroups.map((group) => {

@@ -5350,3 +5350,24 @@ contradiction in `REVIEW_REQUIRED` rather than silently reaching READY.
 
 Focused result: 13 R6 contract tests passed; TypeScript and `git diff --check`
 passed.
+
+### C3 — canonical R6 Research presentation boundary
+
+**Status:** COMPLETE / PASS
+
+Added `programBR6Presentation.ts` as the single feature-layer owner of the R6
+Research presentation contract. It carries security, readiness, parent profile,
+methodology version/role, assignment id/version, classification version,
+snapshot/as-of identity, blockers, reason codes, score-run id, valid score and
+separate evidence coverage. `ResearchScorecardPanel` now renders this contract
+without deciding READY, blockers, fail-closed reasons or methodology role.
+`ResearchPage` no longer uses the ordinary sector router as a Pharma Primary
+fallback.
+
+The score repositories now expose the canonical persisted score-run id, and the
+subprofile repository exposes canonical assignment ids. Five-reference tests
+cover the expected Primary roles; missing Primary, preview/non-complete runs,
+stale/conflicting evidence, missing assignment id and invalid assignment version
+all fail closed. Friendly long-role labels retain the canonical code in the UI.
+
+Focused result: 38 tests passed; TypeScript and `git diff --check` passed.

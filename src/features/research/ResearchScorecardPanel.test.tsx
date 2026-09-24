@@ -2,6 +2,7 @@ import { cleanup, render, screen, within } from "@testing-library/react"
 import { afterEach, describe, expect, it } from "vitest"
 import type { DimensionScore, SecurityScoringSnapshot } from "./scoringTypes"
 import { ResearchScorecardPanel } from "./ResearchScorecardPanel"
+import { buildProgramBR6ScoringPresentation } from "./programBR6Presentation"
 
 const dimension = (dimensionCode: string, rawScore: number | null, evidenceCoverage: number, dimensionWeight = 1): DimensionScore => ({
   dimensionCode,
@@ -93,8 +94,9 @@ describe("ResearchScorecardPanel shared score states", () => {
   })
 
   it("shows the Program B readiness, methodology role and evidence snapshot without conflating evidence coverage", () => {
-    render(<ResearchScorecardPanel snapshot={{
+    const scored = {
       ...snapshot("BANK_NBFC", [dimension("QUALITY", 87, 1)]),
+      scoreRunId: "score-run-bank-1",
       runState: "COMPLETE",
       overallScore: 87,
       scoreReadyCoverage: 1,
@@ -102,12 +104,14 @@ describe("ResearchScorecardPanel shared score states", () => {
       asOfDate: "2026-09-24",
       methodologyState: "AVAILABLE",
       scoringExecutionState: "AVAILABLE",
-    }} isLoading={false} error={null} methodologyRole="BANK" />)
+    } satisfies SecurityScoringSnapshot
+    const programB = buildProgramBR6ScoringPresentation({ securityId: "security-bank", snapshot: scored, pharmaResolution: null })
+    render(<ResearchScorecardPanel snapshot={scored} isLoading={false} error={null} programB={programB} />)
     const contract = screen.getByLabelText("Program B scoring contract")
     expect(within(contract).getByText("Score readiness")).toBeInTheDocument()
     expect(within(contract).getByText("Ready")).toBeInTheDocument()
     expect(within(contract).getByText("Methodology role")).toBeInTheDocument()
-    expect(within(contract).getByText("BANK")).toBeInTheDocument()
+    expect(within(contract).getAllByText("BANK_NBFC").length).toBeGreaterThan(0)
     expect(within(contract).getByText("2026-09-24")).toBeInTheDocument()
     expect(within(contract).getByText(/Evidence coverage is separate from score readiness/u)).toBeInTheDocument()
   })

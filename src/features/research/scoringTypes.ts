@@ -43,6 +43,7 @@ export interface DimensionScore {
 }
 
 export interface SecurityScoringSnapshot {
+  readonly scoreRunId?: string | null
   readonly profileCode: string
   readonly profileName: string
   readonly profileSource: ScoringProfileSource
@@ -61,4 +62,5 @@ export interface SecurityScoringSnapshot {
   readonly dimensions: readonly DimensionScore[]
   readonly ratings: readonly ExternalRatingObservation[]
   readonly previewMode?: boolean
+  readonly canonicalEvidenceState?: "FRESH" | "STALE" | "MISSING" | "CONFLICTING" | "REVIEW_REQUIRED"
 }

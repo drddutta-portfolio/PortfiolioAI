@@ -17,7 +17,7 @@ import { PositionDecisionControls } from "../features/research/PositionDecisionC
 import { latestByCode, metricLabel, coverageStatus, formatResearchMetric } from "../features/research/researchPolicy"
 import { researchSnapshotGroups } from "../features/research/researchPresentationPolicy"
 import { researchProfileUiContract } from "../features/research/researchProfileUiContract"
-import { routeResearchProfileV1 } from "../features/research/researchProfileRouting"
+import { buildProgramBR6ScoringPresentation } from "../features/research/programBR6Presentation"
 import { ResearchScorecardPanel } from "../features/research/ResearchScorecardPanel"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "../features/research/types"
 import { useSecurityResearch } from "../features/research/useSecurityResearch"
@@ -116,20 +116,13 @@ function Overview({ position, research, scoring, onViewEvidence }: { readonly po
   const reviewRequired = research.documents.filter((document) => document.status === "REVIEW_REQUIRED").length
   const stale = research.metrics.filter((metric) => metric.status === "STALE").length
   const coverage = research.metrics.length ? "Partial" : "Unavailable"
-  const routedMethodology = routeResearchProfileV1({
-    assetClass: position.assetClass,
-    applicationSector: research.sector ?? position.sector,
-    applicationIndustry: research.industry ?? position.industry,
-  })
-  const methodologyRole = pharmaResolution.data?.status === "RESOLVED"
-    ? pharmaResolution.data.assignment.primarySubprofileCode
-    : routedMethodology.state === "ROUTED"
-      ? routedMethodology.profileCode
-      : null
+  const programB = scoring.data
+    ? buildProgramBR6ScoringPresentation({ securityId: position.securityId, snapshot: scoring.data, pharmaResolution: pharmaResolution.data })
+    : null
   return <>
     <SectionHeading title="Research at a glance" detail="Designed to give investment clarity first, with the detailed tabs preserving the evidence behind every conclusion." />
     <section className="context-strip" aria-label="Research and portfolio context"><div><span>Research profile</span><strong>{profileDisplayName}</strong><small>{research.industry ?? position.industry ?? (scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed profile · industry pending" : "Industry unavailable")}</small></div><div><span>Portfolio exposure</span><strong>{formatPercent(position.portfolioWeightPercent)} current weight</strong><small>{formatQuantity(position.quantity)} shares · {position.role === "UNCLASSIFIED" ? "role unclassified" : `${titleCase(position.role)} role`}</small></div><div><span>Evidence status</span><strong>{scoring.data?.evidenceCoverage == null ? "Unavailable" : `${Math.round(scoring.data.evidenceCoverage * 100)}% verified`}</strong><small>{scoring.data?.scoreReadyCoverage == null ? "Score readiness unavailable" : `${Math.round(scoring.data.scoreReadyCoverage * 100)}% score-ready`}</small></div></section>
-    <ResearchScorecardPanel snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} methodologyRole={methodologyRole} />
+    <ResearchScorecardPanel snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} programB={programB} />
     {scoring.data?.profileCode === "PHARMA_V1" || pharmaResolution.data?.status === "RESOLVED" ? <PharmaRecommendationPanel securityId={position.securityId} symbol={position.symbol} assignmentResolution={pharmaResolution.data ?? null} /> : null}
     {(!scoring.data?.methodologyState || scoring.data.methodologyState === "AVAILABLE") && (!scoring.data?.scoringExecutionState || scoring.data.scoringExecutionState === "AVAILABLE") && ui.readinessMode === "PROFILE_CONTRACT" ? <ProfileResearchReadinessPanel securityId={position.securityId} profileCode={ui.profileCode} research={research} snapshot={scoring.data} /> : null}
     <div className="research-cockpit">{groups.map((group) => <section className="cockpit-panel" key={group.title}><h2>{group.title}</h2><div className="snapshot-list">{group.codes.map((code) => { const metric = metrics.get(code); return <div key={code}><span>{metric?.label ?? metricLabelForCode(code)}</span><strong>{formatResearchMetric(metric)}</strong><small>{metric ? period(metric) : "Unavailable"}</small><Status value={coverageStatus(metric)} /></div> })}</div></section>)}</div>

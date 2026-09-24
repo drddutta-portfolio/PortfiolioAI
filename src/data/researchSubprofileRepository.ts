@@ -115,6 +115,7 @@ export function mapResearchSubprofileRows(
       .map(mapSecondary)
 
     return {
+      assignmentId: row.id,
       securityId: row.security_id,
       profileCode: "PHARMA_V1",
       primarySubprofileCode: assertSubprofileCode(row.subprofile_code),
