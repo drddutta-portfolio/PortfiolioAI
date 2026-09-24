@@ -4,7 +4,6 @@ import {
   compareProgramCR9ObservedStates,
 } from "./r9MeaningfulChangeEngine"
 import { buildProgramCR9ObservedState } from "./r9ObservedState"
-import { buildProgramCR9ReferenceValidation } from "./r9ReferenceValidation"
 import { evaluateProgramCR10Attention } from "./r10ActionCenterEngine"
 import type {
   ProgramCR10Input,
@@ -113,7 +112,6 @@ function inputFor(
 
 export function buildProgramCR10ReferenceValidation() {
   const r8 = buildProgramCR8ReferenceValidationAssessments()
-  const r9 = buildProgramCR9ReferenceValidation()
   const tornt = r8.rows.find((row) => row.symbol === "TORNTPHARM")
   if (!tornt) {
     throw new Error("Program C C4 reference validation requires TORNTPHARM R8 fixture.")
@@ -125,26 +123,48 @@ export function buildProgramCR10ReferenceValidation() {
     throw new Error("Program C C4 reference validation requires TORNTPHARM owner context.")
   }
 
+  const cleanAssessment = mutatedAssessment(tornt.assessment, {
+    decisionRunId: "C4_FIXTURE_R8_CLEAN",
+    overallDisposition: "ASSESSMENT_COMPLETE",
+    coreHealth: "CORE_HEALTHY",
+    portfolioFit: "FIT_SUPPORTED",
+    portfolioRisk: "RISK_ACCEPTABLE",
+    exitIntelligence: "NO_EXIT_SIGNAL",
+  })
+  const cleanPrevious = baselineFor(
+    cleanAssessment,
+    "2026-09-25T06:00:00.000Z",
+    "CORE_CANDIDATE",
+  )
+  const cleanCurrent = baselineFor(
+    cleanAssessment,
+    "2026-09-25T06:30:00.000Z",
+    "CORE_CANDIDATE",
+  )
+  const noChangeComparison = compareProgramCR9ObservedStates(
+    cleanPrevious.observed,
+    cleanCurrent.observed,
+  )
   const noActionInput = inputFor(
-    tornt.assessment,
-    r9.noChange,
-    r9.observations.torntReplay.lineage.r8DecisionRunId,
+    cleanAssessment,
+    noChangeComparison,
+    cleanCurrent.observed.lineage.r8DecisionRunId,
     ownerContext,
     "CORE_CANDIDATE",
-    r9.observations.torntReplay.lineage.classificationVersion,
+    cleanCurrent.observed.lineage.classificationVersion,
   )
   const noAction = evaluateProgramCR10Attention(noActionInput)
 
   const firstObservation = evaluateProgramCR10Attention(inputFor(
-    tornt.assessment,
-    r9.firstObservation,
-    r9.observations.torntCurrent.lineage.r8DecisionRunId,
+    cleanAssessment,
+    cleanPrevious.comparison,
+    cleanPrevious.observed.lineage.r8DecisionRunId,
     ownerContext,
     "CORE_CANDIDATE",
-    r9.observations.torntCurrent.lineage.classificationVersion,
+    cleanPrevious.observed.lineage.classificationVersion,
   ))
 
-  const exitAssessment = mutatedAssessment(tornt.assessment, {
+  const exitAssessment = mutatedAssessment(cleanAssessment, {
     decisionRunId: "C4_FIXTURE_R8_EXIT_REVIEW",
     exitIntelligence: "HARD_EXIT_REVIEW",
   })
@@ -162,7 +182,7 @@ export function buildProgramCR10ReferenceValidation() {
     exitBaseline.observed.lineage.classificationVersion,
   ))
 
-  const concentrationAssessment = mutatedAssessment(tornt.assessment, {
+  const concentrationAssessment = mutatedAssessment(cleanAssessment, {
     decisionRunId: "C4_FIXTURE_R8_CONCENTRATION",
     portfolioFit: "CONCENTRATION_REVIEW",
   })
@@ -180,7 +200,7 @@ export function buildProgramCR10ReferenceValidation() {
     concentrationBaseline.observed.lineage.classificationVersion,
   ))
 
-  const roleAssessment = mutatedAssessment(tornt.assessment, {
+  const roleAssessment = mutatedAssessment(cleanAssessment, {
     decisionRunId: "C4_FIXTURE_R8_ROLE_REVIEW",
     portfolioFit: "ROLE_COMPATIBILITY_REVIEW",
   })
@@ -198,7 +218,7 @@ export function buildProgramCR10ReferenceValidation() {
     roleBaseline.observed.lineage.classificationVersion,
   ))
 
-  const blockedAssessment = mutatedAssessment(tornt.assessment, {
+  const blockedAssessment = mutatedAssessment(cleanAssessment, {
     decisionRunId: "C4_FIXTURE_R8_BLOCKED",
     overallDisposition: "BLOCKED_PREREQUISITE",
     coreHealth: "BLOCKED_PREREQUISITE",
@@ -217,7 +237,7 @@ export function buildProgramCR10ReferenceValidation() {
     blockedBaseline.observed.lineage.classificationVersion,
   ))
 
-  const partialAssessment = mutatedAssessment(tornt.assessment, {
+  const partialAssessment = mutatedAssessment(cleanAssessment, {
     decisionRunId: "C4_FIXTURE_R8_PARTIAL_EVIDENCE",
     overallDisposition: "ASSESSMENT_PARTIAL",
     portfolioRisk: "INSUFFICIENT_EVIDENCE",
@@ -268,12 +288,12 @@ export function buildProgramCR10ReferenceValidation() {
   ))
 
   const stopThreshold = evaluateProgramCR10Attention(inputFor(
-    tornt.assessment,
-    r9.noChange,
-    r9.observations.torntReplay.lineage.r8DecisionRunId,
+    cleanAssessment,
+    noChangeComparison,
+    cleanCurrent.observed.lineage.r8DecisionRunId,
     ownerContext,
     "CORE_CANDIDATE",
-    r9.observations.torntReplay.lineage.classificationVersion,
+    cleanCurrent.observed.lineage.classificationVersion,
     {
       currentPrice: "600",
       targetPrice: null,
