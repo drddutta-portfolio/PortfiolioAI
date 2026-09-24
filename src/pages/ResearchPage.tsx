@@ -1,6 +1,9 @@
 import Decimal from "decimal.js"
 import { useMemo, useState, type KeyboardEvent } from "react"
 import { Link, useParams } from "react-router-dom"
+import { ProgramCR10AttentionBadge } from "../components/ProgramCR10AttentionBadge"
+import type { ProgramCR10AttentionView } from "../features/decision/r10ActionCenterViewModel"
+import { useProgramCR10ActionCenter } from "../features/decision/useProgramCR10ActionCenter"
 import { formatMoney, formatPercent, formatQuantity } from "../features/portfolio/format"
 import type { PortfolioPosition } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
@@ -33,7 +36,11 @@ type ScoringHook = ReturnType<typeof useSecurityScoring>
 export function ResearchPage() {
   const { security } = useParams()
   const { portfolio, error: portfolioError, isLoading: portfolioLoading, reload: reloadPortfolio } = usePortfolioView()
+  const actionCenter = useProgramCR10ActionCenter(portfolio)
   const position = portfolio?.openPositions.find((item) => item.securityId === security || item.symbol.toLocaleUpperCase() === security?.toLocaleUpperCase()) ?? null
+  const actionAttention = position
+    ? actionCenter.data?.view.find((item) => item.securityId === position.securityId) ?? null
+    : null
   const research = useSecurityResearch(position?.securityId ?? null)
   const scoring = useSecurityScoring(position?.securityId ?? null, research.data?.sector ?? position?.sector ?? null, research.data?.industry ?? position?.industry ?? null)
   const [tab, setTab] = useState<Tab>("Overview")
@@ -41,7 +48,7 @@ export function ResearchPage() {
   if (portfolioError) return <div className="notice notice-error" role="alert">{portfolioError}</div>
   if (!position || !portfolio) return <ResearchNotFound />
   return <section className="research-page">
-    <ResearchHeader position={position} research={research.data} scoring={scoring} currency={portfolio.portfolio.currency} portfolioId={portfolio.portfolio.id} onPositionSaved={reloadPortfolio} />
+    <ResearchHeader position={position} research={research.data} scoring={scoring} currency={portfolio.portfolio.currency} portfolioId={portfolio.portfolio.id} actionAttention={actionAttention} onPositionSaved={reloadPortfolio} />
     <CompleteResearchRefreshPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} symbol={position.symbol} profileCode={scoring.data?.profileCode} onCompleted={() => { research.reload(); scoring.reload() }} />
     <ResearchTabs value={tab} onChange={setTab} />
     {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : research.data ? <TabPanel tab={tab} position={position} research={research.data} scoring={scoring} onTabChange={setTab} /> : null}
@@ -57,7 +64,7 @@ export function ResearchIndexPage() {
   return <section className="research-page"><div className="portfolio-hero compact-hero"><div><p className="eyebrow">Cached evidence library</p><h1>Research</h1><p>Open a current holding to inspect its trusted cached research evidence. Browsing this workspace never refreshes a provider.</p></div></div><section className="panel"><label className="research-search"><span>Find a security</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Ticker or company" /></label><div className="research-directory">{positions.map((position) => <Link key={position.securityId} to={`/app/research/${position.securityId}`}><span><strong>{position.symbol}</strong>{position.company}</span><small>{position.exchange} · {position.assetClass} · {position.sector ?? "Sector awaiting canonical classification"}</small></Link>)}</div>{!positions.length ? <Empty title="No matching securities" detail="Adjust the search to find a current holding." /> : null}</section></section>
 }
 
-function ResearchHeader({ position, research, scoring, currency, portfolioId, onPositionSaved }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly currency: string; readonly portfolioId: string; readonly onPositionSaved: () => void }) {
+function ResearchHeader({ position, research, scoring, currency, portfolioId, actionAttention, onPositionSaved }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly currency: string; readonly portfolioId: string; readonly actionAttention: ProgramCR10AttentionView | null; readonly onPositionSaved: () => void }) {
   const ui = researchProfileUiContract(scoring.data?.profileCode)
   const recommendationAddon = useResearchRecommendationAddon({ securityId: position.securityId, securitySymbol: position.symbol, profileCode: scoring.data?.profileCode ?? null })
   const marketCap = latestByCode(research?.metrics ?? []).get("MARKET_CAP_PROVIDER_RAW")
@@ -74,6 +81,7 @@ function ResearchHeader({ position, research, scoring, currency, portfolioId, on
       <MetricCard label="Total quantity" value={formatQuantity(position.quantity)} />
       <MetricCard label="Average cost" value={formatMoney(position.averageCost, currency)} detail={titleCase(position.accountingBasis)} />
       <MetricCard label="Portfolio weight" value={formatPercent(position.portfolioWeightPercent)} />
+      <article className="research-metric-card"><span>R10 Action Center</span><ProgramCR10AttentionBadge attention={actionAttention} /><small>Canonical read-only review state</small></article>
       <MetricCard label="Invested amount" value={formatMoney(position.investedAmount, currency)} detail="Cost basis" />
       <MetricCard label="Current value" value={formatMoney(position.currentValue, currency)} detail="At cached CMP" />
       <PnlCard position={position} currency={currency} />
