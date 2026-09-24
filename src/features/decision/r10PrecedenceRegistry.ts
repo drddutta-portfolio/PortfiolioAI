@@ -43,7 +43,9 @@ export function selectProgramCR10State(
 ): ProgramCR10PrecedenceRule {
   const unique = [...new Set(states)]
   if (!unique.length) return programCR10Precedence("NO_ACTION_REQUIRED")
-  return unique
+  const selected = unique
     .map(programCR10Precedence)
-    .sort((left, right) => right.rank - left.rank)[0]!
+    .sort((left, right) => right.rank - left.rank)[0]
+  if (!selected) return programCR10Precedence("NO_ACTION_REQUIRED")
+  return selected
 }
