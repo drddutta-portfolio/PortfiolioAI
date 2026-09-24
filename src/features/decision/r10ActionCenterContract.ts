@@ -99,6 +99,7 @@ export interface ProgramCR10IntegratedAttention {
     readonly r9ChangeEventId: string | null
     readonly r9RuleVersion: string | null
     readonly r9OwnerContextVersion: string | null
+    readonly ownerThresholdContextId: string
   }
   readonly ownerContext: ProgramCR8OwnerContext
   readonly asOf: string
