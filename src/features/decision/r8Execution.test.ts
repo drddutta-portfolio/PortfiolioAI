@@ -106,6 +106,17 @@ describe("Program C C2 R8 execution and validation", () => {
     }).state).toBe("INSUFFICIENT_EVIDENCE")
   })
 
+  it("does not allow a positive risk state without canonical evidence identity", () => {
+    expect(evaluateProgramCR8PortfolioRisk({
+      assetClass: "EQUITY",
+      portfolioContextSnapshotId: "context-1",
+      sourceScoreRunId: "r6-run",
+      riskSignal: "ACCEPTABLE",
+      evidenceIds: [],
+      concentrationReasonCodes: [],
+    }).state).toBe("INSUFFICIENT_EVIDENCE")
+  })
+
   it("does not infer an exit from price weakness alone", () => {
     const result = evaluateProgramCR8ExitIntelligence({
       assetClass: "EQUITY",
@@ -117,6 +128,16 @@ describe("Program C C2 R8 execution and validation", () => {
     })
     expect(result.state).toBe("INSUFFICIENT_EVIDENCE")
     expect(result.reasonCodes).toContain("PRICE_WEAKNESS_CONTEXT_ONLY")
+  })
+
+  it("does not allow NO_EXIT_SIGNAL without thesis evidence identity", () => {
+    expect(evaluateProgramCR8ExitIntelligence({
+      assetClass: "EQUITY",
+      sourceScoreRunId: "r6-run",
+      sourceRecommendationRunId: "r7-run",
+      exitSignal: "NO_SIGNAL",
+      thesisEvidenceIds: [],
+    }).state).toBe("INSUFFICIENT_EVIDENCE")
   })
 
   it("gives all 238 frozen K5 holdings an explicit fail-closed R8 disposition", () => {
