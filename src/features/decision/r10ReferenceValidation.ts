@@ -102,6 +102,7 @@ function inputFor(
     asOf: "2026-09-25T12:00:00.000Z",
     classificationVersion,
     r9CurrentR8DecisionRunId: r9DecisionRunId,
+    r9OwnerContextVersion: "C4_REFERENCE_OWNER_CONTEXT_V1",
     r7RecommendationState,
     r8: assessment,
     r9,
