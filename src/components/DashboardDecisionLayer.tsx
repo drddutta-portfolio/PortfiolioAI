@@ -1,15 +1,12 @@
 import Decimal from "decimal.js"
 import { useMemo } from "react"
 import { Link } from "react-router-dom"
-import type { DashboardMonitoringSetting } from "../data/dashboardEvidenceRepository"
-import { useDashboardMonitoringSettings, useDashboardRecommendations } from "../features/dashboard/useDashboardEvidence"
+import { useProgramCR10ActionCenter } from "../features/decision/useProgramCR10ActionCenter"
 import { formatMoney } from "../features/portfolio/format"
 import type { PortfolioPosition, PortfolioRole } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import "./DashboardDecisionLayer.css"
 
-type Tone = "critical" | "warning" | "positive" | "neutral"
-type ActionItem = { id: string; securityId: string; symbol: string; company: string; label: string; detail: string; tone: Tone; priority: number }
 type ThemeRow = { id: string; name: string; exposure: Decimal; currentValue: Decimal; coveredCost: Decimal; coveredPnl: Decimal; coveredCount: number; holdingCount: number; best: PortfolioPosition | null; maxAllocation: string | null }
 type RoleRow = { role: PortfolioRole; label: string; exposure: Decimal; currentValue: Decimal; coveredCost: Decimal; coveredPnl: Decimal; coveredCount: number; holdingCount: number; largest: PortfolioPosition | null; targetCount: number }
 
@@ -22,13 +19,6 @@ function d(value: string | number | null | undefined) {
 function pct(value: Decimal | null, digits = 1) { return value === null ? "—" : `${value.toDecimalPlaces(digits).toFixed(digits)}%` }
 function pretty(value: string | null | undefined) { return value ? value.toLowerCase().replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase()) : "Pending" }
 function roleLabel(role: PortfolioRole) { return role === "UNCLASSIFIED" ? "Unclassified" : pretty(role) }
-function recommendationTone(value: string | null): Tone {
-  const v = (value ?? "").toUpperCase()
-  if (v.includes("EXIT") || v.includes("REDUCE") || v.includes("AVOID")) return "critical"
-  if (v.includes("ADD") || v.includes("ACCUMULATE") || v.includes("BUY")) return "positive"
-  return "neutral"
-}
-
 function roles(positions: readonly PortfolioPosition[]): readonly RoleRow[] {
   const pricedTotal = positions.reduce((sum, position) => sum.plus(position.currentValue ?? "0"), new Decimal(0))
   return ROLE_ORDER.map((role) => {
@@ -67,49 +57,19 @@ function themes(positions: readonly PortfolioPosition[]): readonly ThemeRow[] {
   return [...map.values()].map((row) => ({ ...row, exposure: pricedTotal.isZero() ? new Decimal(0) : row.currentValue.div(pricedTotal).times(100) })).sort((a, b) => b.currentValue.comparedTo(a.currentValue))
 }
 
-function localActions(positions: readonly PortfolioPosition[], settings: ReadonlyMap<string, DashboardMonitoringSetting>) {
-  const actions: ActionItem[] = []
-  positions.forEach((position) => {
-    const current = d(position.currentPrice)
-    const setting = settings.get(position.securityId)
-    const target = d(setting?.targetPrice)
-    const stop = d(setting?.stopLossPrice)
-    if (current && target && setting?.targetPriceAlertEnabled !== false && current.gte(target)) actions.push({ id: `${position.securityId}:target`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Target price reached", detail: `${formatMoney(position.currentPrice)} ≥ configured target ${formatMoney(target.toFixed())}`, tone: "positive", priority: 90 })
-    if (current && stop && setting?.stopLossAlertEnabled !== false && current.lte(stop)) actions.push({ id: `${position.securityId}:stop`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Stop-loss level reached", detail: `${formatMoney(position.currentPrice)} ≤ configured stop ${formatMoney(stop.toFixed())}`, tone: "critical", priority: 100 })
-    const weight = d(position.portfolioWeightPercent); const min = d(position.settings.minimumWeight); const max = d(position.settings.maximumWeight)
-    if (weight && max && weight.gt(max)) actions.push({ id: `${position.securityId}:max`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Above configured sizing range", detail: `${pct(weight, 2)} portfolio weight vs ${pct(max, 2)} maximum`, tone: "warning", priority: 70 })
-    else if (weight && min && weight.lt(min)) actions.push({ id: `${position.securityId}:min`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Below configured sizing range", detail: `${pct(weight, 2)} portfolio weight vs ${pct(min, 2)} minimum`, tone: "neutral", priority: 35 })
-    if (position.isPriceStale) actions.push({ id: `${position.securityId}:stale`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: "Price evidence is stale", detail: "Refresh market data before relying on current-value decisions.", tone: "warning", priority: 55 })
-  })
-  return actions
-}
-
 export function DashboardDecisionLayer() {
   const { portfolio, isLoading, error } = usePortfolioView()
-  const securityIds = useMemo(() => portfolio?.openPositions.map((position) => position.securityId) ?? [], [portfolio])
-  const recommendations = useDashboardRecommendations(portfolio?.portfolio.id ?? null, securityIds)
-  const monitoringSettings = useDashboardMonitoringSettings(portfolio?.portfolio.id ?? null, securityIds)
-  const loadError = recommendations.error ?? monitoringSettings.error
+  const actionCenter = useProgramCR10ActionCenter(portfolio)
+  const loadError = actionCenter.error
 
   const roleRows = useMemo(() => roles(portfolio?.openPositions ?? []), [portfolio])
   const themeRows = useMemo(() => themes(portfolio?.openPositions ?? []), [portfolio])
-  const actions = useMemo(() => {
-    if (!portfolio) return []
-    const result = localActions(portfolio.openPositions, monitoringSettings.data)
-    portfolio.openPositions.forEach((position) => {
-      const rec = recommendations.data.get(position.securityId)
-      const bias = rec?.actionBias?.toUpperCase() ?? ""
-      if (!rec?.actionBias || ["HOLD", "NEUTRAL", "PENDING"].includes(bias)) return
-      const tone = recommendationTone(rec.actionBias)
-      result.push({ id: `${position.securityId}:advisory`, securityId: position.securityId, symbol: position.symbol, company: position.company, label: `${pretty(rec.actionBias)} · persisted advisory`, detail: `${pretty(rec.suggestedRole)} · ${pretty(rec.transitionStatus)}${rec.changeSignal ? ` · ${pretty(rec.changeSignal)}` : ""}`, tone, priority: tone === "critical" ? 85 : 60 })
-    })
-    return result.sort((a, b) => b.priority - a.priority || a.symbol.localeCompare(b.symbol)).slice(0, 12)
-  }, [portfolio, recommendations.data, monitoringSettings.data])
+  const actions = actionCenter.data?.view.slice(0, 12) ?? []
 
   if (isLoading || error || !portfolio) return null
   return <section className="dashboard-next-layer" aria-label="Dashboard decision layer">
-    <div className="dashboard-next-heading"><div><p className="eyebrow">Decision layer</p><h2>Portfolio structure & action center</h2><p>Roles show mutually exclusive portfolio structure; themes show overlapping strategic exposure. All signals are read-only and use evidence already stored in PortfolioAI.</p></div><span>Consolidated portfolio</span></div>
-    {loadError ? <div className="dashboard-next-notice">Some persisted decision evidence could not be loaded: {loadError}</div> : null}
+    <div className="dashboard-next-heading"><div><p className="eyebrow">Decision layer · R10</p><h2>Portfolio structure & canonical Action Center</h2><p>Roles and themes remain descriptive portfolio structure. Action Center attention is produced only by the canonical read-only R10 engine from R8/R9 and owner context.</p></div><span>Consolidated portfolio</span></div>
+    {loadError ? <div className="dashboard-next-notice">Some cached owner/research context required by the canonical R10 projection could not be loaded: {loadError}</div> : null}
     <div className="dashboard-next-grid">
       <div className="dashboard-structure-stack">
         <section className="dashboard-role-snapshot">
@@ -134,8 +94,8 @@ export function DashboardDecisionLayer() {
       </div>
 
       <section className="dashboard-action-center">
-        <div className="dashboard-next-section-title"><div><span>Action center</span><strong>{actions.length} surfaced signals</strong></div><Link to="/app/research">Research →</Link></div>
-        {actions.length ? <div className="dashboard-action-list">{actions.map((item) => <article className={`dashboard-action-item ${item.tone}`} key={item.id}><i /><div><Link to={`/app/research/${item.securityId}`}>{item.symbol}</Link><small>{item.company}</small></div><div><strong>{item.label}</strong><p>{item.detail}</p></div></article>)}</div> : <div className="dashboard-next-empty"><strong>No immediate action signals.</strong><span>No target/stop trigger, sizing-range breach, stale-price warning, or non-hold persisted advisory is currently surfaced.</span></div>}
+        <div className="dashboard-next-section-title"><div><span>Canonical R10 Action Center</span><strong>{actionCenter.data?.view.length ?? 0} portfolio dispositions</strong></div><Link to="/app/research">Research →</Link></div>
+        {actionCenter.isLoading ? <div className="dashboard-next-empty"><strong>Building read-only R10 projection…</strong><span>No provider refresh or persistence is triggered.</span></div> : actions.length ? <div className="dashboard-action-list">{actions.map((item) => <article className={`dashboard-action-item ${item.tone}`} key={item.id}><i /><div><Link to={`/app/research/${item.securityId}`}>{item.symbol}</Link><small>{item.company}</small></div><div><strong>{item.stateLabel}</strong><p>{item.primaryReason}{item.conflictLabels.length ? ` · ${item.conflictLabels.join(" · ")}` : ""}</p></div></article>)}</div> : <div className="dashboard-next-empty"><strong>No canonical R10 dispositions available.</strong><span>Missing prerequisites stay unavailable rather than being replaced by local Action Center heuristics.</span></div>}
       </section>
     </div>
   </section>
