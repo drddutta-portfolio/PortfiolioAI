@@ -19,8 +19,9 @@ export const PROGRAM_C_R8_LIVE_ADAPTER_VERSION =
 function latestIso(values: readonly (string | null)[]) {
   const valid = values
     .filter((value): value is string => Boolean(value) && Number.isFinite(Date.parse(value as string)))
-    .sort((left, right) => right.localeCompare(left))
-  return valid[0] ?? null
+    .map((value) => ({ value, timestamp: Date.parse(value) }))
+    .sort((left, right) => right.timestamp - left.timestamp)
+  return valid[0]?.value ?? null
 }
 
 function ownerContext(position: PortfolioPosition): ProgramCR8OwnerContext {
