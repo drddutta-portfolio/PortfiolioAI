@@ -1,4 +1,4 @@
-**Current stage:** Gate H–K COMPLETE / PASS; Program A COMPLETE / PASS / CLOSED; Program B B0–B4 + R6/R7 + corrective B-FINAL COMPLETE / PASS / CLOSED; Program B = COMPLETE / PASS / CLOSED; branch remains UNMERGED / NOT PRODUCTION OPERATIONAL; next program NOT AUTHORIZED.
+**Current stage:** Gate H–K COMPLETE / PASS / CLOSED; Program A COMPLETE / PASS / CLOSED; Program B COMPLETE / PASS / CLOSED; Program C master plan FROZEN; C0 is the only authorized next checkpoint; branch remains UNMERGED / NOT PRODUCTION OPERATIONAL; Program D and productionization NOT AUTHORIZED.
 
 
 
@@ -5555,3 +5555,102 @@ scheduler change or trading action was performed as part of formal closure.
 This section supersedes the earlier temporary
 `CORRECTED / VALIDATED / OPEN` and `closure deferred` status markers while
 preserving them as historical audit trail.
+
+---
+
+## Program C · master plan frozen / C0 only authorized — 24 September 2026
+
+The owner approved freezing the revised Program C plan after joint Codex/ChatGPT
+review.
+
+Authoritative plan:
+
+```text
+docs/PortfolioAI_PROGRAM_C_MASTER_PLAN.md
+```
+
+Program B functional baseline:
+
+```text
+6a605f618ab67e3e8ad5d5faa2181796a1f43988
+```
+
+Program C plan-freeze documentation commit immediately preceding this handoff
+update:
+
+```text
+2659e640cc95f70b066176dddb07e27f9cdd8003
+```
+
+Canonical scope:
+
+```text
+Program C = R8 + R9 + R10
+
+R8  = Core Health / Portfolio Fit / Risk / Exit Intelligence
+R9  = Meaningful Change / Movement Engine
+R10 = Combined Action Center
+```
+
+Frozen checkpoint structure:
+
+```text
+C0 → C1 → C2 → C3 → C4 → C-FINAL
+```
+
+The frozen plan incorporates six mandatory clarifications beyond the original
+Codex draft:
+
+1. Program C development-branch discipline must be explicit before C1;
+2. C1 must freeze a machine-readable R8 sub-engine dependency matrix;
+3. R9 must distinguish first observation / no comparable baseline from no
+   change, immaterial change and meaningful change;
+4. initial R9 guarantees semantic event identity/idempotency only, not durable
+   acknowledgement, snooze or cross-session notification deduplication;
+5. `ADD_REVIEW` / `TRIM_REVIEW` remain candidate-only until C4 proves an
+   already-approved deterministic upstream directional authority without
+   inventing numeric sizing;
+6. C0 must freeze/version the exact Program C validation universe before any
+   portfolio-wide disposition claim.
+
+Current authority:
+
+```text
+Gate H–K = COMPLETE / PASS / CLOSED
+Program A = COMPLETE / PASS / CLOSED
+Program B = COMPLETE / PASS / CLOSED
+
+Program C master plan = FROZEN
+Current authorized next checkpoint = C0 ONLY
+
+C1 implementation = NOT AUTHORIZED
+R8 execution = NOT AUTHORIZED
+R9 = NOT AUTHORIZED
+R10 = NOT AUTHORIZED
+C-FINAL = NOT AUTHORIZED
+
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+Program C remains a deterministic portfolio-decision-engine program. It does
+not authorize numeric sizing, provider calls inside R8/R9/R10 compute paths,
+AI deterministic decisions, production mutation, persistence, scheduler
+activation or trading.
+
+Agent-swap rule:
+
+Before changing Program C code, ChatGPT or Codex must read:
+
+1. `docs/PortfolioAI_PROGRAM_C_MASTER_PLAN.md`;
+2. the latest Program C section in this cumulative handoff;
+3. the active checkpoint artifacts;
+4. the exact current branch HEAD.
+
+Conversation history is not the sole continuation authority.
+
+No R8 source implementation was authorized or performed by the plan-freeze
+documentation step. C0 is the only next authorized checkpoint.
+
