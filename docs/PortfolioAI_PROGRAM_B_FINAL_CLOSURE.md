@@ -4,7 +4,7 @@
 **Date:** 24 September 2026  
 **Branch:** `program-a-evidence-coverage`  
 **Starting commit:** `5739c9030a9952fffc8f7be1f3afc9462c48ca74`  
-**Status:** IMPLEMENTED CANDIDATE — OWNER-LOCAL FINAL VALIDATION PENDING
+**Status:** FINAL VALIDATION PASS — FORMAL PROGRAM B CLOSURE DEFERRED BY OWNER
 
 ## 1. Purpose
 
@@ -202,3 +202,50 @@ actions.
 After a clean owner-local B-FINAL validation, Program B may be formally closed.
 
 No next program is authorized by this candidate.
+
+
+## 12. Owner-deferred formal closure
+
+The owner-local B-FINAL runner completed successfully on 24 September 2026.
+
+Observed terminal closure markers:
+
+```text
+B-FINAL CANDIDATE VALIDATION PASS
+Program B closure audit: PASS
+Provider calls from Program B compute paths: 0
+AI numeric decision calls: 0
+Owner settings mutation: 0
+Production mutation/deployment/merge/scheduler/trading authorization: NONE
+Pipeline state: VALIDATED / APPROVED LOCAL-CANDIDATE / FAIL-CLOSED WHERE INCOMPLETE
+Production operational: NO
+```
+
+The final audit payload also reported:
+
+```text
+overallPass = true
+Program B repository safety guard = PASS
+TypeScript = PASS
+architecture guard = PASS
+production build = PASS
+```
+
+However, the owner explicitly instructed:
+
+```text
+Do not close Program B now.
+```
+
+Therefore this document records a deliberate distinction:
+
+```text
+B-FINAL validation = PASS
+B-FINAL formal closure = DEFERRED BY OWNER
+Program B formal closure = DEFERRED BY OWNER
+Program B status = VALIDATED / OPEN
+Next program = NOT AUTHORIZED
+```
+
+No closure commit, merge, deployment, production reconciliation, scheduler
+activation or trading action is implied by the successful validation.
