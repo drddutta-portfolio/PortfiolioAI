@@ -5,7 +5,8 @@
 **Repository:** `drddutta-portfolio/PortfiolioAI`
 **Branch:** `program-c-portfolio-decision-engines`
 **Starting HEAD:** `91992ad93f9b2b65c75f85f2b47eed96c6de7a7e`
-**Source implementation HEAD before this document:** `89e1f0a8ba8c3886315248687d27258d56f54562`
+**Initial source implementation review HEAD:** `89e1f0a8ba8c3886315248687d27258d56f54562`
+**Latest pre-validation source refinement HEAD:** `80f2a847cca1c109cb1ab916abe3ab7949073737`
 **Status:** IMPLEMENTED / STATIC ARCHITECTURE-SAFETY REVIEW PASS / OWNER-LOCAL EXECUTABLE VALIDATION PENDING
 
 ## 1. C3 authority and scope
@@ -363,8 +364,11 @@ R9 controlled fixtures exercise:
 - raw numeric score change without threshold;
 - Core Health categorical transition;
 - fresh -> stale evidence transition;
+- stale -> missing evidence transition;
+- missing -> conflicting evidence transition;
 - assignment-version change;
 - blocker cleared;
+- blocker appeared;
 - out-of-order observation;
 - incomparable security observations;
 - duplicate-event suppression.
