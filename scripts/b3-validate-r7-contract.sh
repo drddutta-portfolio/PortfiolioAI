@@ -7,6 +7,9 @@ npx vitest run \
   src/features/research/programBR7Contract.test.ts \
   src/features/research/programBR6Contract.test.ts \
   src/features/research/programBR6Execution.test.ts \
+  src/features/research/pharmaSubprofileAssignment.test.ts \
+  src/features/research/pharmaSubprofileContracts.test.ts \
+  src/features/research/pharmaG6SubprofileCurveApplicability.test.ts \
   src/features/research/pharmaRecommendationAuthority.test.ts \
   src/features/research/pharmaRecommendationPolicyCandidate.test.ts \
   src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts \
