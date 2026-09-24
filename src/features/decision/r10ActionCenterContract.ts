@@ -60,6 +60,7 @@ export interface ProgramCR10Input {
   readonly asOf: string
   readonly classificationVersion: string | null
   readonly r9CurrentR8DecisionRunId: string | null
+  readonly r9OwnerContextVersion: string | null
   readonly r7RecommendationState: string | null
   readonly r8: ProgramCR8PortfolioDecisionAssessment
   readonly r9: ProgramCR9ComparisonResult
@@ -97,6 +98,7 @@ export interface ProgramCR10IntegratedAttention {
     readonly r9CurrentObservedStateId: string | null
     readonly r9ChangeEventId: string | null
     readonly r9RuleVersion: string | null
+    readonly r9OwnerContextVersion: string | null
   }
   readonly ownerContext: ProgramCR8OwnerContext
   readonly asOf: string
