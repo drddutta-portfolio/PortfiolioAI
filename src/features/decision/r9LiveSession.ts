@@ -50,9 +50,17 @@ export function advanceProgramCR9InMemorySession(
   const uniqueEvents = deduplicateProgramCR9Events(candidateEvents)
   const newEvents = uniqueEvents.filter((event) => !seenEventIds.has(event.eventId))
 
-  const nextObservedStates = new Map(
-    sorted.map((row) => [row.securityId, row.observedState]),
-  )
+  const nextObservedStates = new Map(previousStates)
+  for (const row of sorted) {
+    const comparison = comparisons.find(
+      (candidate) => candidate.securityId === row.securityId,
+    )
+    if (
+      comparison?.comparison.transitionState === "OUT_OF_ORDER"
+      || comparison?.comparison.transitionState === "INCOMPARABLE"
+    ) continue
+    nextObservedStates.set(row.securityId, row.observedState)
+  }
   const nextSeenEventIds = new Set(seenEventIds)
   for (const event of uniqueEvents) nextSeenEventIds.add(event.eventId)
 
