@@ -1,4 +1,4 @@
-**Current stage:** Gate H COMPLETE / PASS; Gate I COMPLETE / PASS; Gate J COMPLETE / PASS; Gate K COMPLETE / PASS; K1 COMPLETE / PASS / CLOSED; K2 COMPLETE / PASS / CLOSED; K3 COMPLETE / PASS / CLOSED; K4 COMPLETE / PASS / CLOSED across all 10 sector packages; K5 COMPLETE / PASS / CLOSED; K-FINAL COMPLETE / PASS / CLOSED; sector-specific research layer = PORTFOLIO COVERAGE COMPLETE; PR #101 OPEN / DRAFT / UNMERGED
+**Current stage:** Gate H–K COMPLETE / PASS; Program A A1/A2A/A2B/A2C COMPLETE / PASS / CLOSED; bounded Program A pilot CLOSED; Program B master plan FROZEN; B0 = ACTIVE NEXT CHECKPOINT; PR #101 remains OPEN / DRAFT / UNMERGED unless separately changed.
 
 
 
@@ -3155,3 +3155,72 @@ committed, and was deleted with absence verified after execution. Program A ·
 A2C is **COMPLETE / PASS / CLOSED** for the approved bounded pilot. No production
 mutation, migration, deployment, merge, A2A/A2B execution, scheduler activation
 or trading action occurred.
+
+
+---
+
+## Program B master plan frozen; B0 becomes active checkpoint — 24 September 2026
+
+Program A is recorded as closed through the bounded local pilot at commit
+`96309657dcd853d83a5c992e0237daa919af709b`.
+
+The owner-approved Program B roadmap is now frozen to exactly six checkpoints:
+
+```text
+B0        Program A closure + Program B contract freeze
+B1        R6 Contract & Architecture      (Checkpoint A)
+B2        R6 Execution & Validation       (Checkpoint B)   → R6 closes here
+B3        R7 Contract & Architecture      (Checkpoint A)
+B4        R7 Execution & Validation       (Checkpoint B)   → R7 closes here
+B-FINAL   Program B closure
+```
+
+**Hard cap:** no B5+ checkpoints. Granular requirements remain sections inside the
+six checkpoints rather than becoming new gates.
+
+The frozen Program B plan incorporates these corrections and safeguards:
+
+- security-role lineage is mandatory, but `(security_id, role)` is **not** a timeless
+  uniqueness key; lineage also carries effective assignment/version, methodology
+  version, as-of date and run identity;
+- shell-continuity/replay checks compare canonical deterministic business payloads
+  after excluding explicitly nondeterministic metadata such as run IDs/timestamps;
+- Gate K recommendation-policy portability may be inherited only where repository
+  evidence proves K5 explicitly tested that property; Gate K closure alone is not
+  sufficient evidence;
+- Program B distinguishes **PORTFOLIO-WIDE DISPOSITION COMPLETE** from
+  **PORTFOLIO-WIDE NUMERIC COVERAGE COMPLETE**; Program B requires the former and
+  must not force numeric outputs where evidence/methodology is incomplete;
+- B-FINAL closure language is local/candidate validation only unless a separately
+  approved merge/deployment/production reconciliation later establishes production
+  operation;
+- B1 includes a machine-readable blocker/gap-output contract so Program B can state
+  why a security is blocked without fetching evidence itself.
+
+Program B invariants frozen for B0 review:
+
+1. no evidence readiness → no score;
+2. no valid score → no recommendation;
+3. no valid recommendation → no sizing;
+4. R6/R7 computation is cache-only;
+5. zero Angel One / Trendlyne / OpenAI decision calls from Program B compute paths;
+6. no missing-input renormalization;
+7. no nearest-sector / nearest-methodology / generic fallback to authoritative score;
+8. AI cannot compute or adjust score/recommendation/sizing;
+9. owner target price, stop loss, target weight and role overrides remain untouched;
+10. no production mutation, migration application, deployment, merge, scheduler
+    activation or trading is authorized by this Program B plan.
+
+The persistent reference copy for the build is:
+
+`PortfolioAI_PROGRAM_B_MASTER_PLAN.md`
+
+A copy is stored in the ChatGPT Library as the Program B master-plan reference.
+
+**Current stop point:** execute **B0 only**. B1 must not begin until B0 verifies
+Program A closure and freezes the inherited Gate I / Gate K contracts from actual
+repository evidence.
+
+No provider call, score write, recommendation write, sizing write, production
+mutation, deployment, merge, scheduler or trading action was authorized or performed
+by this documentation update.
