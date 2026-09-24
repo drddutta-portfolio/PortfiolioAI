@@ -5,6 +5,8 @@ echo "== Program B · B3 R7 contract validation =="
 
 npx vitest run \
   src/features/research/programBR7Contract.test.ts \
+  src/features/research/programBR6Contract.test.ts \
+  src/features/research/programBR6Execution.test.ts \
   src/features/research/pharmaRecommendationAuthority.test.ts \
   src/features/research/pharmaRecommendationPolicyCandidate.test.ts \
   src/features/research/pharmaGateI3ReadOnlyRecommendation.test.ts \
