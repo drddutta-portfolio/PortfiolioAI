@@ -182,11 +182,6 @@ const TORNTPHARM_B4_ASSIGNMENT: PharmaSubprofileResolution = {
   },
 }
 
-function sourceScoreRunId(reference: ProgramB2ReferenceResult): string | null {
-  if (reference.dispositionState !== "SCORED" || reference.artifactVersion === null) return null
-  return `PROGRAM_B_R6_REFERENCE::${reference.symbol}::${reference.artifactVersion}`
-}
-
 function recommendationRunId(
   symbol: string,
   scoreRunId: string,
@@ -256,7 +251,7 @@ function blockedRecommendation(
     canRecommend: false,
     securityId: referenceSecurityId(reference),
     symbol: reference.symbol,
-    sourceScoreRunId: sourceScoreRunId(reference),
+    sourceScoreRunId: reference.scoreLineage?.runId ?? null,
     sourceScore: reference.overallScore,
     recommendationRunId: null,
     researchProfileCode: reference.methodologyId,
@@ -273,7 +268,7 @@ function executeReadyPharmaRecommendation(
   reference: ProgramB2ReferenceResult,
 ): ProgramB4RecommendationExecution {
   const assignment = referenceAssignment(reference.symbol)
-  const scoreRunId = sourceScoreRunId(reference)
+  const scoreRunId = reference.scoreLineage?.runId ?? null
   const policy = resolveProgramBRecommendationPolicy("PHARMA_V1")
 
   if (!assignment || scoreRunId === null || reference.overallScore === null) {
@@ -281,6 +276,14 @@ function executeReadyPharmaRecommendation(
   }
   if (assignment.resolution.status !== "RESOLVED") {
     return blockedRecommendation(reference, "BLOCKED_PREREQUISITE")
+  }
+  if (
+    reference.scoreLineage?.securityId !== assignment.securityId
+    || reference.scoreLineage.methodologyRole !== assignment.resolution.assignment.primarySubprofileCode
+    || reference.scoreLineage.assignmentVersion !== assignment.resolution.assignment.assignmentVersion
+    || reference.scoreLineage.overallScore !== reference.overallScore
+  ) {
+    throw new Error(`R7 received inconsistent R6 lineage for ${reference.symbol}.`)
   }
 
   const readiness = evaluateProgramBRecommendationReadiness({

@@ -5371,3 +5371,23 @@ stale/conflicting evidence, missing assignment id and invalid assignment version
 all fail closed. Friendly long-role labels retain the canonical code in the UI.
 
 Focused result: 38 tests passed; TypeScript and `git diff --check` passed.
+
+### C4 — immutable R6-issued score-run lineage
+
+**Status:** COMPLETE / PASS
+
+Every scored R6 reference now contains an immutable `scoreLineage` object owned
+and issued by R6. It includes the run/security identity, as-of and classification
+versions, parent profile, methodology/Primary role, assignment identity/version,
+evidence snapshot/freshness, metric and category payloads, overall score,
+calculation version, readiness, reasons and deterministic reference timestamp.
+Fail-closed references have no score lineage.
+
+R7 no longer constructs `PROGRAM_B_R6_REFERENCE::<symbol>::<artifactVersion>`.
+It consumes `reference.scoreLineage.runId` unchanged, rejects inconsistent
+security/role/assignment/score lineage, and carries the exact R6 id into both the
+recommendation and sizing result. B-FINAL now compares the R7 source id directly
+with the R6-emitted id.
+
+Focused result: 21 R6/R7/final tests passed; TypeScript, targeted lint and
+`git diff --check` passed.

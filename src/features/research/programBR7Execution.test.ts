@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+import { buildProgramB2ReferenceResults } from "./programBR6Execution"
 import {
   PROGRAM_B_B4_SAFETY_BOUNDARY,
   buildProgramB4FrozenPortfolioDisposition,
@@ -129,6 +130,8 @@ describe("Program B B4 R7 execution and validation", () => {
       (item) => item.recommendation.state === "RECOMMENDATION_READY",
     )) {
       expect(row.recommendation.sourceScoreRunId).toBeTruthy()
+      const r6 = buildProgramB2ReferenceResults().find((source) => source.symbol === row.symbol)
+      expect(row.recommendation.sourceScoreRunId).toBe(r6?.scoreLineage?.runId)
       expect(row.recommendation.recommendationRunId).toContain(
         row.recommendation.sourceScoreRunId!,
       )

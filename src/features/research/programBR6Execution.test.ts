@@ -26,6 +26,15 @@ describe("Program B B2 R6 execution and validation", () => {
       nonPersisting: true,
     })
     expect(torntpharm?.overallScore).toBe(TORNTPHARM_GATE_H3_READ_ONLY_RESULT.overallScore)
+    expect(torntpharm?.scoreLineage).toMatchObject({
+      securityId: "PROGRAM_B_B4_TORNTPHARM_REFERENCE",
+      researchProfileCode: "PHARMA_V1",
+      methodologyRole: "DOMESTIC_FORMULATIONS",
+      assignmentVersion: 1,
+      overallScore: 75.1575,
+      readinessState: "READY",
+    })
+    expect(torntpharm?.scoreLineage?.runId).toContain("PROGRAM_B_R6_REFERENCE_RUN")
 
     expect(alivus?.dispositionState).toBe("SCORED")
     expect(alivus?.methodologyRole).toBe("API_BULK_DRUGS")
@@ -40,6 +49,7 @@ describe("Program B B2 R6 execution and validation", () => {
       expect(result?.dispositionState).toBe("INSUFFICIENT_EVIDENCE")
       expect(result?.overallScore).toBeNull()
       expect(result?.categoryScores).toEqual({})
+      expect(result?.scoreLineage).toBeNull()
       expect(result?.noRenormalization).toBe(true)
     }
 

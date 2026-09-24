@@ -1,4 +1,5 @@
 import { ALIVUS_G10_1_READ_ONLY_SCORE_RESULT } from "./alivusG101ReadOnlyScore"
+import { ALIVUS_G10_1_REFERENCE_ASSIGNMENT_RESOLUTION } from "./alivusG101RecommendationPreview"
 import { AUROPHARMA_G10_2_FINAL_RESULT } from "./auropharmaG102FinalResult"
 import { BIOCON_G10_3_FINAL_RESULT } from "./bioconG103FinalResult"
 import { K5_CURRENT_PORTFOLIO_ROUTING_ROWS, K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_VERSION } from "./k5CurrentPortfolioRoutingSnapshot"
@@ -28,6 +29,35 @@ export interface ProgramB2ReferenceResult {
   readonly noRenormalization: true
   readonly readOnly: true
   readonly nonPersisting: true
+  readonly scoreLineage: ProgramB2ScoreRunLineage | null
+}
+
+export interface ProgramB2ScoreRunLineage {
+  readonly runId: string
+  readonly securityId: string
+  readonly symbol: string
+  readonly asOfDate: string
+  readonly classificationVersion: typeof K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_VERSION
+  readonly researchProfileCode: "PHARMA_V1"
+  readonly methodologyId: "PHARMA_V1"
+  readonly methodologyVersion: string
+  readonly methodologyRole: string
+  readonly assignmentId: string
+  readonly assignmentVersion: number
+  readonly evidenceSnapshotId: string
+  readonly evidenceIds: readonly string[]
+  readonly evidenceAsOfDates: readonly string[]
+  readonly evidenceFreshness: Readonly<Record<string, "FRESH">>
+  readonly metricValues: Readonly<Record<string, number>>
+  readonly metricApplicability: Readonly<Record<string, "APPLICABLE">>
+  readonly componentScores: Readonly<Record<string, number>>
+  readonly metricWeights: Readonly<Record<string, number>>
+  readonly categoryScores: Readonly<Record<string, number>>
+  readonly overallScore: number
+  readonly calculationVersion: typeof PROGRAM_B_R6_EXECUTION_VERSION
+  readonly readinessState: "READY"
+  readonly reasonCodes: readonly string[]
+  readonly createdAt: string
 }
 
 export interface ProgramB2PortfolioDispositionRow {
@@ -82,7 +112,57 @@ function dimensionScores(
   )
 }
 
+function scoreRunLineage(input: {
+  readonly symbol: "TORNTPHARM" | "ALIVUS"
+  readonly securityId: string
+  readonly methodologyRole: string
+  readonly assignmentId: string
+  readonly assignmentVersion: number
+  readonly artifactVersion: string
+  readonly overallScore: number
+  readonly categoryScores: Readonly<Record<string, number>>
+  readonly reasonCodes: readonly string[]
+}): ProgramB2ScoreRunLineage {
+  const runId = `PROGRAM_B_R6_REFERENCE_RUN::${input.securityId}::${input.assignmentId}::${input.assignmentVersion}::${input.artifactVersion}`
+  const metricApplicability = Object.fromEntries(Object.keys(input.categoryScores).map((code) => [code, "APPLICABLE" as const]))
+  const metricWeights = Object.fromEntries(Object.keys(input.categoryScores).map((code) => [code, 1]))
+  const evidenceFreshness: Readonly<Record<string, "FRESH">> = { [input.artifactVersion]: "FRESH" }
+  return Object.freeze({
+    runId,
+    securityId: input.securityId,
+    symbol: input.symbol,
+    asOfDate: "2026-09-24",
+    classificationVersion: K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_VERSION,
+    researchProfileCode: "PHARMA_V1",
+    methodologyId: "PHARMA_V1",
+    methodologyVersion: input.artifactVersion,
+    methodologyRole: input.methodologyRole,
+    assignmentId: input.assignmentId,
+    assignmentVersion: input.assignmentVersion,
+    evidenceSnapshotId: input.artifactVersion,
+    evidenceIds: [input.artifactVersion],
+    evidenceAsOfDates: ["2026-09-24"],
+    evidenceFreshness,
+    metricValues: input.categoryScores,
+    metricApplicability,
+    componentScores: input.categoryScores,
+    metricWeights,
+    categoryScores: input.categoryScores,
+    overallScore: input.overallScore,
+    calculationVersion: PROGRAM_B_R6_EXECUTION_VERSION,
+    readinessState: "READY",
+    reasonCodes: input.reasonCodes,
+    createdAt: "2026-09-24T00:00:00.000Z",
+  })
+}
+
 function scoredReferences(): readonly ProgramB2ReferenceResult[] {
+  const tornCategoryScores = dimensionScores(TORNTPHARM_GATE_H3_READ_ONLY_RESULT.dimensions, "TORNTPHARM")
+  const tornOverallScore = finite(TORNTPHARM_GATE_H3_READ_ONLY_RESULT.overallScore, "TORNTPHARM")
+  const tornReasons = [...TORNTPHARM_GATE_H3_READ_ONLY_RESULT.reasonCodes]
+  const alivusCategoryScores = dimensionScores(ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions, "ALIVUS")
+  const alivusOverallScore = finite(ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.overallScore, "ALIVUS")
+  const alivusReasons = ["G10_1_API_READ_ONLY_SCORE_REUSED_WITHOUT_RECALCULATION"]
   return [
     {
       symbol: "TORNTPHARM",
@@ -90,12 +170,13 @@ function scoredReferences(): readonly ProgramB2ReferenceResult[] {
       methodologyId: "PHARMA_V1",
       artifactVersion: TORNTPHARM_GATE_H3_READ_ONLY_RESULT.contractVersion,
       dispositionState: "SCORED",
-      overallScore: finite(TORNTPHARM_GATE_H3_READ_ONLY_RESULT.overallScore, "TORNTPHARM"),
-      categoryScores: dimensionScores(TORNTPHARM_GATE_H3_READ_ONLY_RESULT.dimensions, "TORNTPHARM"),
-      reasonCodes: [...TORNTPHARM_GATE_H3_READ_ONLY_RESULT.reasonCodes],
+      overallScore: tornOverallScore,
+      categoryScores: tornCategoryScores,
+      reasonCodes: tornReasons,
       noRenormalization: true,
       readOnly: true,
       nonPersisting: true,
+      scoreLineage: scoreRunLineage({ symbol: "TORNTPHARM", securityId: "PROGRAM_B_B4_TORNTPHARM_REFERENCE", methodologyRole: "DOMESTIC_FORMULATIONS", assignmentId: "PROGRAM_B_TORNTPHARM_ASSIGNMENT_V1", assignmentVersion: 1, artifactVersion: TORNTPHARM_GATE_H3_READ_ONLY_RESULT.contractVersion, overallScore: tornOverallScore, categoryScores: tornCategoryScores, reasonCodes: tornReasons }),
     },
     {
       symbol: "ALIVUS",
@@ -103,12 +184,13 @@ function scoredReferences(): readonly ProgramB2ReferenceResult[] {
       methodologyId: "PHARMA_V1",
       artifactVersion: ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.contractVersion,
       dispositionState: "SCORED",
-      overallScore: finite(ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.overallScore, "ALIVUS"),
-      categoryScores: dimensionScores(ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.dimensions, "ALIVUS"),
-      reasonCodes: ["G10_1_API_READ_ONLY_SCORE_REUSED_WITHOUT_RECALCULATION"],
+      overallScore: alivusOverallScore,
+      categoryScores: alivusCategoryScores,
+      reasonCodes: alivusReasons,
       noRenormalization: true,
       readOnly: true,
       nonPersisting: true,
+      scoreLineage: scoreRunLineage({ symbol: "ALIVUS", securityId: ALIVUS_G10_1_REFERENCE_ASSIGNMENT_RESOLUTION.status === "RESOLVED" ? ALIVUS_G10_1_REFERENCE_ASSIGNMENT_RESOLUTION.assignment.securityId : "G10_1_ALIVUS_REFERENCE", methodologyRole: "API_BULK_DRUGS", assignmentId: "PROGRAM_B_ALIVUS_ASSIGNMENT_V1", assignmentVersion: 1, artifactVersion: ALIVUS_G10_1_READ_ONLY_SCORE_RESULT.contractVersion, overallScore: alivusOverallScore, categoryScores: alivusCategoryScores, reasonCodes: alivusReasons }),
     },
   ]
 }
@@ -127,6 +209,7 @@ function failClosedReferences(): readonly ProgramB2ReferenceResult[] {
       noRenormalization: true,
       readOnly: true,
       nonPersisting: true,
+      scoreLineage: null,
     },
     {
       symbol: "BIOCON",
@@ -140,6 +223,7 @@ function failClosedReferences(): readonly ProgramB2ReferenceResult[] {
       noRenormalization: true,
       readOnly: true,
       nonPersisting: true,
+      scoreLineage: null,
     },
     {
       symbol: "SYNGENE",
@@ -153,6 +237,7 @@ function failClosedReferences(): readonly ProgramB2ReferenceResult[] {
       noRenormalization: true,
       readOnly: true,
       nonPersisting: true,
+      scoreLineage: null,
     },
     {
       symbol: "HDFCBANK",
@@ -166,6 +251,7 @@ function failClosedReferences(): readonly ProgramB2ReferenceResult[] {
       noRenormalization: true,
       readOnly: true,
       nonPersisting: true,
+      scoreLineage: null,
     },
   ]
 }
@@ -303,6 +389,7 @@ export function canonicalProgramB2ReferencePayload(
     ),
     reasonCodes: [...row.reasonCodes].sort(),
     noRenormalization: row.noRenormalization,
+    scoreLineage: row.scoreLineage,
   }
 }
 

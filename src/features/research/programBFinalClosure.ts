@@ -59,6 +59,8 @@ function r6ToR7TraceabilityPass() {
     const source = r6.get(row.symbol)
     return (
       source?.dispositionState === "SCORED"
+      && source.scoreLineage !== null
+      && source.scoreLineage.runId === row.recommendation.sourceScoreRunId
       && source.overallScore === row.recommendation.sourceScore
       && source.methodologyRole === row.recommendation.methodologyRole
       && row.recommendation.sourceScoreRunId !== null
