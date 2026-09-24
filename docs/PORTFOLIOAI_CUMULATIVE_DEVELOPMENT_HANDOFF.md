@@ -8106,3 +8106,198 @@ Rerun:
 git pull --ff-only
 bash scripts/c4-validate-program-c-r10.sh
 ```
+
+
+---
+
+## Program C · C4 / R10 formal closure — COMPLETE / PASS / CLOSED — 25 September 2026
+
+The owner confirmed the authoritative C4 owner-local validator completed with:
+
+```text
+PROGRAM C C4 VALIDATION ALL PASS
+R10 = IMPLEMENTED / VALIDATED / AWAITING OWNER CLOSURE
+```
+
+The validated C4 source state included the narrow TypeScript union-preservation
+correction:
+
+```text
+5c8c62afe4e57599c1f4619b1415fa430e70e666
+```
+
+### Confirmed validation bundle
+
+The C4 runner passed:
+
+```text
+R10 contract/execution tests = PASS
+R9 regressions = PASS
+R8 regressions = PASS
+Program B final regression = PASS
+Program B R6 regression = PASS
+Program B R7 regression = PASS
+canonical C4 R10 report = PASS
+R10 structural provider/AI/persistence/trading safety = PASS
+C4 scoped ESLint = PASS
+C4 repository allowlist = PASS
+TypeScript = PASS
+PortfolioAI architecture/data-boundary guard = PASS
+production build = PASS
+git diff --check = PASS
+```
+
+No executable validation failure remains open.
+
+### Formal R10 closure
+
+```text
+C4 = COMPLETE / PASS / CLOSED
+R10 = COMPLETE / PASS / CLOSED
+
+R10 contract = CLOSED
+R10 execution = CLOSED
+R10 deterministic replay = PASS
+R10 deterministic precedence = PASS
+R10 conflict preservation = PASS
+R10 exact R8/R9 lineage = PASS
+R10 owner-threshold identity = PASS
+R10 owner-authority regression = PASS
+R10 frozen-universe disposition completeness = PASS
+R10 shared Dashboard/Research/Holdings Action Center = VALIDATED
+R10 authority/safety audit = PASS
+```
+
+### Canonical R10 Action Center authority retained
+
+```text
+actionCenterAuthority = ONE_CANONICAL_R10_COLLECTION
+conflictAuthority = EXPLICIT_PRESERVATION_NO_AVERAGING
+```
+
+Dashboard, Research and Holdings consume the same canonical R10 collection.
+
+No presentation surface independently computes R10 precedence or action state.
+
+### ADD_REVIEW / TRIM_REVIEW boundary retained
+
+```text
+ADD_REVIEW = candidate-only / NOT PROMOTED
+TRIM_REVIEW = candidate-only / NOT PROMOTED
+numeric sizing authority = NONE
+```
+
+The reason remains:
+
+```text
+NO_APPROVED_UPSTREAM_DIRECTIONAL_SIZING_AUTHORITY
+```
+
+No machine-generated quantity, exact add/trim percentage, target weight or trade
+instruction is introduced.
+
+### Owner-control boundary retained
+
+Owner-authored:
+
+- role;
+- target weight;
+- minimum/maximum allocation;
+- investment horizon;
+- target price;
+- stop-loss price;
+- alert enablement
+
+remain owner-controlled inputs.
+
+R10 may surface review context when owner thresholds are reached but cannot
+rewrite owner settings or convert them into automatic orders.
+
+### Frozen 238-holding interpretation retained
+
+The exact validation universe remains:
+
+```text
+PROGRAM_C_VALIDATION_UNIVERSE_V1
+K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22
+238 holdings
+238 EQUITY
+```
+
+Every holding has an explicit deterministic R10 disposition.
+
+This still does **not** claim:
+
+```text
+portfolio-wide positive/action coverage = complete
+portfolio-wide numeric sizing coverage = complete
+portfolio-wide ADD_REVIEW/TRIM_REVIEW authority = approved
+```
+
+Fail-closed blocked/non-applicable states remain intentional where frozen
+prerequisites are absent.
+
+### Closed C4 safety boundary
+
+```text
+R10 execution = READ-ONLY / DETERMINISTIC
+opaque master score = NO
+ADD_REVIEW promoted = NO
+TRIM_REVIEW promoted = NO
+numeric sizing authority = NO
+trade instruction = NO
+owner-setting mutation = 0
+provider calls = 0
+Angel One calls = 0
+Trendlyne calls = 0
+OpenAI deterministic decisions = 0
+persistence = 0
+schema migration = 0
+production mutation = 0
+merge/deployment = 0
+scheduler mutation = 0
+trading = 0
+```
+
+### Closure documentation
+
+C4/R10 was promoted to formal closed status in:
+
+```text
+docs/PortfolioAI_PROGRAM_C_C4_R10_EXECUTION_VALIDATION.md
+```
+
+Closure-document commit immediately preceding this handoff append:
+
+```text
+1d0f20f089970598201bafe42968d71c0a5aa268
+```
+
+### Program C checkpoint state
+
+```text
+C0 = COMPLETE / PASS / CLOSED
+C1 = COMPLETE / PASS / CLOSED
+C2 = COMPLETE / PASS / CLOSED
+C3 = COMPLETE / PASS / CLOSED
+C4 = COMPLETE / PASS / CLOSED
+
+R8 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+R10 = COMPLETE / PASS / CLOSED
+
+C-FINAL = NOT AUTHORIZED
+
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+### Stop boundary
+
+Current stop point is after formal R10 closure.
+
+No C-FINAL closure audit, Program C program-wide regression/freeze, production
+readiness, merge/deployment, scheduler or trading work may begin until the owner
+explicitly authorizes C-FINAL.
