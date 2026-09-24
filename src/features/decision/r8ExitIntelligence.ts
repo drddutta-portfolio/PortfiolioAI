@@ -76,6 +76,19 @@ export function evaluateProgramCR8ExitIntelligence(
     }
   }
 
+  if (!input.thesisEvidenceIds.length) {
+    return {
+      version: PROGRAM_C_R8_EXIT_INTELLIGENCE_CONTRACT_VERSION,
+      state: "INSUFFICIENT_EVIDENCE",
+      applicable: true,
+      sourceScoreRunId: input.sourceScoreRunId,
+      sourceRecommendationRunId: input.sourceRecommendationRunId,
+      thesisEvidenceIds: [],
+      blockers: ["THESIS_PERMANENT_LOSS_EVIDENCE_ID_MISSING"],
+      reasonCodes: ["THESIS_EVIDENCE_ID_MISSING", ...contextualReasons],
+    }
+  }
+
   const state = input.exitSignal === "NO_SIGNAL"
     ? "NO_EXIT_SIGNAL"
     : input.exitSignal === "MONITOR"
