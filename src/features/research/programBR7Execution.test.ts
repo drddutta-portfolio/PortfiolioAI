@@ -72,12 +72,8 @@ describe("Program B B4 R7 execution and validation", () => {
     const portfolio = projectProgramB4DecisionSurface(torn, "PORTFOLIO")
     const action = projectProgramB4DecisionSurface(torn, "ACTION")
 
-    const { surface: _researchSurface, ...researchPayload } = research
-    const { surface: _portfolioSurface, ...portfolioPayload } = portfolio
-    const { surface: _actionSurface, ...actionPayload } = action
-
-    expect(portfolioPayload).toEqual(researchPayload)
-    expect(actionPayload).toEqual(researchPayload)
+    expect(portfolio).toEqual({ ...research, surface: "PORTFOLIO" })
+    expect(action).toEqual({ ...research, surface: "ACTION" })
     expect(research.sourceScore).toBe(torn.recommendation.sourceScore)
     expect(research.sourceScoreRunId).toBe(torn.recommendation.sourceScoreRunId)
     expect(research.recommendationRunId).toBe(torn.recommendation.recommendationRunId)

@@ -12,13 +12,9 @@ import {
   resolveProgramBRecommendationPolicy,
   resolveProgramBSizingMethodology,
   type ProgramBRecommendationFinalState,
-  type ProgramBRecommendationReadinessState,
   type ProgramBSizingReadinessState,
 } from "./programBR7Contract"
-import {
-  buildPharmaGateI3ReferenceRecommendation,
-  type PharmaGateI3ReadOnlyRecommendationResult,
-} from "./pharmaGateI3ReadOnlyRecommendation"
+import { buildPharmaGateI3ReferenceRecommendation } from "./pharmaGateI3ReadOnlyRecommendation"
 import type { PharmaSubprofileResolution } from "./pharmaSubprofileAssignment"
 
 export const PROGRAM_B_R7_EXECUTION_VERSION = "PROGRAM_B_R7_EXECUTION_V1" as const
@@ -32,8 +28,13 @@ export type ProgramB4OutcomeState =
   | "NOT_APPLICABLE"
   | "BLOCKED_PREREQUISITE"
 
+export type ProgramB4RecommendationState = Exclude<
+  ProgramB4OutcomeState,
+  "SIZING_READY"
+>
+
 export interface ProgramB4RecommendationExecution {
-  readonly state: ProgramB4OutcomeState
+  readonly state: ProgramB4RecommendationState
   readonly canRecommend: boolean
   readonly securityId: string | null
   readonly symbol: string
@@ -86,7 +87,7 @@ export interface ProgramB4CanonicalDecisionSurface {
   readonly sourceScoreRunId: string | null
   readonly sourceScore: number | null
   readonly recommendationRunId: string | null
-  readonly recommendationState: ProgramB4OutcomeState
+  readonly recommendationState: ProgramB4RecommendationState
   readonly suggestedRole: ProgramBRecommendationFinalState | null
   readonly sizingState: ProgramBSizingReadinessState
   readonly sizingPolicyId: string | null
@@ -96,7 +97,7 @@ export interface ProgramB4CanonicalDecisionSurface {
 export interface ProgramB4PortfolioDispositionRow {
   readonly symbol: string
   readonly r6Disposition: ProgramB2DispositionState
-  readonly recommendationDisposition: ProgramB4OutcomeState
+  readonly recommendationDisposition: ProgramB4RecommendationState
   readonly sizingDisposition: ProgramBSizingReadinessState
   readonly finalDisposition: ProgramB4OutcomeState
   readonly sourceScoreRunId: string | null
@@ -227,9 +228,14 @@ function referenceAssignment(
   return null
 }
 
+function referenceSecurityId(reference: ProgramB2ReferenceResult): string {
+  const assignment = referenceAssignment(reference.symbol)
+  return assignment?.securityId ?? `PROGRAM_B_B4_${reference.symbol}_REFERENCE`
+}
+
 function mapR6BlockedState(
   state: Exclude<ProgramB2DispositionState, "SCORED">,
-): ProgramB4OutcomeState {
+): ProgramB4RecommendationState {
   if (state === "INSUFFICIENT_EVIDENCE" || state === "STALE_REQUIRED_EVIDENCE") {
     return "INSUFFICIENT_EVIDENCE"
   }
@@ -243,12 +249,12 @@ function mapR6BlockedState(
 
 function blockedRecommendation(
   reference: ProgramB2ReferenceResult,
-  state: ProgramB4OutcomeState,
+  state: ProgramB4RecommendationState,
 ): ProgramB4RecommendationExecution {
   return {
     state,
     canRecommend: false,
-    securityId: null,
+    securityId: referenceSecurityId(reference),
     symbol: reference.symbol,
     sourceScoreRunId: sourceScoreRunId(reference),
     sourceScore: reference.overallScore,
@@ -297,7 +303,7 @@ function executeReadyPharmaRecommendation(
   })
 
   if (!readiness.canRecommend || readiness.state !== "READY") {
-    const state: ProgramB4OutcomeState =
+    const state: ProgramB4RecommendationState =
       readiness.state === "INSUFFICIENT_EVIDENCE"
         ? "INSUFFICIENT_EVIDENCE"
         : readiness.state === "METHODOLOGY_NOT_AVAILABLE"
@@ -637,13 +643,13 @@ export function buildProgramB4SizingEdgeCases() {
 
 function portfolioRecommendationState(
   r6State: ProgramB2DispositionState,
-): ProgramB4OutcomeState {
+): ProgramB4RecommendationState {
   if (r6State === "SCORED") return "METHODOLOGY_NOT_AVAILABLE"
   return mapR6BlockedState(r6State)
 }
 
 function sizingDispositionFromRecommendation(
-  state: ProgramB4OutcomeState,
+  state: ProgramB4RecommendationState,
 ): ProgramBSizingReadinessState {
   if (state === "RECOMMENDATION_READY") return "METHODOLOGY_NOT_AVAILABLE"
   if (state === "INSUFFICIENT_EVIDENCE") return "INSUFFICIENT_EVIDENCE"
