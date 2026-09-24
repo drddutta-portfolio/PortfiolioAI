@@ -60,9 +60,9 @@ describe("Program C C1 R8 contract and architecture", () => {
   })
 
   it("does not make R7 a universal R8 prerequisite", () => {
-    expect(PROGRAM_C_R8_DEPENDENCY_MATRIX.every(
-      (entry) => entry.r7Requirement !== ("REQUIRED" as never),
-    )).toBe(true)
+    expect(
+      PROGRAM_C_R8_DEPENDENCY_MATRIX.map((entry) => entry.r7Requirement),
+    ).not.toContain("REQUIRED")
   })
 
   it("protects Core applicability and owner authority", () => {
