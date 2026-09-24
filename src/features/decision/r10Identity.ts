@@ -11,6 +11,7 @@ export interface ProgramCR10IdentityInput {
   readonly r9CurrentObservedStateId: string | null
   readonly r9ChangeEventId: string | null
   readonly ownerContextVersion: string | null
+  readonly ownerThresholdContextId: string
 }
 
 function required(value: string, field: string) {
@@ -31,6 +32,10 @@ export function programCR10IntegratedAttentionId(
     r9ChangeEventId: input.r9ChangeEventId?.trim() || "R9_EVENT_NONE",
     ownerContextVersion:
       input.ownerContextVersion?.trim() || "OWNER_CONTEXT_VERSION_NONE",
+    ownerThresholdContextId: required(
+      input.ownerThresholdContextId,
+      "ownerThresholdContextId",
+    ),
     contractVersion: PROGRAM_C_R10_CONTRACT_VERSION,
     precedenceVersion: PROGRAM_C_R10_PRECEDENCE_VERSION,
   })
