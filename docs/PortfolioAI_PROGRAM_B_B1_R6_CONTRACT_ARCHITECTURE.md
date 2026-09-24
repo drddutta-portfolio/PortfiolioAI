@@ -4,7 +4,7 @@
 **Date:** 24 September 2026  
 **Branch:** `program-a-evidence-coverage`  
 **Starting commit:** `10c87a5d9a2eb5338db51f3f85e5f5ce1ff9a605`  
-**Status:** IMPLEMENTED CANDIDATE — OWNER-LOCAL VALIDATION PENDING
+**Status:** COMPLETE / PASS / CLOSED — OWNER-LOCAL VALIDATED
 
 ## 1. Purpose
 
@@ -169,16 +169,21 @@ This preserves K5 cross-sector isolation and keeps pending profiles such as
 PHARMA_V1 assignment/subprofile validation remains a prerequisite input. B1 does
 not infer a Pharma subprofile from the symbol or parent sector.
 
-## 7. Validation candidate
+## 7. Validation and closure
 
-Run locally:
+Owner-local consolidated validation was run after the focused blocker-metric
+lineage correction.
+
+Command:
 
 ```bash
 git pull
 bash scripts/b1-validate-r6-contract.sh
 ```
 
-The runner checks:
+Final owner-local result: **ALL PASS**.
+
+The consolidated runner therefore passed:
 
 - B1 contract tests;
 - Gate-K registry/routing isolation regressions;
@@ -188,8 +193,12 @@ The runner checks:
 - production build;
 - whitespace/diff validity.
 
-B1 should close only after owner-local validation passes and the owner approves
-the four B1 components together.
+The first local attempt had exposed a structured-blocker field-mapping defect:
+`metricCode` was not being emitted as `blockingMetric`. Commit
+`bfe3b714a631df631f201e8ad90267702ebce544` corrected only that lineage
+mapping. The rerun subsequently passed completely.
+
+B1 is therefore **COMPLETE / PASS / CLOSED**.
 
 ## 8. Safety boundary
 
@@ -212,9 +221,16 @@ scheduler mutation = NO
 trading = NO
 ```
 
-## 9. Stop boundary
+## 9. Exit and stop boundary
 
-B2 is not authorized by this implementation.
+```text
+B1.1 scoring-readiness adapter = APPROVED / CLOSED
+B1.2 methodology resolver = APPROVED / CLOSED
+B1.3 evidence-to-score lineage contract = APPROVED / CLOSED
+B1.4 machine-readable blocker/gap contract = APPROVED / CLOSED
 
-**Current boundary after candidate implementation: run B1 owner-local validation,
-review the four contracts together, then stop for owner approval before B2.**
+B1 = COMPLETE / PASS / CLOSED
+Next stage = B2 only, after explicit owner approval
+```
+
+B2 has not started and is not authorized by this B1 closure.
