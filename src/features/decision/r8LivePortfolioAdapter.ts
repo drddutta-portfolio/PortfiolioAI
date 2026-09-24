@@ -143,6 +143,7 @@ export function buildProgramCR8LivePortfolioProjection(
     portfolio.openPositions
       .map((position) => ({
         securityId: position.securityId,
+        assetClass: position.assetClass,
         sector: position.sector,
         industry: position.industry,
       }))
