@@ -1,4 +1,5 @@
 import { buildProgramCR8C2Validation } from "./r8C2Validation"
+import { PROGRAM_C_R9_AUTHORITY } from "./r9AuthorityRegistry"
 import { programCR8CanonicalJson } from "./r8Determinism"
 import { buildProgramCR9FrozenPortfolioDisposition } from "./r9FrozenPortfolioDisposition"
 import {
@@ -57,6 +58,19 @@ export function buildProgramCR9C3Validation() {
       && row.changeEventId === null
     ))
   )
+  const authorityPass = (
+    PROGRAM_C_R9_AUTHORITY.executionAuthority === "C3_OWNER_AUTHORIZED_READ_ONLY"
+    && PROGRAM_C_R9_AUTHORITY.materialityAuthority === "VERSIONED_DETERMINISTIC_RULES_ONLY"
+    && PROGRAM_C_R9_AUTHORITY.numericThresholdAuthority === "NONE"
+    && PROGRAM_C_R9_AUTHORITY.aiDecisionAuthority === "NONE"
+    && PROGRAM_C_R9_AUTHORITY.providerAuthority === "NONE"
+    && PROGRAM_C_R9_AUTHORITY.persistenceAuthority === "NONE"
+    && PROGRAM_C_R9_AUTHORITY.durableNotificationStateAuthority === "NONE"
+    && PROGRAM_C_R9_AUTHORITY.ownerMutationAuthority === "NONE"
+    && PROGRAM_C_R9_AUTHORITY.sizingAuthority === "NONE"
+    && PROGRAM_C_R9_AUTHORITY.schedulerAuthority === "NONE"
+    && PROGRAM_C_R9_AUTHORITY.tradingAuthority === "NONE"
+  )
   const safetyPass = (
     PROGRAM_C_R9_C3_SAFETY_BOUNDARY.readOnlyExecution
     && PROGRAM_C_R9_C3_SAFETY_BOUNDARY.deterministicMateriality
@@ -83,6 +97,7 @@ export function buildProgramCR9C3Validation() {
     && comparisonSafetyPass
     && deduplicationPass
     && portfolioDispositionPass
+    && authorityPass
     && safetyPass
     && r8.overallPass
   )
@@ -99,6 +114,7 @@ export function buildProgramCR9C3Validation() {
     frozenHoldingCount: frozen.totalHoldings,
     frozenMeaningfulEventCount: frozen.meaningfulEventCount,
     r8RegressionPass: r8.overallPass,
+    authorityRegistryPass: authorityPass,
     safetyPass,
     providerCalls: 0 as const,
     persistedWrites: 0 as const,
