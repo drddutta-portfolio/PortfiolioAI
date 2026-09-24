@@ -3909,3 +3909,104 @@ logic, database object, migration or safety boundary was changed.
 
 **B2 remains OPEN / OWNER-LOCAL VALIDATION REQUIRED.**
 B3 remains NOT STARTED / NOT AUTHORIZED.
+
+
+---
+
+## Program B · B2 / R6 owner-local validation closure — 24 September 2026
+
+Owner-local consolidated B2 validation was rerun after the stale K3 BANK regression
+assertion was aligned with the current shared BANK benchmark authority.
+
+Command:
+
+```bash
+git pull
+bash scripts/b2-validate-r6-execution.sh
+```
+
+Owner-reported final result: **PASSED**.
+
+Because the runner is fail-fast and reaches its final PASS marker only after all
+steps succeed, this closes the B2 validation surface:
+
+- Program B B2 execution / replay / portfolio-disposition tests;
+- Program B B1 readiness-contract regressions;
+- Gate-H TORNTPHARM deterministic-score regression;
+- G10 Pharma reference regressions for ALIVUS, AUROPHARMA, BIOCON and SYNGENE;
+- Gate-K cross-sector isolation, routing and recommendation-portability regressions;
+- Gate-K3 BANK/NBFC closure and portability regressions;
+- shared BANK benchmark-authority regression;
+- shared Research scorecard UI regression;
+- Research page regression;
+- canonical 238-row frozen-snapshot disposition report generation;
+- TypeScript;
+- architecture guard;
+- production build;
+- `git diff --check`.
+
+The first B2 local attempt failed only because
+`k3BankNbfcClosure.test.ts` still asserted the superseded inline
+`key(sector)/key(industry)` implementation. Repository audit confirmed that A2C
+had intentionally moved this authority into
+`isBankBenchmarkEligibleClassification`, which:
+
+- accepts `Banking / Banks`;
+- accepts `Banking / Private Sector Bank`;
+- rejects NBFC lending;
+- rejects unsupported Banking industries;
+- rejects non-Banking sectors;
+- fails closed when classification is absent.
+
+Commit `e888d52b26843ee6c6c600f024583dc6d3a35771` corrected only the stale
+regression assertion and added the shared BANK-authority test to the B2 runner.
+No production benchmark implementation was changed.
+
+### B2 / R6 closure
+
+```text
+B2.1 controlled reference cohort = COMPLETE / PASS / CLOSED
+B2.2 deterministic scoring execution = COMPLETE / PASS / CLOSED
+B2.3 replay validation = COMPLETE / PASS / CLOSED
+B2.4 isolation and fail-closed validation = COMPLETE / PASS / CLOSED
+B2.5 shell-continuity regression = COMPLETE / PASS / CLOSED
+B2.6 Research UI integration = COMPLETE / PASS / CLOSED
+B2.7 controlled portfolio expansion/disposition = COMPLETE / PASS / CLOSED
+
+Program B · B2 = COMPLETE / PASS / CLOSED
+R6 Checkpoint B = CLOSED
+R6 = COMPLETE / PASS / CLOSED
+
+Portfolio-wide scoring disposition = COMPLETE
+Portfolio-wide numeric coverage = NOT CLAIMED / INCOMPLETE BY DESIGN
+Role/sector/subprofile isolation = PASS
+Shell continuity = PASS
+Provider calls from R6 computation = 0
+```
+
+Scope lock retained:
+- the portfolio-wide pass is against
+  `K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22`;
+- it is a frozen repository-wide disposition validation, not a claim that all
+  238 rows are reconciled to 24 September live provider state;
+- later Program A reference evidence remains newer for the bounded subset;
+- unsupported/missing score-input cases remain canonical fail-closed outcomes,
+  never reconstructed scores.
+
+Safety remained unchanged throughout B2:
+- Angel One calls from R6 computation = 0;
+- Trendlyne calls from R6 computation = 0;
+- OpenAI numeric decision calls = 0;
+- score persistence = NO;
+- recommendation computation/persistence = NO;
+- position sizing = NO;
+- production mutation = NO;
+- migration = NO;
+- deployment = NO;
+- merge = NO;
+- scheduler change = NO;
+- trading = NO.
+
+**STOP BOUNDARY:** B3 has not started and is not authorized by this closure.
+Next stage is **B3 — R7 Contract & Architecture / Checkpoint A**, only after
+explicit owner approval.
