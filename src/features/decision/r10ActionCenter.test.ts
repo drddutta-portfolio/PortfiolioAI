@@ -77,101 +77,10 @@ describe("Program C C4 R10 integrated Action Center", () => {
   })
 
   it("rejects an R9 current observed state that does not reference the same R8 decision run", () => {
-    const validation = buildProgramCR10ReferenceValidation()
-    const base = validation.noAction
-
+    const input = buildProgramCR10ReferenceValidation().inputs.noAction
     expect(() => evaluateProgramCR10Attention({
-      securityId: base.securityId,
-      portfolioId: base.portfolioId,
-      symbol: base.symbol,
-      company: base.company,
-      asOf: base.asOf,
-      classificationVersion: base.upstreamLineage.classificationVersion,
+      ...input,
       r9CurrentR8DecisionRunId: "DIFFERENT_R8_RUN",
-      r7RecommendationState: "CORE_CANDIDATE",
-      r8: {
-        version: "PROGRAM_C_R8_DECISION_CONTRACT_V1",
-        decisionRunId: base.upstreamLineage.r8DecisionRunId,
-        securityId: base.securityId,
-        portfolioId: base.portfolioId,
-        asOfDate: "2026-09-25",
-        upstreamLineage: {
-          scoreRunId: base.upstreamLineage.scoreRunId,
-          recommendationRunId: base.upstreamLineage.recommendationRunId,
-          researchProfileCode: base.upstreamLineage.researchProfileCode,
-          methodologyId: base.upstreamLineage.methodologyId,
-          methodologyVersion: base.upstreamLineage.methodologyVersion,
-          methodologyRole: base.upstreamLineage.methodologyRole,
-          assignmentId: base.upstreamLineage.assignmentId,
-          assignmentVersion: base.upstreamLineage.assignmentVersion,
-          evidenceSnapshotId: base.upstreamLineage.evidenceSnapshotId,
-        },
-        portfolioContextSnapshotId: base.upstreamLineage.portfolioContextSnapshotId,
-        coreHealth: {
-          version: "PROGRAM_C_R8_CORE_HEALTH_V1",
-          state: "CORE_HEALTHY",
-          applicable: true,
-          ownerRole: "CORE",
-          sourceScoreRunId: base.upstreamLineage.scoreRunId,
-          sourceRecommendationRunId: base.upstreamLineage.recommendationRunId,
-          blockers: [],
-          reasonCodes: [],
-        },
-        portfolioFit: {
-          version: "PROGRAM_C_R8_PORTFOLIO_FIT_V1",
-          state: "FIT_SUPPORTED",
-          applicable: true,
-          sourcePortfolioContextSnapshotId: base.upstreamLineage.portfolioContextSnapshotId,
-          ownerRole: "CORE",
-          currentWeight: "4",
-          blockers: [],
-          reasonCodes: [],
-        },
-        portfolioRisk: {
-          version: "PROGRAM_C_R8_PORTFOLIO_RISK_V1",
-          state: "RISK_ACCEPTABLE",
-          applicable: true,
-          sourcePortfolioContextSnapshotId: base.upstreamLineage.portfolioContextSnapshotId,
-          sourceScoreRunId: base.upstreamLineage.scoreRunId,
-          evidenceIds: ["risk"],
-          blockers: [],
-          reasonCodes: [],
-        },
-        exitIntelligence: {
-          version: "PROGRAM_C_R8_EXIT_INTELLIGENCE_V1",
-          state: "NO_EXIT_SIGNAL",
-          applicable: true,
-          sourceScoreRunId: base.upstreamLineage.scoreRunId,
-          sourceRecommendationRunId: base.upstreamLineage.recommendationRunId,
-          thesisEvidenceIds: ["thesis"],
-          blockers: [],
-          reasonCodes: [],
-        },
-        overallDisposition: "ASSESSMENT_COMPLETE",
-        blockers: [],
-        reasonCodes: ["R8_ASSESSMENT_COMPLETE"],
-      },
-      r9: {
-        version: "PROGRAM_C_R9_MEANINGFUL_CHANGE_V1",
-        securityId: base.securityId,
-        portfolioId: base.portfolioId,
-        baselineState: "COMPARABLE_BASELINE",
-        transitionState: "NO_CHANGE",
-        previousObservedStateId: "previous",
-        currentObservedStateId: "current",
-        rawChanges: [],
-        meaningfulChanges: [],
-        event: null,
-        reasonCodes: ["R9_NO_SEMANTIC_CHANGE"],
-      },
-      ownerContext: base.ownerContext,
-      ownerThresholds: {
-        currentPrice: "800",
-        targetPrice: null,
-        stopLossPrice: null,
-        targetPriceAlertEnabled: true,
-        stopLossAlertEnabled: true,
-      },
     })).toThrow(/same R8 decision run/)
   })
 
