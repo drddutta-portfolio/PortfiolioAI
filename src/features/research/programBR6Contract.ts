@@ -444,7 +444,12 @@ export function evaluateProgramBScoringReadiness(
 
     for (const evidence of input.evidence) {
       if (!evidence.required || evidence.applicability === "NOT_APPLICABLE") continue
-      const next = evidenceBlocker(input, evidence)
+      const next = evidenceBlocker(input, {
+        blockingDomain: evidence.blockingDomain,
+        blockingMetric: evidence.metricCode,
+        state: evidence.state,
+        recommendedNextEvidenceAction: evidence.recommendedNextEvidenceAction,
+      })
       if (next) blockers.push(next)
     }
 
