@@ -30,8 +30,8 @@ describe("Gate K3 BANK_NBFC closure contract", () => {
 
   it("makes the NIFTY Bank operational refresh classification-driven rather than HDFCBANK-driven", () => {
     expect(refreshSource).toContain('from("current_security_enrichment_v1").select("sector,industry")')
-    expect(refreshSource).toContain('key(classification.data.sector) !== "BANKING"')
-    expect(refreshSource).toContain('key(classification.data.industry) !== "BANKS"')
+    expect(refreshSource).toContain('import { isBankBenchmarkEligibleClassification } from "../_shared/bank-benchmark-authority.ts"')
+    expect(refreshSource).toContain("isBankBenchmarkEligibleClassification(classification.data.sector, classification.data.industry)")
     expect(refreshSource).not.toContain('security.data.symbol !== "HDFCBANK"')
   })
 

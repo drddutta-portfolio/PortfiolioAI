@@ -16,6 +16,7 @@ npx vitest run \
   src/features/research/k5RecommendationPortability.test.ts \
   src/features/research/k3BankNbfcClosure.test.ts \
   src/features/research/k3BankNbfcPortability.test.ts \
+  supabase/functions/_shared/bank-benchmark-authority.test.ts \
   src/features/research/ResearchScorecardPanel.test.tsx \
   src/pages/ResearchPage.test.tsx
 
