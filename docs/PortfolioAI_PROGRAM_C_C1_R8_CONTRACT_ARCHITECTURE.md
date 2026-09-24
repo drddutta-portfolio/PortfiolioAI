@@ -6,7 +6,7 @@
 **Branch:** `program-c-portfolio-decision-engines`
 **Starting HEAD:** `497006335d4648c7f425691fe8598f9b170ddcd3`
 **Contract source HEAD before this document:** `c2b97b49d2cb962daae4e4e4517d929486357c95`
-**Status:** IMPLEMENTED / STATIC ARCHITECTURE REVIEW PASS / EXECUTABLE REPOSITORY VALIDATION PENDING
+**Status:** COMPLETE / PASS / CLOSED — owner-local executable validation confirmed
 
 ## 1. C1 authority
 
@@ -371,20 +371,18 @@ Static import review confirms:
 - identity fail-closed behavior;
 - C1 operational safety boundary.
 
-## 15. Executable validation limitation
+## 15. Executable validation
 
-No GitHub Actions workflow run exists for the C1 commits and this chat execution
-environment cannot clone the repository from GitHub. Therefore the in-repository
-Vitest suite, TypeScript project check, architecture guard and scoped lint have
-not been represented as executed passes.
+Owner-local executable validation completed successfully after synchronizing the
+Program C branch through commit:
 
-Required owner-local validation before formal C1 closure:
+```text
+2a248bc300ed70ea143ae37164b5f4674485275e
+```
+
+The owner confirmed all required C1 commands passed:
 
 ```bash
-git fetch origin
-git switch program-c-portfolio-decision-engines
-git pull --ff-only
-
 npm test -- src/features/decision/r8ContractArchitecture.test.ts
 npm run typecheck
 npm run check:architecture
@@ -392,8 +390,20 @@ npm exec eslint -- src/features/decision/*.ts
 git diff --check 497006335d4648c7f425691fe8598f9b170ddcd3..HEAD
 ```
 
-C1 must not be promoted to `COMPLETE / PASS / CLOSED` until these executable
-checks are clean or any failures are reviewed and corrected.
+Observed validation state:
+
+```text
+R8 contract architecture Vitest = PASS
+TypeScript = PASS
+PortfolioAI data-boundary architecture guard = PASS
+scoped decision-module ESLint = PASS
+git diff --check = PASS
+```
+
+The only transient issue encountered was Markdown trailing whitespace in this
+C1 document. It was documentation-only, corrected in commit
+`2a248bc300ed70ea143ae37164b5f4674485275e`, and the final
+`git diff --check` passed.
 
 ## 16. C1 safety boundary
 
@@ -417,18 +427,27 @@ scheduler mutation = NO
 trading = NO
 ```
 
-## 17. Current stop point
+## 17. C1 closure and stop point
 
-C1 contract implementation is complete and the static architecture audit passes,
-but executable repository validation remains pending.
+C1 satisfies its Checkpoint-A exit requirements.
 
 ```text
 C1 implementation = COMPLETE
 C1 static architecture review = PASS
-C1 executable validation = PENDING
-C1 formal closure = PENDING
+C1 executable validation = PASS
+C1 formal closure = COMPLETE / PASS / CLOSED
+
+R8 contract = FROZEN
+R8 dependency matrix = FROZEN
+R8 portfolio-context snapshot contract = FROZEN
+R8 run identity contract = FROZEN
+R8 authority registry = FROZEN
+
+R8 execution / C2 = NOT STARTED
 C2 authorization = NONE
 ```
 
-Do not begin C2 until C1 executable validation passes and the owner explicitly
-approves C1 closure / authorizes C2.
+No C2 evaluator, portfolio-wide R8 disposition or UI integration is included in
+C1.
+
+The repository must stop here until the owner separately authorizes C2.
