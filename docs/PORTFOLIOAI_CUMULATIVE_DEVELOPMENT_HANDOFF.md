@@ -5299,7 +5299,7 @@ ready for owner consideration of formal closure while still remaining
 
 ## Program B corrective build — C1 local Pharma assignment repair
 
-**Date:** 24 September 2026  
+**Date:** 24 September 2026
 **Status:** C1 COMPLETE / PASS; Program B remains VALIDATED / OPEN
 
 The post-validation audit confirmed that local canonical assignments already
@@ -5331,3 +5331,22 @@ SYNGENE -> PHARMA_V1 + CDMO_CRAMS
 
 Production mutation, migration, deployment, merge, scheduler mutation and
 trading remain unauthorized and did not occur.
+
+### C2 — R6 Pharma enforcement and applicability contradictions
+
+**Status:** COMPLETE / PASS
+
+`evaluateProgramBScoringReadiness()` now derives the mandatory Pharma Primary
+requirement from the resolved `PHARMA_V1` methodology authority. Caller-supplied
+`assignment.required = false` cannot bypass it. A ready Pharma assignment must
+have exactly one active reviewed assignment, a non-empty assignment id, a
+positive/non-empty version, one of the five canonical Primary codes, and an
+effective period containing the evaluation date. Missing, provisional,
+disputed, conflicting, generic `PHARMA`, BANK and noncanonical roles fail closed.
+
+Required evidence marked both `APPLICABLE` and `NOT_APPLICABLE`, and required
+market history marked `NOT_APPLICABLE`, now return an explicit applicability
+contradiction in `REVIEW_REQUIRED` rather than silently reaching READY.
+
+Focused result: 13 R6 contract tests passed; TypeScript and `git diff --check`
+passed.

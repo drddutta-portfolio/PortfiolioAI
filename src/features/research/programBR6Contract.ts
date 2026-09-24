@@ -1,4 +1,5 @@
 import { resolveK5PortfolioMethodState } from "./k5CrossSectorValidation"
+import { PHARMA_SUBPROFILE_CODES } from "./pharmaSubprofileAssignment"
 import { sectorEngineForProfileCode } from "./sectorEngineRegistry"
 
 export const PROGRAM_B_R6_CONTRACT_VERSION = "PROGRAM_B_R6_CONTRACT_V1" as const
@@ -80,6 +81,9 @@ export interface ProgramBAssignmentInput {
   readonly assignmentId: string | null
   readonly assignmentVersion: string | number | null
   readonly methodologyRole: string | null
+  readonly activeReviewedAssignmentCount: number | null
+  readonly effectiveFrom: string | null
+  readonly effectiveTo: string | null
 }
 
 export interface ProgramBEvidenceRequirement {
@@ -383,11 +387,17 @@ function evidenceBlocker(
   evidence: {
     readonly blockingDomain: string
     readonly blockingMetric: string | null
+    readonly applicability: ProgramBEvidenceApplicability
     readonly state: ProgramBEvidenceState
     readonly recommendedNextEvidenceAction: string | null
   },
 ): ProgramBReadinessBlocker | null {
-  if (evidence.state === "FRESH" || evidence.state === "NOT_APPLICABLE") return null
+  if (evidence.state === "FRESH") return null
+  if (evidence.state === "NOT_APPLICABLE") {
+    return evidence.applicability === "NOT_APPLICABLE"
+      ? null
+      : blocker(input, "REVIEW_REQUIRED", evidence.blockingDomain, evidence.blockingMetric, "FRESH", evidence.state, `${evidence.blockingDomain}_APPLICABILITY_CONTRADICTION`, "REVIEW_EVIDENCE_APPLICABILITY")
+  }
   if (evidence.state === "REVIEW_REQUIRED") {
     return blocker(input, "REVIEW_REQUIRED", evidence.blockingDomain, evidence.blockingMetric, "FRESH", evidence.state, `${evidence.blockingDomain}_REVIEW_REQUIRED`, evidence.recommendedNextEvidenceAction)
   }
@@ -414,6 +424,7 @@ export function evaluateProgramBScoringReadiness(
   }
 
   if (input.methodology.state === "RESOLVED") {
+    const isPharma = input.methodology.methodologyAuthority === "PHARMA_V1"
     if (!clean(input.securityId) || input.securityIdentityState === "MISSING") {
       blockers.push(blocker(input, "BLOCKED_PREREQUISITE", "SECURITY_IDENTITY", null, "READY", input.securityIdentityState, "SECURITY_IDENTITY_MISSING", "RECONCILE_SECURITY_IDENTITY"))
     } else if (input.securityIdentityState === "CONFLICTING" || input.securityIdentityState === "REVIEW_REQUIRED") {
@@ -428,7 +439,7 @@ export function evaluateProgramBScoringReadiness(
       blockers.push(blocker(input, "BLOCKED_PREREQUISITE", "METHODOLOGY", null, "VERSIONED", "VERSION_MISSING", "METHODOLOGY_VERSION_MISSING", "REGISTER_METHODOLOGY_VERSION"))
     }
 
-    if (input.assignment.required) {
+    if (input.assignment.required || isPharma) {
       if (input.assignment.state === "MISSING" || input.assignment.state === "EXPIRED") {
         blockers.push(blocker(input, "BLOCKED_PREREQUISITE", "ASSIGNMENT", null, "VALID", input.assignment.state, `ASSIGNMENT_${input.assignment.state}`, "MATERIALIZE_REVIEWED_ASSIGNMENT"))
       } else if (["PROVISIONAL", "DISPUTED", "CONFLICTING", "REVIEW_REQUIRED"].includes(input.assignment.state)) {
@@ -437,8 +448,34 @@ export function evaluateProgramBScoringReadiness(
         blockers.push(blocker(input, "BLOCKED_PREREQUISITE", "ASSIGNMENT", null, "VALID", input.assignment.state, "ASSIGNMENT_REQUIRED_BUT_NOT_VALID", "MATERIALIZE_REVIEWED_ASSIGNMENT"))
       }
 
-      if (input.assignment.state === "VALID" && (!clean(input.assignment.methodologyRole) || input.assignment.assignmentVersion === null)) {
+      if (input.assignment.state === "VALID" && (
+        !clean(input.assignment.assignmentId)
+        || !clean(input.assignment.methodologyRole)
+        || input.assignment.assignmentVersion === null
+        || String(input.assignment.assignmentVersion).trim() === ""
+        || Number(input.assignment.assignmentVersion) <= 0
+      )) {
         blockers.push(blocker(input, "BLOCKED_PREREQUISITE", "ASSIGNMENT", null, "VERSIONED_ROLE", "INCOMPLETE", "ASSIGNMENT_LINEAGE_INCOMPLETE", "REPAIR_ASSIGNMENT_LINEAGE"))
+      }
+
+      if (isPharma && input.assignment.state === "VALID") {
+        const role = clean(input.assignment.methodologyRole)
+        if (input.assignment.activeReviewedAssignmentCount !== 1) {
+          blockers.push(blocker(input, input.assignment.activeReviewedAssignmentCount && input.assignment.activeReviewedAssignmentCount > 1 ? "REVIEW_REQUIRED" : "BLOCKED_PREREQUISITE", "ASSIGNMENT", null, "EXACTLY_ONE_REVIEWED_PRIMARY", String(input.assignment.activeReviewedAssignmentCount ?? 0), "PHARMA_REVIEWED_PRIMARY_COUNT_INVALID", "REVIEW_PHARMA_PRIMARY_ASSIGNMENTS"))
+        }
+        if (!role || !(PHARMA_SUBPROFILE_CODES as readonly string[]).includes(role)) {
+          blockers.push(blocker(input, "REVIEW_REQUIRED", "ASSIGNMENT", null, "CANONICAL_PHARMA_PRIMARY", role ?? "MISSING", "PHARMA_PRIMARY_SUBPROFILE_INVALID", "REVIEW_PHARMA_PRIMARY_ASSIGNMENT"))
+        }
+        const from = input.assignment.effectiveFrom
+          ? Date.parse(input.assignment.effectiveFrom)
+          : Number.NaN
+        const to = input.assignment.effectiveTo
+          ? Date.parse(input.assignment.effectiveTo)
+          : null
+        const asOf = Date.parse(input.asOfDate)
+        if (!Number.isFinite(from) || !Number.isFinite(asOf) || from > asOf || (to !== null && (!Number.isFinite(to) || to <= asOf))) {
+          blockers.push(blocker(input, "BLOCKED_PREREQUISITE", "ASSIGNMENT", null, "EFFECTIVE_FOR_AS_OF_DATE", `${input.assignment.effectiveFrom ?? "MISSING"}..${input.assignment.effectiveTo ?? "OPEN"}`, "PHARMA_PRIMARY_ASSIGNMENT_NOT_EFFECTIVE", "REVIEW_PHARMA_ASSIGNMENT_EFFECTIVE_PERIOD"))
+        }
       }
     }
 
@@ -447,6 +484,7 @@ export function evaluateProgramBScoringReadiness(
       const next = evidenceBlocker(input, {
         blockingDomain: evidence.blockingDomain,
         blockingMetric: evidence.metricCode,
+        applicability: evidence.applicability,
         state: evidence.state,
         recommendedNextEvidenceAction: evidence.recommendedNextEvidenceAction,
       })
@@ -457,6 +495,7 @@ export function evaluateProgramBScoringReadiness(
       const next = evidenceBlocker(input, {
         blockingDomain: "MARKET_HISTORY",
         blockingMetric: null,
+        applicability: "APPLICABLE",
         state: input.marketHistory.state,
         recommendedNextEvidenceAction: input.marketHistory.recommendedNextEvidenceAction,
       })

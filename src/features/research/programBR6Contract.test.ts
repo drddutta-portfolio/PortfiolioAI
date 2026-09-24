@@ -32,6 +32,9 @@ function readyInput(): ProgramBScoringReadinessInput {
       assignmentId: null,
       assignmentVersion: null,
       methodologyRole: "BANK",
+      activeReviewedAssignmentCount: null,
+      effectiveFrom: null,
+      effectiveTo: null,
     },
     evidence: [{
       blockingDomain: "FUNDAMENTALS",
@@ -194,11 +197,75 @@ describe("Program B B1 R6 contract and architecture", () => {
         assignmentId: null,
         assignmentVersion: null,
         methodologyRole: null,
+        activeReviewedAssignmentCount: 0,
+        effectiveFrom: null,
+        effectiveTo: null,
       },
     })
     expect(assignmentBlocked.state).toBe("BLOCKED_PREREQUISITE")
     expect(assignmentBlocked.canScore).toBe(false)
     expect(assignmentBlocked.reasonCodes).toContain("ASSIGNMENT_MISSING")
+  })
+
+  it("derives the Pharma Primary requirement from PHARMA_V1 and rejects invalid assignment variants", () => {
+    const base = readyInput()
+    const methodology = resolveProgramBMethodology({
+      assetClass: "EQUITY",
+      sector: "Pharma",
+      industry: "Pharmaceuticals",
+      basicIndustry: "Pharmaceuticals",
+      classificationVersion: "K1_CANONICAL_CLASSIFICATION_V1",
+      classificationState: "READY",
+    })
+    const validAssignment = {
+      required: false,
+      state: "VALID" as const,
+      assignmentId: "assignment-torntpharm",
+      assignmentVersion: 1,
+      methodologyRole: "DOMESTIC_FORMULATIONS",
+      activeReviewedAssignmentCount: 1,
+      effectiveFrom: "2026-03-31",
+      effectiveTo: null,
+    }
+    const input = { ...base, methodology, methodologyVersion: "PHARMA_V1", assignment: validAssignment }
+    expect(evaluateProgramBScoringReadiness(input).state).toBe("READY")
+
+    const invalid = [
+      { assignmentId: null },
+      { assignmentVersion: null },
+      { methodologyRole: "PHARMA" },
+      { methodologyRole: "BANK" },
+      { methodologyRole: "UNREVIEWED_PHARMA_ROLE" },
+      { state: "PROVISIONAL" as const },
+      { state: "DISPUTED" as const },
+      { state: "CONFLICTING" as const, activeReviewedAssignmentCount: 2 },
+      { state: "MISSING" as const, assignmentId: null, methodologyRole: null, activeReviewedAssignmentCount: 0 },
+    ]
+    for (const change of invalid) {
+      const result = evaluateProgramBScoringReadiness({
+        ...input,
+        assignment: { ...validAssignment, ...change },
+      })
+      expect(result.state, JSON.stringify(change)).not.toBe("READY")
+      expect(result.canScore).toBe(false)
+    }
+  })
+
+  it("rejects contradictory applicable evidence and required market history marked not applicable", () => {
+    const base = readyInput()
+    const evidence = evaluateProgramBScoringReadiness({
+      ...base,
+      evidence: [{ ...base.evidence[0]!, state: "NOT_APPLICABLE" }],
+    })
+    expect(evidence.state).toBe("REVIEW_REQUIRED")
+    expect(evidence.reasonCodes).toContain("FUNDAMENTALS_APPLICABILITY_CONTRADICTION")
+
+    const market = evaluateProgramBScoringReadiness({
+      ...base,
+      marketHistory: { ...base.marketHistory, state: "NOT_APPLICABLE" },
+    })
+    expect(market.state).toBe("REVIEW_REQUIRED")
+    expect(market.reasonCodes).toContain("MARKET_HISTORY_APPLICABILITY_CONTRADICTION")
   })
 
   it("fails closed on pending methodology before evidence state can matter", () => {
