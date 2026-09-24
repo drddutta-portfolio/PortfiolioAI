@@ -7434,3 +7434,187 @@ Rerun:
 ```bash
 bash scripts/c3-validate-program-c-r9.sh
 ```
+
+
+---
+
+## Program C · C3 / R9 formal closure — COMPLETE / PASS / CLOSED — 25 September 2026
+
+The owner confirmed the authoritative C3 owner-local validator completed with:
+
+```text
+PROGRAM C C3 VALIDATION ALL PASS
+R9 = IMPLEMENTED / VALIDATED / AWAITING OWNER CLOSURE
+```
+
+The validated Program C branch state was synchronized through:
+
+```text
+95bf12514cc0c74da622c026534954e44273a667
+```
+
+### Confirmed validation bundle
+
+The C3 runner passed:
+
+```text
+R9 contract/execution tests = PASS
+R8 C1/C2 regressions = PASS
+Program B final regression = PASS
+Program B R6 regression = PASS
+Program B R7 regression = PASS
+canonical C3 R9 report = PASS
+R9 structural provider/AI/persistence/trading safety = PASS
+C3 scoped ESLint = PASS
+C3 repository allowlist = PASS
+TypeScript = PASS
+PortfolioAI architecture/data-boundary guard = PASS
+production build = PASS
+git diff --check = PASS
+```
+
+The earlier React `set-state-in-effect` issue and the two static-safety
+false positives were corrected before the final passing run.
+
+No executable validation failure remains open.
+
+### Formal R9 closure
+
+```text
+C3 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+
+R9 contract = CLOSED
+R9 execution = CLOSED
+R9 deterministic replay = PASS
+R9 first-observation semantics = PASS
+R9 no-change distinction = PASS
+R9 raw/immaterial distinction = PASS
+R9 categorical meaningful-change transitions = PASS
+R9 incomparable/out-of-order handling = PASS
+R9 semantic duplicate suppression = PASS
+R9 frozen-universe disposition completeness = PASS
+R9 authority/safety audit = PASS
+```
+
+### Frozen R9 semantic boundary retained
+
+```text
+FIRST_OBSERVATION != NO_CHANGE
+FIRST_OBSERVATION != RAW_IMMATERIAL_CHANGE
+FIRST_OBSERVATION != MEANINGFUL_CHANGE
+```
+
+The frozen validation universe remains:
+
+```text
+PROGRAM_C_VALIDATION_UNIVERSE_V1
+K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22
+238 holdings
+238 EQUITY
+```
+
+Every frozen holding has an explicit first-observation disposition.
+
+The frozen fixture still has no comparable historical R9 baseline, therefore:
+
+```text
+frozen meaningful-event count = 0
+meaning = no comparable baseline
+NOT meaning = no change
+```
+
+### Materiality boundary retained
+
+R9 materiality remains versioned and deterministic.
+
+No Program C numeric materiality threshold was approved:
+
+```text
+scoreDeltaThreshold = null
+valuationDeltaThreshold = null
+momentumDeltaThreshold = null
+concentrationDeltaThreshold = null
+hysteresisThreshold = null
+persistenceDurationRule = null
+```
+
+Raw score/run/snapshot movement without an approved categorical rule remains
+raw/immaterial and does not create a meaningful event.
+
+### Idempotency boundary retained
+
+```text
+deterministic event identity = YES
+semantic idempotency = YES
+same-input replay stability = YES
+in-memory duplicate suppression = YES
+
+durable acknowledgement = NO
+durable snooze = NO
+persistent notification deduplication = NO
+cross-session seen/unseen state = NO
+```
+
+No persistence/schema was introduced.
+
+### Closed C3 safety boundary
+
+```text
+AI materiality = NO
+numeric threshold creation = NO
+numeric sizing authority = NO
+owner-setting mutation = 0
+provider calls = 0
+Angel One calls = 0
+Trendlyne calls = 0
+OpenAI deterministic decisions = 0
+persistence = 0
+schema migration = 0
+production mutation = 0
+merge/deployment = 0
+scheduler mutation = 0
+trading = 0
+```
+
+### Closure documentation
+
+C3/R9 was promoted to formal closed status in:
+
+```text
+docs/PortfolioAI_PROGRAM_C_C3_R9_EXECUTION_VALIDATION.md
+```
+
+Closure-document commit immediately preceding this handoff append:
+
+```text
+fa2d18e6d0feeed9874db77d9fe5c89e41f5671c
+```
+
+### Program C checkpoint state
+
+```text
+C0 = COMPLETE / PASS / CLOSED
+C1 = COMPLETE / PASS / CLOSED
+C2 = COMPLETE / PASS / CLOSED
+C3 = COMPLETE / PASS / CLOSED
+
+R8 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+
+C4 / R10 = NOT AUTHORIZED
+C-FINAL = NOT AUTHORIZED
+
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+### Stop boundary
+
+Current stop point is after formal R9 closure.
+
+No R10 contract, integrated attention precedence, action-category composition,
+ADD_REVIEW/TRIM_REVIEW authority promotion, or C-FINAL work may begin until the
+owner explicitly authorizes C4.
