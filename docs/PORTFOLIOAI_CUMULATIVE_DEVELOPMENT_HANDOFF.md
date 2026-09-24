@@ -6262,3 +6262,327 @@ Scheduler/trading = NOT AUTHORIZED
 
 Do not begin R8 execution, portfolio-wide R8 disposition or consumer integration
 until the owner explicitly authorizes C2.
+
+
+---
+
+## Program C · C2 R8 Execution & Validation — implementation complete / executable validation pending — 25 September 2026
+
+The owner explicitly authorized C2 after formal C1 closure.
+
+C2 was kept strictly to R8 Checkpoint B.
+
+### Branch / start state
+
+```text
+repository = drddutta-portfolio/PortfiolioAI
+branch = program-c-portfolio-decision-engines
+C2 starting HEAD = fdd44b4591402dbc521e597e499341e2395b910a
+C2 source implementation review HEAD = 823e47b503dd1c678f29dcad8e814df6ae74bb6f
+C2 architecture document HEAD before this handoff = afb4b358f4c7bec847755fbcefffb67f386e227a
+```
+
+### C2 execution artifacts
+
+Added:
+
+```text
+src/features/decision/r8Determinism.ts
+src/features/decision/r8PortfolioContextBuilder.ts
+src/features/decision/r8CoreHealth.ts
+src/features/decision/r8PortfolioFit.ts
+src/features/decision/r8PortfolioRisk.ts
+src/features/decision/r8ExitIntelligence.ts
+src/features/decision/r8PortfolioDecisionEngine.ts
+src/features/decision/r8ExecutionAuthority.ts
+src/features/decision/r8OwnerAuthority.ts
+src/features/decision/r8Presentation.ts
+src/features/decision/r8LivePortfolioAdapter.ts
+src/features/decision/r8FrozenPortfolioDisposition.ts
+src/features/decision/r8ReferenceValidation.ts
+src/features/decision/r8C2Validation.ts
+src/features/decision/r8Execution.test.ts
+```
+
+Validation tooling:
+
+```text
+scripts/program-c-c2-report.mjs
+scripts/program-c-c2-static-safety.mjs
+scripts/c2-validate-program-c-r8.sh
+```
+
+Controlled consumer integration:
+
+```text
+src/components/DashboardCoreExitRisk.tsx
+src/components/DashboardRiskConcentration.tsx
+```
+
+C2 checkpoint document:
+
+```text
+docs/PortfolioAI_PROGRAM_C_C2_R8_EXECUTION_VALIDATION.md
+```
+
+No R9 or R10 module was created.
+
+### Deterministic R8 execution
+
+Implemented read-only evaluators for:
+
+```text
+Core Health
+Portfolio Fit
+Portfolio Risk
+Exit Intelligence
+```
+
+The composed engine keeps all four independently inspectable and creates no
+opaque portfolio-decision score.
+
+Deterministic run/context identities use semantic fingerprints and explicit
+upstream/context identities; no `Date.now()`, randomness or timestamp-only
+identity is used in R8 compute.
+
+### Dependency isolation retained
+
+Frozen C1 R7 dependency remains:
+
+```text
+CORE_HEALTH       = OPTIONAL_CONTEXT
+PORTFOLIO_FIT     = NOT_REQUIRED
+PORTFOLIO_RISK    = NOT_REQUIRED
+EXIT_INTELLIGENCE = OPTIONAL_CONTEXT
+```
+
+C2 implementation preserves that isolation.
+
+A missing R7 result cannot automatically block Portfolio Fit or Portfolio Risk.
+
+### Core Health
+
+Implemented fail-closed rules:
+
+- missing owner role -> `BLOCKED_PREREQUISITE`;
+- non-Core -> `NOT_APPLICABLE`;
+- missing/stale mandatory health input -> `INSUFFICIENT_EVIDENCE`;
+- conflicting/review state -> `REVIEW_REQUIRED`;
+- categorical approved health input maps deterministically to the frozen state
+  vocabulary;
+- recommendation/owner-role disagreement is surfaced only;
+- owner role is never overwritten.
+
+### Portfolio Fit
+
+Implemented owner-relative deterministic logic only:
+
+```text
+current weight > owner maximum -> CONCENTRATION_REVIEW
+current weight < owner minimum -> FIT_TENSION
+direct R7 role candidate differs from owner role -> ROLE_COMPATIBILITY_REVIEW
+within configured owner range -> FIT_SUPPORTED
+no owner range -> FIT_NEUTRAL
+```
+
+No machine target weight, min/max range, correlation, diversification threshold
+or sector sizing policy is created.
+
+### Portfolio Risk
+
+Positive/evaluated Portfolio Risk now requires:
+
+- explicit canonical categorical risk input; and
+- canonical risk evidence identity.
+
+Therefore missing generic risk evidence can never become `RISK_ACCEPTABLE`.
+
+Generic research freshness alone also does not create a positive risk state.
+
+### Exit Intelligence
+
+Positive/evaluated Exit Intelligence requires:
+
+- explicit thesis/permanent-loss categorical input; and
+- thesis evidence identity.
+
+Price weakness, valuation concern or overweight context alone never creates an
+exit state.
+
+`HARD_EXIT_REVIEW` remains advisory and non-trading.
+
+### Exact lineage
+
+C2 reference execution consumes the existing Program B lineage directly.
+
+The controlled TORNTPHARM / ALIVUS validation fixture carries exact:
+
+```text
+R6 scoreRunId
+R7 recommendationRunId
+research profile
+methodology role
+assignment lineage
+portfolio-context snapshot id
+R8 decisionRunId
+```
+
+R6/R7 source-run mismatch is detected and inconsistent R7 context is not used.
+
+### Frozen validation universe
+
+C2 executes an explicit portfolio-wide disposition over:
+
+```text
+PROGRAM_C_VALIDATION_UNIVERSE_V1
+K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22
+238 holdings
+238 EQUITY
+```
+
+The frozen K5 fixture does not contain owner settings/current weights or
+canonical risk/thesis evidence.
+
+C2 therefore fails closed rather than fabricating positive R8 coverage.
+
+Every frozen holding still receives an explicit Program C R8 disposition.
+
+```text
+portfolio-wide deterministic R8 disposition = COMPLETE
+portfolio-wide numeric/action coverage = NOT CLAIMED
+```
+
+### Live read-only projection
+
+The live adapter consumes only already-loaded application domain values:
+
+```text
+PortfolioViewModel
+ResearchCoverageRow
+```
+
+It imports no repository, Supabase client, provider adapter or network function.
+
+On the live Dashboard:
+
+- Portfolio Fit may evaluate from current weight and owner-authored settings;
+- Core Health remains blocked where exact canonical R6 lineage is not
+  materialized;
+- Portfolio Risk remains insufficient without canonical risk magnitude evidence;
+- Exit Intelligence remains insufficient without thesis/permanent-loss evidence;
+- persisted legacy/advisory recommendation rows are not silently promoted into
+  Program B R7 lineage.
+
+### Consumer integration
+
+`DashboardCoreExitRisk` now consumes canonical R8 Core Health and Exit
+Intelligence projections.
+
+`DashboardRiskConcentration` now consumes canonical R8 Portfolio Fit and
+Portfolio Risk projections.
+
+The existing descriptive data/concentration queue is explicitly labelled
+non-R8 so page-local heuristics cannot become Program C decision authority.
+
+### Owner-write regression
+
+C2 exercises a mock assessment-writer boundary and proves:
+
+```text
+machine assessment write count = 1
+owner field mutation count = 0
+persistence mutation count = 0
+```
+
+### Program B regression
+
+The C2 aggregate audit invokes the closed Program B final audit and requires:
+
+```text
+Program B overallPass = true
+```
+
+The C2 runner also executes Program B R6/R7/final regression tests.
+
+### Static safety review
+
+Remote source review confirms no R8 runtime module imports:
+
+- `src/data/*`;
+- Supabase;
+- Angel One;
+- Trendlyne;
+- OpenAI;
+- provider acquisition;
+- scheduler;
+- brokerage/order repositories.
+
+No R8 runtime module contains:
+
+- `fetch()`;
+- `Date.now()`;
+- `Math.random()`;
+- insert/update/delete/upsert calls.
+
+The C2 structural-safety script independently checks these conditions during the
+owner-local validation run.
+
+### C2 repository safety boundary
+
+No:
+
+- schema migration;
+- Edge Function;
+- data repository;
+- workflow;
+- provider adapter;
+- persistence schema;
+- production configuration;
+- scheduler;
+- trading path
+
+was changed.
+
+### Required owner-local validation
+
+Run:
+
+```bash
+git fetch origin
+git switch program-c-portfolio-decision-engines
+git pull --ff-only
+
+bash scripts/c2-validate-program-c-r8.sh
+```
+
+The runner must end with:
+
+```text
+PROGRAM C C2 VALIDATION ALL PASS
+```
+
+before C2/R8 may be formally closed.
+
+### Current checkpoint state
+
+```text
+C0 = COMPLETE / PASS / CLOSED
+C1 = COMPLETE / PASS / CLOSED
+
+C2 implementation = COMPLETE
+C2 static architecture/safety review = PASS
+C2 owner-local executable validation = PENDING
+C2 formal closure = PENDING
+R8 formal closure = PENDING
+
+C3 / R9 = NOT AUTHORIZED
+C4 / R10 = NOT AUTHORIZED
+C-FINAL = NOT AUTHORIZED
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+Stop after C2 implementation. C3 requires clean C2 validation, explicit owner
+acceptance of R8 closure, and separate authorization.
