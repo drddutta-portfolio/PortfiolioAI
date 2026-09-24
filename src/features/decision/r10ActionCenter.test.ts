@@ -80,6 +80,21 @@ describe("Program C C4 R10 integrated Action Center", () => {
     }
   })
 
+  it("changes deterministic attention identity when owner threshold context changes", () => {
+    const input = buildProgramCR10ReferenceValidation().inputs.noAction
+    const first = evaluateProgramCR10Attention(input)
+    const second = evaluateProgramCR10Attention({
+      ...input,
+      ownerThresholds: {
+        ...input.ownerThresholds,
+        targetPrice: "900",
+      },
+    })
+    expect(second.integratedAttentionId).not.toBe(first.integratedAttentionId)
+    expect(second.upstreamLineage.ownerThresholdContextId)
+      .not.toBe(first.upstreamLineage.ownerThresholdContextId)
+  })
+
   it("rejects an R9 current observed state that does not reference the same R8 decision run", () => {
     const input = buildProgramCR10ReferenceValidation().inputs.noAction
     expect(() => evaluateProgramCR10Attention({
