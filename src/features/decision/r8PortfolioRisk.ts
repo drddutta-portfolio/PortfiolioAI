@@ -87,6 +87,19 @@ export function evaluateProgramCR8PortfolioRisk(
     }
   }
 
+  if (!input.evidenceIds.length) {
+    return {
+      version: PROGRAM_C_R8_PORTFOLIO_RISK_CONTRACT_VERSION,
+      state: "INSUFFICIENT_EVIDENCE",
+      applicable: true,
+      sourcePortfolioContextSnapshotId: input.portfolioContextSnapshotId,
+      sourceScoreRunId: input.sourceScoreRunId,
+      evidenceIds: [],
+      blockers: ["CANONICAL_RISK_EVIDENCE_ID_MISSING"],
+      reasonCodes: ["RISK_EVIDENCE_ID_MISSING", ...input.concentrationReasonCodes],
+    }
+  }
+
   const state = input.riskSignal === "ACCEPTABLE"
     ? "RISK_ACCEPTABLE"
     : input.riskSignal === "MONITOR"
