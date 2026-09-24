@@ -265,9 +265,15 @@ export function resolveProgramBMethodology(
   })
 
   if (routed.state !== "SUPPORTED_ENGINE" || routed.profileCode === null) {
+    const unresolvedState: ProgramBMethodologyResolutionState =
+      routed.state === "NOT_APPLICABLE"
+        ? "NOT_APPLICABLE"
+        : routed.state === "REVIEW_REQUIRED"
+          ? "REVIEW_REQUIRED"
+          : "METHODOLOGY_NOT_AVAILABLE"
     return {
       version: PROGRAM_B_R6_CONTRACT_VERSION,
-      state: routed.state,
+      state: unresolvedState,
       engineCode: routed.engineCode,
       routedProfileCode: routed.profileCode,
       methodologyAuthority: null,
@@ -368,7 +374,7 @@ const BLOCKER_PRIORITY: Readonly<Record<Exclude<ProgramBScoringReadinessState, "
 function finalState(blockers: readonly ProgramBReadinessBlocker[]): ProgramBScoringReadinessState {
   if (!blockers.length) return "READY"
   return [...blockers]
-    .sort((left, right) => BLOCKER_PRIORITY[left.readinessState] - BLOCKER_PRIORITY[right.readinessState])[0]
+    .sort((left, right) => BLOCKER_PRIORITY[left.readinessState] - BLOCKER_PRIORITY[right.readinessState])[0]!
     .readinessState
 }
 

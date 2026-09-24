@@ -130,7 +130,7 @@ describe("Program B B1 R6 contract and architecture", () => {
       const result = evaluateProgramBScoringReadiness({
         ...base,
         evidence: [{
-          ...base.evidence[0],
+          ...base.evidence[0]!,
           state: evidenceState,
           recommendedNextEvidenceAction: "REFRESH_OR_REVIEW_FUNDAMENTALS",
         }],
@@ -156,7 +156,7 @@ describe("Program B B1 R6 contract and architecture", () => {
     const result = evaluateProgramBScoringReadiness({
       ...base,
       evidence: [{
-        ...base.evidence[0],
+        ...base.evidence[0]!,
         applicability: "NOT_APPLICABLE",
         state: "NOT_APPLICABLE",
         evidenceIds: [],
