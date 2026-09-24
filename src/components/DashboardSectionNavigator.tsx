@@ -4,6 +4,7 @@ import "./DashboardSectionNavigator.css"
 const SECTIONS = [
   ["dashboard-overview", "Overview"],
   ["dashboard-daily-move", "Daily Move"],
+  ["dashboard-meaningful-change", "Meaningful Change"],
   ["dashboard-performance", "Performance"],
   ["dashboard-structure", "Structure"],
   ["dashboard-health", "Health"],
