@@ -92,6 +92,26 @@ describe("ResearchScorecardPanel shared score states", () => {
     expect(screen.queryByText("Overall stock score")).not.toBeInTheDocument()
   })
 
+  it("shows the Program B readiness, methodology role and evidence snapshot without conflating evidence coverage", () => {
+    render(<ResearchScorecardPanel snapshot={{
+      ...snapshot("BANK_NBFC", [dimension("QUALITY", 87, 1)]),
+      runState: "COMPLETE",
+      overallScore: 87,
+      scoreReadyCoverage: 1,
+      evidenceCoverage: 1,
+      asOfDate: "2026-09-24",
+      methodologyState: "AVAILABLE",
+      scoringExecutionState: "AVAILABLE",
+    }} isLoading={false} error={null} methodologyRole="BANK" />)
+    const contract = screen.getByLabelText("Program B scoring contract")
+    expect(within(contract).getByText("Score readiness")).toBeInTheDocument()
+    expect(within(contract).getByText("Ready")).toBeInTheDocument()
+    expect(within(contract).getByText("Methodology role")).toBeInTheDocument()
+    expect(within(contract).getByText("BANK")).toBeInTheDocument()
+    expect(within(contract).getByText("2026-09-24")).toBeInTheDocument()
+    expect(within(contract).getByText(/Evidence coverage is separate from score readiness/u)).toBeInTheDocument()
+  })
+
   it("uses one external ratings shell title for empty and populated states", () => {
     const empty = snapshot("PHARMA_V1", [])
     const { rerender } = render(<ResearchScorecardPanel snapshot={empty} isLoading={false} error={null} />)
