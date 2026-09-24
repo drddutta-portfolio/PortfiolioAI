@@ -4,7 +4,7 @@
 **Date:** 24 September 2026  
 **Branch:** `program-a-evidence-coverage`  
 **Starting commit:** `5128b575532f8069693a476019732f0f56622a55`  
-**Status:** IMPLEMENTED CANDIDATE — OWNER-LOCAL VALIDATION PENDING
+**Status:** COMPLETE / PASS / CLOSED — OWNER-LOCAL VALIDATED
 
 ## 1. Purpose
 
@@ -171,32 +171,42 @@ At candidate design time:
 
 No silent holes are permitted.
 
-## 9. Validation
+## 9. Validation and closure
 
-Run:
+Owner-local consolidated validation was run with:
 
 ```bash
 git pull
 bash scripts/b4-validate-r7-execution.sh
 ```
 
-The runner validates:
-- B4 execution/replay/disposition;
-- B3 and R6 regressions;
-- Pharma parent/subgroup architecture;
-- Gate I recommendation authority/policy;
-- ALIVUS and TORNTPHARM read-only recommendation behavior;
-- K5 portability;
-- sector fail-closed behavior;
-- D35B sizing software boundary;
-- owner decision controls;
-- Pharma recommendation UI;
-- Research page regression;
-- canonical B4 report;
-- TypeScript;
-- architecture guard;
-- production build;
-- `git diff --check`.
+Final owner-local result: **PASS**.
+
+Observed terminal closure markers:
+
+```text
+B4 CANDIDATE VALIDATION PASS
+R7 provider calls: 0
+Recommendation persistence: OFF
+Sizing persistence: OFF
+Owner settings mutation: 0
+Next checkpoint: B-FINAL only after B4 closure and explicit owner approval
+```
+
+The same run also showed:
+- architecture guard passed;
+- production build passed;
+- the Vite large-chunk notice remained informational only.
+
+Because the runner is fail-fast, reaching the B4 PASS marker confirms the
+configured B4 execution/replay/disposition suite, inherited B3/R6 regressions,
+Pharma dual-layer regressions, Gate I recommendation policy, ALIVUS/TORNTPHARM
+reference recommendations, K5 portability, sizing-software boundary, owner
+decision controls, shared UI regressions, canonical B4 report, TypeScript,
+architecture guard, production build and `git diff --check` all completed
+successfully.
+
+B4 is therefore **COMPLETE / PASS / CLOSED** and R7 is closed.
 
 ## 10. Safety boundary
 
@@ -216,9 +226,24 @@ scheduler mutation = NO
 trading = NO
 ```
 
-## 11. Stop boundary
+## 11. Exit and stop boundary
 
-B-FINAL is not authorized by this candidate.
+```text
+B4.1 reference cohort / sizing edge cases = COMPLETE / PASS / CLOSED
+B4.2 owner-authority mutation regression = COMPLETE / PASS / CLOSED
+B4.3 replay and cross-surface validation = COMPLETE / PASS / CLOSED
+B4.4 controlled portfolio-wide disposition = COMPLETE / PASS / CLOSED
 
-B4 remains open until the strengthened local runner passes and B4/R7 is formally
-closed.
+Program B · B4 = COMPLETE / PASS / CLOSED
+R7 Checkpoint B = CLOSED
+R7 = COMPLETE / PASS / CLOSED
+
+Portfolio-wide recommendation/sizing disposition = COMPLETE
+Portfolio-wide numeric recommendation coverage = NOT CLAIMED / INCOMPLETE BY DESIGN
+Portfolio-wide numeric sizing coverage = NOT CLAIMED / INCOMPLETE BY DESIGN
+Owner-authority regression = PASS
+Cross-surface canonical consistency = PASS
+Provider calls from R7 computation = 0
+```
+
+B-FINAL has not started and is not authorized by this B4 closure.
