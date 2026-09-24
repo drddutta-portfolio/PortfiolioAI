@@ -4,7 +4,7 @@ import {
   type ProgramB2ReferenceResult,
 } from "../research/programBR6Execution"
 import {
-  buildProgramB4ReferenceDecisions,
+  executeProgramB4ReferenceRecommendation,
   type ProgramB4RecommendationExecution,
 } from "../research/programBR7Execution"
 import {
@@ -95,9 +95,9 @@ function owner(
 
 export function buildProgramCR8ReferenceValidationAssessments() {
   const references = buildProgramB2ReferenceResults()
-  const decisions = buildProgramB4ReferenceDecisions()
+  const recommendations = references.map(executeProgramB4ReferenceRecommendation)
   const r6BySymbol = new Map(references.map((row) => [row.symbol, row]))
-  const r7BySymbol = new Map(decisions.map((row) => [row.symbol, row.recommendation]))
+  const r7BySymbol = new Map(recommendations.map((row) => [row.symbol, row]))
 
   const tornt = r6BySymbol.get("TORNTPHARM")
   const alivus = r6BySymbol.get("ALIVUS")
