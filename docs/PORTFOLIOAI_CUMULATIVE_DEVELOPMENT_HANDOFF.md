@@ -4699,3 +4699,142 @@ trading = NO
 
 **Current stop boundary:** B4 candidate implemented; owner-local validation pending.
 Do not begin B-FINAL.
+
+
+---
+
+## Program B · B4 / R7 owner-local validation closure — 24 September 2026
+
+Owner-local consolidated B4 validation completed successfully.
+
+Command:
+
+```bash
+git pull
+bash scripts/b4-validate-r7-execution.sh
+```
+
+Owner-observed terminal closure markers:
+
+```text
+B4 CANDIDATE VALIDATION PASS
+R7 provider calls: 0
+Recommendation persistence: OFF
+Sizing persistence: OFF
+Owner settings mutation: 0
+Next checkpoint: B-FINAL only after B4 closure and explicit owner approval
+```
+
+The run also showed:
+- architecture guard passed;
+- production build passed;
+- Vite emitted only the existing informational large-chunk warning.
+
+Because the runner is fail-fast, reaching the final B4 PASS marker confirms the
+configured validation chain completed successfully.
+
+### R7 recommendation execution
+
+The currently authorized numeric recommendation executions remain the two
+score-ready PHARMA_V1 references:
+
+```text
+TORNTPHARM
+  parent profile = PHARMA_V1
+  Primary = DOMESTIC_FORMULATIONS
+  assignment version = 1
+  R6 score = 75.1575
+  R7 role = SATELLITE_CANDIDATE
+
+ALIVUS
+  parent profile = PHARMA_V1
+  Primary = API_BULK_DRUGS
+  assignment version = 1
+  R6 score = 76.7225
+  R7 role = SATELLITE_CANDIDATE
+```
+
+The Pharma architecture remains dual-layer and preserved end to end:
+
+```text
+PHARMA_V1 common parent research
+        +
+one reviewed Primary Pharma subprofile
+        +
+assignment version
+        +
+exact R6 score lineage
+        ↓
+PHARMA_V1 recommendation policy
+```
+
+Fail-closed controlled references remain:
+- AUROPHARMA -> insufficient evidence;
+- BIOCON -> insufficient evidence;
+- SYNGENE -> insufficient evidence;
+- HDFCBANK -> blocked prerequisite.
+
+No partial recommendation was reconstructed.
+
+### R7 sizing outcome
+
+No Program B profile/role-specific numeric sizing policy has been separately
+owner-approved.
+
+Therefore:
+- sizing-ready holdings = 0;
+- suggested target/minimum/maximum weight remains null;
+- recommended action remains null;
+- recommendation-ready holdings do not borrow a generic or another sector's
+  sizing heuristic.
+
+This is an intentional fail-closed result, not a missing execution.
+
+### Owner-authority and cross-surface results
+
+Validated:
+- target price unchanged;
+- stop loss unchanged;
+- owner target weight unchanged;
+- owner-selected portfolio role unchanged;
+- owner field mutation count = 0;
+- persistence mutation count = 0;
+- Research / Portfolio / Action canonical projections consume one shared decision
+  payload rather than independently recomputing score/recommendation/sizing.
+
+### B4 / R7 closure
+
+```text
+B4.1 reference cohort / sizing edge cases = COMPLETE / PASS / CLOSED
+B4.2 owner-authority mutation regression = COMPLETE / PASS / CLOSED
+B4.3 replay and cross-surface validation = COMPLETE / PASS / CLOSED
+B4.4 controlled portfolio-wide disposition = COMPLETE / PASS / CLOSED
+
+Program B · B4 = COMPLETE / PASS / CLOSED
+R7 Checkpoint B = CLOSED
+R7 = COMPLETE / PASS / CLOSED
+
+Portfolio-wide recommendation/sizing disposition = COMPLETE
+Portfolio-wide numeric recommendation coverage = NOT CLAIMED / INCOMPLETE BY DESIGN
+Portfolio-wide numeric sizing coverage = NOT CLAIMED / INCOMPLETE BY DESIGN
+Owner-authority regression = PASS
+Cross-surface canonical consistency = PASS
+Provider calls from R7 computation = 0
+```
+
+Safety state:
+- Angel One calls from R7 computation = 0;
+- Trendlyne calls from R7 computation = 0;
+- OpenAI numeric decision calls = 0;
+- recommendation persistence = NO;
+- sizing persistence = NO;
+- owner settings mutation = NO;
+- production mutation = NO;
+- migration = NO;
+- deployment = NO;
+- merge = NO;
+- scheduler change = NO;
+- trading = NO.
+
+**STOP BOUNDARY:** B-FINAL has not started and is not authorized by this closure.
+Next stage is **B-FINAL — Program B Closure**, only after explicit owner approval.
