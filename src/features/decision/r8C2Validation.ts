@@ -12,8 +12,12 @@ export function buildProgramCR8C2Validation() {
   const referenceFirst = buildProgramCR8ReferenceValidationAssessments()
   const referenceSecond = buildProgramCR8ReferenceValidationAssessments()
   const frozen = buildProgramCR8FrozenPortfolioDisposition()
+  const firstReference = referenceFirst.rows[0]
+  if (!firstReference) {
+    throw new Error("Program C C2 validation requires at least one reference assessment.")
+  }
   const owner = buildProgramCR8OwnerAuthorityRegression(
-    referenceFirst.rows[0]!.assessment,
+    firstReference.assessment,
   )
   const programB = buildProgramBFinalAudit()
 
