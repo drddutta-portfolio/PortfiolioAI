@@ -6,6 +6,7 @@ import type { ResearchCoverageRow } from "../research/researchCoverage"
 import { evaluateProgramCR8CoreHealth } from "./r8CoreHealth"
 import { programCR8CanonicalJson } from "./r8Determinism"
 import { evaluateProgramCR8ExitIntelligence } from "./r8ExitIntelligence"
+import { PROGRAM_C_R8_C2_EXECUTION_AUTHORITY } from "./r8ExecutionAuthority"
 import { buildProgramCR8FrozenPortfolioDisposition } from "./r8FrozenPortfolioDisposition"
 import { buildProgramCR8LivePortfolioProjection } from "./r8LivePortfolioAdapter"
 import { buildProgramCR8OwnerAuthorityRegression } from "./r8OwnerAuthority"
@@ -238,6 +239,18 @@ describe("Program C C2 R8 execution and validation", () => {
     expect(audit.numericActionCoverageComplete).toBe(false)
     expect(audit.providerCalls).toBe(0)
     expect(audit.persistedWrites).toBe(0)
+  })
+
+  it("promotes only read-only C2 execution authority while retaining all other prohibitions", () => {
+    expect(PROGRAM_C_R8_C2_EXECUTION_AUTHORITY).toHaveLength(4)
+    for (const authority of PROGRAM_C_R8_C2_EXECUTION_AUTHORITY) {
+      expect(authority.executionAuthority).toBe("C2_OWNER_AUTHORIZED_READ_ONLY")
+      expect(authority.persistenceAuthority).toBe("NONE")
+      expect(authority.providerAuthority).toBe("NONE")
+      expect(authority.aiDecisionAuthority).toBe("NONE")
+      expect(authority.numericSizingAuthority).toBe("NONE")
+      expect(authority.ownerMutationAuthority).toBe("NONE")
+    }
   })
 
   it("retains zero provider, AI, persistence, sizing, scheduler and trading authority", () => {
