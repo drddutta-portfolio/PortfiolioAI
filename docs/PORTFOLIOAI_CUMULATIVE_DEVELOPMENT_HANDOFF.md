@@ -6651,3 +6651,164 @@ owner-local executable validation = PENDING
 formal C2/R8 closure = PENDING
 C3 / R9 = NOT AUTHORIZED
 ```
+
+
+---
+
+## Program C · C2 / R8 formal closure — COMPLETE / PASS / CLOSED — 25 September 2026
+
+The owner confirmed the authoritative C2 owner-local validation completed with:
+
+```text
+PROGRAM C C2 VALIDATION ALL PASS
+R8 = IMPLEMENTED / VALIDATED / AWAITING OWNER CLOSURE
+```
+
+The validated Program C branch state was synchronized through:
+
+```text
+74a59f6b6e480f2a8e140c2566e528dc0d2c9af0
+```
+
+### Confirmed validation bundle
+
+The C2 runner passed:
+
+```text
+C1 contract regression = PASS
+C2 R8 execution tests = PASS
+Program B final regression = PASS
+Program B R6 regression = PASS
+Program B R7 regression = PASS
+C2 canonical aggregate report = PASS
+C2 structural provider/AI/persistence/trading safety = PASS
+C2 scoped ESLint = PASS
+C2 repository allowlist = PASS
+TypeScript = PASS
+PortfolioAI architecture/data-boundary guard = PASS
+production build = PASS
+git diff --check = PASS
+```
+
+No executable validation failure remains open.
+
+### Formal R8 closure
+
+```text
+C2 = COMPLETE / PASS / CLOSED
+R8 = COMPLETE / PASS / CLOSED
+
+R8 contract = CLOSED
+R8 execution = CLOSED
+R8 deterministic replay = PASS
+R8 exact-lineage validation = PASS
+R8 owner-authority regression = PASS
+R8 frozen-universe disposition completeness = PASS
+R8 controlled Dashboard consumer integration = VALIDATED
+R8 provider/AI/persistence/trading safety = PASS
+```
+
+### Frozen-universe interpretation retained
+
+The exact Program C frozen validation universe remains:
+
+```text
+PROGRAM_C_VALIDATION_UNIVERSE_V1
+K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22
+238 holdings
+238 EQUITY
+```
+
+Every frozen holding receives a deterministic R8 disposition.
+
+This still does **not** claim:
+
+```text
+portfolio-wide positive R8 coverage = complete
+portfolio-wide numeric action coverage = complete
+numeric sizing authority = approved
+```
+
+The frozen K5 fixture does not carry all owner/current-weight/risk/thesis inputs
+required for fully positive R8 assessments. Fail-closed blocked/insufficient
+states are therefore intentional and remain part of the closed R8 design.
+
+### Live R8 limitations intentionally retained
+
+```text
+Portfolio Fit:
+  may evaluate from current weight + owner-authored settings
+
+Core Health:
+  blocked where exact canonical R6 lineage is not materialized to the surface
+
+Portfolio Risk:
+  insufficient without canonical risk-magnitude evidence
+
+Exit Intelligence:
+  insufficient without thesis/permanent-loss evidence
+```
+
+Persisted legacy/advisory recommendation metadata is not silently promoted into
+Program B R7 lineage.
+
+### Closed C2 safety boundary
+
+```text
+provider calls = 0
+Angel One calls = 0
+Trendlyne calls = 0
+OpenAI deterministic decisions = 0
+score recomputation = NO
+recommendation recomputation = NO
+numeric sizing authority = NO
+opaque master portfolio score = NO
+owner-setting mutation = 0
+persistence = 0
+schema migration = 0
+production mutation = 0
+merge/deployment = 0
+scheduler mutation = 0
+trading = 0
+```
+
+### Closure documentation
+
+C2/R8 was promoted to formal closed status in:
+
+```text
+docs/PortfolioAI_PROGRAM_C_C2_R8_EXECUTION_VALIDATION.md
+```
+
+Closure-document commit immediately preceding this handoff append:
+
+```text
+e1b82b358c9fdd728ad4ed884b5c07f9c96f5938
+```
+
+### Program C checkpoint state
+
+```text
+C0 = COMPLETE / PASS / CLOSED
+C1 = COMPLETE / PASS / CLOSED
+C2 = COMPLETE / PASS / CLOSED
+
+R8 = COMPLETE / PASS / CLOSED
+
+C3 / R9 = NOT AUTHORIZED
+C4 / R10 = NOT AUTHORIZED
+C-FINAL = NOT AUTHORIZED
+
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+### Stop boundary
+
+Current stop point is after formal R8 closure.
+
+No R9 contract, R9 execution, meaningful-change registry, event identity,
+duplicate suppression or R9 presentation work may begin until the owner
+explicitly authorizes C3.
