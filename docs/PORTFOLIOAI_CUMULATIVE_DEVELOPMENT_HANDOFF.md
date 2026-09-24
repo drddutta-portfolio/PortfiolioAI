@@ -7230,3 +7230,75 @@ Scheduler/trading = NOT AUTHORIZED
 
 Stop after C3 implementation. C4 requires clean C3 validation, explicit owner
 acceptance of R9 closure and separate authorization.
+
+
+---
+
+### Program C · C3 pre-validation refinement — 25 September 2026
+
+After the initial C3 implementation handoff, the R9 validation surface was
+tightened before owner-local execution.
+
+Latest pre-validation R9 source HEAD:
+
+```text
+80f2a847cca1c109cb1ab916abe3ab7949073737
+```
+
+C3 checkpoint document refresh:
+
+```text
+9fef777bed5d098ae9f925d50f5a5895fbf57b3e
+```
+
+Refinements:
+
+1. Event fixture narrowing now uses an explicit
+   `ProgramCR9MeaningfulChangeEvent` type rather than an inferred
+   `NonNullable<typeof event>` predicate.
+
+2. R9 controlled validation now covers all required categorical evidence
+   deterioration cases:
+
+```text
+FRESH -> STALE
+STALE -> MISSING
+MISSING -> CONFLICTING
+```
+
+3. Both blocker directions are now validated:
+
+```text
+blocker appeared
+blocker cleared
+```
+
+4. The aggregate C3 audit requires all of the above transitions to produce
+   deterministic meaningful events.
+
+No production behavior or authority changed.
+
+The C3 safety boundary remains:
+
+```text
+provider calls = 0
+AI materiality = 0
+numeric threshold creation = 0
+numeric sizing authority = NO
+owner-setting mutation = 0
+persistence = 0
+durable acknowledgement/snooze = NO
+schema migration = 0
+production mutation = 0
+merge/deployment = 0
+scheduler/trading = 0
+```
+
+The authoritative local validation command remains:
+
+```bash
+bash scripts/c3-validate-program-c-r9.sh
+```
+
+C3/R9 remains implementation-complete and validation-pending. C4/R10 remains
+unauthorized.
