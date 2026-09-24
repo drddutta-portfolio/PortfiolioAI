@@ -667,6 +667,46 @@ scheduler mutation = 0
 trading = 0
 ```
 
+## 28A. Owner-local typecheck correction
+
+The first owner-local C4 validation run reached TypeScript and stopped at:
+
+```text
+src/features/decision/r10ActionCenterEngine.ts(200,43):
+TS2345: Argument of type 'string[]' is not assignable to
+readonly ProgramCR10AttentionState[]
+```
+
+Root cause:
+
+```text
+unique(values: readonly string[])
+```
+
+widened the canonical R10 state union to plain `string[]` before
+`selectProgramCR10State()`.
+
+Correction:
+
+```text
+unique<T extends string>(values: readonly T[]): T[]
+```
+
+This preserves the exact `ProgramCR10AttentionState` union through deterministic
+deduplication.
+
+Correction commit:
+
+```text
+5c8c62afe4e57599c1f4619b1415fa430e70e666
+```
+
+No R10 state, precedence, conflict rule, lineage, owner authority, sizing
+boundary, provider boundary, persistence boundary or trading boundary changed.
+
+C4 remains executable-validation pending until the full authoritative runner
+completes successfully.
+
 ## 29. Current stop point
 
 ```text
