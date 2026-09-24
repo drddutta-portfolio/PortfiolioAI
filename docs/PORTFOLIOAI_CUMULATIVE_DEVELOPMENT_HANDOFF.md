@@ -5294,3 +5294,40 @@ and the smallest safe corrective action if needed.
 If no critical defect is found, explicitly say whether Program B is technically
 ready for owner consideration of formal closure while still remaining
 `VALIDATED / OPEN` until the owner authorizes closure.
+
+---
+
+## Program B corrective build — C1 local Pharma assignment repair
+
+**Date:** 24 September 2026  
+**Status:** C1 COMPLETE / PASS; Program B remains VALIDATED / OPEN
+
+The post-validation audit confirmed that local canonical assignments already
+resolved TORNTPHARM, ALIVUS and AUROPHARMA correctly, while BIOCON and SYNGENE
+had no rows in `research_subprofile_assignments`. Existing owner-approved Gate J
+locks and exact local NSE/ISIN fixture identities were sufficient; no provider
+call and no schema migration were required.
+
+Added guarded local-only repair artifacts:
+
+- `scripts/program-b-local-pharma-reference-assignment-repair.sql`
+- `scripts/run-program-b-local-pharma-reference-assignment-repair.sh`
+
+The repair materialized BIOCON as `BIOPHARMA_BIOSIMILARS` with reviewed
+`CDMO_CRAMS` and `GLOBAL_GENERICS` Material Overlays, and SYNGENE as
+`CDMO_CRAMS` with no secondary exposures. It writes no score, recommendation,
+sizing, owner setting or trading record. The first run inserted two assignments;
+the replay inserted zero and reused both, proving idempotence.
+
+Local five-reference state after C1:
+
+```text
+TORNTPHARM -> PHARMA_V1 + DOMESTIC_FORMULATIONS
+ALIVUS -> PHARMA_V1 + API_BULK_DRUGS
+AUROPHARMA -> PHARMA_V1 + GLOBAL_GENERICS
+BIOCON -> PHARMA_V1 + BIOPHARMA_BIOSIMILARS
+SYNGENE -> PHARMA_V1 + CDMO_CRAMS
+```
+
+Production mutation, migration, deployment, merge, scheduler mutation and
+trading remain unauthorized and did not occur.
