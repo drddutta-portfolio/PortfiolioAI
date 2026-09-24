@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { buildProgramBFinalAudit } from "../research/programBFinalClosure"
+import { buildProgramCR8C2Validation } from "./r8C2Validation"
 import type { PortfolioViewModel } from "../portfolio/types"
 import type { ResearchCoverageRow } from "../research/researchCoverage"
 import { evaluateProgramCR8CoreHealth } from "./r8CoreHealth"
@@ -205,6 +206,15 @@ describe("Program C C2 R8 execution and validation", () => {
 
   it("retains the closed Program B regression", () => {
     expect(buildProgramBFinalAudit().overallPass).toBe(true)
+  })
+
+  it("produces an aggregate C2 validation audit that passes", () => {
+    const audit = buildProgramCR8C2Validation()
+    expect(audit.overallPass).toBe(true)
+    expect(audit.frozenHoldingCount).toBe(238)
+    expect(audit.numericActionCoverageComplete).toBe(false)
+    expect(audit.providerCalls).toBe(0)
+    expect(audit.persistedWrites).toBe(0)
   })
 
   it("retains zero provider, AI, persistence, sizing, scheduler and trading authority", () => {
