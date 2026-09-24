@@ -4,7 +4,7 @@
 **Date:** 24 September 2026  
 **Branch:** `program-a-evidence-coverage`  
 **Starting commit:** `3a2adc6b8bc04b3645676bf50ce09d3a8ea27720`  
-**Status:** IMPLEMENTED CANDIDATE — OWNER-LOCAL VALIDATION PENDING
+**Status:** COMPLETE / PASS / CLOSED — OWNER-LOCAL VALIDATED
 
 ## Purpose
 
@@ -139,18 +139,45 @@ The existing UI distinction between verified evidence and score-ready coverage i
 retained. The UI does not turn a partial evidence preview into an authoritative
 Program B score.
 
-## Validation
+## Validation and closure
 
-Run:
+Owner-local consolidated validation was run after the stale K3 BANK regression
+assertion was aligned with the current shared BANK benchmark authority.
+
+Command:
 
 ```bash
 git pull
 bash scripts/b2-validate-r6-execution.sh
 ```
 
-The runner executes B2/B1/Gate-H/G10/K5/UI regressions, prints the canonical
-238-row disposition summary, then runs TypeScript, architecture guard, production
-build and `git diff --check`.
+Final owner-local result: **PASSED**.
+
+The consolidated runner therefore passed:
+
+- B2 execution/replay/disposition tests;
+- B1 readiness-contract regressions;
+- Gate-H and G10 Pharma reference controls;
+- K5 routing/isolation/recommendation-portability regressions;
+- K3 BANK/NBFC closure and portability regressions;
+- shared BANK benchmark-authority regression;
+- shared Research scorecard tests;
+- Research page regressions;
+- canonical 238-row disposition report generation;
+- TypeScript;
+- architecture guard;
+- production build;
+- `git diff --check`.
+
+The first B2 local attempt failed only because the legacy K3 closure test still
+looked for the pre-A2C inline `key(...)` BANK guard. The current implementation
+correctly delegates classification authority to
+`isBankBenchmarkEligibleClassification`. Commit
+`e888d52b26843ee6c6c600f024583dc6d3a35771` updated the stale regression test
+and added the shared authority test to the B2 runner. No production benchmark
+implementation was changed.
+
+B2 is therefore **COMPLETE / PASS / CLOSED**. R6 is closed.
 
 ## Safety
 
@@ -170,7 +197,25 @@ scheduler mutation = NO
 trading = NO
 ```
 
-## Stop boundary
+## Exit and stop boundary
 
-B3 is not authorized by this candidate. B2 remains open until owner-local
-validation passes and B2 is formally closed.
+```text
+B2.1 controlled reference cohort = COMPLETE / PASS
+B2.2 deterministic scoring execution = COMPLETE / PASS
+B2.3 replay validation = COMPLETE / PASS
+B2.4 isolation and fail-closed validation = COMPLETE / PASS
+B2.5 shell-continuity regression = COMPLETE / PASS
+B2.6 Research UI integration = COMPLETE / PASS
+B2.7 controlled portfolio expansion/disposition = COMPLETE / PASS
+
+R6 = COMPLETE / PASS / CLOSED
+Portfolio-wide scoring disposition = COMPLETE
+Portfolio-wide numeric coverage = NOT CLAIMED / INCOMPLETE BY DESIGN
+Role/sector/subprofile isolation = PASS
+Shell continuity = PASS
+Provider calls from R6 computation = 0
+
+Next stage = B3 only, after explicit owner approval
+```
+
+B3 has not started and is not authorized by this B2 closure.
