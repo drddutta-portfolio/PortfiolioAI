@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { buildProgramCR9LiveObservedProjection } from "../features/decision/r9LivePortfolioAdapter"
-import { advanceProgramCR9InMemorySession } from "../features/decision/r9LiveSession"
+import { advanceProgramCR9InMemorySession, type ProgramCR9LiveSessionAdvance } from "../features/decision/r9LiveSession"
 import type { ProgramCR9ObservedState } from "../features/decision/r9ObservedState"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { useResearchCoverage } from "../features/research/useResearchCoverage"
@@ -22,26 +22,27 @@ export function DashboardMeaningfulChanges() {
   const coverage = useResearchCoverage(positions)
   const previousStates = useRef<ReadonlyMap<string, ProgramCR9ObservedState>>(new Map())
   const seenEventIds = useRef<ReadonlySet<string>>(new Set())
+  const [session, setSession] = useState<ProgramCR9LiveSessionAdvance | null>(null)
 
   const projection = useMemo(() => {
     if (!portfolio || coverage.isLoading || coverage.error) return null
     return buildProgramCR9LiveObservedProjection(portfolio, coverage.data)
   }, [coverage.data, coverage.error, coverage.isLoading, portfolio])
 
-  const session = useMemo(() => {
-    if (!projection) return null
-    return advanceProgramCR9InMemorySession(
+  useEffect(() => {
+    if (!projection) {
+      setSession(null)
+      return
+    }
+    const nextSession = advanceProgramCR9InMemorySession(
       previousStates.current,
       projection.rows,
       seenEventIds.current,
     )
+    previousStates.current = nextSession.nextObservedStates
+    seenEventIds.current = nextSession.nextSeenEventIds
+    setSession(nextSession)
   }, [projection])
-
-  useEffect(() => {
-    if (!session) return
-    previousStates.current = session.nextObservedStates
-    seenEventIds.current = session.nextSeenEventIds
-  }, [session])
 
   const model = useMemo(() => {
     if (!portfolio || !session) return null
