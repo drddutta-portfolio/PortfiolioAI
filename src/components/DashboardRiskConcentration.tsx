@@ -3,6 +3,7 @@ import { useMemo } from "react"
 import { Link } from "react-router-dom"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { useResearchCoverage } from "../features/research/useResearchCoverage"
+import { buildProgramCR8LivePortfolioProjection } from "../features/decision/r8LivePortfolioAdapter"
 import type { PortfolioPosition } from "../features/portfolio/types"
 import "./DashboardRiskConcentration.css"
 
@@ -27,6 +28,10 @@ export function DashboardRiskConcentration() {
   const { portfolio, isLoading, error } = usePortfolioView()
   const positions = portfolio?.openPositions ?? []
   const coverage = useResearchCoverage(positions)
+  const r8Projection = useMemo(
+    () => portfolio ? buildProgramCR8LivePortfolioProjection(portfolio, coverage.data) : null,
+    [coverage.data, portfolio],
+  )
 
   const model = useMemo(() => {
     const priced = positions.filter((position) => position.currentValue !== null)
@@ -57,6 +62,19 @@ export function DashboardRiskConcentration() {
       return row && !["FRESH", "NOT_APPLICABLE"].includes(row.overall)
     }).reduce((sum, position) => sum.plus(position.currentValue ?? "0"), new Decimal(0))
     const researchRiskExposure = total.isZero() ? new Decimal(0) : researchRiskValue.div(total).times(100)
+
+    const r8Rows = r8Projection?.rows ?? []
+    const r8RiskEvaluated = r8Rows.filter(
+      (row) => row.presentation.portfolioRisk.coverage === "EVALUATED",
+    )
+    const r8RiskInsufficient = r8Rows.filter(
+      (row) => row.presentation.portfolioRisk.coverage === "INSUFFICIENT",
+    )
+    const r8FitReview = r8Rows.filter((row) => [
+      "CONCENTRATION_REVIEW",
+      "ROLE_COMPATIBILITY_REVIEW",
+      "FIT_TENSION",
+    ].includes(row.assessment.portfolioFit.state))
 
     const items: RiskItem[] = positions.map((position) => {
       const flags: string[] = []
@@ -90,13 +108,17 @@ export function DashboardRiskConcentration() {
       researchRiskExposure,
       sectorRows: sectorRows.slice(0, 6),
       items,
+      r8Rows,
+      r8RiskEvaluated,
+      r8RiskInsufficient,
+      r8FitReview,
     }
-  }, [coverage.data, positions])
+  }, [coverage.data, positions, r8Projection?.rows])
 
   if (isLoading || error || !portfolio) return null
 
   return <section className="dashboard-risk" aria-label="Portfolio risk and concentration">
-    <div className="dashboard-risk-heading"><div><p className="eyebrow">Portfolio risk & concentration</p><h2>Where is portfolio risk concentrated?</h2><p>Read-only view separating true portfolio concentration from market-data, classification and research-evidence risk.</p></div><Link to="/app/holdings">Open holdings →</Link></div>
+    <div className="dashboard-risk-heading"><div><p className="eyebrow">Portfolio risk & concentration</p><h2>Where is portfolio risk concentrated?</h2><p>Read-only view separating descriptive concentration/data diagnostics from canonical on-demand R8 Portfolio Fit and Portfolio Risk states.</p></div><Link to="/app/holdings">Open holdings →</Link></div>
 
     {coverage.error ? <div className="dashboard-risk-notice">Research-risk exposure could not be fully assessed: {coverage.error}</div> : null}
 
@@ -106,6 +128,8 @@ export function DashboardRiskConcentration() {
       <article className={model.sectorCoverage.lt(80) ? "warning" : ""}><span>Sector classification coverage</span><strong>{pct(model.sectorCoverage)}</strong><small>{model.largestSector ? `Largest known sector: ${model.largestSector.name} at ${pct(model.largestSector.weight)}` : `${pct(model.unknownSectorExposure)} of priced capital lacks sector classification`}</small></article>
       <article className={model.staleExposure.gt(0) ? "warning" : ""}><span>Stale market-data exposure</span><strong>{pct(model.staleExposure)}</strong><small>Priced capital whose current-value evidence is stale</small></article>
       <article className={model.researchRiskExposure.gte(25) ? "critical" : model.researchRiskExposure.gt(0) ? "warning" : ""}><span>Research-evidence risk</span><strong>{coverage.isLoading ? "…" : pct(model.researchRiskExposure)}</strong><small>Priced capital with non-fresh applicable research coverage</small></article>
+      <article className={model.r8FitReview.length ? "warning" : ""}><span>Canonical R8 Portfolio Fit review</span><strong>{model.r8FitReview.length}</strong><small>Owner-limit / owner-role-relative review states only; no machine target weight</small></article>
+      <article className={model.r8RiskEvaluated.length ? "" : "warning"}><span>Canonical R8 Portfolio Risk evaluated</span><strong>{model.r8RiskEvaluated.length}/{model.r8Rows.length}</strong><small>{model.r8RiskInsufficient.length} insufficient due to absent canonical risk magnitude evidence</small></article>
     </div>
 
     <div className="dashboard-risk-grid">
@@ -115,8 +139,9 @@ export function DashboardRiskConcentration() {
       </section>
 
       <section className="dashboard-risk-queue">
-        <div className="dashboard-risk-subheading"><div><span>Risk attention queue</span><strong>{model.items.length ? `${model.items.length} highest-priority holdings` : "No surfaced risk flags"}</strong></div><Link to="/app/research">Research →</Link></div>
-        {model.items.length ? <div className="dashboard-risk-list">{model.items.map((item) => <article key={item.position.securityId} className={`tone-${item.tone}`}><i/><div><Link to={`/app/research/${item.position.securityId}`}>{item.position.symbol}</Link><small>{item.position.company}</small></div><div><strong>{item.flags[0]}</strong><p>{item.flags.slice(1).join(" · ") || "Single surfaced risk condition"}</p></div><div><b>{item.position.portfolioWeightPercent ? pct(d(item.position.portfolioWeightPercent), 2) : "—"}</b><small>portfolio weight</small></div></article>)}</div> : <div className="dashboard-risk-empty">No concentration, price-freshness, research-coverage or sizing-limit flags are currently surfaced.</div>}
+        <div className="dashboard-risk-subheading"><div><span>Descriptive data &amp; concentration queue</span><strong>{model.items.length ? `${model.items.length} highest-priority diagnostics` : "No surfaced diagnostics"}</strong></div><Link to="/app/research">Research →</Link></div>
+        <div className="dashboard-risk-notice">This queue is descriptive and is not the canonical R8 Portfolio Risk engine. Formal R8 states are shown in the summary above.</div>
+        {model.items.length ? <div className="dashboard-risk-list">{model.items.map((item) => <article key={item.position.securityId} className={`tone-${item.tone}`}><i/><div><Link to={`/app/research/${item.position.securityId}`}>{item.position.symbol}</Link><small>{item.position.company}</small></div><div><strong>{item.flags[0]}</strong><p>{item.flags.slice(1).join(" · ") || "Single surfaced diagnostic condition"}</p></div><div><b>{item.position.portfolioWeightPercent ? pct(d(item.position.portfolioWeightPercent), 2) : "—"}</b><small>portfolio weight</small></div></article>)}</div> : <div className="dashboard-risk-empty">No concentration, price-freshness, research-coverage or owner-limit diagnostics are currently surfaced.</div>}
       </section>
     </div>
   </section>
