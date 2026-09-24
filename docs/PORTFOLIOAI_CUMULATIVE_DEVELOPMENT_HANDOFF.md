@@ -5037,3 +5037,62 @@ Production operational: NO
 
 **STOP BOUNDARY:** Program B is not formally closed until this final owner-local
 runner passes. No next program is authorized.
+
+---
+
+## Program B · B-FINAL validation PASS / formal closure deferred by owner — 24 September 2026
+
+The owner-local final Program B runner completed successfully.
+
+Observed final terminal state:
+
+```text
+overallPass = true
+Program B repository safety guard = PASS
+TypeScript = PASS
+architecture guard = PASS
+production build = PASS
+
+B-FINAL CANDIDATE VALIDATION PASS
+Program B closure audit: PASS
+Provider calls from Program B compute paths: 0
+AI numeric decision calls: 0
+Owner settings mutation: 0
+Production mutation/deployment/merge/scheduler/trading authorization: NONE
+Pipeline state: VALIDATED / APPROVED LOCAL-CANDIDATE / FAIL-CLOSED WHERE INCOMPLETE
+Production operational: NO
+```
+
+This means all B-FINAL validation criteria passed, including the cross-pipeline
+audit, repository-safety allowlist, R6/R7 replay/lineage checks, 238-row
+disposition completeness, Pharma dual-layer protections, provider-free compute,
+AI-free numeric decisions and owner-authority preservation.
+
+The owner then explicitly instructed:
+
+```text
+Do not close Program B now.
+```
+
+Accordingly the authoritative state is:
+
+```text
+B0 = COMPLETE / PASS / CLOSED
+B1 = COMPLETE / PASS / CLOSED
+B2 = COMPLETE / PASS / CLOSED
+R6 = COMPLETE / PASS / CLOSED
+B3 = COMPLETE / PASS / CLOSED
+B4 = COMPLETE / PASS / CLOSED
+R7 = COMPLETE / PASS / CLOSED
+
+B-FINAL validation = PASS
+B-FINAL formal closure = DEFERRED BY OWNER
+Program B formal closure = DEFERRED BY OWNER
+Program B = VALIDATED / OPEN
+Next program = NOT AUTHORIZED
+```
+
+Do not describe Program B as formally closed until the owner explicitly authorizes
+closure. Do not describe the pipeline as production operational. No merge,
+deployment, production reconciliation, scheduler activation or trading action was
+performed by this validation.
