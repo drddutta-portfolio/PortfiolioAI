@@ -4,7 +4,7 @@
 **Date:** 24 September 2026  
 **Branch:** `program-a-evidence-coverage`  
 **Starting commit:** `820d0b1d5e378b18b64e18f8c12d5c1abddae0c2`  
-**Status:** IMPLEMENTED CANDIDATE — OWNER-LOCAL VALIDATION PENDING
+**Status:** COMPLETE / PASS / CLOSED — OWNER-LOCAL VALIDATED
 
 ## 1. Purpose
 
@@ -253,27 +253,42 @@ B3 explicitly does not inherit as authority:
 Those artifacts remain useful historical/software evidence but require separate
 Program B authority before R7 can consume them.
 
-## 10. Validation
+## 10. Validation and closure
 
-Run locally:
+Owner-local consolidated validation was rerun after strengthening the runner to
+include the underlying Pharma dual-layer contract regressions.
+
+Command:
 
 ```bash
 git pull
 bash scripts/b3-validate-r7-contract.sh
 ```
 
-The runner validates:
+Final owner-local result: **PASS**.
 
-- B3 recommendation/sizing contract;
-- Gate I recommendation authority/policy safety;
-- K5 recommendation portability;
-- sector recommendation fail-closed regressions;
-- D35B sizing software regressions;
-- owner decision-control regressions;
-- TypeScript;
-- architecture guard;
-- production build;
-- `git diff --check`.
+Observed validation result:
+- 15 test files passed;
+- 109 tests passed;
+- TypeScript passed;
+- architecture guard passed;
+- production build passed;
+- `git diff --check` passed.
+
+The strengthened runner explicitly included:
+
+- `pharmaSubprofileAssignment.test.ts`;
+- `pharmaSubprofileContracts.test.ts`;
+- `pharmaG6SubprofileCurveApplicability.test.ts`;
+
+in addition to the B3 R7 contract, R6 regressions, Gate I recommendation safety,
+K5 recommendation portability, sector recommendation fail-closed tests, D35B
+sizing software regressions and owner decision-control regressions.
+
+The Vite chunk-size warning is informational only and did not fail the production
+build.
+
+B3 is therefore **COMPLETE / PASS / CLOSED**.
 
 ## 11. Safety boundary
 
@@ -295,10 +310,21 @@ scheduler mutation = NO
 trading = NO
 ```
 
-## 12. Stop boundary
+## 12. Exit and stop boundary
 
-B4 is not authorized by this candidate.
+```text
+B3.1 recommendation-readiness gate = COMPLETE / PASS / CLOSED
+B3.2 Gate I safety inheritance = COMPLETE / PASS / CLOSED
+B3.3 recommendation policy authority = COMPLETE / PASS / CLOSED
+B3.4 Gate K portability boundary = COMPLETE / PASS / CLOSED
+B3.5 recommendation lineage = COMPLETE / PASS / CLOSED
+B3.6 sizing readiness / anti-fallback = COMPLETE / PASS / CLOSED
+B3.7 owner-authority preservation = COMPLETE / PASS / CLOSED
+Pharma dual-layer parent + Primary subgroup invariant = COMPLETE / PASS / CLOSED
 
-B3 remains open until owner-local validation passes and the recommendation,
-lineage, sizing, anti-fallback, owner-authority and portability contracts are
-approved together.
+Program B · B3 = COMPLETE / PASS / CLOSED
+R7 Checkpoint A = CLOSED
+Next stage = B4 only, after explicit owner approval
+```
+
+B4 has not started and is not authorized by this B3 closure.
