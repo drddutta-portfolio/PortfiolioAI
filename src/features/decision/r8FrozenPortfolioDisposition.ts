@@ -45,6 +45,9 @@ export function buildProgramCR8FrozenPortfolioDisposition(): ProgramCR8FrozenPor
   if (r6.totalHoldings !== r7.totalHoldings) {
     throw new Error("Program C R8 frozen universe requires matching R6/R7 holding counts.")
   }
+  if (r7.sizingReady !== 0) {
+    throw new Error("Program C C2 refuses sizing-ready upstream state because numeric sizing authority is not approved.")
+  }
 
   const rows = r6.rows.map((row): ProgramCR8FrozenPortfolioDispositionRow => {
     const recommendation = r7BySymbol.get(row.symbol)
