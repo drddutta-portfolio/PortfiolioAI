@@ -5845,3 +5845,312 @@ Scheduler/trading = NOT AUTHORIZED
 
 Explicit owner approval is required before any C1 contract/architecture work.
 
+
+
+---
+
+## Program C · C1 R8 Contract & Architecture — implementation complete / executable validation pending — 24 September 2026
+
+The owner explicitly authorized C1 after C0.
+
+C1 was kept strictly to R8 Checkpoint A. No R8 evaluator, portfolio-wide R8
+execution, UI integration, R9, R10 or later-program work was authorized or
+performed.
+
+### Branch and start state
+
+```text
+repository = drddutta-portfolio/PortfiolioAI
+branch = program-c-portfolio-decision-engines
+C1 starting HEAD = 497006335d4648c7f425691fe8598f9b170ddcd3
+C1 source-contract review HEAD = c2b97b49d2cb962daae4e4e4517d929486357c95
+C1 architecture document HEAD before this handoff = 01a36e1f87f0ecfb7df8e131e99ccb5bec58bf75
+```
+
+### C1 artifacts
+
+Added:
+
+```text
+src/features/decision/r8CoreHealthContract.ts
+src/features/decision/r8PortfolioFitContract.ts
+src/features/decision/r8PortfolioRiskContract.ts
+src/features/decision/r8ExitIntelligenceContract.ts
+src/features/decision/r8PortfolioContext.ts
+src/features/decision/r8DependencyMatrix.ts
+src/features/decision/r8PortfolioDecisionContract.ts
+src/features/decision/r8AuthorityRegistry.ts
+src/features/decision/r8ContractArchitecture.test.ts
+
+docs/PortfolioAI_PROGRAM_C_C1_R8_CONTRACT_ARCHITECTURE.md
+```
+
+No Program B source file was modified.
+
+### Frozen C1 contract versions
+
+```text
+PROGRAM_C_R8_CORE_HEALTH_V1
+PROGRAM_C_R8_PORTFOLIO_FIT_V1
+PROGRAM_C_R8_PORTFOLIO_RISK_V1
+PROGRAM_C_R8_EXIT_INTELLIGENCE_V1
+PROGRAM_C_R8_PORTFOLIO_CONTEXT_V1
+PROGRAM_C_R8_DEPENDENCY_MATRIX_V1
+PROGRAM_C_R8_DECISION_CONTRACT_V1
+PROGRAM_C_R8_AUTHORITY_REGISTRY_V1
+PROGRAM_C_VALIDATION_UNIVERSE_V1
+```
+
+### Frozen R8 state vocabularies
+
+Core Health:
+
+```text
+CORE_HEALTHY
+CORE_WATCH
+CORE_AT_RISK
+CORE_DEMOTION_REVIEW
+INSUFFICIENT_EVIDENCE
+REVIEW_REQUIRED
+BLOCKED_PREREQUISITE
+NOT_APPLICABLE
+```
+
+Portfolio Fit:
+
+```text
+FIT_SUPPORTED
+FIT_NEUTRAL
+FIT_TENSION
+CONCENTRATION_REVIEW
+ROLE_COMPATIBILITY_REVIEW
+INSUFFICIENT_EVIDENCE
+REVIEW_REQUIRED
+BLOCKED_PREREQUISITE
+NOT_APPLICABLE
+```
+
+Portfolio Risk:
+
+```text
+RISK_ACCEPTABLE
+RISK_MONITOR
+RISK_ELEVATED
+RISK_CRITICAL_REVIEW
+INSUFFICIENT_EVIDENCE
+REVIEW_REQUIRED
+BLOCKED_PREREQUISITE
+NOT_APPLICABLE
+```
+
+Exit Intelligence:
+
+```text
+NO_EXIT_SIGNAL
+EXIT_MONITOR
+EXIT_REVIEW_REQUIRED
+EXIT_RISK_ELEVATED
+HARD_EXIT_REVIEW
+INSUFFICIENT_EVIDENCE
+REVIEW_REQUIRED
+BLOCKED_PREREQUISITE
+NOT_APPLICABLE
+```
+
+### Mandatory R8 dependency matrix frozen
+
+`PROGRAM_C_R8_DEPENDENCY_MATRIX_V1` contains exactly:
+
+```text
+CORE_HEALTH
+PORTFOLIO_FIT
+PORTFOLIO_RISK
+EXIT_INTELLIGENCE
+```
+
+Each entry declares mandatory upstream states, optional upstream states,
+portfolio-context requirements, market/risk evidence requirements, owner-context
+requirements, applicability rules, blockers, R7 dependency and prohibited
+fallbacks.
+
+Frozen R7 dependency:
+
+```text
+CORE_HEALTH       = OPTIONAL_CONTEXT
+PORTFOLIO_FIT     = NOT_REQUIRED
+PORTFOLIO_RISK    = NOT_REQUIRED
+EXIT_INTELLIGENCE = OPTIONAL_CONTEXT
+```
+
+R7 is therefore not a universal R8 prerequisite.
+
+### R8 context and lineage contract
+
+The C1 snapshot contract requires semantic holdings/snapshot fingerprints and
+does not allow timestamp-only identity.
+
+Financial values are carried as exact decimal strings at the contract boundary.
+
+The composed R8 contract preserves exact upstream identity where available:
+
+```text
+R6 scoreRunId
+R7 recommendationRunId
+research profile
+methodology id/version
+methodology role
+assignment id/version
+evidence snapshot id
+portfolio context snapshot id
+R8 deterministic run id
+```
+
+No downstream identity reconstruction is authorized.
+
+### Owner and sizing boundary
+
+Owner-controlled fields remain:
+
+```text
+portfolioRole
+targetPrice
+stopLossPrice
+targetWeight
+minimumAllocation
+maximumAllocation
+investmentHorizon
+freezeMonitoringPreference
+```
+
+Explicitly prohibited outputs include:
+
+```text
+machineGeneratedTargetWeight
+machineGeneratedMinimumWeight
+machineGeneratedMaximumWeight
+exactAddPercentage
+exactTrimPercentage
+orderQuantity
+orderInstruction
+opaquePortfolioDecisionScore
+```
+
+Portfolio Fit is not a sizing engine.
+
+### Risk / Exit safety
+
+```text
+missing risk evidence -> never RISK_ACCEPTABLE
+price weakness alone -> never exit authority
+valuation alone -> never exit authority
+overweight alone -> never exit authority
+HARD_EXIT_REVIEW -> advisory only
+owner stop loss -> context only, not automatic trade authority
+```
+
+### R8 authority registry
+
+All four R8 authorities are registered with:
+
+```text
+executionAuthority = C2_NOT_AUTHORIZED
+numericSizingAuthority = NONE
+providerAuthority = NONE
+aiDecisionAuthority = NONE
+persistenceAuthority = NONE
+ownerMutationAuthority = NONE
+```
+
+### Static C1 architecture review
+
+Diff review from the C1 start shows only C1 decision-contract/test files plus the
+C1 documentation artifact.
+
+No migration, Supabase function, provider adapter, persistence repository,
+workflow, scheduler, trading path or consumer UI file was changed.
+
+Static import review found no:
+
+- Angel One import;
+- Trendlyne import;
+- OpenAI import;
+- Supabase import;
+- network fetch import;
+- persistence repository import;
+- scheduler import;
+- brokerage/order-execution import.
+
+The composed R8 contract imports Program B R6/R7 types only and does not
+reimplement R6/R7 logic.
+
+### Executable test artifact and validation state
+
+Added:
+
+```text
+src/features/decision/r8ContractArchitecture.test.ts
+```
+
+It covers state vocabularies, dependency isolation, R7 independence, Core role
+applicability, owner authority, no-sizing boundaries, missing-risk behavior,
+Exit advisory behavior, cross-sector fallback prohibition, deterministic
+identities, fail-closed identity validation, authority closure and C1 safety.
+
+No GitHub Actions workflow run exists for the C1 commits. The current chat
+execution environment also cannot clone GitHub, so the repository Vitest,
+project TypeScript, architecture guard and scoped ESLint checks have not been
+represented as executed passes.
+
+Required owner-local validation:
+
+```bash
+git fetch origin
+git switch program-c-portfolio-decision-engines
+git pull --ff-only
+
+npm test -- src/features/decision/r8ContractArchitecture.test.ts
+npm run typecheck
+npm run check:architecture
+npm exec eslint -- src/features/decision/*.ts
+git diff --check 497006335d4648c7f425691fe8598f9b170ddcd3..HEAD
+```
+
+### C1 safety result
+
+```text
+R8 execution = 0
+portfolio-wide R8 disposition = 0
+provider calls = 0
+AI deterministic decisions = 0
+numeric sizing authority = NO
+opaque master score = NO
+owner-setting mutation = 0
+persistence = 0
+migration = 0
+production mutation = 0
+merge/deployment = 0
+scheduler mutation = 0
+trading = 0
+```
+
+### Current checkpoint state
+
+```text
+C1 implementation = COMPLETE
+C1 static architecture review = PASS
+C1 executable validation = PENDING
+C1 formal closure = PENDING
+
+C2 / R8 execution = NOT AUTHORIZED
+C3 / R9 = NOT AUTHORIZED
+C4 / R10 = NOT AUTHORIZED
+C-FINAL = NOT AUTHORIZED
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+Stop here. After the owner-local C1 validation is clean, C1 may be formally
+closed only with owner acceptance, and C2 requires explicit separate
+authorization.
