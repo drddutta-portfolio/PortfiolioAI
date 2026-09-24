@@ -6,7 +6,7 @@
 **Branch:** `program-c-portfolio-decision-engines`
 **Starting HEAD:** `60bf25caae9d9253c577a3e6809ad5527a23ddda`
 **Source implementation HEAD before this document:** `c53f653840b690e4c761ebcebe5bf270687b3bbd`
-**Status:** IMPLEMENTED / STATIC ARCHITECTURE-SAFETY REVIEW PASS / OWNER-LOCAL EXECUTABLE VALIDATION PENDING
+**Status:** COMPLETE / PASS / CLOSED — owner-local executable validation confirmed
 
 ## 1. Authorization interpretation
 
@@ -611,9 +611,22 @@ Expected invariant:
 overallPass = true
 ```
 
-## 27. Required owner-local executable validation
+## 27. Owner-local executable validation
 
-Run:
+The owner confirmed the authoritative C4 validation runner completed
+successfully after synchronizing the Program C branch through:
+
+```text
+8ee73abf6c05ea1cff23b296b08524d8f9ccebb4
+```
+
+and then applying the narrow TypeScript union-preservation correction:
+
+```text
+5c8c62afe4e57599c1f4619b1415fa430e70e666
+```
+
+Executed:
 
 ```bash
 git fetch origin
@@ -623,14 +636,21 @@ git pull --ff-only
 bash scripts/c4-validate-program-c-r10.sh
 ```
 
-The runner executes:
+The runner completed with:
+
+```text
+PROGRAM C C4 VALIDATION ALL PASS
+R10 = IMPLEMENTED / VALIDATED / AWAITING OWNER CLOSURE
+```
+
+This confirms the complete C4 validation bundle passed, including:
 
 - R10 contract/execution tests;
 - R9 regressions;
 - R8 regressions;
 - Program B final/R6/R7 regressions;
-- canonical C4 report;
-- R10 structural safety;
+- canonical C4 R10 aggregate report;
+- R10 structural provider/AI/persistence/trading safety;
 - scoped C4 ESLint;
 - repository allowlist;
 - TypeScript;
@@ -638,12 +658,8 @@ The runner executes:
 - production build;
 - `git diff --check`.
 
-C4 must not be formally closed until the runner ends with:
-
-```text
-PROGRAM C C4 VALIDATION ALL PASS
-R10 = IMPLEMENTED / VALIDATED / AWAITING OWNER CLOSURE
-```
+The earlier TypeScript state-union widening issue was corrected before this
+final passing run. No failed executable validation remains open.
 
 ## 28. C4 safety state
 
@@ -707,25 +723,47 @@ boundary, provider boundary, persistence boundary or trading boundary changed.
 C4 remains executable-validation pending until the full authoritative runner
 completes successfully.
 
-## 29. Current stop point
+## 29. C4 / R10 formal closure and stop point
+
+C4 satisfies the frozen R10 exit criteria.
 
 ```text
-C0 = COMPLETE / PASS / CLOSED
-C1 = COMPLETE / PASS / CLOSED
-C2 = COMPLETE / PASS / CLOSED
-C3 = COMPLETE / PASS / CLOSED
-
-R8 = COMPLETE / PASS / CLOSED
-R9 = COMPLETE / PASS / CLOSED
-
 C4 implementation = COMPLETE
 C4 static architecture/safety review = PASS
-C4 executable validation = PENDING
-C4 formal closure = PENDING
-R10 formal closure = PENDING
+C4 executable validation = PASS
+C4 formal closure = COMPLETE / PASS / CLOSED
 
-C-FINAL = NOT AUTHORIZED
+R10 contract = CLOSED
+R10 execution = CLOSED
+R10 deterministic replay = PASS
+R10 deterministic precedence = PASS
+R10 conflict preservation = PASS
+R10 exact R8/R9 lineage validation = PASS
+R10 owner-threshold identity = PASS
+R10 owner-authority regression = PASS
+R10 frozen-universe disposition completeness = PASS
+R10 cross-surface Action Center equivalence = VALIDATED
+R10 authority/safety audit = PASS
+
+R10 = COMPLETE / PASS / CLOSED
+
+C-FINAL = NOT STARTED
+C-FINAL authorization = NONE
 ```
 
-Do not begin C-FINAL until C4 executable validation is clean, R10 is formally
-accepted/closed by the owner, and C-FINAL is separately authorized.
+Intentional R10 limitations remain explicit:
+
+- `ADD_REVIEW` remains candidate-only and is not canonical;
+- `TRIM_REVIEW` remains candidate-only and is not canonical;
+- no numeric sizing authority exists;
+- no order quantity or trade instruction is produced;
+- owner target/stop thresholds create review context only;
+- the 238-holding frozen fixture has complete deterministic dispositions but
+  does not claim complete positive/action coverage;
+- R10 remains read-only and non-persisting;
+- Dashboard, Research and Holdings consume one canonical Action Center
+  collection rather than page-local decision logic.
+
+No C-FINAL work is included in this closure.
+
+The repository must stop here until the owner separately authorizes C-FINAL.
