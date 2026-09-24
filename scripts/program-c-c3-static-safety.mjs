@@ -11,6 +11,7 @@ const computeFiles = [
   "src/features/decision/r9FrozenPortfolioDisposition.ts",
   "src/features/decision/r9LivePortfolioAdapter.ts",
   "src/features/decision/r9LiveSession.ts",
+  "src/features/decision/r9LiveSessionStore.ts",
   "src/features/decision/r9ReferenceValidation.ts",
   "src/features/decision/r9C3Validation.ts",
 ]
