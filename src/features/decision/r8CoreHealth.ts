@@ -86,6 +86,18 @@ export function evaluateProgramCR8CoreHealth(
   input: ProgramCR8CoreHealthEvaluationInput,
 ): ProgramCR8CoreHealthResult {
   const ownerRole = input.ownerRole?.trim() || null
+  if (!ownerRole) {
+    return {
+      version: PROGRAM_C_R8_CORE_HEALTH_CONTRACT_VERSION,
+      state: "BLOCKED_PREREQUISITE",
+      applicable: true,
+      ownerRole: null,
+      sourceScoreRunId: input.r6.scoreRunId,
+      sourceRecommendationRunId: input.r7?.recommendationRunId ?? null,
+      blockers: ["OWNER_ROLE_CONTEXT_MISSING"],
+      reasonCodes: ["OWNER_ROLE_CONTEXT_MISSING"],
+    }
+  }
   if (ownerRole !== "CORE") {
     return {
       version: PROGRAM_C_R8_CORE_HEALTH_CONTRACT_VERSION,
@@ -95,7 +107,7 @@ export function evaluateProgramCR8CoreHealth(
       sourceScoreRunId: input.r6.scoreRunId,
       sourceRecommendationRunId: input.r7?.recommendationRunId ?? null,
       blockers: [],
-      reasonCodes: [ownerRole ? "OWNER_ROLE_NOT_CORE" : "OWNER_ROLE_MISSING_NON_CORE_APPLICABILITY"],
+      reasonCodes: ["OWNER_ROLE_NOT_CORE"],
     }
   }
 
