@@ -1,4 +1,5 @@
 import Decimal from "decimal.js"
+import { programCR8SemanticFingerprint } from "./r8Determinism"
 import { programCR10IntegratedAttentionId } from "./r10Identity"
 import { selectProgramCR10State } from "./r10PrecedenceRegistry"
 import {
@@ -297,6 +298,10 @@ export function evaluateProgramCR10Attention(
   const signals = deriveSignals(input, conflicts)
   const selected = selectProgramCR10State(signals.states)
 
+  const ownerThresholdContextId = programCR8SemanticFingerprint(
+    "PROGRAM_C_R10_OWNER_THRESHOLDS",
+    input.ownerThresholds,
+  )
   const integratedAttentionId = programCR10IntegratedAttentionId({
     securityId: input.securityId,
     portfolioId: input.portfolioId,
@@ -304,6 +309,7 @@ export function evaluateProgramCR10Attention(
     r9CurrentObservedStateId: input.r9.currentObservedStateId,
     r9ChangeEventId: input.r9.event?.eventId ?? null,
     ownerContextVersion: input.ownerContext.ownerContextVersion,
+    ownerThresholdContextId,
   })
 
   return {
@@ -337,6 +343,7 @@ export function evaluateProgramCR10Attention(
       r9ChangeEventId: input.r9.event?.eventId ?? null,
       r9RuleVersion: input.r9.event?.ruleVersion ?? null,
       r9OwnerContextVersion: input.r9OwnerContextVersion,
+      ownerThresholdContextId,
     },
     ownerContext: input.ownerContext,
     asOf: input.asOf,
