@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { buildProgramCR8C2Validation } from "./r8C2Validation"
+import { PROGRAM_C_R9_AUTHORITY } from "./r9AuthorityRegistry"
 import { programCR9ChangeEventId } from "./r9EventIdentity"
 import { buildProgramCR9FrozenPortfolioDisposition } from "./r9FrozenPortfolioDisposition"
 import {
@@ -16,6 +17,7 @@ import {
   PROGRAM_C_R9_NUMERIC_THRESHOLD_AUTHORITY,
 } from "./r9MeaningfulChangeRegistry"
 import { buildProgramCR9C3Validation } from "./r9C3Validation"
+import { advanceProgramCR9InMemorySession } from "./r9LiveSession"
 import { buildProgramCR9ReferenceValidation } from "./r9ReferenceValidation"
 
 describe("Program C C3 R9 meaningful change", () => {
@@ -140,6 +142,53 @@ describe("Program C C3 R9 meaningful change", () => {
       && row.transitionState === "FIRST_OBSERVATION"
       && row.changeEventId === null
     ))).toBe(true)
+  })
+
+  it("preserves the last valid in-memory baseline when an observation is out of order", () => {
+    const validation = buildProgramCR9ReferenceValidation()
+    const stale = validation.observations.staleObserved
+    const fresh = validation.observations.freshObserved
+    const previous = new Map([[stale.securityId, stale]])
+    const session = advanceProgramCR9InMemorySession(
+      previous,
+      [{
+        securityId: fresh.securityId,
+        symbol: "TORNTPHARM",
+        company: "Torrent Pharmaceuticals",
+        observedState: fresh,
+        baseline: validation.firstObservation,
+        presentation: {
+          transitionState: "FIRST_OBSERVATION",
+          label: "First Observation",
+          tone: "neutral",
+          baselineLabel: "Baseline Established",
+          meaningfulChangeCount: 0,
+          rawChangeCount: 0,
+          eventId: null,
+          changeLabels: [],
+        },
+      }],
+      new Set(),
+    )
+    expect(session.comparisons[0]?.comparison.transitionState).toBe("OUT_OF_ORDER")
+    expect(session.nextObservedStates.get(stale.securityId)?.observedStateId)
+      .toBe(stale.observedStateId)
+  })
+
+  it("freezes R9 authority as read-only deterministic materiality only", () => {
+    expect(PROGRAM_C_R9_AUTHORITY).toMatchObject({
+      executionAuthority: "C3_OWNER_AUTHORIZED_READ_ONLY",
+      materialityAuthority: "VERSIONED_DETERMINISTIC_RULES_ONLY",
+      numericThresholdAuthority: "NONE",
+      aiDecisionAuthority: "NONE",
+      providerAuthority: "NONE",
+      persistenceAuthority: "NONE",
+      durableNotificationStateAuthority: "NONE",
+      ownerMutationAuthority: "NONE",
+      sizingAuthority: "NONE",
+      schedulerAuthority: "NONE",
+      tradingAuthority: "NONE",
+    })
   })
 
   it("retains semantic idempotency but does not claim durable notification state", () => {
