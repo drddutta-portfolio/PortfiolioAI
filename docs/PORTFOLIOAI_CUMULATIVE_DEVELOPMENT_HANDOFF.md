@@ -4838,3 +4838,202 @@ Safety state:
 
 **STOP BOUNDARY:** B-FINAL has not started and is not authorized by this closure.
 Next stage is **B-FINAL — Program B Closure**, only after explicit owner approval.
+
+
+---
+
+## Program B · B-FINAL cross-pipeline closure candidate — 24 September 2026
+
+**Checkpoint:** B-FINAL — Program B cross-pipeline closure  
+**Owner authorization:** APPROVED TO BEGIN B-FINAL  
+**Starting commit:** `5739c9030a9952fffc8f7be1f3afc9462c48ca74`  
+**Implementation commits:**
+- `8c33a6e1f03166a13db1512d0a1ebf77f8900108` — B-FINAL audit/test/report/runner/closure document;
+- `6d83dda69740d10dca0779bab1b987b601cb81a5` — static import correction in the final audit layer.
+
+**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL FINAL VALIDATION PENDING**
+
+### Entry state
+
+Repository evidence entering B-FINAL confirms:
+
+```text
+B0 = COMPLETE / PASS / CLOSED
+B1 = COMPLETE / PASS / CLOSED
+B2 = COMPLETE / PASS / CLOSED
+R6 = COMPLETE / PASS / CLOSED
+B3 = COMPLETE / PASS / CLOSED
+B4 = COMPLETE / PASS / CLOSED
+R7 = COMPLETE / PASS / CLOSED
+```
+
+B-FINAL is a regression/audit only. It introduces no new methodology, provider
+workflow, recommendation policy, sizing policy or production action.
+
+### Eleven-point Program B closure audit
+
+The new `PROGRAM_B_FINAL_AUDIT_V1` validates simultaneously:
+
+1. R6 -> R7 traceability for every recommendation-ready / sizing-ready result;
+2. security + role + assignment-version lineage;
+3. explicit R6 and R7 disposition for all 238 frozen K5 equities;
+4. deterministic R6 and R7 replay;
+5. cross-sector/subprofile/role anti-fallback contracts;
+6. Gate H-K shell continuity through inherited regression suites;
+7. B1-B4 stop-condition boundaries;
+8. zero provider calls from Program B compute paths;
+9. zero OpenAI numeric-decision calls;
+10. zero owner-settings mutation;
+11. zero Program B persistence/production/deployment/merge/scheduler/trading authority.
+
+### R6 -> R7 lineage scope
+
+Current score-ready/recommendation-ready reference lineage remains:
+
+```text
+TORNTPHARM
+  PHARMA_V1 + DOMESTIC_FORMULATIONS
+  assignment version 1
+  R6 score 75.1575
+  -> R7 SATELLITE_CANDIDATE
+
+ALIVUS
+  PHARMA_V1 + API_BULK_DRUGS
+  assignment version 1
+  R6 score 76.7225
+  -> R7 SATELLITE_CANDIDATE
+```
+
+For every recommendation-ready row the final audit requires:
+- exact source R6 score;
+- exact source-score run identity;
+- same parent profile / Primary methodology role;
+- assignment version;
+- recommendation-run identity containing the exact source-score run;
+- downstream sizing lineage carrying the same score/recommendation identities.
+
+No sizing-ready reference currently exists because no Program B profile/role
+numeric sizing policy is approved.
+
+### Pharma invariant retained
+
+B-FINAL continues to enforce:
+
+```text
+PHARMA_V1 common parent research
+        +
+one reviewed Primary Pharma subprofile
+        ↓
+effective Pharma research contract
+```
+
+with exactly five canonical Primaries:
+
+```text
+API_BULK_DRUGS
+DOMESTIC_FORMULATIONS
+GLOBAL_GENERICS
+BIOPHARMA_BIOSIMILARS
+CDMO_CRAMS
+```
+
+The parent is not replaced by the subgroup. Cross-subprofile/cross-sector sizing
+or recommendation fallback remains prohibited.
+
+### Repository safety audit
+
+A repository compare from B0 closure
+`10c87a5d9a2eb5338db51f3f85e5f5ce1ff9a605`
+through B4 closure
+`5739c9030a9952fffc8f7be1f3afc9462c48ca74`
+found:
+- 23 Program B changed files;
+- 0 `supabase/migrations/*` changes;
+- 0 `supabase/functions/*` changes;
+- 0 deployment/workflow configuration changes.
+
+At B-FINAL start:
+- Program B branch HEAD was
+  `5739c9030a9952fffc8f7be1f3afc9462c48ca74`;
+- `main` was
+  `d0cc52dfcf61fc9a884f139fcc7931b3bd73c57b`;
+- the long-lived Program B branch remained separate/diverged from `main`;
+- no Program B merge was performed.
+
+The B-FINAL local runner adds a strict changed-file allowlist and rejects any
+Program B migration, Edge Function, deployment or workflow surface change.
+
+### Intentional limitations retained
+
+Program B closure must not overstate numeric or production coverage.
+
+The final audit explicitly records:
+
+```text
+PORTFOLIO_WIDE_NUMERIC_SCORING_COVERAGE_NOT_COMPLETE
+PORTFOLIO_WIDE_NUMERIC_RECOMMENDATION_COVERAGE_NOT_COMPLETE
+PROGRAM_B_NUMERIC_SIZING_POLICY_NOT_APPROVED
+FROZEN_PORTFOLIO_SNAPSHOT_IS_2026_09_22_NOT_LIVE_PRODUCTION_STATE
+PROGRAM_B_BRANCH_IS_LOCAL_CANDIDATE_AND_UNMERGED
+PIPELINE_NOT_PRODUCTION_OPERATIONAL
+```
+
+These are valid fail-closed/operational-boundary outcomes and do not prevent
+Program B disposition closure.
+
+### B-FINAL artifacts
+
+Added:
+- `src/features/research/programBFinalClosure.ts`;
+- `src/features/research/programBFinalClosure.test.ts`;
+- `scripts/program-b-final-report.mjs`;
+- `scripts/b-final-validate-program-b.sh`;
+- `docs/PortfolioAI_PROGRAM_B_FINAL_CLOSURE.md`.
+
+Static audit found and corrected one import-only error in the new final audit
+module at commit
+`6d83dda69740d10dca0779bab1b987b601cb81a5`.
+No R6/R7 business behavior changed.
+
+### Owner-local final validation
+
+Run:
+
+```bash
+git pull
+bash scripts/b-final-validate-program-b.sh
+```
+
+The runner executes:
+- B-FINAL audit;
+- R6/R7 regressions;
+- Gate H/G10 reference regressions;
+- Pharma parent + five-subprofile regressions;
+- Gate I recommendation regressions;
+- K5 isolation/routing/portability;
+- K3 BANK/NBFC and shared benchmark authority;
+- D35B sizing software boundary;
+- owner decision controls;
+- shared Research/Pharma UI regressions;
+- canonical final report;
+- strict Program B repository allowlist;
+- TypeScript;
+- architecture guard;
+- production build;
+- `git diff --check`.
+
+Expected terminal closure markers include:
+
+```text
+B-FINAL CANDIDATE VALIDATION PASS
+Program B closure audit: PASS
+Provider calls from Program B compute paths: 0
+AI numeric decision calls: 0
+Owner settings mutation: 0
+Production mutation/deployment/merge/scheduler/trading authorization: NONE
+Pipeline state: VALIDATED / APPROVED LOCAL-CANDIDATE / FAIL-CLOSED WHERE INCOMPLETE
+Production operational: NO
+```
+
+**STOP BOUNDARY:** Program B is not formally closed until this final owner-local
+runner passes. No next program is authorized.
