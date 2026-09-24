@@ -3388,3 +3388,191 @@ Next stage = B1 only, after explicit owner approval
 
 **STOP BOUNDARY:** B1 has not started. No B1 architecture, implementation or
 validation work is authorized by this B0 closure.
+
+
+---
+
+## Program B · B1 R6 contract architecture candidate — 24 September 2026
+
+**Checkpoint:** B1 — R6 Contract & Architecture / Checkpoint A  
+**Owner authorization:** APPROVED TO BEGIN B1  
+**Starting commit:** `10c87a5d9a2eb5338db51f3f85e5f5ce1ff9a605`  
+**Implementation commits:**  
+- `306a4d9ce8de4fb9e6ccdf478767181471b30072` — B1 contract architecture candidate;
+- `b2d37a66380ecf605733dd6f75340002ac97ee80` — strict-TypeScript contract correction.
+
+**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**  
+**B2 status:** **NOT STARTED / NOT AUTHORIZED**
+
+### B1 artifacts added
+
+- `src/features/research/programBR6Contract.ts`
+- `src/features/research/programBR6Contract.test.ts`
+- `docs/PortfolioAI_PROGRAM_B_B1_R6_CONTRACT_ARCHITECTURE.md`
+- `scripts/b1-validate-r6-contract.sh`
+
+No existing scoring formula, provider adapter, database schema, scheduler, recommendation
+engine or sizing engine was modified.
+
+### B1.1 scoring-readiness adapter
+
+The B1 contract now exposes the frozen readiness state set:
+
+```text
+READY
+INSUFFICIENT_EVIDENCE
+STALE_REQUIRED_EVIDENCE
+CONFLICTING_EVIDENCE
+REVIEW_REQUIRED
+METHODOLOGY_NOT_AVAILABLE
+NOT_APPLICABLE
+BLOCKED_PREREQUISITE
+```
+
+Only `READY` returns `canScore = true`.
+
+The adapter evaluates, cache-only:
+
+- security identity;
+- equity/non-equity applicability;
+- canonical classification state/version;
+- methodology resolution/version;
+- assignment requirement/state/version/role;
+- required evidence applicability/state;
+- required market-history state.
+
+Explicit N/A remains distinct from missing evidence.
+
+### B1.2 methodology resolver
+
+B1 deliberately reuses the existing Gate-K authority chain:
+
+```text
+canonical classification
+        ↓
+Gate-K industry-first routing
+        ↓
+SectorEngineRegistry
+        ↓
+profile methodology authority
+```
+
+No second methodology registry was introduced.
+
+The resolver preserves:
+- sector as macro context;
+- industry as minimum micro-methodology selector;
+- basic industry as business-model refinement context;
+- profile/subprofile assignment as downstream role/applicability refinement;
+- `NONE_FAIL_CLOSED` fallback.
+
+Pending/unsupported/unresolved methodology remains
+`METHODOLOGY_NOT_AVAILABLE` or `REVIEW_REQUIRED`; no nearest-sector,
+ticker-specific or `GENERAL_FALLBACK` path exists.
+
+### B1.3 evidence-to-score lineage contract
+
+The future authoritative score contract now requires lineage for:
+
+- security id and as-of date;
+- classification version;
+- assignment id/version and methodology role;
+- methodology id/version;
+- evidence snapshot/evidence ids;
+- evidence as-of dates/freshness;
+- metric values/applicability/component scores/weights;
+- category scores and overall score;
+- readiness/reason codes;
+- calculation version;
+- run id and created timestamp.
+
+B1 does not instantiate or calculate an authoritative numeric score.
+
+The lineage-identity helper includes:
+
+```text
+security
++ methodology role
++ assignment id/version
++ methodology id/version
++ as-of date
++ run id
+```
+
+Therefore `(security_id, role)` is not used as a timeless uniqueness key.
+
+### B1.4 machine-readable blocker/gap contract
+
+Fail-closed readiness may emit structured blockers containing:
+
+- security id;
+- readiness state;
+- blocking domain/metric;
+- required and observed state;
+- reason code;
+- methodology id/role;
+- assignment version;
+- as-of date;
+- descriptive `recommendedNextEvidenceAction`.
+
+The action is descriptive only. Program B contains no dispatch/fetch path.
+
+### Static/repository audit before local validation
+
+Repository diff from B0 closure commit `10c87a5d...` to B1 candidate
+`b2d37a66...` contains exactly four new files and no migration/provider/database
+changes.
+
+A strict-TypeScript review before handoff recording corrected:
+- Gate-K unresolved-state union mapping into the narrower B1 methodology-state
+  contract;
+- non-null indexing required by repository `noUncheckedIndexedAccess`.
+
+Remote branch HEAD after correction:
+`b2d37a66380ecf605733dd6f75340002ac97ee80`.
+
+No GitHub workflow run was reported for the candidate at audit time. Vercel status
+was pending and is not treated as B1 validation evidence.
+
+### Owner-local validation command
+
+After pulling the branch locally:
+
+```bash
+git pull
+bash scripts/b1-validate-r6-contract.sh
+```
+
+The B1 runner executes:
+- focused B1 contract tests;
+- Gate-K registry/isolation/routing/portability regressions;
+- scoring-profile resolution regression;
+- TypeScript;
+- architecture guard;
+- production build;
+- `git diff --check`.
+
+B1 must remain open until this consolidated local validation passes and the owner
+approves all four B1 components together.
+
+### Safety state
+
+```text
+provider calls = 0
+Angel One calls = 0
+Trendlyne calls = 0
+OpenAI decision calls = 0
+numeric scoring executed = NO
+score persistence = NO
+recommendation computation/persistence = NO
+position sizing = NO
+production mutation = NO
+migration = NO
+deployment = NO
+merge = NO
+scheduler mutation = NO
+trading = NO
+```
+
+**Current stop boundary:** B1 candidate implemented; owner-local validation pending.
+Do not begin B2.
