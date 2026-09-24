@@ -3848,3 +3848,64 @@ trading = NO
 
 **Current stop boundary:** B2 candidate implemented; owner-local validation pending.
 Do not begin B3.
+
+
+### B2 owner-local validation attempt 1 — stale K3 BANK regression correction
+
+Owner-local command:
+
+```bash
+git pull
+bash scripts/b2-validate-r6-execution.sh
+```
+
+First B2 validation run result:
+- 14 test files executed;
+- 13 test files passed;
+- 1 test file failed;
+- 88 tests passed;
+- 1 test failed;
+- failure was in
+  `k3BankNbfcClosure.test.ts > makes the NIFTY Bank operational refresh classification-driven rather than HDFCBANK-driven`.
+
+Observed mismatch:
+- the legacy K3 test expected inline expressions:
+  - `key(classification.data.sector) !== "BANKING"`;
+  - `key(classification.data.industry) !== "BANKS"`;
+- the current implementation no longer contains that local `key(...)` guard.
+
+Repository audit confirmed this is a stale regression assertion, not a production
+BANK-routing regression:
+
+- A2C intentionally replaced the inline K3 guard with the shared canonical helper
+  `isBankBenchmarkEligibleClassification`;
+- the current benchmark function still reads
+  `current_security_enrichment_v1(sector,industry)`;
+- it invokes
+  `isBankBenchmarkEligibleClassification(classification.data.sector, classification.data.industry)`;
+- the shared helper approves only:
+  - `Banking / Banks`;
+  - `Banking / Private Sector Bank`;
+- NBFC lending, unsupported Banking industries, non-Banking sectors and missing
+  classification remain fail-closed;
+- HDFCBANK is still not used as a runtime symbol selector.
+
+This A2C correction was already recorded under commits including:
+- `88422d5bc227ff33c3ddd397129904f9f1e6bdf5` — align NIFTY Bank guard with canonical BANK routing;
+- `dbab6db1b5a22829670cfaddee9244e637257152` — remove obsolete local classification key helper.
+
+B2 correction:
+- commit `e888d52b26843ee6c6c600f024583dc6d3a35771`;
+- updated the stale K3 test to assert:
+  - canonical classification lookup;
+  - import/use of the shared BANK benchmark authority;
+  - absence of an HDFCBANK-specific runtime guard;
+- added
+  `supabase/functions/_shared/bank-benchmark-authority.test.ts`
+  to the B2 consolidated runner.
+
+No production benchmark code, provider behavior, methodology authority, score
+logic, database object, migration or safety boundary was changed.
+
+**B2 remains OPEN / OWNER-LOCAL VALIDATION REQUIRED.**
+B3 remains NOT STARTED / NOT AUTHORIZED.
