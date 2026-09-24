@@ -15,7 +15,7 @@ export function HoldingsPage() {
   const { portfolio, error, isLoading } = usePortfolioView()
   const actionCenter = useProgramCR10ActionCenter(portfolio)
   const attentionById = useMemo(
-    () => new Map((actionCenter.data?.view ?? []).map((item) => [item.securityId, item])),
+    () => new Map((actionCenter.data?.view ?? []).map((item) => [item.securityId, item] as const)),
     [actionCenter.data],
   )
   const [view, setView] = useState<View>("OPEN")
