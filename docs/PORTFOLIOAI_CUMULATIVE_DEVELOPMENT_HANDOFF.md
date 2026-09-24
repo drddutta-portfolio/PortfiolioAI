@@ -4464,3 +4464,238 @@ Safety state remained unchanged:
 **STOP BOUNDARY:** B4 has not started and is not authorized by this closure.
 Next stage is **B4 — R7 Execution & Validation / Checkpoint B**, only after
 explicit owner approval.
+
+
+---
+
+## Program B · B4 R7 execution/validation candidate — 24 September 2026
+
+**Checkpoint:** B4 — R7 Execution & Validation / Checkpoint B  
+**Owner authorization:** APPROVED TO BEGIN B4  
+**Starting commit:** `5128b575532f8069693a476019732f0f56622a55`  
+**Implementation commits:**
+- `e6c4707ada231118c3718c9fcbefc8e5ae5e273c` — R7 execution/disposition candidate;
+- `80e3171fa190f080ffaec8c20653bacb6ddf0cbd` — static lineage/typing tightening.
+
+**Current status:** **IMPLEMENTED CANDIDATE / OWNER-LOCAL VALIDATION PENDING**  
+**B-FINAL status:** **NOT STARTED / NOT AUTHORIZED**
+
+### B4.1 controlled R7 reference execution
+
+B4 consumes the closed R6 reference artifacts and executes recommendation logic
+only where B3 established current authority.
+
+Recommendation-ready reference candidates:
+
+```text
+TORNTPHARM
+  PHARMA_V1 + DOMESTIC_FORMULATIONS
+  R6 score = 75.1575
+  Gate I owner-approved policy
+  expected R7 role = SATELLITE_CANDIDATE
+
+ALIVUS
+  PHARMA_V1 + API_BULK_DRUGS
+  R6 score = 76.7225
+  Gate I owner-approved policy
+  expected R7 role = SATELLITE_CANDIDATE
+```
+
+The Pharma dual-layer rule remains mandatory:
+- common `PHARMA_V1` parent research;
+- exact reviewed Primary Pharma subgroup;
+- assignment version;
+- exact R6 score artifact identity.
+
+TORNTPHARM uses the previously owner-reviewed Gate E assignment decision:
+- Primary `DOMESTIC_FORMULATIONS`;
+- assignment version 1;
+- `GLOBAL_GENERICS` Material secondary exposure;
+- `CDMO_CRAMS` Emerging secondary exposure.
+
+ALIVUS reuses the G10.1 owner-validated reviewed assignment:
+- Primary `API_BULK_DRUGS`;
+- assignment version 1;
+- `CDMO_CRAMS` Emerging Watch.
+
+B4 rejects any source-score or Primary-subprofile mismatch.
+
+### Fail-closed reference behavior
+
+The remaining controlled references retain their R6 boundary:
+
+```text
+AUROPHARMA -> INSUFFICIENT_EVIDENCE
+BIOCON      -> INSUFFICIENT_EVIDENCE
+SYNGENE     -> INSUFFICIENT_EVIDENCE
+HDFCBANK    -> BLOCKED_PREREQUISITE
+```
+
+No partial recommendation is reconstructed.
+
+### B4.2 exact R6 -> R7 lineage
+
+R6 reference scores are read-only/non-persisted artifacts. B4 therefore creates a
+deterministic reference-run identity from the exact symbol + exact R6 artifact
+version.
+
+The recommendation identity includes:
+
+```text
+security
++ exact R6 reference run
++ parent research profile
++ Primary methodology role/subprofile
++ assignment version
++ recommendation policy id/version
+```
+
+The R7 execution asserts:
+- recommendation source score equals the R6 source score;
+- recommendation Primary equals the R6/assignment Primary;
+- sizing receives the same exact score-run and recommendation-run identities.
+
+### B4.3 sizing execution and edge cases
+
+The Program B sizing-policy registry remains intentionally empty because no
+profile/role-specific numeric sizing policy has been separately owner-approved.
+
+Therefore even a recommendation-ready reference returns:
+
+```text
+sizing state = METHODOLOGY_NOT_AVAILABLE
+suggested target weight = null
+suggested minimum weight = null
+suggested maximum weight = null
+recommended action = null
+```
+
+Required B4 sizing edge cases are explicit:
+- strong score + high concentration -> `METHODOLOGY_NOT_AVAILABLE`;
+- strong score + high volatility -> `METHODOLOGY_NOT_AVAILABLE`;
+- low evidence confidence -> `INSUFFICIENT_EVIDENCE`;
+- incomplete holding -> `BLOCKED_PREREQUISITE`;
+- ETF/non-equity -> `NOT_APPLICABLE`.
+
+No generic sizing range is manufactured.
+
+### B4.4 owner-authority mutation regression
+
+The B4 owner fixture has existing:
+- target price;
+- stop loss;
+- target weight;
+- portfolio role.
+
+B4 sizing produces a separate machine assessment only.
+
+Required regression:
+
+```text
+owner settings before == owner settings after
+owner field mutation count = 0
+persistence mutation count = 0
+```
+
+B4 imports no owner-settings save path and authorizes no recommendation/sizing
+persistence.
+
+### B4.5 cross-surface canonical consistency
+
+B4 defines one canonical decision payload and read-only projections for:
+- Research;
+- Portfolio;
+- Action.
+
+The three projections receive the same:
+- source score;
+- source score-run identity;
+- recommendation-run identity;
+- recommendation state/role;
+- sizing state/policy;
+- final disposition.
+
+The projections do not independently recompute score, recommendation or sizing.
+
+Existing Research-page / Pharma recommendation UI regressions remain in the B4
+runner to ensure the shared shell remains semantically stable.
+
+### B4.6 frozen portfolio-wide R7 disposition
+
+The controlled portfolio pass remains scoped to:
+
+`K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22`
+
+All 238 equity rows receive explicit recommendation and sizing dispositions.
+
+B4 intentionally distinguishes:
+
+```text
+portfolio-wide disposition complete
+!= portfolio-wide numeric recommendation coverage
+!= portfolio-wide numeric sizing coverage
+```
+
+Candidate expectation:
+- recommendation-ready rows = the two currently score-ready, approved PHARMA_V1
+  references;
+- sizing-ready rows = 0 while sizing authority is absent;
+- every other row remains explicit fail-closed / review / not-applicable as
+  inherited from R6 and B3.
+
+### B4 artifacts
+
+Added:
+- `src/features/research/programBR7Execution.ts`;
+- `src/features/research/programBR7Execution.test.ts`;
+- `scripts/program-b-b4-report.mjs`;
+- `scripts/b4-validate-r7-execution.sh`;
+- `docs/PortfolioAI_PROGRAM_B_B4_R7_EXECUTION_VALIDATION.md`.
+
+No schema, migration, provider adapter, scheduler or trading code was changed.
+
+### Owner-local validation command
+
+```bash
+git pull
+bash scripts/b4-validate-r7-execution.sh
+```
+
+The runner executes:
+- B4 R7 execution/replay/disposition;
+- B3/R6 regressions;
+- Pharma parent + five-subprofile regressions;
+- Gate I recommendation authority/policy;
+- TORNTPHARM/ALIVUS recommendation regressions;
+- K5 portability;
+- sector fail-closed regressions;
+- D35B sizing software boundary;
+- owner Decision Workspace regressions;
+- Pharma recommendation UI;
+- Research page regression;
+- canonical B4 report;
+- TypeScript;
+- architecture guard;
+- production build;
+- `git diff --check`.
+
+### Safety state
+
+```text
+provider calls = 0
+Angel One calls = 0
+Trendlyne calls = 0
+OpenAI decision calls = 0
+recommendation persistence = NO
+sizing persistence = NO
+owner settings mutation = NO
+production mutation = NO
+migration = NO
+deployment = NO
+merge = NO
+scheduler change = NO
+trading = NO
+```
+
+**Current stop boundary:** B4 candidate implemented; owner-local validation pending.
+Do not begin B-FINAL.
