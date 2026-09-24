@@ -5,6 +5,7 @@ import {
   PROGRAM_B_LEGACY_SIZING_BOUNDARY,
   PROGRAM_B_MACHINE_OUTPUT_FIELDS,
   PROGRAM_B_OWNER_CONTROLLED_FIELDS,
+  PROGRAM_B_PHARMA_DUAL_LAYER_RESEARCH,
   PROGRAM_B_R7_PORTABILITY_BOUNDARY,
   PROGRAM_B_RECOMMENDATION_LINEAGE_REQUIRED_FIELDS,
   PROGRAM_B_RECOMMENDATION_POLICY_REGISTRY,
@@ -34,6 +35,7 @@ function pharmaRecommendationInput(
     scoreLineageState: "COMPLETE",
     scoreProfileCode: "PHARMA_V1",
     methodologyRole: "DOMESTIC_FORMULATIONS",
+    assignmentVersion: 1,
     recommendationPolicy: resolveProgramBRecommendationPolicy("PHARMA_V1"),
     mandatoryFloorInputState: "COMPLETE",
     cautionRiskInputState: "COMPLETE",
@@ -42,6 +44,48 @@ function pharmaRecommendationInput(
 }
 
 describe("Program B B3 R7 contract and architecture", () => {
+  it("preserves Pharma as common parent research plus exactly one reviewed primary subgroup", () => {
+    expect(PROGRAM_B_PHARMA_DUAL_LAYER_RESEARCH).toEqual({
+      parentProfileCode: "PHARMA_V1",
+      parentResearchRequired: true,
+      primarySubprofileRequired: true,
+      primarySubprofiles: [
+        "API_BULK_DRUGS",
+        "DOMESTIC_FORMULATIONS",
+        "GLOBAL_GENERICS",
+        "BIOPHARMA_BIOSIMILARS",
+        "CDMO_CRAMS",
+      ],
+      subprofilesReplaceParent: false,
+      effectiveResearchContract: "PHARMA_V1_PARENT_PLUS_REVIEWED_PRIMARY_SUBPROFILE",
+      secondaryExposureTreatment: "CONTEXT_OR_EXPLICIT_APPROVED_OVERLAY_ONLY",
+    })
+
+    expect(evaluateProgramBRecommendationReadiness(
+      pharmaRecommendationInput({ methodologyRole: null }),
+    )).toMatchObject({
+      state: "BLOCKED_PREREQUISITE",
+      canRecommend: false,
+      reasonCodes: ["PHARMA_PRIMARY_SUBPROFILE_MISSING"],
+    })
+
+    expect(evaluateProgramBRecommendationReadiness(
+      pharmaRecommendationInput({ methodologyRole: "BANK" }),
+    )).toMatchObject({
+      state: "REVIEW_REQUIRED",
+      canRecommend: false,
+      reasonCodes: ["PHARMA_PRIMARY_SUBPROFILE_INVALID"],
+    })
+
+    expect(evaluateProgramBRecommendationReadiness(
+      pharmaRecommendationInput({ assignmentVersion: null }),
+    )).toMatchObject({
+      state: "BLOCKED_PREREQUISITE",
+      canRecommend: false,
+      reasonCodes: ["PHARMA_SUBPROFILE_ASSIGNMENT_VERSION_MISSING"],
+    })
+  })
+
   it("inherits only the owner-approved PHARMA_V1 numeric recommendation authority", () => {
     expect(PROGRAM_B_RECOMMENDATION_POLICY_REGISTRY).toHaveLength(1)
     expect(PROGRAM_B_RECOMMENDATION_POLICY_REGISTRY[0]).toMatchObject({
@@ -163,23 +207,30 @@ describe("Program B B3 R7 contract and architecture", () => {
     expect(PROGRAM_B_RECOMMENDATION_POLICY_REGISTRY[0]?.overlayIndependentRoleAllowed).toBe(false)
   })
 
-  it("requires recommendation lineage to point to one exact score run", () => {
+  it("requires recommendation lineage to preserve exact score, parent profile and primary subgroup assignment", () => {
     expect(PROGRAM_B_RECOMMENDATION_LINEAGE_REQUIRED_FIELDS).toContain("scoreRunId")
-    const first = programBRecommendationLineageIdentity({
+    expect(PROGRAM_B_RECOMMENDATION_LINEAGE_REQUIRED_FIELDS).toContain("researchProfileCode")
+    expect(PROGRAM_B_RECOMMENDATION_LINEAGE_REQUIRED_FIELDS).toContain("methodologyRole")
+    expect(PROGRAM_B_RECOMMENDATION_LINEAGE_REQUIRED_FIELDS).toContain("assignmentVersion")
+
+    const base = {
       recommendationRunId: "recommendation-1",
       securityId: "security-x",
       scoreRunId: "score-run-1",
+      researchProfileCode: "PHARMA_V1",
+      methodologyRole: "DOMESTIC_FORMULATIONS",
+      assignmentVersion: 1,
       recommendationMethodologyId: "policy-x",
       recommendationMethodologyVersion: "v1",
-    })
-    const second = programBRecommendationLineageIdentity({
-      recommendationRunId: "recommendation-1",
-      securityId: "security-x",
-      scoreRunId: "score-run-2",
-      recommendationMethodologyId: "policy-x",
-      recommendationMethodologyVersion: "v1",
-    })
-    expect(first).not.toBe(second)
+    } as const
+    const first = programBRecommendationLineageIdentity(base)
+    const differentScore = programBRecommendationLineageIdentity({ ...base, scoreRunId: "score-run-2" })
+    const differentPrimary = programBRecommendationLineageIdentity({ ...base, methodologyRole: "GLOBAL_GENERICS" })
+    const differentAssignment = programBRecommendationLineageIdentity({ ...base, assignmentVersion: 2 })
+
+    expect(first).not.toBe(differentScore)
+    expect(first).not.toBe(differentPrimary)
+    expect(first).not.toBe(differentAssignment)
   })
 
   it("does not promote legacy draft BANK thresholds or D35B pilot weight guidance into Program B authority", () => {

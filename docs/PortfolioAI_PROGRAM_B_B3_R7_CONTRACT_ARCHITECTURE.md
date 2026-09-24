@@ -59,6 +59,39 @@ PHARMA_V1 retains its owner-approved Gate I policy identity:
 
 `PHARMA_V1_RECOMMENDATION_POLICY_V1_OWNER_APPROVED`
 
+### Pharma's special dual-layer research invariant
+
+Pharma remains intentionally different from the ordinary single-profile sector
+packages.
+
+Every Pharma equity must be researched through both:
+
+```text
+PHARMA_V1 common Pharma research foundation
+        +
+one reviewed Primary Pharma subprofile
+        ↓
+effective stock-specific Pharma research contract
+```
+
+The Primary must be exactly one of:
+
+```text
+API_BULK_DRUGS
+DOMESTIC_FORMULATIONS
+GLOBAL_GENERICS
+BIOPHARMA_BIOSIMILARS
+CDMO_CRAMS
+```
+
+The five subprofiles are children of `PHARMA_V1`; they do **not** replace the
+parent profile. The effective evidence/research contract remains the composed
+parent requirements plus the reviewed Primary subprofile's additions/overrides,
+with only separately approved secondary-exposure/overlay treatment.
+
+For R7, a Pharma recommendation is therefore not allowed to become READY unless
+the exact Primary subprofile and its assignment version are present in lineage.
+
 ## 4. B3.3 recommendation policy authority
 
 Program B now has an explicit recommendation-policy authority registry.
@@ -109,6 +142,9 @@ Every future Program B recommendation must carry:
 - recommendation run id;
 - security id;
 - exact source score run id;
+- research parent profile code;
+- methodology role / Primary subprofile;
+- assignment version;
 - recommendation methodology id/version;
 - source score;
 - applicable thresholds;
@@ -117,8 +153,11 @@ Every future Program B recommendation must carry:
 - final recommendation;
 - created timestamp.
 
-The lineage identity changes when the source score run changes. A recommendation
-cannot float independently of its source score.
+The lineage identity changes when the source score run, parent profile, Primary
+subprofile or assignment version changes. A Pharma recommendation therefore
+cannot lose the distinction between, for example,
+`PHARMA_V1 + DOMESTIC_FORMULATIONS` and
+`PHARMA_V1 + GLOBAL_GENERICS`.
 
 ## 7. B3.6 sizing readiness and anti-fallback
 

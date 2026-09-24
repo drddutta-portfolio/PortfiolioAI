@@ -5,8 +5,22 @@ import {
 import {
   PHARMA_V1_RECOMMENDATION_POLICY_CANDIDATE,
 } from "./pharmaRecommendationPolicyCandidate"
+import {
+  PHARMA_SUBPROFILE_CODES,
+  type PharmaSubprofileCode,
+} from "./pharmaSubprofileAssignment"
 
 export const PROGRAM_B_R7_CONTRACT_VERSION = "PROGRAM_B_R7_CONTRACT_V1" as const
+
+export const PROGRAM_B_PHARMA_DUAL_LAYER_RESEARCH = {
+  parentProfileCode: "PHARMA_V1",
+  parentResearchRequired: true,
+  primarySubprofileRequired: true,
+  primarySubprofiles: PHARMA_SUBPROFILE_CODES,
+  subprofilesReplaceParent: false,
+  effectiveResearchContract: "PHARMA_V1_PARENT_PLUS_REVIEWED_PRIMARY_SUBPROFILE",
+  secondaryExposureTreatment: "CONTEXT_OR_EXPLICIT_APPROVED_OVERLAY_ONLY",
+} as const
 
 export type ProgramBRecommendationReadinessState =
   | "READY"
@@ -132,6 +146,7 @@ export interface ProgramBRecommendationReadinessInput {
   readonly scoreLineageState: "COMPLETE" | "MISSING" | "CONFLICTING" | "REVIEW_REQUIRED"
   readonly scoreProfileCode: string | null
   readonly methodologyRole: string | null
+  readonly assignmentVersion: string | number | null
   readonly recommendationPolicy: ProgramBRecommendationPolicyResolution
   readonly mandatoryFloorInputState: ProgramBPolicyInputState
   readonly cautionRiskInputState: ProgramBPolicyInputState
@@ -146,6 +161,7 @@ export interface ProgramBRecommendationReadinessResult {
   readonly policyId: string | null
   readonly policyVersion: string | null
   readonly methodologyRole: string | null
+  readonly assignmentVersion: string | number | null
   readonly reasonCodes: readonly string[]
 }
 
@@ -167,8 +183,13 @@ function failRecommendation(
     policyId: input.recommendationPolicy.policyId,
     policyVersion: input.recommendationPolicy.policyVersion,
     methodologyRole: input.methodologyRole?.trim() || null,
+    assignmentVersion: input.assignmentVersion,
     reasonCodes,
   }
+}
+
+function isPharmaPrimarySubprofile(value: string | null): value is PharmaSubprofileCode {
+  return value !== null && (PHARMA_SUBPROFILE_CODES as readonly string[]).includes(value)
 }
 
 export function evaluateProgramBRecommendationReadiness(
@@ -206,6 +227,22 @@ export function evaluateProgramBRecommendationReadiness(
   }
   if (input.scoreLineageState === "CONFLICTING" || input.scoreLineageState === "REVIEW_REQUIRED") {
     return failRecommendation(input, "REVIEW_REQUIRED", [`SOURCE_SCORE_LINEAGE_${input.scoreLineageState}`])
+  }
+
+  if (input.scoreProfileCode === PROGRAM_B_PHARMA_DUAL_LAYER_RESEARCH.parentProfileCode) {
+    const role = input.methodologyRole?.trim() || null
+    if (!role) {
+      return failRecommendation(input, "BLOCKED_PREREQUISITE", ["PHARMA_PRIMARY_SUBPROFILE_MISSING"])
+    }
+    if (!isPharmaPrimarySubprofile(role)) {
+      return failRecommendation(input, "REVIEW_REQUIRED", ["PHARMA_PRIMARY_SUBPROFILE_INVALID"])
+    }
+    if (
+      input.assignmentVersion === null
+      || String(input.assignmentVersion).trim() === ""
+    ) {
+      return failRecommendation(input, "BLOCKED_PREREQUISITE", ["PHARMA_SUBPROFILE_ASSIGNMENT_VERSION_MISSING"])
+    }
   }
 
   if (input.recommendationPolicy.state === "METHODOLOGY_NOT_AVAILABLE") {
@@ -247,6 +284,7 @@ export function evaluateProgramBRecommendationReadiness(
     policyId: input.recommendationPolicy.policyId,
     policyVersion: input.recommendationPolicy.policyVersion,
     methodologyRole: input.methodologyRole?.trim() || null,
+    assignmentVersion: input.assignmentVersion,
     reasonCodes: ["RECOMMENDATION_READINESS_READY"],
   }
 }
@@ -255,6 +293,9 @@ export interface ProgramBRecommendationLineageContract {
   readonly recommendationRunId: string
   readonly securityId: string
   readonly scoreRunId: string
+  readonly researchProfileCode: string
+  readonly methodologyRole: string
+  readonly assignmentVersion: string | number
   readonly recommendationMethodologyId: string
   readonly recommendationMethodologyVersion: string
   readonly score: number
@@ -269,6 +310,9 @@ export const PROGRAM_B_RECOMMENDATION_LINEAGE_REQUIRED_FIELDS = [
   "recommendationRunId",
   "securityId",
   "scoreRunId",
+  "researchProfileCode",
+  "methodologyRole",
+  "assignmentVersion",
   "recommendationMethodologyId",
   "recommendationMethodologyVersion",
   "score",
@@ -285,6 +329,9 @@ export function programBRecommendationLineageIdentity(
     | "recommendationRunId"
     | "securityId"
     | "scoreRunId"
+    | "researchProfileCode"
+    | "methodologyRole"
+    | "assignmentVersion"
     | "recommendationMethodologyId"
     | "recommendationMethodologyVersion"
   >,
@@ -293,11 +340,14 @@ export function programBRecommendationLineageIdentity(
     input.recommendationRunId,
     input.securityId,
     input.scoreRunId,
+    input.researchProfileCode,
+    input.methodologyRole,
+    String(input.assignmentVersion),
     input.recommendationMethodologyId,
     input.recommendationMethodologyVersion,
   ].map((value) => value.trim())
   if (parts.some((value) => !value)) {
-    throw new Error("Program B recommendation lineage requires exact recommendation, security, score-run and methodology identity.")
+    throw new Error("Program B recommendation lineage requires exact recommendation, security, score-run, profile, role/assignment and methodology identity.")
   }
   return parts.join("::")
 }
