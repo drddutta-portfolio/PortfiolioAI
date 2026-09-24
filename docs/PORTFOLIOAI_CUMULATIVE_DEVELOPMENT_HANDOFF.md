@@ -3224,3 +3224,167 @@ repository evidence.
 No provider call, score write, recommendation write, sizing write, production
 mutation, deployment, merge, scheduler or trading action was authorized or performed
 by this documentation update.
+
+
+---
+
+## Program B · B0 closure verification and contract freeze — 24 September 2026
+
+**Checkpoint:** B0 — Program A Closure Verification + Program B Contract Freeze  
+**Audit starting HEAD:** `5d4a52c0274f42e2db6078b486713550b854b1a9`  
+**Branch:** `program-a-evidence-coverage`  
+**Result:** **COMPLETE / PASS / CLOSED — OWNER APPROVAL REQUIRED BEFORE B1**
+
+### Repository-state verification
+
+B0 was performed from repository evidence only. No provider execution, scoring,
+recommendation, sizing, migration, deployment, merge, scheduler change or trading
+action was performed.
+
+Program A closure is verified:
+
+- A2A is **COMPLETE / PASS / CLOSED**. Its audited closure tip
+  `5367f3ea53561938ea4a11dcbc1ac0c279372b04` is an ancestor of the B0 starting
+  HEAD.
+- A2B is **COMPLETE / PASS / CLOSED**. Audited commit
+  `2b76b93c557d74cb4a6b00ad9518cd8e17b7cd6b` is an ancestor of the B0 starting
+  HEAD.
+- A2C is **COMPLETE / PASS / CLOSED** for the approved bounded provider pilot at
+  commit `96309657dcd853d83a5c992e0237daa919af709b`.
+- The B0 starting HEAD is exactly two commits ahead of the A2C closure commit and
+  zero commits behind it. The post-closure file changes before B0 are documentation
+  only: the cumulative handoff and the Program B master plan.
+- Final A2C local coverage remains recorded as:
+  - AUROPHARMA: 247 daily rows, `2025-09-24` through `2026-09-23`;
+  - HDFCBANK: 247 daily rows, `2025-09-24` through `2026-09-23`;
+  - NIFTY_BANK: 271 daily rows, `2025-08-20` through `2026-09-23`;
+  - TORNTPHARM: 274 daily rows, `2025-08-17` through `2026-09-23`.
+- The 24 September 2026 daily candle was not final during A2C execution. The
+  resulting zero-provider-call overlap-refresh proposal is therefore an expected
+  intraday freshness residual, not missing historical coverage and not an
+  unresolved Program A blocker. No synthetic candle was created.
+- Historical A2C authentication/provider-runtime blockers recorded earlier in the
+  handoff were superseded by the successful bounded execution and closure commit.
+  They are not carried into Program B as unresolved blockers.
+- Broader portfolio evidence incompleteness remains an intentional runtime
+  readiness condition. It does not reopen Program A and must fail closed inside
+  Program B rather than being repaired by hidden fetching or reconstruction.
+
+Therefore:
+
+```text
+Program A closure = VERIFIED
+Bounded Program A provider pilot = COMPLETE / PASS / CLOSED
+Final A2C closure commit in ancestry = VERIFIED
+Unresolved Program A blocker carried into Program B = NONE
+```
+
+### Inherited Gate I contracts
+
+Program B may inherit the following Gate I facts, within their proved scope:
+
+1. Recommendation authority consumes an already authoritative score; it does not
+   reconstruct a missing overall score from partial dimensions.
+2. `SCORE_READY` and `SCORE_NOT_COMPUTABLE` remain distinct typed states.
+   A non-computable score stays null/fail-closed for recommendation.
+3. Missing mandatory recommendation-floor data yields an insufficient/not-ready
+   outcome rather than a fabricated negative signal.
+4. A failed role floor continues down the approved role ladder; it does not
+   silently renormalize or manufacture a different score.
+5. Recommendation computation remains deterministic, read-only and non-persisting
+   unless a later separately approved contract explicitly changes persistence.
+6. User-selected portfolio role remains separate from the PortfolioAI suggested
+   research role; recommendation logic must not mutate the owner-selected role.
+7. PHARMA_V1 secondary overlays remain contextual and cannot create a second
+   independent recommendation or numeric modifier.
+8. The owner-approved PHARMA_V1 recommendation policy is valid only for its own
+   methodology lineage. Its locked numeric thresholds are:
+   - Core candidate: overall score >= 80;
+   - Satellite candidate: overall score >= 65;
+   - Watch: overall score >= 50;
+   with the approved PHARMA_V1 role-floor and caution semantics.
+9. Those PHARMA_V1 numeric thresholds are **not** a universal Program B policy and
+   must not be imported into another sector/profile without separate authority.
+
+### Inherited Gate K contracts
+
+Program B may inherit the following Gate K facts:
+
+1. Sector is macro context; Industry is the minimum micro-methodology selector;
+   Basic Industry is business-model refinement; subprofile/profile selects
+   metric/applicability/valuation/risk authority.
+2. Registered research engines are isolated. A sector/profile cannot resolve,
+   score, benchmark, value or recommend through another sector/profile's authority.
+3. Unsupported routing fails closed. No nearest-looking engine,
+   `GENERAL_FALLBACK`, nearest-sector or ticker-specific fallback is permitted.
+4. Every holding may resolve to an explicit architecture disposition such as
+   supported/ready-for-methodology, methodology unavailable, review required or
+   not applicable. Architecture coverage does not imply evidence completeness or
+   numeric score/recommendation coverage.
+5. Supported future-stock routing is based on canonical classification/business
+   identity and registry authority, not ticker identity.
+6. The universal Research shell remains shared; sector/profile methodology is
+   supplied through contracts rather than separate symbol-specific page trees.
+7. K5 explicitly confirmed portable recommendation semantics:
+   - missing mandatory evidence remains fail-closed;
+   - missing recommendation-floor data remains insufficient;
+   - MISSING and N/A remain distinct;
+   - no score reconstruction from incomplete mandatory inputs;
+   - no recommendation computation writes;
+   - failed role floors may continue down the approved role ladder.
+8. K5 explicitly did **not** establish universal numeric recommendation-threshold
+   portability. Its frozen result is:
+   `DO_NOT_INTRODUCE_UNIVERSAL_NUMERIC_THRESHOLDS`.
+9. Sector/profile-specific numeric recommendation authority therefore remains a
+   separate evidence-and-owner-approval question.
+
+### B3 obligations carried forward from the portability audit
+
+These are future contract obligations only; no B3 work is started in B0:
+
+- B3 must not generalize the PHARMA_V1 80 / 65 / 50 thresholds to other
+  sectors/profiles merely because Gate I and Gate K are closed.
+- B3 must either bind recommendation thresholds/floors/blockers to an explicitly
+  approved sector/profile authority or return a non-computable/not-ready state.
+- B3 must preserve the portable K5 semantics for missing mandatory inputs,
+  MISSING-vs-N/A, fail-closed score authority and zero hidden reconstruction.
+- B3/R7 sizing must not borrow another sector's sizing heuristic. Owner target
+  price, stop loss, target weight and role overrides remain owner-controlled.
+
+### Program B invariants frozen at B0
+
+The following invariants are now frozen exactly for Program B:
+
+1. **No evidence readiness → no score.**
+2. **No valid score → no recommendation.**
+3. **No valid recommendation → no sizing.**
+4. R6/R7 computation is **cache-only**.
+5. **Zero Angel One calls** from scoring/recommendation/sizing computation.
+6. **Zero Trendlyne calls** from scoring/recommendation/sizing computation.
+7. **Zero OpenAI calls** for numeric scoring, recommendation or sizing decisions.
+8. Missing input is never repaired by hidden renormalization.
+9. Unsupported methodology is never replaced with `GENERAL_FALLBACK` or
+   nearest-sector logic.
+10. No sector may borrow another sector's methodology or sizing heuristic.
+11. AI may explain a deterministic result later; AI may not create or alter the
+    deterministic result.
+12. Owner target price, stop loss, target weight and role overrides remain
+    owner-controlled.
+13. Equity/non-equity applicability remains explicit.
+14. No production mutation, deployment, merge, scheduler activation or trading is
+    authorized by Program B.
+15. Any database migration must be additive, genuinely required, separately
+    reviewed and separately approved before application.
+
+### B0 exit
+
+```text
+Program A closure = VERIFIED
+Program B invariants = FROZEN
+Inherited Gate I / Gate K contracts = EXPLICITLY RECORDED
+B0 = COMPLETE / PASS / CLOSED
+Next stage = B1 only, after explicit owner approval
+```
+
+**STOP BOUNDARY:** B1 has not started. No B1 architecture, implementation or
+validation work is authorized by this B0 closure.
