@@ -34,8 +34,15 @@ const prohibitedRuntimePatterns = [
   /\bMath\.random\s*\(/,
   /\.insert\s*\(/,
   /\.update\s*\(/,
-  /\.delete\s*\(/,
   /\.upsert\s*\(/,
+]
+
+// A generic ".delete(...)" ban is intentionally not used here because R9's
+// in-memory subscription store correctly uses Set.delete(listener) during
+// unsubscribe. Persistence-capable imports are already prohibited above, and
+// this guard additionally rejects database-style chained delete calls.
+const prohibitedPersistencePatterns = [
+  /\.from\s*\([^)]*\)[\s\S]{0,240}\.delete\s*\(/,
 ]
 
 const failures = []
@@ -53,6 +60,11 @@ for (const file of computeFiles) {
       failures.push(`${file}: prohibited R9 runtime pattern ${pattern}`)
     }
   }
+  for (const pattern of prohibitedPersistencePatterns) {
+    if (pattern.test(source)) {
+      failures.push(`${file}: prohibited R9 persistence pattern ${pattern}`)
+    }
+  }
 }
 
 const component = fs.readFileSync(
@@ -61,9 +73,10 @@ const component = fs.readFileSync(
 )
 if (
   !component.includes("buildProgramCR9LiveObservedProjection")
-  || !component.includes("advanceProgramCR9InMemorySession")
+  || !component.includes("createProgramCR9LiveSessionStore")
+  || !component.includes("useSyncExternalStore")
 ) {
-  failures.push("DashboardMeaningfulChanges: canonical R9 consumer integration missing")
+  failures.push("DashboardMeaningfulChanges: canonical R9 external-store consumer integration missing")
 }
 
 const routes = fs.readFileSync("src/routes/AppRoutes.tsx", "utf8")
