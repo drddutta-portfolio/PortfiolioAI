@@ -7,7 +7,7 @@
 **Starting HEAD:** `91992ad93f9b2b65c75f85f2b47eed96c6de7a7e`
 **Initial source implementation review HEAD:** `89e1f0a8ba8c3886315248687d27258d56f54562`
 **Latest pre-validation source refinement HEAD:** `80f2a847cca1c109cb1ab916abe3ab7949073737`
-**Status:** IMPLEMENTED / STATIC ARCHITECTURE-SAFETY REVIEW PASS / OWNER-LOCAL EXECUTABLE VALIDATION PENDING
+**Status:** COMPLETE / PASS / CLOSED — owner-local executable validation confirmed
 
 ## 1. C3 authority and scope
 
@@ -560,9 +560,16 @@ No:
 
 was changed.
 
-## 22. Required owner-local executable validation
+## 22. Owner-local executable validation
 
-Run:
+The owner confirmed the authoritative C3 validation runner completed
+successfully after synchronizing the Program C branch through:
+
+```text
+95bf12514cc0c74da622c026534954e44273a667
+```
+
+Executed:
 
 ```bash
 git fetch origin
@@ -572,13 +579,20 @@ git pull --ff-only
 bash scripts/c3-validate-program-c-r9.sh
 ```
 
-The runner executes:
+The runner completed with:
+
+```text
+PROGRAM C C3 VALIDATION ALL PASS
+R9 = IMPLEMENTED / VALIDATED / AWAITING OWNER CLOSURE
+```
+
+This confirms the full C3 validation bundle passed, including:
 
 - R9 contract/execution tests;
 - R8 C1/C2 regressions;
 - Program B final/R6/R7 regressions;
-- canonical C3 report;
-- R9 static safety;
+- canonical C3 R9 aggregate report;
+- R9 structural provider/AI/persistence/trading safety;
 - scoped C3 ESLint;
 - repository allowlist;
 - TypeScript;
@@ -586,12 +600,9 @@ The runner executes:
 - production build;
 - `git diff --check`.
 
-C3 must not be formally closed until the owner-local runner ends with:
-
-```text
-PROGRAM C C3 VALIDATION ALL PASS
-R9 = IMPLEMENTED / VALIDATED / AWAITING OWNER CLOSURE
-```
+The earlier React-effect lint issue and static-safety false positives were
+corrected before this final passing run. No failed executable validation remains
+open.
 
 ## 23. C3 safety state
 
@@ -730,23 +741,45 @@ changed.
 C3 remains owner-local executable-validation pending until the full authoritative
 runner completes successfully.
 
-## 24. Current stop point
+## 24. C3 / R9 formal closure and stop point
+
+C3 satisfies the frozen R9 exit criteria.
 
 ```text
-C0 = COMPLETE / PASS / CLOSED
-C1 = COMPLETE / PASS / CLOSED
-C2 = COMPLETE / PASS / CLOSED
-R8 = COMPLETE / PASS / CLOSED
-
 C3 implementation = COMPLETE
 C3 static architecture/safety review = PASS
-C3 executable validation = PENDING
-C3 formal closure = PENDING
-R9 formal closure = PENDING
+C3 executable validation = PASS
+C3 formal closure = COMPLETE / PASS / CLOSED
 
-C4 / R10 = NOT AUTHORIZED
-C-FINAL = NOT AUTHORIZED
+R9 contract = CLOSED
+R9 execution = CLOSED
+R9 deterministic replay = PASS
+R9 first-observation semantics = PASS
+R9 raw-vs-meaningful distinction = PASS
+R9 categorical materiality transitions = PASS
+R9 incomparable/out-of-order handling = PASS
+R9 semantic duplicate suppression = PASS
+R9 frozen-universe disposition completeness = PASS
+R9 authority/safety audit = PASS
+
+R9 = COMPLETE / PASS / CLOSED
+
+C4 / R10 = NOT STARTED
+C4 authorization = NONE
 ```
 
-Do not begin C4 until C3 executable validation is clean, R9 is formally
-accepted/closed by the owner, and C4 is separately authorized.
+Intentional R9 limitations remain explicit:
+
+- the 238-holding frozen fixture has complete first-observation dispositions but
+  no historical comparison baseline;
+- zero frozen-fixture events means no comparable baseline, not "no change";
+- numeric materiality thresholds remain unapproved;
+- duplicate suppression is semantic and in-memory only;
+- durable acknowledgement, snooze and cross-session seen/unseen state remain
+  unavailable;
+- R9 remains read-only and non-persisting;
+- R9 does not choose a final integrated action category.
+
+No C4/R10 work is included in this closure.
+
+The repository must stop here until the owner separately authorizes C4.
