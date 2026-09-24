@@ -617,6 +617,58 @@ scheduler mutation = 0
 trading = 0
 ```
 
+## 23A. Pre-validation React lint correction
+
+The first owner-local C3 validation attempt stopped at scoped ESLint with:
+
+```text
+react-hooks/set-state-in-effect
+DashboardMeaningfulChanges.tsx
+Calling setState synchronously within an effect can trigger cascading renders
+```
+
+This was a presentation/session-orchestration defect only. No R9 domain rule,
+event identity, materiality rule, persistence boundary or authority changed.
+
+The Dashboard consumer was corrected by replacing component-local
+`setSession()` calls inside `useEffect` with a
+`useSyncExternalStore`-compatible in-memory R9 session store:
+
+```text
+src/features/decision/r9LiveSessionStore.ts
+```
+
+The effect now synchronizes the current projection into an external in-memory
+store; React subscribes to that store rather than performing a synchronous state
+update inside the effect.
+
+The R9 session store remains:
+
+```text
+in-memory only
+read-only
+non-persisted
+semantic duplicate suppression only
+no acknowledgement/snooze durability
+no provider/network calls
+no owner mutation
+no numeric sizing
+no scheduler/trading
+```
+
+The C3 static-safety scan now includes the new session-store module, and the R9
+test suite includes a regression proving first-observation -> no-change session
+progression through the external-store boundary.
+
+Latest source HEAD for this lint correction before documentation update:
+
+```text
+1f890b940aa1421f4d5df361049747b521e57cf4
+```
+
+C3 remains validation-pending until the owner reruns the full authoritative
+validator successfully.
+
 ## 24. Current stop point
 
 ```text
