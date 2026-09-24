@@ -196,8 +196,10 @@ describe("Program C C2 R8 execution and validation", () => {
   })
 
   it("proves the mock machine-assessment writer cannot mutate owner fields", () => {
-    const assessment = buildProgramCR8ReferenceValidationAssessments().rows[0]!.assessment
-    const regression = buildProgramCR8OwnerAuthorityRegression(assessment)
+    const firstReference = buildProgramCR8ReferenceValidationAssessments().rows[0]
+    expect(firstReference).toBeDefined()
+    if (!firstReference) throw new Error("C2 owner-authority reference missing.")
+    const regression = buildProgramCR8OwnerAuthorityRegression(firstReference.assessment)
     expect(regression.ownerContextAfter).toBe(regression.ownerContextBefore)
     expect(regression.ownerFieldMutationCount).toBe(0)
     expect(regression.machineAssessmentWriteCount).toBe(1)
