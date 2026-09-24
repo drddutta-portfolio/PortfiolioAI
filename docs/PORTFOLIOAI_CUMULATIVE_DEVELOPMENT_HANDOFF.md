@@ -4362,3 +4362,105 @@ This is a test-runner strengthening only. No Pharma methodology, score,
 recommendation, sizing, provider, database or production behavior was changed.
 
 **B3 remains OPEN until the strengthened runner is re-executed locally.**
+
+
+---
+
+## Program B · B3 / R7 Checkpoint A owner-local validation closure — 24 September 2026
+
+Owner-local consolidated B3 validation was rerun after strengthening the runner
+to include the underlying Pharma dual-layer assignment/composition/curve
+regressions.
+
+Command:
+
+```bash
+git pull
+bash scripts/b3-validate-r7-contract.sh
+```
+
+Owner-observed final result: **PASS**.
+
+Observed validation summary:
+- **15 test files passed**;
+- **109 tests passed**;
+- TypeScript passed;
+- architecture guard passed;
+- production build passed;
+- `git diff --check` passed.
+
+The strengthened Pharma validation explicitly covered:
+- `pharmaSubprofileAssignment.test.ts`;
+- `pharmaSubprofileContracts.test.ts`;
+- `pharmaG6SubprofileCurveApplicability.test.ts`.
+
+This proves the B3 closure against both layers of the Pharma model:
+
+```text
+PHARMA_V1 common parent research
+        +
+exactly one reviewed Primary Pharma subprofile
+        ↓
+effective Pharma research contract
+```
+
+Canonical Primary Pharma subprofiles remain exactly:
+
+```text
+API_BULK_DRUGS
+DOMESTIC_FORMULATIONS
+GLOBAL_GENERICS
+BIOPHARMA_BIOSIMILARS
+CDMO_CRAMS
+```
+
+Validated behavior includes:
+- parent Pharma requirements are composed once;
+- Primary subprofile additions/overrides are layered on top;
+- missing/provisional/disputed/conflicting Primary assignment fails closed;
+- Domestic-specific methodology does not auto-transfer to another Primary;
+- secondary/material overlays do not create a second independent stock score;
+- B3 recommendation readiness requires exact Primary subgroup and assignment
+  version;
+- recommendation lineage retains parent profile + Primary subgroup + assignment
+  version + exact source score run.
+
+The Vite large-chunk warning in the production build was informational only and
+did not fail the build.
+
+### B3 closure
+
+```text
+B3.1 recommendation-readiness gate = COMPLETE / PASS / CLOSED
+B3.2 Gate I safety inheritance = COMPLETE / PASS / CLOSED
+B3.3 recommendation policy authority = COMPLETE / PASS / CLOSED
+B3.4 Gate K portability boundary = COMPLETE / PASS / CLOSED
+B3.5 recommendation lineage = COMPLETE / PASS / CLOSED
+B3.6 sizing readiness / anti-fallback = COMPLETE / PASS / CLOSED
+B3.7 owner-authority preservation = COMPLETE / PASS / CLOSED
+Pharma dual-layer invariant = COMPLETE / PASS / CLOSED
+
+Program B · B3 = COMPLETE / PASS / CLOSED
+R7 Checkpoint A = CLOSED
+```
+
+Safety state remained unchanged:
+- recommendation computation executed = NO;
+- recommendation persistence = NO;
+- sizing computation executed = NO;
+- sizing persistence = NO;
+- owner-settings mutation = NO;
+- provider calls = 0;
+- Angel One calls = 0;
+- Trendlyne calls = 0;
+- OpenAI numeric decision calls = 0;
+- production mutation = NO;
+- migration = NO;
+- deployment = NO;
+- merge = NO;
+- scheduler change = NO;
+- trading = NO.
+
+**STOP BOUNDARY:** B4 has not started and is not authorized by this closure.
+Next stage is **B4 — R7 Execution & Validation / Checkpoint B**, only after
+explicit owner approval.
