@@ -5096,3 +5096,201 @@ Do not describe Program B as formally closed until the owner explicitly authoriz
 closure. Do not describe the pipeline as production operational. No merge,
 deployment, production reconciliation, scheduler activation or trading action was
 performed by this validation.
+
+
+---
+
+## Program B · Codex review-ready handoff — 24 September 2026
+
+Program B has completed its full local-candidate build and final validation, but
+the owner has **explicitly deferred formal Program B closure** pending further
+review.
+
+### Authoritative repository state before Codex review
+
+```text
+Repository: drddutta-portfolio/PortfiolioAI
+Branch: program-a-evidence-coverage
+Program B validated HEAD before this handoff update:
+  5a1aef89167f96aecd0552d615b538c57e61088f
+```
+
+Checkpoint state:
+
+```text
+B0 = COMPLETE / PASS / CLOSED
+B1 = COMPLETE / PASS / CLOSED
+B2 = COMPLETE / PASS / CLOSED
+R6 = COMPLETE / PASS / CLOSED
+B3 = COMPLETE / PASS / CLOSED
+B4 = COMPLETE / PASS / CLOSED
+R7 = COMPLETE / PASS / CLOSED
+
+B-FINAL validation = PASS
+B-FINAL formal closure = DEFERRED BY OWNER
+Program B formal closure = DEFERRED BY OWNER
+Program B = VALIDATED / OPEN
+Next program = NOT AUTHORIZED
+```
+
+### Final local validation evidence
+
+The owner ran:
+
+```bash
+git pull
+bash scripts/b-final-validate-program-b.sh
+```
+
+Observed final result:
+
+```text
+overallPass = true
+Program B repository safety guard = PASS
+TypeScript = PASS
+architecture guard = PASS
+production build = PASS
+
+B-FINAL CANDIDATE VALIDATION PASS
+Program B closure audit: PASS
+Provider calls from Program B compute paths: 0
+AI numeric decision calls: 0
+Owner settings mutation: 0
+Production mutation/deployment/merge/scheduler/trading authorization: NONE
+Pipeline state: VALIDATED / APPROVED LOCAL-CANDIDATE / FAIL-CLOSED WHERE INCOMPLETE
+Production operational: NO
+```
+
+### Core Program B artifacts for review
+
+Master/closure documents:
+
+- `docs/PortfolioAI_PROGRAM_B_MASTER_PLAN.md`
+- `docs/PortfolioAI_PROGRAM_B_B1_R6_CONTRACT_ARCHITECTURE.md`
+- `docs/PortfolioAI_PROGRAM_B_B2_R6_EXECUTION_VALIDATION.md`
+- `docs/PortfolioAI_PROGRAM_B_B3_R7_CONTRACT_ARCHITECTURE.md`
+- `docs/PortfolioAI_PROGRAM_B_B4_R7_EXECUTION_VALIDATION.md`
+- `docs/PortfolioAI_PROGRAM_B_FINAL_CLOSURE.md`
+- `docs/PORTFOLIOAI_CUMULATIVE_DEVELOPMENT_HANDOFF.md`
+
+R6 implementation:
+
+- `src/features/research/programBR6Contract.ts`
+- `src/features/research/programBR6Contract.test.ts`
+- `src/features/research/programBR6Execution.ts`
+- `src/features/research/programBR6Execution.test.ts`
+
+R7 implementation:
+
+- `src/features/research/programBR7Contract.ts`
+- `src/features/research/programBR7Contract.test.ts`
+- `src/features/research/programBR7Execution.ts`
+- `src/features/research/programBR7Execution.test.ts`
+
+Final closure audit:
+
+- `src/features/research/programBFinalClosure.ts`
+- `src/features/research/programBFinalClosure.test.ts`
+- `scripts/program-b-final-report.mjs`
+- `scripts/b-final-validate-program-b.sh`
+
+Shared UI touched by Program B:
+
+- `src/features/research/ResearchScorecardPanel.tsx`
+- `src/features/research/ResearchScorecardPanel.test.tsx`
+- `src/pages/ResearchPage.tsx`
+
+### Non-negotiable architecture rules Codex must verify
+
+1. No evidence readiness -> no score.
+2. No valid score -> no recommendation.
+3. No valid recommendation -> no sizing.
+4. R6/R7 computation is cache-only.
+5. Provider calls from Program B compute paths = zero.
+6. OpenAI cannot create/alter numeric score, recommendation or sizing decisions.
+7. No hidden renormalization or reconstruction of missing mandatory inputs.
+8. No `GENERAL_FALLBACK`, nearest-sector or cross-sector methodology borrowing.
+9. No sector may borrow another sector's sizing heuristics.
+10. Owner target price, stop loss, target weight and owner-set role remain untouched.
+11. No Program B recommendation/sizing persistence was authorized.
+12. No production mutation, migration, deployment, merge, scheduler activation or
+    trading was authorized.
+13. Program B must remain fail-closed where methodology/evidence/policy is missing.
+
+### Pharma-specific invariant Codex must verify carefully
+
+Pharma is intentionally **not** handled like ordinary single-profile sectors.
+
+Every Pharma stock must retain:
+
+```text
+PHARMA_V1 common parent research
+        +
+exactly one reviewed Primary Pharma subprofile
+        ↓
+effective Pharma research contract
+```
+
+Canonical Primary subprofiles are exactly:
+
+```text
+API_BULK_DRUGS
+DOMESTIC_FORMULATIONS
+GLOBAL_GENERICS
+BIOPHARMA_BIOSIMILARS
+CDMO_CRAMS
+```
+
+The Primary subgroup does not replace the common `PHARMA_V1` research layer.
+Recommendation lineage must preserve parent profile + Primary subgroup +
+assignment version + exact R6 score lineage.
+
+Secondary exposures/overlays must not create a second independent stock score or
+recommendation.
+
+### Important intentional Program B limitations
+
+These are intentional fail-closed boundaries, not automatically bugs:
+
+```text
+PORTFOLIO_WIDE_NUMERIC_SCORING_COVERAGE_NOT_COMPLETE
+PORTFOLIO_WIDE_NUMERIC_RECOMMENDATION_COVERAGE_NOT_COMPLETE
+PROGRAM_B_NUMERIC_SIZING_POLICY_NOT_APPROVED
+FROZEN_PORTFOLIO_SNAPSHOT_IS_2026_09_22_NOT_LIVE_PRODUCTION_STATE
+PROGRAM_B_BRANCH_IS_LOCAL_CANDIDATE_AND_UNMERGED
+PIPELINE_NOT_PRODUCTION_OPERATIONAL
+```
+
+Current numeric recommendation authority is intentionally limited to the approved
+PHARMA_V1 policy. The legacy BANK/NBFC recommendation policy remains DRAFT and
+must not be promoted silently.
+
+The Program B sizing-policy registry is intentionally empty because no
+profile/role-specific numeric sizing policy has been owner-approved. Therefore
+recommendation-ready holdings may correctly remain
+`METHODOLOGY_NOT_AVAILABLE` for sizing.
+
+### Codex review boundary
+
+Codex review is requested as a **read-only audit first**.
+
+Do not:
+- close Program B;
+- start a next program;
+- merge branches;
+- deploy;
+- create/apply migrations;
+- mutate production/local canonical data;
+- call providers;
+- enable recommendation/sizing persistence;
+- change schedulers;
+- trade;
+- silently fix code before reporting findings.
+
+Codex should first return findings with severity, evidence, affected files,
+whether each issue is a true defect versus an intentional fail-closed boundary,
+and the smallest safe corrective action if needed.
+
+If no critical defect is found, explicitly say whether Program B is technically
+ready for owner consideration of formal closure while still remaining
+`VALIDATED / OPEN` until the owner authorizes closure.
