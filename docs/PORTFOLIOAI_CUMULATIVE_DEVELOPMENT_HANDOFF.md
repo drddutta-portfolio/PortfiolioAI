@@ -6586,3 +6586,68 @@ Scheduler/trading = NOT AUTHORIZED
 
 Stop after C2 implementation. C3 requires clean C2 validation, explicit owner
 acceptance of R8 closure, and separate authorization.
+
+
+---
+
+### Program C · C2 refinement after initial handoff — 25 September 2026
+
+After the initial C2 handoff append, three additional fail-closed refinements were
+made before owner-local validation. These remain entirely within the authorized
+C2 boundary.
+
+Latest C2 source-refinement HEAD before documentation refresh:
+
+```text
+a449963778b7d61e0004fc20b4311060571eb3b3
+```
+
+C2 checkpoint document refresh:
+
+```text
+4c8f9cb780e25a2c2949dd04e6157f2a56fd9e57
+```
+
+Refinements:
+
+1. The controlled TORNTPHARM / ALIVUS C2 reference validation now calls the
+   Program B R7 recommendation executor directly rather than
+   `buildProgramB4ReferenceDecisions()`. This avoids invoking Program B sizing
+   readiness in the C2 reference path.
+
+2. The frozen 238-holding R8 aggregate explicitly aborts if the inherited Program
+   B portfolio aggregate ever reports `sizingReady != 0`. Program C C2
+   therefore cannot silently acquire numeric sizing authority if upstream state
+   changes.
+
+3. The live portfolio classification fingerprint now includes `assetClass` in
+   addition to security/sector/industry identity, strengthening deterministic
+   snapshot identity without changing classification authority.
+
+Earlier C2 hardening also remains in force:
+
+- missing owner role in formal Core Health fails closed as
+  `BLOCKED_PREREQUISITE`;
+- positive Portfolio Risk requires canonical risk evidence identity;
+- positive/NO_EXIT_SIGNAL Exit Intelligence requires thesis evidence identity;
+- live timestamp ordering is based on parsed timestamps, not lexical ordering;
+- non-null assertions were removed from C2 reference/audit paths.
+
+No provider call, persistence, migration, schema change, production mutation,
+numeric sizing authority, AI decision, scheduler or trading behavior was added.
+
+The authoritative C2 validation command remains:
+
+```bash
+bash scripts/c2-validate-program-c-r8.sh
+```
+
+C2 remains:
+
+```text
+implementation = COMPLETE
+static architecture/safety review = PASS
+owner-local executable validation = PENDING
+formal C2/R8 closure = PENDING
+C3 / R9 = NOT AUTHORIZED
+```
