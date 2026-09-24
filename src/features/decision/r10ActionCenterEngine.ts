@@ -336,6 +336,7 @@ export function evaluateProgramCR10Attention(
       r9CurrentObservedStateId: input.r9.currentObservedStateId,
       r9ChangeEventId: input.r9.event?.eventId ?? null,
       r9RuleVersion: input.r9.event?.ruleVersion ?? null,
+      r9OwnerContextVersion: input.r9OwnerContextVersion,
     },
     ownerContext: input.ownerContext,
     asOf: input.asOf,
