@@ -6812,3 +6812,421 @@ Current stop point is after formal R8 closure.
 No R9 contract, R9 execution, meaningful-change registry, event identity,
 duplicate suppression or R9 presentation work may begin until the owner
 explicitly authorizes C3.
+
+
+---
+
+## Program C · C3 R9 Contract + Execution + Validation — implementation complete / executable validation pending — 25 September 2026
+
+The owner explicitly authorized C3 after formal C2/R8 closure.
+
+The repository master plan was re-read before implementation. C3 is the
+consolidated R9 Checkpoints A+B checkpoint; it includes contract, execution and
+validation and is the only checkpoint at which R9 may close.
+
+### Branch / start state
+
+```text
+repository = drddutta-portfolio/PortfiolioAI
+branch = program-c-portfolio-decision-engines
+C3 starting HEAD = 91992ad93f9b2b65c75f85f2b47eed96c6de7a7e
+C3 source implementation review HEAD = 89e1f0a8ba8c3886315248687d27258d56f54562
+C3 checkpoint document HEAD before this handoff = 51905be4834a90bad29cb96dd38f932517355f3f
+```
+
+### C3 R9 artifacts
+
+Added:
+
+```text
+src/features/decision/r9AuthorityRegistry.ts
+src/features/decision/r9MeaningfulChangeContract.ts
+src/features/decision/r9MeaningfulChangeRegistry.ts
+src/features/decision/r9ObservedState.ts
+src/features/decision/r9EventIdentity.ts
+src/features/decision/r9MeaningfulChangeEngine.ts
+src/features/decision/r9Presentation.ts
+src/features/decision/r9FrozenPortfolioDisposition.ts
+src/features/decision/r9LivePortfolioAdapter.ts
+src/features/decision/r9LiveSession.ts
+src/features/decision/r9ReferenceValidation.ts
+src/features/decision/r9C3Validation.ts
+src/features/decision/r9MeaningfulChange.test.ts
+
+src/components/DashboardMeaningfulChanges.tsx
+src/components/DashboardMeaningfulChanges.css
+```
+
+Controlled integration changes:
+
+```text
+src/components/DashboardDailyMovement.tsx
+src/components/DashboardSectionNavigator.tsx
+src/routes/AppRoutes.tsx
+```
+
+Validation tooling:
+
+```text
+scripts/program-c-c3-report.mjs
+scripts/program-c-c3-static-safety.mjs
+scripts/c3-validate-program-c-r9.sh
+```
+
+Checkpoint document:
+
+```text
+docs/PortfolioAI_PROGRAM_C_C3_R9_EXECUTION_VALIDATION.md
+```
+
+No R10 source was created.
+
+### Frozen R9 baseline semantics
+
+R9 now explicitly distinguishes:
+
+```text
+FIRST_OBSERVATION
+NO_CHANGE
+RAW_IMMATERIAL_CHANGE
+MEANINGFUL_CHANGE
+INCOMPARABLE
+OUT_OF_ORDER
+NOT_APPLICABLE
+```
+
+Baseline states:
+
+```text
+BASELINE_ESTABLISHED
+COMPARABLE_BASELINE
+NO_COMPARABLE_BASELINE
+```
+
+Frozen invariant:
+
+```text
+FIRST_OBSERVATION != NO_CHANGE
+FIRST_OBSERVATION != RAW_IMMATERIAL_CHANGE
+FIRST_OBSERVATION != MEANINGFUL_CHANGE
+```
+
+A first observation creates no R9 event.
+
+### Observed-state lineage
+
+The R9 observed-state contract carries exact available lineage including:
+
+```text
+securityId
+portfolioId
+assetClass
+classificationVersion
+researchProfileCode
+methodologyId/version
+methodologyRole
+assignmentId/version
+evidenceSnapshotId
+R6 scoreRunId
+R7 recommendationRunId
+portfolioContextSnapshotId
+R8 decisionRunId
+ownerContextVersion
+```
+
+It also carries R6/R7 readiness/category states, evidence state, optional
+canonical valuation/momentum state, R8 sub-engine states and exact blocker-set
+identity.
+
+Observed-state IDs are deterministic semantic fingerprints. Timestamps are used
+for comparison ordering but never as the sole identity source.
+
+### Meaningful-change registry
+
+R9 materiality is controlled by:
+
+```text
+PROGRAM_C_R9_MEANINGFUL_CHANGE_RULES_V1
+```
+
+Approved meaningful categories include:
+
+- R6/R7 readiness transitions;
+- recommendation categorical transition;
+- methodology/role changes;
+- assignment changes;
+- classification version changes;
+- evidence state changes;
+- canonical valuation/momentum categorical changes when available;
+- R8 overall transition;
+- Core Health transition;
+- Portfolio Fit transition;
+- Portfolio Risk transition;
+- Exit Intelligence transition;
+- blocker appearance/clearing/change;
+- owner-context version change.
+
+AI does not decide materiality.
+
+### Raw but immaterial changes
+
+The registry also explicitly captures raw changes that are **not** currently
+meaningful:
+
+```text
+R6_SCORE_RUN_CHANGED
+R7_RECOMMENDATION_RUN_CHANGED
+R8_DECISION_RUN_CHANGED
+EVIDENCE_SNAPSHOT_CHANGED
+PORTFOLIO_CONTEXT_SNAPSHOT_CHANGED
+R6_SCORE_VALUE_CHANGED_WITHOUT_THRESHOLD
+```
+
+This prevents raw-data movement from being silently promoted into an R9 event.
+
+### Numeric materiality policy
+
+No Program C R9 numeric threshold was invented.
+
+```text
+scoreDeltaThreshold = null
+valuationDeltaThreshold = null
+momentumDeltaThreshold = null
+concentrationDeltaThreshold = null
+hysteresisThreshold = null
+persistenceDurationRule = null
+```
+
+A score value change alone remains raw/immaterial until a separate approved
+threshold authority exists.
+
+### Event identity
+
+Meaningful event identity is deterministic from:
+
+```text
+securityId
+portfolioId
+previousObservedStateId
+currentObservedStateId
+ruleRegistryVersion
+```
+
+Every event explains exact before/after change facts and rule codes.
+
+R9 does not select the final action category. That remains C4/R10 scope.
+
+### Idempotency versus notification persistence
+
+C3 supports:
+
+```text
+deterministic event identity = YES
+semantic idempotency = YES
+same-input replay stability = YES
+in-memory duplicate suppression = YES
+```
+
+C3 does not claim:
+
+```text
+durable acknowledgement = NO
+durable snooze = NO
+persistent notification deduplication = NO
+cross-session seen/unseen state = NO
+```
+
+No persistence or schema was added.
+
+### Out-of-order / incomparable behavior
+
+Different security/portfolio/asset-class identities return an explicit
+`INCOMPARABLE` result with no event.
+
+Older observations return `OUT_OF_ORDER` with no event.
+
+The live in-memory session preserves the previous valid baseline rather than
+replacing it with an invalid comparison window.
+
+### Controlled reference validation
+
+C3 fixtures cover:
+
+```text
+first observation
+no-change replay
+raw score change without threshold
+Core Health categorical change
+fresh -> stale evidence
+assignment version change
+blocker clearing
+out-of-order input
+incomparable input
+duplicate-event suppression
+```
+
+Synthetic previous R8 identities are explicitly fixture-only and are not
+presented as real historical production runs.
+
+### Frozen 238-holding disposition
+
+The Program C validation universe remains:
+
+```text
+PROGRAM_C_VALIDATION_UNIVERSE_V1
+K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22
+238 holdings
+238 EQUITY
+```
+
+The K5 frozen fixture contains no canonical security ids and no previous R9
+comparison snapshot.
+
+R9 therefore does not fabricate either.
+
+All 238 holdings receive:
+
+```text
+baselineState = NO_COMPARABLE_BASELINE
+transitionState = FIRST_OBSERVATION
+changeEventId = null
+```
+
+Hence:
+
+```text
+R9 portfolio-wide deterministic disposition = COMPLETE
+historical comparison coverage = NOT CLAIMED
+frozen-fixture meaningful event count = 0
+```
+
+Zero events in this first-observation fixture does not mean zero change.
+
+### Live in-memory R9 integration
+
+A canonical Dashboard R9 consumer was added:
+
+```text
+DashboardMeaningfulChanges
+```
+
+It presents:
+
+- first observations;
+- no-change;
+- raw/immaterial change;
+- meaningful change;
+- incomparable/out-of-order comparisons;
+- new in-memory meaningful events.
+
+It consumes the shared R9 observed-state, comparison, event and presentation
+logic. It contains no local materiality policy.
+
+### Daily market movement separation
+
+`DashboardDailyMovement` remains a daily cached price/P&L view and is explicitly
+labelled:
+
+```text
+not R9 meaningful-change materiality
+```
+
+Daily price movement does not automatically create an R9 event.
+
+### R9 authority registry
+
+Current R9 authority is frozen as:
+
+```text
+executionAuthority = C3_OWNER_AUTHORIZED_READ_ONLY
+materialityAuthority = VERSIONED_DETERMINISTIC_RULES_ONLY
+numericThresholdAuthority = NONE
+aiDecisionAuthority = NONE
+providerAuthority = NONE
+persistenceAuthority = NONE
+durableNotificationStateAuthority = NONE
+ownerMutationAuthority = NONE
+sizingAuthority = NONE
+schedulerAuthority = NONE
+tradingAuthority = NONE
+```
+
+### Static source review
+
+Remote source review across all R9 runtime modules found no:
+
+- `src/data/*` import;
+- Supabase import;
+- Angel One import;
+- Trendlyne import;
+- OpenAI import;
+- provider-acquisition import;
+- scheduler/brokerage/order repository import;
+- `fetch()`;
+- `Date.now()`;
+- `Math.random()`;
+- insert/update/delete/upsert call.
+
+No trailing whitespace was found in the reviewed R9 runtime modules.
+
+### C3 repository boundary
+
+No:
+
+- migration;
+- Edge Function;
+- data repository;
+- provider adapter;
+- workflow;
+- persistence schema;
+- production configuration;
+- scheduler;
+- trading path
+
+was changed.
+
+### Required owner-local validation
+
+Run:
+
+```bash
+git fetch origin
+git switch program-c-portfolio-decision-engines
+git pull --ff-only
+
+bash scripts/c3-validate-program-c-r9.sh
+```
+
+The runner must end with:
+
+```text
+PROGRAM C C3 VALIDATION ALL PASS
+R9 = IMPLEMENTED / VALIDATED / AWAITING OWNER CLOSURE
+```
+
+before C3/R9 may be formally closed.
+
+### Current Program C state
+
+```text
+C0 = COMPLETE / PASS / CLOSED
+C1 = COMPLETE / PASS / CLOSED
+C2 = COMPLETE / PASS / CLOSED
+R8 = COMPLETE / PASS / CLOSED
+
+C3 implementation = COMPLETE
+C3 static architecture/safety review = PASS
+C3 owner-local executable validation = PENDING
+C3 formal closure = PENDING
+R9 formal closure = PENDING
+
+C4 / R10 = NOT AUTHORIZED
+C-FINAL = NOT AUTHORIZED
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+Stop after C3 implementation. C4 requires clean C3 validation, explicit owner
+acceptance of R9 closure and separate authorization.
