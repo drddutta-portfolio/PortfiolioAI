@@ -64,7 +64,7 @@ describe("Program B B4 R7 execution and validation", () => {
     expect(second).toEqual(first)
   })
 
-  it("keeps Research, Portfolio and Action projections on one canonical decision", () => {
+  it("keeps contract-only Research, Portfolio and Action projections on one canonical decision", () => {
     const torn = buildProgramB4ReferenceDecisions().find((row) => row.symbol === "TORNTPHARM")
     expect(torn).toBeDefined()
     if (!torn) return
@@ -85,6 +85,7 @@ describe("Program B B4 R7 execution and validation", () => {
     expect(regression.ownerSettingsAfter).toEqual(regression.ownerSettingsBefore)
     expect(regression.ownerFieldMutationCount).toBe(0)
     expect(regression.persistenceMutationCount).toBe(0)
+    expect(regression.machineAssessmentWriteCount).toBe(1)
     expect(regression.machineAssessment.canSize).toBe(false)
     expect(regression.machineAssessment.state).toBe("METHODOLOGY_NOT_AVAILABLE")
   })

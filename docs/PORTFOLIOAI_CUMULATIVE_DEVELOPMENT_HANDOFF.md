@@ -5332,6 +5332,28 @@ SYNGENE -> PHARMA_V1 + CDMO_CRAMS
 Production mutation, migration, deployment, merge, scheduler mutation and
 trading remain unauthorized and did not occur.
 
+### C5 — structural safety and honest boundary validation
+
+**Status:** COMPLETE / PASS
+
+The corrective validation now supplements declarative safety constants with a
+static compute-path scan. `program-b-static-safety.mjs` rejects provider,
+refresh, persistence-repository, scheduler, trade/order, network and canonical
+write dependencies in the Program B R6/R7 compute modules. B-FINAL runs this
+scan and its repository allowlist now covers only the reviewed C1-C5 files.
+
+The three-surface regression is now described accurately as a contract-only
+Research/Portfolio/Action projection test; actual application integration is
+not claimed. The owner-authority regression now exercises a machine-assessment
+writer boundary and proves the exact owner-settings object is returned without
+writes to target price, stop loss, target weight or portfolio role. Exactly one
+machine-assessment write is observed, with zero recommendation/sizing
+persistence writes.
+
+Focused result: 38 R6/R7 tests passed; the structural safety scan and
+TypeScript passed. No provider call, migration, production mutation,
+deployment, merge, scheduler mutation or trade occurred.
+
 ### C2 — R6 Pharma enforcement and applicability contradictions
 
 **Status:** COMPLETE / PASS

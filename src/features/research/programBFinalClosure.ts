@@ -224,6 +224,7 @@ export function buildProgramBFinalAudit(): ProgramBFinalAudit {
   const persistenceSafety = (
     r7Portfolio.persistedWrites === 0
     && owner.persistenceMutationCount === 0
+    && owner.machineAssessmentWriteCount === 1
     && !PROGRAM_B_B4_SAFETY_BOUNDARY.recommendationPersistence
     && !PROGRAM_B_B4_SAFETY_BOUNDARY.sizingPersistence
   )

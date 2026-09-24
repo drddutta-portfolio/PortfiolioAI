@@ -81,6 +81,15 @@ export interface ProgramB4OwnerSettingsSnapshot {
   readonly portfolioRole: string
 }
 
+export interface ProgramBMachineAssessmentWriter {
+  recordMachineAssessment(assessment: ProgramB4SizingExecution): void
+}
+
+export function recordProgramBMachineAssessment(ownerSettings: ProgramB4OwnerSettingsSnapshot, assessment: ProgramB4SizingExecution, writer: ProgramBMachineAssessmentWriter) {
+  writer.recordMachineAssessment(assessment)
+  return ownerSettings
+}
+
 export interface ProgramB4CanonicalDecisionSurface {
   readonly surface: "RESEARCH" | "PORTFOLIO" | "ACTION"
   readonly symbol: string
@@ -555,9 +564,10 @@ export function buildProgramB4OwnerAuthorityRegression() {
   )
   if (!reference) throw new Error("B4 owner-authority reference missing.")
 
-  const ownerSettingsAfter: ProgramB4OwnerSettingsSnapshot = {
-    ...ownerSettingsBefore,
-  }
+  let machineAssessmentWriteCount = 0
+  const ownerSettingsAfter = recordProgramBMachineAssessment(ownerSettingsBefore, reference.sizing, {
+    recordMachineAssessment: () => { machineAssessmentWriteCount += 1 },
+  })
 
   return {
     symbol: reference.symbol,
@@ -565,6 +575,7 @@ export function buildProgramB4OwnerAuthorityRegression() {
     ownerSettingsAfter,
     machineAssessment: reference.sizing,
     ownerFieldMutationCount: 0 as const,
+    machineAssessmentWriteCount,
     persistenceMutationCount: 0 as const,
   }
 }
