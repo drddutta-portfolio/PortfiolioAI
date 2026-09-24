@@ -314,7 +314,7 @@ export function evaluateProgramCR10Attention(
     supportingStates: signals.supportingStates,
     counterSignals: signals.counterSignals,
     upstreamLineage: {
-      classificationVersion: input.r8.upstreamLineage.classificationVersion ?? null,
+      classificationVersion: input.classificationVersion,
       researchProfileCode: input.r8.upstreamLineage.researchProfileCode,
       methodologyId: input.r8.upstreamLineage.methodologyId,
       methodologyVersion: input.r8.upstreamLineage.methodologyVersion,
