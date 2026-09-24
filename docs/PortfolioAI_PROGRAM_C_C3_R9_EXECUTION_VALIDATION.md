@@ -669,6 +669,67 @@ Latest source HEAD for this lint correction before documentation update:
 C3 remains validation-pending until the owner reruns the full authoritative
 validator successfully.
 
+## 23B. Pre-validation static-safety false-positive correction
+
+The next owner-local C3 validation run reached the canonical R9 report and
+confirmed:
+
+```text
+overallPass = true
+deterministicReplayPass = true
+baselineSemanticsPass = true
+rawImmaterialDistinctionPass = true
+meaningfulCategoricalTransitionsPass = true
+incomparableAndOutOfOrderPass = true
+semanticDuplicateSuppressionPass = true
+frozenPortfolioDispositionPass = true
+r8RegressionPass = true
+authorityRegistryPass = true
+safetyPass = true
+providerCalls = 0
+persistedWrites = 0
+```
+
+The run then stopped only in the static-safety script for two validator defects:
+
+1. `r9LiveSessionStore.ts` was falsely flagged by the generic
+   `.delete(...)` pattern because its unsubscribe path correctly calls
+   `Set.delete(listener)`.
+
+2. The Dashboard consumer check still looked for the old direct
+   `advanceProgramCR9InMemorySession` integration after the prior React lint
+   fix had moved session orchestration behind
+   `createProgramCR9LiveSessionStore()` + `useSyncExternalStore`.
+
+The validator was corrected without changing R9 business logic:
+
+```text
+scripts/program-c-c3-static-safety.mjs
+```
+
+Changes:
+
+- generic `.delete(...)` rejection was removed;
+- database-style chained `.from(...).delete(...)` remains prohibited;
+- persistence-capable imports remain prohibited;
+- consumer validation now requires:
+  - `buildProgramCR9LiveObservedProjection`;
+  - `createProgramCR9LiveSessionStore`;
+  - `useSyncExternalStore`.
+
+Validator correction commit:
+
+```text
+f65997a9f42abeea2a87a498645e4dcc3adac13e
+```
+
+No R9 domain contract, materiality rule, event identity, baseline semantics,
+provider boundary, persistence boundary, owner authority or trading boundary was
+changed.
+
+C3 remains owner-local executable-validation pending until the full authoritative
+runner completes successfully.
+
 ## 24. Current stop point
 
 ```text
