@@ -286,6 +286,12 @@ export function evaluateProgramCR10Attention(
   if (input.r9.securityId !== input.securityId || input.r9.portfolioId !== input.portfolioId) {
     throw new Error("Program C R10 requires exact R9 security/portfolio identity.")
   }
+  if (
+    input.r9CurrentR8DecisionRunId
+    && input.r9CurrentR8DecisionRunId !== input.r8.decisionRunId
+  ) {
+    throw new Error("Program C R10 requires R9 current observed state to reference the same R8 decision run.")
+  }
 
   const conflicts = conflictRows(input)
   const signals = deriveSignals(input, conflicts)
