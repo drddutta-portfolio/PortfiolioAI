@@ -28,10 +28,31 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 # PortfolioAI — Development Status
 
 **Status:** Living implementation and handover record  
-**Current milestone:** Gate K research-methodology architecture is COMPLETE / PASS with portfolio-coverage/fail-closed routing; PR #101 remains OPEN / DRAFT / UNMERGED; the next substantive program is evidence breadth and market-history coverage, not a new Gate L/M
-**Last reviewed:** 16 September 2026
+**Current milestone:** Stage 4 Dev backend reconstruction is COMPLETE / PASS; Program A · A2 remains IN PROGRESS and separately gated; Post-D P0 has not started
+**Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
+
+## Stage 4 Dev backend reconstruction — 26 September 2026
+
+Stage 4 is COMPLETE / PASS. The separate Supabase project `PortfolioAI Dev`
+(`lrgpjimipfkyoqbpsqzz`) now contains the repository-controlled database
+baseline plus approved later migrations, 27 approved hosted Edge Functions and
+only project-managed Supabase secrets. Its public schema is byte-for-byte
+identical to a fresh repository-local replay.
+
+The environment remains deliberately safe and empty: no production users or
+business records were copied, no application Storage bucket was required, no
+cron job was installed, and Angel One, Trendlyne, OpenAI and scheduler
+credentials remain unset. Production `uxiyufbsbgzzdujzcdxe` was inspected
+read-only and was not modified. Full findings, intentional differences and
+advisor observations are recorded in
+`PortfolioAI_STAGE_4_DEV_BACKEND_RECONSTRUCTION_MANIFEST.md`.
+
+The next development-data stage may create a controlled Dev identity and
+bounded realistic acceptance fixtures. It must not activate providers,
+schedulers, paid AI, trading or production mutation without separate approval.
+Post-D P0 remains NOT STARTED.
 
 ## Program A · Checkpoint A1 status — 23 September 2026
 
