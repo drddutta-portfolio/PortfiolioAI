@@ -9425,3 +9425,67 @@ D-FINAL = NOT STARTED / NOT AUTHORIZED
 ```
 
 D0 closure does not authorize D1. The next possible action after owner closure is a separate explicit D1 authorization.
+
+
+---
+
+## Program D · D0 OWNER CLOSURE / D1 AUTHORIZATION — 25 September 2026
+
+Owner decision:
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = AUTHORIZED
+D2 = NOT AUTHORIZED
+D3 = NOT AUTHORIZED
+D4 = NOT AUTHORIZED
+D-FINAL = NOT AUTHORIZED
+```
+
+The owner explicitly accepted the fully validated D0 result and instructed the build to start D1.
+
+D1 is authorized only within the frozen master-plan scope:
+
+- local/provider-free R11 orchestration implementation;
+- trigger intake;
+- dependency planner;
+- semantic no-op planner;
+- deterministic job identity;
+- lease/concurrency abstraction;
+- retry/recovery state;
+- operational ledger abstraction;
+- downstream event routing;
+- operations UI;
+- dry-run provider-call planning;
+- canonical stage adapters.
+
+The following remain separately gated and are **not** implied by D1 authorization:
+
+```text
+migration creation/application = NOT AUTHORIZED
+R9 durable checkpoint persistence = NOT AUTHORIZED
+R10 operational snapshot persistence = NOT AUTHORIZED
+real provider pilot = NOT AUTHORIZED
+Trendlyne automation = NOT AUTHORIZED
+Angel One automation = NOT AUTHORIZED
+automatic production R6-R10 recomputation = NOT AUTHORIZED
+scheduler enablement = NOT AUTHORIZED
+recurring provider spend = NOT AUTHORIZED
+R12 = NOT AUTHORIZED
+AI provider calls = NOT AUTHORIZED
+notifications = NOT AUTHORIZED
+production readiness/enablement = NOT AUTHORIZED
+merge/deployment = NOT AUTHORIZED
+trading = NOT AUTHORIZED
+```
+
+D1 default physical external calls remain:
+
+```text
+Trendlyne = 0
+Angel One = 0
+AI = 0
+other external provider = 0
+```
+
+Program C remains frozen.
