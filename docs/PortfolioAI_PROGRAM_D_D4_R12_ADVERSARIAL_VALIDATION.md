@@ -1,6 +1,6 @@
 # PortfolioAI — Program D D4 R12 Grounding & Adversarial Validation
 
-**Status:** IMPLEMENTED ON PROGRAM D BRANCH / LOCAL VALIDATION PENDING  
+**Status:** COMPLETE / PASS / CLOSED  
 **Date:** 25 September 2026  
 **Branch:** `program-d-operations-optional-ai`  
 **Authority:** D4 only  
@@ -230,9 +230,19 @@ D1 = COMPLETE / PASS / CLOSED
 D2 = COMPLETE / PASS / CLOSED
 R11 = COMPLETE / PASS / CLOSED
 D3 = COMPLETE / PASS / CLOSED
-D4 = IMPLEMENTED ON GITHUB / LOCAL VALIDATION PENDING
+D4 = COMPLETE / PASS / CLOSED
 
-R12 = NOT YET CLOSED
+R12 = COMPLETE / PASS / CLOSED
 real AI provider pilot = NOT RUN / NOT AUTHORIZED
-D-FINAL = NOT AUTHORIZED
+D-FINAL = AUTHORIZED
+```
+
+
+## 19. Validation result
+
+```text
+D4 = COMPLETE / PASS / CLOSED
+R12 = COMPLETE / PASS / CLOSED
+real AI provider pilot = NOT RUN / NOT AUTHORIZED
+D-FINAL = AUTHORIZED
 ```
