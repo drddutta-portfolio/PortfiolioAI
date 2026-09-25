@@ -1,6 +1,6 @@
 # PortfolioAI — Program D D1 R11 Local Orchestration Implementation
 
-**Status:** IMPLEMENTED ON PROGRAM D BRANCH / LOCAL VALIDATION PENDING  
+**Status:** COMPLETE / PASS / AWAITING OWNER CLOSURE  
 **Date:** 25 September 2026  
 **Branch:** `program-d-operations-optional-ai`  
 **Authority:** D1 only  
@@ -270,7 +270,7 @@ D1 closure is not D2 authorization.
 
 ```text
 D0 = COMPLETE / PASS / CLOSED
-D1 = IMPLEMENTED ON GITHUB / LOCAL VALIDATION PENDING
+D1 = COMPLETE / PASS / AWAITING OWNER CLOSURE
 D2 = NOT AUTHORIZED
 
 real provider pilot = NOT AUTHORIZED
