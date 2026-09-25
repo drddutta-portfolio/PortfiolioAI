@@ -9548,3 +9548,37 @@ D2 = NOT AUTHORIZED
 ```
 
 Next workflow step: pull the exact Program D branch to the Mac, inspect the new Operations UI locally, and execute the D1 local validation suite. D2 must not begin automatically.
+
+
+### D1 localhost visual validation correction — stage ordering bug found and fixed
+
+Owner localhost testing of the four initial D1 fixtures correctly exposed a planner-order defect before D1 closure.
+
+Observed incorrect ledger order included examples such as:
+
+```text
+R10 -> R8_EXIT_INTELLIGENCE -> R8_PORTFOLIO_RISK -> R9
+R10 -> R6 -> R7 -> R8_CORE_HEALTH -> R9
+```
+
+Root cause: the affected-node set was converted to an alphabetically sorted array. That preserved membership but violated dependency/topological execution order.
+
+Fix applied on the Program D branch:
+
+- affected nodes now follow the frozen `PROGRAM_D_R11_DEPENDENCY_MATRIX` order;
+- changed-node normalization also uses the frozen dependency order;
+- a regression test now locks expected stage order for evidence-change and market-data-change fixtures.
+
+Expected corrected orders:
+
+```text
+Evidence change:
+R6 -> R7 -> R8_CORE_HEALTH -> R9 -> R10
+
+Market data change:
+R8_PORTFOLIO_RISK -> R8_EXIT_INTELLIGENCE -> R9 -> R10
+```
+
+No provider call, migration, scheduler activation, production mutation or deterministic R6-R10 execution occurred during discovery or correction.
+
+D1 remains **LOCAL VALIDATION PENDING** until this fix is pulled and the fixtures are rerun.
