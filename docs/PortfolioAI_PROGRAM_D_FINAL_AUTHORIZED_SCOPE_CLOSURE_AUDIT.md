@@ -1,6 +1,6 @@
 # PortfolioAI — Program D Final Authorized-Scope Closure Audit
 
-**Status:** IMPLEMENTED ON PROGRAM D BRANCH / LOCAL VALIDATION PENDING  
+**Status:** COMPLETE / PASS / CLOSED  
 **Date:** 25 September 2026  
 **Branch:** `program-d-operations-optional-ai`  
 **Authority:** D-FINAL only  
@@ -246,12 +246,45 @@ D3 = COMPLETE / PASS / CLOSED
 D4 = COMPLETE / PASS / CLOSED
 R12 = COMPLETE / PASS / CLOSED
 
-D-FINAL = IMPLEMENTED / LOCAL VALIDATION PENDING
-Program D = NOT YET CLOSED
+D-FINAL = COMPLETE / PASS / CLOSED
+Program D = COMPLETE / PASS / CLOSED
 
 production enabled = NO
 real provider pilot = NOT RUN / NOT AUTHORIZED
 real AI pilot = NOT RUN / NOT AUTHORIZED
 merge/deployment = NOT AUTHORIZED
+trading = NOT AUTHORIZED
+```
+
+
+## 13. Final validation result
+
+The owner completed the D-FINAL validation sequence and reported all checks PASS.
+
+```text
+D-FINAL dedicated closure test = PASS
+D4/D3/D2/D1/D0/Program C cumulative regression suite = PASS
+Targeted D-FINAL ESLint = PASS
+TypeScript = PASS
+Architecture guard = PASS
+Production build = PASS
+git diff --check = PASS
+Local working-tree audit = PASS
+```
+
+Formal closure:
+
+```text
+R11 = COMPLETE / PASS / CLOSED
+R12 = COMPLETE / PASS / CLOSED
+D-FINAL = COMPLETE / PASS / CLOSED
+Program D = COMPLETE / PASS / CLOSED
+
+production operational = NO
+real provider pilot = NOT RUN / NOT AUTHORIZED
+real AI pilot = NOT RUN / NOT AUTHORIZED
+scheduler = NOT AUTHORIZED
+merge/deployment = NOT AUTHORIZED
+numeric sizing authority = NONE
 trading = NOT AUTHORIZED
 ```
