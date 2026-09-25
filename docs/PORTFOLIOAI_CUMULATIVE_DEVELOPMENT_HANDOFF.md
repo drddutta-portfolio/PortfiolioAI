@@ -10450,3 +10450,40 @@ D-FINAL = NOT AUTHORIZED
 ```
 
 Next workflow step: pull the exact Program D branch, run the D4 matrix in the Investment Committee UI, then execute the full D4/D3/D2/D1/D0/Program C validation suite.
+
+
+---
+
+## Program D · D4 / R12 OWNER CLOSURE / D-FINAL AUTHORIZATION — 25 September 2026
+
+Owner decision:
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+D3 = COMPLETE / PASS / CLOSED
+D4 = COMPLETE / PASS / CLOSED
+R12 = COMPLETE / PASS / CLOSED
+D-FINAL = AUTHORIZED
+```
+
+The owner reported the full D4 validation suite PASS and explicitly authorized D-FINAL — Authorized-Scope Closure Audit.
+
+D4/R12 closure evidence includes:
+
+- all 15 frozen D4 adversarial cards PASS in the local Investment Committee UI;
+- D4/D3/D2/D1/D0/Program C regression suite PASS;
+- targeted D4 ESLint PASS;
+- TypeScript PASS;
+- architecture guard PASS;
+- production build PASS;
+- `git diff --check` PASS;
+- local working-tree audit PASS;
+- real external AI calls = 0;
+- external AI cost = 0;
+- deterministic R6-R10 state remained available under simulated AI failure;
+- no owner mutation, R10 override, sizing authority or trade/order authority introduced.
+
+D-FINAL is authorized only as the frozen closure audit. It does not authorize production enablement, scheduler activation, migrations, provider/AI pilots, deployment, merge, notifications or trading.
