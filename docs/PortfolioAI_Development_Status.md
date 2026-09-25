@@ -647,3 +647,10 @@ D4 remains **NOT AUTHORIZED**.
 Owner approval closes D3 as **COMPLETE / PASS / CLOSED** and authorizes **D4 — Optional R12 Validation**.
 
 D4 is local/mock/adversarial only by default. Real AI-provider execution and cost remain separately unauthorized. D-FINAL remains not authorized.
+
+
+## Program D · D4 R12 validation implementation — 25 September 2026
+
+D4 is **IMPLEMENTED ON GITHUB / LOCAL VALIDATION PENDING**.
+
+The branch now includes the complete frozen local R12 grounding/adversarial matrix and Investment Committee validation UI. Real AI-provider execution remains unauthorized and external AI cost remains zero.
