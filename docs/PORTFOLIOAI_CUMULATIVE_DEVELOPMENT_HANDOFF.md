@@ -10386,3 +10386,67 @@ numeric sizing authority = NONE
 trade/order instruction = PROHIBITED
 merge/deployment = NOT AUTHORIZED
 ```
+
+
+---
+
+## Program D · D4 R12 Grounding + Adversarial Validation — IMPLEMENTED / LOCAL VALIDATION PENDING — 25 September 2026
+
+D3 is formally closed and D4 was explicitly authorized by the owner.
+
+Authoritative D4 record:
+
+```text
+docs/PortfolioAI_PROGRAM_D_D4_R12_ADVERSARIAL_VALIDATION.md
+```
+
+### Implemented D4 coverage
+
+- exact packet grounding;
+- numeric claim verification;
+- citation resolution;
+- unsupported-fact rejection;
+- deterministic-state preservation;
+- contradictory evidence preservation;
+- prompt-injection resistance;
+- malformed-output runtime schema rejection;
+- AI timeout/unavailability fail-safe behavior;
+- cache/idempotency;
+- cost-limit preservation;
+- authority-conflict rejection;
+- no owner mutation;
+- no R10 override;
+- deterministic system remains available when AI fails.
+
+### D4 safety boundary
+
+```text
+AI provider mode = LOCAL_MOCK_ONLY
+real external AI calls = 0
+external AI cost = 0
+real AI pilot = NOT AUTHORIZED
+scheduled AI = NOT AUTHORIZED
+production AI persistence = NOT AUTHORIZED
+R12 -> R6-R10 feedback = NONE
+numeric sizing authority = NONE
+trade/order authority = NONE
+```
+
+### UI
+
+The Investment Committee workspace now exposes a D4 adversarial validation runner with per-check PASS/FAIL cards above the existing D3 bounded-reference packet workflow.
+
+### Current checkpoint
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+D3 = COMPLETE / PASS / CLOSED
+D4 = IMPLEMENTED ON GITHUB / LOCAL VALIDATION PENDING
+R12 = NOT YET CLOSED
+D-FINAL = NOT AUTHORIZED
+```
+
+Next workflow step: pull the exact Program D branch, run the D4 matrix in the Investment Committee UI, then execute the full D4/D3/D2/D1/D0/Program C validation suite.
