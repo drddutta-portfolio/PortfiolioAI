@@ -13,6 +13,20 @@ if [[ "$current_branch" != "$EXPECTED_BRANCH" ]]; then
 fi
 echo "Program C branch guard: PASS"
 
+if ! git merge-base --is-ancestor "$PROGRAM_C_START" HEAD; then
+  echo "Program C ancestry guard failed: frozen Program C start is not an ancestor of HEAD."
+  exit 1
+fi
+
+merge_commits="$(git log --merges --format='%H' "$PROGRAM_C_START"..HEAD)"
+if [[ -n "$merge_commits" ]]; then
+  echo "Program C history guard failed: merge commit(s) detected inside Program C branch history:"
+  echo "$merge_commits"
+  exit 1
+fi
+
+echo "Program C ancestry / no-merge history guard: PASS"
+
 echo "== Complete Program C + Program B regression =="
 
 npx vitest run \
