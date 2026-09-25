@@ -1,0 +1,257 @@
+# PortfolioAI — Program D Final Authorized-Scope Closure Audit
+
+**Status:** IMPLEMENTED ON PROGRAM D BRANCH / LOCAL VALIDATION PENDING  
+**Date:** 25 September 2026  
+**Branch:** `program-d-operations-optional-ai`  
+**Authority:** D-FINAL only  
+**Program D base:** `f7c6cf45e7ec1d1820173addea0e18f38f84a25a`
+
+## 1. Purpose
+
+D-FINAL is the frozen authorized-scope closure audit for Program D.
+
+It does not enable production, scheduling, migrations, provider automation, AI
+automation, deployment, merge or trading.
+
+## 2. Authorized scope entering D-FINAL
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+D3 = COMPLETE / PASS / CLOSED
+D4 = COMPLETE / PASS / CLOSED
+R12 = COMPLETE / PASS / CLOSED
+D-FINAL = AUTHORIZED
+```
+
+## 3. Repository / branch boundary audit
+
+Compared:
+
+```text
+base = f7c6cf45e7ec1d1820173addea0e18f38f84a25a
+head = program-d-operations-optional-ai
+```
+
+At D-FINAL audit time:
+
+```text
+branch status = ahead
+ahead = 95 commits
+behind = 0 commits
+```
+
+Program D changes from the frozen base are confined to:
+
+- Program D documentation;
+- Program D operations contracts/runtime/tests;
+- Program D Operations UI;
+- Program D Investment Committee UI;
+- application route/navigation additions for those two surfaces.
+
+The compare audit shows:
+
+```text
+Program C decision files modified = 0
+Supabase migration files modified = 0
+provider/edge-function files modified = 0
+scheduler files modified = 0
+trading/order files modified = 0
+```
+
+Program C remains frozen.
+
+## 4. R11 closure audit
+
+R11 closed through D1 + D2 with:
+
+- dependency-driven planning;
+- semantic idempotency;
+- no-op behavior;
+- local lease/concurrency handling;
+- partial recovery/resume;
+- kill-switch fail-closed behavior;
+- provider-budget blocking;
+- bounded retry;
+- partial provider acceptance semantics;
+- recursive-trigger guard;
+- stale-domain-only acquisition planning;
+- incremental market-history planning;
+- zero physical provider-call validation.
+
+Real provider execution was not run.
+
+```text
+real bounded provider pilot = NOT RUN / NOT AUTHORIZED
+Trendlyne physical calls = 0
+Angel One physical calls = 0
+```
+
+## 5. R12 closure audit
+
+R12 closed through D3 + D4 with:
+
+- immutable/versioned deterministic fact packet;
+- exact packet hashing;
+- typed inputs;
+- strict output schema;
+- numeric-claim validation;
+- citation resolution;
+- unsupported-fact rejection;
+- contradiction preservation;
+- prompt-injection resistance;
+- malformed-output rejection;
+- AI-unavailable fail-safe behavior;
+- cache/idempotency;
+- zero-cost ceiling;
+- authority-conflict rejection;
+- no owner mutation;
+- no R10 override;
+- deterministic-system availability under AI failure.
+
+Real AI execution was not run.
+
+```text
+AI provider mode = LOCAL_MOCK_ONLY
+real AI provider pilot = NOT RUN / NOT AUTHORIZED
+real external AI calls = 0
+external AI cost = 0
+scheduled AI = NOT AUTHORIZED
+```
+
+## 6. Security / cost / abuse controls
+
+Verified Program D closure boundaries:
+
+- global/provider/domain gates fail closed;
+- provider budget checks precede execution;
+- local concurrency is bounded;
+- recursive trigger depth is bounded;
+- external AI calls/cost are zero;
+- AI output is validated before acceptance;
+- unsupported citations/facts fail closed;
+- prompt-injection content is treated as data;
+- malformed cache/output is rejected or ignored fail-closed;
+- no secrets, provider credentials or production mutation are introduced by Program D.
+
+## 7. Investment authority audit
+
+Program D creates no new investment authority.
+
+```text
+R6 score authority = unchanged
+R7 recommendation authority = unchanged
+R8 decision-context authority = unchanged
+R9 materiality/change authority = unchanged
+R10 Action Center authority = unchanged / sole canonical authority
+R11 = operational only
+R12 = interpretation only
+owner role/limits/targets = owner authority only
+numeric sizing authority = NONE
+ADD_REVIEW promoted = NO
+TRIM_REVIEW promoted = NO
+trade/order authority = NONE
+```
+
+## 8. Production state
+
+Program D closure must not be described as production enablement.
+
+Exact state:
+
+```text
+production enabled = NO
+scheduler enabled = NO
+migrations created/applied by Program D = NO
+real provider pilot = NOT RUN
+real AI pilot = NOT RUN
+merge authorized = NO
+deployment authorized = NO
+notifications authorized = NO
+trading authorized = NO
+```
+
+The local Vite/Supabase validation environment does not change this production state.
+
+## 9. Intentional limitations retained at closure
+
+Program D intentionally leaves these capabilities unactivated:
+
+- production R11 scheduler;
+- recurring provider spend;
+- real provider automation;
+- durable R9 comparison persistence;
+- durable R10 operational snapshot;
+- real AI-provider execution;
+- scheduled/weekly/portfolio-wide AI;
+- production AI persistence;
+- notifications;
+- merge/deployment;
+- trading;
+- numeric sizing authority.
+
+These are not missing closure items. They remain separately gated future scope.
+
+## 10. Machine-readable D-FINAL audit
+
+Added:
+
+```text
+src/features/operations/programDFinalClosure.ts
+src/features/operations/programDFinalClosure.test.ts
+```
+
+The audit cross-checks:
+
+- Program C frozen boundary;
+- R11 provider safety;
+- R12 AI/cost safety;
+- complete D4 adversarial result;
+- no migrations;
+- no scheduler activation;
+- no production mutation;
+- no owner/sizing authority;
+- no trading;
+- no merge/deployment authority;
+- branch/base boundary;
+- precise disabled production state.
+
+## 11. Required final local validation
+
+Before Program D may be formally closed:
+
+- pull exact D-FINAL branch HEAD;
+- run D-FINAL closure test;
+- run D4/D3/D2/D1/D0/Program C regressions;
+- targeted D-FINAL lint passes;
+- typecheck passes;
+- architecture guard passes;
+- production build passes;
+- `git diff --check` passes;
+- local working-tree audit confirms no tracked drift.
+
+No new UI approval is required for D-FINAL because D-FINAL adds no runtime UI or
+business behavior; it audits the already visually approved D1–D4 surfaces.
+
+## 12. Current checkpoint
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+D3 = COMPLETE / PASS / CLOSED
+D4 = COMPLETE / PASS / CLOSED
+R12 = COMPLETE / PASS / CLOSED
+
+D-FINAL = IMPLEMENTED / LOCAL VALIDATION PENDING
+Program D = NOT YET CLOSED
+
+production enabled = NO
+real provider pilot = NOT RUN / NOT AUTHORIZED
+real AI pilot = NOT RUN / NOT AUTHORIZED
+merge/deployment = NOT AUTHORIZED
+trading = NOT AUTHORIZED
+```
