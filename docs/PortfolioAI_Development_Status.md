@@ -640,3 +640,10 @@ Validated locally:
 No real AI provider call, scheduled AI, migration, production mutation, deployment, merge, sizing authority or trading capability was introduced.
 
 D4 remains **NOT AUTHORIZED**.
+
+
+## Program D · D3 closed / D4 authorized — 25 September 2026
+
+Owner approval closes D3 as **COMPLETE / PASS / CLOSED** and authorizes **D4 — Optional R12 Validation**.
+
+D4 is local/mock/adversarial only by default. Real AI-provider execution and cost remain separately unauthorized. D-FINAL remains not authorized.
