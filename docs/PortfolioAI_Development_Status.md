@@ -613,3 +613,30 @@ D3 is local/mock/on-demand only with external AI calls and cost fixed at zero. R
 D3 is **IMPLEMENTED ON GITHUB / LOCAL VALIDATION PENDING**.
 
 The branch now includes a versioned deterministic R12 fact packet, strict local validator, zero-cost local mock generator, cache reuse, and a dedicated Investment Committee workspace. R12 remains downstream and non-authoritative; real AI-provider execution remains unauthorized.
+
+
+## Program D · D3 local validation complete — 25 September 2026
+
+D3 is now **COMPLETE / PASS / AWAITING OWNER CLOSURE**.
+
+The bounded local/mock R12 implementation is correspondingly **COMPLETE / PASS / AWAITING D4 VALIDATION**.
+
+Validated locally:
+
+- Investment Committee UI and deterministic-vs-AI separation;
+- zero external AI calls and zero external cost;
+- VALID first local generation;
+- VALID cache reuse on unchanged packet + prompt version;
+- numeric-identifier boundary correction;
+- fail-closed browser cache parsing;
+- D3/D2/D1/D0/Program C regressions;
+- targeted D3 ESLint;
+- TypeScript;
+- architecture guard;
+- production build;
+- `git diff --check`;
+- local working-tree audit.
+
+No real AI provider call, scheduled AI, migration, production mutation, deployment, merge, sizing authority or trading capability was introduced.
+
+D4 remains **NOT AUTHORIZED**.
