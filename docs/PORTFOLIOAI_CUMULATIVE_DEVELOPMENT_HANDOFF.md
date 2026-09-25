@@ -10487,3 +10487,94 @@ D4/R12 closure evidence includes:
 - no owner mutation, R10 override, sizing authority or trade/order authority introduced.
 
 D-FINAL is authorized only as the frozen closure audit. It does not authorize production enablement, scheduler activation, migrations, provider/AI pilots, deployment, merge, notifications or trading.
+
+
+---
+
+## Program D · D-FINAL Authorized-Scope Closure Audit — IMPLEMENTED / LOCAL VALIDATION PENDING — 25 September 2026
+
+D4/R12 is formally closed and D-FINAL was explicitly authorized by the owner.
+
+Authoritative D-FINAL record:
+
+```text
+docs/PortfolioAI_PROGRAM_D_FINAL_AUTHORIZED_SCOPE_CLOSURE_AUDIT.md
+```
+
+### Repository boundary audit
+
+Compared Program D base `f7c6cf45e7ec1d1820173addea0e18f38f84a25a` against the Program D branch during D-FINAL.
+
+```text
+branch = program-d-operations-optional-ai
+status = ahead
+ahead = 95
+behind = 0
+Program C decision files modified = 0
+Supabase migration files modified = 0
+provider/edge-function files modified = 0
+scheduler files modified = 0
+trading/order files modified = 0
+```
+
+Program D changes remain confined to Program D documentation, operations contracts/runtime/tests, the Operations and Investment Committee UIs, and their route/navigation additions.
+
+### D-FINAL machine-readable audit
+
+Added:
+
+```text
+src/features/operations/programDFinalClosure.ts
+src/features/operations/programDFinalClosure.test.ts
+```
+
+The closure audit cross-checks Program C freeze, R11 provider safety, R12 AI safety, D4 adversarial cleanliness, no migrations/scheduler/production mutation, no owner/sizing/trading authority, no merge/deployment authority, branch history boundary and precise production-disabled state.
+
+### Exact production state entering closure
+
+```text
+production enabled = NO
+scheduler enabled = NO
+migrations applied = NO
+real provider pilot = NOT RUN / NOT AUTHORIZED
+real AI pilot = NOT RUN / NOT AUTHORIZED
+real external AI calls = 0
+external AI cost = 0
+merge/deployment = NOT AUTHORIZED
+notifications = NOT AUTHORIZED
+numeric sizing authority = NONE
+trading = NOT AUTHORIZED
+```
+
+### Intentional retained limitations
+
+The following remain deliberately unactivated and are not D-FINAL blockers:
+
+- production R11 scheduler;
+- recurring provider spend;
+- real provider automation;
+- durable R9 comparison persistence;
+- durable R10 operational snapshot;
+- real AI provider execution;
+- scheduled/weekly/portfolio-wide AI;
+- production AI persistence;
+- notifications;
+- merge/deployment;
+- numeric sizing;
+- trading.
+
+### Current checkpoint
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+D3 = COMPLETE / PASS / CLOSED
+D4 = COMPLETE / PASS / CLOSED
+R12 = COMPLETE / PASS / CLOSED
+D-FINAL = IMPLEMENTED / LOCAL VALIDATION PENDING
+Program D = NOT YET CLOSED
+```
+
+Next workflow step: pull the exact D-FINAL branch HEAD and run the final closure validation suite. D-FINAL adds no new runtime UI/business behavior, so no new visual approval surface is required.
