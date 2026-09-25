@@ -1,6 +1,6 @@
 # PortfolioAI — Program D D3 Optional R12 Local Implementation
 
-**Status:** COMPLETE / PASS / AWAITING OWNER CLOSURE  
+**Status:** COMPLETE / PASS / CLOSED  
 **Date:** 25 September 2026  
 **Branch:** `program-d-operations-optional-ai`  
 **Authority:** D3 only  
@@ -319,14 +319,14 @@ D0 = COMPLETE / PASS / CLOSED
 D1 = COMPLETE / PASS / CLOSED
 D2 = COMPLETE / PASS / CLOSED
 R11 = COMPLETE / PASS / CLOSED
-D3 = COMPLETE / PASS / AWAITING OWNER CLOSURE
+D3 = COMPLETE / PASS / CLOSED
 
 real R11 provider pilot = NOT RUN / NOT AUTHORIZED
 real AI provider = NOT AUTHORIZED
 external AI calls = 0
 external AI cost = 0
 scheduled AI = NOT AUTHORIZED
-D4 = NOT AUTHORIZED
+D4 = AUTHORIZED
 D-FINAL = NOT AUTHORIZED
 trading = NOT AUTHORIZED
 ```
@@ -335,8 +335,8 @@ trading = NOT AUTHORIZED
 ## 15. Validation result
 
 ```text
-D3 = COMPLETE / PASS / AWAITING OWNER CLOSURE
+D3 = COMPLETE / PASS / CLOSED
 R12 local implementation = COMPLETE / PASS / AWAITING D4 VALIDATION
 real AI provider pilot = NOT RUN / NOT AUTHORIZED
-D4 = NOT AUTHORIZED
+D4 = AUTHORIZED
 ```
