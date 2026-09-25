@@ -10,7 +10,7 @@ import {
 } from "./programD1Store"
 import {
   executeProgramD1Plan,
-  releaseProgramD1Lease,
+  recoverExpiredProgramD1Lease,
 } from "./programD1Runtime"
 import { PROGRAM_D_D1_LOCAL_FIXTURES } from "./programD1Fixtures"
 import type { ProgramD1Plan, ProgramD1Trigger } from "./programD1Types"
@@ -100,6 +100,18 @@ export function staleDomainOnlyProviderRequirements(
     .filter(([, state]) => state === "STALE" || state === "MISSING")
     .map(([domain]) => domain)
     .sort()
+}
+
+export type ProgramD2ProviderBatchState = "SUCCEEDED" | "PARTIAL" | "FAILED"
+
+export function classifyProgramD2ProviderBatch(
+  outcomes: readonly ("ACCEPTED" | "REJECTED")[],
+): ProgramD2ProviderBatchState {
+  if (!outcomes.length) return "FAILED"
+  const accepted = outcomes.filter((outcome) => outcome === "ACCEPTED").length
+  if (accepted === outcomes.length) return "SUCCEEDED"
+  if (accepted === 0) return "FAILED"
+  return "PARTIAL"
 }
 
 export interface ProgramD2BoundedPilotReadiness {
@@ -211,16 +223,19 @@ Promise<readonly ProgramD2ValidationResult[]> {
       : fail("LEASE_RACE", "Lease race", "Lease contention was not safely blocked."),
   )
 
-  const staleLeaseReleased = releaseProgramD1Lease(
+  const staleLeaseRecovered = recoverExpiredProgramD1Lease(
     leaseKey,
-    "FOREIGN_RUN",
     leaseStore,
+    {
+      nowMs: Date.parse("2026-09-25T02:00:00.000Z"),
+      staleAfterMs: 60 * 60 * 1000,
+    },
   )
   const afterRelease = executeProgramD1Plan(planA, leaseStore)
   results.push(
-    staleLeaseReleased && afterRelease.state === "SUCCEEDED"
-      ? pass("STALE_LEASE_RECOVERY", "Stale-lease recovery readiness", "Explicit owner-matching release allowed safe subsequent execution.")
-      : fail("STALE_LEASE_RECOVERY", "Stale-lease recovery readiness", "Explicit lease recovery path failed."),
+    staleLeaseRecovered && afterRelease.state === "SUCCEEDED"
+      ? pass("STALE_LEASE_RECOVERY", "Stale-lease recovery", "Expired local lease was recovered only after the stale threshold and subsequent execution completed.")
+      : fail("STALE_LEASE_RECOVERY", "Stale-lease recovery", "Expired-lease recovery path failed."),
   )
 
   const gateCases = [
@@ -296,6 +311,14 @@ Promise<readonly ProgramD2ValidationResult[]> {
       && retryExhausted.attempts === 3
       ? pass("BOUNDED_RETRY", "Bounded retry", "Transient retries stop at the frozen ceiling and expose exhaustion.")
       : fail("BOUNDED_RETRY", "Bounded retry", "Retry ceiling behavior was incorrect."),
+  )
+
+  results.push(
+    classifyProgramD2ProviderBatch(["ACCEPTED", "REJECTED", "ACCEPTED"]) === "PARTIAL"
+      && classifyProgramD2ProviderBatch(["ACCEPTED", "ACCEPTED"]) === "SUCCEEDED"
+      && classifyProgramD2ProviderBatch(["REJECTED", "REJECTED"]) === "FAILED"
+      ? pass("PARTIAL_ACCEPTANCE", "Partial provider acceptance", "Mixed provider outcomes remain PARTIAL and are never collapsed into SUCCESS.")
+      : fail("PARTIAL_ACCEPTANCE", "Partial provider acceptance", "Provider batch terminal-state classification was incorrect."),
   )
 
   const recoveryStore = createMemoryProgramD1Store()
