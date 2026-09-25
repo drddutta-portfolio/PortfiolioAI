@@ -7,6 +7,10 @@ import {
   type ProgramDR12FactPacket,
   type ProgramDR12Result,
 } from "../features/operations/programD3R12Contract"
+import {
+  buildProgramD4ValidationSummary,
+  type ProgramD4ValidationResult,
+} from "../features/operations/programD4R12Validation"
 import "../features/operations/programD3R12.css"
 
 export function InvestmentCommitteePage() {
@@ -14,6 +18,21 @@ export function InvestmentCommitteePage() {
   const [result, setResult] = useState<ProgramDR12Result | null>(null)
   const [running, setRunning] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [d4Results, setD4Results] = useState<readonly ProgramD4ValidationResult[]>([])
+  const [d4Running, setD4Running] = useState(false)
+
+  const runD4Validation = async () => {
+    setD4Running(true)
+    setError(null)
+    try {
+      const summary = await buildProgramD4ValidationSummary()
+      setD4Results(summary.results)
+    } catch (reason: unknown) {
+      setError(reason instanceof Error ? reason.message : "D4 R12 validation failed.")
+    } finally {
+      setD4Running(false)
+    }
+  }
 
   const runLocal = async () => {
     setRunning(true)
@@ -75,6 +94,43 @@ export function InvestmentCommitteePage() {
       </section>
 
       {error ? <div className="notice notice-error" role="alert">{error}</div> : null}
+
+      <section className="panel">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">D4 grounding / adversarial validation</p>
+            <h2>Validate R12 fail-closed behavior</h2>
+            <p>
+              Exercises the frozen D4 matrix locally. No external AI provider is called and
+              deterministic R6–R10 state remains available even when AI is simulated as unavailable.
+            </p>
+          </div>
+          <button
+            className="button button-primary"
+            type="button"
+            disabled={d4Running}
+            onClick={() => void runD4Validation()}
+          >
+            {d4Running ? "Validating…" : "Run D4 adversarial validation"}
+          </button>
+        </div>
+        {d4Results.length ? (
+          <div className="r12-validation-grid">
+            {d4Results.map((result) => (
+              <article className="r12-validation-card" key={result.code}>
+                <span className={result.state === "PASS" ? "status status-fresh" : "status status-conflicting"}>
+                  {result.state}
+                </span>
+                <strong>{result.label}</strong>
+                <small>{result.code}</small>
+                <p>{result.detail}</p>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="assessment-note">D4 adversarial validation has not been run in this browser session yet.</p>
+        )}
+      </section>
 
       <section className="panel">
         <div className="section-heading">
