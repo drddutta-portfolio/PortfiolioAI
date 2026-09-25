@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest"
 import { buildProgramD1Plan } from "./programD1Planner"
 import { PROGRAM_D_D1_LOCAL_FIXTURES } from "./programD1Fixtures"
 import {
+  createBrowserProgramD1Store,
   createMemoryProgramD1Store,
   emptyProgramD1LocalState,
+  PROGRAM_D_D1_BROWSER_STORAGE_KEY,
 } from "./programD1Store"
 import {
   executeProgramD1Plan,
@@ -17,6 +19,32 @@ function fixture(code: string) {
 }
 
 describe("Program D D1 local orchestration", () => {
+  it("uses the current versioned browser ledger key and rejects stale-version state", () => {
+    expect(PROGRAM_D_D1_BROWSER_STORAGE_KEY).toBe(
+      "portfolioai.program-d.d1.local-orchestration.v2",
+    )
+    const values = new Map<string, string>([
+      [
+        PROGRAM_D_D1_BROWSER_STORAGE_KEY,
+        JSON.stringify({
+          ...emptyProgramD1LocalState(),
+          version: "PROGRAM_D_D1_LOCAL_ORCHESTRATION_V1",
+        }),
+      ],
+    ])
+    const storage = {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => { values.set(key, value) },
+      removeItem: (key: string) => { values.delete(key) },
+      clear: () => { values.clear() },
+      key: (index: number) => [...values.keys()][index] ?? null,
+      get length() { return values.size },
+    } satisfies Storage
+    expect(createBrowserProgramD1Store(storage).load()).toEqual(
+      emptyProgramD1LocalState(),
+    )
+  })
+
   it("plans unchanged semantic input as an audited no-op", async () => {
     const plan = await buildProgramD1Plan(fixture("UNCHANGED_INPUT_NO_OP").trigger)
     expect(plan.noOpReason).toBe("UNCHANGED_CANONICAL_DEPENDENCY_FINGERPRINT")
