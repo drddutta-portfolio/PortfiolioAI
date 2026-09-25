@@ -1,6 +1,6 @@
 # PortfolioAI — Program D D2 R11 Adversarial Validation & Bounded-Pilot Readiness
 
-**Status:** COMPLETE / PASS / AWAITING OWNER CLOSURE  
+**Status:** COMPLETE / PASS / CLOSED  
 **Date:** 25 September 2026  
 **Branch:** `program-d-operations-optional-ai`  
 **Authority:** D2 only  
@@ -261,14 +261,14 @@ inside D2.
 ```text
 D0 = COMPLETE / PASS / CLOSED
 D1 = COMPLETE / PASS / CLOSED
-D2 = COMPLETE / PASS / AWAITING OWNER CLOSURE
+D2 = COMPLETE / PASS / CLOSED
 
 real provider pilot = NOT AUTHORIZED
 provider calls = 0
 migration = NOT AUTHORIZED
 scheduler = NOT AUTHORIZED
 production = NOT AUTHORIZED
-D3 / R12 = NOT AUTHORIZED
+D3 / R12 = AUTHORIZED
 trading = NOT AUTHORIZED
 ```
 
@@ -276,8 +276,8 @@ trading = NOT AUTHORIZED
 ## 16. Validation result
 
 ```text
-D2 = COMPLETE / PASS / AWAITING OWNER CLOSURE
-R11 = COMPLETE / PASS / AWAITING OWNER CLOSURE
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
 real bounded provider pilot = NOT RUN / NOT AUTHORIZED
-D3 / R12 = NOT AUTHORIZED
+D3 / R12 = AUTHORIZED
 ```
