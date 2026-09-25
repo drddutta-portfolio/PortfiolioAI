@@ -9596,3 +9596,12 @@ Hardening applied:
 - a regression test now locks the V2 key and stale-state rejection behavior.
 
 This is local disposable UI/runtime state only. No Supabase persistence, migration, provider call, scheduler, production mutation or Program C semantic change is involved.
+
+
+### D1 targeted-lint correction — 25 September 2026
+
+The full D1/D0/Program C regression set passed 83/83 tests across 7 files. Targeted ESLint then found one D1-local issue in `programD1Planner.ts`: an unnecessary readonly-array type assertion in `uniqueSorted`.
+
+The assertion was removed without changing runtime semantics. No unrelated lint debt was touched.
+
+D1 remains local-validation pending until the corrected HEAD is pulled and the remaining validation commands pass.
