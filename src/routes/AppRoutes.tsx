@@ -53,6 +53,10 @@ const DataSourcesPage = lazy(async () => {
   const module = await import("../pages/DataSourcesPage")
   return { default: module.DataSourcesPage }
 })
+const OperationsPage = lazy(async () => {
+  const module = await import("../pages/OperationsPage")
+  return { default: module.OperationsPage }
+})
 
 export function AppRoutes() {
   return (
@@ -122,6 +126,10 @@ export function AppRoutes() {
         <Route
           path="/app/research/:security"
           element={<AppShell><Suspense fallback={<PageLoader label="Loading security research" />}><ResearchPage /></Suspense></AppShell>}
+        />
+        <Route
+          path="/app/operations"
+          element={<AppShell><Suspense fallback={<PageLoader label="Loading Operations" />}><OperationsPage /></Suspense></AppShell>}
         />
         <Route
           path="/app/settings/data-sources"
