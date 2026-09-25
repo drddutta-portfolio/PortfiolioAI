@@ -103,6 +103,14 @@ describe("Program C C4 R10 integrated Action Center", () => {
     })).toThrow(/same R8 decision run/)
   })
 
+  it("rejects missing R8 lineage for a current R9 observed state", () => {
+    const input = buildProgramCR10ReferenceValidation().inputs.noAction
+    expect(() => evaluateProgramCR10Attention({
+      ...input,
+      r9CurrentR8DecisionRunId: null,
+    })).toThrow(/same R8 decision run/)
+  })
+
   it("builds one deterministic live Action Center collection for shared surface consumption", () => {
     const portfolio = {
       portfolio: { id: "portfolio-live", name: "Live", currency: "INR" },

@@ -153,6 +153,7 @@ export interface ProgramCR8RunIdentityInput {
   readonly portfolioContextSnapshotId: string
   readonly scoreRunId: string | null
   readonly recommendationRunId: string | null
+  readonly semanticInputFingerprint: string
   readonly contractVersion?: string
 }
 
@@ -169,6 +170,7 @@ export function programCR8DecisionRunIdentity(input: ProgramCR8RunIdentityInput)
     identityPart(input.portfolioContextSnapshotId, "portfolioContextSnapshotId"),
     input.scoreRunId?.trim() || "R6_RUN_NONE",
     input.recommendationRunId?.trim() || "R7_RUN_NONE",
+    identityPart(input.semanticInputFingerprint, "semanticInputFingerprint"),
     input.contractVersion?.trim() || PROGRAM_C_R8_DECISION_CONTRACT_VERSION,
   ]
   return `PROGRAM_C_R8_RUN::${parts.join("::")}`

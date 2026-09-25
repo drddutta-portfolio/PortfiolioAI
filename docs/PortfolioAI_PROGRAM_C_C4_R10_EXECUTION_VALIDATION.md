@@ -767,3 +767,14 @@ Intentional R10 limitations remain explicit:
 No C-FINAL work is included in this closure.
 
 The repository must stop here until the owner separately authorizes C-FINAL.
+
+## Post-audit lineage correction — 25 September 2026
+
+The independent pre-closure audit found that R10 rejected a non-null mismatched
+R9-to-R8 run ID but allowed the same lineage value to be missing. R10 now
+requires the current R9 observed-state lineage to equal the supplied R8
+`decisionRunId`; both missing and mismatched lineage fail closed. The C4 and
+C-FINAL validators include an explicit adverse missing-lineage regression.
+
+No Action Center vocabulary, precedence, owner authority, persistence or
+operational boundary changed.

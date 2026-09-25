@@ -288,7 +288,7 @@ export function evaluateProgramCR10Attention(
     throw new Error("Program C R10 requires exact R9 security/portfolio identity.")
   }
   if (
-    input.r9CurrentR8DecisionRunId
+    input.r9.currentObservedStateId !== null
     && input.r9CurrentR8DecisionRunId !== input.r8.decisionRunId
   ) {
     throw new Error("Program C R10 requires R9 current observed state to reference the same R8 decision run.")

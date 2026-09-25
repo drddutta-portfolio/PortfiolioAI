@@ -26,7 +26,7 @@ function money(value: Decimal | null) {
 
 export function DashboardRiskConcentration() {
   const { portfolio, isLoading, error } = usePortfolioView()
-  const positions = portfolio?.openPositions ?? []
+  const positions = useMemo(() => portfolio?.openPositions ?? [], [portfolio])
   const coverage = useResearchCoverage(positions)
   const r8Projection = useMemo(
     () => portfolio ? buildProgramCR8LivePortfolioProjection(portfolio, coverage.data) : null,

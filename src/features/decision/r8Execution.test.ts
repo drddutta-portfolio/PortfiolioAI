@@ -14,6 +14,7 @@ import { evaluateProgramCR8PortfolioFit } from "./r8PortfolioFit"
 import { evaluateProgramCR8PortfolioRisk } from "./r8PortfolioRisk"
 import {
   PROGRAM_C_R8_C2_SAFETY_BOUNDARY,
+  evaluateProgramCR8PortfolioDecision,
 } from "./r8PortfolioDecisionEngine"
 import { buildProgramCR8ReferenceValidationAssessments } from "./r8ReferenceValidation"
 
@@ -43,6 +44,42 @@ describe("Program C C2 R8 execution and validation", () => {
     const first = buildProgramCR8ReferenceValidationAssessments()
     const second = buildProgramCR8ReferenceValidationAssessments()
     expect(programCR8CanonicalJson(first)).toBe(programCR8CanonicalJson(second))
+  })
+
+  it("changes R8 identity when a decision-relevant signal changes", () => {
+    const reference = buildProgramCR8ReferenceValidationAssessments()
+    const fixture = reference.inputs.tornt
+    const first = evaluateProgramCR8PortfolioDecision(fixture.input, fixture.signals)
+    const second = evaluateProgramCR8PortfolioDecision(fixture.input, {
+      ...fixture.signals,
+      coreHealth: "WATCH",
+    })
+    expect(second.coreHealth.state).not.toBe(first.coreHealth.state)
+    expect(second.decisionRunId).not.toBe(first.decisionRunId)
+  })
+
+  it("does not accept evidence ids that are absent from canonical evidence", () => {
+    const fixture = buildProgramCR8ReferenceValidationAssessments().inputs.tornt
+    const result = evaluateProgramCR8PortfolioDecision({
+      ...fixture.input,
+      canonicalEvidence: [],
+    }, fixture.signals)
+    expect(result.portfolioRisk.state).toBe("INSUFFICIENT_EVIDENCE")
+    expect(result.exitIntelligence.state).toBe("INSUFFICIENT_EVIDENCE")
+  })
+
+  it("keeps R8 identity stable when canonical evidence set ordering changes", () => {
+    const fixture = buildProgramCR8ReferenceValidationAssessments().inputs.tornt
+    const first = evaluateProgramCR8PortfolioDecision(fixture.input, fixture.signals)
+    const reordered = evaluateProgramCR8PortfolioDecision({
+      ...fixture.input,
+      canonicalEvidence: [...fixture.input.canonicalEvidence].reverse(),
+    }, {
+      ...fixture.signals,
+      riskEvidenceIds: [...fixture.signals.riskEvidenceIds].reverse(),
+      thesisEvidenceIds: [...fixture.signals.thesisEvidenceIds].reverse(),
+    })
+    expect(reordered.decisionRunId).toBe(first.decisionRunId)
   })
 
   it("keeps Portfolio Fit independently evaluable without R7", () => {

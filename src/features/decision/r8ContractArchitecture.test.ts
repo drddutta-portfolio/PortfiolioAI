@@ -31,8 +31,20 @@ import {
   PROGRAM_C_R8_PORTFOLIO_RISK_BOUNDARY,
   PROGRAM_C_R8_PORTFOLIO_RISK_STATES,
 } from "./r8PortfolioRiskContract"
+import { programCR8SemanticFingerprint } from "./r8Determinism"
 
 describe("Program C C1 R8 contract and architecture", () => {
+  it("uses stable SHA-256 semantic fingerprints", () => {
+    const first = programCR8SemanticFingerprint("TEST", { b: 2, a: 1 })
+    const replay = programCR8SemanticFingerprint("TEST", { a: 1, b: 2 })
+    const changed = programCR8SemanticFingerprint("TEST", { a: 1, b: 3 })
+    expect(first).toBe(
+      "TEST::SHA256::43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777",
+    )
+    expect(replay).toBe(first)
+    expect(changed).not.toBe(first)
+  })
+
   it("freezes the four R8 state vocabularies", () => {
     expect(PROGRAM_C_R8_CORE_HEALTH_STATES).toEqual([
       "CORE_HEALTHY",
@@ -154,6 +166,7 @@ describe("Program C C1 R8 contract and architecture", () => {
       portfolioContextSnapshotId: firstContextId,
       scoreRunId: "r6-run-1",
       recommendationRunId: "r7-run-1",
+      semanticInputFingerprint: "semantic-input-1",
     }
     expect(programCR8DecisionRunIdentity(runInput)).toBe(
       programCR8DecisionRunIdentity(runInput),
@@ -180,6 +193,7 @@ describe("Program C C1 R8 contract and architecture", () => {
       portfolioContextSnapshotId: "context-1",
       scoreRunId: "r6-run-1",
       recommendationRunId: null,
+      semanticInputFingerprint: "semantic-input-1",
     })).toThrow(/securityId/)
   })
 

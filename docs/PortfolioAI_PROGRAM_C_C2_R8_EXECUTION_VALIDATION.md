@@ -529,3 +529,23 @@ Intentional R8 limitations remain explicit:
 No C3/R9 work is included in this closure.
 
 The repository must stop here until the owner separately authorizes C3.
+
+## Post-audit lineage correction — 25 September 2026
+
+The independent Program C pre-closure audit found that the original R8 run
+identity did not include every decision-changing signal and that the composed
+engine did not bind supplied risk/thesis evidence IDs to `canonicalEvidence`.
+The corrective implementation now:
+
+- derives `decisionRunId` from a SHA-256 fingerprint of the complete semantic
+  R8 decision input, including canonical evidence and normalized signals;
+- accepts positive risk evidence only from a fresh `PORTFOLIO_RISK` canonical
+  evidence reference;
+- accepts thesis/permanent-loss evidence only from a fresh `EXIT_THESIS`
+  canonical evidence reference;
+- fails closed when supplied signal evidence is absent from that authority;
+- includes adverse regression coverage for identity sensitivity and evidence
+  binding.
+
+No persistence, schema, provider, production, sizing or trading authority was
+introduced.

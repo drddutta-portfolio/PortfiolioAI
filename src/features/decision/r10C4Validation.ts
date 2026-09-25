@@ -10,6 +10,7 @@ import {
 import { buildProgramCR10FrozenPortfolioDisposition } from "./r10FrozenPortfolioDisposition"
 import { buildProgramCR10OwnerAuthorityRegression } from "./r10OwnerAuthority"
 import { buildProgramCR10ReferenceValidation } from "./r10ReferenceValidation"
+import { evaluateProgramCR10Attention } from "./r10ActionCenterEngine"
 
 export const PROGRAM_C_R10_C4_VALIDATION_VERSION =
   "PROGRAM_C_R10_C4_VALIDATION_V1" as const
@@ -21,6 +22,15 @@ export function buildProgramCR10C4Validation() {
   const r8 = buildProgramCR8C2Validation()
   const r9 = buildProgramCR9C3Validation()
   const owner = buildProgramCR10OwnerAuthorityRegression(first.noAction)
+  let missingR8LineageRejected = false
+  try {
+    evaluateProgramCR10Attention({
+      ...first.inputs.noAction,
+      r9CurrentR8DecisionRunId: null,
+    })
+  } catch {
+    missingR8LineageRejected = true
+  }
 
   const replayPass = programCR8CanonicalJson(first) === programCR8CanonicalJson(second)
   const precedencePass = (
@@ -92,6 +102,7 @@ export function buildProgramCR10C4Validation() {
     && safetyPass
     && r8.overallPass
     && r9.overallPass
+    && missingR8LineageRejected
   )
 
   return {
@@ -107,6 +118,7 @@ export function buildProgramCR10C4Validation() {
     safetyPass,
     r8RegressionPass: r8.overallPass,
     r9RegressionPass: r9.overallPass,
+    missingR8LineageRejected,
     providerCalls: 0 as const,
     persistedWrites: 0 as const,
     overallPass,

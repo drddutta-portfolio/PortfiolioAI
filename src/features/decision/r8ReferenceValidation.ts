@@ -163,6 +163,7 @@ export function buildProgramCR8ReferenceValidationAssessments() {
     if (!reference.scoreLineage) {
       throw new Error(`Program C C2 reference input requires score lineage for ${reference.symbol}.`)
     }
+    const symbol = reference.symbol
     return {
       version: PROGRAM_C_R8_DECISION_CONTRACT_VERSION,
       securityId: reference.scoreLineage.securityId,
@@ -172,36 +173,59 @@ export function buildProgramCR8ReferenceValidationAssessments() {
       r7: r7Reference(recommendation),
       ownerContext,
       portfolioContext: context,
-      canonicalEvidence: [],
+      canonicalEvidence: [
+        {
+          domain: "PORTFOLIO_RISK",
+          state: "FRESH",
+          evidenceIds: [`C2_REFERENCE_RISK_${symbol}`],
+          asOfDates: ["2026-09-24"],
+          authorityVersion: "C2_REFERENCE_EVIDENCE_V1",
+        },
+        {
+          domain: "EXIT_THESIS",
+          state: "FRESH",
+          evidenceIds: [`C2_REFERENCE_THESIS_${symbol}`],
+          asOfDates: ["2026-09-24"],
+          authorityVersion: "C2_REFERENCE_EVIDENCE_V1",
+        },
+      ],
     }
   }
 
+  const torntInput = buildInput(tornt, torntR7, torntOwner)
+  const torntSignals = {
+    coreHealth: "HEALTHY" as const,
+    portfolioRisk: "ACCEPTABLE" as const,
+    exitIntelligence: "NO_SIGNAL" as const,
+    riskEvidenceIds: ["C2_REFERENCE_RISK_TORNTPHARM"],
+    thesisEvidenceIds: ["C2_REFERENCE_THESIS_TORNTPHARM"],
+  }
   const torntAssessment = evaluateProgramCR8PortfolioDecision(
-    buildInput(tornt, torntR7, torntOwner),
-    {
-      coreHealth: "HEALTHY",
-      portfolioRisk: "ACCEPTABLE",
-      exitIntelligence: "NO_SIGNAL",
-      riskEvidenceIds: ["C2_REFERENCE_RISK_TORNTPHARM"],
-      thesisEvidenceIds: ["C2_REFERENCE_THESIS_TORNTPHARM"],
-    },
+    torntInput,
+    torntSignals,
   )
 
+  const alivusInput = buildInput(alivus, alivusR7, alivusOwner)
+  const alivusSignals = {
+    coreHealth: "HEALTHY" as const,
+    portfolioRisk: "MONITOR" as const,
+    exitIntelligence: "NO_SIGNAL" as const,
+    riskEvidenceIds: ["C2_REFERENCE_RISK_ALIVUS"],
+    thesisEvidenceIds: ["C2_REFERENCE_THESIS_ALIVUS"],
+  }
   const alivusAssessment = evaluateProgramCR8PortfolioDecision(
-    buildInput(alivus, alivusR7, alivusOwner),
-    {
-      coreHealth: "HEALTHY",
-      portfolioRisk: "MONITOR",
-      exitIntelligence: "NO_SIGNAL",
-      riskEvidenceIds: ["C2_REFERENCE_RISK_ALIVUS"],
-      thesisEvidenceIds: ["C2_REFERENCE_THESIS_ALIVUS"],
-    },
+    alivusInput,
+    alivusSignals,
   )
 
   return {
     version: PROGRAM_C_R8_REFERENCE_VALIDATION_VERSION,
     fixtureOnly: true as const,
     context,
+    inputs: {
+      tornt: { input: torntInput, signals: torntSignals },
+      alivus: { input: alivusInput, signals: alivusSignals },
+    },
     rows: [
       { symbol: "TORNTPHARM" as const, assessment: torntAssessment },
       { symbol: "ALIVUS" as const, assessment: alivusAssessment },

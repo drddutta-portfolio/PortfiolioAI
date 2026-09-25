@@ -11,6 +11,7 @@ import {
   type ProgramCR8PortfolioDecisionInput,
   type ProgramCR8ReasonCode,
 } from "./r8PortfolioDecisionContract"
+import { programCR8SemanticFingerprint } from "./r8Determinism"
 
 export const PROGRAM_C_R8_EXECUTION_VERSION =
   "PROGRAM_C_R8_EXECUTION_V1" as const
@@ -129,6 +130,33 @@ export function evaluateProgramCR8PortfolioDecision(
   input: ProgramCR8PortfolioDecisionInput,
   signals: ProgramCR8EvaluationSignals,
 ): ProgramCR8PortfolioDecisionAssessment {
+  const sortedUnique = (values: readonly string[]) => (
+    [...new Set(values.map((value) => value.trim()).filter(Boolean))].sort()
+  )
+  const canonicalEvidence = input.canonicalEvidence
+    .map((reference) => ({
+      ...reference,
+      evidenceIds: sortedUnique(reference.evidenceIds),
+      asOfDates: sortedUnique(reference.asOfDates),
+    }))
+    .sort((left, right) => (
+      left.domain.localeCompare(right.domain)
+      || left.state.localeCompare(right.state)
+      || (left.authorityVersion ?? "").localeCompare(right.authorityVersion ?? "")
+      || left.evidenceIds.join("|").localeCompare(right.evidenceIds.join("|"))
+      || left.asOfDates.join("|").localeCompare(right.asOfDates.join("|"))
+    ))
+  const evidenceIdsFor = (domain: string) => new Set(
+    canonicalEvidence
+      .filter((reference) => reference.domain === domain && reference.state === "FRESH")
+      .flatMap((reference) => reference.evidenceIds),
+  )
+  const canonicalRiskEvidenceIds = evidenceIdsFor("PORTFOLIO_RISK")
+  const canonicalThesisEvidenceIds = evidenceIdsFor("EXIT_THESIS")
+  const riskEvidenceIds = sortedUnique(signals.riskEvidenceIds)
+    .filter((id) => canonicalRiskEvidenceIds.has(id))
+  const thesisEvidenceIds = sortedUnique(signals.thesisEvidenceIds)
+    .filter((id) => canonicalThesisEvidenceIds.has(id))
   const holding = input.portfolioContext.holdings.find(
     (candidate) => candidate.securityId === input.securityId,
   )
@@ -171,7 +199,7 @@ export function evaluateProgramCR8PortfolioDecision(
     portfolioContextSnapshotId: holding ? input.portfolioContext.snapshotId : null,
     sourceScoreRunId: input.r6.scoreRunId,
     riskSignal: signals.portfolioRisk,
-    evidenceIds: signals.riskEvidenceIds,
+    evidenceIds: riskEvidenceIds,
     concentrationReasonCodes,
   })
 
@@ -180,7 +208,7 @@ export function evaluateProgramCR8PortfolioDecision(
     sourceScoreRunId: input.r6.scoreRunId,
     sourceRecommendationRunId: safeR7?.recommendationRunId ?? null,
     exitSignal: signals.exitIntelligence,
-    thesisEvidenceIds: signals.thesisEvidenceIds,
+    thesisEvidenceIds,
     priceWeaknessObserved: signals.priceWeaknessObserved,
     valuationConcernObserved: signals.valuationConcernObserved,
     overweightObserved: portfolioFit.state === "CONCENTRATION_REVIEW",
@@ -215,12 +243,30 @@ export function evaluateProgramCR8PortfolioDecision(
     })
   }
 
+  const semanticInputFingerprint = programCR8SemanticFingerprint(
+    "PROGRAM_C_R8_DECISION_INPUT",
+    {
+      assetClass: input.assetClass,
+      asOfDate: input.asOfDate,
+      r6: input.r6,
+      r7: input.r7,
+      ownerContext: input.ownerContext,
+      portfolioContextSnapshotId: input.portfolioContext.snapshotId,
+      canonicalEvidence,
+      signals: {
+        ...signals,
+        riskEvidenceIds,
+        thesisEvidenceIds,
+      },
+    },
+  )
   const decisionRunId = programCR8DecisionRunIdentity({
     securityId: input.securityId,
     portfolioId: input.portfolioContext.portfolioId,
     portfolioContextSnapshotId: input.portfolioContext.snapshotId,
     scoreRunId: input.r6.scoreRunId,
     recommendationRunId: input.r7?.recommendationRunId ?? null,
+    semanticInputFingerprint,
     contractVersion: PROGRAM_C_R8_DECISION_CONTRACT_VERSION,
   })
 

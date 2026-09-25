@@ -519,3 +519,20 @@ until the owner explicitly approves formal closure.
 A clean C-FINAL does not authorize Program D, productionization, merge,
 deployment, provider automation, persistence expansion, scheduler activation or
 trading.
+
+## Independent pre-closure corrective validation — 25 September 2026
+
+An independent audit identified R8 semantic-identity/evidence-binding gaps and
+an R10 missing-lineage acceptance path. The authorized corrective package:
+
+- binds R8 identity to all semantic decision inputs using SHA-256;
+- binds risk and thesis evidence to fresh, domain-specific canonical evidence;
+- rejects missing and mismatched current R9-to-R8 lineage in R10;
+- asserts unique membership across the R8/R9/R10 frozen universe;
+- promotes those adverse checks into the aggregate C-FINAL pass condition;
+- extends static safety scanning to the R8 live adapter and random UUID use;
+- removes the Program C scoped React hook warning.
+
+Program C remains open until the owner reviews the post-fix audit and explicitly
+records formal closure. No database, migration, provider, production, merge,
+deployment, scheduler, sizing or trading authority is included.

@@ -44,7 +44,18 @@ function frozenCrossEngineLineagePass() {
   const r9BySymbol = new Map(r9.rows.map((row) => [row.symbol, row]))
   const r10BySymbol = new Map(r10.rows.map((row) => [row.symbol, row]))
 
-  return r8.rows.every((r8Row) => {
+  const r8Symbols = r8.rows.map((row) => row.symbol)
+  const r9Symbols = r9.rows.map((row) => row.symbol)
+  const r10Symbols = r10.rows.map((row) => row.symbol)
+  const uniqueUniverse = (
+    new Set(r8Symbols).size === r8Symbols.length
+    && new Set(r9Symbols).size === r9Symbols.length
+    && new Set(r10Symbols).size === r10Symbols.length
+    && programCR8CanonicalJson([...r8Symbols].sort()) === programCR8CanonicalJson([...r9Symbols].sort())
+    && programCR8CanonicalJson([...r8Symbols].sort()) === programCR8CanonicalJson([...r10Symbols].sort())
+  )
+
+  return uniqueUniverse && r8.rows.every((r8Row) => {
     const r9Row = r9BySymbol.get(r8Row.symbol)
     const r10Row = r10BySymbol.get(r8Row.symbol)
     return Boolean(
@@ -84,6 +95,10 @@ export interface ProgramCFinalAudit {
   readonly r9ClosureRegressionPass: boolean
   readonly r10ClosureRegressionPass: boolean
   readonly deterministicReplayPass: boolean
+  readonly semanticIdentitySensitivityPass: boolean
+  readonly canonicalEvidenceBindingPass: boolean
+  readonly evidenceOrderStabilityPass: boolean
+  readonly missingR8LineageRejected: boolean
   readonly exactReferenceLineagePass: boolean
   readonly frozenCrossEngineLineagePass: boolean
   readonly portfolioDispositionComplete: boolean
@@ -194,6 +209,10 @@ export function buildProgramCFinalAudit(): ProgramCFinalAudit {
     && r9.overallPass
     && r10.overallPass
     && replayPass
+    && r8.semanticIdentitySensitivityPass
+    && r8.canonicalEvidenceBindingPass
+    && r8.evidenceOrderStabilityPass
+    && r10.missingR8LineageRejected
     && referenceLineage
     && frozenLineage
     && dispositionComplete
@@ -212,6 +231,10 @@ export function buildProgramCFinalAudit(): ProgramCFinalAudit {
     r9ClosureRegressionPass: r9.overallPass,
     r10ClosureRegressionPass: r10.overallPass,
     deterministicReplayPass: replayPass,
+    semanticIdentitySensitivityPass: r8.semanticIdentitySensitivityPass,
+    canonicalEvidenceBindingPass: r8.canonicalEvidenceBindingPass,
+    evidenceOrderStabilityPass: r8.evidenceOrderStabilityPass,
+    missingR8LineageRejected: r10.missingR8LineageRejected,
     exactReferenceLineagePass: referenceLineage,
     frozenCrossEngineLineagePass: frozenLineage,
     portfolioDispositionComplete: dispositionComplete,

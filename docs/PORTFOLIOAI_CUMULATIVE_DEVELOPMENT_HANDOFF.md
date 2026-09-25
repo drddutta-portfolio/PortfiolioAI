@@ -8782,3 +8782,17 @@ Program C = COMPLETE / PASS / CLOSED
 
 Until that approval is given, Program C remains a validated closure candidate
 and Program D remains unauthorized.
+
+### Program C independent pre-closure corrective package — 25 September 2026
+
+The independent pre-closure audit found three related lineage defects: R8 run
+identity omitted decision-changing signals, canonical evidence was not bound to
+the risk/thesis evidence consumed by R8, and R10 allowed missing current
+R9-to-R8 lineage. The authorized local correction binds R8 semantic identity
+and evidence, rejects missing or mismatched R10 lineage, strengthens aggregate
+adverse validation and frozen-universe uniqueness checks, replaces 32-bit
+fingerprints with SHA-256, and resolves the Program C scoped React hook warning.
+
+The correction changes no schema, production state, providers, persistence,
+sizing, scheduling or trading authority. Formal Program C closure still
+requires the owner's explicit post-audit decision.
