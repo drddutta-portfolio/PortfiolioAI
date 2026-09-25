@@ -101,7 +101,7 @@ D1 uses browser `localStorage` only for the local validation surface.
 Key:
 
 ```text
-portfolioai.program-d.d1.local-orchestration.v1
+portfolioai.program-d.d1.local-orchestration.v2
 ```
 
 This state is:
