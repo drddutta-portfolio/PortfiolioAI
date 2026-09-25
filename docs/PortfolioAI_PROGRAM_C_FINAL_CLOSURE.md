@@ -6,7 +6,7 @@
 **Branch:** `program-c-portfolio-decision-engines`
 **C-FINAL starting HEAD:** `be79c7bdf2f66e0392804c3502515c228d171c4f`
 **Source/audit HEAD before this document:** `14815fbc4ed48c3de2de36788ae9bb274787b518`
-**Status:** CANDIDATE VALIDATED / PASS — FORMAL PROGRAM C CLOSURE AWAITING EXPLICIT OWNER APPROVAL
+**Status:** COMPLETE / PASS / CLOSED — formal owner closure approved after post-fix independent audit
 
 ## 1. Purpose
 
@@ -477,14 +477,50 @@ non-fatal build warning; the build itself completed successfully.
 C-FINAL remains executable-validation pending until the full authoritative
 runner reaches its candidate-pass ending.
 
-## 20. Formal closure gate
+## 20. Formal Program C closure
 
-C-FINAL executable validation is now complete and clean.
+The owner explicitly approved formal Program C closure after:
 
-The frozen master plan still requires one separate explicit owner approval
-before recording formal Program C closure.
+1. the initial C-FINAL candidate validation passed;
+2. an independent pre-closure audit identified three closure-blocking lineage
+   defects;
+3. the bounded remediation package was implemented, independently re-audited,
+   committed and pushed as:
 
-Current state:
+```text
+928ae7fd07936f8b8ea9433c09370395940dbeaf
+fix: remediate Program C pre-closure lineage audit findings
+```
+
+4. the post-fix independent audit concluded:
+
+```text
+PROGRAM C INDEPENDENT AUDIT = PASS WITH NON-BLOCKING FINDINGS
+FORMAL CLOSURE MAY PROCEED SUBJECT TO OWNER APPROVAL
+```
+
+5. the strengthened authoritative C-FINAL validator passed again from the
+   committed/pushed remediation state.
+
+The remediation specifically closed:
+
+- R8 semantic decision identity gaps;
+- R8 canonical-evidence binding gaps;
+- R10 missing current R9-to-R8 lineage acceptance.
+
+The post-fix validation also strengthened:
+
+- SHA-256 deterministic semantic identities;
+- evidence-order stability;
+- unique frozen-universe membership;
+- adverse missing/mismatched lineage tests;
+- Program C final aggregate audit coverage;
+- Program C scoped UI/static validation.
+
+The owner has now supplied the separate explicit closure approval required by
+the frozen master plan.
+
+Formal state:
 
 ```text
 C0 = COMPLETE / PASS / CLOSED
@@ -492,47 +528,84 @@ C1 = COMPLETE / PASS / CLOSED
 C2 = COMPLETE / PASS / CLOSED
 C3 = COMPLETE / PASS / CLOSED
 C4 = COMPLETE / PASS / CLOSED
+C-FINAL = COMPLETE / PASS / CLOSED
 
 R8 = COMPLETE / PASS / CLOSED
 R9 = COMPLETE / PASS / CLOSED
 R10 = COMPLETE / PASS / CLOSED
 
-C-FINAL implementation = COMPLETE
-C-FINAL static review = PASS
-C-FINAL owner-local executable validation = PASS
-C-FINAL closure audit = PASS
-C-FINAL formal closure = AWAITING EXPLICIT OWNER APPROVAL
-
-Program C = VALIDATED CLOSURE CANDIDATE / OPEN
-Program D = NOT AUTHORIZED
-Production operational = NO
-```
-
-Do not record:
-
-```text
 Program C = COMPLETE / PASS / CLOSED
 ```
 
-until the owner explicitly approves formal closure.
+### Closure guarantees
 
-A clean C-FINAL does not authorize Program D, productionization, merge,
-deployment, provider automation, persistence expansion, scheduler activation or
-trading.
+Program C closes with the following validated guarantees:
 
-## Independent pre-closure corrective validation — 25 September 2026
+```text
+deterministic R8 semantic identity = PASS
+canonical risk/thesis evidence binding = PASS
+exact R8 -> R9 -> R10 lineage = PASS
+deterministic replay = PASS
+238-holding frozen-universe disposition completeness = PASS
+cross-engine frozen-row consistency = PASS
+one canonical R10 Action Center authority = PASS
+owner-field immutability = PASS
+fail-closed incomplete-state behavior = PASS
 
-An independent audit identified R8 semantic-identity/evidence-binding gaps and
-an R10 missing-lineage acceptance path. The authorized corrective package:
+ADD_REVIEW promoted = NO
+TRIM_REVIEW promoted = NO
+numeric sizing authority = NONE
+provider calls in Program C compute paths = NONE
+AI deterministic investment decisions = NONE
+R8/R9/R10 persistence authority = NONE
+schema migration = NONE
+production mutation = NONE
+branch merge = NONE
+deployment = NONE
+scheduler = NONE
+trading = NONE
+```
 
-- binds R8 identity to all semantic decision inputs using SHA-256;
-- binds risk and thesis evidence to fresh, domain-specific canonical evidence;
-- rejects missing and mismatched current R9-to-R8 lineage in R10;
-- asserts unique membership across the R8/R9/R10 frozen universe;
-- promotes those adverse checks into the aggregate C-FINAL pass condition;
-- extends static safety scanning to the R8 live adapter and random UUID use;
-- removes the Program C scoped React hook warning.
+### Intentional limitations retained after closure
 
-Program C remains open until the owner reviews the post-fix audit and explicitly
-records formal closure. No database, migration, provider, production, merge,
-deployment, scheduler, sizing or trading authority is included.
+Formal closure does not change the documented intentional limitations:
+
+```text
+PORTFOLIO_WIDE_NUMERIC_R6_COVERAGE_NOT_COMPLETE
+PORTFOLIO_WIDE_NUMERIC_R7_COVERAGE_NOT_COMPLETE
+NUMERIC_SIZING_POLICY_NOT_APPROVED
+ADD_REVIEW_NOT_PROMOTED
+TRIM_REVIEW_NOT_PROMOTED
+SOME_HOLDINGS_FAIL_CLOSED_BLOCKED_OR_INSUFFICIENT
+R8_R9_R10_PERSISTENCE_NOT_ENABLED
+R9_DURABLE_ACKNOWLEDGEMENT_SNOOZE_NOT_ENABLED
+NO_PROVIDER_REFRESH_IN_PROGRAM_C
+NO_SCHEDULER
+NO_AI_INVESTMENT_DECISION_AUTHORITY
+NO_PRODUCTION_DEPLOYMENT
+NO_BRANCH_MERGE
+NO_TRADING
+FROZEN_VALIDATION_SNAPSHOT_IS_2026_09_22_NOT_LIVE_PRODUCTION_STATE
+PROGRAM_C_IS_VALIDATED_LOCAL_CANDIDATE_NOT_PRODUCTION_OPERATIONAL
+```
+
+These remain explicit architectural boundaries, not closure defects.
+
+### Post-closure stop boundary
+
+Formal Program C closure authorizes no subsequent program automatically.
+
+Current downstream authority remains:
+
+```text
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Provider automation = NOT AUTHORIZED
+R8/R9/R10 persistence expansion = NOT AUTHORIZED
+Scheduler activation = NOT AUTHORIZED
+Trading = NOT AUTHORIZED
+```
+
+The repository must stop after Program C closure until the owner separately
+authorizes the next program or release activity.
