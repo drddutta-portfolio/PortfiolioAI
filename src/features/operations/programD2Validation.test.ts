@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
   buildProgramD2ValidationSummary,
+  classifyProgramD2ProviderBatch,
   evaluateProgramD2ExecutionGate,
   PROGRAM_D_D2_BOUNDED_PILOT_READINESS,
   simulateProgramD2BoundedRetry,
@@ -63,6 +64,12 @@ describe("Program D D2 adversarial validation", () => {
       generation: 5,
       maximumGeneration: 4,
     })).toBe("BLOCKED_RECURSIVE_TRIGGER")
+  })
+
+  it("keeps mixed provider outcomes explicitly partial", () => {
+    expect(classifyProgramD2ProviderBatch(["ACCEPTED", "REJECTED"])).toBe("PARTIAL")
+    expect(classifyProgramD2ProviderBatch(["ACCEPTED"])).toBe("SUCCEEDED")
+    expect(classifyProgramD2ProviderBatch(["REJECTED"])).toBe("FAILED")
   })
 
   it("bounds transient retries", () => {
