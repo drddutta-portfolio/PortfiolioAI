@@ -111,6 +111,25 @@ describe("Program D D1 local orchestration", () => {
     expect(store.load().leases[resumed.leaseKey]).toBeUndefined()
   })
 
+  it("preserves dependency order so downstream nodes never precede upstream nodes", async () => {
+    const evidencePlan = await buildProgramD1Plan(fixture("EVIDENCE_CHANGE_DRY_RUN").trigger)
+    expect(evidencePlan.affectedNodes).toEqual([
+      "R6",
+      "R7",
+      "R8_CORE_HEALTH",
+      "R9",
+      "R10",
+    ])
+
+    const marketPlan = await buildProgramD1Plan(fixture("MARKET_DATA_CHANGE").trigger)
+    expect(marketPlan.affectedNodes).toEqual([
+      "R8_PORTFOLIO_RISK",
+      "R8_EXIT_INTELLIGENCE",
+      "R9",
+      "R10",
+    ])
+  })
+
   it("routes downstream events only inside the affected dry-run DAG", async () => {
     const plan = await buildProgramD1Plan(fixture("EVIDENCE_CHANGE_DRY_RUN").trigger)
     const record = executeProgramD1Plan(plan, createMemoryProgramD1Store())
