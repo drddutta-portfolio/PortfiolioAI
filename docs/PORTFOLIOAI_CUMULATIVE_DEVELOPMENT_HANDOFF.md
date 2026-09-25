@@ -8301,3 +8301,312 @@ Current stop point is after formal R10 closure.
 No C-FINAL closure audit, Program C program-wide regression/freeze, production
 readiness, merge/deployment, scheduler or trading work may begin until the owner
 explicitly authorizes C-FINAL.
+
+
+---
+
+## Program C · C-FINAL cross-engine closure candidate — implementation complete / executable validation pending — 25 September 2026
+
+The owner explicitly authorized C-FINAL after formal C4/R10 closure.
+
+Repository authority was re-read before execution:
+
+```text
+docs/PortfolioAI_PROGRAM_C_MASTER_PLAN.md
+docs/PORTFOLIOAI_CUMULATIVE_DEVELOPMENT_HANDOFF.md
+current branch / HEAD
+closed C1-C4 artifacts
+```
+
+The frozen master plan defines C-FINAL as:
+
+```text
+Program C cross-engine validation and closure
+R8 -> R9 -> R10
+no new behavior
+```
+
+### Branch / start state
+
+```text
+repository = drddutta-portfolio/PortfiolioAI
+branch = program-c-portfolio-decision-engines
+C-FINAL starting HEAD = be79c7bdf2f66e0392804c3502515c228d171c4f
+C-FINAL audit/source HEAD before documentation = 14815fbc4ed48c3de2de36788ae9bb274787b518
+C-FINAL candidate document commit before this handoff = efe5aa011b33b800de5618c9366a901e45a9728e
+```
+
+### C-FINAL validation-only artifacts
+
+Added:
+
+```text
+src/features/decision/programCFinalClosure.ts
+src/features/decision/programCFinalClosure.test.ts
+
+scripts/program-c-final-report.mjs
+scripts/program-c-final-static-safety.mjs
+scripts/c-final-validate-program-c.sh
+
+docs/PortfolioAI_PROGRAM_C_FINAL_CLOSURE.md
+```
+
+No R8/R9/R10 consumer or decision behavior was changed in C-FINAL.
+
+### Final audit contract
+
+`buildProgramCFinalAudit()` jointly requires:
+
+```text
+Program B regression = PASS
+R8 closure regression = PASS
+R9 closure regression = PASS
+R10 closure regression = PASS
+deterministic replay = PASS
+exact reference lineage = PASS
+frozen cross-engine lineage = PASS
+portfolio-wide disposition complete = PASS
+cross-surface authority = PASS
+owner authority = PASS
+provider/AI/persistence/trading safety = PASS
+numeric sizing boundary = PASS
+```
+
+Expected:
+
+```text
+overallPass = true
+```
+
+### Frozen validation universe retained
+
+C-FINAL does not refresh or replace the C0 population.
+
+```text
+validation universe = PROGRAM_C_VALIDATION_UNIVERSE_V1
+source snapshot = K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22
+snapshot date = 2026-09-22
+holding count = 238
+asset type = 238 EQUITY
+state = frozen local deterministic fixture
+```
+
+No live production/provider read was introduced.
+
+### Cross-engine frozen lineage
+
+For all frozen rows, C-FINAL validates:
+
+```text
+R9.sourceR8Disposition == R8.overallDisposition
+R10.sourceR8Disposition == R8.overallDisposition
+R10.sourceR9Transition == R9.transitionState
+```
+
+All three stages must remain on the same 238-row snapshot/version.
+
+### Exact reference lineage
+
+The controlled end-to-end reference check requires the R9 current observed state
+to reference the exact R8 decision run and requires R10 to carry the exact:
+
+```text
+R6 scoreRunId
+R7 recommendationRunId
+portfolioContextSnapshotId
+R8 decisionRunId
+R9 currentObservedStateId
+```
+
+No identity reconstruction is permitted.
+
+### Deterministic replay
+
+C-FINAL rechecks deterministic replay for:
+
+```text
+R8
+R9
+R10
+complete Program C final audit payload
+```
+
+No random/time-now identity authority is introduced.
+
+### Portfolio-wide disposition
+
+C-FINAL requires:
+
+```text
+R8 = 238 explicit dispositions
+R9 = 238 explicit dispositions
+R10 = 238 explicit dispositions
+```
+
+Portfolio-wide disposition completeness remains distinct from positive, numeric,
+or action coverage.
+
+### Shared UI authority
+
+C-FINAL structural review rechecks:
+
+```text
+R8 Core/Exit Dashboard -> canonical R8
+R8 Risk/Fit Dashboard -> canonical R8
+Meaningful Change Dashboard -> canonical R9
+Dashboard Action Center -> canonical R10
+Research Action Center projection -> canonical R10
+Holdings Action Center projection -> canonical R10
+```
+
+Dashboard/Research/Holdings must continue to consume:
+
+```text
+useProgramCR10ActionCenter()
+```
+
+No presentation surface may execute R10 business rules directly.
+
+### ADD_REVIEW / TRIM_REVIEW boundary
+
+C-FINAL retains:
+
+```text
+ADD_REVIEW = NOT PROMOTED
+TRIM_REVIEW = NOT PROMOTED
+numeric sizing authority = NONE
+```
+
+No order quantity, exact add/trim percentage, machine target weight or trade
+instruction exists in Program C authority.
+
+### Full-history safety guard
+
+The final validator audits the entire Program C history from:
+
+```text
+d3b8a755885bd4ecc0be37aa59ea46f2eac0ca41
+```
+
+and requires:
+
+```text
+expected branch = program-c-portfolio-decision-engines
+frozen Program C start remains ancestor of HEAD
+no merge commits inside Program C branch history
+Program C changed-file allowlist = PASS
+supabase/migrations changes = 0
+supabase/functions changes = 0
+.github/workflows changes = 0
+src/data changes = 0
+deployment-config changes = 0
+```
+
+This validates history safety only. It does not merge the branch.
+
+### Structural source review
+
+Remote review of the newly added C-FINAL artifacts found:
+
+```text
+provider/data imports = 0
+fetch() = 0
+Date.now() = 0
+Math.random() = 0
+trailing whitespace = 0
+```
+
+The final structural scanner also audits the complete R8/R9/R10 runtime path.
+
+### Intentional closure-candidate limitations
+
+C-FINAL deliberately retains:
+
+```text
+PORTFOLIO_WIDE_NUMERIC_R6_COVERAGE_NOT_COMPLETE
+PORTFOLIO_WIDE_NUMERIC_R7_COVERAGE_NOT_COMPLETE
+NUMERIC_SIZING_POLICY_NOT_APPROVED
+ADD_REVIEW_NOT_PROMOTED
+TRIM_REVIEW_NOT_PROMOTED
+SOME_HOLDINGS_FAIL_CLOSED_BLOCKED_OR_INSUFFICIENT
+R8_R9_R10_PERSISTENCE_NOT_ENABLED
+R9_DURABLE_ACKNOWLEDGEMENT_SNOOZE_NOT_ENABLED
+NO_PROVIDER_REFRESH_IN_PROGRAM_C
+NO_SCHEDULER
+NO_AI_INVESTMENT_DECISION_AUTHORITY
+NO_PRODUCTION_DEPLOYMENT
+NO_BRANCH_MERGE
+NO_TRADING
+FROZEN_VALIDATION_SNAPSHOT_IS_2026_09_22_NOT_LIVE_PRODUCTION_STATE
+PROGRAM_C_IS_VALIDATED_LOCAL_CANDIDATE_NOT_PRODUCTION_OPERATIONAL
+```
+
+These are permitted by the frozen master plan and are not closure defects.
+
+### Required owner-local validation
+
+Run:
+
+```bash
+git fetch origin
+git switch program-c-portfolio-decision-engines
+git pull --ff-only
+
+bash scripts/c-final-validate-program-c.sh
+```
+
+The target terminal ending is:
+
+```text
+PROGRAM C C-FINAL CANDIDATE VALIDATION PASS
+R8 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+R10 = COMPLETE / PASS / CLOSED
+Program C closure audit = PASS / AWAITING EXPLICIT OWNER FORMAL CLOSURE APPROVAL
+Portfolio-wide deterministic disposition = COMPLETE over frozen 238-holding universe
+Numeric sizing / ADD_REVIEW / TRIM_REVIEW authority = NONE
+Provider/AI/persistence/production/merge/scheduler/trading authority = NONE
+Program C state = VALIDATED LOCAL-CANDIDATE / FAIL-CLOSED WHERE INCOMPLETE
+Production operational = NO
+Program D = NOT AUTHORIZED
+```
+
+### Current checkpoint state
+
+```text
+C0 = COMPLETE / PASS / CLOSED
+C1 = COMPLETE / PASS / CLOSED
+C2 = COMPLETE / PASS / CLOSED
+C3 = COMPLETE / PASS / CLOSED
+C4 = COMPLETE / PASS / CLOSED
+
+R8 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+R10 = COMPLETE / PASS / CLOSED
+
+C-FINAL implementation = COMPLETE
+C-FINAL static review = PASS
+C-FINAL owner-local executable validation = PENDING
+C-FINAL formal closure = NOT YET APPROVED
+
+Program C = CLOSURE CANDIDATE / OPEN
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Scheduler/trading = NOT AUTHORIZED
+```
+
+### Stop boundary
+
+After a clean C-FINAL owner-local validation, stop.
+
+The frozen master plan requires a separate explicit owner instruction before
+recording:
+
+```text
+Program C = COMPLETE / PASS / CLOSED
+```
+
+A clean C-FINAL does not authorize Program D, productionization, merge,
+deployment, scheduler activation, persistence expansion, provider automation or
+trading.
