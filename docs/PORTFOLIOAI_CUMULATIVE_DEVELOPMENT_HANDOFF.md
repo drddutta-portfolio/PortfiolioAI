@@ -10185,3 +10185,22 @@ Correction:
 No external AI call, provider call, migration, scheduler or production mutation occurred.
 
 D3 remains LOCAL VALIDATION PENDING until the corrected HEAD is pulled and the local interpretation returns VALID.
+
+
+### D3 targeted-lint correction — 25 September 2026
+
+Targeted D3 ESLint found two D3-local issues after the corrected VALID/CACHE REUSED localhost flow:
+
+1. `programD3R12Cache.ts` used an unsafe assignment from `JSON.parse`;
+2. `ProgramDR12FactPacketInput` was declared as an empty interface equivalent to its `Omit<...>` supertype.
+
+Corrections applied:
+
+- browser cache JSON is now parsed as `unknown` and each stored result is accepted only through an explicit runtime type guard;
+- malformed or incompatible cached entries are ignored fail-closed;
+- the empty input interface is replaced with an equivalent type alias;
+- no D3 runtime authority, output schema, provider/cost ceiling, or cache identity changed.
+
+No external AI call, provider call, migration, scheduler activation or production mutation occurred.
+
+D3 remains LOCAL VALIDATION PENDING until the corrected HEAD is pulled and targeted lint plus the remaining validation suite pass.
