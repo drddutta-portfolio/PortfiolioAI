@@ -8677,3 +8677,108 @@ Rerun:
 git pull --ff-only
 bash scripts/c-final-validate-program-c.sh
 ```
+
+
+---
+
+## Program C · C-FINAL candidate validation — PASS / awaiting explicit formal closure approval — 25 September 2026
+
+The owner confirmed the authoritative C-FINAL validation runner completed
+successfully.
+
+Terminal ending:
+
+```text
+PROGRAM C C-FINAL CANDIDATE VALIDATION PASS
+R8 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+R10 = COMPLETE / PASS / CLOSED
+Program C closure audit = PASS / AWAITING EXPLICIT OWNER FORMAL CLOSURE APPROVAL
+Portfolio-wide deterministic disposition = COMPLETE over frozen 238-holding universe
+Numeric sizing / ADD_REVIEW / TRIM_REVIEW authority = NONE
+Provider/AI/persistence/production/merge/scheduler/trading authority = NONE
+Program C state = VALIDATED LOCAL-CANDIDATE / FAIL-CLOSED WHERE INCOMPLETE
+Production operational = NO
+Program D = NOT AUTHORIZED
+```
+
+### Confirmed final validation bundle
+
+The passing C-FINAL run confirms:
+
+```text
+C-FINAL audit tests = PASS
+R10 regressions = PASS
+R9 regressions = PASS
+R8 regressions = PASS
+Program B regressions = PASS
+K5 routing/isolation/portability regressions = PASS
+canonical Program C final report = PASS
+C2/C3/C4 structural safety regressions = PASS
+C-FINAL structural safety = PASS
+Program C scoped ESLint = PASS
+branch/ancestry/no-merge history guard = PASS
+full-history changed-file allowlist = PASS
+TypeScript = PASS
+PortfolioAI architecture/data-boundary guard = PASS
+production build = PASS
+full Program C git diff --check = PASS
+```
+
+The Vite chunk-size output is a warning only; the production build completed
+successfully.
+
+### Current authoritative state
+
+```text
+C0 = COMPLETE / PASS / CLOSED
+C1 = COMPLETE / PASS / CLOSED
+C2 = COMPLETE / PASS / CLOSED
+C3 = COMPLETE / PASS / CLOSED
+C4 = COMPLETE / PASS / CLOSED
+
+R8 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+R10 = COMPLETE / PASS / CLOSED
+
+C-FINAL implementation = COMPLETE
+C-FINAL static review = PASS
+C-FINAL executable validation = PASS
+C-FINAL closure audit = PASS
+C-FINAL formal closure = AWAITING EXPLICIT OWNER APPROVAL
+
+Program C = VALIDATED CLOSURE CANDIDATE / OPEN
+Program D = NOT AUTHORIZED
+Production operational = NO
+```
+
+### Closure boundary remains unchanged
+
+Even after this clean C-FINAL result:
+
+```text
+ADD_REVIEW = NOT PROMOTED
+TRIM_REVIEW = NOT PROMOTED
+numeric sizing authority = NONE
+provider refresh = NO
+AI investment-decision authority = NO
+R8/R9/R10 persistence = NO
+schema migration = NO
+productionization = NO
+branch merge = NO
+deployment = NO
+scheduler = NO
+trading = NO
+```
+
+### Required next step
+
+The frozen Program C master plan requires one separate explicit owner approval
+before recording:
+
+```text
+Program C = COMPLETE / PASS / CLOSED
+```
+
+Until that approval is given, Program C remains a validated closure candidate
+and Program D remains unauthorized.
