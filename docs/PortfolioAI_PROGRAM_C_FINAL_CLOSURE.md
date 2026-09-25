@@ -428,6 +428,38 @@ It will not mean:
 - PortfolioAI is production-operational;
 - Program D is authorized.
 
+## 19A. Owner-local whitespace guard correction
+
+The first owner-local C-FINAL run completed the production build successfully
+and reached the final `git diff --check` history guard.
+
+The only reported failure was historical trailing whitespace in the C0 audit
+header:
+
+```text
+docs/PortfolioAI_PROGRAM_C_C0_CONTRACT_FREEZE_INHERITANCE_AUDIT.md
+lines 3-8
+```
+
+This was documentation whitespace only. No Program C source, decision rule,
+lineage, authority, UI behavior, provider boundary, persistence boundary,
+scheduler boundary or trading boundary failed.
+
+The six trailing-space occurrences were normalized without changing document
+content or semantics.
+
+Correction commit:
+
+```text
+e7f0763a92942cdd587a68b5e7fe322c23c562a4
+```
+
+The Vite chunk-size message shown immediately before the whitespace guard was a
+non-fatal build warning; the build itself completed successfully.
+
+C-FINAL remains executable-validation pending until the full authoritative
+runner reaches its candidate-pass ending.
+
 ## 20. Formal closure gate
 
 The frozen master plan requires a separate explicit owner approval after a clean
