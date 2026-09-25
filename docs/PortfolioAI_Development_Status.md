@@ -654,3 +654,10 @@ D4 is local/mock/adversarial only by default. Real AI-provider execution and cos
 D4 is **IMPLEMENTED ON GITHUB / LOCAL VALIDATION PENDING**.
 
 The branch now includes the complete frozen local R12 grounding/adversarial matrix and Investment Committee validation UI. Real AI-provider execution remains unauthorized and external AI cost remains zero.
+
+
+## Program D · D4/R12 closed / D-FINAL authorized — 25 September 2026
+
+Owner approval closes D4 and R12 as **COMPLETE / PASS / CLOSED** and authorizes **D-FINAL — Authorized-Scope Closure Audit**.
+
+D-FINAL is audit/closure work only. It does not authorize production enablement, provider/AI pilots, scheduler activation, migration, deployment, merge, notifications or trading.
