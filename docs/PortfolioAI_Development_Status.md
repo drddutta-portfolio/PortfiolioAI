@@ -459,3 +459,38 @@ the not-yet-final 24 September daily candle and no NIFTY_BANK action. No
 Trendlyne call, production mutation, migration, deployment, merge, scoring,
 recommendation, sizing, scheduling or trading activation occurred. The temporary
 mode-600 JWT file was deleted and its absence verified.
+
+
+## Program D · D0 contract freeze implementation — 25 September 2026
+
+Program D is now the active development program on `program-d-operations-optional-ai`, but authorization remains limited to **D0 only**.
+
+D0 has added a machine-readable static contract and a dedicated freeze document:
+
+- `src/features/operations/programD0Contract.ts`
+- `src/features/operations/programD0Contract.test.ts`
+- `docs/PortfolioAI_PROGRAM_D_D0_CONTRACT_DEPENDENCY_DURABILITY_SAFETY_FREEZE.md`
+
+The frozen D0 decisions are:
+
+- R11 uses a dependency-driven R6–R10 DAG rather than a blind linear cascade;
+- exact trigger taxonomy, no-op rules, semantic job identity, kill-switch order, retry classes and owner gates are encoded as static contract data;
+- existing research provider controls, budgets, usage accounting, freshness state and compatible acquisition leases are reused rather than duplicated;
+- existing market-data refresh state and leases are reused subject to later scheduler-hardening review;
+- current Program B R6 and R7 execution outputs are non-persisting;
+- Program C R8 is non-persistent and remains governed by its existing four-sub-engine dependency contract;
+- R9 restart safety requires **Model B: a minimal complete semantic comparison checkpoint** because exact reconstruction of the previous complete semantic `ProgramCR9ObservedState` is not proven from durable history;
+- D0 does not authorize creating or persisting that checkpoint;
+- core R11 does not require a durable R10 operational snapshot; R10 remains canonical through recomputation;
+- R12 remains optional, downstream and unable to override deterministic authority; competing action/priority output is `REJECTED_AUTHORITY_CONFLICT`.
+
+Current state:
+
+```text
+D0 contract package = IMPLEMENTED ON PROGRAM D BRANCH
+local pull / validation = PENDING
+owner D0 closure = PENDING
+D1 = NOT AUTHORIZED
+```
+
+No migration, provider call, AI call, scheduler activation, production mutation, deployment, merge, Program C semantic change or trading capability was introduced by this D0 package.
