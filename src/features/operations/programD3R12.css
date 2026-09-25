@@ -1,0 +1,97 @@
+.r12-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.r12-boundary-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 1fr);
+  gap: 1.25rem;
+}
+
+.r12-stage-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 1rem 0;
+}
+
+.r12-stage-grid article,
+.r12-fields > div,
+.r12-list-card,
+.r12-narrative-card {
+  border: 1px solid #e0e6e2;
+  border-radius: 0.65rem;
+  padding: 0.8rem;
+}
+
+.r12-stage-grid article {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.r12-stage-grid span,
+.r12-fields span {
+  color: #68746d;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.r12-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.r12-fields > div {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.r12-fields p,
+.r12-list-card p,
+.r12-narrative-card p {
+  margin: 0;
+}
+
+.r12-result-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.r12-result-panel {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.r12-narrative-card h3,
+.r12-list-card h3 {
+  margin-top: 0;
+}
+
+.r12-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.r12-list-card ul {
+  margin-bottom: 0;
+  padding-left: 1.2rem;
+}
+
+@media (max-width: 950px) {
+  .r12-boundary-panel,
+  .r12-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .r12-stage-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .r12-fields {
+    grid-template-columns: 1fr;
+  }
+}
