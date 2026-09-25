@@ -494,3 +494,25 @@ D1 = NOT AUTHORIZED
 ```
 
 No migration, provider call, AI call, scheduler activation, production mutation, deployment, merge, Program C semantic change or trading capability was introduced by this D0 package.
+
+
+## Program D · D0 local validation — 25 September 2026
+
+D0 is now **COMPLETE / PASS / AWAITING OWNER CLOSURE** on `program-d-operations-optional-ai`.
+
+The owner pulled exact D0 HEAD `a21f987c7f3dbec78d33293f6d33de8a7308231c` locally and validated the package against the running local Supabase/Vite environment.
+
+Validation passed:
+
+- D0 contract test: 9/9;
+- frozen Program C regression set: 63/63 across 5 files;
+- targeted D0 ESLint: pass;
+- TypeScript: pass;
+- architecture guard: pass;
+- production build: pass, with only the existing chunk-size warning;
+- `git diff --check`: pass;
+- no tracked local D0 drift or unexpected generated files.
+
+No provider/AI calls, migrations, scheduler activation, production mutation, deployment, merge, R9 persistence, R10 snapshot persistence, sizing authority or trading capability were introduced.
+
+D1 remains **NOT AUTHORIZED** and may not begin without separate owner approval.
