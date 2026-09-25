@@ -8610,3 +8610,70 @@ Program C = COMPLETE / PASS / CLOSED
 A clean C-FINAL does not authorize Program D, productionization, merge,
 deployment, scheduler activation, persistence expansion, provider automation or
 trading.
+
+
+---
+
+### Program C · C-FINAL owner-local validation correction — historical whitespace — 25 September 2026
+
+The first owner-local C-FINAL run completed the Vite production build and then
+stopped only at the final `git diff --check` history guard.
+
+Reported issue:
+
+```text
+docs/PortfolioAI_PROGRAM_C_C0_CONTRACT_FREEZE_INHERITANCE_AUDIT.md
+trailing whitespace on header metadata lines 3-8
+```
+
+This was a documentation-formatting defect from the historical C0 artifact, not
+a Program C logic or architecture failure.
+
+Correction:
+
+```text
+6 trailing-space occurrences removed
+semantic document content unchanged
+```
+
+Correction commit:
+
+```text
+e7f0763a92942cdd587a68b5e7fe322c23c562a4
+```
+
+The Vite chunk-size message preceding the stop was a non-fatal warning; the
+production build itself had succeeded.
+
+No:
+
+- R8/R9/R10 decision behavior;
+- lineage;
+- Action Center authority;
+- owner authority;
+- numeric sizing boundary;
+- provider call;
+- persistence;
+- schema migration;
+- production mutation;
+- merge/deployment;
+- scheduler;
+- trading
+
+was changed.
+
+C-FINAL remains:
+
+```text
+implementation = COMPLETE
+static review = PASS
+owner-local executable validation = PENDING
+formal Program C closure = NOT YET APPROVED
+```
+
+Rerun:
+
+```bash
+git pull --ff-only
+bash scripts/c-final-validate-program-c.sh
+```
