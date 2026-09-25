@@ -9795,3 +9795,103 @@ trading = NOT AUTHORIZED
 ```
 
 Program C remains frozen.
+
+
+---
+
+## Program D · D2 R11 Adversarial Validation + Bounded-Pilot Readiness — IMPLEMENTED / LOCAL VALIDATION PENDING — 25 September 2026
+
+D1 is formally closed and D2 was explicitly authorized by the owner.
+
+The D2 local/provider-free adversarial validation package is now implemented on the Program D branch.
+
+Authoritative D2 implementation record:
+
+```text
+docs/PortfolioAI_PROGRAM_D_D2_R11_ADVERSARIAL_VALIDATION_READINESS.md
+```
+
+### Implemented D2 validation coverage
+
+- trigger determinism;
+- semantic idempotency and duplicate suppression;
+- lease-race fail-closed behavior;
+- expired/stale local lease recovery;
+- global/provider/domain kill switches;
+- provider-budget blocking;
+- bounded transient retry / retry exhaustion;
+- mixed provider outcomes remain PARTIAL;
+- partial deterministic recovery/resume;
+- unchanged-input no-op;
+- dependency/topological routing;
+- recursive-trigger generation guard;
+- stale-domain-only acquisition planning;
+- incremental market-history planning through the existing Program A planner;
+- no owner mutation;
+- no trade/order path;
+- operational audit completeness;
+- R9 Model-B baseline semantics preserved;
+- R10 recomputation authority preserved;
+- zero physical provider-call invariant.
+
+### Bounded-pilot readiness boundary
+
+D2 defines a readiness contract only:
+
+```text
+status = READY_FOR_OWNER_AUTHORIZATION
+realProviderExecutionAuthorized = false
+```
+
+A future real provider pilot still requires separate explicit owner approval of:
+
+```text
+EXACT_PROVIDER
+EXACT_SECURITIES
+EXACT_DOMAINS
+EXACT_PHYSICAL_CALL_CEILING
+EXACT_BUDGET_CEILING
+MANUAL_START
+POST_RUN_REVIEW
+```
+
+No real provider call is authorized by D2 implementation or readiness status.
+
+### Operations UI
+
+The authenticated `/app/operations` page now includes:
+
+- D2 adversarial validation runner;
+- PASS/FAIL validation cards;
+- bounded-pilot readiness panel;
+- explicit Real provider execution = Not authorized;
+- existing D1 local fixture runner and disposable ledger.
+
+### D2 safety state
+
+```text
+Trendlyne physical calls = 0
+Angel One physical calls = 0
+AI calls = 0
+real provider pilot = NOT AUTHORIZED
+automatic production R6-R10 execution = false
+migration = 0
+Supabase orchestration persistence = 0
+R9 durable checkpoint persistence = 0
+R10 operational snapshot persistence = 0
+scheduler activation = 0
+production mutation = 0
+merge/deployment = 0
+trading = 0
+```
+
+### Current checkpoint
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = IMPLEMENTED ON GITHUB / LOCAL VALIDATION PENDING
+D3 = NOT AUTHORIZED
+```
+
+Next workflow step: pull the exact Program D branch to the Mac, run the D2 adversarial matrix in the Operations UI, then execute the D2/D1/D0/Program C local validation suite. A real provider pilot remains separately gated.
