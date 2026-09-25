@@ -738,3 +738,16 @@ audit. Local UI validation confirmed valid local generation, cache reuse, visibl
 source-bound provenance, zero external cost and all 16 D4 PASS results. No provider
 or real-AI call, migration, scheduler, production mutation, notification, merge,
 deployment, sizing authority or trading capability was introduced or authorized.
+
+### Committed Program D remediation state
+
+The accepted remediation implementation is committed on
+`program-d-operations-optional-ai` as
+`34be5702898f768c74cc9fe4a6f4943edf2fb4e6`. Executable Git evidence at that commit
+confirmed valid Program D base ancestry, 104 commits ahead / 0 behind, no merge
+commits, no unexpected files, and zero protected Program C, research-authority,
+migration, provider-function, scheduler, or trading/order changes. The complete
+regression run passed 289 test files / 1,687 tests, with targeted Program D ESLint,
+TypeScript, architecture, build, and diff checks passing. Production remains
+disabled; provider/AI pilots, scheduling, merge/deployment, numeric sizing and
+trading/order authority remain unauthorized.
