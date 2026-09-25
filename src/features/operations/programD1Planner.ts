@@ -12,7 +12,7 @@ import {
 } from "./programD1Types"
 
 function uniqueSorted<T extends string>(values: readonly T[]): readonly T[] {
-  return [...new Set(values)].sort() as readonly T[]
+  return [...new Set(values)].sort()
 }
 
 function programD1NodeOrder(nodes: ReadonlySet<ProgramDR11Node>): readonly ProgramDR11Node[] {
