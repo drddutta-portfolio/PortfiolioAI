@@ -104,6 +104,42 @@ function containsAuthorityConflict(raw: unknown): boolean {
   return false
 }
 
+export function parseProgramDR12Narrative(raw: unknown): ProgramDR12Narrative | null {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null
+  const row = raw as Record<string, unknown>
+  const stringArray = (value: unknown): value is readonly string[] =>
+    Array.isArray(value) && value.every((item) => typeof item === "string")
+
+  if (typeof row.deterministicStateSummary !== "string") return null
+  if (!stringArray(row.supportingEvidence)) return null
+  if (!stringArray(row.contradictoryEvidence)) return null
+  if (!stringArray(row.uncertainties)) return null
+  if (!stringArray(row.blockedQuestions)) return null
+  if (typeof row.aiInterpretation !== "string") return null
+  if (!stringArray(row.monitoringQuestions)) return null
+  if (!stringArray(row.citations)) return null
+
+  return {
+    deterministicStateSummary: row.deterministicStateSummary,
+    supportingEvidence: row.supportingEvidence,
+    contradictoryEvidence: row.contradictoryEvidence,
+    uncertainties: row.uncertainties,
+    blockedQuestions: row.blockedQuestions,
+    aiInterpretation: row.aiInterpretation,
+    monitoringQuestions: row.monitoringQuestions,
+    citations: row.citations,
+  }
+}
+
+export function validateUnknownProgramDR12Narrative(
+  packet: ProgramDR12FactPacket,
+  rawOutput: unknown,
+): ProgramDR12ValidationStatus {
+  const narrative = parseProgramDR12Narrative(rawOutput)
+  if (!narrative) return "REJECTED_SCHEMA"
+  return validateProgramDR12Narrative(packet, narrative, rawOutput)
+}
+
 export function validateProgramDR12Narrative(
   packet: ProgramDR12FactPacket,
   narrative: ProgramDR12Narrative,
