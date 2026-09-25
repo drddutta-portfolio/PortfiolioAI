@@ -33,6 +33,7 @@ export function AppShell({ children }: PropsWithChildren) {
           <NavLink to="/app/structure">Portfolio Structure</NavLink>
           <NavLink to="/app/research">Research</NavLink>
           <NavLink to="/app/operations">Operations</NavLink>
+          <NavLink to="/app/investment-committee">Investment Committee</NavLink>
           <NavLink to="/app/transactions">Transactions</NavLink>
           <NavLink to="/app/import">Import</NavLink>
           <NavLink to="/app/settings/data-sources">Settings</NavLink>
