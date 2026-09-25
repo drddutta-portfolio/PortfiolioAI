@@ -10204,3 +10204,121 @@ Corrections applied:
 No external AI call, provider call, migration, scheduler activation or production mutation occurred.
 
 D3 remains LOCAL VALIDATION PENDING until the corrected HEAD is pulled and targeted lint plus the remaining validation suite pass.
+
+
+---
+
+## Program D · D3 Full Local Validation — PASS / AWAITING OWNER CLOSURE — 25 September 2026
+
+The owner completed the full D3 local/mock R12 validation cycle and reported all remaining validation commands PASS.
+
+### Localhost validation
+
+The authenticated Investment Committee workspace was reviewed locally.
+
+Validated D3 safety/display state:
+
+```text
+Program D · D3 optional R12 = visible
+LOCAL MOCK / ON DEMAND = visible
+external AI calls = 0
+external AI cost = 0
+scheduled AI = disabled
+R6-R10 deterministic authority = unchanged
+real AI provider = not authorized
+numeric sizing authority = none
+trade/order path = prohibited
+```
+
+The local reference packet rendered R6-R10 deterministic state separately from AI interpretation.
+
+First local generation:
+
+```text
+validation_status = VALID
+cache_state = NEW LOCAL MOCK
+provider = LOCAL_MOCK
+external cost = 0
+```
+
+Second generation with unchanged packet + prompt version:
+
+```text
+validation_status = VALID
+cache_state = CACHE REUSED
+```
+
+### D3 corrections discovered during localhost validation
+
+1. **Embedded identifier digits falsely rejected**
+   - identifiers such as `R10` / `R12` could be partially misread as standalone unsupported numeric claims;
+   - numeric boundaries were corrected to ignore digits embedded in alphanumeric identifiers while preserving rejection of standalone unsupported numbers such as `999`;
+   - regression test added.
+
+2. **Targeted lint / cache safety**
+   - unsafe assignment from browser-cache `JSON.parse` was removed;
+   - cache JSON is now parsed as `unknown` and filtered through an explicit runtime type guard;
+   - malformed/incompatible cache entries fail closed;
+   - empty fact-packet-input interface replaced by an equivalent type alias.
+
+### Full local validation
+
+The owner reported all required D3 validation commands PASS:
+
+```text
+D3/D2/D1/D0/Program C regression suite = PASS
+Targeted D3 ESLint = PASS
+TypeScript = PASS
+Architecture guard = PASS
+Production build = PASS
+git diff --check = PASS
+Local working-tree audit = PASS
+```
+
+The production build again showed only the existing Vite chunk-size warning.
+
+The local working tree continued to show only the same pre-existing untracked artifacts, which remain untouched:
+
+```text
+PORTFOLIOAI_CURRENT_STATE_AUDIT.md
+PORTFOLIOAI_LUI1_LOCAL_FIXTURE.sql
+PORTFOLIOAI_LUI1_LOCAL_FIXTURE_V2.sql
+artifacts/
+```
+
+### D3 / R12 safety audit
+
+```text
+real AI provider calls = 0
+external AI cost = 0
+scheduled AI = 0
+portfolio-wide event-driven AI = 0
+R12 -> R6-R10 feedback path = NONE
+R12 score authority = NONE
+R12 recommendation authority = NONE
+R12 materiality authority = NONE
+R12 R10 action/priority authority = NONE
+numeric sizing authority = NONE
+trade/order authority = NONE
+migration creation/application = 0
+scheduler activation = 0
+production mutation = 0
+merge/deployment = 0
+```
+
+### D3 / R12 checkpoint status
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+D3 = COMPLETE / PASS / AWAITING OWNER CLOSURE
+R12 local implementation = COMPLETE / PASS / AWAITING D4 VALIDATION
+
+D4 = NOT AUTHORIZED
+real AI provider pilot = NOT RUN / NOT AUTHORIZED
+D-FINAL = NOT AUTHORIZED
+```
+
+D3 closure does not authorize D4 or a real cost-bearing AI pilot. Both remain separate owner decisions.
