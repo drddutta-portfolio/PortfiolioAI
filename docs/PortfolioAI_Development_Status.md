@@ -668,3 +668,19 @@ D-FINAL is audit/closure work only. It does not authorize production enablement,
 D-FINAL is **IMPLEMENTED / LOCAL VALIDATION PENDING**.
 
 The final audit confirms the Program D branch remains bounded to Program D docs/operations/UI work with no Program C decision-file, Supabase migration, provider-function, scheduler or trading-file changes. Production remains disabled; real provider/AI pilots were not run; sizing and trading authority remain absent.
+
+
+## Program D — COMPLETE / PASS / CLOSED — 25 September 2026
+
+Program D is formally **COMPLETE / PASS / CLOSED** for the full authorized R11 + R12 scope.
+
+```text
+R11 = COMPLETE / PASS / CLOSED
+R12 = COMPLETE / PASS / CLOSED
+D-FINAL = COMPLETE / PASS / CLOSED
+Program D = COMPLETE / PASS / CLOSED
+```
+
+Final local validation passed across the dedicated D-FINAL closure test, cumulative D4→D0/Program C regressions, targeted lint, TypeScript, architecture guard, production build, `git diff --check`, and working-tree audit.
+
+Production remains disabled. No real provider pilot, real AI pilot, scheduler activation, migration, production mutation, notification activation, merge/deployment, numeric sizing authority or trading authority is authorized by this closure.
