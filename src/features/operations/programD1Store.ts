@@ -27,7 +27,7 @@ export function createMemoryProgramD1Store(
 }
 
 export const PROGRAM_D_D1_BROWSER_STORAGE_KEY =
-  "portfolioai.program-d.d1.local-orchestration.v1"
+  "portfolioai.program-d.d1.local-orchestration.v2"
 
 export function createBrowserProgramD1Store(
   storage: Storage,
