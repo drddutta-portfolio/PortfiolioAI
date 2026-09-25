@@ -219,3 +219,31 @@ export function releaseProgramD1Lease(
   store.save({ ...state, leases })
   return true
 }
+
+
+export function recoverExpiredProgramD1Lease(
+  leaseKey: string,
+  store: ProgramD1StateStore,
+  options: {
+    readonly nowMs: number
+    readonly staleAfterMs: number
+  },
+): boolean {
+  if (!Number.isFinite(options.nowMs) || options.nowMs < 0) {
+    throw new Error("nowMs must be a non-negative finite number.")
+  }
+  if (!Number.isFinite(options.staleAfterMs) || options.staleAfterMs <= 0) {
+    throw new Error("staleAfterMs must be a positive finite number.")
+  }
+  const state = store.load()
+  const lease = state.leases[leaseKey]
+  if (!lease) return false
+  const acquiredAtMs = Date.parse(lease.acquiredAt)
+  if (!Number.isFinite(acquiredAtMs)) return false
+  if (options.nowMs - acquiredAtMs <= options.staleAfterMs) return false
+
+  const leases = { ...state.leases }
+  delete leases[leaseKey]
+  store.save({ ...state, leases })
+  return true
+}
