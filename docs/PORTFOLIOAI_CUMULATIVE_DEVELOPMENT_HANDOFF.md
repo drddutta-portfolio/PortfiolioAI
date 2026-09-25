@@ -9605,3 +9605,130 @@ The full D1/D0/Program C regression set passed 83/83 tests across 7 files. Targe
 The assertion was removed without changing runtime semantics. No unrelated lint debt was touched.
 
 D1 remains local-validation pending until the corrected HEAD is pulled and the remaining validation commands pass.
+
+
+---
+
+## Program D · D1 Full Local Validation — PASS / AWAITING OWNER CLOSURE — 25 September 2026
+
+The owner completed local validation of the D1 R11 local/provider-free orchestration package.
+
+### Exact validated behavior
+
+The Operations UI was reviewed locally and the four frozen D1 fixtures were executed after correction of the stage-ordering defect and local-ledger version hardening.
+
+Validated stage routing:
+
+```text
+UNCHANGED_INPUT_NO_OP
+  state = NO_OP
+  reason = UNCHANGED_CANONICAL_DEPENDENCY_FINGERPRINT
+
+CANONICAL_EVIDENCE_ACCEPTED
+  R6 -> R7 -> R8_CORE_HEALTH -> R9 -> R10
+
+CONDITION_STALENESS
+  R6 -> R7 -> R8_CORE_HEALTH -> R9 -> R10
+  TRENDLYNE FUNDAMENTALS = 1 estimated / 0 executed
+
+MARKET_DATA_ACCEPTED
+  R8_PORTFOLIO_RISK -> R8_EXIT_INTELLIGENCE -> R9 -> R10
+```
+
+All visual runs preserved:
+
+```text
+physical provider calls = 0
+automatic R6-R10 execution = 0
+production writes = 0
+```
+
+### Automated validation
+
+```text
+D1/D0/Program C regression suite
+  7 test files passed
+  83 / 83 tests passed
+
+D1 runtime suite
+  includes semantic identity, no-op, provider-plan zero-call,
+  duplicate-trigger dedupe, lease contention, restart/resume,
+  topological stage order, routed-event scope and safety invariants
+
+Targeted D1 ESLint
+  PASS
+
+TypeScript
+  npm run typecheck
+  PASS
+
+Architecture guard
+  npm run check:architecture
+  PASS
+
+Production build
+  npm run build
+  PASS
+  existing Vite chunk-size warning only
+
+git diff --check
+  PASS
+
+Local working-tree audit
+  PASS
+  no tracked D1 drift
+  pre-existing untracked local artifacts remain untouched:
+    PORTFOLIOAI_CURRENT_STATE_AUDIT.md
+    PORTFOLIOAI_LUI1_LOCAL_FIXTURE.sql
+    PORTFOLIOAI_LUI1_LOCAL_FIXTURE_V2.sql
+    artifacts/
+```
+
+### D1 corrections discovered during localhost validation
+
+1. **Stage ordering defect**
+   - root cause: affected nodes were alphabetically sorted;
+   - correction: affected nodes now follow frozen dependency-matrix order;
+   - regression test added.
+
+2. **Stale disposable browser-ledger reuse**
+   - root cause: pre-fix semantic runs could survive in the V1 localStorage key;
+   - correction: D1 local orchestration state bumped to V2 and stale V1 state is rejected;
+   - regression test added.
+
+3. **Targeted lint issue**
+   - unnecessary type assertion removed from `programD1Planner.ts`;
+   - no runtime semantic change.
+
+### D1 safety audit
+
+```text
+Trendlyne calls = 0
+Angel One calls = 0
+AI calls = 0
+other provider calls = 0
+automatic R6-R10 execution = false
+migration creation/application = 0
+Supabase operational persistence = 0
+R9 durable checkpoint persistence = 0
+R10 snapshot persistence = 0
+scheduler activation = 0
+production mutation = 0
+merge/deployment = 0
+notifications = 0
+numeric sizing authority = NONE
+trading = 0
+```
+
+### D1 checkpoint status
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / AWAITING OWNER CLOSURE
+D2 = NOT AUTHORIZED
+D3 = NOT AUTHORIZED
+D4 = NOT AUTHORIZED
+D-FINAL = NOT AUTHORIZED
+```
+
+D1 completion does not authorize D2. A real bounded provider pilot or any D2 adversarial/pilot-readiness work requires a separate explicit owner authorization.
