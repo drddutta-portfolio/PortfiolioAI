@@ -3,7 +3,7 @@ import type {
   ProgramDR11TriggerType,
 } from "./programD0Contract"
 
-export const PROGRAM_D_D1_VERSION = "PROGRAM_D_D1_LOCAL_ORCHESTRATION_V1" as const
+export const PROGRAM_D_D1_VERSION = "PROGRAM_D_D1_LOCAL_ORCHESTRATION_V2" as const
 
 export type ProgramD1ProviderCode = "TRENDLYNE" | "ANGEL_ONE"
 
