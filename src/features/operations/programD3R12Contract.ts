@@ -60,7 +60,10 @@ export interface ProgramDR12FactPacket {
   readonly contradictions: readonly string[]
 }
 
-export interface ProgramDR12FactPacketInput extends Omit<ProgramDR12FactPacket, "version" | "packetId"> {}
+export type ProgramDR12FactPacketInput = Omit<
+  ProgramDR12FactPacket,
+  "version" | "packetId"
+>
 
 export async function buildProgramDR12FactPacket(
   input: ProgramDR12FactPacketInput,
