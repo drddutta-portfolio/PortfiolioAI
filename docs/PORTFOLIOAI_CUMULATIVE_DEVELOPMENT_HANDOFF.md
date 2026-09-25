@@ -9895,3 +9895,118 @@ D3 = NOT AUTHORIZED
 ```
 
 Next workflow step: pull the exact Program D branch to the Mac, run the D2 adversarial matrix in the Operations UI, then execute the D2/D1/D0/Program C local validation suite. A real provider pilot remains separately gated.
+
+
+---
+
+## Program D · D2 Full Local Validation — PASS / AWAITING OWNER CLOSURE — 25 September 2026
+
+The owner completed the full D2 local/adversarial validation cycle and reported all remaining validation commands PASS.
+
+### Localhost adversarial matrix
+
+The D2 Operations UI was run locally and every adversarial card passed, including:
+
+```text
+Trigger determinism = PASS
+Semantic idempotency / duplicate suppression = PASS
+Lease race = PASS
+Stale-lease recovery = PASS
+Global / provider / domain kill switches = PASS
+Provider budget = PASS
+Bounded retry = PASS
+Partial provider acceptance = PASS
+Partial acceptance / recovery = PASS
+Unchanged-input no-op = PASS
+Dependency-matrix routing = PASS
+Recursive-trigger guard = PASS
+Stale-domain-only refresh = PASS
+Incremental history planning = PASS
+No owner mutation = PASS
+No trade/order path = PASS
+Audit completeness = PASS
+R9 baseline semantics = PASS
+R10 authority preservation = PASS
+Zero real provider calls = PASS
+```
+
+### Full local validation
+
+The owner reported all required D2 validation commands PASS:
+
+```text
+D2/D1/D0/Program C regression suite = PASS
+Targeted D2 ESLint = PASS
+TypeScript = PASS
+Architecture guard = PASS
+Production build = PASS
+git diff --check = PASS
+Local working-tree audit = PASS
+```
+
+The production build again showed only the existing Vite chunk-size warning.
+
+The local working tree continued to show only the same pre-existing untracked local artifacts, which remain untouched:
+
+```text
+PORTFOLIOAI_CURRENT_STATE_AUDIT.md
+PORTFOLIOAI_LUI1_LOCAL_FIXTURE.sql
+PORTFOLIOAI_LUI1_LOCAL_FIXTURE_V2.sql
+artifacts/
+```
+
+### D2 / R11 safety audit
+
+```text
+Trendlyne physical calls = 0
+Angel One physical calls = 0
+AI calls = 0
+other external provider calls = 0
+real bounded provider pilot = NOT RUN / NOT AUTHORIZED
+automatic production R6-R10 execution = false
+migration creation/application = 0
+Supabase orchestration persistence = 0
+R9 durable checkpoint persistence = 0
+R10 operational snapshot persistence = 0
+scheduler activation = 0
+production mutation = 0
+notifications = 0
+merge/deployment = 0
+numeric sizing authority = NONE
+trading = 0
+```
+
+### Bounded-pilot readiness
+
+The D2 package is validated as **READY_FOR_OWNER_AUTHORIZATION** for a future separately authorized bounded provider pilot.
+
+That readiness status is not provider-call authority.
+
+A future real pilot still requires a separate explicit owner decision specifying:
+
+```text
+EXACT_PROVIDER
+EXACT_SECURITIES
+EXACT_DOMAINS
+EXACT_PHYSICAL_CALL_CEILING
+EXACT_BUDGET_CEILING
+MANUAL_START
+POST_RUN_REVIEW
+```
+
+### D2 / R11 checkpoint status
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / AWAITING OWNER CLOSURE
+
+R11 = COMPLETE / PASS / AWAITING OWNER CLOSURE
+
+real bounded provider pilot = NOT RUN / NOT AUTHORIZED
+D3 = NOT AUTHORIZED
+D4 = NOT AUTHORIZED
+D-FINAL = NOT AUTHORIZED
+```
+
+D2 closure does not authorize D3/R12 and does not authorize a real provider pilot. Both remain separate owner decisions.
