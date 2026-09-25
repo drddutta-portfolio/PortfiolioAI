@@ -6,7 +6,7 @@
 **Branch:** `program-c-portfolio-decision-engines`
 **C-FINAL starting HEAD:** `be79c7bdf2f66e0392804c3502515c228d171c4f`
 **Source/audit HEAD before this document:** `14815fbc4ed48c3de2de36788ae9bb274787b518`
-**Status:** CANDIDATE IMPLEMENTED / STATIC REVIEW PASS / OWNER-LOCAL EXECUTABLE VALIDATION PENDING / FORMAL PROGRAM C CLOSURE NOT YET APPROVED
+**Status:** CANDIDATE VALIDATED / PASS — FORMAL PROGRAM C CLOSURE AWAITING EXPLICIT OWNER APPROVAL
 
 ## 1. Purpose
 
@@ -341,19 +341,12 @@ The authoritative C-FINAL runner executes:
 - production Vite build;
 - full Program C `git diff --check`.
 
-## 16. Required owner-local command
+## 16. Owner-local executable validation
 
-Run:
+The owner confirmed the authoritative C-FINAL runner completed successfully from
+the Program C branch after the historical C0 whitespace correction.
 
-```bash
-git fetch origin
-git switch program-c-portfolio-decision-engines
-git pull --ff-only
-
-bash scripts/c-final-validate-program-c.sh
-```
-
-The successful terminal ending must include:
+The terminal ended with:
 
 ```text
 PROGRAM C C-FINAL CANDIDATE VALIDATION PASS
@@ -368,6 +361,30 @@ Program C state = VALIDATED LOCAL-CANDIDATE / FAIL-CLOSED WHERE INCOMPLETE
 Production operational = NO
 Program D = NOT AUTHORIZED
 ```
+
+This confirms the entire executable C-FINAL bundle passed, including:
+
+- C-FINAL audit tests;
+- C4/R10 regressions;
+- C3/R9 regressions;
+- C1/C2 R8 regressions;
+- Program B final/R6/R7 regressions;
+- K5 routing/isolation/portability regressions;
+- canonical Program C final report;
+- C2/C3/C4 structural-safety regressions;
+- C-FINAL structural-safety scan;
+- scoped Program C ESLint;
+- Program C branch/ancestry/no-merge history guards;
+- full-history changed-file allowlist;
+- TypeScript;
+- PortfolioAI architecture/data-boundary guard;
+- production Vite build;
+- full Program C `git diff --check`.
+
+The Vite large-chunk message is non-fatal and did not prevent a successful
+production build.
+
+No executable C-FINAL validation failure remains open.
 
 ## 17. Intentional limitations at closure candidate
 
@@ -462,25 +479,43 @@ runner reaches its candidate-pass ending.
 
 ## 20. Formal closure gate
 
-The frozen master plan requires a separate explicit owner approval after a clean
-C-FINAL validation.
+C-FINAL executable validation is now complete and clean.
 
-Therefore the current state is:
+The frozen master plan still requires one separate explicit owner approval
+before recording formal Program C closure.
+
+Current state:
 
 ```text
+C0 = COMPLETE / PASS / CLOSED
+C1 = COMPLETE / PASS / CLOSED
+C2 = COMPLETE / PASS / CLOSED
+C3 = COMPLETE / PASS / CLOSED
+C4 = COMPLETE / PASS / CLOSED
+
+R8 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+R10 = COMPLETE / PASS / CLOSED
+
 C-FINAL implementation = COMPLETE
 C-FINAL static review = PASS
-C-FINAL owner-local executable validation = PENDING
-C-FINAL formal closure = NOT YET APPROVED
+C-FINAL owner-local executable validation = PASS
+C-FINAL closure audit = PASS
+C-FINAL formal closure = AWAITING EXPLICIT OWNER APPROVAL
 
-Program C = CLOSURE CANDIDATE / OPEN
+Program C = VALIDATED CLOSURE CANDIDATE / OPEN
 Program D = NOT AUTHORIZED
 Production operational = NO
 ```
 
-After a clean local result, stop and request explicit owner approval before
-recording:
+Do not record:
 
 ```text
 Program C = COMPLETE / PASS / CLOSED
 ```
+
+until the owner explicitly approves formal closure.
+
+A clean C-FINAL does not authorize Program D, productionization, merge,
+deployment, provider automation, persistence expansion, scheduler activation or
+trading.
