@@ -568,3 +568,12 @@ D2 remains **NOT AUTHORIZED**.
 Owner approval closes D1 as **COMPLETE / PASS / CLOSED** and authorizes **D2 — R11 Validation & Bounded-Pilot Readiness** only.
 
 D2 may perform local/adversarial validation and bounded-pilot readiness design. A real provider pilot remains separately unauthorized inside D2. No migration, scheduler, production mutation, R12/AI activation, deployment, merge or trading is authorized.
+
+
+## Program D · D2 adversarial validation implementation — 25 September 2026
+
+D2 is **IMPLEMENTED ON GITHUB / LOCAL VALIDATION PENDING**.
+
+The branch now includes a local/provider-free adversarial validation harness for the frozen R11 D2 checklist, plus a bounded-pilot readiness contract and Operations UI matrix. The readiness contract explicitly keeps real provider execution unauthorized.
+
+No provider call, migration, scheduler activation, production mutation, R9/R10 persistence, R12/AI activation, deployment, merge or trading capability was introduced.
