@@ -10163,3 +10163,25 @@ D4 = NOT AUTHORIZED
 ```
 
 Next workflow step: pull the exact Program D branch to the Mac, inspect the Investment Committee workspace, validate generation/cache behavior locally, then run the D3/D2/D1/D0/Program C validation suite.
+
+
+### D3 localhost correction — embedded identifier digits falsely rejected
+
+Local Investment Committee testing exposed a D3 validator defect before closure:
+
+```text
+validation_status = REJECTED_UNSUPPORTED_FACT
+```
+
+The local mock narrative itself was packet-grounded. Root cause was the numeric scanner: for an identifier such as `R10`, it correctly could not start at `10` because of the preceding letter, but could incorrectly restart at the trailing `0` because the old boundary excluded letters only, not adjacent digits.
+
+Correction:
+
+- standalone numeric claims now require both sides to be non-alphanumeric;
+- digits embedded in identifiers such as `R6`, `R9`, `R10`, `R12`, `D3` and version identifiers are ignored by unsupported-number validation;
+- genuinely standalone unsupported figures such as `999` remain rejected;
+- a regression test now locks identifier handling.
+
+No external AI call, provider call, migration, scheduler or production mutation occurred.
+
+D3 remains LOCAL VALIDATION PENDING until the corrected HEAD is pulled and the local interpretation returns VALID.
