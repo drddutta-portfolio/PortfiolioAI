@@ -59,6 +59,19 @@ describe("Program D D3 bounded local R12", () => {
     })).toBe("REJECTED_UNSUPPORTED_CITATION")
   })
 
+  it("does not treat digits embedded in deterministic identifiers as unsupported numbers", async () => {
+    const packet = await buildProgramDR12LocalReferencePacket()
+    const valid = await generateProgramDR12LocalNarrative(
+      packet,
+      createMemoryProgramDR12Cache(),
+    )
+    expect(validateProgramDR12Narrative(packet, {
+      ...valid.narrative,
+      aiInterpretation:
+        "R6, R9, R10, R12, D3 and PROGRAM_C_R10_PRECEDENCE_V1 are identifiers, not numeric claims.",
+    })).toBe("VALID")
+  })
+
   it("rejects unsupported numbers", async () => {
     const packet = await buildProgramDR12LocalReferencePacket()
     const valid = await generateProgramDR12LocalNarrative(
