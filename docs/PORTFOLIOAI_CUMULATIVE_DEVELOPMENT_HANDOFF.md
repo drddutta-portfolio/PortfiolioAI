@@ -9582,3 +9582,17 @@ R8_PORTFOLIO_RISK -> R8_EXIT_INTELLIGENCE -> R9 -> R10
 No provider call, migration, scheduler activation, production mutation or deterministic R6-R10 execution occurred during discovery or correction.
 
 D1 remains **LOCAL VALIDATION PENDING** until this fix is pulled and the fixtures are rerun.
+
+
+### D1 local-ledger invalidation hardening — 25 September 2026
+
+After the stage-order correction, the local automated D1 test passed 10/10, but the browser ledger could still display pre-fix completed records because D1 semantic job identities are deterministic and the disposable browser state key had not changed.
+
+Hardening applied:
+
+- D1 local orchestration contract version bumped to `PROGRAM_D_D1_LOCAL_ORCHESTRATION_V2`;
+- disposable browser key bumped to `portfolioai.program-d.d1.local-orchestration.v2`;
+- stale V1 browser state is rejected and replaced by an empty V2 state;
+- a regression test now locks the V2 key and stale-state rejection behavior.
+
+This is local disposable UI/runtime state only. No Supabase persistence, migration, provider call, scheduler, production mutation or Program C semantic change is involved.
