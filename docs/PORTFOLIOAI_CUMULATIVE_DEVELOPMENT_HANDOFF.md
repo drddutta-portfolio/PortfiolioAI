@@ -10078,3 +10078,88 @@ merge/deployment = NOT AUTHORIZED
 ```
 
 The real bounded provider pilot for R11 also remains NOT RUN / NOT AUTHORIZED and is not implied by R11 closure.
+
+
+---
+
+## Program D · D3 Optional R12 Local Implementation — IMPLEMENTED / LOCAL VALIDATION PENDING — 25 September 2026
+
+D2/R11 is formally closed and D3/R12 was explicitly authorized by the owner.
+
+Authoritative D3 implementation record:
+
+```text
+docs/PortfolioAI_PROGRAM_D_D3_R12_LOCAL_IMPLEMENTATION.md
+```
+
+### D3 provider/cost ceiling
+
+```text
+AI provider mode = LOCAL_MOCK_ONLY
+external AI calls = 0
+external AI cost = 0
+maximum concurrent local generations = 1
+maximum transient retries = 1
+scheduled AI = false
+portfolio-wide event-driven AI = false
+```
+
+No real cost-bearing AI provider is authorized in D3.
+
+### Implemented R12 local boundary
+
+- versioned immutable deterministic fact packet;
+- SHA-256 packet identity;
+- typed FACT / DETERMINISTIC_STATE / OWNER_CONTEXT / UNCERTAINTY / SOURCE_EXCERPT inputs;
+- R6–R10 state + lineage packet sections;
+- evidence/provenance/citation packet references;
+- blockers, uncertainties and contradictions;
+- strict packet validation;
+- strict narrative validation;
+- unsupported-number rejection;
+- unsupported-citation rejection;
+- authority-conflict rejection;
+- local mock generation only;
+- packet-hash + prompt-version cache reuse;
+- zero external cost accounting;
+- dedicated Investment Committee workspace;
+- no R12 feedback into R6–R10.
+
+### New UI
+
+```text
+/app/investment-committee
+```
+
+The UI explicitly separates deterministic fact packet state from AI interpretation and labels the latter non-authoritative.
+
+### D3 safety state
+
+```text
+R10 canonical authority = PRESERVED
+R12 score authority = NONE
+R12 recommendation authority = NONE
+R12 materiality authority = NONE
+R12 priority authority = NONE
+numeric sizing authority = NONE
+trade/order authority = NONE
+real AI provider calls = 0
+external AI cost = 0
+migration = 0
+scheduler activation = 0
+production mutation = 0
+merge/deployment = 0
+```
+
+### Current checkpoint
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+D3 = IMPLEMENTED ON GITHUB / LOCAL VALIDATION PENDING
+D4 = NOT AUTHORIZED
+```
+
+Next workflow step: pull the exact Program D branch to the Mac, inspect the Investment Committee workspace, validate generation/cache behavior locally, then run the D3/D2/D1/D0/Program C validation suite.
