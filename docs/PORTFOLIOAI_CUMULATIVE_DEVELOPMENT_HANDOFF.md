@@ -8796,3 +8796,161 @@ fingerprints with SHA-256, and resolves the Program C scoped React hook warning.
 The correction changes no schema, production state, providers, persistence,
 sizing, scheduling or trading authority. Formal Program C closure still
 requires the owner's explicit post-audit decision.
+
+
+---
+
+## Program C · FORMAL CLOSURE — COMPLETE / PASS / CLOSED — 25 September 2026
+
+The owner explicitly approved formal Program C closure after the independent
+post-fix audit and strengthened C-FINAL validation passed.
+
+### Closure lineage
+
+The final bounded remediation was committed and pushed as:
+
+```text
+928ae7fd07936f8b8ea9433c09370395940dbeaf
+fix: remediate Program C pre-closure lineage audit findings
+```
+
+That remediation closed the three independent-audit blockers:
+
+1. R8 deterministic identity omitted decision-changing semantic inputs.
+2. R8 risk/thesis evidence was not bound to canonical evidence.
+3. R10 accepted missing current R9-to-R8 lineage.
+
+Post-fix independent audit conclusion:
+
+```text
+PROGRAM C INDEPENDENT AUDIT = PASS WITH NON-BLOCKING FINDINGS
+FORMAL CLOSURE MAY PROCEED SUBJECT TO OWNER APPROVAL
+```
+
+The strengthened C-FINAL validator then passed from the committed/pushed
+remediation state.
+
+### Final checkpoint state
+
+```text
+C0 = COMPLETE / PASS / CLOSED
+C1 = COMPLETE / PASS / CLOSED
+C2 = COMPLETE / PASS / CLOSED
+C3 = COMPLETE / PASS / CLOSED
+C4 = COMPLETE / PASS / CLOSED
+C-FINAL = COMPLETE / PASS / CLOSED
+
+R8 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+R10 = COMPLETE / PASS / CLOSED
+
+Program C = COMPLETE / PASS / CLOSED
+```
+
+### Final validated guarantees
+
+```text
+R8 semantic decision identity sensitivity = PASS
+SHA-256 deterministic identity = PASS
+canonical risk evidence binding = PASS
+canonical thesis evidence binding = PASS
+evidence-order identity stability = PASS
+R10 missing-lineage rejection = PASS
+R10 mismatched-lineage rejection = PASS
+exact R8 -> R9 -> R10 lineage = PASS
+deterministic replay = PASS
+frozen-universe uniqueness = PASS
+238-holding deterministic disposition = COMPLETE
+cross-engine frozen-row equivalence = PASS
+one canonical R10 Action Center authority = PASS
+Dashboard/Research/Holdings shared R10 consumption = PASS
+owner-field immutability = PASS
+fail-closed incomplete-state behavior = PASS
+```
+
+### Final safety boundary
+
+```text
+ADD_REVIEW promoted = NO
+TRIM_REVIEW promoted = NO
+numeric sizing authority = NONE
+provider calls in Program C compute paths = NONE
+Angel One calls = NONE
+Trendlyne calls = NONE
+OpenAI deterministic investment decisions = NONE
+R8/R9/R10 persistence writes = NONE
+schema migrations = NONE
+production mutation = NONE
+branch merge = NONE
+deployment = NONE
+scheduler mutation = NONE
+trading = NONE
+```
+
+### Intentional limitations retained
+
+Program C formal closure does **not** claim:
+
+```text
+portfolio-wide numeric R6 coverage = complete
+portfolio-wide numeric R7 coverage = complete
+numeric sizing policy = approved
+ADD_REVIEW authority = approved
+TRIM_REVIEW authority = approved
+R8/R9/R10 persistence = enabled
+R9 durable acknowledgement/snooze = enabled
+provider automation = enabled
+production operational state = achieved
+branch merge = completed
+deployment = completed
+scheduler = active
+trading = enabled
+```
+
+The Program C frozen validation universe remains:
+
+```text
+PROGRAM_C_VALIDATION_UNIVERSE_V1
+K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_2026_09_22
+238 holdings
+238 EQUITY
+```
+
+Some holdings intentionally remain fail-closed where upstream evidence or
+lineage is incomplete.
+
+### Closure documentation
+
+Formal Program C closure is recorded in:
+
+```text
+docs/PortfolioAI_PROGRAM_C_FINAL_CLOSURE.md
+```
+
+Formal closure document commit immediately preceding this handoff append:
+
+```text
+278de4fdf1c44a01032884b3c873d887a6d704da
+```
+
+### Post-closure authority
+
+Formal Program C closure does not authorize the next program automatically.
+
+```text
+Program D = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Provider automation = NOT AUTHORIZED
+R8/R9/R10 persistence expansion = NOT AUTHORIZED
+Scheduler activation = NOT AUTHORIZED
+Trading = NOT AUTHORIZED
+```
+
+### Stop boundary
+
+Current stop point is after formal Program C closure.
+
+No Program D, productionization, merge, deployment, provider automation,
+persistence expansion, scheduler, or trading work may begin until separately
+authorized by the owner.
