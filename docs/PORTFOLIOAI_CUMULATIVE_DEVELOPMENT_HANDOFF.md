@@ -9732,3 +9732,66 @@ D-FINAL = NOT AUTHORIZED
 ```
 
 D1 completion does not authorize D2. A real bounded provider pilot or any D2 adversarial/pilot-readiness work requires a separate explicit owner authorization.
+
+
+---
+
+## Program D · D1 OWNER CLOSURE / D2 AUTHORIZATION — 25 September 2026
+
+Owner decision:
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = AUTHORIZED
+D3 = NOT AUTHORIZED
+D4 = NOT AUTHORIZED
+D-FINAL = NOT AUTHORIZED
+```
+
+The owner accepted the fully validated D1 result and explicitly authorized D2 — R11 Validation & Bounded-Pilot Readiness.
+
+D2 scope is limited to adversarial validation and readiness work required by the frozen master plan:
+
+- trigger determinism;
+- semantic idempotency;
+- duplicate suppression;
+- lease race and stale-lease behavior;
+- kill-switch enforcement;
+- provider-budget blocking;
+- bounded retry behavior;
+- partial acceptance;
+- recovery/resume;
+- unchanged-input no-op;
+- dependency-matrix routing;
+- recursive-trigger guard;
+- stale-domain-only refresh planning;
+- incremental history planning;
+- no owner mutation;
+- no trade/order path;
+- audit completeness;
+- Program C regression;
+- R9 baseline semantics;
+- R10 authority preservation.
+
+A real bounded provider pilot remains a separate owner gate **inside D2** and is not authorized by this transition.
+
+Still not authorized:
+
+```text
+real provider pilot = NOT AUTHORIZED
+Trendlyne physical calls = NOT AUTHORIZED
+Angel One physical calls = NOT AUTHORIZED
+migration creation/application = NOT AUTHORIZED
+R9 durable checkpoint persistence = NOT AUTHORIZED
+R10 operational snapshot persistence = NOT AUTHORIZED
+scheduler enablement = NOT AUTHORIZED
+automatic production R6-R10 recomputation = NOT AUTHORIZED
+production mutation = NOT AUTHORIZED
+R12 / AI = NOT AUTHORIZED
+notifications = NOT AUTHORIZED
+merge/deployment = NOT AUTHORIZED
+trading = NOT AUTHORIZED
+```
+
+Program C remains frozen.
