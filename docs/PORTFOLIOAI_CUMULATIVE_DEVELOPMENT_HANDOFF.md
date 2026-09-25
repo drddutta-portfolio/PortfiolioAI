@@ -8954,3 +8954,180 @@ Current stop point is after formal Program C closure.
 No Program D, productionization, merge, deployment, provider automation,
 persistence expansion, scheduler, or trading work may begin until separately
 authorized by the owner.
+
+
+---
+
+## Program D · Master Plan Freeze / Workflow Handoff — 25 September 2026
+
+Program C is formally closed and remains frozen:
+
+```text
+Program C = COMPLETE / PASS / CLOSED
+R8 = COMPLETE / PASS / CLOSED
+R9 = COMPLETE / PASS / CLOSED
+R10 = COMPLETE / PASS / CLOSED
+```
+
+Program D planning has now been frozen on a separate branch:
+
+```text
+branch = program-d-operations-optional-ai
+base = f7c6cf45e7ec1d1820173addea0e18f38f84a25a
+```
+
+The authoritative Program D master plan is:
+
+```text
+docs/PortfolioAI_PROGRAM_D_MASTER_PLAN.md
+```
+
+Master-plan freeze commit:
+
+```text
+c2eba3e2ef13f7b166e3c0419a5b8f5e1e7101e3
+```
+
+### Mandatory continuation workflow
+
+Before any Program D work, ChatGPT, Codex, or any other approved builder must read:
+
+1. `docs/PortfolioAI_PROGRAM_D_MASTER_PLAN.md`
+2. the latest Program D section of this cumulative handoff
+3. the exact current branch and HEAD
+4. any checkpoint-specific Program D document already created
+
+Repository documents override chat memory.
+
+The builder must confirm explicit authorization for the current checkpoint and
+must stop before the next checkpoint unless separately authorized.
+
+### Frozen Program D sequence
+
+```text
+D0       Contract / Dependency / Durability / Safety Freeze
+
+D1       R11 Local Orchestration Implementation
+D2       R11 Adversarial Validation + Bounded-Pilot Readiness
+         -> R11 closes here
+
+D3       R12 Bounded On-Demand Implementation — OPTIONAL
+D4       R12 Grounding / Adversarial Validation — OPTIONAL
+         -> R12 closes here if authorized
+
+D-FINAL  Authorized-Scope Closure Audit
+```
+
+R12 remains optional. Program D may close for an explicitly authorized R11-only
+scope if the owner defers R12.
+
+### Key revisions incorporated into the frozen plan
+
+The frozen plan incorporates the Codex repository audit plus the following
+architecture refinements:
+
+1. **Dependency-driven R11 DAG**
+   - R11 must use a machine-readable R6-R10 dependency matrix.
+   - It must not rely on a simplistic R6 -> R7 -> R8 -> R9 -> R10 cascade.
+   - Owner-context, evidence-freshness, methodology, assignment and other
+     canonical dependency changes may independently trigger affected stages.
+
+2. **D1 zero-real-provider rule**
+   - D1 uses fixtures, mocks, local/disposable state and dry-run provider plans.
+   - Real Trendlyne, Angel One, AI or other external provider calls are zero by
+     default.
+   - Any bounded provider pilot belongs behind a separate D2 owner gate.
+
+3. **R9 durability decision**
+   - D0 must prove exact reconstruction of the previous comparable semantic
+     R9 observed state from durable canonical history, or approve a minimal
+     durable R9 comparison checkpoint.
+   - An identity/hash alone is not sufficient when the previous semantic
+     payload is required to explain what changed.
+   - R9 acknowledgement, snooze and seen/unseen remain outside core R11.
+
+4. **R10 last-known-good discipline**
+   - Program C R10 is non-persistent.
+   - R11 may not imply durable last-known-good R10 state unless a separately
+     approved non-authoritative operational snapshot is explicitly built.
+   - Operational snapshots may never replace canonical R10 authority.
+
+5. **R12 authority-conflict rejection**
+   - R12 may explain contradiction and uncertainty.
+   - If AI proposes a competing R10 action/priority or unauthorized
+     buy/sell/add/trim/exit instruction, the narrative is rejected as
+     `REJECTED_AUTHORITY_CONFLICT`.
+   - It is not surfaced as a valid competing investment conclusion.
+
+6. **Program D durability/restart matrix**
+   - D0 must freeze what is durable today, what must survive restart and which
+     minimal operational state is genuinely required.
+   - Orchestration persistence must not silently become new business authority.
+
+7. **D-FINAL semantics**
+   - D-FINAL is an authorized-scope closure audit.
+   - It is not production readiness, production enablement, merge or deployment.
+
+### Program D authority boundary
+
+```text
+R11 = orchestration authority only
+R12 = optional narrative authority only
+
+R6 = score authority
+R7 = recommendation authority
+R8 = portfolio decision-context authority
+R9 = meaningful-change authority
+R10 = canonical Action Center authority
+
+owner fields = owner authority
+trading = NOT AUTHORIZED
+```
+
+Program D may not:
+
+- mutate owner roles/settings/limits;
+- create numeric sizing authority;
+- promote ADD_REVIEW or TRIM_REVIEW;
+- make AI deterministic;
+- import providers into R6-R10 compute paths;
+- place trades;
+- activate production through checkpoint completion alone.
+
+### Current Program D status
+
+```text
+Program D master plan = FROZEN
+
+D0 = NOT STARTED
+D1 = NOT STARTED
+D2 = NOT STARTED
+D3 = NOT STARTED
+D4 = NOT STARTED
+D-FINAL = NOT STARTED
+
+R11 = NOT STARTED
+R12 = NOT STARTED
+
+Program D implementation = NOT AUTHORIZED
+Migration = NOT AUTHORIZED
+Provider pilot = NOT AUTHORIZED
+Scheduler activation = NOT AUTHORIZED
+Provider automation = NOT AUTHORIZED
+AI activation = NOT AUTHORIZED
+Productionization = NOT AUTHORIZED
+Merge/deployment = NOT AUTHORIZED
+Trading = NOT AUTHORIZED
+```
+
+### Next eligible authorization
+
+The next owner authorization, if desired, is:
+
+```text
+D0 ONLY
+```
+
+D0 is architecture/contract/audit/freeze work only and must contain no live
+provider execution, AI execution, scheduler activation, migration application,
+production mutation, deployment or trading.
