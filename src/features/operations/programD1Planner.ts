@@ -15,6 +15,12 @@ function uniqueSorted<T extends string>(values: readonly T[]): readonly T[] {
   return [...new Set(values)].sort() as readonly T[]
 }
 
+function programD1NodeOrder(nodes: ReadonlySet<ProgramDR11Node>): readonly ProgramDR11Node[] {
+  return PROGRAM_D_R11_DEPENDENCY_MATRIX
+    .map((entry) => entry.node)
+    .filter((node) => nodes.has(node))
+}
+
 function expandAffectedNodes(changedNodes: readonly ProgramDR11Node[]): readonly ProgramDR11Node[] {
   const affected = new Set<ProgramDR11Node>(changedNodes)
   let grew = true
@@ -30,7 +36,7 @@ function expandAffectedNodes(changedNodes: readonly ProgramDR11Node[]): readonly
       }
     }
   }
-  return uniqueSorted([...affected])
+  return programD1NodeOrder(affected)
 }
 
 function dependencyMap(input: readonly { readonly node: ProgramDR11Node; readonly fingerprint: string }[]) {
@@ -47,8 +53,10 @@ export async function buildProgramD1Plan(
 
   const current = dependencyMap(trigger.dependencyState)
   const previous = dependencyMap(trigger.previousDependencyState)
-  const semanticChanges = uniqueSorted(
-    trigger.changedNodes.filter((node) => current[node] !== previous[node]),
+  const semanticChanges = programD1NodeOrder(
+    new Set(
+      trigger.changedNodes.filter((node) => current[node] !== previous[node]),
+    ),
   )
   const affectedNodes = expandAffectedNodes(semanticChanges)
 
