@@ -9330,3 +9330,98 @@ trading = NO
 ### Next workflow step
 
 Pull the current Program D branch onto the Mac and validate that exact branch state locally. No D1 work may begin during this validation phase.
+
+
+---
+
+## Program D · D0 Full Local Validation — PASS / AWAITING OWNER CLOSURE — 25 September 2026
+
+The D0 branch package was pulled to the owner's Mac at exact GitHub HEAD:
+
+```text
+branch = program-d-operations-optional-ai
+validated HEAD = a21f987c7f3dbec78d33293f6d33de8a7308231c
+```
+
+Local Supabase was already running and healthy. Local Vite was already running. The localhost application smoke check was accepted by the owner as normal, with no D0-specific UI change expected because D0 is contract/audit work only.
+
+### Local validation results
+
+```text
+D0 contract Vitest
+  1 file passed
+  9 / 9 tests passed
+
+Program C frozen regression set
+  5 files passed
+  63 / 63 tests passed
+
+Targeted D0 ESLint
+  PASS
+  no D0-file lint errors
+
+TypeScript
+  npm run typecheck
+  PASS
+
+Architecture guard
+  npm run check:architecture
+  PASS
+
+Production build
+  npm run build
+  PASS
+  only existing Vite chunk-size warning observed
+
+git diff --check
+  PASS
+  no output
+
+Local working tree audit
+  no tracked D0 drift detected
+  existing untracked local artifacts remain untouched:
+    PORTFOLIOAI_CURRENT_STATE_AUDIT.md
+    PORTFOLIOAI_LUI1_LOCAL_FIXTURE.sql
+    PORTFOLIOAI_LUI1_LOCAL_FIXTURE_V2.sql
+    artifacts/
+```
+
+A whole-repository lint command was also run accidentally through the package script and exposed pre-existing unrelated repository lint debt. None of those reported errors were in the D0 files. D0 therefore used the required targeted lint result for its changed application files and did not widen scope to repair unrelated historical lint debt.
+
+### Side-effect audit
+
+The validated D0 package introduced no operational side effects:
+
+```text
+Program C semantic changes = 0
+provider calls = 0
+AI calls = 0
+migration creation = 0
+migration application = 0
+scheduler activation = 0
+production mutation = 0
+deployment = 0
+merge = 0
+provider automation = 0
+R9 persistence = 0
+R10 snapshot persistence = 0
+numeric sizing authority = NONE
+ADD_REVIEW promotion = NO
+TRIM_REVIEW promotion = NO
+trading = NO
+```
+
+### D0 checkpoint status
+
+All required D0 contract, dependency, durability, safety and local validation work is now complete within the authorized D0 scope.
+
+```text
+D0 = COMPLETE / PASS / AWAITING OWNER CLOSURE
+D1 = NOT STARTED / NOT AUTHORIZED
+D2 = NOT STARTED / NOT AUTHORIZED
+D3 = NOT STARTED / NOT AUTHORIZED
+D4 = NOT STARTED / NOT AUTHORIZED
+D-FINAL = NOT STARTED / NOT AUTHORIZED
+```
+
+D0 closure does not authorize D1. The next possible action after owner closure is a separate explicit D1 authorization.
