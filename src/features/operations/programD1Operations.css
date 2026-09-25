@@ -72,3 +72,44 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+.operations-validation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.operations-validation-card {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.85rem;
+  border: 1px solid #e0e6e2;
+  border-radius: 0.65rem;
+}
+
+.operations-validation-card .status {
+  justify-self: start;
+}
+
+.operations-validation-card small,
+.operations-validation-card p {
+  color: #68746d;
+}
+
+.operations-validation-card p {
+  margin: 0;
+}
+
+@media (max-width: 1050px) {
+  .operations-validation-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .operations-validation-grid {
+    grid-template-columns: 1fr;
+  }
+}
