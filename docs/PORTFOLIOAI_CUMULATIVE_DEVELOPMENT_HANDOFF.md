@@ -9131,3 +9131,202 @@ D0 ONLY
 D0 is architecture/contract/audit/freeze work only and must contain no live
 provider execution, AI execution, scheduler activation, migration application,
 production mutation, deployment or trading.
+
+
+---
+
+## Program D · D0 Contract Freeze Implementation — LOCAL VALIDATION PENDING — 25 September 2026
+
+The owner explicitly authorized **D0 only** and confirmed the Program D workflow:
+
+```text
+GitHub branch
+    ↓
+develop/update code
+    ↓
+update cumulative handoff
+    ↓
+git pull
+    ↓
+local Mac
+    ↓
+local Supabase
+    ↓
+local Vite
+    ↓
+localhost / owner review where applicable
+    ↓
+full local validation
+    ↓
+update cumulative handoff with final checkpoint result
+    ↓
+next gate only after separate authorization
+```
+
+### Repository changes completed for D0
+
+Added:
+
+```text
+src/features/operations/programD0Contract.ts
+src/features/operations/programD0Contract.test.ts
+docs/PortfolioAI_PROGRAM_D_D0_CONTRACT_DEPENDENCY_DURABILITY_SAFETY_FREEZE.md
+```
+
+Updated:
+
+```text
+docs/PortfolioAI_Development_Status.md
+docs/PORTFOLIOAI_CUMULATIVE_DEVELOPMENT_HANDOFF.md
+```
+
+The D0 code addition is static contract data plus tests only. It is not an R11 orchestrator, scheduler, provider executor or persistence implementation.
+
+### D0 audit decisions now frozen on the branch
+
+#### Trigger and dependency model
+
+R11 trigger taxonomy is frozen to:
+
+```text
+SCHEDULED_MAINTENANCE
+CONDITION_STALENESS
+CANONICAL_EVIDENCE_ACCEPTED
+MARKET_DATA_ACCEPTED
+OWNER_CONTEXT_CHANGED
+METHODOLOGY_CHANGED
+ASSIGNMENT_CHANGED
+POLICY_CHANGED
+MANUAL_REPLAY
+BOUNDED_PILOT
+```
+
+The machine-readable dependency graph covers:
+
+```text
+R6
+R7
+R8_CORE_HEALTH
+R8_PORTFOLIO_FIT
+R8_PORTFOLIO_RISK
+R8_EXIT_INTELLIGENCE
+R9
+R10
+```
+
+It deliberately preserves the existing Program C R8 dependency contract: Portfolio Fit and Portfolio Risk do not require R7, while Core Health and Exit Intelligence treat R7 only as optional context where applicable.
+
+#### Recomputation / no-op semantics
+
+Unchanged canonical dependency fingerprints are audited no-ops. Frozen no-op cases include duplicate semantic triggers, unchanged accepted evidence, run-id-only changes, unchanged owner context/policy/methodology/assignment state, current market-history windows and already-fresh research domains.
+
+Semantic job identity is SHA-256 over canonical ordered fields including portfolio, normalized subject scope, trigger type, canonical dependency fingerprint, policy versions and engine versions. Random run ids are not semantic authority.
+
+#### Provider-control reuse
+
+Research operations reuse the existing provider-control plane:
+
+```text
+provider_ingestion_controls
+provider_usage_events
+reserve_provider_budget_v1
+settle_provider_budget_v1
+data_ingestion_runs
+data_ingestion_run_items
+security_refresh_states
+refresh_domain_policies
+acquire_data_ingestion_lease_v1 / release_data_ingestion_lease_v1 where scope matches
+```
+
+Market-data operations reuse existing market-data refresh state, cache/history stores and operation leases, with later scheduler hardening separately gated.
+
+Program D does not create a duplicate provider budget or usage-accounting plane.
+
+#### Kill switches / retry / leases
+
+Execution-time kill-switch order is frozen as:
+
+```text
+GLOBAL_AUTOMATION → PROVIDER → DOMAIN
+```
+
+Transient provider/runtime failures are the only automatic-retry class. Auth/authz failure, budget denial, kill switch, identity conflict, schema conflict, invalid canonical evidence, deterministic invalid input and authority conflict are non-retryable.
+
+A Program D deterministic-chain lease and general operational ledger are new semantic requirements, but persistence for either remains separately gated.
+
+#### Durability / restart
+
+Current audited durability is frozen as:
+
+```text
+Research evidence = durable
+Market history = durable
+R6 result = non-persisting today
+R7 result = non-persisting today
+R8 result = non-persistent
+R9 previous comparable semantic state = process-memory only
+R10 Action Center = non-persistent
+```
+
+**R9 decision:** Model B is required for scheduled R11 restart safety.
+
+Reason: current R9 comparison state is in memory, while current R6/R7/R8 outputs are non-persisting; therefore exact reconstruction of the previous complete semantic `ProgramCR9ObservedState` after restart is not proven. A hash/identity alone is insufficient.
+
+Future checkpoint content must include the complete previous comparable semantic payload plus identity, lineage, canonical dependency hash and successful processing checkpoint.
+
+D0 creates **no schema and no persistence** for this decision. Migration creation and R9 persistence each remain separate owner gates.
+
+**R10 decision:** no durable R10 operational snapshot is required for core R11. Canonical R10 is recomputed. On failure, preserve canonical upstream facts, report staleness/failure and do not fabricate a replacement R10 state. Any future operational snapshot remains separately gated and non-authoritative.
+
+#### R12 freeze
+
+R12 remains optional and downstream. Allowed lifecycle states are:
+
+```text
+DISABLED
+ON_DEMAND_ONLY
+BOUNDED_PILOT
+WEEKLY_SELECTED_SCOPE
+```
+
+The fact-packet categories and output authority boundary are frozen. Unsupported facts/numbers/citations are rejected. Any competing R10 action/priority, deterministic override or trade instruction is:
+
+```text
+REJECTED_AUTHORITY_CONFLICT
+```
+
+and must not surface as a valid Investment Committee conclusion.
+
+### D0 validation status
+
+GitHub implementation is complete enough to enter the agreed local pull/validation phase, but D0 is **not closed yet**.
+
+```text
+D0 contract package = IMPLEMENTED ON BRANCH
+D0 local validation = PENDING
+D0 owner closure = PENDING
+D1 = NOT AUTHORIZED
+```
+
+Required local checks before D0 closure include the D0 Vitest contract test, relevant Program C regressions, typecheck, architecture guard, changed-file lint/build as applicable, git diff check, secret review, and confirmation of zero schema/provider/AI/scheduler/production side effects.
+
+### Safety boundary preserved
+
+```text
+Program C mutation = NO
+provider calls = 0
+AI calls = 0
+migration creation/application = 0
+scheduler activation = 0
+production mutation = 0
+deployment = 0
+merge = 0
+ADD_REVIEW promotion = NO
+TRIM_REVIEW promotion = NO
+numeric sizing authority = NONE
+trading = NO
+```
+
+### Next workflow step
+
+Pull the current Program D branch onto the Mac and validate that exact branch state locally. No D1 work may begin during this validation phase.
