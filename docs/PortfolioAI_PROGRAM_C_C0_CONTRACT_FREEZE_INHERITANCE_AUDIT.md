@@ -1,11 +1,11 @@
 # PortfolioAI — Program C · C0 Contract Freeze + Inheritance Audit
 
-**Checkpoint:** C0 — Program C contract freeze + inheritance audit  
-**Date:** 24 September 2026  
-**Repository:** `drddutta-portfolio/PortfiolioAI`  
-**Program C branch:** `program-c-portfolio-decision-engines`  
-**Starting HEAD:** `d3b8a755885bd4ecc0be37aa59ea46f2eac0ca41`  
-**Program B functional baseline:** `6a605f618ab67e3e8ad5d5faa2181796a1f43988`  
+**Checkpoint:** C0 — Program C contract freeze + inheritance audit
+**Date:** 24 September 2026
+**Repository:** `drddutta-portfolio/PortfiolioAI`
+**Program C branch:** `program-c-portfolio-decision-engines`
+**Starting HEAD:** `d3b8a755885bd4ecc0be37aa59ea46f2eac0ca41`
+**Program B functional baseline:** `6a605f618ab67e3e8ad5d5faa2181796a1f43988`
 **Status:** COMPLETE / PASS — OWNER APPROVAL REQUIRED BEFORE C1
 
 ## 1. Scope
