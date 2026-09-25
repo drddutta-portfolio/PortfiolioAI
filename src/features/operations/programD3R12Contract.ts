@@ -68,19 +68,45 @@ export type ProgramDR12FactPacketInput = Omit<
 export async function buildProgramDR12FactPacket(
   input: ProgramDR12FactPacketInput,
 ): Promise<ProgramDR12FactPacket> {
+  const safeInput = structuredClone(input)
   const packetId = await programD1Sha256({
     version: PROGRAM_D_R12_PACKET_VERSION,
-    ...input,
+    ...safeInput,
   })
-  return Object.freeze({
+  return deepFreeze({
     version: PROGRAM_D_R12_PACKET_VERSION,
     packetId,
-    ...input,
+    ...safeInput,
   })
+}
+
+function deepFreeze<T>(value: T): T {
+  if (value && typeof value === "object" && !Object.isFrozen(value)) {
+    for (const nested of Object.values(value as Record<string, unknown>)) deepFreeze(nested)
+    Object.freeze(value)
+  }
+  return value
+}
+
+export async function recomputeProgramDR12PacketId(
+  packet: ProgramDR12FactPacket,
+): Promise<string> {
+  const payload: Record<string, unknown> = { ...packet }
+  delete payload.packetId
+  return programD1Sha256(payload)
+}
+
+export interface ProgramDR12FactualClaim {
+  readonly claimId: string
+  readonly text: string
+  readonly claimType: "FACT" | "DETERMINISTIC_STATE" | "OWNER_CONTEXT"
+  readonly sourceFieldIds: readonly string[]
+  readonly citationIds: readonly string[]
 }
 
 export interface ProgramDR12Narrative {
   readonly deterministicStateSummary: string
+  readonly factualClaims: readonly ProgramDR12FactualClaim[]
   readonly supportingEvidence: readonly string[]
   readonly contradictoryEvidence: readonly string[]
   readonly uncertainties: readonly string[]
@@ -89,6 +115,14 @@ export interface ProgramDR12Narrative {
   readonly monitoringQuestions: readonly string[]
   readonly citations: readonly string[]
 }
+
+export const PROGRAM_D_R12_LOCAL_INTERPRETATION =
+  "This local mock interpretation explains the supplied deterministic packet only. It does not change scoring, recommendation, materiality, Action Center precedence, sizing, or trading authority." as const
+
+export const PROGRAM_D_R12_LOCAL_MONITORING_QUESTIONS = [
+  "Has any canonical evidence changed since this packet was created?",
+  "Have the deterministic R9 or R10 states changed since this packet was created?",
+] as const
 
 export type ProgramDR12ValidationStatus =
   | "VALID"
@@ -100,6 +134,7 @@ export type ProgramDR12ValidationStatus =
 export interface ProgramDR12Result {
   readonly version: typeof PROGRAM_D_R12_LOCAL_IMPLEMENTATION_VERSION
   readonly narrativeId: string
+  readonly cacheKey: string
   readonly inputPacketHash: string
   readonly promptVersion: typeof PROGRAM_D_R12_PROMPT_VERSION
   readonly provider: "LOCAL_MOCK"

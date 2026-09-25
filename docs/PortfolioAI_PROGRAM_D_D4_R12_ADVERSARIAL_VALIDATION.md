@@ -1,10 +1,17 @@
 # PortfolioAI — Program D D4 R12 Grounding & Adversarial Validation
 
-**Status:** COMPLETE / PASS / CLOSED  
+**Status:** COMPLETE / PASS / CLOSED (independent-audit remediation validated)
 **Date:** 25 September 2026  
 **Branch:** `program-d-operations-optional-ai`  
 **Authority:** D4 only  
 **Inherited state:** D0/D1/D2/D3 = CLOSED; R11 = CLOSED
+
+**Remediation closure:** The executable D4 matrix now contains 16 non-vacuous local
+checks, including four unsupported textual claims, injected generation failure,
+owner-context before/after comparison and structural rejection of every frozen
+trade/order output key. The prompt-injection result is explicitly limited to the
+`LOCAL_MOCK_ONLY` implementation and is not presented as real-model evidence. All
+16 checks passed in the local Investment Committee UI on 25 September 2026.
 
 ## 1. Purpose
 
@@ -31,7 +38,8 @@ The implemented D4 harness validates:
 12. authority-conflict rejection;
 13. no owner mutation;
 14. no R10 override;
-15. deterministic system remains available when AI fails.
+15. deterministic system remains available when AI fails;
+16. trade/order output keys are structurally rejected.
 
 ## 3. Runtime schema validation
 
@@ -96,7 +104,9 @@ D4 includes an untrusted SOURCE_EXCERPT fixture containing instructions to:
 - reveal hidden prompts.
 
 The local R12 runtime treats the source excerpt as data. It is not used as an
-instruction source and does not change authority or output policy.
+instruction source and does not change authority or output policy. This evidence
+is explicitly **LOCAL_MOCK_ONLY prompt-injection resistance** and is not evidence
+of real-model safety.
 
 ## 9. Malformed output
 

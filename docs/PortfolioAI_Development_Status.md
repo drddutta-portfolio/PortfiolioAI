@@ -684,3 +684,57 @@ Program D = COMPLETE / PASS / CLOSED
 Final local validation passed across the dedicated D-FINAL closure test, cumulative D4→D0/Program C regressions, targeted lint, TypeScript, architecture guard, production build, `git diff --check`, and working-tree audit.
 
 Production remains disabled. No real provider pilot, real AI pilot, scheduler activation, migration, production mutation, notification activation, merge/deployment, numeric sizing authority or trading authority is authorized by this closure.
+
+## Program D independent-audit remediation — REOPENED — 25 September 2026
+
+An independent post-closure audit found material R12 gaps in browser-cache trust,
+packet-integrity verification, unsupported textual-fact grounding, adversarial-test
+quality and D-FINAL evidentiary derivation. The affected checkpoints are reopened
+while the sound R11 local/provider-free work remains closed.
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+
+D3 = REOPENED / REMEDIATION IN PROGRESS
+D4 = REOPENED / REMEDIATION IN PROGRESS
+R12 = REOPENED
+D-FINAL = REOPENED
+Program D = REOPENED / REMEDIATION IN PROGRESS
+
+Production operational = NO
+```
+
+Remediation remains local/mock-only. Provider calls, real AI calls, migrations,
+scheduler activation, production mutation, merge/deployment, sizing authority and
+trading remain unauthorized.
+
+## Program D independent-audit remediation — COMPLETE / PASS / CLOSED — 25 September 2026
+
+The reopened D3, D4, R12 and D-FINAL checkpoints are reclosed after implementation,
+automated regression coverage, executable repository evidence and local browser UI
+validation.
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+D3 = COMPLETE / PASS / CLOSED
+D4 = COMPLETE / PASS / CLOSED
+R12 = COMPLETE / PASS / CLOSED
+D-FINAL = COMPLETE / PASS / CLOSED
+Program D = COMPLETE / PASS / CLOSED
+
+Production operational = NO
+```
+
+The remediation independently rehashes and deeply freezes R12 packets, treats
+browser storage as untrusted, requires structured source-bound textual claims,
+executes 16 non-vacuous D4 checks, and derives Git closure facts from an executable
+audit. Local UI validation confirmed valid local generation, cache reuse, visible
+source-bound provenance, zero external cost and all 16 D4 PASS results. No provider
+or real-AI call, migration, scheduler, production mutation, notification, merge,
+deployment, sizing authority or trading capability was introduced or authorized.

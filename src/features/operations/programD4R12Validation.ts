@@ -9,6 +9,7 @@ import { buildProgramDR12LocalReferencePacket } from "./programD3R12Fixtures"
 import { generateProgramDR12LocalNarrative } from "./programD3R12Runtime"
 import {
   validateProgramDR12Narrative,
+  validateProgramDR12PacketIntegrity,
   validateUnknownProgramDR12Narrative,
 } from "./programD3R12Validator"
 
@@ -76,9 +77,9 @@ Promise<readonly ProgramD4ValidationResult[]> {
   const generated = await generateProgramDR12LocalNarrative(packet, cache)
 
   const exactGrounding =
-    generated.validationStatus === "VALID"
-    && generated.narrative.deterministicStateSummary.includes(String(packet.r10.state))
-    && generated.narrative.deterministicStateSummary.includes(String(packet.r9.state))
+    (await validateProgramDR12PacketIntegrity(packet)).length === 0
+    && generated.validationStatus === "VALID"
+    && generated.narrative.factualClaims.every((claim) => claim.sourceFieldIds.length > 0)
     && generated.inputPacketHash === packet.packetId
   results.push(
     exactGrounding
@@ -88,11 +89,23 @@ Promise<readonly ProgramD4ValidationResult[]> {
 
   const allowedNumberNarrative: ProgramDR12Narrative = {
     ...generated.narrative,
-    aiInterpretation: "The supplied deterministic overall score is 75.1575.",
+    factualClaims: [...generated.narrative.factualClaims, {
+      claimId: "CLAIM_R6_SCORE",
+      text: "R6 overall score: 75.1575",
+      claimType: "DETERMINISTIC_STATE",
+      sourceFieldIds: ["overall_score"],
+      citationIds: ["CIT_R6"],
+    }],
   }
   const unsupportedNumberNarrative: ProgramDR12Narrative = {
     ...generated.narrative,
-    aiInterpretation: "An unsupported financial figure is 999.",
+    factualClaims: [{
+      claimId: "CLAIM_UNSUPPORTED",
+      text: "R6 overall score: 999",
+      claimType: "DETERMINISTIC_STATE",
+      sourceFieldIds: ["overall_score"],
+      citationIds: ["CIT_R6"],
+    }],
   }
   results.push(
     validateProgramDR12Narrative(packet, allowedNumberNarrative) === "VALID"
@@ -111,10 +124,19 @@ Promise<readonly ProgramD4ValidationResult[]> {
       : fail("CITATION_RESOLUTION", "Citation resolution", "Unresolvable citation was accepted."),
   )
 
+  const unsupportedTextClaims = [
+    "The company defaulted on its debt.",
+    "Promoter pledge increased.",
+    "Revenue fell sharply.",
+    "Management guidance was cut.",
+  ]
   results.push(
-    validateProgramDR12Narrative(packet, unsupportedNumberNarrative) === "REJECTED_UNSUPPORTED_FACT"
-      ? pass("UNSUPPORTED_FACT", "Unsupported-fact rejection", "Unsupported factual figure is rejected rather than surfaced.")
-      : fail("UNSUPPORTED_FACT", "Unsupported-fact rejection", "Unsupported fact was not rejected."),
+    unsupportedTextClaims.every((text) => validateProgramDR12Narrative(packet, {
+      ...generated.narrative,
+      factualClaims: [{ ...generated.narrative.factualClaims[0]!, text }],
+    }) === "REJECTED_UNSUPPORTED_FACT")
+      ? pass("UNSUPPORTED_FACT", "Unsupported-fact rejection", "Unsupported textual factual claims are rejected unless exactly source-bound to packet fields.")
+      : fail("UNSUPPORTED_FACT", "Unsupported-fact rejection", "Unsupported textual fact was not rejected."),
   )
 
   const before = JSON.stringify({
@@ -156,7 +178,7 @@ Promise<readonly ProgramD4ValidationResult[]> {
     && injected.narrative.aiInterpretation.includes("does not change")
   results.push(
     injectionSafe
-      ? pass("PROMPT_INJECTION", "Prompt-injection resistance", "Untrusted source excerpt is treated as data and does not alter authority or instructions.")
+      ? pass("PROMPT_INJECTION", "LOCAL_MOCK_ONLY prompt-injection resistance", "The local mock does not consume untrusted source excerpts as instructions; this is not real-model evidence.")
       : fail("PROMPT_INJECTION", "Prompt-injection resistance", "Source excerpt influenced generated authority."),
   )
 
@@ -170,8 +192,19 @@ Promise<readonly ProgramD4ValidationResult[]> {
       : fail("MALFORMED_OUTPUT", "Malformed output", "Malformed output was not rejected."),
   )
 
+  let unavailableError: string | null = null
+  try {
+    await generateProgramDR12LocalNarrative(
+      packet,
+      createMemoryProgramDR12Cache(),
+      () => "2026-09-25T13:10:00+05:30",
+      () => Promise.reject(new Error("LOCAL_AI_UNAVAILABLE")),
+    )
+  } catch (error) {
+    unavailableError = error instanceof Error ? error.message : String(error)
+  }
   const unavailableBoundary = {
-    aiAvailable: false,
+    aiAvailable: unavailableError === null,
     deterministicAvailable: Boolean(packet.r10.state && packet.r9.state),
     deterministicPacketId: packet.packetId,
     narrative: null,
@@ -180,6 +213,7 @@ Promise<readonly ProgramD4ValidationResult[]> {
     !unavailableBoundary.aiAvailable
       && unavailableBoundary.deterministicAvailable
       && unavailableBoundary.narrative === null
+      && unavailableError === "LOCAL_AI_UNAVAILABLE"
       ? pass("AI_UNAVAILABLE", "AI timeout / unavailability", "AI unavailability leaves deterministic packet state available and emits no fabricated narrative.")
       : fail("AI_UNAVAILABLE", "AI timeout / unavailability", "Deterministic availability depended on AI."),
   )
@@ -213,17 +247,23 @@ Promise<readonly ProgramD4ValidationResult[]> {
       : fail("AUTHORITY_CONFLICT", "Authority-conflict rejection", "Competing action was accepted."),
   )
 
-  const ownerBefore = Object.freeze({
-    role: "CORE",
-    targetWeight: "3.25",
-    minimumWeight: "2.00",
-    maximumWeight: "4.00",
-  })
-  const ownerAfter = { ...ownerBefore }
+  const ownerBefore = JSON.stringify(packet.fields.filter((field) => field.type === "OWNER_CONTEXT"))
+  await generateProgramDR12LocalNarrative(packet, createMemoryProgramDR12Cache())
+  const ownerAfter = JSON.stringify(packet.fields.filter((field) => field.type === "OWNER_CONTEXT"))
   results.push(
-    JSON.stringify(ownerBefore) === JSON.stringify(ownerAfter)
+    ownerBefore === ownerAfter
       ? pass("NO_OWNER_MUTATION", "No owner mutation", "R12 validation does not mutate owner-controlled role or weight fields.")
       : fail("NO_OWNER_MUTATION", "No owner mutation", "Owner-controlled state changed."),
+  )
+
+  const tradeKeys = ["order", "tradeInstruction", "buy", "sell", "add", "trim", "exit"]
+  results.push(
+    tradeKeys.every((key) => validateProgramDR12Narrative(packet, generated.narrative, {
+      ...generated.narrative,
+      [key]: "FORBIDDEN",
+    }) === "REJECTED_AUTHORITY_CONFLICT")
+      ? pass("NO_TRADE_PATH", "No trade/order output authority", "Every frozen trade/order output key is structurally rejected by the runtime validator.")
+      : fail("NO_TRADE_PATH", "No trade/order output authority", "A trade/order output key escaped structural rejection."),
   )
 
   results.push(

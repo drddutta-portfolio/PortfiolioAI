@@ -1,10 +1,17 @@
 # PortfolioAI — Program D D3 Optional R12 Local Implementation
 
-**Status:** COMPLETE / PASS / CLOSED  
+**Status:** COMPLETE / PASS / CLOSED (independent-audit remediation validated)
 **Date:** 25 September 2026  
 **Branch:** `program-d-operations-optional-ai`  
 **Authority:** D3 only  
 **Inherited state:** D0/D1/D2 = CLOSED; R11 = CLOSED
+
+**Remediation closure:** Browser cache entries are fully revalidated at the runtime
+boundary; packet identity is independently recomputed; packet inputs and outputs are
+deep-cloned and recursively frozen; and textual factual claims must be explicitly
+source-bound. Direct localStorage poisoning, packet mutation and unsupported-fact
+regressions pass. Local UI validation confirmed valid generation, visible provenance,
+zero external cost and cache reuse on 25 September 2026.
 
 ## 1. D3 purpose
 
@@ -33,7 +40,8 @@ A real cost-bearing AI call remains separately gated for D4 or later.
 
 D3 adds `PROGRAM_D_R12_FACT_PACKET_V1`.
 
-The packet is immutable after construction and carries:
+The remediated packet is deep-cloned, recursively frozen after construction and
+independently rehashed before every runtime consumption. It carries:
 
 - packet identity/version;
 - portfolio/security identity;
@@ -108,7 +116,7 @@ REJECTED_UNSUPPORTED_CITATION
 REJECTED_AUTHORITY_CONFLICT
 ```
 
-Validation rules include:
+Remediated validation rules include:
 
 - packet version and SHA-style packet identity;
 - unique typed-field ids;
@@ -117,6 +125,10 @@ Validation rules include:
 - unique citation ids;
 - provenance required for evidence references;
 - every output citation must resolve inside the packet;
+- every factual statement is a structured claim with packet field ids and any
+  applicable citation ids;
+- structured claim text must be reproduced exactly from its referenced packet
+  fields;
 - every numeric figure in output must be present in typed packet numeric fields;
 - forbidden action/priority/sizing/trade keys reject the output as authority conflict.
 
@@ -156,7 +168,11 @@ Browser-local cache key:
 portfolioai.program-d.r12.local-cache.v1
 ```
 
-An unchanged packet + prompt version reuses the cached valid result.
+An unchanged packet + prompt version reuses a cached result only after the cache
+entry, packet hash, cache key, prompt/provider/model identity, narrative identity,
+schema, structured claims, citations, numeric claims and authority boundary are
+all revalidated. Browser localStorage is treated as untrusted input; invalid cache
+entries are ignored and regenerated safely.
 
 The cache is:
 

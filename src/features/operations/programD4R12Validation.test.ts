@@ -13,7 +13,7 @@ describe("Program D D4 R12 adversarial validation", () => {
     const summary = await buildProgramD4ValidationSummary()
     expect(summary.failed).toBe(0)
     expect(summary.passed).toBe(summary.total)
-    expect(summary.total).toBe(15)
+    expect(summary.total).toBe(16)
     expect(summary.externalAiCalls).toBe(0)
     expect(summary.externalAiCost).toBe(0)
     expect(summary.realAiPilotAuthorized).toBe(false)

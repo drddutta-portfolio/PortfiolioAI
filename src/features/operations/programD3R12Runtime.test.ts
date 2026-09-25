@@ -1,14 +1,21 @@
 import { describe, expect, it } from "vitest"
-import { createMemoryProgramDR12Cache } from "./programD3R12Cache"
+import {
+  PROGRAM_D_R12_BROWSER_CACHE_KEY,
+  createBrowserProgramDR12Cache,
+  createMemoryProgramDR12Cache,
+} from "./programD3R12Cache"
+import type { ProgramDR12Cache } from "./programD3R12Cache"
 import {
   PROGRAM_D_R12_D3_COST_CEILING,
   PROGRAM_D_R12_PROMPT_VERSION,
   buildProgramDR12FactPacket,
+  type ProgramDR12Result,
 } from "./programD3R12Contract"
 import { buildProgramDR12LocalReferencePacket } from "./programD3R12Fixtures"
 import { generateProgramDR12LocalNarrative } from "./programD3R12Runtime"
 import {
   validateProgramDR12FactPacket,
+  validateProgramDR12PacketIntegrity,
   validateProgramDR12Narrative,
 } from "./programD3R12Validator"
 
@@ -20,6 +27,32 @@ describe("Program D D3 bounded local R12", () => {
     expect(second.packetId).toBe(first.packetId)
     expect(validateProgramDR12FactPacket(first)).toEqual([])
     expect(Object.isFrozen(first)).toBe(true)
+    expect(Object.isFrozen(first.fields)).toBe(true)
+    expect(Object.isFrozen(first.fields[0])).toBe(true)
+    expect(Object.isFrozen(first.evidence)).toBe(true)
+    expect(Object.isFrozen(first.r6.lineage)).toBe(true)
+    expect(Object.isFrozen(first.blockers)).toBe(true)
+    expect(await validateProgramDR12PacketIntegrity(first)).toEqual([])
+  })
+
+  it("rejects forged or mutated packet contents by independently rehashing", async () => {
+    const packet = await buildProgramDR12LocalReferencePacket()
+    const forged = structuredClone(packet)
+    ;(forged as { packetId: string }).packetId = "a".repeat(64)
+    expect(await validateProgramDR12PacketIntegrity(forged)).toContain("PACKET_IDENTITY_MISMATCH")
+
+    for (const mutate of [
+      (value: typeof packet) => { (value.fields[0] as { value: number }).value = 1 },
+      (value: typeof packet) => { (value.evidence[0] as { label: string }).label = "Altered" },
+      (value: typeof packet) => { (value.r6.lineage as Record<string, string>).scoreRunId = "ALTERED" },
+      (value: typeof packet) => { (value.blockers as string[])[0] = "Altered" },
+      (value: typeof packet) => { (value.uncertainties as string[])[0] = "Altered" },
+      (value: typeof packet) => { (value.contradictions as string[])[0] = "Altered" },
+    ]) {
+      const changed = structuredClone(packet)
+      mutate(changed)
+      expect(await validateProgramDR12PacketIntegrity(changed)).toContain("PACKET_IDENTITY_MISMATCH")
+    }
   })
 
   it("generates only local mock output with zero external cost", async () => {
@@ -65,11 +98,8 @@ describe("Program D D3 bounded local R12", () => {
       packet,
       createMemoryProgramDR12Cache(),
     )
-    expect(validateProgramDR12Narrative(packet, {
-      ...valid.narrative,
-      aiInterpretation:
-        "R6, R9, R10, R12, D3 and PROGRAM_C_R10_PRECEDENCE_V1 are identifiers, not numeric claims.",
-    })).toBe("VALID")
+    expect(valid.validationStatus).toBe("VALID")
+    expect(valid.narrative.deterministicStateSummary).toContain("R10")
   })
 
   it("rejects unsupported numbers", async () => {
@@ -82,6 +112,83 @@ describe("Program D D3 bounded local R12", () => {
       ...valid.narrative,
       aiInterpretation: "An unsupported figure is 999.",
     })).toBe("REJECTED_UNSUPPORTED_FACT")
+  })
+
+  it.each([
+    "The company defaulted on its debt.",
+    "Promoter pledge increased.",
+    "Revenue fell sharply.",
+    "Management guidance was cut.",
+  ])("rejects unsupported textual factual output: %s", async (claim) => {
+    const packet = await buildProgramDR12LocalReferencePacket()
+    const valid = await generateProgramDR12LocalNarrative(packet, createMemoryProgramDR12Cache())
+    expect(validateProgramDR12Narrative(packet, {
+      ...valid.narrative,
+      aiInterpretation: claim,
+    })).toBe("REJECTED_UNSUPPORTED_FACT")
+    expect(validateProgramDR12Narrative(packet, {
+      ...valid.narrative,
+      factualClaims: [{
+        ...valid.narrative.factualClaims[0]!,
+        text: claim,
+      }],
+    })).toBe("REJECTED_UNSUPPORTED_FACT")
+  })
+
+  it("never trusts a cached VALID marker without complete revalidation", async () => {
+    const packet = await buildProgramDR12LocalReferencePacket()
+    const valid = await generateProgramDR12LocalNarrative(packet, createMemoryProgramDR12Cache())
+    const attacks: readonly Partial<ProgramDR12Result>[] = [
+      { validationStatus: "FORGED" as ProgramDR12Result["validationStatus"] },
+      { inputPacketHash: "b".repeat(64) },
+      { promptVersion: "FORGED" as typeof valid.promptVersion },
+      { provider: "FORGED" as typeof valid.provider },
+      { model: "FORGED" as typeof valid.model },
+      { cacheKey: "FORGED" },
+      { narrative: { ...valid.narrative, aiInterpretation: "The company defaulted on its debt." } },
+      { narrative: { ...valid.narrative, citations: ["CIT_UNKNOWN"] } },
+      { narrative: { ...valid.narrative, aiInterpretation: "Unsupported 999." } },
+      { narrative: { ...valid.narrative, factualClaims: [] }, narrativeId: "c".repeat(64) },
+    ]
+    for (const attack of attacks) {
+      const forged = { ...valid, ...attack } as ProgramDR12Result
+      const cache: ProgramDR12Cache = { get: () => forged, set: () => undefined, clear: () => undefined }
+      const regenerated = await generateProgramDR12LocalNarrative(packet, cache)
+      expect(regenerated.cached).toBe(false)
+      expect(regenerated.validationStatus).toBe("VALID")
+      expect(regenerated.narrative.aiInterpretation).not.toContain("defaulted")
+    }
+  })
+
+  it("treats serialized browser storage as untrusted input", async () => {
+    const packet = await buildProgramDR12LocalReferencePacket()
+    const valid = await generateProgramDR12LocalNarrative(packet, createMemoryProgramDR12Cache())
+    const cacheKey = `${packet.packetId}::${PROGRAM_D_R12_PROMPT_VERSION}`
+    const values = new Map<string, string>([[
+      PROGRAM_D_R12_BROWSER_CACHE_KEY,
+      JSON.stringify({
+        [cacheKey]: {
+          ...valid,
+          narrative: {
+            ...valid.narrative,
+            aiInterpretation: "The company defaulted on its debt.",
+          },
+        },
+      }),
+    ]])
+    const storage = {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => { values.set(key, value) },
+      removeItem: (key: string) => { values.delete(key) },
+    } as Storage
+
+    const regenerated = await generateProgramDR12LocalNarrative(
+      packet,
+      createBrowserProgramDR12Cache(storage),
+    )
+    expect(regenerated.cached).toBe(false)
+    expect(regenerated.validationStatus).toBe("VALID")
+    expect(regenerated.narrative.aiInterpretation).not.toContain("defaulted")
   })
 
   it("rejects competing action or trade authority", async () => {

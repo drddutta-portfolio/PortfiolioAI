@@ -201,6 +201,7 @@ export function InvestmentCommitteePage() {
           </article>
 
           <div className="r12-columns">
+            <ListCard title="Source-bound factual claims" values={result.narrative.factualClaims.map((claim) => claim.text)} />
             <ListCard title="Supporting evidence" values={result.narrative.supportingEvidence} />
             <ListCard title="Contradictory evidence" values={result.narrative.contradictoryEvidence} />
             <ListCard title="Uncertainties" values={result.narrative.uncertainties} />

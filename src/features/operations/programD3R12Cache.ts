@@ -13,7 +13,10 @@ export interface ProgramDR12Cache {
 export function createMemoryProgramDR12Cache(): ProgramDR12Cache {
   const values = new Map<string, ProgramDR12Result>()
   return {
-    get: (key) => values.get(key) ?? null,
+    get: (key) => {
+      const value = values.get(key)
+      return value ? structuredClone(value) : null
+    },
     set: (key, value) => { values.set(key, structuredClone(value)) },
     clear: () => values.clear(),
   }
@@ -27,6 +30,7 @@ function isProgramDR12Result(value: unknown): value is ProgramDR12Result {
   const row = value as Record<string, unknown>
   return row.version === PROGRAM_D_R12_LOCAL_IMPLEMENTATION_VERSION
     && typeof row.narrativeId === "string"
+    && typeof row.cacheKey === "string"
     && typeof row.inputPacketHash === "string"
     && row.promptVersion === PROGRAM_D_R12_PROMPT_VERSION
     && row.provider === "LOCAL_MOCK"
@@ -34,10 +38,13 @@ function isProgramDR12Result(value: unknown): value is ProgramDR12Result {
     && typeof row.generatedAt === "string"
     && typeof row.narrative === "object"
     && row.narrative !== null
-    && typeof row.validationStatus === "string"
+    && ["VALID", "REJECTED_SCHEMA", "REJECTED_UNSUPPORTED_FACT", "REJECTED_UNSUPPORTED_CITATION", "REJECTED_AUTHORITY_CONFLICT"].includes(String(row.validationStatus))
     && typeof row.usage === "object"
     && row.usage !== null
     && typeof row.cached === "boolean"
+    && typeof (row.usage as Record<string, unknown>).inputTokensEstimated === "number"
+    && typeof (row.usage as Record<string, unknown>).outputTokensEstimated === "number"
+    && (row.usage as Record<string, unknown>).externalCost === 0
 }
 
 function parseProgramDR12Cache(raw: string): Record<string, ProgramDR12Result> {

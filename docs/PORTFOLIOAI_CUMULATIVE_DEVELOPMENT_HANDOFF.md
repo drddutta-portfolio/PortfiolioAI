@@ -10655,3 +10655,54 @@ This closure means the local/provider-free R11 orchestration layer and the bound
 It does **not** mean PortfolioAI production operations are enabled. Future production scheduling, real provider automation, durable R9/R10 operational persistence, real AI-provider execution, notifications, deployment/merge, numeric sizing, or trading remain separately gated future work.
 
 No later program or productionization phase is implicitly authorized by Program D closure.
+
+---
+
+## Program D independent-audit remediation — REOPENED — 25 September 2026
+
+The independent Program D audit reopened only the affected R12 and final-closure
+checkpoints after identifying unsafe trust of browser-cached narratives, missing
+packet rehash verification, incomplete textual-fact grounding, locally vacuous
+adversarial checks and hard-coded D-FINAL self-attestation.
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+
+D3 = REOPENED / REMEDIATION IN PROGRESS
+D4 = REOPENED / REMEDIATION IN PROGRESS
+R12 = REOPENED
+D-FINAL = REOPENED
+Program D = REOPENED / REMEDIATION IN PROGRESS
+
+Production operational = NO
+```
+
+This remediation authorizes local code, tests, repository-derived closure evidence
+and documentation corrections only. It authorizes no provider call, real AI call,
+migration, scheduler, production mutation, merge, deployment, numeric sizing or
+trading capability.
+
+---
+
+## Program D independent-audit remediation — COMPLETE / PASS / CLOSED — 25 September 2026
+
+The reopened D3, D4, R12 and D-FINAL checkpoints are reclosed. The completed
+remediation adds packet rehashing and recursive immutability, full cache-boundary
+revalidation, structured source-bound factual claims, direct localStorage poisoning
+coverage, 16 non-vacuous D4 adversarial checks, and executable Git-derived D-FINAL
+evidence. Local Investment Committee validation showed valid local generation,
+cache reuse, visible provenance, zero external cost and 16/16 D4 PASS.
+
+```text
+D0/D1/D2/R11 = COMPLETE / PASS / CLOSED (unchanged)
+D3/D4/R12/D-FINAL = COMPLETE / PASS / CLOSED (remediated)
+Program D = COMPLETE / PASS / CLOSED
+Production operational = NO
+```
+
+No provider or real-AI call, migration, scheduler activation, production mutation,
+notification, merge/deployment, numeric sizing authority or trading capability was
+introduced or authorized.
