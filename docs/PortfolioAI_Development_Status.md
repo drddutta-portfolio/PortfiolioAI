@@ -516,3 +516,10 @@ Validation passed:
 No provider/AI calls, migrations, scheduler activation, production mutation, deployment, merge, R9 persistence, R10 snapshot persistence, sizing authority or trading capability were introduced.
 
 D1 remains **NOT AUTHORIZED** and may not begin without separate owner approval.
+
+
+## Program D · D0 closed / D1 authorized — 25 September 2026
+
+Owner approval closes D0 as **COMPLETE / PASS / CLOSED** and authorizes **D1 — R11 Local Implementation** only.
+
+D1 remains local/provider-free by default. No migration, durable R9/R10 persistence, real provider pilot, scheduler activation, production mutation, R12/AI activation, deployment, merge or trading is authorized by this transition.
