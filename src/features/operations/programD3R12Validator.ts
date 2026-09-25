@@ -88,7 +88,7 @@ function packetNumbers(packet: ProgramDR12FactPacket) {
 function narrativeNumbers(narrative: ProgramDR12Narrative) {
   const values = new Set<string>()
   for (const part of textParts(narrative)) {
-    for (const match of part.matchAll(/(?<![A-Za-z])[-+]?\d+(?:\.\d+)?%?/gu)) {
+    for (const match of part.matchAll(/(?<![A-Za-z0-9])[-+]?\d+(?:\.\d+)?%?(?![A-Za-z0-9])/gu)) {
       values.add(match[0].replace(/%$/u, ""))
     }
   }
