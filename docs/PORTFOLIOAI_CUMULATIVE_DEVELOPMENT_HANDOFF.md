@@ -10010,3 +10010,71 @@ D-FINAL = NOT AUTHORIZED
 ```
 
 D2 closure does not authorize D3/R12 and does not authorize a real provider pilot. Both remain separate owner decisions.
+
+
+---
+
+## Program D · D2 / R11 OWNER CLOSURE / D3 AUTHORIZATION — 25 September 2026
+
+Owner decision:
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+D3 = AUTHORIZED
+D4 = NOT AUTHORIZED
+D-FINAL = NOT AUTHORIZED
+```
+
+The owner accepted the fully validated D2/R11 result and explicitly authorized D3 — Optional R12 Local Implementation.
+
+D3 is authorized only for bounded, on-demand, local/mocked R12 implementation.
+
+The D3 provider/cost ceiling is frozen for this checkpoint as:
+
+```text
+AI provider mode = LOCAL_MOCK_ONLY
+external AI calls = 0
+external AI cost = 0
+scheduled AI = NOT AUTHORIZED
+portfolio-wide event-driven AI = NOT AUTHORIZED
+```
+
+This local zero-cost ceiling satisfies the D3 implementation entry without authorizing a real AI-provider pilot. Any real cost-bearing AI call remains a separate owner gate no earlier than D4.
+
+D3 scope includes:
+
+- immutable/versioned deterministic fact packet;
+- strict fact-packet schema/type validation;
+- typed FACT / DETERMINISTIC_STATE / OWNER_CONTEXT / UNCERTAINTY / SOURCE_EXCERPT inputs;
+- local/mock on-demand narrative generation;
+- packet-hash + prompt-version cache identity;
+- local bounded cost/token/concurrency controls;
+- strict output schema;
+- citation/provenance validation;
+- unsupported-number/fact rejection;
+- authority-conflict rejection;
+- explicit deterministic-vs-AI UI separation;
+- local Investment Committee workspace or equivalent bounded UI.
+
+Still not authorized:
+
+```text
+real AI provider call = NOT AUTHORIZED
+real AI cost/spend = NOT AUTHORIZED
+scheduled AI = NOT AUTHORIZED
+weekly selected-scope AI = NOT AUTHORIZED
+production AI persistence = NOT AUTHORIZED
+migration = NOT AUTHORIZED
+scheduler = NOT AUTHORIZED
+production mutation = NOT AUTHORIZED
+R6-R10 dependency on AI = PROHIBITED
+R10 reprioritization by AI = PROHIBITED
+numeric sizing authority = NONE
+trade/order instruction = PROHIBITED
+merge/deployment = NOT AUTHORIZED
+```
+
+The real bounded provider pilot for R11 also remains NOT RUN / NOT AUTHORIZED and is not implied by R11 closure.
