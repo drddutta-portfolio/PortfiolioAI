@@ -10322,3 +10322,67 @@ D-FINAL = NOT AUTHORIZED
 ```
 
 D3 closure does not authorize D4 or a real cost-bearing AI pilot. Both remain separate owner decisions.
+
+
+---
+
+## Program D · D3 OWNER CLOSURE / D4 AUTHORIZATION — 25 September 2026
+
+Owner decision:
+
+```text
+D0 = COMPLETE / PASS / CLOSED
+D1 = COMPLETE / PASS / CLOSED
+D2 = COMPLETE / PASS / CLOSED
+R11 = COMPLETE / PASS / CLOSED
+D3 = COMPLETE / PASS / CLOSED
+D4 = AUTHORIZED
+D-FINAL = NOT AUTHORIZED
+```
+
+The owner accepted the fully validated D3 result and explicitly authorized D4 — Optional R12 Validation.
+
+D4 scope is the frozen R12 grounding/adversarial validation matrix:
+
+- exact packet grounding;
+- numeric claim verification;
+- citation resolution;
+- unsupported-fact rejection;
+- deterministic-state preservation;
+- contradictory evidence preservation;
+- prompt-injection resistance;
+- malformed-output rejection;
+- AI timeout/unavailability fail-safe behavior;
+- cache/idempotency;
+- cost limits;
+- authority-conflict rejection;
+- no owner mutation;
+- no R10 override;
+- deterministic system remains available when AI fails.
+
+D4 execution boundary remains:
+
+```text
+AI provider mode = LOCAL_MOCK_ONLY
+real external AI calls = 0
+external AI cost = 0
+scheduled AI = NOT AUTHORIZED
+weekly selected-scope AI = NOT AUTHORIZED
+production AI persistence = NOT AUTHORIZED
+```
+
+A real cost-bearing AI pilot remains a separate owner gate inside D4 and is not authorized by this transition.
+
+Still not authorized:
+
+```text
+real AI provider pilot = NOT AUTHORIZED
+migration = NOT AUTHORIZED
+scheduler = NOT AUTHORIZED
+production mutation = NOT AUTHORIZED
+R6-R10 dependency on AI = PROHIBITED
+R10 reprioritization by AI = PROHIBITED
+numeric sizing authority = NONE
+trade/order instruction = PROHIBITED
+merge/deployment = NOT AUTHORIZED
+```
