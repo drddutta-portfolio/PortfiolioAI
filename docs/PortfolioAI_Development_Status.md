@@ -561,3 +561,10 @@ Validated locally:
 No provider call, migration, scheduler activation, production mutation, R9/R10 persistence, R12/AI activation, deployment, merge or trading capability was introduced.
 
 D2 remains **NOT AUTHORIZED**.
+
+
+## Program D · D1 closed / D2 authorized — 25 September 2026
+
+Owner approval closes D1 as **COMPLETE / PASS / CLOSED** and authorizes **D2 — R11 Validation & Bounded-Pilot Readiness** only.
+
+D2 may perform local/adversarial validation and bounded-pilot readiness design. A real provider pilot remains separately unauthorized inside D2. No migration, scheduler, production mutation, R12/AI activation, deployment, merge or trading is authorized.
