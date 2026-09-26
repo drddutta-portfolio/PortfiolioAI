@@ -29,10 +29,34 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P0 authority/readiness freeze is COMPLETE / PASS / CLOSED after Owner Checkpoint 1 approval; P1 — Source-Code Integration Baseline is AUTHORIZED but NOT STARTED; Stage 5 Development data validation remains COMPLETE / PASS; the Development environment baseline is operational; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
+**Current milestone:** Post-D P1 — Source-Code Integration Baseline is IN PROGRESS; P0 is COMPLETE / PASS / CLOSED; Stage 5 Development data validation remains COMPLETE / PASS; the Development environment baseline is operational; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
+
+## Post-D P1 source-code integration baseline — 26 September 2026
+
+P1 is **IN PROGRESS / RESIDUAL VALIDATION PENDING**.
+
+The first P1 reconciliation pass is documented in:
+
+`PortfolioAI_POST_D_P1_SOURCE_CODE_INTEGRATION_BASELINE_MANIFEST.md`
+
+Current P1 dispositions:
+
+- `PortfolioAI-Development` remains the correct convergence codeline.
+- Program A, Program C and Program D branch tips are ancestors of Development; no evidence of dropped Program A–D lineage was found.
+- The `main` industry-first lock and final Vercel SPA rewrite are already functionally contained in Development.
+- The earlier catch-all Vercel rewrite is superseded.
+- The manual encrypted Production Supabase backup workflow is intentionally retained on `main` only as environment-specific Production operations configuration; it is not copied into Development.
+- PR #101 is already contained in Development ancestry.
+- PR #99 contributes no unique current functionality beyond an already-contained industry-first documentation sync.
+- PR #98's older Pharma business-model routing is superseded by the later R4N/Gate subprofile authority in Development.
+- PR #78's old Dashboard sizing UI is not ported during P1; the canonical R1/D35B sizing engine is present and sizing presentation is reserved for P7 UI consolidation.
+
+No application-code patch has been required by P1 so far. No PR, Production environment, migration, provider, scheduler, paid-AI path or trading capability was modified.
+
+Remaining P1 work is exact-head validation, Development Preview deployment confirmation, final baseline/ancestry freeze, and Owner Checkpoint 2.
 
 ## Post-D P0 authority/readiness freeze — 26 September 2026
 
