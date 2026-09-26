@@ -1,7 +1,7 @@
 # PortfolioAI — Post-D P1 Source-Code Integration Baseline Manifest
 
 **Stage:** P1 — Source-Code Integration Baseline  
-**Status:** IN PROGRESS / RESIDUAL VALIDATION PENDING  
+**Status:** COMPLETE / PASS / AWAITING OWNER CHECKPOINT 2  
 **Branch:** `PortfolioAI-Development`  
 **Date:** 26 September 2026  
 **P0 prerequisite:** COMPLETE / PASS / CLOSED
@@ -157,19 +157,53 @@ The latest Stage 5 closure already recorded:
 
 P1 still requires a final exact-head validation/review before Owner Checkpoint 2. P1 does not silently redefine the inherited test/lint debt as newly passing.
 
-## 9. Remaining P1 work
+## 9. Final exact-head validation
 
-Before P1 can close:
+P1 exact-head validation completed at Development commit `cab5b0f4059bb6858c4445a4b0f78f49dfd46a62`.
 
-1. Revalidate exact Development HEAD after the P1 documentation commits.
-2. Confirm no new source-code files were introduced by P1.
-3. Confirm `main` remains unchanged.
-4. Confirm the branch still deploys successfully to the Development Preview.
-5. Record inherited validation debt explicitly.
-6. Update the living Development Status with the final P1 disposition.
-7. Return to the owner for **Owner Checkpoint 2 — Development baseline and ancestry approval**.
+Results:
 
-## 10. Safety boundary
+- Development branch HEAD matches the expected P1 documentation commit.
+- `main` remains unchanged at `d0cc52dfcf61fc9a884f139fcc7931b3bd73c57b`.
+- The P1 delta from the pre-P1 approved baseline contains exactly two documentation changes:
+  - new `PortfolioAI_POST_D_P1_SOURCE_CODE_INTEGRATION_BASELINE_MANIFEST.md`;
+  - updated `PortfolioAI_Development_Status.md`.
+- No source-code, migration, workflow, environment, provider, scheduler, AI or trading file was changed by P1.
+- Vercel reported **SUCCESS** for the exact P1 HEAD.
+- The validated Stage 5 application tree remains unchanged by P1.
+- Inherited validation debt remains unchanged and explicit:
+  - two historical Program-D branch-name assertions remain the known test-suite exceptions from Stage 5;
+  - repository-wide ESLint retains pre-existing unrelated debt.
+
+## 10. P1 exit criteria
+
+| Exit criterion | Result |
+|---|---|
+| One reviewed Development codeline identified | PASS |
+| Program A ancestry preserved | PASS |
+| Program B implementation lineage materially present | PASS |
+| Program C ancestry preserved | PASS |
+| Program D ancestry preserved | PASS |
+| Main-only application changes dispositioned | PASS |
+| Open PRs dispositioned without blind merge | PASS |
+| No approved capability silently dropped | PASS |
+| No duplicate/superseded code imported | PASS |
+| Exact-head Development deployment succeeds | PASS |
+| Main unchanged | PASS |
+| P1 introduced source-code changes | NONE |
+| Production mutation | NONE |
+
+## 11. P1 closure state
+
+```text
+P1 integration baseline = COMPLETE / PASS
+Owner Checkpoint 2 = AWAITING APPROVAL
+P2 formal closure = NOT AUTHORIZED UNTIL OWNER CHECKPOINT 2
+```
+
+Owner Checkpoint 2 is specifically the approval of the Development baseline/ancestry and the intentional dispositions recorded in this manifest.
+
+## 12. Safety boundary
 
 P1 does not authorize or perform:
 
