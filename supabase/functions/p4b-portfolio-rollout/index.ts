@@ -64,7 +64,7 @@ Deno.serve(async request=>{
     if(body.action!==BATCH_ACTION) return reply(400,{error:"Unknown action."})
     const afterSymbol=typeof body.afterSymbol==="string"?body.afterSymbol.trim().toUpperCase():""
     const limit=Number(body.limit??3)
-    if(!Number.isInteger(limit)||limit<1||limit>5) return reply(400,{error:"Batch limit must be 1..5."})
+    if(!Number.isInteger(limit)||limit<1||limit>6) return reply(400,{error:"Batch limit must be 1..6."})
     const sentinel=`${BATCH_ACTION}:${afterSymbol||"START"}:${limit}`
 
     const admin=createClient(supabaseUrl,serviceKey,{auth:{persistSession:false}})
