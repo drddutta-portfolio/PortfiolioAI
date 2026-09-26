@@ -1,0 +1,121 @@
+{
+  "version": "P4_CURRENT_READINESS_SNAPSHOT_2026_09_26_V1",
+  "asOfDate": "2026-09-26",
+  "environment": {
+    "branch": "PortfolioAI-Development",
+    "supabaseProjectRef": "lrgpjimipfkyoqbpsqzz",
+    "productionMutation": false
+  },
+  "portfolio": {
+    "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+    "openHoldings": 248,
+    "openEquities": 239,
+    "openNonEquities": 9,
+    "currentPriceCovered": 244,
+    "currentPriceMissing": 4,
+    "equitiesWithSectorAndIndustryNoConflict": 48,
+    "equitiesBlockedByMissingSectorIndustryOrConflict": 191,
+    "angelOneIdentityVerified": 244,
+    "openHoldingsWithOneDayHistory": 1,
+    "openHoldingsWithoutOneDayHistory": 247,
+    "holdingsWithFundamentals": 25,
+    "holdingsWithDocuments": 4,
+    "holdingsWithActiveNews": 35
+  },
+  "interpretation": {
+    "classificationNote": "Stage 5 sector-level classification coverage remains valid. P4 applies the stricter industry-first methodology rule, so sector-only rows are blocked until industry/business-model readiness is resolved.",
+    "historyNote": "ONE_DAY market history exists for only one current holding in the copied Development dataset; HDFCBANK has 274 rows from 2025-08-07 through 2026-09-16.",
+    "providerExecution": "ZERO_CALLS_DURING_P4_PLANNING"
+  },
+  "cohort": [
+    {
+      "symbol": "HDFCBANK",
+      "purpose": "MATURE_BANK_REFERENCE",
+      "classification": "READY",
+      "currentPrice": "READY",
+      "angelIdentity": "VERIFIED",
+      "oneDayHistoryRows": 274,
+      "fundamentalRows": 139,
+      "fundamentalMetrics": 23,
+      "documents": 1,
+      "activeNews": 11,
+      "profile": "BANK_NBFC",
+      "profileState": "REVIEWED"
+    },
+    {
+      "symbol": "TORNTPHARM",
+      "purpose": "MATURE_PHARMA_REFERENCE",
+      "classification": "READY",
+      "currentPrice": "READY",
+      "angelIdentity": "VERIFIED",
+      "oneDayHistoryRows": 0,
+      "fundamentalRows": 69,
+      "fundamentalMetrics": 20,
+      "documents": 1,
+      "activeNews": 0,
+      "profile": "PHARMA_HEALTHCARE",
+      "profileState": "REVIEWED",
+      "subprofile": "DOMESTIC_FORMULATIONS"
+    },
+    {
+      "symbol": "M&M",
+      "purpose": "NON_PHARMA_K4_REFERENCE",
+      "classification": "READY",
+      "currentPrice": "READY",
+      "angelIdentity": "VERIFIED",
+      "oneDayHistoryRows": 0,
+      "fundamentalRows": 22,
+      "fundamentalMetrics": 15,
+      "documents": 1,
+      "activeNews": 13,
+      "profile": "AUTO_COMPONENTS",
+      "profileState": "REVIEWED"
+    },
+    {
+      "symbol": "BEL",
+      "purpose": "CLASSIFICATION_PREREQUISITE",
+      "classification": "BLOCKED_MISSING_INDUSTRY",
+      "currentPrice": "READY",
+      "angelIdentity": "VERIFIED",
+      "canonicalIsin": "INE263A01024",
+      "oneDayHistoryRows": 0,
+      "fundamentalRows": 0,
+      "documents": 0,
+      "activeNews": 0
+    },
+    {
+      "symbol": "BANKBARODA",
+      "purpose": "FAIL_CLOSED_IDENTITY_PRICE_CLASSIFICATION",
+      "classification": "BLOCKED_MISSING_SECTOR_INDUSTRY",
+      "currentPrice": "MISSING",
+      "angelIdentity": "MISSING",
+      "canonicalIsin": "INE028A01039",
+      "oneDayHistoryRows": 0,
+      "fundamentalRows": 0,
+      "documents": 0,
+      "activeNews": 0
+    }
+  ],
+  "benchmarkReadiness": [
+    {
+      "code": "NIFTY_BANK",
+      "state": "IDENTITY_UNRESOLVED_IN_DEVELOPMENT",
+      "historyRows": 0
+    },
+    {
+      "code": "NIFTY_PHARMA",
+      "state": "BENCHMARK_ROW_NOT_PRESENT_IN_DEVELOPMENT",
+      "historyRows": 0
+    }
+  ],
+  "providerControls": {
+    "trendlyne": {
+      "ingestionEnabled": true,
+      "schedulerEnabled": false,
+      "dailyInternalAttemptLimit": 50,
+      "perRunInternalAttemptLimit": 40,
+      "actualProviderQuotaStatus": "VERIFIED"
+    },
+    "executionAuthorized": false
+  }
+}

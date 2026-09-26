@@ -29,10 +29,39 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P3 — Acceptance Dataset & Current-State Register is COMPLETE / PASS / CLOSED after Owner Checkpoint 4 approval; P2, P1 and P0 remain CLOSED; the Stage 5 Development acceptance dataset was reused without recopy; P4 — Existing Evidence & Market-Data Rollout is AUTHORIZED / NOT STARTED for planning and bounded-cohort preparation only; provider execution remains gated by Owner Checkpoint 4A
+**Current milestone:** Post-D P4 — Existing Evidence & Market-Data Rollout read-only baseline is COMPLETE and a five-security bounded cohort is PROPOSED / READY FOR OWNER CHECKPOINT 4A; no provider call has been made; portfolio-wide P4 rollout remains NOT AUTHORIZED; P5 is NOT AUTHORIZED
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
+
+## Post-D P4 read-only baseline & bounded-cohort proposal — 26 September 2026
+
+P4 planning/readiness work is **COMPLETE / READY FOR OWNER CHECKPOINT 4A**.
+
+Authoritative plan:
+`PortfolioAI_POST_D_P4_BOUNDED_COHORT_PLAN.md`
+
+Machine-readable current snapshot:
+`docs/p4/PortfolioAI_P4_CURRENT_READINESS_SNAPSHOT_2026-09-26.json`
+
+Proposed cohort:
+- HDFCBANK — mature Bank reference;
+- TORNTPHARM — mature Pharma/DOMESTIC_FORMULATIONS reference;
+- M&M — non-Pharma K4 reference;
+- BEL — missing-industry classification prerequisite;
+- BANKBARODA — fail-closed missing price/classification/Angel identity case.
+
+Initial staged provider envelope proposed for 4A:
+- Trendlyne classification: maximum 2 calls;
+- Trendlyne evidence after mandatory replan: maximum 6 calls;
+- Angel One security history after mandatory replan: maximum 3 requests;
+- benchmark calls: zero initially because Development benchmark identity/readiness is not sufficient.
+
+**Visible UI impact: NONE.**
+
+No provider execution, database write, migration, paid AI, scheduler activation, score/recommendation/sizing persistence, Production mutation, merge to `main`, Production deployment or trading occurred.
+
+Owner Checkpoint 4A is required before any provider-backed cohort execution. Owner Checkpoint 4B is not reached.
 
 ## Post-D P3 acceptance dataset & current-state register — 26 September 2026
 
