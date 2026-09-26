@@ -1028,3 +1028,20 @@ trading/order authority remain unauthorized.
 - Production impact: NONE.
 - Next required action: deploy the committed adapter to PortfolioAI Dev, then execute the approved BEL/BANKBARODA classification cohort and stop for replan.
 - Visible UI change: NONE.
+
+
+## Post-D P4 Dev runtime configuration status — 26 September 2026
+
+- Supabase target: PortfolioAI Dev only (`lrgpjimipfkyoqbpsqzz`).
+- `refresh-trendlyne-classification` Development deployment: ACTIVE version 2.
+- Live Development function contains `P4_EXECUTE`, Development-project lock, and Production rejection.
+- Development Vault internal classification token: provisioned.
+- First internal invocation reached the Dev function but was rejected before provider access because the token was initially absent.
+- After Dev token provisioning, the invocation progressed to runtime configuration and stopped with `Server configuration is incomplete`.
+- Shared missing runtime prerequisite: `TRENDLYNE_MCP_URL`.
+- The Trendlyne remote MCP URL is secret-bearing and is intentionally not stored in Git/database configuration.
+- Trendlyne provider calls consumed by P4A-1: 0.
+- P4A-1 classification writes: 0.
+- Production mutations/provider calls: 0.
+- P4 remains IN PROGRESS; P5 remains NOT AUTHORIZED.
+- Visible UI change: NONE.
