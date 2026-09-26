@@ -29,10 +29,43 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P1 — Source-Code Integration Baseline is COMPLETE / PASS / CLOSED after Owner Checkpoint 2 approval; P2 — Isolated Development Environment & Schema Reconstruction is AUTHORIZED but NOT STARTED; P0 is COMPLETE / PASS / CLOSED; Stage 5 Development data validation remains COMPLETE / PASS; the Development environment baseline is operational; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
+**Current milestone:** Post-D P2 — Isolated Development Environment & Schema Reconstruction residual reconciliation is IMPLEMENTED / PASS and READY FOR OWNER CHECKPOINT 3; P1 is COMPLETE / PASS / CLOSED after Owner Checkpoint 2 approval; P0 is COMPLETE / PASS / CLOSED; Stage 4/5 Development environment work remains the authoritative baseline and was not rebuilt; P3 is NOT AUTHORIZED; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
+
+## Post-D P2 isolated Development environment residual reconciliation — 26 September 2026
+
+P2 residual reconciliation is **IMPLEMENTED / PASS — READY FOR OWNER CHECKPOINT 3**.
+
+P2 deliberately reused the already-complete Stage 4/Stage 5 environment work rather than rebuilding it. The supporting closure package is:
+
+`PortfolioAI_POST_D_P2_ISOLATED_DEVELOPMENT_ENVIRONMENT_CLOSURE.md`
+
+Pre-existing evidence accepted for P2:
+- isolated Development Supabase project `lrgpjimipfkyoqbpsqzz`;
+- repository-controlled schema reconstruction and byte-for-byte replay verification;
+- Development Auth/RLS/ownership validation;
+- 27 approved hosted Edge Functions;
+- branch-scoped Vercel Development binding;
+- canonical current-price path with no fallback authority;
+- real-data browser acceptance;
+- Production unchanged;
+- providers, paid AI, scheduler and trading paths inactive.
+
+The two residual P2 crossover safeguards identified by P0 were implemented in commit
+`f3b5049502e957cee598288464ff4f49f96b7f9b`:
+- Development/local runtime now rejects the known Production Supabase project ref;
+- the stable Development preview must resolve to the approved Development Supabase project;
+- visible `DEVELOPMENT` / `LOCAL` environment identity badges appear on auth and signed-in shells;
+- deterministic unit coverage was added for environment identity and isolation assertions.
+
+Vercel reported **SUCCESS** for safeguard commit
+`f3b5049502e957cee598288464ff4f49f96b7f9b`.
+
+No migration, provider execution, paid AI, scheduler activation, trading action, Production mutation, Production deployment or merge to `main` occurred.
+
+P2 is not marked CLOSED until Owner Checkpoint 3 is explicitly approved. P3 remains NOT AUTHORIZED.
 
 ## Post-D P1 source-code integration baseline — 26 September 2026
 
