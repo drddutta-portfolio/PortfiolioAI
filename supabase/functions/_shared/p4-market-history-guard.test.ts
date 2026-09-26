@@ -13,6 +13,7 @@ describe("P4 market history guard", () => {
   it("refuses Production", () => expect(assertP4MarketHistoryRequest({ ...base, supabaseUrl: "https://uxiyufbsbgzzdujzcdxe.supabase.co" })).toMatchObject({ ok: false, code: "UNEXPECTED_PRODUCTION_DB_TARGET" }))
   it("refuses unknown hosted projects", () => expect(assertP4MarketHistoryRequest({ ...base, supabaseUrl: "https://aaaaaaaaaaaaaaaaaaaa.supabase.co" })).toMatchObject({ ok: false, code: "UNAPPROVED_DEVELOPMENT_DB_TARGET" }))
   it("refuses a different portfolio", () => expect(assertP4MarketHistoryRequest({ ...base, portfolioId: "00000000-0000-0000-0000-000000000000" })).toMatchObject({ ok: false, code: "PORTFOLIO_SCOPE_MISMATCH" }))
-  it("refuses securities outside the exact cohort", () => expect(assertP4MarketHistoryRequest({ ...base, securityId: "6771f493-c29a-477e-8cc8-2bede0941e44" })).toMatchObject({ ok: false, code: "SECURITY_SCOPE_MISMATCH" }))
+  it("accepts BANKBARODA after verified mapping", () => expect(assertP4MarketHistoryRequest({ ...base, securityId: "6771f493-c29a-477e-8cc8-2bede0941e44" })).toEqual({ ok: true }))
+  it("refuses securities outside the exact cohort", () => expect(assertP4MarketHistoryRequest({ ...base, securityId: "00000000-0000-0000-0000-000000000001" })).toMatchObject({ ok: false, code: "SECURITY_SCOPE_MISMATCH" }))
   it("refuses the wrong confirmation", () => expect(assertP4MarketHistoryRequest({ ...base, confirmation: "WRONG" })).toMatchObject({ ok: false, code: "AUTH_OR_CONFIG_ERROR" }))
 })

@@ -8,6 +8,7 @@ const P4_ALLOWED_SECURITY_IDS = new Set([
   "da69b3eb-0343-44f8-912c-288b826118cc",
   "fccdb05a-de17-441f-942d-add1a8a07f92",
   "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+  "6771f493-c29a-477e-8cc8-2bede0941e44",
 ])
 
 function projectRef(value: string): string | null {
