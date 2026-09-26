@@ -3,6 +3,7 @@ import { PLANNED_PRIMARY_ENRICHMENT_SOURCE } from "../_shared/enrichment.ts"
 import { mapApprovedCompleteResearchMetrics } from "../_shared/trendlyne-complete-research-mapping.ts"
 import { TrendlyneObservedMcpClient } from "../_shared/trendlyne-observed.ts"
 import { assertExpectedStockId, parseDocumentAppearances, parseOverview, parseOwnership } from "../_shared/trendlyne.ts"
+import { consumeP4ExecutionGrant } from "../_shared/p4-execution-grant.ts"
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -16,6 +17,7 @@ const reply = (status: number, body: Record<string, unknown>) => new Response(JS
 const SOURCE_CODE = PLANNED_PRIMARY_ENRICHMENT_SOURCE
 const CONFIRMATION = "OWNER_CONFIRMED_COMPLETE_RESEARCH_REFRESH"
 const P4_CONFIRMATION = "OWNER_CONFIRMED_POST_D_P4A2_COMPLETE_RESEARCH"
+const P4B_CONFIRMATION = "OWNER_CONFIRMED_POST_D_P4B_COMPLETE_RESEARCH"
 const P4_DEV_REF = "lrgpjimipfkyoqbpsqzz"
 const P4_PROD_REF = "uxiyufbsbgzzdujzcdxe"
 const P4_PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
@@ -39,6 +41,7 @@ type RequestBody = {
   readonly portfolioId?: unknown
   readonly securityId?: unknown
   readonly confirmation?: unknown
+  readonly grantId?: unknown
 }
 type Security = { readonly id: string; readonly symbol: string; readonly name: string; readonly asset_class: string }
 type Identity = { readonly provider_instrument_id: string | null; readonly observed_symbol: string | null }
@@ -334,21 +337,33 @@ Deno.serve(async request => {
     const body = await request.json() as RequestBody
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return reply(400, { error: "portfolioId and securityId are required." })
     const p4 = body.action === "P4_PLAN" || body.action === "P4_EXECUTE"
-    if (body.action !== "PLAN" && body.action !== "EXECUTE" && !p4) return reply(400, { error: "Unknown action." })
+    const p4b = body.action === "P4B_PLAN" || body.action === "P4B_EXECUTE"
+    if (body.action !== "PLAN" && body.action !== "EXECUTE" && !p4 && !p4b) return reply(400, { error: "Unknown action." })
 
     const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
     let requestedBy: string
 
-    if (p4) {
+    if (p4 || p4b) {
       const ref = projectRef(supabaseUrl)
       if (ref === P4_PROD_REF) return reply(409, { error: "P4 complete research execution refuses Production.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
-      if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID || !P4_SECURITY_IDS.has(body.securityId)) {
+      if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID) {
         return reply(409, { error: "Exact Post-D P4 evidence scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
       }
-      const token = request.headers.get("x-portfolioai-classification-token")
-      if (!token) return reply(401, { error: "Internal authentication required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
-      const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
-      if (verified.error || verified.data !== true) return reply(401, { error: "Internal authentication failed.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      if (p4) {
+        if (!P4_SECURITY_IDS.has(body.securityId)) return reply(409, { error: "Exact Post-D P4 evidence scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+        const token = request.headers.get("x-portfolioai-classification-token")
+        if (!token) return reply(401, { error: "Internal authentication required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+        const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
+        if (verified.error || verified.data !== true) return reply(401, { error: "Internal authentication failed.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      } else {
+        const grant = await consumeP4ExecutionGrant(admin, {
+          grantId: body.grantId,
+          action: String(body.action),
+          portfolioId: body.portfolioId,
+          securityId: body.securityId,
+        })
+        if (!grant.ok) return reply(401, { error: grant.message, code: grant.code, providerCalls: 0 })
+      }
       const p = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId).single()
       if (p.error || !p.data) return reply(404, { error: "Portfolio not found." })
       requestedBy = p.data.user_id as string
@@ -396,7 +411,7 @@ Deno.serve(async request => {
       RESERVED_UNITS <= control.data.per_run_internal_attempt_limit && projectedDailyUsage <= control.data.daily_internal_attempt_limit
     )
 
-    if (body.action === "PLAN" || body.action === "P4_PLAN") return reply(200, {
+    if (body.action === "PLAN" || body.action === "P4_PLAN" || body.action === "P4B_PLAN") return reply(200, {
       mode: "COMPLETE_RESEARCH_REFRESH_PLAN",
       providerCalls: 0,
       security: security.symbol,
@@ -418,7 +433,7 @@ Deno.serve(async request => {
       note: "Planning consumes zero provider calls. Angel One market pricing is not changed by this action.",
     })
 
-    const requiredConfirmation = p4 ? P4_CONFIRMATION : CONFIRMATION
+    const requiredConfirmation = p4 ? P4_CONFIRMATION : p4b ? P4B_CONFIRMATION : CONFIRMATION
     if (body.confirmation !== requiredConfirmation) return reply(409, { error: "Explicit owner confirmation is required.", providerCalls: 0 })
     if (!executionAllowed) return reply(409, { error: "Current safety, quota, or provider-trust gates do not allow execution.", providerCalls: 0 })
     if (!mcpUrl) return reply(409, { error: "Trendlyne provider configuration is incomplete.", providerCalls: 0 })

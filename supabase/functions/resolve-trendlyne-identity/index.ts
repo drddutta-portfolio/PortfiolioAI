@@ -2,10 +2,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { parseTrendlyneClassificationCandidates } from "../_shared/trendlyne-classification.ts"
 import { parseOverview, reconcileTrendlyneIdentityDiscovery } from "../_shared/trendlyne.ts"
 import { TrendlyneObservedMcpClient } from "../_shared/trendlyne-observed.ts"
+import { consumeP4ExecutionGrant } from "../_shared/p4-execution-grant.ts"
 
 const SOURCE_CODE = "TRENDLYNE_MCP"
 const CONFIRMATION = "OWNER_CONFIRMED_PROGRAM_A_A2_IDENTITY_DISCOVERY"
 const P4_CONFIRMATION = "OWNER_CONFIRMED_POST_D_P4_IDENTITY_DISCOVERY"
+const P4B_CONFIRMATION = "OWNER_CONFIRMED_POST_D_P4B_IDENTITY_DISCOVERY"
 const P4_DEV_REF = "lrgpjimipfkyoqbpsqzz"
 const P4_PROD_REF = "uxiyufbsbgzzdujzcdxe"
 const P4_PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
@@ -26,25 +28,40 @@ Deno.serve(async request => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL"), anonKey = Deno.env.get("SUPABASE_ANON_KEY"), serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"), mcpUrl = Deno.env.get("TRENDLYNE_MCP_URL")
   if (!supabaseUrl || !anonKey || !serviceKey || !mcpUrl) return reply(500, { error: "Server configuration is incomplete.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
   try {
-    const body = await request.json() as { action?: unknown; portfolioId?: unknown; securityId?: unknown; confirmation?: unknown }
+    const body = await request.json() as { action?: unknown; portfolioId?: unknown; securityId?: unknown; confirmation?: unknown; grantId?: unknown }
     const p4 = body.action === "P4_EXECUTE"
+    const p4b = body.action === "P4B_EXECUTE"
     const a2 = body.action === "EXECUTE"
-    if (!p4 && !a2) return reply(409, { error: "Exact identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+    if (!p4 && !p4b && !a2) return reply(409, { error: "Exact identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return reply(409, { error: "Exact identity scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
 
     const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
     let requestedBy: string
 
-    if (p4) {
+    if (p4 || p4b) {
       const ref = projectRef(supabaseUrl)
       if (ref === P4_PROD_REF) return reply(409, { error: "P4 identity discovery refuses Production.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
-      if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID || !P4_SECURITY_IDS.has(body.securityId) || body.confirmation !== P4_CONFIRMATION) {
+      if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID) {
         return reply(409, { error: "Exact Post-D P4 identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
       }
-      const token = request.headers.get("x-portfolioai-classification-token")
-      if (!token) return reply(401, { error: "Internal authentication required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
-      const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
-      if (verified.error || verified.data !== true) return reply(401, { error: "Internal authentication failed.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      if (p4) {
+        if (!P4_SECURITY_IDS.has(body.securityId) || body.confirmation !== P4_CONFIRMATION) {
+          return reply(409, { error: "Exact Post-D P4 identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+        }
+        const token = request.headers.get("x-portfolioai-classification-token")
+        if (!token) return reply(401, { error: "Internal authentication required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+        const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
+        if (verified.error || verified.data !== true) return reply(401, { error: "Internal authentication failed.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      } else {
+        if (body.confirmation !== P4B_CONFIRMATION) return reply(409, { error: "Exact Post-D P4B identity confirmation is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+        const grant = await consumeP4ExecutionGrant(admin, {
+          grantId: body.grantId,
+          action: "P4B_EXECUTE",
+          portfolioId: body.portfolioId,
+          securityId: body.securityId,
+        })
+        if (!grant.ok) return reply(401, { error: grant.message, code: grant.code, providerCalls: 0 })
+      }
       const p = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId).single()
       if (p.error || !p.data) return reply(404, { error: "Portfolio not found.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
       requestedBy = p.data.user_id as string
