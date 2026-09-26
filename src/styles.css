@@ -116,6 +116,9 @@ a:hover { color: #134832; }
 .app-header { min-height: 4.5rem; padding: 0 5vw; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid #dce2dd; background: rgba(255,255,255,0.92); }
 .app-brand { display: flex; align-items: center; gap: 0.7rem; color: #173b2c; font-weight: 800; text-decoration: none; }
 .app-brand-mark { width: 2rem; height: 2rem; border-radius: 0.5rem; }
+.environment-badge { display: inline-flex; align-items: center; min-height: 1.45rem; padding: 0.18rem 0.45rem; border: 1px solid #b97919; border-radius: 999px; color: #68460f; background: #fff2cf; font-size: 0.62rem; font-weight: 850; letter-spacing: 0.08em; line-height: 1; text-transform: uppercase; }
+.environment-badge-auth { width: fit-content; margin: 0.5rem 0 0; }
+
 .app-navigation { display: flex; align-self: stretch; align-items: stretch; gap: 0.4rem; }
 .app-navigation a { display: flex; align-items: center; padding: 0 0.8rem; border-bottom: 2px solid transparent; color: #66726b; font-size: 0.88rem; font-weight: 700; text-decoration: none; }
 .app-navigation a.active { border-bottom-color: #27684b; color: #173b2c; }

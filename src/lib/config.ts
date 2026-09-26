@@ -1,3 +1,5 @@
+import { assertEnvironmentIsolation } from "./environment"
+
 function requireEnvironmentVariable(name: string, value: string | undefined) {
   const normalized = value?.trim()
 
@@ -12,11 +14,17 @@ function normalizeOrigin(value: string) {
   return value.replace(/\/$/, "")
 }
 
+const supabaseUrl = requireEnvironmentVariable(
+  "VITE_SUPABASE_URL",
+  import.meta.env.VITE_SUPABASE_URL,
+)
+
+if (typeof window !== "undefined") {
+  assertEnvironmentIsolation(supabaseUrl, window.location.hostname)
+}
+
 export const publicConfig = {
-  supabaseUrl: requireEnvironmentVariable(
-    "VITE_SUPABASE_URL",
-    import.meta.env.VITE_SUPABASE_URL,
-  ),
+  supabaseUrl,
   supabasePublishableKey: requireEnvironmentVariable(
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,

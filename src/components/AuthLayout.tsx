@@ -1,4 +1,5 @@
 import type { PropsWithChildren, ReactNode } from "react"
+import { getEnvironmentIdentity } from "../lib/environment"
 
 interface AuthLayoutProps extends PropsWithChildren {
   readonly eyebrow: string
@@ -14,12 +15,19 @@ export function AuthLayout({
   footer,
   children,
 }: AuthLayoutProps) {
+  const environmentIdentity = getEnvironmentIdentity(window.location.hostname)
+
   return (
     <main className="auth-page">
       <section className="brand-panel" aria-label="PortfolioAI introduction">
         <div className="brand-mark" aria-hidden="true">P</div>
         <div>
           <p className="brand-name">PortfolioAI</p>
+          {environmentIdentity ? (
+            <p className="environment-badge environment-badge-auth" aria-label={`Environment: ${environmentIdentity}`}>
+              {environmentIdentity}
+            </p>
+          ) : null}
           <h1>Clarity for every portfolio decision.</h1>
           <p>
             A private, evidence-led investment workspace where accounting stays
