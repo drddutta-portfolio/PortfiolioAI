@@ -180,3 +180,49 @@ Result:
 - execution status: **BLOCKED_SAFE**.
 
 The next corrective action must preserve the exact-cohort contract and Development-only write target. It requires either an already-approved callable hosted execution surface or a separately reviewed Development-only adapter change. No local-only guard or internal-authentication boundary may be weakened merely to advance P4.
+
+
+## 11. P4A-1 closure and mandatory replan
+
+P4A-1 is **COMPLETE** in PortfolioAI Dev.
+
+The original Trendlyne MCP classification route could not execute because hosted Development lacks `TRENDLYNE_MCP_URL`. Rather than weakening source/runtime controls, the existing `OWNER_REVIEWED_CLASSIFICATION` authority was used with exact public Trendlyne/NSE identity evidence and the frozen Gate K industry taxonomy.
+
+Accepted classifications:
+- BEL → sector `Capital Goods`, industry `Aerospace & Defence`;
+- BANKBARODA → sector `Banking`, industry `Banks`.
+
+Both are conflict-free in `current_security_classification_v1`.
+
+Post-P4A-1 portfolio readiness:
+- 248 open holdings;
+- 239 open equities;
+- 50 methodology-ready equities;
+- 189 classification-blocked equities;
+- 244 priced holdings;
+- 4 unpriced holdings.
+
+BANKBARODA AngelOne identity was subsequently resolved through the existing public instrument-master mapping path:
+- token `4668`;
+- `NSE`;
+- `BANKBARODA-EQ`;
+- `VERIFIED`;
+- `EXCHANGE_SYMBOL_EXACT`.
+
+### Replanned bounded cohort state
+
+| Security | Classification | Current price | Angel mapping | History | Evidence |
+|---|---|---|---|---|---|
+| HDFCBANK | ready | available | verified | existing partial/current-set history | mature |
+| TORNTPHARM | ready | available | verified | missing | mature |
+| M&M | ready | available | verified | missing | partial/mature |
+| BEL | ready | available | verified | missing | sparse |
+| BANKBARODA | ready | missing | verified | missing | sparse |
+
+P4A-2 Trendlyne evidence execution is runtime-blocked by missing hosted-Dev `TRENDLYNE_MCP_URL`.
+
+P4A-3 AngelOne price/history execution is runtime-blocked by missing hosted-Dev AngelOne secrets. A zero-provider-call plan verified this fail-closed state.
+
+No Production mutation or provider execution occurred.
+
+P4 remains IN PROGRESS. Checkpoint 4B is not reached and P5 is not authorized.
