@@ -1,7 +1,7 @@
 # PortfolioAI — Post-D P0 Authority, Lineage, and Current Product-Readiness Freeze
 
 **Stage:** P0  
-**Status:** IMPLEMENTED / AWAITING OWNER CHECKPOINT 1  
+**Status:** COMPLETE / PASS / CLOSED — OWNER CHECKPOINT 1 APPROVED  
 **Branch:** `PortfolioAI-Development`  
 **Date:** 26 September 2026  
 **Scope:** Planning, read-only audit, reconciliation, and status documentation only
@@ -292,8 +292,18 @@ Current state:
 ```text
 P0 audit/package = IMPLEMENTED
 P0 exit criteria = PASS
-Owner Checkpoint 1 = AWAITING APPROVAL
-P1 = NOT AUTHORIZED UNTIL OWNER CHECKPOINT 1
+Owner Checkpoint 1 = APPROVED
+P0 = COMPLETE / PASS / CLOSED
+P1 = AUTHORIZED / NOT STARTED
 ```
 
 If the owner approves P0, P1 begins only with the residual source-code integration work identified by this freeze. Already-proven P2/P3 work must not be repeated without evidence of a defect or unmet exit criterion.
+
+
+## 11. Owner Checkpoint 1 approval — 26 September 2026
+
+The owner explicitly approved the P0 authority/readiness package.
+
+This closes P0 as **COMPLETE / PASS / CLOSED** and authorizes **P1 — Source-Code Integration Baseline** only.
+
+P1 authorization is limited to the residual source-code integration work frozen by P0: deliberate disposition of the four main-only commits, open-PR content/ancestry disposition, proof that no approved Program A–D capability is omitted, and final Development baseline validation. It does not authorize a bulk merge from `main`, production mutation, database migration, provider execution, paid AI, scheduler activation, production deployment, PR merge/closure, or trading.
