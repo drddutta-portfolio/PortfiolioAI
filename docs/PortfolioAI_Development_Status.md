@@ -29,10 +29,32 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Stage 5 Development data validation is COMPLETE / PASS; the Development environment baseline is operational; formal Post-D P0 is the next authorized planning/reconciliation stage; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
+**Current milestone:** Post-D P0 authority/readiness freeze is IMPLEMENTED / PASS and awaits Owner Checkpoint 1 approval; P1 is NOT AUTHORIZED yet; Stage 5 Development data validation remains COMPLETE / PASS; the Development environment baseline is operational; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
+
+## Post-D P0 authority/readiness freeze — 26 September 2026
+
+Post-D P0 is **IMPLEMENTED / PASS / AWAITING OWNER CHECKPOINT 1**.
+
+P0 completed a read-only/documentation-only current-state reconciliation against the canonical architecture, current Development/Production topology, Git divergence and open PR graph. It created:
+
+- `PortfolioAI_POST_D_CURRENT_CAPABILITY_READINESS_REGISTER.md`
+- `PortfolioAI_POST_D_P0_AUTHORITY_READINESS_FREEZE.md`
+
+Key frozen conclusions:
+
+- Programs A–D remain historically valid at their proven maturity; they are not reclassified as failures.
+- Existing pre-P0 work toward P1/P2/P3 is explicitly recognized and must not be rebuilt without evidence of a residual requirement or defect.
+- P1 is **PARTIALLY COMPLETE** and still requires deliberate disposition of the main-only backup workflow and the remaining open-PR ancestry/content.
+- P2 is **PARTIALLY COMPLETE / NEAR COMPLETE** from Stage 4/5 environment work; only residual crossover-proof/owner-closure items remain.
+- P3 is **PARTIALLY COMPLETE** because the production-equivalent Development dataset is operational, while permanent regression-fixture separation, sanitization/licensing treatment, and a repeatable acceptance-data refresh procedure remain to be formalized.
+- `main` was not merged or modified.
+- Production was not mutated.
+- No source-code implementation, migration, provider call, paid AI call, scheduler activation, PR mutation, deployment or trading action occurred.
+
+P0 exit criteria are recorded as PASS. **P1 remains NOT AUTHORIZED until Owner Checkpoint 1 explicitly approves the P0 authority/readiness package.**
 
 ## Stage 5 Development data validation — 26 September 2026
 
