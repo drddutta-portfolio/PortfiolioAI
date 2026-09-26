@@ -73,21 +73,31 @@ Deno.serve(async (request) => {
     let body = await request.json() as RefreshRequest
     const p4Mapping = body.action === "P4_SYNC_MAPPING"
     const p4Price = body.action === "P4_REFRESH_PRICE"
-    const p4Internal = p4Mapping || p4Price
+    const p4bMapping = body.action === "P4B_SYNC_MAPPING"
+    const p4bPrice = body.action === "P4B_REFRESH_PRICE"
+    const p4bInternal = p4bMapping || p4bPrice
+    const p4Internal = p4Mapping || p4Price || p4bInternal
     const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } })
     let userClient: ReturnType<typeof createClient> | null = null
     let userData: { user: { id: string } } | null = null
 
     if (p4Internal) {
       const securityId = Array.isArray(body.securityIds) ? body.securityIds[0] : null
-      const guard = assertP4MarketMappingRequest({
-        supabaseUrl,
-        portfolioId: body.portfolioId,
-        securityId,
-        confirmation: body.confirmation,
-        action: body.action,
-      })
-      if (!guard.ok) return json(409, { error: guard.message, code: guard.code, providerCalls: 0 })
+      if (!p4bInternal) {
+        const guard = assertP4MarketMappingRequest({
+          supabaseUrl,
+          portfolioId: body.portfolioId,
+          securityId,
+          confirmation: body.confirmation,
+          action: body.action,
+        })
+        if (!guard.ok) return json(409, { error: guard.message, code: guard.code, providerCalls: 0 })
+      } else {
+        const ref = (() => { try { return new URL(supabaseUrl).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1] ?? null } catch { return null } })()
+        if (ref !== "lrgpjimipfkyoqbpsqzz" || body.portfolioId !== "6193a4aa-3235-4057-bddc-209fcf443fc2" || typeof securityId !== "string") {
+          return json(409, { error: "P4B market-data scope mismatch.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+        }
+      }
       const token = request.headers.get("x-portfolioai-classification-token")
       if (token) {
         const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
@@ -104,7 +114,7 @@ Deno.serve(async (request) => {
       const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId as string).single()
       if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
       userData = { user: { id: portfolio.user_id as string } }
-      body = { ...body, action: p4Mapping ? "SYNC_MAPPINGS" : "REFRESH", securityIds: [securityId] } as RefreshRequest
+      body = { ...body, action: (p4Mapping || p4bMapping) ? "SYNC_MAPPINGS" : "REFRESH", securityIds: [securityId] } as RefreshRequest
     } else {
       const authorization = request.headers.get("Authorization")
       if (!authorization) return json(401, { error: "Authentication required." })

@@ -169,20 +169,29 @@ Deno.serve(async (request) => {
   try {
     const body = await request.json() as RequestBody
     const p4Internal = body.action === "P4_PLAN" || body.action === "P4_EXECUTE"
-    if (body.action !== "PLAN" && body.action !== "EXECUTE" && !p4Internal) return json(400, { error: "action must be PLAN, EXECUTE, P4_PLAN, or P4_EXECUTE." })
+    const p4bInternal = body.action === "P4B_PLAN" || body.action === "P4B_EXECUTE"
+    const boundedInternal = p4Internal || p4bInternal
+    if (body.action !== "PLAN" && body.action !== "EXECUTE" && !boundedInternal) return json(400, { error: "Unsupported history action." })
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return json(400, { error: "portfolioId and securityId are required." })
 
     const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } })
     let requestedBy: string
 
-    if (p4Internal) {
-      const guard = assertP4MarketHistoryRequest({
-        supabaseUrl,
-        portfolioId: body.portfolioId,
-        securityId: body.securityId,
-        confirmation: body.confirmation,
-      })
-      if (!guard.ok) return json(409, { error: guard.message, code: guard.code, providerCalls: 0 })
+    if (boundedInternal) {
+      if (p4Internal) {
+        const guard = assertP4MarketHistoryRequest({
+          supabaseUrl,
+          portfolioId: body.portfolioId,
+          securityId: body.securityId,
+          confirmation: body.confirmation,
+        })
+        if (!guard.ok) return json(409, { error: guard.message, code: guard.code, providerCalls: 0 })
+      } else {
+        const ref = (() => { try { return new URL(supabaseUrl).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1] ?? null } catch { return null } })()
+        if (ref !== "lrgpjimipfkyoqbpsqzz" || body.portfolioId !== "6193a4aa-3235-4057-bddc-209fcf443fc2") {
+          return json(409, { error: "P4B history scope mismatch.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+        }
+      }
       const token = request.headers.get("x-portfolioai-classification-token")
       if (token) {
         const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
@@ -242,7 +251,7 @@ Deno.serve(async (request) => {
     const latestExisting = await admin.from("market_price_history").select("period_start").eq("security_id", body.securityId).eq("provider_code", MARKET_DATA_PROVIDER).eq("interval", "ONE_DAY").order("period_start", { ascending: false }).limit(1).maybeSingle()
     if (latestExisting.error) throw latestExisting.error
 
-    if (body.action === "PLAN" || body.action === "P4_PLAN") {
+    if (body.action === "PLAN" || body.action === "P4_PLAN" || body.action === "P4B_PLAN") {
       if (p4Internal) {
         try { loadAngelOneConfig() } catch { return json(409, { error: "Angel One runtime configuration is incomplete.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 }) }
       }
@@ -261,7 +270,7 @@ Deno.serve(async (request) => {
     })
     }
 
-    const requiredConfirmation = p4Internal ? P4_MARKET_HISTORY_CONFIRMATION : CONFIRMATION
+    const requiredConfirmation = p4Internal ? P4_MARKET_HISTORY_CONFIRMATION : p4bInternal ? "OWNER_CONFIRMED_POST_D_P4B_MARKET_HISTORY" : CONFIRMATION
     if (body.confirmation !== requiredConfirmation) return json(409, { error: "Explicit owner confirmation is required.", providerCalls: 0 })
     const leaseHolder = crypto.randomUUID()
     await acquireLease(admin, portfolio.id, leaseHolder)
@@ -348,7 +357,7 @@ Deno.serve(async (request) => {
       await admin.from("market_data_refresh_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), failed_security_count: 1, error_summary: operational.code }).eq("id", run.id)
       throw error
     } finally {
-      await releaseLease(admin, portfolio.id, leaseHolder, p4Internal ? 1 : COOLDOWN_SECONDS)
+      await releaseLease(admin, portfolio.id, leaseHolder, boundedInternal ? 1 : COOLDOWN_SECONDS)
     }
   } catch (error) {
     const operational = safeError(error)
