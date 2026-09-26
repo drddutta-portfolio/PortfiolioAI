@@ -5,6 +5,7 @@ import { mapAngelInstruments } from "../_shared/instrument-mapping.ts"
 import { verifiedIdentityChanged, type StoredMappingIdentity } from "../_shared/mapping-transition.ts"
 import { safeError, SafeOperationalError } from "../_shared/security.ts"
 import { parseSampleSecurityIds } from "../_shared/sample-request.ts"
+import { assertP4MarketMappingRequest, P4_MARKET_MAPPING_CONFIRMATION } from "../_shared/p4-market-mapping-guard.ts"
 
 interface RefreshRequest {
   readonly action?: unknown
@@ -24,7 +25,7 @@ function requestedSecuritySample(value: unknown): readonly string[] | null {
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-portfolioai-classification-token",
 }
 
 const LEASE_SECONDS = 300
@@ -60,8 +61,6 @@ function json(status: number, body: Readonly<Record<string, unknown>>) {
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders })
   if (request.method !== "POST") return json(405, { error: "Method not allowed." })
-  const authorization = request.headers.get("Authorization")
-  if (!authorization) return json(401, { error: "Authentication required." })
   const supabaseUrl = Deno.env.get("SUPABASE_URL")
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY")
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
@@ -69,9 +68,35 @@ Deno.serve(async (request) => {
 
   try {
     const body = await request.json() as RefreshRequest
-    const userClient = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
-    const { data: userData, error: userError } = await userClient.auth.getUser()
-    if (userError || !userData.user) return json(401, { error: "Invalid authenticated session." })
+    const p4Mapping = body.action === "P4_SYNC_MAPPING"
+        let userData: { user: { id: string } } | null = null
+
+    if (p4Mapping) {
+      const securityId = Array.isArray(body.securityIds) ? body.securityIds[0] : null
+      const guard = assertP4MarketMappingRequest({
+        supabaseUrl,
+        portfolioId: body.portfolioId,
+        securityId,
+        confirmation: (body as RefreshRequest & { confirmation?: unknown }).confirmation,
+      })
+      if (!guard.ok) return json(409, { error: guard.message, code: guard.code, providerCalls: 0 })
+      const token = request.headers.get("x-portfolioai-classification-token")
+      if (!token) return json(401, { error: "Internal authentication required.", providerCalls: 0 })
+      const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
+      if (verified.error || verified.data !== true) return json(401, { error: "Internal authentication failed.", providerCalls: 0 })
+      const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId as string).single()
+      if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
+      userData = { user: { id: portfolio.user_id as string } }
+      body = { ...body, action: "SYNC_MAPPINGS", securityIds: [securityId] } as RefreshRequest
+    } else {
+      const authorization = request.headers.get("Authorization")
+      if (!authorization) return json(401, { error: "Authentication required." })
+      const userClient = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
+      const auth = await userClient.auth.getUser()
+      if (auth.error || !auth.data.user) return json(401, { error: "Invalid authenticated session." })
+      userData = { user: { id: auth.data.user.id } }
+    }
+
     if (body.action === "READ_CACHE") {
       if (!Array.isArray(body.securityIds) || body.securityIds.some((value) => typeof value !== "string")) {
         return json(400, { error: "securityIds must be an array of UUID strings." })
@@ -101,8 +126,7 @@ Deno.serve(async (request) => {
     if (body.action === "SYNC_MAPPINGS") {
       if (typeof body.portfolioId !== "string") return json(400, { error: "portfolioId must be a UUID string." })
       const sampleSecurityIds = requestedSecuritySample(body.securityIds)
-      const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } })
-      const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", userData.user.id).single()
+            const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", userData!.user.id).single()
       if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found." })
       const leaseHolder = crypto.randomUUID()
       await acquireLease(admin, portfolio.id, "SYNC_MAPPINGS", leaseHolder)
@@ -174,8 +198,7 @@ Deno.serve(async (request) => {
     if (body.action !== "REFRESH") return json(400, { error: "action must be READ_CACHE, SYNC_MAPPINGS, or REFRESH." })
     if (typeof body.portfolioId !== "string") return json(400, { error: "portfolioId must be a UUID string." })
     const sampleSecurityIds = requestedSecuritySample(body.securityIds)
-    const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } })
-    const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", userData.user.id).single()
+        const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", userData!.user.id).single()
     if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found." })
     const leaseHolder = crypto.randomUUID()
     await acquireLease(admin, portfolio.id, "REFRESH_PRICES", leaseHolder)
@@ -209,7 +232,7 @@ Deno.serve(async (request) => {
     const { data: run, error: runError } = await admin.from("market_data_refresh_runs").insert({
       portfolio_id: portfolio.id,
       provider_code: MARKET_DATA_PROVIDER,
-      requested_by: userData.user.id,
+      requested_by: userData!.user.id,
       status: toFetch.length ? "RUNNING" : "SKIPPED_FRESH",
       requested_security_count: targetSecurityIds.length,
       cached_security_count: verified.length - toFetch.length,
