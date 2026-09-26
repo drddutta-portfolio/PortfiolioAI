@@ -12,6 +12,7 @@ interface RefreshRequest {
   readonly portfolioId?: unknown
   readonly securityIds?: unknown
   readonly force?: unknown
+  readonly confirmation?: unknown
 }
 
 function requestedSecuritySample(value: unknown): readonly string[] | null {
@@ -69,17 +70,20 @@ Deno.serve(async (request) => {
   try {
     let body = await request.json() as RefreshRequest
     const p4Mapping = body.action === "P4_SYNC_MAPPING"
+    const p4Price = body.action === "P4_REFRESH_PRICE"
+    const p4Internal = p4Mapping || p4Price
     const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } })
     let userClient: ReturnType<typeof createClient> | null = null
     let userData: { user: { id: string } } | null = null
 
-    if (p4Mapping) {
+    if (p4Internal) {
       const securityId = Array.isArray(body.securityIds) ? body.securityIds[0] : null
       const guard = assertP4MarketMappingRequest({
         supabaseUrl,
         portfolioId: body.portfolioId,
         securityId,
-        confirmation: (body as RefreshRequest & { confirmation?: unknown }).confirmation,
+        confirmation: body.confirmation,
+        action: body.action,
       })
       if (!guard.ok) return json(409, { error: guard.message, code: guard.code, providerCalls: 0 })
       const token = request.headers.get("x-portfolioai-classification-token")
@@ -89,7 +93,7 @@ Deno.serve(async (request) => {
       const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId as string).single()
       if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
       userData = { user: { id: portfolio.user_id as string } }
-      body = { ...body, action: "SYNC_MAPPINGS", securityIds: [securityId] } as RefreshRequest
+      body = { ...body, action: p4Mapping ? "SYNC_MAPPINGS" : "REFRESH", securityIds: [securityId] } as RefreshRequest
     } else {
       const authorization = request.headers.get("Authorization")
       if (!authorization) return json(401, { error: "Authentication required." })
