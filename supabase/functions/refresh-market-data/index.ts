@@ -5,7 +5,7 @@ import { mapAngelInstruments } from "../_shared/instrument-mapping.ts"
 import { verifiedIdentityChanged, type StoredMappingIdentity } from "../_shared/mapping-transition.ts"
 import { safeError, SafeOperationalError } from "../_shared/security.ts"
 import { parseSampleSecurityIds } from "../_shared/sample-request.ts"
-import { assertP4MarketMappingRequest, P4_MARKET_MAPPING_CONFIRMATION } from "../_shared/p4-market-mapping-guard.ts"
+import { assertP4MarketMappingRequest } from "../_shared/p4-market-mapping-guard.ts"
 
 interface RefreshRequest {
   readonly action?: unknown
