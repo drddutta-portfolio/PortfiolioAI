@@ -28,10 +28,58 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 # PortfolioAI — Development Status
 
 **Status:** Living implementation and handover record  
-**Current milestone:** Stage 4 Dev backend reconstruction is COMPLETE / PASS; Program A · A2 remains IN PROGRESS and separately gated; Post-D P0 has not started
+**Current branch:** `PortfolioAI-Development`
+**Current milestone:** Stage 5 Development data validation is COMPLETE / PASS; Stage 6 is the next approved stage but has not started; Program A · A2 remains separately gated; Post-D P0 has not started
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
+
+## Stage 5 Development data validation — 26 September 2026
+
+Stage 5 is **COMPLETE / PASS** on `PortfolioAI-Development`.
+
+The stable Development Preview is
+`https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app/`
+and is branch-scoped to Development Supabase project
+`lrgpjimipfkyoqbpsqzz`. Production remains
+`https://portfiolio-ai.vercel.app/app` backed by
+`uxiyufbsbgzzdujzcdxe`; it was used read-only and was not modified.
+
+The Development owner `dr.d.dutta@gmail.com` resolves the copied real
+`Consolidated Portfolio`: 496 transactions, 273 security histories, 248 open
+holdings, 25 closed histories, 248 cached latest-price rows (244 for current
+open holdings in the copied reference scope), 251 market-data mappings, 236
+classified non-ETF open holdings, 525 fundamental observations, 251 news
+records, five recommendations, five broker accounts, five owner portfolio
+settings, two themes and 13 open theme memberships. All Production ownership
+references were remapped to the Development Auth user. No `DEV*` transaction is
+present in the real portfolio; retained synthetic securities are orphaned
+immutable audit evidence and do not enter holdings.
+
+Accounting, transaction provenance, broker attribution, classification,
+research evidence, news, recommendation and RLS paths resolve through the
+existing canonical authorities. The UI correctly preserves incomplete data:
+three non-ETF open holdings lack reviewed classification; four current open
+holdings lack copied price coverage; most portfolio roles remain Unclassified
+because only five owner-controlled settings exist in Production; and sparse or
+missing score/research states remain unavailable or review-required rather than
+being fabricated.
+
+Two bounded integration defects were corrected. Development branch builds no
+longer embed a Supabase key or force `VITE_MARKET_DATA_ENABLED=false`; the
+frontend now consumes the branch-scoped Vercel variables. The Vercel SPA rewrite
+preserves direct `/app` and `/app/*` navigation. No second price authority,
+fallback value, migration, provider call, scheduler, paid-AI action, trading
+action or Production mutation was introduced.
+
+Latest Stage 5 implementation commit: `21f2a9e` (merged with the owner-authored
+SPA routing commit in the Development branch). The authoritative closure and
+row-level evidence are in
+`PortfolioAI_STAGE_5_DEVELOPMENT_DATA_MANIFEST.md`; the final closure commit SHA
+is reported in the Stage 5 handoff.
+
+Next approved work is **Stage 6 only**. Stage 6, Stage 7 and Post-D P0 have not
+started in this closure.
 
 ## Stage 4 Dev backend reconstruction — 26 September 2026
 
