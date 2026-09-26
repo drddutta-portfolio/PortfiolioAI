@@ -4,7 +4,7 @@
 **Checkpoint:** Owner Checkpoint 4A candidate  
 **Branch:** `PortfolioAI-Development`  
 **Date:** 26 September 2026  
-**Status:** READ-ONLY BASELINE COMPLETE / BOUNDED COHORT PROPOSED / PROVIDER EXECUTION NOT AUTHORIZED  
+**Status:** OWNER CHECKPOINT 4A APPROVED / EXECUTION SAFELY BLOCKED BEFORE FIRST PROVIDER CALL  
 **Production impact:** NONE
 
 ## 1. P4 contract
@@ -145,7 +145,11 @@ P4 read-only baseline = COMPLETE
 P4 bounded cohort = PROPOSED
 Provider calls made during planning = 0
 Writes made during planning = 0
-Owner Checkpoint 4A = REQUIRED
+Owner Checkpoint 4A = APPROVED
+P4A-1 execution = BLOCKED_SAFE
+Provider calls = 0
+Writes = 0
+Blocking reason = HOSTED_EXACT_COHORT_EXECUTION_PATH_NOT_AVAILABLE
 Portfolio-wide P4 rollout = NOT AUTHORIZED
 Owner Checkpoint 4B = NOT REACHED
 P5 = NOT AUTHORIZED
@@ -156,3 +160,23 @@ P5 = NOT AUTHORIZED
 **Visible UI change: NONE.**
 
 This P4 planning checkpoint changes documentation/readiness evidence only. It does not change React components, routes, displayed data, or application behavior.
+
+
+## 9. Owner Checkpoint 4A approval and safe execution stop
+
+The owner approved the exact five-security cohort and stated ceilings.
+
+Before the first provider call, the deployed Development execution contract was checked. The existing exact bounded route (`A2_EXECUTE`) is intentionally local-only and rejects hosted Supabase. The hosted function also requires an internal classification token, while the currently connected execution surface does not expose a safe exact-cohort invocation mechanism carrying that credential.
+
+The generic hosted `RUN` mode was deliberately not used because it would select its own cohort rather than the approved P4 cohort.
+
+Result:
+
+- provider calls: **0**;
+- Development writes: **0**;
+- Production writes: **0**;
+- call budget consumed: **0**;
+- approved cohort: unchanged;
+- execution status: **BLOCKED_SAFE**.
+
+The next corrective action must preserve the exact-cohort contract and Development-only write target. It requires either an already-approved callable hosted execution surface or a separately reviewed Development-only adapter change. No local-only guard or internal-authentication boundary may be weakened merely to advance P4.

@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P4 — Existing Evidence & Market-Data Rollout read-only baseline is COMPLETE and a five-security bounded cohort is PROPOSED / READY FOR OWNER CHECKPOINT 4A; no provider call has been made; portfolio-wide P4 rollout remains NOT AUTHORIZED; P5 is NOT AUTHORIZED
+**Current milestone:** Post-D P4 — Owner Checkpoint 4A is APPROVED; bounded cohort execution attempted but SAFELY BLOCKED before any provider call because the deployed exact Program-A execution path is local-only and the connected environment exposes no approved hosted exact-cohort invocation path; provider calls = 0; writes = 0; portfolio-wide P4 rollout remains NOT AUTHORIZED; P5 is NOT AUTHORIZED
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -62,6 +62,33 @@ Initial staged provider envelope proposed for 4A:
 No provider execution, database write, migration, paid AI, scheduler activation, score/recommendation/sizing persistence, Production mutation, merge to `main`, Production deployment or trading occurred.
 
 Owner Checkpoint 4A is required before any provider-backed cohort execution. Owner Checkpoint 4B is not reached.
+
+### Owner Checkpoint 4A approval and execution boundary — 26 September 2026
+
+Owner Checkpoint 4A is **APPROVED** for the frozen five-security cohort and stated call ceilings.
+
+Execution was evaluated immediately after approval. The first P4A-1 classification step did **not** make a provider call because the currently deployed `refresh-trendlyne-classification` function has two relevant safety contracts:
+
+- its exact bounded `A2_EXECUTE` route explicitly rejects hosted/non-local Supabase targets;
+- hosted execution still requires the internal classification token, and no connected execution tool exposes an approved exact-cohort invocation path carrying that token.
+
+The generic hosted `RUN` path was not substituted because it selects its own highest-value unclassified cohort and would violate the owner-approved exact P4 cohort.
+
+Therefore the safe result is:
+
+```text
+Owner Checkpoint 4A = APPROVED
+P4A-1 provider calls = 0
+P4A-1 writes = 0
+Execution state = BLOCKED_SAFE
+Reason = HOSTED_EXACT_COHORT_EXECUTION_PATH_NOT_AVAILABLE
+Cohort definition = UNCHANGED
+Call ceilings = UNCHANGED
+```
+
+No workaround that broadened scope, bypassed internal authentication, weakened the local-only guard, or used a different provider path was attempted.
+
+**Visible UI impact: NONE.**
 
 ## Post-D P3 acceptance dataset & current-state register — 26 September 2026
 
