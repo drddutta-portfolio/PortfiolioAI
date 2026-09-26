@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Stage 5 Development data validation is COMPLETE / PASS; Stage 6 is the next approved stage but has not started; Program A · A2 remains separately gated; Post-D P0 has not started
+**Current milestone:** Stage 5 Development data validation is COMPLETE / PASS; the Development environment baseline is operational; formal Post-D P0 is the next authorized planning/reconciliation stage; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -78,8 +78,7 @@ row-level evidence are in
 `PortfolioAI_STAGE_5_DEVELOPMENT_DATA_MANIFEST.md`; the final closure commit SHA
 is reported in the Stage 5 handoff.
 
-Next approved work is **Stage 6 only**. Stage 6, Stage 7 and Post-D P0 have not
-started in this closure.
+Post-Stage Reconciliation decision: the Development environment setup work completed through Stage 5 is now frozen as the baseline for formal Post-D convergence. **Post-D P0 is the next authorized planning/reconciliation stage.** Dev Setup Stage 6 and Stage 7 remain **NOT STARTED** and are not the current next step. P0 must explicitly recognize verified pre-existing P1/P2/P3 work as COMPLETE, PARTIAL, NOT STARTED, or INTENTIONAL DIFFERENCE / DEFERRED, and only residual work may proceed.
 
 ## Stage 4 Dev backend reconstruction — 26 September 2026
 
