@@ -5,8 +5,17 @@ import { TrendlyneObservedMcpClient } from "../_shared/trendlyne-observed.ts"
 
 const SOURCE_CODE = "TRENDLYNE_MCP"
 const CONFIRMATION = "OWNER_CONFIRMED_PROGRAM_A_A2_IDENTITY_DISCOVERY"
+const P4_CONFIRMATION = "OWNER_CONFIRMED_POST_D_P4_IDENTITY_DISCOVERY"
+const P4_DEV_REF = "lrgpjimipfkyoqbpsqzz"
+const P4_PROD_REF = "uxiyufbsbgzzdujzcdxe"
+const P4_PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
+const P4_SECURITY_IDS = new Set([
+  "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+  "6771f493-c29a-477e-8cc8-2bede0941e44",
+])
+const projectRef = (value: string) => { try { return new URL(value).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1] ?? null } catch { return null } }
 const RESERVED_UNITS = 2
-const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type" }
+const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-portfolioai-classification-token" }
 const reply = (status: number, body: Record<string, unknown>) => new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } })
 const localUrl = (value: string) => { try { const url = new URL(value); return ["localhost", "127.0.0.1"].includes(url.hostname) || (url.hostname === "kong" && url.port === "8000") } catch { return false } }
 const hash = async (value: unknown) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(JSON.stringify(value))))).map(byte => byte.toString(16).padStart(2, "0")).join("")
@@ -14,19 +23,43 @@ const hash = async (value: unknown) => Array.from(new Uint8Array(await crypto.su
 Deno.serve(async request => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: cors })
   if (request.method !== "POST") return reply(405, { error: "Method not allowed." })
-  const authorization = request.headers.get("Authorization")
-  if (!authorization) return reply(401, { error: "Authentication required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
   const supabaseUrl = Deno.env.get("SUPABASE_URL"), anonKey = Deno.env.get("SUPABASE_ANON_KEY"), serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"), mcpUrl = Deno.env.get("TRENDLYNE_MCP_URL")
   if (!supabaseUrl || !anonKey || !serviceKey || !mcpUrl) return reply(500, { error: "Server configuration is incomplete.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
-  if (!localUrl(supabaseUrl)) return reply(409, { error: "Program A A2 execution is local-only.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
   try {
     const body = await request.json() as { action?: unknown; portfolioId?: unknown; securityId?: unknown; confirmation?: unknown }
-    if (body.action !== "EXECUTE" || body.confirmation !== CONFIRMATION || typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return reply(409, { error: "Exact Program A A2 identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
-    const user = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } }), auth = await user.auth.getUser()
-    if (auth.error || !auth.data.user) return reply(401, { error: "Invalid session.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+    const p4 = body.action === "P4_EXECUTE"
+    const a2 = body.action === "EXECUTE"
+    if (!p4 && !a2) return reply(409, { error: "Exact identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+    if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return reply(409, { error: "Exact identity scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+
     const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
+    let requestedBy: string
+
+    if (p4) {
+      const ref = projectRef(supabaseUrl)
+      if (ref === P4_PROD_REF) return reply(409, { error: "P4 identity discovery refuses Production.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
+      if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID || !P4_SECURITY_IDS.has(body.securityId) || body.confirmation !== P4_CONFIRMATION) {
+        return reply(409, { error: "Exact Post-D P4 identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      }
+      const token = request.headers.get("x-portfolioai-classification-token")
+      if (!token) return reply(401, { error: "Internal authentication required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
+      if (verified.error || verified.data !== true) return reply(401, { error: "Internal authentication failed.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      const p = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId).single()
+      if (p.error || !p.data) return reply(404, { error: "Portfolio not found.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      requestedBy = p.data.user_id as string
+    } else {
+      const authorization = request.headers.get("Authorization")
+      if (!authorization) return reply(401, { error: "Authentication required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      if (!localUrl(supabaseUrl)) return reply(409, { error: "Program A A2 execution is local-only.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
+      if (body.confirmation !== CONFIRMATION) return reply(409, { error: "Exact Program A A2 identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      const user = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } }), auth = await user.auth.getUser()
+      if (auth.error || !auth.data.user) return reply(401, { error: "Invalid session.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      requestedBy = auth.data.user.id
+    }
+
     const [portfolio, holding, securityResult, source, control] = await Promise.all([
-      admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", auth.data.user.id).single(),
+      admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", requestedBy).single(),
       admin.from("current_holdings").select("security_id").eq("portfolio_id", body.portfolioId).eq("security_id", body.securityId).maybeSingle(),
       admin.from("securities").select("id,name,symbol,isin,exchange,series,asset_class").eq("id", body.securityId).single(),
       admin.from("data_sources").select("is_active,entitlement_verified,retention_rights_verified").eq("code", SOURCE_CODE).single(),
@@ -44,7 +77,7 @@ Deno.serve(async request => {
     const usage = await admin.from("provider_usage_events").select("actual_internal_units").eq("source_code", SOURCE_CODE).eq("accounting_class", "PROVIDER_TOOL_ATTEMPT").gte("attempted_at", today.toISOString())
     const used = (usage.data ?? []).reduce((sum, row) => sum + Number(row.actual_internal_units ?? 0), 0)
     if (usage.error || used + RESERVED_UNITS > control.data.daily_internal_attempt_limit) return reply(429, { error: "Provider call budget unavailable.", code: "CALL_BUDGET_EXCEEDED", providerCalls: 0 })
-    const run = await admin.from("data_ingestion_runs").insert({ source_code: SOURCE_CODE, portfolio_id: body.portfolioId, operation: "RESOLVE_PROVIDER_IDENTITY", orchestration_type: "PROGRAM_A_A2_IDENTITY_PREREQUISITE", trigger_source: "OWNER", requested_by: auth.data.user.id, status: "RUNNING", requested_count: 1, estimated_call_count: RESERVED_UNITS, reserved_call_count: RESERVED_UNITS, policy_version: control.data.policy_version, metadata: { security: securityResult.data.symbol } }).select("id").single()
+    const run = await admin.from("data_ingestion_runs").insert({ source_code: SOURCE_CODE, portfolio_id: body.portfolioId, operation: "RESOLVE_PROVIDER_IDENTITY", orchestration_type: "PROGRAM_A_A2_IDENTITY_PREREQUISITE", trigger_source: "OWNER", requested_by: requestedBy, status: "RUNNING", requested_count: 1, estimated_call_count: RESERVED_UNITS, reserved_call_count: RESERVED_UNITS, policy_version: control.data.policy_version, metadata: { security: securityResult.data.symbol } }).select("id").single()
     if (run.error) throw new Error("RUN_ACCOUNTING_FAILED")
     const item = await admin.from("data_ingestion_run_items").insert({ ingestion_run_id: run.data.id, security_id: body.securityId, data_domain: "PROVIDER_IDENTITY", status: "PLANNED" }).select("id").single()
     if (item.error) throw new Error("RUN_ITEM_ACCOUNTING_FAILED")
