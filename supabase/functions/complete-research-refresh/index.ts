@@ -6,7 +6,7 @@ import { assertExpectedStockId, parseDocumentAppearances, parseOverview, parseOw
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-portfolioai-classification-token",
 }
 const reply = (status: number, body: Record<string, unknown>) => new Response(JSON.stringify(body), {
   status,
@@ -15,6 +15,18 @@ const reply = (status: number, body: Record<string, unknown>) => new Response(JS
 
 const SOURCE_CODE = PLANNED_PRIMARY_ENRICHMENT_SOURCE
 const CONFIRMATION = "OWNER_CONFIRMED_COMPLETE_RESEARCH_REFRESH"
+const P4_CONFIRMATION = "OWNER_CONFIRMED_POST_D_P4A2_COMPLETE_RESEARCH"
+const P4_DEV_REF = "lrgpjimipfkyoqbpsqzz"
+const P4_PROD_REF = "uxiyufbsbgzzdujzcdxe"
+const P4_PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
+const P4_SECURITY_IDS = new Set([
+  "b47b007d-1990-4504-a5a2-4391c07687c5",
+  "da69b3eb-0343-44f8-912c-288b826118cc",
+  "fccdb05a-de17-441f-942d-add1a8a07f92",
+  "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+  "6771f493-c29a-477e-8cc8-2bede0941e44",
+])
+const projectRef = (value: string) => { try { return new URL(value).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1] ?? null } catch { return null } }
 const RESERVED_UNITS = 4
 const MAX_CAPTURE_BYTES = 512 * 1024
 const DAY = 24 * 60 * 60 * 1000
@@ -311,8 +323,6 @@ async function updateRefreshState(admin: Admin, securityId: string, domain: "TTM
 Deno.serve(async request => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: cors })
   if (request.method !== "POST") return reply(405, { error: "Method not allowed." })
-  const authorization = request.headers.get("Authorization")
-  if (!authorization) return reply(401, { error: "Authentication required." })
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY")
@@ -323,14 +333,35 @@ Deno.serve(async request => {
   try {
     const body = await request.json() as RequestBody
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return reply(400, { error: "portfolioId and securityId are required." })
-    if (body.action !== "PLAN" && body.action !== "EXECUTE") return reply(400, { error: "Unknown action." })
+    const p4 = body.action === "P4_PLAN" || body.action === "P4_EXECUTE"
+    if (body.action !== "PLAN" && body.action !== "EXECUTE" && !p4) return reply(400, { error: "Unknown action." })
 
-    const user = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
-    const auth = await user.auth.getUser()
-    if (auth.error || !auth.data.user) return reply(401, { error: "Invalid authenticated session." })
     const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
+    let requestedBy: string
 
-    const portfolio = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", auth.data.user.id).single()
+    if (p4) {
+      const ref = projectRef(supabaseUrl)
+      if (ref === P4_PROD_REF) return reply(409, { error: "P4 complete research execution refuses Production.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
+      if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID || !P4_SECURITY_IDS.has(body.securityId)) {
+        return reply(409, { error: "Exact Post-D P4 evidence scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      }
+      const token = request.headers.get("x-portfolioai-classification-token")
+      if (!token) return reply(401, { error: "Internal authentication required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
+      if (verified.error || verified.data !== true) return reply(401, { error: "Internal authentication failed.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+      const p = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId).single()
+      if (p.error || !p.data) return reply(404, { error: "Portfolio not found." })
+      requestedBy = p.data.user_id as string
+    } else {
+      const authorization = request.headers.get("Authorization")
+      if (!authorization) return reply(401, { error: "Authentication required." })
+      const user = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
+      const auth = await user.auth.getUser()
+      if (auth.error || !auth.data.user) return reply(401, { error: "Invalid authenticated session." })
+      requestedBy = auth.data.user.id
+    }
+
+    const portfolio = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", requestedBy).single()
     if (portfolio.error) return reply(404, { error: "Portfolio not found." })
     const holding = await admin.from("current_holdings").select("security_id").eq("portfolio_id", body.portfolioId).eq("security_id", body.securityId).maybeSingle()
     if (holding.error || !holding.data) return reply(403, { error: "Complete Research Refresh is limited to open holdings." })
@@ -365,7 +396,7 @@ Deno.serve(async request => {
       RESERVED_UNITS <= control.data.per_run_internal_attempt_limit && projectedDailyUsage <= control.data.daily_internal_attempt_limit
     )
 
-    if (body.action === "PLAN") return reply(200, {
+    if (body.action === "PLAN" || body.action === "P4_PLAN") return reply(200, {
       mode: "COMPLETE_RESEARCH_REFRESH_PLAN",
       providerCalls: 0,
       security: security.symbol,
@@ -387,7 +418,8 @@ Deno.serve(async request => {
       note: "Planning consumes zero provider calls. Angel One market pricing is not changed by this action.",
     })
 
-    if (body.confirmation !== CONFIRMATION) return reply(409, { error: "Explicit owner confirmation is required.", providerCalls: 0 })
+    const requiredConfirmation = p4 ? P4_CONFIRMATION : CONFIRMATION
+    if (body.confirmation !== requiredConfirmation) return reply(409, { error: "Explicit owner confirmation is required.", providerCalls: 0 })
     if (!executionAllowed) return reply(409, { error: "Current safety, quota, or provider-trust gates do not allow execution.", providerCalls: 0 })
     if (!mcpUrl) return reply(409, { error: "Trendlyne provider configuration is incomplete.", providerCalls: 0 })
 
@@ -397,14 +429,14 @@ Deno.serve(async request => {
       operation: "COMPLETE_RESEARCH_REFRESH",
       orchestration_type: "SINGLE_SECURITY_DEEP_REFRESH",
       trigger_source: "OWNER",
-      requested_by: auth.data.user.id,
+      requested_by: requestedBy,
       status: "RUNNING",
       requested_count: 1,
       estimated_call_count: RESERVED_UNITS,
       reserved_call_count: RESERVED_UNITS,
       attempted_call_count: 0,
       policy_version: control.data.policy_version,
-      metadata: { security: security.symbol, provider_instrument_id: providerInstrumentId, confirmation: CONFIRMATION },
+      metadata: { security: security.symbol, provider_instrument_id: providerInstrumentId, confirmation: requiredConfirmation, execution_mode: body.action },
     }).select("id").single()
     if (run.error) throw run.error
     const runId = run.data.id as string
