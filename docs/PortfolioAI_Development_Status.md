@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P4 — Owner Checkpoint 4A remains APPROVED. P4A-1 classification prerequisite is COMPLETE in PortfolioAI Dev via owner-reviewed exact evidence; methodology-ready equities improved from 48 to 50. BANKBARODA AngelOne mapping is now VERIFIED. P4A-2 Trendlyne evidence refresh and P4A-3 AngelOne price/history remain BLOCKED only by missing hosted-Dev runtime secrets; provider-backed evidence/history calls = 0; Production unchanged; P5 NOT AUTHORIZED
+**Current milestone:** Post-D P4 — Owner Checkpoint 4A bounded cohort is COMPLETE / PASS in PortfolioAI Dev. P4A-1 classification, P4A-2 evidence refresh, and P4A-3 AngelOne price/history validation all passed for HDFCBANK, TORNTPHARM, M&M, BEL, and BANKBARODA. Owner Checkpoint 4B is READY FOR REVIEW but NOT APPROVED; portfolio-wide P4 rollout and P5 remain NOT AUTHORIZED
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -1105,3 +1105,121 @@ Live Development functions:
 P4 remains **IN PROGRESS**. Owner Checkpoint 4B is **NOT REACHED**. P5 remains **NOT AUTHORIZED**.
 
 **Visible UI code change: NONE.** Development data may now visibly show BEL/BANKBARODA classification improvements and BANKBARODA as AngelOne-mapped where those fields are surfaced.
+
+
+## Post-D P4 bounded cohort completion — 27 September 2026
+
+**Environment:** PortfolioAI Dev only (`lrgpjimipfkyoqbpsqzz`)
+
+**Result:** `P4 OWNER CHECKPOINT 4A BOUNDED COHORT = COMPLETE / PASS`
+
+### P4A-1 — classification prerequisites
+
+- BEL → `Capital Goods / Aerospace & Defence`
+- BANKBARODA → `Banking / Banks`
+- both are conflict-free in the canonical current-classification view.
+- methodology-ready equities increased from 48 to 50.
+- classification-blocked equities decreased from 191 to 189.
+
+Trendlyne exact identities were subsequently resolved:
+- BEL → provider stock id `175`;
+- BANKBARODA → provider stock id `162`.
+
+Identity discovery consumed 2 Trendlyne calls per security.
+
+### P4A-2 — research evidence
+
+Deep complete-research refresh was executed only for the two sparse cohort names.
+
+BEL:
+- 4/4 Trendlyne provider calls succeeded;
+- 7 overview/core metrics;
+- 4 detailed mapped metrics;
+- 5 ownership metrics;
+- 1 document appearance / 1 document inserted.
+
+BANKBARODA:
+- 4/4 Trendlyne provider calls succeeded;
+- 7 overview/core metrics;
+- 5 detailed mapped metrics;
+- 5 ownership metrics;
+- 1 document appearance / 1 document inserted.
+
+Current evidence totals after reconciliation:
+- HDFCBANK: 139 fundamental rows / 23 metrics / 1 document;
+- TORNTPHARM: 69 / 20 / 1;
+- M&M: 22 / 15 / 1;
+- BEL: 16 / 16 / 1;
+- BANKBARODA: 17 / 17 / 1.
+
+### P4A-3 — AngelOne price/history
+
+BANKBARODA AngelOne identity:
+- provider instrument id `4668`;
+- exchange `NSE`;
+- trading symbol `BANKBARODA-EQ`;
+- mapping `VERIFIED`;
+- match basis `EXCHANGE_SYMBOL_EXACT`.
+
+BANKBARODA current price refresh:
+- fetched: 1;
+- unresolved: 0;
+- failed: 0;
+- stored price: ₹235.26;
+- provider: AngelOne.
+
+History results:
+- HDFCBANK: 280 `ONE_DAY` rows, through 2026-09-24, 4 derived metric codes;
+- TORNTPHARM: 270 rows, through 2026-09-24, 4 derived metric codes;
+- M&M: 270 rows, through 2026-09-24, 4 derived metric codes;
+- BEL: 270 rows, through 2026-09-24, 4 derived metric codes;
+- BANKBARODA: 270 rows, through 2026-09-24, 4 derived metric codes.
+
+Derived market metrics for each security:
+- `PRICE_MOMENTUM_12M`;
+- `PRICE_MOMENTUM_6M`;
+- `MAX_DRAWDOWN_1Y`;
+- `VOLATILITY_1Y`.
+
+HDFCBANK's first bounded execution successfully stored the new candles/metrics but returned `LEASE_RELEASE_FAILED` because the P4 cooldown was set to zero. The canonical release function requires at least one second. The lease was released through the canonical RPC, the P4 cooldown was corrected to one second, and no duplicate HDFCBANK provider call was made.
+
+### One-time internal grants
+
+Because secret-bearing Vault values are not transported through SQL, P4 price/history execution used exact, single-use Development grants stored as auditable records.
+
+- 6 grants created for the bounded price/history actions;
+- 6/6 grants consumed exactly once;
+- no provider secret value was exposed or copied into Git/database payloads.
+
+### Development readiness after bounded cohort
+
+```text
+Open holdings                 248
+Open equities                 239
+Current prices                245 / 248
+Missing current prices        3
+AngelOne verified mappings    245
+Methodology-ready equities     50 / 239
+Classification-blocked        189
+```
+
+The remaining portfolio-wide gaps are outside the approved five-security cohort and have not been swept.
+
+### Governance state
+
+```text
+P4 read-only baseline                  COMPLETE
+Owner Checkpoint 4A                    APPROVED
+P4A-1 classification                   COMPLETE / PASS
+P4A-2 evidence                         COMPLETE / PASS
+P4A-3 price/history                    COMPLETE / PASS
+P4 bounded cohort                      COMPLETE / PASS
+Owner Checkpoint 4B                    READY FOR REVIEW / NOT APPROVED
+Portfolio-wide P4 rollout              NOT AUTHORIZED
+P5                                     NOT AUTHORIZED
+Production mutation/deployment         NONE
+```
+
+Benchmark history remains outside this initial bounded execution exactly as frozen in the P4 plan: the Development benchmark configuration was not expanded or guessed during Checkpoint 4A.
+
+**Visible UI code change: NONE.** Development data may now visibly show the new BEL/BANKBARODA classification and evidence, BANKBARODA current price/mapping, and current history/market metrics for all five cohort names where those fields are surfaced.

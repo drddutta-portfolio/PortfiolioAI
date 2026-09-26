@@ -226,3 +226,44 @@ P4A-3 AngelOne price/history execution is runtime-blocked by missing hosted-Dev 
 No Production mutation or provider execution occurred.
 
 P4 remains IN PROGRESS. Checkpoint 4B is not reached and P5 is not authorized.
+
+
+## 12. Owner Checkpoint 4A bounded cohort result
+
+**Final bounded-cohort status: COMPLETE / PASS**
+
+The owner-approved five-security cohort completed all planned bounded phases in PortfolioAI Dev:
+
+| Security | Classification | Trendlyne identity | Evidence | Angel mapping | Current price | ONE_DAY history | Derived market metrics |
+|---|---|---|---|---|---|---|---|
+| HDFCBANK | ready | verified | mature | verified | available | 280 rows | 4/4 |
+| TORNTPHARM | ready | verified | mature | verified | available | 270 rows | 4/4 |
+| M&M | ready | verified | mature | verified | available | 270 rows | 4/4 |
+| BEL | ready | verified (175) | refreshed | verified | available | 270 rows | 4/4 |
+| BANKBARODA | ready | verified (162) | refreshed | verified (4668) | ₹235.26 | 270 rows | 4/4 |
+
+P4A-1 classification prerequisite: PASS.
+
+P4A-2 complete-research evidence refresh: PASS for the two sparse names, BEL and BANKBARODA. The three mature reference names were not needlessly re-fetched.
+
+P4A-3 market-data validation: PASS. BANKBARODA mapping and current price were resolved and all five cohort securities now have daily history through 2026-09-24 plus the four canonical derived market metrics.
+
+The bounded execution did not:
+- persist an official score;
+- persist a recommendation or sizing decision;
+- activate a scheduler;
+- activate paid AI;
+- execute a trade;
+- modify Production;
+- broaden into a portfolio-wide provider sweep.
+
+### Checkpoint transition
+
+```text
+Owner Checkpoint 4A = COMPLETE / PASS
+Owner Checkpoint 4B = READY FOR REVIEW / NOT APPROVED
+Portfolio-wide P4 rollout = NOT AUTHORIZED
+P5 = NOT AUTHORIZED
+```
+
+Checkpoint 4B remains a separate owner decision. No portfolio-wide provider rollout may begin until it is explicitly approved.
