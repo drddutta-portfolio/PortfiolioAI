@@ -29,14 +29,14 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P1 — Source-Code Integration Baseline is COMPLETE / PASS and awaits Owner Checkpoint 2 approval; P0 is COMPLETE / PASS / CLOSED; Stage 5 Development data validation remains COMPLETE / PASS; the Development environment baseline is operational; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
+**Current milestone:** Post-D P1 — Source-Code Integration Baseline is COMPLETE / PASS / CLOSED after Owner Checkpoint 2 approval; P2 — Isolated Development Environment & Schema Reconstruction is AUTHORIZED but NOT STARTED; P0 is COMPLETE / PASS / CLOSED; Stage 5 Development data validation remains COMPLETE / PASS; the Development environment baseline is operational; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
 ## Post-D P1 source-code integration baseline — 26 September 2026
 
-P1 is **COMPLETE / PASS / AWAITING OWNER CHECKPOINT 2**.
+P1 is **COMPLETE / PASS / CLOSED** after explicit Owner Checkpoint 2 approval.
 
 The first P1 reconciliation pass is documented in:
 
@@ -64,7 +64,7 @@ Final P1 exact-head validation completed at `cab5b0f4059bb6858c4445a4b0f78f49dfd
 - exact-head Vercel deployment succeeded;
 - inherited Stage 5 validation debt remains unchanged and documented.
 
-**Owner Checkpoint 2 — Development baseline and ancestry approval is now awaiting owner decision.** P2 formal closure is not authorized until that checkpoint is approved.
+Owner Checkpoint 2 was explicitly approved on 26 September 2026. **P2 — Isolated Development Environment & Schema Reconstruction is now AUTHORIZED but has not started.**
 
 ## Post-D P0 authority/readiness freeze — 26 September 2026
 
