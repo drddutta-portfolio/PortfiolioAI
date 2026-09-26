@@ -1,0 +1,78 @@
+{
+  "version": "P3_ACCEPTANCE_DATA_POLICY_V1",
+  "sourceProject": {
+    "name": "Project-PortfolioAI",
+    "ref": "uxiyufbsbgzzdujzcdxe",
+    "access": "READ_ONLY"
+  },
+  "targetProject": {
+    "name": "PortfolioAI Dev",
+    "ref": "lrgpjimipfkyoqbpsqzz"
+  },
+  "localRegressionFixture": {
+    "portfolioId": "10000000-0000-4000-8000-000000000001",
+    "name": "LOCAL UI Research Review",
+    "expectedHoldingCount": 6,
+    "permittedEnvironment": "LOCAL_ONLY",
+    "permittedDevPortfolioRows": 0
+  },
+  "developmentAcceptancePortfolio": {
+    "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+    "name": "Consolidated Portfolio",
+    "transactionRows": 496
+  },
+  "fieldTreatment": [
+    {
+      "class": "AUTH_IDENTITY",
+      "treatment": "REMAP",
+      "rule": "Production ownership UUIDs must be replaced by Development Auth UUIDs; password hashes, sessions, refresh tokens, identities and MFA records are never copied."
+    },
+    {
+      "class": "CREDENTIALS_SECRETS",
+      "treatment": "EXCLUDE",
+      "rule": "Provider credentials, service-role secrets, Vault values, scheduler tokens and AI credentials are never copied."
+    },
+    {
+      "class": "OWNER_PORTFOLIO_FACTS",
+      "treatment": "COPY_FOR_PRIVATE_ACCEPTANCE",
+      "rule": "Portfolio, broker-account relationships, transactions and owner settings may be copied only into the private Development project for acceptance testing; preserve financial values and provenance."
+    },
+    {
+      "class": "BROKER_SOURCE_METADATA",
+      "treatment": "COPY_MINIMUM_REQUIRED",
+      "rule": "Retain only fields required to preserve accounting/source provenance; never treat copied broker metadata as redistributable public data."
+    },
+    {
+      "class": "PROVIDER_RAW_EVIDENCE",
+      "treatment": "PRESERVE_INTERNAL_AUDIT_ONLY",
+      "rule": "Immutable provider/raw evidence may be retained in private Development only when required for reproducibility and provenance; do not republish or export outside the private acceptance environment."
+    },
+    {
+      "class": "MARKET_PRICE_HISTORY",
+      "treatment": "COPY_PRIVATE_CACHE_ONLY",
+      "rule": "Copied market observations remain an internal cache for acceptance testing and are not a redistribution dataset."
+    },
+    {
+      "class": "NEWS_RESEARCH_DOCUMENT_METADATA",
+      "treatment": "COPY_METADATA_ONLY_AS_AVAILABLE",
+      "rule": "Retain provenance/metadata already stored canonically; external document bodies remain governed by their source rights and are not copied unless separately authorized."
+    },
+    {
+      "class": "PERSONAL_CONTACT_DATA",
+      "treatment": "EXCLUDE_UNLESS_APPLICATION_REQUIRED",
+      "rule": "No unrelated personal contact data is part of the acceptance dataset."
+    },
+    {
+      "class": "GENERATED_DECISION_OUTPUTS",
+      "treatment": "COPY_WHEN_NEEDED_FOR_LINEAGE",
+      "rule": "Existing recommendation/reference outputs may be copied to validate lineage; P3 creates no new score, recommendation or sizing output."
+    }
+  ],
+  "licensingBoundary": {
+    "purpose": "PRIVATE_DEVELOPMENT_ACCEPTANCE",
+    "redistribution": false,
+    "publicPublication": false,
+    "newProviderAcquisition": false,
+    "rightsAssumption": "No broader redistribution/license right is inferred from Production access or private Development copying."
+  }
+}
