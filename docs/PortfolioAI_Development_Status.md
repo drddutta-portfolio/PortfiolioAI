@@ -29,14 +29,14 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P1 — Source-Code Integration Baseline is IN PROGRESS; P0 is COMPLETE / PASS / CLOSED; Stage 5 Development data validation remains COMPLETE / PASS; the Development environment baseline is operational; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
+**Current milestone:** Post-D P1 — Source-Code Integration Baseline is COMPLETE / PASS and awaits Owner Checkpoint 2 approval; P0 is COMPLETE / PASS / CLOSED; Stage 5 Development data validation remains COMPLETE / PASS; the Development environment baseline is operational; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
 ## Post-D P1 source-code integration baseline — 26 September 2026
 
-P1 is **IN PROGRESS / RESIDUAL VALIDATION PENDING**.
+P1 is **COMPLETE / PASS / AWAITING OWNER CHECKPOINT 2**.
 
 The first P1 reconciliation pass is documented in:
 
@@ -56,7 +56,15 @@ Current P1 dispositions:
 
 No application-code patch has been required by P1 so far. No PR, Production environment, migration, provider, scheduler, paid-AI path or trading capability was modified.
 
-Remaining P1 work is exact-head validation, Development Preview deployment confirmation, final baseline/ancestry freeze, and Owner Checkpoint 2.
+Final P1 exact-head validation completed at `cab5b0f4059bb6858c4445a4b0f78f49dfd46a62`:
+
+- P1 changed documentation only;
+- no application source or migration changed;
+- `main` remains unchanged at `d0cc52dfcf61fc9a884f139fcc7931b3bd73c57b`;
+- exact-head Vercel deployment succeeded;
+- inherited Stage 5 validation debt remains unchanged and documented.
+
+**Owner Checkpoint 2 — Development baseline and ancestry approval is now awaiting owner decision.** P2 formal closure is not authorized until that checkpoint is approved.
 
 ## Post-D P0 authority/readiness freeze — 26 September 2026
 
