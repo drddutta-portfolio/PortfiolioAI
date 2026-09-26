@@ -67,9 +67,11 @@ Deno.serve(async (request) => {
   if (!supabaseUrl || !anonKey || !serviceRoleKey) return json(500, { error: "Supabase server configuration is incomplete." })
 
   try {
-    const body = await request.json() as RefreshRequest
+    let body = await request.json() as RefreshRequest
     const p4Mapping = body.action === "P4_SYNC_MAPPING"
-        let userData: { user: { id: string } } | null = null
+    const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } })
+    let userClient: ReturnType<typeof createClient> | null = null
+    let userData: { user: { id: string } } | null = null
 
     if (p4Mapping) {
       const securityId = Array.isArray(body.securityIds) ? body.securityIds[0] : null
@@ -91,7 +93,7 @@ Deno.serve(async (request) => {
     } else {
       const authorization = request.headers.get("Authorization")
       if (!authorization) return json(401, { error: "Authentication required." })
-      const userClient = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
+      userClient = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
       const auth = await userClient.auth.getUser()
       if (auth.error || !auth.data.user) return json(401, { error: "Invalid authenticated session." })
       userData = { user: { id: auth.data.user.id } }
@@ -104,8 +106,8 @@ Deno.serve(async (request) => {
       const securityIds = [...new Set(body.securityIds as string[])].slice(0, 1000)
       if (!securityIds.length) return json(200, { prices: [], unresolvedSecurityIds: [] })
       const [{ data: prices, error: priceError }, { data: mappings, error: mappingError }] = await Promise.all([
-        userClient.from("market_price_latest").select("security_id,price,currency,price_timestamp,retrieved_at,provider_code,market_session_status").eq("provider_code", MARKET_DATA_PROVIDER).in("security_id", securityIds),
-        userClient.from("market_data_instrument_mappings").select("security_id,mapping_status").eq("provider_code", MARKET_DATA_PROVIDER).in("security_id", securityIds),
+        userClient!.from("market_price_latest").select("security_id,price,currency,price_timestamp,retrieved_at,provider_code,market_session_status").eq("provider_code", MARKET_DATA_PROVIDER).in("security_id", securityIds),
+        userClient!.from("market_data_instrument_mappings").select("security_id,mapping_status").eq("provider_code", MARKET_DATA_PROVIDER).in("security_id", securityIds),
       ])
       if (priceError) throw priceError
       if (mappingError) throw mappingError
@@ -126,7 +128,7 @@ Deno.serve(async (request) => {
     if (body.action === "SYNC_MAPPINGS") {
       if (typeof body.portfolioId !== "string") return json(400, { error: "portfolioId must be a UUID string." })
       const sampleSecurityIds = requestedSecuritySample(body.securityIds)
-            const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", userData!.user.id).single()
+      const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", userData!.user.id).single()
       if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found." })
       const leaseHolder = crypto.randomUUID()
       await acquireLease(admin, portfolio.id, "SYNC_MAPPINGS", leaseHolder)
