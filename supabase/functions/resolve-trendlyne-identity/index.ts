@@ -83,7 +83,17 @@ Deno.serve(async request => {
       admin.from("provider_ingestion_controls").select("ingestion_enabled,daily_internal_attempt_limit,per_run_internal_attempt_limit,actual_provider_quota_status,policy_version").eq("source_code", SOURCE_CODE).single(),
     ])
     if (portfolio.error || holding.error || !holding.data) return reply(403, { error: "Identity discovery is limited to an owned open holding.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
-    if (securityResult.error || securityResult.data.asset_class !== "EQUITY" || !securityResult.data.isin) return reply(409, { error: "Canonical equity identity is incomplete.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
+    if (securityResult.error || securityResult.data.asset_class !== "EQUITY") return reply(409, { error: "Canonical equity identity is incomplete.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
+    const canonicalIsin = typeof securityResult.data.isin === "string" && securityResult.data.isin.trim() ? securityResult.data.isin.trim() : null
+    if (!canonicalIsin && !p4b) return reply(409, { error: "Canonical equity identity is incomplete.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
+    if (!canonicalIsin && p4b) {
+      const mapping = await admin.from("market_data_instrument_mappings")
+        .select("mapping_status,match_basis,trading_symbol,exchange")
+        .eq("security_id", body.securityId).eq("provider_code", "ANGEL_ONE").maybeSingle()
+      if (mapping.error || !mapping.data || mapping.data.mapping_status !== "VERIFIED" || mapping.data.match_basis !== "EXCHANGE_SYMBOL_EXACT") {
+        return reply(409, { error: "Missing-ISIN bootstrap requires a verified exact AngelOne symbol mapping.", code: "CANONICAL_ISIN_BOOTSTRAP_PREREQUISITE_MISSING", providerCalls: 0 })
+      }
+    }
     if (source.error || control.error || !source.data.is_active || !source.data.entitlement_verified || !source.data.retention_rights_verified || !control.data.ingestion_enabled || control.data.actual_provider_quota_status !== "VERIFIED" || RESERVED_UNITS > control.data.per_run_internal_attempt_limit) return reply(409, { error: "Provider controls do not allow identity discovery.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
     const existing = await admin.from("security_identity_observations").select("provider_instrument_id,evidence_status").eq("security_id", body.securityId).eq("source_code", SOURCE_CODE)
     if (existing.error) throw new Error("IDENTITY_READ_FAILED")
@@ -108,12 +118,26 @@ Deno.serve(async request => {
       catch (error) { const code = error instanceof Error ? error.message : "PROVIDER_REQUEST_FAILED"; await admin.rpc("record_provider_usage_event_v1", { p_source_code: SOURCE_CODE, p_ingestion_run_id: run.data.id, p_run_item_id: item.data.id, p_security_id: body.securityId, p_data_domain: "PROVIDER_IDENTITY", p_operation_class: operation, p_accounting_class: "PROVIDER_TOOL_ATTEMPT", p_estimated_internal_units: 1, p_actual_internal_units: 1, p_attempted_at: started, p_completed_at: new Date().toISOString(), p_outcome: "FAILED", p_safe_error_code: code, p_retry_attempt: 0, p_idempotency_key: `${run.data.id}:${operation}` }); throw error }
     }
     try {
-      const searchText = await tracked("SEARCH_ENTITIES", () => client.searchEntities(`${securityResult.data.name} ${securityResult.data.symbol} ${securityResult.data.isin}`, "stock", 10))
-      const overviewText = await tracked("GET_OVERVIEW_NEWS_CORP_EVENTS", () => client.getOverviewNewsCorpEvents(securityResult.data.symbol, "overview"))
-      const identity = reconcileTrendlyneIdentityDiscovery({ name: securityResult.data.name, symbol: securityResult.data.symbol, isin: securityResult.data.isin, bseCode: null }, parseTrendlyneClassificationCandidates(searchText), parseOverview(overviewText))
-      const payload = { security_id: body.securityId, canonical: { name: securityResult.data.name, symbol: securityResult.data.symbol, isin: securityResult.data.isin }, matched_identity: identity, search_result: searchText, overview_result: overviewText }
+      let searchText = ""
+      let overviewText: string
+      let identity: ReturnType<typeof parseOverview>["identity"]
+      let bootstrapMissingIsin = false
+      if (!canonicalIsin) {
+        bootstrapMissingIsin = true
+        overviewText = await tracked("GET_OVERVIEW_NEWS_CORP_EVENTS", () => client.getOverviewNewsCorpEvents(securityResult.data.symbol, "overview"))
+        const overview = parseOverview(overviewText)
+        if (overview.identity.symbol !== securityResult.data.symbol || !overview.identity.isin || !overview.identity.stockId) throw new Error("NO_EXACT_PROVIDER_IDENTITY")
+        const isinWrite = await admin.from("securities").update({ isin: overview.identity.isin }).eq("id", body.securityId).is("isin", null)
+        if (isinWrite.error) throw new Error("CANONICAL_ISIN_BOOTSTRAP_WRITE_FAILED")
+        identity = overview.identity
+      } else {
+        searchText = await tracked("SEARCH_ENTITIES", () => client.searchEntities(`${securityResult.data.name} ${securityResult.data.symbol} ${canonicalIsin}`, "stock", 10))
+        overviewText = await tracked("GET_OVERVIEW_NEWS_CORP_EVENTS", () => client.getOverviewNewsCorpEvents(securityResult.data.symbol, "overview"))
+        identity = reconcileTrendlyneIdentityDiscovery({ name: securityResult.data.name, symbol: securityResult.data.symbol, isin: canonicalIsin, bseCode: null }, parseTrendlyneClassificationCandidates(searchText), parseOverview(overviewText))
+      }
+      const payload = { security_id: body.securityId, canonical: { name: securityResult.data.name, symbol: securityResult.data.symbol, isin: canonicalIsin ?? identity.isin }, matched_identity: identity, search_result: searchText, overview_result: overviewText, bootstrap_missing_isin: bootstrapMissingIsin }
       const payloadHash = await hash(payload)
-      const record = await admin.from("data_source_records").upsert({ source_code: SOURCE_CODE, ingestion_run_id: run.data.id, record_kind: "SECURITY_IDENTITY", external_record_id: `${identity.stockId}:identity`, payload_hash: payloadHash, raw_payload: payload, retrieved_at: new Date().toISOString(), terms_snapshot: { mode: "PROGRAM_A_A2_IDENTITY_PREREQUISITE", exact_symbol_isin_required: true } }, { onConflict: "source_code,record_kind,external_record_id,payload_hash", ignoreDuplicates: true }).select("id").maybeSingle()
+      const record = await admin.from("data_source_records").upsert({ source_code: SOURCE_CODE, ingestion_run_id: run.data.id, record_kind: "SECURITY_IDENTITY", external_record_id: `${identity.stockId}:identity`, payload_hash: payloadHash, raw_payload: payload, retrieved_at: new Date().toISOString(), terms_snapshot: { mode: p4b ? "POST_D_P4B_IDENTITY_PREREQUISITE" : "PROGRAM_A_A2_IDENTITY_PREREQUISITE", exact_symbol_isin_required: !bootstrapMissingIsin, missing_isin_bootstrap_requires_angel_exact_symbol: bootstrapMissingIsin } }, { onConflict: "source_code,record_kind,external_record_id,payload_hash", ignoreDuplicates: true }).select("id").maybeSingle()
       let sourceRecordId = record.data?.id
       if (!sourceRecordId) { const found = await admin.from("data_source_records").select("id").eq("source_code", SOURCE_CODE).eq("record_kind", "SECURITY_IDENTITY").eq("external_record_id", `${identity.stockId}:identity`).eq("payload_hash", payloadHash).single(); if (found.error) throw new Error("IDENTITY_PROVENANCE_FAILED"); sourceRecordId = found.data.id }
       const conflict = await admin.from("security_identity_observations").select("provider_instrument_id").eq("security_id", body.securityId).eq("source_code", SOURCE_CODE).eq("evidence_status", "MATCHED").neq("provider_instrument_id", identity.stockId)
@@ -122,9 +146,9 @@ Deno.serve(async request => {
       let localWrites = record.data?.id ? 1 : 0
       if (!same.data) { const inserted = await admin.from("security_identity_observations").insert({ security_id: body.securityId, source_record_id: sourceRecordId, source_code: SOURCE_CODE, provider_instrument_id: identity.stockId, observed_name: identity.name, observed_isin: identity.isin, observed_exchange: securityResult.data.exchange, observed_symbol: identity.symbol, observed_series: securityResult.data.series, evidence_status: "MATCHED", confidence: "1.0000", observed_at: new Date().toISOString() }); if (inserted.error) throw new Error("IDENTITY_PERSISTENCE_FAILED"); localWrites += 1 }
       await admin.rpc("settle_provider_budget_v1", { p_reservation_id: reservation.data[0].reservation_id, p_consumed_units: attempted, p_failed_units: 0, p_released_units: RESERVED_UNITS - attempted })
-      await admin.rpc("record_refresh_item_result_v1", { p_run_item_id: item.data.id, p_status: "ACCEPTED", p_safe_reason_code: null, p_attempted_call_count: attempted, p_accepted_record_count: 1, p_metadata: { provider_instrument_id: identity.stockId, exact_symbol_isin_match: true } })
+      await admin.rpc("record_refresh_item_result_v1", { p_run_item_id: item.data.id, p_status: "ACCEPTED", p_safe_reason_code: null, p_attempted_call_count: attempted, p_accepted_record_count: 1, p_metadata: { provider_instrument_id: identity.stockId, exact_symbol_isin_match: !bootstrapMissingIsin, missing_isin_bootstrap: bootstrapMissingIsin } })
       await admin.from("data_ingestion_runs").update({ status: "SUCCEEDED", completed_at: new Date().toISOString(), attempted_call_count: attempted, accepted_count: 1, fetched_count: 1, metadata: { security: securityResult.data.symbol, provider_instrument_id: identity.stockId } }).eq("id", run.data.id)
-      return reply(200, { state: "VERIFIED_DURING_PREREQUISITE_DISCOVERY", providerInstrumentId: identity.stockId, providerCalls: attempted, localWrites, runId: run.data.id })
+      return reply(200, { state: bootstrapMissingIsin ? "VERIFIED_WITH_MISSING_ISIN_BOOTSTRAP" : "VERIFIED_DURING_PREREQUISITE_DISCOVERY", providerInstrumentId: identity.stockId, providerCalls: attempted, localWrites: localWrites + (bootstrapMissingIsin ? 1 : 0), bootstrappedIsin: bootstrapMissingIsin ? identity.isin : null, runId: run.data.id })
     } catch (error) {
       const code = error instanceof Error ? error.message : "PROVIDER_REQUEST_FAILED"
       await admin.rpc("settle_provider_budget_v1", { p_reservation_id: reservation.data[0].reservation_id, p_consumed_units: 0, p_failed_units: attempted, p_released_units: RESERVED_UNITS - attempted })
