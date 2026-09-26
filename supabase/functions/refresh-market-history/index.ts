@@ -2,10 +2,11 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { AngelOneProvider, loadAngelOneConfig, type AngelDailyCandle } from "../_shared/angel-one.ts"
 import { MARKET_DATA_PROVIDER, type ProviderInstrument } from "../_shared/market-data.ts"
 import { SafeOperationalError, safeError } from "../_shared/security.ts"
+import { assertP4MarketHistoryRequest, P4_MARKET_HISTORY_CONFIRMATION } from "../_shared/p4-market-history-guard.ts"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-portfolioai-classification-token",
 }
 const LEASE_SECONDS = 300
 const COOLDOWN_SECONDS = 60
@@ -143,13 +144,13 @@ async function acquireLease(admin: AdminClient, portfolioId: string, holder: str
   if (row?.acquired !== true) throw new SafeOperationalError("MARKET_DATA_RATE_LIMITED", "Another historical market-data operation is running or cooling down.", 429)
 }
 
-async function releaseLease(admin: AdminClient, portfolioId: string, holder: string) {
+async function releaseLease(admin: AdminClient, portfolioId: string, holder: string, cooldownSeconds = COOLDOWN_SECONDS) {
   const { error } = await admin.rpc("release_market_data_operation_lease", {
     p_portfolio_id: portfolioId,
     p_provider_code: MARKET_DATA_PROVIDER,
     p_operation: "REFRESH_HISTORY",
     p_lease_holder: holder,
-    p_cooldown_seconds: COOLDOWN_SECONDS,
+    p_cooldown_seconds: cooldownSeconds,
   })
   if (error) throw new SafeOperationalError("LEASE_RELEASE_FAILED", "Historical refresh completed but its cooldown could not be recorded.")
 }
@@ -157,8 +158,6 @@ async function releaseLease(admin: AdminClient, portfolioId: string, holder: str
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders })
   if (request.method !== "POST") return json(405, { error: "Method not allowed." })
-  const authorization = request.headers.get("Authorization")
-  if (!authorization) return json(401, { error: "Authentication required." })
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY")
@@ -167,16 +166,40 @@ Deno.serve(async (request) => {
 
   try {
     const body = await request.json() as RequestBody
-    if (body.action !== "PLAN" && body.action !== "EXECUTE") return json(400, { error: "action must be PLAN or EXECUTE." })
+    const p4Internal = body.action === "P4_PLAN" || body.action === "P4_EXECUTE"
+    if (body.action !== "PLAN" && body.action !== "EXECUTE" && !p4Internal) return json(400, { error: "action must be PLAN, EXECUTE, P4_PLAN, or P4_EXECUTE." })
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return json(400, { error: "portfolioId and securityId are required." })
 
-    const userClient = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
-    const { data: userData, error: userError } = await userClient.auth.getUser()
-    if (userError || !userData.user) return json(401, { error: "Invalid authenticated session." })
     const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } })
+    let requestedBy: string
 
-    const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", userData.user.id).single()
-    if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found." })
+    if (p4Internal) {
+      const guard = assertP4MarketHistoryRequest({
+        supabaseUrl,
+        portfolioId: body.portfolioId,
+        securityId: body.securityId,
+        confirmation: body.confirmation,
+      })
+      if (!guard.ok) return json(409, { error: guard.message, code: guard.code, providerCalls: 0 })
+      const token = request.headers.get("x-portfolioai-classification-token")
+      if (!token) return json(401, { error: "Internal authentication required.", providerCalls: 0 })
+      const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
+      if (verified.error || verified.data !== true) return json(401, { error: "Internal authentication failed.", providerCalls: 0 })
+      const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId).single()
+      if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
+      requestedBy = portfolio.user_id as string
+    } else {
+      const authorization = request.headers.get("Authorization")
+      if (!authorization) return json(401, { error: "Authentication required." })
+      const userClient = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
+      const { data: userData, error: userError } = await userClient.auth.getUser()
+      if (userError || !userData.user) return json(401, { error: "Invalid authenticated session." })
+      const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId).eq("user_id", userData.user.id).single()
+      if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found." })
+      requestedBy = userData.user.id
+    }
+
+    const portfolio = { id: body.portfolioId as string }
     const { data: holding, error: holdingError } = await admin.from("current_holdings").select("security_id,current_quantity").eq("portfolio_id", portfolio.id).eq("security_id", body.securityId).maybeSingle()
     if (holdingError || !holding || /^[-+]?0(?:\.0+)?$/u.test(String(holding.current_quantity))) return json(403, { error: "Historical refresh is limited to open holdings." })
     const { data: security, error: securityError } = await admin.from("securities").select("id,symbol,name,asset_class").eq("id", body.securityId).single()
@@ -197,7 +220,7 @@ Deno.serve(async (request) => {
     }
     const a2Window = typeof body.requestFrom === "string" && typeof body.requestTo === "string"
     if ((body.requestFrom === undefined) !== (body.requestTo === undefined)) return json(400, { error: "requestFrom and requestTo must be supplied together.", code: "PROVIDER_SCHEMA_MISMATCH" })
-    if (a2Window) {
+    if (a2Window && !p4Internal) {
       const local = isLocalSupabaseUrl(supabaseUrl)
       if (!local) return json(409, { error: "Program A A2 execution is local-only.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
       if (!/^\d{4}-\d{2}-\d{2}$/u.test(body.requestFrom as string) || !/^\d{4}-\d{2}-\d{2}$/u.test(body.requestTo as string)) return json(400, { error: "A2 history window must use ISO dates.", code: "PROVIDER_SCHEMA_MISMATCH" })
@@ -208,7 +231,11 @@ Deno.serve(async (request) => {
     const latestExisting = await admin.from("market_price_history").select("period_start").eq("security_id", body.securityId).eq("provider_code", MARKET_DATA_PROVIDER).eq("interval", "ONE_DAY").order("period_start", { ascending: false }).limit(1).maybeSingle()
     if (latestExisting.error) throw latestExisting.error
 
-    if (body.action === "PLAN") return json(200, {
+    if (body.action === "PLAN" || body.action === "P4_PLAN") {
+      if (p4Internal) {
+        try { loadAngelOneConfig() } catch { return json(409, { error: "Angel One runtime configuration is incomplete.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 }) }
+      }
+      return json(200, {
       mode: "MARKET_HISTORY_REFRESH_PLAN",
       providerCalls: 0,
       security: security.symbol,
@@ -221,14 +248,16 @@ Deno.serve(async (request) => {
       metricsAfterRefresh: ["PRICE_MOMENTUM_12M", "PRICE_MOMENTUM_6M", "MAX_DRAWDOWN_1Y", "VOLATILITY_1Y"],
       note: "Planning consumes zero provider calls. Relative strength remains unavailable until benchmark history is implemented.",
     })
+    }
 
-    if (body.confirmation !== CONFIRMATION) return json(409, { error: "Explicit owner confirmation is required.", providerCalls: 0 })
+    const requiredConfirmation = p4Internal ? P4_MARKET_HISTORY_CONFIRMATION : CONFIRMATION
+    if (body.confirmation !== requiredConfirmation) return json(409, { error: "Explicit owner confirmation is required.", providerCalls: 0 })
     const leaseHolder = crypto.randomUUID()
     await acquireLease(admin, portfolio.id, leaseHolder)
     const { data: run, error: runError } = await admin.from("market_data_refresh_runs").insert({
       portfolio_id: portfolio.id,
       provider_code: MARKET_DATA_PROVIDER,
-      requested_by: userData.user.id,
+      requested_by: requestedBy,
       status: "RUNNING",
       requested_security_count: 1,
       metadata: { operation: "REFRESH_HISTORY", security_id: security.id, symbol: security.symbol, interval: "ONE_DAY", requested_from: body.requestFrom ?? null, requested_to: body.requestTo ?? null, history_days: Math.ceil((to.getTime() - from.getTime()) / DAY) },
@@ -308,7 +337,7 @@ Deno.serve(async (request) => {
       await admin.from("market_data_refresh_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), failed_security_count: 1, error_summary: operational.code }).eq("id", run.id)
       throw error
     } finally {
-      await releaseLease(admin, portfolio.id, leaseHolder)
+      await releaseLease(admin, portfolio.id, leaseHolder, p4Internal ? 0 : COOLDOWN_SECONDS)
     }
   } catch (error) {
     const operational = safeError(error)
