@@ -29,14 +29,14 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P0 authority/readiness freeze is IMPLEMENTED / PASS and awaits Owner Checkpoint 1 approval; P1 is NOT AUTHORIZED yet; Stage 5 Development data validation remains COMPLETE / PASS; the Development environment baseline is operational; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
+**Current milestone:** Post-D P0 authority/readiness freeze is COMPLETE / PASS / CLOSED after Owner Checkpoint 1 approval; P1 — Source-Code Integration Baseline is AUTHORIZED but NOT STARTED; Stage 5 Development data validation remains COMPLETE / PASS; the Development environment baseline is operational; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
 ## Post-D P0 authority/readiness freeze — 26 September 2026
 
-Post-D P0 is **IMPLEMENTED / PASS / AWAITING OWNER CHECKPOINT 1**.
+Post-D P0 is **COMPLETE / PASS / CLOSED** after explicit Owner Checkpoint 1 approval.
 
 P0 completed a read-only/documentation-only current-state reconciliation against the canonical architecture, current Development/Production topology, Git divergence and open PR graph. It created:
 
@@ -54,7 +54,7 @@ Key frozen conclusions:
 - Production was not mutated.
 - No source-code implementation, migration, provider call, paid AI call, scheduler activation, PR mutation, deployment or trading action occurred.
 
-P0 exit criteria are recorded as PASS. **P1 remains NOT AUTHORIZED until Owner Checkpoint 1 explicitly approves the P0 authority/readiness package.**
+P0 exit criteria are recorded as PASS. Owner Checkpoint 1 was explicitly approved on 26 September 2026. **P1 — Source-Code Integration Baseline is now AUTHORIZED but has not started.**
 
 ## Stage 5 Development data validation — 26 September 2026
 
