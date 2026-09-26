@@ -348,7 +348,7 @@ Deno.serve(async (request) => {
       await admin.from("market_data_refresh_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), failed_security_count: 1, error_summary: operational.code }).eq("id", run.id)
       throw error
     } finally {
-      await releaseLease(admin, portfolio.id, leaseHolder, p4Internal ? 0 : COOLDOWN_SECONDS)
+      await releaseLease(admin, portfolio.id, leaseHolder, p4Internal ? 1 : COOLDOWN_SECONDS)
     }
   } catch (error) {
     const operational = safeError(error)
