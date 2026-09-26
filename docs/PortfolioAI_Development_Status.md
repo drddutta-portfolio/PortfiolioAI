@@ -29,10 +29,36 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P2 — Isolated Development Environment & Schema Reconstruction is COMPLETE / PASS / CLOSED after Owner Checkpoint 3 approval; P1 is COMPLETE / PASS / CLOSED after Owner Checkpoint 2 approval; P0 is COMPLETE / PASS / CLOSED; Stage 4/5 Development environment work remains the authoritative baseline and was not rebuilt; P3 — Acceptance Dataset & Current-State Register is AUTHORIZED / NOT STARTED; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
+**Current milestone:** Post-D P3 — Acceptance Dataset & Current-State Register is IMPLEMENTED / PASS and READY FOR OWNER CHECKPOINT 4; P2 is COMPLETE / PASS / CLOSED after Owner Checkpoint 3 approval; P1 and P0 remain CLOSED; the Stage 5 Development acceptance dataset was reused without recopy; next Post-D stage is NOT AUTHORIZED pending Owner Checkpoint 4; Dev Setup Stage 6 is NOT STARTED and is not the current next step
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
+
+## Post-D P3 acceptance dataset & current-state register — 26 September 2026
+
+P3 is **IMPLEMENTED / PASS — READY FOR OWNER CHECKPOINT 4**.
+
+P3 reused the operational Stage 5 Development acceptance dataset and the P0 current-state register. No dataset rebuild or recopy was performed.
+
+Residual P3 work completed:
+- the six-holding local regression fixture is permanently identified as `10000000-0000-4000-8000-000000000001` / `LOCAL UI Research Review`, expected six open holdings, LOCAL ONLY;
+- the Development acceptance portfolio is separately frozen as `6193a4aa-3235-4057-bddc-209fcf443fc2` / `Consolidated Portfolio`;
+- a read-only Development query confirmed the local fixture portfolio has zero rows in Development;
+- machine-readable sanitization/licensing treatment is frozen in `docs/p3/PortfolioAI_P3_ACCEPTANCE_DATA_POLICY_V1.json`;
+- a repeatable acceptance refresh/rebuild procedure is frozen in `docs/p3/PortfolioAI_P3_ACCEPTANCE_DATA_REFRESH_PROCEDURE.md`;
+- fail-closed repository tools now verify dataset identity boundaries and generate refresh plans without performing a refresh.
+
+Supporting P3 manifest:
+`PortfolioAI_POST_D_P3_ACCEPTANCE_DATASET_CURRENT_STATE_REGISTER.md`
+
+P3 implementation commit:
+`05cc50f85230cc9e555e864f1abdc2db4a67a445`.
+
+**Visible UI impact: NONE.** P3 changes only documentation and repository validation/planning tooling; no React/UI source was modified.
+
+No Production mutation, migration, provider execution, scheduler activation, paid AI, trading, Production deployment or merge to `main` occurred.
+
+P3 is not formally CLOSED until Owner Checkpoint 4 is explicitly approved. The next Post-D stage remains NOT AUTHORIZED.
 
 ## Post-D P2 isolated Development environment residual reconciliation — 26 September 2026
 

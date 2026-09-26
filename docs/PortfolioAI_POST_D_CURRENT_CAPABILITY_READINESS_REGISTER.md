@@ -1,6 +1,6 @@
 # PortfolioAI — Post-D Current Capability Readiness Register
 
-**Status:** P0 CURRENT-STATE FREEZE CANDIDATE  
+**Status:** LIVING POST-D CURRENT-STATE REGISTER — UPDATED THROUGH P3 CLOSURE CANDIDATE  
 **Branch:** `PortfolioAI-Development`  
 **Freeze date:** 26 September 2026  
 **Purpose:** Present-tense capability/readiness register for Post-D convergence  
@@ -112,18 +112,21 @@ Residual to prove before formal P2 closure:
 - Reconcile any remaining P2 crossover safeguards not explicitly proved by Stage 4/5, especially an automated rejection of known production project refs and an unambiguous environment identity indicator if not already present.
 - Formal P2 owner checkpoint must recognize the pre-existing evidence rather than repeat it.
 
-### P3 — Acceptance Dataset & Current-State Register: PARTIALLY COMPLETE
+### P3 — Acceptance Dataset & Current-State Register: IMPLEMENTED / PASS — OWNER CHECKPOINT 4 PENDING
 
-Already complete:
+Already complete before P3:
 - Production-equivalent real business/application data is operational in Development.
 - Stage 5 manifest documents row counts, ownership remap, canonical resolution and known gaps.
 - This document establishes the present-tense capability register.
 
-Residual:
-- Confirm the deterministic six-security regression fixture remains reproducible and permanently distinct from the Development acceptance dataset.
-- Document the acceptance dataset's sanitization/licensing treatment against P3's field-level requirement.
-- Document a repeatable acceptance-data refresh/rebuild procedure; Stage 5 copy tooling was temporary/non-repository.
-- Formal P3 owner checkpoint is not yet reached.
+Residuals completed by P3:
+- the deterministic six-security local regression fixture is frozen as LOCAL ONLY and is distinct from the Development acceptance portfolio;
+- a read-only Development check confirms the local fixture portfolio ID has zero rows in Development;
+- field/data-family sanitization and licensing treatment is frozen in a machine-readable P3 policy;
+- a repeatable, fail-closed acceptance refresh/rebuild procedure is now repository-controlled;
+- P3 performs no unnecessary data recopy.
+
+Formal P3 closure awaits Owner Checkpoint 4.
 
 ## 5. Open Git / PR topology freeze
 
