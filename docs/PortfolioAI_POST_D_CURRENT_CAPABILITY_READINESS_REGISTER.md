@@ -1,6 +1,6 @@
 # PortfolioAI — Post-D Current Capability Readiness Register
 
-**Status:** LIVING POST-D CURRENT-STATE REGISTER — UPDATED THROUGH P3 CLOSURE CANDIDATE  
+**Status:** LIVING POST-D CURRENT-STATE REGISTER — UPDATED THROUGH P3 FORMAL CLOSURE  
 **Branch:** `PortfolioAI-Development`  
 **Freeze date:** 26 September 2026  
 **Purpose:** Present-tense capability/readiness register for Post-D convergence  
@@ -112,7 +112,7 @@ Residual to prove before formal P2 closure:
 - Reconcile any remaining P2 crossover safeguards not explicitly proved by Stage 4/5, especially an automated rejection of known production project refs and an unambiguous environment identity indicator if not already present.
 - Formal P2 owner checkpoint must recognize the pre-existing evidence rather than repeat it.
 
-### P3 — Acceptance Dataset & Current-State Register: IMPLEMENTED / PASS — OWNER CHECKPOINT 4 PENDING
+### P3 — Acceptance Dataset & Current-State Register: COMPLETE / PASS / CLOSED
 
 Already complete before P3:
 - Production-equivalent real business/application data is operational in Development.
@@ -126,7 +126,7 @@ Residuals completed by P3:
 - a repeatable, fail-closed acceptance refresh/rebuild procedure is now repository-controlled;
 - P3 performs no unnecessary data recopy.
 
-Formal P3 closure awaits Owner Checkpoint 4.
+Owner Checkpoint 4 was approved on 26 September 2026. P3 is formally closed. P4 is authorized only through bounded-cohort planning until Owner Checkpoint 4A.
 
 ## 5. Open Git / PR topology freeze
 

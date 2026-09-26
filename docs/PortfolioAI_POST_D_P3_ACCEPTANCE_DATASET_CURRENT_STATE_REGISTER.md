@@ -1,7 +1,7 @@
 # PortfolioAI — Post-D P3 Acceptance Dataset & Current-State Register
 
 **Stage:** P3 — Acceptance Dataset & Current-State Register  
-**Status:** IMPLEMENTED / PASS — READY FOR OWNER CHECKPOINT 4  
+**Status:** COMPLETE / PASS / CLOSED — OWNER CHECKPOINT 4 APPROVED  
 **Branch:** `PortfolioAI-Development`  
 **Date:** 26 September 2026  
 **P2 prerequisite:** COMPLETE / PASS / CLOSED  
@@ -126,7 +126,23 @@ P3 changes repository governance, validation tooling and data-handling procedure
 P3 implementation = COMPLETE
 P3 exit criteria = PASS
 Acceptance dataset rebuild = NOT REQUIRED
-Owner Checkpoint 4 = REQUIRED
-P3 formal closure = PENDING OWNER APPROVAL
-Next stage = NOT AUTHORIZED
+Owner Checkpoint 4 = APPROVED
+P3 formal closure = COMPLETE / PASS / CLOSED
+P4 = AUTHORIZED / NOT STARTED (planning/bounded-cohort preparation only)
+Owner Checkpoint 4A = REQUIRED BEFORE PROVIDER-BACKED COHORT EXECUTION
 ```
+
+
+## 9. Owner Checkpoint 4 approval — 26 September 2026
+
+The owner explicitly approved the P3 closure package after the exact-head closure-candidate deployment completed successfully.
+
+P3 is therefore **COMPLETE / PASS / CLOSED**.
+
+**P4 — Existing Evidence & Market-Data Rollout is AUTHORIZED / NOT STARTED** for read-only planning, readiness reconciliation, provider-cost estimation and bounded-cohort proposal only.
+
+Per the canonical Post-D roadmap:
+- Owner Checkpoint 4A is required before any provider-backed bounded cohort execution.
+- Owner Checkpoint 4B is required before portfolio-wide Development rollout.
+
+No visible UI change is introduced by this formal closure.

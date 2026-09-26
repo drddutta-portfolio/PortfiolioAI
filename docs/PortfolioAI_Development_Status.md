@@ -29,14 +29,14 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P3 — Acceptance Dataset & Current-State Register is IMPLEMENTED / PASS and READY FOR OWNER CHECKPOINT 4; P2 is COMPLETE / PASS / CLOSED after Owner Checkpoint 3 approval; P1 and P0 remain CLOSED; the Stage 5 Development acceptance dataset was reused without recopy; next Post-D stage is NOT AUTHORIZED pending Owner Checkpoint 4; Dev Setup Stage 6 is NOT STARTED and is not the current next step
+**Current milestone:** Post-D P3 — Acceptance Dataset & Current-State Register is COMPLETE / PASS / CLOSED after Owner Checkpoint 4 approval; P2, P1 and P0 remain CLOSED; the Stage 5 Development acceptance dataset was reused without recopy; P4 — Existing Evidence & Market-Data Rollout is AUTHORIZED / NOT STARTED for planning and bounded-cohort preparation only; provider execution remains gated by Owner Checkpoint 4A
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
 ## Post-D P3 acceptance dataset & current-state register — 26 September 2026
 
-P3 is **IMPLEMENTED / PASS — READY FOR OWNER CHECKPOINT 4**.
+P3 is **COMPLETE / PASS / CLOSED** after explicit Owner Checkpoint 4 approval.
 
 P3 reused the operational Stage 5 Development acceptance dataset and the P0 current-state register. No dataset rebuild or recopy was performed.
 
@@ -58,7 +58,23 @@ P3 implementation commit:
 
 No Production mutation, migration, provider execution, scheduler activation, paid AI, trading, Production deployment or merge to `main` occurred.
 
-P3 is not formally CLOSED until Owner Checkpoint 4 is explicitly approved. The next Post-D stage remains NOT AUTHORIZED.
+Owner Checkpoint 4 was explicitly approved on 26 September 2026. P3 is formally closed.
+
+**P4 — Existing Evidence & Market-Data Rollout is AUTHORIZED / NOT STARTED for planning, current-state audit, cost estimation and bounded-cohort proposal only.** Any provider-backed bounded cohort still requires the separate canonical **Owner Checkpoint 4A**. Portfolio-wide rollout requires **Owner Checkpoint 4B**.
+
+
+
+### Owner Checkpoint 4 approval — 26 September 2026
+
+The owner explicitly approved the P3 acceptance-dataset/current-state package.
+
+This closes P3 as **COMPLETE / PASS / CLOSED** and authorizes **P4 — Existing Evidence & Market-Data Rollout** only for read-only planning, readiness reconciliation, cost estimation and bounded-cohort preparation.
+
+P4 must reuse the existing R3/R5/Program A mechanisms in the canonical order: identity/eligibility → classification/profile readiness → current-price coverage → historical-price/benchmark coverage → fundamentals → valuation → ownership/governance → documents → news/event context.
+
+**Owner Checkpoint 4A remains mandatory before any provider-backed bounded cohort is executed. Owner Checkpoint 4B remains mandatory before portfolio-wide Development rollout.**
+
+This approval does not authorize Production mutation, Production migration, paid AI, scheduler activation, merge to `main`, Production deployment, PR merge/closure, or trading.
 
 ## Post-D P2 isolated Development environment residual reconciliation — 26 September 2026
 
