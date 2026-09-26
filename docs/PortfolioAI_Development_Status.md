@@ -29,14 +29,14 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P2 — Isolated Development Environment & Schema Reconstruction residual reconciliation is IMPLEMENTED / PASS and READY FOR OWNER CHECKPOINT 3; P1 is COMPLETE / PASS / CLOSED after Owner Checkpoint 2 approval; P0 is COMPLETE / PASS / CLOSED; Stage 4/5 Development environment work remains the authoritative baseline and was not rebuilt; P3 is NOT AUTHORIZED; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
+**Current milestone:** Post-D P2 — Isolated Development Environment & Schema Reconstruction is COMPLETE / PASS / CLOSED after Owner Checkpoint 3 approval; P1 is COMPLETE / PASS / CLOSED after Owner Checkpoint 2 approval; P0 is COMPLETE / PASS / CLOSED; Stage 4/5 Development environment work remains the authoritative baseline and was not rebuilt; P3 — Acceptance Dataset & Current-State Register is AUTHORIZED / NOT STARTED; Dev Setup Stage 6 is NOT STARTED and is not the current next step; Program A · A2 remains separately gated
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
 ## Post-D P2 isolated Development environment residual reconciliation — 26 September 2026
 
-P2 residual reconciliation is **IMPLEMENTED / PASS — READY FOR OWNER CHECKPOINT 3**.
+P2 is **COMPLETE / PASS / CLOSED** after explicit Owner Checkpoint 3 approval.
 
 P2 deliberately reused the already-complete Stage 4/Stage 5 environment work rather than rebuilding it. The supporting closure package is:
 
@@ -65,7 +65,19 @@ Vercel reported **SUCCESS** for safeguard commit
 
 No migration, provider execution, paid AI, scheduler activation, trading action, Production mutation, Production deployment or merge to `main` occurred.
 
-P2 is not marked CLOSED until Owner Checkpoint 3 is explicitly approved. P3 remains NOT AUTHORIZED.
+Owner Checkpoint 3 was explicitly approved on 26 September 2026. P2 is formally closed. **P3 — Acceptance Dataset & Current-State Register is now AUTHORIZED but has not started.**
+
+
+
+### Owner Checkpoint 3 approval — 26 September 2026
+
+The owner explicitly approved the P2 isolated Development environment and crossover-safeguard package.
+
+This closes P2 as **COMPLETE / PASS / CLOSED** and authorizes **P3 — Acceptance Dataset & Current-State Register** only.
+
+P3 must reuse the existing Stage 5 Development acceptance dataset and current-state register. It is limited to the residual P3 work already frozen by P0: permanent deterministic fixture separation/reproducibility, sanitization/licensing treatment, and a repeatable acceptance-data refresh/rebuild procedure. It must not rebuild the Development environment or recopy data without evidence of a residual requirement.
+
+P3 authorization does not authorize production mutation, production migration, provider execution, paid AI, scheduler activation, merge to `main`, production deployment, PR merge/closure, or trading.
 
 ## Post-D P1 source-code integration baseline — 26 September 2026
 
