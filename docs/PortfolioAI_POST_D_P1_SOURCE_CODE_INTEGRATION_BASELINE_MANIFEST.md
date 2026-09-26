@@ -1,7 +1,7 @@
 # PortfolioAI — Post-D P1 Source-Code Integration Baseline Manifest
 
 **Stage:** P1 — Source-Code Integration Baseline  
-**Status:** COMPLETE / PASS / AWAITING OWNER CHECKPOINT 2  
+**Status:** COMPLETE / PASS / CLOSED — OWNER CHECKPOINT 2 APPROVED  
 **Branch:** `PortfolioAI-Development`  
 **Date:** 26 September 2026  
 **P0 prerequisite:** COMPLETE / PASS / CLOSED
@@ -196,9 +196,9 @@ Results:
 ## 11. P1 closure state
 
 ```text
-P1 integration baseline = COMPLETE / PASS
-Owner Checkpoint 2 = AWAITING APPROVAL
-P2 formal closure = NOT AUTHORIZED UNTIL OWNER CHECKPOINT 2
+P1 integration baseline = COMPLETE / PASS / CLOSED
+Owner Checkpoint 2 = APPROVED
+P2 = AUTHORIZED / NOT STARTED
 ```
 
 Owner Checkpoint 2 is specifically the approval of the Development baseline/ancestry and the intentional dispositions recorded in this manifest.
@@ -217,3 +217,14 @@ P1 does not authorize or perform:
 - production deployment;
 - trading/order actions.
 
+
+
+## 13. Owner Checkpoint 2 approval — 26 September 2026
+
+The owner explicitly approved the P1 Development baseline and ancestry disposition.
+
+This closes P1 as **COMPLETE / PASS / CLOSED** and authorizes **P2 — Isolated Development Environment & Schema Reconstruction** only.
+
+P2 must recognize the substantial Stage 4/Stage 5 environment work already completed. It is limited to residual P2 verification/closure work and must not rebuild the Development environment without evidence of an unmet requirement.
+
+P2 authorization does not authorize production mutation, production migration, provider execution, paid AI, scheduler activation, merge to `main`, production deployment, PR merge/closure, or trading.
