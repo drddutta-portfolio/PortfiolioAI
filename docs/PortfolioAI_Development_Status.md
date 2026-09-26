@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P4 — Owner Checkpoint 4A is APPROVED; bounded cohort execution attempted but SAFELY BLOCKED before any provider call because the deployed exact Program-A execution path is local-only and the connected environment exposes no approved hosted exact-cohort invocation path; provider calls = 0; writes = 0; portfolio-wide P4 rollout remains NOT AUTHORIZED; P5 is NOT AUTHORIZED
+**Current milestone:** Post-D P4 — Owner Checkpoint 4A remains APPROVED. P4A-1 classification prerequisite is COMPLETE in PortfolioAI Dev via owner-reviewed exact evidence; methodology-ready equities improved from 48 to 50. BANKBARODA AngelOne mapping is now VERIFIED. P4A-2 Trendlyne evidence refresh and P4A-3 AngelOne price/history remain BLOCKED only by missing hosted-Dev runtime secrets; provider-backed evidence/history calls = 0; Production unchanged; P5 NOT AUTHORIZED
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -1045,3 +1045,63 @@ trading/order authority remain unauthorized.
 - Production mutations/provider calls: 0.
 - P4 remains IN PROGRESS; P5 remains NOT AUTHORIZED.
 - Visible UI change: NONE.
+
+
+## Post-D P4A-1 closure and provider-runtime replan — 27 September 2026
+
+Owner-authorized bounded work remained restricted to **PortfolioAI Dev** (`lrgpjimipfkyoqbpsqzz`).
+
+### P4A-1 classification prerequisite — COMPLETE
+
+The hosted Trendlyne MCP runtime URL was unavailable in Development, so no Trendlyne MCP classification call was made. The existing `OWNER_REVIEWED_CLASSIFICATION` authority was used instead with exact public evidence and the frozen Gate K taxonomy:
+
+- BEL: `Capital Goods / Aerospace & Defence`, exact symbol/ISIN evidence, no conflict.
+- BANKBARODA: `Banking / Banks`, exact symbol/ISIN evidence plus NSE banking identity, no conflict.
+
+Development writes:
+- 1 reviewed source record;
+- 3 immutable attribute observations;
+- 3 selected manual-review decisions.
+
+Portfolio classification readiness after rematerialization:
+- open holdings: 248;
+- open equities: 239;
+- methodology-ready equities: **50** (was 48);
+- classification-blocked equities: **189** (was 191);
+- priced holdings: 244;
+- unpriced holdings: 4.
+
+### BANKBARODA AngelOne identity — RESOLVED
+
+A Dev-only internal adapter reused the existing AngelOne public instrument-master mapping logic.
+
+Result:
+- provider instrument id: `4668`;
+- exchange: `NSE`;
+- trading symbol: `BANKBARODA-EQ`;
+- mapping status: `VERIFIED`;
+- match basis: `EXCHANGE_SYMBOL_EXACT`;
+- ambiguous/unresolved/quarantined: 0.
+
+This public instrument-master lookup required no AngelOne authentication and did not fetch price/history.
+
+### Remaining provider-runtime blockers
+
+- Trendlyne evidence refresh: `TRENDLYNE_MCP_URL` is missing from hosted PortfolioAI Dev runtime.
+- AngelOne price/history: hosted PortfolioAI Dev is missing one or more required AngelOne runtime variables (`ANGEL_ONE_API_KEY`, `ANGEL_ONE_CLIENT_CODE`, `ANGEL_ONE_PIN`, `ANGEL_ONE_TOTP_SECRET`, `ANGEL_ONE_CLIENT_LOCAL_IP`, `ANGEL_ONE_CLIENT_PUBLIC_IP`, `ANGEL_ONE_MAC_ADDRESS`).
+- Zero-call P4 AngelOne plan returned `AUTH_OR_CONFIG_ERROR`; AngelOne history calls consumed: 0.
+- Trendlyne MCP evidence calls consumed: 0.
+- Production mutations/provider calls: 0.
+
+Relevant source commits:
+- `a916a09537bddc09ec85385da51d3900f0bc6ae8` — Dev-only market-history adapter.
+- `b89068d15b3d2f9fa91d75a768a2af0ac65e33f1` — validated Dev-only Angel mapping adapter source.
+
+Live Development functions:
+- `refresh-trendlyne-classification` v2;
+- `refresh-market-history` v2;
+- `refresh-market-data` v2.
+
+P4 remains **IN PROGRESS**. Owner Checkpoint 4B is **NOT REACHED**. P5 remains **NOT AUTHORIZED**.
+
+**Visible UI code change: NONE.** Development data may now visibly show BEL/BANKBARODA classification improvements and BANKBARODA as AngelOne-mapped where those fields are surfaced.
