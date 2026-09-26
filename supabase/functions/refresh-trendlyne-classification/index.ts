@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { matchTrendlyneClassificationCandidate, parseTrendlyneClassificationCandidates, parseTrendlyneClassificationResponse, type TrendlyneClassificationRejectionCode } from "../_shared/trendlyne-classification.ts"
+import { assertP4ExactCohortRequest, isApprovedP4DevelopmentSupabaseUrl } from "../_shared/p4-exact-cohort-guard.ts"
 
 const SOURCE_CODE = "TRENDLYNE_MCP"
 const MAX_LIMIT = 40
@@ -74,16 +75,27 @@ Deno.serve(async (request) => {
 
   let body: { action?: unknown; limit?: unknown; portfolioId?: unknown; securityIds?: unknown; securityNames?: unknown; confirmation?: unknown }
   try { body = await request.json() } catch { return reply(400, { error: "Invalid JSON body." }) }
-  const action = body.action === "RUN" ? "RUN" : body.action === "DRY_RUN" ? "DRY_RUN" : body.action === "A2_EXECUTE" ? "A2_EXECUTE" : null
-  const a2SecurityIds = action === "A2_EXECUTE" && Array.isArray(body.securityIds) && body.securityIds.every(id => typeof id === "string") ? body.securityIds as string[] : []
-  const a2SecurityNames = action === "A2_EXECUTE" && Array.isArray(body.securityNames) && body.securityNames.every(name => typeof name === "string" && name.trim().length > 0) ? body.securityNames as string[] : []
-  const limit = action === "A2_EXECUTE" ? a2SecurityIds.length : Number(body.limit ?? MAX_LIMIT)
+  const action = body.action === "RUN" ? "RUN" : body.action === "DRY_RUN" ? "DRY_RUN" : body.action === "A2_EXECUTE" ? "A2_EXECUTE" : body.action === "P4_EXECUTE" ? "P4_EXECUTE" : null
+  const exactSecurityIds = (action === "A2_EXECUTE" || action === "P4_EXECUTE") && Array.isArray(body.securityIds) && body.securityIds.every(id => typeof id === "string") ? body.securityIds as string[] : []
+  const exactSecurityNames = (action === "A2_EXECUTE" || action === "P4_EXECUTE") && Array.isArray(body.securityNames) && body.securityNames.every(name => typeof name === "string" && name.trim().length > 0) ? body.securityNames as string[] : []
+  const exactExecution = action === "A2_EXECUTE" || action === "P4_EXECUTE"
+  const limit = exactExecution ? exactSecurityIds.length : Number(body.limit ?? MAX_LIMIT)
   if (!action || !Number.isInteger(limit) || limit < 1 || limit > MAX_LIMIT) return reply(400, { error: "Invalid action or limit." })
   if (action === "A2_EXECUTE") {
     const local = isLocalSupabaseUrl(supabaseUrl)
     if (!local) return reply(409, { error: "Program A A2 execution is local-only.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
     if (body.confirmation !== "OWNER_CONFIRMED_PROGRAM_A_A2_CLASSIFICATION") return reply(409, { error: "Exact Program A A2 confirmation is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
-    if (typeof body.portfolioId !== "string" || a2SecurityIds.length < 1 || a2SecurityIds.length > 5 || new Set(a2SecurityIds).size !== a2SecurityIds.length || a2SecurityNames.length !== a2SecurityIds.length) return reply(400, { error: "A2 requires one to five unique exact security identities.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
+    if (typeof body.portfolioId !== "string" || exactSecurityIds.length < 1 || exactSecurityIds.length > 5 || new Set(exactSecurityIds).size !== exactSecurityIds.length || exactSecurityNames.length !== exactSecurityIds.length) return reply(400, { error: "A2 requires one to five unique exact security identities.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
+  }
+  if (action === "P4_EXECUTE") {
+    const guard = assertP4ExactCohortRequest({
+      supabaseUrl,
+      portfolioId: body.portfolioId,
+      securityIds: exactSecurityIds,
+      securityNames: exactSecurityNames,
+      confirmation: body.confirmation,
+    })
+    if (!guard.ok) return reply(409, { error: guard.message, code: guard.code, providerCalls: 0 })
   }
 
   const control = await admin.from("provider_ingestion_controls").select("ingestion_enabled,daily_internal_attempt_limit,per_run_internal_attempt_limit,policy_version").eq("source_code", SOURCE_CODE).single()
@@ -93,7 +105,7 @@ Deno.serve(async (request) => {
   if (limit > control.data.per_run_internal_attempt_limit) return reply(400, { error: "Requested limit exceeds the provider per-run control." })
 
   let holdingsQuery = admin.from("current_holdings").select("security_id,current_quantity")
-  if (action === "A2_EXECUTE") holdingsQuery = holdingsQuery.eq("portfolio_id", body.portfolioId as string).in("security_id", a2SecurityIds)
+  if (exactExecution) holdingsQuery = holdingsQuery.eq("portfolio_id", body.portfolioId as string).in("security_id", exactSecurityIds)
   const holdings = await holdingsQuery
   if (holdings.error) return reply(500, { error: "Holdings could not be loaded." })
   const openQty = new Map<string, number>()
@@ -107,14 +119,14 @@ Deno.serve(async (request) => {
   if (securities.error || classifications.error || prices.error) return reply(500, { error: "Classification planning data could not be loaded." })
   const sectorBy = new Map((classifications.data ?? []).map((row) => [row.security_id as string, row.sector as string | null]))
   const priceBy = new Map((prices.data ?? []).map((row) => [row.security_id as string, Number(row.price)]))
-  const exactA2Ids = new Set(a2SecurityIds)
-  const expectedNameById = new Map(a2SecurityIds.map((id, index) => [id, a2SecurityNames[index]]))
+  const exactIds = new Set(exactSecurityIds)
+  const expectedNameById = new Map(exactSecurityIds.map((id, index) => [id, exactSecurityNames[index]]))
   const targets = (securities.data ?? [])
-    .filter((row) => row.asset_class === "EQUITY" && typeof row.isin === "string" && row.isin.length === 12 && (action === "A2_EXECUTE" ? exactA2Ids.has(row.id as string) : !sectorBy.get(row.id as string)))
+    .filter((row) => row.asset_class === "EQUITY" && typeof row.isin === "string" && row.isin.length === 12 && (exactExecution ? exactIds.has(row.id as string) : !sectorBy.get(row.id as string)))
     .map((row) => ({ id: row.id as string, name: row.name as string, symbol: row.symbol as string, isin: (row.isin as string).toUpperCase(), currentValue: (openQty.get(row.id as string) ?? 0) * (priceBy.get(row.id as string) ?? 0) }))
     .sort((a, b) => b.currentValue - a.currentValue || a.symbol.localeCompare(b.symbol))
     .slice(0, limit)
-  if (action === "A2_EXECUTE" && (targets.length !== a2SecurityIds.length || targets.some(target => !exactA2Ids.has(target.id) || target.name !== expectedNameById.get(target.id)))) return reply(409, { error: "Exact A2 classification identity prerequisite is missing.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
+  if (exactExecution && (targets.length !== exactSecurityIds.length || targets.some(target => !exactIds.has(target.id) || target.name !== expectedNameById.get(target.id)))) return reply(409, { error: "Exact classification identity prerequisite is missing.", code: "CLASSIFICATION_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
 
   const today = new Date(); today.setUTCHours(0, 0, 0, 0)
   const usage = await admin.from("provider_usage_events").select("actual_internal_units").eq("source_code", SOURCE_CODE).eq("accounting_class", "PROVIDER_TOOL_ATTEMPT").gte("attempted_at", today.toISOString())
@@ -127,7 +139,7 @@ Deno.serve(async (request) => {
   if (!targets.length) return reply(200, { action, targetCount: 0, providerCalls: 0, accepted: 0 })
   if (!budgetEligible) return reply(429, { error: "The classification cohort exceeds the remaining provider daily budget.", usedToday, plannedCalls: targets.length, dailyLimit: control.data.daily_internal_attempt_limit })
 
-  const run = await admin.from("data_ingestion_runs").insert({ source_code: SOURCE_CODE, operation: "REFRESH_CLASSIFICATION", orchestration_type: "BOUNDED_CLASSIFICATION_COHORT", trigger_source: "MANUAL", status: "RUNNING", requested_count: targets.length, estimated_call_count: targets.length, reserved_call_count: targets.length, policy_version: control.data.policy_version, metadata: { selection: "HIGHEST_CURRENT_VALUE_UNCLASSIFIED_WITH_CANONICAL_ISIN", limit } }).select("id").single()
+  const run = await admin.from("data_ingestion_runs").insert({ source_code: SOURCE_CODE, operation: "REFRESH_CLASSIFICATION", orchestration_type: "BOUNDED_CLASSIFICATION_COHORT", trigger_source: "MANUAL", status: "RUNNING", requested_count: targets.length, estimated_call_count: targets.length, reserved_call_count: targets.length, policy_version: control.data.policy_version, metadata: { selection: exactExecution ? "OWNER_APPROVED_EXACT_COHORT" : "HIGHEST_CURRENT_VALUE_UNCLASSIFIED_WITH_CANONICAL_ISIN", limit, execution_mode: action } }).select("id").single()
   if (run.error) return reply(500, { error: "Classification ingestion run could not be created." })
   const runId = run.data.id as string
   const itemRows = targets.map((target) => ({ ingestion_run_id: runId, security_id: target.id, data_domain: "CLASSIFICATION", status: "PLANNED" }))
@@ -260,7 +272,7 @@ Deno.serve(async (request) => {
     await admin.rpc("settle_provider_budget_v1", { p_reservation_id: reservationId, p_consumed_units: consumed, p_failed_units: failed, p_released_units: released })
     await admin.rpc("release_data_ingestion_lease_v1", { p_source_code: SOURCE_CODE, p_operation: "REFRESH_CLASSIFICATION", p_lease_holder: leaseHolder, p_cooldown_seconds: 0 })
     const status = failed > 0 || rejected > 0 ? (accepted > 0 ? "PARTIAL" : "FAILED") : "SUCCEEDED"
-    await admin.from("data_ingestion_runs").update({ status, completed_at: new Date().toISOString(), attempted_call_count: attempted, accepted_count: accepted, rejected_count: rejected, failed_count: failed, fetched_count: accepted, skipped_count: Math.max(0, targets.length - accepted - failed), metadata: { selection: "HIGHEST_CURRENT_VALUE_UNCLASSIFIED_WITH_CANONICAL_ISIN", normalized_count: normalized, pending_mapping_pairs: [...pendingPairs.values()] } }).eq("id", runId)
+    await admin.from("data_ingestion_runs").update({ status, completed_at: new Date().toISOString(), attempted_call_count: attempted, accepted_count: accepted, rejected_count: rejected, failed_count: failed, fetched_count: accepted, skipped_count: Math.max(0, targets.length - accepted - failed), metadata: { selection: exactExecution ? "OWNER_APPROVED_EXACT_COHORT" : "HIGHEST_CURRENT_VALUE_UNCLASSIFIED_WITH_CANONICAL_ISIN", execution_mode: action, normalized_count: normalized, pending_mapping_pairs: [...pendingPairs.values()] } }).eq("id", runId)
   }
 
   const safeCode = failureCodes[0] ?? rejectionCodes[0] ?? null
