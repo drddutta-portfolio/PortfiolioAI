@@ -1,27 +1,8 @@
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vitest/config"
 
-const DEVELOPMENT_BRANCH = "PortfolioAI-Development"
-const DEVELOPMENT_SUPABASE_URL = "https://lrgpjimipfkyoqbpsqzz.supabase.co"
-const DEVELOPMENT_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_oa_EMVIgMPR1cjVzsGO1uw_6kyuHan6"
-
-export default defineConfig(() => {
-  const isDevelopmentBranch =
-    process.env.VERCEL_GIT_COMMIT_REF === DEVELOPMENT_BRANCH
-
-  return {
+export default defineConfig({
     plugins: [react()],
-    define: isDevelopmentBranch
-      ? {
-          "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
-            DEVELOPMENT_SUPABASE_URL,
-          ),
-          "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(
-            DEVELOPMENT_SUPABASE_PUBLISHABLE_KEY,
-          ),
-          "import.meta.env.VITE_MARKET_DATA_ENABLED": JSON.stringify("false"),
-        }
-      : undefined,
     test: {
       environment: "jsdom",
       setupFiles: "./src/test/setup.ts",
@@ -43,5 +24,4 @@ export default defineConfig(() => {
       pool: "threads",
       maxWorkers: 1,
     },
-  }
 })
