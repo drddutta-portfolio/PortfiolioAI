@@ -141,7 +141,7 @@ Deno.serve(async request=>{
           action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,
           confirmation:"OWNER_CONFIRMED_POST_D_P4B_COMPLETE_RESEARCH",grantId,
         })
-        steps.push({domain:"TRENDLYNE_RESEARCH",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
+        steps.push({domain:"TRENDLYNE_RESEARCH",httpStatus:r.status,...r.payload,status:r.ok?(r.status===207?"PARTIAL":"READY"):"BLOCKED"})
       }else if(identityOk) steps.push({domain:"TRENDLYNE_RESEARCH",status:"READY_EXISTING"})
       else steps.push({domain:"TRENDLYNE_RESEARCH",status:"BLOCKED",code:"TRENDLYNE_IDENTITY_PREREQUISITE_MISSING"})
 
@@ -174,8 +174,9 @@ Deno.serve(async request=>{
       }else if(mappingOk) steps.push({domain:"MARKET_HISTORY",status:"READY_EXISTING"})
       else steps.push({domain:"MARKET_HISTORY",status:"BLOCKED",code:"ANGEL_MAPPING_PREREQUISITE_MISSING"})
 
-      row.status=steps.some(s=>s.status==="BLOCKED")?"PARTIAL_OR_BLOCKED":"READY"
+      row.status=steps.some(s=>s.status==="BLOCKED"||s.status==="PARTIAL")?"PARTIAL_OR_BLOCKED":"READY"
       results.push(row)
+      await new Promise(resolve=>setTimeout(resolve,1300))
     }
 
     return reply(200,{
