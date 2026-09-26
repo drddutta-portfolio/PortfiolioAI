@@ -3,6 +3,7 @@ import { AngelOneProvider, loadAngelOneConfig, type AngelDailyCandle } from "../
 import { MARKET_DATA_PROVIDER, type ProviderInstrument } from "../_shared/market-data.ts"
 import { SafeOperationalError, safeError } from "../_shared/security.ts"
 import { assertP4MarketHistoryRequest, P4_MARKET_HISTORY_CONFIRMATION } from "../_shared/p4-market-history-guard.ts"
+import { consumeP4ExecutionGrant } from "../_shared/p4-execution-grant.ts"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,6 +22,7 @@ type RequestBody = {
   readonly confirmation?: unknown
   readonly requestFrom?: unknown
   readonly requestTo?: unknown
+  readonly grantId?: unknown
 }
 type AdminClient = ReturnType<typeof createClient>
 type MetricRow = {
@@ -182,9 +184,18 @@ Deno.serve(async (request) => {
       })
       if (!guard.ok) return json(409, { error: guard.message, code: guard.code, providerCalls: 0 })
       const token = request.headers.get("x-portfolioai-classification-token")
-      if (!token) return json(401, { error: "Internal authentication required.", providerCalls: 0 })
-      const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
-      if (verified.error || verified.data !== true) return json(401, { error: "Internal authentication failed.", providerCalls: 0 })
+      if (token) {
+        const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
+        if (verified.error || verified.data !== true) return json(401, { error: "Internal authentication failed.", providerCalls: 0 })
+      } else {
+        const grant = await consumeP4ExecutionGrant(admin, {
+          grantId: body.grantId,
+          action: String(body.action),
+          portfolioId: body.portfolioId as string,
+          securityId: body.securityId as string,
+        })
+        if (!grant.ok) return json(401, { error: grant.message, code: grant.code, providerCalls: 0 })
+      }
       const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId).single()
       if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
       requestedBy = portfolio.user_id as string

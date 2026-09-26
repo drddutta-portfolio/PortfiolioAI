@@ -6,6 +6,7 @@ import { verifiedIdentityChanged, type StoredMappingIdentity } from "../_shared/
 import { safeError, SafeOperationalError } from "../_shared/security.ts"
 import { parseSampleSecurityIds } from "../_shared/sample-request.ts"
 import { assertP4MarketMappingRequest } from "../_shared/p4-market-mapping-guard.ts"
+import { consumeP4ExecutionGrant } from "../_shared/p4-execution-grant.ts"
 
 interface RefreshRequest {
   readonly action?: unknown
@@ -13,6 +14,7 @@ interface RefreshRequest {
   readonly securityIds?: unknown
   readonly force?: unknown
   readonly confirmation?: unknown
+  readonly grantId?: unknown
 }
 
 function requestedSecuritySample(value: unknown): readonly string[] | null {
@@ -87,9 +89,18 @@ Deno.serve(async (request) => {
       })
       if (!guard.ok) return json(409, { error: guard.message, code: guard.code, providerCalls: 0 })
       const token = request.headers.get("x-portfolioai-classification-token")
-      if (!token) return json(401, { error: "Internal authentication required.", providerCalls: 0 })
-      const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
-      if (verified.error || verified.data !== true) return json(401, { error: "Internal authentication failed.", providerCalls: 0 })
+      if (token) {
+        const verified = await admin.rpc("verify_trendlyne_classification_refresh_token_v1", { p_token: token })
+        if (verified.error || verified.data !== true) return json(401, { error: "Internal authentication failed.", providerCalls: 0 })
+      } else {
+        const grant = await consumeP4ExecutionGrant(admin, {
+          grantId: body.grantId,
+          action: String(body.action),
+          portfolioId: body.portfolioId as string,
+          securityId: securityId as string,
+        })
+        if (!grant.ok) return json(401, { error: grant.message, code: grant.code, providerCalls: 0 })
+      }
       const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id,user_id").eq("id", body.portfolioId as string).single()
       if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
       userData = { user: { id: portfolio.user_id as string } }
