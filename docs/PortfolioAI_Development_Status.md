@@ -1016,3 +1016,15 @@ regression run passed 289 test files / 1,687 tests, with targeted Program D ESLi
 TypeScript, architecture, build, and diff checks passing. Production remains
 disabled; provider/AI pilots, scheduling, merge/deployment, numeric sizing and
 trading/order authority remain unauthorized.
+
+
+## Post-D P4 runtime deployment boundary — 26 September 2026
+
+- Exact-cohort Development adapter source: IMPLEMENTED at `87a0b260f4475123567bf29879224afc24cc083b`.
+- Branch/Vercel status for the adapter commit: SUCCESS.
+- Live Development Edge Function: unchanged; P4 exact-cohort mode is not deployed.
+- P4A-1 provider calls: 0.
+- Development data writes from P4A-1: 0.
+- Production impact: NONE.
+- Next required action: deploy the committed adapter to PortfolioAI Dev, then execute the approved BEL/BANKBARODA classification cohort and stop for replan.
+- Visible UI change: NONE.
