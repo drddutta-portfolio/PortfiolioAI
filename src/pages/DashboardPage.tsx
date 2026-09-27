@@ -201,6 +201,7 @@ export function DashboardPage() {
         <span className={`dashboard-coverage-pill ${completePrices ? "is-complete" : "is-partial"}`}><i />{scopedCurrent.coverage}/{scopedPositions.length} priced</span>
         {isMarketDataEnabled() ? <button className="button button-primary button-compact" disabled={refreshing} onClick={() => void refresh()}>{refreshing ? "Refreshing…" : "Refresh prices"}</button> : null}
         <Link className="button button-secondary link-button button-compact" to="/app/holdings">Open holdings</Link>
+        <Link className="button button-secondary link-button button-compact" to="/app/intelligence">Open intelligence</Link>
       </div>
     </header>
 
