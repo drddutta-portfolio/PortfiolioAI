@@ -207,7 +207,7 @@ export function DashboardPage() {
 
     {refreshError ? <div className="notice notice-error" role="alert">{refreshError}</div> : null}
 
-    <section className="dashboard-kpi-strip" aria-label="Portfolio summary">
+    <section id="dashboard-summary" className="dashboard-kpi-strip dashboard-section-anchor" aria-label="Portfolio summary">
       <Kpi icon="₹" label={completePrices ? "Current value" : "Priced value"} value={formatMoney(kpiCurrentValue)} detail={`${scopedCurrent.coverage}/${scopedPositions.length} scoped holdings priced`} />
       <Kpi icon="◫" label="Calculable cost basis" value={formatMoney(kpiCostBasis)} detail={`${isConsolidated ? portfolio.totals.accountingCoverage : scopedCost.coverage}/${scopedPositions.length} scoped holdings covered`} />
       <Kpi icon="↗" label={completePrices ? "Unrealised P&L" : "Covered unrealised P&L"} value={formatMoney(kpiUnrealised)} secondaryValue={formatSignedPercent(kpiUnrealisedPercent)} detail={`${isConsolidated ? portfolio.totals.unrealisedCoverage : scopedUnrealised.coverage}/${scopedPositions.length} scoped holdings included`} tone={signedTone(kpiUnrealised)} />
@@ -217,7 +217,7 @@ export function DashboardPage() {
 
     <div className="dashboard-workspace-grid">
       <main className="dashboard-workspace-main">
-        <section className="dashboard-focus-panel">
+        <section id="dashboard-pulse" className="dashboard-focus-panel dashboard-section-anchor">
           <div className="dashboard-section-heading">
             <div><p className="eyebrow">Portfolio pulse</p><h2>What deserves a quick look?</h2><p>Supported return leaders and concentration within {selectedScopeLabel}.</p></div>
             <Link to="/app/holdings">View holdings →</Link>
@@ -237,7 +237,7 @@ export function DashboardPage() {
 
         {enrichment.error ? <div className="notice notice-warning"><strong>Stored enrichment could not be loaded.</strong> {enrichment.error} Portfolio accounting and price views remain available.</div> : null}
 
-        <section className="dashboard-allocation-section">
+        <section id="dashboard-allocation" className="dashboard-allocation-section dashboard-section-anchor">
           <div className="dashboard-section-heading"><div><p className="eyebrow">Portfolio structure</p><h2>Allocation overview</h2><p>Visual allocation for {selectedScopeLabel}; missing evidence stays explicit.</p></div><Link to="/app/structure">Manage structure →</Link></div>
           <div className="dashboard-chart-grid">
             <DonutAllocationPanel title="Portfolio role" rows={roleAllocation} empty="Trusted prices are required before role allocation can be calculated." partial={!completePrices} />
@@ -253,9 +253,9 @@ export function DashboardPage() {
           </details>
         </section>
 
-        <PositionSizingPanel positions={sizedPositions} scopedValue={scopedCurrent.value} scopeLabel={selectedScopeLabel} />
+        <div id="dashboard-weights" className="dashboard-section-anchor"><PositionSizingPanel positions={sizedPositions} scopedValue={scopedCurrent.value} scopeLabel={selectedScopeLabel} /></div>
 
-        <section className="dashboard-performance-section">
+        <section id="dashboard-position-returns" className="dashboard-performance-section dashboard-section-anchor">
           <div className="dashboard-section-heading"><div><p className="eyebrow">Supported position performance</p><h2>Top 10 and Bottom 10</h2><p>Return percentage remains separate from portfolio P&L contribution.</p></div><span className="coverage-badge">{ranked.length}/{scopedPositions.length} ranked</span></div>
           <div className="dashboard-performance-grid">
             <VerticalPerformanceChart title="Top 10 performers" positions={winners} tone="positive" />
@@ -263,7 +263,7 @@ export function DashboardPage() {
           </div>
         </section>
 
-        <section className="dashboard-contribution-section">
+        <section id="dashboard-contribution" className="dashboard-contribution-section dashboard-section-anchor">
           <div className="dashboard-section-heading"><div><p className="eyebrow">Portfolio impact</p><h2>P&L contributors and detractors</h2><p>Absolute supported unrealised P&L shows which holdings are moving portfolio value—not merely which stocks have the highest percentage return.</p></div></div>
           <div className="dashboard-contribution-grid">
             <PnlContributionList title="Top contributors" positions={contributors} tone="positive" />
@@ -271,11 +271,11 @@ export function DashboardPage() {
           </div>
         </section>
 
-        {isConsolidated ? <BrokerAnalytics rows={portfolio.brokerAnalytics} /> : <ScopedBrokerExposure positions={scopedPositions} scopeLabel={selectedScopeLabel} />}
+        <div id="dashboard-broker" className="dashboard-section-anchor">{isConsolidated ? <BrokerAnalytics rows={portfolio.brokerAnalytics} /> : <ScopedBrokerExposure positions={scopedPositions} scopeLabel={selectedScopeLabel} />}</div>
       </main>
 
       <aside className="dashboard-insights-rail">
-        <section className="dashboard-key-insights-panel">
+        <section id="dashboard-insights" className="dashboard-key-insights-panel dashboard-section-anchor">
           <div className="dashboard-section-heading compact"><div><p className="eyebrow">Key insights</p><h2>{selectedScopeLabel}</h2></div></div>
           <div className="dashboard-key-insight-list">
             <InsightRow label="Largest position" value={largestPosition?.label ?? "Unavailable"} detail={largestPosition ? `${new Decimal(largestPosition.percentage).toDecimalPlaces(2).toFixed(2)}% of selected priced scope` : "Awaiting price coverage"} />
@@ -291,7 +291,7 @@ export function DashboardPage() {
           </div>
         </section>
 
-        <section className="dashboard-health-panel">
+        <section id="dashboard-data-health" className="dashboard-health-panel dashboard-section-anchor">
           <div className="dashboard-section-heading compact"><div><p className="eyebrow">Data health</p><h2>Coverage & quality</h2></div></div>
           <CoverageMeter label="Price coverage" value={pricedCoveragePercent} detail={`${scopedFreshPrices} fresh · ${scopedStalePrices} stale`} />
           <CoverageMeter label="Accounting coverage" value={accountingCoveragePercent} detail={`${scopedCost.coverage}/${scopedPositions.length} scoped holdings`} />
@@ -305,7 +305,7 @@ export function DashboardPage() {
       </aside>
     </div>
 
-    <details className="dashboard-methodology">
+    <details id="dashboard-integrity" className="dashboard-methodology dashboard-section-anchor">
       <summary>Detailed analytics, calculation integrity & evidence policy</summary>
       <div><p className="eyebrow">Calculation integrity</p><h2>Evidence before estimates</h2><p>Quantities use the effective ACTIVE ledger. FIFO is used where chronology is provable; deterministic weighted-average cost is used where chronology is incomplete. Scope filtering changes presentation only: it never creates another portfolio, duplicates transactions, changes roles or mutates financial evidence.</p></div>
     </details>
