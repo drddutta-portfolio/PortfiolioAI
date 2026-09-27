@@ -90,7 +90,7 @@ export function ResearchCoveragePage() {
   const counts = COVERAGE_STATES.reduce<Record<string, number>>((result, value) => ({ ...result, [value]: coverage.data.filter((row) => row.overall === value).length }), {})
 
   return <section className="research-page">
-    <div className="portfolio-hero compact-hero"><div><p className="eyebrow">Stage 7.2D.2A · cache-first refresh planning</p><h1>Research Coverage</h1><p>See stored research coverage and explicitly estimate refresh work. Browsing, filtering, selecting holdings and reviewing an estimate do not refresh Trendlyne.</p></div><Link className="button button-secondary" to="/app/settings/data-sources">Data Sources / Refresh</Link></div>
+    <div className="portfolio-hero compact-hero"><div><p className="eyebrow">Cache-first research coverage</p><h1>Research Coverage</h1><p>See stored research coverage and explicitly estimate refresh work. Browsing, filtering, selecting holdings and reviewing an estimate do not refresh Trendlyne.</p></div><Link className="button button-secondary" to="/app/settings/data-sources">Data Sources / Refresh</Link></div>
 
     <section className="summary-grid" aria-label="Research coverage summary">
       <Summary label="Open holdings" value={coverage.data.length} />
@@ -139,8 +139,8 @@ function RefreshPlanPanel({ estimate, selectedRows, documentSelection, acknowled
     <div className="coverage-columns"><article><h3>Internal daily safety budget</h3><p>{estimate.dailyObservedUsage} observed → {estimate.projectedDailyUsage} projected of {estimate.dailyInternalAttemptLimit} internal attempts.</p><p className="assessment-note">This is a PortfolioAI safety ceiling, not a Trendlyne contractual quota.</p></article><article><h3>Provider quota status</h3><p><strong>{titleCase(estimate.providerQuotaStatus)}</strong></p><p className="assessment-note">Unknown remains unknown unless independently verified.</p></article></div>
     <div className="refresh-plan-security-list"><h3>Planned holdings</h3>{estimate.plan.securities.map((security) => <div key={security.securityId}><strong>{security.symbol}</strong><span>{Object.entries(security.domains).filter(([, value]) => value === "REQUIRED").map(([domain]) => titleCase(domain)).join(", ") || "All approved domains fresh"}</span><small>{security.baseCalls} base call{security.baseCalls === 1 ? "" : "s"}{documentSelection.has(security.securityId) ? " · documents included" : ""}</small></div>)}</div>
     <p className="assessment-note">Selected: {selectedRows.map((row) => row.symbol).join(", ")}. Batches: {estimate.plan.batches.length || 0}; per-run internal ceiling: {estimate.perRunInternalAttemptLimit}.</p>
-    <label className="refresh-acknowledgement"><input type="checkbox" checked={acknowledged} onChange={(event) => onAcknowledge(event.target.checked)} /> I reviewed this estimate and understand that provider execution is not enabled in Stage 7.2D.2A.</label>
-    <button className="button button-primary" type="button" disabled>{acknowledged ? "Execution not enabled in Stage 7.2D.2A" : "Review and acknowledge estimate"}</button>
+    <label className="refresh-acknowledgement"><input type="checkbox" checked={acknowledged} onChange={(event) => onAcknowledge(event.target.checked)} /> I reviewed this estimate and understand that this estimate does not execute a provider refresh.</label>
+    <button className="button button-primary" type="button" disabled>{acknowledged ? "Estimate reviewed · execution remains separate" : "Review and acknowledge estimate"}</button>
   </section>
 }
 
