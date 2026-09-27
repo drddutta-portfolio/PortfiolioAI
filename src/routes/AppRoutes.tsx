@@ -4,16 +4,8 @@ import { RedirectIfAuthenticated } from "../auth/RedirectIfAuthenticated"
 import { RequireAuth } from "../auth/RequireAuth"
 import { AppShell } from "../components/AppShell"
 import { DashboardAllocationPerformance } from "../components/DashboardAllocationPerformance"
-import { DashboardCollapsibleSection } from "../components/DashboardCollapsibleSection"
-import { DashboardCoreExitRisk } from "../components/DashboardCoreExitRisk"
 import { DashboardDailyMovement } from "../components/DashboardDailyMovement"
-import { DashboardDecisionLayer } from "../components/DashboardDecisionLayer"
-import { DashboardMonitoringReadiness } from "../components/DashboardMonitoringReadiness"
-import { DashboardMeaningfulChanges } from "../components/DashboardMeaningfulChanges"
 import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
-import { DashboardPortfolioIntelligence } from "../components/DashboardPortfolioIntelligence"
-import { DashboardResearchIntelligence } from "../components/DashboardResearchIntelligence"
-import { DashboardRiskConcentration } from "../components/DashboardRiskConcentration"
 import { DashboardScopeProvider } from "../components/DashboardScopeContext"
 import { DashboardSectionNavigator } from "../components/DashboardSectionNavigator"
 import "../components/DashboardTypography.css"
@@ -98,14 +90,7 @@ export function AppRoutes() {
                 <DashboardSectionNavigator />
                 <div id="dashboard-overview" className="dashboard-section-anchor"><DashboardPage /></div>
                 <div id="dashboard-daily-move" className="dashboard-section-anchor"><DashboardDailyMovement /></div>
-                <div id="dashboard-meaningful-change" className="dashboard-section-anchor"><DashboardMeaningfulChanges /></div>
                 <div id="dashboard-performance" className="dashboard-section-anchor"><DashboardAllocationPerformance /></div>
-                <div id="dashboard-structure" className="dashboard-section-anchor"><DashboardDecisionLayer /></div>
-                <div id="dashboard-health" className="dashboard-section-anchor"><DashboardCoreExitRisk /></div>
-                <div id="dashboard-risk" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="risk" label="Portfolio Risk & Concentration" anchorId="dashboard-risk" defaultOpen><DashboardRiskConcentration /></DashboardCollapsibleSection></div>
-                <div id="dashboard-monitoring" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="monitoring" label="Monitoring & Configuration Coverage" anchorId="dashboard-monitoring"><DashboardMonitoringReadiness /></DashboardCollapsibleSection></div>
-                <div id="dashboard-research" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="research" label="Research & Intelligence Status" anchorId="dashboard-research"><DashboardResearchIntelligence /></DashboardCollapsibleSection></div>
-                <div id="dashboard-intelligence" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="intelligence" label="Portfolio Intelligence Snapshot" anchorId="dashboard-intelligence"><DashboardPortfolioIntelligence /></DashboardCollapsibleSection></div>
                 <div id="dashboard-news" className="dashboard-section-anchor"><DashboardNewsPreview /></div>
               </DashboardScopeProvider>
             </AppShell>
