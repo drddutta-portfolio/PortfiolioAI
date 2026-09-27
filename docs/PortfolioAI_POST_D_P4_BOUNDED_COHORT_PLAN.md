@@ -4,7 +4,7 @@
 **Checkpoint:** Owner Checkpoint 4A candidate  
 **Branch:** `PortfolioAI-Development`  
 **Date:** 26 September 2026  
-**Status:** OWNER CHECKPOINT 4A APPROVED / EXECUTION SAFELY BLOCKED BEFORE FIRST PROVIDER CALL  
+**Status:** P4 COMPLETE / PASS / CLOSED — OWNER CHECKPOINT 4B PORTFOLIO-WIDE ROLLOUT COMPLETE  
 **Production impact:** NONE
 
 ## 1. P4 contract
@@ -267,3 +267,50 @@ P5 = NOT AUTHORIZED
 ```
 
 Checkpoint 4B remains a separate owner decision. No portfolio-wide provider rollout may begin until it is explicitly approved.
+
+
+## 13. Owner Checkpoint 4B portfolio-wide result
+
+**Owner Checkpoint 4B: APPROVED / COMPLETE / PASS**
+
+The owner-approved portfolio-wide Development rollout completed across all 248 open holdings without widening scope into P5.
+
+Final terminal reconciliation:
+
+| Domain | READY | BLOCKED | NOT_APPLICABLE |
+|---|---:|---:|---:|
+| Equity classification | 239 | 0 | 9 |
+| Trendlyne identity | 99 | 140 | 9 |
+| Research evidence | 81 | 158 | 9 |
+| AngelOne mapping | 248 | 0 | 0 |
+| Current price | 248 | 0 | 0 |
+| ONE_DAY history | 239 | 0 | 9 |
+| Derived market metrics | 230 | 0 | 18 |
+
+All **248 / 248** holdings have a persisted `P4B_TERMINAL_READINESS` record. The closure audit found **zero UNKNOWN states**.
+
+Identity blockers are explicit:
+- 47 equities: `CANONICAL_ISIN_MISSING`;
+- 93 equities: `TRENDLYNE_PROVIDER_RESPONSE_INCOMPLETE`.
+
+The provider-response blocker was reproduced after routing requests with verified Trendlyne provider stock IDs, so it is not treated as a symbol-routing defect. Missing evidence remains blocked and is never converted to zero or reconstructed from weaker data.
+
+Nine equities have insufficient listing history for the complete four-metric market window and are explicitly `NOT_APPLICABLE` for the unavailable derived window rather than treated as failed calculations.
+
+The nine ETFs retain verified AngelOne mapping/current price but company classification/research and equity-history methodology remain `NOT_APPLICABLE` under the frozen FUND/ETF boundary.
+
+The temporary Development Trendlyne call ceiling used for the approved rollout was restored to the canonical daily internal limit of 400 at closure.
+
+```text
+P4A bounded cohort            COMPLETE / PASS
+Checkpoint 4B                 APPROVED / COMPLETE / PASS
+Portfolio-wide terminality    248 / 248
+UNKNOWN terminal states       0
+P4                            COMPLETE / PASS / CLOSED
+P5                            NOT AUTHORIZED
+Production                    UNCHANGED
+```
+
+No official score, recommendation, sizing decision, scheduler, paid-AI call, trading action, Production deployment, Production migration, or merge to `main` was authorized or executed by this stage.
+
+**Visible UI code change: NONE.**

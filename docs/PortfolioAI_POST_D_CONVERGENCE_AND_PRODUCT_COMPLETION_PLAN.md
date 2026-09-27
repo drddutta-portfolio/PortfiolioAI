@@ -557,8 +557,10 @@ Roll out existing R3/R5/Program A mechanisms in this order:
 reason, not applicable, or owner-deferred. No unknown value becomes zero. No
 provider sweep occurs without a cost estimate and approval.
 
-**Owner checkpoint 4A:** Approve a bounded cohort.  
-**Owner checkpoint 4B:** Approve portfolio-wide development rollout after review.
+**Owner checkpoint 4A:** APPROVED / COMPLETE / PASS.  
+**Owner checkpoint 4B:** APPROVED / COMPLETE / PASS.
+
+**Execution result — 27 September 2026:** P4 is **COMPLETE / PASS / CLOSED** in PortfolioAI Dev. All 248 open holdings have a persisted terminal readiness state; zero states remain unknown. All 239 equities are classification-ready with verified AngelOne mapping/current price/daily history. Research gaps are retained as explicit canonical blockers or not-applicable states rather than inferred values. Production was unchanged. **P5 remains NOT AUTHORIZED.**
 
 ### P5 — Existing R6/R7 real-portfolio execution
 

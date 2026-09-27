@@ -29,8 +29,8 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P4 — Owner Checkpoint 4B portfolio-wide rollout is IN PROGRESS in PortfolioAI Dev. Classification is COMPLETE at 239/239 equities. AngelOne market-data coverage is effectively complete at 238/239 for mapping/current price/daily history, with V2RETAIL the sole true AngelOne residual due to the application’s SYNC_MAPPINGS safety cooldown. Trendlyne identity/research rollout is PAUSED because the provider’s 400-call daily quota is exhausted until the daily reset. P4 is NOT YET CLOSED; P5 remains NOT AUTHORIZED; Production remains unchanged
-**Last reviewed:** 26 September 2026
+**Current milestone:** Post-D P4 — Existing Evidence & Market-Data Rollout is COMPLETE / PASS / CLOSED in PortfolioAI Dev after Owner Checkpoint 4B. All 248 open holdings have a persisted terminal readiness record with zero UNKNOWN states. All 239 equities are classification-ready and AngelOne mapping/current-price/daily-history ready; research coverage is 81 READY and 158 canonically BLOCKED, with 47 missing canonical ISIN and 93 Trendlyne provider-response identity blockers. The 9 ETFs are NOT_APPLICABLE for company research/equity-history methodology while retaining verified AngelOne mapping and current price. P5 remains NOT AUTHORIZED; Production remains unchanged
+**Last reviewed:** 27 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
@@ -1304,3 +1304,67 @@ Production mutation/deployment         NONE
 No score, recommendation, sizing decision, scheduler, paid-AI workflow, trade, Production migration, Production deployment, main-branch merge, or PR merge was authorized or executed.
 
 **Visible UI code change: NONE.** Development data coverage has materially improved, but this checkpoint has not changed the React UI.
+
+
+## Post-D P4 portfolio-wide closure — 27 September 2026
+
+**P4 = COMPLETE / PASS / CLOSED**
+
+Owner Checkpoint 4B was explicitly approved and the portfolio-wide rollout completed in **PortfolioAI Dev** (`lrgpjimipfkyoqbpsqzz`) only.
+
+Final terminal register:
+- open holdings: **248 / 248** represented;
+- unique `P4B_TERMINAL_READINESS` records: **248**;
+- UNKNOWN states: **0**;
+- overall READY: **90**;
+- overall BLOCKED: **158**.
+
+Equity readiness:
+- open equities: **239**;
+- classification READY: **239 / 239**;
+- AngelOne mapping READY: **239 / 239**;
+- current price READY: **239 / 239**;
+- ONE_DAY history READY: **239 / 239**;
+- full four derived market metrics: **230 / 239**;
+- derived metrics NOT_APPLICABLE due insufficient listing history: **9 / 239**.
+
+Trendlyne identity/evidence:
+- identity READY: **99 / 239**;
+- identity BLOCKED: **140 / 239**;
+  - `CANONICAL_ISIN_MISSING`: **47**;
+  - `TRENDLYNE_PROVIDER_RESPONSE_INCOMPLETE`: **93**;
+- research evidence READY: **81 / 239**;
+- research evidence BLOCKED with canonical reason: **158 / 239**.
+
+The Trendlyne blocker was reproduced after switching overview/ownership calls from ticker symbol to verified provider stock ID; the provider continued returning responses without required `stockData`. Those holdings are therefore terminally blocked rather than repeatedly retried or inferred.
+
+Non-equity holdings:
+- ETFs: **9**;
+- AngelOne mapping/current price: READY for all 9;
+- company classification/research and equity-history methodology: `NOT_APPLICABLE` under the frozen FUND/ETF boundary.
+
+Market-data residuals were closed:
+- PINELABS mapping resolved as `PINELABS-EQ`; price and 215 ONE_DAY candles stored;
+- V2RETAIL mapping resolved as `V2RETAIL-EQ`; price and 270 ONE_DAY candles stored;
+- ALIVUS cooldown residual was retried successfully with 270 ONE_DAY candles and four derived metrics.
+
+Provider-control closeout:
+- the temporary owner-authorized Development Trendlyne internal ceiling was used only for the portfolio rollout;
+- the canonical Development daily internal ceiling was restored to **400** after completion;
+- provider quota status remains `VERIFIED`;
+- no Production provider controls were modified.
+
+Governance:
+
+```text
+Owner Checkpoint 4A          COMPLETE / PASS
+Owner Checkpoint 4B          APPROVED / COMPLETE / PASS
+P4 portfolio-wide rollout    COMPLETE / PASS
+P4                           COMPLETE / PASS / CLOSED
+P5                           NOT AUTHORIZED
+Production changes           NONE
+Score/recommendation/sizing  NOT EXECUTED BY P4
+Scheduler / paid AI / trade  NOT ACTIVATED
+```
+
+**Visible UI code change: NONE.** Development data coverage changed substantially; existing UI surfaces may display the newly available classifications, prices, histories, metrics, and explicit blocked states where they already consume those authorities.
