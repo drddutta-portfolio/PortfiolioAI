@@ -144,7 +144,7 @@ export function DashboardRiskConcentration() {
 
       <section className="dashboard-risk-queue">
         <div className="dashboard-risk-subheading"><div><span>Descriptive data &amp; concentration queue</span><strong>{model.items.length ? `${model.items.length} highest-priority diagnostics` : "No surfaced diagnostics"}</strong></div><Link to="/app/research">Research →</Link></div>
-        <div className="dashboard-risk-notice">This queue is descriptive and is not the canonical R8 Portfolio Risk engine. Formal R8 states are shown in the summary above.</div>
+        <div className="dashboard-risk-notice">This queue is descriptive and is not the canonical Portfolio Risk assessment. Formal current risk states are shown in the summary above.</div>
         {model.items.length ? <div className="dashboard-risk-list">{model.items.map((item) => <article key={item.position.securityId} className={`tone-${item.tone}`}><i/><div><Link to={`/app/research/${item.position.securityId}`}>{item.position.symbol}</Link><small>{item.position.company}</small></div><div><strong>{item.flags[0]}</strong><p>{item.flags.slice(1).join(" · ") || "Single surfaced diagnostic condition"}</p></div><div><b>{item.position.portfolioWeightPercent ? pct(d(item.position.portfolioWeightPercent), 2) : "—"}</b><small>portfolio weight</small></div></article>)}</div> : <div className="dashboard-risk-empty">No concentration, price-freshness, research-coverage or owner-limit diagnostics are currently surfaced.</div>}
       </section>
     </div>
