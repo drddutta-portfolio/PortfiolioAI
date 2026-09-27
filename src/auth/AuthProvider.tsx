@@ -49,8 +49,14 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, [])
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
+
+    // Commit the successful session synchronously before callers navigate.
+    // Relying only on onAuthStateChange can race with RequireAuth and bounce
+    // a valid sign-in back to /login on slower clients.
+    setSession(data.session)
+    setLoading(false)
   }, [])
 
   const signOut = useCallback(async () => {
