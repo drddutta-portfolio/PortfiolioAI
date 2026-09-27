@@ -39,11 +39,10 @@ export function AppShell({ children }: PropsWithChildren) {
           <NavLink to="/app/holdings">Holdings</NavLink>
           <NavLink to="/app/structure">Portfolio Structure</NavLink>
           <NavLink to="/app/research">Research</NavLink>
-          <NavLink to="/app/operations">Operations</NavLink>
-          <NavLink to="/app/investment-committee">Investment Committee</NavLink>
+          <NavLink to="/app/intelligence">Intelligence</NavLink>
           <NavLink to="/app/transactions">Transactions</NavLink>
           <NavLink to="/app/import">Import</NavLink>
-          <NavLink to="/app/settings/data-sources">Settings</NavLink>
+          <NavLink to="/app/settings">Settings</NavLink>
         </nav>
         <div className="account-menu">
           <span className="account-email">{user?.email}</span>
