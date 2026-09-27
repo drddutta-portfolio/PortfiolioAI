@@ -179,11 +179,11 @@ export function DashboardCoreExitRisk() {
           {model.r8ScopedRows.slice(0, 6).map(({ position, row }) => <div className="dcer-readiness-row" key={position.securityId}><span>{position.symbol} · Core: {row.presentation.coreHealth.label}</span><strong>Exit: {row.presentation.exitIntelligence.label}</strong></div>)}
           <div className="dcer-readiness-row"><span>Current persisted advisories in scope</span><strong>{model.scopedRows.length}/{model.scoped.length}</strong></div>
           <div className="dcer-readiness-row"><span>Advisory escalation signals</span><strong>{model.advisoryEscalations.length}</strong></div>
-          {model.advisoryEscalations.length ? <div className="dcer-escalations">{model.advisoryEscalations.slice(0, 5).map(({ row, position }) => <article key={row.securityId}><Link to={`/app/research/${row.securityId}`}>{position?.symbol ?? row.securityId.slice(0, 8)}</Link><span>{pretty(row.actionBias)} · {pretty(row.transitionStatus)}{row.changeSignal ? ` · ${pretty(row.changeSignal)}` : ""}</span></article>)}</div> : <p className="dcer-caution">No escalation is present in the currently persisted advisory evidence. This must not be interpreted as “zero exit risk”; canonical R8 Exit Intelligence remains fail-closed where thesis/permanent-loss evidence is insufficient.</p>}
+          {model.advisoryEscalations.length ? <div className="dcer-escalations">{model.advisoryEscalations.slice(0, 5).map(({ row, position }) => <article key={row.securityId}><Link to={`/app/research/${row.securityId}`}>{position?.symbol ?? row.securityId.slice(0, 8)}</Link><span>{pretty(row.actionBias)} · {pretty(row.transitionStatus)}{row.changeSignal ? ` · ${pretty(row.changeSignal)}` : ""}</span></article>)}</div> : <p className="dcer-caution">No escalation is present in the currently persisted advisory evidence. This must not be interpreted as “zero exit risk”; Exit Intelligence remains fail-closed where thesis/permanent-loss evidence is insufficient.</p>}
         </section>
       </div>
 
-      <p className="dcer-method">Core Health and Exit Intelligence remain separate concepts. R8 is evaluated on demand and is not persisted in C2; persisted recommendation metadata remains separate context, and price weakness, valuation or concentration alone cannot become a thesis-breaking exit signal.</p>
+      <p className="dcer-method">Core Health and Exit Intelligence remain separate concepts. They are evaluated on demand; persisted advisory metadata remains separate context, and price weakness, valuation or concentration alone cannot become a thesis-breaking exit signal.</p>
     </> : null}
   </section>
 }
