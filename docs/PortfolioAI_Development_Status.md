@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P4 — Owner Checkpoint 4A bounded cohort is COMPLETE / PASS in PortfolioAI Dev. P4A-1 classification, P4A-2 evidence refresh, and P4A-3 AngelOne price/history validation all passed for HDFCBANK, TORNTPHARM, M&M, BEL, and BANKBARODA. Owner Checkpoint 4B is READY FOR REVIEW but NOT APPROVED; portfolio-wide P4 rollout and P5 remain NOT AUTHORIZED
+**Current milestone:** Post-D P4 — Owner Checkpoint 4B portfolio-wide rollout is IN PROGRESS in PortfolioAI Dev. Classification is COMPLETE at 239/239 equities. AngelOne market-data coverage is effectively complete at 238/239 for mapping/current price/daily history, with V2RETAIL the sole true AngelOne residual due to the application’s SYNC_MAPPINGS safety cooldown. Trendlyne identity/research rollout is PAUSED because the provider’s 400-call daily quota is exhausted until the daily reset. P4 is NOT YET CLOSED; P5 remains NOT AUTHORIZED; Production remains unchanged
 **Last reviewed:** 26 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -1223,3 +1223,84 @@ Production mutation/deployment         NONE
 Benchmark history remains outside this initial bounded execution exactly as frozen in the P4 plan: the Development benchmark configuration was not expanded or guessed during Checkpoint 4A.
 
 **Visible UI code change: NONE.** Development data may now visibly show the new BEL/BANKBARODA classification and evidence, BANKBARODA current price/mapping, and current history/market metrics for all five cohort names where those fields are surfaced.
+
+
+## Post-D P4 Checkpoint 4B portfolio-wide rollout status — 27 September 2026
+
+**Environment:** PortfolioAI Dev only (`lrgpjimipfkyoqbpsqzz`)
+
+**Owner Checkpoint 4B:** APPROVED / IN PROGRESS
+
+### Classification layer — COMPLETE
+
+Portfolio-wide industry materialization and reconciliation completed under the frozen K1 authority path.
+
+```text
+Open equities                  239
+Classification-ready           239 / 239
+Classification-blocked           0
+```
+
+The rollout preserved the canonical sector authority and only materialized/reconciled the missing industry layer. No sector-only methodology routing was introduced.
+
+### AngelOne market-data layer — NEAR COMPLETE
+
+Current portfolio-wide market-data state:
+
+```text
+AngelOne verified mappings     238 / 239
+Current prices                 238 / 239
+Daily history                  238 / 239
+True AngelOne residual           1
+```
+
+Resolved during Checkpoint 4B:
+- ALIVUS history: 270 `ONE_DAY` candles + 4/4 derived market metrics.
+- PINELABS mapping: VERIFIED, provider instrument id `759820`, trading symbol `PINELABS-EQ`.
+- PINELABS current price: ₹176.57.
+- PINELABS history: 215 `ONE_DAY` candles.
+
+The remaining true AngelOne residual is:
+- `V2RETAIL` — mapping/current-price/history unresolved.
+- Latest retries were blocked only by PortfolioAI’s own `SYNC_MAPPINGS` safety cooldown (`MARKET_DATA_RATE_LIMITED`), not by an AngelOne provider quota.
+- No active market-data lease is stuck; the cooldown is fail-closed and functioning as designed.
+
+Short-listed-history securities with fewer than four derived metrics are treated as legitimate N/A conditions where the required lookback does not exist. Missing 12M momentum is not backfilled or fabricated.
+
+### Trendlyne identity/research layer — PAUSED BY DAILY PROVIDER QUOTA
+
+Trendlyne execution was expanded to portfolio-wide one-time-grant paths with explicit Development-only guards and Production rejection.
+
+During the rollout:
+- exact identity and research batches were executed;
+- genuine provider schema/response failures were separated from zero-call reservation collisions;
+- retry logic was hardened so attempted provider failures are not repeatedly retried blindly;
+- deep-research calls were changed to use verified Trendlyne stock IDs where available;
+- testing confirmed that `overview omitted stockData` is a real provider-response limitation, not a symbol-routing bug.
+
+Current Trendlyne constraint:
+- the provider’s **400-call daily quota is exhausted for today**;
+- all further Trendlyne calls are stopped until the daily reset;
+- no attempt will be made to bypass the provider quota or fabricate missing research evidence.
+
+The remaining Trendlyne research/identity work is therefore **quota-deferred**, not silently marked ready.
+
+### Checkpoint 4B governance state
+
+```text
+P4 bounded 5-stock cohort              COMPLETE / PASS
+Owner Checkpoint 4A                    COMPLETE / PASS
+Owner Checkpoint 4B                    APPROVED / IN PROGRESS
+
+Classification layer                   COMPLETE / PASS
+AngelOne market-data layer             NEAR COMPLETE
+Trendlyne identity/research layer      PAUSED — DAILY QUOTA EXHAUSTED
+
+P4                                     NOT YET CLOSED
+P5                                     NOT AUTHORIZED
+Production mutation/deployment         NONE
+```
+
+No score, recommendation, sizing decision, scheduler, paid-AI workflow, trade, Production migration, Production deployment, main-branch merge, or PR merge was authorized or executed.
+
+**Visible UI code change: NONE.** Development data coverage has materially improved, but this checkpoint has not changed the React UI.
