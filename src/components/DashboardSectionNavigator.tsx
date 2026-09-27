@@ -4,14 +4,7 @@ import "./DashboardSectionNavigator.css"
 const SECTIONS = [
   ["dashboard-overview", "Overview"],
   ["dashboard-daily-move", "Daily Move"],
-  ["dashboard-meaningful-change", "Meaningful Change"],
   ["dashboard-performance", "Performance"],
-  ["dashboard-structure", "Structure"],
-  ["dashboard-health", "Health"],
-  ["dashboard-risk", "Risk"],
-  ["dashboard-monitoring", "Monitoring"],
-  ["dashboard-research", "Research"],
-  ["dashboard-intelligence", "Intelligence"],
   ["dashboard-news", "News"],
 ] as const
 
@@ -33,7 +26,7 @@ export function DashboardSectionNavigator() {
     <nav className="dashboard-section-navigator" aria-label="Dashboard sections">
       <div className="dashboard-section-navigator-copy">
         <span>Command index</span>
-        <small>Jump to a dashboard layer</small>
+        <small>Jump to an overview section</small>
       </div>
       <div className="dashboard-section-navigator-links">
         {SECTIONS.map(([id, label]) => <a key={id} href={`#${id}`} onClick={(event) => jumpToSection(event, id)}>{label}</a>)}
