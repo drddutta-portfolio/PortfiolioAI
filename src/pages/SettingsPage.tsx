@@ -27,6 +27,13 @@ export function SettingsPage() {
         </article>
 
         <article className="panel">
+          <p className="eyebrow">Import</p>
+          <h2>Portfolio data import</h2>
+          <p>Import reviewed portfolio and transaction data through the existing controlled import workflow.</p>
+          <Link className="button button-secondary" to="/app/import">Open Import</Link>
+        </article>
+
+        <article className="panel">
           <p className="eyebrow">Operations</p>
           <h2>Diagnostics &amp; run history</h2>
           <p>Inspect local orchestration safety, dry-run history and fail-closed diagnostics.</p>
