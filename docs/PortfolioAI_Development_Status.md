@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P7 — UI Consolidation technical implementation is COMPLETE / PASS in PortfolioAI Dev and is awaiting Owner Checkpoint 6 browser approval. The primary product shell now contains exactly Dashboard, Holdings, Portfolio Structure, Research, Intelligence, Transactions, Import and Settings. Historical Gate/fixture recommendation artifacts are removed from current Research; owner position controls no longer generate legacy recommendation/weight/action previews; detailed decision intelligence is consolidated under Intelligence; Operations is under Settings diagnostics. P7 formal closure is PENDING browser approval; P8 is NOT AUTHORIZED; Production remains unchanged
+**Current milestone:** Post-D P7 — UI Consolidation technical implementation is COMPLETE / PASS in PortfolioAI Dev. The primary product shell is now Dashboard / Holdings / Portfolio Structure / Research / Intelligence / Transactions / Import / Settings. Historical Gate/Program validation artifacts and legacy recommendation/weight/action previews were removed from the current investor workflow; owner settings remain separate from engine outputs; Action Center blockers use investor language. Owner Checkpoint 6 browser approval is PENDING; P7 formal closure is PENDING. P8 remains NOT AUTHORIZED; Production remains unchanged
 **Last reviewed:** 27 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
