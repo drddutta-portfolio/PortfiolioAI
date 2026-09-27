@@ -353,7 +353,7 @@ function BarAllocationPanel({ title: panelTitle, rows, empty, partial, status }:
 
 function PositionSizingPanel({ positions, scopedValue, scopeLabel: selectedScopeLabel }: { readonly positions: readonly PortfolioPosition[]; readonly scopedValue: string | null; readonly scopeLabel: string }) {
   return <section className="dashboard-sizing-section">
-    <div className="dashboard-section-heading"><div><p className="eyebrow">Position sizing</p><h2>Largest stock positions & sizing intent</h2><p>Equity stock positions only—ETFs are intentionally excluded. Current portfolio weight is compared with your configured sizing settings, while scope share remains separate.</p></div><Link to="/app/structure">Edit sizing targets →</Link></div>
+    <div className="dashboard-section-heading"><div><p className="eyebrow">Owner-configured weights</p><h2>Largest stock positions & weight limits</h2><p>Equity stock positions only—ETFs are intentionally excluded. Current portfolio weight is compared only with your saved target/minimum/maximum settings; this is not an engine sizing recommendation.</p></div><Link to="/app/structure">Edit weight settings →</Link></div>
     {positions.length ? <div className="dashboard-sizing-list">{positions.map((position) => <SizingRow key={position.securityId} position={position} scopedValue={scopedValue} />)}</div> : <EmptyData text={`No non-ETF priced holdings are available in ${selectedScopeLabel}. ETFs are intentionally excluded from position sizing.`} />}
   </section>
 }
@@ -370,7 +370,7 @@ function SizingRow({ position, scopedValue }: { readonly position: PortfolioPosi
   const targetLeft = target === null ? null : Decimal.min(100, target.div(scale).times(100)).toFixed()
   const minLeft = minimum === null ? null : Decimal.min(100, minimum.div(scale).times(100)).toFixed()
   const maxLeft = maximum === null ? null : Decimal.min(100, maximum.div(scale).times(100)).toFixed()
-  let status = "No sizing range"
+  let status = "No owner range"
   if (current !== null && minimum !== null && current.lt(minimum)) status = "Below minimum"
   else if (current !== null && maximum !== null && current.gt(maximum)) status = "Above maximum"
   else if (current !== null && (minimum !== null || maximum !== null)) status = "Within configured range"
