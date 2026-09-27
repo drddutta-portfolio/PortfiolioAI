@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P5 — Existing R6/R7 Real-Portfolio Execution is COMPLETE / PASS / CLOSED in PortfolioAI Dev. All 248 open holdings have an append-only `P5_TERMINAL_DISPOSITION_V1` record with explicit methodology, R6, R7 and sizing terminal states. Methodology resolution: 110 RESOLVED, 124 METHODOLOGY_NOT_AVAILABLE, 5 REVIEW_REQUIRED, 9 NOT_APPLICABLE. Current numeric score/recommendation/sizing coverage is 0/239 equities because no current canonical P5 score-input snapshot exists; historical reference outputs were not promoted into current facts. Owner settings were unchanged. P6 remains NOT AUTHORIZED; Production remains unchanged
+**Current milestone:** Post-D P6 — Existing R8–R12 Product Integration has completed technical execution in PortfolioAI Dev and is awaiting Owner Checkpoint 5. P5 terminal R6/R7 states are now consumed by the live R8 → R9 → R10 chain through an authenticated Development-only read bridge. R9 remains in-memory only; R10 remains recomputed canonical authority; R11 remains manual/auditable/fail-closed with schedulers disabled; R12 remains LOCAL_MOCK_ONLY with no real AI. P6 formal closure is PENDING owner approval of the integrated deterministic state and persistence decisions. P7 is NOT AUTHORIZED; Production remains unchanged
 **Last reviewed:** 27 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -1486,3 +1486,60 @@ Production = UNCHANGED
 ```
 
 **Visible UI code change: NONE.**
+
+
+## Post-D P6 integrated deterministic state — 27 September 2026
+
+**Technical result:** `PASS`
+
+**Formal closure:** `PENDING OWNER CHECKPOINT 5`
+
+P6 converged the existing R8–R12 implementation onto the current P5 terminal authority without rebuilding R8–R12.
+
+Key integration change:
+- deployed `p6-terminal-disposition-read` to PortfolioAI Dev only;
+- platform JWT verification is enabled;
+- portfolio ownership is checked server-side;
+- no direct frontend access to `data_source_records` was granted;
+- R8/R9/R10 now consume current P5 terminal states instead of the stale hard-coded live R6 placeholder;
+- Holdings and Research continue to share one canonical R10 Action Center path;
+- Dashboard R8 consumers now receive the same P5 terminal-authority map.
+
+Persistence decisions awaiting Owner Checkpoint 5:
+- R8: recomputed/read-only, no new database persistence;
+- R9: in-memory session baseline only, no durable persistence;
+- R10: canonical recomputation, no competing snapshot persistence;
+- R11: existing manual/auditable operational ledger semantics retained, no scheduler;
+- R12: browser-local validated cache, `LOCAL_MOCK_ONLY`, no real AI;
+- P5 terminal registry remains the upstream append-only authority.
+
+Safety verification since P6 authorization:
+```text
+new score runs                 0
+new recommendation runs        0
+new sizing assessments         0
+provider usage events          0
+owner-setting mutations        0
+scheduler activation           0
+database migrations            0
+Production changes             0
+merge to main                  0
+```
+
+Owner settings remain unchanged with hash:
+`2b70a819b84b62f88cd3a6634afc71e16f43e61871b2c787233bc4550f56dee7`
+
+Supporting audit:
+`docs/PortfolioAI_POST_D_P6_INTEGRATED_STATE_AUDIT.md`
+
+```text
+P4 = COMPLETE / PASS / CLOSED
+P5 = COMPLETE / PASS / CLOSED
+P6 technical execution = COMPLETE / PASS
+Owner Checkpoint 5 = PENDING
+P6 formal closure = PENDING
+P7 = NOT AUTHORIZED
+Production = UNCHANGED
+```
+
+**Visible UI topology change: NONE.** Existing R8/R10 badges and dashboard consumers now use more accurate current upstream terminal state, but P7 remains the UI consolidation stage.
