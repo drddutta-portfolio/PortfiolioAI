@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P6 — Existing R8–R12 Product Integration has completed technical execution in PortfolioAI Dev and is awaiting Owner Checkpoint 5. P5 terminal R6/R7 states are now consumed by the live R8 → R9 → R10 chain through an authenticated Development-only read bridge. R9 remains in-memory only; R10 remains recomputed canonical authority; R11 remains manual/auditable/fail-closed with schedulers disabled; R12 remains LOCAL_MOCK_ONLY with no real AI. P6 formal closure is PENDING owner approval of the integrated deterministic state and persistence decisions. P7 is NOT AUTHORIZED; Production remains unchanged
+**Current milestone:** Post-D P6 — Existing R8–R12 Product Integration is COMPLETE / PASS / CLOSED in PortfolioAI Dev. Owner Checkpoint 5 is APPROVED / CLOSED. The live R8 → R9 → R10 chain consumes the current P5 terminal authority; R9 remains in-memory only; R10 remains recomputed canonical authority; R11 remains manual/auditable/fail-closed with schedulers disabled; R12 remains LOCAL_MOCK_ONLY with no real AI. P7 remains NOT AUTHORIZED; Production remains unchanged
 **Last reviewed:** 27 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -1492,7 +1492,7 @@ Production = UNCHANGED
 
 **Technical result:** `PASS`
 
-**Formal closure:** `PENDING OWNER CHECKPOINT 5`
+**Formal closure:** `COMPLETE / PASS / CLOSED`
 
 P6 converged the existing R8–R12 implementation onto the current P5 terminal authority without rebuilding R8–R12.
 
@@ -1536,10 +1536,39 @@ Supporting audit:
 P4 = COMPLETE / PASS / CLOSED
 P5 = COMPLETE / PASS / CLOSED
 P6 technical execution = COMPLETE / PASS
-Owner Checkpoint 5 = PENDING
-P6 formal closure = PENDING
+Owner Checkpoint 5 = APPROVED / CLOSED
+P6 formal closure = COMPLETE / PASS / CLOSED
 P7 = NOT AUTHORIZED
 Production = UNCHANGED
 ```
 
 **Visible UI topology change: NONE.** Existing R8/R10 badges and dashboard consumers now use more accurate current upstream terminal state, but P7 remains the UI consolidation stage.
+
+
+## Post-D P6 formal closure — 27 September 2026
+
+**Owner Checkpoint 5:** `APPROVED / CLOSED`
+
+The owner approved the frozen P6 integrated deterministic state and persistence decisions:
+
+- R8 remains recomputed/read-only with no new database persistence.
+- R9 remains in-memory session baseline only; no durable baseline, acknowledgement, snooze, or cross-session seen-state persistence was introduced.
+- R10 remains the sole canonical Action Center authority through recomputation; no competing snapshot table was introduced.
+- R11 retains the existing manual/auditable/fail-closed operational model; no scheduler was enabled.
+- R12 remains `LOCAL_MOCK_ONLY` with browser-local validated cache; no real AI provider was authorized.
+- The append-only P5 terminal registry remains the upstream authority for current P5 disposition facts.
+
+Formal governance state:
+
+```text
+Post-D P4 = COMPLETE / PASS / CLOSED
+Post-D P5 = COMPLETE / PASS / CLOSED
+Post-D P6 = COMPLETE / PASS / CLOSED
+Owner Checkpoint 5 = APPROVED / CLOSED
+P7 = NOT AUTHORIZED
+Production = UNCHANGED
+```
+
+No additional provider calls, score/recommendation/sizing runs, migrations, scheduler activation, Production mutation, merge to `main`, or Production deployment were authorized by this closure.
+
+**Visible UI topology change: NONE.** P6 converged the existing deterministic decision chain; major UI consolidation remains P7.
