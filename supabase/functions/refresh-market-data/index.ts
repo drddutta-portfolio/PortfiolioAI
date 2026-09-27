@@ -39,7 +39,7 @@ interface AdminClient {
   rpc(name: string, parameters: Readonly<Record<string, unknown>>): PromiseLike<{ data: unknown; error: { message: string } | null }>
 }
 
-async function acquireLease(admin: AdminClient, portfolioId: string, operation: "REFRESH_PRICES" | "SYNC_MAPPINGS", holder: string) {
+async function acquireLease(admin: AdminClient, portfolioId: string, operation: string, holder: string) {
   const { data, error } = await admin.rpc("acquire_market_data_operation_lease", {
     p_portfolio_id: portfolioId, p_provider_code: MARKET_DATA_PROVIDER, p_operation: operation,
     p_lease_holder: holder, p_lease_seconds: LEASE_SECONDS,
@@ -49,7 +49,7 @@ async function acquireLease(admin: AdminClient, portfolioId: string, operation: 
   if (result?.acquired !== true) throw new SafeOperationalError("MARKET_DATA_RATE_LIMITED", "A market-data operation is already running or is in its safety cooldown.", 429)
 }
 
-async function releaseLease(admin: AdminClient, portfolioId: string, operation: "REFRESH_PRICES" | "SYNC_MAPPINGS", holder: string, cooldown: number) {
+async function releaseLease(admin: AdminClient, portfolioId: string, operation: string, holder: string, cooldown: number) {
   const { error } = await admin.rpc("release_market_data_operation_lease", {
     p_portfolio_id: portfolioId, p_provider_code: MARKET_DATA_PROVIDER, p_operation: operation,
     p_lease_holder: holder, p_cooldown_seconds: cooldown,
@@ -156,7 +156,8 @@ Deno.serve(async (request) => {
       const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", userData!.user.id).single()
       if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found." })
       const leaseHolder = crypto.randomUUID()
-      await acquireLease(admin, portfolio.id, "SYNC_MAPPINGS", leaseHolder)
+      const mappingOperation = p4bMapping ? "P4B_SYNC_MAPPINGS" : "SYNC_MAPPINGS"
+      await acquireLease(admin, portfolio.id, mappingOperation, leaseHolder)
       try {
       const { data: holdings, error: holdingsError } = await admin.from("current_holdings").select("security_id,current_quantity").eq("portfolio_id", portfolio.id)
       if (holdingsError) throw holdingsError
@@ -219,7 +220,7 @@ Deno.serve(async (request) => {
         unsupported: securityIds.length - resolved.length,
       })
       } finally {
-        await releaseLease(admin, portfolio.id, "SYNC_MAPPINGS", leaseHolder, MAPPING_SYNC_COOLDOWN_SECONDS)
+        await releaseLease(admin, portfolio.id, mappingOperation, leaseHolder, p4bMapping ? 1 : MAPPING_SYNC_COOLDOWN_SECONDS)
       }
     }
     if (body.action !== "REFRESH") return json(400, { error: "action must be READ_CACHE, SYNC_MAPPINGS, or REFRESH." })
