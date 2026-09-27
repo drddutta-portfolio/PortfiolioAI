@@ -482,7 +482,7 @@ Deno.serve(async request => {
     const reservationId = reservation.data[0].reservation_id as string
 
     const leaseHolder = crypto.randomUUID()
-    const leaseOperation = p4b ? `COMPLETE_RESEARCH_REFRESH:${security.id}` : "COMPLETE_RESEARCH_REFRESH"
+    const leaseOperation = p4b ? `COMPLETE_RESEARCH_REFRESH_${security.id.replaceAll("-", "_").toUpperCase()}` : "COMPLETE_RESEARCH_REFRESH"
     const lease = await admin.rpc("acquire_data_ingestion_lease_v1", {
       p_source_code: SOURCE_CODE,
       p_operation: leaseOperation,

@@ -164,24 +164,34 @@ Deno.serve(async request=>{
               steps.push({domain:"CURRENT_PRICE",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
             }else if(mappingOk) steps.push({domain:"CURRENT_PRICE",status:"READY_EXISTING"})
             else steps.push({domain:"CURRENT_PRICE",status:"BLOCKED",code:"ANGEL_MAPPING_PREREQUISITE_MISSING"})
-      
-            if(mappingOk&&!historyReady.has(security.id)){
-              const grantId=await createGrant(admin,"P4B_EXECUTE",security.id)
-              const r=await invoke(`${supabaseUrl}/functions/v1/refresh-market-history`,{
-                action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,
-                confirmation:"OWNER_CONFIRMED_POST_D_P4B_MARKET_HISTORY",grantId,
-              })
-              steps.push({domain:"MARKET_HISTORY",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
-            }else if(mappingOk) steps.push({domain:"MARKET_HISTORY",status:"READY_EXISTING"})
-            else steps.push({domain:"MARKET_HISTORY",status:"BLOCKED",code:"ANGEL_MAPPING_PREREQUISITE_MISSING"})
-      
-            row.status=steps.some(s=>s.status==="BLOCKED"||s.status==="PARTIAL")?"PARTIAL_OR_BLOCKED":"READY"
+                  row.status=steps.some(s=>s.status==="BLOCKED"||s.status==="PARTIAL")?"PARTIAL_OR_BLOCKED":"READY"
       await new Promise(resolve=>setTimeout(resolve,250))
       return row
     }
     for(let i=0;i<equities.length;i+=3){
       const chunk=equities.slice(i,i+3)
       const chunkResults=await Promise.all(chunk.map(processSecurity))
+      for(let j=0;j<chunk.length;j+=1){
+        const security=chunk[j]
+        const row=chunkResults[j]
+        const steps=row.steps as Record<string,unknown>[]
+        const mappingStep=steps.find(step=>step.domain==="ANGEL_MAPPING")
+        const mappingUsable=mappingStep?.status==="READY"||mappingStep?.status==="READY_EXISTING"
+        if(mappingUsable&&!historyReady.has(security.id)){
+          const grantId=await createGrant(admin,"P4B_EXECUTE",security.id)
+          const r=await invoke(`${supabaseUrl}/functions/v1/refresh-market-history`,{
+            action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,
+            confirmation:"OWNER_CONFIRMED_POST_D_P4B_MARKET_HISTORY",grantId,
+          })
+          steps.push({domain:"MARKET_HISTORY",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
+          await new Promise(resolve=>setTimeout(resolve,1300))
+        }else if(mappingUsable){
+          steps.push({domain:"MARKET_HISTORY",status:"READY_EXISTING"})
+        }else{
+          steps.push({domain:"MARKET_HISTORY",status:"BLOCKED",code:"ANGEL_MAPPING_PREREQUISITE_MISSING"})
+        }
+        row.status=steps.some(step=>step.status==="BLOCKED"||step.status==="PARTIAL")?"PARTIAL_OR_BLOCKED":"READY"
+      }
       results.push(...chunkResults)
       if(i+3<equities.length) await new Promise(resolve=>setTimeout(resolve,500))
     }
