@@ -28,7 +28,7 @@ export function InvestmentCommitteePage() {
       const summary = await buildProgramD4ValidationSummary()
       setD4Results(summary.results)
     } catch (reason: unknown) {
-      setError(reason instanceof Error ? reason.message : "D4 R12 validation failed.")
+      setError(reason instanceof Error ? reason.message : "Grounding validation failed.")
     } finally {
       setD4Running(false)
     }
@@ -46,7 +46,7 @@ export function InvestmentCommitteePage() {
       setPacket(nextPacket)
       setResult(nextResult)
     } catch (reason: unknown) {
-      setError(reason instanceof Error ? reason.message : "Local R12 generation failed.")
+      setError(reason instanceof Error ? reason.message : "Local narrative generation failed.")
     } finally {
       setRunning(false)
     }
@@ -66,7 +66,7 @@ export function InvestmentCommitteePage() {
         <span className="status status-stale">LOCAL MOCK / ON DEMAND</span>
       </div>
 
-      <section className="summary-grid" aria-label="R12 D3 safety summary">
+      <section className="summary-grid" aria-label="Investment Committee interpretation safety summary">
         <Summary label="External AI calls" value="0" />
         <Summary label="External AI cost" value="0" />
         <Summary label="Scheduled AI" value="Disabled" />
@@ -108,7 +108,7 @@ export function InvestmentCommitteePage() {
             disabled={d4Running}
             onClick={() => void runD4Validation()}
           >
-            {d4Running ? "Validating…" : "Run D4 adversarial validation"}
+            {d4Running ? "Validating…" : "Run grounding validation"}
           </button>
         </div>
         {d4Results.length ? (
@@ -155,11 +155,11 @@ export function InvestmentCommitteePage() {
             <code>{packet.packetId.slice(0, 16)}…</code>
           </div>
           <div className="r12-stage-grid">
-            <Stage label="R6" state={packet.r6.state} />
-            <Stage label="R7" state={packet.r7.state} />
-            <Stage label="R8" state={packet.r8.state} />
-            <Stage label="R9" state={packet.r9.state} />
-            <Stage label="R10" state={packet.r10.state} />
+            <Stage label="Scoring" state={packet.r6.state} />
+            <Stage label="Recommendation" state={packet.r7.state} />
+            <Stage label="Health / fit" state={packet.r8.state} />
+            <Stage label="Meaningful change" state={packet.r9.state} />
+            <Stage label="Action Center" state={packet.r10.state} />
           </div>
           <div className="r12-fields">
             {packet.fields.map((field) => (
