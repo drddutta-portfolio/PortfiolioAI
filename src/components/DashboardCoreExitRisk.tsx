@@ -115,7 +115,7 @@ export function DashboardCoreExitRisk() {
       <div>
         <p className="eyebrow">Core health &amp; exit-risk</p>
         <h2>Where does the portfolio need structural attention?</h2>
-        <p>Read-only summary combining persisted advisory evidence with canonical on-demand R8 Core Health and Exit Intelligence. Missing upstream authority stays blocked or insufficient; nothing is inferred from price weakness alone.</p>
+        <p>Read-only summary combining persisted advisory evidence with current Core Health and Exit Intelligence. Missing upstream authority stays blocked or insufficient; nothing is inferred from price weakness alone.</p>
       </div>
       <span>{model.scopeLabel}</span>
     </div>
@@ -141,12 +141,12 @@ export function DashboardCoreExitRisk() {
           <span>Advisory escalation only — not formal Exit Risk</span>
         </article>
         <article className={model.r8CoreEvaluated.length === model.core.length && model.core.length ? "positive" : "warning"}>
-          <small>Canonical R8 Core Health</small>
+          <small>Core Health</small>
           <strong>{model.r8CoreEvaluated.length}/{model.core.length}</strong>
           <span>On-demand, read-only; blocked/insufficient states remain explicit</span>
         </article>
         <article className={model.r8ExitEvaluated.length === model.scoped.length && model.scoped.length ? "positive" : "warning"}>
-          <small>Canonical R8 Exit Intelligence</small>
+          <small>Exit Intelligence</small>
           <strong>{model.r8ExitEvaluated.length}/{model.scoped.length}</strong>
           <span>On-demand, non-persisted thesis/permanent-loss assessment</span>
         </article>
@@ -171,10 +171,10 @@ export function DashboardCoreExitRisk() {
         </section>
 
         <section className="dcer-panel">
-          <div className="dcer-subheading"><div><span>Canonical R8 states</span><strong>Core Health + Exit Intelligence</strong></div><Link to="/app/research">Research →</Link></div>
+          <div className="dcer-subheading"><div><span>Current decision states</span><strong>Core Health + Exit Intelligence</strong></div><Link to="/app/research">Research →</Link></div>
           <div className="dcer-engine-note">
             <strong>Read-only and fail-closed</strong>
-            <p>R8 now evaluates on demand from canonical local portfolio context. Where exact R6 lineage, risk magnitude or thesis-deterioration evidence is not available to this surface, the engine returns blocked or insufficient rather than fabricating a positive state.</p>
+            <p>PortfolioAI evaluates this view on demand from current portfolio context. Where required score lineage, risk magnitude or thesis-deterioration evidence is unavailable, the result stays blocked or insufficient rather than fabricating a positive state.</p>
           </div>
           {model.r8ScopedRows.slice(0, 6).map(({ position, row }) => <div className="dcer-readiness-row" key={position.securityId}><span>{position.symbol} · Core: {row.presentation.coreHealth.label}</span><strong>Exit: {row.presentation.exitIntelligence.label}</strong></div>)}
           <div className="dcer-readiness-row"><span>Current persisted advisories in scope</span><strong>{model.scopedRows.length}/{model.scoped.length}</strong></div>
