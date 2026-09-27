@@ -1,3 +1,4 @@
+import type { P5TerminalDisposition } from "../../data/p5TerminalDispositionRepository"
 import type { PortfolioPosition, PortfolioViewModel } from "../portfolio/types"
 import type { ResearchCoverageRow, ResearchCoverageState } from "../research/researchCoverage"
 import type { ProgramCR8RiskSignal } from "./r8PortfolioRisk"
@@ -58,20 +59,44 @@ function ownerContext(position: PortfolioPosition): ProgramCR8OwnerContext {
   }
 }
 
-function liveR6Reference(): ProgramCR8R6Reference {
+function liveR6Reference(
+  terminal: P5TerminalDisposition | undefined,
+): ProgramCR8R6Reference {
+  if (!terminal) {
+    return {
+      readinessState: "BLOCKED_PREREQUISITE",
+      scoreRunId: null,
+      researchProfileCode: null,
+      methodologyId: null,
+      methodologyVersion: null,
+      methodologyRole: null,
+      assignmentId: null,
+      assignmentVersion: null,
+      classificationVersion: null,
+      evidenceSnapshotId: null,
+      evidenceAsOfDates: [],
+      reasonCodes: ["P5_TERMINAL_DISPOSITION_UNAVAILABLE"],
+    }
+  }
+
+  const scored = terminal.r6Disposition === "SCORED"
   return {
-    readinessState: "BLOCKED_PREREQUISITE",
-    scoreRunId: null,
-    researchProfileCode: null,
-    methodologyId: null,
-    methodologyVersion: null,
-    methodologyRole: null,
-    assignmentId: null,
-    assignmentVersion: null,
+    readinessState: scored
+      ? terminal.scoreRunId ? "READY" : "BLOCKED_PREREQUISITE"
+      : terminal.r6Disposition,
+    scoreRunId: terminal.scoreRunId,
+    researchProfileCode: terminal.profileCode,
+    methodologyId: terminal.methodologyId,
+    methodologyVersion: terminal.methodologyId,
+    methodologyRole: terminal.methodologyRole ?? terminal.profileCode,
+    assignmentId: terminal.assignmentId,
+    assignmentVersion: terminal.assignmentVersion,
     classificationVersion: null,
-    evidenceSnapshotId: null,
-    evidenceAsOfDates: [],
-    reasonCodes: ["LIVE_CANONICAL_R6_RUN_NOT_MATERIALIZED"],
+    evidenceSnapshotId: terminal.p4PayloadHash,
+    evidenceAsOfDates: [terminal.retrievedAt],
+    reasonCodes: scored && !terminal.scoreRunId
+      ? ["P5_SCORED_STATE_WITHOUT_SCORE_RUN_ID"]
+      : terminal.r6ReasonCodes,
   }
 }
 
@@ -122,6 +147,7 @@ export interface ProgramCR8LivePortfolioProjection {
 export function buildProgramCR8LivePortfolioProjection(
   portfolio: PortfolioViewModel,
   coverageRows: readonly ResearchCoverageRow[],
+  p5BySecurityId: ReadonlyMap<string, P5TerminalDisposition> = new Map(),
 ): ProgramCR8LivePortfolioProjection {
   const marketDataAsOf = latestIso(
     portfolio.openPositions.map((position) => position.priceRetrievedAt),
@@ -170,8 +196,8 @@ export function buildProgramCR8LivePortfolioProjection(
     })),
     classificationSnapshotVersion,
     marketDataAsOf,
-    r6ScoreRunIds: [],
-    r7RecommendationRunIds: [],
+    r6ScoreRunIds: [...p5BySecurityId.values()].flatMap((row) => row.scoreRunId ? [row.scoreRunId] : []),
+    r7RecommendationRunIds: [...p5BySecurityId.values()].flatMap((row) => row.recommendationRunId ? [row.recommendationRunId] : []),
     snapshotAsOf,
   })
 
@@ -180,7 +206,8 @@ export function buildProgramCR8LivePortfolioProjection(
 
   const rows = portfolio.openPositions.map((position): ProgramCR8LiveAssessmentRow => {
     const coverage = coverageById.get(position.securityId)
-    const r6 = liveR6Reference()
+    const terminal = p5BySecurityId.get(position.securityId)
+    const r6 = liveR6Reference(terminal)
     const input: ProgramCR8PortfolioDecisionInput = {
       version: PROGRAM_C_R8_DECISION_CONTRACT_VERSION,
       securityId: position.securityId,
@@ -215,7 +242,8 @@ export function buildProgramCR8LivePortfolioProjection(
     reasonCodes: [
       "LIVE_R8_PORTFOLIO_FIT_ENABLED_FROM_OWNER_CONTEXT",
       "LIVE_R8_CORE_RISK_EXIT_FAIL_CLOSED_WITHOUT_CANONICAL_DECISION_EVIDENCE",
-      "LIVE_R6_R7_RUN_LINEAGE_NOT_MATERIALIZED_IN_THIS_SURFACE",
+      "LIVE_R6_TERMINAL_STATE_FROM_P5_AUTHORITY",
+      "LIVE_R6_R7_NUMERIC_RUN_LINEAGE_REMAINS_NULL_WHERE_NOT_MATERIALIZED",
     ],
   }
 }
