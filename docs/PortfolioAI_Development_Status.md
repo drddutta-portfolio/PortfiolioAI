@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P4 — Existing Evidence & Market-Data Rollout is COMPLETE / PASS / CLOSED in PortfolioAI Dev after Owner Checkpoint 4B and independent final reconciliation. All 248 open holdings have an append-only ten-domain `P4_TERMINAL_READINESS_V2` record with zero UNKNOWN or invalid states. All 239 equities are classification-ready and AngelOne mapping/current-price/daily-history ready; research coverage is 81 READY and 158 canonically BLOCKED. Reviewed methodology-profile coverage is 4 READY and 235 explicitly OWNER_DEFERRED to P5, not silently treated as ready. The 9 ETFs are NOT_APPLICABLE for company research/equity-history methodology while retaining verified AngelOne mapping and current price. P5 remains NOT AUTHORIZED; Production remains unchanged
+**Current milestone:** Post-D P5 — Existing R6/R7 Real-Portfolio Execution is COMPLETE / PASS / CLOSED in PortfolioAI Dev. All 248 open holdings have an append-only `P5_TERMINAL_DISPOSITION_V1` record with explicit methodology, R6, R7 and sizing terminal states. Methodology resolution: 110 RESOLVED, 124 METHODOLOGY_NOT_AVAILABLE, 5 REVIEW_REQUIRED, 9 NOT_APPLICABLE. Current numeric score/recommendation/sizing coverage is 0/239 equities because no current canonical P5 score-input snapshot exists; historical reference outputs were not promoted into current facts. Owner settings were unchanged. P6 remains NOT AUTHORIZED; Production remains unchanged
 **Last reviewed:** 27 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -1413,3 +1413,76 @@ Owner Checkpoint 4B             COMPLETE / PASS
 P5                              NOT AUTHORIZED
 Production operational changes NONE
 ```
+
+
+## Post-D P5 real-portfolio execution closure — 27 September 2026
+
+**Result:** `P5 = COMPLETE / PASS / CLOSED`
+
+P5 reused the already-closed Program B R6/R7 contracts and current P4 terminal evidence. It did not rebuild scoring, recommendation or sizing engines and did not call providers.
+
+Live Development terminal-disposition result:
+
+```text
+Open holdings                         248
+Equities                              239
+ETFs                                    9
+
+Methodology RESOLVED                  110
+Methodology NOT AVAILABLE             124
+Methodology REVIEW REQUIRED             5
+Methodology NOT APPLICABLE              9
+
+R6 BLOCKED_PREREQUISITE               110
+R6 METHODOLOGY_NOT_AVAILABLE          124
+R6 REVIEW_REQUIRED                      5
+R6 NOT_APPLICABLE                       9
+R6 SCORED                               0
+
+R7 BLOCKED_PREREQUISITE               110
+R7 METHODOLOGY_NOT_AVAILABLE          124
+R7 REVIEW_REQUIRED                      5
+R7 NOT_APPLICABLE                       9
+R7 RECOMMENDATION_READY                 0
+
+Sizing BLOCKED_PREREQUISITE           110
+Sizing METHODOLOGY_NOT_AVAILABLE      124
+Sizing REVIEW_REQUIRED                  5
+Sizing NOT_APPLICABLE                   9
+Sizing READY                            0
+```
+
+Numeric coverage is reported separately and is not used as a false completion target. The frozen P5 exit contract requires portfolio-wide disposition, canonical blockers, explicit persistence, lineage and no promotion of historical reference outputs.
+
+All 248 holdings have a latest `P5_TERMINAL_DISPOSITION_V1` record with non-null R6/R7/sizing dispositions.
+
+Key safeguards:
+- source P4 terminal identity/hash preserved;
+- owner-settings snapshot hash preserved and unchanged before/after P5;
+- historical Gate-H/G10/B2 score artifacts were not promoted into current score facts;
+- database `DRAFT` recommendation policies were not promoted;
+- no universal recommendation thresholds were invented;
+- Program B sizing-policy registry remains unmodified;
+- new score runs during P5: 0;
+- new recommendation runs during P5: 0;
+- new sizing assessments during P5: 0;
+- provider calls: 0;
+- Production mutation/deployment/migration: 0;
+- merge to `main`: 0.
+
+Supporting closure record:
+`docs/PortfolioAI_POST_D_P5_FINAL_CLOSURE_AUDIT.md`
+
+Reproducible audit:
+`scripts/p5-final-closure-audit.sql`
+
+A fresh authenticated browser smoke test was unavailable from the execution session because the Vercel connector lacked deployment permission. No browser pass is fabricated. Major UI consolidation remains P7 scope.
+
+```text
+Post-D P4 = COMPLETE / PASS / CLOSED
+Post-D P5 = COMPLETE / PASS / CLOSED
+P6        = NOT AUTHORIZED
+Production = UNCHANGED
+```
+
+**Visible UI code change: NONE.**
