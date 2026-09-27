@@ -1,3 +1,4 @@
+import type { P5TerminalDisposition } from "../../data/p5TerminalDispositionRepository"
 import type { PortfolioViewModel } from "../portfolio/types"
 import type { ResearchCoverageRow } from "../research/researchCoverage"
 import { programCR8SemanticFingerprint } from "./r8Determinism"
@@ -48,8 +49,9 @@ export interface ProgramCR9LiveObservedProjection {
 export function buildProgramCR9LiveObservedProjection(
   portfolio: PortfolioViewModel,
   coverageRows: readonly ResearchCoverageRow[],
+  p5BySecurityId: ReadonlyMap<string, P5TerminalDisposition> = new Map(),
 ): ProgramCR9LiveObservedProjection {
-  const r8 = buildProgramCR8LivePortfolioProjection(portfolio, coverageRows)
+  const r8 = buildProgramCR8LivePortfolioProjection(portfolio, coverageRows, p5BySecurityId)
   const r8ById = new Map(r8.rows.map((row) => [row.securityId, row]))
   const coverageById = new Map(coverageRows.map((row) => [row.securityId, row]))
   const omittedSecurityIds: string[] = []
@@ -62,6 +64,7 @@ export function buildProgramCR9LiveObservedProjection(
       continue
     }
     const coverage = coverageById.get(position.securityId)
+    const terminal = p5BySecurityId.get(position.securityId)
     const observedAt = latestTimestamp([
       position.priceRetrievedAt,
       coverage?.latestEvidenceAt ?? null,
@@ -90,12 +93,8 @@ export function buildProgramCR9LiveObservedProjection(
       portfolioId: portfolio.portfolio.id,
       assetClass: position.assetClass,
       observedAt,
-      r6ReadinessState: r8Row.assessment.upstreamLineage.scoreRunId
-        ? "RUN_ID_AVAILABLE"
-        : "NOT_MATERIALIZED",
-      r7ReadinessState: r8Row.assessment.upstreamLineage.recommendationRunId
-        ? "RUN_ID_AVAILABLE"
-        : "NOT_MATERIALIZED",
+      r6ReadinessState: terminal?.r6Disposition ?? "P5_TERMINAL_DISPOSITION_UNAVAILABLE",
+      r7ReadinessState: terminal?.r7Disposition ?? "P5_TERMINAL_DISPOSITION_UNAVAILABLE",
       r7RecommendationState: null,
       r6OverallScore: null,
       evidenceState: evidenceState(coverage),
@@ -122,6 +121,7 @@ export function buildProgramCR9LiveObservedProjection(
     omittedSecurityIds: omittedSecurityIds.sort(),
     reasonCodes: [
       "R9_LIVE_EVENTS_ARE_IN_MEMORY_ONLY",
+      "R9_P5_TERMINAL_AUTHORITY_CONSUMED",
       "R9_FIRST_OBSERVATION_NOT_NO_CHANGE",
       "R9_DURABLE_ACKNOWLEDGEMENT_AND_SNOOZE_NOT_AVAILABLE",
     ],
