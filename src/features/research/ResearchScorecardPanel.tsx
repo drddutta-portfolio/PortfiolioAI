@@ -4,29 +4,10 @@ import { researchProfileUiContract } from "./researchProfileUiContract"
 import { programBMethodologyRoleLabel, type ProgramBR6ScoringPresentation } from "./programBR6Presentation"
 import type { DimensionScore, SecurityScoringSnapshot } from "./scoringTypes"
 
-const OVERALL_PREVIEW_COVERAGE_GATE = 0.70
-
 const label = (value: string) => value.replaceAll("_", " ").toLocaleLowerCase().replace(/(^|\s)\S/gu, (match) => match.toLocaleUpperCase())
 const percent = (value: number | null) => value === null ? "Unavailable" : `${Math.round(value * 100)}%`
 const score = (value: number | null) => value === null ? "—" : value.toFixed(0)
 const profileSourceLabel = (source: SecurityScoringSnapshot["profileSource"]) => source === "REVIEWED_ASSIGNMENT" ? "Reviewed profile" : source === "SECTOR_RULE" ? "Sector-resolved profile" : "Methodology unavailable"
-
-function scoreBand(value: number) {
-  if (value >= 80) return "Strong"
-  if (value >= 65) return "Positive"
-  if (value >= 50) return "Neutral"
-  if (value >= 35) return "Weak"
-  return "Risk"
-}
-
-function previewOverallScore(dimensions: readonly DimensionScore[], scoreReadyCoverage: number | null) {
-  if (scoreReadyCoverage === null || scoreReadyCoverage < OVERALL_PREVIEW_COVERAGE_GATE) return null
-  const weighted = dimensions.filter((dimension) => dimension.dimensionWeight > 0)
-  if (!weighted.length || weighted.some((dimension) => dimension.rawScore === null)) return null
-  const totalWeight = weighted.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
-  if (totalWeight <= 0) return null
-  return weighted.reduce((sum, dimension) => sum + (dimension.rawScore ?? 0) * dimension.dimensionWeight, 0) / totalWeight
-}
 
 function sectionSummary(dimensions: readonly DimensionScore[], codes: readonly string[]) {
   const selected = codes.map((code) => dimensions.find((dimension) => dimension.dimensionCode === code)).filter((dimension): dimension is DimensionScore => Boolean(dimension && dimension.dimensionWeight > 0))
@@ -48,12 +29,12 @@ function ratingDate(value: string | null) {
 function ScoringContractStrip({ presentation }: {
   readonly presentation: ProgramBR6ScoringPresentation
 }) {
-  return <div className="investment-clarity-strip scoring-contract-strip" aria-label="Program B scoring contract">
+  return <div className="investment-clarity-strip scoring-contract-strip" aria-label="Current scoring readiness">
     <article><span>Score readiness</span><strong>{label(presentation.readinessState)}</strong><small>Evidence coverage is separate from score readiness</small></article>
     <article><span>Methodology</span><strong>{presentation.researchProfileCode}</strong><small>{presentation.methodologyVersion ?? "Version unresolved"}</small></article>
     <article><span>Methodology role</span><strong title={presentation.methodologyRole ?? undefined}>{programBMethodologyRoleLabel(presentation.methodologyRole)}</strong><small>{presentation.methodologyRole ?? "Canonical Primary unresolved"}</small></article>
     <article><span>Evidence date / snapshot</span><strong>{presentation.asOfDate ?? "Date unresolved"}</strong><small>{presentation.evidenceSnapshotIdentity ?? "Snapshot unresolved"}</small></article>
-    <article><span>Blocked inputs</span><strong>{presentation.blockerCount}</strong><small>Canonical R6 blockers</small></article>
+    <article><span>Blocked inputs</span><strong>{presentation.blockerCount}</strong><small>Current scoring prerequisites</small></article>
     <article><span>Fail-closed reason</span><strong>{presentation.reasonCodes.length ? presentation.reasonCodes.map(label).join(" · ") : "None"}</strong><small>No hidden reconstruction</small></article>
   </div>
 }
@@ -73,14 +54,11 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error, programB = 
   const ui = researchProfileUiContract(snapshot.profileCode)
   const byCode = new Map(snapshot.dimensions.map((dimension) => [dimension.dimensionCode, dimension]))
   const hasRun = Boolean(snapshot.runState)
-  const previewScore = hasRun ? null : previewOverallScore(snapshot.dimensions, snapshot.scoreReadyCoverage)
-  const displayedOverallScore = hasRun ? snapshot.overallScore : previewScore
+  const displayedOverallScore = hasRun ? snapshot.overallScore : null
   const hasOverallEvidence = (snapshot.evidenceCoverage ?? 0) > 0
   const overallStatus = hasRun
     ? label(snapshot.runState ?? "PARTIAL")
-    : previewScore === null
-      ? "Awaiting evidence gate"
-      : `Read-only preview · ${scoreBand(previewScore)}`
+    : "No current canonical score"
   const ratingsByAgency = new Map<string, typeof snapshot.ratings>()
   for (const rating of snapshot.ratings) ratingsByAgency.set(rating.agencyCode, [...(ratingsByAgency.get(rating.agencyCode) ?? []), rating])
 
@@ -119,7 +97,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error, programB = 
         })}
       </div>
 
-      {!hasRun ? <div className="research-callout research-callout-neutral"><strong>Read-only scoring preview</strong><p>Verified evidence and score readiness are shown separately. The overall preview appears only after at least 70% score-ready coverage and every weighted dimension has crossed its own scoring gate. It is not an official persisted score and does not change portfolio membership or role.</p></div> : null}
+      {!hasRun ? <div className="research-callout research-callout-neutral"><strong>No current canonical score</strong><p>Verified evidence and score readiness are shown separately. PortfolioAI does not reconstruct an overall score from historical fixtures or partial evidence. A numeric score appears here only when a current authoritative score run exists.</p></div> : null}
 
       <div className="heatmap-heading">
         <div><p className="eyebrow">Investment heatmap</p><h3>Where the stock is strong, weak or still unknown</h3><p className="heatmap-help">Open any dimension to see the reviewed inputs that produced its score.</p></div>
