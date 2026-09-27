@@ -25,13 +25,19 @@ Deno.serve(async request=>{
   const ids=(h.data??[]).filter(r=>Number(r.current_quantity)>0).map(r=>r.security_id)
   const s=await admin.from("securities").select("id,symbol,isin,asset_class").in("id",ids);if(s.error)throw s.error
   const equities=(s.data??[] as Security[]).filter(x=>x.asset_class==="EQUITY"&&x.symbol>after).sort((a,b)=>a.symbol.localeCompare(b.symbol))
-  const obs=await admin.from("security_identity_observations").select("security_id,provider_instrument_id,evidence_status").in("security_id",equities.map(x=>x.id)).eq("source_code","TRENDLYNE_MCP");if(obs.error)throw obs.error
+  const eqIds=equities.map(x=>x.id)
+  const [obs,runs]=await Promise.all([
+    admin.from("security_identity_observations").select("security_id,provider_instrument_id,evidence_status").in("security_id",eqIds).eq("source_code","TRENDLYNE_MCP"),
+    admin.from("data_ingestion_runs").select("id,metadata,attempted_call_count,status,error_summary,started_at").eq("source_code","TRENDLYNE_MCP").eq("operation","RESOLVE_PROVIDER_IDENTITY").order("started_at",{ascending:false}).limit(2000),
+  ])
+  if(obs.error||runs.error)throw obs.error??runs.error
   const ready=new Set((obs.data??[]).filter(x=>x.evidence_status==="MATCHED"&&x.provider_instrument_id).map(x=>x.security_id))
-  const targets=equities.filter(x=>!ready.has(x.id)&&x.isin).slice(0,limit)
+  const attemptedSymbols=new Set((runs.data??[]).filter(r=>Number(r.attempted_call_count??0)>0).map(r=>String(r.metadata?.security??"")))
+  const targets=equities.filter(x=>!ready.has(x.id)&&x.isin&&!attemptedSymbols.has(x.symbol)).slice(0,limit)
   if(!targets.length)return reply(200,{status:"COMPLETE",processed:0,lastSymbol:after,remaining:0,results:[]})
   const one=async(x:Security)=>{const g=await grant(admin,"P4B_EXECUTE",x.id);const r=await invoke(`${supabaseUrl}/functions/v1/resolve-trendlyne-identity`,{action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:x.id,confirmation:"OWNER_CONFIRMED_POST_D_P4B_IDENTITY_DISCOVERY",grantId:g});return{symbol:x.symbol,securityId:x.id,status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload}}
   const results:Record<string,unknown>[]=[]
-  for(let i=0;i<targets.length;i+=6){results.push(...await Promise.all(targets.slice(i,i+6).map(one)));if(i+6<targets.length)await new Promise(r=>setTimeout(r,250))}
+  for(const target of targets){results.push(await one(target));await new Promise(r=>setTimeout(r,250))}
   const last=targets.at(-1)?.symbol??after
   const remaining=equities.filter(x=>x.symbol>last&&!ready.has(x.id)&&x.isin).length
   return reply(200,{status:"BATCH_COMPLETE",processed:targets.length,lastSymbol:last,remaining,results})
