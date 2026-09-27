@@ -63,8 +63,8 @@ Deno.serve(async request=>{
     const body=await request.json() as {action?:unknown;grantId?:unknown;afterSymbol?:unknown;limit?:unknown}
     if(body.action!==BATCH_ACTION) return reply(400,{error:"Unknown action."})
     const afterSymbol=typeof body.afterSymbol==="string"?body.afterSymbol.trim().toUpperCase():""
-    const limit=Number(body.limit??3)
-    if(!Number.isInteger(limit)||limit<1||limit>6) return reply(400,{error:"Batch limit must be 1..6."})
+    const limit=Number(body.limit??9)
+    if(!Number.isInteger(limit)||limit<1||limit>15) return reply(400,{error:"Batch limit must be 1..15."})
     const sentinel=`${BATCH_ACTION}:${afterSymbol||"START"}:${limit}`
 
     const admin=createClient(supabaseUrl,serviceKey,{auth:{persistSession:false}})
@@ -108,75 +108,83 @@ Deno.serve(async request=>{
     const documentReady=new Set((documents.data??[]).map(r=>r.security_id))
     const historyReady=new Set((histories.data??[]).map(r=>r.security_id))
 
+
     const results:Record<string,unknown>[]=[]
-    for(const security of equities){
-      const row:Record<string,unknown>={symbol:security.symbol,securityId:security.id,steps:[]}
-      const steps=row.steps as Record<string,unknown>[]
-      const cls=classBy.get(security.id)
-      if(!cls?.sector||!cls?.industry||cls?.has_conflict){
-        steps.push({domain:"CLASSIFICATION",status:"BLOCKED",code:"CLASSIFICATION_NOT_READY"})
-        row.status="BLOCKED"
-        results.push(row)
-        continue
-      }
-
-      let identityOk=identityReady.has(security.id)
-      if(!identityOk){
-        if(!security.isin){
-          steps.push({domain:"TRENDLYNE_IDENTITY",status:"BLOCKED",code:"CANONICAL_ISIN_MISSING"})
-        }else{
-          const grantId=await createGrant(admin,"P4B_EXECUTE",security.id)
-          const r=await invoke(`${supabaseUrl}/functions/v1/resolve-trendlyne-identity`,{
-            action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,
-            confirmation:"OWNER_CONFIRMED_POST_D_P4B_IDENTITY_DISCOVERY",grantId,
-          })
-          steps.push({domain:"TRENDLYNE_IDENTITY",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
-          identityOk=r.ok
-        }
-      }else steps.push({domain:"TRENDLYNE_IDENTITY",status:"READY_EXISTING"})
-
-      if(identityOk&&(!fundamentalReady.has(security.id)||!documentReady.has(security.id))){
-        const grantId=await createGrant(admin,"P4B_EXECUTE",security.id)
-        const r=await invoke(`${supabaseUrl}/functions/v1/complete-research-refresh`,{
-          action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,
-          confirmation:"OWNER_CONFIRMED_POST_D_P4B_COMPLETE_RESEARCH",grantId,
-        })
-        steps.push({domain:"TRENDLYNE_RESEARCH",httpStatus:r.status,...r.payload,status:r.ok?(r.status===207?"PARTIAL":"READY"):"BLOCKED"})
-      }else if(identityOk) steps.push({domain:"TRENDLYNE_RESEARCH",status:"READY_EXISTING"})
-      else steps.push({domain:"TRENDLYNE_RESEARCH",status:"BLOCKED",code:"TRENDLYNE_IDENTITY_PREREQUISITE_MISSING"})
-
-      let mappingOk=mappingReady.has(security.id)
-      if(!mappingOk){
-        const grantId=await createGrant(admin,"P4B_SYNC_MAPPING",security.id)
-        const r=await invoke(`${supabaseUrl}/functions/v1/refresh-market-data`,{
-          action:"P4B_SYNC_MAPPING",portfolioId:PORTFOLIO_ID,securityIds:[security.id],grantId,
-        })
-        steps.push({domain:"ANGEL_MAPPING",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
-        mappingOk=r.ok
-      }else steps.push({domain:"ANGEL_MAPPING",status:"READY_EXISTING"})
-
-      if(mappingOk&&!priceReady.has(security.id)){
-        const grantId=await createGrant(admin,"P4B_REFRESH_PRICE",security.id)
-        const r=await invoke(`${supabaseUrl}/functions/v1/refresh-market-data`,{
-          action:"P4B_REFRESH_PRICE",portfolioId:PORTFOLIO_ID,securityIds:[security.id],grantId,
-        })
-        steps.push({domain:"CURRENT_PRICE",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
-      }else if(mappingOk) steps.push({domain:"CURRENT_PRICE",status:"READY_EXISTING"})
-      else steps.push({domain:"CURRENT_PRICE",status:"BLOCKED",code:"ANGEL_MAPPING_PREREQUISITE_MISSING"})
-
-      if(mappingOk&&!historyReady.has(security.id)){
-        const grantId=await createGrant(admin,"P4B_EXECUTE",security.id)
-        const r=await invoke(`${supabaseUrl}/functions/v1/refresh-market-history`,{
-          action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,
-          confirmation:"OWNER_CONFIRMED_POST_D_P4B_MARKET_HISTORY",grantId,
-        })
-        steps.push({domain:"MARKET_HISTORY",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
-      }else if(mappingOk) steps.push({domain:"MARKET_HISTORY",status:"READY_EXISTING"})
-      else steps.push({domain:"MARKET_HISTORY",status:"BLOCKED",code:"ANGEL_MAPPING_PREREQUISITE_MISSING"})
-
-      row.status=steps.some(s=>s.status==="BLOCKED"||s.status==="PARTIAL")?"PARTIAL_OR_BLOCKED":"READY"
-      results.push(row)
-      await new Promise(resolve=>setTimeout(resolve,1300))
+    const processSecurity=async(security:Security)=>{
+      
+            const row:Record<string,unknown>={symbol:security.symbol,securityId:security.id,steps:[]}
+            const steps=row.steps as Record<string,unknown>[]
+            const cls=classBy.get(security.id)
+            if(!cls?.sector||!cls?.industry||cls?.has_conflict){
+              steps.push({domain:"CLASSIFICATION",status:"BLOCKED",code:"CLASSIFICATION_NOT_READY"})
+              row.status="BLOCKED"
+              results.push(row)
+              continue
+            }
+      
+            let identityOk=identityReady.has(security.id)
+            if(!identityOk){
+              if(!security.isin){
+                steps.push({domain:"TRENDLYNE_IDENTITY",status:"BLOCKED",code:"CANONICAL_ISIN_MISSING"})
+              }else{
+                const grantId=await createGrant(admin,"P4B_EXECUTE",security.id)
+                const r=await invoke(`${supabaseUrl}/functions/v1/resolve-trendlyne-identity`,{
+                  action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,
+                  confirmation:"OWNER_CONFIRMED_POST_D_P4B_IDENTITY_DISCOVERY",grantId,
+                })
+                steps.push({domain:"TRENDLYNE_IDENTITY",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
+                identityOk=r.ok
+              }
+            }else steps.push({domain:"TRENDLYNE_IDENTITY",status:"READY_EXISTING"})
+      
+            if(identityOk&&(!fundamentalReady.has(security.id)||!documentReady.has(security.id))){
+              const grantId=await createGrant(admin,"P4B_EXECUTE",security.id)
+              const r=await invoke(`${supabaseUrl}/functions/v1/complete-research-refresh`,{
+                action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,
+                confirmation:"OWNER_CONFIRMED_POST_D_P4B_COMPLETE_RESEARCH",grantId,
+              })
+              steps.push({domain:"TRENDLYNE_RESEARCH",httpStatus:r.status,...r.payload,status:r.ok?(r.status===207?"PARTIAL":"READY"):"BLOCKED"})
+            }else if(identityOk) steps.push({domain:"TRENDLYNE_RESEARCH",status:"READY_EXISTING"})
+            else steps.push({domain:"TRENDLYNE_RESEARCH",status:"BLOCKED",code:"TRENDLYNE_IDENTITY_PREREQUISITE_MISSING"})
+      
+            let mappingOk=mappingReady.has(security.id)
+            if(!mappingOk){
+              const grantId=await createGrant(admin,"P4B_SYNC_MAPPING",security.id)
+              const r=await invoke(`${supabaseUrl}/functions/v1/refresh-market-data`,{
+                action:"P4B_SYNC_MAPPING",portfolioId:PORTFOLIO_ID,securityIds:[security.id],grantId,
+              })
+              steps.push({domain:"ANGEL_MAPPING",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
+              mappingOk=r.ok
+            }else steps.push({domain:"ANGEL_MAPPING",status:"READY_EXISTING"})
+      
+            if(mappingOk&&!priceReady.has(security.id)){
+              const grantId=await createGrant(admin,"P4B_REFRESH_PRICE",security.id)
+              const r=await invoke(`${supabaseUrl}/functions/v1/refresh-market-data`,{
+                action:"P4B_REFRESH_PRICE",portfolioId:PORTFOLIO_ID,securityIds:[security.id],grantId,
+              })
+              steps.push({domain:"CURRENT_PRICE",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
+            }else if(mappingOk) steps.push({domain:"CURRENT_PRICE",status:"READY_EXISTING"})
+            else steps.push({domain:"CURRENT_PRICE",status:"BLOCKED",code:"ANGEL_MAPPING_PREREQUISITE_MISSING"})
+      
+            if(mappingOk&&!historyReady.has(security.id)){
+              const grantId=await createGrant(admin,"P4B_EXECUTE",security.id)
+              const r=await invoke(`${supabaseUrl}/functions/v1/refresh-market-history`,{
+                action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,
+                confirmation:"OWNER_CONFIRMED_POST_D_P4B_MARKET_HISTORY",grantId,
+              })
+              steps.push({domain:"MARKET_HISTORY",status:r.ok?"READY":"BLOCKED",httpStatus:r.status,...r.payload})
+            }else if(mappingOk) steps.push({domain:"MARKET_HISTORY",status:"READY_EXISTING"})
+            else steps.push({domain:"MARKET_HISTORY",status:"BLOCKED",code:"ANGEL_MAPPING_PREREQUISITE_MISSING"})
+      
+            row.status=steps.some(s=>s.status==="BLOCKED"||s.status==="PARTIAL")?"PARTIAL_OR_BLOCKED":"READY"
+      await new Promise(resolve=>setTimeout(resolve,250))
+      return row
+    }
+    for(let i=0;i<equities.length;i+=3){
+      const chunk=equities.slice(i,i+3)
+      const chunkResults=await Promise.all(chunk.map(processSecurity))
+      results.push(...chunkResults)
+      if(i+3<equities.length) await new Promise(resolve=>setTimeout(resolve,500))
     }
 
     return reply(200,{

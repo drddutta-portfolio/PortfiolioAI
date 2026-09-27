@@ -133,11 +133,11 @@ function deriveMetrics(candles: readonly AngelDailyCandle[]): MetricRow[] {
   return result
 }
 
-async function acquireLease(admin: AdminClient, portfolioId: string, holder: string) {
+async function acquireLease(admin: AdminClient, portfolioId: string, holder: string, operation = "REFRESH_HISTORY") {
   const { data, error } = await admin.rpc("acquire_market_data_operation_lease", {
     p_portfolio_id: portfolioId,
     p_provider_code: MARKET_DATA_PROVIDER,
-    p_operation: "REFRESH_HISTORY",
+    p_operation: operation,
     p_lease_holder: holder,
     p_lease_seconds: LEASE_SECONDS,
   })
@@ -146,11 +146,11 @@ async function acquireLease(admin: AdminClient, portfolioId: string, holder: str
   if (row?.acquired !== true) throw new SafeOperationalError("MARKET_DATA_RATE_LIMITED", "Another historical market-data operation is running or cooling down.", 429)
 }
 
-async function releaseLease(admin: AdminClient, portfolioId: string, holder: string, cooldownSeconds = COOLDOWN_SECONDS) {
+async function releaseLease(admin: AdminClient, portfolioId: string, holder: string, cooldownSeconds = COOLDOWN_SECONDS, operation = "REFRESH_HISTORY") {
   const { error } = await admin.rpc("release_market_data_operation_lease", {
     p_portfolio_id: portfolioId,
     p_provider_code: MARKET_DATA_PROVIDER,
-    p_operation: "REFRESH_HISTORY",
+    p_operation: operation,
     p_lease_holder: holder,
     p_cooldown_seconds: cooldownSeconds,
   })
@@ -273,7 +273,8 @@ Deno.serve(async (request) => {
     const requiredConfirmation = p4Internal ? P4_MARKET_HISTORY_CONFIRMATION : p4bInternal ? "OWNER_CONFIRMED_POST_D_P4B_MARKET_HISTORY" : CONFIRMATION
     if (body.confirmation !== requiredConfirmation) return json(409, { error: "Explicit owner confirmation is required.", providerCalls: 0 })
     const leaseHolder = crypto.randomUUID()
-    await acquireLease(admin, portfolio.id, leaseHolder)
+    const leaseOperation = p4bInternal ? `REFRESH_HISTORY:${security.id}` : "REFRESH_HISTORY"
+    await acquireLease(admin, portfolio.id, leaseHolder, leaseOperation)
     const { data: run, error: runError } = await admin.from("market_data_refresh_runs").insert({
       portfolio_id: portfolio.id,
       provider_code: MARKET_DATA_PROVIDER,
@@ -357,7 +358,7 @@ Deno.serve(async (request) => {
       await admin.from("market_data_refresh_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), failed_security_count: 1, error_summary: operational.code }).eq("id", run.id)
       throw error
     } finally {
-      await releaseLease(admin, portfolio.id, leaseHolder, boundedInternal ? 1 : COOLDOWN_SECONDS)
+      await releaseLease(admin, portfolio.id, leaseHolder, boundedInternal ? 1 : COOLDOWN_SECONDS, leaseOperation)
     }
   } catch (error) {
     const operational = safeError(error)

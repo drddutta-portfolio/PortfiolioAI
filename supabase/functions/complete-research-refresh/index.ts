@@ -482,9 +482,10 @@ Deno.serve(async request => {
     const reservationId = reservation.data[0].reservation_id as string
 
     const leaseHolder = crypto.randomUUID()
+    const leaseOperation = p4b ? `COMPLETE_RESEARCH_REFRESH:${security.id}` : "COMPLETE_RESEARCH_REFRESH"
     const lease = await admin.rpc("acquire_data_ingestion_lease_v1", {
       p_source_code: SOURCE_CODE,
-      p_operation: "COMPLETE_RESEARCH_REFRESH",
+      p_operation: leaseOperation,
       p_lease_holder: leaseHolder,
       p_lease_seconds: 900,
     })
@@ -588,7 +589,7 @@ Deno.serve(async request => {
       if (settlement.error) results.push({ domain: "ACCOUNTING", status: "FAILED", safeCode: "BUDGET_SETTLEMENT_FAILED" })
       const release = await admin.rpc("release_data_ingestion_lease_v1", {
         p_source_code: SOURCE_CODE,
-        p_operation: "COMPLETE_RESEARCH_REFRESH",
+        p_operation: leaseOperation,
         p_lease_holder: leaseHolder,
         p_cooldown_seconds: 0,
       })
