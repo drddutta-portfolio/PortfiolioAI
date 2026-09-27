@@ -648,7 +648,9 @@ operations history, diagnostics, and environment state.
 requires attention, and what evidence supports the action without understanding
 repository program terminology.
 
-**Owner checkpoint 6:** Browser approval using production-equivalent data.
+**Execution result — 27 September 2026:** P7 technical implementation is **COMPLETE / PASS** in PortfolioAI Dev. The product shell now has exactly the eight approved top-level products; detailed decision intelligence is consolidated under Intelligence; provider/operations controls are grouped under Settings; historical Gate/fixture outputs are removed from current Research; owner controls are separated from engine outputs; blockers use investor language; and unsupported duplicate placeholders were removed. App-code commit `829df629339b701bf5228df735a32473904c5b5a` built successfully on Vercel. Formal P7 closure remains pending Owner Checkpoint 6 browser approval. P8 is NOT AUTHORIZED and Production remains unchanged.
+
+**Owner checkpoint 6:** PENDING — browser approval using production-equivalent data.
 
 ### P8 — Release-candidate qualification
 
