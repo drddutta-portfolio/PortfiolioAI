@@ -56,12 +56,11 @@ export function InvestmentCommitteePage() {
     <section className="r12-page">
       <div className="portfolio-hero compact-hero">
         <div>
-          <p className="eyebrow">Program D · D3 optional R12</p>
+          <p className="eyebrow">Optional interpretation</p>
           <h1>Investment Committee</h1>
           <p>
             Bounded on-demand interpretation of a versioned deterministic fact packet.
-            This local D3 implementation uses no external AI provider and cannot alter
-            R6–R10, owner settings, sizing, or trading.
+            This local mock implementation uses no external AI provider and cannot alter deterministic decisions, owner settings, sizing, or trading.
           </p>
         </div>
         <span className="status status-stale">LOCAL MOCK / ON DEMAND</span>
@@ -71,16 +70,15 @@ export function InvestmentCommitteePage() {
         <Summary label="External AI calls" value="0" />
         <Summary label="External AI cost" value="0" />
         <Summary label="Scheduled AI" value="Disabled" />
-        <Summary label="Deterministic authority" value="R6–R10 unchanged" />
+        <Summary label="Decision authority" value="Deterministic state unchanged" />
       </section>
 
       <section className="panel r12-boundary-panel">
         <div>
-          <p className="eyebrow">Authority boundary</p>
+          <p className="eyebrow">Interpretation boundary</p>
           <h2>AI interpretation is downstream and non-authoritative</h2>
           <p>
-            R10 remains the sole canonical Action Center authority. R12 can explain supplied
-            deterministic state, contradictions, uncertainty, and monitoring questions only.
+            The Action Center remains the sole decision-attention authority. This narrative can explain supplied deterministic state, contradictions, uncertainty, and monitoring questions only.
           </p>
         </div>
         <div className="operations-safety-grid">
@@ -98,11 +96,10 @@ export function InvestmentCommitteePage() {
       <section className="panel">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">D4 grounding / adversarial validation</p>
-            <h2>Validate R12 fail-closed behavior</h2>
+            <p className="eyebrow">Grounding validation</p>
+            <h2>Validate interpretation fail-closed behavior</h2>
             <p>
-              Exercises the frozen D4 matrix locally. No external AI provider is called and
-              deterministic R6–R10 state remains available even when AI is simulated as unavailable.
+              Exercises the frozen validation matrix locally. No external AI provider is called and deterministic decision state remains available even when interpretation is simulated as unavailable.
             </p>
           </div>
           <button
@@ -128,7 +125,7 @@ export function InvestmentCommitteePage() {
             ))}
           </div>
         ) : (
-          <p className="assessment-note">D4 adversarial validation has not been run in this browser session yet.</p>
+          <p className="assessment-note">Grounding validation has not been run in this browser session yet.</p>
         )}
       </section>
 
@@ -138,7 +135,7 @@ export function InvestmentCommitteePage() {
             <p className="eyebrow">Bounded reference packet</p>
             <h2>Run local Investment Committee interpretation</h2>
             <p>
-              Uses a frozen local TORNTPHARM packet to validate the R12 contract.
+              Uses a frozen local TORNTPHARM packet to validate the interpretation contract.
               Repeating the same packet reuses the cached narrative.
             </p>
           </div>
@@ -180,8 +177,8 @@ export function InvestmentCommitteePage() {
         <section className="panel r12-result-panel">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">AI interpretation · non-authoritative</p>
-              <h2>Local R12 narrative</h2>
+              <p className="eyebrow">Interpretation · non-authoritative</p>
+              <h2>Local Investment Committee narrative</h2>
             </div>
             <div className="r12-result-badges">
               <span className={result.validationStatus === "VALID" ? "status status-fresh" : "status status-conflicting"}>
