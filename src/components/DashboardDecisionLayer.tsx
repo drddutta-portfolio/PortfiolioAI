@@ -69,7 +69,7 @@ export function DashboardDecisionLayer() {
   if (isLoading || error || !portfolio) return null
   return <section className="dashboard-next-layer" aria-label="Dashboard decision layer">
     <div className="dashboard-next-heading"><div><p className="eyebrow">Decision attention</p><h2>Portfolio structure & Action Center</h2><p>Roles and themes remain descriptive portfolio structure. Action Center attention is read-only and derived from current decision state plus your owner context.</p></div><span>Consolidated portfolio</span></div>
-    {loadError ? <div className="dashboard-next-notice">Some cached owner/research context required by the canonical R10 projection could not be loaded: {loadError}</div> : null}
+    {loadError ? <div className="dashboard-next-notice">Some cached owner/research context required by the Action Center could not be loaded: {loadError}</div> : null}
     <div className="dashboard-next-grid">
       <div className="dashboard-structure-stack">
         <section className="dashboard-role-snapshot">
