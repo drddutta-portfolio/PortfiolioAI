@@ -24,7 +24,7 @@ export function AppShell({ children }: PropsWithChildren) {
 
   return (
     <div className="app-shell">
-      <header className="app-header">
+      <header id="app-top" className="app-header">
         <NavLink className="app-brand" to="/app" end aria-label="PortfolioAI home">
           <span className="app-brand-mark" aria-hidden="true">P</span>
           <span>PortfolioAI</span>
