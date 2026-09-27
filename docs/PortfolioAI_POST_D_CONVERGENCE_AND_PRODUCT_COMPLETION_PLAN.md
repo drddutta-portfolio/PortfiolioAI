@@ -599,9 +599,9 @@ surfaces; R11 manual operation is auditable and fail-closed; deterministic
 operation does not depend on AI; no scheduler or production execution is
 implied.
 
-**Execution result — 27 September 2026:** P6 technical execution is **COMPLETE / PASS** in PortfolioAI Dev. The live R8 → R9 → R10 chain now consumes the current P5 terminal authority through an authenticated Development-only read bridge. R9 remains in-memory only, R10 remains recomputed canonical authority, R11 remains manual/auditable/fail-closed with schedulers disabled, and R12 remains LOCAL_MOCK_ONLY. No provider calls, score/recommendation/sizing runs, owner-setting mutations, migrations, Production changes or merge to `main` occurred. Formal P6 closure is pending Owner Checkpoint 5.
+**Execution result — 27 September 2026:** P6 is **COMPLETE / PASS / CLOSED** in PortfolioAI Dev. The live R8 → R9 → R10 chain consumes the current P5 terminal authority through an authenticated Development-only read bridge. R9 remains in-memory only, R10 remains recomputed canonical authority, R11 remains manual/auditable/fail-closed with schedulers disabled, and R12 remains LOCAL_MOCK_ONLY. No provider calls, score/recommendation/sizing runs, owner-setting mutations, migrations, Production changes or merge to `main` occurred.
 
-**Owner checkpoint 5:** PENDING — approve integrated deterministic state and the explicit persistence decisions: R8 recompute/no new persistence; R9 in-memory/no durable baseline; R10 recomputation/no competing snapshot; R11 existing manual operational ledger/no scheduler; R12 browser-local mock cache/no real AI.
+**Owner checkpoint 5:** **APPROVED / CLOSED** — integrated deterministic state and persistence decisions are frozen: R8 recompute/no new persistence; R9 in-memory/no durable baseline; R10 recomputation/no competing snapshot; R11 existing manual operational ledger/no scheduler; R12 browser-local mock cache/no real AI.
 
 ### P7 — UI consolidation
 
