@@ -1,3 +1,4 @@
+import type { P5TerminalDisposition } from "../../data/p5TerminalDispositionRepository"
 import type { PortfolioPosition, PortfolioViewModel } from "../portfolio/types"
 import type { ResearchCoverageRow } from "../research/researchCoverage"
 import { programCR8SemanticFingerprint } from "./r8Determinism"
@@ -80,9 +81,10 @@ export function buildProgramCR10LiveActionCenter(
   portfolio: PortfolioViewModel,
   coverageRows: readonly ResearchCoverageRow[],
   monitoringBySecurityId: ReadonlyMap<string, ProgramCR10MonitoringInput>,
+  p5BySecurityId: ReadonlyMap<string, P5TerminalDisposition> = new Map(),
 ): ProgramCR10LiveActionCenter {
-  const r8 = buildProgramCR8LivePortfolioProjection(portfolio, coverageRows)
-  const r9 = buildProgramCR9LiveObservedProjection(portfolio, coverageRows)
+  const r8 = buildProgramCR8LivePortfolioProjection(portfolio, coverageRows, p5BySecurityId)
+  const r9 = buildProgramCR9LiveObservedProjection(portfolio, coverageRows, p5BySecurityId)
   const r8ById = new Map(r8.rows.map((row) => [row.securityId, row]))
   const r9ById = new Map(r9.rows.map((row) => [row.securityId, row]))
   const positionById = new Map(
@@ -127,6 +129,7 @@ export function buildProgramCR10LiveActionCenter(
     omittedSecurityIds: [...omittedSecurityIds].sort(),
     reasonCodes: [
       "R10_CANONICAL_ACTION_CENTER_READ_ONLY",
+      "R10_UPSTREAM_P5_TERMINAL_AUTHORITY_CONSUMED",
       "R10_LIVE_R9_BASELINE_IS_IN_MEMORY_FIRST_OBSERVATION",
       "R10_ADD_TRIM_REVIEW_NOT_PROMOTED",
       "R10_NO_NUMERIC_SIZING_OR_TRADE_INSTRUCTION",
