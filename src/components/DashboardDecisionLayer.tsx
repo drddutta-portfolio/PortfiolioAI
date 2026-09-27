@@ -68,7 +68,7 @@ export function DashboardDecisionLayer() {
 
   if (isLoading || error || !portfolio) return null
   return <section className="dashboard-next-layer" aria-label="Dashboard decision layer">
-    <div className="dashboard-next-heading"><div><p className="eyebrow">Decision layer · R10</p><h2>Portfolio structure & canonical Action Center</h2><p>Roles and themes remain descriptive portfolio structure. Action Center attention is produced only by the canonical read-only R10 engine from R8/R9 and owner context.</p></div><span>Consolidated portfolio</span></div>
+    <div className="dashboard-next-heading"><div><p className="eyebrow">Decision attention</p><h2>Portfolio structure & Action Center</h2><p>Roles and themes remain descriptive portfolio structure. Action Center attention is read-only and derived from current decision state plus your owner context.</p></div><span>Consolidated portfolio</span></div>
     {loadError ? <div className="dashboard-next-notice">Some cached owner/research context required by the canonical R10 projection could not be loaded: {loadError}</div> : null}
     <div className="dashboard-next-grid">
       <div className="dashboard-structure-stack">
@@ -94,8 +94,8 @@ export function DashboardDecisionLayer() {
       </div>
 
       <section className="dashboard-action-center">
-        <div className="dashboard-next-section-title"><div><span>Canonical R10 Action Center</span><strong>{actionCenter.data?.view.length ?? 0} portfolio dispositions</strong></div><Link to="/app/research">Research →</Link></div>
-        {actionCenter.isLoading ? <div className="dashboard-next-empty"><strong>Building read-only R10 projection…</strong><span>No provider refresh or persistence is triggered.</span></div> : actions.length ? <div className="dashboard-action-list">{actions.map((item) => <article className={`dashboard-action-item ${item.tone}`} key={item.id}><i /><div><Link to={`/app/research/${item.securityId}`}>{item.symbol}</Link><small>{item.company}</small></div><div><strong>{item.stateLabel}</strong><p>{item.primaryReason}{item.conflictLabels.length ? ` · ${item.conflictLabels.join(" · ")}` : ""}</p></div></article>)}</div> : <div className="dashboard-next-empty"><strong>No canonical R10 dispositions available.</strong><span>Missing prerequisites stay unavailable rather than being replaced by local Action Center heuristics.</span></div>}
+        <div className="dashboard-next-section-title"><div><span>Action Center</span><strong>{actionCenter.data?.view.length ?? 0} portfolio dispositions</strong></div><Link to="/app/research">Research →</Link></div>
+        {actionCenter.isLoading ? <div className="dashboard-next-empty"><strong>Building current decision view…</strong><span>No provider refresh or persistence is triggered.</span></div> : actions.length ? <div className="dashboard-action-list">{actions.map((item) => <article className={`dashboard-action-item ${item.tone}`} key={item.id}><i /><div><Link to={`/app/research/${item.securityId}`}>{item.symbol}</Link><small>{item.company}</small></div><div><strong>{item.stateLabel}</strong><p>{item.primaryReason}{item.conflictLabels.length ? ` · ${item.conflictLabels.join(" · ")}` : ""}</p></div></article>)}</div> : <div className="dashboard-next-empty"><strong>No current Action Center dispositions available.</strong><span>Missing prerequisites stay unavailable rather than being replaced by guesses.</span></div>}
       </section>
     </div>
   </section>
