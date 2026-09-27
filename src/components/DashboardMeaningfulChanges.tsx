@@ -62,15 +62,15 @@ export function DashboardMeaningfulChanges() {
   return <section className="dashboard-r9" aria-label="Meaningful portfolio change">
     <div className="dashboard-r9-heading">
       <div>
-        <p className="eyebrow">Meaningful change · R9</p>
+        <p className="eyebrow">Decision-state change</p>
         <h2>What changed in decision state, not just price?</h2>
-        <p>Deterministic comparison of canonical portfolio-decision states. First observation, no change, raw immaterial change and meaningful change are distinct outcomes.</p>
+        <p>Deterministic comparison of current portfolio-decision states. First observation, no change, immaterial change and meaningful change remain distinct outcomes.</p>
       </div>
       <span>{model?.scopeLabel ?? dashboardScopeLabel(scopeKey, portfolio)}</span>
     </div>
 
-    {coverage.isLoading ? <div className="dashboard-r9-notice">Waiting for canonical research coverage before establishing the in-memory R9 baseline…</div> : null}
-    {coverage.error ? <div className="dashboard-r9-notice">R9 baseline was not established because research coverage could not be read: {coverage.error}</div> : null}
+    {coverage.isLoading ? <div className="dashboard-r9-notice">Waiting for research coverage before establishing the in-memory comparison baseline…</div> : null}
+    {coverage.error ? <div className="dashboard-r9-notice">The comparison baseline was not established because research coverage could not be read: {coverage.error}</div> : null}
 
     {model ? <>
       <div className="dashboard-r9-summary">
@@ -92,10 +92,10 @@ export function DashboardMeaningfulChanges() {
             <div><Link to={`/app/research/${event.securityId}`}>{row?.symbol ?? event.securityId.slice(0, 8)}</Link><span>{row?.company ?? "Portfolio holding"}</span></div>
             <div><strong>{event.meaningfulChanges.map((change) => pretty(change.code)).join(" · ")}</strong><span>{event.meaningfulChanges.map((change) => `${change.previousValue ?? "None"} → ${change.currentValue ?? "None"}`).join(" · ")}</span></div>
           </article>
-        })}</div> : <div className="dashboard-r9-empty">No new meaningful R9 event is available in this mounted session. On first observation PortfolioAI establishes an in-memory baseline; it does not fabricate “no change”.</div>}
+        })}</div> : <div className="dashboard-r9-empty">No new meaningful decision-state event is available in this session. On first observation PortfolioAI establishes an in-memory baseline; it does not fabricate “no change”.</div>}
       </div>
 
-      <p className="dashboard-r9-method">R9 is read-only and non-persisted in Program C. Duplicate suppression is semantic and in-memory only; acknowledgement, snooze, seen/unseen state and cross-session notification history are not claimed. Daily price movement remains a separate market view and is not R9 materiality.</p>
+      <p className="dashboard-r9-method">Meaningful-change comparison is read-only and session-local. Acknowledgement, snooze, seen/unseen state and cross-session notification history are not persisted. Daily price movement remains a separate market view and is not treated as decision-state materiality.</p>
     </> : null}
   </section>
 }
