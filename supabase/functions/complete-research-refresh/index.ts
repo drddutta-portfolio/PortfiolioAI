@@ -539,7 +539,7 @@ Deno.serve(async request => {
       const overviewOk = await executeCall(
         "TTM_FUNDAMENTALS",
         "GET_OVERVIEW_NEWS_CORP_EVENTS",
-        () => client.getOverviewNewsCorpEvents(security.symbol, "overview"),
+        () => client.getOverviewNewsCorpEvents(providerInstrumentId, "overview"),
         async text => writeOverview(admin, runId, security, providerInstrumentId, text),
       )
       if (!overviewOk) abortRemaining = true
@@ -555,7 +555,7 @@ Deno.serve(async request => {
         await executeCall(
           "OWNERSHIP",
           "GET_OWNERSHIP_DEALS_INSIDER_SAST",
-          () => client.getOwnershipDealsInsiderSast(security.symbol, "shareholding"),
+          () => client.getOwnershipDealsInsiderSast(providerInstrumentId, "shareholding"),
           async text => writeOwnership(admin, runId, security, providerInstrumentId, text),
         )
         const documentQuery = `${security.name} ${security.symbol} stock id ${providerInstrumentId} annual report quarterly result investor presentation earnings call`
