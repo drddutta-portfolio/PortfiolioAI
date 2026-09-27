@@ -21,11 +21,12 @@ Portfolio Structure
 Research
 Intelligence
 Transactions
-Import
 Settings
+
+Import is accessed from Settings and is not a primary navigation item.
 ```
 
-Exactly eight primary navigation entries are present.
+seven primary navigation entries are present; Import is nested under Settings.
 
 Legacy top-level Operations and Investment Committee routes were removed from
 primary navigation and preserved through backward-compatible redirects:
@@ -193,7 +194,7 @@ Current P7 technical head:
 
 Primary navigation count:
 
-`8 / 8`
+`7 / 7`
 
 No P7 migration files were created.
 
