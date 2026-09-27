@@ -352,8 +352,9 @@ Portfolio Structure
 Research
 Intelligence
 Transactions
-Import
 Settings
+
+Import is accessed from Settings and is not a primary navigation item.
 ```
 
 `Operations` and `Investment Committee` should not remain ordinary primary
