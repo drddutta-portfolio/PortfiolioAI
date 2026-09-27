@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { matchTrendlyneClassificationCandidate, parseTrendlyneClassificationCandidates, parseTrendlyneClassificationResponse, type TrendlyneClassificationRejectionCode } from "../_shared/trendlyne-classification.ts"
-import { assertP4ExactCohortRequest, isApprovedP4DevelopmentSupabaseUrl } from "../_shared/p4-exact-cohort-guard.ts"
+import { assertP4ExactCohortRequest } from "../_shared/p4-exact-cohort-guard.ts"
 
 const SOURCE_CODE = "TRENDLYNE_MCP"
 const MAX_LIMIT = 40

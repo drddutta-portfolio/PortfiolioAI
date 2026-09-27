@@ -15,7 +15,7 @@ const normalizedClassificationMigration = readFileSync(`${root}/supabase/migrati
 describe("Program A A2 provider-control reuse", () => {
   it("requires the exact local-only A2 classification cohort and confirmation", () => {
     expect(classification).toContain('body.action === "A2_EXECUTE"')
-    expect(classification).toContain('a2SecurityIds.length > 5')
+    expect(classification).toContain('exactSecurityIds.length > 5')
     expect(classification).toContain('OWNER_CONFIRMED_PROGRAM_A_A2_CLASSIFICATION')
     expect(classification).toContain('UNEXPECTED_PRODUCTION_DB_TARGET')
     expect(classification).toContain('url.hostname === "kong" && url.port === "8000"')

@@ -12,7 +12,10 @@ const reply=(status:number,body:Record<string,unknown>)=>new Response(JSON.strin
 const sleep=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms))
 function projectRef(value:string){try{return new URL(value).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1]??null}catch{return null}}
 function parseCookieHeaders(headers:Headers){
-  const values=typeof (headers as any).getSetCookie==="function"?(headers as any).getSetCookie():[headers.get("set-cookie")].filter(Boolean)
+  const cookieHeaders=headers as Headers & {getSetCookie?:()=>string[]}
+  const values=typeof cookieHeaders.getSetCookie==="function"
+    ? cookieHeaders.getSetCookie()
+    : [headers.get("set-cookie")].filter((value):value is string=>Boolean(value))
   return values.flatMap((value:string)=>String(value).split(/,(?=[^;,]+=)/gu)).map((part:string)=>part.split(";")[0]?.trim()).filter(Boolean).join("; ")
 }
 function mergeCookies(...cookieStrings:string[]){

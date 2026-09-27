@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P4 — Existing Evidence & Market-Data Rollout is COMPLETE / PASS / CLOSED in PortfolioAI Dev after Owner Checkpoint 4B. All 248 open holdings have a persisted terminal readiness record with zero UNKNOWN states. All 239 equities are classification-ready and AngelOne mapping/current-price/daily-history ready; research coverage is 81 READY and 158 canonically BLOCKED, with 47 missing canonical ISIN and 93 Trendlyne provider-response identity blockers. The 9 ETFs are NOT_APPLICABLE for company research/equity-history methodology while retaining verified AngelOne mapping and current price. P5 remains NOT AUTHORIZED; Production remains unchanged
+**Current milestone:** Post-D P4 — Existing Evidence & Market-Data Rollout is COMPLETE / PASS / CLOSED in PortfolioAI Dev after Owner Checkpoint 4B and independent final reconciliation. All 248 open holdings have an append-only ten-domain `P4_TERMINAL_READINESS_V2` record with zero UNKNOWN or invalid states. All 239 equities are classification-ready and AngelOne mapping/current-price/daily-history ready; research coverage is 81 READY and 158 canonically BLOCKED. Reviewed methodology-profile coverage is 4 READY and 235 explicitly OWNER_DEFERRED to P5, not silently treated as ready. The 9 ETFs are NOT_APPLICABLE for company research/equity-history methodology while retaining verified AngelOne mapping and current price. P5 remains NOT AUTHORIZED; Production remains unchanged
 **Last reviewed:** 27 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -1368,3 +1368,48 @@ Scheduler / paid AI / trade  NOT ACTIVATED
 ```
 
 **Visible UI code change: NONE.** Development data coverage changed substantially; existing UI surfaces may display the newly available classifications, prices, histories, metrics, and explicit blocked states where they already consume those authorities.
+
+
+## Post-D P4 independent final reconciliation — 27 September 2026
+
+The live Development database and deployed Development functions were audited
+after the initial closure record. The final audit is recorded in
+`PortfolioAI_POST_D_P4_FINAL_CLOSURE_AUDIT.md`.
+
+The original `P4B_TERMINAL_READINESS` evidence remains immutable. A new
+append-only `P4_TERMINAL_READINESS_V2` representation now records all ten P4
+domains separately for every open holding:
+
+```text
+Terminal records                     248 / 248
+Domains per record                    10 / 10
+UNKNOWN or invalid states              0
+Equity classification READY          239 / 239
+AngelOne mapping/current price READY  248 / 248
+Equity ONE_DAY history READY          239 / 239
+Fresh research evidence READY          81 / 239
+Research evidence BLOCKED             158 / 239
+Reviewed methodology profile READY      4 / 239
+Methodology profile OWNER_DEFERRED     235 / 239
+```
+
+The profile deferral is explicitly assigned to P5 and does not authorize P5.
+This corrects the earlier compressed readiness representation without changing
+the valid provider-coverage counts or fabricating missing evidence.
+
+Focused security review of the deployed `verify_jwt:false` P4/P4B functions
+passed. Live missing-credential probes were rejected before provider use or
+mutation. Grant-controlled routes require exact, expiring, single-use execution
+grants; the classification route requires its internal token; normal app routes
+retain authenticated portfolio ownership checks. There are zero unconsumed,
+unexpired P4 grants and zero active market-data leases.
+
+`refresh-market-data` v15 is deployed in PortfolioAI Dev with the final mapping
+lease correction. No database migration was created or applied.
+
+```text
+Post-D P4                       COMPLETE / PASS / CLOSED
+Owner Checkpoint 4B             COMPLETE / PASS
+P5                              NOT AUTHORIZED
+Production operational changes NONE
+```

@@ -314,3 +314,25 @@ Production                    UNCHANGED
 No official score, recommendation, sizing decision, scheduler, paid-AI call, trading action, Production deployment, Production migration, or merge to `main` was authorized or executed by this stage.
 
 **Visible UI code change: NONE.**
+
+## 14. Independent final closure reconciliation
+
+The final closure audit found that the initial terminal record compressed six
+research/profile domains into one `research_evidence` object. The underlying
+counts were valid, but that representation was not sufficient to prove the ten
+domain P4 exit contract independently.
+
+An append-only `P4_TERMINAL_READINESS_V2` record now exists for all 248 open
+holdings. Each record contains exactly ten domain states and preserves
+`READY`, canonical `BLOCKED`, `NOT_APPLICABLE`, and `OWNER_DEFERRED` semantics.
+There are zero unknown or invalid states.
+
+Methodology-profile readiness is no longer implied by classification alone:
+
+- 4 open equities have a reviewed profile;
+- 235 are explicitly owner-deferred to P5;
+- 9 ETFs are not applicable.
+
+This reconciliation does not begin or authorize P5. The final audit and
+security evidence are recorded in
+`PortfolioAI_POST_D_P4_FINAL_CLOSURE_AUDIT.md`.

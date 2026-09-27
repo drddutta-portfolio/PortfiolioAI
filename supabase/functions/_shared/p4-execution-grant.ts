@@ -1,6 +1,6 @@
-type AdminClient = {
-  from: (table: string) => any
-}
+import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2"
+
+type AdminClient = Pick<SupabaseClient, "from">
 
 const SOURCE_CODE = "OWNER_REVIEWED_CLASSIFICATION"
 const GRANT_KIND = "P4_EXECUTION_GRANT"

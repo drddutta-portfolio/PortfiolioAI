@@ -84,12 +84,6 @@ Deno.serve(async request=>{
       if(upsert.error) throw upsert.error
     }
 
-    const verified:ProviderInstrument[]=accepted.flatMap(mapping=>
-      mapping.mappingStatus==="VERIFIED"&&mapping.providerInstrumentId&&mapping.exchange&&mapping.tradingSymbol
-        ? [{mappingId:existingBySecurity.get(mapping.securityId)?.id??mapping.securityId,securityId:mapping.securityId,providerInstrumentId:mapping.providerInstrumentId,exchange:mapping.exchange,tradingSymbol:mapping.tradingSymbol}]
-        : []
-    )
-
     const mappingRows=await admin.from("market_data_instrument_mappings")
       .select("id,security_id,provider_instrument_id,exchange,trading_symbol,mapping_status")
       .eq("provider_code",MARKET_DATA_PROVIDER).in("security_id",targetIds)

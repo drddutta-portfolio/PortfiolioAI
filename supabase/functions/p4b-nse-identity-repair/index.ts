@@ -13,7 +13,8 @@ const sleep=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms))
 const browserHeaders=(extra:Record<string,string>={})=>({"user-agent":UA,"accept-language":"en-US,en;q=0.9","cache-control":"no-cache","pragma":"no-cache",...extra})
 
 function cookies(headers:Headers){
-  const raw=(headers as any).getSetCookie?.()??[headers.get("set-cookie")].filter(Boolean)
+  const cookieHeaders=headers as Headers & {getSetCookie?:()=>string[]}
+  const raw=cookieHeaders.getSetCookie?.()??[headers.get("set-cookie")].filter((value):value is string=>Boolean(value))
   return raw.flatMap((v:string)=>String(v).split(/,(?=[^;,]+=)/gu)).map((p:string)=>p.split(";")[0]?.trim()).filter(Boolean).join("; ")
 }
 function mergeCookies(...items:string[]){
@@ -70,7 +71,7 @@ Deno.serve(async request=>{
     if(!targets.length)return reply(200,{status:"COMPLETE",processed:0,lastSymbol:after,results:[]})
 
     let cookie=""
-    try{cookie=await seedCookie()}catch{}
+    try{cookie=await seedCookie()}catch{cookie=""}
     const results:Record<string,unknown>[]=[]
     for(const sec of targets){
       try{
@@ -82,10 +83,10 @@ Deno.serve(async request=>{
         if(observedSymbol!==String(sec.symbol).toUpperCase())throw new Error("NSE_SYMBOL_IDENTITY_MISMATCH")
         if(!official)throw new Error("NSE_ISIN_MISSING")
         const current=typeof sec.isin==="string"&&sec.isin.trim()?sec.isin.trim():null
-        let allowed=false,reason=""
-        if(!current){allowed=true;reason="CANONICAL_ISIN_MISSING_OFFICIAL_NSE_REPAIR"}
+        let reason=""
+        if(!current){reason="CANONICAL_ISIN_MISSING_OFFICIAL_NSE_REPAIR"}
         else if(sec.symbol==="ANGELONE"&&current==="INE732I01013"&&official==="INE732I01021"){
-          allowed=true;reason="K1_REVIEWED_ANGELONE_CORPORATE_ACTION"
+          reason="K1_REVIEWED_ANGELONE_CORPORATE_ACTION"
         }else if(current===official){
           results.push({symbol:sec.symbol,status:"UNCHANGED",isin:current});await sleep(300);continue
         }else{
