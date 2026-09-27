@@ -580,6 +580,8 @@ reported separately; blockers have canonical reasons; reference outputs are not
 presented as current facts; persistence is explicit; cross-surface consistency
 passes.
 
+**Execution result — 27 September 2026:** P5 is **COMPLETE / PASS / CLOSED** in PortfolioAI Dev. All 248 open holdings have a persisted `P5_TERMINAL_DISPOSITION_V1` record with explicit methodology, R6, R7 and sizing states. Methodology resolution is 110 RESOLVED / 124 METHODOLOGY_NOT_AVAILABLE / 5 REVIEW_REQUIRED / 9 NOT_APPLICABLE. Current numeric score, recommendation and sizing coverage is 0/239 equities because no current canonical P5 score-input snapshot exists; historical reference artifacts and DRAFT recommendation policies were not promoted into current facts. Owner settings remained unchanged. P6 remains NOT AUTHORIZED; Production remains unchanged.
+
 ### P6 — Existing R8–R12 product integration
 
 - Integrate R8 Health/Fit/Risk/Exit with current R6/R7 and portfolio facts.
