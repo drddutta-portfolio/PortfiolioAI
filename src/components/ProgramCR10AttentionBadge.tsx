@@ -9,7 +9,7 @@ export function ProgramCR10AttentionBadge({
   readonly compact?: boolean
 }) {
   if (!attention) {
-    return <span className="r10-attention-badge is-unavailable">R10 unavailable</span>
+    return <span className="r10-attention-badge is-unavailable">Attention unavailable</span>
   }
 
   return <span
