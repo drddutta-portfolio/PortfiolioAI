@@ -122,7 +122,7 @@ export function DashboardRiskConcentration() {
   if (isLoading || error || !portfolio) return null
 
   return <section className="dashboard-risk" aria-label="Portfolio risk and concentration">
-    <div className="dashboard-risk-heading"><div><p className="eyebrow">Portfolio risk & concentration</p><h2>Where is portfolio risk concentrated?</h2><p>Read-only view separating descriptive concentration/data diagnostics from canonical on-demand R8 Portfolio Fit and Portfolio Risk states.</p></div><Link to="/app/holdings">Open holdings →</Link></div>
+    <div className="dashboard-risk-heading"><div><p className="eyebrow">Portfolio risk & concentration</p><h2>Where is portfolio risk concentrated?</h2><p>Read-only view separating descriptive concentration/data diagnostics from current Portfolio Fit and Portfolio Risk states.</p></div><Link to="/app/holdings">Open holdings →</Link></div>
 
     {coverage.error ? <div className="dashboard-risk-notice">Research-risk exposure could not be fully assessed: {coverage.error}</div> : null}
 
@@ -132,8 +132,8 @@ export function DashboardRiskConcentration() {
       <article className={model.sectorCoverage.lt(80) ? "warning" : ""}><span>Sector classification coverage</span><strong>{pct(model.sectorCoverage)}</strong><small>{model.largestSector ? `Largest known sector: ${model.largestSector.name} at ${pct(model.largestSector.weight)}` : `${pct(model.unknownSectorExposure)} of priced capital lacks sector classification`}</small></article>
       <article className={model.staleExposure.gt(0) ? "warning" : ""}><span>Stale market-data exposure</span><strong>{pct(model.staleExposure)}</strong><small>Priced capital whose current-value evidence is stale</small></article>
       <article className={model.researchRiskExposure.gte(25) ? "critical" : model.researchRiskExposure.gt(0) ? "warning" : ""}><span>Research-evidence risk</span><strong>{coverage.isLoading ? "…" : pct(model.researchRiskExposure)}</strong><small>Priced capital with non-fresh applicable research coverage</small></article>
-      <article className={model.r8FitReview.length ? "warning" : ""}><span>Canonical R8 Portfolio Fit review</span><strong>{model.r8FitReview.length}</strong><small>Owner-limit / owner-role-relative review states only; no machine target weight</small></article>
-      <article className={model.r8RiskEvaluated.length ? "" : "warning"}><span>Canonical R8 Portfolio Risk evaluated</span><strong>{model.r8RiskEvaluated.length}/{model.r8Rows.length}</strong><small>{model.r8RiskInsufficient.length} insufficient due to absent canonical risk magnitude evidence</small></article>
+      <article className={model.r8FitReview.length ? "warning" : ""}><span>Portfolio Fit review</span><strong>{model.r8FitReview.length}</strong><small>Owner-limit / owner-role-relative review states only; no machine target weight</small></article>
+      <article className={model.r8RiskEvaluated.length ? "" : "warning"}><span>Portfolio Risk evaluated</span><strong>{model.r8RiskEvaluated.length}/{model.r8Rows.length}</strong><small>{model.r8RiskInsufficient.length} insufficient due to absent canonical risk magnitude evidence</small></article>
     </div>
 
     <div className="dashboard-risk-grid">
