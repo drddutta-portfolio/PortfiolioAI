@@ -118,8 +118,7 @@ Deno.serve(async request=>{
             if(!cls?.sector||!cls?.industry||cls?.has_conflict){
               steps.push({domain:"CLASSIFICATION",status:"BLOCKED",code:"CLASSIFICATION_NOT_READY"})
               row.status="BLOCKED"
-              results.push(row)
-              continue
+              return row
             }
       
             let identityOk=identityReady.has(security.id)
