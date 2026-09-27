@@ -271,8 +271,6 @@ export function DashboardPage() {
           </div>
         </section>
 
-        <NewsPlaceholder scopeLabel={selectedScopeLabel} />
-
         {isConsolidated ? <BrokerAnalytics rows={portfolio.brokerAnalytics} /> : <ScopedBrokerExposure positions={scopedPositions} scopeLabel={selectedScopeLabel} />}
       </main>
 
@@ -406,13 +404,6 @@ function PnlContributionList({ title: listTitle, positions, tone }: { readonly t
     const width = Decimal.max(3, amount.abs().div(max).times(100)).toFixed()
     return <article key={position.securityId}><div><Link to={`/app/research/${position.securityId}`}>{position.symbol}</Link><span>{formatMoney(position.unrealisedPnl)}</span></div><div className="dashboard-contribution-track"><i style={{ width: `${width}%` }} /></div><small>{position.portfolioWeightPercent === null ? "Portfolio weight unavailable" : `${new Decimal(position.portfolioWeightPercent).toDecimalPlaces(2).toFixed(2)}% portfolio weight`}</small></article>
   })}</div> : <EmptyData text="No supported positions in this direction." />}</section>
-}
-
-function NewsPlaceholder({ scopeLabel: selectedScopeLabel }: { readonly scopeLabel: string }) {
-  return <section className="dashboard-news-section">
-    <div className="dashboard-section-heading"><div><p className="eyebrow">Important portfolio news</p><h2>News intelligence</h2><p>The visual slot is ready for holding-specific daily news, but live ingestion is intentionally not enabled in this UI-only branch.</p></div><span className="dashboard-news-status">Backend planned</span></div>
-    <div className="dashboard-news-placeholder"><span aria-hidden="true">◫</span><div><strong>No fabricated headlines</strong><p>Future scheduled ingestion will deduplicate and cache important news for {selectedScopeLabel} from approved sources, then update this panel without requiring a manual Dashboard refresh.</p></div></div>
-  </section>
 }
 
 function ScopedBrokerExposure({ positions, scopeLabel: selectedScopeLabel }: { readonly positions: readonly PortfolioPosition[]; readonly scopeLabel: string }) {
