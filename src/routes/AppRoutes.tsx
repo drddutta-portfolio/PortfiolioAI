@@ -61,6 +61,14 @@ const InvestmentCommitteePage = lazy(async () => {
   const module = await import("../pages/InvestmentCommitteePage")
   return { default: module.InvestmentCommitteePage }
 })
+const IntelligencePage = lazy(async () => {
+  const module = await import("../pages/IntelligencePage")
+  return { default: module.IntelligencePage }
+})
+const SettingsPage = lazy(async () => {
+  const module = await import("../pages/SettingsPage")
+  return { default: module.SettingsPage }
+})
 
 export function AppRoutes() {
   return (
@@ -132,17 +140,27 @@ export function AppRoutes() {
           element={<AppShell><Suspense fallback={<PageLoader label="Loading security research" />}><ResearchPage /></Suspense></AppShell>}
         />
         <Route
-          path="/app/operations"
-          element={<AppShell><Suspense fallback={<PageLoader label="Loading Operations" />}><OperationsPage /></Suspense></AppShell>}
+          path="/app/intelligence"
+          element={<AppShell><Suspense fallback={<PageLoader label="Loading Intelligence" />}><IntelligencePage /></Suspense></AppShell>}
         />
         <Route
-          path="/app/investment-committee"
-          element={<AppShell><Suspense fallback={<PageLoader label="Loading Investment Committee" />}><InvestmentCommitteePage /></Suspense></AppShell>}
+          path="/app/intelligence/investment-committee"
+          element={<AppShell><Suspense fallback={<PageLoader label="Loading Investment Committee narrative" />}><InvestmentCommitteePage /></Suspense></AppShell>}
+        />
+        <Route
+          path="/app/settings"
+          element={<AppShell><Suspense fallback={<PageLoader label="Loading Settings" />}><SettingsPage /></Suspense></AppShell>}
         />
         <Route
           path="/app/settings/data-sources"
           element={<AppShell><Suspense fallback={<PageLoader label="Loading Data Sources" />}><DataSourcesPage /></Suspense></AppShell>}
         />
+        <Route
+          path="/app/settings/diagnostics/operations"
+          element={<AppShell><Suspense fallback={<PageLoader label="Loading diagnostics" />}><OperationsPage /></Suspense></AppShell>}
+        />
+        <Route path="/app/operations" element={<Navigate to="/app/settings/diagnostics/operations" replace />} />
+        <Route path="/app/investment-committee" element={<Navigate to="/app/intelligence/investment-committee" replace />} />
         <Route
           path="/app/import"
           element={
