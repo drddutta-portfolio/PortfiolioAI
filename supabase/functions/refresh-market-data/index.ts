@@ -156,7 +156,7 @@ Deno.serve(async (request) => {
       const { data: portfolio, error: portfolioError } = await admin.from("portfolios").select("id").eq("id", body.portfolioId).eq("user_id", userData!.user.id).single()
       if (portfolioError || !portfolio) return json(404, { error: "Portfolio not found." })
       const leaseHolder = crypto.randomUUID()
-      const mappingOperation = p4bMapping ? "P4B_SYNC_MAPPINGS" : "SYNC_MAPPINGS"
+      const mappingOperation = "SYNC_MAPPINGS"
       await acquireLease(admin, portfolio.id, mappingOperation, leaseHolder)
       try {
       const { data: holdings, error: holdingsError } = await admin.from("current_holdings").select("security_id,current_quantity").eq("portfolio_id", portfolio.id)
