@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { useResearchCoverage } from "../features/research/useResearchCoverage"
 import { buildProgramCR8LivePortfolioProjection } from "../features/decision/r8LivePortfolioAdapter"
+import { useP5TerminalDispositions } from "../features/decision/useP5TerminalDispositions"
 import type { PortfolioPosition } from "../features/portfolio/types"
 import "./DashboardRiskConcentration.css"
 
@@ -28,9 +29,12 @@ export function DashboardRiskConcentration() {
   const { portfolio, isLoading, error } = usePortfolioView()
   const positions = useMemo(() => portfolio?.openPositions ?? [], [portfolio])
   const coverage = useResearchCoverage(positions)
+  const p5 = useP5TerminalDispositions(portfolio?.portfolio.id ?? null)
   const r8Projection = useMemo(
-    () => portfolio ? buildProgramCR8LivePortfolioProjection(portfolio, coverage.data) : null,
-    [coverage.data, portfolio],
+    () => portfolio && !p5.isLoading
+      ? buildProgramCR8LivePortfolioProjection(portfolio, coverage.data, p5.bySecurityId)
+      : null,
+    [coverage.data, p5.bySecurityId, p5.isLoading, portfolio],
   )
 
   const model = useMemo(() => {
