@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P6 — Existing R8–R12 Product Integration is COMPLETE / PASS / CLOSED in PortfolioAI Dev. Owner Checkpoint 5 is APPROVED / CLOSED. The live R8 → R9 → R10 chain consumes the current P5 terminal authority; R9 remains in-memory only; R10 remains recomputed canonical authority; R11 remains manual/auditable/fail-closed with schedulers disabled; R12 remains LOCAL_MOCK_ONLY with no real AI. P7 remains NOT AUTHORIZED; Production remains unchanged
+**Current milestone:** Post-D P7 — UI Consolidation technical implementation is COMPLETE / PASS in PortfolioAI Dev and is awaiting Owner Checkpoint 6 browser approval. The primary product shell now contains exactly Dashboard, Holdings, Portfolio Structure, Research, Intelligence, Transactions, Import and Settings. Historical Gate/fixture recommendation artifacts are removed from current Research; owner position controls no longer generate legacy recommendation/weight/action previews; detailed decision intelligence is consolidated under Intelligence; Operations is under Settings diagnostics. P7 formal closure is PENDING browser approval; P8 is NOT AUTHORIZED; Production remains unchanged
 **Last reviewed:** 27 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -1572,3 +1572,56 @@ Production = UNCHANGED
 No additional provider calls, score/recommendation/sizing runs, migrations, scheduler activation, Production mutation, merge to `main`, or Production deployment were authorized by this closure.
 
 **Visible UI topology change: NONE.** P6 converged the existing deterministic decision chain; major UI consolidation remains P7.
+
+
+## Post-D P7 UI consolidation technical pass — 27 September 2026
+
+**Technical implementation:** `COMPLETE / PASS`
+
+**Owner Checkpoint 6:** `PENDING BROWSER APPROVAL`
+
+Primary navigation is now frozen to:
+
+```text
+Dashboard
+Holdings
+Portfolio Structure
+Research
+Intelligence
+Transactions
+Import
+Settings
+```
+
+Key P7 convergence completed:
+- detailed health/risk/change/action views moved out of the long Dashboard workflow into Intelligence;
+- legacy Operations route moved under Settings diagnostics with backward redirect;
+- Investment Committee interpretation moved under Intelligence with backward redirect;
+- Gate/Program/R6–R12 terminology removed from primary product copy;
+- historical Gate-J/Gate-I reference outputs removed from live stock Research pages;
+- current score slot no longer reconstructs a preview from partial/reference evidence;
+- owner position settings are now owner-only and no longer run legacy draft recommendation, suggested-weight or action-bias previews;
+- Action Center blockers are translated into investor language;
+- duplicate “Backend planned” news placeholder removed;
+- stale hardcoded provider-call limit removed in favor of live configured value.
+
+The first P7 owner-settings build exposed a stale TypeScript test contract. The test was updated to the new owner-only component contract.
+
+Verified app-code deployment:
+`829df629339b701bf5228df735a32473904c5b5a` → Vercel `READY`.
+
+No P7 migrations, provider calls, AI calls, scheduler activation, trading, Production mutation, merge to `main`, or Production deployment occurred.
+
+Supporting audit:
+`docs/PortfolioAI_POST_D_P7_UI_CONSOLIDATION_AUDIT.md`
+
+```text
+P4 = COMPLETE / PASS / CLOSED
+P5 = COMPLETE / PASS / CLOSED
+P6 = COMPLETE / PASS / CLOSED
+P7 technical implementation = COMPLETE / PASS
+Owner Checkpoint 6 = PENDING BROWSER APPROVAL
+P7 formal closure = PENDING
+P8 = NOT AUTHORIZED
+Production = UNCHANGED
+```
