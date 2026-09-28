@@ -39,8 +39,11 @@ ONE CONSISTENT INVESTOR UI
 ONE QUALIFIED RELEASE CANDIDATE
 ```
 
-No Program E, R13/R14, Gate L/M, new scoring engine, additional Dashboard,
-provider integration, trading capability, or broad AI expansion is authorized.
+No independent feature Program E, R13/R14, Gate L/M, new scoring engine, additional Dashboard,
+provider integration, trading capability, or broad AI expansion is authorized. The owner-approved
+working label **Program E** refers only to the canonical **P7-IC Portfolio-wide Intelligence
+Completion Remediation** checkpoint defined below. P7-IC is convergence/completion work using
+existing R3/R4/R5/R6/R7/R8/R9/R10 authorities; it is not a fifth feature program.
 
 ### 1.1 Permanent capability maturity model
 
@@ -650,9 +653,52 @@ operations history, diagnostics, and environment state.
 requires attention, and what evidence supports the action without understanding
 repository program terminology.
 
-**Execution result — refined 28 September 2026:** P7 technical implementation is **COMPLETE / PASS** in PortfolioAI Dev. The product shell now has exactly the seven approved top-level products, with Import nested under Settings; detailed decision intelligence is consolidated under Intelligence; provider/operations controls are grouped under Settings; historical Gate/fixture outputs are removed from current Research; owner controls are separated from engine outputs; blockers use investor language; and unsupported duplicate placeholders were removed. The Dashboard Allocation & Performance block now uses the approved compact four-row presentation, canonical equal-width page alignment, semantic market-cap colors, and responsive table/matrix behavior. Formal P7 closure remains pending Owner Checkpoint 6 browser approval. P8 is NOT AUTHORIZED and Production remains unchanged.
+**Execution result — refined 28 September 2026:** the P7 shell/UI consolidation is technically implemented in PortfolioAI Dev. The product shell now has exactly the seven approved top-level products, with Import nested under Settings; detailed decision intelligence is consolidated under Intelligence; provider/operations controls are grouped under Settings; historical Gate/fixture outputs are removed from current Research; owner controls are separated from engine outputs; blockers use investor language; unsupported duplicate placeholders were removed; and the Dashboard Allocation & Performance block uses the approved compact four-row presentation with responsive alignment.
 
-**Owner checkpoint 6:** PENDING — browser approval using production-equivalent data.
+P7 is intentionally **NOT CLOSED**. Master-Blueprint reconciliation identified a material product-completion gap: current portfolio-wide methodology/evidence/numeric recommendation coverage and the full multi-period Movement Engine are not yet operational across the eligible portfolio. The mandatory **P7-IC Portfolio-wide Intelligence Completion Remediation** must therefore complete before final Owner Checkpoint 6 acceptance.
+
+### P7-IC — Portfolio-wide Intelligence Completion Remediation
+
+**Working label:** Program E  
+**Canonical meaning:** convergence/remediation checkpoint inside P7, not a new feature program.
+
+Authoritative detailed plan:
+
+`docs/PortfolioAI_POST_D_P7_IC_PORTFOLIO_INTELLIGENCE_COMPLETION_PLAN.md`
+
+Required sequence:
+
+```text
+IC0  Authority + portfolio coverage freeze
+  ↓
+IC1  Methodology + recommendation-policy completion
+  ↓
+IC2  Evidence / market-history remediation
+  ↓
+IC3  Current canonical evidence snapshots
+  ↓
+IC4  R6 current portfolio scoring
+  ↓
+IC5  R7 recommendation / Core-Satellite candidacy / sizing readiness
+  ↓
+IC6  R8 + R9 + Movement Engine operationalization
+  ↓
+IC7  R10 + final P7 UI integration
+  ↓
+IC-FINAL portfolio-wide validation
+  ↓
+Owner Checkpoint 6
+  ↓
+P7 COMPLETE / PASS / CLOSED
+```
+
+P7-IC must preserve fail-closed semantics. It does **not** require a numeric score or recommendation for every equity at any cost. Every eligible security must instead reach either the deepest valid current assessment supported by approved methodology/evidence or an explicit canonical blocker.
+
+P7-IC must not introduce a replacement scoring/recommendation engine, universal Pharma thresholds, automatic role mutation, autonomous trading, or a competing Action Center. R10 remains the sole Action Center authority and owner portfolio role remains authoritative.
+
+**Owner checkpoint 6:** DEFERRED UNTIL P7-IC IC-FINAL — final browser approval using production-equivalent Development data and the real current R6/R7/R8/R9/Movement/R10 outputs.
+
+P8 remains **NOT AUTHORIZED** until P7-IC completes and the owner explicitly closes P7.
 
 ### P8 — Release-candidate qualification
 
