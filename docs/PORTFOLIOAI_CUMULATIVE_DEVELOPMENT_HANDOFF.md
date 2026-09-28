@@ -10797,3 +10797,23 @@ The handoff artifacts are
 `docs/p7-ic/PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json`.
 The exact next checkpoint is IC-A owner review. IC1 and P8 remain unauthorized;
 Production is unchanged.
+
+
+---
+
+## P7-IC IC1 handoff — 29 September 2026
+
+IC-A was owner-approved for strengthened held-portfolio methodology/R7 completion and persistence/access design only.
+
+IC1 produced a complete candidate authority layer without reopening historical Gate K. The frozen 239-equity IC0 universe now has 238 resolved methodology+R7 dispositions and one legitimate factual review exception (BLUEJET Pharma Primary-subprofile assignment). No held equity remains METHODOLOGY_NOT_AVAILABLE solely because methodology engineering was deferred.
+
+Artifacts:
+- `docs/p7-ic/PortfolioAI_P7_IC1_METHODOLOGY_R7_REGISTRY_V1.json`
+- `docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json`
+- `docs/PortfolioAI_P7_IC1_METHODOLOGY_R7_COMPLETION.md`
+- `docs/PortfolioAI_P7_IC1_PERSISTENCE_ACCESS_DESIGN.md`
+- `scripts/p7-ic1-validate.mjs`
+
+No provider call, database write, migration, deployment, merge or Production change occurred. IC1 stops at IC-B. IC2 is not authorized.
+
+Because the Development branch is connected to Vercel Preview, moving the branch ref would constitute a deployment. The package is therefore staged as an unattached Git commit pending owner IC-B review; `PortfolioAI-Development` remains at `e7c021b865fcd1d49a7c59924ef9c44f0383f301`.

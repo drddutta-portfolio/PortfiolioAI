@@ -1932,3 +1932,32 @@ IC1 = NOT STARTED / NOT AUTHORIZED
 P8 = NOT AUTHORIZED
 Production = UNCHANGED
 ```
+
+
+## P7-IC IC-A approval and IC1 candidate completion — 29 September 2026
+
+Owner explicitly approved IC-A for strengthened IC1 methodology + complete R7-policy completion and persistence/access architecture DESIGN ONLY.
+
+IC1 candidate package is complete and stopped at IC-B:
+- 239 equities reconciled;
+- 238 methodology/R7 resolved;
+- 1 genuine factual review exception: BLUEJET Primary Pharma subprofile;
+- 0 deferred-engineering METHODOLOGY_NOT_AVAILABLE closure states;
+- 21 new held-business-model methodology candidates completed;
+- all resolved held profiles have complete R7 authority/candidate coverage;
+- Gate K remains historically COMPLETE / PASS / CLOSED;
+- persistence/access design completed with no migration file.
+
+Safety:
+```text
+IC1 runtime activation = NO
+provider calls = 0
+database writes = 0
+migration creation/application = 0
+Production change = 0
+deployment = 0
+merge = 0
+P8 = NOT AUTHORIZED
+```
+
+The Development branch ref intentionally remains at `e7c021b865fcd1d49a7c59924ef9c44f0383f301` because a branch update is Vercel-deploying and deployment is not authorized. The IC1 package is staged as an unattached Git commit for IC-B review; no branch ref is moved.
