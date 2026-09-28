@@ -615,7 +615,7 @@ canonical selection / conflict handling
       ↓
 recompute readiness
       ↓
-IC3 snapshot → IC4 R6 → IC5 R7 for the completed cohort
+prepare/materialize IC3 snapshot for the completed cohort → STOP at IC-C; IC4 R6 and IC5 R7 may execute only after IC-C approval
 ```
 
 ### Cache-first rule
