@@ -30,9 +30,38 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
 **Current milestone:** Post-D P7 remains ACTIVE. Dashboard/stock-page UI refinement is still being completed, and P7 formal closure is deliberately deferred. The mandatory **P7-IC Portfolio-wide Intelligence Completion Remediation** (working label: Program E; not a new feature program) must then align the existing R3/R4/R5/R6/R7/R8/R9/R10 authorities with the real current portfolio. The frozen P7-IC execution model is industry/methodology-first, cache-first and quota-bounded: reuse valid Gate H-K methodology reference stocks, persist every accepted provider observation with provenance/date/freshness metadata, make normal stock-page browsing zero-provider-call, execute Trendlyne in bounded daily cohorts (default 320 planned calls/day against the current 400/day planning ceiling), materialize current snapshots, execute current R6/R7, operationalize R8/R9 plus Movement, and integrate real outputs through R10/Research/Intelligence/Action Center. Owner Checkpoint 6 is deferred until P7-IC IC-FINAL. P8 remains NOT AUTHORIZED; Production remains unchanged
-**Last reviewed:** 28 September 2026
+**Last reviewed:** 29 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
+
+
+## P7-IC final planning coherence approval — 29 September 2026
+
+Final read-only Codex audit result: **A. APPROVE**.
+
+The audit confirmed that the repository planning package at `c567a3b8b1b3321fc19b72e41bcb0f6645defcc0` and the corrected V2 owner plan are aligned with no material current contradiction. The audit specifically confirmed:
+
+- complete held-portfolio methodology completion remains the IC1 target;
+- complete R7 policy coverage remains mandatory for every held-portfolio methodology/profile/subprofile;
+- Gate K remains historically COMPLETE / PASS / CLOSED;
+- checkpoint barriers are coherent: IC1→IC-B, IC2/IC3→IC-C, IC4/IC5→IC-D, IC6→IC-E;
+- IC5 produces R7 candidacy/sizing readiness only and no owner-facing action state;
+- canonical action projection occurs in IC6 only after R8 + Movement exist;
+- canonical internal action states remain `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`;
+- IC-A remains a future owner decision and may authorize strengthened IC1 plus persistence/access design only; migration creation/application remains separately approval-gated.
+
+Governance remains:
+
+```text
+P7 = ACTIVE
+IC0 = BLOCKED / AUDIT COMPLETE / PASS WITHHELD
+IC-A = AWAITING OWNER APPROVAL
+IC1 = NOT STARTED / NOT AUTHORIZED
+P8 = NOT AUTHORIZED
+Production = UNCHANGED
+```
+
+No build, provider call, migration, database write, deployment or Production change was authorized by this planning approval.
 
 
 ## P7-IC operational amendment — cache-first sector-aware completion — 28 September 2026
