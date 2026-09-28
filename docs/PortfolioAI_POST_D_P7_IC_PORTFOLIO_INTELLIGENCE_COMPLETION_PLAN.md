@@ -1073,8 +1073,9 @@ If existing storage cannot reproduce a 2–4-quarter movement decision, stop for
 - every applicable holding has an R8 disposition;
 - R9 change state is available where historical comparison is valid;
 - every equity has a movement disposition or canonical blocker;
+- every applicable equity has a canonical owner-facing action state or an explicit action blocker after R7 + R8 + Movement are available;
 - no automatic role mutation exists;
-- replay of the same evidence/history gives the same movement state.
+- replay of the same evidence/history gives the same movement state and action projection.
 
 ### Owner Checkpoint IC-E
 
