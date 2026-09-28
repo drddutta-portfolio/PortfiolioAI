@@ -869,14 +869,22 @@ Expose the completed current intelligence through the existing product shell wit
 
 ## Research
 
+All stocks use one universal design shell. Sector/industry/subprofile differences alter only the research modules, evidence requirements and methodology-specific decision content.
+
 Show:
 
-- current methodology;
+- current methodology/profile/subprofile;
 - current evidence readiness;
 - current R6 score when available;
 - current R7 recommendation / suggested role when available;
+- owner-facing action label when canonically derivable;
 - exact blocker when unavailable;
-- “why this score/recommendation?” lineage.
+- “why this score/recommendation?” lineage;
+- evidence period/as-of date;
+- last fetched/retrieved date;
+- freshness / stale state and fresh-through date where applicable.
+
+Opening the page must be cache-only and must not itself trigger Trendlyne or Angel One historical calls.
 
 ## Intelligence
 
@@ -961,6 +969,10 @@ For all 248 open holdings record:
 - Movement state;
 - R10 attention state;
 - UI visibility;
+- evidence period/as-of date;
+- last fetched/retrieved date;
+- freshness state;
+- provider calls used by the remediation cohort;
 - final blocker;
 - last as-of date.
 
@@ -1024,7 +1036,10 @@ At each executable checkpoint run the relevant subset; IC-FINAL runs the full se
 - production-equivalent Vite build;
 - `git diff --check`;
 - secret/crossover scan;
-- Development browser validation.
+- Development browser validation;
+- cache-only page-open regression proving zero provider calls on normal Research/Holdings/Intelligence/Dashboard browsing;
+- evidence-card freshness/date display validation;
+- bounded-provider-plan tests including daily call ceiling/headroom enforcement.
 
 Required visual/browser widths remain:
 
@@ -1120,11 +1135,13 @@ P7-IC succeeds when PortfolioAI can answer, for each eligible holding, with curr
 1. **Can this company be assessed with an approved methodology?**
 2. **What is its current deterministic score, or why is no score valid?**
 3. **Is it currently a Core Candidate, Satellite Candidate, Watch, Avoid, or blocked?**
-4. **How does that compare with the owner’s current role?**
+4. **How does that compare with the owner's current role?**
 5. **What is its Core Health / Fit / Risk / Exit state?**
 6. **What changed since the prior valid state?**
 7. **Is it stable, a promotion candidate, promotion ready, a demotion review, or otherwise blocked?**
-8. **What requires the owner’s attention in R10?**
+8. **What requires the owner's attention in R10?**
 9. **What evidence supports the conclusion?**
+10. **When was that evidence measured and last fetched, and is it still fresh?**
+11. **What simple owner-facing action state (Accumulate / Hold / Watch / Reduce / Exit Review) is justified, if any, without bypassing R7/R8?**
 
-The final decision always remains with the portfolio owner.
+The final investment decision remains with the owner. The application must provide the evidence, deterministic assessment, role candidacy, risk/exit context and traceable reason path needed to make that decision.
