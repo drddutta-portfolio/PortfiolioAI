@@ -119,8 +119,8 @@ a:hover { color: #134832; }
 .environment-badge { display: inline-flex; align-items: center; min-height: 1.45rem; padding: 0.18rem 0.45rem; border: 1px solid #b97919; border-radius: 999px; color: #68460f; background: #fff2cf; font-size: 0.62rem; font-weight: 850; letter-spacing: 0.08em; line-height: 1; text-transform: uppercase; }
 .environment-badge-auth { width: fit-content; margin: 0.5rem 0 0; }
 
-.app-navigation { display: flex; align-self: stretch; align-items: stretch; gap: 0.4rem; }
-.app-navigation a { display: flex; align-items: center; padding: 0 0.8rem; border-bottom: 2px solid transparent; color: #66726b; font-size: 0.88rem; font-weight: 700; text-decoration: none; }
+.app-navigation { display: flex; min-width: 0; align-self: stretch; align-items: stretch; gap: 0.4rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.app-navigation a { display: flex; flex: 0 0 auto; align-items: center; padding: 0 0.8rem; border-bottom: 2px solid transparent; color: #66726b; font-size: 0.88rem; font-weight: 700; text-decoration: none; }
 .app-navigation a.active { border-bottom-color: #27684b; color: #173b2c; }
 .account-menu { display: flex; align-items: center; gap: 1rem; }
 .account-email { color: #637068; font-size: 0.86rem; }
