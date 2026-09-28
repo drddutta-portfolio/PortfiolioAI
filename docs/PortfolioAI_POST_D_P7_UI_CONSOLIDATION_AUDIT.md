@@ -5,8 +5,9 @@
 **Branch:** `PortfolioAI-Development`  
 **Date:** 27 September 2026  
 **Technical implementation:** COMPLETE / PASS  
-**Owner Checkpoint 6:** PENDING BROWSER APPROVAL  
+**Owner Checkpoint 6:** DEFERRED UNTIL P7-IC IC-FINAL  
 **P7 formal closure:** PENDING  
+**P7-IC:** REQUIRED — portfolio-wide intelligence completion remediation  
 **P8:** NOT AUTHORIZED  
 **Production impact:** NONE
 
@@ -262,5 +263,47 @@ Owner Checkpoint 6          = PENDING BROWSER APPROVAL
 P7 formal closure           = PENDING
 P8                          = NOT AUTHORIZED
 
+Production = UNCHANGED
+```
+
+
+## 13. Superseding P7 closure sequence — 28 September 2026
+
+The UI-consolidation implementation described above remains valid, but its original
+closure sequence is superseded by Master-Blueprint reconciliation.
+
+P7 must remain open while the required **P7-IC Portfolio-wide Intelligence
+Completion Remediation** runs.
+
+Authoritative plan:
+
+`docs/PortfolioAI_POST_D_P7_IC_PORTFOLIO_INTELLIGENCE_COMPLETION_PLAN.md`
+
+The required sequence is:
+
+```text
+current P7 shell/UI work
+→ P7-IC IC0–IC7
+→ P7-IC IC-FINAL
+→ final real-data UI/browser integration
+→ Owner Checkpoint 6
+→ P7 formal closure
+→ P8
+```
+
+Reason: current UI consolidation cannot be considered final until real current
+portfolio outputs for methodology/evidence readiness, R6 scoring, R7
+Core/Satellite candidacy, R8 portfolio intelligence, R9 change, Movement state
+and R10 attention are integrated and browser-validated.
+
+This does not invalidate earlier P7 UI work. It prevents the UI from being
+closed before the Master Blueprint's existing decision capabilities are
+operationalized across the real portfolio.
+
+```text
+P7 = ACTIVE
+P7-IC = REQUIRED / PLAN FROZEN
+Owner Checkpoint 6 = DEFERRED
+P8 = NOT AUTHORIZED
 Production = UNCHANGED
 ```
