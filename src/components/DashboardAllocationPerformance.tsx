@@ -6,6 +6,7 @@ import type { SecurityEnrichment } from "../features/enrichment/types"
 import { formatMoney } from "../features/portfolio/format"
 import type { PortfolioPosition } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
+import { MARKET_CAP_COLORS } from "./dashboardAllocationPalette"
 import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./DashboardScopeContext"
 import "./DashboardAllocationPerformance.css"
 
@@ -53,14 +54,8 @@ const SPECIAL_COLORS: Record<NonNullable<AllocationSegment["special"]>, string> 
   UNCLASSIFIED: "#c8cec9",
   OTHER: "#a7b6ad",
 }
-const MARKET_CAP_COLORS: Record<string, string> = {
-  "Large Cap": "#2563eb",
-  "Mid Cap": "#d97706",
-  "Small Cap": "#7c3aed",
-  ETF: "#0891b2",
-  Unclassified: "#c8cec9",
-}
 const HIGH_ALLOCATION_THRESHOLD = new Decimal(5)
+const OUTPERFORMANCE_THRESHOLD = new Decimal(20.3)
 
 function prettyMarketCap(value: SecurityEnrichment["marketCapCategory"] | "ETF") {
   if (value === "ETF") return "ETF"
@@ -205,33 +200,37 @@ function sortRows(rows: readonly GroupRow[], key: SortKey, direction: Direction)
   })
 }
 
-function Donut({ segments, centerLabel, compact = false }: { segments: readonly AllocationSegment[]; centerLabel: string; compact?: boolean }) {
+function segmentColor(segment: AllocationSegment, index: number, colors?: Readonly<Record<string, string>>) {
+  return colors?.[segment.label] ?? (segment.special ? SPECIAL_COLORS[segment.special] : DONUT_COLORS[index % DONUT_COLORS.length])
+}
+
+function Donut({ segments, centerValue, centerLabel, colors }: { segments: readonly AllocationSegment[]; centerValue: string; centerLabel: string; colors?: Readonly<Record<string, string>> }) {
   const total = segments.reduce((sum, segment) => sum.plus(segment.value), new Decimal(0))
-  if (total.isZero()) return <div className={compact ? "dap-donut compact empty" : "dap-donut empty"}><div><strong>—</strong><small>No priced data</small></div></div>
+  if (total.isZero()) return <div className="dap-donut empty"><div><strong>—</strong><small>No priced data</small></div></div>
   let offset = new Decimal(0)
   const stops: string[] = []
   segments.forEach((segment, index) => {
     const start = offset
     const end = offset.plus(segment.weight)
-    const color = segment.special ? SPECIAL_COLORS[segment.special] : DONUT_COLORS[index % DONUT_COLORS.length]
+    const color = segmentColor(segment, index, colors)
     stops.push(`${color} ${start.toFixed(4)}% ${end.toFixed(4)}%`)
     offset = end
   })
-  return <div className={compact ? "dap-donut compact" : "dap-donut"} style={{ background: `conic-gradient(${stops.join(",")})` }}><div><strong>100%</strong><small>{centerLabel}</small></div></div>
+  return <div className="dap-donut" style={{ background: `conic-gradient(${stops.join(",")})` }}><div><strong>{centerValue}</strong><small>{centerLabel}</small></div></div>
 }
 
 function AllocationLegend({ segments, currency, compact = false }: { segments: readonly AllocationSegment[]; currency: string; compact?: boolean }) {
   return <div className={compact ? "dap-legend compact" : "dap-legend"}>{segments.map((segment, index) => <div className="dap-legend-row" key={segment.label}><i style={{ background: segment.special ? SPECIAL_COLORS[segment.special] : DONUT_COLORS[index % DONUT_COLORS.length] }} /><span><strong>{segment.label}</strong><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed(), currency)}</small></span><b>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</b></div>)}</div>
 }
 
-function MarketCapAllocation({ segments, currency }: { segments: readonly AllocationSegment[]; currency: string }) {
-  return <section className="dap-allocation-card"><div className="dap-allocation-title"><div><h3>Market-cap allocation</h3><span>Portfolio weight by current priced value</span></div><span className="dap-coverage-badge">100% classified</span></div><div className="dap-marketcap-layout"><Donut segments={segments} centerLabel="classified" /><div className="dap-marketcap-list">{segments.map((segment) => <div className="dap-marketcap-row" key={segment.label}><i style={{ background: MARKET_CAP_COLORS[segment.label] ?? "#7b91a8" }} /><span><strong>{segment.label}</strong><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed(), currency)}</small></span><b>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</b></div>)}</div></div></section>
+function MarketCapAllocation({ segments, currency, coverage }: { segments: readonly AllocationSegment[]; currency: string; coverage: string }) {
+  return <section className="dap-allocation-card"><div className="dap-allocation-title"><div><h3>Market-cap allocation</h3><span>Portfolio weight by current priced value</span></div><span className="dap-coverage-badge">{coverage} classified</span></div><div className="dap-marketcap-layout"><Donut segments={segments} centerValue={coverage} centerLabel="classified" colors={MARKET_CAP_COLORS} /><div className="dap-marketcap-list">{segments.map((segment) => <div className="dap-marketcap-row" key={segment.label}><i style={{ background: MARKET_CAP_COLORS[segment.label] ?? MARKET_CAP_COLORS.Unclassified }} /><span><strong>{segment.label}</strong><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed(), currency)}</small></span><b>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</b></div>)}</div></div></section>
 }
 
 function PerformanceMatrix({ groups }: { groups: readonly GroupRow[] }) {
   const matrix = useMemo(() => groups.reduce<Record<MatrixBucket, GroupRow[]>>((acc, row) => {
     const bucket: MatrixBucket = row.weight.greaterThanOrEqualTo(HIGH_ALLOCATION_THRESHOLD)
-      ? row.returnPct !== null && row.returnPct.greaterThanOrEqualTo(20.3) ? "strength" : "review"
+      ? row.returnPct !== null && row.returnPct.greaterThanOrEqualTo(OUTPERFORMANCE_THRESHOLD) ? "strength" : "review"
       : row.returnPct !== null && row.returnPct.lessThan(0) ? "watch" : "lowPriority"
     acc[bucket].push(row)
     return acc
@@ -242,7 +241,7 @@ function PerformanceMatrix({ groups }: { groups: readonly GroupRow[] }) {
     { key: "watch", title: "Smaller & negative", subtitle: "Watch for deterioration" },
     { key: "lowPriority", title: "Smaller & positive", subtitle: "Lower portfolio impact" },
   ]
-  return <section className="dap-matrix"><div className="dap-matrix-heading"><div><p className="eyebrow">Allocation vs performance</p><h3>Where is sector exposure helping or lagging?</h3></div><div className="dap-matrix-rules"><span>Large exposure ≥ 5%</span><span>Outperforming ≥ +20.3%</span></div></div><div className="dap-matrix-grid">{cells.map((cell) => <article className={`bucket-${cell.key}`} key={cell.key}><div><strong>{cell.title}</strong><small>{cell.subtitle}</small></div>{matrix[cell.key].length ? <ul>{matrix[cell.key].sort((a,b)=>b.weight.comparedTo(a.weight)).map((row)=><li key={row.label}><span>{row.label}</span><b>{row.weight.toDecimalPlaces(1).toFixed(1)}% · {signed(row.returnPct)}</b></li>)}</ul> : <p>No sectors in this bucket.</p>}</article>)}</div></section>
+  return <section className="dap-matrix"><div className="dap-matrix-heading"><div><p className="eyebrow">Allocation vs performance</p><h3>Where is sector exposure helping or lagging?</h3></div><div className="dap-matrix-rules"><span>Large exposure ≥ {HIGH_ALLOCATION_THRESHOLD.toFixed()}%</span><span>Outperforming ≥ +{OUTPERFORMANCE_THRESHOLD.toFixed(1)}%</span></div></div><div className="dap-matrix-grid">{cells.map((cell) => <article className={`dap-matrix-bucket bucket-${cell.key}`} key={cell.key}><div className="dap-matrix-bucket-heading"><strong>{cell.title}</strong><small>{cell.subtitle}</small></div>{matrix[cell.key].length ? <ul>{matrix[cell.key].sort((a,b)=>b.weight.comparedTo(a.weight)).map((row)=><li key={row.label}><span>{row.label}</span><b>{row.weight.toDecimalPlaces(1).toFixed(1)}% · {signed(row.returnPct)}</b></li>)}</ul> : <p>No sectors in this bucket.</p>}</article>)}</div></section>
 }
 
 function GroupTable({ title, rows, empty, groupHoldings }: { title: string; rows: readonly GroupRow[]; empty: string; groupHoldings?: ReadonlyMap<string, readonly HoldingDetail[]> }) {
@@ -295,24 +294,27 @@ export function DashboardAllocationPerformance() {
   const sectorClassified = equityPositions.filter((p) => Boolean(enrichment.bySecurityId.get(p.securityId)?.sector)).length
   const marketCapClassified = equityPositions.filter((p) => Boolean(enrichment.bySecurityId.get(p.securityId)?.marketCapCategory)).length
   const etfs = positions.filter((p) => p.assetClass === "ETF").length
+  const totalPricedValue = sectorGroups.reduce((sum, row) => sum.plus(row.currentValue), new Decimal(0))
+  const unclassifiedAllocation = totalPricedValue.isZero() ? null : sectorGroups.find((row) => row.label === "Unclassified")?.weight ?? new Decimal(0)
+  const classifiedAllocation = unclassifiedAllocation === null ? null : Decimal.max(new Decimal(0), new Decimal(100).minus(unclassifiedAllocation))
+  const sectorCoverage = coveragePct(sectorClassified, equityPositions.length)
+  const marketCapCoverage = coveragePct(marketCapClassified, equityPositions.length)
 
   return <section className="dashboard-allocation-performance" aria-label="Sector and market-cap performance">
-    <div className="dap-heading"><div><p className="eyebrow">Allocation & performance</p><h2>Sector and market-cap performance</h2><p>Classification-backed allocation and supported return aggregation for the selected Dashboard scope. Missing classifications are excluded rather than guessed.</p></div><span>{scopeLabel}</span></div>
+    <div className="dap-heading"><div><p className="eyebrow">Allocation &amp; performance</p><h2>Allocation &amp; Performance</h2><p>Classification-backed allocation and performance aggregation for the selected Dashboard scope. Missing classifications are never guessed.</p></div><span>{scopeLabel}</span></div>
 
-    <div className="dap-classification-strip">
-      <article><small>Sector classification</small><strong>{coveragePct(sectorClassified, equityPositions.length)}</strong><span>{sectorClassified}/{equityPositions.length} scoped non-ETF holdings classified</span></article>
-      <article><small>Market-cap classification</small><strong>{coveragePct(marketCapClassified, equityPositions.length)}</strong><span>{marketCapClassified}/{equityPositions.length} scoped non-ETF holdings classified</span></article>
-      <article><small>ETF bucket</small><strong>{etfs}</strong><span>ETFs in the selected scope are shown separately from equity market-cap categories</span></article>
-      <article><small>Scoped holdings</small><strong>{positions.length}</strong><span>{scopeLabel}</span></article>
+    <div className="dap-summary-grid">
+      <section className="dap-summary-card" aria-label="Classification coverage"><div className="dap-summary-title"><span className="dap-summary-icon" aria-hidden="true">◉</span><div><h3>Classification coverage</h3><p>Canonical enrichment coverage in this scope</p></div></div><dl className="dap-coverage-list"><div><dt>Sector classification</dt><dd><strong>{coveragePct(sectorClassified, equityPositions.length)}</strong><span>{sectorClassified}/{equityPositions.length} non-ETF holdings</span></dd></div><div><dt>Market-cap classification</dt><dd><strong>{coveragePct(marketCapClassified, equityPositions.length)}</strong><span>{marketCapClassified}/{equityPositions.length} non-ETF holdings</span></dd></div><div><dt>ETF buckets</dt><dd><strong>{etfs}</strong><span>shown separately</span></dd></div><div><dt>Scoped holdings</dt><dd><strong>{positions.length}</strong><span>{scopeLabel}</span></dd></div></dl></section>
+      <section className="dap-summary-card" aria-label="Allocation scope"><div className="dap-summary-title"><span className="dap-summary-icon" aria-hidden="true">i</span><div><h3>Allocation scope</h3><p>Portfolio weight by current priced value</p></div></div><div className="dap-scope-bars"><div><strong>{classifiedAllocation === null ? "Unavailable" : `${classifiedAllocation.toDecimalPlaces(1).toFixed(1)}%`}</strong><span><i style={{ width: `${classifiedAllocation?.toFixed(4) ?? "0"}%` }} /></span><b>Classified</b></div><div><strong>{unclassifiedAllocation === null ? "Unavailable" : `${unclassifiedAllocation.toDecimalPlaces(1).toFixed(1)}%`}</strong><span><i className="is-unclassified" style={{ width: `${unclassifiedAllocation?.toFixed(4) ?? "0"}%` }} /></span><b>Unclassified</b></div></div></section>
     </div>
 
     <div className="dap-allocation-grid">
-      <section className="dap-allocation-card"><div className="dap-allocation-title"><div><h3>Sector allocation</h3><span>Portfolio weight by current priced value</span></div><span className="dap-coverage-badge">{coveragePct(sectorClassified, equityPositions.length)} classified</span></div><div className="dap-sector-layout"><div><AllocationLegend segments={sectorSegments} currency={portfolio.portfolio.currency} /></div><Donut segments={sectorSegments} centerLabel="classified" compact /></div></section>
-      <MarketCapAllocation segments={marketCapSegments} currency={portfolio.portfolio.currency} />
+      <section className="dap-allocation-card"><div className="dap-allocation-title"><div><h3>Sector allocation</h3><span>Portfolio weight by current priced value</span></div><span className="dap-coverage-badge">{sectorCoverage} classified</span></div><div className="dap-sector-layout"><Donut segments={sectorSegments} centerValue={sectorCoverage} centerLabel="classified" /><AllocationLegend segments={sectorSegments} currency={portfolio.portfolio.currency} /></div><a className="dap-view-all" href="#dap-sector-performance">View all sectors</a></section>
+      <MarketCapAllocation segments={marketCapSegments} currency={portfolio.portfolio.currency} coverage={marketCapCoverage} />
     </div>
 
     <div className="dap-performance-grid">
-      <GroupTable title="Sector performance" rows={sectorGroups} empty="No classified sector holdings are available in this scope." groupHoldings={sectorHoldings} />
+      <div id="dap-sector-performance"><GroupTable title="Sector performance" rows={sectorGroups} empty="No classified sector holdings are available in this scope." groupHoldings={sectorHoldings} /></div>
       <GroupTable title="Market-cap performance" rows={marketCapGroups} empty="No classified market-cap holdings are available in this scope." groupHoldings={marketCapHoldings} />
     </div>
 

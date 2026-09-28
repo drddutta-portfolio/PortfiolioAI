@@ -625,9 +625,10 @@ Portfolio Structure
 Research
 Intelligence
 Transactions
-Import
 Settings
 ```
+
+Import remains available from Settings and is not a primary navigation item.
 
 **Intelligence contains:** Core Health, Portfolio Fit, Risk, Exit Intelligence,
 Meaningful Change, Action Center, and optional Investment Committee narrative.
@@ -649,7 +650,7 @@ operations history, diagnostics, and environment state.
 requires attention, and what evidence supports the action without understanding
 repository program terminology.
 
-**Execution result — 27 September 2026:** P7 technical implementation is **COMPLETE / PASS** in PortfolioAI Dev. The product shell now has exactly the eight approved top-level products; detailed decision intelligence is consolidated under Intelligence; provider/operations controls are grouped under Settings; historical Gate/fixture outputs are removed from current Research; owner controls are separated from engine outputs; blockers use investor language; and unsupported duplicate placeholders were removed. App-code commit `829df629339b701bf5228df735a32473904c5b5a` built successfully on Vercel. Formal P7 closure remains pending Owner Checkpoint 6 browser approval. P8 is NOT AUTHORIZED and Production remains unchanged.
+**Execution result — refined 28 September 2026:** P7 technical implementation is **COMPLETE / PASS** in PortfolioAI Dev. The product shell now has exactly the seven approved top-level products, with Import nested under Settings; detailed decision intelligence is consolidated under Intelligence; provider/operations controls are grouped under Settings; historical Gate/fixture outputs are removed from current Research; owner controls are separated from engine outputs; blockers use investor language; and unsupported duplicate placeholders were removed. The Dashboard Allocation & Performance block now uses the approved compact four-row presentation, canonical equal-width page alignment, semantic market-cap colors, and responsive table/matrix behavior. Formal P7 closure remains pending Owner Checkpoint 6 browser approval. P8 is NOT AUTHORIZED and Production remains unchanged.
 
 **Owner checkpoint 6:** PENDING — browser approval using production-equivalent data.
 

@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P7 — UI Consolidation is ACTIVE in PortfolioAI Dev under Owner Checkpoint 6 browser review/refinement. The primary shell is Dashboard / Holdings / Portfolio Structure / Research / Intelligence / Transactions / Settings, with Import inside Settings. Core P7 consolidation remains implemented, but Dashboard acceptance refinements are still in progress: the full sticky block navigator, true page-top return and live News mount are implemented/deployed at Development head `ac935a168c3ed72f6ffd07d2beb91ceba95fae98`; the owner-approved compact Allocation & Performance redesign, equal-width block alignment and tablet/mobile responsive refinement are APPROVED / PENDING IMPLEMENTATION. P7 formal closure remains PENDING. P8 remains NOT AUTHORIZED; Production remains unchanged
+**Current milestone:** Post-D P7 — UI Consolidation is ACTIVE in PortfolioAI Dev under Owner Checkpoint 6 browser review/refinement. The primary shell is Dashboard / Holdings / Portfolio Structure / Research / Intelligence / Transactions / Settings, with Import inside Settings. Core P7 consolidation remains implemented. The full sticky block navigator, true page-top return and live News mount remain deployed, and the owner-approved compact Allocation & Performance four-row redesign, equal-width block alignment, semantic market-cap palette and tablet/mobile responsive refinement are implemented and locally verified. P7 formal closure remains PENDING owner browser approval. P8 remains NOT AUTHORIZED; Production remains unchanged.
 **Last reviewed:** 28 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -1674,13 +1674,11 @@ Implemented since the earlier P7 technical-pass record:
    - the live News portal therefore has a valid mount target;
    - the News sticky-menu link points to the real live News block.
 
-### Owner-approved Dashboard refinement still pending implementation
+### Owner-approved Dashboard refinement implemented
 
 The current repository version of
-`src/components/DashboardAllocationPerformance.tsx` and its CSS still uses the
-pre-redesign Allocation & Performance presentation.
-
-The owner has approved a new compact professional presentation with:
+`src/components/DashboardAllocationPerformance.tsx` and its CSS implements the
+approved compact professional presentation with:
 
 - equal-width paired cards;
 - compact Classification Coverage and Allocation Scope summary cards;
@@ -1697,9 +1695,12 @@ The owner has approved a new compact professional presentation with:
   - ETF / non-equity `#D9A441`
   - Unclassified / unavailable `#7B8794`
 
-**This redesign is APPROVED / PENDING IMPLEMENTATION. It must not be recorded as
-implemented until the source, responsive checks, tests and Development build
-actually pass.**
+The component preserves canonical holdings, enrichment and accounting access
+paths; displays unavailable priced scope as unavailable rather than fabricating
+coverage; keeps missing classifications explicit; and does not introduce a new
+business fact or calculation authority. Focused component/palette tests,
+TypeScript, architecture checks, edge tests and the production build pass. The
+repository-wide ESLint command retains pre-existing unrelated failures.
 
 Current governance state:
 
@@ -1711,7 +1712,7 @@ P6 = COMPLETE / PASS / CLOSED
 P7 = ACTIVE
 Owner Checkpoint 6 = IN REVIEW / REFINEMENT
 Dashboard sticky navigation = IMPLEMENTED / DEPLOYED
-Allocation & Performance redesign = APPROVED / PENDING IMPLEMENTATION
+Allocation & Performance redesign = IMPLEMENTED / LOCAL CHECKS PASS
 P7 formal closure = PENDING
 
 P8 = NOT AUTHORIZED

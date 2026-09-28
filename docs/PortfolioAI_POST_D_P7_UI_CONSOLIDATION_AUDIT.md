@@ -233,7 +233,7 @@ Please verify:
 1. Login succeeds and remains inside the app.
 2. Top navigation shows exactly:
    Dashboard / Holdings / Portfolio Structure / Research / Intelligence /
-   Transactions / Import / Settings.
+   Transactions / Settings. Import remains available from Settings.
 3. Dashboard feels like an executive overview rather than a long technical
    development page.
 4. Holdings shows real 248-position portfolio data and Action Center states

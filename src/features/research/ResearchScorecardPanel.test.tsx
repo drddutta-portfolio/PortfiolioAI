@@ -107,7 +107,7 @@ describe("ResearchScorecardPanel shared score states", () => {
     } satisfies SecurityScoringSnapshot
     const programB = buildProgramBR6ScoringPresentation({ securityId: "security-bank", snapshot: scored, pharmaResolution: null })
     render(<ResearchScorecardPanel snapshot={scored} isLoading={false} error={null} programB={programB} />)
-    const contract = screen.getByLabelText("Program B scoring contract")
+    const contract = screen.getByLabelText("Current scoring readiness")
     expect(within(contract).getByText("Score readiness")).toBeInTheDocument()
     expect(within(contract).getByText("Ready")).toBeInTheDocument()
     expect(within(contract).getByText("Methodology role")).toBeInTheDocument()

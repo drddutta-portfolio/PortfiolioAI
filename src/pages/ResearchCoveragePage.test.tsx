@@ -43,6 +43,6 @@ describe("ResearchCoveragePage refresh planning",()=>{
     expect(screen.getByText("Unknown")).toBeInTheDocument()
     expect(screen.getByRole("button",{name:/Review and acknowledge estimate/})).toBeDisabled()
     fireEvent.click(screen.getByLabelText(/I reviewed this estimate/))
-    expect(screen.getByRole("button",{name:/Execution not enabled/})).toBeDisabled()
+    expect(screen.getByRole("button",{name:/Estimate reviewed · execution remains separate/})).toBeDisabled()
   })
 })

@@ -69,13 +69,6 @@
     gap: .75rem;
   }
 
-  .dap-chart-layout {
-    grid-template-columns: 190px minmax(0, 1fr);
-  }
-
-  .dap-matrix-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 760px) {
@@ -102,18 +95,6 @@
   .dashboard-research-intelligence,
   .dashboard-portfolio-intelligence {
     border-radius: 14px;
-  }
-
-  .dap-chart-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .dap-chart-legend {
-    width: 100%;
-  }
-
-  .dap-chart-legend > div {
-    grid-template-columns: 10px minmax(0, 1fr) auto;
   }
 
   .dap-table-scroll {
@@ -155,26 +136,11 @@
     min-height: 34px;
   }
 
-  .dap-coverage-grid,
   .dashboard-risk-summary,
   .dashboard-monitoring-summary,
   .dashboard-research-summary,
   .dashboard-pi-summary {
     grid-template-columns: 1fr;
-  }
-
-  .dap-matrix-item {
-    grid-template-columns: minmax(0, 1fr) 64px 64px;
-    gap: 6px;
-  }
-
-  .dap-matrix-thresholds {
-    display: grid;
-    justify-content: stretch;
-  }
-
-  .dap-matrix-thresholds span {
-    text-align: center;
   }
 
   .dashboard-live-news-footer {

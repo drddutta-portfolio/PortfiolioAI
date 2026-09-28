@@ -89,9 +89,9 @@ export function AppRoutes() {
               <DashboardScopeProvider>
                 <DashboardSectionNavigator />
                 <div id="dashboard-overview" className="dashboard-section-anchor"><DashboardPage /></div>
-                <div id="dashboard-daily-move" className="dashboard-section-anchor"><DashboardDailyMovement /></div>
-                <div id="dashboard-performance" className="dashboard-section-anchor"><DashboardAllocationPerformance /></div>
-                <div id="dashboard-news" className="dashboard-section-anchor dashboard-news-section"><DashboardNewsPreview /></div>
+                <div id="dashboard-daily-move" className="dashboard-section-anchor dashboard-content-block"><DashboardDailyMovement /></div>
+                <div id="dashboard-performance" className="dashboard-section-anchor dashboard-content-block"><DashboardAllocationPerformance /></div>
+                <div id="dashboard-news" className="dashboard-section-anchor dashboard-content-block dashboard-news-section"><DashboardNewsPreview /></div>
               </DashboardScopeProvider>
             </AppShell>
           }

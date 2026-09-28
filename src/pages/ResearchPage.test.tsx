@@ -58,8 +58,8 @@ describe("ResearchPage", () => {
     expect(screen.getByText("5.00%")).toBeInTheDocument()
     expect(screen.getByText("Zerodha")).toBeInTheDocument()
     expect(screen.getByText("Angel One")).toBeInTheDocument()
-    expect(screen.getByText("Target price").closest("article")).toHaveTextContent("Not setNot configured")
-    expect(screen.getByText("Stop loss").closest("article")).toHaveTextContent("Not setNot configured")
+    expect(screen.queryByText("Target price")).not.toBeInTheDocument()
+    expect(screen.queryByText("Stop loss")).not.toBeInTheDocument()
   })
   it("uses Overview as a research cockpit without repeating position cards", () => {
     renderPage()
