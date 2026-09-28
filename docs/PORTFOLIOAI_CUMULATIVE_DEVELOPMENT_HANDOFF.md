@@ -15,6 +15,7 @@
 - Nominal worst case at 320 planned calls/day is ~64 five-call securities/day, around four provider days. Bounded cohorts may progress only within the currently approved checkpoint range and must stop at the next unapproved owner checkpoint.
 - Canonical R7 outputs: CORE_CANDIDATE / SATELLITE_CANDIDATE / WATCH / AVOID or explicit blocker.
 - Canonical internal owner-facing action enum is `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`, deterministically projected from R7 + R8 + Movement/owner context. UI display copy may say “Buy / Accumulate” or “Sell / Exit Review”; `BUY` and `SELL` are not internal recommendation/action states.
+- The canonical action projection is an IC6-or-later output because it requires current R8 and Movement inputs; IC5 does not emit an authoritative action state.
 - Owner role/targets remain authoritative; no autonomous role mutation or trading.
 - Detailed authority: `docs/PortfolioAI_POST_D_P7_IC_PORTFOLIO_INTELLIGENCE_COMPLETION_PLAN.md`.
 
