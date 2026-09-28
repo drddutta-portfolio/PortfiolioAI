@@ -707,6 +707,18 @@ P7-IC must not introduce a replacement scoring/recommendation engine, universal 
 - at a nominal five calls/security and 320 planned calls/day, a worst-case rollout is approximately four provider days, while each completed cohort may proceed immediately through IC3 → IC4 → IC5 rather than waiting for the entire portfolio;
 - R7 remains the canonical role-candidacy authority (Core Candidate / Satellite Candidate / Watch / Avoid). A simple owner-facing Accumulate / Hold / Watch / Reduce / Exit Review label may be shown only as a deterministic, explainable projection of R7 + R8 + owner context; it is not a second recommendation engine and cannot mutate roles or trade.
 
+**Portfolio-completion amendment — strengthened before IC-A approval:**
+
+- Gate K remains historically closed; its routing/isolation/portability discipline is reused inside P7-IC rather than reopened.
+- P7-IC IC1 is now the mandatory **held-portfolio methodology and recommendation-policy completion gate**.
+- For every held equity the research hierarchy must resolve through `Sector → Industry → Basic Industry / Business Model → Subprofile where needed → COMPLETE methodology`.
+- A complete methodology includes evidence requirements, metric applicability/N/A rules, dimensions/weights/curves, quality/durability/growth logic, capital-efficiency/cash-flow treatment, leverage/credit treatment, valuation, benchmark/peer authority, ownership/governance, momentum/risk, cycle normalization where relevant, blockers/freshness, deterministic R6 semantics, R7 policy, validation anchors, isolation tests and future-stock portability.
+- `METHODOLOGY_NOT_AVAILABLE` for a current held equity is an IC1 work trigger when the cause is historically deferred methodology engineering; it is not an acceptable IC1 closure state merely because Gate K deferred that business model.
+- Every complete methodology/profile/subprofile used by the current held portfolio must leave IC1 with a complete approved R7 policy. Existing `...RECOMMENDATION_PENDING_THRESHOLDS` authorities are IC1 work items, not completion states.
+- IC1 may leave a held equity unresolved only for a genuine factual/classification ambiguity that prevents safe methodology assignment; the blocker must be explicit, owner-visible and actioned as `REVIEW_REQUIRED`.
+- P7-IC must not create a later cleanup program merely to finish methodologies or recommendation policies for business models already represented in the current held portfolio.
+- The eventual owner-facing action vocabulary may include Buy/Accumulate, Hold, Watch, Reduce and Sell/Exit Review, but only as a deterministic projection of canonical R7 + R8 + Movement/context; score alone cannot create a Buy/Sell label.
+
 **Owner checkpoint 6:** DEFERRED UNTIL P7-IC IC-FINAL — final browser approval using production-equivalent Development data and the real current R6/R7/R8/R9/Movement/R10 outputs.
 
 P8 remains **NOT AUTHORIZED** until P7-IC completes and the owner explicitly closes P7.
