@@ -266,6 +266,29 @@ P8                          = NOT AUTHORIZED
 Production = UNCHANGED
 ```
 
+---
+
+## Universal stock-page shell final lock — 28 September 2026
+
+The Research stock-page shell is verified and locked as one common component
+path for every equity methodology family. Representative coverage uses
+HDFCBANK (Bank/NBFC), TORNTPHARM (Pharma), BEL (Industrials/Capital Goods), M&M
+(Auto) and SRF (Chemicals specialist), together with the existing responsive
+validation at 1440, 1280, 1024, 768, 430, 390 and 360 pixels.
+
+The shared shell retains identity/classification context, About the Company, the
+eight-card position row including Brokers/Demat, Decision Workspace, Key
+Insights, tabs, glance, cockpit, refresh and health regions. Methodology and
+subprofile differences are confined to lower research/evidence content. No
+corrective UI code was required in IC0.
+
+This shell is now a P7 constraint. Future methodology work may not introduce a
+profile-specific base layout without explicit owner UI approval.
+
+The related IC0 authority/coverage audit completed 248/248 records but is
+`BLOCKED` on missing evidence-count access and durable R9/Movement persistence.
+P7 therefore remains active and IC-A awaits owner decision.
+
 
 ## 13. Superseding P7 closure sequence — 28 September 2026
 

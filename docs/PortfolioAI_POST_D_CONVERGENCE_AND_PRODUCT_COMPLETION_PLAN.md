@@ -1010,3 +1010,18 @@ review. No subsequent checkpoint begins automatically.
 Approval of this plan does not authorize P0 or any later stage. Execution begins
 only when the owner explicitly authorizes the named checkpoint and its exact
 scope.
+
+---
+
+## 21. P7-IC execution overlay — 28 September 2026
+
+The P7-IC IC0 read-only audit was executed on Development HEAD
+`673dcc9ac9acc1a514df3e27a9f2e4b58c15925f`. It produced an explicit 248-holding
+coverage matrix without provider calls or writes. The universal stock-page
+shell is verified and locked.
+
+`IC0 = BLOCKED` because the present shared access paths cannot expose exact
+methodology-specific evidence deficits and the required durable R9/Movement
+persistence is absent. No migration was created or applied. IC-A now requires
+an owner decision on IC1 scope and on any additive persistence design. P7 stays
+active; IC1, P8 and Production work remain unauthorized.

@@ -10748,3 +10748,27 @@ production build, and `git diff --check` passed.
 Production remains disabled. Scheduler activation, real provider and real AI
 pilots, external AI cost, merge/deployment, numeric sizing, and trading/order
 authority remain absent and unauthorized.
+
+---
+
+## P7-IC IC0 handoff — 28 September 2026
+
+Development HEAD was reconciled at
+`673dcc9ac9acc1a514df3e27a9f2e4b58c15925f`. The universal Research stock-page
+shell is verified and locked; no shell code correction was needed.
+
+The read-only IC0 audit produced an explicit 248/248 holding matrix with zero
+Trendlyne, Angel One or paid-AI calls, zero database writes, zero migrations and
+zero Production changes. Existing observations/decisions, score runs,
+recommendation runs, sizing and provider-usage persistence were audited.
+
+`IC0 = BLOCKED` because exact methodology-required evidence counts are not
+available through the current registry, no canonical current evidence snapshot
+is materialized, R9 remains session-only and durable Movement history is absent.
+No missing fact was fabricated and no historical reference output was promoted.
+
+The handoff artifacts are
+`docs/PortfolioAI_P7_IC0_AUTHORITY_AND_COVERAGE_FREEZE.md` and
+`docs/p7-ic/PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json`.
+The exact next checkpoint is IC-A owner review. IC1 and P8 remain unauthorized;
+Production is unchanged.

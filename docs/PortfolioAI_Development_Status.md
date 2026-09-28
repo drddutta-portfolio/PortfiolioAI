@@ -1834,3 +1834,33 @@ Production = UNCHANGED
 ```
 
 There is no canonical P9 in the current Post-D roadmap.
+
+### P7-IC IC0 execution status — 28 September 2026
+
+Development was reconciled at `673dcc9ac9acc1a514df3e27a9f2e4b58c15925f`.
+The common Research stock-page shell is verified and locked across HDFCBANK,
+TORNTPHARM, BEL, M&M and SRF representative methodology families and the
+documented desktop/responsive viewport set. No shell correction was required.
+
+The IC0 read-only authority/coverage freeze now contains 248/248 explicit
+holding records: 239 equities and 9 non-equities. It executed with zero provider
+calls, zero database writes, zero migrations and zero Production changes.
+
+Current portfolio state includes 110 resolved methodologies, 124 unavailable
+methodologies, 5 methodology reviews and 9 non-applicable holdings. Evidence is
+66 conflicting, 142 missing, 31 review-required and 9 non-applicable. No current
+numeric R6 score or R7 recommendation was promoted from reference output.
+
+`IC0 = BLOCKED`: methodology-specific evidence-count access, a canonical
+materialized current snapshot, durable R9 state and Movement history persistence
+are insufficient or absent. IC-A awaits owner direction; IC1 has not started.
+
+```text
+P7 = ACTIVE
+Universal stock-page shell = VERIFIED / LOCKED
+P7-IC IC0 = BLOCKED / AUDIT COMPLETE / PASS WITHHELD
+Owner Checkpoint IC-A = AWAITING OWNER DECISION
+IC1 = NOT STARTED / NOT AUTHORIZED
+P8 = NOT AUTHORIZED
+Production = UNCHANGED
+```

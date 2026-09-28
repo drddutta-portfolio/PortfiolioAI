@@ -1145,3 +1145,24 @@ P7-IC succeeds when PortfolioAI can answer, for each eligible holding, with curr
 11. **What simple owner-facing action state (Accumulate / Hold / Watch / Reduce / Exit Review) is justified, if any, without bypassing R7/R8?**
 
 The final investment decision remains with the owner. The application must provide the evidence, deterministic assessment, role candidacy, risk/exit context and traceable reason path needed to make that decision.
+
+---
+
+# 20. IC0 execution record — 28 September 2026
+
+Development was reconciled at `673dcc9ac9acc1a514df3e27a9f2e4b58c15925f`.
+The universal Research stock-page shell is verified and locked across the
+representative Bank/NBFC, Pharma, Industrials, Auto and specialist Chemicals
+families. Methodology content may vary inside the shared shell; it may not fork
+the shell without explicit owner UI approval.
+
+The read-only IC0 matrix explicitly classifies 248/248 open holdings (239
+equities and 9 non-equities) with zero provider calls, zero database writes,
+zero migrations and zero Production changes. The audit found that the current
+access paths do not expose per-security methodology evidence counts, and that
+durable R9 baseline state and Movement history persistence do not exist.
+
+Therefore `IC0 = BLOCKED`, not PASS. The detailed audit and machine-readable
+matrix are recorded in `docs/PortfolioAI_P7_IC0_AUTHORITY_AND_COVERAGE_FREEZE.md`
+and `docs/p7-ic/PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json`.
+IC-A is awaiting owner decision; IC1 has not started.
