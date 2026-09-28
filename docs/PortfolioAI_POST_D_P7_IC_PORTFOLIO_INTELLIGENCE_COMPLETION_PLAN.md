@@ -335,7 +335,24 @@ Important:
 - Each methodology must either have an explicitly approved policy or remain
   `METHODOLOGY_NOT_AVAILABLE` for recommendation.
 
-## IC1C — Core/Satellite meaning freeze
+## IC1C — Representative methodology validation strategy
+
+P7-IC must not create unnecessary provider cost by pretending every classification group needs a fresh methodology pilot.
+
+1. Build the exact registry of executable methodology families and subprofiles.
+2. Map the portfolio sector / industry / basic-industry groups to those methodology authorities.
+3. Reuse already-validated Gate H-K reference stocks when their methodology contract and provider semantics are still current.
+4. Select a new representative stock only when:
+   - a genuinely new methodology/subprofile is being completed;
+   - an adapter/provider semantic contract changed materially;
+   - a recommendation policy requires a new falsification/reference case;
+   - an existing reference no longer satisfies current evidence lineage.
+5. A representative-stock pass validates the **methodology**, not the rest of the portfolio.
+6. Once the methodology is frozen, each held equity is processed independently through IC2-IC5 with its own evidence and lineage.
+
+This prevents both extremes: no wasteful new pilot for every display-sector label, and no false assumption that one stock's evidence represents its peers.
+
+## IC1D — Core/Satellite meaning freeze
 
 Freeze common semantics while allowing methodology-specific thresholds:
 
@@ -395,32 +412,127 @@ For every blocked equity:
 ```text
 methodology requirement
       ↓
-missing/stale/conflicting evidence list
+exact required metric/evidence contract
       ↓
-existing canonical cache check
+fresh canonical cache check
+      ↓
+missing / stale / conflicting evidence list
       ↓
 provider/source plan
       ↓
-cost/call estimate
+exact cost/call estimate
       ↓
 owner approval where required
       ↓
 bounded fetch
       ↓
-normalize + provenance
+validate provider identity + schema
+      ↓
+persist raw/provider provenance + normalized evidence
+      ↓
+set retrieved_at + evidence/as-of date + fresh-through/stale-after state
+      ↓
+canonical selection / conflict handling
       ↓
 recompute readiness
+      ↓
+IC3 snapshot → IC4 R6 → IC5 R7 for the completed cohort
 ```
 
-Prioritize by:
+### Cache-first rule
 
-1. current portfolio holdings;
+A provider call is not justified merely because a stock page is opened or because the provider has a newer value. Before any Trendlyne call, the planner must determine whether the required evidence is already present, still fresh for the methodology, validated/canonically selected, conflicted, or actually required by that stock's methodology/subprofile.
+
+If the existing evidence is valid and fresh, the planned call count for that item is zero.
+
+### Evidence persistence contract
+
+Every accepted provider observation must preserve enough information to reproduce why the application showed a value:
+
+- security identity;
+- provider and provider identity;
+- provider source field / endpoint class where available;
+- raw provider value/text where retention is lawful and already supported;
+- normalized value/unit/currency;
+- evidence period type and period/as-of date;
+- retrieval timestamp (`retrieved_at`);
+- freshness boundary (`fresh_until` or equivalent deterministic stale rule);
+- evidence status (verified/provisional/conflicting/review-required/stale/etc.);
+- selected vs competing/unselected state;
+- normalization/mapping version where applicable;
+- immutable provenance/lineage to the acquisition run.
+
+Normal UI reads consume this persistence. They do not call the provider.
+
+### Visible freshness contract
+
+At minimum, stock research cards/details must make the user able to see:
+
+- evidence/period date;
+- last fetched/retrieved date;
+- current freshness state;
+- fresh-through/stale-after date when a deterministic freshness boundary exists.
+
+A stale value may remain visible for continuity, but it must be marked stale and must not silently qualify as current score-ready evidence.
+
+### Cohort priority
+
+Prioritize execution by:
+
+1. owner Core holdings and other positions requiring immediate Core Health/role comparison;
 2. largest portfolio weights;
-3. owner Core holdings;
-4. holdings blocked by only one/few prerequisites;
-5. remaining equities.
+3. holdings blocked by only one/few prerequisites and therefore likely to become R6/R7-ready quickly;
+4. remaining Satellite/other held equities;
+5. difficult/conflicting/manual-review cases.
 
 This prioritization affects execution order only, not methodology standards.
+
+### Trendlyne daily quota strategy
+
+The provider plan is **portfolio completion by bounded cohorts**, not one stock from each sector and stop.
+
+Planning assumptions:
+
+- hard/current working ceiling: 400 Trendlyne calls/day;
+- default P7-IC operating envelope: 320 planned calls/day;
+- reserve: approximately 80 calls/day for retries, provider/schema diagnostics, identity exceptions and bounded remediation;
+- worst-case planning estimate: 239 equities × 5 calls = 1,195 calls before cache savings;
+- nominal five-call stock capacity at 320 planned calls/day: about 64 securities/day;
+- nominal worst-case rollout: about four provider days, subject to actual cache reuse and per-methodology call requirements.
+
+Each daily cohort plan must state:
+
+- exact security list;
+- methodology/profile for each security;
+- fresh cache reused;
+- exact missing/stale/conflicting requirements;
+- planned Trendlyne calls per security and total;
+- planned Angel One/history calls separately;
+- retry ceiling;
+- daily observed provider usage before execution;
+- projected usage after execution;
+- reserved headroom;
+- stop conditions.
+
+No batch may begin merely from an estimate such as five calls per stock. The executable plan must be based on the exact current cache deficit.
+
+### Progressive downstream execution
+
+Do not wait for all 239 equities to finish provider acquisition before producing useful intelligence.
+
+```text
+cohort evidence persisted
+      ↓
+IC3 canonical snapshots for that cohort
+      ↓
+IC4 R6 dispositions/scores
+      ↓
+IC5 R7 candidacy/action output
+      ↓
+provisional IC6/R10 integration as applicable
+```
+
+This allows early cohorts to produce real portfolio intelligence while later cohorts continue on subsequent provider days.
 
 ## Provider controls
 
@@ -564,6 +676,24 @@ Where eligible:
 Where not eligible:
 
 - explicit fail-closed state.
+
+### Owner-facing action-language projection
+
+PortfolioAI may project the canonical decision state into a simpler owner-facing action label only after the underlying R7/R8 authorities exist.
+
+Permitted UI labels:
+
+- `ACCUMULATE`
+- `HOLD`
+- `WATCH`
+- `REDUCE`
+- `EXIT_REVIEW`
+
+These labels are **not a second recommendation engine**. They must be a deterministic projection of current R7 candidacy, R8 Core Health / Portfolio Fit / Portfolio Risk / Exit Intelligence, current owner role, already-authorized portfolio context, hard blockers and evidence confidence.
+
+The mapping must be methodology-aware, versioned, testable and explainable. A fail-closed upstream state cannot be converted into a decisive action label. The UI must expose the reason/evidence path behind the label.
+
+No label authorizes automatic trading or owner-role mutation.
 
 ## Required role comparison
 
