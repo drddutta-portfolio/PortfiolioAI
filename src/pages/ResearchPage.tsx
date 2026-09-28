@@ -102,15 +102,26 @@ function ResearchDecisionState({ scoring, attention }: { readonly scoring: Scori
   const currentScore = snapshot?.runState && snapshot.overallScore != null ? snapshot.overallScore.toFixed(0) : null
   const evidence = snapshot?.evidenceCoverage == null ? "Pending" : `${Math.round(snapshot.evidenceCoverage * 100)}%`
   const readiness = snapshot?.scoreReadyCoverage == null ? "Pending" : `${Math.round(snapshot.scoreReadyCoverage * 100)}%`
+  const advisoryState = attention?.stateLabel ?? "Pending"
   return <section className="portfolioai-state-panel" aria-label="PortfolioAI current decision state">
-    <div className="portfolioai-state-heading"><div><span>PortfolioAI state</span><h3>{attention?.stateLabel ?? "Pending"}</h3><p>{attention?.primaryReason ?? "Awaiting a current validated decision state."}</p></div><ProgramCR10AttentionBadge attention={attention} compact /></div>
-    <div className="portfolioai-state-grid">
-      <article><span>Scoring profile</span><strong>{snapshot ? ui.profileDisplayName : "Loading…"}</strong><small>{snapshot?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed assignment" : snapshot?.profileSource === "SECTOR_RULE" ? "Sector resolved" : "Canonical profile"}</small></article>
-      <article><span>Canonical score</span><strong>{currentScore ?? "Pending"}</strong><small>{currentScore ? "Current authoritative run" : "No current score run"}</small></article>
-      <article><span>Verified evidence</span><strong>{evidence}</strong><small>Current research coverage</small></article>
-      <article><span>Score readiness</span><strong>{readiness}</strong><small>Current score-ready coverage</small></article>
+    <div className="portfolioai-state-heading">
+      <div className="portfolioai-state-title-wrap">
+        <span className="portfolioai-state-icon" aria-hidden="true">✦</span>
+        <div><span>PortfolioAI suggestion</span><h3>{advisoryState}</h3><p>{snapshot ? `${ui.profileDisplayName} · current canonical research state` : "Evaluating canonical research state…"}</p></div>
+      </div>
+      <ProgramCR10AttentionBadge attention={attention} compact />
     </div>
-    <p className="portfolioai-state-note">Read-only advisory state. It never overwrites your role, target weight, target price, stop-loss reference, or investment horizon.</p>
+    <div className="portfolioai-primary-state">
+      <div><span>Current advisory state</span><strong>{advisoryState}</strong><small>{attention?.primaryReason ?? "Awaiting a complete, validated decision state."}</small></div>
+      <div><span>Canonical score</span><strong>{currentScore ?? "Pending"}</strong><small>{currentScore ? "Current authoritative run" : "No current score run"}</small></div>
+    </div>
+    <div className="portfolioai-state-grid">
+      <article><span>Verified evidence</span><strong>{evidence}</strong><small>Current research coverage</small></article>
+      <article><span>Score readiness</span><strong>{readiness}</strong><small>Validated score-ready coverage</small></article>
+      <article><span>Methodology</span><strong>{snapshot?.methodologyState === "AVAILABLE" ? "Available" : snapshot?.methodologyState ? titleCase(snapshot.methodologyState) : "Pending"}</strong><small>{snapshot?.profileName ?? "Canonical profile loading"}</small></article>
+      <article><span>Profile</span><strong>{snapshot ? ui.profileDisplayName : "Loading…"}</strong><small>{snapshot?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed assignment" : snapshot?.profileSource === "SECTOR_RULE" ? "Sector resolved" : "Canonical profile"}</small></article>
+    </div>
+    <p className="portfolioai-state-note">Read-only advisory. PortfolioAI never overwrites your saved role, target weight, target price, stop-loss reference, or investment horizon.</p>
   </section>
 }
 
