@@ -18,6 +18,13 @@
 - Owner role/targets remain authoritative; no autonomous role mutation or trading.
 - Detailed authority: `docs/PortfolioAI_POST_D_P7_IC_PORTFOLIO_INTELLIGENCE_COMPLETION_PLAN.md`.
 
+- **Strengthened IC1 completion mandate:** every current held equity must map to a complete methodology after Sector → Industry → Basic Industry / business-model → subprofile resolution where needed; deferred methodology engineering is not an acceptable terminal state for a held stock.
+- A complete methodology includes the full evidence, metric applicability, scoring, valuation, benchmark, risk, freshness, fail-closed, R6, R7, validation, isolation and future-portability contract.
+- Every held-portfolio methodology/profile/subprofile must also have a complete approved R7 Core/Satellite/Watch/Avoid policy; pending recommendation thresholds are IC1 work.
+- Remaining post-IC1 unresolved holdings may only be genuine classification/factual REVIEW_REQUIRED exceptions.
+- Gate K remains CLOSED; IC1 reuses Gate-K discipline rather than reopening historical gates.
+- IC-A remains pending; IC1 is not yet authorized.
+
 ---
 
 
