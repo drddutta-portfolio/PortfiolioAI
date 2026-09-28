@@ -45,6 +45,8 @@
   margin-bottom: 12px;
 }
 
+.dap-performance-grid > * { min-width: 0; }
+
 .dap-summary-card,
 .dap-allocation-card,
 .dap-table-card,
