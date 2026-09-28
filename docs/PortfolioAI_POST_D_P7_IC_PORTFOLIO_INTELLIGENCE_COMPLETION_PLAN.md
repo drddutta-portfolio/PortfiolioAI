@@ -870,42 +870,13 @@ Where not eligible:
 
 - explicit fail-closed state.
 
-### Owner-facing action-language projection
+### Action projection boundary
 
-PortfolioAI may project the canonical decision state into a simpler owner-facing action label only after the underlying R7/R8 authorities exist.
+IC5 produces the canonical R7 candidacy result and sizing readiness only.
 
-Permitted UI labels:
+**IC5 does not produce an owner-facing action state.**
 
-- `ACCUMULATE`
-- `HOLD`
-- `WATCH`
-- `REDUCE`
-- `EXIT_REVIEW`
-
-These labels are **not a second recommendation engine**. They must be a deterministic projection of current R7 candidacy, R8 Core Health / Portfolio Fit / Portfolio Risk / Exit Intelligence, current owner role, already-authorized portfolio context, hard blockers and evidence confidence.
-
-The mapping must be methodology-aware, versioned, testable and explainable. A fail-closed upstream state cannot be converted into a decisive action label. The UI must expose the reason/evidence path behind the label.
-
-No label authorizes automatic trading or owner-role mutation.
-
-### Canonical action-state vocabulary
-
-Internal action authority is limited to:
-
-- `ACCUMULATE`
-- `HOLD`
-- `WATCH`
-- `REDUCE`
-- `EXIT_REVIEW`
-
-`BUY` and `SELL` are not internal action/recommendation states because they are already transaction/accounting concepts elsewhere in PortfolioAI.
-
-Permitted display wording may include:
-
-- `ACCUMULATE` → “Buy / Accumulate”
-- `EXIT_REVIEW` → “Sell / Exit Review”
-
-Display wording must never change the underlying canonical state or imply that an order was placed.
+The owner-facing action layer requires R8 and Movement inputs that do not exist until IC6. IC5 may expose the prerequisites needed by the later action projection, but it must not emit `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW` as authoritative current action states.
 
 
 ## Required role comparison
@@ -1018,6 +989,43 @@ Minimum movement states:
 - `INSUFFICIENT_EVIDENCE`
 - `REVIEW_REQUIRED`
 - `BLOCKED_PREREQUISITE`
+
+## IC6D — Canonical owner-facing action projection
+
+Only after current R7, R8 and Movement authorities exist may PortfolioAI derive a canonical owner-facing action state.
+
+The canonical internal action enum is:
+
+- `ACCUMULATE`
+- `HOLD`
+- `WATCH`
+- `REDUCE`
+- `EXIT_REVIEW`
+
+The action state must be a deterministic, methodology-aware, versioned, testable and explainable projection of:
+
+- current R7 candidacy;
+- R8 Core Health;
+- R8 Portfolio Fit;
+- R8 Portfolio Risk;
+- R8 Exit Intelligence;
+- Movement state;
+- current owner role;
+- already-authorized portfolio context;
+- evidence confidence and hard blockers.
+
+A score alone cannot create an action state. A fail-closed upstream state cannot be converted into a decisive action state.
+
+`BUY` and `SELL` are not internal recommendation/action states because they are transaction/accounting concepts elsewhere in PortfolioAI.
+
+Permitted display copy may include:
+
+- `ACCUMULATE` → “Buy / Accumulate”
+- `EXIT_REVIEW` → “Sell / Exit Review”
+
+Display wording must never change the underlying canonical state or imply that an order was placed.
+
+No action state authorizes automatic trading or owner-role mutation.
 
 ## Anti-churn contract
 
