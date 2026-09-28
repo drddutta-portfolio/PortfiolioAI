@@ -612,16 +612,15 @@
       "methodologyAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
       "methodologyState": "EXISTING_COMPLETE_GATE_K",
       "dimensionWeights": {
-        "QUALITY": 15,
-        "GROWTH": 12,
-        "CAPITAL_EFFICIENCY": 13,
+        "QUALITY": 18,
+        "GROWTH": 15,
+        "CAPITAL_EFFICIENCY": 12,
         "CASH_FLOW": 0,
-        "BALANCE_SHEET_CREDIT": 18,
-        "BUSINESS_DURABILITY": 14,
-        "VALUATION": 10,
-        "MOMENTUM": 4,
-        "RISK": 9,
-        "OWNERSHIP_GOVERNANCE": 5
+        "BALANCE_SHEET_CREDIT": 20,
+        "VALUATION": 15,
+        "MOMENTUM": 10,
+        "OWNERSHIP_GOVERNANCE": 5,
+        "RISK": 5
       },
       "weightTotal": 100,
       "notApplicableDimensions": [
@@ -783,7 +782,17 @@
         "fallback": "NONE_FAIL_CLOSED"
       },
       "r7PolicyCode": "P7_IC1_R7_BANK_V1",
-      "r7PolicyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B"
+      "r7PolicyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+      "durabilityTreatment": {
+        "separateWeightedDimension": false,
+        "rule": "BANK_FRANCHISE_AND_FUNDING_DURABILITY_IS_EMBEDDED_IN_QUALITY_BALANCE_SHEET_CREDIT_AND_RISK_CONTRACT; NO EXTRA WEIGHT IS ADDED",
+        "sourceAuthority": "BANK_NBFC_STAGE_8_BANK_V1"
+      },
+      "sourceVerification": {
+        "developmentReadOnly": "public.scoring_model_dimensions",
+        "verifiedOn": "2026-09-29",
+        "weightsMatchCanonicalDevelopment": true
+      }
     },
     {
       "profileCode": "BRANDED_CONSUMER_FMCG",
