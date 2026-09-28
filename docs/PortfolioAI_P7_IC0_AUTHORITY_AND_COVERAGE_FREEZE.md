@@ -134,3 +134,20 @@ The next permitted action is owner review at IC-A. Approval is required for:
   for canonical snapshots, durable R9 state and Movement history.
 
 IC1 has not started. P8 remains unauthorized. Production remains unchanged.
+
+## 10. Owner clarification after IC0 — strengthened IC-A scope
+
+After reviewing the IC0 gap counts, the owner rejected a partial methodology-completion interpretation.
+
+IC-A, when approved, must authorize IC1 against the strengthened portfolio-completion standard in the authoritative P7-IC plan:
+
+- do not reopen Gate K;
+- treat the 124 `METHODOLOGY_NOT_AVAILABLE` held equities as methodology-completion work items, subject to classification reconciliation;
+- for every distinct held-equity business model, reuse a complete existing methodology where legitimately applicable or build and validate a complete methodology;
+- complete every required held-portfolio R7 recommendation policy rather than leaving `...PENDING_THRESHOLDS`;
+- permit only genuine factual/classification ambiguity to remain `REVIEW_REQUIRED`;
+- make methodology evidence requirements machine-readable for the later IC2 cache-first provider plan.
+
+This clarification changes the intended IC1 completion standard; it does not alter the historical IC0 read-only findings or convert IC0 to PASS.
+
+`IC0 = BLOCKED` remains the current verdict until the owner approves IC-A and separately authorizes any required additive persistence/schema design boundary.
