@@ -704,7 +704,7 @@ P7-IC must not introduce a replacement scoring/recommendation engine, universal 
 - Trendlyne execution is portfolio completion by bounded daily cohorts, not a one-stock-per-sector rollout;
 - the current planning ceiling is 400 Trendlyne calls/day with a default P7-IC operating envelope of 320 planned calls/day and approximately 80 calls reserved for bounded retries/diagnostics/exceptions;
 - five calls/security is only a conservative budgeting model: 239 equities × 5 = 1,195 calls before cache savings; exact batch plans must be derived from the current missing/stale/conflicting evidence matrix;
-- at a nominal five calls/security and 320 planned calls/day, a worst-case rollout is approximately four provider days, while each completed cohort may proceed immediately through IC3 → IC4 → IC5 rather than waiting for the entire portfolio;
+- at a nominal five calls/security and 320 planned calls/day, a worst-case rollout is approximately four provider days; completed cohorts may progress only within the currently approved checkpoint range and must stop at the next unapproved owner checkpoint;
 - R7 remains the canonical role-candidacy authority (Core Candidate / Satellite Candidate / Watch / Avoid). A simple owner-facing Accumulate / Hold / Watch / Reduce / Exit Review label may be shown only as a deterministic, explainable projection of R7 + R8 + owner context; it is not a second recommendation engine and cannot mutate roles or trade.
 
 **Portfolio-completion amendment — strengthened before IC-A approval:**
@@ -717,7 +717,17 @@ P7-IC must not introduce a replacement scoring/recommendation engine, universal 
 - Every complete methodology/profile/subprofile used by the current held portfolio must leave IC1 with a complete approved R7 policy. Existing `...RECOMMENDATION_PENDING_THRESHOLDS` authorities are IC1 work items, not completion states.
 - IC1 may leave a held equity unresolved only for a genuine factual/classification ambiguity that prevents safe methodology assignment; the blocker must be explicit, owner-visible and actioned as `REVIEW_REQUIRED`.
 - P7-IC must not create a later cleanup program merely to finish methodologies or recommendation policies for business models already represented in the current held portfolio.
-- The eventual owner-facing action vocabulary may include Buy/Accumulate, Hold, Watch, Reduce and Sell/Exit Review, but only as a deterministic projection of canonical R7 + R8 + Movement/context; score alone cannot create a Buy/Sell label.
+- The canonical internal owner-facing action enum is `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`, derived only as a deterministic projection of canonical R7 + R8 + Movement/context; the UI may display “Buy / Accumulate” or “Sell / Exit Review” as plain-language copy, but `BUY`/`SELL` are not competing internal action states and score alone cannot create an action label.
+
+**Checkpoint and persistence clarification — frozen before IC-A approval:**
+
+- owner checkpoints are global barriers: IC1 stops at IC-B; IC2/IC3 stop at IC-C; IC4/IC5 stop at IC-D; IC6 stops at IC-E; no bounded cohort may cross an unapproved checkpoint;
+- IC-A, when approved, may authorize strengthened IC1 methodology/R7-policy completion and design-only work for the additive persistence/access capabilities identified by IC0;
+- IC-A does not authorize migration creation/application, provider execution, Production change, or deployment;
+- any required additive migration returns for separate owner approval under repository migration rules;
+- canonical current evidence-snapshot persistence/access must be resolved before IC3 can pass / IC-C can be approved;
+- methodology requirement registries/read models required to calculate exact IC2 evidence deficits must be available before provider-backed IC2 execution;
+- durable R9 baseline/acknowledgement/snooze and multi-period Movement history must be resolved before IC6 can pass / IC-E can be approved.
 
 **Owner checkpoint 6:** DEFERRED UNTIL P7-IC IC-FINAL — final browser approval using production-equivalent Development data and the real current R6/R7/R8/R9/Movement/R10 outputs.
 
