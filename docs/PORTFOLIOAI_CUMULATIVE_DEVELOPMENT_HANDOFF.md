@@ -10817,3 +10817,14 @@ Artifacts:
 No provider call, database write, migration, deployment, merge or Production change occurred. IC1 stops at IC-B. IC2 is not authorized.
 
 Because the Development branch is connected to Vercel Preview, moving the branch ref would constitute a deployment. The package is therefore staged as an unattached Git commit pending owner IC-B review; `PortfolioAI-Development` remains at `e7c021b865fcd1d49a7c59924ef9c44f0383f301`.
+
+
+---
+
+## P7-IC IC-B closure + IC2 planning handoff — 29 September 2026
+
+IC1 is CLOSED at accepted commit `8bd8a971ae31812e503217d06c6c3cc9098d4061`.
+
+IC2 planning is complete but execution is not authorized. Exact current supported-adapter workload is 920 Trendlyne calls plus 238 incremental Angel One stock-history calls. This excludes methodology-specific multi-period/business-model evidence until executable normalization adapters are frozen. Twenty-two required benchmark authorities currently have zero ready histories. BLUEJET remains zero-call factual review.
+
+No provider calls, DB writes, migrations, deployment, merge, IC4/R6 or IC5/R7 occurred.

@@ -1,0 +1,28 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC1_ICB_CLOSURE_V1",
+  "ownerCheckpoint": "IC-B",
+  "approvedAtDate": "2026-09-29",
+  "acceptedCommit": "8bd8a971ae31812e503217d06c6c3cc9098d4061",
+  "status": "IC1_COMPLETE_PASS_CLOSED",
+  "acceptedDisposition": {
+    "equities": 239,
+    "resolved": 238,
+    "reviewRequired": [
+      "BLUEJET"
+    ],
+    "deferredEngineeringMethodologyNotAvailable": 0
+  },
+  "authorizationAfterClosure": "IC2_EXACT_CACHE_EVIDENCE_DEFICIT_PLANNING_AND_BOUNDED_COHORT_CONSTRUCTION_ONLY",
+  "notAuthorized": [
+    "PROVIDER_CALLS",
+    "MIGRATION_CREATION",
+    "MIGRATION_APPLICATION",
+    "PRODUCTION_CHANGE",
+    "DEPLOYMENT",
+    "MERGE",
+    "IC4_R6_EXECUTION",
+    "IC5_R7_EXECUTION",
+    "P8"
+  ],
+  "branchRefMove": false
+}

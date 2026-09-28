@@ -1961,3 +1961,19 @@ P8 = NOT AUTHORIZED
 ```
 
 The Development branch ref intentionally remains at `e7c021b865fcd1d49a7c59924ef9c44f0383f301` because a branch update is Vercel-deploying and deployment is not authorized. The IC1 package is staged as an unattached Git commit for IC-B review; no branch ref is moved.
+
+
+## P7-IC IC-B / IC2 planning — 29 September 2026
+
+IC-B accepted IC1 commit `8bd8a971ae31812e503217d06c6c3cc9098d4061`.
+
+```text
+IC1 = COMPLETE / PASS / CLOSED
+IC2 = ACTIVE / PLANNING COMPLETE / PROVIDER EXECUTION NOT AUTHORIZED
+IC3 = NOT STARTED
+IC4 R6 = NOT AUTHORIZED
+IC5 R7 = NOT AUTHORIZED
+P8 = NOT AUTHORIZED
+```
+
+Live Development planning: 99 Trendlyne identities ready; 79 base current-research bundles reusable; 160 resolved equities need current research refresh; 140 need identity work first; supported-adapter Trendlyne ceiling 920 calls; 238 incremental Angel One stock-history calls; nine <252-session listing-history blockers; 22 primary benchmark authorities and zero ready benchmark histories; current R6-ready count 0. No provider calls or database writes occurred.

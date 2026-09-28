@@ -124,3 +124,12 @@ IC-B must review and approve or amend:
 4. the persistence/access design boundary.
 
 No IC2, provider execution, migration creation/application, R6 portfolio execution, R7 portfolio execution, IC6 action projection, deployment, merge or Production change is authorized by this IC1 package.
+
+
+## IC-B owner closure — 29 September 2026
+
+Owner approved this exact IC1 candidate at commit `8bd8a971ae31812e503217d06c6c3cc9098d4061`.
+
+**Final state: IC1 COMPLETE / PASS / CLOSED.**
+
+The accepted methodology/R7 content is preserved at the approved commit rather than rewritten after approval. Subsequent IC2 planning is recorded in child detached commits. No Development branch ref was moved and no deployment was triggered.
