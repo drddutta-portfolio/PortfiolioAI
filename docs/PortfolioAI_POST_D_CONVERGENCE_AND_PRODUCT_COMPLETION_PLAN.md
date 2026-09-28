@@ -718,6 +718,7 @@ P7-IC must not introduce a replacement scoring/recommendation engine, universal 
 - IC1 may leave a held equity unresolved only for a genuine factual/classification ambiguity that prevents safe methodology assignment; the blocker must be explicit, owner-visible and actioned as `REVIEW_REQUIRED`.
 - P7-IC must not create a later cleanup program merely to finish methodologies or recommendation policies for business models already represented in the current held portfolio.
 - The canonical internal owner-facing action enum is `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`, derived only as a deterministic projection of canonical R7 + R8 + Movement/context; the UI may display “Buy / Accumulate” or “Sell / Exit Review” as plain-language copy, but `BUY`/`SELL` are not competing internal action states and score alone cannot create an action label.
+- Canonical action projection executes only after the required IC6 R8 + Movement authorities exist; IC5 produces R7 candidacy/sizing readiness but no authoritative owner-facing action state.
 
 **Checkpoint and persistence clarification — frozen before IC-A approval:**
 
