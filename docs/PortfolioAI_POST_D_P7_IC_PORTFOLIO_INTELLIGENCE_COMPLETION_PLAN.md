@@ -253,7 +253,8 @@ The following are now mandatory for P7-IC:
 
 9. **Decision output must be evidence-linked**
    - R7 role candidacy remains canonical: CORE_CANDIDATE / SATELLITE_CANDIDATE / WATCH / AVOID or explicit blocker;
-   - owner-facing action language may additionally present BUY/ACCUMULATE / HOLD / WATCH / REDUCE / SELL/EXIT_REVIEW only when deterministically derived from canonical R7 + R8 + Movement + current owner role + risk/exit state;
+   - canonical internal owner-facing action states are `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`, derived only from canonical R7 + R8 + Movement + current owner role/context + risk/exit state;
+   - display copy may render `ACCUMULATE` as “Buy / Accumulate” and `EXIT_REVIEW` as “Sell / Exit Review” where the UI needs plain-language guidance, but `BUY` and `SELL` are not additional internal recommendation/action enums because those terms also identify executed transaction types;
    - this action-language layer is advisory and must never mutate owner settings or execute trades.
 
 ---
@@ -285,6 +286,61 @@ P8
 ```
 
 No checkpoint may be skipped because a later UI appears to work.
+
+## 5.1 Checkpoint barrier rule
+
+The checkpoint sequence is globally authoritative.
+
+A bounded security/evidence cohort may progress only through work that is inside the currently approved checkpoint range and must stop before the next unapproved owner checkpoint.
+
+The default interpretation is:
+
+```text
+IC-A approved
+  ↓
+IC1
+  ↓
+STOP at IC-B
+
+IC-B approved
+  ↓
+IC2 bounded evidence cohorts
+  ↓
+IC3 snapshot materialization may be prepared/materialized for completed cohorts
+  ↓
+STOP at IC-C
+  ↓
+NO R6 / R7 execution before IC-C approval
+
+IC-C approved
+  ↓
+IC4 R6
+  ↓
+IC5 R7 / sizing readiness
+  ↓
+STOP at IC-D
+  ↓
+NO IC6 / Movement execution before IC-D approval
+
+IC-D approved
+  ↓
+IC6 R8 + R9 + Movement
+  ↓
+STOP at IC-E
+  ↓
+NO IC7 final integration before IC-E approval
+
+IC-E approved
+  ↓
+IC7
+  ↓
+IC-FINAL
+  ↓
+Owner Checkpoint 6
+```
+
+A checkpoint approval is global for the explicitly approved scope; it is not silently recreated per cohort. A rolling multi-stage cohort protocol may be used only if the owner separately and explicitly approves such a protocol.
+
 
 ---
 
@@ -340,9 +396,26 @@ Establish exact present-tense truth for every open holding before remediation.
 
 ### Owner Checkpoint IC-A
 
-Approve the frozen coverage matrix and the exact remediation scope.
+IC-A must explicitly decide all of the following:
 
-No provider calls occur in IC0.
+1. **IC1 authority**
+   - whether to authorize the strengthened held-portfolio methodology and R7-policy completion scope;
+   - IC1 may proceed independently of later provider execution and independently of migration application.
+
+2. **Persistence architecture design authority**
+   - whether to authorize design-only work for the additive persistence/access capabilities identified by IC0;
+   - design authority does **not** authorize migration creation or migration application.
+
+3. **Migration boundary**
+   - if design proves that a migration is required, the exact additive migration must return for separate owner approval before it is created/applied under the repository migration rules;
+   - no migration approval is implied by IC-A.
+
+4. **Placement of persistence work**
+   - canonical current evidence-snapshot persistence / access required by IC3 must be resolved before IC3 can pass and before IC-C approval;
+   - durable R9 baseline / acknowledgement / snooze and durable multi-period Movement history required by IC6 must be resolved before IC6 can pass and before IC-E approval;
+   - methodology requirement registries/read models needed for IC2 exact deficit planning must be available before IC2 provider execution.
+
+No provider calls occur in IC0. IC-A approval, when given, does not itself authorize provider calls, migration creation/application, Production changes, or deployment.
 
 ---
 
@@ -622,23 +695,37 @@ Each daily cohort plan must state:
 
 No batch may begin merely from an estimate such as five calls per stock. The executable plan must be based on the exact current cache deficit.
 
-### Progressive downstream execution
+### Progressive downstream execution within checkpoint barriers
 
-Do not wait for all 239 equities to finish provider acquisition before producing useful intelligence.
+Provider work may still be executed in bounded cohorts, but cohorts do **not** bypass owner checkpoints.
+
+After IC-B approval, a completed IC2 cohort may progress only as far as the IC-C boundary:
 
 ```text
 cohort evidence persisted
       ↓
-IC3 canonical snapshots for that cohort
+readiness recomputed
       ↓
-IC4 R6 dispositions/scores
+IC3 canonical snapshot prepared/materialized for that cohort
       ↓
-IC5 R7 candidacy/action output
-      ↓
-provisional IC6/R10 integration as applicable
+STOP — awaiting global IC-C approval
 ```
 
-This allows early cohorts to produce real portfolio intelligence while later cohorts continue on subsequent provider days.
+No authoritative R6 or R7 portfolio execution occurs before IC-C approval.
+
+After IC-C approval, IC4 and IC5 may evaluate the approved current-snapshot universe, but execution stops at IC-D:
+
+```text
+IC4 R6 disposition/score
+      ↓
+IC5 R7 candidacy / sizing readiness
+      ↓
+STOP — awaiting IC-D approval
+```
+
+After IC-D approval, IC6 may run R8 / R9 / Movement, but execution stops at IC-E before IC7.
+
+This retains quota-bounded cohort acquisition and early snapshot materialization without weakening the frozen governance sequence.
 
 ## Provider controls
 
@@ -800,6 +887,26 @@ These labels are **not a second recommendation engine**. They must be a determin
 The mapping must be methodology-aware, versioned, testable and explainable. A fail-closed upstream state cannot be converted into a decisive action label. The UI must expose the reason/evidence path behind the label.
 
 No label authorizes automatic trading or owner-role mutation.
+
+### Canonical action-state vocabulary
+
+Internal action authority is limited to:
+
+- `ACCUMULATE`
+- `HOLD`
+- `WATCH`
+- `REDUCE`
+- `EXIT_REVIEW`
+
+`BUY` and `SELL` are not internal action/recommendation states because they are already transaction/accounting concepts elsewhere in PortfolioAI.
+
+Permitted display wording may include:
+
+- `ACCUMULATE` → “Buy / Accumulate”
+- `EXIT_REVIEW` → “Sell / Exit Review”
+
+Display wording must never change the underlying canonical state or imply that an order was placed.
+
 
 ## Required role comparison
 
@@ -1248,7 +1355,7 @@ P7-IC succeeds when PortfolioAI can answer, for each eligible holding, with curr
 8. **What requires the owner's attention in R10?**
 9. **What evidence supports the conclusion?**
 10. **When was that evidence measured and last fetched, and is it still fresh?**
-11. **What simple owner-facing action state (Buy/Accumulate / Hold / Watch / Reduce / Sell/Exit Review) is justified, if any, without bypassing R7/R8/Movement?**
+11. **What canonical owner-facing action state (`ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`) is justified, if any, without bypassing R7/R8/Movement?** The UI may display “Buy / Accumulate” or “Sell / Exit Review” as explanatory copy without creating `BUY`/`SELL` internal enums.
 12. **If the company is in the held portfolio, is any remaining limitation caused by a genuine factual/evidence blocker rather than unfinished methodology or recommendation-policy engineering?**
 
 The final investment decision remains with the owner. The application must provide the evidence, deterministic assessment, role candidacy, risk/exit context and traceable reason path needed to make that decision.
