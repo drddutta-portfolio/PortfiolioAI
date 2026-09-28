@@ -80,7 +80,7 @@
   font-weight: 900;
 }
 
-.dap-coverage-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 18px; margin: 0; }
+.dap-coverage-list { display: grid; grid-template-columns: 1fr; gap: 4px; margin: 0; }
 .dap-coverage-list > div { display: grid; grid-template-columns: minmax(112px, 1fr) auto; align-items: baseline; gap: 8px; }
 .dap-coverage-list dt { color: #42574d; font-size: 11px; }
 .dap-coverage-list dd { display: flex; align-items: baseline; justify-content: flex-end; gap: 7px; min-width: 0; margin: 0; text-align: right; }
@@ -96,7 +96,7 @@
 .dap-scope-bars i.is-unclassified { background: #9da7a1; }
 
 .dap-allocation-title { padding: 11px 13px 0; }
-.dap-view-all { display: inline-flex; margin: 0 13px 11px; color: #285f45; font-size: 10px; font-weight: 800; text-underline-offset: 2px; }
+.dap-view-all { display: inline-flex; flex: none; align-items: center; margin: 1px 0 0; color: #285f45; font-size: 10px; font-weight: 800; text-align: right; text-underline-offset: 2px; }
 .dap-sector-layout,
 .dap-marketcap-layout {
   display: grid;

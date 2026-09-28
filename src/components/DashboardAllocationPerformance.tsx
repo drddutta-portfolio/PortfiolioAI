@@ -224,7 +224,7 @@ function AllocationLegend({ segments, currency, compact = false }: { segments: r
 }
 
 function MarketCapAllocation({ segments, currency, coverage }: { segments: readonly AllocationSegment[]; currency: string; coverage: string }) {
-  return <section className="dap-allocation-card"><div className="dap-allocation-title"><div><h3>Market-cap allocation</h3><span>Portfolio weight by current priced value</span></div><span className="dap-coverage-badge">{coverage} classified</span></div><div className="dap-marketcap-layout"><Donut segments={segments} centerValue={coverage} centerLabel="classified" colors={MARKET_CAP_COLORS} /><div className="dap-marketcap-list">{segments.map((segment) => <div className="dap-marketcap-row" key={segment.label}><i style={{ background: MARKET_CAP_COLORS[segment.label] ?? MARKET_CAP_COLORS.Unclassified }} /><span><strong>{segment.label}</strong><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed(), currency)}</small></span><b>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</b></div>)}</div></div></section>
+  return <section className="dap-allocation-card"><div className="dap-allocation-title"><div><h3>Market-cap allocation</h3><span>Portfolio weight by current priced value</span></div><a className="dap-view-all" href="#dap-marketcap-performance">View all market-cap groups →</a></div><div className="dap-marketcap-layout"><Donut segments={segments} centerValue={coverage} centerLabel="classified" colors={MARKET_CAP_COLORS} /><div className="dap-marketcap-list">{segments.map((segment) => <div className="dap-marketcap-row" key={segment.label}><i style={{ background: MARKET_CAP_COLORS[segment.label] ?? MARKET_CAP_COLORS.Unclassified }} /><span><strong>{segment.label}</strong><small>{segment.holdings} holding{segment.holdings === 1 ? "" : "s"} · {formatMoney(segment.value.toFixed(), currency)}</small></span><b>{segment.weight.toDecimalPlaces(1).toFixed(1)}%</b></div>)}</div></div></section>
 }
 
 function PerformanceMatrix({ groups }: { groups: readonly GroupRow[] }) {
@@ -309,13 +309,13 @@ export function DashboardAllocationPerformance() {
     </div>
 
     <div className="dap-allocation-grid">
-      <section className="dap-allocation-card"><div className="dap-allocation-title"><div><h3>Sector allocation</h3><span>Portfolio weight by current priced value</span></div><span className="dap-coverage-badge">{sectorCoverage} classified</span></div><div className="dap-sector-layout"><Donut segments={sectorSegments} centerValue={sectorCoverage} centerLabel="classified" /><AllocationLegend segments={sectorSegments} currency={portfolio.portfolio.currency} /></div><a className="dap-view-all" href="#dap-sector-performance">View all sectors</a></section>
+      <section className="dap-allocation-card"><div className="dap-allocation-title"><div><h3>Sector allocation</h3><span>Portfolio weight by current priced value</span></div><a className="dap-view-all" href="#dap-sector-performance">View all sectors →</a></div><div className="dap-sector-layout"><Donut segments={sectorSegments} centerValue={sectorCoverage} centerLabel="classified" /><AllocationLegend segments={sectorSegments} currency={portfolio.portfolio.currency} /></div></section>
       <MarketCapAllocation segments={marketCapSegments} currency={portfolio.portfolio.currency} coverage={marketCapCoverage} />
     </div>
 
     <div className="dap-performance-grid">
       <div id="dap-sector-performance"><GroupTable title="Sector performance" rows={sectorGroups} empty="No classified sector holdings are available in this scope." groupHoldings={sectorHoldings} /></div>
-      <GroupTable title="Market-cap performance" rows={marketCapGroups} empty="No classified market-cap holdings are available in this scope." groupHoldings={marketCapHoldings} />
+      <div id="dap-marketcap-performance"><GroupTable title="Market-cap performance" rows={marketCapGroups} empty="No classified market-cap holdings are available in this scope." groupHoldings={marketCapHoldings} /></div>
     </div>
 
     <PerformanceMatrix groups={sectorGroups.filter((row) => row.label !== "ETF" && row.label !== "Unclassified")} />

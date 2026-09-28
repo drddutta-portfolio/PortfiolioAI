@@ -74,7 +74,8 @@ describe("DashboardAllocationPerformance", () => {
     expect(screen.getByRole("heading", { name: "Sector performance" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Market-cap performance" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Where is sector exposure helping or lagging?" })).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "View all sectors" })).toHaveAttribute("href", "#dap-sector-performance")
+    expect(screen.getByRole("link", { name: "View all sectors →" })).toHaveAttribute("href", "#dap-sector-performance")
+    expect(screen.getByRole("link", { name: "View all market-cap groups →" })).toHaveAttribute("href", "#dap-marketcap-performance")
   })
 
   it("does not fabricate allocation completeness when the selected scope has no priced value", () => {
