@@ -1724,6 +1724,10 @@ coverage; keeps missing classifications explicit; and does not introduce a new
 business fact or calculation authority. Focused component/palette tests,
 TypeScript, architecture checks, edge tests and the production build pass. The
 repository-wide ESLint command retains pre-existing unrelated failures.
+The authenticated Development deployment subsequently passed responsive browser
+validation at 1440, 1280, 1024, 768, 430, 390 and 360 pixels, including internal
+table scrolling, sticky navigation, true page-top return, live News presence and
+absence of page-level horizontal overflow.
 
 Current governance state:
 
@@ -1735,7 +1739,8 @@ P6 = COMPLETE / PASS / CLOSED
 P7 = ACTIVE
 Owner Checkpoint 6 = IN REVIEW / REFINEMENT
 Dashboard sticky navigation = IMPLEMENTED / DEPLOYED
-Allocation & Performance redesign = IMPLEMENTED / LOCAL CHECKS PASS
+Allocation & Performance redesign = IMPLEMENTED / VALIDATED
+Dashboard responsive refinement = IMPLEMENTED / VALIDATED
 P7 formal closure = PENDING
 
 P8 = NOT AUTHORIZED
