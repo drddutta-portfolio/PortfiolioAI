@@ -1,0 +1,947 @@
+# PortfolioAI — P7-IC Portfolio-wide Intelligence Completion Remediation
+
+**Working label:** Program E  
+**Canonical status:** Post-D convergence remediation/completion checkpoint inside the still-open P7 stage; **not a new feature program**  
+**Repository:** `drddutta-portfolio/PortfiolioAI`  
+**Branch:** `PortfolioAI-Development`  
+**Date frozen:** 28 September 2026  
+**Master authority:** `docs/PortfolioAI_Master_Blueprint.md`  
+**Post-D authority:** `docs/PortfolioAI_POST_D_CONVERGENCE_AND_PRODUCT_COMPLETION_PLAN.md`  
+**P7 state:** ACTIVE — must remain open until P7-IC completes and Owner Checkpoint 6 is approved  
+**P8:** NOT AUTHORIZED  
+**Production:** UNCHANGED
+
+---
+
+## 1. Purpose
+
+P7-IC exists to align the research, scoring, recommendation, portfolio-decision and movement capabilities already built through Gates H–K and Programs A–D with the real current portfolio before release-candidate qualification.
+
+It is deliberately a **completion/remediation pass**, not a new research architecture and not a new scoring/recommendation program.
+
+The problem it closes is:
+
+```text
+architecture / contracts / reference fixtures exist
+                +
+portfolio-wide fail-closed dispositions exist
+                +
+current real portfolio has incomplete methodology/evidence/numeric coverage
+                ↓
+PortfolioAI cannot yet provide current Core/Satellite and movement intelligence
+for the full eligible portfolio
+```
+
+The target is:
+
+> Every eligible equity has either a reproducible current assessment through the deepest applicable canonical engine, or an explicit canonical blocker explaining why it cannot yet be assessed.
+
+The target is **not** “force a numeric score for every stock”.
+
+Valid terminal states remain valid:
+
+- `METHODOLOGY_NOT_AVAILABLE`
+- `INSUFFICIENT_EVIDENCE`
+- `STALE_REQUIRED_EVIDENCE`
+- `CONFLICTING_EVIDENCE`
+- `REVIEW_REQUIRED`
+- `BLOCKED_PREREQUISITE`
+- `NOT_APPLICABLE`
+
+No hidden fallback, guessed metric, denominator renormalization, or cross-sector policy borrowing is allowed.
+
+---
+
+## 2. Why P7 stays open
+
+P7 originally consolidates the product UI. The portfolio-wide intelligence completion pass will create real states that must be presented and validated in:
+
+- Research;
+- Intelligence;
+- Holdings / Action Center;
+- Portfolio Structure;
+- selected Dashboard coverage/attention surfaces.
+
+Therefore the correct sequence is:
+
+```text
+P7 shell + responsive refinement
+        ↓
+P7-IC portfolio-wide intelligence completion
+        ↓
+P7 final UI integration with real outputs
+        ↓
+Owner Checkpoint 6 browser acceptance
+        ↓
+P7 COMPLETE / PASS / CLOSED
+        ↓
+P8 release-candidate qualification
+        ↓
+P-FINAL convergence closure
+```
+
+P7 must **not** be formally closed before P7-IC and final real-data browser acceptance.
+
+---
+
+## 3. Scope and non-goals
+
+### In scope
+
+P7-IC reuses existing authorities:
+
+- R3 research evidence breadth;
+- R4 / Gate-K methodology routing;
+- R5 market-history breadth;
+- R6 deterministic scoring;
+- R7 recommendation and sizing readiness;
+- R8 Core Health / Portfolio Fit / Portfolio Risk / Exit Intelligence;
+- R9 Meaningful Change;
+- R10 Action Center;
+- existing provider controls, provenance, RLS and owner-authority rules.
+
+It also completes the Master Blueprint Movement Engine as the missing portfolio lifecycle layer.
+
+### Out of scope
+
+P7-IC does not authorize:
+
+- a new universal scoring engine;
+- a new recommendation engine;
+- universal Pharma thresholds outside Pharma;
+- sector-only specialist routing;
+- another Dashboard;
+- autonomous role mutation;
+- autonomous trading;
+- production mutation;
+- production migration;
+- scheduler activation;
+- paid AI;
+- broad watchlist discovery;
+- market-wide stock idea generation;
+- replacement-engine expansion beyond existing approved scope;
+- P8.
+
+---
+
+## 4. Frozen starting facts
+
+The current Post-D state must be revalidated at P7-IC entry, but the expected starting facts are:
+
+- 248 open holdings;
+- 239 equities;
+- 9 ETFs;
+- P4 portfolio-wide readiness/disposition closed;
+- P5 portfolio-wide terminal disposition closed;
+- current P5 numeric score coverage recorded as 0 / 239 equities;
+- current P5 recommendation coverage recorded as 0 / 239 equities;
+- current P5 sizing coverage recorded as 0 / 239 equities;
+- methodology resolution historically recorded as 110 resolved / 124 methodology-not-available / 5 review-required / 9 not-applicable;
+- R8–R10 engines are implemented;
+- current R7 recommendation-policy coverage is narrower than the R6 methodology/routing architecture;
+- owner role remains authoritative and must never be silently rewritten;
+- P7 is still active.
+
+These are starting expectations, not assumptions. IC0 must verify current repository/database reality before execution.
+
+---
+
+# 5. Canonical build workflow
+
+```text
+IC0  Authority + portfolio coverage freeze
+  ↓ owner checkpoint IC-A
+IC1  Methodology + recommendation-policy completion
+  ↓ owner checkpoint IC-B
+IC2  Evidence / market-history remediation plan and bounded acquisition
+  ↓ provider execution checkpoints as required
+IC3  Current canonical evidence-snapshot materialization
+  ↓ owner checkpoint IC-C
+IC4  R6 current portfolio scoring execution
+  ↓
+IC5  R7 recommendation / Core-Satellite candidacy / sizing readiness
+  ↓ owner checkpoint IC-D
+IC6  R8 + R9 + Movement Engine operationalization
+  ↓ owner checkpoint IC-E
+IC7  R10 + Research / Intelligence / Action Center UI integration
+  ↓
+IC-FINAL  Cross-portfolio validation + final P7 browser package
+  ↓ Owner Checkpoint 6
+P7 CLOSED
+  ↓
+P8
+```
+
+No checkpoint may be skipped because a later UI appears to work.
+
+---
+
+# 6. IC0 — Authority and coverage freeze
+
+## Objective
+
+Establish exact present-tense truth for every open holding before remediation.
+
+## Required work
+
+1. Freeze the exact Development branch commit and Development portfolio identity.
+2. Reconcile current holdings:
+   - equities;
+   - ETFs / non-equity;
+   - open / closed.
+3. Produce one machine-readable per-security matrix containing at minimum:
+   - security identity;
+   - asset class;
+   - sector / industry / basic industry;
+   - methodology/profile resolution;
+   - methodology role / assignment version;
+   - research evidence readiness;
+   - market-history readiness;
+   - current canonical evidence snapshot state;
+   - R6 state;
+   - R7 state;
+   - sizing state;
+   - R8 state by domain;
+   - R9 availability;
+   - movement state;
+   - R10 state;
+   - current owner role;
+   - current blocker;
+   - next canonical action.
+4. Reconcile legacy/reference outputs so none are mistaken for current portfolio facts.
+5. Inventory existing persistence:
+   - score runs;
+   - recommendation runs;
+   - evidence snapshots;
+   - owner role history;
+   - action/decision history;
+   - movement/promotion/demotion storage if any.
+6. Confirm whether the current schema can support the required multi-period Movement Engine without a new migration.
+
+## Exit criteria
+
+- 248/248 open holdings have an explicit IC0 record.
+- 239 equities have an explicit methodology/evidence/R6/R7/R8/R9/R10 status.
+- 9 ETFs have explicit non-equity applicability.
+- No unknown is silently treated as ready.
+- Existing schema/persistence capability is documented.
+
+### Owner Checkpoint IC-A
+
+Approve the frozen coverage matrix and the exact remediation scope.
+
+No provider calls occur in IC0.
+
+---
+
+# 7. IC1 — Methodology and recommendation-policy completion
+
+## Objective
+
+Close the gap between portfolio-wide Gate-K routing and actual executable R6/R7 policy coverage.
+
+## IC1A — R6 methodology completion
+
+For each equity currently `METHODOLOGY_NOT_AVAILABLE` or `REVIEW_REQUIRED`:
+
+1. Verify sector / industry / basic-industry authority.
+2. Resolve whether an existing approved methodology actually applies.
+3. If an existing methodology family applies but its adapter is incomplete, complete the adapter without changing the frozen methodology semantics.
+4. If no approved methodology exists, define the minimum industry-specific methodology needed by the Master Blueprint.
+5. Validate isolation:
+   - no Pharma metric leakage into Banks;
+   - no Bank metric leakage into industrials;
+   - no nearest-sector fallback;
+   - no symbol-specific runtime routing.
+6. Keep company evidence separate from methodology definition.
+
+The goal is maximum legitimate coverage, not forced universal scoring.
+
+## IC1B — R7 recommendation-policy completion
+
+Inventory every R6 methodology/profile that can produce a valid current score.
+
+For each one, determine whether an approved recommendation policy exists.
+
+A recommendation policy must define, where appropriate:
+
+- Core Candidate conditions;
+- Satellite Candidate conditions;
+- Watch conditions;
+- Avoid / blocked conditions;
+- mandatory floors;
+- caution / risk interaction;
+- methodology-specific role rules;
+- fail-closed behavior;
+- lineage version.
+
+Important:
+
+- Pharma’s historical `CORE / SATELLITE / WATCH` floors remain Pharma-specific.
+- They must not be copied to Banking, IT, Capital Goods, Auto, Chemicals, etc.
+- Each methodology must either have an explicitly approved policy or remain
+  `METHODOLOGY_NOT_AVAILABLE` for recommendation.
+
+## IC1C — Core/Satellite meaning freeze
+
+Freeze common semantics while allowing methodology-specific thresholds:
+
+**Core Candidate**
+- durable business quality and growth;
+- suitable balance-sheet / cash-flow / capital-efficiency characteristics for that industry;
+- acceptable risk;
+- valuation not inconsistent with sustainable compounding;
+- sufficient evidence confidence.
+
+**Satellite Candidate**
+- investable opportunity that does not currently satisfy the required Core durability/quality profile, or whose investment case is intentionally cyclical, turnaround, catalyst, rerating, emerging-growth or momentum-led.
+
+Satellite must never mean “failed Core”.
+
+## Exit criteria
+
+- every R6 methodology/profile has:
+  - an executable scoring adapter, or
+  - a canonical methodology blocker;
+- every score-capable profile has:
+  - an approved R7 recommendation policy, or
+  - a canonical recommendation-policy blocker;
+- policy isolation tests pass;
+- no universal fallback is introduced.
+
+### Owner Checkpoint IC-B
+
+Owner reviews and approves newly required recommendation-policy contracts before portfolio-wide execution.
+
+---
+
+# 8. IC2 — Evidence and market-history remediation
+
+## Objective
+
+Acquire or normalize the evidence required by the approved methodologies without allowing R6/R7 to fetch data themselves.
+
+## Rules
+
+Evidence acquisition remains outside deterministic computation.
+
+Use existing:
+
+- R3 evidence orchestration;
+- R5 history mechanisms;
+- Program A patterns;
+- Trendlyne controls;
+- Angel One controls;
+- official filings / exchange sources;
+- manual verified evidence where allowed.
+
+## Required workflow
+
+For every blocked equity:
+
+```text
+methodology requirement
+      ↓
+missing/stale/conflicting evidence list
+      ↓
+existing canonical cache check
+      ↓
+provider/source plan
+      ↓
+cost/call estimate
+      ↓
+owner approval where required
+      ↓
+bounded fetch
+      ↓
+normalize + provenance
+      ↓
+recompute readiness
+```
+
+Prioritize by:
+
+1. current portfolio holdings;
+2. largest portfolio weights;
+3. owner Core holdings;
+4. holdings blocked by only one/few prerequisites;
+5. remaining equities.
+
+This prioritization affects execution order only, not methodology standards.
+
+## Provider controls
+
+Before each provider-backed batch record:
+
+- provider;
+- symbols/cohort;
+- exact reason;
+- expected calls;
+- daily quota impact;
+- retry ceiling;
+- cost/entitlement;
+- stop condition.
+
+No open-ended provider sweep.
+
+### Provider checkpoints
+
+Real Trendlyne / Angel One or other provider execution requires the existing owner/provider authorization rules.
+
+## Exit criteria
+
+Every equity has one of:
+
+- required evidence ready;
+- explicit unresolved evidence blocker;
+- unresolved methodology blocker;
+- review-required conflict;
+- not applicable.
+
+---
+
+# 9. IC3 — Current canonical research/evidence snapshots
+
+## Objective
+
+Materialize the current reproducible input boundary required by R6.
+
+For each eligible equity, create or resolve one canonical current snapshot containing:
+
+- security identity;
+- classification version;
+- methodology/profile;
+- methodology role;
+- assignment version;
+- evidence IDs;
+- evidence as-of dates;
+- freshness;
+- required metric values;
+- metric applicability;
+- market-history identity where required;
+- conflict/review state;
+- deterministic snapshot fingerprint;
+- as-of date.
+
+Snapshots must preserve null/missing facts.
+
+No reference fixture, old Gate score or historical recommendation may be reused as a current snapshot unless it independently satisfies the current evidence and lineage contract.
+
+## Persistence rule
+
+Reuse existing canonical persistence wherever possible.
+
+If a genuinely new persistence mechanism or migration is necessary, stop and return for separate owner approval before creating/applying it.
+
+## Exit criteria
+
+Every equity has:
+
+- a current score-input snapshot eligible for R6; or
+- an explicit canonical reason why one cannot be materialized.
+
+### Owner Checkpoint IC-C
+
+Approve the current-snapshot coverage report before R6 portfolio execution.
+
+---
+
+# 10. IC4 — R6 current portfolio scoring
+
+## Objective
+
+Run the existing deterministic R6 architecture over current canonical snapshots.
+
+## Rules
+
+- cache-only;
+- zero provider calls inside R6;
+- zero AI numeric influence;
+- deterministic replay required;
+- exact methodology/version lineage required;
+- no missing-input renormalization;
+- no cross-sector fallback.
+
+## Required outputs per equity
+
+One of:
+
+- `SCORED`
+- `INSUFFICIENT_EVIDENCE`
+- `STALE_REQUIRED_EVIDENCE`
+- `CONFLICTING_EVIDENCE`
+- `REVIEW_REQUIRED`
+- `METHODOLOGY_NOT_AVAILABLE`
+- `BLOCKED_PREREQUISITE`
+- `NOT_APPLICABLE`
+
+For scored equities preserve:
+
+- overall score;
+- category scores;
+- methodology;
+- evidence snapshot;
+- run identity;
+- reason codes;
+- as-of date.
+
+## Exit criteria
+
+- 239/239 equities have a current R6 disposition.
+- Numeric coverage is reported separately.
+- No score is fabricated to increase the coverage percentage.
+
+---
+
+# 11. IC5 — R7 recommendation, role candidacy and sizing readiness
+
+## Objective
+
+Produce current deterministic investment-role suggestions wherever R6 and the approved policy permit.
+
+## Required R7 recommendation outputs
+
+Where eligible:
+
+- `CORE_CANDIDATE`
+- `SATELLITE_CANDIDATE`
+- `WATCH`
+- `AVOID`
+
+Where not eligible:
+
+- explicit fail-closed state.
+
+## Required role comparison
+
+For each eligible holding expose separately:
+
+```text
+Owner role
+vs
+PortfolioAI suggested role
+```
+
+Examples:
+
+```text
+Owner: SATELLITE
+PortfolioAI: CORE_CANDIDATE
+=> ROLE_COMPATIBILITY_REVIEW
+```
+
+```text
+Owner: CORE
+PortfolioAI: SATELLITE_CANDIDATE
+=> possible demotion review input
+```
+
+The engine must never mutate the owner role.
+
+## Sizing
+
+Sizing remains separate from role recommendation.
+
+Use only an approved sizing methodology. If none exists, return the canonical sizing blocker rather than inventing weights.
+
+## Exit criteria
+
+- 239 equities have a current R7 disposition.
+- Every scored/recommendable equity has a traceable R7 result.
+- Core/Satellite numeric/result coverage is reported separately.
+- Owner settings remain unchanged.
+
+### Owner Checkpoint IC-D
+
+Review recommendation-policy execution, Core/Satellite candidacy semantics and owner-authority protection.
+
+---
+
+# 12. IC6 — R8, R9 and Movement Engine operationalization
+
+## Objective
+
+Turn current R6/R7 outputs into portfolio-level health, change and role-transition intelligence.
+
+## IC6A — R8
+
+For each applicable holding run:
+
+- Core Health;
+- Portfolio Fit;
+- Portfolio Risk;
+- Exit Intelligence.
+
+Preserve independent states; do not collapse them into an opaque master score.
+
+Expected Core Health states include:
+
+- `CORE_HEALTHY`
+- `CORE_WATCH`
+- `CORE_AT_RISK`
+- `CORE_DEMOTION_REVIEW`
+
+## IC6B — R9 meaningful change
+
+Use canonical point-in-time evidence/run lineage to distinguish:
+
+- no meaningful change;
+- improving;
+- deteriorating;
+- conflicting;
+- newly blocked/unblocked;
+- recommendation-role change;
+- risk/exit-state change.
+
+Do not confuse daily price movement with thesis/research change.
+
+## IC6C — Movement Engine
+
+Implement the missing Master Blueprint lifecycle using current owner role + R7 + R8 + R9 + historical canonical evidence.
+
+Minimum movement states:
+
+### Core lifecycle
+
+- `CORE_STABLE`
+- `CORE_WATCH`
+- `CORE_AT_RISK`
+- `CORE_TO_SATELLITE_REVIEW`
+- `CORE_TO_EXIT_REVIEW`
+
+### Satellite lifecycle
+
+- `SATELLITE_STABLE`
+- `SATELLITE_CORE_CANDIDATE`
+- `SATELLITE_CORE_PROMOTION_READY`
+- `SATELLITE_REVIEW`
+
+### Other applicability
+
+- `NOT_APPLICABLE`
+- `INSUFFICIENT_EVIDENCE`
+- `REVIEW_REQUIRED`
+- `BLOCKED_PREREQUISITE`
+
+## Anti-churn contract
+
+The Master Blueprint rules are mandatory:
+
+- price weakness alone cannot demote Core;
+- one weak quarter cannot automatically demote Core;
+- Core promotion normally requires sustained qualifying evidence over 2–4 quarters;
+- exceptional hard thesis breaks may accelerate demotion/review;
+- soft deterioration and hard deterioration must be distinguished.
+
+“Sustained qualifying evidence” must be methodology-aware. Do not invent one universal numeric threshold.
+
+## Owner actions
+
+Movement outputs are advisory.
+
+Possible owner decisions:
+
+### Demotion review
+- KEEP CORE
+- MOVE TO SATELLITE
+- MOVE TO REVIEW
+- EXIT
+- SNOOZE 90 DAYS
+
+### Promotion review
+- PROMOTE TO CORE
+- KEEP SATELLITE
+- WATCH
+- REJECT
+
+No role changes occur automatically.
+
+## Persistence / history
+
+The Movement Engine needs reproducible multi-period evidence.
+
+First reuse append-only canonical evidence, score/recommendation lineage and existing owner-decision history.
+
+If existing storage cannot reproduce a 2–4-quarter movement decision, stop for a separate persistence-design approval. Do not silently change the previously frozen R8/R9 persistence policy.
+
+## Exit criteria
+
+- every applicable holding has an R8 disposition;
+- R9 change state is available where historical comparison is valid;
+- every equity has a movement disposition or canonical blocker;
+- no automatic role mutation exists;
+- replay of the same evidence/history gives the same movement state.
+
+### Owner Checkpoint IC-E
+
+Approve Movement Engine contracts and owner-decision boundary before UI integration is called final.
+
+---
+
+# 13. IC7 — R10 and final P7 UI integration
+
+## Objective
+
+Expose the completed current intelligence through the existing product shell without creating competing authorities.
+
+## Research
+
+Show:
+
+- current methodology;
+- current evidence readiness;
+- current R6 score when available;
+- current R7 recommendation / suggested role when available;
+- exact blocker when unavailable;
+- “why this score/recommendation?” lineage.
+
+## Intelligence
+
+Show:
+
+- current owner role;
+- PortfolioAI suggested role;
+- Core Health;
+- Portfolio Fit;
+- Portfolio Risk;
+- Exit Intelligence;
+- Meaningful Change;
+- Movement state;
+- reason/evidence summary.
+
+## R10 Action Center
+
+Surface only canonical attention items, including:
+
+- Core demotion review;
+- Satellite promotion candidate;
+- Core promotion ready;
+- exit review;
+- evidence/methodology review;
+- owner-role/recommendation tension.
+
+R10 remains the sole Action Center authority.
+
+## Portfolio Structure
+
+Remain the owner-control surface.
+
+Movement recommendations may link here for owner action, but no engine may write the owner role automatically.
+
+## Holdings
+
+May show compact current role / suggested role / attention state, but must consume the same canonical R7/R8/Movement/R10 outputs.
+
+## Dashboard
+
+Dashboard remains an executive overview. Do not duplicate the full Movement or Research workspace.
+
+## Exit criteria
+
+Cross-surface consistency proves:
+
+```text
+Research suggested role
+=
+Intelligence suggested role
+=
+Holdings suggested role
+=
+R10 source fact
+```
+
+and owner role remains separately visible.
+
+---
+
+# 14. IC-FINAL — Portfolio-wide completion audit
+
+## Required portfolio matrix
+
+For all 248 open holdings record:
+
+- asset class;
+- current owner role;
+- methodology state;
+- evidence state;
+- current snapshot state;
+- R6 state;
+- R6 score if valid;
+- R7 state;
+- R7 suggested role if valid;
+- sizing state;
+- R8 Core Health;
+- R8 Fit;
+- R8 Risk;
+- R8 Exit;
+- R9 state;
+- Movement state;
+- R10 attention state;
+- UI visibility;
+- final blocker;
+- last as-of date.
+
+## Required aggregate coverage report
+
+At minimum:
+
+- methodology resolved / blocked / review / N/A;
+- current snapshot ready;
+- R6 scored;
+- R7 recommendation ready;
+- Core Candidate;
+- Satellite Candidate;
+- Watch;
+- Avoid;
+- R8 evaluated by domain;
+- movement evaluated;
+- promotion-ready;
+- demotion-review;
+- explicit blocked states;
+- ETF/non-equity not applicable.
+
+## Completion rule
+
+P7-IC may close even if not every equity receives a numeric score or recommendation.
+
+It may close only if:
+
+1. every holding has a current explicit terminal state;
+2. all legitimately solvable methodology/evidence gaps in the approved scope were addressed;
+3. remaining blockers are real and documented;
+4. no current result depends on a fixture/historical reference masquerading as live data;
+5. all cross-surface facts agree;
+6. owner role was never silently mutated;
+7. provider/accounting/production safety boundaries passed;
+8. Movement Engine decisions are reproducible;
+9. P7 UI consumes the completed authorities.
+
+After IC-FINAL, return to **Owner Checkpoint 6** for final browser acceptance.
+
+Only explicit Owner Checkpoint 6 approval closes P7.
+
+---
+
+# 15. Validation requirements
+
+At each executable checkpoint run the relevant subset; IC-FINAL runs the full set:
+
+- TypeScript;
+- architecture guard;
+- deterministic engine tests;
+- sector/profile isolation tests;
+- recommendation-policy tests;
+- Movement Engine tests;
+- owner-authority mutation regressions;
+- cross-surface canonical-fact tests;
+- RLS / ownership tests where applicable;
+- full main test suite;
+- Edge tests;
+- ESLint;
+- production-equivalent Vite build;
+- `git diff --check`;
+- secret/crossover scan;
+- Development browser validation.
+
+Required visual/browser widths remain:
+
+- 1440;
+- 1280;
+- 1024;
+- 768;
+- 430;
+- 390;
+- 360.
+
+---
+
+# 16. Stop conditions
+
+Stop and return to the owner if:
+
+- methodology selection is ambiguous;
+- a new recommendation policy requires an investment-policy decision not already approved;
+- a provider batch exceeds its approved envelope;
+- a required provider entitlement/cost is unclear;
+- current evidence conflicts materially;
+- a new database migration appears necessary;
+- Movement Engine persistence requires changing the frozen R8/R9 persistence decision;
+- a stock can be scored only by borrowing another industry’s methodology;
+- a recommendation can be produced only by copying Pharma thresholds;
+- R10 differs between consumer surfaces;
+- owner roles would need automatic mutation;
+- production action is required;
+- a numeric result would require guessed data.
+
+---
+
+# 17. Git and environment discipline
+
+All work remains on:
+
+`PortfolioAI-Development`
+
+Before every checkpoint:
+
+1. inspect local branch / remote branch;
+2. protect unrelated uncommitted work;
+3. reconcile to the current Development baseline;
+4. implement only the active checkpoint;
+5. validate;
+6. update this plan/status/handoff;
+7. commit/push only reviewed files;
+8. stop at the next owner checkpoint.
+
+Never commit credentials, backup keys or local secret files.
+
+`main` and Production remain unchanged until separate release authorization after P8.
+
+---
+
+# 18. Canonical governance sequence
+
+```text
+P4 = COMPLETE / PASS / CLOSED
+P5 = COMPLETE / PASS / CLOSED
+P6 = COMPLETE / PASS / CLOSED
+
+P7 = ACTIVE
+  ├─ shell/UI consolidation = implemented
+  ├─ P7-IC = required before final closure
+  │    ├─ IC0 coverage freeze
+  │    ├─ IC1 methodology + recommendation policy
+  │    ├─ IC2 evidence/history remediation
+  │    ├─ IC3 canonical snapshots
+  │    ├─ IC4 R6
+  │    ├─ IC5 R7
+  │    ├─ IC6 R8 + R9 + Movement
+  │    ├─ IC7 R10 + UI integration
+  │    └─ IC-FINAL
+  └─ Owner Checkpoint 6
+       ↓
+P7 COMPLETE / PASS / CLOSED
+       ↓
+P8 release-candidate qualification
+       ↓
+P-FINAL convergence closure
+```
+
+There is no canonical P9 in the current Post-D roadmap.
+
+---
+
+# 19. Definition of success
+
+P7-IC succeeds when PortfolioAI can answer, for each eligible holding, with current evidence:
+
+1. **Can this company be assessed with an approved methodology?**
+2. **What is its current deterministic score, or why is no score valid?**
+3. **Is it currently a Core Candidate, Satellite Candidate, Watch, Avoid, or blocked?**
+4. **How does that compare with the owner’s current role?**
+5. **What is its Core Health / Fit / Risk / Exit state?**
+6. **What changed since the prior valid state?**
+7. **Is it stable, a promotion candidate, promotion ready, a demotion review, or otherwise blocked?**
+8. **What requires the owner’s attention in R10?**
+9. **What evidence supports the conclusion?**
+
+The final decision always remains with the portfolio owner.
