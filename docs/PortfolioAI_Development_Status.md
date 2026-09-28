@@ -57,6 +57,27 @@ Current mandatory rules:
 
 Production/main remain unchanged by this documentation amendment.
 
+## P7-IC portfolio-completion mandate — strengthened before IC-A approval — 28 September 2026
+
+IC0 proved that the current held-equity universe still contains 124 `METHODOLOGY_NOT_AVAILABLE` equities and 5 `REVIEW_REQUIRED` equities, while the currently resolved methodologies do not yet all have completed R7 threshold policies.
+
+The owner has therefore strengthened IC1 before authorizing it.
+
+Mandatory IC1 completion rules now are:
+
+- Gate K remains historically closed; P7-IC reuses its methodology isolation/portability discipline without reopening the gate.
+- Every current held equity must resolve through `Sector → Industry → Basic Industry / Business Model → Subprofile where needed → COMPLETE methodology`.
+- "Complete methodology" means a full versioned research/scoring/recommendation contract, not a placeholder adapter.
+- A complete methodology includes required evidence, metric applicability/N/A, dimensions/weights/curves, quality/durability/growth, capital-efficiency/cash-flow, leverage/credit, valuation, benchmark/peer authority, ownership/governance, momentum/risk, cycle normalization where relevant, freshness/blockers, deterministic R6 semantics, a complete R7 policy, reference validation, isolation tests and future-stock portability.
+- For a current held equity, `METHODOLOGY_NOT_AVAILABLE` caused by historically deferred methodology engineering is now an IC1 work item, not an acceptable IC1 closure state.
+- Every methodology/profile/subprofile used by current held equities must leave IC1 with an approved complete R7 policy; `...RECOMMENDATION_PENDING_THRESHOLDS` is not an IC1 completion state.
+- Remaining unresolved holdings after IC1 may be only genuine factual/classification `REVIEW_REQUIRED` exceptions with explicit reasons and next actions.
+- IC1 must make methodology-to-evidence requirements machine-readable enough for IC2 to compute exact fresh/stale/missing/conflicting evidence deficits and provider demand.
+- P7-IC must not defer completion of current held-portfolio methodologies/recommendation policies into a later cleanup program.
+- Owner-facing action language may ultimately include Buy/Accumulate, Hold, Watch, Reduce and Sell/Exit Review, but only as deterministic downstream interpretation of R7 + R8 + Movement/context; score alone cannot create Buy/Sell.
+
+IC-A remains pending. IC1 has not started and is not authorized until the owner explicitly approves this strengthened scope and the required additive persistence-design boundary.
+
 ## Post-D P4 read-only baseline & bounded-cohort proposal — 26 September 2026
 
 P4 planning/readiness work is **COMPLETE / READY FOR OWNER CHECKPOINT 4A**.
