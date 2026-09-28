@@ -535,3 +535,254 @@ th { color: #69746d; background: #f7f9f7; font-size: 0.7rem; letter-spacing: 0.0
     position: static;
   }
 }
+
+
+/* P7 universal stock research shell — production design parity */
+.research-header > .position-dashboard,
+.research-header > .research-decision-layout { grid-column: 1 / -1; }
+
+.position-dashboard { min-width: 0; }
+.position-dashboard .research-head-metrics { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+
+.research-decision-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(15rem, 1fr);
+  gap: .8rem;
+  align-items: stretch;
+  padding-top: .8rem;
+  border-top: 1px solid #d8e2dc;
+}
+.research-decision-workspace,
+.research-key-insights {
+  min-width: 0;
+  border: 1px solid #d3ddd7;
+  border-radius: .8rem;
+  background: rgba(255,255,255,.9);
+}
+.research-decision-workspace { padding: .9rem; }
+.research-decision-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .8rem;
+  margin-bottom: .75rem;
+}
+.research-decision-heading .eyebrow { margin: 0 0 .12rem; }
+.research-decision-heading h2 { margin: 0; color: #20382c; font-size: 1.02rem; }
+.research-decision-heading p:last-child { margin: .2rem 0 0; color: #6b7770; font-size: .72rem; line-height: 1.35; }
+.research-decision-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  gap: .7rem;
+  align-items: stretch;
+}
+
+/* Owner-controlled side of the decision workspace. */
+.research-decision-body .position-decision-panel {
+  min-width: 0;
+  padding: .8rem;
+  border: 1px solid #ccdbea;
+  border-radius: .7rem;
+  background: #f5f9ff;
+}
+.position-decision-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .65rem;
+  margin-bottom: .65rem;
+}
+.position-decision-heading > div { display: grid; gap: .12rem; }
+.position-decision-heading span,
+.position-decision-summary article span,
+.position-decision-editor label > span {
+  color: #66776d;
+  font-size: .61rem;
+  font-weight: 800;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+.position-decision-heading strong { color: #20382c; font-size: .95rem; }
+.position-decision-heading small { color: #728078; font-size: .67rem; line-height: 1.3; }
+.position-decision-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .45rem;
+}
+.position-decision-summary article {
+  min-height: 4.4rem;
+  padding: .58rem .62rem;
+  display: grid;
+  align-content: space-between;
+  gap: .12rem;
+  border: 1px solid #dce5df;
+  border-radius: .55rem;
+  background: #fff;
+}
+.position-decision-summary article strong { color: #1f3328; font-size: .86rem; overflow-wrap: anywhere; }
+.position-decision-summary article small { color: #748078; font-size: .61rem; line-height: 1.25; }
+.position-decision-panel > .assessment-note {
+  margin: .55rem 0 0;
+  color: #6c7972;
+  font-size: .63rem;
+  line-height: 1.35;
+}
+.position-decision-editor {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .55rem;
+}
+.position-decision-editor label { display: grid; gap: .28rem; }
+.position-decision-editor input,
+.position-decision-editor select {
+  width: 100%;
+  min-height: 2.35rem;
+  padding: .45rem .55rem;
+  border: 1px solid #cbd6d0;
+  border-radius: .45rem;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+}
+.position-decision-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: .45rem; }
+
+/* Current PortfolioAI state, kept visually separate from owner settings. */
+.portfolioai-state-panel {
+  min-width: 0;
+  padding: .8rem;
+  border: 1px solid #bfd8c9;
+  border-radius: .7rem;
+  background: linear-gradient(180deg, #f6fbf8 0%, #eef7f2 100%);
+}
+.portfolioai-state-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .65rem;
+  margin-bottom: .62rem;
+}
+.portfolioai-state-heading > div { min-width: 0; }
+.portfolioai-state-heading span:first-child {
+  color: #66776d;
+  font-size: .61rem;
+  font-weight: 800;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+.portfolioai-state-heading h3 { margin: .14rem 0 .1rem; color: #19412d; font-size: 1.15rem; line-height: 1.1; }
+.portfolioai-state-heading p { margin: 0; color: #617069; font-size: .67rem; line-height: 1.35; }
+.portfolioai-state-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .45rem;
+}
+.portfolioai-state-grid article {
+  min-height: 4.4rem;
+  padding: .58rem .62rem;
+  display: grid;
+  align-content: space-between;
+  gap: .12rem;
+  border: 1px solid #d5e3da;
+  border-radius: .55rem;
+  background: rgba(255,255,255,.92);
+}
+.portfolioai-state-grid span {
+  color: #66776d;
+  font-size: .59rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.portfolioai-state-grid strong { color: #1d3c2b; font-size: .86rem; overflow-wrap: anywhere; }
+.portfolioai-state-grid small { color: #718078; font-size: .61rem; line-height: 1.25; }
+.portfolioai-state-note {
+  margin: .55rem 0 0;
+  padding-top: .5rem;
+  border-top: 1px solid #d8e5dc;
+  color: #617069;
+  font-size: .63rem;
+  line-height: 1.35;
+}
+
+/* Right-hand quick insight rail from the original research-page composition. */
+.research-key-insights {
+  padding: .78rem;
+  display: flex;
+  flex-direction: column;
+}
+.research-key-insights-title {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  padding-bottom: .62rem;
+  border-bottom: 1px solid #e0e6e2;
+}
+.research-key-insights-title > span {
+  display: inline-flex;
+  width: 1.55rem;
+  height: 1.55rem;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: .42rem;
+  background: #e8f3ec;
+  color: #2a6849;
+  font-size: .72rem;
+}
+.research-key-insights-title h2 { margin: 0; color: #20382c; font-size: .9rem; }
+.research-key-insights-title p { margin: .1rem 0 0; color: #748078; font-size: .61rem; line-height: 1.3; }
+.research-key-insight-list { display: grid; }
+.research-key-insight-list article {
+  padding: .55rem .05rem;
+  display: grid;
+  gap: .09rem;
+  border-bottom: 1px solid #e6ebe8;
+}
+.research-key-insight-list article > span {
+  color: #78847d;
+  font-size: .56rem;
+  font-weight: 800;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+.research-key-insight-list article strong { color: #253d31; font-size: .76rem; }
+.research-key-insight-list article small { color: #6d7972; font-size: .59rem; line-height: 1.28; }
+.research-readonly-advisory {
+  margin-top: auto;
+  padding: .62rem;
+  border: 1px solid #c9daef;
+  border-radius: .55rem;
+  background: #eef5ff;
+}
+.research-readonly-advisory strong {
+  color: #315b83;
+  font-size: .61rem;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+.research-readonly-advisory p { margin: .2rem 0 0; color: #5d6d7b; font-size: .59rem; line-height: 1.3; }
+
+@media (max-width: 1280px) {
+  .position-dashboard .research-head-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .research-decision-layout { grid-template-columns: minmax(0, 1fr); }
+  .research-key-insights { display: grid; grid-template-columns: minmax(12rem, .8fr) minmax(0, 2fr) minmax(12rem, .9fr); gap: .7rem; align-items: start; }
+  .research-key-insights-title { border-bottom: 0; padding-bottom: 0; }
+  .research-key-insight-list { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .35rem; }
+  .research-key-insight-list article { border: 1px solid #e4e9e6; border-radius: .45rem; padding: .5rem; }
+  .research-readonly-advisory { margin-top: 0; }
+}
+@media (max-width: 900px) {
+  .research-decision-body { grid-template-columns: 1fr; }
+  .research-key-insights { display: flex; }
+  .research-key-insights-title { padding-bottom: .62rem; border-bottom: 1px solid #e0e6e2; }
+  .research-key-insight-list { grid-template-columns: 1fr; gap: 0; }
+  .research-key-insight-list article { border: 0; border-bottom: 1px solid #e6ebe8; border-radius: 0; padding: .55rem .05rem; }
+  .research-readonly-advisory { margin-top: .65rem; }
+}
+@media (max-width: 720px) {
+  .position-dashboard .research-head-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .position-decision-summary,
+  .portfolioai-state-grid,
+  .position-decision-editor { grid-template-columns: 1fr; }
+  .position-decision-actions { grid-column: 1; }
+}
