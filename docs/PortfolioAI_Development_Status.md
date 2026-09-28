@@ -75,6 +75,7 @@ Mandatory IC1 completion rules now are:
 - IC1 must make methodology-to-evidence requirements machine-readable enough for IC2 to compute exact fresh/stale/missing/conflicting evidence deficits and provider demand.
 - P7-IC must not defer completion of current held-portfolio methodologies/recommendation policies into a later cleanup program.
 - Canonical internal owner-facing action states are `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`, deterministically derived from R7 + R8 + Movement/context; display copy may say “Buy / Accumulate” or “Sell / Exit Review”, but score alone cannot create an action state.
+- Action-state projection occurs only in/after IC6 once current R8 and Movement inputs exist; IC5 produces R7 candidacy and sizing readiness only.
 
 IC-A remains pending. IC1 has not started and is not authorized until the owner explicitly approves this strengthened scope and the required additive persistence-design boundary.
 
