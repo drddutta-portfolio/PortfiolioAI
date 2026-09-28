@@ -29,10 +29,33 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P7 remains ACTIVE. The shell/UI consolidation and Dashboard responsive refinements are implemented, but P7 formal closure is deliberately deferred. Master-Blueprint reconciliation has inserted the mandatory **P7-IC Portfolio-wide Intelligence Completion Remediation** (working label: Program E; not a new feature program) before Owner Checkpoint 6. P7-IC must align the existing R3/R4/R5/R6/R7/R8/R9/R10 authorities with the real current portfolio, complete legitimate methodology/recommendation-policy coverage, remediate evidence, materialize current snapshots, execute current R6/R7, operationalize R8/R9 plus the Movement Engine, and integrate the resulting real states through R10/Research/Intelligence/Action Center. Owner Checkpoint 6 is deferred until P7-IC IC-FINAL. P8 remains NOT AUTHORIZED; Production remains unchanged
+**Current milestone:** Post-D P7 remains ACTIVE. Dashboard/stock-page UI refinement is still being completed, and P7 formal closure is deliberately deferred. The mandatory **P7-IC Portfolio-wide Intelligence Completion Remediation** (working label: Program E; not a new feature program) must then align the existing R3/R4/R5/R6/R7/R8/R9/R10 authorities with the real current portfolio. The frozen P7-IC execution model is industry/methodology-first, cache-first and quota-bounded: reuse valid Gate H-K methodology reference stocks, persist every accepted provider observation with provenance/date/freshness metadata, make normal stock-page browsing zero-provider-call, execute Trendlyne in bounded daily cohorts (default 320 planned calls/day against the current 400/day planning ceiling), materialize current snapshots, execute current R6/R7, operationalize R8/R9 plus Movement, and integrate real outputs through R10/Research/Intelligence/Action Center. Owner Checkpoint 6 is deferred until P7-IC IC-FINAL. P8 remains NOT AUTHORIZED; Production remains unchanged
 **Last reviewed:** 28 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
+
+
+## P7-IC operational amendment — cache-first sector-aware completion — 28 September 2026
+
+The owner clarified the required real-portfolio completion model and it is now frozen into the authoritative P7-IC plan and Post-D roadmap.
+
+Current mandatory rules:
+
+- all stock pages share one universal design shell; methodology-specific blocks vary by sector/industry/basic-industry/subprofile;
+- methodology validation is by methodology/subprofile, not by every display-sector label; existing Gate H-K reference cases are reused when valid;
+- a reference stock validates a methodology contract only; every held equity still requires its own company evidence/readiness lineage;
+- provider-backed research is cache-first: fresh validated evidence is reused and planned provider calls for it are zero;
+- accepted Trendlyne/Angel observations are persisted with provider provenance, normalized value, evidence/as-of date, retrieval date, freshness/stale boundary, evidence status and selected/canonical state;
+- normal Research/Holdings/Intelligence/Dashboard browsing must make zero Trendlyne and zero Angel One historical calls;
+- stale cached evidence remains visible but clearly marked stale and cannot silently qualify as current score-ready evidence;
+- stock research cards/details must expose evidence/period date, last fetched/retrieved date and freshness state;
+- Trendlyne rollout is by exact bounded cohorts. The current planning ceiling is 400 calls/day; default P7-IC planned usage is 320/day with approximately 80 calls reserved for bounded retries/diagnostics/exceptions;
+- five Trendlyne calls/security is only a conservative budget model. For 239 equities this is 1,195 calls before cache savings; exact execution counts come from the missing/stale/conflicting evidence matrix;
+- at the default 320/day envelope, a nominal five-call stock allows roughly 64 equities/day and about four worst-case provider days, but completed cohorts progress immediately through IC3 snapshots → IC4 R6 → IC5 R7;
+- R7 canonical output remains Core Candidate / Satellite Candidate / Watch / Avoid or fail-closed blocker. Owner-facing Accumulate / Hold / Watch / Reduce / Exit Review may be added only as a deterministic projection of R7 + R8 + owner context, never as a second recommendation engine;
+- P7 remains open until P7-IC IC-FINAL and Owner Checkpoint 6.
+
+Production/main remain unchanged by this documentation amendment.
 
 ## Post-D P4 read-only baseline & bounded-cohort proposal — 26 September 2026
 
