@@ -76,14 +76,60 @@ function ResearchHeader({ position, research, scoring, currency, portfolioId, ac
       <MetricCard label="Total quantity" value={formatQuantity(position.quantity)} />
       <MetricCard label="Average cost" value={formatMoney(position.averageCost, currency)} detail={titleCase(position.accountingBasis)} />
       <MetricCard label="Portfolio weight" value={formatPercent(position.portfolioWeightPercent)} />
-      <article className="research-metric-card"><span>Action Center</span><ProgramCR10AttentionBadge attention={actionAttention} /><small>Current read-only attention state</small></article>
       <MetricCard label="Invested amount" value={formatMoney(position.investedAmount, currency)} detail="Cost basis" />
       <MetricCard label="Current value" value={formatMoney(position.currentValue, currency)} detail="At cached CMP" />
       <PnlCard position={position} currency={currency} />
       <article className="research-metric-card broker-card"><span>Brokers / demat</span><div className="broker-chips">{brokers.length ? brokers.map((broker) => <span key={broker.broker} title={`${formatQuantity(broker.quantity)} shares`}>{broker.broker}</span>) : <strong>Unavailable</strong>}</div><small>{brokers.length ? `${brokers.length} account${brokers.length === 1 ? "" : "s"}` : "Attribution incomplete"}</small></article>
-      <PositionDecisionControls portfolioId={portfolioId} securityId={position.securityId} currentRole={position.role} currentWeight={position.portfolioWeightPercent} fallbackTargetWeight={position.settings.targetWeight} fallbackInvestmentHorizon={position.settings.investmentHorizon} currency={currency} onSaved={onPositionSaved} />
     </div></section>
+    <div className="research-decision-layout">
+      <section className="research-decision-workspace" aria-labelledby="decision-workspace-title">
+        <div className="research-decision-heading">
+          <div><p className="eyebrow">Decision controls</p><h2 id="decision-workspace-title">Decision Workspace</h2><p>Your saved investment plan and PortfolioAI current read-only decision state stay separate.</p></div>
+        </div>
+        <div className="research-decision-body">
+          <PositionDecisionControls portfolioId={portfolioId} securityId={position.securityId} currentRole={position.role} currentWeight={position.portfolioWeightPercent} fallbackTargetWeight={position.settings.targetWeight} fallbackInvestmentHorizon={position.settings.investmentHorizon} currency={currency} onSaved={onPositionSaved} />
+          <ResearchDecisionState scoring={scoring} attention={actionAttention} />
+        </div>
+      </section>
+      <ResearchKeyInsights position={position} scoring={scoring} attention={actionAttention} />
+    </div>
   </header>
+}
+
+function ResearchDecisionState({ scoring, attention }: { readonly scoring: ScoringHook; readonly attention: ProgramCR10AttentionView | null }) {
+  const snapshot = scoring.data
+  const ui = researchProfileUiContract(snapshot?.profileCode)
+  const currentScore = snapshot?.runState && snapshot.overallScore != null ? snapshot.overallScore.toFixed(0) : null
+  const evidence = snapshot?.evidenceCoverage == null ? "Pending" : `${Math.round(snapshot.evidenceCoverage * 100)}%`
+  const readiness = snapshot?.scoreReadyCoverage == null ? "Pending" : `${Math.round(snapshot.scoreReadyCoverage * 100)}%`
+  return <section className="portfolioai-state-panel" aria-label="PortfolioAI current decision state">
+    <div className="portfolioai-state-heading"><div><span>PortfolioAI state</span><h3>{attention?.stateLabel ?? "Pending"}</h3><p>{attention?.primaryReason ?? "Awaiting a current validated decision state."}</p></div><ProgramCR10AttentionBadge attention={attention} compact /></div>
+    <div className="portfolioai-state-grid">
+      <article><span>Scoring profile</span><strong>{snapshot ? ui.profileDisplayName : "Loading…"}</strong><small>{snapshot?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed assignment" : snapshot?.profileSource === "SECTOR_RULE" ? "Sector resolved" : "Canonical profile"}</small></article>
+      <article><span>Canonical score</span><strong>{currentScore ?? "Pending"}</strong><small>{currentScore ? "Current authoritative run" : "No current score run"}</small></article>
+      <article><span>Verified evidence</span><strong>{evidence}</strong><small>Current research coverage</small></article>
+      <article><span>Score readiness</span><strong>{readiness}</strong><small>Current score-ready coverage</small></article>
+    </div>
+    <p className="portfolioai-state-note">Read-only advisory state. It never overwrites your role, target weight, target price, stop-loss reference, or investment horizon.</p>
+  </section>
+}
+
+function ResearchKeyInsights({ position, scoring, attention }: { readonly position: PortfolioPosition; readonly scoring: ScoringHook; readonly attention: ProgramCR10AttentionView | null }) {
+  const snapshot = scoring.data
+  const evidence = snapshot?.evidenceCoverage == null ? "Pending" : `${Math.round(snapshot.evidenceCoverage * 100)}%`
+  const readiness = snapshot?.scoreReadyCoverage == null ? "Pending" : `${Math.round(snapshot.scoreReadyCoverage * 100)}%`
+  const role = position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)
+  return <aside className="research-key-insights" aria-labelledby="key-insights-title">
+    <div className="research-key-insights-title"><span aria-hidden="true">▣</span><div><h2 id="key-insights-title">Key Insights</h2><p>Quick view of the most important current research signals.</p></div></div>
+    <div className="research-key-insight-list">
+      <article><span>Role</span><strong>{role}</strong><small>Your saved portfolio role</small></article>
+      <article><span>Action state</span><strong>{attention?.stateLabel ?? "Pending"}</strong><small>{attention?.primaryReason ?? "No current action state available"}</small></article>
+      <article><span>Evidence coverage</span><strong>{evidence}</strong><small>Verified research evidence</small></article>
+      <article><span>Score readiness</span><strong>{readiness}</strong><small>Validated score-ready coverage</small></article>
+      <article><span>Methodology</span><strong>{snapshot?.methodologyState === "AVAILABLE" ? "Available" : snapshot?.methodologyState ? titleCase(snapshot.methodologyState) : "Pending"}</strong><small>{snapshot?.profileName ?? "Canonical profile loading"}</small></article>
+    </div>
+    <div className="research-readonly-advisory"><strong>Read-only advisory</strong><p>Your selected role, holdings, target weight, target price and stop-loss remain under your control.</p></div>
+  </aside>
 }
 
 function ResearchTabs({ value, onChange }: { readonly value: Tab; readonly onChange: (tab: Tab) => void }) {
