@@ -149,25 +149,30 @@ export function PositionDecisionControls({
   return <section className="position-decision-panel" aria-label="Owner position settings">
     <div className="position-decision-heading">
       <div>
-        <span>Your position settings</span>
-        <strong>Owner-controlled</strong>
-        <small>These values are yours. PortfolioAI does not overwrite them with an engine recommendation.</small>
+        <span>Your investment plan</span>
+        <strong>Owner-controlled plan</strong>
+        <small>These values are user-controlled and never overwritten by PortfolioAI.</small>
       </div>
       {!editing
-        ? <button className="button button-secondary button-compact" type="button" onClick={() => setEditing(true)}>Edit</button>
+        ? <button className="button button-secondary button-compact" type="button" onClick={() => setEditing(true)}>Edit plan</button>
         : null}
     </div>
 
     {error ? <div className="notice notice-error" role="alert">{error}</div> : null}
 
-    {!editing ? <div className="position-decision-summary">
-      <article><span>Portfolio role</span><strong>{roleLabel(settings.portfolioRole)}</strong><small>Current saved role</small></article>
-      <article><span>Current weight</span><strong>{percent(currentWeight)}</strong><small>Calculated portfolio exposure</small></article>
-      <article><span>Your target weight</span><strong>{percent(settings.targetWeight)}</strong><small>Owner setting</small></article>
-      <article><span>Your target price</span><strong>{money(settings.targetPrice, currency)}</strong><small>Owner setting</small></article>
-      <article><span>Your stop-loss reference</span><strong>{money(settings.stopLossPrice, currency)}</strong><small>Owner setting</small></article>
-      <article><span>Investment horizon</span><strong>{settings.investmentHorizon ?? "Not set"}</strong><small>Owner setting</small></article>
-    </div> : <div className="position-decision-editor">
+    {!editing ? <>
+      <div className="position-decision-summary">
+        <article><span>Target price</span><strong>{money(settings.targetPrice, currency)}</strong><small>{settings.targetPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
+        <article><span>Stop loss</span><strong>{money(settings.stopLossPrice, currency)}</strong><small>{settings.stopLossPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
+        <article><span>Target weight</span><strong>{percent(settings.targetWeight)}</strong><small>Portfolio allocation guide</small></article>
+        <article><span>Investment horizon</span><strong>{settings.investmentHorizon ?? "Not set"}</strong><small>Your intended holding horizon</small></article>
+      </div>
+      <div className="position-decision-role">
+        <span>Your selected role</span>
+        <strong>{roleLabel(settings.portfolioRole)}</strong>
+        <small>Manual portfolio decision · current weight {percent(currentWeight)}</small>
+      </div>
+    </> : <div className="position-decision-editor">
       <label>
         <span>Portfolio role</span>
         <select value={draft.portfolioRole} onChange={(event) => setDraft((value) => ({ ...value, portfolioRole: event.target.value as UserPortfolioRole }))}>
@@ -184,9 +189,6 @@ export function PositionDecisionControls({
       </div>
     </div>}
 
-    <p className="assessment-note">
-      Current engine recommendation and numeric sizing are shown only when a canonical current run exists.
-      Historical previews are not used as your current position instruction.
-    </p>
+    <p className="assessment-note">Target and stop-loss values remain owner-controlled. PortfolioAI advisory output is displayed separately.</p>
   </section>
 }
