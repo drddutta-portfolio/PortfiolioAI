@@ -696,6 +696,17 @@ P7-IC must preserve fail-closed semantics. It does **not** require a numeric sco
 
 P7-IC must not introduce a replacement scoring/recommendation engine, universal Pharma thresholds, automatic role mutation, autonomous trading, or a competing Action Center. R10 remains the sole Action Center authority and owner portfolio role remains authoritative.
 
+**Operational amendment — 28 September 2026:**
+
+- methodology validation is performed by methodology/subprofile, reusing existing Gate H-K reference stocks wherever valid; a representative stock proves a methodology contract but never substitutes for another company's evidence;
+- IC2 is cache-first and persistence-first: normal stock-page or Dashboard browsing is zero-provider-call; accepted Trendlyne/Angel evidence is stored with provenance, evidence/as-of date, retrieval date, freshness/stale state and canonical-selection status;
+- stock research cards must expose evidence/period date, last fetched/retrieved date and freshness state;
+- Trendlyne execution is portfolio completion by bounded daily cohorts, not a one-stock-per-sector rollout;
+- the current planning ceiling is 400 Trendlyne calls/day with a default P7-IC operating envelope of 320 planned calls/day and approximately 80 calls reserved for bounded retries/diagnostics/exceptions;
+- five calls/security is only a conservative budgeting model: 239 equities × 5 = 1,195 calls before cache savings; exact batch plans must be derived from the current missing/stale/conflicting evidence matrix;
+- at a nominal five calls/security and 320 planned calls/day, a worst-case rollout is approximately four provider days, while each completed cohort may proceed immediately through IC3 → IC4 → IC5 rather than waiting for the entire portfolio;
+- R7 remains the canonical role-candidacy authority (Core Candidate / Satellite Candidate / Watch / Avoid). A simple owner-facing Accumulate / Hold / Watch / Reduce / Exit Review label may be shown only as a deterministic, explainable projection of R7 + R8 + owner context; it is not a second recommendation engine and cannot mutate roles or trade.
+
 **Owner checkpoint 6:** DEFERRED UNTIL P7-IC IC-FINAL — final browser approval using production-equivalent Development data and the real current R6/R7/R8/R9/Movement/R10 outputs.
 
 P8 remains **NOT AUTHORIZED** until P7-IC completes and the owner explicitly closes P7.
