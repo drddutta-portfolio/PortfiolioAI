@@ -1,4 +1,25 @@
-**Current stage:** Gate H–K COMPLETE / PASS / CLOSED; Program A COMPLETE / PASS / CLOSED; Program B COMPLETE / PASS / CLOSED; Program C master plan FROZEN; C0 is the only authorized next checkpoint; branch remains UNMERGED / NOT PRODUCTION OPERATIONAL; Program D and productionization NOT AUTHORIZED.
+**Current stage:** Programs A–D COMPLETE / PASS / CLOSED within their approved scopes; Post-D P0–P6 CLOSED; P7 ACTIVE; P7-IC REQUIRED before Owner Checkpoint 6; P8 NOT AUTHORIZED; branch remains `PortfolioAI-Development`; Production/main unchanged.
+
+## Current handoff — P7-IC operational amendment — 28 September 2026
+
+- P7 must remain open.
+- Canonical sequence: P7 UI refinement → P7-IC → final real-output UI integration → Owner Checkpoint 6 → P7 close → P8 → P-FINAL.
+- P7-IC is a Post-D convergence remediation/completion checkpoint, not a new feature program.
+- All stock pages use one universal design shell. Research content varies by industry/basic-industry/subprofile methodology.
+- Existing Gate H-K reference stocks should be reused to validate methodology families/subprofiles wherever still valid. A reference stock validates methodology only; it never substitutes for another holding's company evidence.
+- Provider use is cache-first and persistence-first. Normal page browsing is zero-provider-call.
+- Accepted Trendlyne/Angel evidence must be persisted with provenance, normalized value, evidence/as-of date, retrieval date, freshness/stale boundary, validation status and canonical-selection state.
+- Stock research cards/details must expose evidence/period date, last fetched date and freshness state.
+- Trendlyne working ceiling remains 400 calls/day; default P7-IC planned envelope is 320 calls/day with ~80-call reserve for bounded retries/diagnostics/exceptions.
+- Five calls/security is only a conservative budget model. 239 × 5 = 1,195 calls before cache savings. Exact cohorts are generated from the current missing/stale/conflicting evidence matrix.
+- Nominal worst case at 320 planned calls/day is ~64 five-call securities/day, around four provider days, but each completed cohort proceeds immediately through IC3 snapshots → IC4 R6 → IC5 R7.
+- Canonical R7 outputs: CORE_CANDIDATE / SATELLITE_CANDIDATE / WATCH / AVOID or explicit blocker.
+- Optional owner-facing action language may show ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW only as a deterministic projection of R7 + R8 + owner context; never as a second recommendation engine.
+- Owner role/targets remain authoritative; no autonomous role mutation or trading.
+- Detailed authority: `docs/PortfolioAI_POST_D_P7_IC_PORTFOLIO_INTELLIGENCE_COMPLETION_PLAN.md`.
+
+---
+
 
 
 
