@@ -29,8 +29,8 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P7 — UI Consolidation technical implementation is COMPLETE / PASS in PortfolioAI Dev. The primary product shell is now Dashboard / Holdings / Portfolio Structure / Research / Intelligence / Transactions / Settings, with Import inside Settings. Historical Gate/Program validation artifacts and legacy recommendation/weight/action previews were removed from the current investor workflow; owner settings remain separate from engine outputs; Action Center blockers use investor language. Owner Checkpoint 6 browser approval is PENDING; P7 formal closure is PENDING. P8 remains NOT AUTHORIZED; Production remains unchanged
-**Last reviewed:** 27 September 2026
+**Current milestone:** Post-D P7 — UI Consolidation is ACTIVE in PortfolioAI Dev under Owner Checkpoint 6 browser review/refinement. The primary shell is Dashboard / Holdings / Portfolio Structure / Research / Intelligence / Transactions / Settings, with Import inside Settings. Core P7 consolidation remains implemented, but Dashboard acceptance refinements are still in progress: the full sticky block navigator, true page-top return and live News mount are implemented/deployed at Development head `ac935a168c3ed72f6ffd07d2beb91ceba95fae98`; the owner-approved compact Allocation & Performance redesign, equal-width block alignment and tablet/mobile responsive refinement are APPROVED / PENDING IMPLEMENTATION. P7 formal closure remains PENDING. P8 remains NOT AUTHORIZED; Production remains unchanged
+**Last reviewed:** 28 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
@@ -1623,6 +1623,97 @@ P6 = COMPLETE / PASS / CLOSED
 P7 technical implementation = COMPLETE / PASS
 Owner Checkpoint 6 = PENDING BROWSER APPROVAL
 P7 formal closure = PENDING
+P8 = NOT AUTHORIZED
+Production = UNCHANGED
+```
+
+
+## Post-D P7 Owner Checkpoint 6 refinement status — 28 September 2026
+
+**Stage state:** `ACTIVE / OWNER CHECKPOINT 6 REFINEMENT`
+
+**Formal P7 closure:** `PENDING`
+
+**P8:** `NOT AUTHORIZED`
+
+Repository verification completed before this update:
+
+- Development head: `ac935a168c3ed72f6ffd07d2beb91ceba95fae98`
+- Production `main` remains: `d0cc52dfcf61fc9a884f139fcc7931b3bd73c57b`
+- latest Development deployment for `ac935a1` completed successfully on Vercel;
+- no Production merge, Production deployment, migration, provider activation, scheduler activation, paid AI call or trading action occurred.
+
+Implemented since the earlier P7 technical-pass record:
+
+1. **Import navigation refinement**
+   - Import removed from the primary top navigation;
+   - Import remains available at `/app/import`;
+   - Import is now accessed from the Settings hub;
+   - primary navigation now contains exactly seven top-level items:
+     Dashboard / Holdings / Portfolio Structure / Research / Intelligence /
+     Transactions / Settings.
+
+2. **Dashboard sticky navigator restored and expanded**
+   - the floating Dashboard navigator now links to every major Dashboard block:
+     Overview, Summary, Pulse, Allocation, Weights, Position Returns, P&L Impact,
+     Broker, Insights, Data Health, Integrity, Daily Move, Allocation Performance
+     and News;
+   - every jump target was verified to exist exactly once;
+   - the navigator remains sticky for fast intra-Dashboard access.
+
+3. **True page-top navigation restored**
+   - the app header now has the canonical `app-top` target;
+   - the right-side `Top` control scrolls to the actual page top rather than only
+     to the Dashboard overview;
+   - this restores visibility of the primary application menu after long
+     Dashboard scrolling.
+
+4. **Live News mount corrected**
+   - the Dashboard News route wrapper again carries
+     `dashboard-news-section`;
+   - the live News portal therefore has a valid mount target;
+   - the News sticky-menu link points to the real live News block.
+
+### Owner-approved Dashboard refinement still pending implementation
+
+The current repository version of
+`src/components/DashboardAllocationPerformance.tsx` and its CSS still uses the
+pre-redesign Allocation & Performance presentation.
+
+The owner has approved a new compact professional presentation with:
+
+- equal-width paired cards;
+- compact Classification Coverage and Allocation Scope summary cards;
+- aligned Sector Allocation and Market-cap Allocation cards;
+- aligned Sector Performance and Market-cap Performance tables;
+- a compact full-width Allocation vs Performance insight section;
+- consistent outer width with all other Dashboard blocks;
+- responsive behavior for desktop, tablet and mobile;
+- horizontally scrollable tables on narrow screens without dropping columns;
+- strongly contrasting fixed market-cap colors:
+  - Small Cap `#2F7D57`
+  - Large Cap `#8FC56A`
+  - Mid Cap `#4F86C6`
+  - ETF / non-equity `#D9A441`
+  - Unclassified / unavailable `#7B8794`
+
+**This redesign is APPROVED / PENDING IMPLEMENTATION. It must not be recorded as
+implemented until the source, responsive checks, tests and Development build
+actually pass.**
+
+Current governance state:
+
+```text
+P4 = COMPLETE / PASS / CLOSED
+P5 = COMPLETE / PASS / CLOSED
+P6 = COMPLETE / PASS / CLOSED
+
+P7 = ACTIVE
+Owner Checkpoint 6 = IN REVIEW / REFINEMENT
+Dashboard sticky navigation = IMPLEMENTED / DEPLOYED
+Allocation & Performance redesign = APPROVED / PENDING IMPLEMENTATION
+P7 formal closure = PENDING
+
 P8 = NOT AUTHORIZED
 Production = UNCHANGED
 ```
