@@ -144,6 +144,59 @@ The current Post-D state must be revalidated at P7-IC entry, but the expected st
 
 These are starting expectations, not assumptions. IC0 must verify current repository/database reality before execution.
 
+## 4.1 Frozen operational invariants added 28 September 2026
+
+The following are now mandatory for P7-IC:
+
+1. **Universal stock-page shell**
+   - all equity stock pages use the same design shell and navigation;
+   - sector / industry / subprofile differences change research content, dimensions, evidence requirements and decision logic, not the basic page design;
+   - Pharma subprofiles and other industry-specific methodologies remain content/configuration differences inside the common shell.
+
+2. **Industry/methodology-first research**
+   - Sector is macro context;
+   - Industry is the minimum micro-methodology selector;
+   - Basic Industry / subprofile refines the business model;
+   - company evidence feeds the selected methodology;
+   - no sector-only specialist fallback and no nearest-looking methodology substitution.
+
+3. **Cache-first provider use**
+   - opening Research, Holdings, Intelligence, Dashboard or any stock page must use cached canonical data only;
+   - normal browsing must make **zero Trendlyne calls** and zero Angel One historical calls;
+   - provider calls occur only through an explicit planned refresh / remediation workflow.
+
+4. **Persist every accepted provider observation**
+   - fetched evidence must be written to the Development evidence store with provider/source provenance, raw field/value where retained, normalized value, evidence period/as-of date, retrieval timestamp, freshness/stale boundary, validation state and canonical-selection state;
+   - repeated page opens reuse persisted evidence;
+   - stale evidence remains visible and is marked stale until refreshed; it is not silently discarded or automatically refetched.
+
+5. **Visible evidence age**
+   - user-facing evidence cards must expose the applicable evidence/period date and the last fetched/retrieved date;
+   - where a freshness policy exists, the card or its detail view must also expose the fresh-through/stale-after state.
+
+6. **Quota-bounded acquisition**
+   - Trendlyne is treated as a constrained evidence provider, not a page-render service;
+   - the current planning assumption is a 400-call/day provider ceiling;
+   - P7-IC must reserve operating headroom and must not plan to consume the full daily ceiling;
+   - the default planning envelope is **320 planned Trendlyne calls/day**, leaving approximately 80 calls for retries, schema diagnostics and exceptions unless the owner explicitly approves another ceiling.
+
+7. **Reference validation is not portfolio completion**
+   - one representative stock per methodology/subprofile may be used to validate a methodology or recommendation-policy contract;
+   - existing Gate H-K reference validations must be reused wherever still valid;
+   - a reference stock can prove methodology behavior but can never substitute for another company's evidence;
+   - after methodology validation, every held equity must still receive its own cache/evidence/readiness treatment.
+
+8. **Cohort execution**
+   - provider-backed work is performed in bounded daily cohorts generated from the exact missing/stale/conflicting evidence matrix;
+   - a rough worst-case planning model of five Trendlyne calls per security implies about 1,195 calls for 239 equities, but this is a ceiling model only;
+   - exact call plans must first subtract reusable fresh cache;
+   - at a 320-call operational envelope, a nominal five-calls-per-stock cohort is approximately 64 stocks/day, so a full worst-case rollout is expected to require about four provider days plus any remediation/retry work.
+
+9. **Decision output must be evidence-linked**
+   - R7 role candidacy remains canonical: CORE_CANDIDATE / SATELLITE_CANDIDATE / WATCH / AVOID or explicit blocker;
+   - owner-facing action language may additionally present ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW only when deterministically derived from canonical R7 + R8 + current owner role + risk/exit state;
+   - this action-language layer is advisory and must never mutate owner settings or execute trades.
+
 ---
 
 # 5. Canonical build workflow
