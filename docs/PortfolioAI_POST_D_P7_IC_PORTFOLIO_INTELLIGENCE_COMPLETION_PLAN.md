@@ -253,7 +253,7 @@ The following are now mandatory for P7-IC:
 
 9. **Decision output must be evidence-linked**
    - R7 role candidacy remains canonical: CORE_CANDIDATE / SATELLITE_CANDIDATE / WATCH / AVOID or explicit blocker;
-   - owner-facing action language may additionally present ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW only when deterministically derived from canonical R7 + R8 + current owner role + risk/exit state;
+   - owner-facing action language may additionally present BUY/ACCUMULATE / HOLD / WATCH / REDUCE / SELL/EXIT_REVIEW only when deterministically derived from canonical R7 + R8 + Movement + current owner role + risk/exit state;
    - this action-language layer is advisory and must never mutate owner settings or execute trades.
 
 ---
