@@ -50,6 +50,65 @@ Valid terminal states remain valid:
 
 No hidden fallback, guessed metric, denominator renormalization, or cross-sector policy borrowing is allowed.
 
+## 1.1 Portfolio-completion doctrine — strengthened 28 September 2026
+
+P7-IC is the portfolio-completion phase for the owner's current held-equity universe. Earlier Gates and Programs may remain historically complete within narrower architecture, reference, fixture or fail-closed scopes, but P7-IC must not carry those historical deferrals forward as unfinished product capability.
+
+For the current held-equity portfolio, the required research hierarchy is:
+
+```text
+Sector
+  ↓
+Industry
+  ↓
+Basic Industry / Business Model
+  ↓
+Subprofile where economically required
+  ↓
+COMPLETE methodology
+  ↓
+company-specific evidence
+  ↓
+R6 deterministic scoring
+  ↓
+R7 recommendation / role candidacy
+  ↓
+R8 / R9 / Movement / R10 portfolio intelligence
+```
+
+A **complete methodology** is not a placeholder adapter and not merely a routing token. It must define, as one coherent versioned contract where applicable:
+
+- required financial and operating evidence;
+- required market-history and benchmark evidence;
+- applicable vs explicitly N/A metrics;
+- scoring dimensions and weights;
+- scoring curves / bands / normalization rules;
+- business-quality and durability logic;
+- industry-appropriate growth logic;
+- capital-efficiency and cash-flow treatment;
+- leverage / balance-sheet / credit treatment;
+- valuation methodology;
+- benchmark and peer context;
+- ownership / governance treatment;
+- momentum and risk treatment;
+- cycle normalization where relevant;
+- hard blockers and fail-closed rules;
+- evidence freshness requirements;
+- deterministic R6 scoring semantics;
+- complete R7 Core Candidate / Satellite Candidate / Watch / Avoid policy;
+- methodology-specific recommendation thresholds / floors / cautions;
+- validation/reference stock(s);
+- cross-methodology isolation tests;
+- future-stock portability rules for the same business model.
+
+The goal is **not** one methodology per Dashboard sector label. Multiple securities may share one methodology only when Industry / Basic Industry / business-model economics justify that shared authority and applicability is explicitly validated.
+
+For a current held equity, `METHODOLOGY_NOT_AVAILABLE` is a **work trigger during IC1**, not a satisfactory IC1 closure result merely because earlier Gate-K scope deferred that business model.
+
+IC1 must attempt to close every methodology gap represented by the current held portfolio. A remaining unresolved equity may proceed beyond IC1 only when the blocker is a genuine unresolved/conflicting company classification or another owner-reviewed factual ambiguity that prevents safe methodology assignment; deferred engineering by itself is not an acceptable final blocker.
+
+No new future "Program F", Gate, or cleanup pass should be required merely to finish methodologies or recommendation policies for business models already present in the current held portfolio.
+
 ---
 
 ## 2. Why P7 stays open
@@ -293,47 +352,84 @@ No provider calls occur in IC0.
 
 Close the gap between portfolio-wide Gate-K routing and actual executable R6/R7 policy coverage.
 
-## IC1A — R6 methodology completion
+## IC1A — Complete R6 methodology coverage for the held portfolio
+
+For every current held equity, resolve:
+
+```text
+Sector
+  ↓
+Industry
+  ↓
+Basic Industry / Business Model
+  ↓
+Subprofile where needed
+  ↓
+complete methodology authority
+```
 
 For each equity currently `METHODOLOGY_NOT_AVAILABLE` or `REVIEW_REQUIRED`:
 
-1. Verify sector / industry / basic-industry authority.
-2. Resolve whether an existing approved methodology actually applies.
-3. If an existing methodology family applies but its adapter is incomplete, complete the adapter without changing the frozen methodology semantics.
-4. If no approved methodology exists, define the minimum industry-specific methodology needed by the Master Blueprint.
-5. Validate isolation:
+1. Verify sector / industry / basic-industry / business-model authority.
+2. Determine whether an existing **complete** approved methodology legitimately applies.
+3. If an existing methodology applies, validate applicability to that business model and reuse it.
+4. If an existing methodology family applies but its adapter or subprofile contract is incomplete, complete the missing methodology work without weakening the frozen semantics.
+5. If no approved methodology exists, **build and validate the complete industry/basic-industry/business-model methodology required for that held-equity business model**.
+6. Add a subprofile only where economically necessary; do not create artificial subprofiles merely to mirror display-sector labels.
+7. Validate:
+   - required evidence contract;
+   - metric applicability / explicit N/A treatment;
+   - scoring dimensions, weights and curves;
+   - quality/durability/growth/capital-efficiency/cash-flow/leverage logic;
+   - valuation and benchmark authority;
+   - ownership/governance, momentum and risk treatment;
+   - cycle normalization where relevant;
+   - freshness and fail-closed rules;
+   - deterministic R6 behavior;
    - no Pharma metric leakage into Banks;
    - no Bank metric leakage into industrials;
+   - no cross-industry methodology leakage;
    - no nearest-sector fallback;
-   - no symbol-specific runtime routing.
-6. Keep company evidence separate from methodology definition.
+   - no symbol-specific runtime routing;
+   - future-stock portability for the same business model.
+8. Keep company evidence separate from methodology definition: the methodology says **what evidence is required and how it is interpreted**; IC2 supplies each company's current evidence.
 
-The goal is maximum legitimate coverage, not forced universal scoring.
+**IC1A completion principle:** a held equity may not remain `METHODOLOGY_NOT_AVAILABLE` simply because methodology work was deferred in Gate K. That state triggers methodology completion work inside IC1.
 
-## IC1B — R7 recommendation-policy completion
+This does not require fabricated numeric scores. A company can still fail closed later because its required evidence is missing, stale, conflicting or review-required.
 
-Inventory every R6 methodology/profile that can produce a valid current score.
+## IC1B — Complete R7 recommendation-policy coverage
 
-For each one, determine whether an approved recommendation policy exists.
+Inventory every complete R6 methodology/profile/subprofile used by the current held-equity portfolio.
 
-A recommendation policy must define, where appropriate:
+For each one, ensure a complete approved R7 recommendation policy exists.
 
-- Core Candidate conditions;
-- Satellite Candidate conditions;
-- Watch conditions;
-- Avoid / blocked conditions;
-- mandatory floors;
-- caution / risk interaction;
+A complete R7 policy must define, where appropriate:
+
+- `CORE_CANDIDATE` eligibility;
+- `SATELLITE_CANDIDATE` eligibility;
+- `WATCH` eligibility;
+- `AVOID` / blocked conditions;
+- overall thresholds where methodology-appropriate;
+- mandatory dimension floors;
+- caution rules;
+- risk interaction;
+- valuation interaction;
+- governance interaction;
+- evidence-confidence/readiness gates;
 - methodology-specific role rules;
 - fail-closed behavior;
-- lineage version.
+- recommendation lineage/version;
+- deterministic reason codes;
+- validation/falsification cases.
 
 Important:
 
 - Pharma’s historical `CORE / SATELLITE / WATCH` floors remain Pharma-specific.
-- They must not be copied to Banking, IT, Capital Goods, Auto, Chemicals, etc.
-- Each methodology must either have an explicitly approved policy or remain
-  `METHODOLOGY_NOT_AVAILABLE` for recommendation.
+- They must not be copied to Banking, IT, Capital Goods, Auto, Chemicals, or any other unrelated methodology.
+- Existing `...RECOMMENDATION_PENDING_THRESHOLDS` authorities for methodologies used by current held equities are **IC1 work items**, not acceptable IC1 closure states.
+- Every executable held-portfolio methodology must leave IC1 with an approved, testable R7 policy.
+- A recommendation may still fail closed later because the company lacks current required evidence; that is an evidence/runtime result, not an unfinished-policy result.
 
 ## IC1C — Representative methodology validation strategy
 
@@ -370,14 +466,24 @@ Satellite must never mean “failed Core”.
 
 ## Exit criteria
 
-- every R6 methodology/profile has:
-  - an executable scoring adapter, or
-  - a canonical methodology blocker;
-- every score-capable profile has:
-  - an approved R7 recommendation policy, or
-  - a canonical recommendation-policy blocker;
-- policy isolation tests pass;
-- no universal fallback is introduced.
+IC1 is a **portfolio-completion gate**, not a documentation-of-deferrals gate.
+
+IC1 may close only when:
+
+1. all 239 current equities have a resolved Sector / Industry / Basic Industry / business-model disposition;
+2. every held equity with resolvable classification maps to a **complete** methodology authority;
+3. every previously deferred business model represented in the held portfolio has either:
+   - been mapped legitimately to an existing complete methodology, or
+   - received a newly completed and validated methodology/subprofile;
+4. no held equity remains `METHODOLOGY_NOT_AVAILABLE` solely because methodology engineering was deferred;
+5. any remaining unresolved equity is a genuine `REVIEW_REQUIRED` factual/classification exception with an explicit owner-visible reason and next action;
+6. every complete methodology/profile/subprofile used by held equities has an approved complete R7 policy;
+7. no active held-portfolio recommendation authority remains merely `...PENDING_THRESHOLDS`;
+8. methodology/reference validation, cross-sector isolation and future-stock portability tests pass;
+9. no universal numeric fallback or copied Pharma thresholds are introduced;
+10. the exact methodology-to-evidence requirements are machine-readable enough for IC2 to calculate per-security fresh/stale/missing/conflicting evidence deficits and exact provider demand.
+
+**IC1 does not require every stock to have a numeric score yet.** It requires the methodology and recommendation authority to be complete so that IC2 can collect the correct evidence and IC4/IC5 can evaluate the company without another methodology-building pass.
 
 ### Owner Checkpoint IC-B
 
@@ -1142,7 +1248,8 @@ P7-IC succeeds when PortfolioAI can answer, for each eligible holding, with curr
 8. **What requires the owner's attention in R10?**
 9. **What evidence supports the conclusion?**
 10. **When was that evidence measured and last fetched, and is it still fresh?**
-11. **What simple owner-facing action state (Accumulate / Hold / Watch / Reduce / Exit Review) is justified, if any, without bypassing R7/R8?**
+11. **What simple owner-facing action state (Buy/Accumulate / Hold / Watch / Reduce / Sell/Exit Review) is justified, if any, without bypassing R7/R8/Movement?**
+12. **If the company is in the held portfolio, is any remaining limitation caused by a genuine factual/evidence blocker rather than unfinished methodology or recommendation-policy engineering?**
 
 The final investment decision remains with the owner. The application must provide the evidence, deterministic assessment, role candidacy, risk/exit context and traceable reason path needed to make that decision.
 
