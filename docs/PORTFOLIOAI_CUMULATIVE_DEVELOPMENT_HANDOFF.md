@@ -1,5 +1,18 @@
 **Current stage:** Programs A–D COMPLETE / PASS / CLOSED within their approved scopes; Post-D P0–P6 CLOSED; P7 ACTIVE; P7-IC REQUIRED before Owner Checkpoint 6; P8 NOT AUTHORIZED; branch remains `PortfolioAI-Development`; Production/main unchanged.
 
+
+## Current handoff — final P7-IC planning audit approval — 29 September 2026
+
+- Final Codex read-only audit verdict: **A. APPROVE**.
+- Repository planning and the corrected V2 owner plan are aligned with no material current contradiction.
+- Complete held-portfolio methodology + complete R7 policy remains the IC1 mandate.
+- Gate K remains historically CLOSED / PASS.
+- Checkpoint barriers remain frozen: IC1→IC-B; IC2/IC3→IC-C; IC4/IC5→IC-D; IC6→IC-E.
+- IC5 has no canonical action-state output; action projection is IC6-or-later after R8 + Movement.
+- Canonical internal action enum remains `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`.
+- IC-A is still awaiting owner approval; IC1 remains not started/not authorized.
+- Planning approval does not authorize providers, migrations, database writes, deployment, Production changes or trading.
+
 ## Current handoff — P7-IC operational amendment — 28 September 2026
 
 - P7 must remain open.
