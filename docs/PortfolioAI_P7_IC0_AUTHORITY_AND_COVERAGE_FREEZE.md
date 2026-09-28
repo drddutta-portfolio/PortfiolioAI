@@ -151,3 +151,34 @@ IC-A, when approved, must authorize IC1 against the strengthened portfolio-compl
 This clarification changes the intended IC1 completion standard; it does not alter the historical IC0 read-only findings or convert IC0 to PASS.
 
 `IC0 = BLOCKED` remains the current verdict until the owner approves IC-A and separately authorizes any required additive persistence/schema design boundary.
+
+## 11. IC-A checkpoint and persistence decision boundary
+
+IC-A, if approved later, must explicitly decide:
+
+1. whether to authorize the strengthened IC1 held-portfolio methodology + complete R7-policy scope;
+2. whether to authorize **design-only** work for additive persistence/access capabilities identified by IC0;
+3. that migration creation and migration application remain separate owner approvals after exact design review;
+4. that methodology requirement registries/read models must be available before provider-backed IC2 exact deficit planning;
+5. that canonical current evidence-snapshot persistence/access must be resolved before IC3 can pass and before IC-C approval;
+6. that durable R9 baseline/acknowledgement/snooze and durable multi-period Movement history must be resolved before IC6 can pass and before IC-E approval.
+
+Checkpoint barriers are global:
+
+```text
+IC1       → STOP at IC-B
+IC2 / IC3 → STOP at IC-C
+IC4 / IC5 → STOP at IC-D
+IC6       → STOP at IC-E
+IC7 / IC-FINAL → Owner Checkpoint 6
+```
+
+Bounded cohorts may operate inside an approved checkpoint range but may not cross an unapproved owner checkpoint.
+
+The canonical internal action enum is:
+
+`ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`
+
+The UI may display “Buy / Accumulate” for `ACCUMULATE` and “Sell / Exit Review” for `EXIT_REVIEW`, but `BUY` and `SELL` are not additional internal recommendation/action states because they also identify transaction/accounting concepts.
+
+This section is a governance clarification only. IC-A remains unapproved; IC1 remains unstarted; no build, migration, provider call, database write, deployment or Production change is authorized by this clarification.
