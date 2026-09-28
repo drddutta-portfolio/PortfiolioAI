@@ -51,8 +51,8 @@ Current mandatory rules:
 - stock research cards/details must expose evidence/period date, last fetched/retrieved date and freshness state;
 - Trendlyne rollout is by exact bounded cohorts. The current planning ceiling is 400 calls/day; default P7-IC planned usage is 320/day with approximately 80 calls reserved for bounded retries/diagnostics/exceptions;
 - five Trendlyne calls/security is only a conservative budget model. For 239 equities this is 1,195 calls before cache savings; exact execution counts come from the missing/stale/conflicting evidence matrix;
-- at the default 320/day envelope, a nominal five-call stock allows roughly 64 equities/day and about four worst-case provider days, but completed cohorts progress immediately through IC3 snapshots → IC4 R6 → IC5 R7;
-- R7 canonical output remains Core Candidate / Satellite Candidate / Watch / Avoid or fail-closed blocker. Owner-facing Accumulate / Hold / Watch / Reduce / Exit Review may be added only as a deterministic projection of R7 + R8 + owner context, never as a second recommendation engine;
+- at the default 320/day envelope, a nominal five-call stock allows roughly 64 equities/day and about four worst-case provider days; completed cohorts may progress only within the currently approved checkpoint range and must stop at the next unapproved owner checkpoint;
+- R7 canonical output remains Core Candidate / Satellite Candidate / Watch / Avoid or fail-closed blocker. Canonical internal owner-facing action states are `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`; the UI may render “Buy / Accumulate” or “Sell / Exit Review” as display copy, but `BUY`/`SELL` are not additional internal recommendation/action enums;
 - P7 remains open until P7-IC IC-FINAL and Owner Checkpoint 6.
 
 Production/main remain unchanged by this documentation amendment.
@@ -74,9 +74,26 @@ Mandatory IC1 completion rules now are:
 - Remaining unresolved holdings after IC1 may be only genuine factual/classification `REVIEW_REQUIRED` exceptions with explicit reasons and next actions.
 - IC1 must make methodology-to-evidence requirements machine-readable enough for IC2 to compute exact fresh/stale/missing/conflicting evidence deficits and provider demand.
 - P7-IC must not defer completion of current held-portfolio methodologies/recommendation policies into a later cleanup program.
-- Owner-facing action language may ultimately include Buy/Accumulate, Hold, Watch, Reduce and Sell/Exit Review, but only as deterministic downstream interpretation of R7 + R8 + Movement/context; score alone cannot create Buy/Sell.
+- Canonical internal owner-facing action states are `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`, deterministically derived from R7 + R8 + Movement/context; display copy may say “Buy / Accumulate” or “Sell / Exit Review”, but score alone cannot create an action state.
 
 IC-A remains pending. IC1 has not started and is not authorized until the owner explicitly approves this strengthened scope and the required additive persistence-design boundary.
+
+### IC-A checkpoint and persistence clarification
+
+Before IC-A is approved, the following authority boundaries are frozen:
+
+- IC1 stops at IC-B.
+- IC2 and IC3 stop at IC-C.
+- IC4 and IC5 stop at IC-D.
+- IC6 stops at IC-E.
+- No bounded cohort may cross an unapproved owner checkpoint.
+- IC-A may authorize strengthened IC1 and **design-only** work for additive persistence/access gaps identified by IC0.
+- IC-A does not authorize migration creation/application, provider execution, Production change or deployment.
+- Methodology requirement registries/read models needed for exact IC2 deficit planning must exist before provider-backed IC2 execution.
+- Canonical current evidence-snapshot persistence/access must be resolved before IC3 PASS / IC-C.
+- Durable R9 baseline/acknowledgement/snooze plus multi-period Movement history must be resolved before IC6 PASS / IC-E.
+- If any migration is required, the exact additive migration returns for separate owner approval.
+
 
 ## Post-D P4 read-only baseline & bounded-cohort proposal — 26 September 2026
 
