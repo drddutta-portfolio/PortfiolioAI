@@ -29,7 +29,7 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P7 — UI Consolidation is ACTIVE in PortfolioAI Dev under Owner Checkpoint 6 browser review/refinement. The primary shell is Dashboard / Holdings / Portfolio Structure / Research / Intelligence / Transactions / Settings, with Import inside Settings. Core P7 consolidation remains implemented. The full sticky block navigator, true page-top return and live News mount remain deployed, and the owner-approved compact Allocation & Performance four-row redesign, equal-width block alignment, semantic market-cap palette and tablet/mobile responsive refinement are implemented and locally verified. P7 formal closure remains PENDING owner browser approval. P8 remains NOT AUTHORIZED; Production remains unchanged.
+**Current milestone:** Post-D P7 remains ACTIVE. The shell/UI consolidation and Dashboard responsive refinements are implemented, but P7 formal closure is deliberately deferred. Master-Blueprint reconciliation has inserted the mandatory **P7-IC Portfolio-wide Intelligence Completion Remediation** (working label: Program E; not a new feature program) before Owner Checkpoint 6. P7-IC must align the existing R3/R4/R5/R6/R7/R8/R9/R10 authorities with the real current portfolio, complete legitimate methodology/recommendation-policy coverage, remediate evidence, materialize current snapshots, execute current R6/R7, operationalize R8/R9 plus the Movement Engine, and integrate the resulting real states through R10/Research/Intelligence/Action Center. Owner Checkpoint 6 is deferred until P7-IC IC-FINAL. P8 remains NOT AUTHORIZED; Production remains unchanged
 **Last reviewed:** 28 September 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
@@ -1718,3 +1718,91 @@ P7 formal closure = PENDING
 P8 = NOT AUTHORIZED
 Production = UNCHANGED
 ```
+
+
+## P7-IC Portfolio-wide Intelligence Completion Remediation — frozen 28 September 2026
+
+**Working label:** Program E  
+**Canonical status:** Required convergence/remediation checkpoint inside still-open P7; not a new feature program.  
+**Authoritative plan:** `docs/PortfolioAI_POST_D_P7_IC_PORTFOLIO_INTELLIGENCE_COMPLETION_PLAN.md`
+
+Master-Blueprint reconciliation confirmed that Programs A–D and Post-D P4–P6 correctly established architecture, contracts, safety boundaries and portfolio-wide terminal dispositions, but those closures do not by themselves prove current portfolio-wide numeric score/recommendation coverage or the full multi-period Movement Engine.
+
+The required sequence is now frozen as:
+
+```text
+P7 shell/UI refinement
+  ↓
+P7-IC
+  IC0  Authority + portfolio coverage freeze
+  IC1  Methodology + recommendation-policy completion
+  IC2  Evidence / market-history remediation
+  IC3  Current canonical evidence snapshots
+  IC4  R6 current portfolio scoring
+  IC5  R7 recommendation / Core-Satellite candidacy / sizing readiness
+  IC6  R8 + R9 + Movement Engine operationalization
+  IC7  R10 + final P7 UI integration
+  IC-FINAL portfolio-wide validation
+  ↓
+Owner Checkpoint 6
+  ↓
+P7 COMPLETE / PASS / CLOSED
+  ↓
+P8
+  ↓
+P-FINAL
+```
+
+### Completion principle
+
+P7-IC does **not** require every equity to receive a numeric score or recommendation at any cost.
+
+Every eligible equity must instead end with either:
+
+- a reproducible current assessment through the deepest applicable canonical engine; or
+- an explicit justified blocker such as `METHODOLOGY_NOT_AVAILABLE`, `INSUFFICIENT_EVIDENCE`, `REVIEW_REQUIRED`, `BLOCKED_PREREQUISITE` or `NOT_APPLICABLE`.
+
+No hidden fallback or cross-sector policy borrowing is allowed.
+
+### Core / Satellite and Movement objective
+
+P7-IC must make current owner role and machine assessment separately visible.
+
+Where legitimate current R7 evidence permits, PortfolioAI may produce:
+
+- `CORE_CANDIDATE`
+- `SATELLITE_CANDIDATE`
+- `WATCH`
+- `AVOID`
+
+The owner role remains authoritative.
+
+The Movement Engine must implement the Master Blueprint lifecycle without automatic role mutation, including at minimum:
+
+- Core → Watch;
+- Core → At Risk;
+- Core → Satellite review;
+- Core → Exit review;
+- Satellite → Core Candidate;
+- Satellite → Core Promotion Ready.
+
+Promotion normally requires sustained qualifying evidence over 2–4 quarters unless an exceptional approved rule applies. Price weakness alone and one weak quarter cannot automatically demote Core.
+
+### Governance state
+
+```text
+P4 = COMPLETE / PASS / CLOSED
+P5 = COMPLETE / PASS / CLOSED
+P6 = COMPLETE / PASS / CLOSED
+
+P7 = ACTIVE
+P7-IC = REQUIRED / PLAN FROZEN / NOT YET EXECUTED
+Owner Checkpoint 6 = DEFERRED UNTIL IC-FINAL
+P7 formal closure = PENDING
+
+P8 = NOT AUTHORIZED
+P-FINAL = NOT STARTED
+Production = UNCHANGED
+```
+
+There is no canonical P9 in the current Post-D roadmap.
