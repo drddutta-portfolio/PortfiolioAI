@@ -12,9 +12,9 @@
 - Stock research cards/details must expose evidence/period date, last fetched date and freshness state.
 - Trendlyne working ceiling remains 400 calls/day; default P7-IC planned envelope is 320 calls/day with ~80-call reserve for bounded retries/diagnostics/exceptions.
 - Five calls/security is only a conservative budget model. 239 × 5 = 1,195 calls before cache savings. Exact cohorts are generated from the current missing/stale/conflicting evidence matrix.
-- Nominal worst case at 320 planned calls/day is ~64 five-call securities/day, around four provider days, but each completed cohort proceeds immediately through IC3 snapshots → IC4 R6 → IC5 R7.
+- Nominal worst case at 320 planned calls/day is ~64 five-call securities/day, around four provider days. Bounded cohorts may progress only within the currently approved checkpoint range and must stop at the next unapproved owner checkpoint.
 - Canonical R7 outputs: CORE_CANDIDATE / SATELLITE_CANDIDATE / WATCH / AVOID or explicit blocker.
-- Optional owner-facing action language may show ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW only as a deterministic projection of R7 + R8 + owner context; never as a second recommendation engine.
+- Canonical internal owner-facing action enum is `ACCUMULATE / HOLD / WATCH / REDUCE / EXIT_REVIEW`, deterministically projected from R7 + R8 + Movement/owner context. UI display copy may say “Buy / Accumulate” or “Sell / Exit Review”; `BUY` and `SELL` are not internal recommendation/action states.
 - Owner role/targets remain authoritative; no autonomous role mutation or trading.
 - Detailed authority: `docs/PortfolioAI_POST_D_P7_IC_PORTFOLIO_INTELLIGENCE_COMPLETION_PLAN.md`.
 
@@ -24,6 +24,10 @@
 - Remaining post-IC1 unresolved holdings may only be genuine classification/factual REVIEW_REQUIRED exceptions.
 - Gate K remains CLOSED; IC1 reuses Gate-K discipline rather than reopening historical gates.
 - IC-A remains pending; IC1 is not yet authorized.
+
+- Global checkpoint barriers: IC1 → IC-B; IC2/IC3 → IC-C; IC4/IC5 → IC-D; IC6 → IC-E. No bounded cohort may cross an unapproved checkpoint.
+- IC-A may later authorize strengthened IC1 plus persistence/access **design only**; migration creation/application remains separately approval-gated.
+- Methodology requirement read models must be ready before provider-backed IC2; canonical current snapshot persistence before IC-C; durable R9/Movement persistence before IC-E.
 
 ---
 
