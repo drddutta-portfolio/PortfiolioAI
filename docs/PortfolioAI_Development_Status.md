@@ -2362,3 +2362,45 @@ Provider remediation stopped at two genuine external failures:
 Trendlyne accounting was corrected to bind the internal daily limit to the verified external entitlement of 400/day. At the stop, 242/400 attempts had been consumed on 29 September 2026. Scheduler execution remains disabled.
 
 Therefore IC2 is not closed. IC3 is not ready and no R6/R7 execution occurred. Production, main, Vercel and owner-controlled portfolio roles remain unchanged.
+
+
+## P7-IC IC2 current-selection remediation — Stage 0/1 complete — 29 September 2026
+
+Owner approved continuation of the IC2 blocker remediation in ChatGPT after Codex produced the current-selection repair plan.
+
+Stage 0 read-only baseline verification is COMPLETE / PASS:
+
+- authoritative GitHub Development baseline: `PortfolioAI-Development` at `572d87dd108c0bf2d698a8e3ea46035dfce5bfbc`;
+- branch comparison against that commit: identical, 0 ahead / 0 behind;
+- Development Supabase project: `PortfolioAI Dev` / `lrgpjimipfkyoqbpsqzz`, ACTIVE_HEALTHY;
+- current portfolio: 248 open holdings = 239 equities + 9 ETFs;
+- immutable evidence state: 1,007 `research_evidence_snapshots`, 14,913 `research_evidence_snapshot_items`;
+- current view cardinality: 239 rows / 239 distinct held equities / 0 duplicate current securities;
+- read-only current-selection baseline fingerprint: `10ccc67e6c8eed006c50fd3fb891e14a`;
+- live Development Edge baseline: `p7-ic2-materialize-readiness` v16, `complete-research-refresh` v29, `p7-ic2-orchestrator` v4.
+
+The canonical-current defect was independently confirmed. `append_research_evidence_snapshot_v1` is content-idempotent and returns an existing immutable snapshot when a corrected run reproduces an earlier hash, while `current_research_evidence_snapshot_v1` still determines currentness from `as_of_date, created_at, id`. Therefore an older corrected snapshot cannot become current again after a newer erroneous immutable snapshot has been inserted.
+
+The observed current view remains unsuitable for IC2 closure and matches the prior stop audit:
+
+- snapshot dispositions: READY 0, INSUFFICIENT 128, STALE 2, CONFLICTING 0, REVIEW_REQUIRED 109;
+- requirement states: FRESH 829, INSUFFICIENT 258, MISSING 2,170, STALE 2, CONFLICTING 0, REVIEW_REQUIRED 246.
+
+Stage 1 canonical-selection contract is COMPLETE / PASS at design level:
+
+- immutable snapshot content and canonical selection are separated;
+- a single reconciliation campaign/run identity spans all bounded slices;
+- each bounded slice retains its own one-time execution-grant identity;
+- one fixed `evaluation_as_of` and one fixed `source_cutoff_at` are required across the full campaign;
+- content idempotency and selection idempotency are separate;
+- same-run retries must resolve idempotently;
+- partial-slice failures must be resumable without deleting successful selections;
+- initial backfill must preserve the current pre-remediation view exactly;
+- later reconciliation, not the migration itself, changes canonical selection;
+- currentness must derive from the latest valid canonical selection event rather than snapshot creation time;
+- the future selection ledger remains append-only, owner-readable under RLS, with no anonymous/browser write path and service-controlled writes only;
+- the current view must retain `security_invoker = true`.
+
+No migration has been created or applied. No database row was changed. No provider call was made. No Edge Function was deployed. Production and `main` remain unchanged. IC3/R6/R7/IC6+/P8 remain not authorized.
+
+**Stage 0 = COMPLETE / PASS. Stage 1 = COMPLETE / PASS. Stage 2 = NOT STARTED. IC2 remains BLOCKED / NOT CLOSED pending the approved additive remediation build and later reconciliation.**
