@@ -1,0 +1,46 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC2_IDENTITY_COMPLETION_AUDIT_V1",
+  "asOf": "2026-09-29",
+  "status": "PASS",
+  "coverage": {
+    "matchedEquities": 239,
+    "totalOpenEquities": 239
+  },
+  "inoxwind": {
+    "initialFailure": "NO_EXACT_PROVIDER_IDENTITY",
+    "remediationDisposition": "RESOLVER_SEARCH_CANDIDATE_FALSE_NEGATIVE",
+    "canonicalSymbol": "INOXWIND",
+    "canonicalIsin": "INE066P01011",
+    "trendlyneStockId": "1627",
+    "remediationRunId": "7d5e6de0-5e25-4578-9c33-dbd4e8cb34bd",
+    "result": "SUCCEEDED_ACCEPTED",
+    "resolverVersion": 21
+  },
+  "finalSlice": [
+    {
+      "symbol": "QUESS",
+      "trendlyneStockId": "4595",
+      "status": "PASS"
+    },
+    {
+      "symbol": "FAZE3Q",
+      "trendlyneStockId": "3253",
+      "status": "PASS"
+    },
+    {
+      "symbol": "ZENSARTECH",
+      "trendlyneStockId": "1544",
+      "status": "PASS"
+    }
+  ],
+  "governance": {
+    "productionChanged": false,
+    "migration": false,
+    "vercelDeployment": false,
+    "gitMerge": false,
+    "ic4R6": false,
+    "ic5R7": false,
+    "ic6Plus": false,
+    "p8": false
+  }
+}
