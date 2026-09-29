@@ -1,0 +1,5 @@
+import {describe,expect,it} from "vitest"
+import {P7_IC_PROFILE_CONTRACTS,p7IcProfileContract} from "./p7-ic-profile-contracts"
+import {P7_IC_HELD_PROFILE_ASSIGNMENTS,p7IcHeldProfileAssignment} from "./p7-ic-held-profile-assignments"
+import {buildProfileEvidencePlan} from "./p7-ic-evidence-normalization"
+describe("P7 IC frozen contracts",()=>{it("covers 47 profiles",()=>expect(Object.keys(P7_IC_PROFILE_CONTRACTS)).toHaveLength(47));it("covers 239 equities with 238 resolved",()=>{const rows=Object.values(P7_IC_HELD_PROFILE_ASSIGNMENTS);expect(rows).toHaveLength(239);expect(rows.filter(x=>x.state==="RESOLVED")).toHaveLength(238);expect(rows.filter(x=>x.state==="REVIEW_REQUIRED").map(x=>x.symbol)).toEqual(["BLUEJET"])});it("builds plans for every resolved profile",()=>{for(const a of Object.values(P7_IC_HELD_PROFILE_ASSIGNMENTS)){if(a.state==="RESOLVED"&&a.profileCode)expect(()=>buildProfileEvidencePlan(p7IcProfileContract(a.profileCode))).not.toThrow()}});it("does not guess BLUEJET",()=>expect(p7IcHeldProfileAssignment("c9b5f6f8-76be-435d-bba0-c4432e8441df")).toMatchObject({symbol:"BLUEJET",state:"REVIEW_REQUIRED",subprofileCode:null}))})
