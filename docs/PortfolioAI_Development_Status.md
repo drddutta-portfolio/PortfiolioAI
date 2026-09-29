@@ -2116,3 +2116,22 @@ No TID03 offset 10/15, TID04+, research, Angel One stock-history, or benchmark e
 PortfolioAI internal provider-attempt ledger today = 85 events (52 overview + 33 search). This is not equivalent to Trendlyne subscription billing; Trendlyne's own MCPMax utilisation remains authoritative for external quota usage.
 
 **IC2 = ACTIVE / IDENTITY EXECUTION PAUSED / FAIL-CLOSED AT TMCV.**
+
+
+## P7-IC IC2 — TMCV remediation PASS — 29 September 2026
+
+TMCV exact identity remediation passed under owner authorization:
+- canonical NSE symbol: `TMCV`;
+- canonical ISIN: `INE1TAE01010`;
+- fresh Trendlyne overview stock ID: `3327757`;
+- observed Trendlyne symbol: `TMCV`;
+- observed Trendlyne ISIN: `INE1TAE01010`;
+- persisted Development identity: `MATCHED`;
+- confidence: `1.0000`;
+- remediation provider usage: one `GET_OVERVIEW_NEWS_CORP_EVENTS` operation; no `SEARCH_ENTITIES` operation.
+
+The prior `NO_EXACT_PROVIDER_IDENTITY` result is classified as a resolver/search-candidate false-negative, not a canonical identity conflict.
+
+Broad IC2 identity execution remains PAUSED by approval scope. No TID03 offset 10/15, TID04+, research, Angel One stock-history, or benchmark execution resumed in this remediation step.
+
+No Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
