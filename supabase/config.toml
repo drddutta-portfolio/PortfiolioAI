@@ -402,3 +402,9 @@ verify_jwt = false
 
 [functions.refresh-pharma-benchmark]
 verify_jwt = false
+
+
+# P7-IC benchmark refresh validates the authenticated user inside the function.
+# The function itself hard-locks PortfolioAI Dev and refuses Production.
+[functions.p7-ic-benchmark-refresh]
+verify_jwt = false
