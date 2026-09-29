@@ -10828,3 +10828,24 @@ IC1 is CLOSED at accepted commit `8bd8a971ae31812e503217d06c6c3cc9098d4061`.
 IC2 planning is complete but execution is not authorized. Exact current supported-adapter workload is 920 Trendlyne calls plus 238 incremental Angel One stock-history calls. This excludes methodology-specific multi-period/business-model evidence until executable normalization adapters are frozen. Twenty-two required benchmark authorities currently have zero ready histories. BLUEJET remains zero-call factual review.
 
 No provider calls, DB writes, migrations, deployment, merge, IC4/R6 or IC5/R7 occurred.
+
+
+---
+
+## P7-IC IC2 exact provider package handoff — 29 September 2026
+
+Repository-only adapter work is complete. The provider campaign is frozen but not authorized.
+
+```text
+Trendlyne identity       280 calls
+Trendlyne research       640 calls
+Trendlyne total          920 calls / 23 batches <= 40
+Angel One stock history  238 calls
+Angel One benchmarks      22 calls
+Angel One history total  260 calls
+BLUEJET                    0 calls
+```
+
+The next action is external: activate the temporary Trendlyne 1,000-call/day entitlement. Only after it is verified should owner authorization permit the temporary Development internal limit change 400→1,000 and the exact provider/data-write campaign.
+
+No provider calls or database writes have occurred.

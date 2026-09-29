@@ -1977,3 +1977,24 @@ P8 = NOT AUTHORIZED
 ```
 
 Live Development planning: 99 Trendlyne identities ready; 79 base current-research bundles reusable; 160 resolved equities need current research refresh; 140 need identity work first; supported-adapter Trendlyne ceiling 920 calls; 238 incremental Angel One stock-history calls; nine <252-session listing-history blockers; 22 primary benchmark authorities and zero ready benchmark histories; current R6-ready count 0. No provider calls or database writes occurred.
+
+
+## P7-IC IC2 adapter implementation — 29 September 2026
+
+Repository-only adapter implementation is complete as a detached candidate:
+- 47 frozen methodology profile contracts;
+- 239 accepted held-equity assignments;
+- generic 22-index benchmark adapter;
+- profile-aware Trendlyne evidence normalization;
+- Development-only benchmark refresh execution path staged but not deployed;
+- Complete Research IC2 execution path staged but not deployed.
+
+Exact provider package:
+- Trendlyne = 920 calls in 23 batches of at most 40 (280 identity + 640 current research);
+- Angel One = 238 stock-history + 22 benchmark-history = 260 authenticated history calls;
+- BLUEJET = 0 provider calls;
+- 79 existing base research bundles are cache-first normalization candidates.
+
+The temporary 1,000/day Trendlyne upgrade is now required before the next execution approval. PortfolioAI Development remains at 400/day until a separate owner-authorized database control change.
+
+No provider call, DB write, migration, deployment, merge or Production change occurred.
