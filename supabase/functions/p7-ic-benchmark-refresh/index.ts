@@ -200,6 +200,7 @@ Deno.serve(async request => {
         })), { onConflict: "benchmark_code,provider_code,interval,period_start" })
         if (inserted.error) throw inserted.error
         results.push({ code: item.code, status: "REFRESHED", candles: candles.length })
+        if (item !== plan.plans.at(-1)) await new Promise(resolve => setTimeout(resolve, 1_500))
       }
       return json(200, {
         mode: "P7_IC2_BENCHMARK_REFRESH",
