@@ -1,0 +1,32 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC2_MAXHEALTH_REMEDIATION_AUDIT_V1",
+  "asOf": "2026-09-29",
+  "status": "PASS",
+  "symbol": "MAXHEALTH",
+  "canonical": {
+    "isin": "INE027H01010",
+    "exchange": "NSE"
+  },
+  "trendlyne": {
+    "providerInstrumentId": "276825",
+    "observedSymbol": "MAXHEALTH",
+    "observedIsin": "INE027H01010",
+    "confidence": "1.0000"
+  },
+  "providerUsage": {
+    "overviewOperations": 1,
+    "searchOperations": 0
+  },
+  "disposition": "RESOLVER_SEARCH_CANDIDATE_FALSE_NEGATIVE",
+  "broadCampaignResumed": false,
+  "governance": {
+    "productionChanged": false,
+    "migration": false,
+    "vercelDeployment": false,
+    "gitMerge": false,
+    "ic4R6": false,
+    "ic5R7": false,
+    "ic6Plus": false,
+    "p8": false
+  }
+}

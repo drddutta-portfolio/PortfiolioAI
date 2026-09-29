@@ -2073,3 +2073,22 @@ Execution-control deviation recorded:
 PortfolioAI internal provider-attempt events today = 63 (38 overview + 25 search). This is **not** the Trendlyne subscription billing count. The Trendlyne dashboard remains authoritative for external tool-call utilisation.
 
 **IC2 = ACTIVE / PROVIDER EXECUTION PAUSED / FAIL-CLOSED AT MAXHEALTH.**
+
+
+## P7-IC IC2 — MAXHEALTH remediation PASS — 29 September 2026
+
+MAXHEALTH exact identity remediation passed under owner authorization:
+- canonical NSE symbol: `MAXHEALTH`;
+- canonical ISIN: `INE027H01010`;
+- fresh Trendlyne overview stock ID: `276825`;
+- observed Trendlyne symbol: `MAXHEALTH`;
+- observed Trendlyne ISIN: `INE027H01010`;
+- persisted Development identity: `MATCHED`;
+- confidence: `1.0000`;
+- remediation provider usage: one `GET_OVERVIEW_NEWS_CORP_EVENTS` operation; no `SEARCH_ENTITIES` operation.
+
+The prior `NO_EXACT_PROVIDER_IDENTITY` result is therefore classified as a resolver/search-candidate false-negative, not a canonical identity conflict.
+
+Broad IC2 provider execution remains PAUSED by owner scope. No TID03+, research, Angel One stock-history, or benchmark execution was resumed in this remediation step.
+
+No Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
