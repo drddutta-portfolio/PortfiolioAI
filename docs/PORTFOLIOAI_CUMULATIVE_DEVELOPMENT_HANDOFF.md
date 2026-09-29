@@ -11023,3 +11023,26 @@ The prior `NO_EXACT_PROVIDER_IDENTITY` result is classified as a resolver/search
 Broad IC2 identity execution remains PAUSED by approval scope. LEMONTREE and later identity slices were not resumed in this remediation step.
 
 No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
+
+
+## P7-IC IC2 identity execution resumed; stopped at CHOLAFIN — 29 September 2026
+
+Owner authorized resumption from LEMONTREE through the remaining IC2 Trendlyne identity batches using corrected one-slice-at-a-time fail-closed control.
+
+Successful execution after the VEDL remediation:
+- LEMONTREE = PASS;
+- TID03 offset 15: KRN, LTF, TI, FORTIS, IRMENERGY = PASS;
+- TID04 offset 0: ICIL, WOCKPHARMA, LENSKART, HCLTECH, GOLDIAM = PASS;
+- TID04 offset 5: CEMPRO, ZYDUSLIFE, SHAILY, GRANULES, VINATIORGA = PASS;
+- TID04 offset 10: SSWL, VOLTAS, SBCL, MUTHOOTFIN, GROWW = PASS;
+- TID04 offset 15: UPL, ALIVUS, LGEINDIA, PAR, SAGILITY = PASS;
+- TID05 offset 0: VENTIVE, SRF, ZENTEC, PENIND = PASS;
+- CHOLAFIN = `PROVIDER_COMPANY_IDENTITY_CONFLICT` → immediate stop.
+
+No TID05 offset 5 or any TID06/TID07 identity slice was submitted after the CHOLAFIN failure.
+
+Exact Trendlyne identity coverage is now **183 / 239 open equities** (153 before this resumed pass + 30 newly matched).
+
+No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
+
+**IC2 = ACTIVE / IDENTITY EXECUTION PAUSED / FAIL-CLOSED AT CHOLAFIN.**
