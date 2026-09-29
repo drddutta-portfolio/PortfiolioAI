@@ -1,0 +1,33 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC2_HAL_REMEDIATION_AUDIT_V1",
+  "asOf": "2026-09-29",
+  "status": "PASS",
+  "symbol": "HAL",
+  "canonical": {
+    "isin": "INE066F01020",
+    "exchange": "NSE"
+  },
+  "trendlyne": {
+    "providerInstrumentId": "80502",
+    "observedName": "Hindustan Aeronautics Ltd.",
+    "observedSymbol": "HAL",
+    "observedIsin": "INE066F01020",
+    "confidence": "1.0000"
+  },
+  "providerUsage": {
+    "overviewOperations": 1,
+    "searchOperations": 0
+  },
+  "disposition": "RESOLVER_SEARCH_CANDIDATE_FALSE_NEGATIVE",
+  "broadCampaignResumed": false,
+  "governance": {
+    "productionChanged": false,
+    "migration": false,
+    "vercelDeployment": false,
+    "gitMerge": false,
+    "ic4R6": false,
+    "ic5R7": false,
+    "ic6Plus": false,
+    "p8": false
+  }
+}

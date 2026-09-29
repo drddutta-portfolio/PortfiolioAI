@@ -2243,3 +2243,23 @@ Exact Trendlyne identity coverage is now **186 / 239 open equities** (184 before
 No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
 
 **IC2 = ACTIVE / IDENTITY EXECUTION PAUSED / FAIL-CLOSED AT HAL.**
+
+
+## P7-IC IC2 — HAL remediation PASS — 29 September 2026
+
+HAL exact identity remediation passed under owner authorization:
+- canonical NSE symbol: `HAL`;
+- canonical ISIN: `INE066F01020`;
+- fresh Trendlyne overview stock ID: `80502`;
+- observed Trendlyne symbol: `HAL`;
+- observed Trendlyne ISIN: `INE066F01020`;
+- observed provider name: `Hindustan Aeronautics Ltd.`;
+- persisted Development identity: `MATCHED`;
+- confidence: `1.0000`;
+- remediation provider usage: one `GET_OVERVIEW_NEWS_CORP_EVENTS` operation; no `SEARCH_ENTITIES` operation.
+
+The prior `NO_EXACT_PROVIDER_IDENTITY` result is classified as a resolver/search-candidate false-negative, not a canonical identity conflict.
+
+Broad IC2 identity execution remains PAUSED by approval scope. ONESOURCE, PANAMAPET and later identity slices were not resumed in this remediation step.
+
+No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
