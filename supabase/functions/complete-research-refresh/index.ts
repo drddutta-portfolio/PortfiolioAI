@@ -359,7 +359,8 @@ Deno.serve(async request => {
     }
     let requestedBy: string
 
-    if (p4 || p4b) {
+    const p7Grant = p7ic2 && typeof body.grantId === "string"
+    if (p4 || p4b || p7Grant) {
       const ref = projectRef(supabaseUrl)
       if (ref === P4_PROD_REF) return reply(409, { error: "P4 complete research execution refuses Production.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
       if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID) {

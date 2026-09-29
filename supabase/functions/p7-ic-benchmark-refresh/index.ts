@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { AngelOneProvider, loadAngelOneConfig } from "../_shared/angel-one.ts"
+import { consumeP4ExecutionGrant } from "../_shared/p4-execution-grant.ts"
 import {
   buildBenchmarkExecutionPlan,
   P7_IC_BENCHMARK_REGISTRY,
@@ -26,6 +27,7 @@ type Body = {
   readonly portfolioId?: unknown
   readonly benchmarkCodes?: unknown
   readonly confirmation?: unknown
+  readonly grantId?: unknown
 }
 
 function projectRef(value: string) {
@@ -62,15 +64,27 @@ Deno.serve(async request => {
       return json(400, { error: "One to 22 approved benchmark codes are required.", providerCalls: 0 })
     }
 
-    const authorization = request.headers.get("Authorization")
-    if (!authorization) return json(401, { error: "Authentication required.", providerCalls: 0 })
-    const user = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
-    const auth = await user.auth.getUser()
-    if (auth.error || !auth.data.user) return json(401, { error: "Invalid authenticated session.", providerCalls: 0 })
-
     const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
-    const portfolio = await admin.from("portfolios").select("id").eq("id", PORTFOLIO_ID).eq("user_id", auth.data.user.id).single()
-    if (portfolio.error) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
+    if (typeof body.grantId === "string") {
+      const sentinel = `P7_IC2_BENCHMARKS:${requested.join(",")}`
+      const grant = await consumeP4ExecutionGrant(admin, {
+        grantId: body.grantId,
+        action: String(body.action),
+        portfolioId: PORTFOLIO_ID,
+        securityId: sentinel,
+      })
+      if (!grant.ok) return json(401, { error: grant.message, code: grant.code, providerCalls: 0 })
+      const portfolio = await admin.from("portfolios").select("id").eq("id", PORTFOLIO_ID).single()
+      if (portfolio.error) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
+    } else {
+      const authorization = request.headers.get("Authorization")
+      if (!authorization) return json(401, { error: "Authentication required.", providerCalls: 0 })
+      const user = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
+      const auth = await user.auth.getUser()
+      if (auth.error || !auth.data.user) return json(401, { error: "Invalid authenticated session.", providerCalls: 0 })
+      const portfolio = await admin.from("portfolios").select("id").eq("id", PORTFOLIO_ID).eq("user_id", auth.data.user.id).single()
+      if (portfolio.error) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
+    }
 
     const [mappingResult, historyResult, anchorResult] = await Promise.all([
       admin.from("market_benchmarks").select("code,mapping_status").in("code", requested),
