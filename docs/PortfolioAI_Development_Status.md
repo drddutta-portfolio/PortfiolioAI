@@ -2223,3 +2223,23 @@ The prior `PROVIDER_COMPANY_IDENTITY_CONFLICT` is classified as a canonical disp
 Broad IC2 identity execution remains PAUSED by approval scope. No TID05 offset 5 or later identity slice was resumed in this remediation step.
 
 No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
+
+
+## P7-IC IC2 identity execution resumed; stopped at HAL — 29 September 2026
+
+Owner authorized resumption of the remaining IC2 Trendlyne identity batches from TID05 offset 5 using corrected one-slice-at-a-time fail-closed control.
+
+Current slice result:
+- NYKAA = PASS
+- VINCOFE = PASS
+- HAL = `NO_EXACT_PROVIDER_IDENTITY` → immediate stop
+- ONESOURCE = not attempted
+- PANAMAPET = not attempted
+
+No TID05 offset 10/15 or any TID06/TID07 identity slice was submitted after the HAL failure.
+
+Exact Trendlyne identity coverage is now **186 / 239 open equities** (184 before this resumed slice + 2 newly matched).
+
+No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
+
+**IC2 = ACTIVE / IDENTITY EXECUTION PAUSED / FAIL-CLOSED AT HAL.**

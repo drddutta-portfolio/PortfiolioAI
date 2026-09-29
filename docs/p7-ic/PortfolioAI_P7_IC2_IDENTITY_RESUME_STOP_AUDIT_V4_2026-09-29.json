@@ -1,0 +1,42 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC2_IDENTITY_RESUME_STOP_AUDIT_V4",
+  "asOf": "2026-09-29",
+  "status": "PAUSED_FAIL_CLOSED",
+  "identityReady": 186,
+  "openEquities": 239,
+  "newlyMatchedThisResume": [
+    "NYKAA",
+    "VINCOFE"
+  ],
+  "blocker": {
+    "symbol": "HAL",
+    "result": "NO_EXACT_PROVIDER_IDENTITY"
+  },
+  "notAttempted": [
+    "ONESOURCE",
+    "PANAMAPET"
+  ],
+  "notExecutedAfterStop": [
+    "TID05_OFFSET_10",
+    "TID05_OFFSET_15",
+    "TID06",
+    "TID07",
+    "RESEARCH_BATCHES",
+    "ANGEL_ONE_STOCK_HISTORY",
+    "BENCHMARK_HISTORY"
+  ],
+  "stopControl": {
+    "oneSliceAtATime": true,
+    "nextSliceSubmittedAfterFailure": false
+  },
+  "governance": {
+    "productionChanged": false,
+    "migration": false,
+    "vercelDeployment": false,
+    "gitMerge": false,
+    "ic4R6": false,
+    "ic5R7": false,
+    "ic6Plus": false,
+    "p8": false
+  }
+}
