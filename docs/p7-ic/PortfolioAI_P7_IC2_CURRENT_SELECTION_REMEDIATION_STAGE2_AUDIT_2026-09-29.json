@@ -1,0 +1,61 @@
+{
+  "audit": "P7-IC2 canonical current-selection remediation Stage 2 repository package",
+  "date": "2026-09-29",
+  "environmentTarget": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "baselineCommit": "572d87dd108c0bf2d698a8e3ea46035dfce5bfbc",
+  "currentHeadAtAuditCreation": "135398909ba998d679132f6809afaa6b252d00ee",
+  "stage2": {
+    "status": "PACKAGE_CREATED_AWAITING_LOCAL_REPLAY_VERIFICATION",
+    "migration": {
+      "path": "supabase/migrations/20260929235000_add_p7_ic2_canonical_snapshot_selection_ledger.sql",
+      "commit": "905442681eee64dfc6196a416a7bb75f4bae9d24",
+      "purpose": "Add append-only canonical snapshot selection ledger, behavior-preserving backfill, selection-based current view, and service-only V2 append/select function."
+    },
+    "verification": {
+      "path": "supabase/tests/p7_ic2_current_selection_ledger.sql",
+      "commit": "5917c8c40170b765c3f4dbcc27f91547cc69814f",
+      "mode": "TRANSACTION_ONLY_ROLLBACK",
+      "expectedChecks": [
+        "backfill/current cardinality equality",
+        "one current row per security",
+        "security_invoker view",
+        "authenticated read-only and anon-denied ledger access",
+        "service-role-only V2 execution",
+        "older deterministic snapshot reuse without snapshot/item growth",
+        "canonical reselection",
+        "same-run retry idempotency",
+        "fail-closed different-content reuse of same run/security key",
+        "append-only update/delete rejection",
+        "cross-security composite-FK rejection"
+      ]
+    },
+    "contract": {
+      "path": "docs/p7-ic/PortfolioAI_P7_IC2_CURRENT_SELECTION_CONTRACT_V1.md",
+      "commit": "135398909ba998d679132f6809afaa6b252d00ee"
+    },
+    "repositoryDeltaFromBaseline": {
+      "aheadByCommits": 5,
+      "behindByCommits": 0,
+      "expectedFilesOnly": true
+    }
+  },
+  "boundaries": {
+    "migrationAppliedToDevelopment": false,
+    "databaseRowsChanged": false,
+    "edgeFunctionsDeployed": false,
+    "providerCalls": 0,
+    "productionChanged": false,
+    "mainChanged": false,
+    "ic3Executed": false,
+    "r6Executed": false,
+    "r7Executed": false,
+    "p8Executed": false
+  },
+  "stopGo": {
+    "stage2CodePackageReady": true,
+    "stage2LocalReplayVerified": false,
+    "stage3Authorized": false,
+    "requirementBeforeStage3": "Run the repository migration and transaction-only verification against an isolated local/replay database and review the exact pre/post manifest before Development application."
+  }
+}
