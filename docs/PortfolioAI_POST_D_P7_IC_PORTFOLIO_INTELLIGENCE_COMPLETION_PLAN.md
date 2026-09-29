@@ -1391,3 +1391,71 @@ Therefore `IC0 = BLOCKED`, not PASS. The detailed audit and machine-readable
 matrix are recorded in `docs/PortfolioAI_P7_IC0_AUTHORITY_AND_COVERAGE_FREEZE.md`
 and `docs/p7-ic/PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json`.
 IC-A is awaiting owner decision; IC1 has not started.
+
+
+---
+
+# 21. Current execution state after IC2 identity completion — 29 September 2026
+
+This section records the current execution state without rewriting the historical checkpoint records above.
+
+The owner-authorized IC2 Trendlyne identity campaign is complete:
+
+- 239 / 239 open equities now have exact `MATCHED` Trendlyne identities with non-null provider instrument IDs;
+- INOXWIND was the final bounded remediation exception and resolved to Trendlyne stock ID `1627`;
+- the final three identities after INOXWIND were QUESS `4595`, FAZE3Q `3253`, and ZENSARTECH `1544`;
+- the machine-readable identity-completion audit is `docs/p7-ic/PortfolioAI_P7_IC2_IDENTITY_COMPLETION_AUDIT_2026-09-29.json`;
+- the detached identity-completion repository commit is `30a71fd35df2ce1969d29f47199b03cf1334c8d0`.
+
+## IC2 scope clarification
+
+Identity completion is a prerequisite inside IC2, not the IC2 exit criterion itself.
+
+The frozen IC2 authority remains **Evidence and market-history remediation**. Before IC2 may close and before IC3 may be called globally complete, the portfolio must still be re-audited against the approved methodology requirements for:
+
+- current company evidence;
+- evidence freshness and conflict state;
+- required normalized metrics;
+- required stock market history;
+- required benchmark history;
+- canonical provider/source lineage;
+- explicit unresolved blockers where evidence legitimately cannot be completed.
+
+The next executable step is therefore a **fresh cache-first IC2 readiness/deficit audit against the completed 239/239 identity baseline**.
+
+That audit must first determine exactly what is already valid/fresh in cache and what still requires bounded provider remediation. No provider call is justified merely because the identity campaign completed.
+
+Any remaining Trendlyne current-research, Angel One history, benchmark-history, or manual/official-source remediation must continue under the existing bounded-provider and owner-approval rules.
+
+## Current governance state
+
+```text
+P7 = ACTIVE
+
+IC0 = HISTORICAL AUDIT COMPLETE
+      ORIGINAL PASS WITHHELD RECORD PRESERVED
+
+IC-A = APPROVED
+
+IC1 = COMPLETE / PASS / CLOSED
+IC-B = COMPLETE / APPROVED
+
+IC2 = ACTIVE
+      identity prerequisite = COMPLETE / PASS / 239 OF 239
+      evidence + market-history remediation = NOT YET CLOSED
+
+IC3 = NOT STARTED GLOBALLY
+      cohort snapshot preparation remains permitted only inside the frozen IC2→IC3→IC-C boundary
+
+IC-C = NOT REACHED / NOT APPROVED
+IC4 R6 = NOT AUTHORIZED
+IC5 R7 = NOT AUTHORIZED
+IC6+ = NOT AUTHORIZED
+
+P8 = NOT AUTHORIZED
+Production = UNCHANGED
+```
+
+The historical IC0, IC-A, IC-B and earlier IC2 planning/execution records remain immutable context and should not be rewritten to look as if their then-current states were different.
+
+No IC3 global closure, R6 portfolio execution, R7 portfolio execution, R8/R9/Movement execution, R10 final integration, Production change, migration, Vercel deployment, Git merge, or P8 action is authorized by this status update.
