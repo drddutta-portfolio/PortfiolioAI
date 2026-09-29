@@ -1,0 +1,67 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC2_PROVIDER_EXECUTION_STOP_AUDIT_V1",
+  "asOf": "2026-09-29",
+  "status": "PAUSED_FAIL_CLOSED",
+  "authorizedCampaign": {
+    "trendlyneCeiling": 920,
+    "angelOneHistoryCeiling": 260,
+    "perRunLimit": 40,
+    "developmentOnly": true
+  },
+  "deployed": {
+    "completeResearchRefreshVersion": 18,
+    "benchmarkRefreshVersion": 2,
+    "ic2OrchestratorVersion": 1
+  },
+  "trendlyne": {
+    "internalDailyLimit": 1000,
+    "callsConsumed": 21,
+    "providerAttemptsSucceeded": 21,
+    "providerAttemptsFailed": 0,
+    "identityReadyBefore": 99,
+    "identityReadyAfter": 109,
+    "newlyMatched": [
+      "YATHARTH",
+      "SYRMA",
+      "LT",
+      "NH",
+      "MANKIND",
+      "SONACOMS",
+      "PERSISTENT",
+      "SKYGOLD",
+      "MFSL",
+      "RELIANCE"
+    ],
+    "blocker": {
+      "symbol": "USHAMART",
+      "canonicalIsin": "INE228A01035",
+      "providerCalls": 2,
+      "result": "NO_EXACT_PROVIDER_IDENTITY",
+      "matchedIdentityCreated": false,
+      "priorTrendlyneRawCaptureAvailable": false
+    },
+    "researchBatchesExecuted": 0
+  },
+  "angelOne": {
+    "stockHistoryRunsExecuted": 0,
+    "benchmarkRunsExecuted": 0
+  },
+  "evidence": {
+    "exactBaseBundleReady": 80
+  },
+  "bluejet": {
+    "state": "REVIEW_REQUIRED",
+    "providerCalls": 0
+  },
+  "governance": {
+    "productionChanged": false,
+    "vercelDeployment": false,
+    "gitMerge": false,
+    "migrationCreated": false,
+    "migrationApplied": false,
+    "ic4R6Executed": false,
+    "ic5R7Executed": false,
+    "p8Authorized": false
+  },
+  "nextRequiredDecision": "OWNER_DISPOSITION_FOR_USHAMART_IDENTITY_BLOCKER_BEFORE_IC2_PROVIDER_EXECUTION_RESUMES"
+}

@@ -10849,3 +10849,29 @@ BLUEJET                    0 calls
 The next action is external: activate the temporary Trendlyne 1,000-call/day entitlement. Only after it is verified should owner authorization permit the temporary Development internal limit change 400→1,000 and the exact provider/data-write campaign.
 
 No provider calls or database writes have occurred.
+
+
+---
+
+## P7-IC IC2 provider execution stop handoff — 29 September 2026
+
+Execution authority was exercised only until the first frozen fail-closed identity condition.
+
+```text
+Trendlyne calls consumed       21
+Provider-attempt failures       0
+New exact identities           10
+Identity-ready total          109 / 239
+Blocker                       USHAMART
+Blocker result                NO_EXACT_PROVIDER_IDENTITY
+USHAMART canonical ISIN       INE228A01035
+IC2 research calls              0
+IC2 Angel stock-history calls   0
+IC2 benchmark-history calls     0
+BLUEJET calls                   0
+```
+
+Do not resume IC2 provider execution until the owner disposes the USHAMART exact-identity blocker. Do not guess or manually force a provider identity.
+
+Machine-readable audit:
+`docs/p7-ic/PortfolioAI_P7_IC2_PROVIDER_EXECUTION_STOP_AUDIT_2026-09-29.json`.

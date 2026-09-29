@@ -1998,3 +1998,36 @@ Exact provider package:
 The temporary 1,000/day Trendlyne upgrade is now required before the next execution approval. PortfolioAI Development remains at 400/day until a separate owner-authorized database control change.
 
 No provider call, DB write, migration, deployment, merge or Production change occurred.
+
+
+## P7-IC IC2 provider execution — PAUSED FAIL-CLOSED — 29 September 2026
+
+The Development-only IC2 orchestrator/grant mechanism was authorized, staged at `76cc0270a684c2e9e713bde15539b47b66ffcb2f`, and deployed without moving `PortfolioAI-Development`.
+
+Live Development functions:
+- `complete-research-refresh` v18;
+- `p7-ic-benchmark-refresh` v2;
+- `p7-ic2-orchestrator` v1.
+
+Trendlyne internal Development limit remains 1,000/day with 40/run.
+
+Execution began with the frozen TID01 identity cohort. Ten previously unresolved identities were matched exactly:
+YATHARTH, SYRMA, LT, NH, MANKIND, SONACOMS, PERSISTENT, SKYGOLD, MFSL, RELIANCE.
+
+Cumulative IC2 Trendlyne usage = **21 calls**. All 21 provider attempts succeeded at transport/provider level.
+
+The next security, **USHAMART**, consumed 2 provider calls but failed exact reconciliation with `NO_EXACT_PROVIDER_IDENTITY`. Canonical PortfolioAI identity is NSE `USHAMART`, ISIN `INE228A01035`. No matched Trendlyne identity was persisted and no prior Trendlyne raw capture exists for offline repair.
+
+Per the frozen IC2 stop rules, all further provider execution stopped immediately.
+
+Current read-only audit:
+- Trendlyne exact identity ready: 109/239 open equities (99 before IC2 execution);
+- exact current base-research bundle ready: 80;
+- IC2 research batches executed: 0;
+- IC2 Angel One stock-history runs: 0;
+- IC2 benchmark runs: 0;
+- BLUEJET provider calls: 0.
+
+No Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7 or P8 occurred.
+
+**IC2 = ACTIVE / PROVIDER EXECUTION PAUSED / FAIL-CLOSED AT USHAMART.**
