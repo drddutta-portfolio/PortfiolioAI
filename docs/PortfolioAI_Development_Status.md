@@ -2092,3 +2092,27 @@ The prior `NO_EXACT_PROVIDER_IDENTITY` result is therefore classified as a resol
 Broad IC2 provider execution remains PAUSED by owner scope. No TID03+, research, Angel One stock-history, or benchmark execution was resumed in this remediation step.
 
 No Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
+
+
+## P7-IC IC2 identity execution resumed; stopped at TMCV — 29 September 2026
+
+Owner approved resumption of the remaining IC2 identity campaign after MAXHEALTH remediation, with corrected stop-control.
+
+Execution behavior:
+- one bounded slice is submitted at a time;
+- the next slice is not submitted unless every symbol in the current slice has a fresh exact `MATCHED` identity;
+- audit queries are time-bounded to the current slice.
+
+Results after resumption:
+- TID02 remainder: PREMIERENE, SRHHYPOLTD, SENCO = PASS;
+- TID03 offset 0: RATEGAIN, SHARDACROP, ERIS, LTFOODS, SHRIRAMFIN = PASS;
+- TID03 offset 5: PHOENIXLTD, NATIONALUM, TATACAP, CPPLUS = PASS;
+- TMCV = `NO_EXACT_PROVIDER_IDENTITY` and triggered immediate stop.
+
+Current exact Trendlyne identity coverage = **148 / 239 open equities**.
+
+No TID03 offset 10/15, TID04+, research, Angel One stock-history, or benchmark execution occurred after the TMCV failure.
+
+PortfolioAI internal provider-attempt ledger today = 85 events (52 overview + 33 search). This is not equivalent to Trendlyne subscription billing; Trendlyne's own MCPMax utilisation remains authoritative for external quota usage.
+
+**IC2 = ACTIVE / IDENTITY EXECUTION PAUSED / FAIL-CLOSED AT TMCV.**
