@@ -1,0 +1,86 @@
+{
+  "audit": "P7-IC2 current-selection remediation Stage 0/1 audit",
+  "date": "2026-09-29",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "baselineCommit": "572d87dd108c0bf2d698a8e3ea46035dfce5bfbc",
+  "stage0": {
+    "status": "COMPLETE_PASS",
+    "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+    "holdings": {
+      "total": 248,
+      "equities": 239,
+      "etfs": 9
+    },
+    "immutableState": {
+      "snapshots": 1007,
+      "items": 14913
+    },
+    "currentView": {
+      "rows": 239,
+      "distinctSecurities": 239,
+      "duplicateCurrentSecurities": 0
+    },
+    "currentMappingFingerprintMd5": "10ccc67e6c8eed006c50fd3fb891e14a",
+    "currentSnapshotStatuses": {
+      "READY": 0,
+      "INSUFFICIENT": 128,
+      "STALE": 2,
+      "CONFLICTING": 0,
+      "REVIEW_REQUIRED": 109
+    },
+    "currentRequirementStates": {
+      "FRESH": 829,
+      "INSUFFICIENT": 258,
+      "MISSING": 2170,
+      "STALE": 2,
+      "CONFLICTING": 0,
+      "REVIEW_REQUIRED": 246
+    },
+    "liveEdgeVersions": {
+      "p7-ic2-materialize-readiness": 16,
+      "complete-research-refresh": 29,
+      "p7-ic2-orchestrator": 4
+    },
+    "rootCauseConfirmed": "append_research_evidence_snapshot_v1 reuses an existing immutable content-addressed snapshot, while current_research_evidence_snapshot_v1 selects currentness by as_of_date/created_at/id; therefore a corrected historical hash cannot be reactivated after a newer erroneous immutable snapshot."
+  },
+  "stage1": {
+    "status": "COMPLETE_PASS_DESIGN_ONLY",
+    "contract": {
+      "separateImmutableSnapshotAndCanonicalSelection": true,
+      "campaignRunIdentitySpansAllSlices": true,
+      "executionGrantRemainsPerSlice": true,
+      "fixedEvaluationAsOfRequired": true,
+      "fixedSourceCutoffAtRequired": true,
+      "separateContentAndSelectionIdempotency": true,
+      "retryIdempotencyRequired": true,
+      "partialSliceResumeRequired": true,
+      "initialBackfillMustPreserveCurrentView": true,
+      "currentnessMustResolveThroughSelectionEvent": true,
+      "appendOnlySelectionHistory": true,
+      "ownerScopedReadRls": true,
+      "anonymousWriteAccess": false,
+      "browserWriteAccess": false,
+      "securityInvokerCurrentView": true
+    }
+  },
+  "status": {
+    "p7": "ACTIVE",
+    "ic1": "COMPLETE_PASS_CLOSED",
+    "ic2": "BLOCKED_NOT_CLOSED",
+    "ic3": "NOT_STARTED_NOT_AUTHORIZED",
+    "r6": "NOT_AUTHORIZED",
+    "r7": "NOT_AUTHORIZED",
+    "p8": "NOT_AUTHORIZED",
+    "productionChanged": false,
+    "mainChanged": false
+  },
+  "boundaries": {
+    "migrationCreated": false,
+    "migrationApplied": false,
+    "databaseRowsChanged": false,
+    "providerCalls": 0,
+    "edgeDeployments": 0
+  },
+  "nextStage": "STAGE_2_CREATE_AND_VERIFY_ADDITIVE_MIGRATION_IN_REPOSITORY_ONLY"
+}
