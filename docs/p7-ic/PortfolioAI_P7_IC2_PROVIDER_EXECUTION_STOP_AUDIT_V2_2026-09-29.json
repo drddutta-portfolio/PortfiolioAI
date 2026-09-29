@@ -1,0 +1,57 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC2_PROVIDER_EXECUTION_STOP_AUDIT_V2",
+  "asOf": "2026-09-29",
+  "status": "PAUSED_FAIL_CLOSED",
+  "ushamartRemediation": {
+    "state": "PASS",
+    "providerInstrumentId": "1456",
+    "symbol": "USHAMART",
+    "isin": "INE228A01035",
+    "freshProviderOverviewCalls": 1,
+    "matchedIdentityPersisted": true,
+    "confidence": "1.0000"
+  },
+  "resumedExecution": {
+    "identityReady": 135,
+    "openEquities": 239,
+    "internalAttemptEventsToday": 63,
+    "internalBreakdown": {
+      "GET_OVERVIEW_NEWS_CORP_EVENTS": 38,
+      "SEARCH_ENTITIES": 25
+    },
+    "externalTrendlyneSubscriptionCalls": "UNKNOWN_AFTER_RESUME_USE_TRENDLYNE_DASHBOARD_AS_AUTHORITY",
+    "researchBatchesExecuted": 0,
+    "angelStockHistoryRunsExecuted": 0,
+    "benchmarkRunsExecuted": 0
+  },
+  "currentBlocker": {
+    "symbol": "MAXHEALTH",
+    "result": "NO_EXACT_PROVIDER_IDENTITY",
+    "attemptedInternalOperations": 2,
+    "campaignStopped": true
+  },
+  "staleAuditCorrection": {
+    "premierene": "NOT_EXECUTED_IN_CURRENT_RESUMED_CAMPAIGN; prior historical failed run was mistakenly surfaced by an unbounded latest-run lookup.",
+    "srhhypoltd": "NOT_REACHED",
+    "senco": "NOT_REACHED"
+  },
+  "executionDeviation": {
+    "occurred": true,
+    "description": "After MAXHEALTH failed inside TID02 offset 5, an audit-string detection bug in the management loop failed to break and later independent TID02 slices (offsets 10 and 15) were submitted. Those later slices completed successfully. No TID03+ execution occurred.",
+    "containment": "Broad campaign stopped immediately after audit reconciliation. No research or Angel One IC2 execution occurred."
+  },
+  "bluejet": {
+    "state": "REVIEW_REQUIRED",
+    "providerCalls": 0
+  },
+  "governance": {
+    "productionChanged": false,
+    "vercelDeployment": false,
+    "gitMerge": false,
+    "migrationCreated": false,
+    "migrationApplied": false,
+    "ic4R6Executed": false,
+    "ic5R7Executed": false,
+    "p8Authorized": false
+  }
+}

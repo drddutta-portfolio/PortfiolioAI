@@ -10890,3 +10890,30 @@ These are not equivalent accounting units. The Trendlyne subscription dashboard 
 - **PortfolioAI internal provider-attempt events = 21**
 
 Any earlier wording that described 21 as Trendlyne calls consumed is superseded by this correction.
+
+
+## P7-IC IC2 — USHAMART remediation PASS; provider execution paused at MAXHEALTH — 29 September 2026
+
+USHAMART exact remediation passed:
+- canonical NSE symbol: `USHAMART`;
+- canonical ISIN: `INE228A01035`;
+- fresh Trendlyne overview stock ID: `1456`;
+- persisted Trendlyne identity: MATCHED / confidence 1.0000;
+- remediation provider calls: one overview operation.
+
+IC2 identity execution then resumed under the standing owner authorization. Current exact Trendlyne identity coverage is **135 / 239 open equities**.
+
+Current fail-closed blocker:
+- `MAXHEALTH` → `NO_EXACT_PROVIDER_IDENTITY`.
+
+Correction: PREMIERENE was not executed in this resumed slice. A stale historical PREMIERENE failure was initially surfaced by an audit query and is not the current stop reason.
+
+Execution-control deviation recorded:
+- the management audit loop failed to detect the escaped `matched:false` marker after MAXHEALTH and consequently submitted TID02 offsets 10 and 15 after the failure;
+- those later slices completed successfully;
+- no TID03+ slices were submitted;
+- no IC2 research batches, Angel One stock-history calls, or benchmark calls were executed.
+
+PortfolioAI internal provider-attempt events today = 63 (38 overview + 25 search). This is **not** the Trendlyne subscription billing count. The Trendlyne dashboard remains authoritative for external tool-call utilisation.
+
+**IC2 = ACTIVE / PROVIDER EXECUTION PAUSED / FAIL-CLOSED AT MAXHEALTH.**
