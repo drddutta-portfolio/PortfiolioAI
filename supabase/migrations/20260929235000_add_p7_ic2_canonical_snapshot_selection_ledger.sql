@@ -33,8 +33,8 @@ create table public.research_evidence_snapshot_selections (
     foreign key (snapshot_id, portfolio_id, security_id)
     references public.research_evidence_snapshots(id, portfolio_id, security_id)
     on delete restrict,
-  constraint research_evidence_snapshot_selections_run_security_uq
-    unique (selection_run_id, security_id),
+  constraint research_evidence_snapshot_selections_portfolio_run_security_uq
+    unique (portfolio_id, selection_run_id, security_id),
   constraint research_evidence_snapshot_selections_cutoff_lte_evaluation_ck
     check (source_cutoff_at <= evaluation_as_of)
 );
@@ -156,7 +156,10 @@ as $$
 declare
   v_snapshot_id uuid;
   v_selection_id uuid;
+  v_existing_snapshot public.research_evidence_snapshots%rowtype;
   v_existing_selection public.research_evidence_snapshot_selections%rowtype;
+  v_submitted_items jsonb;
+  v_stored_items jsonb;
   v_snapshot_created boolean := false;
   v_selection_created boolean := false;
   v_portfolio_id uuid := (p_snapshot->>'portfolio_id')::uuid;
@@ -194,13 +197,42 @@ begin
       message='Snapshot as_of_date must equal the UTC date of evaluation_as_of.';
   end if;
 
+  select jsonb_agg(to_jsonb(x) order by x.requirement_code)
+  into v_submitted_items
+  from jsonb_to_recordset(p_items) as x(
+    requirement_code text,
+    metric_code text,
+    required boolean,
+    minimum_history integer,
+    freshness_policy text,
+    benchmark_authority text[],
+    applicability text,
+    evidence_state text,
+    candidate_evidence_ids uuid[],
+    selected_evidence_id uuid,
+    evidence_as_of_date date,
+    retrieved_at timestamptz,
+    fresh_through date,
+    source_provider text,
+    raw_source_record_id uuid,
+    normalized_value jsonb,
+    validation_state text,
+    canonical_selection_state text,
+    reason_code text,
+    recommended_remediation_action text
+  );
+
+  if v_submitted_items is null then
+    raise exception using errcode='22023', message='Snapshot items could not be normalized for verification.';
+  end if;
+
   if exists (
     select 1
     from public.research_evidence_snapshot_selections r
-    where r.selection_run_id = v_selection_run_id
+    where r.portfolio_id = v_portfolio_id
+      and r.selection_run_id = v_selection_run_id
       and (
-        r.portfolio_id <> v_portfolio_id
-        or r.evaluation_as_of <> v_evaluation_as_of
+        r.evaluation_as_of <> v_evaluation_as_of
         or r.source_cutoff_at <> v_source_cutoff_at
         or r.selection_basis <> v_selection_basis
         or r.materializer_version <> v_materializer_version
@@ -248,19 +280,44 @@ begin
   returning id into v_snapshot_id;
 
   if v_snapshot_id is null then
-    select id into v_snapshot_id
+    select * into v_existing_snapshot
     from public.research_evidence_snapshots
-    where security_id = v_security_id
+    where portfolio_id = v_portfolio_id
+      and security_id = v_security_id
       and as_of_date = v_snapshot_as_of_date
       and methodology_authority = p_snapshot->>'methodology_authority'
       and methodology_version = p_snapshot->>'methodology_version'
       and requirement_registry_version = p_snapshot->>'requirement_registry_version'
       and snapshot_hash = p_snapshot->>'snapshot_hash';
 
-    if v_snapshot_id is null then
+    if v_existing_snapshot.id is null then
       raise exception using
         errcode='55000',
-        message='Existing deterministic snapshot could not be resolved after uniqueness conflict.';
+        message='Existing deterministic snapshot could not be resolved in the requested portfolio after uniqueness conflict.';
+    end if;
+
+    if v_existing_snapshot.profile_code is distinct from p_snapshot->>'profile_code'
+       or v_existing_snapshot.subprofile_code is distinct from nullif(p_snapshot->>'subprofile_code','')
+       or v_existing_snapshot.snapshot_status is distinct from p_snapshot->>'snapshot_status' then
+      raise exception using
+        errcode='22023',
+        message='Submitted snapshot metadata does not match the stored immutable snapshot.';
+    end if;
+
+    v_snapshot_id := v_existing_snapshot.id;
+
+    select jsonb_agg(
+      to_jsonb(i) - 'id' - 'snapshot_id' - 'created_at'
+      order by i.requirement_code
+    )
+    into v_stored_items
+    from public.research_evidence_snapshot_items i
+    where i.snapshot_id = v_snapshot_id;
+
+    if v_stored_items is distinct from v_submitted_items then
+      raise exception using
+        errcode='22023',
+        message='Submitted snapshot items do not match the stored immutable snapshot content.';
     end if;
   else
     v_snapshot_created := true;
@@ -357,14 +414,15 @@ begin
     v_materializer_version,
     v_selected_by
   )
-  on conflict (selection_run_id, security_id)
+  on conflict (portfolio_id, selection_run_id, security_id)
   do nothing
   returning id into v_selection_id;
 
   if v_selection_id is null then
     select * into v_existing_selection
     from public.research_evidence_snapshot_selections
-    where selection_run_id = v_selection_run_id
+    where portfolio_id = v_portfolio_id
+      and selection_run_id = v_selection_run_id
       and security_id = v_security_id;
 
     if v_existing_selection.id is null then

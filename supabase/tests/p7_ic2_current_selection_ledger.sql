@@ -10,12 +10,14 @@ declare
   v_backfill bigint;
   v_current bigint;
   v_distinct bigint;
+  v_backfill_fingerprint text;
+  v_current_fingerprint text;
 begin
   select count(*) into v_backfill
   from public.research_evidence_snapshot_selections
   where selection_basis = 'BACKFILL_CURRENT_VIEW';
 
-  select count(*), count(distinct security_id)
+  select count(*), count(distinct (portfolio_id, security_id))
   into v_current, v_distinct
   from public.current_research_evidence_snapshot_v1;
 
@@ -24,7 +26,51 @@ begin
   end if;
 
   if v_current <> v_distinct then
-    raise exception 'current view contains duplicate securities: rows %, distinct %', v_current, v_distinct;
+    raise exception 'current view contains duplicate portfolio/security rows: rows %, distinct %', v_current, v_distinct;
+  end if;
+
+  if exists (
+    (
+      select portfolio_id, security_id, snapshot_id
+      from public.research_evidence_snapshot_selections
+      where selection_basis = 'BACKFILL_CURRENT_VIEW'
+      except
+      select portfolio_id, security_id, id
+      from public.current_research_evidence_snapshot_v1
+    )
+    union all
+    (
+      select portfolio_id, security_id, id
+      from public.current_research_evidence_snapshot_v1
+      except
+      select portfolio_id, security_id, snapshot_id
+      from public.research_evidence_snapshot_selections
+      where selection_basis = 'BACKFILL_CURRENT_VIEW'
+    )
+  ) then
+    raise exception 'backfill/current exact snapshot-id mapping mismatch';
+  end if;
+
+  select md5(string_agg(
+    portfolio_id::text || ':' || security_id::text || ':' || snapshot_id::text,
+    E'\n'
+    order by portfolio_id, security_id
+  ))
+  into v_backfill_fingerprint
+  from public.research_evidence_snapshot_selections
+  where selection_basis = 'BACKFILL_CURRENT_VIEW';
+
+  select md5(string_agg(
+    portfolio_id::text || ':' || security_id::text || ':' || id::text,
+    E'\n'
+    order by portfolio_id, security_id
+  ))
+  into v_current_fingerprint
+  from public.current_research_evidence_snapshot_v1;
+
+  if v_backfill_fingerprint is distinct from v_current_fingerprint then
+    raise exception 'backfill/current deterministic fingerprint mismatch: % vs %',
+      v_backfill_fingerprint, v_current_fingerprint;
   end if;
 end;
 $$;
@@ -223,7 +269,8 @@ begin
 
   select count(*) into v_selection_count_after_first
   from public.research_evidence_snapshot_selections
-  where selection_run_id = v_run
+  where portfolio_id = v_portfolio_id
+    and selection_run_id = v_run
     and security_id = v_security_id;
 
   v_retry := public.append_and_select_research_evidence_snapshot_v2(
@@ -242,12 +289,25 @@ begin
 
   select count(*) into v_selection_count_after_retry
   from public.research_evidence_snapshot_selections
-  where selection_run_id = v_run
+  where portfolio_id = v_portfolio_id
+    and selection_run_id = v_run
     and security_id = v_security_id;
 
   if v_selection_count_after_retry <> v_selection_count_after_first then
     raise exception 'same-run retry changed selection cardinality';
   end if;
+
+  begin
+    perform public.append_and_select_research_evidence_snapshot_v2(
+      v_snapshot_json,
+      jsonb_set(v_items, '{0,reason_code}', to_jsonb('TAMPERED_PAYLOAD'::text)),
+      jsonb_set(v_selection_json, '{selection_run_id}', to_jsonb(gen_random_uuid()))
+    );
+    raise exception 'tampered existing-snapshot payload unexpectedly succeeded';
+  exception
+    when sqlstate '22023' then
+      null;
+  end;
 
   v_other_snapshot_json := jsonb_build_object(
     'portfolio_id', v_other_snapshot.portfolio_id,

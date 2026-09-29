@@ -2425,3 +2425,37 @@ Repository delta from the Stage 0 baseline is controlled and contains only the a
 No migration has been applied to PortfolioAI Dev. No database row has been changed by Stage 2. No Edge Function has been deployed. No provider call has occurred. Production and `main` remain unchanged.
 
 **Stage 2 repository package = COMPLETE. Local/replay execution verification = PENDING. Stage 3 = NOT AUTHORIZED. IC2 remains BLOCKED / NOT CLOSED.**
+
+
+## P7-IC IC2 current-selection remediation — Stage 2 COMPLETE / PASS — 30 September 2026
+
+The unapplied Stage 2 package was corrected locally before any hosted Development application:
+
+- selection idempotency is scoped by `portfolio_id + selection_run_id + security_id`;
+- the V2 reuse path verifies portfolio, snapshot metadata, and the complete normalized submitted item payload against the stored immutable snapshot items;
+- verification proves exact backfill/current snapshot-ID equivalence and a documented deterministic mapping fingerprint;
+- the contract and machine-readable audit reflect the corrected behavior.
+
+Verification completed in two isolated local modes:
+
+1. the full repository migration chain replayed successfully from scratch, followed by a controlled two-snapshot fixture and transaction-only behavioral verification;
+2. a read-only dump of hosted PortfolioAI Dev public data was restored into an isolated local database at the exact pre-ledger migration boundary, then the corrected migration and rollback-only verification were executed against the real Development evidence dataset.
+
+Real Development-data replay preserved the complete baseline:
+
+- immutable snapshots: `1,007` before / `1,007` after;
+- immutable snapshot items: `14,913` before / `14,913` after;
+- current rows: `239` before / `239` after;
+- distinct portfolio/security pairs: `239` before / `239` after;
+- backfill selections: `239`;
+- strengthened deterministic mapping fingerprint: `3c94aeafe90316a777de0ec6cd72350f` before and after;
+- snapshot dispositions unchanged: READY `0`, INSUFFICIENT `128`, STALE `2`, CONFLICTING `0`, REVIEW_REQUIRED `109`;
+- requirement states unchanged: FRESH `829`, INSUFFICIENT `258`, MISSING `2,170`, STALE `2`, CONFLICTING `0`, REVIEW_REQUIRED `246`.
+
+The earlier Stage 0 fingerprint `10ccc67e6c8eed006c50fd3fb891e14a` used an undocumented serialization. Stage 2 does not reinterpret it. The strengthened replay records its exact serialization (`portfolio_id:security_id:snapshot_id`, newline-delimited and ordered by portfolio/security), proves identical pre/post values, and separately proves exact mapping-set equality.
+
+The real-data transaction verification completed `BEGIN / DO / DO / DO / DO / ROLLBACK`, including canonical reselection, content and selection idempotency, tampered-item fail-closed behavior, append-only enforcement, privilege checks, `security_invoker`, and cross-scope FK rejection.
+
+No migration has been applied to hosted PortfolioAI Dev. No hosted row changed. No Edge Function was deployed. No provider was called. Production and `main` remain unchanged.
+
+**Stage 2 = COMPLETE / PASS. Stage 3 = NOT STARTED / NOT AUTHORIZED. IC2 remains BLOCKED / NOT CLOSED pending separate owner approval for hosted Development migration application.**

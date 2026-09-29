@@ -1,12 +1,12 @@
 {
   "audit": "P7-IC2 canonical current-selection remediation Stage 2 repository package",
-  "date": "2026-09-29",
+  "date": "2026-09-30",
   "environmentTarget": "PortfolioAI Dev",
   "branch": "PortfolioAI-Development",
   "baselineCommit": "572d87dd108c0bf2d698a8e3ea46035dfce5bfbc",
   "currentHeadAtAuditCreation": "135398909ba998d679132f6809afaa6b252d00ee",
   "stage2": {
-    "status": "PACKAGE_CREATED_AWAITING_LOCAL_REPLAY_VERIFICATION",
+    "status": "COMPLETE_PASS_LOCAL_AND_REAL_DEVELOPMENT_DATA_REPLAY",
     "migration": {
       "path": "supabase/migrations/20260929235000_add_p7_ic2_canonical_snapshot_selection_ledger.sql",
       "commit": "905442681eee64dfc6196a416a7bb75f4bae9d24",
@@ -18,17 +18,55 @@
       "mode": "TRANSACTION_ONLY_ROLLBACK",
       "expectedChecks": [
         "backfill/current cardinality equality",
-        "one current row per security",
+        "exact backfill/current snapshot-ID mapping equivalence",
+        "deterministic backfill/current mapping fingerprint equality",
+        "one current row per portfolio/security",
         "security_invoker view",
         "authenticated read-only and anon-denied ledger access",
         "service-role-only V2 execution",
         "older deterministic snapshot reuse without snapshot/item growth",
+        "stored immutable item payload verification before snapshot reuse",
         "canonical reselection",
-        "same-run retry idempotency",
-        "fail-closed different-content reuse of same run/security key",
+        "same-run retry idempotency scoped by portfolio",
+        "fail-closed different-content reuse of same portfolio/run/security key",
         "append-only update/delete rejection",
         "cross-security composite-FK rejection"
-      ]
+      ],
+      "controlledFixtureReplay": "PASS",
+      "realDevelopmentDataReplay": {
+        "status": "PASS",
+        "sourceMode": "READ_ONLY_HOSTED_DUMP_RESTORED_TO_ISOLATED_LOCAL_DATABASE",
+        "preMigrationVersion": "20260929184000",
+        "snapshotCountBefore": 1007,
+        "snapshotCountAfter": 1007,
+        "snapshotItemCountBefore": 14913,
+        "snapshotItemCountAfter": 14913,
+        "currentCountBefore": 239,
+        "currentCountAfter": 239,
+        "distinctPortfolioSecurityCountBefore": 239,
+        "distinctPortfolioSecurityCountAfter": 239,
+        "backfillSelectionCount": 239,
+        "strengthenedMappingFingerprintBefore": "3c94aeafe90316a777de0ec6cd72350f",
+        "strengthenedMappingFingerprintAfter": "3c94aeafe90316a777de0ec6cd72350f",
+        "publishedStage0Fingerprint": "10ccc67e6c8eed006c50fd3fb891e14a",
+        "fingerprintNote": "The published Stage 0 fingerprint used an undocumented serialization. Stage 2 used the documented portfolio_id:security_id:snapshot_id newline serialization and proved exact pre/post equality plus exact mapping set equality.",
+        "snapshotDispositionBeforeAndAfter": {
+          "READY": 0,
+          "INSUFFICIENT": 128,
+          "STALE": 2,
+          "CONFLICTING": 0,
+          "REVIEW_REQUIRED": 109
+        },
+        "requirementStateBeforeAndAfter": {
+          "FRESH": 829,
+          "INSUFFICIENT": 258,
+          "MISSING": 2170,
+          "STALE": 2,
+          "CONFLICTING": 0,
+          "REVIEW_REQUIRED": 246
+        },
+        "transactionVerificationOutput": ["BEGIN", "DO", "DO", "DO", "DO", "ROLLBACK"]
+      }
     },
     "contract": {
       "path": "docs/p7-ic/PortfolioAI_P7_IC2_CURRENT_SELECTION_CONTRACT_V1.md",
@@ -38,7 +76,27 @@
       "aheadByCommits": 5,
       "behindByCommits": 0,
       "expectedFilesOnly": true
-    }
+    },
+    "completionChecks": {
+      "migrationChainReplay": "PASS",
+      "controlledFixtureVerification": "PASS",
+      "realDevelopmentDataReplay": "PASS",
+      "architectureGuard": "PASS",
+      "typescript": "PASS",
+      "productionBuild": "PASS_WITH_EXISTING_CHUNK_SIZE_WARNING",
+      "databaseLint": "PASS_WITH_PRE_EXISTING_GET_PORTFOLIO_COVERAGE_REGISTRY_STABLE_VOLATILE_WARNING",
+      "jsonValidation": "PASS",
+      "gitDiffCheck": "PASS",
+      "secretDiffScan": "PASS",
+      "targetedMaterializerTest": "BASELINE_FAILURE_STALE_SOURCE_STRING_EXPECTATION",
+      "repositoryLint": "BASELINE_FAILURES_OUTSIDE_STAGE2_FILES"
+    },
+    "correctionsRequiredByReadOnlyReview": [
+      "selection idempotency key scoped by portfolio_id + selection_run_id + security_id",
+      "V2 verifies submitted item payload against stored immutable snapshot items before reuse",
+      "verification proves exact backfill/current snapshot-ID equivalence and deterministic fingerprint equality",
+      "contract trailing whitespace normalized"
+    ]
   },
   "boundaries": {
     "migrationAppliedToDevelopment": false,
@@ -54,8 +112,9 @@
   },
   "stopGo": {
     "stage2CodePackageReady": true,
-    "stage2LocalReplayVerified": false,
+    "stage2LocalReplayVerified": true,
+    "stage2RealDevelopmentDataReplayVerified": true,
     "stage3Authorized": false,
-    "requirementBeforeStage3": "Run the repository migration and transaction-only verification against an isolated local/replay database and review the exact pre/post manifest before Development application."
+    "requirementBeforeStage3": "Owner review and separate explicit approval to apply the corrected migration to hosted PortfolioAI Dev."
   }
 }

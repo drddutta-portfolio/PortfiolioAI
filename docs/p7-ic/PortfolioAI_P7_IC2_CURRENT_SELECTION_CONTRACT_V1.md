@@ -1,8 +1,8 @@
 # PortfolioAI P7-IC2 Canonical Current-Selection Contract V1
 
-Date: 29 September 2026  
-Environment target: PortfolioAI Dev only  
-Branch: `PortfolioAI-Development`  
+Date: 29 September 2026
+Environment target: PortfolioAI Dev only
+Branch: `PortfolioAI-Development`
 Baseline before remediation build: `572d87dd108c0bf2d698a8e3ea46035dfce5bfbc`
 
 ## Purpose
@@ -24,7 +24,7 @@ The remediation separates immutable evidence content from canonical-selection hi
 9. Each bounded slice retains its own one-time execution grant.
 10. Every campaign freezes one `evaluation_as_of` and one `source_cutoff_at`.
 11. Same-content materialization is content-idempotent.
-12. Same `selection_run_id + security_id` is selection-idempotent.
+12. Same `portfolio_id + selection_run_id + security_id` is selection-idempotent.
 13. A new approved run may reselect the same immutable snapshot and append a new audit event.
 14. Partial slice failure is resumable; completed per-security selections remain valid.
 15. Selection writes are service-controlled only.
@@ -63,8 +63,10 @@ The transaction-only verification script checks:
 - service-role-only V2 execution;
 - deterministic reuse of an older snapshot without increasing snapshot/item cardinality;
 - canonical reselection of older valid content;
-- same-run retry idempotency;
-- fail-closed reuse of one run/security key with different content;
+- exact backfill/current snapshot-ID equivalence and deterministic mapping fingerprint equality;
+- same-run retry idempotency scoped by portfolio;
+- fail-closed reuse of one portfolio/run/security key with different content;
+- fail-closed reuse of a stored snapshot when the submitted item payload does not match its immutable stored items;
 - append-only UPDATE/DELETE rejection;
 - cross-security selection rejection by composite foreign key.
 
@@ -110,10 +112,10 @@ The materializer must recompute evidence deterministically. It must not choose a
 
 Stage 2 is repository-only.
 
-The migration exists in GitHub but is not applied to PortfolioAI Dev.  
-No database row has been changed by Stage 2.  
-No Edge Function has been deployed by Stage 2.  
-No provider call is required by this remediation.  
+The migration exists in GitHub but is not applied to PortfolioAI Dev.
+No database row has been changed by Stage 2.
+No Edge Function has been deployed by Stage 2.
+No provider call is required by this remediation.
 Production and `main` remain out of scope.
 
 Development migration application is Stage 3 and requires separate owner approval after local/replay verification of the Stage 2 package.
