@@ -1,0 +1,62 @@
+{
+  "audit": "P7-IC2 completion stop audit",
+  "date": "2026-09-29",
+  "environment": "PortfolioAI Dev",
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "status": "BLOCKED_NOT_CLOSED",
+  "completedWork": {
+    "heldEquitiesMaterialized": 239,
+    "trendlyneIdentities": 239,
+    "trendlyneInternalAttemptsToday": 521,
+    "trendlyneAttemptsAddedSinceThisHandoff": 262,
+    "trendlyneAttemptsAddedAfterOwnerQuotaIncrease": 192,
+    "trendlyneFailuresAddedAfterOwnerQuotaIncrease": 0,
+    "loadedBenchmarkAuthorities": 10,
+    "requiredBenchmarkAuthorities": 22
+  },
+  "currentViewObservedAfterFailedIntermediateProjection": {
+    "warning": "These are not an acceptable IC2 closure matrix because a failed intermediate slice projection created newer immutable zero-history snapshots. Later correct deterministic hashes resolve to older immutable rows and therefore cannot become current under the created_at-only view.",
+    "snapshotStatuses": {
+      "READY": 0,
+      "INSUFFICIENT": 128,
+      "STALE": 2,
+      "CONFLICTING": 0,
+      "REVIEW_REQUIRED": 109
+    },
+    "requirementStates": {
+      "FRESH": 829,
+      "INSUFFICIENT": 258,
+      "MISSING": 2170,
+      "STALE": 2,
+      "CONFLICTING": 0,
+      "REVIEW_REQUIRED": 246
+    },
+    "reasonCodes": {
+      "BENCHMARK_HISTORY_NOT_READY": 96,
+      "BENCHMARK_HISTORY_READY": 12,
+      "CANONICAL_OBSERVATION_READY": 33,
+      "DOCUMENT_EVIDENCE_REQUIRES_REVIEW": 245,
+      "INSUFFICIENT_LISTING_HISTORY": 258,
+      "METHODOLOGY_REVIEW_REQUIRED": 1,
+      "NORMALIZED_REQUIREMENT_READY": 514,
+      "ONLY_STALE_REQUIRED_EVIDENCE": 2,
+      "REQUIRED_EVIDENCE_MISSING": 2074,
+      "STOCK_HISTORY_READY": 270
+    }
+  },
+  "minimalBlockers": [
+    "The canonical current-snapshot projection cannot safely advance back to a previously existing correct deterministic content hash after a newer erroneous immutable snapshot was appended. Repair requires an owner-approved persistence/current-pointer design or migration; immutable evidence must not be deleted or rewritten.",
+    "Twelve frozen benchmark authorities remain unavailable in the approved Angel One instrument master and no approved substitute authority exists.",
+    "BLUEJET remains METHODOLOGY_REVIEW_REQUIRED.",
+    "Document evidence remains explicitly human-review-required and must not be auto-promoted to READY."
+  ],
+  "boundaries": {
+    "productionChanged": false,
+    "mainChanged": false,
+    "ic3Executed": false,
+    "r6Executed": false,
+    "r7Executed": false,
+    "migrationCreated": false,
+    "migrationApplied": false
+  }
+}

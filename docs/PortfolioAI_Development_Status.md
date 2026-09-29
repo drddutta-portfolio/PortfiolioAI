@@ -2315,6 +2315,22 @@ INOXWIND remediation:
 
 **IC2 Trendlyne identity campaign = COMPLETE / PASS.**
 
+## P7-IC IC2 completion attempt — BLOCKED on canonical current-pointer semantics — 29 September 2026
+
+Development-only cache reprojection, residual Trendlyne evidence collection and bounded rematerialization continued after the owner raised the verified Trendlyne daily entitlement to 1,000. The live control remains scheduler-disabled. Today’s internal ledger is 521 successful attempts and zero failed attempts; 262 attempts were added since this IC2 handoff, including 192 after the quota increase.
+
+The residual two-domain campaign completed, followed by six approved full-research slices. The materializer was reconciled with live Development code and changed to avoid the 13 MB whole-portfolio projection. It now loads bounded slice evidence and exact per-security/per-benchmark history counts. Development Edge only was deployed; Production was not changed.
+
+During validation, an intermediate bounded projection exposed two defects: the former whole-portfolio helper exceeded practical Edge/PostgREST limits, and a first slice-scoped implementation encountered the 1,000-row API boundary. That intermediate pass appended newer immutable snapshots containing zero-history dispositions. The corrected exact-count implementation deterministically reproduces older correct content hashes. The append helper therefore returns those older immutable rows, while `current_research_evidence_snapshot_v1` continues to select the newer erroneous rows by `created_at`.
+
+No immutable snapshot was deleted, overwritten or fabricated. Correct closure now requires an owner-approved current-pointer/supersession persistence design or migration. No migration was created or applied because that specific schema action has not been approved. The canonical current view is consequently not valid for IC2 closure, even though all 239 securities were processed by the corrected materializer.
+
+Independent blockers remain: 10/22 frozen benchmark authorities are loaded; 12 are absent from the approved Angel One master with no approved substitute. BLUEJET remains `METHODOLOGY_REVIEW_REQUIRED`. Human-review document evidence remains review-required.
+
+The machine-readable stop audit is `docs/p7-ic/PortfolioAI_P7_IC2_COMPLETION_STOP_AUDIT_2026-09-29.json`.
+
+**IC2 = BLOCKED / NOT CLOSED. IC3, R6, R7, IC6+ and P8 remain not authorized. Production and main are unchanged.**
+
 No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
 
 

@@ -449,6 +449,14 @@ const TREND_BATCHES={
     ]
   }
 } as const
+const RESIDUAL_BATCHES={
+  "R2C01":{
+    "phase":"CURRENT_RESEARCH",
+    "plannedCalls":142,
+    "domains":["DETAILED_FUNDAMENTALS","DOCUMENT_DISCOVERY"],
+    "symbols":["IREDA","CGCL","HUDCO","ABCAPITAL","IDFCFIRSTB","IKS","JIOFIN","ANANTRAJ","ETERNAL","ITCHOTELS","JTLIND","AUBANK","AXISBANK","BANKBARODA","BLUSPRING","COALINDIA","DELHIVERY","DMART","ECLERX","GRASIM","ICICIBANK","INDHOTEL","INDIANB","INDUSTOWER","JUBLFOOD","KARURVYSYA","KOTAKBANK","BANDHANBNK","BLUESTARCO","CROMPTON","IDBI","IONEXCHANG","KALYANKJIL","KAYNES","AUROPHARMA","CAPLIPOINT","AKUMS","BIOCON","CIPLA","EMCURE","GLENMARK","HDFCBANK","JYOTHYLAB","LAURUSLABS","APLAPOLLO","DATAPATTNS","JUBLPHARMA","ACMESOLAR","BBOX","CAMS","COROMANDEL","EBGNG","GRAVITA","HEXT","HINDALCO","HINDUNILVR","IPL","TORNTPHARM","BIKAJI","CCL","HINDCOPPER","HINDZINC","HYUNDAI","JINDALSTEL","ASTRAL","ASTRAMICRO","AVALON","BEL","GAIL","GOODLUCK","JSWENERGY"]
+  }
+} as const
 const HISTORY_BATCHES={
   "H1": {
     "phase": "STOCK_HISTORY",
@@ -788,7 +796,7 @@ Deno.serve(async request=>{
       const r=await invoke(`${supabaseUrl}/functions/v1/p7-ic-benchmark-refresh`,{action:"P7_IC2_EXECUTE",portfolioId:PORTFOLIO_ID,benchmarkCodes:BENCHMARK_CODES,confirmation:"OWNER_CONFIRMED_P7_IC2_BENCHMARK_REFRESH",grantId:child})
       return reply(r.ok?200:r.status,{status:r.ok?"BATCH_COMPLETE":"BLOCKED",batchId,providerCalls:Number(r.payload.providerCalls??0),result:r.payload})
    }
-   const batch=(TREND_BATCHES as Record<string,{phase:string;plannedCalls:number;symbols:readonly string[]}>)[batchId]??(HISTORY_BATCHES as Record<string,{phase:string;plannedCalls:number;symbols:readonly string[]}>)[batchId]
+   const batch=(TREND_BATCHES as Record<string,{phase:string;plannedCalls:number;symbols:readonly string[];domains?:readonly string[]}>)[batchId]??(RESIDUAL_BATCHES as Record<string,{phase:string;plannedCalls:number;symbols:readonly string[];domains?:readonly string[]}>)[batchId]??(HISTORY_BATCHES as Record<string,{phase:string;plannedCalls:number;symbols:readonly string[];domains?:readonly string[]}>)[batchId]
    if(!batch)return reply(400,{error:"BatchId is not in the frozen IC2 package.",providerCalls:0})
    const symbols=batch.symbols.slice(offset,offset+limit)
    if(!symbols.length)return reply(200,{status:"SLICE_COMPLETE",batchId,offset,processed:0,nextOffset:null,providerCalls:0,results:[]})
@@ -812,7 +820,7 @@ Deno.serve(async request=>{
    if(batch.phase==="IDENTITY"||batch.phase==="CURRENT_RESEARCH"){
       const usage=await admin.from("provider_usage_events").select("actual_internal_units").eq("source_code","TRENDLYNE_MCP").eq("accounting_class","PROVIDER_TOOL_ATTEMPT").gte("attempted_at",new Date(new Date().setUTCHours(0,0,0,0)).toISOString())
       if(usage.error)throw usage.error
-      const used=(usage.data??[]).reduce((sum,row)=>sum+Number(row.actual_internal_units??0),0),expected=symbols.length*(batch.phase==="IDENTITY"?2:4)
+      const used=(usage.data??[]).reduce((sum,row)=>sum+Number(row.actual_internal_units??0),0),expected=symbols.length*(batch.phase==="IDENTITY"?2:(batch.domains?.length??4))
       if(used+expected>Math.min(MAX_TRENDLYNE_CAMPAIGN_CALLS,externalDaily))return reply(429,{error:"Verified Trendlyne daily entitlement would be exceeded.",code:"IC2_VERIFIED_DAILY_CALL_CEILING",used,expected,externalDaily,providerCalls:0})
    }
    const results:Record<string,unknown>[]=[]
@@ -824,14 +832,15 @@ Deno.serve(async request=>{
         r=await invoke(`${supabaseUrl}/functions/v1/resolve-trendlyne-identity`,{action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,confirmation:"OWNER_CONFIRMED_POST_D_P4B_IDENTITY_DISCOVERY",grantId:child})
       }else if(batch.phase==="CURRENT_RESEARCH"){
         const child=await createGrant(admin,"P7_IC2_EXECUTE",security.id)
-        r=await invoke(`${supabaseUrl}/functions/v1/complete-research-refresh`,{action:"P7_IC2_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,confirmation:"OWNER_CONFIRMED_P7_IC2_RESEARCH_EVIDENCE_REFRESH",grantId:child})
+        r=await invoke(`${supabaseUrl}/functions/v1/complete-research-refresh`,{action:"P7_IC2_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,confirmation:"OWNER_CONFIRMED_P7_IC2_RESEARCH_EVIDENCE_REFRESH",grantId:child,...(batch.domains?{domains:batch.domains}:{})})
       }else{
         const child=await createGrant(admin,"P4B_EXECUTE",security.id)
         r=await invoke(`${supabaseUrl}/functions/v1/refresh-market-history`,{action:"P4B_EXECUTE",portfolioId:PORTFOLIO_ID,securityId:security.id,confirmation:"OWNER_CONFIRMED_POST_D_P4B_MARKET_HISTORY",grantId:child})
       }
       const calls=Number(r.payload.providerCalls??(batch.phase==="STOCK_HISTORY"&&r.ok?1:0));providerCalls+=Number.isFinite(calls)?calls:0
-      results.push({symbol:security.symbol,httpStatus:r.status,status:r.ok?"READY":"BLOCKED",providerCalls:calls,...r.payload})
-      if(!r.ok)return reply(r.status,{status:"BLOCKED",batchId,offset,providerCalls,results})
+      const terminalOk=r.ok&&(batch.phase!=="CURRENT_RESEARCH"||r.payload.status==="SUCCEEDED")
+      results.push({symbol:security.symbol,httpStatus:r.status,status:terminalOk?"READY":"BLOCKED",providerCalls:calls,...r.payload})
+      if(!terminalOk)return reply(r.status,{status:"BLOCKED",batchId,offset,providerCalls,results})
       await new Promise(resolve=>setTimeout(resolve,batch.phase==="STOCK_HISTORY"?1300:250))
    }
    const nextOffset=offset+symbols.length<batch.symbols.length?offset+symbols.length:null

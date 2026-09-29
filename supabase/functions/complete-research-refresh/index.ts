@@ -16,7 +16,6 @@ const reply = (status: number, body: Record<string, unknown>) => new Response(JS
   status,
   headers: { ...cors, "Content-Type": "application/json" },
 })
-
 const SOURCE_CODE = PLANNED_PRIMARY_ENRICHMENT_SOURCE
 const CONFIRMATION = "OWNER_CONFIRMED_COMPLETE_RESEARCH_REFRESH"
 const P4_CONFIRMATION = "OWNER_CONFIRMED_POST_D_P4A2_COMPLETE_RESEARCH"
@@ -46,9 +45,11 @@ type RequestBody = {
   readonly securityId?: unknown
   readonly confirmation?: unknown
   readonly grantId?: unknown
+  readonly domains?: unknown
+  readonly evidenceCodes?: unknown
 }
 type Security = { readonly id: string; readonly symbol: string; readonly name: string; readonly asset_class: string }
-type Identity = { readonly provider_instrument_id: string | null; readonly observed_symbol: string | null }
+type Identity = { readonly provider_instrument_id: string | null; readonly observed_symbol: string | null; readonly observed_name: string | null }
 
 const hash = async (value: unknown) => Array.from(new Uint8Array(await crypto.subtle.digest(
   "SHA-256",
@@ -157,7 +158,20 @@ async function writeOverview(admin: Admin, runId: string, security: Security, pr
 }
 
 async function writeDetailed(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string, ic2Plan: ReturnType<typeof buildProfileEvidencePlan> | null = null) {
-  const normalizedEvidence = ic2Plan ? normalizeNumericEvidence({ providerResult: text, expectedSymbol: security.symbol, expectedInstrumentId: providerInstrumentId, requirements: ic2Plan.requirements }) : null
+  let normalizedEvidence: ReturnType<typeof normalizeNumericEvidence> | null = null
+  try {
+    normalizedEvidence = ic2Plan ? normalizeNumericEvidence({ providerResult: text, expectedSymbol: security.symbol, expectedInstrumentId: providerInstrumentId, requirements: ic2Plan.requirements }) : null
+  } catch (error) {
+    await sourceRecord(admin, runId, "COMPLETE_RESEARCH_STRUCTURED_METRICS_REJECTED", `${providerInstrumentId}:structured-rejected:${runId}`, {
+      security_id: security.id,
+      security_symbol: security.symbol,
+      provider_instrument_id: providerInstrumentId,
+      provider_tool: "get_parameter_values_multi_stock",
+      rejection_code: error instanceof Error ? error.message : "STRUCTURED_NORMALIZATION_REJECTED",
+      result: text,
+    })
+    throw error
+  }
   const record = await sourceRecord(admin, runId, "COMPLETE_RESEARCH_STRUCTURED_METRICS", `${providerInstrumentId}:structured:${runId}`, {
     security_id: security.id,
     security_symbol: security.symbol,
@@ -350,6 +364,15 @@ Deno.serve(async request => {
     const p4b = body.action === "P4B_PLAN" || body.action === "P4B_EXECUTE"
     const p7ic2 = body.action === "P7_IC2_PLAN" || body.action === "P7_IC2_EXECUTE"
     if (body.action !== "PLAN" && body.action !== "EXECUTE" && !p4 && !p4b && !p7ic2) return reply(400, { error: "Unknown action." })
+    const requestedDomains = p7ic2 && Array.isArray(body.domains)
+      ? [...new Set(body.domains.map(value => String(value)).filter((value): value is Domain => (DOMAINS as readonly string[]).includes(value)))]
+      : [...DOMAINS]
+    if (p7ic2 && Array.isArray(body.domains) && (requestedDomains.length !== body.domains.length || requestedDomains.length === 0)) {
+      return reply(400, { error: "IC2 domains must be a non-empty exact subset of the approved research domains.", code: "P7_IC2_DOMAIN_SELECTION_INVALID", providerCalls: 0 })
+    }
+    if (requestedDomains.includes("OWNERSHIP") && !requestedDomains.includes("TTM_FUNDAMENTALS")) requestedDomains.unshift("TTM_FUNDAMENTALS")
+    const activeDomains = p7ic2 ? requestedDomains : [...DOMAINS]
+    const reservedUnits = activeDomains.length
 
     const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
     if (p7ic2) {
@@ -406,14 +429,31 @@ Deno.serve(async request => {
     const ic2EvidencePlan = ic2Profile ? buildProfileEvidencePlan(ic2Profile) : null
 
     const identityResult = await admin.from("security_identity_observations")
-      .select("provider_instrument_id,observed_symbol,created_at")
+      .select("provider_instrument_id,observed_symbol,observed_name,created_at")
       .eq("security_id", body.securityId).eq("source_code", SOURCE_CODE).eq("evidence_status", "MATCHED")
       .not("provider_instrument_id", "is", null).order("created_at", { ascending: false }).limit(1).maybeSingle()
     if (identityResult.error || !identityResult.data?.provider_instrument_id) return reply(409, { error: "Verified Trendlyne identity is required before a complete refresh.", code: "TRENDLYNE_IDENTITY_PREREQUISITE_MISSING", providerCalls: 0 })
     const identity = identityResult.data as Identity
     if (identity.observed_symbol && identity.observed_symbol !== security.symbol) return reply(409, { error: "Stored Trendlyne identity no longer matches the security symbol." })
     const providerInstrumentId = String(identity.provider_instrument_id)
-    const ic2Queries = ic2Profile ? buildProfileAwareTrendlyneQueries({ companyName: security.name, symbol: security.symbol, providerInstrumentId, profile: ic2Profile }) : null
+    const providerVerifiedName = identity.observed_name?.trim() || security.name
+    const ic2Queries = ic2Profile ? buildProfileAwareTrendlyneQueries({ companyName: providerVerifiedName, symbol: security.symbol, providerInstrumentId, profile: ic2Profile }) : null
+    const requestedEvidenceCodes = p7ic2 && Array.isArray(body.evidenceCodes)
+      ? [...new Set(body.evidenceCodes.map(value => String(value).trim().toUpperCase()).filter(Boolean))]
+      : []
+    if (requestedEvidenceCodes.length) {
+      if (!activeDomains.includes("DETAILED_FUNDAMENTALS")) return reply(400, { error: "Targeted IC2 evidence codes require DETAILED_FUNDAMENTALS.", code: "P7_IC2_TARGET_DOMAIN_REQUIRED", providerCalls: 0 })
+      if (!ic2EvidencePlan) return reply(409, { error: "IC2 evidence plan is unavailable.", code: "P7_IC2_EVIDENCE_PLAN_MISSING", providerCalls: 0 })
+      const allowed = new Set(ic2EvidencePlan.requirements.map(item => item.evidenceCode))
+      if (requestedEvidenceCodes.length > 12 || requestedEvidenceCodes.some(code => !allowed.has(code))) {
+        return reply(400, { error: "Targeted IC2 evidence codes must be an approved bounded subset of the stock methodology.", code: "P7_IC2_EVIDENCE_CODE_SELECTION_INVALID", providerCalls: 0 })
+      }
+    }
+    const targetedParameterHints = requestedEvidenceCodes.length && ic2EvidencePlan
+      ? [...new Set(ic2EvidencePlan.requirements
+          .filter(item => requestedEvidenceCodes.includes(item.evidenceCode))
+          .flatMap(item => item.parameterHints))]
+      : []
 
     const source = await admin.from("data_sources").select("is_active,entitlement_verified,retention_rights_verified").eq("code", SOURCE_CODE).single()
     const control = await admin.from("provider_ingestion_controls")
@@ -426,11 +466,11 @@ Deno.serve(async request => {
       .eq("source_code", SOURCE_CODE).eq("accounting_class", "PROVIDER_TOOL_ATTEMPT").gte("attempted_at", today.toISOString())
     if (usage.error) return reply(503, { error: "Provider usage could not be calculated." })
     const dailyObservedUsage = (usage.data ?? []).reduce((sum, row) => sum + Number(row.actual_internal_units ?? 0), 0)
-    const projectedDailyUsage = dailyObservedUsage + RESERVED_UNITS
+    const projectedDailyUsage = dailyObservedUsage + reservedUnits
     const trustedConfiguration = Boolean(source.data.is_active && source.data.entitlement_verified && source.data.retention_rights_verified)
     const executionAllowed = Boolean(
       trustedConfiguration && control.data.ingestion_enabled && control.data.actual_provider_quota_status === "VERIFIED" &&
-      RESERVED_UNITS <= control.data.per_run_internal_attempt_limit && projectedDailyUsage <= control.data.daily_internal_attempt_limit
+      reservedUnits <= control.data.per_run_internal_attempt_limit && projectedDailyUsage <= control.data.daily_internal_attempt_limit
     )
 
     if (body.action === "PLAN" || body.action === "P4_PLAN" || body.action === "P4B_PLAN" || body.action === "P7_IC2_PLAN") return reply(200, {
@@ -439,7 +479,7 @@ Deno.serve(async request => {
       security: security.symbol,
       company: security.name,
       providerInstrumentId,
-      estimatedProviderCalls: RESERVED_UNITS,
+      estimatedProviderCalls: reservedUnits,
       dailyObservedUsage,
       projectedDailyUsage,
       dailyLimit: control.data.daily_internal_attempt_limit,
@@ -450,12 +490,9 @@ Deno.serve(async request => {
       p7Ic2SubprofileCode: ic2Assignment?.subprofileCode ?? null,
       p7Ic2EvidenceRequirementCount: ic2EvidencePlan?.requirements.length ?? null,
       p7Ic2ProfileAwareQueries: p7ic2 ? { detailed: Boolean(ic2Queries?.detailedQuery), documents: Boolean(ic2Queries?.documentQuery) } : null,
-      components: [
-        { domain: "Overview & core fundamentals", calls: 1 },
-        { domain: "Detailed scoring metrics", calls: 1 },
-        { domain: "Ownership & pledge", calls: 1 },
-        { domain: "Documents & evidence", calls: 1 },
-      ],
+      p7Ic2TargetedEvidenceCodes: requestedEvidenceCodes,
+      p7Ic2TargetedParameterHintCount: targetedParameterHints.length,
+      components: activeDomains.map(domain => ({ domain, calls: 1 })),
       note: "Planning consumes zero provider calls. Angel One market pricing is not changed by this action.",
     })
 
@@ -473,16 +510,16 @@ Deno.serve(async request => {
       requested_by: requestedBy,
       status: "RUNNING",
       requested_count: 1,
-      estimated_call_count: RESERVED_UNITS,
-      reserved_call_count: RESERVED_UNITS,
+      estimated_call_count: reservedUnits,
+      reserved_call_count: reservedUnits,
       attempted_call_count: 0,
       policy_version: control.data.policy_version,
-      metadata: { security: security.symbol, provider_instrument_id: providerInstrumentId, confirmation: requiredConfirmation, execution_mode: body.action },
+      metadata: { security: security.symbol, provider_instrument_id: providerInstrumentId, confirmation: requiredConfirmation, execution_mode: body.action, active_domains: activeDomains },
     }).select("id").single()
     if (run.error) throw run.error
     const runId = run.data.id as string
 
-    const insertedItems = await admin.from("data_ingestion_run_items").insert(DOMAINS.map(domain => ({
+    const insertedItems = await admin.from("data_ingestion_run_items").insert(activeDomains.map(domain => ({
       ingestion_run_id: runId,
       security_id: security.id,
       data_domain: domain,
@@ -496,13 +533,13 @@ Deno.serve(async request => {
       p_source_code: SOURCE_CODE,
       p_ingestion_run_id: runId,
       p_reservation_key: `${runId}:COMPLETE_RESEARCH_REFRESH`,
-      p_estimated_units: RESERVED_UNITS,
+      p_estimated_units: reservedUnits,
       p_reservation_seconds: 900,
     })
     if (reservation.error || !reservation.data?.[0]?.reserved) {
       const safeCode = reservation.data?.[0]?.reason_code ?? "BUDGET_RESERVATION_FAILED"
-      for (const domain of DOMAINS) await markItem(admin, itemByDomain.get(domain)!, "SKIPPED_BUDGET", safeCode, 0, 0)
-      await admin.from("data_ingestion_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), skipped_count: 4, error_summary: safeCode }).eq("id", runId)
+      for (const domain of activeDomains) await markItem(admin, itemByDomain.get(domain)!, "SKIPPED_BUDGET", safeCode, 0, 0)
+      await admin.from("data_ingestion_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), skipped_count: activeDomains.length, error_summary: safeCode }).eq("id", runId)
       return reply(429, { error: "Provider budget reservation was not granted.", providerCalls: 0, runId })
     }
     const reservationId = reservation.data[0].reservation_id as string
@@ -516,9 +553,9 @@ Deno.serve(async request => {
       p_lease_seconds: 900,
     })
     if (lease.error || !lease.data?.[0]?.acquired) {
-      await admin.rpc("settle_provider_budget_v1", { p_reservation_id: reservationId, p_consumed_units: 0, p_failed_units: 0, p_released_units: RESERVED_UNITS })
-      for (const domain of DOMAINS) await markItem(admin, itemByDomain.get(domain)!, "SKIPPED_BUDGET", "REFRESH_IN_PROGRESS", 0, 0)
-      await admin.from("data_ingestion_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), skipped_count: 4, error_summary: "REFRESH_IN_PROGRESS" }).eq("id", runId)
+      await admin.rpc("settle_provider_budget_v1", { p_reservation_id: reservationId, p_consumed_units: 0, p_failed_units: 0, p_released_units: reservedUnits })
+      for (const domain of activeDomains) await markItem(admin, itemByDomain.get(domain)!, "SKIPPED_BUDGET", "REFRESH_IN_PROGRESS", 0, 0)
+      await admin.from("data_ingestion_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), skipped_count: activeDomains.length, error_summary: "REFRESH_IN_PROGRESS" }).eq("id", runId)
       return reply(409, { error: "Another complete research refresh is currently running.", providerCalls: 0, runId })
     }
 
@@ -562,39 +599,49 @@ Deno.serve(async request => {
     }
 
     try {
-      const overviewOk = await executeCall(
-        "TTM_FUNDAMENTALS",
-        "GET_OVERVIEW_NEWS_CORP_EVENTS",
-        () => client.getOverviewNewsCorpEvents(providerInstrumentId, "overview"),
-        async text => writeOverview(admin, runId, security, providerInstrumentId, text),
-      )
-      if (!overviewOk) abortRemaining = true
+      if (activeDomains.includes("TTM_FUNDAMENTALS")) {
+        const overviewOk = await executeCall(
+          "TTM_FUNDAMENTALS",
+          "GET_OVERVIEW_NEWS_CORP_EVENTS",
+          () => client.getOverviewNewsCorpEvents(security.symbol, "overview"),
+          async text => writeOverview(admin, runId, security, providerInstrumentId, text),
+        )
+        if (!overviewOk) abortRemaining = true
+      }
 
       if (!abortRemaining) {
-        const detailedQuery = ic2Queries?.detailedQuery ?? `${security.name} ${security.symbol} instrument ${providerInstrumentId} latest ROCE Ann. %, OPM TTM %, promoter holding pledge percentage, Gross NPA ratio Qtr %, Net NPA ratio % Qtr, EPS Qtr YoY Growth %, Fair Price 5YrPE Upside%, net profit 3Y growth, cash EPS 3Y growth, operating cash flow 3Y growth, debt equity, interest coverage, ROA, NIM, capital adequacy and CET1`
-        await executeCall(
-          "DETAILED_FUNDAMENTALS",
-          "GET_PARAMETER_VALUES_MULTI_STOCK",
-          () => client.getParameterValuesMultiStock(detailedQuery, "stock"),
-          async text => writeDetailed(admin, runId, security, providerInstrumentId, text, ic2EvidencePlan),
-        )
-        await executeCall(
-          "OWNERSHIP",
-          "GET_OWNERSHIP_DEALS_INSIDER_SAST",
-          () => client.getOwnershipDealsInsiderSast(providerInstrumentId, "shareholding"),
-          async text => writeOwnership(admin, runId, security, providerInstrumentId, text, ic2EvidencePlan),
-        )
-        const documentQuery = ic2Queries?.documentQuery ?? `${security.name} ${security.symbol} stock id ${providerInstrumentId} annual report quarterly result investor presentation earnings call`
-        await executeCall(
-          "DOCUMENT_DISCOVERY",
-          "GET_DOCUMENT_SEARCH_RESULTS",
-          () => client.getDocumentSearchResults(documentQuery),
-          async text => writeDocuments(admin, runId, security, providerInstrumentId, text, ic2EvidencePlan),
-        )
+        if (activeDomains.includes("DETAILED_FUNDAMENTALS")) {
+          const detailedQuery = targetedParameterHints.length
+            ? `${providerVerifiedName} ${security.symbol} instrument ${providerInstrumentId} latest and historical ${targetedParameterHints.join(", ")}`
+            : ic2Queries?.detailedQuery ?? `${security.name} ${security.symbol} instrument ${providerInstrumentId} latest ROCE Ann. %, OPM TTM %, promoter holding pledge percentage, Gross NPA ratio Qtr %, Net NPA ratio % Qtr, EPS Qtr YoY Growth %, Fair Price 5YrPE Upside%, net profit 3Y growth, cash EPS 3Y growth, operating cash flow 3Y growth, debt equity, interest coverage, ROA, NIM, capital adequacy and CET1`
+          await executeCall(
+            "DETAILED_FUNDAMENTALS",
+            "GET_PARAMETER_VALUES_MULTI_STOCK",
+            () => client.getParameterValuesMultiStock(detailedQuery, "stock"),
+            async text => writeDetailed(admin, runId, security, providerInstrumentId, text, ic2EvidencePlan),
+          )
+        }
+        if (activeDomains.includes("OWNERSHIP")) {
+          await executeCall(
+            "OWNERSHIP",
+            "GET_OWNERSHIP_DEALS_INSIDER_SAST",
+            () => client.getOwnershipDealsInsiderSast(security.symbol, "shareholding"),
+            async text => writeOwnership(admin, runId, security, providerInstrumentId, text, ic2EvidencePlan),
+          )
+        }
+        if (activeDomains.includes("DOCUMENT_DISCOVERY")) {
+          const documentQuery = ic2Queries?.documentQuery ?? `${security.name} ${security.symbol} stock id ${providerInstrumentId} annual report quarterly result investor presentation earnings call`
+          await executeCall(
+            "DOCUMENT_DISCOVERY",
+            "GET_DOCUMENT_SEARCH_RESULTS",
+            () => client.getDocumentSearchResults(documentQuery),
+            async text => writeDocuments(admin, runId, security, providerInstrumentId, text, ic2EvidencePlan),
+          )
+        }
       }
 
       if (abortRemaining) {
-        for (const domain of DOMAINS.slice(1)) {
+        for (const domain of activeDomains.filter(domain => domain !== "TTM_FUNDAMENTALS")) {
           const itemId = itemByDomain.get(domain)!
           await markItem(admin, itemId, "SKIPPED_BUDGET", "IDENTITY_REVALIDATION_FAILED", 0, 0)
           results.push({ domain, status: "SKIPPED", safeCode: "IDENTITY_REVALIDATION_FAILED" })
@@ -605,7 +652,7 @@ Deno.serve(async request => {
         if (results.some(result => result.domain === "DOCUMENT_DISCOVERY" && result.status === "ACCEPTED")) await updateRefreshState(admin, security.id, "DOCUMENT_DISCOVERY", runId, 7)
       }
     } finally {
-      const released = RESERVED_UNITS - attempted
+      const released = reservedUnits - attempted
       const settlement = await admin.rpc("settle_provider_budget_v1", {
         p_reservation_id: reservationId,
         p_consumed_units: providerSucceeded,
@@ -630,7 +677,7 @@ Deno.serve(async request => {
       fetched_count: acceptedItems,
       accepted_count: acceptedItems,
       failed_count: failedItems,
-      skipped_count: RESERVED_UNITS - attempted,
+      skipped_count: reservedUnits - attempted,
       error_summary: finalStatus === "SUCCEEDED" ? null : "COMPLETE_RESEARCH_REFRESH_PARTIAL_OR_FAILED",
       metadata: { security: security.symbol, provider_instrument_id: providerInstrumentId, results },
     }).eq("id", runId)
@@ -643,7 +690,7 @@ Deno.serve(async request => {
       providerSucceeded,
       providerFailed,
       localWrites: acceptedItems,
-      releasedReservationUnits: RESERVED_UNITS - attempted,
+      releasedReservationUnits: reservedUnits - attempted,
       status: finalStatus,
       results,
       runId,
