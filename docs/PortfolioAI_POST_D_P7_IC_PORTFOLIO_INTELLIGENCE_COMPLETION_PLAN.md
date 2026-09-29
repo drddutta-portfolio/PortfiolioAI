@@ -1459,3 +1459,33 @@ Production = UNCHANGED
 The historical IC0, IC-A, IC-B and earlier IC2 planning/execution records remain immutable context and should not be rewritten to look as if their then-current states were different.
 
 No IC3 global closure, R6 portfolio execution, R7 portfolio execution, R8/R9/Movement execution, R10 final integration, Production change, migration, Vercel deployment, Git merge, or P8 action is authorized by this status update.
+
+
+## P7-IC IC2 canonical readiness remediation — BLOCKED — 29 September 2026
+
+The owner-authorized Development-only remediation implemented and applied the additive canonical evidence boundary:
+
+- `research_evidence_snapshots`;
+- `research_evidence_snapshot_items`;
+- `current_research_evidence_snapshot_v1` with `security_invoker = true`;
+- service-only cache projection and atomic append helpers;
+- append-only enforcement and owner-scoped read RLS.
+
+A grant-gated Development-only materializer produced current canonical dispositions for all 239 held equities. Current snapshot totals are:
+
+- READY: 0;
+- INSUFFICIENT: 226;
+- STALE: 8;
+- CONFLICTING: 4;
+- REVIEW_REQUIRED: 1 (BLUEJET).
+
+The immutable machine-readable audit is `docs/p7-ic/PortfolioAI_P7_IC2_CANONICAL_READINESS_AUDIT_2026-09-29.json`.
+
+Provider remediation stopped at two genuine external failures:
+
+1. the bounded 22-benchmark Angel One path performed one public instrument-master fetch, then the market-data session was rejected with HTTP 403 before any benchmark-history call was accepted;
+2. after live canonical proof of deficits for M&M, BHARTIARTL, SBIN, HDFCBANK and WABAG, the first Trendlyne residual attempt for M&M returned an overview without the mandatory `stockData` identity block. The path failed closed after one accounted attempt; the remaining three reserved units were released and the other securities were not called.
+
+Trendlyne accounting was corrected to bind the internal daily limit to the verified external entitlement of 400/day. At the stop, 242/400 attempts had been consumed on 29 September 2026. Scheduler execution remains disabled.
+
+Therefore IC2 is not closed. IC3 is not ready and no R6/R7 execution occurred. Production, main, Vercel and owner-controlled portfolio roles remain unchanged.

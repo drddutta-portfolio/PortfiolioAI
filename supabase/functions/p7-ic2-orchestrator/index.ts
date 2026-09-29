@@ -779,8 +779,9 @@ Deno.serve(async request=>{
    const sentinel=`${batchId}:${offset}:${limit}`
    const outer=await consumeP4ExecutionGrant(admin,{grantId:body.grantId,action:ACTION,portfolioId:PORTFOLIO_ID,securityId:sentinel})
    if(!outer.ok)return reply(401,{error:outer.message,code:outer.code,providerCalls:0})
-   const control=await admin.from("provider_ingestion_controls").select("ingestion_enabled,daily_internal_attempt_limit,per_run_internal_attempt_limit,actual_provider_quota_status").eq("source_code","TRENDLYNE_MCP").single()
-   if(control.error||!control.data.ingestion_enabled||control.data.actual_provider_quota_status!=="VERIFIED"||Number(control.data.daily_internal_attempt_limit)!==1000||Number(control.data.per_run_internal_attempt_limit)!==40)return reply(409,{error:"IC2 Trendlyne control envelope is not active.",code:"IC2_CONTROL_ENVELOPE_MISMATCH",providerCalls:0})
+   const control=await admin.from("provider_ingestion_controls").select("ingestion_enabled,daily_internal_attempt_limit,per_run_internal_attempt_limit,actual_provider_quota_status,actual_provider_quota").eq("source_code","TRENDLYNE_MCP").single()
+   const externalDaily=Number((control.data?.actual_provider_quota as {daily_limit?:unknown}|null)?.daily_limit??0),internalDaily=Number(control.data?.daily_internal_attempt_limit??0)
+   if(control.error||!control.data.ingestion_enabled||control.data.actual_provider_quota_status!=="VERIFIED"||!Number.isFinite(externalDaily)||externalDaily<=0||internalDaily!==externalDaily||Number(control.data.per_run_internal_attempt_limit)!==40)return reply(409,{error:"IC2 Trendlyne control envelope does not match the verified provider entitlement.",code:"IC2_CONTROL_ENVELOPE_MISMATCH",providerCalls:0,externalDaily,internalDaily})
    if(batchId==="BMARK01"){
       if(offset!==0)return reply(400,{error:"Benchmark batch does not support offset.",providerCalls:0})
       const child=await createGrant(admin,"P7_IC2_EXECUTE",`P7_IC2_BENCHMARKS:${BENCHMARK_CODES.join(",")}`)
@@ -812,7 +813,7 @@ Deno.serve(async request=>{
       const usage=await admin.from("provider_usage_events").select("actual_internal_units").eq("source_code","TRENDLYNE_MCP").eq("accounting_class","PROVIDER_TOOL_ATTEMPT").gte("attempted_at",new Date(new Date().setUTCHours(0,0,0,0)).toISOString())
       if(usage.error)throw usage.error
       const used=(usage.data??[]).reduce((sum,row)=>sum+Number(row.actual_internal_units??0),0),expected=symbols.length*(batch.phase==="IDENTITY"?2:4)
-      if(used+expected>MAX_TRENDLYNE_CAMPAIGN_CALLS)return reply(429,{error:"Frozen 920-call Trendlyne campaign ceiling would be exceeded.",code:"IC2_CAMPAIGN_CALL_CEILING",used,expected,providerCalls:0})
+      if(used+expected>Math.min(MAX_TRENDLYNE_CAMPAIGN_CALLS,externalDaily))return reply(429,{error:"Verified Trendlyne daily entitlement would be exceeded.",code:"IC2_VERIFIED_DAILY_CALL_CEILING",used,expected,externalDaily,providerCalls:0})
    }
    const results:Record<string,unknown>[]=[]
    let providerCalls=0

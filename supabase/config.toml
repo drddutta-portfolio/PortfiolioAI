@@ -414,3 +414,8 @@ verify_jwt = false
 # and refuses Production in function code.
 [functions.p7-ic2-orchestrator]
 verify_jwt = false
+
+# Development-only IC2 materializer consumes a scoped one-time grant and
+# refuses every runtime except the PortfolioAI Development project.
+[functions.p7-ic2-materialize-readiness]
+verify_jwt = false

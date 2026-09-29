@@ -592,6 +592,103 @@ export type Database = {
           },
         ]
       }
+      external_rating_observations: {
+        Row: {
+          agency_code: string
+          created_at: string
+          evidence_status: string
+          fresh_until: string
+          id: string
+          instrument_description: string | null
+          instrument_type: string | null
+          outlook: string | null
+          rating_action: string | null
+          rating_date: string | null
+          rating_symbol: string
+          retrieved_at: string
+          security_id: string
+          source_record_id: string | null
+          source_url: string
+        }
+        Insert: {
+          agency_code: string
+          created_at?: string
+          evidence_status?: string
+          fresh_until: string
+          id?: string
+          instrument_description?: string | null
+          instrument_type?: string | null
+          outlook?: string | null
+          rating_action?: string | null
+          rating_date?: string | null
+          rating_symbol: string
+          retrieved_at?: string
+          security_id: string
+          source_record_id?: string | null
+          source_url: string
+        }
+        Update: {
+          agency_code?: string
+          created_at?: string
+          evidence_status?: string
+          fresh_until?: string
+          id?: string
+          instrument_description?: string | null
+          instrument_type?: string | null
+          outlook?: string | null
+          rating_action?: string | null
+          rating_date?: string | null
+          rating_symbol?: string
+          retrieved_at?: string
+          security_id?: string
+          source_record_id?: string | null
+          source_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "external_rating_observations_agency_code_fkey"
+            columns: ["agency_code"]
+            isOneToOne: false
+            referencedRelation: "rating_agencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "external_rating_observations_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "external_rating_observations_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "external_rating_observations_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "external_rating_observations_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "external_rating_observations_source_record_id_fkey"
+            columns: ["source_record_id"]
+            isOneToOne: false
+            referencedRelation: "data_source_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fundamental_metric_definitions: {
         Row: {
           canonical_unit: string | null
@@ -1289,6 +1386,116 @@ export type Database = {
           },
         ]
       }
+      market_benchmark_price_history: {
+        Row: {
+          benchmark_code: string
+          close: number
+          created_at: string
+          high: number
+          id: string
+          interval: string
+          low: number
+          open: number
+          period_start: string
+          provenance: Json
+          provider_code: string
+          retrieved_at: string
+          volume: number | null
+        }
+        Insert: {
+          benchmark_code: string
+          close: number
+          created_at?: string
+          high: number
+          id?: string
+          interval: string
+          low: number
+          open: number
+          period_start: string
+          provenance?: Json
+          provider_code: string
+          retrieved_at: string
+          volume?: number | null
+        }
+        Update: {
+          benchmark_code?: string
+          close?: number
+          created_at?: string
+          high?: number
+          id?: string
+          interval?: string
+          low?: number
+          open?: number
+          period_start?: string
+          provenance?: Json
+          provider_code?: string
+          retrieved_at?: string
+          volume?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_benchmark_price_history_benchmark_code_fkey"
+            columns: ["benchmark_code"]
+            isOneToOne: false
+            referencedRelation: "market_benchmarks"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "market_benchmark_price_history_provider_code_fkey"
+            columns: ["provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_providers"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      market_benchmarks: {
+        Row: {
+          code: string
+          exchange: string | null
+          mapping_evidence: Json
+          mapping_status: string
+          name: string
+          provider_code: string
+          provider_instrument_id: string | null
+          trading_symbol: string | null
+          updated_at: string
+          verified_at: string | null
+        }
+        Insert: {
+          code: string
+          exchange?: string | null
+          mapping_evidence?: Json
+          mapping_status?: string
+          name: string
+          provider_code: string
+          provider_instrument_id?: string | null
+          trading_symbol?: string | null
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Update: {
+          code?: string
+          exchange?: string | null
+          mapping_evidence?: Json
+          mapping_status?: string
+          name?: string
+          provider_code?: string
+          provider_instrument_id?: string | null
+          trading_symbol?: string | null
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_benchmarks_provider_code_fkey"
+            columns: ["provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_providers"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       market_cap_category_assessments: {
         Row: {
           assessed_at: string
@@ -1879,6 +2086,93 @@ export type Database = {
           },
         ]
       }
+      market_metric_observations: {
+        Row: {
+          as_of_date: string
+          created_at: string
+          derivation: Json
+          evidence_status: string
+          fresh_until: string
+          id: string
+          lookback_end: string
+          lookback_start: string | null
+          metric_code: string
+          numeric_value: number
+          provider_code: string
+          retrieved_at: string
+          security_id: string
+          unit: string
+        }
+        Insert: {
+          as_of_date: string
+          created_at?: string
+          derivation?: Json
+          evidence_status?: string
+          fresh_until: string
+          id?: string
+          lookback_end: string
+          lookback_start?: string | null
+          metric_code: string
+          numeric_value: number
+          provider_code: string
+          retrieved_at?: string
+          security_id: string
+          unit: string
+        }
+        Update: {
+          as_of_date?: string
+          created_at?: string
+          derivation?: Json
+          evidence_status?: string
+          fresh_until?: string
+          id?: string
+          lookback_end?: string
+          lookback_start?: string | null
+          metric_code?: string
+          numeric_value?: number
+          provider_code?: string
+          retrieved_at?: string
+          security_id?: string
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_metric_observations_provider_code_fkey"
+            columns: ["provider_code"]
+            isOneToOne: false
+            referencedRelation: "market_data_providers"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "market_metric_observations_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "market_metric_observations_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "market_metric_observations_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "market_metric_observations_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       market_price_history: {
         Row: {
           adjusted_close: number | null
@@ -2061,6 +2355,292 @@ export type Database = {
           },
         ]
       }
+      news_classification_events: {
+        Row: {
+          classifier_version: string
+          created_at: string
+          evidence_record_id: string | null
+          id: string
+          new_category: string
+          new_importance_state: string
+          new_tone_state: string
+          news_item_id: string
+          previous_category: string
+          previous_importance_state: string
+          previous_tone_state: string
+          reason: string
+        }
+        Insert: {
+          classifier_version: string
+          created_at?: string
+          evidence_record_id?: string | null
+          id?: string
+          new_category: string
+          new_importance_state: string
+          new_tone_state: string
+          news_item_id: string
+          previous_category: string
+          previous_importance_state: string
+          previous_tone_state: string
+          reason: string
+        }
+        Update: {
+          classifier_version?: string
+          created_at?: string
+          evidence_record_id?: string | null
+          id?: string
+          new_category?: string
+          new_importance_state?: string
+          new_tone_state?: string
+          news_item_id?: string
+          previous_category?: string
+          previous_importance_state?: string
+          previous_tone_state?: string
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_classification_events_evidence_record_id_fkey"
+            columns: ["evidence_record_id"]
+            isOneToOne: false
+            referencedRelation: "data_source_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "news_classification_events_news_item_id_fkey"
+            columns: ["news_item_id"]
+            isOneToOne: false
+            referencedRelation: "news_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      news_items: {
+        Row: {
+          canonical_key: string
+          category: string
+          created_at: string
+          first_seen_at: string
+          headline: string
+          id: string
+          importance_state: string
+          is_active: boolean
+          last_seen_at: string
+          primary_source_name: string | null
+          primary_source_url: string | null
+          publication_precision: string
+          published_at: string | null
+          security_id: string
+          summary: string | null
+          tone_confidence: number | null
+          tone_method: string
+          tone_reason: string | null
+          tone_state: string
+          updated_at: string
+        }
+        Insert: {
+          canonical_key: string
+          category?: string
+          created_at?: string
+          first_seen_at?: string
+          headline: string
+          id?: string
+          importance_state?: string
+          is_active?: boolean
+          last_seen_at?: string
+          primary_source_name?: string | null
+          primary_source_url?: string | null
+          publication_precision?: string
+          published_at?: string | null
+          security_id: string
+          summary?: string | null
+          tone_confidence?: number | null
+          tone_method?: string
+          tone_reason?: string | null
+          tone_state?: string
+          updated_at?: string
+        }
+        Update: {
+          canonical_key?: string
+          category?: string
+          created_at?: string
+          first_seen_at?: string
+          headline?: string
+          id?: string
+          importance_state?: string
+          is_active?: boolean
+          last_seen_at?: string
+          primary_source_name?: string | null
+          primary_source_url?: string | null
+          publication_precision?: string
+          published_at?: string | null
+          security_id?: string
+          summary?: string | null
+          tone_confidence?: number | null
+          tone_method?: string
+          tone_reason?: string | null
+          tone_state?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_items_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "news_items_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "news_items_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "news_items_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      news_pipeline_leases: {
+        Row: {
+          acquired_at: string
+          cooldown_until: string
+          expires_at: string
+          lease_holder: string
+          portfolio_id: string
+          source_code: string
+          updated_at: string
+        }
+        Insert: {
+          acquired_at?: string
+          cooldown_until?: string
+          expires_at: string
+          lease_holder: string
+          portfolio_id: string
+          source_code: string
+          updated_at?: string
+        }
+        Update: {
+          acquired_at?: string
+          cooldown_until?: string
+          expires_at?: string
+          lease_holder?: string
+          portfolio_id?: string
+          source_code?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_pipeline_leases_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_enrichment_coverage_v1"
+            referencedColumns: ["portfolio_id"]
+          },
+          {
+            foreignKeyName: "news_pipeline_leases_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "news_pipeline_leases_source_code_fkey"
+            columns: ["source_code"]
+            isOneToOne: false
+            referencedRelation: "data_sources"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      news_source_appearances: {
+        Row: {
+          content_hash: string
+          created_at: string
+          data_source_record_id: string
+          dedupe_key: string
+          headline_as_received: string
+          id: string
+          news_item_id: string
+          provider_record_id: string | null
+          provider_security_identity: string
+          published_at: string | null
+          publisher_name: string | null
+          retrieved_at: string
+          source_code: string
+          source_url: string | null
+          summary_as_received: string | null
+        }
+        Insert: {
+          content_hash: string
+          created_at?: string
+          data_source_record_id: string
+          dedupe_key: string
+          headline_as_received: string
+          id?: string
+          news_item_id: string
+          provider_record_id?: string | null
+          provider_security_identity: string
+          published_at?: string | null
+          publisher_name?: string | null
+          retrieved_at: string
+          source_code: string
+          source_url?: string | null
+          summary_as_received?: string | null
+        }
+        Update: {
+          content_hash?: string
+          created_at?: string
+          data_source_record_id?: string
+          dedupe_key?: string
+          headline_as_received?: string
+          id?: string
+          news_item_id?: string
+          provider_record_id?: string | null
+          provider_security_identity?: string
+          published_at?: string | null
+          publisher_name?: string | null
+          retrieved_at?: string
+          source_code?: string
+          source_url?: string | null
+          summary_as_received?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_source_appearances_data_source_record_id_fkey"
+            columns: ["data_source_record_id"]
+            isOneToOne: false
+            referencedRelation: "data_source_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "news_source_appearances_news_item_id_fkey"
+            columns: ["news_item_id"]
+            isOneToOne: false
+            referencedRelation: "news_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "news_source_appearances_source_code_fkey"
+            columns: ["source_code"]
+            isOneToOne: false
+            referencedRelation: "data_sources"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       portfolio_security_settings: {
         Row: {
           created_at: string
@@ -2075,6 +2655,10 @@ export type Database = {
           portfolio_role: string
           priority: number | null
           security_id: string
+          stop_loss_alert_enabled: boolean
+          stop_loss_price: number | null
+          target_price: number | null
+          target_price_alert_enabled: boolean
           target_weight: number | null
           updated_at: string
         }
@@ -2091,6 +2675,10 @@ export type Database = {
           portfolio_role?: string
           priority?: number | null
           security_id: string
+          stop_loss_alert_enabled?: boolean
+          stop_loss_price?: number | null
+          target_price?: number | null
+          target_price_alert_enabled?: boolean
           target_weight?: number | null
           updated_at?: string
         }
@@ -2107,6 +2695,10 @@ export type Database = {
           portfolio_role?: string
           priority?: number | null
           security_id?: string
+          stop_loss_alert_enabled?: boolean
+          stop_loss_price?: number | null
+          target_price?: number | null
+          target_price_alert_enabled?: boolean
           target_weight?: number | null
           updated_at?: string
         }
@@ -2184,6 +2776,138 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      position_sizing_assessments: {
+        Row: {
+          as_of_at: string
+          assessment_state: string
+          created_at: string
+          current_weight: number | null
+          engine_version: string
+          evaluation_key: string
+          evidence_confidence: number | null
+          evidence_coverage: number | null
+          id: string
+          input_snapshot: Json
+          portfolio_id: string
+          rationale: Json
+          reason_codes: string[]
+          recommended_action: string | null
+          research_profile_code: string | null
+          research_profile_version: string | null
+          security_id: string
+          source_recommendation_run_id: string | null
+          source_score_run_id: string | null
+          suggested_maximum_weight: number | null
+          suggested_minimum_weight: number | null
+          suggested_target_weight: number | null
+        }
+        Insert: {
+          as_of_at: string
+          assessment_state: string
+          created_at?: string
+          current_weight?: number | null
+          engine_version: string
+          evaluation_key: string
+          evidence_confidence?: number | null
+          evidence_coverage?: number | null
+          id?: string
+          input_snapshot: Json
+          portfolio_id: string
+          rationale?: Json
+          reason_codes?: string[]
+          recommended_action?: string | null
+          research_profile_code?: string | null
+          research_profile_version?: string | null
+          security_id: string
+          source_recommendation_run_id?: string | null
+          source_score_run_id?: string | null
+          suggested_maximum_weight?: number | null
+          suggested_minimum_weight?: number | null
+          suggested_target_weight?: number | null
+        }
+        Update: {
+          as_of_at?: string
+          assessment_state?: string
+          created_at?: string
+          current_weight?: number | null
+          engine_version?: string
+          evaluation_key?: string
+          evidence_confidence?: number | null
+          evidence_coverage?: number | null
+          id?: string
+          input_snapshot?: Json
+          portfolio_id?: string
+          rationale?: Json
+          reason_codes?: string[]
+          recommended_action?: string | null
+          research_profile_code?: string | null
+          research_profile_version?: string | null
+          security_id?: string
+          source_recommendation_run_id?: string | null
+          source_score_run_id?: string | null
+          suggested_maximum_weight?: number | null
+          suggested_minimum_weight?: number | null
+          suggested_target_weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "position_sizing_assessments_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_enrichment_coverage_v1"
+            referencedColumns: ["portfolio_id"]
+          },
+          {
+            foreignKeyName: "position_sizing_assessments_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "position_sizing_assessments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "position_sizing_assessments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "position_sizing_assessments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "position_sizing_assessments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "position_sizing_assessments_source_recommendation_run_id_fkey"
+            columns: ["source_recommendation_run_id"]
+            isOneToOne: false
+            referencedRelation: "stock_recommendation_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "position_sizing_assessments_source_score_run_id_fkey"
+            columns: ["source_score_run_id"]
+            isOneToOne: false
+            referencedRelation: "stock_score_runs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       provider_budget_reservations: {
         Row: {
@@ -2482,6 +3206,95 @@ export type Database = {
           },
         ]
       }
+      rating_agencies: {
+        Row: {
+          code: string
+          country_code: string | null
+          created_at: string
+          is_active: boolean
+          name: string
+          website_url: string | null
+        }
+        Insert: {
+          code: string
+          country_code?: string | null
+          created_at?: string
+          is_active?: boolean
+          name: string
+          website_url?: string | null
+        }
+        Update: {
+          code?: string
+          country_code?: string | null
+          created_at?: string
+          is_active?: boolean
+          name?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      recommendation_profile_policies: {
+        Row: {
+          caution_rules: Json
+          core_min_score: number | null
+          created_at: string
+          mandatory_dimension_floors: Json
+          min_score_ready_coverage: number
+          notes: string | null
+          persistence_rules: Json
+          policy_version: number
+          profile_code: string
+          satellite_min_score: number | null
+          sector_focus: Json
+          status: string
+          updated_at: string
+          watch_min_score: number | null
+          weight_policy: Json
+        }
+        Insert: {
+          caution_rules?: Json
+          core_min_score?: number | null
+          created_at?: string
+          mandatory_dimension_floors?: Json
+          min_score_ready_coverage?: number
+          notes?: string | null
+          persistence_rules?: Json
+          policy_version?: number
+          profile_code: string
+          satellite_min_score?: number | null
+          sector_focus?: Json
+          status?: string
+          updated_at?: string
+          watch_min_score?: number | null
+          weight_policy?: Json
+        }
+        Update: {
+          caution_rules?: Json
+          core_min_score?: number | null
+          created_at?: string
+          mandatory_dimension_floors?: Json
+          min_score_ready_coverage?: number
+          notes?: string | null
+          persistence_rules?: Json
+          policy_version?: number
+          profile_code?: string
+          satellite_min_score?: number | null
+          sector_focus?: Json
+          status?: string
+          updated_at?: string
+          watch_min_score?: number | null
+          weight_policy?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_profile_policies_profile_code_fkey"
+            columns: ["profile_code"]
+            isOneToOne: false
+            referencedRelation: "scoring_profiles"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       refresh_domain_policies: {
         Row: {
           cooldown_seconds: number
@@ -2700,6 +3513,745 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "securities"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      research_evidence_snapshot_items: {
+        Row: {
+          applicability: string
+          benchmark_authority: string[] | null
+          candidate_evidence_ids: string[]
+          canonical_selection_state: string
+          created_at: string
+          evidence_as_of_date: string | null
+          evidence_state: string
+          fresh_through: string | null
+          freshness_policy: string | null
+          id: string
+          metric_code: string | null
+          minimum_history: number
+          normalized_value: Json | null
+          raw_source_record_id: string | null
+          reason_code: string
+          recommended_remediation_action: string
+          required: boolean
+          requirement_code: string
+          retrieved_at: string | null
+          selected_evidence_id: string | null
+          snapshot_id: string
+          source_provider: string | null
+          validation_state: string
+        }
+        Insert: {
+          applicability: string
+          benchmark_authority?: string[] | null
+          candidate_evidence_ids?: string[]
+          canonical_selection_state: string
+          created_at?: string
+          evidence_as_of_date?: string | null
+          evidence_state: string
+          fresh_through?: string | null
+          freshness_policy?: string | null
+          id?: string
+          metric_code?: string | null
+          minimum_history?: number
+          normalized_value?: Json | null
+          raw_source_record_id?: string | null
+          reason_code: string
+          recommended_remediation_action: string
+          required?: boolean
+          requirement_code: string
+          retrieved_at?: string | null
+          selected_evidence_id?: string | null
+          snapshot_id: string
+          source_provider?: string | null
+          validation_state: string
+        }
+        Update: {
+          applicability?: string
+          benchmark_authority?: string[] | null
+          candidate_evidence_ids?: string[]
+          canonical_selection_state?: string
+          created_at?: string
+          evidence_as_of_date?: string | null
+          evidence_state?: string
+          fresh_through?: string | null
+          freshness_policy?: string | null
+          id?: string
+          metric_code?: string | null
+          minimum_history?: number
+          normalized_value?: Json | null
+          raw_source_record_id?: string | null
+          reason_code?: string
+          recommended_remediation_action?: string
+          required?: boolean
+          requirement_code?: string
+          retrieved_at?: string | null
+          selected_evidence_id?: string | null
+          snapshot_id?: string
+          source_provider?: string | null
+          validation_state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "research_evidence_snapshot_items_raw_source_record_id_fkey"
+            columns: ["raw_source_record_id"]
+            isOneToOne: false
+            referencedRelation: "data_source_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_items_snapshot_id_fkey"
+            columns: ["snapshot_id"]
+            isOneToOne: false
+            referencedRelation: "current_research_evidence_snapshot_v1"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_items_snapshot_id_fkey"
+            columns: ["snapshot_id"]
+            isOneToOne: false
+            referencedRelation: "research_evidence_snapshots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      research_evidence_snapshots: {
+        Row: {
+          as_of_date: string
+          created_at: string
+          created_by: string | null
+          id: string
+          methodology_authority: string
+          methodology_version: string
+          portfolio_id: string
+          profile_code: string
+          requirement_registry_version: string
+          security_id: string
+          snapshot_hash: string
+          snapshot_status: string
+          subprofile_code: string | null
+        }
+        Insert: {
+          as_of_date: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          methodology_authority: string
+          methodology_version: string
+          portfolio_id: string
+          profile_code: string
+          requirement_registry_version: string
+          security_id: string
+          snapshot_hash: string
+          snapshot_status: string
+          subprofile_code?: string | null
+        }
+        Update: {
+          as_of_date?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          methodology_authority?: string
+          methodology_version?: string
+          portfolio_id?: string
+          profile_code?: string
+          requirement_registry_version?: string
+          security_id?: string
+          snapshot_hash?: string
+          snapshot_status?: string
+          subprofile_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "research_evidence_snapshots_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_enrichment_coverage_v1"
+            referencedColumns: ["portfolio_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      research_subprofile_assignments: {
+        Row: {
+          assignment_basis: string
+          assignment_status: string
+          confidence_state: string
+          created_at: string
+          created_by: string | null
+          effective_from: string
+          effective_period: unknown
+          effective_to: string | null
+          id: string
+          parent_profile_code: string
+          parent_profile_version: string
+          retired_at: string | null
+          retired_by: string | null
+          retirement_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          security_id: string
+          source_record_id: string | null
+          source_reference: string
+          subprofile_code: string
+          subprofile_version: string
+        }
+        Insert: {
+          assignment_basis: string
+          assignment_status: string
+          confidence_state: string
+          created_at?: string
+          created_by?: string | null
+          effective_from: string
+          effective_period?: unknown
+          effective_to?: string | null
+          id?: string
+          parent_profile_code: string
+          parent_profile_version: string
+          retired_at?: string | null
+          retired_by?: string | null
+          retirement_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          security_id: string
+          source_record_id?: string | null
+          source_reference: string
+          subprofile_code: string
+          subprofile_version: string
+        }
+        Update: {
+          assignment_basis?: string
+          assignment_status?: string
+          confidence_state?: string
+          created_at?: string
+          created_by?: string | null
+          effective_from?: string
+          effective_period?: unknown
+          effective_to?: string | null
+          id?: string
+          parent_profile_code?: string
+          parent_profile_version?: string
+          retired_at?: string | null
+          retired_by?: string | null
+          retirement_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          security_id?: string
+          source_record_id?: string | null
+          source_reference?: string
+          subprofile_code?: string
+          subprofile_version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "research_subprofile_assignments_contract_fkey"
+            columns: [
+              "parent_profile_code",
+              "parent_profile_version",
+              "subprofile_code",
+              "subprofile_version",
+            ]
+            isOneToOne: false
+            referencedRelation: "research_subprofile_contracts"
+            referencedColumns: [
+              "parent_profile_code",
+              "parent_profile_version",
+              "subprofile_code",
+              "subprofile_version",
+            ]
+          },
+          {
+            foreignKeyName: "research_subprofile_assignments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_subprofile_assignments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_subprofile_assignments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_subprofile_assignments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_subprofile_assignments_source_record_id_fkey"
+            columns: ["source_record_id"]
+            isOneToOne: false
+            referencedRelation: "data_source_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      research_subprofile_contracts: {
+        Row: {
+          created_at: string
+          display_name: string
+          parent_profile_code: string
+          parent_profile_version: string
+          subprofile_code: string
+          subprofile_version: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          parent_profile_code: string
+          parent_profile_version: string
+          subprofile_code: string
+          subprofile_version: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          parent_profile_code?: string
+          parent_profile_version?: string
+          subprofile_code?: string
+          subprofile_version?: string
+        }
+        Relationships: []
+      }
+      research_subprofile_secondary_exposures: {
+        Row: {
+          assignment_id: string
+          assignment_status: string
+          confidence_state: string
+          created_at: string
+          effective_from: string
+          effective_to: string | null
+          evidence_basis: string
+          id: string
+          materiality_state: string
+          parent_profile_code: string
+          parent_profile_version: string
+          reason_code: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source_reference: string
+          subprofile_code: string
+          subprofile_version: string
+        }
+        Insert: {
+          assignment_id: string
+          assignment_status: string
+          confidence_state: string
+          created_at?: string
+          effective_from: string
+          effective_to?: string | null
+          evidence_basis: string
+          id?: string
+          materiality_state: string
+          parent_profile_code: string
+          parent_profile_version: string
+          reason_code: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_reference: string
+          subprofile_code: string
+          subprofile_version: string
+        }
+        Update: {
+          assignment_id?: string
+          assignment_status?: string
+          confidence_state?: string
+          created_at?: string
+          effective_from?: string
+          effective_to?: string | null
+          evidence_basis?: string
+          id?: string
+          materiality_state?: string
+          parent_profile_code?: string
+          parent_profile_version?: string
+          reason_code?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_reference?: string
+          subprofile_code?: string
+          subprofile_version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "research_subprofile_secondary_contract_fkey"
+            columns: [
+              "parent_profile_code",
+              "parent_profile_version",
+              "subprofile_code",
+              "subprofile_version",
+            ]
+            isOneToOne: false
+            referencedRelation: "research_subprofile_contracts"
+            referencedColumns: [
+              "parent_profile_code",
+              "parent_profile_version",
+              "subprofile_code",
+              "subprofile_version",
+            ]
+          },
+          {
+            foreignKeyName: "research_subprofile_secondary_exposures_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "research_subprofile_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scoring_model_dimensions: {
+        Row: {
+          created_at: string
+          dimension_code: string
+          display_order: number
+          id: string
+          minimum_coverage: number
+          scoring_model_id: string
+          scoring_profile: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          dimension_code: string
+          display_order: number
+          id?: string
+          minimum_coverage?: number
+          scoring_model_id: string
+          scoring_profile: string
+          weight: number
+        }
+        Update: {
+          created_at?: string
+          dimension_code?: string
+          display_order?: number
+          id?: string
+          minimum_coverage?: number
+          scoring_model_id?: string
+          scoring_profile?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scoring_model_dimensions_scoring_model_id_fkey"
+            columns: ["scoring_model_id"]
+            isOneToOne: false
+            referencedRelation: "scoring_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scoring_model_metric_rules: {
+        Row: {
+          created_at: string
+          dimension_code: string
+          direction: string
+          display_order: number
+          id: string
+          input_code: string
+          input_kind: string
+          metric_code: string | null
+          metric_weight: number
+          normalization_rule: Json
+          preferred_source: string | null
+          provider_field_contract: string | null
+          rule_state: string
+          scoring_model_id: string
+          scoring_profile: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dimension_code: string
+          direction: string
+          display_order: number
+          id?: string
+          input_code: string
+          input_kind: string
+          metric_code?: string | null
+          metric_weight: number
+          normalization_rule?: Json
+          preferred_source?: string | null
+          provider_field_contract?: string | null
+          rule_state?: string
+          scoring_model_id: string
+          scoring_profile: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dimension_code?: string
+          direction?: string
+          display_order?: number
+          id?: string
+          input_code?: string
+          input_kind?: string
+          metric_code?: string | null
+          metric_weight?: number
+          normalization_rule?: Json
+          preferred_source?: string | null
+          provider_field_contract?: string | null
+          rule_state?: string
+          scoring_model_id?: string
+          scoring_profile?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scoring_model_metric_rules_scoring_model_id_fkey"
+            columns: ["scoring_model_id"]
+            isOneToOne: false
+            referencedRelation: "scoring_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scoring_models: {
+        Row: {
+          activated_at: string | null
+          code: string
+          created_at: string
+          id: string
+          methodology: Json
+          name: string
+          retired_at: string | null
+          status: string
+          version: number
+        }
+        Insert: {
+          activated_at?: string | null
+          code: string
+          created_at?: string
+          id?: string
+          methodology?: Json
+          name: string
+          retired_at?: string | null
+          status?: string
+          version: number
+        }
+        Update: {
+          activated_at?: string | null
+          code?: string
+          created_at?: string
+          id?: string
+          methodology?: Json
+          name?: string
+          retired_at?: string | null
+          status?: string
+          version?: number
+        }
+        Relationships: []
+      }
+      scoring_profile_dimension_overrides: {
+        Row: {
+          created_at: string
+          dimension_code: string
+          id: string
+          rationale: string | null
+          scoring_model_id: string
+          scoring_profile_code: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          dimension_code: string
+          id?: string
+          rationale?: string | null
+          scoring_model_id: string
+          scoring_profile_code: string
+          weight: number
+        }
+        Update: {
+          created_at?: string
+          dimension_code?: string
+          id?: string
+          rationale?: string | null
+          scoring_model_id?: string
+          scoring_profile_code?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scoring_profile_dimension_overrides_scoring_model_id_fkey"
+            columns: ["scoring_model_id"]
+            isOneToOne: false
+            referencedRelation: "scoring_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scoring_profile_dimension_overrides_scoring_profile_code_fkey"
+            columns: ["scoring_profile_code"]
+            isOneToOne: false
+            referencedRelation: "scoring_profiles"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      scoring_profile_metric_overrides: {
+        Row: {
+          applicability: string
+          created_at: string
+          dimension_code: string
+          id: string
+          input_code: string
+          rationale: string | null
+          scoring_model_id: string
+          scoring_profile_code: string
+          weight_multiplier: number
+        }
+        Insert: {
+          applicability?: string
+          created_at?: string
+          dimension_code: string
+          id?: string
+          input_code: string
+          rationale?: string | null
+          scoring_model_id: string
+          scoring_profile_code: string
+          weight_multiplier?: number
+        }
+        Update: {
+          applicability?: string
+          created_at?: string
+          dimension_code?: string
+          id?: string
+          input_code?: string
+          rationale?: string | null
+          scoring_model_id?: string
+          scoring_profile_code?: string
+          weight_multiplier?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scoring_profile_metric_overrides_scoring_model_id_fkey"
+            columns: ["scoring_model_id"]
+            isOneToOne: false
+            referencedRelation: "scoring_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scoring_profile_metric_overrides_scoring_profile_code_fkey"
+            columns: ["scoring_profile_code"]
+            isOneToOne: false
+            referencedRelation: "scoring_profiles"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      scoring_profile_sector_rules: {
+        Row: {
+          created_at: string
+          id: string
+          industry_pattern: string | null
+          is_active: boolean
+          priority: number
+          scoring_profile_code: string
+          sector_pattern: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          industry_pattern?: string | null
+          is_active?: boolean
+          priority?: number
+          scoring_profile_code: string
+          sector_pattern: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          industry_pattern?: string | null
+          is_active?: boolean
+          priority?: number
+          scoring_profile_code?: string
+          sector_pattern?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scoring_profile_sector_rules_scoring_profile_code_fkey"
+            columns: ["scoring_profile_code"]
+            isOneToOne: false
+            referencedRelation: "scoring_profiles"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      scoring_profiles: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          is_active: boolean
+          name: string
+          parent_profile_code: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          is_active?: boolean
+          name: string
+          parent_profile_code?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          is_active?: boolean
+          name?: string
+          parent_profile_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scoring_profiles_parent_profile_code_fkey"
+            columns: ["parent_profile_code"]
+            isOneToOne: false
+            referencedRelation: "scoring_profiles"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -3124,6 +4676,112 @@ export type Database = {
             columns: ["security_id"]
             isOneToOne: false
             referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_company_profiles: {
+        Row: {
+          about_retrieved_at: string | null
+          about_summary: string | null
+          company_website_url: string | null
+          created_at: string
+          last_checked_at: string | null
+          last_safe_error_code: string | null
+          logo_content_type: string | null
+          logo_retrieved_at: string | null
+          logo_source_url: string | null
+          logo_storage_path: string | null
+          metadata: Json
+          profile_status: string
+          security_id: string
+          source_about_hash: string | null
+          source_code: string | null
+          source_record_id: string | null
+          source_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          about_retrieved_at?: string | null
+          about_summary?: string | null
+          company_website_url?: string | null
+          created_at?: string
+          last_checked_at?: string | null
+          last_safe_error_code?: string | null
+          logo_content_type?: string | null
+          logo_retrieved_at?: string | null
+          logo_source_url?: string | null
+          logo_storage_path?: string | null
+          metadata?: Json
+          profile_status?: string
+          security_id: string
+          source_about_hash?: string | null
+          source_code?: string | null
+          source_record_id?: string | null
+          source_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          about_retrieved_at?: string | null
+          about_summary?: string | null
+          company_website_url?: string | null
+          created_at?: string
+          last_checked_at?: string | null
+          last_safe_error_code?: string | null
+          logo_content_type?: string | null
+          logo_retrieved_at?: string | null
+          logo_source_url?: string | null
+          logo_storage_path?: string | null
+          metadata?: Json
+          profile_status?: string
+          security_id?: string
+          source_about_hash?: string | null
+          source_code?: string | null
+          source_record_id?: string | null
+          source_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_company_profiles_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: true
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "security_company_profiles_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: true
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "security_company_profiles_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: true
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "security_company_profiles_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: true
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "security_company_profiles_source_code_fkey"
+            columns: ["source_code"]
+            isOneToOne: false
+            referencedRelation: "data_sources"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "security_company_profiles_source_record_id_fkey"
+            columns: ["source_record_id"]
+            isOneToOne: false
+            referencedRelation: "data_source_records"
             referencedColumns: ["id"]
           },
         ]
@@ -3748,6 +5406,448 @@ export type Database = {
           },
         ]
       }
+      security_scoring_profile_assignments: {
+        Row: {
+          assigned_at: string
+          assignment_basis: string
+          assignment_status: string
+          notes: string | null
+          reviewed_at: string | null
+          scoring_profile_code: string
+          security_id: string
+          source_reference: string | null
+        }
+        Insert: {
+          assigned_at?: string
+          assignment_basis: string
+          assignment_status?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          scoring_profile_code: string
+          security_id: string
+          source_reference?: string | null
+        }
+        Update: {
+          assigned_at?: string
+          assignment_basis?: string
+          assignment_status?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          scoring_profile_code?: string
+          security_id?: string
+          source_reference?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_scoring_profile_assignments_scoring_profile_code_fkey"
+            columns: ["scoring_profile_code"]
+            isOneToOne: false
+            referencedRelation: "scoring_profiles"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "security_scoring_profile_assignments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: true
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "security_scoring_profile_assignments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: true
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "security_scoring_profile_assignments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: true
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "security_scoring_profile_assignments_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: true
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_dimension_scores: {
+        Row: {
+          confidence: number
+          created_at: string
+          dimension_code: string
+          dimension_weight: number
+          evidence_coverage: number
+          heat_state: string
+          id: string
+          rationale: Json
+          raw_score: number | null
+          score_run_id: string
+          weighted_contribution: number | null
+        }
+        Insert: {
+          confidence?: number
+          created_at?: string
+          dimension_code: string
+          dimension_weight: number
+          evidence_coverage?: number
+          heat_state?: string
+          id?: string
+          rationale?: Json
+          raw_score?: number | null
+          score_run_id: string
+          weighted_contribution?: number | null
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          dimension_code?: string
+          dimension_weight?: number
+          evidence_coverage?: number
+          heat_state?: string
+          id?: string
+          rationale?: Json
+          raw_score?: number | null
+          score_run_id?: string
+          weighted_contribution?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_dimension_scores_score_run_id_fkey"
+            columns: ["score_run_id"]
+            isOneToOne: false
+            referencedRelation: "stock_score_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_metric_score_inputs: {
+        Row: {
+          contribution: number | null
+          created_at: string
+          dimension_score_id: string
+          external_rating_observation_id: string | null
+          fundamental_observation_id: string | null
+          id: string
+          input_label: string
+          input_state: string
+          metric_code: string | null
+          metric_weight: number
+          normalization_rule: Json
+          normalized_score: number | null
+          observed_numeric_value: number | null
+          observed_text_value: string | null
+        }
+        Insert: {
+          contribution?: number | null
+          created_at?: string
+          dimension_score_id: string
+          external_rating_observation_id?: string | null
+          fundamental_observation_id?: string | null
+          id?: string
+          input_label: string
+          input_state?: string
+          metric_code?: string | null
+          metric_weight: number
+          normalization_rule?: Json
+          normalized_score?: number | null
+          observed_numeric_value?: number | null
+          observed_text_value?: string | null
+        }
+        Update: {
+          contribution?: number | null
+          created_at?: string
+          dimension_score_id?: string
+          external_rating_observation_id?: string | null
+          fundamental_observation_id?: string | null
+          id?: string
+          input_label?: string
+          input_state?: string
+          metric_code?: string | null
+          metric_weight?: number
+          normalization_rule?: Json
+          normalized_score?: number | null
+          observed_numeric_value?: number | null
+          observed_text_value?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_metric_score_inputs_dimension_score_id_fkey"
+            columns: ["dimension_score_id"]
+            isOneToOne: false
+            referencedRelation: "stock_dimension_scores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_metric_score_inputs_external_rating_observation_id_fkey"
+            columns: ["external_rating_observation_id"]
+            isOneToOne: false
+            referencedRelation: "external_rating_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_metric_score_inputs_fundamental_observation_id_fkey"
+            columns: ["fundamental_observation_id"]
+            isOneToOne: false
+            referencedRelation: "fundamental_observations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_recommendation_runs: {
+        Row: {
+          action_bias: string | null
+          ai_interpretation: Json | null
+          ai_interpretation_generated_at: string | null
+          ai_interpretation_input_hash: string | null
+          ai_interpretation_model: string | null
+          ai_interpretation_provider: string | null
+          ai_interpretation_status: string | null
+          ai_interpretation_usage: Json
+          ai_summary: string | null
+          change_signal: string | null
+          created_at: string
+          current_user_role: string | null
+          current_weight: number | null
+          evaluation_key: string | null
+          evidence_confidence: number | null
+          id: string
+          overall_score: number | null
+          persistence_count: number
+          portfolio_id: string
+          rationale: Json
+          recommendation_policy_version: number
+          run_state: string
+          score_ready_coverage: number | null
+          scoring_profile_code: string
+          security_id: string
+          source_score_run_id: string | null
+          suggested_role: string
+          suggested_weight_max: number | null
+          suggested_weight_min: number | null
+          transition_status: string | null
+        }
+        Insert: {
+          action_bias?: string | null
+          ai_interpretation?: Json | null
+          ai_interpretation_generated_at?: string | null
+          ai_interpretation_input_hash?: string | null
+          ai_interpretation_model?: string | null
+          ai_interpretation_provider?: string | null
+          ai_interpretation_status?: string | null
+          ai_interpretation_usage?: Json
+          ai_summary?: string | null
+          change_signal?: string | null
+          created_at?: string
+          current_user_role?: string | null
+          current_weight?: number | null
+          evaluation_key?: string | null
+          evidence_confidence?: number | null
+          id?: string
+          overall_score?: number | null
+          persistence_count?: number
+          portfolio_id: string
+          rationale?: Json
+          recommendation_policy_version: number
+          run_state?: string
+          score_ready_coverage?: number | null
+          scoring_profile_code: string
+          security_id: string
+          source_score_run_id?: string | null
+          suggested_role: string
+          suggested_weight_max?: number | null
+          suggested_weight_min?: number | null
+          transition_status?: string | null
+        }
+        Update: {
+          action_bias?: string | null
+          ai_interpretation?: Json | null
+          ai_interpretation_generated_at?: string | null
+          ai_interpretation_input_hash?: string | null
+          ai_interpretation_model?: string | null
+          ai_interpretation_provider?: string | null
+          ai_interpretation_status?: string | null
+          ai_interpretation_usage?: Json
+          ai_summary?: string | null
+          change_signal?: string | null
+          created_at?: string
+          current_user_role?: string | null
+          current_weight?: number | null
+          evaluation_key?: string | null
+          evidence_confidence?: number | null
+          id?: string
+          overall_score?: number | null
+          persistence_count?: number
+          portfolio_id?: string
+          rationale?: Json
+          recommendation_policy_version?: number
+          run_state?: string
+          score_ready_coverage?: number | null
+          scoring_profile_code?: string
+          security_id?: string
+          source_score_run_id?: string | null
+          suggested_role?: string
+          suggested_weight_max?: number | null
+          suggested_weight_min?: number | null
+          transition_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_recommendation_runs_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_enrichment_coverage_v1"
+            referencedColumns: ["portfolio_id"]
+          },
+          {
+            foreignKeyName: "stock_recommendation_runs_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_recommendation_runs_scoring_profile_code_fkey"
+            columns: ["scoring_profile_code"]
+            isOneToOne: false
+            referencedRelation: "scoring_profiles"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "stock_recommendation_runs_scoring_profile_code_recommendat_fkey"
+            columns: ["scoring_profile_code", "recommendation_policy_version"]
+            isOneToOne: false
+            referencedRelation: "recommendation_profile_policies"
+            referencedColumns: ["profile_code", "policy_version"]
+          },
+          {
+            foreignKeyName: "stock_recommendation_runs_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "stock_recommendation_runs_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "stock_recommendation_runs_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "stock_recommendation_runs_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_recommendation_runs_source_score_run_id_fkey"
+            columns: ["source_score_run_id"]
+            isOneToOne: false
+            referencedRelation: "stock_score_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_score_runs: {
+        Row: {
+          as_of_date: string
+          completed_at: string | null
+          created_at: string
+          evidence_confidence: number
+          evidence_coverage: number
+          evidence_quality_factor: number
+          freshness_factor: number
+          id: string
+          overall_score: number | null
+          run_state: string
+          scoring_model_id: string
+          scoring_profile: string
+          security_id: string
+          summary: Json
+        }
+        Insert: {
+          as_of_date: string
+          completed_at?: string | null
+          created_at?: string
+          evidence_confidence?: number
+          evidence_coverage?: number
+          evidence_quality_factor?: number
+          freshness_factor?: number
+          id?: string
+          overall_score?: number | null
+          run_state?: string
+          scoring_model_id: string
+          scoring_profile: string
+          security_id: string
+          summary?: Json
+        }
+        Update: {
+          as_of_date?: string
+          completed_at?: string | null
+          created_at?: string
+          evidence_confidence?: number
+          evidence_coverage?: number
+          evidence_quality_factor?: number
+          freshness_factor?: number
+          id?: string
+          overall_score?: number | null
+          run_state?: string
+          scoring_model_id?: string
+          scoring_profile?: string
+          security_id?: string
+          summary?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_score_runs_scoring_model_id_fkey"
+            columns: ["scoring_model_id"]
+            isOneToOne: false
+            referencedRelation: "scoring_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_score_runs_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "stock_score_runs_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "stock_score_runs_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "stock_score_runs_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       theme_securities: {
         Row: {
           created_at: string
@@ -4362,6 +6462,97 @@ export type Database = {
           },
         ]
       }
+      current_research_evidence_snapshot_v1: {
+        Row: {
+          as_of_date: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string | null
+          methodology_authority: string | null
+          methodology_version: string | null
+          portfolio_id: string | null
+          profile_code: string | null
+          requirement_registry_version: string | null
+          security_id: string | null
+          snapshot_hash: string | null
+          snapshot_status: string | null
+          subprofile_code: string | null
+        }
+        Insert: {
+          as_of_date?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string | null
+          methodology_authority?: string | null
+          methodology_version?: string | null
+          portfolio_id?: string | null
+          profile_code?: string | null
+          requirement_registry_version?: string | null
+          security_id?: string | null
+          snapshot_hash?: string | null
+          snapshot_status?: string | null
+          subprofile_code?: string | null
+        }
+        Update: {
+          as_of_date?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string | null
+          methodology_authority?: string | null
+          methodology_version?: string | null
+          portfolio_id?: string | null
+          profile_code?: string | null
+          requirement_registry_version?: string | null
+          security_id?: string | null
+          snapshot_hash?: string | null
+          snapshot_status?: string | null
+          subprofile_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "research_evidence_snapshots_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_enrichment_coverage_v1"
+            referencedColumns: ["portfolio_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       current_security_classification_v1: {
         Row: {
           company_name: string | null
@@ -4429,6 +6620,10 @@ export type Database = {
       }
     }
     Functions: {
+      _p4b_launch_batch: {
+        Args: { p_after: string; p_limit?: number }
+        Returns: number
+      }
       acquire_data_ingestion_lease_v1: {
         Args: {
           p_lease_holder: string
@@ -4453,6 +6648,22 @@ export type Database = {
           acquired: boolean
           retry_after: string
         }[]
+      }
+      acquire_news_pipeline_lease_v1: {
+        Args: {
+          p_lease_holder: string
+          p_lease_seconds?: number
+          p_portfolio_id: string
+          p_source_code: string
+        }
+        Returns: {
+          acquired: boolean
+          retry_after: number
+        }[]
+      }
+      append_research_evidence_snapshot_v1: {
+        Args: { p_items: Json; p_snapshot: Json }
+        Returns: string
       }
       apply_fundamental_observation_decision_v1: {
         Args: { p_basis: string; p_notes?: string; p_observation_id: string }
@@ -4524,6 +6735,72 @@ export type Database = {
         }
         Returns: Json
       }
+      get_portfolio_coverage_registry_v1: {
+        Args: { p_portfolio_id: string; p_user_id: string }
+        Returns: Json
+      }
+      get_portfolio_news_feed_v1: {
+        Args: {
+          p_before?: string
+          p_limit?: number
+          p_portfolio_id: string
+          p_security_ids?: string[]
+        }
+        Returns: {
+          category: string
+          company_name: string
+          first_seen_at: string
+          headline: string
+          importance_state: string
+          news_item_id: string
+          publication_precision: string
+          published_at: string
+          security_id: string
+          source_name: string
+          source_url: string
+          symbol: string
+        }[]
+      }
+      get_portfolio_news_feed_v2: {
+        Args: {
+          p_before?: string
+          p_limit?: number
+          p_portfolio_id: string
+          p_security_ids?: string[]
+        }
+        Returns: {
+          category: string
+          company_name: string
+          first_seen_at: string
+          headline: string
+          importance_state: string
+          news_item_id: string
+          publication_precision: string
+          published_at: string
+          security_id: string
+          source_name: string
+          source_url: string
+          symbol: string
+          tone_confidence: number
+          tone_method: string
+          tone_reason: string
+          tone_state: string
+        }[]
+      }
+      get_portfolio_profile_weight_context_v1: {
+        Args: {
+          p_portfolio_id: string
+          p_profile_code: string
+          p_security_id: string
+        }
+        Returns: {
+          current_weight: number
+          reviewed_assignment_count: number
+          reviewed_assignment_coverage: number
+          same_profile_weight: number
+          total_position_count: number
+        }[]
+      }
       get_provider_operational_summary_v1: {
         Args: { p_source_code?: string }
         Returns: {
@@ -4547,6 +6824,36 @@ export type Database = {
           utilization_state: string
         }[]
       }
+      get_provider_quota_summary_v1: {
+        Args: { p_source_code?: string }
+        Returns: {
+          day_started_at: string
+          internal_daily_limit: number
+          internal_daily_remaining: number
+          internal_daily_used: number
+          month_started_at: string
+          plan_name: string
+          provider_daily_estimated_remaining: number
+          provider_daily_estimated_used: number
+          provider_daily_limit: number
+          provider_monthly_estimated_remaining: number
+          provider_monthly_estimated_used: number
+          provider_monthly_limit: number
+          quota_status: string
+          source_code: string
+          usage_basis: string
+        }[]
+      }
+      invoke_amfi_market_cap_refresh_v1: {
+        Args: { p_action?: string }
+        Returns: number
+      }
+      invoke_nse_news_pipeline_scheduled_v1: { Args: never; Returns: number }
+      invoke_trendlyne_classification_refresh_v1: {
+        Args: { p_action?: string; p_limit?: number }
+        Returns: number
+      }
+      p7_ic2_cache_facts_v1: { Args: { p_portfolio_id: string }; Returns: Json }
       portfolioai_assert_effective_quantity_valid: {
         Args: {
           p_excluded_transaction_id?: string
@@ -4567,6 +6874,14 @@ export type Database = {
         Args: { p_value: string }
         Returns: string
       }
+      reclassify_unclassified_news_from_stored_evidence_v1: {
+        Args: { p_limit?: number }
+        Returns: {
+          remaining_unclassified: number
+          scanned_count: number
+          updated_count: number
+        }[]
+      }
       record_provider_usage_event_v1: {
         Args: {
           p_accounting_class: string
@@ -4586,6 +6901,60 @@ export type Database = {
           p_source_code: string
         }
         Returns: string
+      }
+      record_recommendation_preview_v1: {
+        Args: {
+          p_current_user_role: string
+          p_current_weight: number
+          p_evaluation_key: string
+          p_evidence_confidence: number
+          p_overall_score: number
+          p_policy_version: number
+          p_portfolio_id: string
+          p_rationale?: Json
+          p_score_ready_coverage: number
+          p_scoring_profile_code: string
+          p_security_id: string
+          p_suggested_role: string
+        }
+        Returns: {
+          change_signal: string
+          created_at: string
+          id: string
+          persistence_count: number
+          suggested_role: string
+          transition_status: string
+        }[]
+      }
+      record_recommendation_preview_v2: {
+        Args: {
+          p_action_bias: string
+          p_current_user_role: string
+          p_current_weight: number
+          p_evaluation_key: string
+          p_evidence_confidence: number
+          p_overall_score: number
+          p_policy_version: number
+          p_portfolio_id: string
+          p_rationale?: Json
+          p_score_ready_coverage: number
+          p_scoring_profile_code: string
+          p_security_id: string
+          p_suggested_role: string
+          p_suggested_weight_max: number
+          p_suggested_weight_min: number
+        }
+        Returns: {
+          action_bias: string
+          change_signal: string
+          created_at: string
+          id: string
+          persistence_count: number
+          suggested_role: string
+          suggested_weight_max: number
+          suggested_weight_min: number
+          transition_status: string
+        }[]
       }
       record_refresh_item_result_v1: {
         Args: {
@@ -4632,6 +7001,15 @@ export type Database = {
           p_operation: string
           p_portfolio_id: string
           p_provider_code: string
+        }
+        Returns: boolean
+      }
+      release_news_pipeline_lease_v1: {
+        Args: {
+          p_cooldown_seconds?: number
+          p_lease_holder: string
+          p_portfolio_id: string
+          p_source_code: string
         }
         Returns: boolean
       }
@@ -4728,6 +7106,18 @@ export type Database = {
           p_target_kind: string
         }
         Returns: string
+      }
+      verify_amfi_market_cap_refresh_token_v1: {
+        Args: { p_token: string }
+        Returns: boolean
+      }
+      verify_news_pipeline_scheduler_token_v1: {
+        Args: { p_token: string }
+        Returns: boolean
+      }
+      verify_trendlyne_classification_refresh_token_v1: {
+        Args: { p_token: string }
+        Returns: boolean
       }
       void_transaction_v1: {
         Args: {
