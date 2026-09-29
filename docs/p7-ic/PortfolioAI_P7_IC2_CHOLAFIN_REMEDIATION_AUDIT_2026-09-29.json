@@ -1,0 +1,34 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC2_CHOLAFIN_REMEDIATION_AUDIT_V1",
+  "asOf": "2026-09-29",
+  "status": "PASS",
+  "symbol": "CHOLAFIN",
+  "canonical": {
+    "nameAlias": "Cholamandalam Investments",
+    "isin": "INE121A01024",
+    "exchange": "NSE"
+  },
+  "trendlyne": {
+    "providerInstrumentId": "262",
+    "observedName": "Cholamandalam Investment & Finance Company Ltd.",
+    "observedSymbol": "CHOLAFIN",
+    "observedIsin": "INE121A01024",
+    "confidence": "1.0000"
+  },
+  "providerUsage": {
+    "overviewOperations": 1,
+    "searchOperations": 0
+  },
+  "disposition": "CANONICAL_DISPLAY_NAME_ALIAS_FALSE_POSITIVE",
+  "broadCampaignResumed": false,
+  "governance": {
+    "productionChanged": false,
+    "migration": false,
+    "vercelDeployment": false,
+    "gitMerge": false,
+    "ic4R6": false,
+    "ic5R7": false,
+    "ic6Plus": false,
+    "p8": false
+  }
+}

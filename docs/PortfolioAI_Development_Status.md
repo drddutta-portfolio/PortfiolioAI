@@ -2202,3 +2202,24 @@ Exact Trendlyne identity coverage is now **183 / 239 open equities** (153 before
 No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
 
 **IC2 = ACTIVE / IDENTITY EXECUTION PAUSED / FAIL-CLOSED AT CHOLAFIN.**
+
+
+## P7-IC IC2 — CHOLAFIN remediation PASS — 29 September 2026
+
+CHOLAFIN exact identity remediation passed under owner authorization:
+- canonical PortfolioAI symbol: `CHOLAFIN`;
+- canonical ISIN: `INE121A01024`;
+- canonical display-name alias: `Cholamandalam Investments`;
+- fresh Trendlyne overview stock ID: `262`;
+- observed Trendlyne symbol: `CHOLAFIN`;
+- observed Trendlyne ISIN: `INE121A01024`;
+- observed provider name: `Cholamandalam Investment & Finance Company Ltd.`;
+- persisted Development identity: `MATCHED`;
+- confidence: `1.0000`;
+- remediation provider usage: one `GET_OVERVIEW_NEWS_CORP_EVENTS` operation; no `SEARCH_ENTITIES` operation.
+
+The prior `PROVIDER_COMPANY_IDENTITY_CONFLICT` is classified as a canonical display-name alias false-positive, not a real provider/canonical identity conflict.
+
+Broad IC2 identity execution remains PAUSED by approval scope. No TID05 offset 5 or later identity slice was resumed in this remediation step.
+
+No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
