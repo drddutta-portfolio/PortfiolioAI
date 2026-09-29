@@ -2160,3 +2160,22 @@ These are internal accounting events, not the Trendlyne subscription billing cou
 No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
 
 **IC2 = ACTIVE / IDENTITY EXECUTION PAUSED / FAIL-CLOSED AT VEDL.**
+
+
+## P7-IC IC2 — VEDL remediation PASS — 29 September 2026
+
+VEDL exact identity remediation passed under owner authorization:
+- canonical NSE symbol: `VEDL`;
+- canonical ISIN: `INE205A01025`;
+- fresh Trendlyne overview stock ID: `1289`;
+- observed Trendlyne symbol: `VEDL`;
+- observed Trendlyne ISIN: `INE205A01025`;
+- persisted Development identity: `MATCHED`;
+- confidence: `1.0000`;
+- remediation provider usage: one `GET_OVERVIEW_NEWS_CORP_EVENTS` operation; no `SEARCH_ENTITIES` operation.
+
+The prior `NO_EXACT_PROVIDER_IDENTITY` result is classified as a resolver/search-candidate false-negative, not a canonical identity conflict.
+
+Broad IC2 identity execution remains PAUSED by approval scope. LEMONTREE and later identity slices were not resumed in this remediation step.
+
+No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.

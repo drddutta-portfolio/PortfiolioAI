@@ -1,0 +1,32 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC2_VEDL_REMEDIATION_AUDIT_V1",
+  "asOf": "2026-09-29",
+  "status": "PASS",
+  "symbol": "VEDL",
+  "canonical": {
+    "isin": "INE205A01025",
+    "exchange": "NSE"
+  },
+  "trendlyne": {
+    "providerInstrumentId": "1289",
+    "observedSymbol": "VEDL",
+    "observedIsin": "INE205A01025",
+    "confidence": "1.0000"
+  },
+  "providerUsage": {
+    "overviewOperations": 1,
+    "searchOperations": 0
+  },
+  "disposition": "RESOLVER_SEARCH_CANDIDATE_FALSE_NEGATIVE",
+  "broadCampaignResumed": false,
+  "governance": {
+    "productionChanged": false,
+    "migration": false,
+    "vercelDeployment": false,
+    "gitMerge": false,
+    "ic4R6": false,
+    "ic5R7": false,
+    "ic6Plus": false,
+    "p8": false
+  }
+}
