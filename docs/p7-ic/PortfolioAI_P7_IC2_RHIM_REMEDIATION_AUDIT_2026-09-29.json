@@ -1,0 +1,35 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC2_RHIM_REMEDIATION_AUDIT_V1",
+  "asOf": "2026-09-29",
+  "status": "PASS",
+  "symbol": "RHIM",
+  "canonical": {
+    "isin": "INE743M01012",
+    "exchange": "NSE",
+    "companyName": "RHI Magnesita India Limited"
+  },
+  "trendlyne": {
+    "providerInstrumentId": "989",
+    "observedName": "RHI Magnesita India Ltd.",
+    "observedSymbol": "RHIM",
+    "observedIsin": "INE743M01012",
+    "confidence": "1.0000"
+  },
+  "providerUsage": {
+    "overviewOperations": 1,
+    "searchOperations": 0
+  },
+  "disposition": "RESOLVER_SEARCH_CANDIDATE_FALSE_NEGATIVE",
+  "broadCampaignResumed": false,
+  "nextFrozenSymbol": "IGL",
+  "governance": {
+    "productionChanged": false,
+    "migration": false,
+    "vercelDeployment": false,
+    "gitMerge": false,
+    "ic4R6": false,
+    "ic5R7": false,
+    "ic6Plus": false,
+    "p8": false
+  }
+}
