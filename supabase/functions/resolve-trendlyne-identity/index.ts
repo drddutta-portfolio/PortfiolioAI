@@ -28,6 +28,11 @@ const P7_VEDL_SECURITY_ID = "2065b292-6f3a-4c30-8e63-e2b845862ad4"
 const P7_VEDL_SYMBOL = "VEDL"
 const P7_VEDL_ISIN = "INE205A01025"
 const P7_VEDL_STOCK_ID = "1289"
+const P7_CHOLAFIN_CONFIRMATION = "OWNER_CONFIRMED_P7_IC2_CHOLAFIN_IDENTITY_REMEDIATION"
+const P7_CHOLAFIN_SECURITY_ID = "cbdbea24-eb1d-489f-ab6f-7800f04f28ca"
+const P7_CHOLAFIN_SYMBOL = "CHOLAFIN"
+const P7_CHOLAFIN_ISIN = "INE121A01024"
+const P7_CHOLAFIN_STOCK_ID = "262"
 const P4_DEV_REF = "lrgpjimipfkyoqbpsqzz"
 const P4_PROD_REF = "uxiyufbsbgzzdujzcdxe"
 const P4_PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
@@ -55,20 +60,34 @@ Deno.serve(async request => {
     const p7Maxhealth = body.action === "P7_IC2_MAXHEALTH_REMEDIATE"
     const p7Tmcv = body.action === "P7_IC2_TMCV_REMEDIATE"
     const p7Vedl = body.action === "P7_IC2_VEDL_REMEDIATE"
+    const p7Cholafin = body.action === "P7_IC2_CHOLAFIN_REMEDIATE"
     const a2 = body.action === "EXECUTE"
-    if (!p4 && !p4b && !p7Ushamart && !p7Maxhealth && !p7Tmcv && !p7Vedl && !a2) return reply(409, { error: "Exact identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+    if (!p4 && !p4b && !p7Ushamart && !p7Maxhealth && !p7Tmcv && !p7Vedl && !p7Cholafin && !a2) return reply(409, { error: "Exact identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return reply(409, { error: "Exact identity scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
 
     const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
     let requestedBy: string
 
-    if (p4 || p4b || p7Ushamart || p7Maxhealth || p7Tmcv || p7Vedl) {
+    if (p4 || p4b || p7Ushamart || p7Maxhealth || p7Tmcv || p7Vedl || p7Cholafin) {
       const ref = projectRef(supabaseUrl)
       if (ref === P4_PROD_REF) return reply(409, { error: "P4 identity discovery refuses Production.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
       if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID) {
         return reply(409, { error: "Exact Post-D P4 identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
       }
-      if (p7Vedl) {
+      if (p7Cholafin) {
+        if (
+          body.portfolioId !== P4_PORTFOLIO_ID ||
+          body.securityId !== P7_CHOLAFIN_SECURITY_ID ||
+          body.confirmation !== P7_CHOLAFIN_CONFIRMATION
+        ) return reply(409, { error: "Exact CHOLAFIN remediation scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+        const grant = await consumeP4ExecutionGrant(admin, {
+          grantId: body.grantId,
+          action: "P7_IC2_CHOLAFIN_REMEDIATE",
+          portfolioId: body.portfolioId,
+          securityId: body.securityId,
+        })
+        if (!grant.ok) return reply(401, { error: grant.message, code: grant.code, providerCalls: 0 })
+      } else if (p7Vedl) {
         if (
           body.portfolioId !== P4_PORTFOLIO_ID ||
           body.securityId !== P7_VEDL_SECURITY_ID ||
@@ -198,7 +217,20 @@ Deno.serve(async request => {
       let overviewText: string
       let identity: ReturnType<typeof parseOverview>["identity"]
       let bootstrapMissingIsin = false
-      if (p7Vedl) {
+      if (p7Cholafin) {
+        if (
+          securityResult.data.symbol !== P7_CHOLAFIN_SYMBOL ||
+          canonicalIsin?.toUpperCase() !== P7_CHOLAFIN_ISIN
+        ) throw new Error("CHOLAFIN_CANONICAL_IDENTITY_MISMATCH")
+        overviewText = await tracked("GET_OVERVIEW_NEWS_CORP_EVENTS", () => client.getOverviewNewsCorpEvents(P7_CHOLAFIN_SYMBOL, "overview"))
+        const overview = parseOverview(overviewText)
+        if (
+          overview.identity.stockId !== P7_CHOLAFIN_STOCK_ID ||
+          overview.identity.symbol !== P7_CHOLAFIN_SYMBOL ||
+          overview.identity.isin?.toUpperCase() !== P7_CHOLAFIN_ISIN
+        ) throw new Error("CHOLAFIN_PROVIDER_IDENTITY_MISMATCH")
+        identity = overview.identity
+      } else if (p7Vedl) {
         if (
           securityResult.data.symbol !== P7_VEDL_SYMBOL ||
           canonicalIsin?.toUpperCase() !== P7_VEDL_ISIN
@@ -270,6 +302,13 @@ Deno.serve(async request => {
         search_result: searchText,
         overview_result: overviewText,
         bootstrap_missing_isin: bootstrapMissingIsin,
+        p7_ic2_cholafin_remediation: p7Cholafin ? {
+          exact_expected_stock_id: P7_CHOLAFIN_STOCK_ID,
+          exact_expected_symbol: P7_CHOLAFIN_SYMBOL,
+          exact_expected_isin: P7_CHOLAFIN_ISIN,
+          canonical_name_alias: securityResult.data.name,
+          provider_public_name: "Cholamandalam Investment & Finance Company Ltd.",
+        } : null,
         p7_ic2_vedl_remediation: p7Vedl ? {
           exact_expected_stock_id: P7_VEDL_STOCK_ID,
           exact_expected_symbol: P7_VEDL_SYMBOL,
@@ -308,7 +347,7 @@ Deno.serve(async request => {
         } : null,
       }
       const payloadHash = await hash(payload)
-      const record = await admin.from("data_source_records").upsert({ source_code: SOURCE_CODE, ingestion_run_id: run.data.id, record_kind: "SECURITY_IDENTITY", external_record_id: `${identity.stockId}:identity`, payload_hash: payloadHash, raw_payload: payload, retrieved_at: new Date().toISOString(), terms_snapshot: { mode: p7Vedl ? "P7_IC2_VEDL_EXACT_IDENTITY_REMEDIATION" : p7Tmcv ? "P7_IC2_TMCV_EXACT_IDENTITY_REMEDIATION" : p7Maxhealth ? "P7_IC2_MAXHEALTH_EXACT_IDENTITY_REMEDIATION" : p7Ushamart ? "P7_IC2_USHAMART_EXACT_IDENTITY_REMEDIATION" : p4b ? "POST_D_P4B_IDENTITY_PREREQUISITE" : "PROGRAM_A_A2_IDENTITY_PREREQUISITE", exact_symbol_isin_required: !bootstrapMissingIsin, missing_isin_bootstrap_requires_angel_exact_symbol: bootstrapMissingIsin, public_exact_identity_crosscheck_required: p7Ushamart || p7Maxhealth || p7Tmcv || p7Vedl } }, { onConflict: "source_code,record_kind,external_record_id,payload_hash", ignoreDuplicates: true }).select("id").maybeSingle()
+      const record = await admin.from("data_source_records").upsert({ source_code: SOURCE_CODE, ingestion_run_id: run.data.id, record_kind: "SECURITY_IDENTITY", external_record_id: `${identity.stockId}:identity`, payload_hash: payloadHash, raw_payload: payload, retrieved_at: new Date().toISOString(), terms_snapshot: { mode: p7Cholafin ? "P7_IC2_CHOLAFIN_EXACT_IDENTITY_REMEDIATION" : p7Vedl ? "P7_IC2_VEDL_EXACT_IDENTITY_REMEDIATION" : p7Tmcv ? "P7_IC2_TMCV_EXACT_IDENTITY_REMEDIATION" : p7Maxhealth ? "P7_IC2_MAXHEALTH_EXACT_IDENTITY_REMEDIATION" : p7Ushamart ? "P7_IC2_USHAMART_EXACT_IDENTITY_REMEDIATION" : p4b ? "POST_D_P4B_IDENTITY_PREREQUISITE" : "PROGRAM_A_A2_IDENTITY_PREREQUISITE", exact_symbol_isin_required: !bootstrapMissingIsin, missing_isin_bootstrap_requires_angel_exact_symbol: bootstrapMissingIsin, public_exact_identity_crosscheck_required: p7Ushamart || p7Maxhealth || p7Tmcv || p7Vedl || p7Cholafin } }, { onConflict: "source_code,record_kind,external_record_id,payload_hash", ignoreDuplicates: true }).select("id").maybeSingle()
       let sourceRecordId = record.data?.id
       if (!sourceRecordId) { const found = await admin.from("data_source_records").select("id").eq("source_code", SOURCE_CODE).eq("record_kind", "SECURITY_IDENTITY").eq("external_record_id", `${identity.stockId}:identity`).eq("payload_hash", payloadHash).single(); if (found.error) throw new Error("IDENTITY_PROVENANCE_FAILED"); sourceRecordId = found.data.id }
       const conflict = await admin.from("security_identity_observations").select("provider_instrument_id").eq("security_id", body.securityId).eq("source_code", SOURCE_CODE).eq("evidence_status", "MATCHED").neq("provider_instrument_id", identity.stockId)
