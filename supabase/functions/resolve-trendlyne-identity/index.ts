@@ -18,6 +18,11 @@ const P7_MAXHEALTH_SECURITY_ID = "6acf47cc-f868-41d3-b37c-1f7a0c29021b"
 const P7_MAXHEALTH_SYMBOL = "MAXHEALTH"
 const P7_MAXHEALTH_ISIN = "INE027H01010"
 const P7_MAXHEALTH_STOCK_ID = "276825"
+const P7_TMCV_CONFIRMATION = "OWNER_CONFIRMED_P7_IC2_TMCV_IDENTITY_REMEDIATION"
+const P7_TMCV_SECURITY_ID = "986f6527-d5e6-4fe2-af2d-576ddccedb57"
+const P7_TMCV_SYMBOL = "TMCV"
+const P7_TMCV_ISIN = "INE1TAE01010"
+const P7_TMCV_STOCK_ID = "3327757"
 const P4_DEV_REF = "lrgpjimipfkyoqbpsqzz"
 const P4_PROD_REF = "uxiyufbsbgzzdujzcdxe"
 const P4_PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
@@ -43,20 +48,34 @@ Deno.serve(async request => {
     const p4b = body.action === "P4B_EXECUTE"
     const p7Ushamart = body.action === "P7_IC2_USHAMART_REMEDIATE"
     const p7Maxhealth = body.action === "P7_IC2_MAXHEALTH_REMEDIATE"
+    const p7Tmcv = body.action === "P7_IC2_TMCV_REMEDIATE"
     const a2 = body.action === "EXECUTE"
-    if (!p4 && !p4b && !p7Ushamart && !p7Maxhealth && !a2) return reply(409, { error: "Exact identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+    if (!p4 && !p4b && !p7Ushamart && !p7Maxhealth && !p7Tmcv && !a2) return reply(409, { error: "Exact identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return reply(409, { error: "Exact identity scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
 
     const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
     let requestedBy: string
 
-    if (p4 || p4b || p7Ushamart || p7Maxhealth) {
+    if (p4 || p4b || p7Ushamart || p7Maxhealth || p7Tmcv) {
       const ref = projectRef(supabaseUrl)
       if (ref === P4_PROD_REF) return reply(409, { error: "P4 identity discovery refuses Production.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
       if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID) {
         return reply(409, { error: "Exact Post-D P4 identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
       }
-      if (p7Maxhealth) {
+      if (p7Tmcv) {
+        if (
+          body.portfolioId !== P4_PORTFOLIO_ID ||
+          body.securityId !== P7_TMCV_SECURITY_ID ||
+          body.confirmation !== P7_TMCV_CONFIRMATION
+        ) return reply(409, { error: "Exact TMCV remediation scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+        const grant = await consumeP4ExecutionGrant(admin, {
+          grantId: body.grantId,
+          action: "P7_IC2_TMCV_REMEDIATE",
+          portfolioId: body.portfolioId,
+          securityId: body.securityId,
+        })
+        if (!grant.ok) return reply(401, { error: grant.message, code: grant.code, providerCalls: 0 })
+      } else if (p7Maxhealth) {
         if (
           body.portfolioId !== P4_PORTFOLIO_ID ||
           body.securityId !== P7_MAXHEALTH_SECURITY_ID ||
@@ -160,7 +179,20 @@ Deno.serve(async request => {
       let overviewText: string
       let identity: ReturnType<typeof parseOverview>["identity"]
       let bootstrapMissingIsin = false
-      if (p7Maxhealth) {
+      if (p7Tmcv) {
+        if (
+          securityResult.data.symbol !== P7_TMCV_SYMBOL ||
+          canonicalIsin?.toUpperCase() !== P7_TMCV_ISIN
+        ) throw new Error("TMCV_CANONICAL_IDENTITY_MISMATCH")
+        overviewText = await tracked("GET_OVERVIEW_NEWS_CORP_EVENTS", () => client.getOverviewNewsCorpEvents(P7_TMCV_SYMBOL, "overview"))
+        const overview = parseOverview(overviewText)
+        if (
+          overview.identity.stockId !== P7_TMCV_STOCK_ID ||
+          overview.identity.symbol !== P7_TMCV_SYMBOL ||
+          overview.identity.isin?.toUpperCase() !== P7_TMCV_ISIN
+        ) throw new Error("TMCV_PROVIDER_IDENTITY_MISMATCH")
+        identity = overview.identity
+      } else if (p7Maxhealth) {
         if (
           securityResult.data.symbol !== P7_MAXHEALTH_SYMBOL ||
           canonicalIsin?.toUpperCase() !== P7_MAXHEALTH_ISIN
@@ -206,6 +238,15 @@ Deno.serve(async request => {
         search_result: searchText,
         overview_result: overviewText,
         bootstrap_missing_isin: bootstrapMissingIsin,
+        p7_ic2_tmcv_remediation: p7Tmcv ? {
+          exact_expected_stock_id: P7_TMCV_STOCK_ID,
+          exact_expected_symbol: P7_TMCV_SYMBOL,
+          exact_expected_isin: P7_TMCV_ISIN,
+          public_validation: {
+            trendlyne_stock_url_identity: "3327757/TMCV",
+            nse_official_isin: P7_TMCV_ISIN,
+          },
+        } : null,
         p7_ic2_maxhealth_remediation: p7Maxhealth ? {
           exact_expected_stock_id: P7_MAXHEALTH_STOCK_ID,
           exact_expected_symbol: P7_MAXHEALTH_SYMBOL,
@@ -226,7 +267,7 @@ Deno.serve(async request => {
         } : null,
       }
       const payloadHash = await hash(payload)
-      const record = await admin.from("data_source_records").upsert({ source_code: SOURCE_CODE, ingestion_run_id: run.data.id, record_kind: "SECURITY_IDENTITY", external_record_id: `${identity.stockId}:identity`, payload_hash: payloadHash, raw_payload: payload, retrieved_at: new Date().toISOString(), terms_snapshot: { mode: p7Maxhealth ? "P7_IC2_MAXHEALTH_EXACT_IDENTITY_REMEDIATION" : p7Ushamart ? "P7_IC2_USHAMART_EXACT_IDENTITY_REMEDIATION" : p4b ? "POST_D_P4B_IDENTITY_PREREQUISITE" : "PROGRAM_A_A2_IDENTITY_PREREQUISITE", exact_symbol_isin_required: !bootstrapMissingIsin, missing_isin_bootstrap_requires_angel_exact_symbol: bootstrapMissingIsin, public_exact_identity_crosscheck_required: p7Ushamart || p7Maxhealth } }, { onConflict: "source_code,record_kind,external_record_id,payload_hash", ignoreDuplicates: true }).select("id").maybeSingle()
+      const record = await admin.from("data_source_records").upsert({ source_code: SOURCE_CODE, ingestion_run_id: run.data.id, record_kind: "SECURITY_IDENTITY", external_record_id: `${identity.stockId}:identity`, payload_hash: payloadHash, raw_payload: payload, retrieved_at: new Date().toISOString(), terms_snapshot: { mode: p7Tmcv ? "P7_IC2_TMCV_EXACT_IDENTITY_REMEDIATION" : p7Maxhealth ? "P7_IC2_MAXHEALTH_EXACT_IDENTITY_REMEDIATION" : p7Ushamart ? "P7_IC2_USHAMART_EXACT_IDENTITY_REMEDIATION" : p4b ? "POST_D_P4B_IDENTITY_PREREQUISITE" : "PROGRAM_A_A2_IDENTITY_PREREQUISITE", exact_symbol_isin_required: !bootstrapMissingIsin, missing_isin_bootstrap_requires_angel_exact_symbol: bootstrapMissingIsin, public_exact_identity_crosscheck_required: p7Ushamart || p7Maxhealth || p7Tmcv } }, { onConflict: "source_code,record_kind,external_record_id,payload_hash", ignoreDuplicates: true }).select("id").maybeSingle()
       let sourceRecordId = record.data?.id
       if (!sourceRecordId) { const found = await admin.from("data_source_records").select("id").eq("source_code", SOURCE_CODE).eq("record_kind", "SECURITY_IDENTITY").eq("external_record_id", `${identity.stockId}:identity`).eq("payload_hash", payloadHash).single(); if (found.error) throw new Error("IDENTITY_PROVENANCE_FAILED"); sourceRecordId = found.data.id }
       const conflict = await admin.from("security_identity_observations").select("provider_instrument_id").eq("security_id", body.securityId).eq("source_code", SOURCE_CODE).eq("evidence_status", "MATCHED").neq("provider_instrument_id", identity.stockId)
