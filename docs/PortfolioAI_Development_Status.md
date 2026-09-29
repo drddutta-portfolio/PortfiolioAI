@@ -2404,3 +2404,24 @@ Stage 1 canonical-selection contract is COMPLETE / PASS at design level:
 No migration has been created or applied. No database row was changed. No provider call was made. No Edge Function was deployed. Production and `main` remain unchanged. IC3/R6/R7/IC6+/P8 remain not authorized.
 
 **Stage 0 = COMPLETE / PASS. Stage 1 = COMPLETE / PASS. Stage 2 = NOT STARTED. IC2 remains BLOCKED / NOT CLOSED pending the approved additive remediation build and later reconciliation.**
+
+
+## P7-IC IC2 current-selection remediation — Stage 2 repository package — 29 September 2026
+
+Stage 2 repository implementation package has been created on `PortfolioAI-Development`.
+
+Artifacts:
+- additive migration: `supabase/migrations/20260929235000_add_p7_ic2_canonical_snapshot_selection_ledger.sql`;
+- transaction-only verification script: `supabase/tests/p7_ic2_current_selection_ledger.sql`;
+- frozen contract: `docs/p7-ic/PortfolioAI_P7_IC2_CURRENT_SELECTION_CONTRACT_V1.md`;
+- machine-readable Stage 2 audit: `docs/p7-ic/PortfolioAI_P7_IC2_CURRENT_SELECTION_REMEDIATION_STAGE2_AUDIT_2026-09-29.json`.
+
+The migration is additive and preserves the existing immutable snapshot/item tables. It introduces `research_evidence_snapshot_selections`, backfills the pre-migration current projection without changing observable current state, changes `current_research_evidence_snapshot_v1` to resolve through canonical selection events, and adds service-only `append_and_select_research_evidence_snapshot_v2`.
+
+The repository verification script is designed to run inside a transaction and ends with `ROLLBACK`. It checks backfill cardinality, one-current-row-per-security behavior, RLS/grants, `security_invoker`, older-snapshot reactivation without immutable snapshot/item growth, same-run retry idempotency, different-content idempotency failure, append-only mutation rejection, and composite snapshot/security integrity.
+
+Repository delta from the Stage 0 baseline is controlled and contains only the approved remediation documentation plus the new migration/test package.
+
+No migration has been applied to PortfolioAI Dev. No database row has been changed by Stage 2. No Edge Function has been deployed. No provider call has occurred. Production and `main` remain unchanged.
+
+**Stage 2 repository package = COMPLETE. Local/replay execution verification = PENDING. Stage 3 = NOT AUTHORIZED. IC2 remains BLOCKED / NOT CLOSED.**
