@@ -2031,3 +2031,18 @@ Current read-only audit:
 No Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7 or P8 occurred.
 
 **IC2 = ACTIVE / PROVIDER EXECUTION PAUSED / FAIL-CLOSED AT USHAMART.**
+
+
+### IC2 Trendlyne quota accounting correction — 29 September 2026
+
+Owner-provided Trendlyne MCPMax utilisation shows **11 / 1000 tool calls used**.
+
+PortfolioAI's local ledger shows **21 internal provider-attempt events**, comprising:
+- 11 × `GET_OVERVIEW_NEWS_CORP_EVENTS`
+- 10 × `SEARCH_ENTITIES`
+
+These are not equivalent accounting units. The Trendlyne subscription dashboard is authoritative for external quota consumption. Therefore:
+- **External Trendlyne tool calls consumed = 11**
+- **PortfolioAI internal provider-attempt events = 21**
+
+Any earlier wording that described 21 as Trendlyne calls consumed is superseded by this correction.

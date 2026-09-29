@@ -15,7 +15,6 @@
   },
   "trendlyne": {
     "internalDailyLimit": 1000,
-    "callsConsumed": 21,
     "providerAttemptsSucceeded": 21,
     "providerAttemptsFailed": 0,
     "identityReadyBefore": 99,
@@ -40,7 +39,15 @@
       "matchedIdentityCreated": false,
       "priorTrendlyneRawCaptureAvailable": false
     },
-    "researchBatchesExecuted": 0
+    "researchBatchesExecuted": 0,
+    "internalProviderAttemptEvents": 21,
+    "internalProviderAttemptBreakdown": {
+      "GET_OVERVIEW_NEWS_CORP_EVENTS": 11,
+      "SEARCH_ENTITIES": 10
+    },
+    "externalSubscriptionToolCallsObserved": 11,
+    "externalSubscriptionObservationSource": "Owner-provided Trendlyne MCPMax utilisation screenshot, 29 Sep 2026",
+    "accountingNote": "PortfolioAI internal attempt events are not equivalent to Trendlyne subscription tool-call billing. Use Trendlyne's own utilisation counter as the authoritative external quota measure."
   },
   "angelOne": {
     "stockHistoryRunsExecuted": 0,
