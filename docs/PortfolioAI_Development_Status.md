@@ -2135,3 +2135,28 @@ The prior `NO_EXACT_PROVIDER_IDENTITY` result is classified as a resolver/search
 Broad IC2 identity execution remains PAUSED by approval scope. No TID03 offset 10/15, TID04+, research, Angel One stock-history, or benchmark execution resumed in this remediation step.
 
 No Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
+
+
+## P7-IC IC2 identity execution resumed; stopped at VEDL — 29 September 2026
+
+Owner approved resumption of the remaining IC2 Trendlyne identity campaign using corrected one-slice-at-a-time fail-closed control.
+
+Execution from TID03 offset 10:
+- PRIVISCL = PASS
+- NCC = PASS
+- HBLENGINE = PASS
+- VEDL = `NO_EXACT_PROVIDER_IDENTITY` → immediate stop
+- LEMONTREE was not attempted
+- no TID03 offset 15 or TID04+ slice was submitted
+
+Current exact Trendlyne identity coverage = **152 / 239 open equities**.
+
+PortfolioAI internal provider-attempt ledger today = 94 events:
+- 57 × `GET_OVERVIEW_NEWS_CORP_EVENTS`
+- 37 × `SEARCH_ENTITIES`
+
+These are internal accounting events, not the Trendlyne subscription billing count. Trendlyne's own MCPMax utilisation remains authoritative for external quota usage.
+
+No research, Angel One history, benchmark execution, Production change, migration, Vercel deployment, Git merge, IC4/R6, IC5/R7, IC6+, or P8 occurred.
+
+**IC2 = ACTIVE / IDENTITY EXECUTION PAUSED / FAIL-CLOSED AT VEDL.**

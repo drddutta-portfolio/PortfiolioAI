@@ -1,0 +1,48 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC2_IDENTITY_RESUME_STOP_AUDIT_V2",
+  "asOf": "2026-09-29",
+  "status": "PAUSED_FAIL_CLOSED",
+  "identityReady": 152,
+  "openEquities": 239,
+  "passedThisResume": [
+    "PRIVISCL",
+    "NCC",
+    "HBLENGINE"
+  ],
+  "blocker": {
+    "symbol": "VEDL",
+    "result": "NO_EXACT_PROVIDER_IDENTITY"
+  },
+  "notAttempted": [
+    "LEMONTREE"
+  ],
+  "stopControl": {
+    "oneSliceAtATime": true,
+    "timeBoundedAudit": true,
+    "nextSliceSubmittedAfterFailure": false
+  },
+  "notExecutedAfterStop": [
+    "TID03_OFFSET_15",
+    "TID04",
+    "TID05",
+    "TID06",
+    "TID07",
+    "RESEARCH_BATCHES",
+    "ANGEL_ONE_STOCK_HISTORY",
+    "BENCHMARK_HISTORY"
+  ],
+  "bluejet": {
+    "state": "REVIEW_REQUIRED",
+    "providerCalls": 0
+  },
+  "governance": {
+    "productionChanged": false,
+    "migration": false,
+    "vercelDeployment": false,
+    "gitMerge": false,
+    "ic4R6": false,
+    "ic5R7": false,
+    "ic6Plus": false,
+    "p8": false
+  }
+}
