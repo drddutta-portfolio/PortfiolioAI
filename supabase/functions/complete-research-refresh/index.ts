@@ -1,6 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { PLANNED_PRIMARY_ENRICHMENT_SOURCE } from "../_shared/enrichment.ts"
 import { mapApprovedCompleteResearchMetrics } from "../_shared/trendlyne-complete-research-mapping.ts"
+import { buildProfileAwareTrendlyneQueries, buildProfileEvidencePlan, normalizeDocumentEvidence, normalizeNumericEvidence, parseTrendlyneOwnershipHistory, type Ic1ProfileEvidenceContract } from "../_shared/p7-ic-evidence-normalization.ts"
+import { p7IcProfileContract } from "../_shared/p7-ic-profile-contracts.ts"
+import { p7IcHeldProfileAssignment } from "../_shared/p7-ic-held-profile-assignments.ts"
 import { TrendlyneObservedMcpClient } from "../_shared/trendlyne-observed.ts"
 import { assertExpectedStockId, parseDocumentAppearances, parseOverview, parseOwnership } from "../_shared/trendlyne.ts"
 import { consumeP4ExecutionGrant } from "../_shared/p4-execution-grant.ts"
@@ -21,6 +24,7 @@ const P4B_CONFIRMATION = "OWNER_CONFIRMED_POST_D_P4B_COMPLETE_RESEARCH"
 const P4_DEV_REF = "lrgpjimipfkyoqbpsqzz"
 const P4_PROD_REF = "uxiyufbsbgzzdujzcdxe"
 const P4_PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
+const P7_IC2_CONFIRMATION = "OWNER_CONFIRMED_P7_IC2_RESEARCH_EVIDENCE_REFRESH"
 const P4_SECURITY_IDS = new Set([
   "b47b007d-1990-4504-a5a2-4391c07687c5",
   "da69b3eb-0343-44f8-912c-288b826118cc",
@@ -152,12 +156,14 @@ async function writeOverview(admin: Admin, runId: string, security: Security, pr
   return { metricCount: rows.length, identity: overview.identity }
 }
 
-async function writeDetailed(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string) {
+async function writeDetailed(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string, ic2Plan: ReturnType<typeof buildProfileEvidencePlan> | null = null) {
+  const normalizedEvidence = ic2Plan ? normalizeNumericEvidence({ providerResult: text, expectedSymbol: security.symbol, expectedInstrumentId: providerInstrumentId, requirements: ic2Plan.requirements }) : null
   const record = await sourceRecord(admin, runId, "COMPLETE_RESEARCH_STRUCTURED_METRICS", `${providerInstrumentId}:structured:${runId}`, {
     security_id: security.id,
     security_symbol: security.symbol,
     provider_instrument_id: providerInstrumentId,
     provider_tool: "get_parameter_values_multi_stock",
+    p7_ic2_normalized_evidence: normalizedEvidence,
     result: text,
   })
   const mapped = mapApprovedCompleteResearchMetrics(text, security.symbol, providerInstrumentId)
@@ -204,13 +210,15 @@ async function writeDetailed(admin: Admin, runId: string, security: Security, pr
   return { metricCount: rows.length, captured: true }
 }
 
-async function writeOwnership(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string) {
+async function writeOwnership(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string, ic2Plan: ReturnType<typeof buildProfileEvidencePlan> | null = null) {
   const values = parseOwnership(text)
+  const ownershipHistory = ic2Plan ? parseTrendlyneOwnershipHistory(text) : null
   const record = await sourceRecord(admin, runId, "COMPLETE_RESEARCH_OWNERSHIP", `${providerInstrumentId}:ownership:${runId}`, {
     security_id: security.id,
     security_symbol: security.symbol,
     provider_instrument_id: providerInstrumentId,
     provider_tool: "get_ownership_deals_insider_sast",
+    p7_ic2_ownership_history: ownershipHistory,
     result: text,
   })
   const freshUntil = new Date(new Date(record.retrieved_at).getTime() + 45 * DAY).toISOString()
@@ -243,13 +251,15 @@ async function writeOwnership(admin: Admin, runId: string, security: Security, p
   return { metricCount: rows.length }
 }
 
-async function writeDocuments(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string) {
+async function writeDocuments(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string, ic2Plan: ReturnType<typeof buildProfileEvidencePlan> | null = null) {
+  const normalizedEvidence = ic2Plan ? normalizeDocumentEvidence({ providerResult: text, expectedSymbol: security.symbol, expectedInstrumentId: providerInstrumentId, requirements: ic2Plan.requirements }) : null
   const rawRecord = await sourceRecord(admin, runId, "COMPLETE_RESEARCH_DOCUMENT_SEARCH", `${providerInstrumentId}:documents:${runId}`, {
     security_id: security.id,
     security_symbol: security.symbol,
     provider_instrument_id: providerInstrumentId,
     provider_tool: "get_document_search_results",
     document_bodies_retained: false,
+    p7_ic2_normalized_evidence: normalizedEvidence,
     result: text,
   })
   const appearances = parseDocumentAppearances(text)
@@ -338,9 +348,15 @@ Deno.serve(async request => {
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return reply(400, { error: "portfolioId and securityId are required." })
     const p4 = body.action === "P4_PLAN" || body.action === "P4_EXECUTE"
     const p4b = body.action === "P4B_PLAN" || body.action === "P4B_EXECUTE"
-    if (body.action !== "PLAN" && body.action !== "EXECUTE" && !p4 && !p4b) return reply(400, { error: "Unknown action." })
+    const p7ic2 = body.action === "P7_IC2_PLAN" || body.action === "P7_IC2_EXECUTE"
+    if (body.action !== "PLAN" && body.action !== "EXECUTE" && !p4 && !p4b && !p7ic2) return reply(400, { error: "Unknown action." })
 
     const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
+    if (p7ic2) {
+      const ref = projectRef(supabaseUrl)
+      if (ref === P4_PROD_REF) return reply(409, { error: "P7-IC IC2 research execution refuses Production.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
+      if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID) return reply(409, { error: "P7-IC IC2 requires the frozen Development project and portfolio.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+    }
     let requestedBy: string
 
     if (p4 || p4b) {
@@ -383,6 +399,10 @@ Deno.serve(async request => {
     const securityResult = await admin.from("securities").select("id,symbol,name,asset_class").eq("id", body.securityId).single()
     if (securityResult.error || securityResult.data.asset_class !== "EQUITY") return reply(400, { error: "Complete Research Refresh currently supports held equities only." })
     const security = securityResult.data as Security
+    const ic2Assignment = p7ic2 ? p7IcHeldProfileAssignment(security.id) : null
+    if (p7ic2 && (!ic2Assignment || ic2Assignment.state !== "RESOLVED" || !ic2Assignment.profileCode)) return reply(409, { error: "P7-IC IC2 requires an owner-approved resolved methodology assignment.", code: "P7_IC2_PROFILE_ASSIGNMENT_NOT_RESOLVED", providerCalls: 0 })
+    const ic2Profile: Ic1ProfileEvidenceContract | null = ic2Assignment?.profileCode ? p7IcProfileContract(ic2Assignment.profileCode) : null
+    const ic2EvidencePlan = ic2Profile ? buildProfileEvidencePlan(ic2Profile) : null
 
     const identityResult = await admin.from("security_identity_observations")
       .select("provider_instrument_id,observed_symbol,created_at")
@@ -392,6 +412,7 @@ Deno.serve(async request => {
     const identity = identityResult.data as Identity
     if (identity.observed_symbol && identity.observed_symbol !== security.symbol) return reply(409, { error: "Stored Trendlyne identity no longer matches the security symbol." })
     const providerInstrumentId = String(identity.provider_instrument_id)
+    const ic2Queries = ic2Profile ? buildProfileAwareTrendlyneQueries({ companyName: security.name, symbol: security.symbol, providerInstrumentId, profile: ic2Profile }) : null
 
     const source = await admin.from("data_sources").select("is_active,entitlement_verified,retention_rights_verified").eq("code", SOURCE_CODE).single()
     const control = await admin.from("provider_ingestion_controls")
@@ -411,7 +432,7 @@ Deno.serve(async request => {
       RESERVED_UNITS <= control.data.per_run_internal_attempt_limit && projectedDailyUsage <= control.data.daily_internal_attempt_limit
     )
 
-    if (body.action === "PLAN" || body.action === "P4_PLAN" || body.action === "P4B_PLAN") return reply(200, {
+    if (body.action === "PLAN" || body.action === "P4_PLAN" || body.action === "P4B_PLAN" || body.action === "P7_IC2_PLAN") return reply(200, {
       mode: "COMPLETE_RESEARCH_REFRESH_PLAN",
       providerCalls: 0,
       security: security.symbol,
@@ -424,6 +445,10 @@ Deno.serve(async request => {
       providerQuotaStatus: control.data.actual_provider_quota_status,
       ingestionEnabled: control.data.ingestion_enabled,
       executionAllowed,
+      p7Ic2ProfileCode: ic2Assignment?.profileCode ?? null,
+      p7Ic2SubprofileCode: ic2Assignment?.subprofileCode ?? null,
+      p7Ic2EvidenceRequirementCount: ic2EvidencePlan?.requirements.length ?? null,
+      p7Ic2ProfileAwareQueries: p7ic2 ? { detailed: Boolean(ic2Queries?.detailedQuery), documents: Boolean(ic2Queries?.documentQuery) } : null,
       components: [
         { domain: "Overview & core fundamentals", calls: 1 },
         { domain: "Detailed scoring metrics", calls: 1 },
@@ -433,7 +458,7 @@ Deno.serve(async request => {
       note: "Planning consumes zero provider calls. Angel One market pricing is not changed by this action.",
     })
 
-    const requiredConfirmation = p4 ? P4_CONFIRMATION : p4b ? P4B_CONFIRMATION : CONFIRMATION
+    const requiredConfirmation = p4 ? P4_CONFIRMATION : p4b ? P4B_CONFIRMATION : p7ic2 ? P7_IC2_CONFIRMATION : CONFIRMATION
     if (body.confirmation !== requiredConfirmation) return reply(409, { error: "Explicit owner confirmation is required.", providerCalls: 0 })
     if (!executionAllowed) return reply(409, { error: "Current safety, quota, or provider-trust gates do not allow execution.", providerCalls: 0 })
     if (!mcpUrl) return reply(409, { error: "Trendlyne provider configuration is incomplete.", providerCalls: 0 })
@@ -545,25 +570,25 @@ Deno.serve(async request => {
       if (!overviewOk) abortRemaining = true
 
       if (!abortRemaining) {
-        const detailedQuery = `${security.name} ${security.symbol} instrument ${providerInstrumentId} latest ROCE Ann. %, OPM TTM %, promoter holding pledge percentage, Gross NPA ratio Qtr %, Net NPA ratio % Qtr, EPS Qtr YoY Growth %, Fair Price 5YrPE Upside%, net profit 3Y growth, cash EPS 3Y growth, operating cash flow 3Y growth, debt equity, interest coverage, ROA, NIM, capital adequacy and CET1`
+        const detailedQuery = ic2Queries?.detailedQuery ?? `${security.name} ${security.symbol} instrument ${providerInstrumentId} latest ROCE Ann. %, OPM TTM %, promoter holding pledge percentage, Gross NPA ratio Qtr %, Net NPA ratio % Qtr, EPS Qtr YoY Growth %, Fair Price 5YrPE Upside%, net profit 3Y growth, cash EPS 3Y growth, operating cash flow 3Y growth, debt equity, interest coverage, ROA, NIM, capital adequacy and CET1`
         await executeCall(
           "DETAILED_FUNDAMENTALS",
           "GET_PARAMETER_VALUES_MULTI_STOCK",
           () => client.getParameterValuesMultiStock(detailedQuery, "stock"),
-          async text => writeDetailed(admin, runId, security, providerInstrumentId, text),
+          async text => writeDetailed(admin, runId, security, providerInstrumentId, text, ic2EvidencePlan),
         )
         await executeCall(
           "OWNERSHIP",
           "GET_OWNERSHIP_DEALS_INSIDER_SAST",
           () => client.getOwnershipDealsInsiderSast(providerInstrumentId, "shareholding"),
-          async text => writeOwnership(admin, runId, security, providerInstrumentId, text),
+          async text => writeOwnership(admin, runId, security, providerInstrumentId, text, ic2EvidencePlan),
         )
-        const documentQuery = `${security.name} ${security.symbol} stock id ${providerInstrumentId} annual report quarterly result investor presentation earnings call`
+        const documentQuery = ic2Queries?.documentQuery ?? `${security.name} ${security.symbol} stock id ${providerInstrumentId} annual report quarterly result investor presentation earnings call`
         await executeCall(
           "DOCUMENT_DISCOVERY",
           "GET_DOCUMENT_SEARCH_RESULTS",
           () => client.getDocumentSearchResults(documentQuery),
-          async text => writeDocuments(admin, runId, security, providerInstrumentId, text),
+          async text => writeDocuments(admin, runId, security, providerInstrumentId, text, ic2EvidencePlan),
         )
       }
 
