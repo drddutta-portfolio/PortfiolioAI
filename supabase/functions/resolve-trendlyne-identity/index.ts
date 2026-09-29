@@ -8,6 +8,11 @@ const SOURCE_CODE = "TRENDLYNE_MCP"
 const CONFIRMATION = "OWNER_CONFIRMED_PROGRAM_A_A2_IDENTITY_DISCOVERY"
 const P4_CONFIRMATION = "OWNER_CONFIRMED_POST_D_P4_IDENTITY_DISCOVERY"
 const P4B_CONFIRMATION = "OWNER_CONFIRMED_POST_D_P4B_IDENTITY_DISCOVERY"
+const P7_USHAMART_CONFIRMATION = "OWNER_CONFIRMED_P7_IC2_USHAMART_IDENTITY_REMEDIATION"
+const P7_USHAMART_SECURITY_ID = "84455cdf-46f9-48d3-a323-8b46ef8cd9f6"
+const P7_USHAMART_SYMBOL = "USHAMART"
+const P7_USHAMART_ISIN = "INE228A01035"
+const P7_USHAMART_STOCK_ID = "1456"
 const P4_DEV_REF = "lrgpjimipfkyoqbpsqzz"
 const P4_PROD_REF = "uxiyufbsbgzzdujzcdxe"
 const P4_PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
@@ -31,20 +36,34 @@ Deno.serve(async request => {
     const body = await request.json() as { action?: unknown; portfolioId?: unknown; securityId?: unknown; confirmation?: unknown; grantId?: unknown }
     const p4 = body.action === "P4_EXECUTE"
     const p4b = body.action === "P4B_EXECUTE"
+    const p7Ushamart = body.action === "P7_IC2_USHAMART_REMEDIATE"
     const a2 = body.action === "EXECUTE"
-    if (!p4 && !p4b && !a2) return reply(409, { error: "Exact identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+    if (!p4 && !p4b && !p7Ushamart && !a2) return reply(409, { error: "Exact identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
     if (typeof body.portfolioId !== "string" || typeof body.securityId !== "string") return reply(409, { error: "Exact identity scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
 
     const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
     let requestedBy: string
 
-    if (p4 || p4b) {
+    if (p4 || p4b || p7Ushamart) {
       const ref = projectRef(supabaseUrl)
       if (ref === P4_PROD_REF) return reply(409, { error: "P4 identity discovery refuses Production.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
       if (ref !== P4_DEV_REF || body.portfolioId !== P4_PORTFOLIO_ID) {
         return reply(409, { error: "Exact Post-D P4 identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
       }
-      if (p4) {
+      if (p7Ushamart) {
+        if (
+          body.portfolioId !== P4_PORTFOLIO_ID ||
+          body.securityId !== P7_USHAMART_SECURITY_ID ||
+          body.confirmation !== P7_USHAMART_CONFIRMATION
+        ) return reply(409, { error: "Exact USHAMART remediation scope is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
+        const grant = await consumeP4ExecutionGrant(admin, {
+          grantId: body.grantId,
+          action: "P7_IC2_USHAMART_REMEDIATE",
+          portfolioId: body.portfolioId,
+          securityId: body.securityId,
+        })
+        if (!grant.ok) return reply(401, { error: grant.message, code: grant.code, providerCalls: 0 })
+      } else if (p4) {
         if (!P4_SECURITY_IDS.has(body.securityId) || body.confirmation !== P4_CONFIRMATION) {
           return reply(409, { error: "Exact Post-D P4 identity authorization is required.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 })
         }
@@ -122,7 +141,20 @@ Deno.serve(async request => {
       let overviewText: string
       let identity: ReturnType<typeof parseOverview>["identity"]
       let bootstrapMissingIsin = false
-      if (!canonicalIsin) {
+      if (p7Ushamart) {
+        if (
+          securityResult.data.symbol !== P7_USHAMART_SYMBOL ||
+          canonicalIsin?.toUpperCase() !== P7_USHAMART_ISIN
+        ) throw new Error("USHAMART_CANONICAL_IDENTITY_MISMATCH")
+        overviewText = await tracked("GET_OVERVIEW_NEWS_CORP_EVENTS", () => client.getOverviewNewsCorpEvents(P7_USHAMART_SYMBOL, "overview"))
+        const overview = parseOverview(overviewText)
+        if (
+          overview.identity.stockId !== P7_USHAMART_STOCK_ID ||
+          overview.identity.symbol !== P7_USHAMART_SYMBOL ||
+          overview.identity.isin?.toUpperCase() !== P7_USHAMART_ISIN
+        ) throw new Error("USHAMART_PROVIDER_IDENTITY_MISMATCH")
+        identity = overview.identity
+      } else if (!canonicalIsin) {
         bootstrapMissingIsin = true
         overviewText = await tracked("GET_OVERVIEW_NEWS_CORP_EVENTS", () => client.getOverviewNewsCorpEvents(securityResult.data.symbol, "overview"))
         const overview = parseOverview(overviewText)
@@ -135,9 +167,25 @@ Deno.serve(async request => {
         overviewText = await tracked("GET_OVERVIEW_NEWS_CORP_EVENTS", () => client.getOverviewNewsCorpEvents(securityResult.data.symbol, "overview"))
         identity = reconcileTrendlyneIdentityDiscovery({ name: securityResult.data.name, symbol: securityResult.data.symbol, isin: canonicalIsin, bseCode: null }, parseTrendlyneClassificationCandidates(searchText), parseOverview(overviewText))
       }
-      const payload = { security_id: body.securityId, canonical: { name: securityResult.data.name, symbol: securityResult.data.symbol, isin: canonicalIsin ?? identity.isin }, matched_identity: identity, search_result: searchText, overview_result: overviewText, bootstrap_missing_isin: bootstrapMissingIsin }
+      const payload = {
+        security_id: body.securityId,
+        canonical: { name: securityResult.data.name, symbol: securityResult.data.symbol, isin: canonicalIsin ?? identity.isin },
+        matched_identity: identity,
+        search_result: searchText,
+        overview_result: overviewText,
+        bootstrap_missing_isin: bootstrapMissingIsin,
+        p7_ic2_ushamart_remediation: p7Ushamart ? {
+          exact_expected_stock_id: P7_USHAMART_STOCK_ID,
+          exact_expected_symbol: P7_USHAMART_SYMBOL,
+          exact_expected_isin: P7_USHAMART_ISIN,
+          public_validation: {
+            trendlyne_stock_url_identity: "1456/USHAMART",
+            company_official_isin: P7_USHAMART_ISIN,
+          },
+        } : null,
+      }
       const payloadHash = await hash(payload)
-      const record = await admin.from("data_source_records").upsert({ source_code: SOURCE_CODE, ingestion_run_id: run.data.id, record_kind: "SECURITY_IDENTITY", external_record_id: `${identity.stockId}:identity`, payload_hash: payloadHash, raw_payload: payload, retrieved_at: new Date().toISOString(), terms_snapshot: { mode: p4b ? "POST_D_P4B_IDENTITY_PREREQUISITE" : "PROGRAM_A_A2_IDENTITY_PREREQUISITE", exact_symbol_isin_required: !bootstrapMissingIsin, missing_isin_bootstrap_requires_angel_exact_symbol: bootstrapMissingIsin } }, { onConflict: "source_code,record_kind,external_record_id,payload_hash", ignoreDuplicates: true }).select("id").maybeSingle()
+      const record = await admin.from("data_source_records").upsert({ source_code: SOURCE_CODE, ingestion_run_id: run.data.id, record_kind: "SECURITY_IDENTITY", external_record_id: `${identity.stockId}:identity`, payload_hash: payloadHash, raw_payload: payload, retrieved_at: new Date().toISOString(), terms_snapshot: { mode: p7Ushamart ? "P7_IC2_USHAMART_EXACT_IDENTITY_REMEDIATION" : p4b ? "POST_D_P4B_IDENTITY_PREREQUISITE" : "PROGRAM_A_A2_IDENTITY_PREREQUISITE", exact_symbol_isin_required: !bootstrapMissingIsin, missing_isin_bootstrap_requires_angel_exact_symbol: bootstrapMissingIsin, public_exact_identity_crosscheck_required: p7Ushamart } }, { onConflict: "source_code,record_kind,external_record_id,payload_hash", ignoreDuplicates: true }).select("id").maybeSingle()
       let sourceRecordId = record.data?.id
       if (!sourceRecordId) { const found = await admin.from("data_source_records").select("id").eq("source_code", SOURCE_CODE).eq("record_kind", "SECURITY_IDENTITY").eq("external_record_id", `${identity.stockId}:identity`).eq("payload_hash", payloadHash).single(); if (found.error) throw new Error("IDENTITY_PROVENANCE_FAILED"); sourceRecordId = found.data.id }
       const conflict = await admin.from("security_identity_observations").select("provider_instrument_id").eq("security_id", body.securityId).eq("source_code", SOURCE_CODE).eq("evidence_status", "MATCHED").neq("provider_instrument_id", identity.stockId)
