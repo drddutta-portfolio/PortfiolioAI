@@ -16,17 +16,44 @@ declare
   v_members_before bigint;
   v_selections_before bigint;
 begin
-  select ch.portfolio_id, ch.security_id, s.is_active
-    into v_portfolio_id, v_security_id, v_security_active_before
-  from public.current_holdings ch
-  join public.securities s on s.id = ch.security_id
-  where ch.current_quantity > 0
-    and s.asset_class = 'EQUITY'
-  limit 1;
+  -- Self-contained clean-reset fixture. Do not depend on seed data or copied holdings.
+  insert into auth.users (id, email)
+  values (
+    '8b200000-0000-4000-8000-000000000001'::uuid,
+    'p8-b2-local-test@example.invalid'
+  );
 
-  if v_portfolio_id is null or v_security_id is null then
-    raise exception 'P8-B2 test requires one existing held equity fixture';
-  end if;
+  insert into public.portfolios (id, user_id, name, base_currency, is_active)
+  values (
+    '8b200000-0000-4000-8000-000000000002'::uuid,
+    '8b200000-0000-4000-8000-000000000001'::uuid,
+    'P8 B2 Local Test Portfolio',
+    'INR',
+    true
+  );
+
+  insert into public.securities (
+    id, symbol, exchange, name, asset_class, instrument_type,
+    currency, is_active, creation_source, series
+  ) values (
+    '8b200000-0000-4000-8000-000000000003'::uuid,
+    'P8B2TEST',
+    'NSE',
+    'P8 B2 Local Test Equity',
+    'EQUITY',
+    'EQUITY',
+    'INR',
+    true,
+    'P8_B2_TEST',
+    'EQ'
+  );
+
+  v_portfolio_id := '8b200000-0000-4000-8000-000000000002'::uuid;
+  v_security_id := '8b200000-0000-4000-8000-000000000003'::uuid;
+
+  select is_active into v_security_active_before
+  from public.securities
+  where id = v_security_id;
 
   v_observation_id := public.append_p8_listing_observation_v1(jsonb_build_object(
     'portfolio_id', v_portfolio_id,
