@@ -2803,3 +2803,10 @@ Before freezing the eligibility/parser rules, P8-B2 requires one compact semanti
 The local NSE identity profile completed. Observed `SctyTpFlg` values include `0`, `2` and `4`; `SctyTp`, `InstrmNm`, `MktTpAndId` and `Xchg` are blank in the sampled profile. ISIN and common identity fields are populated, but the observed type-flag values alone are not sufficient authority to infer equity eligibility.
 
 To avoid guessing NSE semantics, the next read-only step profiles the full 32-file distribution of `SctySrs × SctyTpFlg` with representative ticker/ISIN/name samples. Added `scripts/p8/p8-b2-profile-nse-series-flags.mjs`. No provider calls or database writes occur.
+
+
+## P8-B2 NSE equity eligibility rule — 30 September 2026
+
+NSE's official Master Data Technical Specifications explicitly define the Capital Market security-master instrument type as: `0 = Equities`, `1 = Preference Shares`, `2 = Debentures`, `3 = Warrants`, `4 = Miscellaneous`. Therefore the P8-B2 historical-equity eligibility rule is now frozen to `SctyTpFlg = "0"` for the acquired MII security files. Series is retained as evidence but is not used as a guessed substitute for instrument type.
+
+This resolves the earlier ambiguity observed in the local profile (`0`, `2`, `4`). A read-only dry-run parser has been added at `scripts/p8/p8-b2-dry-run-nse-equities.mjs`. It filters only official instrument type 0 rows, uses ISIN as the primary stable identity, records symbol/series/name/instrument-ID changes without overwriting them, reports missing/duplicate ISINs, fingerprints every monthly universe, and produces a global identity fingerprint. It makes no database writes and no provider calls.

@@ -35,7 +35,7 @@
     "evidence_source": "owner local terminal output from authorized runner",
     "generated_at": "2026-09-30T08:44:27.720Z"
   },
-  "next_action": "Run scripts/p8/p8-b2-profile-nse-series-flags.mjs locally and use the full SctySrs × SctyTpFlg distribution plus representative samples to freeze the equity eligibility contract.",
+  "next_action": "Run scripts/p8/p8-b2-dry-run-nse-equities.mjs locally and review missing/duplicate identities plus month fingerprints before any hosted materialization.",
   "schema_inspection": {
     "files_checked": 32,
     "all_hashes_pass": true,
@@ -90,5 +90,19 @@
     ],
     "parser_freeze_status": "PENDING_SERIES_FLAG_CROSSTAB",
     "rationale": "Do not infer equity semantics from undocumented numeric flags alone."
+  },
+  "equity_eligibility_contract": {
+    "authority": "NSE Data & Analytics Master Data Technical Specifications, Capital Market Segment",
+    "field": "SctyTpFlg",
+    "eligible_value": "0",
+    "semantics": "Equities",
+    "excluded_values": {
+      "1": "Preference Shares",
+      "2": "Debentures",
+      "3": "Warrants",
+      "4": "Miscellaneous"
+    },
+    "series_policy": "Evidence only; not used to infer instrument type.",
+    "identity_policy": "ISIN primary; preserve symbol/series/name/instrument-ID history."
   }
 }
