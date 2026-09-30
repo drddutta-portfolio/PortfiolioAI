@@ -2775,3 +2775,17 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+
+## P8-B2 two-schema mapping detail — 30 September 2026
+
+The owner-provided local schema comparison confirms both NSE layouts contain 120 columns. The version-specific differences are:
+
+```text
+V1-only: ElgbltyRETDBTMkt, Rsvd01
+V2-only: ElgbltyClsgAuctnSsn, XchgExclsv
+```
+
+The month mapping shows the campaign is V1 through June 2026 and V2 from July 2026 onward. These fields are not assumed to be equivalent or renamed without evidence; the parser will treat them as version-specific optional attributes and keep core identity/universe fields on the common schema only.
+
+A read-only semantic-analysis runner is added at `scripts/p8/p8-b2-analyze-nse-schema.mjs`. It extracts only identity/listing/security-relevant common columns, representative values for each schema version, and the exact month/version transition. No provider calls or database writes occur.
