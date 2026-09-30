@@ -1,0 +1,36 @@
+{
+  "contract": "PORTFOLIOAI_P7_IC3_CANONICAL_SNAPSHOT_COMPLETION_AUDIT_V1",
+  "asOfDate": "2026-09-30",
+  "environment": "PortfolioAI Dev",
+  "projectRef": "lrgpjimipfkyoqbpsqzz",
+  "status": "COMPLETE_PASS_AWAITING_IC_C",
+  "migration": "20260930022314_add_p7_ic3_snapshot_lineage_contract.sql",
+  "selectionRunId": "3c3c0000-0000-4000-8000-000000000001",
+  "evaluationAsOf": "2026-09-29T23:59:59.999Z",
+  "sourceCutoffAt": "2026-09-29T23:59:59.999Z",
+  "coverage": {"equities": 239, "canonicalSnapshots": 239, "completeLineage": 239, "incompleteLineage": 0},
+  "lineageContract": {
+    "classificationAuthority": "current_security_enrichment_v1",
+    "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+    "assignmentAuthority": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1",
+    "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+    "fields": ["classification_version", "methodology_role", "assignment_id", "assignment_version"]
+  },
+  "currentFingerprint": "31f15adbe874c095f689128ed7ac1576",
+  "snapshotStatusMatrix": {"READY": 0, "INSUFFICIENT": 128, "STALE": 2, "CONFLICTING": 0, "REVIEW_REQUIRED": 109},
+  "requirementStateMatrixExcludingLineage": {"FRESH": 1081, "INSUFFICIENT": 18, "MISSING": 2158, "STALE": 2, "CONFLICTING": 0, "REVIEW_REQUIRED": 246},
+  "persistenceAfter": {"snapshots": 1246, "items": 18657, "selections": 717, "lineageRows": 239},
+  "preservation": {
+    "priorSnapshotsPreserved": 1007,
+    "priorItemsPreserved": 14913,
+    "priorSelectionsPreserved": 478,
+    "historicalRowsUpdatedOrDeleted": 0,
+    "newIc3Snapshots": 239,
+    "newIc3Items": 3744,
+    "newIc3Selections": 239,
+    "newIc3LineageRows": 239
+  },
+  "verification": ["isolated local migration replay", "transaction-only rollback behavior test", "RLS and privilege checks", "security_invoker view check", "hosted rollback verification", "239-equity hosted coverage audit", "evidence-matrix preservation", "deterministic fingerprint"],
+  "providerCalls": 0,
+  "boundaries": {"icC": "AWAITING_OWNER_APPROVAL", "ic4R6": "NOT_AUTHORIZED", "ic5R7": "NOT_AUTHORIZED", "ic6Plus": "NOT_AUTHORIZED", "p8": "NOT_AUTHORIZED", "production": "UNCHANGED", "main": "UNCHANGED"}
+}

@@ -4,11 +4,15 @@ import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvide
 import {P7_IC_PROFILE_CONTRACTS} from "../_shared/p7-ic-profile-contracts.ts"
 import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json" with {type:"json"}
 
-const DEV_REF="lrgpjimipfkyoqbpsqzz",PROD_REF="uxiyufbsbgzzdujzcdxe",ACTION="P7_IC2_MATERIALIZE_READINESS"
+const DEV_REF="lrgpjimipfkyoqbpsqzz",PROD_REF="uxiyufbsbgzzdujzcdxe",ACTION="P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS"
 const REGISTRY_VERSION="PORTFOLIOAI_P7_IC1_METHODOLOGY_R7_REGISTRY_V1"
-const MATERIALIZER_VERSION="P7_IC2_CURRENT_SELECTION_V2"
+const MATERIALIZER_VERSION="P7_IC3_CANONICAL_SNAPSHOT_V1"
+const CLASSIFICATION_AUTHORITY="current_security_enrichment_v1"
+const CLASSIFICATION_VERSION="PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json"
+const ASSIGNMENT_AUTHORITY="PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1"
+const ASSIGNMENT_VERSION="e7c021b865fcd1d49a7c59924ef9c44f0383f301"
 type Json=Record<string,unknown>
-type CoverageRow={securityId:string;symbol:string;ic1State:string;profileCode:string|null;subprofileCode:string|null;methodologyAuthority:string|null;r7PolicyCode:string|null}
+type CoverageRow={securityId:string;symbol:string;sector:string;industry:string;ic1State:string;profileCode:string|null;subprofileCode:string|null;methodologyAuthority:string|null;r7PolicyCode:string|null}
 type Observation={id:string;security_id:string;metric_code:string;numeric_value:number|null;text_value:string|null;boolean_value:boolean|null;date_value:string|null;period_end:string|null;period_type:string|null;retrieved_at:string;fresh_until:string|null;evidence_status:string;source_code:string;source_record_id:string}
 type SourceRecord={id:string;source_code:string;record_kind:string;retrieved_at:string;raw_payload:Json}
 type History={security_id:string;sessions:number;latest_session:string|null;retrieved_at:string|null}
@@ -227,15 +231,19 @@ Deno.serve(async request=>{
     const plan=buildProfileEvidencePlan(contract),baseRecords=facts.sourceRecords.filter(x=>String(x.raw_payload.security_id)===security.id),records=projectCachedRecords(baseRecords,security,plan)
     items=plan.requirements.map(req=>requirementItem({code:req.evidenceCode,minimum:req.minimumPeriods,freshness:(contract.signalRequirements.find(x=>(x.evidenceCodes??[x.signalCode]).includes(req.evidenceCode)) as {freshnessPolicy?:string}|undefined)?.freshnessPolicy??null,benchmarks:[...(contract.benchmarkAuthority??[])],securityId:security.id,observations:facts.observations,records,history:historyById.get(security.id),benchmarkByCode,evaluationAsOfMs}))
    }
+   const methodologyRole=assignment.subprofileCode??assignment.profileCode??"UNRESOLVED"
+   const assignmentId=`${ASSIGNMENT_AUTHORITY}:${assignment.securityId}:${methodologyRole}`
+   const lineage={classification_authority:CLASSIFICATION_AUTHORITY,classification_version:CLASSIFICATION_VERSION,methodology_role:methodologyRole,assignment_authority:ASSIGNMENT_AUTHORITY,assignment_id:assignmentId,assignment_version:ASSIGNMENT_VERSION}
+   items.push({...blocked("IC3_SNAPSHOT_LINEAGE",1,null,[],"FRESH","IC3_LINEAGE_READY","NONE"),required:true,evidence_state:"FRESH",normalized_value:{sector:assignment.sector,industry:assignment.industry,...lineage},validation_state:"VALIDATED",canonical_selection_state:"IMMUTABLE_LINEAGE"})
    const states=new Set(items.map(x=>x.evidence_state)),status=states.has("REVIEW_REQUIRED")?"REVIEW_REQUIRED":states.has("CONFLICTING")?"CONFLICTING":states.has("STALE")?"STALE":states.has("MISSING")||states.has("INSUFFICIENT")?"INSUFFICIENT":"READY"
    totals[status]=(totals[status]??0)+1
-   const hash=await sha({securityId:security.id,authority,profile,subprofile:assignment.subprofileCode,registry:REGISTRY_VERSION,items})
-   const result=await admin.rpc("append_and_select_research_evidence_snapshot_v2",{p_snapshot:{portfolio_id:portfolioId,security_id:security.id,as_of_date:new Date(evaluationAsOfMs).toISOString().slice(0,10),methodology_authority:authority,methodology_version:"V1",profile_code:profile,subprofile_code:assignment.subprofileCode,requirement_registry_version:REGISTRY_VERSION,snapshot_status:status,snapshot_hash:hash,created_by:null},p_items:items,p_selection:{selection_run_id:selectionRunId,execution_grant_id:String(body.grantId??""),evaluation_as_of:evaluationAsOf,source_cutoff_at:sourceCutoffAt,selection_basis:"MATERIALIZED_RECONCILIATION",materializer_version:MATERIALIZER_VERSION,selected_by:null}})
+   const hash=await sha({securityId:security.id,authority,profile,subprofile:assignment.subprofileCode,registry:REGISTRY_VERSION,lineage,items})
+   const result=await admin.rpc("append_and_select_research_evidence_snapshot_v3",{p_snapshot:{portfolio_id:portfolioId,security_id:security.id,as_of_date:new Date(evaluationAsOfMs).toISOString().slice(0,10),methodology_authority:authority,methodology_version:"V1",profile_code:profile,subprofile_code:assignment.subprofileCode,requirement_registry_version:REGISTRY_VERSION,snapshot_status:status,snapshot_hash:hash,created_by:null},p_items:items,p_selection:{selection_run_id:selectionRunId,execution_grant_id:String(body.grantId??""),evaluation_as_of:evaluationAsOf,source_cutoff_at:sourceCutoffAt,selection_basis:"IC3_CANONICAL_MATERIALIZATION",materializer_version:MATERIALIZER_VERSION,selected_by:null},p_lineage:lineage})
    if(result.error)throw result.error
    const written=result.data as {snapshot_id:string;selection_id:string;snapshot_created:boolean;snapshot_reused:boolean;selection_created:boolean;selection_reused:boolean}
    snapshotIds.push(String(written.snapshot_id));selectionIds.push(String(written.selection_id))
    if(written.snapshot_created)writeTotals.snapshotsCreated++;if(written.snapshot_reused)writeTotals.snapshotsReused++;if(written.selection_created)writeTotals.selectionsCreated++;if(written.selection_reused)writeTotals.selectionsReused++
   }
-  return reply(200,{status:"MATERIALIZED_AND_SELECTED",portfolioId,selectionRunId,evaluationAsOf,sourceCutoffAt,offset,processed:slice.length,totalEquities:facts.totalEquities,nextOffset:offset+slice.length<facts.totalEquities?offset+slice.length:null,providerCalls:0,totals,writeTotals,snapshotIds,selectionIds})
- }catch(error){return reply(500,{error:"IC2 readiness materialization failed safely.",code:error instanceof Error?error.message:"IC2_MATERIALIZATION_FAILED"})}
+  return reply(200,{status:"IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",portfolioId,selectionRunId,evaluationAsOf,sourceCutoffAt,offset,processed:slice.length,totalEquities:facts.totalEquities,nextOffset:offset+slice.length<facts.totalEquities?offset+slice.length:null,providerCalls:0,totals,writeTotals,snapshotIds,selectionIds})
+ }catch(error){return reply(500,{error:"IC3 canonical snapshot materialization failed safely.",code:error instanceof Error?error.message:"IC3_MATERIALIZATION_FAILED"})}
 })

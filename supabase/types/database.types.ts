@@ -3604,6 +3604,13 @@ export type Database = {
             foreignKeyName: "research_evidence_snapshot_items_snapshot_id_fkey"
             columns: ["snapshot_id"]
             isOneToOne: false
+            referencedRelation: "current_research_evidence_snapshot_lineage_v1"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_items_snapshot_id_fkey"
+            columns: ["snapshot_id"]
+            isOneToOne: false
             referencedRelation: "current_research_evidence_snapshot_v1"
             referencedColumns: ["id"]
           },
@@ -3613,6 +3620,109 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "research_evidence_snapshots"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      research_evidence_snapshot_lineage: {
+        Row: {
+          assignment_authority: string
+          assignment_id: string
+          assignment_version: string
+          classification_authority: string
+          classification_version: string
+          created_at: string
+          methodology_role: string
+          portfolio_id: string
+          security_id: string
+          snapshot_id: string
+        }
+        Insert: {
+          assignment_authority: string
+          assignment_id: string
+          assignment_version: string
+          classification_authority: string
+          classification_version: string
+          created_at?: string
+          methodology_role: string
+          portfolio_id: string
+          security_id: string
+          snapshot_id: string
+        }
+        Update: {
+          assignment_authority?: string
+          assignment_id?: string
+          assignment_version?: string
+          classification_authority?: string
+          classification_version?: string
+          created_at?: string
+          methodology_role?: string
+          portfolio_id?: string
+          security_id?: string
+          snapshot_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "research_evidence_snapshot_lineage_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_enrichment_coverage_v1"
+            referencedColumns: ["portfolio_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_lineage_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_lineage_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_lineage_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_lineage_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_lineage_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_lineage_snapshot_scope_fk"
+            columns: ["snapshot_id", "portfolio_id", "security_id"]
+            isOneToOne: false
+            referencedRelation: "current_research_evidence_snapshot_lineage_v1"
+            referencedColumns: ["id", "portfolio_id", "security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_lineage_snapshot_scope_fk"
+            columns: ["snapshot_id", "portfolio_id", "security_id"]
+            isOneToOne: false
+            referencedRelation: "current_research_evidence_snapshot_v1"
+            referencedColumns: ["id", "portfolio_id", "security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_lineage_snapshot_scope_fk"
+            columns: ["snapshot_id", "portfolio_id", "security_id"]
+            isOneToOne: false
+            referencedRelation: "research_evidence_snapshots"
+            referencedColumns: ["id", "portfolio_id", "security_id"]
           },
         ]
       }
@@ -3708,6 +3818,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "securities"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshot_selections_snapshot_scope_fk"
+            columns: ["snapshot_id", "portfolio_id", "security_id"]
+            isOneToOne: false
+            referencedRelation: "current_research_evidence_snapshot_lineage_v1"
+            referencedColumns: ["id", "portfolio_id", "security_id"]
           },
           {
             foreignKeyName: "research_evidence_snapshot_selections_snapshot_scope_fk"
@@ -6571,6 +6688,73 @@ export type Database = {
           },
         ]
       }
+      current_research_evidence_snapshot_lineage_v1: {
+        Row: {
+          as_of_date: string | null
+          assignment_authority: string | null
+          assignment_id: string | null
+          assignment_version: string | null
+          classification_authority: string | null
+          classification_version: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string | null
+          methodology_authority: string | null
+          methodology_role: string | null
+          methodology_version: string | null
+          portfolio_id: string | null
+          profile_code: string | null
+          requirement_registry_version: string | null
+          security_id: string | null
+          snapshot_hash: string | null
+          snapshot_status: string | null
+          subprofile_code: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "research_evidence_snapshots_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_enrichment_coverage_v1"
+            referencedColumns: ["portfolio_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_classification_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_enrichment_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "current_security_identity_v1"
+            referencedColumns: ["security_id"]
+          },
+          {
+            foreignKeyName: "research_evidence_snapshots_security_id_fkey"
+            columns: ["security_id"]
+            isOneToOne: false
+            referencedRelation: "securities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       current_research_evidence_snapshot_v1: {
         Row: {
           as_of_date: string | null
@@ -6742,6 +6926,15 @@ export type Database = {
       }
       append_and_select_research_evidence_snapshot_v2: {
         Args: { p_items: Json; p_selection: Json; p_snapshot: Json }
+        Returns: Json
+      }
+      append_and_select_research_evidence_snapshot_v3: {
+        Args: {
+          p_items: Json
+          p_lineage: Json
+          p_selection: Json
+          p_snapshot: Json
+        }
         Returns: Json
       }
       append_research_evidence_snapshot_v1: {

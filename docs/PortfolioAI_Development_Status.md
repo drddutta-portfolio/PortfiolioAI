@@ -2515,3 +2515,15 @@ Stage 7 repeatability passed across all 239 equities: snapshots created `0`, sna
 The immutable completion audit is `docs/p7-ic/PortfolioAI_P7_IC2_CURRENT_SELECTION_REMEDIATION_COMPLETION_AUDIT_2026-09-30.json`.
 
 **IC2 = COMPLETE / PASS / CLOSED. IC3 remains NOT STARTED / NOT AUTHORIZED. No R6/R7/IC6+/P8 work occurred. Production and `main` remain unchanged.**
+
+## P7-IC IC3 canonical current snapshots — COMPLETE / PASS / AWAITING IC-C — 30 September 2026
+
+Owner-authorized IC3 completed in hosted PortfolioAI Dev. Additive migration `20260930022314` adds an append-only snapshot-lineage companion, IC3-specific selection basis, service-only atomic V3 append/select function, and `security_invoker` current-lineage view. All prior immutable snapshots/items and IC2 selection history remain preserved.
+
+One cache-only campaign materialized 239/239 current equity snapshots with classification version, methodology role, and assignment identity/version. Complete lineage is 239/239, incomplete lineage is zero, provider calls are zero, and the deterministic current mapping fingerprint is `31f15adbe874c095f689128ed7ac1576`.
+
+Evidence semantics are unchanged: snapshot dispositions remain INSUFFICIENT 128, STALE 2, REVIEW_REQUIRED 109, READY 0 and CONFLICTING 0. Excluding the new lineage item, requirement states remain FRESH 1,081, INSUFFICIENT 18, MISSING 2,158, STALE 2, REVIEW_REQUIRED 246 and CONFLICTING 0.
+
+The completion audit is `docs/p7-ic/PortfolioAI_P7_IC3_CANONICAL_SNAPSHOT_COMPLETION_AUDIT_2026-09-30.json`.
+
+**IC3 = COMPLETE / PASS. STOP at IC-C. IC-C = AWAITING OWNER APPROVAL. IC4/R6, IC5/R7, IC6+, P8, Production and `main` remain untouched and unauthorized.**
