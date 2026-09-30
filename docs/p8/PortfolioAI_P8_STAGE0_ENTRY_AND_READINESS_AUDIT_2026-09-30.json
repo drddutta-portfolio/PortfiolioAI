@@ -1,0 +1,44 @@
+{
+  "asOfDate": "2026-09-30",
+  "contract": "PORTFOLIOAI_P8_STAGE0_ENTRY_READINESS_V1",
+  "ownerCheckpoint6": "APPROVED_CLOSED",
+  "p8": "ACTIVE",
+  "phase": "ADVANCED_QUANT_BACKTESTING",
+  "currentPortfolio": {
+    "openHoldings": 248,
+    "equities": 239,
+    "etfs": 9,
+    "canonicalCurrentEquitySnapshots": 239,
+    "numericR6Scores": 0,
+    "r7Candidacies": 0,
+    "canonicalActions": 0,
+    "historicalCanonicalDecisionStateDepth": 0
+  },
+  "entryControls": {
+    "pointInTimeEligibilityContract": "P8_POINT_IN_TIME_ELIGIBILITY_V1",
+    "lookAheadBiasFailClosed": true,
+    "survivorshipBiasFailClosed": true,
+    "publicationAvailabilityRequired": true,
+    "immutableSourceIdentityRequired": true,
+    "outcomeWindowSeparatedFromDecision": true,
+    "currentPortfolioUsedAsHistoricalUniverse": false,
+    "performanceClaimsPublished": 0
+  },
+  "verification": {
+    "targetedTestsPassed": 18,
+    "targetedTestFilesPassed": 3,
+    "changedFileLint": "PASS",
+    "typescript": "PASS",
+    "architectureBoundary": "PASS",
+    "productionBuild": "PASS",
+    "diffCheck": "PASS",
+    "browserVerification": "PENDING_DEVELOPMENT_DEPLOYMENT"
+  },
+  "currentGate": "BLOCKED_DATA_FOUNDATION",
+  "nextStage": "P8_A_HISTORICAL_DATA_SUFFICIENCY_INVENTORY",
+  "databaseWrites": 0,
+  "providerCalls": 0,
+  "migrationsCreatedOrApplied": 0,
+  "productionChanges": 0,
+  "mainChanges": 0
+}

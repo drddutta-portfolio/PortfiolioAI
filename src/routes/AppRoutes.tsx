@@ -57,6 +57,10 @@ const IntelligencePage = lazy(async () => {
   const module = await import("../pages/IntelligencePage")
   return { default: module.IntelligencePage }
 })
+const BacktestingReadinessPage = lazy(async () => {
+  const module = await import("../pages/BacktestingReadinessPage")
+  return { default: module.BacktestingReadinessPage }
+})
 const SettingsPage = lazy(async () => {
   const module = await import("../pages/SettingsPage")
   return { default: module.SettingsPage }
@@ -131,6 +135,10 @@ export function AppRoutes() {
         <Route
           path="/app/intelligence/investment-committee"
           element={<AppShell><Suspense fallback={<PageLoader label="Loading Investment Committee narrative" />}><InvestmentCommitteePage /></Suspense></AppShell>}
+        />
+        <Route
+          path="/app/intelligence/backtesting"
+          element={<AppShell><Suspense fallback={<PageLoader label="Loading backtesting readiness" />}><BacktestingReadinessPage /></Suspense></AppShell>}
         />
         <Route
           path="/app/settings"

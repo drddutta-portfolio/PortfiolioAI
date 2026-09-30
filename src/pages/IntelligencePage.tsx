@@ -22,6 +22,10 @@ export function IntelligencePage() {
 
         <P7CanonicalIntelligencePanel portfolio={portfolio} />
 
+        <section className="panel">
+          <div className="section-heading"><div><p className="eyebrow">P8 · Advanced Quant</p><h2>Backtesting readiness</h2><p>Inspect the point-in-time data gate before any historical performance experiment is allowed to run.</p></div><Link className="button button-secondary" to="/app/intelligence/backtesting">Open P8 readiness</Link></div>
+        </section>
+
         <section id="intelligence-narrative" className="panel">
           <div className="section-heading">
             <div>

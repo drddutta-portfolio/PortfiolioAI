@@ -2569,3 +2569,17 @@ The Dashboard now shows a compact canonical readiness block. Intelligence shows 
 Verification passed: 64 targeted IC6/R8/R9/R10/final and canonical-authority tests, TypeScript, architecture boundary guard, production build, scoped lint for every changed application file, and `git diff --check`. The deployed authenticated Development UI visibly proves 239/239 canonical equity coverage, zero R6 scores, zero R7 candidacies, zero canonical actions, 109 review-required and 130 insufficient/stale holdings; disposition filtering works and the browser reports no warning/error console entries. Repository-wide lint still has 79 pre-existing errors outside this change. The integration audit is `docs/p7-ic/PortfolioAI_P7_IC7_FINAL_UI_INTEGRATION_AUDIT_2026-09-30.json`.
 
 **P7-IC = COMPLETE / PASS. IC-FINAL = COMPLETE / PASS. STOP at Owner Checkpoint 6. P8 = NOT AUTHORIZED / NOT STARTED. Production and `main` remain unchanged.**
+
+## Owner Checkpoint 6 approved / P8 entered — 30 September 2026
+
+The owner approved Owner Checkpoint 6 and authorized entry into P8. P7-IC and IC-FINAL are now formally COMPLETE / PASS / CLOSED.
+
+P8 is governed by the Master Blueprint's Advanced Quant / Backtesting boundary. P8-0 freezes a deterministic point-in-time eligibility contract and adds a visible Development readiness surface under Intelligence. The contract rejects evidence observed or published after a simulated decision, later-captured evidence without immutable publication proof, unproven historical-universe membership, and outcome windows that overlap the decision instant.
+
+The entry audit is fail-closed. The current portfolio has 239 canonical-current equity snapshots but zero numeric R6 scores, zero R7 candidacies, zero canonical actions and no historical canonical decision-state series. Today's holdings do not prove a survivor-free historical universe. Consequently no return, alpha, hit-rate, drawdown or policy-improvement claim is permitted.
+
+The execution plan is `docs/p8/PortfolioAI_P8_ADVANCED_QUANT_BACKTESTING_EXECUTION_PLAN_2026-09-30.md`; the entry audit is `docs/p8/PortfolioAI_P8_STAGE0_ENTRY_AND_READINESS_AUDIT_2026-09-30.json`.
+
+P8-0 verification passed: 18 targeted tests across the point-in-time, IC6 projection and canonical-authority contracts; changed-file lint; TypeScript; architecture boundary guard; production build; and diff hygiene.
+
+**Owner Checkpoint 6 = APPROVED / CLOSED. P7 = COMPLETE / PASS / CLOSED. P8 = ACTIVE. P8-0 = COMPLETE / PASS pending deployed browser verification. Current P8 execution gate = BLOCKED — DATA FOUNDATION. P8-A historical data sufficiency inventory is next. Production and `main` remain unchanged.**
