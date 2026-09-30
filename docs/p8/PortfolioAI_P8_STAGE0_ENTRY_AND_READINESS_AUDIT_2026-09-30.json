@@ -32,7 +32,17 @@
     "architectureBoundary": "PASS",
     "productionBuild": "PASS",
     "diffCheck": "PASS",
-    "browserVerification": "PENDING_DEVELOPMENT_DEPLOYMENT"
+    "browserVerification": {
+      "developmentDeployment": "SUCCESS",
+      "route": "/app/intelligence/backtesting",
+      "gateVisible": "BLOCKED_DATA_FOUNDATION",
+      "currentEquityUniverseVisible": 239,
+      "r6R7ReadyVisible": "0/239",
+      "historicalDecisionStatesVisible": 0,
+      "publishedBacktestResultsVisible": 0,
+      "browserWarningsOrErrors": 0,
+      "result": "PASS"
+    }
   },
   "currentGate": "BLOCKED_DATA_FOUNDATION",
   "nextStage": "P8_A_HISTORICAL_DATA_SUFFICIENCY_INVENTORY",

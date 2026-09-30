@@ -2580,6 +2580,6 @@ The entry audit is fail-closed. The current portfolio has 239 canonical-current 
 
 The execution plan is `docs/p8/PortfolioAI_P8_ADVANCED_QUANT_BACKTESTING_EXECUTION_PLAN_2026-09-30.md`; the entry audit is `docs/p8/PortfolioAI_P8_STAGE0_ENTRY_AND_READINESS_AUDIT_2026-09-30.json`.
 
-P8-0 verification passed: 18 targeted tests across the point-in-time, IC6 projection and canonical-authority contracts; changed-file lint; TypeScript; architecture boundary guard; production build; and diff hygiene.
+P8-0 verification passed: 18 targeted tests across the point-in-time, IC6 projection and canonical-authority contracts; changed-file lint; TypeScript; architecture boundary guard; production build; diff hygiene; and authenticated Development browser verification. The deployed `/app/intelligence/backtesting` route visibly reports BLOCKED — DATA FOUNDATION, 239 current equities, 0/239 current R6/R7 readiness, zero historical decision states and zero published backtest results; browser warnings/errors are zero.
 
-**Owner Checkpoint 6 = APPROVED / CLOSED. P7 = COMPLETE / PASS / CLOSED. P8 = ACTIVE. P8-0 = COMPLETE / PASS pending deployed browser verification. Current P8 execution gate = BLOCKED — DATA FOUNDATION. P8-A historical data sufficiency inventory is next. Production and `main` remain unchanged.**
+**Owner Checkpoint 6 = APPROVED / CLOSED. P7 = COMPLETE / PASS / CLOSED. P8 = ACTIVE. P8-0 = COMPLETE / PASS. Current P8 execution gate = BLOCKED — DATA FOUNDATION. P8-A historical data sufficiency inventory is next. Production and `main` remain unchanged.**
