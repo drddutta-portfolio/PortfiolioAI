@@ -2,7 +2,7 @@
 
 Date: 30 September 2026  
 Environment: Development only  
-Status: **MIGRATION CREATED / LOCAL REPLAY PENDING / HOSTED APPLICATION NOT AUTHORIZED**
+Status: **LOCAL REPLAY / TEST COMPLETE / PASS / HOSTED APPLICATION NOT AUTHORIZED**
 
 ## Why this extension exists
 
@@ -61,3 +61,16 @@ New owner-scoped `security_invoker` view:
 ## Current boundary
 
 No historical universe data is materialized by this migration package. Hosted PortfolioAI Dev application remains separately approval-gated after local migration replay and SQL contract test pass.
+
+## Local replay verification
+
+Owner-run verification completed on 30 September 2026 against Development commit `3dc490d8b8251a092c5bb3a1c0ba3a0a31056664`.
+
+- clean local `supabase db reset`: PASS;
+- migration replay: PASS;
+- transactional SQL contract test: PASS;
+- required ending: `BEGIN → DO → DO → ROLLBACK`;
+- hosted PortfolioAI Dev application: **NOT AUTHORIZED / NOT APPLIED**;
+- historical universe materialization: **NOT STARTED**.
+
+The local schema gate is therefore satisfied. The next database action, if approved separately, is application of this exact additive migration to hosted PortfolioAI Dev followed by hosted contract verification. No hosted action is implied by this local pass.

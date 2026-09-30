@@ -2889,3 +2889,36 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 evidence-link local replay verification — 30 September 2026
+
+Owner-run local verification completed against Development commit `3dc490d8b8251a092c5bb3a1c0ba3a0a31056664`.
+
+Verification evidence:
+
+- `supabase db reset` completed successfully on the isolated local stack;
+- migration `20260930170500_add_p8_b2_member_listing_evidence_links.sql` applied during the clean replay;
+- `supabase/tests/p8_b2_member_listing_evidence_links.sql` completed with the required terminal sequence `BEGIN → DO → DO → ROLLBACK`;
+- no SQL error occurred and the transactional test left no fixture data behind;
+- no hosted PortfolioAI Dev migration/application was performed;
+- no historical universe materialization, provider call, P8-B3, P8-C, Production or `main` change was performed.
+
+Current governance:
+
+```text
+P8 = ACTIVE
+P8-0 = COMPLETE / PASS
+P8-A = COMPLETE / PASS
+P8-B0 = COMPLETE / PASS
+P8-B1 = COMPLETE / PASS
+P8-B2 acquisition = COMPLETE / PASS
+P8-B2 hash/schema/identity diagnostics = COMPLETE / PASS
+P8-B2 duplicate structure = PROVEN MANY-TO-ONE AT ISIN LEVEL
+P8-B2 evidence-link migration package = LOCAL REPLAY / TEST COMPLETE / PASS
+Hosted PortfolioAI Dev application = NOT AUTHORIZED / NOT APPLIED
+Historical universe materialization = NOT STARTED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```

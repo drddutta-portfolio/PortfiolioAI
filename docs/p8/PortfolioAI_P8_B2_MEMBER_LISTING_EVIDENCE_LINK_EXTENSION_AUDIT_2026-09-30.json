@@ -2,7 +2,7 @@
   "stage": "P8-B2 member-to-listing evidence-link schema extension",
   "date": "2026-09-30",
   "authorization": "OWNER_APPROVED_DEVELOPMENT_LOCAL_ONLY",
-  "status": "MIGRATION_PACKAGE_CREATED_LOCAL_REPLAY_PENDING",
+  "status": "LOCAL_REPLAY_TEST_COMPLETE_PASS_HOSTED_APPLICATION_NOT_AUTHORIZED",
   "migration": "supabase/migrations/20260930170500_add_p8_b2_member_listing_evidence_links.sql",
   "test": "supabase/tests/p8_b2_member_listing_evidence_links.sql",
   "new_objects": {
@@ -27,10 +27,35 @@
     "Append-only/RLS/security_invoker/service-only write controls"
   ],
   "execution": {
-    "local_replay": "PENDING",
+    "local_replay": "COMPLETE_PASS",
     "hosted_apply": false,
-    "historical_universe_materialization": false,
-    "provider_calls": 0
+    "historical_universe_materialization": "NOT_STARTED",
+    "provider_calls": 0,
+    "local_replay_commit": "3dc490d8b8251a092c5bb3a1c0ba3a0a31056664",
+    "local_reset": "PASS",
+    "sql_contract_test": "PASS",
+    "sql_contract_test_expected_ending": [
+      "BEGIN",
+      "DO",
+      "DO",
+      "ROLLBACK"
+    ],
+    "production_changed": false,
+    "main_changed": false
   },
-  "next_action": "Run local supabase db reset and supabase/tests/p8_b2_member_listing_evidence_links.sql. Return for separate owner approval before hosted application."
+  "next_action": "Run local supabase db reset and supabase/tests/p8_b2_member_listing_evidence_links.sql. Return for separate owner approval before hosted application.",
+  "verification": {
+    "verified_on": "2026-09-30",
+    "verification_mode": "OWNER_RUN_LOCAL_SUPABASE_STACK",
+    "clean_db_reset": true,
+    "migration_replayed": "20260930170500_add_p8_b2_member_listing_evidence_links.sql",
+    "sql_test": "supabase/tests/p8_b2_member_listing_evidence_links.sql",
+    "terminal_sequence": [
+      "BEGIN",
+      "DO",
+      "DO",
+      "ROLLBACK"
+    ],
+    "fixture_residue_expected": false
+  }
 }
