@@ -2527,3 +2527,13 @@ Evidence semantics are unchanged: snapshot dispositions remain INSUFFICIENT 128,
 The completion audit is `docs/p7-ic/PortfolioAI_P7_IC3_CANONICAL_SNAPSHOT_COMPLETION_AUDIT_2026-09-30.json`.
 
 **IC3 = COMPLETE / PASS. STOP at IC-C. IC-C = AWAITING OWNER APPROVAL. IC4/R6, IC5/R7, IC6+, P8, Production and `main` remain untouched and unauthorized.**
+
+## P7-IC IC4 R6 current portfolio execution — COMPLETE / PASS — 30 September 2026
+
+The owner approved IC-C and authorized Development-only IC4. IC4 consumed the 239 canonical IC3 snapshots cache-only with zero provider calls, zero AI numeric influence, no missing-input renormalization and no cross-profile fallback.
+
+Every equity received one current deterministic R6 disposition: INSUFFICIENT_EVIDENCE 128, STALE_REQUIRED_EVIDENCE 2, REVIEW_REQUIRED 109, with SCORED 0 and CONFLICTING_EVIDENCE 0. Numeric coverage is therefore 0/239 and is reported separately rather than fabricated. Each row preserves its IC3 snapshot, classification, methodology/profile, methodology role and assignment lineage plus exact blocker reason codes.
+
+The machine-readable execution audit is `docs/p7-ic/PortfolioAI_P7_IC4_R6_CURRENT_PORTFOLIO_EXECUTION_AUDIT_2026-09-30.json`; its SHA-256 is `4b97fd85259c4b2a586cbc783807b8c71a69814f3010ff14fdd32d0f518a03b5`.
+
+**IC4/R6 = COMPLETE / PASS. IC5/R7 is authorized by approved IC-C but has not started. Stop remains IC-D after IC5. No database write, migration, provider call, deployment, Production or `main` change occurred in IC4.**
