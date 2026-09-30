@@ -1,0 +1,204 @@
+{
+  "audit": "PortfolioAI P8-B0 re-entry and immutable baseline",
+  "audit_date": "2026-09-30",
+  "measured_at_utc": "2026-09-30T05:11:28.776569Z",
+  "environment": "PortfolioAI Dev",
+  "project_ref": "lrgpjimipfkyoqbpsqzz",
+  "repository": "drddutta-portfolio/PortfiolioAI",
+  "branch": "PortfolioAI-Development",
+  "repository_head": "4567bc7d7d82259d852b3a51e3c356701d9072d1",
+  "mode": "READ_ONLY",
+  "result": "COMPLETE_PASS_REPRODUCIBLE_NO_MATERIAL_P8A_DRIFT",
+  "p8_state": {
+    "p7": "COMPLETE_PASS_CLOSED",
+    "p8": "ACTIVE",
+    "p8_0": "COMPLETE_PASS",
+    "p8_a": "COMPLETE_PASS",
+    "p8_b0": "COMPLETE_PASS",
+    "p8_b1": "AWAITING_OWNER_APPROVAL_OF_FROZEN_CONTRACT",
+    "p8_c_plus": "NOT_AUTHORIZED",
+    "execution_gate": "BLOCKED_DATA_FOUNDATION"
+  },
+  "repository_checks": {
+    "expected_handoff_commit": "4567bc7d7d82259d852b3a51e3c356701d9072d1",
+    "actual_head": "4567bc7d7d82259d852b3a51e3c356701d9072d1",
+    "handoff_plan": "docs/p8/PortfolioAI_P8_COMPLETION_BUILD_HANDOFF_PLAN_2026-09-30.md",
+    "authoritative_docs_re_read": true,
+    "unexplained_repository_drift": false
+  },
+  "hosted_development": {
+    "project_status": "ACTIVE_HEALTHY",
+    "postgres_version": "17.6.1.166",
+    "public_base_tables": 89,
+    "public_views": 9,
+    "public_functions": 65,
+    "rls_enabled_tables": 89,
+    "public_policies": 84,
+    "migrations": 92,
+    "latest_migration": {
+      "version": "20260930022314",
+      "name": "add_p7_ic3_snapshot_lineage_contract"
+    },
+    "edge_functions": 39,
+    "selected_edge_versions": {
+      "complete-research-refresh": 29,
+      "refresh-market-data": 17,
+      "refresh-market-history": 18,
+      "p7-ic2-orchestrator": 4,
+      "p7-ic2-materialize-readiness": 18
+    }
+  },
+  "remeasured_p8a": {
+    "holdings": {
+      "open": 248,
+      "equities": 239,
+      "etfs": 9
+    },
+    "daily_prices": {
+      "covered_equities": 239,
+      "rows": 63927,
+      "first_date": "2025-08-07",
+      "last_date": "2026-09-28",
+      "minimum_dates_per_equity": 73,
+      "median_dates_per_equity": 270,
+      "maximum_dates_per_equity": 282,
+      "equities_with_at_least_252_dates": 230,
+      "equities_with_at_least_504_dates": 0,
+      "equities_with_at_least_756_dates": 0,
+      "equities_with_adjusted_close": 0,
+      "short_history": {
+        "TMCV": 217,
+        "VAML": 73,
+        "GROWW": 217,
+        "TATACAP": 237,
+        "ICICIAMC": 190,
+        "LENSKART": 219,
+        "LGEINDIA": 236,
+        "PINELABS": 215,
+        "UTLSOLAR": 211
+      }
+    },
+    "benchmarks": {
+      "defined": 10,
+      "mapped": 10,
+      "series": 10,
+      "rows": 2710,
+      "first_date": "2025-08-25",
+      "last_date": "2026-09-28"
+    },
+    "fundamentals": {
+      "covered_equities": 114,
+      "missing_equities": 125,
+      "rows": 2428,
+      "rows_with_published_at": 2,
+      "rows_with_observed_at": 2,
+      "equities_with_no_published_timestamps": 113,
+      "equities_with_all_rows_published": 0,
+      "equities_with_at_least_8_periods": 1,
+      "median_periods": 1,
+      "maximum_periods": 13,
+      "first_period": "2021-03-31",
+      "last_period": "2026-06-30"
+    },
+    "documents": {
+      "covered_equities": 111,
+      "missing_equities": 128,
+      "held_equity_source_rows": 139,
+      "equities_with_at_least_8_publication_dates": 0,
+      "first_published_at": "2026-04-17",
+      "last_published_at": "2026-09-25",
+      "rows_with_source_published_at": 139,
+      "rows_with_retrieved_at": 139,
+      "rows_with_content_hash": 0
+    },
+    "canonical_snapshots": {
+      "rows": 1246,
+      "covered_equities": 239,
+      "distinct_as_of_dates": 1,
+      "equities_with_at_least_2_dates": 0,
+      "equities_with_at_least_8_dates": 0
+    },
+    "historical_universe": {
+      "securities": 284,
+      "active_securities": 284,
+      "inactive_securities": 0,
+      "equities": 272,
+      "inactive_equities": 0,
+      "listing_rows": 282,
+      "listings_with_valid_from": 0,
+      "listings_with_valid_to": 0
+    },
+    "classification_methodology": {
+      "classification_changes": 0,
+      "held_equity_market_cap_coverage": 236,
+      "market_cap_distinct_as_of_dates": 1,
+      "subprofile_assignment_rows": 6,
+      "subprofile_assignments_with_effective_from": 6,
+      "scoring_profile_assignment_securities": 4
+    },
+    "historical_decision_runs": {
+      "stock_score_runs": 0,
+      "stock_score_run_securities": 0,
+      "stock_recommendation_runs": 5,
+      "stock_recommendation_securities": 1
+    }
+  },
+  "provider_ledger_read_only": {
+    "provider_calls_recorded_on_2026_09_30_before_or_during_day": 6,
+    "provider_internal_units_recorded_on_2026_09_30": 6,
+    "latest_recorded_provider_attempt": "2026-09-30T03:09:13.319Z",
+    "open_budget_reservations": 0,
+    "controls": [
+      {
+        "source_code": "SCREENER_WEB",
+        "ingestion_enabled": true,
+        "scheduler_enabled": false,
+        "daily_internal_attempt_limit": 25,
+        "rolling_internal_attempt_limit": 300,
+        "rolling_window_days": 30,
+        "per_run_internal_attempt_limit": 5,
+        "concurrency_limit": 1,
+        "actual_provider_quota_status": "UNKNOWN",
+        "policy_version": 1
+      },
+      {
+        "source_code": "TRENDLYNE_MCP",
+        "ingestion_enabled": true,
+        "scheduler_enabled": false,
+        "daily_internal_attempt_limit": 1000,
+        "rolling_internal_attempt_limit": 2000,
+        "rolling_window_days": 30,
+        "per_run_internal_attempt_limit": 40,
+        "concurrency_limit": 3,
+        "actual_provider_quota_status": "VERIFIED",
+        "policy_version": 6
+      }
+    ],
+    "calls_made_by_p8_b0": 0
+  },
+  "drift_assessment": {
+    "material_p8a_drift": false,
+    "note": "Core P8-A counts and blockers reproduce. The hosted provider ledger contains six attempts dated 2026-09-30, all earlier than this P8-B0 read-only re-entry; P8-B0 itself made zero provider calls."
+  },
+  "query_definitions": [
+    "Count current open holdings from current_holdings joined to securities for portfolio 6193a4aa-3235-4057-bddc-209fcf443fc2; separate EQUITY and ETF by securities.asset_class.",
+    "Aggregate ONE_DAY market_price_history by held equity security_id for row counts, min/max dates, depth thresholds and adjusted_close presence.",
+    "Aggregate market_benchmarks and market_benchmark_price_history for mapped series and date coverage.",
+    "Aggregate fundamental_observations for held equities by publication/observation timestamp completeness and distinct reporting periods.",
+    "Aggregate research_documents joined to research_document_sources for held-equity publication dates, retrieval timestamps and content hashes.",
+    "Aggregate research_evidence_snapshots for portfolio 6193a4aa-3235-4057-bddc-209fcf443fc2 by security and as_of_date.",
+    "Count securities/security_listings activity and valid_from/valid_to population for historical-universe readiness.",
+    "Count security_classification_changes, market_cap_classification_observations, research_subprofile_assignments and security_scoring_profile_assignments for historical validity depth.",
+    "Count stock_score_runs and stock_recommendation_runs and distinct covered securities.",
+    "Read provider_ingestion_controls, provider_usage_events and provider_budget_reservations without invoking providers."
+  ],
+  "controls": {
+    "provider_calls": 0,
+    "database_writes": 0,
+    "migrations_created_or_applied": 0,
+    "deployments": 0,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_action": "OWNER_APPROVAL_REQUIRED_FOR_P8_B1_FROZEN_EXPERIMENT_AND_BIAS_CONTROL_CONTRACT"
+}

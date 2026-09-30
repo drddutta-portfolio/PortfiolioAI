@@ -2595,3 +2595,32 @@ The machine-readable audit is `docs/p8/PortfolioAI_P8_A_HISTORICAL_DATA_SUFFICIE
 **P7 = COMPLETE / PASS / CLOSED. P8 = ACTIVE. P8-0 = COMPLETE / PASS. P8-A = COMPLETE / PASS. P8-B = NOT STARTED / AWAITING OWNER-APPROVED REMEDIATION SCOPE. Current P8 execution gate = BLOCKED — DATA FOUNDATION. No performance backtest is authorized. Production and `main` remain unchanged.**
 
 The implementation-ready continuation and safe-stop handoff is `docs/p8/PortfolioAI_P8_COMPLETION_BUILD_HANDOFF_PLAN_2026-09-30.md`. It sequences P8-B data-foundation remediation and experiment freeze through P8-C replay, P8-D simulation, P8-E adversarial validation, P8-F UI and P8-FINAL, with separate owner approvals for contract decisions, provider campaigns, migrations and the P8-C transition.
+
+
+## P8-B0 re-entry baseline — 30 September 2026
+
+P8-B0 is **COMPLETE / PASS** as a read-only re-entry and immutable baseline verification.
+
+- Repository handoff HEAD verified: `4567bc7d7d82259d852b3a51e3c356701d9072d1`.
+- Hosted Development project `PortfolioAI Dev` is healthy.
+- P8-A core counts and blockers reproduced with no material drift.
+- Current Development state remains 248 open holdings / 239 equities / 9 ETFs; 63,927 held-equity ONE_DAY price rows; 230 equities with at least 252 dates; zero adjusted-close coverage; 114/239 fundamental coverage with only two publication timestamps; 111/239 document coverage; 1,246 snapshots across one as-of date; no dated historical listing validity; zero historical score runs.
+- Provider ledger was inspected only. P8-B0 made zero provider calls and zero database writes.
+- Owner decision memo created at `docs/p8/PortfolioAI_P8_B0_OWNER_DECISION_MEMO_2026-09-30.md`.
+- Baseline audit created at `docs/p8/PortfolioAI_P8_B0_REENTRY_BASELINE_AUDIT_2026-09-30.json`.
+
+Current governance:
+
+```text
+P7 = COMPLETE / PASS / CLOSED
+P8 = ACTIVE
+P8-0 = COMPLETE / PASS
+P8-A = COMPLETE / PASS
+P8-B0 = COMPLETE / PASS
+P8-B1 = AWAITING OWNER APPROVAL
+P8-B2+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+P8 execution gate = BLOCKED — DATA FOUNDATION
+Production = UNCHANGED
+main = UNCHANGED
+```
