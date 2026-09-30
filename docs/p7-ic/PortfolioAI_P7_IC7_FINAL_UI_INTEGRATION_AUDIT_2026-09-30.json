@@ -19,5 +19,16 @@
   "migrationsCreatedOrApplied": 0,
   "productionChanges": 0,
   "p8Started": false,
-  "result": "PASS_PENDING_BROWSER_VERIFICATION"
+  "browserVerification": {
+    "developmentDeployment": "SUCCESS",
+    "canonicalCoverageVisible": "239/239",
+    "r6ScoredVisible": 0,
+    "r7CandidacyVisible": 0,
+    "canonicalActionsVisible": 0,
+    "reviewRequiredVisible": 109,
+    "insufficientOrStaleVisible": 130,
+    "filterInteraction": "PASS",
+    "browserWarningsOrErrors": 0
+  },
+  "result": "PASS"
 }
