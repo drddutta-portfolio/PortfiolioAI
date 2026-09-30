@@ -1,0 +1,63 @@
+{
+  "audit": "PortfolioAI P8-B2 historical universe foundation design/local migration package",
+  "audit_date": "2026-09-30",
+  "environment": "Repository only",
+  "result": "MIGRATION_PACKAGE_CREATED_LOCAL_EXECUTION_PENDING",
+  "authority": "Owner approved P8-B2 Development-only design and local creation/testing; hosted application not authorized.",
+  "migration": {
+    "file": "supabase/migrations/20260930061500_create_p8_historical_universe_foundation.sql",
+    "additive": true,
+    "data_backfill": false,
+    "existing_applied_migrations_modified": false,
+    "existing_current_tables_rewritten": false
+  },
+  "objects": {
+    "tables": [
+      "p8_listing_observations",
+      "p8_historical_universe_runs",
+      "p8_historical_universe_members",
+      "p8_historical_universe_run_selections"
+    ],
+    "views": [
+      "current_p8_historical_universe_run_v1",
+      "current_p8_historical_universe_membership_v1"
+    ],
+    "functions": [
+      "reject_p8_historical_universe_mutation_v1()",
+      "append_p8_listing_observation_v1(jsonb)",
+      "append_and_select_p8_historical_universe_v1(jsonb,jsonb,jsonb)"
+    ]
+  },
+  "safety_invariants": [
+    "No current holdings fallback",
+    "No securities.is_active historical fallback",
+    "No rewrite of security_listings validity dates",
+    "Unknown validity remains unknown",
+    "PROVEN validity requires explicit valid_from",
+    "ELIGIBLE membership requires proven LISTED interval covering decision date",
+    "Corrections are append-and-reselect",
+    "READY run cannot contain BLOCKED members",
+    "Owner-scoped RLS and security_invoker views",
+    "Service-role-only append/select functions"
+  ],
+  "test": {
+    "file": "supabase/tests/p8_b2_historical_universe_foundation.sql",
+    "created": true,
+    "execution_status": "NOT_EXECUTED_NO_LOCAL_POSTGRES_RUNTIME_IN_CONNECTED_SESSION",
+    "required_before_hosted_apply": true
+  },
+  "hosted_state": {
+    "migration_applied": false,
+    "database_writes": 0,
+    "provider_calls": 0,
+    "edge_deployments": 0
+  },
+  "governance": {
+    "p8_b2": "MIGRATION_PACKAGE_CREATED / LOCAL REPLAY PENDING",
+    "p8_b3_plus": "NOT_AUTHORIZED",
+    "p8_c_plus": "NOT_AUTHORIZED",
+    "production": "UNCHANGED",
+    "main": "UNCHANGED"
+  },
+  "next_action": "Obtain local replay/test evidence for the exact migration, then return for separate owner approval before hosted PortfolioAI Dev application."
+}

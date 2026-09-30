@@ -2651,3 +2651,30 @@ P8 execution gate = BLOCKED — DATA FOUNDATION
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+
+## P8-B2 historical universe foundation package — 30 September 2026
+
+P8-B2 is **IN PROGRESS — ADDITIVE MIGRATION PACKAGE CREATED / LOCAL REPLAY PENDING** under explicit owner authorization.
+
+Created repository-only migration `20260930061500_create_p8_historical_universe_foundation.sql`, its transactional SQL contract test, design note and machine-readable audit. The package introduces append-only owner-scoped historical listing observations, decision-instant universe runs, member dispositions and canonical selection history, with service-only mutation paths and `security_invoker` read models. It contains no current-holdings or `securities.is_active` historical fallback and does not rewrite existing `security_listings.valid_from/valid_to` values.
+
+No provider call, hosted database write, hosted migration application, Edge Function deployment, P8-B3+, P8-C, Production or `main` change has occurred.
+
+The connected session does not expose a local PostgreSQL/Supabase runtime, so the migration replay and SQL test are created but not yet executed. Under the frozen P8 migration protocol, hosted Development application remains blocked until local replay evidence exists and a separate owner approval is obtained.
+
+Current governance:
+
+```text
+P8 = ACTIVE
+P8-0 = COMPLETE / PASS
+P8-A = COMPLETE / PASS
+P8-B0 = COMPLETE / PASS
+P8-B1 = COMPLETE / PASS
+P8-B2 = IN PROGRESS / MIGRATION PACKAGE CREATED / LOCAL REPLAY PENDING
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Hosted P8-B2 migration = NOT AUTHORIZED / NOT APPLIED
+Production = UNCHANGED
+main = UNCHANGED
+```
