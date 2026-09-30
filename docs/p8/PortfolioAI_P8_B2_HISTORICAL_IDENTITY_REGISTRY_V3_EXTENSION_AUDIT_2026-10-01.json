@@ -2,7 +2,7 @@
   "stage": "P8-B2 historical identity/source-archive V3 extension",
   "date": "2026-10-01",
   "environment": "Development repository/local package only",
-  "result": "MIGRATION_AND_CONTRACT_TEST_CREATED_LOCAL_REPLAY_PENDING_HOSTED_APPLICATION_NOT_AUTHORIZED",
+  "result": "LOCAL_SQL_FAIL_CLOSED_PRIVILEGE_REMEDIATION_APPLIED_POST_REMEDIATION_REPLAY_PENDING",
   "repository_base_head": "35cfde567ba4e6e623c3880b6e9bb02a689bbaa1",
   "package": {
     "migration": "supabase/migrations/20261001001500_create_p8_b2_historical_identity_registry_v3.sql",
@@ -73,5 +73,19 @@
     "production_changed": false,
     "main_changed": false
   },
-  "next_gate": "OWNER_RUN_LOCAL_CLASSIFICATION_AND_SQL_REPLAY"
+  "next_gate": "OWNER_RUN_CLEAN_DB_RESET_AND_RERUN_V3_SQL_CONTRACT_TEST_AFTER_PRIVILEGE_REMEDIATION",
+  "local_validation": {
+    "sql_contract_test": {
+      "status": "FAIL_CLOSED_REMEDIATED_REPLAY_PENDING",
+      "observed_error": "P8-B2 V3 table privilege contract failed on p8_historical_security_identities",
+      "failing_block": "privilege verification DO block",
+      "diagnosis": "Supabase default privileges granted service_role direct table DML; migration had not first revoked service_role defaults before re-granting SELECT.",
+      "remediation_commit": "540f761b8bae9e65a9b2ed7926ad840e49d9a501",
+      "remediation": [
+        "Explicit REVOKE ALL FROM service_role on all seven V3 tables before GRANT SELECT.",
+        "Explicit REVOKE ALL FROM service_role on all three V3 views before GRANT SELECT.",
+        "Service-only mutation remains through validated functions."
+      ]
+    }
+  }
 }
