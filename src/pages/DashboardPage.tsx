@@ -216,7 +216,7 @@ export function DashboardPage() {
       <Kpi icon="#" label="Open holdings" value={String(scopedPositions.length)} detail={isConsolidated ? `${portfolio.totals.closedHistories} closed histories retained` : selectedScopeLabel} />
     </section>
 
-    <P7CanonicalIntelligencePanel compact />
+    <P7CanonicalIntelligencePanel portfolio={portfolio} compact />
 
     <div className="dashboard-workspace-grid">
       <main className="dashboard-workspace-main">

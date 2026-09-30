@@ -1,26 +1,24 @@
 import { useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import { useP7CurrentIntelligence } from "../features/decision/useP7CurrentIntelligence"
-import { usePortfolioView } from "../features/portfolio/usePortfolioView"
+import type { PortfolioViewModel } from "../features/portfolio/types"
 import "./P7CanonicalIntelligencePanel.css"
 
 function pretty(value: string) {
   return value.toLowerCase().replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase())
 }
 
-export function P7CanonicalIntelligencePanel({ compact = false }: { readonly compact?: boolean }) {
-  const { portfolio, isLoading: portfolioLoading, error: portfolioError } = usePortfolioView()
-  const intelligence = useP7CurrentIntelligence(portfolio?.portfolio.id ?? null)
+export function P7CanonicalIntelligencePanel({ portfolio, compact = false }: { readonly portfolio: PortfolioViewModel; readonly compact?: boolean }) {
+  const intelligence = useP7CurrentIntelligence(portfolio.portfolio.id)
   const [filter, setFilter] = useState<"ALL" | "REVIEW_REQUIRED" | "INSUFFICIENT">("ALL")
-  const positionById = useMemo(() => new Map((portfolio?.openPositions ?? []).map((position) => [position.securityId, position])), [portfolio])
+  const positionById = useMemo(() => new Map(portfolio.openPositions.map((position) => [position.securityId, position])), [portfolio.openPositions])
   const equityRows = useMemo(() => intelligence.data.map((row) => ({ row, position: positionById.get(row.securityId) })).filter((entry) => entry.position?.assetClass !== "ETF"), [intelligence.data, positionById])
   const reviewCount = equityRows.filter(({ row }) => row.r6State === "REVIEW_REQUIRED").length
   const staleCount = equityRows.filter(({ row }) => row.r6State === "STALE_REQUIRED_EVIDENCE").length
   const insufficientCount = equityRows.filter(({ row }) => row.r6State === "INSUFFICIENT_EVIDENCE").length
-  const etfCount = portfolio?.openPositions.filter((position) => position.assetClass === "ETF").length ?? 0
+  const etfCount = portfolio.openPositions.filter((position) => position.assetClass === "ETF").length
   const visibleRows = equityRows.filter(({ row }) => filter === "ALL" || (filter === "REVIEW_REQUIRED" ? row.r6State === "REVIEW_REQUIRED" : row.r6State !== "REVIEW_REQUIRED")).slice(0, compact ? 8 : 40)
 
-  if (portfolioLoading || portfolioError || !portfolio) return null
   return <section className={`p7-intelligence ${compact ? "is-compact" : ""}`} aria-label="P7 canonical portfolio intelligence">
     <header className="p7-intelligence-heading">
       <div><p className="eyebrow">P7 canonical intelligence</p><h2>Decision readiness, without invented actions</h2><p>Current IC3 evidence lineage feeds the IC6 readiness boundary. R8, Meaningful Change, Movement and owner-facing action remain blocked until their prerequisites exist.</p></div>

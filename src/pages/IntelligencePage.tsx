@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom"
 import { P7CanonicalIntelligencePanel } from "../components/P7CanonicalIntelligencePanel"
+import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 
 export function IntelligencePage() {
+  const { portfolio, isLoading, error } = usePortfolioView()
+  if (isLoading) return <div className="portfolio-loading"><span className="loader" /><p>Loading canonical portfolio intelligence…</p></div>
+  if (error || !portfolio) return <div className="notice notice-error" role="alert">{error ?? "Portfolio intelligence could not be loaded."}</div>
   return (
       <section className="portfolio-page intelligence-page">
         <div className="portfolio-hero compact-hero">
@@ -16,7 +20,7 @@ export function IntelligencePage() {
           <Link className="button button-secondary" to="/app/research">Review evidence</Link>
         </div>
 
-        <P7CanonicalIntelligencePanel />
+        <P7CanonicalIntelligencePanel portfolio={portfolio} />
 
         <section id="intelligence-narrative" className="panel">
           <div className="section-heading">
