@@ -2716,3 +2716,32 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+
+## P8-B2 acquisition result — 30 September 2026
+
+Local owner-run acquisition completed successfully for the authorized official-NSE campaign.
+
+```text
+months_requested = 32
+months_acquired = 32
+months_missing = 0
+minimum_proven_decision_dates = 24
+minimum_met = true
+```
+
+The month-end probe correctly handled unavailable archive dates by moving backward to the first actual official file (for example September 2026 resolved despite a 404 on the initial probe). No missing month remains in the acquisition manifest.
+
+P8-B2 now advances from acquisition to **schema/hash inspection and historical-universe reconciliation**. A read-only local inspection runner was added at `scripts/p8/p8-b2-inspect-nse-universe.mjs`. It verifies each CSV SHA-256 against the acquisition manifest, checks schema consistency across all 32 files, counts rows and captures the actual provider header set. It performs no database writes and no provider calls.
+
+Current governance:
+
+```text
+P8-B2 acquisition = COMPLETE / PASS (32/32 months)
+P8-B2 schema/hash inspection = READY / LOCAL READ-ONLY
+P8-B2 historical universe reconstruction = NOT YET MATERIALIZED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```

@@ -2,7 +2,7 @@
   "stage": "P8-B2 historical universe acquisition",
   "date": "2026-09-30",
   "authorization": "OWNER_APPROVED",
-  "status": "ACTIVE_RUNNER_PREPARED",
+  "status": "ACQUISITION_COMPLETE_PASS_32_OF_32",
   "authority": {
     "primary": "National Stock Exchange of India CM MII Security File",
     "file_pattern": "NSE_CM_security_DDMMYYYY.csv.gz",
@@ -25,5 +25,15 @@
     "main_changed": false,
     "p8_b3_started": false
   },
-  "environment_limit": "Current connector runtime cannot fetch arbitrary binary NSE archive files. Acquisition runner is prepared for the local Mac/network-capable execution environment."
+  "environment_limit": "Current connector runtime cannot fetch arbitrary binary NSE archive files. Acquisition runner is prepared for the local Mac/network-capable execution environment.",
+  "result": {
+    "months_requested": 32,
+    "months_acquired": 32,
+    "months_missing": 0,
+    "minimum_proven_decision_dates": 24,
+    "minimum_met": true,
+    "evidence_source": "owner local terminal output from authorized runner",
+    "generated_at": "2026-09-30T08:44:27.720Z"
+  },
+  "next_action": "Run scripts/p8/p8-b2-inspect-nse-universe.mjs locally to verify manifest hashes and actual NSE CSV schema before parser/reconciliation implementation."
 }
