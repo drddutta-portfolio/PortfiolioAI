@@ -2789,3 +2789,10 @@ V2-only: ElgbltyClsgAuctnSsn, XchgExclsv
 The month mapping shows the campaign is V1 through June 2026 and V2 from July 2026 onward. These fields are not assumed to be equivalent or renamed without evidence; the parser will treat them as version-specific optional attributes and keep core identity/universe fields on the common schema only.
 
 A read-only semantic-analysis runner is added at `scripts/p8/p8-b2-analyze-nse-schema.mjs`. It extracts only identity/listing/security-relevant common columns, representative values for each schema version, and the exact month/version transition. No provider calls or database writes occur.
+
+
+## P8-B2 semantic schema inspection — 30 September 2026
+
+The schema semantic-analysis runner completed successfully and wrote `tmp/p8-b2-nse/schema-semantic-analysis.json`. Representative V2 identity/listing fields include `FinInstrmId`, `TckrSymb`, `SctySrs`, `FinInstrmNm`, `ISIN`, `SctyTpFlg`, `SctyTp`, `InstrmNm`, market identifiers and exchange fields. The two version-specific fields remain isolated from the core parser contract.
+
+Before freezing the eligibility/parser rules, P8-B2 requires one compact semantic profile of the candidate identity/type fields so that equity filtering is based on observed NSE values rather than guessed meanings. Added `scripts/p8/p8-b2-profile-nse-identity.mjs`, which reads only the local analysis file and produces `tmp/p8-b2-nse/identity-profile.json`. No provider calls or database writes occur.

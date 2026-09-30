@@ -35,7 +35,7 @@
     "evidence_source": "owner local terminal output from authorized runner",
     "generated_at": "2026-09-30T08:44:27.720Z"
   },
-  "next_action": "Run scripts/p8/p8-b2-analyze-nse-schema.mjs locally; use its compact common identity/listing field map and representative values to freeze the parser contract before dry-run reconciliation.",
+  "next_action": "Run scripts/p8/p8-b2-profile-nse-identity.mjs locally and inspect distinct observed values for candidate identity/type fields before freezing equity eligibility/parser rules.",
   "schema_inspection": {
     "files_checked": 32,
     "all_hashes_pass": true,
@@ -57,5 +57,22 @@
     ],
     "observed_transition": "V1 through 2026-06; V2 from 2026-07 through 2026-09",
     "interpretation": "Version-specific fields are not treated as semantic renames without evidence; core historical-universe identity must use common fields."
+  },
+  "semantic_schema_analysis": {
+    "status": "PASS",
+    "output": "tmp/p8-b2-nse/schema-semantic-analysis.json",
+    "observed_v2_core_fields": [
+      "FinInstrmId",
+      "TckrSymb",
+      "SctySrs",
+      "FinInstrmNm",
+      "ISIN",
+      "SctyTpFlg",
+      "SctyTp",
+      "InstrmNm",
+      "MktTpAndId",
+      "Xchg"
+    ],
+    "parser_freeze_status": "PENDING_COMPACT_IDENTITY_TYPE_PROFILE"
   }
 }
