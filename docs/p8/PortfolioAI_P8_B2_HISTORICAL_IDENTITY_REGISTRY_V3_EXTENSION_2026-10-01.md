@@ -48,7 +48,7 @@ All use `security_invoker=true`:
 - `append_p8_historical_listing_observation_v3(jsonb)`
 - `append_and_select_p8_historical_universe_v3(jsonb,jsonb,jsonb,jsonb)`
 
-Authenticated/browser roles have read-only access under owner-scoped RLS. Anonymous reads are denied. Direct service-role table writes are not granted; service-role mutation is intentionally routed through the validated functions.
+Authenticated/browser roles have read-only access under owner-scoped RLS and no direct table DML. Anonymous access is denied. The Supabase `service_role` remains the elevated server-side role and retains the platform-standard table privileges; the four V3 append/select functions remain explicitly executable only by `service_role` among API roles.
 
 ## Frozen identity contract
 
@@ -172,7 +172,8 @@ The SQL test covers:
 - legacy v1/v2 preservation;
 - RLS, anonymous denial and authenticated owner-read contract;
 - `security_invoker` views;
-- service-role-only mutation functions with no direct service-role table DML grant.
+- browser/user write denial and authenticated owner-scoped reads;
+- service-role-only execution of the privileged append/select functions, while preserving Supabase's platform-standard elevated `service_role` table privileges.
 
 ## Stop boundary
 
