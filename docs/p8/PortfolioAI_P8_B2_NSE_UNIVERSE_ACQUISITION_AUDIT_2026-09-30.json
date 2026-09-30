@@ -35,5 +35,13 @@
     "evidence_source": "owner local terminal output from authorized runner",
     "generated_at": "2026-09-30T08:44:27.720Z"
   },
-  "next_action": "Run scripts/p8/p8-b2-inspect-nse-universe.mjs locally to verify manifest hashes and actual NSE CSV schema before parser/reconciliation implementation."
+  "next_action": "Map both NSE header versions explicitly, then implement a dry-run schema-aware parser/reconciler before any hosted historical-universe writes.",
+  "schema_inspection": {
+    "files_checked": 32,
+    "all_hashes_pass": true,
+    "total_rows_across_files": 991687,
+    "unique_header_set_count": 2,
+    "result": "PASS_HASHES_SCHEMA_VERSIONING_REQUIRED",
+    "evidence_source": "owner local terminal output"
+  }
 }
