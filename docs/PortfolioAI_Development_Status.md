@@ -2459,3 +2459,25 @@ The real-data transaction verification completed `BEGIN / DO / DO / DO / DO / RO
 No migration has been applied to hosted PortfolioAI Dev. No hosted row changed. No Edge Function was deployed. No provider was called. Production and `main` remain unchanged.
 
 **Stage 2 = COMPLETE / PASS. Stage 3 = NOT STARTED / NOT AUTHORIZED. IC2 remains BLOCKED / NOT CLOSED pending separate owner approval for hosted Development migration application.**
+
+
+## P7-IC IC2 current-selection remediation — Stage 3 COMPLETE / PASS — 30 September 2026
+
+Owner explicitly approved migration `20260929235000` for hosted PortfolioAI Dev. The migration was applied through the Supabase Management API as a single migration file and recorded in hosted migration history. A broad `db push` was deliberately not used because four earlier IC2 migrations are recorded remotely under historical timestamp aliases and must not be replayed.
+
+Hosted Development preservation checks passed exactly:
+
+- immutable snapshots: `1,007` before / `1,007` after;
+- immutable snapshot items: `14,913` before / `14,913` after;
+- current rows and distinct portfolio/security pairs: `239 / 239` before and after;
+- initial behavior-preserving selections: `239`;
+- deterministic mapping fingerprint: `3c94aeafe90316a777de0ec6cd72350f` before and after;
+- snapshot and requirement-state matrices unchanged.
+
+Hosted security and behavior checks passed: `security_invoker = true`, owner-scoped authenticated read, no anonymous read, no authenticated writes, no authenticated V2 execution, service-role V2 execution, exact mapping equivalence, immutable content reuse, tampered-item fail-closed behavior, append-only enforcement, and cross-scope rejection. The behavioral script completed inside a transaction and rolled back.
+
+Database lint passed with only the pre-existing `get_portfolio_coverage_registry_v1` STABLE/VOLATILE warning. Hosted migration history contains `20260929235000 / add_p7_ic2_canonical_snapshot_selection_ledger`.
+
+No Edge Function was deployed and no corrective selection occurred during Stage 3. No provider was called. Production and `main` remain unchanged.
+
+**Stage 3 = COMPLETE / PASS. Stage 4 materializer integration is authorized and in progress. IC2 remains BLOCKED / NOT CLOSED until the 239-equity canonical reconciliation and closure audit pass.**

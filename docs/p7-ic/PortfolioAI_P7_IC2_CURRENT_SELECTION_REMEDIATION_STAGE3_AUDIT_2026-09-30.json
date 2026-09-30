@@ -1,0 +1,57 @@
+{
+  "audit": "P7-IC2 canonical current-selection remediation Stage 3",
+  "date": "2026-09-30",
+  "environment": "PortfolioAI Dev",
+  "projectRef": "lrgpjimipfkyoqbpsqzz",
+  "migration": "20260929235000_add_p7_ic2_canonical_snapshot_selection_ledger",
+  "status": "COMPLETE_PASS",
+  "application": {
+    "method": "Supabase Management API single-file execution",
+    "reason": "Four earlier IC2 migrations are recorded remotely under historical timestamp aliases; broad db push was rejected to avoid replaying already-applied schema.",
+    "migrationHistoryRecorded": true
+  },
+  "prePostManifest": {
+    "snapshots": {"before": 1007, "after": 1007},
+    "snapshotItems": {"before": 14913, "after": 14913},
+    "currentRows": {"before": 239, "after": 239},
+    "distinctPortfolioSecurity": {"before": 239, "after": 239},
+    "selectionRows": {"before": 0, "after": 239},
+    "mappingFingerprint": {
+      "before": "3c94aeafe90316a777de0ec6cd72350f",
+      "after": "3c94aeafe90316a777de0ec6cd72350f"
+    },
+    "snapshotDispositionBeforeAndAfter": {
+      "READY": 0,
+      "INSUFFICIENT": 128,
+      "STALE": 2,
+      "CONFLICTING": 0,
+      "REVIEW_REQUIRED": 109
+    },
+    "requirementStateBeforeAndAfter": {
+      "FRESH": 829,
+      "INSUFFICIENT": 258,
+      "MISSING": 2170,
+      "STALE": 2,
+      "CONFLICTING": 0,
+      "REVIEW_REQUIRED": 246
+    }
+  },
+  "security": {
+    "viewSecurityInvoker": true,
+    "anonSelectionRead": false,
+    "authenticatedSelectionRead": true,
+    "authenticatedSelectionWrite": false,
+    "authenticatedV2Execute": false,
+    "serviceRoleV2Execute": true,
+    "transactionVerification": "PASS_ROLLED_BACK"
+  },
+  "databaseLint": "PASS_WITH_PRE_EXISTING_GET_PORTFOLIO_COVERAGE_REGISTRY_STABLE_VOLATILE_WARNING",
+  "boundaries": {
+    "edgeDeployment": false,
+    "correctiveReconciliation": false,
+    "providerCalls": 0,
+    "productionChanged": false,
+    "mainChanged": false,
+    "ic3Executed": false
+  }
+}

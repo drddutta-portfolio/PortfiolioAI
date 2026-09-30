@@ -6,13 +6,14 @@ import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLO
 
 const DEV_REF="lrgpjimipfkyoqbpsqzz",PROD_REF="uxiyufbsbgzzdujzcdxe",ACTION="P7_IC2_MATERIALIZE_READINESS"
 const REGISTRY_VERSION="PORTFOLIOAI_P7_IC1_METHODOLOGY_R7_REGISTRY_V1"
+const MATERIALIZER_VERSION="P7_IC2_CURRENT_SELECTION_V2"
 type Json=Record<string,unknown>
 type CoverageRow={securityId:string;symbol:string;ic1State:string;profileCode:string|null;subprofileCode:string|null;methodologyAuthority:string|null;r7PolicyCode:string|null}
 type Observation={id:string;security_id:string;metric_code:string;numeric_value:number|null;text_value:string|null;boolean_value:boolean|null;date_value:string|null;period_end:string|null;period_type:string|null;retrieved_at:string;fresh_until:string|null;evidence_status:string;source_code:string;source_record_id:string}
 type SourceRecord={id:string;source_code:string;record_kind:string;retrieved_at:string;raw_payload:Json}
 type History={security_id:string;sessions:number;latest_session:string|null;retrieved_at:string|null}
 type Benchmark={code:string;mapping_status:string;provider_code:string|null;provider_instrument_id:string|null;verified_at:string|null;sessions:number;latest_session:string|null;retrieved_at:string|null}
-type Facts={portfolioId:string;generatedAt:string;securities:Array<{id:string;symbol:string;isin:string;exchange:string}>;observations:Observation[];sourceRecords:SourceRecord[];histories:History[];benchmarks:Benchmark[]}
+type Facts={portfolioId:string;generatedAt:string;totalEquities:number;securities:Array<{id:string;symbol:string;isin:string;exchange:string}>;observations:Observation[];sourceRecords:SourceRecord[];histories:History[];benchmarks:Benchmark[]}
 type Item={requirement_code:string;metric_code:string|null;required:boolean;minimum_history:number;freshness_policy:string|null;benchmark_authority:string[];applicability:"APPLICABLE"|"NOT_APPLICABLE";evidence_state:"FRESH"|"STALE"|"MISSING"|"INSUFFICIENT"|"CONFLICTING"|"REVIEW_REQUIRED"|"NOT_APPLICABLE";candidate_evidence_ids:string[];selected_evidence_id:string|null;evidence_as_of_date:string|null;retrieved_at:string|null;fresh_through:string|null;source_provider:string|null;raw_source_record_id:string|null;normalized_value:unknown;validation_state:string;canonical_selection_state:string;reason_code:string;recommended_remediation_action:string}
 
 const canonicalMetricCodes:Readonly<Record<string,readonly string[]>>={
@@ -27,14 +28,14 @@ const reply=(status:number,body:Json)=>new Response(JSON.stringify(body),{status
 const dateOnly=(v:string|null)=>v?v.slice(0,10):null
 const marketish=(c:string)=>/(PRICE_HISTORY|MARKET_DRAWDOWN|MAX_DRAWDOWN|CYCLE_DRAWDOWN|VOLATILITY|MOMENTUM|TOTAL_RETURN|RELATIVE_STRENGTH)/u.test(c)
 
-async function loadStockHistories(admin:Admin,ids:readonly string[]):Promise<History[]>{
- return await Promise.all(ids.map(async securityId=>{const [countResult,latestResult]=await Promise.all([admin.from("market_price_history").select("security_id",{count:"exact",head:true}).eq("security_id",securityId).eq("interval","ONE_DAY"),admin.from("market_price_history").select("period_start,retrieved_at").eq("security_id",securityId).eq("interval","ONE_DAY").order("period_start",{ascending:false}).limit(1).maybeSingle()]);if(countResult.error)throw countResult.error;if(latestResult.error)throw latestResult.error;return{security_id:securityId,sessions:countResult.count??0,latest_session:latestResult.data?.period_start??null,retrieved_at:latestResult.data?.retrieved_at??null}}))
+async function loadStockHistories(admin:Admin,ids:readonly string[],sourceCutoffAt:string):Promise<History[]>{
+ return await Promise.all(ids.map(async securityId=>{const [countResult,latestResult]=await Promise.all([admin.from("market_price_history").select("security_id",{count:"exact",head:true}).eq("security_id",securityId).eq("interval","ONE_DAY").lte("retrieved_at",sourceCutoffAt),admin.from("market_price_history").select("period_start,retrieved_at").eq("security_id",securityId).eq("interval","ONE_DAY").lte("retrieved_at",sourceCutoffAt).order("period_start",{ascending:false}).limit(1).maybeSingle()]);if(countResult.error)throw countResult.error;if(latestResult.error)throw latestResult.error;return{security_id:securityId,sessions:countResult.count??0,latest_session:latestResult.data?.period_start??null,retrieved_at:latestResult.data?.retrieved_at??null}}))
 }
-async function loadBenchmarkHistories(admin:Admin,codes:readonly string[]){
- return new Map(await Promise.all(codes.map(async code=>{const [countResult,latestResult]=await Promise.all([admin.from("market_benchmark_price_history").select("benchmark_code",{count:"exact",head:true}).eq("benchmark_code",code).eq("interval","ONE_DAY"),admin.from("market_benchmark_price_history").select("period_start,retrieved_at").eq("benchmark_code",code).eq("interval","ONE_DAY").order("period_start",{ascending:false}).limit(1).maybeSingle()]);if(countResult.error)throw countResult.error;if(latestResult.error)throw latestResult.error;return[code,{sessions:countResult.count??0,latest_session:latestResult.data?.period_start??null,retrieved_at:latestResult.data?.retrieved_at??null}] as const})))
+async function loadBenchmarkHistories(admin:Admin,codes:readonly string[],sourceCutoffAt:string){
+ return new Map(await Promise.all(codes.map(async code=>{const [countResult,latestResult]=await Promise.all([admin.from("market_benchmark_price_history").select("benchmark_code",{count:"exact",head:true}).eq("benchmark_code",code).eq("interval","ONE_DAY").lte("retrieved_at",sourceCutoffAt),admin.from("market_benchmark_price_history").select("period_start,retrieved_at").eq("benchmark_code",code).eq("interval","ONE_DAY").lte("retrieved_at",sourceCutoffAt).order("period_start",{ascending:false}).limit(1).maybeSingle()]);if(countResult.error)throw countResult.error;if(latestResult.error)throw latestResult.error;return[code,{sessions:countResult.count??0,latest_session:latestResult.data?.period_start??null,retrieved_at:latestResult.data?.retrieved_at??null}] as const})))
 }
 
-async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit:number):Promise<Facts>{
+async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit:number,sourceCutoffAt:string):Promise<Facts>{
  const holdings=await admin.from("current_holdings").select("security_id,current_quantity").eq("portfolio_id",portfolioId)
  if(holdings.error)throw holdings.error
  const openIds=(holdings.data??[]).filter(row=>Number(row.current_quantity)>0).map(row=>String(row.security_id))
@@ -42,18 +43,19 @@ async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit
  if(securitiesResult.error)throw securitiesResult.error
  const securities=(securitiesResult.data??[]).slice(offset,offset+limit).map(row=>({id:String(row.id),symbol:String(row.symbol),isin:String(row.isin??""),exchange:String(row.exchange??"")}))
  const ids=securities.map(row=>row.id)
- if(!ids.length)return{portfolioId,generatedAt:new Date().toISOString(),securities,observations:[],sourceRecords:[],histories:[],benchmarks:[]}
+ const totalEquities=securitiesResult.data?.length??0
+ if(!ids.length)return{portfolioId,generatedAt:new Date().toISOString(),totalEquities,securities,observations:[],sourceRecords:[],histories:[],benchmarks:[]}
  const benchmarkResult=await admin.from("market_benchmarks").select("code,mapping_status,provider_code,provider_instrument_id,verified_at")
  if(benchmarkResult.error)throw benchmarkResult.error
  const [observationsResult,sourceRecordsResult,histories,benchmarkHistory]=await Promise.all([
-  admin.from("fundamental_observations").select("id,security_id,metric_code,numeric_value,text_value,boolean_value,date_value,period_end,period_type,retrieved_at,fresh_until,evidence_status,source_code,source_record_id").in("security_id",ids),
-  admin.from("data_source_records").select("id,source_code,record_kind,retrieved_at,raw_payload").in("record_kind",["COMPLETE_RESEARCH_STRUCTURED_METRICS","COMPLETE_RESEARCH_DOCUMENT_SEARCH","COMPLETE_RESEARCH_OWNERSHIP"]).in("raw_payload->>security_id",ids).order("retrieved_at"),
-  loadStockHistories(admin,ids),
-  loadBenchmarkHistories(admin,(benchmarkResult.data??[]).map(row=>String(row.code))),
+  admin.from("fundamental_observations").select("id,security_id,metric_code,numeric_value,text_value,boolean_value,date_value,period_end,period_type,retrieved_at,fresh_until,evidence_status,source_code,source_record_id").in("security_id",ids).lte("retrieved_at",sourceCutoffAt),
+  admin.from("data_source_records").select("id,source_code,record_kind,retrieved_at,raw_payload").in("record_kind",["COMPLETE_RESEARCH_STRUCTURED_METRICS","COMPLETE_RESEARCH_DOCUMENT_SEARCH","COMPLETE_RESEARCH_OWNERSHIP"]).in("raw_payload->>security_id",ids).lte("retrieved_at",sourceCutoffAt).order("retrieved_at"),
+  loadStockHistories(admin,ids,sourceCutoffAt),
+  loadBenchmarkHistories(admin,(benchmarkResult.data??[]).map(row=>String(row.code)),sourceCutoffAt),
  ])
  for(const result of [observationsResult,sourceRecordsResult])if(result.error)throw result.error
  const benchmarks=(benchmarkResult.data??[]).map(row=>{const history=benchmarkHistory.get(String(row.code))??{sessions:0,latest_session:null,retrieved_at:null};return{code:String(row.code),mapping_status:String(row.mapping_status),provider_code:row.provider_code===null?null:String(row.provider_code),provider_instrument_id:row.provider_instrument_id===null?null:String(row.provider_instrument_id),verified_at:row.verified_at===null?null:String(row.verified_at),...history}})
- return{portfolioId,generatedAt:new Date().toISOString(),securities,observations:(observationsResult.data??[]) as Observation[],sourceRecords:(sourceRecordsResult.data??[]) as SourceRecord[],histories,benchmarks}
+ return{portfolioId,generatedAt:new Date().toISOString(),totalEquities,securities,observations:(observationsResult.data??[]) as Observation[],sourceRecords:(sourceRecordsResult.data??[]) as SourceRecord[],histories,benchmarks}
 }
 const benchmarkish=(c:string)=>/(APPROVED_BENCHMARK|BENCHMARK_HISTORY|BENCHMARK_RELATIVE)/u.test(c)
 const ownershipish=(c:string)=>/(OWNERSHIP|PROMOTER|FII|DII|INSTITUTIONAL|SHAREHOLDING)/u.test(c)
@@ -139,8 +141,8 @@ function projectCachedRecords(records:SourceRecord[],security:{id:string;symbol:
  })
 }
 
-function requirementItem(input:{code:string;minimum:number;freshness:string|null;benchmarks:string[];securityId:string;observations:Observation[];records:SourceRecord[];history?:History;benchmarkByCode:Map<string,Benchmark>}):Item{
- const {code,minimum,freshness,benchmarks,securityId,observations,records,history,benchmarkByCode}=input
+function requirementItem(input:{code:string;minimum:number;freshness:string|null;benchmarks:string[];securityId:string;observations:Observation[];records:SourceRecord[];history?:History;benchmarkByCode:Map<string,Benchmark>;evaluationAsOfMs:number}):Item{
+ const {code,minimum,freshness,benchmarks,securityId,observations,records,history,benchmarkByCode,evaluationAsOfMs}=input
  if(benchmarkish(code)){
    const required=benchmarks.filter(x=>x.startsWith("NIFTY_")),rows=required.map(x=>benchmarkByCode.get(x)),ready=required.length>0&&rows.every(x=>x?.mapping_status==="VERIFIED"&&Number(x.sessions)>=minimum)
    if(!ready)return blocked(code,minimum,freshness,benchmarks,"MISSING","BENCHMARK_HISTORY_NOT_READY","REFRESH_EXACT_APPROVED_BENCHMARK_HISTORY")
@@ -172,7 +174,7 @@ function requirementItem(input:{code:string;minimum:number;freshness:string|null
  }
  const metricCodes=canonicalMetricCodes[code]??[code],candidates=observations.filter(x=>x.security_id===securityId&&metricCodes.includes(x.metric_code))
  if(candidates.some(x=>x.evidence_status==="CONFLICTING"))return {...blocked(code,minimum,freshness,benchmarks,"CONFLICTING","CANONICAL_OBSERVATION_CONFLICT","RECONCILE_CANONICAL_EVIDENCE"),candidate_evidence_ids:candidates.map(x=>x.id)}
- const fresh=candidates.filter(x=>x.evidence_status==="AVAILABLE"&&(!x.fresh_until||Date.parse(x.fresh_until)>=Date.now()))
+ const fresh=candidates.filter(x=>x.evidence_status==="AVAILABLE"&&(!x.fresh_until||Date.parse(x.fresh_until)>=evaluationAsOfMs))
  if(fresh.length){
    const byPeriod=new Map<string,Observation[]>()
    for(const row of fresh){
@@ -206,13 +208,14 @@ Deno.serve(async request=>{
  if(ref===PROD_REF)return reply(409,{error:"P7 IC2 materializer refuses Production.",code:"UNEXPECTED_PRODUCTION_DB_TARGET"})
  if(ref!==DEV_REF||!key)return reply(500,{error:"Development runtime configuration is incomplete."})
  try{
-  const body=await request.json() as Json,portfolioId=String(body.portfolioId??""),offset=Number(body.offset??0),limit=Number(body.limit??40)
-  if(body.action!==ACTION||!portfolioId||!Number.isInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>40)return reply(400,{error:"Exact action, portfolioId, and a valid bounded slice are required."})
+  const body=await request.json() as Json,portfolioId=String(body.portfolioId??""),offset=Number(body.offset??0),limit=Number(body.limit??40),selectionRunId=String(body.selectionRunId??""),evaluationAsOf=String(body.evaluationAsOf??""),sourceCutoffAt=String(body.sourceCutoffAt??"")
+  const evaluationAsOfMs=Date.parse(evaluationAsOf),sourceCutoffAtMs=Date.parse(sourceCutoffAt)
+  if(body.action!==ACTION||!portfolioId||!Number.isInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>40||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu.test(selectionRunId)||!Number.isFinite(evaluationAsOfMs)||!Number.isFinite(sourceCutoffAtMs)||sourceCutoffAtMs>evaluationAsOfMs)return reply(400,{error:"Exact action, portfolioId, bounded slice, selection run, evaluation time, and source cutoff are required."})
   const scope=`ALL_HELD_EQUITIES:${offset}:${limit}`
   const admin=createClient(url,key,{auth:{persistSession:false}}),grant=await consumeP4ExecutionGrant(admin,{grantId:body.grantId,action:ACTION,portfolioId,securityId:scope})
   if(!grant.ok)return reply(401,{error:grant.message,code:grant.code})
-  const facts=await loadSliceFacts(admin,portfolioId,offset,limit),coverageRows=(coverage as {rows:CoverageRow[]}).rows,coverageById=new Map(coverageRows.map(x=>[x.securityId,x])),historyById=new Map(facts.histories.map(x=>[x.security_id,x])),benchmarkByCode=new Map(facts.benchmarks.map(x=>[x.code,x]))
-  const snapshotIds:string[]=[],totals:Record<string,number>={}
+  const facts=await loadSliceFacts(admin,portfolioId,offset,limit,sourceCutoffAt),coverageRows=(coverage as {rows:CoverageRow[]}).rows,coverageById=new Map(coverageRows.map(x=>[x.securityId,x])),historyById=new Map(facts.histories.map(x=>[x.security_id,x])),benchmarkByCode=new Map(facts.benchmarks.map(x=>[x.code,x]))
+  const snapshotIds:string[]=[],selectionIds:string[]=[],totals:Record<string,number>={},writeTotals={snapshotsCreated:0,snapshotsReused:0,selectionsCreated:0,selectionsReused:0}
   const slice=facts.securities
   for(const security of slice){
    const assignment=coverageById.get(security.id);if(!assignment)throw new Error(`METHODOLOGY_ASSIGNMENT_MISSING:${security.symbol}`)
@@ -222,14 +225,17 @@ Deno.serve(async request=>{
    else{
     const contract=P7_IC_PROFILE_CONTRACTS[assignment.profileCode as keyof typeof P7_IC_PROFILE_CONTRACTS];if(!contract)throw new Error(`PROFILE_CONTRACT_MISSING:${assignment.profileCode}`)
     const plan=buildProfileEvidencePlan(contract),baseRecords=facts.sourceRecords.filter(x=>String(x.raw_payload.security_id)===security.id),records=projectCachedRecords(baseRecords,security,plan)
-    items=plan.requirements.map(req=>requirementItem({code:req.evidenceCode,minimum:req.minimumPeriods,freshness:(contract.signalRequirements.find(x=>(x.evidenceCodes??[x.signalCode]).includes(req.evidenceCode)) as {freshnessPolicy?:string}|undefined)?.freshnessPolicy??null,benchmarks:[...(contract.benchmarkAuthority??[])],securityId:security.id,observations:facts.observations,records,history:historyById.get(security.id),benchmarkByCode}))
+    items=plan.requirements.map(req=>requirementItem({code:req.evidenceCode,minimum:req.minimumPeriods,freshness:(contract.signalRequirements.find(x=>(x.evidenceCodes??[x.signalCode]).includes(req.evidenceCode)) as {freshnessPolicy?:string}|undefined)?.freshnessPolicy??null,benchmarks:[...(contract.benchmarkAuthority??[])],securityId:security.id,observations:facts.observations,records,history:historyById.get(security.id),benchmarkByCode,evaluationAsOfMs}))
    }
    const states=new Set(items.map(x=>x.evidence_state)),status=states.has("REVIEW_REQUIRED")?"REVIEW_REQUIRED":states.has("CONFLICTING")?"CONFLICTING":states.has("STALE")?"STALE":states.has("MISSING")||states.has("INSUFFICIENT")?"INSUFFICIENT":"READY"
    totals[status]=(totals[status]??0)+1
    const hash=await sha({securityId:security.id,authority,profile,subprofile:assignment.subprofileCode,registry:REGISTRY_VERSION,items})
-   const result=await admin.rpc("append_research_evidence_snapshot_v1",{p_snapshot:{portfolio_id:portfolioId,security_id:security.id,as_of_date:new Date().toISOString().slice(0,10),methodology_authority:authority,methodology_version:"V1",profile_code:profile,subprofile_code:assignment.subprofileCode,requirement_registry_version:REGISTRY_VERSION,snapshot_status:status,snapshot_hash:hash,created_by:null},p_items:items})
-   if(result.error)throw result.error;snapshotIds.push(String(result.data))
+   const result=await admin.rpc("append_and_select_research_evidence_snapshot_v2",{p_snapshot:{portfolio_id:portfolioId,security_id:security.id,as_of_date:new Date(evaluationAsOfMs).toISOString().slice(0,10),methodology_authority:authority,methodology_version:"V1",profile_code:profile,subprofile_code:assignment.subprofileCode,requirement_registry_version:REGISTRY_VERSION,snapshot_status:status,snapshot_hash:hash,created_by:null},p_items:items,p_selection:{selection_run_id:selectionRunId,execution_grant_id:String(body.grantId??""),evaluation_as_of:evaluationAsOf,source_cutoff_at:sourceCutoffAt,selection_basis:"MATERIALIZED_RECONCILIATION",materializer_version:MATERIALIZER_VERSION,selected_by:null}})
+   if(result.error)throw result.error
+   const written=result.data as {snapshot_id:string;selection_id:string;snapshot_created:boolean;snapshot_reused:boolean;selection_created:boolean;selection_reused:boolean}
+   snapshotIds.push(String(written.snapshot_id));selectionIds.push(String(written.selection_id))
+   if(written.snapshot_created)writeTotals.snapshotsCreated++;if(written.snapshot_reused)writeTotals.snapshotsReused++;if(written.selection_created)writeTotals.selectionsCreated++;if(written.selection_reused)writeTotals.selectionsReused++
   }
-  return reply(200,{status:"MATERIALIZED",portfolioId,offset,processed:slice.length,nextOffset:offset+slice.length<facts.securities.length?offset+slice.length:null,totals,snapshotIds})
+  return reply(200,{status:"MATERIALIZED_AND_SELECTED",portfolioId,selectionRunId,evaluationAsOf,sourceCutoffAt,offset,processed:slice.length,totalEquities:facts.totalEquities,nextOffset:offset+slice.length<facts.totalEquities?offset+slice.length:null,providerCalls:0,totals,writeTotals,snapshotIds,selectionIds})
  }catch(error){return reply(500,{error:"IC2 readiness materialization failed safely.",code:error instanceof Error?error.message:"IC2_MATERIALIZATION_FAILED"})}
 })
