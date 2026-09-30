@@ -2593,3 +2593,5 @@ The inventory classified nine required data domains. Daily prices and benchmarks
 The machine-readable audit is `docs/p8/PortfolioAI_P8_A_HISTORICAL_DATA_SUFFICIENCY_AUDIT_2026-09-30.json`; the handoff is `docs/p8/PortfolioAI_P8_A_HANDOFF_2026-09-30.md`. The Development readiness surface now exposes the domain-by-domain measured inventory and required remediation without presenting a return or performance claim.
 
 **P7 = COMPLETE / PASS / CLOSED. P8 = ACTIVE. P8-0 = COMPLETE / PASS. P8-A = COMPLETE / PASS. P8-B = NOT STARTED / AWAITING OWNER-APPROVED REMEDIATION SCOPE. Current P8 execution gate = BLOCKED — DATA FOUNDATION. No performance backtest is authorized. Production and `main` remain unchanged.**
+
+The implementation-ready continuation and safe-stop handoff is `docs/p8/PortfolioAI_P8_COMPLETION_BUILD_HANDOFF_PLAN_2026-09-30.md`. It sequences P8-B data-foundation remediation and experiment freeze through P8-C replay, P8-D simulation, P8-E adversarial validation, P8-F UI and P8-FINAL, with separate owner approvals for contract decisions, provider campaigns, migrations and the P8-C transition.
