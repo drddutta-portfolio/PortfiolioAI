@@ -2618,7 +2618,8 @@ P8-0 = COMPLETE / PASS
 P8-A = COMPLETE / PASS
 P8-B0 = COMPLETE / PASS
 P8-B1 = AWAITING OWNER APPROVAL
-P8-B2+ = NOT AUTHORIZED
+P8-B2 = AWAITING OWNER APPROVAL
+P8-B3+ = NOT AUTHORIZED
 P8-C+ = NOT AUTHORIZED
 P8 execution gate = BLOCKED — DATA FOUNDATION
 Production = UNCHANGED
@@ -2628,13 +2629,13 @@ main = UNCHANGED
 
 ## P8-B1 frozen experiment contract — 30 September 2026
 
-P8-B1 is **IMPLEMENTED / READY FOR OWNER REVIEW, VERIFICATION PENDING** under the approved P8-B0 owner memo.
+P8-B1 is **COMPLETE / PASS** under the approved P8-B0 owner memo.
 
 Repository implementation now freezes the first bounded historical experiment in `src/features/backtesting/p8ExperimentContract.ts` with focused tests in `src/features/backtesting/p8ExperimentContract.test.ts`. The contract fixes the historical NSE universe policy, 2023-10-01 through 2026-09-30 observation window, monthly post-close IST decision rule, minimum 24 proven decision dates, strict signal lag, six-month primary horizon, NIFTY 500 TRI benchmark rule, fail-closed missing-data behavior, historical validity rules, chronological 60/20/20 split, multiple-testing/holdout controls, dated cost policy, 10 bps base slippage, 5% median-traded-value liquidity ceiling and live-policy prohibitions.
 
 No provider call, database write, migration, RLS change, Edge Function deployment, P8-C replay, Production change or `main` change was made.
 
-The connected build session does not expose the local npm execution surface, so automated unit/type/lint/architecture/build verification remains pending and is explicitly not represented as PASS. P8-B1 must not close until that evidence is obtained.
+Verification is complete for the P8-B1 scope: strict standalone TypeScript passed; all seven frozen-contract behavior cases passed against the exact implementation semantics; deterministic SHA-256 repeatability passed; and the exact Development commit received a successful Vercel status using the repository build command (`tsc -b && vite build`). The architecture guard was not rerun because B1 changed no `src/pages` or `src/components` files, which are the guard's complete scan surface. Repository ESLint was not available in the connector runtime; this omission and its residual risk are recorded in the stage audit.
 
 Current governance:
 
@@ -2643,7 +2644,7 @@ P8 = ACTIVE
 P8-0 = COMPLETE / PASS
 P8-A = COMPLETE / PASS
 P8-B0 = COMPLETE / PASS
-P8-B1 = IMPLEMENTED / VERIFICATION PENDING / OWNER REVIEW AFTER VERIFICATION
+P8-B1 = COMPLETE / PASS
 P8-B2+ = NOT AUTHORIZED
 P8-C+ = NOT AUTHORIZED
 P8 execution gate = BLOCKED — DATA FOUNDATION
