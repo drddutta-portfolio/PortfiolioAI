@@ -3143,3 +3143,38 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 local SQL privilege failure and remediation — 1 October 2026
+
+The owner-run V3 SQL contract test stopped in its second DO block with:
+
+```text
+ERROR: P8-B2 V3 table privilege contract failed on p8_historical_security_identities
+CONTEXT: PL/pgSQL function inline_code_block line 32 at RAISE
+```
+
+Diagnosis: Supabase default privileges had already granted `service_role` direct DML on newly created tables. The migration granted SELECT afterward but had not first revoked those inherited/default privileges.
+
+Repository-only remediation:
+
+- each of the seven new V3 tables now explicitly `REVOKE ALL` from `service_role` before granting only `SELECT`;
+- the three V3 read views now also explicitly reset `service_role` privileges and grant only `SELECT`;
+- service-role mutation remains available only through the four validated service-only functions;
+- no hosted migration or historical data write occurred.
+
+The local database must be reset again so the amended migration is replayed before rerunning the SQL contract test.
+
+Current governance:
+
+```text
+P8-B2 V3 classification validation = COMPLETE / PASS
+P8-B2 V3 clean local migration replay = PASS ON PRE-REMEDIATION PACKAGE
+P8-B2 V3 SQL contract test = FAIL-CLOSED / PRIVILEGE REMEDIATION APPLIED IN REPOSITORY
+P8-B2 V3 post-remediation clean replay = PENDING
+P8-B2 V3 hosted application = NOT AUTHORIZED / NOT APPLIED
+P8-B2 historical universe materialization = NOT STARTED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
