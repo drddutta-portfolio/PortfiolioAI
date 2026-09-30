@@ -3213,3 +3213,38 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 local migration gate closure — 1 October 2026
+
+Owner-run validation completed against the corrected V3 package.
+
+Verified locally:
+
+- historical identity classification: PASS;
+- clean `supabase db reset`: PASS;
+- migration `20261001001500_create_p8_b2_historical_identity_registry_v3.sql`: applied successfully;
+- SQL contract test `supabase/tests/p8_b2_historical_identity_registry_v3.sql`: PASS;
+- terminal sequence: `BEGIN → DO → DO → ROLLBACK`;
+- no fixture residue due to transactional rollback;
+- no hosted PortfolioAI Dev migration/application;
+- no historical universe materialization;
+- no provider call;
+- no P8-B3/P8-C work;
+- Production and `main` unchanged.
+
+Current governance:
+
+```text
+P8-B2 V3 classification = COMPLETE / PASS
+P8-B2 V3 clean local replay = COMPLETE / PASS
+P8-B2 V3 SQL contract = COMPLETE / PASS
+P8-B2 V3 local migration package = COMPLETE / PASS
+
+P8-B2 V3 hosted application = NOT AUTHORIZED / NOT APPLIED
+P8-B2 historical universe materialization = NOT STARTED
+
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
