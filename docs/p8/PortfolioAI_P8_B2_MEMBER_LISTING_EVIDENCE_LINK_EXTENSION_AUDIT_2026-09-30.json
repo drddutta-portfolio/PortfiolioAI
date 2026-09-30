@@ -1,0 +1,36 @@
+{
+  "stage": "P8-B2 member-to-listing evidence-link schema extension",
+  "date": "2026-09-30",
+  "authorization": "OWNER_APPROVED_DEVELOPMENT_LOCAL_ONLY",
+  "status": "MIGRATION_PACKAGE_CREATED_LOCAL_REPLAY_PENDING",
+  "migration": "supabase/migrations/20260930170500_add_p8_b2_member_listing_evidence_links.sql",
+  "test": "supabase/tests/p8_b2_member_listing_evidence_links.sql",
+  "new_objects": {
+    "table": "p8_historical_universe_member_listing_evidence",
+    "view": "current_p8_historical_universe_member_listing_evidence_v1",
+    "function": "append_and_select_p8_historical_universe_v2(jsonb,jsonb,jsonb,jsonb)"
+  },
+  "preserved_objects": [
+    "p8_listing_observations",
+    "p8_historical_universe_runs",
+    "p8_historical_universe_members",
+    "p8_historical_universe_run_selections",
+    "append_and_select_p8_historical_universe_v1"
+  ],
+  "invariants": [
+    "One member per security identity",
+    "Many immutable listing observations may support one member",
+    "Legacy single listing_observation_id remains nullable and unused by V2",
+    "Eligible membership requires at least one linked proven LISTED observation valid at decision date",
+    "No arbitrary EQ/BE/series selection",
+    "Run hash reuse with changed evidence bundle fails closed",
+    "Append-only/RLS/security_invoker/service-only write controls"
+  ],
+  "execution": {
+    "local_replay": "PENDING",
+    "hosted_apply": false,
+    "historical_universe_materialization": false,
+    "provider_calls": 0
+  },
+  "next_action": "Run local supabase db reset and supabase/tests/p8_b2_member_listing_evidence_links.sql. Return for separate owner approval before hosted application."
+}

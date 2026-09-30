@@ -2862,3 +2862,30 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+
+## P8-B2 evidence-link migration package — 30 September 2026
+
+Owner approval received for the Development-only additive many-to-one evidence-link schema. The migration package is now created but **not applied to hosted PortfolioAI Dev**.
+
+Created:
+
+- `supabase/migrations/20260930170500_add_p8_b2_member_listing_evidence_links.sql`
+- `supabase/tests/p8_b2_member_listing_evidence_links.sql`
+- `docs/p8/PortfolioAI_P8_B2_MEMBER_LISTING_EVIDENCE_LINK_EXTENSION_2026-09-30.md`
+- machine-readable package audit
+
+The extension preserves all existing B2 objects and adds an append-only member-to-listing-observation bridge, an owner-scoped `security_invoker` evidence-bundle view, and a service-only V2 append/select function. V2 keeps one member per security identity while preserving every linked NSE line-level observation and leaves the legacy single `listing_observation_id` null.
+
+Current governance:
+
+```text
+P8-B2 evidence-link migration = CREATED / LOCAL REPLAY PENDING
+Hosted application = NOT AUTHORIZED / NOT APPLIED
+Historical universe materialization = NOT STARTED
+Provider calls = 0
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
