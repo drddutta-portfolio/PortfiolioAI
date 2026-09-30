@@ -2655,13 +2655,13 @@ main = UNCHANGED
 
 ## P8-B2 historical universe foundation package — 30 September 2026
 
-P8-B2 is **IN PROGRESS — ADDITIVE MIGRATION PACKAGE CREATED / LOCAL REPLAY PENDING** under explicit owner authorization.
+P8-B2 is **LOCAL REPLAY / SQL TEST PASS — HOSTED APPLICATION AWAITING OWNER APPROVAL** under explicit owner authorization.
 
 Created repository-only migration `20260930061500_create_p8_historical_universe_foundation.sql`, its transactional SQL contract test, design note and machine-readable audit. The package introduces append-only owner-scoped historical listing observations, decision-instant universe runs, member dispositions and canonical selection history, with service-only mutation paths and `security_invoker` read models. It contains no current-holdings or `securities.is_active` historical fallback and does not rewrite existing `security_listings.valid_from/valid_to` values.
 
 No provider call, hosted database write, hosted migration application, Edge Function deployment, P8-B3+, P8-C, Production or `main` change has occurred.
 
-The connected session does not expose a local PostgreSQL/Supabase runtime, so the migration replay and SQL test are created but not yet executed. Under the frozen P8 migration protocol, hosted Development application remains blocked until local replay evidence exists and a separate owner approval is obtained.
+Local verification was completed on commit `ecf871dc09f65b1fbe71e22b74d23f5481b33493`: `supabase db reset` applied the P8-B2 migration successfully, and `supabase/tests/p8_b2_historical_universe_foundation.sql` completed `BEGIN → DO → DO → ROLLBACK` with no error. The test is self-contained and leaves no fixture data behind. Hosted Development application remains separately approval-gated.
 
 Current governance:
 
@@ -2671,7 +2671,7 @@ P8-0 = COMPLETE / PASS
 P8-A = COMPLETE / PASS
 P8-B0 = COMPLETE / PASS
 P8-B1 = COMPLETE / PASS
-P8-B2 = IN PROGRESS / MIGRATION PACKAGE CREATED / LOCAL REPLAY PENDING
+P8-B2 = LOCAL REPLAY PASS / HOSTED APPLICATION AWAITING OWNER APPROVAL
 P8-B3+ = NOT AUTHORIZED
 P8-C+ = NOT AUTHORIZED
 Hosted P8-B2 migration = NOT AUTHORIZED / NOT APPLIED
