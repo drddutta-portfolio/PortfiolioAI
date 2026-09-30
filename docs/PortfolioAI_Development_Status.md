@@ -2481,3 +2481,37 @@ Database lint passed with only the pre-existing `get_portfolio_coverage_registry
 No Edge Function was deployed and no corrective selection occurred during Stage 3. No provider was called. Production and `main` remain unchanged.
 
 **Stage 3 = COMPLETE / PASS. Stage 4 materializer integration is authorized and in progress. IC2 remains BLOCKED / NOT CLOSED until the 239-equity canonical reconciliation and closure audit pass.**
+
+
+## P7-IC IC2 current-selection remediation — COMPLETE / PASS / CLOSED — 30 September 2026
+
+The remaining owner-authorized current-selection remediation stages completed in hosted PortfolioAI Dev.
+
+Stage 4 deployed `p7-ic2-materialize-readiness` version 17 from Development commit `9200921`. The function is Development-bound, one-time-grant controlled, provider-free, uses one fixed campaign evaluation/source cutoff, and writes through `append_and_select_research_evidence_snapshot_v2`.
+
+Stage 5 canaries passed:
+
+- ANANTRAJ reactivated an existing corrected immutable snapshot and now exposes `STOCK_HISTORY_READY` rather than false zero-history;
+- GROWW preserved genuine short history;
+- BLUEJET preserved its explicit methodology-review blocker.
+
+Stage 6 reconciled all 239 held equities under selection run `e8b6aeb3-78a8-4b71-a328-0e98d03a08bb`, fixed at `2026-09-29T23:59:59.999Z`. All 239 immutable snapshots were reused; no snapshot or snapshot item was created, changed, or deleted. The campaign appended exactly 239 canonical selection events and changed 158 current mappings from the behavior-preserving backfill.
+
+The true canonical requirement matrix is now:
+
+- FRESH: `1,081`;
+- INSUFFICIENT: `18`;
+- MISSING: `2,158`;
+- STALE: `2`;
+- CONFLICTING: `0`;
+- REVIEW_REQUIRED: `246`.
+
+Compared with the invalid pointer view, FRESH increased by `252`, INSUFFICIENT decreased by `240`, and MISSING decreased by `12`. The stock-level matrix remains READY `0`, INSUFFICIENT `128`, STALE `2`, CONFLICTING `0`, REVIEW_REQUIRED `109`; those top-level totals are coincidentally unchanged because legitimate document and evidence blockers still dominate many corrected stocks.
+
+Residuals are explicit and valid terminal IC2 dispositions: nine genuine short-history equities, 245 document-review requirements across 108 securities, BLUEJET methodology review, two stale requirements, 2,074 remaining required-evidence gaps, and 12 unavailable authorities from the frozen 22-benchmark set. No semantic conflict remains.
+
+Stage 7 repeatability passed across all 239 equities: snapshots created `0`, snapshots reused `239`, selections created `0`, selections reused `239`, provider calls `0`, and fingerprint unchanged at `836b9474f5683d15b231c370aa0791f5`.
+
+The immutable completion audit is `docs/p7-ic/PortfolioAI_P7_IC2_CURRENT_SELECTION_REMEDIATION_COMPLETION_AUDIT_2026-09-30.json`.
+
+**IC2 = COMPLETE / PASS / CLOSED. IC3 remains NOT STARTED / NOT AUTHORIZED. No R6/R7/IC6+/P8 work occurred. Production and `main` remain unchanged.**

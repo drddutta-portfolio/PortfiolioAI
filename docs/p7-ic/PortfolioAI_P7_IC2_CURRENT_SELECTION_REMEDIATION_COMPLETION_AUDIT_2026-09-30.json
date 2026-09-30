@@ -1,0 +1,125 @@
+{
+  "audit": "P7-IC2 canonical current-selection remediation completion",
+  "date": "2026-09-30",
+  "environment": "PortfolioAI Dev",
+  "projectRef": "lrgpjimipfkyoqbpsqzz",
+  "portfolioId": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "status": "COMPLETE_PASS_CLOSED",
+  "stage3": {
+    "migration": "20260929235000_add_p7_ic2_canonical_snapshot_selection_ledger",
+    "status": "COMPLETE_PASS",
+    "behaviorPreservingBackfillSelections": 239
+  },
+  "stage4": {
+    "materializer": "p7-ic2-materialize-readiness",
+    "version": 17,
+    "deploymentSha256": "21b413351f50669425b8700c24a20760fbf0bd04ff4169e881b1bf0b12c41f23",
+    "status": "COMPLETE_PASS",
+    "providerPath": false,
+    "oneTimeGrantRequired": true
+  },
+  "campaign": {
+    "selectionRunId": "e8b6aeb3-78a8-4b71-a328-0e98d03a08bb",
+    "evaluationAsOf": "2026-09-29T23:59:59.999Z",
+    "sourceCutoffAt": "2026-09-29T23:59:59.999Z",
+    "heldEquities": 239,
+    "campaignSelections": 239,
+    "currentRowsFromCampaign": 239,
+    "snapshotsCreated": 0,
+    "snapshotsReused": 239,
+    "selectionEventsCreated": 239,
+    "providerCalls": 0,
+    "canaries": {
+      "ANANTRAJ": "PASS_REACTIVATED_EXISTING_CONTENT_WITH_STOCK_HISTORY_READY",
+      "GROWW": "PASS_GENUINE_SHORT_HISTORY_PRESERVED",
+      "BLUEJET": "PASS_METHODOLOGY_REVIEW_PRESERVED"
+    }
+  },
+  "repeatability": {
+    "status": "PASS",
+    "snapshotsCreated": 0,
+    "snapshotsReused": 239,
+    "selectionsCreated": 0,
+    "selectionsReused": 239,
+    "providerCalls": 0,
+    "fingerprintUnchanged": true
+  },
+  "canonicalResult": {
+    "immutableSnapshots": 1007,
+    "immutableSnapshotItems": 14913,
+    "allSelectionEvents": 478,
+    "currentRows": 239,
+    "currentMappingFingerprint": "836b9474f5683d15b231c370aa0791f5",
+    "currentMappingsChangedFromBackfill": 158,
+    "snapshotDisposition": {
+      "READY": 0,
+      "INSUFFICIENT": 128,
+      "STALE": 2,
+      "CONFLICTING": 0,
+      "REVIEW_REQUIRED": 109
+    },
+    "requirementState": {
+      "FRESH": 1081,
+      "INSUFFICIENT": 18,
+      "MISSING": 2158,
+      "STALE": 2,
+      "CONFLICTING": 0,
+      "REVIEW_REQUIRED": 246
+    },
+    "requirementDeltaFromInvalidPointerView": {
+      "FRESH": 252,
+      "INSUFFICIENT": -240,
+      "MISSING": -12,
+      "STALE": 0,
+      "CONFLICTING": 0,
+      "REVIEW_REQUIRED": 0
+    },
+    "reasonCounts": {
+      "BENCHMARK_HISTORY_NOT_READY": 84,
+      "BENCHMARK_HISTORY_READY": 24,
+      "CANONICAL_OBSERVATION_READY": 33,
+      "DOCUMENT_EVIDENCE_REQUIRES_REVIEW": 245,
+      "INSUFFICIENT_LISTING_HISTORY": 18,
+      "METHODOLOGY_REVIEW_REQUIRED": 1,
+      "NORMALIZED_REQUIREMENT_READY": 514,
+      "ONLY_STALE_REQUIRED_EVIDENCE": 2,
+      "REQUIRED_EVIDENCE_MISSING": 2074,
+      "STOCK_HISTORY_READY": 510
+    }
+  },
+  "explicitTerminalBlockers": {
+    "shortHistorySecurities": [
+      {"symbol": "GROWW", "sessions": 217},
+      {"symbol": "ICICIAMC", "sessions": 190},
+      {"symbol": "LENSKART", "sessions": 219},
+      {"symbol": "LGEINDIA", "sessions": 236},
+      {"symbol": "PINELABS", "sessions": 215},
+      {"symbol": "TATACAP", "sessions": 237},
+      {"symbol": "TMCV", "sessions": 217},
+      {"symbol": "UTLSOLAR", "sessions": 211},
+      {"symbol": "VAML", "sessions": 73}
+    ],
+    "documentReviewRequirements": 245,
+    "documentReviewSecurities": 108,
+    "methodologyReviewSecurities": ["BLUEJET"],
+    "loadedFrozenBenchmarkAuthorities": 10,
+    "totalFrozenBenchmarkAuthorities": 22,
+    "unavailableFrozenBenchmarkAuthorities": 12
+  },
+  "operationalWrites": {
+    "canonicalSelectionEvents": 239,
+    "oneTimeExecutionGrants": 15,
+    "oneTimeGrantConsumptionRecords": 15,
+    "newImmutableSnapshots": 0,
+    "newImmutableSnapshotItems": 0
+  },
+  "closureBasis": "Every held equity has a deterministic current snapshot and every requirement has an allowed terminal disposition: ready evidence, explicit unresolved evidence blocker, unresolved methodology blocker, review-required evidence, stale evidence, or genuine insufficient history. No conflicts remain and repeatability is proven.",
+  "boundaries": {
+    "ic3Executed": false,
+    "r6Executed": false,
+    "r7Executed": false,
+    "productionChanged": false,
+    "mainChanged": false,
+    "providerCalls": 0
+  }
+}
