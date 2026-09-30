@@ -3069,3 +3069,46 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 historical identity/source-archive V3 migration package — 1 October 2026
+
+Owner approval received to create the additive P8-B2 remediation migration package and local contract test.
+
+Created:
+
+- `supabase/migrations/20261001001500_create_p8_b2_historical_identity_registry_v3.sql`;
+- `supabase/tests/p8_b2_historical_identity_registry_v3.sql`;
+- `docs/p8/PortfolioAI_P8_B2_HISTORICAL_IDENTITY_REGISTRY_V3_EXTENSION_2026-10-01.md`;
+- `docs/p8/PortfolioAI_P8_B2_HISTORICAL_IDENTITY_REGISTRY_V3_EXTENSION_AUDIT_2026-10-01.json`.
+
+The V3 package introduces a P8-local historical identity registry, immutable source archives with conservative availability upper bounds, identity-keyed line-level listing evidence, identity-keyed universe runs/members/evidence links/selections, owner-scoped RLS, three `security_invoker` views, and four service-only append/select functions.
+
+Static package review:
+
+```text
+new tables = 7
+new views = 3
+new functions = 4
+RLS policies = 7
+security_invoker views = 3
+DROP statements = 0
+public.securities updates = 0
+legacy B2 v1/v2 table alterations = 0
+```
+
+No historical data has been materialized and no hosted schema change has been made.
+
+Current governance:
+
+```text
+P8-B2 reconciliation = COMPLETE
+P8-B2 remediation design = COMPLETE
+P8-B2 V3 migration package = CREATED
+P8-B2 V3 local classification/replay = PENDING
+P8-B2 V3 hosted application = NOT AUTHORIZED / NOT APPLIED
+P8-B2 historical universe materialization = NOT STARTED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```

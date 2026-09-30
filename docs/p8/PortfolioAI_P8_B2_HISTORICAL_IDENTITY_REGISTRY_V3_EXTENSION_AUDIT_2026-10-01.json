@@ -1,0 +1,77 @@
+{
+  "stage": "P8-B2 historical identity/source-archive V3 extension",
+  "date": "2026-10-01",
+  "environment": "Development repository/local package only",
+  "result": "MIGRATION_AND_CONTRACT_TEST_CREATED_LOCAL_REPLAY_PENDING_HOSTED_APPLICATION_NOT_AUTHORIZED",
+  "repository_base_head": "35cfde567ba4e6e623c3880b6e9bb02a689bbaa1",
+  "package": {
+    "migration": "supabase/migrations/20261001001500_create_p8_b2_historical_identity_registry_v3.sql",
+    "migration_blob_sha": "50591173a0c9ea31767127147a3969f7459641c2",
+    "test": "supabase/tests/p8_b2_historical_identity_registry_v3.sql",
+    "test_blob_sha": "67db4625fa1c9157734512f99b8d2117e176ab68",
+    "tables": 7,
+    "views": 3,
+    "service_only_functions": 4,
+    "rls_tables": 7,
+    "security_invoker_views": 3
+  },
+  "frozen_population_contract": {
+    "source_identities": 5211,
+    "frozen_company_equity_identities": 4524,
+    "exact_current_common_equity_links": 255,
+    "current_null_isin_link_candidates": 7,
+    "p8_local_historical_identity_rows_required": 4262,
+    "excluded_non_frozen_identities": 687,
+    "eligible_cohort_symbol_collision_groups": 40
+  },
+  "architecture": {
+    "identity_key": "historical_isin",
+    "mutate_live_securities": false,
+    "live_security_required_for_historical_identity": false,
+    "canonical_link_optional": true,
+    "canonical_link_bases": [
+      "EXACT_ISIN",
+      "EXACT_NSE_SYMBOL_CURRENT_NULL_ISIN",
+      "NONE"
+    ],
+    "symbol_is_identity": false,
+    "preserve_legacy_b2_v1_v2": true
+  },
+  "provenance": {
+    "exact_publication_time_required": false,
+    "invented_publication_time_forbidden": true,
+    "availability_upper_bound_supported": true,
+    "nse_bound_local_time": "09:00:00 Asia/Kolkata",
+    "nse_bound_requires_source_published_at_null": true
+  },
+  "static_review": {
+    "create_tables": 7,
+    "create_views": 3,
+    "create_functions": 4,
+    "rls_policies": 7,
+    "security_invoker_views": 3,
+    "drop_statements": false,
+    "public_securities_update": false,
+    "legacy_b2_table_alter": false,
+    "test_transactional": true,
+    "test_do_blocks": 2,
+    "expected_sql_ending": [
+      "BEGIN",
+      "DO",
+      "DO",
+      "ROLLBACK"
+    ]
+  },
+  "authorization_boundary": {
+    "local_migration_package_created": true,
+    "local_replay_executed": false,
+    "hosted_dev_applied": false,
+    "historical_materialization_performed": false,
+    "provider_calls": 0,
+    "p8_b3_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "OWNER_RUN_LOCAL_CLASSIFICATION_AND_SQL_REPLAY"
+}
