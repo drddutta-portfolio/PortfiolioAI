@@ -2,7 +2,7 @@
 
 Date: 30 September 2026  
 Environment: PortfolioAI Development only  
-Status: **RECONCILIATION RUNNER CREATED / LOCAL OWNER RUN REQUIRED / NO DATABASE WRITE**
+Status: **LOCAL RECONCILIATION COMPLETE / BLOCKERS PROVEN / MATERIALIZATION BLOCKED**
 
 ## Why this gate exists
 
@@ -36,3 +36,37 @@ The runner performs **zero database writes and zero provider calls**. It intenti
 ## Current boundary
 
 No historical listing observation, universe run, member, selection or evidence link has been inserted by this checkpoint. No canonical security row has been created or modified. P8-B3 and P8-C remain not authorized.
+
+## Reconciliation result
+
+The owner-run reconciliation completed against Development commit `ddb6a4488046981435b4b2a59bcd7a36eec047dc`.
+
+```text
+files_checked = 32
+total_equity_rows = 597092
+historical_unique_isins = 5211
+canonical_securities = 284
+canonical_distinct_isins = 256
+matched_by_isin = 256
+current_null_isin_symbol_candidates = 7
+canonical_additions_required = 4948
+current_symbol_collision_groups = 51
+latest_multi_symbol_isins = 25
+latest_multi_name_isins = 882
+current_equity_isins_absent_from_archive = 0
+rows_missing_isin = 0
+parse_error_count = 0
+hash_mismatch_count = 0
+gzip_mtime_present_files = 0
+gzip_mtime_missing_files = 32
+gzip_mtime_same_calendar_date_files = 0
+ready_for_materialization = false
+```
+
+Blocking reasons:
+
+1. `SOURCE_PUBLICATION_TIMESTAMP_NOT_PROVEN_FROM_GZIP_METADATA`
+2. `CANONICAL_CURRENT_SECURITIES_REQUIRE_ISIN_RECONCILIATION`
+3. `CANONICAL_HISTORICAL_SECURITY_ADDITIONS_REQUIRED`
+
+This is an expected fail-closed result. The source files and parsed identity evidence are internally clean; the remaining work is provenance-time proof plus identity persistence design/remediation. No historical materialization has been performed.

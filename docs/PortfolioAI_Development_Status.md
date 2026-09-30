@@ -2989,3 +2989,47 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 historical identity reconciliation result — 30 September 2026
+
+Owner-run local reconciliation against Development commit `ddb6a4488046981435b4b2a59bcd7a36eec047dc` completed fail-closed.
+
+Observed result:
+
+- files checked: 32;
+- total official-NSE equity rows: 597,092;
+- historical unique equity ISINs: 5,211;
+- PortfolioAI Dev canonical securities: 284;
+- canonical distinct ISINs: 256;
+- exact historical-to-canonical ISIN matches: 256;
+- current null-ISIN symbol candidates requiring reconciliation: 7;
+- historical canonical additions otherwise required under the current `securities.id` FK model: 4,948;
+- current symbol-collision groups: 51;
+- latest-month multi-symbol ISINs: 25;
+- latest-month multi-name ISINs: 882;
+- current equity ISINs absent from the archive: 0;
+- rows missing ISIN: 0;
+- CSV parse errors: 0;
+- source hash mismatches: 0;
+- GZIP files with usable MTIME publication timestamp: 0 / 32.
+
+The runner therefore returned `ready_for_materialization = false` with exactly these blockers:
+
+```text
+SOURCE_PUBLICATION_TIMESTAMP_NOT_PROVEN_FROM_GZIP_METADATA
+CANONICAL_CURRENT_SECURITIES_REQUIRE_ISIN_RECONCILIATION
+CANONICAL_HISTORICAL_SECURITY_ADDITIONS_REQUIRED
+```
+
+No historical listing observation, universe run, universe member, selection or evidence link was written. No canonical security was created or modified.
+
+Current governance:
+
+```text
+P8-B2 historical identity reconciliation = COMPLETE / BLOCKERS PROVEN
+P8-B2 historical universe materialization = BLOCKED / NOT STARTED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
