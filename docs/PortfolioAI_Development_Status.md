@@ -2655,7 +2655,7 @@ main = UNCHANGED
 
 ## P8-B2 historical universe foundation package — 30 September 2026
 
-P8-B2 is **LOCAL REPLAY / SQL TEST PASS — HOSTED APPLICATION AWAITING OWNER APPROVAL** under explicit owner authorization.
+P8-B2 is **IN PROGRESS — HOSTED FOUNDATION APPLIED / VERIFIED; HISTORICAL UNIVERSE RECONSTRUCTION PENDING** under explicit owner authorization.
 
 Created repository-only migration `20260930061500_create_p8_historical_universe_foundation.sql`, its transactional SQL contract test, design note and machine-readable audit. The package introduces append-only owner-scoped historical listing observations, decision-instant universe runs, member dispositions and canonical selection history, with service-only mutation paths and `security_invoker` read models. It contains no current-holdings or `securities.is_active` historical fallback and does not rewrite existing `security_listings.valid_from/valid_to` values.
 
@@ -2671,10 +2671,24 @@ P8-0 = COMPLETE / PASS
 P8-A = COMPLETE / PASS
 P8-B0 = COMPLETE / PASS
 P8-B1 = COMPLETE / PASS
-P8-B2 = LOCAL REPLAY PASS / HOSTED APPLICATION AWAITING OWNER APPROVAL
+P8-B2 = IN PROGRESS / HOSTED FOUNDATION PASS / HISTORICAL UNIVERSE RECONSTRUCTION PENDING
 P8-B3+ = NOT AUTHORIZED
 P8-C+ = NOT AUTHORIZED
-Hosted P8-B2 migration = NOT AUTHORIZED / NOT APPLIED
+Hosted P8-B2 migration = APPLIED / VERIFIED (`20260930083620`)
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+
+Hosted P8-B2 application verification:
+
+- hosted migration `20260930083620_create_p8_historical_universe_foundation` applied successfully to PortfolioAI Dev only;
+- the hosted transactional SQL contract test passed and rolled back with zero fixture residue;
+- 4 P8-B2 tables, 2 `security_invoker` views and 3 functions are present;
+- RLS is enabled on all 4 new tables;
+- authenticated read / anonymous deny / service-only append and universe-run execution privileges match the contract;
+- all new P8-B2 evidence/run/selection tables remain empty after verification;
+- existing counts remain 284 securities, 282 listings, 496 transactions, 1,246 research snapshots, 717 snapshot selections and 239 snapshot-lineage rows;
+- provider ledger remains 1,227 events with latest attempt at 2026-09-30T03:09:13.319Z, so this hosted migration/verification made zero provider calls.
+
+Gate B2 is **not yet closed**. The governing P8 plan requires every approved decision date to reconstruct an eligible historical universe or produce a deterministic global blocker. Historical listing/delisting acquisition and reconstruction remain a separate, approval-gated next action.
