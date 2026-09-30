@@ -3,7 +3,7 @@
 Date: 1 October 2026  
 Environment: Development only  
 Authority: owner-approved P8-B2 remediation migration-package scope  
-Status: **MIGRATION + CONTRACT TEST CREATED / LOCAL REPLAY PENDING / HOSTED APPLICATION NOT AUTHORIZED**
+Status: **LOCAL CLASSIFICATION + CLEAN REPLAY + SQL CONTRACT COMPLETE / PASS / HOSTED APPLICATION NOT AUTHORIZED**
 
 ## Purpose
 
@@ -180,3 +180,19 @@ The SQL test covers:
 Hosted PortfolioAI Dev application is **not authorized by this package creation**. Historical materialization remains not started.
 
 After local classification + clean reset + SQL contract test pass, return for separate owner approval before applying this exact migration to hosted PortfolioAI Dev.
+
+## Local migration gate closure
+
+The corrected V3 package completed the full local gate on 1 October 2026:
+
+```text
+classification = PASS
+clean db reset = PASS
+V3 migration replay = PASS
+SQL contract test = PASS
+terminal sequence = BEGIN → DO → DO → ROLLBACK
+```
+
+The local package is therefore **COMPLETE / PASS**.
+
+Hosted PortfolioAI Dev application remains a separately approval-gated action under the P8 handoff. Historical universe materialization has not started.
