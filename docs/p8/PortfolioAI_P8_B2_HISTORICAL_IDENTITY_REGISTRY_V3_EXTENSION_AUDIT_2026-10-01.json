@@ -2,7 +2,7 @@
   "stage": "P8-B2 historical identity/source-archive V3 extension",
   "date": "2026-10-01",
   "environment": "Development repository/local package only",
-  "result": "LOCAL_MIGRATION_PACKAGE_COMPLETE_PASS_HOSTED_APPLICATION_NOT_AUTHORIZED",
+  "result": "HOSTED_DEVELOPMENT_APPLIED_VERIFIED_PASS_HISTORICAL_MATERIALIZATION_NOT_STARTED",
   "repository_base_head": "35cfde567ba4e6e623c3880b6e9bb02a689bbaa1",
   "package": {
     "migration": "supabase/migrations/20261001001500_create_p8_b2_historical_identity_registry_v3.sql",
@@ -65,7 +65,7 @@
   "authorization_boundary": {
     "local_migration_package_created": true,
     "local_replay_executed": false,
-    "hosted_dev_applied": false,
+    "hosted_dev_applied": true,
     "historical_materialization_performed": false,
     "provider_calls": 0,
     "p8_b3_started": false,
@@ -73,7 +73,7 @@
     "production_changed": false,
     "main_changed": false
   },
-  "next_gate": "SEPARATE_OWNER_APPROVAL_FOR_HOSTED_PORTFOLIOAI_DEV_APPLICATION_OF_EXACT_V3_MIGRATION",
+  "next_gate": "SEPARATE_OWNER_APPROVAL_FOR_P8_B2_HISTORICAL_UNIVERSE_MATERIALIZATION",
   "local_validation": {
     "sql_contract_test": {
       "status": "COMPLETE_PASS",
@@ -93,6 +93,51 @@
     "migration_replay": {
       "status": "COMPLETE_PASS",
       "migration": "20261001001500_create_p8_b2_historical_identity_registry_v3.sql"
+    }
+  },
+  "hosted_verification": {
+    "verified_on": "2026-10-01",
+    "project_id": "lrgpjimipfkyoqbpsqzz",
+    "migration_version": "20260930192959",
+    "migration_name": "create_p8_b2_historical_identity_registry_v3",
+    "repository_migration": "supabase/migrations/20261001001500_create_p8_b2_historical_identity_registry_v3.sql",
+    "transactional_contract_test": "PASS_ROLLED_BACK",
+    "preservation": {
+      "securities": 284,
+      "security_listings": 282,
+      "transactions": 496,
+      "legacy_listing_observations": 0,
+      "legacy_runs": 0,
+      "legacy_members": 0,
+      "legacy_selections": 0,
+      "legacy_evidence_links": 0
+    },
+    "v3_rows": {
+      "historical_security_identities": 0,
+      "historical_source_archives": 0,
+      "historical_listing_observations": 0,
+      "historical_universe_runs": 0,
+      "historical_universe_members": 0,
+      "historical_member_listing_evidence": 0,
+      "historical_universe_run_selections": 0
+    },
+    "security": {
+      "rls_enabled_all_seven_tables": true,
+      "anon_table_access_denied": true,
+      "authenticated_select_only": true,
+      "authenticated_table_dml_denied": true,
+      "security_invoker_views": 3,
+      "authenticated_privileged_function_execute": false,
+      "service_role_privileged_function_execute": true
+    },
+    "advisors": {
+      "security": [
+        "Authenticated GraphQL visibility warnings on intentionally authenticated-readable RLS-protected V3 tables/views; direct checks confirm anon denial."
+      ],
+      "performance": [
+        "Informational unindexed-foreign-key notices on several V3 relationships.",
+        "Unused-index notice on empty historical identity table."
+      ]
     }
   }
 }
