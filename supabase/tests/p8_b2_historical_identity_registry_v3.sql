@@ -535,12 +535,15 @@ begin
     end if;
 
     if has_table_privilege('anon', format('public.%I',v_table), 'select')
+       or has_table_privilege('anon', format('public.%I',v_table), 'insert')
+       or has_table_privilege('anon', format('public.%I',v_table), 'update')
+       or has_table_privilege('anon', format('public.%I',v_table), 'delete')
        or not has_table_privilege('authenticated', format('public.%I',v_table), 'select')
-       or not has_table_privilege('service_role', format('public.%I',v_table), 'select')
-       or has_table_privilege('service_role', format('public.%I',v_table), 'insert')
-       or has_table_privilege('service_role', format('public.%I',v_table), 'update')
-       or has_table_privilege('service_role', format('public.%I',v_table), 'delete') then
-      raise exception 'P8-B2 V3 table privilege contract failed on %', v_table;
+       or has_table_privilege('authenticated', format('public.%I',v_table), 'insert')
+       or has_table_privilege('authenticated', format('public.%I',v_table), 'update')
+       or has_table_privilege('authenticated', format('public.%I',v_table), 'delete')
+       or not has_table_privilege('service_role', format('public.%I',v_table), 'select') then
+      raise exception 'P8-B2 V3 browser/read privilege contract failed on %', v_table;
     end if;
   end loop;
 
