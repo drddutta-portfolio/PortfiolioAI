@@ -2828,3 +2828,37 @@ changed_identity_isins = 4398
 The zero missing-ISIN count is a strong identity-quality result, but the very large duplicate-row count proves that a single ISIN can have multiple contemporaneous eligible security-master rows (for example different series/instrument IDs). Therefore P8-B2 must not collapse rows arbitrarily or choose one series by assumption.
 
 The next local read-only diagnostic is `scripts/p8/p8-b2-profile-duplicate-identities.mjs`. It measures whether same-month duplicate ISIN groups differ by symbol, series, security name and instrument ID, and captures bounded examples. This will determine whether monthly universe membership can be safely deduplicated at ISIN level while retaining all line-level evidence, or whether an additional evidence-bundle schema is required.
+
+
+## P8-B2 duplicate identity diagnostic — 30 September 2026
+
+The owner-run NSE duplicate-identity diagnostic completed across all 32 monthly files:
+
+```text
+files_checked = 32
+duplicate_isin_months = 32
+duplicate_isin_groups = 114908
+multi_symbol_groups = 569
+multi_series_groups = 114908
+multi_name_groups = 28019
+multi_instrument_id_groups = 114908
+```
+
+This is a decisive schema finding. Every duplicate-ISIN group differs by series and instrument ID, while smaller subsets also differ by symbol and security name. Therefore a single arbitrary NSE row cannot be selected as the sole evidence for historical ISIN-level universe membership.
+
+P8-B2 historical membership identity remains ISIN-level, but the existing schema's single nullable `listing_observation_id` on a universe member cannot preserve the observed many-line-to-one-security evidence structure. An additive append-only member-to-listing-observation evidence-link relation is required before materialization.
+
+No new migration has been created yet. Under the P8 migration protocol this schema extension requires explicit owner approval for Development-only local migration design/replay, followed by separate approval before hosted application.
+
+Current governance:
+
+```text
+P8-B2 acquisition = COMPLETE / PASS
+P8-B2 hash/schema/identity diagnostics = COMPLETE / PASS
+P8-B2 duplicate structure = PROVEN MANY-TO-ONE AT ISIN LEVEL
+P8-B2 historical universe materialization = BLOCKED / ADDITIVE EVIDENCE-LINK SCHEMA REQUIRED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```

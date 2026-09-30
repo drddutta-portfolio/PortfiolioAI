@@ -35,7 +35,7 @@
     "evidence_source": "owner local terminal output from authorized runner",
     "generated_at": "2026-09-30T08:44:27.720Z"
   },
-  "next_action": "Run scripts/p8/p8-b2-profile-duplicate-identities.mjs locally before choosing canonical monthly membership evidence. Do not arbitrarily select EQ/BE/BL/etc. or one instrument row.",
+  "next_action": "Owner approval required to design/create/test a Development-only additive P8-B2 evidence-link migration locally. Hosted application remains separately approval-gated.",
   "schema_inspection": {
     "files_checked": 32,
     "all_hashes_pass": true,
@@ -113,5 +113,21 @@
     "duplicate_isin_rows": 466208,
     "changed_identity_isins": 4398,
     "result": "PASS_IDENTITY_COVERAGE_DUPLICATE_STRUCTURE_REQUIRES_DIAGNOSTIC"
+  },
+  "duplicate_identity_profile": {
+    "files_checked": 32,
+    "duplicate_isin_months": 32,
+    "duplicate_isin_groups": 114908,
+    "multi_symbol_groups": 569,
+    "multi_series_groups": 114908,
+    "multi_name_groups": 28019,
+    "multi_instrument_id_groups": 114908,
+    "interpretation": "ISIN-level membership is many-to-one over contemporaneous line-level NSE evidence; arbitrary single-row selection is prohibited."
+  },
+  "schema_gap": {
+    "status": "BLOCKING",
+    "missing_concept": "append-only member-to-listing-observation evidence links",
+    "migration_created": false,
+    "hosted_change": false
   }
 }
