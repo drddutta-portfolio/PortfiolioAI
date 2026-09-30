@@ -3,7 +3,7 @@
 Date: 1 October 2026  
 Environment: Development only  
 Authority: owner-approved P8-B2 remediation migration-package scope  
-Status: **LOCAL CLASSIFICATION + CLEAN REPLAY + SQL CONTRACT COMPLETE / PASS / HOSTED APPLICATION NOT AUTHORIZED**
+Status: **HOSTED DEVELOPMENT APPLIED / VERIFIED / PASS / HISTORICAL MATERIALIZATION NOT STARTED**
 
 ## Purpose
 
@@ -196,3 +196,27 @@ terminal sequence = BEGIN → DO → DO → ROLLBACK
 The local package is therefore **COMPLETE / PASS**.
 
 Hosted PortfolioAI Dev application remains a separately approval-gated action under the P8 handoff. Historical universe materialization has not started.
+
+## Hosted Development application verification
+
+With separate owner approval, the exact locally validated V3 migration was applied to **PortfolioAI Dev** only and registered as:
+
+`20260930192959_create_p8_b2_historical_identity_registry_v3`
+
+Hosted verification passed:
+
+- transactional V3 SQL contract test executed successfully and rolled back;
+- zero fixture residue;
+- all seven V3 tables remain empty;
+- all three canonical read views are present with `security_invoker=true`;
+- RLS is enabled on every V3 table;
+- anon access is denied;
+- authenticated users have owner-scoped SELECT only and no table DML;
+- authenticated execution of all four privileged V3 functions is denied;
+- service-role execution of all four privileged V3 functions is granted;
+- legacy B2 v1/v2 tables remain empty;
+- current securities/listings/transactions counts remain 284 / 282 / 496.
+
+Security-advisor authenticated-GraphQL visibility warnings are expected for the intentionally authenticated-readable, RLS-protected V3 objects. Performance-advisor foreign-key index notices are recorded as informational and are not treated as a schema-correctness failure at this checkpoint.
+
+Historical universe materialization has **not** started. P8-B3 and P8-C remain separately authorization-gated.
