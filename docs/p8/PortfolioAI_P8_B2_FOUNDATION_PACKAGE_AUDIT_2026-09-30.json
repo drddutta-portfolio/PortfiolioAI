@@ -2,7 +2,7 @@
   "audit": "PortfolioAI P8-B2 historical universe foundation design/local migration package",
   "audit_date": "2026-09-30",
   "environment": "Repository only",
-  "result": "MIGRATION_PACKAGE_CREATED_LOCAL_EXECUTION_PENDING",
+  "result": "LOCAL_REPLAY_AND_SQL_TEST_PASS_AWAITING_HOSTED_APPLY_APPROVAL",
   "authority": "Owner approved P8-B2 Development-only design and local creation/testing; hosted application not authorized.",
   "migration": {
     "file": "supabase/migrations/20260930061500_create_p8_historical_universe_foundation.sql",
@@ -43,8 +43,13 @@
   "test": {
     "file": "supabase/tests/p8_b2_historical_universe_foundation.sql",
     "created": true,
-    "execution_status": "NOT_EXECUTED_NO_LOCAL_POSTGRES_RUNTIME_IN_CONNECTED_SESSION",
-    "required_before_hosted_apply": true
+    "execution_status": "PASS",
+    "required_before_hosted_apply": false,
+    "local_verification_commit": "ecf871dc09f65b1fbe71e22b74d23f5481b33493",
+    "local_verification_evidence": [
+      "supabase db reset applied 20260930061500_create_p8_historical_universe_foundation.sql successfully",
+      "p8_b2_historical_universe_foundation.sql completed BEGIN -> DO -> DO -> ROLLBACK with no ERROR"
+    ]
   },
   "hosted_state": {
     "migration_applied": false,
@@ -53,11 +58,11 @@
     "edge_deployments": 0
   },
   "governance": {
-    "p8_b2": "MIGRATION_PACKAGE_CREATED / LOCAL REPLAY PENDING",
+    "p8_b2": "LOCAL REPLAY PASS / HOSTED APPLICATION AWAITING OWNER APPROVAL",
     "p8_b3_plus": "NOT_AUTHORIZED",
     "p8_c_plus": "NOT_AUTHORIZED",
     "production": "UNCHANGED",
     "main": "UNCHANGED"
   },
-  "next_action": "Obtain local replay/test evidence for the exact migration, then return for separate owner approval before hosted PortfolioAI Dev application."
+  "next_action": "Owner approval required before applying 20260930061500_create_p8_historical_universe_foundation.sql to hosted PortfolioAI Dev."
 }
