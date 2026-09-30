@@ -35,7 +35,7 @@
     "evidence_source": "owner local terminal output from authorized runner",
     "generated_at": "2026-09-30T08:44:27.720Z"
   },
-  "next_action": "Run scripts/p8/p8-b2-profile-nse-identity.mjs locally and inspect distinct observed values for candidate identity/type fields before freezing equity eligibility/parser rules.",
+  "next_action": "Run scripts/p8/p8-b2-profile-nse-series-flags.mjs locally and use the full SctySrs × SctyTpFlg distribution plus representative samples to freeze the equity eligibility contract.",
   "schema_inspection": {
     "files_checked": 32,
     "all_hashes_pass": true,
@@ -74,5 +74,21 @@
       "Xchg"
     ],
     "parser_freeze_status": "PENDING_COMPACT_IDENTITY_TYPE_PROFILE"
+  },
+  "identity_profile": {
+    "status": "PASS",
+    "observed_type_flags": [
+      "0",
+      "2",
+      "4"
+    ],
+    "observed_blank_fields": [
+      "SctyTp",
+      "InstrmNm",
+      "MktTpAndId",
+      "Xchg"
+    ],
+    "parser_freeze_status": "PENDING_SERIES_FLAG_CROSSTAB",
+    "rationale": "Do not infer equity semantics from undocumented numeric flags alone."
   }
 }

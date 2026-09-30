@@ -2796,3 +2796,10 @@ A read-only semantic-analysis runner is added at `scripts/p8/p8-b2-analyze-nse-s
 The schema semantic-analysis runner completed successfully and wrote `tmp/p8-b2-nse/schema-semantic-analysis.json`. Representative V2 identity/listing fields include `FinInstrmId`, `TckrSymb`, `SctySrs`, `FinInstrmNm`, `ISIN`, `SctyTpFlg`, `SctyTp`, `InstrmNm`, market identifiers and exchange fields. The two version-specific fields remain isolated from the core parser contract.
 
 Before freezing the eligibility/parser rules, P8-B2 requires one compact semantic profile of the candidate identity/type fields so that equity filtering is based on observed NSE values rather than guessed meanings. Added `scripts/p8/p8-b2-profile-nse-identity.mjs`, which reads only the local analysis file and produces `tmp/p8-b2-nse/identity-profile.json`. No provider calls or database writes occur.
+
+
+## P8-B2 NSE identity/type profile — 30 September 2026
+
+The local NSE identity profile completed. Observed `SctyTpFlg` values include `0`, `2` and `4`; `SctyTp`, `InstrmNm`, `MktTpAndId` and `Xchg` are blank in the sampled profile. ISIN and common identity fields are populated, but the observed type-flag values alone are not sufficient authority to infer equity eligibility.
+
+To avoid guessing NSE semantics, the next read-only step profiles the full 32-file distribution of `SctySrs × SctyTpFlg` with representative ticker/ISIN/name samples. Added `scripts/p8/p8-b2-profile-nse-series-flags.mjs`. No provider calls or database writes occur.
