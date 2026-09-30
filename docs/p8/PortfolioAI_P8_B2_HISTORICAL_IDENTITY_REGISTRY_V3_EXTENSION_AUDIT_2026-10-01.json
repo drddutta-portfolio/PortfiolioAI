@@ -2,7 +2,7 @@
   "stage": "P8-B2 historical identity/source-archive V3 extension",
   "date": "2026-10-01",
   "environment": "Development repository/local package only",
-  "result": "PRIVILEGE_CONTRACT_CORRECTED_TO_SUPABASE_SERVICE_ROLE_MODEL_FRESH_LOCAL_REPLAY_PENDING",
+  "result": "LOCAL_MIGRATION_PACKAGE_COMPLETE_PASS_HOSTED_APPLICATION_NOT_AUTHORIZED",
   "repository_base_head": "35cfde567ba4e6e623c3880b6e9bb02a689bbaa1",
   "package": {
     "migration": "supabase/migrations/20261001001500_create_p8_b2_historical_identity_registry_v3.sql",
@@ -73,22 +73,26 @@
     "production_changed": false,
     "main_changed": false
   },
-  "next_gate": "OWNER_RUN_FRESH_DB_RESET_AND_RERUN_CORRECTED_V3_SQL_CONTRACT_TEST",
+  "next_gate": "SEPARATE_OWNER_APPROVAL_FOR_HOSTED_PORTFOLIOAI_DEV_APPLICATION_OF_EXACT_V3_MIGRATION",
   "local_validation": {
     "sql_contract_test": {
-      "status": "PRIOR_ASSERTION_INVALID_CORRECTED_REPLAY_PENDING",
-      "observed_error": "P8-B2 V3 table privilege contract failed on p8_historical_security_identities",
-      "corrected_diagnosis": "The test incorrectly required service_role to lack direct table DML. Supabase documents service_role as the elevated server-side role with full data access / BYPASSRLS and existing projects commonly grant table DML by default.",
-      "corrected_contract": [
-        "anon has no SELECT/INSERT/UPDATE/DELETE on V3 tables",
-        "authenticated has owner-scoped SELECT only and no INSERT/UPDATE/DELETE",
-        "all V3 views use security_invoker=true",
-        "authenticated cannot execute V3 privileged functions",
-        "service_role can execute V3 privileged functions",
-        "service_role platform-level table DML is not treated as a contract failure"
+      "status": "COMPLETE_PASS",
+      "test": "supabase/tests/p8_b2_historical_identity_registry_v3.sql",
+      "terminal_sequence": [
+        "BEGIN",
+        "DO",
+        "DO",
+        "ROLLBACK"
       ],
-      "migration_correction_commit": "faddb035dd034bd0965fe31c8518341a1cac7904",
-      "test_correction_commit": "6012053eeb1f73d3fb6a8d056ed627dfe56c5e78"
+      "rollback_fixture_residue": false
+    },
+    "classification": {
+      "status": "COMPLETE_PASS"
+    },
+    "clean_db_reset": "COMPLETE_PASS",
+    "migration_replay": {
+      "status": "COMPLETE_PASS",
+      "migration": "20261001001500_create_p8_b2_historical_identity_registry_v3.sql"
     }
   }
 }
