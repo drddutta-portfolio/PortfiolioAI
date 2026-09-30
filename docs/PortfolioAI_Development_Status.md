@@ -3178,3 +3178,38 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 privilege-contract correction — 1 October 2026
+
+A repeated local SQL failure showed that the prior remediation targeted the wrong invariant.
+
+Supabase's documented role model treats `service_role` as the elevated server-side role with full data access / RLS bypass. Existing Supabase projects commonly grant `SELECT/INSERT/UPDATE/DELETE` on new `public` tables to `service_role` by default.
+
+The Codex P8 security requirement is therefore enforced at the browser/user boundary:
+
+- `anon`: no read or write access;
+- `authenticated`: owner-scoped SELECT only, no direct INSERT/UPDATE/DELETE;
+- V3 views: `security_invoker=true`;
+- privileged append/select functions: EXECUTE denied to `anon`/`authenticated`, granted to `service_role`;
+- `service_role` remains the Supabase server/admin role and may retain platform-level table DML.
+
+Repository correction:
+
+- V3 migration restored standard Supabase `service_role` table privileges;
+- the SQL contract test now verifies no browser/user DML instead of incorrectly requiring `service_role` to have no direct DML;
+- this does not widen any `anon` or `authenticated` privilege.
+
+Because the migration and test changed, a fresh local reset and contract replay are required.
+
+```text
+P8-B2 V3 classification = COMPLETE / PASS
+P8-B2 V3 privilege model = CORRECTED TO SUPABASE SERVICE-ROLE MODEL
+P8-B2 V3 clean replay after correction = PENDING
+P8-B2 V3 SQL contract after correction = PENDING
+P8-B2 V3 hosted application = NOT AUTHORIZED / NOT APPLIED
+P8-B2 historical universe materialization = NOT STARTED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
