@@ -2,7 +2,7 @@
   "audit": "PortfolioAI P8-B2 historical universe foundation design/local migration package",
   "audit_date": "2026-09-30",
   "environment": "Repository only",
-  "result": "LOCAL_REPLAY_AND_SQL_TEST_PASS_AWAITING_HOSTED_APPLY_APPROVAL",
+  "result": "HOSTED_FOUNDATION_APPLIED_AND_VERIFIED_B2_GATE_DATA_RECONSTRUCTION_PENDING",
   "authority": "Owner approved P8-B2 Development-only design and local creation/testing; hosted application not authorized.",
   "migration": {
     "file": "supabase/migrations/20260930061500_create_p8_historical_universe_foundation.sql",
@@ -52,17 +52,43 @@
     ]
   },
   "hosted_state": {
-    "migration_applied": false,
-    "database_writes": 0,
-    "provider_calls": 0,
-    "edge_deployments": 0
+    "migration_applied": true,
+    "hosted_migration_version": "20260930083620",
+    "hosted_migration_name": "create_p8_historical_universe_foundation",
+    "hosted_sql_contract_test": "PASS_TRANSACTION_ROLLED_BACK_NO_RESIDUE",
+    "tables_present": 4,
+    "views_present": 2,
+    "functions_present": 3,
+    "rls_enabled_tables": 4,
+    "security_invoker_views": 2,
+    "listing_observations": 0,
+    "historical_universe_runs": 0,
+    "historical_universe_members": 0,
+    "historical_universe_selections": 0,
+    "test_fixture_residue": {
+      "auth_users": 0,
+      "portfolios": 0,
+      "securities": 0
+    },
+    "existing_counts_after_apply": {
+      "securities": 284,
+      "security_listings": 282,
+      "transactions": 496,
+      "research_snapshots": 1246,
+      "research_selections": 717,
+      "research_lineage": 239
+    },
+    "provider_usage_events": 1227,
+    "latest_provider_attempt": "2026-09-30T03:09:13.319Z",
+    "provider_calls_by_hosted_b2_application": 0
   },
   "governance": {
-    "p8_b2": "LOCAL REPLAY PASS / HOSTED APPLICATION AWAITING OWNER APPROVAL",
+    "p8_b2": "FOUNDATION APPLIED / HOSTED VERIFICATION PASS / GATE B2 NOT YET CLOSED",
+    "p8_b2_gate": "Requires historical universe reconstruction for every approved decision date or deterministic global blocker",
     "p8_b3_plus": "NOT_AUTHORIZED",
     "p8_c_plus": "NOT_AUTHORIZED",
     "production": "UNCHANGED",
     "main": "UNCHANGED"
   },
-  "next_action": "Owner approval required before applying 20260930061500_create_p8_historical_universe_foundation.sql to hosted PortfolioAI Dev."
+  "next_action": "Prepare the P8-B2 historical listing/universe acquisition and reconstruction plan. Provider/public-source acquisition remains separately approval-gated."
 }
