@@ -101,7 +101,7 @@ describe("P8-B1 frozen experiment and bias-control contract", () => {
         ...P8_EXPERIMENT_CONTRACT.costs,
         baseSlippageBpsPerExecutedSide: 11,
       },
-    } as typeof P8_EXPERIMENT_CONTRACT
+    } as unknown as typeof P8_EXPERIMENT_CONTRACT
 
     expect(await fingerprintP8ExperimentContract(changed))
       .not.toBe(await fingerprintP8ExperimentContract())
