@@ -2745,3 +2745,33 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+
+## P8-B2 NSE schema/hash inspection result — 30 September 2026
+
+Owner local verification of the acquired official-NSE universe files passed:
+
+```text
+files_checked = 32
+all_hashes_pass = true
+total_rows_across_files = 991687
+unique_header_set_count = 2
+```
+
+All 32 acquired files match their manifest SHA-256 values. The 32 files contain 991,687 total rows. Two distinct header schemas are present, so parser/reconciliation must be schema-version-aware; a single hard-coded column layout would be unsafe.
+
+P8-B2 therefore advances to **schema-version mapping and dry-run historical-universe reconciliation**. No database materialization is authorized until the two header sets are explicitly mapped and the dry-run reconciliation proves deterministic identity handling, survivor-free decision-date membership, and explicit blockers for unresolved records.
+
+Current governance:
+
+```text
+P8-B2 acquisition = COMPLETE / PASS (32/32 months)
+P8-B2 hash integrity = COMPLETE / PASS
+P8-B2 schema uniformity = MIXED / 2 HEADER VERSIONS
+P8-B2 schema-version mapping = REQUIRED / NEXT
+P8-B2 historical universe reconstruction = NOT YET MATERIALIZED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
