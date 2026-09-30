@@ -3033,3 +3033,39 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 historical identity remediation decision — 1 October 2026
+
+The uploaded historical-identity reconciliation was analyzed in full. The live `securities` table is not a safe historical-universe registry because historical ISINs reuse current symbols and one historical ISIN may expose multiple symbols. Bulk historical insertion into `securities` is prohibited.
+
+Frozen common-equity identity refinement:
+
+```text
+source identities                              5211
+P8 company-equity identities                   4524
+exact current common-equity links               255
+current null-ISIN link candidates                 7
+P8-local historical identities required        4262
+excluded non-frozen identities                  687
+eligible-cohort symbol-collision groups          40
+```
+
+Decision: introduce a P8-local historical identity registry with optional current-security linkage and preserve symbol/name/series/instrument-ID as dated evidence. Do not mutate the seven live null-ISIN securities in B2 and do not add 4,262 historical identities to the live canonical security registry.
+
+The source-time blocker is redesigned fail-closed: GZIP MTIME is not used. Official NSE daily security-master dissemination plus the documented requirement to load the security master before trading hours supports a conservative `available_no_later_than_at` proof field; exact publication time will not be invented.
+
+A read-only classification validator has been created. No new migration or hosted write is authorized by this checkpoint.
+
+Current governance:
+
+```text
+P8-B2 historical identity reconciliation = COMPLETE
+P8-B2 remediation design = COMPLETE
+P8-B2 classification validation = LOCAL RUN PENDING
+P8-B2 historical universe materialization = BLOCKED PENDING NEW ADDITIVE IDENTITY/PROVENANCE SCHEMA
+P8-B2 new migration = NOT CREATED / REQUIRES SEPARATE OWNER APPROVAL
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```

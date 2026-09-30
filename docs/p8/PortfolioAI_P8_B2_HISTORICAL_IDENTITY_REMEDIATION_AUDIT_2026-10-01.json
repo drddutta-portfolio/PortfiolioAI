@@ -1,0 +1,88 @@
+{
+  "stage": "P8-B2 historical identity remediation decision",
+  "date": "2026-10-01",
+  "environment": "Development only",
+  "source_reconciliation": "owner-uploaded historical-identity-reconciliation.json",
+  "result": "DESIGN_DECISION_COMPLETE_LOCAL_CLASSIFICATION_VALIDATION_PENDING_NO_MIGRATION_CREATED",
+  "source_summary": {
+    "files_checked": 32,
+    "total_source_equity_flag_rows": 597092,
+    "historical_unique_source_identities": 5211,
+    "canonical_securities": 284,
+    "canonical_distinct_isins": 256,
+    "exact_source_isin_matches": 256,
+    "current_null_isin_symbol_candidates": 7,
+    "otherwise_unmatched_source_identities": 4948,
+    "symbol_collision_groups": 51,
+    "latest_multi_symbol_isins": 25,
+    "hash_mismatches": 0,
+    "parse_errors": 0
+  },
+  "frozen_common_equity_identity_rule": {
+    "country_prefix": "IN",
+    "allowed_issuer_types": [
+      "E",
+      "9"
+    ],
+    "required_security_type_code": "01"
+  },
+  "derived_population": {
+    "frozen_company_equity_identities": 4524,
+    "exact_current_common_equity_links": 255,
+    "matched_current_non_equity_rows": 1,
+    "current_null_isin_common_equity_candidates": 7,
+    "p8_local_historical_identity_rows_required": 4262,
+    "excluded_non_frozen_identities": 687,
+    "eligible_cohort_symbol_collision_groups": 40,
+    "present_latest_decision_date": 4385,
+    "historical_only_before_latest_date": 139
+  },
+  "excluded_population": {
+    "issuer_type_F": 333,
+    "company_non_equity_security_type": {
+      "total": 288,
+      "codes": {
+        "11": 1,
+        "13": 1,
+        "20": 269,
+        "23": 10,
+        "25": 6,
+        "09": 1
+      }
+    },
+    "unsupported_issuer_type_8": 2,
+    "nonstandard_or_placeholder": 64
+  },
+  "architecture_decision": {
+    "mutate_live_securities": false,
+    "bulk_add_historical_identities_to_live_securities": false,
+    "new_p8_local_historical_identity_registry_required": true,
+    "canonical_security_link_optional": true,
+    "symbol_is_identity": false,
+    "preserve_existing_empty_v1_v2_objects": true
+  },
+  "provenance_decision": {
+    "gzip_mtime_usable": false,
+    "exact_publication_timestamp_invented": false,
+    "use_availability_upper_bound": true,
+    "availability_upper_bound_basis": "NSE requires appropriate security master before trading hours; NSE equity pre-open begins at 09:00 Asia/Kolkata",
+    "proposed_bound_local_time": "09:00:00 Asia/Kolkata",
+    "official_references": [
+      "NSE/MSD/60315",
+      "NSE/MSD/67344",
+      "NSE market timings"
+    ]
+  },
+  "safety": {
+    "database_writes": 0,
+    "provider_calls": 0,
+    "migration_created": false,
+    "hosted_schema_change": false,
+    "historical_materialization_performed": false,
+    "production_changed": false,
+    "main_changed": false,
+    "p8_b3_started": false,
+    "p8_c_started": false
+  },
+  "next_gate": "SEPARATE_OWNER_APPROVAL_FOR_ADDITIVE_P8_B2_HISTORICAL_IDENTITY_AND_SOURCE_ARCHIVE_MIGRATION_PACKAGE"
+}
