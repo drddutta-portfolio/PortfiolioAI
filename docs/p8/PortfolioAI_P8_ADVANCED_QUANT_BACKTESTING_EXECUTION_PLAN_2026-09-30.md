@@ -25,6 +25,8 @@ The Master Blueprint permits P8 only after sufficient point-in-time history exis
 
 ### P8-A — Historical data sufficiency inventory
 
+**Completion note (30 September 2026): COMPLETE / PASS as a read-only inventory.** The measured result is fail-closed: two partial foundations, seven blocked domains, P8-B not ready and no performance run authorized. See `PortfolioAI_P8_A_HISTORICAL_DATA_SUFFICIENCY_AUDIT_2026-09-30.json`.
+
 Read-only inventory by security/date/domain:
 
 - historical daily OHLCV and benchmark coverage;

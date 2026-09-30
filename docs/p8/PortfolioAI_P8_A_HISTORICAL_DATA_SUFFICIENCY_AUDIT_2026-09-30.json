@@ -1,0 +1,135 @@
+{
+  "audit": "PortfolioAI P8-A historical data sufficiency inventory",
+  "audit_date": "2026-09-30",
+  "environment": "PortfolioAI Dev",
+  "mode": "READ_ONLY",
+  "result": "COMPLETE_PASS_WITH_BLOCKED_DATA_FOUNDATION",
+  "scope": {
+    "open_holdings": 248,
+    "current_equities": 239,
+    "current_etfs": 9
+  },
+  "inventory_summary": {
+    "usable_foundations": 0,
+    "partial_foundations": 2,
+    "blocked_domains": 7,
+    "p8_b_ready": false,
+    "performance_backtest_authorized": false
+  },
+  "daily_prices": {
+    "disposition": "PARTIAL",
+    "covered_equities": 239,
+    "rows": 63927,
+    "first_date": "2025-08-07",
+    "last_date": "2026-09-28",
+    "minimum_dates_per_equity": 73,
+    "median_dates_per_equity": 270,
+    "maximum_dates_per_equity": 282,
+    "equities_with_at_least_252_dates": 230,
+    "equities_with_at_least_504_dates": 0,
+    "equities_with_at_least_756_dates": 0,
+    "equities_with_adjusted_close": 0,
+    "short_history": {
+      "VAML": 73,
+      "ICICIAMC": 190,
+      "UTLSOLAR": 211,
+      "PINELABS": 215,
+      "GROWW": 217,
+      "TMCV": 217,
+      "LENSKART": 219,
+      "LGEINDIA": 236,
+      "TATACAP": 237
+    }
+  },
+  "benchmarks": {
+    "disposition": "PARTIAL",
+    "defined": 10,
+    "mapped": 10,
+    "series": 10,
+    "rows": 2710,
+    "dates_per_series": 271,
+    "first_date": "2025-08-25",
+    "last_date": "2026-09-28",
+    "codes": ["NIFTY_500", "AUTO", "BANK", "FINANCIAL_SERVICES", "FMCG", "INFRASTRUCTURE", "IT", "METAL", "PHARMA", "REALTY"]
+  },
+  "fundamentals": {
+    "disposition": "BLOCKED",
+    "covered_equities": 114,
+    "missing_equities": 125,
+    "rows": 2428,
+    "rows_with_published_at": 2,
+    "rows_with_observed_at": 2,
+    "equities_with_no_published_timestamps": 113,
+    "equities_with_all_rows_published": 0,
+    "equities_with_at_least_8_periods": 1,
+    "median_periods": 1,
+    "maximum_periods": 13,
+    "first_period": "2021-03-31",
+    "last_period": "2026-06-30"
+  },
+  "documents": {
+    "disposition": "BLOCKED",
+    "covered_equities": 111,
+    "missing_equities": 128,
+    "held_equity_rows": 139,
+    "equities_with_at_least_8_publication_dates": 0,
+    "first_published_at": "2026-04-17",
+    "last_published_at": "2026-09-25",
+    "rows_with_source_published_at": 139,
+    "rows_with_retrieved_at": 139,
+    "rows_with_content_hash": 0
+  },
+  "canonical_snapshots": {
+    "disposition": "BLOCKED",
+    "rows": 1246,
+    "covered_equities": 239,
+    "distinct_as_of_dates": 1,
+    "only_as_of_date": "2026-09-29",
+    "equities_with_at_least_2_dates": 0,
+    "equities_with_at_least_8_dates": 0
+  },
+  "historical_universe": {
+    "disposition": "BLOCKED",
+    "securities": 284,
+    "active_securities": 284,
+    "inactive_securities": 0,
+    "equities": 272,
+    "inactive_equities": 0,
+    "listing_rows": 282,
+    "listings_with_valid_from": 0,
+    "listings_with_valid_to": 0
+  },
+  "classification_and_methodology": {
+    "disposition": "BLOCKED",
+    "classification_changes": 0,
+    "market_cap_observation_securities": 236,
+    "market_cap_distinct_as_of_dates": 1,
+    "subprofile_assignment_rows": 6,
+    "subprofile_assignments_with_effective_from": 6,
+    "scoring_profile_assignment_securities": 4
+  },
+  "historical_decision_runs": {
+    "disposition": "BLOCKED",
+    "stock_score_runs": 0,
+    "stock_score_run_securities": 0,
+    "stock_recommendation_runs": 5,
+    "stock_recommendation_securities": 1,
+    "finding": "Legacy recommendation rows are not portfolio-wide point-in-time R6-R10 decision history."
+  },
+  "required_owner_decisions_before_p8_b": [
+    "historical eligible-universe and listing/delisting authority",
+    "minimum historical period and decision calendar",
+    "corporate-action and adjusted-price authority",
+    "benchmark set and extension authority",
+    "point-in-time fundamentals and document acquisition strategy",
+    "classification/methodology validity-history strategy"
+  ],
+  "controls": {
+    "provider_calls": 0,
+    "database_writes": 0,
+    "migrations_created_or_applied": 0,
+    "performance_runs": 0,
+    "production_changed": false,
+    "main_changed": false
+  }
+}

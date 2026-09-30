@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import { P8_HISTORICAL_INVENTORY, summarizeP8HistoricalInventory } from "../features/backtesting/p8HistoricalInventory"
 import { useP7CurrentIntelligence } from "../features/decision/useP7CurrentIntelligence"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import "./BacktestingReadinessPage.css"
@@ -13,6 +14,7 @@ export function BacktestingReadinessPage() {
   const scored = intelligence.data.filter((row) => row.r6State === "SCORED" && row.r7State !== "INSUFFICIENT_EVIDENCE").length
   const historicalDecisionStates = 0
   const ready = equityCount > 0 && scored === equityCount && historicalDecisionStates >= 8
+  const inventorySummary = summarizeP8HistoricalInventory()
 
   return <section className="portfolio-page p8-readiness-page">
     <div className="portfolio-hero compact-hero"><div><p className="eyebrow">P8 · Advanced Quant / Backtesting</p><h1>Backtesting readiness</h1><p>Point-in-time evidence must prove what PortfolioAI could actually have known on each historical decision date. Current data is never silently treated as historical data.</p></div><Link className="button button-secondary" to="/app/intelligence">Back to Intelligence</Link></div>
@@ -40,6 +42,17 @@ export function BacktestingReadinessPage() {
       </div>
     </section>
 
-    <section className="panel p8-next-panel"><p className="eyebrow">Next controlled step</p><h2>Historical data sufficiency inventory</h2><p>Count usable price, fundamental, document, classification, benchmark and universe-membership history by security and date. The inventory is read-only and must precede any backtest engine or performance UI.</p></section>
+    <section className="panel p8-inventory-panel"><div className="section-heading"><div><p className="eyebrow">P8-A inventory · {P8_HISTORICAL_INVENTORY.auditedAt}</p><h2>Historical data sufficiency</h2><p>{inventorySummary.partial} partial foundations · {inventorySummary.blocked} blocked domains · no performance run authorized</p></div><span className="coverage-badge">Audit complete</span></div>
+      <div className="p8-inventory-table" role="table" aria-label="Historical data sufficiency inventory">
+        {P8_HISTORICAL_INVENTORY.domains.map((domain) => <article key={domain.code} role="row" className={`is-${domain.state.toLowerCase()}`}>
+          <div><strong>{domain.label}</strong><span>{domain.coverage}</span></div>
+          <b>{domain.state.replaceAll("_", " ")}</b>
+          <p>{domain.finding}</p>
+          <small>{domain.requiredRemediation}</small>
+        </article>)}
+      </div>
+    </section>
+
+    <section className="panel p8-next-panel"><p className="eyebrow">P8-A stop boundary</p><h2>P8-B requires an owner-approved remediation scope</h2><p>The next decision must select a historical universe, minimum period, decision calendar, benchmark set, corporate-action authority and acquisition strategy. No deterministic replay or performance result begins automatically.</p></section>
   </section>
 }
