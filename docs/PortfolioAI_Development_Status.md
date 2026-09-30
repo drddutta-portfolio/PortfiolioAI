@@ -2692,3 +2692,27 @@ Hosted P8-B2 application verification:
 - provider ledger remains 1,227 events with latest attempt at 2026-09-30T03:09:13.319Z, so this hosted migration/verification made zero provider calls.
 
 Gate B2 is **not yet closed**. The governing P8 plan requires every approved decision date to reconstruct an eligible historical universe or produce a deterministic global blocker. Historical listing/delisting acquisition and reconstruction remain a separate, approval-gated next action.
+
+
+## P8-B2 historical NSE universe acquisition — 30 September 2026
+
+Owner approval received for the next P8-B2 historical listing/universe acquisition and reconstruction step. **Development Status is updated immediately: P8-B2 acquisition is AUTHORIZED / ACTIVE.**
+
+The hosted B2 foundation remains applied and verified. A bounded official-NSE acquisition campaign has been prepared using the CM MII security master `NSE_CM_security_DDMMYYYY.csv.gz` for February 2024 through September 2026. This interval provides 32 monthly opportunities against the frozen minimum of 24 proven decision dates. The runner probes backward from each month-end and accepts only an actual official file; it does not infer holidays or invent dates.
+
+Repository acquisition runner: `scripts/p8/p8-b2-acquire-nse-universe.mjs`. It writes raw immutable files plus SHA-256 manifest evidence and performs no database writes.
+
+Current governance:
+
+```text
+P8 = ACTIVE
+P8-0 = COMPLETE / PASS
+P8-A = COMPLETE / PASS
+P8-B0 = COMPLETE / PASS
+P8-B1 = COMPLETE / PASS
+P8-B2 = ACTIVE / HOSTED FOUNDATION PASS / HISTORICAL UNIVERSE ACQUISITION AUTHORIZED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```

@@ -1,0 +1,29 @@
+{
+  "stage": "P8-B2 historical universe acquisition",
+  "date": "2026-09-30",
+  "authorization": "OWNER_APPROVED",
+  "status": "ACTIVE_RUNNER_PREPARED",
+  "authority": {
+    "primary": "National Stock Exchange of India CM MII Security File",
+    "file_pattern": "NSE_CM_security_DDMMYYYY.csv.gz",
+    "archive_base": "https://nsearchives.nseindia.com/content/cm/",
+    "website_dissemination_effective_from": "2024-02-05",
+    "supporting_circular": "NSE/MSD/60315"
+  },
+  "campaign": {
+    "start_month": "2024-02",
+    "end_month": "2026-09",
+    "monthly_opportunities": 32,
+    "minimum_proven_decision_dates": 24,
+    "runner": "scripts/p8/p8-b2-acquire-nse-universe.mjs",
+    "output_manifest": "tmp/p8-b2-nse/manifest.json"
+  },
+  "safety": {
+    "database_writes": 0,
+    "provider_calls": 0,
+    "production_changed": false,
+    "main_changed": false,
+    "p8_b3_started": false
+  },
+  "environment_limit": "Current connector runtime cannot fetch arbitrary binary NSE archive files. Acquisition runner is prepared for the local Mac/network-capable execution environment."
+}
