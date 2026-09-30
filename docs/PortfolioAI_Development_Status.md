@@ -2537,3 +2537,13 @@ Every equity received one current deterministic R6 disposition: INSUFFICIENT_EVI
 The machine-readable execution audit is `docs/p7-ic/PortfolioAI_P7_IC4_R6_CURRENT_PORTFOLIO_EXECUTION_AUDIT_2026-09-30.json`; its SHA-256 is `4b97fd85259c4b2a586cbc783807b8c71a69814f3010ff14fdd32d0f518a03b5`.
 
 **IC4/R6 = COMPLETE / PASS. IC5/R7 is authorized by approved IC-C but has not started. Stop remains IC-D after IC5. No database write, migration, provider call, deployment, Production or `main` change occurred in IC4.**
+
+## P7-IC IC5 R7 candidacy and sizing readiness — COMPLETE / PASS / AWAITING IC-D — 30 September 2026
+
+IC5 consumed the completed current IC4/R6 dispositions cache-only. Because numeric R6 coverage is 0/239, no equity is eligible for a candidacy recommendation: INSUFFICIENT_EVIDENCE 130 and REVIEW_REQUIRED 109. CORE_CANDIDATE, SATELLITE_CANDIDATE, WATCH and AVOID coverage are each zero. This is the required fail-closed result, not an incomplete execution.
+
+All 239 owner roles were projected separately and left unchanged. Role compatibility was not evaluated where R6 was not scored. Sizing readiness is blocked for all 239, with no invented target/minimum/maximum weights. IC5 produced zero owner-facing action states; ACCUMULATE/HOLD/WATCH/REDUCE/EXIT_REVIEW remain an IC6 projection requiring R8 and Movement.
+
+The machine-readable audit is `docs/p7-ic/PortfolioAI_P7_IC5_R7_CURRENT_PORTFOLIO_EXECUTION_AUDIT_2026-09-30.json`; its SHA-256 is `0b567dba2e03359f23f6b53fe6d3e5ff41c62c14d7e8866554328519326379aa`.
+
+**IC5/R7 = COMPLETE / PASS. STOP at IC-D. IC-D = AWAITING OWNER APPROVAL. IC6+, P8, Production and `main` remain untouched and unauthorized.**
