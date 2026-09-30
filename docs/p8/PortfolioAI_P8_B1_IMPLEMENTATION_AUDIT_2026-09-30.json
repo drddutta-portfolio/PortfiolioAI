@@ -1,0 +1,74 @@
+{
+  "audit": "PortfolioAI P8-B1 frozen experiment and bias-control contract implementation",
+  "audit_date": "2026-09-30",
+  "environment": "Development repository only",
+  "contract_version": "P8_EXPERIMENT_BIAS_CONTROL_V1",
+  "result": "IMPLEMENTED_READY_FOR_OWNER_REVIEW",
+  "owner_authority": "P8-B0 owner decision memo approved and P8-B1 authorized",
+  "implementation": {
+    "contract_file": "src/features/backtesting/p8ExperimentContract.ts",
+    "test_file": "src/features/backtesting/p8ExperimentContract.test.ts",
+    "documentation": "docs/p8/PortfolioAI_P8_B1_EXPERIMENT_BIAS_CONTROL_CONTRACT_2026-09-30.md",
+    "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+    "methodology_version": "P8_R6_R10_REPLAY_V1",
+    "universe_version": "P8_NSE_HISTORICAL_UNIVERSE_V1",
+    "classification_version": "P8_HISTORICAL_CLASSIFICATION_V1",
+    "benchmark_version": "P8_NIFTY500_TRI_V1",
+    "cost_model_version": "P8_COST_MODEL_V1",
+    "decision_calendar_version": "P8_MONTH_END_IST_V1",
+    "exclusion_registry_version": "P8_EXCLUSION_REGISTRY_V1"
+  },
+  "frozen_choices": {
+    "period": [
+      "2023-10-01",
+      "2026-09-30"
+    ],
+    "target_monthly_decision_dates": 36,
+    "minimum_proven_decision_dates": 24,
+    "decision_calendar": "LAST_ELIGIBLE_NSE_TRADING_SESSION_AFTER_CLOSE_ASIA_KOLKATA",
+    "primary_horizon_months": 6,
+    "secondary_horizon_months": [
+      1,
+      3,
+      12
+    ],
+    "primary_benchmark": "NIFTY_500_TOTAL_RETURN_INDEX",
+    "currency": "INR",
+    "split": "60_20_20_CHRONOLOGICAL",
+    "base_slippage_bps_per_executed_side": 10,
+    "liquidity_lookback_sessions": 20,
+    "max_order_share_of_median_traded_value_percent": 5,
+    "missing_data": "FAIL_CLOSED",
+    "point_in_time_signal_lag": "STRICTLY_AFTER_PUBLICATION_AND_AVAILABILITY",
+    "holdout": "UNTOUCHED_UNTIL_VALIDATION_STAGE"
+  },
+  "test_scope": [
+    "no result-affecting TBDs",
+    "strict publication boundary before/equal/after",
+    "unknown publication/availability fail closed",
+    "deterministic chronological split",
+    "identical-input fingerprint repeatability",
+    "result-affecting input changes fingerprint",
+    "explicit exclusion registry and live-policy prohibitions"
+  ],
+  "verification_status": {
+    "repository_static_review": "PASS",
+    "automated_tests": "NOT_EXECUTED_IN_CONNECTOR_SESSION",
+    "typescript": "NOT_EXECUTED_IN_CONNECTOR_SESSION",
+    "eslint": "NOT_EXECUTED_IN_CONNECTOR_SESSION",
+    "architecture_guard": "NOT_EXECUTED_IN_CONNECTOR_SESSION",
+    "production_build": "NOT_EXECUTED_IN_CONNECTOR_SESSION",
+    "note": "The connected repository session can create and inspect source but does not provide the local npm execution surface used by Codex. P8-B1 is therefore not claimed COMPLETE/PASS until these checks run or equivalent CI evidence is obtained."
+  },
+  "canonical_authority_impact": "NONE_NEW_LIVE_FACT",
+  "controls": {
+    "provider_calls": 0,
+    "database_writes": 0,
+    "migrations_created_or_applied": 0,
+    "edge_deployments": 0,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "OWNER_REVIEW_AFTER_AUTOMATED_VERIFICATION"
+}

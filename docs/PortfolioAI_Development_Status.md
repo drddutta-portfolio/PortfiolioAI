@@ -2624,3 +2624,29 @@ P8 execution gate = BLOCKED — DATA FOUNDATION
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+
+## P8-B1 frozen experiment contract — 30 September 2026
+
+P8-B1 is **IMPLEMENTED / READY FOR OWNER REVIEW, VERIFICATION PENDING** under the approved P8-B0 owner memo.
+
+Repository implementation now freezes the first bounded historical experiment in `src/features/backtesting/p8ExperimentContract.ts` with focused tests in `src/features/backtesting/p8ExperimentContract.test.ts`. The contract fixes the historical NSE universe policy, 2023-10-01 through 2026-09-30 observation window, monthly post-close IST decision rule, minimum 24 proven decision dates, strict signal lag, six-month primary horizon, NIFTY 500 TRI benchmark rule, fail-closed missing-data behavior, historical validity rules, chronological 60/20/20 split, multiple-testing/holdout controls, dated cost policy, 10 bps base slippage, 5% median-traded-value liquidity ceiling and live-policy prohibitions.
+
+No provider call, database write, migration, RLS change, Edge Function deployment, P8-C replay, Production change or `main` change was made.
+
+The connected build session does not expose the local npm execution surface, so automated unit/type/lint/architecture/build verification remains pending and is explicitly not represented as PASS. P8-B1 must not close until that evidence is obtained.
+
+Current governance:
+
+```text
+P8 = ACTIVE
+P8-0 = COMPLETE / PASS
+P8-A = COMPLETE / PASS
+P8-B0 = COMPLETE / PASS
+P8-B1 = IMPLEMENTED / VERIFICATION PENDING / OWNER REVIEW AFTER VERIFICATION
+P8-B2+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+P8 execution gate = BLOCKED — DATA FOUNDATION
+Production = UNCHANGED
+main = UNCHANGED
+```
