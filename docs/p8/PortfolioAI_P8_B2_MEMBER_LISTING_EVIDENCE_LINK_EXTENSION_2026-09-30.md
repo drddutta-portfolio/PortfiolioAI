@@ -2,7 +2,7 @@
 
 Date: 30 September 2026  
 Environment: Development only  
-Status: **LOCAL REPLAY / TEST COMPLETE / PASS / HOSTED APPLICATION NOT AUTHORIZED**
+Status: **HOSTED DEVELOPMENT APPLIED / VERIFIED / PASS / HISTORICAL MATERIALIZATION NOT STARTED**
 
 ## Why this extension exists
 
@@ -74,3 +74,26 @@ Owner-run verification completed on 30 September 2026 against Development commit
 - historical universe materialization: **NOT STARTED**.
 
 The local schema gate is therefore satisfied. The next database action, if approved separately, is application of this exact additive migration to hosted PortfolioAI Dev followed by hosted contract verification. No hosted action is implied by this local pass.
+
+## Hosted Development application verification
+
+With separate owner approval, the exact locally verified migration was applied to **PortfolioAI Dev** only and registered as:
+
+`20260930172115_add_p8_b2_member_listing_evidence_links`
+
+Hosted verification passed:
+
+- exact SQL contract test executed successfully inside its own transaction and rolled back;
+- zero fixture residue;
+- new table/view/function are present;
+- RLS is enabled;
+- the evidence view is `security_invoker`;
+- anon SELECT is denied;
+- authenticated SELECT is allowed under owner-scoped RLS;
+- V2 function execution is denied to authenticated and granted to service_role;
+- all P8-B2 observation/run/member/selection/evidence-link tables remain empty after verification;
+- existing securities/listings/transactions counts remain 284 / 282 / 496.
+
+Advisor notes are non-blocking for this gate: authenticated GraphQL visibility is expected for the owner-scoped authenticated read contract; performance lints flag composite FK indexing and currently-unused indexes on the empty table. No additional schema remediation is authorized by this checkpoint.
+
+Historical universe materialization has **not** started. P8-B3 and P8-C remain separately authorization-gated.

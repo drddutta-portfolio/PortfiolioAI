@@ -2,7 +2,7 @@
   "stage": "P8-B2 member-to-listing evidence-link schema extension",
   "date": "2026-09-30",
   "authorization": "OWNER_APPROVED_DEVELOPMENT_LOCAL_ONLY",
-  "status": "LOCAL_REPLAY_TEST_COMPLETE_PASS_HOSTED_APPLICATION_NOT_AUTHORIZED",
+  "status": "HOSTED_DEVELOPMENT_APPLIED_VERIFIED_PASS_HISTORICAL_MATERIALIZATION_NOT_STARTED",
   "migration": "supabase/migrations/20260930170500_add_p8_b2_member_listing_evidence_links.sql",
   "test": "supabase/tests/p8_b2_member_listing_evidence_links.sql",
   "new_objects": {
@@ -28,7 +28,7 @@
   ],
   "execution": {
     "local_replay": "COMPLETE_PASS",
-    "hosted_apply": false,
+    "hosted_apply": true,
     "historical_universe_materialization": "NOT_STARTED",
     "provider_calls": 0,
     "local_replay_commit": "3dc490d8b8251a092c5bb3a1c0ba3a0a31056664",
@@ -41,7 +41,11 @@
       "ROLLBACK"
     ],
     "production_changed": false,
-    "main_changed": false
+    "main_changed": false,
+    "hosted_project_id": "lrgpjimipfkyoqbpsqzz",
+    "hosted_migration_version": "20260930172115",
+    "hosted_migration_name": "add_p8_b2_member_listing_evidence_links",
+    "hosted_contract_test": "PASS_ROLLED_BACK"
   },
   "next_action": "Run local supabase db reset and supabase/tests/p8_b2_member_listing_evidence_links.sql. Return for separate owner approval before hosted application.",
   "verification": {
@@ -57,5 +61,34 @@
       "ROLLBACK"
     ],
     "fixture_residue_expected": false
+  },
+  "hosted_verification": {
+    "verified_on": "2026-09-30",
+    "securities_count": 284,
+    "security_listings_count": 282,
+    "transactions_count": 496,
+    "p8_listing_observations_count": 0,
+    "p8_historical_universe_runs_count": 0,
+    "p8_historical_universe_members_count": 0,
+    "p8_historical_universe_run_selections_count": 0,
+    "p8_member_listing_evidence_count": 0,
+    "evidence_table_exists": true,
+    "evidence_view_exists": true,
+    "v2_function_exists": true,
+    "evidence_rls_enabled": true,
+    "evidence_view_security_invoker": true,
+    "anon_can_select": false,
+    "authenticated_can_select": true,
+    "authenticated_can_execute_v2": false,
+    "service_role_can_execute_v2": true,
+    "advisor_notes": {
+      "security": [
+        "Authenticated GraphQL visibility warnings on the authenticated-readable owner-scoped table/view; RLS remains the row-access boundary."
+      ],
+      "performance": [
+        "Composite foreign-key covering-index notices on the new evidence table.",
+        "Unused-index notices are expected while the new evidence table remains empty."
+      ]
+    }
   }
 }

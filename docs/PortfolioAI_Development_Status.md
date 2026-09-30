@@ -2922,3 +2922,46 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 evidence-link hosted Development application verification — 30 September 2026
+
+Owner approval received for hosted PortfolioAI Dev application of the already locally replayed P8-B2 evidence-link migration.
+
+Applied to **PortfolioAI Dev only**:
+
+- hosted project: `lrgpjimipfkyoqbpsqzz`;
+- hosted migration: `20260930172115_add_p8_b2_member_listing_evidence_links`;
+- exact repository migration source: `supabase/migrations/20260930170500_add_p8_b2_member_listing_evidence_links.sql`;
+- hosted transactional contract test: PASS / rolled back;
+- evidence-link table, canonical evidence view and V2 append/select function: PRESENT;
+- evidence-link RLS: ENABLED;
+- canonical evidence view: `security_invoker=true`;
+- anonymous SELECT: DENIED;
+- authenticated SELECT: GRANTED and constrained by owner-scoped RLS;
+- authenticated V2 execution: DENIED;
+- service-role V2 execution: GRANTED;
+- P8 listing observations / universe runs / members / selections / evidence links after verification: all zero;
+- preservation counts remain 284 securities, 282 security listings and 496 transactions.
+
+Supabase advisors report two expected authenticated-GraphQL visibility warnings for the authenticated-readable table/view; row access remains owner-scoped by RLS. Performance advisors also report two composite-FK indexing notices and unused-index notices on the empty new table. These are advisory/non-blocking for this correctness gate and no further schema change is authorized by this checkpoint.
+
+No provider call, historical-universe materialization, P8-B3, P8-C, Production or `main` change occurred.
+
+Current governance:
+
+```text
+P8 = ACTIVE
+P8-0 = COMPLETE / PASS
+P8-A = COMPLETE / PASS
+P8-B0 = COMPLETE / PASS
+P8-B1 = COMPLETE / PASS
+P8-B2 acquisition = COMPLETE / PASS
+P8-B2 hash/schema/identity diagnostics = COMPLETE / PASS
+P8-B2 duplicate structure = PROVEN MANY-TO-ONE AT ISIN LEVEL
+P8-B2 evidence-link migration = HOSTED DEVELOPMENT APPLIED / VERIFIED / PASS
+P8-B2 historical universe materialization = NOT STARTED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
