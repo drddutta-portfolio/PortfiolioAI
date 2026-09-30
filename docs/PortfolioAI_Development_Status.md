@@ -2965,3 +2965,27 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 historical identity reconciliation gate — 30 September 2026
+
+Owner approval received to continue P8-B2 historical universe reconstruction/materialization. Before any universe data write, the canonical identity prerequisite is being measured fail-closed.
+
+Measured hosted baseline:
+
+- official NSE historical equity universe from the acquired B2 evidence: 5,211 unique ISINs;
+- PortfolioAI Dev canonical securities: 284;
+- canonical securities with ISIN: 256.
+
+Created a read-only Development security identity snapshot and local reconciliation runner. The runner must establish exact ISIN overlap, current null-ISIN candidates, symbol collisions, required historical security additions and whether the acquired GZIP metadata supplies a defensible source publication timestamp. It performs no database writes or provider calls.
+
+Current governance:
+
+```text
+P8-B2 evidence-link migration = HOSTED DEVELOPMENT APPLIED / VERIFIED / PASS
+P8-B2 historical identity reconciliation = ACTIVE / LOCAL RUN REQUIRED
+P8-B2 historical universe materialization = NOT YET STARTED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
