@@ -18,6 +18,7 @@ export type CanonicalFactKey =
   | "FUNDAMENTAL_EVIDENCE"
   | "OWNERSHIP_EVIDENCE"
   | "RESEARCH_DOCUMENTS"
+  | "CURRENT_RESEARCH_EVIDENCE"
   | "DAILY_OHLCV"
   | "OFFICIAL_NEWS"
   | "DETERMINISTIC_SCORE"
@@ -25,6 +26,7 @@ export type CanonicalFactKey =
   | "POSITION_SIZING_ASSESSMENT"
   | "CORE_HEALTH"
   | "EXIT_RISK"
+  | "CANONICAL_ACTION"
 
 export interface CanonicalDataAuthority {
   readonly fact: CanonicalFactKey
@@ -235,6 +237,17 @@ export const CANONICAL_DATA_AUTHORITIES = {
     pageLocalDerivationAllowed: false,
     notes: "Document metadata and provenance are canonical; large binaries remain external where designed.",
   }),
+  CURRENT_RESEARCH_EVIDENCE: authority({
+    fact: "CURRENT_RESEARCH_EVIDENCE",
+    label: "Canonical current research evidence",
+    layer: "NORMALIZED",
+    canonicalAuthority: "P7 IC3 canonical selection and lineage contract",
+    canonicalSourceObject: "current_research_evidence_snapshot_lineage_v1",
+    sharedAccessPath: "loadP7CurrentEvidenceSnapshots() -> useP7CurrentIntelligence()",
+    missingDataBehavior: "PRESERVE_STATE",
+    pageLocalDerivationAllowed: false,
+    notes: "Dashboard and Intelligence consume the same owner-scoped current snapshot lineage; immutable history is not re-ranked in UI code.",
+  }),
   DAILY_OHLCV: authority({
     fact: "DAILY_OHLCV",
     label: "Daily historical OHLCV",
@@ -311,6 +324,17 @@ export const CANONICAL_DATA_AUTHORITIES = {
     missingDataBehavior: "NOT_APPLICABLE_WHEN_UNSUPPORTED",
     pageLocalDerivationAllowed: false,
     notes: "Current UI readiness surfaces must not fabricate formal engine output.",
+  }),
+  CANONICAL_ACTION: authority({
+    fact: "CANONICAL_ACTION",
+    label: "Canonical owner-facing action",
+    layer: "SCORED",
+    canonicalAuthority: "P7 IC6D action projection contract",
+    canonicalSourceObject: "R7 + current R8 domains + Movement + owner context + evidence blockers",
+    sharedAccessPath: "projectP7Ic6CurrentState() -> useP7CurrentIntelligence()",
+    missingDataBehavior: "PRESERVE_STATE",
+    pageLocalDerivationAllowed: false,
+    notes: "Only ACCUMULATE/HOLD/WATCH/REDUCE/EXIT_REVIEW are canonical. Current fail-closed prerequisites emit no action; BUY/SELL are not internal states.",
   }),
 } as const satisfies Record<CanonicalFactKey, CanonicalDataAuthority>
 

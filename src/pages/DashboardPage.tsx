@@ -1,6 +1,7 @@
 import Decimal from "decimal.js"
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { P7CanonicalIntelligencePanel } from "../components/P7CanonicalIntelligencePanel"
 import { isMarketDataEnabled, refreshPortfolioMarketData } from "../data/marketDataRepository"
 import { displayError } from "../lib/displayError"
 import { enrichmentAllocation } from "../features/enrichment/allocation"
@@ -214,6 +215,8 @@ export function DashboardPage() {
       <Kpi icon="✓" label={isConsolidated ? "Supported realised P&L" : "Scoped realised P&L"} value={formatMoney(kpiRealised)} detail={isConsolidated ? `${portfolio.totals.realisedCoverage}/${portfolio.totals.realisedEligibleHistories} disposal histories covered` : `${scopedRealised.coverage}/${scopedPositions.length} current scoped holdings with supported realised P&L`} tone={signedTone(kpiRealised)} />
       <Kpi icon="#" label="Open holdings" value={String(scopedPositions.length)} detail={isConsolidated ? `${portfolio.totals.closedHistories} closed histories retained` : selectedScopeLabel} />
     </section>
+
+    <P7CanonicalIntelligencePanel compact />
 
     <div className="dashboard-workspace-grid">
       <main className="dashboard-workspace-main">

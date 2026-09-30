@@ -2547,3 +2547,25 @@ All 239 owner roles were projected separately and left unchanged. Role compatibi
 The machine-readable audit is `docs/p7-ic/PortfolioAI_P7_IC5_R7_CURRENT_PORTFOLIO_EXECUTION_AUDIT_2026-09-30.json`; its SHA-256 is `0b567dba2e03359f23f6b53fe6d3e5ff41c62c14d7e8866554328519326379aa`.
 
 **IC5/R7 = COMPLETE / PASS. STOP at IC-D. IC-D = AWAITING OWNER APPROVAL. IC6+, P8, Production and `main` remain untouched and unauthorized.**
+
+## P7-IC IC6 R8/R9/Movement/action projection — COMPLETE / PASS / AWAITING IC-E — 30 September 2026
+
+The owner approved IC-D and authorized completion through the P7 boundary. IC6 consumed the current IC3 lineage and completed IC4/IC5 dispositions without provider calls or database writes. Because every current equity is fail-closed upstream, R8 Core Health, Portfolio Fit, Portfolio Risk and Exit Intelligence correctly produce 130 BLOCKED_PREREQUISITE and 109 REVIEW_REQUIRED dispositions. No assessment is represented as complete.
+
+R9 records BASELINE_NOT_AVAILABLE for all 239 equities because no valid prior canonical R8 observed state exists; it does not confuse daily price movement with meaningful change. Movement is INSUFFICIENT_EVIDENCE for 130 and REVIEW_REQUIRED for 109. Every equity therefore has an explicit IC6 disposition or blocker.
+
+Canonical action projection remains exactly ACCUMULATE, HOLD, WATCH, REDUCE and EXIT_REVIEW. It requires R7, all current R8 domains, Movement, owner context and evidence confidence/blockers. Current canonical action coverage is 0/239 and all 239 are BLOCKED_PREREQUISITE. BUY and SELL are not internal states. Owner roles remain unchanged.
+
+The machine-readable audit is `docs/p7-ic/PortfolioAI_P7_IC6_CURRENT_PORTFOLIO_EXECUTION_AUDIT_2026-09-30.json`.
+
+**IC6 = COMPLETE / PASS. STOP at IC-E. IC-E = APPROVED by the owner's instruction to complete IC6+ through P7 and stop before P8. No migration, database write, provider call, Production or `main` change occurred.**
+
+## P7-IC IC7 / IC-FINAL product integration — COMPLETE / PASS / OWNER CHECKPOINT 6 — 30 September 2026
+
+IC7 replaces the rendered frozen validation Action Center with one shared read-only current-intelligence path. The owner-scoped `current_research_evidence_snapshot_lineage_v1` view is loaded through `loadP7CurrentEvidenceSnapshots()`, projected fail-closed through `projectP7Ic6CurrentState()`, and consumed by one reusable `P7CanonicalIntelligencePanel` on both Dashboard and Intelligence.
+
+The Dashboard now shows a compact canonical readiness block. Intelligence shows the full filterable current disposition table with owner role, R6, R7, R8, Movement and action blocker. The UI states plainly that no buy/sell signal was created, current action coverage is zero, and owner roles are unchanged. The complete open-holdings boundary is 248: 239 equities receive an explicit disposition and 9 ETFs are not applicable to the equity methodology.
+
+Verification passed: 64 targeted IC6/R8/R9/R10/final and canonical-authority tests, TypeScript, architecture boundary guard, production build, and `git diff --check`. Local browser loading and authentication boundary were verified; authenticated live-data visual verification requires the normal owner session after the Development deployment because the isolated preview browser's saved credential was stale. The integration audit is `docs/p7-ic/PortfolioAI_P7_IC7_FINAL_UI_INTEGRATION_AUDIT_2026-09-30.json`.
+
+**P7-IC = COMPLETE / PASS. IC-FINAL = COMPLETE / PASS. STOP at Owner Checkpoint 6. P8 = NOT AUTHORIZED / NOT STARTED. Production and `main` remain unchanged.**

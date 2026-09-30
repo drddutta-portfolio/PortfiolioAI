@@ -1,0 +1,23 @@
+{
+  "asOfDate": "2026-09-30",
+  "contract": "PORTFOLIOAI_P7_IC7_FINAL_UI_INTEGRATION_V1",
+  "portfolioUniverse": { "openHoldings": 248, "equities": 239, "etfsNotApplicable": 9 },
+  "sharedCanonicalPath": "current_research_evidence_snapshot_lineage_v1 -> loadP7CurrentEvidenceSnapshots -> useP7CurrentIntelligence -> P7CanonicalIntelligencePanel",
+  "surfaces": {
+    "dashboard": "COMPACT_CANONICAL_READINESS_VISIBLE",
+    "intelligence": "FULL_FILTERABLE_CANONICAL_DISPOSITION_VISIBLE",
+    "researchLinks": "SECURITY_DEEP_LINKS_VISIBLE"
+  },
+  "statesVisible": ["R6", "R7", "R8", "Movement", "Canonical action blocker", "Owner role"],
+  "canonicalActionEnum": ["ACCUMULATE", "HOLD", "WATCH", "REDUCE", "EXIT_REVIEW"],
+  "buySellInternalStates": false,
+  "staleFrozenActionCenterRendered": false,
+  "missingDataFabricated": false,
+  "ownerRolesMutated": 0,
+  "providerCalls": 0,
+  "databaseWrites": 0,
+  "migrationsCreatedOrApplied": 0,
+  "productionChanges": 0,
+  "p8Started": false,
+  "result": "PASS_PENDING_BROWSER_VERIFICATION"
+}

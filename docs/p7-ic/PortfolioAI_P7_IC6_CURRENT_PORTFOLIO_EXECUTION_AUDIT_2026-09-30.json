@@ -1,0 +1,44 @@
+{
+  "asOfDate": "2026-09-30",
+  "contract": "PORTFOLIOAI_P7_IC6_CURRENT_PORTFOLIO_EXECUTION_V1",
+  "sourceIc3Fingerprint": "31f15adbe874c095f689128ed7ac1576",
+  "sourceIc5Audit": "PortfolioAI_P7_IC5_R7_CURRENT_PORTFOLIO_EXECUTION_AUDIT_2026-09-30.json",
+  "equityUniverse": 239,
+  "r8": {
+    "coreHealth": { "BLOCKED_PREREQUISITE": 130, "REVIEW_REQUIRED": 109, "ASSESSMENT_COMPLETE": 0 },
+    "portfolioFit": { "BLOCKED_PREREQUISITE": 130, "REVIEW_REQUIRED": 109, "ASSESSMENT_COMPLETE": 0 },
+    "portfolioRisk": { "BLOCKED_PREREQUISITE": 130, "REVIEW_REQUIRED": 109, "ASSESSMENT_COMPLETE": 0 },
+    "exitIntelligence": { "BLOCKED_PREREQUISITE": 130, "REVIEW_REQUIRED": 109, "ASSESSMENT_COMPLETE": 0 }
+  },
+  "r9": {
+    "BASELINE_NOT_AVAILABLE": 239,
+    "meaningfulChangeEvents": 0,
+    "reason": "NO_VALID_PRIOR_R8_OBSERVED_STATE"
+  },
+  "movement": {
+    "INSUFFICIENT_EVIDENCE": 130,
+    "REVIEW_REQUIRED": 109,
+    "CURRENT_MOVEMENT_READY": 0
+  },
+  "canonicalAction": {
+    "ACCUMULATE": 0,
+    "HOLD": 0,
+    "WATCH": 0,
+    "REDUCE": 0,
+    "EXIT_REVIEW": 0,
+    "BLOCKED_PREREQUISITE": 239,
+    "buyInternalStateCount": 0,
+    "sellInternalStateCount": 0
+  },
+  "proof": {
+    "everyEquityHasExplicitDispositionOrBlocker": true,
+    "actionRequiresR7R8MovementOwnerContextAndEvidenceConfidence": true,
+    "scoreAloneCreatesAction": false,
+    "ownerRolesMutated": 0,
+    "providerCalls": 0,
+    "databaseWrites": 0,
+    "migrationsCreatedOrApplied": 0,
+    "productionChanges": 0
+  },
+  "result": "PASS_FAIL_CLOSED"
+}

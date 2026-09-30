@@ -19,6 +19,7 @@ const REQUIRED_FACTS: readonly CanonicalFactKey[] = [
   "FUNDAMENTAL_EVIDENCE",
   "OWNERSHIP_EVIDENCE",
   "RESEARCH_DOCUMENTS",
+  "CURRENT_RESEARCH_EVIDENCE",
   "DAILY_OHLCV",
   "OFFICIAL_NEWS",
   "DETERMINISTIC_SCORE",
@@ -26,6 +27,7 @@ const REQUIRED_FACTS: readonly CanonicalFactKey[] = [
   "POSITION_SIZING_ASSESSMENT",
   "CORE_HEALTH",
   "EXIT_RISK",
+  "CANONICAL_ACTION",
 ]
 
 describe("canonical data authority registry", () => {
@@ -67,6 +69,13 @@ describe("canonical data authority registry", () => {
     expect(canonicalAuthorityFor("PORTFOLIO_ROLE").layer).toBe("OWNER_SETTING")
     expect(canonicalAuthorityFor("THEMES").layer).toBe("OWNER_SETTING")
     expect(canonicalAuthorityFor("POSITION_SIZING_ASSESSMENT").layer).toBe("SCORED")
+  })
+
+  it("keeps canonical action on the IC6 shared projection path", () => {
+    const action = canonicalAuthorityFor("CANONICAL_ACTION")
+    expect(action.sharedAccessPath).toContain("projectP7Ic6CurrentState")
+    expect(action.notes).toContain("ACCUMULATE/HOLD/WATCH/REDUCE/EXIT_REVIEW")
+    expect(action.notes).not.toContain("BUY/SELL are canonical")
   })
 
   it("does not treat future Core Health or Exit Risk UI readiness as canonical engine output", () => {

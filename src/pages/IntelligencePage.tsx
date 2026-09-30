@@ -1,13 +1,8 @@
 import { Link } from "react-router-dom"
-import { DashboardCoreExitRisk } from "../components/DashboardCoreExitRisk"
-import { DashboardDecisionLayer } from "../components/DashboardDecisionLayer"
-import { DashboardMeaningfulChanges } from "../components/DashboardMeaningfulChanges"
-import { DashboardRiskConcentration } from "../components/DashboardRiskConcentration"
-import { DashboardScopeProvider } from "../components/DashboardScopeContext"
+import { P7CanonicalIntelligencePanel } from "../components/P7CanonicalIntelligencePanel"
 
 export function IntelligencePage() {
   return (
-    <DashboardScopeProvider>
       <section className="portfolio-page intelligence-page">
         <div className="portfolio-hero compact-hero">
           <div>
@@ -21,29 +16,7 @@ export function IntelligencePage() {
           <Link className="button button-secondary" to="/app/research">Review evidence</Link>
         </div>
 
-        <nav className="intelligence-jump-nav" aria-label="Intelligence sections">
-          <a href="#intelligence-action">Action Center</a>
-          <a href="#intelligence-health">Core Health &amp; Exit</a>
-          <a href="#intelligence-risk">Portfolio Fit &amp; Risk</a>
-          <a href="#intelligence-change">Meaningful Change</a>
-          <a href="#intelligence-narrative">Investment Committee</a>
-        </nav>
-
-        <div id="intelligence-action" className="dashboard-section-anchor">
-          <DashboardDecisionLayer />
-        </div>
-
-        <div id="intelligence-health" className="dashboard-section-anchor">
-          <DashboardCoreExitRisk />
-        </div>
-
-        <div id="intelligence-risk" className="dashboard-section-anchor">
-          <DashboardRiskConcentration />
-        </div>
-
-        <div id="intelligence-change" className="dashboard-section-anchor">
-          <DashboardMeaningfulChanges />
-        </div>
+        <P7CanonicalIntelligencePanel />
 
         <section id="intelligence-narrative" className="panel">
           <div className="section-heading">
@@ -64,6 +37,5 @@ export function IntelligencePage() {
           </p>
         </section>
       </section>
-    </DashboardScopeProvider>
   )
 }
