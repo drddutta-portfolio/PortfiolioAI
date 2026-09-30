@@ -3112,3 +3112,34 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 local classification verification — 1 October 2026
+
+Owner-run classification validation completed against Development commit `60dd4da3a858231a689a5c495e4eb9c50669779c` and matched the frozen remediation contract exactly.
+
+```text
+historical_unique_identities = 5211
+frozen_company_equity_identities = 4524
+excluded_non_frozen_identities = 687
+exact_current_equity_links = 255
+matched_non_equity_current_rows = 1
+current_null_isin_company_equity_candidates = 7
+p8_local_historical_identity_rows_required = 4262
+frozen_equity_symbol_collision_groups = 40
+frozen_equity_present_on_latest_decision_date = 4385
+frozen_equity_historical_only_before_latest_date = 139
+```
+
+No database write or provider call occurred.
+
+```text
+P8-B2 V3 classification validation = COMPLETE / PASS
+P8-B2 V3 clean local database replay = PENDING
+P8-B2 V3 SQL contract test = PENDING
+P8-B2 V3 hosted application = NOT AUTHORIZED / NOT APPLIED
+P8-B2 historical universe materialization = NOT STARTED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
