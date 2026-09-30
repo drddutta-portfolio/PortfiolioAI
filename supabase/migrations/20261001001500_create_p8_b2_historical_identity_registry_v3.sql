@@ -91,7 +91,7 @@ using (
 );
 
 revoke all on public.p8_historical_security_identities
-from public, anon, authenticated;
+from public, anon, authenticated, service_role;
 grant select on public.p8_historical_security_identities to authenticated;
 grant select on public.p8_historical_security_identities to service_role;
 
@@ -191,7 +191,7 @@ using (
 );
 
 revoke all on public.p8_historical_source_archives
-from public, anon, authenticated;
+from public, anon, authenticated, service_role;
 grant select on public.p8_historical_source_archives to authenticated;
 grant select on public.p8_historical_source_archives to service_role;
 
@@ -274,7 +274,7 @@ using (
 );
 
 revoke all on public.p8_historical_listing_observations_v3
-from public, anon, authenticated;
+from public, anon, authenticated, service_role;
 grant select on public.p8_historical_listing_observations_v3 to authenticated;
 grant select on public.p8_historical_listing_observations_v3 to service_role;
 
@@ -360,7 +360,7 @@ using (
 );
 
 revoke all on public.p8_historical_universe_runs_v3
-from public, anon, authenticated;
+from public, anon, authenticated, service_role;
 grant select on public.p8_historical_universe_runs_v3 to authenticated;
 grant select on public.p8_historical_universe_runs_v3 to service_role;
 
@@ -417,7 +417,7 @@ using (
 );
 
 revoke all on public.p8_historical_universe_members_v3
-from public, anon, authenticated;
+from public, anon, authenticated, service_role;
 grant select on public.p8_historical_universe_members_v3 to authenticated;
 grant select on public.p8_historical_universe_members_v3 to service_role;
 
@@ -475,7 +475,7 @@ using (
 );
 
 revoke all on public.p8_historical_universe_member_listing_evidence_v3
-from public, anon, authenticated;
+from public, anon, authenticated, service_role;
 grant select on public.p8_historical_universe_member_listing_evidence_v3 to authenticated;
 grant select on public.p8_historical_universe_member_listing_evidence_v3 to service_role;
 
@@ -531,7 +531,7 @@ using (
 );
 
 revoke all on public.p8_historical_universe_run_selections_v3
-from public, anon, authenticated;
+from public, anon, authenticated, service_role;
 grant select on public.p8_historical_universe_run_selections_v3 to authenticated;
 grant select on public.p8_historical_universe_run_selections_v3 to service_role;
 
@@ -551,8 +551,9 @@ where not exists (
 );
 
 revoke all on public.current_p8_historical_universe_run_v3
-from public, anon, authenticated;
+from public, anon, authenticated, service_role;
 grant select on public.current_p8_historical_universe_run_v3 to authenticated;
+grant select on public.current_p8_historical_universe_run_v3 to service_role;
 
 create view public.current_p8_historical_universe_membership_v3
 with (security_invoker = true) as
@@ -584,8 +585,9 @@ join public.p8_historical_security_identities i
   on i.id = m.historical_identity_id;
 
 revoke all on public.current_p8_historical_universe_membership_v3
-from public, anon, authenticated;
+from public, anon, authenticated, service_role;
 grant select on public.current_p8_historical_universe_membership_v3 to authenticated;
+grant select on public.current_p8_historical_universe_membership_v3 to service_role;
 
 create view public.current_p8_historical_universe_member_listing_evidence_v3
 with (security_invoker = true) as
@@ -620,8 +622,9 @@ join public.current_p8_historical_universe_run_v3 r
   on r.id = m.universe_run_id;
 
 revoke all on public.current_p8_historical_universe_member_listing_evidence_v3
-from public, anon, authenticated;
+from public, anon, authenticated, service_role;
 grant select on public.current_p8_historical_universe_member_listing_evidence_v3 to authenticated;
+grant select on public.current_p8_historical_universe_member_listing_evidence_v3 to service_role;
 
 create function public.append_p8_historical_security_identity_v1(
   p_identity jsonb
