@@ -2810,3 +2810,21 @@ To avoid guessing NSE semantics, the next read-only step profiles the full 32-fi
 NSE's official Master Data Technical Specifications explicitly define the Capital Market security-master instrument type as: `0 = Equities`, `1 = Preference Shares`, `2 = Debentures`, `3 = Warrants`, `4 = Miscellaneous`. Therefore the P8-B2 historical-equity eligibility rule is now frozen to `SctyTpFlg = "0"` for the acquired MII security files. Series is retained as evidence but is not used as a guessed substitute for instrument type.
 
 This resolves the earlier ambiguity observed in the local profile (`0`, `2`, `4`). A read-only dry-run parser has been added at `scripts/p8/p8-b2-dry-run-nse-equities.mjs`. It filters only official instrument type 0 rows, uses ISIN as the primary stable identity, records symbol/series/name/instrument-ID changes without overwriting them, reports missing/duplicate ISINs, fingerprints every monthly universe, and produces a global identity fingerprint. It makes no database writes and no provider calls.
+
+
+## P8-B2 NSE equity dry-run result — 30 September 2026
+
+The owner-run dry parser completed against all 32 acquired NSE files.
+
+```text
+files_checked = 32
+total_equity_rows = 597092
+global_unique_isins = 5211
+rows_missing_isin = 0
+duplicate_isin_rows = 466208
+changed_identity_isins = 4398
+```
+
+The zero missing-ISIN count is a strong identity-quality result, but the very large duplicate-row count proves that a single ISIN can have multiple contemporaneous eligible security-master rows (for example different series/instrument IDs). Therefore P8-B2 must not collapse rows arbitrarily or choose one series by assumption.
+
+The next local read-only diagnostic is `scripts/p8/p8-b2-profile-duplicate-identities.mjs`. It measures whether same-month duplicate ISIN groups differ by symbol, series, security name and instrument ID, and captures bounded examples. This will determine whether monthly universe membership can be safely deduplicated at ISIN level while retaining all line-level evidence, or whether an additional evidence-bundle schema is required.

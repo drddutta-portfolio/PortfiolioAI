@@ -35,7 +35,7 @@
     "evidence_source": "owner local terminal output from authorized runner",
     "generated_at": "2026-09-30T08:44:27.720Z"
   },
-  "next_action": "Run scripts/p8/p8-b2-dry-run-nse-equities.mjs locally and review missing/duplicate identities plus month fingerprints before any hosted materialization.",
+  "next_action": "Run scripts/p8/p8-b2-profile-duplicate-identities.mjs locally before choosing canonical monthly membership evidence. Do not arbitrarily select EQ/BE/BL/etc. or one instrument row.",
   "schema_inspection": {
     "files_checked": 32,
     "all_hashes_pass": true,
@@ -104,5 +104,14 @@
     },
     "series_policy": "Evidence only; not used to infer instrument type.",
     "identity_policy": "ISIN primary; preserve symbol/series/name/instrument-ID history."
+  },
+  "equity_dry_run": {
+    "files_checked": 32,
+    "total_equity_rows": 597092,
+    "global_unique_isins": 5211,
+    "rows_missing_isin": 0,
+    "duplicate_isin_rows": 466208,
+    "changed_identity_isins": 4398,
+    "result": "PASS_IDENTITY_COVERAGE_DUPLICATE_STRUCTURE_REQUIRES_DIAGNOSTIC"
   }
 }
