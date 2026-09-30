@@ -3248,3 +3248,43 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 hosted Development application verification — 1 October 2026
+
+Owner approval received for hosted PortfolioAI Dev application of the exact locally validated P8-B2 V3 historical-identity/source-archive migration.
+
+Applied to **PortfolioAI Dev only**:
+
+- hosted project: `lrgpjimipfkyoqbpsqzz`;
+- hosted migration: `20260930192959_create_p8_b2_historical_identity_registry_v3`;
+- exact repository migration source: `supabase/migrations/20261001001500_create_p8_b2_historical_identity_registry_v3.sql`;
+- hosted transactional contract test: PASS / rolled back;
+- seven V3 tables: PRESENT;
+- three V3 canonical read views: PRESENT / `security_invoker=true`;
+- four V3 privileged append/select functions: PRESENT;
+- RLS: ENABLED on all seven V3 tables;
+- anonymous table/view access: DENIED;
+- authenticated table access: SELECT only under owner-scoped RLS; INSERT/UPDATE/DELETE denied;
+- authenticated privileged-function execution: DENIED;
+- service-role privileged-function execution: GRANTED;
+- all seven V3 tables after verification: zero rows;
+- legacy B2 v1/v2 evidence/run/member/selection tables: zero rows;
+- preservation counts: 284 securities / 282 security listings / 496 transactions.
+
+Supabase security advisors report authenticated-GraphQL visibility warnings for the new authenticated-readable tables/views. Those warnings are consistent with the intended owner-scoped authenticated-read contract and do not indicate anon exposure; direct checks confirm anon access is denied and RLS is enabled.
+
+Performance advisors report informational unindexed-foreign-key notices on several new V3 composite relationships plus an unused-index notice while the tables are empty. These are recorded as non-blocking for this schema-correctness gate; no additional migration is authorized by this checkpoint.
+
+No historical-universe materialization, provider call, P8-B3, P8-C, Production or `main` change occurred.
+
+Current governance:
+
+```text
+P8-B2 V3 local migration package = COMPLETE / PASS
+P8-B2 V3 hosted application = COMPLETE / VERIFIED / PASS
+P8-B2 historical universe materialization = NOT STARTED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
