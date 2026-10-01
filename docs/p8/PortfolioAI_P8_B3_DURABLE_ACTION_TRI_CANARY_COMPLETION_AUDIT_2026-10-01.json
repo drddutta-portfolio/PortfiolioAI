@@ -1,0 +1,103 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "DURABLE_ACTION_TRI_CANARY_COMPLETION",
+  "date": "2026-10-01",
+  "environment": "PortfolioAI Dev",
+  "result": "COMPLETE_PASS",
+  "campaign_id": "P8_B3_ACTION_TRI_CANARY_20261001_V1",
+  "payload": {
+    "version": "P8_B3_DURABLE_ACTION_TRI_CANARY_PAYLOAD_V1",
+    "payload_hash": "f0e7da820631d9c0a6fe010c1a9008ac407119381a9e149356142aef2567b445",
+    "ready_for_durable_insert": true
+  },
+  "durable_rows_after_canary": {
+    "source_archives": 4,
+    "raw_market_price_observations": 2,
+    "corporate_action_observations": 1,
+    "corporate_action_normalizations": 0,
+    "adjustment_factors": 0,
+    "adjusted_market_price_series": 0,
+    "benchmark_total_return_history": 1
+  },
+  "corporate_action": {
+    "historical_isin": "INE263A01024",
+    "historical_identity_id": "abb92c43-9463-5a06-b5db-8b795d78cf62",
+    "link_basis": "EXACT_ISIN",
+    "symbol": "BEL",
+    "company_name": "Bharat Electronics Limited",
+    "series": "EQ",
+    "purpose": "Interim Dividend - Rs 1.95 Per Share",
+    "face_value": "1",
+    "ex_date": "2026-03-06",
+    "record_date": "2026-03-06",
+    "content_sha256": "e0e607b6eea64d40cc986bf693c11df4ea388691a32f9b56e500f7bef163ccc0",
+    "archive_hash": "de41b892845d1e50430d0aeea1d6b850901c4852fdfc1fb9490c3f582b36d102",
+    "observation_hash": "af6c6e3df80527790f0aa2f65028f49debbf0fe5a76c595c93fefdf82d5a64b1"
+  },
+  "benchmark": {
+    "benchmark_version": "P8_NIFTY500_TRI_V1",
+    "benchmark_code": "NIFTY_500",
+    "trade_date": "2024-01-31",
+    "total_return_index": "31011.17",
+    "net_total_return_index": "29432.64",
+    "content_sha256": "c8a90fa5cd34a64c7988dc4ef056d956ee8071a3d9f557e4f2e4b601dd61438e",
+    "archive_hash": "9e9ff135fd5c539af4be74a7e2df7f5864dd4b649984a90a9f2edac68837d910",
+    "row_hash": "d10e475b21fed2768bc9cd196630b9c3bd03f2c2fdfe22da5fe93d6c27ae49e9"
+  },
+  "idempotency": {
+    "replay_action_archive_inserted": 0,
+    "replay_tri_archive_inserted": 0,
+    "replay_action_row_inserted": 0,
+    "replay_tri_row_inserted": 0,
+    "result": "PASS"
+  },
+  "preservation": {
+    "securities": {
+      "rows": 284,
+      "fingerprint_sum": "-71096614391613005803",
+      "unchanged": true
+    },
+    "market_price_history": {
+      "rows": 63929,
+      "fingerprint_sum": "1886650556560648807899",
+      "unchanged": true
+    },
+    "market_benchmark_price_history": {
+      "rows": 2710,
+      "fingerprint_sum": "-161214581717534960018",
+      "unchanged": true
+    },
+    "p8_b2_identities": {
+      "rows": 4524,
+      "fingerprint_sum": "-203447333955115924373",
+      "unchanged": true
+    },
+    "p8_b2_listing_observations": {
+      "rows": 562790,
+      "row_hash_fingerprint_sum": "-3231956900133089664586",
+      "unchanged": true
+    },
+    "p8_b2_runs": 32,
+    "p8_b2_members": 144768,
+    "p8_b2_evidence_links": 562790,
+    "p8_b2_selections": 32
+  },
+  "advisors": {
+    "b3_security_findings": 0,
+    "b3_unindexed_foreign_key_findings": 0,
+    "b3_unused_index_info_findings": 15,
+    "unused_index_disposition": "INFO_ONLY_REASSESS_AFTER_FULL_B3_LOAD_PATHS_MATURE"
+  },
+  "controls": {
+    "full_raw_price_campaign_started": false,
+    "full_corporate_action_campaign_started": false,
+    "full_tri_campaign_started": false,
+    "normalization_started": false,
+    "adjustment_materialization_started": false,
+    "p8_b4_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "SEPARATE_OWNER_APPROVAL_FOR_FULL_B3_SOURCE_ACQUISITION_CAMPAIGN_PLAN_AND_EXECUTION"
+}
