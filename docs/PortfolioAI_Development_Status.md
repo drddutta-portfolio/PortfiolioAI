@@ -3355,3 +3355,52 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 canary evidence lookup failure and remediation — 1 October 2026
+
+The first hosted materialization canary progressed through identity/archive/observation/run/member creation and then stopped fail-closed before any evidence-link or selection insert.
+
+Observed hosted partial state:
+
+```text
+historical identities = 4524
+source archives = 1
+listing observations = 14998
+universe runs = 1
+universe members = 4524
+member evidence links = 0
+run selections = 0
+campaign grant consumed = 0
+```
+
+The first run is for `2024-02-29` with:
+
+```text
+eligible = 3385
+ineligible = 1139
+blocked = 0
+```
+
+Root cause was isolated from hosted Edge/PostgREST logs: the evidence resolver attempted a `.in(...)` lookup with hundreds of 64-character row hashes in one GET URL, causing a PostgREST/gateway HTTP 400 before evidence-link insertion.
+
+Repository/runtime remediation:
+
+- observation row-hash lookup batches reduced from 400 hashes to 50;
+- bounded error detail logging added for subsequent materializer failures;
+- Development Edge Function redeployed as version 2;
+- no data rollback or destructive remediation required because all completed writes are idempotent;
+- campaign grant remains unconsumed and resumable.
+
+Current governance:
+
+```text
+P8-B2 V3 canary = FAIL-CLOSED AT EVIDENCE LOOKUP / REMEDIATED
+P8-B2 V3 partial canary data = PRESERVED / IDEMPOTENT
+P8-B2 V3 materializer = DEVELOPMENT VERSION 2 / ACTIVE
+P8-B2 V3 canary rerun = REQUIRED
+P8-B2 historical universe materialization = AUTHORIZED / ACTIVE
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
