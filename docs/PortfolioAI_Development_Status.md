@@ -4631,3 +4631,26 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 action/TRI canary optional-date parser remediation — 1 October 2026
+
+The first local action/TRI payload extraction stopped before any database write because the official NSE corporate-action response contains placeholder values such as `-` in optional date fields (for example book-closure fields).
+
+The extractor was corrected so:
+
+- required dates such as the selected corporate-action ex-date remain strict and fail closed if malformed/missing;
+- optional date fields recognize only explicit official placeholder tokens (`-`, `--`, `NA`, `N/A`, `N.A.`, `NOT AVAILABLE`, `NOT APPLICABLE`, `NULL`) as null;
+- any other non-date text still fails closed;
+- no hosted B3 write occurred.
+
+```text
+P8-B3 durable raw-price canary = COMPLETE / PASS
+P8-B3 durable action+TRI canary = PAYLOAD EXTRACTION RETRY REQUIRED
+P8-B3 action+TRI hosted durable rows = 0
+
+P8-B3 normalization/materialization = NOT STARTED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
