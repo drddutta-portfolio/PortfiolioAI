@@ -2,7 +2,7 @@
 
 Date: 1 October 2026  
 Environment: Development repository only  
-Status: **CANDIDATE IMPLEMENTED / LOCAL VERIFICATION PENDING / OWNER APPROVAL REQUIRED BEFORE USE FOR MATERIALIZATION**
+Status: **OWNER APPROVED / FROZEN / AUTHORITATIVE FOR P8-B3 DERIVED ARITHMETIC**
 
 ## Why this contract exists
 
@@ -185,16 +185,9 @@ Existing corporate-action fixtures are also updated to require the arithmetic po
 
 ## Authorization boundary
 
-This candidate is **not yet owner-approved for financial materialization**.
+This contract is **owner-approved and frozen for P8-B3 financial materialization**.
 
-Until explicit owner approval:
-
-- no adjustment-factor campaign;
-- no adjusted market-price series;
-- no derived security total-return series;
-- no B3 bulk acquisition/materialization that depends on this arithmetic contract.
-
-Raw authoritative evidence acquisition can be designed separately, but no derived arithmetic facts may be persisted under this candidate policy until approval.
+Owner approval was granted on 1 October 2026. This clears the arithmetic-policy blocker only. It does not itself authorize bulk B3 acquisition or durable materialization; those remain separately approval-gated.
 
 ## Local verification result
 
