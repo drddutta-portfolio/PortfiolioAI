@@ -3616,3 +3616,69 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 historical universe materialization closure — 1 October 2026
+
+The owner-approved PortfolioAI Dev historical-universe materialization campaign completed successfully and was independently reverified against the hosted database.
+
+Frozen plan:
+
+```text
+plan hash = ea253903259183d3bf287e51412c6fa0938ea8b06260e48e40c682af2dfdf5b3
+completion hash = 23a19bfbd86a341767370d6753d4eb471982313b6a0e37fe36e8a0c818124823
+experiment = P8_EXP_NSE_MONTHLY_6M_V1
+first selected date = 2024-02-29
+last selected date = 2026-09-29
+selected dates = 32 / 32
+```
+
+Final hosted V3 counts:
+
+```text
+historical identities = 4524
+  EXACT_ISIN = 255
+  EXACT_NSE_SYMBOL_CURRENT_NULL_ISIN = 7
+  historical-only / NONE = 4262
+source archives = 32
+listing observations = 562790
+universe runs = 32
+universe members = 144768
+member evidence links = 562790
+run selections = 32
+```
+
+Final decision date:
+
+```text
+decision date = 2026-09-29
+eligible = 4385
+ineligible = 139
+blocked = 0
+run hash = 2ddce0a378e758a84501f4ef537a37822d3d4479264f7c3ffa27e89824fcbb21
+```
+
+Independent integrity verification:
+
+- all 32 runs have exactly 4,524 members;
+- all 32 run-level eligible/ineligible counts match their member dispositions;
+- all 32 runs have exactly one selection;
+- every eligible member on every run has ELIGIBILITY_SUPPORT evidence;
+- all 32 source archives have source publication time left NULL rather than invented;
+- all 32 approved conservative availability upper bounds precede their decision instants;
+- 4,524 identities are unique by historical ISIN and all satisfy the frozen common-equity identity rule;
+- the 284-row current security registry remains exactly unchanged versus its frozen snapshot: 0 changed / 0 missing / 0 added;
+- legacy B2 v1/v2 tables remain empty and were not repurposed;
+- the one-campaign grant is consumed and cannot be reused;
+- Production and `main` remain unchanged.
+
+Gate B2 is therefore **COMPLETE / PASS / CLOSED**.
+
+```text
+P8 = ACTIVE
+P8-B2 = COMPLETE / PASS / CLOSED
+P8-B3 = NOT STARTED / NOT AUTHORIZED
+P8-B4+ = NOT STARTED / NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
