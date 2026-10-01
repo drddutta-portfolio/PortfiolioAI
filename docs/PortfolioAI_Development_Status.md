@@ -3772,3 +3772,51 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 local foundation validation closure — 1 October 2026
+
+The B3 local foundation package has passed the complete local validation gate.
+
+Verified locally:
+
+```text
+supabase db reset = PASS
+B3 migration replay = PASS
+SQL contract test = PASS
+  BEGIN
+  DO
+  DO
+  ROLLBACK
+
+deterministic adjustment tests = 7 / 7 PASS
+
+dry-run acquisition planner = PASS
+candidate weekdays = 783
+legacy format candidates = 200
+UDiFF format candidates = 583
+proven trading dates = 0
+resolved download URLs = 0
+acquisition_ready = false
+```
+
+The deliberate `acquisition_ready = false` state is the expected fail-closed result: no weekday, trading date, archive URL, corporate action or benchmark export has been guessed.
+
+Current state:
+
+```text
+P8-B2 = COMPLETE / PASS / CLOSED
+P8-B3 = ACTIVE
+
+P8-B3 local schema package = COMPLETE / PASS
+P8-B3 SQL contract = COMPLETE / PASS
+P8-B3 deterministic adjustment tests = COMPLETE / PASS
+P8-B3 dry-run manifest = COMPLETE / PASS
+
+P8-B3 official-source retrieval canary = NOT STARTED / AWAITING OWNER APPROVAL
+P8-B3 hosted migration = NOT AUTHORIZED / NOT APPLIED
+P8-B3 bulk acquisition = NOT AUTHORIZED / NOT STARTED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
