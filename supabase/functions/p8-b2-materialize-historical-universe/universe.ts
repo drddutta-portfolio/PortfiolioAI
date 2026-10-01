@@ -187,7 +187,10 @@ export async function evidenceBatch(
 
   const rowHashes = [...new Set(rows.map((row) => clean(row.row_hash)))]
   const observationMap = new Map<string, Json>()
-  for (const batch of chunks(rowHashes, 400)) {
+  // SHA-256 values are 64 characters each. Keep this lookup intentionally small
+  // because PostgREST encodes .in(...) filters into the request URL; large batches can
+  // exceed gateway request-line limits even though the evidence payload itself is valid.
+  for (const batch of chunks(rowHashes, 50)) {
     const result = await admin.from("p8_historical_listing_observations_v3")
       .select("id,row_hash,historical_identity_id")
       .eq("portfolio_id", PORTFOLIO_ID).eq("experiment_id", EXPERIMENT_ID)
