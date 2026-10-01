@@ -195,3 +195,13 @@ Until explicit owner approval:
 - no B3 bulk acquisition/materialization that depends on this arithmetic contract.
 
 Raw authoritative evidence acquisition can be designed separately, but no derived arithmetic facts may be persisted under this candidate policy until approval.
+
+## Local verification result
+
+The candidate passed its complete local verification gate.
+
+```text
+P8_B3_ARITHMETIC_CONTRACT_CANDIDATE_VERIFICATION_PASS
+```
+
+The numerical policy is therefore technically validated and reproducible. It remains pending explicit owner approval before any adjustment factor, adjusted price, derived return, or derived security total-return series may be materialized.
