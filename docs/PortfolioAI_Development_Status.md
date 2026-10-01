@@ -4013,3 +4013,50 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 pre-hosted verification closure — 1 October 2026
+
+The corrected local verification tail completed successfully after the first runner had already passed steps 1-7.
+
+Final confirmation:
+
+```text
+local migration ledger includes:
+20261001123000|create_p8_b3_market_history_foundation
+
+8/10 local DB lint + migration ledger + generated types = PASS
+9/10 post-replay schema diff = PASS / EMPTY
+10/10 repository hygiene = PASS
+
+P8_B3_PREHOSTED_VERIFICATION_PASS
+```
+
+Therefore the full B3 pre-hosted package is now verified:
+
+- clean local reset = PASS;
+- migration replay = PASS;
+- SQL contract = PASS;
+- deterministic financial fixtures = 7 / 7 PASS;
+- TypeScript = PASS;
+- scoped ESLint = PASS;
+- architecture check = PASS;
+- production build = PASS;
+- local DB lint = PASS;
+- local migration ledger = PASS;
+- generated local types include B3 schema objects;
+- post-replay schema diff = EMPTY;
+- repository hygiene / credential-pattern scan = PASS;
+- official-source canary = 4 / 4 PROVEN.
+
+```text
+P8-B3 local foundation = COMPLETE / PASS
+P8-B3 official-source canary = COMPLETE / PASS
+P8-B3 pre-hosted verification = COMPLETE / PASS
+
+P8-B3 hosted migration = READY FOR SEPARATE OWNER APPROVAL / NOT APPLIED
+P8-B3 bulk acquisition = NOT AUTHORIZED / NOT STARTED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
