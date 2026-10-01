@@ -40,13 +40,22 @@ npm run build 2>&1 | tee "$OUT/build.log"
 
 echo
 echo "8/10 local DB lint, migration list and generated types"
-supabase db lint --local --level warning 2>&1 | tee "$OUT/supabase-db-lint.log"
-supabase migration list 2>&1 | tee "$OUT/supabase-migration-list.log"
-supabase gen types typescript --local > "$OUT/database.types.ts"
+supabase db lint --level warning 2>&1 | tee "$OUT/supabase-db-lint.log"
+
+# The current Supabase CLI "migration list" command always requires a linked
+# remote project. This verification worktree is intentionally not linked.
+# Read the local migration ledger directly instead.
+psql \
+  "postgresql://postgres:postgres@127.0.0.1:54322/postgres" \
+  -v ON_ERROR_STOP=1 \
+  -Atc "select version || '|' || coalesce(name,'') from supabase_migrations.schema_migrations order by version" \
+  2>&1 | tee "$OUT/local-migration-ledger.log"
+
+supabase gen types --lang typescript --local > "$OUT/database.types.ts"
 
 echo
 echo "9/10 post-replay schema diff"
-supabase db diff --local --schema public > "$OUT/local-schema-diff.sql" 2> "$OUT/local-schema-diff.stderr"
+supabase db diff --schema public > "$OUT/local-schema-diff.sql" 2> "$OUT/local-schema-diff.stderr"
 if [ -s "$OUT/local-schema-diff.sql" ]; then
   echo "ERROR: local schema diff is not empty after reset." >&2
   cat "$OUT/local-schema-diff.sql" >&2
