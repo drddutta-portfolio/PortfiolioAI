@@ -1,0 +1,45 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "DURABLE_RAW_PRICE_CANARY_CAMPAIGN",
+  "date": "2026-10-01",
+  "result": "OWNER_APPROVED_EXTRACTOR_CREATED_PAYLOAD_PENDING",
+  "campaign_id": "P8_B3_RAW_PRICE_CANARY_20261001_V1",
+  "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+  "target_isin": "INE002A01018",
+  "sources": [
+    {
+      "source_kind": "NSE_CM_BHAVCOPY_LEGACY",
+      "trade_date": "2024-03-14",
+      "source_url": "https://nsearchives.nseindia.com/content/historical/EQUITIES/2024/MAR/cm14MAR2024bhav.csv.zip"
+    },
+    {
+      "source_kind": "NSE_CM_BHAVCOPY_UDIFF",
+      "trade_date": "2024-08-01",
+      "source_url": "https://nsearchives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_20240801_F_0000.csv.zip"
+    }
+  ],
+  "expected_durable_rows": {
+    "source_archives": 2,
+    "raw_market_price_observations": 2,
+    "corporate_action_observations": 0,
+    "corporate_action_normalizations": 0,
+    "adjustment_factors": 0,
+    "adjusted_market_price_series": 0,
+    "benchmark_total_return_history": 0
+  },
+  "extractor": "scripts/p8/p8-b3-build-durable-raw-price-canary.mjs",
+  "payload": "tmp/p8-b3/durable-canary/P8_B3_RAW_PRICE_CANARY_PAYLOAD.json",
+  "controls": {
+    "third_party_source_allowed": false,
+    "guessed_trading_date_allowed": false,
+    "guessed_price_allowed": false,
+    "database_writes_by_extractor": 0,
+    "durable_insert_started": false,
+    "bulk_acquisition_started": false,
+    "p8_b4_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "PAYLOAD_VERIFICATION_THEN_EXACT_TWO_ARCHIVE_TWO_OBSERVATION_DURABLE_INSERT"
+}
