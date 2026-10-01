@@ -57,3 +57,29 @@ After independent hosted verification, resume with `--resume`. The sender is ide
 ## Stop boundary
 
 P8-B3 and P8-C are not authorized. Materialization success does not authorize replay, simulation or results work.
+
+## Canary verification result
+
+The remediated canary for decision date `2024-02-29` completed and passed independent hosted verification.
+
+```text
+identities = 4524
+source archives = 1
+observations = 14998
+runs = 1
+members = 4524
+evidence links = 14998
+selections = 1
+
+eligible = 3385
+ineligible = 1139
+blocked = 0
+ELIGIBILITY_SUPPORT links = 3385
+SYMBOL_SERIES_VARIANT links = 11613
+```
+
+Identity linkage remains exactly `255 / 7 / 4262`.
+
+The frozen live-security snapshot was compared to current PortfolioAI Dev after the canary and returned `0 changed / 0 missing / 0 added`.
+
+The campaign grant remains unconsumed. The full materialization sender may now resume; its idempotent keys safely replay the canary month before continuing through the remaining 31 dates.
