@@ -386,12 +386,12 @@ begin
 
     if has_table_privilege('anon', format('public.%I',v_table), 'select')
        or has_table_privilege('anon', format('public.%I',v_table), 'insert')
+       or has_table_privilege('authenticated', format('public.%I',v_table), 'select')
        or has_table_privilege('authenticated', format('public.%I',v_table), 'insert')
        or has_table_privilege('authenticated', format('public.%I',v_table), 'update')
        or has_table_privilege('authenticated', format('public.%I',v_table), 'delete')
-       or not has_table_privilege('authenticated', format('public.%I',v_table), 'select')
        or not has_table_privilege('service_role', format('public.%I',v_table), 'select') then
-      raise exception 'P8-B3 privilege contract failed on %', v_table;
+      raise exception 'P8-B3 hardened privilege contract failed on %', v_table;
     end if;
   end loop;
 
