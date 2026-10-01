@@ -3724,3 +3724,51 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 no-guesswork local foundation package — 1 October 2026
+
+Owner authorized the bounded B3 local schema/test + dry-run manifest package with an explicit real-money/no-guesswork requirement.
+
+Created:
+
+- `supabase/migrations/20261001123000_create_p8_b3_market_history_foundation.sql`
+- `supabase/tests/p8_b3_market_history_foundation.sql`
+- `src/features/backtesting/p8CorporateActionAdjustment.ts`
+- `src/features/backtesting/p8CorporateActionAdjustment.test.ts`
+- `scripts/p8/p8-b3-plan-market-history.mjs`
+- `docs/p8/PortfolioAI_P8_B3_LOCAL_FOUNDATION_PACKAGE_2026-10-01.md`
+- `docs/p8/PortfolioAI_P8_B3_LOCAL_FOUNDATION_PACKAGE_AUDIT_2026-10-01.json`
+
+The package is additive and does not mutate live price/history/benchmark/security tables.
+
+Financial-data doctrine:
+
+- no inferred corporate actions from price discontinuities;
+- no missing-data interpolation;
+- no guessed download URLs;
+- no price-index substitution for NIFTY 500 TRI;
+- ambiguous rights/merger/demerger terms remain BLOCKED;
+- raw evidence and derived adjustments are separate, immutable, versioned layers.
+
+The dry-run planner intentionally performs zero network requests and leaves all exact download URLs unresolved until an official-source canary proves them.
+
+```text
+P8-B2 = COMPLETE / PASS / CLOSED
+P8-B3 = ACTIVE
+P8-B3 read-only baseline = COMPLETE
+P8-B3 authority design = COMPLETE
+P8-B3 local schema/test package = CREATED
+P8-B3 dry-run planner = CREATED
+
+P8-B3 clean local replay = PENDING
+P8-B3 SQL contract test = PENDING
+P8-B3 deterministic adjustment tests = PENDING
+P8-B3 dry-run manifest execution = PENDING
+
+P8-B3 hosted migration = NOT AUTHORIZED / NOT APPLIED
+P8-B3 acquisition = NOT STARTED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
