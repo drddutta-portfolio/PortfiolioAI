@@ -3313,3 +3313,45 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 hosted materialization execution package — 1 October 2026
+
+The owner-approved P8-B2 materialization stage has passed deterministic preflight with plan hash:
+
+`ea253903259183d3bf287e51412c6fa0938ea8b06260e48e40c682af2dfdf5b3`
+
+Execution package created:
+
+- local sender: `scripts/p8/p8-b2-materialize-historical-universe-v3.mjs`;
+- Development-only Edge Function: `p8-b2-materialize-historical-universe`;
+- function runtime hard-locks project ref `lrgpjimipfkyoqbpsqzz` and refuses Production;
+- writes require the frozen plan hash and a time-limited campaign grant;
+- identity/month/observation/member/evidence writes are idempotent and resumable;
+- provider calls remain zero.
+
+Hosted baseline immediately before canary:
+
+```text
+historical identities = 0
+source archives = 0
+listing observations = 0
+universe runs = 0
+universe members = 0
+member evidence links = 0
+run selections = 0
+```
+
+A 24-hour one-campaign grant has been issued out-of-repository. The capability token is not committed to GitHub.
+
+Next execution gate: one-month canary for the first proven decision date, followed by hosted count/integrity verification. On pass, resume the remaining 31 months under the same approved P8-B2 materialization stage.
+
+```text
+P8-B2 V3 materialization preflight = COMPLETE / PASS
+P8-B2 V3 materializer = DEPLOYED / DEVELOPMENT ONLY
+P8-B2 V3 canary = READY / NOT YET EXECUTED
+P8-B2 historical universe materialization = AUTHORIZED / ACTIVE
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
