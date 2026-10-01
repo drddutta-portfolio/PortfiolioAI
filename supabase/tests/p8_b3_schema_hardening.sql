@@ -84,7 +84,13 @@ begin
         and idx.indisready
         and idx.indpred is null
         and idx.indexprs is null
-        and (idx.indkey::smallint[])[1:cardinality(v_fk.conkey)] = v_fk.conkey
+        and (
+          select array_agg(idx.indkey[position]::smallint order by position)
+          from generate_series(
+            0,
+            cardinality(v_fk.conkey) - 1
+          ) as positions(position)
+        ) = v_fk.conkey
     ) then
       raise exception 'P8-B3 hardening: FK % has no exact leading covering index', v_fk.conname;
     end if;
