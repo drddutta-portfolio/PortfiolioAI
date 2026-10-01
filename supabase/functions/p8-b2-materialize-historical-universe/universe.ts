@@ -276,14 +276,29 @@ export async function selectMonth(admin: Admin, month: Json) {
     throw new Error("P8_B2_SELECT_ARCHIVE")
   }
 
-  const observations = await paged<Json>(async (from, to) => {
-    const result = await admin.from("p8_historical_listing_observations_v3")
-      .select("row_hash,raw_metadata")
-      .eq("portfolio_id", PORTFOLIO_ID).eq("experiment_id", EXPERIMENT_ID)
-      .eq("source_archive_id", archive.data.id)
-      .order("id").range(from, to)
+  const members = await paged<Json>(async (from, to) => {
+    const result = await admin.from("p8_historical_universe_members_v3")
+      .select("id,historical_identity_id,membership_state")
+      .eq("universe_run_id", run.data.id).order("id").range(from, to)
     return { data: (result.data ?? []) as Json[], error: result.error }
   })
+
+  // Fingerprint observations through the archive + historical_identity composite index.
+  // Avoid ORDER BY id across the growing observation table; that path eventually forces
+  // an expensive sort and hits PostgREST statement_timeout.
+  const observations: Json[] = []
+  const historicalIdentityIds = members.map((row) => String(row.historical_identity_id))
+
+  for (const identityBatch of chunks(historicalIdentityIds, 75)) {
+    const result = await admin.from("p8_historical_listing_observations_v3")
+      .select("row_hash,raw_metadata,historical_identity_id")
+      .eq("source_archive_id", archive.data.id)
+      .in("historical_identity_id", identityBatch)
+
+    if (result.error) throw result.error
+    observations.push(...((result.data ?? []) as Json[]))
+  }
+
   if (observations.length !== expectedObservationRows) {
     throw new Error("P8_B2_SELECT_OBSERVATION_COUNT:" + observations.length)
   }
@@ -295,13 +310,6 @@ export async function selectMonth(admin: Admin, month: Json) {
   )
   const fingerprint = await sha256(ordered.map((row) => String(row.row_hash)))
   if (fingerprint !== expectedFingerprint) throw new Error("P8_B2_SELECT_ROW_HASH_FINGERPRINT")
-
-  const members = await paged<Json>(async (from, to) => {
-    const result = await admin.from("p8_historical_universe_members_v3")
-      .select("id,membership_state")
-      .eq("universe_run_id", run.data.id).order("id").range(from, to)
-    return { data: (result.data ?? []) as Json[], error: result.error }
-  })
   if (members.length !== 4524) throw new Error("P8_B2_SELECT_MEMBER_COUNT:" + members.length)
   const eligibleMembers = members.filter((row) => row.membership_state === "ELIGIBLE")
   const ineligibleMembers = members.filter((row) => row.membership_state === "INELIGIBLE")
