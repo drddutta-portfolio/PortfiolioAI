@@ -3860,3 +3860,46 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 official-source canary partial pass and TRI route remediation — 1 October 2026
+
+The first local official-source canary executed under the fail-closed/no-guesswork contract.
+
+Result:
+
+```text
+legacy NSE bhavcopy = PROVEN
+UDiFF NSE bhavcopy = PROVEN
+NSE corporate actions = PROVEN
+NIFTY 500 TRI = BLOCKED
+overall = CANARY_BLOCKED
+```
+
+Canary result hash:
+
+`9d0c4c660442da2d598ddb3264baf4aa2d67d71879cae629cdf4fd3c6a8797c8`
+
+The benchmark blocker was not bypassed. The failure was isolated to the stale NSE Indices backend route used by the initial canary:
+
+`/Backpage.aspx/getTotalReturnIndexString`
+
+Current 2026 NSE data tooling reflects the live route:
+
+`/BackPage/getTotalReturnIndexString`
+
+and a current direct-array JSON response contract. The canary was updated accordingly while preserving strict rejection of HTML/challenge responses.
+
+No B3 database write, hosted migration, bulk acquisition, paid-provider call, Production change or main change occurred.
+
+```text
+P8-B3 local foundation = COMPLETE / PASS
+P8-B3 official-source canary = PARTIAL PASS / 3 OF 4 PROVEN
+P8-B3 TRI route remediation = CREATED / RERUN REQUIRED
+
+P8-B3 hosted migration = NOT AUTHORIZED / NOT APPLIED
+P8-B3 bulk acquisition = NOT AUTHORIZED / NOT STARTED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
