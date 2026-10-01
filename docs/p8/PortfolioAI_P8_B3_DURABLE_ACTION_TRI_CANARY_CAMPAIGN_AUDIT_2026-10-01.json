@@ -1,0 +1,47 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "DURABLE_ACTION_TRI_CANARY_CAMPAIGN",
+  "date": "2026-10-01",
+  "result": "OWNER_APPROVED_EXTRACTOR_CREATED_PAYLOAD_PENDING",
+  "campaign_id": "P8_B3_ACTION_TRI_CANARY_20261001_V1",
+  "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+  "corporate_action": {
+    "symbol": "BEL",
+    "historical_isin": "INE263A01024",
+    "historical_identity_id": "abb92c43-9463-5a06-b5db-8b795d78cf62",
+    "b2_link_basis": "EXACT_ISIN",
+    "expected_purpose": "Interim Dividend - Rs 1.95 Per Share",
+    "expected_ex_date": "2026-03-06",
+    "expected_record_date": "2026-03-06",
+    "source": "OFFICIAL_NSE_CORPORATE_ACTIONS"
+  },
+  "benchmark": {
+    "benchmark_version": "P8_NIFTY500_TRI_V1",
+    "benchmark_code": "NIFTY_500",
+    "selected_trade_date": "2024-01-31",
+    "source": "OFFICIAL_NSE_INDICES_TOTAL_RETURN_INDEX"
+  },
+  "expected_durable_rows": {
+    "source_archives": 2,
+    "corporate_action_observations": 1,
+    "benchmark_total_return_history": 1,
+    "corporate_action_normalizations": 0,
+    "adjustment_factors": 0,
+    "adjusted_market_price_series": 0
+  },
+  "extractor": "scripts/p8/p8-b3-build-durable-action-tri-canary.mjs",
+  "payload": "tmp/p8-b3/durable-canary/P8_B3_ACTION_TRI_CANARY_PAYLOAD.json",
+  "controls": {
+    "database_writes_by_extractor": 0,
+    "paid_provider_calls": 0,
+    "third_party_source_allowed": false,
+    "normalization_started": false,
+    "adjustment_materialization_started": false,
+    "full_campaign_started": false,
+    "p8_b4_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "PAYLOAD_VERIFICATION_THEN_EXACT_TWO_ARCHIVE_ONE_ACTION_ONE_TRI_DURABLE_INSERT"
+}
