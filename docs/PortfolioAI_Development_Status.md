@@ -3682,3 +3682,45 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 re-entry and authority baseline — 1 October 2026
+
+Owner approved entry into P8-B3 after B2 closure.
+
+Read-only hosted inventory:
+
+```text
+market_price_history rows = 63929
+covered securities = 240
+history = 2025-08-07 through 2026-09-28
+adjusted_close rows = 2
+
+benchmark rows = 2710
+benchmark series = 10
+history = 2025-08-25 through 2026-09-28
+
+dedicated corporate-action history = absent
+```
+
+This is insufficient for the frozen 2023-10-01 through 2026-09-30 experiment.
+
+Proposed B3 authority:
+
+- raw equity OHLCV: official NSE cash-market bhavcopy archives;
+- corporate actions: official NSE corporate-action evidence, with company evidence only where needed to resolve terms;
+- primary benchmark: official NSE Indices NIFTY 500 Total Return Index history;
+- raw source evidence immutable; adjusted series derived/versioned deterministically;
+- ambiguous actions fail closed.
+
+No acquisition, migration or hosted B3 write was performed at this checkpoint.
+
+```text
+P8-B2 = COMPLETE / PASS / CLOSED
+P8-B3 = ACTIVE / READ-ONLY BASELINE COMPLETE
+P8-B3 acquisition = NOT STARTED
+P8-B3 schema package = NOT CREATED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
