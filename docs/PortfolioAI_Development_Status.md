@@ -4822,3 +4822,47 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 hosted action-batch diagnostic hardening — 1 October 2026
+
+The resumed full-source campaign reached the November-2023 corporate-action slice. The official November source archive was stored successfully, but the hosted `action_batch` operation returned HTTP 500 before inserting any November action rows.
+
+Hosted state at the stop:
+
+```text
+full-campaign source archives = 38
+  TRI archives = 36
+  corporate-action archives = 2
+full-campaign benchmark rows = 744
+full-campaign corporate-action rows = 49
+full-campaign raw-price rows = 0
+
+normalizations = 0
+adjustment factors = 0
+adjusted series = 0
+```
+
+The Edge Function previously collapsed structured Supabase/PostgREST error objects into the generic code `P8_B3_SOURCE_ACQUISITION_FAILED`. That diagnostic behavior has been corrected without changing ingestion semantics.
+
+Development Edge Function:
+
+```text
+p8-b3-acquire-market-history
+version = 2
+status = ACTIVE
+```
+
+Version 2 returns safe structured database diagnostics (code/message/details/hint) on failure while preserving the same campaign ID, plan hash, grant, database-write rules and fail-closed behavior.
+
+```text
+P8-B3 full source acquisition = ACTIVE / RESUMABLE
+Stage 1 TRI calendar = COMPLETE / PASS
+Stage 2 corporate actions = 1 month fully committed; November archive stored, rows pending
+Stage 3 raw prices = NOT STARTED
+
+P8-B3 normalization/materialization = NOT AUTHORIZED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
