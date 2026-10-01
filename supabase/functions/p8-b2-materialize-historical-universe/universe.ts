@@ -310,22 +310,34 @@ export async function selectMonth(admin: Admin, month: Json) {
     ineligibleMembers.length !== expectedIneligible
   ) throw new Error("P8_B2_SELECT_MEMBER_STATE_COUNTS")
 
-  const evidence = await paged<Json>(async (from, to) => {
+  // Resolve evidence through the indexed universe_member_id relationship rather than
+  // scanning the growing evidence table by decision_at. The latter becomes increasingly
+  // expensive as historical months accumulate and can hit PostgREST statement_timeout.
+  let evidenceCount = 0
+  const eligibleSupport = new Set<string>()
+  const memberIds = members.map((row) => String(row.id))
+
+  for (const memberIdBatch of chunks(memberIds, 75)) {
     const result = await admin.from("p8_historical_universe_member_listing_evidence_v3")
       .select("universe_member_id,evidence_role")
-      .eq("portfolio_id", PORTFOLIO_ID).eq("experiment_id", EXPERIMENT_ID)
-      .eq("decision_at", decisionAt).order("id").range(from, to)
-    return { data: (result.data ?? []) as Json[], error: result.error }
-  })
-  if (evidence.length !== expectedObservationRows) {
-    throw new Error("P8_B2_SELECT_EVIDENCE_COUNT:" + evidence.length)
+      .in("universe_member_id", memberIdBatch)
+
+    if (result.error) throw result.error
+
+    const batchEvidence = (result.data ?? []) as Json[]
+    evidenceCount += batchEvidence.length
+
+    for (const row of batchEvidence) {
+      if (row.evidence_role === "ELIGIBILITY_SUPPORT") {
+        eligibleSupport.add(String(row.universe_member_id))
+      }
+    }
   }
 
-  const eligibleSupport = new Set(
-    evidence
-      .filter((row) => row.evidence_role === "ELIGIBILITY_SUPPORT")
-      .map((row) => String(row.universe_member_id)),
-  )
+  if (evidenceCount !== expectedObservationRows) {
+    throw new Error("P8_B2_SELECT_EVIDENCE_COUNT:" + evidenceCount)
+  }
+
   if (eligibleMembers.some((row) => !eligibleSupport.has(String(row.id)))) {
     throw new Error("P8_B2_SELECT_ELIGIBLE_SUPPORT_MISSING")
   }
