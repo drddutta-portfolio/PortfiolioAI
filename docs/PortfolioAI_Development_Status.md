@@ -4214,3 +4214,35 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 hardening test false-negative remediation — 1 October 2026
+
+The first local hardening verification reached step 3/9 and failed in the FK-covering-index assertion for `p8_b3_adjusted_series_identity_fk`.
+
+This was confirmed to be a **test-catalog indexing bug**, not a migration/index failure:
+
+- PostgreSQL `pg_index.indkey` is an `int2vector`;
+- its array lower bound is 0;
+- the original assertion sliced it as if it were 1-based, skipping the first FK/index key;
+- the hardening migration itself already contains the intended exact covering index.
+
+The assertion now reconstructs the leading index attnums explicitly from positions `0..N-1` before comparison with `pg_constraint.conkey`.
+
+No migration SQL changed. No hosted hardening was applied.
+
+A resume runner was added so the already-passed clean reset and cumulative foundation contract do not need to be repeated:
+
+`scripts/p8/run-p8-b3-hardening-local-verification-resume.sh`
+
+```text
+P8-B3 hardening local step 1 reset = PASS
+P8-B3 hardening local step 2 foundation contract = PASS
+P8-B3 hardening local step 3 = TEST FALSE NEGATIVE / FIXED
+P8-B3 hardening local steps 3-9 = RERUN REQUIRED
+
+P8-B3 hosted hardening migration = NOT AUTHORIZED / NOT APPLIED
+P8-B3 acquisition = NOT STARTED
+P8-B3 hosted data rows = 0
+Production = UNCHANGED
+main = UNCHANGED
+```
