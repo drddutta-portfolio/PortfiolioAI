@@ -1,0 +1,40 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "FULL_SOURCE_ACQUISITION_PLAN",
+  "date": "2026-10-01",
+  "result": "OWNER_APPROVED_IMPLEMENTATION_ACTIVE",
+  "version": "P8_B3_FULL_SOURCE_ACQUISITION_PLAN_V1",
+  "campaign_id": "P8_B3_FULL_SOURCE_ACQUISITION_20261001_V1",
+  "plan_hash": "9367d9a55b5c7a6db176ef3e2b80da96cb97b3ac114f0ef884f124352a54919a",
+  "environment": "PortfolioAI Dev",
+  "portfolio_id": "6193a4aa-3235-4057-bddc-209fcf443fc2",
+  "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+  "frozen_window": [
+    "2023-10-01",
+    "2026-09-30"
+  ],
+  "authorities": {
+    "trading_calendar": "OFFICIAL_NSE_INDICES_NIFTY500_TRI_ROWS",
+    "raw_price": "OFFICIAL_NSE_CM_BHAVCOPY_LEGACY_AND_UDIFF",
+    "corporate_actions": "OFFICIAL_NSE_CORPORATE_ACTIONS",
+    "benchmark": "OFFICIAL_NSE_INDICES_TOTAL_RETURN_INDEX"
+  },
+  "chunking": {
+    "benchmark_months": 36,
+    "corporate_action_months": 36,
+    "raw_price": "ONE_OFFICIAL_ARCHIVE_PER_PROVEN_BENCHMARK_TRADING_DATE"
+  },
+  "identity_rules": {
+    "raw_price": "EXACT_HISTORICAL_ISIN_ONLY",
+    "corporate_actions": "B2_SYMBOL_SERIES_DATE_RANGE_FAIL_CLOSED"
+  },
+  "controls": {
+    "normalizations_authorized": false,
+    "adjustment_factors_authorized": false,
+    "adjusted_series_authorized": false,
+    "paid_provider_calls": 0,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "DEPLOY_AND_VALIDATE_DEVELOPMENT_ACQUISITION_FUNCTION_THEN_EXECUTE_RESUMABLE_LOCAL_CAMPAIGN"
+}
