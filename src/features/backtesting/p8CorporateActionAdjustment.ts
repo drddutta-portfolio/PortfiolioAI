@@ -1,10 +1,20 @@
-import Decimal from "decimal.js"
+import type Decimal from "decimal.js"
+import {
+  P8_B3_ARITHMETIC_POLICY_VERSION,
+  P8Decimal,
+  canonicalDerivedDecimal,
+  canonicalSourceDecimal,
+  p8FiniteNonNegative,
+  p8FinitePositive,
+  type P8DecimalValue,
+} from "./p8ArithmeticPolicy"
 
-export const P8_B3_ADJUSTMENT_VERSION = "P8_B3_ADJUSTMENT_V1" as const
+export const P8_B3_ADJUSTMENT_VERSION = "P8_B3_ADJUSTMENT_V2" as const
 
 export type P8AdjustmentReady = {
   state: "READY"
   calculationVersion: typeof P8_B3_ADJUSTMENT_VERSION
+  arithmeticPolicyVersion: typeof P8_B3_ARITHMETIC_POLICY_VERSION
   shareFactor?: string
   priceBackAdjustmentFactor?: string
   cashDistributionPerShare?: string
@@ -16,30 +26,11 @@ export type P8AdjustmentReady = {
 export type P8AdjustmentBlocked = {
   state: "BLOCKED"
   calculationVersion: typeof P8_B3_ADJUSTMENT_VERSION
+  arithmeticPolicyVersion: typeof P8_B3_ARITHMETIC_POLICY_VERSION
   blockerReason: string
 }
 
 export type P8AdjustmentResult = P8AdjustmentReady | P8AdjustmentBlocked
-
-function finitePositive(value: Decimal.Value, name: string): Decimal {
-  const parsed = new Decimal(value)
-  if (!parsed.isFinite() || parsed.lte(0)) {
-    throw new Error(`${name} must be finite and > 0`)
-  }
-  return parsed
-}
-
-function finiteNonNegative(value: Decimal.Value, name: string): Decimal {
-  const parsed = new Decimal(value)
-  if (!parsed.isFinite() || parsed.lt(0)) {
-    throw new Error(`${name} must be finite and >= 0`)
-  }
-  return parsed
-}
-
-function canonicalDecimal(value: Decimal): string {
-  return value.toSignificantDigits(30).toString()
-}
 
 /**
  * Exact split/consolidation adjustment from declared face-value terms only.
@@ -49,17 +40,18 @@ function canonicalDecimal(value: Decimal): string {
  * Historical pre-event shares are multiplied by 10/2 = 5.
  */
 export function calculateSplitFromFaceValues(
-  oldFaceValue: Decimal.Value,
-  newFaceValue: Decimal.Value,
+  oldFaceValue: P8DecimalValue,
+  newFaceValue: P8DecimalValue,
 ): P8AdjustmentReady {
-  const oldValue = finitePositive(oldFaceValue, "oldFaceValue")
-  const newValue = finitePositive(newFaceValue, "newFaceValue")
+  const oldValue = p8FinitePositive(oldFaceValue, "oldFaceValue")
+  const newValue = p8FinitePositive(newFaceValue, "newFaceValue")
 
   return {
     state: "READY",
     calculationVersion: P8_B3_ADJUSTMENT_VERSION,
-    shareFactor: canonicalDecimal(oldValue.div(newValue)),
-    priceBackAdjustmentFactor: canonicalDecimal(newValue.div(oldValue)),
+    arithmeticPolicyVersion: P8_B3_ARITHMETIC_POLICY_VERSION,
+    shareFactor: canonicalDerivedDecimal(oldValue.div(newValue)),
+    priceBackAdjustmentFactor: canonicalDerivedDecimal(newValue.div(oldValue)),
   }
 }
 
@@ -69,18 +61,19 @@ export function calculateSplitFromFaceValues(
  * Example: bonus 1:1 -> shares double, historical pre-event prices halve.
  */
 export function calculateBonusFromRatio(
-  bonusShares: Decimal.Value,
-  heldShares: Decimal.Value,
+  bonusShares: P8DecimalValue,
+  heldShares: P8DecimalValue,
 ): P8AdjustmentReady {
-  const bonus = finitePositive(bonusShares, "bonusShares")
-  const held = finitePositive(heldShares, "heldShares")
-  const postShares = held.plus(bonus)
+  const bonus = p8FinitePositive(bonusShares, "bonusShares")
+  const held = p8FinitePositive(heldShares, "heldShares")
+  const postShares = new P8Decimal(held).plus(bonus)
 
   return {
     state: "READY",
     calculationVersion: P8_B3_ADJUSTMENT_VERSION,
-    shareFactor: canonicalDecimal(postShares.div(held)),
-    priceBackAdjustmentFactor: canonicalDecimal(held.div(postShares)),
+    arithmeticPolicyVersion: P8_B3_ARITHMETIC_POLICY_VERSION,
+    shareFactor: canonicalDerivedDecimal(postShares.div(held)),
+    priceBackAdjustmentFactor: canonicalDerivedDecimal(held.div(postShares)),
   }
 }
 
@@ -92,21 +85,22 @@ export function calculateBonusFromRatio(
  * Daily total return link = (ex-date close + cash distribution per share) / previous close.
  */
 export function calculateCashDividendReturnLink(args: {
-  previousClose: Decimal.Value
-  exDateClose: Decimal.Value
-  cashDistributionPerShare: Decimal.Value
+  previousClose: P8DecimalValue
+  exDateClose: P8DecimalValue
+  cashDistributionPerShare: P8DecimalValue
 }): P8AdjustmentReady {
-  const previousClose = finitePositive(args.previousClose, "previousClose")
-  const exDateClose = finiteNonNegative(args.exDateClose, "exDateClose")
-  const cash = finiteNonNegative(args.cashDistributionPerShare, "cashDistributionPerShare")
+  const previousClose = p8FinitePositive(args.previousClose, "previousClose")
+  const exDateClose = p8FiniteNonNegative(args.exDateClose, "exDateClose")
+  const cash = p8FiniteNonNegative(args.cashDistributionPerShare, "cashDistributionPerShare")
 
   return {
     state: "READY",
     calculationVersion: P8_B3_ADJUSTMENT_VERSION,
-    cashDistributionPerShare: canonicalDecimal(cash),
-    referencePrice: canonicalDecimal(previousClose),
-    priceReturnLinkFactor: canonicalDecimal(exDateClose.div(previousClose)),
-    totalReturnLinkFactor: canonicalDecimal(exDateClose.plus(cash).div(previousClose)),
+    arithmeticPolicyVersion: P8_B3_ARITHMETIC_POLICY_VERSION,
+    cashDistributionPerShare: canonicalSourceDecimal(cash),
+    referencePrice: canonicalSourceDecimal(previousClose),
+    priceReturnLinkFactor: canonicalDerivedDecimal(exDateClose.div(previousClose)),
+    totalReturnLinkFactor: canonicalDerivedDecimal(exDateClose.plus(cash).div(previousClose)),
   }
 }
 
@@ -125,6 +119,7 @@ export function blockUnsupportedCorporateAction(
   return {
     state: "BLOCKED",
     calculationVersion: P8_B3_ADJUSTMENT_VERSION,
+    arithmeticPolicyVersion: P8_B3_ARITHMETIC_POLICY_VERSION,
     blockerReason: `${actionType}: ${cleanReason}`,
   }
 }
