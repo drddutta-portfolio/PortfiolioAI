@@ -4538,3 +4538,46 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 durable raw-price canary closure — 1 October 2026
+
+The first durable B3 acquisition slice completed successfully.
+
+```text
+campaign = P8_B3_RAW_PRICE_CANARY_20261001_V1
+payload hash = a494b79025de3b04f41b771a2374a87721c1cd40abc30685bd37eb62a168ecaa
+
+B3 source archives = 2
+B3 raw price observations = 2
+B3 derived rows = 0
+
+target ISIN = INE002A01018
+B2 identity resolution = EXACT_ISIN / single match
+
+idempotency replay = 0 new archives / 0 new observations
+preservation fingerprints = UNCHANGED
+B3 security advisor findings = 0
+B3 unindexed-FK findings = 0
+```
+
+Durable evidence covers both supported NSE bhavcopy formats:
+
+- 2024-03-14 legacy CM bhavcopy;
+- 2024-08-01 UDiFF CM bhavcopy.
+
+```text
+P8-B3 arithmetic contract = OWNER APPROVED / FROZEN
+P8-B3 durable raw-price canary = COMPLETE / PASS
+
+P8-B3 full raw-price acquisition = NOT STARTED
+P8-B3 corporate-action durable canary = NOT STARTED
+P8-B3 NIFTY 500 TRI durable canary = NOT STARTED
+P8-B3 adjustment materialization = NOT STARTED
+
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Next gate: separate owner approval for the corporate-action and NIFTY 500 TRI durable authority canaries.
