@@ -10,7 +10,8 @@ describe("P8-B3 deterministic corporate-action adjustment", () => {
   it("computes a 10-to-2 face-value split exactly", () => {
     expect(calculateSplitFromFaceValues(10, 2)).toEqual({
       state: "READY",
-      calculationVersion: "P8_B3_ADJUSTMENT_V1",
+      calculationVersion: "P8_B3_ADJUSTMENT_V2",
+      arithmeticPolicyVersion: "P8_B3_ARITHMETIC_V1",
       shareFactor: "5",
       priceBackAdjustmentFactor: "0.2",
     })
@@ -19,7 +20,8 @@ describe("P8-B3 deterministic corporate-action adjustment", () => {
   it("computes a 1:1 bonus exactly", () => {
     expect(calculateBonusFromRatio(1, 1)).toEqual({
       state: "READY",
-      calculationVersion: "P8_B3_ADJUSTMENT_V1",
+      calculationVersion: "P8_B3_ADJUSTMENT_V2",
+      arithmeticPolicyVersion: "P8_B3_ARITHMETIC_V1",
       shareFactor: "2",
       priceBackAdjustmentFactor: "0.5",
     })
@@ -32,7 +34,8 @@ describe("P8-B3 deterministic corporate-action adjustment", () => {
       cashDistributionPerShare: 5,
     })).toEqual({
       state: "READY",
-      calculationVersion: "P8_B3_ADJUSTMENT_V1",
+      calculationVersion: "P8_B3_ADJUSTMENT_V2",
+      arithmeticPolicyVersion: "P8_B3_ARITHMETIC_V1",
       cashDistributionPerShare: "5",
       referencePrice: "100",
       priceReturnLinkFactor: "0.96",
@@ -60,7 +63,8 @@ describe("P8-B3 deterministic corporate-action adjustment", () => {
       "subscription terms require a separately approved deterministic treatment",
     )).toEqual({
       state: "BLOCKED",
-      calculationVersion: "P8_B3_ADJUSTMENT_V1",
+      calculationVersion: "P8_B3_ADJUSTMENT_V2",
+      arithmeticPolicyVersion: "P8_B3_ARITHMETIC_V1",
       blockerReason:
         "RIGHTS: subscription terms require a separately approved deterministic treatment",
     })
