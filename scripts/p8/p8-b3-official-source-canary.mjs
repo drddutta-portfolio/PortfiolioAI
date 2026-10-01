@@ -51,7 +51,7 @@ const TRI = {
   id: "NSE_INDICES_NIFTY500_TRI_JAN_2024",
   pageUrl: "https://www.niftyindices.com/reports/historical-data",
   endpoint:
-    "https://www.niftyindices.com/Backpage.aspx/getTotalReturnIndexString",
+    "https://www.niftyindices.com/BackPage/getTotalReturnIndexString",
   indexName: "NIFTY 500",
   startDate: "01-Jan-2024",
   endDate: "31-Jan-2024",
@@ -482,7 +482,9 @@ async function retrieveTriCanary() {
       Accept: "application/json,text/javascript,*/*;q=0.01",
       "Content-Type": "application/json; charset=UTF-8",
       "X-Requested-With": "XMLHttpRequest",
+      Origin: "https://www.niftyindices.com",
       Referer: TRI.pageUrl,
+      "Accept-Language": "en-US,en;q=0.9",
     },
     body: JSON.stringify({ cinfo }),
   })
@@ -496,20 +498,35 @@ async function retrieveTriCanary() {
   const rawPath = join(OUT, "NSE_INDICES_NIFTY500_TRI_JAN_2024.json")
   writeFileSync(rawPath, rawBytes)
 
-  let envelope
+  const contentType = response.headers.get("content-type") ?? ""
+  const rawText = rawBytes.toString("utf8")
+  assert(
+    /json/i.test(contentType) || /^[\s\[{]/u.test(rawText),
+    "NIFTY 500 TRI endpoint returned non-JSON content: " +
+      contentType + " " + rawText.slice(0, 120),
+  )
+
+  let payload
   try {
-    envelope = JSON.parse(rawBytes.toString("utf8"))
+    payload = JSON.parse(rawText)
   } catch {
-    throw new Error("NIFTY 500 TRI endpoint returned invalid JSON")
+    throw new Error(
+      "NIFTY 500 TRI endpoint returned invalid JSON: " + rawText.slice(0, 160),
+    )
   }
 
-  let rows = envelope?.d
-  if (typeof rows === "string") {
+  // Current NSE Indices route returns the row array directly. Preserve strict
+  // compatibility with the older documented ASP.NET envelope only when the
+  // HTTP body itself is valid JSON; never reinterpret HTML/challenge content.
+  let rows = payload
+  if (!Array.isArray(rows) && typeof payload?.d === "string") {
     try {
-      rows = JSON.parse(rows)
+      rows = JSON.parse(payload.d)
     } catch {
       throw new Error("NIFTY 500 TRI envelope.d is not valid JSON")
     }
+  } else if (!Array.isArray(rows) && Array.isArray(payload?.d)) {
+    rows = payload.d
   }
 
   assert(Array.isArray(rows), "NIFTY 500 TRI response is not a row array")
@@ -549,6 +566,7 @@ async function retrieveTriCanary() {
     page_url: TRI.pageUrl,
     endpoint: response.url,
     http_status: response.status,
+    content_type: contentType,
     raw_file: rawPath,
     raw_bytes: rawBytes.length,
     raw_sha256: sha256(rawBytes),
