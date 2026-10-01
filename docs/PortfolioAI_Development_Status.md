@@ -3559,3 +3559,60 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 late-campaign observation verification timeout remediation — 1 October 2026
+
+The campaign progressed to decision date `2026-05-29` and again stopped fail-closed in `select_month` after all month writes completed.
+
+Hosted state at the stop point:
+
+```text
+source archives = 28
+listing observations = 481787
+universe runs = 28
+universe members = 126672
+member evidence links = 481787
+run selections = 27
+campaign grant = ACTIVE / UNCONSUMED
+```
+
+The staged `2026-05-29` month is complete except for selection:
+
+```text
+observations = 19614
+members = 4524
+evidence links = 19614
+eligible = 4139
+ineligible = 385
+blocked = 0
+selection = PENDING
+```
+
+Hosted Edge logs identified the exact timeout query as the listing-observation fingerprint verification:
+
+`p8_historical_listing_observations_v3 WHERE source_archive_id = ? ORDER BY id OFFSET ? LIMIT 1000`
+
+As the append-only observation table grew, the `ORDER BY id` path stopped matching the archive-oriented index and PostgREST canceled the query with SQLSTATE `57014`.
+
+Remediation:
+
+- observation fingerprint verification now resolves observations through `source_archive_id + historical_identity_id` in bounded 75-identity batches, matching the existing composite index;
+- the exact observation count and source-row-number-sorted fingerprint are still verified;
+- evidence verification continues through indexed `universe_member_id`;
+- future evidence write batches were reduced from 1500 to 500 to avoid large PostgREST upsert timeouts;
+- Development Edge Function redeployed as version 4;
+- no schema migration, rollback, Production change, or P8-B3/P8-C work occurred.
+
+Resume point: `2026-05-29`.
+
+```text
+P8-B2 full materialization = ACTIVE / FAIL-CLOSED AT LATE VERIFICATION / REMEDIATED
+P8-B2 completed selections = 27 / 32
+P8-B2 current staged month = 2026-05-29
+P8-B2 materializer = DEVELOPMENT VERSION 4
+P8-B2 remaining decision dates after current month = 4
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
