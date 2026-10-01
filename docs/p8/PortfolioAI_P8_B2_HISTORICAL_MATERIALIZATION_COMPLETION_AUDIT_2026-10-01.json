@@ -1,0 +1,65 @@
+{
+  "stage": "P8-B2",
+  "date": "2026-10-01",
+  "environment": "PortfolioAI Dev",
+  "result": "COMPLETE_PASS_CLOSED",
+  "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+  "plan_hash": "ea253903259183d3bf287e51412c6fa0938ea8b06260e48e40c682af2dfdf5b3",
+  "completion_hash": "23a19bfbd86a341767370d6753d4eb471982313b6a0e37fe36e8a0c818124823",
+  "selected_date_range": {
+    "first": "2024-02-29",
+    "last": "2026-09-29",
+    "count": 32
+  },
+  "counts": {
+    "historical_security_identities": 4524,
+    "exact_isin_links": 255,
+    "current_null_isin_links": 7,
+    "historical_only_identities": 4262,
+    "source_archives": 32,
+    "listing_observations": 562790,
+    "universe_runs": 32,
+    "universe_members": 144768,
+    "member_listing_evidence": 562790,
+    "run_selections": 32
+  },
+  "latest": {
+    "decision_date": "2026-09-29",
+    "eligible": 4385,
+    "ineligible": 139,
+    "blocked": 0,
+    "run_hash": "2ddce0a378e758a84501f4ef537a37822d3d4479264f7c3ffa27e89824fcbb21"
+  },
+  "integrity": {
+    "runs_with_matching_member_counts": "32/32",
+    "runs_with_complete_support_and_selection": "32/32",
+    "archive_availability_before_decision": "32/32",
+    "invented_publication_timestamps": 0,
+    "invalid_frozen_isins": 0,
+    "live_security_snapshot": {
+      "rows": 284,
+      "changed": 0,
+      "missing": 0,
+      "added": 0
+    },
+    "legacy_b2_v1_v2_rows": {
+      "listing_observations": 0,
+      "runs": 0,
+      "members": 0,
+      "evidence_links": 0,
+      "selections": 0
+    }
+  },
+  "campaign": {
+    "grant_id": "19f6b732-5600-417c-8216-7cb9a3b51f99",
+    "grant_consumed": true,
+    "provider_calls": 0
+  },
+  "boundaries": {
+    "p8_b3_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "SEPARATE_OWNER_APPROVAL_FOR_P8_B3_CORPORATE_ACTIONS_AND_ADJUSTED_MARKET_HISTORY"
+}
