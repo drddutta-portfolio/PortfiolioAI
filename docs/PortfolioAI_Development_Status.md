@@ -3978,3 +3978,38 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 pre-hosted runner CLI compatibility remediation — 1 October 2026
+
+The first pre-hosted runner reached step 8/10, proving steps 1-7 passed under `set -euo pipefail`, then stopped because `supabase migration list` requires a linked remote project.
+
+This was a verifier command issue, not a schema/test/build failure.
+
+Passed before the stop:
+
+- clean local reset;
+- SQL contract;
+- deterministic financial fixtures;
+- TypeScript;
+- scoped ESLint;
+- architecture check;
+- production build.
+
+CLI remediation:
+
+- replaced remote-dependent `supabase migration list` with a direct read of the local `supabase_migrations.schema_migrations` ledger;
+- corrected type generation to `supabase gen types --lang typescript --local`;
+- removed the unnecessary `--local` flag from `supabase db diff`, which already targets local by default;
+- added `scripts/p8/run-p8-b3-prehosted-verification-tail.sh` to complete steps 8-10 without repeating the already-passed steps 1-7.
+
+```text
+P8-B3 pre-hosted steps 1-7 = PASS
+P8-B3 pre-hosted steps 8-10 = RERUN REQUIRED WITH CORRECTED LOCAL RUNNER
+
+P8-B3 hosted migration = NOT AUTHORIZED / NOT APPLIED
+P8-B3 bulk acquisition = NOT AUTHORIZED / NOT STARTED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
