@@ -4,7 +4,7 @@ Date: 1 October 2026
 Mode: planning and read-only audit only  
 Repository: `drddutta-portfolio/PortfiolioAI`  
 Branch audited: `PortfolioAI-Development`  
-Repository head audited: `1fad7dfbc4a1be4e66d1ed9c850e420d9a34cc66`  
+Repository audit began at `1fad7dfbc4a1be4e66d1ed9c850e420d9a34cc66`; concurrent P8-B3 work advanced the verified plan parent to `5885d488335fc95c9c231c011aa4293f1d7d8e85`.
 Database audited: hosted `PortfolioAI Dev` (`lrgpjimipfkyoqbpsqzz`)  
 Result: **A. PLAN READY FOR OWNER APPROVAL**
 
@@ -37,7 +37,7 @@ The final current read authority should be `current_security_classification_v2`,
   - `p8_historical_listing_observations_v3`: 562,790 rows;
   - `p8_historical_universe_runs_v3`: 32 rows;
   - `p8_historical_universe_members_v3`: 144,768 rows.
-- P8-B3 is ACTIVE only at its separately authorized official-source canary boundary. Its hosted migration and bulk acquisition are not authorized by this plan.
+- P8-B3 is ACTIVE at its separately authorized official-source canary boundary. Three of four local probes are proven; the NIFTY 500 TRI route is remediated but requires rerun. Its hosted migration and bulk acquisition remain unauthorized. This classification plan neither changes nor expands that authority.
 
 ### 2.2 Current portfolio classification
 
