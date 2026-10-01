@@ -3462,3 +3462,45 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 campaign network interruption recovery — 1 October 2026
+
+The full materialization campaign progressed through 15 fully selected decision dates and then encountered a client-side HTTPS `ECONNRESET` while processing `2025-05-30`.
+
+Hosted state at the stop point:
+
+```text
+historical identities = 4524
+source archives = 16
+listing observations = 244044
+universe runs = 15
+universe members = 67860
+member evidence links = 239544
+run selections = 15
+campaign grant consumed = 0
+```
+
+Decision dates through `2025-04-30` are fully selected. The `2025-05-30` source archive exists with 4,500 listing observations staged, but no run/member/evidence/selection rows exist yet for that month.
+
+Diagnosis: local Node fetch lost the TLS socket with `ECONNRESET`; no hosted constraint, hash, identity, or integrity error occurred.
+
+Recovery package:
+
+- local sender retries network/5xx/429 failures up to five attempts with bounded exponential backoff;
+- identity replay is skipped when the hosted 4,524-row registry is already complete;
+- `--from YYYY-MM-DD` permits deterministic resume from a frozen decision date;
+- the verified hosted materializer remains on the stable Development v2 contract;
+- no rollback is required because staged writes are idempotent.
+
+Required resume point: `2025-05-30`.
+
+```text
+P8-B2 full materialization = ACTIVE / INTERRUPTED SAFELY / RESUMABLE
+P8-B2 completed selected dates = 15 / 32
+P8-B2 current partial date = 2025-05-30
+P8-B2 campaign grant = ACTIVE / UNCONSUMED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
