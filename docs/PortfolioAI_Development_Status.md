@@ -3820,3 +3820,43 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 official-source retrieval canary package — 1 October 2026
+
+Owner approved the small official-source retrieval canary under the no-guesswork / real-money doctrine.
+
+Created:
+
+`scripts/p8/p8-b3-official-source-canary.mjs`
+
+The canary performs four bounded local probes only:
+
+1. official NSE legacy CM bhavcopy for 14-Mar-2024;
+2. official NSE UDiFF CM bhavcopy for 01-Aug-2024;
+3. official NSE corporate-action evidence for DELPHIFX, selected because the official corporate-action surface exposes split, bonus and rights events for the same security;
+4. official NSE Indices NIFTY 500 Total Return Index for January 2024.
+
+Acceptance is content-based, not URL-based:
+
+- final host must remain official NSE/NSE Indices;
+- bhavcopy responses must be real ZIP artifacts;
+- extracted CSV schema and embedded trade date must match the requested canary date;
+- corporate-action raw response must prove the requested symbol and explicit action text/date evidence;
+- TRI response must identify NIFTY 500 and provide positive Total Returns Index values for the requested window;
+- raw bytes are persisted locally with SHA-256 hashes;
+- any mismatch produces BLOCKED, not a fallback or inferred success.
+
+The canary performs zero database writes, zero paid-provider calls, zero hosted migrations and zero bulk acquisition.
+
+```text
+P8-B3 local foundation = COMPLETE / PASS
+P8-B3 official-source canary runner = CREATED
+P8-B3 official-source canary execution = LOCAL RUN PENDING
+
+P8-B3 hosted migration = NOT AUTHORIZED / NOT APPLIED
+P8-B3 bulk acquisition = NOT AUTHORIZED / NOT STARTED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
