@@ -4361,3 +4361,45 @@ main = UNCHANGED
 ```
 
 Next Codex-aligned gate: hosted B3 schema canary plus explicit arithmetic precision/rounding contract before any adjustment-factor or adjusted-series materialization.
+
+## P8-B3 hosted transactional canary and arithmetic contract candidate — 1 October 2026
+
+Hosted transactional schema/data canary:
+
+```text
+service-role B3 insert lineage = PASS
+all seven B3 tables exercised = PASS
+append-only mutation guard = PASS
+transaction rollback = PASS
+durable B3 rows after canary = 0
+```
+
+The fixture used `example.invalid` source URLs deliberately and was rolled back, so it cannot be mistaken for authoritative evidence.
+
+Arithmetic candidate implemented in repository only:
+
+```text
+policy = P8_B3_ARITHMETIC_V1
+internal precision = 50 significant digits
+persisted derived precision = 30 significant digits
+rounding = ROUND_HALF_EVEN
+derived total-return index base = 1000
+source inputs = exact decimal strings / no pre-rounding
+binary floating-point persistence = prohibited
+presentation rounding = non-authoritative
+adjustment version = P8_B3_ADJUSTMENT_V2
+```
+
+The numerical policy is **not yet owner-approved**. It must pass local tests and then receive explicit owner approval before any derived B3 arithmetic fact is materialized.
+
+```text
+P8-B3 hosted foundation/hardening = COMPLETE / PASS
+P8-B3 hosted transactional canary = COMPLETE / PASS
+P8-B3 arithmetic contract = CANDIDATE / LOCAL VERIFICATION PENDING
+P8-B3 acquisition = NOT STARTED
+P8-B3 adjustment materialization = NOT AUTHORIZED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
