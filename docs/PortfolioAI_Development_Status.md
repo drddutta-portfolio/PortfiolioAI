@@ -4460,3 +4460,41 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 arithmetic contract owner approval — 1 October 2026
+
+The owner explicitly approved the exact locally validated numerical policy.
+
+```text
+P8_B3_ARITHMETIC_V1 = OWNER APPROVED / FROZEN
+
+internal precision = 50 significant digits
+persisted derived precision = 30 significant digits
+rounding = ROUND_HALF_EVEN
+derived total-return index base = 1000
+authoritative source values = no pre-rounding
+binary floating-point persistence = prohibited
+presentation rounding = non-authoritative
+adjustment version = P8_B3_ADJUSTMENT_V2
+```
+
+Authoritative frozen record:
+
+`docs/p8/PortfolioAI_P8_B3_ARITHMETIC_PRECISION_ROUNDING_CONTRACT_FROZEN_2026-10-01.md`
+
+This approval clears the arithmetic-policy blocker only.
+
+```text
+P8-B3 hosted foundation/hardening = COMPLETE / PASS
+P8-B3 hosted transactional canary = COMPLETE / PASS
+P8-B3 arithmetic contract = OWNER APPROVED / FROZEN
+
+P8-B3 bulk acquisition = NOT AUTHORIZED / NOT STARTED
+P8-B3 durable materialization = NOT AUTHORIZED / NOT STARTED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Next gate: separate owner approval for the bounded B3 acquisition/materialization campaign.
