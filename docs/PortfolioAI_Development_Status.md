@@ -3504,3 +3504,58 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 select-month statement-timeout remediation — 1 October 2026
+
+The resumable campaign progressed to `2025-09-30` and then stopped fail-closed in `select_month` after all month rows had already been materialized.
+
+Hosted state at the stop point:
+
+```text
+historical identities = 4524
+source archives = 20
+listing observations = 329755
+universe runs = 20
+universe members = 90480
+member evidence links = 329755
+run selections = 19
+campaign grant consumed = 0
+```
+
+The `2025-09-30` month itself is fully staged:
+
+```text
+observations = 18399
+members = 4524
+evidence links = 18399
+eligible = 3895
+ineligible = 629
+blocked = 0
+selection = PENDING
+```
+
+Hosted Edge logs identified the exact timeout query: the final evidence verification read filtered the growing evidence table by `portfolio_id + experiment_id + decision_at`, ordered by `id`, and PostgREST canceled the first 1,000-row page with SQLSTATE `57014`.
+
+Remediation:
+
+- the `select_month` evidence verification no longer scans by `decision_at`;
+- it now traverses evidence through the already-indexed `universe_member_id` relationship in bounded 75-member batches;
+- exact total evidence count is still verified;
+- every ELIGIBLE member must still have `ELIGIBILITY_SUPPORT`;
+- no new schema migration was required;
+- Development Edge Function redeployed as version 3;
+- all staged month writes remain idempotent and the campaign grant remains unconsumed.
+
+Resume point: `2025-09-30`.
+
+```text
+P8-B2 full materialization = ACTIVE / FAIL-CLOSED AT SELECTION VERIFY / REMEDIATED
+P8-B2 completed selections = 19 / 32
+P8-B2 current staged month = 2025-09-30
+P8-B2 materializer = DEVELOPMENT VERSION 3
+P8-B2 campaign grant = ACTIVE / UNCONSUMED
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
