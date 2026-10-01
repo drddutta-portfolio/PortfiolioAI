@@ -2,7 +2,7 @@
 
 Date: 1 October 2026  
 Environment: PortfolioAI Development  
-Status: **OWNER APPROVED / EXTRACTOR CREATED / DURABLE INSERT PENDING PAYLOAD VERIFICATION**
+Status: **COMPLETE / PASS / DURABLE ACTION + TRI AUTHORITY CANARY CLOSED**
 
 ## Purpose
 
@@ -127,3 +127,42 @@ Not authorized:
 - adjustment factors;
 - adjusted series;
 - P8-B4 or P8-C.
+
+## Completion result
+
+The uploaded payload was independently hash-validated and the exact four-row durable authority canary was applied.
+
+```text
+payload hash = f0e7da820631d9c0a6fe010c1a9008ac407119381a9e149356142aef2567b445
+
+new source archives = 2
+new corporate-action observations = 1
+new benchmark TRI rows = 1
+new normalization/factor/adjusted rows = 0
+```
+
+Corporate-action evidence:
+
+```text
+BEL / INE263A01024
+B2 link basis = EXACT_ISIN
+Interim Dividend - Rs 1.95 Per Share
+face value = 1
+ex-date = 2026-03-06
+record date = 2026-03-06
+observation hash = af6c6e3df80527790f0aa2f65028f49debbf0fe5a76c595c93fefdf82d5a64b1
+```
+
+Benchmark evidence:
+
+```text
+P8_NIFTY500_TRI_V1 / NIFTY_500
+trade date = 2024-01-31
+TRI = 31011.17
+NTRI = 29432.64
+row hash = d10e475b21fed2768bc9cd196630b9c3bd03f2c2fdfe22da5fe93d6c27ae49e9
+```
+
+Exact payload replay inserted zero new rows. Existing live/B2 preservation fingerprints remain unchanged. B3 security and unindexed-FK advisor findings remain zero.
+
+This closes only the durable corporate-action + benchmark authority canary. Full-source acquisition and derived materialization remain separately approval-gated.
