@@ -3288,3 +3288,28 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 historical materialization planning — 1 October 2026
+
+Owner approval received to begin P8-B2 historical-universe materialization.
+
+Before any hosted row insert, a deterministic local planner was added:
+
+`scripts/p8/p8-b2-plan-historical-materialization-v3.mjs`
+
+The planner revalidates all 32 acquired NSE source-file hashes, reconstructs the frozen 4,524 common-equity identity registry, verifies the 255 exact-current links / 7 current-null-ISIN links / 4,262 historical-only identities, parses every frozen listing-evidence row, checks required line-level fields, freezes one source-archive record per decision date, and produces a deterministic materialization-plan hash.
+
+It performs zero remote database writes and zero provider calls.
+
+The planner must pass before the hosted materialization runner is activated. This is the canary/preflight required by the P8 handoff.
+
+```text
+P8-B2 V3 hosted schema = COMPLETE / VERIFIED / PASS
+P8-B2 V3 materialization planner = CREATED
+P8-B2 V3 materialization preflight = LOCAL RUN PENDING
+P8-B2 historical universe materialization = AUTHORIZED / NOT YET WRITTEN
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
