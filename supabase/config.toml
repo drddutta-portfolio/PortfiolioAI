@@ -419,3 +419,8 @@ verify_jwt = false
 # refuses every runtime except the PortfolioAI Development project.
 [functions.p7-ic2-materialize-readiness]
 verify_jwt = false
+# P8-B2 historical-universe materializer validates a Development-only,
+# time-limited campaign grant inside the function and hard-refuses Production.
+[functions.p8-b2-materialize-historical-universe]
+verify_jwt = false
+
