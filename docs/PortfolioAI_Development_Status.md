@@ -3404,3 +3404,61 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B2 V3 hosted canary verification — 1 October 2026
+
+The remediated one-month materialization canary completed and was independently verified against PortfolioAI Dev.
+
+Verified hosted state:
+
+```text
+historical identities = 4524
+  EXACT_ISIN = 255
+  EXACT_NSE_SYMBOL_CURRENT_NULL_ISIN = 7
+  historical-only / NONE = 4262
+
+source archives = 1
+listing observations = 14998
+universe runs = 1
+universe members = 4524
+member evidence links = 14998
+run selections = 1
+campaign grant consumed = 0
+```
+
+First selected decision date:
+
+```text
+decision date = 2024-02-29
+run state = READY
+eligible = 3385
+ineligible = 1139
+blocked = 0
+evidence ELIGIBILITY_SUPPORT = 3385
+evidence SYMBOL_SERIES_VARIANT = 11613
+```
+
+Source provenance is preserved with exact source hashes, `source_published_at = NULL`, and the approved conservative availability upper bound before the decision instant.
+
+Live PortfolioAI security preservation was rechecked against the frozen 284-row canonical security snapshot:
+
+```text
+current securities = 284
+snapshot securities = 284
+changed = 0
+missing = 0
+added = 0
+```
+
+The canary is therefore **COMPLETE / PASS**. The same campaign grant remains unconsumed and the idempotent sender may now resume the full 32-date campaign; the already-completed canary date may be safely replayed.
+
+```text
+P8-B2 V3 materialization preflight = COMPLETE / PASS
+P8-B2 V3 canary = COMPLETE / VERIFIED / PASS
+P8-B2 V3 remaining 31 decision dates = AUTHORIZED / READY TO RESUME
+P8-B2 full materialization = ACTIVE / NOT YET COMPLETE
+P8-B3+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
