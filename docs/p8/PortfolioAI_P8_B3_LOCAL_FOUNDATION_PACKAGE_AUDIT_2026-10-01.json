@@ -55,10 +55,12 @@
     "acquisition_ready": false
   },
   "validation": {
-    "clean_local_db_reset": "PENDING",
-    "sql_contract_test": "PENDING",
-    "typescript_fixture_test": "PENDING",
-    "dry_run_manifest_execution": "PENDING"
+    "clean_local_db_reset": "PASS",
+    "migration_replay": "PASS",
+    "sql_contract_test": "PASS_BEGIN_DO_DO_ROLLBACK",
+    "typescript_fixture_test": "PASS_7_OF_7",
+    "dry_run_manifest_execution": "PASS",
+    "dry_run_manifest_hash": "d7140779abdf92cc1e6acc85bd1ac08d430bc7ce48ece97d0a52d74aa516dc3"
   },
   "controls": {
     "official_file_acquisition_started": false,
@@ -72,5 +74,6 @@
     "production_changed": false,
     "main_changed": false
   },
-  "next_gate": "LOCAL_REPLAY_AND_TEST_ONLY"
+  "next_gate": "OWNER_APPROVAL_FOR_OFFICIAL_SOURCE_RETRIEVAL_CANARY_ONLY",
+  "result": "LOCAL_FOUNDATION_PACKAGE_COMPLETE_PASS"
 }
