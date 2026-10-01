@@ -4403,3 +4403,60 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 arithmetic contract candidate verification closure — 1 October 2026
+
+The repository-only B3 arithmetic precision/rounding candidate completed the full local verification gate successfully.
+
+Terminal marker:
+
+```text
+P8_B3_ARITHMETIC_CONTRACT_CANDIDATE_VERIFICATION_PASS
+```
+
+Verified:
+
+- arithmetic-policy fixtures;
+- corporate-action fixtures;
+- half-even tie behavior;
+- 30-significant-digit derived persistence boundary;
+- long authoritative source decimal preservation;
+- recurring-ratio determinism;
+- isolation from application-wide Decimal.js defaults;
+- presentation-rounding separation;
+- TypeScript;
+- scoped lint;
+- architecture check;
+- production build;
+- repository hygiene.
+
+Candidate policy remains:
+
+```text
+policy = P8_B3_ARITHMETIC_V1
+internal precision = 50 significant digits
+persisted derived precision = 30 significant digits
+rounding = ROUND_HALF_EVEN
+derived total-return index base = 1000
+source values = no pre-rounding
+storage = PostgreSQL numeric / canonical decimal
+binary floating-point authority = prohibited
+presentation rounding = non-authoritative
+adjustment version = P8_B3_ADJUSTMENT_V2
+```
+
+This policy is technically validated but is **not yet owner-approved for financial materialization**.
+
+```text
+P8-B3 hosted foundation/hardening = COMPLETE / PASS
+P8-B3 hosted transactional canary = COMPLETE / PASS
+P8-B3 arithmetic contract local verification = COMPLETE / PASS
+P8-B3 arithmetic contract owner approval = PENDING
+
+P8-B3 acquisition = NOT STARTED
+P8-B3 adjustment materialization = NOT AUTHORIZED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
