@@ -4103,3 +4103,76 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 hosted schema application and fail-closed advisor stop — 1 October 2026
+
+After the Codex-plan alignment audit and owner approval, the exact reviewed B3 foundation migration was applied to hosted PortfolioAI Dev.
+
+Hosted migration:
+
+```text
+name = create_p8_b3_market_history_foundation
+hosted version = 20261001112716
+broad db push = NO
+```
+
+Post-application structural verification:
+
+```text
+B3 tables = 7
+B3 security-invoker views = 2
+B3 mutation-rejection functions = 1
+all B3 tables RLS enabled = YES
+owner-scoped policy on each table = YES
+anon SELECT = NO
+authenticated INSERT/UPDATE/DELETE = NO
+service-role INSERT = YES
+mutation function execute = service-role only
+initial B3 rows = 0
+```
+
+All preservation baselines are unchanged:
+
+```text
+securities = 284 / fingerprint unchanged
+market_price_history = 63929 / fingerprint unchanged
+market_benchmark_price_history = 2710 / fingerprint unchanged
+P8-B2 identities = 4524 / fingerprint unchanged
+P8-B2 listing observations = 562790 / fingerprint unchanged
+P8-B2 runs = 32
+P8-B2 members = 144768
+P8-B2 evidence links = 562790
+P8-B2 selections = 32
+```
+
+Mandatory advisor comparison found B3-attributable deltas:
+
+```text
+authenticated GraphQL exposure WARN = +9
+  exactly 7 B3 tables + 2 B3 views
+
+unindexed foreign keys INFO = +12
+  exactly 12 B3 FK paths
+
+unused indexes INFO = +9
+  newly created empty B3 indexes
+```
+
+No other security-warning category changed.
+
+Per the Codex stop-on-divergence protocol, B3 is stopped before hosted schema canary/data acquisition. No B3 rows have been inserted.
+
+The authenticated GraphQL findings are owner-scoped by RLS, but they conflict with the stricter pre-hosted no-new-security-warning criterion and therefore require an explicit hardening disposition rather than silent acceptance. The 12 unindexed-FK findings require performance review before loading the large historical dataset.
+
+```text
+P8-B3 hosted schema = APPLIED / STRUCTURAL PASS
+P8-B3 preservation = PASS
+P8-B3 advisor gate = BLOCKED / REMEDIATION REQUIRED
+P8-B3 hosted data rows = 0
+P8-B3 acquisition = NOT STARTED
+P8-B3 adjustment materialization = BLOCKED BY ARITHMETIC CONTRACT + ADVISOR GATE
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
