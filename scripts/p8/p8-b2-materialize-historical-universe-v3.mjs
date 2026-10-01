@@ -24,11 +24,17 @@ const UNIVERSE_VERSION = "P8_NSE_HISTORICAL_UNIVERSE_V1"
 const GRANT_ID = String(process.env.P8_B2_MATERIALIZATION_GRANT ?? "").trim()
 const PUBLISHABLE_KEY = String(process.env.P8_B2_PUBLISHABLE_KEY ?? "").trim()
 
-const args = new Set(process.argv.slice(2))
+const argv = process.argv.slice(2)
+const args = new Set(argv)
 const canary = args.has("--canary")
 const resume = args.has("--resume")
+const fromArgIndex = argv.indexOf("--from")
+const fromDate = fromArgIndex >= 0 ? clean(argv[fromArgIndex + 1]) : null
 if ((canary && resume) || (!canary && !resume)) {
   throw new Error("Use exactly one mode: --canary or --resume")
+}
+if (fromDate && !/^\d{4}-\d{2}-\d{2}$/u.test(fromDate)) {
+  throw new Error("--from requires YYYY-MM-DD")
 }
 if (!/^[0-9a-f-]{36}$/iu.test(GRANT_ID)) {
   throw new Error("P8_B2_MATERIALIZATION_GRANT is required")
@@ -400,22 +406,16 @@ if (Number(initialStatus?.counts?.p8_historical_security_identities ?? 0) === 45
 }
 
 const months = [...plan.months].sort((a, b) => a.decision_date.localeCompare(b.decision_date))
-const selectedMonths = canary ? [months[0]] : months
+let selectedMonths = canary ? [months[0]] : months
 
-for (const month of selectedMonths) {
-  const monthState = await post("month_status", { sourceDate: month.decision_date })
-  if (monthState.selected === true) {
-    console.log("\nMonth " + month.decision_date + " already selected; skipping completed month.")
-    continue
-  }
-  if (monthState.archive_exists || Number(monthState.observations ?? 0) > 0) {
-    console.log(
-      "\nMonth " + month.decision_date +
-      " has resumable partial state: observations=" + Number(monthState.observations ?? 0),
-    )
-  }
-  await materializeMonth(month)
+if (resume && fromDate) {
+  const matchIndex = selectedMonths.findIndex((month) => month.decision_date === fromDate)
+  if (matchIndex < 0) throw new Error("--from date is not one of the frozen decision dates: " + fromDate)
+  selectedMonths = selectedMonths.slice(matchIndex)
+  console.log("Resuming materialization from " + fromDate + "; earlier frozen months are not replayed.")
 }
+
+for (const month of selectedMonths) await materializeMonth(month)
 
 if (resume) {
   const completed = await post("complete_campaign")
