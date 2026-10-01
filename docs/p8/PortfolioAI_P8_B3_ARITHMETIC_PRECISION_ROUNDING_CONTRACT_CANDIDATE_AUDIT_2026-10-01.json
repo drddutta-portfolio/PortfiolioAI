@@ -2,7 +2,7 @@
   "stage": "P8-B3",
   "checkpoint": "ARITHMETIC_PRECISION_ROUNDING_CONTRACT_CANDIDATE",
   "date": "2026-10-01",
-  "result": "LOCAL_VERIFICATION_COMPLETE_PASS_OWNER_APPROVAL_PENDING",
+  "result": "OWNER_APPROVED_FROZEN_AUTHORITATIVE",
   "policy": {
     "version": "P8_B3_ARITHMETIC_V1",
     "internal_precision_significant_digits": 50,
@@ -24,7 +24,7 @@
   ],
   "verification_runner": "scripts/p8/run-p8-b3-arithmetic-contract-verification.sh",
   "materialization_authorized": false,
-  "next_gate": "EXPLICIT_OWNER_APPROVAL_OF_EXACT_NUMERICAL_POLICY",
+  "next_gate": "SEPARATE_OWNER_APPROVAL_FOR_BOUNDED_B3_ACQUISITION_AND_MATERIALIZATION_CAMPAIGN",
   "validation": {
     "arithmetic_policy_fixtures": "PASS",
     "corporate_action_fixtures": "PASS",
@@ -38,5 +38,12 @@
     "production_build": "PASS",
     "repository_hygiene": "PASS",
     "terminal_marker": "P8_B3_ARITHMETIC_CONTRACT_CANDIDATE_VERIFICATION_PASS"
+  },
+  "owner_approval": {
+    "date": "2026-10-01",
+    "approved_exact_policy": true,
+    "scope": "ARITHMETIC_POLICY_ONLY",
+    "acquisition_authorized": false,
+    "durable_b3_materialization_authorized": false
   }
 }
