@@ -1,0 +1,63 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "FULL_SOURCE_ACQUISITION_EXECUTION_READY",
+  "date": "2026-10-01",
+  "result": "READY_TO_EXECUTE_RESUMABLE_CAMPAIGN",
+  "repository_head_before_status": "a8fe057ec93790c5a151f7c30fcbc9557a969f9e",
+  "campaign_id": "P8_B3_FULL_SOURCE_ACQUISITION_20261001_V1",
+  "plan_hash": "9367d9a55b5c7a6db176ef3e2b80da96cb97b3ac114f0ef884f124352a54919a",
+  "frozen_window": [
+    "2023-10-01",
+    "2026-09-30"
+  ],
+  "implementation": {
+    "edge_function": "p8-b3-acquire-market-history",
+    "edge_function_version": 1,
+    "edge_function_status": "ACTIVE",
+    "verify_jwt": false,
+    "authentication": "CUSTOM_SCOPED_ONE_CAMPAIGN_GRANT",
+    "local_runner": "scripts/p8/p8-b3-acquire-full-market-history.mjs",
+    "modules": [
+      "scripts/p8/lib/p8-b3-acquisition-common.mjs",
+      "scripts/p8/lib/p8-b3-acquisition-tri-actions.mjs",
+      "scripts/p8/lib/p8-b3-acquisition-prices.mjs"
+    ]
+  },
+  "grant": {
+    "issued": true,
+    "expires_at": "2026-10-08 14:02:17.219977+00",
+    "grant_id_persisted_in_repository": false
+  },
+  "pre_execution_counts": {
+    "full_campaign_source_archives": 0,
+    "full_campaign_raw_price_rows": 0,
+    "full_campaign_action_rows": 0,
+    "full_campaign_benchmark_rows": 0,
+    "normalizations": 0,
+    "adjustment_factors": 0,
+    "adjusted_series": 0
+  },
+  "execution_order": [
+    "OFFICIAL_NIFTY500_TRI_AND_TRADING_CALENDAR",
+    "OFFICIAL_NSE_CORPORATE_ACTIONS_MONTHLY",
+    "OFFICIAL_NSE_BHAVCOPY_FOR_EVERY_PROVEN_TRI_TRADING_DATE"
+  ],
+  "hard_stops": [
+    "MALFORMED_OR_NON_OFFICIAL_SOURCE",
+    "BENCHMARK_TRADING_DATE_WITHOUT_VALID_OFFICIAL_BHAVCOPY",
+    "SCHEMA_OR_EMBEDDED_DATE_MISMATCH",
+    "HOSTED_WRITE_FAILURE",
+    "PLAN_OR_GRANT_MISMATCH",
+    "ANY_DERIVED_B3_ROWS_DURING_SOURCE_ACQUISITION"
+  ],
+  "excluded": {
+    "normalization": true,
+    "adjustment_factor_materialization": true,
+    "adjusted_series_materialization": true,
+    "p8_b4": true,
+    "p8_c": true,
+    "production": true,
+    "main": true
+  },
+  "next_gate": "RUN_LOCAL_STATUS_THEN_RESUMABLE_FULL_CAMPAIGN"
+}
