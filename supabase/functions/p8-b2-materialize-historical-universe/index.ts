@@ -258,9 +258,21 @@ Deno.serve(async (request) => {
       code: "P8_B2_OPERATION",
     })
   } catch (error) {
+    const detail = error instanceof Error
+      ? { code: error.message }
+      : (error && typeof error === "object"
+        ? {
+            code: String((error as Record<string, unknown>).code ?? "P8_B2_MATERIALIZATION_FAILED"),
+            message: String((error as Record<string, unknown>).message ?? ""),
+            details: String((error as Record<string, unknown>).details ?? ""),
+            hint: String((error as Record<string, unknown>).hint ?? ""),
+          }
+        : { code: "P8_B2_MATERIALIZATION_FAILED" })
+
+    console.error("P8_B2_MATERIALIZATION_STOP", detail)
     return reply(500, {
       error: "P8-B2 materialization stopped safely.",
-      code: error instanceof Error ? error.message : "P8_B2_MATERIALIZATION_FAILED",
+      ...detail,
     })
   }
 })
