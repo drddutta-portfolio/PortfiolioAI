@@ -1,4 +1,3 @@
-import type Decimal from "decimal.js"
 import {
   P8_B3_ARITHMETIC_POLICY_VERSION,
   P8Decimal,
