@@ -15,6 +15,7 @@ import {
   optionalDate,
   post,
   saveProgress,
+  sleep,
   sha256,
   uploadArchive,
 } from "./p8-b3-acquisition-common.mjs"
@@ -301,28 +302,69 @@ export async function acquireActionMonth(month, progress, cookie) {
 
   let bytes
   let retrievalMode
+  let rows
+
   if (existsSync(cachePath)) {
     bytes = readFileSync(cachePath)
+    rows = normalizeCorporateActions(bytes, month)
     retrievalMode = "CACHE"
   } else {
-    const response = await fetchWithRetry(sourceUrl, {
-      headers: {
-        "User-Agent": USER_AGENT,
-        Accept: "application/json,text/plain,*/*",
-        Referer: NSE_ACTION_PAGE,
-        ...(cookie ? { Cookie: cookie } : {}),
-      },
-    })
-    assert(
-      new URL(response.url).hostname === "www.nseindia.com",
-      "Corporate-action API left official host",
-    )
-    bytes = Buffer.from(await response.arrayBuffer())
-    writeFileSync(cachePath, bytes)
-    retrievalMode = "NETWORK"
-  }
+    let activeCookie = cookie
+    let lastError
 
-  const rows = normalizeCorporateActions(bytes, month)
+    for (let attempt = 1; attempt <= 5; attempt++) {
+      try {
+        if (attempt > 1 || !activeCookie) {
+          activeCookie = await newNseCookie()
+        }
+
+        const response = await fetchWithRetry(
+          sourceUrl,
+          {
+            headers: {
+              "User-Agent": USER_AGENT,
+              Accept: "application/json,text/plain,*/*",
+              Referer: NSE_ACTION_PAGE,
+              ...(activeCookie ? { Cookie: activeCookie } : {}),
+            },
+          },
+          1,
+          120000,
+        )
+
+        assert(
+          new URL(response.url).hostname === "www.nseindia.com",
+          "Corporate-action API left official host",
+        )
+
+        const candidate = Buffer.from(await response.arrayBuffer())
+        const parsed = normalizeCorporateActions(candidate, month)
+
+        bytes = candidate
+        rows = parsed
+        writeFileSync(cachePath, bytes)
+        retrievalMode = "NETWORK"
+        break
+      } catch (error) {
+        lastError = error
+        if (attempt < 5) {
+          const delay = Math.min(15000, 1000 * 2 ** (attempt - 1))
+          console.log(
+            "  action source retry " + (attempt + 1) +
+            "/5 after " + delay + "ms with fresh NSE session",
+          )
+          activeCookie = ""
+          await sleep(delay)
+        }
+      }
+    }
+
+    if (!bytes || !rows) {
+      throw lastError || new Error(
+        "Corporate-action acquisition failed for " + month.key,
+      )
+    }
+  }
   const archive = await uploadArchive({
     source_kind: "NSE_CORPORATE_ACTIONS",
     source_period_start: month.start,
