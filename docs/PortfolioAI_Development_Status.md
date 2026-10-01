@@ -4705,3 +4705,61 @@ main = UNCHANGED
 ```
 
 Next gate: separate owner approval for the full B3 source-acquisition campaign plan/execution. No full acquisition begins from this canary closure alone.
+
+## P8-B3 full source-acquisition execution ready — 1 October 2026
+
+Owner approved the full Development-only B3 source-acquisition campaign after both durable authority canaries passed.
+
+Frozen execution:
+
+```text
+campaign = P8_B3_FULL_SOURCE_ACQUISITION_20261001_V1
+plan hash = 9367d9a55b5c7a6db176ef3e2b80da96cb97b3ac114f0ef884f124352a54919a
+window = 2023-10-01 through 2026-09-30
+```
+
+Acquisition order:
+
+1. official NIFTY 500 TRI in 36 calendar-month slices;
+2. TRI-returned dates become the proven trading calendar;
+3. official NSE corporate actions in 36 monthly slices;
+4. one official NSE bhavcopy for every proven TRI trading date.
+
+Raw-price identity resolution is exact historical ISIN only. Corporate-action identity resolution remains fail-closed and records AMBIGUOUS/UNRESOLVED states rather than guessing.
+
+Implementation:
+
+- Development Edge Function `p8-b3-acquire-market-history` deployed ACTIVE as version 1;
+- Production-project refusal is hard-coded;
+- authentication is a custom owner-approved one-campaign grant;
+- local runner is cache-first, resumable and idempotent;
+- grant expires automatically on 8 October 2026;
+- grant ID is not stored in Git.
+
+Pre-execution hosted state:
+
+```text
+full-campaign source archives = 0
+full-campaign raw price rows = 0
+full-campaign corporate-action rows = 0
+full-campaign benchmark rows = 0
+
+normalizations = 0
+adjustment factors = 0
+adjusted series = 0
+```
+
+```text
+P8-B3 durable raw-price canary = COMPLETE / PASS
+P8-B3 durable action+TRI canary = COMPLETE / PASS
+P8-B3 arithmetic contract = OWNER APPROVED / FROZEN
+
+P8-B3 full source-acquisition campaign = AUTHORIZED / READY TO EXECUTE
+P8-B3 normalization = NOT AUTHORIZED / NOT STARTED
+P8-B3 adjustment materialization = NOT AUTHORIZED / NOT STARTED
+
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
