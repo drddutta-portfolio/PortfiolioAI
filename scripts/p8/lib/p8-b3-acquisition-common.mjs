@@ -155,18 +155,22 @@ export async function post(operation, extra = {}) {
   throw lastError || new Error(operation + " failed")
 }
 
-export async function fetchWithRetry(url, options = {}, attempts = 5) {
+export async function fetchWithRetry(
+  url,
+  options = {},
+  attempts = 5,
+  timeoutMs = 45000,
+) {
   let lastError
   for (let attempt = 1; attempt <= attempts; attempt++) {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
     try {
-      const controller = new AbortController()
-      const timer = setTimeout(() => controller.abort(), 45000)
       const response = await fetch(url, {
         redirect: "follow",
         ...options,
         signal: controller.signal,
       })
-      clearTimeout(timer)
       if (response.ok) return response
       const body = await response.text().catch(() => "")
       throw new Error("HTTP " + response.status + " for " + url + ": " + body.slice(0, 160))
@@ -174,9 +178,14 @@ export async function fetchWithRetry(url, options = {}, attempts = 5) {
       lastError = error
       if (attempt < attempts) {
         const delay = Math.min(15000, 1000 * 2 ** (attempt - 1))
-        console.log("  network retry " + (attempt + 1) + "/" + attempts + " after " + delay + "ms")
+        console.log(
+          "  network retry " + (attempt + 1) + "/" + attempts +
+          " after " + delay + "ms",
+        )
         await sleep(delay)
       }
+    } finally {
+      clearTimeout(timer)
     }
   }
   throw lastError || new Error("request failed: " + url)
