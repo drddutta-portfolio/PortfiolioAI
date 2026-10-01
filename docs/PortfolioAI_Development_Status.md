@@ -4498,3 +4498,43 @@ main = UNCHANGED
 ```
 
 Next gate: separate owner approval for the bounded B3 acquisition/materialization campaign.
+
+## P8-B3 durable raw-price evidence canary campaign — 1 October 2026
+
+Owner approved entry into the bounded B3 acquisition/materialization campaign.
+
+The first durable slice is deliberately limited to official NSE raw price evidence:
+
+```text
+campaign = P8_B3_RAW_PRICE_CANARY_20261001_V1
+target historical ISIN = INE002A01018
+
+legacy bhavcopy date = 2024-03-14
+UDiFF bhavcopy date = 2024-08-01
+
+planned durable archives = 2
+planned durable raw observations = 2
+planned derived rows = 0
+```
+
+Created:
+
+- `scripts/p8/p8-b3-build-durable-raw-price-canary.mjs`
+- `docs/p8/PortfolioAI_P8_B3_DURABLE_RAW_PRICE_CANARY_CAMPAIGN_2026-10-01.md`
+- `docs/p8/PortfolioAI_P8_B3_DURABLE_RAW_PRICE_CANARY_CAMPAIGN_AUDIT_2026-10-01.json`
+
+The extractor performs zero database writes. Durable insertion is gated on a verified payload proving exact official artifact hashes, dates, schema and one exact target-ISIN row from each format.
+
+```text
+P8-B3 arithmetic contract = OWNER APPROVED / FROZEN
+P8-B3 bounded acquisition campaign = OWNER APPROVED
+P8-B3 raw-price durable canary extractor = CREATED
+P8-B3 raw-price canary payload = PENDING
+P8-B3 durable raw-price rows = 0
+P8-B3 full acquisition = NOT STARTED
+
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
