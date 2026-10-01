@@ -1,0 +1,25 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "OFFICIAL_SOURCE_CANARY",
+  "date": "2026-10-01",
+  "result": "COMPLETE_PASS",
+  "canary_hash": "bae2927499d3f37b7e58660680b506dc7b2ffccdaf10be5b1fb8a0d90e1b2c1f",
+  "probes": {
+    "legacy_bhavcopy": "PROVEN",
+    "udiff_bhavcopy": "PROVEN",
+    "corporate_actions": "PROVEN",
+    "nifty500_tri": "PROVEN"
+  },
+  "controls": {
+    "hosted_database_writes": 0,
+    "hosted_migration_applied": false,
+    "bulk_acquisition_started": false,
+    "paid_provider_calls": 0,
+    "guessed_urls": 0,
+    "benchmark_substitution": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "doctrine": "NO_GUESSWORK_FAIL_CLOSED_REAL_MONEY",
+  "next_gate": "PRE_HOSTED_MIGRATION_VERIFICATION_THEN_SEPARATE_OWNER_APPROVAL"
+}
