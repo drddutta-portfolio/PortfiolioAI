@@ -188,3 +188,21 @@ The hosted step, if later approved, must:
 8. stop for a hosted schema canary before any bulk historical acquisition.
 
 No `db push` is permitted for this stage because of migration-history aliasing.
+
+## Final verification result
+
+The complete pre-hosted verification gate passed.
+
+```text
+P8_B3_PREHOSTED_VERIFICATION_PASS
+```
+
+The local migration ledger confirms:
+
+```text
+20261001123000|create_p8_b3_market_history_foundation
+```
+
+The final schema diff is empty after clean replay, generated local types include the B3 objects, and repository hygiene/credential-pattern checks passed.
+
+The B3 migration is now eligible for a **separately owner-approved exact hosted Development application only**. Broad `supabase db push` remains prohibited because of the previously documented B2 migration-version aliasing.
