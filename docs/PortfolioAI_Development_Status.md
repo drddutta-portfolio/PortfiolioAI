@@ -4581,3 +4581,53 @@ main = UNCHANGED
 ```
 
 Next gate: separate owner approval for the corporate-action and NIFTY 500 TRI durable authority canaries.
+
+## P8-B3 durable corporate-action + NIFTY 500 TRI canary campaign — 1 October 2026
+
+Owner approved the next bounded B3 authority canary.
+
+Scope:
+
+```text
+campaign = P8_B3_ACTION_TRI_CANARY_20261001_V1
+
+corporate action:
+  BEL / INE263A01024
+  Interim Dividend - Rs 1.95 Per Share
+  ex/record date = 2026-03-06
+  B2 link = EXACT_ISIN
+
+benchmark:
+  NIFTY 500 Total Return Index
+  selected date = 2024-01-31
+  benchmark version = P8_NIFTY500_TRI_V1
+
+planned durable rows:
+  source archives = +2
+  corporate-action observations = +1
+  benchmark TRI rows = +1
+  normalization/factor/adjusted rows = +0
+```
+
+Created:
+
+- `scripts/p8/p8-b3-build-durable-action-tri-canary.mjs`
+- `docs/p8/PortfolioAI_P8_B3_DURABLE_ACTION_TRI_CANARY_CAMPAIGN_2026-10-01.md`
+- `docs/p8/PortfolioAI_P8_B3_DURABLE_ACTION_TRI_CANARY_CAMPAIGN_AUDIT_2026-10-01.json`
+
+The extractor performs zero database writes and must output a verified payload before any hosted durable insert.
+
+```text
+P8-B3 durable raw-price canary = COMPLETE / PASS
+P8-B3 durable action+TRI canary = OWNER APPROVED / PAYLOAD PENDING
+
+P8-B3 full raw-price acquisition = NOT STARTED
+P8-B3 full corporate-action acquisition = NOT STARTED
+P8-B3 full TRI acquisition = NOT STARTED
+P8-B3 normalization/materialization = NOT STARTED
+
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
