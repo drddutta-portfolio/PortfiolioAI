@@ -2,7 +2,7 @@
 
 Date: 1 October 2026  
 Environment: PortfolioAI Development  
-Status: **OWNER APPROVED / EXTRACTOR CREATED / DURABLE INSERT PENDING PAYLOAD VERIFICATION**
+Status: **COMPLETE / PASS / DURABLE TWO-DATE RAW-EVIDENCE CANARY CLOSED**
 
 ## Purpose
 
@@ -105,3 +105,34 @@ This approval does not authorize:
 - NIFTY 500 TRI durable acquisition;
 - normalization or derived adjustment materialization;
 - P8-B4 or P8-C.
+
+## Completion result
+
+The payload was uploaded, its deterministic payload hash independently revalidated, and the exact durable canary was inserted.
+
+```text
+payload hash = a494b79025de3b04f41b771a2374a87721c1cd40abc30685bd37eb62a168ecaa
+
+durable source archives = 2
+durable raw observations = 2
+derived rows = 0
+```
+
+Identity binding:
+
+```text
+historical ISIN = INE002A01018
+B2 identity matches = 1
+canonical link basis = EXACT_ISIN
+```
+
+Idempotency replay:
+
+```text
+archives inserted on replay = 0
+raw observations inserted on replay = 0
+```
+
+All pre-existing preservation fingerprints remain unchanged. B3 security findings and B3 unindexed-FK findings remain zero.
+
+This closes only the durable raw-price authority canary. It does not authorize the full historical price campaign or any derived materialization.
