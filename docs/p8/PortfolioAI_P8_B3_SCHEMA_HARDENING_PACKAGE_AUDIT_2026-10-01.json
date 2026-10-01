@@ -1,0 +1,52 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "SCHEMA_HARDENING_LOCAL_PACKAGE",
+  "date": "2026-10-01",
+  "result": "PACKAGE_CREATED_LOCAL_VALIDATION_PENDING",
+  "trigger": {
+    "hosted_foundation_applied": true,
+    "hosted_b3_rows": 0,
+    "preservation_pass": true,
+    "advisor_delta": {
+      "authenticated_graphql_exposure": 9,
+      "unindexed_foreign_keys": 12,
+      "unused_indexes": 9
+    }
+  },
+  "migration": {
+    "file": "supabase/migrations/20261001131500_harden_p8_b3_access_and_foreign_key_indexes.sql",
+    "create_indexes": 12,
+    "authenticated_select_revocations": 9,
+    "drop_statements": 0,
+    "update_statements": 0,
+    "delete_statements": 0,
+    "insert_statements": 0,
+    "alter_table_statements": 0
+  },
+  "intended_access": {
+    "anon": "NO_B3_ACCESS",
+    "authenticated": "NO_DIRECT_B3_ACCESS",
+    "service_role": "READ_WRITE",
+    "rls_policies_preserved": true,
+    "future_ui_exposure": "SEPARATE_APPROVED_READ_MODEL_REQUIRED"
+  },
+  "tests": {
+    "hardening_contract": "supabase/tests/p8_b3_schema_hardening.sql",
+    "cumulative_foundation_contract_updated": true,
+    "local_runner": "scripts/p8/run-p8-b3-hardening-local-verification.sh"
+  },
+  "arithmetic_contract": {
+    "precision_rounding_frozen": false,
+    "adjustment_materialization_blocked": true
+  },
+  "controls": {
+    "hosted_hardening_applied": false,
+    "b3_data_acquisition_started": false,
+    "b3_data_rows_written": 0,
+    "p8_b4_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "LOCAL_HARDENING_REPLAY_AND_VERIFICATION_PASS"
+}
