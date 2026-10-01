@@ -2,7 +2,7 @@
   "stage": "P8-B3",
   "checkpoint": "SCHEMA_HARDENING_LOCAL_PACKAGE",
   "date": "2026-10-01",
-  "result": "PACKAGE_CREATED_LOCAL_VALIDATION_PENDING",
+  "result": "LOCAL_HARDENING_VERIFICATION_COMPLETE_PASS",
   "trigger": {
     "hosted_foundation_applied": true,
     "hosted_b3_rows": 0,
@@ -48,5 +48,23 @@
     "production_changed": false,
     "main_changed": false
   },
-  "next_gate": "LOCAL_HARDENING_REPLAY_AND_VERIFICATION_PASS"
+  "next_gate": "SEPARATE_OWNER_APPROVAL_FOR_EXACT_HOSTED_B3_HARDENING_MIGRATION",
+  "validation": {
+    "clean_cumulative_replay": "PASS",
+    "cumulative_foundation_contract": "PASS",
+    "hardening_contract": "PASS",
+    "deterministic_adjustment_tests": "PASS_7_OF_7",
+    "typescript": "PASS",
+    "architecture": "PASS",
+    "scoped_lint": "PASS",
+    "production_build": "PASS",
+    "local_db_lint": "PASS",
+    "local_migration_ledger": "PASS",
+    "hardening_migration_present": true,
+    "generated_types": "PASS",
+    "post_replay_schema_diff": "EMPTY_PASS",
+    "repository_hygiene": "PASS",
+    "credential_pattern_scan": "PASS",
+    "terminal_marker": "P8_B3_HARDENING_LOCAL_VERIFICATION_PASS"
+  }
 }
