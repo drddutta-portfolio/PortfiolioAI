@@ -3,7 +3,7 @@
 Date: 1 October 2026  
 Environment: Development repository/local only  
 Upstream: P8-B2 COMPLETE / PASS / CLOSED  
-Status: **PACKAGE CREATED / LOCAL REPLAY + TEST PENDING / HOSTED APPLICATION NOT AUTHORIZED**
+Status: **LOCAL PACKAGE COMPLETE / VALIDATED / PASS / HOSTED APPLICATION NOT AUTHORIZED**
 
 ## Non-negotiable financial-data doctrine
 
@@ -172,3 +172,29 @@ This deliberate non-ready result is the safety gate: the subsequent canary resol
 Run a clean local database replay, execute the SQL contract test, execute the deterministic TypeScript fixture test, then run the dry-run manifest planner.
 
 No hosted migration application, official-file download campaign, corporate-action acquisition, TRI acquisition, B4 work or C work is authorized by this package.
+
+## Local validation result
+
+The package passed all local validation steps:
+
+```text
+supabase db reset = PASS
+SQL contract test = PASS
+BEGIN
+DO
+DO
+ROLLBACK
+
+Vitest deterministic adjustment suite = 7 / 7 PASS
+
+Dry-run manifest planner = PASS
+manifest hash = d7140779abdf92cc1e6acc85bd1ac08d430bc7ce48ece97d0a52d74aa516dc3
+candidate weekdays = 783
+legacy candidates = 200
+UDiFF candidates = 583
+proven trading dates = 0
+resolved download URLs = 0
+acquisition_ready = false
+```
+
+The next gate is a small official-source retrieval canary. That canary must prove the exact NSE legacy/UDiFF bhavcopy path, the official NSE corporate-action export and the official NIFTY 500 TRI export before any bulk acquisition is allowed.
