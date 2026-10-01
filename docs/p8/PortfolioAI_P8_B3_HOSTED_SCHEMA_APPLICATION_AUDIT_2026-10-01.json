@@ -1,0 +1,131 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "HOSTED_SCHEMA_APPLICATION",
+  "date": "2026-10-01",
+  "environment": "PortfolioAI Dev",
+  "result": "SCHEMA_APPLIED_PRESERVATION_PASS_ADVISOR_DIVERGENCE_STOP",
+  "codex_alignment_audit": "docs/p8/PortfolioAI_P8_B3_CODEX_PLAN_ALIGNMENT_AUDIT_2026-10-01.md",
+  "migration": {
+    "repository_file": "supabase/migrations/20261001123000_create_p8_b3_market_history_foundation.sql",
+    "repository_blob_sha": "3bc672003162926b5637dd2101f7bb15613b3c1f",
+    "applied_name": "create_p8_b3_market_history_foundation",
+    "hosted_version": "20261001112716",
+    "exact_reviewed_sql_only": true,
+    "broad_db_push_used": false
+  },
+  "hosted_objects": {
+    "tables": 7,
+    "views": 2,
+    "functions": 1,
+    "all_b3_tables_rls_enabled": true,
+    "all_b3_tables_policy_count": 1,
+    "views_security_invoker": true,
+    "anon_table_select": false,
+    "authenticated_table_select": true,
+    "authenticated_table_write": false,
+    "service_role_insert": true,
+    "mutation_rejection_function_public_execute": false,
+    "mutation_rejection_function_anon_execute": false,
+    "mutation_rejection_function_authenticated_execute": false,
+    "mutation_rejection_function_service_execute": true,
+    "initial_b3_rows": 0
+  },
+  "preservation": {
+    "securities": {
+      "rows": 284,
+      "fingerprint_sum": "-71096614391613005803",
+      "unchanged": true
+    },
+    "market_price_history": {
+      "rows": 63929,
+      "fingerprint_sum": "1886650556560648807899",
+      "unchanged": true
+    },
+    "market_benchmark_price_history": {
+      "rows": 2710,
+      "fingerprint_sum": "-161214581717534960018",
+      "unchanged": true
+    },
+    "p8_b2_identities": {
+      "rows": 4524,
+      "fingerprint_sum": "-203447333955115924373",
+      "unchanged": true
+    },
+    "p8_b2_listing_observations": {
+      "rows": 562790,
+      "row_hash_fingerprint_sum": "-3231956900133089664586",
+      "unchanged": true
+    },
+    "p8_b2_runs": {
+      "rows": 32,
+      "unchanged": true
+    },
+    "p8_b2_members": {
+      "rows": 144768,
+      "unchanged": true
+    },
+    "p8_b2_evidence_links": {
+      "rows": 562790,
+      "unchanged": true
+    },
+    "p8_b2_selections": {
+      "rows": 32,
+      "unchanged": true
+    }
+  },
+  "advisor_delta": {
+    "security": {
+      "pg_graphql_authenticated_table_exposed": {
+        "before": 95,
+        "after": 104,
+        "delta": 9,
+        "b3_findings": 9
+      },
+      "other_security_lints_changed": false
+    },
+    "performance": {
+      "unindexed_foreign_keys": {
+        "before": 135,
+        "after": 147,
+        "delta": 12,
+        "b3_findings": 12
+      },
+      "unused_index": {
+        "before": 36,
+        "after": 45,
+        "delta": 9,
+        "b3_findings": 9,
+        "note": "expected on newly created empty tables; review after use"
+      },
+      "auth_rls_initplan": {
+        "before": 2,
+        "after": 2,
+        "delta": 0
+      },
+      "no_primary_key": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      }
+    }
+  },
+  "stop_reason": [
+    "Post-migration advisor divergence must be reviewed before any B3 data acquisition.",
+    "Pre-hosted checkpoint required no new unexplained security advisor warnings.",
+    "Twelve B3 foreign-key paths lack advisor-recognized covering indexes."
+  ],
+  "arithmetic_contract": {
+    "precision_rounding_frozen": false,
+    "blocks_adjustment_materialization": true,
+    "blocks_schema_presence": false
+  },
+  "controls": {
+    "bulk_acquisition_started": false,
+    "b3_data_rows_written": 0,
+    "p8_b4_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "OWNER_APPROVAL_FOR_LOCAL_ADDITIVE_B3_SCHEMA_HARDENING_REMEDIATION_PACKAGE"
+}
