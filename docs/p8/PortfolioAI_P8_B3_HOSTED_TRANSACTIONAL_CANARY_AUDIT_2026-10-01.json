@@ -1,0 +1,43 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "HOSTED_TRANSACTIONAL_SCHEMA_DATA_CANARY",
+  "date": "2026-10-01",
+  "environment": "PortfolioAI Dev",
+  "result": "COMPLETE_PASS_ROLLED_BACK",
+  "durable_rows_written": 0,
+  "exercised_lineage": [
+    "p8_b3_source_archives",
+    "p8_b3_raw_market_price_observations",
+    "p8_b3_corporate_action_observations",
+    "p8_b3_corporate_action_normalizations",
+    "p8_b3_adjustment_factors",
+    "p8_b3_adjusted_market_price_series",
+    "p8_b3_benchmark_total_return_history"
+  ],
+  "checks": {
+    "service_role_insert_path": "PASS",
+    "foreign_key_lineage": "PASS",
+    "ready_normalization_constraints": "PASS",
+    "adjustment_factor_constraints": "PASS",
+    "adjusted_series_constraints": "PASS",
+    "benchmark_constraints": "PASS",
+    "append_only_mutation_guard": "PASS_SQLSTATE_55000",
+    "transaction_rollback": "PASS"
+  },
+  "post_canary_counts": {
+    "source_archives": 0,
+    "raw_prices": 0,
+    "corporate_action_observations": 0,
+    "corporate_action_normalizations": 0,
+    "adjustment_factors": 0,
+    "adjusted_series": 0,
+    "benchmark_rows": 0
+  },
+  "preserved_reference_counts": {
+    "securities": 284,
+    "market_price_history": 63929,
+    "p8_b2_listing_observations": 562790
+  },
+  "note": "Fixture URLs used example.invalid deliberately so the transactional schema canary cannot be mistaken for authoritative market evidence.",
+  "next_gate": "ARITHMETIC_CONTRACT_OWNER_APPROVAL_BEFORE_ADJUSTMENT_MATERIALIZATION"
+}
