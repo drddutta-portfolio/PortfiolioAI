@@ -5,7 +5,7 @@ import {
   reply, sha256, validateGrant,
 } from "./shared.ts"
 import { beginMonth, identityBatch, observationBatch } from "./identity.ts"
-import { beginRun, evidenceBatch, memberBatch, selectMonth } from "./universe.ts"
+import { beginRun, evidenceBatch, memberBatch, monthStatus, selectMonth } from "./universe.ts"
 
 async function completeCampaign(
   admin: ReturnType<typeof createClient>,
@@ -192,6 +192,14 @@ Deno.serve(async (request) => {
           clean(body.archiveHash),
           Array.isArray(body.rows) ? body.rows as Json[] : [],
         ),
+      })
+    }
+
+    if (operation === "month_status") {
+      return reply(200, {
+        status: "OK",
+        operation,
+        ...await monthStatus(admin, clean(body.sourceDate)),
       })
     }
 
