@@ -111,6 +111,24 @@ function normalizeDate(value) {
   throw new Error("unsupported date format: " + raw)
 }
 
+const OPTIONAL_DATE_PLACEHOLDERS = new Set([
+  "-",
+  "--",
+  "NA",
+  "N/A",
+  "N.A.",
+  "NOT AVAILABLE",
+  "NOT APPLICABLE",
+  "NULL",
+])
+
+function normalizeOptionalDate(value) {
+  const raw = String(value ?? "").trim()
+  if (!raw) return null
+  if (OPTIONAL_DATE_PLACEHOLDERS.has(raw.toUpperCase())) return null
+  return normalizeDate(raw)
+}
+
 async function fetchWithRetry(url, options = {}, attempts = 4) {
   let lastError
   for (let attempt = 1; attempt <= attempts; attempt++) {
@@ -245,47 +263,28 @@ async function buildCorporateAction() {
     ex_date: normalizeDate(
       firstDefined(row, ["exDate", "ex_date", "EX-DATE"]),
     ),
-    record_date: firstDefined(row, [
-      "recDate",
-      "recordDate",
-      "record_date",
-      "RECORD DATE",
-    ])
-      ? normalizeDate(
-          firstDefined(row, [
-            "recDate",
-            "recordDate",
-            "record_date",
-            "RECORD DATE",
-          ]),
-        )
-      : null,
-    book_closure_start: firstDefined(row, [
-      "bcStartDate",
-      "bookClosureStartDate",
-      "BOOK CLOSURE START DATE",
-    ])
-      ? normalizeDate(
-          firstDefined(row, [
-            "bcStartDate",
-            "bookClosureStartDate",
-            "BOOK CLOSURE START DATE",
-          ]),
-        )
-      : null,
-    book_closure_end: firstDefined(row, [
-      "bcEndDate",
-      "bookClosureEndDate",
-      "BOOK CLOSURE END DATE",
-    ])
-      ? normalizeDate(
-          firstDefined(row, [
-            "bcEndDate",
-            "bookClosureEndDate",
-            "BOOK CLOSURE END DATE",
-          ]),
-        )
-      : null,
+    record_date: normalizeOptionalDate(
+      firstDefined(row, [
+        "recDate",
+        "recordDate",
+        "record_date",
+        "RECORD DATE",
+      ]),
+    ),
+    book_closure_start: normalizeOptionalDate(
+      firstDefined(row, [
+        "bcStartDate",
+        "bookClosureStartDate",
+        "BOOK CLOSURE START DATE",
+      ]),
+    ),
+    book_closure_end: normalizeOptionalDate(
+      firstDefined(row, [
+        "bcEndDate",
+        "bookClosureEndDate",
+        "BOOK CLOSURE END DATE",
+      ]),
+    ),
   }))
 
   const selected = normalized.filter(
