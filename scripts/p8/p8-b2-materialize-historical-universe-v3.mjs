@@ -367,7 +367,9 @@ async function materializeMonth(month) {
   }
 
   let evidenceDone = 0
-  for (const batch of chunks(evidence, 1500)) {
+  // Keep evidence writes deliberately smaller as the append-only evidence table grows.
+  // This avoids large PostgREST upserts approaching the hosted statement timeout.
+  for (const batch of chunks(evidence, 500)) {
     await post("evidence_batch", {
       runId: run.run_id,
       decisionAt: month.decision_at,
