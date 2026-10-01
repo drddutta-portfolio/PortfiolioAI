@@ -2,7 +2,7 @@
 
 Date: 1 October 2026  
 Environment: PortfolioAI Development only  
-Status: **PREFLIGHT PASS / MATERIALIZER DEPLOYED / CANARY READY**
+Status: **COMPLETE / PASS / CLOSED**
 
 ## Frozen plan
 
@@ -83,3 +83,44 @@ Identity linkage remains exactly `255 / 7 / 4262`.
 The frozen live-security snapshot was compared to current PortfolioAI Dev after the canary and returned `0 changed / 0 missing / 0 added`.
 
 The campaign grant remains unconsumed. The full materialization sender may now resume; its idempotent keys safely replay the canary month before continuing through the remaining 31 dates.
+
+## Full campaign completion
+
+The Development-only campaign completed on 1 October 2026.
+
+```text
+status = COMPLETE
+operation = complete_campaign
+
+historical identities = 4524
+source archives = 32
+listing observations = 562790
+universe runs = 32
+universe members = 144768
+member evidence links = 562790
+run selections = 32
+
+latest decision date = 2026-09-29
+latest eligible = 4385
+latest ineligible = 139
+latest blocked = 0
+latest run hash = 2ddce0a378e758a84501f4ef537a37822d3d4479264f7c3ffa27e89824fcbb21
+
+completion hash = 23a19bfbd86a341767370d6753d4eb471982313b6a0e37fe36e8a0c818124823
+```
+
+The campaign completion record and grant-consumption record are present in hosted PortfolioAI Dev.
+
+Independent post-completion verification confirmed:
+
+- 32 / 32 selected dates from 2024-02-29 through 2026-09-29;
+- 32 / 32 runs with exact 4,524-member cardinality and matching eligible/ineligible counts;
+- 32 / 32 runs with one selection and complete ELIGIBILITY_SUPPORT coverage for eligible members;
+- 32 / 32 source archives with the approved conservative availability bound before the decision instant and no invented publication timestamp;
+- identity split exactly 255 / 7 / 4262 with zero invalid frozen common-equity ISINs;
+- live current-security preservation exactly 284 / 284 rows, with 0 changed / 0 missing / 0 added;
+- legacy B2 v1/v2 tables remain unused.
+
+P8-B2 Gate result: **COMPLETE / PASS / CLOSED**.
+
+P8-B3, P8-B4+ and P8-C remain separately authorization-gated.
