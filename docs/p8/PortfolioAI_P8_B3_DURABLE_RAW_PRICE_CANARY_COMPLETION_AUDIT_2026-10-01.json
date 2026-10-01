@@ -1,0 +1,108 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "DURABLE_RAW_PRICE_CANARY_COMPLETION",
+  "date": "2026-10-01",
+  "environment": "PortfolioAI Dev",
+  "result": "COMPLETE_PASS",
+  "campaign_id": "P8_B3_RAW_PRICE_CANARY_20261001_V1",
+  "payload": {
+    "version": "P8_B3_DURABLE_RAW_PRICE_CANARY_PAYLOAD_V1",
+    "payload_hash": "a494b79025de3b04f41b771a2374a87721c1cd40abc30685bd37eb62a168ecaa",
+    "target_isin": "INE002A01018",
+    "ready_for_durable_insert": true
+  },
+  "durable_rows": {
+    "source_archives": 2,
+    "raw_market_price_observations": 2,
+    "corporate_action_observations": 0,
+    "corporate_action_normalizations": 0,
+    "adjustment_factors": 0,
+    "adjusted_market_price_series": 0,
+    "benchmark_total_return_history": 0
+  },
+  "evidence": [
+    {
+      "source_kind": "NSE_CM_BHAVCOPY_LEGACY",
+      "trade_date": "2024-03-14",
+      "archive_sha256": "3350c560b90aaa469832ac27a659b43dddbf2fe59006f58842831f979890f450",
+      "csv_sha256": "c367cc2f851b1e987e50b7ae8372acad4f1f11fa82bc86d5f09ba717f10121fd",
+      "archive_hash": "546a6980b5d9c509fdbd1800d86e0f3131b265ce98f23872f848ab0287e93578",
+      "row_hash": "3ea7c52a455c43f60c37dfff56458601243918305bcb419dc995e95dacacfe8c",
+      "trading_symbol": "RELIANCE",
+      "series": "EQ",
+      "close": "2862.95"
+    },
+    {
+      "source_kind": "NSE_CM_BHAVCOPY_UDIFF",
+      "trade_date": "2024-08-01",
+      "archive_sha256": "5021dabff197d0e8c3939eff10e2a09e540c7c3e60e61164a34293ab970ac94c",
+      "csv_sha256": "e298457061a1cb8da33b3eb8697e28b0ea79b632a96e57b0118a8d1dff956818",
+      "archive_hash": "af340a9c68af84dd8d1edda8e6f373ff7c97922dbcbabe45c5dbeb0ac8f6cd97",
+      "row_hash": "8f1035e31aa55fe5880b0d7aa6f7210a236969a9c5903a04e7de92b5614bf156",
+      "trading_symbol": "RELIANCE",
+      "series": "EQ",
+      "close": "3030.60"
+    }
+  ],
+  "identity_binding": {
+    "historical_identity_id": "4620072a-b43a-5b0f-a090-f96c5561bed8",
+    "historical_isin": "INE002A01018",
+    "link_basis": "EXACT_ISIN",
+    "exact_match_count": 1
+  },
+  "idempotency": {
+    "replay_legacy_archive_inserted": 0,
+    "replay_udiff_archive_inserted": 0,
+    "replay_legacy_raw_observation_inserted": 0,
+    "replay_udiff_raw_observation_inserted": 0,
+    "result": "PASS"
+  },
+  "preservation": {
+    "securities": {
+      "rows": 284,
+      "fingerprint_sum": "-71096614391613005803",
+      "unchanged": true
+    },
+    "market_price_history": {
+      "rows": 63929,
+      "fingerprint_sum": "1886650556560648807899",
+      "unchanged": true
+    },
+    "market_benchmark_price_history": {
+      "rows": 2710,
+      "fingerprint_sum": "-161214581717534960018",
+      "unchanged": true
+    },
+    "p8_b2_identities": {
+      "rows": 4524,
+      "fingerprint_sum": "-203447333955115924373",
+      "unchanged": true
+    },
+    "p8_b2_listing_observations": {
+      "rows": 562790,
+      "row_hash_fingerprint_sum": "-3231956900133089664586",
+      "unchanged": true
+    },
+    "p8_b2_runs": 32,
+    "p8_b2_members": 144768,
+    "p8_b2_evidence_links": 562790,
+    "p8_b2_selections": 32
+  },
+  "advisors": {
+    "b3_security_findings": 0,
+    "b3_unindexed_foreign_key_findings": 0,
+    "b3_unused_index_info_findings": 17,
+    "unused_index_disposition": "INFO_ONLY_REASSESS_AFTER_B3_LOAD_PATHS_MATURE"
+  },
+  "controls": {
+    "corporate_action_durable_acquisition_started": false,
+    "benchmark_durable_acquisition_started": false,
+    "adjustment_materialization_started": false,
+    "full_raw_price_campaign_started": false,
+    "p8_b4_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "SEPARATE_OWNER_APPROVAL_FOR_CORPORATE_ACTION_AND_NIFTY500_TRI_DURABLE_AUTHORITY_CANARIES"
+}
