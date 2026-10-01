@@ -1,0 +1,108 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "HOSTED_HARDENING",
+  "date": "2026-10-01",
+  "environment": "PortfolioAI Dev",
+  "result": "COMPLETE_PASS",
+  "migration": {
+    "repository_file": "supabase/migrations/20261001131500_harden_p8_b3_access_and_foreign_key_indexes.sql",
+    "repository_blob_sha": "a4c07fdb4814fc4e3ecb101ea127b44f1f4e892f",
+    "applied_name": "harden_p8_b3_access_and_foreign_key_indexes",
+    "hosted_version": "20261001120242",
+    "exact_reviewed_sql_only": true,
+    "broad_db_push_used": false
+  },
+  "hosted_access": {
+    "b3_tables": 7,
+    "b3_views": 2,
+    "all_tables_rls_enabled": true,
+    "anon_select": false,
+    "authenticated_select": false,
+    "authenticated_write": false,
+    "service_role_select": true,
+    "service_role_insert": true,
+    "views_security_invoker": true
+  },
+  "foreign_keys": {
+    "total_b3_foreign_keys": 14,
+    "all_have_covering_indexes": true,
+    "advisor_unindexed_b3_findings_after": 0
+  },
+  "preservation": {
+    "securities": {
+      "rows": 284,
+      "fingerprint_sum": "-71096614391613005803",
+      "unchanged": true
+    },
+    "market_price_history": {
+      "rows": 63929,
+      "fingerprint_sum": "1886650556560648807899",
+      "unchanged": true
+    },
+    "market_benchmark_price_history": {
+      "rows": 2710,
+      "fingerprint_sum": "-161214581717534960018",
+      "unchanged": true
+    },
+    "p8_b2_identities": {
+      "rows": 4524,
+      "fingerprint_sum": "-203447333955115924373",
+      "unchanged": true
+    },
+    "p8_b2_listing_observations": {
+      "rows": 562790,
+      "row_hash_fingerprint_sum": "-3231956900133089664586",
+      "unchanged": true
+    },
+    "p8_b2_runs": {
+      "rows": 32,
+      "unchanged": true
+    },
+    "p8_b2_members": {
+      "rows": 144768,
+      "unchanged": true
+    },
+    "p8_b2_evidence_links": {
+      "rows": 562790,
+      "unchanged": true
+    },
+    "p8_b2_selections": {
+      "rows": 32,
+      "unchanged": true
+    }
+  },
+  "advisor_after": {
+    "security": {
+      "rls_enabled_no_policy": 21,
+      "pg_graphql_anon_table_exposed": 29,
+      "pg_graphql_authenticated_table_exposed": 95,
+      "anon_security_definer_function_executable": 3,
+      "authenticated_security_definer_function_executable": 14,
+      "auth_leaked_password_protection": 1,
+      "b3_findings": 0
+    },
+    "performance": {
+      "unindexed_foreign_keys": 135,
+      "auth_rls_initplan": 2,
+      "no_primary_key": 1,
+      "unused_index": 57,
+      "b3_unindexed_foreign_key_findings": 0,
+      "b3_unused_index_findings": 21,
+      "b3_unused_index_disposition": "EXPECTED_INFO_ON_EMPTY_NEW_TABLES_REVIEW_AFTER_DATA_CANARY"
+    }
+  },
+  "hosted_b3_rows": 0,
+  "arithmetic_contract": {
+    "precision_rounding_frozen": false,
+    "blocks_adjustment_materialization": true
+  },
+  "controls": {
+    "acquisition_started": false,
+    "adjustment_materialization_started": false,
+    "p8_b4_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "HOSTED_SCHEMA_CANARY_AND_ARITHMETIC_PRECISION_ROUNDING_CONTRACT_BEFORE_DATA_MATERIALIZATION"
+}
