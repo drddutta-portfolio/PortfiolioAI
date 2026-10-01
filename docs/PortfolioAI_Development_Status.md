@@ -4289,3 +4289,75 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 hosted schema hardening closure — 1 October 2026
+
+The exact owner-approved B3 hardening migration was applied to hosted PortfolioAI Dev and passed post-migration verification.
+
+Hosted migration:
+
+```text
+name = harden_p8_b3_access_and_foreign_key_indexes
+hosted version = 20261001120242
+broad db push = NO
+```
+
+Verified hosted access state:
+
+```text
+B3 tables = 7
+B3 views = 2
+all B3 tables RLS enabled = YES
+anon B3 SELECT = NO
+authenticated B3 SELECT = NO
+authenticated B3 writes = NO
+service-role SELECT/INSERT = YES
+coverage views security_invoker = YES
+```
+
+Foreign-key hardening:
+
+```text
+B3 foreign keys checked = 14
+covering index present = 14 / 14
+B3 unindexed-FK advisor findings = 0
+```
+
+All preservation counts/fingerprints remain unchanged.
+
+Advisor result:
+
+```text
+authenticated GraphQL WARN = 95
+  returned exactly to pre-B3 baseline
+  B3 findings = 0
+
+unindexed foreign keys INFO = 135
+  returned exactly to pre-B3 baseline
+  B3 findings = 0
+
+unused indexes INFO = 57
+  B3 findings = 21
+  disposition = EXPECTED while all B3 tables remain empty;
+                review again after hosted data canary/load paths execute
+```
+
+All seven B3 tables remain empty.
+
+```text
+P8-B3 hosted foundation schema = APPLIED
+P8-B3 hosted hardening = COMPLETE / PASS
+P8-B3 advisor gate = COMPLETE / PASS
+P8-B3 hosted data rows = 0
+
+P8-B3 acquisition = NOT STARTED
+P8-B3 arithmetic precision/rounding contract = NOT YET FROZEN
+P8-B3 adjustment materialization = BLOCKED
+
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Next Codex-aligned gate: hosted B3 schema canary plus explicit arithmetic precision/rounding contract before any adjustment-factor or adjusted-series materialization.
