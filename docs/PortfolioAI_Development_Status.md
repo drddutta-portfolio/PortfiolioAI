@@ -3903,3 +3903,44 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 official-source canary closure — 1 October 2026
+
+The bounded local official-source retrieval canary completed successfully under the no-guesswork / real-money contract.
+
+Verified official authority paths:
+
+```text
+legacy NSE bhavcopy = PROVEN
+UDiFF NSE bhavcopy = PROVEN
+NSE corporate actions = PROVEN
+NIFTY 500 TRI = PROVEN
+overall = CANARY_PASS
+```
+
+Canary hash:
+
+`bae2927499d3f37b7e58660680b506dc7b2ffccdaf10be5b1fb8a0d90e1b2c1f`
+
+The canary performed no hosted database writes, no migration application, no bulk acquisition and no paid-provider call.
+
+Gate implication:
+
+- official raw OHLCV source path is proven across both pre- and post-UDiFF formats;
+- official corporate-action evidence path is proven;
+- official NIFTY 500 Total Return Index path is proven;
+- source acquisition can now be planned without guessed URLs or benchmark substitution.
+
+```text
+P8-B2 = COMPLETE / PASS / CLOSED
+P8-B3 = ACTIVE
+P8-B3 local foundation = COMPLETE / PASS
+P8-B3 official-source canary = COMPLETE / PASS
+
+P8-B3 hosted migration = NOT AUTHORIZED / NOT APPLIED
+P8-B3 bulk acquisition = NOT AUTHORIZED / NOT STARTED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
