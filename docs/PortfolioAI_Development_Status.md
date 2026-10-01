@@ -4176,3 +4176,41 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 local schema hardening remediation package — 1 October 2026
+
+Following the hosted advisor stop, an additive local-only hardening package was created.
+
+Remediation:
+
+```text
+authenticated B3 table/view SELECT = REVOKED IN LOCAL MIGRATION
+service-role access = PRESERVED
+RLS policies = PRESERVED
+exact FK covering indexes added = 12
+data mutations = 0
+```
+
+Created:
+
+- `supabase/migrations/20261001131500_harden_p8_b3_access_and_foreign_key_indexes.sql`
+- `supabase/tests/p8_b3_schema_hardening.sql`
+- `scripts/p8/run-p8-b3-hardening-local-verification.sh`
+- `docs/p8/PortfolioAI_P8_B3_SCHEMA_HARDENING_PACKAGE_2026-10-01.md`
+- `docs/p8/PortfolioAI_P8_B3_SCHEMA_HARDENING_PACKAGE_AUDIT_2026-10-01.json`
+
+The cumulative B3 SQL contract was updated to validate the hardened access state.
+
+```text
+P8-B3 hosted foundation schema = APPLIED
+P8-B3 hosted data rows = 0
+P8-B3 advisor gate = BLOCKED / LOCAL REMEDIATION PACKAGE CREATED
+P8-B3 local hardening verification = PENDING
+P8-B3 hosted hardening migration = NOT AUTHORIZED / NOT APPLIED
+P8-B3 acquisition = NOT STARTED
+P8-B3 adjustment materialization = BLOCKED BY ARITHMETIC CONTRACT
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
