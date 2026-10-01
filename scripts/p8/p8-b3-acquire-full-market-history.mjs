@@ -84,6 +84,13 @@ console.log(
 console.log("\nStage 2/3 - official NSE corporate actions")
 let cookie = await newNseCookie()
 for (const month of MONTHS) {
+  if (progress.completed_action_months.includes(month.key)) {
+    console.log(
+      "  actions " + month.key + ": completed slice; skipping replay",
+    )
+    continue
+  }
+
   try {
     await acquireActionMonth(month, progress, cookie)
   } catch (error) {
