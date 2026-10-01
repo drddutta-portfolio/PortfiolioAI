@@ -1,0 +1,76 @@
+{
+  "stage": "P8-B3",
+  "checkpoint": "LOCAL_FOUNDATION_PACKAGE_CREATED",
+  "date": "2026-10-01",
+  "environment": "Development repository/local only",
+  "repository_head_before_audit": "361fa139f0dca58287a13918fb2ff34ec14adcab",
+  "doctrine": "NO_GUESSWORK_FAIL_CLOSED_REAL_MONEY",
+  "upstream": {
+    "p8_b2": "COMPLETE_PASS_CLOSED",
+    "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+    "benchmark_version": "P8_NIFTY500_TRI_V1"
+  },
+  "package": {
+    "migration": "supabase/migrations/20261001123000_create_p8_b3_market_history_foundation.sql",
+    "sql_test": "supabase/tests/p8_b3_market_history_foundation.sql",
+    "adjustment_math": "src/features/backtesting/p8CorporateActionAdjustment.ts",
+    "adjustment_test": "src/features/backtesting/p8CorporateActionAdjustment.test.ts",
+    "dry_run_planner": "scripts/p8/p8-b3-plan-market-history.mjs",
+    "design_doc": "docs/p8/PortfolioAI_P8_B3_LOCAL_FOUNDATION_PACKAGE_2026-10-01.md"
+  },
+  "schema": {
+    "additive_tables": 7,
+    "read_views": 2,
+    "mutates_existing_live_market_tables": false,
+    "append_only": true,
+    "rls_required": true,
+    "anon_access": "DENIED",
+    "authenticated_access": "OWNER_SCOPED_SELECT_ONLY",
+    "service_role_write": true
+  },
+  "authority_contract": {
+    "raw_ohlcv": "OFFICIAL_NSE_ALL_REPORTS_BHAVCOPY",
+    "bhavcopy_cutover": "2024-07-08",
+    "legacy_report": "CM - Bhavcopy(csv)",
+    "udiff_report": "CM-UDiFF Common Bhavcopy Final (zip)",
+    "corporate_actions": "OFFICIAL_NSE_CORPORATE_FILINGS_ACTIONS",
+    "benchmark": "OFFICIAL_NSE_INDICES_NIFTY_500_TOTAL_RETURN_INDEX",
+    "direct_download_urls_guessed": false
+  },
+  "deterministic_adjustment_scope": {
+    "split_consolidation": "EXPLICIT_DECLARED_TERMS_ONLY",
+    "bonus": "EXPLICIT_DECLARED_RATIO_ONLY",
+    "cash_dividend": "EXPLICIT_CASH_AMOUNT_AND_PRICE_LINK_ONLY",
+    "rights": "BLOCKED_PENDING_EXACT_TERMS_AND_APPROVED_TREATMENT",
+    "merger": "BLOCKED_PENDING_EXACT_TERMS_AND_APPROVED_TREATMENT",
+    "demerger": "BLOCKED_PENDING_EXACT_TERMS_AND_APPROVED_TREATMENT",
+    "unexplained_price_discontinuity": "NEVER_INFER_ACTION"
+  },
+  "dry_run_expectation": {
+    "candidate_weekdays": 783,
+    "legacy_candidates": 200,
+    "udiff_candidates": 583,
+    "proven_trading_dates_before_canary": 0,
+    "resolved_download_urls_before_canary": 0,
+    "acquisition_ready": false
+  },
+  "validation": {
+    "clean_local_db_reset": "PENDING",
+    "sql_contract_test": "PENDING",
+    "typescript_fixture_test": "PENDING",
+    "dry_run_manifest_execution": "PENDING"
+  },
+  "controls": {
+    "official_file_acquisition_started": false,
+    "corporate_action_acquisition_started": false,
+    "benchmark_tri_acquisition_started": false,
+    "hosted_migration_applied": false,
+    "hosted_b3_writes": 0,
+    "paid_provider_calls": 0,
+    "p8_b4_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "LOCAL_REPLAY_AND_TEST_ONLY"
+}
