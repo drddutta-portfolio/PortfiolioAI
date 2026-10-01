@@ -736,9 +736,27 @@ Deno.serve(async (request) => {
       code: "P8_B3_OPERATION",
     })
   } catch (error) {
-    const detail = error instanceof Error
-      ? { code: error.message }
-      : { code: "P8_B3_SOURCE_ACQUISITION_FAILED" }
+    let detail: Json
+
+    if (error instanceof Error) {
+      detail = {
+        code: error.message,
+        error_type: error.name,
+      }
+    } else if (error && typeof error === "object") {
+      const row = error as Record<string, unknown>
+      detail = {
+        code: clean(row.code) || "P8_B3_SOURCE_ACQUISITION_FAILED",
+        database_message: clean(row.message) || null,
+        database_details: clean(row.details) || null,
+        database_hint: clean(row.hint) || null,
+      }
+    } else {
+      detail = {
+        code: "P8_B3_SOURCE_ACQUISITION_FAILED",
+        database_message: clean(error) || null,
+      }
+    }
 
     console.error("P8_B3_SOURCE_ACQUISITION_STOP", detail)
     return reply(500, {
