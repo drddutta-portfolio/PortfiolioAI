@@ -4654,3 +4654,54 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 durable corporate-action + NIFTY 500 TRI canary closure — 1 October 2026
+
+The second durable B3 authority slice completed successfully.
+
+```text
+campaign = P8_B3_ACTION_TRI_CANARY_20261001_V1
+payload hash = f0e7da820631d9c0a6fe010c1a9008ac407119381a9e149356142aef2567b445
+
+durable totals:
+  source archives = 4
+  raw price observations = 2
+  corporate-action observations = 1
+  benchmark TRI rows = 1
+  normalizations = 0
+  adjustment factors = 0
+  adjusted series = 0
+
+BEL corporate action:
+  historical ISIN = INE263A01024
+  B2 link basis = EXACT_ISIN
+  purpose = Interim Dividend - Rs 1.95 Per Share
+  ex/record date = 2026-03-06
+
+NIFTY 500 TRI:
+  trade date = 2024-01-31
+  TRI = 31011.17
+  NTRI = 29432.64
+
+idempotency replay = 0 / 0 / 0 / 0
+preservation fingerprints = UNCHANGED
+B3 security findings = 0
+B3 unindexed-FK findings = 0
+```
+
+```text
+P8-B3 durable raw-price canary = COMPLETE / PASS
+P8-B3 durable action+TRI canary = COMPLETE / PASS
+P8-B3 arithmetic contract = OWNER APPROVED / FROZEN
+
+P8-B3 full source acquisition = NOT STARTED
+P8-B3 normalization = NOT STARTED
+P8-B3 adjustment materialization = NOT STARTED
+
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Next gate: separate owner approval for the full B3 source-acquisition campaign plan/execution. No full acquisition begins from this canary closure alone.
