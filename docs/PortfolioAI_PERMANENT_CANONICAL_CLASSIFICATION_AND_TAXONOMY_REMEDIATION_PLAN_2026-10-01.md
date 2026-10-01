@@ -6,7 +6,7 @@ Repository: `drddutta-portfolio/PortfiolioAI`
 Branch audited: `PortfolioAI-Development`  
 Repository audit began at `1fad7dfbc4a1be4e66d1ed9c850e420d9a34cc66`; concurrent P8-B3 work advanced through verified canary closure commit `57c44e9` before this plan's final alignment.
 Database audited: hosted `PortfolioAI Dev` (`lrgpjimipfkyoqbpsqzz`)  
-Result: **A. PLAN READY FOR OWNER APPROVAL**
+Result: **A. AMENDED PLAN READY FOR OWNER APPROVAL**
 
 ## 1. Executive decision
 
@@ -271,7 +271,11 @@ official classification evidence staged
     ↓
 Macro Sector → Sector → Industry → Basic Industry reconciled
     ↓
-one canonical V2 economic assignment selected
+complete 239-equity reconciliation matrix proposed
+    ↓
+owner checkpoint C-CLASSIFICATION approves the matrix
+    ↓
+only approved paths become canonical V2 economic assignments
     ↓
 business-model methodology revalidated
     ↓
@@ -359,28 +363,52 @@ SUBPROFILE_CHANGED
 REVIEW_REQUIRED
 ```
 
-Each row records previous V1 values, official hierarchy, source/evidence, proposed V2 path, reason codes and reviewer state. Suspicious combinations named in the request are mandatory review cases. No canonical selection occurs until the complete matrix is reviewed.
+Each row records, at minimum:
 
-**PASS:** 239/239 have an evidence-backed proposed path or explicit blocker; zero silent overwrite.
+```text
+security identity
+ticker/symbol
+previous V1 sector
+previous V1 industry
+all relevant existing evidence
+official NSE/BSE Macro-Economic Sector
+official Sector
+official Industry
+official Basic Industry
+proposed canonical V2 path
+disposition
+reason codes
+primary evidence source
+evidence date
+conflict/review state
+proposed methodology impact
+proposed subprofile impact where applicable
+```
+
+Suspicious combinations named in the request are mandatory review cases. C4 is a reconciliation/proposal stage only. It must not create or select a canonical V2 current assignment merely because a proposal exists.
+
+**PASS:** 239/239 have an evidence-backed proposed path or explicit blocker; zero silent overwrite; the complete matrix is owner-reviewable.
+
+**Owner checkpoint C-CLASSIFICATION:** the owner must approve the complete 239-equity reconciliation matrix before any proposed company path may be selected/materialized as canonical V2 current truth. Unapproved or unresolved rows remain `REVIEW_REQUIRED`. No guessed or provisional selected classification is permitted.
 
 ### C5 — Canonical taxonomy materialization
 
-Only after C4, derive actual represented Macro Sectors, Sectors, Industries and Basic Industries from the approved paths. Materialize stable nodes and exact raw-source-label mappings. Counts are outputs, not targets.
+Only after C4 **and owner checkpoint C-CLASSIFICATION approval**, derive actual represented Macro Sectors, Sectors, Industries and Basic Industries from the approved paths. Materialize stable nodes and exact raw-source-label mappings. Counts are outputs, not targets. C5 may materialize taxonomy nodes/mappings only from owner-approved reconciliation paths; unresolved rows remain review cases and cannot be converted into guessed canonical assignments.
 
 **PASS:** every resolved path has four correctly parented nodes; raw variants map explicitly; no orphan/duplicate node.
 
 ### C6 — Permanent database architecture
 
-Implement the approved append/version/select objects from section 4 locally, then hosted Development only after separate approval. Preserve V1 data and immutable evidence. Add audit triggers/constraints, RLS, grants, indexes, service-only writers and generated TypeScript types.
+Implement the approved append/version/select objects from section 4 locally, then hosted Development only after separate approval. Preserve V1 data and immutable evidence. Add audit triggers/constraints, RLS, grants, indexes, service-only writers and generated TypeScript types. Schema/staging capability may exist before company selection, but no canonical company selection event may be created from C4 proposals until owner checkpoint C-CLASSIFICATION has approved the relevant row/path.
 
 **PASS:** migration replay, schema diff, lint/advisors, RLS, privilege, append-only and idempotency tests pass; before/after preservation counts match.
 
 ### C7 — Canonical current projection
 
-Create `current_security_classification_v2` and an enrichment composition that joins it without redefining it. Conflict state must be derived from the candidate set and selection contract, not a selected row flag.
+Create `current_security_classification_v2` and an enrichment composition that joins it without redefining it. Conflict state must be derived from the candidate set and selection contract, not a selected row flag. The projection may expose only owner-approved canonical selections as `RESOLVED`; unresolved/unapproved securities must remain explicitly non-resolved and must never receive a guessed path.
 
-**PASS:** exactly 239 current rows, no duplicate security, every unresolved case visible, deterministic fingerprint stable across replay.  
-**STOP:** do not switch consumers yet.
+**PASS:** exactly 239 current rows, no duplicate security, every unresolved case visible, every `RESOLVED` row traces to C-CLASSIFICATION approval, deterministic fingerprint stable across replay.  
+**STOP:** do not switch consumers yet. During execution, `REVIEW_REQUIRED` is valid as an intermediate state; it is not sufficient by itself for final program closure.
 
 ### C8 — Methodology reassignment
 
@@ -398,7 +426,7 @@ methodology version and authority
 
 Retain correct methodology assignments by reference; do not recreate them. Changed assignments append a superseding version. Exact taxonomy-node/business-model mappings replace wildcard routing.
 
-**PASS:** 239 dispositions; 238 prior resolved methodologies accounted for; BLUEJET remains review-required until evidence resolves it; changed methodologies receive explicit owner review.  
+**PASS:** 239 dispositions; 238 prior resolved methodologies accounted for; BLUEJET remains review-required until evidence resolves it; changed methodologies receive explicit owner review. A security whose economic classification remains unresolved cannot receive a guessed methodology, `GENERAL` fallback, specialised R6/R7 score or downstream analytical action that depends on valid methodology.  
 **Owner checkpoint C-D:** approve changed methodology/subprofile assignments.
 
 ### C9 — Pharma reconciliation
@@ -415,7 +443,7 @@ CDMO_CRAMS
 
 Economic hierarchy does not replace this layer. Use consolidated segments, filings and approved company evidence. Preserve TORNTPHARM and other correct assignments; supersede only with stronger evidence and owner approval. BLUEJET must be resolved from evidence or remain `REVIEW_REQUIRED`.
 
-**PASS:** every Pharma-methodology security has one current subprofile or an explicit blocker; no generic Pharma fallback.
+**PASS:** every Pharma-methodology security has one current subprofile or an explicit blocker; no generic Pharma fallback. An explicit blocker is acceptable during Development execution, but final closure requires resolution unless that named security receives an individual owner-approved unresolved exception.
 
 ### C10 — Application migration to one source
 
@@ -441,7 +469,7 @@ Ledger creation/transaction preservation may remain possible when financially va
 
 The workflow uses exact identity, official exchange classification, immutable evidence, idempotent retries, freshness/refresh policy, restructuring/corporate-action review, and owner-visible blockers. It never guesses or chooses the nearest profile.
 
-**PASS:** onboarding tests in C14 and an operational retry/review queue pass.
+**PASS:** onboarding tests in C14 and an operational retry/review queue pass. A `REVIEW_REQUIRED` onboarding security is not `ANALYTICALLY_READY` and cannot enter specialised R6/R7 or dependent downstream action generation.
 
 ### C12 — Legacy retirement
 
@@ -473,7 +501,9 @@ stock-page classification match      x/239
 methodology routing valid            x/239
 ```
 
-Every unresolved stock must have an explicit reason. Cross-surface comparisons must use IDs/version, not only matching display strings.
+Every unresolved stock must have an explicit reason. The regression must also report the count and names of any proposed owner-approved unresolved exceptions and prove that each remains blocked from specialised methodology/scoring. Cross-surface comparisons must use IDs/version, not only matching display strings.
+
+For Development/migration readiness, a non-zero `REVIEW_REQUIRED` count is acceptable only when every such security is visible and fail-closed. For final program closure, the default requirement is `239/239 RESOLVED`; any deviation requires individually named, documented, owner-approved exceptions.
 
 ### C14 — New-stock simulations
 
@@ -489,7 +519,7 @@ Prominently record:
 
 > PortfolioAI has exactly one current canonical company-classification authority. All analytical methodology is downstream of that authority.
 
-**Final checkpoint C-F:** owner reviews the 239 regression, new-stock simulations, retirement report and P8 isolation proof before closure or any Production proposal.
+**Final checkpoint C-F:** owner reviews the 239 regression, new-stock simulations, retirement report and P8 isolation proof before closure or any Production proposal. Closure requires `239/239 RESOLVED` by default. If any security remains unresolved, C-F must individually name it, document the exact missing/conflicting evidence and reason resolution is currently impossible, and record explicit owner approval of that exception. The exception remains `REVIEW_REQUIRED` and analytically blocked; it cannot be silently counted as complete.
 
 ## 8. Methodology revalidation rules
 
@@ -514,20 +544,25 @@ design
 → owner C-C approval
 → hosted Development schema canary
 → evidence staging/reconciliation
-→ V2 shadow projection
+→ complete 239-equity proposed classification matrix
+→ owner C-CLASSIFICATION approval
+→ approved canonical V2 selections / shadow projection
 → methodology revalidation
+→ owner C-D approval for changed methodology/subprofiles
 → consumer shadow comparison
-→ owner cutover approval
+→ owner C-CUTOVER approval
 → V2 consumer switch
 → full regression
 → owner C-E retirement approval
 → legacy retirement
+→ owner C-F final closure
 ```
 
 ### Rollback
 
+- Before C-CLASSIFICATION approval: evidence/candidates and reconciliation proposals may be preserved, but no proposed path may be promoted to selected canonical V2 truth.
 - Before cutover: drop/revert only unapplied local work or disable new Development writers; V1 remains untouched.
-- After hosted additive migration but before cutover: stop campaigns, preserve staged evidence, revoke new writers if required, and keep consumers on V1.
+- After hosted additive migration but before cutover: stop campaigns, preserve staged evidence, revoke new writers if required, and keep consumers on V1. If rollback occurs after C-CLASSIFICATION but before cutover, approved selections may remain as inert V2 audit state while V1 remains the active read authority.
 - After consumer cutover: application rollback may point the compatibility view/repository back only if V1 was not retired and owner explicitly approves; no data rollback or evidence deletion.
 - After retirement: restore application authority by selecting the prior V2 assignment/version, not by resurrecting wildcard or page-local logic.
 - Every campaign has fixed run ID/cutoff, resumable slices, before/after counts and deterministic fingerprints.
@@ -636,6 +671,7 @@ They receive a release/deletion deadline and cannot accept writes or calculate c
 | C-A | taxonomy/reconciliation contract and local migration design |
 | C-B | exact evidence acquisition manifest, sources, calls and quota |
 | C-C | exact migration application to hosted PortfolioAI Dev |
+| C-CLASSIFICATION | approve the complete 239-equity reconciliation matrix before any canonical V2 company selection |
 | C-D | changed methodology and Pharma/subprofile assignments |
 | C-CUTOVER | switch all Development consumers to V2 |
 | C-E | destructive legacy retirement after full dependency proof |
@@ -645,18 +681,41 @@ They receive a release/deletion deadline and cannot accept writes or calculate c
 
 The program closes only when:
 
-- all 239 current equities have one V2 economic assignment or explicit `REVIEW_REQUIRED` blocker;
+- **default closure state: 239/239 current equities are `RESOLVED` with one owner-approved canonical V2 economic assignment each;**
+- if resolution is genuinely impossible for a security, closure may proceed only with an **individually named, documented, owner-approved unresolved exception**;
+- each such exception remains `REVIEW_REQUIRED`, states the exact missing/conflicting evidence and why resolution is currently impossible, and remains blocked from specialised methodology/scoring, R6/R7 and dependent downstream analytical action;
+- `REVIEW_REQUIRED` support is an intermediate safety mechanism and does not by itself satisfy final closure;
+- no unresolved security receives a guessed classification, nearest methodology, silent `GENERAL` fallback, or hidden completion status;
 - every resolved assignment contains the complete official hierarchy available under the approved authority;
-- every equity has a valid methodology/subprofile disposition;
+- every equity has a valid methodology/subprofile disposition, or an explicit owner-approved unresolved exception with downstream blocking;
 - all application and engine consumers use one canonical access path;
 - V1 logic, wildcard routing and page-local derivation are no longer active;
 - future equities fail closed until identity, classification and methodology readiness pass;
 - immutable evidence and P8 history remain unchanged;
 - full regression and simulation reports pass;
-- the owner approves retirement and closure.
+- the owner approves retirement and closure at C-F.
 
 ## 16. Audit safety statement
 
-This audit performed read-only repository inspection and read-only SQL against hosted Development. It created no migration, made no database write, made no provider call, deployed nothing, and changed neither Production nor `main`.
+This audit performed read-only repository inspection and read-only SQL against hosted Development. The subsequent safeguard amendment is documentation-only. It created no migration, made no database write, made no provider call, deployed nothing, and changed neither Production nor `main`.
 
-**A. PLAN READY FOR OWNER APPROVAL**
+### Execution boundary after safeguard amendment
+
+```text
+PLAN = READY FOR OWNER APPROVAL
+
+C0 = NOT STARTED / NOT AUTHORIZED
+C1+ = NOT STARTED / NOT AUTHORIZED
+
+Database writes = 0
+Migration applications = 0
+Provider calls = 0
+NSE acquisition calls = 0
+Trendlyne calls = 0
+Deployments = 0
+Production changes = 0
+main changes = 0
+P8 changes = 0
+```
+
+**A. AMENDED PLAN READY FOR OWNER APPROVAL**
