@@ -262,19 +262,28 @@ async function listingObservations(
     series: string | null
     source_date: string
   }> = []
+
   const PAGE = 1000
+  const SYMBOL_CHUNK = 32
 
-  for (let offset = 0;; offset += PAGE) {
-    const result = await admin.from("p8_historical_listing_observations_v3")
-      .select("historical_identity_id,trading_symbol,series,source_date")
-      .eq("portfolio_id", PORTFOLIO_ID)
-      .eq("experiment_id", EXPERIMENT_ID)
-      .in("trading_symbol", symbols)
-      .range(offset, offset + PAGE - 1)
+  for (let start = 0; start < symbols.length; start += SYMBOL_CHUNK) {
+    const symbolChunk = symbols.slice(start, start + SYMBOL_CHUNK)
 
-    if (result.error) throw result.error
-    rows.push(...(result.data ?? []))
-    if ((result.data ?? []).length < PAGE) break
+    for (let offset = 0;; offset += PAGE) {
+      const result = await admin.from("p8_historical_listing_observations_v3")
+        .select("historical_identity_id,trading_symbol,series,source_date")
+        .eq("portfolio_id", PORTFOLIO_ID)
+        .eq("experiment_id", EXPERIMENT_ID)
+        .in("trading_symbol", symbolChunk)
+        .order("trading_symbol", { ascending: true })
+        .order("historical_identity_id", { ascending: true })
+        .order("source_date", { ascending: true })
+        .range(offset, offset + PAGE - 1)
+
+      if (result.error) throw result.error
+      rows.push(...(result.data ?? []))
+      if ((result.data ?? []).length < PAGE) break
+    }
   }
 
   return rows
