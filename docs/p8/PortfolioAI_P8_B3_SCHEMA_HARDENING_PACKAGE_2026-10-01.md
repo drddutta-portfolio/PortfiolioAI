@@ -119,3 +119,15 @@ Not authorized by this package:
 - P8-B4 or P8-C.
 
 The previously identified B3 arithmetic precision/rounding contract remains a separate hard blocker before any adjustment materialization.
+
+## Local verification result
+
+The hardening package passed the complete local gate.
+
+```text
+P8_B3_HARDENING_LOCAL_VERIFICATION_PASS
+```
+
+The cumulative schema replays cleanly, both B3 SQL contracts pass, all code/build checks pass, the local migration ledger contains the hardening migration, generated types contain the B3 objects, and the post-replay schema diff is empty.
+
+The package is therefore ready for a separately owner-approved exact hosted Development hardening migration. No acquisition or B3 data materialization is authorized by this result.
