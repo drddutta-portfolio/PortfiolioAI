@@ -82,19 +82,38 @@ async function post(operation, extra = {}) {
   })
 
   let last
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const response = await fetch(FUNCTION_URL, { method: "POST", headers, body })
-    const payload = await response.json().catch(() => ({ error: "NON_JSON_RESPONSE" }))
-    last = { response, payload }
-    if (response.ok) return payload
-    if (response.status < 500 && response.status !== 429) {
-      throw new Error(operation + " HTTP " + response.status + ": " + JSON.stringify(payload))
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    try {
+      const response = await fetch(FUNCTION_URL, { method: "POST", headers, body })
+      const payload = await response.json().catch(() => ({ error: "NON_JSON_RESPONSE" }))
+      last = { response, payload }
+      if (response.ok) return payload
+      if (response.status < 500 && response.status !== 429) {
+        throw new Error(operation + " HTTP " + response.status + ": " + JSON.stringify(payload))
+      }
+    } catch (error) {
+      last = { networkError: error }
+      if (attempt === 5) {
+        throw new Error(
+          operation + " network failure after 5 attempts: " +
+          (error instanceof Error ? error.message : String(error)),
+          { cause: error },
+        )
+      }
     }
-    if (attempt < 3) await sleep(1000 * attempt)
+    if (attempt < 5) {
+      const delay = Math.min(15000, 1000 * (2 ** (attempt - 1)))
+      console.log("  retry " + operation + " attempt " + (attempt + 1) + "/5 after " + delay + "ms")
+      await sleep(delay)
+    }
   }
-  throw new Error(
-    operation + " HTTP " + last.response.status + ": " + JSON.stringify(last.payload),
-  )
+
+  if (last?.response) {
+    throw new Error(
+      operation + " HTTP " + last.response.status + ": " + JSON.stringify(last.payload),
+    )
+  }
+  throw new Error(operation + " failed without a response")
 }
 
 const plan = JSON.parse(readFileSync(PLAN_PATH, "utf8"))
@@ -371,14 +390,32 @@ console.log(JSON.stringify({
 }, null, 2))
 
 console.log("Initial hosted status:")
-console.log(JSON.stringify(await post("status"), null, 2))
+const initialStatus = await post("status")
+console.log(JSON.stringify(initialStatus, null, 2))
 
-await sendIdentities()
+if (Number(initialStatus?.counts?.p8_historical_security_identities ?? 0) === 4524) {
+  console.log("Identity registry already complete; skipping identity replay.")
+} else {
+  await sendIdentities()
+}
 
 const months = [...plan.months].sort((a, b) => a.decision_date.localeCompare(b.decision_date))
 const selectedMonths = canary ? [months[0]] : months
 
-for (const month of selectedMonths) await materializeMonth(month)
+for (const month of selectedMonths) {
+  const monthState = await post("month_status", { sourceDate: month.decision_date })
+  if (monthState.selected === true) {
+    console.log("\nMonth " + month.decision_date + " already selected; skipping completed month.")
+    continue
+  }
+  if (monthState.archive_exists || Number(monthState.observations ?? 0) > 0) {
+    console.log(
+      "\nMonth " + month.decision_date +
+      " has resumable partial state: observations=" + Number(monthState.observations ?? 0),
+    )
+  }
+  await materializeMonth(month)
+}
 
 if (resume) {
   const completed = await post("complete_campaign")
