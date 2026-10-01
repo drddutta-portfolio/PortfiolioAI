@@ -4060,3 +4060,46 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 Codex-plan alignment checkpoint — 1 October 2026
+
+Before hosted B3 schema application, the implementation was re-audited against:
+
+- `PortfolioAI_P8_COMPLETION_BUILD_HANDOFF_PLAN_2026-09-30.md`;
+- `PortfolioAI_P8_ADVANCED_QUANT_BACKTESTING_EXECUTION_PLAN_2026-09-30.md`;
+- the frozen P8-B1 experiment/bias-control contract.
+
+Result:
+
+```text
+B3 authority path = ALIGNED
+B3 additive schema = ALIGNED
+B3 migration protocol = ALIGNED
+B3 fail-closed corporate-action handling = ALIGNED
+B3 benchmark policy = ALIGNED
+B3 stage boundary = ALIGNED
+
+B3 arithmetic precision/rounding = NOT YET FROZEN
+```
+
+The arithmetic-policy gap does not block the additive schema application because no B3 data exists and all adjustment rows are versioned. It **does** block any adjustment-factor or adjusted-series materialization until a separately explicit precision/rounding policy is approved and tested.
+
+Aligned next sequence:
+
+1. exact hosted Development B3 schema application;
+2. before/after preservation verification + RLS/advisor checks;
+3. hosted schema canary;
+4. freeze B3 arithmetic precision/rounding contract;
+5. separately authorize bounded acquisition/materialization;
+6. close Gate B3 before P8-B4.
+
+```text
+P8-B3 pre-hosted verification = COMPLETE / PASS
+P8-B3 Codex alignment audit = COMPLETE / PASS WITH DEFERRED ARITHMETIC CONTRACT
+P8-B3 hosted schema = OWNER APPROVED / NOT YET APPLIED
+P8-B3 bulk acquisition = NOT AUTHORIZED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
