@@ -1,0 +1,68 @@
+{
+  "stage": "P8-B3 re-entry and market-history/corporate-action gap audit",
+  "date": "2026-10-01",
+  "environment": "PortfolioAI Dev",
+  "mode": "READ_ONLY_PLUS_PUBLIC_SOURCE_RESEARCH",
+  "result": "BASELINE_COMPLETE_ACQUISITION_AND_SCHEMA_NOT_EXECUTED",
+  "repository_head": "fd4e6cdc8856af49b25d9917fa6980bea52e9126",
+  "upstream": {
+    "p8_b2": "COMPLETE_PASS_CLOSED"
+  },
+  "frozen_contract": {
+    "experiment_window": [
+      "2023-10-01",
+      "2026-09-30"
+    ],
+    "primary_horizon_months": 6,
+    "secondary_horizon_months": [
+      1,
+      3,
+      12
+    ],
+    "primary_benchmark": "NIFTY_500_TOTAL_RETURN_INDEX",
+    "corporate_action_authority": "OFFICIAL_NSE_AND_COMPANY_EVIDENCE",
+    "raw_ohlcv_immutable": true,
+    "adjusted_series": "DERIVED_VERSIONED_DETERMINISTIC",
+    "missing_data": "FAIL_CLOSED"
+  },
+  "hosted_inventory": {
+    "market_price_history": {
+      "rows": 63929,
+      "provider": "ANGEL_ONE",
+      "interval": "ONE_DAY",
+      "securities": 240,
+      "first_period": "2025-08-07",
+      "last_period": "2026-09-28",
+      "adjusted_close_rows": 2,
+      "disposition": "PARTIAL_NOT_B3_AUTHORITY"
+    },
+    "benchmark_history": {
+      "rows": 2710,
+      "benchmark_series": 10,
+      "provider": "ANGEL_ONE",
+      "first_period": "2025-08-25",
+      "last_period": "2026-09-28",
+      "disposition": "PARTIAL_PRICE_HISTORY_NOT_PRIMARY_TRI_AUTHORITY"
+    },
+    "corporate_action_history_relation": false
+  },
+  "proposed_authorities": {
+    "raw_equity_ohlcv": "NSE cash-market bhavcopy archives, including legacy and CM-UDiFF formats",
+    "corporate_actions": "NSE Corporate Filings Corporate Actions; company evidence only when required to resolve terms",
+    "primary_benchmark": "NSE Indices NIFTY 500 Total Return Index historical values",
+    "paid_provider_required_for_primary_authority": false
+  },
+  "controls": {
+    "nse_acquisition_started": false,
+    "corporate_action_acquisition_started": false,
+    "benchmark_tri_acquisition_started": false,
+    "migration_created": false,
+    "hosted_b3_write": false,
+    "paid_provider_calls": 0,
+    "p8_b4_started": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "next_gate": "OWNER_APPROVAL_FOR_B3_ACQUISITION_AND_ADDITIVE_SCHEMA_PACKAGE_CREATION"
+}
