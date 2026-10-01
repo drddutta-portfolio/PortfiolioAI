@@ -4246,3 +4246,46 @@ P8-B3 hosted data rows = 0
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 local schema hardening verification closure — 1 October 2026
+
+The additive B3 schema-hardening package completed the full local verification gate successfully.
+
+Terminal closure marker:
+
+```text
+P8_B3_HARDENING_LOCAL_VERIFICATION_PASS
+```
+
+Verified:
+
+- clean cumulative migration replay;
+- cumulative B3 foundation contract;
+- corrected B3 FK-covering-index contract;
+- deterministic financial fixtures;
+- TypeScript;
+- architecture guard;
+- scoped lint;
+- production build;
+- local DB lint;
+- local migration ledger including `20261001131500|harden_p8_b3_access_and_foreign_key_indexes`;
+- generated types;
+- empty post-replay schema diff;
+- repository hygiene;
+- credential-pattern scan.
+
+The earlier FK test failure was a false negative caused by PostgreSQL `int2vector` 0-based indexing in the catalog assertion; the schema migration itself did not change.
+
+```text
+P8-B3 hosted foundation schema = APPLIED
+P8-B3 hosted data rows = 0
+P8-B3 local hardening package = COMPLETE / PASS
+P8-B3 hosted hardening migration = READY FOR SEPARATE OWNER APPROVAL / NOT APPLIED
+P8-B3 acquisition = NOT STARTED
+P8-B3 arithmetic precision/rounding contract = NOT YET FROZEN
+P8-B3 adjustment materialization = BLOCKED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
