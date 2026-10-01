@@ -3944,3 +3944,37 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 pre-hosted migration verification — 1 October 2026
+
+The remote pre-migration baseline and additive migration static review are complete.
+
+Key findings:
+
+- hosted Dev contains no `p8_b3_*` objects;
+- reviewed B3 migration contains 7 additive tables, 2 views and 1 function;
+- no DROP / UPDATE / DELETE / INSERT / non-B3 ALTER statement exists;
+- existing B2 hosted migration history uses a different version alias than the repository filename, so broad `supabase db push` is forbidden;
+- hosted preservation counts/fingerprint sums were captured for securities, live market history, benchmark history and B2 materialization;
+- Supabase security/performance advisor findings were captured as the pre-B3 baseline.
+
+Created:
+
+- `scripts/p8/run-p8-b3-prehosted-verification.sh`
+- `docs/p8/PortfolioAI_P8_B3_PREHOSTED_MIGRATION_VERIFICATION_2026-10-01.md`
+- `docs/p8/PortfolioAI_P8_B3_PREHOSTED_MIGRATION_VERIFICATION_AUDIT_2026-10-01.json`
+
+```text
+P8-B3 local foundation = COMPLETE / PASS
+P8-B3 official-source canary = COMPLETE / PASS
+P8-B3 remote preservation baseline = COMPLETE
+P8-B3 migration static review = COMPLETE / PASS
+P8-B3 final local pre-hosted runner = CREATED / EXECUTION PENDING
+
+P8-B3 hosted migration = NOT AUTHORIZED / NOT APPLIED
+P8-B3 bulk acquisition = NOT AUTHORIZED / NOT STARTED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
