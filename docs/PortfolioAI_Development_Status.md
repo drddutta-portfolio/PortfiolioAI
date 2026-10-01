@@ -4866,3 +4866,54 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 action identity resolver performance remediation — 2 October 2026
+
+The resumed full-source campaign exposed the exact hosted failure:
+
+```text
+PostgreSQL code = 57014
+message = canceling statement due to statement timeout
+operation = action_batch
+```
+
+Root cause:
+
+- `p8_historical_listing_observations_v3` contains 562,790 rows;
+- the B3 corporate-action resolver filters by `portfolio_id + experiment_id + trading_symbol`;
+- the table previously had no `trading_symbol` lookup index;
+- November-2023 action resolution therefore crossed the hosted statement timeout.
+
+Remediation:
+
+1. additive Development migration added:
+   `p8_historical_listing_obs_v3_action_lookup_idx`
+2. exact key:
+   `(portfolio_id, experiment_id, trading_symbol, historical_identity_id, source_date) INCLUDE (series)`
+3. B2 listing/identity row counts and fingerprints verified unchanged pre/post migration;
+4. Edge Function action identity lookup now queries symbols in deterministic chunks of 32 rather than one large `IN (...)` request;
+5. Development Edge Function `p8-b3-acquire-market-history` deployed ACTIVE as version 3.
+
+Preservation:
+
+```text
+B2 listing rows = 562790 / unchanged
+B2 listing row-hash fingerprint = unchanged
+B2 identities = 4524 / unchanged
+B2 identity fingerprint = unchanged
+```
+
+Campaign state remains resumable with the same campaign ID, plan hash and one-campaign grant.
+
+```text
+P8-B3 full source acquisition = ACTIVE / RESUMABLE
+Stage 1 TRI calendar = COMPLETE / PASS
+Stage 2 corporate actions = October committed; November archive stored, rows pending retry
+Stage 3 raw prices = NOT STARTED
+
+P8-B3 normalization/materialization = NOT AUTHORIZED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
