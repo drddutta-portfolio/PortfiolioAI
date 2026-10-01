@@ -4763,3 +4763,62 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+## P8-B3 full acquisition first interruption and transport remediation — 1 October 2026
+
+The full B3 campaign started correctly.
+
+Stage 1 completed:
+
+```text
+official NIFTY 500 TRI monthly archives = 36 / 36
+proven trading dates = 744
+calendar range = 2023-10-03 through 2026-09-30
+benchmark rows = 744
+```
+
+Stage 2 began and completed the first monthly corporate-action slice:
+
+```text
+2023-10 corporate-action archive = 1
+2023-10 corporate-action rows = 49
+```
+
+The next official NSE corporate-action request then exhausted the original 45-second transport timeout and stopped with a local `AbortError`. This was a network/transport stop, not a schema, identity or data-integrity failure.
+
+Hosted state at stop:
+
+```text
+full-campaign source archives = 37
+  TRI archives = 36
+  corporate-action archives = 1
+full-campaign benchmark rows = 744
+full-campaign corporate-action rows = 49
+full-campaign raw price rows = 0
+
+normalizations = 0
+adjustment factors = 0
+adjusted series = 0
+```
+
+Transport remediation is repository-only:
+
+- corporate-action request timeout increased from 45s to 120s;
+- every failed corporate-action attempt obtains a fresh NSE session before retry;
+- official response bytes are cached only after successful JSON/schema/date parsing;
+- completed corporate-action months are skipped on resume so local counters are not double-counted;
+- acquisition semantics, official-source requirements, campaign ID and plan hash are unchanged;
+- existing one-campaign grant remains valid.
+
+```text
+P8-B3 full source acquisition = ACTIVE / RESUMABLE
+Stage 1 TRI calendar = COMPLETE / PASS
+Stage 2 corporate actions = 1 / 36 months COMPLETE
+Stage 3 raw prices = NOT STARTED
+
+P8-B3 normalization/materialization = NOT AUTHORIZED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
