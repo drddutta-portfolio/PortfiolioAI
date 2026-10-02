@@ -32,7 +32,9 @@ export const publicConfig = {
   marketDataEnabled: import.meta.env.VITE_MARKET_DATA_ENABLED === "true",
   historyApiUrl: import.meta.env.VITE_HISTORY_API_URL?.trim()
     ? normalizeOrigin(import.meta.env.VITE_HISTORY_API_URL.trim())
-    : null,
+    : supabaseUrl.includes("lrgpjimipfkyoqbpsqzz")
+      ? "https://portfolioai-history-dev-api.dr-d-dutta.workers.dev"
+      : null,
 }
 
 export function getApplicationOrigin() {
