@@ -1,7 +1,5 @@
 interface Env {
   HISTORY_BUCKET: R2Bucket
-  SUPABASE_URL: string
-  SUPABASE_PUBLISHABLE_KEY: string
   ALLOWED_ORIGINS: string
 }
 
@@ -20,15 +18,13 @@ function allowedOrigins(env: Env) {
 
 function corsHeaders(request: Request, env: Env) {
   const origin = request.headers.get("Origin")
-  const allowed = allowedOrigins(env)
   const headers = new Headers({
-    "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
-    "Access-Control-Allow-Headers": "Authorization,Content-Type,Range",
-    "Access-Control-Expose-Headers": "Content-Range,ETag,Content-Length",
+    "Access-Control-Allow-Methods": "GET,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
     "Vary": "Origin",
   })
 
-  if (origin && allowed.has(origin)) {
+  if (origin && allowedOrigins(env).has(origin)) {
     headers.set("Access-Control-Allow-Origin", origin)
   }
 
@@ -42,83 +38,34 @@ function jsonResponse(
   init: ResponseInit = {},
 ) {
   const headers = new Headers(init.headers)
-  const cors = corsHeaders(request, env)
-  cors.forEach((value, key) => headers.set(key, value))
+  corsHeaders(request, env).forEach((value, key) => headers.set(key, value))
   headers.set("Content-Type", "application/json; charset=utf-8")
   headers.set("Cache-Control", "no-store")
   return new Response(JSON.stringify(body), { ...init, headers })
 }
 
-async function requireUser(request: Request, env: Env) {
-  const authorization = request.headers.get("Authorization")
-  if (!authorization?.startsWith("Bearer ")) return null
-
-  const response = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, {
-    headers: {
-      Authorization: authorization,
-      apikey: env.SUPABASE_PUBLISHABLE_KEY,
-    },
-  })
-
-  if (!response.ok) return null
-  const user = await response.json<{ id?: string }>()
-  return user.id ? user : null
+function validDate(value: string | null) {
+  return Boolean(value && /^\d{4}-\d{2}-\d{2}$/.test(value))
 }
 
-function safeObjectKey(url: URL) {
-  const key = url.searchParams.get("key")?.trim()
-  if (!key || !key.startsWith(ROOT_PREFIX)) return null
-  if (key.includes("..") || key.includes("\\") || key.length > 1024) return null
-  return key
+function rawPriceKey(year: number, symbol: string, series: string) {
+  return (
+    ROOT_PREFIX +
+    `runtime/raw-prices/v1/year=${year}/series=${encodeURIComponent(series)}/symbol=${encodeURIComponent(symbol)}.json`
+  )
 }
 
-async function serveObject(
-  request: Request,
+async function loadRuntimeYear(
   env: Env,
-  key: string,
+  year: number,
+  symbol: string,
+  series: string,
 ) {
-  const rangeHeader = request.headers.get("Range")
-  let object: R2ObjectBody | null
-
-  if (rangeHeader) {
-    const match = /^bytes=(\d+)-(\d*)$/.exec(rangeHeader)
-    if (!match) {
-      return jsonResponse(request, env, { error: "INVALID_RANGE" }, { status: 416 })
-    }
-
-    const offset = Number(match[1])
-    const end = match[2] ? Number(match[2]) : undefined
-    const length = end === undefined ? undefined : end - offset + 1
-
-    object = await env.HISTORY_BUCKET.get(key, {
-      range: length === undefined ? { offset } : { offset, length },
-    })
-  } else {
-    object = await env.HISTORY_BUCKET.get(key)
-  }
-
-  if (!object) {
-    return jsonResponse(request, env, { error: "OBJECT_NOT_FOUND" }, { status: 404 })
-  }
-
-  const headers = corsHeaders(request, env)
-  object.writeHttpMetadata(headers)
-  headers.set("ETag", object.httpEtag)
-  headers.set("Cache-Control", "private, max-age=60")
-
-  if (request.method === "HEAD") {
-    return new Response(null, { status: 200, headers })
-  }
-
-  if (rangeHeader && object.range) {
-    const { offset, length } = object.range
-    headers.set("Content-Range", `bytes ${offset}-${offset + length - 1}/${object.size}`)
-    headers.set("Content-Length", String(length))
-    return new Response(object.body, { status: 206, headers })
-  }
-
-  headers.set("Content-Length", String(object.size))
-  return new Response(object.body, { status: 200, headers })
+  const object = await env.HISTORY_BUCKET.get(rawPriceKey(year, symbol, series))
+  if (!object) return null
+  return object.json<{
+    readonly rows?: readonly Record<string, string | null>[]
+  }>()
 }
 
 export default {
@@ -127,9 +74,13 @@ export default {
       return new Response(null, { status: 204, headers: corsHeaders(request, env) })
     }
 
+    if (request.method !== "GET") {
+      return jsonResponse(request, env, { error: "METHOD_NOT_ALLOWED" }, { status: 405 })
+    }
+
     const url = new URL(request.url)
 
-    if (request.method === "GET" && url.pathname === "/v1/health") {
+    if (url.pathname === "/v1/health") {
       const backup = await env.HISTORY_BUCKET.get(BACKUP_MANIFEST_KEY)
       const catalog = await env.HISTORY_BUCKET.head(CATALOG_KEY)
       let backupStatus: unknown = null
@@ -147,26 +98,22 @@ export default {
         }
       }
 
-      return jsonResponse(request, env, {
-        ok: Boolean(backup),
-        version: VERSION,
-        environment: "DEVELOPMENT",
-        r2: {
-          bucket_bound: true,
-          backup_manifest_present: Boolean(backup),
-          catalog_present: Boolean(catalog),
+      return jsonResponse(
+        request,
+        env,
+        {
+          ok: Boolean(backup),
+          version: VERSION,
+          environment: "DEVELOPMENT",
+          r2: {
+            bucket_bound: true,
+            backup_manifest_present: Boolean(backup),
+            catalog_present: Boolean(catalog),
+          },
+          backup: backupStatus,
         },
-        backup: backupStatus,
-      }, { status: backup ? 200 : 503 })
-    }
-
-    if (!["GET", "HEAD"].includes(request.method)) {
-      return jsonResponse(request, env, { error: "METHOD_NOT_ALLOWED" }, { status: 405 })
-    }
-
-    const user = await requireUser(request, env)
-    if (!user) {
-      return jsonResponse(request, env, { error: "UNAUTHORIZED" }, { status: 401 })
+        { status: backup ? 200 : 503 },
+      )
     }
 
     if (url.pathname === "/v1/catalog") {
@@ -181,19 +128,69 @@ export default {
       }
       const headers = corsHeaders(request, env)
       headers.set("Content-Type", "application/json; charset=utf-8")
-      headers.set("Cache-Control", "private, max-age=60")
-      return new Response(request.method === "HEAD" ? null : catalog.body, {
-        status: 200,
-        headers,
-      })
+      headers.set("Cache-Control", "public, max-age=60")
+      return new Response(catalog.body, { status: 200, headers })
     }
 
-    if (url.pathname === "/v1/object") {
-      const key = safeObjectKey(url)
-      if (!key) {
-        return jsonResponse(request, env, { error: "INVALID_OBJECT_KEY" }, { status: 400 })
+    if (url.pathname === "/v1/raw-prices") {
+      const symbol = url.searchParams.get("symbol")?.trim().toUpperCase() ?? ""
+      const series = url.searchParams.get("series")?.trim().toUpperCase() || "EQ"
+      const from = url.searchParams.get("from")
+      const to = url.searchParams.get("to")
+
+      if (
+        !symbol ||
+        symbol.length > 64 ||
+        series.length > 16 ||
+        !validDate(from) ||
+        !validDate(to) ||
+        from! > to!
+      ) {
+        return jsonResponse(request, env, { error: "INVALID_QUERY" }, { status: 400 })
       }
-      return serveObject(request, env, key)
+
+      const firstYear = Number(from!.slice(0, 4))
+      const lastYear = Number(to!.slice(0, 4))
+      if (lastYear - firstYear > 5) {
+        return jsonResponse(request, env, { error: "RANGE_TOO_LARGE" }, { status: 400 })
+      }
+
+      const years = Array.from(
+        { length: lastYear - firstYear + 1 },
+        (_, index) => firstYear + index,
+      )
+      const payloads = await Promise.all(
+        years.map((year) => loadRuntimeYear(env, year, symbol, series)),
+      )
+      const rows = payloads
+        .flatMap((payload) => payload?.rows ?? [])
+        .filter((row) => {
+          const date = row.trade_date
+          return typeof date === "string" && date >= from! && date <= to!
+        })
+        .sort((left, right) =>
+          String(left.trade_date).localeCompare(String(right.trade_date)),
+        )
+
+      if (!rows.length) {
+        return jsonResponse(
+          request,
+          env,
+          { error: "HISTORY_NOT_FOUND", symbol, series, from, to },
+          { status: 404 },
+        )
+      }
+
+      return jsonResponse(request, env, {
+        version: "P8_RAW_PRICE_RUNTIME_V1",
+        source: "CLOUDFLARE_R2",
+        symbol,
+        series,
+        from,
+        to,
+        row_count: rows.length,
+        rows,
+      })
     }
 
     return jsonResponse(request, env, { error: "NOT_FOUND" }, { status: 404 })
