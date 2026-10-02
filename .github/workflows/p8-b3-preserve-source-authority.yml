@@ -1,0 +1,76 @@
+name: P8 B3 Preserve NSE Source Authority
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - scripts/p8/p8-b3-preserve-source-authority.py
+      - .github/workflows/p8-b3-preserve-source-authority.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p8-b3-source-authority-development
+  cancel-in-progress: false
+
+jobs:
+  preserve:
+    name: verify-and-preserve
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+
+    steps:
+      - name: Checkout Development
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Require Development secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in             SUPABASE_DB_URL             CLOUDFLARE_R2_ACCOUNT_ID             CLOUDFLARE_R2_ACCESS_KEY_ID             CLOUDFLARE_R2_SECRET_ACCESS_KEY             CLOUDFLARE_R2_BUCKET
+          do
+            if [ -z "${!name:-}" ]; then
+              echo "Missing required secret: $name" >&2
+              exit 1
+            fi
+          done
+          case "$SUPABASE_DB_URL" in
+            *lrgpjimipfkyoqbpsqzz*) ;;
+            *)
+              echo "SUPABASE_DB_URL is not PortfolioAI Dev. Refusing." >&2
+              exit 1
+              ;;
+          esac
+          if [ "$CLOUDFLARE_R2_BUCKET" != "portfolioai-history-dev" ]; then
+            echo "Unexpected R2 bucket. Refusing." >&2
+            exit 1
+          fi
+
+      - name: Install pinned preservation dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir             "boto3==1.40.46"             "psycopg[binary]==3.2.10"             "requests==2.32.5"
+
+      - name: Verify official NSE bytes and preserve to R2
+        run: python scripts/p8/p8-b3-preserve-source-authority.py
+
+      - name: Publish S1 completion evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b3-source-authority-completion
+          path: tmp/p8-b3-source-authority/COMPLETE.json
+          if-no-files-found: error
+          retention-days: 30
