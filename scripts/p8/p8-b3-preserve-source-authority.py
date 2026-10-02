@@ -87,6 +87,33 @@ def extract_csv(zip_bytes: bytes, preferred_member: str | None) -> tuple[str, by
             member = next((n for n in members if "bhav" in os.path.basename(n).lower()), members[0])
         return member, zf.read(member)
 
+def put_verified(s3, bucket: str, key: str, data: bytes, content_type: str, metadata: dict):
+    digest = sha256_bytes(data)
+    try:
+        head = s3.head_object(Bucket=bucket, Key=key)
+        existing_meta = {k.lower(): v for k, v in (head.get("Metadata") or {}).items()}
+        if existing_meta.get("sha256", "").lower() != digest:
+            raise RuntimeError(f"Existing R2 metadata SHA mismatch for {key}")
+        downloaded = s3.get_object(Bucket=bucket, Key=key)["Body"].read()
+        if sha256_bytes(downloaded) != digest:
+            raise RuntimeError(f"Existing R2 read-back mismatch for {key}")
+        return False
+    except s3.exceptions.ClientError as exc:
+        code = str(exc.response.get("Error", {}).get("Code", ""))
+        if code not in {"404", "NoSuchKey", "NotFound"}:
+            raise
+    s3.put_object(
+        Bucket=bucket,
+        Key=key,
+        Body=data,
+        ContentType=content_type,
+        Metadata={"sha256": digest, **metadata},
+    )
+    downloaded = s3.get_object(Bucket=bucket, Key=key)["Body"].read()
+    if sha256_bytes(downloaded) != digest:
+        raise RuntimeError(f"R2 upload/read-back mismatch for {key}")
+    return True
+
 def load_archives(db_url: str):
     sql = """
       select
@@ -177,6 +204,8 @@ def main():
     total_bytes = 0
     skipped_existing = 0
     uploaded = 0
+    content_uploaded = 0
+    repacked_zip_uploaded = 0
 
     for index, row in enumerate(rows, 1):
         date = row["source_date"]
@@ -214,6 +243,25 @@ def main():
             preferred = raw_meta.get("csv_member")
         member, csv_bytes = extract_csv(zip_bytes, preferred)
         actual_csv = sha256_bytes(csv_bytes)
+
+        if actual_csv == expected_csv:
+            content_key = f"{PREFIX}/content/trade_date={date}/{os.path.basename(member)}"
+            if put_verified(
+                s3,
+                bucket,
+                content_key,
+                csv_bytes,
+                "text/csv",
+                {
+                    "content_sha256": expected_csv,
+                    "source_kind": row["source_kind"],
+                    "campaign_id": CAMPAIGN_ID,
+                    "source_date": date,
+                    "archive_id": row["archive_id"],
+                },
+            ):
+                content_uploaded += 1
+
         if actual_zip != expected_zip:
             content_state = "MATCH" if actual_csv == expected_csv else "MISMATCH"
             diagnostic = {
@@ -227,6 +275,26 @@ def main():
                 "actual_content_sha256": actual_csv,
             }
             diagnostics.append(diagnostic)
+            if content_state == "MATCH":
+                repacked_key = f"{PREFIX}/repacked-zip/trade_date={date}/{file_name}"
+                if put_verified(
+                    s3,
+                    bucket,
+                    repacked_key,
+                    zip_bytes,
+                    "application/zip",
+                    {
+                        "current_sha256": actual_zip,
+                        "original_compressed_sha256": expected_zip,
+                        "content_sha256": expected_csv,
+                        "source_kind": row["source_kind"],
+                        "campaign_id": CAMPAIGN_ID,
+                        "source_date": date,
+                        "archive_id": row["archive_id"],
+                        "preservation_status": "ZIP_REPACK_CONTENT_MATCH",
+                    },
+                ):
+                    repacked_zip_uploaded += 1
             diagnostic_item_bytes = (json.dumps(diagnostic, indent=2, sort_keys=True) + "\n").encode()
             diagnostic_item_key = f"{PREFIX}/diagnostics/{diagnostic['status']}/trade_date={date}.json"
             s3.put_object(
@@ -305,6 +373,9 @@ def main():
         "blocked_dates": len(diagnostics),
         "uploaded_objects": uploaded,
         "preexisting_verified_objects": skipped_existing,
+        "content_uploaded_objects": content_uploaded,
+        "repacked_zip_uploaded_objects": repacked_zip_uploaded,
+        "exact_content_dates": EXPECTED_DATES - sum(1 for d in diagnostics if d["status"] == "CONTENT_MISMATCH"),
         "diagnostics": diagnostics,
     }
     diagnostic_bytes = (json.dumps(diagnostic_payload, indent=2, sort_keys=True) + "\n").encode()
