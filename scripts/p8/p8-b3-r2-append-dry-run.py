@@ -193,7 +193,7 @@ def load_db_state(db_url, date):
             cur.execute(
                 """
                 select id::text, source_kind, source_file_name, content_sha256,
-                       compressed_sha256, archive_hash, raw_metadata
+                       compressed_sha256, archive_hash, retrieved_at::text, raw_metadata
                 from public.p8_b3_source_archives
                 where source_period_start=%s
                   and source_kind like 'NSE_CM_BHAVCOPY%%'
@@ -227,7 +227,8 @@ def load_db_state(db_url, date):
         "content_sha256": archive[3],
         "compressed_sha256": archive[4],
         "archive_hash": archive[5],
-        "raw_metadata": archive[6] or {},
+        "retrieved_at": archive[6],
+        "raw_metadata": archive[7] or {},
         "identity_by_isin": by_isin,
     }
 
