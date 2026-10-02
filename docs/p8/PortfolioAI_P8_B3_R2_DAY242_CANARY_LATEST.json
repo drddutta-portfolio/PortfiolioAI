@@ -1,0 +1,42 @@
+{
+  "exit_code": 0,
+  "result": {
+    "append_manifest": {
+      "bytes": 1709,
+      "key": "portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-20.json",
+      "sha256": "339a63a3de654a53222b8b0867d4e0c3b65523342c458f1e63a2395fd01c19e7",
+      "write": "UPDATED"
+    },
+    "canonical_rows_after": 537303,
+    "catalog": {
+      "bytes": 1872,
+      "key": "portfolioai-history/development/p8/catalog/v1/catalog.json",
+      "sha256": "5b7829e1733a9988ab9e822a69ad55aba4c379c471c5ea9d30e786a0f1c6a3a7",
+      "write": "UPDATED"
+    },
+    "date": "2024-09-20",
+    "partition": {
+      "bytes": 257659,
+      "key": "portfolioai-history/development/p8/b3/raw-prices/v1/year=2024/month=09/trade_date=2024-09-20/part-00000.parquet",
+      "sha256": "13cade2a40197290123f4d918b199da1e4c7982c6c237f74624063d83c947d5d",
+      "write": "UPDATED"
+    },
+    "partitions_after": 242,
+    "production_changes": 0,
+    "raw_price_database_writes": 0,
+    "resolved_rows": 2357,
+    "runtime_objects_after": 6140,
+    "runtime_objects_created": 2,
+    "runtime_rows_verified": 2357,
+    "source_archive_id": "e1c54eae-b2ac-59c3-a9a1-a719be19f8da",
+    "source_metadata_inserted": true,
+    "source_rows": 2357,
+    "status": "PASS",
+    "unknown_isin_rows": 0,
+    "version": "P8_B3_R2_NATIVE_SINGLE_DATE_V1"
+  },
+  "status": "PASS",
+  "stderr": "",
+  "stdout": "{\n  \"append_manifest\": {\n    \"bytes\": 1709,\n    \"key\": \"portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-20.json\",\n    \"sha256\": \"339a63a3de654a53222b8b0867d4e0c3b65523342c458f1e63a2395fd01c19e7\",\n    \"write\": \"UPDATED\"\n  },\n  \"canonical_rows_after\": 537303,\n  \"catalog\": {\n    \"bytes\": 1872,\n    \"key\": \"portfolioai-history/development/p8/catalog/v1/catalog.json\",\n    \"sha256\": \"5b7829e1733a9988ab9e822a69ad55aba4c379c471c5ea9d30e786a0f1c6a3a7\",\n    \"write\": \"UPDATED\"\n  },\n  \"date\": \"2024-09-20\",\n  \"partition\": {\n    \"bytes\": 257659,\n    \"key\": \"portfolioai-history/development/p8/b3/raw-prices/v1/year=2024/month=09/trade_date=2024-09-20/part-00000.parquet\",\n    \"sha256\": \"13cade2a40197290123f4d918b199da1e4c7982c6c237f74624063d83c947d5d\",\n    \"write\": \"UPDATED\"\n  },\n  \"partitions_after\": 242,\n  \"production_changes\": 0,\n  \"raw_price_database_writes\": 0,\n  \"resolved_rows\": 2357,\n  \"runtime_objects_after\": 6140,\n  \"runtime_objects_created\": 2,\n  \"runtime_rows_verified\": 2357,\n  \"source_archive_id\": \"e1c54eae-b2ac-59c3-a9a1-a719be19f8da\",\n  \"source_metadata_inserted\": true,\n  \"source_rows\": 2357,\n  \"status\": \"PASS\",\n  \"unknown_isin_rows\": 0,\n  \"version\": \"P8_B3_R2_NATIVE_SINGLE_DATE_V1\"\n}\n",
+  "version": "P8_B3_R2_DAY242_CANARY_AUDIT_V1"
+}
