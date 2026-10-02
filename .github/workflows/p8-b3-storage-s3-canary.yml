@@ -64,13 +64,13 @@ jobs:
               "b2_universe_members": (144768, 145),
           }
           PAGE_SIZE = 1000
-          MAX_WORKERS = 8
+          MAX_WORKERS = 4
 
           tasks = [(dataset, page) for dataset, (_, pages) in CONTRACT.items() for page in range(pages)]
 
           def fetch_one(task):
               dataset, page = task
-              url = BASE + "?" + urllib.parse.urlencode({"dataset": dataset, "page": page, "generation": "v3"})
+              url = BASE + "?" + urllib.parse.urlencode({"dataset": dataset, "page": page, "generation": "v4"})
               last_error = None
               for attempt in range(6):
                   try:
