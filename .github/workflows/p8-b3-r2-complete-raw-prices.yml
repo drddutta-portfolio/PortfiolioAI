@@ -1,0 +1,197 @@
+name: P8 B3 Complete R2 Raw Price Campaign
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - .github/workflows/p8-b3-r2-complete-raw-prices.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p8-b3-r2-complete-raw-price-campaign-development
+  cancel-in-progress: false
+
+jobs:
+  complete:
+    name: complete-remaining-proven-dates
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+      P8_BATCH_SIZE: "30"
+
+    steps:
+      - name: Checkout Development
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Require Development bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY CLOUDFLARE_R2_BUCKET
+          do
+            if [ -z "${!name:-}" ]; then
+              echo "Missing required secret: $name" >&2
+              exit 1
+            fi
+          done
+          case "$SUPABASE_DB_URL" in
+            *lrgpjimipfkyoqbpsqzz*) ;;
+            *) echo "Refusing non-Development database URL" >&2; exit 1 ;;
+          esac
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            "boto3==1.40.46" \
+            "duckdb==1.4.1" \
+            "psycopg[binary]==3.2.10" \
+            "requests==2.32.5"
+
+      - name: Run resumable 30-date batches
+        id: campaign
+        shell: bash
+        run: |
+          set +e
+          mkdir -p tmp/p8-b3-r2-complete
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          root=Path("tmp/p8-b3-r2-complete")
+          summaries=[]
+          status="RUNNING"
+          failure=None
+
+          for iteration in range(1, 25):
+              env=os.environ.copy()
+              env["P8_BATCH_SIZE"]="30"
+              proc=subprocess.run(
+                  ["python","scripts/p8/p8-b3-r2-acquire-batch.py"],
+                  text=True,
+                  capture_output=True,
+                  env=env,
+              )
+              (root/f"batch-{iteration:02d}.stdout.log").write_text(proc.stdout)
+              (root/f"batch-{iteration:02d}.stderr.log").write_text(proc.stderr)
+
+              if proc.returncode != 0:
+                  failure={
+                      "iteration":iteration,
+                      "returncode":proc.returncode,
+                      "stdout":proc.stdout[-20000:],
+                      "stderr":proc.stderr[-20000:],
+                  }
+                  status="FAIL"
+                  break
+
+              try:
+                  result=json.loads(proc.stdout)
+              except Exception as exc:
+                  failure={
+                      "iteration":iteration,
+                      "returncode":0,
+                      "parse_error":str(exc),
+                      "stdout":proc.stdout[-20000:],
+                  }
+                  status="FAIL"
+                  break
+
+              if result.get("status")=="COMPLETE":
+                  status="COMPLETE"
+                  summaries.append({
+                      "iteration":iteration,
+                      "status":"COMPLETE",
+                      "catalog_max_date":result.get("catalog_max_date"),
+                  })
+                  break
+
+              if result.get("status")!="PASS":
+                  failure={"iteration":iteration,"result":result}
+                  status="FAIL"
+                  break
+
+              dates=result.get("dates") or []
+              summaries.append({
+                  "iteration":iteration,
+                  "status":"PASS",
+                  "date_count":result.get("date_count"),
+                  "first_date":dates[0] if dates else None,
+                  "last_date":dates[-1] if dates else None,
+                  "rows_added":result.get("rows_added"),
+                  "canonical_rows_after":result.get("canonical_rows_after"),
+                  "partitions_after":result.get("partitions_after"),
+                  "runtime_objects_after":result.get("runtime_objects_after"),
+                  "runtime_objects_created":result.get("runtime_objects_created"),
+                  "runtime_objects_verified":result.get("runtime_objects_verified"),
+                  "source_metadata_inserts":result.get("source_metadata_inserts"),
+                  "raw_price_database_writes":result.get("raw_price_database_writes"),
+                  "production_changes":result.get("production_changes"),
+              })
+          else:
+              status="FAIL"
+              failure={"reason":"MAX_ITERATIONS_EXHAUSTED"}
+
+          payload={
+              "version":"P8_B3_R2_COMPLETE_RAW_PRICE_CAMPAIGN_AUDIT_V1",
+              "status":status,
+              "batch_size":30,
+              "batches":summaries,
+              "failure":failure,
+          }
+          (root/"campaign-summary.json").write_text(
+              json.dumps(payload,indent=2,sort_keys=True)+"\n"
+          )
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          sys.exit(0 if status=="COMPLETE" else 1)
+          PY
+          status=$?
+          echo "$status" > tmp/p8-b3-r2-complete/exit_code.txt
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Record campaign audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp tmp/p8-b3-r2-complete/campaign-summary.json             docs/p8/PortfolioAI_P8_B3_R2_COMPLETE_RAW_PRICE_CAMPAIGN_LATEST.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B3_R2_COMPLETE_RAW_PRICE_CAMPAIGN_LATEST.json
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): record R2 raw-price completion campaign"
+            git push
+          fi
+
+      - name: Enforce campaign result
+        if: steps.campaign.outputs.exit_code != '0'
+        shell: bash
+        run: |
+          echo "R2 raw-price completion campaign stopped fail-closed; see audit." >&2
+          exit 1
+
+      - name: Publish campaign evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b3-r2-complete-raw-price-campaign
+          path: tmp/p8-b3-r2-complete/*
+          if-no-files-found: warn
+          retention-days: 30
