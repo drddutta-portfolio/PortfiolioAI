@@ -101,7 +101,7 @@ def load_archives(db_url: str):
         archive_hash,
         raw_metadata
       from public.p8_b3_source_archives
-      where source_kind like 'NSE_CM_BHAVCOPY%'
+      where source_kind like 'NSE_CM_BHAVCOPY%%'
         and raw_metadata->>'campaign_id' = %s
       order by source_period_start, source_file_name
     """
