@@ -4917,3 +4917,55 @@ P8-C+ = NOT AUTHORIZED
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+
+## P8-B3 storage remediation entry — 2 October 2026
+
+The full B3 source-acquisition campaign is paused because the Development Supabase Free database exceeded the 500 MB database-size quota and entered read-only mode.
+
+Read-only forensic remeasurement confirmed:
+
+- Development database size = 1,531,079,827 bytes / ~1460 MB;
+- `p8_b3_raw_market_price_observations` = ~565 MB;
+- `p8_historical_listing_observations_v3` = ~499 MB;
+- `p8_historical_universe_member_listing_evidence_v3` = ~208 MB;
+- `p8_historical_universe_members_v3` = ~78 MB;
+- those four relations total ~1350 MB;
+- Supabase Storage currently contains 0 buckets / 0 objects / 0 bytes.
+
+The owner approved proceeding with non-destructive storage-remediation stages S0–S3 only.
+
+Authoritative plan:
+`docs/p8/PortfolioAI_P8_B3_STORAGE_REMEDIATION_PLAN_V1_2026-10-02.md`
+
+Target architecture:
+
+- Supabase Postgres remains the online operational/control plane;
+- bulky immutable B2/B3 historical materializations move to versioned Parquet in durable object storage;
+- exact official NSE source files remain the forensic authority and are preserved separately;
+- compact manifests, fingerprints and historical identity/symbol resolver structures remain in Postgres;
+- final deployed PortfolioAI remains online and must not require localhost or the owner's Mac for normal use.
+
+Current stage state:
+
+```text
+P8-B2 = COMPLETE / PASS / CLOSED
+P8-B3 = ACTIVE / STORAGE-BLOCKED
+
+B3 Stage 1 TRI = COMPLETE / PASS
+B3 Stage 2 Corporate Actions = COMPLETE / PASS
+B3 Stage 3 raw prices = 241 / 744 / PAUSED
+
+Storage Remediation S0 = COMPLETE / PASS
+Storage Remediation S1 = PENDING RAW-FILE BYTE VERIFICATION
+Storage Remediation S2 = DOCUMENTED / OWNER REVIEW
+Storage Remediation S3 = PARQUET CANARY PENDING
+
+B3 normalization/materialization = NOT AUTHORIZED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+No Supabase data write, schema migration, table/index removal, provider call, acquisition restart, normalization, deployment or Production/main change occurred during this entry.
