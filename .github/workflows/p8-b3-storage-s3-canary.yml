@@ -56,7 +56,7 @@ jobs:
           import urllib.parse
           import urllib.request
 
-          BASE = "https://portfolioai-r2-full-backup.dr-d-dutta.workers.dev/"
+          BASE = "https://portfolioai-r2-full-backup-v5.dr-d-dutta.workers.dev/"
           CONTRACT = {
               "b3_raw_prices": (532575, 533),
               "b2_listing_observations": (562790, 563),
