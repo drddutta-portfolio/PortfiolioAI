@@ -1,0 +1,86 @@
+name: P8 R2 Live Runtime Smoke
+
+on:
+  push:
+    branches: [p8-r2-live-runtime]
+    paths:
+      - "src/lib/config.ts"
+      - "src/data/historicalMarketDataRepository.ts"
+      - "cloudflare/portfolioai-history-dev-api/**"
+      - ".github/workflows/p8-r2-live-runtime-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        env:
+          VITE_SUPABASE_URL: https://lrgpjimipfkyoqbpsqzz.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: smoke-only-placeholder
+        run: npm run typecheck
+
+      - name: Verify R2 gateway health, catalog, and real price history
+        run: |
+          set -euo pipefail
+          base="https://portfolioai-history-dev-api.dr-d-dutta.workers.dev"
+
+          health="$(curl --fail --silent --show-error --retry 4 --retry-all-errors "$base/v1/health")"
+          catalog="$(curl --fail --silent --show-error --retry 4 --retry-all-errors "$base/v1/catalog")"
+          prices="$(curl --fail --silent --show-error --retry 4 --retry-all-errors "$base/v1/raw-prices?symbol=RELIANCE&series=EQ&from=2024-01-01&to=2024-01-10")"
+
+          node - "$health" "$catalog" "$prices" <<'NODE'
+          const health=JSON.parse(process.argv[2]);
+          const catalog=JSON.parse(process.argv[3]);
+          const prices=JSON.parse(process.argv[4]);
+
+          if (!health.ok) throw new Error("R2 gateway health is not OK");
+          if (!health.r2?.backup_manifest_present) throw new Error("Verified backup manifest missing");
+          if (!health.r2?.catalog_present) throw new Error("R2 runtime catalog missing");
+
+          if (catalog.status !== "READY") throw new Error("Catalog is not READY");
+          if (catalog.runtime?.raw_prices?.row_count !== 532575) {
+            throw new Error("Runtime raw-price row count mismatch");
+          }
+          if (catalog.runtime?.raw_prices?.object_count !== 6135) {
+            throw new Error("Runtime raw-price object count mismatch");
+          }
+
+          if (prices.source !== "CLOUDFLARE_R2") throw new Error("Historical prices did not come from R2");
+          if (!Array.isArray(prices.rows) || prices.rows.length < 1) {
+            throw new Error("RELIANCE historical price smoke returned no rows");
+          }
+          if (prices.row_count !== prices.rows.length) throw new Error("Price row-count contract mismatch");
+
+          const forbidden=["id","portfolio_id","experiment_id","historical_identity_id","source_archive_id","row_hash"];
+          for (const row of prices.rows) {
+            for (const key of forbidden) {
+              if (Object.prototype.hasOwnProperty.call(row,key)) {
+                throw new Error("Sanitized runtime response exposed internal field: "+key);
+              }
+            }
+          }
+
+          console.log(JSON.stringify({
+            status:"PASS",
+            source:prices.source,
+            symbol:prices.symbol,
+            rows:prices.row_count,
+            runtime_rows:catalog.runtime.raw_prices.row_count,
+            runtime_objects:catalog.runtime.raw_prices.object_count
+          }));
+          NODE

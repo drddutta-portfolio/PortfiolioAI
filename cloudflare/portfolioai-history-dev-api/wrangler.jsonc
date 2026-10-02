@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "portfolioai-history-dev-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-02",
+  "workers_dev": true,
+  "vars": {
+    "SUPABASE_URL": "https://lrgpjimipfkyoqbpsqzz.supabase.co",
+    "ALLOWED_ORIGINS": "https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app,http://localhost:5173"
+  },
+  "r2_buckets": [
+    {
+      "binding": "HISTORY_BUCKET",
+      "bucket_name": "portfolioai-history-dev"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+name: P8 R2 Canonical Export
+
+on:
+  push:
+    branches: [p8-r2-live-runtime]
+    paths:
+      - "scripts/p8/p8-r2-canonical-export.py"
+      - ".github/workflows/p8-r2-canonical-export.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Require R2 secrets
+        run: |
+          set -euo pipefail
+          test -n "${CLOUDFLARE_R2_ACCOUNT_ID}"
+          test -n "${CLOUDFLARE_R2_ACCESS_KEY_ID}"
+          test -n "${CLOUDFLARE_R2_SECRET_ACCESS_KEY}"
+          test -n "${CLOUDFLARE_R2_BUCKET}"
+      - name: Install pinned dependencies
+        run: python -m pip install --disable-pip-version-check --no-cache-dir duckdb==1.5.6 boto3==1.40.46
+      - name: Export verified dump into canonical R2 datasets
+        run: python scripts/p8/p8-r2-canonical-export.py
+      - name: Publish completion evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-r2-canonical-export-completion
+          path: |
+            tmp/p8-r2-canonical-export/TABLE_EXPORT_COMPLETE.json
+            tmp/p8-r2-canonical-export/catalog.json
+          if-no-files-found: error
+          retention-days: 30
