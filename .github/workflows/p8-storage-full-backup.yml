@@ -1,0 +1,51 @@
+name: P8 Full Storage Backup
+
+on:
+  push:
+    branches: [p8-storage-full-backup]
+    paths:
+      - "scripts/p8/p8-storage-full-backup.py"
+      - "scripts/p8/fixtures/p8-storage-backup-partitions-2026-10-02.json"
+      - ".github/workflows/p8-storage-full-backup.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  full-backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      P8_EXPORT_URL: https://lrgpjimipfkyoqbpsqzz.supabase.co/functions/v1/p8-storage-export-readonly
+      P8_EXPORT_TOKEN: ObJ3t0aPouc1GMiMmuozSB_1E8qVwJC98vvrouqhdlnHERRksGryV5h3HzT-o_ug
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Require R2 secrets
+        run: |
+          set -euo pipefail
+          test -n "${CLOUDFLARE_R2_ACCOUNT_ID}"
+          test -n "${CLOUDFLARE_R2_ACCESS_KEY_ID}"
+          test -n "${CLOUDFLARE_R2_SECRET_ACCESS_KEY}"
+          test -n "${CLOUDFLARE_R2_BUCKET}"
+      - name: Install backup dependencies
+        run: python -m pip install --disable-pip-version-check --no-cache-dir duckdb==1.5.6 boto3==1.40.46 requests==2.32.5
+      - name: Export, convert, upload, and read-back verify
+        run: |
+          python scripts/p8/p8-storage-full-backup.py \
+            --plan scripts/p8/fixtures/p8-storage-backup-partitions-2026-10-02.json \
+            --out tmp/p8-storage-full-backup
+      - name: Publish completion manifest evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-storage-full-backup-completion
+          path: tmp/p8-storage-full-backup/COMPLETE.json
+          if-no-files-found: error
+          retention-days: 30
