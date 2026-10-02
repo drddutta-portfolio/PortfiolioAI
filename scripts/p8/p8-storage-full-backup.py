@@ -4,8 +4,8 @@ from pathlib import Path
 import requests, duckdb
 
 PREFIX="portfolioai-history/development/p8/storage-backup-v1"
-PAGE_LIMIT=1000
-PAGES_PER_CHUNK=10
+PAGE_LIMIT=100
+PAGES_PER_CHUNK=100
 
 def sha256_bytes(b): return hashlib.sha256(b).hexdigest()
 def canonical_json(v): return json.dumps(v, sort_keys=True, separators=(",",":"), ensure_ascii=False)
