@@ -38,12 +38,14 @@ def canonical_json(value):
 def sha256_bytes(data):
     return hashlib.sha256(data).hexdigest()
 
-def upload_verified(s3, bucket, key, data, content_type, metadata=None):
+def upload_verified(s3, bucket, key, data, content_type, metadata=None, allow_replace=False):
     digest = sha256_bytes(data)
     try:
         existing = s3.get_object(Bucket=bucket, Key=key)["Body"].read()
         if existing == data:
             return {"key": key, "bytes": len(data), "sha256": digest, "write": "UNCHANGED"}
+        if not allow_replace:
+            raise RuntimeError(f"Immutable R2 object already exists with different bytes: {key}")
     except s3.exceptions.ClientError as exc:
         code = str(exc.response.get("Error", {}).get("Code", ""))
         if code not in {"404", "NoSuchKey", "NotFound"}:
@@ -158,6 +160,7 @@ def update_runtime_one(s3, bucket, row):
     upload_verified(
         s3, bucket, key, data, "application/json",
         {"append_version": APPEND_VERSION, "last_trade_date": DATE},
+        allow_replace=True,
     )
     return {"key": key, "created": created, "changed": True}
 
@@ -310,6 +313,7 @@ def main():
     catalog_ev = upload_verified(
         s3, bucket, CATALOG_KEY, catalog_bytes, "application/json",
         {"append_version": APPEND_VERSION, "last_append_date": DATE},
+        allow_replace=True,
     )
 
     # Final catalog read-back assertions.
