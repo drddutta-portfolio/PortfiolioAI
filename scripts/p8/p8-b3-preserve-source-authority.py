@@ -204,10 +204,8 @@ def main():
         if not existing_ok:
             zip_bytes = fetch_official(session, row["source_url"])
             actual_zip = sha256_bytes(zip_bytes)
-            if actual_zip != expected_zip:
-                raise RuntimeError(
-                    f"Compressed SHA-256 mismatch {date}: expected {expected_zip}, got {actual_zip}"
-                )
+        else:
+            actual_zip = expected_zip
 
         preferred = None
         raw_meta = row.get("raw_metadata") or {}
@@ -215,6 +213,12 @@ def main():
             preferred = raw_meta.get("csv_member")
         member, csv_bytes = extract_csv(zip_bytes, preferred)
         actual_csv = sha256_bytes(csv_bytes)
+        if actual_zip != expected_zip:
+            content_state = "MATCH" if actual_csv == expected_csv else "MISMATCH"
+            raise RuntimeError(
+                f"Compressed SHA-256 mismatch {date}: expected {expected_zip}, got {actual_zip}; "
+                f"CSV/content={content_state} expected {expected_csv}, got {actual_csv}"
+            )
         if actual_csv != expected_csv:
             raise RuntimeError(
                 f"CSV/content SHA-256 mismatch {date}: expected {expected_csv}, got {actual_csv}"
