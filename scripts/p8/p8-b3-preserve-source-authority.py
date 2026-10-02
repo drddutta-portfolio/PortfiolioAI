@@ -298,8 +298,20 @@ def main():
         "diagnostics": diagnostics,
     }
     diagnostic_bytes = (json.dumps(diagnostic_payload, indent=2, sort_keys=True) + "\n").encode()
+    diagnostic_sha = sha256_bytes(diagnostic_bytes)
     with open("tmp/p8-b3-source-authority/DIAGNOSTIC.json", "wb") as fh:
         fh.write(diagnostic_bytes)
+    diagnostic_key = f"{PREFIX}/DIAGNOSTIC.json"
+    s3.put_object(
+        Bucket=bucket,
+        Key=diagnostic_key,
+        Body=diagnostic_bytes,
+        ContentType="application/json",
+        Metadata={"sha256": diagnostic_sha},
+    )
+    diagnostic_check = s3.get_object(Bucket=bucket, Key=diagnostic_key)["Body"].read()
+    if sha256_bytes(diagnostic_check) != diagnostic_sha:
+        raise RuntimeError("Diagnostic manifest R2 read-back mismatch")
 
     if diagnostics:
         print(json.dumps({
