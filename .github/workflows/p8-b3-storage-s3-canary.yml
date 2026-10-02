@@ -1,0 +1,113 @@
+name: P8 B3 S3 Parquet Canary
+
+on:
+  push:
+    branches:
+      - p8-b3-storage-s3-canary
+    paths:
+      - "scripts/p8/p8-b3-storage-s3-parquet-canary.py"
+      - "scripts/p8/fixtures/p8-b3-storage-s3-canary-2023-10-03.json"
+      - ".github/workflows/p8-b3-storage-s3-canary.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  parquet-canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout canary branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned DuckDB
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir duckdb==1.5.6
+
+      - name: Run exact Parquet round-trip canary
+        run: |
+          python scripts/p8/p8-b3-storage-s3-parquet-canary.py \
+            --fixture scripts/p8/fixtures/p8-b3-storage-s3-canary-2023-10-03.json \
+            --out-dir tmp/p8-b3-storage-s3-canary
+
+      - name: Verify Cloudflare R2 upload and read-back when configured
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${R2_ACCOUNT_ID}" || -z "${R2_ACCESS_KEY_ID}" || -z "${R2_SECRET_ACCESS_KEY}" || -z "${R2_BUCKET}" ]]; then
+            echo "R2_CANARY=SKIPPED_MISSING_SECRETS"
+            exit 0
+          fi
+
+          if ! command -v aws >/dev/null 2>&1; then
+            echo "AWS CLI is required for the R2 verification step."
+            exit 1
+          fi
+
+          PARQUET="tmp/p8-b3-storage-s3-canary/p8-b3-storage-s3-canary-2023-10-03.parquet"
+          READBACK="tmp/p8-b3-storage-s3-canary/r2-readback.parquet"
+          OBJECT_KEY="portfolioai-history/development/p8/b3/canary/v1/trade_date=2023-10-03/p8-b3-storage-s3-canary.parquet"
+          ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+
+          LOCAL_SHA="$(sha256sum "${PARQUET}" | awk '{print $1}')"
+
+          aws s3 cp "${PARQUET}" "s3://${R2_BUCKET}/${OBJECT_KEY}" \
+            --endpoint-url "${ENDPOINT}" \
+            --only-show-errors
+
+          aws s3 cp "s3://${R2_BUCKET}/${OBJECT_KEY}" "${READBACK}" \
+            --endpoint-url "${ENDPOINT}" \
+            --only-show-errors
+
+          REMOTE_SHA="$(sha256sum "${READBACK}" | awk '{print $1}')"
+
+          if [[ "${LOCAL_SHA}" != "${REMOTE_SHA}" ]]; then
+            echo "P8_B3_S3_R2_SHA256_MISMATCH"
+            exit 1
+          fi
+
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          manifest_path = Path("tmp/p8-b3-storage-s3-canary/manifest.json")
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          manifest["remote_storage"] = {
+              "provider": "CLOUDFLARE_R2",
+              "bucket": os.environ["R2_BUCKET"],
+              "object_key": (
+                  "portfolioai-history/development/p8/b3/canary/v1/"
+                  "trade_date=2023-10-03/p8-b3-storage-s3-canary.parquet"
+              ),
+              "upload_verified": True,
+              "download_sha256_verified": True,
+          }
+          manifest_path.write_text(
+              json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          print("R2_CANARY=PASS")
+          PY
+
+      - name: Publish S3 canary evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b3-storage-s3-canary
+          path: tmp/p8-b3-storage-s3-canary/
+          if-no-files-found: error
+          retention-days: 14
