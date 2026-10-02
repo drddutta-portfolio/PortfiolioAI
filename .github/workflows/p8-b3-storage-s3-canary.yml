@@ -1,5 +1,5 @@
 name: P8 B3 S3 Parquet Canary
-# Full backup contract: exact 1000-row chunks, four immutable Development tables.
+# Full backup v2: 5,000-row verified R2 batches built from five bounded 1,000-row PostgREST slices.
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 330
     steps:
-      - name: Export, upload and read-back verify every chunk
+      - name: Export, upload and read-back verify every batched object
         shell: bash
         run: |
           set -euo pipefail
@@ -56,42 +56,40 @@ jobs:
           import urllib.parse
           import urllib.request
 
-          BASE = "https://portfolioai-r2-full-backup-v5.dr-d-dutta.workers.dev/"
+          BASE = "https://portfolioai-r2-full-backup-v6.dr-d-dutta.workers.dev/"
           CONTRACT = {
-              "b3_raw_prices": (532575, 533),
-              "b2_listing_observations": (562790, 563),
-              "b2_listing_evidence": (562790, 563),
-              "b2_universe_members": (144768, 145),
+              "b3_raw_prices": (532575, 107),
+              "b2_listing_observations": (562790, 113),
+              "b2_listing_evidence": (562790, 113),
+              "b2_universe_members": (144768, 29),
           }
-          PAGE_SIZE = 1000
-          MAX_WORKERS = 4
+          BATCH_ROWS = 5000
+          MAX_WORKERS = 2
 
-          tasks = [(dataset, page) for dataset, (_, pages) in CONTRACT.items() for page in range(pages)]
+          tasks = [(dataset, batch) for dataset, (_, batches) in CONTRACT.items() for batch in range(batches)]
 
           def fetch_one(task):
-              dataset, page = task
-              url = BASE + "?" + urllib.parse.urlencode({"dataset": dataset, "page": page, "generation": "v4"})
+              dataset, batch = task
+              url = BASE + "?" + urllib.parse.urlencode({"dataset": dataset, "batch": batch})
               last_error = None
               for attempt in range(6):
                   try:
-                      req = urllib.request.Request(url, headers={"User-Agent": "PortfolioAI-P8-Backup/1"})
-                      with urllib.request.urlopen(req, timeout=120) as resp:
+                      req = urllib.request.Request(url, headers={"User-Agent": "PortfolioAI-P8-Backup/2"})
+                      with urllib.request.urlopen(req, timeout=180) as resp:
                           data = json.loads(resp.read().decode("utf-8"))
                       if data.get("ok") is not True:
                           raise RuntimeError(data)
                       if data.get("source_sha256") != data.get("readback_sha256"):
                           raise RuntimeError({"hash_mismatch": data})
-                      expected_rows = PAGE_SIZE
-                      total, pages = CONTRACT[dataset]
-                      if page == pages - 1:
-                          expected_rows = total - PAGE_SIZE * (pages - 1)
+                      total, batches = CONTRACT[dataset]
+                      expected_rows = BATCH_ROWS if batch < batches - 1 else total - BATCH_ROWS * (batches - 1)
                       if int(data.get("rows")) != expected_rows:
                           raise RuntimeError({"row_count_mismatch": data, "expected": expected_rows})
                       return data
                   except Exception as exc:
                       last_error = exc
                       time.sleep(min(2 ** attempt, 20))
-              raise RuntimeError(f"{dataset} page {page} failed after retries: {last_error}")
+              raise RuntimeError(f"{dataset} batch {batch} failed after retries: {last_error}")
 
           results = []
           with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
@@ -99,27 +97,28 @@ jobs:
               for n, future in enumerate(concurrent.futures.as_completed(futures), 1):
                   row = future.result()
                   results.append(row)
-                  if n % 50 == 0 or n == len(tasks):
-                      print(f"verified {n}/{len(tasks)} chunks", flush=True)
+                  if n % 20 == 0 or n == len(tasks):
+                      print(f"verified {n}/{len(tasks)} R2 batches", flush=True)
 
-          results.sort(key=lambda r: (r["dataset"], int(r["page"])))
-          p = pathlib.Path("backup-evidence/chunks.ndjson")
+          results.sort(key=lambda r: (r["dataset"], int(r["batch"])))
+          p = pathlib.Path("backup-evidence/batches.ndjson")
           p.write_text("\n".join(json.dumps(r, sort_keys=True) for r in results) + "\n", encoding="utf-8")
 
           summary = {}
-          for dataset, (expected_total, expected_pages) in CONTRACT.items():
+          for dataset, (expected_total, expected_batches) in CONTRACT.items():
               rows = [r for r in results if r["dataset"] == dataset]
-              pages = [int(r["page"]) for r in rows]
+              batches = [int(r["batch"]) for r in rows]
               actual_rows = sum(int(r["rows"]) for r in rows)
               ok = (
-                  len(rows) == expected_pages
-                  and pages == list(range(expected_pages))
+                  len(rows) == expected_batches
+                  and batches == list(range(expected_batches))
                   and actual_rows == expected_total
                   and all(r["source_sha256"] == r["readback_sha256"] for r in rows)
+                  and all(r.get("contract") == "batched-v1" for r in rows)
               )
               summary[dataset] = {
-                  "chunks": len(rows),
-                  "expected_chunks": expected_pages,
+                  "batches": len(rows),
+                  "expected_batches": expected_batches,
                   "rows": actual_rows,
                   "expected_rows": expected_total,
                   "bytes": sum(int(r["bytes"]) for r in rows),
@@ -128,9 +127,9 @@ jobs:
 
           manifest = {
               "status": "PASS" if all(v["all_verified"] for v in summary.values()) else "FAIL",
-              "page_size": PAGE_SIZE,
+              "batch_rows": BATCH_ROWS,
               "datasets": summary,
-              "chunk_log_sha256": hashlib.sha256(p.read_bytes()).hexdigest(),
+              "batch_log_sha256": hashlib.sha256(p.read_bytes()).hexdigest(),
           }
           pathlib.Path("backup-evidence/summary.json").write_text(
               json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -143,7 +142,7 @@ jobs:
       - name: Publish full-backup evidence
         uses: actions/upload-artifact@v4
         with:
-          name: p8-full-r2-backup-evidence
+          name: p8-full-r2-backup-v2-evidence
           path: backup-evidence/
           if-no-files-found: error
           retention-days: 30
