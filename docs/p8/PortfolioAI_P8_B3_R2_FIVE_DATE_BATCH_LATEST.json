@@ -1,0 +1,87 @@
+{
+  "exit_code": 0,
+  "result": {
+    "append_manifests": [
+      {
+        "date": "2024-09-23",
+        "manifest": {
+          "bytes": 1774,
+          "key": "portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-23.json",
+          "sha256": "b46e4925ac0d39ec8c56009864dcf474adddbf427b8a2a121c6cfaa7d1fb96c2",
+          "write": "UPDATED"
+        },
+        "rows": 2401
+      },
+      {
+        "date": "2024-09-24",
+        "manifest": {
+          "bytes": 1774,
+          "key": "portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-24.json",
+          "sha256": "951c9b91ebab27ae833bb3c7b8c6bf691b4606e4b39c0ae9209aaa388d928610",
+          "write": "UPDATED"
+        },
+        "rows": 2371
+      },
+      {
+        "date": "2024-09-25",
+        "manifest": {
+          "bytes": 1774,
+          "key": "portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-25.json",
+          "sha256": "3bc7530c09025f0639358c9a31ac94a662721b63ec8cc7a1737bb869c432d112",
+          "write": "UPDATED"
+        },
+        "rows": 2379
+      },
+      {
+        "date": "2024-09-26",
+        "manifest": {
+          "bytes": 1774,
+          "key": "portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-26.json",
+          "sha256": "86990c0ccbef4efa699cf0a2df76345ab3a680df8573088585824c3fdd30357f",
+          "write": "UPDATED"
+        },
+        "rows": 2380
+      },
+      {
+        "date": "2024-09-27",
+        "manifest": {
+          "bytes": 1775,
+          "key": "portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-27.json",
+          "sha256": "2e0621f4a7704810411d10182f3e155e396c7e02dc4533596d79bd36ee5a9bad",
+          "write": "UPDATED"
+        },
+        "rows": 2392
+      }
+    ],
+    "canonical_rows_after": 549226,
+    "catalog": {
+      "bytes": 1872,
+      "key": "portfolioai-history/development/p8/catalog/v1/catalog.json",
+      "sha256": "05c9514db25a81dbe2e29b9bfe5fd026752713057e3f8376320de231aa36c25d",
+      "write": "UPDATED"
+    },
+    "date_count": 5,
+    "dates": [
+      "2024-09-23",
+      "2024-09-24",
+      "2024-09-25",
+      "2024-09-26",
+      "2024-09-27"
+    ],
+    "partitions_after": 247,
+    "production_changes": 0,
+    "raw_price_database_writes": 0,
+    "rows_added": 11923,
+    "runtime_objects_after": 6175,
+    "runtime_objects_created": 35,
+    "runtime_objects_touched": 2474,
+    "runtime_objects_verified": 2474,
+    "source_metadata_inserts": 5,
+    "status": "PASS",
+    "version": "P8_B3_R2_NATIVE_BATCH_V1"
+  },
+  "status": "PASS",
+  "stderr": "",
+  "stdout": "{\n  \"append_manifests\": [\n    {\n      \"date\": \"2024-09-23\",\n      \"manifest\": {\n        \"bytes\": 1774,\n        \"key\": \"portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-23.json\",\n        \"sha256\": \"b46e4925ac0d39ec8c56009864dcf474adddbf427b8a2a121c6cfaa7d1fb96c2\",\n        \"write\": \"UPDATED\"\n      },\n      \"rows\": 2401\n    },\n    {\n      \"date\": \"2024-09-24\",\n      \"manifest\": {\n        \"bytes\": 1774,\n        \"key\": \"portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-24.json\",\n        \"sha256\": \"951c9b91ebab27ae833bb3c7b8c6bf691b4606e4b39c0ae9209aaa388d928610\",\n        \"write\": \"UPDATED\"\n      },\n      \"rows\": 2371\n    },\n    {\n      \"date\": \"2024-09-25\",\n      \"manifest\": {\n        \"bytes\": 1774,\n        \"key\": \"portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-25.json\",\n        \"sha256\": \"3bc7530c09025f0639358c9a31ac94a662721b63ec8cc7a1737bb869c432d112\",\n        \"write\": \"UPDATED\"\n      },\n      \"rows\": 2379\n    },\n    {\n      \"date\": \"2024-09-26\",\n      \"manifest\": {\n        \"bytes\": 1774,\n        \"key\": \"portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-26.json\",\n        \"sha256\": \"86990c0ccbef4efa699cf0a2df76345ab3a680df8573088585824c3fdd30357f\",\n        \"write\": \"UPDATED\"\n      },\n      \"rows\": 2380\n    },\n    {\n      \"date\": \"2024-09-27\",\n      \"manifest\": {\n        \"bytes\": 1775,\n        \"key\": \"portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-27.json\",\n        \"sha256\": \"2e0621f4a7704810411d10182f3e155e396c7e02dc4533596d79bd36ee5a9bad\",\n        \"write\": \"UPDATED\"\n      },\n      \"rows\": 2392\n    }\n  ],\n  \"canonical_rows_after\": 549226,\n  \"catalog\": {\n    \"bytes\": 1872,\n    \"key\": \"portfolioai-history/development/p8/catalog/v1/catalog.json\",\n    \"sha256\": \"05c9514db25a81dbe2e29b9bfe5fd026752713057e3f8376320de231aa36c25d\",\n    \"write\": \"UPDATED\"\n  },\n  \"date_count\": 5,\n  \"dates\": [\n    \"2024-09-23\",\n    \"2024-09-24\",\n    \"2024-09-25\",\n    \"2024-09-26\",\n    \"2024-09-27\"\n  ],\n  \"partitions_after\": 247,\n  \"production_changes\": 0,\n  \"raw_price_database_writes\": 0,\n  \"rows_added\": 11923,\n  \"runtime_objects_after\": 6175,\n  \"runtime_objects_created\": 35,\n  \"runtime_objects_touched\": 2474,\n  \"runtime_objects_verified\": 2474,\n  \"source_metadata_inserts\": 5,\n  \"status\": \"PASS\",\n  \"version\": \"P8_B3_R2_NATIVE_BATCH_V1\"\n}\n",
+  "version": "P8_B3_R2_FIVE_DATE_BATCH_AUDIT_V1"
+}
