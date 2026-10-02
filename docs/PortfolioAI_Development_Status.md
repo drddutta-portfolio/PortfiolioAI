@@ -4969,3 +4969,65 @@ main = UNCHANGED
 ```
 
 No Supabase data write, schema migration, table/index removal, provider call, acquisition restart, normalization, deployment or Production/main change occurred during this entry.
+
+
+## P8-B3 storage remediation S3A canary result — 2 October 2026
+
+Owner froze Cloudflare R2 Standard as the primary P8 historical object store. Cloudflare D1 is not used.
+
+A Development-only isolated branch was created:
+
+`p8-b3-storage-s3-canary`
+
+GitHub Actions executed the first exact Parquet preservation canary successfully:
+
+- workflow run: `36961242278`;
+- canary commit: `70732143ae5843dc19db46bd49a43230f5fdd82f`;
+- artifact ID: `11208170069`;
+- DuckDB: `1.5.6`;
+- Parquet: V2 / ZSTD;
+- rows: 5 exact Development B3 raw-price rows;
+- source archive: `183e942c-a54d-5889-8043-436eebeb635d`;
+- trade date: `2023-10-03`;
+- source fingerprint:
+  `716ad53ad17e6fadc9e9e49230584b946fbecd964e530384daad73f6c5ed9061`;
+- read-back fingerprint:
+  `716ad53ad17e6fadc9e9e49230584b946fbecd964e530384daad73f6c5ed9061`;
+- Parquet SHA-256:
+  `fb5f9b07d510cdaf7336f8a84b76c97740ff79566b81d6361d0c2468b873450f`;
+- Parquet size: 6,330 bytes.
+
+Exact round-trip parity therefore passed for the canary representation.
+
+The workflow already contains Cloudflare R2 upload + download SHA-256 verification using the R2 S3 endpoint. That step was safely skipped because the repository currently has no R2 credentials configured:
+
+`R2_CANARY=SKIPPED_MISSING_SECRETS`
+
+Required future secret names:
+
+- `CLOUDFLARE_R2_ACCOUNT_ID`
+- `CLOUDFLARE_R2_ACCESS_KEY_ID`
+- `CLOUDFLARE_R2_SECRET_ACCESS_KEY`
+- `CLOUDFLARE_R2_BUCKET`
+
+Current state:
+
+```text
+Storage Remediation S0 = COMPLETE / PASS
+Storage Remediation S1 = PENDING RAW-FILE BYTE VERIFICATION
+Storage Remediation S2 = COMPLETE / DOCUMENTED / R2 FROZEN
+Storage Remediation S3A Parquet round-trip = COMPLETE / PASS
+Storage Remediation S3B R2 upload-readback = PENDING R2 CONNECTION
+
+P8-B3 acquisition = PAUSED at 241 / 744
+B3 normalization/materialization = NOT AUTHORIZED
+P8-B4+ = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+
+NO SUPABASE WRITE
+NO DATABASE MIGRATION
+NO TABLE/INDEX REMOVAL
+NO B3 RESTART
+Production = UNCHANGED
+main = UNCHANGED
+```
