@@ -1,3 +1,35 @@
+## P8-B3 storage remediation and PostgreSQL retirement — 2 October 2026
+
+**Status: COMPLETE / PASS for database-size remediation and permanent R2 runtime.**
+
+Development-only storage remediation is complete after explicit owner approval.
+
+- PortfolioAI Dev full PostgreSQL backup to Cloudflare R2: **PASS**.
+- Verified encrypted backup object: ~188.3 MB; full R2 download, decrypt, SHA-256 and `pg_restore --list` validation passed.
+- Canonical R2 export: **PASS**.
+- Exact preserved rows:
+  - B3 raw prices: 532,575
+  - B2 listing observations: 562,790
+  - B2 listing evidence: 562,790
+  - B2 universe members: 144,768
+- R2 runtime raw-price projection: **532,575 rows / 6,135 objects**.
+- Focused live Worker smoke: **PASS** for health, catalog and real RELIANCE historical-price retrieval from Cloudflare R2.
+- Bulk PostgreSQL retirement migration: **APPLIED / PASS** on PortfolioAI Dev only.
+- Retired relations:
+  - `p8_b3_raw_market_price_observations`
+  - `p8_historical_listing_observations_v3`
+  - `p8_historical_universe_member_listing_evidence_v3`
+  - `p8_historical_universe_members_v3`
+- No `CASCADE` was used. Dependent views/functions/FK were handled explicitly and legacy writer RPCs now fail closed.
+- PortfolioAI Dev database size fell from **1,531,079,827 bytes** to **115,190,931 bytes** (~115 MB).
+- PostgreSQL is writable again: `default_transaction_read_only=off`, `transaction_read_only=off`.
+- Development project status: **ACTIVE_HEALTHY**.
+- Operational/control-plane sanity check retained 1 portfolio, 284 securities, 496 transactions, 263 latest prices, 317 B3 source-archive metadata rows, 6,704 corporate-action observations and 745 benchmark rows.
+- R2 runtime implementation merged into `PortfolioAI-Development` through PR #103; merge commit `ccbcbb51b14d53e47a29a24d21ff7cc2a433c64f`.
+- Production database and Production runtime were not modified.
+
+Remaining preservation note: complete raw official NSE source-byte archival/verification remains a separate open preservation task. Database evidence and canonical R2 Parquet/runtime copies are protected, but this does not claim that every original NSE source file byte has already been copied to R2.
+
 ## Program A · A2A closure — 23 September 2026
 
 Program A · A2A is COMPLETE / PASS / CLOSED.
