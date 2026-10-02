@@ -1,0 +1,43 @@
+name: P8 R2 Live Runtime CI
+
+on:
+  push:
+    branches: [p8-r2-live-runtime]
+    paths:
+      - "src/lib/config.ts"
+      - "src/data/historicalMarketDataRepository.ts"
+      - "cloudflare/portfolioai-history-dev-api/**"
+      - ".env.example"
+      - ".github/workflows/p8-r2-live-runtime-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  runtime-ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Test
+        run: npm test
+      - name: Smoke Cloudflare R2 gateway
+        run: |
+          set -euo pipefail
+          BODY="$(curl --fail --silent --show-error --retry 3 --retry-all-errors             https://portfolioai-history-dev-api.dr-d-dutta.workers.dev/v1/health)"
+          node -e '
+            const payload=JSON.parse(process.argv[1]);
+            if (!payload.ok) throw new Error("gateway health is not OK");
+            if (!payload.r2?.bucket_bound) throw new Error("R2 binding not active");
+            if (!payload.r2?.backup_manifest_present) throw new Error("verified backup manifest missing");
+            console.log(JSON.stringify(payload));
+          ' "$BODY"
