@@ -67,10 +67,11 @@ jobs:
       - name: Verify official NSE bytes and preserve to R2
         run: python scripts/p8/p8-b3-preserve-source-authority.py
 
-      - name: Publish S1 completion evidence
+      - name: Publish S1 preservation evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: p8-b3-source-authority-completion
-          path: tmp/p8-b3-source-authority/COMPLETE.json
-          if-no-files-found: error
+          name: p8-b3-source-authority-evidence
+          path: tmp/p8-b3-source-authority/*.json
+          if-no-files-found: warn
           retention-days: 30
