@@ -173,6 +173,7 @@ def main():
     session = requests.Session()
 
     preserved = []
+    diagnostics = []
     total_bytes = 0
     skipped_existing = 0
     uploaded = 0
@@ -215,14 +216,34 @@ def main():
         actual_csv = sha256_bytes(csv_bytes)
         if actual_zip != expected_zip:
             content_state = "MATCH" if actual_csv == expected_csv else "MISMATCH"
-            raise RuntimeError(
-                f"Compressed SHA-256 mismatch {date}: expected {expected_zip}, got {actual_zip}; "
-                f"CSV/content={content_state} expected {expected_csv}, got {actual_csv}"
+            diagnostics.append({
+                "source_date": date,
+                "source_file_name": file_name,
+                "source_url": row["source_url"],
+                "status": "ZIP_REPACK_CONTENT_MATCH" if content_state == "MATCH" else "CONTENT_MISMATCH",
+                "expected_compressed_sha256": expected_zip,
+                "actual_compressed_sha256": actual_zip,
+                "expected_content_sha256": expected_csv,
+                "actual_content_sha256": actual_csv,
+            })
+            print(
+                f"[{index}/{len(rows)}] BLOCKED {date} ZIP={actual_zip} "
+                f"expected={expected_zip} CSV={content_state}"
             )
+            continue
         if actual_csv != expected_csv:
-            raise RuntimeError(
-                f"CSV/content SHA-256 mismatch {date}: expected {expected_csv}, got {actual_csv}"
-            )
+            diagnostics.append({
+                "source_date": date,
+                "source_file_name": file_name,
+                "source_url": row["source_url"],
+                "status": "CONTENT_MISMATCH",
+                "expected_compressed_sha256": expected_zip,
+                "actual_compressed_sha256": actual_zip,
+                "expected_content_sha256": expected_csv,
+                "actual_content_sha256": actual_csv,
+            })
+            print(f"[{index}/{len(rows)}] BLOCKED {date} CSV content mismatch")
+            continue
 
         if not existing_ok:
             s3.put_object(
@@ -260,6 +281,38 @@ def main():
             "bytes": len(zip_bytes),
         })
         print(f"[{index}/{len(rows)}] PASS {date} {file_name}")
+
+    os.makedirs("tmp/p8-b3-source-authority", exist_ok=True)
+    diagnostic_payload = {
+        "version": "PORTFOLIOAI_P8_B3_SOURCE_AUTHORITY_DIAGNOSTIC_V1",
+        "status": "PASS" if not diagnostics else "BLOCKED_ORIGINAL_ZIP_RECOVERY_REQUIRED",
+        "environment": "DEVELOPMENT",
+        "project_ref": PROJECT_REF,
+        "campaign_id": CAMPAIGN_ID,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "expected_source_dates": EXPECTED_DATES,
+        "exact_preserved_dates": len(preserved),
+        "blocked_dates": len(diagnostics),
+        "uploaded_objects": uploaded,
+        "preexisting_verified_objects": skipped_existing,
+        "diagnostics": diagnostics,
+    }
+    diagnostic_bytes = (json.dumps(diagnostic_payload, indent=2, sort_keys=True) + "\n").encode()
+    with open("tmp/p8-b3-source-authority/DIAGNOSTIC.json", "wb") as fh:
+        fh.write(diagnostic_bytes)
+
+    if diagnostics:
+        print(json.dumps({
+            "status": diagnostic_payload["status"],
+            "exact_preserved_dates": len(preserved),
+            "blocked_dates": len(diagnostics),
+            "zip_repack_content_match": sum(1 for d in diagnostics if d["status"] == "ZIP_REPACK_CONTENT_MATCH"),
+            "content_mismatch": sum(1 for d in diagnostics if d["status"] == "CONTENT_MISMATCH"),
+        }, indent=2))
+        raise RuntimeError(
+            f"S1 remains blocked: {len(diagnostics)} original ZIP object(s) are not reproducible "
+            "from current NSE downloads; recover exact bytes from the original acquisition cache."
+        )
 
     fingerprint_input = [
         {
@@ -309,7 +362,6 @@ def main():
     if sha256_bytes(check) != manifest_sha:
         raise RuntimeError("Completion manifest R2 read-back mismatch")
 
-    os.makedirs("tmp/p8-b3-source-authority", exist_ok=True)
     with open("tmp/p8-b3-source-authority/COMPLETE.json", "wb") as fh:
         fh.write(manifest_bytes)
     print(json.dumps({
