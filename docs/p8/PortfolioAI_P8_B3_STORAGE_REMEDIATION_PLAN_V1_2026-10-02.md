@@ -104,7 +104,21 @@ Normal PortfolioAI use must remain online. A developer workstation/localhost may
 
 ## 5. Object storage direction
 
-Primary candidate: Cloudflare R2 or another durable S3-compatible object store with sufficient free/low-cost headroom.
+Owner decision on 2 October 2026: **Cloudflare R2 Standard is frozen as the primary PortfolioAI P8 historical object store.**
+
+Development bucket target:
+
+`portfolioai-history-dev`
+
+R2 contract:
+
+- private bucket; no public-read requirement;
+- S3-compatible access through `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`;
+- API token limited to Object Read & Write for the Development bucket only;
+- credentials stored only in secret stores/environment variables, never committed;
+- deterministic immutable object keys under `portfolioai-history/development/`;
+- original official NSE source bytes and versioned Parquet datasets are both retained;
+- object upload is followed by download/read-back SHA-256 verification before the object is accepted as durable evidence.
 
 Secondary copy: verified local/external-drive archive.
 
@@ -112,7 +126,7 @@ Optional tertiary copy: Google Drive for disaster-recovery backup.
 
 Supabase Storage is not selected as the long-term historical authority because the Free allowance is only 1 GB and therefore provides limited growth headroom.
 
-Final provider selection requires owner approval before credentials/configuration are introduced.
+Cloudflare D1 and the Supabase Cloudflare D1 Wrapper are not part of this architecture.
 
 ## 6. Phase S0 — forensic freeze
 
@@ -402,7 +416,8 @@ Local/desktop execution is permitted only for migration, forensic verification, 
 - **S0** forensic baseline — COMPLETE / PASS.
 - **S1** all raw authoritative files verified — PENDING.
 - **S2** preservation/schema contract — DOCUMENTED / OWNER REVIEW.
-- **S3** Parquet canary + read-back parity — PENDING.
+- **S3A** Parquet local/CI write + read-back parity — COMPLETE / PASS on GitHub Actions run `36961242278`.
+- **S3B** Cloudflare R2 upload + download SHA-256 parity — BLOCKED ONLY ON R2 CREDENTIAL CONNECTION / NOT YET PASS.
 - **S4** full immutable export — NOT AUTHORIZED.
 - **S5** replacement runtime + old/new parity — NOT AUTHORIZED.
 - **S6** retirement evidence package — NOT AUTHORIZED.
@@ -425,3 +440,62 @@ NO B3 ACQUISITION RESTART
 NO B3 NORMALIZATION
 NO B4/P8-C PROGRESSION
 ```
+
+
+## 21. S3 Parquet canary execution evidence — 2 October 2026
+
+Execution branch: `p8-b3-storage-s3-canary`  
+Canary commit: `70732143ae5843dc19db46bd49a43230f5fdd82f`  
+GitHub Actions run: `36961242278`  
+Artifact ID: `11208170069`
+
+Canary fixture:
+
+- 5 exact Development B3 raw-price observations;
+- source archive: `183e942c-a54d-5889-8043-436eebeb635d`;
+- trade date: `2023-10-03`;
+- exact UUID, identity, archive, date, decimal lexical values, row hashes and canonical raw metadata preserved.
+
+Execution result:
+
+```text
+DuckDB = 1.5.6
+Parquet format = V2
+Compression = ZSTD
+Rows = 5
+
+source fingerprint:
+716ad53ad17e6fadc9e9e49230584b946fbecd964e530384daad73f6c5ed9061
+
+read-back fingerprint:
+716ad53ad17e6fadc9e9e49230584b946fbecd964e530384daad73f6c5ed9061
+
+Parquet SHA-256:
+fb5f9b07d510cdaf7336f8a84b76c97740ff79566b81d6361d0c2468b873450f
+
+Parquet bytes:
+6330
+
+S3A result = PASS
+```
+
+The R2 step was present and executed safely but reported:
+
+`R2_CANARY=SKIPPED_MISSING_SECRETS`
+
+Therefore S3 is not fully closed. S3B requires the Development R2 bucket and these secret values in the CI environment:
+
+- `CLOUDFLARE_R2_ACCOUNT_ID`
+- `CLOUDFLARE_R2_ACCESS_KEY_ID`
+- `CLOUDFLARE_R2_SECRET_ACCESS_KEY`
+- `CLOUDFLARE_R2_BUCKET`
+
+No secret value may be committed to the repository.
+
+The exact canary object key is:
+
+`portfolioai-history/development/p8/b3/canary/v1/trade_date=2023-10-03/p8-b3-storage-s3-canary.parquet`
+
+S3B PASS requires upload to R2, download back from R2, and exact equality between the local Parquet SHA-256 and downloaded-object SHA-256.
+
+No PostgreSQL data may be deleted while S3B remains pending.
