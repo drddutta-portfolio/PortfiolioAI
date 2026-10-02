@@ -1,4 +1,5 @@
-name: P8 B3 S3 Parquet Canary\n# Full backup paging contract: 1000 rows per verified R2 chunk
+name: P8 B3 S3 Parquet Canary
+# Full backup paging contract: 1000 rows per verified R2 chunk
 
 on:
   push:
