@@ -62,26 +62,55 @@ jobs:
             "psycopg[binary]==3.2.10"
 
       - name: Validate known partition and plan day 241
+        id: dryrun
         shell: bash
         run: |
-          set -euo pipefail
+          set +e
           mkdir -p tmp/p8-b3-r2-append-dry-run
           python scripts/p8/p8-b3-r2-append-dry-run.py \
-            | tee tmp/p8-b3-r2-append-dry-run/result.json
+            > tmp/p8-b3-r2-append-dry-run/stdout.log \
+            2> tmp/p8-b3-r2-append-dry-run/stderr.log
+          status=$?
+          echo "$status" > tmp/p8-b3-r2-append-dry-run/exit_code.txt
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit 0
 
-      - name: Record passing dry-run result
+      - name: Record dry-run audit
         shell: bash
         run: |
           set -euo pipefail
-          cp tmp/p8-b3-r2-append-dry-run/result.json docs/p8/PortfolioAI_P8_B3_R2_APPEND_DRY_RUN_LATEST.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("tmp/p8-b3-r2-append-dry-run")
+          code=int((root/"exit_code.txt").read_text().strip())
+          stdout=(root/"stdout.log").read_text(errors="replace")
+          stderr=(root/"stderr.log").read_text(errors="replace")
+          payload={
+            "version":"P8_B3_R2_APPEND_DRY_RUN_CI_AUDIT_V1",
+            "status":"PASS" if code==0 else "FAIL",
+            "exit_code":code,
+            "stdout":stdout[-20000:],
+            "stderr":stderr[-20000:],
+          }
+          Path("docs/p8/PortfolioAI_P8_B3_R2_APPEND_DRY_RUN_LATEST.json").write_text(
+            json.dumps(payload,indent=2,sort_keys=True)+"\n"
+          )
+          PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/p8/PortfolioAI_P8_B3_R2_APPEND_DRY_RUN_LATEST.json
-          if git diff --cached --quiet; then
-            exit 0
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): record R2 append dry-run result"
+            git push
           fi
-          git commit -m "audit(p8): record R2 append dry-run result"
-          git push
+
+      - name: Enforce dry-run result
+        if: steps.dryrun.outputs.exit_code != '0'
+        shell: bash
+        run: |
+          echo "R2 append dry-run failed; see recorded audit." >&2
+          exit 1
 
       - name: Publish dry-run evidence
         uses: actions/upload-artifact@v4
