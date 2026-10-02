@@ -2,17 +2,433 @@ name: Manual Supabase Database Backup
 
 on:
   workflow_dispatch:
+    inputs:
+      target:
+        description: Database to back up
+        required: true
+        type: choice
+        default: development
+        options:
+          - development
+          - production
 
 permissions:
   contents: read
 
 concurrency:
-  group: manual-supabase-db-backup
+  group: manual-supabase-db-backup-${{ inputs.target }}
   cancel-in-progress: false
 
 jobs:
-  backup:
-    name: Backup production database to Supabase Storage
+  backup-development-to-r2:
+    if: ${{ inputs.target == 'development' }}
+    name: Backup PortfolioAI Dev completely to Cloudflare R2
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      BACKUP_ENCRYPTION_PASSPHRASE: ${{ secrets.BACKUP_ENCRYPTION_PASSPHRASE }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+      EXPECTED_DEV_PROJECT_REF: lrgpjimipfkyoqbpsqzz
+      EXPECTED_R2_BUCKET: portfolioai-history-dev
+
+    steps:
+      - name: Check required secrets and Development isolation
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            SUPABASE_DB_URL \
+            BACKUP_ENCRYPTION_PASSPHRASE \
+            CLOUDFLARE_R2_ACCOUNT_ID \
+            CLOUDFLARE_R2_ACCESS_KEY_ID \
+            CLOUDFLARE_R2_SECRET_ACCESS_KEY \
+            CLOUDFLARE_R2_BUCKET
+          do
+            if [ -z "${!name:-}" ]; then
+              echo "Required GitHub Actions secret is missing: $name" >&2
+              exit 1
+            fi
+          done
+
+          case "$SUPABASE_DB_URL" in
+            *"$EXPECTED_DEV_PROJECT_REF"*) ;;
+            *)
+              echo "SUPABASE_DB_URL is not the PortfolioAI Dev database. Refusing to continue." >&2
+              exit 1
+              ;;
+          esac
+
+          if [ "$CLOUDFLARE_R2_BUCKET" != "$EXPECTED_R2_BUCKET" ]; then
+            echo "R2 bucket is not the frozen Development bucket. Refusing to continue." >&2
+            exit 1
+          fi
+
+      - name: Install R2 client
+        shell: bash
+        run: python3 -m pip install --disable-pip-version-check --no-cache-dir boto3==1.40.46
+
+      - name: Preflight Cloudflare R2 write-read-delete
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, os, re
+          from urllib.parse import urlparse
+          import boto3
+          from botocore.config import Config
+
+          raw=os.environ["CLOUDFLARE_R2_ACCOUNT_ID"].strip().rstrip("/")
+          host=(urlparse(raw).hostname or "") if "://" in raw else raw
+          suffix=".r2.cloudflarestorage.com"
+          account=host[:-len(suffix)] if host.endswith(suffix) else host
+          if not re.fullmatch(r"[0-9a-fA-F]{32}",account):
+              raise SystemExit("Invalid Cloudflare R2 Account ID/endpoint.")
+
+          endpoint=f"https://{account}.r2.cloudflarestorage.com"
+          with open(os.environ["GITHUB_ENV"],"a",encoding="utf-8") as fh:
+              fh.write(f"R2_ENDPOINT={endpoint}\n")
+
+          s3=boto3.client(
+              "s3",
+              endpoint_url=endpoint,
+              aws_access_key_id=os.environ["CLOUDFLARE_R2_ACCESS_KEY_ID"],
+              aws_secret_access_key=os.environ["CLOUDFLARE_R2_SECRET_ACCESS_KEY"],
+              region_name="auto",
+              config=Config(
+                  retries={"max_attempts":8,"mode":"adaptive"},
+                  connect_timeout=30,
+                  read_timeout=120,
+                  s3={"addressing_style":"path"},
+              ),
+          )
+          bucket=os.environ["CLOUDFLARE_R2_BUCKET"]
+          key=f"portfolioai-backups/development/database/_preflight/{os.environ['GITHUB_RUN_ID']}.txt"
+          source=b"portfolioai-dev-full-db-backup-preflight-v1\n"
+          s3.put_object(Bucket=bucket,Key=key,Body=source,ContentType="text/plain")
+          readback=s3.get_object(Bucket=bucket,Key=key)["Body"].read()
+          if hashlib.sha256(readback).digest()!=hashlib.sha256(source).digest():
+              raise SystemExit("R2 preflight SHA-256 mismatch.")
+          s3.delete_object(Bucket=bucket,Key=key)
+          print("Development R2 preflight PASS")
+          PY
+
+      - name: Create complete Development PostgreSQL logical backup
+        id: dump
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+
+          workdir="$(mktemp -d)"
+          echo "workdir=$workdir" >> "$GITHUB_OUTPUT"
+
+          timestamp="$(date -u +'%Y-%m-%dT%H-%M-%SZ')"
+          object_prefix="portfolioai-backups/development/database/manual/$timestamp"
+          object_name="portfolioai-dev-$timestamp-$GITHUB_RUN_ID.dump.enc"
+          echo "timestamp=$timestamp" >> "$GITHUB_OUTPUT"
+          echo "object_prefix=$object_prefix" >> "$GITHUB_OUTPUT"
+          echo "object_name=$object_name" >> "$GITHUB_OUTPUT"
+
+          database_size_bytes="$(
+            docker run --rm \
+              -e DB_URL="$SUPABASE_DB_URL" \
+              postgres:17-alpine \
+              sh -ceu 'psql "$DB_URL" -X -v ON_ERROR_STOP=1 -Atc "select pg_database_size(current_database())"'
+          )"
+
+          docker run --rm \
+            -e DB_URL="$SUPABASE_DB_URL" \
+            -v "$workdir:/backup" \
+            postgres:17-alpine \
+            sh -ceu 'pg_dump "$DB_URL" \
+              --format=custom \
+              --compress=3 \
+              --no-owner \
+              --no-acl \
+              --file=/backup/database.dump'
+
+          docker run --rm \
+            -v "$workdir:/backup:ro" \
+            postgres:17-alpine \
+            sh -ceu 'pg_restore --list /backup/database.dump >/dev/null'
+
+          dump_sha="$(sha256sum "$workdir/database.dump" | awk '{print $1}')"
+          dump_size="$(stat -c '%s' "$workdir/database.dump")"
+
+          export WORKDIR="$workdir"
+          export timestamp database_size_bytes dump_sha dump_size object_prefix object_name
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          manifest={
+              "backup_version":"PORTFOLIOAI_DEV_FULL_DB_R2_V1",
+              "source_environment":"PortfolioAI Dev",
+              "source_project_ref":"lrgpjimipfkyoqbpsqzz",
+              "created_utc":os.environ["timestamp"],
+              "github_repository":os.environ["GITHUB_REPOSITORY"],
+              "github_run_id":os.environ["GITHUB_RUN_ID"],
+              "github_sha":os.environ["GITHUB_SHA"],
+              "database_size_bytes":int(os.environ["database_size_bytes"]),
+              "dump_format":"postgresql_custom",
+              "dump_compression_level":3,
+              "dump_sha256":os.environ["dump_sha"],
+              "dump_size_bytes":int(os.environ["dump_size"]),
+              "pg_dump_image":"postgres:17-alpine",
+              "encryption":"AES-256-CBC/PBKDF2/200000",
+              "r2_bucket":"portfolioai-history-dev",
+              "r2_object_prefix":os.environ["object_prefix"],
+              "r2_encrypted_object":os.environ["object_name"],
+          }
+          Path(os.environ["WORKDIR"]).joinpath("manifest.json").write_text(
+              json.dumps(manifest,indent=2,sort_keys=True)+"\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Encrypt Development backup
+        id: encrypt
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          workdir="${{ steps.dump.outputs.workdir }}"
+          encrypted="$workdir/database.dump.enc"
+
+          openssl enc -aes-256-cbc \
+            -salt \
+            -pbkdf2 \
+            -iter 200000 \
+            -in "$workdir/database.dump" \
+            -out "$encrypted" \
+            -pass env:BACKUP_ENCRYPTION_PASSPHRASE
+
+          sha256sum "$encrypted" | awk '{print $1}' > "$workdir/database.dump.enc.sha256"
+          echo "encrypted=$encrypted" >> "$GITHUB_OUTPUT"
+
+      - name: Upload to R2 and verify full encrypted read-back
+        id: r2
+        shell: bash
+        run: |
+          set -euo pipefail
+          workdir="${{ steps.dump.outputs.workdir }}"
+          prefix="${{ steps.dump.outputs.object_prefix }}"
+          name="${{ steps.dump.outputs.object_name }}"
+
+          export BACKUP_WORKDIR="$workdir"
+          export BACKUP_PREFIX="$prefix"
+          export BACKUP_NAME="$name"
+
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          import boto3
+          from boto3.s3.transfer import TransferConfig
+          from botocore.config import Config
+
+          root=Path(os.environ["BACKUP_WORKDIR"])
+          encrypted=root/"database.dump.enc"
+          checksum=root/"database.dump.enc.sha256"
+          manifest=root/"manifest.json"
+          bucket=os.environ["CLOUDFLARE_R2_BUCKET"]
+          prefix=os.environ["BACKUP_PREFIX"]
+          name=os.environ["BACKUP_NAME"]
+
+          s3=boto3.client(
+              "s3",
+              endpoint_url=os.environ["R2_ENDPOINT"],
+              aws_access_key_id=os.environ["CLOUDFLARE_R2_ACCESS_KEY_ID"],
+              aws_secret_access_key=os.environ["CLOUDFLARE_R2_SECRET_ACCESS_KEY"],
+              region_name="auto",
+              config=Config(
+                  retries={"max_attempts":10,"mode":"adaptive"},
+                  connect_timeout=30,
+                  read_timeout=180,
+                  s3={"addressing_style":"path"},
+              ),
+          )
+          transfer=TransferConfig(
+              multipart_threshold=64*1024*1024,
+              multipart_chunksize=64*1024*1024,
+              max_concurrency=4,
+              use_threads=True,
+          )
+
+          def sha(path):
+              h=hashlib.sha256()
+              with path.open("rb") as f:
+                  for block in iter(lambda:f.read(4*1024*1024),b""):
+                      h.update(block)
+              return h.hexdigest()
+
+          encrypted_sha=sha(encrypted)
+          key=f"{prefix}/{name}"
+          s3.upload_file(
+              str(encrypted),bucket,key,
+              ExtraArgs={
+                  "ContentType":"application/octet-stream",
+                  "Metadata":{
+                      "sha256":encrypted_sha,
+                      "backup_version":"PORTFOLIOAI_DEV_FULL_DB_R2_V1",
+                  },
+              },
+              Config=transfer,
+          )
+          s3.upload_file(str(checksum),bucket,key+".sha256",ExtraArgs={"ContentType":"text/plain"},Config=transfer)
+          s3.upload_file(str(manifest),bucket,f"{prefix}/manifest.json",ExtraArgs={"ContentType":"application/json"},Config=transfer)
+
+          readback=root/"r2-readback.dump.enc"
+          s3.download_file(bucket,key,str(readback),Config=transfer)
+          readback_sha=sha(readback)
+          if readback_sha!=encrypted_sha:
+              raise SystemExit("R2 encrypted backup SHA-256 read-back mismatch.")
+
+          head=s3.head_object(Bucket=bucket,Key=key)
+          if int(head["ContentLength"])!=encrypted.stat().st_size:
+              raise SystemExit("R2 encrypted backup size read-back mismatch.")
+
+          evidence={
+              "status":"R2_READBACK_PASS",
+              "object_key":key,
+              "encrypted_size_bytes":encrypted.stat().st_size,
+              "encrypted_sha256":encrypted_sha,
+          }
+          (root/"r2-evidence.json").write_text(
+              json.dumps(evidence,indent=2,sort_keys=True)+"\n",
+              encoding="utf-8",
+          )
+          print(json.dumps(evidence,sort_keys=True))
+          PY
+
+      - name: Decrypt R2 read-back and prove restore archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          workdir="${{ steps.dump.outputs.workdir }}"
+
+          openssl enc -d -aes-256-cbc \
+            -pbkdf2 \
+            -iter 200000 \
+            -in "$workdir/r2-readback.dump.enc" \
+            -out "$workdir/r2-readback.dump" \
+            -pass env:BACKUP_ENCRYPTION_PASSPHRASE
+
+          expected="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["dump_sha256"])' "$workdir/manifest.json")"
+          actual="$(sha256sum "$workdir/r2-readback.dump" | awk '{print $1}')"
+
+          if [ "$expected" != "$actual" ]; then
+            echo "Decrypted R2 backup does not match the original PostgreSQL dump." >&2
+            exit 1
+          fi
+
+          docker run --rm \
+            -v "$workdir:/backup:ro" \
+            postgres:17-alpine \
+            sh -ceu 'pg_restore --list /backup/r2-readback.dump >/dev/null'
+
+          echo "R2 read-back decrypt + pg_restore validation PASS"
+
+      - name: Write and upload immutable completion marker
+        shell: bash
+        run: |
+          set -euo pipefail
+          workdir="${{ steps.dump.outputs.workdir }}"
+          prefix="${{ steps.dump.outputs.object_prefix }}"
+
+          export BACKUP_WORKDIR="$workdir"
+          export BACKUP_PREFIX="$prefix"
+
+          python3 - <<'PY'
+          import hashlib, json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          import boto3
+
+          root=Path(os.environ["BACKUP_WORKDIR"])
+          manifest=json.loads((root/"manifest.json").read_text())
+          evidence=json.loads((root/"r2-evidence.json").read_text())
+          complete={
+              "status":"PASS",
+              "backup_version":"PORTFOLIOAI_DEV_FULL_DB_R2_V1",
+              "source_environment":"PortfolioAI Dev",
+              "source_project_ref":"lrgpjimipfkyoqbpsqzz",
+              "verified_utc":datetime.now(timezone.utc).isoformat(),
+              "verification":[
+                  "pg_dump_complete",
+                  "pg_restore_list_source_pass",
+                  "aes256_encrypted",
+                  "r2_upload_pass",
+                  "r2_full_download_readback_sha256_pass",
+                  "r2_full_download_readback_size_pass",
+                  "r2_readback_decrypt_pass",
+                  "pg_restore_list_readback_pass",
+                  "plaintext_dump_sha256_match",
+              ],
+              "database_size_bytes":manifest["database_size_bytes"],
+              "dump_size_bytes":manifest["dump_size_bytes"],
+              "dump_sha256":manifest["dump_sha256"],
+              "encrypted_size_bytes":evidence["encrypted_size_bytes"],
+              "encrypted_sha256":evidence["encrypted_sha256"],
+              "r2_bucket":"portfolioai-history-dev",
+              "r2_object_key":evidence["object_key"],
+          }
+          path=root/"COMPLETE.json"
+          data=(json.dumps(complete,indent=2,sort_keys=True)+"\n").encode()
+          path.write_bytes(data)
+
+          s3=boto3.client(
+              "s3",
+              endpoint_url=os.environ["R2_ENDPOINT"],
+              aws_access_key_id=os.environ["CLOUDFLARE_R2_ACCESS_KEY_ID"],
+              aws_secret_access_key=os.environ["CLOUDFLARE_R2_SECRET_ACCESS_KEY"],
+              region_name="auto",
+          )
+          bucket=os.environ["CLOUDFLARE_R2_BUCKET"]
+          key=f"{os.environ['BACKUP_PREFIX']}/COMPLETE.json"
+          s3.put_object(Bucket=bucket,Key=key,Body=data,ContentType="application/json")
+          readback=s3.get_object(Bucket=bucket,Key=key)["Body"].read()
+          if hashlib.sha256(readback).digest()!=hashlib.sha256(data).digest():
+              raise SystemExit("COMPLETE.json R2 read-back mismatch.")
+          print(json.dumps(complete,sort_keys=True))
+          PY
+
+          {
+            echo "### PortfolioAI Dev full database backup"
+            echo
+            echo "Status: **PASS**"
+            echo "R2 bucket: `portfolioai-history-dev`"
+            echo "Prefix: `$prefix/`"
+            echo "The encrypted backup was downloaded, decrypted, SHA-256 checked, and parsed by pg_restore."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish non-sensitive completion evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolioai-dev-full-db-r2-backup-evidence
+          path: |
+            ${{ steps.dump.outputs.workdir }}/manifest.json
+            ${{ steps.dump.outputs.workdir }}/r2-evidence.json
+            ${{ steps.dump.outputs.workdir }}/COMPLETE.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Remove temporary Development backup files
+        if: always()
+        shell: bash
+        run: |
+          workdir="${{ steps.dump.outputs.workdir }}"
+          if [ -n "$workdir" ] && [ -d "$workdir" ]; then
+            rm -rf "$workdir"
+          fi
+
+  backup-production-to-supabase-storage:
+    if: ${{ inputs.target == 'production' }}
+    name: Backup Production database to Supabase Storage
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -51,19 +467,16 @@ jobs:
           echo "workdir=$workdir" >> "$GITHUB_OUTPUT"
 
           timestamp="$(date -u +'%Y-%m-%dT%H-%M-%SZ')"
-          object_path="manual/${timestamp}/portfolioai-${timestamp}-${GITHUB_RUN_ID}.tar.gz.enc"
+          object_path="manual/$timestamp/portfolioai-$timestamp-$GITHUB_RUN_ID.tar.gz.enc"
           echo "timestamp=$timestamp" >> "$GITHUB_OUTPUT"
           echo "object_path=$object_path" >> "$GITHUB_OUTPUT"
 
-          # Use PostgreSQL 17 client tools so the dump client is not older than
-          # current supported Supabase PostgreSQL server versions.
           docker run --rm \
             -e PROD_DATABASE_URL \
             -v "$workdir:/backup" \
             postgres:17-alpine \
             sh -ceu 'pg_dump "$PROD_DATABASE_URL" --format=custom --no-owner --no-acl --file=/backup/database.dump'
 
-          # Prove that pg_restore can parse the archive before it is encrypted/uploaded.
           docker run --rm \
             -v "$workdir:/backup:ro" \
             postgres:17-alpine \
@@ -114,7 +527,6 @@ jobs:
           object_path="${{ steps.dump.outputs.object_path }}"
           encrypted="${{ steps.encrypt.outputs.encrypted }}"
           checksum="${{ steps.encrypt.outputs.checksum }}"
-
           base_url="${BACKUP_SUPABASE_URL%/}"
 
           curl --fail-with-body --silent --show-error \
@@ -160,12 +572,9 @@ jobs:
             exit 1
           fi
 
-          echo "Encrypted backup verified successfully in Supabase Storage."
-          echo "Bucket: $BACKUP_BUCKET"
-          echo "Object: $object_path"
-          echo "SHA-256: $actual"
+          echo "Encrypted Production backup verified successfully in Supabase Storage."
 
-      - name: Remove temporary backup files
+      - name: Remove temporary Production backup files
         if: always()
         shell: bash
         run: |
