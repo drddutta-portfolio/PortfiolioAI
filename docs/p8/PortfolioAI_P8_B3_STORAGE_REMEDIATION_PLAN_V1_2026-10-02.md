@@ -499,3 +499,61 @@ The exact canary object key is:
 S3B PASS requires upload to R2, download back from R2, and exact equality between the local Parquet SHA-256 and downloaded-object SHA-256.
 
 No PostgreSQL data may be deleted while S3B remains pending.
+
+
+## 22. Execution closure — 2 October 2026
+
+This section records actual execution after the original plan was written.
+
+### Verified preservation and runtime evidence
+
+- Full PortfolioAI Dev PostgreSQL backup to Cloudflare R2: PASS.
+- Backup read-back/decrypt/restore-list validation: PASS.
+- Canonical Parquet export: PASS.
+- R2 catalog SHA-256: `b92fa34b7282b387a753b7eabfc3a339e66e65d84ef07834540743033f566aea`.
+- R2 private export manifest SHA-256: `0432e9385694df42f7b98aeeab7dd9e41993cc2eee0665f487579d0d7047f0bf`.
+- Exact exported row counts:
+  - raw prices: 532,575;
+  - listing observations: 562,790;
+  - listing evidence: 562,790;
+  - universe members: 144,768.
+- Runtime raw-price projection: 532,575 rows / 6,135 objects.
+- Focused live Cloudflare Worker smoke against RELIANCE history: PASS.
+
+### S7 execution
+
+Owner explicitly approved destructive retirement on 2 October 2026.
+
+Migration:
+`20261002204500_retire_p8_bulk_history_from_postgres.sql`
+
+Execution result:
+- PASS on PortfolioAI Dev `lrgpjimipfkyoqbpsqzz`;
+- no `CASCADE`;
+- dependent views/functions/FK handled explicitly;
+- adjusted-series writes remain fail-closed until the R2 raw-lineage contract is implemented;
+- the four approved large relations were retired.
+
+Measured database size:
+
+```text
+Before: 1,531,079,827 bytes
+After:    115,190,931 bytes
+```
+
+Post-execution checks:
+- Development project = ACTIVE_HEALTHY;
+- transaction read-only settings = OFF;
+- four retired relations = absent;
+- fail-closed compatibility RPCs = present;
+- core operational/control data remains queryable.
+
+Repository integration:
+- R2 runtime branch merged to `PortfolioAI-Development` via PR #103;
+- merge commit: `ccbcbb51b14d53e47a29a24d21ff7cc2a433c64f`.
+
+### Remaining open preservation item
+
+S1 raw official NSE byte archival/verification is still not claimed complete. The database backup and canonical Parquet/runtime copies protect the historical data, but original official source-file bytes should still be copied/verified into the R2 source-authority tree before P8-B3 acquisition resumes.
+
+Production remains unchanged.
