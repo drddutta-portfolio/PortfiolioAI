@@ -1,0 +1,150 @@
+name: P8 Direct PostgreSQL Backup to R2
+
+on:
+  push:
+    branches: [p8-storage-full-backup]
+    paths:
+      - ".github/workflows/p8-storage-pgdump-backup.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pgdump-backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Require backup secrets
+        run: |
+          set -euo pipefail
+          test -n "${SUPABASE_DB_URL}"
+          test -n "${CLOUDFLARE_R2_ACCOUNT_ID}"
+          test -n "${CLOUDFLARE_R2_ACCESS_KEY_ID}"
+          test -n "${CLOUDFLARE_R2_SECRET_ACCESS_KEY}"
+          test -n "${CLOUDFLARE_R2_BUCKET}"
+
+      - name: Create consistent PostgreSQL custom-format backup
+        run: |
+          set -euo pipefail
+          mkdir -p tmp/p8-storage-pgdump
+          docker run --rm \
+            -e DB_URL="${SUPABASE_DB_URL}" \
+            -v "${PWD}/tmp/p8-storage-pgdump:/backup" \
+            postgres:17-alpine \
+            sh -lc 'pg_dump "$DB_URL" --format=custom --compress=9 --no-owner --no-privileges \
+              --table=public.p8_b3_raw_market_price_observations \
+              --table=public.p8_historical_listing_observations_v3 \
+              --table=public.p8_historical_universe_member_listing_evidence_v3 \
+              --table=public.p8_historical_universe_members_v3 \
+              --file=/backup/portfolioai-p8-large-relations-2026-10-02.dump'
+
+      - name: Validate archive structure and capture source counts
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            -v "${PWD}/tmp/p8-storage-pgdump:/backup" \
+            postgres:17-alpine \
+            pg_restore --list /backup/portfolioai-p8-large-relations-2026-10-02.dump \
+            > tmp/p8-storage-pgdump/pg_restore.list
+
+          docker run --rm \
+            -e DB_URL="${SUPABASE_DB_URL}" \
+            postgres:17-alpine \
+            psql "$DB_URL" -X -v ON_ERROR_STOP=1 -Atc "
+              select json_build_object(
+                'p8_b3_raw_market_price_observations',(select count(*) from public.p8_b3_raw_market_price_observations),
+                'p8_historical_listing_observations_v3',(select count(*) from public.p8_historical_listing_observations_v3),
+                'p8_historical_universe_member_listing_evidence_v3',(select count(*) from public.p8_historical_universe_member_listing_evidence_v3),
+                'p8_historical_universe_members_v3',(select count(*) from public.p8_historical_universe_members_v3)
+              );" > tmp/p8-storage-pgdump/source-counts.json
+
+          sha256sum tmp/p8-storage-pgdump/portfolioai-p8-large-relations-2026-10-02.dump \
+            > tmp/p8-storage-pgdump/portfolioai-p8-large-relations-2026-10-02.dump.sha256
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install R2 client
+        run: python -m pip install --disable-pip-version-check --no-cache-dir boto3==1.40.46
+
+      - name: Upload to R2 and download-readback verify SHA-256
+        run: |
+          python - <<'PY'
+          import boto3, hashlib, json, os
+          from pathlib import Path
+
+          root=Path("tmp/p8-storage-pgdump")
+          dump=root/"portfolioai-p8-large-relations-2026-10-02.dump"
+          counts=root/"source-counts.json"
+          listing=root/"pg_restore.list"
+          bucket=os.environ["CLOUDFLARE_R2_BUCKET"]
+          prefix="portfolioai-history/development/p8/rescue-backup-v1"
+          s3=boto3.client(
+              "s3",
+              endpoint_url=f"https://{os.environ['CLOUDFLARE_R2_ACCOUNT_ID']}.r2.cloudflarestorage.com",
+              aws_access_key_id=os.environ["CLOUDFLARE_R2_ACCESS_KEY_ID"],
+              aws_secret_access_key=os.environ["CLOUDFLARE_R2_SECRET_ACCESS_KEY"],
+              region_name="auto",
+          )
+          def sha(path):
+              h=hashlib.sha256()
+              with path.open("rb") as f:
+                  for block in iter(lambda:f.read(1024*1024),b""): h.update(block)
+              return h.hexdigest()
+          def put_verify(path,key,ctype):
+              local=sha(path)
+              s3.upload_file(str(path),bucket,key,ExtraArgs={"ContentType":ctype,"Metadata":{"sha256":local}})
+              rb=root/("readback-"+path.name)
+              s3.download_file(bucket,key,str(rb))
+              remote=sha(rb)
+              if remote!=local: raise RuntimeError(f"SHA256 mismatch: {key}")
+              rb.unlink()
+              return {"key":key,"bytes":path.stat().st_size,"sha256":local}
+
+          evidence={}
+          evidence["dump"]=put_verify(dump,f"{prefix}/{dump.name}","application/octet-stream")
+          evidence["source_counts"]=put_verify(counts,f"{prefix}/{counts.name}","application/json")
+          evidence["archive_listing"]=put_verify(listing,f"{prefix}/{listing.name}","text/plain")
+
+          manifest={
+              "status":"PASS",
+              "backup_version":"P8_RESCUE_PGDUMP_V1",
+              "source_environment":"PortfolioAI Dev / lrgpjimipfkyoqbpsqzz",
+              "tables":[
+                  "p8_b3_raw_market_price_observations",
+                  "p8_historical_listing_observations_v3",
+                  "p8_historical_universe_member_listing_evidence_v3",
+                  "p8_historical_universe_members_v3",
+              ],
+              "source_counts":json.loads(counts.read_text()),
+              "objects":evidence,
+              "restore_tool":"PostgreSQL 17 pg_restore",
+              "r2_bucket":bucket,
+          }
+          mf=root/"COMPLETE.json"
+          mf.write_text(json.dumps(manifest,indent=2,sort_keys=True)+"\n")
+          evidence["complete_manifest"]=put_verify(mf,f"{prefix}/COMPLETE.json","application/json")
+          print(json.dumps(manifest,indent=2,sort_keys=True))
+          PY
+
+      - name: Publish backup completion evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-rescue-pgdump-backup-completion
+          path: |
+            tmp/p8-storage-pgdump/COMPLETE.json
+            tmp/p8-storage-pgdump/source-counts.json
+            tmp/p8-storage-pgdump/pg_restore.list
+            tmp/p8-storage-pgdump/portfolioai-p8-large-relations-2026-10-02.dump.sha256
+          if-no-files-found: error
+          retention-days: 30
