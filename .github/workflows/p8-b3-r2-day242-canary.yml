@@ -1,0 +1,131 @@
+name: P8 B3 R2 Native Day 242 Canary
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - scripts/p8/p8-b3-r2-acquire-next-date.py
+      - .github/workflows/p8-b3-r2-day242-canary.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p8-b3-r2-day242-canary-development
+  cancel-in-progress: false
+
+jobs:
+  acquire:
+    name: acquire-2024-09-20
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+      P8_EXPECTED_DATE: "2024-09-20"
+
+    steps:
+      - name: Checkout Development
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Require Development bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY CLOUDFLARE_R2_BUCKET
+          do
+            if [ -z "${!name:-}" ]; then
+              echo "Missing required secret: $name" >&2
+              exit 1
+            fi
+          done
+          case "$SUPABASE_DB_URL" in
+            *lrgpjimipfkyoqbpsqzz*) ;;
+            *) echo "Refusing non-Development database URL" >&2; exit 1 ;;
+          esac
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            "boto3==1.40.46" \
+            "duckdb==1.4.1" \
+            "psycopg[binary]==3.2.10" \
+            "requests==2.32.5"
+
+      - name: Acquire and materialize day 242
+        id: acquire
+        shell: bash
+        run: |
+          set +e
+          mkdir -p tmp/p8-b3-r2-day242
+          python scripts/p8/p8-b3-r2-acquire-next-date.py \
+            > tmp/p8-b3-r2-day242/stdout.log \
+            2> tmp/p8-b3-r2-day242/stderr.log
+          status=$?
+          echo "$status" > tmp/p8-b3-r2-day242/exit_code.txt
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Record day-242 audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("tmp/p8-b3-r2-day242")
+          code=int((root/"exit_code.txt").read_text().strip())
+          stdout=(root/"stdout.log").read_text(errors="replace")
+          stderr=(root/"stderr.log").read_text(errors="replace")
+          result=None
+          if code==0:
+              try:
+                  result=json.loads(stdout)
+              except Exception:
+                  result=None
+          payload={
+            "version":"P8_B3_R2_DAY242_CANARY_AUDIT_V1",
+            "status":"PASS" if code==0 and isinstance(result,dict) and result.get("status")=="PASS" else "FAIL",
+            "exit_code":code,
+            "result":result,
+            "stdout":stdout[-30000:],
+            "stderr":stderr[-30000:],
+          }
+          Path("docs/p8/PortfolioAI_P8_B3_R2_DAY242_CANARY_LATEST.json").write_text(
+            json.dumps(payload,indent=2,sort_keys=True)+"\n"
+          )
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B3_R2_DAY242_CANARY_LATEST.json
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): record day-242 R2 canary"
+            git push
+          fi
+
+      - name: Enforce day-242 result
+        if: steps.acquire.outputs.exit_code != '0'
+        shell: bash
+        run: |
+          echo "Day-242 R2-native acquisition failed; see Development audit." >&2
+          exit 1
+
+      - name: Publish day-242 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b3-r2-day242-canary
+          path: tmp/p8-b3-r2-day242/*
+          if-no-files-found: warn
+          retention-days: 30
