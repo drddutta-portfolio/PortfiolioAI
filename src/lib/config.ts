@@ -30,6 +30,9 @@ export const publicConfig = {
     import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
   ),
   marketDataEnabled: import.meta.env.VITE_MARKET_DATA_ENABLED === "true",
+  historyApiUrl: import.meta.env.VITE_HISTORY_API_URL?.trim()
+    ? normalizeOrigin(import.meta.env.VITE_HISTORY_API_URL.trim())
+    : null,
 }
 
 export function getApplicationOrigin() {
