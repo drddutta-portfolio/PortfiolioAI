@@ -1,0 +1,22 @@
+name: Trigger R2 Integrity Worker
+
+on:
+  push:
+    branches:
+      - p8-b3-storage-s3-canary
+    paths:
+      - ".github/workflows/p8-r2-integrity-trigger.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Invoke temporary R2 integrity worker
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --retry 3             https://portfolioai-r2-integrity-canary.dr-d-dutta.workers.dev
