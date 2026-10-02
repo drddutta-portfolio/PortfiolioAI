@@ -216,7 +216,7 @@ def main():
         actual_csv = sha256_bytes(csv_bytes)
         if actual_zip != expected_zip:
             content_state = "MATCH" if actual_csv == expected_csv else "MISMATCH"
-            diagnostics.append({
+            diagnostic = {
                 "source_date": date,
                 "source_file_name": file_name,
                 "source_url": row["source_url"],
@@ -225,7 +225,17 @@ def main():
                 "actual_compressed_sha256": actual_zip,
                 "expected_content_sha256": expected_csv,
                 "actual_content_sha256": actual_csv,
-            })
+            }
+            diagnostics.append(diagnostic)
+            diagnostic_item_bytes = (json.dumps(diagnostic, indent=2, sort_keys=True) + "\n").encode()
+            diagnostic_item_key = f"{PREFIX}/diagnostics/trade_date={date}.json"
+            s3.put_object(
+                Bucket=bucket,
+                Key=diagnostic_item_key,
+                Body=diagnostic_item_bytes,
+                ContentType="application/json",
+                Metadata={"sha256": sha256_bytes(diagnostic_item_bytes)},
+            )
             print(
                 f"[{index}/{len(rows)}] BLOCKED {date} ZIP={actual_zip} "
                 f"expected={expected_zip} CSV={content_state}"
