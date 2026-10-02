@@ -1,0 +1,36 @@
+{
+  "exit_code": 0,
+  "result": {
+    "append_manifest": {
+      "bytes": 1360,
+      "key": "portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-19.json",
+      "sha256": "a2e6323c788ba1bb4ac2158f04092b7ff82404eaa7830a522d2d9d01608ad1f4",
+      "write": "UPDATED"
+    },
+    "catalog": {
+      "bytes": 1872,
+      "key": "portfolioai-history/development/p8/catalog/v1/catalog.json",
+      "sha256": "fc3deb4e25e79a9ee386529d6b360cf42298b0452d1ff44353358d649c914411",
+      "write": "UPDATED"
+    },
+    "database_writes": 0,
+    "date": "2024-09-19",
+    "partition": {
+      "bytes": 258755,
+      "key": "portfolioai-history/development/p8/b3/raw-prices/v1/year=2024/month=09/trade_date=2024-09-19/part-00000.parquet",
+      "row_count": 2371,
+      "sha256": "a744e246f9404b91a3d50fa1ecb6d6412efcecfa8b6ad1f31818ff67425962ea",
+      "status": "PASS"
+    },
+    "production_changes": 0,
+    "runtime_objects_after": 6138,
+    "runtime_objects_created": 3,
+    "runtime_rows_verified": 2371,
+    "status": "PASS",
+    "version": "P8_B3_DAY241_FINALIZER_V1"
+  },
+  "status": "PASS",
+  "stderr": "",
+  "stdout": "{\n  \"append_manifest\": {\n    \"bytes\": 1360,\n    \"key\": \"portfolioai-history/development/p8/manifests/v1/APPEND_2024-09-19.json\",\n    \"sha256\": \"a2e6323c788ba1bb4ac2158f04092b7ff82404eaa7830a522d2d9d01608ad1f4\",\n    \"write\": \"UPDATED\"\n  },\n  \"catalog\": {\n    \"bytes\": 1872,\n    \"key\": \"portfolioai-history/development/p8/catalog/v1/catalog.json\",\n    \"sha256\": \"fc3deb4e25e79a9ee386529d6b360cf42298b0452d1ff44353358d649c914411\",\n    \"write\": \"UPDATED\"\n  },\n  \"database_writes\": 0,\n  \"date\": \"2024-09-19\",\n  \"partition\": {\n    \"bytes\": 258755,\n    \"key\": \"portfolioai-history/development/p8/b3/raw-prices/v1/year=2024/month=09/trade_date=2024-09-19/part-00000.parquet\",\n    \"row_count\": 2371,\n    \"sha256\": \"a744e246f9404b91a3d50fa1ecb6d6412efcecfa8b6ad1f31818ff67425962ea\",\n    \"status\": \"PASS\"\n  },\n  \"production_changes\": 0,\n  \"runtime_objects_after\": 6138,\n  \"runtime_objects_created\": 3,\n  \"runtime_rows_verified\": 2371,\n  \"status\": \"PASS\",\n  \"version\": \"P8_B3_DAY241_FINALIZER_V1\"\n}\n",
+  "version": "P8_B3_DAY241_FINALIZER_CI_AUDIT_V1"
+}
