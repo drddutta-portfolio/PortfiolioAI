@@ -13,7 +13,7 @@ permissions:
 jobs:
   pgdump-backup:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
     env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
@@ -47,7 +47,7 @@ jobs:
               --table=public.p8_historical_universe_members_v3 \
               --file=/backup/portfolioai-p8-large-relations-2026-10-02.dump'
 
-      - name: Validate archive structure and capture source counts
+      - name: Validate archive structure and exact dump row counts
         run: |
           set -euo pipefail
           docker run --rm \
@@ -56,16 +56,49 @@ jobs:
             pg_restore --list /backup/portfolioai-p8-large-relations-2026-10-02.dump \
             > tmp/p8-storage-pgdump/pg_restore.list
 
-          docker run --rm \
-            -e DB_URL="${SUPABASE_DB_URL}" \
-            postgres:17-alpine \
-            sh -lc 'psql "$DB_URL" -X -v ON_ERROR_STOP=1 -Atc "
-              select json_build_object(
-                '\''p8_b3_raw_market_price_observations'\'',(select count(*) from public.p8_b3_raw_market_price_observations),
-                '\''p8_historical_listing_observations_v3'\'',(select count(*) from public.p8_historical_listing_observations_v3),
-                '\''p8_historical_universe_member_listing_evidence_v3'\'',(select count(*) from public.p8_historical_universe_member_listing_evidence_v3),
-                '\''p8_historical_universe_members_v3'\'',(select count(*) from public.p8_historical_universe_members_v3)
-              );"' > tmp/p8-storage-pgdump/source-counts.json
+          python - <<'PY'
+          import json, os, re, subprocess
+          from pathlib import Path
+
+          root=Path("tmp/p8-storage-pgdump")
+          dump="/backup/portfolioai-p8-large-relations-2026-10-02.dump"
+          expected={
+              "p8_b3_raw_market_price_observations": 532575,
+              "p8_historical_listing_observations_v3": 562790,
+              "p8_historical_universe_member_listing_evidence_v3": 562790,
+              "p8_historical_universe_members_v3": 144768,
+          }
+          counts={k:0 for k in expected}
+          mount=f"{os.getcwd()}/tmp/p8-storage-pgdump:/backup"
+          cmd=["docker","run","--rm","-v",mount,"postgres:17-alpine",
+               "pg_restore","--data-only","--file=-",dump]
+          proc=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
+                                text=True,bufsize=1)
+          current=None
+          copy_re=re.compile(r"^COPY public\.([A-Za-z0-9_]+) \(")
+          assert proc.stdout is not None
+          for line in proc.stdout:
+              match=copy_re.match(line)
+              if match:
+                  table=match.group(1)
+                  current=table if table in counts else None
+                  continue
+              if current and line.rstrip("\n") == r"\.":
+                  current=None
+                  continue
+              if current:
+                  counts[current]+=1
+          stderr=proc.stderr.read() if proc.stderr else ""
+          rc=proc.wait()
+          if rc != 0:
+              raise SystemExit(f"pg_restore data validation failed ({rc}): {stderr[-4000:]}")
+          if counts != expected:
+              raise SystemExit(f"EXACT_DUMP_COUNT_MISMATCH expected={expected} actual={counts}")
+          (root/"source-counts.json").write_text(
+              json.dumps(counts,sort_keys=True,separators=(",",":"))+"\n"
+          )
+          print(json.dumps({"status":"PASS","validation":"PG_RESTORE_DATA_STREAM_EXACT_COUNTS","counts":counts}))
+          PY
 
           sha256sum tmp/p8-storage-pgdump/portfolioai-p8-large-relations-2026-10-02.dump \
             > tmp/p8-storage-pgdump/portfolioai-p8-large-relations-2026-10-02.dump.sha256
