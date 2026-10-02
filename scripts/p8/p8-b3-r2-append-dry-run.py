@@ -331,6 +331,20 @@ def validate_existing_partition(s3, bucket, date, rows):
         for key_name in right:
             lv = left.get(key_name)
             rv = right.get(key_name)
+            if key_name == "raw_metadata":
+                try:
+                    lv_norm = json.loads(lv) if isinstance(lv, str) else lv
+                    rv_norm = json.loads(rv) if isinstance(rv, str) else rv
+                except Exception as exc:
+                    raise RuntimeError(
+                        f"Known-date raw_metadata parse failure row={index}: {exc}"
+                    ) from exc
+                if lv_norm != rv_norm:
+                    raise RuntimeError(
+                        f"Known-date parity mismatch row={index} field={key_name}: "
+                        f"{lv_norm!r} != {rv_norm!r}"
+                    )
+                continue
             if lv != rv:
                 raise RuntimeError(
                     f"Known-date parity mismatch row={index} field={key_name}: {lv!r} != {rv!r}"
