@@ -208,7 +208,8 @@ def parquet_partition(ndjson_path,out_path):
     try:
         src=str(sorted_ndjson).replace("'","''")
         dst=str(out_path).replace("'","''")
-        con.execute(f"COPY (SELECT * FROM read_json_auto('{src}', format='newline_delimited', all_varchar=true)) TO '{dst}' (FORMAT PARQUET, COMPRESSION ZSTD, PARQUET_VERSION 'V2')")
+        schema="{" + ",".join("'" + key.replace("'", "''") + "':'VARCHAR'" for key in rows[0].keys()) + "}"
+        con.execute(f"COPY (SELECT * FROM read_json_auto('{src}', format='newline_delimited', columns={schema})) TO '{dst}' (FORMAT PARQUET, COMPRESSION ZSTD, PARQUET_VERSION 'V2')")
         check=con.execute(f"SELECT count(*) FROM read_parquet('{dst}')").fetchone()[0]
     finally:
         con.close()
