@@ -1,5 +1,5 @@
 name: P8 B3 S3 Parquet Canary
-# Full backup paging contract: 1000 rows per verified R2 chunk
+# Full backup contract: exact 1000-row chunks, four immutable Development tables.
 
 on:
   push:
@@ -19,26 +19,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout canary branch
-        uses: actions/checkout@v4
-
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Install pinned DuckDB
-        run: |
-          python -m pip install --disable-pip-version-check --no-cache-dir duckdb==1.5.6
-
+        run: python -m pip install --disable-pip-version-check --no-cache-dir duckdb==1.5.6
       - name: Run exact Parquet round-trip canary
         run: |
           python scripts/p8/p8-b3-storage-s3-parquet-canary.py \
             --fixture scripts/p8/fixtures/p8-b3-storage-s3-canary-2023-10-03.json \
             --out-dir tmp/p8-b3-storage-s3-canary
-
-      - name: Publish S3 canary evidence
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: p8-b3-storage-s3-canary
           path: tmp/p8-b3-storage-s3-canary/
@@ -50,90 +42,101 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 330
     steps:
-      - name: Back up four large Development tables to R2
+      - name: Export, upload and read-back verify every chunk
         shell: bash
         run: |
           set -euo pipefail
-
-          BASE="https://portfolioai-r2-full-backup.dr-d-dutta.workers.dev"
-          DATASETS=(
-            "b3_raw_prices"
-            "b2_listing_observations"
-            "b2_listing_evidence"
-            "b2_universe_members"
-          )
-
           mkdir -p backup-evidence
-          : > backup-evidence/chunks.ndjson
-
-          for DATASET in "${DATASETS[@]}"; do
-            echo "=== START ${DATASET} ==="
-            PAGE=0
-
-            while true; do
-              if (( PAGE > 2000 )); then
-                echo "Page guard exceeded for ${DATASET}"
-                exit 1
-              fi
-
-              URL="${BASE}/?dataset=${DATASET}&page=${PAGE}"
-              RESPONSE="$(curl --fail --silent --show-error --retry 5 --retry-delay 2 --max-time 120 "${URL}")"
-              echo "${RESPONSE}" | tee -a backup-evidence/chunks.ndjson
-
-              echo "${RESPONSE}" | jq -e '.ok == true and .source_sha256 == .readback_sha256' >/dev/null
-              ROWS="$(echo "${RESPONSE}" | jq -r '.rows // empty')"
-              DONE="$(echo "${RESPONSE}" | jq -r 'if .done then "1" else "0" end')"
-
-              echo "dataset=${DATASET} page=${PAGE} rows=${ROWS:-unknown} done=${DONE}"
-
-              if [[ "${DONE}" == "1" ]]; then
-                break
-              fi
-
-              PAGE=$((PAGE + 1))
-            done
-
-            echo "=== COMPLETE ${DATASET} pages=$((PAGE + 1)) ==="
-          done
-
-      - name: Build backup evidence summary
-        shell: bash
-        run: |
           python - <<'PY'
+          import concurrent.futures
           import hashlib
           import json
-          from pathlib import Path
+          import pathlib
+          import time
+          import urllib.parse
+          import urllib.request
 
-          p = Path("backup-evidence/chunks.ndjson")
-          entries = [json.loads(line) for line in p.read_text().splitlines() if line.strip()]
-          summary = {}
-          for r in entries:
-              d = r["dataset"]
-              s = summary.setdefault(d, {"chunks": 0, "rows": 0, "bytes": 0, "all_verified": True})
-              s["chunks"] += 1
-              if r.get("rows") is not None:
-                  s["rows"] += int(r["rows"])
-              s["bytes"] += int(r["bytes"])
-              s["all_verified"] = s["all_verified"] and r.get("source_sha256") == r.get("readback_sha256")
-
-          required = {
-              "b3_raw_prices",
-              "b2_listing_observations",
-              "b2_listing_evidence",
-              "b2_universe_members",
+          BASE = "https://portfolioai-r2-full-backup.dr-d-dutta.workers.dev/"
+          CONTRACT = {
+              "b3_raw_prices": (532575, 533),
+              "b2_listing_observations": (562790, 563),
+              "b2_listing_evidence": (562790, 563),
+              "b2_universe_members": (144768, 145),
           }
-          status = "PASS" if set(summary) == required and all(v["all_verified"] for v in summary.values()) else "FAIL"
+          PAGE_SIZE = 1000
+          MAX_WORKERS = 4
+
+          tasks = [(dataset, page) for dataset, (_, pages) in CONTRACT.items() for page in range(pages)]
+
+          def fetch_one(task):
+              dataset, page = task
+              url = BASE + "?" + urllib.parse.urlencode({"dataset": dataset, "page": page})
+              last_error = None
+              for attempt in range(6):
+                  try:
+                      req = urllib.request.Request(url, headers={"User-Agent": "PortfolioAI-P8-Backup/1"})
+                      with urllib.request.urlopen(req, timeout=120) as resp:
+                          data = json.loads(resp.read().decode("utf-8"))
+                      if data.get("ok") is not True:
+                          raise RuntimeError(data)
+                      if data.get("source_sha256") != data.get("readback_sha256"):
+                          raise RuntimeError({"hash_mismatch": data})
+                      expected_rows = PAGE_SIZE
+                      total, pages = CONTRACT[dataset]
+                      if page == pages - 1:
+                          expected_rows = total - PAGE_SIZE * (pages - 1)
+                      if int(data.get("rows")) != expected_rows:
+                          raise RuntimeError({"row_count_mismatch": data, "expected": expected_rows})
+                      return data
+                  except Exception as exc:
+                      last_error = exc
+                      time.sleep(min(2 ** attempt, 20))
+              raise RuntimeError(f"{dataset} page {page} failed after retries: {last_error}")
+
+          results = []
+          with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+              futures = {pool.submit(fetch_one, task): task for task in tasks}
+              for n, future in enumerate(concurrent.futures.as_completed(futures), 1):
+                  row = future.result()
+                  results.append(row)
+                  if n % 50 == 0 or n == len(tasks):
+                      print(f"verified {n}/{len(tasks)} chunks", flush=True)
+
+          results.sort(key=lambda r: (r["dataset"], int(r["page"])))
+          p = pathlib.Path("backup-evidence/chunks.ndjson")
+          p.write_text("\n".join(json.dumps(r, sort_keys=True) for r in results) + "\n", encoding="utf-8")
+
+          summary = {}
+          for dataset, (expected_total, expected_pages) in CONTRACT.items():
+              rows = [r for r in results if r["dataset"] == dataset]
+              pages = [int(r["page"]) for r in rows]
+              actual_rows = sum(int(r["rows"]) for r in rows)
+              ok = (
+                  len(rows) == expected_pages
+                  and pages == list(range(expected_pages))
+                  and actual_rows == expected_total
+                  and all(r["source_sha256"] == r["readback_sha256"] for r in rows)
+              )
+              summary[dataset] = {
+                  "chunks": len(rows),
+                  "expected_chunks": expected_pages,
+                  "rows": actual_rows,
+                  "expected_rows": expected_total,
+                  "bytes": sum(int(r["bytes"]) for r in rows),
+                  "all_verified": ok,
+              }
+
           manifest = {
-              "status": status,
+              "status": "PASS" if all(v["all_verified"] for v in summary.values()) else "FAIL",
+              "page_size": PAGE_SIZE,
               "datasets": summary,
               "chunk_log_sha256": hashlib.sha256(p.read_bytes()).hexdigest(),
           }
-          Path("backup-evidence/summary.json").write_text(
-              json.dumps(manifest, indent=2, sort_keys=True) + "\n",
-              encoding="utf-8",
+          pathlib.Path("backup-evidence/summary.json").write_text(
+              json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
           )
           print(json.dumps(manifest, indent=2, sort_keys=True))
-          if status != "PASS":
+          if manifest["status"] != "PASS":
               raise SystemExit(1)
           PY
 
