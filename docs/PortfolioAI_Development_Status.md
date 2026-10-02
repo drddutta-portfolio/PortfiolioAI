@@ -5031,3 +5031,40 @@ NO B3 RESTART
 Production = UNCHANGED
 main = UNCHANGED
 ```
+
+
+## P8-B3 storage remediation S3B R2 hosted canary progress — 2 October 2026
+
+Cloudflare R2 was enabled by the owner and became accessible through the authenticated Cloudflare plugin.
+
+Hosted R2 actions completed:
+
+- created private Development bucket `portfolioai-history-dev`;
+- bucket location = APAC;
+- bucket storage class = Standard;
+- uploaded the exact 6,330-byte Parquet canary artifact produced by GitHub Actions;
+- object key:
+  `portfolioai-history/development/p8/b3/canary/v1/trade_date=2023-10-03/p8-b3-storage-s3-canary.parquet`;
+- R2 reported object size = 6,330 bytes;
+- uploaded immutable manifest sidecar;
+- uploaded SHA-256 sidecar containing the expected Parquet SHA-256:
+  `fb5f9b07d510cdaf7336f8a84b76c97740ff79566b81d6361d0c2468b873450f`;
+- R2 list-objects confirms all three objects are present.
+
+The Cloudflare ChatGPT connector's Get Object operation UTF-8 decodes binary object bodies. For the Parquet object, the connector returned a 6,290-character decoded string with U+FFFD replacement characters despite R2 reporting the stored object as 6,330 bytes. Therefore the connector output is not byte-preserving and MUST NOT be used for the required downloaded-object SHA-256 check.
+
+Cloudflare API token management is not authorized through the current plugin session (`9109 Unauthorized to access requested resource`). Therefore a short-lived/exportable credential could not be created automatically for an independent S3/raw-byte download.
+
+Fail-closed state:
+
+```text
+S3A Parquet local/CI round-trip = COMPLETE / PASS
+S3B R2 bucket creation = COMPLETE / PASS
+S3B R2 Parquet upload = COMPLETE
+S3B R2 object presence/size = COMPLETE / PASS
+S3B R2 manifest + SHA sidecars = COMPLETE / PASS
+S3B strict binary download SHA-256 = PENDING S3/API CREDENTIAL PATH
+S3 overall = NOT YET CLOSED
+```
+
+No PostgreSQL retirement, full export, acquisition restart or normalization may proceed solely on the connector-decoded object body. A true byte-preserving R2 download must match the expected SHA-256 before S3 closes.
