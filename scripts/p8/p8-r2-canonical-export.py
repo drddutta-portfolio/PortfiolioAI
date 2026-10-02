@@ -144,7 +144,7 @@ def parse_dump(dump_path,work):
     dates={k:set() for k in EXPECTED}
     runtime_keys=set()
     minmax={k:[None,None] for k in EXPECTED}
-    mount=f"{dump_path.parent}:/backup"
+    mount=f"{dump_path.parent.resolve()}:/backup"
     cmd=["docker","run","--rm","-v",mount,"postgres:17-alpine",
          "pg_restore","--data-only","--file=-",f"/backup/{dump_path.name}"]
     proc=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,bufsize=1024*1024)
