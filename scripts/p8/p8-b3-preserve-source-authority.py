@@ -228,7 +228,7 @@ def main():
             }
             diagnostics.append(diagnostic)
             diagnostic_item_bytes = (json.dumps(diagnostic, indent=2, sort_keys=True) + "\n").encode()
-            diagnostic_item_key = f"{PREFIX}/diagnostics/trade_date={date}.json"
+            diagnostic_item_key = f"{PREFIX}/diagnostics/{diagnostic['status']}/trade_date={date}.json"
             s3.put_object(
                 Bucket=bucket,
                 Key=diagnostic_item_key,
