@@ -1,0 +1,92 @@
+{
+  "version": "P8_B6_CANONICAL_HISTORICAL_SNAPSHOT_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "status": "PASS",
+  "stage": "P8-B6",
+  "gate_interpretation": "STRUCTURAL_PASS_WITH_CANONICAL_EXCLUSIONS",
+  "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+  "materialization": {
+    "run_id": "f117c92a-acac-43db-b832-81f5853410a2",
+    "materializer_version": "P8_B6_CANONICAL_SNAPSHOT_V1",
+    "run_state": "READY",
+    "physical_vectors": "public.p8_b6_canonical_snapshot_vectors",
+    "materialization_runs": "public.p8_b6_materialization_runs",
+    "selection_events": 1,
+    "canonical_view": "public.p8_b6_canonical_historical_snapshots_v1",
+    "physical_identity_vectors": 4524,
+    "decision_dates": 32,
+    "logical_snapshot_rows": 144768,
+    "distinct_logical_keys": 144768,
+    "distinct_snapshot_fingerprints": 144768,
+    "replay_ready_rows": 0,
+    "excluded_rows": 144768,
+    "aggregate_fingerprint": "3dcce751ab82f2e8a80fcb265db2b79d5a93567cea911f0b749b295860fcf4a1"
+  },
+  "frozen_versions": {
+    "methodology_version": "P8_R6_R10_REPLAY_V1",
+    "universe_version": "P8_NSE_HISTORICAL_UNIVERSE_V1",
+    "classification_version": "P8_HISTORICAL_CLASSIFICATION_V1",
+    "benchmark_version": "P8_NIFTY500_TRI_V1",
+    "cost_model_version": "P8_COST_MODEL_V1",
+    "decision_calendar_version": "P8_MONTH_END_IST_V1"
+  },
+  "exclusions": {
+    "B5_NO_CANONICAL_LINK": 136384,
+    "B5_NO_CLASSIFICATION_EVIDENCE_BEFORE_DECISION": 8145,
+    "B5_CLASSIFICATION_VALIDITY_UNPROVEN": 239
+  },
+  "temporal_integrity": {
+    "source_cutoff_after_decision_rows": 0,
+    "future_evidence_fallback_used": false,
+    "current_state_fallback_used": false,
+    "b5_blocker_precedence_preserved": true
+  },
+  "replay": {
+    "replay_rows": 144768,
+    "fingerprint_mismatches": 0,
+    "missing_materialized_rows": 0,
+    "replay_aggregate_fingerprint": "3dcce751ab82f2e8a80fcb265db2b79d5a93567cea911f0b749b295860fcf4a1",
+    "deterministic": true
+  },
+  "b2_binding": {
+    "ready_universe_runs": 32,
+    "run_hash_nulls": 0,
+    "source_cutoff_nulls": 0,
+    "note": "Heavy B2 member rows were previously offloaded during storage remediation; B6 binds the frozen B2 universe run ID/hash/source cutoff. Because every pair is excluded upstream by B5, B6 does not fabricate resident membership evidence."
+  },
+  "storage": {
+    "b5_vector_size": "1304 kB",
+    "b5_sparse_size": "32 kB",
+    "b6_vector_size": "5616 kB",
+    "development_database_size": "188 MB",
+    "below_200_mb_target": true
+  },
+  "security": {
+    "rls_enabled_on_all_physical_b6_tables": true,
+    "anon_select": false,
+    "authenticated_select": false,
+    "canonical_view_security_invoker": true,
+    "fk_index_gaps_cleared": true,
+    "remaining_advisor_note": "New B6 indexes are reported only as unused immediately after creation; no uncovered B6 foreign-key advisory remains."
+  },
+  "mutations": {
+    "provider_calls": 0,
+    "production_changes": 0,
+    "main_changes": 0,
+    "p8_b_final_started": false,
+    "p8_c_started": false
+  },
+  "interpretation": {
+    "replay_ready_coverage": "0/144768",
+    "note": "B6 passes structurally because every expected identity/date pair has exactly one canonical deterministic snapshot disposition. All are explicit exclusions inherited from B5. Coverage sufficiency is intentionally deferred to P8-B-FINAL and must not be weakened."
+  },
+  "gate": {
+    "p8_b6_complete": true,
+    "p8_b6_closed": true,
+    "p8_b_final_ready_for_owner_authorization": true,
+    "p8_b_final_started": false,
+    "p8_c_authorized": false
+  }
+}
