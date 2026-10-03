@@ -1,0 +1,22 @@
+name: P8 B4-4 Day1 Loop
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - scripts/p8/p8-b4-4-day1-loop.sh
+      - .github/workflows/p8-b4-4-day1-loop.yml
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Execute bounded B4-4 loop
+        run: bash scripts/p8/p8-b4-4-day1-loop.sh
