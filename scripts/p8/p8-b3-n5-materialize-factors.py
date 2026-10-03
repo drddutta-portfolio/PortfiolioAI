@@ -96,13 +96,19 @@ def load_partition(s3, bucket, date):
             cols = [r[0] for r in con.execute(
                 "describe select * from read_parquet(?)", [str(path)]
             ).fetchall()]
-            required_cols = {"id", "historical_identity_id", "trading_symbol", "series", "close", "row_hash"}
+            required_cols = {
+                "id","historical_identity_id","source_archive_id","trading_symbol","series",
+                "source_format","previous_close","open","high","low","close","last_price",
+                "volume","traded_value","trade_count","row_hash"
+            }
             missing = required_cols - set(cols)
             if missing:
                 raise RuntimeError(f"{date} missing raw columns {sorted(missing)}")
             rows = con.execute(
                 """
-                select id, historical_identity_id, trading_symbol, series, close, row_hash
+                select id, historical_identity_id, source_archive_id, trading_symbol, series,
+                       source_format, previous_close, open, high, low, close, last_price,
+                       volume, traded_value, trade_count, row_hash
                 from read_parquet(?)
                 where historical_identity_id is not null
                 """,
@@ -110,25 +116,67 @@ def load_partition(s3, bucket, date):
             ).fetchall()
         finally:
             con.close()
-    out = {}
-    for raw_id, identity_id, trading_symbol, series, close, row_hash in rows:
+    grouped = defaultdict(list)
+    for row in rows:
+        (
+            raw_id, identity_id, source_archive_id, trading_symbol, series,
+            source_format, previous_close, open_value, high, low, close, last_price,
+            volume, traded_value, trade_count, row_hash,
+        ) = row
         identity_id = str(identity_id)
         canonical_key = (
             identity_id,
             str(trading_symbol or "").strip().upper(),
             str(series or "").strip().upper(),
         )
-        if canonical_key in out:
-            raise RuntimeError(
-                f"{date} duplicate identity/symbol/series {canonical_key}"
-            )
-        out[canonical_key] = {
+        economic = (
+            str(source_format or ""),
+            None if previous_close is None else str(previous_close),
+            None if open_value is None else str(open_value),
+            None if high is None else str(high),
+            None if low is None else str(low),
+            str(close),
+            None if last_price is None else str(last_price),
+            None if volume is None else str(volume),
+            None if traded_value is None else str(traded_value),
+            None if trade_count is None else str(trade_count),
+        )
+        grouped[canonical_key].append({
             "raw_price_observation_id": str(raw_id),
-            "close": str(close),
+            "source_archive_id": str(source_archive_id),
             "row_hash": str(row_hash),
+            "economic": economic,
+            "close": str(close),
+        })
+
+    out = {}
+    for canonical_key, candidates in grouped.items():
+        unique_economics = {candidate["economic"] for candidate in candidates}
+        if len(unique_economics) != 1:
+            raise RuntimeError(
+                f"{date} conflicting duplicate identity/symbol/series {canonical_key}: "
+                f"{len(candidates)} rows / {len(unique_economics)} economic variants"
+            )
+
+        candidates.sort(key=lambda candidate: candidate["raw_price_observation_id"])
+        chosen = candidates[0]
+        out[canonical_key] = {
+            "raw_price_observation_id": chosen["raw_price_observation_id"],
+            "close": chosen["close"],
+            "row_hash": chosen["row_hash"],
             "partition_key": key,
             "trading_symbol": canonical_key[1],
             "series": canonical_key[2],
+            "equivalent_duplicate_count": len(candidates),
+            "equivalent_raw_price_observation_ids": [
+                candidate["raw_price_observation_id"] for candidate in candidates
+            ],
+            "equivalent_source_archive_ids": [
+                candidate["source_archive_id"] for candidate in candidates
+            ],
+            "equivalent_row_hashes": [
+                candidate["row_hash"] for candidate in candidates
+            ],
         }
     return out
 
@@ -231,6 +279,14 @@ def build_factor(norm, benchmark_dates, load_date):
                         "exRawRowHash": ex["row_hash"],
                         "previousPartitionKey": prev["partition_key"],
                         "exPartitionKey": ex["partition_key"],
+                        "previousEquivalentDuplicateCount": prev["equivalent_duplicate_count"],
+                        "exEquivalentDuplicateCount": ex["equivalent_duplicate_count"],
+                        "previousEquivalentRawPriceObservationIds": prev["equivalent_raw_price_observation_ids"],
+                        "exEquivalentRawPriceObservationIds": ex["equivalent_raw_price_observation_ids"],
+                        "previousEquivalentSourceArchiveIds": prev["equivalent_source_archive_ids"],
+                        "exEquivalentSourceArchiveIds": ex["equivalent_source_archive_ids"],
+                        "previousEquivalentRowHashes": prev["equivalent_row_hashes"],
+                        "exEquivalentRowHashes": ex["equivalent_row_hashes"],
                     })
     else:
         raise RuntimeError(f"READY normalization has unsupported N5 action {action}: {norm_id}")
