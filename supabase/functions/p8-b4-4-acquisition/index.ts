@@ -4,7 +4,7 @@ const SOURCE="TRENDLYNE_MCP"
 const PORTFOLIO_ID="6193a4aa-3235-4057-bddc-209fcf443fc2"
 const REQUESTED_BY="f9e48c4c-d796-424b-95f7-2a4a97149543"
 const CONFIRMATION="P8_B4_4_OWNER_AUTH_2026_10_03"
-const MAX_BATCH=20
+const MAX_BATCH=10
 const MAX_BYTES=512*1024
 const FUND_KINDS=["P8_B4_3_CANARY_FUNDAMENTALS","P8_B4_4_FUNDAMENTALS"]
 const DOC_KINDS=["P8_B4_3_CANARY_DOCUMENTS","P8_B4_4_DOCUMENTS"]
@@ -48,7 +48,7 @@ Deno.serve(async req=>{
   if(req.method!=="POST") return reply(405,{error:"Method not allowed"})
   const b=await req.json().catch(()=>({})) as Record<string,unknown>
   if(b.confirmation!==CONFIRMATION) return reply(401,{error:"Exact B4-4 owner confirmation required",providerCalls:0})
-  const batchSize=Math.max(1,Math.min(MAX_BATCH,Number(b.batchSize??20)))
+  const batchSize=Math.max(1,Math.min(MAX_BATCH,Number(b.batchSize??10)))
   const url=Deno.env.get("SUPABASE_URL"), service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"), mcpUrl=Deno.env.get("TRENDLYNE_MCP_URL")
   if(!url||!service||!mcpUrl||!url.includes("lrgpjimipfkyoqbpsqzz")) return reply(409,{error:"Development configuration mismatch",providerCalls:0})
   const admin=createClient(url,service,{auth:{persistSession:false}})
