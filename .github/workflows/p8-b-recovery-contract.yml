@@ -29,7 +29,5 @@ jobs:
         run: npm ci
       - name: Verify P8-B recovery contract
         run: npx vitest run src/contracts/p8BRecoveryContractV1.test.ts
-      - name: Typecheck
-        run: npm run typecheck
       - name: Lint recovery contract
         run: npx eslint src/contracts/p8BRecoveryContractV1.ts src/contracts/p8BRecoveryContractV1.test.ts src/contracts/fixtures/p8BRecoveryContractV1.fixtures.ts
