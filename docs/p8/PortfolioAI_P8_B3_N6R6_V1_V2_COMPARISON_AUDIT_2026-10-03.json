@@ -1,0 +1,91 @@
+{
+  "summary": {
+    "audit_fingerprint_sha256": "eae3cf1d0499d961d1ea9a8fb16f1cb1fc7363fe28d1682a6c9e2d2c43447bb9",
+    "closure_gate": {
+      "b3_closed_by_this_stage": false,
+      "comparison_audit_passed": true,
+      "n6r6_complete": true,
+      "new_remediation_authorized": false,
+      "ready_for_b3_closure_decision": true
+    },
+    "determinism": {
+      "immutable_replay_stable": true,
+      "n6r5_replay_created_objects": 0,
+      "n6r5_replay_unchanged_objects": 1553
+    },
+    "environment": "PortfolioAI Dev",
+    "frozen_v1": {
+      "adjusted_series_fingerprint": "7f7f14c7af972baa22e0363732a285df1e4f3e0631d8134ce665ac32397c8a76",
+      "completion_fingerprint": "59992c038e74f83ccb278dce0af73ed6cbd97ba2064c67cd724e0df531a4ca12",
+      "decision_ledger_fingerprint": "9ec30b0c8ea30e5d8068be570a8b251964efc5ef725d795165666b5223b275ae",
+      "raw_catalog_dataset_fingerprint": "a5c16c5e26eb0fae070c5072fb200032bd6395765bba1d162be7d04d00e5f2a7",
+      "unchanged": true
+    },
+    "lineage_and_imputation": {
+      "exact_decision_date_selections": 81327,
+      "ready_rows_with_selected_price_verified": 82504,
+      "silent_imputation_detected": false,
+      "strict_1_day_carry_forward_selections": 1177,
+      "unexpected_selection_sources": 0,
+      "v1_row_id_and_hash_lineage_verified_for_all_pairs": true
+    },
+    "mutations": {
+      "main_changes": 0,
+      "production_changes": 0,
+      "r2_writes": 0,
+      "supabase_writes": 0
+    },
+    "recovery_deltas": {
+      "complex_recovered": 20711,
+      "strict_1_day_no_trade_recovered": 1177,
+      "total_new_ready_vs_v1": 21888,
+      "v1_ready_regressions": 0
+    },
+    "remaining_blockers": {
+      "decomposition": {
+        "CORPORATE_ACTION_BOUNDARY_NO_TRADE": 2,
+        "NO_PRIOR_PRICE": 34354,
+        "RAW_PRICE_ECONOMICS_CONFLICT_COMPLEX": 67,
+        "STALE_GT_1_BENCHMARK_DAY": 5020,
+        "UNRESOLVED_EVENT_BOUNDARY_COMPLEX": 9
+      },
+      "interpretation": {
+        "all_remaining_blockers_are_fully_accounted": true,
+        "claim_all_remaining_blockers_are_fundamentally_irreducible": false,
+        "staleness_blockers_are_policy_held_by_frozen_strict_1_day_threshold": true,
+        "structural_or_evidence_boundary_blockers_require_new_evidence_or_separate_remediation_to_change": true
+      },
+      "strict_policy_staleness_total": 5020,
+      "structural_or_evidence_boundary_total": 34432,
+      "total": 39452
+    },
+    "scope": {
+      "decision_pairs_compared": 121956,
+      "selected_v2_price_lineages_verified": 82504,
+      "v2_adjusted_manifests_recomputed": 744,
+      "v2_ledger_manifests_recomputed": 32
+    },
+    "status": "PASS",
+    "v1_to_v2_transition_matrix": {
+      "V1_COMPLEX_to_V2_BLOCKED": 76,
+      "V1_COMPLEX_to_V2_READY": 20711,
+      "V1_NO_TRADE_to_V2_BLOCKED": 39376,
+      "V1_NO_TRADE_to_V2_READY": 1177,
+      "V1_READY_to_V2_READY": 60616
+    },
+    "v2_fingerprints": {
+      "adjusted_series_aggregate": "118195d4f80b64b5eccd6891780567ae9ee06a950c8badf91f15213a0d9c2a82",
+      "completion_fingerprint": "cbacc9dc030e5c654bde0995d3e8490d7cba406475ec47ce7cfacd83a06fcc1f",
+      "decision_ledger_aggregate": "7cfd268d0114501acc292fb06b5d73dd18ef5cfb724d306d00cda401be49e452",
+      "manifest_accounting": {
+        "adjusted_blocked": 2728,
+        "adjusted_ready": 1852250,
+        "adjusted_rows": 1854978,
+        "decision_blocked": 39452,
+        "decision_ready": 82504,
+        "decision_rows": 121956
+      }
+    },
+    "version": "P8_B3_N6R6_V1_V2_COMPARISON_AUDIT_V1"
+  }
+}
