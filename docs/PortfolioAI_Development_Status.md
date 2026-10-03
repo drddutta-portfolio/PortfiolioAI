@@ -6821,3 +6821,33 @@ Final audit:
 - `docs/p8/PortfolioAI_P8_B_FINAL_DATA_FOUNDATION_CLOSURE_AUDIT_2026-10-03.json`
 
 The frozen experiment contract has NOT been weakened. Under the Codex instruction, B-FINAL closes BLOCKED because zero canonical snapshots are replay-ready. P8-C remains prohibited until a separately authorized remediation produces sufficient point-in-time classification/methodology/evidence coverage and B6/B-FINAL are re-executed.
+
+
+## P8-B Recovery started — Workstream A semantic correction — 3 October 2026
+
+The single bounded P8-B recovery plan is now ACTIVE.
+
+Controlling plan:
+
+- `docs/p8/PortfolioAI_P8_B_SINGLE_RECOVERY_PLAN_2026-10-03.md`
+
+Workstream A has started with a repository-backed semantic audit:
+
+- `docs/p8/PortfolioAI_P8_B_RECOVERY_WORKSTREAM_A_SEMANTIC_AUDIT_2026-10-03.md`
+- commit `db8b79bfe71b7b5acbe75713ba80c4d873efe3e1`
+
+Key corrections proven:
+
+1. Historical P8 identity is `historical_identity_id + historical_isin`; current `canonical_security_id` is optional and must not gate historical eligibility.
+2. Historical company facts must be point-in-time, but the frozen replay policy `P8_R6_R10_REPLAY_V1` is an experiment algorithm and does not need to have existed in the historical year.
+3. B-FINAL recovery coverage must distinguish the full 144,768 audit surface from the 121,956 B2-eligible experiment candidate pairs.
+4. Official NSE/BSE filings must become the historical evidence identity/time authority; Trendlyne remains supplemental.
+
+No hosted B5/B6 data mutation, provider call, NSE/BSE acquisition, P8-C work, Production change or main change occurred.
+
+New-chat handoff:
+
+- `docs/p8/PortfolioAI_P8_B_RECOVERY_NEW_CHAT_HANDOFF_2026-10-03.md`
+- commit `08489a7742408f8acc24fcd5b5f77322e5dbf1f5`
+
+Next action: continue Workstream A by implementing a separately versioned recovery contract + tests/fixtures. The recovery exclusion ceiling remains pending explicit owner freeze before bulk acquisition or P8-C.
