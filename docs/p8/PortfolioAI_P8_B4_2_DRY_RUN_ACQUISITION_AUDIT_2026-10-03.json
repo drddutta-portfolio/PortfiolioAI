@@ -55,7 +55,8 @@
     "path": "docs/p8/PortfolioAI_P8_B4_2_DRY_RUN_ACQUISITION_MANIFEST_2026-10-03.csv",
     "rows": 4524,
     "unique_historical_identity_required": true,
-    "provider_calls_embedded": false
+    "provider_calls_embedded": false,
+    "sha256": "239e348709b2161cd859bf51d32d80dde51f1a6331b0ea2ecee56295dd3e8bea"
   },
   "gate": {
     "b4_2_complete": true,
@@ -71,5 +72,12 @@
     "Existing Trendlyne fundamental cache without published_at is not point-in-time eligible.",
     "Published document metadata without immutable content hash remains incomplete for B4 historical authority.",
     "All unresolved identities remain explicit fail-closed exclusions until separately remediated."
-  ]
+  ],
+  "verification": {
+    "github_actions_run": 37119334491,
+    "github_actions_job": 111192235373,
+    "result": "PASS",
+    "unique_historical_identity_rows": 4524,
+    "provider_hosted_mutation_guard": "PASS"
+  }
 }
