@@ -5800,3 +5800,84 @@ main changes = 0
 ```
 
 Next B4 step: repository/local additive historical-evidence schema package plus B4-2 dry-run acquisition manifest. Hosted migration/application and provider acquisition remain separate auditable execution gates.
+
+
+## P8-B4-1 schema + identity contract closure — 3 October 2026
+
+P8-B4-1 completed as a repository/local-only schema-and-contract stage.
+
+Final state:
+
+```text
+P8-B4 = ACTIVE
+B4-0 = COMPLETE / PASS
+B4-1 = COMPLETE / PASS / CLOSED
+B4-2 = READY / NOT STARTED
+hosted B4 schema migration = NOT APPLIED / NOT AUTHORIZED
+provider acquisition = NOT EXECUTED / NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+B4-1 artifacts:
+
+- `docs/sql/PortfolioAI_P8_B4_HISTORICAL_EVIDENCE_SCHEMA_PROPOSAL_2026-10-03.sql`
+- `src/features/backtesting/p8B4HistoricalEvidenceContract.ts`
+- `src/features/backtesting/p8B4HistoricalEvidenceContract.test.ts`
+- `.github/workflows/p8-b4-1-contract-verification.yml`
+- `docs/p8/PortfolioAI_P8_B4_1_SCHEMA_IDENTITY_CONTRACT_AUDIT_2026-10-03.json`
+
+Proposed historical evidence objects:
+
+```text
+p8_b4_fundamental_observations
+p8_b4_research_documents
+p8_b4_decision_evidence_eligibility
+```
+
+Frozen B4-1 controls:
+
+- exact `historical_identity_id` + historical ISIN binding;
+- no present-day security-ID back-projection;
+- publication and source availability must both be proven;
+- evidence must be strictly before the decision instant;
+- equality at the decision instant is ineligible;
+- unknown publication time fails closed;
+- observed/retrieved/provider-update time cannot substitute for publication time;
+- amendments/restatements append and explicitly link prior immutable evidence;
+- revisions cannot cross semantic evidence series;
+- revisions cannot carry a publication timestamp earlier than the item superseded;
+- deterministic evidence fingerprint and idempotent-existing detection;
+- repository schema proposal enables RLS and revokes anon/authenticated access;
+- no hosted migration file was created.
+
+Verification run:
+
+`37118973304`
+
+Verification result:
+
+```text
+targeted B4-1 tests = 11 / 11 PASS
+isolated B4 TypeScript compile = PASS
+architecture boundary check = PASS
+schema non-hosted/fail-closed guard = PASS
+B4-specific type errors = 0
+```
+
+The diagnostic full-repository typecheck still reports pre-existing errors in the frozen B3 file
+`src/features/backtesting/p8CorporateActionNormalization.ts`. B4-1 did not modify that B3 code and does not mask the debt.
+
+Mutation report:
+
+```text
+provider calls = 0
+Supabase writes = 0
+R2 writes = 0
+hosted migration = 0
+Production changes = 0
+main changes = 0
+```
+
+B4-1 is frozen. The next stage is B4-2 dry-run acquisition manifest only.
