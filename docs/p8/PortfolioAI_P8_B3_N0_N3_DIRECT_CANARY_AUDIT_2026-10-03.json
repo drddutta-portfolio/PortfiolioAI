@@ -1,0 +1,125 @@
+{
+  "version": "P8_B3_N0_N3_DIRECT_CANARY_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "stage": "P8-B3",
+  "scope": "N0-N3 only",
+  "status": "PASS_WITH_TEST_RUNNER_OBSERVABILITY_LIMITATION",
+  "campaign_id": "P8_B3_NORMALIZATION_CANARY_20261003_V1",
+  "repository_head_at_canary": "499c4f6cabbe9570fd0648d039b65a0d161c5e30",
+  "source_completion": {
+    "status": "PASS",
+    "raw_r2_rows": 1854978,
+    "raw_r2_partitions": 744,
+    "catalog_last_append_date": "2026-09-30",
+    "catalog_sha256": "27c73dbf9d0e0b9ad9a0c2259d4375335278acc2af049e103f386c31ebd6352f"
+  },
+  "n1_classifier": {
+    "implementation": "src/features/backtesting/p8CorporateActionNormalization.ts",
+    "tests": "src/features/backtesting/p8CorporateActionNormalization.test.ts",
+    "browser_safe": true,
+    "test_execution_observed": false,
+    "note": "GitHub Actions did not persist a run during this session; isolated runner could not resolve github.com."
+  },
+  "n2_missing_price_classifier": {
+    "implementation": "src/features/backtesting/p8MissingPriceBlocker.ts",
+    "tests": "src/features/backtesting/p8MissingPriceBlocker.test.ts",
+    "test_execution_observed": false
+  },
+  "n3_canary": {
+    "first_pass_inserts": {
+      "normalizations": 5,
+      "factors": 4,
+      "adjusted_series": 0
+    },
+    "replay_inserts": {
+      "normalizations": 0,
+      "factors": 0
+    },
+    "normalizations": [
+      {
+        "symbol": "FOCUS",
+        "action_type": "SPLIT",
+        "state": "READY",
+        "normalization_hash": "48b1db902f104505d30940a6ba46e77ab31308a1fe80a994ccdcc0b8032ef657"
+      },
+      {
+        "symbol": "GENSOL",
+        "action_type": "BONUS",
+        "state": "READY",
+        "normalization_hash": "a4487c7040fd44ad54e48cde56f0ed27595da0e795d990fd3d7e81847101a0fd"
+      },
+      {
+        "symbol": "TCS",
+        "action_type": "CASH_DIVIDEND",
+        "state": "READY",
+        "normalization_hash": "3187b568d4e019df7b69de1ea928cf75a1930bf9231589559c86ec7ef5f224c0"
+      },
+      {
+        "symbol": "BOROLTD",
+        "action_type": "DEMERGER",
+        "state": "BLOCKED",
+        "normalization_hash": "65d023ea6bfaa43a3cfa941c484c1628080b49fc2e9733d0ffcbf8a908e117c9"
+      },
+      {
+        "symbol": "GRASIM",
+        "action_type": "RIGHTS",
+        "state": "READY",
+        "normalization_hash": "cfedb5a4de812ed897923a39ad55998478b111dd56b2431c739f17e3461a8200"
+      }
+    ],
+    "factors": [
+      {
+        "symbol": "FOCUS",
+        "state": "READY",
+        "share_factor": "5",
+        "price_back_adjustment_factor": "0.2",
+        "factor_hash": "34a06689eb29d6ca05bdcae1bd991cf028881543237fdf10e7270d63253879ea"
+      },
+      {
+        "symbol": "GENSOL",
+        "state": "READY",
+        "share_factor": "3",
+        "price_back_adjustment_factor": "0.333333333333333333333333333333",
+        "factor_hash": "efeab2aa6fdfe423c7f6e1eabd1e0458654b16a483a228c2642dad3bbe90c8f6"
+      },
+      {
+        "symbol": "GRASIM",
+        "state": "BLOCKED",
+        "reason": "RIGHTS: subscription terms are normalized, but deterministic rights-price treatment is not owner-approved",
+        "factor_hash": "dc6e7ec4449d3317c27cd6d667039833198d3d29dbf050377e131d0b8d4bd7a4"
+      },
+      {
+        "symbol": "BOROLTD",
+        "state": "BLOCKED",
+        "reason": "DEMERGER: successor entitlement and valuation lineage not proven",
+        "factor_hash": "f01ab0dda03b4fcf36317f49cbfaa713e2dfa66590b79650eec87b998af285e5"
+      }
+    ],
+    "dividend_factor_materialized": false,
+    "dividend_factor_note": "TCS normalization is READY; factor was intentionally not written in the direct SQL canary because the approved raw-price authority is R2 and the adjusted-series R2 identity contract remains gated.",
+    "no_action_control": {
+      "historical_identity_id": "002b525a-f99d-5480-b370-23092bff997a",
+      "corporate_action_observations": 0,
+      "normalizations": 0,
+      "factors": 0
+    },
+    "missing_price_fixture": {
+      "historical_identity_id": "000c98a4-3608-5b85-bea0-d4df597c5c4e",
+      "historical_isin": "INE01JE01010",
+      "decision_date": "2024-02-29",
+      "policy": "fail closed; no carry-forward or zero-imputation"
+    },
+    "canary_fingerprint_sha256": "6ae872401c8b2cce3752354620614b6e8ac5060b298763f787bffd911a45b8bb"
+  },
+  "constraints": {
+    "adjusted_series_rows": 0,
+    "adjusted_series_external_history_gate_unchanged": true,
+    "n4_n6_authorized": false,
+    "p8_b4_started": false,
+    "p8_c_started": false,
+    "production_changes": 0,
+    "main_changes": 0
+  },
+  "next_gate": "OWNER_APPROVAL_REQUIRED_BEFORE_N4_N6_FULL_MATERIALIZATION"
+}
