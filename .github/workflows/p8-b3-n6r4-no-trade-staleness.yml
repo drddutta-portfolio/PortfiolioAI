@@ -44,6 +44,26 @@ jobs:
           esac
           test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
 
+      - name: Record N6R4 run start
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > docs/p8/PortfolioAI_P8_B3_N6R4_RUN_STATE_2026-10-03.json <<'JSON'
+          {
+            "stage": "N6R-4",
+            "status": "RUNNING",
+            "environment": "PortfolioAI Dev",
+            "production_changes": 0,
+            "main_changes": 0,
+            "n6r5_started": false
+          }
+          JSON
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B3_N6R4_RUN_STATE_2026-10-03.json
+          git commit -m "audit(p8): mark N6R4 running" || true
+          git push
+
       - name: Install pinned dependencies
         run: |
           python -m pip install --disable-pip-version-check --no-cache-dir \
@@ -52,11 +72,49 @@ jobs:
             "psycopg[binary]==3.2.10"
 
       - name: Run N6R4 staleness analysis
+        id: analyze
+        shell: bash
         run: |
+          set +e
           mkdir -p tmp/p8-b3-n6r4
-          python scripts/p8/p8-b3-n6r4-no-trade-staleness.py > tmp/p8-b3-n6r4/summary.json
+          python scripts/p8/p8-b3-n6r4-no-trade-staleness.py > tmp/p8-b3-n6r4/summary.json 2> tmp/p8-b3-n6r4/error.log
+          rc=$?
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Record N6R4 failure
+        if: steps.analyze.outputs.exit_code != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "# P8-B3 N6R4 failure diagnostic"
+            echo
+            echo "exit_code = ${{ steps.analyze.outputs.exit_code }}"
+            echo
+            echo '~~~text'
+            cat tmp/p8-b3-n6r4/error.log
+            echo '~~~'
+          } > docs/p8/PortfolioAI_P8_B3_N6R4_FAILURE_DIAGNOSTIC_2026-10-03.md
+          cat > docs/p8/PortfolioAI_P8_B3_N6R4_RUN_STATE_2026-10-03.json <<'JSON'
+          {
+            "stage": "N6R-4",
+            "status": "FAILED",
+            "environment": "PortfolioAI Dev",
+            "production_changes": 0,
+            "main_changes": 0,
+            "n6r5_started": false
+          }
+          JSON
+          git add \
+            docs/p8/PortfolioAI_P8_B3_N6R4_FAILURE_DIAGNOSTIC_2026-10-03.md \
+            docs/p8/PortfolioAI_P8_B3_N6R4_RUN_STATE_2026-10-03.json
+          git commit -m "audit(p8): record N6R4 failure"
+          git push
+          exit 1
 
       - name: Verify N6R4 accounting
+        if: steps.analyze.outputs.exit_code == '0'
         shell: bash
         run: |
           set -euo pipefail
@@ -68,13 +126,11 @@ jobs:
           m = Path("docs/p8/PortfolioAI_P8_B3_N6R4_NO_TRADE_STALENESS_MATRIX_2026-10-03.csv")
           with m.open(newline="", encoding="utf-8") as f:
               rows = sum(1 for _ in csv.DictReader(f))
-          dist_total = sum(s["staleness_distribution"].values())
-          primary_total = sum(s["primary_exclusion_reason_counts"].values())
           checks = {
               "status": s.get("status") == "PASS",
               "matrix_rows_40553": rows == 40553,
-              "distribution_40553": dist_total == 40553,
-              "primary_accounting_40553": primary_total == 40553,
+              "distribution_40553": sum(s["staleness_distribution"].values()) == 40553,
+              "primary_accounting_40553": sum(s["primary_exclusion_reason_counts"].values()) == 40553,
               "v1_unchanged": s.get("n6_v1_unchanged") is True,
               "raw_catalog_unchanged": s.get("raw_r2_catalog_unchanged") is True,
               "no_threshold_selected": s.get("policy_evidence", {}).get("threshold_selected") is False,
@@ -88,14 +144,24 @@ jobs:
           PY
 
       - name: Commit N6R4 evidence
+        if: steps.analyze.outputs.exit_code == '0'
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cat > docs/p8/PortfolioAI_P8_B3_N6R4_RUN_STATE_2026-10-03.json <<'JSON'
+          {
+            "stage": "N6R-4",
+            "status": "COMPLETE / PASS",
+            "environment": "PortfolioAI Dev",
+            "production_changes": 0,
+            "main_changes": 0,
+            "n6r5_started": false
+          }
+          JSON
           git add \
             docs/p8/PortfolioAI_P8_B3_N6R4_NO_TRADE_STALENESS_AUDIT_2026-10-03.json \
-            docs/p8/PortfolioAI_P8_B3_N6R4_NO_TRADE_STALENESS_MATRIX_2026-10-03.csv
+            docs/p8/PortfolioAI_P8_B3_N6R4_NO_TRADE_STALENESS_MATRIX_2026-10-03.csv \
+            docs/p8/PortfolioAI_P8_B3_N6R4_RUN_STATE_2026-10-03.json
           git commit -m "audit(p8): record N6R4 no-trade staleness"
           git push
 
