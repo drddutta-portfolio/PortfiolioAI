@@ -5568,3 +5568,99 @@ Artifacts:
 - R2 `portfolioai-history/development/p8/manifests/v2/N6R5_COMPLETE.json`
 
 N6R-5 is frozen. Stop boundary remains before N6R-6.
+
+
+## P8-B3 N6R-6 V1-versus-V2 comparison audit — 3 October 2026
+
+N6R-6 completed the read-only V1-versus-V2 comparison/audit gate after N6R-5.
+
+Final GitHub Actions run:
+
+`37117240418`
+
+Final state:
+
+```text
+N6R-6 = COMPLETE / PASS / CLOSED
+decision pairs compared = 121,956
+V2 adjusted manifests recomputed = 744
+V2 decision-ledger manifests recomputed = 32
+selected V2 price lineages verified = 82,504
+V1 READY regressions = 0
+total new READY vs V1 = 21,888
+```
+
+V1 -> V2 transition matrix:
+
+```text
+V1 READY -> V2 READY = 60,616
+V1 COMPLEX -> V2 READY = 20,711
+V1 COMPLEX -> V2 BLOCKED = 76
+V1 NO_TRADE -> V2 READY = 1,177
+V1 NO_TRADE -> V2 BLOCKED = 39,376
+```
+
+Remaining blocker accounting:
+
+```text
+TOTAL remaining blockers = 39,452
+
+structural/evidence/boundary = 34,432
+  NO_PRIOR_PRICE = 34,354
+  CORPORATE_ACTION_BOUNDARY_NO_TRADE = 2
+  RAW_PRICE_ECONOMICS_CONFLICT_COMPLEX = 67
+  UNRESOLVED_EVENT_BOUNDARY_COMPLEX = 9
+
+strict-policy staleness = 5,020
+  STALE_GT_1_BENCHMARK_DAY = 5,020
+```
+
+Interpretation:
+
+- all remaining blockers are fully accounted;
+- the 34,432 structural/evidence/boundary blockers require new evidence or a separately authorized remediation to change;
+- the 5,020 stale-price blockers are held by the frozen `STRICT_1_BENCHMARK_DAY` policy and are not claimed to be fundamentally irreducible;
+- no silent imputation was detected;
+- every READY V2 decision has an exact selected V2 price row and verified lineage;
+- all 121,956 V2 decision rows verify the frozen V1 row ID and row hash lineage.
+
+Determinism:
+
+```text
+N6R-5 replay created objects = 0
+N6R-5 replay unchanged objects = 1,553
+immutable replay stable = YES
+```
+
+Frozen fingerprints:
+
+```text
+V1 adjusted = 7f7f14c7af972baa22e0363732a285df1e4f3e0631d8134ce665ac32397c8a76
+V1 decision ledger = 9ec30b0c8ea30e5d8068be570a8b251964efc5ef725d795165666b5223b275ae
+V1 completion = 59992c038e74f83ccb278dce0af73ed6cbd97ba2064c67cd724e0df531a4ca12
+V2 adjusted = 118195d4f80b64b5eccd6891780567ae9ee06a950c8badf91f15213a0d9c2a82
+V2 decision ledger = 7cfd268d0114501acc292fb06b5d73dd18ef5cfb724d306d00cda401be49e452
+V2 completion = cbacc9dc030e5c654bde0995d3e8490d7cba406475ec47ce7cfacd83a06fcc1f
+N6R-6 audit = eae3cf1d0499d961d1ea9a8fb16f1cb1fc7363fe28d1682a6c9e2d2c43447bb9
+```
+
+Closure gate:
+
+```text
+N6R-6 comparison audit = PASS
+ready for B3 closure decision = YES
+B3 closed by N6R-6 = NO
+new remediation authorized = NO
+R2 writes = 0
+Supabase writes = 0
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Artifacts:
+
+- `scripts/p8/p8-b3-n6r6-v1-v2-comparison-audit.py`
+- `.github/workflows/p8-b3-n6r6-v1-v2-comparison-audit.yml`
+- `docs/p8/PortfolioAI_P8_B3_N6R6_V1_V2_COMPARISON_AUDIT_2026-10-03.json`
+
+N6R-6 is frozen. The next step is the separate P8-B3 closure decision; N6R-6 itself does not close B3 or authorize further remediation.
