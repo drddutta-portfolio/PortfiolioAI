@@ -9,6 +9,8 @@ on:
       - "src/contracts/p8BRecoveryContractV1.ts"
       - "src/contracts/p8BRecoveryContractV1.test.ts"
       - "src/contracts/fixtures/p8BRecoveryContractV1.fixtures.ts"
+      - "src/features/backtesting/p8BRecoverySourceAdapters.ts"
+      - "src/features/backtesting/p8BRecoverySourceAdapters.test.ts"
       - ".github/workflows/p8-b-recovery-contract.yml"
 
 permissions:
@@ -28,6 +30,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Verify P8-B recovery contract
-        run: npx vitest run src/contracts/p8BRecoveryContractV1.test.ts
+        run: npx vitest run src/contracts/p8BRecoveryContractV1.test.ts src/features/backtesting/p8BRecoverySourceAdapters.test.ts
       - name: Lint recovery contract
-        run: npx eslint src/contracts/p8BRecoveryContractV1.ts src/contracts/p8BRecoveryContractV1.test.ts src/contracts/fixtures/p8BRecoveryContractV1.fixtures.ts
+        run: npx eslint src/contracts/p8BRecoveryContractV1.ts src/contracts/p8BRecoveryContractV1.test.ts src/contracts/fixtures/p8BRecoveryContractV1.fixtures.ts src/features/backtesting/p8BRecoverySourceAdapters.ts src/features/backtesting/p8BRecoverySourceAdapters.test.ts
