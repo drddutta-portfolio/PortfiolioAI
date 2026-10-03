@@ -6587,3 +6587,105 @@ Final audit:
 - `docs/p8/PortfolioAI_P8_B5_HISTORICAL_CLASSIFICATION_METHODOLOGY_VALIDITY_AUDIT_2026-10-03.json`
 
 No provider calls, Production changes, main changes, or P8-B6 work occurred.
+
+
+## P8-B6 canonical historical snapshot materialization closure — 3 October 2026
+
+P8-B6 completed as the canonical historical snapshot materialization gate.
+
+Final state:
+
+```text
+P8-B4 = COMPLETE / PASS / CLOSED
+P8-B5 = COMPLETE / PASS / CLOSED
+P8-B6 = COMPLETE / PASS / CLOSED
+P8-B-FINAL = READY / NOT STARTED / NOT AUTHORIZED
+P8-C = NOT STARTED / NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Canonical materialization:
+
+```text
+materialization run = f117c92a-acac-43db-b832-81f5853410a2
+materializer = P8_B6_CANONICAL_SNAPSHOT_V1
+historical identities = 4,524
+decision dates = 32
+logical snapshots = 144,768
+distinct logical keys = 144,768
+distinct snapshot fingerprints = 144,768
+replay-ready rows = 0
+canonical exclusions = 144,768
+selection events = 1
+aggregate fingerprint = 3dcce751ab82f2e8a80fcb265db2b79d5a93567cea911f0b749b295860fcf4a1
+```
+
+Exclusion census:
+
+```text
+B5_NO_CANONICAL_LINK = 136,384
+B5_NO_CLASSIFICATION_EVIDENCE_BEFORE_DECISION = 8,145
+B5_CLASSIFICATION_VALIDITY_UNPROVEN = 239
+```
+
+No future source cutoff was used. Current-state fallback was not used.
+
+Independent B2+B4+B5 source replay:
+
+```text
+replay rows = 144,768
+fingerprint mismatches = 0
+missing materialized rows = 0
+replay aggregate fingerprint = 3dcce751ab82f2e8a80fcb265db2b79d5a93567cea911f0b749b295860fcf4a1
+```
+
+Frozen versions bound into every snapshot fingerprint:
+
+- `P8_R6_R10_REPLAY_V1`
+- `P8_NSE_HISTORICAL_UNIVERSE_V1`
+- `P8_HISTORICAL_CLASSIFICATION_V1`
+- `P8_NIFTY500_TRI_V1`
+- `P8_COST_MODEL_V1`
+- `P8_MONTH_END_IST_V1`
+
+Storage architecture:
+
+- B6 physical vectors: `public.p8_b6_canonical_snapshot_vectors`
+- B6 materialization runs: `public.p8_b6_materialization_runs`
+- B6 selection events: `public.p8_b6_selection_events`
+- canonical decoded interface: `public.p8_b6_canonical_historical_snapshots_v1`
+
+B5 was further vector-compacted without changing its logical interface:
+
+```text
+B5 vectors = 1304 kB
+B5 sparse lineage = 32 kB
+B6 vectors = 5616 kB
+PortfolioAI Dev DB = 188 MB
+target < 200 MB = PASS
+```
+
+B5 rowwise-to-vector equivalence was 0 differences in both directions before removal of the rowwise table.
+
+Security:
+
+- RLS enabled on all B6 physical tables;
+- anon/authenticated SELECT denied;
+- canonical view uses `security_invoker`;
+- B6 FK covering-index gaps were fixed;
+- remaining advisor mentions are only newly-created indexes not yet observed in usage.
+
+Important interpretation:
+
+**B6 passes structurally because every expected identity/date pair has exactly one canonical deterministic disposition. All 144,768 rows are exclusions inherited from B5, so B6 does not assert that the experiment is replayable. P8-B-FINAL must make the coverage-sufficiency decision under the frozen experiment contract.**
+
+Plan:
+
+- `docs/p8/PortfolioAI_P8_B6_CANONICAL_HISTORICAL_SNAPSHOT_PLAN_2026-10-03.md`
+
+Final audit:
+
+- `docs/p8/PortfolioAI_P8_B6_CANONICAL_HISTORICAL_SNAPSHOT_AUDIT_2026-10-03.json`
+
+No provider calls, Production changes, main changes, P8-B-FINAL work, or P8-C work occurred.
