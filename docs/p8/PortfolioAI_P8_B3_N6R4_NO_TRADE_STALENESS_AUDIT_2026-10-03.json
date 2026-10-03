@@ -1,0 +1,97 @@
+{
+  "summary": {
+    "economics_columns_used_for_uniqueness": [
+      "close",
+      "high",
+      "last_price",
+      "low",
+      "open",
+      "previous_close",
+      "traded_value",
+      "volume"
+    ],
+    "eligible_for_threshold_review_total": 6197,
+    "environment": "PortfolioAI Dev",
+    "exclusion_flag_counts": {
+      "CORPORATE_ACTION_BOUNDARY": 2,
+      "NO_PRIOR_PRICE": 34354
+    },
+    "main_changes": 0,
+    "n6_v1_unchanged": true,
+    "n6r5_started": false,
+    "policy_candidates_for_owner_review": [
+      {
+        "conditions": "exact identity + unique economics + no corporate-action boundary + no decision-date trade conflict",
+        "eligible_count": 1177,
+        "name": "STRICT_1_BENCHMARK_DAY",
+        "threshold": 1
+      },
+      {
+        "conditions": "same fail-closed gates; permits one additional benchmark-day of staleness",
+        "eligible_count": 1666,
+        "name": "CONSERVATIVE_2_BENCHMARK_DAYS",
+        "threshold": 2
+      },
+      {
+        "conditions": "same fail-closed gates; requires explicit owner approval before any materialization",
+        "eligible_count": 2083,
+        "name": "RESEARCH_3_BENCHMARK_DAYS",
+        "threshold": 3
+      },
+      {
+        "conditions": "diagnostic comparison only; no automatic selection",
+        "eligible_counts": {
+          "lte_10": 2844,
+          "lte_5": 2597
+        },
+        "name": "EXTENDED_5_OR_10_DAY_DIAGNOSTIC_ONLY",
+        "thresholds": [
+          5,
+          10
+        ]
+      }
+    ],
+    "policy_evidence": {
+      "any_corporate_action_boundary_fail_closed": true,
+      "exact_historical_identity_only": true,
+      "identity_or_economics_conflict_fail_closed": true,
+      "latest_prior_raw_observation_only": true,
+      "no_silent_carry_forward": true,
+      "threshold_selected": false,
+      "unresolved_segment_boundary_fail_closed": true,
+      "v2_decision_prices_materialized": false
+    },
+    "primary_exclusion_reason_counts": {
+      "CORPORATE_ACTION_BOUNDARY": 2,
+      "ELIGIBLE_FOR_THRESHOLD_REVIEW": 6197,
+      "NO_PRIOR_PRICE": 34354
+    },
+    "production_changes": 0,
+    "raw_r2_catalog_unchanged": true,
+    "recoverable_under_candidate_thresholds": {
+      "lte_10_benchmark_trading_days": 2844,
+      "lte_1_benchmark_trading_days": 1177,
+      "lte_2_benchmark_trading_days": 1666,
+      "lte_3_benchmark_trading_days": 2083,
+      "lte_5_benchmark_trading_days": 2597
+    },
+    "scope": {
+      "benchmark_trading_dates": 744,
+      "decision_ledger_partitions": 32,
+      "exact_target_identity_count": 1749,
+      "raw_r2_partitions_read": 744,
+      "v1_no_trade_pairs": 40553
+    },
+    "staleness_distribution": {
+      "1_PREVIOUS_BENCHMARK_TRADING_DAY": 1177,
+      "2_BENCHMARK_TRADING_DAYS": 489,
+      "3_BENCHMARK_TRADING_DAYS": 417,
+      "4_5_BENCHMARK_TRADING_DAYS": 516,
+      "6_10_BENCHMARK_TRADING_DAYS": 247,
+      "GT_10_BENCHMARK_TRADING_DAYS": 3353,
+      "NO_PRIOR_VALID_RAW_PRICE": 34354
+    },
+    "status": "PASS",
+    "version": "P8_B3_N6R4_NO_TRADE_STALENESS_V1"
+  }
+}
