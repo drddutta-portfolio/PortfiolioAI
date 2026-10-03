@@ -1,0 +1,68 @@
+{
+  "bse": {
+    "announcements": {
+      "body_prefix": "<HTML><HEAD>\n<TITLE>Access Denied</TITLE>\n</HEAD><BODY>\n<H1>Access Denied</H1>\n \nYou don't have permission to access \"http&#58;&#47;&#47;api&#46;bseindia&#46;com&#47;BseIndiaAPI&#47;api&#47;AnnGetData",
+      "content_type": "text/html",
+      "json": false,
+      "status": 403,
+      "url": "https://api.bseindia.com/BseIndiaAPI/api/AnnGetData/w?pageno=1&strCat=-1&strPrevDate=20250102&strScrip=&strSearch=P&strToDate=20250102&strType=C"
+    }
+  },
+  "bse_metadata_transport_ready": false,
+  "generated_at": "2026-10-03T17:27:47.392608+00:00",
+  "nse": {
+    "announcements": {
+      "content_type": "application/json; charset=utf-8",
+      "json": true,
+      "shape": {
+        "count": 840,
+        "first_keys": [
+          "an_dt",
+          "attFileSize",
+          "attchmntFile",
+          "attchmntText",
+          "bflag",
+          "csvName",
+          "desc",
+          "difference",
+          "dt",
+          "exchdisstime",
+          "fileSize",
+          "hasXbrl",
+          "old_new",
+          "orgid",
+          "seq_id",
+          "smIndustry",
+          "sm_isin",
+          "sm_name",
+          "sort_date",
+          "symbol"
+        ],
+        "kind": "list"
+      },
+      "status": 200,
+      "url": "https://www.nseindia.com/api/corporate-announcements?index=equities&from_date=01-01-2025&to_date=02-01-2025"
+    },
+    "financial_results": {
+      "body_prefix": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Resource not found</title>\n</head>\n<body style=\"background-color: #e8e8e8;\">\n  <div style=\"font-size: 32px; padding: 50px 25px",
+      "content_type": "text/html; charset=utf-8",
+      "json": false,
+      "status": 404,
+      "url": "https://www.nseindia.com/api/corporate-financial-results?index=equities&from_date=01-01-2025&to_date=31-01-2025"
+    },
+    "landing_status": 200
+  },
+  "nse_metadata_transport_ready": true,
+  "scope": {
+    "attachment_downloads": 0,
+    "csv_body_downloads": 0,
+    "metadata_only": true,
+    "pdf_downloads": 0,
+    "provider_calls": 0,
+    "r2_writes": 0,
+    "supabase_writes": 0,
+    "xbrl_downloads": 0
+  },
+  "status": "BLOCKED_METADATA_TRANSPORT",
+  "version": "P8_B_RECOVERY_EXCHANGE_METADATA_CANARY_V1"
+}
