@@ -1,0 +1,62 @@
+name: P8 B4-3 Canary Acquisition
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - .github/workflows/p8-b4-3-canary.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p8-b4-3-canary-development
+  cancel-in-progress: false
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Invoke exact Development canary
+        id: invoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          endpoint="https://lrgpjimipfkyoqbpsqzz.supabase.co/functions/v1/p8-b4-3-canary"
+          http_code="$(curl --silent --show-error --output /tmp/b4.json --write-out '%{http_code}'             -X POST "$endpoint"             -H 'content-type: application/json'             --data '{"confirmation":"P8_B4_3_OWNER_AUTH_2026_10_03"}')"
+          cp /tmp/b4.json docs/p8/PortfolioAI_P8_B4_3_CANARY_LATEST.json
+          echo "http_code=$http_code" >> "$GITHUB_OUTPUT"
+          cat /tmp/b4.json
+          test "$http_code" = "200"
+
+      - name: Verify canary safety envelope
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open("docs/p8/PortfolioAI_P8_B4_3_CANARY_LATEST.json"))
+          assert p["state"] in ("PASS","IDEMPOTENT_EXISTING")
+          assert int(p.get("providerCalls",0)) <= 6
+          if p["state"]=="PASS":
+              assert p["providerCalls"] == 6
+              assert p["budgetFailed"] == 0
+              assert len(p["captures"]) == 6
+              assert p["canonicalPromotionPerformed"] is False
+              assert p["b4SchemaWritePerformed"] is False
+          PY
+
+      - name: Commit canary evidence
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B4_3_CANARY_LATEST.json
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): record B4-3 canary evidence"
+            git push
+          fi
