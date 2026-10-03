@@ -1,0 +1,94 @@
+{
+  "checks": {
+    "coverage_stable": true,
+    "factor_states_stable": true,
+    "first_expected_insert_count": true,
+    "legacy_adjusted_zero": true,
+    "pass1_status": true,
+    "pass2_status": true,
+    "raw_r2_stable": true,
+    "replay_zero_insert": true,
+    "replay_zero_prepared": true
+  },
+  "first_pass": {
+    "adjustment_version": "P8_B3_ADJUSTMENT_V2",
+    "arithmetic_policy_version": "P8_B3_ARITHMETIC_V1",
+    "audit_fingerprint_sha256": "0a2120280aeabb2d4f4c4a6a343ba1cbfe75ccb48736a76246b831ecfb7bff23",
+    "campaign_id": "P8_B3_N4_N6_FULL_20261003_V1",
+    "coverage": {
+      "covered_normalizations": 4982,
+      "missing": 0,
+      "non_singleton": 0,
+      "ready_normalizations": 4982
+    },
+    "final_ready_normalization_factor_states": {
+      "BLOCKED": 420,
+      "READY": 4562
+    },
+    "inserted_new_factors": 4979,
+    "legacy_postgres_adjusted_series_rows": 0,
+    "main_changes": 0,
+    "new_factor_actions": {
+      "BONUS": 138,
+      "CASH_DIVIDEND": 4671,
+      "RIGHTS": 133,
+      "SPLIT": 37
+    },
+    "new_factor_states": {
+      "BLOCKED": 419,
+      "READY": 4560
+    },
+    "normalization_version": "P8_B3_NORMALIZATION_V1",
+    "prepared_new_factors": 4979,
+    "production_changes": 0,
+    "raw_r2": {
+      "max_date": "2026-09-30",
+      "min_date": "2023-10-03",
+      "partitions": 744,
+      "rows": 1854978
+    },
+    "ready_normalizations": 4982,
+    "skipped_existing_factors": 3,
+    "status": "PASS",
+    "version": "P8_B3_N5_FULL_FACTOR_MATERIALIZATION_AUDIT_V1"
+  },
+  "main_changes": 0,
+  "n6_started": false,
+  "production_changes": 0,
+  "replay": {
+    "adjustment_version": "P8_B3_ADJUSTMENT_V2",
+    "arithmetic_policy_version": "P8_B3_ARITHMETIC_V1",
+    "audit_fingerprint_sha256": "a9641f5edd8bde277b0b32da2066b2870fcf093e8f1c62e0cf89d2c7d2eef038",
+    "campaign_id": "P8_B3_N4_N6_FULL_20261003_V1",
+    "coverage": {
+      "covered_normalizations": 4982,
+      "missing": 0,
+      "non_singleton": 0,
+      "ready_normalizations": 4982
+    },
+    "final_ready_normalization_factor_states": {
+      "BLOCKED": 420,
+      "READY": 4562
+    },
+    "inserted_new_factors": 0,
+    "legacy_postgres_adjusted_series_rows": 0,
+    "main_changes": 0,
+    "new_factor_actions": {},
+    "new_factor_states": {},
+    "normalization_version": "P8_B3_NORMALIZATION_V1",
+    "prepared_new_factors": 0,
+    "production_changes": 0,
+    "raw_r2": {
+      "max_date": "2026-09-30",
+      "min_date": "2023-10-03",
+      "partitions": 744,
+      "rows": 1854978
+    },
+    "ready_normalizations": 4982,
+    "skipped_existing_factors": 4982,
+    "status": "PASS",
+    "version": "P8_B3_N5_FULL_FACTOR_MATERIALIZATION_AUDIT_V1"
+  },
+  "status": "PASS",
+  "version": "P8_B3_N5_FULL_FACTOR_COMPLETION_AUDIT_V1"
+}
