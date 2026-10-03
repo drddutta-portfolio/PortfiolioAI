@@ -6465,3 +6465,125 @@ Final audit:
 P8-B4 remains COMPLETE / PASS / CLOSED.
 
 P8-B5 = READY / NOT STARTED / NOT AUTHORIZED.
+
+
+## P8-B5 historical classification / methodology validity closure — 3 October 2026
+
+P8-B5 completed as a Development-only historical classification, methodology, assignment and threshold validity gate.
+
+Final state:
+
+```text
+P8-B4 = COMPLETE / PASS / CLOSED
+Post-B4 storage remediation = COMPLETE / PASS
+P8-B5 = COMPLETE / PASS / CLOSED
+P8-B6 = READY / NOT STARTED / NOT AUTHORIZED
+P8-B-FINAL = NOT STARTED
+P8-C = NOT STARTED / NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Frozen historical-validity rule:
+
+- no current classification, methodology, subprofile, or threshold is projected backward without dated evidence valid at the historical decision instant;
+- the P7-IC1 methodology registry remains a current-state authority with `asOfDate=2026-09-29` and is not backdated into earlier P8 decisions;
+- DRAFT recommendation policies are not accepted as approved historical threshold authority.
+
+Population:
+
+```text
+historical identities = 4,524
+decision dates = 32
+identity/date pairs = 144,768
+```
+
+Classification evidence baseline:
+
+```text
+SECTOR observations = 300
+SECTOR observations with valid_from = 0
+INDUSTRY observations = 250
+INDUSTRY observations with valid_from = 0
+```
+
+All current sector/industry observations were observed/retrieved in September 2026. Therefore present-day classification cannot be projected backward.
+
+Primary blocker census:
+
+```text
+NO_CANONICAL_LINK = 136,384
+NO_CLASSIFICATION_EVIDENCE_BEFORE_DECISION = 8,145
+CLASSIFICATION_VALIDITY_UNPROVEN = 239
+classification conflict/overlap = 0
+```
+
+Component evidence preserved:
+
+```text
+reviewed DB methodology assignment available before decision = 4 rows
+approved pre-decision threshold policy = 0 rows
+reviewed/effective subprofile available before decision = 1 row
+methodology overlap = 0
+subprofile overlap = 0
+```
+
+Materialized B5 authority:
+
+- physical table: `public.p8_b5_historical_assignment_validity`
+- decoded internal view: `public.p8_b5_historical_assignment_validity_v1`
+
+Final materialization:
+
+```text
+rows = 144,768
+distinct logical keys = 144,768
+distinct deterministic fingerprints = 144,768
+resolved historical paths = 0
+blocked historical paths = 144,768
+rows without an explicit blocker = 0
+aggregate fingerprint = 85fc8b7185d88c65b869ab9444a5c9b00acfc40cd7933cb1ffa99f5f80a9429f
+```
+
+Independent source replay:
+
+```text
+replay rows = 144,768
+replay minus materialized = 0
+materialized minus replay = 0
+replay aggregate fingerprint = 85fc8b7185d88c65b869ab9444a5c9b00acfc40cd7933cb1ffa99f5f80a9429f
+```
+
+Storage was compacted before closure:
+
+```text
+B5 relation = 18 MB
+PortfolioAI Dev DB = 199 MB
+target < 200 MB = PASS
+```
+
+Security:
+
+```text
+RLS = enabled
+anon SELECT/INSERT = denied
+authenticated SELECT/INSERT = denied
+decoded view = security_invoker
+B5 performance-advisor findings = 0
+```
+
+The Supabase RLS-with-no-policy information notice is intentional because the B5 objects are service/internal-only and client privileges are revoked.
+
+Important interpretation:
+
+**B5 passes structurally because every historical identity/date pair has exactly one deterministic disposition and all unresolved paths are explicit fail-closed blockers. This does not mean historical classification coverage is sufficient for the experiment.** P8-B6 must carry these blockers into canonical snapshots/exclusions, and P8-B-FINAL must decide whether the frozen experiment has sufficient coverage to proceed to P8-C.
+
+Plan:
+
+- `docs/p8/PortfolioAI_P8_B5_HISTORICAL_CLASSIFICATION_METHODOLOGY_VALIDITY_PLAN_2026-10-03.md`
+
+Final audit:
+
+- `docs/p8/PortfolioAI_P8_B5_HISTORICAL_CLASSIFICATION_METHODOLOGY_VALIDITY_AUDIT_2026-10-03.json`
+
+No provider calls, Production changes, main changes, or P8-B6 work occurred.
