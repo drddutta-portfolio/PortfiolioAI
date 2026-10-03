@@ -175,7 +175,7 @@ def load_dates_and_factors(db):
           join public.p8_b3_source_archives a on a.id=b.source_archive_id
           where b.portfolio_id=%s and b.experiment_id=%s
             and a.raw_metadata->>'campaign_id'=%s
-          order by b.trade_date
+          order by trade_date
         """,(PORTFOLIO_ID,EXPERIMENT_ID,RAW_CAMPAIGN_ID))
         dates=[r["trade_date"] for r in cur.fetchall()]
         if len(dates)!=744: raise RuntimeError(f"Expected 744 dates, got {len(dates)}")
