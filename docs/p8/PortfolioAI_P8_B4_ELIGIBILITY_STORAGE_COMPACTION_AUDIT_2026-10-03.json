@@ -1,0 +1,86 @@
+{
+  "version": "P8_B4_ELIGIBILITY_STORAGE_COMPACTION_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "status": "PASS",
+  "scope": "Post-B4 storage remediation before P8-B5",
+  "backup_checkpoint": {
+    "github_workflow": "Manual Supabase Database Backup",
+    "github_run_id": 37013039221,
+    "github_job_id": 111224605687,
+    "conclusion": "success",
+    "r2_bucket": "portfolioai-history-dev",
+    "r2_prefix": "portfolioai-backups/development/database/manual/2026-10-03T14-42-12Z/",
+    "encrypted_object": "portfolioai-dev-2026-10-03T14-42-12Z-37013039221.dump.enc",
+    "encrypted_size_bytes": 43118448,
+    "encrypted_sha256": "f1990ea4efc3f88566d28d413decbc3bb53f28bc54cdf2039bdf7b6d6f0bf9ec",
+    "complete_marker_present": true,
+    "restore_readback_verified": true,
+    "previous_backup_prefix_deleted": "portfolioai-backups/development/database/manual/2026-10-02T13-27-09Z/",
+    "previous_backup_prefix_empty_verified": true
+  },
+  "before": {
+    "database_size": "322 MB",
+    "expanded_eligibility_relation_size": "187 MB",
+    "eligibility_rows": 289536,
+    "aggregate_fingerprint": "5ba943fa1ea2a2e94ead3f58065bc0a848c5a71a84275aa3192240993557e883"
+  },
+  "compaction": {
+    "physical_table": "public.p8_b4_decision_evidence_eligibility_compact",
+    "public_compatibility_view": "public.p8_b4_decision_evidence_eligibility",
+    "compact_relation_size": "46 MB",
+    "evidence_domain_encoding": {
+      "1": "FUNDAMENTAL",
+      "2": "DOCUMENT"
+    },
+    "exclusion_encoding": {
+      "1": "INELIGIBLE_NO_EXACT_PROVIDER_IDENTITY",
+      "2": "INELIGIBLE_UNKNOWN_PUBLICATION_TIME",
+      "3": "INELIGIBLE_UNKNOWN_SOURCE_AVAILABILITY_TIME"
+    },
+    "fingerprint_storage": "32-byte bytea",
+    "legacy_id_preserved": true,
+    "created_at_preserved": true,
+    "security_invoker_view": true,
+    "anon_access": false,
+    "authenticated_access": false
+  },
+  "equivalence": {
+    "rows": 289536,
+    "distinct_fingerprints": 289536,
+    "old_minus_compat": 0,
+    "compat_minus_old": 0,
+    "selected_rows": 0,
+    "null_exclusions": 0,
+    "aggregate_fingerprint_after": "5ba943fa1ea2a2e94ead3f58065bc0a848c5a71a84275aa3192240993557e883",
+    "fingerprint_unchanged": true
+  },
+  "after": {
+    "database_size": "181 MB",
+    "compact_relation_size": "46 MB",
+    "reduction_from_322_mb": "141 MB",
+    "below_200_mb_target": true,
+    "approximate_headroom_to_500_mb": "319 MB"
+  },
+  "canonical_preservation": {
+    "fundamental_observations_rows": 2458,
+    "research_documents_rows": 140,
+    "production_changed": false,
+    "main_changed": false
+  },
+  "advisors": {
+    "compact_table_performance_findings": 0,
+    "intentional_security_notice": "RLS enabled with no policy because compact table is service/internal-only and public client privileges are revoked."
+  },
+  "repository": {
+    "compaction_sql": "docs/sql/PortfolioAI_P8_B4_ELIGIBILITY_STORAGE_COMPACTION_2026-10-03.sql",
+    "compaction_sql_commit": "c7150879e3a96925e812c41642bae734afbb2461"
+  },
+  "next_gate": {
+    "p8_b4_remains_closed": true,
+    "storage_remediation_complete": true,
+    "p8_b5_ready_for_separate_owner_authorization": true,
+    "p8_b5_started": false
+  }
+}
