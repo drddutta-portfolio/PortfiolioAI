@@ -1,0 +1,101 @@
+{
+  "checks": {
+    "adjusted_partitions_744": true,
+    "adjusted_rows_1854978": true,
+    "decision_pairs_121956": true,
+    "decision_partitions_32": true,
+    "legacy_postgres_adjusted_zero": true,
+    "pass1_status": true,
+    "pass2_status": true,
+    "production_main_unchanged": true,
+    "raw_catalog_fingerprint_stable": true,
+    "replay_zero_new_immutable_objects": true,
+    "same_adjusted_fingerprint": true,
+    "same_completion_fingerprint": true,
+    "same_ledger_fingerprint": true
+  },
+  "first_pass": {
+    "adjusted_series": {
+      "aggregate_fingerprint_sha256": "7f7f14c7af972baa22e0363732a285df1e4f3e0631d8134ce665ac32397c8a76",
+      "blocked_rows": 458982,
+      "distinct_identities": 3474,
+      "max_date": "2026-09-30",
+      "min_date": "2023-10-03",
+      "partition_count": 744,
+      "ready_rows": 1395996,
+      "row_count": 1854978
+    },
+    "adjustment_version": "P8_B3_ADJUSTMENT_V2",
+    "arithmetic_policy_version": "P8_B3_ARITHMETIC_V1",
+    "audit_fingerprint_sha256": "81c8a4b28e84dea5dba849ef53b50a16a6d62be484ba05b917b01e44d0efab3d",
+    "campaign_id": "P8_B3_N6_R2_ADJUSTED_SERIES_20261003_V1",
+    "catalog_sha256": "39c10f5c5a1cfe51908110953950aa4e05be8f6275ace200ae6cb2325999aa72",
+    "completion_fingerprint_sha256": "59992c038e74f83ccb278dce0af73ed6cbd97ba2064c67cd724e0df531a4ca12",
+    "completion_manifest_sha256": "4cc8e85a5510977033aa522292e7bd742f2d26be72e6731a1fbed61c2f220826",
+    "created_objects": 1553,
+    "decision_ledger": {
+      "aggregate_fingerprint_sha256": "9ec30b0c8ea30e5d8068be570a8b251964efc5ef725d795165666b5223b275ae",
+      "blocked_rows": 61340,
+      "blocker_counts": {
+        "COMPLEX_CORPORATE_ACTION_BLOCKER": 20787,
+        "NO_TRADE_ON_DECISION_DATE": 40553
+      },
+      "max_date": "2026-09-29",
+      "min_date": "2024-02-29",
+      "partition_count": 32,
+      "ready_rows": 60616,
+      "row_count": 121956
+    },
+    "legacy_postgres_adjusted_series_rows": 0,
+    "main_changes": 0,
+    "production_changes": 0,
+    "raw_catalog_dataset_fingerprint": "a5c16c5e26eb0fae070c5072fb200032bd6395765bba1d162be7d04d00e5f2a7",
+    "status": "PASS",
+    "unchanged_objects": 0,
+    "version": "P8_B3_N6_COMPLETION_MANIFEST_V1"
+  },
+  "main_changes": 0,
+  "production_changes": 0,
+  "replay": {
+    "adjusted_series": {
+      "aggregate_fingerprint_sha256": "7f7f14c7af972baa22e0363732a285df1e4f3e0631d8134ce665ac32397c8a76",
+      "blocked_rows": 458982,
+      "distinct_identities": 3474,
+      "max_date": "2026-09-30",
+      "min_date": "2023-10-03",
+      "partition_count": 744,
+      "ready_rows": 1395996,
+      "row_count": 1854978
+    },
+    "adjustment_version": "P8_B3_ADJUSTMENT_V2",
+    "arithmetic_policy_version": "P8_B3_ARITHMETIC_V1",
+    "audit_fingerprint_sha256": "0f1d79b06ed13bde3114aaaf6b194f9f10702c29433d5083ea51b2dd149671d3",
+    "campaign_id": "P8_B3_N6_R2_ADJUSTED_SERIES_20261003_V1",
+    "catalog_sha256": "39c10f5c5a1cfe51908110953950aa4e05be8f6275ace200ae6cb2325999aa72",
+    "completion_fingerprint_sha256": "59992c038e74f83ccb278dce0af73ed6cbd97ba2064c67cd724e0df531a4ca12",
+    "completion_manifest_sha256": "4cc8e85a5510977033aa522292e7bd742f2d26be72e6731a1fbed61c2f220826",
+    "created_objects": 0,
+    "decision_ledger": {
+      "aggregate_fingerprint_sha256": "9ec30b0c8ea30e5d8068be570a8b251964efc5ef725d795165666b5223b275ae",
+      "blocked_rows": 61340,
+      "blocker_counts": {
+        "COMPLEX_CORPORATE_ACTION_BLOCKER": 20787,
+        "NO_TRADE_ON_DECISION_DATE": 40553
+      },
+      "max_date": "2026-09-29",
+      "min_date": "2024-02-29",
+      "partition_count": 32,
+      "ready_rows": 60616,
+      "row_count": 121956
+    },
+    "legacy_postgres_adjusted_series_rows": 0,
+    "main_changes": 0,
+    "production_changes": 0,
+    "raw_catalog_dataset_fingerprint": "a5c16c5e26eb0fae070c5072fb200032bd6395765bba1d162be7d04d00e5f2a7",
+    "status": "PASS",
+    "unchanged_objects": 1553,
+    "version": "P8_B3_N6_COMPLETION_MANIFEST_V1"
+  },
+  "status": "PASS",
+  "version": "P8_B3_N6_R2_ADJUSTED_SERIES_COMPLETION_AUDIT_V1"
+}
