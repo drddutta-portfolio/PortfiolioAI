@@ -6169,3 +6169,105 @@ Final audit:
 - `docs/p8/PortfolioAI_P8_B4_4_FINAL_BOUNDED_CAMPAIGN_AUDIT_2026-10-03.json`
 
 B4-4 is frozen. B4-5 requires separate owner authorization.
+
+
+## P8-B4-5 decision-date eligibility materialization closure — 3 October 2026
+
+P8-B4-5 completed as a Development-only decision-date eligibility materialization stage.
+
+Final state:
+
+```text
+P8-B4 = ACTIVE
+B4-0 = COMPLETE / PASS
+B4-1 = COMPLETE / PASS / CLOSED
+B4-2 = COMPLETE / PASS / CLOSED
+B4-3 = COMPLETE / PASS / CLOSED
+B4-4 = COMPLETE / PASS / CLOSED
+B4-5 = COMPLETE / PASS / CLOSED
+B4-6 = READY / NOT STARTED
+P8-B5 = NOT STARTED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Population:
+
+```text
+historical identities = 4,524
+frozen B2 decision dates = 32
+identity/date pairs = 144,768
+evidence domains = 2
+materialized eligibility rows = 289,536
+```
+
+Materializer:
+
+- `P8_B4_DECISION_ELIGIBILITY_V1`
+- exact hosted table: `public.p8_b4_decision_evidence_eligibility`
+- repository SQL: `docs/sql/PortfolioAI_P8_B4_5_DECISION_ELIGIBILITY_MATERIALIZATION_2026-10-03.sql`
+
+Eligibility result is deliberately fail-closed:
+
+```text
+selected evidence rows = 0
+rows with explicit exclusion = 289,536
+null exclusions = 0
+```
+
+Fundamental exclusions:
+
+```text
+INELIGIBLE_UNKNOWN_PUBLICATION_TIME = 7,648
+INELIGIBLE_NO_EXACT_PROVIDER_IDENTITY = 137,120
+```
+
+Document exclusions:
+
+```text
+INELIGIBLE_UNKNOWN_SOURCE_AVAILABILITY_TIME = 7,648
+INELIGIBLE_NO_EXACT_PROVIDER_IDENTITY = 137,120
+```
+
+The 7,648 rows per captured domain equal 239 exact-provider identities × 32 decisions.
+
+No provider retrieval/update timestamp was treated as publication time. No provider-reported document date was treated as authoritative source availability without official-source validation. No current-state fallback or invented timing was used.
+
+Determinism / idempotency:
+
+```text
+rows = 289,536
+distinct logical keys = 289,536
+distinct selection fingerprints = 289,536
+aggregate fingerprint = 5ba943fa1ea2a2e94ead3f58065bc0a848c5a71a84275aa3192240993557e883
+replay = ZERO NEW ROWS
+```
+
+Security:
+
+```text
+RLS = enabled
+anon SELECT = false
+authenticated SELECT = false
+anon INSERT = false
+authenticated INSERT = false
+```
+
+Supabase's RLS-with-no-policy information notice is intentional for this service/internal-only table because all public client privileges are revoked. The B4-5 foreign-key performance advisory was cleared by adding a covering historical-identity index.
+
+Storage after B4-5:
+
+```text
+eligibility relation = 187 MB
+PortfolioAI Dev database = 322 MB
+free-plan threshold = 500 MB
+```
+
+This footprint must remain visible in B4-6 closure review.
+
+Final audit:
+
+- `docs/p8/PortfolioAI_P8_B4_5_DECISION_ELIGIBILITY_MATERIALIZATION_AUDIT_2026-10-03.json`
+
+B4-5 is frozen. B4-6 remains separately owner-gated.
