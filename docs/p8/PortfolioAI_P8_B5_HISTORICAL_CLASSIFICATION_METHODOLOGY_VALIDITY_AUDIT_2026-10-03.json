@@ -1,0 +1,103 @@
+{
+  "version": "P8_B5_HISTORICAL_CLASSIFICATION_METHODOLOGY_VALIDITY_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "status": "PASS",
+  "stage": "P8-B5",
+  "gate_interpretation": "STRUCTURAL_PASS_WITH_EXPLICIT_FAIL_CLOSED_BLOCKERS",
+  "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+  "contract": {
+    "version": "P8_B5_HISTORICAL_VALIDITY_V1",
+    "rule": "No current classification, methodology, subprofile, or threshold may be backdated without decision-time-valid dated evidence.",
+    "p7_ic1_registry_as_of": "2026-09-29",
+    "p7_ic1_backdated": false
+  },
+  "baseline": {
+    "historical_identities": 4524,
+    "decision_dates": 32,
+    "identity_decision_pairs": 144768,
+    "sector_observations": 300,
+    "industry_observations": 250,
+    "sector_with_valid_from": 0,
+    "industry_with_valid_from": 0,
+    "reviewed_db_methodology_assignments": 4,
+    "reviewed_dated_subprofile_assignments": 6,
+    "approved_historical_threshold_policy_pairs": 0
+  },
+  "blocker_census": {
+    "NO_CANONICAL_LINK": 136384,
+    "NO_CLASSIFICATION_EVIDENCE_BEFORE_DECISION": 8145,
+    "CLASSIFICATION_VALIDITY_UNPROVEN": 239,
+    "CLASSIFICATION_CONFLICT_OR_OVERLAP": 0,
+    "METHODOLOGY_ASSIGNMENT_MISSING_AS_PRIMARY_BLOCKER": 0,
+    "METHODOLOGY_ASSIGNMENT_OVERLAP": 0,
+    "APPROVED_THRESHOLD_VERSION_MISSING_AS_PRIMARY_BLOCKER": 0,
+    "SUBPROFILE_REQUIRED_UNRESOLVED_AS_PRIMARY_BLOCKER": 0
+  },
+  "component_census": {
+    "rows_with_reviewed_predecision_methodology_assignment": 4,
+    "rows_with_approved_predecision_threshold_policy": 0,
+    "rows_with_reviewed_effective_subprofile": 1,
+    "classification_conflict_or_overlap_rows": 0,
+    "methodology_overlap_rows": 0,
+    "subprofile_overlap_rows": 0
+  },
+  "materialization": {
+    "table": "public.p8_b5_historical_assignment_validity",
+    "decoded_view": "public.p8_b5_historical_assignment_validity_v1",
+    "rows": 144768,
+    "distinct_keys": 144768,
+    "distinct_fingerprints": 144768,
+    "resolved_paths": 0,
+    "blocked_paths": 144768,
+    "rows_without_blocker": 0,
+    "aggregate_fingerprint": "85fc8b7185d88c65b869ab9444a5c9b00acfc40cd7933cb1ffa99f5f80a9429f"
+  },
+  "replay": {
+    "replay_rows": 144768,
+    "replay_minus_materialized": 0,
+    "materialized_minus_replay": 0,
+    "replay_aggregate_fingerprint": "85fc8b7185d88c65b869ab9444a5c9b00acfc40cd7933cb1ffa99f5f80a9429f",
+    "deterministic": true,
+    "duplicate_keys": 0
+  },
+  "storage": {
+    "physical_fingerprint_storage": "derived_on_read_from compact state fields",
+    "relation_size": "18 MB",
+    "database_size": "199 MB",
+    "below_200_mb_target": true
+  },
+  "security": {
+    "rls_enabled": true,
+    "anon_select": false,
+    "authenticated_select": false,
+    "anon_insert": false,
+    "authenticated_insert": false,
+    "decoded_view_security_invoker": true,
+    "decoded_view_anon_select": false,
+    "decoded_view_authenticated_select": false,
+    "performance_advisor_findings_for_b5": 0,
+    "security_advisor_note": "RLS enabled with no policy is intentional deny-by-default for this service/internal table."
+  },
+  "mutations": {
+    "provider_calls": 0,
+    "production_changes": 0,
+    "main_changes": 0,
+    "p8_b6_started": false
+  },
+  "interpretation": {
+    "historical_classification_validity_resolved_pairs": 0,
+    "why": "All 550 current sector/industry observations lack valid_from, and all were only observed/retrieved in September 2026. Current-state classification cannot be projected backward. At the final decision date 239 pairs have pre-decision sector+industry observations, but their historical validity interval is still unproven.",
+    "methodology_note": "Four final-date pairs have reviewed DB methodology assignments available before decision; one also has a reviewed effective subprofile. These component facts are preserved but cannot create a complete path while classification validity is unproven and approved threshold policy coverage is zero.",
+    "sufficiency_boundary": "B5 structural closure does not assert experiment-level sufficiency. P8-B6 must carry these blockers into canonical snapshots/exclusions, and P8-B-FINAL must decide whether coverage satisfies the frozen experiment."
+  },
+  "gate": {
+    "p8_b5_complete": true,
+    "p8_b5_closed": true,
+    "p8_b6_ready_for_owner_authorization": true,
+    "p8_b6_started": false,
+    "p8_b_final_started": false,
+    "p8_c_authorized": false
+  }
+}
