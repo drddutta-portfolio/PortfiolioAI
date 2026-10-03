@@ -1,0 +1,72 @@
+name: P8 B4-2 Dry Run Manifest Verification
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - docs/p8/PortfolioAI_P8_B4_2_DRY_RUN_ACQUISITION_MANIFEST_2026-10-03.csv
+      - docs/p8/PortfolioAI_P8_B4_2_DRY_RUN_ACQUISITION_AUDIT_2026-10-03.json
+      - .github/workflows/p8-b4-2-dry-run-verification.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify B4-2 manifest accounting
+        run: |
+          python - <<'PY'
+          import csv, json, hashlib
+          from collections import Counter
+          from pathlib import Path
+
+          manifest = Path("docs/p8/PortfolioAI_P8_B4_2_DRY_RUN_ACQUISITION_MANIFEST_2026-10-03.csv")
+          audit = json.loads(Path("docs/p8/PortfolioAI_P8_B4_2_DRY_RUN_ACQUISITION_AUDIT_2026-10-03.json").read_text())
+
+          rows = list(csv.DictReader(manifest.open()))
+          assert len(rows) == 4524
+          ids = [r["historical_identity_id"] for r in rows]
+          assert len(ids) == len(set(ids))
+
+          dispositions = Counter(r["dry_run_disposition"] for r in rows)
+          assert dispositions == {
+              "BLOCKED_EXACT_PROVIDER_IDENTITY": 4285,
+              "CANARY_ELIGIBLE_CACHE_FIRST": 239,
+          }
+
+          provider_states = Counter(r["provider_identity_state"] for r in rows)
+          assert provider_states["EXACT_ISIN_PROVIDER_ID_READY"] == 239
+          assert provider_states["NO_CURRENT_CANONICAL_LINK"] == 4262
+          assert provider_states["NO_EXACT_TRENDLYNE_PROVIDER_ID"] == 23
+
+          exact = [r for r in rows if r["dry_run_disposition"] == "CANARY_ELIGIBLE_CACHE_FIRST"]
+          assert all(r["trendlyne_provider_id"] for r in exact)
+          assert all(int(r["minimum_planned_trendlyne_attempts"]) == 2 for r in exact)
+          assert sum(int(r["minimum_planned_trendlyne_attempts"]) for r in rows) == 478
+
+          assert audit["status"] == "PASS"
+          assert audit["scope"]["provider_calls"] == 0
+          assert audit["scope"]["supabase_writes"] == 0
+          assert audit["provider_identity_readiness"]["exact_trendlyne_identity"] == 239
+          assert audit["provider_identity_readiness"]["blocked_exact_provider_identity_total"] == 4285
+          assert audit["dry_run_call_model"]["minimum_planned_trendlyne_attempts"] == 478
+
+          print("manifest_sha256", hashlib.sha256(manifest.read_bytes()).hexdigest())
+          print("rows", len(rows))
+          print("exact_provider_ready", dispositions["CANARY_ELIGIBLE_CACHE_FIRST"])
+          print("blocked_exact_provider_identity", dispositions["BLOCKED_EXACT_PROVIDER_IDENTITY"])
+          print("minimum_planned_trendlyne_attempts", 478)
+          PY
+
+      - name: Guard against provider or hosted mutation
+        run: |
+          test ! -e supabase/migrations/20261003*_p8_b4*
+          grep -q '"provider_calls": 0' docs/p8/PortfolioAI_P8_B4_2_DRY_RUN_ACQUISITION_AUDIT_2026-10-03.json
+          grep -q '"supabase_writes": 0' docs/p8/PortfolioAI_P8_B4_2_DRY_RUN_ACQUISITION_AUDIT_2026-10-03.json
