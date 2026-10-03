@@ -1,0 +1,91 @@
+name: P8-B Recovery Metadata Census
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - scripts/p8/p8-b-recovery-metadata-census.py
+      - .github/workflows/p8-b-recovery-metadata-census.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p8-b-recovery-metadata-census-development
+  cancel-in-progress: false
+
+jobs:
+  census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - name: Checkout Development
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Require Development bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY CLOUDFLARE_R2_BUCKET
+          do
+            test -n "${!name:-}" || { echo "Missing required secret: $name" >&2; exit 1; }
+          done
+          case "$SUPABASE_DB_URL" in *lrgpjimipfkyoqbpsqzz*) ;; *) echo "Refusing non-Development DB" >&2; exit 1;; esac
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir             "boto3==1.40.46" "duckdb==1.4.1" "psycopg[binary]==3.2.10" "requests==2.32.5"
+      - name: Run full metadata-only census
+        id: census
+        shell: bash
+        run: |
+          set +e
+          python scripts/p8/p8-b-recovery-metadata-census.py > /tmp/p8-b-recovery-census-stdout.json 2> /tmp/p8-b-recovery-census-stderr.log
+          status=$?
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          cat /tmp/p8-b-recovery-census-stdout.json || true
+          cat /tmp/p8-b-recovery-census-stderr.log >&2 || true
+          exit 0
+      - name: Record census audit
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f docs/p8/PortfolioAI_P8_B_RECOVERY_METADATA_CENSUS_AUDIT_2026-10-03.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B_RECOVERY_METADATA_CENSUS_AUDIT_2026-10-03.json
+          if [ -f docs/p8/PortfolioAI_P8_B_RECOVERY_METADATA_CENSUS_IDENTITY_SUMMARY_2026-10-03.csv ]; then
+            git add docs/p8/PortfolioAI_P8_B_RECOVERY_METADATA_CENSUS_IDENTITY_SUMMARY_2026-10-03.csv
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): record recovery metadata census"
+            git push
+          fi
+      - name: Upload full pair census
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b-recovery-metadata-census
+          path: |
+            tmp/p8-b-recovery-metadata-census/pair-census.csv
+            /tmp/p8-b-recovery-census-stdout.json
+            /tmp/p8-b-recovery-census-stderr.log
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Enforce census execution
+        if: steps.census.outputs.exit_code != '0'
+        run: |
+          echo "Metadata census failed closed; see committed audit." >&2
+          exit 1
