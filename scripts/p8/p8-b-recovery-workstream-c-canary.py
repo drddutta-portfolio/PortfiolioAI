@@ -9,7 +9,7 @@ UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/152 Safari/537.36"
 LANDING="https://www.nseindia.com/companies-listing/corporate-filings-financial-results"
 API="https://www.nseindia.com/api/corporates-financial-results"
 OUT="docs/p8/PortfolioAI_P8_B_RECOVERY_WORKSTREAM_C_CANARY_2026-10-04.json"
-PREFIX="portfolioai-history/development/p8/recovery/workstream-c/canary/"
+PREFIX="portfolioai-history/development/p8/recovery/workstream-c/canary/"\n# CI trigger: workflow now present
 
 def r2():
     raw=os.environ["CLOUDFLARE_R2_ACCOUNT_ID"].strip().rstrip("/")
