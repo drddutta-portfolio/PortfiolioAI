@@ -1,5 +1,3 @@
-import { createHash } from "node:crypto"
-
 export const P8_B3_NORMALIZATION_VERSION = "P8_B3_NORMALIZATION_V1" as const
 
 export type P8B3IdentityState = "RESOLVED" | "AMBIGUOUS" | "UNRESOLVED"
@@ -24,7 +22,6 @@ export type P8B3Normalization =
       effectiveDate: string
       historicalIdentityId: string
       normalizedTerms: Record<string, string>
-      normalizationHash: string
     }
   | {
       state: "BLOCKED"
@@ -34,19 +31,7 @@ export type P8B3Normalization =
       historicalIdentityId: string | null
       normalizedTerms: Record<string, string>
       blockerReason: string
-      normalizationHash: string
     }
-
-function canonical(value: unknown): string {
-  if (value === null || typeof value !== "object") return JSON.stringify(value)
-  if (Array.isArray(value)) return "[" + value.map(canonical).join(",") + "]"
-  const object = value as Record<string, unknown>
-  return "{" + Object.keys(object).sort().map((key) => JSON.stringify(key) + ":" + canonical(object[key])).join(",") + "}"
-}
-
-function sha256(value: unknown): string {
-  return createHash("sha256").update(canonical(value)).digest("hex")
-}
 
 function cleanPurpose(value: string): string {
   return value.replace(/\s+/gu, " ").trim()
@@ -85,7 +70,7 @@ function block(
     normalizedTerms,
     blockerReason: reason,
   }
-  return { ...logical, normalizationHash: sha256(logical) }
+  return logical
 }
 
 function ready(
@@ -105,7 +90,7 @@ function ready(
     effectiveDate: observation.exDate,
     normalizedTerms,
   }
-  return { ...logical, normalizationHash: sha256(logical) }
+  return logical
 }
 
 export function normalizeP8B3CorporateAction(observation: P8B3ActionObservation): P8B3Normalization {
