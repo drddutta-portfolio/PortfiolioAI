@@ -1,0 +1,127 @@
+name: P8 B3 N0-N3 Canary
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - src/features/backtesting/p8CorporateActionNormalization.ts
+      - src/features/backtesting/p8CorporateActionNormalization.test.ts
+      - src/features/backtesting/p8MissingPriceBlocker.ts
+      - src/features/backtesting/p8MissingPriceBlocker.test.ts
+      - scripts/p8/p8-b3-n3-canary.py
+      - .github/workflows/p8-b3-n3-canary.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p8-b3-n3-canary-development
+  cancel-in-progress: false
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Run focused N1/N2 arithmetic tests
+        run: >
+          npx vitest run
+          src/features/backtesting/p8CorporateActionNormalization.test.ts
+          src/features/backtesting/p8MissingPriceBlocker.test.ts
+          src/features/backtesting/p8CorporateActionAdjustment.test.ts
+          src/features/backtesting/p8ArithmeticPolicy.test.ts
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Require Development bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$SUPABASE_DB_URL" in
+            *lrgpjimipfkyoqbpsqzz*) ;;
+            *) echo "Refusing non-Development DB" >&2; exit 1 ;;
+          esac
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+
+      - name: Install pinned Python dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            "boto3==1.40.46" "duckdb==1.4.1" "psycopg[binary]==3.2.10"
+
+      - name: Execute bounded canary first pass
+        run: |
+          mkdir -p tmp/p8-b3-n3-canary
+          python scripts/p8/p8-b3-n3-canary.py > tmp/p8-b3-n3-canary/pass1.json
+
+      - name: Execute bounded canary replay
+        run: |
+          python scripts/p8/p8-b3-n3-canary.py > tmp/p8-b3-n3-canary/pass2.json
+
+      - name: Verify idempotency and persist audit
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.load(open("tmp/p8-b3-n3-canary/pass1.json"))
+          b=json.load(open("tmp/p8-b3-n3-canary/pass2.json"))
+          checks={
+            "pass1_status":a.get("status")=="PASS",
+            "pass2_status":b.get("status")=="PASS",
+            "same_fingerprint":a.get("canary_fingerprint_sha256")==b.get("canary_fingerprint_sha256"),
+            "replay_zero_normalizations":b.get("inserted_this_run",{}).get("normalizations")==0,
+            "replay_zero_factors":b.get("inserted_this_run",{}).get("factors")==0,
+            "post_counts_stable":a.get("post_counts")==b.get("post_counts"),
+            "adjusted_series_zero":b.get("post_counts",{}).get("adjusted_series")==0,
+            "raw_catalog_stable":b.get("raw_r2_catalog_rows")==1854978 and b.get("raw_r2_partitions")==744,
+          }
+          payload={
+            "version":"P8_B3_N0_N3_CANARY_COMPLETION_AUDIT_V1",
+            "status":"PASS" if all(checks.values()) else "FAIL",
+            "checks":checks,
+            "first_pass":a,
+            "replay":b,
+            "n4_n6_authorized":False,
+            "production_changes":0,
+            "main_changes":0,
+          }
+          Path("docs/p8/PortfolioAI_P8_B3_N0_N3_CANARY_COMPLETION_AUDIT_2026-10-03.json").write_text(
+            json.dumps(payload,indent=2,sort_keys=True)+"\n"
+          )
+          if payload["status"]!="PASS":
+            raise SystemExit(json.dumps(checks,indent=2))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B3_N0_N3_CANARY_COMPLETION_AUDIT_2026-10-03.json
+          git commit -m "audit(p8): record B3 N0-N3 canary completion"
+          git push
+
+      - name: Upload canary evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b3-n0-n3-canary
+          path: tmp/p8-b3-n3-canary/*.json
+          retention-days: 30
