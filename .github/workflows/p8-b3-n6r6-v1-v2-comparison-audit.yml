@@ -1,0 +1,103 @@
+name: P8 B3 N6R6 V1 V2 Comparison Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - scripts/p8/p8-b3-n6r6-v1-v2-comparison-audit.py
+      - .github/workflows/p8-b3-n6r6-v1-v2-comparison-audit.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p8-b3-n6r6-comparison-development
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Require Development bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+          git ls-remote origin refs/heads/main | awk '{print $1}' > /tmp/main-before.sha
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            "boto3==1.40.46" \
+            "pyarrow==21.0.0"
+
+      - name: Run N6R6 V1 V2 comparison audit
+        run: |
+          mkdir -p tmp/p8-b3-n6r6
+          python scripts/p8/p8-b3-n6r6-v1-v2-comparison-audit.py \
+            > tmp/p8-b3-n6r6/summary.json
+
+      - name: Verify N6R6 closure gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.load(open("docs/p8/PortfolioAI_P8_B3_N6R6_V1_V2_COMPARISON_AUDIT_2026-10-03.json"))["summary"]
+          checks={
+            "status":s.get("status")=="PASS",
+            "pairs":s["scope"]["decision_pairs_compared"]==121956,
+            "v1_unchanged":s["frozen_v1"]["unchanged"] is True,
+            "ready_regressions":s["recovery_deltas"]["v1_ready_regressions"]==0,
+            "complex_recovered":s["recovery_deltas"]["complex_recovered"]==20711,
+            "carry_forward":s["recovery_deltas"]["strict_1_day_no_trade_recovered"]==1177,
+            "blocked_total":s["remaining_blockers"]["total"]==39452,
+            "structural_or_evidence":s["remaining_blockers"]["structural_or_evidence_boundary_total"]==34432,
+            "strict_staleness":s["remaining_blockers"]["strict_policy_staleness_total"]==5020,
+            "silent_imputation":s["lineage_and_imputation"]["silent_imputation_detected"] is False,
+            "replay":s["determinism"]["immutable_replay_stable"] is True,
+            "closure_ready":s["closure_gate"]["ready_for_b3_closure_decision"] is True,
+            "b3_not_auto_closed":s["closure_gate"]["b3_closed_by_this_stage"] is False,
+            "no_mutations":all(v==0 for v in s["mutations"].values()),
+          }
+          if not all(checks.values()):
+              raise SystemExit(json.dumps(checks,indent=2))
+          Path("tmp/p8-b3-n6r6/checks.json").write_text(json.dumps(checks,indent=2)+"\n")
+          PY
+          git ls-remote origin refs/heads/main | awk '{print $1}' > /tmp/main-after.sha
+          cmp /tmp/main-before.sha /tmp/main-after.sha
+
+      - name: Commit N6R6 audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B3_N6R6_V1_V2_COMPARISON_AUDIT_2026-10-03.json
+          git commit -m "audit(p8): record N6R6 V1 V2 comparison"
+          git push
+
+      - name: Upload N6R6 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b3-n6r6-v1-v2-comparison
+          path: tmp/p8-b3-n6r6/*
+          if-no-files-found: warn
+          retention-days: 30
