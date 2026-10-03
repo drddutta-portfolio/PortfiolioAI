@@ -1,0 +1,168 @@
+{
+  "version": "P8_B_FINAL_DATA_FOUNDATION_CLOSURE_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+  "stage": "P8-B-FINAL",
+  "status": "BLOCKED",
+  "closure": "COMPLETE_BLOCKED_CLOSED",
+  "codex_rule": "If B-FINAL PASS conditions fail, P8-B closes BLOCKED with exact evidence; do not weaken the frozen contract after seeing coverage.",
+  "pass_condition_matrix": {
+    "minimum_approved_decision_dates": {
+      "result": "PASS",
+      "proven_dates": 32,
+      "minimum_required": 24
+    },
+    "historical_universe_survivor_free": {
+      "result": "PASS",
+      "authority": "P8-B2 COMPLETE/PASS/CLOSED",
+      "universe_runs": 32,
+      "source_archives": 32,
+      "historical_identities": 4524,
+      "latest_run_blocked": 0
+    },
+    "adjustment_and_benchmark_contracts": {
+      "result": "PASS",
+      "authority": "P8-B3 COMPLETE/PASS/CLOSED",
+      "adjusted_v2_rows": 1854978,
+      "adjusted_v2_ready": 1852250,
+      "adjusted_v2_blocked": 2728,
+      "decision_ledger_v2_rows": 121956,
+      "decision_ledger_v2_ready": 82504,
+      "decision_ledger_v2_blocked": 39452,
+      "benchmark_trading_dates": 744,
+      "note": "Heavy adjusted-market history was previously externalized to the R2 architecture; B3 closure fingerprints/audits remain the authority."
+    },
+    "point_in_time_evidence_and_version_lineage_complete_enough": {
+      "result": "FAIL",
+      "b4_fundamental_rows": 144768,
+      "b4_fundamental_selected": 0,
+      "b4_document_rows": 144768,
+      "b4_document_selected": 0,
+      "b5_paths_resolved": 0,
+      "b5_paths_blocked": 144768,
+      "b6_replay_ready": 0,
+      "b6_excluded": 144768,
+      "reason": "No security/date pair has a complete point-in-time classification/methodology/threshold path, therefore no canonical snapshot can be replay-ready."
+    },
+    "gaps_explicit_and_within_approved_exclusion_ceiling": {
+      "result": "FAIL",
+      "explicit_gaps": true,
+      "exclusion_rows": 144768,
+      "expected_rows": 144768,
+      "exclusion_rate": 1,
+      "note": "All gaps are explicit, but 100% canonical exclusion leaves no usable experiment sample. The frozen contract may not be weakened to force coverage."
+    },
+    "holdout_untouched": {
+      "result": "PASS",
+      "p8_c_objects_found": 0,
+      "replay_performance_objects_found": 0,
+      "p8_c_started": false,
+      "performance_calculation_started": false
+    },
+    "owner_approval_for_transition_to_p8_c": {
+      "result": "NOT_ELIGIBLE",
+      "reason": "Upstream sufficiency conditions failed; owner approval cannot convert a failed data foundation into a PASS without a separately versioned remediation/re-execution."
+    }
+  },
+  "coverage": {
+    "b2": {
+      "decision_dates": 32,
+      "historical_identities": 4524
+    },
+    "b4": {
+      "evidence_domains": 2,
+      "logical_rows": 289536,
+      "selected_rows": 0,
+      "explicit_exclusions": 289536,
+      "aggregate_fingerprint": "5ba943fa1ea2a2e94ead3f58065bc0a848c5a71a84275aa3192240993557e883"
+    },
+    "b5": {
+      "logical_rows": 144768,
+      "resolved_paths": 0,
+      "blocked_paths": 144768,
+      "aggregate_fingerprint": "85fc8b7185d88c65b869ab9444a5c9b00acfc40cd7933cb1ffa99f5f80a9429f"
+    },
+    "b6": {
+      "logical_rows": 144768,
+      "replay_ready": 0,
+      "excluded": 144768,
+      "distinct_keys": 144768,
+      "distinct_fingerprints": 144768,
+      "future_source_cutoff_rows": 0,
+      "aggregate_fingerprint": "3dcce751ab82f2e8a80fcb265db2b79d5a93567cea911f0b749b295860fcf4a1"
+    }
+  },
+  "blocker_census": {
+    "B5_NO_CANONICAL_LINK": 136384,
+    "B5_NO_CLASSIFICATION_EVIDENCE_BEFORE_DECISION": 8145,
+    "B5_CLASSIFICATION_VALIDITY_UNPROVEN": 239
+  },
+  "security_pattern_matrix": [
+    {
+      "pattern": "NO_CANONICAL_LINK_ALL_DATES",
+      "identities": 4262,
+      "no_link_dates": 32,
+      "no_classification_predecision_dates": 0,
+      "validity_unproven_dates": 0,
+      "replay_ready_dates": 0
+    },
+    {
+      "pattern": "LINKED_FINAL_DATE_EVIDENCE_VALIDITY_UNPROVEN",
+      "identities": 239,
+      "no_link_dates": 0,
+      "no_classification_predecision_dates": 31,
+      "validity_unproven_dates": 1,
+      "replay_ready_dates": 0
+    },
+    {
+      "pattern": "LINKED_NO_COMPLETE_PREDECISION_CLASSIFICATION",
+      "identities": 23,
+      "no_link_dates": 0,
+      "no_classification_predecision_dates": 32,
+      "validity_unproven_dates": 0,
+      "replay_ready_dates": 0
+    }
+  ],
+  "deterministic_integrity": {
+    "b4_replay_idempotent": true,
+    "b5_source_replay_rows": 144768,
+    "b5_replay_differences": 0,
+    "b6_source_replay_rows": 144768,
+    "b6_fingerprint_mismatches": 0,
+    "b6_missing_materialized_rows": 0,
+    "lookahead_violations": 0,
+    "current_state_fallback_used": false,
+    "cross_security_imputation_used": false
+  },
+  "storage": {
+    "development_database_size": "188 MB",
+    "free_plan_threshold": "500 MB",
+    "approximate_headroom": "312 MB",
+    "below_200_mb_target": true
+  },
+  "holdout": {
+    "split_contract": "60% development / 20% validation / 20% untouched holdout",
+    "p8_c_database_objects": 0,
+    "performance_results_generated": false,
+    "state": "UNTOUCHED"
+  },
+  "artifacts": {
+    "coverage_matrices": "docs/p8/PortfolioAI_P8_B_FINAL_COVERAGE_MATRICES_2026-10-03.md",
+    "coverage_matrices_commit": "484cd66677f2143add569f5389a09f5279c6a905"
+  },
+  "boundaries": {
+    "production_changed": false,
+    "main_changed": false,
+    "p8_c_started": false,
+    "p8_d_started": false,
+    "contract_relaxed": false
+  },
+  "final_decision": {
+    "p8_b_final": "COMPLETE / BLOCKED / CLOSED",
+    "p8_b": "BLOCKED — DATA FOUNDATION INSUFFICIENT FOR FROZEN EXPERIMENT",
+    "p8_c": "NOT AUTHORIZED",
+    "reason": "Zero replay-ready canonical snapshots under the frozen point-in-time evidence/classification/methodology contract."
+  }
+}
