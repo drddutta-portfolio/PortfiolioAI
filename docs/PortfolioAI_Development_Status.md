@@ -1,3 +1,57 @@
+## P8-B3 N6R-0 / N6R-1 blocker remediation baseline — 3 October 2026
+
+**Status: N6R-0 COMPLETE / PASS. N6R-1 COMPLETE / PASS. N6 V1 FROZEN / UNCHANGED.**
+
+N6R-0 froze the completed N6 V1 output as the immutable remediation baseline:
+
+- N6 V1 adjusted-series rows: **1,854,978**
+  - READY: **1,395,996**
+  - BLOCKED: **458,982**
+- adjusted-series partitions: **744**
+- N6 V1 adjusted-series aggregate fingerprint:
+  `7f7f14c7af972baa22e0363732a285df1e4f3e0631d8134ce665ac32397c8a76`
+- frozen B2 decision ledger: **121,956** pairs
+  - READY: **60,616**
+  - BLOCKED: **61,340**
+  - complex corporate-action blockers: **20,787**
+  - no-trade-on-decision-date blockers: **40,553**
+- decision-ledger aggregate fingerprint:
+  `9ec30b0c8ea30e5d8068be570a8b251964efc5ef725d795165666b5223b275ae`
+- N6 completion fingerprint:
+  `59992c038e74f83ccb278dce0af73ed6cbd97ba2064c67cd724e0df531a4ca12`
+- baseline freeze:
+  `docs/p8/PortfolioAI_P8_B3_N6R0_BASELINE_FREEZE_2026-10-03.json`
+- N6 V1 overwrite is prohibited; any remediation output must be versioned separately.
+
+N6R-1 completed the exact blocker-event census:
+
+- blocked historical identities: **439**
+- blocker events: **562**
+  - normalization blockers: **141**
+  - factor blockers: **421**
+- blocker-event date range: **2023-10-17 through 2026-09-25**
+- action-family identity counts:
+  - CASH_DIVIDEND: **303**
+  - RIGHTS: **119**
+  - DEMERGER: **36**
+  - BONUS: **3**
+  - identities may overlap between action families
+- remediation-category counts:
+  - dividend remediation only: **282**
+  - rights economics remediation only: **107**
+  - demerger lineage remediation only: **27**
+  - bonus terms remediation only: **2**
+  - multiple corporate-action causes: **21**
+- N6 V1 whole-identity blocking policy is confirmed as the direct cause of the broad **458,982-row** blocked surface.
+- full blocker census:
+  `docs/p8/PortfolioAI_P8_B3_N6R1_BLOCKER_CENSUS_2026-10-03.json`
+- full 439-row matrix:
+  `docs/p8/PortfolioAI_P8_B3_N6R1_BLOCKER_IDENTITY_MATRIX_2026-10-03.csv`
+- N6R2 / V2 adjusted-series materialization: **NOT STARTED**.
+- Production and `main`: **UNCHANGED**.
+
+**STOP boundary:** N6R-0 and N6R-1 are complete. Do not alter N6 V1 or begin N6R-2 remediation logic without a new owner instruction.
+
 ## P8-B3 N5 adjustment-factor materialization — 3 October 2026
 
 **Status: COMPLETE / PASS. N6 NOT STARTED.**
