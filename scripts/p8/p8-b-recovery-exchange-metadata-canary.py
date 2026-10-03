@@ -10,7 +10,18 @@ TIMEOUT = 30
 def shape(payload):
     if isinstance(payload, list):
         first = payload[0] if payload else {}
-        return {"kind": "list", "count": len(payload), "first_keys": sorted(first.keys()) if isinstance(first, dict) else []}
+        out={"kind":"list","count":len(payload),"first_keys":sorted(first.keys()) if isinstance(first,dict) else []}
+        if payload and isinstance(first,dict):
+            dates=[str(r.get("an_dt") or r.get("News_submission_dt") or r.get("DissemDT") or "") for r in payload if isinstance(r,dict)]
+            dates=[d for d in dates if d]
+            isins=[str(r.get("sm_isin") or "") for r in payload if isinstance(r,dict)]
+            desc=[str(r.get("desc") or r.get("NEWSSUB") or "").upper() for r in payload if isinstance(r,dict)]
+            out["sample_dates"]=dates[:3]
+            out["date_min"]=min(dates) if dates else None
+            out["date_max"]=max(dates) if dates else None
+            out["rows_with_isin"]=sum(bool(x.strip()) for x in isins)
+            out["financial_like_rows"]=sum(("FINANCIAL" in x or "RESULT" in x or "ANNUAL REPORT" in x or "INTEGRATED FILING" in x) for x in desc)
+        return out
     if isinstance(payload, dict):
         out = {"kind": "dict", "keys": sorted(payload.keys())}
         for key in ("data","Table","table","results"):
@@ -69,6 +80,17 @@ for name,url,params in candidates:
         audit["nse"][name]=fetch_json(nse,url,params=params,headers={"Referer":landing})
     except Exception as exc:
         audit["nse"][name]={"error":type(exc).__name__+":"+str(exc)[:300]}
+
+try:
+    web=requests.get("https://www.bseindia.com/corporates/ann.html",headers={"User-Agent":UA},timeout=TIMEOUT)
+    audit["bse"]["desktop_page_status"]=web.status_code
+except Exception as exc:
+    audit["bse"]["desktop_page_error"]=type(exc).__name__+":"+str(exc)[:200]
+try:
+    mobile=requests.get("https://m.bseindia.com/corporates.aspx",headers={"User-Agent":UA},timeout=TIMEOUT)
+    audit["bse"]["mobile_page_status"]=mobile.status_code
+except Exception as exc:
+    audit["bse"]["mobile_page_error"]=type(exc).__name__+":"+str(exc)[:200]
 
 bse=requests.Session()
 bse.headers.update({
