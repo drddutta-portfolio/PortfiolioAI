@@ -1,0 +1,85 @@
+{
+  "version": "P8_B4_1_SCHEMA_IDENTITY_CONTRACT_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "status": "PASS",
+  "stage": "P8-B4-1",
+  "scope": {
+    "repository_local_only": true,
+    "hosted_schema_applied": false,
+    "provider_calls": 0,
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "production_changes": 0,
+    "main_changes": 0
+  },
+  "schema_package": {
+    "artifact": "docs/sql/PortfolioAI_P8_B4_HISTORICAL_EVIDENCE_SCHEMA_PROPOSAL_2026-10-03.sql",
+    "tables_proposed": [
+      "p8_b4_fundamental_observations",
+      "p8_b4_research_documents",
+      "p8_b4_decision_evidence_eligibility"
+    ],
+    "historical_identity_keyed": true,
+    "exact_historical_isin_bound": true,
+    "append_only_design": true,
+    "rls_enabled_in_proposal": true,
+    "anon_authenticated_writes_revoked": true,
+    "proposal_wrapped_in_rollback": true,
+    "hosted_migration_file_created": false
+  },
+  "contract": {
+    "artifact": "src/features/backtesting/p8B4HistoricalEvidenceContract.ts",
+    "contract_version": "P8_B4_POINT_IN_TIME_EVIDENCE_V1",
+    "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+    "exact_identity_and_isin_required": true,
+    "strict_before_decision": true,
+    "equality_ineligible": true,
+    "unknown_publication_time_ineligible": true,
+    "unknown_source_availability_time_ineligible": true,
+    "observed_or_retrieved_time_not_publication_substitute": true,
+    "restatement_requires_explicit_supersession_link": true,
+    "revisions_cannot_cross_semantic_series": true,
+    "revision_publication_cannot_precede_superseded_evidence": true,
+    "deterministic_fingerprint": true,
+    "idempotent_existing_detection": true
+  },
+  "verification": {
+    "github_actions_run": 37118973304,
+    "github_actions_job": 111191206189,
+    "targeted_tests": {
+      "passed": 11,
+      "failed": 0
+    },
+    "isolated_b4_compile": "PASS",
+    "architecture_check": "PASS",
+    "schema_fail_closed_guard": "PASS",
+    "full_repository_typecheck": {
+      "status": "KNOWN_PREEXISTING_FAILURE_OUTSIDE_B4",
+      "file": "src/features/backtesting/p8CorporateActionNormalization.ts",
+      "b4_errors": 0,
+      "action": "not modified because P8-B3 is frozen"
+    }
+  },
+  "commits": {
+    "schema_proposal": "0b36a772c9d518a3b03725787c618c82f57e4a67",
+    "revision_idempotency_contract": "064323256df050ce71328dc115fc31211067d5f2",
+    "revision_idempotency_tests": "1975ce057d8de6a61bf0e9bea4eb4d6c3c30fb7f",
+    "verification_workflow_final": "5f7cb9dedd6ba8f419fe43ab4fbdae45e9dcd3af"
+  },
+  "gate": {
+    "b4_1_complete": true,
+    "b4_1_closed": true,
+    "b4_2_ready": true,
+    "hosted_migration_authorized": false,
+    "provider_acquisition_authorized": false,
+    "p8_c_authorized": false
+  },
+  "preservation": {
+    "p8_b3_reopened": false,
+    "production_unchanged": true,
+    "main_unchanged": true,
+    "main_head": "9362f15844e75acaf9d387df01695e67d8ca54dc"
+  }
+}
