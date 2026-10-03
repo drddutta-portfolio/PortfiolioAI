@@ -1,0 +1,35 @@
+name: P8-B Recovery Contract Guard
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - "src/contracts/p8BRecoveryContractV1.ts"
+      - "src/contracts/p8BRecoveryContractV1.test.ts"
+      - "src/contracts/fixtures/p8BRecoveryContractV1.fixtures.ts"
+      - ".github/workflows/p8-b-recovery-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  recovery-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Development
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Verify P8-B recovery contract
+        run: npx vitest run src/contracts/p8BRecoveryContractV1.test.ts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint recovery contract
+        run: npx eslint src/contracts/p8BRecoveryContractV1.ts src/contracts/p8BRecoveryContractV1.test.ts src/contracts/fixtures/p8BRecoveryContractV1.fixtures.ts
