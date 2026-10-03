@@ -5985,3 +5985,107 @@ main changes = 0
 ```
 
 B4-2 is frozen. The next stage is B4-3 canary acquisition campaign, which requires separate authorization before any provider call or hosted persistence.
+
+
+## P8-B4-3 canary acquisition closure — 3 October 2026
+
+P8-B4-3 completed as a bounded live provider canary.
+
+Final state:
+
+```text
+P8-B4 = ACTIVE
+B4-0 = COMPLETE / PASS
+B4-1 = COMPLETE / PASS / CLOSED
+B4-2 = COMPLETE / PASS / CLOSED
+B4-3 = COMPLETE / PASS / CLOSED
+B4-4 = READY / NOT STARTED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Deterministic three-identity cohort:
+
+- MGL — no cached fundamentals/documents;
+- RELIANCE — cached fundamentals with unknown publication time + document metadata;
+- HDFCBANK — partial publication-dated fundamental cache.
+
+Exact identity controls:
+
+- exact historical identity ID;
+- exact historical ISIN;
+- exact Trendlyne provider ID;
+- hard-coded cohort;
+- maximum 6 provider attempts;
+- stop on first provider/schema/provenance failure.
+
+Live canary run:
+
+```text
+run_id = b5b61ca8-b2c1-4c94-aa01-c397e37755c5
+provider calls planned max = 6
+provider calls attempted = 6
+provider calls succeeded = 6
+provider calls failed = 0
+budget consumed = 6
+raw captures = 6
+```
+
+Provider operation split:
+
+```text
+GET_PARAMETER_VALUES_MULTI_STOCK = 3 / 3 succeeded
+GET_DOCUMENT_SEARCH_RESULTS = 3 / 3 succeeded
+```
+
+Canary captures:
+
+- 3 immutable raw fundamental-history captures;
+- 3 immutable raw document-history captures;
+- payload SHA-256 recorded for all six;
+- provider usage event recorded for all six.
+
+Canonical mutation controls:
+
+```text
+fundamental_observations rows after canary = 2,458 / unchanged
+research_documents rows after canary = 140 / unchanged
+canonical fundamental writes = 0
+canonical document writes = 0
+B4 schema writes = 0
+R2 writes = 0
+canonical promotion performed = NO
+```
+
+Evidence-quality finding:
+
+- structured fundamental-history requests returned provider data for all three identities;
+- however, the returned fundamental responses still do not prove a trustworthy source publication timestamp under the frozen B4 contract;
+- therefore those captures remain raw evidence only and are NOT point-in-time eligible;
+- document searches returned dated document records for all three identities, including annual-report dates;
+- those provider-reported dates remain pending official NSE/BSE/company-source validation before canonical historical promotion.
+
+Idempotency check:
+
+- replay returned `IDEMPOTENT_EXISTING`;
+- replay provider calls = 0;
+- no duplicate source captures or usage events were created.
+
+The replay GitHub job showed a final red status only because an old checkout attempted to push a second copy of the already-committed evidence file and hit a non-fast-forward rejection. The replay invocation and safety verification themselves both passed and made zero provider calls.
+
+Artifacts:
+
+- `supabase/functions/p8-b4-3-canary/index.ts`
+- `.github/workflows/p8-b4-3-canary.yml`
+- `docs/p8/PortfolioAI_P8_B4_3_CANARY_LATEST.json`
+- `docs/p8/PortfolioAI_P8_B4_3_CANARY_ACQUISITION_AUDIT_2026-10-03.json`
+
+Execution evidence:
+
+- GitHub Actions run `37120486659`;
+- successful canary job `111195466314`;
+- idempotency replay job `111195796854`;
+- deployed Development Edge Function `p8-b4-3-canary` version 2.
+
+B4-3 is frozen. B4-4 must remain separately authorized before any broad provider campaign.
