@@ -1,0 +1,120 @@
+{
+  "version": "P8_B4_3_CANARY_ACQUISITION_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "status": "PASS",
+  "stage": "P8-B4-3",
+  "cohort": [
+    {
+      "symbol": "MGL",
+      "historical_identity_id": "499b6a54-c8c4-5f15-9019-75b665f3c09c",
+      "isin": "INE002S01010",
+      "provider_id": "4581",
+      "cache_state": "ABSENT_BOTH"
+    },
+    {
+      "symbol": "RELIANCE",
+      "historical_identity_id": "4620072a-b43a-5b0f-a090-f96c5561bed8",
+      "isin": "INE002A01018",
+      "provider_id": "1127",
+      "cache_state": "FUNDAMENTALS_UNDATED_DOCUMENT_METADATA_PRESENT"
+    },
+    {
+      "symbol": "HDFCBANK",
+      "historical_identity_id": "1b6c3a3c-f749-53bf-8a32-bcbda02f0559",
+      "isin": "INE040A01034",
+      "provider_id": "533",
+      "cache_state": "PARTIAL_PUBLICATION_DATED_FUNDAMENTALS"
+    }
+  ],
+  "provider_execution": {
+    "run_id": "b5b61ca8-b2c1-4c94-aa01-c397e37755c5",
+    "planned_max_calls": 6,
+    "attempted_calls": 6,
+    "succeeded_calls": 6,
+    "failed_calls": 0,
+    "budget_consumed": 6,
+    "budget_failed": 0,
+    "budget_released": 0,
+    "operation_counts": {
+      "GET_PARAMETER_VALUES_MULTI_STOCK": 3,
+      "GET_DOCUMENT_SEARCH_RESULTS": 3
+    }
+  },
+  "capture_result": {
+    "immutable_raw_captures": 6,
+    "data_source_record_count": 6,
+    "usage_event_count": 6,
+    "canonical_fundamental_rows_after": 2458,
+    "canonical_research_document_rows_after": 140,
+    "canonical_promotion_performed": false,
+    "b4_schema_write_performed": false
+  },
+  "evidence_findings": {
+    "fundamental_tool": {
+      "result": "RESPONDED_FOR_ALL_3",
+      "publication_time_proven": false,
+      "disposition": "CAPTURE_ONLY_NOT_POINT_IN_TIME_ELIGIBLE",
+      "note": "Responses contained dated/as-of data but no trustworthy publication-time label that satisfies the frozen B4 contract."
+    },
+    "document_tool": {
+      "result": "RESPONDED_FOR_ALL_3",
+      "provider_document_dates_present": true,
+      "authoritative_source_validation_complete": false,
+      "disposition": "CAPTURE_ONLY_PENDING_OFFICIAL_SOURCE_VALIDATION",
+      "note": "Dated document records were returned, including annual-report dates, but provider metadata alone is not promoted as official source availability."
+    }
+  },
+  "deterministic_controls": {
+    "exact_historical_identity_and_isin_verified": true,
+    "exact_provider_id_verified": true,
+    "cohort_hard_locked": true,
+    "max_call_budget_hard_locked": true,
+    "first_failure_stop": true,
+    "provider_usage_accounted": true,
+    "raw_capture_hashes_recorded": true,
+    "canonical_promotion": false
+  },
+  "idempotency": {
+    "replay_state": "IDEMPOTENT_EXISTING",
+    "replay_provider_calls": 0,
+    "duplicate_capture_rows_created": 0,
+    "duplicate_usage_rows_created": 0,
+    "verification_job_id": 111195796854,
+    "verification_note": "Invocation and safety verification passed. Overall rerun job was red only because the stale checkout could not push a second copy of the evidence file; no provider or data-integrity failure occurred."
+  },
+  "workflow": {
+    "run_id": 37120486659,
+    "successful_job_id": 111195466314,
+    "successful_job_conclusion": "success",
+    "replay_job_id": 111195796854,
+    "replay_invocation_and_safety_checks": "PASS",
+    "replay_job_final_conclusion": "failure_due_to_git_non_fast_forward_only"
+  },
+  "deployed_function": {
+    "slug": "p8-b4-3-canary",
+    "version": 2,
+    "development_only": true,
+    "exact_confirmation_required": true,
+    "idempotent_after_first_run": true
+  },
+  "gate": {
+    "b4_3_complete": true,
+    "b4_3_closed": true,
+    "b4_4_ready_for_owner_authorization": true,
+    "hosted_b4_schema_applied": false,
+    "p8_c_authorized": false
+  },
+  "mutations": {
+    "provider_calls": 6,
+    "operational_accounting_writes": true,
+    "raw_capture_writes": 6,
+    "canonical_fundamental_writes": 0,
+    "canonical_document_writes": 0,
+    "b4_schema_writes": 0,
+    "r2_writes": 0,
+    "production_changes": 0,
+    "main_changes": 0
+  }
+}
