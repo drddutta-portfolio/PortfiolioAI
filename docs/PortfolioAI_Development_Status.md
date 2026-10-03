@@ -1,3 +1,61 @@
+## P8-B3 N6R-3 event-local blocker policy — 3 October 2026
+
+**Status: COMPLETE / PASS. N6 V1 FROZEN / UNCHANGED. N6R-4 NOT STARTED. V2 MATERIALIZATION NOT STARTED.**
+
+N6R-3 completed the Development-only event-local / segment-local blocker simulation using the N6R-2 recovered dividend evidence.
+
+- Policy version: `P8_B3_N6R3_EVENT_LOCAL_POLICY_V1`.
+- N6R-2 recovered normalization IDs overlaid: **371**.
+- Remaining unresolved event identities: **169**.
+- Remaining unresolved event dates: **192**.
+- Unique segment-boundary rows: **192**.
+- Events without any raw row on/after the event: **0**.
+
+Frozen policy:
+
+- N6 V1 is never overwritten.
+- Pre-event segment: usable as an independent segment.
+- Unresolved transition: block only the cross-boundary return.
+- Post-event segment: usable as a new independent segment.
+- Segment restart: daily return = NULL and TRI resets to 1000.
+- Unresolved dividend:
+  - raw/price path remains usable;
+  - total-return transition is blocked.
+- Unresolved rights/demerger/bonus/other capital action:
+  - the cross-boundary price/total-return transition is blocked;
+  - both sides remain independently usable segments.
+- No price carry-forward.
+- No V2 materialization in N6R-3.
+
+Measured daily-series impact:
+
+- N6 V1 total raw-linked rows: **1,854,978**.
+- N6 V1 READY: **1,395,996**.
+- N6 V1 BLOCKED: **458,982**.
+- Projected V2 price-usable rows under N6R-3 policy: **1,854,978**.
+- Projected V2 price-blocked rows: **0**.
+- Return-boundary rows: **192**.
+- Whole-identity blocked rows recoverable: **458,982**.
+
+Measured decision-ledger impact:
+
+- N6 V1 READY: **60,616**.
+- N6 V1 complex-action blockers: **20,787**.
+- N6 V1 no-trade blockers: **40,553**.
+- Projected READY under event-local policy: **81,394**.
+- Projected complex-action blockers: **9**.
+- Projected no-trade blockers: **40,553**.
+- Complex blockers recoverable: **20,778 / 20,787**.
+
+Formal artifacts:
+
+- `docs/p8/PortfolioAI_P8_B3_N6R3_EVENT_LOCAL_POLICY_AUDIT_2026-10-03.json`
+- `docs/p8/PortfolioAI_P8_B3_N6R3_EVENT_BOUNDARY_MATRIX_2026-10-03.csv`
+
+N6 V1 remains unchanged. N6R-4 staleness analysis is not started. N6R-5/V2 materialization is not started. Production and `main` remain unchanged.
+
+**STOP boundary:** N6R-3 is complete. Do not begin N6R-4 or V2 materialization without a new owner instruction.
+
 ## P8-B3 N6R-2 dividend blocker recovery — 3 October 2026
 
 **Status: COMPLETE / PASS. N6 V1 FROZEN / UNCHANGED. N6R-3 NOT STARTED.**
