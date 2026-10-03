@@ -1,0 +1,97 @@
+{
+  "version": "P8_B4_4_BOUNDED_FULL_ACQUISITION_CLOSURE_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "status": "PASS",
+  "stage": "P8-B4-4",
+  "scope": {
+    "exact_provider_identities": 239,
+    "exact_provider_identity_definition": "Exact historical identity + historical ISIN + verified Trendlyne provider ID",
+    "unresolved_outside_campaign": 4285,
+    "note": "The 4,285 unresolved historical identities remain deterministic fail-closed exclusions from provider acquisition; B4-4 closes the exact-provider cohort defined by B4-2."
+  },
+  "quota_authority": {
+    "prior_internal_planned_ceiling": 320,
+    "owner_authorized_change": "Use verified Trendlyne 1000 calls/day quota for B4-4 continuation",
+    "live_provider_control_daily_internal_attempt_limit": 1000,
+    "live_provider_control_per_run_internal_attempt_limit": 40,
+    "actual_provider_quota_status": "VERIFIED",
+    "policy_version": 6
+  },
+  "acquisition_result": {
+    "complete_identities": 239,
+    "fund_only": 0,
+    "doc_only": 0,
+    "unique_domain_capture_pairs": 478,
+    "b4_3_canary_captures": 6,
+    "b4_4_raw_captures": 472,
+    "b4_4_identities_with_capture": 236
+  },
+  "provider_accounting": {
+    "b4_4_runs": 23,
+    "b4_4_succeeded_runs": 21,
+    "b4_4_failed_runs": 2,
+    "b4_4_attempted_calls": 473,
+    "b4_4_accepted_items": 236,
+    "b4_3_canary_calls": 6,
+    "total_trendlyne_usage_today": 479,
+    "daily_limit": 1000,
+    "remaining_verified_daily_headroom": 521,
+    "settled_b4_4_reservations": 23,
+    "running_b4_4_reservations": 0
+  },
+  "worker_failures": {
+    "count": 2,
+    "interpretation": "Operational worker resource terminations, not provider identity/evidence failures.",
+    "reconciled_or_resumed": true,
+    "orphan_run": {
+      "run_id": "c14f3d33-383f-449b-8903-77fbcabebbb9",
+      "provider_usage_rows": 37,
+      "captures_persisted": 36,
+      "fully_completed_identities": 18,
+      "partial_identity": "SENCO",
+      "partial_call_count": 1,
+      "later_resumable_completion_present": true,
+      "reservation_consumed_units": 37,
+      "reservation_released_units": 3,
+      "final_status": "FAILED",
+      "safe_reason_code": "WORKER_RESOURCE_LIMIT_RECONCILED"
+    }
+  },
+  "evidence_quality": {
+    "canonical_promotion_performed": false,
+    "b4_schema_writes": 0,
+    "fundamental_capture_disposition": "RAW_CAPTURE_ONLY_PENDING_PROVABLE_PUBLICATION_TIME",
+    "document_capture_disposition": "RAW_CAPTURE_ONLY_PENDING_OFFICIAL_SOURCE_VALIDATION",
+    "point_in_time_eligibility_materialized": false
+  },
+  "safety": {
+    "exact_identity_guard": true,
+    "cache_reuse": true,
+    "resumable": true,
+    "no_canonical_fundamental_writes": true,
+    "no_canonical_document_writes": true,
+    "r2_writes": 0,
+    "production_changes": 0,
+    "main_changes": 0,
+    "p8_b5_started": false
+  },
+  "implementation": {
+    "runner": "supabase/functions/p8-b4-4-acquisition/index.ts",
+    "final_runner_commit": "6ef0701bc409758b98f69ef7b7aba6db99f226e0",
+    "quota_authorization_commit": "66ad7a8514e4e9786d178300b1f3403933a81985",
+    "cache_ledger_fix_commit": "360c504b7e8285c04762c07d526b9facdcb4bde9",
+    "final_success_run_id": "214dbcf2-7052-4ee4-ad57-7360d8a5ebdd",
+    "final_success_provider_calls": 2,
+    "final_success_complete_after": 239,
+    "github_actions_run": 37120486659
+  },
+  "gate": {
+    "b4_4_complete": true,
+    "b4_4_closed": true,
+    "b4_5_ready_for_owner_authorization": true,
+    "b4_5_started": false,
+    "p8_c_authorized": false
+  }
+}
