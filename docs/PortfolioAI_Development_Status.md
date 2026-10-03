@@ -6089,3 +6089,83 @@ Execution evidence:
 - deployed Development Edge Function `p8-b4-3-canary` version 2.
 
 B4-3 is frozen. B4-4 must remain separately authorized before any broad provider campaign.
+
+
+## P8-B4-4 bounded full acquisition closure — 3 October 2026
+
+P8-B4-4 completed after owner authorized use of the live verified Trendlyne 1,000-calls/day quota for the remaining bounded campaign.
+
+Final state:
+
+```text
+P8-B4 = ACTIVE
+B4-0 = COMPLETE / PASS
+B4-1 = COMPLETE / PASS / CLOSED
+B4-2 = COMPLETE / PASS / CLOSED
+B4-3 = COMPLETE / PASS / CLOSED
+B4-4 = COMPLETE / PASS / CLOSED
+B4-5 = READY / NOT STARTED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Final B4-4 coverage:
+
+```text
+exact-provider identities = 239
+identities with both raw fundamental + document capture = 239
+remaining identities = 0
+fund-only identities = 0
+doc-only identities = 0
+
+raw captures total = 478
+  B4-3 canary fundamentals = 3
+  B4-3 canary documents = 3
+  B4-4 fundamentals = 236
+  B4-4 documents = 236
+```
+
+Provider controls:
+
+```text
+live daily Trendlyne limit = 1,000
+quota status = VERIFIED
+per-run internal limit = 40
+provider units used today = 479
+```
+
+The campaign remained below the verified 1,000/day provider limit.
+
+Integrity and fail-closed status:
+
+- exact historical identity + historical ISIN + exact provider identity required;
+- raw-capture ledger is the final coverage authority;
+- one worker-resource-limited run was reconciled safely and later resumed;
+- a capture-ledger pagination undercount was found during continuation, stopped, and corrected before further broad execution;
+- after the fix, remaining work was driven only from exhaustive raw-capture coverage;
+- no canonical fundamentals were promoted;
+- no canonical research documents were promoted;
+- no B4 historical schema rows were written;
+- no R2 writes;
+- Production unchanged;
+- main unchanged.
+
+Canonical tables after B4-4:
+
+```text
+fundamental_observations = 2,458 / unchanged
+research_documents = 140 / unchanged
+```
+
+Evidence disposition remains deliberately raw-only:
+
+- fundamentals: pending provable publication/source-availability timing;
+- documents: pending official NSE/BSE/company-source validation;
+- no B4-5 point-in-time eligibility materialization has started.
+
+Final audit:
+
+- `docs/p8/PortfolioAI_P8_B4_4_FINAL_BOUNDED_CAMPAIGN_AUDIT_2026-10-03.json`
+
+B4-4 is frozen. B4-5 requires separate owner authorization.
