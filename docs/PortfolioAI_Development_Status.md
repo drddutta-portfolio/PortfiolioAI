@@ -5664,3 +5664,66 @@ Artifacts:
 - `docs/p8/PortfolioAI_P8_B3_N6R6_V1_V2_COMPARISON_AUDIT_2026-10-03.json`
 
 N6R-6 is frozen. The next step is the separate P8-B3 closure decision; N6R-6 itself does not close B3 or authorize further remediation.
+
+
+## P8-B3 closure — 3 October 2026
+
+Owner explicitly authorized closure after N6R-6 PASS.
+
+Final state:
+
+```text
+P8-B3 = COMPLETE / PASS / CLOSED
+
+V2 adjusted-series rows = 1,854,978
+V2 adjusted-series READY = 1,852,250
+V2 adjusted-series BLOCKED = 2,728
+
+V2 decision-ledger rows = 121,956
+V2 decision-ledger READY = 82,504
+V2 decision-ledger BLOCKED = 39,452
+
+net new READY vs V1 = 21,888
+V1 READY regressions = 0
+```
+
+Residual blocker accounting:
+
+```text
+NO_PRIOR_PRICE = 34,354
+CORPORATE_ACTION_BOUNDARY_NO_TRADE = 2
+RAW_PRICE_ECONOMICS_CONFLICT_COMPLEX = 67
+UNRESOLVED_EVENT_BOUNDARY_COMPLEX = 9
+STALE_GT_1_BENCHMARK_DAY = 5,020
+TOTAL = 39,452
+```
+
+Closure conditions:
+
+- all residual blockers fully accounted;
+- strict carry-forward policy remains `STRICT_1_BENCHMARK_DAY`;
+- no silent imputation;
+- all 82,504 READY V2 selected-price lineages verified;
+- 744 adjusted manifests and 32 decision-ledger manifests independently recomputed;
+- immutable replay stable;
+- V1 and V2 fingerprints frozen;
+- no new remediation authorized.
+
+Separate open preservation item:
+
+- exhaustive original NSE source-file byte archival/verification (storage-remediation S1) remains open and is not claimed complete.
+
+Closure record:
+
+- `docs/p8/PortfolioAI_P8_B3_CLOSURE_2026-10-03.md`
+
+```text
+R2 writes during closure = 0
+Supabase writes during closure = 0
+Production = UNCHANGED
+main = UNCHANGED
+P8-B4 = NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+```
+
+P8-B3 is frozen. Any future change to residual-blocker policy, staleness threshold, event policy, raw-conflict handling, V2 adjusted series or V2 decision ledger requires separate authorization and versioning.
