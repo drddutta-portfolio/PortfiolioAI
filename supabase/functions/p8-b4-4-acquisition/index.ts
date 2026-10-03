@@ -72,11 +72,23 @@ Deno.serve(async req=>{
   if(sec.error) return reply(500,{error:"SECURITY_READ_FAILED",providerCalls:0})
   const smap=new Map((sec.data??[]).map((x:any)=>[x.id,x.symbol]))
 
-  const existing=await admin.from("data_source_records").select("record_kind,raw_payload").in("record_kind",[...FUND_KINDS,...DOC_KINDS]).range(0,2000)
-  if(existing.error) return reply(500,{error:"CAPTURE_READ_FAILED",providerCalls:0})
   const haveFund=new Set<string>(),haveDoc=new Set<string>()
-  for(const r of existing.data??[]){const id=String((r.raw_payload as any)?.historical_identity_id??"");if(FUND_KINDS.includes(r.record_kind))haveFund.add(id);if(DOC_KINDS.includes(r.record_kind))haveDoc.add(id)}
+  for(let from=0;;from+=500){
+    const existing=await admin.from("data_source_records")
+      .select("record_kind,raw_payload")
+      .in("record_kind",[...FUND_KINDS,...DOC_KINDS])
+      .range(from,from+499)
+    if(existing.error) return reply(500,{error:"CAPTURE_READ_FAILED",providerCalls:0})
+    const rows=existing.data??[]
+    for(const r of rows){
+      const id=String((r.raw_payload as any)?.historical_identity_id??"")
+      if(FUND_KINDS.includes(r.record_kind))haveFund.add(id)
+      if(DOC_KINDS.includes(r.record_kind))haveDoc.add(id)
+    }
+    if(rows.length<500) break
+  }
   const completeBefore=exact.filter((x:any)=>haveFund.has(x.id)&&haveDoc.has(x.id)).length
+  if(completeBefore<160) return reply(409,{error:"CAPTURE_LEDGER_UNDERCOUNT",providerCalls:0,completeBefore,totalExact:exact.length})
   const todo=exact.filter((x:any)=>!(haveFund.has(x.id)&&haveDoc.has(x.id))).slice(0,batchSize)
   if(!todo.length) return reply(200,{state:"CAMPAIGN_COMPLETE",providerCalls:0,completeBefore,totalExact:exact.length})
 
