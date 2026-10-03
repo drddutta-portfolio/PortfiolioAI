@@ -1,0 +1,131 @@
+name: P8 B3 N6 R2 Adjusted Series
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - scripts/p8/p8-b3-n6-materialize-adjusted-series.py
+      - .github/workflows/p8-b3-n6-materialize-adjusted-series.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p8-b3-n6-r2-adjusted-series-development
+  cancel-in-progress: false
+
+jobs:
+  n6:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Require Development bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY CLOUDFLARE_R2_BUCKET
+          do
+            if [ -z "${!name:-}" ]; then
+              echo "Missing required secret: $name" >&2
+              exit 1
+            fi
+          done
+          case "$SUPABASE_DB_URL" in
+            *lrgpjimipfkyoqbpsqzz*) ;;
+            *) echo "Refusing non-Development DB" >&2; exit 1 ;;
+          esac
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            "boto3==1.40.46" \
+            "pyarrow==21.0.0" \
+            "psycopg[binary]==3.2.10"
+
+      - name: N6 first pass
+        run: |
+          mkdir -p tmp/p8-b3-n6
+          python scripts/p8/p8-b3-n6-materialize-adjusted-series.py > tmp/p8-b3-n6/pass1.json
+
+      - name: N6 full replay
+        run: |
+          python scripts/p8/p8-b3-n6-materialize-adjusted-series.py > tmp/p8-b3-n6/pass2.json
+
+      - name: Verify N6 replay and persist audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          a=json.load(open("tmp/p8-b3-n6/pass1.json"))
+          b=json.load(open("tmp/p8-b3-n6/pass2.json"))
+
+          a_adj=a.get("adjusted_series",{})
+          b_adj=b.get("adjusted_series",{})
+          a_led=a.get("decision_ledger",{})
+          b_led=b.get("decision_ledger",{})
+
+          checks={
+            "pass1_status":a.get("status")=="PASS",
+            "pass2_status":b.get("status")=="PASS",
+            "adjusted_rows_1854978":a_adj.get("row_count")==1854978 and b_adj.get("row_count")==1854978,
+            "adjusted_partitions_744":a_adj.get("partition_count")==744 and b_adj.get("partition_count")==744,
+            "decision_pairs_121956":a_led.get("row_count")==121956 and b_led.get("row_count")==121956,
+            "decision_partitions_32":a_led.get("partition_count")==32 and b_led.get("partition_count")==32,
+            "same_adjusted_fingerprint":a_adj.get("aggregate_fingerprint_sha256")==b_adj.get("aggregate_fingerprint_sha256"),
+            "same_ledger_fingerprint":a_led.get("aggregate_fingerprint_sha256")==b_led.get("aggregate_fingerprint_sha256"),
+            "same_completion_fingerprint":a.get("completion_fingerprint_sha256")==b.get("completion_fingerprint_sha256"),
+            "replay_zero_new_immutable_objects":b.get("created_objects")==0,
+            "legacy_postgres_adjusted_zero":a.get("legacy_postgres_adjusted_series_rows")==0 and b.get("legacy_postgres_adjusted_series_rows")==0,
+            "raw_catalog_fingerprint_stable":a.get("raw_catalog_dataset_fingerprint")==b.get("raw_catalog_dataset_fingerprint"),
+            "production_main_unchanged":a.get("production_changes")==0 and b.get("production_changes")==0 and a.get("main_changes")==0 and b.get("main_changes")==0,
+          }
+
+          payload={
+            "version":"P8_B3_N6_R2_ADJUSTED_SERIES_COMPLETION_AUDIT_V1",
+            "status":"PASS" if all(checks.values()) else "FAIL",
+            "checks":checks,
+            "first_pass":a,
+            "replay":b,
+            "production_changes":0,
+            "main_changes":0,
+          }
+
+          out=Path("docs/p8/PortfolioAI_P8_B3_N6_COMPLETION_AUDIT_2026-10-03.json")
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True)+"\n")
+          if payload["status"]!="PASS":
+            raise SystemExit(json.dumps(payload,indent=2))
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B3_N6_COMPLETION_AUDIT_2026-10-03.json
+          git commit -m "audit(p8): record N6 R2 adjusted-series completion"
+          git push
+
+      - name: Upload N6 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b3-n6-r2-adjusted-series
+          path: tmp/p8-b3-n6/*.json
+          if-no-files-found: warn
+          retention-days: 30
