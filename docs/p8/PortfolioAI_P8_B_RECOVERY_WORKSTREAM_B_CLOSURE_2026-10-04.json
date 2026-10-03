@@ -1,0 +1,33 @@
+{
+  "version": "P8_B_RECOVERY_WORKSTREAM_B_CLOSURE_V1",
+  "date": "2026-10-04",
+  "branch": "PortfolioAI-Development",
+  "status": "COMPLETE_PASS",
+  "next_workstream": "C",
+  "next_workstream_authorized": false,
+  "counts": {
+    "historical_identities": 4524,
+    "full_audit_surface_pairs": 144768,
+    "b2_eligible_candidate_pairs": 121956,
+    "nse_metadata_candidate_ready": 61702,
+    "nse_metadata_partial": 23,
+    "bse_fallback_required": 60231
+  },
+  "bse_fallback": {
+    "adapter_implemented": true,
+    "exact_isin_required": true,
+    "required_pairs": 60231,
+    "bulk_acquisition_started": false,
+    "transport_note": "Official BSE JSON API returned HTTP 403 from GitHub Actions; official desktop/mobile pages returned HTTP 200. Acquisition remains Workstream C and must fail closed."
+  },
+  "exclusion_ceiling_state": "PENDING_OWNER_FREEZE",
+  "prohibited_or_not_started": {
+    "provider_calls": 0,
+    "filing_body_downloads": 0,
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "hosted_b5_b6_mutations": 0,
+    "performance_outcome_reads": 0,
+    "production_changes": 0
+  }
+}
