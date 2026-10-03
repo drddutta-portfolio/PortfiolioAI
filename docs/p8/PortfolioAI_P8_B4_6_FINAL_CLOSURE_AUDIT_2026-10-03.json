@@ -1,0 +1,116 @@
+{
+  "version": "P8_B4_6_FINAL_CLOSURE_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "status": "PASS",
+  "stage": "P8-B4-6",
+  "gate_result": "P8_B4_COMPLETE_PASS_CLOSED",
+  "upstream": {
+    "b4_0": "COMPLETE_PASS",
+    "b4_1": "COMPLETE_PASS_CLOSED",
+    "b4_2": "COMPLETE_PASS_CLOSED",
+    "b4_3": "COMPLETE_PASS_CLOSED",
+    "b4_4": "COMPLETE_PASS_CLOSED",
+    "b4_5": "COMPLETE_PASS_CLOSED"
+  },
+  "acquisition": {
+    "exact_provider_identities": 239,
+    "raw_capture_identity_domain_keys": 478,
+    "duplicate_capture_keys": 0,
+    "raw_capture_rows": 478,
+    "raw_capture_fingerprint": "4c4930eba3c5eee8bfce99af0210673b9b27e666f2117b17cad4ea27a71fffcb",
+    "provider_units_today": 479,
+    "accounting_reconciliation": "PASS_WITH_ONE_INTERRUPTED_SUCCESSFUL_ATTEMPT",
+    "note": "One provider attempt succeeded but was interrupted before durable capture during a worker resource-limit event; the missing capture was later safely reacquired. No duplicate completed identity/domain captures remain."
+  },
+  "provider_runs": {
+    "b4_4_runs": 23,
+    "succeeded_runs": 21,
+    "failed_runs": 2,
+    "failed_reasons": [
+      "WORKER_RESOURCE_LIMIT",
+      "WORKER_RESOURCE_LIMIT_RECONCILED"
+    ],
+    "attempted_calls_recorded": 473,
+    "accepted_items_recorded": 236,
+    "reservations_reconciled": true
+  },
+  "eligibility": {
+    "historical_identities": 4524,
+    "decision_dates": 32,
+    "identity_decision_pairs": 144768,
+    "evidence_domains": 2,
+    "materialized_rows": 289536,
+    "distinct_keys": 289536,
+    "distinct_fingerprints": 289536,
+    "selected_rows": 0,
+    "explicit_exclusion_rows": 289536,
+    "null_exclusions": 0,
+    "aggregate_fingerprint": "5ba943fa1ea2a2e94ead3f58065bc0a848c5a71a84275aa3192240993557e883",
+    "replay_result": "IDEMPOTENT_ZERO_NEW_ROWS"
+  },
+  "exclusion_breakdown": {
+    "FUNDAMENTAL": {
+      "INELIGIBLE_UNKNOWN_PUBLICATION_TIME": 7648,
+      "INELIGIBLE_NO_EXACT_PROVIDER_IDENTITY": 137120
+    },
+    "DOCUMENT": {
+      "INELIGIBLE_UNKNOWN_SOURCE_AVAILABILITY_TIME": 7648,
+      "INELIGIBLE_NO_EXACT_PROVIDER_IDENTITY": 137120
+    }
+  },
+  "frozen_contract_checks": {
+    "unknown_publication_treated_as_eligible": 0,
+    "unknown_source_availability_treated_as_eligible": 0,
+    "provider_retrieval_time_used_as_publication_time": false,
+    "provider_update_time_used_as_publication_time": false,
+    "current_state_fallback_used": false,
+    "cross_security_imputation_used": false,
+    "invented_publication_timestamps": 0,
+    "invented_source_availability_timestamps": 0,
+    "repeated_materialization_changed_fingerprints": false,
+    "repeated_materialization_created_duplicates": false
+  },
+  "canonical_preservation": {
+    "fundamental_observations_rows": 2458,
+    "research_documents_rows": 140,
+    "canonical_fundamental_promotion": false,
+    "canonical_document_promotion": false
+  },
+  "security": {
+    "eligibility_table_rls_enabled": true,
+    "anon_select": false,
+    "authenticated_select": false,
+    "anon_insert": false,
+    "authenticated_insert": false,
+    "intentional_rls_no_policy_deny_by_default": true,
+    "b4_5_foreign_key_advisor_cleared": true
+  },
+  "storage": {
+    "eligibility_relation_size": "187 MB",
+    "development_database_size": "322 MB",
+    "free_plan_threshold": "500 MB",
+    "below_threshold": true,
+    "headroom_mb_approx": 178,
+    "carry_forward_note": "B4-5 eligibility materialization is a large relation and should remain part of future storage planning."
+  },
+  "repository": {
+    "corrected_b4_4_audit_commit": "dd37fde1107f844a5168291f968b782a9a1814c3",
+    "main_head_unchanged": "9362f15844e75acaf9d387df01695e67d8ca54dc"
+  },
+  "boundaries": {
+    "production_changed": false,
+    "main_changed": false,
+    "p8_b5_started": false,
+    "p8_c_authorized": false
+  },
+  "closure": {
+    "b4_6_complete": true,
+    "b4_6_closed": true,
+    "p8_b4_complete": true,
+    "p8_b4_closed": true,
+    "next_gate": "P8-B5",
+    "p8_b5_ready_for_separate_owner_authorization": true
+  }
+}
