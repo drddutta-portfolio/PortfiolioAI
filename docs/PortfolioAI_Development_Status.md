@@ -1,3 +1,48 @@
+## P8-B3 N5 adjustment-factor materialization — 3 October 2026
+
+**Status: COMPLETE / PASS. N6 NOT STARTED.**
+
+Owner-authorized N5 is formally closed in Development.
+
+- Normalization authority: `P8_B3_NORMALIZATION_V1`.
+- Adjustment authority: `P8_B3_ADJUSTMENT_V2`.
+- Arithmetic policy: `P8_B3_ARITHMETIC_V1`.
+- READY normalizations requiring factor treatment: **4,982**.
+- READY normalizations without a factor row: **0**.
+- Total N5 factor rows: **4,983** across **4,983 distinct normalization IDs**.
+- Duplicate factor rows: **0**.
+- READY factors: **4,562**.
+- BLOCKED factors: **421**.
+- Invalid factor states: **0**.
+- One factor is the retained N3 canary demerger blocker linked to a BLOCKED normalization; it is outside the 4,982 READY-normalization coverage denominator.
+- Factor coverage by family:
+  - BONUS: 139 READY / 139 total
+  - SPLIT: 38 READY / 38 total
+  - CASH_DIVIDEND: 4,385 READY + 286 BLOCKED / 4,671 total
+  - RIGHTS: 0 READY + 134 BLOCKED / 134 total
+  - DEMERGER canary: 1 BLOCKED
+- Dividend blockers:
+  - 285: exact historical-identity-bound previous/ex-date R2 price pair unavailable
+  - 1: effective date is not a proven raw-price trading date
+- Rights blockers: 134; subscription terms are normalized, but deterministic rights-price treatment is not owner-approved.
+- Factor payload integrity:
+  - READY split rows missing factor math: 0
+  - READY bonus rows missing factor math: 0
+  - READY dividend rows missing required cash/reference/link fields: 0
+  - BLOCKED rows carrying prohibited factor math: 0
+  - invalid/missing SHA-256 hashes: 0
+  - missing calculation inputs: 0
+  - missing effective dates: 0
+- Raw R2 catalog remains unchanged at **1,854,978 rows / 744 partitions** through **2026-09-30**.
+- Raw catalog SHA remains `27c73dbf9d0e0b9ad9a0c2259d4375335278acc2af049e103f386c31ebd6352f`.
+- Adjusted-series rows: **0**.
+- N6: **NOT STARTED**.
+- Formal audit:
+  `docs/p8/PortfolioAI_P8_B3_N5_COMPLETION_AUDIT_2026-10-03.json` = **PASS**.
+- Production and `main`: **UNCHANGED**.
+
+**STOP boundary:** work stops after N5 as owner requested. Do not start N6 adjusted-series materialization without a new owner instruction.
+
 ## P8-B3 N0–N3 normalization canary — 3 October 2026
 
 **Status: COMPLETE / PASS WITH TEST-RUNNER OBSERVABILITY LIMITATION.**
