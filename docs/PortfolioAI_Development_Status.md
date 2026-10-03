@@ -1,3 +1,41 @@
+## P8-B3 raw source-acquisition completion verification — 3 October 2026
+
+**Status: SOURCE ACQUISITION / RAW HISTORY = COMPLETE / PASS. P8-B3 overall remains ACTIVE / NOT CLOSED.**
+
+The Development-only R2-native raw market-history campaign and the required separate verification audit are complete.
+
+- Campaign: `P8_B3_FULL_SOURCE_ACQUISITION_20261001_V1`.
+- Official NIFTY 500 TRI campaign rows/dates: **744 / 744**, from **2023-10-03 through 2026-09-30**.
+- Official NSE CM bhavcopy archives: **744 / 744**:
+  - legacy: **189**
+  - UDiFF: **555**
+- R2 canonical raw-price partitions: **744 Parquet + 744 partition manifests**.
+- Canonical raw-price rows: **1,854,978**.
+- R2 source-content authority objects: **744 / 744**.
+- Corporate-action monthly archives: **36 / 36**.
+- Corporate-action observations: **6,703**:
+  - RESOLVED: **6,078**
+  - AMBIGUOUS: **184**
+  - UNRESOLVED: **441**
+- Derived B3 rows remain **zero**:
+  - corporate-action normalizations: 0
+  - adjustment factors: 0
+  - adjusted market-price series: 0
+- B3 security controls: all six B3 tables have RLS enabled with at least one policy; direct `anon` / `authenticated` table grants are zero.
+- R2 raw-price catalog/manifest row parity: **PASS**.
+- Aggregate raw-partition fingerprint: `178039ccb14f1f2417f2e4fe7f04acf647e2a93ce856d5c6c9bc272cfbeaee12`.
+- Frozen B2 authority remains **32 decision dates**, **2024-02-29 through 2026-09-29**, exactly as P8-B2 closed.
+- Raw-price coverage measured against B2 **eligible** membership on those 32 dates:
+  - eligible security/date pairs: **121,956**
+  - same-day raw-price pairs present: **81,403**
+  - same-day raw-price pairs absent: **40,553**
+  - measured same-day coverage: **66.747843%**
+- These missing same-day rows are **not silently imputed**. They must become deterministic explicit blockers or be handled under the separately approved normalization/adjusted-series contract.
+- Formal audit: `docs/p8/PortfolioAI_P8_B3_SOURCE_COMPLETION_VERIFICATION_2026-10-03.json` = **PASS**.
+- Production and `main`: **UNCHANGED**.
+
+**Next gate:** prepare the corporate-action normalization / adjustment-factor / adjusted-series proposal and explicit missing-price blocker policy. Do not materialize normalization, factors or adjusted series until separately owner-authorized.
+
 ## P8-B3 storage remediation and PostgreSQL retirement — 2 October 2026
 
 **Status: COMPLETE / PASS for database-size remediation and permanent R2 runtime.**
@@ -61,8 +99,8 @@ No production migration, deployment, merge, score/recommendation/sizing activati
 
 **Status:** Living implementation and handover record  
 **Current branch:** `PortfolioAI-Development`
-**Current milestone:** Post-D P7 remains ACTIVE. Dashboard/stock-page UI refinement is still being completed, and P7 formal closure is deliberately deferred. The mandatory **P7-IC Portfolio-wide Intelligence Completion Remediation** (working label: Program E; not a new feature program) must then align the existing R3/R4/R5/R6/R7/R8/R9/R10 authorities with the real current portfolio. The frozen P7-IC execution model is industry/methodology-first, cache-first and quota-bounded: reuse valid Gate H-K methodology reference stocks, persist every accepted provider observation with provenance/date/freshness metadata, make normal stock-page browsing zero-provider-call, execute Trendlyne in bounded daily cohorts (default 320 planned calls/day against the current 400/day planning ceiling), materialize current snapshots, execute current R6/R7, operationalize R8/R9 plus Movement, and integrate real outputs through R10/Research/Intelligence/Action Center. Owner Checkpoint 6 is deferred until P7-IC IC-FINAL. P8 remains NOT AUTHORIZED; Production remains unchanged
-**Last reviewed:** 29 September 2026
+**Current milestone:** P8-B3 is ACTIVE. The Development-only B3 source-acquisition/raw-history campaign is COMPLETE / PASS with 744/744 proven trading dates and 1,854,978 canonical raw-price rows in R2. The separate source-completion verification audit is PASS. B3 overall is not closed because corporate-action normalization, adjustment factors, adjusted market-price/return series, and explicit treatment of missing same-day eligible-member prices remain unmaterialized and separately approval-gated. P8-B4 and P8-C+ remain not started/not authorized. Production and main remain unchanged
+**Last reviewed:** 3 October 2026
 
 This document records current implementation reality, completion level, known limitations, and the next gated work. Detailed historical implementation evidence remains in stage plans/completion records and Git history.
 
