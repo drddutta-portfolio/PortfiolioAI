@@ -1,0 +1,139 @@
+name: P8 B3 N5 Full Factor Materialization
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - scripts/p8/p8-b3-n5-materialize-factors.py
+      - .github/workflows/p8-b3-n5-materialize-factors.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p8-b3-n5-full-factor-development
+  cancel-in-progress: false
+
+jobs:
+  n5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Run focused B3 policy tests
+        run: >
+          npx vitest run
+          src/features/backtesting/p8CorporateActionNormalization.test.ts
+          src/features/backtesting/p8MissingPriceBlocker.test.ts
+          src/features/backtesting/p8CorporateActionAdjustment.test.ts
+          src/features/backtesting/p8ArithmeticPolicy.test.ts
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Require Development bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_DB_URL CLOUDFLARE_R2_ACCOUNT_ID CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY CLOUDFLARE_R2_BUCKET
+          do
+            if [ -z "${!name:-}" ]; then
+              echo "Missing required secret: $name" >&2
+              exit 1
+            fi
+          done
+          case "$SUPABASE_DB_URL" in
+            *lrgpjimipfkyoqbpsqzz*) ;;
+            *) echo "Refusing non-Development DB" >&2; exit 1 ;;
+          esac
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+
+      - name: Install pinned Python dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            "boto3==1.40.46" \
+            "duckdb==1.4.1" \
+            "psycopg[binary]==3.2.10"
+
+      - name: N5 first pass
+        run: |
+          mkdir -p tmp/p8-b3-n5
+          python scripts/p8/p8-b3-n5-materialize-factors.py > tmp/p8-b3-n5/pass1.json
+
+      - name: N5 replay
+        run: |
+          python scripts/p8/p8-b3-n5-materialize-factors.py > tmp/p8-b3-n5/pass2.json
+
+      - name: Verify replay and persist N5 audit
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          a=json.load(open("tmp/p8-b3-n5/pass1.json"))
+          b=json.load(open("tmp/p8-b3-n5/pass2.json"))
+
+          checks={
+            "pass1_status":a.get("status")=="PASS",
+            "pass2_status":b.get("status")=="PASS",
+            "first_expected_insert_count":a.get("inserted_new_factors")==4979,
+            "replay_zero_insert":b.get("inserted_new_factors")==0,
+            "replay_zero_prepared":b.get("prepared_new_factors")==0,
+            "coverage_stable":a.get("coverage")==b.get("coverage"),
+            "factor_states_stable":a.get("final_ready_normalization_factor_states")==b.get("final_ready_normalization_factor_states"),
+            "raw_r2_stable":a.get("raw_r2")==b.get("raw_r2"),
+            "legacy_adjusted_zero":b.get("legacy_postgres_adjusted_series_rows")==0,
+          }
+
+          payload={
+            "version":"P8_B3_N5_FULL_FACTOR_COMPLETION_AUDIT_V1",
+            "status":"PASS" if all(checks.values()) else "FAIL",
+            "checks":checks,
+            "first_pass":a,
+            "replay":b,
+            "n6_started":False,
+            "production_changes":0,
+            "main_changes":0,
+          }
+
+          out=Path("docs/p8/PortfolioAI_P8_B3_N5_FULL_FACTOR_MATERIALIZATION_AUDIT_2026-10-03.json")
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True)+"\n")
+
+          if payload["status"]!="PASS":
+            raise SystemExit(json.dumps(payload,indent=2))
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B3_N5_FULL_FACTOR_MATERIALIZATION_AUDIT_2026-10-03.json
+          git commit -m "audit(p8): record N5 full factor materialization"
+          git push
+
+      - name: Upload N5 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b3-n5-full-factor
+          path: tmp/p8-b3-n5/*.json
+          if-no-files-found: warn
+          retention-days: 30
