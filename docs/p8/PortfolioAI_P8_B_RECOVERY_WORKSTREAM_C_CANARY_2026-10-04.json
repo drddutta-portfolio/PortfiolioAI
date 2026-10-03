@@ -1,0 +1,59 @@
+{
+  "candidate_links": 23,
+  "endpoint": "https://www.nseindia.com/api/corporates-financial-results?index=equities&period=Quarterly&from_date=01-01-2025&to_date=07-01-2025",
+  "first_keys": [
+    "audited",
+    "bank",
+    "broadCastDate",
+    "companyName",
+    "consolidated",
+    "cumulative",
+    "difference",
+    "exchdisstime",
+    "filingDate",
+    "financialYear",
+    "format",
+    "fromDate",
+    "indAs",
+    "industry",
+    "isin",
+    "oldNewFlag",
+    "params",
+    "period",
+    "reInd",
+    "relatingTo",
+    "resultDescription",
+    "resultDetailedDataLink",
+    "seqNumber",
+    "symbol",
+    "toDate",
+    "xbrl"
+  ],
+  "generated_at": "2026-10-03T19:25:08.574488+00:00",
+  "rows": 23,
+  "saved_objects": [
+    {
+      "bytes": 53702,
+      "field": "xbrl",
+      "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/canary/ed8f7899cc0af109984b78b464b6d4fbf4b74a20b68ad835f0cabae164634f7c.xml",
+      "sha256": "ed8f7899cc0af109984b78b464b6d4fbf4b74a20b68ad835f0cabae164634f7c",
+      "source_url": "https://nsearchives.nseindia.com/corporate/xbrl/INDAS_117174_1339020_07012025101757.xml",
+      "state": "WRITTEN"
+    },
+    {
+      "bytes": 53226,
+      "field": "xbrl",
+      "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/canary/4b145fe33f0b239e671f5618d0f8db777585c3596312326f12f78c9526045942.xml",
+      "sha256": "4b145fe33f0b239e671f5618d0f8db777585c3596312326f12f78c9526045942",
+      "source_url": "https://nsearchives.nseindia.com/corporate/xbrl/INDAS_117173_1339017_07012025101306.xml",
+      "state": "WRITTEN"
+    }
+  ],
+  "scope": {
+    "production_changes": 0,
+    "provider_calls": 0
+  },
+  "status": "PASS",
+  "status_code": 200,
+  "version": "P8_B_RECOVERY_WORKSTREAM_C_CANARY_V1"
+}
