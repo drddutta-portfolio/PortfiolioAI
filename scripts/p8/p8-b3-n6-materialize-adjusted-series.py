@@ -419,6 +419,7 @@ def main():
 
     prev_adjusted = {}
     tri_state = {}
+    runtime_blocked = defaultdict(set)
     adjusted_manifests = []
     adjusted_rows_total = 0
     adjusted_ready_total = 0
@@ -455,110 +456,55 @@ def main():
         rows = raw_rows(raw_data, date)
         out_rows = []
 
+        grouped_rows = defaultdict(list)
         for raw in rows:
-            identity = raw["historical_identity_id"]
-            distinct_identities.add(identity)
-            blockers = sorted(blocked_identity.get(identity, set()))
-            lineage = {
-                "n6Version": N6_VERSION,
-                "campaignId": N6_CAMPAIGN_ID,
-                "rawPartitionKey": raw_key(date),
-                "rawPriceObservationId": raw["id"],
-                "rawRowHash": raw["row_hash"],
-                "factorScheduleHash": schedule_hash.get(identity),
+            grouped_rows[raw["historical_identity_id"]].append(raw)
+
+        for identity in sorted(grouped_rows):
+            group = sorted(
+                grouped_rows[identity],
+                key=lambda r: (r["trading_symbol"], r["series"], r["raw_price_observation_id"] if "raw_price_observation_id" in r else r["id"]),
+            )
+            signatures = {
+                (r["open"], r["high"], r["low"], r["close"])
+                for r in group
             }
+            if len(signatures) > 1:
+                runtime_blocked[identity].add(
+                    f"MULTIPLE_RAW_PRICE_ROWS_AMBIGUOUS:{date}"
+                )
+
+            distinct_identities.add(identity)
+            blockers = sorted(
+                set(blocked_identity.get(identity, set()))
+                | set(runtime_blocked.get(identity, set()))
+            )
 
             if blockers:
                 blocker_reason = " | ".join(blockers)
-                logical = {
-                    "rawPriceObservationId": raw["id"],
-                    "historicalIdentityId": identity,
-                    "tradeDate": date,
-                    "adjustmentVersion": ADJUSTMENT_VERSION,
-                    "seriesState": "BLOCKED",
-                    "blockerReason": blocker_reason,
-                    "lineage": lineage,
-                }
-                series_hash = sha256_json(logical)
-                row_id = deterministic_uuid(
-                    f"P8_B3_SERIES|{raw['id']}|{ADJUSTMENT_VERSION}|{series_hash}"
-                )
-                out = {
-                    "id": row_id,
-                    "raw_price_observation_id": raw["id"],
-                    "historical_identity_id": identity,
-                    "trade_date": date,
-                    "trading_symbol": raw["trading_symbol"],
-                    "series": raw["series"],
-                    "adjustment_version": ADJUSTMENT_VERSION,
-                    "arithmetic_policy_version": ARITHMETIC_VERSION,
-                    "series_state": "BLOCKED",
-                    "cumulative_price_factor": None,
-                    "adjusted_open": None,
-                    "adjusted_high": None,
-                    "adjusted_low": None,
-                    "adjusted_close": None,
-                    "daily_price_return": None,
-                    "daily_total_return": None,
-                    "total_return_index": None,
-                    "blocker_reason": blocker_reason,
-                    "lineage_json": canonical_json(lineage),
-                    "series_hash": series_hash,
-                }
-                adjusted_blocked_total += 1
-            else:
-                with localcontext(CTX):
-                    factor = cumulative.get(identity, ONE)
-                    open_v = None if raw["open"] is None else dec(raw["open"]) * factor
-                    high_v = None if raw["high"] is None else dec(raw["high"]) * factor
-                    low_v = None if raw["low"] is None else dec(raw["low"]) * factor
-                    close_v = dec(raw["close"]) * factor
-
-                    previous = prev_adjusted.get(identity)
-                    daily_price = None
-                    daily_total = None
-                    tri = TRI_BASE
-                    cash = sum(dividends.get(date, {}).get(identity, []), ZERO)
-
-                    if previous is not None:
-                        if previous <= 0:
-                            raise RuntimeError(f"Non-positive previous adjusted close for {identity}")
-                        daily_price_d = close_v / previous - ONE
-                        cash_adjusted = cash * factor
-                        daily_total_d = (close_v + cash_adjusted) / previous - ONE
-                        daily_price = sig30(daily_price_d)
-                        daily_total = sig30(daily_total_d)
-                        previous_tri = tri_state[identity]
-                        tri = previous_tri * (ONE + daily_total_d)
-
-                    prev_adjusted[identity] = close_v
-                    tri_state[identity] = tri
-
-                    lineage.update({
-                        "cumulativePriceFactor": sig30(factor),
-                        "cashDistributionPerShare": sig30(cash) if cash != 0 else "0",
-                    })
+                for raw in group:
+                    lineage = {
+                        "n6Version": N6_VERSION,
+                        "campaignId": N6_CAMPAIGN_ID,
+                        "rawPartitionKey": raw_key(date),
+                        "rawPriceObservationId": raw["id"],
+                        "rawRowHash": raw["row_hash"],
+                        "factorScheduleHash": schedule_hash.get(identity),
+                    }
                     logical = {
                         "rawPriceObservationId": raw["id"],
                         "historicalIdentityId": identity,
                         "tradeDate": date,
                         "adjustmentVersion": ADJUSTMENT_VERSION,
-                        "seriesState": "READY",
-                        "cumulativePriceFactor": sig30(factor),
-                        "adjustedOpen": None if open_v is None else sig30(open_v),
-                        "adjustedHigh": None if high_v is None else sig30(high_v),
-                        "adjustedLow": None if low_v is None else sig30(low_v),
-                        "adjustedClose": sig30(close_v),
-                        "dailyPriceReturn": daily_price,
-                        "dailyTotalReturn": daily_total,
-                        "totalReturnIndex": sig30(tri),
+                        "seriesState": "BLOCKED",
+                        "blockerReason": blocker_reason,
                         "lineage": lineage,
                     }
                     series_hash = sha256_json(logical)
                     row_id = deterministic_uuid(
                         f"P8_B3_SERIES|{raw['id']}|{ADJUSTMENT_VERSION}|{series_hash}"
                     )
-                    out = {
+                    out_rows.append({
                         "id": row_id,
                         "raw_price_observation_id": raw["id"],
                         "historical_identity_id": identity,
@@ -567,22 +513,116 @@ def main():
                         "series": raw["series"],
                         "adjustment_version": ADJUSTMENT_VERSION,
                         "arithmetic_policy_version": ARITHMETIC_VERSION,
-                        "series_state": "READY",
-                        "cumulative_price_factor": sig30(factor),
-                        "adjusted_open": None if open_v is None else sig30(open_v),
-                        "adjusted_high": None if high_v is None else sig30(high_v),
-                        "adjusted_low": None if low_v is None else sig30(low_v),
-                        "adjusted_close": sig30(close_v),
-                        "daily_price_return": daily_price,
-                        "daily_total_return": daily_total,
-                        "total_return_index": sig30(tri),
-                        "blocker_reason": None,
+                        "series_state": "BLOCKED",
+                        "cumulative_price_factor": None,
+                        "adjusted_open": None,
+                        "adjusted_high": None,
+                        "adjusted_low": None,
+                        "adjusted_close": None,
+                        "daily_price_return": None,
+                        "daily_total_return": None,
+                        "total_return_index": None,
+                        "blocker_reason": blocker_reason,
                         "lineage_json": canonical_json(lineage),
                         "series_hash": series_hash,
-                    }
-                adjusted_ready_total += 1
+                    })
+                    adjusted_blocked_total += 1
+                continue
 
-            out_rows.append(out)
+            representative = group[0]
+            with localcontext(CTX):
+                factor = cumulative.get(identity, ONE)
+                open_v = None if representative["open"] is None else dec(representative["open"]) * factor
+                high_v = None if representative["high"] is None else dec(representative["high"]) * factor
+                low_v = None if representative["low"] is None else dec(representative["low"]) * factor
+                close_v = dec(representative["close"]) * factor
+
+                previous = prev_adjusted.get(identity)
+                daily_price = None
+                daily_total = None
+                tri = TRI_BASE
+                cash = sum(dividends.get(date, {}).get(identity, []), ZERO)
+
+                if previous is not None:
+                    if previous <= 0:
+                        raise RuntimeError(f"Non-positive previous adjusted close for {identity}")
+                    daily_price_d = close_v / previous - ONE
+                    cash_adjusted = cash * factor
+                    daily_total_d = (close_v + cash_adjusted) / previous - ONE
+                    daily_price = sig30(daily_price_d)
+                    daily_total = sig30(daily_total_d)
+                    previous_tri = tri_state[identity]
+                    tri = previous_tri * (ONE + daily_total_d)
+
+                prev_adjusted[identity] = close_v
+                tri_state[identity] = tri
+
+                common_derived = {
+                    "cumulative_price_factor": sig30(factor),
+                    "adjusted_open": None if open_v is None else sig30(open_v),
+                    "adjusted_high": None if high_v is None else sig30(high_v),
+                    "adjusted_low": None if low_v is None else sig30(low_v),
+                    "adjusted_close": sig30(close_v),
+                    "daily_price_return": daily_price,
+                    "daily_total_return": daily_total,
+                    "total_return_index": sig30(tri),
+                }
+
+            for raw in group:
+                lineage = {
+                    "n6Version": N6_VERSION,
+                    "campaignId": N6_CAMPAIGN_ID,
+                    "rawPartitionKey": raw_key(date),
+                    "rawPriceObservationId": raw["id"],
+                    "rawRowHash": raw["row_hash"],
+                    "factorScheduleHash": schedule_hash.get(identity),
+                    "cumulativePriceFactor": common_derived["cumulative_price_factor"],
+                    "cashDistributionPerShare": sig30(cash) if cash != 0 else "0",
+                    "equivalentIdentityDateRowCount": len(group),
+                }
+                logical = {
+                    "rawPriceObservationId": raw["id"],
+                    "historicalIdentityId": identity,
+                    "tradeDate": date,
+                    "adjustmentVersion": ADJUSTMENT_VERSION,
+                    "seriesState": "READY",
+                    "cumulativePriceFactor": common_derived["cumulative_price_factor"],
+                    "adjustedOpen": common_derived["adjusted_open"],
+                    "adjustedHigh": common_derived["adjusted_high"],
+                    "adjustedLow": common_derived["adjusted_low"],
+                    "adjustedClose": common_derived["adjusted_close"],
+                    "dailyPriceReturn": common_derived["daily_price_return"],
+                    "dailyTotalReturn": common_derived["daily_total_return"],
+                    "totalReturnIndex": common_derived["total_return_index"],
+                    "lineage": lineage,
+                }
+                series_hash = sha256_json(logical)
+                row_id = deterministic_uuid(
+                    f"P8_B3_SERIES|{raw['id']}|{ADJUSTMENT_VERSION}|{series_hash}"
+                )
+                out_rows.append({
+                    "id": row_id,
+                    "raw_price_observation_id": raw["id"],
+                    "historical_identity_id": identity,
+                    "trade_date": date,
+                    "trading_symbol": raw["trading_symbol"],
+                    "series": raw["series"],
+                    "adjustment_version": ADJUSTMENT_VERSION,
+                    "arithmetic_policy_version": ARITHMETIC_VERSION,
+                    "series_state": "READY",
+                    "cumulative_price_factor": common_derived["cumulative_price_factor"],
+                    "adjusted_open": common_derived["adjusted_open"],
+                    "adjusted_high": common_derived["adjusted_high"],
+                    "adjusted_low": common_derived["adjusted_low"],
+                    "adjusted_close": common_derived["adjusted_close"],
+                    "daily_price_return": common_derived["daily_price_return"],
+                    "daily_total_return": common_derived["daily_total_return"],
+                    "total_return_index": common_derived["total_return_index"],
+                    "blocker_reason": None,
+                    "lineage_json": canonical_json(lineage),
+                    "series_hash": series_hash,
+                })
+                adjusted_ready_total += 1
 
         out_rows.sort(key=lambda r: (r["historical_identity_id"], r["trading_symbol"], r["series"], r["raw_price_observation_id"]))
         data = parquet_bytes(out_rows, ADJ_SCHEMA)
