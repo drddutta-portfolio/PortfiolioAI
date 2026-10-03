@@ -1,0 +1,80 @@
+{
+  "canaries": {
+    "historical_only_or_delisted_candidate": {
+      "canonical_security_id": null,
+      "first_source_date": "2024-02-29",
+      "historical_identity_id": "73cc019a-97ae-58db-8bfa-751c871577e1",
+      "historical_isin": "INE00VM01010",
+      "last_source_date": "2024-02-29",
+      "names": [
+        "MANORAMA INDUSTRIES LTD"
+      ],
+      "observation_rows": 5,
+      "symbols": [
+        "MANORAMA"
+      ]
+    },
+    "name_change": {
+      "canonical_security_id": null,
+      "first_source_date": "2024-02-29",
+      "historical_identity_id": "7105e305-6103-56fd-9b19-f27bdcd9b640",
+      "historical_isin": "INE089A01023",
+      "last_source_date": "2024-09-30",
+      "names": [
+        "DR REDDY S LAB DEPO SETT",
+        "DR REDDY S LAB DEPO SETT.",
+        "DR. REDDY S LABORATORIES",
+        "DR. REDDY'S LABORATORIES",
+        "DR. REDDYS LAB LTD"
+      ],
+      "observation_rows": 48,
+      "symbols": [
+        "DRREDDY"
+      ]
+    },
+    "symbol_change": {
+      "canonical_security_id": null,
+      "first_source_date": "2024-02-29",
+      "historical_identity_id": "f9587cf3-31b1-59e6-a69b-03d3f86c86f5",
+      "historical_isin": "INE460C01014",
+      "last_source_date": "2026-09-29",
+      "names": [
+        "GANESH HOUSING CORP LTD",
+        "GANESH HOUSING FIN CORP",
+        "GANESH HOUSING LIMITED"
+      ],
+      "observation_rows": 231,
+      "symbols": [
+        "GANESHHOU",
+        "GANESHHOUC",
+        "GANHSGFIN"
+      ]
+    }
+  },
+  "exclusion_ceiling_state": "PENDING_OWNER_FREEZE",
+  "generated_at": "2026-10-03T17:48:41.034389+00:00",
+  "population": {
+    "historical_only_with_listing_evidence": 4262,
+    "identities_with_listing_evidence": 4524,
+    "name_change_identities": 1000,
+    "symbol_change_identities": 116
+  },
+  "proof": [
+    "Canary historical identities are selected from R2 B2 listing evidence, not current security state.",
+    "The historical-only canary has canonical_security_id=null and therefore proves the adapter population includes identities with no current-security link.",
+    "The symbol-change canary has more than one historically observed symbol under one historical_identity_id/ISIN.",
+    "No present-day manual company assignment is used in canary selection or alias evidence."
+  ],
+  "scope": {
+    "filing_body_downloads": 0,
+    "historical_identities": 4524,
+    "listing_observation_rows": 562790,
+    "listing_partitions": 32,
+    "performance_outcome_reads": 0,
+    "provider_calls": 0,
+    "r2_writes": 0,
+    "supabase_writes": 0
+  },
+  "status": "PASS",
+  "version": "P8_B_RECOVERY_IDENTITY_CANARIES_V1"
+}
