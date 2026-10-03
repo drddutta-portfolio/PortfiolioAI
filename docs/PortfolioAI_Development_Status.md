@@ -1,3 +1,48 @@
+## P8-B3 N6R-2 dividend blocker recovery — 3 October 2026
+
+**Status: COMPLETE / PASS. N6 V1 FROZEN / UNCHANGED. N6R-3 NOT STARTED.**
+
+N6R-2 completed a Development-only, read-only dividend recovery pass against the canonical R2 raw-price authority.
+
+- Recovery version: `P8_B3_N6R2_DIVIDEND_RECOVERY_V1`.
+- Dividend recovery units examined: **563**.
+- RECOVERED events: **371**.
+- Still BLOCKED events: **192**.
+- Historical identities with at least one recovered event: **295**.
+- Previously BLOCKED normalization events with uniquely parseable dividend cash terms recovered: **93**.
+- Factor events recoverable from exact historical-identity-bound previous/ex-date R2 rows: **371**.
+- Recovery method:
+  - exact `historical_identity_id` only;
+  - unique economic row required on each relevant date;
+  - no symbol inference;
+  - no price-drop inference;
+  - no non-trading-date remap;
+  - no multi-component cash distribution summation without a separately approved rule.
+- Remaining blocker outcome counts:
+  - multi-component dividend requires separate policy: **132**
+  - identity absent on both previous and ex date: **43**
+  - dividend cash amount not uniquely parseable: **14**
+  - effective date not a proven trading date: **1**
+  - ex-date conflicting economics: **1**
+  - identity absent on previous date only: **1**
+- The pass confirms many N5 dividend blockers were caused by the old `historical_identity_id + raw_symbol + raw_series` lookup being too strict. Exact identity-only R2 evidence recovers cases where the R2 symbol/series differs from the corporate-action observation while the historical identity is unambiguous.
+- Examples observed in recovered evidence include R2 series/symbol transitions such as:
+  - `BCONCEPTS`: corporate-action key EQ, canonical R2 row BE;
+  - `SEMAC`: corporate-action key EQ, canonical R2 row BE;
+  - `ALIVUS` observation resolved to R2 `GLS`;
+  - `LTM` observation resolved to R2 `LTIM`;
+  - `TIPSMUSIC` observation resolved to R2 `TIPSINDLTD`.
+- Recovery ledger:
+  `docs/p8/PortfolioAI_P8_B3_N6R2_DIVIDEND_RECOVERY_2026-10-03.json`.
+- Full event matrix:
+  `docs/p8/PortfolioAI_P8_B3_N6R2_DIVIDEND_RECOVERY_MATRIX_2026-10-03.csv`.
+- N6 V1 was not overwritten.
+- R2 catalog remains unchanged with SHA:
+  `39c10f5c5a1cfe51908110953950aa4e05be8f6275ace200ae6cb2325999aa72`.
+- Production and `main`: **UNCHANGED**.
+
+**STOP boundary:** N6R-2 is complete. Do not begin N6R-3 event-local blocking/V2 series logic without a new owner instruction.
+
 ## P8-B3 N6R-0 / N6R-1 blocker remediation baseline — 3 October 2026
 
 **Status: N6R-0 COMPLETE / PASS. N6R-1 COMPLETE / PASS. N6 V1 FROZEN / UNCHANGED.**
