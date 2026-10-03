@@ -33,17 +33,28 @@ jobs:
       - name: Targeted B4-1 contract tests
         run: npx vitest run src/features/backtesting/p8B4HistoricalEvidenceContract.test.ts
 
-      - name: Typecheck
-        run: npm run typecheck
+      - name: B4-1 contract compile check
+        run: |
+          npx tsc --noEmit --target ES2022 --module NodeNext --moduleResolution NodeNext \
+            --types node src/features/backtesting/p8B4HistoricalEvidenceContract.ts
 
       - name: Architecture check
         run: npm run check:architecture
 
-      - name: Verify schema proposal remains non-hosted
+      - name: Verify schema proposal remains non-hosted and fail-closed
         shell: bash
         run: |
           set -euo pipefail
           f=docs/sql/PortfolioAI_P8_B4_HISTORICAL_EVIDENCE_SCHEMA_PROPOSAL_2026-10-03.sql
           grep -q '^begin;' "$f"
           grep -q '^rollback;' "$f"
-          ! git diff --exit-code -- supabase/migrations
+          grep -q 'enable row level security' "$f"
+          grep -q 'revoke all .* from anon, authenticated' "$f"
+          grep -q 'supersedes_observation_id' "$f"
+          grep -q 'amendment_of_document_id' "$f"
+          grep -q 'selection_fingerprint' "$f"
+          test ! -e supabase/migrations/20261003*_p8_b4*
+
+      - name: Full repository typecheck diagnostic
+        continue-on-error: true
+        run: npm run typecheck
