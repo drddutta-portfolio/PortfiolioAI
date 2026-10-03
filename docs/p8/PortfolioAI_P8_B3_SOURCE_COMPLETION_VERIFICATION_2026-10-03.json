@@ -1,0 +1,7 @@
+{
+  "exit_code": 1,
+  "result": null,
+  "status": "FAIL",
+  "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/PortfiolioAI/PortfiolioAI/scripts/p8/p8-b3-source-completion-audit.py\", line 239, in <module>\n    main()\n  File \"/home/runner/work/PortfiolioAI/PortfiolioAI/scripts/p8/p8-b3-source-completion-audit.py\", line 178, in main\n    b2=s3.get_object(Bucket=bucket,Key=b2key)[\"Body\"].read()\n       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/botocore/client.py\", line 602, in _api_call\n    return self._make_api_call(operation_name, kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/botocore/context.py\", line 123, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/botocore/client.py\", line 1078, in _make_api_call\n    raise error_class(parsed_response, operation_name)\nbotocore.errorfactory.NoSuchKey: An error occurred (NoSuchKey) when calling the GetObject operation: The specified key does not exist.\n",
+  "version": "P8_B3_SOURCE_COMPLETION_CI_AUDIT_V1"
+}
