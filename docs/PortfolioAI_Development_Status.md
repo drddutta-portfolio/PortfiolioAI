@@ -1,3 +1,38 @@
+## P8-B3 N0–N3 normalization canary — 3 October 2026
+
+**Status: COMPLETE / PASS WITH TEST-RUNNER OBSERVABILITY LIMITATION.**
+
+Owner-approved N0–N3 was executed Development-only and stopped before N4.
+
+- N0 preflight: source-completion audit PASS; R2 catalog still 1,854,978 raw rows / 744 partitions through 2026-09-30.
+- N1 deterministic normalization classifier implemented:
+  - `src/features/backtesting/p8CorporateActionNormalization.ts`
+- N2 explicit missing-price blocker classifier implemented:
+  - `src/features/backtesting/p8MissingPriceBlocker.ts`
+- N3 bounded canary persisted:
+  - 5 corporate-action normalizations
+  - 4 adjustment-factor rows
+  - 0 adjusted-series rows
+- READY normalizations: TCS dividend, FOCUS split, GENSOL bonus, GRASIM rights.
+- BLOCKED normalization: BOROLTD demerger.
+- READY factors:
+  - FOCUS split: share factor 5; price back-adjustment factor 0.2
+  - GENSOL bonus 2:1: share factor 3; price back-adjustment factor 0.333333333333333333333333333333
+- BLOCKED factors:
+  - GRASIM rights: deterministic rights-price treatment not owner-approved
+  - BOROLTD demerger: successor entitlement / valuation lineage not proven
+- Direct replay inserted **0 normalizations / 0 factors**, proving append/idempotency at this canary boundary.
+- No-action control identity retained 0 action observations / 0 normalizations / 0 factors.
+- Adjusted-series fail-closed R2 identity gate remains unchanged; adjusted-series rows remain 0.
+- Raw R2 catalog SHA remains `27c73dbf9d0e0b9ad9a0c2259d4375335278acc2af049e103f386c31ebd6352f`.
+- Canary fingerprint: `6ae872401c8b2cce3752354620614b6e8ac5060b298763f787bffd911a45b8bb`.
+- Formal direct-canary audit:
+  `docs/p8/PortfolioAI_P8_B3_N0_N3_DIRECT_CANARY_AUDIT_2026-10-03.json`.
+- GitHub Actions did not persist the focused Vitest run during this session, and the isolated runner had no network path to GitHub; this limitation is recorded explicitly rather than treated as a test PASS.
+- Production and `main`: unchanged.
+
+**Next gate:** N4–N6 full normalization / factor / adjusted-series materialization is **NOT AUTHORIZED** and requires owner approval. The R2-backed adjusted-series identity contract must be designed before N6 can write any adjusted-series row.
+
 ## P8-B3 raw source-acquisition completion verification — 3 October 2026
 
 **Status: SOURCE ACQUISITION / RAW HISTORY = COMPLETE / PASS. P8-B3 overall remains ACTIVE / NOT CLOSED.**
