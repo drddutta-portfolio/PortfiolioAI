@@ -86,8 +86,9 @@ export function projectHistoricalAliasesFromB2(
       throw new Error("listing observation requires symbol and company name")
     }
 
-    const byDate = byIdentityDate.get(row.historicalIdentityId) ?? new Map()
-    const rows = byDate.get(row.sourceDate) ?? []
+    const byDate = byIdentityDate.get(row.historicalIdentityId) ??
+      new Map<string, P8B2ListingObservationRow[]>()
+    const rows: P8B2ListingObservationRow[] = byDate.get(row.sourceDate) ?? []
     rows.push(row)
     byDate.set(row.sourceDate, rows)
     byIdentityDate.set(row.historicalIdentityId, byDate)
@@ -96,12 +97,13 @@ export function projectHistoricalAliasesFromB2(
   const result: P8HistoricalAlias[] = []
 
   for (const identity of identities) {
-    const byDate = byIdentityDate.get(identity.id) ?? new Map()
+    const byDate = byIdentityDate.get(identity.id) ??
+      new Map<string, P8B2ListingObservationRow[]>()
     const active = new Map<string, { startDate: string; row: P8B2ListingObservationRow }>()
 
     for (let dateIndex = 0; dateIndex < dates.length; dateIndex++) {
       const date = dates[dateIndex]!
-      const rows = byDate.get(date) ?? []
+      const rows: P8B2ListingObservationRow[] = byDate.get(date) ?? []
       const current = new Map(rows.map((row) => [aliasKey(row), row]))
 
       for (const [key, state] of active) {
