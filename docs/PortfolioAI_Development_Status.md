@@ -6271,3 +6271,114 @@ Final audit:
 - `docs/p8/PortfolioAI_P8_B4_5_DECISION_ELIGIBILITY_MATERIALIZATION_AUDIT_2026-10-03.json`
 
 B4-5 is frozen. B4-6 remains separately owner-gated.
+
+
+## P8-B4-6 final closure — 3 October 2026
+
+P8-B4-6 completed as the final P8-B4 idempotency, coverage, provider-accounting, security and storage closure audit.
+
+Final state:
+
+```text
+P8-B4 = COMPLETE / PASS / CLOSED
+B4-0 = COMPLETE / PASS
+B4-1 = COMPLETE / PASS / CLOSED
+B4-2 = COMPLETE / PASS / CLOSED
+B4-3 = COMPLETE / PASS / CLOSED
+B4-4 = COMPLETE / PASS / CLOSED
+B4-5 = COMPLETE / PASS / CLOSED
+B4-6 = COMPLETE / PASS / CLOSED
+P8-B5 = READY / NOT STARTED / NOT AUTHORIZED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Acquisition closure:
+
+```text
+exact-provider identities = 239
+identity/domain capture keys = 478
+raw capture rows = 478
+duplicate capture keys = 0
+raw capture fingerprint = 4c4930eba3c5eee8bfce99af0210673b9b27e666f2117b17cad4ea27a71fffcb
+provider units accounted today = 479
+```
+
+The one-unit difference between provider usage and useful captures is fully accounted for: one successful provider attempt was interrupted before durable capture during a worker resource-limit event and was later safely reacquired. No duplicate completed identity/domain capture remains.
+
+B4-4 run accounting, corrected during closure review:
+
+```text
+B4-4 runs = 23
+successful runs = 21
+worker-resource-limited runs = 2
+recorded B4-4 attempted calls = 473
+accepted B4-4 identities = 236
+B4-3 canary identities = 3
+total exact-provider identities = 239
+```
+
+Decision-date eligibility closure:
+
+```text
+historical identities = 4,524
+decision dates = 32
+identity/date pairs = 144,768
+evidence domains = 2
+eligibility rows = 289,536
+distinct logical keys = 289,536
+distinct fingerprints = 289,536
+selected evidence rows = 0
+explicit exclusion rows = 289,536
+null exclusions = 0
+aggregate fingerprint = 5ba943fa1ea2a2e94ead3f58065bc0a848c5a71a84275aa3192240993557e883
+replay = ZERO NEW ROWS
+```
+
+Frozen contract checks all passed:
+
+- unknown publication time treated as eligible = 0;
+- unknown source-availability time treated as eligible = 0;
+- provider retrieval/update time never substituted for publication time;
+- current-state fallback = none;
+- cross-security imputation = none;
+- invented publication timestamps = 0;
+- invented source-availability timestamps = 0;
+- replay duplicates = 0;
+- fingerprint drift = 0.
+
+Canonical preservation:
+
+```text
+fundamental_observations = 2,458 / unchanged
+research_documents = 140 / unchanged
+canonical fundamental promotion = NO
+canonical document promotion = NO
+```
+
+Security:
+
+```text
+B4-5 eligibility RLS = enabled
+anon SELECT/INSERT = denied
+authenticated SELECT/INSERT = denied
+historical-identity FK advisor = cleared
+```
+
+Storage at closure:
+
+```text
+B4 eligibility relation = 187 MB
+PortfolioAI Dev database = 322 MB
+free-plan threshold = 500 MB
+approximate remaining headroom = 178 MB
+```
+
+The B4 eligibility relation remains a significant storage item and must stay visible in later P8 storage planning.
+
+Final audit:
+
+- `docs/p8/PortfolioAI_P8_B4_6_FINAL_CLOSURE_AUDIT_2026-10-03.json`
+
+P8-B4 is frozen and closed. P8-B5 remains separately owner-gated.
