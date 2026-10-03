@@ -147,3 +147,72 @@ export function p8B4EvidenceSemanticKey(candidate: P8B4EvidenceCandidate): strin
 export function p8B4EvidenceFingerprint(candidate: P8B4EvidenceCandidate): string {
   return createHash("sha256").update(p8B4EvidenceSemanticKey(candidate)).digest("hex")
 }
+
+
+export type P8B4RevisionKind = "ORIGINAL" | "AMENDMENT" | "RESTATEMENT"
+
+export interface P8B4VersionedEvidence {
+  readonly evidenceId: string
+  readonly semanticSeriesKey: string
+  readonly revisionKind: P8B4RevisionKind
+  readonly supersedesEvidenceId: string | null
+  readonly publishedAt: string | null
+  readonly evidenceHash: string
+}
+
+export function validateP8B4VersionedEvidence(
+  candidate: P8B4VersionedEvidence,
+  priorById: ReadonlyMap<string, P8B4VersionedEvidence>,
+): P8B4VersionedEvidence {
+  if (!candidate.evidenceId || !candidate.semanticSeriesKey || !candidate.evidenceHash) {
+    throw new Error("P8-B4 versioned evidence is missing a stable identity, semantic series key, or hash.")
+  }
+
+  if (candidate.revisionKind === "ORIGINAL") {
+    if (candidate.supersedesEvidenceId !== null) {
+      throw new Error("P8-B4 ORIGINAL evidence cannot supersede another evidence item.")
+    }
+    return candidate
+  }
+
+  if (candidate.supersedesEvidenceId === null) {
+    throw new Error("P8-B4 amendment/restatement must explicitly link the superseded evidence item.")
+  }
+  if (candidate.supersedesEvidenceId === candidate.evidenceId) {
+    throw new Error("P8-B4 evidence cannot supersede itself.")
+  }
+
+  const prior = priorById.get(candidate.supersedesEvidenceId)
+  if (!prior) {
+    throw new Error("P8-B4 superseded evidence item is not present in the immutable history.")
+  }
+  if (prior.semanticSeriesKey !== candidate.semanticSeriesKey) {
+    throw new Error("P8-B4 revision cannot cross semantic evidence series.")
+  }
+
+  if (candidate.publishedAt !== null && prior.publishedAt !== null) {
+    const currentPublished = parseIso(candidate.publishedAt, "publishedAt")
+    const priorPublished = parseIso(prior.publishedAt, "prior publishedAt")
+    if (currentPublished < priorPublished) {
+      throw new Error("P8-B4 revision publication time cannot precede the evidence it supersedes.")
+    }
+  }
+
+  return candidate
+}
+
+export interface P8B4AppendDecision {
+  readonly disposition: "APPEND_NEW" | "IDEMPOTENT_EXISTING"
+  readonly existingEvidenceId: string | null
+}
+
+export function decideP8B4Append(
+  candidate: P8B4EvidenceCandidate,
+  existingByFingerprint: ReadonlyMap<string, string>,
+): P8B4AppendDecision {
+  const fingerprint = p8B4EvidenceFingerprint(candidate)
+  const existingEvidenceId = existingByFingerprint.get(fingerprint) ?? null
+  return existingEvidenceId
+    ? { disposition: "IDEMPOTENT_EXISTING", existingEvidenceId }
+    : { disposition: "APPEND_NEW", existingEvidenceId: null }
+}
