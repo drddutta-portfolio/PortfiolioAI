@@ -5509,3 +5509,62 @@ Artifacts:
 - `.github/workflows/p8-b3-n6r4-no-trade-staleness.yml`
 
 N6R-4 is frozen as analysis/policy evidence. Stop boundary remains before N6R-5.
+
+
+## P8-B3 N6R-5 V2 materialization — 3 October 2026
+
+N6R-5 completed successfully on Development using the strictest N6R-4 carry-forward candidate and localized fail-closed handling for raw economics conflicts.
+
+Final GitHub Actions run:
+
+`37112455074`
+
+Final state:
+
+```text
+N6R-5 = COMPLETE / PASS / CLOSED
+policy = STRICT_1_BENCHMARK_DAY
+V2 adjusted-series rows = 1,854,978
+V2 adjusted-series READY = 1,852,250
+V2 adjusted-series BLOCKED = 2,728
+raw economics conflict identity-date groups = 1,363
+V2 decision-ledger rows = 121,956
+V2 decision-ledger READY = 82,504
+V2 decision-ledger BLOCKED = 39,452
+strict 1-day carry-forward recoveries = 1,177
+remaining complex blockers = 76
+remaining no-trade blockers = 39,376
+```
+
+Raw economics conflict policy:
+
+- exact conflicting identity-date only is blocked;
+- no price row is selected from conflicting economics;
+- continuity restarts after that identity-date;
+- the rest of the identity history remains independently usable;
+- 67 of the remaining complex decision blockers are caused by these localized raw-price conflicts;
+- 20,711 of the original 20,787 complex blockers were recovered.
+
+Preservation gates:
+
+```text
+N6 V1 adjusted fingerprint = 7f7f14c7af972baa22e0363732a285df1e4f3e0631d8134ce665ac32397c8a76 / unchanged
+N6 V1 decision fingerprint = 9ec30b0c8ea30e5d8068be570a8b251964efc5ef725d795165666b5223b275ae / unchanged
+N6 V1 completion fingerprint = 59992c038e74f83ccb278dce0af73ed6cbd97ba2064c67cd724e0df531a4ca12 / unchanged
+silent imputation = NO
+corporate-action boundary crossing = NO
+Production = UNCHANGED
+main = UNCHANGED
+N6R-6 = NOT STARTED / NOT AUTHORIZED
+```
+
+Artifacts:
+
+- `scripts/p8/p8-b3-n6r5-v2-materialization.py`
+- `.github/workflows/p8-b3-n6r5-v2-materialization.yml`
+- `docs/p8/PortfolioAI_P8_B3_N6R5_V2_MATERIALIZATION_AUDIT_2026-10-03.json`
+- R2 `portfolioai-history/development/p8/b3/adjusted-series/v2/`
+- R2 `portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/`
+- R2 `portfolioai-history/development/p8/manifests/v2/N6R5_COMPLETE.json`
+
+N6R-5 is frozen. Stop boundary remains before N6R-6.
