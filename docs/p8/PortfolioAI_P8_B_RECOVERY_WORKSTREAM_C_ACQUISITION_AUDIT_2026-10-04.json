@@ -1,0 +1,5 @@
+{
+  "version": "P8_B_RECOVERY_WORKSTREAM_C_ACQUISITION_V1",
+  "status": "BLOCKED_FAIL_CLOSED",
+  "error": "ConnectionError:('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
+}
