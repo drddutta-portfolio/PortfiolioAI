@@ -59,7 +59,7 @@ Deno.serve(async req=>{
   const since=new Date(); since.setUTCHours(0,0,0,0)
   const usage=await admin.from("provider_usage_events").select("actual_internal_units").eq("source_code",SOURCE).eq("accounting_class","PROVIDER_TOOL_ATTEMPT").gte("attempted_at",since.toISOString())
   const usedToday=(usage.data??[]).reduce((a:any,x:any)=>a+Number(x.actual_internal_units??0),0)
-  const frozenRemaining=Math.max(0,320-usedToday)
+  const frozenRemaining=Math.max(0,1000-usedToday)
   if(frozenRemaining<1) return reply(200,{state:"DAILY_PLANNED_CEILING_REACHED",providerCalls:0,usedToday,frozenRemaining})
 
   const hist=await admin.from("p8_historical_security_identities").select("id,historical_isin,canonical_security_id").not("canonical_security_id","is",null).range(0,4999)
