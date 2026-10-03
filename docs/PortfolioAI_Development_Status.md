@@ -5727,3 +5727,76 @@ P8-C+ = NOT AUTHORIZED
 ```
 
 P8-B3 is frozen. Any future change to residual-blocker policy, staleness threshold, event policy, raw-conflict handling, V2 adjusted series or V2 decision ledger requires separate authorization and versioning.
+
+
+## P8-B4 start — point-in-time fundamentals and document history — 3 October 2026
+
+Owner authorized starting P8-B4 after P8-B3 closure.
+
+Current state:
+
+```text
+P8-B4 = ACTIVE
+B4-0 cache-first baseline = COMPLETE / PASS
+B4-1 repository point-in-time evidence contract = IMPLEMENTED
+B4 hosted schema migration = NOT APPLIED
+B4 provider acquisition = NOT EXECUTED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Read-only B4 entry findings on PortfolioAI Dev:
+
+```text
+historical identities = 4,524
+mapped to current canonical security_id = 262
+unmapped historical identities = 4,262
+
+fundamental_observations = 2,458 rows / 116 securities
+Trendlyne fundamental rows = 2,454 / 114 securities
+Trendlyne rows with published_at = 0
+historical identities with any current-table fundamentals = 114 / 4,524
+historical identities with publication-dated fundamentals = 1 / 4,524
+historical identities with >=8 distinct fundamental periods = 1 / 4,524
+
+research_documents = 140 / 112 securities
+historical identities with any documents = 111 / 4,524
+historical identities with publication-dated documents = 111 / 4,524
+historical identities with hashed canonical documents = 0 / 4,524
+```
+
+Architecture conclusion:
+
+- existing live/current `security_id`-keyed fundamental/document tables cannot serve as P8 historical truth;
+- B4 requires a separate append-only historical evidence layer keyed by `historical_identity_id` and exact historical ISIN;
+- current tables may only seed cache candidates when exact identity and timestamp provenance are proven;
+- unknown publication time is ineligible;
+- retrieval/provider update time never substitutes for publication time;
+- no present-day canonical-security mapping may be projected backward.
+
+Repository artifacts:
+
+- `docs/p8/PortfolioAI_P8_B4_POINT_IN_TIME_EVIDENCE_ENTRY_PLAN_2026-10-03.md`
+- `src/features/backtesting/p8B4HistoricalEvidenceContract.ts`
+- `src/features/backtesting/p8B4HistoricalEvidenceContract.test.ts`
+
+Implemented B4 contract controls:
+
+- exact historical identity + ISIN;
+- strict-before-decision publication/availability predicate;
+- equality at decision instant is ineligible;
+- unknown publication time fails closed;
+- unknown source availability time fails closed;
+- observed/retrieved timestamps are audit fields only and cannot substitute for source publication/availability;
+- deterministic evidence semantic key and SHA-256 fingerprint.
+
+```text
+provider calls during B4 entry = 0
+Supabase writes during B4 entry = 0
+R2 writes during B4 entry = 0
+Production changes = 0
+main changes = 0
+```
+
+Next B4 step: repository/local additive historical-evidence schema package plus B4-2 dry-run acquisition manifest. Hosted migration/application and provider acquisition remain separate auditable execution gates.
