@@ -1,0 +1,61 @@
+{
+  "summary": {
+    "audit_fingerprint_sha256": "1e6907769d1c0456e4a6b8ca245bb55c67951f318499160069a4497c8f8c13f8",
+    "authorization_basis": "Owner authorized N6R-5 completion on 2026-10-03; strictest N6R-4 candidate applied fail-closed.",
+    "catalog_sha256": "7d96881d958e61c0338ef6414ba30f75596f51e124c23451860302780dd4c182",
+    "completion_fingerprint_sha256": "cbacc9dc030e5c654bde0995d3e8490d7cba406475ec47ce7cfacd83a06fcc1f",
+    "completion_manifest_sha256": "f13e4ff6e3719df705b48ab403b2da6a3efd88562be26b57f2680394e673f4e8",
+    "created_objects": 0,
+    "environment": "PortfolioAI Dev",
+    "frozen_v1": {
+      "adjusted_fingerprint": "7f7f14c7af972baa22e0363732a285df1e4f3e0631d8134ce665ac32397c8a76",
+      "completion_fingerprint": "59992c038e74f83ccb278dce0af73ed6cbd97ba2064c67cd724e0df531a4ca12",
+      "decision_ledger_fingerprint": "9ec30b0c8ea30e5d8068be570a8b251964efc5ef725d795165666b5223b275ae",
+      "overwritten": false
+    },
+    "main_changes": 0,
+    "policy": "STRICT_1_BENCHMARK_DAY",
+    "policy_gates": {
+      "carry_forward_threshold_benchmark_days": 1,
+      "corporate_action_boundary_crossing": false,
+      "exact_identity_only": true,
+      "n6r6_started": false,
+      "raw_economics_conflict_policy": "BLOCK_IDENTITY_DATE_ONLY_AND_RESTART",
+      "silent_imputation": false,
+      "unique_economics_only": true
+    },
+    "production_changes": 0,
+    "raw_r2_catalog_mutated": false,
+    "status": "PASS",
+    "unchanged_objects": 1553,
+    "v2_adjusted_series": {
+      "aggregate_fingerprint_sha256": "118195d4f80b64b5eccd6891780567ae9ee06a950c8badf91f15213a0d9c2a82",
+      "blocked_rows": 2728,
+      "max_date": "2026-09-30",
+      "min_date": "2023-10-03",
+      "partition_count": 744,
+      "raw_conflict_identity_date_groups": 1363,
+      "raw_conflict_rows": 2728,
+      "ready_rows": 1852250,
+      "return_boundary_rows": 191,
+      "row_count": 1854978
+    },
+    "v2_decision_ledger": {
+      "aggregate_fingerprint_sha256": "7cfd268d0114501acc292fb06b5d73dd18ef5cfb724d306d00cda401be49e452",
+      "blocked_rows": 39452,
+      "blocker_counts": {
+        "COMPLEX_CORPORATE_ACTION_BLOCKER": 76,
+        "NO_TRADE_ON_DECISION_DATE": 39376
+      },
+      "carry_forward_recoveries": 1177,
+      "complex_local_conflict_pairs": 67,
+      "partition_count": 32,
+      "ready_rows": 82504,
+      "row_count": 121956,
+      "v1_complex_recovered": 20711,
+      "v1_complex_total": 20787,
+      "v1_ready_lost_to_local_conflict": 0
+    },
+    "version": "P8_B3_N6R5_V2_MATERIALIZATION_V1"
+  }
+}
