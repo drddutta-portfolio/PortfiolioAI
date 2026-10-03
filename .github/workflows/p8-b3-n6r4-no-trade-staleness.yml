@@ -1,0 +1,109 @@
+name: P8 B3 N6R4 No Trade Staleness
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - scripts/p8/p8-b3-n6r4-no-trade-staleness.py
+      - .github/workflows/p8-b3-n6r4-no-trade-staleness.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p8-b3-n6r4-no-trade-staleness-development
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Require Development bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$SUPABASE_DB_URL" in
+            *lrgpjimipfkyoqbpsqzz*) ;;
+            *) echo "Refusing non-Development DB" >&2; exit 1 ;;
+          esac
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            "boto3==1.40.46" \
+            "pyarrow==21.0.0" \
+            "psycopg[binary]==3.2.10"
+
+      - name: Run N6R4 staleness analysis
+        run: |
+          mkdir -p tmp/p8-b3-n6r4
+          python scripts/p8/p8-b3-n6r4-no-trade-staleness.py > tmp/p8-b3-n6r4/summary.json
+
+      - name: Verify N6R4 accounting
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          audit = json.load(open("docs/p8/PortfolioAI_P8_B3_N6R4_NO_TRADE_STALENESS_AUDIT_2026-10-03.json"))
+          s = audit["summary"]
+          m = Path("docs/p8/PortfolioAI_P8_B3_N6R4_NO_TRADE_STALENESS_MATRIX_2026-10-03.csv")
+          with m.open(newline="", encoding="utf-8") as f:
+              rows = sum(1 for _ in csv.DictReader(f))
+          dist_total = sum(s["staleness_distribution"].values())
+          primary_total = sum(s["primary_exclusion_reason_counts"].values())
+          checks = {
+              "status": s.get("status") == "PASS",
+              "matrix_rows_40553": rows == 40553,
+              "distribution_40553": dist_total == 40553,
+              "primary_accounting_40553": primary_total == 40553,
+              "v1_unchanged": s.get("n6_v1_unchanged") is True,
+              "raw_catalog_unchanged": s.get("raw_r2_catalog_unchanged") is True,
+              "no_threshold_selected": s.get("policy_evidence", {}).get("threshold_selected") is False,
+              "no_materialization": s.get("policy_evidence", {}).get("v2_decision_prices_materialized") is False,
+              "n6r5_not_started": s.get("n6r5_started") is False,
+              "prod_main_zero": s.get("production_changes") == 0 and s.get("main_changes") == 0,
+          }
+          if not all(checks.values()):
+              raise SystemExit(json.dumps(checks, indent=2))
+          Path("tmp/p8-b3-n6r4/checks.json").write_text(json.dumps(checks, indent=2) + "\n")
+          PY
+
+      - name: Commit N6R4 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/p8/PortfolioAI_P8_B3_N6R4_NO_TRADE_STALENESS_AUDIT_2026-10-03.json \
+            docs/p8/PortfolioAI_P8_B3_N6R4_NO_TRADE_STALENESS_MATRIX_2026-10-03.csv
+          git commit -m "audit(p8): record N6R4 no-trade staleness"
+          git push
+
+      - name: Upload N6R4 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b3-n6r4-no-trade-staleness
+          path: tmp/p8-b3-n6r4/*
+          if-no-files-found: warn
+          retention-days: 30
