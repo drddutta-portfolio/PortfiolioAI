@@ -6382,3 +6382,86 @@ Final audit:
 - `docs/p8/PortfolioAI_P8_B4_6_FINAL_CLOSURE_AUDIT_2026-10-03.json`
 
 P8-B4 is frozen and closed. P8-B5 remains separately owner-gated.
+
+
+## Post-B4 eligibility storage compaction — 3 October 2026
+
+Post-B4 Development storage remediation completed before P8-B5.
+
+Fresh full PortfolioAI Dev backup was created and verified through the existing GitHub workflow `Manual Supabase Database Backup`.
+
+Verified backup checkpoint:
+
+```text
+GitHub run = 37013039221
+Development backup job = 111224605687 / SUCCESS
+R2 bucket = portfolioai-history-dev
+R2 prefix = portfolioai-backups/development/database/manual/2026-10-03T14-42-12Z/
+encrypted backup size = 43,118,448 bytes
+encrypted SHA-256 = f1990ea4efc3f88566d28d413decbc3bb53f28bc54cdf2039bdf7b6d6f0bf9ec
+COMPLETE.json = present
+R2 read-back/decrypt/pg_restore validation = PASS
+```
+
+The previous 2 October backup prefix was manually deleted by the owner and independently verified empty:
+
+`portfolioai-backups/development/database/manual/2026-10-02T13-27-09Z/`
+
+Eligibility storage before remediation:
+
+```text
+PortfolioAI Dev DB = 322 MB
+p8_b4_decision_evidence_eligibility = 187 MB
+logical rows = 289,536
+aggregate fingerprint = 5ba943fa1ea2a2e94ead3f58065bc0a848c5a71a84275aa3192240993557e883
+```
+
+Compacted architecture:
+
+- physical storage: `public.p8_b4_decision_evidence_eligibility_compact`
+- public logical interface retained at original name:
+  `public.p8_b4_decision_evidence_eligibility`
+- compatibility object is a `security_invoker` view;
+- original `id` and `created_at` values preserved exactly;
+- row-level fingerprints preserved in 32-byte binary form;
+- repeated text/constant fields derived by the compatibility view;
+- `anon` and `authenticated` access remains denied.
+
+Exact equivalence verification before removal of the old expanded table:
+
+```text
+old minus compatibility = 0
+compatibility minus old = 0
+rows = 289,536
+distinct fingerprints = 289,536
+selected rows = 0
+null exclusions = 0
+aggregate fingerprint = 5ba943fa1ea2a2e94ead3f58065bc0a848c5a71a84275aa3192240993557e883
+```
+
+Final storage:
+
+```text
+compact eligibility relation = 46 MB
+PortfolioAI Dev DB = 181 MB
+reduction = 141 MB
+target < 200 MB = PASS
+approximate headroom to 500 MB = 319 MB
+```
+
+Canonical research state remained unchanged:
+
+```text
+fundamental_observations = 2,458
+research_documents = 140
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Final audit:
+
+- `docs/p8/PortfolioAI_P8_B4_ELIGIBILITY_STORAGE_COMPACTION_AUDIT_2026-10-03.json`
+
+P8-B4 remains COMPLETE / PASS / CLOSED.
+
+P8-B5 = READY / NOT STARTED / NOT AUTHORIZED.
