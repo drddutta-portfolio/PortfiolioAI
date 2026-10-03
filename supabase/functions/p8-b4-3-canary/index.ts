@@ -105,7 +105,7 @@ Deno.serve(async (req)=>{
   const prior=await admin.from("data_ingestion_runs")
     .select("id,status,attempted_call_count,error_summary,metadata")
     .eq("source_code",SOURCE_CODE).eq("operation",OPERATION)
-    .order("created_at",{ascending:false}).limit(1).maybeSingle()
+    .order("started_at",{ascending:false}).limit(1).maybeSingle()
   if(prior.error) return json(500,{error:"CANARY_PRIOR_RUN_CHECK_FAILED",providerCalls:0})
   if(prior.data) return json(200,{state:"IDEMPOTENT_EXISTING",providerCalls:0,run:prior.data})
 
