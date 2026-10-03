@@ -1,0 +1,203 @@
+{
+  "artifacts": {
+    "full_pair_manifest": {
+      "path": "ACTION_ARTIFACT/pair-census.csv",
+      "rows": 121956,
+      "sha256": "aa905b27161e1a9ab5bd6c6b100cc367bbfabc36736b8bf3210ed0fcaec98b79"
+    },
+    "identity_summary": {
+      "path": "docs/p8/PortfolioAI_P8_B_RECOVERY_METADATA_CENSUS_IDENTITY_SUMMARY_2026-10-03.csv",
+      "rows": 4524,
+      "sha256": "9a87228b6561561e534878006916dd250450c3eac8186c68929e8c46377bde37"
+    }
+  },
+  "branch": "PortfolioAI-Development",
+  "bse_fallback_required_pairs": 60231,
+  "bse_fallback_transport_state": "PENDING_FOR_EXACT_NSE_GAPS",
+  "decision_date_dispositions": {
+    "2024-02-29": {
+      "BSE_FALLBACK_REQUIRED": 1584,
+      "NSE_METADATA_CANDIDATE_READY": 1799,
+      "NSE_METADATA_PARTIAL": 2
+    },
+    "2024-03-28": {
+      "BSE_FALLBACK_REQUIRED": 1602,
+      "NSE_METADATA_CANDIDATE_READY": 1805,
+      "NSE_METADATA_PARTIAL": 2
+    },
+    "2024-04-30": {
+      "BSE_FALLBACK_REQUIRED": 1627,
+      "NSE_METADATA_CANDIDATE_READY": 1805,
+      "NSE_METADATA_PARTIAL": 2
+    },
+    "2024-05-31": {
+      "BSE_FALLBACK_REQUIRED": 1637,
+      "NSE_METADATA_CANDIDATE_READY": 1819,
+      "NSE_METADATA_PARTIAL": 2
+    },
+    "2024-06-28": {
+      "BSE_FALLBACK_REQUIRED": 1659,
+      "NSE_METADATA_CANDIDATE_READY": 1818,
+      "NSE_METADATA_PARTIAL": 2
+    },
+    "2024-07-31": {
+      "BSE_FALLBACK_REQUIRED": 1689,
+      "NSE_METADATA_CANDIDATE_READY": 1821,
+      "NSE_METADATA_PARTIAL": 1
+    },
+    "2024-08-30": {
+      "BSE_FALLBACK_REQUIRED": 1712,
+      "NSE_METADATA_CANDIDATE_READY": 1833,
+      "NSE_METADATA_PARTIAL": 1
+    },
+    "2024-09-30": {
+      "BSE_FALLBACK_REQUIRED": 1756,
+      "NSE_METADATA_CANDIDATE_READY": 1836,
+      "NSE_METADATA_PARTIAL": 2
+    },
+    "2024-10-31": {
+      "BSE_FALLBACK_REQUIRED": 1776,
+      "NSE_METADATA_CANDIDATE_READY": 1848,
+      "NSE_METADATA_PARTIAL": 2
+    },
+    "2024-11-29": {
+      "BSE_FALLBACK_REQUIRED": 1776,
+      "NSE_METADATA_CANDIDATE_READY": 1868,
+      "NSE_METADATA_PARTIAL": 1
+    },
+    "2024-12-31": {
+      "BSE_FALLBACK_REQUIRED": 1808,
+      "NSE_METADATA_CANDIDATE_READY": 1868,
+      "NSE_METADATA_PARTIAL": 1
+    },
+    "2025-01-31": {
+      "BSE_FALLBACK_REQUIRED": 1822,
+      "NSE_METADATA_CANDIDATE_READY": 1872,
+      "NSE_METADATA_PARTIAL": 1
+    },
+    "2025-02-28": {
+      "BSE_FALLBACK_REQUIRED": 1821,
+      "NSE_METADATA_CANDIDATE_READY": 1900
+    },
+    "2025-03-28": {
+      "BSE_FALLBACK_REQUIRED": 1829,
+      "NSE_METADATA_CANDIDATE_READY": 1903
+    },
+    "2025-04-30": {
+      "BSE_FALLBACK_REQUIRED": 1836,
+      "NSE_METADATA_CANDIDATE_READY": 1904
+    },
+    "2025-05-30": {
+      "BSE_FALLBACK_REQUIRED": 1844,
+      "NSE_METADATA_CANDIDATE_READY": 1909
+    },
+    "2025-06-30": {
+      "BSE_FALLBACK_REQUIRED": 1864,
+      "NSE_METADATA_CANDIDATE_READY": 1918
+    },
+    "2025-07-31": {
+      "BSE_FALLBACK_REQUIRED": 1889,
+      "NSE_METADATA_CANDIDATE_READY": 1925
+    },
+    "2025-08-29": {
+      "BSE_FALLBACK_REQUIRED": 1908,
+      "NSE_METADATA_CANDIDATE_READY": 1943
+    },
+    "2025-09-30": {
+      "BSE_FALLBACK_REQUIRED": 1942,
+      "NSE_METADATA_CANDIDATE_READY": 1952,
+      "NSE_METADATA_PARTIAL": 1
+    },
+    "2025-10-31": {
+      "BSE_FALLBACK_REQUIRED": 1946,
+      "NSE_METADATA_CANDIDATE_READY": 1975,
+      "NSE_METADATA_PARTIAL": 1
+    },
+    "2025-11-28": {
+      "BSE_FALLBACK_REQUIRED": 1952,
+      "NSE_METADATA_CANDIDATE_READY": 1993,
+      "NSE_METADATA_PARTIAL": 1
+    },
+    "2025-12-31": {
+      "BSE_FALLBACK_REQUIRED": 1975,
+      "NSE_METADATA_CANDIDATE_READY": 2000,
+      "NSE_METADATA_PARTIAL": 1
+    },
+    "2026-01-30": {
+      "BSE_FALLBACK_REQUIRED": 1986,
+      "NSE_METADATA_CANDIDATE_READY": 2004
+    },
+    "2026-02-27": {
+      "BSE_FALLBACK_REQUIRED": 1994,
+      "NSE_METADATA_CANDIDATE_READY": 2017
+    },
+    "2026-03-30": {
+      "BSE_FALLBACK_REQUIRED": 2005,
+      "NSE_METADATA_CANDIDATE_READY": 2025
+    },
+    "2026-04-30": {
+      "BSE_FALLBACK_REQUIRED": 2098,
+      "NSE_METADATA_CANDIDATE_READY": 2029
+    },
+    "2026-05-29": {
+      "BSE_FALLBACK_REQUIRED": 2098,
+      "NSE_METADATA_CANDIDATE_READY": 2041
+    },
+    "2026-06-30": {
+      "BSE_FALLBACK_REQUIRED": 2109,
+      "NSE_METADATA_CANDIDATE_READY": 2047
+    },
+    "2026-07-31": {
+      "BSE_FALLBACK_REQUIRED": 2126,
+      "NSE_METADATA_CANDIDATE_READY": 2056
+    },
+    "2026-08-31": {
+      "BSE_FALLBACK_REQUIRED": 2271,
+      "NSE_METADATA_CANDIDATE_READY": 2074
+    },
+    "2026-09-29": {
+      "BSE_FALLBACK_REQUIRED": 2290,
+      "NSE_METADATA_CANDIDATE_READY": 2095
+    }
+  },
+  "environment": "PortfolioAI Dev",
+  "exclusion_ceiling_state": "PENDING_OWNER_FREEZE",
+  "generated_at": "2026-10-03T17:43:57.108200+00:00",
+  "interpretation": [
+    "NSE metadata candidate readiness is a source-feasibility signal only; it does not mean B5/B6 evidence is materialized.",
+    "Every filing candidate uses exchange dissemination time strictly before the B2 decision.",
+    "Pairs with no relevant NSE filing metadata are routed to BSE fallback; they are not excluded.",
+    "No current canonical-security linkage is required to map NSE metadata because historical ISIN is the primary key.",
+    "The recovery exclusion ceiling remains pending explicit owner freeze."
+  ],
+  "nse_metadata": {
+    "raw_metadata_rows": 893028,
+    "relevant_filing_metadata_rows": 69582,
+    "relevant_rows_with_unusable_timestamp": 0,
+    "requests": 287,
+    "target_identity_metadata_rows": 743341,
+    "unique_relevant_rows": 69582
+  },
+  "pair_dispositions": {
+    "BSE_FALLBACK_REQUIRED": 60231,
+    "NSE_METADATA_CANDIDATE_READY": 61702,
+    "NSE_METADATA_PARTIAL": 23
+  },
+  "scope": {
+    "attachment_downloads": 0,
+    "b2_eligible_candidate_pairs": 121956,
+    "filing_csv_body_downloads": 0,
+    "full_audit_surface_pairs": 144768,
+    "historical_identities": 4524,
+    "hosted_b5_b6_mutations": 0,
+    "nse_metadata_requests": 287,
+    "pdf_downloads": 0,
+    "performance_outcome_reads": 0,
+    "provider_calls": 0,
+    "r2_writes": 0,
+    "supabase_writes": 0,
+    "xbrl_downloads": 0
+  },
+  "status": "PASS_NSE_CENSUS_BSE_FALLBACK_PENDING",
+  "version": "P8_B_RECOVERY_METADATA_CENSUS_V1"
+}
