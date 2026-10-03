@@ -323,6 +323,8 @@ def main():
     manifests=[]
     total=ready=blocked=0
     boundary_rows=0
+    conflict_groups=set()
+    conflict_row_count=0
     created=unchanged=0
 
     for d in dates:
@@ -331,7 +333,36 @@ def main():
         for ident in sorted(groups):
             group=sorted(groups[ident],key=lambda r:(r["trading_symbol"],r["series"],r["id"]))
             sig={(r["open"],r["high"],r["low"],r["close"]) for r in group}
-            if len(sig)!=1: raise RuntimeError(f"Conflicting raw economics {ident} {d}")
+            if len(sig)!=1:
+                conflict_groups.add((d,ident))
+                conflict_row_count+=len(group)
+                prev_close.pop(ident,None)
+                tri_state.pop(ident,None)
+                for raw in group:
+                    lineage={
+                      "n6r5Version":N6R5_VERSION,"policy":POLICY,
+                      "rawPartitionKey":raw_key(d),"rawPriceObservationId":raw["id"],"rawRowHash":raw["row_hash"],
+                      "localConflict":True,"conflictScope":"IDENTITY_DATE_ONLY",
+                      "segmentRestartAfterConflict":True
+                    }
+                    logical={
+                      "rawPriceObservationId":raw["id"],"historicalIdentityId":ident,"tradeDate":d,
+                      "version":V2_SERIES_VERSION,"seriesState":"BLOCKED",
+                      "blockerReason":"RAW_PRICE_ECONOMICS_CONFLICT","lineage":lineage
+                    }
+                    sh=sha_json(logical)
+                    rid=deterministic_uuid(f"P8_B3_SERIES_V2|{raw['id']}|{sh}")
+                    rows.append({
+                      "id":rid,"raw_price_observation_id":raw["id"],"historical_identity_id":ident,
+                      "trade_date":d,"trading_symbol":raw["trading_symbol"],"series":raw["series"],
+                      "adjustment_version":ADJUSTMENT_VERSION,"arithmetic_policy_version":ARITHMETIC_VERSION,
+                      "series_state":"BLOCKED","cumulative_price_factor":None,
+                      "adjusted_open":None,"adjusted_high":None,"adjusted_low":None,"adjusted_close":None,
+                      "daily_price_return":None,"daily_total_return":None,"total_return_index":None,
+                      "blocker_reason":"RAW_PRICE_ECONOMICS_CONFLICT","lineage_json":canonical(lineage),"series_hash":sh
+                    })
+                    blocked+=1
+                continue
 
             rep=group[0]
             price_boundary=d in set(price_boundaries.get(ident,[]))
@@ -405,15 +436,17 @@ def main():
         st,psha,psz=put_immutable(s3,bucket,v2_key(d),data,"application/vnd.apache.parquet")
         created+=st=="CREATED"; unchanged+=st=="UNCHANGED"
         fp=sha_json([[r["id"],r["series_hash"],r["series_state"]] for r in rows])
-        m={"version":V2_SERIES_VERSION,"trade_date":d,"row_count":len(rows),"ready_rows":len(rows),"blocked_rows":0,
+        m={"version":V2_SERIES_VERSION,"trade_date":d,"row_count":len(rows),
+           "ready_rows":sum(r["series_state"]=="READY" for r in rows),
+           "blocked_rows":sum(r["series_state"]=="BLOCKED" for r in rows),
            "parquet_sha256":psha,"parquet_bytes":psz,"normalized_fingerprint_sha256":fp,"policy":POLICY}
         md=(json.dumps(m,indent=2,sort_keys=True)+"\n").encode()
         st2,msha,_=put_immutable(s3,bucket,v2_manifest_key(d),md,"application/json")
         created+=st2=="CREATED"; unchanged+=st2=="UNCHANGED"
         m["manifest_sha256"]=msha; manifests.append(m); total+=len(rows)
 
-    if total!=EXPECTED_ROWS or ready!=EXPECTED_ROWS or blocked!=0:
-        raise RuntimeError(f"V2 series accounting {total}/{ready}/{blocked}")
+    if total!=EXPECTED_ROWS or ready+blocked!=EXPECTED_ROWS or blocked!=conflict_row_count:
+        raise RuntimeError(f"V2 series accounting {total}/{ready}/{blocked}/{conflict_row_count}")
 
     # Build V2 decision ledger by exact transformation of frozen V1 ledger.
     decision_dates=[]
@@ -428,6 +461,10 @@ def main():
     ledger_manifests=[]
     ledger_total=ledger_ready=ledger_blocked=cf_used=0
     blockers=Counter()
+    v1_ready_lost_to_local_conflict=0
+    v1_complex_total=0
+    v1_complex_recovered=0
+    conflict_complex_pairs=0
 
     for d in decision_dates:
         v1t=table(read_obj(s3,bucket,v1_ledger_key(d)))
@@ -440,16 +477,25 @@ def main():
             selected=None; cf_date=None; source="EXACT_DECISION_DATE"
 
             if state=="READY":
-                selected=unique_ready(exact_cache.get(ident,[]))
-                if selected is None: raise RuntimeError(f"V1 READY lacks V2 exact row {d} {ident}")
-                new_state="READY"; new_reason=None
+                if (d,ident) in conflict_groups:
+                    new_state="BLOCKED"; new_reason="RAW_PRICE_ECONOMICS_CONFLICT"
+                    v1_ready_lost_to_local_conflict+=1
+                else:
+                    selected=unique_ready(exact_cache.get(ident,[]))
+                    if selected is None: raise RuntimeError(f"V1 READY lacks V2 exact row {d} {ident}")
+                    new_state="READY"; new_reason=None
             elif reason=="COMPLEX_CORPORATE_ACTION_BLOCKER":
-                if d in set(total_boundaries.get(ident,[])):
+                v1_complex_total+=1
+                event_boundary=d in set(total_boundaries.get(ident,[]))
+                local_conflict=(d,ident) in conflict_groups
+                if event_boundary or local_conflict:
                     new_state="BLOCKED"; new_reason="COMPLEX_CORPORATE_ACTION_BLOCKER"
+                    if local_conflict: conflict_complex_pairs+=1
                 else:
                     selected=unique_ready(exact_cache.get(ident,[]))
                     if selected is None: raise RuntimeError(f"Recoverable complex lacks exact V2 row {d} {ident}")
                     new_state="READY"; new_reason=None
+                    v1_complex_recovered+=1
             elif reason=="NO_TRADE_ON_DECISION_DATE":
                 cf_date=carry_forward.get((d,ident))
                 if cf_date:
@@ -503,11 +549,14 @@ def main():
         created+=st2=="CREATED"; unchanged+=st2=="UNCHANGED"
         m["manifest_sha256"]=msha; ledger_manifests.append(m); ledger_total+=len(out)
 
-    if ledger_total!=EXPECTED_LEDGER or ledger_ready!=EXPECTED_READY or ledger_blocked!=EXPECTED_BLOCKED:
+    if ledger_total!=EXPECTED_LEDGER or ledger_ready+ledger_blocked!=EXPECTED_LEDGER:
         raise RuntimeError(f"V2 ledger accounting {ledger_total}/{ledger_ready}/{ledger_blocked}")
     if cf_used!=EXPECTED_CF: raise RuntimeError(f"Carry-forward count {cf_used}")
-    if blockers["COMPLEX_CORPORATE_ACTION_BLOCKER"]!=EXPECTED_COMPLEX: raise RuntimeError(f"Complex blockers {blockers}")
     if blockers["NO_TRADE_ON_DECISION_DATE"]!=EXPECTED_NO_TRADE: raise RuntimeError(f"No-trade blockers {blockers}")
+    if v1_complex_total!=20787: raise RuntimeError(f"V1 complex census drift {v1_complex_total}")
+    expected_ready=60616-v1_ready_lost_to_local_conflict+v1_complex_recovered+cf_used
+    if ledger_ready!=expected_ready:
+        raise RuntimeError(f"Ledger readiness algebra drift {ledger_ready} != {expected_ready}")
 
     adj_fp=sha_json([[m["trade_date"],m["row_count"],m["normalized_fingerprint_sha256"],m["parquet_sha256"]] for m in manifests])
     ledger_fp=sha_json([[m["decision_date"],m["row_count"],m["normalized_fingerprint_sha256"],m["parquet_sha256"]] for m in ledger_manifests])
@@ -516,13 +565,20 @@ def main():
       "version":N6R5_VERSION,"status":"PASS","environment":"PortfolioAI Dev","policy":POLICY,
       "authorization_basis":"Owner authorized N6R-5 completion on 2026-10-03; strictest N6R-4 candidate applied fail-closed.",
       "frozen_v1":{"adjusted_fingerprint":EXPECTED_V1_ADJ_FP,"decision_ledger_fingerprint":EXPECTED_V1_LEDGER_FP,"completion_fingerprint":EXPECTED_V1_COMPLETE_FP,"overwritten":False},
-      "v2_adjusted_series":{"row_count":total,"ready_rows":ready,"blocked_rows":0,"partition_count":len(manifests),
-        "min_date":dates[0],"max_date":dates[-1],"return_boundary_rows":boundary_rows,"aggregate_fingerprint_sha256":adj_fp},
+      "v2_adjusted_series":{"row_count":total,"ready_rows":ready,"blocked_rows":blocked,"partition_count":len(manifests),
+        "min_date":dates[0],"max_date":dates[-1],"return_boundary_rows":boundary_rows,
+        "raw_conflict_identity_date_groups":len(conflict_groups),"raw_conflict_rows":conflict_row_count,
+        "aggregate_fingerprint_sha256":adj_fp},
       "v2_decision_ledger":{"row_count":ledger_total,"ready_rows":ledger_ready,"blocked_rows":ledger_blocked,
         "carry_forward_recoveries":cf_used,"blocker_counts":dict(sorted(blockers.items())),
+        "v1_complex_total":v1_complex_total,"v1_complex_recovered":v1_complex_recovered,
+        "complex_local_conflict_pairs":conflict_complex_pairs,
+        "v1_ready_lost_to_local_conflict":v1_ready_lost_to_local_conflict,
         "partition_count":len(ledger_manifests),"aggregate_fingerprint_sha256":ledger_fp},
       "policy_gates":{"carry_forward_threshold_benchmark_days":1,"exact_identity_only":True,"unique_economics_only":True,
-        "corporate_action_boundary_crossing":False,"silent_imputation":False,"n6r6_started":False},
+        "corporate_action_boundary_crossing":False,"silent_imputation":False,
+        "raw_economics_conflict_policy":"BLOCK_IDENTITY_DATE_ONLY_AND_RESTART",
+        "n6r6_started":False},
       "raw_r2_catalog_mutated":False,"production_changes":0,"main_changes":0
     }
     completion["completion_fingerprint_sha256"]=sha_json(completion)
@@ -537,7 +593,7 @@ def main():
     v1_led_before=sha_json(catalog["datasets"]["b3_adjusted_decision_ledger"])
     new=json.loads(json.dumps(catalog))
     new["datasets"]["b3_adjusted_series_v2"]={
-      "version":V2_SERIES_VERSION,"row_count":total,"ready_rows":ready,"blocked_rows":0,
+      "version":V2_SERIES_VERSION,"row_count":total,"ready_rows":ready,"blocked_rows":blocked,
       "partition_count":len(manifests),"min_date":dates[0],"max_date":dates[-1],
       "aggregate_fingerprint_sha256":adj_fp,"completion_manifest_key":V2_COMPLETE,"completion_manifest_sha256":csha,
       "policy":POLICY
