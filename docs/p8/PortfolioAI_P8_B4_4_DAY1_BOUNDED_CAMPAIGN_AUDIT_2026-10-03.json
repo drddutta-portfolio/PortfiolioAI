@@ -1,0 +1,49 @@
+{
+  "version": "P8_B4_4_DAY1_BOUNDED_CAMPAIGN_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "status": "PASS_DAY1_PARTIAL_OVERALL",
+  "exact_provider_identities_total": 239,
+  "complete_identities": 160,
+  "remaining_identities": 79,
+  "minimum_remaining_planned_attempts": 158,
+  "provider_usage_today": {
+    "b4_3_canary_calls": 6,
+    "b4_4_calls": 314,
+    "total_trendlyne_units": 320,
+    "frozen_daily_planned_ceiling": 320,
+    "ceiling_exhausted": true
+  },
+  "b4_4_runs": {
+    "total": 15,
+    "succeeded": 14,
+    "failed": 1,
+    "failed_reason": "WORKER_RESOURCE_LIMIT",
+    "failed_run_reconciled": true,
+    "failed_run_completed_identities_retained": 19,
+    "failed_run_partial_identity": "HINDALCO",
+    "failed_run_consumed_units": 39,
+    "failed_run_released_units": 1
+  },
+  "captures": {
+    "b4_4_raw_capture_rows": 314,
+    "complete_identity_pairs_including_b4_3": 160,
+    "fund_only": 0,
+    "doc_only": 0
+  },
+  "controls": {
+    "canonical_promotion_performed": false,
+    "b4_schema_writes": 0,
+    "r2_writes": 0,
+    "production_changes": 0,
+    "main_changes": 0,
+    "retry_diagnostic_reserve_used_for_planned_expansion": false
+  },
+  "gate": {
+    "b4_4_day1_complete": true,
+    "b4_4_overall_complete": false,
+    "reason": "Frozen daily planned Trendlyne ceiling exhausted; 79 identities / minimum 158 planned attempts remain for the next provider day.",
+    "b4_5_authorized": false
+  }
+}
