@@ -6689,3 +6689,135 @@ Final audit:
 - `docs/p8/PortfolioAI_P8_B6_CANONICAL_HISTORICAL_SNAPSHOT_AUDIT_2026-10-03.json`
 
 No provider calls, Production changes, main changes, P8-B-FINAL work, or P8-C work occurred.
+
+
+## P8-B-FINAL data-foundation closure audit — 3 October 2026
+
+P8-B-FINAL completed against the frozen Codex plan and the frozen experiment contract `P8_EXPERIMENT_BIAS_CONTROL_V1`.
+
+Final state:
+
+```text
+P8-B2 = COMPLETE / PASS / CLOSED
+P8-B3 = COMPLETE / PASS / CLOSED
+P8-B4 = COMPLETE / PASS / CLOSED
+P8-B5 = COMPLETE / PASS / CLOSED
+P8-B6 = COMPLETE / PASS / CLOSED
+P8-B-FINAL = COMPLETE / BLOCKED / CLOSED
+P8-B = BLOCKED — DATA FOUNDATION INSUFFICIENT FOR FROZEN EXPERIMENT
+P8-C = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Codex B-FINAL PASS-condition audit:
+
+```text
+minimum approved decision dates = PASS
+  proven = 32
+  minimum = 24
+
+historical universe survivor-free = PASS
+  authority = P8-B2 closure
+
+adjustment + benchmark contracts = PASS
+  authority = P8-B3 closure
+  NIFTY 500 TRI trading dates = 744
+
+point-in-time evidence + version lineage complete enough = FAIL
+
+explicit gaps within usable exclusion boundary = FAIL
+  canonical exclusions = 144,768 / 144,768 = 100%
+
+holdout untouched = PASS
+  P8-C objects = 0
+  replay/performance results = 0
+
+owner transition to P8-C = NOT ELIGIBLE
+```
+
+B4 domain coverage:
+
+```text
+FUNDAMENTAL rows = 144,768
+selected = 0
+excluded = 144,768
+
+DOCUMENT rows = 144,768
+selected = 0
+excluded = 144,768
+```
+
+B5 historical-path coverage:
+
+```text
+rows = 144,768
+resolved full paths = 0
+blocked paths = 144,768
+```
+
+B6 canonical coverage:
+
+```text
+canonical snapshots = 144,768
+replay-ready = 0
+excluded = 144,768
+distinct keys = 144,768
+distinct fingerprints = 144,768
+future source-cutoff violations = 0
+aggregate fingerprint = 3dcce751ab82f2e8a80fcb265db2b79d5a93567cea911f0b749b295860fcf4a1
+```
+
+Final blocker census:
+
+```text
+B5_NO_CANONICAL_LINK = 136,384
+B5_NO_CLASSIFICATION_EVIDENCE_BEFORE_DECISION = 8,145
+B5_CLASSIFICATION_VALIDITY_UNPROVEN = 239
+```
+
+Security-pattern matrix:
+
+```text
+4,262 identities:
+  32/32 dates blocked by NO_CANONICAL_LINK
+
+239 identities:
+  31/32 dates blocked by NO_CLASSIFICATION_EVIDENCE_BEFORE_DECISION
+  final date blocked by CLASSIFICATION_VALIDITY_UNPROVEN
+
+23 identities:
+  32/32 dates blocked by NO_CLASSIFICATION_EVIDENCE_BEFORE_DECISION
+
+identities with >=1 replay-ready date = 0
+```
+
+Determinism and no-look-ahead remain PASS:
+
+- B4 replay idempotent;
+- B5 source replay = 144,768 rows, zero differences;
+- B6 source replay = 144,768 rows, zero fingerprint mismatches;
+- no future source cutoff;
+- no current-state fallback;
+- no cross-security imputation;
+- no contract relaxation.
+
+Holdout remains untouched. No P8-C/replay-performance database object exists and no performance result has been generated.
+
+Current storage:
+
+```text
+PortfolioAI Dev DB = 188 MB
+Supabase threshold = 500 MB
+approximate headroom = 312 MB
+```
+
+Coverage matrices:
+
+- `docs/p8/PortfolioAI_P8_B_FINAL_COVERAGE_MATRICES_2026-10-03.md`
+
+Final audit:
+
+- `docs/p8/PortfolioAI_P8_B_FINAL_DATA_FOUNDATION_CLOSURE_AUDIT_2026-10-03.json`
+
+The frozen experiment contract has NOT been weakened. Under the Codex instruction, B-FINAL closes BLOCKED because zero canonical snapshots are replay-ready. P8-C remains prohibited until a separately authorized remediation produces sufficient point-in-time classification/methodology/evidence coverage and B6/B-FINAL are re-executed.
