@@ -1,0 +1,102 @@
+name: P8 B3 N6R3 Event Local Policy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - scripts/p8/p8-b3-n6r3-event-local-policy.py
+      - .github/workflows/p8-b3-n6r3-event-local-policy.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p8-b3-n6r3-event-local-policy-development
+  cancel-in-progress: false
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Require Development bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$SUPABASE_DB_URL" in
+            *lrgpjimipfkyoqbpsqzz*) ;;
+            *) echo "Refusing non-Development DB" >&2; exit 1 ;;
+          esac
+          test "$CLOUDFLARE_R2_BUCKET" = "portfolioai-history-dev"
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            "boto3==1.40.46" \
+            "pyarrow==21.0.0" \
+            "psycopg[binary]==3.2.10"
+
+      - name: Run N6R3 policy simulation
+        run: |
+          mkdir -p tmp/p8-b3-n6r3
+          python scripts/p8/p8-b3-n6r3-event-local-policy.py > tmp/p8-b3-n6r3/summary.json
+
+      - name: Verify and commit N6R3 audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.load(open("docs/p8/PortfolioAI_P8_B3_N6R3_EVENT_LOCAL_POLICY_AUDIT_2026-10-03.json"))
+          s=p["summary"]
+          d=s["daily_rows"]
+          l=s["decision_ledger"]
+          checks={
+            "status":s.get("status")=="PASS",
+            "v1_total":d.get("v1_total")==1854978,
+            "v1_blocked":d.get("v1_blocked")==458982,
+            "decision_v1_complex":l.get("v1_complex_blocked")==20787,
+            "decision_v1_no_trade":l.get("v1_no_trade_blocked")==40553,
+            "accounted_decisions":l.get("projected_ready",0)+l.get("projected_complex_blocked",0)+l.get("projected_no_trade_blocked",0)==121956,
+            "v1_unchanged":s.get("n6_v1_unchanged") is True,
+            "n6r4_not_started":s.get("n6r4_started") is False,
+            "v2_not_started":s.get("n6r5_v2_materialization_started") is False,
+            "prod_main_zero":s.get("production_changes")==0 and s.get("main_changes")==0,
+          }
+          if not all(checks.values()):
+            raise SystemExit(json.dumps(checks,indent=2))
+          Path("tmp/p8-b3-n6r3/checks.json").write_text(json.dumps(checks,indent=2)+"\n")
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/p8/PortfolioAI_P8_B3_N6R3_EVENT_LOCAL_POLICY_AUDIT_2026-10-03.json \
+            docs/p8/PortfolioAI_P8_B3_N6R3_EVENT_BOUNDARY_MATRIX_2026-10-03.csv
+          git commit -m "audit(p8): record N6R3 event-local policy"
+          git push
+
+      - name: Upload N6R3 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p8-b3-n6r3-event-local-policy
+          path: tmp/p8-b3-n6r3/*
+          if-no-files-found: warn
+          retention-days: 30
