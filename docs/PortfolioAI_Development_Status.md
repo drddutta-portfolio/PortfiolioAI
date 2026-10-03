@@ -5881,3 +5881,107 @@ main changes = 0
 ```
 
 B4-1 is frozen. The next stage is B4-2 dry-run acquisition manifest only.
+
+
+## P8-B4-2 dry-run acquisition manifest closure — 3 October 2026
+
+P8-B4-2 completed as a strict read-only dry-run acquisition manifest.
+
+Final state:
+
+```text
+P8-B4 = ACTIVE
+B4-0 = COMPLETE / PASS
+B4-1 = COMPLETE / PASS / CLOSED
+B4-2 = COMPLETE / PASS / CLOSED
+B4-3 = READY / NOT STARTED
+hosted B4 schema migration = NOT APPLIED / NOT AUTHORIZED
+provider acquisition = NOT EXECUTED
+P8-C+ = NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Manifest:
+
+- `docs/p8/PortfolioAI_P8_B4_2_DRY_RUN_ACQUISITION_MANIFEST_2026-10-03.csv`
+- rows = 4,524
+- unique historical identities = 4,524
+- SHA-256 = `239e348709b2161cd859bf51d32d80dde51f1a6331b0ea2ecee56295dd3e8bea`
+
+Provider identity readiness:
+
+```text
+exact Trendlyne provider ID + matching historical ISIN = 239
+no current canonical link = 4,262
+current canonical link but no exact Trendlyne provider identity = 23
+blocked exact-provider-identity total = 4,285
+provider ISIN mismatches = 0
+```
+
+Cache state inside the exact 239-identity cohort:
+
+```text
+fundamentals:
+  cache absent = 125
+  cache present but publication time unknown = 113
+  publication-dated cache present = 1
+  >=8 periods = 1
+
+documents:
+  cache absent = 128
+  publication-dated metadata present = 111
+  hashed canonical documents = 0
+```
+
+Dry-run call model:
+
+```text
+method = lower-bound one provider attempt per incomplete domain per exact identity
+minimum planned Trendlyne attempts = 478
+planned daily ceiling = 320
+retry/diagnostic reserve = 80
+minimum full-campaign days if later authorized = 2
+```
+
+The 478 figure is a lower bound only. Actual execution can be higher because historical period depth, official publication-time remediation, source-specific document retrieval and retries are not collapsed into the dry-run estimate.
+
+Dry-run dispositions:
+
+```text
+CANARY_ELIGIBLE_CACHE_FIRST = 239
+BLOCKED_EXACT_PROVIDER_IDENTITY = 4,285
+```
+
+Fail-closed rules:
+
+- only exact Trendlyne provider ID plus matching historical ISIN may enter a future provider canary;
+- current canonical linkage alone does not authorize provider execution;
+- existing Trendlyne fundamentals with unknown `published_at` remain ineligible for historical replay;
+- publication metadata without durable document content hash is not treated as complete historical document authority;
+- unresolved identities remain deterministic exclusions until separately remediated.
+
+Verification:
+
+- GitHub Actions run `37119334491`
+- job `111192235373`
+- manifest accounting = PASS
+- uniqueness = PASS
+- provider/hosted mutation guard = PASS
+
+Audit:
+
+- `docs/p8/PortfolioAI_P8_B4_2_DRY_RUN_ACQUISITION_AUDIT_2026-10-03.json`
+
+Mutation report:
+
+```text
+provider calls = 0
+Supabase writes = 0
+R2 writes = 0
+hosted migrations = 0
+Production changes = 0
+main changes = 0
+```
+
+B4-2 is frozen. The next stage is B4-3 canary acquisition campaign, which requires separate authorization before any provider call or hosted persistence.
