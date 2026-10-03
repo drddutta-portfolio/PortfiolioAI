@@ -5425,3 +5425,87 @@ Artifacts:
 - `docs/p8/PortfolioAI_P8_B3_N6R3_EVENT_BOUNDARY_MATRIX_2026-10-03.csv`
 
 N6R-3 is COMPLETE / PASS / CLOSED. N6R-4 is authorized as analysis/policy-evidence only.
+
+## P8-B3 N6R-4 no-trade-on-decision-date staleness analysis — 3 October 2026
+
+N6R-4 completed the analysis-only census of all frozen N6 V1 `NO_TRADE_ON_DECISION_DATE` decision pairs using the exact immutable R2 raw-price history for the same `historical_identity_id`.
+
+Final state:
+
+```text
+N6R-4 = COMPLETE / PASS / CLOSED
+NO_TRADE_ON_DECISION_DATE pairs = 40,553
+benchmark trading dates scanned = 744
+R2 raw-price partitions scanned = 744
+decision-ledger partitions = 32
+exact target identities = 1,749
+```
+
+Exact staleness distribution:
+
+```text
+1 previous benchmark trading day = 1,177
+2 benchmark trading days = 489
+3 benchmark trading days = 417
+4–5 benchmark trading days = 516
+6–10 benchmark trading days = 247
+>10 benchmark trading days = 3,353
+no prior valid raw price = 34,354
+TOTAL = 40,553
+```
+
+After applying the non-threshold fail-closed gates, 6,197 pairs are eligible for owner threshold review.
+
+Candidate cumulative recoverable counts:
+
+```text
+<=1 benchmark trading day = 1,177
+<=2 benchmark trading days = 1,666
+<=3 benchmark trading days = 2,083
+<=5 benchmark trading days = 2,597
+<=10 benchmark trading days = 2,844
+```
+
+Primary exclusion accounting:
+
+```text
+NO_PRIOR_PRICE = 34,354
+CORPORATE_ACTION_BOUNDARY = 2
+ELIGIBLE_FOR_THRESHOLD_REVIEW = 6,197
+TOTAL = 40,553
+```
+
+No identity-ambiguity exclusion and no conflicting-economics exclusion were observed in the final row-level census. The two pairs with an intervening corporate-action boundary remain fail-closed irrespective of staleness.
+
+No carry-forward threshold has been selected or authorized. The audit records these owner-review policy candidates only:
+
+- strict: <=1 benchmark trading day;
+- conservative: <=2 benchmark trading days;
+- research: <=3 benchmark trading days;
+- <=5 and <=10 benchmark trading days remain diagnostic comparison candidates only.
+
+Preservation gates:
+
+```text
+silent carry-forward = NO
+V2 decision-price materialization = NO
+N6 V1 mutation = NO
+raw R2 catalog mutation = NO
+N6R-5 = NOT STARTED / NOT AUTHORIZED
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Evidence commit produced by GitHub Actions:
+
+`52ffdd89ec758cf4b3bb7ce4c8c272ff335f626e`
+
+Artifacts:
+
+- `docs/p8/PortfolioAI_P8_B3_N6R4_NO_TRADE_STALENESS_AUDIT_2026-10-03.json`
+- `docs/p8/PortfolioAI_P8_B3_N6R4_NO_TRADE_STALENESS_MATRIX_2026-10-03.csv`
+- `docs/p8/PortfolioAI_P8_B3_N6R4_RUN_STATE_2026-10-03.json`
+- `scripts/p8/p8-b3-n6r4-no-trade-staleness.py`
+- `.github/workflows/p8-b3-n6r4-no-trade-staleness.yml`
+
+N6R-4 is frozen as analysis/policy evidence. Stop boundary remains before N6R-5.
