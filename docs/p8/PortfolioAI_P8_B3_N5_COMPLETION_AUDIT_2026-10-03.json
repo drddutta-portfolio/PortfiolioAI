@@ -1,0 +1,90 @@
+{
+  "version": "P8_B3_N5_COMPLETION_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "stage": "P8-B3",
+  "substage": "N5 Adjustment-factor materialization",
+  "status": "PASS",
+  "repository_head_before_audit": "7615453a1fc7022032d97c262bd2d759a3690893",
+  "normalization_version": "P8_B3_NORMALIZATION_V1",
+  "adjustment_version": "P8_B3_ADJUSTMENT_V2",
+  "arithmetic_policy_version": "P8_B3_ARITHMETIC_V1",
+  "source_campaign_id": "P8_B3_FULL_SOURCE_ACQUISITION_20261001_V1",
+  "coverage": {
+    "ready_normalizations": 4982,
+    "ready_without_factor": 0,
+    "factor_rows_total": 4983,
+    "distinct_normalizations_with_factor": 4983,
+    "duplicate_factor_rows": 0,
+    "ready_factors": 4562,
+    "blocked_factors": 421,
+    "invalid_factor_states": 0,
+    "factors_linked_to_blocked_normalizations": 1
+  },
+  "factor_breakdown": {
+    "BONUS": {
+      "normalizations": 139,
+      "ready_factors": 139,
+      "blocked_factors": 0,
+      "missing_factors": 0
+    },
+    "CASH_DIVIDEND": {
+      "normalizations": 4671,
+      "ready_factors": 4385,
+      "blocked_factors": 286,
+      "missing_factors": 0
+    },
+    "RIGHTS": {
+      "normalizations": 134,
+      "ready_factors": 0,
+      "blocked_factors": 134,
+      "missing_factors": 0
+    },
+    "SPLIT": {
+      "normalizations": 38,
+      "ready_factors": 38,
+      "blocked_factors": 0,
+      "missing_factors": 0
+    },
+    "DEMERGER_CANARY": {
+      "normalizations": 0,
+      "ready_factors": 0,
+      "blocked_factors": 1,
+      "missing_factors": 0
+    }
+  },
+  "blocker_reasons": {
+    "DIVIDEND: exact historical-identity-bound previous/ex-date R2 price pair unavailable": 285,
+    "DIVIDEND: effective date is not a proven raw-price trading date": 1,
+    "RIGHTS: subscription terms are normalized, but deterministic rights-price treatment is not owner-approved": 134,
+    "DEMERGER: successor entitlement and valuation lineage not proven": 1
+  },
+  "integrity_checks": {
+    "split_ready_missing_math": 0,
+    "bonus_ready_missing_math": 0,
+    "dividend_ready_missing_math": 0,
+    "blocked_with_forbidden_factor_math": 0,
+    "invalid_hash_rows": 0,
+    "missing_calculation_inputs": 0,
+    "missing_effective_date": 0
+  },
+  "raw_r2_catalog": {
+    "rows": 1854978,
+    "partitions": 744,
+    "last_append_date": "2026-09-30",
+    "sha256": "27c73dbf9d0e0b9ad9a0c2259d4375335278acc2af049e103f386c31ebd6352f",
+    "unchanged_from_n3": true
+  },
+  "n6": {
+    "adjusted_series_rows": 0,
+    "started": false,
+    "status": "NOT STARTED"
+  },
+  "scope_guards": {
+    "production_changes": 0,
+    "main_changes": 0,
+    "p8_b4_started": false,
+    "p8_c_started": false
+  },
+  "conclusion": "N5 is COMPLETE / PASS. Every READY normalization has exactly one N5 factor row. Unsupported or insufficiently evidenced economics are represented as explicit BLOCKED factor states. N6 remains untouched."
+}
