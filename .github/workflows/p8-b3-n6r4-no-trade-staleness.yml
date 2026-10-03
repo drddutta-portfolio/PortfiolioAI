@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: p8-b3-n6r4-no-trade-staleness-development
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   analyze:
