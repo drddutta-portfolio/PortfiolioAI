@@ -35,7 +35,7 @@ jobs:
 
       - name: B4-1 contract compile check
         run: |
-          npx tsc --noEmit --target ES2022 --module NodeNext --moduleResolution NodeNext \
+          npx tsc --ignoreConfig --noEmit --target ES2022 --module NodeNext --moduleResolution NodeNext \
             --types node src/features/backtesting/p8B4HistoricalEvidenceContract.ts
 
       - name: Architecture check
