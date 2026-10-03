@@ -113,3 +113,91 @@ describe("P8-B4 point-in-time eligibility", () => {
     expect(p8B4EvidenceFingerprint(base)).toBe(p8B4EvidenceFingerprint(base))
   })
 })
+
+
+describe("P8-B4 revision and append-only controls", () => {
+  it("requires amendments/restatements to link prior immutable evidence", async () => {
+    const mod = await import("./p8B4HistoricalEvidenceContract")
+    const prior = {
+      evidenceId: "e1",
+      semanticSeriesKey: "hist-1|ROCE_ANNUAL|2024-03-31",
+      revisionKind: "ORIGINAL" as const,
+      supersedesEvidenceId: null,
+      publishedAt: "2024-05-01T10:00:00Z",
+      evidenceHash: "hash-1",
+    }
+    const current = {
+      evidenceId: "e2",
+      semanticSeriesKey: prior.semanticSeriesKey,
+      revisionKind: "RESTATEMENT" as const,
+      supersedesEvidenceId: "e1",
+      publishedAt: "2024-06-01T10:00:00Z",
+      evidenceHash: "hash-2",
+    }
+    const validated = mod.validateP8B4VersionedEvidence(current, new Map([["e1", prior]]))
+    expect(validated).toEqual(current)
+  })
+
+  it("rejects a revision that crosses semantic evidence series", async () => {
+    const mod = await import("./p8B4HistoricalEvidenceContract")
+    const prior = {
+      evidenceId: "e1",
+      semanticSeriesKey: "hist-1|ROCE_ANNUAL|2024-03-31",
+      revisionKind: "ORIGINAL" as const,
+      supersedesEvidenceId: null,
+      publishedAt: "2024-05-01T10:00:00Z",
+      evidenceHash: "hash-1",
+    }
+    const current = {
+      evidenceId: "e2",
+      semanticSeriesKey: "hist-1|EPS_DILUTED|2024-03-31",
+      revisionKind: "AMENDMENT" as const,
+      supersedesEvidenceId: "e1",
+      publishedAt: "2024-06-01T10:00:00Z",
+      evidenceHash: "hash-2",
+    }
+    expect(() => mod.validateP8B4VersionedEvidence(current, new Map([["e1", prior]]))).toThrow(
+      /cannot cross semantic evidence series/,
+    )
+  })
+
+  it("rejects a revision published before the evidence it supersedes", async () => {
+    const mod = await import("./p8B4HistoricalEvidenceContract")
+    const prior = {
+      evidenceId: "e1",
+      semanticSeriesKey: "hist-1|ROCE_ANNUAL|2024-03-31",
+      revisionKind: "ORIGINAL" as const,
+      supersedesEvidenceId: null,
+      publishedAt: "2024-06-01T10:00:00Z",
+      evidenceHash: "hash-1",
+    }
+    const current = {
+      evidenceId: "e2",
+      semanticSeriesKey: prior.semanticSeriesKey,
+      revisionKind: "RESTATEMENT" as const,
+      supersedesEvidenceId: "e1",
+      publishedAt: "2024-05-01T10:00:00Z",
+      evidenceHash: "hash-2",
+    }
+    expect(() => mod.validateP8B4VersionedEvidence(current, new Map([["e1", prior]]))).toThrow(
+      /cannot precede/,
+    )
+  })
+
+  it("returns an idempotent decision for an existing evidence fingerprint", async () => {
+    const mod = await import("./p8B4HistoricalEvidenceContract")
+    const fp = mod.p8B4EvidenceFingerprint(base)
+    expect(mod.decideP8B4Append(base, new Map([[fp, "existing-evidence-id"]]))).toEqual({
+      disposition: "IDEMPOTENT_EXISTING",
+      existingEvidenceId: "existing-evidence-id",
+    })
+  })
+
+  it("returns append-new when the evidence fingerprint is new", async () => {
+    const mod = await import("./p8B4HistoricalEvidenceContract")
+    expect(mod.decideP8B4Append(base, new Map())).toEqual({
+      disposition: "APPEND_NEW",
+      existingEvidenceId: null,
+    })
+  })
+})
