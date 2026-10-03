@@ -96,13 +96,13 @@ def load_partition(s3, bucket, date):
             cols = [r[0] for r in con.execute(
                 "describe select * from read_parquet(?)", [str(path)]
             ).fetchall()]
-            required_cols = {"id", "historical_identity_id", "close", "row_hash"}
+            required_cols = {"id", "historical_identity_id", "trading_symbol", "series", "close", "row_hash"}
             missing = required_cols - set(cols)
             if missing:
                 raise RuntimeError(f"{date} missing raw columns {sorted(missing)}")
             rows = con.execute(
                 """
-                select id, historical_identity_id, close, row_hash
+                select id, historical_identity_id, trading_symbol, series, close, row_hash
                 from read_parquet(?)
                 where historical_identity_id is not null
                 """,
@@ -111,15 +111,24 @@ def load_partition(s3, bucket, date):
         finally:
             con.close()
     out = {}
-    for raw_id, identity_id, close, row_hash in rows:
+    for raw_id, identity_id, trading_symbol, series, close, row_hash in rows:
         identity_id = str(identity_id)
-        if identity_id in out:
-            raise RuntimeError(f"{date} duplicate historical_identity_id {identity_id}")
-        out[identity_id] = {
+        canonical_key = (
+            identity_id,
+            str(trading_symbol or "").strip().upper(),
+            str(series or "").strip().upper(),
+        )
+        if canonical_key in out:
+            raise RuntimeError(
+                f"{date} duplicate identity/symbol/series {canonical_key}"
+            )
+        out[canonical_key] = {
             "raw_price_observation_id": str(raw_id),
             "close": str(close),
             "row_hash": str(row_hash),
             "partition_key": key,
+            "trading_symbol": canonical_key[1],
+            "series": canonical_key[2],
         }
     return out
 
@@ -129,6 +138,8 @@ def build_factor(norm, benchmark_dates, load_date):
     effective_date = str(norm["effective_date"])
     terms = norm["normalized_terms"]
     norm_id = str(norm["id"])
+    raw_symbol = str(norm.get("raw_symbol") or "").strip().upper()
+    raw_series = str(norm.get("raw_series") or "").strip().upper()
 
     factor_state = "READY"
     blocker = None
@@ -182,8 +193,9 @@ def build_factor(norm, benchmark_dates, load_date):
             previous_date = benchmark_dates[idx - 1]
             prev_rows = load_date(previous_date)
             ex_rows = load_date(effective_date)
-            prev = prev_rows.get(identity)
-            ex = ex_rows.get(identity)
+            lookup_key = (identity, raw_symbol, raw_series)
+            prev = prev_rows.get(lookup_key)
+            ex = ex_rows.get(lookup_key)
             if prev is None or ex is None:
                 factor_state = "BLOCKED"
                 blocker = (
@@ -209,6 +221,8 @@ def build_factor(norm, benchmark_dates, load_date):
                         total_link = sig30((ex_close + cash_d) / previous_close)
                     inputs.update({
                         "previousTradeDate": previous_date,
+                        "rawSymbol": raw_symbol,
+                        "rawSeries": raw_series,
                         "previousClose": prev["close"],
                         "exDateClose": ex["close"],
                         "previousRawPriceObservationId": prev["raw_price_observation_id"],
@@ -307,7 +321,9 @@ def main():
                   n.effective_date::text,
                   n.action_type,
                   n.normalized_terms,
-                  n.normalization_hash
+                  n.normalization_hash,
+                  o.raw_symbol,
+                  o.raw_series
                 from public.p8_b3_corporate_action_normalizations n
                 join public.p8_b3_corporate_action_observations o
                   on o.id=n.corporate_action_observation_id
