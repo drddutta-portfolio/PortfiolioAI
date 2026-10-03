@@ -1,0 +1,75 @@
+{
+  "version": "P8_B4_2_DRY_RUN_ACQUISITION_MANIFEST_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "status": "PASS",
+  "stage": "P8-B4-2",
+  "scope": {
+    "historical_identities": 4524,
+    "provider_calls": 0,
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "production_changes": 0,
+    "main_changes": 0
+  },
+  "provider_identity_readiness": {
+    "exact_trendlyne_identity": 239,
+    "no_current_canonical_link": 4262,
+    "current_link_but_no_exact_trendlyne_identity": 23,
+    "blocked_exact_provider_identity_total": 4285,
+    "provider_isin_mismatch_detected": 0
+  },
+  "exact_identity_cohort_cache": {
+    "identities": 239,
+    "fundamentals": {
+      "cache_absent": 125,
+      "cache_present_publication_unknown": 113,
+      "publication_dated_present": 1,
+      "identities_with_8plus_periods": 1
+    },
+    "documents": {
+      "cache_absent": 128,
+      "publication_dated_present": 111,
+      "hashed_documents_present": 0
+    }
+  },
+  "dry_run_call_model": {
+    "methodology": "LOWER_BOUND_ONE_ATTEMPT_PER_MISSING_DOMAIN_PER_EXACT_IDENTITY",
+    "exact_identity_cohort": 239,
+    "minimum_planned_trendlyne_attempts": 478,
+    "daily_planned_ceiling": 320,
+    "retry_diagnostic_reserve": 80,
+    "minimum_campaign_days_if_full_campaign_later_authorized": 2,
+    "caveat": "478 is a lower bound. Actual execution can be higher because historical period depth, official publication-time remediation, retries, and source-specific document retrieval are not collapsed into this estimate."
+  },
+  "dispositions": {
+    "CANARY_ELIGIBLE_CACHE_FIRST": 239,
+    "BLOCKED_EXACT_PROVIDER_IDENTITY": 4285
+  },
+  "deterministic_exclusions": {
+    "exact_provider_identity_unresolved": "EXCLUDE_IF_EXACT_PROVIDER_IDENTITY_UNRESOLVED",
+    "publication_or_source_availability_unproven": "EXCLUDE_SECURITY_DATE_DOMAIN_IF_PUBLICATION_OR_SOURCE_AVAILABILITY_UNPROVEN"
+  },
+  "manifest": {
+    "path": "docs/p8/PortfolioAI_P8_B4_2_DRY_RUN_ACQUISITION_MANIFEST_2026-10-03.csv",
+    "rows": 4524,
+    "unique_historical_identity_required": true,
+    "provider_calls_embedded": false
+  },
+  "gate": {
+    "b4_2_complete": true,
+    "b4_2_closed": true,
+    "b4_3_ready_for_owner_authorization": true,
+    "hosted_b4_schema_applied": false,
+    "provider_acquisition_executed": false,
+    "p8_c_authorized": false
+  },
+  "interpretation": [
+    "Only exact Trendlyne provider identity plus matching historical ISIN qualifies for a future provider canary.",
+    "Current canonical linkage alone does not authorize provider acquisition.",
+    "Existing Trendlyne fundamental cache without published_at is not point-in-time eligible.",
+    "Published document metadata without immutable content hash remains incomplete for B4 historical authority.",
+    "All unresolved identities remain explicit fail-closed exclusions until separately remediated."
+  ]
+}
