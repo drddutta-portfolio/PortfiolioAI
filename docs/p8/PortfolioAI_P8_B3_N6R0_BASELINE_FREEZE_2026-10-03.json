@@ -1,0 +1,43 @@
+{
+  "version": "P8_B3_N6R0_BASELINE_FREEZE_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "branch_head": "536068a87bb53888f2223e9b4fdbd950773ce1d7",
+  "status": "FROZEN",
+  "source_n6_audit": "docs/p8/PortfolioAI_P8_B3_N6_COMPLETION_AUDIT_2026-10-03.json",
+  "n6_campaign_id": "P8_B3_N6_R2_ADJUSTED_SERIES_20261003_V1",
+  "adjusted_series": {
+    "rows": 1854978,
+    "ready": 1395996,
+    "blocked": 458982,
+    "partitions": 744,
+    "min_date": "2023-10-03",
+    "max_date": "2026-09-30",
+    "distinct_identities": 3474,
+    "aggregate_fingerprint_sha256": "7f7f14c7af972baa22e0363732a285df1e4f3e0631d8134ce665ac32397c8a76"
+  },
+  "decision_ledger": {
+    "rows": 121956,
+    "ready": 60616,
+    "blocked": 61340,
+    "partitions": 32,
+    "min_date": "2024-02-29",
+    "max_date": "2026-09-29",
+    "blocker_counts": {
+      "COMPLEX_CORPORATE_ACTION_BLOCKER": 20787,
+      "NO_TRADE_ON_DECISION_DATE": 40553
+    },
+    "aggregate_fingerprint_sha256": "9ec30b0c8ea30e5d8068be570a8b251964efc5ef725d795165666b5223b275ae"
+  },
+  "completion_fingerprint_sha256": "59992c038e74f83ccb278dce0af73ed6cbd97ba2064c67cd724e0df531a4ca12",
+  "completion_manifest_sha256": "4cc8e85a5510977033aa522292e7bd742f2d26be72e6731a1fbed61c2f220826",
+  "raw_catalog_dataset_fingerprint": "a5c16c5e26eb0fae070c5072fb200032bd6395765bba1d162be7d04d00e5f2a7",
+  "remediation_policy": {
+    "overwrite_n6_v1": false,
+    "create_v2_only_after_owner_approval": true,
+    "current_stage": "N6R0_BASELINE_FREEZE"
+  },
+  "production_changes": 0,
+  "main_changes": 0
+}
