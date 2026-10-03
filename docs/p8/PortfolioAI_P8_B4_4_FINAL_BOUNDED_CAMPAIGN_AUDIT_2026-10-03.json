@@ -31,16 +31,19 @@
   "provider_accounting": {
     "provider_units_used_today": 479,
     "below_verified_1000_daily_limit": true,
-    "note": "Provider usage exceeds the 478 useful capture count by one accounted unit because one worker-resource-limited run consumed an attempt that did not become a completed capture pair; no completed identity was falsely promoted."
+    "note": "479 total provider units were accounted for across B4-3/B4-4. The raw-capture ledger contains 478 unique useful identity/domain captures; one additional successful provider attempt was interrupted before durable capture during a worker resource-limit event and was later safely reacquired."
   },
   "b4_4_runs": {
     "total": 23,
-    "attempted_calls_recorded": 436,
-    "accepted_items_recorded": 218,
+    "attempted_calls_recorded": 473,
+    "accepted_items_recorded": 236,
     "succeeded_runs": 21,
-    "failed_runs": 1,
-    "known_failed_reason": "WORKER_RESOURCE_LIMIT",
-    "note": "Run aggregates exclude B4-3 canary calls and include resumable/reconciled execution behavior. Final authority is the raw-capture ledger."
+    "failed_runs": 2,
+    "failed_reasons": [
+      "WORKER_RESOURCE_LIMIT",
+      "WORKER_RESOURCE_LIMIT_RECONCILED"
+    ],
+    "note": "Run aggregates exclude the 6 B4-3 canary calls. Both interrupted runs reconciled reservations and retained only fully completed identities. Final acquisition authority is the 478-row duplicate-free raw-capture ledger."
   },
   "integrity": {
     "exact_historical_identity_and_isin": true,
@@ -52,7 +55,9 @@
     "canonical_fundamental_rows_after": 2458,
     "canonical_research_document_rows_after": 140,
     "production_changes": 0,
-    "main_changes": 0
+    "main_changes": 0,
+    "raw_capture_fingerprint": "4c4930eba3c5eee8bfce99af0210673b9b27e666f2117b17cad4ea27a71fffcb",
+    "duplicate_capture_keys": 0
   },
   "evidence_disposition": {
     "fundamentals": "RAW_CAPTURE_ONLY_PENDING_PROVABLE_PUBLICATION_TIMING",
