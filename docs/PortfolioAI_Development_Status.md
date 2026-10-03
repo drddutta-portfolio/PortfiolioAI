@@ -5375,3 +5375,53 @@ S3 overall = NOT YET CLOSED
 ```
 
 No PostgreSQL retirement, full export, acquisition restart or normalization may proceed solely on the connector-decoded object body. A true byte-preserving R2 download must match the expected SHA-256 before S3 closes.
+
+## P8-B3 N6R-3 event-local / segment-local policy simulation — 3 October 2026
+
+GitHub Actions run `37108934030` completed successfully on `PortfolioAI-Development`.
+
+Frozen N6R-3 audit result:
+
+- status = COMPLETE / PASS
+- N6 V1 adjusted-series rows = 1,854,978 / unchanged
+- V1 whole-identity blocked rows = 458,982
+- projected V2 price-usable rows under event-local segmentation = 1,854,978
+- projected V2 price-blocked rows = 0
+- projected cross-boundary return rows = 192
+- unresolved event identities = 169
+- unresolved event dates = 192
+- N6R-2 recovered dividend normalization IDs honored = 371
+- V1 decision-ledger READY = 60,616
+- V1 complex blockers = 20,787
+- V1 no-trade blockers = 40,553
+- projected decision READY = 81,394
+- projected complex blockers = 9
+- complex blockers recoverable under the simulated event-local policy = 20,778
+- projected no-trade blockers remain = 40,553
+
+Policy simulation only:
+
+- unresolved corporate-action events block the cross-event return transition rather than the full identity history;
+- pre-event and post-event segments remain independently usable;
+- restarted segments seed return = null and TRI = 1000;
+- unresolved dividend boundaries keep the price path usable while blocking total-return continuity;
+- unresolved capital-action boundaries block price/total-return cross-boundary transitions;
+- no price carry-forward was performed.
+
+Preservation gates:
+
+```text
+N6 V1 overwrite = NO
+N6R-4 materialization = NO
+N6R-5 / V2 materialization = NO
+R2 raw catalog mutation = NO
+Production = UNCHANGED
+main = UNCHANGED
+```
+
+Artifacts:
+
+- `docs/p8/PortfolioAI_P8_B3_N6R3_EVENT_LOCAL_POLICY_AUDIT_2026-10-03.json`
+- `docs/p8/PortfolioAI_P8_B3_N6R3_EVENT_BOUNDARY_MATRIX_2026-10-03.csv`
+
+N6R-3 is COMPLETE / PASS / CLOSED. N6R-4 is authorized as analysis/policy-evidence only.
