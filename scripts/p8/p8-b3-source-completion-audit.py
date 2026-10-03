@@ -47,7 +47,7 @@ def scalar(cur,sql,args=()):
 def rows(cur,sql,args=()):
     cur.execute(sql,args); return cur.fetchall()
 
-def parquet_identity_set(data):
+def parquet_identity_set(data, eligible_only=False):
     with tempfile.TemporaryDirectory() as td:
         p=Path(td)/"x.parquet"; p.write_bytes(data)
         con=duckdb.connect()
@@ -55,7 +55,12 @@ def parquet_identity_set(data):
             cols=[r[0] for r in con.execute("describe select * from read_parquet(?)",[str(p)]).fetchall()]
             if "historical_identity_id" not in cols:
                 raise RuntimeError(f"historical_identity_id missing from parquet; cols={cols}")
-            vals=con.execute("select distinct historical_identity_id from read_parquet(?) where historical_identity_id is not null",[str(p)]).fetchall()
+            where="historical_identity_id is not null"
+            if eligible_only:
+                if "membership_state" not in cols:
+                    raise RuntimeError(f"membership_state missing from B2 member parquet; cols={cols}")
+                where += " and membership_state='ELIGIBLE'"
+            vals=con.execute(f"select distinct historical_identity_id from read_parquet(?) where {where}",[str(p)]).fetchall()
             return {str(r[0]) for r in vals},cols
         finally:
             con.close()
@@ -134,7 +139,23 @@ def main():
 
     expected=set(benchmark_dates)
     if len(benchmark_dates)!=744: raise RuntimeError(f"Expected 744 benchmark dates, got {len(benchmark_dates)}")
-    if len(decision_dates)!=36: raise RuntimeError(f"Expected 36 decision dates, got {len(decision_dates)}")
+    if len(decision_dates)!=36: raise RuntimeError(f"Expected 36 benchmark month-end dates, got {len(decision_dates)}")
+
+    # B2 closed on its own frozen 32-date authority (2024-02-29 through 2026-09-29).
+    b2_prefix=f"{ROOT}/b2/universe-members/v1/"
+    b2_dates=set()
+    paginator=s3.get_paginator("list_objects_v2")
+    for page in paginator.paginate(Bucket=bucket,Prefix=b2_prefix):
+        for obj in page.get("Contents") or []:
+            key=obj["Key"]
+            marker="decision_date="
+            if marker in key and key.endswith("/part-00000.parquet"):
+                b2_dates.add(key.split(marker,1)[1].split("/",1)[0])
+    b2_decision_dates=sorted(b2_dates)
+    if len(b2_decision_dates)!=32:
+        raise RuntimeError(f"Expected 32 frozen B2 decision dates, got {len(b2_decision_dates)}")
+    if b2_decision_dates[0]!="2024-02-29" or b2_decision_dates[-1]!="2026-09-29":
+        raise RuntimeError(f"Unexpected B2 decision boundary {b2_decision_dates[0]}..{b2_decision_dates[-1]}")
 
     catalog,_=get_json(s3,bucket,CATALOG_KEY)
     ds=catalog["datasets"]["b3_raw_prices"]
@@ -171,13 +192,13 @@ def main():
 
     coverage=[]
     total_members=total_priced=total_missing=0
-    for d in decision_dates:
+    for d in b2_decision_dates:
         y,m=d[:4],d[5:7]
         b2key=f"{ROOT}/b2/universe-members/v1/decision_date={d}/part-00000.parquet"
         pkey=f"{ROOT}/b3/raw-prices/v1/year={y}/month={m}/trade_date={d}/part-00000.parquet"
         b2=s3.get_object(Bucket=bucket,Key=b2key)["Body"].read()
         p=s3.get_object(Bucket=bucket,Key=pkey)["Body"].read()
-        members,b2cols=parquet_identity_set(b2)
+        members,b2cols=parquet_identity_set(b2,eligible_only=True)
         prices,pcols=parquet_identity_set(p)
         missing=sorted(members-prices)
         priced=len(members & prices)
@@ -203,8 +224,9 @@ def main():
       "benchmark_calendar_744":len(benchmark_dates)==744,
       "raw_price_partitions_744":len(manifests)==744,
       "catalog_manifest_row_parity":manifest_rows==int(ds["row_count"]),
-      "decision_dates_36":len(decision_dates)==36,
-      "decision_date_raw_price_coverage_measured":len(coverage)==36,
+      "benchmark_month_end_dates_36":len(decision_dates)==36,
+      "b2_frozen_decision_dates_32":len(b2_decision_dates)==32,
+      "decision_date_raw_price_coverage_measured":len(coverage)==32,
       "derived_rows_zero":all(int(v)==0 for v in derived.values()),
       "b3_rls_enabled_with_policy":all(x["rls_enabled"] and x["policy_count"]>=1 for x in rls),
       "b3_no_anon_authenticated_table_grants":int(exposed)==0,
@@ -220,7 +242,8 @@ def main():
       "status":status,
       "environment":"DEVELOPMENT",
       "campaign_id":CAMPAIGN_ID,
-      "benchmark":{"dates":len(benchmark_dates),"first":benchmark_dates[0],"last":benchmark_dates[-1],"decision_dates":decision_dates},
+      "benchmark":{"dates":len(benchmark_dates),"first":benchmark_dates[0],"last":benchmark_dates[-1],"month_end_dates":decision_dates},
+      "b2_authority":{"decision_dates":b2_decision_dates,"first":b2_decision_dates[0],"last":b2_decision_dates[-1],"count":len(b2_decision_dates)},
       "sources":source_map,
       "raw_prices":{"catalog_rows":int(ds["row_count"]),"manifest_rows":manifest_rows,"partitions":len(manifests),"aggregate_fingerprint_sha256":aggregate_fp},
       "decision_date_coverage":{"decision_dates":coverage,"eligible_member_pairs":total_members,"priced_member_pairs":total_priced,"missing_member_pairs":total_missing,"overall_ratio":1.0 if total_members==0 else total_priced/total_members},
