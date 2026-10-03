@@ -1,0 +1,84 @@
+{
+  "version": "P8_B4_5_DECISION_ELIGIBILITY_MATERIALIZATION_AUDIT_V1",
+  "date": "2026-10-03",
+  "environment": "PortfolioAI Dev",
+  "branch": "PortfolioAI-Development",
+  "status": "PASS",
+  "stage": "P8-B4-5",
+  "population": {
+    "historical_identities": 4524,
+    "decision_dates": 32,
+    "identity_decision_pairs": 144768,
+    "evidence_domains": [
+      "FUNDAMENTAL",
+      "DOCUMENT"
+    ],
+    "materialized_rows": 289536
+  },
+  "cardinality": {
+    "distinct_keys": 289536,
+    "distinct_selection_fingerprints": 289536,
+    "selected_rows": 0,
+    "null_exclusions": 0
+  },
+  "exclusions": {
+    "FUNDAMENTAL": {
+      "INELIGIBLE_UNKNOWN_PUBLICATION_TIME": 7648,
+      "INELIGIBLE_NO_EXACT_PROVIDER_IDENTITY": 137120
+    },
+    "DOCUMENT": {
+      "INELIGIBLE_UNKNOWN_SOURCE_AVAILABILITY_TIME": 7648,
+      "INELIGIBLE_NO_EXACT_PROVIDER_IDENTITY": 137120
+    }
+  },
+  "interpretation": {
+    "captured_exact_provider_identities": 239,
+    "captured_identity_decision_rows_per_domain": 7648,
+    "uncaptured_or_no_exact_provider_identities": 4285,
+    "uncaptured_identity_decision_rows_per_domain": 137120,
+    "note": "No evidence was selected because the frozen B4 contract forbids using provider retrieval/update timing as publication timing and requires official-source availability validation for documents."
+  },
+  "determinism": {
+    "materializer_version": "P8_B4_DECISION_ELIGIBILITY_V1",
+    "aggregate_fingerprint": "5ba943fa1ea2a2e94ead3f58065bc0a848c5a71a84275aa3192240993557e883",
+    "replay_result": "IDEMPOTENT_ZERO_NEW_ROWS",
+    "row_count_after_replay": 289536
+  },
+  "security": {
+    "rls_enabled": true,
+    "anon_select": false,
+    "authenticated_select": false,
+    "anon_insert": false,
+    "authenticated_insert": false,
+    "supabase_security_advisor_note": "RLS-enabled/no-policy is intentional deny-by-default because table is service/internal only."
+  },
+  "performance": {
+    "foreign_key_covering_index_added": true,
+    "b4_5_fk_advisor_cleared": true,
+    "table_total_relation_size": "187 MB",
+    "database_size_after": "322 MB",
+    "free_plan_limit_reference": "500 MB",
+    "note": "Storage footprint is explicitly carried into B4-6 closure review."
+  },
+  "source_boundary": {
+    "current_state_fallback_used": false,
+    "invented_publication_timestamps": 0,
+    "invented_source_availability_timestamps": 0,
+    "b4_4_raw_capture_rows_used_as_presence_only": 478,
+    "canonical_fundamental_promotion": false,
+    "canonical_document_promotion": false
+  },
+  "repository": {
+    "materializer_sql": "docs/sql/PortfolioAI_P8_B4_5_DECISION_ELIGIBILITY_MATERIALIZATION_2026-10-03.sql",
+    "materializer_sql_commit": "efe12a70d10554f43003cd341e2f59bb8be4f48d",
+    "main_head_unchanged": "9362f15844e75acaf9d387df01695e67d8ca54dc"
+  },
+  "gate": {
+    "b4_5_complete": true,
+    "b4_5_closed": true,
+    "b4_6_ready_for_owner_authorization": true,
+    "b4_6_started": false,
+    "p8_b5_started": false,
+    "p8_c_authorized": false
+  }
+}
