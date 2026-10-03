@@ -1,0 +1,49 @@
+name: P8 B4-1 Contract Verification
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - PortfolioAI-Development
+    paths:
+      - src/features/backtesting/p8B4HistoricalEvidenceContract.ts
+      - src/features/backtesting/p8B4HistoricalEvidenceContract.test.ts
+      - docs/sql/PortfolioAI_P8_B4_HISTORICAL_EVIDENCE_SCHEMA_PROPOSAL_2026-10-03.sql
+      - .github/workflows/p8-b4-1-contract-verification.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Targeted B4-1 contract tests
+        run: npx vitest run src/features/backtesting/p8B4HistoricalEvidenceContract.test.ts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Architecture check
+        run: npm run check:architecture
+
+      - name: Verify schema proposal remains non-hosted
+        shell: bash
+        run: |
+          set -euo pipefail
+          f=docs/sql/PortfolioAI_P8_B4_HISTORICAL_EVIDENCE_SCHEMA_PROPOSAL_2026-10-03.sql
+          grep -q '^begin;' "$f"
+          grep -q '^rollback;' "$f"
+          ! git diff --exit-code -- supabase/migrations
