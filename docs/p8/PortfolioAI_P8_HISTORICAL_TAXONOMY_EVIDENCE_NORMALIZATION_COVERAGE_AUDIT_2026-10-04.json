@@ -1,0 +1,102 @@
+{
+  "version": "P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_COVERAGE_AUDIT_V1",
+  "date": "2026-10-04",
+  "exact_disposition": "HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_BLOCKED",
+  "implementation_status": "COMPLETE_PASS",
+  "semantic_classification_status": "CANARY_SEMANTICS_RECOVERED_BUT_CANONICAL_CLASSIFICATION_UNPROVEN",
+  "full_expansion_executed": false,
+  "expansion_stop_reason": "FROZEN_CANARY_GATE_FAILED_COMPLETE_CLASSIFICATION_AND_ROUTE_REQUIREMENTS",
+  "denominators": {
+    "full_b2_eligible_pairs": 121956,
+    "historical_identities": 4524,
+    "decision_dates": 32,
+    "provisional_candidate_pairs": 25761,
+    "provisional_candidate_identities": 877,
+    "frozen_canary_members": 32
+  },
+  "canary_results": {
+    "semantic_recovered": 32,
+    "semantic_recovered_percent": 100,
+    "positional_semantic_recovered": 11,
+    "historical_only_semantic_recovered": 19,
+    "classification_proven": 0,
+    "methodology_route_proven": 0,
+    "complete_normalized_input_pairs": 0,
+    "negative_controls_promoted": 0
+  },
+  "full_b2_primary_dispositions": {
+    "NO_PRE_DECISION_EVIDENCE": 60531,
+    "CLASSIFICATION_UNRESOLVED": 33706,
+    "MARKET_DATA_BLOCKED": 1958,
+    "CLASSIFICATION_TAXONOMY_UNPROVEN": 25761
+  },
+  "full_candidate_state": {
+    "semantic_recovery_over_25761": "NOT_MEASURED_BECAUSE_FROZEN_CANARY_GATE_BLOCKED_EXPANSION",
+    "classification_proven_pairs": 0,
+    "route_proven_pairs": 0,
+    "complete_normalized_input_pairs": 0
+  },
+  "representative_source_semantics": [
+    "Performance Polymers & Chemicals",
+    "Solar Photovoltaic Modules",
+    "EPC/Engineering Services",
+    "Oil Seed Extraction and Refining",
+    "Hospital Business",
+    "Pharma",
+    "Chemicals",
+    "Textiles"
+  ],
+  "canonical_gap": {
+    "blocker_code": "COMPLETE_FOUR_TIER_TAXONOMY_MAPPING_AUTHORITY_ABSENT",
+    "description": "Existing stored official filing bodies contain recoverable business/segment meaning, but the repository does not contain a complete authoritative historical Macro-Economic Sector -> Sector -> Industry -> Basic Industry mapping that can deterministically convert those semantic labels into canonical economic classification without inventing new synonym/business rules.",
+    "gate_k_limit": "Gate-K provides research-routing Sector+Industry mappings; it is not a complete four-tier economic taxonomy authority and cannot substitute for historical classification proof.",
+    "current_company_classification_backdating": "FORBIDDEN"
+  },
+  "proposed_standard_assessment": {
+    "owner_frozen": false,
+    "minimum_24_dates": {
+      "result": "PASS",
+      "observed": 32
+    },
+    "minimum_80_overall_coverage": {
+      "result": "FAIL",
+      "observed_complete_input_percent": 0
+    },
+    "minimum_70_each_retained_date": {
+      "result": "FAIL",
+      "reason": "0 classification-proven / route-proven complete-input pairs"
+    },
+    "minimum_60_major_methodology_sector": {
+      "result": "NOT_COMPUTABLE_FAIL_CLOSED",
+      "reason": "No complete historical classification can be promoted into methodology routing"
+    }
+  },
+  "selection_bias_limitations": [
+    "The 32-member canary was selected before semantic measurement using stable outcome-independent strata and hashes.",
+    "The 25,761 provisional candidates were not expanded because the frozen gate failed; semantic success was not used to define a smaller universe.",
+    "No successful semantic excerpt was converted into taxonomy using model knowledge, current company classifications, company names, returns or present-day survival."
+  ],
+  "source_lineage": {
+    "normalization_contract_blob_sha": "a54ab626e8325a31c7bd960691fd1ba897c14b76",
+    "canary_manifest_blob_sha": "177866e6844179c0de15523fb5964aea103f2e12",
+    "canary_manifest_fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce",
+    "canary_audit_blob_sha": "e2cceb04478191fb7b9b492a2d5478a0d5cdf200",
+    "source_excerpt_blob_sha": "3f6be33a25ae154aad6da920b5d261e1232f6632",
+    "canary_deterministic_fingerprint": "69b9c2a93587b8178117c7b47f42065cb08b375ad0aa1b6bacf6c42b390d0259"
+  },
+  "safety_boundary": {
+    "provider_calls": 0,
+    "new_source_acquisition": 0,
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "migrations": 0,
+    "experiment_execution": 0,
+    "b5_b6_bfinal_rebuild": 0,
+    "p8_c_started": 0,
+    "forward_return_reads": 0,
+    "performance_reads": 0,
+    "holdout_reads": 0,
+    "production_changes": 0,
+    "main_changes": 0
+  }
+}
