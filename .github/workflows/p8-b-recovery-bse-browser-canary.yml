@@ -1,0 +1,36 @@
+name: P8-B Recovery BSE Browser Canary
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - scripts/p8/p8-b-recovery-bse-browser-canary.cjs
+      - .github/workflows/p8-b-recovery-bse-browser-canary.yml
+permissions:
+  contents: write
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "20"}
+      - run: npm install --no-save playwright@1.55.0
+      - run: npx playwright install --with-deps chromium
+      - id: test
+        shell: bash
+        run: |
+          set +e
+          node scripts/p8/p8-b-recovery-bse-browser-canary.cjs
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Commit canary
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B_RECOVERY_BSE_BROWSER_CANARY_2026-10-04.json || true
+          if ! git diff --cached --quiet; then git commit -m "audit(p8): record BSE browser transport canary"; git push; fi
+      - if: steps.test.outputs.code != '0'
+        run: exit 1
