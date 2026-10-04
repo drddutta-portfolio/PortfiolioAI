@@ -2296,3 +2296,54 @@ AGRI_PROCESSING remains registry-only and would require a separately scoped capa
 Edible Oil remains a separate owner decision.
 
 No broad 25,761-pair processing is authorized.
+
+
+---
+
+## 36. P8 Steel-Ferrous historical route integration closure — 5 October 2026
+
+The bounded historical Steel-Ferrous integration is COMPLETE / PASS.
+
+Exact disposition:
+
+`STEEL_FERROUS_HISTORICAL_ROUTE_INTEGRATION_COMPLETE_INPUT_READINESS_BLOCKED`
+
+PortfolioAI now has one authoritative historical methodology route on the frozen canary:
+
+`IN070205015 Iron & Steel Products → STEEL_FERROUS → METALS_COMMODITIES`
+
+The official historical economic hierarchy remains:
+
+`Industrials → Capital Goods → Industrial Products → Iron & Steel Products`
+
+and is not rewritten into Metals & Mining.
+
+### Frozen canary
+
+- 32 total pairs;
+- 2 authoritative complete historical classifications;
+- 1 exact integrated STEEL_FERROUS route;
+- 0 accidental negative-control routes;
+- 0 complete-input pairs.
+
+### Input readiness
+
+The routed Steel case has **0 / 11** normalized mandatory readiness signals complete.
+
+Current stored evidence includes 8 pre-decision XML sources and 2 eligible audited annual sources, but the canonical adjusted B3 market series has 0 rows before the decision. Several through-cycle signals require 5 annual or 12 cycle observations, and the required normalized histories are not materialized.
+
+Therefore routing is solved but score readiness remains blocked.
+
+### Verification
+
+Workflow `37229420071` passed focused tests, focused lint, architecture, global typecheck, global lint, production build and deterministic canary audit.
+
+### Next possible bounded task
+
+If separately authorized:
+
+`P8 Steel-Ferrous Historical Signal Materialization Feasibility`
+
+The task should use only existing stored evidence for this exact routed case, produce no investment decision, acquire no new source and stop where observation-depth requirements cannot be proven.
+
+No 25,761-pair expansion, experiment execution, B5/B6/B-FINAL rebuild or P8-C is authorized.
