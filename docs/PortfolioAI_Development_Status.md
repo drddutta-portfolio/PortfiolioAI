@@ -1,3 +1,166 @@
+## P8 Historical Segment-Revenue Classification Contract + Frozen Canary Validation — 4 October 2026
+
+**Current-state precedence:** This entry supersedes the prior statement that the immediate blocker is simply taxonomy-policy adoption plus a multi-segment rule. The separately authorized segment/accounting contract task has now been implemented and measured on the unchanged frozen canary.
+
+**Implementation / focused tests = COMPLETE / PASS.**  
+**Segment/accounting contract candidate = FROZEN / PENDING OWNER ADOPTION.**  
+**Accounting proof on frozen canary = BLOCKED.**  
+**Company classification / route / normalized-input proof = 0.**  
+**Experiment feasibility = BLOCKED.**  
+**Exact disposition: `SEGMENT_REVENUE_CONTRACT_COMPLETE_CANARY_EVIDENCE_BLOCKED_PENDING_OWNER_ADOPTION`.**
+
+### Methodology/version authority
+
+The current official NSE Indices industry-classification methodology page is marked **Updated 21/09/2023** and documents:
+
+- revenue-based classification;
+- strict multi-business segment contribution `>50%`;
+- Diversified handling;
+- audited consolidated annual financials as the prime source;
+- annual/event-driven review.
+
+The PortfolioAI frozen vocabulary is the official **November-2022** NSE structure. Its frozen PDF contains definition text using `>50%` / `>=20%` concepts, but the exact complete November-2022 methodology text is not preserved. Therefore the 2023 methodology is treated as later official methodology evidence, not asserted verbatim as the November-2022 methodology.
+
+Methodology assessment:
+
+- current methodology HTML SHA-256: `5ef4f26fde3cfc2d105adf27c6a3884e500a307c02bf89f866b687bb0cb3792`
+- November-2022 taxonomy PDF SHA-256: `ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1`
+
+### Frozen segment/accounting contract
+
+Contract:
+
+`P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1`
+
+Git blob SHA:
+
+`45e990981371dba217d12c430f8ce567acbf25fc`
+
+The contract was frozen before final canary measurement.
+
+Core rules:
+
+- latest eligible **audited consolidated annual** source strictly before the decision;
+- annual duration 330–380 days;
+- no standalone, quarterly or unaudited OD3 fallback in V1;
+- company denominator = same-period net Revenue from Operations;
+- total segment revenue − aggregate inter-segment revenue must reconcile to company revenue within XBRL rounding tolerance;
+- segment numerator must be comparable external revenue;
+- gross segment revenue can be used only when aggregate inter-segment revenue is valid zero;
+- non-zero aggregate inter-segment revenue without segment allocation blocks dominance;
+- strict `>50%`; exactly 50% fails;
+- no summing available segments as the denominator;
+- no combining separate segments to manufacture dominance;
+- units, scale, currency, reporting period, accounting scope, revision lineage and provenance remain explicit.
+
+### Frozen 32-pair canary
+
+Membership remained unchanged:
+
+- pairs: **32**
+- unique identities: **31**
+- membership fingerprint: `b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce`
+
+Final measured counts:
+
+| Measure | Result |
+|---|---:|
+| Semantic canary pairs | **32** |
+| Eligible audited consolidated annual source | **24** |
+| Accounting block — segment/base period-context mismatch | **12** |
+| Accounting-incomplete | **12** |
+| No eligible audited consolidated annual source | **8** |
+| Comparable segment-revenue pairs | **0** |
+| Dominant-business candidates | **0** |
+| Candidate complete company classifications | **0** |
+| Authoritative complete classifications | **0** |
+| Candidate unique routes | **0** |
+| Authoritative routes | **0** |
+| Complete normalized-input pairs | **0** |
+| Negative-control promotions | **0** |
+
+Accounting fingerprint:
+
+`cce3a731431ade7caf697ef7af036074c1cbb5e5ce27ead0f833df3b02e09d50`
+
+Final classification/router fingerprint:
+
+`146206681ac7cc7f5f2978b8d7f1954afca56ce65aa7082e1ec17d2c2f032667`
+
+### Primary accounting evidence gaps
+
+The blocker is now source/accounting comparability rather than missing taxonomy vocabulary.
+
+Observed overlapping diagnostics:
+
+- `REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH`: **12 pairs**
+- `INTERSEGMENT_REVENUE_MISSING`: **12 pairs**
+- `TOTAL_SEGMENT_REVENUE_MISSING`: **4 pairs**
+- `NO_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL`: **8 pairs**
+
+In some audited annual filings, the base `FourD` context is full-year while `FourReportableSegmentRevenue...` facts have literal XBRL context dates covering only a quarter, even where the values appear annual-sized. V1 deliberately does not infer annual semantics from the `Four` label or numeric magnitude.
+
+This is a critical fail-closed boundary.
+
+### Six prior exact Basic-Industry cases
+
+All six prior exact-leaf canary cases were inspected:
+
+- five have an eligible audited consolidated annual source;
+- one has no eligible audited consolidated annual source;
+- zero prove a comparable annual segment numerator under V1;
+- zero produce a dominant company-level classification.
+
+Therefore historical segment descriptions such as Pharmaceuticals, Commercial Vehicles, Education, Sugar and Edible Oil remain **segment evidence**, not whole-company classification.
+
+### Policy status
+
+Repository search still found no recorded owner approval for OD1–OD3.
+
+A consolidated adoption package now proposes:
+
+- OD1 — approve frozen November-2022 taxonomy vocabulary for retrospective organization of strictly point-in-time company evidence;
+- OD2 — approve versioned evidence-backed semantic synonym mappings under review control;
+- OD3 — approve the **strict frozen V1 accounting contract**, not an informal >50% shortcut;
+- OD4 — remains blocked.
+
+Crucially, approval would adopt policy only. It would **not** make this canary pass or authorize full expansion.
+
+### Expansion boundary
+
+The full historical denominator remains:
+
+- B2 eligible: **121,956 pairs / 4,524 identities / 32 dates**
+- provisional candidate surface: **25,761 pairs / 877 identities**
+
+The 25,761-pair surface was **NOT processed**.
+
+The pre-existing expansion gate still fails because complete company classification = 0 and unique methodology route = 0.
+
+Any future proposal to reinterpret the filing's column semantics differently from the literal XBRL segment context dates must be a **new semantic contract version**, with explicit evidence, explanation and full frozen-canary rerun. It is not approved or implied by this closure.
+
+### Verification
+
+Final workflow: **37217432181 — SUCCESS**
+
+Focused accounting / semantic tests: **18 / 18 PASS**
+
+Actual `RESEARCH_PROFILE_ROUTING_V2` smoke guards passed. Repeat deterministic fingerprint matched.
+
+### Authoritative artifacts
+
+- [Methodology source assessment JSON](p8/PortfolioAI_P8_SEGMENT_REVENUE_METHODOLOGY_SOURCE_ASSESSMENT_2026-10-04.json)
+- [Methodology version assessment](p8/PortfolioAI_P8_SEGMENT_REVENUE_METHODOLOGY_VERSION_ASSESSMENT_2026-10-04.md)
+- [Segment-revenue contract](p8/PortfolioAI_P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CONTRACT_V1.json)
+- [Segment-revenue specification](p8/PortfolioAI_P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_SPEC_2026-10-04.md)
+- [Canary source/accounting audit](p8/PortfolioAI_P8_SEGMENT_REVENUE_CANARY_SOURCE_ACCOUNTING_AUDIT_2026-10-04.json)
+- [Canary classification/route audit](p8/PortfolioAI_P8_SEGMENT_REVENUE_CANARY_CLASSIFICATION_AUDIT_2026-10-04.json)
+- [Consolidated owner-adoption package](p8/PortfolioAI_P8_SEGMENT_REVENUE_CONSOLIDATED_OWNER_ADOPTION_PACKAGE_2026-10-04.md)
+- [Closure audit](p8/PortfolioAI_P8_SEGMENT_REVENUE_CLASSIFICATION_CLOSURE_AUDIT_2026-10-04.json)
+- [Closure memo](p8/PortfolioAI_P8_SEGMENT_REVENUE_CLASSIFICATION_CLOSURE_2026-10-04.md)
+
+Safety boundary: Supabase writes 0; R2 writes 0; migrations 0; deployments 0; scheduler activation 0; new company-source acquisition 0; Production/main changes 0; experiment execution 0; B5/B6/B-FINAL rebuild 0; P8-C 0; return/performance/forward/holdout reads 0.
+
 ## P8 Complete Four-Tier Taxonomy Authority Build + Frozen Canary Revalidation — 4 October 2026
 
 **Current-state precedence:** This entry supersedes the prior four-tier mapping next-step statement only for the separately authorized complete-taxonomy authority task. Earlier P8 closures remain authoritative for their historical scopes.
