@@ -9,7 +9,7 @@ permissions:
   contents: write
 concurrency:
   group: p8-b-recovery-workstream-d
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   run:
     runs-on: ubuntu-latest
