@@ -40,54 +40,53 @@ def level_for(code):
 def parse_layout_pdf():
     nodes={}
     diagnostics=[]
-    current={k:None for k in EXPECTED}
+    order=["MACRO_ECONOMIC_SECTOR","SECTOR","INDUSTRY","BASIC_INDUSTRY"]
+    bands={
+      "MACRO_ECONOMIC_SECTOR":(60.0,195.0),
+      "SECTOR":(195.0,324.0),
+      "INDUSTRY":(324.0,465.0),
+      "BASIC_INDUSTRY":(465.0,635.0),
+    }
+    current={k:None for k in order}
     with pdfplumber.open(TMP) as pdf:
         for pageno,page in enumerate(pdf.pages[1:21],start=2):
-            text=page.extract_text(layout=True,x_tolerance=2,y_tolerance=2) or ""
-            lines=text.splitlines()
-            header_idx=None; pos=None
-            for i,line in enumerate(lines):
-                if "MES_Code" in line and "Sect_Code" in line and "Ind_Code" in line and "Basic_Ind_Code" in line:
-                    header_idx=i
-                    pos={
-                      "MACRO_ECONOMIC_SECTOR":line.index("MES_Code"),
-                      "SECTOR":line.index("Sect_Code"),
-                      "INDUSTRY":line.index("Ind_Code"),
-                      "BASIC_INDUSTRY":line.index("Basic_Ind_Code"),
-                      "DEFINITION":line.index("Definition") if "Definition" in line else len(line)
-                    }
-                    break
-            if header_idx is None:
-                diagnostics.append({"page":pageno,"reason":"HEADER_NOT_FOUND"})
-                continue
-            order=["MACRO_ECONOMIC_SECTOR","SECTOR","INDUSTRY","BASIC_INDUSTRY"]
-            bounds={}
-            for i,lvl in enumerate(order):
-                left=pos[lvl]
-                right=pos[order[i+1]] if i+1<len(order) else pos["DEFINITION"]
-                bounds[lvl]=(left,right)
-            for line in lines[header_idx+1:]:
-                if "NSE Indices Industry Classification Structure" in line or line.strip().startswith("Disclaimer"):
+            words=page.extract_words(x_tolerance=2,y_tolerance=2,keep_blank_chars=False)
+            lines={}
+            for w in words:
+                top=round(float(w["top"]),1)
+                if top < 95:  # table headers
                     continue
-                for lvl in order:
-                    left,right=bounds[lvl]
-                    cell=clean(line[left:right] if left < len(line) else "")
-                    if not cell: continue
-                    m=re.match(r"^(IN\d+)\s+(.*)$",cell)
-                    if m and level_for(m.group(1))==lvl:
-                        code=m.group(1); name=clean(m.group(2))
+                lines.setdefault(top,[]).append(w)
+            for top,ws in sorted(lines.items()):
+                ws=sorted(ws,key=lambda z:float(z["x0"]))
+                # Ignore page footer/disclaimer material.
+                line_text=" ".join(str(x["text"]) for x in ws)
+                if "NSE Indices Industry Classification Structure" in line_text or line_text.startswith("Disclaimer"):
+                    continue
+                for li,lvl in enumerate(order):
+                    left,right=bands[lvl]
+                    toks=[clean(w["text"]) for w in ws if left <= float(w["x0"]) < right]
+                    toks=[t for t in toks if t]
+                    if not toks: continue
+                    code_idx=next((i for i,t in enumerate(toks) if level_for(t)==lvl),None)
+                    if code_idx is not None:
+                        code=toks[code_idx]
+                        name=clean(" ".join(toks[code_idx+1:]))
                         current[lvl]=code
-                        # lower levels reset when parent changes
-                        li=order.index(lvl)
-                        for lower in order[li+1:]: current[lower]=None
+                        for lower in order[li+1:]:
+                            current[lower]=None
                         if code not in nodes:
                             nodes[code]={"code":code,"level":lvl,"name":name,"source_page":pageno}
+                        elif name and not nodes[code]["name"]:
+                            nodes[code]["name"]=name
                         elif name and nodes[code]["name"]!=name:
                             diagnostics.append({"page":pageno,"code":code,"reason":"DUPLICATE_NAME_VARIANT","existing":nodes[code]["name"],"new":name})
-                    elif current[lvl] and not ANY_CODE.match(cell):
-                        # Continuation within the same fixed-width name column.
-                        existing=nodes[current[lvl]]["name"]
-                        nodes[current[lvl]]["name"]=clean((existing+" "+cell).strip())
+                    elif current[lvl]:
+                        # Continuation of a wrapped display name within the fixed column.
+                        # Reject obvious non-name header/footer fragments.
+                        frag=clean(" ".join(toks))
+                        if frag and frag not in ("Economic Sector","Sector","Industry","Basic Industry","Definition"):
+                            nodes[current[lvl]]["name"]=clean(nodes[current[lvl]]["name"]+" "+frag)
     return nodes,diagnostics
 
 def build_hierarchy(nodes):
