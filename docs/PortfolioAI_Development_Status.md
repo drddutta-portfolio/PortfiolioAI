@@ -1,3 +1,45 @@
+## P8 Narrower Experiment Design + Feasibility Audit — 4 October 2026
+
+**Current-state precedence:** This entry supersedes the prior `VERSION_NARROWER_EXPERIMENT_REQUIRED` next-step statement only to record that the separately authorized narrower-design feasibility audit has now been performed. Historical P8-B recovery closure records remain unchanged.
+
+**P8 Narrower Experiment Design + Feasibility Audit = COMPLETE / NO-GO / CLOSED.**
+
+Exact disposition: **`NARROWER_EXPERIMENT_NO_GO`**.
+
+Authoritative artifacts:
+
+- [Narrower Experiment Decision Memo](p8/PortfolioAI_P8_NARROWER_EXPERIMENT_DECISION_MEMO.md)
+- [Narrower Experiment Feasibility Audit](p8/PortfolioAI_P8_NARROWER_EXPERIMENT_FEASIBILITY_AUDIT.json)
+
+Verified outcome-blind intersection against the existing B2 + B3 V2 + Workstream D evidence surface:
+
+| Measure | Result |
+|---|---:|
+| Historical identities | 4,524 |
+| Proven decision dates | 32 |
+| B2-eligible identity/date pairs | 121,956 |
+| Maximum current candidate pairs | 25,761 |
+| Candidate historical identities | 877 |
+| Candidate share of B2 denominator | 21.123192% |
+| Replay-ready pairs | 0 |
+
+Pair dispositions total exactly 121,956:
+
+- `CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN`: **25,761**
+- `CLASSIFICATION_UNRESOLVED`: **33,706**
+- `MARKET_DATA_BLOCKED`: **1,958**
+- `NO_PRE_DECISION_EVIDENCE`: **60,531**
+
+The 25,761 candidate pairs satisfy B2 eligibility, B3 V2 market readiness, official pre-decision evidence presence and Workstream-D provisional classification resolution. They are **not replay-ready** because Workstream D's segment-derived classification labels are not a frozen complete historical taxonomy contract; therefore exactly one historical classification → R6–R10 methodology route and its complete normalized required-metric set cannot yet be proven. Raw XBRL fact presence is not treated as normalized metric completeness.
+
+The proposed research-governance standards were not relaxed: 32 dates satisfy the >=24 date floor, but 0% replay-ready coverage fails the proposed >=80% overall requirement; per-date and major-methodology-sector replay-ready coverage cannot be validly computed until the route contract is frozen.
+
+The proposed identifier `P8_EXP_NSE_MONTHLY_6M_NARROWER_V2_PROPOSED` is **NOT FROZEN / NOT AUTHORIZED / NOT EXECUTED**. No B5/B6/B-FINAL rebuild is authorized from this result. **P8-C remains NOT AUTHORIZED.**
+
+The next legitimate step, only under separate owner authorization, is a bounded Development-only contract-resolution audit using already acquired evidence: freeze a complete historical taxonomy/router, map each eligible historical classification to exactly one frozen R6–R10 methodology path, define the exact normalized metric requirements per path, and then remeasure point-in-time coverage. This result does not authorize provider acquisition, schema/database/R2 writes, experiment execution or outcome inspection.
+
+Audit boundary: zero provider calls, zero new source acquisition, zero Supabase writes, zero R2 writes, zero Production/main changes, and zero performance/holdout/forward-return reads.
+
 ## P8-B Recovery Workstream E and B-FINAL closure — 4 October 2026
 
 **Current-state precedence:** This entry supersedes earlier recovery-active and E-not-started statements. Historical audits and their original denominators remain preserved.
