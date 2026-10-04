@@ -3,7 +3,7 @@
   "contract_git_blob_sha": "45e990981371dba217d12c430f8ce567acbf25fc",
   "contract_version": "P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1",
   "counts": {
-    "ACCOUNTING_RECONCILED": 12,
+    "ACCOUNTING_RECONCILED": 0,
     "AUTHORITATIVE_COMPLETE_CLASSIFICATION": 0,
     "CANDIDATE_COMPLETE_CLASSIFICATION": 0,
     "COMPARABLE_SEGMENT_REVENUE": 0,
@@ -12,8 +12,8 @@
     "ROUTE_INPUT_READY_CANDIDATE": 0,
     "SEMANTIC_CANARY_PAIRS": 32
   },
-  "deterministic_fingerprint_sha256": "f9d7d701400296f5f244294ea04b9d75f6bba45e9a283291c8305e70f5973aec",
-  "repeat_fingerprint_sha256": "f9d7d701400296f5f244294ea04b9d75f6bba45e9a283291c8305e70f5973aec",
+  "deterministic_fingerprint_sha256": "cce3a731431ade7caf697ef7af036074c1cbb5e5ce27ead0f833df3b02e09d50",
+  "repeat_fingerprint_sha256": "cce3a731431ade7caf697ef7af036074c1cbb5e5ce27ead0f833df3b02e09d50",
   "results": [
     {
       "accounting": {
@@ -26,15 +26,91 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "10465095000.00",
         "dominant_segments": [],
         "intersegment_revenue": "0.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "150000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Manufacturing- Steel Pipes",
+            "scale": null,
+            "segment_revenue": "2056698000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Trading- Building Material & Steel Products",
+            "scale": null,
+            "segment_revenue": "625993000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Unallocated Segment",
+            "scale": null,
+            "segment_revenue": "0.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Manufacturing- Steel Pipes",
+            "scale": null,
+            "segment_revenue": "7836123000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Trading- Building Material & Steel Products",
+            "scale": null,
+            "segment_revenue": "2628972000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Unallocated Segment",
+            "scale": null,
+            "segment_revenue": "0.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "10465095000.00",
         "unit": "INR"
       },
@@ -110,15 +186,67 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "200108200000.00",
         "dominant_segments": [],
         "intersegment_revenue": "15200000.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "1500000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-6",
+            "description": "Others",
+            "scale": null,
+            "segment_revenue": "202500000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-6",
+            "description": "Pharmaceuticals",
+            "scale": null,
+            "segment_revenue": "49417500000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-6",
+            "description": "Others",
+            "scale": null,
+            "segment_revenue": "671400000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-6",
+            "description": "Pharmaceuticals",
+            "scale": null,
+            "segment_revenue": "199452000000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "200123400000.00",
         "unit": "INR"
       },
@@ -156,15 +284,115 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "1103830000000.00",
         "dominant_segments": [],
         "intersegment_revenue": "27859200000.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "15000000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Insurance",
+            "scale": null,
+            "segment_revenue": "170306700000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Investment and others",
+            "scale": null,
+            "segment_revenue": "4735200000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Retail financing",
+            "scale": null,
+            "segment_revenue": "149342300000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue04D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Windmill",
+            "scale": null,
+            "segment_revenue": "29400000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Insurance",
+            "scale": null,
+            "segment_revenue": "549724100000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Investment and others",
+            "scale": null,
+            "segment_revenue": "31899300000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Retail financing",
+            "scale": null,
+            "segment_revenue": "549825000000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue04D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Windmill",
+            "scale": null,
+            "segment_revenue": "240800000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "1131689200000.00",
         "unit": "INR"
       },
@@ -202,15 +430,91 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "1099130000000.00",
         "dominant_segments": [],
         "intersegment_revenue": "0.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "15000000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Engineering and R&D Services",
+            "scale": null,
+            "segment_revenue": "45900000000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "HCL Software",
+            "scale": null,
+            "segment_revenue": "27100000000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "IT and Business Service",
+            "scale": null,
+            "segment_revenue": "211990000000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Engineering and R&D Services",
+            "scale": null,
+            "segment_revenue": "175810000000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "HCL Software",
+            "scale": null,
+            "segment_revenue": "111840000000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "IT and Business Service",
+            "scale": null,
+            "segment_revenue": "811480000000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "1099130000000.00",
         "unit": "INR"
       },
@@ -324,15 +628,67 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "31305700000.00",
         "dominant_segments": [],
         "intersegment_revenue": "947100000.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "150000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Custom Designed building solutions & auxillaries",
+            "scale": null,
+            "segment_revenue": "4031600000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Diversified Engineering",
+            "scale": null,
+            "segment_revenue": "4466900000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Custom Designed building solutions & auxillaries",
+            "scale": null,
+            "segment_revenue": "15839100000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Diversified Engineering",
+            "scale": null,
+            "segment_revenue": "16413700000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "32252800000.00",
         "unit": "INR"
       },
@@ -447,15 +803,91 @@
           "scope": "Consolidated",
           "start": "2022-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "8062700000.00",
         "dominant_segments": [],
         "intersegment_revenue": "23600000.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "150000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2023-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2023-01-01",
+            "decimals": "-5",
+            "description": "Capital Goods",
+            "scale": null,
+            "segment_revenue": "376400000.00",
+            "selected_annual_end": "2023-03-31",
+            "selected_annual_start": "2022-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2023-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2023-01-01",
+            "decimals": "-5",
+            "description": "Construction and EPC contracts",
+            "scale": null,
+            "segment_revenue": "707600000.00",
+            "selected_annual_end": "2023-03-31",
+            "selected_annual_start": "2022-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2023-03-31",
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "context_start": "2023-01-01",
+            "decimals": "-5",
+            "description": "Unallocated",
+            "scale": null,
+            "segment_revenue": "0.00",
+            "selected_annual_end": "2023-03-31",
+            "selected_annual_start": "2022-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2023-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2023-01-01",
+            "decimals": "-5",
+            "description": "Capital Goods",
+            "scale": null,
+            "segment_revenue": "1936400000.00",
+            "selected_annual_end": "2023-03-31",
+            "selected_annual_start": "2022-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2023-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2023-01-01",
+            "decimals": "-5",
+            "description": "Construction and EPC contracts",
+            "scale": null,
+            "segment_revenue": "6149900000.00",
+            "selected_annual_end": "2023-03-31",
+            "selected_annual_start": "2022-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2023-03-31",
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "context_start": "2023-01-01",
+            "decimals": "-5",
+            "description": "Unallocated",
+            "scale": null,
+            "segment_revenue": "0.00",
+            "selected_annual_end": "2023-03-31",
+            "selected_annual_start": "2022-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "8086300000.00",
         "unit": "INR"
       },
@@ -531,15 +963,91 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "12532600000.00",
         "dominant_segments": [],
         "intersegment_revenue": "126800000.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "150000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Agri Nutrients",
+            "scale": null,
+            "segment_revenue": "23100000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "P&K Fertilizers",
+            "scale": null,
+            "segment_revenue": "579600000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Performance Polymers & Chemicals",
+            "scale": null,
+            "segment_revenue": "2421500000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Agri Nutrients",
+            "scale": null,
+            "segment_revenue": "132400000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "P&K Fertilizers",
+            "scale": null,
+            "segment_revenue": "2822900000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Performance Polymers & Chemicals",
+            "scale": null,
+            "segment_revenue": "9704100000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "12659400000.00",
         "unit": "INR"
       },
@@ -615,15 +1123,67 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "10809400000.00",
         "dominant_segments": [],
         "intersegment_revenue": "0.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "150000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Chemical",
+            "scale": null,
+            "segment_revenue": "600000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Textile",
+            "scale": null,
+            "segment_revenue": "2643200000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Chemical",
+            "scale": null,
+            "segment_revenue": "600000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Textile",
+            "scale": null,
+            "segment_revenue": "10808800000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "10809400000.00",
         "unit": "INR"
       },
@@ -785,15 +1345,115 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "16384905000.00",
         "dominant_segments": [],
         "intersegment_revenue": "0.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "150000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Corporate/unallocable",
+            "scale": null,
+            "segment_revenue": "311850000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Discontinued operations",
+            "scale": null,
+            "segment_revenue": "0.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "EPC/Engineering Services",
+            "scale": null,
+            "segment_revenue": "4386340000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue04D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Others",
+            "scale": null,
+            "segment_revenue": "10579000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Corporate/unallocable",
+            "scale": null,
+            "segment_revenue": "1354542000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Discontinued operations",
+            "scale": null,
+            "segment_revenue": "0.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "EPC/Engineering Services",
+            "scale": null,
+            "segment_revenue": "14925983000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue04D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Others",
+            "scale": null,
+            "segment_revenue": "104380000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "16384905000.00",
         "unit": "INR"
       },
@@ -831,15 +1491,91 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "512616300000.00",
         "dominant_segments": [],
         "intersegment_revenue": "0.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "15000000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Edible Oil",
+            "scale": null,
+            "segment_revenue": "101949400000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Food & FMCG",
+            "scale": null,
+            "segment_revenue": "13408200000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Industry Essentials",
+            "scale": null,
+            "segment_revenue": "17022800000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Edible Oil",
+            "scale": null,
+            "segment_revenue": "387883300000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Food & FMCG",
+            "scale": null,
+            "segment_revenue": "49939900000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-7",
+            "description": "Industry Essentials",
+            "scale": null,
+            "segment_revenue": "74793100000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "512616300000.00",
         "unit": "INR"
       },
@@ -877,15 +1613,67 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "20287806000.00",
         "dominant_segments": [],
         "intersegment_revenue": "0.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "150000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Automotive Segment",
+            "scale": null,
+            "segment_revenue": "5546139000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Others Segment",
+            "scale": null,
+            "segment_revenue": "29061000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Automotive Segment",
+            "scale": null,
+            "segment_revenue": "20211147000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-5",
+            "description": "Others Segment",
+            "scale": null,
+            "segment_revenue": "76659000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "20287806000.00",
         "unit": "INR"
       },
@@ -923,15 +1711,91 @@
           "scope": "Consolidated",
           "start": "2023-04-01"
         },
-        "blockers": [],
+        "blockers": [
+          "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH"
+        ],
         "company_revenue": "11168350000.00",
         "dominant_segments": [],
         "intersegment_revenue": "185680000.00",
         "reconciled": true,
         "reconciliation_residual": "0.00",
         "reconciliation_tolerance": "1500000",
+        "segment_period_mismatch_evidence": [
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-6",
+            "description": "Canada",
+            "scale": null,
+            "segment_revenue": "810260000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-6",
+            "description": "India",
+            "scale": null,
+            "segment_revenue": "2117530000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-6",
+            "description": "others",
+            "scale": null,
+            "segment_revenue": "80400000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "context_start": "2024-01-01",
+            "decimals": "-6",
+            "description": "Canada",
+            "scale": null,
+            "segment_revenue": "3196190000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "context_start": "2024-01-01",
+            "decimals": "-6",
+            "description": "India",
+            "scale": null,
+            "segment_revenue": "7887730000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          },
+          {
+            "context_end": "2024-03-31",
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "context_start": "2024-01-01",
+            "decimals": "-6",
+            "description": "others",
+            "scale": null,
+            "segment_revenue": "270110000.00",
+            "selected_annual_end": "2024-03-31",
+            "selected_annual_start": "2023-04-01",
+            "unit_ref": "INR"
+          }
+        ],
         "segments": [],
-        "state": "NO_REPORTABLE_SEGMENT_REVENUE",
+        "state": "ACCOUNTING_BLOCKED",
         "total_segment_revenue": "11354030000.00",
         "unit": "INR"
       },

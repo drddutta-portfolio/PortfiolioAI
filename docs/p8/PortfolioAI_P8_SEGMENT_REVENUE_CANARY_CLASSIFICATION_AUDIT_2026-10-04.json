@@ -1,7 +1,7 @@
 {
   "contract_version": "P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1",
   "counts": {
-    "ACCOUNTING_RECONCILED": 12,
+    "ACCOUNTING_RECONCILED": 0,
     "AUTHORITATIVE_COMPLETE_CLASSIFICATION": 0,
     "CANDIDATE_COMPLETE_CLASSIFICATION": 0,
     "COMPARABLE_SEGMENT_REVENUE": 0,
@@ -25,10 +25,10 @@
     },
     "taxonomy_adopted": false
   },
-  "pre_router_fingerprint_sha256": "df90c6902c57270f2667a3debe0de95acaf6d905ed723756ca9511941b039ee2",
+  "pre_router_fingerprint_sha256": "b9a698f36168586d3fc0b560d8ec0e69c6e36f465ce997f710c7ac3f6167c95c",
   "results": [
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -62,7 +62,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -79,7 +79,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -96,7 +96,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -147,7 +147,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -198,7 +198,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -232,7 +232,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -266,7 +266,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -368,7 +368,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -385,7 +385,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -402,7 +402,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -419,7 +419,7 @@
       "required_signals": []
     },
     {
-      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "accounting_state": "ACCOUNTING_BLOCKED",
       "authoritative_classification": null,
       "authoritative_policy_adopted": false,
       "blockers": [
@@ -587,5 +587,5 @@
     "complete_normalized_input_pairs": 0,
     "reason": "No authoritative route exists while OD1-OD3 remain unapproved. For candidate routes, canonical requirements are selected but existing raw historical XBRL is not promoted to normalized route input completeness without an explicit canonical normalization mapping."
   },
-  "final_fingerprint_sha256": "f4714fcdfb6754f1c095244707b28498c45ccaa0c1c723a6cc822068a1780070"
+  "final_fingerprint_sha256": "146206681ac7cc7f5f2978b8d7f1954afca56ce65aa7082e1ec17d2c2f032667"
 }
