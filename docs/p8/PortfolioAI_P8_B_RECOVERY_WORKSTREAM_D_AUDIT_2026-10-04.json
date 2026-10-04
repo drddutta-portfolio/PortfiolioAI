@@ -1,0 +1,216 @@
+{
+  "artifacts": {
+    "classification_intervals": {
+      "r2_key": "portfolioai-history/development/p8/recovery/workstream-d/v2/classification-intervals-e1bb66578f8bbdbfe88907369d37068c509abdb0aa07ce50ebf3b0a8dae21ed6.jsonl",
+      "rows": 12779,
+      "sha256": "e1bb66578f8bbdbfe88907369d37068c509abdb0aa07ce50ebf3b0a8dae21ed6"
+    },
+    "facts": {
+      "r2_key": "portfolioai-history/development/p8/recovery/workstream-d/v2/xbrl-observations-fc55a4808a5497cdfc73ea51db1289fcdc24e994306fff372191fe3faf9aeeba.jsonl",
+      "rows": 6303784,
+      "sha256": "fc55a4808a5497cdfc73ea51db1289fcdc24e994306fff372191fe3faf9aeeba"
+    },
+    "filings": {
+      "r2_key": "portfolioai-history/development/p8/recovery/workstream-d/v2/filing-index-9fcce341710076dfb77e9ae2b1b3b18694d09a7cedc111442ae1826a02dd754a.jsonl",
+      "rows": 35516,
+      "sha256": "9fcce341710076dfb77e9ae2b1b3b18694d09a7cedc111442ae1826a02dd754a"
+    },
+    "pair_dispositions": {
+      "r2_key": "portfolioai-history/development/p8/recovery/workstream-d/v2/pair-dispositions-b3f734704585e3fe9b833f84fc711af8505bc6c4ff1c38d447c5ca792c720e39.jsonl",
+      "rows": 121956,
+      "sha256": "b3f734704585e3fe9b833f84fc711af8505bc6c4ff1c38d447c5ca792c720e39"
+    }
+  },
+  "decision_date_matrix": {
+    "2024-02-29": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 969,
+      "NO_PRE_DECISION_EVIDENCE": 1660,
+      "RESOLVED_CLASSIFICATION": 756
+    },
+    "2024-03-28": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 973,
+      "NO_PRE_DECISION_EVIDENCE": 1677,
+      "RESOLVED_CLASSIFICATION": 759
+    },
+    "2024-04-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 981,
+      "NO_PRE_DECISION_EVIDENCE": 1682,
+      "RESOLVED_CLASSIFICATION": 771
+    },
+    "2024-05-31": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1039,
+      "NO_PRE_DECISION_EVIDENCE": 1579,
+      "RESOLVED_CLASSIFICATION": 840
+    },
+    "2024-06-28": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1040,
+      "NO_PRE_DECISION_EVIDENCE": 1594,
+      "RESOLVED_CLASSIFICATION": 845
+    },
+    "2024-07-31": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1042,
+      "NO_PRE_DECISION_EVIDENCE": 1621,
+      "RESOLVED_CLASSIFICATION": 848
+    },
+    "2024-08-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1042,
+      "NO_PRE_DECISION_EVIDENCE": 1643,
+      "RESOLVED_CLASSIFICATION": 861
+    },
+    "2024-09-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1040,
+      "NO_PRE_DECISION_EVIDENCE": 1687,
+      "RESOLVED_CLASSIFICATION": 867
+    },
+    "2024-10-31": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1044,
+      "NO_PRE_DECISION_EVIDENCE": 1708,
+      "RESOLVED_CLASSIFICATION": 874
+    },
+    "2024-11-29": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1057,
+      "NO_PRE_DECISION_EVIDENCE": 1703,
+      "RESOLVED_CLASSIFICATION": 885
+    },
+    "2024-12-31": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1057,
+      "NO_PRE_DECISION_EVIDENCE": 1735,
+      "RESOLVED_CLASSIFICATION": 885
+    },
+    "2025-01-31": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1060,
+      "NO_PRE_DECISION_EVIDENCE": 1752,
+      "RESOLVED_CLASSIFICATION": 883
+    },
+    "2025-02-28": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1076,
+      "NO_PRE_DECISION_EVIDENCE": 1752,
+      "RESOLVED_CLASSIFICATION": 893
+    },
+    "2025-03-28": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1079,
+      "NO_PRE_DECISION_EVIDENCE": 1760,
+      "RESOLVED_CLASSIFICATION": 893
+    },
+    "2025-04-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1080,
+      "NO_PRE_DECISION_EVIDENCE": 1768,
+      "RESOLVED_CLASSIFICATION": 892
+    },
+    "2025-05-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1079,
+      "NO_PRE_DECISION_EVIDENCE": 1783,
+      "RESOLVED_CLASSIFICATION": 891
+    },
+    "2025-06-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1077,
+      "NO_PRE_DECISION_EVIDENCE": 1816,
+      "RESOLVED_CLASSIFICATION": 889
+    },
+    "2025-07-31": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1076,
+      "NO_PRE_DECISION_EVIDENCE": 1852,
+      "RESOLVED_CLASSIFICATION": 886
+    },
+    "2025-08-29": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1075,
+      "NO_PRE_DECISION_EVIDENCE": 1891,
+      "RESOLVED_CLASSIFICATION": 885
+    },
+    "2025-09-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1074,
+      "NO_PRE_DECISION_EVIDENCE": 1939,
+      "RESOLVED_CLASSIFICATION": 882
+    },
+    "2025-10-31": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1071,
+      "NO_PRE_DECISION_EVIDENCE": 1970,
+      "RESOLVED_CLASSIFICATION": 881
+    },
+    "2025-11-28": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1069,
+      "NO_PRE_DECISION_EVIDENCE": 1996,
+      "RESOLVED_CLASSIFICATION": 881
+    },
+    "2025-12-31": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1067,
+      "NO_PRE_DECISION_EVIDENCE": 2030,
+      "RESOLVED_CLASSIFICATION": 879
+    },
+    "2026-01-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1063,
+      "NO_PRE_DECISION_EVIDENCE": 2048,
+      "RESOLVED_CLASSIFICATION": 879
+    },
+    "2026-02-27": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1062,
+      "NO_PRE_DECISION_EVIDENCE": 2072,
+      "RESOLVED_CLASSIFICATION": 877
+    },
+    "2026-03-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1060,
+      "NO_PRE_DECISION_EVIDENCE": 2093,
+      "RESOLVED_CLASSIFICATION": 877
+    },
+    "2026-04-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1060,
+      "NO_PRE_DECISION_EVIDENCE": 2190,
+      "RESOLVED_CLASSIFICATION": 877
+    },
+    "2026-05-29": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1060,
+      "NO_PRE_DECISION_EVIDENCE": 2202,
+      "RESOLVED_CLASSIFICATION": 877
+    },
+    "2026-06-30": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1059,
+      "NO_PRE_DECISION_EVIDENCE": 2220,
+      "RESOLVED_CLASSIFICATION": 877
+    },
+    "2026-07-31": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1059,
+      "NO_PRE_DECISION_EVIDENCE": 2246,
+      "RESOLVED_CLASSIFICATION": 877
+    },
+    "2026-08-31": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1058,
+      "NO_PRE_DECISION_EVIDENCE": 2411,
+      "RESOLVED_CLASSIFICATION": 876
+    },
+    "2026-09-29": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 1058,
+      "NO_PRE_DECISION_EVIDENCE": 2451,
+      "RESOLVED_CLASSIFICATION": 876
+    }
+  },
+  "eligible_pairs": 121956,
+  "generated_at": "2026-10-04T10:36:00.618646+00:00",
+  "hash_mismatches": 0,
+  "notes": [
+    "No current classification backdated.",
+    "Frozen P8_HISTORICAL_CLASSIFICATION_V1 applied only to pre-decision filing evidence.",
+    "D completion is structural materialization, not a coverage PASS for the stopped V1 experiment."
+  ],
+  "pair_states": {
+    "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 33706,
+    "NO_PRE_DECISION_EVIDENCE": 60531,
+    "RESOLVED_CLASSIFICATION": 27719
+  },
+  "parse_states": {
+    "XML_PARSED": 35515,
+    "XML_PARSE_ERROR": 1
+  },
+  "performance_outcome_reads": 0,
+  "production_changes": 0,
+  "provider_calls": 0,
+  "revision_lineage": "append-only source hash + publication timestamp + interval supersession",
+  "source_manifest": {
+    "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/manifests/alias-backfill-8758fa8c8340ec0006f4a74fab76b783806bf009ba668148f0d771015d46ed79.jsonl",
+    "rows": 54562,
+    "sha256": "8758fa8c8340ec0006f4a74fab76b783806bf009ba668148f0d771015d46ed79"
+  },
+  "status": "PASS_COMPLETE",
+  "supabase_writes": 0,
+  "usable_source_bodies": 35516,
+  "version": "P8_B_RECOVERY_WORKSTREAM_D_V2"
+}
