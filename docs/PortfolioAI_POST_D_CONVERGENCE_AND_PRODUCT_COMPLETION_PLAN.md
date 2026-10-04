@@ -1712,3 +1712,125 @@ Authoritative artifacts:
 - `docs/p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_CLOSURE_2026-10-04.md`
 
 Safety boundary: provider calls 0; new source acquisition 0; Supabase/R2 writes 0; migrations 0; deployments 0; Production/main changes 0; B5/B6/B-FINAL rebuild 0; new experiment 0; P8-C 0; performance/forward/holdout reads 0.
+
+
+---
+
+## 27. P8 complete four-tier taxonomy authority + frozen canary revalidation closure — 4 October 2026
+
+**Current-state precedence:** This section supersedes section 26's missing-authority framing. The separately authorized complete-taxonomy build is now complete.
+
+**Implementation / tests:** COMPLETE / PASS  
+**Official four-tier vocabulary:** COMPLETE AS DEVELOPMENT REFERENCE CANDIDATE  
+**Canonical PortfolioAI adoption:** PENDING OWNER APPROVAL  
+**Historical company complete classification:** BLOCKED  
+**Exact disposition:** `COMPLETE_FOUR_TIER_TAXONOMY_BUILT_PENDING_OWNER_POLICY_ADOPTION`
+
+### 27.1 Official reference authority
+
+The task located and fetched read-only the official **NSE Indices Limited Industry Classification Structure — November 2022**.
+
+Official source SHA-256:
+
+`ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1`
+
+The generated Development reference candidate validates:
+
+- 12 Macro-Economic Sectors;
+- 22 Sectors;
+- 59 Industries;
+- 197 Basic Industries;
+- 0 structural validation errors;
+- 0 orphan nodes;
+- 0 empty names.
+
+Generated taxonomy payload SHA-256:
+
+`e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96`
+
+This resolves the prior missing complete four-tier vocabulary dependency for the declared November-2022 source.
+
+### 27.2 Adoption boundary
+
+The package status remains:
+
+`REFERENCE_CANDIDATE_PENDING_PORTFOLIOAI_OWNER_ADOPTION`
+
+OD1–OD4 remain pending. The execution authorization's proposed policy choices were not treated as owner approval.
+
+### 27.3 Frozen canary revalidation
+
+The unchanged 32-pair frozen canary was rerun against the complete official vocabulary.
+
+| Measure | Result |
+|---|---:|
+| Semantic retained | 32 / 32 |
+| Exact official Basic-Industry evidence | 6 pairs |
+| Exact-leaf multi-segment cases blocked | 6 |
+| Complete company-level taxonomy candidates | 0 |
+| Authoritative complete classifications | 0 |
+| Unique route candidates from complete company classification | 0 |
+| Authoritative methodology routes | 0 |
+| Complete normalized-input pairs | 0 |
+| Negative-control promotions | 0 |
+
+Canary fingerprint:
+
+`04a89f697c95c0a403e4ab2c16fc6a1367b902169f6cc969732e1cc291c4616a`
+
+Exact official leaf evidence includes Pharmaceuticals, Commercial Vehicles, Education, Sugar and Edible Oil. Every such canary case is multi-segment, so the leaf evidence cannot become a company classification without an approved business-selection/dominance policy.
+
+### 27.4 Expansion gate
+
+The existing gate was preserved.
+
+It fails because:
+
+- the mapping authority has not been owner-adopted;
+- OD1–OD4 are not approved;
+- complete authoritative company classification remains 0;
+- authoritative unique methodology route from complete classification remains 0.
+
+Therefore the 25,761 provisional candidate pairs were **not** processed broadly.
+
+Full candidate semantic recovery remains **NOT MEASURED**.
+
+Route-specific normalized input completeness remains **NOT EVALUATED**.
+
+### 27.5 Concrete owner adoption package
+
+The review package proposes:
+
+- OD1 — approve frozen later NSE taxonomy vocabulary for retrospective organization of strictly point-in-time company evidence with version disclosure;
+- OD2 — approve a versioned evidence-backed synonym catalog while broad/ambiguous phrases remain blocked;
+- OD3 — do **not** approve dominant-business inference yet; first define a separate accounting/segment contract covering scope, period, comparability, eliminations and revenue denominator;
+- OD4 — keep diversified specialised routing blocked.
+
+No policy is adopted by this plan.
+
+### 27.6 Current blocker
+
+The precise remaining dependency is no longer taxonomy vocabulary.
+
+It is:
+
+**`OWNER_POLICY_ADOPTION_AND_MULTI_SEGMENT_CLASSIFICATION_POLICY`**
+
+Until resolved:
+
+- `P8_EXP_NSE_MONTHLY_6M_NARROWER_V2_PROPOSED` remains NOT FROZEN / NOT AUTHORIZED / NOT EXECUTED;
+- B5/B6/B-FINAL remain in their prior closed state;
+- P8-C remains NOT AUTHORIZED;
+- Production and `main` remain unchanged.
+
+Authoritative artifacts:
+
+- `docs/p8/PortfolioAI_P8_COMPLETE_FOUR_TIER_TAXONOMY_SOURCE_INVENTORY_2026-10-04.md`
+- `docs/p8/PortfolioAI_P8_NSE_FOUR_TIER_TAXONOMY_NOVEMBER_2022.json`
+- `docs/p8/PortfolioAI_P8_NSE_FOUR_TIER_TAXONOMY_NOVEMBER_2022_ADOPTION_MANIFEST.json`
+- `docs/p8/PortfolioAI_P8_COMPLETE_FOUR_TIER_TAXONOMY_OWNER_ADOPTION_PACKAGE_2026-10-04.md`
+- `docs/p8/PortfolioAI_P8_COMPLETE_FOUR_TIER_TAXONOMY_CANARY_REVALIDATION_2026-10-04.json`
+- `docs/p8/PortfolioAI_P8_COMPLETE_FOUR_TIER_TAXONOMY_CLOSURE_AUDIT_2026-10-04.json`
+- `docs/p8/PortfolioAI_P8_COMPLETE_FOUR_TIER_TAXONOMY_CLOSURE_2026-10-04.md`
+
+Safety boundary: no Supabase/R2 writes, migrations, deployments, Production/main changes, company-source acquisition, experiment execution, B5/B6/B-FINAL rebuild, P8-C or outcome/performance/holdout inspection.
