@@ -1,15 +1,52 @@
 # P8-B Recovery Workstream C Closure — 2026-10-04
 
-**Workstream C = COMPLETE / PASS / CLOSED**
+## Superseded status
 
-Frozen B2 boundary: 121,956 eligible pairs. Official NSE acquisition and source disposition are complete. Missing point-in-time NSE evidence is explicit missingness, not automatic BSE fallback. BSE is only relevant to a specifically deterministic BSE mapping.
+**Workstream C = NOT CLOSED / FEASIBILITY STOP**
 
-Original NSE manifest: 50,377 sources = 47,999 verified existing + 2,255 written + 123 unavailable. Targeted repair tested 122 dead financial sources, repaired 19, leaving 103 explicitly unavailable. SHA-256, deterministic R2 keys, and no-refetch idempotency are enforced.
+The earlier statement in this file that Workstream C was `COMPLETE / PASS / CLOSED` is superseded.
 
-Dated-alias run 37174254098 completed acquisition; only its later git push failed due non-fast-forward. Alias manifest SHA-256: 8758fa8c8340ec0006f4a74fab76b783806bf009ba668148f0d771015d46ed79. It inspected 64,828 NSE metadata rows in 260 requests, resolved 54,562 unique filings, and acquired 35,516 bodies; 19,046 bodies are explicitly SOURCE_UNAVAILABLE. Resolver counts: 54,043 exact ISIN, 1,044 dated NSE symbol/name, 9,741 unresolved metadata rows. Acquired identity modes: 34,601 exact ISIN + 915 dated NSE symbol/name.
+Reason: the governing recovery plan requires a feasibility decision before Workstream C bulk acquisition and recommends replay-ready coverage of at least 80% overall and 70% on every retained decision date before proceeding. The owner-approved exclusion ceiling remains `PENDING_OWNER_FREEZE`.
 
-Financial-result diagnostic only: 61,425 covered pairs; 60,531 explicit gaps; 50.3665%; 2,754 gap identities. This is not a C closure threshold.
+The latest alias-aware official NSE financial-metadata census shows:
 
-Provider calls 0. Supabase writes 0. Production changes 0. Performance/outcome reads 0. D/E not started. Residual missingness is carried forward to later readiness evaluation and is not converted into fabricated evidence.
+- B2 eligible denominator: **121,956**
+- covered pairs: **61,692**
+- gaps: **60,264**
+- overall coverage: **50.585457%**
+- best decision-date coverage: **54.5980%**
+- worst decision-date coverage: **44.2417%**
+- decision dates meeting the recommended 70% floor: **0 / 32**
 
-**CLOSED. D/E require separate authorization.**
+Official BSE automated fallback remains unproven/blocked. Trendlyne is secondary enrichment only and requires an official filing anchor; it cannot convert filing-absent pairs into replay-ready pairs.
+
+Therefore explicit missingness is correctly preserved, but explicit missingness alone is not sufficient to close Workstream C as PASS.
+
+## Preserved acquisition evidence
+
+The source-acquisition work remains valid and reusable:
+
+- original NSE manifest: 50,377 sources = 47,999 verified existing + 2,255 written + 123 initially unavailable;
+- dated-alias acquisition inspected 64,828 NSE metadata rows;
+- deterministic historical identity resolution via exact ISIN and dated NSE symbol/name;
+- SHA-256 content hashes;
+- deterministic R2 keys;
+- no-refetch idempotency;
+- provider calls 0;
+- Production changes 0;
+- performance/outcome reads 0.
+
+No acquired evidence is invalidated or deleted by this status correction.
+
+## Controlling decision
+
+See:
+
+- `docs/p8/PortfolioAI_P8_B_FEASIBILITY_DECISION_2026-10-04.md`
+- `docs/p8/PortfolioAI_P8_B_CURRENT_EXPERIMENT_FEASIBILITY_STOP_2026-10-04.md`
+
+Current disposition:
+
+**NO-GO — CURRENT P8 EXPERIMENT NOT FEASIBLE UNDER THE GOVERNING RECOVERY STANDARD**
+
+Workstreams D and E are not authorized under the current experiment. P8-C, holdout, forward returns, and performance remain untouched.
