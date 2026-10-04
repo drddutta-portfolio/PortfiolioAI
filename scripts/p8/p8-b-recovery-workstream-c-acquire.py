@@ -104,22 +104,32 @@ def annmeta(target):
     return list(u.values()),n
 
 def link(v):
-    if not isinstance(v,str) or not v.strip():return None
-    u=urljoin("https://www.nseindia.com",v.strip())
+    if not isinstance(v,str): return None
+    raw=v.strip()
+    if not raw or raw.lower() in {"-","na","n/a","null","none","#"}: return None
+    u=urljoin("https://www.nseindia.com",raw)
     return u if u.startswith("https://") else None
 
 def sources(fin,ann):
     a={}
     for r in fin:
-        u=link(r.get("xbrl")) or link(r.get("resultDetailedDataLink"))
-        if not u:continue
+        candidates=[]
+        for raw in (r.get("xbrl"),r.get("resultDetailedDataLink")):
+            u=link(raw)
+            if u and u not in candidates:candidates.append(u)
+        if not candidates:continue
         isin=str(r.get("isin") or "").strip().upper(); t=dt(r.get("exchdisstime") or r.get("broadCastDate") or r.get("filingDate"))
-        h=hashlib.sha256(u.encode()).hexdigest();a[h]={"url":u,"isin":isin,"kind":"FINANCIAL_RESULT","time":t.isoformat() if t else None}
+        h=hashlib.sha256(candidates[0].encode()).hexdigest()
+        a[h]={"url":candidates[0],"candidates":candidates,"isin":isin,"kind":"FINANCIAL_RESULT","time":t.isoformat() if t else None}
     for r in ann:
-        u=link(r.get("attchmntFile")) or link(r.get("csvName"))
-        if not u:continue
+        candidates=[]
+        for raw in (r.get("attchmntFile"),r.get("csvName")):
+            u=link(raw)
+            if u and u not in candidates:candidates.append(u)
+        if not candidates:continue
         isin=str(r.get("sm_isin") or "").strip().upper(); t=dt(r.get("exchdisstime") or r.get("an_dt"))
-        h=hashlib.sha256(u.encode()).hexdigest();a[h]={"url":u,"isin":isin,"kind":r["_kind"],"time":t.isoformat() if t else None}
+        h=hashlib.sha256(candidates[0].encode()).hexdigest()
+        a[h]={"url":candidates[0],"candidates":candidates,"isin":isin,"kind":r["_kind"],"time":t.isoformat() if t else None}
     return a
 
 def one(item,bucket):
@@ -129,21 +139,26 @@ def one(item,bucket):
         k=x[0]["Key"];h=c.head_object(Bucket=bucket,Key=k)
         if h.get("Metadata",{}).get("sha256"):return {**meta,"r2_key":k,"sha256":h["Metadata"]["sha256"],"bytes":h["ContentLength"],"state":"VERIFIED_EXISTING"}
     q=requests.Session();q.headers.update({"User-Agent":UA,"Referer":"https://www.nseindia.com/"})
-    r=None; err=None
-    for i in range(8):
-        try:
-            r=q.get(meta["url"],timeout=120)
-            if r.status_code==200 and r.content:break
-        except requests.RequestException as e:
-            err=e
-            r=None
-        time.sleep(min(30,2**i))
-    if r is None or r.status_code!=200 or not r.content:
-        return {**meta,"state":"SOURCE_UNAVAILABLE","http":getattr(r,"status_code",None),"transport_error":type(err).__name__ if err else None}
-    sh=hashlib.sha256(r.content).hexdigest(); p=urlparse(meta["url"]).path.lower()
+    r=None; err=None; selected=None; attempts=[]
+    for candidate in meta.get("candidates") or [meta["url"]]:
+        for i in range(4):
+            try:
+                r=q.get(candidate,timeout=120)
+                attempts.append({"url":candidate,"http":r.status_code})
+                if r.status_code==200 and r.content:
+                    selected=candidate
+                    break
+            except requests.RequestException as e:
+                err=e; r=None
+                attempts.append({"url":candidate,"error":type(e).__name__})
+            time.sleep(min(12,2**i))
+        if selected: break
+    if selected is None or r is None or r.status_code!=200 or not r.content:
+        return {**meta,"state":"SOURCE_UNAVAILABLE","http":getattr(r,"status_code",None),"transport_error":type(err).__name__ if err else None,"attempts":attempts}
+    sh=hashlib.sha256(r.content).hexdigest(); p=urlparse(selected).path.lower()
     ext=".xml" if p.endswith(".xml") or "xml" in r.headers.get("content-type","").lower() else ".pdf" if p.endswith(".pdf") or "pdf" in r.headers.get("content-type","").lower() else ".bin"
-    k=pref+ext;c.put_object(Bucket=bucket,Key=k,Body=r.content,Metadata={"sha256":sh,"source-url-sha256":keyhash,"kind":meta["kind"].lower()})
-    return {**meta,"r2_key":k,"sha256":sh,"bytes":len(r.content),"state":"WRITTEN"}
+    k=pref+ext;c.put_object(Bucket=bucket,Key=k,Body=r.content,Metadata={"sha256":sh,"source-url-sha256":hashlib.sha256(selected.encode()).hexdigest(),"kind":meta["kind"].lower()})
+    return {**meta,"selected_url":selected,"r2_key":k,"sha256":sh,"bytes":len(r.content),"state":"WRITTEN"}
 
 def bse():
     q=requests.Session();q.headers.update({"User-Agent":UA,"Accept":"application/json,text/plain,*/*","Origin":"https://www.bseindia.com","Referer":"https://www.bseindia.com/corporates/ann.html"})
@@ -168,7 +183,10 @@ def main():
     byisin=defaultdict(set)
     for x in results:
         if x["state"]!="SOURCE_UNAVAILABLE":byisin[x["isin"]].add(x["kind"])
-    gap={i for i in target if "FINANCIAL_RESULT" not in byisin[i] or not ({"ANNUAL_REPORT","RHP_INFORMATION_MEMORANDUM"} & byisin[i])}
+    # Workstream C acquires official raw evidence. Financial-result filings are themselves
+    # classification-capable inputs because Workstream D parses their segment/business data.
+    # Annual reports/RHP are supplemental when structured financials are insufficient.
+    gap={i for i in target if "FINANCIAL_RESULT" not in byisin[i]}
     bp=bse() if gap else {"status_code":None,"json_ready":True}
     text="".join(json.dumps(x,sort_keys=True)+"\n" for x in results);mh=hashlib.sha256(text.encode()).hexdigest();mk=MAN+"sources-"+mh+".jsonl";s3().put_object(Bucket=bucket,Key=mk,Body=text.encode(),Metadata={"sha256":mh,"version":V})
     audit={"version":V,"generated_at":datetime.now(timezone.utc).isoformat(),"status":"PASS","historical_identities":len(target),
