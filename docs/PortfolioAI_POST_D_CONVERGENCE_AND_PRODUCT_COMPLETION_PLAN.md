@@ -2206,3 +2206,44 @@ It does not create an application-taxonomy crosswalk or methodology route.
 Authoritative routes remain **0** and complete normalized inputs remain **0**.
 
 No 25,761-pair expansion, experiment execution, B5/B6/B-FINAL rebuild or P8-C is authorized.
+
+
+---
+
+## 34. P8 application-taxonomy and methodology coverage closure — 4 October 2026
+
+The bounded capability/applicability audit is COMPLETE / PASS.
+
+Exact disposition:
+
+`APPLICATION_TAXONOMY_METHODOLOGY_COVERAGE_BLOCKED_APPLICABILITY_AND_EXECUTION_GAPS`
+
+Two authoritative historical classifications are proven, but neither reaches an authoritative methodology route.
+
+### Edible Oil
+
+`AGRI_PROCESSING` exists in the methodology registry but is absent from both the canonical router and sector-engine registry, so it is registered but not executable through the canonical application path. Historical source evidence also does not yet prove its required procurement/processing business attributes.
+
+`BRANDED_CONSUMER_FMCG` is implemented, but Edible Oil classification alone does not prove branded-consumer applicability.
+
+### Steel Pipes / Iron & Steel Products
+
+`STEEL_FERROUS` and `CAPITAL_EQUIPMENT_ELECTRICAL` are implemented profiles, but the current historical evidence does not establish their business-model semantics for the proven Steel Pipes classification.
+
+### Current counts
+
+- authoritative historical classifications: **2**
+- authoritative methodology routes: **0**
+- complete normalized inputs: **0**
+
+### Next decision
+
+Do not wire a route yet.
+
+Recommended next bounded task:
+
+`P8 Historical Business-Applicability Evidence + Methodology Capability Decision`
+
+or retain unsupported exclusions and stop this recovery branch.
+
+No 25,761-pair expansion, experiment execution, B5/B6/B-FINAL rebuild or P8-C is authorized.
