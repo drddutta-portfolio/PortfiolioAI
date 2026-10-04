@@ -1,0 +1,69 @@
+{
+  "record_version": "P8_SEGMENT_REVENUE_OWNER_POLICY_ADOPTION_V1",
+  "recorded_at": "2026-10-04T22:38:00+05:30",
+  "branch": "PortfolioAI-Development",
+  "owner_approval_status": "APPROVED",
+  "approved_policies": {
+    "OD1": {
+      "status": "APPROVED",
+      "authority": "PORTFOLIOAI_NSE_FOUR_TIER_TAXONOMY_REFERENCE_V1",
+      "source_version": "NSE Indices Industry Classification Structure — November 2022",
+      "official_source_sha256": "ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1",
+      "taxonomy_payload_sha256": "e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96",
+      "conditions": [
+        "Use the frozen November-2022 taxonomy to organize strictly point-in-time company evidence.",
+        "Disclose taxonomy version.",
+        "Do not introduce future company attributes."
+      ]
+    },
+    "OD2": {
+      "status": "APPROVED_WITH_REVIEW_CONTROL",
+      "authority": "VERSIONED_EVIDENCE_BACKED_SYNONYM_CATALOG",
+      "conditions": [
+        "Every synonym must map to an official taxonomy node with evidence.",
+        "Broad, conflicting or ambiguous descriptions remain blocked.",
+        "Every mapping-catalog change requires a new version and deterministic rerun."
+      ]
+    },
+    "OD3": {
+      "status": "APPROVED",
+      "authority": "P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1",
+      "frozen_git_blob_sha": "45e990981371dba217d12c430f8ce567acbf25fc",
+      "conditions": [
+        "Audited consolidated annual evidence only under V1.",
+        "Same-period accounting reconciliation and comparable segment external revenue required.",
+        "Strict greater-than-50-percent dominance; exactly 50 percent fails.",
+        "No denominator substitution or combining distinct segments to manufacture dominance."
+      ]
+    },
+    "OD4": {
+      "status": "BLOCKED",
+      "authority": "NO_SPECIALISED_ROUTE_FOR_DIVERSIFIED",
+      "conditions": [
+        "Do not design or adopt a new diversified-company methodology.",
+        "No specialised methodology route for diversified cases."
+      ]
+    }
+  },
+  "authorization_boundary": {
+    "taxonomy_and_policy_contracts_adopted": true,
+    "live_taxonomy_materialization_write_authorized": false,
+    "candidate_25761_pair_expansion_authorized": false,
+    "experiment_freeze_or_execution_authorized": false,
+    "b5_b6_bfinal_rebuild_authorized": false,
+    "p8_c_authorized": false,
+    "supabase_or_r2_writes_authorized": false,
+    "migrations_authorized": false,
+    "deployment_authorized": false
+  },
+  "measured_implication": {
+    "canary_pairs": 32,
+    "comparable_segment_revenue_pairs": 0,
+    "dominant_business_candidate_pairs": 0,
+    "complete_company_classification_pairs": 0,
+    "unique_methodology_routes": 0,
+    "complete_normalized_input_pairs": 0,
+    "note": "Policy adoption does not change the frozen canary measurement and does not make the expansion gate pass."
+  },
+  "exact_owner_approval_statement": "I approve OD1 under the frozen NSE November-2022 taxonomy reference, OD2 with versioned evidence-backed review control, and OD3 under `P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1` frozen at Git blob `45e990981371dba217d12c430f8ce567acbf25fc`. OD4 remains blocked. This approval adopts the policy contracts only; it does not authorize 25,761-pair expansion, experiment freeze/execution, B5/B6/B-FINAL rebuild, or P8-C."
+}
