@@ -2069,3 +2069,41 @@ The next unresolved issue is not taxonomy-policy adoption.
 It is the source/accounting semantic problem documented in section 28, including reportable-segment XBRL period contexts that conflict with the selected audited annual company context, incomplete inter-segment evidence, and absent eligible annual sources.
 
 Any future attempt to reinterpret those source-column semantics requires a new versioned semantic/accounting contract, explicit authorization and a complete rerun of the frozen canary before any broad cohort processing.
+
+
+---
+
+## 30. P8 XBRL segment-period semantics closure — 4 October 2026
+
+The bounded XBRL source-semantics task is COMPLETE / PASS.
+
+Exact disposition:
+
+`XBRL_SEGMENT_PERIOD_V3_CONDITIONAL_RECOVERY_PENDING_OWNER_APPROVAL`
+
+Approved V1 remains unchanged at blob `45e990981371dba217d12c430f8ce567acbf25fc`.
+
+New conditional candidate:
+
+`P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3`
+
+Blob:
+
+`797b7e91d7770f3377d0061ee338c76e8220391f`
+
+The 12 mismatch cases are not V1 parser omissions. Same-filing explicit period facts prove a quarter One-column and annual Four-column structure while the literal reportable-segment contexts remain quarter-dated. V3 preserves those raw dates and proposes an annual normalized semantic period only when the explicit One/Four period bridge, matching segment identities and multi-measure reconciliation all pass.
+
+Conditional V3 canary result:
+
+- 12 period corrections;
+- 6 comparable segment-revenue cases;
+- 6 dominant-business candidates;
+- 1 exact Basic-Industry mapping;
+- 0 methodology routes;
+- 0 complete inputs.
+
+The 12 accounting-incomplete cases yielded no alternate related facts. The 8 no-annual-source cases remain unchanged.
+
+V3 requires owner approval before any corrected period semantics become authoritative.
+
+No broad cohort processing, experiment execution, B5/B6/B-FINAL rebuild or P8-C is authorized.
