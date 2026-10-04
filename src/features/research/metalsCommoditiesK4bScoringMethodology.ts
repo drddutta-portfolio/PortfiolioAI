@@ -95,7 +95,7 @@ function rulesFor(subprofile: MetalsCommoditiesK4aSubprofile): readonly MetalsSi
   ]
 }
 
-const READINESS_ONLY_SIGNALS = [
+export const METALS_COMMODITIES_K4B_READINESS_ONLY_SIGNALS = [
   { signalCode: "COMMODITY_EXPOSURE_METADATA", minimumObservations: 1 },
 ] as const
 
@@ -132,7 +132,7 @@ export function scoreMetalsCommoditiesK4b(input: MetalsScoringInput): MetalsScor
     }
   }
 
-  for (const gate of READINESS_ONLY_SIGNALS) {
+  for (const gate of METALS_COMMODITIES_K4B_READINESS_ONLY_SIGNALS) {
     const signal = byCode.get(gate.signalCode)
     if (!signal || signal.state !== "FRESH" || signal.observationCount < gate.minimumObservations) {
       failed.push(gate.signalCode)
