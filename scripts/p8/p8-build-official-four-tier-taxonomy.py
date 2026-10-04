@@ -140,6 +140,11 @@ def norm_name(x):
 def main():
     pdf,headers=download()
     nodes,diagnostics=parse_layout_pdf()
+    # Explicit source-layout repairs: PDF wraps "Telecommunication" across the fixed-width column.
+    extraction_repairs={"IN10":"Telecommunication","IN1001":"Telecommunication"}
+    for code,name in extraction_repairs.items():
+        if code in nodes:
+            nodes[code]["name"]=name
     nodes=build_hierarchy(nodes)
     counts,errors=validate(nodes)
 
@@ -170,6 +175,7 @@ def main():
         "orphan_count":sum(1 for e in errors if e.startswith("ORPHAN:")),
         "empty_name_count":sum(1 for e in errors if e.startswith("EMPTY_NAME:")),
       },
+      "extraction_repairs":extraction_repairs,
       "nodes":sorted(nodes.values(),key=lambda x:(len(x["code"]),x["code"])),
       "extraction_diagnostics":diagnostics[:200]
     }
