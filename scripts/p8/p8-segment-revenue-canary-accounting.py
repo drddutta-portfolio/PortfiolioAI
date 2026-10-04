@@ -186,16 +186,26 @@ def accounting(selected):
     reconciled=residual is not None and abs(residual)<=tolerance
     if not reconciled: blockers.append("TOTAL_INTERSEGMENT_COMPANY_REVENUE_UNRECONCILED")
 
-    # Identify segment revenue facts for exact same duration period.
-    segs=[]
+    # Identify segment revenue facts for the exact same audited annual duration period.
+    # Facts present under a different context period are preserved as mismatch evidence
+    # and never silently promoted based on context names such as "Four...".
+    segs=[]; period_mismatches=[]
     for f in fs:
         if f["local_name"]!="SegmentRevenue" or f["context_ref"]==cref: continue
         cp=f.get("context") or {}
-        if cp.get("start")!=b["start"] or cp.get("end")!=b["end"]: continue
         members=cp.get("members") or []
         if not members: continue
         desc=one(fs,"DescriptionOfReportableSegment",f["context_ref"])
         if not desc: continue
+        if cp.get("start")!=b["start"] or cp.get("end")!=b["end"]:
+            period_mismatches.append({
+              "context_ref":f["context_ref"],"description":clean(desc["value"]),
+              "context_start":cp.get("start"),"context_end":cp.get("end"),
+              "selected_annual_start":b["start"],"selected_annual_end":b["end"],
+              "segment_revenue":str(scaled_value(f)) if scaled_value(f) is not None else None,
+              "unit_ref":f.get("unit_ref"),"decimals":f.get("decimals"),"scale":f.get("scale")
+            })
+            continue
         fv=scaled_value(f)
         ext_rows=[x for x in fs if x["context_ref"]==f["context_ref"] and re.search(r"external.*revenue|revenue.*external",x["local_name"],re.I)]
         ext=ext_rows[0] if len(ext_rows)==1 else None
@@ -231,6 +241,8 @@ def accounting(selected):
     dominant=[s for s in segs if s["strict_gt_50"] and not s["blockers"]]
     if len(dominant)>1: blockers.append("MULTIPLE_GT50_SEGMENTS_INTERNAL_INCONSISTENCY")
     state="ACCOUNTING_RECONCILED"
+    if not segs and period_mismatches:
+        blockers.append("REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH")
     if blockers: state="ACCOUNTING_BLOCKED"
     elif not segs: state="NO_REPORTABLE_SEGMENT_REVENUE"
     elif not dominant: state="NO_DOMINANT_BUSINESS_UNDER_CANDIDATE"
@@ -243,7 +255,7 @@ def accounting(selected):
       "unit":denom.get("unit_ref"),"reconciliation_residual":str(residual) if residual is not None else None,
       "reconciliation_tolerance":str(tolerance),"reconciled":reconciled,
       "aggregate_intersegment_is_zero":inter_zero,
-      "segments":segs,"dominant_segments":dominant,"blockers":sorted(set(blockers))
+      "segments":segs,"segment_period_mismatch_evidence":period_mismatches,"dominant_segments":dominant,"blockers":sorted(set(blockers))
     }
 
 def taxonomy_index(tax):
