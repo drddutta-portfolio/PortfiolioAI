@@ -1,0 +1,51 @@
+{
+  "contract_version": "P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3",
+  "supersedes_candidate": "P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V2",
+  "status": "FROZEN_CONDITIONAL_CANDIDATE_NOT_OWNER_APPROVED",
+  "reason_for_new_version": "V2 required literal FourD context dates to be annual. Source inspection proved that the same FourD contexts are quarter-dated while explicit DateOfStartOfReportingPeriod/DateOfEndOfReportingPeriod facts attached to FourD identify the annual period. Using those explicit period facts is a semantic-rule change and therefore requires a new version.",
+  "approved_v1_unchanged": {
+    "contract": "P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1",
+    "git_blob_sha": "45e990981371dba217d12c430f8ce567acbf25fc"
+  },
+  "evidence_standard": {
+    "primary_raw_evidence": "Preserve literal XBRL context dates exactly as filed.",
+    "explicit_period_facts": [
+      "DateOfStartOfReportingPeriod",
+      "DateOfEndOfReportingPeriod",
+      "ReportingQuarter"
+    ],
+    "correction_rule": "A proposed semantic-period correction may use explicit period facts attached to the base OneD/FourD table-column groups when deterministic same-filing structure links segment subcontexts to those groups.",
+    "prohibited_alone": [
+      "One/Four naming",
+      "amount magnitude",
+      "expected revenue",
+      "arithmetic reconciliation",
+      "another issuer filing",
+      "current company knowledge"
+    ]
+  },
+  "conditional_rule": {
+    "id": "YEARLY_EXPLICIT_PERIOD_FACT_TABLE_COLUMN_BRIDGE_V2",
+    "all_required": [
+      "Source hash verifies and filing is point-in-time eligible.",
+      "ReportingQuarter = Yearly.",
+      "OneD and FourD each contain explicit DateOfStartOfReportingPeriod and DateOfEndOfReportingPeriod facts.",
+      "OneD explicit period is quarter-duration and FourD explicit period is annual-duration, with same end date.",
+      "OneReportableSegmentRevenue and FourReportableSegmentRevenue groups have identical ordered reportable-segment descriptions.",
+      "One segment revenue group reconciles to OneD total SegmentRevenue.",
+      "Four segment revenue group reconciles to FourD total SegmentRevenue.",
+      "At least one additional One/Four reportable-segment measure family reconciles independently to its OneD/FourD totals.",
+      "Units and scale are compatible.",
+      "Original literal subcontext dates are retained and disclosed as conflicting raw metadata."
+    ],
+    "proposed_normalization": "Assign proposed semantic period of Four reportable-segment facts from the explicit FourD reporting-period facts, while preserving their original literal context dates and recording SOURCE_CONTEXT_DATE_CONFLICT.",
+    "proof_state": "V3_CONDITIONAL_SOURCE_TAGGING_DEFECT_WITH_EXPLICIT_PERIOD_FACT_BRIDGE",
+    "owner_approval_required": true
+  },
+  "v1_effect": "NONE_UNTIL_OWNER_APPROVAL",
+  "broad_processing_authorized": false,
+  "frozen_canary": {
+    "pair_count": 32,
+    "fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce"
+  }
+}
