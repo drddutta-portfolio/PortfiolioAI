@@ -16,7 +16,7 @@ jobs:
         with: {ref: PortfolioAI-Development}
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - run: python -m pip install --no-cache-dir "requests==2.32.5" "beautifulsoup4==4.13.4"
+      - run: python -m pip install --no-cache-dir "requests==2.32.5" "beautifulsoup4==4.13.4" "pdfplumber==0.11.7"
       - run: python scripts/p8/p8-segment-revenue-methodology-source-assessment.py
       - name: Commit assessment
         run: |
