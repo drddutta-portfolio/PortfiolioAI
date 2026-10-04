@@ -3,8 +3,11 @@
 **Document type:** Authoritative planning and audit document  
 **Implementation authorization:** None  
 **Repository:** `drddutta-portfolio/PortfiolioAI`  
-**Audited development line:** `program-d-operations-optional-ai`  
-**Plan date:** 26 September 2026
+**Historical audited development line:** `program-d-operations-optional-ai`
+**Current authoritative branch:** `PortfolioAI-Development`
+**Original plan date:** 26 September 2026
+**Last reconciled:** 4 October 2026, 18:11:19 IST (Asia/Kolkata; UTC+05:30)
+**Audited Development HEAD:** `f2970a8970320e7525e272996ddcca59ba840542`
 
 This plan does not authorize source-code changes, migrations, branch creation,
 Supabase or Vercel changes, provider or AI calls, deployment, merge, push,
@@ -13,6 +16,14 @@ scheduler activation, production mutation, or implementation of any checkpoint.
 ---
 
 ## 1. Executive conclusion
+
+**Current-state precedence — 4 October 2026:** Section 22 reconciles this plan
+with the latest repository artifacts and supersedes earlier present-tense stage
+labels below. P0–P7, P7-IC and IC-FINAL are closed within their recorded scopes.
+P8 is active but V1 is stopped on feasibility. Workstream D is structurally
+closed; Workstream E has not started. The next path is an owner-reviewed design
+for a separately versioned narrower experiment, before any outcome inspection.
+This document update authorizes no experiment creation or execution.
 
 PortfolioAI must now enter a **convergence and product-completion phase**, not
 another feature program.
@@ -739,6 +750,14 @@ P8 remains **NOT AUTHORIZED** until P7-IC completes and the owner explicitly clo
 
 ### P8 — Release-candidate qualification
 
+**Scope reconciliation — 4 October 2026:** Later owner-authorized P8 documents
+use P8 for Advanced Quant / Backtesting, consistent with Blueprint Phase 8.
+The release-candidate requirements below remain outstanding obligations before
+P-FINAL; backtesting closure does not substitute for release qualification.
+Section 22 records this naming divergence and the owner decision required to
+freeze the combined completion sequence. No new program or numbered stage is
+created by this reconciliation.
+
 Required checks:
 
 - full test suite;
@@ -1051,3 +1070,225 @@ methodology-specific evidence deficits and the required durable R9/Movement
 persistence is absent. No migration was created or applied. IC-A now requires
 an owner decision on IC1 scope and on any additive persistence design. P7 stays
 active; IC1, P8 and Production work remain unauthorized.
+
+
+---
+
+## 22. Repository-backed current-build reconciliation — 4 October 2026
+
+**Updated at:** 4 October 2026, 18:11:19 IST (Asia/Kolkata; UTC+05:30)
+**Equivalent UTC:** 4 October 2026, 12:41:19 UTC
+**Scope:** Planning/audit document update only
+**Final audit disposition:** `VERSION_NARROWER_EXPERIMENT_REQUIRED`
+
+### 22.1 Authority and evidence boundary
+
+Repository: `drddutta-portfolio/PortfiolioAI`. Branch: `PortfolioAI-Development`.
+Local HEAD, cached origin/PortfolioAI-Development and independently verified live
+GitHub Development HEAD agree at:
+
+`f2970a8970320e7525e272996ddcca59ba840542`
+
+Latest commit: `audit(p8): close Workstream D materialization`.
+The working tree was clean before this documentation edit. Shell
+`git fetch --prune origin` failed because its proxy was unreachable; live remote
+authority was instead verified through the GitHub connector. No reset or branch
+switch occurred. This timestamp dates the reconciliation, not a new data run.
+
+This audit inspected repository plans, implementation, commit chronology and
+coverage artifacts. It did not independently reread R2 source bodies or query
+hosted databases. Source verification counts below are the recorded run results.
+No P8-C outcomes, holdout returns, forward returns or performance were inspected.
+
+Controlling detailed evidence:
+
+- `docs/PortfolioAI_Development_Status.md`, including P7 closure and P8 entry;
+- `docs/PortfolioAI_POST_D_P7_IC_PORTFOLIO_INTELLIGENCE_COMPLETION_PLAN.md`;
+- `docs/p8/PortfolioAI_P8_ADVANCED_QUANT_BACKTESTING_EXECUTION_PLAN_2026-09-30.md`;
+- `docs/p8/PortfolioAI_P8_COMPLETION_BUILD_HANDOFF_PLAN_2026-09-30.md`;
+- `docs/p8/PortfolioAI_P8_B_SINGLE_RECOVERY_PLAN_2026-10-03.md`;
+- `docs/p8/PortfolioAI_P8_B_FEASIBILITY_DECISION_2026-10-04.md`;
+- `docs/p8/PortfolioAI_P8_B_CURRENT_EXPERIMENT_FEASIBILITY_STOP_2026-10-04.md`;
+- latest recovery Workstream A–D plans, census, audits and closure artifacts.
+
+### 22.2 Effective lineage and stage matrix
+
+| Stage | Effective state | Exact closure meaning / limitation |
+|---|---|---|
+| Programs A–D | COMPLETE / PASS / CLOSED | Approved bounded engineering scopes; not Production maturity |
+| P0 | COMPLETE / PASS / CLOSED | Authority/readiness freeze and Checkpoint 1 |
+| P1 | COMPLETE / PASS / CLOSED | Development baseline/ancestry and Checkpoint 2 |
+| P2 | COMPLETE / PASS / CLOSED | Isolated Development environment and Checkpoint 3 |
+| P3 | COMPLETE / PASS / CLOSED | Acceptance-data/fixture boundaries and Checkpoint 4 |
+| P4 | COMPLETE / PASS / CLOSED | Portfolio-wide terminal readiness dispositions |
+| P5 | COMPLETE / PASS / CLOSED | Explicit methodology/R6/R7/sizing dispositions; numeric coverage zero |
+| P6 | COMPLETE / PASS / CLOSED | Integrated deterministic state and frozen persistence choices |
+| P7 / P7-IC / IC-FINAL | COMPLETE / PASS / CLOSED | Current-state integration; Owner Checkpoint 6 explicitly approved |
+| P8 overall | ACTIVE / BLOCKED | Historical experiment foundation insufficient |
+| P8-0 | COMPLETE / PASS | Point-in-time entry contract and readiness surface |
+| P8-A | COMPLETE / PASS | Read-only inventory completed; data sufficiency failed |
+| P8-B0 / B1 | COMPLETE / PASS | Baseline and experiment/bias-control contract |
+| P8-B2 / B3 | COMPLETE / PASS / CLOSED | Historical foundations with explicit residual blockers |
+| Original B4 / B5 / B6 | COMPLETE / PASS structurally | Original artifacts preserved; deficient semantics superseded by recovery |
+| Original B-FINAL | BLOCKED / CLOSED | Closure audit complete; experiment sufficiency failed |
+| Recovery A | Contract implementation COMPLETE / PASS; ceiling freeze BLOCKED | Corrected semantics encoded; ceiling remains null |
+| Recovery B | COMPLETE / PASS, bounded | Identity/source adapter and census; no feasibility PASS |
+| Recovery C | BLOCKED / NOT CLOSED | Earlier PASS superseded by feasibility stop |
+| Recovery D | COMPLETE / PASS / CLOSED structurally | Materialization run complete; full classification/reproducibility compliance unproven |
+| Recovery E | NOT STARTED / BLOCKED | Corrected B5/B6/B-FINAL rerun not performed |
+| P8-C onward | NOT STARTED / NOT AUTHORIZED | No progression permitted from current foundation |
+| Release-candidate qualification / P-FINAL | NOT CLOSED | Original qualification obligations remain outstanding |
+
+The resulting lineage is:
+
+Programs A–D → P0 → P1 → P2 → P3 → P4 → P5 → P6 → P7 → P7-IC /
+IC-FINAL / approved Checkpoint 6 → P8-0 → P8-A → P8-B blocked → recovery A/B
+→ C feasibility stop → D structural materialization → E not started.
+
+P7 closure does not assert numeric investment readiness. Latest closure records
+report zero R6 scores, zero R7 candidacies and zero canonical actions, with
+explicit current blockers. Older IC2-active and P8-unauthorized planning
+snapshots remain historical records and are superseded for current-state use.
+
+### 22.3 Current V1 feasibility and Workstream D reconciliation
+
+Experiment: `P8_EXP_NSE_MONTHLY_6M_V1`.
+
+| Measure | Repository-backed value |
+|---|---:|
+| Historical identities | 4,524 |
+| Proven decision dates | 32 |
+| Full identity/date audit surface | 144,768 |
+| B2-eligible candidate denominator | 121,956 |
+| Alias-aware official NSE financial-metadata covered pairs | 61,692 (50.585457%) |
+| Latest metadata gaps | 60,264 |
+| Metadata coverage by decision date | 44.2417%–54.5980% |
+| Dates meeting recommended 70% floor | 0 / 32 |
+| B3 V2 market-ledger READY pairs | 82,504 (67.650628%) |
+| B3 V2 market-ledger blocked pairs | 39,452 |
+| Owner-approved exclusion ceiling | PENDING_OWNER_FREEZE / null |
+
+B's earlier 60,231 fallback-required pairs are its earlier census, not the
+latest metadata-gap count. Official BSE fallback remains unproven/blocked:
+API transport returned 403 and the browser canary failed. An implemented identity
+adapter or accessible landing page does not prove usable filing acquisition.
+Trendlyne enrichment requires an official filing anchor and cannot fill
+filing-absent pairs. Explicit missingness does not count as replay-ready coverage.
+
+Latest D audit: `PortfolioAI_P8_B_RECOVERY_WORKSTREAM_D_AUDIT_2026-10-04.json`.
+Closure: `PortfolioAI_P8_B_RECOVERY_WORKSTREAM_D_CLOSURE_2026-10-04.md`.
+GitHub Actions run 37195065327 completed successfully on Development.
+
+| D output / state | Count |
+|---|---:|
+| Eligible pair dispositions | 121,956 |
+| Verified usable source bodies / filing-index rows | 35,516 |
+| Parsed XBRL bodies | 35,515 |
+| XML parse errors | 1 |
+| XBRL observations materialized | 6,303,784 |
+| Historical classification intervals | 12,779 |
+| Hash mismatches | 0 |
+| RESOLVED_CLASSIFICATION | 27,719 (22.728689%) |
+| EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED | 33,706 |
+| NO_PRE_DECISION_EVIDENCE | 60,531 |
+| Total unresolved pair states | 94,237 |
+
+All pair-state and 32 decision-date totals reconcile to 121,956. D evidence-present
+coverage is 61,425 pairs (50.366526%). Recorded classification-resolved coverage
+is 19.9772%–24.2915% per date. Classification resolution alone does not prove
+complete required metrics, methodology routing or canonical B6 replay readiness.
+
+D closes structural materialization only. Its closure explicitly preserves V1's
+NO-GO and requires separate authorization for E. Original hosted B5/B6 artifacts
+remain unchanged; no corrected B-FINAL PASS exists.
+
+The recovery plan recommends at least 24 dates, 100% historical identity
+resolution, 80% overall replay-ready coverage, 70% per retained date and 60% per
+major methodology sector. These are owner-reviewable recommended standards,
+not an already approved numeric ceiling. Owner approval must not be inferred.
+Complete sector/cohort and metric sufficiency remain unproven.
+
+**Conclusion:** V1 cannot legitimately reach B-FINAL PASS through an E rerun on
+this frozen evidence surface. D improves evidence materialization but does not
+repair feasibility. The market-ready population is itself below the recommended
+overall coverage floor. No threshold or exclusion policy is relaxed here.
+
+### 22.4 Errors, supersessions and governance drift
+
+1. C's premature PASS at `873b1c83` was retracted at `803f3257`; the feasibility
+   decision and stop are controlling. Missingness preservation is not sufficiency.
+2. Full C acquisition proceeded while the ceiling remained pending and before a
+   demonstrated coverage path met the recovery feasibility gate. The recorded
+   source-download canary does not prove the required full difficult-identity →
+   classification → methodology → B6 chain.
+3. D implementation and execution followed the documented stop that prohibited
+   starting D. No intervening owner override is recorded in the reviewed
+   repository artifacts. Its later closure does not establish such approval.
+4. Original B5 required current canonical-security linkage and historical
+   assignment/policy creation. These rules contradicted B2 historical identity
+   and retrospective frozen-methodology semantics. A corrects the contract,
+   without yet rebuilding hosted B5/B6.
+5. D's `parse_xml` aggregates revenue/turnover/income over XBRL members without
+   selecting audited consolidated annual periods or identifying segment axes.
+   Raw member labels / DIVERSIFIED do not implement the required four-tier
+   taxonomy and fallback hierarchy. Its PASS check tests hashes and pair count,
+   not the complete classification contract.
+6. D collects results in asynchronous completion order and serializes them
+   without canonical sorting; equal-timestamp events lack deterministic
+   tie/conflict resolution. Stable repeat-materialization hashes are unproven.
+7. This master roadmap names P8 release qualification while later plans name it
+   Advanced Quant / Backtesting. Both obligations must be reconciled explicitly;
+   neither completion can silently substitute for the other.
+8. Development Status ends at A-started and the P7-IC plan retains older states.
+   B–D have dedicated artifacts, so recovery is documented but central status
+   convergence is incomplete. The alias-metadata JSON audit also has a trailing
+   literal backslash-n after its object; strict JSON parsing fails. Its numbers
+   were cross-checked against the feasibility documents.
+
+B4–B6 structural closures already disclaim experiment sufficiency. B3's separate
+exhaustive original-source forensic preservation item remains open and must stay
+tracked; it is not silently closed by this update.
+
+### 22.5 Exact next legitimate step and bounded plan
+
+**Selected path C: stop V1 and prepare an owner-reviewable design for a separately
+versioned narrower P8 experiment before any outcome inspection.**
+
+A legitimate E PASS is unsupported. A structural diagnostic E rerun cannot
+resolve feasibility and is not selected. Existing official evidence and
+historical infrastructure justify narrower-design assessment, but do not prove
+that a narrower experiment will pass. Total historical-validation infeasibility
+is therefore not declared yet. Repository access is sufficient for this decision.
+
+| Control | Bounded next-step requirement |
+|---|---|
+| Entry | Reverify Development authority; preserve V1 NO-GO; obtain explicit owner authorization for narrower-design work |
+| Proposed new files | `docs/p8/PortfolioAI_P8_NARROWER_EXPERIMENT_DECISION_MEMO.md`; `docs/p8/PortfolioAI_P8_NARROWER_EXPERIMENT_FEASIBILITY_AUDIT.json` |
+| Subsequent status edits | `docs/PortfolioAI_Development_Status.md`; this master plan's current-state overlay |
+| Read-only evidence | Existing B2 membership, B3 V2 decision ledger, C source manifests, D filing/fact/classification/disposition artifacts |
+| Method | Define objective historical universe/period rules; measure the intersection of identity, market, official evidence, valid classification, required metrics and methodology coverage by date/sector/cohort |
+| Allowed writes | After authorization, Development planning and audit documents only; no tables or R2 objects changed |
+| Prohibited | Executable experiment creation, E rerun, new acquisition/provider calls, schema changes, database/R2 writes, P8-C, outcome/holdout/forward-return inspection, silent exclusions, threshold lowering, Production/main changes |
+| Closure | Owner-reviewable versioned design with explicit denominator, exclusions and missingness concentration; at least 24 proven dates; classifier validity and a demonstrated coverage path against proposed frozen standards—or documented narrower-scope NO-GO |
+| Approval | Owner authorization for design; separate contract freeze/implementation approval; separately gated P8-C transition |
+
+Narrowing must be based on explicit, outcome-independent eligibility rules,
+not silent retention of conveniently covered pairs. No new nested recovery
+program is created. The attached-document update request authorizes this planning
+reconciliation only; it does not authorize the proposed experiment work.
+
+### 22.6 Preserved completion and release boundary
+
+Preserve valid P0–P7 / P7-IC work, B0/B1, B2/B3, R2 architecture, recovery A/B,
+dated identity resolution, immutable raw sources/manifests, hashing and
+point-in-time dissemination rules. Existing evidence must not be overwritten,
+deleted or presented as more mature than its proven scope.
+
+Before P-FINAL, the owner must explicitly resolve the combined roadmap:
+historical-validation disposition and the original release-candidate checklist
+in section 9. Release qualification still requires its exact candidate,
+validation, migration/security evidence, environment/dataset manifests,
+limitations, rollback and deployment plans. Production/main changes remain
+separately authorized. This reconciliation makes no Production readiness claim.
+
+**Current final disposition: VERSION_NARROWER_EXPERIMENT_REQUIRED.**
