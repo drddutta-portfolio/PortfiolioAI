@@ -1,3 +1,85 @@
+## P8 Historical Business-Applicability Evidence + Methodology Capability Decision — 5 October 2026
+
+**Audit execution = COMPLETE / PASS.**  
+**Exact disposition: `HISTORICAL_BUSINESS_APPLICABILITY_MIXED_DECISION_STEEL_EXISTING_METHOD_SUPPORTED_EDIBLE_OWNER_POLICY_REQUIRED`.**
+
+### Important correction to the previous capability audit
+
+The earlier capability audit correctly found zero authoritative routes, but it was too strict in treating several mandatory scored evidence families as methodology-selection prerequisites.
+
+The locked methodology contracts distinguish selection from score readiness.
+
+#### Steel Pipes / Iron & Steel Products
+
+Approved historical classification:
+
+`Industrials → Capital Goods → Industrial Products → Iron & Steel Products (IN070205015)`
+
+The existing locked `STEEL_FERROUS` methodology explicitly accepts selector:
+
+`IRON_STEEL_PRODUCTS`
+
+Therefore:
+
+- methodology applicability = **PROVEN**
+- new methodology required = **NO**
+- canonical route integration = **MISSING**
+- generic non-BANK/non-PHARMA scoring adapter = **PENDING**
+- normalized input completeness = **NOT PROVEN**
+
+Raw-material integration, steel-spread history, capacity/utilisation and other through-cycle requirements remain mandatory scoring/readiness evidence. Their absence does not invalidate methodology selection.
+
+#### Edible Oil
+
+Approved historical classification:
+
+`Fast Moving Consumer Goods → Fast Moving Consumer Goods → Agricultural Food & other Products → Edible Oil (IN040101001)`
+
+`BRANDED_CONSUMER_FMCG` accepts selector `VEGETABLE_OILS_PRODUCTS`, but no adopted PortfolioAI rule currently maps `Edible Oil` to that selector.
+
+Therefore:
+
+- BRANDED_CONSUMER_FMCG applicability = **OWNER-CONTROLLED SELECTOR MAPPING DECISION**
+- normalized input completeness = **NOT PROVEN**
+
+`AGRI_PROCESSING` remains a registry-level profile with no canonical K4A-style selector contract, no router exposure, no sector-engine registration and no dedicated canonical executable K4 engine.
+
+### Source-backed evidence
+
+Steel source:
+- ISIN `INE230R01035`
+- source SHA-256 `4b0b16349cc9ef3ff46f61d590768a39915ba4c567ef4a72f0355cd28680521d`
+- disseminated `2024-05-31T09:27:01+00:00`
+- audited consolidated FY2024
+- explicit dominant `Manufacturing- Steel Pipes` segment ≈ **74.88%**
+
+Edible Oil source:
+- ISIN `INE699H01024`
+- source SHA-256 `07eeb7e380b7436e23543c61921d53011b9c15a523a9007751f4fca12d73a196`
+- disseminated `2024-05-01T13:10:49+00:00`
+- audited consolidated FY2024
+- explicit dominant `Edible Oil` segment ≈ **75.67%**
+
+### Recommended next authorization
+
+Recommended:
+
+**P8 Steel-Ferrous Historical Route Integration + Frozen-Canary Input Readiness Validation**
+
+This would be a separately authorized, canary-only implementation using the existing `STEEL_FERROUS` methodology without changing historical economic taxonomy.
+
+Edible Oil should remain separate. Owner must choose whether to approve:
+
+`Edible Oil → VEGETABLE_OILS_PRODUCTS → BRANDED_CONSUMER_FMCG`
+
+as a methodology selector mapping, retain Edible Oil unsupported, or separately authorize AGRI_PROCESSING capability design.
+
+### Boundary
+
+The 25,761-pair population remains **NOT AUTHORIZED / NOT MEASURED**.
+
+No experiment execution, B5/B6/B-FINAL rebuild, P8-C, provider call, database/storage write, migration or deployment occurred.
+
 ## P8 Application-Taxonomy and Existing Methodology Coverage Audit — 4 October 2026
 
 **Implementation / tests = COMPLETE / PASS.**  
