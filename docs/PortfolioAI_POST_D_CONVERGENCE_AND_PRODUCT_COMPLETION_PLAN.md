@@ -21,7 +21,7 @@ scheduler activation, production mutation, or implementation of any checkpoint.
 with the latest repository artifacts and supersedes earlier present-tense stage
 labels below. P0–P7, P7-IC and IC-FINAL are closed within their recorded scopes.
 P8 is active but V1 is stopped on feasibility. Workstream D is structurally
-closed; Workstream E is COMPLETE / BLOCKED / CLOSED after its corrected rerun. The separately authorized narrower-experiment feasibility audit and subsequent historical classification / methodology-route / metric contract-resolution audit are now complete. The latest exact disposition is `HISTORICAL_CONTRACT_RESOLUTION_BLOCKED`: current point-in-time evidence does not yet prove canonical historical Sector + Industry routing for any provisional candidate pair. The next possible step, only if separately owner-authorized, is a bounded historical taxonomy evidence-normalization build using already acquired official source bodies; no new source-acquisition loop or experiment execution is authorized by this plan.
+closed; Workstream E is COMPLETE / BLOCKED / CLOSED after its corrected rerun. The separately authorized narrower-experiment feasibility audit and subsequent historical classification / methodology-route / metric contract-resolution audit are now complete. The latest exact disposition is `HISTORICAL_CONTRACT_RESOLUTION_BLOCKED`: current point-in-time evidence does not yet prove canonical historical Sector + Industry routing for any provisional candidate pair. The separately authorized historical taxonomy evidence-normalization build is now COMPLETE / BLOCKED. It proved deterministic semantic recovery from existing official XML, but the currently materialized repository authority still lacks a complete historical Macro-Economic Sector → Sector → Industry → Basic Industry mapping. No further taxonomy acquisition, experiment execution or recovery loop is automatically authorized.
 
 PortfolioAI must now enter a **convergence and product-completion phase**, not
 another feature program.
@@ -1470,3 +1470,119 @@ Authoritative artifacts:
 - `docs/p8/PortfolioAI_P8_HISTORICAL_CONTRACT_RESOLUTION_CLOSURE_2026-10-04.md`
 
 Execution boundary: provider calls 0; new source acquisition 0; Supabase writes 0; R2 writes 0; migrations 0; P8-C 0; outcome/performance/holdout reads 0; Production/main changes 0.
+
+
+---
+
+## 25. P8 historical taxonomy evidence-normalization closure — 4 October 2026
+
+**Current-state precedence:** This section supersedes section 24's possible-next-step wording by recording the separately owner-authorized taxonomy evidence-normalization build.
+
+**Implementation / focused tests:** COMPLETE / PASS  
+**Semantic canary:** COMPLETE / PASS  
+**Classification / route / normalized-input feasibility:** BLOCKED  
+**Exact disposition:** `HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_BLOCKED`
+
+### 25.1 Frozen canary and contract
+
+The canary was frozen before semantic measurement:
+
+- contract: `P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_V1`
+- canary: `P8_HISTORICAL_TAXONOMY_CANARY_V1`
+- canary members: 32
+- membership fingerprint: `b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce`
+- deterministic canary result fingerprint: `69b9c2a93587b8178117c7b47f42065cb08b375ad0aa1b6bacf6c42b390d0259`
+
+The 32-member set covered positional-label and DIVERSIFIED candidates, historical-only and current-linked identities, dated aliases, multiple pre-decision filings and unresolved-evidence negative controls. Membership used stable pre-measurement metadata and hashes only.
+
+### 25.2 Source-semantic result
+
+All 32 canary members yielded recoverable semantic text from official XML already stored in R2.
+
+Observed examples include:
+
+- `Performance Polymers & Chemicals`
+- `Solar Photovoltaic Modules`
+- `EPC/Engineering Services`
+- `Oil Seed Extraction and Refining`
+- `Hospital Business`
+- `Pharma`
+- `Chemicals`
+- `Textiles`
+
+Canary counts:
+
+| Measure | Result |
+|---|---:|
+| Semantic recovered | 32 / 32 |
+| Positional-label semantic recovery | 11 |
+| Historical-only semantic recovery | 19 |
+| Negative controls promoted | 0 |
+| Complete four-tier classification proven | 0 |
+| Exactly-one methodology route proven | 0 |
+| Complete normalized-input pairs | 0 |
+
+This proves that Workstream D's positional member QNames were not the limit of the stored evidence: the XML instances contain meaningful `DescriptionOfReportableSegment` and `DescriptionOfSingleSegment` facts.
+
+### 25.3 Why full expansion stopped
+
+The frozen expansion gate required at least one complete historical classification and at least one exactly-one methodology route derived from such classification.
+
+Those conditions failed.
+
+The repository still lacks an already-authoritative complete historical:
+
+`Macro-Economic Sector → Sector → Industry → Basic Industry`
+
+mapping capable of turning the recovered source descriptions into canonical taxonomy without inventing new semantic synonyms or backdating current classifications.
+
+Gate-K's research taxonomy/router remains useful but intentionally narrower: Sector + Industry methodology routing is not a substitute for a full economic hierarchy.
+
+Exact blocker:
+
+**`COMPLETE_FOUR_TIER_TAXONOMY_MAPPING_AUTHORITY_ABSENT`**
+
+Therefore processing did not expand to all 25,761 provisional candidates.
+
+### 25.4 Denominator and standards
+
+Historical denominator remains:
+
+- 121,956 B2-eligible pairs;
+- 4,524 historical identities;
+- 32 decision dates;
+- 25,761 provisional candidate pairs / 877 identities.
+
+Primary dispositions remain:
+
+- 60,531 `NO_PRE_DECISION_EVIDENCE`
+- 33,706 `CLASSIFICATION_UNRESOLVED`
+- 1,958 `MARKET_DATA_BLOCKED`
+- 25,761 `CLASSIFICATION_TAXONOMY_UNPROVEN`
+
+The proposed standards remain not owner-frozen:
+
+- >=24 dates: PASS — 32;
+- >=80% overall complete-input coverage: FAIL — 0%;
+- >=70% each retained date: FAIL;
+- >=60% each major methodology sector: NOT COMPUTABLE / FAIL CLOSED.
+
+No successful canary row was used to define a new denominator or manufacture feasibility.
+
+### 25.5 Current owner boundary
+
+This closure authorizes no follow-on work automatically.
+
+A future resolution would require a separately authorized canonical taxonomy-authority decision/build. The present task does not authorize acquisition of official taxonomy data, creation of a new taxonomy policy, a new experiment, B5/B6/B-FINAL rebuild, P8-C or outcome inspection.
+
+Authoritative artifacts:
+
+- `docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_SPEC_2026-10-04.md`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_CONTRACT_V1.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CANARY_MANIFEST_2026-10-04.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CANARY_AUDIT_2026-10-04.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CANARY_SOURCE_EXCERPTS_2026-10-04.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_COVERAGE_AUDIT_2026-10-04.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_CLOSURE_2026-10-04.md`
+
+Safety boundary: provider calls 0; new source acquisition 0; Supabase writes 0; R2 writes 0; migrations 0; experiment execution 0; B5/B6/B-FINAL rebuild 0; P8-C 0; outcome/performance/holdout reads 0; Production/main changes 0.
