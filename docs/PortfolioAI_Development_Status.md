@@ -1,3 +1,66 @@
+## P8 XBRL Segment-Period Semantics V3 Owner Adoption — 4 October 2026
+
+**Current-state precedence:** This entry supersedes earlier statements that V3 is pending owner approval.
+
+**V3 = OWNER APPROVED / ADOPTED.**  
+**Approved V1 = UNCHANGED.**  
+**OD1 = APPROVED.**  
+**OD2 = APPROVED WITH REVIEW CONTROL.**  
+**OD3 = APPROVED.**  
+**OD4 = BLOCKED.**
+
+Approved V3 authority:
+
+`P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3`
+
+Frozen Git blob:
+
+`797b7e91d7770f3377d0061ee338c76e8220391f`
+
+V1 remains exactly:
+
+`45e990981371dba217d12c430f8ce567acbf25fc`
+
+Immutable owner-adoption record:
+
+`docs/p8/PortfolioAI_P8_XBRL_SEGMENT_PERIOD_SEMANTICS_V3_OWNER_ADOPTION_2026-10-04.json`
+
+### Authoritative semantic effect
+
+Where every frozen V3 evidence condition passes, PortfolioAI may now normalize the semantic period of the affected Four-reportable-segment facts to the explicit annual FourD reporting period while preserving the original literal quarter-dated XBRL contexts as raw evidence.
+
+V3 does not permit annuality inference from concept/context naming, value magnitude, expected revenue or reconciliation alone.
+
+### Measured canary state after adoption
+
+The frozen 32-pair canary measurement does not change:
+
+| Measure | Result |
+|---|---:|
+| V3 period normalizations | **12** |
+| Comparable segment-revenue cases | **6** |
+| Strict >50% dominant-business candidates | **6** |
+| Exact Basic-Industry classifications | **1** |
+| Methodology routes | **0** |
+| Complete normalized inputs | **0** |
+
+The exact classification remains **Edible Oil — IN040101001**.
+
+Five other dominant-business descriptions still require OD2-reviewed mappings or remain ambiguous.
+
+Six V3-normalized cases remain blocked by non-zero aggregate intersegment revenue without segment-specific external revenue.
+
+### Expansion boundary
+
+Approval of V3 does **not** authorize the 25,761-pair expansion.
+
+The gate remains closed because:
+
+- methodology routes = 0;
+- complete normalized inputs = 0.
+
+Experiment freeze/execution, B5/B6/B-FINAL rebuild and P8-C remain unauthorized.
+
 ## P8 XBRL Segment-Period Semantics Audit + Normalization Candidate — 4 October 2026
 
 **Implementation / tests = COMPLETE / PASS.**  
