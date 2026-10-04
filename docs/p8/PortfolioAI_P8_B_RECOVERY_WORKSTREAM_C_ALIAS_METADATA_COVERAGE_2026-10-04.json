@@ -1,0 +1,655 @@
+{
+  "coverage_ratio": 0.5058545705008364,
+  "covered_pairs": 61692,
+  "decision_date_coverage": {
+    "2024-02-29": {
+      "covered": 1761,
+      "gap": 1624
+    },
+    "2024-03-28": {
+      "covered": 1768,
+      "gap": 1641
+    },
+    "2024-04-30": {
+      "covered": 1786,
+      "gap": 1648
+    },
+    "2024-05-31": {
+      "covered": 1888,
+      "gap": 1570
+    },
+    "2024-06-28": {
+      "covered": 1892,
+      "gap": 1587
+    },
+    "2024-07-31": {
+      "covered": 1895,
+      "gap": 1616
+    },
+    "2024-08-30": {
+      "covered": 1907,
+      "gap": 1639
+    },
+    "2024-09-30": {
+      "covered": 1911,
+      "gap": 1683
+    },
+    "2024-10-31": {
+      "covered": 1924,
+      "gap": 1702
+    },
+    "2024-11-29": {
+      "covered": 1946,
+      "gap": 1699
+    },
+    "2024-12-31": {
+      "covered": 1946,
+      "gap": 1731
+    },
+    "2025-01-31": {
+      "covered": 1948,
+      "gap": 1747
+    },
+    "2025-02-28": {
+      "covered": 1974,
+      "gap": 1747
+    },
+    "2025-03-28": {
+      "covered": 1977,
+      "gap": 1755
+    },
+    "2025-04-30": {
+      "covered": 1977,
+      "gap": 1763
+    },
+    "2025-05-30": {
+      "covered": 1975,
+      "gap": 1778
+    },
+    "2025-06-30": {
+      "covered": 1971,
+      "gap": 1811
+    },
+    "2025-07-31": {
+      "covered": 1967,
+      "gap": 1847
+    },
+    "2025-08-29": {
+      "covered": 1965,
+      "gap": 1886
+    },
+    "2025-09-30": {
+      "covered": 1962,
+      "gap": 1933
+    },
+    "2025-10-31": {
+      "covered": 1958,
+      "gap": 1964
+    },
+    "2025-11-28": {
+      "covered": 1956,
+      "gap": 1990
+    },
+    "2025-12-31": {
+      "covered": 1952,
+      "gap": 2024
+    },
+    "2026-01-30": {
+      "covered": 1948,
+      "gap": 2042
+    },
+    "2026-02-27": {
+      "covered": 1945,
+      "gap": 2066
+    },
+    "2026-03-30": {
+      "covered": 1943,
+      "gap": 2087
+    },
+    "2026-04-30": {
+      "covered": 1943,
+      "gap": 2184
+    },
+    "2026-05-29": {
+      "covered": 1943,
+      "gap": 2196
+    },
+    "2026-06-30": {
+      "covered": 1942,
+      "gap": 2214
+    },
+    "2026-07-31": {
+      "covered": 1942,
+      "gap": 2240
+    },
+    "2026-08-31": {
+      "covered": 1940,
+      "gap": 2405
+    },
+    "2026-09-29": {
+      "covered": 1940,
+      "gap": 2445
+    }
+  },
+  "eligible_pairs": 121956,
+  "filing_body_downloads": 0,
+  "gap_pairs": 60264,
+  "gap_sample": [
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0050b61b-dc76-5e87-8f46-a916e98b5532",
+      "historical_isin": "INE104Y01012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0066a1e8-1de5-5c79-b630-c2d3e9218372",
+      "historical_isin": "INE239T01016"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "007ad317-de38-53d4-af6b-ffd6f43e355e",
+      "historical_isin": "INE160901018"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "00b4dc3f-5c45-5090-b434-89d621b93b03",
+      "historical_isin": "INE303501014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "00bb0744-ce66-54af-9cb3-a4e164224f28",
+      "historical_isin": "IN9362A01055"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "00e29a45-119f-5d68-8ba9-04fe912e12c2",
+      "historical_isin": "INE204301019"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "013fb974-26bc-5c4f-99f1-74be047ec6b3",
+      "historical_isin": "INE365201016"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "01890efe-0f73-574e-abf1-1ca0ac398f5c",
+      "historical_isin": "INE270I01022"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "01abd611-f6ad-524d-a333-a7970cfbb204",
+      "historical_isin": "INE0ON201012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "01c70e95-498c-5246-86c3-da409390ce24",
+      "historical_isin": "INE063301019"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "01dbbc4c-304a-57a9-bf08-9af923d86089",
+      "historical_isin": "INE642Z01026"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "01ddbc70-a37d-5f9d-8296-c36700bfacd7",
+      "historical_isin": "INE712A01012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "026aeebd-518d-5d0c-a8b8-e0dad10af4e9",
+      "historical_isin": "INE141E01016"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "027e6ce7-0536-5a67-bc79-c5201b86f0a1",
+      "historical_isin": "INE0PZA01015"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0286ae08-c576-5b76-a795-cf2be0cb9343",
+      "historical_isin": "INE192B01015"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "02a94fdd-7b6d-5167-a130-3c87ea0679ab",
+      "historical_isin": "INE575P01011"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "02c56099-4006-5d1a-a5ef-0c791ebc2ded",
+      "historical_isin": "IN9043A01150"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "02dde531-b22f-5df7-805a-e6509658d9d2",
+      "historical_isin": "INE162101013"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "02e3d5fd-0ae6-5837-be9f-01b31a5bf1ea",
+      "historical_isin": "IN9022A01014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "02ecda63-3853-5742-ae60-222bea226e48",
+      "historical_isin": "INE391Z01012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "03efe067-b2d4-5328-89eb-4f7a46ef3f04",
+      "historical_isin": "INE201201014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0465c9e4-c875-513b-9d69-c22761761213",
+      "historical_isin": "INE648A01026"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "048406c7-1138-5dce-bd08-81bd53877afb",
+      "historical_isin": "INE218A01010"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "04b93d78-398e-517b-9e18-6dc10a4a9ec3",
+      "historical_isin": "INE342101016"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "04dedff0-bcf5-529e-8d73-f5dbb280e859",
+      "historical_isin": "INE618H01016"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "04f6365a-b88a-5403-afc7-34da3717c2cb",
+      "historical_isin": "INE0IA701014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "05051ed3-1f2e-5b06-bcbe-67247f44c6f9",
+      "historical_isin": "INE0QP001012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "051202ca-73cd-545b-9940-183aed821a79",
+      "historical_isin": "INE0I3H01019"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "051ad3d4-9028-5a44-85b7-2308501d9e4f",
+      "historical_isin": "INE620A01017"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "053f16fb-939d-55b8-b7dc-86026695f088",
+      "historical_isin": "INE676A01027"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "053f674d-db4e-5a76-94fb-9ca1bd82f417",
+      "historical_isin": "IN9162A01018"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "058628d7-f2e3-5138-a3f4-e5f990c2ff3d",
+      "historical_isin": "INE452201010"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "05a00c03-bfd7-5d04-9450-57af09244574",
+      "historical_isin": "INE754A01014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "05d2179e-5ce0-538a-af2a-737a78c2c419",
+      "historical_isin": "INE019301014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "05e62202-9c7d-5c78-814e-fd24746d83af",
+      "historical_isin": "IN9091A01019"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "06015f35-6d2c-5cd6-9e64-70374c0e82cd",
+      "historical_isin": "INE030601012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "060fd98c-fab3-5460-ab44-bf06e4dc3a85",
+      "historical_isin": "INE982V01025"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "06da8090-ef57-5bfe-9b23-34ae555e8ae5",
+      "historical_isin": "INE330R01017"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "071df288-6466-50cb-8e05-78041e29deea",
+      "historical_isin": "INE385O01018"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0787c4c1-729e-5613-aa69-e474a56b789b",
+      "historical_isin": "INE0O5T01011"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "07cb6761-80b1-50a9-8898-6116af7279cd",
+      "historical_isin": "INE0O0001013"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "07cd5298-0db5-5446-8997-97f706604649",
+      "historical_isin": "IN9039B01032"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "080d60a9-57f6-592b-9d09-f4a27af159cc",
+      "historical_isin": "INE127401011"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0815bf16-1caa-5e40-af29-34443e4aa93c",
+      "historical_isin": "INE345601012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0817fd16-f07e-5fbb-a04e-bae0833856a8",
+      "historical_isin": "INE446901014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0823291a-a6fa-59e8-a8eb-b3e74549594c",
+      "historical_isin": "IN9889A01024"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "08281d2a-b8aa-5e97-b74a-bd6fa5ce4d56",
+      "historical_isin": "INE02EE01019"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "08443f53-39f9-5276-8eb8-d96fe806b8ee",
+      "historical_isin": "INE879C01015"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0845d715-616e-5e88-b706-3b5f448316b2",
+      "historical_isin": "INE367G01038"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "08488c4e-71f1-54f1-8c03-d3736abbdd3f",
+      "historical_isin": "INE637H01024"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "086565c5-7628-5f3a-96ce-041bf58f9873",
+      "historical_isin": "IN9635A01021"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "08728ea1-31f0-5e95-898c-1646e9f6028c",
+      "historical_isin": "INE445901015"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0873407f-fdf3-5997-ae44-8efa2fcbcf7f",
+      "historical_isin": "INE582A01019"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "089792db-fad5-562a-913f-81d88cca1435",
+      "historical_isin": "INE062401018"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "089bb92c-e344-546a-87bd-e868be483413",
+      "historical_isin": "INE187D01029"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "089c9b14-1d90-5e8b-b557-b643c39bf933",
+      "historical_isin": "INE873D01024"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "089f2a6b-c2fe-58ca-93d3-2d514c84f753",
+      "historical_isin": "INE490401010"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "08afb328-c039-5578-8b96-df0a260c630f",
+      "historical_isin": "INE883G01018"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "093f5a26-4b2e-5568-9a77-1d6b7d7444d5",
+      "historical_isin": "IN9043A01077"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "09911849-8d90-5d84-a297-e572a1d3c859",
+      "historical_isin": "IN9324L01011"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "09997b7f-c3c6-5a73-a20f-48932f3a34b3",
+      "historical_isin": "INE812G01025"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "09d1254c-c97e-54d7-9db8-0a42c9b70e34",
+      "historical_isin": "IN9110D01011"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "09def854-f81a-5cce-95da-08df3467cab6",
+      "historical_isin": "INE101D01020"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0a1f3053-9321-543b-a5a5-83ebec441f58",
+      "historical_isin": "IN9573K01023"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0a2c9b0e-312d-50a2-8dd4-342c387cd10c",
+      "historical_isin": "INE0G1D01014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0a6d4333-0c95-54eb-9ad4-7155703ce29d",
+      "historical_isin": "INE209601017"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0ab50354-fb4c-5b67-9400-290752bc0f83",
+      "historical_isin": "INE650Z01011"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0b09bf50-93a8-5c46-9348-752faf550510",
+      "historical_isin": "INE025201018"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0b693096-738d-500c-afb7-6be7fa21c4ac",
+      "historical_isin": "INE099A01014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0b733d1b-6117-5042-807a-77bbbfa54081",
+      "historical_isin": "IN9408A01015"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0b87e323-2843-5cdc-ae0d-aef5cf093703",
+      "historical_isin": "INE200501018"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0bc5e90b-84f5-5561-880c-aeb415660d26",
+      "historical_isin": "IN9755A01019"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0bd875b0-8b13-582a-9c47-04aeafa3caa6",
+      "historical_isin": "INE0DTQ01028"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0bde5bb7-5789-5850-9f66-0635d31fdc2c",
+      "historical_isin": "INE116C01012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0beaeb95-1b39-5c9f-8eb5-661c4c254cdd",
+      "historical_isin": "INE292A01015"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0bfb76af-2778-5d83-a9c8-031c78a9d50d",
+      "historical_isin": "INE021A01026"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0c18d836-42ce-59d0-ad2b-2da5c75dd299",
+      "historical_isin": "INE583C01021"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0c25f900-70d1-52eb-9829-480c4cabeb6c",
+      "historical_isin": "INE037B01012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0cbc340d-3883-5f10-833f-5527977e29c9",
+      "historical_isin": "IN9383A01036"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0d67d305-cd4e-5253-8079-84ba5867598e",
+      "historical_isin": "IN9889A01040"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0d7f1ede-c79e-54f5-af78-3e04cebb208c",
+      "historical_isin": "INE031001014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0d85970f-0cba-5341-8310-95ae266de8ff",
+      "historical_isin": "INE008901014"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0d89613b-c793-5bab-a798-3a075310c10d",
+      "historical_isin": "INE727B01026"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0dc27582-94c5-5e34-97a2-83561f227f18",
+      "historical_isin": "INE418A01016"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0de20311-8a84-5a1d-8521-1b3c520f8540",
+      "historical_isin": "IN9043A01051"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0e1cd5ce-b080-556e-b1ed-29669c04e87f",
+      "historical_isin": "INE670B01010"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0e6666b7-20f8-5104-a411-4c48b046d0b9",
+      "historical_isin": "INE0QWN01013"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0e9667e9-8367-5dd8-9ac1-5e81654c53d0",
+      "historical_isin": "IN9136A01012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0ea24a08-b393-57b2-98eb-8dfdc85a313d",
+      "historical_isin": "INE189I01024"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0eb0d66b-5649-5977-a3c1-2ba260331800",
+      "historical_isin": "IN9256A01042"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0ebc4381-402a-56ca-a17a-75b9871d55b1",
+      "historical_isin": "INE00KV01022"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0eecf462-7cf6-5358-8cba-26293f813940",
+      "historical_isin": "INE019A01038"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0f26347c-45ba-5fcb-b206-eefa8d79aeee",
+      "historical_isin": "INE332801013"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0f356919-4ce7-5ad2-8659-bc061a9f6bac",
+      "historical_isin": "INE307501010"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0f8151e9-c562-58b5-869f-c001332507e5",
+      "historical_isin": "INE992S01012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "0fa535a6-4909-5cfa-aaae-d0a14cd8ec5d",
+      "historical_isin": "INE0JYY01011"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "10100bcb-ec3d-512e-9947-3fea9c2276b0",
+      "historical_isin": "INE302501015"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "1020ab23-6ab0-5eab-980e-03e9f0880337",
+      "historical_isin": "INE070201012"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "10259f3c-b841-500f-81c8-2bc9001da1c5",
+      "historical_isin": "INE872H01027"
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "1078972b-4ff8-52d1-ae51-67b12bec69f1",
+      "historical_isin": "IN9039A01018"
+    }
+  ],
+  "gap_unique_historical_identities": 2715,
+  "generated_at": "2026-10-04T03:48:53.070645+00:00",
+  "metadata_requests": 260,
+  "metadata_rows": 64828,
+  "production_changes": 0,
+  "provider_calls": 0,
+  "r2_writes": 0,
+  "resolved_unique_filings": 54562,
+  "resolver": {
+    "DATED_NSE_SYMBOL_NAME": 1044,
+    "EXACT_ISIN": 54043,
+    "UNRESOLVED": 9741
+  },
+  "status": "PARTIAL",
+  "supabase_writes": 0,
+  "version": "P8_B_RECOVERY_WORKSTREAM_C_ALIAS_METADATA_COVERAGE_V1"
+}\n
