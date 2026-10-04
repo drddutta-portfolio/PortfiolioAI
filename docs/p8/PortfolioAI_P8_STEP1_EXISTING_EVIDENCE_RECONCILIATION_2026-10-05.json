@@ -1,0 +1,377 @@
+{
+  "version": "P8_STEP1_EXISTING_EVIDENCE_RECONCILIATION_V1",
+  "date": "2026-10-05",
+  "source_commit": "9af09722ad56d2936307637a798c749578c56718",
+  "disposition": "STEP1_CANARY_VALIDATION_BLOCKED_INSUFFICIENT_EXISTING_HISTORY",
+  "scope": "One previously routed Steel canary case; no population expansion",
+  "identity": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+  "isin": "INE230R01035",
+  "decision_at": "2024-11-29T10:00:00+00:00",
+  "filing_index": {
+    "r2_key": "portfolioai-history/development/p8/recovery/workstream-d/v2/filing-index-9fcce341710076dfb77e9ae2b1b3b18694d09a7cedc111442ae1826a02dd754a.jsonl",
+    "identity_entries": 10,
+    "predecision_entries": 8,
+    "predecision_distinct_source_hashes": 6,
+    "future_entries_excluded": 2
+  },
+  "sources": [
+    {
+      "source": {
+        "body_type": "XML",
+        "classification_label": "in-bse-fin:FourReportableSegmentRevenue01Member",
+        "classification_rule": "DOMINANT_SEGMENT_GT_50",
+        "fact_count": 300,
+        "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+        "historical_isin": "INE230R01035",
+        "identity_mode": "DATED_NSE_SYMBOL_NAME",
+        "parse_state": "PARSED",
+        "published_at": "2024-05-31T09:27:01+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/c3/c3bbb4dc78bc481c428239d63ee3f84e4146939383eca1079c91ce5d3ee49a01.xml",
+        "source_hash": "4b0b16349cc9ef3ff46f61d590768a39915ba4c567ef4a72f0355cd28680521d"
+      },
+      "actual_sha256": "4b0b16349cc9ef3ff46f61d590768a39915ba4c567ef4a72f0355cd28680521d",
+      "hash_verified": true,
+      "xml_characters": 75241,
+      "facts": [
+        {
+          "concept": "ReportingQuarter",
+          "context": "OneD",
+          "value": "Yearly"
+        },
+        {
+          "concept": "DateOfStartOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-01-01"
+        },
+        {
+          "concept": "DateOfEndOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-03-31"
+        },
+        {
+          "concept": "NatureOfReportStandaloneConsolidated",
+          "context": "OneD",
+          "value": "Consolidated"
+        },
+        {
+          "concept": "DateOfStartOfReportingPeriod",
+          "context": "FourD",
+          "value": "2023-04-01"
+        },
+        {
+          "concept": "DateOfEndOfReportingPeriod",
+          "context": "FourD",
+          "value": "2024-03-31"
+        },
+        {
+          "concept": "NatureOfReportStandaloneConsolidated",
+          "context": "FourD",
+          "value": "Consolidated"
+        }
+      ]
+    },
+    {
+      "source": {
+        "body_type": "XML",
+        "classification_label": "in-bse-fin:FourReportableSegmentRevenue01Member",
+        "classification_rule": "DOMINANT_SEGMENT_GT_50",
+        "fact_count": 283,
+        "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+        "historical_isin": "INE230R01035",
+        "identity_mode": "DATED_NSE_SYMBOL_NAME",
+        "parse_state": "PARSED",
+        "published_at": "2024-05-31T09:23:29+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/f7/f772ddbf0dd7ad5ea149b54e2a9aec21e42b25840776eb5d32b16809096fa8b4.xml",
+        "source_hash": "850bae30a2039796ac2e0cd8b3c33518e696105197cbe8e2b33d48e517007176"
+      },
+      "actual_sha256": "850bae30a2039796ac2e0cd8b3c33518e696105197cbe8e2b33d48e517007176",
+      "hash_verified": true,
+      "xml_characters": 66290,
+      "facts": [
+        {
+          "concept": "ReportingQuarter",
+          "context": "OneD",
+          "value": "Yearly"
+        },
+        {
+          "concept": "DateOfStartOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-01-01"
+        },
+        {
+          "concept": "DateOfEndOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-03-31"
+        },
+        {
+          "concept": "NatureOfReportStandaloneConsolidated",
+          "context": "OneD",
+          "value": "Standalone"
+        },
+        {
+          "concept": "DateOfStartOfReportingPeriod",
+          "context": "FourD",
+          "value": "2023-04-01"
+        },
+        {
+          "concept": "DateOfEndOfReportingPeriod",
+          "context": "FourD",
+          "value": "2024-03-31"
+        },
+        {
+          "concept": "NatureOfReportStandaloneConsolidated",
+          "context": "FourD",
+          "value": "Standalone"
+        }
+      ]
+    },
+    {
+      "source": {
+        "body_type": "XML",
+        "classification_label": "in-bse-fin:OneReportableSegmentRevenue01Member",
+        "classification_rule": "DOMINANT_SEGMENT_GT_50",
+        "fact_count": 85,
+        "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+        "historical_isin": "INE230R01035",
+        "identity_mode": "DATED_NSE_SYMBOL_NAME",
+        "parse_state": "PARSED",
+        "published_at": "2024-08-14T12:55:48+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/8d/8dfbc263d4cd4b652fa19f0405b4ee22c96e3fba17859e34bd6195526930d76c.xml",
+        "source_hash": "c301ee7eeaaa03b1fa8fee6051ec500c89f685e5595c356a51df159c53dc3026"
+      },
+      "actual_sha256": "c301ee7eeaaa03b1fa8fee6051ec500c89f685e5595c356a51df159c53dc3026",
+      "hash_verified": true,
+      "xml_characters": 31027,
+      "facts": [
+        {
+          "concept": "ReportingQuarter",
+          "context": "OneD",
+          "value": "First quarter"
+        },
+        {
+          "concept": "DateOfStartOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-04-01"
+        },
+        {
+          "concept": "DateOfEndOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-06-30"
+        },
+        {
+          "concept": "NatureOfReportStandaloneConsolidated",
+          "context": "OneD",
+          "value": "Consolidated"
+        }
+      ]
+    },
+    {
+      "source": {
+        "body_type": "XML",
+        "classification_label": "in-bse-fin:OneReportableSegmentRevenue01Member",
+        "classification_rule": "DOMINANT_SEGMENT_GT_50",
+        "fact_count": 83,
+        "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+        "historical_isin": "INE230R01035",
+        "identity_mode": "DATED_NSE_SYMBOL_NAME",
+        "parse_state": "PARSED",
+        "published_at": "2024-08-14T12:54:54+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/80/80aff64929d2f9c4315826c26b47e7a4af2f8b6e66dff0cd1d1e88f24e861c30.xml",
+        "source_hash": "42f34e84d876facf52087c130413e8eb38d072f8eb3f8469f96c06a51095173d"
+      },
+      "actual_sha256": "42f34e84d876facf52087c130413e8eb38d072f8eb3f8469f96c06a51095173d",
+      "hash_verified": true,
+      "xml_characters": 30057,
+      "facts": [
+        {
+          "concept": "ReportingQuarter",
+          "context": "OneD",
+          "value": "First quarter"
+        },
+        {
+          "concept": "DateOfStartOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-04-01"
+        },
+        {
+          "concept": "DateOfEndOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-06-30"
+        },
+        {
+          "concept": "NatureOfReportStandaloneConsolidated",
+          "context": "OneD",
+          "value": "Standalone"
+        }
+      ]
+    },
+    {
+      "source": {
+        "body_type": "XML",
+        "classification_label": "in-bse-fin:FourReportableSegmentRevenue01Member",
+        "classification_rule": "DOMINANT_SEGMENT_GT_50",
+        "fact_count": 293,
+        "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+        "historical_isin": "INE230R01035",
+        "identity_mode": "DATED_NSE_SYMBOL_NAME",
+        "parse_state": "PARSED",
+        "published_at": "2024-11-15T09:21:22+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/79/79cee8ad68d46ac5a82e66f2a5c7d79c930f0ba99f743588fa0e7a9c4da096f2.xml",
+        "source_hash": "2d04111b166ff542b93873e19a214226ab5aeb18e0ec2d26a5ccc928edf70a80"
+      },
+      "actual_sha256": "2d04111b166ff542b93873e19a214226ab5aeb18e0ec2d26a5ccc928edf70a80",
+      "hash_verified": true,
+      "xml_characters": 71321,
+      "facts": [
+        {
+          "concept": "ReportingQuarter",
+          "context": "OneD",
+          "value": "Half yearly"
+        },
+        {
+          "concept": "DateOfStartOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-07-01"
+        },
+        {
+          "concept": "DateOfEndOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-09-30"
+        },
+        {
+          "concept": "NatureOfReportStandaloneConsolidated",
+          "context": "OneD",
+          "value": "Standalone"
+        },
+        {
+          "concept": "DateOfStartOfReportingPeriod",
+          "context": "FourD",
+          "value": "2024-04-01"
+        },
+        {
+          "concept": "DateOfEndOfReportingPeriod",
+          "context": "FourD",
+          "value": "2024-09-30"
+        },
+        {
+          "concept": "NatureOfReportStandaloneConsolidated",
+          "context": "FourD",
+          "value": "Standalone"
+        }
+      ]
+    },
+    {
+      "source": {
+        "body_type": "XML",
+        "classification_label": "DIVERSIFIED",
+        "classification_rule": "MULTI_SEGMENT_NO_GT_50",
+        "fact_count": 299,
+        "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+        "historical_isin": "INE230R01035",
+        "identity_mode": "DATED_NSE_SYMBOL_NAME",
+        "parse_state": "PARSED",
+        "published_at": "2024-11-15T09:22:59+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/e6/e65a01e81ff1a27f5c745df8d6ebe90a74bc009267b2c12eadbb7f37067f12b2.xml",
+        "source_hash": "94e000621b866922f5a4e72933b85aebfacc212201518a29624782890cdff1b5"
+      },
+      "actual_sha256": "94e000621b866922f5a4e72933b85aebfacc212201518a29624782890cdff1b5",
+      "hash_verified": true,
+      "xml_characters": 73350,
+      "facts": [
+        {
+          "concept": "ReportingQuarter",
+          "context": "OneD",
+          "value": "Half yearly"
+        },
+        {
+          "concept": "DateOfStartOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-07-01"
+        },
+        {
+          "concept": "DateOfEndOfReportingPeriod",
+          "context": "OneD",
+          "value": "2024-09-30"
+        },
+        {
+          "concept": "NatureOfReportStandaloneConsolidated",
+          "context": "OneD",
+          "value": "Consolidated"
+        },
+        {
+          "concept": "DateOfStartOfReportingPeriod",
+          "context": "FourD",
+          "value": "2024-04-01"
+        },
+        {
+          "concept": "DateOfEndOfReportingPeriod",
+          "context": "FourD",
+          "value": "2024-09-30"
+        },
+        {
+          "concept": "NatureOfReportStandaloneConsolidated",
+          "context": "FourD",
+          "value": "Consolidated"
+        }
+      ]
+    }
+  ],
+  "history": {
+    "annual_consolidated_periods": [
+      {
+        "start": "2023-04-01",
+        "end": "2024-03-31"
+      }
+    ],
+    "annual_consolidated_distinct_years": 1,
+    "required_annual_years": 5,
+    "required_quarters": 12,
+    "earlier_comparative_reporting_periods_found": false,
+    "conclusion": "The inspected complete XML bodies do not provide the five distinct annual periods required by K4A. Duplicate source bodies and standalone/consolidated versions of FY2024 are not additional years.",
+    "authority": "src/features/research/metalsCommoditiesK4aMethodologyContract.ts:historyMinimums"
+  },
+  "market": {
+    "previous_zero_count_conclusion": "SUPERSEDED_AS_UNSUPPORTED_MISSING_DATA_INFERENCE",
+    "canonical_storage": "CLOUDFLARE_R2",
+    "legacy_sql_table_expected_rows": 0,
+    "authority": "docs/p8/PortfolioAI_P8_B3_R2_ADJUSTED_SERIES_IDENTITY_CONTRACT_2026-10-03.md",
+    "verified_partition_objects": [
+      {
+        "key": "portfolioai-history/development/p8/b3/adjusted-series/v2/year=2024/month=11/trade_date=2024-11-29/part-00000.parquet",
+        "size": 653308,
+        "sha256_metadata": "f2cf3d6839884905b091b9707d536171f85eb0a86cdae6ee966272c9767af0bd"
+      },
+      {
+        "key": "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-11-29/part-00000.parquet",
+        "size": 668150,
+        "sha256_metadata": "56f84586bfc0a487c8e087996e8a1c1831136745cee73cf7d22ac4b5ce0353a5"
+      }
+    ],
+    "identity_specific_market_rows": null,
+    "identity_specific_history_state": "NOT_MEASURED",
+    "limitation": "Connector returns Parquet as UTF-8 text, which cannot be used as a lossless binary Parquet read. Partition presence does not establish identity coverage or 252-day continuity."
+  },
+  "verification_gaps": {
+    "previous_canary_python_runner": "Routes were assigned by historical identity; market count and complete-input count were hard-coded. Its fingerprint is not independent measurement of these facts.",
+    "current_canary_route_count": "Prior implementation result retained; not independently rerun here",
+    "prior_ready_signal_count": "0/11 is a prior reported readiness result, not recomputed by this audit"
+  },
+  "step1": {
+    "policy_adoption": "RECORDED_APPROVED",
+    "classification_and_route_implementation": "RECORDED_COMPLETE_FOR_ONE_STEEL_CASE",
+    "input_completeness": "BLOCKED",
+    "acceptance": "NOT_PASS",
+    "step2": "NOT_STARTED",
+    "population_25761": "NOT_AUTHORIZED_NOT_MEASURED",
+    "no_global_infeasibility_claim": true
+  },
+  "boundaries": {
+    "provider_calls": 0,
+    "new_source_acquisition": 0,
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "migrations": 0,
+    "deployments": 0,
+    "holdout_or_performance_reads": 0
+  }
+}

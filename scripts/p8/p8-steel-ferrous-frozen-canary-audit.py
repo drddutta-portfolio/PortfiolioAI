@@ -57,7 +57,8 @@ counts={
 }
 
 core={
- "version":"P8_STEEL_FERROUS_FROZEN_CANARY_AUDIT_V1",
+ "version":"P8_STEEL_FERROUS_FROZEN_CANARY_AUDIT_V2",
+ "measurement_scope":"Prior identity-assigned route report; not independent canonical-router or input measurement",
  "canary_fingerprint":EXPECTED_FP,
  "integration_contract_blob":"a0d1700cab6f63ddaaf65986cad9cc3fc31f27b8",
  "counts":counts,
@@ -68,8 +69,10 @@ core={
    "normalized_ready_signals":0,
    "required_signal_count":11,
    "market_history":{
-     "p8_b3_adjusted_rows_before_decision":0,
-     "state":"MISSING_SOURCE_EVIDENCE"
+     "p8_b3_adjusted_rows_before_decision":None,
+     "state":"NOT_MEASURED_R2_CANONICAL_HISTORY",
+     "legacy_sql_table_expected_rows":0,
+     "note":"Canonical B3 adjusted series are R2-backed; the legacy SQL table must remain empty. Do not infer absent market history from SQL."
    }
  },
  "results":results,

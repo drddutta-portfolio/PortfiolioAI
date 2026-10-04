@@ -15,9 +15,10 @@
     "not_routed_other_pairs": 30,
     "pair_denominator": 32
   },
-  "fingerprint_sha256": "d9ad343b3c28cdf1015f081398c58f9fa4e42a3097b735606e76006055ccd357",
+  "fingerprint_sha256": "2829e5a4d995618c84d6cfb0123e065dff12a6002fc69b0ccf5e5aca837f200e",
   "integration_contract_blob": "a0d1700cab6f63ddaaf65986cad9cc3fc31f27b8",
-  "repeat_fingerprint_sha256": "d9ad343b3c28cdf1015f081398c58f9fa4e42a3097b735606e76006055ccd357",
+  "measurement_scope": "Prior identity-assigned route report; not independent canonical-router or input measurement",
+  "repeat_fingerprint_sha256": "2829e5a4d995618c84d6cfb0123e065dff12a6002fc69b0ccf5e5aca837f200e",
   "results": [
     {
       "decision_at": "2024-08-30T10:00:00+00:00",
@@ -310,12 +311,14 @@
     "decision_at": "2024-11-29T10:00:00+00:00",
     "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
     "market_history": {
-      "p8_b3_adjusted_rows_before_decision": 0,
-      "state": "MISSING_SOURCE_EVIDENCE"
+      "legacy_sql_table_expected_rows": 0,
+      "note": "Canonical B3 adjusted series are R2-backed; the legacy SQL table must remain empty. Do not infer absent market history from SQL.",
+      "p8_b3_adjusted_rows_before_decision": null,
+      "state": "NOT_MEASURED_R2_CANONICAL_HISTORY"
     },
     "normalized_ready_signals": 0,
     "required_signal_count": 11,
     "state": "INPUTS_INCOMPLETE"
   },
-  "version": "P8_STEEL_FERROUS_FROZEN_CANARY_AUDIT_V1"
+  "version": "P8_STEEL_FERROUS_FROZEN_CANARY_AUDIT_V2"
 }
