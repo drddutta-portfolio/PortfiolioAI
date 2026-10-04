@@ -1,3 +1,84 @@
+## P8 Historical Taxonomy Evidence-Normalization Build — 4 October 2026
+
+**Current-state precedence:** This entry supersedes the previous contract-resolution next-step statement by recording completion of the separately authorized bounded semantic-normalization build. Earlier P8-B, narrower-feasibility and contract-resolution records remain authoritative for their historical scopes.
+
+**Implementation / focused tests = COMPLETE / PASS.**
+**Semantic extraction canary = COMPLETE / PASS.**
+**Historical classification / methodology route / normalized-input feasibility = BLOCKED.**
+**Exact disposition: `HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_BLOCKED`.**
+
+Frozen pre-measurement controls:
+
+- canary: `P8_HISTORICAL_TAXONOMY_CANARY_V1`
+- canary membership: **32**
+- canary membership fingerprint: `b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce`
+- normalization contract: `P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_V1`
+- canary deterministic fingerprint: `69b9c2a93587b8178117c7b47f42065cb08b375ad0aa1b6bacf6c42b390d0259`
+
+Authoritative artifacts:
+
+- [Normalization specification](p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_SPEC_2026-10-04.md)
+- [Machine-readable normalization contract](p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_CONTRACT_V1.json)
+- [Frozen canary manifest](p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CANARY_MANIFEST_2026-10-04.json)
+- [Canary audit](p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CANARY_AUDIT_2026-10-04.json)
+- [Source semantic excerpts](p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CANARY_SOURCE_EXCERPTS_2026-10-04.json)
+- [Coverage audit](p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_COVERAGE_AUDIT_2026-10-04.json)
+- [Closure memo](p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_CLOSURE_2026-10-04.md)
+
+### Canary result
+
+All **32/32** frozen canary members yielded recoverable source-cited semantic business/segment text from the official XML bodies already stored in R2.
+
+Key canary counts:
+
+| Measure | Result |
+|---|---:|
+| Semantic evidence recovered | 32 / 32 |
+| Positional-label cases with semantic recovery | 11 |
+| Historical-only identities with semantic recovery | 19 |
+| Negative controls incorrectly promoted | 0 |
+| Complete four-tier classifications proven | 0 |
+| Methodology routes proven | 0 |
+| Complete normalized-input pairs | 0 |
+
+Examples recovered directly from official source facts include `Performance Polymers & Chemicals`, `Solar Photovoltaic Modules`, `EPC/Engineering Services`, `Oil Seed Extraction and Refining`, `Hospital Business`, `Pharma`, `Chemicals` and `Textiles`.
+
+This proves the prior positional XBRL labels were masking useful business meaning already present in the filing instances. However, the stored repository authority still does not contain a complete historical **Macro-Economic Sector → Sector → Industry → Basic Industry** mapping capable of converting those recovered business descriptions into the required canonical economic hierarchy without inventing new synonyms or using current-state classification.
+
+The exact remaining blocker is:
+
+**`COMPLETE_FOUR_TIER_TAXONOMY_MAPPING_AUTHORITY_ABSENT`**
+
+Gate-K remains an analytical Sector+Industry methodology router; it is not a complete historical four-tier economic taxonomy and cannot be substituted for classification proof.
+
+### Expansion decision
+
+The frozen canary gate required:
+
+1. source-cited positional semantic recovery;
+2. at least one complete historical classification;
+3. at least one exactly-one methodology route from a complete classification;
+4. repeat fingerprint match; and
+5. zero unsupported promotion of negative controls.
+
+Conditions 1, 4 and 5 passed. Conditions 2 and 3 failed. Therefore broad semantic processing of the 25,761 provisional candidate pairs was **NOT EXECUTED**.
+
+The full denominator remains:
+
+- B2 eligible: **121,956 pairs / 4,524 identities / 32 decision dates**
+- provisional candidates: **25,761 pairs / 877 identities**
+- primary dispositions: 60,531 no pre-decision evidence; 33,706 classification unresolved; 1,958 market blocked; 25,761 taxonomy unproven.
+
+No narrower denominator was created from successful canary rows.
+
+The proposed standards remain not owner-frozen: >=24 dates passes at 32; >=80% complete-input coverage fails at 0%; >=70% per retained date fails; >=60% per major methodology sector remains not computable without canonical classification proof.
+
+**`P8_EXP_NSE_MONTHLY_6M_NARROWER_V2_PROPOSED` remains NOT FROZEN / NOT AUTHORIZED / NOT EXECUTED. P8-C remains NOT AUTHORIZED.**
+
+No follow-on taxonomy acquisition, recovery loop or experiment build is authorized by this closure.
+
+Execution boundary: provider calls 0; new source acquisition 0; Supabase writes 0; R2 writes 0; migrations 0; experiment execution 0; B5/B6/B-FINAL rebuild 0; P8-C 0; performance/forward-return/holdout reads 0; Production/main changes 0.
+
 ## P8 Historical Classification / Methodology Route / Metric Contract Resolution Audit — 4 October 2026
 
 **Current-state precedence:** This entry supersedes the prior narrower-feasibility next-step statement only to record completion of the separately authorized contract-resolution audit. Prior P8-B and narrower-feasibility closure records remain historical authority for their scopes.
