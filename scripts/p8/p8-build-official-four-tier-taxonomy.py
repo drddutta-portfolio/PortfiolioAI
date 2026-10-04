@@ -128,11 +128,11 @@ def validate(nodes):
           "IN020602001":"Education",
           "IN110101004":"Power Generation",
         }
-        for code,name in expected_names.items():
-            if code not in nodes: errors.append(f"SPOTCHECK_MISSING:{code}")
-            elif norm_name(nodes[code]["name"])!=norm_name(name):
-                errors.append(f"SPOTCHECK_NAME:{code}:{nodes[code]['name']}!={name}")
-    
+    for code,name in expected_names.items():
+        if code not in nodes: errors.append(f"SPOTCHECK_MISSING:{code}")
+        elif norm_name(nodes[code]["name"])!=norm_name(name):
+            errors.append(f"SPOTCHECK_NAME:{code}:{nodes[code]['name']}!={name}")
+
     return counts,errors
 
 def norm_name(x):
