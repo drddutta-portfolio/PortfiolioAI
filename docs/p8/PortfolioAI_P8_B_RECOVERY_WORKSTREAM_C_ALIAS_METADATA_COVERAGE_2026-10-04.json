@@ -1,4 +1,6 @@
 {
+  "automatic_bse_fallback_required": false,
+  "closure_semantics": "METADATA_CENSUS_COMPLETE_WITH_EXPLICIT_MISSINGNESS",
   "coverage_ratio": 0.5058545705008364,
   "covered_pairs": 61692,
   "decision_date_coverage": {
@@ -133,6 +135,7 @@
   },
   "eligible_pairs": 121956,
   "filing_body_downloads": 0,
+  "gap_disposition": "OFFICIAL_NSE_FINANCIAL_METADATA_NOT_FOUND_BEFORE_DECISION_DATE",
   "gap_pairs": 60264,
   "gap_sample": [
     {
@@ -637,7 +640,7 @@
     }
   ],
   "gap_unique_historical_identities": 2715,
-  "generated_at": "2026-10-04T03:48:53.070645+00:00",
+  "generated_at": "2026-10-04T05:46:36.520506+00:00",
   "metadata_requests": 260,
   "metadata_rows": 64828,
   "production_changes": 0,
@@ -649,7 +652,7 @@
     "EXACT_ISIN": 54043,
     "UNRESOLVED": 9741
   },
-  "status": "PARTIAL",
+  "status": "PASS",
   "supabase_writes": 0,
   "version": "P8_B_RECOVERY_WORKSTREAM_C_ALIAS_METADATA_COVERAGE_V1"
 }\n
