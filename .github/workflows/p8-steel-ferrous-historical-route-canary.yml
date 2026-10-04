@@ -1,0 +1,48 @@
+name: P8 Steel Ferrous Historical Route Canary
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - src/features/research/researchProfileRouting.ts
+      - src/features/research/metalsCommoditiesK4bScoringMethodology.ts
+      - src/features/research/historicalSteelFerrousReadinessAdapter.ts
+      - src/features/research/historicalSteelFerrousReadinessAdapter.test.ts
+      - scripts/p8/p8-steel-ferrous-frozen-canary-audit.py
+      - docs/p8/PortfolioAI_P8_STEEL_FERROUS_HISTORICAL_ROUTE_INTEGRATION_CONTRACT_V1.json
+      - .github/workflows/p8-steel-ferrous-historical-route-canary.yml
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: PortfolioAI-Development}
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: "npm"}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: npm ci
+      - name: Focused routing and readiness tests
+        run: npx vitest run src/features/research/historicalSteelFerrousReadinessAdapter.test.ts src/features/research/researchProfileRouting.test.ts src/features/research/metalsCommoditiesK4bScoringMethodology.test.ts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Architecture
+        run: npm run check:architecture
+      - name: Lint
+        run: npm run lint
+      - name: Production build
+        run: npm run build
+      - name: Frozen canary audit
+        run: python scripts/p8/p8-steel-ferrous-frozen-canary-audit.py
+      - name: Commit deterministic audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_STEEL_FERROUS_FROZEN_CANARY_AUDIT_2026-10-05.json
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): validate steel-ferrous frozen canary"
+            git pull --rebase origin PortfolioAI-Development
+            git push origin HEAD:PortfolioAI-Development
+          fi
