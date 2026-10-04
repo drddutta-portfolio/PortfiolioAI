@@ -18,6 +18,6 @@
   "safe_for_canary_candidate_evaluation": true,
   "taxonomy_contract": "PORTFOLIOAI_NSE_FOUR_TIER_TAXONOMY_REFERENCE_V1",
   "taxonomy_file": "docs/p8/PortfolioAI_P8_NSE_FOUR_TIER_TAXONOMY_NOVEMBER_2022.json",
-  "taxonomy_payload_sha256": "66af25a6a7141288f58adbd416fc2c394bf7dad9ae1f061bf5ee7fdc8ab53d0f",
+  "taxonomy_payload_sha256": "e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96",
   "version": "P8_NSE_FOUR_TIER_TAXONOMY_ADOPTION_MANIFEST_V1"
 }
