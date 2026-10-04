@@ -1,0 +1,1404 @@
+{
+  "by_decision_date": {
+    "2024-02-29": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 705,
+      "CLASSIFICATION_UNRESOLVED": 969,
+      "MARKET_DATA_BLOCKED": 51,
+      "NO_PRE_DECISION_EVIDENCE": 1660
+    },
+    "2024-03-28": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 701,
+      "CLASSIFICATION_UNRESOLVED": 973,
+      "MARKET_DATA_BLOCKED": 58,
+      "NO_PRE_DECISION_EVIDENCE": 1677
+    },
+    "2024-04-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 729,
+      "CLASSIFICATION_UNRESOLVED": 981,
+      "MARKET_DATA_BLOCKED": 42,
+      "NO_PRE_DECISION_EVIDENCE": 1682
+    },
+    "2024-05-31": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 786,
+      "CLASSIFICATION_UNRESOLVED": 1039,
+      "MARKET_DATA_BLOCKED": 54,
+      "NO_PRE_DECISION_EVIDENCE": 1579
+    },
+    "2024-06-28": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 790,
+      "CLASSIFICATION_UNRESOLVED": 1040,
+      "MARKET_DATA_BLOCKED": 55,
+      "NO_PRE_DECISION_EVIDENCE": 1594
+    },
+    "2024-07-31": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 794,
+      "CLASSIFICATION_UNRESOLVED": 1042,
+      "MARKET_DATA_BLOCKED": 54,
+      "NO_PRE_DECISION_EVIDENCE": 1621
+    },
+    "2024-08-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 802,
+      "CLASSIFICATION_UNRESOLVED": 1042,
+      "MARKET_DATA_BLOCKED": 59,
+      "NO_PRE_DECISION_EVIDENCE": 1643
+    },
+    "2024-09-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 819,
+      "CLASSIFICATION_UNRESOLVED": 1040,
+      "MARKET_DATA_BLOCKED": 48,
+      "NO_PRE_DECISION_EVIDENCE": 1687
+    },
+    "2024-10-31": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 816,
+      "CLASSIFICATION_UNRESOLVED": 1044,
+      "MARKET_DATA_BLOCKED": 58,
+      "NO_PRE_DECISION_EVIDENCE": 1708
+    },
+    "2024-11-29": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 823,
+      "CLASSIFICATION_UNRESOLVED": 1057,
+      "MARKET_DATA_BLOCKED": 62,
+      "NO_PRE_DECISION_EVIDENCE": 1703
+    },
+    "2024-12-31": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 833,
+      "CLASSIFICATION_UNRESOLVED": 1057,
+      "MARKET_DATA_BLOCKED": 52,
+      "NO_PRE_DECISION_EVIDENCE": 1735
+    },
+    "2025-01-31": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 820,
+      "CLASSIFICATION_UNRESOLVED": 1060,
+      "MARKET_DATA_BLOCKED": 63,
+      "NO_PRE_DECISION_EVIDENCE": 1752
+    },
+    "2025-02-28": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 828,
+      "CLASSIFICATION_UNRESOLVED": 1076,
+      "MARKET_DATA_BLOCKED": 65,
+      "NO_PRE_DECISION_EVIDENCE": 1752
+    },
+    "2025-03-28": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 832,
+      "CLASSIFICATION_UNRESOLVED": 1079,
+      "MARKET_DATA_BLOCKED": 61,
+      "NO_PRE_DECISION_EVIDENCE": 1760
+    },
+    "2025-04-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 830,
+      "CLASSIFICATION_UNRESOLVED": 1080,
+      "MARKET_DATA_BLOCKED": 62,
+      "NO_PRE_DECISION_EVIDENCE": 1768
+    },
+    "2025-05-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 829,
+      "CLASSIFICATION_UNRESOLVED": 1079,
+      "MARKET_DATA_BLOCKED": 62,
+      "NO_PRE_DECISION_EVIDENCE": 1783
+    },
+    "2025-06-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 834,
+      "CLASSIFICATION_UNRESOLVED": 1077,
+      "MARKET_DATA_BLOCKED": 55,
+      "NO_PRE_DECISION_EVIDENCE": 1816
+    },
+    "2025-07-31": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 820,
+      "CLASSIFICATION_UNRESOLVED": 1076,
+      "MARKET_DATA_BLOCKED": 66,
+      "NO_PRE_DECISION_EVIDENCE": 1852
+    },
+    "2025-08-29": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 818,
+      "CLASSIFICATION_UNRESOLVED": 1075,
+      "MARKET_DATA_BLOCKED": 67,
+      "NO_PRE_DECISION_EVIDENCE": 1891
+    },
+    "2025-09-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 824,
+      "CLASSIFICATION_UNRESOLVED": 1074,
+      "MARKET_DATA_BLOCKED": 58,
+      "NO_PRE_DECISION_EVIDENCE": 1939
+    },
+    "2025-10-31": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 814,
+      "CLASSIFICATION_UNRESOLVED": 1071,
+      "MARKET_DATA_BLOCKED": 67,
+      "NO_PRE_DECISION_EVIDENCE": 1970
+    },
+    "2025-11-28": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 814,
+      "CLASSIFICATION_UNRESOLVED": 1069,
+      "MARKET_DATA_BLOCKED": 67,
+      "NO_PRE_DECISION_EVIDENCE": 1996
+    },
+    "2025-12-31": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 813,
+      "CLASSIFICATION_UNRESOLVED": 1067,
+      "MARKET_DATA_BLOCKED": 66,
+      "NO_PRE_DECISION_EVIDENCE": 2030
+    },
+    "2026-01-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 813,
+      "CLASSIFICATION_UNRESOLVED": 1063,
+      "MARKET_DATA_BLOCKED": 66,
+      "NO_PRE_DECISION_EVIDENCE": 2048
+    },
+    "2026-02-27": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 811,
+      "CLASSIFICATION_UNRESOLVED": 1062,
+      "MARKET_DATA_BLOCKED": 66,
+      "NO_PRE_DECISION_EVIDENCE": 2072
+    },
+    "2026-03-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 814,
+      "CLASSIFICATION_UNRESOLVED": 1060,
+      "MARKET_DATA_BLOCKED": 63,
+      "NO_PRE_DECISION_EVIDENCE": 2093
+    },
+    "2026-04-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 805,
+      "CLASSIFICATION_UNRESOLVED": 1060,
+      "MARKET_DATA_BLOCKED": 72,
+      "NO_PRE_DECISION_EVIDENCE": 2190
+    },
+    "2026-05-29": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 805,
+      "CLASSIFICATION_UNRESOLVED": 1060,
+      "MARKET_DATA_BLOCKED": 72,
+      "NO_PRE_DECISION_EVIDENCE": 2202
+    },
+    "2026-06-30": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 815,
+      "CLASSIFICATION_UNRESOLVED": 1059,
+      "MARKET_DATA_BLOCKED": 62,
+      "NO_PRE_DECISION_EVIDENCE": 2220
+    },
+    "2026-07-31": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 806,
+      "CLASSIFICATION_UNRESOLVED": 1059,
+      "MARKET_DATA_BLOCKED": 71,
+      "NO_PRE_DECISION_EVIDENCE": 2246
+    },
+    "2026-08-31": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 809,
+      "CLASSIFICATION_UNRESOLVED": 1058,
+      "MARKET_DATA_BLOCKED": 67,
+      "NO_PRE_DECISION_EVIDENCE": 2411
+    },
+    "2026-09-29": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 809,
+      "CLASSIFICATION_UNRESOLVED": 1058,
+      "MARKET_DATA_BLOCKED": 67,
+      "NO_PRE_DECISION_EVIDENCE": 2451
+    }
+  },
+  "contract_file_sha256": "dc9f2cc576d7a304135d006fb303704963b8c51b1f121c47a4796a0d98112531",
+  "contract_git_blob_sha": "f459a4bd01ff8d25bcabbcef2195249553ddeb87",
+  "contract_version": "P8_HISTORICAL_CONTRACT_RESOLUTION_CANDIDATE_V1",
+  "coverage": {
+    "classification_proof_provisional_candidate_percent": 0.0,
+    "complete_input_full_b2_percent": 0.0,
+    "complete_input_provisional_candidate_percent": 0.0
+  },
+  "denominators": {
+    "decision_dates": 32,
+    "full_b2_eligible_pairs": 121956,
+    "historical_identities": 4524,
+    "objectively_proposed_narrower_universe": "No narrower universe is frozen because classification proof is zero; successful metric completeness is not used as a selection rule.",
+    "provisional_candidate_identities": 877,
+    "provisional_candidate_pairs": 25761
+  },
+  "deterministic_payload_fingerprint_sha256": "79d31733ecac224c3b78aeb7e875809e209d3016aca114d3a0142ee1887ff83b",
+  "execution_commit": "8bd19cc4c7b0714acc2767ac1206579ff3696b50",
+  "generated_at": "2026-10-04T14:56:19.317826+00:00",
+  "historical_cohorts": {
+    "DIVERSIFIED_WITHOUT_SEMANTIC_FOUR_TIER_PROOF": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 8719,
+      "MARKET_DATA_BLOCKED": 612
+    },
+    "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": {
+      "CLASSIFICATION_UNRESOLVED": 33706
+    },
+    "NO_PRE_DECISION_EVIDENCE": {
+      "NO_PRE_DECISION_EVIDENCE": 60531
+    },
+    "POSITIONAL_XBRL_MEMBER_NOT_TAXONOMY": {
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 17042,
+      "MARKET_DATA_BLOCKED": 1346
+    }
+  },
+  "methodology_contract_inventory": {
+    "families": {
+      "AGRI_PROCESSING_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "AUTO_COMPONENTS": {
+        "profiles": 2,
+        "required_signals": 20,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "BANK_NBFC": {
+        "profiles": 1,
+        "required_signals": 22,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "BUILDING_MATERIALS_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "BUSINESS_SERVICES_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "CHEMICALS_V1": {
+        "profiles": 4,
+        "required_signals": 40,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "CONSUMER_DURABLES_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "CONSUMER_FMCG": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "CONSUMER_LEISURE_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "ENVIRONMENTAL_SERVICES_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "FINANCIAL_HOLDCO_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "FIN_SERVICES_NON_LENDER": {
+        "profiles": 3,
+        "required_signals": 30,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "HEALTHCARE_SERVICES_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "INDUSTRIALS_CAPITAL_GOODS": {
+        "profiles": 4,
+        "required_signals": 40,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "IT_TECH": {
+        "profiles": 4,
+        "required_signals": 40,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "JEWELLERY_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "LENDERS_NBFC_V1": {
+        "profiles": 1,
+        "required_signals": 9,
+        "signals_with_registry_evidence_period_freshness": 9
+      },
+      "LOGISTICS_TRANSPORT_V1": {
+        "profiles": 2,
+        "required_signals": 20,
+        "signals_with_registry_evidence_period_freshness": 20
+      },
+      "METALS_COMMODITIES": {
+        "profiles": 3,
+        "required_signals": 30,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "OIL_GAS_V1": {
+        "profiles": 4,
+        "required_signals": 40,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "PHARMA_V1": {
+        "profiles": 1,
+        "required_signals": 0,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "POWER_RENEWABLES_V1": {
+        "profiles": 3,
+        "required_signals": 30,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "REAL_ESTATE_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "RETAIL_COMMERCE_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "TELECOM_V1": {
+        "profiles": 2,
+        "required_signals": 20,
+        "signals_with_registry_evidence_period_freshness": 20
+      },
+      "TEXTILES_V1": {
+        "profiles": 1,
+        "required_signals": 10,
+        "signals_with_registry_evidence_period_freshness": 10
+      }
+    },
+    "family_count": 26,
+    "profile_count": 47,
+    "profiles": {
+      "AGRI_PROCESSING": {
+        "familyCode": "AGRI_PROCESSING_V1",
+        "methodologyAuthority": "P7_IC1_AGRI_PROCESSING_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "AGRI_PROCESSING_QUALITY_COMPOSITE",
+          "AGRI_PROCESSING_GROWTH_COMPOSITE",
+          "AGRI_PROCESSING_CAPITAL_EFFICIENCY_COMPOSITE",
+          "AGRI_PROCESSING_CASH_FLOW_COMPOSITE",
+          "AGRI_PROCESSING_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "AGRI_PROCESSING_BUSINESS_DURABILITY_COMPOSITE",
+          "AGRI_PROCESSING_VALUATION_COMPOSITE",
+          "AGRI_PROCESSING_MOMENTUM_COMPOSITE",
+          "AGRI_PROCESSING_RISK_COMPOSITE",
+          "AGRI_PROCESSING_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "AGRO_FERTILISER": {
+        "familyCode": "CHEMICALS_V1",
+        "methodologyAuthority": "CHEMICALS_V1_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_MARGIN_HISTORY",
+          "REVENUE_AND_VOLUME_GROWTH_MULTI_PERIOD",
+          "ROCE_OR_ROIC",
+          "CFO_OR_FCF_CONVERSION",
+          "NET_CASH_OR_LEVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "AUTO_COMPONENTS": {
+        "familyCode": "AUTO_COMPONENTS",
+        "methodologyAuthority": "AUTO_COMPONENTS_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_MARGIN_HISTORY",
+          "REVENUE_GROWTH_MULTI_PERIOD",
+          "ROCE_OR_ROIC",
+          "CFO_OR_FCF_CONVERSION",
+          "NET_CASH_OR_LEVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "AUTO_OEM": {
+        "familyCode": "AUTO_COMPONENTS",
+        "methodologyAuthority": "AUTO_COMPONENTS_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_MARGIN_HISTORY",
+          "VOLUME_AND_REVENUE_GROWTH_MULTI_PERIOD",
+          "ROCE_OR_ROIC",
+          "CFO_OR_FCF_CONVERSION",
+          "NET_CASH_OR_LEVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "BANK": {
+        "familyCode": "BANK_NBFC",
+        "methodologyAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "ROE_ANNUAL",
+          "NIM_TTM",
+          "GROSS_NPA",
+          "NET_NPA",
+          "ADVANCES_GROWTH_YOY",
+          "DEPOSITS_GROWTH_YOY",
+          "EPS_GROWTH_YOY",
+          "ROA_ANNUAL",
+          "CET1_RATIO",
+          "CAPITAL_ADEQUACY_RATIO",
+          "EXTERNAL_LONG_TERM_RATING",
+          "PE_TTM_RELATIVE",
+          "PB_RELATIVE",
+          "PB_ADJUSTED_FOR_ROE",
+          "PRICE_MOMENTUM_12M",
+          "PRICE_MOMENTUM_6M",
+          "RELATIVE_STRENGTH_12M",
+          "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "GOVERNANCE_EVENT_SIGNAL",
+          "MAX_DRAWDOWN_1Y",
+          "VOLATILITY_RELATIVE",
+          "RATING_TREND"
+        ],
+        "required_signal_count": 22,
+        "signals_requiring_additional_profile_authority_detail": 22,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "BRANDED_CONSUMER_FMCG": {
+        "familyCode": "CONSUMER_FMCG",
+        "methodologyAuthority": "CONSUMER_FMCG_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "GROSS_AND_OPERATING_MARGIN_HISTORY",
+          "REVENUE_AND_VOLUME_PRICE_MIX_GROWTH",
+          "ROCE_OR_ROIC",
+          "CFO_OR_FCF_CONVERSION_AND_WORKING_CAPITAL",
+          "NET_CASH_OR_LEVERAGE",
+          "BRAND_DISTRIBUTION_CATEGORY_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "CATEGORY_AND_MARKET_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "BUSINESS_SERVICES": {
+        "familyCode": "BUSINESS_SERVICES_V1",
+        "methodologyAuthority": "P7_IC1_BUSINESS_SERVICES_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "BUSINESS_SERVICES_QUALITY_COMPOSITE",
+          "BUSINESS_SERVICES_GROWTH_COMPOSITE",
+          "BUSINESS_SERVICES_CAPITAL_EFFICIENCY_COMPOSITE",
+          "BUSINESS_SERVICES_CASH_FLOW_COMPOSITE",
+          "BUSINESS_SERVICES_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "BUSINESS_SERVICES_BUSINESS_DURABILITY_COMPOSITE",
+          "BUSINESS_SERVICES_VALUATION_COMPOSITE",
+          "BUSINESS_SERVICES_MOMENTUM_COMPOSITE",
+          "BUSINESS_SERVICES_RISK_COMPOSITE",
+          "BUSINESS_SERVICES_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "CAPITAL_EQUIPMENT_ELECTRICAL": {
+        "familyCode": "INDUSTRIALS_CAPITAL_GOODS",
+        "methodologyAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_MARGIN_HISTORY",
+          "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD",
+          "ROCE_OR_ROIC",
+          "CFO_FCF_AND_WORKING_CAPITAL",
+          "NET_DEBT_AND_INTEREST_COVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "CAPITAL_MARKETS_AMC": {
+        "familyCode": "FIN_SERVICES_NON_LENDER",
+        "methodologyAuthority": "FIN_SERVICES_NON_LENDER_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_MARGIN_HISTORY",
+          "AUM_CLIENT_ASSET_AND_EARNINGS_GROWTH",
+          "ROE_OR_ROIC",
+          "CFO_OR_FCF_CONVERSION",
+          "NET_CASH_OR_LEVERAGE",
+          "CAPITAL_MARKETS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "CEMENT_BUILDING_MATERIALS": {
+        "familyCode": "BUILDING_MATERIALS_V1",
+        "methodologyAuthority": "P7_IC1_CEMENT_BUILDING_MATERIALS_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "CEMENT_BUILDING_MATERIALS_QUALITY_COMPOSITE",
+          "CEMENT_BUILDING_MATERIALS_GROWTH_COMPOSITE",
+          "CEMENT_BUILDING_MATERIALS_CAPITAL_EFFICIENCY_COMPOSITE",
+          "CEMENT_BUILDING_MATERIALS_CASH_FLOW_COMPOSITE",
+          "CEMENT_BUILDING_MATERIALS_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "CEMENT_BUILDING_MATERIALS_BUSINESS_DURABILITY_COMPOSITE",
+          "CEMENT_BUILDING_MATERIALS_VALUATION_COMPOSITE",
+          "CEMENT_BUILDING_MATERIALS_MOMENTUM_COMPOSITE",
+          "CEMENT_BUILDING_MATERIALS_RISK_COMPOSITE",
+          "CEMENT_BUILDING_MATERIALS_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "COMMODITY_PROCESS_CHEMICALS": {
+        "familyCode": "CHEMICALS_V1",
+        "methodologyAuthority": "CHEMICALS_V1_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_MARGIN_HISTORY",
+          "VOLUME_PRICE_MIX_GROWTH",
+          "ROCE_OR_ROIC",
+          "CFO_OR_FCF_CONVERSION",
+          "NET_CASH_OR_LEVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "CONSUMER_DURABLES": {
+        "familyCode": "CONSUMER_DURABLES_V1",
+        "methodologyAuthority": "P7_IC1_CONSUMER_DURABLES_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "CONSUMER_DURABLES_QUALITY_COMPOSITE",
+          "CONSUMER_DURABLES_GROWTH_COMPOSITE",
+          "CONSUMER_DURABLES_CAPITAL_EFFICIENCY_COMPOSITE",
+          "CONSUMER_DURABLES_CASH_FLOW_COMPOSITE",
+          "CONSUMER_DURABLES_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "CONSUMER_DURABLES_BUSINESS_DURABILITY_COMPOSITE",
+          "CONSUMER_DURABLES_VALUATION_COMPOSITE",
+          "CONSUMER_DURABLES_MOMENTUM_COMPOSITE",
+          "CONSUMER_DURABLES_RISK_COMPOSITE",
+          "CONSUMER_DURABLES_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "DEFENCE_AEROSPACE": {
+        "familyCode": "INDUSTRIALS_CAPITAL_GOODS",
+        "methodologyAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_MARGIN_HISTORY",
+          "ORDER_BOOK_AND_EXECUTION_GROWTH",
+          "ROCE_OR_ROIC",
+          "CFO_FCF_CONVERSION",
+          "NET_DEBT_AND_INTEREST_COVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "DIVERSIFIED_CHEMICALS_PETROCHEM": {
+        "familyCode": "CHEMICALS_V1",
+        "methodologyAuthority": "P7_IC1_DIVERSIFIED_CHEMICALS_PETROCHEM_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "DIVERSIFIED_CHEMICALS_PETROCHEM_QUALITY_COMPOSITE",
+          "DIVERSIFIED_CHEMICALS_PETROCHEM_GROWTH_COMPOSITE",
+          "DIVERSIFIED_CHEMICALS_PETROCHEM_CAPITAL_EFFICIENCY_COMPOSITE",
+          "DIVERSIFIED_CHEMICALS_PETROCHEM_CASH_FLOW_COMPOSITE",
+          "DIVERSIFIED_CHEMICALS_PETROCHEM_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "DIVERSIFIED_CHEMICALS_PETROCHEM_BUSINESS_DURABILITY_COMPOSITE",
+          "DIVERSIFIED_CHEMICALS_PETROCHEM_VALUATION_COMPOSITE",
+          "DIVERSIFIED_CHEMICALS_PETROCHEM_MOMENTUM_COMPOSITE",
+          "DIVERSIFIED_CHEMICALS_PETROCHEM_RISK_COMPOSITE",
+          "DIVERSIFIED_CHEMICALS_PETROCHEM_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "ENVIRONMENTAL_SERVICES": {
+        "familyCode": "ENVIRONMENTAL_SERVICES_V1",
+        "methodologyAuthority": "P7_IC1_ENVIRONMENTAL_SERVICES_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "ENVIRONMENTAL_SERVICES_QUALITY_COMPOSITE",
+          "ENVIRONMENTAL_SERVICES_GROWTH_COMPOSITE",
+          "ENVIRONMENTAL_SERVICES_CAPITAL_EFFICIENCY_COMPOSITE",
+          "ENVIRONMENTAL_SERVICES_CASH_FLOW_COMPOSITE",
+          "ENVIRONMENTAL_SERVICES_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "ENVIRONMENTAL_SERVICES_BUSINESS_DURABILITY_COMPOSITE",
+          "ENVIRONMENTAL_SERVICES_VALUATION_COMPOSITE",
+          "ENVIRONMENTAL_SERVICES_MOMENTUM_COMPOSITE",
+          "ENVIRONMENTAL_SERVICES_RISK_COMPOSITE",
+          "ENVIRONMENTAL_SERVICES_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "FINANCIAL_HOLDING_COMPANY": {
+        "familyCode": "FINANCIAL_HOLDCO_V1",
+        "methodologyAuthority": "P7_IC1_FINANCIAL_HOLDING_COMPANY_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "FINANCIAL_HOLDING_COMPANY_QUALITY_COMPOSITE",
+          "FINANCIAL_HOLDING_COMPANY_GROWTH_COMPOSITE",
+          "FINANCIAL_HOLDING_COMPANY_CAPITAL_EFFICIENCY_COMPOSITE",
+          "FINANCIAL_HOLDING_COMPANY_CASH_FLOW_COMPOSITE",
+          "FINANCIAL_HOLDING_COMPANY_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "FINANCIAL_HOLDING_COMPANY_BUSINESS_DURABILITY_COMPOSITE",
+          "FINANCIAL_HOLDING_COMPANY_VALUATION_COMPOSITE",
+          "FINANCIAL_HOLDING_COMPANY_MOMENTUM_COMPOSITE",
+          "FINANCIAL_HOLDING_COMPANY_RISK_COMPOSITE",
+          "FINANCIAL_HOLDING_COMPANY_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "FINTECH_PLATFORM": {
+        "familyCode": "FIN_SERVICES_NON_LENDER",
+        "methodologyAuthority": "FIN_SERVICES_NON_LENDER_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "CONTRIBUTION_MARGIN_OR_UNIT_ECONOMICS",
+          "REVENUE_GROWTH_MULTI_PERIOD",
+          "CAPITAL_EFFICIENCY_OR_BURN_EFFICIENCY",
+          "CFO_FCF_OR_CASH_BURN",
+          "NET_CASH_OR_FUNDING_RUNWAY",
+          "FINTECH_PLATFORM_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "GENERATION_INTEGRATED_UTILITY": {
+        "familyCode": "POWER_RENEWABLES_V1",
+        "methodologyAuthority": "POWER_RENEWABLES_V1_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_QUALITY_AND_AVAILABILITY",
+          "CAPACITY_GENERATION_AND_ASSET_MIX_GROWTH",
+          "ROCE_OR_ROIC_WITH_ASSET_CONTEXT",
+          "CFO_OR_FCF_AND_PROJECT_CASH_CONVERSION",
+          "NET_DEBT_INTEREST_COVERAGE_AND_REFINANCING",
+          "POWER_ASSET_DURABILITY",
+          "VALUATION_ASSET_AND_CASH_FLOW_CONTEXT",
+          "MOMENTUM_12M_RELATIVE",
+          "TARIFF_OFFTAKER_GRID_AND_RESOURCE_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "HOSPITAL": {
+        "familyCode": "HEALTHCARE_SERVICES_V1",
+        "methodologyAuthority": "HEALTHCARE_SERVICES_V1_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_MARGIN_HISTORY",
+          "REVENUE_AND_EBITDA_GROWTH_MULTI_PERIOD",
+          "ROCE_OR_ROIC",
+          "CFO_OR_FCF_CONVERSION",
+          "NET_CASH_OR_LEVERAGE",
+          "HOSPITAL_OPERATING_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "HOSPITALITY_LEISURE": {
+        "familyCode": "CONSUMER_LEISURE_V1",
+        "methodologyAuthority": "P7_IC1_HOSPITALITY_LEISURE_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "HOSPITALITY_LEISURE_QUALITY_COMPOSITE",
+          "HOSPITALITY_LEISURE_GROWTH_COMPOSITE",
+          "HOSPITALITY_LEISURE_CAPITAL_EFFICIENCY_COMPOSITE",
+          "HOSPITALITY_LEISURE_CASH_FLOW_COMPOSITE",
+          "HOSPITALITY_LEISURE_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "HOSPITALITY_LEISURE_BUSINESS_DURABILITY_COMPOSITE",
+          "HOSPITALITY_LEISURE_VALUATION_COMPOSITE",
+          "HOSPITALITY_LEISURE_MOMENTUM_COMPOSITE",
+          "HOSPITALITY_LEISURE_RISK_COMPOSITE",
+          "HOSPITALITY_LEISURE_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "INDUSTRIAL_PRODUCTS": {
+        "familyCode": "INDUSTRIALS_CAPITAL_GOODS",
+        "methodologyAuthority": "P7_IC1_INDUSTRIAL_PRODUCTS_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "INDUSTRIAL_PRODUCTS_QUALITY_COMPOSITE",
+          "INDUSTRIAL_PRODUCTS_GROWTH_COMPOSITE",
+          "INDUSTRIAL_PRODUCTS_CAPITAL_EFFICIENCY_COMPOSITE",
+          "INDUSTRIAL_PRODUCTS_CASH_FLOW_COMPOSITE",
+          "INDUSTRIAL_PRODUCTS_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "INDUSTRIAL_PRODUCTS_BUSINESS_DURABILITY_COMPOSITE",
+          "INDUSTRIAL_PRODUCTS_VALUATION_COMPOSITE",
+          "INDUSTRIAL_PRODUCTS_MOMENTUM_COMPOSITE",
+          "INDUSTRIAL_PRODUCTS_RISK_COMPOSITE",
+          "INDUSTRIAL_PRODUCTS_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "INSURANCE": {
+        "familyCode": "FIN_SERVICES_NON_LENDER",
+        "methodologyAuthority": "FIN_SERVICES_NON_LENDER_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "UNDERWRITING_OR_RESERVING_QUALITY",
+          "PREMIUM_OR_AUM_GROWTH_MULTI_PERIOD",
+          "SOLVENCY_OR_CAPITAL_ADEQUACY",
+          "INSURANCE_CASH_OR_EARNINGS_QUALITY",
+          "SOLVENCY_BALANCE_SHEET_BUFFER",
+          "INSURANCE_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "INTEGRATED_REFINING_PETCHEM": {
+        "familyCode": "OIL_GAS_V1",
+        "methodologyAuthority": "OIL_GAS_V1_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "CYCLE_NORMALIZED_EARNINGS_QUALITY",
+          "THROUGHPUT_SEGMENT_AND_MARGIN_GROWTH",
+          "ROCE_OR_ROIC_THROUGH_CYCLE",
+          "CFO_OR_FCF_CONVERSION_THROUGH_CYCLE",
+          "NET_DEBT_AND_INTEREST_COVERAGE",
+          "OIL_GAS_BUSINESS_DURABILITY",
+          "VALUATION_THROUGH_CYCLE",
+          "MOMENTUM_12M_RELATIVE",
+          "COMMODITY_POLICY_TRANSITION_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "IT_BPM_SERVICES": {
+        "familyCode": "IT_TECH",
+        "methodologyAuthority": "P7_IC1_IT_BPM_SERVICES_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "IT_BPM_SERVICES_QUALITY_COMPOSITE",
+          "IT_BPM_SERVICES_GROWTH_COMPOSITE",
+          "IT_BPM_SERVICES_CAPITAL_EFFICIENCY_COMPOSITE",
+          "IT_BPM_SERVICES_CASH_FLOW_COMPOSITE",
+          "IT_BPM_SERVICES_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "IT_BPM_SERVICES_BUSINESS_DURABILITY_COMPOSITE",
+          "IT_BPM_SERVICES_VALUATION_COMPOSITE",
+          "IT_BPM_SERVICES_MOMENTUM_COMPOSITE",
+          "IT_BPM_SERVICES_RISK_COMPOSITE",
+          "IT_BPM_SERVICES_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "IT_DIGITAL_INFRA_HARDWARE": {
+        "familyCode": "IT_TECH",
+        "methodologyAuthority": "IT_TECH_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "REVENUE_GROWTH_MULTI_PERIOD",
+          "OPERATING_MARGIN_HISTORY",
+          "ROCE_OR_ROIC",
+          "WORKING_CAPITAL_AND_CASH_CONVERSION",
+          "NET_CASH_OR_LEVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "IT_SERVICES": {
+        "familyCode": "IT_TECH",
+        "methodologyAuthority": "IT_TECH_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "REVENUE_GROWTH_MULTI_PERIOD",
+          "OPERATING_MARGIN_HISTORY",
+          "ROCE_OR_ROIC",
+          "FCF_CONVERSION",
+          "NET_CASH_OR_LEVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "IT_SOFTWARE_PRODUCTS_PLATFORMS": {
+        "familyCode": "IT_TECH",
+        "methodologyAuthority": "IT_TECH_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "REVENUE_GROWTH_MULTI_PERIOD",
+          "OPERATING_MARGIN_HISTORY",
+          "ROCE_OR_ROIC",
+          "FCF_OR_CASH_BURN",
+          "NET_CASH_OR_LEVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "JEWELLERY": {
+        "familyCode": "JEWELLERY_V1",
+        "methodologyAuthority": "P7_IC1_JEWELLERY_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "JEWELLERY_QUALITY_COMPOSITE",
+          "JEWELLERY_GROWTH_COMPOSITE",
+          "JEWELLERY_CAPITAL_EFFICIENCY_COMPOSITE",
+          "JEWELLERY_CASH_FLOW_COMPOSITE",
+          "JEWELLERY_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "JEWELLERY_BUSINESS_DURABILITY_COMPOSITE",
+          "JEWELLERY_VALUATION_COMPOSITE",
+          "JEWELLERY_MOMENTUM_COMPOSITE",
+          "JEWELLERY_RISK_COMPOSITE",
+          "JEWELLERY_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "LOGISTICS": {
+        "familyCode": "LOGISTICS_TRANSPORT_V1",
+        "methodologyAuthority": "P7_IC1_LOGISTICS_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "LOGISTICS_QUALITY_COMPOSITE",
+          "LOGISTICS_GROWTH_COMPOSITE",
+          "LOGISTICS_CAPITAL_EFFICIENCY_COMPOSITE",
+          "LOGISTICS_CASH_FLOW_COMPOSITE",
+          "LOGISTICS_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "LOGISTICS_BUSINESS_DURABILITY_COMPOSITE",
+          "LOGISTICS_VALUATION_COMPOSITE",
+          "LOGISTICS_MOMENTUM_COMPOSITE",
+          "LOGISTICS_RISK_COMPOSITE",
+          "LOGISTICS_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "MIDSTREAM_CITY_GAS": {
+        "familyCode": "OIL_GAS_V1",
+        "methodologyAuthority": "OIL_GAS_V1_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "CYCLE_NORMALIZED_EARNINGS_QUALITY",
+          "VOLUME_THROUGHPUT_AND_NETWORK_GROWTH",
+          "ROCE_OR_ROIC_THROUGH_CYCLE",
+          "CFO_OR_FCF_CONVERSION_THROUGH_CYCLE",
+          "NET_DEBT_AND_INTEREST_COVERAGE",
+          "OIL_GAS_BUSINESS_DURABILITY",
+          "VALUATION_THROUGH_CYCLE",
+          "MOMENTUM_12M_RELATIVE",
+          "COMMODITY_POLICY_TRANSITION_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "NBFC_LENDING": {
+        "familyCode": "LENDERS_NBFC_V1",
+        "methodologyAuthority": "P7_IC1_NBFC_LENDING_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "NBFC_LENDING_QUALITY_COMPOSITE",
+          "NBFC_LENDING_GROWTH_COMPOSITE",
+          "NBFC_LENDING_CAPITAL_EFFICIENCY_COMPOSITE",
+          "NBFC_LENDING_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "NBFC_LENDING_BUSINESS_DURABILITY_COMPOSITE",
+          "NBFC_LENDING_VALUATION_COMPOSITE",
+          "NBFC_LENDING_MOMENTUM_COMPOSITE",
+          "NBFC_LENDING_RISK_COMPOSITE",
+          "NBFC_LENDING_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 9,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 9
+      },
+      "NON_FERROUS_DIVERSIFIED_METALS": {
+        "familyCode": "METALS_COMMODITIES",
+        "methodologyAuthority": "METALS_COMMODITIES_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "THROUGH_CYCLE_MARGIN_QUALITY",
+          "PRODUCTION_VOLUME_REALIZATION_GROWTH",
+          "ROCE_OR_ROIC_THROUGH_CYCLE",
+          "CFO_OR_FCF_CONVERSION_THROUGH_CYCLE",
+          "NET_DEBT_AND_INTEREST_COVERAGE_MID_CYCLE",
+          "METALS_BUSINESS_DURABILITY",
+          "VALUATION_THROUGH_CYCLE",
+          "MOMENTUM_12M_RELATIVE",
+          "COMMODITY_CYCLE_DRAWDOWN_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "OIL_OPERATIONS": {
+        "familyCode": "OIL_GAS_V1",
+        "methodologyAuthority": "P7_IC1_OIL_OPERATIONS_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "OIL_OPERATIONS_QUALITY_COMPOSITE",
+          "OIL_OPERATIONS_GROWTH_COMPOSITE",
+          "OIL_OPERATIONS_CAPITAL_EFFICIENCY_COMPOSITE",
+          "OIL_OPERATIONS_CASH_FLOW_COMPOSITE",
+          "OIL_OPERATIONS_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "OIL_OPERATIONS_BUSINESS_DURABILITY_COMPOSITE",
+          "OIL_OPERATIONS_VALUATION_COMPOSITE",
+          "OIL_OPERATIONS_MOMENTUM_COMPOSITE",
+          "OIL_OPERATIONS_RISK_COMPOSITE",
+          "OIL_OPERATIONS_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "PHARMA": {
+        "familyCode": "PHARMA_V1",
+        "methodologyAuthority": "PHARMA_V1_PLUS_REVIEWED_PRIMARY_SUBPROFILE",
+        "methodologyState": "EXISTING_COMPLETE_GATE_H_J",
+        "required_signal_codes": [],
+        "required_signal_count": 0,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "PROJECT_EPC": {
+        "familyCode": "INDUSTRIALS_CAPITAL_GOODS",
+        "methodologyAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_MARGIN_HISTORY",
+          "ORDER_BOOK_AND_REVENUE_GROWTH",
+          "ROCE_OR_ROIC",
+          "WORKING_CAPITAL_AND_CASH_CONVERSION",
+          "NET_DEBT_AND_INTEREST_COVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "REAL_ESTATE_DEVELOPER": {
+        "familyCode": "REAL_ESTATE_V1",
+        "methodologyAuthority": "P7_IC1_REAL_ESTATE_DEVELOPER_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "REAL_ESTATE_DEVELOPER_QUALITY_COMPOSITE",
+          "REAL_ESTATE_DEVELOPER_GROWTH_COMPOSITE",
+          "REAL_ESTATE_DEVELOPER_CAPITAL_EFFICIENCY_COMPOSITE",
+          "REAL_ESTATE_DEVELOPER_CASH_FLOW_COMPOSITE",
+          "REAL_ESTATE_DEVELOPER_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "REAL_ESTATE_DEVELOPER_BUSINESS_DURABILITY_COMPOSITE",
+          "REAL_ESTATE_DEVELOPER_VALUATION_COMPOSITE",
+          "REAL_ESTATE_DEVELOPER_MOMENTUM_COMPOSITE",
+          "REAL_ESTATE_DEVELOPER_RISK_COMPOSITE",
+          "REAL_ESTATE_DEVELOPER_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "REGULATED_NETWORK": {
+        "familyCode": "POWER_RENEWABLES_V1",
+        "methodologyAuthority": "POWER_RENEWABLES_V1_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_QUALITY_AND_AVAILABILITY",
+          "REGULATED_ASSET_NETWORK_AND_COMMISSIONING_GROWTH",
+          "ROCE_OR_ROIC_WITH_ASSET_CONTEXT",
+          "CFO_OR_FCF_AND_PROJECT_CASH_CONVERSION",
+          "NET_DEBT_INTEREST_COVERAGE_AND_REFINANCING",
+          "POWER_ASSET_DURABILITY",
+          "VALUATION_ASSET_AND_CASH_FLOW_CONTEXT",
+          "MOMENTUM_12M_RELATIVE",
+          "TARIFF_OFFTAKER_GRID_AND_RESOURCE_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "RENEWABLE_IPP": {
+        "familyCode": "POWER_RENEWABLES_V1",
+        "methodologyAuthority": "POWER_RENEWABLES_V1_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_QUALITY_AND_AVAILABILITY",
+          "OPERATING_AND_PIPELINE_CAPACITY_GROWTH",
+          "ROCE_OR_ROIC_WITH_ASSET_CONTEXT",
+          "CFO_OR_FCF_AND_PROJECT_CASH_CONVERSION",
+          "NET_DEBT_INTEREST_COVERAGE_AND_REFINANCING",
+          "POWER_ASSET_DURABILITY",
+          "VALUATION_ASSET_AND_CASH_FLOW_CONTEXT",
+          "MOMENTUM_12M_RELATIVE",
+          "TARIFF_OFFTAKER_GRID_AND_RESOURCE_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "RETAIL_COMMERCE": {
+        "familyCode": "RETAIL_COMMERCE_V1",
+        "methodologyAuthority": "P7_IC1_RETAIL_COMMERCE_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "RETAIL_COMMERCE_QUALITY_COMPOSITE",
+          "RETAIL_COMMERCE_GROWTH_COMPOSITE",
+          "RETAIL_COMMERCE_CAPITAL_EFFICIENCY_COMPOSITE",
+          "RETAIL_COMMERCE_CASH_FLOW_COMPOSITE",
+          "RETAIL_COMMERCE_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "RETAIL_COMMERCE_BUSINESS_DURABILITY_COMPOSITE",
+          "RETAIL_COMMERCE_VALUATION_COMPOSITE",
+          "RETAIL_COMMERCE_MOMENTUM_COMPOSITE",
+          "RETAIL_COMMERCE_RISK_COMPOSITE",
+          "RETAIL_COMMERCE_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "SHIPPING": {
+        "familyCode": "LOGISTICS_TRANSPORT_V1",
+        "methodologyAuthority": "P7_IC1_SHIPPING_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "SHIPPING_QUALITY_COMPOSITE",
+          "SHIPPING_GROWTH_COMPOSITE",
+          "SHIPPING_CAPITAL_EFFICIENCY_COMPOSITE",
+          "SHIPPING_CASH_FLOW_COMPOSITE",
+          "SHIPPING_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "SHIPPING_BUSINESS_DURABILITY_COMPOSITE",
+          "SHIPPING_VALUATION_COMPOSITE",
+          "SHIPPING_MOMENTUM_COMPOSITE",
+          "SHIPPING_RISK_COMPOSITE",
+          "SHIPPING_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "SOLID_FUELS_MINING": {
+        "familyCode": "METALS_COMMODITIES",
+        "methodologyAuthority": "P7_IC1_SOLID_FUELS_MINING_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "SOLID_FUELS_MINING_QUALITY_COMPOSITE",
+          "SOLID_FUELS_MINING_GROWTH_COMPOSITE",
+          "SOLID_FUELS_MINING_CAPITAL_EFFICIENCY_COMPOSITE",
+          "SOLID_FUELS_MINING_CASH_FLOW_COMPOSITE",
+          "SOLID_FUELS_MINING_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "SOLID_FUELS_MINING_BUSINESS_DURABILITY_COMPOSITE",
+          "SOLID_FUELS_MINING_VALUATION_COMPOSITE",
+          "SOLID_FUELS_MINING_MOMENTUM_COMPOSITE",
+          "SOLID_FUELS_MINING_RISK_COMPOSITE",
+          "SOLID_FUELS_MINING_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "SPECIALTY_CHEMICALS": {
+        "familyCode": "CHEMICALS_V1",
+        "methodologyAuthority": "CHEMICALS_V1_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "OPERATING_MARGIN_HISTORY",
+          "REVENUE_GROWTH_MULTI_PERIOD",
+          "ROCE_OR_ROIC",
+          "CFO_OR_FCF_CONVERSION",
+          "NET_CASH_OR_LEVERAGE",
+          "BUSINESS_DURABILITY",
+          "VALUATION",
+          "MOMENTUM_12M_RELATIVE",
+          "DRAWDOWN_VOLATILITY_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "STEEL_FERROUS": {
+        "familyCode": "METALS_COMMODITIES",
+        "methodologyAuthority": "METALS_COMMODITIES_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "THROUGH_CYCLE_MARGIN_QUALITY",
+          "VOLUME_REALIZATION_AND_SPREAD_GROWTH",
+          "ROCE_OR_ROIC_THROUGH_CYCLE",
+          "CFO_OR_FCF_CONVERSION_THROUGH_CYCLE",
+          "NET_DEBT_AND_INTEREST_COVERAGE_MID_CYCLE",
+          "METALS_BUSINESS_DURABILITY",
+          "VALUATION_THROUGH_CYCLE",
+          "MOMENTUM_12M_RELATIVE",
+          "COMMODITY_CYCLE_DRAWDOWN_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      },
+      "TELECOM_INFRA": {
+        "familyCode": "TELECOM_V1",
+        "methodologyAuthority": "P7_IC1_TELECOM_INFRA_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "TELECOM_INFRA_QUALITY_COMPOSITE",
+          "TELECOM_INFRA_GROWTH_COMPOSITE",
+          "TELECOM_INFRA_CAPITAL_EFFICIENCY_COMPOSITE",
+          "TELECOM_INFRA_CASH_FLOW_COMPOSITE",
+          "TELECOM_INFRA_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "TELECOM_INFRA_BUSINESS_DURABILITY_COMPOSITE",
+          "TELECOM_INFRA_VALUATION_COMPOSITE",
+          "TELECOM_INFRA_MOMENTUM_COMPOSITE",
+          "TELECOM_INFRA_RISK_COMPOSITE",
+          "TELECOM_INFRA_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "TELECOM_OPERATOR": {
+        "familyCode": "TELECOM_V1",
+        "methodologyAuthority": "P7_IC1_TELECOM_OPERATOR_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "TELECOM_OPERATOR_QUALITY_COMPOSITE",
+          "TELECOM_OPERATOR_GROWTH_COMPOSITE",
+          "TELECOM_OPERATOR_CAPITAL_EFFICIENCY_COMPOSITE",
+          "TELECOM_OPERATOR_CASH_FLOW_COMPOSITE",
+          "TELECOM_OPERATOR_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "TELECOM_OPERATOR_BUSINESS_DURABILITY_COMPOSITE",
+          "TELECOM_OPERATOR_VALUATION_COMPOSITE",
+          "TELECOM_OPERATOR_MOMENTUM_COMPOSITE",
+          "TELECOM_OPERATOR_RISK_COMPOSITE",
+          "TELECOM_OPERATOR_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "TEXTILES_APPAREL": {
+        "familyCode": "TEXTILES_V1",
+        "methodologyAuthority": "P7_IC1_TEXTILES_APPAREL_METHODOLOGY_V1",
+        "methodologyState": "IC1_COMPLETE_CANDIDATE_AWAITING_IC_B",
+        "required_signal_codes": [
+          "TEXTILES_APPAREL_QUALITY_COMPOSITE",
+          "TEXTILES_APPAREL_GROWTH_COMPOSITE",
+          "TEXTILES_APPAREL_CAPITAL_EFFICIENCY_COMPOSITE",
+          "TEXTILES_APPAREL_CASH_FLOW_COMPOSITE",
+          "TEXTILES_APPAREL_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "TEXTILES_APPAREL_BUSINESS_DURABILITY_COMPOSITE",
+          "TEXTILES_APPAREL_VALUATION_COMPOSITE",
+          "TEXTILES_APPAREL_MOMENTUM_COMPOSITE",
+          "TEXTILES_APPAREL_RISK_COMPOSITE",
+          "TEXTILES_APPAREL_OWNERSHIP_GOVERNANCE_COMPOSITE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 0,
+        "signals_with_registry_evidence_period_freshness": 10
+      },
+      "UPSTREAM_E_AND_P": {
+        "familyCode": "OIL_GAS_V1",
+        "methodologyAuthority": "OIL_GAS_V1_K4B_SCORING_V1",
+        "methodologyState": "EXISTING_COMPLETE_GATE_K",
+        "required_signal_codes": [
+          "CYCLE_NORMALIZED_EARNINGS_QUALITY",
+          "PRODUCTION_RESERVE_AND_REALIZATION_GROWTH",
+          "ROCE_OR_ROIC_THROUGH_CYCLE",
+          "CFO_OR_FCF_CONVERSION_THROUGH_CYCLE",
+          "NET_DEBT_AND_INTEREST_COVERAGE",
+          "OIL_GAS_BUSINESS_DURABILITY",
+          "VALUATION_THROUGH_CYCLE",
+          "MOMENTUM_12M_RELATIVE",
+          "COMMODITY_POLICY_TRANSITION_RISK",
+          "OWNERSHIP_GOVERNANCE"
+        ],
+        "required_signal_count": 10,
+        "signals_requiring_additional_profile_authority_detail": 10,
+        "signals_with_registry_evidence_period_freshness": 0
+      }
+    },
+    "required_signal_count": 471
+  },
+  "methodology_family_coverage": {
+    "note": "No candidate pair has a proven four-tier historical classification, so assigning a methodology family would invent taxonomy. Family coverage is therefore not computable rather than zero-filled.",
+    "routed_pair_denominator": 0
+  },
+  "metric_availability": {
+    "canonical_fundamental_metric_definitions_at_start": 47,
+    "pair_level_metric_evaluation_started": false,
+    "reason": "Exact route is a prerequisite to selecting the mandatory metric set. Evaluating a guessed route would violate the frozen contract.",
+    "registry_required_signals": 471,
+    "registry_signals_with_explicit_evidence_period_freshness": 209,
+    "registry_signals_without_all_three": 262
+  },
+  "overlapping_diagnostic_blockers": {
+    "DIVERSIFIED_WITHOUT_SEMANTIC_FOUR_TIER_PROOF": 8719,
+    "METHODOLOGY_ROUTE_UNPROVEN": 25761,
+    "METRIC_SET_NOT_SELECTABLE_WITHOUT_ROUTE": 25761,
+    "POSITIONAL_XBRL_MEMBER_NOT_TAXONOMY": 17042
+  },
+  "primary_dispositions": {
+    "CLASSIFICATION_TAXONOMY_UNPROVEN": 25761,
+    "CLASSIFICATION_UNRESOLVED": 33706,
+    "MARKET_DATA_BLOCKED": 1958,
+    "NO_PRE_DECISION_EVIDENCE": 60531
+  },
+  "proof_counts": {
+    "classification_proven_pairs": 0,
+    "complete_input_pairs": 0,
+    "complete_input_unique_identities": 0,
+    "methodology_route_proven_pairs": 0
+  },
+  "selection_bias_limitations": [
+    "Selecting only the 25,761 provisional candidates would condition on evidence/classification availability and is not by itself an unbiased historical universe.",
+    "Selecting only eventual metric-complete pairs is prohibited because completeness is an audit result, not an ex-ante universe rule.",
+    "Missingness is concentrated in no-pre-decision-evidence and unresolved-classification cohorts and must remain visible."
+  ],
+  "source_lineage": {
+    "b3_partition_sha256": {
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-02-29/part-00000.parquet": "79d90cbd30eb0bf17659765dd70ed7e2fc25686bcc39c570837be007dd99ab65",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-03-28/part-00000.parquet": "b06227d1792c0294ba37b21141aa725d273445583336187f85a1f7a39de5626f",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-04-30/part-00000.parquet": "ba138589faae8d2f4041a7ca41973711ec487f706e85c796d0dcf2d77448e4c6",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-05-31/part-00000.parquet": "568bf72c18eef34d793346fbb8479976acdeec2c728766fbdf7e4365323baa37",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-06-28/part-00000.parquet": "88afdc179a0380a3feed8b5623c9a60648dc25c1533ccee67da9124815a77985",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-07-31/part-00000.parquet": "66d8327b71bfd3cb5213719d71ada40cf1c2953987a4ec7983d3b2bc441be1b0",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-08-30/part-00000.parquet": "ea07efbcc16b426674debe2fff15449d85ec80fd43030f4d12e4fc01809dc7dd",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-09-30/part-00000.parquet": "420ddf337005ad0a18a097f1262dc9c0ecfdeef04a6bed0cd9667425a1d9531b",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-10-31/part-00000.parquet": "d2c5312a081e165e1b9ce240f34b4bf7c81829432be6e56d392a8c1c1ed5ca50",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-11-29/part-00000.parquet": "56f84586bfc0a487c8e087996e8a1c1831136745cee73cf7d22ac4b5ce0353a5",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2024-12-31/part-00000.parquet": "471a2270705994b4ff078e8bd325a880ea0567cc01ecb01e3cdf7385bcff7bcc",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-01-31/part-00000.parquet": "24017564d31a377f80b55366209495306e6cf2a1795c37ef87baeae0544afa76",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-02-28/part-00000.parquet": "5a1a355580d643a86fc835ce2faf5d44d73f00dc9167b7c1841372103c70cd5d",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-03-28/part-00000.parquet": "f08a23199622c1bb9128877d01f6c38911fe7ee3c0999c174e78fce62c117a51",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-04-30/part-00000.parquet": "201b59b514795a9d509cfecd871b4682c88fe1be5352f8e0abc0866d7545fcf1",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-05-30/part-00000.parquet": "3f264d3114f3cad3bdf3166151150419becc98780a71b582406e9e8f6bd77fa6",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-06-30/part-00000.parquet": "381c08ab89734fa8145643d8c800fe8c2c23ef4901169105b19d67afa0b60b79",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-07-31/part-00000.parquet": "38e29a70a3b972696c0dfbbd326d23f71d017d28940acb9815d9640c4406c7c9",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-08-29/part-00000.parquet": "0764aca401e170955ffd6eb11c42e80296dc5eec4ae6e15a021880f8ac336d1c",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-09-30/part-00000.parquet": "8e8786fe3197364fbbeb7857b1b4788cf7645928ddf096c330d1b398f57ba2a7",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-10-31/part-00000.parquet": "13c913b8e84991339a6473680f51e46865bbd8e31d27465163c3469ce13fb0f8",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-11-28/part-00000.parquet": "f41160da58e67d163a34e13827da8846ecbc1f0a8088a0040db70419b8bd045c",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2025-12-31/part-00000.parquet": "10588ed257c76e2e7d60248fdf1fef93ab61ef2b552fe5ec5775e83f4b3b3514",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2026-01-30/part-00000.parquet": "a5cb897c4c1f8dddb8e0215b6d737314e5a8dc0b3e498c8173e07f55bf1d7e8c",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2026-02-27/part-00000.parquet": "6a1637b34e8c76897eb177dca4435b5fa4fad9d9f4410beb2fd4cf4770b123a5",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2026-03-30/part-00000.parquet": "cddefb838ad30c9ea616b8358be1e6b94fc8f62ee212a351787fbbf087716d31",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2026-04-30/part-00000.parquet": "3dbfa0b35f610190b02183d85d2d75adc48764f5e7f8012ff0073a81b0ace5ce",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2026-05-29/part-00000.parquet": "1f6e6400520dd05ae351ba1ae5e962c0485f0973291b8b1c9c81c5eab15c1f0c",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2026-06-30/part-00000.parquet": "9c92bfed36f361f05520cd651bc64fbefe4db54f3766acf0b3909755e6cc1619",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2026-07-31/part-00000.parquet": "5378cfee25de765fa7cc3cbf9ed3c39a7fcc06f31e2ab18ab49c5ea296a33730",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2026-08-31/part-00000.parquet": "57d2d7af97b9e51ab9a529333d536f0d4e8a31fa71329f5caaec68c8c660870c",
+      "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2/decision_date=2026-09-29/part-00000.parquet": "b70fd2e6a16376a1edf3e499cdc52c0dab5ad27792f6bd82a8e379d86f4f06c5"
+    },
+    "b3_v2_prefix": "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2",
+    "workstream_d_pair_r2_key": "portfolioai-history/development/p8/recovery/workstream-d/v2/pair-dispositions-b3f734704585e3fe9b833f84fc711af8505bc6c4ff1c38d447c5ca792c720e39.jsonl",
+    "workstream_d_pair_sha256": "b3f734704585e3fe9b833f84fc711af8505bc6c4ff1c38d447c5ca792c720e39"
+  },
+  "standards_assessment": {
+    "each_retained_date_70_percent": {
+      "reason": "0 complete-input pairs on every date under the frozen classification contract",
+      "result": "FAIL"
+    },
+    "major_methodology_sector_60_percent": {
+      "reason": "no methodology route may be assigned without proven historical Sector + Industry",
+      "result": "NOT_COMPUTABLE_FAIL_CLOSED"
+    },
+    "minimum_24_dates": {
+      "observed": 32,
+      "result": "PASS"
+    },
+    "overall_80_percent": {
+      "observed_complete_input_percent": 0.0,
+      "result": "FAIL"
+    },
+    "owner_frozen": false
+  },
+  "version": "P8_HISTORICAL_CONTRACT_RESOLUTION_COVERAGE_CENSUS_V1"
+}

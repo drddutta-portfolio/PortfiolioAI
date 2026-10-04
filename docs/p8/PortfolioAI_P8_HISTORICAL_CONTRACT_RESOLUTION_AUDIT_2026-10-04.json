@@ -1,0 +1,52 @@
+{
+  "census_fingerprint_sha256": "79d31733ecac224c3b78aeb7e875809e209d3016aca114d3a0142ee1887ff83b",
+  "checks": {
+    "b3_logical_keys": 121956,
+    "candidate_surface_reconciles": true,
+    "contract_blob_matches": true,
+    "contract_frozen_before_census": true,
+    "current_classification_backdated": false,
+    "d_logical_keys": 121956,
+    "d_pair_hash_matches": true,
+    "future_evidence_used": false,
+    "main_changes": 0,
+    "manual_assignment_backdated": false,
+    "p8_c_started": false,
+    "performance_outcome_reads": 0,
+    "primary_dispositions_reconcile": true,
+    "production_changes": 0,
+    "provider_calls": 0,
+    "r2_writes": 0,
+    "supabase_writes": 0
+  },
+  "contract_candidate": {
+    "file_sha256": "dc9f2cc576d7a304135d006fb303704963b8c51b1f121c47a4796a0d98112531",
+    "git_blob_sha": "f459a4bd01ff8d25bcabbcef2195249553ddeb87",
+    "owner_approved": false,
+    "version": "P8_HISTORICAL_CONTRACT_RESOLUTION_CANDIDATE_V1"
+  },
+  "disposition": "HISTORICAL_CONTRACT_RESOLUTION_BLOCKED",
+  "execution_commit": "8bd19cc4c7b0714acc2767ac1206579ff3696b50",
+  "generated_at": "2026-10-04T14:56:19.318661+00:00",
+  "next_owner_decision": "Whether to authorize a separate bounded historical taxonomy evidence-normalization build using existing source bodies only. This audit does not authorize it.",
+  "remaining_blockers": [
+    "Current Workstream-D classification evidence does not prove canonical historical Sector + Industry + Basic Industry; DIVERSIFIED and positional XBRL members are insufficient.",
+    "Without proven historical Sector + Industry, the existing RESEARCH_PROFILE_ROUTING_V2 cannot select exactly one methodology route without invention.",
+    "Without a route, mandatory metric requirements cannot be selected pair-by-pair.",
+    "Even after routing is solved, many existing scoring signals consume normalized inputs without a universal historical raw-XBRL concept/unit/scale mapping; unresolved mappings must fail closed or require a separately reviewed canonical mapping decision."
+  ],
+  "repeat_census_core_fingerprint_sha256": "ca0995be2ddf772866e28287ca9c168b6c679873c61f0b4d790e8dd456ae7726",
+  "research_feasibility": "DEFENSIBLE_NARROWER_EXPERIMENT_NOT_SUPPORTABLE_FROM_CURRENT_EVIDENCE",
+  "semantic_findings": {
+    "central_registry_required_signals": 471,
+    "central_registry_signals_needing_more_profile_normalization_detail": 262,
+    "central_registry_signals_with_evidence_period_freshness": 209,
+    "diversified_pairs_candidate": 8719,
+    "methodology_route_can_be_selected_without_invention": false,
+    "metric_set_can_be_selected_without_route": false,
+    "positional_member_pairs_candidate": 17042,
+    "workstream_d_labels_are_four_tier_taxonomy": false
+  },
+  "status": "COMPLETE_BLOCKED",
+  "version": "P8_HISTORICAL_CONTRACT_RESOLUTION_AUDIT_V1"
+}
