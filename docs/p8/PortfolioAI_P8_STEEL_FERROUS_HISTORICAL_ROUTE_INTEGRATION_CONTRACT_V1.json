@@ -1,0 +1,71 @@
+{
+  "contract_version": "P8_STEEL_FERROUS_HISTORICAL_ROUTE_INTEGRATION_V1",
+  "status": "DEVELOPMENT_BOUNDED_HISTORICAL_ONLY",
+  "scope": {
+    "taxonomy_version": "NSE_NOVEMBER_2022",
+    "exact_basic_industry": {
+      "code": "IN070205015",
+      "name": "Iron & Steel Products"
+    },
+    "preserved_hierarchy": [
+      {
+        "level": "MACRO_ECONOMIC_SECTOR",
+        "code": "IN07",
+        "name": "Industrials"
+      },
+      {
+        "level": "SECTOR",
+        "code": "IN0702",
+        "name": "Capital Goods"
+      },
+      {
+        "level": "INDUSTRY",
+        "code": "IN070205",
+        "name": "Industrial Products"
+      },
+      {
+        "level": "BASIC_INDUSTRY",
+        "code": "IN070205015",
+        "name": "Iron & Steel Products"
+      }
+    ],
+    "methodology_profile": "STEEL_FERROUS",
+    "sector_engine": "METALS_COMMODITIES",
+    "selector": "IRON_STEEL_PRODUCTS"
+  },
+  "frozen_authorities": {
+    "accounting_v1_blob": "45e990981371dba217d12c430f8ce567acbf25fc",
+    "period_v3_blob": "797b7e91d7770f3377d0061ee338c76e8220391f",
+    "historical_crosswalk_blob": "fd5a683ab595d98c71254ea8c825d5ae82338afb",
+    "methodology_contract": "METALS_COMMODITIES_K4A_METHODOLOGY_V1",
+    "scoring_contract": "METALS_COMMODITIES_K4B_SCORING_V1",
+    "router_live": "RESEARCH_PROFILE_ROUTING_V2",
+    "router_historical": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1"
+  },
+  "prerequisites": [
+    "EQUITY",
+    "AUTHORITATIVE_COMPLETE_CLASSIFICATION",
+    "NSE_NOVEMBER_2022_TAXONOMY",
+    "EXACT_IN070205015_BASIC_INDUSTRY",
+    "SOURCE_DISSEMINATED_STRICTLY_BEFORE_DECISION",
+    "APPROVED_V1_ACCOUNTING_BLOB",
+    "APPROVED_V3_PERIOD_SEMANTICS_BLOB"
+  ],
+  "fail_closed": [
+    "BROADER_INDUSTRIAL_PRODUCTS_ONLY",
+    "PARTIAL_OR_CONDITIONAL_CLASSIFICATION",
+    "FUTURE_OR_SAME_INSTANT_EVIDENCE",
+    "OTHER_BASIC_INDUSTRY",
+    "CURRENT_CACHE_FALLBACK",
+    "IMPLICIT_LATEST_PROFILE",
+    "PROVIDER_CALL",
+    "PERSISTENCE"
+  ],
+  "execution": {
+    "scoring_allowed_for_canary": false,
+    "readiness_only": true,
+    "network_calls": 0,
+    "writes": 0,
+    "current_live_route_changes": false
+  }
+}
