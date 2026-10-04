@@ -1,0 +1,97 @@
+{
+  "version": "P8_STEEL_FERROUS_SIGNAL_READINESS_MATRIX_V1",
+  "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+  "historical_isin": "INE230R01035",
+  "decision_at": "2024-11-29T10:00:00+00:00",
+  "source": {
+    "sha256": "4b0b16349cc9ef3ff46f61d590768a39915ba4c567ef4a72f0355cd28680521d",
+    "disseminated_at": "2024-05-31T09:27:01+00:00",
+    "accounting_scope": "AUDITED_CONSOLIDATED_FY2024"
+  },
+  "route": {
+    "basic_industry_code": "IN070205015",
+    "profile": "STEEL_FERROUS",
+    "engine": "METALS_COMMODITIES",
+    "methodology_version": "METALS_COMMODITIES_K4A_METHODOLOGY_V1",
+    "scoring_version": "METALS_COMMODITIES_K4B_SCORING_V1"
+  },
+  "summary": {
+    "required_signals": 11,
+    "normalized_ready": 0,
+    "complete": false
+  },
+  "signals": [
+    {
+      "signal": "THROUGH_CYCLE_MARGIN_QUALITY",
+      "minimum_observations": 12,
+      "normalization_authority": "THROUGH_CYCLE_MARGIN_AND_COST_POSITION",
+      "state": "INSUFFICIENT_HISTORY_AND_NOT_MATERIALIZED",
+      "note": "Selected source contains revenue/profit facts but not a 12-observation normalized through-cycle signal."
+    },
+    {
+      "signal": "VOLUME_REALIZATION_AND_SPREAD_GROWTH",
+      "minimum_observations": 12,
+      "normalization_authority": "VOLUME_REALIZATION_STEEL_SPREAD_AND_UTILISATION",
+      "state": "MISSING_SOURCE_EVIDENCE",
+      "note": "No validated 12-period volume/realization/steel-spread history is materialized."
+    },
+    {
+      "signal": "ROCE_OR_ROIC_THROUGH_CYCLE",
+      "minimum_observations": 5,
+      "normalization_authority": "THROUGH_CYCLE_RETURN_ON_CAPITAL",
+      "state": "INSUFFICIENT_HISTORY_AND_NOT_MATERIALIZED"
+    },
+    {
+      "signal": "CFO_OR_FCF_CONVERSION_THROUGH_CYCLE",
+      "minimum_observations": 5,
+      "normalization_authority": "THROUGH_CYCLE_CASH_CONVERSION",
+      "state": "INSUFFICIENT_HISTORY_AND_NOT_MATERIALIZED"
+    },
+    {
+      "signal": "NET_DEBT_AND_INTEREST_COVERAGE_MID_CYCLE",
+      "minimum_observations": 5,
+      "normalization_authority": "MID_CYCLE_LEVERAGE_AND_COVERAGE",
+      "state": "INSUFFICIENT_HISTORY_AND_NOT_MATERIALIZED"
+    },
+    {
+      "signal": "METALS_BUSINESS_DURABILITY",
+      "minimum_observations": 5,
+      "normalization_authority": "COST_CURVE_INTEGRATION_SCALE_AND_CAPITAL_ALLOCATION",
+      "state": "MISSING_NORMALIZED_BUSINESS_EVIDENCE",
+      "note": "No reviewed cost-curve/integration durability composite exists for the historical decision."
+    },
+    {
+      "signal": "VALUATION_THROUGH_CYCLE",
+      "minimum_observations": 5,
+      "normalization_authority": "NORMALIZED_EV_EBITDA_PB_FCF_ROCE_NOT_SPOT_PE",
+      "state": "MISSING_NORMALIZED_HISTORY"
+    },
+    {
+      "signal": "MOMENTUM_12M_RELATIVE",
+      "minimum_observations": 252,
+      "normalization_authority": "NIFTY_METAL_RELATIVE",
+      "state": "MISSING_SOURCE_EVIDENCE",
+      "note": "Development p8_b3_adjusted_market_price_series has 0 rows for this historical identity before the decision."
+    },
+    {
+      "signal": "COMMODITY_CYCLE_DRAWDOWN_RISK",
+      "minimum_observations": 252,
+      "normalization_authority": "COMMODITY_CYCLE_AND_MARKET_DRAWDOWN_RISK",
+      "state": "MISSING_SOURCE_EVIDENCE",
+      "note": "Development p8_b3_adjusted_market_price_series has 0 rows for this historical identity before the decision."
+    },
+    {
+      "signal": "OWNERSHIP_GOVERNANCE",
+      "minimum_observations": 1,
+      "normalization_authority": "REVIEWED_GOVERNANCE_EVIDENCE",
+      "state": "MISSING_NORMALIZED_REVIEW_EVIDENCE"
+    },
+    {
+      "signal": "COMMODITY_EXPOSURE_METADATA",
+      "minimum_observations": 1,
+      "normalization_authority": "METALS_COMMODITIES_K4A_METHODOLOGY_V1:COMMODITY_EXPOSURE_METADATA",
+      "state": "NOT_MATERIALIZED",
+      "note": "Economic classification establishes Iron & Steel Products, but no explicit canonical historical commodity-exposure metadata record is materialized."
+    }
+  ]
+}
