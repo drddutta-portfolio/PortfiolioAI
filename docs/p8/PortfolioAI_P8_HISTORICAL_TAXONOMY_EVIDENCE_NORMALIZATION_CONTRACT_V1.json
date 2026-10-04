@@ -1,0 +1,129 @@
+{
+  "contract_version": "P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_V1",
+  "status": "FROZEN_FOR_BOUNDED_BUILD_PENDING_OWNER_ADOPTION",
+  "authoritative_live_taxonomy_change": false,
+  "source_authorities": {
+    "prior_contract": {
+      "path": "docs/p8/PortfolioAI_P8_HISTORICAL_CONTRACT_RESOLUTION_CANDIDATE_V1.json",
+      "blob_sha": "f459a4bd01ff8d25bcabbcef2195249553ddeb87"
+    },
+    "canary_manifest": {
+      "path": "docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CANARY_MANIFEST_2026-10-04.json",
+      "blob_sha": "177866e6844179c0de15523fb5964aea103f2e12"
+    },
+    "gate_k_taxonomy": {
+      "path": "docs/k1/PortfolioAI_GATE_K_INDUSTRY_RESEARCH_TAXONOMY.json",
+      "blob_sha": "65b0b728b2dff842e0b12269288bd4553c1e2580",
+      "contract": "PORTFOLIOAI_GATE_K_INDUSTRY_RESEARCH_TAXONOMY_V1"
+    },
+    "router": {
+      "path": "src/features/research/researchProfileRouting.ts",
+      "version": "RESEARCH_PROFILE_ROUTING_V2"
+    }
+  },
+  "extraction": {
+    "source_bodies": "EXISTING_OFFICIAL_NSE_XML_ONLY",
+    "no_external_schema_or_linkbase_fetch": true,
+    "parse_contexts": true,
+    "preserve_dimensions": true,
+    "preserve_periods": true,
+    "preserve_units_decimals_scale": true,
+    "semantic_fact_concepts": [
+      "NAME_OR_DESCRIPTION_OF_REPORTABLE_SEGMENT",
+      "NATURE_OR_DESCRIPTION_OF_BUSINESS",
+      "PRINCIPAL_BUSINESS_ACTIVITY",
+      "PRODUCT_OR_SERVICE_DESCRIPTION",
+      "INDUSTRY_OR_SECTOR_DISCLOSURE",
+      "EMBEDDED_XBRL_LABEL_RESOURCE"
+    ],
+    "linkage_precedence": [
+      "EXACT_SAME_CONTEXT_REF",
+      "EXACT_DIMENSION_MEMBER_QNAME_WITH_EMBEDDED_LABEL",
+      "EXACT_POSITIONAL_ORDINAL_MATCH_WITHIN_SAME_SOURCE_BODY",
+      "DOCUMENT_LEVEL_BUSINESS_DESCRIPTION_ONLY_FOR_SINGLE_BUSINESS_PROOF"
+    ],
+    "forbidden": [
+      "POSITIONAL_MEMBER_QNAME_AS_BUSINESS_IDENTITY",
+      "COMPANY_NAME_AS_TAXONOMY",
+      "CURRENT_COMPANY_CLASSIFICATION",
+      "GENERAL_MODEL_KNOWLEDGE",
+      "EXTERNAL_AI_INTERPRETATION"
+    ]
+  },
+  "normalization": {
+    "text": "UNICODE_NFKC_TRIM_COLLAPSE_WHITESPACE_CASEFOLD_FOR_MATCHING_PRESERVE_ORIGINAL",
+    "synonym_policy": "ONLY_EXPLICIT_EXISTING_GATE_K_OR_ROUTER_ALIASES; NO NEW SEMANTIC_SYNONYMS_DURING_MEASUREMENT",
+    "taxonomy_mapping": "EXACT_NORMALIZED_SOURCE_LABEL_TO_EXISTING_CANONICAL_LABEL_OR_EXPLICIT_PREEXISTING_ALIAS_ONLY",
+    "dominant_business_rule": "SEMANTICALLY_IDENTIFIED_SEGMENT_REVENUE_GT_50_PERCENT_OF_ELIGIBLE_SEGMENT_REVENUE",
+    "diversified_rule": "MULTIPLE_SEMANTICALLY_IDENTIFIED_BUSINESSES_AND_NO_GT_50_PERCENT_SEGMENT; DIVERSIFIED_IS_A_DISPOSITION_NOT_A_METHODOLOGY_ROUTE",
+    "conflict_rule": "CONTRADICTORY_ELIGIBLE_DISCLOSURES_AT_SAME_DECISION_FAIL_CLOSED",
+    "scope_rule": "CONSOLIDATED_PREFERRED; STANDALONE_CANNOT_OVERRIDE_AVAILABLE_CONSOLIDATED_WITHOUT_PREEXISTING_CANONICAL_RULE",
+    "revision_rule": "REVISION_USABLE_ONLY_AFTER_OWN_OFFICIAL_DISSEMINATION_TIMESTAMP",
+    "validity_rule": "CLASSIFICATION_FROM_LATEST_ELIGIBLE_PROOF_REMAINS_VALID_UNTIL_ELIGIBLE_SUPERSEDING_PROOF_OR_MATERIAL_BUSINESS_CHANGE; NO_UNSPECIFIED_STALENESS_INVENTED",
+    "future_evidence": "FORBIDDEN"
+  },
+  "proof_states": {
+    "semantic": [
+      "SEMANTIC_RECOVERED",
+      "SEMANTIC_NOT_FOUND",
+      "SEMANTIC_AMBIGUOUS",
+      "SOURCE_INVALID"
+    ],
+    "classification": [
+      "CLASSIFICATION_PROVEN",
+      "CLASSIFICATION_PARTIAL",
+      "CLASSIFICATION_AMBIGUOUS",
+      "CLASSIFICATION_UNSUPPORTED",
+      "CLASSIFICATION_BLOCKED"
+    ],
+    "route": [
+      "ROUTE_PROVEN",
+      "ROUTE_MULTIPLE",
+      "ROUTE_UNSUPPORTED",
+      "ROUTE_BLOCKED_BY_CLASSIFICATION"
+    ],
+    "metric": [
+      "INPUTS_COMPLETE",
+      "INPUTS_INCOMPLETE",
+      "INPUTS_NOT_EVALUATED_NO_ROUTE"
+    ]
+  },
+  "complete_classification_requirement": {
+    "hierarchy": [
+      "MACRO_ECONOMIC_SECTOR",
+      "SECTOR",
+      "INDUSTRY",
+      "BASIC_INDUSTRY"
+    ],
+    "note": "Gate-K sector/industry route mapping alone does not prove the complete economic hierarchy."
+  },
+  "canary_expansion_gate": {
+    "all_required": true,
+    "conditions": [
+      "AT_LEAST_ONE_POSITIONAL_MEMBER_CASE_HAS_SOURCE_CITED_SEMANTIC_RECOVERY",
+      "AT_LEAST_ONE_CANARY_MEMBER_HAS_COMPLETE_CLASSIFICATION_PROVEN",
+      "AT_LEAST_ONE_COMPLETE_CLASSIFICATION_PROVEN_MEMBER_HAS_EXACTLY_ONE_EXISTING_ROUTE",
+      "REPEAT_FINGERPRINT_MATCHES",
+      "NEGATIVE_CONTROLS_ARE_NOT_PROMOTED_WITHOUT_PROOF"
+    ],
+    "no_minimum_success_rate_tuning": true
+  },
+  "output_provenance": [
+    "historical_identity_id",
+    "decision_at",
+    "source_r2_key",
+    "source_sha256",
+    "context_ref",
+    "source_concept_qname",
+    "original_text",
+    "normalized_text",
+    "reporting_period",
+    "accounting_scope",
+    "disseminated_at",
+    "revision_lineage",
+    "rule_version",
+    "eligibility_state",
+    "classification_proof",
+    "blockers"
+  ]
+}
