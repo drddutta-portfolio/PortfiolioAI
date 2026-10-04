@@ -1,0 +1,3848 @@
+{
+  "adoption_manifest_sha256": "496c60ec662fbbbd32c5ab7fe3b5e8667d5876a6a0204ea1047afd154ee5beee",
+  "authority_adopted": false,
+  "canary_fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce",
+  "counts": {
+    "AUTHORITATIVE_COMPLETE": 0,
+    "AUTHORITATIVE_ROUTE": 0,
+    "COMPLETE_TAXONOMY_CANDIDATE": 0,
+    "MULTISEGMENT_EXACT_LEAF_BLOCKED": 6,
+    "NEGATIVE_CONTROL_PROMOTED": 0,
+    "PAIR_WITH_EXACT_BASIC_INDUSTRY_EVIDENCE": 6,
+    "SEMANTIC_RETAINED": 32,
+    "UNIQUE_ROUTE_CANDIDATE": 0
+  },
+  "deterministic_fingerprint_sha256": "04a89f697c95c0a403e4ab2c16fc6a1367b902169f6cc969732e1cc291c4616a",
+  "exact_disposition": "COMPLETE_TAXONOMY_BUILT_PENDING_OWNER_POLICY_ADOPTION",
+  "expansion_authorized": false,
+  "expansion_gate": {
+    "AT_LEAST_ONE_COMPLETE_CLASSIFICATION_HAS_UNIQUE_ROUTE": false,
+    "AT_LEAST_ONE_COMPLETE_CLASSIFICATION_PROVEN": false,
+    "MAPPING_AUTHORITY_OWNER_ADOPTED": false,
+    "NEGATIVE_CONTROLS_NOT_PROMOTED": true,
+    "OD1_OD4_OWNER_APPROVED": false,
+    "REPEAT_FINGERPRINT_MATCHES": true,
+    "TAXONOMY_PACKAGE_STRUCTURALLY_COMPLETE": true
+  },
+  "full_25761_surface": "NOT_MEASURED",
+  "implementation_status": "PASS",
+  "owner_policy_status": {
+    "OD1": "PENDING_OWNER_DECISION",
+    "OD2": "PENDING_OWNER_DECISION",
+    "OD3": "PENDING_OWNER_DECISION",
+    "OD4": "PENDING_OWNER_DECISION"
+  },
+  "repeat_fingerprint_sha256": "04a89f697c95c0a403e4ab2c16fc6a1367b902169f6cc969732e1cc291c4616a",
+  "results": [
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2024-11-29T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+      "historical_isin": "INE230R01035",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing - Steel Pipe"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Trading- Building Material & Steel Products"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated Segment"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing - Steel Pipe"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Trading- Building Material & Steel Products"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated Segment"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing - Steel Pipe"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Trading- Building Material & Steel Products"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated Segment"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing - Steel Pipe"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Trading- Building Material & Steel Products"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated Segment"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing - Steel Pipe"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Trading- Building Material & Steel Products"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated Segment"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing - Steel Pipe"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Trading- Building Material & Steel Products"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated Segment"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/e6/e65a01e81ff1a27f5c745df8d6ebe90a74bc009267b2c12eadbb7f37067f12b2.xml",
+      "source_sha256": "94e000621b866922f5a4e72933b85aebfacc212201518a29624782890cdff1b5"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "59e788f2-3047-536c-8f4b-d92f34d69bf4",
+      "historical_isin": "INE979A01025",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Events"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Music"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Video"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Events"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Music"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Video"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Events"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Music"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Video"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Events"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Music"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Video"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Events"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Music"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/13/131384f706dd3239c7929fe6008bf9d77be848e9d5817c82332ffba770dddda0.xml",
+      "source_sha256": "3f0aa8777f0e45241f2577387172bd12308eb32442610779f2cc20a8faa603ca"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "MULTI_SEGMENT_COMPANY_REQUIRES_APPROVED_SELECTION_OR_DOMINANCE_POLICY"
+      ],
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "EXACT_LEAF_EVIDENCE_MULTISEGMENT_PENDING_OD3",
+      "candidate_unique_route": false,
+      "decision_at": "2025-01-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentRevenue04D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Pharmaceuticals"
+          },
+          "leaf": {
+            "code": "IN060101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Pharmaceuticals",
+            "parent_code": "IN060101",
+            "source_page": 14
+          },
+          "path": [
+            {
+              "code": "IN06",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Healthcare",
+              "parent_code": null,
+              "source_page": 14
+            },
+            {
+              "code": "IN0601",
+              "level": "SECTOR",
+              "name": "Healthcare",
+              "parent_code": "IN06",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101",
+              "level": "INDUSTRY",
+              "name": "Pharmaceuticals & Biotechnology",
+              "parent_code": "IN0601",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Pharmaceuticals",
+              "parent_code": "IN060101",
+              "source_page": 14
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "FourReportableSegmentRevenue04D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Pharmaceuticals"
+          },
+          "leaf": {
+            "code": "IN060101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Pharmaceuticals",
+            "parent_code": "IN060101",
+            "source_page": 14
+          },
+          "path": [
+            {
+              "code": "IN06",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Healthcare",
+              "parent_code": null,
+              "source_page": 14
+            },
+            {
+              "code": "IN0601",
+              "level": "SECTOR",
+              "name": "Healthcare",
+              "parent_code": "IN06",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101",
+              "level": "INDUSTRY",
+              "name": "Pharmaceuticals & Biotechnology",
+              "parent_code": "IN0601",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Pharmaceuticals",
+              "parent_code": "IN060101",
+              "source_page": 14
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentResults04D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Pharmaceuticals"
+          },
+          "leaf": {
+            "code": "IN060101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Pharmaceuticals",
+            "parent_code": "IN060101",
+            "source_page": 14
+          },
+          "path": [
+            {
+              "code": "IN06",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Healthcare",
+              "parent_code": null,
+              "source_page": 14
+            },
+            {
+              "code": "IN0601",
+              "level": "SECTOR",
+              "name": "Healthcare",
+              "parent_code": "IN06",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101",
+              "level": "INDUSTRY",
+              "name": "Pharmaceuticals & Biotechnology",
+              "parent_code": "IN0601",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Pharmaceuticals",
+              "parent_code": "IN060101",
+              "source_page": 14
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "FourReportableSegmentResults04D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Pharmaceuticals"
+          },
+          "leaf": {
+            "code": "IN060101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Pharmaceuticals",
+            "parent_code": "IN060101",
+            "source_page": 14
+          },
+          "path": [
+            {
+              "code": "IN06",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Healthcare",
+              "parent_code": null,
+              "source_page": 14
+            },
+            {
+              "code": "IN0601",
+              "level": "SECTOR",
+              "name": "Healthcare",
+              "parent_code": "IN06",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101",
+              "level": "INDUSTRY",
+              "name": "Pharmaceuticals & Biotechnology",
+              "parent_code": "IN0601",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Pharmaceuticals",
+              "parent_code": "IN060101",
+              "source_page": 14
+            }
+          ]
+        }
+      ],
+      "historical_identity_id": "af88fe19-5864-536f-a207-15aded7d3c83",
+      "historical_isin": "INE326A01037",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Less: Inter segment Assets"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Less: Inter segment Liabilities"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Pharmaceuticals"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Less: Inter segment Assets"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Less: Inter segment Liabilities"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Pharmaceuticals"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Less: Inter segment Assets"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Less: Inter segment Liabilities"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Pharmaceuticals"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Less: Inter segment Assets"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Less: Inter segment Liabilities"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Pharmaceuticals"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Less: Inter segment Assets"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Less: Inter segment Liabilities"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/a8/a870f199d9bff82cb8edff1bcddd71b6a6b38fbd3df709089f9b3816e69c74c0.xml",
+      "source_sha256": "aea35077ab13f94cf0908a89b4c7e7f8e6e8b9abaef8a7d08a1466502c745e38"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2024-09-30T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "f079165e-be44-517c-9bfc-0bdefdb29b0b",
+      "historical_isin": "INE918I01026",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Insurance"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Investment and others"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Retail financing"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Windmill"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Insurance"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Investment and others"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Retail financing"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Windmill"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Insurance"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Investment and others"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Retail financing"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Windmill"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Insurance"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Investment and others"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Retail financing"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Windmill"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/ed/ed6c01a031d55a23a1e509a5410c9d6dcbdaad6f2ce569991403457fd07f2dc6.xml",
+      "source_sha256": "fa8ed710f7f465dee2b7fe3747152e4d02d383d586f09aa9f9385f24c678b2f4"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2024-12-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "26f17fef-d920-566a-ae9f-85df009ec151",
+      "historical_isin": "INE860A01027",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "IT and Business Services"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "IT and Business Services"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "IT and Business Services"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "IT and Business Services"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "IT and Business Services"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "IT and Business Services"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/ef/ef88759b2d4021379daa0ac548d7b8a7f886a73fe65ac5a106a5f5eb2edc7ca7.xml",
+      "source_sha256": "d6d0bb100cd3a2d60b0a66ce305ba398f7f16907faf2925efb30f83287baa07a"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-11-28T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "6fef8980-34eb-5c31-ab04-9d41dddfe1e6",
+      "historical_isin": "INE093A01041",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Banking"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Financial Services (FS)"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Healthcare & Insurance (H&I)"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Hi-Tech and Professional Services (HTPS)"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing and Consumer (M & C)"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue06D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Travel and Transportation (T&T)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Banking"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Financial Services (FS)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Healthcare & Insurance (H&I)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Hi-Tech and Professional Services (HTPS)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing and Consumer (M & C)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue06D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Travel and Transportation (T&T)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Banking"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Financial Services (FS)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Healthcare & Insurance (H&I)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Hi-Tech and Professional Services (HTPS)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing and Consumer (M & C)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults06D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Travel and Transportation (T&T)"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Banking"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Financial Services (FS)"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/a9/a9c3cb87a7e9c69e3ce79734a8e81393c0fe1bcdd8197eb61328d61915ebb7bd.xml",
+      "source_sha256": "5e8c91dd30290e5ddeb4c6ff15c5ec5481ab80cedfb9d7714ce0639a85cb8acd"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2026-07-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "6fef8980-34eb-5c31-ab04-9d41dddfe1e6",
+      "historical_isin": "INE093A01041",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Banking"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Financial Services (FS)"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Healthcare & Insurance (H&I)"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Hi-Tech and Professional Services (HTPS)"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing and Consumer (M & C)"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue06D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Travel and Transportation (T&T)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Banking"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Financial Services (FS)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Healthcare & Insurance (H&I)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Hi-Tech and Professional Services (HTPS)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing and Consumer (M & C)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue06D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Travel and Transportation (T&T)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Banking"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Financial Services (FS)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Healthcare & Insurance (H&I)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Hi-Tech and Professional Services (HTPS)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Manufacturing and Consumer (M & C)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults06D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Travel and Transportation (T&T)"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Banking"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Financial Services (FS)"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/a9/a9c3cb87a7e9c69e3ce79734a8e81393c0fe1bcdd8197eb61328d61915ebb7bd.xml",
+      "source_sha256": "5e8c91dd30290e5ddeb4c6ff15c5ec5481ab80cedfb9d7714ce0639a85cb8acd"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "fe5e9f41-8b55-54af-b0e3-874544a10d27",
+      "historical_isin": "INE932A01024",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Custom designed building solutions & auxiliaries"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Diversified engineering"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Custom designed building solutions & auxiliaries"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Diversified engineering"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Custom designed building solutions & auxiliaries"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Diversified engineering"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Custom designed building solutions & auxiliaries"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Diversified engineering"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Custom designed building solutions & auxiliaries"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Diversified engineering"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Custom designed building solutions & auxiliaries"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Diversified engineering"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/20/20d009f3f7b4239530f655543a2bab33d74eba4957d9546f1272ee4814a09240.xml",
+      "source_sha256": "b28b6ba9ba464206c0e464fad6756909cff4f4111477f37fa563ea512c0e1289"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "MULTI_SEGMENT_COMPANY_REQUIRES_APPROVED_SELECTION_OR_DOMINANCE_POLICY"
+      ],
+      "canary_stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "EXACT_LEAF_EVIDENCE_MULTISEGMENT_PENDING_OD3",
+      "candidate_unique_route": false,
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "exact_basic_industry_evidence": [
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Commercial vehicles"
+          },
+          "leaf": {
+            "code": "IN070202002",
+            "level": "BASIC_INDUSTRY",
+            "name": "Commercial Vehicles",
+            "parent_code": "IN070202",
+            "source_page": 15
+          },
+          "path": [
+            {
+              "code": "IN07",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Industrials",
+              "parent_code": null,
+              "source_page": 15
+            },
+            {
+              "code": "IN0702",
+              "level": "SECTOR",
+              "name": "Capital Goods",
+              "parent_code": "IN07",
+              "source_page": 15
+            },
+            {
+              "code": "IN070202",
+              "level": "INDUSTRY",
+              "name": "Agricultural, Commercial & Construction Vehicles",
+              "parent_code": "IN0702",
+              "source_page": 15
+            },
+            {
+              "code": "IN070202002",
+              "level": "BASIC_INDUSTRY",
+              "name": "Commercial Vehicles",
+              "parent_code": "IN070202",
+              "source_page": 15
+            }
+          ]
+        }
+      ],
+      "historical_identity_id": "38749e5e-3e7c-5516-b5b9-17f54160025d",
+      "historical_isin": "INE772T01024",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Commercial vehicles"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Luxury vehicles"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/bb/bb04fc1141bbb26591cf7c582022b886cc952c6b7691b1a6da22c6767e4f51e1.xml",
+      "source_sha256": "86b97c13c70e6c1b7b5de2a17f25ec0934aa4a93beea82a6f8d5291157fce650"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-06-30T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "6936e380-029f-5495-a265-d8db8672aa47",
+      "historical_isin": "INE118A01012",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneD",
+          "kind": "SINGLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfSingleSegment",
+          "value": "Investment"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/3a/3aceeb9c6dbb3d3775be6244d5b9f00da60261dee6d139367e73c0f95bb0f463.xml",
+      "source_sha256": "dac4c18ddb42967537284f15418f02d94aa7f238ecc12ecc311f0769c2e754ba"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "72497e23-689a-576c-98ec-70b9acb59914",
+      "historical_isin": "INE661I01014",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Capital goods"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Construction and EPC contracts"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Capital goods"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Construction and EPC contracts"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Capital goods"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Construction and EPC contracts"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Capital goods"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Construction and EPC contracts"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Capital goods"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Construction and EPC contracts"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Unallocated"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Capital goods"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/b9/b9716e09981dbf3a2e470f5ea09ea3b9717878db3bd0403e09bf8c9de782d1ef.xml",
+      "source_sha256": "1fbaf9a1a9f1dd2c126609afc8318d8a904b33e4bebaf56dcb8c28b65db3f6af"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "bca563eb-e943-5272-960b-f6833a692614",
+      "historical_isin": "INE470A01017",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Consumer"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Health Care"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Safety & Industrial"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Transportation & Electronics"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Consumer"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Health Care"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Safety & Industrial"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Transportation & Electronics"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Consumer"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Health Care"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Safety & Industrial"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Transportation & Electronics"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Consumer"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Health Care"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Safety & Industrial"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Transportation & Electronics"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/5a/5a4b5953b004008ece2305f5e9d2650bd6c5a9d36724779945962ec872f626d7.xml",
+      "source_sha256": "3e080650d8a5286f8630822e685e4f99d623fd15c76187af1e210158d027ca40"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2024-08-30T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "08aee4b7-fef7-5caa-b4af-a0830f66d5fa",
+      "historical_isin": "INE645L01011",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agri Nutrients"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "P&K Fertilizers"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Performance Polymers & Chemicals"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agri Nutrients"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "P&K Fertilizers"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Performance Polymers & Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agri Nutrients"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "P&K Fertilizers"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Performance Polymers & Chemicals"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agri Nutrients"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "P&K Fertilizers"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Performance Polymers & Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agri Nutrients"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "P&K Fertilizers"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Performance Polymers & Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agri Nutrients"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "P&K Fertilizers"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Performance Polymers & Chemicals"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/77/7720ee51f4d6bea57b68d8ea756e1defeb0edf5f6128f2cd2b19ac64754be711.xml",
+      "source_sha256": "596f96ec873e68dd47c030aba5999a245ac82cc31389d41fa3a31134f91df0ff"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "MULTI_SEGMENT_COMPANY_REQUIRES_APPROVED_SELECTION_OR_DOMINANCE_POLICY"
+      ],
+      "canary_stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "EXACT_LEAF_EVIDENCE_MULTISEGMENT_PENDING_OD3",
+      "candidate_unique_route": false,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Education"
+          },
+          "leaf": {
+            "code": "IN020602001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Education",
+            "parent_code": "IN020602",
+            "source_page": 8
+          },
+          "path": [
+            {
+              "code": "IN02",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Consumer Discretionary",
+              "parent_code": null,
+              "source_page": 4
+            },
+            {
+              "code": "IN0206",
+              "level": "SECTOR",
+              "name": "Consumer Services",
+              "parent_code": "IN02",
+              "source_page": 8
+            },
+            {
+              "code": "IN020602",
+              "level": "INDUSTRY",
+              "name": "Other Consumer Services",
+              "parent_code": "IN0206",
+              "source_page": 8
+            },
+            {
+              "code": "IN020602001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Education",
+              "parent_code": "IN020602",
+              "source_page": 8
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Education"
+          },
+          "leaf": {
+            "code": "IN020602001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Education",
+            "parent_code": "IN020602",
+            "source_page": 8
+          },
+          "path": [
+            {
+              "code": "IN02",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Consumer Discretionary",
+              "parent_code": null,
+              "source_page": 4
+            },
+            {
+              "code": "IN0206",
+              "level": "SECTOR",
+              "name": "Consumer Services",
+              "parent_code": "IN02",
+              "source_page": 8
+            },
+            {
+              "code": "IN020602",
+              "level": "INDUSTRY",
+              "name": "Other Consumer Services",
+              "parent_code": "IN0206",
+              "source_page": 8
+            },
+            {
+              "code": "IN020602001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Education",
+              "parent_code": "IN020602",
+              "source_page": 8
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentResults01D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Education"
+          },
+          "leaf": {
+            "code": "IN020602001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Education",
+            "parent_code": "IN020602",
+            "source_page": 8
+          },
+          "path": [
+            {
+              "code": "IN02",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Consumer Discretionary",
+              "parent_code": null,
+              "source_page": 4
+            },
+            {
+              "code": "IN0206",
+              "level": "SECTOR",
+              "name": "Consumer Services",
+              "parent_code": "IN02",
+              "source_page": 8
+            },
+            {
+              "code": "IN020602",
+              "level": "INDUSTRY",
+              "name": "Other Consumer Services",
+              "parent_code": "IN0206",
+              "source_page": 8
+            },
+            {
+              "code": "IN020602001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Education",
+              "parent_code": "IN020602",
+              "source_page": 8
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "FourReportableSegmentResults01D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Education"
+          },
+          "leaf": {
+            "code": "IN020602001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Education",
+            "parent_code": "IN020602",
+            "source_page": 8
+          },
+          "path": [
+            {
+              "code": "IN02",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Consumer Discretionary",
+              "parent_code": null,
+              "source_page": 4
+            },
+            {
+              "code": "IN0206",
+              "level": "SECTOR",
+              "name": "Consumer Services",
+              "parent_code": "IN02",
+              "source_page": 8
+            },
+            {
+              "code": "IN020602",
+              "level": "INDUSTRY",
+              "name": "Other Consumer Services",
+              "parent_code": "IN0206",
+              "source_page": 8
+            },
+            {
+              "code": "IN020602001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Education",
+              "parent_code": "IN020602",
+              "source_page": 8
+            }
+          ]
+        }
+      ],
+      "historical_identity_id": "23c42d9d-fc5c-58a6-9d65-0d3c12da2fa6",
+      "historical_isin": "INE374B01019",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Education"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Equipment Division (Including Other income)"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Software Division"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Theatrical Exibition Division"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Education"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Equipment Division (Including Other income)"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Software Division"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Theatrical Exibition Division"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Education"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Equipment Division (Including Other income)"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Software Division"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Theatrical Exibition Division"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Education"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/62/6229be3310f0bef552fde90294a8748462b2648c0abc7efc03af112be627a2d6.xml",
+      "source_sha256": "3a8213aef1e861c09fe047d5a2b95f45e3744f2be12e6f5f9ae81a20590bbcff"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2024-09-30T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "5b4f2608-90cb-5aa8-bd6a-d007f42de9f8",
+      "historical_isin": "INE08KP01019",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Textiles"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Textiles"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Textiles"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Textiles"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/f0/f03a19ba8e3fd0abd0e1d859d4b52b4dddcf574556e2be282dd2bdf3e75edec3.xml",
+      "source_sha256": "2a9e651b575c3d8e7cb3464bb433a496ff1ac859f9ae107770cc6ccb0c67e695"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "MULTI_SEGMENT_COMPANY_REQUIRES_APPROVED_SELECTION_OR_DOMINANCE_POLICY"
+      ],
+      "canary_stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "EXACT_LEAF_EVIDENCE_MULTISEGMENT_PENDING_OD3",
+      "candidate_unique_route": false,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "SUGAR"
+          },
+          "leaf": {
+            "code": "IN040101002",
+            "level": "BASIC_INDUSTRY",
+            "name": "Sugar",
+            "parent_code": "IN040101",
+            "source_page": 10
+          },
+          "path": [
+            {
+              "code": "IN04",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": null,
+              "source_page": 10
+            },
+            {
+              "code": "IN0401",
+              "level": "SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": "IN04",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101",
+              "level": "INDUSTRY",
+              "name": "Agricultural Food & other Products",
+              "parent_code": "IN0401",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101002",
+              "level": "BASIC_INDUSTRY",
+              "name": "Sugar",
+              "parent_code": "IN040101",
+              "source_page": 10
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "SUGAR"
+          },
+          "leaf": {
+            "code": "IN040101002",
+            "level": "BASIC_INDUSTRY",
+            "name": "Sugar",
+            "parent_code": "IN040101",
+            "source_page": 10
+          },
+          "path": [
+            {
+              "code": "IN04",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": null,
+              "source_page": 10
+            },
+            {
+              "code": "IN0401",
+              "level": "SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": "IN04",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101",
+              "level": "INDUSTRY",
+              "name": "Agricultural Food & other Products",
+              "parent_code": "IN0401",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101002",
+              "level": "BASIC_INDUSTRY",
+              "name": "Sugar",
+              "parent_code": "IN040101",
+              "source_page": 10
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentResults03D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "SUGAR"
+          },
+          "leaf": {
+            "code": "IN040101002",
+            "level": "BASIC_INDUSTRY",
+            "name": "Sugar",
+            "parent_code": "IN040101",
+            "source_page": 10
+          },
+          "path": [
+            {
+              "code": "IN04",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": null,
+              "source_page": 10
+            },
+            {
+              "code": "IN0401",
+              "level": "SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": "IN04",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101",
+              "level": "INDUSTRY",
+              "name": "Agricultural Food & other Products",
+              "parent_code": "IN0401",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101002",
+              "level": "BASIC_INDUSTRY",
+              "name": "Sugar",
+              "parent_code": "IN040101",
+              "source_page": 10
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "FourReportableSegmentResults03D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "SUGAR"
+          },
+          "leaf": {
+            "code": "IN040101002",
+            "level": "BASIC_INDUSTRY",
+            "name": "Sugar",
+            "parent_code": "IN040101",
+            "source_page": 10
+          },
+          "path": [
+            {
+              "code": "IN04",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": null,
+              "source_page": 10
+            },
+            {
+              "code": "IN0401",
+              "level": "SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": "IN04",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101",
+              "level": "INDUSTRY",
+              "name": "Agricultural Food & other Products",
+              "parent_code": "IN0401",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101002",
+              "level": "BASIC_INDUSTRY",
+              "name": "Sugar",
+              "parent_code": "IN040101",
+              "source_page": 10
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentAssets03D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "SUGAR"
+          },
+          "leaf": {
+            "code": "IN040101002",
+            "level": "BASIC_INDUSTRY",
+            "name": "Sugar",
+            "parent_code": "IN040101",
+            "source_page": 10
+          },
+          "path": [
+            {
+              "code": "IN04",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": null,
+              "source_page": 10
+            },
+            {
+              "code": "IN0401",
+              "level": "SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": "IN04",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101",
+              "level": "INDUSTRY",
+              "name": "Agricultural Food & other Products",
+              "parent_code": "IN0401",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101002",
+              "level": "BASIC_INDUSTRY",
+              "name": "Sugar",
+              "parent_code": "IN040101",
+              "source_page": 10
+            }
+          ]
+        }
+      ],
+      "historical_identity_id": "acaacb32-02bb-595c-8d70-435e8f3f4096",
+      "historical_isin": "INE625B01014",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "DISTILLERY"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "POWER"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "SUGAR"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "UNALLOCATED"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "DISTILLERY"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "POWER"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "SUGAR"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "UNALLOCATED"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "DISTILLERY"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "POWER"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "SUGAR"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "UNALLOCATED"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "DISTILLERY"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "POWER"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "SUGAR"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "UNALLOCATED"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "DISTILLERY"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "POWER"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "SUGAR"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "UNALLOCATED"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/e8/e84577b5921ab01c82423613071fe3b1fa5638bfa6715787a81442c0d4f6f574.xml",
+      "source_sha256": "628cccbd5f607dfce906616ca9ee857c6df5700d1fd118cc6ad7db28e8d1f856"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "POSITIONAL_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-07-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "1e88380b-a173-5055-b53d-3554e487db96",
+      "historical_isin": "INE377N01017",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Engineering, procurement and construction (EPC) contracts"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Generation of power"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Solar Photovoltaic Modules"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Engineering, procurement and construction (EPC) contracts"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Generation of power"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Solar Photovoltaic Modules"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Engineering, procurement and construction (EPC) contracts"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Generation of power"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Solar Photovoltaic Modules"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Engineering, procurement and construction (EPC) contracts"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Generation of power"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Solar Photovoltaic Modules"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Engineering, procurement and construction (EPC) contracts"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Generation of power"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Solar Photovoltaic Modules"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Engineering, procurement and construction (EPC) contracts"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Generation of power"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Solar Photovoltaic Modules"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/cd/cd0aac60c44de9a3c309752883d79d62094e03e6e0c1c94521981b8ead696c6b.xml",
+      "source_sha256": "46e07661b491c02104069504da4ee9becc6d7d8ff6678ffeca540ec077437398"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "POSITIONAL_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "9eac015d-2fe9-5eca-bf57-42011e16fa5e",
+      "historical_isin": "INE280A01028",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Corporate"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Eyecare"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Jewellery"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Watches and Wearables"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Corporate"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Eyecare"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Jewellery"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Watches and Wearables"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Corporate"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Eyecare"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Jewellery"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults04D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults05D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Watches and Wearables"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Corporate"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Eyecare"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Jewellery"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/22/22fd6ce710794fb9f3834a816ff9257d47e209fdc757d63cc549c7b0193d6227.xml",
+      "source_sha256": "09dbeb46c6edfe31be0cbbd1c55e5861d247cacba040b855737a51841cd771c1"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "MULTI_SEGMENT_COMPANY_REQUIRES_APPROVED_SELECTION_OR_DOMINANCE_POLICY"
+      ],
+      "canary_stratum": "POSITIONAL_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "EXACT_LEAF_EVIDENCE_MULTISEGMENT_PENDING_OD3",
+      "candidate_unique_route": false,
+      "decision_at": "2025-03-28T10:00:00+00:00",
+      "exact_basic_industry_evidence": [
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Pharmaceuticals"
+          },
+          "leaf": {
+            "code": "IN060101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Pharmaceuticals",
+            "parent_code": "IN060101",
+            "source_page": 14
+          },
+          "path": [
+            {
+              "code": "IN06",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Healthcare",
+              "parent_code": null,
+              "source_page": 14
+            },
+            {
+              "code": "IN0601",
+              "level": "SECTOR",
+              "name": "Healthcare",
+              "parent_code": "IN06",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101",
+              "level": "INDUSTRY",
+              "name": "Pharmaceuticals & Biotechnology",
+              "parent_code": "IN0601",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Pharmaceuticals",
+              "parent_code": "IN060101",
+              "source_page": 14
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Pharmaceuticals"
+          },
+          "leaf": {
+            "code": "IN060101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Pharmaceuticals",
+            "parent_code": "IN060101",
+            "source_page": 14
+          },
+          "path": [
+            {
+              "code": "IN06",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Healthcare",
+              "parent_code": null,
+              "source_page": 14
+            },
+            {
+              "code": "IN0601",
+              "level": "SECTOR",
+              "name": "Healthcare",
+              "parent_code": "IN06",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101",
+              "level": "INDUSTRY",
+              "name": "Pharmaceuticals & Biotechnology",
+              "parent_code": "IN0601",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Pharmaceuticals",
+              "parent_code": "IN060101",
+              "source_page": 14
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentResults02D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Pharmaceuticals"
+          },
+          "leaf": {
+            "code": "IN060101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Pharmaceuticals",
+            "parent_code": "IN060101",
+            "source_page": 14
+          },
+          "path": [
+            {
+              "code": "IN06",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Healthcare",
+              "parent_code": null,
+              "source_page": 14
+            },
+            {
+              "code": "IN0601",
+              "level": "SECTOR",
+              "name": "Healthcare",
+              "parent_code": "IN06",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101",
+              "level": "INDUSTRY",
+              "name": "Pharmaceuticals & Biotechnology",
+              "parent_code": "IN0601",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Pharmaceuticals",
+              "parent_code": "IN060101",
+              "source_page": 14
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "FourReportableSegmentResults02D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Pharmaceuticals"
+          },
+          "leaf": {
+            "code": "IN060101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Pharmaceuticals",
+            "parent_code": "IN060101",
+            "source_page": 14
+          },
+          "path": [
+            {
+              "code": "IN06",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Healthcare",
+              "parent_code": null,
+              "source_page": 14
+            },
+            {
+              "code": "IN0601",
+              "level": "SECTOR",
+              "name": "Healthcare",
+              "parent_code": "IN06",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101",
+              "level": "INDUSTRY",
+              "name": "Pharmaceuticals & Biotechnology",
+              "parent_code": "IN0601",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Pharmaceuticals",
+              "parent_code": "IN060101",
+              "source_page": 14
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentAssets02D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Pharmaceuticals"
+          },
+          "leaf": {
+            "code": "IN060101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Pharmaceuticals",
+            "parent_code": "IN060101",
+            "source_page": 14
+          },
+          "path": [
+            {
+              "code": "IN06",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Healthcare",
+              "parent_code": null,
+              "source_page": 14
+            },
+            {
+              "code": "IN0601",
+              "level": "SECTOR",
+              "name": "Healthcare",
+              "parent_code": "IN06",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101",
+              "level": "INDUSTRY",
+              "name": "Pharmaceuticals & Biotechnology",
+              "parent_code": "IN0601",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Pharmaceuticals",
+              "parent_code": "IN060101",
+              "source_page": 14
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentLiabilities02D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Pharmaceuticals"
+          },
+          "leaf": {
+            "code": "IN060101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Pharmaceuticals",
+            "parent_code": "IN060101",
+            "source_page": 14
+          },
+          "path": [
+            {
+              "code": "IN06",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Healthcare",
+              "parent_code": null,
+              "source_page": 14
+            },
+            {
+              "code": "IN0601",
+              "level": "SECTOR",
+              "name": "Healthcare",
+              "parent_code": "IN06",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101",
+              "level": "INDUSTRY",
+              "name": "Pharmaceuticals & Biotechnology",
+              "parent_code": "IN0601",
+              "source_page": 14
+            },
+            {
+              "code": "IN060101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Pharmaceuticals",
+              "parent_code": "IN060101",
+              "source_page": 14
+            }
+          ]
+        }
+      ],
+      "historical_identity_id": "c644b736-db2a-53bf-9155-cb211ee8e455",
+      "historical_isin": "INE987B01026",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agro Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Pharmaceuticals"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agro Chemicals"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Pharmaceuticals"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agro Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Pharmaceuticals"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agro Chemicals"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Pharmaceuticals"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agro Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Pharmaceuticals"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Agro Chemicals"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Pharmaceuticals"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/23/23077563adef8a307a2b96fc3ce8522bc3f022d07125d49b56e4286ea5e97e99.xml",
+      "source_sha256": "680e44964ea24d2a90ea567f9b202a838d342035b0b114125a9d6bd768a4cfdc"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "POSITIONAL_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2024-11-29T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "e5754730-b48d-5c21-8198-0316e48c1f03",
+      "historical_isin": "INE0Q3J01015",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Oveseas"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Oveseas"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Oveseas"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Oveseas"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Oveseas"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Oveseas"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/ec/ec4430a7443afc714dd852cfa5a9421a735517292b6f92f4f16c4cb3241799bd.xml",
+      "source_sha256": "40059a7ca80efd9820a70d1a66d58d252268374fdab05c9747e1129821215224"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "32947c3d-1d36-55b3-b687-83556470f25f",
+      "historical_isin": "INE285K01026",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Corporate/Unallocable"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "EPC/Engineering Services"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Corporate/Unallocable"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "EPC/Engineering Services"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Corporate/Unallocable"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "EPC/Engineering Services"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Corporate/Unallocable"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "EPC/Engineering Services"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Corporate/Unallocable"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "EPC/Engineering Services"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Corporate/Unallocable"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "EPC/Engineering Services"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/95/95064424b116883cce78e9d448d28f317b9c28e5cabd0159c96dd6abe7654108.xml",
+      "source_sha256": "31c8c2255ad8b074352b40caf1ed51721cfd02a9c14d895b2d096aa19adb7992"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "MULTI_SEGMENT_COMPANY_REQUIRES_APPROVED_SELECTION_OR_DOMINANCE_POLICY"
+      ],
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "EXACT_LEAF_EVIDENCE_MULTISEGMENT_PENDING_OD3",
+      "candidate_unique_route": false,
+      "decision_at": "2024-06-28T10:00:00+00:00",
+      "exact_basic_industry_evidence": [
+        {
+          "fact": {
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Edible Oil"
+          },
+          "leaf": {
+            "code": "IN040101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Edible Oil",
+            "parent_code": "IN040101",
+            "source_page": 10
+          },
+          "path": [
+            {
+              "code": "IN04",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": null,
+              "source_page": 10
+            },
+            {
+              "code": "IN0401",
+              "level": "SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": "IN04",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101",
+              "level": "INDUSTRY",
+              "name": "Agricultural Food & other Products",
+              "parent_code": "IN0401",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Edible Oil",
+              "parent_code": "IN040101",
+              "source_page": 10
+            }
+          ]
+        },
+        {
+          "fact": {
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "kind": "REPORTABLE_SEGMENT",
+            "qname": "in-bse-fin:DescriptionOfReportableSegment",
+            "value": "Edible Oil"
+          },
+          "leaf": {
+            "code": "IN040101001",
+            "level": "BASIC_INDUSTRY",
+            "name": "Edible Oil",
+            "parent_code": "IN040101",
+            "source_page": 10
+          },
+          "path": [
+            {
+              "code": "IN04",
+              "level": "MACRO_ECONOMIC_SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": null,
+              "source_page": 10
+            },
+            {
+              "code": "IN0401",
+              "level": "SECTOR",
+              "name": "Fast Moving Consumer Goods",
+              "parent_code": "IN04",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101",
+              "level": "INDUSTRY",
+              "name": "Agricultural Food & other Products",
+              "parent_code": "IN0401",
+              "source_page": 10
+            },
+            {
+              "code": "IN040101001",
+              "level": "BASIC_INDUSTRY",
+              "name": "Edible Oil",
+              "parent_code": "IN040101",
+              "source_page": 10
+            }
+          ]
+        }
+      ],
+      "historical_identity_id": "b33c4aee-1095-5010-907f-7fbd7b6efb89",
+      "historical_isin": "INE699H01024",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Edible Oil"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Food & FMCG"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Edible Oil"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/f8/f87852338778f1df5b790e06a3909e3356c58c13f3dc22b0782dbb72261c7e35.xml",
+      "source_sha256": "07eeb7e380b7436e23543c61921d53011b9c15a523a9007751f4fca12d73a196"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "ee5599cc-381f-5091-8dbd-9585d70834f4",
+      "historical_isin": "INE737H01014",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Automotive Segment"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others Segment"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Automotive Segment"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others Segment"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Automotive Segment"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others Segment"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Automotive Segment"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others Segment"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Automotive Segment"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others Segment"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Automotive Segment"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Others Segment"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/7c/7ca4b7dc52915186d9043e47dc6968ab2950f9556c15e06395a8707fbc2fd4c7.xml",
+      "source_sha256": "46996f3827b7ea1b1cb1a4c6caca37b6c91b3802f560219af49774b3f046303d"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2024-07-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "f7261c7f-30b9-5cac-a3d6-2dfe7c417508",
+      "historical_isin": "INE127B01011",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Canada"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "OneReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "others"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Canada"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "FourReportableSegmentRevenue03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "others"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Canada"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "OneReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "others"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Canada"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "FourReportableSegmentResults03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "others"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Canada"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "OneReportableSegmentAssets03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "others"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities01D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "Canada"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities02D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "India"
+        },
+        {
+          "context_ref": "OneReportableSegmentLiabilities03D",
+          "kind": "REPORTABLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfReportableSegment",
+          "value": "others"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/83/83b52180f8d1495712b77db8efc96291bd0ce53ac22aa369c10c24318c0ad192.xml",
+      "source_sha256": "13db0e96ffcdc30cd7a2456444d8421de749e35955acb3a12e31ba79b214cd83"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-07-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "2b347f1e-4a76-5825-89c1-642e386ea715",
+      "historical_isin": "INE0JO301016",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneD",
+          "kind": "SINGLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfSingleSegment",
+          "value": "Hospital Business"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/10/106c61a9fa6038a63bc583aec33a826c29fea59c322b527fb7cb3efaeeb975a1.xml",
+      "source_sha256": "f34516800eae5dbf543bc1fe88d5d8f7f9771dc3eaca3187adae960900df10eb"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-09-30T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "56b13c5c-ca21-570e-b387-634e320718c8",
+      "historical_isin": "INE013P01021",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneD",
+          "kind": "SINGLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfSingleSegment",
+          "value": "Pharma"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/af/afcd8ff7336888f8e44f56fdc1ba9fa5018177c0537bf0bef3a2f400ff79c401.xml",
+      "source_sha256": "3124a76ce26e53ca71dbcd7d4c34cda6ee38526865a37f12c152d60f1fbeda8b"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-02-28T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "c84e95b9-f25c-5489-8bd9-d149f0339a3b",
+      "historical_isin": "INE0OV601013",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneD",
+          "kind": "SINGLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfSingleSegment",
+          "value": "The company is engaged in the business of Sewerage contractors, Sewerage tretament plants, transmission & Distribution & building and maintainance of own items which are used for construction purpose. Based on sinilarity of activities, risk and reward structure, organisation structure and internal reporting system, the company has structured its operations into single operating segment and hence there is no reportable segment as per IND AS 108 Operating Segment ."
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/e9/e95679d8c3aeaa633da52ced2eac9552b67e1786ad0328f2f33b2ff4f40c29aa.xml",
+      "source_sha256": "0e421ee6acceca7c122d66260646e3685137f989c872104da4efdaed508467ab"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-06-30T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "d226db5d-0fea-55e9-a934-bc2e9aac2d67",
+      "historical_isin": "INE0HR601026",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneD",
+          "kind": "SINGLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfSingleSegment",
+          "value": "POLYMER COMPOUNDS"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/73/739654758b97d06456703099062ff3357bb7afab7ed43de1150344a08688070d.xml",
+      "source_sha256": "2552697e6a74735ba1295d25ed247288b490a094c3703dc6d2e9f08f3c4d865d"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-01-31T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "22cc4c9f-d5d0-53ce-93af-60b3ea0f5357",
+      "historical_isin": "INE798K01010",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneD",
+          "kind": "SINGLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfSingleSegment",
+          "value": "Oil Seed Extraction and Refining"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/74/749d68cfa50d07d310fb7af615138f92e49595c470ec5478ae988b97c099a6db.xml",
+      "source_sha256": "5b6429db73aae51fc7e258684a03bd76eb05f2220f565af2a4ca7248c4bb63bd"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "5ffdcce2-20c4-5a4f-baee-0a87475cf1e5",
+      "historical_isin": "INE184O01015",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneD",
+          "kind": "SINGLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfSingleSegment",
+          "value": "Welding Fabrication Technology and Engineerin"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/23/230582e4a99926d243f95ab2b76ad04682d1753eae4a5d642d54cf74b0e532ac.xml",
+      "source_sha256": "be599cf953e3781540557770ee8aecf08ea5bd846a117eb6ccbcab6dc5f922a5"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "76b41969-131c-591c-91a7-e4cb65884e90",
+      "historical_isin": "INE999K01014",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneD",
+          "kind": "SINGLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfSingleSegment",
+          "value": "Generation of power through renewable sources and related services"
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/ed/ed0ba72e3534b1f32feedc1581b35248684a802b8c5bf10812b0c2e51f6b2d9f.xml",
+      "source_sha256": "c24185c95dee2417c1ef680ab2de6ed317a9886506b58501eb794ae7383d000e"
+    },
+    {
+      "authoritative_complete_classification": false,
+      "authoritative_methodology_route": false,
+      "blockers": [
+        "NO_EXACT_BASIC_INDUSTRY_LABEL_MATCH_OD2_REQUIRED_FOR_SYNONYM_MAPPING"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "candidate_complete_path": null,
+      "candidate_route_matches": [],
+      "candidate_state": "NO_EXACT_BASIC_INDUSTRY_MATCH",
+      "candidate_unique_route": false,
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "exact_basic_industry_evidence": [],
+      "historical_identity_id": "91cfc33b-5c5a-570c-9811-eb4851e6144b",
+      "historical_isin": "INE200A01026",
+      "normalized_input_state": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+      "point_in_time_eligible": true,
+      "semantic_facts": [
+        {
+          "context_ref": "OneD",
+          "kind": "SINGLE_SEGMENT",
+          "qname": "in-bse-fin:DescriptionOfSingleSegment",
+          "value": "The Company is engaged in the business relating to products, projects and systems for electricity transmission and related activities only. Accordingly, the Company has only one operating segment."
+        }
+      ],
+      "source_hash_verified": true,
+      "source_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/0e/0e0bf9df4f0a828c777692ebe3f0c55e47ba0ce22b4140b39327e846c7bc73ff.xml",
+      "source_sha256": "0b12b7eda0a6de93394526ee20afe04216d8f118dfbfb354ba908e26cf38691e"
+    }
+  ],
+  "route_specific_normalized_inputs": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE",
+  "safety": {
+    "company_source_acquisition": 0,
+    "migrations": 0,
+    "p8_c": 0,
+    "performance_reads": 0,
+    "provider_calls": 0,
+    "r2_writes": 0,
+    "supabase_writes": 0
+  },
+  "taxonomy_official_source_sha256": "ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1",
+  "taxonomy_package_status": "REFERENCE_CANDIDATE_PENDING_PORTFOLIOAI_OWNER_ADOPTION",
+  "taxonomy_payload_sha256": "e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96",
+  "version": "P8_COMPLETE_FOUR_TIER_TAXONOMY_CANARY_REVALIDATION_V1"
+}
