@@ -1,0 +1,102 @@
+{
+  "version": "P8_COMPLETE_FOUR_TIER_TAXONOMY_AUTHORITY_CLOSURE_V1",
+  "date": "2026-10-04",
+  "exact_disposition": "COMPLETE_FOUR_TIER_TAXONOMY_BUILT_PENDING_OWNER_POLICY_ADOPTION",
+  "starting_head": "e371cd2e3e89b1aa178e6c8fbe372c4e70b21da3",
+  "implementation_status": "COMPLETE_PASS",
+  "official_taxonomy_reference": {
+    "authority": "NSE Indices Limited",
+    "version": "November 2022",
+    "source_url": "https://nsearchives.nseindia.com/s3fs-public/inline-files/nse-indices_industry-classification-structure-2022-11.pdf",
+    "source_sha256": "ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1",
+    "taxonomy_package_sha256": "e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96",
+    "counts": {
+      "macro_economic_sector": 12,
+      "sector": 22,
+      "industry": 59,
+      "basic_industry": 197
+    },
+    "structural_errors": 0,
+    "orphan_nodes": 0,
+    "empty_names": 0
+  },
+  "adoption_status": {
+    "adopted": false,
+    "OD1": "PENDING_OWNER_DECISION",
+    "OD2": "PENDING_OWNER_DECISION",
+    "OD3": "PENDING_OWNER_DECISION",
+    "OD4": "PENDING_OWNER_DECISION"
+  },
+  "frozen_canary": {
+    "pairs": 32,
+    "unique_identities": 31,
+    "semantic_retained": 32,
+    "exact_basic_industry_evidence_pairs": 6,
+    "multisegment_exact_leaf_blocked_pairs": 6,
+    "complete_taxonomy_candidate_pairs": 0,
+    "authoritative_complete_pairs": 0,
+    "unique_route_candidate_pairs": 0,
+    "authoritative_route_pairs": 0,
+    "complete_normalized_input_pairs": 0,
+    "negative_control_promotions": 0,
+    "fingerprint": "04a89f697c95c0a403e4ab2c16fc6a1367b902169f6cc969732e1cc291c4616a"
+  },
+  "exact_leaf_evidence_examples": [
+    {
+      "semantic": "Pharmaceuticals",
+      "basic_industry_code": "IN060101001"
+    },
+    {
+      "semantic": "Commercial vehicles",
+      "basic_industry_code": "IN070202002"
+    },
+    {
+      "semantic": "Education",
+      "basic_industry_code": "IN020602001"
+    },
+    {
+      "semantic": "SUGAR",
+      "basic_industry_code": "IN040101002"
+    },
+    {
+      "semantic": "Edible Oil",
+      "basic_industry_code": "IN040101001"
+    }
+  ],
+  "expansion_gate": {
+    "taxonomy_package_structurally_complete": true,
+    "mapping_authority_owner_adopted": false,
+    "od1_od4_owner_approved": false,
+    "complete_classification_proven": false,
+    "complete_classification_unique_route": false,
+    "repeat_fingerprint_matches": true,
+    "negative_controls_not_promoted": true,
+    "expansion_authorized": false
+  },
+  "denominators": {
+    "full_b2_pairs": 121956,
+    "historical_identities": 4524,
+    "decision_dates": 32,
+    "provisional_candidate_pairs": 25761,
+    "provisional_candidate_identities": 877
+  },
+  "unmeasured": {
+    "full_25761_semantic_recovery": "NOT_MEASURED",
+    "full_candidate_classification": "NOT_MEASURED",
+    "route_specific_normalized_inputs": "NOT_EVALUATED_NO_AUTHORITATIVE_ROUTE"
+  },
+  "blocker": "OWNER_POLICY_ADOPTION_AND_MULTI_SEGMENT_CLASSIFICATION_POLICY",
+  "safety": {
+    "company_source_acquisition": 0,
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "migrations": 0,
+    "deployments": 0,
+    "production_changes": 0,
+    "main_changes": 0,
+    "experiment_execution": 0,
+    "b5_b6_bfinal_rebuild": 0,
+    "p8_c": 0,
+    "returns_performance_holdout_reads": 0
+  }
+}
