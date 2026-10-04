@@ -37,14 +37,17 @@ def sess(page):
     return q
 
 def getj(q,url,params):
-    last=None
-    for i in range(5):
-        last=q.get(url,params=params,timeout=90)
-        if last.status_code==200:
-            try:return last.json()
-            except:pass
-        time.sleep(min(8,2**i))
-    raise RuntimeError(f"official metadata HTTP {getattr(last,'status_code',None)}")
+    last=None; err=None
+    for i in range(8):
+        try:
+            last=q.get(url,params=params,timeout=90)
+            if last.status_code==200:
+                try:return last.json()
+                except ValueError:pass
+        except requests.RequestException as e:
+            err=e
+        time.sleep(min(30,2**i))
+    raise RuntimeError(f"official metadata unavailable HTTP {getattr(last,'status_code',None)} error={type(err).__name__ if err else None}")
 
 def ids():
     db=os.environ["SUPABASE_DB_URL"]
@@ -126,12 +129,17 @@ def one(item,bucket):
         k=x[0]["Key"];h=c.head_object(Bucket=bucket,Key=k)
         if h.get("Metadata",{}).get("sha256"):return {**meta,"r2_key":k,"sha256":h["Metadata"]["sha256"],"bytes":h["ContentLength"],"state":"VERIFIED_EXISTING"}
     q=requests.Session();q.headers.update({"User-Agent":UA,"Referer":"https://www.nseindia.com/"})
-    r=None
-    for i in range(5):
-        r=q.get(meta["url"],timeout=120)
-        if r.status_code==200 and r.content:break
-        time.sleep(min(8,2**i))
-    if r is None or r.status_code!=200 or not r.content:return {**meta,"state":"SOURCE_UNAVAILABLE","http":getattr(r,"status_code",None)}
+    r=None; err=None
+    for i in range(8):
+        try:
+            r=q.get(meta["url"],timeout=120)
+            if r.status_code==200 and r.content:break
+        except requests.RequestException as e:
+            err=e
+            r=None
+        time.sleep(min(30,2**i))
+    if r is None or r.status_code!=200 or not r.content:
+        return {**meta,"state":"SOURCE_UNAVAILABLE","http":getattr(r,"status_code",None),"transport_error":type(err).__name__ if err else None}
     sh=hashlib.sha256(r.content).hexdigest(); p=urlparse(meta["url"]).path.lower()
     ext=".xml" if p.endswith(".xml") or "xml" in r.headers.get("content-type","").lower() else ".pdf" if p.endswith(".pdf") or "pdf" in r.headers.get("content-type","").lower() else ".bin"
     k=pref+ext;c.put_object(Bucket=bucket,Key=k,Body=r.content,Metadata={"sha256":sh,"source-url-sha256":keyhash,"kind":meta["kind"].lower()})
