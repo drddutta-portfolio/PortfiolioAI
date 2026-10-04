@@ -21,7 +21,7 @@ scheduler activation, production mutation, or implementation of any checkpoint.
 with the latest repository artifacts and supersedes earlier present-tense stage
 labels below. P0–P7, P7-IC and IC-FINAL are closed within their recorded scopes.
 P8 is active but V1 is stopped on feasibility. Workstream D is structurally
-closed; Workstream E has not started. The next path is an owner-reviewed design
+closed; Workstream E is COMPLETE / BLOCKED / CLOSED after its corrected rerun. The next path is an owner-reviewed design
 for a separately versioned narrower experiment, before any outcome inspection.
 This document update authorizes no experiment creation or execution.
 
@@ -1135,7 +1135,7 @@ Controlling detailed evidence:
 | Recovery B | COMPLETE / PASS, bounded | Identity/source adapter and census; no feasibility PASS |
 | Recovery C | BLOCKED / NOT CLOSED | Earlier PASS superseded by feasibility stop |
 | Recovery D | COMPLETE / PASS / CLOSED structurally | Materialization run complete; full classification/reproducibility compliance unproven |
-| Recovery E | NOT STARTED / BLOCKED | Corrected B5/B6/B-FINAL rerun not performed |
+| Recovery E | COMPLETE / BLOCKED / CLOSED | Corrected rerun complete; 0 / 121,956 replay-ready; see section 22.7 |
 | P8-C onward | NOT STARTED / NOT AUTHORIZED | No progression permitted from current foundation |
 | Release-candidate qualification / P-FINAL | NOT CLOSED | Original qualification obligations remain outstanding |
 
@@ -1143,7 +1143,7 @@ The resulting lineage is:
 
 Programs A–D → P0 → P1 → P2 → P3 → P4 → P5 → P6 → P7 → P7-IC /
 IC-FINAL / approved Checkpoint 6 → P8-0 → P8-A → P8-B blocked → recovery A/B
-→ C feasibility stop → D structural materialization → E not started.
+→ C feasibility stop → D structural materialization → E COMPLETE / BLOCKED / CLOSED.
 
 P7 closure does not assert numeric investment readiness. Latest closure records
 report zero R6 scores, zero R7 candidacies and zero canonical actions, with
@@ -1227,7 +1227,7 @@ overall coverage floor. No threshold or exclusion policy is relaxed here.
 4. Original B5 required current canonical-security linkage and historical
    assignment/policy creation. These rules contradicted B2 historical identity
    and retrospective frozen-methodology semantics. A corrects the contract,
-   without yet rebuilding hosted B5/B6.
+   without rewriting original hosted B5/B6. E later produced corrected rerun artifacts; see section 22.7.
 5. D's `parse_xml` aggregates revenue/turnover/income over XBRL members without
    selecting audited consolidated annual periods or identifying segment axes.
    Raw member labels / DIVERSIFIED do not implement the required four-tier
@@ -1255,7 +1255,7 @@ tracked; it is not silently closed by this update.
 versioned narrower P8 experiment before any outcome inspection.**
 
 A legitimate E PASS is unsupported. A structural diagnostic E rerun cannot
-resolve feasibility and is not selected. Existing official evidence and
+resolve feasibility; the subsequent E rerun confirmed BLOCKED closure (section 22.7). Existing official evidence and
 historical infrastructure justify narrower-design assessment, but do not prove
 that a narrower experiment will pass. Total historical-validation infeasibility
 is therefore not declared yet. Repository access is sufficient for this decision.
@@ -1268,7 +1268,7 @@ is therefore not declared yet. Repository access is sufficient for this decision
 | Read-only evidence | Existing B2 membership, B3 V2 decision ledger, C source manifests, D filing/fact/classification/disposition artifacts |
 | Method | Define objective historical universe/period rules; measure the intersection of identity, market, official evidence, valid classification, required metrics and methodology coverage by date/sector/cohort |
 | Allowed writes | After authorization, Development planning and audit documents only; no tables or R2 objects changed |
-| Prohibited | Executable experiment creation, E rerun, new acquisition/provider calls, schema changes, database/R2 writes, P8-C, outcome/holdout/forward-return inspection, silent exclusions, threshold lowering, Production/main changes |
+| Prohibited | Executable experiment creation, further E reruns, new acquisition/provider calls, schema changes, database/R2 writes, P8-C, outcome/holdout/forward-return inspection, silent exclusions, threshold lowering, Production/main changes |
 | Closure | Owner-reviewable versioned design with explicit denominator, exclusions and missingness concentration; at least 24 proven dates; classifier validity and a demonstrated coverage path against proposed frozen standards—or documented narrower-scope NO-GO |
 | Approval | Owner authorization for design; separate contract freeze/implementation approval; separately gated P8-C transition |
 
@@ -1292,3 +1292,40 @@ limitations, rollback and deployment plans. Production/main changes remain
 separately authorized. This reconciliation makes no Production readiness claim.
 
 **Current final disposition: VERSION_NARROWER_EXPERIMENT_REQUIRED.**
+
+## 22.7 Workstream E closure reconciliation — 4 October 2026
+
+**Current-state precedence:** This entry supersedes earlier recovery-active and E-not-started statements. Historical audits and their original denominators remain preserved.
+
+**Workstream E = COMPLETE / BLOCKED / CLOSED.**
+**P8-B-FINAL = COMPLETE / BLOCKED / CLOSED.**
+
+Verified GitHub Actions run: [37207914448](https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/37207914448), completed successfully on `PortfolioAI-Development`. Workflow success confirms execution completion; it does not establish experiment feasibility.
+
+Authoritative records:
+
+- [Workstream E closure](p8/PortfolioAI_P8_B_RECOVERY_WORKSTREAM_E_CLOSURE_2026-10-04.md)
+- [Workstream E audit](p8/PortfolioAI_P8_B_RECOVERY_WORKSTREAM_E_AUDIT_2026-10-04.json)
+- [B-FINAL rerun audit](p8/PortfolioAI_P8_B_RECOVERY_B_FINAL_RERUN_2026-10-04.json)
+
+Corrected results against **121,956 B2-eligible pairs**:
+
+| Measure | Result |
+|---|---:|
+| B5 resolved paths | 0 |
+| B5 blocked paths | 121,956 |
+| B6 replay-ready | 0 |
+| B6 excluded | 121,956 |
+| Replay-ready coverage | 0% |
+| B3 market foundation READY / BLOCKED | 82,504 / 39,452 |
+| Proven decision dates / minimum | 32 / 24 |
+
+B5 blockers total exactly 121,956: `HISTORICAL_CLASSIFICATION_CONTRACT_UNPROVEN` 27,719; `HISTORICAL_CLASSIFICATION_UNRESOLVED` 33,706; `NO_PRE_DECISION_EVIDENCE` 60,531.
+
+Deterministic replay passed. Future evidence, current-state fallback and cross-security imputation were not used. The owner-approved exclusion ceiling remains `PENDING_OWNER_FREEZE`. Corrected B5 and B6 feasibility checks failed despite structural execution completion.
+
+`P8_EXP_NSE_MONTHLY_6M_V1` remains stopped: **P8-B = BLOCKED — V1 DATA FOUNDATION INSUFFICIENT**. **P8-C = NOT AUTHORIZED**. The next legitimate disposition is **`VERSION_NARROWER_EXPERIMENT_REQUIRED`**: prepare a separately authorized, owner-reviewable narrower design before any outcome inspection. This closure update does not authorize that work or another recovery loop.
+
+The recorded E run made zero provider calls, zero Supabase writes and zero Production/main changes; P8-C, holdout, forward returns and performance outcomes were not inspected. Corrected E artifacts do not imply that the original hosted B5/B6 objects were rewritten. B3's separate original-source forensic preservation obligation remains open.
+
+Reconciliation source: Development commit `b33986c8960c6b4a9b2f307a07aca2d896352675`. Section 22.1 retains the earlier audit's original HEAD and evidence boundary; this addendum records the subsequent E closure and supersedes its E-not-started conclusions. No fresh acquisition, database audit or experiment execution was performed for this documentation reconciliation.
