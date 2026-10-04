@@ -4,6 +4,11 @@ import { routeResearchProfileV1, RESEARCH_PROFILE_ROUTING_VERSION } from "../../
 const path="docs/p8/PortfolioAI_P8_SEGMENT_REVENUE_CANARY_CLASSIFICATION_AUDIT_2026-10-04.json"
 const registry=JSON.parse(fs.readFileSync("docs/p7-ic/PortfolioAI_P7_IC1_METHODOLOGY_R7_REGISTRY_V1.json","utf8"))
 const audit=JSON.parse(fs.readFileSync(path,"utf8"))
+// Focused smoke checks against the actual canonical router before canary application.
+const pharmaSmoke=routeResearchProfileV1({assetClass:"EQUITY",applicationSector:"Pharma",applicationIndustry:"Pharmaceuticals"})
+if (pharmaSmoke.state!=="ROUTED" || pharmaSmoke.profileCode!=="PHARMA") throw new Error("canonical PHARMA router smoke failed")
+const unsupportedSmoke=routeResearchProfileV1({assetClass:"EQUITY",applicationSector:"Healthcare",applicationIndustry:"Unknown Industry"})
+if (unsupportedSmoke.state==="ROUTED") throw new Error("unsupported industry unexpectedly routed")
 let candidateRoutes=0, authoritativeRoutes=0, candidateRequirementsSelected=0, completeInputs=0
 for (const row of audit.results) {
   row.router_result=null
