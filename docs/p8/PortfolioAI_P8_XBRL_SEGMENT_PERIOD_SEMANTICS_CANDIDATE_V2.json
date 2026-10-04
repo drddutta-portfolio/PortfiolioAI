@@ -1,0 +1,66 @@
+{
+  "contract_version": "P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V2",
+  "status": "FROZEN_CONDITIONAL_CANDIDATE_NOT_OWNER_APPROVED",
+  "approved_v1_unchanged": {
+    "contract": "P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1",
+    "git_blob_sha": "45e990981371dba217d12c430f8ce567acbf25fc"
+  },
+  "evidence_standard": {
+    "authoritative_period_proof_rank": [
+      "LITERAL_XBRL_CONTEXT_DATES",
+      "EXPLICIT_OFFICIAL_PERIOD_LABEL_LINKED_TO_THE_SAME_TABLE_OR_FACT_GROUP",
+      "SOURCE_SUPPORTED_TABLE_COLUMN_TO_FACT_GROUP_LINKAGE",
+      "APPLICABLE_STORED_TAXONOMY_OR_CONCEPT_DEFINITION"
+    ],
+    "prohibited_as_sufficient_alone": [
+      "CONTEXT_OR_MEMBER_PREFIX_ONE_FOUR",
+      "AMOUNT_MAGNITUDE",
+      "EXPECTED_REVENUE",
+      "ARITHMETIC_RECONCILIATION",
+      "ANOTHER_COMPANY_FILING",
+      "CURRENT_COMPANY_KNOWLEDGE"
+    ],
+    "conflict_rule": "Literal context dates remain original evidence. A proposed corrected semantic period is permitted only as a separate conditional normalization when independent in-source structure proves a table-column relationship; never overwrite the original context.",
+    "unsupported_rule": "If no independent period proof or deterministic table-column linkage exists, retain literal context and fail closed."
+  },
+  "conditional_rule": {
+    "id": "YEARLY_ONE_FOUR_COLUMN_BRIDGE_V1",
+    "applicability_all_required": [
+      "Official filing is eligible before decision and source hash verifies.",
+      "ReportingQuarter fact equals Yearly.",
+      "Selected audited consolidated annual base context exists.",
+      "A quarter-duration OneD base context and annual-duration FourD base context share the same annual end date.",
+      "OneReportableSegmentRevenue and FourReportableSegmentRevenue groups contain matching reportable segment descriptions/identities.",
+      "One-group segment revenues reconcile to OneD total SegmentRevenue within XBRL rounding tolerance.",
+      "Four-group segment revenues reconcile to FourD total SegmentRevenue within XBRL rounding tolerance.",
+      "At least one additional segment measure family, when present with One/Four groups and totals, independently preserves the same One/Four column mapping; otherwise proof state remains weaker and no correction is promoted.",
+      "Units, currency, scale, audit status and consolidated scope are compatible."
+    ],
+    "proposed_normalization": "Preserve original Four-segment literal context dates; add proposed_period = FourD annual period and proof linkage to the One/Four table-column bridge.",
+    "proof_states": [
+      "V1_EXTRACTION_FIX_EXISTING_ANNUAL_FACT",
+      "V2_CONDITIONAL_SOURCE_TAGGING_DEFECT_PROVEN_BY_TABLE_COLUMN_BRIDGE",
+      "GENUINELY_QUARTERLY_OR_LITERAL_CONTEXT_ONLY",
+      "INSUFFICIENT_PERIOD_EVIDENCE",
+      "SOURCE_CONFLICT"
+    ],
+    "owner_approval_required": true,
+    "note": "This rule does not infer annuality from the word Four, magnitude, or reconciliation alone. It requires explicit Yearly filing metadata plus paired One/Four base contexts and deterministic same-filing table-column structure."
+  },
+  "missing_accounting_search": {
+    "alternate_concept_search_patterns": [
+      "InterSegmentRevenue",
+      "InterSegmentSales",
+      "Elimination",
+      "SegmentRevenue",
+      "RevenueFromOperations"
+    ],
+    "absent_is_zero": false,
+    "denominator_substitution": false
+  },
+  "frozen_canary": {
+    "pair_count": 32,
+    "fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce"
+  },
+  "broad_processing_authorized": false
+}
