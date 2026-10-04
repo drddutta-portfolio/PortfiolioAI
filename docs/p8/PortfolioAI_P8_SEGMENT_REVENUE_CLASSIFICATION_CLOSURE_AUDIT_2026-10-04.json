@@ -1,0 +1,96 @@
+{
+  "version": "P8_SEGMENT_REVENUE_CLASSIFICATION_CLOSURE_AUDIT_V1",
+  "date": "2026-10-04",
+  "exact_disposition": "SEGMENT_REVENUE_CONTRACT_COMPLETE_CANARY_EVIDENCE_BLOCKED_PENDING_OWNER_ADOPTION",
+  "implementation_status": "COMPLETE_PASS",
+  "accounting_proof_status": "BLOCKED",
+  "policy_adoption_status": "PENDING_OWNER_APPROVAL",
+  "company_classification_status": "ZERO_COMPLETE",
+  "route_status": "ZERO_ROUTES",
+  "normalized_input_status": "ZERO_COMPLETE",
+  "experiment_feasibility": "BLOCKED",
+  "source_methodology": {
+    "current_nse_methodology_updated_on": "21/09/2023",
+    "current_methodology_html_sha256": "5ef4f26fde3c3fc2d105adf27c6a3884e500a307c02bf89f866b687bb0cb3792",
+    "november_2022_taxonomy_pdf_sha256": "ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1",
+    "version_mismatch_disclosed": true,
+    "exact_november_2022_full_methodology_preserved": false
+  },
+  "frozen_contract": {
+    "version": "P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1",
+    "git_blob_sha": "45e990981371dba217d12c430f8ce567acbf25fc",
+    "owner_approved": false
+  },
+  "frozen_canary": {
+    "membership_pairs": 32,
+    "membership_unique_identities": 31,
+    "membership_fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce",
+    "semantic_pairs": 32,
+    "eligible_audited_consolidated_annual_pairs": 24,
+    "accounting_blocked_period_context_mismatch_pairs": 12,
+    "accounting_incomplete_pairs": 12,
+    "no_eligible_annual_source_pairs": 8,
+    "comparable_segment_revenue_pairs": 0,
+    "dominant_business_candidate_pairs": 0,
+    "candidate_complete_classification_pairs": 0,
+    "authoritative_complete_classification_pairs": 0,
+    "candidate_unique_routes": 0,
+    "authoritative_unique_routes": 0,
+    "complete_normalized_input_pairs": 0,
+    "negative_control_promotions": 0,
+    "accounting_fingerprint": "cce3a731431ade7caf697ef7af036074c1cbb5e5ce27ead0f833df3b02e09d50",
+    "final_classification_fingerprint": "146206681ac7cc7f5f2978b8d7f1954afca56ce65aa7082e1ec17d2c2f032667"
+  },
+  "primary_evidence_gaps": [
+    {
+      "code": "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH",
+      "pairs": 12
+    },
+    {
+      "code": "INTERSEGMENT_REVENUE_MISSING",
+      "pairs": 12,
+      "note": "overlaps other accounting gaps"
+    },
+    {
+      "code": "TOTAL_SEGMENT_REVENUE_MISSING",
+      "pairs": 4,
+      "note": "overlaps accounting-incomplete cohort"
+    },
+    {
+      "code": "NO_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL",
+      "pairs": 8
+    }
+  ],
+  "six_prior_exact_leaf_cases": {
+    "audited_annual_source_available": 5,
+    "no_eligible_audited_consolidated_annual": 1,
+    "exact_company_dominance_proven": 0,
+    "note": "Previously observed exact Basic-Industry segment labels are insufficient for company classification because the V1 audited-annual accounting comparability requirements fail."
+  },
+  "full_surface": {
+    "full_b2_pairs": 121956,
+    "provisional_candidate_pairs": 25761,
+    "provisional_candidate_identities": 877,
+    "decision_dates": 32,
+    "expansion_executed": false,
+    "full_candidate_surface": "NOT_MEASURED"
+  },
+  "tests": {
+    "final_workflow_run": 37217432181,
+    "focused_accounting_tests_passed": 18,
+    "canonical_router_smoke_guards": true,
+    "deterministic_repeat_fingerprint_match": true
+  },
+  "safety": {
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "migrations": 0,
+    "deployments": 0,
+    "company_source_acquisition": 0,
+    "production_main_changes": 0,
+    "experiment_execution": 0,
+    "b5_b6_bfinal_rebuild": 0,
+    "p8_c": 0,
+    "returns_performance_forward_holdout_reads": 0
+  }
+}
