@@ -1,0 +1,2076 @@
+{
+  "contract": "PORTFOLIOAI_NSE_FOUR_TIER_TAXONOMY_REFERENCE_V1",
+  "counts": {
+    "BASIC_INDUSTRY": 197,
+    "INDUSTRY": 59,
+    "MACRO_ECONOMIC_SECTOR": 12,
+    "SECTOR": 22
+  },
+  "declared_scope": {
+    "expected_counts": {
+      "BASIC_INDUSTRY": 197,
+      "INDUSTRY": 59,
+      "MACRO_ECONOMIC_SECTOR": 12,
+      "SECTOR": 22
+    },
+    "hierarchy": [
+      "MACRO_ECONOMIC_SECTOR",
+      "SECTOR",
+      "INDUSTRY",
+      "BASIC_INDUSTRY"
+    ],
+    "source_methodology_page": "https://www.nseindia.com/static/products-services/industry-classification"
+  },
+  "extraction_diagnostics": [],
+  "nodes": [
+    {
+      "code": "IN01",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Commodities",
+      "parent_code": null,
+      "source_page": 2
+    },
+    {
+      "code": "IN02",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Consumer",
+      "parent_code": null,
+      "source_page": 4
+    },
+    {
+      "code": "IN03",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Energy",
+      "parent_code": null,
+      "source_page": 9
+    },
+    {
+      "code": "IN04",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Fast Moving",
+      "parent_code": null,
+      "source_page": 10
+    },
+    {
+      "code": "IN05",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Financial",
+      "parent_code": null,
+      "source_page": 12
+    },
+    {
+      "code": "IN06",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Healthcare",
+      "parent_code": null,
+      "source_page": 14
+    },
+    {
+      "code": "IN07",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Industrials",
+      "parent_code": null,
+      "source_page": 15
+    },
+    {
+      "code": "IN08",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Information",
+      "parent_code": null,
+      "source_page": 18
+    },
+    {
+      "code": "IN09",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Services",
+      "parent_code": null,
+      "source_page": 18
+    },
+    {
+      "code": "IN10",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Telecommunic",
+      "parent_code": null,
+      "source_page": 20
+    },
+    {
+      "code": "IN11",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Utilities",
+      "parent_code": null,
+      "source_page": 20
+    },
+    {
+      "code": "IN12",
+      "level": "MACRO_ECONOMIC_SECTOR",
+      "name": "Diversified",
+      "parent_code": null,
+      "source_page": 21
+    },
+    {
+      "code": "IN0101",
+      "level": "SECTOR",
+      "name": "Chemicals",
+      "parent_code": "IN01",
+      "source_page": 2
+    },
+    {
+      "code": "IN0102",
+      "level": "SECTOR",
+      "name": "Construction",
+      "parent_code": "IN01",
+      "source_page": 3
+    },
+    {
+      "code": "IN0103",
+      "level": "SECTOR",
+      "name": "Metals &",
+      "parent_code": "IN01",
+      "source_page": 3
+    },
+    {
+      "code": "IN0104",
+      "level": "SECTOR",
+      "name": "Forest",
+      "parent_code": "IN01",
+      "source_page": 4
+    },
+    {
+      "code": "IN0201",
+      "level": "SECTOR",
+      "name": "Automobile",
+      "parent_code": "IN02",
+      "source_page": 4
+    },
+    {
+      "code": "IN0202",
+      "level": "SECTOR",
+      "name": "Consumer",
+      "parent_code": "IN02",
+      "source_page": 4
+    },
+    {
+      "code": "IN0203",
+      "level": "SECTOR",
+      "name": "Textiles",
+      "parent_code": "IN02",
+      "source_page": 6
+    },
+    {
+      "code": "IN0204",
+      "level": "SECTOR",
+      "name": "Media,",
+      "parent_code": "IN02",
+      "source_page": 6
+    },
+    {
+      "code": "IN0205",
+      "level": "SECTOR",
+      "name": "Realty",
+      "parent_code": "IN02",
+      "source_page": 8
+    },
+    {
+      "code": "IN0206",
+      "level": "SECTOR",
+      "name": "Consumer",
+      "parent_code": "IN02",
+      "source_page": 8
+    },
+    {
+      "code": "IN0301",
+      "level": "SECTOR",
+      "name": "Oil, Gas &",
+      "parent_code": "IN03",
+      "source_page": 9
+    },
+    {
+      "code": "IN0401",
+      "level": "SECTOR",
+      "name": "Fast Moving",
+      "parent_code": "IN04",
+      "source_page": 10
+    },
+    {
+      "code": "IN0501",
+      "level": "SECTOR",
+      "name": "Financial",
+      "parent_code": "IN05",
+      "source_page": 12
+    },
+    {
+      "code": "IN0601",
+      "level": "SECTOR",
+      "name": "Healthcare",
+      "parent_code": "IN06",
+      "source_page": 14
+    },
+    {
+      "code": "IN0701",
+      "level": "SECTOR",
+      "name": "Construction",
+      "parent_code": "IN07",
+      "source_page": 15
+    },
+    {
+      "code": "IN0702",
+      "level": "SECTOR",
+      "name": "Capital Goods",
+      "parent_code": "IN07",
+      "source_page": 15
+    },
+    {
+      "code": "IN0801",
+      "level": "SECTOR",
+      "name": "Information",
+      "parent_code": "IN08",
+      "source_page": 18
+    },
+    {
+      "code": "IN0901",
+      "level": "SECTOR",
+      "name": "Services",
+      "parent_code": "IN09",
+      "source_page": 18
+    },
+    {
+      "code": "IN1001",
+      "level": "SECTOR",
+      "name": "Telecommunic",
+      "parent_code": "IN10",
+      "source_page": 20
+    },
+    {
+      "code": "IN1101",
+      "level": "SECTOR",
+      "name": "Power",
+      "parent_code": "IN11",
+      "source_page": 20
+    },
+    {
+      "code": "IN1102",
+      "level": "SECTOR",
+      "name": "Utilities",
+      "parent_code": "IN11",
+      "source_page": 21
+    },
+    {
+      "code": "IN1201",
+      "level": "SECTOR",
+      "name": "Diversified",
+      "parent_code": "IN12",
+      "source_page": 21
+    },
+    {
+      "code": "IN010101",
+      "level": "INDUSTRY",
+      "name": "Chem",
+      "parent_code": "IN0101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010102",
+      "level": "INDUSTRY",
+      "name": "Fertil",
+      "parent_code": "IN0101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010203",
+      "level": "INDUSTRY",
+      "name": "Cem",
+      "parent_code": "IN0102",
+      "source_page": 3
+    },
+    {
+      "code": "IN010204",
+      "level": "INDUSTRY",
+      "name": "Othe",
+      "parent_code": "IN0102",
+      "source_page": 3
+    },
+    {
+      "code": "IN010301",
+      "level": "INDUSTRY",
+      "name": "Ferro",
+      "parent_code": "IN0103",
+      "source_page": 3
+    },
+    {
+      "code": "IN010302",
+      "level": "INDUSTRY",
+      "name": "Non",
+      "parent_code": "IN0103",
+      "source_page": 3
+    },
+    {
+      "code": "IN010303",
+      "level": "INDUSTRY",
+      "name": "Diver",
+      "parent_code": "IN0103",
+      "source_page": 3
+    },
+    {
+      "code": "IN010304",
+      "level": "INDUSTRY",
+      "name": "Mine",
+      "parent_code": "IN0103",
+      "source_page": 3
+    },
+    {
+      "code": "IN010305",
+      "level": "INDUSTRY",
+      "name": "Meta",
+      "parent_code": "IN0103",
+      "source_page": 3
+    },
+    {
+      "code": "IN010401",
+      "level": "INDUSTRY",
+      "name": "Pape",
+      "parent_code": "IN0104",
+      "source_page": 4
+    },
+    {
+      "code": "IN020101",
+      "level": "INDUSTRY",
+      "name": "Auto",
+      "parent_code": "IN0201",
+      "source_page": 4
+    },
+    {
+      "code": "IN020102",
+      "level": "INDUSTRY",
+      "name": "Auto",
+      "parent_code": "IN0201",
+      "source_page": 4
+    },
+    {
+      "code": "IN020201",
+      "level": "INDUSTRY",
+      "name": "Cons",
+      "parent_code": "IN0202",
+      "source_page": 4
+    },
+    {
+      "code": "IN020301",
+      "level": "INDUSTRY",
+      "name": "Texti",
+      "parent_code": "IN0203",
+      "source_page": 6
+    },
+    {
+      "code": "IN020401",
+      "level": "INDUSTRY",
+      "name": "Medi",
+      "parent_code": "IN0204",
+      "source_page": 6
+    },
+    {
+      "code": "IN020402",
+      "level": "INDUSTRY",
+      "name": "Enter",
+      "parent_code": "IN0204",
+      "source_page": 7
+    },
+    {
+      "code": "IN020403",
+      "level": "INDUSTRY",
+      "name": "Print",
+      "parent_code": "IN0204",
+      "source_page": 7
+    },
+    {
+      "code": "IN020501",
+      "level": "INDUSTRY",
+      "name": "Realt",
+      "parent_code": "IN0205",
+      "source_page": 8
+    },
+    {
+      "code": "IN020601",
+      "level": "INDUSTRY",
+      "name": "Leisu",
+      "parent_code": "IN0206",
+      "source_page": 8
+    },
+    {
+      "code": "IN020602",
+      "level": "INDUSTRY",
+      "name": "Othe",
+      "parent_code": "IN0206",
+      "source_page": 8
+    },
+    {
+      "code": "IN020603",
+      "level": "INDUSTRY",
+      "name": "Retai",
+      "parent_code": "IN0206",
+      "source_page": 9
+    },
+    {
+      "code": "IN030101",
+      "level": "INDUSTRY",
+      "name": "Gas",
+      "parent_code": "IN0301",
+      "source_page": 9
+    },
+    {
+      "code": "IN030102",
+      "level": "INDUSTRY",
+      "name": "Oil",
+      "parent_code": "IN0301",
+      "source_page": 10
+    },
+    {
+      "code": "IN030103",
+      "level": "INDUSTRY",
+      "name": "Petro",
+      "parent_code": "IN0301",
+      "source_page": 10
+    },
+    {
+      "code": "IN030104",
+      "level": "INDUSTRY",
+      "name": "Cons",
+      "parent_code": "IN0301",
+      "source_page": 10
+    },
+    {
+      "code": "IN040101",
+      "level": "INDUSTRY",
+      "name": "Agric",
+      "parent_code": "IN0401",
+      "source_page": 10
+    },
+    {
+      "code": "IN040102",
+      "level": "INDUSTRY",
+      "name": "Beve",
+      "parent_code": "IN0401",
+      "source_page": 10
+    },
+    {
+      "code": "IN040103",
+      "level": "INDUSTRY",
+      "name": "Cigar",
+      "parent_code": "IN0401",
+      "source_page": 11
+    },
+    {
+      "code": "IN040104",
+      "level": "INDUSTRY",
+      "name": "Food",
+      "parent_code": "IN0401",
+      "source_page": 11
+    },
+    {
+      "code": "IN040105",
+      "level": "INDUSTRY",
+      "name": "Perso",
+      "parent_code": "IN0401",
+      "source_page": 11
+    },
+    {
+      "code": "IN040106",
+      "level": "INDUSTRY",
+      "name": "Hous",
+      "parent_code": "IN0401",
+      "source_page": 11
+    },
+    {
+      "code": "IN040107",
+      "level": "INDUSTRY",
+      "name": "Diver",
+      "parent_code": "IN0401",
+      "source_page": 11
+    },
+    {
+      "code": "IN050101",
+      "level": "INDUSTRY",
+      "name": "Finan",
+      "parent_code": "IN0501",
+      "source_page": 12
+    },
+    {
+      "code": "IN050102",
+      "level": "INDUSTRY",
+      "name": "Bank",
+      "parent_code": "IN0501",
+      "source_page": 13
+    },
+    {
+      "code": "IN050103",
+      "level": "INDUSTRY",
+      "name": "Capit",
+      "parent_code": "IN0501",
+      "source_page": 13
+    },
+    {
+      "code": "IN050104",
+      "level": "INDUSTRY",
+      "name": "Insur",
+      "parent_code": "IN0501",
+      "source_page": 14
+    },
+    {
+      "code": "IN050105",
+      "level": "INDUSTRY",
+      "name": "Finan",
+      "parent_code": "IN0501",
+      "source_page": 14
+    },
+    {
+      "code": "IN060101",
+      "level": "INDUSTRY",
+      "name": "Phar",
+      "parent_code": "IN0601",
+      "source_page": 14
+    },
+    {
+      "code": "IN060102",
+      "level": "INDUSTRY",
+      "name": "Healt",
+      "parent_code": "IN0601",
+      "source_page": 14
+    },
+    {
+      "code": "IN060103",
+      "level": "INDUSTRY",
+      "name": "Healt",
+      "parent_code": "IN0601",
+      "source_page": 14
+    },
+    {
+      "code": "IN070101",
+      "level": "INDUSTRY",
+      "name": "Cons",
+      "parent_code": "IN0701",
+      "source_page": 15
+    },
+    {
+      "code": "IN070201",
+      "level": "INDUSTRY",
+      "name": "Aero",
+      "parent_code": "IN0702",
+      "source_page": 15
+    },
+    {
+      "code": "IN070202",
+      "level": "INDUSTRY",
+      "name": "Agric",
+      "parent_code": "IN0702",
+      "source_page": 15
+    },
+    {
+      "code": "IN070203",
+      "level": "INDUSTRY",
+      "name": "Elect",
+      "parent_code": "IN0702",
+      "source_page": 16
+    },
+    {
+      "code": "IN070204",
+      "level": "INDUSTRY",
+      "name": "Indus",
+      "parent_code": "IN0702",
+      "source_page": 16
+    },
+    {
+      "code": "IN070205",
+      "level": "INDUSTRY",
+      "name": "Indus",
+      "parent_code": "IN0702",
+      "source_page": 16
+    },
+    {
+      "code": "IN080101",
+      "level": "INDUSTRY",
+      "name": "IT - S",
+      "parent_code": "IN0801",
+      "source_page": 18
+    },
+    {
+      "code": "IN080102",
+      "level": "INDUSTRY",
+      "name": "IT - S",
+      "parent_code": "IN0801",
+      "source_page": 18
+    },
+    {
+      "code": "IN080103",
+      "level": "INDUSTRY",
+      "name": "IT - H",
+      "parent_code": "IN0801",
+      "source_page": 18
+    },
+    {
+      "code": "IN090101",
+      "level": "INDUSTRY",
+      "name": "Engin",
+      "parent_code": "IN0901",
+      "source_page": 18
+    },
+    {
+      "code": "IN090102",
+      "level": "INDUSTRY",
+      "name": "Trans",
+      "parent_code": "IN0901",
+      "source_page": 18
+    },
+    {
+      "code": "IN090103",
+      "level": "INDUSTRY",
+      "name": "Trans",
+      "parent_code": "IN0901",
+      "source_page": 19
+    },
+    {
+      "code": "IN090104",
+      "level": "INDUSTRY",
+      "name": "Com",
+      "parent_code": "IN0901",
+      "source_page": 19
+    },
+    {
+      "code": "IN090105",
+      "level": "INDUSTRY",
+      "name": "Publi",
+      "parent_code": "IN0901",
+      "source_page": 20
+    },
+    {
+      "code": "IN100101",
+      "level": "INDUSTRY",
+      "name": "Telec",
+      "parent_code": "IN1001",
+      "source_page": 20
+    },
+    {
+      "code": "IN100102",
+      "level": "INDUSTRY",
+      "name": "Telec",
+      "parent_code": "IN1001",
+      "source_page": 20
+    },
+    {
+      "code": "IN110101",
+      "level": "INDUSTRY",
+      "name": "Powe",
+      "parent_code": "IN1101",
+      "source_page": 20
+    },
+    {
+      "code": "IN110201",
+      "level": "INDUSTRY",
+      "name": "Othe",
+      "parent_code": "IN1102",
+      "source_page": 21
+    },
+    {
+      "code": "IN120101",
+      "level": "INDUSTRY",
+      "name": "Diver",
+      "parent_code": "IN1201",
+      "source_page": 21
+    },
+    {
+      "code": "IN010101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Co",
+      "parent_code": "IN010101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010101002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Sp",
+      "parent_code": "IN010101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010101003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ca",
+      "parent_code": "IN010101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010101004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Dy",
+      "parent_code": "IN010101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010101005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ex",
+      "parent_code": "IN010101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010101006",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pe",
+      "parent_code": "IN010101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010101007",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pri",
+      "parent_code": "IN010101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010101008",
+      "level": "BASIC_INDUSTRY",
+      "name": "Tra",
+      "parent_code": "IN010101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010101009",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ind",
+      "parent_code": "IN010101",
+      "source_page": 2
+    },
+    {
+      "code": "IN010102001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Fe",
+      "parent_code": "IN010102",
+      "source_page": 2
+    },
+    {
+      "code": "IN010102002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pe",
+      "parent_code": "IN010102",
+      "source_page": 3
+    },
+    {
+      "code": "IN010203001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ce",
+      "parent_code": "IN010203",
+      "source_page": 3
+    },
+    {
+      "code": "IN010204001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN010204",
+      "source_page": 3
+    },
+    {
+      "code": "IN010301001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Fe",
+      "parent_code": "IN010301",
+      "source_page": 3
+    },
+    {
+      "code": "IN010301002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pig",
+      "parent_code": "IN010301",
+      "source_page": 3
+    },
+    {
+      "code": "IN010301003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Sp",
+      "parent_code": "IN010301",
+      "source_page": 3
+    },
+    {
+      "code": "IN010301004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Iro",
+      "parent_code": "IN010301",
+      "source_page": 3
+    },
+    {
+      "code": "IN010302001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Alu",
+      "parent_code": "IN010302",
+      "source_page": 3
+    },
+    {
+      "code": "IN010302002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Co",
+      "parent_code": "IN010302",
+      "source_page": 3
+    },
+    {
+      "code": "IN010302003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Zin",
+      "parent_code": "IN010302",
+      "source_page": 3
+    },
+    {
+      "code": "IN010302004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pr",
+      "parent_code": "IN010302",
+      "source_page": 3
+    },
+    {
+      "code": "IN010303001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Div",
+      "parent_code": "IN010303",
+      "source_page": 3
+    },
+    {
+      "code": "IN010304001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ind",
+      "parent_code": "IN010304",
+      "source_page": 3
+    },
+    {
+      "code": "IN010305001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Tra",
+      "parent_code": "IN010305",
+      "source_page": 3
+    },
+    {
+      "code": "IN010305002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Tra",
+      "parent_code": "IN010305",
+      "source_page": 4
+    },
+    {
+      "code": "IN010401001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pa",
+      "parent_code": "IN010401",
+      "source_page": 4
+    },
+    {
+      "code": "IN010401002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Fo",
+      "parent_code": "IN010401",
+      "source_page": 4
+    },
+    {
+      "code": "IN010401003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Jut",
+      "parent_code": "IN010401",
+      "source_page": 4
+    },
+    {
+      "code": "IN020101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pa",
+      "parent_code": "IN020101",
+      "source_page": 4
+    },
+    {
+      "code": "IN020101002",
+      "level": "BASIC_INDUSTRY",
+      "name": "2/",
+      "parent_code": "IN020101",
+      "source_page": 4
+    },
+    {
+      "code": "IN020101004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Au",
+      "parent_code": "IN020101",
+      "source_page": 4
+    },
+    {
+      "code": "IN020102001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Au",
+      "parent_code": "IN020102",
+      "source_page": 4
+    },
+    {
+      "code": "IN020102006",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ty",
+      "parent_code": "IN020102",
+      "source_page": 4
+    },
+    {
+      "code": "IN020102007",
+      "level": "BASIC_INDUSTRY",
+      "name": "Tra",
+      "parent_code": "IN020102",
+      "source_page": 4
+    },
+    {
+      "code": "IN020201002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Cy",
+      "parent_code": "IN020201",
+      "source_page": 4
+    },
+    {
+      "code": "IN020201003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Co",
+      "parent_code": "IN020201",
+      "source_page": 4
+    },
+    {
+      "code": "IN020201005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ge",
+      "parent_code": "IN020201",
+      "source_page": 5
+    },
+    {
+      "code": "IN020201006",
+      "level": "BASIC_INDUSTRY",
+      "name": "Gl",
+      "parent_code": "IN020201",
+      "source_page": 5
+    },
+    {
+      "code": "IN020201007",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ho",
+      "parent_code": "IN020201",
+      "source_page": 5
+    },
+    {
+      "code": "IN020201008",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ho",
+      "parent_code": "IN020201",
+      "source_page": 5
+    },
+    {
+      "code": "IN020201009",
+      "level": "BASIC_INDUSTRY",
+      "name": "Le",
+      "parent_code": "IN020201",
+      "source_page": 5
+    },
+    {
+      "code": "IN020201010",
+      "level": "BASIC_INDUSTRY",
+      "name": "Lei",
+      "parent_code": "IN020201",
+      "source_page": 5
+    },
+    {
+      "code": "IN020201011",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pla",
+      "parent_code": "IN020201",
+      "source_page": 5
+    },
+    {
+      "code": "IN020201012",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ply",
+      "parent_code": "IN020201",
+      "source_page": 6
+    },
+    {
+      "code": "IN020201013",
+      "level": "BASIC_INDUSTRY",
+      "name": "Sa",
+      "parent_code": "IN020201",
+      "source_page": 6
+    },
+    {
+      "code": "IN020201015",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pa",
+      "parent_code": "IN020201",
+      "source_page": 6
+    },
+    {
+      "code": "IN020201016",
+      "level": "BASIC_INDUSTRY",
+      "name": "Div",
+      "parent_code": "IN020201",
+      "source_page": 6
+    },
+    {
+      "code": "IN020201017",
+      "level": "BASIC_INDUSTRY",
+      "name": "Fo",
+      "parent_code": "IN020201",
+      "source_page": 6
+    },
+    {
+      "code": "IN020201018",
+      "level": "BASIC_INDUSTRY",
+      "name": "Fu",
+      "parent_code": "IN020201",
+      "source_page": 5
+    },
+    {
+      "code": "IN020201019",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ce",
+      "parent_code": "IN020201",
+      "source_page": 5
+    },
+    {
+      "code": "IN020201020",
+      "level": "BASIC_INDUSTRY",
+      "name": "Gr",
+      "parent_code": "IN020201",
+      "source_page": 5
+    },
+    {
+      "code": "IN020301001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ga",
+      "parent_code": "IN020301",
+      "source_page": 6
+    },
+    {
+      "code": "IN020301002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN020301",
+      "source_page": 6
+    },
+    {
+      "code": "IN020301003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Tra",
+      "parent_code": "IN020301",
+      "source_page": 6
+    },
+    {
+      "code": "IN020401001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ad",
+      "parent_code": "IN020401",
+      "source_page": 6
+    },
+    {
+      "code": "IN020401002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ele",
+      "parent_code": "IN020401",
+      "source_page": 6
+    },
+    {
+      "code": "IN020401003",
+      "level": "BASIC_INDUSTRY",
+      "name": "W",
+      "parent_code": "IN020401",
+      "source_page": 7
+    },
+    {
+      "code": "IN020401004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pri",
+      "parent_code": "IN020401",
+      "source_page": 7
+    },
+    {
+      "code": "IN020402001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Fil",
+      "parent_code": "IN020402",
+      "source_page": 7
+    },
+    {
+      "code": "IN020402002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Di",
+      "parent_code": "IN020402",
+      "source_page": 7
+    },
+    {
+      "code": "IN020402003",
+      "level": "BASIC_INDUSTRY",
+      "name": "M",
+      "parent_code": "IN020402",
+      "source_page": 7
+    },
+    {
+      "code": "IN020402004",
+      "level": "BASIC_INDUSTRY",
+      "name": "TV",
+      "parent_code": "IN020402",
+      "source_page": 7
+    },
+    {
+      "code": "IN020403001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pri",
+      "parent_code": "IN020403",
+      "source_page": 7
+    },
+    {
+      "code": "IN020501001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Re",
+      "parent_code": "IN020501",
+      "source_page": 8
+    },
+    {
+      "code": "IN020501002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Re",
+      "parent_code": "IN020501",
+      "source_page": 8
+    },
+    {
+      "code": "IN020501003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Re",
+      "parent_code": "IN020501",
+      "source_page": 8
+    },
+    {
+      "code": "IN020601001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ho",
+      "parent_code": "IN020601",
+      "source_page": 8
+    },
+    {
+      "code": "IN020601002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Re",
+      "parent_code": "IN020601",
+      "source_page": 8
+    },
+    {
+      "code": "IN020601003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Am",
+      "parent_code": "IN020601",
+      "source_page": 8
+    },
+    {
+      "code": "IN020601004",
+      "level": "BASIC_INDUSTRY",
+      "name": "W",
+      "parent_code": "IN020601",
+      "source_page": 8
+    },
+    {
+      "code": "IN020601005",
+      "level": "BASIC_INDUSTRY",
+      "name": "To",
+      "parent_code": "IN020601",
+      "source_page": 8
+    },
+    {
+      "code": "IN020602001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ed",
+      "parent_code": "IN020602",
+      "source_page": 8
+    },
+    {
+      "code": "IN020602002",
+      "level": "BASIC_INDUSTRY",
+      "name": "E-L",
+      "parent_code": "IN020602",
+      "source_page": 8
+    },
+    {
+      "code": "IN020602003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Fo",
+      "parent_code": "IN020602",
+      "source_page": 9
+    },
+    {
+      "code": "IN020602004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN020602",
+      "source_page": 9
+    },
+    {
+      "code": "IN020603001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Sp",
+      "parent_code": "IN020603",
+      "source_page": 9
+    },
+    {
+      "code": "IN020603002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ph",
+      "parent_code": "IN020603",
+      "source_page": 9
+    },
+    {
+      "code": "IN020603003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Div",
+      "parent_code": "IN020603",
+      "source_page": 9
+    },
+    {
+      "code": "IN020603004",
+      "level": "BASIC_INDUSTRY",
+      "name": "E-R",
+      "parent_code": "IN020603",
+      "source_page": 9
+    },
+    {
+      "code": "IN020603005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Int",
+      "parent_code": "IN020603",
+      "source_page": 9
+    },
+    {
+      "code": "IN020603006",
+      "level": "BASIC_INDUSTRY",
+      "name": "Dis",
+      "parent_code": "IN020603",
+      "source_page": 9
+    },
+    {
+      "code": "IN030101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ga",
+      "parent_code": "IN030101",
+      "source_page": 9
+    },
+    {
+      "code": "IN030101003",
+      "level": "BASIC_INDUSTRY",
+      "name": "LP",
+      "parent_code": "IN030101",
+      "source_page": 9
+    },
+    {
+      "code": "IN030101004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Tra",
+      "parent_code": "IN030101",
+      "source_page": 10
+    },
+    {
+      "code": "IN030102001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Oil",
+      "parent_code": "IN030102",
+      "source_page": 10
+    },
+    {
+      "code": "IN030102002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Of",
+      "parent_code": "IN030102",
+      "source_page": 10
+    },
+    {
+      "code": "IN030102003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Oil",
+      "parent_code": "IN030102",
+      "source_page": 10
+    },
+    {
+      "code": "IN030102004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Oil",
+      "parent_code": "IN030102",
+      "source_page": 10
+    },
+    {
+      "code": "IN030103001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Re",
+      "parent_code": "IN030103",
+      "source_page": 10
+    },
+    {
+      "code": "IN030103002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Lu",
+      "parent_code": "IN030103",
+      "source_page": 10
+    },
+    {
+      "code": "IN030104001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Co",
+      "parent_code": "IN030104",
+      "source_page": 10
+    },
+    {
+      "code": "IN030104002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Tra",
+      "parent_code": "IN030104",
+      "source_page": 10
+    },
+    {
+      "code": "IN040101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ed",
+      "parent_code": "IN040101",
+      "source_page": 10
+    },
+    {
+      "code": "IN040101002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Su",
+      "parent_code": "IN040101",
+      "source_page": 10
+    },
+    {
+      "code": "IN040101003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Te",
+      "parent_code": "IN040101",
+      "source_page": 10
+    },
+    {
+      "code": "IN040101004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN040101",
+      "source_page": 10
+    },
+    {
+      "code": "IN040102001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Br",
+      "parent_code": "IN040102",
+      "source_page": 10
+    },
+    {
+      "code": "IN040102002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN040102",
+      "source_page": 11
+    },
+    {
+      "code": "IN040103001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Cig",
+      "parent_code": "IN040103",
+      "source_page": 11
+    },
+    {
+      "code": "IN040104001",
+      "level": "BASIC_INDUSTRY",
+      "name": "An",
+      "parent_code": "IN040104",
+      "source_page": 11
+    },
+    {
+      "code": "IN040104002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Da",
+      "parent_code": "IN040104",
+      "source_page": 11
+    },
+    {
+      "code": "IN040104003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN040104",
+      "source_page": 11
+    },
+    {
+      "code": "IN040104004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pa",
+      "parent_code": "IN040104",
+      "source_page": 11
+    },
+    {
+      "code": "IN040104005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Se",
+      "parent_code": "IN040104",
+      "source_page": 11
+    },
+    {
+      "code": "IN040104006",
+      "level": "BASIC_INDUSTRY",
+      "name": "M",
+      "parent_code": "IN040104",
+      "source_page": 11
+    },
+    {
+      "code": "IN040105001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pe",
+      "parent_code": "IN040105",
+      "source_page": 11
+    },
+    {
+      "code": "IN040106001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ho",
+      "parent_code": "IN040106",
+      "source_page": 11
+    },
+    {
+      "code": "IN040106004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Sta",
+      "parent_code": "IN040106",
+      "source_page": 11
+    },
+    {
+      "code": "IN040107001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Div",
+      "parent_code": "IN040107",
+      "source_page": 11
+    },
+    {
+      "code": "IN050101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Fin",
+      "parent_code": "IN050101",
+      "source_page": 12
+    },
+    {
+      "code": "IN050101002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ho",
+      "parent_code": "IN050101",
+      "source_page": 12
+    },
+    {
+      "code": "IN050101003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Inv",
+      "parent_code": "IN050101",
+      "source_page": 12
+    },
+    {
+      "code": "IN050101004",
+      "level": "BASIC_INDUSTRY",
+      "name": "No",
+      "parent_code": "IN050101",
+      "source_page": 12
+    },
+    {
+      "code": "IN050101005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN050101",
+      "source_page": 12
+    },
+    {
+      "code": "IN050101006",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ho",
+      "parent_code": "IN050101",
+      "source_page": 12
+    },
+    {
+      "code": "IN050101007",
+      "level": "BASIC_INDUSTRY",
+      "name": "Mi",
+      "parent_code": "IN050101",
+      "source_page": 12
+    },
+    {
+      "code": "IN050101008",
+      "level": "BASIC_INDUSTRY",
+      "name": "Se",
+      "parent_code": "IN050101",
+      "source_page": 12
+    },
+    {
+      "code": "IN050102001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pu",
+      "parent_code": "IN050102",
+      "source_page": 13
+    },
+    {
+      "code": "IN050102002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pri",
+      "parent_code": "IN050102",
+      "source_page": 13
+    },
+    {
+      "code": "IN050102003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN050102",
+      "source_page": 13
+    },
+    {
+      "code": "IN050103001",
+      "level": "BASIC_INDUSTRY",
+      "name": "As",
+      "parent_code": "IN050103",
+      "source_page": 13
+    },
+    {
+      "code": "IN050103002",
+      "level": "BASIC_INDUSTRY",
+      "name": "De",
+      "parent_code": "IN050103",
+      "source_page": 13
+    },
+    {
+      "code": "IN050103003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Fin",
+      "parent_code": "IN050103",
+      "source_page": 13
+    },
+    {
+      "code": "IN050103004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ra",
+      "parent_code": "IN050103",
+      "source_page": 13
+    },
+    {
+      "code": "IN050103005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ex",
+      "parent_code": "IN050103",
+      "source_page": 13
+    },
+    {
+      "code": "IN050103006",
+      "level": "BASIC_INDUSTRY",
+      "name": "Sto",
+      "parent_code": "IN050103",
+      "source_page": 13
+    },
+    {
+      "code": "IN050103007",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN050103",
+      "source_page": 14
+    },
+    {
+      "code": "IN050104001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ge",
+      "parent_code": "IN050104",
+      "source_page": 14
+    },
+    {
+      "code": "IN050104002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Lif",
+      "parent_code": "IN050104",
+      "source_page": 14
+    },
+    {
+      "code": "IN050104003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN050104",
+      "source_page": 14
+    },
+    {
+      "code": "IN050104004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ins",
+      "parent_code": "IN050104",
+      "source_page": 14
+    },
+    {
+      "code": "IN050105001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Fin",
+      "parent_code": "IN050105",
+      "source_page": 14
+    },
+    {
+      "code": "IN060101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ph",
+      "parent_code": "IN060101",
+      "source_page": 14
+    },
+    {
+      "code": "IN060101002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Bio",
+      "parent_code": "IN060101",
+      "source_page": 14
+    },
+    {
+      "code": "IN060102001",
+      "level": "BASIC_INDUSTRY",
+      "name": "M",
+      "parent_code": "IN060102",
+      "source_page": 14
+    },
+    {
+      "code": "IN060103001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ho",
+      "parent_code": "IN060103",
+      "source_page": 14
+    },
+    {
+      "code": "IN060103002",
+      "level": "BASIC_INDUSTRY",
+      "name": "He",
+      "parent_code": "IN060103",
+      "source_page": 15
+    },
+    {
+      "code": "IN060103003",
+      "level": "BASIC_INDUSTRY",
+      "name": "He",
+      "parent_code": "IN060103",
+      "source_page": 15
+    },
+    {
+      "code": "IN070101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Civ",
+      "parent_code": "IN070101",
+      "source_page": 15
+    },
+    {
+      "code": "IN070201001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ae",
+      "parent_code": "IN070201",
+      "source_page": 15
+    },
+    {
+      "code": "IN070202001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Tra",
+      "parent_code": "IN070202",
+      "source_page": 15
+    },
+    {
+      "code": "IN070202002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Co",
+      "parent_code": "IN070202",
+      "source_page": 15
+    },
+    {
+      "code": "IN070202003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Co",
+      "parent_code": "IN070202",
+      "source_page": 15
+    },
+    {
+      "code": "IN070202004",
+      "level": "BASIC_INDUSTRY",
+      "name": "De",
+      "parent_code": "IN070202",
+      "source_page": 15
+    },
+    {
+      "code": "IN070203001",
+      "level": "BASIC_INDUSTRY",
+      "name": "He",
+      "parent_code": "IN070203",
+      "source_page": 16
+    },
+    {
+      "code": "IN070203002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN070203",
+      "source_page": 16
+    },
+    {
+      "code": "IN070204005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ra",
+      "parent_code": "IN070204",
+      "source_page": 16
+    },
+    {
+      "code": "IN070204006",
+      "level": "BASIC_INDUSTRY",
+      "name": "Sh",
+      "parent_code": "IN070204",
+      "source_page": 16
+    },
+    {
+      "code": "IN070204008",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ind",
+      "parent_code": "IN070204",
+      "source_page": 16
+    },
+    {
+      "code": "IN070205003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ca",
+      "parent_code": "IN070205",
+      "source_page": 16
+    },
+    {
+      "code": "IN070205004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ca",
+      "parent_code": "IN070205",
+      "source_page": 17
+    },
+    {
+      "code": "IN070205008",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pa",
+      "parent_code": "IN070205",
+      "source_page": 17
+    },
+    {
+      "code": "IN070205009",
+      "level": "BASIC_INDUSTRY",
+      "name": "Pla",
+      "parent_code": "IN070205",
+      "source_page": 17
+    },
+    {
+      "code": "IN070205011",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ru",
+      "parent_code": "IN070205",
+      "source_page": 17
+    },
+    {
+      "code": "IN070205012",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN070205",
+      "source_page": 17
+    },
+    {
+      "code": "IN070205013",
+      "level": "BASIC_INDUSTRY",
+      "name": "Gl",
+      "parent_code": "IN070205",
+      "source_page": 17
+    },
+    {
+      "code": "IN070205014",
+      "level": "BASIC_INDUSTRY",
+      "name": "Alu",
+      "parent_code": "IN070205",
+      "source_page": 17
+    },
+    {
+      "code": "IN070205015",
+      "level": "BASIC_INDUSTRY",
+      "name": "Iro",
+      "parent_code": "IN070205",
+      "source_page": 17
+    },
+    {
+      "code": "IN070205016",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ab",
+      "parent_code": "IN070205",
+      "source_page": 17
+    },
+    {
+      "code": "IN070205017",
+      "level": "BASIC_INDUSTRY",
+      "name": "Co",
+      "parent_code": "IN070205",
+      "source_page": 18
+    },
+    {
+      "code": "IN070205018",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ele",
+      "parent_code": "IN070205",
+      "source_page": 18
+    },
+    {
+      "code": "IN080101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Co",
+      "parent_code": "IN080101",
+      "source_page": 18
+    },
+    {
+      "code": "IN080101002",
+      "level": "BASIC_INDUSTRY",
+      "name": "So",
+      "parent_code": "IN080101",
+      "source_page": 18
+    },
+    {
+      "code": "IN080102001",
+      "level": "BASIC_INDUSTRY",
+      "name": "IT",
+      "parent_code": "IN080102",
+      "source_page": 18
+    },
+    {
+      "code": "IN080103001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Co",
+      "parent_code": "IN080103",
+      "source_page": 18
+    },
+    {
+      "code": "IN090101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Dr",
+      "parent_code": "IN090101",
+      "source_page": 18
+    },
+    {
+      "code": "IN090102001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Air",
+      "parent_code": "IN090102",
+      "source_page": 18
+    },
+    {
+      "code": "IN090102002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Lo",
+      "parent_code": "IN090102",
+      "source_page": 18
+    },
+    {
+      "code": "IN090102003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ra",
+      "parent_code": "IN090102",
+      "source_page": 18
+    },
+    {
+      "code": "IN090102004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ro",
+      "parent_code": "IN090102",
+      "source_page": 19
+    },
+    {
+      "code": "IN090102005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Sh",
+      "parent_code": "IN090102",
+      "source_page": 19
+    },
+    {
+      "code": "IN090102006",
+      "level": "BASIC_INDUSTRY",
+      "name": "Tra",
+      "parent_code": "IN090102",
+      "source_page": 19
+    },
+    {
+      "code": "IN090103001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Air",
+      "parent_code": "IN090103",
+      "source_page": 19
+    },
+    {
+      "code": "IN090103002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Po",
+      "parent_code": "IN090103",
+      "source_page": 19
+    },
+    {
+      "code": "IN090103004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ro",
+      "parent_code": "IN090103",
+      "source_page": 19
+    },
+    {
+      "code": "IN090104001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Tra",
+      "parent_code": "IN090104",
+      "source_page": 19
+    },
+    {
+      "code": "IN090104002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Co",
+      "parent_code": "IN090104",
+      "source_page": 19
+    },
+    {
+      "code": "IN090104003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Da",
+      "parent_code": "IN090104",
+      "source_page": 19
+    },
+    {
+      "code": "IN090104004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Div",
+      "parent_code": "IN090104",
+      "source_page": 19
+    },
+    {
+      "code": "IN090104005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Bu",
+      "parent_code": "IN090104",
+      "source_page": 20
+    },
+    {
+      "code": "IN090105001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ur",
+      "parent_code": "IN090105",
+      "source_page": 20
+    },
+    {
+      "code": "IN090105002",
+      "level": "BASIC_INDUSTRY",
+      "name": "De",
+      "parent_code": "IN090105",
+      "source_page": 20
+    },
+    {
+      "code": "IN100101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Te",
+      "parent_code": "IN100101",
+      "source_page": 20
+    },
+    {
+      "code": "IN100101002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Te",
+      "parent_code": "IN100101",
+      "source_page": 20
+    },
+    {
+      "code": "IN100101003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN100101",
+      "source_page": 20
+    },
+    {
+      "code": "IN100102001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Te",
+      "parent_code": "IN100102",
+      "source_page": 20
+    },
+    {
+      "code": "IN110101002",
+      "level": "BASIC_INDUSTRY",
+      "name": "Po",
+      "parent_code": "IN110101",
+      "source_page": 20
+    },
+    {
+      "code": "IN110101003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Po",
+      "parent_code": "IN110101",
+      "source_page": 21
+    },
+    {
+      "code": "IN110101004",
+      "level": "BASIC_INDUSTRY",
+      "name": "Po",
+      "parent_code": "IN110101",
+      "source_page": 20
+    },
+    {
+      "code": "IN110101005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Int",
+      "parent_code": "IN110101",
+      "source_page": 20
+    },
+    {
+      "code": "IN110101006",
+      "level": "BASIC_INDUSTRY",
+      "name": "Po",
+      "parent_code": "IN110101",
+      "source_page": 21
+    },
+    {
+      "code": "IN110201001",
+      "level": "BASIC_INDUSTRY",
+      "name": "W",
+      "parent_code": "IN110201",
+      "source_page": 21
+    },
+    {
+      "code": "IN110201002",
+      "level": "BASIC_INDUSTRY",
+      "name": "W",
+      "parent_code": "IN110201",
+      "source_page": 21
+    },
+    {
+      "code": "IN110201003",
+      "level": "BASIC_INDUSTRY",
+      "name": "Em",
+      "parent_code": "IN110201",
+      "source_page": 21
+    },
+    {
+      "code": "IN110201004",
+      "level": "BASIC_INDUSTRY",
+      "name": "M",
+      "parent_code": "IN110201",
+      "source_page": 21
+    },
+    {
+      "code": "IN110201005",
+      "level": "BASIC_INDUSTRY",
+      "name": "Ot",
+      "parent_code": "IN110201",
+      "source_page": 21
+    },
+    {
+      "code": "IN120101001",
+      "level": "BASIC_INDUSTRY",
+      "name": "Div",
+      "parent_code": "IN120101",
+      "source_page": 21
+    }
+  ],
+  "source": {
+    "authority": "NSE Indices Limited",
+    "content_length": 502411,
+    "content_sha256": "ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1",
+    "http_etag": "W/\"502411-1673598103000\"",
+    "http_last_modified": "Fri, 13 Jan 2023 08:21:43 GMT",
+    "retrieved_at": "2026-10-04T15:55:11.012536+00:00",
+    "title": "Industry Classification Structure",
+    "url": "https://nsearchives.nseindia.com/s3fs-public/inline-files/nse-indices_industry-classification-structure-2022-11.pdf",
+    "version_label": "November 2022"
+  },
+  "status": "REFERENCE_CANDIDATE_PENDING_PORTFOLIOAI_OWNER_ADOPTION",
+  "validation": {
+    "complete_for_declared_source": true,
+    "diagnostic_count": 0,
+    "empty_name_count": 0,
+    "errors": [],
+    "orphan_count": 0
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "adopted_as_portfolioai_historical_authority": false,
+  "adoption_blockers": [
+    "Owner approval of OD1 retrospective vocabulary policy is not recorded.",
+    "Owner approval of OD2 evidence-backed synonym policy is not recorded.",
+    "Owner approval of OD3 no-dominance-inference policy is not recorded.",
+    "Owner approval of OD4 diversified-specialised-routing-blocked policy is not recorded.",
+    "This repository candidate must not overwrite live Development taxonomy without separately authorized migration/write scope."
+  ],
+  "authority_candidate_complete": true,
+  "official_source_sha256": "ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1",
+  "owner_policy_status": {
+    "OD1": "PENDING_OWNER_DECISION",
+    "OD2": "PENDING_OWNER_DECISION",
+    "OD3": "PENDING_OWNER_DECISION",
+    "OD4": "PENDING_OWNER_DECISION"
+  },
+  "safe_for_canary_candidate_evaluation": true,
+  "taxonomy_contract": "PORTFOLIOAI_NSE_FOUR_TIER_TAXONOMY_REFERENCE_V1",
+  "taxonomy_file": "docs/p8/PortfolioAI_P8_NSE_FOUR_TIER_TAXONOMY_NOVEMBER_2022.json",
+  "taxonomy_payload_sha256": "66af25a6a7141288f58adbd416fc2c394bf7dad9ae1f061bf5ee7fdc8ab53d0f",
+  "version": "P8_NSE_FOUR_TIER_TAXONOMY_ADOPTION_MANIFEST_V1"
+}
