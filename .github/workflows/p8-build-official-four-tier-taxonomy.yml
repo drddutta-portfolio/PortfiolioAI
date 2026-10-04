@@ -23,25 +23,6 @@ jobs:
       - run: python -m pip install --no-cache-dir "requests==2.32.5" "pdfplumber==0.11.7"
       - name: Parser tests
         run: python scripts/p8/test-p8-build-official-four-tier-taxonomy.py
-      - name: Inspect PDF coordinates for parser calibration
-        run: |
-          python - <<'PY'
-          import requests, pdfplumber, io
-          u="https://nsearchives.nseindia.com/s3fs-public/inline-files/nse-indices_industry-classification-structure-2022-11.pdf"
-          b=requests.get(u,timeout=60,headers={"User-Agent":"Mozilla/5.0 PortfolioAI taxonomy-reference audit"}).content
-          with pdfplumber.open(io.BytesIO(b)) as pdf:
-              for pidx in (13,14):
-                  p=pdf.pages[pidx]
-                  words=p.extract_words(x_tolerance=2,y_tolerance=2)
-                  lines={}
-                  for w in words: lines.setdefault(round(float(w["top"]),1),[]).append(w)
-                  print("PAGE",pidx+1)
-                  for top,ws in sorted(lines.items()):
-                      ws=sorted(ws,key=lambda z:float(z["x0"]))
-                      txt=" ".join(x["text"] for x in ws)
-                      if "IN06" in txt or "IN07" in txt or "MES_Code" in txt or "Basic_Ind_Code" in txt:
-                          print(top,[(round(float(x["x0"]),1),x["text"]) for x in ws])
-          PY
       - name: Fetch and build official taxonomy reference
         run: python scripts/p8/p8-build-official-four-tier-taxonomy.py
       - name: Commit reference package
