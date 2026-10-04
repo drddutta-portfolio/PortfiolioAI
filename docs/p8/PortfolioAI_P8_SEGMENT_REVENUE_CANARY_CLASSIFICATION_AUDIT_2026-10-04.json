@@ -1,0 +1,591 @@
+{
+  "contract_version": "P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1",
+  "counts": {
+    "ACCOUNTING_RECONCILED": 12,
+    "AUTHORITATIVE_COMPLETE_CLASSIFICATION": 0,
+    "CANDIDATE_COMPLETE_CLASSIFICATION": 0,
+    "COMPARABLE_SEGMENT_REVENUE": 0,
+    "DOMINANT_BUSINESS_CANDIDATE": 0,
+    "ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL": 24,
+    "ROUTE_INPUT_READY_CANDIDATE": 0,
+    "SEMANTIC_CANARY_PAIRS": 32,
+    "CANDIDATE_UNIQUE_ROUTE": 0,
+    "AUTHORITATIVE_UNIQUE_ROUTE": 0,
+    "COMPLETE_NORMALIZED_INPUT": 0
+  },
+  "metric_registry": {
+    "path": "docs/p7-ic/PortfolioAI_P7_IC1_METHODOLOGY_R7_REGISTRY_V1.json"
+  },
+  "policy_status": {
+    "owner_policy_status": {
+      "OD1": "PENDING_OWNER_DECISION",
+      "OD2": "PENDING_OWNER_DECISION",
+      "OD3": "PENDING_OWNER_DECISION",
+      "OD4": "PENDING_OWNER_DECISION"
+    },
+    "taxonomy_adopted": false
+  },
+  "pre_router_fingerprint_sha256": "df90c6902c57270f2667a3debe0de95acaf6d905ed723756ca9511941b039ee2",
+  "results": [
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "candidate_classification": null,
+      "decision_at": "2024-11-29T10:00:00+00:00",
+      "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+      "historical_isin": "INE230R01035",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "candidate_classification": null,
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "historical_identity_id": "59e788f2-3047-536c-8f4b-d92f34d69bf4",
+      "historical_isin": "INE979A01025",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "candidate_classification": null,
+      "decision_at": "2025-01-31T10:00:00+00:00",
+      "historical_identity_id": "af88fe19-5864-536f-a207-15aded7d3c83",
+      "historical_isin": "INE326A01037",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "candidate_classification": null,
+      "decision_at": "2024-09-30T10:00:00+00:00",
+      "historical_identity_id": "f079165e-be44-517c-9bfc-0bdefdb29b0b",
+      "historical_isin": "INE918I01026",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2024-12-31T10:00:00+00:00",
+      "historical_identity_id": "26f17fef-d920-566a-ae9f-85df009ec151",
+      "historical_isin": "INE860A01027",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2025-11-28T10:00:00+00:00",
+      "historical_identity_id": "6fef8980-34eb-5c31-ab04-9d41dddfe1e6",
+      "historical_isin": "INE093A01041",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2026-07-31T10:00:00+00:00",
+      "historical_identity_id": "6fef8980-34eb-5c31-ab04-9d41dddfe1e6",
+      "historical_isin": "INE093A01041",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "historical_identity_id": "fe5e9f41-8b55-54af-b0e3-874544a10d27",
+      "historical_isin": "INE932A01024",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "historical_identity_id": "38749e5e-3e7c-5516-b5b9-17f54160025d",
+      "historical_isin": "INE772T01024",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2025-06-30T10:00:00+00:00",
+      "historical_identity_id": "6936e380-029f-5495-a265-d8db8672aa47",
+      "historical_isin": "INE118A01012",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "72497e23-689a-576c-98ec-70b9acb59914",
+      "historical_isin": "INE661I01014",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "bca563eb-e943-5272-960b-f6833a692614",
+      "historical_isin": "INE470A01017",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "candidate_classification": null,
+      "decision_at": "2024-08-30T10:00:00+00:00",
+      "historical_identity_id": "08aee4b7-fef7-5caa-b4af-a0830f66d5fa",
+      "historical_isin": "INE645L01011",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "candidate_classification": null,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "historical_identity_id": "23c42d9d-fc5c-58a6-9d65-0d3c12da2fa6",
+      "historical_isin": "INE374B01019",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "candidate_classification": null,
+      "decision_at": "2024-09-30T10:00:00+00:00",
+      "historical_identity_id": "5b4f2608-90cb-5aa8-bd6a-d007f42de9f8",
+      "historical_isin": "INE08KP01019",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "candidate_classification": null,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "historical_identity_id": "acaacb32-02bb-595c-8d70-435e8f3f4096",
+      "historical_isin": "INE625B01014",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "POSITIONAL_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2025-07-31T10:00:00+00:00",
+      "historical_identity_id": "1e88380b-a173-5055-b53d-3554e487db96",
+      "historical_isin": "INE377N01017",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "POSITIONAL_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "historical_identity_id": "9eac015d-2fe9-5eca-bf57-42011e16fa5e",
+      "historical_isin": "INE280A01028",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "POSITIONAL_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2025-03-28T10:00:00+00:00",
+      "historical_identity_id": "c644b736-db2a-53bf-9155-cb211ee8e455",
+      "historical_isin": "INE987B01026",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "POSITIONAL_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2024-11-29T10:00:00+00:00",
+      "historical_identity_id": "e5754730-b48d-5c21-8198-0316e48c1f03",
+      "historical_isin": "INE0Q3J01015",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "historical_identity_id": "32947c3d-1d36-55b3-b687-83556470f25f",
+      "historical_isin": "INE285K01026",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2024-06-28T10:00:00+00:00",
+      "historical_identity_id": "b33c4aee-1095-5010-907f-7fbd7b6efb89",
+      "historical_isin": "INE699H01024",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "historical_identity_id": "ee5599cc-381f-5091-8dbd-9585d70834f4",
+      "historical_isin": "INE737H01014",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_REPORTABLE_SEGMENT_REVENUE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2024-07-31T10:00:00+00:00",
+      "historical_identity_id": "f7261c7f-30b9-5cac-a3d6-2dfe7c417508",
+      "historical_isin": "INE127B01011",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2025-07-31T10:00:00+00:00",
+      "historical_identity_id": "2b347f1e-4a76-5825-89c1-642e386ea715",
+      "historical_isin": "INE0JO301016",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2025-09-30T10:00:00+00:00",
+      "historical_identity_id": "56b13c5c-ca21-570e-b387-634e320718c8",
+      "historical_isin": "INE013P01021",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2025-02-28T10:00:00+00:00",
+      "historical_identity_id": "c84e95b9-f25c-5489-8bd9-d149f0339a3b",
+      "historical_isin": "INE0OV601013",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "candidate_classification": null,
+      "decision_at": "2025-06-30T10:00:00+00:00",
+      "historical_identity_id": "d226db5d-0fea-55e9-a934-bc2e9aac2d67",
+      "historical_isin": "INE0HR601026",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2025-01-31T10:00:00+00:00",
+      "historical_identity_id": "22cc4c9f-d5d0-53ce-93af-60b3ea0f5357",
+      "historical_isin": "INE798K01010",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "historical_identity_id": "5ffdcce2-20c4-5a4f-baee-0a87475cf1e5",
+      "historical_isin": "INE184O01015",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "ACCOUNTING_INCOMPLETE",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_identity_id": "76b41969-131c-591c-91a7-e4cb65884e90",
+      "historical_isin": "INE999K01014",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    },
+    {
+      "accounting_state": "NO_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL",
+      "authoritative_classification": null,
+      "authoritative_policy_adopted": false,
+      "blockers": [
+        "NO_VALID_DOMINANT_BUSINESS_CANDIDATE"
+      ],
+      "canary_stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "candidate_classification": null,
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "historical_identity_id": "91cfc33b-5c5a-570c-9811-eb4851e6144b",
+      "historical_isin": "INE200A01026",
+      "route_input": null,
+      "router_result": null,
+      "metric_requirement_state": "NOT_EVALUATED_NO_ROUTE",
+      "required_signals": []
+    }
+  ],
+  "router_authority": {
+    "path": "src/features/research/researchProfileRouting.ts",
+    "version": "RESEARCH_PROFILE_ROUTING_V2"
+  },
+  "version": "P8_SEGMENT_REVENUE_CANARY_CLASSIFICATION_V1",
+  "router_execution": {
+    "version": "RESEARCH_PROFILE_ROUTING_V2",
+    "candidate_routes": 0,
+    "authoritative_routes": 0
+  },
+  "metric_input_completeness": {
+    "candidate_routes_with_requirements_selected": 0,
+    "complete_normalized_input_pairs": 0,
+    "reason": "No authoritative route exists while OD1-OD3 remain unapproved. For candidate routes, canonical requirements are selected but existing raw historical XBRL is not promoted to normalized route input completeness without an explicit canonical normalization mapping."
+  },
+  "final_fingerprint_sha256": "f4714fcdfb6754f1c095244707b28498c45ccaa0c1c723a6cc822068a1780070"
+}
