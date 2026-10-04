@@ -1,0 +1,9 @@
+{
+  "version": "P8_B_RECOVERY_BSE_BROWSER_CANARY_V1",
+  "status": "BLOCKED",
+  "generated_at": "2026-10-04T03:56:20.157Z",
+  "landing_status": 403,
+  "api": {
+    "error": "TypeError:Failed to fetch"
+  }
+}
