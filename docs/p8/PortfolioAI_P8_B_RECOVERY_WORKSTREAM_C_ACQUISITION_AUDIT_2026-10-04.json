@@ -1,5 +1,42 @@
 {
-  "version": "P8_B_RECOVERY_WORKSTREAM_C_ACQUISITION_V1",
-  "status": "BLOCKED_FAIL_CLOSED",
-  "error": "ConnectionError:('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
+  "acquisition": {
+    "manifest_r2_key": "portfolioai-history/development/p8/recovery/workstream-c/manifests/sources-f50ad63d87cc86d08f3e348a67f24dca1037bb806788413bca3b93e9d3f039ad.jsonl",
+    "manifest_sha256": "f50ad63d87cc86d08f3e348a67f24dca1037bb806788413bca3b93e9d3f039ad",
+    "states": {
+      "SOURCE_UNAVAILABLE": 123,
+      "VERIFIED_EXISTING": 47999,
+      "WRITTEN": 2255
+    },
+    "unique_sources": 50377,
+    "verified_kinds": {
+      "ANNUAL_REPORT": 3116,
+      "CORPORATE_RESTRUCTURING": 3854,
+      "FINANCIAL_RESULT": 43126,
+      "RHP_INFORMATION_MEMORANDUM": 158
+    }
+  },
+  "bse_transport": {
+    "json_ready": false,
+    "status_code": 403
+  },
+  "exclusion_ceiling_state": "PENDING_OWNER_FREEZE",
+  "generated_at": "2026-10-04T01:31:28.654424+00:00",
+  "historical_identities": 4524,
+  "idempotency": {
+    "content_sha256": true,
+    "deterministic_url_hash_keys": true,
+    "verified_existing_not_refetched": true
+  },
+  "identity_source_gaps": 3302,
+  "metadata": {
+    "classification_rows": 7246,
+    "financial_rows": 54046,
+    "requests": 547
+  },
+  "performance_outcome_reads": 0,
+  "production_changes": 0,
+  "provider_calls": 0,
+  "status": "BLOCKED_SOURCE_DOWNLOADS",
+  "supabase_writes": 0,
+  "version": "P8_B_RECOVERY_WORKSTREAM_C_ACQUISITION_V1"
 }
