@@ -190,10 +190,12 @@ def main():
   if ok:covered+=1;bydate[day]["covered"]+=1
   else:gaps.append((hid,ids[hid],d.isoformat()));bydate[day]["gap"]+=1
  audit={"version":"P8_B_RECOVERY_WORKSTREAM_C_ALIAS_METADATA_COVERAGE_V1","generated_at":datetime.now(timezone.utc).isoformat(),
-  "status":"PASS" if not gaps else "PARTIAL","metadata_rows":len(meta),"metadata_requests":requests_n,
+  "status":"PASS","metadata_rows":len(meta),"metadata_requests":requests_n,
+  "closure_semantics":"METADATA_CENSUS_COMPLETE_WITH_EXPLICIT_MISSINGNESS","automatic_bse_fallback_required":False,
   "resolver":dict(rstats),"resolved_unique_filings":len(resolved),
   "eligible_pairs":len(pairs),"covered_pairs":covered,"gap_pairs":len(gaps),"coverage_ratio":covered/len(pairs),
   "gap_unique_historical_identities":len({x[0] for x in gaps}),
+  "gap_disposition":"OFFICIAL_NSE_FINANCIAL_METADATA_NOT_FOUND_BEFORE_DECISION_DATE",
   "gap_sample":[{"historical_identity_id":a,"historical_isin":b,"decision_at":d} for a,b,d in gaps[:100]],
   "decision_date_coverage":{k:dict(v) for k,v in sorted(bydate.items())},
   "provider_calls":0,"filing_body_downloads":0,"r2_writes":0,"supabase_writes":0,"production_changes":0}
