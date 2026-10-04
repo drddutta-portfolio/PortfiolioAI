@@ -1,7 +1,7 @@
 # PortfolioAI P8 Segment-Revenue Classification — Consolidated Owner Adoption Package
 
 Date: 4 October 2026  
-Status: **AWAITING EXPLICIT OWNER APPROVAL**
+Status: **OWNER APPROVED — OD1 / OD2 / OD3 ADOPTED; OD4 BLOCKED**
 
 This package consolidates the unresolved taxonomy and segment-accounting policies after completion of the frozen 32-pair canary audit.
 
@@ -112,3 +112,43 @@ A future change that interprets the source's `FourReportableSegment...` column s
 If the owner accepts this package, the explicit approval statement should be:
 
 > **I approve OD1 under the frozen NSE November-2022 taxonomy reference, OD2 with versioned evidence-backed review control, and OD3 under `P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1` frozen at Git blob `45e990981371dba217d12c430f8ce567acbf25fc`. OD4 remains blocked. This approval adopts the policy contracts only; it does not authorize 25,761-pair expansion, experiment freeze/execution, B5/B6/B-FINAL rebuild, or P8-C.**
+
+
+---
+
+## Owner adoption record — 4 October 2026, 22:38 IST
+
+The owner explicitly approved the package under the following frozen authorities:
+
+- **OD1 = APPROVED** — frozen NSE November-2022 taxonomy reference;
+- **OD2 = APPROVED WITH REVIEW CONTROL** — versioned evidence-backed synonym catalog;
+- **OD3 = APPROVED** — `P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1` frozen at Git blob `45e990981371dba217d12c430f8ce567acbf25fc`;
+- **OD4 = BLOCKED** — no specialised diversified-company methodology.
+
+Immutable adoption record:
+
+`docs/p8/PortfolioAI_P8_SEGMENT_REVENUE_OWNER_POLICY_ADOPTION_2026-10-04.json`
+
+### Approval boundary
+
+This approval adopts the policy contracts only.
+
+It does **not** authorize:
+
+- the 25,761-pair expansion;
+- experiment freeze or execution;
+- B5/B6/B-FINAL rebuild;
+- P8-C;
+- Supabase/R2 writes;
+- migrations;
+- deployment or scheduler activation.
+
+The existing canary measurement remains unchanged:
+
+- comparable segment-revenue pairs: **0**;
+- dominant-business candidates: **0**;
+- complete company classifications: **0**;
+- unique methodology routes: **0**;
+- complete normalized-input pairs: **0**.
+
+Therefore the expansion gate remains closed after policy adoption.
