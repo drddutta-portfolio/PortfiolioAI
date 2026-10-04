@@ -1,0 +1,98 @@
+{
+  "version": "P8_STEEL_FERROUS_HISTORICAL_ROUTE_CLOSURE_V1",
+  "date": "2026-10-05",
+  "exact_disposition": "STEEL_FERROUS_HISTORICAL_ROUTE_INTEGRATION_COMPLETE_INPUT_READINESS_BLOCKED",
+  "implementation": {
+    "status": "COMPLETE_PASS",
+    "historical_router_version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+    "integration_contract": "P8_STEEL_FERROUS_HISTORICAL_ROUTE_INTEGRATION_V1",
+    "integration_contract_blob": "a0d1700cab6f63ddaaf65986cad9cc3fc31f27b8",
+    "profile": "STEEL_FERROUS",
+    "engine": "METALS_COMMODITIES",
+    "methodology_version": "METALS_COMMODITIES_K4A_METHODOLOGY_V1",
+    "scoring_version": "METALS_COMMODITIES_K4B_SCORING_V1",
+    "live_route_behavior_changed": false
+  },
+  "frozen_authorities": {
+    "v1_accounting": "45e990981371dba217d12c430f8ce567acbf25fc",
+    "v3_period_semantics": "797b7e91d7770f3377d0061ee338c76e8220391f",
+    "historical_crosswalk": "fd5a683ab595d98c71254ea8c825d5ae82338afb"
+  },
+  "canary": {
+    "fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce",
+    "pair_denominator": 32,
+    "authoritative_complete_classifications": 2,
+    "exact_integrated_steel_ferrous_routes": 1,
+    "authoritative_classification_outside_integration": 1,
+    "not_routed_other_pairs": 30,
+    "accidental_negative_control_routes": 0,
+    "complete_input_pairs": 0,
+    "nonzero_intersegment_blocked_pairs": 6,
+    "audit_fingerprint": "d9ad343b3c28cdf1015f081398c58f9fa4e42a3097b735606e76006055ccd357"
+  },
+  "routed_case": {
+    "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+    "historical_isin": "INE230R01035",
+    "decision_at": "2024-11-29T10:00:00+00:00",
+    "source_sha256": "4b0b16349cc9ef3ff46f61d590768a39915ba4c567ef4a72f0355cd28680521d",
+    "source_disseminated_at": "2024-05-31T09:27:01+00:00",
+    "hierarchy": "Industrials > Capital Goods > Industrial Products > Iron & Steel Products (IN070205015)",
+    "source_inventory": {
+      "eligible_predecision_xml_sources": 8,
+      "eligible_audited_annual_sources": 2,
+      "p8_b3_adjusted_market_rows_before_decision": 0
+    }
+  },
+  "input_readiness": {
+    "required_signal_count": 11,
+    "normalized_ready_signals": 0,
+    "state": "INPUTS_INCOMPLETE",
+    "definitive_blockers": [
+      "MOMENTUM_12M_RELATIVE: no canonical adjusted market rows before decision",
+      "COMMODITY_CYCLE_DRAWDOWN_RISK: no canonical adjusted market rows before decision",
+      "Through-cycle annual signals: only 2 eligible audited annual sources versus minimum 5 where required",
+      "12-observation cycle/growth signals: no normalized 12-observation history is materialized",
+      "OWNERSHIP_GOVERNANCE: no reviewed historical normalized signal",
+      "COMMODITY_EXPOSURE_METADATA: no canonical historical metadata signal materialized"
+    ],
+    "potentially_recoverable_from_existing_sources": [
+      "Selected and other pre-decision XML filings may contain raw financial components for margin, cash-flow, leverage and return-on-capital transformations.",
+      "Eight pre-decision XML filings justify a bounded materialization feasibility review, but do not by themselves prove required observation depth.",
+      "Raw R2 market archives were not reprocessed in this task; only the canonical adjusted B3 series was checked."
+    ]
+  },
+  "verification": {
+    "workflow_run": 37229420071,
+    "conclusion": "SUCCESS",
+    "focused_tests": "36 PASS (21 existing routing + 9 historical integration + 6 metals scoring)",
+    "focused_lint": "PASS",
+    "architecture": "PASS",
+    "global_typecheck": "PASS",
+    "global_lint": "PASS",
+    "production_build": "PASS",
+    "frozen_canary_audit": "PASS"
+  },
+  "next_bounded_proposal": {
+    "title": "P8 Steel-Ferrous Historical Signal Materialization Feasibility",
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "scope": [
+      "exact routed Steel case only",
+      "existing 8 pre-decision XML sources and existing B3/R2 market evidence only",
+      "materialize no score or investment decision",
+      "prove observation counts and deterministic normalization feasibility for the 11 existing requirements",
+      "no new provider/source acquisition",
+      "stop if minimum history cannot be met from existing evidence"
+    ]
+  },
+  "boundary": {
+    "candidate_25761_surface": "NOT_AUTHORIZED_NOT_MEASURED",
+    "experiment_execution": false,
+    "historical_r6_r10_replay": false,
+    "investment_outputs_generated": false,
+    "p8_c": false,
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "migrations": 0,
+    "deployments": 0
+  }
+}
