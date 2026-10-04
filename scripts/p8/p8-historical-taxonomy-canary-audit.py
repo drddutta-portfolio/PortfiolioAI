@@ -117,7 +117,8 @@ def accounting_scope(facts):
     vals=[]
     for f in facts:
         lk=norm_key(f["local_name"])
-        if "CONSOLIDATED" in lk or "STANDALONE" in lk or "NATURE_OF_REPORT" in lk:
+        flat=lk.replace("_","")
+        if "CONSOLIDATED" in flat or "STANDALONE" in flat or "NATUREOFREPORT" in flat:
             v=norm_key(f["value"])
             if "CONSOLIDATED" in v: vals.append("CONSOLIDATED")
             if "STANDALONE" in v: vals.append("STANDALONE")
