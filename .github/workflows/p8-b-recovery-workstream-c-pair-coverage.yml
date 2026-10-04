@@ -1,0 +1,31 @@
+name: P8-B Recovery Workstream C Pair Coverage
+on:
+  workflow_dispatch:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - scripts/p8/p8-b-recovery-workstream-c-pair-coverage.py
+      - .github/workflows/p8-b-recovery-workstream-c-pair-coverage.yml
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m pip install --no-cache-dir "boto3==1.40.46" "duckdb==1.4.1" "psycopg[binary]==3.2.10"
+      - run: python scripts/p8/p8-b-recovery-workstream-c-pair-coverage.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_B_RECOVERY_WORKSTREAM_C_PAIR_COVERAGE_AUDIT_2026-10-04.json
+          if ! git diff --cached --quiet; then git commit -m "audit(p8): measure Workstream C pair coverage"; git push; fi
