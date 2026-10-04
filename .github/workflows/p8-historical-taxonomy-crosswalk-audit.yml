@@ -1,0 +1,41 @@
+name: P8 Historical Taxonomy Crosswalk Canary Audit
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - scripts/p8/p8-historical-taxonomy-crosswalk-audit.py
+      - scripts/p8/p8-apply-historical-crosswalk-router.ts
+      - scripts/p8/test-p8-historical-taxonomy-crosswalk.py
+      - .github/workflows/p8-historical-taxonomy-crosswalk-audit.yml
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: PortfolioAI-Development}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}
+      - run: python -m pip install --no-cache-dir "psycopg[binary]==3.2.10"
+      - name: Crosswalk tests
+        run: python scripts/p8/test-p8-historical-taxonomy-crosswalk.py
+      - name: Build frozen-canary crosswalk audit
+        run: python scripts/p8/p8-historical-taxonomy-crosswalk-audit.py
+      - name: Validate with actual canonical router and registry
+        run: npx --yes tsx@4.20.6 scripts/p8/p8-apply-historical-crosswalk-router.ts
+      - name: Commit audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CROSSWALK_CANARY_AUDIT_2026-10-04.json
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): validate historical taxonomy crosswalk canary"
+            git pull --rebase origin PortfolioAI-Development
+            git push origin HEAD:PortfolioAI-Development
+          fi
