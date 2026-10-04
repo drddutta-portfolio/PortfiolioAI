@@ -37,84 +37,58 @@ def level_for(code):
         if rx.match(code): return level
     return None
 
-def extract_rows():
-    raw=[]
-    with pdfplumber.open(TMP) as pdf:
-        for pageno,page in enumerate(pdf.pages[1:21],start=2):
-            tables=page.extract_tables({
-              "vertical_strategy":"text",
-              "horizontal_strategy":"text",
-              "snap_tolerance":3,
-              "join_tolerance":3,
-              "intersection_tolerance":5,
-              "text_tolerance":3,
-              "min_words_vertical":1,
-              "min_words_horizontal":1,
-            })
-            for table in tables:
-                for row in table or []:
-                    cells=[clean(c) for c in (row or [])]
-                    if not any(cells): continue
-                    raw.append({"page":pageno,"cells":cells})
-    return raw
-
-def parse(raw_rows):
+def parse_layout_pdf():
     nodes={}
     diagnostics=[]
-    # Table extraction usually places code and name in adjacent cells. Search each row for code cells,
-    # then take text until next code as that node's displayed label.
-    for row in raw_rows:
-        cells=row["cells"]
-        code_positions=[]
-        for i,c in enumerate(cells):
-            cc=clean(c)
-            if ANY_CODE.match(cc) and level_for(cc):
-                code_positions.append((i,cc,level_for(cc)))
-        for idx,(pos,code,level) in enumerate(code_positions):
-            next_pos=code_positions[idx+1][0] if idx+1<len(code_positions) else len(cells)
-            pieces=[clean(x) for x in cells[pos+1:next_pos] if clean(x)]
-            # Remove obvious header/definition noise from label candidate.
-            pieces=[x for x in pieces if x not in ("MES_Code","Macro Economic Sector","Sect_Code","Sector","Ind_Code","Industry","Basic_Ind_Code","Basic Industry","Definition")]
-            name=pieces[0] if pieces else ""
-            # Some extractors place code+name in one cell; fallback to matching same row text.
-            if not name:
-                diagnostics.append({"page":row["page"],"code":code,"reason":"NAME_EMPTY","cells":cells})
-            if code in nodes:
-                # Repeated code on same/next page should be identical; keep first nonempty and record mismatch.
-                if name and nodes[code]["name"] and name!=nodes[code]["name"]:
-                    diagnostics.append({"page":row["page"],"code":code,"reason":"DUPLICATE_NAME_VARIANT","existing":nodes[code]["name"],"new":name})
-                elif name and not nodes[code]["name"]:
-                    nodes[code]["name"]=name
-                continue
-            nodes[code]={"code":code,"level":level,"name":name,"source_page":row["page"]}
-    return nodes,diagnostics
-
-def fallback_parse_text(nodes):
-    # Use per-page word coordinates if table extraction missed codes/names.
+    current={k:None for k in EXPECTED}
     with pdfplumber.open(TMP) as pdf:
         for pageno,page in enumerate(pdf.pages[1:21],start=2):
-            words=page.extract_words(x_tolerance=2,y_tolerance=2,keep_blank_chars=False)
-            # Group by approximate top coordinate.
-            lines={}
-            for w in words:
-                lines.setdefault(round(float(w["top"]),1),[]).append(w)
-            for _,ws in sorted(lines.items()):
-                ws=sorted(ws,key=lambda w:float(w["x0"]))
-                texts=[clean(w["text"]) for w in ws]
-                for i,t in enumerate(texts):
-                    if not (ANY_CODE.match(t) and level_for(t)): continue
-                    if t in nodes and nodes[t].get("name"): continue
-                    level=level_for(t)
-                    # Collect words after code until next recognized code, stopping before long definition region
-                    parts=[]
-                    for u in texts[i+1:]:
-                        if ANY_CODE.match(u) and level_for(u): break
-                        if u in ("MES_Code","Sect_Code","Ind_Code","Basic_Ind_Code","Definition"): break
-                        parts.append(u)
-                    name=clean(" ".join(parts))
-                    if t not in nodes: nodes[t]={"code":t,"level":level,"name":name,"source_page":pageno}
-                    elif name and not nodes[t].get("name"): nodes[t]["name"]=name
-    return nodes
+            text=page.extract_text(layout=True,x_tolerance=2,y_tolerance=2) or ""
+            lines=text.splitlines()
+            header_idx=None; pos=None
+            for i,line in enumerate(lines):
+                if "MES_Code" in line and "Sect_Code" in line and "Ind_Code" in line and "Basic_Ind_Code" in line:
+                    header_idx=i
+                    pos={
+                      "MACRO_ECONOMIC_SECTOR":line.index("MES_Code"),
+                      "SECTOR":line.index("Sect_Code"),
+                      "INDUSTRY":line.index("Ind_Code"),
+                      "BASIC_INDUSTRY":line.index("Basic_Ind_Code"),
+                      "DEFINITION":line.index("Definition") if "Definition" in line else len(line)
+                    }
+                    break
+            if header_idx is None:
+                diagnostics.append({"page":pageno,"reason":"HEADER_NOT_FOUND"})
+                continue
+            order=["MACRO_ECONOMIC_SECTOR","SECTOR","INDUSTRY","BASIC_INDUSTRY"]
+            bounds={}
+            for i,lvl in enumerate(order):
+                left=pos[lvl]
+                right=pos[order[i+1]] if i+1<len(order) else pos["DEFINITION"]
+                bounds[lvl]=(left,right)
+            for line in lines[header_idx+1:]:
+                if "NSE Indices Industry Classification Structure" in line or line.strip().startswith("Disclaimer"):
+                    continue
+                for lvl in order:
+                    left,right=bounds[lvl]
+                    cell=clean(line[left:right] if left < len(line) else "")
+                    if not cell: continue
+                    m=re.match(r"^(IN\d+)\s+(.*)$",cell)
+                    if m and level_for(m.group(1))==lvl:
+                        code=m.group(1); name=clean(m.group(2))
+                        current[lvl]=code
+                        # lower levels reset when parent changes
+                        li=order.index(lvl)
+                        for lower in order[li+1:]: current[lower]=None
+                        if code not in nodes:
+                            nodes[code]={"code":code,"level":lvl,"name":name,"source_page":pageno}
+                        elif name and nodes[code]["name"]!=name:
+                            diagnostics.append({"page":pageno,"code":code,"reason":"DUPLICATE_NAME_VARIANT","existing":nodes[code]["name"],"new":name})
+                    elif current[lvl] and not ANY_CODE.match(cell):
+                        # Continuation within the same fixed-width name column.
+                        existing=nodes[current[lvl]]["name"]
+                        nodes[current[lvl]]["name"]=clean((existing+" "+cell).strip())
+    return nodes,diagnostics
 
 def build_hierarchy(nodes):
     # Codes encode parentage.
@@ -142,13 +116,31 @@ def validate(nodes):
         if name and len(codes)>1:
             # duplicate names may be legitimate but must be disclosed
             pass
+    expected_names={
+          "IN02":"Consumer Discretionary",
+          "IN04":"Fast Moving Consumer Goods",
+          "IN08":"Information Technology",
+          "IN10":"Telecommunication",
+          "IN060101001":"Pharmaceuticals",
+          "IN060103001":"Hospital",
+          "IN070202002":"Commercial Vehicles",
+          "IN040101001":"Edible Oil",
+          "IN020602001":"Education",
+          "IN110101004":"Power Generation",
+        }
+        for code,name in expected_names.items():
+            if code not in nodes: errors.append(f"SPOTCHECK_MISSING:{code}")
+            elif norm_name(nodes[code]["name"])!=norm_name(name):
+                errors.append(f"SPOTCHECK_NAME:{code}:{nodes[code]['name']}!={name}")
+    
     return counts,errors
+
+def norm_name(x):
+    return re.sub(r"[^A-Z0-9]+","_",clean(x).upper()).strip("_")
 
 def main():
     pdf,headers=download()
-    rows=extract_rows()
-    nodes,diagnostics=parse(rows)
-    nodes=fallback_parse_text(nodes)
+    nodes,diagnostics=parse_layout_pdf()
     nodes=build_hierarchy(nodes)
     counts,errors=validate(nodes)
 
