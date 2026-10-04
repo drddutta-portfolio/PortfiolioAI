@@ -1,3 +1,128 @@
+## P8 Steel-Ferrous Historical Route Integration + Frozen-Canary Input Readiness Validation — 5 October 2026
+
+**Implementation = COMPLETE / PASS.**  
+**Authoritative historical route = ESTABLISHED FOR 1 CASE.**  
+**Normalized input completeness = BLOCKED / 0 COMPLETE PAIRS.**  
+**Exact disposition: `STEEL_FERROUS_HISTORICAL_ROUTE_INTEGRATION_COMPLETE_INPUT_READINESS_BLOCKED`.**
+
+### Historical integration authority
+
+Versioned contract:
+
+`P8_STEEL_FERROUS_HISTORICAL_ROUTE_INTEGRATION_V1`
+
+Contract Git blob:
+
+`a0d1700cab6f63ddaaf65986cad9cc3fc31f27b8`
+
+Historical router version:
+
+`HISTORICAL_RESEARCH_PROFILE_ROUTING_V1`
+
+Exact eligible historical Basic Industry:
+
+`IN070205015 — Iron & Steel Products`
+
+Preserved economic hierarchy:
+
+`Industrials → Capital Goods → Industrial Products → Iron & Steel Products`
+
+Selected methodology:
+
+`STEEL_FERROUS`
+
+Existing engine:
+
+`METALS_COMMODITIES`
+
+Methodology authority:
+
+`METALS_COMMODITIES_K4A_METHODOLOGY_V1`
+
+Scoring authority:
+
+`METALS_COMMODITIES_K4B_SCORING_V1`
+
+The live/current `routeResearchProfileV1` behavior remains unchanged.
+
+### Frozen 32-case canary
+
+- denominator: **32**
+- authoritative complete classifications: **2**
+- exact integrated STEEL_FERROUS routes: **1**
+- authoritative classification outside this integration: **1**
+- other pairs rejected: **30**
+- accidental negative-control routes: **0**
+- preserved non-zero-intersegment blockers: **6**
+- complete-input pairs: **0**
+
+Canary fingerprint remains:
+
+`b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce`
+
+Route-canary audit fingerprint:
+
+`d9ad343b3c28cdf1015f081398c58f9fa4e42a3097b735606e76006055ccd357`
+
+### Steel input readiness
+
+Routed historical identity:
+
+`19f21fe6-46c9-5f26-9ee5-6207558ba10b / INE230R01035`
+
+Decision instant:
+
+`2024-11-29T10:00:00+00:00`
+
+Existing pre-decision evidence:
+
+- XML sources: **8**
+- eligible audited annual sources: **2**
+- canonical adjusted B3 market rows: **0**
+
+STEEL_FERROUS required readiness signals:
+
+**11**
+
+Normalized ready:
+
+**0 / 11**
+
+Therefore:
+
+**INPUTS_INCOMPLETE**
+
+Key blockers:
+
+- no canonical 252-day momentum history;
+- no canonical 252-day commodity-cycle drawdown history;
+- only 2 audited annual sources versus 5 observations required by several through-cycle signals;
+- no materialized 12-observation through-cycle margin/growth histories;
+- no reviewed historical ownership/governance signal;
+- no canonical historical commodity-exposure metadata signal.
+
+### Verification
+
+Workflow `37229420071`: **SUCCESS**
+
+- focused tests: PASS
+- focused lint: PASS
+- architecture: PASS
+- global typecheck: PASS
+- global lint: PASS
+- production build: PASS
+- frozen canary audit: PASS
+
+### Boundary
+
+The route integration does **not** authorize scoring/recommendation generation, historical R6–R10 replay, B5/B6/B-FINAL rebuild, experiment execution, broad 25,761-pair expansion or P8-C.
+
+Recommended next bounded task, if separately authorized:
+
+**P8 Steel-Ferrous Historical Signal Materialization Feasibility**
+
+Use only the existing routed Steel case and already-stored evidence; stop if required observation depth cannot be proven.
+
 ## P8 Historical Business-Applicability Evidence + Methodology Capability Decision — 5 October 2026
 
 **Audit execution = COMPLETE / PASS.**  
