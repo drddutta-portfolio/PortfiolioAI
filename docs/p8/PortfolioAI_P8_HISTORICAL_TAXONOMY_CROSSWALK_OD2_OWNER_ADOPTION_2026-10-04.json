@@ -1,0 +1,59 @@
+{
+  "record_version": "P8_HISTORICAL_TAXONOMY_CROSSWALK_OD2_OWNER_ADOPTION_V1",
+  "recorded_at": "2026-10-04",
+  "branch": "PortfolioAI-Development",
+  "owner_approval_status": "APPROVED",
+  "frozen_candidate": {
+    "version": "P8_HISTORICAL_TAXONOMY_CROSSWALK_CANDIDATE_V1",
+    "git_blob_sha": "fd5a683ab595d98c71254ea8c825d5ae82338afb"
+  },
+  "approved_entry": {
+    "source_description": "Manufacturing- Steel Pipes",
+    "mapping_type": "OD2_EVIDENCE_BACKED_SYNONYM",
+    "official_taxonomy": {
+      "macro": {
+        "code": "IN07",
+        "name": "Industrials"
+      },
+      "sector": {
+        "code": "IN0702",
+        "name": "Capital Goods"
+      },
+      "industry": {
+        "code": "IN070205",
+        "name": "Industrial Products"
+      },
+      "basic_industry": {
+        "code": "IN070205015",
+        "name": "Iron & Steel Products"
+      }
+    },
+    "adoption_effect": "HISTORICAL_TAXONOMY_MAPPING_ONLY",
+    "application_taxonomy_crosswalk_authorized": false,
+    "methodology_route_authorized": false
+  },
+  "preserved_state": {
+    "edible_oil_authoritative_classification": true,
+    "edible_oil_existing_route": false,
+    "steel_pipes_historical_taxonomy_mapping": true,
+    "steel_pipes_existing_route": false,
+    "remaining_ambiguous_descriptions": [
+      "IT and Business Service",
+      "EPC/Engineering Services",
+      "Textile",
+      "Automotive Segment"
+    ]
+  },
+  "authorization_boundary": {
+    "application_taxonomy_crosswalk_authorized": false,
+    "methodology_route_authorized": false,
+    "candidate_25761_pair_expansion_authorized": false,
+    "experiment_execution_authorized": false,
+    "b5_b6_bfinal_rebuild_authorized": false,
+    "p8_c_authorized": false,
+    "supabase_or_r2_writes_authorized": false,
+    "migrations_authorized": false,
+    "deployment_authorized": false
+  },
+  "exact_owner_approval_statement": "I approve the OD2 synonym entry in `P8_HISTORICAL_TAXONOMY_CROSSWALK_CANDIDATE_V1` frozen at Git blob `fd5a683ab595d98c71254ea8c825d5ae82338afb` mapping historical description `Manufacturing- Steel Pipes` to NSE Basic Industry `Iron & Steel Products (IN070205015)` under `Industrials → Capital Goods → Industrial Products`. This approval establishes the historical taxonomy mapping only; it does not authorize an application-taxonomy crosswalk, methodology route, 25,761-pair expansion, experiment execution, B5/B6/B-FINAL rebuild or P8-C."
+}
