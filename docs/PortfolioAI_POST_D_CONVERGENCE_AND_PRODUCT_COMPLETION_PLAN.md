@@ -1329,3 +1329,51 @@ Deterministic replay passed. Future evidence, current-state fallback and cross-s
 The recorded E run made zero provider calls, zero Supabase writes and zero Production/main changes; P8-C, holdout, forward returns and performance outcomes were not inspected. Corrected E artifacts do not imply that the original hosted B5/B6 objects were rewritten. B3's separate original-source forensic preservation obligation remains open.
 
 Reconciliation source: Development commit `b33986c8960c6b4a9b2f307a07aca2d896352675`. Section 22.1 retains the earlier audit's original HEAD and evidence boundary; this addendum records the subsequent E closure and supersedes its E-not-started conclusions. No fresh acquisition, database audit or experiment execution was performed for this documentation reconciliation.
+
+
+---
+
+## 23. P8 narrower-experiment feasibility closure — 4 October 2026
+
+**Current-state precedence:** This section supersedes section 22's `VERSION_NARROWER_EXPERIMENT_REQUIRED` next-step disposition by recording the separately owner-authorized narrower-design feasibility audit. It does not rewrite prior P8-B recovery history.
+
+**Audit state:** COMPLETE / NO-GO / CLOSED  
+**Exact disposition:** `NARROWER_EXPERIMENT_NO_GO`
+
+Authoritative artifacts:
+
+- `docs/p8/PortfolioAI_P8_NARROWER_EXPERIMENT_DECISION_MEMO.md`
+- `docs/p8/PortfolioAI_P8_NARROWER_EXPERIMENT_FEASIBILITY_AUDIT.json`
+
+The audit rejoined the authoritative Workstream D pair-disposition ledger to the 32-partition B3 V2 adjusted decision ledger using exact `historical_identity_id + decision_date`, without inspecting outcomes.
+
+Measured surface:
+
+- historical identities: **4,524**
+- decision dates: **32**
+- B2-eligible pairs: **121,956**
+- maximum current candidate surface: **25,761 pairs / 877 historical identities**
+- candidate share of B2 denominator: **21.123192%**
+- replay-ready pairs: **0**
+
+The candidate definition is objective and outcome-independent: B2 historical eligibility + B3 V2 market READY + official pre-decision evidence + Workstream-D provisional classification resolution. No current survival, current holdings, future performance, later success or hand-picked stock list was used.
+
+The candidate surface cannot yet be promoted to replay-ready because Workstream D's segment-derived labels are not a frozen complete historical classification taxonomy. Consequently, exactly one deterministic historical classification → frozen R6–R10 methodology route is not yet provable, and the complete normalized methodology-specific metric requirement cannot be established per pair. Raw parsed XBRL fact presence is explicitly insufficient to claim scoring-metric completeness.
+
+The proposed governance baseline was not weakened after measurement. The >=24 date gate passes with 32 dates; the proposed >=80% overall replay-ready gate fails at 0%; >=70% per retained date and >=60% per major methodology sector cannot be truthfully evaluated as replay-ready before the methodology route contract exists.
+
+The provisional identifier `P8_EXP_NSE_MONTHLY_6M_NARROWER_V2_PROPOSED` is **NOT FROZEN / NOT AUTHORIZED / NOT EXECUTED**. No B5/B6/B-FINAL rebuild follows automatically. **P8-C remains NOT AUTHORIZED.**
+
+### 23.1 Next legitimate owner decision
+
+If separately authorized, the next bounded Development task is **contract resolution only**, using already acquired point-in-time evidence:
+
+1. freeze the complete historical classification taxonomy/router;
+2. map each eligible historical classification to exactly one frozen R6–R10 methodology path;
+3. freeze the exact normalized metric requirements for each route; and
+4. run a read-only coverage census to determine whether any separately versioned experiment can meet the proposed governance standards.
+
+This is not authorization for that task. No provider acquisition, database/R2 mutation, schema migration, experiment implementation, P8-C, holdout inspection, forward-return inspection or Production/main change is permitted by this reconciliation.
+
+Execution boundary of the completed audit: **0 provider calls, 0 new source acquisitions, 0 Supabase writes, 0 R2 writes, 0 performance/outcome reads, 0 Production changes, 0 main changes.**
+
