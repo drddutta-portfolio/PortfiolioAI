@@ -1,0 +1,363 @@
+{
+  "classification_label_matrix": {
+    "DIVERSIFIED": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 8719,
+      "MARKET_DATA_BLOCKED": 612
+    },
+    "UNRESOLVED": {
+      "CLASSIFICATION_UNRESOLVED": 33706,
+      "NO_PRE_DECISION_EVIDENCE": 60531
+    },
+    "in-bse-fin:FourOtherRevenueFromOperations01Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 995,
+      "MARKET_DATA_BLOCKED": 14
+    },
+    "in-bse-fin:FourOtherRevenueFromOperations02Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 13
+    },
+    "in-bse-fin:FourReportableSegmentRevenue01Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 6248,
+      "MARKET_DATA_BLOCKED": 545
+    },
+    "in-bse-fin:FourReportableSegmentRevenue02Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 4656,
+      "MARKET_DATA_BLOCKED": 305
+    },
+    "in-bse-fin:FourReportableSegmentRevenue03Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 1709,
+      "MARKET_DATA_BLOCKED": 43
+    },
+    "in-bse-fin:FourReportableSegmentRevenue04Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 550,
+      "MARKET_DATA_BLOCKED": 46
+    },
+    "in-bse-fin:FourReportableSegmentRevenue05Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 95,
+      "MARKET_DATA_BLOCKED": 2
+    },
+    "in-bse-fin:FourReportableSegmentRevenue06Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 28
+    },
+    "in-bse-fin:FourReportableSegmentRevenue07Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 29
+    },
+    "in-bse-fin:FourReportableSegmentRevenue08Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 14,
+      "MARKET_DATA_BLOCKED": 14
+    },
+    "in-bse-fin:OneOtherRevenueFromOperations01Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 143,
+      "MARKET_DATA_BLOCKED": 4
+    },
+    "in-bse-fin:OneOtherRevenueFromOperations02Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 29
+    },
+    "in-bse-fin:OneReportableSegmentRevenue01Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 1113,
+      "MARKET_DATA_BLOCKED": 121
+    },
+    "in-bse-fin:OneReportableSegmentRevenue02Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 676,
+      "MARKET_DATA_BLOCKED": 108
+    },
+    "in-bse-fin:OneReportableSegmentRevenue03Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 304,
+      "MARKET_DATA_BLOCKED": 5
+    },
+    "in-bse-fin:OneReportableSegmentRevenue04Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 175,
+      "MARKET_DATA_BLOCKED": 5
+    },
+    "in-bse-fin:OneReportableSegmentRevenue05Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 25
+    },
+    "in-bse-fin:OneReportableSegmentRevenue06Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 8
+    },
+    "in-bse-fin:OtherRevenueFromOperations1Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 98
+    },
+    "in-bse-fin:ReportableSegments1Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 130,
+      "MARKET_DATA_BLOCKED": 134
+    },
+    "in-bse-fin:ReportableSegments3Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 2
+    },
+    "in-bse-fin:ReportableSegments4Member": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 2
+    }
+  },
+  "decision": "NARROWER_EXPERIMENT_NO_GO",
+  "decision_date_matrix": {
+    "2024-02-29": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 705,
+      "CLASSIFICATION_UNRESOLVED": 969,
+      "MARKET_DATA_BLOCKED": 51,
+      "NO_PRE_DECISION_EVIDENCE": 1660
+    },
+    "2024-03-28": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 701,
+      "CLASSIFICATION_UNRESOLVED": 973,
+      "MARKET_DATA_BLOCKED": 58,
+      "NO_PRE_DECISION_EVIDENCE": 1677
+    },
+    "2024-04-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 729,
+      "CLASSIFICATION_UNRESOLVED": 981,
+      "MARKET_DATA_BLOCKED": 42,
+      "NO_PRE_DECISION_EVIDENCE": 1682
+    },
+    "2024-05-31": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 786,
+      "CLASSIFICATION_UNRESOLVED": 1039,
+      "MARKET_DATA_BLOCKED": 54,
+      "NO_PRE_DECISION_EVIDENCE": 1579
+    },
+    "2024-06-28": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 790,
+      "CLASSIFICATION_UNRESOLVED": 1040,
+      "MARKET_DATA_BLOCKED": 55,
+      "NO_PRE_DECISION_EVIDENCE": 1594
+    },
+    "2024-07-31": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 794,
+      "CLASSIFICATION_UNRESOLVED": 1042,
+      "MARKET_DATA_BLOCKED": 54,
+      "NO_PRE_DECISION_EVIDENCE": 1621
+    },
+    "2024-08-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 802,
+      "CLASSIFICATION_UNRESOLVED": 1042,
+      "MARKET_DATA_BLOCKED": 59,
+      "NO_PRE_DECISION_EVIDENCE": 1643
+    },
+    "2024-09-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 819,
+      "CLASSIFICATION_UNRESOLVED": 1040,
+      "MARKET_DATA_BLOCKED": 48,
+      "NO_PRE_DECISION_EVIDENCE": 1687
+    },
+    "2024-10-31": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 816,
+      "CLASSIFICATION_UNRESOLVED": 1044,
+      "MARKET_DATA_BLOCKED": 58,
+      "NO_PRE_DECISION_EVIDENCE": 1708
+    },
+    "2024-11-29": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 823,
+      "CLASSIFICATION_UNRESOLVED": 1057,
+      "MARKET_DATA_BLOCKED": 62,
+      "NO_PRE_DECISION_EVIDENCE": 1703
+    },
+    "2024-12-31": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 833,
+      "CLASSIFICATION_UNRESOLVED": 1057,
+      "MARKET_DATA_BLOCKED": 52,
+      "NO_PRE_DECISION_EVIDENCE": 1735
+    },
+    "2025-01-31": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 820,
+      "CLASSIFICATION_UNRESOLVED": 1060,
+      "MARKET_DATA_BLOCKED": 63,
+      "NO_PRE_DECISION_EVIDENCE": 1752
+    },
+    "2025-02-28": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 828,
+      "CLASSIFICATION_UNRESOLVED": 1076,
+      "MARKET_DATA_BLOCKED": 65,
+      "NO_PRE_DECISION_EVIDENCE": 1752
+    },
+    "2025-03-28": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 832,
+      "CLASSIFICATION_UNRESOLVED": 1079,
+      "MARKET_DATA_BLOCKED": 61,
+      "NO_PRE_DECISION_EVIDENCE": 1760
+    },
+    "2025-04-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 830,
+      "CLASSIFICATION_UNRESOLVED": 1080,
+      "MARKET_DATA_BLOCKED": 62,
+      "NO_PRE_DECISION_EVIDENCE": 1768
+    },
+    "2025-05-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 829,
+      "CLASSIFICATION_UNRESOLVED": 1079,
+      "MARKET_DATA_BLOCKED": 62,
+      "NO_PRE_DECISION_EVIDENCE": 1783
+    },
+    "2025-06-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 834,
+      "CLASSIFICATION_UNRESOLVED": 1077,
+      "MARKET_DATA_BLOCKED": 55,
+      "NO_PRE_DECISION_EVIDENCE": 1816
+    },
+    "2025-07-31": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 820,
+      "CLASSIFICATION_UNRESOLVED": 1076,
+      "MARKET_DATA_BLOCKED": 66,
+      "NO_PRE_DECISION_EVIDENCE": 1852
+    },
+    "2025-08-29": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 818,
+      "CLASSIFICATION_UNRESOLVED": 1075,
+      "MARKET_DATA_BLOCKED": 67,
+      "NO_PRE_DECISION_EVIDENCE": 1891
+    },
+    "2025-09-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 824,
+      "CLASSIFICATION_UNRESOLVED": 1074,
+      "MARKET_DATA_BLOCKED": 58,
+      "NO_PRE_DECISION_EVIDENCE": 1939
+    },
+    "2025-10-31": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 814,
+      "CLASSIFICATION_UNRESOLVED": 1071,
+      "MARKET_DATA_BLOCKED": 67,
+      "NO_PRE_DECISION_EVIDENCE": 1970
+    },
+    "2025-11-28": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 814,
+      "CLASSIFICATION_UNRESOLVED": 1069,
+      "MARKET_DATA_BLOCKED": 67,
+      "NO_PRE_DECISION_EVIDENCE": 1996
+    },
+    "2025-12-31": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 813,
+      "CLASSIFICATION_UNRESOLVED": 1067,
+      "MARKET_DATA_BLOCKED": 66,
+      "NO_PRE_DECISION_EVIDENCE": 2030
+    },
+    "2026-01-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 813,
+      "CLASSIFICATION_UNRESOLVED": 1063,
+      "MARKET_DATA_BLOCKED": 66,
+      "NO_PRE_DECISION_EVIDENCE": 2048
+    },
+    "2026-02-27": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 811,
+      "CLASSIFICATION_UNRESOLVED": 1062,
+      "MARKET_DATA_BLOCKED": 66,
+      "NO_PRE_DECISION_EVIDENCE": 2072
+    },
+    "2026-03-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 814,
+      "CLASSIFICATION_UNRESOLVED": 1060,
+      "MARKET_DATA_BLOCKED": 63,
+      "NO_PRE_DECISION_EVIDENCE": 2093
+    },
+    "2026-04-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 805,
+      "CLASSIFICATION_UNRESOLVED": 1060,
+      "MARKET_DATA_BLOCKED": 72,
+      "NO_PRE_DECISION_EVIDENCE": 2190
+    },
+    "2026-05-29": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 805,
+      "CLASSIFICATION_UNRESOLVED": 1060,
+      "MARKET_DATA_BLOCKED": 72,
+      "NO_PRE_DECISION_EVIDENCE": 2202
+    },
+    "2026-06-30": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 815,
+      "CLASSIFICATION_UNRESOLVED": 1059,
+      "MARKET_DATA_BLOCKED": 62,
+      "NO_PRE_DECISION_EVIDENCE": 2220
+    },
+    "2026-07-31": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 806,
+      "CLASSIFICATION_UNRESOLVED": 1059,
+      "MARKET_DATA_BLOCKED": 71,
+      "NO_PRE_DECISION_EVIDENCE": 2246
+    },
+    "2026-08-31": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 809,
+      "CLASSIFICATION_UNRESOLVED": 1058,
+      "MARKET_DATA_BLOCKED": 67,
+      "NO_PRE_DECISION_EVIDENCE": 2411
+    },
+    "2026-09-29": {
+      "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 809,
+      "CLASSIFICATION_UNRESOLVED": 1058,
+      "MARKET_DATA_BLOCKED": 67,
+      "NO_PRE_DECISION_EVIDENCE": 2451
+    }
+  },
+  "full_surface": {
+    "b2_eligible_pairs": 121956,
+    "decision_dates": 32,
+    "historical_identities": 4524
+  },
+  "generated_at": "2026-10-04T14:36:29.129560+00:00",
+  "irreducible_blockers": [
+    "No currently frozen complete historical classification contract maps the Workstream-D provisional labels into the required four-tier taxonomy and one deterministic R6-R10 route.",
+    "Required methodology-specific metric completeness cannot be proven before that route exists; raw parsed fact presence is insufficient.",
+    "Therefore no identity/date pair can yet be truthfully classified as replay-ready under the proposed research-governance standards."
+  ],
+  "main_changes": 0,
+  "maximum_current_candidate_surface": {
+    "coverage_of_b2_percent": 21.123192,
+    "definition": "B2 eligible AND B3 market READY AND official pre-decision evidence present AND Workstream-D provisional classification resolved",
+    "pairs": 25761,
+    "replay_ready_pairs": 0,
+    "unique_historical_identities": 877,
+    "why_not_replay_ready": [
+      "Workstream-D classification_label is a provisional segment-derived signal, not a frozen complete four-tier historical taxonomy contract.",
+      "Without a frozen deterministic historical classification-to-methodology route, the required methodology-specific metric set is not determinable per pair.",
+      "Raw XBRL fact presence cannot be treated as proof that every required normalized scoring metric is available and semantically valid.",
+      "The audit therefore fails closed rather than converting provisional labels or raw facts into replay-ready status."
+    ]
+  },
+  "outcome_blind": true,
+  "owner_freeze_boundary": {
+    "reason": "A proposed experiment contract can be drafted, but the evidence surface does not yet prove a sufficiently large replay-ready sample. Rebuilding B5/B6 is not justified yet.",
+    "status": "NOT_READY_FOR_OWNER_FREEZE"
+  },
+  "pair_dispositions": {
+    "CANDIDATE_ROUTE_AND_REQUIRED_METRICS_UNPROVEN": 25761,
+    "CLASSIFICATION_UNRESOLVED": 33706,
+    "MARKET_DATA_BLOCKED": 1958,
+    "NO_PRE_DECISION_EVIDENCE": 60531
+  },
+  "performance_outcome_reads": 0,
+  "production_changes": 0,
+  "proposed_experiment_id": "P8_EXP_NSE_MONTHLY_6M_NARROWER_V2_PROPOSED",
+  "proposed_objective_rules": [
+    "Retain only B2 survivor-free historically eligible pairs.",
+    "Require B3 market state READY at the decision date.",
+    "Require official evidence disseminated strictly before the decision.",
+    "Require a frozen, point-in-time historical classification that deterministically maps to exactly one R6-R10 methodology route.",
+    "Require the complete normalized methodology-specific metric set from pre-decision evidence.",
+    "Require at least 24 retained decision dates and no date below the frozen per-date coverage floor.",
+    "Do not use current survival, current holdings, future returns, later success, or manual stock selection."
+  ],
+  "provider_calls": 0,
+  "r2_writes": 0,
+  "repository_branch": "PortfolioAI-Development",
+  "source_experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+  "source_lineage": {
+    "b3_market_ledger_prefix": "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2",
+    "b3_market_partitions": 32,
+    "workstream_d_audit": "docs/p8/PortfolioAI_P8_B_RECOVERY_WORKSTREAM_D_AUDIT_2026-10-04.json",
+    "workstream_d_pair_dispositions_r2_key": "portfolioai-history/development/p8/recovery/workstream-d/v2/pair-dispositions-b3f734704585e3fe9b833f84fc711af8505bc6c4ff1c38d447c5ca792c720e39.jsonl",
+    "workstream_d_pair_dispositions_sha256": "b3f734704585e3fe9b833f84fc711af8505bc6c4ff1c38d447c5ca792c720e39"
+  },
+  "standards": {
+    "identity_resolution_required_percent": 100,
+    "minimum_decision_dates": 24,
+    "minimum_each_retained_date_percent": 70,
+    "minimum_major_methodology_sector_percent": 60,
+    "minimum_overall_replay_ready_percent": 80
+  },
+  "standards_evaluation": {
+    "decision_dates_available": 32,
+    "decision_dates_gate": "PASS",
+    "identity_resolution_for_retained_pairs": "PASS_BY_B2_IDENTITY_KEY",
+    "major_methodology_sector_gate": "FAIL_NOT_COMPUTABLE_UNTIL_ROUTE_FROZEN",
+    "overall_gate": "FAIL",
+    "overall_replay_ready_percent": 0.0,
+    "per_date_gate": "FAIL_NOT_COMPUTABLE_AS_REPLAY_READY"
+  },
+  "supabase_writes": 0,
+  "version": "P8_NARROWER_EXPERIMENT_FEASIBILITY_AUDIT_V1"
+}
