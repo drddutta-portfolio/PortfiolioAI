@@ -1994,3 +1994,78 @@ Authoritative artifacts:
 - `docs/p8/PortfolioAI_P8_SEGMENT_REVENUE_CONSOLIDATED_OWNER_ADOPTION_PACKAGE_2026-10-04.md`
 - `docs/p8/PortfolioAI_P8_SEGMENT_REVENUE_CLASSIFICATION_CLOSURE_AUDIT_2026-10-04.json`
 - `docs/p8/PortfolioAI_P8_SEGMENT_REVENUE_CLASSIFICATION_CLOSURE_2026-10-04.md`
+
+
+---
+
+## 29. Owner adoption of OD1–OD3 — 4 October 2026
+
+**Current-state precedence:** This section supersedes section 28 only with respect to owner-policy adoption status. The canary measurement, accounting blockers and expansion gate remain unchanged.
+
+Owner approval is now recorded.
+
+- **OD1: APPROVED**
+- **OD2: APPROVED WITH REVIEW CONTROL**
+- **OD3: APPROVED**
+- **OD4: BLOCKED**
+
+Authoritative adoption record:
+
+`docs/p8/PortfolioAI_P8_SEGMENT_REVENUE_OWNER_POLICY_ADOPTION_2026-10-04.json`
+
+OD3 was approved against the exact frozen contract:
+
+`P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1`
+
+Git blob SHA:
+
+`45e990981371dba217d12c430f8ce567acbf25fc`
+
+The approved contract file was not mutated after approval.
+
+### 29.1 Policy authority
+
+The November-2022 NSE four-tier vocabulary is now adopted as PortfolioAI's retrospective analytical taxonomy authority for strictly point-in-time company evidence, with explicit taxonomy-version disclosure.
+
+A versioned evidence-backed synonym catalog is permitted under review control. Broad or ambiguous phrases still fail closed.
+
+The frozen V1 segment/accounting contract is adopted. Its strict audited-consolidated-annual, reconciliation, comparable-segment-revenue and >50% rules are authoritative within this historical-research scope.
+
+Diversified specialised routing remains blocked.
+
+### 29.2 Measurement remains blocked
+
+Adoption does not alter prior evidence.
+
+Frozen-canary result remains:
+
+- 32 pairs;
+- 24 with eligible audited consolidated annual source;
+- 0 comparable segment-revenue pairs;
+- 0 dominant-business candidates;
+- 0 complete company classifications;
+- 0 unique methodology routes;
+- 0 complete normalized-input pairs.
+
+Therefore the accounting/source blocker remains active.
+
+### 29.3 Expansion remains unauthorized
+
+The owner explicitly did **not** authorize:
+
+- the 25,761-pair expansion;
+- experiment freeze/execution;
+- B5/B6/B-FINAL rebuild;
+- P8-C.
+
+No automatic downstream build may begin from this policy adoption.
+
+The existing expansion gate remains closed.
+
+### 29.4 Next unresolved dependency
+
+The next unresolved issue is not taxonomy-policy adoption.
+
+It is the source/accounting semantic problem documented in section 28, including reportable-segment XBRL period contexts that conflict with the selected audited annual company context, incomplete inter-segment evidence, and absent eligible annual sources.
+
+Any future attempt to reinterpret those source-column semantics requires a new versioned semantic/accounting contract, explicit authorization and a complete rerun of the frozen canary before any broad cohort processing.
