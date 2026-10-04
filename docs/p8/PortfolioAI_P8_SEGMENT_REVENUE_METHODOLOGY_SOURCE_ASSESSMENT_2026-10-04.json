@@ -1,8 +1,8 @@
 {
   "current_methodology_page": {
     "authority": "NSE Indices Limited",
-    "content_length": 351988,
-    "content_sha256": "7bce3d99185bfa3fed6b1bd183fd22bceef6a08b6ede1a15597ddc43d07fb920",
+    "content_length": 351987,
+    "content_sha256": "5ef4f26fde3c3fc2d105adf27c6a3884e500a307c02bf89f866b687bb0cb3792",
     "required_rule_presence": {
       "annual_review": true,
       "audited_consolidated_prime_source": true,
@@ -21,12 +21,22 @@
     "url": "https://www.nseindia.com/static/products-services/industry-classification"
   },
   "frozen_taxonomy_reference": {
-    "historical_definition_support": [],
+    "historical_definition_support": [
+      {
+        "phrase": "more than 50%",
+        "snippet": "ts, where no single business 10 NSE Indices Industry Classification Structure, November 2022 MES_Code Macro Sect_Code Sector Ind_Code Industry Basic_Ind_Code Basic Industry Definition Economic Sector segment contributes more than 50% of companies' total revenue and two or more segments each contributes at least 20% of total revenue IN05 Financial IN0501 Financial IN050101 Finance IN050101001 Financial Financial Institutions as defined under Services Services Institution Section 4(1) of the Companies Act, 1956 IN050101002 Housing Finance Companies providing loan for buying Company housing and commercial properties IN050101003 Investment Companies which earn major revenue Company from interest, capital appreciation from investments "
+      },
+      {
+        "phrase": "at least 20%",
+        "snippet": "ber 2022 MES_Code Macro Sect_Code Sector Ind_Code Industry Basic_Ind_Code Basic Industry Definition Economic Sector segment contributes more than 50% of companies' total revenue and two or more segments each contributes at least 20% of total revenue IN05 Financial IN0501 Financial IN050101 Finance IN050101001 Financial Financial Institutions as defined under Services Services Institution Section 4(1) of the Companies Act, 1956 IN050101002 Housing Finance Companies providing loan for buying Company housing and commercial properties IN050101003 Investment Companies which earn major revenue Company from interest, capital appreciation from investments made. It does not include rental income which is classified under 'Diversified Comme"
+      }
+    ],
     "official_source_sha256": "ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1",
     "taxonomy_payload_sha256": "e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96",
+    "taxonomy_pdf_reverified_sha256": "ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1",
     "version_label": "November 2022"
   },
-  "retrieved_at": "2026-10-04T16:22:14.103257+00:00",
+  "retrieved_at": "2026-10-04T16:23:34.802159+00:00",
   "version": "P8_SEGMENT_REVENUE_METHODOLOGY_SOURCE_ASSESSMENT_V1",
   "version_assessment": {
     "current_methodology_postdates_taxonomy_reference": true,
