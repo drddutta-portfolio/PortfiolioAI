@@ -2107,3 +2107,35 @@ The 12 accounting-incomplete cases yielded no alternate related facts. The 8 no-
 V3 requires owner approval before any corrected period semantics become authoritative.
 
 No broad cohort processing, experiment execution, B5/B6/B-FINAL rebuild or P8-C is authorized.
+
+
+---
+
+## 31. Owner adoption of XBRL segment-period V3 — 4 October 2026
+
+The owner has explicitly adopted:
+
+`P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3`
+
+at frozen Git blob:
+
+`797b7e91d7770f3377d0061ee338c76e8220391f`
+
+Approved V1 remains unchanged at:
+
+`45e990981371dba217d12c430f8ce567acbf25fc`
+
+The adoption authorizes only the V3 normalization semantics under their full frozen evidence conditions and permanent preservation of original context dates.
+
+The frozen-canary measured result remains:
+
+- 12 authoritative V3 period normalizations;
+- 6 comparable segment-revenue cases;
+- 6 dominant-business candidates;
+- 1 exact Basic-Industry classification;
+- 0 methodology routes;
+- 0 complete normalized inputs.
+
+Therefore the existing broad-expansion gate remains closed.
+
+No 25,761-pair expansion, experiment freeze/execution, B5/B6/B-FINAL rebuild, P8-C, database/storage write, migration, deployment or scheduler activation is authorized by this adoption.
