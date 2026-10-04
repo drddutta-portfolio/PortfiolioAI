@@ -21,9 +21,7 @@ scheduler activation, production mutation, or implementation of any checkpoint.
 with the latest repository artifacts and supersedes earlier present-tense stage
 labels below. P0–P7, P7-IC and IC-FINAL are closed within their recorded scopes.
 P8 is active but V1 is stopped on feasibility. Workstream D is structurally
-closed; Workstream E is COMPLETE / BLOCKED / CLOSED after its corrected rerun. The next path is an owner-reviewed design
-for a separately versioned narrower experiment, before any outcome inspection.
-This document update authorizes no experiment creation or execution.
+closed; Workstream E is COMPLETE / BLOCKED / CLOSED after its corrected rerun. The separately authorized narrower-experiment feasibility audit and subsequent historical classification / methodology-route / metric contract-resolution audit are now complete. The latest exact disposition is `HISTORICAL_CONTRACT_RESOLUTION_BLOCKED`: current point-in-time evidence does not yet prove canonical historical Sector + Industry routing for any provisional candidate pair. The next possible step, only if separately owner-authorized, is a bounded historical taxonomy evidence-normalization build using already acquired official source bodies; no new source-acquisition loop or experiment execution is authorized by this plan.
 
 PortfolioAI must now enter a **convergence and product-completion phase**, not
 another feature program.
@@ -1377,3 +1375,98 @@ This is not authorization for that task. No provider acquisition, database/R2 mu
 
 Execution boundary of the completed audit: **0 provider calls, 0 new source acquisitions, 0 Supabase writes, 0 R2 writes, 0 performance/outcome reads, 0 Production changes, 0 main changes.**
 
+
+
+---
+
+## 24. P8 historical classification / methodology route / metric contract-resolution closure — 4 October 2026
+
+**Current-state precedence:** This section supersedes section 23's possible next-step framing. The narrower feasibility audit was completed and then the separately authorized contract-resolution audit was executed against a contract candidate frozen before measurement.
+
+**Audit execution:** COMPLETE / PASS  
+**Research feasibility:** BLOCKED  
+**Exact disposition:** `HISTORICAL_CONTRACT_RESOLUTION_BLOCKED`
+
+### 24.1 Frozen contract boundary
+
+The contract candidate was committed before the census:
+
+- version: `P8_HISTORICAL_CONTRACT_RESOLUTION_CANDIDATE_V1`
+- Git blob SHA: `f459a4bd01ff8d25bcabbcef2195249553ddeb87`
+- file SHA-256 at execution: `dc9f2cc576d7a304135d006fb303704963b8c51b1f121c47a4796a0d98112531`
+- owner-approved: **NO**
+- new experiment frozen: **NO**
+
+The candidate reuses existing authorities only: the P8 four-tier analytical classification hierarchy, `RESEARCH_PROFILE_ROUTING_V2`, Gate-K sector-engine authority, Program-B R6 fail-closed semantics and the P7-IC methodology registry. It creates no parallel taxonomy, methodology family or live R6-R10 rule.
+
+### 24.2 Deterministic census
+
+Execution commit: `8bd19cc4c7b0714acc2767ac1206579ff3696b50`.  
+Census fingerprint: `79d31733ecac224c3b78aeb7e875809e209d3016aca114d3a0142ee1887ff83b`.
+
+| Measure | Result |
+|---|---:|
+| Full B2 eligible denominator | 121,956 pairs |
+| Historical identities | 4,524 |
+| Decision dates | 32 |
+| Prior provisional candidates | 25,761 pairs / 877 identities |
+| Classification-proven under frozen contract | 0 |
+| Methodology-route-proven | 0 |
+| Complete-input pairs | 0 |
+
+Primary mutually exclusive dispositions:
+
+- `NO_PRE_DECISION_EVIDENCE`: 60,531
+- `CLASSIFICATION_UNRESOLVED`: 33,706
+- `MARKET_DATA_BLOCKED`: 1,958
+- `CLASSIFICATION_TAXONOMY_UNPROVEN`: 25,761
+
+These reconcile exactly to 121,956.
+
+Within the 25,761 provisional candidates:
+
+- 8,719 carry `DIVERSIFIED` without semantic four-tier proof;
+- 17,042 carry positional XBRL member labels rather than a business taxonomy;
+- all 25,761 therefore also carry `METHODOLOGY_ROUTE_UNPROVEN` and `METRIC_SET_NOT_SELECTABLE_WITHOUT_ROUTE`.
+
+### 24.3 Methodology and metric inventory
+
+The existing P7-IC methodology authority contains 47 profiles across 26 families and 471 required signals. 209 required signals contain evidence-code, minimum-period and freshness metadata directly in the central registry; 262 require further profile-specific normalization detail.
+
+PortfolioAI Dev had 47 active canonical fundamental metric definitions at audit start. Those definitions provide important unit, statement-scope, freshness and semantic guards for covered metrics. They do not constitute a universal historical raw-XBRL concept/unit/scale mapping for all 471 route signals.
+
+Pair-level route-specific metric completeness was therefore intentionally **not** evaluated by guessing a route. Exact historical Sector + Industry proof is a prerequisite to selecting the applicable methodology metric set.
+
+### 24.4 Research-standard assessment
+
+The proposed standards remain not owner-frozen:
+
+- >=24 decision dates: PASS — 32;
+- >=80% overall complete-input coverage: FAIL — 0%;
+- >=70% each retained date: FAIL;
+- >=60% each major methodology sector: NOT COMPUTABLE / FAIL CLOSED because no methodology sector may be assigned without proven historical taxonomy.
+
+No threshold or rule was relaxed after observing coverage.
+
+### 24.5 Exact next possible owner decision
+
+No further recovery loop is authorized automatically.
+
+If the owner separately authorizes additional Development work, the bounded task is **historical taxonomy evidence normalization using already acquired official source bodies only**:
+
+1. derive semantic business labels from eligible pre-decision filings / annual-report evidence;
+2. map those labels into the existing canonical four-tier taxonomy without backdating current classifications;
+3. prove exact `RESEARCH_PROFILE_ROUTING_V2` routes; and
+4. only after route proof, measure route-specific normalized metric completeness against canonical definitions and explicit raw-concept mappings.
+
+This is not an authorization for that task. Provider/source acquisition, Supabase/R2 writes, migrations, a new experiment, B5/B6/B-FINAL rebuild, P8-C, holdout/forward-return/performance inspection, Production and `main` all remain outside the current authorization.
+
+Authoritative artifacts:
+
+- `docs/p8/PortfolioAI_P8_HISTORICAL_CLASSIFICATION_METHOD_ROUTE_METRIC_CONTRACT_RESOLUTION_2026-10-04.md`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_CONTRACT_RESOLUTION_CANDIDATE_V1.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_CONTRACT_RESOLUTION_COVERAGE_CENSUS_2026-10-04.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_CONTRACT_RESOLUTION_AUDIT_2026-10-04.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_CONTRACT_RESOLUTION_CLOSURE_2026-10-04.md`
+
+Execution boundary: provider calls 0; new source acquisition 0; Supabase writes 0; R2 writes 0; migrations 0; P8-C 0; outcome/performance/holdout reads 0; Production/main changes 0.
