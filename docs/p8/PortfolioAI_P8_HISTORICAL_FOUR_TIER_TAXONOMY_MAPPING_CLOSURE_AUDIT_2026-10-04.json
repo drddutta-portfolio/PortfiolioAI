@@ -1,0 +1,83 @@
+{
+  "version": "P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_CLOSURE_V1",
+  "date": "2026-10-04",
+  "exact_disposition": "HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_PENDING_OWNER_DECISION",
+  "implementation_test_status": "COMPLETE_PASS",
+  "evidence_proof_status": "SEMANTIC_EVIDENCE_CONFIRMED",
+  "mapping_candidate_status": "FROZEN_PENDING_OWNER_ADOPTION",
+  "canonical_contract_adopted": false,
+  "canary_denominator": 32,
+  "canary_unique_identities": 31,
+  "measured": {
+    "semantic_retained_pairs": 32,
+    "authoritative_partial_pairs": 5,
+    "authoritative_partial_unique_identities": 4,
+    "authoritative_sector_industry_pairs": 2,
+    "authoritative_sector_industry_unique_identities": 2,
+    "conditional_pending_owner_pairs": 4,
+    "conditional_pending_owner_unique_identities": 4,
+    "unsupported_or_ambiguous_pairs": 23,
+    "complete_four_tier_authoritative_pairs": 0,
+    "authoritative_methodology_route_pairs": 0,
+    "route_candidate_from_partial_pairs": 2,
+    "route_candidate_from_partial_unique_identities": 2,
+    "complete_normalized_input_pairs": 0,
+    "negative_control_promotions": 0
+  },
+  "full_denominators": {
+    "b2_pairs": 121956,
+    "historical_identities": 4524,
+    "decision_dates": 32,
+    "provisional_candidate_pairs": 25761,
+    "provisional_candidate_identities": 877
+  },
+  "full_population_semantic_recovery": "NOT_MEASURED",
+  "expansion_executed": false,
+  "expansion_reason": "Candidate mapping authority is not adopted and canary has zero complete four-tier authoritative classifications.",
+  "blocker_categories": {
+    "missing_source_evidence": "NOT_PRIMARY_CANARY_BLOCKER; semantic evidence retained 32/32",
+    "ambiguous_business_semantics": "PRESENT_IN_SUBSET",
+    "missing_taxonomy_definitions": "YES; complete materialized Macro-Economic Sector and Basic Industry authority absent",
+    "unapproved_mapping_policy": "YES; OD1-OD4 pending owner decision",
+    "unsupported_methodology": "NOT_YET_PRIMARY; two unique PHARMA_V1 route candidates exist from partial Sector+Industry proof but cannot count authoritatively"
+  },
+  "proposed_standard_assessment": {
+    "owner_frozen": false,
+    "minimum_24_dates": {
+      "result": "PASS",
+      "observed": 32
+    },
+    "minimum_80_overall": {
+      "result": "FAIL",
+      "observed_complete_input_percent": 0
+    },
+    "minimum_70_each_date": {
+      "result": "FAIL"
+    },
+    "minimum_60_major_methodology_sector": {
+      "result": "NOT_COMPUTABLE_FAIL_CLOSED"
+    }
+  },
+  "source_lineage": {
+    "mapping_candidate_blob_sha": "e0284742e9e3e55a737946aeefe79d9cc7e4a09d",
+    "frozen_canary_blob_sha": "177866e6844179c0de15523fb5964aea103f2e12",
+    "frozen_canary_fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce",
+    "canary_validation_blob_sha": "52d9d82a57f5a0263ac9bd3929f823d5b85e9c94",
+    "canary_validation_fingerprint": "661f2acf48eb8a626d9fbaa658f9ab6f9ab5701533884da14c96819918907461"
+  },
+  "safety_boundary": {
+    "provider_calls": 0,
+    "new_source_acquisition": 0,
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "migrations": 0,
+    "production_changes": 0,
+    "main_changes": 0,
+    "new_experiment": 0,
+    "p8_c": 0,
+    "b5_b6_bfinal_rebuild": 0,
+    "performance_reads": 0,
+    "forward_outcome_reads": 0,
+    "holdout_reads": 0
+  }
+}
