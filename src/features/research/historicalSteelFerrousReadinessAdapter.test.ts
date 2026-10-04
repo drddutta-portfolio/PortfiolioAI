@@ -117,7 +117,7 @@ describe("P8 historical Steel-Ferrous integration", () => {
   })
 
   it("rejects future signal evidence and authority mismatches", () => {
-    const rule = metalsCommoditiesK4bSignalRules("STEEL_FERROUS")[0]
+    const rule = metalsCommoditiesK4bSignalRules("STEEL_FERROUS")[0]!
     const readiness = assessHistoricalSteelFerrousReadiness({
       route: baseRoute,
       signals: [{
