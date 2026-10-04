@@ -1,0 +1,20 @@
+name: P8 Historical Business Applicability Decision Verify
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - scripts/p8/p8-verify-historical-business-applicability-decision.py
+      - scripts/p8/test-p8-historical-business-applicability-decision.py
+      - docs/p8/PortfolioAI_P8_HISTORICAL_BUSINESS_APPLICABILITY_CLOSURE_AUDIT_2026-10-05.json
+      - .github/workflows/p8-historical-business-applicability-decision.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: PortfolioAI-Development}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python scripts/p8/test-p8-historical-business-applicability-decision.py
