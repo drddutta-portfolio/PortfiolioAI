@@ -409,3 +409,101 @@ export function routeResearchProfileV1(input: ResearchProfileRoutingInput): Rese
 
   return result(input, "PROFILE_PENDING", null, "AMBIGUOUS_OR_UNSUPPORTED", "PROFILE_CONTRACT_NOT_IMPLEMENTED")
 }
+
+
+export const HISTORICAL_RESEARCH_PROFILE_ROUTING_VERSION =
+  "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1" as const
+
+export interface HistoricalResearchEconomicHierarchy {
+  readonly macroEconomicSectorCode: string
+  readonly macroEconomicSectorName: string
+  readonly sectorCode: string
+  readonly sectorName: string
+  readonly industryCode: string
+  readonly industryName: string
+  readonly basicIndustryCode: string
+  readonly basicIndustryName: string
+}
+
+export interface HistoricalResearchProfileRoutingInput {
+  readonly assetClass: string
+  readonly decisionAt: string
+  readonly sourceDisseminatedAt: string
+  readonly classificationState: "AUTHORITATIVE_COMPLETE" | "PARTIAL" | "CONDITIONAL" | "BLOCKED"
+  readonly taxonomyVersion: "NSE_NOVEMBER_2022"
+  readonly economicHierarchy: HistoricalResearchEconomicHierarchy
+  readonly accountingContractBlob: string
+  readonly periodSemanticsBlob: string
+}
+
+export interface HistoricalResearchProfileRoutingResult {
+  readonly version: typeof HISTORICAL_RESEARCH_PROFILE_ROUTING_VERSION
+  readonly state: "ROUTED" | "REVIEW_REQUIRED"
+  readonly profileCode: "STEEL_FERROUS" | null
+  readonly basis: "EXACT_HISTORICAL_BASIC_INDUSTRY" | "HISTORICAL_ROUTE_REJECTED"
+  readonly reasonCode: string
+  readonly decisionAt: string
+  readonly economicHierarchy: HistoricalResearchEconomicHierarchy
+}
+
+const P8_APPROVED_ACCOUNTING_BLOB = "45e990981371dba217d12c430f8ce567acbf25fc" as const
+const P8_APPROVED_PERIOD_SEMANTICS_BLOB = "797b7e91d7770f3377d0061ee338c76e8220391f" as const
+const P8_STEEL_FERROUS_BASIC_INDUSTRY = "IN070205015" as const
+
+/**
+ * Historical-only methodology selection for the bounded P8 integration.
+ *
+ * This does not alter current/live application classification or routeResearchProfileV1.
+ * Economic taxonomy remains the approved NSE November-2022 hierarchy; methodology
+ * selection is a separate analytical decision keyed to the exact authoritative
+ * Basic Industry. Anything broader, conditional, future-dated or using a different
+ * accounting/period authority fails closed.
+ */
+export function routeHistoricalResearchProfileV1(
+  input: HistoricalResearchProfileRoutingInput,
+): HistoricalResearchProfileRoutingResult {
+  const reject = (reasonCode: string): HistoricalResearchProfileRoutingResult => ({
+    version: HISTORICAL_RESEARCH_PROFILE_ROUTING_VERSION,
+    state: "REVIEW_REQUIRED",
+    profileCode: null,
+    basis: "HISTORICAL_ROUTE_REJECTED",
+    reasonCode,
+    decisionAt: input.decisionAt,
+    economicHierarchy: input.economicHierarchy,
+  })
+
+  if (input.assetClass.trim().toUpperCase() !== "EQUITY") return reject("HISTORICAL_EQUITY_REQUIRED")
+  if (input.taxonomyVersion !== "NSE_NOVEMBER_2022") return reject("HISTORICAL_TAXONOMY_VERSION_REQUIRED")
+  if (input.classificationState !== "AUTHORITATIVE_COMPLETE") return reject("AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED")
+  if (input.accountingContractBlob !== P8_APPROVED_ACCOUNTING_BLOB) return reject("APPROVED_V1_ACCOUNTING_REQUIRED")
+  if (input.periodSemanticsBlob !== P8_APPROVED_PERIOD_SEMANTICS_BLOB) return reject("APPROVED_V3_PERIOD_SEMANTICS_REQUIRED")
+
+  const decisionMs = Date.parse(input.decisionAt)
+  const disseminationMs = Date.parse(input.sourceDisseminatedAt)
+  if (!Number.isFinite(decisionMs) || !Number.isFinite(disseminationMs)) return reject("VALID_POINT_IN_TIME_TIMESTAMPS_REQUIRED")
+  if (disseminationMs >= decisionMs) return reject("FUTURE_OR_SAME_INSTANT_SOURCE_REJECTED")
+
+  const h = input.economicHierarchy
+  if (
+    h.macroEconomicSectorCode !== "IN07"
+    || h.sectorCode !== "IN0702"
+    || h.industryCode !== "IN070205"
+    || h.basicIndustryCode !== P8_STEEL_FERROUS_BASIC_INDUSTRY
+  ) {
+    return reject("EXACT_IN070205015_BASIC_INDUSTRY_REQUIRED")
+  }
+
+  if (key(h.basicIndustryName) !== "IRON_STEEL_PRODUCTS") {
+    return reject("IRON_STEEL_PRODUCTS_NAME_REQUIRED")
+  }
+
+  return {
+    version: HISTORICAL_RESEARCH_PROFILE_ROUTING_VERSION,
+    state: "ROUTED",
+    profileCode: "STEEL_FERROUS",
+    basis: "EXACT_HISTORICAL_BASIC_INDUSTRY",
+    reasonCode: "P8_HISTORICAL_IN070205015_STEEL_FERROUS",
+    decisionAt: input.decisionAt,
+    economicHierarchy: input.economicHierarchy,
+  }
+}
