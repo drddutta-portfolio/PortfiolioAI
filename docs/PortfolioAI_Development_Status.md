@@ -1,3 +1,64 @@
+## P8 Historical Classification / Methodology Route / Metric Contract Resolution Audit — 4 October 2026
+
+**Current-state precedence:** This entry supersedes the prior narrower-feasibility next-step statement only to record completion of the separately authorized contract-resolution audit. Prior P8-B and narrower-feasibility closure records remain historical authority for their scopes.
+
+**Audit execution = COMPLETE / PASS. Research feasibility = BLOCKED.**  
+**Exact disposition: `HISTORICAL_CONTRACT_RESOLUTION_BLOCKED`.**
+
+Frozen pre-census candidate:
+
+- contract version: `P8_HISTORICAL_CONTRACT_RESOLUTION_CANDIDATE_V1`
+- Git blob SHA: `f459a4bd01ff8d25bcabbcef2195249553ddeb87`
+- owner-approved: **NO**
+- experiment-frozen: **NO**
+
+Authoritative artifacts:
+
+- [Contract-resolution specification](p8/PortfolioAI_P8_HISTORICAL_CLASSIFICATION_METHOD_ROUTE_METRIC_CONTRACT_RESOLUTION_2026-10-04.md)
+- [Machine-readable contract candidate](p8/PortfolioAI_P8_HISTORICAL_CONTRACT_RESOLUTION_CANDIDATE_V1.json)
+- [Coverage census](p8/PortfolioAI_P8_HISTORICAL_CONTRACT_RESOLUTION_COVERAGE_CENSUS_2026-10-04.json)
+- [Audit](p8/PortfolioAI_P8_HISTORICAL_CONTRACT_RESOLUTION_AUDIT_2026-10-04.json)
+- [Closure memo](p8/PortfolioAI_P8_HISTORICAL_CONTRACT_RESOLUTION_CLOSURE_2026-10-04.md)
+
+Deterministic full-B2 census:
+
+| Measure | Result |
+|---|---:|
+| B2-eligible pairs | 121,956 |
+| Historical identities | 4,524 |
+| Decision dates | 32 |
+| Prior provisional candidate pairs | 25,761 |
+| Prior provisional candidate identities | 877 |
+| Classification-proven pairs under frozen candidate | 0 |
+| Methodology-route-proven pairs | 0 |
+| Complete-input pairs | 0 |
+
+Mutually exclusive primary dispositions reconcile exactly to 121,956:
+
+- `NO_PRE_DECISION_EVIDENCE`: **60,531**
+- `CLASSIFICATION_UNRESOLVED`: **33,706**
+- `MARKET_DATA_BLOCKED`: **1,958**
+- `CLASSIFICATION_TAXONOMY_UNPROVEN`: **25,761**
+
+Within the 25,761 provisional candidates, overlapping classification diagnostics are:
+
+- `DIVERSIFIED_WITHOUT_SEMANTIC_FOUR_TIER_PROOF`: **8,719**
+- `POSITIONAL_XBRL_MEMBER_NOT_TAXONOMY`: **17,042**
+- `METHODOLOGY_ROUTE_UNPROVEN`: **25,761**
+- `METRIC_SET_NOT_SELECTABLE_WITHOUT_ROUTE`: **25,761**
+
+The frozen contract reuses the existing four-tier historical taxonomy requirement, `RESEARCH_PROFILE_ROUTING_V2`, Gate-K authority and the existing P7-IC methodology registry. No parallel taxonomy or scoring family was created. The current P7-IC registry contains **47 profiles / 26 families / 471 required signals**; **209** required signals expose evidence-code + minimum-period + freshness metadata in the central registry, while **262** rely on further profile-specific normalization authority. PortfolioAI Dev has **47 active canonical fundamental metric definitions**, but there is no universal historical raw-XBRL concept/unit/scale mapping for every route signal.
+
+The current Workstream-D labels are useful contemporaneous segment evidence but do not prove canonical historical Sector + Industry + Basic Industry. Assigning a Gate-K profile from them would invent taxonomy. Pair-level route-specific metric evaluation therefore stops fail-closed before selecting a methodology metric set.
+
+Proposed research standards remain **not owner-frozen**: >=24 dates passes at 32; >=80% overall complete-input coverage fails at 0%; >=70% each retained date fails; >=60% per major methodology sector is not computable without inventing routes.
+
+**P8_EXP_NSE_MONTHLY_6M_NARROWER_V2_PROPOSED remains NOT FROZEN / NOT AUTHORIZED / NOT EXECUTED. P8-C remains NOT AUTHORIZED.**
+
+The next possible task is **not automatically authorized**. If separately approved by the owner, it is a bounded historical taxonomy evidence-normalization build using already acquired source bodies only: derive semantic business labels from eligible pre-decision evidence, map them into the existing four-tier taxonomy without current-state backdating, prove exact existing-router paths, then measure route-specific normalized metric completeness. No provider/source acquisition loop is implied.
+
+Execution boundary: provider calls 0; new source acquisition 0; Supabase writes 0; R2 writes 0; migrations 0; forward-return/performance/holdout reads 0; Production/main changes 0.
+
 ## P8 Narrower Experiment Design + Feasibility Audit — 4 October 2026
 
 **Current-state precedence:** This entry supersedes the prior `VERSION_NARROWER_EXPERIMENT_REQUIRED` next-step statement only to record that the separately authorized narrower-design feasibility audit has now been performed. Historical P8-B recovery closure records remain unchanged.
