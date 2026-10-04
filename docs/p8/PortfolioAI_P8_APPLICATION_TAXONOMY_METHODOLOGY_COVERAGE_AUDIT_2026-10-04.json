@@ -1,0 +1,575 @@
+{
+  "answers": {
+    "either_case_blocked_only_by_missing_wiring": false,
+    "either_requires_additional_historical_business_evidence": true,
+    "next_owner_change": "AUTHORIZE_BOUNDED_BUSINESS_APPLICABILITY_EVIDENCE_AND_METHODOLOGY_COVERAGE_DECISION; DO_NOT_WIRE_ROUTE_YET",
+    "registered_but_unimplemented_profile": "AGRI_PROCESSING"
+  },
+  "application_taxonomy": {
+    "active_count": 9,
+    "rows": [
+      {
+        "industry_code": "BANKING_PRIVATE_SECTOR_BANK",
+        "industry_name": "Private Sector Bank",
+        "sector_code": "BANKING",
+        "sector_name": "Banking"
+      },
+      {
+        "industry_code": "CEMENT_AND_CONSTRUCTION_CEMENT_AND_CEMENT_PRODUCTS",
+        "industry_name": "Cement & Cement Products",
+        "sector_code": "CEMENT_AND_CONSTRUCTION",
+        "sector_name": "Cement and Construction"
+      },
+      {
+        "industry_code": "HEALTHCARE_HEALTHCARE_FACILITIES",
+        "industry_name": "Healthcare Facilities",
+        "sector_code": "HEALTHCARE",
+        "sector_name": "Healthcare"
+      },
+      {
+        "industry_code": "METALS_AND_MINING_ALUMINIUM_AND_ALUMINIUM_PRODUCTS",
+        "industry_name": "Aluminium and Aluminium Products",
+        "sector_code": "METALS_AND_MINING",
+        "sector_name": "Metals & Mining"
+      },
+      {
+        "industry_code": "METALS_AND_MINING_IRON_AND_STEEL_INTERM_PRODUCTS",
+        "industry_name": "Iron & Steel/Interm.Products",
+        "sector_code": "METALS_AND_MINING",
+        "sector_name": "Metals & Mining"
+      },
+      {
+        "industry_code": "OIL_AND_GAS_REFINERIES_PETRO_PRODUCTS",
+        "industry_name": "Refineries/Petro-Products",
+        "sector_code": "OIL_AND_GAS",
+        "sector_name": "Oil & Gas"
+      },
+      {
+        "industry_code": "PHARMA_PHARMACEUTICALS",
+        "industry_name": "Pharmaceuticals",
+        "sector_code": "PHARMA",
+        "sector_name": "Pharma"
+      },
+      {
+        "industry_code": "REALTY_REALTY",
+        "industry_name": "Realty",
+        "sector_code": "REALTY",
+        "sector_name": "Realty"
+      },
+      {
+        "industry_code": "STAGE5_ETF_INDUSTRY",
+        "industry_name": "Stage 5 Exchange Traded Fund",
+        "sector_code": "STAGE5_ETF",
+        "sector_name": "Stage 5 ETF"
+      }
+    ]
+  },
+  "authorities": {
+    "crosswalk_blob": "fd5a683ab595d98c71254ea8c825d5ae82338afb",
+    "router_version": "RESEARCH_PROFILE_ROUTING_V2",
+    "v1_blob": "45e990981371dba217d12c430f8ce567acbf25fc",
+    "v3_blob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+  },
+  "broad_processing": "NOT_AUTHORIZED_NOT_MEASURED",
+  "edible_oil": {
+    "AGRI_PROCESSING": {
+      "business_applicability_evidence": "INSUFFICIENT",
+      "live_scoring_runtime": "UNIMPLEMENTED_IN_CANONICAL_SECTOR_ENGINE_PATH",
+      "missing_dependency": [
+        "POINT_IN_TIME_PROCESSING_PROCUREMENT_BUSINESS_APPLICABILITY_EVIDENCE",
+        "CANONICAL_SECTOR_ENGINE_IMPLEMENTATION_OR_EQUIVALENT_EXECUTION_AUTHORITY",
+        "CANONICAL_ROUTER_INTEGRATION",
+        "APPLICATION_TAXONOMY_REPRESENTATION"
+      ],
+      "registry_profile": "PRESENT",
+      "router": "NOT_EXPOSED",
+      "sector_engine": "NOT_REGISTERED",
+      "semantic_compatibility": "PLAUSIBLE_BUT_NOT_PROVEN"
+    },
+    "BRANDED_CONSUMER_FMCG": {
+      "business_applicability_evidence": "INSUFFICIENT_BRAND_DISTRIBUTION_CATEGORY_PROOF",
+      "live_scoring_runtime": "PENDING_ADAPTER",
+      "missing_dependency": [
+        "POINT_IN_TIME_BRAND_DISTRIBUTION_CATEGORY_APPLICABILITY_EVIDENCE",
+        "ACTIVE_APPLICATION_TAXONOMY_TARGET",
+        "LIVE_SCORING_ADAPTER_IF_RUNTIME_EXECUTION_REQUIRED"
+      ],
+      "registry_profile": "PRESENT",
+      "router": "EXPOSED",
+      "sector_engine": "IMPLEMENTED",
+      "semantic_compatibility": "NOT_PROVEN_FROM_EDIBLE_OIL_CLASSIFICATION"
+    },
+    "authoritative_taxonomy": "IN04 > IN0401 > IN040101 > IN040101001",
+    "disposition": "NOT_BLOCKED_ONLY_BY_WIRING",
+    "source_evidence": {
+      "dominance_ratio": "0.7566737538388849515709898417198204583038",
+      "dominant_segment": "Edible Oil",
+      "historical_business_attributes_proven": [
+        "EDIBLE_OIL_SEGMENT",
+        "SEGMENT_REVENUE_DOMINANCE",
+        "FOOD_AND_FMCG_SECONDARY_SEGMENT",
+        "INDUSTRY_ESSENTIALS_SECONDARY_SEGMENT"
+      ],
+      "not_proven_in_selected_historical_source": [
+        "PROCUREMENT_AND_PROCESSING_MOAT",
+        "BRAND_CUSTOMER_SUPPLY_CHAIN",
+        "BRAND_DISTRIBUTION_CATEGORY_DURABILITY",
+        "PRODUCT_CATEGORY_BRAND_POSITIONING",
+        "CROP_INPUT_PRICE_FX_CUSTOMER_CONCENTRATION"
+      ],
+      "other_segments": [
+        "Food & FMCG",
+        "Industry Essentials"
+      ]
+    }
+  },
+  "fingerprint_sha256": "23d8ffb2cfa1f239ff3b20001ada66f7f8fd9d3eb55d9fb77d614544d1b0570c",
+  "iron_steel_products": {
+    "CAPITAL_EQUIPMENT_ELECTRICAL": {
+      "business_applicability_evidence": "NO_ELECTRICAL_EQUIPMENT_OR_CAPITAL_EQUIPMENT_PRODUCT_PROOF",
+      "live_scoring_runtime": "PENDING_ADAPTER",
+      "missing_dependency": [
+        "PROFILE_SEMANTICS_NOT_SATISFIED"
+      ],
+      "registry_profile": "PRESENT",
+      "router": "EXPOSED",
+      "sector_engine": "IMPLEMENTED",
+      "semantic_compatibility": "REJECTED_ON_CURRENT_EVIDENCE"
+    },
+    "STEEL_FERROUS": {
+      "business_applicability_evidence": "INSUFFICIENT_COMMODITY_CYCLE_AND_RAW_MATERIAL_INTEGRATION_PROOF",
+      "live_scoring_runtime": "PENDING_ADAPTER",
+      "missing_dependency": [
+        "POINT_IN_TIME_STEEL_COMMODITY_PROFILE_APPLICABILITY_EVIDENCE",
+        "SEMANTICALLY_VALID_APPLICATION_TAXONOMY_TARGET",
+        "LIVE_SCORING_ADAPTER_IF_RUNTIME_EXECUTION_REQUIRED"
+      ],
+      "registry_profile": "PRESENT",
+      "router": "EXPOSED_FOR_METALS_MINING_CLASSIFICATION",
+      "sector_engine": "IMPLEMENTED",
+      "semantic_compatibility": "NOT_PROVEN_FOR_DOWNSTREAM_STEEL_PIPE_MANUFACTURER"
+    },
+    "authoritative_taxonomy": "IN07 > IN0702 > IN070205 > IN070205015",
+    "disposition": "NOT_BLOCKED_ONLY_BY_WIRING",
+    "source_evidence": {
+      "dominance_ratio": "0.7487866091994387055253679015813998821798",
+      "dominant_segment": "Manufacturing- Steel Pipes",
+      "historical_business_attributes_proven": [
+        "STEEL_PIPE_MANUFACTURING_SEGMENT",
+        "SEGMENT_REVENUE_DOMINANCE",
+        "BUILDING_MATERIAL_AND_STEEL_PRODUCTS_TRADING_SECONDARY_SEGMENT"
+      ],
+      "not_proven_in_selected_historical_source": [
+        "UPSTREAM_STEEL_PRODUCTION",
+        "RAW_MATERIAL_INTEGRATION",
+        "IRON_ORE_OR_COKING_COAL_COST_POSITION",
+        "STEEL_SPREAD_CYCLE_EXPOSURE",
+        "ELECTRICAL_EQUIPMENT_BUSINESS",
+        "ORDER_BOOK_ELECTRICAL_OR_CAPITAL_EQUIPMENT_SEMANTICS"
+      ],
+      "other_segments": [
+        "Trading- Building Material & Steel Products",
+        "Unallocated Segment"
+      ]
+    }
+  },
+  "profile_inventory": {
+    "AGRI_PROCESSING": {
+      "familyCode": "AGRI_PROCESSING_V1",
+      "methodologyAuthority": "P7_IC1_AGRI_PROCESSING_METHODOLOGY_V1",
+      "registry_present": true,
+      "required_signals": [
+        {
+          "evidenceCodes": [
+            "GROSS_OPERATING_MARGIN_HISTORY",
+            "PRODUCT_MIX"
+          ],
+          "freshnessPolicy": "FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS",
+          "minimumPeriods": 8,
+          "normalizationCurve": "PEER_SELF_PERCENTILE_V1",
+          "signalCode": "AGRI_PROCESSING_QUALITY_COMPOSITE",
+          "sourceAuthority": null
+        },
+        {
+          "evidenceCodes": [
+            "REVENUE_VOLUME_EXPORT_GROWTH"
+          ],
+          "freshnessPolicy": "FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS",
+          "minimumPeriods": 8,
+          "normalizationCurve": "PEER_SELF_PERCENTILE_V1",
+          "signalCode": "AGRI_PROCESSING_GROWTH_COMPOSITE",
+          "sourceAuthority": null
+        },
+        {
+          "evidenceCodes": [
+            "ROCE_OR_ROIC"
+          ],
+          "freshnessPolicy": "FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS",
+          "minimumPeriods": 3,
+          "normalizationCurve": "PEER_SELF_PERCENTILE_V1",
+          "signalCode": "AGRI_PROCESSING_CAPITAL_EFFICIENCY_COMPOSITE",
+          "sourceAuthority": null
+        },
+        {
+          "evidenceCodes": [
+            "CFO_FCF_INVENTORY_WORKING_CAPITAL"
+          ],
+          "freshnessPolicy": "FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS",
+          "minimumPeriods": 3,
+          "normalizationCurve": "PEER_SELF_PERCENTILE_V1",
+          "signalCode": "AGRI_PROCESSING_CASH_FLOW_COMPOSITE",
+          "sourceAuthority": null
+        },
+        {
+          "evidenceCodes": [
+            "NET_CASH_OR_LEVERAGE"
+          ],
+          "freshnessPolicy": "FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS",
+          "minimumPeriods": 3,
+          "normalizationCurve": "PEER_SELF_PERCENTILE_V1",
+          "signalCode": "AGRI_PROCESSING_BALANCE_SHEET_CREDIT_COMPOSITE",
+          "sourceAuthority": null
+        },
+        {
+          "evidenceCodes": [
+            "BRAND_CUSTOMER_SUPPLY_CHAIN",
+            "PROCUREMENT_AND_PROCESSING_MOAT"
+          ],
+          "freshnessPolicy": "FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS",
+          "minimumPeriods": 3,
+          "normalizationCurve": "PEER_PERCENTILE_V1",
+          "signalCode": "AGRI_PROCESSING_BUSINESS_DURABILITY_COMPOSITE",
+          "sourceAuthority": null
+        },
+        {
+          "evidenceCodes": [
+            "PE",
+            "EV_EBITDA",
+            "FCF_YIELD",
+            "ROCE_WORKING_CAPITAL_CONTEXT"
+          ],
+          "freshnessPolicy": "FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS",
+          "minimumPeriods": 3,
+          "normalizationCurve": "VALUATION_RELATIVE_V1",
+          "signalCode": "AGRI_PROCESSING_VALUATION_COMPOSITE",
+          "sourceAuthority": null
+        },
+        {
+          "evidenceCodes": [
+            "PRICE_HISTORY_252D",
+            "APPROVED_BENCHMARK_HISTORY_252D"
+          ],
+          "freshnessPolicy": "MARKET_5_TRADING_DAYS",
+          "minimumPeriods": 252,
+          "normalizationCurve": "RELATIVE_MOMENTUM_V1",
+          "signalCode": "AGRI_PROCESSING_MOMENTUM_COMPOSITE",
+          "sourceAuthority": null
+        },
+        {
+          "evidenceCodes": [
+            "CROP_INPUT_PRICE_FX_CUSTOMER_CONCENTRATION",
+            "MARKET_DRAWDOWN"
+          ],
+          "freshnessPolicy": "MARKET_5_TRADING_DAYS",
+          "minimumPeriods": 252,
+          "normalizationCurve": "LOWER_RISK_V1",
+          "signalCode": "AGRI_PROCESSING_RISK_COMPOSITE",
+          "sourceAuthority": null
+        },
+        {
+          "evidenceCodes": [
+            "OWNERSHIP_TREND_4Q",
+            "GOVERNANCE_EVENT_REVIEW"
+          ],
+          "freshnessPolicy": "FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS",
+          "minimumPeriods": 4,
+          "normalizationCurve": "GOVERNANCE_ORDINAL_V1",
+          "signalCode": "AGRI_PROCESSING_OWNERSHIP_GOVERNANCE_COMPOSITE",
+          "sourceAuthority": null
+        }
+      ],
+      "router_exposed": false,
+      "sector_engine_registered": false
+    },
+    "BRANDED_CONSUMER_FMCG": {
+      "familyCode": "CONSUMER_FMCG",
+      "methodologyAuthority": "CONSUMER_FMCG_K4B_SCORING_V1",
+      "registry_present": true,
+      "required_signals": [
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "GROSS_AND_OPERATING_MARGIN_HISTORY",
+          "sourceAuthority": "CONSUMER_FMCG_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "REVENUE_AND_VOLUME_PRICE_MIX_GROWTH",
+          "sourceAuthority": "CONSUMER_FMCG_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "ROCE_OR_ROIC",
+          "sourceAuthority": "CONSUMER_FMCG_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "CFO_OR_FCF_CONVERSION_AND_WORKING_CAPITAL",
+          "sourceAuthority": "CONSUMER_FMCG_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "NET_CASH_OR_LEVERAGE",
+          "sourceAuthority": "CONSUMER_FMCG_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "BRAND_DISTRIBUTION_CATEGORY_DURABILITY",
+          "sourceAuthority": "CONSUMER_FMCG_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "VALUATION",
+          "sourceAuthority": "CONSUMER_FMCG_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "MOMENTUM_12M_RELATIVE",
+          "sourceAuthority": "CONSUMER_FMCG_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "CATEGORY_AND_MARKET_RISK",
+          "sourceAuthority": "CONSUMER_FMCG_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "OWNERSHIP_GOVERNANCE",
+          "sourceAuthority": "CONSUMER_FMCG_K4B_SCORING_V1"
+        }
+      ],
+      "router_exposed": true,
+      "sector_engine_registered": true
+    },
+    "CAPITAL_EQUIPMENT_ELECTRICAL": {
+      "familyCode": "INDUSTRIALS_CAPITAL_GOODS",
+      "methodologyAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+      "registry_present": true,
+      "required_signals": [
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "OPERATING_MARGIN_HISTORY",
+          "sourceAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "REVENUE_AND_ORDER_GROWTH_MULTI_PERIOD",
+          "sourceAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "ROCE_OR_ROIC",
+          "sourceAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "CFO_FCF_AND_WORKING_CAPITAL",
+          "sourceAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "NET_DEBT_AND_INTEREST_COVERAGE",
+          "sourceAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "BUSINESS_DURABILITY",
+          "sourceAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "VALUATION",
+          "sourceAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "MOMENTUM_12M_RELATIVE",
+          "sourceAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "DRAWDOWN_VOLATILITY_RISK",
+          "sourceAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "OWNERSHIP_GOVERNANCE",
+          "sourceAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1"
+        }
+      ],
+      "router_exposed": true,
+      "sector_engine_registered": true
+    },
+    "INDUSTRIAL_CAPITAL_GOODS": {
+      "familyCode": null,
+      "methodologyAuthority": null,
+      "registry_present": false,
+      "required_signals": [],
+      "router_exposed": true,
+      "sector_engine_registered": false
+    },
+    "STEEL_FERROUS": {
+      "familyCode": "METALS_COMMODITIES",
+      "methodologyAuthority": "METALS_COMMODITIES_K4B_SCORING_V1",
+      "registry_present": true,
+      "required_signals": [
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "THROUGH_CYCLE_MARGIN_QUALITY",
+          "sourceAuthority": "METALS_COMMODITIES_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "VOLUME_REALIZATION_AND_SPREAD_GROWTH",
+          "sourceAuthority": "METALS_COMMODITIES_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "ROCE_OR_ROIC_THROUGH_CYCLE",
+          "sourceAuthority": "METALS_COMMODITIES_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "CFO_OR_FCF_CONVERSION_THROUGH_CYCLE",
+          "sourceAuthority": "METALS_COMMODITIES_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "NET_DEBT_AND_INTEREST_COVERAGE_MID_CYCLE",
+          "sourceAuthority": "METALS_COMMODITIES_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "METALS_BUSINESS_DURABILITY",
+          "sourceAuthority": "METALS_COMMODITIES_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "VALUATION_THROUGH_CYCLE",
+          "sourceAuthority": "METALS_COMMODITIES_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "MOMENTUM_12M_RELATIVE",
+          "sourceAuthority": "METALS_COMMODITIES_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "COMMODITY_CYCLE_DRAWDOWN_RISK",
+          "sourceAuthority": "METALS_COMMODITIES_K4B_SCORING_V1"
+        },
+        {
+          "evidenceCodes": null,
+          "freshnessPolicy": null,
+          "minimumPeriods": null,
+          "normalizationCurve": null,
+          "signalCode": "OWNERSHIP_GOVERNANCE",
+          "sourceAuthority": "METALS_COMMODITIES_K4B_SCORING_V1"
+        }
+      ],
+      "router_exposed": true,
+      "sector_engine_registered": true
+    }
+  },
+  "repeat_fingerprint_sha256": "23d8ffb2cfa1f239ff3b20001ada66f7f8fd9d3eb55d9fb77d614544d1b0570c",
+  "scoring_runtime": {
+    "non_bank_pharma_sector_adapter_pending": true
+  },
+  "version": "P8_APPLICATION_TAXONOMY_METHODOLOGY_COVERAGE_AUDIT_V1"
+}
