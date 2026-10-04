@@ -1,0 +1,93 @@
+{
+  "version": "P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CLOSURE_V1",
+  "date": "2026-10-04",
+  "exact_disposition": "XBRL_SEGMENT_PERIOD_V3_CONDITIONAL_RECOVERY_PENDING_OWNER_APPROVAL",
+  "implementation_status": "COMPLETE_PASS",
+  "approved_v1": {
+    "contract": "P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1",
+    "git_blob_sha": "45e990981371dba217d12c430f8ce567acbf25fc",
+    "modified": false
+  },
+  "proposed_v3": {
+    "contract": "P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3",
+    "git_blob_sha": "797b7e91d7770f3377d0061ee338c76e8220391f",
+    "owner_approved": false
+  },
+  "canary": {
+    "pairs": 32,
+    "unique_identities": 31,
+    "fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce",
+    "primary_dispositions": {
+      "V3_CONDITIONAL_RECOVERABLE_SOURCE_TAGGING_DEFECT": 12,
+      "ACCOUNTING_INCOMPLETE_OR_OTHER_BLOCKER": 12,
+      "NO_ELIGIBLE_ANNUAL_SOURCE": 8
+    },
+    "v1_authoritative": {
+      "extraction_fixes": 0,
+      "comparable_segment_revenue": 0,
+      "complete_company_classifications": 0,
+      "unique_methodology_routes": 0,
+      "complete_normalized_inputs": 0
+    },
+    "v3_conditional": {
+      "period_normalizations": 12,
+      "comparable_segment_revenue": 6,
+      "dominant_business_candidates": 6,
+      "exact_basic_industry_classifications": 1,
+      "candidate_methodology_routes": 0,
+      "complete_normalized_inputs": 0
+    }
+  },
+  "source_semantics": {
+    "reporting_quarter_yearly_in_12_of_12_mismatch_cases": true,
+    "explicit_oneD_quarter_period_in_12_of_12": true,
+    "explicit_fourD_annual_period_in_12_of_12": true,
+    "one_four_segment_identity_match_in_12_of_12": true,
+    "revenue_reconciliation_one_and_four_in_12_of_12": true,
+    "segment_profit_reconciliation_one_and_four_in_12_of_12": true,
+    "literal_context_conflict_preserved": true,
+    "applicable_xsd_linkbase_stored": false,
+    "companion_rendered_pdf_html_stored": false
+  },
+  "missing_accounting": {
+    "case_denominator": 12,
+    "parser_omission_recovered": 0,
+    "no_alternate_related_facts_found": 12,
+    "absence_inferred_as_zero": 0
+  },
+  "routing": {
+    "actual_router": "RESEARCH_PROFILE_ROUTING_V2",
+    "conditional_candidate_routes": 0,
+    "authoritative_routes": 0,
+    "conditional_requirements_selected": 0,
+    "authoritative_complete_inputs": 0
+  },
+  "fingerprints": {
+    "v2_matrix": "7cefd5e0ce5675d81c1106c4bf6d846a3b972f42bb6a9aa8d77280feb61c5997",
+    "v3_pre_router": "2af967ef181706762b43fbbc9aa2919faadb665bc1825062c734c5e2d2fe5723",
+    "v3_final": "e75ffba7529050c5984b23575ef3663b5c823f1cc1c4a3c7d19e8717de9799f8"
+  },
+  "checks": {
+    "final_workflow_run": 37220672965,
+    "focused_tests": 12,
+    "result": "PASS"
+  },
+  "unmeasured": {
+    "provisional_candidate_pairs": 25761,
+    "provisional_candidate_identities": 877,
+    "full_surface_status": "NOT_AUTHORIZED_NOT_MEASURED"
+  },
+  "safety": {
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "migrations": 0,
+    "deployments": 0,
+    "provider_calls": 0,
+    "new_company_source_acquisition": 0,
+    "production_main_changes": 0,
+    "experiment_execution": 0,
+    "b5_b6_bfinal_rebuild": 0,
+    "p8_c": 0,
+    "performance_forward_holdout_reads": 0
+  }
+}
