@@ -1,0 +1,48 @@
+{
+  "record_version": "P8_XBRL_SEGMENT_PERIOD_SEMANTICS_V3_OWNER_ADOPTION_V1",
+  "recorded_at": "2026-10-04",
+  "branch": "PortfolioAI-Development",
+  "owner_approval_status": "APPROVED",
+  "approved_candidate": {
+    "contract_version": "P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3",
+    "frozen_git_blob_sha": "797b7e91d7770f3377d0061ee338c76e8220391f",
+    "scope": "Normalization rule for documented One/Four XBRL source-period conflict",
+    "conditions": [
+      "Apply only when all frozen V3 evidence conditions pass.",
+      "Preserve original literal XBRL context dates as immutable raw evidence.",
+      "Use explicit reporting-period facts and deterministic same-filing One/Four structure as the semantic bridge.",
+      "Do not infer annuality from prefixes, amount magnitude, expected revenue or reconciliation alone."
+    ]
+  },
+  "approved_v1_unchanged": {
+    "contract_version": "P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1",
+    "frozen_git_blob_sha": "45e990981371dba217d12c430f8ce567acbf25fc"
+  },
+  "existing_policy_authority": {
+    "OD1": "APPROVED",
+    "OD2": "APPROVED_WITH_REVIEW_CONTROL",
+    "OD3": "APPROVED",
+    "OD4": "BLOCKED"
+  },
+  "measured_canary_implication": {
+    "pair_denominator": 32,
+    "v3_period_normalizations": 12,
+    "v3_comparable_segment_revenue": 6,
+    "v3_dominant_business_candidates": 6,
+    "v3_exact_basic_industry_classifications": 1,
+    "methodology_routes": 0,
+    "complete_normalized_inputs": 0,
+    "note": "Approval makes V3 period normalization authoritative where its conditions pass; it does not make the expansion gate pass."
+  },
+  "authorization_boundary": {
+    "candidate_25761_pair_expansion_authorized": false,
+    "experiment_freeze_or_execution_authorized": false,
+    "b5_b6_bfinal_rebuild_authorized": false,
+    "p8_c_authorized": false,
+    "supabase_or_r2_writes_authorized": false,
+    "migrations_authorized": false,
+    "deployment_authorized": false,
+    "scheduler_activation_authorized": false
+  },
+  "exact_owner_approval_statement": "I approve `P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3` frozen at Git blob `797b7e91d7770f3377d0061ee338c76e8220391f` as the PortfolioAI normalization rule for the documented One/Four XBRL source-period conflict, subject to its full evidence conditions and preservation of original context dates. Approved V1 at blob `45e990981371dba217d12c430f8ce567acbf25fc` remains unchanged. This approval does not authorize 25,761-pair expansion, experiment freeze/execution, B5/B6/B-FINAL rebuild, P8-C, database/storage writes, migrations or deployment."
+}
