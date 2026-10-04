@@ -1,0 +1,48 @@
+name: P8 XBRL Segment Period V3 Canary Audit
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - scripts/p8/p8-xbrl-segment-period-v3-audit.py
+      - scripts/p8/test-p8-xbrl-segment-period-v3-audit.py
+      - scripts/p8/p8-apply-xbrl-v3-router.ts
+      - .github/workflows/p8-xbrl-segment-period-v3-audit.yml
+permissions:
+  contents: write
+concurrency:
+  group: p8-xbrl-segment-period-v3-audit
+  cancel-in-progress: true
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: PortfolioAI-Development}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}
+      - run: python -m pip install --no-cache-dir "boto3==1.40.46" "lxml==6.0.2" "psycopg[binary]==3.2.10"
+      - name: V3 semantic tests
+        run: python scripts/p8/test-p8-xbrl-segment-period-v3-audit.py
+      - name: V3 source/accounting audit
+        run: python scripts/p8/p8-xbrl-segment-period-v3-audit.py
+      - name: Apply actual canonical router conditionally
+        run: npx --yes tsx@4.20.6 scripts/p8/p8-apply-xbrl-v3-router.ts
+      - name: Commit V3 audit artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/p8/PortfolioAI_P8_XBRL_SEGMENT_PERIOD_V3_CANARY_AUDIT_2026-10-04.json docs/p8/PortfolioAI_P8_XBRL_MISSING_ACCOUNTING_DISCLOSURE_AUDIT_2026-10-04.json
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): evaluate XBRL segment-period V3 candidate"
+            git pull --rebase origin PortfolioAI-Development
+            git push origin HEAD:PortfolioAI-Development
+          fi
