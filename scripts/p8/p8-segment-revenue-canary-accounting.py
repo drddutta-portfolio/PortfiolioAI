@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import boto3, hashlib, json, os, re
 from collections import defaultdict, Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone, date
 from decimal import Decimal, InvalidOperation, getcontext
 from pathlib import Path
@@ -139,18 +140,23 @@ def source_snapshot(raw):
 def select_annual_source(c,sources,decision):
     candidates=[]
     parse_errors=[]
-    for src in sources:
-        ts=str(src.get("time") or "")
-        if not ts or ts>=decision or not src.get("r2_key") or not str(src["r2_key"]).lower().endswith(".xml"): continue
+    eligible=[src for src in sources if str(src.get("time") or "") and str(src.get("time") or "")<decision and src.get("r2_key") and str(src["r2_key"]).lower().endswith(".xml")]
+    def load(src):
         try:
             raw=read(c,src["r2_key"])
             if sha256(raw)!=src.get("sha256"):
-                parse_errors.append({"r2_key":src["r2_key"],"blocker":"SOURCE_HASH_MISMATCH"}); continue
+                return None,{"r2_key":src["r2_key"],"blocker":"SOURCE_HASH_MISMATCH"}
             root,ctx,fs,bases=source_snapshot(raw)
-            for b in bases:
-                candidates.append({"src":src,"raw":raw,"ctx":ctx,"facts":fs,"base":b})
+            return [{"src":src,"raw":raw,"ctx":ctx,"facts":fs,"base":b} for b in bases],None
         except Exception as e:
-            parse_errors.append({"r2_key":src.get("r2_key"),"blocker":"SOURCE_PARSE_ERROR","detail":str(e)[:300]})
+            return None,{"r2_key":src.get("r2_key"),"blocker":"SOURCE_PARSE_ERROR","detail":str(e)[:300]}
+    if eligible:
+        with ThreadPoolExecutor(max_workers=min(12,len(eligible))) as pool:
+            futs=[pool.submit(load,src) for src in eligible]
+            for fut in as_completed(futs):
+                rows,err=fut.result()
+                if rows: candidates.extend(rows)
+                if err: parse_errors.append(err)
     # One version per annual period: latest eligible dissemination wins. Then latest annual period end.
     best_by_period={}
     for x in candidates:
