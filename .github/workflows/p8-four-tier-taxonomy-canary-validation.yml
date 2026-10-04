@@ -1,0 +1,43 @@
+name: P8 Four-Tier Taxonomy Canary Validation
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - scripts/p8/p8-four-tier-taxonomy-canary-validation.py
+      - scripts/p8/test-p8-four-tier-taxonomy-canary-validation.py
+      - .github/workflows/p8-four-tier-taxonomy-canary-validation.yml
+permissions:
+  contents: write
+concurrency:
+  group: p8-four-tier-taxonomy-canary-validation
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: PortfolioAI-Development}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m pip install --no-cache-dir "boto3==1.40.46" "lxml==6.0.2" "psycopg[binary]==3.2.10"
+      - name: Mapping semantic tests
+        run: python scripts/p8/test-p8-four-tier-taxonomy-canary-validation.py
+      - name: Validate frozen candidate on frozen canary
+        run: python scripts/p8/p8-four-tier-taxonomy-canary-validation.py
+      - name: Commit validation audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin PortfolioAI-Development
+          git add docs/p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_CANARY_VALIDATION_2026-10-04.json
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): validate four-tier taxonomy candidate on frozen canary"
+            git push origin HEAD:PortfolioAI-Development
+          fi
