@@ -1,0 +1,144 @@
+{
+  "contract_version": "P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1",
+  "status": "FROZEN_CANDIDATE_PENDING_OWNER_ADOPTION",
+  "authoritative_adoption": false,
+  "frozen_canary_fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce",
+  "source_authorities": {
+    "methodology_assessment": {
+      "path": "docs/p8/PortfolioAI_P8_SEGMENT_REVENUE_METHODOLOGY_SOURCE_ASSESSMENT_2026-10-04.json",
+      "blob_sha": "8d2ed8845cc58cf9ca222d62f909f086f9c46df6"
+    },
+    "taxonomy": {
+      "path": "docs/p8/PortfolioAI_P8_NSE_FOUR_TIER_TAXONOMY_NOVEMBER_2022.json",
+      "blob_sha": "6efcfa3ad8f6044283798d7b13db079f373be2df",
+      "version": "November 2022"
+    },
+    "canary": {
+      "path": "docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CANARY_MANIFEST_2026-10-04.json",
+      "blob_sha": "177866e6844179c0de15523fb5964aea103f2e12"
+    },
+    "current_nse_methodology": {
+      "url": "https://www.nseindia.com/static/products-services/industry-classification",
+      "updated_on": "21/09/2023",
+      "role": "LATER_OFFICIAL_METHODOLOGY_EVIDENCE_NOT_PROOF_OF_IDENTICAL_NOV_2022_TEXT"
+    }
+  },
+  "owner_policy_status": {
+    "OD1": {
+      "status": "PENDING_OWNER_DECISION",
+      "proposal": "USE_FROZEN_NOV_2022_TAXONOMY_RETROSPECTIVELY_WITH_VERSION_DISCLOSURE"
+    },
+    "OD2": {
+      "status": "PENDING_OWNER_DECISION",
+      "proposal": "VERSIONED_EVIDENCE_BACKED_SYNONYM_CATALOG_WITH_REVIEW_CONTROL"
+    },
+    "OD3": {
+      "status": "PENDING_OWNER_DECISION",
+      "proposal": "STRICT_GT_50_SEGMENT_REVENUE_DOMINANCE_ONLY_WHEN_ACCOUNTING_COMPARABILITY_AND_RECONCILIATION_PASS"
+    },
+    "OD4": {
+      "status": "BLOCKED_BY_OWNER_BOUNDARY",
+      "proposal": "NO_SPECIALISED_ROUTE_FOR_DIVERSIFIED"
+    }
+  },
+  "source_selection": {
+    "decision_eligibility": "OFFICIAL_DISSEMINATION_TIMESTAMP_STRICTLY_BEFORE_DECISION",
+    "prime_source": "LATEST_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL_FINANCIAL_EVIDENCE",
+    "audited_value": "AUDITED",
+    "accounting_scope": "CONSOLIDATED",
+    "annual_duration_days": {
+      "minimum": 330,
+      "maximum": 380
+    },
+    "selection_order": [
+      "LATEST_DISSEMINATION_FOR_SAME_ANNUAL_PERIOD",
+      "LATEST_ANNUAL_PERIOD_END",
+      "SOURCE_HASH_ASC_FOR_DETERMINISTIC_TIEBREAK"
+    ],
+    "standalone_fallback": "NOT_PERMITTED_FOR_OD3_DOMINANCE_IN_V1",
+    "quarterly_or_unaudited_fallback": "NOT_PERMITTED_FOR_OD3_DOMINANCE_IN_V1",
+    "revision_rule": "LATER_ELIGIBLE_FILING_FOR_SAME_PERIOD_SUPERSEDES_EARLIER_ONLY_FROM_ITS_OWN_DISSEMINATION_TIME"
+  },
+  "accounting_contract": {
+    "segment_description_concept": "DescriptionOfReportableSegment",
+    "segment_revenue_concept": "SegmentRevenue",
+    "total_segment_revenue_concept": "SegmentRevenue at selected undimensioned annual base context",
+    "aggregate_intersegment_revenue_concept": "InterSegmentRevenue at selected annual base context",
+    "company_revenue_denominator_preference": [
+      "SegmentRevenueFromOperations",
+      "RevenueFromOperations"
+    ],
+    "denominator_definition": "NET_COMPANY_REVENUE_FROM_OPERATIONS_FOR_IDENTICAL_AUDITED_CONSOLIDATED_ANNUAL_PERIOD",
+    "numerator_definition": "SEGMENT_EXTERNAL_REVENUE_FOR_IDENTICAL_PERIOD",
+    "segment_external_revenue_preference": [
+      "Explicit segment-specific external revenue fact if available",
+      "SegmentRevenue only when aggregate InterSegmentRevenue equals valid zero"
+    ],
+    "nonzero_intersegment_rule": "BLOCK_DOMINANCE_IF_ONLY_GROSS_SEGMENT_REVENUE_IS_AVAILABLE_AND_SEGMENT_SPECIFIC_INTERSEGMENT_ALLOCATION_IS_UNAVAILABLE",
+    "total_reconciliation": "TOTAL_SEGMENT_REVENUE_MINUS_AGGREGATE_INTERSEGMENT_REVENUE_EQUALS_COMPANY_REVENUE_WITHIN_XBRL_ROUNDING_TOLERANCE",
+    "rounding_tolerance": "SUM_OF_HALF_ROUNDING_QUANTA_DERIVED_FROM_XBRL_DECIMALS_FOR_RECONCILED_FACTS",
+    "units": "NUMERATOR_DENOMINATOR_TOTAL_AND_INTERSEGMENT_MUST_SHARE_COMPATIBLE_UNIT_AND_CURRENCY",
+    "scale": "APPLY_XBRL_SCALE_WHEN_PRESENT; NEVER_GUESS_SCALE",
+    "denominator_invalid": [
+      "MISSING",
+      "ZERO",
+      "NEGATIVE",
+      "NON_NUMERIC",
+      "UNIT_CONFLICT",
+      "PERIOD_CONFLICT",
+      "SCOPE_CONFLICT",
+      "UNRECONCILED_TOTAL"
+    ],
+    "segment_negative_revenue": "BLOCK_SEGMENT_DOMINANCE_FOR_NEGATIVE_NUMERATOR",
+    "valid_zero_segment_revenue": "PRESERVE_AS_ZERO_NOT_MISSING",
+    "sum_available_segments_as_denominator": false,
+    "combine_distinct_segments": false,
+    "aggregate_same_business_category": false,
+    "aggregation_note": "No official rule located in the preserved methodology evidence authorizes combining distinct reported segments merely because they might map to one business category."
+  },
+  "dominance_contract": {
+    "threshold_operator": ">",
+    "threshold": 0.5,
+    "exactly_50_percent_passes": false,
+    "requirement": "ONE_REPORTED_BUSINESS_SEGMENT_WITH_COMPARABLE_EXTERNAL_REVENUE_DIVIDED_BY_VALID_COMPANY_REVENUE_GREATER_THAN_0_5",
+    "competing_segments": "If more than one segment appears >50%, accounting evidence is internally inconsistent and classification fails closed.",
+    "no_qualifier_disposition": "NO_DOMINANT_BUSINESS_UNDER_CANDIDATE",
+    "diversified_route": "BLOCKED; do not create or select a specialised diversified methodology"
+  },
+  "semantic_taxonomy_contract": {
+    "exact_basic_industry_match": "ALLOWED_AS_CANDIDATE_TAXONOMY_EVIDENCE",
+    "synonym_mapping": "CONDITIONAL_PENDING_OD2",
+    "broad_or_ambiguous_description": "BLOCK",
+    "company_name_inference": false,
+    "current_classification_backdating": false,
+    "model_knowledge_as_proof": false,
+    "partial_taxonomy_preserved": true
+  },
+  "validity_contract": {
+    "classification_effective_from": "SOURCE_DISSEMINATION_TIMESTAMP",
+    "classification_valid_until": "NEXT_ELIGIBLE_AUDITED_CONSOLIDATED_ANNUAL_CLASSIFICATION_EVIDENCE_OR_ELIGIBLE_MATERIAL_BUSINESS_CHANGE",
+    "annual_review_basis": true,
+    "numeric_staleness_threshold": "NOT_INVENTED_IN_V1",
+    "evidence_age_days": "REPORT_DIAGNOSTICALLY"
+  },
+  "proof_states": [
+    "SOURCE_INELIGIBLE",
+    "ANNUAL_AUDITED_CONSOLIDATED_ELIGIBLE",
+    "SEGMENT_ACCOUNTING_UNRECONCILED",
+    "SEGMENT_EXTERNAL_REVENUE_UNRESOLVED",
+    "NO_DOMINANT_BUSINESS_UNDER_CANDIDATE",
+    "DOMINANT_BUSINESS_CANDIDATE",
+    "TAXONOMY_EXACT_CANDIDATE",
+    "TAXONOMY_CONDITIONAL_PENDING_OD2",
+    "COMPANY_CLASSIFICATION_CANDIDATE",
+    "AUTHORITATIVE_CLASSIFICATION_AFTER_OWNER_ADOPTION",
+    "ROUTE_CANDIDATE",
+    "AUTHORITATIVE_ROUTE_AFTER_OWNER_ADOPTION",
+    "INPUTS_COMPLETE_CANDIDATE",
+    "INPUTS_INCOMPLETE",
+    "NOT_EVALUATED_NO_ROUTE"
+  ],
+  "route_rule": "Use existing canonical router only after complete four-tier company classification; candidate policy outputs remain conditional until owner adoption.",
+  "metric_rule": "Select route-specific canonical required inputs only after exactly one route is supported. Raw XBRL presence is insufficient.",
+  "expansion_gate": "Preserve pre-existing frozen canary gate; no 25,761-pair expansion without adopted authority and authoritative complete classification-to-unique-route proof."
+}
