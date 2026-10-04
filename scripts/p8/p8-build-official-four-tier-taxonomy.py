@@ -121,12 +121,9 @@ def build_hierarchy(nodes):
     for n in nodes.values():
         c=n["code"]
         if n["level"]=="MACRO_ECONOMIC_SECTOR": n["parent_code"]=None
-        elif n["level"]=="SECTOR": n["parent_code"]=c[:4-2]  # INxx
-        elif n["level"]=="INDUSTRY": n["parent_code"]=c[:4]  # INxxxx
-        else: n["parent_code"]=c[:6]  # INxxxxxx
-    # correct macro parent string: first four chars e.g. IN01
-    for n in nodes.values():
-        if n["level"]=="SECTOR": n["parent_code"]=n["code"][:4]
+        elif n["level"]=="SECTOR": n["parent_code"]=c[:4]   # INxx
+        elif n["level"]=="INDUSTRY": n["parent_code"]=c[:6] # INxxxx
+        else: n["parent_code"]=c[:8]                        # INxxxxxx
     return nodes
 
 def validate(nodes):
