@@ -1,0 +1,199 @@
+{
+  "version": "P8_HISTORICAL_TAXONOMY_CROSSWALK_CANDIDATE_V1",
+  "status": "FROZEN_REVIEW_CANDIDATE",
+  "frozen_authorities": {
+    "v1_blob": "45e990981371dba217d12c430f8ce567acbf25fc",
+    "v3_blob": "797b7e91d7770f3377d0061ee338c76e8220391f",
+    "taxonomy": "NSE Indices Industry Classification Structure — November 2022",
+    "router_version": "RESEARCH_PROFILE_ROUTING_V2"
+  },
+  "invariants": {
+    "no_live_taxonomy_changes": true,
+    "no_new_methodologies": true,
+    "no_fallback_routing": true,
+    "require_exactly_one_semantically_supported_application_target": true,
+    "od2_review_required_for_synonyms": true
+  },
+  "entries": [
+    {
+      "source_description": "Edible Oil",
+      "source_mapping_type": "EXACT_OFFICIAL_BASIC_INDUSTRY",
+      "official_taxonomy": {
+        "macro": {
+          "code": "IN04",
+          "name": "Fast Moving Consumer Goods"
+        },
+        "sector": {
+          "code": "IN0401",
+          "name": "Fast Moving Consumer Goods"
+        },
+        "industry": {
+          "code": "IN040101",
+          "name": "Agricultural Food & other Products"
+        },
+        "basic_industry": {
+          "code": "IN040101001",
+          "name": "Edible Oil"
+        }
+      },
+      "od2_review_state": "NOT_REQUIRED_FOR_OFFICIAL_EXACT_MATCH",
+      "application_target": null,
+      "route_state": "UNSUPPORTED_EXISTING_METHODOLOGY",
+      "rationale": [
+        "No active Development application industry exactly represents Edible Oil or Agricultural Food & other Products.",
+        "Router alias FMCG + VEGETABLE_OILS_PRODUCTS would select BRANDED_CONSUMER_FMCG, but the official Edible Oil leaf does not prove branded-consumer business semantics.",
+        "Registry contains AGRI_PROCESSING, but RESEARCH_PROFILE_ROUTING_V2 does not expose AGRI_PROCESSING as a route."
+      ]
+    },
+    {
+      "source_description": "Manufacturing- Steel Pipes",
+      "source_mapping_type": "OD2_SYNONYM_CANDIDATE",
+      "official_taxonomy_candidate": {
+        "macro": {
+          "code": "IN07",
+          "name": "Industrials"
+        },
+        "sector": {
+          "code": "IN0702",
+          "name": "Capital Goods"
+        },
+        "industry": {
+          "code": "IN070205",
+          "name": "Industrial Products"
+        },
+        "basic_industry": {
+          "code": "IN070205015",
+          "name": "Iron & Steel Products"
+        }
+      },
+      "od2_review_state": "REVIEW_REQUIRED",
+      "application_target": null,
+      "route_state": "NO_SEMANTICALLY_COMPATIBLE_APPLICATION_CROSSWALK",
+      "exclusions": [
+        "Do not map to Metals & Mining / Iron & Steel/Interm.Products because the official candidate path is Industrials / Capital Goods / Industrial Products.",
+        "Do not route to CAPITAL_EQUIPMENT_ELECTRICAL merely because the router accepts Capital Goods / Industrial Products; steel pipes are not proven electrical/capital equipment."
+      ]
+    },
+    {
+      "source_description": "IT and Business Service",
+      "source_mapping_type": "AMBIGUOUS_DESCRIPTION",
+      "supported_partial_levels": [
+        {
+          "level": "MACRO_ECONOMIC_SECTOR",
+          "code": "IN08",
+          "name": "Information Technology"
+        },
+        {
+          "level": "SECTOR",
+          "code": "IN0801",
+          "name": "Information Technology"
+        }
+      ],
+      "competing_or_unproven_leaves": [
+        {
+          "code": "IN080101001",
+          "name": "Computers - Software & Consulting"
+        },
+        {
+          "code": "IN080101002",
+          "name": "Software Products"
+        }
+      ],
+      "od2_review_state": "NO_CANDIDATE_UNTIL_SOURCE_MEANING_IS_MORE_SPECIFIC",
+      "application_target": null,
+      "route_state": "AMBIGUOUS_NO_ROUTE"
+    },
+    {
+      "source_description": "EPC/Engineering Services",
+      "source_mapping_type": "AMBIGUOUS_DESCRIPTION",
+      "competing_paths": [
+        {
+          "basic_industry": {
+            "code": "IN070101001",
+            "name": "Civil Construction"
+          },
+          "industry": {
+            "code": "IN070101",
+            "name": "Construction"
+          },
+          "sector": {
+            "code": "IN0701",
+            "name": "Construction"
+          }
+        },
+        {
+          "industry": {
+            "code": "IN090101",
+            "name": "Engineering Services"
+          },
+          "sector": {
+            "code": "IN0901",
+            "name": "Services"
+          }
+        }
+      ],
+      "od2_review_state": "NO_UNIQUE_BASIC_INDUSTRY",
+      "application_target": null,
+      "route_state": "AMBIGUOUS_NO_ROUTE",
+      "exclusion": "Do not select PROJECT_EPC merely because its router label resembles the source phrase."
+    },
+    {
+      "source_description": "Textile",
+      "source_mapping_type": "PARTIAL_HIERARCHY_ONLY",
+      "supported_partial_levels": [
+        {
+          "level": "SECTOR",
+          "code": "IN0203",
+          "name": "Textiles"
+        },
+        {
+          "level": "INDUSTRY",
+          "code": "IN020301",
+          "name": "Textiles & Apparels"
+        }
+      ],
+      "competing_leaves": [
+        {
+          "code": "IN020301001",
+          "name": "Garments & Apparels"
+        },
+        {
+          "code": "IN020301002",
+          "name": "Other Textile Products"
+        },
+        {
+          "code": "IN020301003",
+          "name": "Trading - Textile Products"
+        }
+      ],
+      "od2_review_state": "NO_UNIQUE_BASIC_INDUSTRY",
+      "application_target": null,
+      "route_state": "INCOMPLETE_HIERARCHY_NO_ROUTE"
+    },
+    {
+      "source_description": "Automotive Segment",
+      "source_mapping_type": "PARTIAL_HIERARCHY_ONLY",
+      "supported_partial_levels": [
+        {
+          "level": "SECTOR",
+          "code": "IN0201",
+          "name": "Automobile and Auto Components"
+        }
+      ],
+      "competing_industries": [
+        {
+          "code": "IN020101",
+          "name": "Automobiles"
+        },
+        {
+          "code": "IN020102",
+          "name": "Auto Components"
+        }
+      ],
+      "od2_review_state": "NO_UNIQUE_INDUSTRY_OR_BASIC_INDUSTRY",
+      "application_target": null,
+      "route_state": "AMBIGUOUS_NO_ROUTE"
+    }
+  ],
+  "adoption_rule": "Only entries with OD2 review approval and exactly one semantically compatible existing application target may become authoritative crosswalks. This V1 candidate does not propose any application-target adoption."
+}
