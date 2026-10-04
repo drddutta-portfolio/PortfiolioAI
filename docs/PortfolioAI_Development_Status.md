@@ -1,3 +1,84 @@
+## P8 Historical Four-Tier Taxonomy Mapping Authority + Canary Validation — 4 October 2026
+
+**Current-state precedence:** This entry supersedes the prior taxonomy-normalization next-step statement only to record completion of the separately authorized four-tier mapping-authority task. Earlier P8 closures remain historical authority for their scopes.
+
+**Implementation / tests = COMPLETE / PASS.**  
+**Semantic evidence = CONFIRMED.**  
+**Mapping authority = CANDIDATE / PENDING OWNER ADOPTION.**  
+**Experiment feasibility = BLOCKED.**  
+**Exact disposition: `HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_PENDING_OWNER_DECISION`.**
+
+Authoritative task artifacts:
+
+- [Authority inventory](p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_AUTHORITY_INVENTORY_2026-10-04.md)
+- [Mapping specification](p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_SPEC_2026-10-04.md)
+- [Machine-readable mapping candidate](p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_CANDIDATE_V1.json)
+- [Owner decision package](p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_OWNER_DECISIONS_2026-10-04.md)
+- [Frozen-canary validation](p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_CANARY_VALIDATION_2026-10-04.json)
+- [Closure audit](p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_CLOSURE_AUDIT_2026-10-04.json)
+- [Closure memo](p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_CLOSURE_2026-10-04.md)
+
+### Authority inventory
+
+The repository already encodes the intended NSE official four-field shape (`macroEconomicSector → sector → industry → basicIndustry`) in the K1 NSE classification adapter. However, the active Development taxonomy materialization remains only two levels:
+
+- active taxonomy rows: **2**, both `SECTOR, INDUSTRY`;
+- sectors: **8**;
+- industries: **9**;
+- verified source mappings: **9**.
+
+No already-preserved K1 historical four-level snapshot was found in the repository or current R2 inventory. Gate-K remains an analytical methodology-routing taxonomy, not a complete economic hierarchy.
+
+### Frozen 32-case canary validation
+
+The exact frozen canary was reused unchanged.
+
+| Measure | Result |
+|---|---:|
+| Semantic evidence retained | **32 / 32** |
+| Authoritative partial taxonomy pairs | **5** |
+| Authoritative partial unique identities | **4** |
+| Authoritative Sector + Industry pairs | **2** |
+| Conditional / pending-owner pairs | **4** |
+| Unsupported or ambiguous pairs | **23** |
+| Complete four-tier authoritative pairs | **0** |
+| Authoritative methodology-route pairs | **0** |
+| Route candidates from partial proof | **2 pairs / 2 identities** |
+| Complete normalized-input pairs | **0** |
+
+The two partial route candidates resolve to existing **PHARMA_V1** from exact `Pharmaceuticals` evidence plus the existing canonical two-level parent relationship. They remain `ROUTE_CANDIDATE_FROM_PARTIAL`, not authoritative routes, because Macro-Economic Sector and Basic Industry are absent.
+
+Canary validation fingerprint: `661f2acf48eb8a626d9fbaa658f9ab6f9ab5701533884da14c96819918907461`.
+
+### Owner-controlled decisions
+
+The candidate does not silently adopt four policies:
+
+1. OD1 — later frozen taxonomy vocabulary versus decision-date-contemporaneous taxonomy versions;
+2. OD2 — exact labels only versus an owner-reviewed versioned semantic synonym catalog;
+3. OD3 — no dominance inference versus explicit approval of the previously proposed >50% eligible segment-revenue rule;
+4. OD4 — fail-closed diversified handling versus later design of a separate diversified analytical treatment.
+
+The previous >50% rule is explicitly **not owner-frozen**.
+
+### Expansion / experiment boundary
+
+The existing expansion gate is preserved. It fails because the mapping candidate is not adopted, complete four-tier classification remains 0, and authoritative routes from complete classification remain 0.
+
+Therefore:
+
+- full semantic recovery over 25,761 provisional candidates = **NOT MEASURED**;
+- no full census was executed;
+- no route-specific normalized metric evaluation was executed;
+- no narrower experiment was frozen or executed;
+- `P8-C` remains **NOT AUTHORIZED**.
+
+The full historical denominator remains **121,956 B2-eligible pairs / 4,524 identities / 32 dates**, with **25,761 provisional candidate pairs / 877 identities**.
+
+This closure is **not primarily a missing-source-evidence failure**. The material blockers are incomplete four-tier taxonomy materialization, unapproved mapping policy, and ambiguous/multi-business semantics in a subset. Methodology is downstream: two PHARMA route candidates already exist, but cannot become authoritative before full classification proof.
+
+Safety boundary: provider calls 0; new source acquisition 0; Supabase/R2 writes 0; migrations 0; deployment 0; Production/main changes 0; B5/B6/B-FINAL rebuild 0; experiment execution 0; P8-C 0; performance/forward/holdout reads 0.
+
 ## P8 Historical Taxonomy Evidence-Normalization Build — 4 October 2026
 
 **Current-state precedence:** This entry supersedes the previous contract-resolution next-step statement by recording completion of the separately authorized bounded semantic-normalization build. Earlier P8-B, narrower-feasibility and contract-resolution records remain authoritative for their historical scopes.
