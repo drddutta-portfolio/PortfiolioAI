@@ -1,0 +1,56 @@
+{
+  "version": "P8_HISTORICAL_BUSINESS_APPLICABILITY_CAPABILITY_DECISION_V1",
+  "date": "2026-10-05",
+  "exact_disposition": "HISTORICAL_BUSINESS_APPLICABILITY_MIXED_DECISION_STEEL_EXISTING_METHOD_SUPPORTED_EDIBLE_OWNER_POLICY_REQUIRED",
+  "frozen_authorities": {
+    "v1": "45e990981371dba217d12c430f8ce567acbf25fc",
+    "v3": "797b7e91d7770f3377d0061ee338c76e8220391f",
+    "crosswalk": "fd5a683ab595d98c71254ea8c825d5ae82338afb"
+  },
+  "cases": {
+    "steel_pipes": {
+      "outcome": "A_EXISTING_METHODOLOGY_APPLICABILITY_PROVEN",
+      "historical_classification": "IN070205015 Iron & Steel Products",
+      "methodology": "STEEL_FERROUS",
+      "selector_match": "IRON_STEEL_PRODUCTS",
+      "integration_gap": true,
+      "scoring_adapter_gap": true,
+      "input_completeness": "NOT_PROVEN",
+      "new_methodology_required": false
+    },
+    "edible_oil": {
+      "outcome": "D_OWNER_SELECTION_DECISION_AND_C_AGRI_CAPABILITY_GAP",
+      "historical_classification": "IN040101001 Edible Oil",
+      "branded_consumer": {
+        "existing_methodology": true,
+        "contract_selector": "VEGETABLE_OILS_PRODUCTS",
+        "selector_mapping_state": "OWNER_DECISION_REQUIRED",
+        "input_completeness": "NOT_PROVEN"
+      },
+      "agri_processing": {
+        "registry_present": true,
+        "applicability_contract": "AMBIGUOUS",
+        "router": false,
+        "sector_engine": false,
+        "dedicated_canonical_scoring_implementation": false,
+        "capability_extension_required": true
+      }
+    }
+  },
+  "canary": {
+    "pair_denominator": 32,
+    "unchanged": true
+  },
+  "population_25761": "NOT_AUTHORIZED_NOT_MEASURED",
+  "next_authorization": "P8_STEEL_FERROUS_HISTORICAL_ROUTE_INTEGRATION_FROZEN_CANARY_INPUT_READINESS_VALIDATION",
+  "edible_owner_decision": "SEPARATE",
+  "safety": {
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "migrations": 0,
+    "deployments": 0,
+    "provider_calls": 0,
+    "new_sources": 0,
+    "p8_c": 0
+  }
+}
