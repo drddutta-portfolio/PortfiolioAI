@@ -1,3 +1,89 @@
+## P8 Historical Taxonomy Crosswalk + Existing Methodology Route Validation — 4 October 2026
+
+**Implementation / tests = COMPLETE / PASS.**  
+**Exact disposition: `HISTORICAL_CROSSWALK_ROUTE_VALIDATION_BLOCKED_NO_SEMANTICALLY_SUPPORTED_EXISTING_ROUTE`.**
+
+Frozen candidate:
+
+`P8_HISTORICAL_TAXONOMY_CROSSWALK_CANDIDATE_V1`
+
+Git blob:
+
+`fd5a683ab595d98c71254ea8c825d5ae82338afb`
+
+### Frozen-canary result
+
+| Measure | Result |
+|---|---:|
+| Authoritative complete classifications | **1** |
+| Conditional OD2 complete classifications | **1** |
+| Authoritative unique routes | **0** |
+| Conditional unique routes | **0** |
+| Complete normalized inputs | **0** |
+
+The authoritative complete classification is **Edible Oil — IN040101001**.
+
+The conditional OD2 candidate is **Manufacturing- Steel Pipes → Iron & Steel Products — IN070205015**, pending review.
+
+### Edible Oil route assessment
+
+Official hierarchy:
+
+`Fast Moving Consumer Goods → Fast Moving Consumer Goods → Agricultural Food & other Products → Edible Oil`
+
+No active Development application taxonomy target represents this hierarchy.
+
+The canonical router can theoretically route `FMCG + Vegetable Oils Products` to `BRANDED_CONSUMER_FMCG`, but this is rejected as a crosswalk because:
+
+- the active application taxonomy has no such target;
+- Edible Oil does not itself prove branded-consumer methodology semantics;
+- the BRANDED_CONSUMER_FMCG profile requires branded-consumer evidence including brand/distribution/category durability.
+
+The registry contains `AGRI_PROCESSING`, but `RESEARCH_PROFILE_ROUTING_V2` does not expose that profile.
+
+Disposition:
+
+**`UNSUPPORTED_EXISTING_METHODOLOGY`**
+
+### Other dominant descriptions
+
+- `Manufacturing- Steel Pipes`: OD2 reviewable synonym to `Iron & Steel Products`; no semantically compatible application crosswalk or route.
+- `IT and Business Service`: ambiguous below IT macro/sector.
+- `EPC/Engineering Services`: ambiguous across Construction and Engineering Services.
+- `Textile`: partial Textiles/Textiles & Apparels hierarchy only.
+- `Automotive Segment`: Automobile versus Auto Components unresolved.
+
+No company name, current classification or general model knowledge was used.
+
+### Accounting boundary
+
+The six V3-normalized cases with non-zero aggregate intersegment revenue remain blocked under approved V1.
+
+No accounting rule was weakened.
+
+### Verification
+
+Workflow `37224872015`: **SUCCESS**  
+Focused tests: **5 / 5 PASS**
+
+Crosswalk fingerprint:
+
+`4cec9b0468f27d0724e7db04487dba2af75794d9ffbcd19d304b855f2ddf6eb7`
+
+Final router-validation fingerprint:
+
+`c6c15c0e9bce15a20242e6ad8684bfd97f38ce584652515809a13bcd4e98cd19`
+
+### Boundary
+
+The 25,761-pair surface remains **NOT AUTHORIZED / NOT MEASURED**.
+
+Experiment freeze/execution, B5/B6/B-FINAL rebuild and P8-C remain unauthorized.
+
+OD2 review package:
+
+`docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CROSSWALK_OD2_REVIEW_PACKAGE_2026-10-04.md`
+
 ## P8 XBRL Segment-Period Semantics V3 Owner Adoption — 4 October 2026
 
 **Current-state precedence:** This entry supersedes earlier statements that V3 is pending owner approval.
