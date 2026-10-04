@@ -2174,3 +2174,35 @@ The only OD2 reviewable new synonym entry is `Manufacturing- Steel Pipes → Iro
 IT and Business Service, EPC/Engineering Services, Textile and Automotive Segment remain ambiguous or incomplete and are not presented as convenient crosswalks.
 
 The broad 25,761-pair surface remains unauthorized and unmeasured.
+
+
+---
+
+## 33. OD2 adoption — Manufacturing- Steel Pipes — 4 October 2026
+
+The owner has approved the evidence-backed OD2 synonym:
+
+`Manufacturing- Steel Pipes → Iron & Steel Products (IN070205015)`
+
+under the official hierarchy:
+
+`Industrials → Capital Goods → Industrial Products`
+
+Frozen authority:
+
+`P8_HISTORICAL_TAXONOMY_CROSSWALK_CANDIDATE_V1`
+
+Git blob:
+
+`fd5a683ab595d98c71254ea8c825d5ae82338afb`
+
+This increases authoritative complete historical classifications on the frozen canary from **1 to 2**:
+
+- Edible Oil;
+- Iron & Steel Products via the approved Steel Pipes synonym.
+
+It does not create an application-taxonomy crosswalk or methodology route.
+
+Authoritative routes remain **0** and complete normalized inputs remain **0**.
+
+No 25,761-pair expansion, experiment execution, B5/B6/B-FINAL rebuild or P8-C is authorized.
