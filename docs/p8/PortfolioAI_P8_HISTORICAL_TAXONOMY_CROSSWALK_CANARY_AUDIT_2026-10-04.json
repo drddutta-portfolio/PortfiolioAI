@@ -1,0 +1,622 @@
+{
+  "active_application_taxonomy": [
+    {
+      "industry_code": "BANKING_PRIVATE_SECTOR_BANK",
+      "industry_name": "Private Sector Bank",
+      "sector_code": "BANKING",
+      "sector_name": "Banking"
+    },
+    {
+      "industry_code": "CEMENT_AND_CONSTRUCTION_CEMENT_AND_CEMENT_PRODUCTS",
+      "industry_name": "Cement & Cement Products",
+      "sector_code": "CEMENT_AND_CONSTRUCTION",
+      "sector_name": "Cement and Construction"
+    },
+    {
+      "industry_code": "HEALTHCARE_HEALTHCARE_FACILITIES",
+      "industry_name": "Healthcare Facilities",
+      "sector_code": "HEALTHCARE",
+      "sector_name": "Healthcare"
+    },
+    {
+      "industry_code": "METALS_AND_MINING_ALUMINIUM_AND_ALUMINIUM_PRODUCTS",
+      "industry_name": "Aluminium and Aluminium Products",
+      "sector_code": "METALS_AND_MINING",
+      "sector_name": "Metals & Mining"
+    },
+    {
+      "industry_code": "METALS_AND_MINING_IRON_AND_STEEL_INTERM_PRODUCTS",
+      "industry_name": "Iron & Steel/Interm.Products",
+      "sector_code": "METALS_AND_MINING",
+      "sector_name": "Metals & Mining"
+    },
+    {
+      "industry_code": "OIL_AND_GAS_REFINERIES_PETRO_PRODUCTS",
+      "industry_name": "Refineries/Petro-Products",
+      "sector_code": "OIL_AND_GAS",
+      "sector_name": "Oil & Gas"
+    },
+    {
+      "industry_code": "PHARMA_PHARMACEUTICALS",
+      "industry_name": "Pharmaceuticals",
+      "sector_code": "PHARMA",
+      "sector_name": "Pharma"
+    },
+    {
+      "industry_code": "REALTY_REALTY",
+      "industry_name": "Realty",
+      "sector_code": "REALTY",
+      "sector_name": "Realty"
+    },
+    {
+      "industry_code": "STAGE5_ETF_INDUSTRY",
+      "industry_name": "Stage 5 Exchange Traded Fund",
+      "sector_code": "STAGE5_ETF",
+      "sector_name": "Stage 5 ETF"
+    }
+  ],
+  "canary_fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce",
+  "candidate_blob": "fd5a683ab595d98c71254ea8c825d5ae82338afb",
+  "counts": {
+    "AUTHORITATIVE_COMPLETE_CLASSIFICATION": 1,
+    "AUTHORITATIVE_UNIQUE_ROUTE": 0,
+    "COMPLETE_NORMALIZED_INPUT": 0,
+    "CONDITIONAL_OD2_COMPLETE_CLASSIFICATION": 1,
+    "CONDITIONAL_UNIQUE_ROUTE": 0
+  },
+  "fingerprint_sha256": "4cec9b0468f27d0724e7db04487dba2af75794d9ffbcd19d304b855f2ddf6eb7",
+  "pair_denominator": 32,
+  "repeat_fingerprint_sha256": "4cec9b0468f27d0724e7db04487dba2af75794d9ffbcd19d304b855f2ddf6eb7",
+  "results": [
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2024-08-30T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "08aee4b7-fef7-5caa-b4af-a0830f66d5fa",
+      "historical_isin": "INE645L01011",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "OD2_REVIEW_REQUIRED",
+        "NO_SEMANTICALLY_COMPATIBLE_APPLICATION_CROSSWALK"
+      ],
+      "conditional_od2_classification": true,
+      "conditional_unique_route": false,
+      "decision_at": "2024-11-29T10:00:00+00:00",
+      "dominant_description": "Manufacturing- Steel Pipes",
+      "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+      "historical_isin": "INE230R01035",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-07-31T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "1e88380b-a173-5055-b53d-3554e487db96",
+      "historical_isin": "INE377N01017",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-01-31T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "22cc4c9f-d5d0-53ce-93af-60b3ea0f5357",
+      "historical_isin": "INE798K01010",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "23c42d9d-fc5c-58a6-9d65-0d3c12da2fa6",
+      "historical_isin": "INE374B01019",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "AMBIGUOUS_NO_ROUTE"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2024-12-31T10:00:00+00:00",
+      "dominant_description": "IT and Business Service",
+      "historical_identity_id": "26f17fef-d920-566a-ae9f-85df009ec151",
+      "historical_isin": "INE860A01027",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-07-31T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "2b347f1e-4a76-5825-89c1-642e386ea715",
+      "historical_isin": "INE0JO301016",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "AMBIGUOUS_NO_ROUTE"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "dominant_description": "EPC/Engineering Services",
+      "historical_identity_id": "32947c3d-1d36-55b3-b687-83556470f25f",
+      "historical_isin": "INE285K01026",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "38749e5e-3e7c-5516-b5b9-17f54160025d",
+      "historical_isin": "INE772T01024",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-09-30T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "56b13c5c-ca21-570e-b387-634e320718c8",
+      "historical_isin": "INE013P01021",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "59e788f2-3047-536c-8f4b-d92f34d69bf4",
+      "historical_isin": "INE979A01025",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "INCOMPLETE_HIERARCHY_NO_ROUTE"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2024-09-30T10:00:00+00:00",
+      "dominant_description": "Textile",
+      "historical_identity_id": "5b4f2608-90cb-5aa8-bd6a-d007f42de9f8",
+      "historical_isin": "INE08KP01019",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "5ffdcce2-20c4-5a4f-baee-0a87475cf1e5",
+      "historical_isin": "INE184O01015",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-06-30T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "6936e380-029f-5495-a265-d8db8672aa47",
+      "historical_isin": "INE118A01012",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-11-28T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "6fef8980-34eb-5c31-ab04-9d41dddfe1e6",
+      "historical_isin": "INE093A01041",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2026-07-31T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "6fef8980-34eb-5c31-ab04-9d41dddfe1e6",
+      "historical_isin": "INE093A01041",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "72497e23-689a-576c-98ec-70b9acb59914",
+      "historical_isin": "INE661I01014",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "76b41969-131c-591c-91a7-e4cb65884e90",
+      "historical_isin": "INE999K01014",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "91cfc33b-5c5a-570c-9811-eb4851e6144b",
+      "historical_isin": "INE200A01026",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "9eac015d-2fe9-5eca-bf57-42011e16fa5e",
+      "historical_isin": "INE280A01028",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "acaacb32-02bb-595c-8d70-435e8f3f4096",
+      "historical_isin": "INE625B01014",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-01-31T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "af88fe19-5864-536f-a207-15aded7d3c83",
+      "historical_isin": "INE326A01037",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": true,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "UNSUPPORTED_EXISTING_METHODOLOGY"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2024-06-28T10:00:00+00:00",
+      "dominant_description": "Edible Oil",
+      "historical_identity_id": "b33c4aee-1095-5010-907f-7fbd7b6efb89",
+      "historical_isin": "INE699H01024",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "bca563eb-e943-5272-960b-f6833a692614",
+      "historical_isin": "INE470A01017",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-03-28T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "c644b736-db2a-53bf-9155-cb211ee8e455",
+      "historical_isin": "INE987B01026",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-02-28T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "c84e95b9-f25c-5489-8bd9-d149f0339a3b",
+      "historical_isin": "INE0OV601013",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-06-30T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "d226db5d-0fea-55e9-a934-bc2e9aac2d67",
+      "historical_isin": "INE0HR601026",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2024-11-29T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "e5754730-b48d-5c21-8198-0316e48c1f03",
+      "historical_isin": "INE0Q3J01015",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "AMBIGUOUS_NO_ROUTE"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "dominant_description": "Automotive Segment",
+      "historical_identity_id": "ee5599cc-381f-5091-8dbd-9585d70834f4",
+      "historical_isin": "INE737H01014",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2024-09-30T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "f079165e-be44-517c-9bfc-0bdefdb29b0b",
+      "historical_isin": "INE918I01026",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2024-07-31T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "f7261c7f-30b9-5cac-a3d6-2dfe7c417508",
+      "historical_isin": "INE127B01011",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    },
+    {
+      "application_crosswalk": null,
+      "authoritative_complete_classification": false,
+      "authoritative_unique_route": false,
+      "blockers": [
+        "NO_DOMINANT_BUSINESS_OR_ACCOUNTING_BLOCKED"
+      ],
+      "conditional_od2_classification": false,
+      "conditional_unique_route": false,
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "dominant_description": null,
+      "historical_identity_id": "fe5e9f41-8b55-54af-b0e3-874544a10d27",
+      "historical_isin": "INE932A01024",
+      "normalized_input_state": "NOT_EVALUATED_NO_SUPPORTED_ROUTE",
+      "router_result": null
+    }
+  ],
+  "version": "P8_HISTORICAL_TAXONOMY_CROSSWALK_CANARY_AUDIT_V1",
+  "routing_authority_validation": {
+    "router_version": "RESEARCH_PROFILE_ROUTING_V2",
+    "theoretical_edible_oil_router_alias": {
+      "version": "RESEARCH_PROFILE_ROUTING_V2",
+      "applicationSector": "FMCG",
+      "applicationIndustry": "Vegetable Oils Products",
+      "state": "ROUTED",
+      "profileCode": "BRANDED_CONSUMER_FMCG",
+      "basis": "SECTOR_AND_INDUSTRY",
+      "reasonCode": "BRANDED_CONSUMER_FMCG"
+    },
+    "theoretical_alias_accepted_as_crosswalk": false,
+    "rejection_reason": "No active application taxonomy target exists and Edible Oil alone does not prove branded-consumer methodology semantics.",
+    "branded_consumer_profile_exists": true,
+    "branded_consumer_required_signals": [
+      "GROSS_AND_OPERATING_MARGIN_HISTORY",
+      "REVENUE_AND_VOLUME_PRICE_MIX_GROWTH",
+      "ROCE_OR_ROIC",
+      "CFO_OR_FCF_CONVERSION_AND_WORKING_CAPITAL",
+      "NET_CASH_OR_LEVERAGE",
+      "BRAND_DISTRIBUTION_CATEGORY_DURABILITY",
+      "VALUATION",
+      "MOMENTUM_12M_RELATIVE",
+      "CATEGORY_AND_MARKET_RISK",
+      "OWNERSHIP_GOVERNANCE"
+    ],
+    "agri_processing_profile_exists": true,
+    "agri_processing_exposed_by_router_source": false
+  },
+  "input_completeness": {
+    "authoritative_routes": 0,
+    "conditional_routes": 0,
+    "complete_normalized_input_pairs": 0,
+    "reason": "No semantically supported application crosswalk reaches the canonical router."
+  },
+  "final_fingerprint_sha256": "c6c15c0e9bce15a20242e6ad8684bfd97f38ce584652515809a13bcd4e98cd19"
+}
