@@ -1,0 +1,37 @@
+name: P8 Build Official Four-Tier Taxonomy Reference
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - scripts/p8/p8-build-official-four-tier-taxonomy.py
+      - scripts/p8/test-p8-build-official-four-tier-taxonomy.py
+      - .github/workflows/p8-build-official-four-tier-taxonomy.yml
+permissions:
+  contents: write
+concurrency:
+  group: p8-build-official-four-tier-taxonomy
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: PortfolioAI-Development}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m pip install --no-cache-dir "requests==2.32.5" "pdfplumber==0.11.7"
+      - name: Parser tests
+        run: python scripts/p8/test-p8-build-official-four-tier-taxonomy.py
+      - name: Fetch and build official taxonomy reference
+        run: python scripts/p8/p8-build-official-four-tier-taxonomy.py
+      - name: Commit reference package
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin PortfolioAI-Development
+          git add docs/p8/PortfolioAI_P8_NSE_FOUR_TIER_TAXONOMY_NOVEMBER_2022.json docs/p8/PortfolioAI_P8_NSE_FOUR_TIER_TAXONOMY_NOVEMBER_2022_ADOPTION_MANIFEST.json
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): build official NSE four-tier taxonomy reference"
+            git push origin HEAD:PortfolioAI-Development
+          fi
