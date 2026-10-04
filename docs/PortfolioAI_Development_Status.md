@@ -1,3 +1,117 @@
+## P8 Complete Four-Tier Taxonomy Authority Build + Frozen Canary Revalidation — 4 October 2026
+
+**Current-state precedence:** This entry supersedes the prior four-tier mapping next-step statement only for the separately authorized complete-taxonomy authority task. Earlier P8 closures remain authoritative for their historical scopes.
+
+**Implementation / tests = COMPLETE / PASS.**  
+**Official four-tier vocabulary = COMPLETE AS DEVELOPMENT REFERENCE CANDIDATE.**  
+**PortfolioAI canonical adoption = PENDING OWNER APPROVAL.**  
+**Historical company complete classification = BLOCKED.**  
+**Exact disposition: `COMPLETE_FOUR_TIER_TAXONOMY_BUILT_PENDING_OWNER_POLICY_ADOPTION`.**
+
+### Official taxonomy authority
+
+A read-only official NSE Indices reference fetch produced a complete candidate from:
+
+- authority: **NSE Indices Limited**
+- document: **Industry Classification Structure — November 2022**
+- official PDF SHA-256: `ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1`
+- generated taxonomy payload SHA-256: `e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96`
+
+Validated declared hierarchy:
+
+| Level | Count |
+|---|---:|
+| Macro-Economic Sector | **12** |
+| Sector | **22** |
+| Industry | **59** |
+| Basic Industry | **197** |
+
+Validation result: **0 errors / 0 orphan nodes / 0 empty names**.
+
+This resolves the previous missing-vocabulary dependency at the reference-package level.
+
+### Adoption status
+
+The package remains:
+
+`REFERENCE_CANDIDATE_PENDING_PORTFOLIOAI_OWNER_ADOPTION`
+
+No repository evidence of explicit OD1–OD4 approval was found.
+
+Owner-policy status remains:
+
+- OD1 retrospective frozen taxonomy vocabulary: **PENDING OWNER DECISION**
+- OD2 versioned evidence-backed synonym catalog: **PENDING OWNER DECISION**
+- OD3 dominant-business inference: **PENDING OWNER DECISION**
+- OD4 diversified specialised routing: **PENDING OWNER DECISION**
+
+The execution request's proposed choices were not interpreted as approval.
+
+### Frozen 32-case canary revalidation
+
+The original frozen membership and fingerprint were reused unchanged.
+
+| Measure | Result |
+|---|---:|
+| Semantic evidence retained | **32 / 32** |
+| Pairs with exact official Basic-Industry evidence | **6** |
+| Multi-segment exact-leaf cases blocked | **6** |
+| Complete company-level taxonomy candidates | **0** |
+| Authoritative complete classifications | **0** |
+| Unique route candidates from complete classification | **0** |
+| Authoritative methodology routes | **0** |
+| Complete normalized-input pairs | **0** |
+| Negative-control promotions | **0** |
+
+Exact official leaves now evidenced inside the canary include:
+
+- Pharmaceuticals — `IN060101001`
+- Commercial Vehicles — `IN070202002`
+- Education — `IN020602001`
+- Sugar — `IN040101002`
+- Edible Oil — `IN040101001`
+
+All six exact-leaf evidence cases are multi-segment company contexts. Therefore exact leaf evidence cannot be promoted to company classification without an approved OD3 selection/dominance policy.
+
+Canary revalidation fingerprint:
+
+`04a89f697c95c0a403e4ab2c16fc6a1367b902169f6cc969732e1cc291c4616a`
+
+### Expansion gate
+
+The existing expansion gate remains unchanged.
+
+- structurally complete taxonomy package: **PASS**
+- mapping authority owner-adopted: **FAIL**
+- OD1–OD4 approved: **FAIL**
+- >=1 complete authoritative company classification: **FAIL**
+- >=1 unique route from complete classification: **FAIL**
+- repeat fingerprint: **PASS**
+- negative controls remain unpromoted: **PASS**
+
+Therefore:
+
+- 25,761-pair broad processing = **NOT EXECUTED**
+- full candidate semantic recovery = **NOT MEASURED**
+- route-specific normalized-input completeness = **NOT EVALUATED**
+- no experiment was frozen/executed
+- P8-C remains **NOT AUTHORIZED**
+
+### Owner adoption package
+
+The review package proposes, but does not adopt:
+
+1. OD1 — approve frozen later NSE taxonomy vocabulary for retrospective organization of strictly point-in-time company evidence with explicit taxonomy-version disclosure;
+2. OD2 — approve a versioned evidence-backed synonym catalog while keeping broad/ambiguous phrases blocked;
+3. OD3 — **do not approve dominant-business inference yet**; require a separate accounting/segment contract defining scope, period, comparability, eliminations and denominator semantics;
+4. OD4 — keep diversified specialised routing blocked.
+
+The precise remaining blocker is now:
+
+**`OWNER_POLICY_ADOPTION_AND_MULTI_SEGMENT_CLASSIFICATION_POLICY`**
+
+Safety boundary: no Supabase/R2 writes, migrations, deployments, Production/main changes, company-source acquisition, experiment execution, B5/B6/B-FINAL rebuild, P8-C, returns, performance, forward outcomes or holdout inspection.
+
 ## P8 Historical Four-Tier Taxonomy Mapping Authority + Canary Validation — 4 October 2026
 
 **Current-state precedence:** This entry supersedes the prior taxonomy-normalization next-step statement only to record completion of the separately authorized four-tier mapping-authority task. Earlier P8 closures remain historical authority for their scopes.
