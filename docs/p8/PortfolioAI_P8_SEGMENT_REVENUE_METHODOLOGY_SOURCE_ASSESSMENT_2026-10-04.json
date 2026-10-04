@@ -1,0 +1,37 @@
+{
+  "current_methodology_page": {
+    "authority": "NSE Indices Limited",
+    "content_length": 351988,
+    "content_sha256": "7bce3d99185bfa3fed6b1bd183fd22bceef6a08b6ede1a15597ddc43d07fb920",
+    "required_rule_presence": {
+      "annual_review": true,
+      "audited_consolidated_prime_source": true,
+      "diversified": true,
+      "four_tier": true,
+      "multi_business_gt50": true,
+      "single_business": true
+    },
+    "snippets": {
+      "diversified": "ere no single business segment contributes more than 50% of companies' total revenue and two or more segments each contributes at least 20% of total revenue, such company would be classified as \u2018Diversified\u2019 In case of a company engaged into multiple business segment, where no single business segment contributes more than 50% of companies' total revenue and each business segments contribute less than 20% of total revenue, such company would also be classified as \u2018Diversified\u2019 Source Audited consolidated annual financials report shall be the prime source information that is considered for class",
+      "dominance": "y would be classified according to that business. In case company has more than single business, classification is based on the business segment (Segment Revenue) that contributes more than 50% of the total revenue. In case of a company engaged into multiple business segment, where no single business segment contributes more than 50% of companies' total revenue and two or more segments each contributes at least 20% of total revenue, such company would be classified as \u2018Diversified\u2019 In case of a company engaged into multiple business segment, where no single business segment contributes more th",
+      "prime_source": "butes more than 50% of companies' total revenue and each business segments contribute less than 20% of total revenue, such company would also be classified as \u2018Diversified\u2019 Source Audited consolidated annual financials report shall be the prime source information that is considered for classification of a company. Where revenue information is unavailable or insufficient, or where a company is newly listed or it has undergone a change in its line of business, the company will be classified based on the definition closely coincides with the description of company\u2019s business as stated in company\u2019",
+      "revenue_basis": "ustry Classification Structure (.pdf) Methodology NSE Indices Ltd. classifies each company to basic industry whose definition most closely describes the nature of its business. As revenues are more stable than the profits, they are considered as basis to classifying a company into particular category of industry classification structure. Revenues provide more accurate description of company\u2019s core business activities. In case a company has only 1 line of business, company would be classified according to that business. In case company has more than single business, classification is based on t"
+    },
+    "updated_on": "21/09/2023",
+    "url": "https://www.nseindia.com/static/products-services/industry-classification"
+  },
+  "frozen_taxonomy_reference": {
+    "historical_definition_support": [],
+    "official_source_sha256": "ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1",
+    "taxonomy_payload_sha256": "e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96",
+    "version_label": "November 2022"
+  },
+  "retrieved_at": "2026-10-04T16:22:14.103257+00:00",
+  "version": "P8_SEGMENT_REVENUE_METHODOLOGY_SOURCE_ASSESSMENT_V1",
+  "version_assessment": {
+    "current_methodology_postdates_taxonomy_reference": true,
+    "exact_november_2022_methodology_text_preserved": false,
+    "portfolioai_policy_effect": "Treat the >50% rule as an evidence-backed candidate, not adopted historical replay policy, until explicit owner approval.",
+    "safe_conclusion": "Current official NSE methodology documents audited consolidated annual financials as prime source and >50% segment-revenue dominance, while the November-2022 taxonomy definitions provide historical evidence that >50%/20% diversified concepts existed in that structure. This does not prove the entire current methodology text was identical in November 2022."
+  }
+}
