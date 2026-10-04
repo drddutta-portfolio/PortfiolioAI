@@ -1,23 +1,24 @@
 {
-  "adopted_as_portfolioai_historical_authority": false,
+  "adopted_as_portfolioai_historical_authority": true,
   "adoption_blockers": [
-    "Owner approval of OD1 retrospective vocabulary policy is not recorded.",
-    "Owner approval of OD2 evidence-backed synonym policy is not recorded.",
-    "Owner approval of OD3 no-dominance-inference policy is not recorded.",
-    "Owner approval of OD4 diversified-specialised-routing-blocked policy is not recorded.",
-    "This repository candidate must not overwrite live Development taxonomy without separately authorized migration/write scope."
+    "Live taxonomy materialization remains unchanged because this owner approval adopts policy contracts only and does not authorize database/storage writes, migrations, or deployment.",
+    "The frozen canary still proves zero comparable segment-revenue pairs, zero complete company classifications, and zero unique methodology routes; the 25,761-pair expansion gate remains closed."
   ],
   "authority_candidate_complete": true,
   "official_source_sha256": "ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1",
   "owner_policy_status": {
-    "OD1": "PENDING_OWNER_DECISION",
-    "OD2": "PENDING_OWNER_DECISION",
-    "OD3": "PENDING_OWNER_DECISION",
-    "OD4": "PENDING_OWNER_DECISION"
+    "OD1": "APPROVED",
+    "OD2": "APPROVED_WITH_REVIEW_CONTROL",
+    "OD3": "APPROVED",
+    "OD4": "BLOCKED"
   },
   "safe_for_canary_candidate_evaluation": true,
   "taxonomy_contract": "PORTFOLIOAI_NSE_FOUR_TIER_TAXONOMY_REFERENCE_V1",
   "taxonomy_file": "docs/p8/PortfolioAI_P8_NSE_FOUR_TIER_TAXONOMY_NOVEMBER_2022.json",
   "taxonomy_payload_sha256": "e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96",
-  "version": "P8_NSE_FOUR_TIER_TAXONOMY_ADOPTION_MANIFEST_V1"
+  "version": "P8_NSE_FOUR_TIER_TAXONOMY_ADOPTION_MANIFEST_V1",
+  "owner_adoption_record": "docs/p8/PortfolioAI_P8_SEGMENT_REVENUE_OWNER_POLICY_ADOPTION_2026-10-04.json",
+  "adoption_scope": "POLICY_AUTHORITY_ONLY_NO_LIVE_MATERIALIZATION_NO_EXPANSION",
+  "adopted_at": "2026-10-04T22:38:00+05:30",
+  "od3_frozen_contract_git_blob_sha": "45e990981371dba217d12c430f8ce567acbf25fc"
 }
