@@ -1,0 +1,57 @@
+{
+  "version": "P8_APPLICATION_TAXONOMY_METHODOLOGY_COVERAGE_CLOSURE_V1",
+  "date": "2026-10-04",
+  "exact_disposition": "APPLICATION_TAXONOMY_METHODOLOGY_COVERAGE_BLOCKED_APPLICABILITY_AND_EXECUTION_GAPS",
+  "implementation_status": "COMPLETE_PASS",
+  "workflow_run": 37227467813,
+  "audit_fingerprint": "23d8ffb2cfa1f239ff3b20001ada66f7f8fd9d3eb55d9fb77d614544d1b0570c",
+  "authoritative_historical_classifications": 2,
+  "authoritative_methodology_routes": 0,
+  "complete_normalized_inputs": 0,
+  "direct_answers": {
+    "blocked_only_by_missing_wiring": false,
+    "requires_additional_historical_business_evidence": true,
+    "existing_registered_but_unimplemented_profile": "AGRI_PROCESSING",
+    "exact_next_owner_change": "Authorize bounded Historical Business-Applicability Evidence + Methodology Capability Decision, or retain unsupported exclusions."
+  },
+  "edible_oil": {
+    "agri_processing": {
+      "semantic": "PLAUSIBLE_BUT_NOT_PROVEN",
+      "registry": true,
+      "router": false,
+      "sector_engine": false
+    },
+    "branded_consumer_fmcg": {
+      "semantic": "NOT_PROVEN",
+      "registry": true,
+      "router": true,
+      "sector_engine": true,
+      "adapter": "PENDING"
+    }
+  },
+  "steel_pipes": {
+    "steel_ferrous": {
+      "semantic": "NOT_PROVEN",
+      "registry": true,
+      "router": true,
+      "sector_engine": true,
+      "adapter": "PENDING"
+    },
+    "capital_equipment_electrical": {
+      "semantic": "REJECTED_ON_CURRENT_EVIDENCE",
+      "registry": true,
+      "router": true,
+      "sector_engine": true,
+      "adapter": "PENDING"
+    }
+  },
+  "broad_surface": "25,761 pairs NOT AUTHORIZED / NOT MEASURED",
+  "safety": {
+    "writes": 0,
+    "migrations": 0,
+    "deployments": 0,
+    "provider_calls": 0,
+    "new_company_sources": 0,
+    "p8_c": 0
+  }
+}
