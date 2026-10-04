@@ -2247,3 +2247,52 @@ Recommended next bounded task:
 or retain unsupported exclusions and stop this recovery branch.
 
 No 25,761-pair expansion, experiment execution, B5/B6/B-FINAL rebuild or P8-C is authorized.
+
+
+---
+
+## 35. P8 historical business-applicability decision — 5 October 2026
+
+The bounded decision audit is COMPLETE / PASS.
+
+Exact disposition:
+
+`HISTORICAL_BUSINESS_APPLICABILITY_MIXED_DECISION_STEEL_EXISTING_METHOD_SUPPORTED_EDIBLE_OWNER_POLICY_REQUIRED`
+
+The audit corrects an over-strict interpretation from the preceding capability review: mandatory scored evidence must not be silently promoted into methodology-selection prerequisites.
+
+### Steel Pipes
+
+The approved historical Basic Industry `Iron & Steel Products (IN070205015)` exactly matches the locked `STEEL_FERROUS` selector `IRON_STEEL_PRODUCTS`.
+
+Therefore existing methodology applicability is proven.
+
+Remaining gaps are:
+- canonical historical/application routing bridge;
+- generic sector scoring adapter;
+- normalized input completeness.
+
+No new steel methodology is required.
+
+### Edible Oil
+
+The source proves `Edible Oil`, while BRANDED_CONSUMER_FMCG accepts `VEGETABLE_OILS_PRODUCTS`.
+
+No adopted selector mapping currently equates those labels, so owner policy is required before routing.
+
+AGRI_PROCESSING remains registry-only and would require a separately scoped capability extension.
+
+### Current authoritative state
+
+- historical classifications: **2**
+- methodology-applicable cases under existing contract: **1 (Steel Pipes → STEEL_FERROUS)**
+- authoritative integrated routes: **0**
+- complete normalized inputs: **0**
+
+### Next recommended bounded work
+
+`P8 Steel-Ferrous Historical Route Integration + Frozen-Canary Input Readiness Validation`
+
+Edible Oil remains a separate owner decision.
+
+No broad 25,761-pair processing is authorized.
