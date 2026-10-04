@@ -1,0 +1,155 @@
+{
+  "case_denominator": 12,
+  "cases": [
+    {
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "existing_blockers": [
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "23c42d9d-fc5c-58a6-9d65-0d3c12da2fa6",
+      "historical_isin": "INE374B01019",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2025-07-31T10:00:00+00:00",
+      "existing_blockers": [
+        "TOTAL_SEGMENT_REVENUE_MISSING",
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "2b347f1e-4a76-5825-89c1-642e386ea715",
+      "historical_isin": "INE0JO301016",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "existing_blockers": [
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "38749e5e-3e7c-5516-b5b9-17f54160025d",
+      "historical_isin": "INE772T01024",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "existing_blockers": [
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "59e788f2-3047-536c-8f4b-d92f34d69bf4",
+      "historical_isin": "INE979A01025",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2025-06-30T10:00:00+00:00",
+      "existing_blockers": [
+        "TOTAL_SEGMENT_REVENUE_MISSING",
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "6936e380-029f-5495-a265-d8db8672aa47",
+      "historical_isin": "INE118A01012",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2025-11-28T10:00:00+00:00",
+      "existing_blockers": [
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "6fef8980-34eb-5c31-ab04-9d41dddfe1e6",
+      "historical_isin": "INE093A01041",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2026-07-31T10:00:00+00:00",
+      "existing_blockers": [
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "6fef8980-34eb-5c31-ab04-9d41dddfe1e6",
+      "historical_isin": "INE093A01041",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "existing_blockers": [
+        "TOTAL_SEGMENT_REVENUE_MISSING",
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "76b41969-131c-591c-91a7-e4cb65884e90",
+      "historical_isin": "INE999K01014",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "existing_blockers": [
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "9eac015d-2fe9-5eca-bf57-42011e16fa5e",
+      "historical_isin": "INE280A01028",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "existing_blockers": [
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "bca563eb-e943-5272-960b-f6833a692614",
+      "historical_isin": "INE470A01017",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2025-03-28T10:00:00+00:00",
+      "existing_blockers": [
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "c644b736-db2a-53bf-9155-cb211ee8e455",
+      "historical_isin": "INE987B01026",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    },
+    {
+      "decision_at": "2025-02-28T10:00:00+00:00",
+      "existing_blockers": [
+        "TOTAL_SEGMENT_REVENUE_MISSING",
+        "INTERSEGMENT_REVENUE_MISSING"
+      ],
+      "finding": "NO_ALTERNATE_RELATED_FACTS_FOUND",
+      "historical_identity_id": "c84e95b9-f25c-5489-8bd9-d149f0339a3b",
+      "historical_isin": "INE0OV601013",
+      "literal_annual_segment_facts": [],
+      "related_intersegment_elimination_facts": [],
+      "segment_external_revenue_facts": []
+    }
+  ],
+  "fingerprint_sha256": "088d90d16ddde49dc9eaed30041b8bf93d14b34e2c8bf83ca69e63731d468c3b",
+  "version": "P8_XBRL_MISSING_ACCOUNTING_DISCLOSURE_AUDIT_V1"
+}
