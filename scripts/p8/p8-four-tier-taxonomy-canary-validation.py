@@ -20,7 +20,7 @@ def sha256(b): return hashlib.sha256(b).hexdigest()
 def git_blob_sha(b): return hashlib.sha1(f"blob {len(b)}\0".encode()+b).hexdigest()
 def norm_text(x): return " ".join(unicodedata.normalize("NFKC",str(x or "")).strip().split())
 def norm_key(x): return re.sub(r"[^A-Z0-9]+","_",norm_text(x).upper()).strip("_")
-def stable_hash(x): return sha256(json.dumps(x,sort_keys=True,separators=(",",":")).encode())
+def stable_hash(x): return sha256(json.dumps(x,sort_keys=True,separators=(",",":"),default=str).encode())
 
 def acct(raw):
     h=urlparse(raw).hostname if "://" in raw else raw
