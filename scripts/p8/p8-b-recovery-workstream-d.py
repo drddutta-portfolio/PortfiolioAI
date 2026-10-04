@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import boto3,duckdb,hashlib,json,os,re,tempfile
+import boto3,duckdb,hashlib,json,os,re,tempfile,bisect
 from collections import Counter,defaultdict
 from datetime import datetime,timezone
 from pathlib import Path
