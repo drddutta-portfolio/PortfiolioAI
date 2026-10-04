@@ -1586,3 +1586,129 @@ Authoritative artifacts:
 - `docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_CLOSURE_2026-10-04.md`
 
 Safety boundary: provider calls 0; new source acquisition 0; Supabase writes 0; R2 writes 0; migrations 0; experiment execution 0; B5/B6/B-FINAL rebuild 0; P8-C 0; outcome/performance/holdout reads 0; Production/main changes 0.
+
+
+---
+
+## 26. P8 historical four-tier taxonomy mapping authority + canary validation closure — 4 October 2026
+
+**Current-state precedence:** This section supersedes section 25's possible-next-step framing. The separately authorized four-tier taxonomy mapping-authority task is now complete.
+
+**Implementation / focused tests:** COMPLETE / PASS  
+**Semantic evidence:** CONFIRMED  
+**Mapping authority:** CANDIDATE / PENDING OWNER ADOPTION  
+**Experiment feasibility:** BLOCKED  
+**Exact disposition:** `HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_PENDING_OWNER_DECISION`
+
+### 26.1 Authority inventory
+
+The repository already defines the intended NSE official four-field classification shape:
+
+`Macro-Economic Sector → Sector → Industry → Basic Industry`
+
+through the K1 NSE classification adapter.
+
+Development's materialized taxonomy remains only two levels:
+
+- 2 active taxonomy records, both `SECTOR, INDUSTRY`;
+- 8 sectors;
+- 9 industries;
+- 9 verified source mappings.
+
+No already-preserved historical K1 four-level snapshot was found in the repository or current R2 inventory during this task. Gate-K remains an analytical research-routing authority and cannot substitute for missing economic hierarchy levels.
+
+### 26.2 Frozen mapping candidate
+
+Candidate: `P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_CANDIDATE_V1`
+
+Git blob SHA: `e0284742e9e3e55a737946aeefe79d9cc7e4a09d`
+
+The candidate distinguishes:
+
+- exact existing authority → partial proof only;
+- conditional semantic mappings → pending owner approval;
+- ambiguous / unsupported source descriptions → fail closed.
+
+It does not adopt new taxonomy nodes, synonyms, business dominance rules, diversified methodology or live classification changes.
+
+### 26.3 Frozen 32-case canary result
+
+Canary validation fingerprint:
+
+`661f2acf48eb8a626d9fbaa658f9ab6f9ab5701533884da14c96819918907461`
+
+| Measure | Result |
+|---|---:|
+| Semantic evidence retained | 32 / 32 |
+| Authoritative partial taxonomy pairs | 5 |
+| Authoritative partial unique identities | 4 |
+| Authoritative Sector+Industry pairs | 2 |
+| Conditional / pending-owner pairs | 4 |
+| Unsupported or ambiguous pairs | 23 |
+| Complete four-tier authoritative pairs | 0 |
+| Authoritative methodology-route pairs | 0 |
+| Route candidates from partial proof | 2 pairs / 2 identities |
+| Complete normalized-input pairs | 0 |
+
+The two route-compatible partial cases resolve to the existing `PHARMA_V1` route from exact `Pharmaceuticals` evidence plus the existing canonical two-level parent relation. They remain route candidates, not authoritative routes, because Macro-Economic Sector and Basic Industry are missing.
+
+### 26.4 Owner decisions
+
+Four owner-controlled policy choices remain unresolved:
+
+1. **OD1 — retrospective taxonomy vocabulary:** later frozen NSE vocabulary versus date-contemporaneous taxonomy versions;
+2. **OD2 — semantic synonym catalog:** exact labels only versus owner-reviewed versioned synonyms;
+3. **OD3 — dominant business:** no inference versus explicit approval of the previously proposed >50% eligible-segment-revenue rule;
+4. **OD4 — diversified treatment:** fail-closed specialized routing versus a later separately designed diversified analytical policy.
+
+No choice is silently adopted.
+
+### 26.5 Expansion decision
+
+The previous frozen expansion gate remains authoritative for this stage.
+
+It fails because:
+
+- the mapping authority remains a candidate, not adopted;
+- complete four-tier authoritative classification remains 0;
+- authoritative route proof from complete classification remains 0.
+
+Therefore the 25,761 provisional candidate pairs were **not** processed broadly.
+
+Full-population semantic recovery remains **NOT MEASURED**.
+
+Route-specific normalized input completeness remains **NOT EVALUATED** because no authoritative complete route exists.
+
+### 26.6 Research standards
+
+The standards remain proposed rather than owner-frozen:
+
+- >=24 decision dates: PASS — 32;
+- >=80% overall complete-input coverage: FAIL — 0%;
+- >=70% each retained date: FAIL;
+- >=60% each major methodology sector: NOT COMPUTABLE / fail closed.
+
+### 26.7 Current owner boundary
+
+This closure does not automatically authorize another recovery loop or taxonomy build.
+
+The next decision is owner review of the four mapping-policy questions and whether to authorize creation/adoption of a complete versioned four-tier taxonomy vocabulary/mapping catalog.
+
+Until that occurs:
+
+- `P8_EXP_NSE_MONTHLY_6M_NARROWER_V2_PROPOSED` remains NOT FROZEN / NOT AUTHORIZED / NOT EXECUTED;
+- B5/B6/B-FINAL remain closed in their prior state;
+- P8-C remains NOT AUTHORIZED;
+- Production and `main` remain unchanged.
+
+Authoritative artifacts:
+
+- `docs/p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_AUTHORITY_INVENTORY_2026-10-04.md`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_SPEC_2026-10-04.md`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_CANDIDATE_V1.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_OWNER_DECISIONS_2026-10-04.md`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_CANARY_VALIDATION_2026-10-04.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_CLOSURE_AUDIT_2026-10-04.json`
+- `docs/p8/PortfolioAI_P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_CLOSURE_2026-10-04.md`
+
+Safety boundary: provider calls 0; new source acquisition 0; Supabase/R2 writes 0; migrations 0; deployments 0; Production/main changes 0; B5/B6/B-FINAL rebuild 0; new experiment 0; P8-C 0; performance/forward/holdout reads 0.
