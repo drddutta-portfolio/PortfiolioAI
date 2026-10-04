@@ -1,3 +1,94 @@
+## P8 XBRL Segment-Period Semantics Audit + Normalization Candidate — 4 October 2026
+
+**Implementation / tests = COMPLETE / PASS.**  
+**Approved V1 = UNCHANGED.**  
+**V1 authoritative recovery = 0.**  
+**V3 conditional normalization = MEASURED / PENDING OWNER APPROVAL.**  
+**Exact disposition: `XBRL_SEGMENT_PERIOD_V3_CONDITIONAL_RECOVERY_PENDING_OWNER_APPROVAL`.**
+
+Frozen candidate:
+
+`P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3`
+
+Git blob:
+
+`797b7e91d7770f3377d0061ee338c76e8220391f`
+
+### Root cause
+
+The 12 prior segment-period mismatches are not V1 parser omissions.
+
+All 12 show a same-filing conflict:
+- `ReportingQuarter = Yearly`;
+- explicit OneD reporting-period facts identify the quarter;
+- explicit FourD reporting-period facts identify the audited annual period;
+- literal OneD/FourD XBRL context dates remain quarter-dated;
+- One/Four segment identities match;
+- One/Four revenue and segment-profit groups independently reconcile to their corresponding totals.
+
+This supports a recoverable source-tagging defect only under the separately versioned V3 semantic rule. Original literal context dates remain preserved.
+
+### Frozen-canary result
+
+Primary dispositions reconcile to 32:
+
+- V3 conditional recoverable source-tagging defect: **12**
+- accounting incomplete / other blocker: **12**
+- no eligible audited consolidated annual source: **8**
+
+V3 conditional diagnostics:
+
+- period normalizations: **12**
+- comparable segment revenue: **6**
+- strict >50% dominant-business candidates: **6**
+- exact Basic-Industry classifications: **1**
+- candidate methodology routes: **0**
+- complete normalized inputs: **0**
+
+The exact Basic-Industry case is **Edible Oil — IN040101001**, but no existing exact application-taxonomy crosswalk produces a route.
+
+The other five dominant descriptions require OD2 review/catalog mapping or remain ambiguous.
+
+The remaining six V3-normalized cases are blocked by non-zero aggregate intersegment revenue without segment-specific external revenue.
+
+### Missing accounting disclosures
+
+The 12 accounting-incomplete cases were searched independently.
+
+**12 / 12 = NO_ALTERNATE_RELATED_FACTS_FOUND.**
+
+No absence was converted to zero.
+
+### Source limitation
+
+The XML references `Ind-AS_entry_point_2020-03-31.xsd`, but no applicable XSD/linkbase or companion rendered filing was found in the authorized repository/R2 evidence set.
+
+### Verification
+
+Final workflow: `37220672965` — SUCCESS  
+Focused/source-backed tests: **12 / 12 PASS**
+
+V3 final fingerprint:
+
+`e75ffba7529050c5984b23575ef3663b5c823f1cc1c4a3c7d19e8717de9799f8`
+
+### Boundary
+
+V3 is **not owner-approved**.
+
+Therefore authoritative V1 counts remain:
+
+- comparable segment revenue: 0
+- complete company classification: 0
+- unique methodology routes: 0
+- complete normalized inputs: 0
+
+The 25,761-pair surface remains **NOT AUTHORIZED / NOT MEASURED**. P8-C remains NOT AUTHORIZED.
+
+Owner review package:
+
+`docs/p8/PortfolioAI_P8_XBRL_SEGMENT_PERIOD_SEMANTICS_V3_OWNER_APPROVAL_PACKAGE_2026-10-04.md`
+
 ## P8 OD1–OD3 Owner Adoption — 4 October 2026
 
 **Current-state precedence:** This entry supersedes all earlier present-tense statements that OD1, OD2 or OD3 are pending owner approval. It does not alter the frozen canary measurement or authorize downstream expansion.
