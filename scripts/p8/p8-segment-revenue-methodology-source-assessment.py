@@ -2,7 +2,7 @@
 import hashlib, json, re
 from datetime import datetime, timezone
 from pathlib import Path
-import requests
+import requests, io, pdfplumber
 from bs4 import BeautifulSoup
 
 URL="https://www.nseindia.com/static/products-services/industry-classification"
@@ -40,12 +40,19 @@ def main():
     }.items():
       idx=text.lower().find(needle.lower())
       snippets[key]=text[max(0,idx-180):idx+420] if idx>=0 else None
+    # Re-read the same frozen official Nov-2022 PDF to preserve definition-level historical evidence.
+    pdf_url=tax["source"]["url"]
+    pr=requests.get(pdf_url,timeout=60,headers={"User-Agent":"Mozilla/5.0 PortfolioAI methodology-reference audit"})
+    pr.raise_for_status()
+    if sha256(pr.content)!=tax["source"]["content_sha256"]:
+      raise SystemExit("Nov-2022 taxonomy PDF hash drift")
+    with pdfplumber.open(io.BytesIO(pr.content)) as pdf:
+      pdf_text=clean(" ".join((p.extract_text() or "") for p in pdf.pages))
     historical_definition_support=[]
-    # The frozen Nov-2022 taxonomy definitions can contain revenue-threshold language.
-    for n in tax["nodes"]:
-      definition=clean(n.get("definition"))
-      if "50%" in definition or "20%" in definition:
-        historical_definition_support.append({"code":n["code"],"name":n["name"],"definition":definition})
+    for phrase in ("more than 50%","at least 20%","less than 20%"):
+      idx=pdf_text.lower().find(phrase.lower())
+      if idx>=0:
+        historical_definition_support.append({"phrase":phrase,"snippet":pdf_text[max(0,idx-220):idx+520]})
     assessment={
       "version":"P8_SEGMENT_REVENUE_METHODOLOGY_SOURCE_ASSESSMENT_V1",
       "retrieved_at":datetime.now(timezone.utc).isoformat(),
@@ -62,7 +69,8 @@ def main():
         "version_label":tax["source"]["version_label"],
         "official_source_sha256":tax["source"]["content_sha256"],
         "taxonomy_payload_sha256":sha256(TAX.read_bytes()),
-        "historical_definition_support":historical_definition_support
+        "historical_definition_support":historical_definition_support,
+        "taxonomy_pdf_reverified_sha256":sha256(pr.content)
       },
       "version_assessment":{
         "exact_november_2022_methodology_text_preserved":False,
