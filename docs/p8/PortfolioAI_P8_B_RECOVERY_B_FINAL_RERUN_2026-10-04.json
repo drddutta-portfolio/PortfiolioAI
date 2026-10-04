@@ -1,0 +1,64 @@
+{
+  "boundaries": {
+    "holdout_or_performance_inspected": false,
+    "main_changed": false,
+    "p8_c_started": false,
+    "production_changed": false,
+    "provider_calls": 0
+  },
+  "closure": "COMPLETE_BLOCKED_CLOSED",
+  "coverage": {
+    "eligible_pairs": 121956,
+    "recommended_overall_floor": 0.8,
+    "recommended_per_date_floor": 0.7,
+    "replay_ready_pairs": 0,
+    "replay_ready_ratio": 0.0
+  },
+  "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+  "final_decision": {
+    "next_legitimate_step": "VERSION_NARROWER_EXPERIMENT_REQUIRED",
+    "p8_b": "BLOCKED \u2014 V1 DATA FOUNDATION INSUFFICIENT",
+    "p8_b_final": "COMPLETE / BLOCKED / CLOSED",
+    "p8_c": "NOT AUTHORIZED",
+    "workstream_e": "COMPLETE / BLOCKED / CLOSED"
+  },
+  "generated_at": "2026-10-04T14:05:16.293035+00:00",
+  "pass_condition_matrix": {
+    "b2_eligible_denominator": {
+      "pairs": 121956,
+      "result": "PASS"
+    },
+    "b3_market_foundation": {
+      "blocked": 39452,
+      "ready": 82504,
+      "result": "PASS_STRUCTURAL_WITH_BLOCKERS"
+    },
+    "corrected_b5": {
+      "blocked_paths": 121956,
+      "reason": "No pair has a fully proven frozen four-tier historical classification to deterministic methodology route.",
+      "resolved_paths": 0,
+      "result": "FAIL"
+    },
+    "corrected_b6": {
+      "coverage": 0.0,
+      "excluded": 121956,
+      "replay_ready": 0,
+      "result": "FAIL"
+    },
+    "holdout_untouched": {
+      "performance_outcome_reads": 0,
+      "result": "PASS"
+    },
+    "minimum_decision_dates": {
+      "minimum_required": 24,
+      "proven_dates": 32,
+      "result": "PASS"
+    },
+    "owner_approved_exclusion_ceiling": {
+      "result": "FAIL",
+      "state": "PENDING_OWNER_FREEZE"
+    }
+  },
+  "status": "BLOCKED",
+  "version": "P8_B_RECOVERY_B_FINAL_RERUN_V1"
+}

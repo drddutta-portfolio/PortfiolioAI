@@ -1,0 +1,46 @@
+{
+  "b3": {
+    "blocked": 39452,
+    "ready": 82504
+  },
+  "b5": {
+    "blocked_paths": 121956,
+    "blockers": {
+      "HISTORICAL_CLASSIFICATION_CONTRACT_UNPROVEN": 27719,
+      "HISTORICAL_CLASSIFICATION_UNRESOLVED": 33706,
+      "NO_PRE_DECISION_EVIDENCE": 60531
+    },
+    "deterministic_replay": true,
+    "r2_key": "portfolioai-history/development/p8/recovery/workstream-e/v1/b5-corrected-463a822369d5e9b2650979768481fb0824dd72303fb8ca8913fe41d4fd48aa47.jsonl",
+    "r2_write_state": "CREATED",
+    "resolved_paths": 0,
+    "rows": 121956,
+    "sha256": "463a822369d5e9b2650979768481fb0824dd72303fb8ca8913fe41d4fd48aa47"
+  },
+  "b6": {
+    "blockers": {
+      "B5_HISTORICAL_CLASSIFICATION_CONTRACT_UNPROVEN": 27719,
+      "B5_HISTORICAL_CLASSIFICATION_UNRESOLVED": 33706,
+      "B5_NO_PRE_DECISION_EVIDENCE": 60531
+    },
+    "deterministic_replay": true,
+    "excluded": 121956,
+    "r2_key": "portfolioai-history/development/p8/recovery/workstream-e/v1/b6-corrected-e0f4da436dc2e876c04f18cddf5ea04aadbfb800a4b8f05d5c4bf39e0c88c49a.jsonl",
+    "r2_write_state": "CREATED",
+    "replay_ready": 0,
+    "rows": 121956,
+    "sha256": "e0f4da436dc2e876c04f18cddf5ea04aadbfb800a4b8f05d5c4bf39e0c88c49a"
+  },
+  "cross_security_imputation_used": false,
+  "current_state_fallback_used": false,
+  "eligible_pairs": 121956,
+  "experiment_id": "P8_EXP_NSE_MONTHLY_6M_V1",
+  "future_evidence_used": false,
+  "generated_at": "2026-10-04T14:05:16.292700+00:00",
+  "performance_outcome_reads": 0,
+  "production_changes": 0,
+  "provider_calls": 0,
+  "status": "COMPLETE_BLOCKED",
+  "supabase_writes": 0,
+  "version": "P8_B_RECOVERY_WORKSTREAM_E_V1"
+}
