@@ -1,3 +1,76 @@
+## P8 OD1–OD3 Owner Adoption — 4 October 2026
+
+**Current-state precedence:** This entry supersedes all earlier present-tense statements that OD1, OD2 or OD3 are pending owner approval. It does not alter the frozen canary measurement or authorize downstream expansion.
+
+**OD1 = APPROVED.**  
+**OD2 = APPROVED WITH REVIEW CONTROL.**  
+**OD3 = APPROVED under the frozen contract.**  
+**OD4 = BLOCKED.**
+
+Authoritative adoption record:
+
+`docs/p8/PortfolioAI_P8_SEGMENT_REVENUE_OWNER_POLICY_ADOPTION_2026-10-04.json`
+
+### Adopted authorities
+
+- OD1 authority: `PORTFOLIOAI_NSE_FOUR_TIER_TAXONOMY_REFERENCE_V1`
+- official NSE November-2022 source SHA-256: `ed6a4af212460747510ca551bb14634ab8ef81bb5dee59a33d5d6973e3129dd1`
+- taxonomy payload SHA-256: `e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96`
+
+OD2 now permits a **versioned, evidence-backed synonym catalog with review control**. Broad, conflicting or ambiguous descriptions remain blocked.
+
+OD3 authority:
+
+`P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CANDIDATE_V1`
+
+Frozen Git blob SHA:
+
+`45e990981371dba217d12c430f8ce567acbf25fc`
+
+The frozen contract file itself remains unchanged after approval.
+
+OD4 remains blocked:
+
+`NO_SPECIALISED_ROUTE_FOR_DIVERSIFIED`
+
+### Approval boundary
+
+Owner approval adopts the policy contracts only.
+
+It does **not** authorize:
+
+- 25,761-pair expansion;
+- experiment freeze or execution;
+- B5/B6/B-FINAL rebuild;
+- P8-C;
+- Supabase/R2 writes;
+- migrations;
+- deployments;
+- scheduler activation.
+
+### Research state after adoption
+
+Policy adoption does not change the measured frozen-canary evidence result:
+
+| Measure | Result |
+|---|---:|
+| Frozen canary pairs | **32** |
+| Eligible audited consolidated annual source | **24** |
+| Comparable segment-revenue pairs | **0** |
+| Dominant-business candidates | **0** |
+| Complete company classifications | **0** |
+| Unique methodology routes | **0** |
+| Complete normalized-input pairs | **0** |
+
+Therefore:
+
+**Policy authority = ADOPTED.**  
+**Accounting/source proof = BLOCKED.**  
+**Expansion gate = CLOSED.**  
+**Experiment feasibility = BLOCKED.**
+
+The remaining unresolved dependency is source/accounting semantics, principally the audited-annual versus reportable-segment XBRL period-context mismatch and other incomplete annual accounting evidence. Any change that reinterprets those source contexts requires a separately versioned semantic/accounting contract and explicit authorization; it is not implied by OD1–OD3 approval.
+
 ## P8 Historical Segment-Revenue Classification Contract + Frozen Canary Validation — 4 October 2026
 
 **Current-state precedence:** This entry supersedes the prior statement that the immediate blocker is simply taxonomy-policy adoption plus a multi-segment rule. The separately authorized segment/accounting contract task has now been implemented and measured on the unchanged frozen canary.
