@@ -2139,3 +2139,38 @@ The frozen-canary measured result remains:
 Therefore the existing broad-expansion gate remains closed.
 
 No 25,761-pair expansion, experiment freeze/execution, B5/B6/B-FINAL rebuild, P8-C, database/storage write, migration, deployment or scheduler activation is authorized by this adoption.
+
+
+---
+
+## 32. P8 historical taxonomy crosswalk + route validation closure — 4 October 2026
+
+The bounded historical crosswalk task is COMPLETE / PASS.
+
+Exact disposition:
+
+`HISTORICAL_CROSSWALK_ROUTE_VALIDATION_BLOCKED_NO_SEMANTICALLY_SUPPORTED_EXISTING_ROUTE`
+
+Frozen crosswalk candidate:
+
+`P8_HISTORICAL_TAXONOMY_CROSSWALK_CANDIDATE_V1`
+
+Git blob:
+
+`fd5a683ab595d98c71254ea8c825d5ae82338afb`
+
+Frozen-canary result:
+
+- 1 authoritative complete classification;
+- 1 conditional OD2 complete classification candidate;
+- 0 authoritative routes;
+- 0 conditional routes;
+- 0 complete normalized inputs.
+
+Edible Oil is an authoritative NSE Basic Industry classification but is `UNSUPPORTED_EXISTING_METHODOLOGY`: no active application-taxonomy target represents its official hierarchy, the theoretical branded-consumer router path is not semantically justified, and the AGRI_PROCESSING methodology is not exposed by the canonical router.
+
+The only OD2 reviewable new synonym entry is `Manufacturing- Steel Pipes → Iron & Steel Products (IN070205015)`. Even if approved, it creates no existing methodology route.
+
+IT and Business Service, EPC/Engineering Services, Textile and Automotive Segment remain ambiguous or incomplete and are not presented as convenient crosswalks.
+
+The broad 25,761-pair surface remains unauthorized and unmeasured.
