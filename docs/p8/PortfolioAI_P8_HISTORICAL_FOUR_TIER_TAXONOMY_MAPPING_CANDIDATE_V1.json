@@ -1,0 +1,184 @@
+{
+  "contract_version": "P8_HISTORICAL_FOUR_TIER_TAXONOMY_MAPPING_CANDIDATE_V1",
+  "status": "FROZEN_CANDIDATE_PENDING_OWNER_ADOPTION",
+  "authoritative_adoption": false,
+  "retrospective_policy_version": "P8_RETROSPECTIVE_CLASSIFICATION_POLICY_V1_CANDIDATE",
+  "purpose": "Map point-in-time official semantic business evidence into the required four-tier economic hierarchy and then the existing methodology router without changing live taxonomy.",
+  "source_authorities": {
+    "nse_four_level_field_contract": {
+      "path": "scripts/k1-fetch-nse-primary-classification.mjs",
+      "blob_sha": "4e1e01797c2e03b51c345787109def60b879f79c",
+      "fields": [
+        "macroEconomicSector",
+        "sector",
+        "industry",
+        "basicIndustry"
+      ],
+      "status": "FIELD_CONTRACT_ONLY_NO_PRESERVED_HISTORICAL_SNAPSHOT"
+    },
+    "gate_k_router_taxonomy": {
+      "path": "docs/k1/PortfolioAI_GATE_K_INDUSTRY_RESEARCH_TAXONOMY.json",
+      "blob_sha": "65b0b728b2dff842e0b12269288bd4553c1e2580",
+      "status": "ANALYTICAL_ROUTING_AUTHORITY_NOT_COMPLETE_ECONOMIC_TAXONOMY"
+    },
+    "prior_semantic_normalization": {
+      "path": "docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_CONTRACT_V1.json",
+      "blob_sha": "a54ab626e8325a31c7bd960691fd1ba897c14b76"
+    },
+    "frozen_canary": {
+      "path": "docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CANARY_MANIFEST_2026-10-04.json",
+      "blob_sha": "177866e6844179c0de15523fb5964aea103f2e12",
+      "fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce"
+    },
+    "development_db_taxonomy_snapshot": "READ_ONLY_AT_EXECUTION"
+  },
+  "canonical_hierarchy": [
+    "MACRO_ECONOMIC_SECTOR",
+    "SECTOR",
+    "INDUSTRY",
+    "BASIC_INDUSTRY"
+  ],
+  "mapping_states": [
+    "AUTHORITATIVE_EXACT_PARTIAL",
+    "AUTHORITATIVE_COMPLETE",
+    "CONDITIONAL_PENDING_OWNER",
+    "AMBIGUOUS",
+    "UNSUPPORTED",
+    "BLOCKED_MISSING_LEVELS"
+  ],
+  "exact_match_policy": {
+    "text_normalization": "UNICODE_NFKC_TRIM_COLLAPSE_WHITESPACE_UPPERCASE_NONALNUM_TO_UNDERSCORE",
+    "authoritative_exact_sources": [
+      "Development classification_taxonomies/sectors/industries/classification_source_mappings where mapping_status=VERIFIED",
+      "Gate-K exact route labels for analytical route compatibility only"
+    ],
+    "no_new_synonyms_during_evaluation": true,
+    "broad_terms_do_not_imply_child_levels": true,
+    "examples": [
+      "PHARMA may prove a matching existing sector label only; it does not prove Industry or Basic Industry",
+      "PHARMACEUTICALS may prove an existing Industry and its existing parent Sector where that parent relation exists; it does not prove Macro or Basic Industry"
+    ]
+  },
+  "point_in_time_rules": {
+    "company_evidence_must_predate_decision": true,
+    "mapping_algorithm_may_be_later_than_decision": true,
+    "current_company_assignment_backdating": false,
+    "company_name_inference": false,
+    "survival_or_holdings_inference": false,
+    "model_knowledge_as_proof": false,
+    "source_hash_and_context_required": true,
+    "revision_usable_only_after_own_dissemination": true
+  },
+  "scope_rules": {
+    "consolidated_preferred": true,
+    "standalone_may_support_single_business_only_when_no_conflicting_consolidated_evidence": true,
+    "conflicting_scope": "BLOCKED"
+  },
+  "owner_decisions": {
+    "OD1_RETROSPECTIVE_TAXONOMY_VOCABULARY": {
+      "status": "PENDING_OWNER_DECISION",
+      "question": "May one frozen later NSE four-tier taxonomy vocabulary be applied retrospectively to point-in-time historical business evidence, with the output explicitly labeled retrospective analytical classification?",
+      "options": {
+        "A": "YES_USE_FROZEN_LATER_NSE_VOCABULARY_WITH_VERSION_DISCLOSURE",
+        "B": "NO_REQUIRE_TAXONOMY_VERSION_CONTEMPORANEOUS_TO_EACH_DECISION_DATE"
+      },
+      "impact": "A enables scalable historical mapping once a complete vocabulary is available; B requires historical taxonomy-version archives that are not currently preserved."
+    },
+    "OD2_SEMANTIC_SYNONYM_CATALOG": {
+      "status": "PENDING_OWNER_DECISION",
+      "question": "May a reviewed versioned semantic-description to canonical-node synonym catalog be adopted where source text is not an exact canonical label?",
+      "options": {
+        "A": "EXACT_LABELS_ONLY",
+        "B": "OWNER_APPROVED_VERSIONED_SYNONYM_CATALOG_WITH_SOURCE_CITED_RULES"
+      },
+      "impact": "A is conservative but leaves phrases such as HOSPITAL BUSINESS and SOLAR PHOTOVOLTAIC MODULES unmapped; B can increase coverage but requires explicit mapping review and versioning."
+    },
+    "OD3_DOMINANT_BUSINESS": {
+      "status": "PENDING_OWNER_DECISION",
+      "question": "What deterministic policy, if any, may convert multi-segment evidence into one economic classification?",
+      "options": {
+        "A": "NO_DOMINANCE_INFERENCE_ONLY_EXPLICIT_SINGLE_BUSINESS_OR_OFFICIAL_CLASSIFICATION",
+        "B": "APPROVE_PREVIOUSLY_PROPOSED_GT_50_PERCENT_ELIGIBLE_SEGMENT_REVENUE_RULE"
+      },
+      "impact": "A keeps multi-business cases blocked; B may classify some cases but was not previously owner-frozen and therefore cannot be used authoritatively in this canary."
+    },
+    "OD4_DIVERSIFIED_TREATMENT": {
+      "status": "PENDING_OWNER_DECISION",
+      "question": "When no approved dominant-business rule resolves a genuine multi-business company, should it remain classification-blocked for specialized routing or use a separately approved diversified analytical treatment?",
+      "options": {
+        "A": "BLOCK_SPECIALIZED_ROUTE",
+        "B": "DESIGN_SEPARATE_DIVERSIFIED_ANALYTICAL_POLICY_LATER"
+      },
+      "impact": "No existing methodology family is introduced by this candidate."
+    }
+  },
+  "conditional_proposal_examples": [
+    {
+      "semantic": "Hospital Business",
+      "proposed_sector": "HEALTHCARE",
+      "proposed_industry": "HOSPITALS",
+      "status": "CONDITIONAL_PENDING_OD2",
+      "note": "Route-compatible proposal only; Macro and Basic Industry remain unmapped."
+    },
+    {
+      "semantic": "Pharma",
+      "proposed_sector": "PHARMA",
+      "status": "AUTHORITATIVE_EXACT_PARTIAL_IF_DB_EXACT_MATCH",
+      "note": "Broad source term cannot prove child hierarchy."
+    },
+    {
+      "semantic": "Pharmaceuticals",
+      "proposed_industry": "PHARMACEUTICALS",
+      "status": "AUTHORITATIVE_EXACT_PARTIAL_IF_DB_EXACT_MATCH",
+      "note": "Existing parent Sector may be inherited from canonical two-level relation; Macro and Basic remain unmapped."
+    },
+    {
+      "semantic": "Commercial vehicles",
+      "proposed_industry": "COMMERCIAL_VEHICLES",
+      "status": "ANALYTICAL_ROUTE_ALIAS_ONLY",
+      "note": "Gate-K route alias is not complete economic taxonomy proof."
+    },
+    {
+      "semantic": "Solar Photovoltaic Modules",
+      "status": "CONDITIONAL_PENDING_OD2",
+      "note": "No existing exact economic mapping authority found."
+    },
+    {
+      "semantic": "Performance Polymers & Chemicals",
+      "status": "CONDITIONAL_PENDING_OD2",
+      "note": "No existing exact economic mapping authority found."
+    },
+    {
+      "semantic": "EPC/Engineering Services",
+      "status": "CONDITIONAL_PENDING_OD2",
+      "note": "No existing exact economic mapping authority found."
+    },
+    {
+      "semantic": "Chemicals",
+      "status": "AMBIGUOUS_BROAD_TERM",
+      "note": "Broad term cannot prove complete hierarchy."
+    },
+    {
+      "semantic": "Textiles",
+      "status": "AMBIGUOUS_BROAD_TERM",
+      "note": "Broad term cannot prove complete hierarchy."
+    }
+  ],
+  "proof_requirements": {
+    "complete_authoritative_classification": "All four hierarchy levels have canonical identifiers under an adopted authority and are supported by eligible source evidence plus mapping lineage.",
+    "partial_classification": "One or more levels supported, missing levels remain null/blocked.",
+    "methodology_route": "Exactly one existing route after authoritative classification; conditional classification cannot count as authoritative route proof.",
+    "input_completeness": "Only evaluated after authoritative route proof."
+  },
+  "expansion_gate": {
+    "preserve_previous_gate": true,
+    "requires_adopted_mapping_authority": true,
+    "previous_conditions": [
+      "AT_LEAST_ONE_POSITIONAL_MEMBER_CASE_HAS_SOURCE_CITED_SEMANTIC_RECOVERY",
+      "AT_LEAST_ONE_CANARY_MEMBER_HAS_COMPLETE_CLASSIFICATION_PROVEN",
+      "AT_LEAST_ONE_COMPLETE_CLASSIFICATION_PROVEN_MEMBER_HAS_EXACTLY_ONE_EXISTING_ROUTE",
+      "REPEAT_FINGERPRINT_MATCHES",
+      "NEGATIVE_CONTROLS_ARE_NOT_PROMOTED_WITHOUT_PROOF"
+    ]
+  }
+}
