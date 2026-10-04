@@ -1,3 +1,85 @@
+## P8 Application-Taxonomy and Existing Methodology Coverage Audit — 4 October 2026
+
+**Implementation / tests = COMPLETE / PASS.**  
+**Exact disposition: `APPLICATION_TAXONOMY_METHODOLOGY_COVERAGE_BLOCKED_APPLICABILITY_AND_EXECUTION_GAPS`.**
+
+### Current proven historical classifications
+
+1. **Edible Oil — IN040101001**
+2. **Iron & Steel Products — IN070205015** via approved `Manufacturing- Steel Pipes` synonym
+
+Authoritative methodology routes remain **0**.
+
+Complete normalized-input pairs remain **0**.
+
+### Capability findings
+
+#### Edible Oil
+
+`AGRI_PROCESSING`:
+- P7 methodology registry: **present**
+- canonical router exposure: **absent**
+- `SECTOR_ENGINE_REGISTRY`: **absent**
+- dedicated executable K4 engine: **absent**
+- historical applicability evidence: **insufficient**
+
+`BRANDED_CONSUMER_FMCG`:
+- methodology/sector engine: **implemented**
+- router: **exposed**
+- generic scoring adapter: **pending**
+- historical applicability evidence: **insufficient** because Edible Oil classification does not establish brand/distribution/category durability.
+
+#### Iron & Steel Products / Steel Pipes
+
+`STEEL_FERROUS`:
+- methodology/sector engine: **implemented**
+- router: **exposed for metals/steel classifications**
+- generic scoring adapter: **pending**
+- historical applicability evidence: **insufficient** for commodity-cycle/raw-material integration semantics.
+
+`CAPITAL_EQUIPMENT_ELECTRICAL`:
+- methodology/sector engine: **implemented**
+- router: **exposed**
+- applicability to Steel Pipes: **rejected on current evidence**.
+
+### Direct answers
+
+- Either case blocked only by wiring? **NO**
+- Additional historical business evidence required? **YES, for both**
+- Registered but unimplemented profile? **AGRI_PROCESSING**
+- Route integration justified now? **NO**
+
+### Architecture conclusion
+
+Economic taxonomy and analytical methodology remain separate authorities.
+
+Do not add convenience aliases:
+- Edible Oil → BRANDED_CONSUMER_FMCG
+- Steel Pipes → STEEL_FERROUS
+- Steel Pipes → CAPITAL_EQUIPMENT_ELECTRICAL
+
+without the required point-in-time business-applicability evidence.
+
+### Recommended next bounded owner decision
+
+Authorize:
+
+**P8 Historical Business-Applicability Evidence + Methodology Capability Decision**
+
+This should use existing contemporaneous evidence to prove or reject applicability before any router integration. If AGRI_PROCESSING is proven applicable, a later separate authorization would be required for its canonical engine/router/adapter implementation.
+
+Alternatively, retain both cases as unsupported exclusions and close this historical methodology-recovery branch.
+
+### Verification
+
+Workflow `37227467813`: **SUCCESS**
+
+Deterministic audit fingerprint:
+
+`23d8ffb2cfa1f239ff3b20001ada66f7f8fd9d3eb55d9fb77d614544d1b0570c`
+
+The 25,761-pair surface remains **NOT AUTHORIZED / NOT MEASURED**.
+
 ## P8 OD2 Steel-Pipes Historical Taxonomy Adoption — 4 October 2026
 
 **Current-state precedence:** This entry supersedes earlier statements that `Manufacturing- Steel Pipes` is pending OD2 review.
