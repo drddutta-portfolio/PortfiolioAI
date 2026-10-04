@@ -1,0 +1,80 @@
+{
+  "version": "P8_HISTORICAL_TAXONOMY_CROSSWALK_ROUTE_VALIDATION_CLOSURE_V1",
+  "date": "2026-10-04",
+  "exact_disposition": "HISTORICAL_CROSSWALK_ROUTE_VALIDATION_BLOCKED_NO_SEMANTICALLY_SUPPORTED_EXISTING_ROUTE",
+  "implementation_status": "COMPLETE_PASS",
+  "frozen_candidate": {
+    "version": "P8_HISTORICAL_TAXONOMY_CROSSWALK_CANDIDATE_V1",
+    "git_blob_sha": "fd5a683ab595d98c71254ea8c825d5ae82338afb"
+  },
+  "preserved_authorities": {
+    "v1_blob": "45e990981371dba217d12c430f8ce567acbf25fc",
+    "v3_blob": "797b7e91d7770f3377d0061ee338c76e8220391f",
+    "router": "RESEARCH_PROFILE_ROUTING_V2"
+  },
+  "canary": {
+    "pairs": 32,
+    "authoritative_complete_classifications": 1,
+    "conditional_od2_complete_classifications": 1,
+    "authoritative_unique_routes": 0,
+    "conditional_unique_routes": 0,
+    "complete_normalized_inputs": 0
+  },
+  "edible_oil": {
+    "taxonomy": "IN04 > IN0401 > IN040101 > IN040101001",
+    "classification_status": "AUTHORITATIVE_COMPLETE",
+    "application_crosswalk_status": "NO_ACTIVE_SEMANTICALLY_COMPATIBLE_TARGET",
+    "route_disposition": "UNSUPPORTED_EXISTING_METHODOLOGY",
+    "theoretical_router_alias": {
+      "sector": "FMCG",
+      "industry": "Vegetable Oils Products",
+      "profile": "BRANDED_CONSUMER_FMCG",
+      "accepted": false
+    },
+    "reason": "Official Edible Oil classification does not prove branded-consumer methodology semantics; AGRI_PROCESSING exists in registry but is not exposed by canonical router."
+  },
+  "od2_review": {
+    "review_required": [
+      {
+        "description": "Manufacturing- Steel Pipes",
+        "candidate_basic_industry": "IN070205015",
+        "name": "Iron & Steel Products",
+        "route_after_approval": "NONE"
+      }
+    ],
+    "ambiguous_or_incomplete": [
+      "IT and Business Service",
+      "EPC/Engineering Services",
+      "Textile",
+      "Automotive Segment"
+    ]
+  },
+  "accounting_boundary": {
+    "nonzero_intersegment_cases_remain_blocked": 6,
+    "contract_weakened": false
+  },
+  "fingerprints": {
+    "crosswalk_audit": "4cec9b0468f27d0724e7db04487dba2af75794d9ffbcd19d304b855f2ddf6eb7",
+    "final": "c6c15c0e9bce15a20242e6ad8684bfd97f38ce584652515809a13bcd4e98cd19"
+  },
+  "checks": {
+    "workflow_run": 37224872015,
+    "result": "SUCCESS",
+    "focused_tests": 5
+  },
+  "unmeasured": {
+    "candidate_25761_surface": "NOT_AUTHORIZED_NOT_MEASURED"
+  },
+  "safety": {
+    "supabase_writes": 0,
+    "r2_writes": 0,
+    "migrations": 0,
+    "deployments": 0,
+    "provider_calls": 0,
+    "new_company_sources": 0,
+    "production_main_changes": 0,
+    "experiment_execution": 0,
+    "b5_b6_bfinal_rebuild": 0,
+    "p8_c": 0
+  }
+}
