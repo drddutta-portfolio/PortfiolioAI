@@ -1,0 +1,2490 @@
+{
+  "canary_fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce",
+  "cases": [
+    {
+      "canary_stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "decision_at": "2024-08-30T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-05-28T06:26:59+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/77/7720ee51f4d6bea57b68d8ea756e1defeb0edf5f6128f2cd2b19ac64754be711.xml",
+        "sha256": "596f96ec873e68dd47c030aba5999a245ac82cc31389d41fa3a31134f91df0ff"
+      },
+      "historical_identity_id": "08aee4b7-fef7-5caa-b4af-a0830f66d5fa",
+      "historical_isin": "INE645L01011",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Agri Nutrients",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "132400000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "P&K Fertilizers",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "2822900000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "decimals": "-5",
+            "description": "Performance Polymers & Chemicals",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "9704100000.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Agri Nutrients",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "23100000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "P&K Fertilizers",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "579600000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "decimals": "-5",
+            "description": "Performance Polymers & Chemicals",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "2421500000.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "21000000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "126800000.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "decision_at": "2024-11-29T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-05-31T09:27:01+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/c3/c3bbb4dc78bc481c428239d63ee3f84e4146939383eca1079c91ce5d3ee49a01.xml",
+        "sha256": "4b0b16349cc9ef3ff46f61d590768a39915ba4c567ef4a72f0355cd28680521d"
+      },
+      "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+      "historical_isin": "INE230R01035",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Manufacturing- Steel Pipes",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "7836123000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Trading- Building Material & Steel Products",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "2628972000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "decimals": "-5",
+            "description": "Unallocated Segment",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "0.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Manufacturing- Steel Pipes",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "2056698000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Trading- Building Material & Steel Products",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "625993000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "decimals": "-5",
+            "description": "Unallocated Segment",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "0.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "decision_at": "2024-12-31T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-04-26T15:20:16+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/49/491aa5acf43b5a120d3ec253b74ee82ae6b3cddf10dc7867dfa1f64a46e3095c.xml",
+        "sha256": "6a97ac9f69daf58812c6c53c3d07e5b5a3a6f4ed20234113265eaa0691ce1ad5"
+      },
+      "historical_identity_id": "26f17fef-d920-566a-ae9f-85df009ec151",
+      "historical_isin": "INE860A01027",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "20000000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-7",
+            "description": "Engineering and R&D Services",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "175810000000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-7",
+            "description": "HCL Software",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "111840000000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "decimals": "-7",
+            "description": "IT and Business Service",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "811480000000.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "20000000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "20000000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-7",
+            "description": "Engineering and R&D Services",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "45900000000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-7",
+            "description": "HCL Software",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "27100000000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "decimals": "-7",
+            "description": "IT and Business Service",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "211990000000.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "20000000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-05-29T08:59:17+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/78/78cd2c8a157243dae3d52a28abab7f7eb466136cd3792998a857015493cc7731.xml",
+        "sha256": "de523818983b6a6833a97fc5adfd208ea9fc36dedeff59bf5167888cc3403107"
+      },
+      "historical_identity_id": "32947c3d-1d36-55b3-b687-83556470f25f",
+      "historical_isin": "INE285K01026",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "250000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Corporate/unallocable",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "1354542000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Discontinued operations",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "0.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "decimals": "-5",
+            "description": "EPC/Engineering Services",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "14925983000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue04Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue04D",
+            "decimals": "-5",
+            "description": "Others",
+            "ordinal": 4,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "104380000.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "250000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "250000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Corporate/unallocable",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "311850000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Discontinued operations",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "0.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "decimals": "-5",
+            "description": "EPC/Engineering Services",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "4386340000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue04Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue04D",
+            "decimals": "-5",
+            "description": "Others",
+            "ordinal": 4,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "10579000.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "250000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "decision_at": "2024-09-30T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-05-29T10:27:25+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/09/099340a8a7e27e33db75c1f7ec7cec8c9cf59f8c776b25577159d16d6342a33f.xml",
+        "sha256": "d9c183bb8829cd5e7364bb8059d09870161194e8a3657c9c941f04b86fed0f84"
+      },
+      "historical_identity_id": "5b4f2608-90cb-5aa8-bd6a-d007f42de9f8",
+      "historical_isin": "INE08KP01019",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Chemical",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "600000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Textile",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "10808800000.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Chemical",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "600000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Textile",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "2643200000.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 365,
+          "end": "2023-03-31",
+          "scope": "Consolidated",
+          "start": "2022-04-01"
+        },
+        "disseminated_at": "2023-05-31T22:38:02+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/18/182158f6abf1cddf9e8bdfdd59ef568552e1c2dded7a328137a50bb1fc195c41.xml",
+        "sha256": "54ff47d1df7ba53d41f0892b54797a0fb045a6b5e8cf7eef8a56575a156ef39e"
+      },
+      "historical_identity_id": "72497e23-689a-576c-98ec-70b9acb59914",
+      "historical_isin": "INE661I01014",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2023-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2023-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2023-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2023-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Capital Goods",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "1936400000.00"
+          },
+          {
+            "context": {
+              "end": "2023-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2023-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Construction and EPC contracts",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "6149900000.00"
+          },
+          {
+            "context": {
+              "end": "2023-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2023-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "decimals": "-5",
+            "description": "Unallocated",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "0.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2023-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2023-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2023-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2023-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Capital Goods",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "376400000.00"
+          },
+          {
+            "context": {
+              "end": "2023-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2023-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Construction and EPC contracts",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "707600000.00"
+          },
+          {
+            "context": {
+              "end": "2023-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2023-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "decimals": "-5",
+            "description": "Unallocated",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "0.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "200000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2023-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2023-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "17300000.00"
+          },
+          {
+            "context": {
+              "end": "2023-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2023-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "23600000.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "decision_at": "2025-01-31T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-05-07T07:36:58+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/a6/a63a0665e4e4865aef9c261f4d7d430d17ae2e87d5b28a7c6ffd35836c3067db.xml",
+        "sha256": "10e295d0da56e9123a0ffb21a0714befc66b0aa7391a29c247a79ec3c37873f8"
+      },
+      "historical_identity_id": "af88fe19-5864-536f-a207-15aded7d3c83",
+      "historical_isin": "INE326A01037",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "1500000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-6",
+            "description": "Others",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "671400000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-6",
+            "description": "Pharmaceuticals",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "199452000000.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "1500000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "1500000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-6",
+            "description": "Others",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "202500000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-6",
+            "description": "Pharmaceuticals",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "49417500000.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "1500000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "12100000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "15200000.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "decision_at": "2024-06-28T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-05-01T13:10:49+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/f8/f87852338778f1df5b790e06a3909e3356c58c13f3dc22b0782dbb72261c7e35.xml",
+        "sha256": "07eeb7e380b7436e23543c61921d53011b9c15a523a9007751f4fca12d73a196"
+      },
+      "historical_identity_id": "b33c4aee-1095-5010-907f-7fbd7b6efb89",
+      "historical_isin": "INE699H01024",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "20000000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-7",
+            "description": "Edible Oil",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "387883300000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-7",
+            "description": "Food & FMCG",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "49939900000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "decimals": "-7",
+            "description": "Industry Essentials",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "74793100000.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "20000000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "20000000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-7",
+            "description": "Edible Oil",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "101949400000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-7",
+            "description": "Food & FMCG",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "13408200000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "decimals": "-7",
+            "description": "Industry Essentials",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "17022800000.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "20000000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-05-21T11:52:14+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/bf/bfd1ef6e0bcbb8386bbcb66979a2647a7fb9ee00c3ed3779a84081e82e487b35.xml",
+        "sha256": "d1887807a078d5aff8a5d3426ccd2adde13cfa3df56aeee51bc54d37c700b8c7"
+      },
+      "historical_identity_id": "ee5599cc-381f-5091-8dbd-9585d70834f4",
+      "historical_isin": "INE737H01014",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Automotive Segment",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "20211147000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Others Segment",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "76659000.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Automotive Segment",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "5546139000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Others Segment",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "29061000.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "0.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "DATED_ALIAS_CANDIDATE",
+      "decision_at": "2024-09-30T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-04-27T07:27:08+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/81/81a2d69f0c8c5040fdee54a882667f0590adb126ab3987d7705739161b103dab.xml",
+        "sha256": "74da1f4dbbcb9effed262fc61ed51871f1cba160b0185f2e825a47a1cf7cbba9"
+      },
+      "historical_identity_id": "f079165e-be44-517c-9bfc-0bdefdb29b0b",
+      "historical_isin": "INE918I01026",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "25000000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-7",
+            "description": "Insurance",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "549724100000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-7",
+            "description": "Investment and others",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "31899300000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "decimals": "-7",
+            "description": "Retail financing",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "549825000000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue04Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue04D",
+            "decimals": "-7",
+            "description": "Windmill",
+            "ordinal": 4,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "240800000.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "25000000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "25000000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-7",
+            "description": "Insurance",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "170306700000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-7",
+            "description": "Investment and others",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "4735200000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "decimals": "-7",
+            "description": "Retail financing",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "149342300000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue04Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue04D",
+            "decimals": "-7",
+            "description": "Windmill",
+            "ordinal": 4,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "29400000.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "25000000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "3994300000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "27859200000.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "in-bse-fin-2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "decision_at": "2024-07-31T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-05-29T16:40:23+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/83/83b52180f8d1495712b77db8efc96291bd0ce53ac22aa369c10c24318c0ad192.xml",
+        "sha256": "13db0e96ffcdc30cd7a2456444d8421de749e35955acb3a12e31ba79b214cd83"
+      },
+      "historical_identity_id": "f7261c7f-30b9-5cac-a3d6-2dfe7c417508",
+      "historical_isin": "INE127B01011",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "2000000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-6",
+            "description": "Canada",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "3196190000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-6",
+            "description": "India",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "7887730000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue03D",
+            "decimals": "-6",
+            "description": "others",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "270110000.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "2000000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "2000000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-6",
+            "description": "Canada",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "810260000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-6",
+            "description": "India",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "2117530000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue03Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue03D",
+            "decimals": "-6",
+            "description": "others",
+            "ordinal": 3,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "80400000.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "2000000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "40230000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "185680000.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    },
+    {
+      "canary_stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "filing": {
+        "annual_base_period": {
+          "audit": "Audited",
+          "context_ref": "FourD",
+          "days": 366,
+          "end": "2024-03-31",
+          "scope": "Consolidated",
+          "start": "2023-04-01"
+        },
+        "disseminated_at": "2024-05-23T06:50:45+00:00",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/5f/5f7276286fc56bc1d2acc333c0cb5ed190c1557b3941ca114ec367498fe97ac5.xml",
+        "sha256": "c5d3fc6d1aa788e97a7ed890a07af989e132f51560ada51a50eec0806f7fbd6c"
+      },
+      "historical_identity_id": "fe5e9f41-8b55-54af-b0e3-874544a10d27",
+      "historical_isin": "INE932A01024",
+      "source_semantics": {
+        "bridge_conditions_pass": false,
+        "defect_category": "INSUFFICIENT_PERIOD_EVIDENCE",
+        "fourD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "four_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "four_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Custom Designed building solutions & auxillaries",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "15839100000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:FourReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Diversified Engineering",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "16413700000.00"
+          }
+        ],
+        "four_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "literal_annual_segment_facts": [],
+        "matching_one_four_segment_identities": true,
+        "oneD": {
+          "end": "2024-03-31",
+          "instant": null,
+          "members": [],
+          "start": "2024-01-01"
+        },
+        "one_profit_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "one_revenue_group": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue01Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue01D",
+            "decimals": "-5",
+            "description": "Custom Designed building solutions & auxillaries",
+            "ordinal": 1,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "4031600000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [
+                {
+                  "dimension": "in-bse-fin:ReportableSegmentsAxis",
+                  "member": "in-bse-fin:OneReportableSegmentRevenue02Member"
+                }
+              ],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneReportableSegmentRevenue02D",
+            "decimals": "-5",
+            "description": "Diversified Engineering",
+            "ordinal": 2,
+            "scale": null,
+            "unit_ref": "INR",
+            "value": "4466900000.00"
+          }
+        ],
+        "one_revenue_reconciliation": {
+          "ok": true,
+          "residual": "0.00",
+          "tolerance": "150000"
+        },
+        "related_intersegment_elimination_facts": [
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "OneD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "270500000.00"
+          },
+          {
+            "context": {
+              "end": "2024-03-31",
+              "instant": null,
+              "members": [],
+              "start": "2024-01-01"
+            },
+            "context_ref": "FourD",
+            "qname": "in-bse-fin:InterSegmentRevenue",
+            "unit_ref": "INR",
+            "value": "947100000.00"
+          }
+        ],
+        "reporting_quarter_values": [
+          "Yearly"
+        ],
+        "schema_refs": [
+          "Ind-AS_entry_point_2020-03-31.xsd"
+        ]
+      }
+    }
+  ],
+  "counts": {
+    "INSUFFICIENT_PERIOD_EVIDENCE": 12
+  },
+  "fingerprint_sha256": "7cefd5e0ce5675d81c1106c4bf6d846a3b972f42bb6a9aa8d77280feb61c5997",
+  "mismatch_denominator": 12,
+  "repeat_fingerprint_sha256": "7cefd5e0ce5675d81c1106c4bf6d846a3b972f42bb6a9aa8d77280feb61c5997",
+  "v1_contract_blob": "45e990981371dba217d12c430f8ce567acbf25fc",
+  "v2_candidate_blob": "6a2c5d7780ac3966cd4e06b8b8ac46b5b3f6a627",
+  "version": "P8_XBRL_SEGMENT_PERIOD_SOURCE_SEMANTICS_MATRIX_V1"
+}
