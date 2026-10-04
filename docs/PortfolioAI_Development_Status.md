@@ -1,3 +1,66 @@
+## P8 OD2 Steel-Pipes Historical Taxonomy Adoption — 4 October 2026
+
+**Current-state precedence:** This entry supersedes earlier statements that `Manufacturing- Steel Pipes` is pending OD2 review.
+
+The owner has approved the OD2 evidence-backed synonym:
+
+`Manufacturing- Steel Pipes → Iron & Steel Products (IN070205015)`
+
+under:
+
+`Industrials → Capital Goods → Industrial Products`
+
+Frozen crosswalk candidate:
+
+`P8_HISTORICAL_TAXONOMY_CROSSWALK_CANDIDATE_V1`
+
+Git blob:
+
+`fd5a683ab595d98c71254ea8c825d5ae82338afb`
+
+Immutable owner-adoption record:
+
+`docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CROSSWALK_OD2_OWNER_ADOPTION_2026-10-04.json`
+
+### Updated frozen-canary taxonomy state
+
+Authoritative complete historical classifications are now:
+
+1. **Edible Oil — IN040101001**
+2. **Manufacturing- Steel Pipes → Iron & Steel Products — IN070205015**
+
+Therefore:
+
+- authoritative complete classifications: **2**
+- remaining ambiguous/incomplete dominant descriptions: **4**
+- authoritative methodology routes: **0**
+- complete normalized inputs: **0**
+
+The remaining unresolved descriptions are:
+
+- `IT and Business Service`
+- `EPC/Engineering Services`
+- `Textile`
+- `Automotive Segment`
+
+### Routing boundary
+
+This approval establishes historical taxonomy classification only.
+
+It does not authorize or create a semantically supported application-taxonomy target.
+
+For Steel Pipes, the official taxonomy branch remains:
+
+`Industrials → Capital Goods → Industrial Products → Iron & Steel Products`
+
+It must not be silently rewritten into the active Metals & Mining application category merely to obtain the `STEEL_FERROUS` route.
+
+Therefore methodology routing remains:
+
+**0 authoritative routes**
+
+The 25,761-pair surface remains unauthorized and unmeasured.
+
 ## P8 Historical Taxonomy Crosswalk + Existing Methodology Route Validation — 4 October 2026
 
 **Implementation / tests = COMPLETE / PASS.**  
