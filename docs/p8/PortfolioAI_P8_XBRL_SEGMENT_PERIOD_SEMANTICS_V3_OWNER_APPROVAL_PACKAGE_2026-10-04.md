@@ -1,7 +1,7 @@
 # PortfolioAI P8 XBRL Segment-Period Semantics V3 — Owner Approval Package
 
 Date: 4 October 2026  
-Status: **AWAITING EXPLICIT OWNER APPROVAL**
+Status: **OWNER APPROVED / ADOPTED**
 
 Candidate:
 
@@ -56,3 +56,54 @@ Approval therefore improves source/accounting proof but **does not pass the exis
 
 > **I approve `P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3` frozen at Git blob `797b7e91d7770f3377d0061ee338c76e8220391f` as the PortfolioAI normalization rule for the documented One/Four XBRL source-period conflict, subject to its full evidence conditions and preservation of original context dates. Approved V1 at blob `45e990981371dba217d12c430f8ce567acbf25fc` remains unchanged. This approval does not authorize 25,761-pair expansion, experiment freeze/execution, B5/B6/B-FINAL rebuild, P8-C, database/storage writes, migrations or deployment.**
 
+
+
+---
+
+## Owner adoption record — 4 October 2026
+
+The owner explicitly approved:
+
+`P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3`
+
+Frozen Git blob:
+
+`797b7e91d7770f3377d0061ee338c76e8220391f`
+
+Approved V1 remains unchanged at:
+
+`45e990981371dba217d12c430f8ce567acbf25fc`
+
+Immutable adoption record:
+
+`docs/p8/PortfolioAI_P8_XBRL_SEGMENT_PERIOD_SEMANTICS_V3_OWNER_ADOPTION_2026-10-04.json`
+
+### Adoption effect
+
+V3 is now the approved PortfolioAI normalization rule for the documented One/Four XBRL source-period conflict whenever all frozen V3 evidence conditions pass.
+
+Original literal XBRL context dates remain preserved.
+
+Measured canary implications are unchanged:
+
+- 12 approved V3 period normalizations;
+- 6 comparable segment-revenue cases;
+- 6 strict >50% dominant-business candidates;
+- 1 exact Basic-Industry classification;
+- 0 methodology routes;
+- 0 complete normalized inputs.
+
+### Boundary
+
+This approval does **not** authorize:
+
+- 25,761-pair expansion;
+- experiment freeze/execution;
+- B5/B6/B-FINAL rebuild;
+- P8-C;
+- Supabase/R2 writes;
+- migrations;
+- deployment;
+- scheduler activation.
+
+The expansion gate remains closed.
