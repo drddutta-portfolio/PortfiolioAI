@@ -238,7 +238,7 @@ def db_signal_inventory():
 
 def actual_routes(records):
     if not records:return {}
-    p=subprocess.run(["node","--experimental-strip-types","scripts/p8/p8-step2-route-readiness-bridge.mjs"],
+    p=subprocess.run(["npx","--yes","tsx@4.20.6","scripts/p8/p8-step2-route-readiness-bridge.mjs"],
       input="".join(json.dumps(x,separators=(",",":"))+"\n" for x in records),text=True,capture_output=True,check=True)
     out={}
     for line in p.stdout.splitlines():
