@@ -550,3 +550,12 @@ No plan approval should be interpreted as blanket permission for all later produ
 ## 11. Direction in one sentence
 
 > **Use the existing HDFCBANK and Dashboard work as reference implementations, then complete the missing portfolio-wide evidence and deterministic orchestration layers so every page reads the same canonical stored truth and every engine runs only when its prerequisites are genuinely satisfied.**
+
+
+## Evidence-gap closure status — 5 October 2026
+
+The baseline audit now has a complete current methodology-assignment census and measured 0% usable-intelligence baseline. The current Development Vercel deployment for repository HEAD is broken, while the stable alias remains on an older READY SHA. R2 runtime/bucket and backup-integrity evidence are read-only verified.
+
+This does not authorize a return to the older R1–R12 execution sequence. The governing V1 ten-gate sequence remains unchanged. Methodology assignment is now reusable baseline evidence; V1-4 evidence readiness and downstream V1-5/V1-7 engines/actions remain the dominant product blockers.
+
+Scope Freeze B remains incomplete until the current Development deployment/browser path is proven, recovery acceptance is resolved, and remediation evidence supports a non-arbitrary usable-intelligence release threshold.
