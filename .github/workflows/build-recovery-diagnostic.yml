@@ -11,16 +11,50 @@ permissions:
 jobs:
   diagnostic:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
           cache: npm
       - name: Install locked dependencies
         run: npm ci
-      - name: TypeScript diagnostic
-        run: npm run typecheck
-      - name: Production build diagnostic
-        run: npm run build
+      - name: Run recovery validation suite
+        shell: bash
+        run: |
+          set +e
+          npm run check:architecture
+          architecture=$?
+
+          npm run typecheck
+          typecheck=$?
+
+          npm run lint
+          lint=$?
+
+          npx vitest run             src/features/backtesting/p8CorporateActionNormalization.test.ts             src/features/backtesting/p8B4HistoricalEvidenceContract.test.ts
+          tests=$?
+
+          npm run build
+          build=$?
+
+          git diff --check f97cabbc155626b5f74ad8f5e065b9c984260680..HEAD
+          diffcheck=$?
+
+          if git diff --unified=0 f97cabbc155626b5f74ad8f5e065b9c984260680..HEAD             | grep '^+'             | grep -E -- '(-----BEGIN (RSA|EC|OPENSSH|PRIVATE)|AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|eyJ[A-Za-z0-9_-]{20,}\.)'
+          then
+            echo "Potential secret material found in changed lines."
+            secrets=1
+          else
+            secrets=0
+          fi
+
+          printf 'architecture=%s typecheck=%s lint=%s tests=%s build=%s diffcheck=%s secrets=%s\n'             "$architecture" "$typecheck" "$lint" "$tests" "$build" "$diffcheck" "$secrets"
+
+          if [ "$architecture" -ne 0 ] || [ "$typecheck" -ne 0 ] || [ "$lint" -ne 0 ] ||              [ "$tests" -ne 0 ] || [ "$build" -ne 0 ] || [ "$diffcheck" -ne 0 ] || [ "$secrets" -ne 0 ]
+          then
+            exit 1
+          fi
