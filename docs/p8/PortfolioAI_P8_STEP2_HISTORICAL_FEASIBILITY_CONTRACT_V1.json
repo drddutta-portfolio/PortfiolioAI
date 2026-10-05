@@ -1,0 +1,244 @@
+{
+  "version": "P8_STEP2_HISTORICAL_FEASIBILITY_CONTRACT_V1",
+  "frozen_at": "2026-10-05",
+  "branch": "PortfolioAI-Development",
+  "starting_head": "beaa82ec10cd50cfb004b53ac065da6e15fc88ba",
+  "purpose": "Freeze deterministic audit rules for Step 2 feasibility measurement only; does not freeze or authorize an investment experiment.",
+  "population": {
+    "authority": "P8 B2 survivor-free historical eligible universe",
+    "expected_pairs": 121956,
+    "expected_historical_identities": 4524,
+    "expected_decision_dates": 32,
+    "pair_key": [
+      "historical_identity_id",
+      "decision_date"
+    ],
+    "exact_pair_source": "R2 portfolioai-history/development/p8/b2/universe-members/v1/*/part-00000.parquet where membership_state=ELIGIBLE",
+    "reconciliation_baseline": {
+      "NO_PRE_DECISION_EVIDENCE": 60531,
+      "CLASSIFICATION_UNRESOLVED": 33706,
+      "MARKET_DATA_BLOCKED": 1958,
+      "CLASSIFICATION_TAXONOMY_UNPROVEN": 25761
+    },
+    "prior_candidate_pairs": 25761,
+    "prior_candidate_identities": 877
+  },
+  "frozen_source_inventory": {
+    "r2_bucket": "portfolioai-history-dev",
+    "source_manifest": {
+      "key": "portfolioai-history/development/p8/recovery/workstream-c/manifests/alias-backfill-8758fa8c8340ec0006f4a74fab76b783806bf009ba668148f0d771015d46ed79.jsonl",
+      "rows": 54562,
+      "sha256": "8758fa8c8340ec0006f4a74fab76b783806bf009ba668148f0d771015d46ed79"
+    },
+    "workstream_d": {
+      "pair_dispositions": {
+        "key": "portfolioai-history/development/p8/recovery/workstream-d/v2/pair-dispositions-b3f734704585e3fe9b833f84fc711af8505bc6c4ff1c38d447c5ca792c720e39.jsonl",
+        "rows": 121956,
+        "sha256": "b3f734704585e3fe9b833f84fc711af8505bc6c4ff1c38d447c5ca792c720e39"
+      },
+      "filing_index": {
+        "key": "portfolioai-history/development/p8/recovery/workstream-d/v2/filing-index-9fcce341710076dfb77e9ae2b1b3b18694d09a7cedc111442ae1826a02dd754a.jsonl",
+        "rows": 35516,
+        "sha256": "9fcce341710076dfb77e9ae2b1b3b18694d09a7cedc111442ae1826a02dd754a"
+      },
+      "xbrl_observations": {
+        "key": "portfolioai-history/development/p8/recovery/workstream-d/v2/xbrl-observations-fc55a4808a5497cdfc73ea51db1289fcdc24e994306fff372191fe3faf9aeeba.jsonl",
+        "rows": 6303784,
+        "sha256": "fc55a4808a5497cdfc73ea51db1289fcdc24e994306fff372191fe3faf9aeeba"
+      },
+      "classification_intervals": {
+        "key": "portfolioai-history/development/p8/recovery/workstream-d/v2/classification-intervals-e1bb66578f8bbdbfe88907369d37068c509abdb0aa07ce50ebf3b0a8dae21ed6.jsonl",
+        "rows": 12779,
+        "sha256": "e1bb66578f8bbdbfe88907369d37068c509abdb0aa07ce50ebf3b0a8dae21ed6"
+      }
+    },
+    "b3_adjusted_decision_ledger_prefix": "portfolioai-history/development/p8/b3/adjusted-decision-ledger/v2",
+    "b3_expected_partitions": 32,
+    "inventory_rule": "Runner must enumerate and hash the exact 32 B3 partition identities before measurement; any population, source hash or partition-count mismatch is a fail-closed preflight error."
+  },
+  "adopted_authorities": {
+    "accounting_contract": {
+      "path": "docs/p8/PortfolioAI_P8_HISTORICAL_SEGMENT_REVENUE_CLASSIFICATION_CONTRACT_V1.json",
+      "git_blob_sha": "45e990981371dba217d12c430f8ce567acbf25fc"
+    },
+    "period_semantics": {
+      "path": "docs/p8/PortfolioAI_P8_XBRL_SEGMENT_PERIOD_SEMANTICS_CANDIDATE_V3.json",
+      "git_blob_sha": "797b7e91d7770f3377d0061ee338c76e8220391f"
+    },
+    "taxonomy_crosswalk": {
+      "path": "docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_CROSSWALK_CANDIDATE_V1.json",
+      "git_blob_sha": "fd5a683ab595d98c71254ea8c825d5ae82338afb"
+    },
+    "original_canary_gate": {
+      "path": "docs/p8/PortfolioAI_P8_HISTORICAL_TAXONOMY_EVIDENCE_NORMALIZATION_CONTRACT_V1.json",
+      "git_blob_sha": "a54ab626e8325a31c7bd960691fd1ba897c14b76"
+    },
+    "taxonomy_version": "NSE_NOVEMBER_2022",
+    "taxonomy_payload_sha256": "e68821b19212f38a475bacd9977e9ec316e113babce90becbbca8a7c59bbed96",
+    "actual_historical_router": {
+      "path": "src/features/research/researchProfileRouting.ts",
+      "git_blob_sha": "b680ab1ff2f544d4462fb8e57e73532e80beed2f",
+      "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1"
+    },
+    "steel_methodology": {
+      "path": "src/features/research/metalsCommoditiesK4aMethodologyContract.ts",
+      "git_blob_sha": "4eb9e16a2f587dd8aa23bedbb467de4faab869a2",
+      "version": "METALS_COMMODITIES_K4A_METHODOLOGY_V1"
+    },
+    "steel_scoring_input_authority": {
+      "path": "src/features/research/metalsCommoditiesK4bScoringMethodology.ts",
+      "git_blob_sha": "c298676c8c54fccae7c571106830c274b58529d8",
+      "version": "METALS_COMMODITIES_K4B_SCORING_V1"
+    },
+    "steel_readiness_adapter": {
+      "path": "src/features/research/historicalSteelFerrousReadinessAdapter.ts",
+      "git_blob_sha": "c8237b27a5385e1d7105f67d7847f589a6d4f342",
+      "version": "P8_HISTORICAL_STEEL_FERROUS_READINESS_ADAPTER_V1"
+    },
+    "step1_canary_fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce"
+  },
+  "historical_classification_rules": {
+    "accounting": "Apply adopted V1 only to audited consolidated annual evidence with same-period reconciliation and comparable external segment revenue. Strict dominance is >50%; exactly 50% fails. Missing is not zero; aggregate intersegment revenue cannot establish segment-specific external revenue.",
+    "period": "Apply adopted V3 only where every documented evidence prerequisite holds, preserving literal context dates and transformation provenance.",
+    "taxonomy": "Require complete official NSE November-2022 four-tier hierarchy. Approved exact mapping Edible Oil -> IN040101001 and reviewed OD2 synonym Manufacturing- Steel Pipes -> IN070205015 are the only adopted mappings in scope. No new synonym inference.",
+    "diversified": "DIVERSIFIED remains blocked under OD4."
+  },
+  "routing_rules": {
+    "actual_router_required": true,
+    "current_proven_historical_profile": "STEEL_FERROUS",
+    "current_proven_basic_industry_code": "IN070205015",
+    "company_identity_routing_forbidden": true,
+    "theoretical_registry_routing_forbidden": true,
+    "unsupported_or_ambiguous": "FAIL_CLOSED"
+  },
+  "route_specific_requirements": {
+    "profile": "STEEL_FERROUS",
+    "history_minimums": {
+      "annualFundamentalsYears": 5,
+      "quarterlyCycleQuarters": 12,
+      "marginHistoryQuarters": 12,
+      "cashConversionYears": 5,
+      "leverageYears": 5,
+      "marketHistoryTradingDays": 252
+    },
+    "mandatory_signals": [
+      {
+        "code": "THROUGH_CYCLE_MARGIN_QUALITY",
+        "minimumObservations": 12,
+        "normalizationAuthority": "THROUGH_CYCLE_MARGIN_AND_COST_POSITION"
+      },
+      {
+        "code": "ROCE_OR_ROIC_THROUGH_CYCLE",
+        "minimumObservations": 5,
+        "normalizationAuthority": "THROUGH_CYCLE_RETURN_ON_CAPITAL"
+      },
+      {
+        "code": "CFO_OR_FCF_CONVERSION_THROUGH_CYCLE",
+        "minimumObservations": 5,
+        "normalizationAuthority": "THROUGH_CYCLE_CASH_CONVERSION"
+      },
+      {
+        "code": "NET_DEBT_AND_INTEREST_COVERAGE_MID_CYCLE",
+        "minimumObservations": 5,
+        "normalizationAuthority": "MID_CYCLE_LEVERAGE_AND_COVERAGE"
+      },
+      {
+        "code": "METALS_BUSINESS_DURABILITY",
+        "minimumObservations": 5,
+        "normalizationAuthority": "COST_CURVE_INTEGRATION_SCALE_AND_CAPITAL_ALLOCATION"
+      },
+      {
+        "code": "VALUATION_THROUGH_CYCLE",
+        "minimumObservations": 5,
+        "normalizationAuthority": "NORMALIZED_EV_EBITDA_PB_FCF_ROCE_NOT_SPOT_PE"
+      },
+      {
+        "code": "MOMENTUM_12M_RELATIVE",
+        "minimumObservations": 252,
+        "normalizationAuthority": "NIFTY_METAL_RELATIVE"
+      },
+      {
+        "code": "COMMODITY_CYCLE_DRAWDOWN_RISK",
+        "minimumObservations": 252,
+        "normalizationAuthority": "COMMODITY_CYCLE_AND_MARKET_DRAWDOWN_RISK"
+      },
+      {
+        "code": "OWNERSHIP_GOVERNANCE",
+        "minimumObservations": 1,
+        "normalizationAuthority": "REVIEWED_GOVERNANCE_EVIDENCE"
+      },
+      {
+        "code": "VOLUME_REALIZATION_AND_SPREAD_GROWTH",
+        "minimumObservations": 12,
+        "normalizationAuthority": "VOLUME_REALIZATION_STEEL_SPREAD_AND_UTILISATION"
+      },
+      {
+        "code": "COMMODITY_EXPOSURE_METADATA",
+        "minimumObservations": 1,
+        "normalizationAuthority": "METALS_COMMODITIES_K4A_METHODOLOGY_V1:COMMODITY_EXPOSURE_METADATA",
+        "scoreRequired": false
+      }
+    ],
+    "complete_input_rule": "Every applicable signal must have an adopted canonical definition/source mapping/unit-scale-period-accounting authority, pre-decision provenance, required history, freshness/revision validity and the exact normalization authority. Raw XBRL facts or active metric definitions alone are insufficient."
+  },
+  "primary_disposition_precedence": [
+    "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION",
+    "NO_PRE_DECISION_EVIDENCE",
+    "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE",
+    "MARKET_DATA_BLOCKED_OR_INSUFFICIENT_HISTORY",
+    "ROUTE_UNSUPPORTED_OR_AMBIGUOUS",
+    "REQUIRED_INPUTS_INCOMPLETE",
+    "COMPLETE_INPUTS"
+  ],
+  "diagnostic_flags_overlap_allowed": true,
+  "proposed_narrower_cohort": {
+    "name": "P8_STEP2_OBJECTIVE_ROUTED_HISTORICAL_COHORT_V1",
+    "frozen_before_coverage": true,
+    "eligibility": [
+      "B2 pair is historically eligible under the frozen survivor-free universe.",
+      "Official evidence exists strictly before the decision timestamp.",
+      "Adopted V1/V3 rules prove a complete four-tier historical classification.",
+      "The actual historical router proves exactly one supported existing profile."
+    ],
+    "exclusions_not_used": [
+      "future return or holdout outcome",
+      "later company survival",
+      "current holdings",
+      "manual stock convenience",
+      "final complete-input status"
+    ],
+    "note": "Market and input sufficiency are measured outcomes within this predeclared cohort, not membership selectors."
+  },
+  "acceptance_thresholds": {
+    "minimum_included_decision_dates": 24,
+    "minimum_overall_complete_input_coverage_percent": 80,
+    "minimum_each_included_decision_date_percent": 70,
+    "minimum_each_applicable_major_methodology_sector_percent": 60
+  },
+  "output_contract": {
+    "full_denominator_coverage_required": true,
+    "pair_level_exclusive_disposition_required": true,
+    "counts_by_decision_date": true,
+    "counts_by_methodology_family": true,
+    "exact_input_completeness": true,
+    "diagnostic_flags": true,
+    "canonical_json_sort_keys": true,
+    "fingerprint": "SHA-256 over canonical machine-readable audit payload excluding generated timestamp and self-fingerprint fields"
+  },
+  "authorization_boundaries": {
+    "feasibility_measurement_only": true,
+    "experiment_freeze_or_execution": false,
+    "scores_or_decisions_or_positions_or_returns": false,
+    "holdout_or_forward_return_reads": false,
+    "provider_calls": false,
+    "supabase_writes": false,
+    "r2_writes": false,
+    "schema_migrations": false,
+    "deployments": false,
+    "scheduler_activation": false,
+    "production_changes": false,
+    "main_changes": false,
+    "p8_c": false,
+    "b5_b6_bfinal_rebuild": false
+  }
+}
