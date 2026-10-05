@@ -8,9 +8,15 @@ Research now exposes the canonical selected snapshot's immutable requirement sta
 
 Read-only PortfolioAI Dev (`lrgpjimipfkyoqbpsqzz`) census: 239 equities across 45 profiles, 0 READY / 109 REVIEW_REQUIRED / 2 STALE / 128 INSUFFICIENT. The unchanged approved 111-member cohort spans 39 profiles: 103 members have missing mandatory items, 109 review-required items, 2 stale items, 32 missing approved benchmark history, 1 short listing history (overlapping conditions). Snapshot assessments are dated 29 September, not recomputed current freshness. V1-4 cannot be closed from UI visibility or a stored VALIDATED label alone: dated period/unit/currency/scope/source/freshness validation, aligned/adjusted history, evidence review and bounded acquisition/materialization remain required.
 
-105 application regressions and 17 Edge contract tests PASS; final presentation/lifecycle edit also rerun with 15 PASS. Strict build, architecture guard and changed-file lint PASS. Full lint retains the unchanged 77 errors / 4 warnings. RLS remains enabled on evidence tables; current views are security-invoker; new read path uses owner-scoped SELECT only.
+105 application regressions and 21 Edge contract tests PASS; final presentation/lifecycle edit also rerun with 15 PASS. Strict build, architecture guard and changed-file lint PASS. Full lint retains the unchanged 77 errors / 4 warnings. RLS remains enabled on evidence tables; current views are security-invoker; new read path uses owner-scoped SELECT only.
 
 The approved manifest/hash, same-member count/value thresholds, 239-equity/248-holding visibility and mandatory V1-9 restore proof remain unchanged. Provider campaigns, database mutations/materialization, migrations, scheduler actions, storage writes and restores require their specific action approval; no such action occurred. No main/Production/Auth/RLS/P8 changes or execution. This dated entry supersedes older V1-4 NOT AUTHORIZED/NOT STARTED entries below, which remain historical.
+
+
+
+### Cached historical evidence guard follow-up
+
+Final source-path verification also found already-normalized cached AVAILABLE payloads could bypass the parser repair. The materializer now calls the same `guardedNumericEvidenceState` for retained matched-section payloads before accepting availability. For multi-period requirements it yields REVIEW_REQUIRED with `DATED_REPORTING_PERIODS_NOT_PROVEN / RECONCILE_DATED_REPORTING_PERIODS`; document review keeps its own reason. The raw source payload is never changed. Pure Edge regressions now total **21 PASS across 3 files**, and changed Edge-file ESLint passes. The materializer's Development-only target, one-time execution grant, bounded slices, append-only lineage, zero-provider-call contract and terminal states remain intact. No Edge Function deployment or materializer invocation occurred. This follow-up changes Edge source/tests and documentation only; the frontend source remains exactly the tested READY application at `94a9b855cb0f4c83a24b0a0de21f18d4438790bd`. Future documentation/Edge-only commits must not be mistaken for a new frontend implementation needing repeated browser acceptance.
 
 Execution record and all 45 profile readiness counts: `docs/PortfolioAI_V1_4_EVIDENCE_AND_CURRENT_HISTORY_READINESS_2026-10-05.md`.
 

@@ -1,6 +1,6 @@
 import {createClient} from "https://esm.sh/@supabase/supabase-js@2"
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
-import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvidence,parseTrendlyneOwnershipHistory} from "../_shared/p7-ic-evidence-normalization.ts"
+import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvidence,parseTrendlyneOwnershipHistory,guardedNumericEvidenceState} from "../_shared/p7-ic-evidence-normalization.ts"
 import {P7_IC_PROFILE_CONTRACTS} from "../_shared/p7-ic-profile-contracts.ts"
 import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json" with {type:"json"}
 
@@ -160,7 +160,7 @@ function requirementItem(input:{code:string;minimum:number;freshness:string|null
  const normalized=records.flatMap(record=>{
    const raw=record.raw_payload,items=Array.isArray(raw.p7_ic2_normalized_evidence)?raw.p7_ic2_normalized_evidence:[]
    if(ownershipish(code)&&raw.p7_ic2_ownership_history&&typeof raw.p7_ic2_ownership_history==="object")return [{record,value:raw.p7_ic2_ownership_history as Json,state:String((raw.p7_ic2_ownership_history as Json).state??"MISSING")}]
-   return items.filter(x=>x&&typeof x==="object"&&String((x as Json).evidenceCode)===code).map(x=>({record,value:x as Json,state:String((x as Json).state??"MISSING")}))
+   return items.filter(x=>x&&typeof x==="object"&&String((x as Json).evidenceCode)===code).map(x=>({record,value:x as Json,state:guardedNumericEvidenceState(String((x as Json).state??"MISSING"),x,minimum)}))
  })
  const available=normalized.filter(x=>x.state==="AVAILABLE")
  if(available.length){
@@ -202,7 +202,11 @@ function requirementItem(input:{code:string;minimum:number;freshness:string|null
    return {...blocked(code,minimum,freshness,benchmarks,"FRESH","CANONICAL_OBSERVATION_READY","NONE"),metric_code:x.metric_code,candidate_evidence_ids:fresh.map(row=>row.id),selected_evidence_id:x.id,evidence_as_of_date:periodDates.length?periodDates[periodDates.length-1]!:x.period_end,retrieved_at:x.retrieved_at,fresh_through:freshDates.length?dateOnly(freshDates[0]!):null,source_provider:x.source_code,raw_source_record_id:x.source_record_id,normalized_value:{series:selected.map(row=>({metricCode:row.metric_code,periodEnd:row.period_end,periodType:row.period_type,numeric:row.numeric_value,text:row.text_value,boolean:row.boolean_value,date:row.date_value}))},validation_state:"VALIDATED",canonical_selection_state:"DETERMINISTIC_HISTORY_AGGREGATE"}
  }
  if(candidates.length)return {...blocked(code,minimum,freshness,benchmarks,"STALE","ONLY_STALE_REQUIRED_EVIDENCE","REFRESH_REQUIRED_EVIDENCE"),candidate_evidence_ids:candidates.map(x=>x.id)}
- const review=normalized.find(x=>x.state.includes("REVIEW"));if(review)return {...blocked(code,minimum,freshness,benchmarks,"REVIEW_REQUIRED","DOCUMENT_EVIDENCE_REQUIRES_REVIEW","REVIEW_DOCUMENT_EVIDENCE"),candidate_evidence_ids:[review.record.id],raw_source_record_id:review.record.id,retrieved_at:review.record.retrieved_at,source_provider:review.record.source_code,normalized_value:review.value}
+ const review=normalized.find(x=>x.state.includes("REVIEW"))
+ if(review){
+   const historyReview=minimum>1&&Array.isArray(review.value.matchedSections)
+   return {...blocked(code,minimum,freshness,benchmarks,"REVIEW_REQUIRED",historyReview?"DATED_REPORTING_PERIODS_NOT_PROVEN":"DOCUMENT_EVIDENCE_REQUIRES_REVIEW",historyReview?"RECONCILE_DATED_REPORTING_PERIODS":"REVIEW_DOCUMENT_EVIDENCE"),candidate_evidence_ids:[review.record.id],raw_source_record_id:review.record.id,retrieved_at:review.record.retrieved_at,source_provider:review.record.source_code,normalized_value:review.value}
+ }
  return blocked(code,minimum,freshness,benchmarks,"MISSING","REQUIRED_EVIDENCE_MISSING","CACHE_FIRST_PROVIDER_REFRESH")
 }
 

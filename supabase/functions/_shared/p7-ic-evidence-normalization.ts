@@ -45,6 +45,12 @@ export function unwrapTrendlyneMarkdown(providerResult:string){let parsed:unknow
 export function parseTrendlyneParameterSections(providerResult:string,expectedSymbol:string,expectedInstrumentId:string){const lines=unwrapTrendlyneMarkdown(providerResult).split(/\r?\n/u).map(line=>line.trim()),identityRows=lines.filter(line=>line.includes("|")).slice(0,20),expected=identityRows.some(line=>{const fields=line.split("|").map(x=>x.trim());return fields[0]===expectedInstrumentId&&fields[2]?.toUpperCase()===expectedSymbol.toUpperCase()});if(!expected)throw new Error("PROVIDER_PRIMARY_ENTITY_MISMATCH");const result:Array<{label:string;numericValue:number}>=[],valueRow=/^[^:]+:(?:-?[\d,]+(?:\.\d+)?|None)$/u;for(let i=0;i<lines.length;i++){const label=lines[i];if(!label||label==="---"||label.includes("|")||valueRow.test(label))continue;let matched:string|null=null;for(let j=i+1;j<lines.length;j++){const line=lines[j];if(line==="---")break;if(line.includes("|"))break;if(line.startsWith(expectedSymbol+":")){if(matched!==null){matched=null;break}matched=line.slice(expectedSymbol.length+1).trim()}}if(!matched||matched==="None")continue;const numericValue=Number(matched.replace(/,/gu,""));if(Number.isFinite(numericValue))result.push({label,numericValue})}return result}
 function normalizeLabel(value:string){return value.toUpperCase().replace(/[^A-Z0-9]+/gu," ").trim().replace(/\s+/gu," ")}
 function labelMatches(label:string,hint:string){const a=normalizeLabel(label),b=normalizeLabel(hint);return a===b||a.includes(b)||b.includes(a)}
+/** Old cached AVAILABLE labels cannot establish dated history either. Preserve their payload for review. */
+export function guardedNumericEvidenceState(state:string,value:unknown,minimumPeriods:number):string {
+ if(state!=="AVAILABLE"||minimumPeriods<=1||!value||typeof value!=="object")return state
+ const retained=value as {readonly matchedSections?:unknown}
+ return Array.isArray(retained.matchedSections)?"EVIDENCE_PRESENT_REVIEW_REQUIRED":state
+}
 export function normalizeNumericEvidence(input:{readonly providerResult:string;readonly expectedSymbol:string;readonly expectedInstrumentId:string;readonly requirements:readonly EvidenceRequirementPlan[]}) {
  const sections=parseTrendlyneParameterSections(input.providerResult,input.expectedSymbol,input.expectedInstrumentId)
  return input.requirements.filter(req=>req.channels.includes("TRENDLYNE_PARAMETERS")).map(req=>{
@@ -55,7 +61,7 @@ export function normalizeNumericEvidence(input:{readonly providerResult:string;r
   const historyUnproven=matches.length>0&&req.minimumPeriods>1
   return {
    evidenceCode:req.evidenceCode,
-   state:historyUnproven?"EVIDENCE_PRESENT_REVIEW_REQUIRED":matches.length?"AVAILABLE":"MISSING",
+   state:guardedNumericEvidenceState(matches.length?"AVAILABLE":"MISSING",{matchedSections:matches},req.minimumPeriods),
    minimumPeriods:req.minimumPeriods,
    matchedSections:matches,
    ...(historyUnproven?{reasonCode:"DATED_REPORTING_PERIODS_NOT_PROVEN",deterministicScoreReady:false}:{}),

@@ -95,7 +95,7 @@ The canonical authority registry and both research/SSOT architecture documents d
 ## Verification and practical limits
 
 - Application focused regressions: **105 PASS across 12 files**; the final lifecycle/presentation test edit was also rerun with **15 PASS across 2 files**.
-- Edge normalization/materializer contract regressions: **17 PASS across 3 files**. These are pure tests; no function or provider executes.
+- Edge normalization/materializer contract regressions: **21 PASS across 3 files**. These are pure tests; no function or provider executes.
 - Strict TypeScript/Vite production build: PASS. Existing large-chunk warning remains.
 - Data-boundary architecture guard: PASS.
 - Changed application-file and changed Edge-file ESLint: PASS.
@@ -137,4 +137,12 @@ No main/Production changes; no database writes, migrations, Auth/RLS changes, pr
 - Owner-provided temporary protected share access established a Vercel-only cookie and delivered `/app` HTTP 200. Served Research asset `ResearchPage-DcW-bIwF.js` SHA-256 `bfd60ee04e6e417b739b99141c49d8dbfdc99dcb1e42d8c5bdae107079a9c4bc` contains the canonical requirements panel, read-only browsing copy and requirement selection metadata. No share capability token/cookie value is recorded here.
 - This proves protected SPA/asset delivery, not a logged-in PortfolioAI interaction or live data rendering. Authenticated end-to-end acceptance remains mandatory at V1-9.
 - The connector's explicit team-scoped listing returned 403 scope authorization, while listing/get-deployment **without the team override** succeeded using the connected account. No protection settings or account permissions were changed.
-- GitHub comparison against the starting HEAD verifies exactly 13 source/test/architecture-document files changed and no private manifest change. No GitHub Actions runs were associated with the application commit. The final gate/status record is a documentation-only descendant and therefore source-equivalent; do not demand another application build after it.
+- GitHub comparison against the starting HEAD verifies exactly 13 source/test/architecture-document files changed and no private manifest change. No GitHub Actions runs were associated with the application commit. The final gate/status record and cached-period follow-up add Edge source/tests/documentation only; the frontend remains source-equivalent to this tested application Preview. Do not require another frontend acceptance cycle for Edge/docs-only differences.
+
+
+### Cached historical evidence guard follow-up
+
+Final source-path verification also found already-normalized cached AVAILABLE payloads could bypass the parser repair. The materializer now calls the same `guardedNumericEvidenceState` for retained matched-section payloads before accepting availability. For multi-period requirements it yields REVIEW_REQUIRED with `DATED_REPORTING_PERIODS_NOT_PROVEN / RECONCILE_DATED_REPORTING_PERIODS`; document review keeps its own reason. The raw source payload is never changed. Pure Edge regressions now total **21 PASS across 3 files**, and changed Edge-file ESLint passes. The materializer's Development-only target, one-time execution grant, bounded slices, append-only lineage, zero-provider-call contract and terminal states remain intact. No Edge Function deployment or materializer invocation occurred. This follow-up changes Edge source/tests and documentation only; the frontend source remains exactly the tested READY application at `94a9b855cb0f4c83a24b0a0de21f18d4438790bd`. Future documentation/Edge-only commits must not be mistaken for a new frontend implementation needing repeated browser acceptance.
+
+
+Final follow-up checks: the pure shared normalizer passes strict standalone TypeScript compilation (`tsc --noEmit --ignoreConfig --strict --skipLibCheck --target ES2023 --module ESNext --moduleResolution bundler`). Deno is not installed in the managed verification workspace, so a complete Deno runtime typecheck/deployment of the materializer was not performed or claimed. Its changed source is covered by pure normalization and materializer contract tests and Edge ESLint; actual Development function deployment and execution remain separately bounded actions.

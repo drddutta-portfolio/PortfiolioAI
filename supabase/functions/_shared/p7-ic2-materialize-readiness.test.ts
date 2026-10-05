@@ -6,6 +6,8 @@ describe("P7 IC3 canonical snapshot materializer",()=>{
  it("uses the append-only V3 IC3 lineage contract",()=>{expect(source).toContain('append_and_select_research_evidence_snapshot_v3');expect(source).toContain('selection_run_id:selectionRunId');expect(source).toContain('execution_grant_id:String(body.grantId??"")');expect(source).toContain('selection_basis:"IC3_CANONICAL_MATERIALIZATION"');expect(source).toContain('classification_version');expect(source).toContain('methodology_role');expect(source).toContain('assignment_version')})
  it("freezes campaign time and source cutoff",()=>{expect(source).toContain("evaluationAsOfMs");expect(source).toContain("sourceCutoffAt");expect(source).toContain('.lte("retrieved_at",sourceCutoffAt)');expect(source).not.toContain("Date.now()))")})
  it("reports zero provider calls",()=>{expect(source).toContain("providerCalls:0")})
+ it("applies the shared historical-period guard to retained normalized evidence",()=>{expect(source).toContain('state:guardedNumericEvidenceState(String((x as Json).state??"MISSING"),x,minimum)')})
+ it("keeps historical-period review distinct from document review",()=>{expect(source).toContain('historyReview?"DATED_REPORTING_PERIODS_NOT_PROVEN":"DOCUMENT_EVIDENCE_REQUIRES_REVIEW"');expect(source).toContain('historyReview?"RECONCILE_DATED_REPORTING_PERIODS":"REVIEW_DOCUMENT_EVIDENCE"')})
  it("preserves all terminal evidence states",()=>{for(const state of ["FRESH","STALE","MISSING","INSUFFICIENT","CONFLICTING","REVIEW_REQUIRED","NOT_APPLICABLE"])expect(source).toContain(`"${state}"`)})
  it("does not score R6 or R7",()=>{expect(source).not.toMatch(/stock_score_runs|recommendation_runs|executeR6|executeR7/u)})
 })
