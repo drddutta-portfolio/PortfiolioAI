@@ -157,12 +157,13 @@ def main():
         for (hid,dte),dr in sorted(dmap.items(),key=lambda x:(x[0][1],x[0][0])):
             p=pre[(hid,dte)];mr=market[(hid,dte)];rr=rmap.get(hid+"|"+dte)
             no_pre=dr["state"]=="NO_PRE_DECISION_EVIDENCE";classification=p["classification"] is not None;market_ready=mr["state"]=="READY"
-            route_ok=bool(rr and rr["route"]["state"]=="ROUTED");inputs_ok=bool(rr and rr["readiness"]["state"]=="INPUTS_COMPLETE")
+            route_ok=bool(rr and rr["route"]["state"]=="ROUTED");inputs_ok=False
             primary=pick_primary({"access":p["access"],"no_pre":no_pre,"classification":classification,"market":market_ready,"route":route_ok,"inputs":inputs_ok})
             flags=[];flags+=(p["snap"].get("diagnostics",[]) if p["snap"] else [])
             if not market_ready:flags.append("MARKET:"+str(mr.get("blocker_reason") or mr["state"]))
             if rr and not route_ok:flags.append("ROUTE:"+rr["route"]["reasonCode"])
-            if rr and not inputs_ok:flags+=rr["readiness"]["reasonCodes"]
+            if route_ok:
+                flags += ["MANDATORY_SIGNAL_NOT_READY:"+x["code"]+":MISSING_NORMALIZED_HISTORICAL_INPUT" for x in contract["route_specific_requirements"]["mandatory_signals"]]
             for x in set(flags):diag[x]+=1
             method=rr["route"]["profileCode"] if route_ok else None
             if route_ok:cohort.append((hid,dte))
@@ -170,7 +171,11 @@ def main():
             if method:bymethod[method][primary]+=1
             rows.append({"historical_identity_id":hid,"decision_date":dte,"primary_disposition":primary,"historical_classification":p["classification"],
               "selected_source":({k:p["snap"].get(k) for k in ("period_start","period_end","published_at","source_sha256","r2_key","classification_description","classification_basis")} if p["snap"] else None),
-              "market_state":mr,"route":rr["route"] if rr else None,"input_readiness":rr["readiness"] if rr else None,"diagnostic_flags":sorted(set(flags))})
+              "market_state":mr,"route":rr["route"] if rr else None,
+              "input_readiness":({"state":"INPUTS_INCOMPLETE","authority":"P8_STEP2_HISTORICAL_FEASIBILITY_CONTRACT_V1",
+                "required_signals":contract["route_specific_requirements"]["mandatory_signals"],
+                "reason":"NO_FROZEN_NORMALIZED_HISTORICAL_SIGNAL_LEDGER_IN_STEP2_SOURCE_INVENTORY"} if route_ok else None),
+              "diagnostic_flags":sorted(set(flags))})
         return counts,bydate,bymethod,diag,rows,cohort
 
     def core(a):
