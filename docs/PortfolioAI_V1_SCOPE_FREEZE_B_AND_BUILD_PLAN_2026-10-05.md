@@ -343,3 +343,77 @@ Before approval, complete:
 After those are supplied, amend this same file to **PROPOSED / OWNER REVIEW REQUIRED**. Only explicit owner approval after that amendment may authorize V1-2–V1-9 implementation.
 
 No application code, database migration, provider execution, scheduler activation, storage write, main/Production change, or V1 implementation is authorized by this document.
+
+
+## 21. Evidence-gap closure update — 5 October 2026
+
+**Status remains: INCOMPLETE PROPOSAL / OWNER REVIEW NOT READY.**  
+**V1 IMPLEMENTATION remains NOT AUTHORIZED.**
+
+### Closed or materially improved evidence gaps
+
+1. **R2 target/runtime mapping:** verified read-only. `portfolioai-history-dev-api` is bound to `portfolioai-history-dev`; preserved P8 objects/manifests and hashes are present.
+2. **Existing Development backup integrity:** verified from live R2 metadata plus the repository workflow contract. The 2026-10-03 encrypted backup exists with manifest, SHA file and PASS completion marker; the workflow performed upload/read-back/decrypt/SHA/`pg_restore --list` validation.
+3. **Full current methodology census:** completed. 239/239 held equities have one current P7 IC1 methodology assignment across 45 profile codes.
+4. **Current evidence/readiness totals:** completed. 128 INSUFFICIENT, 109 REVIEW_REQUIRED, 2 STALE, 0 READY.
+5. **Current usable-intelligence baseline:** measured as **0/239 equities and INR 0 / INR 2,087,118.51 priced equity value** under the frozen minimum V1 endpoint.
+6. **Private real-case availability:** measured without publishing identities. Core, ETF, bank/financial, pharma/specialized, non-financial, missing/review evidence, partial-sale and multi-broker cases exist; no owner SATELLITE role was measured and no current READY equity exists.
+
+### Newly proven deployment blocker
+
+Current repository HEAD `224c2889372cb1a8dbecb1f32babf03e6fee064c` maps to Vercel deployment `dpl_3ViT5naRqprmzHxwBfiRrD1LjLXW`, which is **ERROR**:
+- error code: `lint_or_type_error`;
+- build command: `npm run build`;
+- exit code: 2.
+
+The stable Development alias currently resolves to an older READY deployment at SHA `52fb8929bbaa3991256cb4386f4c716c137c0634`.
+
+Therefore current HEAD cannot yet pass authenticated browser acceptance, and the older runtime must not be represented as verification of current HEAD.
+
+### Remediation cohorts and threshold consequence
+
+The current 239-equity denominator divides into evidence cohorts:
+- 128 INSUFFICIENT / INR 761,261.55;
+- 109 REVIEW_REQUIRED / INR 1,240,361.16;
+- 2 STALE / INR 85,495.80.
+
+Common downstream work affects the entire denominator: current V1 engines/actions are not portfolio-wide and no current snapshot is READY.
+
+Therefore no honest non-zero release threshold can yet be derived solely from read-only evidence. A percentage chosen now would be arbitrary. The correct owner-facing conclusion is:
+
+> Current usable-intelligence coverage is 0%. Before a numerical V1 release threshold is proposed, V1-4/V1-5/V1-7 remediation must establish a bounded set of securities that actually reaches the minimum endpoint; the threshold must then be derived from the measured count/value produced by those remediation cohorts.
+
+The denominator remains 239 equities and INR 2,087,118.51 priced equity value at the dated snapshot. It must not be reduced to make the percentage look better.
+
+### Remaining conditions before Scope Freeze B can become review-ready
+
+1. fix or otherwise separately resolve the current Development build/deployment failure and positively verify the resulting exact SHA;
+2. perform authenticated browser verification on that exact current Development deployment;
+3. establish an explicitly authorized isolated live restore rehearsal, or owner-accept a documented recovery limitation if the release standard is amended;
+4. after bounded V1 remediation evidence exists, derive a non-arbitrary minimum usable-intelligence release threshold;
+5. finalize private acceptance fixtures for scenarios that do not currently exist as real READY holdings.
+
+The deployment fix is application/runtime work and is **not authorized by this audit task**. The isolated restore is a mutable operation and is **not authorized**. Both require separate owner authorization.
+
+### Revised blocker/reuse position
+
+Current audit priorities are now:
+- 23 V1 BLOCKER;
+- 21 V1 IMPORTANT;
+- 4 V1.1;
+- 8 NO CHANGE.
+
+The methodology-assignment census itself is no longer a blocker and should be **REUSE AS-IS**, subject to V1-3 compatibility verification. Evidence readiness remains a V1-4 blocker. Existing P8/R2 assets remain preserved and are not rebuilt.
+
+### Gate effort refinement
+
+- V1-2: optimistic Small; likely Small–Medium; pessimistic Medium.
+- V1-3: optimistic Small; likely Medium; pessimistic Medium. The 239/239 assignment census can be reused.
+- V1-4: optimistic Medium; likely Large; pessimistic Large+, driven by 128 INSUFFICIENT + 109 REVIEW_REQUIRED + 2 STALE snapshots and 9 equities below 252 daily history rows.
+- V1-5: optimistic Medium; likely Large; pessimistic Large+, driven by engine generalization/missing engines.
+- V1-6: optimistic Small–Medium; likely Medium; pessimistic Medium–Large.
+- V1-7: optimistic Medium; likely Large; pessimistic Large+, driven by Fit/Sizing/Exit/action integration.
+- V1-8: optimistic Small–Medium; likely Medium; pessimistic Medium–Large.
+- V1-9: optimistic Medium; likely Medium–Large; pessimistic Large, driven by deployment/browser/recovery/invalidation proof.
+
+External provider/evidence delays are not included in engineering effort and remain separately authorization/budget dependent.
