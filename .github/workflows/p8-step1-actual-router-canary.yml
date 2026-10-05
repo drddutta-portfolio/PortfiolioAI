@@ -1,0 +1,24 @@
+name: P8 Step 1 actual router canary
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - 'scripts/p8/*step1*'
+      - 'docs/p8/**'
+      - 'src/features/research/researchProfileRouting.ts'
+      - '.github/workflows/p8-step1-actual-router-canary.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --experimental-strip-types scripts/p8/test-p8-step1-actual-router-canary.mjs
+      - run: python scripts/p8/test-p8-step1-evidence-reconciliation.py
+      - run: node --experimental-strip-types scripts/p8/p8-step1-actual-router-canary.mjs
+      - run: git diff --exit-code -- docs/p8/PortfolioAI_P8_STEP1_ACTUAL_ROUTER_CANARY_VALIDATION_2026-10-05.json

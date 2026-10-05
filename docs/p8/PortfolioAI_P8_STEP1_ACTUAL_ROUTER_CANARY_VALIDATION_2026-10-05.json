@@ -1,0 +1,1776 @@
+{
+  "version": "P8_STEP1_ACTUAL_ROUTER_CANARY_VALIDATION_V1",
+  "canary_fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce",
+  "scope": "Original Step 1 policy/classification/route gate; not Step 2 input feasibility",
+  "upstream_measurements": "Existing frozen source-semantic and V3 accounting audits reused, not re-extracted",
+  "execution": "Actual routeHistoricalResearchProfileV1 called twice per canary pair for repeatability; no identity-assigned route",
+  "counts": {
+    "canary_pairs": 32,
+    "authoritative_complete_classifications": 2,
+    "actual_canonical_router_routes": 1,
+    "negative_controls": 8,
+    "negative_control_promotions": 0,
+    "semantic_recovered_from_existing_audit": 32
+  },
+  "gate": {
+    "AT_LEAST_ONE_POSITIONAL_MEMBER_CASE_HAS_SOURCE_CITED_SEMANTIC_RECOVERY": true,
+    "AT_LEAST_ONE_CANARY_MEMBER_HAS_COMPLETE_CLASSIFICATION_PROVEN": true,
+    "AT_LEAST_ONE_COMPLETE_CLASSIFICATION_PROVEN_MEMBER_HAS_EXACTLY_ONE_EXISTING_ROUTE": true,
+    "NEGATIVE_CONTROLS_ARE_NOT_PROMOTED_WITHOUT_PROOF": true,
+    "REPEAT_FINGERPRINT_MATCHES": true
+  },
+  "gate_pass": true,
+  "results": [
+    {
+      "historical_identity_id": "08aee4b7-fef7-5caa-b4af-a0830f66d5fa",
+      "decision_at": "2024-08-30T10:00:00+00:00",
+      "historical_isin": "INE645L01011",
+      "stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "source": {
+        "sha256": "596f96ec873e68dd47c030aba5999a245ac82cc31389d41fa3a31134f91df0ff",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/77/7720ee51f4d6bea57b68d8ea756e1defeb0edf5f6128f2cd2b19ac64754be711.xml",
+        "disseminated_at": "2024-05-28T06:26:59+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-08-30T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-28T06:26:59+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2024-08-30T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [
+        "NONZERO_INTERSEGMENT_WITHOUT_SEGMENT_EXTERNAL_REVENUE"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "19f21fe6-46c9-5f26-9ee5-6207558ba10b",
+      "decision_at": "2024-11-29T10:00:00+00:00",
+      "historical_isin": "INE230R01035",
+      "stratum": "DATED_ALIAS_CANDIDATE",
+      "source": {
+        "sha256": "4b0b16349cc9ef3ff46f61d590768a39915ba4c567ef4a72f0355cd28680521d",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/c3/c3bbb4dc78bc481c428239d63ee3f84e4146939383eca1079c91ce5d3ee49a01.xml",
+        "disseminated_at": "2024-05-31T09:27:01+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": {
+        "macroEconomicSectorCode": "IN07",
+        "macroEconomicSectorName": "Industrials",
+        "sectorCode": "IN0702",
+        "sectorName": "Capital Goods",
+        "industryCode": "IN070205",
+        "industryName": "Industrial Products",
+        "basicIndustryCode": "IN070205015",
+        "basicIndustryName": "Iron & Steel Products"
+      },
+      "classification_basis": "OWNER_REVIEWED_OD2_SYNONYM_AND_ADOPTED_V1_V3",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-11-29T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-31T09:27:01+00:00",
+        "classificationState": "AUTHORITATIVE_COMPLETE",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "IN07",
+          "macroEconomicSectorName": "Industrials",
+          "sectorCode": "IN0702",
+          "sectorName": "Capital Goods",
+          "industryCode": "IN070205",
+          "industryName": "Industrial Products",
+          "basicIndustryCode": "IN070205015",
+          "basicIndustryName": "Iron & Steel Products"
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "ROUTED",
+        "profileCode": "STEEL_FERROUS",
+        "basis": "EXACT_HISTORICAL_BASIC_INDUSTRY",
+        "reasonCode": "P8_HISTORICAL_IN070205015_STEEL_FERROUS",
+        "decisionAt": "2024-11-29T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "IN07",
+          "macroEconomicSectorName": "Industrials",
+          "sectorCode": "IN0702",
+          "sectorName": "Capital Goods",
+          "industryCode": "IN070205",
+          "industryName": "Industrial Products",
+          "basicIndustryCode": "IN070205015",
+          "basicIndustryName": "Iron & Steel Products"
+        }
+      },
+      "accounting_blockers": [
+        "DOMINANT_SEGMENT_TAXONOMY_MAPPING_REQUIRES_OD2_CATALOG_OR_IS_AMBIGUOUS"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "1e88380b-a173-5055-b53d-3554e487db96",
+      "decision_at": "2025-07-31T10:00:00+00:00",
+      "historical_isin": "INE377N01017",
+      "stratum": "POSITIONAL_CURRENT_LINKED",
+      "source": null,
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-07-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-07-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "22cc4c9f-d5d0-53ce-93af-60b3ea0f5357",
+      "decision_at": "2025-01-31T10:00:00+00:00",
+      "historical_isin": "INE798K01010",
+      "stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "source": null,
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-01-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-01-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": true
+    },
+    {
+      "historical_identity_id": "23c42d9d-fc5c-58a6-9d65-0d3c12da2fa6",
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "historical_isin": "INE374B01019",
+      "stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "source": {
+        "sha256": "4d963f84cc478c03cbc306bf2edd2d997cf4686dd7d66fb14335a8a7b38e245e",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/6f/6f13ae49b4196557c1622fef5c317e97418f072fe4cbd601c966dc8e0be94038.xml",
+        "disseminated_at": "2024-05-28T11:31:58+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-10-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-28T11:31:58+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-10-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "26f17fef-d920-566a-ae9f-85df009ec151",
+      "decision_at": "2024-12-31T10:00:00+00:00",
+      "historical_isin": "INE860A01027",
+      "stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "source": {
+        "sha256": "6a97ac9f69daf58812c6c53c3d07e5b5a3a6f4ed20234113265eaa0691ce1ad5",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/49/491aa5acf43b5a120d3ec253b74ee82ae6b3cddf10dc7867dfa1f64a46e3095c.xml",
+        "disseminated_at": "2024-04-26T15:20:16+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-12-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-04-26T15:20:16+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2024-12-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [
+        "DOMINANT_SEGMENT_TAXONOMY_MAPPING_REQUIRES_OD2_CATALOG_OR_IS_AMBIGUOUS"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "2b347f1e-4a76-5825-89c1-642e386ea715",
+      "decision_at": "2025-07-31T10:00:00+00:00",
+      "historical_isin": "INE0JO301016",
+      "stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "source": {
+        "sha256": "50e5083b9dd4e0027805fd605dccf4a2d0915a5ae9014953b8e656eb16b4c208",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/90/90f07116f87b5e4c7e4de96ce99f6647a22352774063d81e5d96973d92d10e16.xml",
+        "disseminated_at": "2024-05-23T16:31:09+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-07-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-23T16:31:09+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-07-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": true
+    },
+    {
+      "historical_identity_id": "32947c3d-1d36-55b3-b687-83556470f25f",
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "historical_isin": "INE285K01026",
+      "stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "source": {
+        "sha256": "de523818983b6a6833a97fc5adfd208ea9fc36dedeff59bf5167888cc3403107",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/78/78cd2c8a157243dae3d52a28abab7f7eb466136cd3792998a857015493cc7731.xml",
+        "disseminated_at": "2024-05-29T08:59:17+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-05-30T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-29T08:59:17+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-05-30T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [
+        "DOMINANT_SEGMENT_TAXONOMY_MAPPING_REQUIRES_OD2_CATALOG_OR_IS_AMBIGUOUS"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "38749e5e-3e7c-5516-b5b9-17f54160025d",
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "historical_isin": "INE772T01024",
+      "stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "source": {
+        "sha256": "0472d3e156567296896a065a12d1301290146435b0a9468aeed50bcec9719310",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/83/8379826c857524d90967de50e8a9ec2f2b68f72dbc776afdd4b2162a90c8c947.xml",
+        "disseminated_at": "2024-05-29T13:06:48+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-05-30T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-29T13:06:48+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-05-30T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "56b13c5c-ca21-570e-b387-634e320718c8",
+      "decision_at": "2025-09-30T10:00:00+00:00",
+      "historical_isin": "INE013P01021",
+      "stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "source": null,
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-09-30T10:00:00+00:00",
+        "sourceDisseminatedAt": "",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-09-30T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": true
+    },
+    {
+      "historical_identity_id": "59e788f2-3047-536c-8f4b-d92f34d69bf4",
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "historical_isin": "INE979A01025",
+      "stratum": "DATED_ALIAS_CANDIDATE",
+      "source": {
+        "sha256": "d291254701399b1fdfa05cd65557ea334d05d6c7d0281a6367c917ce432c0ad4",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/9a/9a9acf1529ac5a4821c6588fd09506673c1ecaf4f4bdbdfbb9389903b3a64363.xml",
+        "disseminated_at": "2024-05-23T13:25:48+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2026-05-29T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-23T13:25:48+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2026-05-29T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "5b4f2608-90cb-5aa8-bd6a-d007f42de9f8",
+      "decision_at": "2024-09-30T10:00:00+00:00",
+      "historical_isin": "INE08KP01019",
+      "stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "source": {
+        "sha256": "d9c183bb8829cd5e7364bb8059d09870161194e8a3657c9c941f04b86fed0f84",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/09/099340a8a7e27e33db75c1f7ec7cec8c9cf59f8c776b25577159d16d6342a33f.xml",
+        "disseminated_at": "2024-05-29T10:27:25+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-09-30T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-29T10:27:25+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2024-09-30T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [
+        "DOMINANT_SEGMENT_TAXONOMY_MAPPING_REQUIRES_OD2_CATALOG_OR_IS_AMBIGUOUS"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "5ffdcce2-20c4-5a4f-baee-0a87475cf1e5",
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "historical_isin": "INE184O01015",
+      "stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "source": null,
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2026-05-29T10:00:00+00:00",
+        "sourceDisseminatedAt": "",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2026-05-29T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": true
+    },
+    {
+      "historical_identity_id": "6936e380-029f-5495-a265-d8db8672aa47",
+      "decision_at": "2025-06-30T10:00:00+00:00",
+      "historical_isin": "INE118A01012",
+      "stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "source": {
+        "sha256": "20480cb7309d1cfffce74fe6ad8b68e9e3deb507f1fa3033fa62a2102baadd25",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/0f/0fe27418f3c557b48ae5b9f9f233f8b41f896eeb92b74e8c2ae756b8fec244fc.xml",
+        "disseminated_at": "2024-04-27T06:05:38+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-06-30T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-04-27T06:05:38+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-06-30T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "6fef8980-34eb-5c31-ab04-9d41dddfe1e6",
+      "decision_at": "2025-11-28T10:00:00+00:00",
+      "historical_isin": "INE093A01041",
+      "stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "source": {
+        "sha256": "5e8c91dd30290e5ddeb4c6ff15c5ec5481ab80cedfb9d7714ce0639a85cb8acd",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/a9/a9c3cb87a7e9c69e3ce79734a8e81393c0fe1bcdd8197eb61328d61915ebb7bd.xml",
+        "disseminated_at": "2025-03-07T12:34:43+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-11-28T10:00:00+00:00",
+        "sourceDisseminatedAt": "2025-03-07T12:34:43+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-11-28T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "6fef8980-34eb-5c31-ab04-9d41dddfe1e6",
+      "decision_at": "2026-07-31T10:00:00+00:00",
+      "historical_isin": "INE093A01041",
+      "stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "source": {
+        "sha256": "5e8c91dd30290e5ddeb4c6ff15c5ec5481ab80cedfb9d7714ce0639a85cb8acd",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/a9/a9c3cb87a7e9c69e3ce79734a8e81393c0fe1bcdd8197eb61328d61915ebb7bd.xml",
+        "disseminated_at": "2025-03-07T12:34:43+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2026-07-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "2025-03-07T12:34:43+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2026-07-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "72497e23-689a-576c-98ec-70b9acb59914",
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_isin": "INE661I01014",
+      "stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "source": {
+        "sha256": "54ff47d1df7ba53d41f0892b54797a0fb045a6b5e8cf7eef8a56575a156ef39e",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/18/182158f6abf1cddf9e8bdfdd59ef568552e1c2dded7a328137a50bb1fc195c41.xml",
+        "disseminated_at": "2023-05-31T22:38:02+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-02-29T10:00:00+00:00",
+        "sourceDisseminatedAt": "2023-05-31T22:38:02+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2024-02-29T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [
+        "NONZERO_INTERSEGMENT_WITHOUT_SEGMENT_EXTERNAL_REVENUE"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "76b41969-131c-591c-91a7-e4cb65884e90",
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_isin": "INE999K01014",
+      "stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "source": {
+        "sha256": "59bbb2cd665b2488f29925af0131a854c904484855fd32a14583970653563d9b",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/3a/3aec4d238039fdd3d0799742078fd3330a43adb64d2cc6dfff58aed40f462253.xml",
+        "disseminated_at": "2023-04-21T11:20:02+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-02-29T10:00:00+00:00",
+        "sourceDisseminatedAt": "2023-04-21T11:20:02+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2024-02-29T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": true
+    },
+    {
+      "historical_identity_id": "91cfc33b-5c5a-570c-9811-eb4851e6144b",
+      "decision_at": "2025-05-30T10:00:00+00:00",
+      "historical_isin": "INE200A01026",
+      "stratum": "UNRESOLVED_EVIDENCE_HISTORICAL_ONLY",
+      "source": null,
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-05-30T10:00:00+00:00",
+        "sourceDisseminatedAt": "",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-05-30T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": true
+    },
+    {
+      "historical_identity_id": "9eac015d-2fe9-5eca-bf57-42011e16fa5e",
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "historical_isin": "INE280A01028",
+      "stratum": "POSITIONAL_CURRENT_LINKED",
+      "source": {
+        "sha256": "78f75a58c8635406a558e7ba55ffc7d85779c58fce07c3762c0c914bc553107e",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/1d/1d3bfedd4a840b70a4b69e2b542fd34cc372a774209dd70df480a3bb92ef338f.xml",
+        "disseminated_at": "2024-05-03T18:00:23+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-10-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-03T18:00:23+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-10-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "acaacb32-02bb-595c-8d70-435e8f3f4096",
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "historical_isin": "INE625B01014",
+      "stratum": "MULTIPLE_PREDECISION_FILINGS",
+      "source": null,
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-10-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-10-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "af88fe19-5864-536f-a207-15aded7d3c83",
+      "decision_at": "2025-01-31T10:00:00+00:00",
+      "historical_isin": "INE326A01037",
+      "stratum": "DATED_ALIAS_CANDIDATE",
+      "source": {
+        "sha256": "10e295d0da56e9123a0ffb21a0714befc66b0aa7391a29c247a79ec3c37873f8",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/a6/a63a0665e4e4865aef9c261f4d7d430d17ae2e87d5b28a7c6ffd35836c3067db.xml",
+        "disseminated_at": "2024-05-07T07:36:58+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-01-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-07T07:36:58+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-01-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [
+        "NONZERO_INTERSEGMENT_WITHOUT_SEGMENT_EXTERNAL_REVENUE"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "b33c4aee-1095-5010-907f-7fbd7b6efb89",
+      "decision_at": "2024-06-28T10:00:00+00:00",
+      "historical_isin": "INE699H01024",
+      "stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "source": {
+        "sha256": "07eeb7e380b7436e23543c61921d53011b9c15a523a9007751f4fca12d73a196",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/f8/f87852338778f1df5b790e06a3909e3356c58c13f3dc22b0782dbb72261c7e35.xml",
+        "disseminated_at": "2024-05-01T13:10:49+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": {
+        "macroEconomicSectorCode": "IN04",
+        "macroEconomicSectorName": "Fast Moving Consumer Goods",
+        "sectorCode": "IN0401",
+        "sectorName": "Fast Moving Consumer Goods",
+        "industryCode": "IN040101",
+        "industryName": "Agricultural Food & other Products",
+        "basicIndustryCode": "IN040101001",
+        "basicIndustryName": "Edible Oil"
+      },
+      "classification_basis": "EXACT_NSE_LEAF_AND_ADOPTED_V1_V3",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-06-28T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-01T13:10:49+00:00",
+        "classificationState": "AUTHORITATIVE_COMPLETE",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "IN04",
+          "macroEconomicSectorName": "Fast Moving Consumer Goods",
+          "sectorCode": "IN0401",
+          "sectorName": "Fast Moving Consumer Goods",
+          "industryCode": "IN040101",
+          "industryName": "Agricultural Food & other Products",
+          "basicIndustryCode": "IN040101001",
+          "basicIndustryName": "Edible Oil"
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "EXACT_IN070205015_BASIC_INDUSTRY_REQUIRED",
+        "decisionAt": "2024-06-28T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "IN04",
+          "macroEconomicSectorName": "Fast Moving Consumer Goods",
+          "sectorCode": "IN0401",
+          "sectorName": "Fast Moving Consumer Goods",
+          "industryCode": "IN040101",
+          "industryName": "Agricultural Food & other Products",
+          "basicIndustryCode": "IN040101001",
+          "basicIndustryName": "Edible Oil"
+        }
+      },
+      "accounting_blockers": [
+        "APPLICATION_CLASSIFICATION_CROSSWALK_UNRESOLVED"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "bca563eb-e943-5272-960b-f6833a692614",
+      "decision_at": "2024-02-29T10:00:00+00:00",
+      "historical_isin": "INE470A01017",
+      "stratum": "DIVERSIFIED_HISTORICAL_ONLY",
+      "source": {
+        "sha256": "92122ec9b9b48c0e356a80e8c2354eeaf6019bf1b33a88d6d5344bee48c5b9d8",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/94/94152407fff5c818984efaaea7bdf4ba0ceb2973e800b8c98c50d0b0d83bdda0.xml",
+        "disseminated_at": "2023-05-31T16:28:03+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-02-29T10:00:00+00:00",
+        "sourceDisseminatedAt": "2023-05-31T16:28:03+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2024-02-29T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "c644b736-db2a-53bf-9155-cb211ee8e455",
+      "decision_at": "2025-03-28T10:00:00+00:00",
+      "historical_isin": "INE987B01026",
+      "stratum": "POSITIONAL_CURRENT_LINKED",
+      "source": {
+        "sha256": "42db6d4502297eb1f74ff90464e542ba1f03da58b485bd863765226daf99fa8c",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/09/09934a67b69ea05cb87d721905ae30b22dc039ff384cbfa52098411cb16740e7.xml",
+        "disseminated_at": "2024-05-27T11:37:06+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-03-28T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-27T11:37:06+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-03-28T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "c84e95b9-f25c-5489-8bd9-d149f0339a3b",
+      "decision_at": "2025-02-28T10:00:00+00:00",
+      "historical_isin": "INE0OV601013",
+      "stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "source": {
+        "sha256": "b425f296c0f9f376f1dad2bb24f2e4866659939311ab4dc15c629fa9d558b286",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/63/6306cbdf30eb6e6132a0d2126c6957d05df22937f56f313bec1285ea44d296b3.xml",
+        "disseminated_at": "2024-05-30T09:40:27+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-02-28T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-30T09:40:27+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-02-28T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": true
+    },
+    {
+      "historical_identity_id": "d226db5d-0fea-55e9-a934-bc2e9aac2d67",
+      "decision_at": "2025-06-30T10:00:00+00:00",
+      "historical_isin": "INE0HR601026",
+      "stratum": "UNRESOLVED_EVIDENCE_CURRENT_LINKED",
+      "source": null,
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-06-30T10:00:00+00:00",
+        "sourceDisseminatedAt": "",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-06-30T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": true
+    },
+    {
+      "historical_identity_id": "e5754730-b48d-5c21-8198-0316e48c1f03",
+      "decision_at": "2024-11-29T10:00:00+00:00",
+      "historical_isin": "INE0Q3J01015",
+      "stratum": "POSITIONAL_CURRENT_LINKED",
+      "source": null,
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-11-29T10:00:00+00:00",
+        "sourceDisseminatedAt": "",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2024-11-29T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "ee5599cc-381f-5091-8dbd-9585d70834f4",
+      "decision_at": "2025-10-31T10:00:00+00:00",
+      "historical_isin": "INE737H01014",
+      "stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "source": {
+        "sha256": "d1887807a078d5aff8a5d3426ccd2adde13cfa3df56aeee51bc54d37c700b8c7",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/bf/bfd1ef6e0bcbb8386bbcb66979a2647a7fb9ee00c3ed3779a84081e82e487b35.xml",
+        "disseminated_at": "2024-05-21T11:52:14+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2025-10-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-21T11:52:14+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2025-10-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [
+        "DOMINANT_SEGMENT_TAXONOMY_MAPPING_REQUIRES_OD2_CATALOG_OR_IS_AMBIGUOUS"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "f079165e-be44-517c-9bfc-0bdefdb29b0b",
+      "decision_at": "2024-09-30T10:00:00+00:00",
+      "historical_isin": "INE918I01026",
+      "stratum": "DATED_ALIAS_CANDIDATE",
+      "source": {
+        "sha256": "74da1f4dbbcb9effed262fc61ed51871f1cba160b0185f2e825a47a1cf7cbba9",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/81/81a2d69f0c8c5040fdee54a882667f0590adb126ab3987d7705739161b103dab.xml",
+        "disseminated_at": "2024-04-27T07:27:08+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-09-30T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-04-27T07:27:08+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2024-09-30T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [
+        "NONZERO_INTERSEGMENT_WITHOUT_SEGMENT_EXTERNAL_REVENUE"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "f7261c7f-30b9-5cac-a3d6-2dfe7c417508",
+      "decision_at": "2024-07-31T10:00:00+00:00",
+      "historical_isin": "INE127B01011",
+      "stratum": "POSITIONAL_HISTORICAL_ONLY",
+      "source": {
+        "sha256": "13db0e96ffcdc30cd7a2456444d8421de749e35955acb3a12e31ba79b214cd83",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/83/83b52180f8d1495712b77db8efc96291bd0ce53ac22aa369c10c24318c0ad192.xml",
+        "disseminated_at": "2024-05-29T16:40:23+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 1,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2024-07-31T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-29T16:40:23+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2024-07-31T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [
+        "NONZERO_INTERSEGMENT_WITHOUT_SEGMENT_EXTERNAL_REVENUE"
+      ],
+      "negative_control": false
+    },
+    {
+      "historical_identity_id": "fe5e9f41-8b55-54af-b0e3-874544a10d27",
+      "decision_at": "2026-05-29T10:00:00+00:00",
+      "historical_isin": "INE932A01024",
+      "stratum": "DIVERSIFIED_CURRENT_LINKED",
+      "source": {
+        "sha256": "c5d3fc6d1aa788e97a7ed890a07af989e132f51560ada51a50eec0806f7fbd6c",
+        "r2_key": "portfolioai-history/development/p8/recovery/workstream-c/raw-alias/5f/5f7276286fc56bc1d2acc333c0cb5ed190c1557b3941ca114ec367498fe97ac5.xml",
+        "disseminated_at": "2024-05-23T06:50:45+00:00"
+      },
+      "semantic_state": "SEMANTIC_RECOVERED",
+      "linked_positional_semantic_count": 0,
+      "classification": null,
+      "classification_basis": "UNPROVEN_OR_BLOCKED",
+      "route_input": {
+        "assetClass": "EQUITY",
+        "decisionAt": "2026-05-29T10:00:00+00:00",
+        "sourceDisseminatedAt": "2024-05-23T06:50:45+00:00",
+        "classificationState": "BLOCKED",
+        "taxonomyVersion": "NSE_NOVEMBER_2022",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        },
+        "accountingContractBlob": "45e990981371dba217d12c430f8ce567acbf25fc",
+        "periodSemanticsBlob": "797b7e91d7770f3377d0061ee338c76e8220391f"
+      },
+      "actual_router_result": {
+        "version": "HISTORICAL_RESEARCH_PROFILE_ROUTING_V1",
+        "state": "REVIEW_REQUIRED",
+        "profileCode": null,
+        "basis": "HISTORICAL_ROUTE_REJECTED",
+        "reasonCode": "AUTHORITATIVE_COMPLETE_CLASSIFICATION_REQUIRED",
+        "decisionAt": "2026-05-29T10:00:00+00:00",
+        "economicHierarchy": {
+          "macroEconomicSectorCode": "",
+          "macroEconomicSectorName": "",
+          "sectorCode": "",
+          "sectorName": "",
+          "industryCode": "",
+          "industryName": "",
+          "basicIndustryCode": "",
+          "basicIndustryName": ""
+        }
+      },
+      "accounting_blockers": [
+        "NONZERO_INTERSEGMENT_WITHOUT_SEGMENT_EXTERNAL_REVENUE"
+      ],
+      "negative_control": false
+    }
+  ],
+  "result_fingerprint_sha256": "81f83d2bf61fdf459041bf48859771a4778af5e8ffac615df77a0d232a8edb67",
+  "repeat_fingerprint_sha256": "81f83d2bf61fdf459041bf48859771a4778af5e8ffac615df77a0d232a8edb67",
+  "input_feasibility": "BLOCKED_FOR_ROUTED_CASE_BY_EXISTING_HISTORY; NOT_A_STEP1_GATE_CONDITION",
+  "boundaries": {
+    "expansion_executed": false,
+    "experiment_frozen": false,
+    "b5_b6_bfinal_rebuilt": false,
+    "p8_c_started": false,
+    "scores_generated": false,
+    "writes": 0,
+    "provider_calls": 0
+  },
+  "fingerprint_sha256": "7e4e539d3882a8929f57f20c0eb662ec75c7d1516adb1c0b155ba26210a44c9d"
+}
