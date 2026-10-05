@@ -1,3 +1,17 @@
+## Codex Development verification reconciliation — 5 October 2026
+
+**Build/runtime source equivalence = VERIFIED.** The stable Development alias serves READY Preview `dpl_DbjnpyyEYHg8bDWDYgJKuCaaFCwE` at SHA `10d740fb76f218ad8db04c4494714c998045c1d2`. Inspected remote HEAD `953575ebbfac4fd5c0c76157a6317531965a5057` differs only in this Development Status document; application and committed configuration are identical.
+
+**Hosted authenticated baseline smoke = PARTIAL OWNER-REPORTED REACHABILITY; full smoke NOT PROVEN.** The owner reports Dashboard open at `/app#dashboard-daily-move`; other route/marker/error checks have not yet been supplied. A fresh browser request redirects to Vercel login. Owner access was requested; no bypass or authenticated workflow is claimed. Use the verified READY Preview and disclose later documentation-only differences instead of creating a deployment loop.
+
+**111-equity target = CANDIDATE / DELIVERY FEASIBILITY NOT PROVEN.** The reported count/value arithmetic is correct (46.44% count / 63.53% frozen value), but REVIEW_REQUIRED/STALE does not establish complete evidence or approved implemented engine support. The current projection remains fail-closed with no final action. Before approval, supply cohort method/engine/evidence/cost assumptions or obtain explicit owner acceptance of the disclosed uncertainty.
+
+**Baseline Freeze = PARTIAL. Scope Freeze B = INCOMPLETE / OWNER REVIEW NOT READY. V1 implementation = NOT AUTHORIZED.** Restore deferral to V1-9 remains an owner decision. Current capability totals remain 22 BLOCKER / 23 IMPORTANT / 3 V1.1 / 8 NO CHANGE.
+
+The current verification and concrete owner choices are in `docs/PortfolioAI_V1_SCOPE_FREEZE_B_AND_BUILD_PLAN_2026-10-05.md`. This section supersedes earlier current-runtime, only-two-blockers and fully-justified-target claims below. This continuation changes documentation only; no runtime, provider, database, scheduler, storage, main or Production action occurred.
+
+---
+
 ## Concrete Scope Freeze B acceptance proposal — 5 October 2026
 
 The proposed V1 minimum real-portfolio usable-intelligence acceptance is now **111/239 equities (46.44%) representing INR 1,325,856.96 / 63.53% of the frozen priced-equity denominator**, selected objectively as the complete frozen non-INSUFFICIENT cohort (109 REVIEW_REQUIRED + 2 STALE). This is a proposed release target, not achieved coverage; current measured usable intelligence remains 0/239.

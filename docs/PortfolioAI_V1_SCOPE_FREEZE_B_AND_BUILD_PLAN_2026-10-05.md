@@ -1,3 +1,80 @@
+## Current Codex verification and owner-review decisions — 5 October 2026
+
+**Scope Freeze B:** INCOMPLETE / OWNER REVIEW NOT READY.
+**V1 implementation:** NOT AUTHORIZED.
+**Development build/runtime source equivalence:** VERIFIED.
+**Authenticated hosted workflow acceptance:** PARTIAL OWNER-REPORTED REACHABILITY; full smoke NOT PROVEN.
+**111-equity delivery feasibility:** NOT PROVEN; candidate target for owner review.
+
+This section supersedes earlier present-tense deployment and proposal-readiness claims below. Previous dated reports remain history.
+
+### Verified Development runtime
+
+Inspected remote Development HEAD: `953575ebbfac4fd5c0c76157a6317531965a5057`.
+
+The stable Development alias now resolves to READY Preview deployment `dpl_DbjnpyyEYHg8bDWDYgJKuCaaFCwE`, Git SHA `10d740fb76f218ad8db04c4494714c998045c1d2`, branch `PortfolioAI-Development`, project `portfiolio-ai` / `prj_Vp1QUuF63cnfuAl8ULYuHW44EbXU`, Preview (`target: null`).
+
+Unique URL: https://portfiolio-4v8jelttm-dibyendu-dutta.vercel.app
+Stable alias: https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app
+
+GitHub comparison of the deployed SHA to inspected HEAD reports exactly one changed file: `docs/PortfolioAI_Development_Status.md`. Application source, dependencies, build configuration and committed runtime configuration are identical. No new deployment is necessary to resolve an application-source mismatch. This proves source equivalence, not deployment of the documentation-only HEAD or browser acceptance. Connected platform configuration was not changed.
+
+For baseline inspection, use this positively identified READY Development Preview and record its exact SHA. Later documentation-only commits must be compared and disclosed; they do not invalidate this source-equivalence proof. Any application/configuration change requires new deployment evidence. Final release deployment/version acceptance remains required in V1-9.
+
+The owner reports that the Development Dashboard is open at `/app#dashboard-daily-move`. This is owner-reported reachability; no marker, data correctness or other route result has yet been supplied. The agent's separate fresh browser request reached Vercel's login page, not an authenticated PortfolioAI workflow. The Codex browser tab was requested for owner access; opening a tab is not authentication or successful inspection. No protection bypass or credentials were used. Dashboard, Holdings, Portfolio Structure, Research and Intelligence remain unverified in an authenticated hosted session. Owner-performed evidence must be explicitly attributed to the owner, with date, deployment identity, checked routes, DEVELOPMENT marker and errors/limitations; it must not be labelled agent-observed.
+
+### What the 111-equity proposal establishes
+
+The reported frozen cohorts reconcile arithmetically:
+- 109 REVIEW_REQUIRED + 2 STALE = 111 equities;
+- INR 1,240,361.16 + INR 85,495.80 = INR 1,325,856.96;
+- 111 / 239 = 46.44% by count;
+- INR 1,325,856.96 / INR 2,087,118.51 = 63.53% by frozen priced equity value.
+
+This continuation checks the arithmetic and repository evidence; it does not independently remeasure private holdings or change the dated database snapshot.
+
+The cohort is reproducibly defined by status, but that does not demonstrate lower remediation cost, complete mandatory inputs, approved methodology coverage or deliverability. REVIEW_REQUIRED can reflect unresolved review/conflict, and STALE requires an accepted freshness remedy. These are not executable-engine readiness guarantees.
+
+The existing `src/features/decision/p7Ic6CurrentProjection.ts` exposes blocked prerequisites and returns `actionState: null`; even READY evidence alone does not create R7 candidacy or complete portfolio/action intelligence. This supports preserving the measured zero-usable baseline and planning real downstream engineering, rather than converting a readiness label into an action.
+
+### Candidate acceptance contract and delivery assumptions
+
+Retain 111 equities / INR 1,325,856.96 as a **candidate minimum**, not an approved or evidence-proven delivery forecast. Preserve the complete deterministic endpoint, scenario tests, 248/248 explicit status coverage, unchanged denominators, fail-closed semantics and private-identity boundary.
+
+Before claiming that this candidate is feasible, the existing V1-3/V1-4 planning work must supply a private frozen member manifest and non-sensitive aggregate matrix covering:
+1. methodology/profile distribution within the selected cohort;
+2. approved contract/version and implemented reusable versus missing engine for each represented methodology;
+3. mandatory evidence/history/freshness gaps and review/conflict reasons;
+4. permissible acquisition paths, external dependencies and provider volume/budget assumptions, without executing providers;
+5. engineering work/effort per methodology and shared downstream integration;
+6. expected count/value gains with uncertainty and explicit unremediable cases.
+
+This is bounded inspection/planning inside the existing gates, not a new gate or authorization to implement them. If evidence is unavailable, mark it NOT PROVEN. Do not claim that all 111 are achievable solely because they are non-INSUFFICIENT.
+
+Owner choices, once the remaining evidence is available:
+- adopt the 111 candidate with its documented assumptions and all-or-fail acceptance, accepting the disclosed delivery uncertainty;
+- select a smaller named private cohort with measured count/value and method coverage before implementation, then amend the threshold explicitly;
+- require all 239 equities, accepting the wider evidence/engine scope.
+
+No smaller threshold, provider authorization or feasibility exception is inferred here. Once approved, a target must not be lowered after seeing implementation results without an explicit owner amendment.
+
+### Remaining actions and decisions
+
+1. Obtain attributed read-only authenticated baseline smoke evidence from the verified READY Preview. Do not use refresh/save/import or other write/provider controls.
+2. Resolve cohort feasibility assumptions and freeze the private membership/count/value contract, or obtain explicit owner acceptance of the disclosed target uncertainty. No live provider acquisition or implementation is required to review the plan.
+3. Present the isolated-restore deferral to V1-9 for explicit owner decision; Baseline Freeze remains PARTIAL and restore remains a release requirement.
+4. Only then present Scope Freeze B for explicit approval. V1-2 requires separate execution authorization.
+
+Full lint remains reported FAIL (84 errors, 4 warnings); previous build/TypeScript/architecture/focused-test results are preserved historical verification, not newly rerun in this documentation-only continuation.
+
+No main/Production change, application implementation, provider call, database mutation/migration, scheduler action, storage write, backup/restore, runtime configuration change or manual deployment occurred.
+
+---
+
+## Historical proposal and verification records
+
+The sections below preserve previous proposals and observations. Current status and qualifications above control; earlier claims that only two evidence gaps remained or that the 111 target was fully justified are superseded.
+
 ## Concrete V1 release acceptance contract — 5 October 2026
 
 **Proposal status:** COMPLETE AS A PLAN / NOT YET REVIEW-READY BECAUSE HOSTED ACCEPTANCE EVIDENCE REMAINS MISSING  
