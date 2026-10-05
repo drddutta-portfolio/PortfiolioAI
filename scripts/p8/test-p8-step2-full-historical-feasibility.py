@@ -10,15 +10,15 @@ def load():
 class Step2ContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.m=load();cls.path=cls.m.taxonomy()
+        cls.m=load()
 
     def test_only_frozen_taxonomy_mappings_promote(self):
-        a=self.m.mapped_hierarchy("Edible Oil",self.path)
-        b=self.m.mapped_hierarchy("Manufacturing- Steel Pipes",self.path)
+        path=self.m.taxonomy()\n        a=self.m.mapped_hierarchy("Edible Oil",path)
+        b=self.m.mapped_hierarchy("Manufacturing- Steel Pipes",path)
         self.assertEqual(a["basicIndustryCode"],"IN040101001")
         self.assertEqual(b["basicIndustryCode"],"IN070205015")
-        self.assertIsNone(self.m.mapped_hierarchy("Steel Pipes",self.path))
-        self.assertIsNone(self.m.mapped_hierarchy("Automotive Segment",self.path))
+        self.assertIsNone(self.m.mapped_hierarchy("Steel Pipes",path))
+        self.assertIsNone(self.m.mapped_hierarchy("Automotive Segment",path))
 
     def test_primary_disposition_precedence(self):
         base={"access_limitation":False,"predecision_evidence":True,"classification_state":"AUTHORITATIVE_COMPLETE",
