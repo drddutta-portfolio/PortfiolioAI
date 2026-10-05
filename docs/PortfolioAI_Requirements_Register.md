@@ -99,3 +99,18 @@ This register preserves feature traceability. It does not override the Master Bl
 | REQ-SIZING-002 | Position sizing engine | Persist a deterministic, versioned sizing assessment separately from owner `portfolio_security_settings`, with lineage, readiness, reason codes and valid `INSUFFICIENT_EVIDENCE` / `NOT_APPLICABLE` outcomes | ENGINE CONTRACT COMPLETE / MERGED; PRODUCTION MIGRATION NOT APPLIED | R1 / D35B | D35B is verified and fail-closed; research-profile readiness and score/recommendation lineage are required. HDFCBANK remains the genuine current research-backed reference; repository migration exists but production persistence remains separately gated |
 | REQ-COVERAGE-001 | Coverage/orchestration | Maintain a portfolio/security/domain readiness matrix with eligibility, freshness, conflicts, authoritative source, estimated provider cost and downstream blockers without requiring provider calls | COVERAGE CONTRACT COMPLETE / R2C READ-ONLY BASELINE COMPLETE | R2 | R2A–R2C are repository/read-only complete. R2D production app-facing projection is designed but not deployed and requires explicit production approval |
 | REQ-ARCH-001 | Cross-application architecture | A business fact that means the same thing must have one canonical authority and one shared application access path; pages are views of the same system and may not create competing storage reads, taxonomies or business calculations | R2E IMPLEMENTED IN DRAFT PR #84 / MERGE PENDING | R2E | Canonical SSOT document, machine-readable authority registry, presentation-layer boundary scanner, permanent Architecture Guard CI, shared Dashboard evidence repository/hooks, agent pre-flight and cross-page classification alignment. No production mutation |
+
+
+## Evidence-gap closure requirement overlay — 5 October 2026
+
+No original requirement status is rewritten by this overlay.
+
+Current audit evidence now proves:
+- 239/239 held equities have a P7 IC1 methodology assignment across 45 profiles;
+- current methodology assignment itself is reusable and is no longer classified as a missing-census blocker;
+- all 239 current research snapshots remain fail-closed: 128 INSUFFICIENT, 109 REVIEW_REQUIRED, 2 STALE;
+- usable-intelligence coverage at the frozen minimum V1 endpoint is 0%;
+- current Development HEAD fails Vercel build/deployment and therefore authenticated current-HEAD browser acceptance is still unproven;
+- R2 and backup-integrity evidence is verified, but isolated live restore proof remains pending separate authorization.
+
+Requirements mapped to V1-4/V1-5/V1-7/V1-9 remain active blockers where their accepted behavior depends on evidence readiness, deterministic engines/actions, maintenance, deployment/browser proof or recovery.
