@@ -1,3 +1,14 @@
+import type { SecurityScoringSnapshot } from "./scoringTypes"
+
+/** Display the selected canonical route even while its scoring adapter is pending. */
+export function researchProfileDisplayName(snapshot: SecurityScoringSnapshot | null | undefined) {
+  if (!snapshot) return "Loading…"
+  if (snapshot.profileSource === "CANONICAL_ASSIGNMENT"
+    || (snapshot.methodologyState && snapshot.methodologyState !== "AVAILABLE")
+    || (snapshot.scoringExecutionState && snapshot.scoringExecutionState !== "AVAILABLE")) return snapshot.profileName
+  return researchProfileUiContract(snapshot.profileCode).profileDisplayName
+}
+
 export interface ResearchSnapshotGroup {
   readonly title: string
   readonly codes: readonly string[]

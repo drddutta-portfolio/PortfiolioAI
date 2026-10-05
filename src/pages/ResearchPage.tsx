@@ -16,7 +16,7 @@ import { CanonicalEvidenceReadinessPanel } from "../features/research/CanonicalE
 import { PositionDecisionControls } from "../features/research/PositionDecisionControls"
 import { latestByCode, metricLabel, coverageStatus, formatResearchMetric } from "../features/research/researchPolicy"
 import { researchSnapshotGroups } from "../features/research/researchPresentationPolicy"
-import { researchProfileUiContract } from "../features/research/researchProfileUiContract"
+import { researchProfileDisplayName } from "../features/research/researchProfileUiContract"
 import { buildProgramBR6ScoringPresentation } from "../features/research/programBR6Presentation"
 import { ResearchScorecardPanel } from "../features/research/ResearchScorecardPanel"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "../features/research/types"
@@ -62,13 +62,12 @@ export function ResearchIndexPage() {
 }
 
 function ResearchHeader({ position, research, scoring, currency, portfolioId, actionAttention, onPositionSaved }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly currency: string; readonly portfolioId: string; readonly actionAttention: ProgramCR10AttentionView | null; readonly onPositionSaved: () => void }) {
-  const ui = researchProfileUiContract(scoring.data?.profileCode)
   const marketCap = latestByCode(research?.metrics ?? []).get("MARKET_CAP_PROVIDER_RAW")
   const brokers = position.brokerExposure ?? []
   const sector = research?.sector ?? position.sector
   const industry = research?.industry ?? position.industry
   const profileSource = scoring.data?.profileSource === "CANONICAL_ASSIGNMENT" ? "Canonical assignment" : scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed" : scoring.data?.profileSource === "SECTOR_RULE" ? "Sector-resolved" : scoring.data ? "Methodology unavailable" : null
-  const profileDisplayName = scoring.data && ((scoring.data.methodologyState && scoring.data.methodologyState !== "AVAILABLE") || (scoring.data.scoringExecutionState && scoring.data.scoringExecutionState !== "AVAILABLE")) ? scoring.data.profileName : ui.profileDisplayName
+  const profileDisplayName = researchProfileDisplayName(scoring.data)
   return <header className="research-header">
     <div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><h1>{research?.companyName ?? position.company}</h1><p className="security-identity-line"><strong>{position.symbol}</strong> · {position.exchange} · {titleCase(position.instrumentType)}</p><p><strong>Scoring profile:</strong> {scoring.data ? profileDisplayName : "Loading…"}{profileSource ? ` · ${profileSource}` : ""}</p><PharmaSubprofileSummary securityId={position.securityId} enabled={scoring.data?.profileCode === "PHARMA_V1"} /><p>Canonical sector: {sector ?? "Awaiting classification"} · Canonical industry: {industry ?? "Awaiting classification"}</p><p>{research?.marketCapCategory ? titleCase(research.marketCapCategory) : "Market-cap category unavailable"} · {position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</p><p className="raw-market-cap">Raw market cap: {formatResearchMetric(marketCap)}</p><div className="identity-chips" aria-label="Themes">{position.themes.length ? position.themes.map((theme) => <span key={theme.id}>{theme.name}</span>) : <span>No themes</span>}</div></div>
     <CompanyAboutPanel portfolioId={portfolioId} securityId={position.securityId} symbol={position.symbol} companyName={research?.companyName ?? position.company} />
@@ -99,7 +98,7 @@ function ResearchHeader({ position, research, scoring, currency, portfolioId, ac
 
 function ResearchDecisionState({ scoring, attention }: { readonly scoring: ScoringHook; readonly attention: ProgramCR10AttentionView | null }) {
   const snapshot = scoring.data
-  const ui = researchProfileUiContract(snapshot?.profileCode)
+  const profileDisplayName = researchProfileDisplayName(snapshot)
   const currentScore = snapshot?.runState && snapshot.overallScore != null ? snapshot.overallScore.toFixed(0) : null
   const evidence = snapshot?.evidenceCoverage == null ? "Pending" : `${Math.round(snapshot.evidenceCoverage * 100)}%`
   const readiness = snapshot?.scoreReadyCoverage == null ? "Pending" : `${Math.round(snapshot.scoreReadyCoverage * 100)}%`
@@ -108,7 +107,7 @@ function ResearchDecisionState({ scoring, attention }: { readonly scoring: Scori
     <div className="portfolioai-state-heading">
       <div className="portfolioai-state-title-wrap">
         <span className="portfolioai-state-icon" aria-hidden="true">✦</span>
-        <div><span>PortfolioAI suggestion</span><h3>{advisoryState}</h3><p>{snapshot ? `${ui.profileDisplayName} · current canonical research state` : "Evaluating canonical research state…"}</p></div>
+        <div><span>PortfolioAI suggestion</span><h3>{advisoryState}</h3><p>{snapshot ? `${profileDisplayName} · current canonical research state` : "Evaluating canonical research state…"}</p></div>
       </div>
       <ProgramCR10AttentionBadge attention={attention} compact />
     </div>
@@ -120,7 +119,7 @@ function ResearchDecisionState({ scoring, attention }: { readonly scoring: Scori
       <article><span>Verified evidence</span><strong>{evidence}</strong><small>Current research coverage</small></article>
       <article><span>Score readiness</span><strong>{readiness}</strong><small>Validated score-ready coverage</small></article>
       <article><span>Methodology</span><strong>{snapshot?.methodologyState === "AVAILABLE" ? "Available" : snapshot?.methodologyState ? titleCase(snapshot.methodologyState) : "Pending"}</strong><small>{snapshot?.profileName ?? "Canonical profile loading"}</small></article>
-      <article><span>Profile</span><strong>{snapshot ? ui.profileDisplayName : "Loading…"}</strong><small>{snapshot?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed assignment" : snapshot?.profileSource === "SECTOR_RULE" ? "Sector resolved" : "Canonical profile"}</small></article>
+      <article><span>Profile</span><strong>{profileDisplayName}</strong><small>{snapshot?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed assignment" : snapshot?.profileSource === "SECTOR_RULE" ? "Sector resolved" : "Canonical profile"}</small></article>
     </div>
     <p className="portfolioai-state-note">Read-only advisory. PortfolioAI never overwrites your saved role, target weight, target price, stop-loss reference, or investment horizon.</p>
   </section>
@@ -169,8 +168,7 @@ function TabPanel({ tab, position, research, scoring, onTabChange }: { readonly 
 function Overview({ position, research, scoring, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch; readonly scoring: ScoringHook; readonly onViewEvidence: () => void }) {
   const pharmaResolution = usePharmaSubprofileResolution(position.securityId)
   const metrics = latestByCode(research.metrics)
-  const ui = researchProfileUiContract(scoring.data?.profileCode)
-  const profileDisplayName = scoring.data && ((scoring.data.methodologyState && scoring.data.methodologyState !== "AVAILABLE") || (scoring.data.scoringExecutionState && scoring.data.scoringExecutionState !== "AVAILABLE")) ? scoring.data.profileName : ui.profileDisplayName
+  const profileDisplayName = researchProfileDisplayName(scoring.data)
   const groups = researchSnapshotGroups(scoring.data?.profileCode)
   const conflicts = research.metrics.filter((metric) => metric.status === "CONFLICTING").length
   const provisional = research.metrics.filter((metric) => metric.status === "PROVISIONAL").length
