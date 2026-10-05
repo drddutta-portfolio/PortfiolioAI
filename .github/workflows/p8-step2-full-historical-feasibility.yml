@@ -1,0 +1,82 @@
+name: P8 Step 2 Full Historical Feasibility Census
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - scripts/p8/p8-step2-full-historical-feasibility.py
+      - scripts/p8/p8-step2-route-readiness-bridge.mjs
+      - scripts/p8/test-p8-step2-full-historical-feasibility.py
+      - .github/workflows/p8-step2-full-historical-feasibility.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: p8-step2-full-historical-feasibility
+  cancel-in-progress: false
+jobs:
+  census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+      CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: PortfolioAI-Development}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}
+      - run: python -m pip install --no-cache-dir "boto3==1.40.46" "lxml==6.0.2" "psycopg[binary]==3.2.10" "pyarrow==21.0.0"
+      - name: Step 2 focused contract tests
+        run: python scripts/p8/test-p8-step2-full-historical-feasibility.py
+      - name: Existing V1 accounting regression
+        run: python scripts/p8/test-p8-segment-revenue-canary-accounting.py
+      - name: Existing V3 semantic regression
+        run: python scripts/p8/test-p8-xbrl-segment-period-v3-audit.py
+      - name: Step 1 router regression
+        run: node --experimental-strip-types scripts/p8/test-p8-step1-actual-router-canary.mjs
+      - name: Census execution A
+        run: |
+          python scripts/p8/p8-step2-full-historical-feasibility.py --repeat-tag A | tee /tmp/step2-a.log
+          cp docs/p8/PortfolioAI_P8_STEP2_FULL_HISTORICAL_FEASIBILITY_AUDIT_2026-10-05.json /tmp/audit-a.json
+          cp docs/p8/PortfolioAI_P8_STEP2_PAIR_DISPOSITIONS_2026-10-05.jsonl.gz /tmp/pairs-a.gz
+          cp docs/p8/PortfolioAI_P8_STEP2_NARROWER_EXPERIMENT_PROPOSAL_2026-10-05.json /tmp/proposal-a.json
+          cp docs/p8/PortfolioAI_P8_STEP2_FEASIBILITY_DECISION_MEMO_2026-10-05.md /tmp/memo-a.md
+      - name: Independent deterministic execution B
+        run: |
+          python scripts/p8/p8-step2-full-historical-feasibility.py --repeat-tag B | tee /tmp/step2-b.log
+          cmp /tmp/audit-a.json docs/p8/PortfolioAI_P8_STEP2_FULL_HISTORICAL_FEASIBILITY_AUDIT_2026-10-05.json
+          cmp /tmp/pairs-a.gz docs/p8/PortfolioAI_P8_STEP2_PAIR_DISPOSITIONS_2026-10-05.jsonl.gz
+          cmp /tmp/proposal-a.json docs/p8/PortfolioAI_P8_STEP2_NARROWER_EXPERIMENT_PROPOSAL_2026-10-05.json
+          cmp /tmp/memo-a.md docs/p8/PortfolioAI_P8_STEP2_FEASIBILITY_DECISION_MEMO_2026-10-05.md
+      - name: Record focused validation evidence
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          a=json.loads(Path("docs/p8/PortfolioAI_P8_STEP2_FULL_HISTORICAL_FEASIBILITY_AUDIT_2026-10-05.json").read_text())
+          out={
+            "version":"P8_STEP2_FOCUSED_VALIDATION_V1",
+            "status":"PASS",
+            "workflow":"P8 Step 2 Full Historical Feasibility Census",
+            "github_run_id":os.environ.get("GITHUB_RUN_ID"),
+            "github_sha":os.environ.get("GITHUB_SHA"),
+            "census_fingerprint_sha256":a["census_fingerprint_sha256"],
+            "deterministic_repeat_exact_match":True,
+            "focused_tests":["step2_contract","v1_accounting","v3_semantics","step1_actual_router"],
+            "unauthorized_actions":0
+          }
+          Path("docs/p8/PortfolioAI_P8_STEP2_FOCUSED_VALIDATION_2026-10-05.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          PY
+      - name: Commit completed Step 2 audit artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin PortfolioAI-Development
+          git add             docs/p8/PortfolioAI_P8_STEP2_FULL_HISTORICAL_FEASIBILITY_AUDIT_2026-10-05.json             docs/p8/PortfolioAI_P8_STEP2_PAIR_DISPOSITIONS_2026-10-05.jsonl.gz             docs/p8/PortfolioAI_P8_STEP2_NARROWER_EXPERIMENT_PROPOSAL_2026-10-05.json             docs/p8/PortfolioAI_P8_STEP2_FEASIBILITY_DECISION_MEMO_2026-10-05.md             docs/p8/PortfolioAI_P8_STEP2_FOCUSED_VALIDATION_2026-10-05.json
+          git commit -m "audit(p8): complete Step 2 historical feasibility census"
+          git push origin HEAD:PortfolioAI-Development
