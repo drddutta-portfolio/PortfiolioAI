@@ -7,6 +7,24 @@
 
 ---
 
+## Scope Freeze A UI/release boundary — 5 October 2026
+
+The V1 release boundary is governed by [PortfolioAI V1/V1.1/V2 Product Scope Freeze A](PortfolioAI_V1_V2_PRODUCT_SCOPE_FREEZE_2026-10-05.md).
+
+The existing top-level navigation remains the V1 shell:
+
+**Dashboard | Holdings | Portfolio Structure | Research | Intelligence | Transactions | Import | Settings**
+
+V1 is an integration/correctness/completion program, not another broad UI redesign. V1 retains current-portfolio deterministic intelligence, Core/Satellite eligibility, Core Health, Satellite Opportunity, Valuation, current Momentum, Risk, Portfolio Fit, Position Sizing, Exit Risk, portfolio-aware advisory actions, optional grounded AI explanation and owner decision recording when prerequisites are satisfied.
+
+`BLOCKED` is a readiness state rather than an investment opinion. Missing evidence must not be presented as HOLD/REDUCE/EXIT.
+
+V1 selects the minimal thesis/invalidation record defined in Scope Freeze A where thesis-based exit reasoning is used. Owner decisions must reference the exact recommendation snapshot reviewed.
+
+Richer monitoring/notifications/discovery may remain V1.1 release work unless the V1 audit proves a bounded subset is necessary for an accepted V1 workflow.
+
+---
+
 ## 1. Purpose
 
 This document defines the intended end-to-end user experience of PortfolioAI.
