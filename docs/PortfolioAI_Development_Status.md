@@ -1,3 +1,47 @@
+## V1-4 deployed validation and hosted acceptance — 5 October 2026
+
+**V1-4 = IN PROGRESS / NOT PROVEN. V1-5 remains NOT AUTHORIZED.**
+
+This entry supersedes earlier statements that the repaired function was undeployed or Deno was unavailable. Starting Development HEAD was `89fb9b59bf93c18326f769ed995725e1412f2791`. Tested application/source commit is `94c9ff092adc8f46710b30ada8ece23962702ce0`.
+
+### Published repair and verification
+
+The canonical pipeline now validates metric definitions, reporting dates/types, units, currency, scope, source identity/priority, cutoffs and freshness. Distinct reporting periods cannot pool incompatible bases; retained legacy AVAILABLE labels cannot bypass validation. Stock/benchmark history is counted by distinct exchange-session date; adjustment/calendar alignment remains explicitly unproven rather than inferred from row counts. Numeric values are queried as decimal strings. Canonical profile names take precedence in Research display. Approved methodology contracts and minima remain unchanged.
+
+Development Supabase `lrgpjimipfkyoqbpsqzz` function `p7-ic2-materialize-readiness` was deployed as ACTIVE version **19**; bundle SHA-256 `655b60263857ed648da9fb38a9aeac740d796b79b484f0ea0fbfb6fc179ca5d6`. Existing verify_jwt configuration was preserved. The new owner-authenticated action `P7_IC3_VALIDATE_CANONICAL_INPUTS` validates application sessions and portfolio ownership and performs no writes. Existing materialization still requires its scoped one-time execution grant.
+
+Verification: **38 frontend tests, 54 pure Edge tests and one actual Deno HTTP-handler regression passed**. Full Deno typecheck, strict frontend build, architecture check and changed-file lint passed. Full repository lint retains **77 errors / 4 warnings**; it is not certified clean. Existing build chunk warning remains.
+
+Vercel deployment `dpl_A5mbDnriKWU9GE9MpGy4xkD3fgDW` is **READY / Preview / PortfolioAI-Development**, exactly at the tested commit. URL: https://portfiolio-i66dnxux8-dibyendu-dutta.vercel.app . Project: `portfiolio-ai / prj_Vp1QUuF63cnfuAl8ULYuHW44EbXU`, team slug `dibyendu-dutta`. Authenticated hosted Research Overview, Evidence and expanded snapshot-provenance checks passed; Development identity and canonical profile consistency were visible, with no JavaScript errors or alerts. Protection and application authentication were preserved. A later documentation-only HEAD does not require a new application acceptance loop.
+
+### Live read-only result
+
+Run `996411b5-44c9-41e3-b1e4-c51da09c7093`, evaluation/source cutoff `2026-10-05T19:25:54.019754+00:00`, six bounded slices of at most 40 inspected all **239 equities**, including all **111 frozen members**.
+
+These are **prospective diagnostic results, not newly persisted/selected snapshots**:
+- All equities: **231 REVIEW_REQUIRED, 8 INSUFFICIENT, 0 READY**.
+- Frozen cohort: **111 REVIEW_REQUIRED, 0 READY**.
+- Proposed requirement/lineage items: **3,744** overall, **1,719** in the frozen cohort.
+
+Overlapping frozen-member blocker counts: missing mandatory evidence **103**; document review **108**; adjustment/calendar alignment **109**; normalized-input metadata **107**; invalid reporting periods **65**; unreviewed metric contracts **38**; missing benchmark mapping **32**; dated-period proof **39**; reporting-period type **35**; insufficient distinct sessions **1**; canonical unit mismatch **1**; deliberate methodology factual-review exception **1**. Counts overlap and must not be summed. Factual-review exceptions must not be guessed away.
+
+Private diagnostic JSON SHA-256: `c4a9e3cb396cce42d48ac859c487f14f2f881dcaa28949617ef2e978b1e6c8df`. Only aggregates are published. Approved private manifest SHA-256 remains `79f551558333adc1f37d6a26298d8088ee02db3161f03c6d6e59f9a19a93fc27`; membership and frozen values are unchanged.
+
+Before/after Development counts were identical: snapshots **1,246**, items **18,657**, selections **717**, consumed P4 grants **1,196**, provider usage events **1,720**. Responses reported zero snapshot/item/selection writes and zero consumed grants.
+
+Whole-Development source census (not cohort-specific): **2,475** fundamental observations, of which **1,681 undated** and **2,471 unknown scope**; **63,932** daily stock-history rows, only **2** with adjusted close and none with adjustment_methodology provenance. No exchange-calendar table was found in public schema. Existing P8 history/corporate-action assets remain preserved and paused. These findings do not establish that no usable corporate-action evidence exists anywhere; they establish that this active pipeline cannot yet prove its mandatory semantics.
+
+### Remaining execution boundary
+
+Read-only inspection and guard tests cannot supply missing evidence or establish adjustment/calendar contracts. See [bounded continuation proposal](PortfolioAI_V1_4_DEVELOPMENT_EVIDENCE_REMEDIATION_EXECUTION_PLAN_2026-10-05.md). Publishing truthful new snapshots is a separately specified data mutation and does not itself close V1-4.
+
+Release contract unchanged: attempt all 111; at least **100 same frozen members AND 119,327,127 paise** of their frozen value must reach the full deterministic endpoint. Frozen cohort value remains **132,585,696 paise**. All 239 equities and 248 holdings remain visible. Restore proof remains mandatory at V1-9. V1-1/2/3 remain closed.
+
+No Production/main changes, provider execution, database mutation, migration, Auth/RLS change, scheduler action, R2/storage write, P8 execution or restore occurred. The explicitly reported Development function deployment is the runtime change in this pass.
+
+
+---
+
 ## V1-4 authorized execution — 5 October 2026
 
 **V1-4 = AUTHORIZED / IN PROGRESS / NOT PROVEN. V1-5 = NOT STARTED / NOT AUTHORIZED.**
