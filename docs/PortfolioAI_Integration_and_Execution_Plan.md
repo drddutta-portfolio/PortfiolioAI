@@ -6,6 +6,27 @@
 
 ---
 
+## Scope Freeze A current delivery directive — 5 October 2026
+
+The active delivery direction is now governed by [PortfolioAI V1/V1.1/V2 Product Scope Freeze A](PortfolioAI_V1_V2_PRODUCT_SCOPE_FREEZE_2026-10-05.md).
+
+This Integration Plan remains valuable architectural/history context, but it does not authorize continuing its older roadmap as the current critical path when that would conflict with Scope Freeze A release sequencing.
+
+Current sequence:
+
+1. verify Development environment isolation **before any mutable backend/provider execution**;
+2. verify the actual Development/P8 baseline;
+3. complete V1-1 Operational Baseline Audit;
+4. establish the dated acceptance inventory, supported profiles, acceptance cohort, usable-intelligence count/value denominators and thresholds, maintenance mechanism, gate completion contracts and effort estimates;
+5. owner approves Scope Freeze B;
+6. only then begin V1 implementation.
+
+P8 expansion is not deleted or invalidated. Its final `PAUSED / PRESERVED FOR V2` disposition remains conditional on Development-branch baseline verification.
+
+No Production/main mutation is authorized by this directive.
+
+---
+
 ## 1. Why this plan is needed now
 
 PortfolioAI has reached a transition point. The transaction ledger, accounting, current-price integration, canonical classifications, research storage, provider control plane, Research workspace, NSE News pipeline, Dashboard redesign and a reference-stock investment-intelligence path have all advanced substantially. However, the implementation is no longer moving strictly in the original stage order.
