@@ -1,0 +1,16 @@
+{
+  "census_fingerprint_sha256": "fe7ad2190af20aa111bd7ceef73235ea04f5472e30428c7418b57ea51d39e7b1",
+  "deterministic_repeat_exact_match": true,
+  "focused_tests": [
+    "step2_contract",
+    "v1_accounting",
+    "v3_semantics",
+    "step1_actual_router"
+  ],
+  "github_run_id": "37265713073",
+  "github_sha": "b393bafbde0e69e790b11dadc46573d6bfbe9fd3",
+  "status": "PASS",
+  "unauthorized_actions": 0,
+  "version": "P8_STEP2_FOCUSED_VALIDATION_V1",
+  "workflow": "P8 Step 2 Full Historical Feasibility Census"
+}

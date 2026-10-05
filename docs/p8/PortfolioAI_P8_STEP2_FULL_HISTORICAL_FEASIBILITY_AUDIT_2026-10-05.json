@@ -1,435 +1,516 @@
 {
-  "b5_b6_bfinal_rebuilt": false,
-  "census_fingerprint_sha256": "4b62210f94e907a693ce57da83dec16be0ff7d63dc67bad60ec5bee00eb07b73",
-  "classification_and_route": {
-    "actual_supported_route_identities": 1,
-    "actual_supported_route_pairs": 29,
-    "authoritative_complete_pairs": 61,
-    "methodology_primary_dispositions": {
-      "STEEL_FERROUS": {
-        "REQUIRED_INPUTS_INCOMPLETE": 29
-      }
+  "branch": "PortfolioAI-Development",
+  "by_basic_industry": {
+    "IN040101001": {
+      "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 32
+    },
+    "IN070205015": {
+      "REQUIRED_INPUTS_INCOMPLETE": 29
+    },
+    "UNRESOLVED": {
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 61609,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 32,
+      "NO_PRE_DECISION_EVIDENCE": 60254
     }
   },
-  "contract_blob_sha": "de02b6984fc715c81433a42a523e0a00f022b73d",
-  "contract_sha256": "4cbcfddd9ebf60237d8143d64f84c40faefe52c174af28515e1cbf932c834d6e",
-  "decision_date_primary_dispositions": {
+  "by_decision_date": {
     "2024-02-29": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1724,
-      "NO_PRE_DECISION_EVIDENCE": 1660,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1759,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1624,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2024-03-28": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1731,
-      "NO_PRE_DECISION_EVIDENCE": 1677,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1767,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1640,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2024-04-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1751,
-      "NO_PRE_DECISION_EVIDENCE": 1682,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1785,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1647,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2024-05-31": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1877,
-      "NO_PRE_DECISION_EVIDENCE": 1579,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1890,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1565,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2024-06-28": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1883,
-      "NO_PRE_DECISION_EVIDENCE": 1594,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1889,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1587,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2024-07-31": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1888,
-      "NO_PRE_DECISION_EVIDENCE": 1621,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1892,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1616,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2024-08-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1901,
-      "NO_PRE_DECISION_EVIDENCE": 1643,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1905,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1638,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2024-09-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1905,
-      "NO_PRE_DECISION_EVIDENCE": 1687,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1908,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1683,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2024-10-31": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1916,
-      "NO_PRE_DECISION_EVIDENCE": 1708,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1921,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1702,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2024-11-29": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1940,
-      "NO_PRE_DECISION_EVIDENCE": 1703,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1943,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1699,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2024-12-31": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1940,
-      "NO_PRE_DECISION_EVIDENCE": 1735,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1943,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1731,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-01-31": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1941,
-      "NO_PRE_DECISION_EVIDENCE": 1752,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1947,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1745,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-02-28": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1967,
-      "NO_PRE_DECISION_EVIDENCE": 1752,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1971,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1747,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-03-28": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1970,
-      "NO_PRE_DECISION_EVIDENCE": 1760,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1974,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1755,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-04-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1970,
-      "NO_PRE_DECISION_EVIDENCE": 1768,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1974,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1763,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-05-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1968,
-      "NO_PRE_DECISION_EVIDENCE": 1783,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1972,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1778,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-06-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1964,
-      "NO_PRE_DECISION_EVIDENCE": 1816,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1968,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1811,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-07-31": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1960,
-      "NO_PRE_DECISION_EVIDENCE": 1852,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1964,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1847,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-08-29": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1958,
-      "NO_PRE_DECISION_EVIDENCE": 1891,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1962,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1886,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-09-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1954,
-      "NO_PRE_DECISION_EVIDENCE": 1939,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1959,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1933,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-10-31": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1950,
-      "NO_PRE_DECISION_EVIDENCE": 1970,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1955,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1964,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-11-28": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1948,
-      "NO_PRE_DECISION_EVIDENCE": 1996,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1953,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 1990,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2025-12-31": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1944,
-      "NO_PRE_DECISION_EVIDENCE": 2030,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1949,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 2024,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2026-01-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1940,
-      "NO_PRE_DECISION_EVIDENCE": 2048,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1945,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 2042,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2026-02-27": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1937,
-      "NO_PRE_DECISION_EVIDENCE": 2072,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1942,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 2066,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2026-03-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1935,
-      "NO_PRE_DECISION_EVIDENCE": 2093,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1940,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 2087,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2026-04-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1935,
-      "NO_PRE_DECISION_EVIDENCE": 2190,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1940,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 2184,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2026-05-29": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1935,
-      "NO_PRE_DECISION_EVIDENCE": 2202,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1940,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 2196,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2026-06-30": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1934,
-      "NO_PRE_DECISION_EVIDENCE": 2220,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1939,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 2214,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2026-07-31": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1934,
-      "NO_PRE_DECISION_EVIDENCE": 2246,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1939,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 2240,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2026-08-31": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1932,
-      "NO_PRE_DECISION_EVIDENCE": 2411,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1937,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 2405,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     },
     "2026-09-29": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1932,
-      "NO_PRE_DECISION_EVIDENCE": 2451,
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 1937,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 1,
+      "NO_PRE_DECISION_EVIDENCE": 2445,
       "REQUIRED_INPUTS_INCOMPLETE": 1,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 1
     }
   },
-  "diagnostic_flags": {
-    "ACCOUNTING_UNIT_CONFLICT": 353,
-    "INTERSEGMENT_REVENUE_MISSING": 27754,
-    "INVALID_OR_MISSING_DENOMINATOR_OR_INTERSEGMENT": 98,
-    "INVALID_ZERO_OR_NEGATIVE_DENOMINATOR": 98,
-    "MANDATORY_SIGNAL_NOT_READY:CFO_OR_FCF_CONVERSION_THROUGH_CYCLE:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MANDATORY_SIGNAL_NOT_READY:COMMODITY_CYCLE_DRAWDOWN_RISK:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MANDATORY_SIGNAL_NOT_READY:COMMODITY_EXPOSURE_METADATA:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MANDATORY_SIGNAL_NOT_READY:METALS_BUSINESS_DURABILITY:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MANDATORY_SIGNAL_NOT_READY:MOMENTUM_12M_RELATIVE:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MANDATORY_SIGNAL_NOT_READY:NET_DEBT_AND_INTEREST_COVERAGE_MID_CYCLE:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MANDATORY_SIGNAL_NOT_READY:OWNERSHIP_GOVERNANCE:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MANDATORY_SIGNAL_NOT_READY:ROCE_OR_ROIC_THROUGH_CYCLE:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MANDATORY_SIGNAL_NOT_READY:THROUGH_CYCLE_MARGIN_QUALITY:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MANDATORY_SIGNAL_NOT_READY:VALUATION_THROUGH_CYCLE:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MANDATORY_SIGNAL_NOT_READY:VOLUME_REALIZATION_AND_SPREAD_GROWTH:MISSING_NORMALIZED_HISTORICAL_INPUT": 29,
-    "MARKET:COMPLEX_CORPORATE_ACTION_BLOCKER": 76,
-    "MARKET:NO_TRADE_ON_DECISION_DATE": 39376,
-    "NONZERO_INTERSEGMENT_WITHOUT_SEGMENT_EXTERNAL_REVENUE": 7901,
-    "REPORTABLE_SEGMENT_FACTS_PRESENT_BUT_PERIOD_CONTEXT_MISMATCH": 15158,
-    "ROUTE:EXACT_IN070205015_BASIC_INDUSTRY_REQUIRED": 32,
-    "TAXONOMY_MAPPING_UNPROVEN": 6314,
-    "TOTAL_SEGMENT_REVENUE_MISSING": 23918,
-    "V3_DOMINANT_SEGMENT_NOT_UNIQUE": 813,
-    "V3_PREREQUISITES_NOT_PROVEN": 3
-  },
-  "execution_status": "COMPLETE",
-  "experiment_executed": false,
-  "frozen_inputs": {
-    "b3_inventory_fingerprint_sha256": "e381bee03e6f5d2236209d1400bddf47801e04d0df53da52933d5cf706744f59",
-    "source_manifest_sha256": "8758fa8c8340ec0006f4a74fab76b783806bf009ba668148f0d771015d46ed79",
-    "workstream_d_pair_sha256": "b3f734704585e3fe9b833f84fc711af8505bc6c4ff1c38d447c5ca792c720e39"
-  },
-  "full_b2": {
-    "complete_input_pairs": 0,
-    "decision_dates": 32,
-    "pairs": 121956,
-    "primary_dispositions": {
-      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 61364,
-      "NO_PRE_DECISION_EVIDENCE": 60531,
-      "REQUIRED_INPUTS_INCOMPLETE": 29,
+  "by_methodology": {
+    "NO_SUPPORTED_ROUTE": {
+      "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 61609,
+      "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 32,
+      "NO_PRE_DECISION_EVIDENCE": 60254,
       "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 32
     },
-    "unique_identities": 4524
+    "STEEL_FERROUS": {
+      "REQUIRED_INPUTS_INCOMPLETE": 29
+    }
   },
-  "p8_c_started": false,
+  "census_fingerprint_sha256": "fe7ad2190af20aa111bd7ceef73235ea04f5472e30428c7418b57ea51d39e7b1",
+  "complete_input_pairs": 0,
+  "contract_git_blob_sha": "de02b6984fc715c81433a42a523e0a00f022b73d",
+  "contract_version": "P8_STEP2_HISTORICAL_FEASIBILITY_CONTRACT_V1",
+  "diagnostic_flags": {
+    "ACCESS_OR_DECODING_LIMITATION": 32,
+    "ACTUAL_ROUTER_ROUTED": 29,
+    "AUTHORITATIVE_COMPLETE_CLASSIFICATION": 61,
+    "B3_MARKET_NOT_READY": 39452,
+    "SIGNAL_CFO_OR_FCF_CONVERSION_THROUGH_CYCLE_MISSING": 29,
+    "SIGNAL_COMMODITY_CYCLE_DRAWDOWN_RISK_MISSING": 29,
+    "SIGNAL_COMMODITY_EXPOSURE_METADATA_MISSING": 29,
+    "SIGNAL_METALS_BUSINESS_DURABILITY_MISSING": 29,
+    "SIGNAL_MOMENTUM_12M_RELATIVE_MISSING": 29,
+    "SIGNAL_NET_DEBT_AND_INTEREST_COVERAGE_MID_CYCLE_MISSING": 29,
+    "SIGNAL_OWNERSHIP_GOVERNANCE_MISSING": 29,
+    "SIGNAL_ROCE_OR_ROIC_THROUGH_CYCLE_MISSING": 29,
+    "SIGNAL_THROUGH_CYCLE_MARGIN_QUALITY_MISSING": 29,
+    "SIGNAL_VALUATION_THROUGH_CYCLE_MISSING": 29,
+    "SIGNAL_VOLUME_REALIZATION_AND_SPREAD_GROWTH_MISSING": 29
+  },
+  "exclusive_primary_dispositions": {
+    "CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE": 61609,
+    "NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION": 32,
+    "NO_PRE_DECISION_EVIDENCE": 60254,
+    "REQUIRED_INPUTS_INCOMPLETE": 29,
+    "ROUTE_UNSUPPORTED_OR_AMBIGUOUS": 32
+  },
+  "execution_status": "COMPLETE",
+  "mutations": {
+    "deployments": 0,
+    "holdout_reads": 0,
+    "main_changes": 0,
+    "production_changes": 0,
+    "provider_calls": 0,
+    "r2_writes": 0,
+    "schema_migrations": 0,
+    "scores_decisions_positions_returns": 0,
+    "supabase_writes": 0
+  },
   "pair_manifest": {
+    "gzip_sha256": "8f0effa34d1d7dcd8d9fec3d8cd88b3ba60331db1bb84050ecd582fa3627d183",
     "path": "docs/p8/PortfolioAI_P8_STEP2_PAIR_DISPOSITIONS_2026-10-05.jsonl.gz",
-    "rows": 121956,
-    "uncompressed_sha256": "c3223b8119e9fff926b02837e59fffeba8421402fe5ff74aa3094592433998ee"
+    "uncompressed_rows": 121956,
+    "uncompressed_sha256": "b17856697f0bdc40c124910870dd218455ee494609712406bc1348d146ad0832"
   },
-  "performance_outcome_reads": 0,
+  "population": {
+    "decision_dates": 32,
+    "historical_identities": 4524,
+    "pairs": 121956
+  },
   "proposed_cohort": {
-    "by_decision_date": {
-      "2024-05-31": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2024-06-28": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2024-07-31": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2024-08-30": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2024-09-30": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2024-10-31": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2024-11-29": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2024-12-31": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-01-31": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-02-28": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-03-28": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-04-30": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-05-30": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-06-30": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-07-31": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-08-29": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-09-30": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-10-31": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-11-28": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2025-12-31": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2026-01-30": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2026-02-27": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2026-03-30": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2026-04-30": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2026-05-29": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2026-06-30": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2026-07-31": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2026-08-31": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      },
-      "2026-09-29": {
-        "complete": 0,
-        "complete_percent": 0.0,
-        "pairs": 1
-      }
-    },
-    "by_methodology": {
+    "complete_input_pairs": 0,
+    "decision_dates": 29,
+    "methodology_coverage": {
       "STEEL_FERROUS": {
-        "complete": 0,
-        "complete_percent": 0.0,
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
         "pairs": 29
       }
     },
-    "complete_input_pairs": 0,
-    "decision_dates": 29,
-    "gates": {
-      "every_applicable_major_methodology_sector_at_least_60pct": false,
-      "every_included_date_at_least_70pct": false,
-      "minimum_24_decision_dates": true,
-      "overall_complete_input_at_least_80pct": false
-    },
     "name": "P8_STEP2_OBJECTIVE_ROUTED_HISTORICAL_COHORT_V1",
-    "overall_complete_input_percent": 0.0,
+    "overall_coverage_percent": 0.0,
     "pairs": 29,
+    "per_decision_date": {
+      "2024-05-31": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2024-06-28": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2024-07-31": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2024-08-30": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2024-09-30": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2024-10-31": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2024-11-29": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2024-12-31": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-01-31": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-02-28": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-03-28": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-04-30": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-05-30": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-06-30": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-07-31": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-08-29": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-09-30": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-10-31": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-11-28": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2025-12-31": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2026-01-30": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2026-02-27": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2026-03-30": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2026-04-30": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2026-05-29": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2026-06-30": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2026-07-31": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2026-08-31": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      },
+      "2026-09-29": {
+        "complete_inputs": 0,
+        "coverage_percent": 0.0,
+        "pairs": 1
+      }
+    },
     "unique_identities": 1
   },
-  "provider_calls": 0,
-  "r2_writes": 0,
-  "repeat_fingerprint_sha256": "4b62210f94e907a693ce57da83dec16be0ff7d63dc67bad60ec5bee00eb07b73",
+  "regression": {
+    "step1_canary_fingerprint": "b159764fd342aad3901717e04446596e93aa87d9c6726b7b3dd7ef8b55026dce"
+  },
   "research_feasibility": "NO_GO",
-  "scores_generated": 0,
-  "source_access_error_identities": 1,
-  "supabase_writes": 0,
-  "version": "P8_STEP2_FULL_HISTORICAL_FEASIBILITY_CENSUS_V1"
+  "source_inventory": {
+    "b2_partition_count": 32,
+    "b3_partition_count": 32,
+    "b3_partition_inventory_fingerprint_sha256": "e381bee03e6f5d2236209d1400bddf47801e04d0df53da52933d5cf706744f59",
+    "dedup_xml_sources": 30465,
+    "manifest_rows": 54562,
+    "manifest_sha256": "8758fa8c8340ec0006f4a74fab76b783806bf009ba668148f0d771015d46ed79",
+    "normalized_signal_inventory": {
+      "CFO_OR_FCF_CONVERSION_THROUGH_CYCLE": 0,
+      "COMMODITY_CYCLE_DRAWDOWN_RISK": 0,
+      "COMMODITY_EXPOSURE_METADATA": 0,
+      "METALS_BUSINESS_DURABILITY": 0,
+      "MOMENTUM_12M_RELATIVE": 0,
+      "NET_DEBT_AND_INTEREST_COVERAGE_MID_CYCLE": 0,
+      "OWNERSHIP_GOVERNANCE": 0,
+      "ROCE_OR_ROIC_THROUGH_CYCLE": 0,
+      "THROUGH_CYCLE_MARGIN_QUALITY": 0,
+      "VALUATION_THROUGH_CYCLE": 0,
+      "VOLUME_REALIZATION_AND_SPREAD_GROWTH": 0
+    },
+    "supabase_project_ref": "lrgpjimipfkyoqbpsqzz",
+    "workstream_d_pair_states_baseline": {
+      "EVIDENCE_PRESENT_CLASSIFICATION_UNRESOLVED": 33706,
+      "NO_PRE_DECISION_EVIDENCE": 60531,
+      "RESOLVED_CLASSIFICATION": 27719
+    }
+  },
+  "standards_evaluation": {
+    "each_applicable_major_methodology_sector": {
+      "pass": false,
+      "required_percent": 60
+    },
+    "each_included_date_coverage": {
+      "pass": false,
+      "required_percent": 70
+    },
+    "minimum_decision_dates": {
+      "actual": 29,
+      "pass": true,
+      "required": 24
+    },
+    "overall_complete_input_coverage": {
+      "actual_percent": 0.0,
+      "pass": false,
+      "required_percent": 80
+    }
+  },
+  "step1_status": "COMPLETE_PASS_CLOSED",
+  "version": "P8_STEP2_FULL_HISTORICAL_FEASIBILITY_AUDIT_V1"
 }
