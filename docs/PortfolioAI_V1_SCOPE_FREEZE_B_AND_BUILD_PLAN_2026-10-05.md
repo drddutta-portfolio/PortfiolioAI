@@ -1,3 +1,20 @@
+## V1-3 closure — 5 October 2026
+
+**V1-3 Identity / Classification / Methodology Routing = COMPLETE / PASS.**  
+**V1-4 remains NOT STARTED / NOT AUTHORIZED.**
+
+This closure aligns execution with the already-frozen gate contracts; it does not amend release thresholds or weaken acceptance.
+
+The canonical routing compatibility defect is closed at tested application SHA `3faf2561257d8a222cc78c0cde38a603b0f82c44`: Research consumes the approved portfolio/security-scoped P7 IC1 assignment before adapter capability/evidence readiness, all 45 held parent profiles resolve, and fail-closed states are preserved.
+
+Fresh Development identity/classification verification confirms 239 unique equity security IDs, 239 unique ISINs, complete sector/industry classification, zero classification conflicts and complete current methodology assignment lineage. Two rows lack canonical listing projection metadata but retain unique canonical identity plus VERIFIED NSE provider mapping and are not ambiguous identities used for accounting/scoring. They remain explicit limitations under the V1-3 allowable-unresolved contract; no database row is inferred.
+
+The frozen plan assigns exact authenticated end-to-end browser acceptance to **V1-9 Maintenance / Release**, not V1-3. The exact repaired Preview is nevertheless independently confirmed READY at the tested application SHA. Protected authenticated interaction remains a mandatory V1-9 item.
+
+V1-3 closure does not authorize V1-4 provider/evidence work.
+
+---
+
 ## V1-3 routing compatibility repair — 5 October 2026
 
 **Routing repair = COMPLETE / PASS. Exact Development Preview = READY.**
