@@ -1,3 +1,15 @@
+## Current recovery acceptance status — 5 October 2026
+
+Current remote Development HEAD is `fb067e01b64344c5279ceb65ead5ad7b3516a616`. Git comparison confirms it is one documentation-only commit ahead of verified READY Preview SHA `ba8c9e9ddbc0e2658a213af178f0f8922e86639d`; no application-source/configuration difference exists.
+
+Vercel currently returns no deployment for exact HEAD `fb067e01...`. The latest project deployment remains READY deployment `dpl_5p9Daac7UqGSL8y6qP3dawqF1Hzx` at `ba8c9e9...`, and the stable Development alias remains mapped to that READY deployment. This is preserved as valid build/runtime evidence for that SHA only, not exact-current-HEAD proof.
+
+Authenticated hosted browser verification is still unavailable because no existing authorized owner session is exposed here and SSO protection remains enabled. No bypass is attempted.
+
+Build recovery of application source remains COMPLETE / PASS. Final acceptance remains incomplete only at the exact-current-HEAD deployment/browser boundary. Full repository lint remains unresolved at 84 errors / 4 warnings and is not claimed as passing.
+
+---
+
 # PortfolioAI Development Build Recovery — 5 October 2026
 
 **Repository:** `drddutta-portfolio/PortfiolioAI`
