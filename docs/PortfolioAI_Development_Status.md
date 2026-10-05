@@ -1,3 +1,38 @@
+## Frozen cohort recovery — 5 October 2026
+
+**Private 111-equity manifest: RECOVERED / RECONCILED / OWNER REVIEW PENDING.**
+**V1-3: NOT STARTED / NOT AUTHORIZED.**
+This supersedes the earlier statement that no retrievable row-level baseline evidence had been established. It does not treat recovery as owner review, does not change the cohort or release contract, and does not authorize implementation.
+
+Read-only inspection of PortfolioAI Dev (`lrgpjimipfkyoqbpsqzz`) recovered historical cohort membership from the latest append-only snapshot selections at or before the original dated audit cutoff **2026-10-05 09:18:25.508110 UTC**. It did not use current-readiness views to choose a new cohort.
+
+The database enforces append-only research snapshots and selections through a trigger rejecting UPDATE/DELETE. There are 1,246 preserved snapshots and 717 selections across 3 historical selection runs, all pre-dating the freeze. The recovered cohort uses one selected historical run, dated 30 September; snapshot as-of date is 29 September. All member snapshot hashes, canonical identities, selected snapshot/selection references, assignment versions and effective transaction lineage were recovered privately.
+
+Owner transaction audit timestamps show zero rows created or updated after the audit cutoff. Effective baseline quantities are recovered from active ledger/source evidence, not guessed from current readiness. Retained ANGEL_ONE price rows used for valuation all have retrieval timestamps before the cutoff.
+
+Exact reconciliation:
+| Frozen state | Equities | Frozen value (INR) |
+| --- | ---: | ---: |
+| REVIEW_REQUIRED | 109 | 1,240,361.16 |
+| STALE | 2 | 85,495.80 |
+| Initial remediation cohort | **111** | **1,325,856.96** |
+| Excluded INSUFFICIENT equity group | 128 | 761,261.55 |
+| Full equity population | 239 | 2,087,118.51 |
+
+Each cohort value is exactly integral in paise; summing all 111 per-member values gives **132,585,696 paise**, with no rounding residue. Canonical member IDs are distinct. The approved minimums remain **100 members and 119,327,127 paise from the same successful members**.
+
+Private artifact identifier: `PortfolioAI_V1_FROZEN_COHORT_2026-10-05`.
+Authoritative recovered JSON SHA-256: `79f551558333adc1f37d6a26298d8088ee02db3161f03c6d6e59f9a19a93fc27`.
+A companion private CSV and owner-review table were prepared in the owner's execution workspace outside the repository. Row-level holding/account identities and private values are not committed. These files require owner retention; public GitHub contains only this non-sensitive aggregate evidence and integrity reference.
+
+**Price provenance limitation:** market_price_latest is mutable, unlike the append-only selections. Its retained timestamps and all original group totals reconcile, but no independent immutable per-price baseline audit copy was located. Recovery is corroborated from retained pre-cutoff records; it is not claimed to be a byte-for-byte retrieval of an originally saved 111-row manifest. Current symbol/name/ISIN are display references; canonical IDs and preserved snapshot selections define membership.
+
+**Next boundary:** owner review of the exact private manifest and its disclosed provenance is required before V1-3. Record approval against the JSON SHA-256, retaining the recovered file unchanged. If the owner does not accept the recovery evidence, obtain additional frozen-baseline evidence; do not silently substitute a current cohort. Separate V1-3 execution authorization is still required.
+
+No application code, runtime configuration, Production/main, database mutation/migration/Auth/RLS, provider execution, scheduler action, R2/storage write, P8 execution or restore action occurred. Local private review-artifact creation is the only non-documentation file output.
+
+---
+
 ## Owner-approved sequencing amendment and V1-2 execution — 5 October 2026
 
 **Scope Freeze B: FROZEN / OWNER APPROVED, with this owner-approved sequencing amendment.**
