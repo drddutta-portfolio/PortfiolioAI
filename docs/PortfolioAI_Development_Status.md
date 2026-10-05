@@ -1,3 +1,23 @@
+## V1-2 execution attempt — frozen prerequisite stop — 5 October 2026
+
+Owner authorization for V1-2 was received under frozen Scope Freeze B.
+
+**Result: V1-2 NOT PROVEN / application coding not started.**
+
+The mandatory private 111-member acceptance manifest could not be reconciled from retrievable private evidence. Aggregate facts are established (111 = 109 REVIEW_REQUIRED + 2 STALE; INR 1,325,856.96 / 132,585,696 paise), but no private owner-reviewed row-level canonical identity + frozen per-member value record with valuation/source lineage and integrity reference is available. Scope Freeze B forbids treating approval of the aggregate contract as proof of that manifest and forbids inventing/substituting members.
+
+Independent read-only V1-2 preparation was completed against verified Development Supabase project `PortfolioAI Dev / lrgpjimipfkyoqbpsqzz`. Current ledger/accounting authority remains shared across Dashboard, Holdings and Portfolio Structure. Live aggregate census: 273 security histories = 248 open + 25 closed; 32 open histories with sales; 3 date-provable reopened histories; 71 multi-broker histories; 58 histories with a missing-broker transaction; 5 active corrections + 5 superseded originals; 248/248 holdings priced; 239 equities + 9 ETFs; priced value INR 2,217,451.55, of which equity INR 2,087,118.51. All 273 histories currently have incomplete charge/tax evidence, and the existing engine explicitly uses/labels gross-only accounting rather than mixing partial charges.
+
+Current source inspection found no proven V1-2 defect requiring repair before the prerequisite stop. Existing regression coverage includes partial sales, close/reopen, corrections, exact decimals, FIFO/weighted-average selection, gross-only charge semantics, oversells and imported-snapshot independence.
+
+No application code, database/schema/Auth, provider, scheduler, R2/storage or P8 action occurred.
+
+Focused record: `docs/PortfolioAI_V1_2_ACCOUNTING_INTEGRITY_PREIMPLEMENTATION_AUDIT_2026-10-05.md`.
+
+V1-3 remains NOT STARTED / NOT AUTHORIZED.
+
+---
+
 ## Scope Freeze B owner approval — 5 October 2026
 
 **Scope Freeze B: FROZEN / OWNER APPROVED.**
