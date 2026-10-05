@@ -1,3 +1,23 @@
+## Owner-approved sequencing amendment and V1-2 execution — 5 October 2026
+
+**Scope Freeze B: FROZEN / OWNER APPROVED, with this owner-approved sequencing amendment.**
+**V1-2: AUTHORIZED; accounting verification completed as recorded in the focused V1-2 artifact.**
+**V1-3: NOT STARTED / NOT AUTHORIZED; private manifest is a hard entry prerequisite.**
+
+Following explicit discussion of the accounting/intelligence distinction, the owner instructed “Please proceed”. This approves moving the private-manifest prerequisite from before V1-2 coding to **before ANY V1-3 work starts**, and authorizes continuation of V1-2 only.
+
+V1-2 covers all **248 open holdings plus relevant closed histories**, independently of the later 111-equity intelligence cohort. This supersedes every earlier statement requiring the private manifest before accounting verification or repairs. It does not change accounting methods, evidence standards, cohort membership or release measurement.
+
+Before V1-3, the 111-member private manifest must be fully recovered from the accepted frozen baseline, reconciled and owner-reviewed, including canonical identities, per-member frozen values, valuation/source and snapshot lineage, and integrity reference. It must total **111 members / INR 1,325,856.96**. If row-level baseline evidence cannot be recovered, stop before V1-3; do not regenerate membership from current readiness or substitute members.
+
+Release criteria remain unchanged: attempt all 111; require **at least 100 of those same 111** at the full deterministic endpoint AND **at least INR 1,193,271.27** of the SAME successful members' frozen cohort value. All 239 equities and all 248 holdings remain visible, including the 128 INSUFFICIENT equities. Missing evidence never becomes HOLD. Isolated restore proof remains mandatory in V1-9; Baseline Freeze remains PARTIAL.
+
+The initial prerequisite stop was correct under the previous wording and remains historical evidence below. The manifest itself remains NOT ESTABLISHED. This amendment removes it as a V1-2 blocker only.
+
+V1-2 verification record: `docs/PortfolioAI_V1_2_ACCOUNTING_INTEGRITY_PREIMPLEMENTATION_AUDIT_2026-10-05.md`. No later gate is authorized by accounting completion. Final release hosted interaction/security/restore acceptance remains mandatory.
+
+---
+
 ## Scope Freeze B owner approval — 5 October 2026
 
 **Scope Freeze B: FROZEN / OWNER APPROVED.**

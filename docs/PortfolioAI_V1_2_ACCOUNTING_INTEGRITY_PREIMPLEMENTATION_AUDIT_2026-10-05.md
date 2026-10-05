@@ -1,3 +1,129 @@
+# PortfolioAI V1-2 Accounting Integrity — Execution and Verification
+
+**Date:** 5 October 2026
+**Branch:** PortfolioAI-Development
+**Starting authoritative remote HEAD:** `0bb86cbf99e139a6b13f8460ddded641e55daf8d`
+**Disposition:** **COMPLETE / PASS for V1-2 accounting verification**, with the hosted-interaction limitation below.
+**Code repair:** NONE REQUIRED BY THE EXECUTED EVIDENCE.
+**V1-3:** NOT STARTED / NOT AUTHORIZED; private frozen manifest remains a hard prerequisite.
+
+## Authorization and architecture
+
+The owner approved the sequencing amendment: portfolio-wide V1-2 may proceed before private 111-cohort reconciliation; the manifest must be fully recovered/reconciled/owner-reviewed before V1-3 starts. Approved release thresholds and all evidence/accounting invariants are unchanged. AGENTS.md and canonical authority documents were reviewed from the remote branch.
+
+Canonical flow is transactions → loadPortfolioLedgerSnapshot → calculateAccounting → calculatePortfolio → usePortfolioView → Dashboard / Holdings / Portfolio Structure. Snapshot evidence remains reconciliation provenance, not a cost/price authority. No new financial authority, schema, security/RLS policy or financial method was introduced.
+
+## Exact source and Development target
+
+Used remote HEAD above, never the stale work checkout. The temporary execution copy was verified against **734 GitHub blobs** covering every existing src file, package/lockfile, available TypeScript/build/lint configuration and architecture guard; **zero mismatches**. Temporary verification-only files were added separately, not represented as remote source. Unrelated operational scripts were not executed.
+
+Supabase project PortfolioAI Dev / `lrgpjimipfkyoqbpsqzz` was freshly verified ACTIVE_HEALTHY, distinct from Production. SQL was read-only and owner-portfolio-scoped. Numeric transaction/price inputs were extracted as strings; imported normalized quantity/price provenance was preserved consistently with the repository mapper. Identities were replaced with ephemeral references before temporary execution files were written. No private holdings, broker labels, account IDs, email or row-level values are published here.
+
+## Executed checks
+
+| Check | Result |
+| --- | --- |
+| Existing accounting, portfolio, repository, instrument mapping and position-settings suites | 6 files / **42 tests PASS** |
+| Existing market-data cache/freshness and Dashboard allocation suites | 2 files / **3 tests PASS** |
+| Temporary read-only Development reconciliation | 1 file / **4 tests PASS** |
+| Temporary actual-page cross-surface rendering | 1 file / **3 tests PASS** |
+| TypeScript + Vite build | PASS |
+| Architecture data-boundary guard | PASS |
+| Targeted accounting/portfolio/repository/hook ESLint | PASS |
+
+Total: **52 executed passing tests across 10 files**. No application code was changed. Full repository lint was not rerun; its historical 84 errors / 4 warnings remain explicitly unresolved. Build reports a non-fatal large-chunk warning.
+
+Existing regression commands:
+```text
+npm test -- src/features/accounting/fifoAccounting.test.ts src/features/portfolio/calculatePortfolio.test.ts src/data/portfolioRepository.test.ts src/data/transactionRepository.test.ts src/features/portfolio/instrumentMapping.test.ts src/features/portfolio/positionSettings.test.ts
+npm test -- src/data/marketDataRepository.test.ts src/components/DashboardAllocationPerformance.test.tsx
+npm run build
+npm run check:architecture
+```
+
+Targeted lint covered fifoAccounting and calculatePortfolio implementations/tests, portfolioRepository and transactionRepository implementations/tests, and usePortfolioView.
+
+## Hand-verifiable accounting acceptance
+
+Executed existing expectations include:
+- FIFO buys 10 at 10 and 10 at 20, sell 15 at 30: remaining quantity 5, cost 100, realised cost 200, proceeds 450, realised P&L 250.
+- Full close: buy 2 at 10, sell 2 at 14: zero remaining quantity/cost, historical acquisition average 10, realised P&L 8.
+- Close/reopen: prior buy 5 at 100 and sell 5 at 120; new buy 3 at 200: current cost 600, current average 200, prior realised P&L 100.
+- Missing-date pooled buys 20 at 300 and 20 at 349.42, sell 5 at 409.51: average-cost basis 324.71, remaining quantity 35/cost 11,364.85, realised P&L 424.
+- Exact fractional buy 0.3 at 0.2 with charges 0.03; sell 0.1 at 0.5 with charges 0.01: remaining cost 0.06, realised P&L 0.01.
+- Supersession/correction and reverse/restore exclude ineffective originals and recalculate from effective rows.
+- Chronological/aggregate oversells and missing essential evidence remain unresolved.
+- Ambiguous chronology remains explicitly average-cost, never invented FIFO.
+- Incomplete charges yield explicit gross-only results without mixing partial charges.
+- Known and unknown broker attribution remain distinct; imported snapshot formulas do not feed accounting.
+
+Historical fixture labels referring to Production are synthetic tests; no Production database was accessed.
+
+## Full Development population reconciliation
+
+Read-only snapshot contains **496 transaction rows**, of which **490 ACTIVE**, across **273 histories = 248 open + 25 closed**. It includes 5 superseded originals, 5 active corrections and 477 imported rows, all 477 linked to source evidence. The remaining non-active row does not enter the effective ledger.
+
+Current measured history coverage:
+- 71 multi-broker histories;
+- 58 histories containing missing broker attribution;
+- 211 histories containing missing dates;
+- all 273 histories containing incomplete charge/tax evidence.
+
+Executed the existing canonical engine on all effective rows, without imported holdings-snapshot inputs:
+- all **248 returned current_holdings quantities** exactly match canonical open quantities, and quantity-completeness flags pass;
+- 273 history outputs retain 248 open and 25 closed; zero unresolved accounting histories;
+- all 248 open positions are priced;
+- 239 equity holdings and 9 ETFs remain distinct;
+- each open position value equals quantity × cached price;
+- each open position unrealised P&L equals value − supported remaining cost;
+- every open position weight agrees with value / priced portfolio value × 100 within 0.000000000000001 percentage points;
+- weight sum is 100 within 0.000000000001 percentage points.
+
+Screenshot-reconciled totals, rounded for display to two decimal places:
+| Measure | Canonical engine |
+| --- | ---: |
+| Current portfolio value | INR 2,217,451.55 |
+| Supported remaining cost | INR 1,915,293.31 |
+| Unrealised P&L | INR 302,158.24 |
+| Supported realised P&L | INR 6,948.89 |
+
+The temporary tests also rendered the actual Dashboard, Holdings and Portfolio Structure components against the same canonical model, with data hooks supplied deterministically and mutation/provider paths mocked. Dashboard totals, Holdings position value/cost/weight and closed-history count, and Structure position value/weight all matched their canonical formatted values. Classification/role enrichment was omitted from this accounting-focused harness; it does not independently verify live metadata.
+
+Temporary read-only verification sources are v12LiveReadOnly.test.ts and v12CrossSurfaceReadOnly.test.tsx in the execution workspace. They consume a private temporary snapshot and are not committed. They verify Development data; they are not substitutes for persistent general regression coverage already present in the repository.
+
+## Hosted baseline and limitations
+
+Fresh Vercel inspection confirms stable Development alias:
+https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app
+
+READY Preview:
+- deployment `dpl_EuMLf3BrvV5oBJMfuuh8X8hjaz97`;
+- unique URL https://portfiolio-l5ezksigo-dibyendu-dutta.vercel.app;
+- branch PortfolioAI-Development;
+- Git SHA `9b24b97eec37cdb6ce6ffa6440f2ee333ce2b41f`;
+- project `portfiolio-ai` / `prj_Vp1QUuF63cnfuAl8ULYuHW44EbXU`;
+- Preview (`target: null`).
+
+GitHub comparison to starting HEAD shows only Development Status and the prior V1-2 audit document changed. Application/configuration source is identical. This continuation also changes documentation only; no application redeployment is needed.
+
+Owner-supplied authenticated Development screenshots already show Dashboard, Holdings and Structure rendering consistent counts/value/weights, with explicit accounting and price limitations. Together with executed engine/page checks, they support this bounded V1-2 accounting PASS. They are owner visual evidence, not agent-operated hosted interaction.
+
+Browser runtime activation still fails because its platform token is not provisioned. Authenticated hosted filter/drill-down/correction interaction was **not executed**. Database write workflows were not exercised, and this PASS does not claim end-to-end write/RLS acceptance. Full authenticated interaction/security acceptance remains mandatory in V1-9; no release PASS is asserted.
+
+Cached price freshness remains explicit. No prices were refreshed. Valid price availability does not imply freshness. Gross-only accounting and missing chronology/broker attribution remain disclosed limitations rather than fabricated corrections.
+
+## Closure and next boundary
+
+V1-2 accounting verification is COMPLETE / PASS on the bounded evidence above; no production-source repair was justified. Private 111-manifest availability is not required for this accounting gate under the owner's amendment, but remains NOT ESTABLISHED and a hard blocker before V1-3. V1-3 additionally needs separate owner execution authorization. No later gate was started.
+
+No main/Production, database mutation/migration/Auth/RLS, provider call/campaign/refresh, scheduler action, R2/storage write, P8 execution or backup/restore action occurred.
+
+---
+
+## Historical pre-amendment prerequisite stop
+
+The original audit below is retained unchanged for provenance. Its stop-before-V1-2 boundary is superseded by the owner-approved amendment above; its historical observations are not falsely described as newly executed tests.
+
 # PortfolioAI V1-2 Accounting Integrity — Pre-implementation Audit
 
 **Date:** 5 October 2026  
