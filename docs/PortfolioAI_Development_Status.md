@@ -1,3 +1,21 @@
+## PortfolioAI V1 Scope Freeze A — 5 October 2026
+
+**Scope Freeze A = FROZEN.**  
+**V1 implementation = NOT AUTHORIZED pending Scope Freeze B.**  
+**Production/main mutation = NOT AUTHORIZED.**  
+**P8 expansion = PROPOSED PAUSE / PRESERVE FOR V2, pending Development/P8 baseline verification.**
+
+Authoritative release-boundary document:
+`docs/PortfolioAI_V1_V2_PRODUCT_SCOPE_FREEZE_2026-10-05.md`.
+
+The frozen V1 direction is operational current-portfolio investment intelligence: trustworthy accounting, approved current research evidence/methodology routing, deterministic Core/Satellite/Valuation/Momentum/Risk/Portfolio-Fit/Sizing/Exit intelligence, portfolio-aware advisory actions, optional grounded AI explanation and auditable owner decisions. Historical observations required for today's analysis remain V1 dependencies.
+
+Deferred to V2/P8: point-in-time historical reconstruction and historical strategy/recommendation evaluation.
+
+Before any mutable Development backend/provider execution, environment isolation must be verified. Next authorized work is read-only repository/baseline verification followed by the V1-1 Operational Baseline Audit. The audit must propose the dated acceptance inventory, supported profiles, real-security cohort, count/value usable-intelligence denominators and thresholds, gate completion contracts, maintenance mechanism and effort estimates. Owner approval of Scope Freeze B is required before implementation.
+
+---
+
 ## P8 Step 2 Full Historical Feasibility Census closure — 5 October 2026
 
 **Step 2 execution = COMPLETE / PASS / CLOSED.**  
