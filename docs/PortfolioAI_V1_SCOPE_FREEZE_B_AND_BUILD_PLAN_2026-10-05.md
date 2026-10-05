@@ -1,3 +1,108 @@
+## Concrete V1 release acceptance contract — 5 October 2026
+
+**Proposal status:** COMPLETE AS A PLAN / NOT YET REVIEW-READY BECAUSE HOSTED ACCEPTANCE EVIDENCE REMAINS MISSING  
+**V1 implementation:** NOT AUTHORIZED
+
+### Recommended minimum usable-intelligence release target
+
+Use the frozen 2026-10-05 equity denominator of **239 equities / INR 2,087,118.51 priced equity value**.
+
+The proposed bounded remediation cohort is the entire current **non-INSUFFICIENT** equity cohort:
+- 109 `REVIEW_REQUIRED`;
+- 2 `STALE`;
+- total proposed cohort: **111 equities**;
+- count share: **46.44%** of 239;
+- priced equity value represented by the cohort: **INR 1,325,856.96**;
+- value share: **63.53%** of the frozen priced-equity denominator.
+
+This is a **proposed minimum V1 acceptance target**, not current achieved coverage. Current measured usable intelligence remains **0/239 equities and INR 0 value**.
+
+The reason for selecting this cohort is objective and reproducible: it includes every equity that is not currently classified `INSUFFICIENT` under the frozen readiness snapshot, while leaving the 128 `INSUFFICIENT` equities visible in the denominator and explicitly blocked from usable-intelligence counting until later remediation.
+
+### Mandatory acceptance conditions for the 111-equity cohort
+
+Every one of the 111 equities counted toward release must reach the full deterministic endpoint:
+
+`identity -> approved applicable methodology -> mandatory evidence/history -> deterministic assessments -> eligibility -> portfolio context -> applicable Fit/Sizing/Exit -> persisted advisory action with reproducible lineage`.
+
+A readiness label alone does not count. `BLOCKED`, `REVIEW_REQUIRED`, `STALE`, unsupported, unresolved, conflicting or missing-evidence states do not count as usable. Missing evidence never defaults to HOLD.
+
+The 111 target is all-or-fail for this proposed minimum: if fewer than 111 reach the endpoint, V1 does not satisfy this proposed release threshold unless the owner explicitly approves a later Scope Freeze amendment. The denominator must not be reduced after implementation to manufacture a pass.
+
+### Methodology coverage rule
+
+The release cohort must support every canonical methodology/profile actually represented among the selected 111 equities. Shared engines may serve multiple profile codes where the approved architecture says so. A profile may not be counted merely because it has an assignment row; applicable methodology approval, implemented deterministic engine support and mandatory evidence readiness must all be proven.
+
+Methodology profiles represented only among the 128 `INSUFFICIENT` equities may remain explicitly blocked for V1 release, provided their holdings remain visible in the 239-equity denominator and their status is not misrepresented as usable intelligence.
+
+### Scenario acceptance coverage
+
+The private acceptance suite must cover, using real Development holdings where available:
+- Core;
+- bank/financial;
+- pharma/specialized;
+- non-financial;
+- ETF/accounting applicability boundary;
+- missing/review-required evidence;
+- partial-sale accounting;
+- multi-broker/unknown-attribution accounting.
+
+Additionally validate with clearly labelled deterministic fixtures where a genuine READY Development case does not exist:
+- supported Satellite;
+- role mismatch;
+- high-quality overweight;
+- underweight/ADD;
+- deterioration/EXIT-review;
+- conflicting evidence.
+
+Fixture success validates behavior; it does **not** add to the 111-equity or INR 1,325,856.96 real-portfolio usable coverage.
+
+### Full-portfolio protections required even outside the 111 usable cohort
+
+- 248/248 open securities must have an explicit applicability/readiness state.
+- 239/239 equities must remain visible under the canonical assignment/readiness authority.
+- The 128 `INSUFFICIENT` equities remain explicit blocked/non-usable states; they are not removed from reporting.
+- All 9 ETFs remain outside equity stock-selection scoring but must retain correct accounting/status handling.
+- Accounting, valuation and weights must remain canonical and cross-surface consistent.
+- Missing/conflicting/stale evidence must remain fail-closed.
+- Owner roles/settings and final human decision authority must be preserved.
+- Maintenance/invalidation/provider-outage behavior must prevent stale derived outputs from appearing current.
+- Security/RLS and operational checks remain release requirements.
+- Full repository lint is **not PASS**: 84 errors and 4 warnings remain explicit technical debt. Broad cleanup is not part of this acceptance plan; any lint issue touching release-critical changed code must still be resolved before that code closes its gate.
+
+### Gate-specific delivery justification
+
+- **V1-2:** reuse existing ledger/accounting authority; verify partial sales, reopen, multi-broker, corrections, P&L and cross-surface exactness. Estimated engineering effort: Small–Medium.
+- **V1-3:** reuse 239/239 methodology assignments; verify application-router compatibility and approval/engine mapping. Estimated effort: Small–Medium to Medium.
+- **V1-4:** remediate the 111 selected `REVIEW_REQUIRED/STALE` equities first; separately preserve the 128 `INSUFFICIENT` cohort as explicit blocked states. Evidence/provider work is separate from engineering effort. Estimated engineering effort: Large.
+- **V1-5:** implement/generalize only the deterministic engines required by methodology profiles represented in the 111 cohort, while preserving existing pilots. Estimated effort: Large.
+- **V1-6:** current eligibility and role-fit for the accepted cohort; unsupported temporal movement may remain V1.1. Estimated effort: Medium.
+- **V1-7:** complete Portfolio Fit, Position Sizing, Exit Risk and action precedence for every usable cohort member. Estimated effort: Large.
+- **V1-8:** minimal thesis/snapshot/owner-decision linkage and optional grounded AI. Estimated effort: Medium.
+- **V1-9:** maintenance/invalidation, exact hosted browser acceptance, security/ops checks and isolated restore rehearsal. Estimated effort: Medium–Large.
+
+Provider/evidence acquisition volume, cooldowns and external availability are not included in engineering effort and require their own execution authorization/budget controls.
+
+### Fallback owner options
+
+If the owner considers the recommended 111 / 63.53%-value minimum too broad before implementation, the only defensible fallback is to approve a smaller **explicitly preselected private cohort** with a frozen count and measured value before V1-4 begins. It must not be selected after seeing implementation results.
+
+If the owner instead requires comprehensive V1 intelligence, the alternative is **239/239 equities / 100% count and 100% priced equity value**, with all 128 currently `INSUFFICIENT` holdings included in remediation. This is materially higher scope and should be treated as Large+ evidence/engine work, not as the default minimum.
+
+**Recommended owner choice:** approve the 111-equity / INR 1,325,856.96 minimum real-portfolio usable-intelligence target plus 248/248 explicit status coverage.
+
+### Recovery decision for owner review
+
+Proposed decision:
+
+> **Defer the isolated restore rehearsal to V1-9 while retaining it as a mandatory requirement before V1 release.**
+
+Supporting evidence: the Development backup has strong integrity/read-back/decrypt/hash/archive-validation evidence and R2/runtime mapping has been verified. Remaining uncertainty: there has been no isolated live restore into a disposable target, so application/schema/data recovery compatibility has not been proven end-to-end. Baseline Freeze therefore remains **PARTIAL** until the recovery requirement is satisfied or explicitly redefined by the owner.
+
+This proposal does not approve the deferral by itself and performs no restore.
+
+---
+
 ## Current Scope Freeze B review status — 5 October 2026
 
 **Status: INCOMPLETE / OWNER REVIEW NOT READY**  
