@@ -1,3 +1,21 @@
+## Private manifest owner approval — 5 October 2026
+
+**Private 111-equity manifest: RECOVERED / RECONCILED / OWNER APPROVED.**
+**V1-3 manifest entry prerequisite: SATISFIED.**
+**V1-3 execution: NOT STARTED / NOT AUTHORIZED.**
+
+The owner explicitly stated “All Files Approved” after the three private files were uploaded at commit `4b27769fdbbbb4e9d13e09f72e3fb5567dc8ddbb`.
+
+Approval is recorded against unchanged JSON SHA-256 `79f551558333adc1f37d6a26298d8088ee02db3161f03c6d6e59f9a19a93fc27`. Remote JSON blob identity was checked; the approved JSON/CSV/review table remain unchanged. Capture-time PENDING labels inside those files are superseded by the separate dated record `docs/private/PortfolioAI_V1_FROZEN_COHORT_OWNER_APPROVAL_2026-10-05.md`.
+
+111 unique equities and 132,585,696 paise remain frozen. Release minimums remain 100 successful cohort members AND 119,327,127 paise from the same members. The original full endpoint, all-population visibility, fail-closed states, disclosed recovery provenance and mandatory V1-9 restore proof remain unchanged.
+
+This supersedes earlier pending-direct-review and manifest-blocker status statements below. V1-2 remains COMPLETE / PASS with its recorded hosted-interaction limitation. The next step is separate owner authorization for V1-3 only; no V1-3 work has begun.
+
+No application/runtime, database/Auth/schema, provider, migration, scheduler, R2/storage or Production/main change occurred in this approval-recording pass.
+
+---
+
 ## Owner aggregate acceptance and private-file checks — 5 October 2026
 
 **Aggregate recovery: OWNER ACCEPTED / PASS.**
