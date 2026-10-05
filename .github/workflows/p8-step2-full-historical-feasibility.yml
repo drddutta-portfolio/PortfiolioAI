@@ -76,7 +76,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin PortfolioAI-Development
-          git add             docs/p8/PortfolioAI_P8_STEP2_FULL_HISTORICAL_FEASIBILITY_AUDIT_2026-10-05.json             docs/p8/PortfolioAI_P8_STEP2_PAIR_DISPOSITIONS_2026-10-05.jsonl.gz             docs/p8/PortfolioAI_P8_STEP2_NARROWER_EXPERIMENT_PROPOSAL_2026-10-05.json             docs/p8/PortfolioAI_P8_STEP2_FEASIBILITY_DECISION_MEMO_2026-10-05.md             docs/p8/PortfolioAI_P8_STEP2_FOCUSED_VALIDATION_2026-10-05.json
+          git add \
+            docs/p8/PortfolioAI_P8_STEP2_FULL_HISTORICAL_FEASIBILITY_AUDIT_2026-10-05.json \
+            docs/p8/PortfolioAI_P8_STEP2_PAIR_DISPOSITIONS_2026-10-05.jsonl.gz \
+            docs/p8/PortfolioAI_P8_STEP2_NARROWER_EXPERIMENT_PROPOSAL_2026-10-05.json \
+            docs/p8/PortfolioAI_P8_STEP2_FEASIBILITY_DECISION_MEMO_2026-10-05.md \
+            docs/p8/PortfolioAI_P8_STEP2_FOCUSED_VALIDATION_2026-10-05.json
           git commit -m "audit(p8): complete Step 2 historical feasibility census"
+          git pull --rebase origin PortfolioAI-Development
           git push origin HEAD:PortfolioAI-Development
