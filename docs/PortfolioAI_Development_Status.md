@@ -1,3 +1,31 @@
+## V1-3 CLOSED — Identity / Classification / Methodology Routing — 5 October 2026
+
+**V1-3 = COMPLETE / PASS.**  
+**V1-4 = NOT STARTED / NOT AUTHORIZED.**
+
+V1-3 is now closed against its original frozen completion contract. The tested application source remains `3faf2561257d8a222cc78c0cde38a603b0f82c44`, deployed as READY Development Preview `dpl_CH8HTDf7jJqne41jjXzMiAP8V74E`. Later Development changes before this closure are documentation-only and source-equivalent.
+
+Closure evidence:
+- 239/239 held equities have unique canonical security IDs and ISINs;
+- 239/239 have sector/industry with zero classification conflicts;
+- 239/239 have approved current profile/methodology assignment lineage;
+- live route matrix matches the approved P7 IC1 matrix;
+- all 45 held parent profiles resolve through the canonical assignment path;
+- 238 required-primary routes resolve; the deliberate Pharma primary-review exception remains REVIEW_REQUIRED;
+- ETFs remain outside equity scoring;
+- prior 20-profile / 74-equity / 26-frozen-member routing gap is repaired;
+- 87 focused tests, strict build, architecture guard and changed-file lint passed.
+
+Two listing-projection metadata exceptions remain explicitly documented. They are not ambiguous identities: each retains unique canonical security ID/ISIN, canonical classification and methodology lineage, plus VERIFIED Angel One NSE mapping. They are permitted unresolved V1-3 limitations and were not fabricated or mutated.
+
+The frozen plan places exact authenticated end-to-end hosted-browser acceptance in **V1-9**, so the unavailable protected browser session is no longer misclassified as a V1-3 blocker. It remains mandatory before final V1 release.
+
+Approved 111-member manifest and thresholds are unchanged. No Production/main, database/schema/Auth/RLS, provider, scheduler, R2/storage, P8, backup or restore action occurred.
+
+Focused closure record: `docs/PortfolioAI_V1_3_IDENTITY_CLASSIFICATION_ROUTING_VERIFICATION_2026-10-05.md`.
+
+---
+
 ## V1-3 routing compatibility repair — 5 October 2026
 
 **Routing repair = COMPLETE / PASS. Exact Development Preview = READY.**
