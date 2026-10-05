@@ -1,3 +1,26 @@
+## Current Development Baseline Freeze + V1-1 audit — 5 October 2026
+
+**Baseline Freeze = PARTIAL.**  
+**V1-1 Operational Baseline Audit = COMPLETE FOR AVAILABLE READ-ONLY EVIDENCE.**  
+**Scope Freeze B = INCOMPLETE PROPOSAL / OWNER REVIEW NOT READY.**  
+**V1 implementation = NOT AUTHORIZED.**  
+**Production/main mutation = NOT AUTHORIZED.**
+
+New authoritative audit artifacts:
+- `docs/PortfolioAI_CURRENT_DEVELOPMENT_BASELINE_FREEZE_2026-10-05.md`
+- `docs/PortfolioAI_V1_OPERATIONAL_BASELINE_AUDIT_2026-10-05.md`
+- `docs/PortfolioAI_V1_SCOPE_FREEZE_B_AND_BUILD_PLAN_2026-10-05.md`
+
+Verified Development inventory: 248 open consolidated securities, 239 equities, 9 ETFs, 248/248 priced, priced market value INR 2,217,451.55, with 46 current-holding rows carrying missing broker attribution. Current held-equity evidence presence is 114/239 for fundamental observations and 111/239 for research documents; current classification is 239/239; persisted recommendation coverage is 1/239 and persisted position-sizing coverage is 0/239.
+
+The exact pre-audit Development SHA is `a116cec4ab0939238c02a5480d283a09186b274b`.
+
+Remaining Scope Freeze B readiness gaps are: Development Preview deployment/SHA verification, authenticated browser baseline proof, live R2/runtime storage verification sufficient for recovery mapping, complete 239-equity methodology-route/readiness census, measured usable-intelligence coverage and private real-security acceptance cohort. No V1-2–V1-9 implementation may start until Scope Freeze B is amended to a review-ready proposal and explicitly approved by the owner.
+
+P8 remains preserved/paused for future V2; its existing code/data/docs/manifests are not deleted or rebuilt.
+
+---
+
 ## PortfolioAI V1 Scope Freeze A — 5 October 2026
 
 **Scope Freeze A = FROZEN.**  
