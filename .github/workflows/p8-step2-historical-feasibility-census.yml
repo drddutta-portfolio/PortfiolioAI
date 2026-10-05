@@ -49,7 +49,11 @@ jobs:
                   docs/p8/PortfolioAI_P8_STEP2_PAIR_DISPOSITIONS_2026-10-05.jsonl.gz \
                   docs/p8/PortfolioAI_P8_STEP2_NARROWER_EXPERIMENT_PROPOSAL_2026-10-05.json \
                   docs/p8/PortfolioAI_P8_STEP2_DECISION_MEMO_2026-10-05.md
-          git commit -m "audit(p8): complete Step 2 historical feasibility census"
-          git push origin HEAD:PortfolioAI-Development
+          if ! git diff --cached --quiet; then
+            git commit -m "audit(p8): complete Step 2 historical feasibility census"
+            git push origin HEAD:PortfolioAI-Development
+          else
+            echo "Step 2 artifacts are unchanged; deterministic rerun produced no commit."
+          fi
       - if: steps.execute.outputs.code != '0'
         run: exit 1
