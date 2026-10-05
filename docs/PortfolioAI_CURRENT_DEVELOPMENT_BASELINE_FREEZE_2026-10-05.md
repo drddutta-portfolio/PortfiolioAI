@@ -183,3 +183,86 @@ What prevents COMPLETE:
 ## 13. Baseline rule going forward
 
 V1, V1.1, V2/P8 and later versions are cumulative upgrades of this preserved Development line. Valid existing work must be reused, extended or preserved. Replacement/retirement requires evidence, migration/recovery implications and owner approval.
+
+
+## 14. Evidence-gap closure update — 5 October 2026
+
+### Development deployment
+
+Repository HEAD was reverified as `224c2889372cb1a8dbecb1f32babf03e6fee064c`.
+
+Vercel project `portfiolio-ai` / `prj_Vp1QUuF63cnfuAl8ULYuHW44EbXU` is the intended Vite project. The current Development deployment for repository HEAD is:
+
+- deployment: `dpl_3ViT5naRqprmzHxwBfiRrD1LjLXW`
+- branch: `PortfolioAI-Development`
+- SHA: `224c2889372cb1a8dbecb1f32babf03e6fee064c`
+- state: **ERROR**
+- error: `lint_or_type_error`
+- build message: `npm run build` exited with 2.
+
+The stable Development branch alias `portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app` is associated with an older READY deployment `dpl_5hAVfPT5XrSojEH9wnRLkqAMP8i6` at SHA `52fb8929bbaa3991256cb4386f4c716c137c0634`.
+
+Therefore:
+- REPOSITORY VERIFIED: yes;
+- DEPLOYED CONFIGURATION VERIFIED: yes, including the mismatch;
+- BROWSER VERIFIED: no;
+- repository HEAD is **not** the currently working Development runtime.
+
+No deployment or runtime change was authorized or made.
+
+### Cloudflare R2 / storage
+
+Read-only Cloudflare inspection verified:
+
+- Cloudflare account: one authorized standard account;
+- Development bucket: `portfolioai-history-dev`, APAC, Standard;
+- runtime Worker: `portfolioai-history-dev-api`;
+- runtime Worker R2 binding: `HISTORY_BUCKET -> portfolioai-history-dev`;
+- Worker allowed Development origin includes the stable PortfolioAI Development Vercel alias;
+- backup Worker binding: `BUCKET -> portfolioai-history-dev`;
+- preserved P8 B2 Parquet partitions/manifests and hashes are present in the bucket;
+- current Development backup prefix exists under `portfolioai-backups/development/database/manual/2026-10-03T14-42-12Z/`;
+- encrypted backup object size: 43,118,448 bytes;
+- backup version metadata: `PORTFOLIOAI_DEV_FULL_DB_R2_V1`;
+- encrypted object SHA-256 metadata: `f1990ea4efc3f88566d28d413decbc3bb53f28bc54cdf2039bdf7b6d6f0bf9ec`;
+- `manifest.json`, encrypted SHA file and `COMPLETE.json` are present.
+
+Repository backup workflow evidence proves that this backup process:
+1. targets Development ref `lrgpjimipfkyoqbpsqzz`;
+2. refuses a different R2 bucket;
+3. creates a PostgreSQL custom dump;
+4. verifies `pg_restore --list`;
+5. encrypts with AES-256-CBC/PBKDF2;
+6. uploads to R2;
+7. performs full encrypted read-back with SHA-256 and size verification;
+8. decrypts the R2 read-back;
+9. verifies the plaintext dump SHA-256;
+10. re-runs `pg_restore --list`;
+11. writes a PASS completion marker.
+
+This is strong backup-integrity evidence, but it is still not a full restore into an isolated live PostgreSQL target.
+
+### Recovery conclusion
+
+Baseline status remains **PARTIAL** because:
+- current Development Preview HEAD does not deploy successfully;
+- authenticated browser acceptance against HEAD is impossible while that deployment is broken;
+- no isolated live restore rehearsal has been authorized/performed;
+- the preserved database backup predates the present documentation HEAD and code/database/storage were not captured atomically.
+
+### Separate isolated-restore proposal — NOT EXECUTED
+
+If separately authorized, restore validation should use a disposable Development-only Supabase/PostgreSQL target with no Production binding.
+
+Proposed operation:
+1. positively identify the disposable project/ref;
+2. retrieve the exact encrypted backup `PORTFOLIOAI_DEV_FULL_DB_R2_V1` from the verified R2 key;
+3. verify encrypted SHA-256 and manifest;
+4. decrypt locally in the authorized runner;
+5. verify plaintext dump SHA-256 and `pg_restore --list`;
+6. restore into the disposable target only;
+7. verify migrations/schema, row-count invariants, canonical views/functions and a bounded read-only application smoke check;
+8. record recovery evidence;
+9. destroy/retire the disposable target only under its separate cleanup authorization.
+
+Expected effects: creation/restoration of a disposable database only; no Production effect. Cost depends on the selected disposable Supabase target/branch and must be obtained/approved before creation. Rollback is deletion/retirement of that disposable target. This proposal is documentation only.
