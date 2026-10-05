@@ -1,0 +1,31 @@
+{
+  "cohort_name": "P8_STEP2_OBJECTIVE_ROUTED_HISTORICAL_COHORT_V1",
+  "complete_input_pairs": 0,
+  "eligibility": [
+    "B2 pair is historically eligible under the frozen survivor-free universe.",
+    "Official evidence exists strictly before the decision timestamp.",
+    "Adopted V1/V3 rules prove a complete four-tier historical classification.",
+    "The actual historical router proves exactly one supported existing profile."
+  ],
+  "exclusions_not_used": [
+    "future return or holdout outcome",
+    "later company survival",
+    "current holdings",
+    "manual stock convenience",
+    "final complete-input status"
+  ],
+  "freeze_recommended": false,
+  "gates": {
+    "every_applicable_major_methodology_sector_at_least_60pct": false,
+    "every_included_date_at_least_70pct": false,
+    "minimum_24_decision_dates": true,
+    "overall_complete_input_at_least_80pct": false
+  },
+  "measured_decision_dates": 29,
+  "measured_pairs": 29,
+  "measured_unique_identities": 1,
+  "owner_approval_required_before_any_freeze": true,
+  "recommendation": "NO_GO",
+  "status": "PROPOSAL_ONLY_NOT_FROZEN",
+  "version": "P8_STEP2_NARROWER_EXPERIMENT_PROPOSAL_V1"
+}
