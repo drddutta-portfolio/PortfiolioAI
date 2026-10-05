@@ -1,3 +1,31 @@
+## V1-3 execution — identity/classification/routing verification — 5 October 2026
+
+**V1-3 = NOT PROVEN. V1-4 NOT STARTED / NOT AUTHORIZED.**
+
+Starting authoritative HEAD: `6186ddf2acae853b0f5d57652f9b99cd6ab7bccc`.
+
+Read-only Development verification confirms:
+- 248 open holdings = 239 equities + 9 ETFs;
+- 239/239 equities have canonical security IDs, ISIN, sector, industry, stored profile and methodology authority/version;
+- zero classification conflicts;
+- live 239-equity profile/subprofile/methodology matrix matches the approved P7-IC1 matrix with zero route mismatches;
+- the frozen 111-member cohort is fully present with zero route mismatches;
+- BLUEJET remains the one intentional Pharma Primary-subprofile REVIEW_REQUIRED exception;
+- ETFs remain outside equity methodology routing.
+
+The blocking compatibility defect is in the current application route/execution surface: the approved held universe spans 45 profile codes, but `RESEARCH_PROFILE_ROUTING_V2` / current sector-engine exposure covers only 25 of those approved held profiles, representing 165/239 equities. The remaining 20 approved profile codes cover 74/239 equities and 26/111 frozen-cohort members. Only 4 held equities have a REVIEWED legacy scoring-profile assignment, so this gap is not masked by reviewed assignments.
+
+This must be repaired by making the application consume the approved canonical route assignment authority before separately evaluating engine/adapter availability; do not duplicate the 45-route matrix as page-local guesses.
+
+Identity exception: two held equities have canonical security ID + ISIN + VERIFIED Angel One NSE mappings but lack a canonical listing projection in `current_security_identity_v1`. No DB row was fabricated; any data correction/migration requires separate approval.
+
+Focused record:
+`docs/PortfolioAI_V1_3_IDENTITY_CLASSIFICATION_ROUTING_VERIFICATION_2026-10-05.md`.
+
+No application code, Production/main, database/Auth/RLS, provider, scheduler, R2/storage or P8 operation occurred.
+
+---
+
 ## Private manifest owner approval — 5 October 2026
 
 **Private 111-equity manifest: RECOVERED / RECONCILED / OWNER APPROVED.**
