@@ -4,7 +4,7 @@
 **Branch:** PortfolioAI-Development  
 **Capture date:** 2026-10-05  
 **Status:** PARTIAL  
-**Source commit:** SOURCE_SHA_PENDING_FIRST_COMMIT_PARENT  
+**Source commit:** a116cec4ab0939238c02a5480d283a09186b274b  
 **Purpose:** Preserve the current Development build as a recoverable reference before any V1 implementation.
 
 ## 1. Authorization and boundaries
@@ -18,7 +18,7 @@ Canonical authority remains the order in AGENTS.md. Scope Freeze A remains froze
 | Target | Verified state | Evidence / limitation |
 |---|---|---|
 | Git repository | VERIFIED | drddutta-portfolio/PortfiolioAI, branch PortfolioAI-Development |
-| Remote Development source SHA | Pending first documentation-commit parent capture in this initial revision | This file will be amended immediately with the exact pre-audit SHA |
+| Remote Development source SHA | VERIFIED | Pre-audit HEAD: `a116cec4ab0939238c02a5480d283a09186b274b`; first audit documentation commit: `af4e367c17b6d009f9838fb8f6dd9130f93acaaf` |
 | Supabase Development | VERIFIED | PortfolioAI Dev, ref `lrgpjimipfkyoqbpsqzz`, ACTIVE_HEALTHY |
 | Other PortfolioAI Supabase project | SEPARATE / NOT USED | `uxiyufbsbgzzdujzcdxe` (Project-PortfolioAI) |
 | Vercel Development Preview | NOT VERIFIED | Connected Vercel context returned no accessible teams/projects; no deployment ID/SHA is inferred |
@@ -174,12 +174,11 @@ What is recoverable/evidenced:
 - existing backup workflow/history references.
 
 What prevents COMPLETE:
-1. exact pre-audit remote source SHA is inserted in the immediate follow-up revision of this file;
-2. Development Preview deployment ID/SHA is unverified;
-3. live R2 bucket/binding/catalog state was not independently inspected;
-4. no authorized restore rehearsal proves database/storage recovery;
-5. authenticated browser end-to-end behavior is unverified;
-6. code/database/storage captures are not atomic.
+1. Development Preview deployment ID/SHA is unverified;
+2. live R2 bucket/binding/catalog state was not independently inspected;
+3. no authorized restore rehearsal proves database/storage recovery;
+4. authenticated browser end-to-end behavior is unverified;
+5. code/database/storage captures are not atomic.
 
 ## 13. Baseline rule going forward
 
