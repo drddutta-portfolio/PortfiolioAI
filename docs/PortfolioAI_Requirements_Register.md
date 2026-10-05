@@ -1,3 +1,21 @@
+## Scope Freeze A release overlay — 5 October 2026
+
+Release sequencing is defined by [PortfolioAI V1/V1.1/V2 Product Scope Freeze A](PortfolioAI_V1_V2_PRODUCT_SCOPE_FREEZE_2026-10-05.md).
+
+Existing requirement IDs, implementation statuses and original milestone records below remain historical truth and must not be rewritten simply to fit the V1 plan.
+
+The scope-freeze document adds a **requirement-to-gate release overlay**. In summary:
+
+- accounting/import requirements feed **V1-2**;
+- classification/asset/security-route requirements feed **V1-3**;
+- provider/evidence/research/coverage requirements feed **V1-4** and maintenance controls;
+- investment/Core Health/sizing requirements feed **V1-5 through V1-7**;
+- compatibility/security/operational recovery requirements feed **V1-9**;
+- deferred target/stop alerts, richer theme intelligence and discovery remain **V1.1** unless the audit proves a bounded subset is required for V1 acceptance;
+- historical replay/backtesting is **V2/P8**.
+
+Scope Freeze B may refine release placement after the audit while preserving the original requirement history.
+
 # PortfolioAI Requirements Register
 
 This register preserves feature traceability. It does not override the Master Blueprint, Research & Intelligence Architecture, Single Source of Truth Architecture, Database Architecture, or Development Rules.
