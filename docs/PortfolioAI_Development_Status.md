@@ -1,3 +1,83 @@
+## Owner-directed cohort and minimum acceptance amendment — 5 October 2026
+
+**Scope Freeze B: PROPOSED / OWNER REVIEW REQUIRED — NOT FROZEN.**
+**Minimum thresholds: PROPOSED, awaiting explicit owner approval.**
+**V1 implementation / V1-2 execution: NOT AUTHORIZED.**
+
+This amendment records the owner's cohort and restore decisions and supersedes ALL earlier present-tense 111/111 all-or-fail requirements, readiness statements and restore-decision requests below. Earlier records are retained as historical evidence only. No release threshold has yet been approved.
+
+### Accepted owner direction
+
+Attempt to bring **all 111 equities** in the initial remediation cohort (109 REVIEW_REQUIRED + 2 STALE in the frozen canonical snapshot) to the complete deterministic usable-intelligence endpoint. The target is 111; release does not require 111/111 if the separately approved minimum thresholds and every other release condition pass.
+
+Keep **all 239 equities and all 248 open holdings** visible in readiness and applicability reporting. Cohort membership and denominators must not be changed after observing implementation results. Unsuccessful members retain explicit BLOCKED, REVIEW_REQUIRED, STALE or other not-ready states with documented reasons. Missing evidence must never become HOLD or any other invented investment opinion.
+
+The owner has accepted **isolated restore rehearsal deferral to V1-9**. Baseline Freeze remains PARTIAL. Successful isolated restore proof remains mandatory before final V1 release; deferral is not a waiver.
+
+### Exact proposed minimums — BOTH must pass
+
+| Measure | Frozen denominator | Proposed minimum |
+| --- | --- | --- |
+| Successful cohort stock count | 111 equities | **100 equities** (100/111 = 90.09%; ceiling of 90% × 111) |
+| Successful cohort frozen priced-equity value | INR 1,325,856.96 | **INR 1,193,271.27** (at least 90.00% of cohort frozen value, rounded UP to the nearest paise) |
+
+Use exact integer paise: cohort denominator 132,585,696 paise; 90% = 119,327,126.4 paise; minimum = **119,327,127 paise**. Do not round a displayed percentage to determine acceptance.
+
+For context only, these minimums correspond to **100/239 = 41.84% of all equities by count** and approximately **57.17% of the frozen total priced-equity value INR 2,087,118.51**. The 90% value threshold applies to the selected cohort, NOT to the entire 239-equity portfolio. Display both cohort and full-portfolio coverage distinctly.
+
+The SAME set of fully successful cohort members must satisfy both measures. Count cannot be met by one set and value by a different set. At most 11 cohort members may remain not-ready by count, and their combined frozen baseline value may not exceed **INR 132,585.69**. Thus 100 low-value successes alone cannot pass if their combined value is below the minimum; even 110 successes may fail the value condition.
+
+A release pass is:
+- successful cohort count >= 100;
+- sum of frozen baseline values of those same successful members >= 119,327,127 paise;
+- every other V1 gate, scenario, full-portfolio reporting, security, operational and restore acceptance requirement passes.
+
+Neither 100 successes nor 90% value is sufficient alone. Passing these minimums does not justify abandoning the remaining target members or hiding their remediation backlog.
+
+### What counts as successful
+
+Preserve the full endpoint without weakening any prerequisite:
+
+**identity → approved methodology → mandatory evidence/history → deterministic assessments → eligibility → portfolio context → applicable Fit/Sizing/Exit → persisted advisory action with reproducible lineage.**
+
+A stock counts once only when its full applicable endpoint is demonstrated and current under approved freshness/invalidation rules at release acceptance. READY evidence, assigned methodology, an engine score, a fixture, an unpersisted result or a blocked action alone does not count. Applicability exclusions require the approved contract; they cannot be introduced to inflate coverage. Synthetic fixtures never add to real-stock count/value success.
+
+### Frozen measurement contract and privacy
+
+Before implementation starts, reconcile and preserve a private owner-reviewed 111-member manifest containing canonical identity, snapshot membership, each member's frozen baseline priced value, valuation date/source and reproducible lineage, with an auditable manifest identifier/integrity reference. The sum must reconcile exactly to INR 1,325,856.96. Membership comes from the accepted baseline, not a new moving status query. Keep holding identities, account details and private per-stock values out of public GitHub documentation.
+
+These values originate from the existing frozen audit valuation; this amendment does not claim a new valuation or private-manifest verification. If reconciliation cannot be demonstrated, report it before implementation; do not guess, substitute members or change the denominator. Freeze the exact thresholds and measurement contract through explicit Scope Freeze B approval before coding. The private acceptance record must be reviewable to the owner.
+
+Use fixed baseline values for contractual acceptance so price changes, transactions or a falling denominator cannot manufacture a pass. Also report live portfolio readiness/value with its actual current denominator separately. Holdings disposed of or otherwise unable to satisfy the approved endpoint do not silently disappear from the frozen contract. Changes require an explicit owner amendment before adopting a revised contract, never a retroactive adjustment after results are known.
+
+### Evidence-based recommendation and remaining uncertainty
+
+Recommend these dual 90% minimums as a practical INITIAL acceptance proposal aligned with the owner's preference. They permit a bounded residual of up to 11 members while protecting high-value coverage. This is an acceptance-policy recommendation, **not a proven feasibility forecast**.
+
+Existing read-only evidence shows overlapping mandatory-input gaps affecting 103 cohort members, document review affecting 108, benchmark gaps affecting 32, stale evidence affecting 2 and insufficient listing history affecting 1. The stored readiness snapshot is dated 2026-09-29. The one structural history blocker makes 111/111 especially uncertain, but the available aggregate evidence does not establish which 100 members or 90% of value can succeed. Stock-level dependency/engine/source feasibility and provider budget estimates remain unproven; no new acquisition or provider execution is authorized by this proposal. V1 must preserve approved history/methodology requirements rather than relax them to meet the minimums.
+
+### Owner-supplied hosted baseline evidence
+
+The owner supplied authenticated screenshots of Dashboard, Holdings (/app/holdings), Portfolio Structure (/app/structure), Research (/app/research) and Intelligence (/app/intelligence), all showing the Development alias and DEVELOPMENT marker. Together these close the **bounded owner-supplied visual page-rendering baseline**; no additional screenshot is requested for that baseline.
+
+Holdings shows 248 open positions and 25 closed histories, with explicit accounting limitations and stale price evidence. Structure renders roles/themes/weights. Research renders stored coverage: 248 open holdings, 0 fresh, 0 stale, 127 missing, 52 conflicting and 60 review-required; displayed categories must not be assumed to be an exhaustive disjoint partition of all holdings. Intelligence shows 239/239 canonical equity coverage, 9 ETFs outside equity methodology and zero scored/candidacy-ready/actions, with explicit blocked/review states.
+
+This is screenshot evidence supplied by the owner, not agent-operated interaction or network verification. No visible login/page-load error appears in the supplied views. Filters, drill-downs, persisted workflow behavior, full accounting correctness and final hosted acceptance remain for their existing gates, including V1-9. Research evidence coverage and canonical intelligence readiness are different views and their labels/counts are not interchangeable.
+
+The previously verified READY Preview source/configuration SHA remains `3125f03ae91cddc33bcc3c0135fc005a50cb823f`, deployment `dpl_CeFoJttcGwnfYwbRk78nqehr7HZM`. Screenshot capture SHA/time is not independently attested. Subsequent documentation-only changes preserve that application baseline and do not require another deployment.
+
+### Approval and execution boundary
+
+Present the exact **100/111 and INR 1,193,271.27 / INR 1,325,856.96** proposal to the owner for explicit Scope Freeze B approval, including the measurement contract and disclosed uncertainty. The earlier owner's cohort/restore instruction is recorded above; it is not approval of these newly proposed numbers.
+
+Only after Scope Freeze B approval, pre-execution manifest reconciliation and **separate V1-2 execution authorization** may implementation begin. Reuse and upgrade the same PortfolioAI; preserve existing accounting, architecture, pilots and paused P8. Sequence remains V1-2 → V1-3 → V1-4 → V1-5 → V1-6 → V1-7 → V1-8 → V1-9.
+
+This amendment changes documentation only. No runtime, Production/main, Supabase data/Auth/schema, provider call, migration, scheduler, storage or restore action occurred.
+
+---
+
+## Superseded historical proposal records
+
 ## Bounded baseline closure and V1 proposal evidence — 5 October 2026
 
 **Scope Freeze B: INCOMPLETE / OWNER REVIEW NOT READY. V1 implementation: NOT AUTHORIZED.**
