@@ -1,3 +1,19 @@
+## Owner aggregate acceptance and private-file checks — 5 October 2026
+
+**Aggregate recovery: OWNER ACCEPTED / PASS.**
+**Private manifest owner approval: PENDING DIRECT FILE REVIEW.**
+**V1-3: NOT STARTED / NOT AUTHORIZED.**
+
+The owner accepted recovery methodology and aggregate reconciliation at commit `85bc89a84f8cc998255f13fdf9803127b868830a`, including the price-cache limitation in principle. The owner explicitly reserved final approval until direct private-file review.
+
+Codex checked the private files: unchanged JSON SHA-256 `79f551558333adc1f37d6a26298d8088ee02db3161f03c6d6e59f9a19a93fc27`; 111 rows/unique canonical IDs; all required identity, snapshot/hash, selection/run, state, quantity, valuation/retrieval, integer-paise and methodology/assignment fields present; every member quantity × price × 100 exactly equals its paise value; sum 132,585,696 paise. CSV has the same 111 members and all CSV fields match JSON. Review table contains all 111 members with matching symbols/states and the same JSON hash.
+
+JSON is the full lineage authority; CSV is a field subset and the review table a readable summary. Automated checks are not owner approval. Private files remain unchanged and outside public GitHub. No threshold, cohort or denominator change is approved or needed.
+
+Owner direct review and approval against the exact JSON hash remain mandatory before V1-3, followed by separate execution authorization. No runtime, database, provider, migration, scheduler, storage or Production/main action occurred.
+
+---
+
 ## Frozen cohort recovery — 5 October 2026
 
 **Private 111-equity manifest: RECOVERED / RECONCILED / OWNER REVIEW PENDING.**
