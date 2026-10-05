@@ -8250,3 +8250,24 @@ New-chat handoff:
 - commit `08489a7742408f8acc24fcd5b5f77322e5dbf1f5`
 
 Next action: continue Workstream A by implementing a separately versioned recovery contract + tests/fixtures. The recovery exclusion ceiling remains pending explicit owner freeze before bulk acquisition or P8-C.
+
+
+## Baseline/Scope Freeze B evidence-gap closure — 5 October 2026
+
+Current Development HEAD before this closure work was `224c2889372cb1a8dbecb1f32babf03e6fee064c`.
+
+Evidence closure results:
+- Current Development Vercel deployment for that SHA exists but is **ERROR** (`lint_or_type_error`, `npm run build` exit 2).
+- Stable Development alias remains on older READY SHA `52fb8929bbaa3991256cb4386f4c716c137c0634`.
+- Cloudflare R2 Development bucket/binding and preserved P8 objects are verified read-only.
+- Existing 2026-10-03 Development backup integrity evidence is strong, but no isolated live restore rehearsal has been performed.
+- Current methodology census is complete: 239/239 held equities, 45 profile codes, one P7 IC1 assignment per equity.
+- Current readiness: 128 INSUFFICIENT, 109 REVIEW_REQUIRED, 2 STALE, 0 READY.
+- Current usable-intelligence coverage under the frozen V1 endpoint: 0/239 equities and INR 0 / INR 2,087,118.51 priced equity value.
+- Revised priority counts: 23 V1 BLOCKER, 21 V1 IMPORTANT, 4 V1.1, 8 NO CHANGE.
+
+**Baseline Freeze remains PARTIAL.**  
+**Scope Freeze B remains INCOMPLETE PROPOSAL / OWNER REVIEW NOT READY.**  
+**V1 implementation remains NOT AUTHORIZED.**
+
+The immediate unresolved items are the broken current Development deployment/browser proof, isolated restore/recovery acceptance, and evidence/engine remediation required before a non-arbitrary V1 usable-intelligence release threshold can be derived.
