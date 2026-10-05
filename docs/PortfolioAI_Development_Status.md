@@ -23,31 +23,33 @@ Before any mutable Development backend/provider execution, environment isolation
 **Experiment freeze recommendation = NO.**  
 **Step 1 remains COMPLETE / PASS / CLOSED with disposition `STEP1_POLICY_CLASSIFICATION_ROUTE_CANARY_PASS`.**
 
-This section supersedes earlier present-tense statements below that Step 2 was blocked/not started. Historical records are retained unchanged as audit history.
+This current-state section supersedes earlier present-tense statements below that Step 2 was blocked/not started and supersedes the earlier Step 2 census evidence commit `e01e5f125fa895b338a4042bab3e351de48f4596`. Historical records are retained unchanged as audit history.
 
-The frozen Step 2 contract is `P8_STEP2_HISTORICAL_FEASIBILITY_CONTRACT_V1`, Git blob `de02b6984fc715c81433a42a523e0a00f022b73d`. The full read-only census used the exact B2 denominator and canonical R2/B3 authorities, processed the frozen source inventory, invoked the actual historical router for proven classifications, and repeated the deterministic measurement against the same frozen inputs.
+The frozen Step 2 contract is `P8_STEP2_HISTORICAL_FEASIBILITY_CONTRACT_V1`, Git blob `de02b6984fc715c81433a42a523e0a00f022b73d`. The final full read-only census used the exact B2 denominator and canonical R2/B3 authorities, verified the fixed source inventory, invoked the actual historical router/readiness adapter for proven classifications, and repeated the deterministic measurement independently against the same frozen inputs.
 
 ### Full B2 result
 
 - pairs: **121,956**
 - historical identities: **4,524**
 - decision dates: **32**
-- authoritative complete historical classifications: **61**
+- authoritative complete historical classification pairs: **61**
 - actual supported existing methodology-route pairs: **29**
-- routed identities: **1**
+- routed historical identities: **1**
 - complete-input pairs: **0**
 
 Exclusive primary disposition:
 
-- `NO_PRE_DECISION_EVIDENCE`: **60,531**
-- `CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE`: **61,364**
+- `NO_PRE_DECISION_EVIDENCE`: **60,254**
+- `CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE`: **61,609**
+- `NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION`: **32**
 - `ROUTE_UNSUPPORTED_OR_AMBIGUOUS`: **32**
 - `REQUIRED_INPUTS_INCOMPLETE`: **29**
-- `COMPLETE_INPUTS`: **0**
-- `NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION`: **0**
 - `MARKET_DATA_BLOCKED_OR_INSUFFICIENT_HISTORY`: **0**
+- `COMPLETE_INPUTS`: **0**
 
-The primary-disposition counts sum exactly to **121,956**. Market diagnostics remain separately recorded and overlapping; they are not misrepresented as exclusive dispositions.
+The exclusive primary-disposition counts sum exactly to **121,956**. Separately, **39,452** pairs carry the overlapping diagnostic `B3_MARKET_NOT_READY`; primary precedence prevents those diagnostics from being double-counted as an exclusive reconciliation.
+
+The 61 authoritative classifications split into **32 Edible Oil** pairs (`IN040101001`) that fail closed because the actual historical router has no supported existing route, and **29 Iron & Steel Products / STEEL_FERROUS** pairs (`IN070205015`) that reach the actual historical router and readiness adapter.
 
 ### Objectively predeclared narrower cohort
 
@@ -59,21 +61,25 @@ The primary-disposition counts sum exactly to **121,956**. Market diagnostics re
 - methodology: **STEEL_FERROUS**
 - complete-input pairs: **0 / 29 = 0%**
 
+All 11 frozen STEEL_FERROUS normalized signal codes are absent from the Development historical normalized-signal observation inventory. Raw XBRL facts and B3 prices were not promoted to canonical normalized scoring inputs. Every routed pair therefore fails closed as `REQUIRED_INPUTS_INCOMPLETE`.
+
 Frozen acceptance standards:
 
 - at least 24 decision dates: **PASS** (29)
 - at least 80% overall complete-input coverage: **FAIL** (0%)
-- at least 70% on every included decision date: **FAIL** (0% on each routed date)
+- at least 70% on every included decision date: **FAIL** (0% on each of 29 dates)
 - at least 60% per applicable major methodology sector: **FAIL** (STEEL_FERROUS 0%)
 
-Therefore the evidence-based recommendation is **NO-GO**. No experiment is frozen or executed. The smallest evidenced next dependency is route-specific historical normalized-input materialization/mapping under already adopted methodology authorities; this is not authorization for another acquisition loop.
+Therefore the evidence-based recommendation is **NO-GO**. No experiment is frozen or executed. The smallest evidenced next dependency is route-specific historical normalized-input materialization/mapping under the already adopted methodology authorities; this is not authorization for another provider-acquisition loop.
 
-Deterministic census fingerprint: `4b62210f94e907a693ce57da83dec16be0ff7d63dc67bad60ec5bee00eb07b73`  
-Pair-manifest uncompressed SHA-256: `c3223b8119e9fff926b02837e59fffeba8421402fe5ff74aa3094592433998ee`  
-Census workflow: `37260752764` — **SUCCESS**  
-Census evidence commit: `e01e5f125fa895b338a4042bab3e351de48f4596`
+Deterministic census fingerprint: `fe7ad2190af20aa111bd7ceef73235ea04f5472e30428c7418b57ea51d39e7b1`  
+B3 partition-inventory fingerprint: `e381bee03e6f5d2236209d1400bddf47801e04d0df53da52933d5cf706744f59`  
+Pair-manifest uncompressed SHA-256: `b17856697f0bdc40c124910870dd218455ee494609712406bc1348d146ad0832`  
+Pair-manifest gzip SHA-256: `8f0effa34d1d7dcd8d9fec3d8cd88b3ba60331db1bb84050ecd582fa3627d183`  
+Focused validation workflow: `37265713073` — **SUCCESS**  
+Census evidence commit: `b7bf8b7a81e24d64ebef379c562b3c4e90cced57`
 
-No provider calls, Supabase/R2 writes, migrations, deployments, score/decision/position/return/performance calculations, B5/B6/B-FINAL rebuild, P8-C start, `main` change or Production change occurred.
+No provider calls, Supabase/R2 writes, migrations, deployments, score/decision/position/return/performance calculations, holdout reads, B5/B6/B-FINAL rebuild, P8-C start, `main` change or Production change occurred.
 
 ---
 
