@@ -1,3 +1,21 @@
+## V1-4 authorized execution — 5 October 2026
+
+**V1-4 = AUTHORIZED / IN PROGRESS / NOT PROVEN. V1-5 = NOT STARTED / NOT AUTHORIZED.**
+
+Owner authorized V1-4 in the current conversation. V1-1/V1-2/V1-3 remain closed. Application/normalization safety repair commit: `94a9b855cb0f4c83a24b0a0de21f18d4438790bd`. Exact Development Preview `dpl_BtKDRTQ7pSeL8HZF7FKCwtpq7U6c` is READY at that SHA: https://portfiolio-g4qns2wsr-dibyendu-dutta.vercel.app (project portfiolio-ai; Preview target null). GitHub Vercel status is success; no GitHub Actions runs were associated with the code commit. Protected alias SPA shell returns HTTP 200 using the owner's temporary share access; this is separate from authenticated app acceptance at V1-9.
+
+Research now exposes the canonical selected snapshot's immutable requirement states, source/period/freshness metadata, history minima, benchmark context, validation/selection/provenance and reasons independently of engine availability. The repository's shared numeric normalizer rejects matching-label counts as proof of historical reporting periods; multi-period matches without dated periods remain review-required. Existing live Edge Functions/snapshots were not changed or executed.
+
+Read-only PortfolioAI Dev (`lrgpjimipfkyoqbpsqzz`) census: 239 equities across 45 profiles, 0 READY / 109 REVIEW_REQUIRED / 2 STALE / 128 INSUFFICIENT. The unchanged approved 111-member cohort spans 39 profiles: 103 members have missing mandatory items, 109 review-required items, 2 stale items, 32 missing approved benchmark history, 1 short listing history (overlapping conditions). Snapshot assessments are dated 29 September, not recomputed current freshness. V1-4 cannot be closed from UI visibility or a stored VALIDATED label alone: dated period/unit/currency/scope/source/freshness validation, aligned/adjusted history, evidence review and bounded acquisition/materialization remain required.
+
+105 application regressions and 17 Edge contract tests PASS; final presentation/lifecycle edit also rerun with 15 PASS. Strict build, architecture guard and changed-file lint PASS. Full lint retains the unchanged 77 errors / 4 warnings. RLS remains enabled on evidence tables; current views are security-invoker; new read path uses owner-scoped SELECT only.
+
+The approved manifest/hash, same-member count/value thresholds, 239-equity/248-holding visibility and mandatory V1-9 restore proof remain unchanged. Provider campaigns, database mutations/materialization, migrations, scheduler actions, storage writes and restores require their specific action approval; no such action occurred. No main/Production/Auth/RLS/P8 changes or execution. This dated entry supersedes older V1-4 NOT AUTHORIZED/NOT STARTED entries below, which remain historical.
+
+Execution record and all 45 profile readiness counts: `docs/PortfolioAI_V1_4_EVIDENCE_AND_CURRENT_HISTORY_READINESS_2026-10-05.md`.
+
+---
+
 ## V1-3 CLOSED — Identity / Classification / Methodology Routing — 5 October 2026
 
 **V1-3 = COMPLETE / PASS.**  
