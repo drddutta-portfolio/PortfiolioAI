@@ -145,11 +145,11 @@ def mapped_hierarchy(desc,pathfn):
     if not code:return None
     p=pathfn(code)
     q={x["level"]:x for x in p}
-    need=("MACRO","SECTOR","INDUSTRY","BASIC_INDUSTRY")
+    need=("MACRO_ECONOMIC_SECTOR","SECTOR","INDUSTRY","BASIC_INDUSTRY")
     if any(x not in q for x in need):raise RuntimeError(f"incomplete taxonomy path {code}")
     return {
       "mapping_rule":kind,
-      "macroEconomicSectorCode":q["MACRO"]["code"],"macroEconomicSectorName":q["MACRO"]["name"],
+      "macroEconomicSectorCode":q["MACRO_ECONOMIC_SECTOR"]["code"],"macroEconomicSectorName":q["MACRO_ECONOMIC_SECTOR"]["name"],
       "sectorCode":q["SECTOR"]["code"],"sectorName":q["SECTOR"]["name"],
       "industryCode":q["INDUSTRY"]["code"],"industryName":q["INDUSTRY"]["name"],
       "basicIndustryCode":q["BASIC_INDUSTRY"]["code"],"basicIndustryName":q["BASIC_INDUSTRY"]["name"],
