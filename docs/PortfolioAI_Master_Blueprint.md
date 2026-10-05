@@ -13,6 +13,24 @@
 
 ---
 
+## Scope Freeze A release-sequencing note — 5 October 2026
+
+**Release sequencing authority:** [PortfolioAI V1/V1.1/V2 Product Scope Freeze A](PortfolioAI_V1_V2_PRODUCT_SCOPE_FREEZE_2026-10-05.md).
+
+This note does not alter the Blueprint's product architecture. It freezes the near-term release sequence:
+
+- **V1:** operational current-portfolio investment intelligence and owner decision support;
+- **V1.1:** non-blocking monitoring/intelligence/discovery expansion;
+- **V2/P8:** point-in-time historical reconstruction and historical strategy validation.
+
+Historical observations required to evaluate a company or portfolio **today** remain V1 dependencies. Only point-in-time replay/backtesting and historical strategy-effectiveness inference are deferred.
+
+The existing deterministic architecture remains V1 where prerequisites are satisfied: Core Selection, Core Health, Satellite Opportunity, Valuation, current Momentum/Relative Strength, Risk, Portfolio Fit, Position Sizing, Exit Risk and advisory action states. AI remains optional and evidence-grounded; deterministic operation cannot depend on AI availability.
+
+Scope Freeze B must be owner-approved after the Development audit before implementation begins.
+
+---
+
 ## 1. Vision
 
 PortfolioAI is a personal investment decision-support system for managing a diversified Indian equity portfolio across multiple demat/broker accounts. It is not an order-execution bot, intraday/scalping system, or autonomous investment adviser.
