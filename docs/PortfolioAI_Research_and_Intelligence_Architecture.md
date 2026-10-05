@@ -7,6 +7,29 @@
 
 ---
 
+## Scope Freeze A historical-data boundary — 5 October 2026
+
+The release boundary is governed by [PortfolioAI V1/V1.1/V2 Product Scope Freeze A](PortfolioAI_V1_V2_PRODUCT_SCOPE_FREEZE_2026-10-05.md).
+
+For V1, do **not** interpret "historical validation deferred" as "historical data deferred."
+
+V1 still requires historical observations needed for correct present-tense analysis, including as required by approved methodologies:
+
+- multi-quarter/multi-year fundamental history;
+- valuation and ownership history;
+- prior observations needed for deterioration/improvement or anti-churn logic;
+- current-market OHLCV lookback;
+- corporate-action-compatible price history;
+- benchmark history/alignment for relative strength and market-risk calculations.
+
+What is deferred to V2/P8 is point-in-time reconstruction and historical strategy evaluation: recreating what PortfolioAI knew on past decision dates, replaying scores/actions and evaluating subsequent investment effectiveness.
+
+Current Momentum/Relative Strength may remain V1 only when authoritative OHLCV, sufficient lookback, corporate-action semantics, benchmark identity and date alignment are ready.
+
+Temporal role/movement claims require actual prior observations; otherwise expose current eligibility and `TRANSITION_NOT_ASSESSABLE`.
+
+---
+
 ## 1. Purpose
 
 PortfolioAI will combine data from multiple providers, the trusted transaction ledger, deterministic calculations, and later optional AI synthesis. The main architectural risk is not insufficient data; it is allowing multiple values with different origins and meanings to become mixed together.
