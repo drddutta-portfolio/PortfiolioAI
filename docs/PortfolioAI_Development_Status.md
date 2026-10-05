@@ -1,3 +1,27 @@
+## Scope Freeze B owner approval — 5 October 2026
+
+**Scope Freeze B: FROZEN / OWNER APPROVED.**
+**V1-2 execution: NOT AUTHORIZED — separate owner instruction required.**
+
+The owner explicitly approved the exact proposal presented at commit `e23b049d8639cacb23fd70a2f7b74551f0955b13` by answering “Yes” to approval of Scope Freeze B with its thresholds and measurement rules.
+
+Approved contract:
+- Attempt full deterministic usable intelligence for all **111 initial cohort equities**.
+- Require **at least 100/111 successful equities** AND **at least INR 1,193,271.27 of their combined frozen baseline value**, against the fixed cohort value **INR 1,325,856.96**. The same successful members must satisfy both measures.
+- Preserve the complete endpoint, fixed membership/denominators, exact paise arithmetic, explicit unsuccessful reasons and no conversion of missing evidence into HOLD.
+- Keep all **239 equities and 248 holdings** visible. Other release gates remain mandatory.
+- Defer isolated restore rehearsal to **V1-9**, keeping successful restore proof mandatory before release and Baseline Freeze PARTIAL.
+- Preserve the accepted measurement contract: reconcile and preserve the private owner-reviewed membership/value manifest before implementation; do not claim that approval itself verifies that manifest.
+- Preserve the disclosed evidence/engine/history feasibility uncertainty. Approval of the target is not proof of attainability or provider-budget authorization.
+
+The bounded owner-supplied screenshot baseline is accepted as documented; interactive and final hosted acceptance remain for their existing gates.
+
+This approval supersedes earlier pending-review, all-or-fail 111/111 and INCOMPLETE proposal status statements retained below. The approved proposal is preserved at the cited commit for traceability. This record authorizes no V1 implementation, migration, provider campaign, scheduler action, storage write or Production/main change.
+
+Next: obtain separate V1-2 execution authorization and satisfy the frozen pre-implementation manifest reconciliation requirement before coding.
+
+---
+
 ## Owner-directed cohort and minimum acceptance amendment — 5 October 2026
 
 **Scope Freeze B: PROPOSED / OWNER REVIEW REQUIRED — NOT FROZEN.**
