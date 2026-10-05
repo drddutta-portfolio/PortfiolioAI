@@ -23,7 +23,7 @@ The census reconciled **121,956** B2 pairs across **32** decision dates. The obj
 - every_included_date_at_least_70pct: **FAIL**
 - every_applicable_major_methodology_sector_at_least_60pct: **FAIL**
 
-The actual historical router and actual STEEL_FERROUS readiness adapter were executed. Raw XBRL facts were not promoted into normalized inputs and no threshold was relaxed.
+The actual historical router was executed. Route-specific input readiness was evaluated against the frozen 11-signal STEEL_FERROUS authority in `P8_STEP2_HISTORICAL_FEASIBILITY_CONTRACT_V1`; because the frozen Step 2 source inventory contains no normalized historical signal ledger, those signals fail closed as missing rather than being fabricated from raw XBRL facts. No threshold was relaxed.
 
 ## Recommendation
 
