@@ -1,3 +1,21 @@
+## Baseline Freeze and V1-1 audit overlay — 5 October 2026
+
+The Current Development Baseline Freeze and V1-1 Operational Baseline Audit have now been executed under read-only/documentation authorization.
+
+- Baseline Freeze: **PARTIAL**
+- V1-1 audit: **COMPLETE FOR AVAILABLE READ-ONLY EVIDENCE**
+- Scope Freeze B: **INCOMPLETE PROPOSAL / OWNER REVIEW NOT READY**
+- V1 implementation: **NOT AUTHORIZED**
+
+Use:
+- [Current Development Baseline Freeze](PortfolioAI_CURRENT_DEVELOPMENT_BASELINE_FREEZE_2026-10-05.md)
+- [V1 Operational Baseline Audit](PortfolioAI_V1_OPERATIONAL_BASELINE_AUDIT_2026-10-05.md)
+- [V1 Scope Freeze B and Build Plan](PortfolioAI_V1_SCOPE_FREEZE_B_AND_BUILD_PLAN_2026-10-05.md)
+
+The old R1–R12 roadmap below remains architectural/history context and does not supersede the ten V1 gates. P8 is preserved/paused for future V2. The immediate critical path is to close the explicit Scope Freeze B evidence gaps, not to resume old roadmap execution or P8 campaigns.
+
+---
+
 # PortfolioAI Integration and Execution Plan
 
 **Status:** Owner-review plan; no production implementation is authorized by this document alone.  
