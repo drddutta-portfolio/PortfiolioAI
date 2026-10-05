@@ -70,7 +70,7 @@ No surface is claimed browser-verified in this audit because the authenticated D
 | 18 | Themes | Owner themes independent of roles | Requirements implemented/deployed | WORKING | Value analytics richer later | V1.1 | Themes/theme_securities | REUSE AS-IS | Defer richer analytics | Low |
 | 19 | Security identity | One canonical identity | Identity/reconciliation structures; 248 distinct holdings | WORKING | Revalidate ambiguous cases | V1 IMPORTANT | Security master | REUSE AS-IS | V1-3 | Low |
 | 20 | Sector/industry/Basic Industry | Canonical classification | 239/239 held equities in current classification view | WORKING | Taxonomy reconciliation still important for method routing | V1 IMPORTANT | Current classification authority | REUSE WITH FIX | V1-3 | Current classification != methodology |
-| 21 | Profile/methodology routing | Explicit approved route | Code/registry/pilots exist; explicit reviewed assignment rows only 4; broad route readiness not yet measured | PARTIAL | Portfolio-wide authoritative route matrix incomplete | V1 BLOCKER | Research profile router + versioned contracts | GENERALISE PILOT | V1-3 | Major dependency |
+| 21 | Profile/methodology routing | Explicit approved route | Current P7 IC1 census: 239/239 held equities assigned across 45 profile codes; authority/version recorded in section 11 | WORKING | Assignment census resolved; application-router compatibility and method/engine readiness still require distinct verification | NO CHANGE | P7 IC1 reviewed assignment authority + application router/versioned contracts | REUSE AS-IS | V1-3 compatibility verification | Assignment coverage does not establish evidence readiness or implemented engine approval |
 | 22 | Fundamental evidence | Required current fundamentals | 114/239 held equities have observations | PARTIAL | 125 held equities without current table coverage | V1 BLOCKER | Fundamental evidence repository | REUSE WITH FIX | V1-4 | Provider/evidence effort |
 | 23 | Ownership evidence | Required ownership where applicable | Architecture/provider contracts exist; portfolio-wide readiness not measured | AUDIT_PENDING | Coverage not measured independently | V1 IMPORTANT | Research evidence repository | REUSE WITH FIX | V1-4 | Needs specific inventory |
 | 24 | Valuation evidence | Required valuation inputs | Reference/pilot contracts exist; portfolio-wide readiness not measured | PARTIAL | Breadth incomplete | V1 BLOCKER | Research evidence repository | GENERALISE PILOT | V1-4/V1-5 | Method-specific |
@@ -305,3 +305,25 @@ Therefore:
 - authenticated browser verification of current HEAD is **NOT PROVEN**;
 - capability 56 remains a V1 BLOCKER;
 - no deployment fix is authorized by this audit.
+
+
+## 12. Capability-row count correction — 5 October 2026
+
+This correction reconciles the current 56-row capability matrix with the methodology-routing resolution in section 11. Capability 21 now records WORKING / NO CHANGE / REUSE AS-IS. The assignment census is resolved; application-router compatibility, profile approval/engine implementation and security-level evidence readiness remain separate checks.
+
+The earlier summaries in sections 5 and 11 are retained as previously reported history and are superseded for current priority totals by the counts below. The original matrix actually contained 23 blocker rows, 23 important rows, 3 V1.1 rows and 7 no-change rows; clearing capability 21 changes only one blocker to no-change.
+
+| Current priority | Capability rows |
+|---|---:|
+| V1 BLOCKER | 22 |
+| V1 IMPORTANT | 23 |
+| V1.1 | 3 |
+| V2 | 0 |
+| NO CHANGE | 8 |
+| Total | 56 |
+
+Remaining blocker capability IDs: 22, 24, 27, 28, 29, 30, 31, 32, 33, 35, 36, 37, 38, 39, 40, 41, 42, 45, 46, 53, 55 and 56.
+
+These counts describe classified acceptance gaps, not 22 missing engines or 22 new stages. Existing implementations must be verified and reused before new work is proposed. Portfolio-wide scoreability is not required merely because a gap is classified a blocker; release acceptance follows the separately approved coverage contract.
+
+This arithmetic correction does not complete the baseline freeze, make Scope Freeze B review-ready, authorize implementation or require V1 remediation before Scope Freeze B approval. Baseline recovery, deployment/browser evidence and a costed remediation/coverage proposal retain their existing boundaries. Historical-feasibility blockers remain distinct from V1 current-analysis dependencies.
