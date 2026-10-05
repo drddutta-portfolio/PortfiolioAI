@@ -1,3 +1,11 @@
+## Development authentication deep-link recovery — 5 October 2026
+
+A real owner recovery link reached the Development `/auth/update-password` route but Vercel returned 404 before React loaded. The existing deployment rewrites covered only `/app` paths. Development configuration now also rewrites `/login`, `/forgot-password` and `/auth/:path*` to `/index.html`, allowing the existing React login/recovery routes to load on direct navigation.
+
+This is a narrowly authorized authentication recovery fix. Supabase users, ownership, RLS, passwords, provider controls and schedulers are not changed by this commit. No recovery tokens or account identities are committed. Hosted deployment verification and owner completion of the recovery flow remain separate checks. V1 implementation remains NOT AUTHORIZED.
+
+---
+
 ## Codex Development verification reconciliation — 5 October 2026
 
 **Build/runtime source equivalence = VERIFIED.** The stable Development alias serves READY Preview `dpl_DbjnpyyEYHg8bDWDYgJKuCaaFCwE` at SHA `10d740fb76f218ad8db04c4494714c998045c1d2`. Inspected remote HEAD `953575ebbfac4fd5c0c76157a6317531965a5057` differs only in this Development Status document; application and committed configuration are identical.
