@@ -60,16 +60,17 @@ function block(
   normalizedTerms: Record<string, string>,
   reason: string,
 ): P8B3Normalization {
-  return {
+  const logical = {
     observationId: observation.observationId,
     historicalIdentityId: observation.historicalIdentityId,
     normalizationVersion: P8_B3_NORMALIZATION_VERSION,
     actionType,
-    state: "BLOCKED",
+    state: "BLOCKED" as const,
     effectiveDate: observation.exDate ?? null,
     normalizedTerms,
     blockerReason: reason,
   }
+  return logical
 }
 
 function ready(
@@ -80,15 +81,16 @@ function ready(
   if (!observation.historicalIdentityId || !observation.exDate) {
     return block(observation, actionType, normalizedTerms, "resolved identity and ex-date are required")
   }
-  return {
+  const logical = {
     observationId: observation.observationId,
     historicalIdentityId: observation.historicalIdentityId,
     normalizationVersion: P8_B3_NORMALIZATION_VERSION,
     actionType,
-    state: "READY",
+    state: "READY" as const,
     effectiveDate: observation.exDate,
     normalizedTerms,
   }
+  return logical
 }
 
 export function normalizeP8B3CorporateAction(observation: P8B3ActionObservation): P8B3Normalization {
