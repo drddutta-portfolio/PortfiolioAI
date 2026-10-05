@@ -1,3 +1,18 @@
+## V1-4 Action A completed — 5 October 2026
+
+**Action A = COMPLETE / PASS. V1-4 = NOT PROVEN. Action B = PROPOSAL ONLY. V1-5 = NOT AUTHORIZED.**
+
+Owner-approved six-slice cache-only run `4d6ef6d6-ca7c-4fbc-8362-827edcfc6075` completed on PortfolioAI Dev only, retaining evaluation/source cutoff `2026-10-05T19:25:54.019754+00:00`. All 239 current snapshots match the run. Appended 239 snapshots, 3,744 items, 239 selections and 239 immutable lineage rows; issued/consumed six scoped one-time grants. Historical/source/assignment/control fingerprints were unchanged, provider usage delta zero, cron runs zero. Frozen manifest/hash and 132,585,696-paise aggregate unchanged.
+
+Current frozen cohort: **111 REVIEW_REQUIRED / 0 READY**. Current full equity population: **231 REVIEW_REQUIRED / 8 INSUFFICIENT / 0 READY**. All 239 equities / 248 holdings remain visible. Action A made validated blockers current; it removed no underlying blocker and is not usable-intelligence progress. Authenticated Development Overview/Evidence/provenance checks passed with explicit blockers and no JavaScript errors.
+
+See [execution reconciliation](PortfolioAI_V1_4_ACTION_A_EXECUTION_RECORD_2026-10-05.md) and [one consolidated Action B remediation matrix](PortfolioAI_V1_4_ACTION_B_REMEDIATION_MATRIX_2026-10-05.md). The matrix includes exact requirement inventory, cache/source limitations and budgets; unsupported acquisition volumes are explicitly not budgetable. No Action B implementation or provider campaign was run.
+
+No Production/main access or mutation, acquisition/provider call, P8, R2 write, scheduler action, Auth/RLS change, migration or restore occurred. Release minimum and full deterministic endpoint are unchanged; restore proof remains mandatory at V1-9. V1-1/2/3 remain closed.
+
+
+---
+
 # V1-4 Development evidence remediation — bounded continuation proposal
 
 Date: 5 October 2026. **PROPOSED / SPECIFIC DATA-WRITE APPROVAL REQUIRED.** Existing V1-4 scope; no new implementation gate or release-condition change.
