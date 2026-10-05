@@ -1,3 +1,16 @@
+## V1-1 baseline audit overlay — 5 October 2026
+
+The authorized V1-1 audit is complete for available read-only repository/Development evidence. Baseline Freeze is **PARTIAL** and Scope Freeze B remains **INCOMPLETE / NOT READY FOR OWNER APPROVAL**.
+
+Audit artifacts:
+- `PortfolioAI_CURRENT_DEVELOPMENT_BASELINE_FREEZE_2026-10-05.md`
+- `PortfolioAI_V1_OPERATIONAL_BASELINE_AUDIT_2026-10-05.md`
+- `PortfolioAI_V1_SCOPE_FREEZE_B_AND_BUILD_PLAN_2026-10-05.md`
+
+This overlay does not rewrite original requirement statuses. It records that current V1 blockers concentrate in profile/methodology-route readiness, evidence/history/benchmark sufficiency, portfolio-wide deterministic engines, Fit/Sizing/Exit/action integration, maintenance/recovery, and authenticated end-to-end release proof. Existing implemented accounting, transaction, classification, roles/themes, price-cache, research-storage/provider-control and UI/reference work is to be reused rather than rebuilt.
+
+---
+
 ## Scope Freeze A release overlay — 5 October 2026
 
 Release sequencing is defined by [PortfolioAI V1/V1.1/V2 Product Scope Freeze A](PortfolioAI_V1_V2_PRODUCT_SCOPE_FREEZE_2026-10-05.md).
