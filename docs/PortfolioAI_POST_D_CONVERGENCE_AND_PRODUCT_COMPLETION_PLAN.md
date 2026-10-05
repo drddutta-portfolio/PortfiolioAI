@@ -35,7 +35,7 @@ Validation: five Node regression tests and seven existing Python reconciliation 
 **Current authoritative branch:** `PortfolioAI-Development`
 **Original plan date:** 26 September 2026
 **Last reconciled:** 5 October 2026
-**Audited P8 Step 2 census evidence HEAD:** `e01e5f125fa895b338a4042bab3e351de48f4596`
+**Audited P8 Step 2 census evidence HEAD:** `b7bf8b7a81e24d64ebef379c562b3c4e90cced57`
 
 This plan does not authorize source-code changes, migrations, branch creation,
 Supabase or Vercel changes, provider or AI calls, deployment, merge, push,
@@ -45,7 +45,7 @@ scheduler activation, production mutation, or implementation of any checkpoint.
 
 ## 1. Executive conclusion
 
-**Current-state precedence — 5 October 2026:** P8 Step 1 is **COMPLETE / PASS / CLOSED** against its original five-condition canary gate. P8 Step 2 is now **COMPLETE / PASS / CLOSED as an execution audit**, while research feasibility is **NO-GO**. The full deterministic census reconciled 121,956 B2 pairs across 4,524 historical identities and 32 decision dates, proved 61 authoritative complete historical classifications, and produced 29 actual supported STEEL_FERROUS route pairs across one identity and 29 dates. Complete normalized-input pairs remain 0. The predeclared routed cohort passes only the ≥24-date gate and fails the frozen 80% overall, 70% per-date, and 60% methodology-coverage standards. Census fingerprint: `4b62210f94e907a693ce57da83dec16be0ff7d63dc67bad60ec5bee00eb07b73`. No experiment freeze/execution, B5/B6/B-FINAL rebuild, P8-C, provider call, database/storage write, migration, deployment, score or outcome inspection is authorized by this closure. Earlier blocked/not-started Step 2 statements remain historical evidence and are superseded by this precedence note.
+**Current-state precedence — 5 October 2026:** P8 Step 1 is **COMPLETE / PASS / CLOSED** against its original five-condition canary gate. P8 Step 2 is **COMPLETE / PASS / CLOSED as an execution audit**, while research feasibility is **NO-GO**. The final deterministic census reconciled 121,956 B2 pairs across 4,524 historical identities and 32 decision dates, proved 61 authoritative complete historical-classification pairs, and produced 29 actual supported STEEL_FERROUS route pairs across one identity and 29 dates. Complete normalized-input pairs remain 0. Exclusive primary dispositions are: 60,254 `NO_PRE_DECISION_EVIDENCE`; 61,609 `CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE`; 32 `NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION`; 32 `ROUTE_UNSUPPORTED_OR_AMBIGUOUS`; and 29 `REQUIRED_INPUTS_INCOMPLETE`. The predeclared routed cohort passes only the ≥24-date gate and fails the frozen 80% overall, 70% per-date, and 60% methodology-coverage standards. Census fingerprint: `fe7ad2190af20aa111bd7ceef73235ea04f5472e30428c7418b57ea51d39e7b1`; focused validation run `37265713073` passed with an exact independent repeat. No experiment freeze/execution, B5/B6/B-FINAL rebuild, P8-C, provider call, database/storage write, migration, deployment, score or outcome inspection is authorized by this closure. Earlier Step 2 blocked/not-started statements and the superseded census fingerprint remain historical evidence only.
 
 PortfolioAI must now enter a **convergence and product-completion phase**, not
 another feature program.
