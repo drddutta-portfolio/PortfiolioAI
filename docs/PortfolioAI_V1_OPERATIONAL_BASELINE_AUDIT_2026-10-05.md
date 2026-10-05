@@ -194,3 +194,114 @@ The audit establishes a strong reusable foundation but not a release-ready V1.
 Already working/reusable: transactions/import, ledger-derived holdings, current asset/classification coverage, latest price coverage, roles/settings/themes, research storage architecture, provider controls, generic Research workspace, News, and multiple pilot/reference intelligence components.
 
 Primary work remaining: route/readiness census, evidence breadth, method-valid current-history/benchmarks, generalization/completion of deterministic engines, Portfolio Fit/Core Health/Exit Risk, portfolio-wide sizing/recommendations, final action policy, owner decision/thesis, invalidation/maintenance, recovery proof and authenticated end-to-end release validation.
+
+
+## 11. Evidence-gap closure addendum — 5 October 2026
+
+### Revalidated dated inventory
+
+Measurement timestamp: **2026-10-05 09:18:25.508110+00**.
+
+The prior inventory is unchanged:
+- open securities: 248;
+- equities: 239;
+- ETFs: 9;
+- priced: 248/248;
+- total priced value: INR 2,217,451.55;
+- priced equity value: INR 2,087,118.51;
+- missing-broker rows: 46;
+- fundamental-observation coverage: 114/239 equities;
+- research-document coverage: 111/239;
+- persisted recommendation coverage: 1/239 securities (5 historical/preview runs for that one security);
+- persisted sizing assessments: 0/239.
+
+### Full current methodology/readiness census
+
+The current P7 evidence lineage supplies exactly one current methodology snapshot for each of the 239 held equities:
+
+- census rows: **239 / 239**;
+- distinct profile codes: **45**;
+- assignment authority for all 239: `PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1`;
+- assignment version for all 239: `e7c021b865fcd1d49a7c59924ef9c44f0383f301`;
+- approved/current methodology assignment coverage: **239/239**;
+- ambiguous/unassigned current methodology routes in this census: **0**.
+
+Input/readiness state is separate:
+- `INSUFFICIENT`: **128 equities**, priced value INR **761,261.55**;
+- `REVIEW_REQUIRED`: **109 equities**, priced value INR **1,240,361.16**;
+- `STALE`: **2 equities**, priced value INR **85,495.80**;
+- READY current snapshots: **0**.
+
+Thus the profile-support classification is:
+- SUPPORTED PROFILE / approved methodology assignment: **239**;
+- PARTIALLY SUPPORTED PROFILE due to missing methodology assignment: **0**;
+- UNSUPPORTED PROFILE due to no methodology authority: **0**;
+- AMBIGUOUS / UNRESOLVED ROUTE: **0**.
+
+This classification does **not** mean the securities are intelligence-ready. Current snapshot evidence has 2,158 required MISSING items across 231 securities, 246 REVIEW_REQUIRED items across 109 securities, 18 INSUFFICIENT items across 9 securities and 2 STALE items across 2 securities. No current snapshot is READY.
+
+### Current market-history / benchmark evidence
+
+Current PostgreSQL market history contains `ONE_DAY` records for all 239 held equities:
+- 230 equities have at least 252 daily rows;
+- 9 equities have 1–251 rows;
+- 0 have zero rows;
+- observed range per security: 73–282 rows.
+
+Benchmark history contains 271 ONE_DAY rows each for:
+`NIFTY_500`, `NIFTY_AUTO`, `NIFTY_BANK`, `NIFTY_FINANCIAL_SERVICES`, `NIFTY_FMCG`, `NIFTY_INFRASTRUCTURE`, `NIFTY_IT`, `NIFTY_METAL`, `NIFTY_PHARMA`, and `NIFTY_REALTY`, spanning 2025-08-25 through 2026-09-28 UTC.
+
+Presence does not by itself prove profile-specific benchmark alignment or every required lookback, but the earlier generic statement that market-history breadth was unmeasured is now superseded by these counts.
+
+### Private acceptance-cohort evidence
+
+No private holding identifiers are committed.
+
+Measured real-case availability:
+- owner CORE holdings exist: 5;
+- owner SATELLITE holdings: 0 measured;
+- ETFs exist: 9;
+- open holdings with prior SELL history: 32;
+- multi-broker open holdings: 70;
+- holdings covering both prior SELL and multi-broker: 12;
+- current persisted recommendation exists for one held equity; latest current-equity recommendation context is CORE / PREVIEW / ACCUMULATE / CORE_CANDIDATE.
+
+Because no current equity snapshot is READY and no SATELLITE owner role is present, a genuine “supported Satellite” case cannot be claimed. Likewise, high-quality overweight, deterioration/EXIT-review and final V1 ADD/EXIT cases cannot be inferred from the current fail-closed snapshots. Those scenario gaps require labelled deterministic fixtures unless later V1 evidence produces real cases.
+
+A minimum private acceptance cohort can therefore be selected from real data for: Core, bank/financial, pharma/specialized, non-financial, missing/review-required evidence, ETF, partial-sale, and multi-broker cases. The exact private IDs remain outside repository documentation.
+
+### Measured usable-intelligence coverage
+
+Using the frozen V1 minimum endpoint, current usable intelligence is:
+
+- usable open equities: **0 / 239 = 0%**;
+- usable priced-equity value: **INR 0 / INR 2,087,118.51 = 0%**;
+- status coverage: **239/239 methodology snapshots classified**, but none reaches the full deterministic V1 endpoint.
+
+The 0% result is not caused by a missing methodology census. It is caused by fail-closed current evidence/readiness plus incomplete downstream deterministic engine/action coverage. Research-document presence or a generic BLOCKED result is not counted as usable intelligence.
+
+### Revised blocker reconciliation
+
+The prior methodology-routing blocker is now resolved as a current-census evidence gap:
+- capability 21 Profile/methodology routing: **WORKING / REUSE AS-IS**, with 239/239 P7 IC1 assignments and 45 profile codes. V1-3 must verify compatibility with the application routing layer, but the portfolio is no longer missing a methodology assignment census.
+
+Other major blockers remain, including mandatory evidence readiness, nine sub-252-day market-history cases, profile-specific benchmark alignment, portfolio-wide deterministic engines, Portfolio Fit/Core Health/Exit Risk/sizing/action integration, recovery rehearsal, and authenticated end-to-end release proof.
+
+Revised priority counts:
+- **V1 BLOCKER: 23**
+- **V1 IMPORTANT: 21**
+- **V1.1: 4**
+- **NO CHANGE: 8**
+
+### Deployment/browser result
+
+Repository HEAD `224c2889372cb1a8dbecb1f32babf03e6fee064c` has a Vercel Development deployment, but that deployment is ERROR with `lint_or_type_error` and `npm run build` exit 2.
+
+The stable Development branch alias remains attached to an older READY deployment at SHA `52fb8929bbaa3991256cb4386f4c716c137c0634`.
+
+Therefore:
+- repository evidence is verified;
+- deployment mismatch/failure is verified;
+- authenticated browser verification of current HEAD is **NOT PROVEN**;
+- capability 56 remains a V1 BLOCKER;
+- no deployment fix is authorized by this audit.
