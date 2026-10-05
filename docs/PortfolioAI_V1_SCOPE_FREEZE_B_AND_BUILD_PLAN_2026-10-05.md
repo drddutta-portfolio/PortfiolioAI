@@ -1,3 +1,92 @@
+## Current Scope Freeze B review status — 5 October 2026
+
+**Status: INCOMPLETE / OWNER REVIEW NOT READY**  
+**V1 implementation: NOT AUTHORIZED**  
+**Current Development HEAD: `fb067e01b64344c5279ceb65ead5ad7b3516a616`**  
+**Browser-tested/READY Preview SHA: `ba8c9e9ddbc0e2658a213af178f0f8922e86639d`**  
+**READY deployment: `dpl_5p9Daac7UqGSL8y6qP3dawqF1Hzx`**
+
+Current HEAD is one documentation-only commit ahead of the verified READY Preview. Git comparison shows no application-source or runtime-configuration difference between those SHAs. Vercel currently returns no deployment for the exact current HEAD, so exact-current-HEAD Preview acceptance remains unproven and the older READY deployment is not substituted for it.
+
+Authenticated hosted browser verification also remains unavailable because no existing authorized owner browser session is exposed to this execution environment and the Preview is protected by Vercel SSO. No protection bypass, credential request, or write-capable browser action is permitted.
+
+Proposal content is otherwise complete enough to define the intended V1 implementation plan without prematurely executing V1-4/V1-5/V1-7.
+
+### Frozen measured baseline for the proposal
+
+- 248 open securities: 239 equities + 9 ETFs.
+- Priced equity denominator: INR 2,087,118.51.
+- Current methodology assignment census: 239/239 equities across 45 profiles.
+- Methodology assignment is not equivalent to approved executable engine readiness or evidence readiness.
+- Current evidence/readiness states: 128 INSUFFICIENT, 109 REVIEW_REQUIRED, 2 STALE, 0 READY.
+- Current usable-intelligence baseline: 0/239 equities and INR 0 / INR 2,087,118.51 under the frozen minimum V1 endpoint.
+- Capability totals: 22 V1 BLOCKER / 23 V1 IMPORTANT / 3 V1.1 / 8 NO CHANGE.
+
+### Bounded remediation plan
+
+The plan remains the existing V1 gate sequence with no new sub-gate hierarchy:
+
+- **V1-2 Accounting Integrity:** verify/reconcile current accounting and broker attribution; do not rebuild proven ledger authority.
+- **V1-3 Identity / Classification / Routing:** reuse the 239/239 assignment census, verify compatibility with current application routing, and fail closed on any genuine mismatch.
+- **V1-4 Evidence / Current-History Readiness:** remediate the measured INSUFFICIENT / REVIEW_REQUIRED / STALE cohorts, method-specific current-history sufficiency, freshness/conflicts and benchmark alignment.
+- **V1-5 Deterministic Engines:** generalize valid pilots and complete only genuinely missing engines.
+- **V1-6 Eligibility / Movement:** implement current eligibility first; defer unsupported temporal movement rather than infer it.
+- **V1-7 Portfolio Intelligence / Actions:** integrate Portfolio Fit, Position Sizing, Exit Risk and final action precedence.
+- **V1-8 Thesis / Decisions / Optional AI:** persist owner thesis and reviewed recommendation/decision linkage; AI remains optional and downstream.
+- **V1-9 Maintenance / Release:** invalidation/recompute, outage behavior, exact-SHA browser acceptance and recovery rehearsal.
+
+### Proposed acceptance cohorts
+
+Repository documentation will not publish private holding identities. The private acceptance set should use the smallest real Development cohort that covers:
+- Core;
+- bank/financial;
+- pharma/specialized;
+- non-financial;
+- ETF;
+- missing/review-required evidence;
+- partial-sale accounting;
+- multi-broker/unknown attribution.
+
+Where a genuine Development case does not exist at acceptance time (for example a supported Satellite or a specific final ADD/EXIT condition), use a clearly labelled deterministic fixture instead of misclassifying a real holding.
+
+### Proposed coverage contract
+
+No arbitrary usable-intelligence percentage is frozen before implementation.
+
+The proposal instead freezes:
+1. **status coverage:** 248/248 open securities must have an explicit current applicability/readiness state;
+2. **equity methodology-state coverage:** 239/239 equities remain explicitly assigned or explicitly blocked/review-required under the canonical authority;
+3. **usable intelligence:** every equity counted as READY at release must reach the complete frozen endpoint (identity + applicable method + mandatory evidence/history + deterministic assessments + eligibility/portfolio context + Fit/Sizing/Exit where applicable + persisted advisory action);
+4. unsupported, unresolved, stale or blocked securities remain visible in the denominator and never silently become HOLD;
+5. the final count/value release threshold is measured from the implemented remediation cohorts before V1 release acceptance, not guessed in Scope Freeze B.
+
+This is a planning contract, not a claim that any non-zero usable-intelligence coverage is currently achieved.
+
+### Effort / dependency proposal
+
+- V1-2: Small–Medium.
+- V1-3: Small–Medium to Medium; 239/239 assignment census is reusable.
+- V1-4: Large; dominant dependencies are evidence breadth/freshness, 9 sub-252-day history cases, and profile-specific benchmark/readiness rules.
+- V1-5: Large; depends on V1-4 accepted inputs and pilot generalization.
+- V1-6: Medium.
+- V1-7: Large; depends on Fit/Sizing/Exit/action integration.
+- V1-8: Medium.
+- V1-9: Medium–Large; depends on invalidation, exact-SHA hosted browser proof and recovery rehearsal.
+
+These are engineering ranges, not calendar promises or provider-call estimates.
+
+### Owner decisions required once deployment/browser acceptance is available
+
+1. Approve this bounded V1-2–V1-9 implementation plan and retain the no-sub-gate discipline.
+2. Approve the coverage contract above rather than an arbitrary pre-implementation percentage.
+3. Approve use of labelled deterministic fixtures for acceptance scenarios that do not exist as genuine READY Development holdings.
+4. Approve deferral of the isolated restore rehearsal to **V1-9**, while keeping Baseline Freeze PARTIAL and retaining restore rehearsal as a release requirement.
+5. Approve the proposed action semantics and precedence already documented in this file: BUY / ADD / HOLD / REDUCE / EXIT / WATCH, with BLOCKED as readiness rather than investment opinion.
+
+Until exact-current-HEAD Preview and authenticated hosted browser evidence are available, this file remains **INCOMPLETE / OWNER REVIEW NOT READY**. No V1 implementation may start.
+
+---
+
 # PortfolioAI V1 Scope Freeze B and Build Plan — 5 October 2026
 
 **Status:** INCOMPLETE PROPOSAL / OWNER REVIEW NOT READY  
