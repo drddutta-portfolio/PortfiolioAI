@@ -1,3 +1,64 @@
+## P8 Step 2 Full Historical Feasibility Census closure — 5 October 2026
+
+**Step 2 execution = COMPLETE / PASS / CLOSED.**  
+**Research feasibility = NO-GO.**  
+**Experiment freeze recommendation = NO.**  
+**Step 1 remains COMPLETE / PASS / CLOSED with disposition `STEP1_POLICY_CLASSIFICATION_ROUTE_CANARY_PASS`.**
+
+This section supersedes earlier present-tense statements below that Step 2 was blocked/not started. Historical records are retained unchanged as audit history.
+
+The frozen Step 2 contract is `P8_STEP2_HISTORICAL_FEASIBILITY_CONTRACT_V1`, Git blob `de02b6984fc715c81433a42a523e0a00f022b73d`. The full read-only census used the exact B2 denominator and canonical R2/B3 authorities, processed the frozen source inventory, invoked the actual historical router for proven classifications, and repeated the deterministic measurement against the same frozen inputs.
+
+### Full B2 result
+
+- pairs: **121,956**
+- historical identities: **4,524**
+- decision dates: **32**
+- authoritative complete historical classifications: **61**
+- actual supported existing methodology-route pairs: **29**
+- routed identities: **1**
+- complete-input pairs: **0**
+
+Exclusive primary disposition:
+
+- `NO_PRE_DECISION_EVIDENCE`: **60,531**
+- `CLASSIFICATION_UNRESOLVED_OR_NOT_AUTHORITATIVE`: **61,364**
+- `ROUTE_UNSUPPORTED_OR_AMBIGUOUS`: **32**
+- `REQUIRED_INPUTS_INCOMPLETE`: **29**
+- `COMPLETE_INPUTS`: **0**
+- `NOT_MEASURED_ACCESS_OR_DECODING_LIMITATION`: **0**
+- `MARKET_DATA_BLOCKED_OR_INSUFFICIENT_HISTORY`: **0**
+
+The primary-disposition counts sum exactly to **121,956**. Market diagnostics remain separately recorded and overlapping; they are not misrepresented as exclusive dispositions.
+
+### Objectively predeclared narrower cohort
+
+`P8_STEP2_OBJECTIVE_ROUTED_HISTORICAL_COHORT_V1` contains:
+
+- **29 pairs**
+- **1 historical identity**
+- **29 decision dates**
+- methodology: **STEEL_FERROUS**
+- complete-input pairs: **0 / 29 = 0%**
+
+Frozen acceptance standards:
+
+- at least 24 decision dates: **PASS** (29)
+- at least 80% overall complete-input coverage: **FAIL** (0%)
+- at least 70% on every included decision date: **FAIL** (0% on each routed date)
+- at least 60% per applicable major methodology sector: **FAIL** (STEEL_FERROUS 0%)
+
+Therefore the evidence-based recommendation is **NO-GO**. No experiment is frozen or executed. The smallest evidenced next dependency is route-specific historical normalized-input materialization/mapping under already adopted methodology authorities; this is not authorization for another acquisition loop.
+
+Deterministic census fingerprint: `4b62210f94e907a693ce57da83dec16be0ff7d63dc67bad60ec5bee00eb07b73`  
+Pair-manifest uncompressed SHA-256: `c3223b8119e9fff926b02837e59fffeba8421402fe5ff74aa3094592433998ee`  
+Census workflow: `37260752764` — **SUCCESS**  
+Census evidence commit: `e01e5f125fa895b338a4042bab3e351de48f4596`
+
+No provider calls, Supabase/R2 writes, migrations, deployments, score/decision/position/return/performance calculations, B5/B6/B-FINAL rebuild, P8-C start, `main` change or Production change occurred.
+
+---
+
 ## P8 Step 1 closure — 5 October 2026
 
 **Step 1 = COMPLETE / PASS / CLOSED against its original frozen policy/classification/route gate.**
