@@ -1,3 +1,56 @@
+## Bounded baseline closure and V1 proposal evidence — 5 October 2026
+
+**Scope Freeze B: INCOMPLETE / OWNER REVIEW NOT READY. V1 implementation: NOT AUTHORIZED.**
+This dated reconciliation supersedes earlier deployment and browser statements below. It completes the available bounded assessment; no additional general audit or build-repair campaign is proposed.
+
+### Development runtime and browser evidence
+
+Remote Development HEAD inspected: `3125f03ae91cddc33bcc3c0135fc005a50cb823f`. Stable alias https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app resolves to READY Development Preview `dpl_CeFoJttcGwnfYwbRk78nqehr7HZM`, at that same Git SHA, in project `portfiolio-ai` / `prj_Vp1QUuF63cnfuAl8ULYuHW44EbXU`. Unique deployment: https://portfiolio-oto6ttuuh-dibyendu-dutta.vercel.app. The previous build/deployment mismatch is closed.
+
+The owner confirmed that the emailed password-reset flow works following the authentication deep-link routing repair. The supplied authenticated Dashboard screenshot visibly shows the DEVELOPMENT marker, 248/248 priced open holdings, current value INR 2,217,451.55, cost basis INR 1,915,293.31, unrealised P&L INR 302,158.24, supported realised P&L INR 6,948.89 and canonical equity coverage 239/239, with zero scored/candidacy-ready/actions. This is owner-supplied visual evidence, not an agent-operated browser test. It does not establish navigation, interactions, Holdings, Portfolio Structure, Research or Intelligence workflow acceptance. Screenshot capture SHA/time is not independently attested; deployment mapping was separately verified.
+
+Codex cannot control the owner's authenticated session in this environment: its browser runtime requires a platform-provisioned activation token. A separate unauthenticated browser is redirected to Vercel login. No login bypass, password/cookie extraction or protection change is authorized or attempted.
+
+Use this READY application/configuration SHA as the baseline. A later documentation-only commit does not invalidate it; disclose and verify that comparison. Reverify deployment after any application/configuration change. Do not trigger deployments merely to align documentation.
+
+### Read-only Development cohort findings
+
+Inspection used only PortfolioAI Dev, project ref `lrgpjimipfkyoqbpsqzz`, and owner-scoped existing canonical snapshots/evidence. Snapshot as-of date is **2026-09-29**; these are stored snapshot classifications inspected on 5 October, not a newly refreshed readiness assessment.
+
+The 239 equities reconcile to 128 INSUFFICIENT, 109 REVIEW_REQUIRED and 2 STALE. The proposed 111-member cohort spans **39 profile codes and 29 methodology authority identifiers**. Mandatory evidence rows within this cohort show:
+
+| Condition | Affected equities | Planning consequence |
+| --- | ---: | --- |
+| Required evidence missing | 103 | Acquisition/input completeness must be proven; no providers executed |
+| Document evidence requires review | 108 | Factual/document review remains mandatory |
+| Required benchmark history not ready | 32 | Exact approved benchmark coverage must be established |
+| Required evidence stale | 2 | Freshness remedy must be authorized and validated |
+| Insufficient listing history | 1 | Time-dependent structural blocker; cannot manufacture history |
+| Methodology factual review required | 1 | Resolve applicable methodology before counting usable output |
+
+These counts overlap and must not be added. Eight cohort members lack the missing-evidence flag; this does not make them usable or prove they form a feasible smaller release cohort. The short-history case also has missing mandatory evidence.
+
+The current methodology registry is byte-identical by Git blob SHA `a42da0465b2b06eae9a206e2210af620de7145f0` to the registry at recorded owner-approved IC1 commit `8bd8a971ae31812e503217d06c6c3cc9098d4061`. The IC1 completion document records COMPLETE / PASS / CLOSED after owner approval. Its preserved original candidate label must not be mistaken for absence of subsequent approval. Approval/assignment still does not prove implemented engines, mandatory evidence availability or downstream action readiness for all represented profiles.
+
+The existing canonical current projection returns `actionState: null`. Preserve that fail-closed behavior and the zero-usable baseline until full deterministic lineage and downstream acceptance are demonstrated.
+
+### Concrete proposal and owner decisions
+
+Retain **111 equities / 46.44% count / INR 1,325,856.96 / 63.53% equity value** as a proposed all-or-fail minimum, with explicit delivery uncertainty. Values and denominators are the previously frozen audit valuation, not a newly remeasured SQL valuation. The cohort must be privately frozen before implementation; public documents contain aggregate evidence only.
+
+Feasibility assumptions are now explicit: authorized sources can supply missing mandatory evidence for 103 members; 108 document reviews can be completed; 32 benchmark gaps can be closed under approved contracts; implemented engines can serve all represented authorities; stale inputs can be refreshed; and the one insufficient-listing-history member can legitimately satisfy the approved contract by the release date. **None of these outcomes is guaranteed.** The history requirement must not be shortened or waived to hit 111 without an explicit owner-approved methodology/scope amendment. Provider volume/budget and engineering estimates remain NOT PROVEN.
+
+The proposal therefore needs three bounded owner decisions, rather than another open-ended audit:
+1. Supply the remaining read-only browser smoke evidence (Holdings, Portfolio Structure, Research and Intelligence), or explicitly accept the limited Dashboard evidence as sufficient to enter Development and record that exception. Full hosted acceptance remains required before release.
+2. Accept the 111 all-or-fail target with these feasibility risks, or choose a smaller preselected private cohort whose membership, count/value and methodology obligations are frozen before implementation. No arbitrary smaller target or retrospective denominator reduction is approved.
+3. Accept isolated restore rehearsal deferral to V1-9, preserving Baseline Freeze as PARTIAL and restore proof as a release requirement.
+
+After those decisions are recorded, amend this same Scope Freeze B to PROPOSED / OWNER REVIEW REQUIRED and obtain explicit owner approval. **V1-2 execution requires separate authorization after approval.** Preserve the sequence V1-2 → V1-3 → V1-4 → V1-5 → V1-6 → V1-7 → V1-8 → V1-9 and reuse existing PortfolioAI architecture, accounting, pilots and paused P8 work.
+
+No application code, runtime configuration, Supabase data/Auth/schema, Production/main, provider execution, migration, scheduler, storage or restore change occurred in this evidence/planning pass. Full lint remains historical FAIL (84 errors, 4 warnings); it is not relabelled PASS.
+
+---
+
 ## Current Codex verification and owner-review decisions — 5 October 2026
 
 **Scope Freeze B:** INCOMPLETE / OWNER REVIEW NOT READY.
