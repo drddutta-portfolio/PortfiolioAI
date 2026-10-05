@@ -1,0 +1,25 @@
+name: P8 Step 2 focused semantic validation
+on:
+  push:
+    branches: [PortfolioAI-Development]
+    paths:
+      - '.github/workflows/p8-step2-focused-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: PortfolioAI-Development}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - run: python -m pip install --no-cache-dir "boto3==1.40.46" "lxml==5.3.0" "psycopg[binary]==3.2.10" "pyarrow==21.0.0"
+      - run: python scripts/p8/test-p8-segment-revenue-canary-accounting.py
+      - run: python scripts/p8/test-p8-xbrl-segment-period-v3-audit.py
+      - run: python scripts/p8/test-p8-step1-evidence-reconciliation.py
+      - run: python scripts/p8/test-p8-step2-historical-feasibility-census.py
+      - run: node --experimental-strip-types scripts/p8/test-p8-step1-actual-router-canary.mjs
