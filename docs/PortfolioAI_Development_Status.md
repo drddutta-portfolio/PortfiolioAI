@@ -1,3 +1,11 @@
+## Concrete Scope Freeze B acceptance proposal — 5 October 2026
+
+The proposed V1 minimum real-portfolio usable-intelligence acceptance is now **111/239 equities (46.44%) representing INR 1,325,856.96 / 63.53% of the frozen priced-equity denominator**, selected objectively as the complete frozen non-INSUFFICIENT cohort (109 REVIEW_REQUIRED + 2 STALE). This is a proposed release target, not achieved coverage; current measured usable intelligence remains 0/239.
+
+248/248 open securities still require explicit applicability/readiness status. The 128 INSUFFICIENT equities remain visible and blocked rather than excluded. Exact hosted current-HEAD deployment and authenticated owner-browser acceptance remain missing, so Scope Freeze B remains INCOMPLETE / OWNER REVIEW NOT READY and V1 implementation remains NOT AUTHORIZED.
+
+---
+
 ## Current Development acceptance status — 5 October 2026
 
 **Remote HEAD:** `fb067e01b64344c5279ceb65ead5ad7b3516a616`  
