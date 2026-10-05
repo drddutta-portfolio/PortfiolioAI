@@ -417,3 +417,14 @@ The methodology-assignment census itself is no longer a blocker and should be **
 - V1-9: optimistic Medium; likely Medium–Large; pessimistic Large, driven by deployment/browser/recovery/invalidation proof.
 
 External provider/evidence delays are not included in engineering effort and remain separately authorization/budget dependent.
+
+
+## 22. Development build recovery reconciliation — 5 October 2026
+
+Current capability totals are **22 V1 BLOCKER / 23 V1 IMPORTANT / 3 V1.1 / 8 NO CHANGE** across 56 capabilities. They supersede previous totals in this document.
+
+Remote HEAD `94be7ace03f6669edcf98da18b393cd41258e12b` passes the locally reproduced TypeScript/Vite build. Exact-SHA Development Preview and authenticated browser acceptance remain NOT PROVEN; see `PortfolioAI_DEVELOPMENT_BUILD_RECOVERY_2026-10-05.md`. Status remains **INCOMPLETE PROPOSAL / OWNER REVIEW NOT READY**, and V1 implementation remains **NOT AUTHORIZED**.
+
+The earlier statement requiring V1-4/V1-5/V1-7 remediation before proposing release coverage creates a circular approval dependency and is superseded: a review-ready proposal must describe bounded remediation cohorts, count/value estimates, prerequisites and measurable acceptance. Only after owner approval may those gates implement and measure the proposed outcomes. No arbitrary target or forecast is recorded as verified readiness.
+
+Deferral of the isolated restore rehearsal to V1-9 requires an explicit owner decision. Baseline Freeze remains PARTIAL until its outstanding evidence is satisfied; strong backup integrity is not completed restore proof.

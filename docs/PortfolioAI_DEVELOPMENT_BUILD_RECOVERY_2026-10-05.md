@@ -1,0 +1,58 @@
+# PortfolioAI Development Build Recovery — 5 October 2026
+
+**Repository:** `drddutta-portfolio/PortfiolioAI`  
+**Branch:** `PortfolioAI-Development`  
+**Inspected remote HEAD:** `94be7ace03f6669edcf98da18b393cd41258e12b`  
+**Local build:** PASS  
+**Exact current Development Preview:** NOT YET PROVEN  
+**Scope Freeze B:** INCOMPLETE PROPOSAL / OWNER REVIEW NOT READY  
+**V1 implementation:** NOT AUTHORIZED
+
+## Source and repair evidence
+
+The remote Development branch contains three repair commits, including a third commit beyond the two in the prior handover:
+
+- `80da8e185ef0ca8eb61b6b163f0346d764d1b6ed`: strict corporate-action normalizer compatibility.
+- `454700626b9458941052c079d1840e7d522debe0`: narrow `node:crypto` type declaration.
+- `94be7ace03f6669edcf98da18b393cd41258e12b`: preserve normalizer return shape under strict typing.
+
+Source and build configuration were retrieved from the remote Git tree into an isolated local workspace. The stale local `work` checkout was not treated as Development authority. A missing local reconstruction fixture was retrieved unchanged from the same remote tree; it was not a repository defect.
+
+The current remote source passes `npm run build` with Node 24. No additional application-code change is justified by the reproduced compiler result. The normalizer's existing runtime behavior and hashing contract are retained.
+
+## Verification
+
+| Check | Result |
+|---|---|
+| `npm run build` (`tsc -b && vite build`) | PASS |
+| `npm run check:architecture` | PASS |
+| `npm run lint:architecture` | PASS |
+| Focused ESLint: normalizer and crypto declaration | PASS |
+| Normalization, adjustment, arithmetic, recovery-contract and environment tests | PASS: 5 files, 33 tests |
+| Full `npm run lint` | FAIL: 84 errors, 4 warnings in inspected source; no lint rules weakened |
+
+The Vite build emits a nonfatal bundle-size warning. Full lint findings remain an explicit maintenance limitation; they were not silently fixed through unrelated financial, repository or UI changes. A local production-mode build is not proof of a hosted Production deployment or an exact-SHA Preview.
+
+## Deployment evidence and remaining acceptance
+
+Vercel project: `portfiolio-ai`, `prj_Vp1QUuF63cnfuAl8ULYuHW44EbXU`, Vite, Node `24.x`.
+
+Before this documentation commit, no deployment was returned for SHA `94be7ace03f6669edcf98da18b393cd41258e12b`. The Development alias still resolved to READY deployment `dpl_5hAVfPT5XrSojEH9wnRLkqAMP8i6`, SHA `52fb8929bbaa3991256cb4386f4c716c137c0634`, branch `PortfolioAI-Development`, Preview (`target: null`). The earlier deployments at repair SHAs `80da8e1...` and `4547006...` remain ERROR.
+
+Build-log retrieval is unavailable through the current connector: Vercel returns HTTP 403 requiring authorization for team `team_I44twYceUpZR7icSr7coEWv3`. Project/deployment metadata reads are available. Project metadata reports SSO deployment protection enabled for `all_except_custom_domains`. No protection bypass, share token, environment/configuration change, manual redeployment or Production promotion is performed.
+
+The ordinary Git-connected Development Preview must be checked after the documentation push. Completion requires a READY deployment whose Git SHA equals the final remote Development HEAD, followed by bounded authenticated read-only browser verification. An older READY deployment must not be used as proof of current HEAD.
+
+## Audit and planning reconciliation
+
+Authoritative capability totals are **22 V1 BLOCKER, 23 V1 IMPORTANT, 3 V1.1, 8 NO CHANGE**, totaling 56. Earlier dated totals remain historical evidence, not current counts.
+
+The 239-equity assignment census, measured 0% usable-intelligence baseline and existing R2/backup evidence remain reusable. Assignment coverage is not engine readiness. Freeze B must not require V1-4/V1-5/V1-7 implementation before approving their plan: those gates follow owner approval. A proposed coverage target must instead have a bounded cohort, explicit prerequisites, estimated count/value gains and acceptance criteria; forecasts must not be represented as measured completed coverage.
+
+Baseline Freeze remains PARTIAL. Deferring the isolated restore rehearsal to V1-9 is an owner-review proposal, not an accepted exception or restoration proof. No restore is performed in this recovery.
+
+Scope Freeze B remains incomplete until exact Preview/browser acceptance and remaining proposal decisions are evidenced. V1-2 and later gates must not begin without explicit owner approval of the review-ready proposal.
+
+## Side-effect boundary
+
+Only documentation is committed in this continuation, using `[skip actions]` to suppress GitHub Actions, including P8 canaries. Existing application repairs are preserved. No provider calls/campaigns, database writes/migrations, Edge Function changes, scheduler actions, R2 writes, restore, main or Production changes are performed. Ordinary Git-connected Development Preview builds are within the authorized recovery scope.

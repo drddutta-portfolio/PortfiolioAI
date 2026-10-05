@@ -1,3 +1,17 @@
+## Development build recovery verification — 5 October 2026
+
+Remote Development source `94be7ace03f6669edcf98da18b393cd41258e12b` passes the local TypeScript/Vite production-mode build. Architecture checks, focused lint and 33 preservation/environment regression tests pass. Full repository lint reports 84 errors and 4 warnings. No further source repair was needed in this continuation.
+
+**Exact current Preview = NOT YET PROVEN.** The branch alias still serves older READY SHA `52fb8929bbaa3991256cb4386f4c716c137c0634`; no Preview was returned for the inspected newer HEAD. Authenticated exact-SHA browser acceptance remains outstanding.
+
+**Current audit totals: 22 V1 BLOCKER / 23 V1 IMPORTANT / 3 V1.1 / 8 NO CHANGE (56 capabilities).** This supersedes earlier counts below.
+
+**Baseline Freeze = PARTIAL. Scope Freeze B = INCOMPLETE / OWNER REVIEW NOT READY. V1 implementation = NOT AUTHORIZED.** Restore deferral to V1-9 remains a proposed owner decision. Planning V1 remediation does not require prematurely implementing those gates.
+
+Evidence and remaining acceptance: `docs/PortfolioAI_DEVELOPMENT_BUILD_RECOVERY_2026-10-05.md`. This continuation changes documentation only; ordinary Git-connected Preview builds are permitted, while provider/backend/storage/scheduler/main/Production mutations remain prohibited.
+
+---
+
 ## Current Development Baseline Freeze + V1-1 audit — 5 October 2026
 
 **Baseline Freeze = PARTIAL.**  
