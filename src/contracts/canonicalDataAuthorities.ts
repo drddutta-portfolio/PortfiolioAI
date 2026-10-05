@@ -243,10 +243,10 @@ export const CANONICAL_DATA_AUTHORITIES = {
     layer: "NORMALIZED",
     canonicalAuthority: "P7 IC3 canonical selection and lineage contract",
     canonicalSourceObject: "current_research_evidence_snapshot_lineage_v1",
-    sharedAccessPath: "loadP7CurrentEvidenceSnapshots() -> useP7CurrentIntelligence(); loadP7CurrentEvidenceSnapshot() -> resolveCanonicalScoringProfile() -> loadSecurityScoringSnapshot() -> useSecurityScoring()",
+    sharedAccessPath: "loadP7CurrentEvidenceSnapshots() -> useP7CurrentIntelligence(); loadP7CurrentEvidenceSnapshot() -> resolveCanonicalScoringProfile() -> loadSecurityScoringSnapshot() -> useSecurityScoring(); loadP7CurrentEvidenceDetails() -> useCanonicalEvidenceReadiness() -> CanonicalEvidenceReadinessPanel",
     missingDataBehavior: "PRESERVE_STATE",
     pageLocalDerivationAllowed: false,
-    notes: "Dashboard, Intelligence and Research consume the same portfolio-scoped current snapshot lineage. Research resolves the approved IC1 assignment before classification or legacy assignments; route resolution, engine availability and evidence readiness remain separate. Missing engines/evidence cannot select GENERAL.",
+    notes: "Dashboard, Intelligence and Research consume the same portfolio-scoped current snapshot lineage. Research resolves the approved IC1 assignment before classification or legacy assignments; route resolution, engine availability and evidence readiness remain separate. Missing engines/evidence cannot select GENERAL. Research reads immutable research_evidence_snapshot_items of that selected snapshot to show requirement states, history minima, approved benchmark context, source/freshness dates, normalized evidence, validation/selection and remediation reasons even when an engine is unavailable. Presentation never reselects evidence or promotes stored readiness.",
   }),
   DAILY_OHLCV: authority({
     fact: "DAILY_OHLCV",
