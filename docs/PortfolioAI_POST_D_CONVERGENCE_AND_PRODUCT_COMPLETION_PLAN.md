@@ -34,8 +34,8 @@ Validation: five Node regression tests and seven existing Python reconciliation 
 **Historical audited development line:** `program-d-operations-optional-ai`
 **Current authoritative branch:** `PortfolioAI-Development`
 **Original plan date:** 26 September 2026
-**Last reconciled:** 4 October 2026, 18:11:19 IST (Asia/Kolkata; UTC+05:30)
-**Audited Development HEAD:** `f2970a8970320e7525e272996ddcca59ba840542`
+**Last reconciled:** 5 October 2026
+**Audited P8 Step 2 census evidence HEAD:** `e01e5f125fa895b338a4042bab3e351de48f4596`
 
 This plan does not authorize source-code changes, migrations, branch creation,
 Supabase or Vercel changes, provider or AI calls, deployment, merge, push,
@@ -45,11 +45,7 @@ scheduler activation, production mutation, or implementation of any checkpoint.
 
 ## 1. Executive conclusion
 
-**Current-state precedence — 4 October 2026:** Section 22 reconciles this plan
-with the latest repository artifacts and supersedes earlier present-tense stage
-labels below. P0–P7, P7-IC and IC-FINAL are closed within their recorded scopes.
-P8 is active but V1 is stopped on feasibility. Workstream D is structurally
-closed; Workstream E is COMPLETE / BLOCKED / CLOSED after its corrected rerun. The separately authorized narrower-experiment feasibility audit and subsequent historical classification / methodology-route / metric contract-resolution audit are now complete. The latest exact disposition is `HISTORICAL_CONTRACT_RESOLUTION_BLOCKED`: current point-in-time evidence does not yet prove canonical historical Sector + Industry routing for any provisional candidate pair. The separately authorized historical taxonomy evidence-normalization build is now COMPLETE / BLOCKED. It proved deterministic semantic recovery from existing official XML, but the currently materialized repository authority still lacks a complete historical Macro-Economic Sector → Sector → Industry → Basic Industry mapping. No further taxonomy acquisition, experiment execution or recovery loop is automatically authorized.
+**Current-state precedence — 5 October 2026:** P8 Step 1 is **COMPLETE / PASS / CLOSED** against its original five-condition canary gate. P8 Step 2 is now **COMPLETE / PASS / CLOSED as an execution audit**, while research feasibility is **NO-GO**. The full deterministic census reconciled 121,956 B2 pairs across 4,524 historical identities and 32 decision dates, proved 61 authoritative complete historical classifications, and produced 29 actual supported STEEL_FERROUS route pairs across one identity and 29 dates. Complete normalized-input pairs remain 0. The predeclared routed cohort passes only the ≥24-date gate and fails the frozen 80% overall, 70% per-date, and 60% methodology-coverage standards. Census fingerprint: `4b62210f94e907a693ce57da83dec16be0ff7d63dc67bad60ec5bee00eb07b73`. No experiment freeze/execution, B5/B6/B-FINAL rebuild, P8-C, provider call, database/storage write, migration, deployment, score or outcome inspection is authorized by this closure. Earlier blocked/not-started Step 2 statements remain historical evidence and are superseded by this precedence note.
 
 PortfolioAI must now enter a **convergence and product-completion phase**, not
 another feature program.
