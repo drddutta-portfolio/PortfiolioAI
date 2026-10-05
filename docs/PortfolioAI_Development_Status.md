@@ -2,7 +2,7 @@
 
 Remote Development source `94be7ace03f6669edcf98da18b393cd41258e12b` passes the local TypeScript/Vite production-mode build. Architecture checks, focused lint and 33 preservation/environment regression tests pass. Full repository lint reports 84 errors and 4 warnings. No further source repair was needed in this continuation.
 
-**Exact current Preview = NOT YET PROVEN.** The branch alias still serves older READY SHA `52fb8929bbaa3991256cb4386f4c716c137c0634`; no Preview was returned for the inspected newer HEAD. Authenticated exact-SHA browser acceptance remains outstanding.
+**Development Preview build recovery = COMPLETE / PASS.** Commit `ba8c9e9ddbc0e2658a213af178f0f8922e86639d` reached READY in Preview deployment `dpl_5p9Daac7UqGSL8y6qP3dawqF1Hzx`; the stable Development alias resolves to that exact SHA. This replaces the old runtime mismatch. Authenticated exact-SHA browser acceptance remains NOT PROVEN. Local login/LOCAL marker renders without page errors.
 
 **Current audit totals: 22 V1 BLOCKER / 23 V1 IMPORTANT / 3 V1.1 / 8 NO CHANGE (56 capabilities).** This supersedes earlier counts below.
 

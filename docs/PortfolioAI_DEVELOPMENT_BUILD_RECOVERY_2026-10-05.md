@@ -1,11 +1,11 @@
 # PortfolioAI Development Build Recovery — 5 October 2026
 
-**Repository:** `drddutta-portfolio/PortfiolioAI`  
-**Branch:** `PortfolioAI-Development`  
-**Inspected remote HEAD:** `94be7ace03f6669edcf98da18b393cd41258e12b`  
-**Local build:** PASS  
-**Exact current Development Preview:** NOT YET PROVEN  
-**Scope Freeze B:** INCOMPLETE PROPOSAL / OWNER REVIEW NOT READY  
+**Repository:** `drddutta-portfolio/PortfiolioAI`
+**Branch:** `PortfolioAI-Development`
+**Inspected remote HEAD:** `94be7ace03f6669edcf98da18b393cd41258e12b`
+**Local build:** PASS
+**Development Preview build recovery:** PASS — exact pushed SHA verified READY
+**Scope Freeze B:** INCOMPLETE PROPOSAL / OWNER REVIEW NOT READY
 **V1 implementation:** NOT AUTHORIZED
 
 ## Source and repair evidence
@@ -41,7 +41,7 @@ Before this documentation commit, no deployment was returned for SHA `94be7ace03
 
 Build-log retrieval is unavailable through the current connector: Vercel returns HTTP 403 requiring authorization for team `team_I44twYceUpZR7icSr7coEWv3`. Project/deployment metadata reads are available. Project metadata reports SSO deployment protection enabled for `all_except_custom_domains`. No protection bypass, share token, environment/configuration change, manual redeployment or Production promotion is performed.
 
-The ordinary Git-connected Development Preview must be checked after the documentation push. Completion requires a READY deployment whose Git SHA equals the final remote Development HEAD, followed by bounded authenticated read-only browser verification. An older READY deployment must not be used as proof of current HEAD.
+The ordinary Git-connected Development Preview must be checked after the documentation push. A READY exact-SHA Preview has now been obtained; authenticated read-only browser verification remains a separate acceptance requirement. An older READY deployment must not be used as proof of current HEAD.
 
 ## Audit and planning reconciliation
 
@@ -56,3 +56,23 @@ Scope Freeze B remains incomplete until exact Preview/browser acceptance and rem
 ## Side-effect boundary
 
 Only documentation is committed in this continuation, using `[skip actions]` to suppress GitHub Actions, including P8 canaries. Existing application repairs are preserved. No provider calls/campaigns, database writes/migrations, Edge Function changes, scheduler actions, R2 writes, restore, main or Production changes are performed. Ordinary Git-connected Development Preview builds are within the authorized recovery scope.
+
+
+## Exact-SHA Preview recovery result
+
+The Git-connected Preview for documentation commit `ba8c9e9ddbc0e2658a213af178f0f8922e86639d` reached **READY**:
+
+- deployment: `dpl_5p9Daac7UqGSL8y6qP3dawqF1Hzx`;
+- project: `portfiolio-ai` / `prj_Vp1QUuF63cnfuAl8ULYuHW44EbXU`;
+- Git branch: `PortfolioAI-Development`;
+- Git SHA: `ba8c9e9ddbc0e2658a213af178f0f8922e86639d`;
+- environment: Preview (`target: null`);
+- unique URL: `https://portfiolio-6ulnczb7k-dibyendu-dutta.vercel.app`;
+- stable Development alias: `https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app`;
+- stable alias positively resolves to this same deployment/SHA.
+
+GitHub Actions inspection returned zero workflow runs for this commit. No P8 canary was triggered. The compiled source is the preserved `94be7ace...` source plus documentation only. No new compiler repair was needed.
+
+A bounded local browser check rendered the PortfolioAI login page, LOCAL environment marker and disabled public registration, with zero page errors. This is local unauthenticated UI evidence only. A browser request to the stable Development alias redirects to `https://vercel.com/login` (Vercel SSO); it does not reach an authenticated PortfolioAI workflow. Hosted Preview browser access and an authenticated owner session remain prerequisites for the protected runtime smoke test; no login/protection bypass is used and no credential is requested or printed.
+
+**Build recovery = COMPLETE / PASS. Authenticated exact-SHA browser acceptance = NOT PROVEN. Scope Freeze B = INCOMPLETE / OWNER REVIEW NOT READY.** The specific next dependency is access to the protected Development Preview in an existing authenticated owner browser session, followed by read-only navigation of the existing workflows. The restore-deferral and bounded coverage proposal decisions remain explicit owner-review matters; V1 gates have not begun.

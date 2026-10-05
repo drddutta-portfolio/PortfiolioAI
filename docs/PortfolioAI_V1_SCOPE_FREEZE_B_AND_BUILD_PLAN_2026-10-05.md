@@ -428,3 +428,10 @@ Remote HEAD `94be7ace03f6669edcf98da18b393cd41258e12b` passes the locally reprod
 The earlier statement requiring V1-4/V1-5/V1-7 remediation before proposing release coverage creates a circular approval dependency and is superseded: a review-ready proposal must describe bounded remediation cohorts, count/value estimates, prerequisites and measurable acceptance. Only after owner approval may those gates implement and measure the proposed outcomes. No arbitrary target or forecast is recorded as verified readiness.
 
 Deferral of the isolated restore rehearsal to V1-9 requires an explicit owner decision. Baseline Freeze remains PARTIAL until its outstanding evidence is satisfied; strong backup integrity is not completed restore proof.
+
+
+### Exact Preview recovery outcome
+
+Development Preview deployment `dpl_5p9Daac7UqGSL8y6qP3dawqF1Hzx` is **READY** at Git SHA `ba8c9e9ddbc0e2658a213af178f0f8922e86639d`, branch `PortfolioAI-Development`, Preview (`target: null`). The stable Development alias resolves to that exact deployment/SHA. This closes the current-branch build/deployment failure; the preserved source at `94be7ace...` required no further application change.
+
+Authenticated hosted browser acceptance is still NOT PROVEN. The local login screen/LOCAL marker renders without page errors but does not establish protected Preview workflow acceptance. A permitted authenticated Development session is the exact missing evidence. Scope Freeze B remains INCOMPLETE / OWNER REVIEW NOT READY until its remaining proposal/acceptance conditions are evidenced. V1 implementation is NOT AUTHORIZED.
