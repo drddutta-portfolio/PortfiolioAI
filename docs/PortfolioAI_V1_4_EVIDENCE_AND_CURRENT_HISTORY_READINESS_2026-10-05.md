@@ -146,3 +146,6 @@ Final source-path verification also found already-normalized cached AVAILABLE pa
 
 
 Final follow-up checks: the pure shared normalizer passes strict standalone TypeScript compilation (`tsc --noEmit --ignoreConfig --strict --skipLibCheck --target ES2023 --module ESNext --moduleResolution bundler`). Deno is not installed in the managed verification workspace, so a complete Deno runtime typecheck/deployment of the materializer was not performed or claimed. Its changed source is covered by pure normalization and materializer contract tests and Edge ESLint; actual Development function deployment and execution remain separately bounded actions.
+
+
+Materializer source preflight also found its existing `Admin` parameter type was undeclared. It is now explicitly `ReturnType<typeof createClient>`; this is a type-only compatibility repair with no runtime behavior change. The 21 pure Edge tests and changed materializer Edge ESLint pass after this correction. Complete Deno runtime typechecking remains unverified as described above.

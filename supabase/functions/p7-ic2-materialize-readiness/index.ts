@@ -1,4 +1,5 @@
 import {createClient} from "https://esm.sh/@supabase/supabase-js@2"
+type Admin = ReturnType<typeof createClient>
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
 import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvidence,parseTrendlyneOwnershipHistory,guardedNumericEvidenceState} from "../_shared/p7-ic-evidence-normalization.ts"
 import {P7_IC_PROFILE_CONTRACTS} from "../_shared/p7-ic-profile-contracts.ts"
