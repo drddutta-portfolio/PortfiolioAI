@@ -1,3 +1,22 @@
+## V1-3 routing compatibility repair — 5 October 2026
+
+**Routing repair = COMPLETE / PASS. Exact Development Preview = READY.**
+**V1-3 full closure = NOT PROVEN (canonical-listing exceptions and authenticated repaired-Preview acceptance remain explicit). V1-4 NOT STARTED / NOT AUTHORIZED.**
+
+Repair/tested application commit: `3faf2561257d8a222cc78c0cde38a603b0f82c44`, parent `b37d14f2f6585ccde602aa1ee9ffb3979a442b6e`.
+Preview: `dpl_CH8HTDf7jJqne41jjXzMiAP8V74E` / https://portfiolio-f3uij1atq-dibyendu-dutta.vercel.app, branch PortfolioAI-Development, target null, READY; GitHub Vercel status success.
+
+Research now consumes the approved P7 IC1 assignment from the portfolio-and-security-scoped current canonical selection before separately checking adapter availability and evidence readiness. All 45 held parent profiles resolve; 238 equities have resolved required-primary routing and the one Pharma primary-review exception stays REVIEW_REQUIRED. The earlier 20-profile / 74-equity / 26-frozen-member application routing gap is repaired. Missing adapters remain PENDING_ADAPTER; non-READY evidence stays BLOCKED with null scores and no GENERAL fallback. No later engine or intelligence readiness was implemented.
+
+87 tests / 10 files, strict TypeScript/Vite build, architecture guard and all changed-file ESLint PASS. Full-repository ESLint retains 77 errors / 4 warnings in unchanged files. Agent authenticated hosted acceptance cannot be claimed: browser activation lacks its platform token; protected Vercel access/build logs return scope authorization 403; anonymous access redirects to Vercel login. The two existing canonical-listing projection exceptions were not mutated or guessed.
+
+The approved private manifest and frozen count/value thresholds are unchanged; restore proof remains mandatory at V1-9. No Production/main, database/migration/Auth/RLS, provider, scheduler, storage/R2/P8/restore actions occurred.
+
+Evidence: `docs/PortfolioAI_V1_3_IDENTITY_CLASSIFICATION_ROUTING_VERIFICATION_2026-10-05.md`.
+This dated entry supersedes the preceding routing-defect/no-application-change statements below. Any following documentation-only commit is source-equivalent to the tested repair SHA; do not restart a deployment loop.
+
+---
+
 ## V1-3 execution — identity/classification/routing verification — 5 October 2026
 
 **V1-3 = NOT PROVEN. V1-4 NOT STARTED / NOT AUTHORIZED.**

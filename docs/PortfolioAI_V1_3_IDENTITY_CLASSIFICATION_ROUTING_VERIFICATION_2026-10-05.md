@@ -1,4 +1,87 @@
-# PortfolioAI V1-3 Identity, Classification and Methodology Routing — Verification
+# PortfolioAI V1-3 Routing Repair — Execution Verification
+
+**Date:** 5 October 2026
+**Branch:** PortfolioAI-Development
+**Starting remote HEAD:** b37d14f2f6585ccde602aa1ee9ffb3979a442b6e
+**Repair commit / tested application SHA:** 3faf2561257d8a222cc78c0cde38a603b0f82c44
+**Routing compatibility repair:** COMPLETE / PASS
+**Development Preview build:** VERIFIED READY at the exact repair SHA
+**Authenticated hosted interaction:** NOT PROVEN
+**Full V1-3 closure:** NOT PROVEN; existing listing exceptions and hosted acceptance remain explicit.
+**V1-4:** NOT STARTED / NOT AUTHORIZED
+
+## Change and authority
+
+The Research scoring repository now reads the portfolio-and-security-scoped canonical P7 current selection from `current_research_evidence_snapshot_lineage_v1`. Its approved IC1 assignment wins over sector/industry inference and legacy scoring assignments. Assignment authority `PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1` and approved version `e7c021b865fcd1d49a7c59924ef9c44f0383f301` are checked; missing or unreviewed lineage remains blocked.
+
+Shared path: `loadP7CurrentEvidenceSnapshot → resolveCanonicalScoringProfile → loadSecurityScoringSnapshot → useSecurityScoring → ResearchPage / ResearchScorecardPanel`. Dashboard and Intelligence retain the same canonical selection authority. The authority registry and canonical architecture documents record this access path.
+
+There is no new runtime taxonomy containing 45 route copies. The existing engine registry remains a separate adapter-capability authority. The 45-profile JSON under test fixtures is aggregate regression evidence only, not a runtime route map.
+
+## Fail-closed behavior
+
+- Valid assigned route with no adapter: route RESOLVED, methodology AVAILABLE, engine/execution PENDING_ADAPTER, rule profile null, no score.
+- Available Bank/Pharma engine with non-READY current evidence: execution BLOCKED, no historical score query, no numeric preview, no GENERAL fallback.
+- Missing/unreviewed canonical assignment: explicit unavailable/review state, no classification or legacy fallback.
+- Pharma without reviewed primary subprofile: REVIEW_REQUIRED; no guessed subprofile.
+- Non-equities: NOT_APPLICABLE for equity scoring.
+- Repository retrieval/duplicate errors remain errors rather than triggering alternate routes.
+- The hook uses the shared canonical loader for Pharma as well as other classifications. Portfolio/security/asset cache scope prevents cross-portfolio reuse. New blocked canonical results replace old numeric results; pending/error states do not display a previous request's score.
+- Existing scoring adapters and accounting calculations are preserved. No new engine, score run, recommendation, sizing result or action was created.
+
+## Development evidence and regression results
+
+Read-only project: PortfolioAI Dev, `lrgpjimipfkyoqbpsqzz`; Production was not inspected or changed by this repair.
+
+Fresh aggregate route census: 45 approved held profiles / 239 equities. All 45 parent profile assignments resolve from canonical lineage. Required-primary routing is resolved for 238 members; the deliberate Pharma primary-review exception remains 1. This closes the earlier 20-profile / 74-equity / 26-frozen-cohort application compatibility gap without asserting engine readiness.
+
+Fresh current evidence counts remain 128 INSUFFICIENT + 109 REVIEW_REQUIRED + 2 STALE = 239; zero READY. No routing repair converts these states to HOLD or usable intelligence.
+
+Executed focused command:
+
+```sh
+npm run test -- src/features/accounting/fifoAccounting.test.ts src/features/portfolio/calculatePortfolio.test.ts src/features/research/canonicalScoringRoute.test.ts src/data/canonicalScoringRepository.test.ts src/data/p7CurrentIntelligenceRepository.test.ts src/features/research/useSecurityScoring.test.tsx src/features/research/ResearchScorecardBoundary.test.tsx src/features/research/scoringProfileResolution.test.ts src/features/decision/p7Ic6CurrentProjection.test.ts src/contracts/canonicalDataAuthorities.test.ts
+```
+
+**10 test files / 87 tests PASS.** Coverage includes canonical precedence against conflicting Pharma classification/GENERAL assignment, all 45 approved profile contracts, lineage rejection, missing adapters, NBFC route-versus-engine separation, Pharma primary review, all non-READY evidence states, retrieval errors, ETF applicability, repository portfolio/security scoping, preserved Pharma dispatch, cache replacement/isolation, blocked UI rendering, P7 current projection, canonical authority contracts and accounting/portfolio regressions.
+
+- `npm run build`: PASS (strict TypeScript project build + Vite build). Existing bundle-size warning remains.
+- `npm run check:architecture`: PASS.
+- ESLint on all changed TypeScript/TSX and tests: PASS.
+- Full repository ESLint: 77 errors / 4 warnings in unchanged files; no changed-file errors. Existing lint debt was not repaired outside V1-3.
+- Remote comparison: exactly the 16 intended source/test/architecture files in the repair commit; no private manifest files changed. Added-line whitespace check PASS; no secret candidates in changed files.
+
+## Exact repaired Preview
+
+- Vercel project: `portfiolio-ai / prj_Vp1QUuF63cnfuAl8ULYuHW44EbXU`.
+- Deployment: `dpl_CH8HTDf7jJqne41jjXzMiAP8V74E`.
+- Unique URL: https://portfiolio-f3uij1atq-dibyendu-dutta.vercel.app
+- Branch alias: https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app
+- Git ref: PortfolioAI-Development.
+- Git SHA: 3faf2561257d8a222cc78c0cde38a603b0f82c44.
+- State: READY; aliasError null; target null (Preview, not Production).
+- GitHub Vercel commit status: success / Deployment has completed.
+- GitHub workflow runs for the repair SHA: zero.
+
+Deployment/build identity is verified. Authenticated Research interaction is not: browser activation fails with `NODE_REPL_AUTH_TOKEN must be provisioned before browser activation`; the connected Vercel protected-content fetch returns 403 at protection-access authorization, and an anonymous branch-alias request redirects to Vercel login. Build-log access also returns a scope-authorization 403. No protection setting, credentials or browser session was changed or extracted. Local component tests are not described as hosted acceptance.
+
+Subsequent audit/status documentation commits must be compared to this tested SHA. Documentation-only differences do not require another application build.
+
+## Remaining boundaries and preserved release contract
+
+The earlier two canonical-listing projection exceptions remain open; VERIFIED provider mappings are not fabricated canonical listing rows. Any listing correction requires the already-specified separate, exact data-correction authorization. Authenticated acceptance of the repaired hosted Research route remains unexecuted. Accordingly this report closes the routing defect, not every V1-3 acceptance item.
+
+The approved 111-member JSON/CSV/review files are unchanged; JSON SHA-256 remains `79f551558333adc1f37d6a26298d8088ee02db3161f03c6d6e59f9a19a93fc27`. Attempt all 111; release minimum remains 100 successful members AND 119,327,127 paise from those same successful members against 132,585,696 paise frozen cohort value. All 239 equities / 248 holdings remain visible. Restore proof remains mandatory at V1-9.
+
+No Production/main changes, database writes/migrations, Auth/RLS changes, provider calls/refresh, scheduler actions, R2/storage writes, P8 execution/canary/backtest, backup or restore occurred. Only Development application code, tests and documentation were committed. STOP before V1-4.
+
+---
+
+## Earlier read-only verification (historical)
+
+The record below describes the preceding documentation-only inspection, before the repair above. Its routing-defect and no-code statements are superseded by this repair record; its preserved evidence and unresolved identity exceptions remain applicable.
+
+### PortfolioAI V1-3 Identity, Classification and Methodology Routing — Verification
 
 **Date:** 5 October 2026  
 **Repository:** `drddutta-portfolio/PortfiolioAI`  
