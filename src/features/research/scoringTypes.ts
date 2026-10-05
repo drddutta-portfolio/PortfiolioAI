@@ -1,7 +1,19 @@
 export type HeatState = "STRONG" | "POSITIVE" | "NEUTRAL" | "WEAK" | "RISK" | "INSUFFICIENT"
-export type ScoringProfileSource = "REVIEWED_ASSIGNMENT" | "SECTOR_RULE" | "METHODOLOGY_UNAVAILABLE"
-export type ScoringMethodologyState = "AVAILABLE" | "METHODOLOGY_NOT_AVAILABLE" | "REVIEW_REQUIRED"
+export type ScoringProfileSource = "CANONICAL_ASSIGNMENT" | "REVIEWED_ASSIGNMENT" | "SECTOR_RULE" | "METHODOLOGY_UNAVAILABLE"
+export type ScoringMethodologyState = "AVAILABLE" | "METHODOLOGY_NOT_AVAILABLE" | "REVIEW_REQUIRED" | "NOT_APPLICABLE"
 export type ScoringExecutionState = "AVAILABLE" | "PENDING_ADAPTER" | "BLOCKED"
+
+export interface CanonicalScoringRoute {
+  readonly profileCode: string
+  readonly subprofileCode: string | null
+  readonly methodologyAuthority: string
+  readonly methodologyVersion: string
+  readonly assignmentAuthority: string | null
+  readonly assignmentVersion: string
+  readonly assignmentId: string
+  readonly snapshotId: string
+  readonly asOfDate: string
+}
 
 export interface ExternalRatingObservation {
   readonly id: string
@@ -43,6 +55,10 @@ export interface DimensionScore {
 }
 
 export interface SecurityScoringSnapshot {
+  readonly canonicalRoute?: CanonicalScoringRoute
+  readonly routeState?: "RESOLVED" | "REVIEW_REQUIRED" | "UNAVAILABLE" | "NOT_APPLICABLE"
+  /** Adapter support is separate from evidence and score execution readiness. */
+  readonly engineState?: ScoringExecutionState
   readonly scoreRunId?: string | null
   readonly profileCode: string
   readonly profileName: string

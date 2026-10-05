@@ -388,3 +388,9 @@ Any remaining legacy drift discovered by the guard should be recorded and remove
 > **One business fact, one authority, one deterministic owner, many consistent views.**
 
 That rule is part of PortfolioAI's architecture, not a UI convention.
+
+## V1-3 canonical routing compatibility — 2026-10-05
+
+Research consumes the approved P7 IC1 assignment from the same portfolio-scoped `current_research_evidence_snapshot_lineage_v1` projection used by Dashboard and Intelligence. `loadP7CurrentEvidenceSnapshot` → `resolveCanonicalScoringProfile` → `loadSecurityScoringSnapshot` → `useSecurityScoring` is the shared access path. A present canonical assignment takes precedence over legacy assignments and classification routing. Unreviewed assignment lineage fails closed; there is no page-level copy of the 45-profile taxonomy. The approved assignment version is preserved, not regenerated.
+
+Route resolution, engine availability and current evidence readiness are distinct states. An approved route with no scoring adapter remains resolved with `PENDING_ADAPTER` and null scores. An available engine with non-READY evidence remains `BLOCKED`; unresolved Pharma primary subprofiles remain `REVIEW_REQUIRED`. Non-equities remain outside equity scoring. The existing Bank/Pharma adapters and accounting authorities are preserved. This compatibility repair neither implements later engines nor creates scores, recommendations or advisory actions.

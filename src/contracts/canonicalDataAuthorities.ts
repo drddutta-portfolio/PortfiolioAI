@@ -243,10 +243,10 @@ export const CANONICAL_DATA_AUTHORITIES = {
     layer: "NORMALIZED",
     canonicalAuthority: "P7 IC3 canonical selection and lineage contract",
     canonicalSourceObject: "current_research_evidence_snapshot_lineage_v1",
-    sharedAccessPath: "loadP7CurrentEvidenceSnapshots() -> useP7CurrentIntelligence()",
+    sharedAccessPath: "loadP7CurrentEvidenceSnapshots() -> useP7CurrentIntelligence(); loadP7CurrentEvidenceSnapshot() -> resolveCanonicalScoringProfile() -> loadSecurityScoringSnapshot() -> useSecurityScoring()",
     missingDataBehavior: "PRESERVE_STATE",
     pageLocalDerivationAllowed: false,
-    notes: "Dashboard and Intelligence consume the same owner-scoped current snapshot lineage; immutable history is not re-ranked in UI code.",
+    notes: "Dashboard, Intelligence and Research consume the same portfolio-scoped current snapshot lineage. Research resolves the approved IC1 assignment before classification or legacy assignments; route resolution, engine availability and evidence readiness remain separate. Missing engines/evidence cannot select GENERAL.",
   }),
   DAILY_OHLCV: authority({
     fact: "DAILY_OHLCV",

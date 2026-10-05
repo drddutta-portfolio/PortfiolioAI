@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
-import { loadPharmaV1ScoringSnapshot } from "../../data/pharmaScoringRepository"
 import { loadSecurityScoringSnapshot } from "../../data/scoringRepository"
 import { displayError } from "../../lib/displayError"
-import { isPharmaScoringContext } from "./scoringProfileResolution"
 import type { SecurityScoringSnapshot } from "./scoringTypes"
 
 const scoringCache = new Map<string, SecurityScoringSnapshot>()
@@ -17,6 +15,8 @@ function snapshotRank(snapshot: SecurityScoringSnapshot) {
 
 function betterSnapshot(current: SecurityScoringSnapshot | undefined, incoming: SecurityScoringSnapshot) {
   if (!current) return incoming
+  // Fresh canonical blocked/review states must replace any older numeric preview.
+  if (incoming.canonicalRoute || incoming.routeState) return incoming
   if (incoming.methodologyState && incoming.methodologyState !== "AVAILABLE") return incoming
   if (current.methodologyState && current.methodologyState !== "AVAILABLE") return incoming
   const currentRank = snapshotRank(current)
@@ -48,34 +48,32 @@ function subscribe(securityId: string, listener: (snapshot: SecurityScoringSnaps
   }
 }
 
-export function useSecurityScoring(securityId: string | null, sector: string | null, industry: string | null) {
-  const [data, setData] = useState<SecurityScoringSnapshot | null>(() => securityId ? scoringCache.get(securityId) ?? null : null)
-  const [error, setError] = useState<string | null>(null)
+export function useSecurityScoring(securityId: string | null, sector: string | null, industry: string | null, portfolioId: string | null, assetClass: string | null) {
+  const cacheKey = securityId && portfolioId && assetClass ? `${portfolioId}:${securityId}:${assetClass}` : null
+  const [loaded, setLoaded] = useState<{ key: string | null; revision: number; data: SecurityScoringSnapshot | null; error: string | null }>({ key: null, revision: 0, data: null, error: null })
   const [revision, setRevision] = useState(0)
+  const current = loaded.key === cacheKey && loaded.revision === revision
+  const data = current ? loaded.data : null
+  const error = current ? loaded.error : null
 
   useEffect(() => {
     let active = true
-    if (!securityId) return () => { active = false }
+    if (!securityId || !portfolioId || !assetClass || !cacheKey) return () => { active = false }
 
-    const cached = scoringCache.get(securityId)
-    if (cached) setData(cached)
-    const unsubscribe = subscribe(securityId, (snapshot) => { if (active) setData(snapshot) })
+    const unsubscribe = subscribe(cacheKey, (snapshot) => { if (active) setLoaded({ key: cacheKey, revision, data: snapshot, error: null }) })
 
-    setError(null)
-    const loader = isPharmaScoringContext(sector, industry)
-      ? loadPharmaV1ScoringSnapshot(securityId)
-      : loadSecurityScoringSnapshot(securityId, sector, industry)
+    const loader = loadSecurityScoringSnapshot(securityId, sector, industry, { portfolioId, assetClass })
     void loader
-      .then((value) => { if (active) setData(publishSnapshot(securityId, value)) })
-      .catch((reason: unknown) => { if (active) setError(displayError(reason)) })
+      .then((value) => { if (active) setLoaded({ key: cacheKey, revision, data: publishSnapshot(cacheKey, value), error: null }) })
+      .catch((reason: unknown) => { if (active) setLoaded({ key: cacheKey, revision, data: null, error: displayError(reason) }) })
 
     return () => { active = false; unsubscribe() }
-  }, [securityId, sector, industry, revision])
+  }, [securityId, sector, industry, portfolioId, assetClass, cacheKey, revision])
 
   return {
     data,
     error,
-    isLoading: Boolean(securityId) && !data && !error,
+    isLoading: Boolean(cacheKey) && !data && !error,
     reload: () => setRevision(value => value + 1),
   }
 }

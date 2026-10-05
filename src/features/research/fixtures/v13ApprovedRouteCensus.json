@@ -1,0 +1,272 @@
+[
+  {
+    "profile_code": "AGRI_PROCESSING",
+    "methodology_authority": "P7_IC1_AGRI_PROCESSING_METHODOLOGY_V1",
+    "members": 3,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "AGRO_FERTILISER",
+    "methodology_authority": "CHEMICALS_V1_K4B_SCORING_V1",
+    "members": 6,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "AUTO_COMPONENTS",
+    "methodology_authority": "AUTO_COMPONENTS_K4B_SCORING_V1",
+    "members": 7,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "AUTO_OEM",
+    "methodology_authority": "AUTO_COMPONENTS_K4B_SCORING_V1",
+    "members": 5,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "BANK",
+    "methodology_authority": "BANK_NBFC_STAGE_8_BANK_V1",
+    "members": 15,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "BRANDED_CONSUMER_FMCG",
+    "methodology_authority": "CONSUMER_FMCG_K4B_SCORING_V1",
+    "members": 12,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "BUSINESS_SERVICES",
+    "methodology_authority": "P7_IC1_BUSINESS_SERVICES_METHODOLOGY_V1",
+    "members": 2,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "CAPITAL_EQUIPMENT_ELECTRICAL",
+    "methodology_authority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+    "members": 20,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "CAPITAL_MARKETS_AMC",
+    "methodology_authority": "FIN_SERVICES_NON_LENDER_K4B_SCORING_V1",
+    "members": 7,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "CEMENT_BUILDING_MATERIALS",
+    "methodology_authority": "P7_IC1_CEMENT_BUILDING_MATERIALS_METHODOLOGY_V1",
+    "members": 2,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "COMMODITY_PROCESS_CHEMICALS",
+    "methodology_authority": "CHEMICALS_V1_K4B_SCORING_V1",
+    "members": 1,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "CONSUMER_DURABLES",
+    "methodology_authority": "P7_IC1_CONSUMER_DURABLES_METHODOLOGY_V1",
+    "members": 6,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "DEFENCE_AEROSPACE",
+    "methodology_authority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+    "members": 7,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "DIVERSIFIED_CHEMICALS_PETROCHEM",
+    "methodology_authority": "P7_IC1_DIVERSIFIED_CHEMICALS_PETROCHEM_METHODOLOGY_V1",
+    "members": 8,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "ENVIRONMENTAL_SERVICES",
+    "methodology_authority": "P7_IC1_ENVIRONMENTAL_SERVICES_METHODOLOGY_V1",
+    "members": 5,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "FINANCIAL_HOLDING_COMPANY",
+    "methodology_authority": "P7_IC1_FINANCIAL_HOLDING_COMPANY_METHODOLOGY_V1",
+    "members": 2,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "FINTECH_PLATFORM",
+    "methodology_authority": "FIN_SERVICES_NON_LENDER_K4B_SCORING_V1",
+    "members": 3,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "GENERATION_INTEGRATED_UTILITY",
+    "methodology_authority": "POWER_RENEWABLES_V1_K4B_SCORING_V1",
+    "members": 3,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "HOSPITAL",
+    "methodology_authority": "HEALTHCARE_SERVICES_V1_K4B_SCORING_V1",
+    "members": 5,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "HOSPITALITY_LEISURE",
+    "methodology_authority": "P7_IC1_HOSPITALITY_LEISURE_METHODOLOGY_V1",
+    "members": 6,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "INDUSTRIAL_PRODUCTS",
+    "methodology_authority": "P7_IC1_INDUSTRIAL_PRODUCTS_METHODOLOGY_V1",
+    "members": 8,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "INSURANCE",
+    "methodology_authority": "FIN_SERVICES_NON_LENDER_K4B_SCORING_V1",
+    "members": 2,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "INTEGRATED_REFINING_PETCHEM",
+    "methodology_authority": "OIL_GAS_V1_K4B_SCORING_V1",
+    "members": 2,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "IT_BPM_SERVICES",
+    "methodology_authority": "P7_IC1_IT_BPM_SERVICES_METHODOLOGY_V1",
+    "members": 4,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "IT_DIGITAL_INFRA_HARDWARE",
+    "methodology_authority": "IT_TECH_K4B_SCORING_V1",
+    "members": 2,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "IT_SERVICES",
+    "methodology_authority": "IT_TECH_K4B_SCORING_V1",
+    "members": 10,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "IT_SOFTWARE_PRODUCTS_PLATFORMS",
+    "methodology_authority": "IT_TECH_K4B_SCORING_V1",
+    "members": 1,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "JEWELLERY",
+    "methodology_authority": "P7_IC1_JEWELLERY_METHODOLOGY_V1",
+    "members": 8,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "LOGISTICS",
+    "methodology_authority": "P7_IC1_LOGISTICS_METHODOLOGY_V1",
+    "members": 1,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "MIDSTREAM_CITY_GAS",
+    "methodology_authority": "OIL_GAS_V1_K4B_SCORING_V1",
+    "members": 4,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "NBFC_LENDING",
+    "methodology_authority": "P7_IC1_NBFC_LENDING_METHODOLOGY_V1",
+    "members": 9,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "NON_FERROUS_DIVERSIFIED_METALS",
+    "methodology_authority": "METALS_COMMODITIES_K4B_SCORING_V1",
+    "members": 8,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "OIL_OPERATIONS",
+    "methodology_authority": "P7_IC1_OIL_OPERATIONS_METHODOLOGY_V1",
+    "members": 2,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "PHARMA",
+    "methodology_authority": "PHARMA_V1_PLUS_REVIEWED_PRIMARY_SUBPROFILE",
+    "members": 26,
+    "subprofile_members": 25
+  },
+  {
+    "profile_code": "PROJECT_EPC",
+    "methodology_authority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+    "members": 5,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "REAL_ESTATE_DEVELOPER",
+    "methodology_authority": "P7_IC1_REAL_ESTATE_DEVELOPER_METHODOLOGY_V1",
+    "members": 2,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "REGULATED_NETWORK",
+    "methodology_authority": "POWER_RENEWABLES_V1_K4B_SCORING_V1",
+    "members": 1,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "RENEWABLE_IPP",
+    "methodology_authority": "POWER_RENEWABLES_V1_K4B_SCORING_V1",
+    "members": 2,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "RETAIL_COMMERCE",
+    "methodology_authority": "P7_IC1_RETAIL_COMMERCE_METHODOLOGY_V1",
+    "members": 5,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "SHIPPING",
+    "methodology_authority": "P7_IC1_SHIPPING_METHODOLOGY_V1",
+    "members": 1,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "SOLID_FUELS_MINING",
+    "methodology_authority": "P7_IC1_SOLID_FUELS_MINING_METHODOLOGY_V1",
+    "members": 1,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "STEEL_FERROUS",
+    "methodology_authority": "METALS_COMMODITIES_K4B_SCORING_V1",
+    "members": 2,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "TELECOM_INFRA",
+    "methodology_authority": "P7_IC1_TELECOM_INFRA_METHODOLOGY_V1",
+    "members": 1,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "TELECOM_OPERATOR",
+    "methodology_authority": "P7_IC1_TELECOM_OPERATOR_METHODOLOGY_V1",
+    "members": 1,
+    "subprofile_members": 0
+  },
+  {
+    "profile_code": "TEXTILES_APPAREL",
+    "methodology_authority": "P7_IC1_TEXTILES_APPAREL_METHODOLOGY_V1",
+    "members": 6,
+    "subprofile_members": 0
+  }
+]

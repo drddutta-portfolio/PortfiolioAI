@@ -38,7 +38,7 @@ export function ResearchPage() {
     ? actionCenter.data?.view.find((item) => item.securityId === position.securityId) ?? null
     : null
   const research = useSecurityResearch(position?.securityId ?? null)
-  const scoring = useSecurityScoring(position?.securityId ?? null, research.data?.sector ?? position?.sector ?? null, research.data?.industry ?? position?.industry ?? null)
+  const scoring = useSecurityScoring(position?.securityId ?? null, research.data?.sector ?? position?.sector ?? null, research.data?.industry ?? position?.industry ?? null, portfolio?.portfolio.id ?? null, position?.assetClass ?? null)
   const [tab, setTab] = useState<Tab>("Overview")
   if (portfolioLoading) return <Loading label="Loading cached portfolio context…" />
   if (portfolioError) return <div className="notice notice-error" role="alert">{portfolioError}</div>
@@ -66,8 +66,8 @@ function ResearchHeader({ position, research, scoring, currency, portfolioId, ac
   const brokers = position.brokerExposure ?? []
   const sector = research?.sector ?? position.sector
   const industry = research?.industry ?? position.industry
-  const profileSource = scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed" : scoring.data?.profileSource === "SECTOR_RULE" ? "Sector-resolved" : scoring.data ? "Methodology unavailable" : null
-  const profileDisplayName = scoring.data && ((scoring.data.methodologyState && scoring.data.methodologyState !== "AVAILABLE") || scoring.data.scoringExecutionState === "PENDING_ADAPTER") ? scoring.data.profileName : ui.profileDisplayName
+  const profileSource = scoring.data?.profileSource === "CANONICAL_ASSIGNMENT" ? "Canonical assignment" : scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed" : scoring.data?.profileSource === "SECTOR_RULE" ? "Sector-resolved" : scoring.data ? "Methodology unavailable" : null
+  const profileDisplayName = scoring.data && ((scoring.data.methodologyState && scoring.data.methodologyState !== "AVAILABLE") || (scoring.data.scoringExecutionState && scoring.data.scoringExecutionState !== "AVAILABLE")) ? scoring.data.profileName : ui.profileDisplayName
   return <header className="research-header">
     <div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><h1>{research?.companyName ?? position.company}</h1><p className="security-identity-line"><strong>{position.symbol}</strong> · {position.exchange} · {titleCase(position.instrumentType)}</p><p><strong>Scoring profile:</strong> {scoring.data ? profileDisplayName : "Loading…"}{profileSource ? ` · ${profileSource}` : ""}</p><PharmaSubprofileSummary securityId={position.securityId} enabled={scoring.data?.profileCode === "PHARMA_V1"} /><p>Canonical sector: {sector ?? "Awaiting classification"} · Canonical industry: {industry ?? "Awaiting classification"}</p><p>{research?.marketCapCategory ? titleCase(research.marketCapCategory) : "Market-cap category unavailable"} · {position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</p><p className="raw-market-cap">Raw market cap: {formatResearchMetric(marketCap)}</p><div className="identity-chips" aria-label="Themes">{position.themes.length ? position.themes.map((theme) => <span key={theme.id}>{theme.name}</span>) : <span>No themes</span>}</div></div>
     <CompanyAboutPanel portfolioId={portfolioId} securityId={position.securityId} symbol={position.symbol} companyName={research?.companyName ?? position.company} />
@@ -169,7 +169,7 @@ function Overview({ position, research, scoring, onViewEvidence }: { readonly po
   const pharmaResolution = usePharmaSubprofileResolution(position.securityId)
   const metrics = latestByCode(research.metrics)
   const ui = researchProfileUiContract(scoring.data?.profileCode)
-  const profileDisplayName = scoring.data && ((scoring.data.methodologyState && scoring.data.methodologyState !== "AVAILABLE") || scoring.data.scoringExecutionState === "PENDING_ADAPTER") ? scoring.data.profileName : ui.profileDisplayName
+  const profileDisplayName = scoring.data && ((scoring.data.methodologyState && scoring.data.methodologyState !== "AVAILABLE") || (scoring.data.scoringExecutionState && scoring.data.scoringExecutionState !== "AVAILABLE")) ? scoring.data.profileName : ui.profileDisplayName
   const groups = researchSnapshotGroups(scoring.data?.profileCode)
   const conflicts = research.metrics.filter((metric) => metric.status === "CONFLICTING").length
   const provisional = research.metrics.filter((metric) => metric.status === "PROVISIONAL").length

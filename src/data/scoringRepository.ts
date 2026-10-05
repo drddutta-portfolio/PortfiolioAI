@@ -1,7 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js"
 import { supabase } from "../lib/supabase"
 import { assessPharmaV1Evidence } from "../features/research/pharmaScoringEvidence"
-import { resolveScoringProfile } from "../features/research/scoringProfileResolution"
+import { resolveScoringProfile, type ScoringProfileResolution } from "../features/research/scoringProfileResolution"
+import { loadP7CurrentEvidenceSnapshot, type P7CurrentEvidenceSnapshot } from "./p7CurrentIntelligenceRepository"
+import { loadPharmaV1ScoringSnapshot } from "./pharmaScoringRepository"
 import type { DimensionScore, ExternalRatingObservation, HeatState, MetricScoreSignal, ScoringProfileSource, SecurityScoringSnapshot } from "../features/research/scoringTypes"
 
 // Stage 8 tables were added after the last generated Database snapshot. Keep this
@@ -9,6 +11,11 @@ import type { DimensionScore, ExternalRatingObservation, HeatState, MetricScoreS
 const scoringDb = supabase as unknown as SupabaseClient
 
 const MIN_DIMENSION_COVERAGE = 0.60
+
+// Narrow the newer scoring tables at this isolated compatibility boundary.
+function nullableScoringRow<T>(value: unknown): T | null {
+  return value as T | null
+}
 
 type RuleRow = {
   dimension_code: string
@@ -264,19 +271,15 @@ function previewDimensions(
   })
 }
 
-export async function loadSecurityScoringSnapshot(securityId: string, sector: string | null, industry: string | null): Promise<SecurityScoringSnapshot> {
-  const assignmentResult = await scoringDb.from("security_scoring_profile_assignments")
-    .select("scoring_profile_code,assignment_status").eq("security_id", securityId).eq("assignment_status", "REVIEWED").maybeSingle()
-  if (assignmentResult.error) throw assignmentResult.error
-
-  const rawAssignedCode = typeof assignmentResult.data?.scoring_profile_code === "string" ? assignmentResult.data.scoring_profile_code : null
-  const resolvedProfile = resolveScoringProfile(sector, industry, rawAssignedCode)
-  if (resolvedProfile.methodologyState !== "AVAILABLE" || resolvedProfile.scoringExecutionState !== "AVAILABLE" || resolvedProfile.profileCode === null || resolvedProfile.ruleProfile === null) {
-    const executionPending = resolvedProfile.methodologyState === "AVAILABLE" && resolvedProfile.scoringExecutionState === "PENDING_ADAPTER"
+function blockedSnapshot(resolvedProfile: ScoringProfileResolution, canonical?: P7CurrentEvidenceSnapshot): SecurityScoringSnapshot {
     return {
-      profileCode: executionPending ? resolvedProfile.profileCode ?? "SCORING_EXECUTION_PENDING" : resolvedProfile.methodologyState,
-      profileName: executionPending ? (resolvedProfile.profileCode ?? "Sector methodology").replaceAll("_", " ") : resolvedProfile.methodologyState === "REVIEW_REQUIRED" ? "Research classification review required" : "Research methodology not available",
+      profileCode: resolvedProfile.profileCode ?? resolvedProfile.methodologyState,
+      profileName: (resolvedProfile.canonicalRoute?.profileCode ?? resolvedProfile.profileCode ?? resolvedProfile.methodologyState).replaceAll("_", " "),
       profileSource: resolvedProfile.profileSource,
+      canonicalRoute: resolvedProfile.canonicalRoute,
+      routeState: resolvedProfile.routeState,
+      engineState: resolvedProfile.engineState,
+      canonicalEvidenceState: canonical ? evidenceState(canonical.snapshotStatus) : undefined,
       methodologyState: resolvedProfile.methodologyState,
       methodologyReasonCode: resolvedProfile.reasonCode,
       scoringExecutionState: resolvedProfile.scoringExecutionState,
@@ -288,11 +291,50 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
       evidenceCoverage: null,
       scoreReadyCoverage: null,
       evidenceConfidence: null,
-      asOfDate: null,
+      asOfDate: canonical?.asOfDate ?? null,
       dimensions: [],
       ratings: [],
       previewMode: false,
     }
+}
+
+function evidenceState(status: P7CurrentEvidenceSnapshot["snapshotStatus"]): SecurityScoringSnapshot["canonicalEvidenceState"] {
+  return status === "READY" ? "FRESH" : status === "INSUFFICIENT" ? "MISSING" : status
+}
+
+export async function loadSecurityScoringSnapshot(
+  securityId: string, sector: string | null, industry: string | null,
+  context: { readonly portfolioId: string; readonly assetClass: string },
+): Promise<SecurityScoringSnapshot> {
+  if (context.assetClass !== "EQUITY") return blockedSnapshot({
+    profileCode: null, ruleProfile: null, profileSource: "METHODOLOGY_UNAVAILABLE",
+    methodologyState: "NOT_APPLICABLE", scoringExecutionState: "BLOCKED", engineState: "BLOCKED",
+    routeState: "NOT_APPLICABLE", reasonCode: "NON_EQUITY_SCORING_NOT_APPLICABLE", legacyAssignmentCode: null,
+  })
+
+  const canonical = await loadP7CurrentEvidenceSnapshot(context.portfolioId, securityId)
+  if (!canonical) return blockedSnapshot({
+    profileCode: null, ruleProfile: null, profileSource: "METHODOLOGY_UNAVAILABLE",
+    methodologyState: "REVIEW_REQUIRED", scoringExecutionState: "BLOCKED", engineState: "BLOCKED",
+    routeState: "UNAVAILABLE", reasonCode: "CANONICAL_ROUTE_NOT_AVAILABLE", legacyAssignmentCode: null,
+  })
+  const resolvedProfile = resolveScoringProfile(sector, industry, null, canonical)
+  if (resolvedProfile.methodologyState !== "AVAILABLE" || resolvedProfile.scoringExecutionState !== "AVAILABLE"
+    || resolvedProfile.profileCode === null || resolvedProfile.ruleProfile === null) {
+    return blockedSnapshot(resolvedProfile, canonical)
+  }
+
+  // A resolved route/available adapter is not evidence readiness. Do not expose
+  // historical scores or fall back to GENERAL when the current snapshot is blocked.
+  if (canonical.snapshotStatus !== "READY") return blockedSnapshot({ ...resolvedProfile,
+    scoringExecutionState: "BLOCKED", reasonCode: `CANONICAL_EVIDENCE_${canonical.snapshotStatus}`,
+  }, canonical)
+
+  if (resolvedProfile.profileCode === "PHARMA_V1") return {
+    ...await loadPharmaV1ScoringSnapshot(securityId), profileSource: "CANONICAL_ASSIGNMENT",
+    canonicalRoute: resolvedProfile.canonicalRoute, routeState: resolvedProfile.routeState,
+    engineState: resolvedProfile.engineState, scoringExecutionState: resolvedProfile.scoringExecutionState,
+    canonicalEvidenceState: evidenceState(canonical.snapshotStatus),
   }
   const profileCode = resolvedProfile.profileCode
   const profileSource: ScoringProfileSource = resolvedProfile.profileSource
@@ -307,8 +349,8 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
   ])
   const failure = [modelResult, profileResult, ratingsResult, observationsResult, marketObservationsResult].find((result) => result.error)
   if (failure?.error) throw failure.error
-  const model = modelResult.data as { id: string; name: string; status: string } | null
-  const profile = profileResult.data as { code: string; name: string } | null
+  const model = nullableScoringRow<{ id: string; name: string; status: string }>(modelResult.data)
+  const profile = nullableScoringRow<{ code: string; name: string }>(profileResult.data)
   if (!model) throw new Error("Scoring model is unavailable.")
   const ratingRows = (ratingsResult.data ?? []) as RatingRow[]
   const marketRows = (marketObservationsResult.data ?? []) as MarketObservationRow[]
@@ -323,7 +365,7 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
   const secondFailure = [runResult, rulesResult, baseDimensionsResult, profileDimensionsResult, metricOverridesResult].find((result) => result.error)
   if (secondFailure?.error) throw secondFailure.error
 
-  const run = runResult.data as { id: string; run_state: string; overall_score: number | string | null; evidence_coverage: number | string; evidence_confidence: number | string; as_of_date: string } | null
+  const run = nullableScoringRow<{ id: string; run_state: string; overall_score: number | string | null; evidence_coverage: number | string; evidence_confidence: number | string; as_of_date: string }>(runResult.data)
   let dimensions: DimensionScore[]
   if (run?.id) {
     const dimensionResult = await scoringDb.from("stock_dimension_scores").select("dimension_code,dimension_weight,raw_score,weighted_contribution,evidence_coverage,confidence,heat_state").eq("score_run_id", run.id)
@@ -337,7 +379,7 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
     const weights = new Map<string, number>()
     for (const row of (baseDimensionsResult.data ?? []) as DimensionWeightRow[]) weights.set(row.dimension_code, Number(row.weight))
     for (const row of (profileDimensionsResult.data ?? []) as ProfileOverrideRow[]) weights.set(row.dimension_code, Number(row.weight))
-    dimensions = previewDimensions((rulesResult.data ?? []) as RuleRow[], (observationsResult.data ?? []) as ObservationRow[], marketRows, ratingRows, weights, (metricOverridesResult.data ?? []) as MetricOverrideRow[])
+    dimensions = previewDimensions((rulesResult.data ?? []), (observationsResult.data ?? []), marketRows, ratingRows, weights, (metricOverridesResult.data ?? []))
   }
 
   const ratings: ExternalRatingObservation[] = ratingRows.map((row) => ({
@@ -355,6 +397,8 @@ export async function loadSecurityScoringSnapshot(securityId: string, sector: st
 
   return {
     scoreRunId: run?.id ?? null,
+    canonicalRoute: resolvedProfile.canonicalRoute, routeState: resolvedProfile.routeState,
+    engineState: resolvedProfile.engineState, canonicalEvidenceState: evidenceState(canonical.snapshotStatus),
     profileCode, profileName: profile?.name ?? profileCode.replaceAll("_", " "), profileSource,
     methodologyState: "AVAILABLE", methodologyReasonCode: null,
     scoringExecutionState: "AVAILABLE", scoringExecutionReasonCode: null,
