@@ -1,3 +1,78 @@
+# PortfolioAI V1-3 Closure — Identity, Classification and Methodology Routing
+
+**Closure date:** 5 October 2026  
+**V1-3:** **COMPLETE / PASS**  
+**Tested application SHA:** `3faf2561257d8a222cc78c0cde38a603b0f82c44`  
+**Verified Development Preview:** `dpl_CH8HTDf7jJqne41jjXzMiAP8V74E` — READY  
+**V1-4:** **NOT STARTED / NOT AUTHORIZED**
+
+## Closure decision
+
+V1-3 is closed against its frozen completion contract in `PortfolioAI_V1_OPERATIONAL_COMPLETION_PLAN_2026-10-05.md`:
+
+- complete 239-equity route matrix;
+- preserve asset-class, classification, owner-role and research-profile separation;
+- use versioned approved routing;
+- fail closed on ambiguity or unsupported execution;
+- prove holding-to-route and classification consistency.
+
+All 239 held equities have unique canonical security IDs and unique ISINs, canonical sector/industry classification, zero classification conflicts, a current approved profile/methodology assignment and assignment authority. The live route matrix matches the approved P7 IC1 assignment matrix. The Research scoring path now consumes that canonical assignment before separately resolving engine/adapter capability. All 45 held parent profiles resolve; 238 required-primary routes are resolved and the one deliberate Pharma primary-subprofile review case remains REVIEW_REQUIRED rather than guessed. ETFs remain NOT_APPLICABLE to equity scoring.
+
+The earlier 20-profile / 74-equity / 26-frozen-member application-routing compatibility defect is repaired and regression-covered. Missing engines/adapters remain explicit PENDING_ADAPTER; non-READY evidence remains BLOCKED with null scores and no GENERAL fallback.
+
+## Listing-projection limitations — non-blocking for V1-3
+
+Two held equities still lack listing ID/exchange/trading-symbol fields in `current_security_identity_v1`. This is retained as an explicit data-quality limitation, not silently repaired.
+
+Fresh read-only verification proves for each exception:
+- canonical security ID exists and is unique;
+- ISIN exists and is unique;
+- asset class is EQUITY;
+- sector/industry are present with no classification conflict;
+- approved canonical methodology route and assignment lineage are present;
+- a VERIFIED Angel One NSE instrument mapping exists;
+- no duplicate/ambiguous canonical identity is used for accounting or scoring.
+
+Therefore the V1-3 STOP condition "ambiguous identity used for accounting/scoring" is not met. The frozen V1-3 contract expressly allows explicit identity/profile/industry missing states to remain visible; the missing listing projection is carried as a documented limitation and must not be fabricated. Any database listing-row correction remains separately authorized work.
+
+## Hosted acceptance boundary
+
+Authenticated end-to-end hosted-browser acceptance is **not a V1-3 completion requirement**. The frozen Scope Freeze B plan assigns exact hosted-browser acceptance to **V1-9 Maintenance / Release**. V1-3 therefore does not claim that protected authenticated interaction has been performed.
+
+What is proven now:
+- exact application SHA `3faf256...` is deployed as Preview `dpl_CH8HTDf7jJqne41jjXzMiAP8V74E`;
+- Vercel deployment state is READY;
+- branch is `PortfolioAI-Development`;
+- target is Preview, not Production;
+- GitHub Vercel commit status is success;
+- current later HEAD differs from the tested application SHA by documentation only.
+
+The protected authenticated-browser limitation is retained for V1-9 rather than incorrectly holding V1-3 open.
+
+## Verification retained
+
+The routing repair previously passed:
+- 10 focused test files / 87 tests;
+- strict TypeScript/Vite build;
+- architecture guard;
+- changed-file ESLint.
+
+Full-repository lint remains historical debt in unchanged files and is not relabelled PASS.
+
+## Final V1-3 disposition
+
+**V1-3 = COMPLETE / PASS.**
+
+Preserved limitations:
+1. two canonical listing-projection metadata gaps remain explicit and unmodified;
+2. BLUEJET remains the deliberate Pharma Primary-subprofile REVIEW_REQUIRED case;
+3. engine/adaptor availability and evidence readiness remain later-gate concerns;
+4. authenticated exact-SHA end-to-end browser acceptance remains mandatory in V1-9.
+
+No V1-4 evidence acquisition, provider execution, deterministic-engine implementation, database mutation, migration, Auth/RLS change, scheduler action, storage write, P8 execution, backup or restore was performed for this closure.
+
+---
+
 # PortfolioAI V1-3 Routing Repair — Execution Verification
 
 **Date:** 5 October 2026
