@@ -3,7 +3,7 @@
 **Date:** 6 October 2026 (Asia/Kolkata)
 **Repository:** drddutta-portfolio/PortfiolioAI
 **Target branch:** PortfolioAI-Development
-**Design version:** STOCK_RESEARCH_WORKSPACE_V2_PROPOSAL
+**Design version:** STOCK_RESEARCH_WORKSPACE_V2_1_PROPOSAL
 **Status:** Consolidated design specification / implementation proposal. Documentation creation is authorized; this document does not independently authorize application changes, provider execution, migrations or later V1 gates.
 **Reference baseline:** `95ae01330f87e7adc35a79da084f4beb9157c2bd`
 **Product rule:** One PortfolioAI, one reusable stock Research shell, profile-specific research within it.
@@ -61,7 +61,7 @@ Unknown or unresolved profiles use the same shell with explicit unresolved appli
 | 7 | Key Insights | Up to three to five concise source-supported findings, material risks or unanswered research questions. Do not repeat the suggestion card verbatim. |
 | 8 | Research Refresh | Compact shared control strip plus expandable profile capability modules; no provider calls on rendering/navigation. Explicit lifecycle and separate planning/execution controls. |
 | 9 | Research navigation | Overview / Financials / Quality & Growth / Ownership / Valuation / Documents / Evidence. Same labels and order for all stocks. |
-| 10 | Research at a glance | Three-card strip: effective research model, portfolio exposure, canonical evidence/readiness summary with evaluation timestamp. |
+| 10 | Research at a glance | Three-card strip: business/research context, owner's portfolio role/exposure, and canonical classification. Evidence/score readiness remains prominent in the cockpit and readiness regions; see section 16.3. |
 | 11 | Investment Decision Cockpit and section summaries | Independent dimensions, assessment state and material reasons from qualified persisted outputs; explicit engine/evidence blocks when unavailable. |
 | 12 | Investment heatmap | Shared geometry and accessibility; only applicable approved dimensions. No manufactured scores, misleading curves or zero-filled missing cells. |
 | 13 | External ratings | Clearly separate provider opinions/ratings from PortfolioAI conclusions. Compact empty state and source/date metadata. |
@@ -318,3 +318,157 @@ Documentation-only publication requires reference/path checking, Markdown/whites
 **Evidence/engine/release complete:** only the relevant V1 gate's acceptance contract may establish this; neither design nor UI completion implies it.
 
 This publication creates one consolidated design plan on Development. It does not amend frozen cohort membership/value, release thresholds, methodology, provider budgets, Production, main, Auth/RLS, schedulers, storage or migration state.
+
+## 16. Owner-supplied original stock-page baseline — 6 October 2026 amendment
+
+**Design decision:** The three HDFCBANK screenshots supplied by the owner are the visual and feature baseline for the shared stock Research page. Retain the complete feature set and recognizable layout, and extend it through approved sector/industry/group/subgroup and profile/subprofile contracts.
+
+This amendment clarifies feature preservation in sections 4–9. It does not remove AI Interpretation, readiness or specialist research already required by R4M merely because those regions are not visible in the supplied screenshots.
+
+The screenshots are design evidence, not financial facts, validated scores, current assignments, provider authorizations or approved methodology thresholds. No numerical value, draft policy, 70% gating text, action, score or historical tracking count is adopted as a business rule from an image.
+
+### 16.1 Evaluation of the original design
+
+Preserve the following strengths:
+
+- a recognizable identity/About/position header;
+- a clear separation between the owner's saved plan and PortfolioAI's read-only suggestion;
+- explanatory action/range links and a compact Key Insights column;
+- one refresh area with capability cards;
+- consistent navigation tabs;
+- a compact context strip, decision cockpit and explainable heatmap;
+- expandable external ratings;
+- a two-column grid of research snapshots;
+- a compact Research Health footer with a direct evidence link.
+
+Correct the visible weaknesses without removing the features:
+
+- eliminate the large blank area under Decision Workspace through content-driven sizing;
+- expose dates, units, currency/scale and reporting scope instead of ambiguous raw amounts;
+- distinguish current canonical validation from provider/legacy VERIFIED labels;
+- clarify ownership categories that overlap, such as mutual funds inside institutional ownership;
+- keep unavailable/insufficient heatmap interactions disabled or redirect explicitly to missing prerequisites; do not label them “Why this score?” when no score exists;
+- keep draft recommendations, stale evidence and missing assessments unmistakably separate from qualified advice;
+- display market-cap magnitude only with its proven currency/unit;
+- preserve consistent owner-role and research-assignment facts across all regions.
+
+The objective is the original complete product experience with better canonical consistency and business-specific research—not a reduced page containing only readiness diagnostics.
+
+### 16.2 Complete feature-preservation matrix
+
+Every row below must have an explicit implementation/test outcome. Unavailable facts keep their region and a truthful state; they are not silently removed to make the page look complete.
+
+| Original feature | Required shared behavior | Sector/profile adaptation and safety |
+|---|---|---|
+| Back-to-Research link | Preserve navigation to coverage/list and useful navigation context. | Same behavior for every stock. |
+| Stock identity panel | Name, symbol, exchange, asset class, classification, market-cap class and themes. | Canonical sector/industry/group/subgroup and research assignment remain separate; missing facts explicit. |
+| Company logo and About panel | Compact logo/fallback and source-supported business description with source/date access. | Describe this company's actual operating model; never generate unsupported factual enrichment. |
+| Position summary | CMP, quantity, average/canonical cost, weight, invested amount, current value, P&L and brokers/demat. | Shared accounting authority; explain gross/net or cost-method limits and incomplete broker attribution. |
+| Edit plan | Retain the existing owner-controlled editing workflow. | No advisory write-through; editing remains an explicit owner action. |
+| Target price | Show saved value, reference/horizon and saved date where available. | An owner target is not PortfolioAI fair value. |
+| Stop-loss reference | Show saved value or Not set; retain notification/reference semantics. | No automated sell/execution implication. |
+| Target weight | Show owner allocation target distinctly from any suggested range. | Exact current/target difference only from approved shared calculations. |
+| Investment horizon | Show value with its explicit unit, not an unexplained number. | Never infer a horizon from sector or methodology. |
+| Selected portfolio role | Preserve owner's Core/Satellite/Thematic/ETF/Other or unset state. | Not a research-profile label or system-overwritten role. |
+| Suggestion status badge | Show recommendation freshness/qualification from the correct canonical output. | Separate evidence freshness, recommendation freshness and execution capability. |
+| Role/recommendation preview | Preserve common structure in available and unavailable states. | Only approved deterministic outputs; never convert not-ready to HOLD or an invented role. |
+| Action bias | Show canonical action/bias when qualified, otherwise an explicit unavailable/not-ready state. | Do not present Wait as a default investment opinion merely because evidence is missing. |
+| Why this action? | Preserve an accessible explanation entry point. | Qualified output opens reasons, supporting/contradicting evidence and lineage; blocked output opens exact prerequisites with an accurate label. |
+| Suggested weight range | Preserve the range region and applicability status. | Populated only from authorized qualified sizing outputs; no new sizing calculation in UI. |
+| Current weight / Your target | Preserve side-by-side comparison. | Shared current portfolio view plus owner settings; consistent formatting. |
+| Portfolio context | Preserve fit/concentration/context region. | Qualified portfolio-aware results only; missing assessment remains explicit. |
+| Why this range? | Preserve explanation of any qualified sizing range. | Show constraints, fit/risk inputs, calculation version and lineage; do not manufacture a rationale. |
+| AI Interpretation | Preserve R4M region and control placement. | Optional downstream explanation of existing deterministic outputs; disabled when not authorized/ready. |
+| Key Insights: role/action/range | Preserve compact summary entries and links to their detailed regions. | Use the same canonical values, not a separate computation or repeated generic narrative. |
+| Primary caution | Preserve the caution field. | Distinguish No reviewed caution identified from No caution assessment available; absence of evidence is not evidence of safety. |
+| Tracking status | Preserve evaluation/confirmation progress where a reviewed tracking contract exists. | Counts, anti-churn and confirmation rules come from the approved engine; never copy screenshot numbers or rules. |
+| Evidence confidence | Preserve a confidence/coverage entry with clear definition and date. | Do not rename evidence coverage as confidence or invent percentages; explain their distinct denominators. |
+| Tracking history | Preserve read-only history access. | Selected security/portfolio only, qualified evaluations and timestamps; ordinary viewing must not append tracking events. |
+| Read-only advisory notice | Preserve concise owner-control explanation. | No implied trading, role changes or account action. |
+| Target/stop-loss notification note | Preserve the applicable existing notification feature and its honest state. | Do not promise notifications when capability is absent or inactive; no scheduler activation from page rendering. |
+| Plan complete refresh | Preserve zero-call planning entry point and exact proposed operations. | Uses effective profile capability contract, budget, eligibility and execution grants. |
+| Valuation refresh card | Preserve module slot and shared control grammar. | Approved sector-specific valuation source/requirements; no generic P/E request forced on all profiles. |
+| Market-history refresh card | Preserve incremental history planning and evidence state. | Actual approved source/window, session and adjustment validation; no call on navigation. |
+| Benchmark-relative card | Preserve benchmark planning/context slot. | Exact approved benchmark mapping; no substitution with NIFTY Bank outside applicable contracts. |
+| Missing-field discovery card | Preserve a capability module for bounded discovery when supported. | HDFCBANK reference-stock entitlement is not expanded to other stocks; display explicit unsupported state elsewhere. |
+| Seven research tabs | Preserve original labels/order and all existing content. | Effective profile changes content within tabs, not navigation grammar. |
+| Research at a glance context cards | Preserve Business/research context, Your portfolio role, and Classification. | Context may show profile/subprofile, exposure/weight, cap class/themes and canonical hierarchy. Canonical evidence summary remains prominent in the cockpit/readiness region. |
+| Overall stock score | Preserve dedicated overall score/state card. | Only qualified canonical overall assessment; independent missing dimensions remain explicit. |
+| Verified evidence and score-ready coverage | Preserve separate measures and date/denominator access. | Validated evidence is not automatically score-ready; no guessed percentages. |
+| Section score summaries | Preserve compact overview cards for the approved standard dimensions. | Profile labels/applicability may differ; raw provider values do not become scores. |
+| Read-only scoring preview notice | Preserve explanation of preview versus qualified persisted results. | Gating language comes from current approved policy, not historical screenshot draft text. |
+| Heatmap and legend | Preserve common card grid, semantic colors and accessible state labels. | Only approved applicable dimensions; missing/nonapplicable states do not become neutral or zero. |
+| Why this score? | Preserve drill-down for scored cells. | Link score inputs, formula/version, exclusions and evidence; no score means correctly labelled evidence/prerequisite access. |
+| External ratings | Preserve agency summary, agency/instrument counts and expandable details. | Rating/outlook/date and instrument-level identity remain separate from company scores; explicit availability/applicability for every profile. |
+| Quality / Growth snapshots | Preserve relevant grouped metric cards. | All metrics and labels selected by approved effective profile, not stock symbol. |
+| Valuation snapshot | Preserve source-bound applicable ratios/context. | Sector-appropriate approved methods; conflicts/staleness visible. |
+| Ownership snapshot | Preserve dated ownership and pledge facts. | Consistent period/basis; overlapping ownership groups must be explained, not summed as independent portions. |
+| Research Health footer | Preserve coverage state, retained observation count, conflicts/review/provisional counts and View Evidence. | Define count scope/time; raw observation count is not validated readiness. |
+| Complete documents/evidence access | Preserve detailed artifacts, requirements and provenance. | Move depth into tabs/disclosures without deleting valid prior research. |
+
+### 16.3 Context strip clarification
+
+For the owner-supplied baseline, retain the three original context roles:
+
+1. **Business / research context:** canonical industry and approved profile/subprofile, with clear assignment state.
+2. **Your portfolio role:** owner's role, current weight and preserved manual-control semantics.
+3. **Classification:** canonical sector/industry/group/subgroup summary, market-cap class and themes as available.
+
+This clarifies section 4, region 10, which previously described an evidence-summary third card. Evidence readiness is still prominent and mandatory, but belongs in the dedicated cockpit evidence/score-readiness cards and the readiness summary rather than displacing Classification.
+
+Where information would duplicate the header, use concise context summaries and accessible detail. No canonical fact is removed.
+
+### 16.4 Same visual design, different research results
+
+The same shell must accommodate these distinct outputs:
+
+| Shared research surface | Banking illustration | Pharma illustration | Holding-company illustration |
+|---|---|---|---|
+| Business context | Approved bank/lending model | Reviewed Pharma primary subprofile plus role-scoped exposures | Approved holding-company model and subsidiary/structural context |
+| Quality/growth research | Relevant lending/franchise profitability and growth | Relevant product/business-model profitability, growth and durability | Look-through economics, subsidiary earnings and capital allocation |
+| Strength/risk research | Credit quality, capital/funding and applicable risks | Cash/leverage, regulatory/site and applicable business risks | Holdco liquidity/leverage, complexity and reviewed subsidiary risks |
+| Valuation research | Approved bank/lender valuation basis | Approved Pharma valuation basis | Approved NAV/SOTP/look-through valuation basis |
+| Market context | Exact approved benchmark/history | Exact approved profile/subprofile benchmark/history | Exact approved benchmark/peer context |
+| Explanations | Same score/action/range detail grammar | Same detail grammar, different validated inputs | Same detail grammar, different validated inputs |
+
+These are illustrative content directions, not new formula/metric approvals. The approved effective contract controls exact requirements, source authority, history, applicability, overlays and outputs.
+
+The sector-specific deep workspace follows the shared Overview and Research Health. It can contain model/operating-driver detail, applicable methodology, source-linked supporting and contradicting evidence, unresolved questions and collapsible evidence operations. It must not push the common cockpit below a long operational checklist.
+
+### 16.5 Result publication contract
+
+A business-oriented section is useful only if its contents have honest semantics. Each displayed research result must identify:
+
+- effective profile/subprofile and approved methodology version;
+- security/portfolio scope and relevant evaluation date;
+- applicable requirement/dimension and readiness state;
+- source facts with unit/currency/scale/period/scope;
+- deterministic assessment/run and explanation where available;
+- supporting and contradictory evidence;
+- material blockers or exclusions;
+- freshness and reproducible lineage.
+
+An unimplemented engine may show validated facts and research questions but cannot supply an assessment as if calculated. An implemented engine without qualifying evidence remains blocked. A qualified assessment without qualified portfolio-context/sizing/action output does not imply an actionable recommendation.
+
+### 16.6 Revised implementation priorities
+
+1. Preserve every feature in section 16.2 and map it to existing reusable components and canonical paths before editing.
+2. Restore the original compact visual grammar; remove unnecessary blank space and giant pre-overview evidence tables.
+3. Repair identity/owner-role/state contradictions and unsafe metric formatting.
+4. Extend the shared UI contracts for all current approved profiles/subprofiles; remove irrelevant metric leakage.
+5. Connect qualified sector-specific results into the existing cockpit, heatmap, snapshot, explanation and deep-research regions as their authorized V1 gates complete.
+6. Verify populated, blocked, sparse, stale, conflicting, unknown-profile and unavailable-engine states in the same shell.
+
+Preservation does not mean showing every banking metric for every stock. It means retaining every product capability and shared region while selecting the economically applicable research content.
+
+### 16.7 Additional acceptance requirements
+
+- Feature coverage matrix: every row in section 16.2 has a retained component/path, authorized availability condition and verification case.
+- Side-by-side desktop/mobile comparison against the supplied original design for shared layout and interaction grammar; screenshots are not required to match obsolete values or unsafe legacy labels.
+- Action/range/score links expose qualified canonical explanations and show truthful unavailable states.
+- Tracking and notification surfaces preserve approved behavior without enabling new writes, provider calls or schedulers.
+- Rating summaries expand to the correct security/instrument evidence; raw rating labels never alter scores.
+- No disappearance of owner plan, suggestion, Key Insights, cockpit, heatmap, ratings, snapshots or Research Health when a profile is blocked.
+- Bank-only content does not leak into Pharma, holding companies or other profiles.
+- All retained profile methodology remains accessible; collapsing detail is not deleting it.
+- No new financial formulas, scoring thresholds, confirmation counts or provider permissions are inferred from the screenshots.
