@@ -88,6 +88,28 @@ async function uploadBytes(admin:ReturnType<typeof createClient>,path:string,byt
   const r=await admin.storage.from(BUCKET).upload(path,bytes,{contentType,upsert:false})
   if(r.error)throw new Error("P7_IC_B0_V2_STORAGE_UPLOAD_FAILED")
 }
+async function syntheticLocalVerify(){
+  const tmp="/tmp/"+crypto.randomUUID()+".json",results:Record<string,unknown>={}
+  try{
+    const created=await createSyntheticFile(tmp);results.tmpCapture=created
+    const file=await Deno.open(tmp,{read:true})
+    const scan=await scanMasterArtifact({chunks:readableStreamChunks(file.readable),definitions:defs(),requestedCodes:V1_4_BATCH_B_CODES,expectedSha256:created.sha256})
+    results.localReadback={byteLength:scan.byteLength,sha256:scan.sha256,rowCount:scan.rowCount,allExact:scan.preflight.every(x=>x.status==="EXACT_MATCH"),statuses:scan.preflight.map(x=>({code:x.code,status:x.status}))}
+    let malformed=""
+    try{await scanMasterArtifact({chunks:(async function*(){yield new TextEncoder().encode('[{"broken":1}')})(),definitions:defs(),requestedCodes:V1_4_BATCH_B_CODES})}catch(e){malformed=safe(e)}
+    results.malformed=malformed
+    const oneMiB=new Uint8Array(1024*1024);let oversize=""
+    try{await captureByteStream((async function*(){for(let i=0;i<65;i++)yield oneMiB})(),{write(){},close(){}},V1_4_MASTER_MAX_RESPONSE_BYTES)}catch(e){oversize=safe(e)}
+    results.oversize=oversize
+    let acc=advanceMasterCaptureAccounting(emptyMasterCaptureAccounting(),{stage:"ATTEMPT_STARTED"});results.interrupted=acc
+    acc=advanceMasterCaptureAccounting(acc,{stage:"RESPONSE_RECEIVED",responseOk:true})
+    acc=advanceMasterCaptureAccounting(acc,{stage:"BODY_COMPLETE"})
+    acc=advanceMasterCaptureAccounting(acc,{stage:"CAPTURE_PERSISTED"})
+    acc=advanceMasterCaptureAccounting(acc,{stage:"PREFLIGHT_COMPLETED"})
+    results.completedAccounting=acc
+    return results
+  }finally{await Deno.remove(tmp).catch(()=>undefined)}
+}
 async function syntheticVerify(admin:ReturnType<typeof createClient>){
   await ensureBucket(admin)
   const prefix="synthetic-b0-v2/"+crypto.randomUUID(),good=prefix+"/master.json",bad=prefix+"/malformed.json",tmp="/tmp/"+crypto.randomUUID()+".json"
@@ -130,6 +152,10 @@ Deno.serve(async req=>{
     if(action==="PREPARE_STORAGE"){
       if(body.confirmation!==OWNER_CONFIRMATION)throw new Error("P7_IC_B0_V2_OWNER_CONFIRMATION_REQUIRED")
       await ensureBucket(admin);return json(200,{mode:"B0_V2_STORAGE_READY",bucket:BUCKET,maxObjectBytes:V1_4_MASTER_MAX_RESPONSE_BYTES})
+    }
+    if(action==="SYNTHETIC_LOCAL_VERIFY"){
+      if(body.confirmation!==OWNER_CONFIRMATION)throw new Error("P7_IC_B0_V2_OWNER_CONFIRMATION_REQUIRED")
+      return json(200,{mode:"B0_V2_SYNTHETIC_LOCAL_VERIFY",results:await syntheticLocalVerify()})
     }
     if(action==="SYNTHETIC_VERIFY"){
       if(body.confirmation!==OWNER_CONFIRMATION)throw new Error("P7_IC_B0_V2_OWNER_CONFIRMATION_REQUIRED")
