@@ -188,45 +188,45 @@ function projectCachedRecords(records:SourceRecord[],security:{id:string;symbol:
  })
 }
 
-function requirementItem(input:{code:string;minimum:number;freshness:string|null;benchmarks:string[];portfolioId:string;securityId:string;observations:Observation[];definitions:MetricDefinition[];records:SourceRecord[];reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];history?:History;benchmarkByCode:Map<string,Benchmark>;evaluationAsOfMs:number;sourceCutoffAtMs:number}):Item{
- const {code,minimum,freshness,benchmarks,portfolioId,securityId,observations,definitions,records,reviews,reviewSources,researchDocuments,history,benchmarkByCode,evaluationAsOfMs,sourceCutoffAtMs}=input
-
- if(benchmarkish(code)){
+async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;minimum:number;freshness:string|null;benchmarks:string[];portfolioId:string;portfolioOwnerId:string;securityId:string;observations:Observation[];definitions:MetricDefinition[];records:SourceRecord[];reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];documentSources:ReviewedDocumentSource[];history?:History;benchmarkByCode:Map<string,Benchmark>;evaluationAsOfMs:number;sourceCutoffAtMs:number}):Promise<Item>{
+ const {code,family,minimum,freshness,benchmarks,portfolioId,portfolioOwnerId,securityId,observations,definitions,records,reviews,reviewSources,researchDocuments,documentSources,history,benchmarkByCode,evaluationAsOfMs,sourceCutoffAtMs}=input
+ if(family==="BENCHMARK_HISTORY"){
    const required=benchmarks.filter(x=>x.startsWith("NIFTY_")),rows=required.map(x=>benchmarkByCode.get(x))
    const mapped=required.length>0&&rows.every(x=>x?.mapping_status==="VERIFIED"&&x.provider_code==="ANGEL_ONE"&&x.provider_instrument_id&&x.verified_at&&Date.parse(x.verified_at)<=sourceCutoffAtMs)
    if(!mapped)return blocked(code,minimum,freshness,benchmarks,"MISSING","BENCHMARK_MAPPING_NOT_PROVEN","RECONCILE_EXACT_APPROVED_BENCHMARK_MAPPING")
-   const conflict=rows.find(x=>x?.history.state==="CONFLICTING")
-   const short=rows.find(x=>(x?.history.distinctSessions??0)<minimum)
+   const conflict=rows.find(x=>x?.history.state==="CONFLICTING"),short=rows.find(x=>(x?.history.distinctSessions??0)<minimum)
    return {...blocked(code,minimum,freshness,benchmarks,conflict?"CONFLICTING":short?"INSUFFICIENT":"REVIEW_REQUIRED",conflict?"DUPLICATE_SESSION_CONFLICT":short?"BENCHMARK_DISTINCT_SESSIONS_INSUFFICIENT":"ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN","VALIDATE_APPROVED_HISTORY_CONTRACT"),normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,benchmarkCodes:required,histories:rows.map(x=>x?.history??null),stockHistory:history??null},retrieved_at:rows.map(x=>x?.history.retrievedAt??null).filter((x):x is string=>Boolean(x)).sort().at(-1)??null,source_provider:"ANGEL_ONE"}
  }
- if(marketish(code)){
+ if(family==="MARKET_HISTORY"){
    const state=history&&history.distinctSessions>=minimum?history.state:"INSUFFICIENT"
    return {...blocked(code,minimum,freshness,benchmarks,state,history?.reason??"DISTINCT_SESSIONS_INSUFFICIENT","VALIDATE_APPROVED_HISTORY_CONTRACT"),retrieved_at:history?.retrievedAt??null,evidence_as_of_date:history?.latestSession??null,source_provider:"ANGEL_ONE",normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,...history}}
  }
  const normalized=records.flatMap(record=>{
    const raw=record.raw_payload,items=Array.isArray(raw.p7_ic2_normalized_evidence)?raw.p7_ic2_normalized_evidence:[]
-   if(ownershipish(code)&&raw.p7_ic2_ownership_history&&typeof raw.p7_ic2_ownership_history==="object")return [{record,value:raw.p7_ic2_ownership_history as Json,...cachedEvidenceReadiness(String((raw.p7_ic2_ownership_history as Json).state??"MISSING"),raw.p7_ic2_ownership_history,minimum)}]
+   if(family==="OWNERSHIP_4Q"&&raw.p7_ic2_ownership_history&&typeof raw.p7_ic2_ownership_history==="object")return [{record,value:raw.p7_ic2_ownership_history as Json,...cachedEvidenceReadiness(String((raw.p7_ic2_ownership_history as Json).state??"MISSING"),raw.p7_ic2_ownership_history,minimum)}]
    return items.filter(x=>x&&typeof x==="object"&&String((x as Json).evidenceCode)===code).map(x=>({record,value:x as Json,...cachedEvidenceReadiness(guardedNumericEvidenceState(String((x as Json).state??"MISSING"),x,minimum),x,minimum)}))
  })
  const metricCodes=canonicalMetricCodes[code]??[code]
  const candidates=observations.filter(x=>x.security_id===securityId&&metricCodes.includes(x.metric_code))
- let canonicalFailure:Item|null=null
- if(candidates.length){
-   const validation=validateObservationSeries({rows:candidates,definitions,minimum,evaluationAsOfMs,sourceCutoffAtMs})
-   if(validation.state==="FRESH"){
-     const selected=validation.selected,x=newestObservation(selected)
-     const freshDates=selected.map(row=>row.fresh_until!).sort()
-     return {...blocked(code,minimum,freshness,benchmarks,"FRESH",validation.reason,"NONE"),metric_code:x.metric_code,candidate_evidence_ids:candidates.map(row=>row.id),selected_evidence_id:x.id,evidence_as_of_date:selected.at(-1)!.period_end,retrieved_at:x.retrieved_at,fresh_through:dateOnly(freshDates[0]!),source_provider:x.source_code,raw_source_record_id:x.source_record_id,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,series:selected},validation_state:"VALIDATED",canonical_selection_state:"DETERMINISTIC_HISTORY_AGGREGATE"}
+ const reviewed=await validateReviewedRequirementEvidence({portfolioId,portfolioOwnerId,securityId,requirementCode:code,family,metricCodes,minimum,reviews,sources:reviewSources,documents:researchDocuments,documentSources,definitions,evaluationAsOfMs,sourceCutoffAtMs})
+ const reconciliation=reconcileCanonicalAndReviewed({canonicalRows:candidates,reviewed,definitions,minimum,evaluationAsOfMs,sourceCutoffAtMs,family})
+ if(reconciliation.validation.state==="FRESH"){
+   const selected=reconciliation.validation.selected
+   if(reconciliation.authority==="REVIEW"&&reviewed){
+     return {...blocked(code,minimum,freshness,benchmarks,"FRESH",reconciliation.reason,"NONE"),metric_code:reviewed.observations[0]?.metric_code??null,candidate_evidence_ids:[...reviewed.selectedReviewIds],selected_evidence_id:reviewed.selectedReviewIds.at(-1)??null,evidence_as_of_date:reviewed.evidenceAsOfDate,retrieved_at:reviewed.retrievedAt,fresh_through:dateOnly(reviewed.freshThrough),source_provider:reviewed.sourceCode,raw_source_record_id:reviewed.sourceRecordIds.at(-1)??null,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,reviewedEvidence:reviewed.lineage,series:reviewed.observations},validation_state:"VALIDATED_REVIEW_LEDGER",canonical_selection_state:"DETERMINISTIC_REVIEW_LEDGER"}
    }
-   canonicalFailure={...blocked(code,minimum,freshness,benchmarks,validation.state,validation.reason,"RECONCILE_CANONICAL_INPUT_CONTRACT"),candidate_evidence_ids:candidates.map(x=>x.id),normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,observations:candidates}}
+   if(selected.length){
+     const x=newestObservation(selected),freshDates=selected.map(row=>row.fresh_until!).sort()
+     return {...blocked(code,minimum,freshness,benchmarks,"FRESH",reconciliation.reason,"NONE"),metric_code:x.metric_code,candidate_evidence_ids:[...new Set([...candidates.map(row=>row.id),...(reviewed?.selectedReviewIds??[])])],selected_evidence_id:x.id,evidence_as_of_date:selected.at(-1)!.period_end,retrieved_at:x.retrieved_at,fresh_through:dateOnly(freshDates[0]!),source_provider:x.source_code,raw_source_record_id:x.source_record_id,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,series:selected,reviewedEvidence:reviewed?.lineage??null},validation_state:reconciliation.authority==="COMBINED"?"VALIDATED_CANONICAL_PLUS_REVIEW":"VALIDATED",canonical_selection_state:reconciliation.authority==="COMBINED"?"DETERMINISTIC_RECONCILED_SERIES":"DETERMINISTIC_HISTORY_AGGREGATE"}
+   }
  }
- const reviewed=validateReviewedRequirementEvidence({portfolioId,securityId,requirementCode:code,metricCodes,minimum,reviews,sources:reviewSources,documents:researchDocuments,definitions,evaluationAsOfMs,sourceCutoffAtMs})
- if(reviewed){
-   if(reviewed.state!=="FRESH")return canonicalFailure??{...blocked(code,minimum,freshness,benchmarks,reviewed.state,reviewed.reason,"RECONCILE_REVIEWED_EVIDENCE_CONTRACT"),candidate_evidence_ids:[...reviewed.selectedReviewIds],raw_source_record_id:reviewed.sourceRecordId,retrieved_at:reviewed.retrievedAt,evidence_as_of_date:reviewed.evidenceAsOfDate,fresh_through:dateOnly(reviewed.freshThrough),source_provider:reviewed.sourceCode,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,reviewedEvidence:reviewed.lineage,observations:reviewed.observations}}
-   const first=reviewed.observations[0]??null
-   return {...blocked(code,minimum,freshness,benchmarks,"FRESH",reviewed.reason,"NONE"),metric_code:first?.metric_code??null,candidate_evidence_ids:[...reviewed.selectedReviewIds],selected_evidence_id:reviewed.selectedReviewIds.at(-1)??null,evidence_as_of_date:reviewed.evidenceAsOfDate,retrieved_at:reviewed.retrievedAt,fresh_through:dateOnly(reviewed.freshThrough),source_provider:reviewed.sourceCode,raw_source_record_id:reviewed.sourceRecordId,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,reviewedEvidence:reviewed.lineage,series:reviewed.observations},validation_state:"VALIDATED_REVIEW_LEDGER",canonical_selection_state:"DETERMINISTIC_REVIEW_LEDGER"}
+ if(reconciliation.validation.state==="CONFLICTING"){
+   return {...blocked(code,minimum,freshness,benchmarks,"CONFLICTING",reconciliation.reason,"RECONCILE_CANONICAL_AND_REVIEW_CONFLICT"),candidate_evidence_ids:[...new Set([...candidates.map(x=>x.id),...(reviewed?.selectedReviewIds??[])])],normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,canonical:candidates,reviewed:reviewed?.lineage??null}}
  }
- if(canonicalFailure)return canonicalFailure
+ if(candidates.length||reviewed){
+   const state=reconciliation.validation.state
+   return {...blocked(code,minimum,freshness,benchmarks,state,reconciliation.validation.reason,"RECONCILE_CANONICAL_INPUT_CONTRACT"),candidate_evidence_ids:[...new Set([...candidates.map(x=>x.id),...(reviewed?.selectedReviewIds??[])])],raw_source_record_id:reviewed?.sourceRecordIds.at(-1)??null,retrieved_at:reviewed?.retrievedAt??null,evidence_as_of_date:reviewed?.evidenceAsOfDate??null,fresh_through:dateOnly(reviewed?.freshThrough??null),source_provider:reviewed?.sourceCode??null,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,canonical:candidates,reviewed:reviewed?.lineage??null}}
+ }
  const review=normalized.find(x=>x.state.includes("REVIEW"))
  if(review){
    const historyReview=minimum>1&&Array.isArray(review.value.matchedSections)
@@ -271,7 +271,7 @@ Deno.serve(async request=>{
    else{
     const contract=p7IcProfileContract(assignment.profileCode)
     const plan=buildProfileEvidencePlan(contract),baseRecords=facts.sourceRecords.filter(x=>String(x.raw_payload.security_id)===security.id),records=projectCachedRecords(baseRecords,security,plan)
-    items=plan.requirements.map(req=>requirementItem({code:req.evidenceCode,minimum:req.minimumPeriods,freshness:(contract.signalRequirements.find(x=>(x.evidenceCodes??[x.signalCode]).includes(req.evidenceCode)) as {freshnessPolicy?:string}|undefined)?.freshnessPolicy??null,benchmarks:[...(contract.benchmarkAuthority??[])],portfolioId,securityId:security.id,observations:facts.observations,definitions:facts.definitions,records,reviews:facts.reviewFacts.reviews,reviewSources:facts.reviewFacts.reviewSources,researchDocuments:facts.reviewFacts.researchDocuments,history:historyById.get(security.id),benchmarkByCode,evaluationAsOfMs,sourceCutoffAtMs}))
+    items=await Promise.all(plan.requirements.map(req=>requirementItem({code:req.evidenceCode,family:req.deterministicCoverageRule,minimum:req.minimumPeriods,freshness:(contract.signalRequirements.find(x=>(x.evidenceCodes??[x.signalCode]).includes(req.evidenceCode)) as {freshnessPolicy?:string}|undefined)?.freshnessPolicy??null,benchmarks:[...(contract.benchmarkAuthority??[])],portfolioId,portfolioOwnerId:facts.portfolioOwnerId,securityId:security.id,observations:facts.observations,definitions:facts.definitions,records,reviews:facts.reviewFacts.reviews,reviewSources:facts.reviewFacts.reviewSources,researchDocuments:facts.reviewFacts.researchDocuments,documentSources:facts.reviewFacts.documentSources,history:historyById.get(security.id),benchmarkByCode,evaluationAsOfMs,sourceCutoffAtMs})))
    }
    const methodologyRole=assignment.subprofileCode??assignment.profileCode??"UNRESOLVED"
    const assignmentId=`${ASSIGNMENT_AUTHORITY}:${assignment.securityId}:${methodologyRole}`
