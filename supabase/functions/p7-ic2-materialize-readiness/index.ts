@@ -83,13 +83,19 @@ async function loadReviewFacts(admin:Admin,portfolioId:string,ids:readonly strin
  }
  for(let i=0;i<documentIds.length;i+=100){
   const idsChunk=documentIds.slice(i,i+100)
-  const [docs,links]=await Promise.all([
+  const [docs]=await Promise.all([
    admin.from("research_documents").select("id,security_id,reporting_period_start,reporting_period_end,reporting_period_type,published_at,canonical_content_hash,identity_status,authoritative_identifier_scheme,authoritative_identifier,metadata_identity_hash").in("id",idsChunk),
-   admin.from("research_document_sources").select("id,research_document_id,source_record_id,source_code,content_hash,source_status,provider_document_id,source_url,retrieved_at").in("research_document_id",idsChunk),
+   Promise.resolve({data:[],error:null}),
   ])
-  if(docs.error)throw docs.error;if(links.error)throw links.error
+  if(docs.error)throw docs.error
   researchDocuments.push(...(docs.data??[]) as unknown as ReviewedResearchDocument[])
-  documentSources.push(...(links.data??[]) as unknown as ReviewedDocumentSource[])
+  for(let offset=0;offset<5000;offset+=500){
+   const links=await admin.from("research_document_sources").select("id,research_document_id,source_record_id,source_code,content_hash,source_status,provider_document_id,source_url,retrieved_at").in("research_document_id",idsChunk).order("id").range(offset,offset+499)
+   if(links.error)throw links.error
+   documentSources.push(...(links.data??[]) as unknown as ReviewedDocumentSource[])
+   if((links.data?.length??0)<500)break
+   if(offset===4500)throw new Error("REVIEW_DOCUMENT_SOURCES_COMPLETENESS_NOT_PROVEN")
+  }
  }
  if(reviewSources.length!==sourceIds.length||researchDocuments.length!==documentIds.length)throw new Error("REVIEW_REFERENCED_FACTS_INCOMPLETE")
  return{reviews,reviewSources,researchDocuments,documentSources}
@@ -208,7 +214,7 @@ async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;mi
  })
  const metricCodes=canonicalMetricCodes[code]??[code]
  const candidates=observations.filter(x=>x.security_id===securityId&&metricCodes.includes(x.metric_code))
- const reviewed=await validateReviewedRequirementEvidence({portfolioId,portfolioOwnerId,securityId,requirementCode:code,family,metricCodes,minimum,reviews,sources:reviewSources,documents:researchDocuments,documentSources,definitions,evaluationAsOfMs,sourceCutoffAtMs})
+ const reviewed=await validateReviewedRequirementEvidence({portfolioId,portfolioOwnerId,securityId,requirementCode:code,family,metricCodes,minimum,reviews,sources:reviewSources,documents:researchDocuments,documentSources,definitions,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:freshness})
  const reconciliation=reconcileCanonicalAndReviewed({canonicalRows:candidates,reviewed,definitions,minimum,evaluationAsOfMs,sourceCutoffAtMs,family})
  if(reconciliation.validation.state==="FRESH"){
    const selected=reconciliation.validation.selected
@@ -277,7 +283,7 @@ Deno.serve(async request=>{
    const assignmentId=`${ASSIGNMENT_AUTHORITY}:${assignment.securityId}:${methodologyRole}`
    const lineage={classification_authority:CLASSIFICATION_AUTHORITY,classification_version:CLASSIFICATION_VERSION,methodology_role:methodologyRole,assignment_authority:ASSIGNMENT_AUTHORITY,assignment_id:assignmentId,assignment_version:ASSIGNMENT_VERSION}
    items.push({...blocked("IC3_SNAPSHOT_LINEAGE",1,null,[],"FRESH","IC3_LINEAGE_READY","NONE"),required:true,evidence_state:"FRESH",normalized_value:{sector:assignment.sector,industry:assignment.industry,...lineage},validation_state:"VALIDATED",canonical_selection_state:"IMMUTABLE_LINEAGE"})
-   const states=new Set(items.map(x=>x.evidence_state)),status=states.has("REVIEW_REQUIRED")?"REVIEW_REQUIRED":states.has("CONFLICTING")?"CONFLICTING":states.has("STALE")?"STALE":states.has("MISSING")||states.has("INSUFFICIENT")?"INSUFFICIENT":"READY"
+   const states=new Set(items.map(x=>x.evidence_state)),status=states.has("CONFLICTING")?"CONFLICTING":states.has("REVIEW_REQUIRED")?"REVIEW_REQUIRED":states.has("STALE")?"STALE":states.has("MISSING")||states.has("INSUFFICIENT")?"INSUFFICIENT":"READY"
    totals[status]=(totals[status]??0)+1
    const hash=await sha({securityId:security.id,authority,profile,subprofile:assignment.subprofileCode,registry:REGISTRY_VERSION,lineage,items})
    if(dryRun){dryRunResults.push({securityId:security.id,status,snapshotHash:hash,items});continue}
