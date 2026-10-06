@@ -17,6 +17,7 @@ export function CompanyAboutPanel({ portfolioId, securityId, symbol, companyName
 }) {
   const profile = useCompanyProfile(portfolioId, securityId)
   const logoUrl = companyLogoPublicUrl(profile.data?.logoStoragePath ?? null)
+  const [failedLogo, setFailedLogo] = useState<string | null>(null)
   const initial = (symbol.trim()[0] ?? companyName.trim()[0] ?? "?").toLocaleUpperCase()
   const scrollRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{ startY: number; startScrollTop: number } | null>(null)
@@ -82,7 +83,7 @@ export function CompanyAboutPanel({ portfolioId, securityId, symbol, companyName
     <header className="company-about-header">
       <div className="company-about-heading">
         <div className="company-logo-shell" aria-hidden="true">
-          {logoUrl ? <img src={logoUrl} alt="" loading="lazy" /> : <span>{initial}</span>}
+          {logoUrl && failedLogo !== logoUrl ? <img src={logoUrl} alt="" loading="lazy" onError={() => setFailedLogo(logoUrl)} /> : <span>{initial}</span>}
         </div>
         <div>
           <p className="eyebrow" id="company-about-title">About {symbol}</p>

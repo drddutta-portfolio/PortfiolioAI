@@ -1,3 +1,48 @@
+## Shared stock Research shell restoration — 6 October 2026
+
+**Owner-authorized D1–D3 presentation work = IMPLEMENTED / LOCALLY VERIFIED; hosted Development acceptance and merge remain pending. V1-4 remains IN PROGRESS / NOT PROVEN. V1-5 and downstream execution gates remain unchanged.**
+
+Restores the original HDFCBANK visual grammar through the shared Research route:
+owner plan beside read-only advisory/Key Insights, disabled interpretation slot,
+compact refresh with expandable profile capabilities, original context roles,
+preserved cockpit/heatmap/ratings in blocked states, compact readiness with
+collapsed immutable detail, source snapshots, Research Health and stock-specific
+profile/subprofile requirement/result blocks. Existing Pharma deep research remains.
+Unsupported profile presentation mappings retain explicit shared slots and the
+selected canonical requirement workspace rather than inheriting bank templates.
+
+Canonical reads remain the existing portfolio/accounting, position settings,
+company/research, scoring, R10 attention and selected evidence-detail paths.
+Retained external rating reads reuse the scoring repository's rating selection/map
+independently of score qualification. Tracking history uses the existing owner-scoped
+recommendation history SELECT; viewing does not create evaluations. Source availability
+is not presented as canonical VERIFIED; ambiguous source currency/scale and bare
+horizon units are not guessed. No new business fact, accounting formula or evidence
+validator is introduced; canonical-authority registry remains unchanged.
+
+Local authenticated browser checks against Development data covered HDFCBANK,
+TORNTPHARM, AKUMS and ABCAPITAL. Each retained the cockpit/heatmap/profile workspace;
+Pharma/holding-company snapshots showed no bank placeholders. HDFCBANK checked at
+1440, 1024 and 390px without horizontal page overflow or JavaScript errors.
+Evidence-tab requirements, Overview detail disclosure and refresh-capability
+disclosure were verified without invoking execution/edit controls. Only existing
+READ_CACHE market-price and terminal-disposition read requests were observed;
+no acquisition, refresh execution, review/materialization, tracking append or
+owner-setting writes were performed. Private screenshots remain outside the repo.
+
+Production build (including TypeScript) and architecture guard passed; changed-file
+lint passed. Repository-wide lint remains blocked by 81 errors / 4 warnings in
+unchanged files; the existing large Research bundle warning remains. 95 focused
+Research/canonical-route regressions passed across 10 test files.
+
+No migrations created or applied; no schema/Auth/RLS/provider/scheduler/Production
+changes. This does not certify new sector engines, numeric sizing, AI execution,
+evidence readiness or V1 release completion. See section 17 of
+`PortfolioAI_STOCK_RESEARCH_PAGE_DESIGN_PLAN_2026-10-06.md` for composition layers,
+component/authority map and honest unavailable combinations.
+
+---
+
 ## V1-4 evidence remediation / closure preparation — 6 October 2026
 
 **H1 semantic correction = COMPLETE. Source/history/ownership validator repairs = DEPLOYED. Consolidated next execution package = PREPARED / NOT EXECUTED. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT AUTHORIZED.**

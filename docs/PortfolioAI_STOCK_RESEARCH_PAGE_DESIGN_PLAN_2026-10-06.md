@@ -472,3 +472,72 @@ Preservation does not mean showing every banking metric for every stock. It mean
 - Bank-only content does not leak into Pharma, holding companies or other profiles.
 - All retained profile methodology remains accessible; collapsing detail is not deleting it.
 - No new financial formulas, scoring thresholds, confirmation counts or provider permissions are inferred from the screenshots.
+
+## 17. Shared-shell restoration implementation — 6 October 2026
+
+The owner authorized restoring the original HDFCBANK visual baseline on Development,
+with one basic shell for all stocks and stock/sector/industry/sub-sector research
+blocks. This is presentation integration under D1–D3, not authorization to open
+V1-5 or downstream execution gates.
+
+### 17.1 Two composition layers
+
+**Basic shell:** identity/About/position; owner plan alongside read-only advisory;
+interpretation slot and Key Insights; compact refresh with expandable capabilities;
+seven tabs; Business/research context, owner role and Classification; cockpit,
+section summaries, heatmap, external ratings; compact readiness; metric snapshots;
+Research Health; complete Documents/Evidence access. Loading, blocked and sparse
+pages retain this structure. An unavailable score never removes the cockpit or
+turns into an investment opinion.
+
+**Stock-specific extension:** the selected canonical snapshot's approved
+profile/subprofile and applicable immutable requirement items select the research
+blocks, source-bound normalized results, states, dates and lineage. They are scoped
+to the current portfolio/security. Canonical sector/industry labels are descriptive
+facts and do not infer a profile, subprofile or scoring method. Existing Pharma
+business-model/evidence workspace remains accessible after the common research
+health. Other approved profiles retain their selected-contract research blocks even
+when a richer snapshot presentation or scoring adapter is unavailable.
+
+No symbol-specific page, stylesheet, component tree or formula is introduced.
+Unknown presentation contracts expose unsupported states; they do not inherit bank
+metrics or a generic scoring engine. The existing reference-stock refresh eligibility
+remains the authority for operational controls.
+
+### 17.2 Concrete component and authority map
+
+| Region | Component / shared path | Availability and preservation |
+|---|---|---|
+| Identity, position, classification | `ResearchPage` → `usePortfolioView`, `useSecurityResearch`, `useSecurityScoring` | Existing accounting and canonical route; no page-local accounting |
+| About/logo | `CompanyAboutPanel` → existing company-profile repository | Cached narrative retained; failed logo uses an initial |
+| Owner plan/edit | `PositionDecisionControls` → existing position settings repository | Existing explicit owner writes only; decimal formatting and unset-role distinction preserved |
+| Suggestion, reasons, Key Insights | Shared Research header → R10 action-center view and canonical scoring snapshot | Read-only current state; unavailable role/range slots and prerequisite explanations; no fallback HOLD/Wait |
+| Interpretation | Shared disabled interpretation region | Capability/result wiring remains downstream authorized work; rendering issues no AI request |
+| Tracking history | `ResearchTrackingHistory` → existing `loadRecommendationHistory` | Explicit history disclosure performs SELECT only; historical records are not current advice |
+| Refresh | `CompleteResearchRefreshPanel` → existing typed profile/reference eligibility | Capabilities collapsed by default; existing explicit planning/execution safeguards retained |
+| Cockpit/heatmap | `ResearchScorecardPanel` → canonical scoring snapshot / R6 presentation | Complete current qualified run required for numbers; blocked/sparse regions retained |
+| Ratings | `useExternalRatings` → `loadCachedExternalRatings` in scoring repository | Existing rating authority browsed independently of score readiness; provider opinion/status/dates visible |
+| Readiness | `CanonicalEvidenceReadinessPanel` → `useCanonicalEvidenceReadiness` | Compact stored-state/top-blocker summary; complete immutable matrix and provenance collapsed in Overview and expanded in Evidence |
+| Metric snapshots | Existing profile UI registry and research repository | Bank and Pharma configurations retained; source status distinguished from canonical validation; ambiguous unit/currency hidden from overview amounts |
+| Other profile results | `ProfileResearchBlocks` → selected canonical evidence details | First six applicable requirements, source-bound retained result disclosures, complete Evidence link; no readiness recomputation |
+| Deep Pharma research | Existing `PharmaResearchWorkspacePanel` | Existing model/exposure/review tools and methodology retained |
+| Research Health, documents, source ledger | Existing shared Research components / research repository | Original observations and audit detail retained; source counts are not validated coverage |
+
+### 17.3 Honest unavailable combinations
+
+- A selected profile with blocked evidence retains the common cockpit/heatmap,
+  provider ratings and source snapshots. No stale numeric assessment is promoted.
+- Validated evidence without a qualified score run shows retained results and
+  prerequisites, not an invented assessment or action.
+- Missing presentation metadata for an approved profile uses the selected canonical
+  requirement blocks; bank placeholders do not fill the gap.
+- Legacy source availability is labelled as retained source availability; it does
+  not carry a canonical VERIFIED badge into the overview.
+- Ambiguous `Cr` / `Cr.` amounts without proven currency are marked unproven.
+  Original values remain in Evidence. A bare owner horizon is not assigned months
+  or years by the UI.
+
+This implementation does not introduce source acquisition, normalization, evidence
+review writes, new formulas, provider permissions, migrations, Auth/RLS changes,
+schedulers, or recommendation-preview tracking writes. Scoring/advisory/AI completion
+and release acceptance retain their separate gate contracts.

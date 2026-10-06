@@ -155,12 +155,12 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       <div>
         <p className="eyebrow">Owner-controlled research refresh</p>
         <h2 id="complete-research-refresh-title">Research Refresh</h2>
-        <p>These Pharma research areas are ready to receive evidence as their approved refresh capabilities become available.</p>
+        <p>The selected profile’s research areas are ready to receive evidence as their approved refresh capabilities become available.</p>
       </div>
       <button type="button" className="button button-secondary" disabled title="Complete refresh execution is not yet enabled for this profile">Plan complete refresh</button>
     </div>}
 
-    {refreshModules.length ? <div className="profile-refresh-workspace" aria-label={`${ui.profileCode} research modules`}>
+    {refreshModules.length ? <details className="refresh-capabilities"><summary>Profile refresh capabilities</summary><div className="profile-refresh-workspace" aria-label={`${ui.profileCode} research modules`}>
       {refreshModules.map((module) => <div className="complete-refresh-plan" key={module.code}>
         <div>
           <p className="eyebrow">{module.eyebrow}</p>
@@ -215,7 +215,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
           <p className="assessment-note">{module.note}</p>
         </>}
       </div>)}
-    </div> : null}
+    </div></details> : <p className="assessment-note">No approved profile-specific refresh capabilities are available.</p>}
 
   </section>
 }

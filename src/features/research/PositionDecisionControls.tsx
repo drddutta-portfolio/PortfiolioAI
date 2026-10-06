@@ -7,6 +7,7 @@ import {
 } from "../../data/positionDecisionRepository"
 import { displayError } from "../../lib/displayError"
 import type { PortfolioRole } from "../portfolio/types"
+import { formatPercent } from "../portfolio/format"
 import "./PositionDecisionControls.css"
 import "./PositionDecisionControlsPolish.css"
 
@@ -30,7 +31,7 @@ function money(value: string | null, currency: string) {
 }
 
 function percent(value: string | null) {
-  return value ? `${value}%` : "Not set"
+  return value ? formatPercent(value) : "Not set"
 }
 
 function roleLabel(value: UserPortfolioRole) {
@@ -83,12 +84,11 @@ export function PositionDecisionControls({
 
   useEffect(() => {
     let active = true
-    setLoading(true)
-    setError(null)
     void loadPositionDecisionSettings(portfolioId, securityId)
       .then((loaded) => {
         if (!active) return
         const next = loaded ?? fallback
+        setError(null)
         setSettings(next)
         setDraft({
           portfolioRole: next.portfolioRole,
@@ -162,15 +162,15 @@ export function PositionDecisionControls({
 
     {!editing ? <>
       <div className="position-decision-summary">
-        <article><span>Target price</span><strong>{money(settings.targetPrice, currency)}</strong><small>{settings.targetPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
-        <article><span>Stop loss</span><strong>{money(settings.stopLossPrice, currency)}</strong><small>{settings.stopLossPrice ? "Saved · alert-ready" : "Not configured"}</small></article>
+        <article><span>Target price</span><strong>{money(settings.targetPrice, currency)}</strong><small>{settings.targetPrice ? "Saved reference" : "Not configured"}</small></article>
+        <article><span>Stop loss</span><strong>{money(settings.stopLossPrice, currency)}</strong><small>{settings.stopLossPrice ? "Saved reference" : "Not configured"}</small></article>
         <article><span>Target weight</span><strong>{percent(settings.targetWeight)}</strong><small>Portfolio allocation guide</small></article>
-        <article><span>Investment horizon</span><strong>{settings.investmentHorizon ?? "Not set"}</strong><small>Your intended holding horizon</small></article>
+        <article><span>Investment horizon</span><strong>{settings.investmentHorizon ?? "Not set"}</strong><small>Saved owner horizon; numerical values need a unit</small></article>
       </div>
       <div className="position-decision-role">
         <span>Your selected role</span>
-        <strong>{roleLabel(settings.portfolioRole)}</strong>
-        <small>Manual portfolio decision · current weight {percent(currentWeight)}</small>
+        <strong>{!settings.id && currentRole === "UNCLASSIFIED" ? "Unclassified" : roleLabel(settings.portfolioRole)}</strong>
+        <small>Manual portfolio decision · current weight {formatPercent(currentWeight)}</small>
       </div>
     </> : <div className="position-decision-editor">
       <label>
@@ -189,6 +189,6 @@ export function PositionDecisionControls({
       </div>
     </div>}
 
-    <p className="assessment-note">Target and stop-loss values remain owner-controlled. PortfolioAI advisory output is displayed separately.</p>
+    <p className="assessment-note">Target and stop-loss values remain owner-controlled. PortfolioAI advisory output is displayed separately. Saved target/stop-loss references do not imply an active notification service.</p>
   </section>
 }

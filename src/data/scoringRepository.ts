@@ -343,7 +343,7 @@ export async function loadSecurityScoringSnapshot(
   const [modelResult, profileResult, ratingsResult, observationsResult, marketObservationsResult] = await Promise.all([
     scoringDb.from("scoring_models").select("id,name,status").eq("code", "PAI_STOCK_SCORE").eq("version", 1).maybeSingle(),
     scoringDb.from("scoring_profiles").select("code,name").eq("code", profileCode).maybeSingle(),
-    scoringDb.from("external_rating_observations").select("id,agency_code,instrument_type,instrument_description,rating_symbol,outlook,rating_action,rating_date,source_url,retrieved_at,fresh_until,evidence_status").eq("security_id", securityId).order("rating_date", { ascending: false, nullsFirst: false }).order("retrieved_at", { ascending: false }),
+    loadExternalRatingRows(securityId),
     scoringDb.from("fundamental_observations").select("metric_code,numeric_value,evidence_status,period_end,retrieved_at,fresh_until").eq("security_id", securityId),
     scoringDb.from("market_metric_observations").select("metric_code,numeric_value,evidence_status,as_of_date,retrieved_at,fresh_until").eq("security_id", securityId),
   ])
@@ -382,13 +382,7 @@ export async function loadSecurityScoringSnapshot(
     dimensions = previewDimensions((rulesResult.data ?? []), (observationsResult.data ?? []), marketRows, ratingRows, weights, (metricOverridesResult.data ?? []))
   }
 
-  const ratings: ExternalRatingObservation[] = ratingRows.map((row) => ({
-    id: String(row.id), agencyCode: String(row.agency_code), instrumentType: row.instrument_type === null ? null : String(row.instrument_type),
-    instrumentDescription: row.instrument_description === null ? null : String(row.instrument_description), ratingSymbol: String(row.rating_symbol),
-    outlook: row.outlook === null ? null : String(row.outlook), ratingAction: row.rating_action === null ? null : String(row.rating_action),
-    ratingDate: row.rating_date === null ? null : String(row.rating_date), sourceUrl: String(row.source_url), retrievedAt: String(row.retrieved_at),
-    freshUntil: String(row.fresh_until), evidenceStatus: String(row.evidence_status),
-  }))
+  const ratings = mapExternalRatings(ratingRows)
 
   const weightedEligible = dimensions.filter((dimension) => dimension.dimensionWeight > 0)
   const totalDimensionWeight = weightedEligible.reduce((sum, dimension) => sum + dimension.dimensionWeight, 0)
@@ -409,4 +403,27 @@ export async function loadSecurityScoringSnapshot(
     evidenceConfidence: run ? Number(run.evidence_confidence) : Math.round(previewEvidenceCoverage * 100),
     asOfDate: run?.as_of_date ?? null, dimensions, ratings, previewMode: !run,
   }
+}
+
+
+function mapExternalRatings(rows: readonly RatingRow[]): ExternalRatingObservation[] {
+  return rows.map((row) => ({
+    id: String(row.id), agencyCode: String(row.agency_code), instrumentType: row.instrument_type === null ? null : String(row.instrument_type),
+    instrumentDescription: row.instrument_description === null ? null : String(row.instrument_description), ratingSymbol: String(row.rating_symbol),
+    outlook: row.outlook === null ? null : String(row.outlook), ratingAction: row.rating_action === null ? null : String(row.rating_action),
+    ratingDate: row.rating_date === null ? null : String(row.rating_date), sourceUrl: String(row.source_url), retrievedAt: String(row.retrieved_at),
+    freshUntil: String(row.fresh_until), evidenceStatus: String(row.evidence_status),
+  }))
+}
+
+/** Retained provider opinions are browsable independently of scoring qualification. */
+export async function loadCachedExternalRatings(securityId: string): Promise<readonly ExternalRatingObservation[]> {
+  const result = await loadExternalRatingRows(securityId)
+  if (result.error) throw result.error
+  return mapExternalRatings(result.data ?? [])
+}
+
+
+function loadExternalRatingRows(securityId: string) {
+  return scoringDb.from("external_rating_observations").select("id,agency_code,instrument_type,instrument_description,rating_symbol,outlook,rating_action,rating_date,source_url,retrieved_at,fresh_until,evidence_status").eq("security_id", securityId).order("rating_date", { ascending: false, nullsFirst: false }).order("retrieved_at", { ascending: false })
 }

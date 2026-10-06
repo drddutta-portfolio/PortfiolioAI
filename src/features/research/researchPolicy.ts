@@ -136,3 +136,12 @@ export function formatResearchMetric(metric: ResearchMetric | undefined) {
   if (metric.currency === "INR" || metric.unit === "INR") return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(Number(metric.value))
   return metric.value
 }
+
+/** Source display only: never guess currency from an ambiguous provider scale. */
+export function formatSourceResearchMetric(metric: ResearchMetric | undefined) {
+  if (!metric?.value) return "Unavailable"
+  const unit = metric.unit
+  if (!unit || unit === "UNKNOWN") return "Unit unavailable"
+  if (unit.includes("PERCENT") || ["INR_CRORE", "INR_PER_SHARE", "INR", "RATIO"].includes(unit)) return formatResearchMetric(metric)
+  return "Unit / currency unproven"
+}

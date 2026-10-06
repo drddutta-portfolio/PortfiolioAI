@@ -1,3 +1,4 @@
+import { SECTOR_ENGINE_REGISTRY } from "./sectorEngineRegistry"
 import { describe, expect, it } from "vitest"
 import { researchProfileUiContract, researchRefreshModulesForSecurity } from "./researchProfileUiContract"
 
@@ -117,10 +118,24 @@ describe("researchProfileUiContract", () => {
 
   it("falls back safely for unknown profiles without inventing a sector contract", () => {
     const fallback = researchProfileUiContract("UNREGISTERED_PROFILE")
-    expect(fallback.profileCode).toBe("GENERAL")
+    expect(fallback.profileCode).toBe("UNREGISTERED_PROFILE")
+    expect(fallback.snapshotGroups.flatMap(group => group.codes)).toEqual([])
+    expect(fallback.dimensionOrder).toEqual([])
     expect(fallback.readinessMode).toBe("NONE")
     expect(fallback.refreshModules).toHaveLength(0)
     expect(fallback.financialWorkspaceSections).toHaveLength(0)
     expect(fallback.qualityGrowthWorkspaceSections).toHaveLength(0)
   })
+  it("has an explicit presentation outcome for every registered profile, with no bank fallback", () => {
+    const codes = [...new Set(SECTOR_ENGINE_REGISTRY.flatMap(engine => engine.profileCodes))]
+    for (const code of codes) {
+      const contract = researchProfileUiContract(code)
+      expect(contract.snapshotGroups.length).toBeGreaterThan(0)
+      if (!["BANK", "BANK_NBFC"].includes(code)) {
+        expect(contract.snapshotGroups.flatMap(group => group.codes)).not.toContain("GROSS_NPA_PERCENT")
+        expect(contract.snapshotGroups.flatMap(group => group.codes)).not.toContain("DEPOSITS_GROWTH_YOY")
+      }
+    }
+  })
+
 })

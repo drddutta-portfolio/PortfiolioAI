@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import type { P7CurrentEvidenceDetails, P7EvidenceRequirement } from "../../data/p7CurrentIntelligenceRepository"
 const mocks = vi.hoisted(() => ({ hook: vi.fn() }))
 vi.mock("./useCanonicalEvidenceReadiness", () => ({ useCanonicalEvidenceReadiness: mocks.hook }))
+import { ProfileResearchBlocks } from "./ProfileResearchBlocks"
 import { CanonicalEvidenceReadinessPanel } from "./CanonicalEvidenceReadinessPanel"
 
 const snapshot: P7CurrentEvidenceDetails["snapshot"] = { snapshotId: "snapshot", portfolioId: "portfolio", securityId: "security", asOfDate: "2026-09-29", snapshotStatus: "REVIEW_REQUIRED", profileCode: "RETAIL_COMMERCE", subprofileCode: null, methodologyAuthority: "approved", methodologyVersion: "v1", classificationVersion: "v1", methodologyRole: "PRIMARY", assignmentId: "assignment", assignmentVersion: "v1" }
@@ -53,4 +54,21 @@ describe("canonical evidence requirement presentation", () => {
     mocks.hook.mockReturnValue({ applicable: false, isLoading: false, error: null, data: null })
     mount(); expect(screen.getByText(/equity methodology requirements do not apply/)).toBeTruthy()
   })
+  it("keeps the Overview summary compact with the complete immutable detail collapsed", () => {
+    render(<CanonicalEvidenceReadinessPanel portfolioId="portfolio" securityId="security" assetClass="EQUITY" compact />)
+    expect(screen.getByRole("heading", { name: "Research Readiness" })).toBeInTheDocument()
+    expect(screen.getByText("Complete requirements and source lineage").closest("details")).not.toHaveAttribute("open")
+    expect(screen.getByText(/Minimum history: 252/)).toBeInTheDocument()
+    expect(screen.getByText("Snapshot provenance")).toBeInTheDocument()
+  })
+
+  it.each(["BANK", "PHARMA", "FINANCIAL_HOLDING", "UNRESOLVED"])("uses the selected %s requirement without importing bank templates", profileCode => {
+    mocks.hook.mockReturnValue({ applicable: true, isLoading: false, error: null, data: { snapshot: { ...snapshot, profileCode, subprofileCode: profileCode === "PHARMA" ? "CDMO_CRAMS" : null }, requirements: [{ ...requirement, requirement_code: "SELECTED_CONTRACT_REQUIREMENT", normalized_value: { sourceValue: "12.5", scope: "STANDALONE" } }] } })
+    render(<ProfileResearchBlocks portfolioId="portfolio" securityId="security" assetClass="EQUITY" onViewEvidence={vi.fn()} />)
+    expect(screen.getByText("Selected Contract Requirement")).toBeInTheDocument()
+    expect(screen.getByText(/"sourceValue": "12.5"/)).toBeInTheDocument()
+    expect(screen.queryByText("Gross NPA Ratio")).not.toBeInTheDocument()
+    expect(screen.getByText("View complete profile evidence")).toBeInTheDocument()
+  })
+
 })

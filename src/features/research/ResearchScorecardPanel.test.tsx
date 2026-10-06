@@ -36,7 +36,7 @@ describe("ResearchScorecardPanel shared score states", () => {
   afterEach(cleanup)
 
   it("retains numeric scored cards for BANK_NBFC", () => {
-    render(<ResearchScorecardPanel snapshot={snapshot("BANK_NBFC", [dimension("QUALITY", 87, .81)])} isLoading={false} error={null} />)
+    render(<ResearchScorecardPanel snapshot={{ ...snapshot("BANK_NBFC", [dimension("QUALITY", 87, .81)]), runState: "COMPLETE", scoreRunId: "run-1" }} isLoading={false} error={null} />)
     const quality = screen.getByText("Quality").closest("summary")
     expect(quality).not.toBeNull()
     expect(within(quality!).getByText("87")).toBeInTheDocument()
@@ -47,7 +47,7 @@ describe("ResearchScorecardPanel shared score states", () => {
     render(<ResearchScorecardPanel snapshot={snapshot("PHARMA_V1", [dimension("QUALITY", null, .34), dimension("GROWTH", null, 0)])} isLoading={false} error={null} />)
     expect(screen.getAllByText("Not score-ready").length).toBeGreaterThan(0)
     expect(screen.getByText("34% evidence reviewed")).toBeInTheDocument()
-    expect(screen.getAllByText("No validated evidence yet").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("No qualified assessment").length).toBeGreaterThan(0)
     expect(screen.getAllByText("View evidence", { exact: false }).length).toBeGreaterThan(0)
     const growth = screen.getByText("Growth").closest("summary")
     expect(growth).not.toBeNull()
@@ -72,9 +72,10 @@ describe("ResearchScorecardPanel shared score states", () => {
       methodologyState: "METHODOLOGY_NOT_AVAILABLE",
       methodologyReasonCode: "REGISTERED_PROFILE_METHODOLOGY_PENDING",
     }} isLoading={false} error={null} />)
-    expect(screen.getByText("Research methodology not available")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Research methodology not available" })).toBeInTheDocument()
     expect(screen.getByText(/will not substitute the GENERAL scoring profile/u)).toBeInTheDocument()
-    expect(screen.queryByText("Overall stock score")).not.toBeInTheDocument()
+    expect(screen.getByText("Overall stock score")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "External ratings" })).toBeInTheDocument()
   })
 
   it("shows a truthful execution-pending state for an available K4 methodology", () => {
@@ -88,9 +89,10 @@ describe("ResearchScorecardPanel shared score states", () => {
       overallScore: null,
       dimensions: [],
     }} isLoading={false} error={null} />)
-    expect(screen.getByText("Sector methodology available")).toBeInTheDocument()
+    expect(screen.getByText(/Sector methodology available; scoring execution/u)).toBeInTheDocument()
     expect(screen.getByText(/pending evidence\/adapter rollout/u)).toBeInTheDocument()
-    expect(screen.queryByText("Overall stock score")).not.toBeInTheDocument()
+    expect(screen.getByText("Overall stock score")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "External ratings" })).toBeInTheDocument()
   })
 
   it("shows the Program B readiness, methodology role and evidence snapshot without conflating evidence coverage", () => {
@@ -123,4 +125,27 @@ describe("ResearchScorecardPanel shared score states", () => {
     rerender(<ResearchScorecardPanel snapshot={{ ...snapshot("BANK_NBFC", []), ratings: [{ id: "rating-1", agencyCode: "CARE", ratingSymbol: "AAA", outlook: "STABLE", ratingDate: null, ratingAction: null, instrumentType: null, instrumentDescription: null, sourceUrl: "https://example.test/rating", retrievedAt: "2026-09-15T00:00:00Z", freshUntil: "2026-10-15T00:00:00Z", evidenceStatus: "VERIFIED" }] }} isLoading={false} error={null} />)
     expect(screen.getByRole("heading", { name: "External ratings" })).toBeInTheDocument()
   })
+  it.each(["BLOCKED", "PENDING_ADAPTER"] as const)("preserves the cockpit, heatmap and ratings without leaking retained scores when %s", state => {
+    render(<ResearchScorecardPanel snapshot={{ ...snapshot("BANK_NBFC", [dimension("QUALITY", 97, 1)]), scoringExecutionState: state, methodologyState: "AVAILABLE", runState: "COMPLETE", scoreRunId: "historical-run", overallScore: 97 }} isLoading={false} error={null} />)
+    expect(screen.getByText("Overall stock score")).toBeInTheDocument()
+    expect(screen.getByLabelText("Investment score heatmap")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "External ratings" })).toBeInTheDocument()
+    expect(screen.queryByText("97")).not.toBeInTheDocument()
+    expect(screen.queryByText("Why this score?")).not.toBeInTheDocument()
+  })
+
+  it("retains ratings even with an unresolved methodology", () => {
+    render(<ResearchScorecardPanel snapshot={null} isLoading={false} error={null} retainedRatings={[{ id: "rating", agencyCode: "Agency", instrumentType: "BOND", instrumentDescription: "Rated bond", ratingSymbol: "AAA", outlook: "STABLE", ratingAction: null, ratingDate: "2026-06-30", sourceUrl: "https://example.com/rating", retrievedAt: "2026-07-01", freshUntil: "2026-08-01", evidenceStatus: "REVIEW_REQUIRED" }]} />)
+    expect(screen.getAllByText("AAA / Stable")).toHaveLength(2)
+    expect(screen.getByText(/Source status: REVIEW_REQUIRED/)).toBeInTheDocument()
+    expect(screen.queryByText("Why this score?")).not.toBeInTheDocument()
+  })
+
+  it("distinguishes a rating read failure from zero cached instruments", () => {
+    render(<ResearchScorecardPanel snapshot={snapshot("BANK_NBFC", [])} isLoading={false} error={null} retainedRatings={[]} ratingsError="Permission denied" />)
+    expect(screen.getByRole("alert")).toHaveTextContent("Permission denied")
+    expect(screen.getByText("External ratings unavailable")).toBeInTheDocument()
+    expect(screen.queryByText("No external agency ratings cached")).not.toBeInTheDocument()
+  })
+
 })
