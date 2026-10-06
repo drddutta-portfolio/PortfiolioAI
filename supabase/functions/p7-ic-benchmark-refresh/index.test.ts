@@ -12,8 +12,10 @@ describe("p7-ic-benchmark-refresh V1-4 Batch B integration",()=>{
  })
  it("increments request counters before provider requests and preserves them in failure output",()=>{
   expect(source).toContain("counters.instrumentMasterRequests+=1")
-  expect(source).toContain("counters.attemptedHistoryRequests+=1")
+  expect(source).toContain('if(kind==="HISTORY")counters.attemptedHistoryRequests+=1')
+  expect(source).toContain('if(kind==="AUTHENTICATE")counters.providerAuthenticationRequests+=1')
   expect(source).toContain("counters.successfulHistoryResponses+=1")
+  expect(source).toContain("getDailyHistoryNoRetry")
   expect(source).toContain("counters.acceptedRows+=")
   expect(source).toContain("counters.persistedRows+=")
   expect(source).toContain("...actionCounters(counters)")
