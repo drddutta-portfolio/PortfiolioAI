@@ -1,3 +1,16 @@
+## V1-4 Codex B0 accounting repair — 7 October 2026
+
+V1-4 remains IN PROGRESS / NOT PROVEN; V1-5 unauthorized. The single fresh B0
+attempt received Angel HTTP 200, then stopped before durable capture because its
+control tried to UPDATE the append-only provider-usage ledger. The control now
+retains the immutable UNKNOWN attempt and appends observed transport stages;
+no guard/schema/authentication was weakened. Control v6 deployed; three regression
+cases, architecture check, changed-file Edge lint, TypeScript/Vite build and diff
+check passed. No retry, R2 write, benchmark write or materialization occurred.
+See `PortfolioAI_V1_4_CODEX_B0_CONTROL_REPAIR_2026-10-07.md` for exact evidence.
+
+---
+
 ## HDFCBANK sample deployment to Development — 6 October 2026
 
 Owner explicitly requested the HDFCBANK-only redesigned sample on the existing

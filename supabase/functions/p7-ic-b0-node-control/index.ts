@@ -13,7 +13,7 @@ const DB_WARNING_BYTES=400_000_000
 const DB_ACTION_BYTES=450_000_000
 const DB_HARD_STOP_BYTES=475_000_000
 const CAPACITY_SNAPSHOT_BYTES=202_812_563
-const CAPACITY_SNAPSHOT_AT="2026-10-06T17:37:14.383727Z"
+const CAPACITY_SNAPSHOT_AT="2026-10-06T19:05:07.246310Z"
 const CAPACITY_SNAPSHOT_MAX_AGE_MS=30*60*1000
 const EXPECTED_B0_CONTROL_INCREMENT_BYTES=100_000
 const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, content-type"}
@@ -60,12 +60,6 @@ async function usageStart(admin:ReturnType<typeof createClient>,grantId:string){
   })
   if(ins.error)throw new Error("B0_CONTROL_USAGE_WRITE_FAILED")
 }
-async function usageResponse(admin:ReturnType<typeof createClient>,grantId:string,outcome:"SUCCEEDED"|"FAILED",code:string|null){
-  const up=await admin.from("provider_usage_events").update({
-    completed_at:new Date().toISOString(),outcome,safe_error_code:code
-  }).eq("source_code","ANGEL_ONE").eq("idempotency_key","V1_4_B0_NODE_MASTER_"+grantId)
-  if(up.error)throw new Error("B0_CONTROL_USAGE_UPDATE_FAILED")
-}
 async function stage(admin:ReturnType<typeof createClient>,grantId:string,name:string,payload:Record<string,unknown>){
   const at=new Date().toISOString(),raw={grant_id:grantId,stage:name,at,...payload}
   const ins=await admin.from("data_source_records").insert({source_code:"ANGEL_ONE",record_kind:STAGE_KIND,external_record_id:grantId+":"+name+":"+at,retrieved_at:at,payload_hash:await hexSha256(JSON.stringify(raw)),raw_payload:raw,terms_snapshot:{mode:"V1_4_B0_NODE_APPEND_ONLY"}})
@@ -97,9 +91,9 @@ Deno.serve(async req=>{
       if(!["RESPONSE_RECEIVED","BODY_COMPLETE","CAPTURE_PERSISTED"].includes(stageName))return json(400,{code:"INVALID_STAGE"})
       const outcome=String(body.requestOutcome??"UNKNOWN")
       await stage(admin,grantId,stageName,{request_outcome:outcome,http_status:body.httpStatus??null,byte_length:body.byteLength??null,payload_hash:body.payloadHash??null,object_key:body.objectKey??null})
-      if(stageName==="RESPONSE_RECEIVED"&&(outcome==="SUCCEEDED"||outcome==="FAILED")){
-        await usageResponse(admin,grantId,outcome,outcome==="SUCCEEDED"?null:"B0_PROVIDER_HTTP_FAILED")
-      }
+      // The usage attempt is immutable. Its UNKNOWN row records the initial
+      // attempt; this append-only stage records the independently observed
+      // transport outcome without a second billable attempt or an UPDATE.
       return json(200,{ok:true})
     }
     if(action==="PREFLIGHT_COMPLETE"){
