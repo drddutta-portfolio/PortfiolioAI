@@ -143,6 +143,12 @@ async function preflight(token:string,body:Record<string,unknown>){
   return{grantId,objectKey,byteLength:scan.byteLength,payloadHash:scan.sha256,rowCount:scan.rowCount,preflight:scan.preflight,allExact:scan.preflight.every(x=>x.status==="EXACT_MATCH")}
 }
 export default async function handler(request:Request){
+  const url=new URL(request.url)
+  if(request.method==="GET"&&url.searchParams.get("action")==="SELF_TEST"){
+    if(!devContext())return json(409,{code:"UNAPPROVED_RUNTIME",vercelEnv:process.env.VERCEL_ENV??null,gitRef:process.env.VERCEL_GIT_COMMIT_REF??null})
+    try{return json(200,{mode:"SELF_TEST",auth:"VERCEL_DEPLOYMENT_PROTECTION",result:await selfTest()})}
+    catch(e){return json(409,{code:e instanceof Error?e.message:"B0_NODE_SELF_TEST_FAILED"})}
+  }
   if(request.method!=="POST")return json(405,{code:"METHOD_NOT_ALLOWED"})
   if(!auth(request))return json(401,{code:"UNAUTHORIZED"})
   if(!devContext())return json(409,{code:"UNAPPROVED_RUNTIME",vercelEnv:process.env.VERCEL_ENV??null,gitRef:process.env.VERCEL_GIT_COMMIT_REF??null})
