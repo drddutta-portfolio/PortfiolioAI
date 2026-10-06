@@ -55,7 +55,7 @@ describe("Angel One session lifecycle", () => {
     })
     await expect(provider.getDailyHistoryNoRetry(instrument,"2025-09-01 00:00","2026-10-06 23:59")).rejects.toMatchObject({code:"ANGEL_PROVIDER_ERROR_AB1004"})
     expect(fetchMock).toHaveBeenCalledTimes(2)
-    expect(events).toEqual(["attempt:AUTHENTICATE","response:AUTHENTICATE:true","attempt:HISTORY","response:HISTORY:false"])
+    expect(events).toEqual(["attempt:AUTHENTICATE","response:AUTHENTICATE:true","attempt:HISTORY"])
   })
 
 })
