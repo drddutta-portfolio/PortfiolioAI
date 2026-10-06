@@ -12,56 +12,35 @@ No Angel One request, authentication request, history request, replacement acqui
 
 V1-4 remains **IN PROGRESS / NOT PROVEN**.
 
-## 1. Supabase hard size gate
+## 1. Supabase capacity policy
 
-Initial authoritative measurement at start of this task:
+Owner-confirmed application quota:
+- **500,000,000 bytes**
 
-- `pg_database_size('postgres') = 202,771,603 bytes`
+This replaces the obsolete 200,000,000-byte acquisition restriction.
 
-Owner ceiling:
+Latest authoritative measurement:
+- `pg_database_size('postgres') = 202,812,563 bytes`
+- quota used: **40.56%**
+- quota headroom: **297,187,437 bytes**
+- status: **NORMAL**
 
-- **strictly below 200,000,000 bytes**
+Capacity thresholds:
+- WARNING: 400,000,000 bytes
+- ACTION: 450,000,000 bytes
+- HARD STOP: 475,000,000 bytes
+- ABSOLUTE OWNER QUOTA: 500,000,000 bytes
 
-Therefore the database was already **2,771,603 bytes over the ceiling before implementation began**.
+B0 keeps the complete instrument-master body in Cloudflare R2. Supabase stores only compact control/audit rows and object metadata.
 
-The B0 control plane was intentionally deployed with mutating actions fail-closed.
+The deployed control function requires a recent authoritative capacity snapshot before mutating B0 actions:
+- snapshot max age: **30 minutes**
+- expected B0 control increment: **100,000 bytes**
+- projected size must remain below the 475,000,000-byte hard-stop threshold
 
-Final measurement:
+Before creating any future replacement acquisition grant, refresh the authoritative database-size snapshot provider-free and redeploy/update the control attestation if necessary.
 
-- `202,812,563 bytes`
-
-Difference during this phase:
-
-- +40,960 bytes
-
-No B0 application control rows, provider-usage rows, grants or grant consumptions were created during this phase. The database can allocate pages for extension/system activity and the provider-free health request used `pg_net`; this record does not attribute the 40,960-byte difference to B0 application data.
-
-Verified zero current B0 V3 rows:
-- `V1_4_B0_NODE_STAGE_V3`: 0
-- `V1_4_ANGEL_INSTRUMENT_MASTER_V3`: 0
-- provider usage `V1_4_B0_NODE_MASTER_%`: 0
-- new P4 grants in this phase: 0
-- new consumed P4 grants in this phase: 0
-
-Interrupted grant `ccddba7a-f599-4ca6-a48f-249b120dd9bd` remains exactly one consumed record.
-
-### Expected future compact control footprint
-
-Read-only row-size evidence:
-- average existing P4 grant/consumption row: 590.55 bytes
-- maximum observed existing P4 grant/consumption row: 984 bytes
-- average provider-usage row: 299.01 bytes
-- representative B0 stage JSONB payload: 449 bytes
-- representative B0 compact metadata JSONB payload: 402 bytes
-
-A replacement B0 is expected to add only compact control rows, not the master body:
-- grant <=1
-- grant consumption <=1
-- provider usage <=1
-- stage records <=5
-- compact metadata <=1
-
-Payload-level storage is only a few KiB. Allowing for tuple/index/page overhead, reopen the B0 DB write gate only after authoritative size is **<=199,500,000 bytes**, leaving at least 500,000 bytes headroom below the owner ceiling.
+No B0 V3 control rows, provider-usage rows, grants or grant consumptions were created during the provider-free preparation.
 
 ## 2. Cloudflare R2 storage design
 
@@ -183,12 +162,18 @@ Control source commits:
 
 Authenticated provider-free `HEALTH` returned HTTP 200.
 
-All mutating actions are currently blocked by:
-`WRITE_GATE_OPEN=false`
+Control v4 no longer contains the obsolete 200 MB hard block.
 
-Therefore no grant can currently be consumed and no provider attempt can begin.
+Mutating actions are instead capacity-gated by the owner-confirmed 500 MB policy and a fresh authoritative capacity attestation.
 
-When later reopened after authoritative DB-size verification below the operational threshold, `BEGIN_CAPTURE`:
+Current deployed capacity state:
+- verified bytes: 202,812,563
+- projected B0 control bytes: 202,912,563
+- level: NORMAL
+
+`BEGIN_CAPTURE` remains acquisition-grant gated and was not invoked.
+
+When later invoked under separate owner authorization, `BEGIN_CAPTURE`:
 - consumes a fresh scoped grant;
 - inserts one provider-usage row as `PROVIDER_TOOL_ATTEMPT`;
 - initial outcome `UNKNOWN`;
@@ -310,14 +295,16 @@ The deployed `SELF_TEST` additionally contains hash-mismatch and malformed/inter
 
 Do not authorize the provider GET yet.
 
+Capacity policy is no longer a blocker at the current 202,812,563-byte database size.
+
 Before a replacement B0 acquisition:
-1. reduce and verify Supabase Postgres to **<=199,500,000 bytes**;
-2. provider-free redeploy the control endpoint with `WRITE_GATE_OPEN=true` only after that measurement;
-3. obtain a supported way to invoke the protected Development Vercel function and run `SELF_TEST`;
-4. require the 40 MiB deployed Node test to PASS with recorded duration/RSS/heap;
-5. run an end-to-end Node -> R2 gateway synthetic test if protected-function invocation becomes available;
-6. confirm test object cleanup and zero provider/grant activity;
-7. only then prepare a fresh one-time B0 grant for separate owner approval.
+1. refresh and verify `pg_database_size('postgres')` within 30 minutes of the first B0 control write;
+2. require projected bounded B0 control writes to remain below the 475,000,000-byte hard-stop threshold and absolute 500,000,000-byte quota;
+3. complete the protected Development 40 MiB Vercel Node `SELF_TEST`;
+4. require recorded duration/RSS/heap and all twelve-code parser/failure-path checks to PASS;
+5. only then prepare a fresh one-time B0 grant for separate owner approval.
+
+Current SELF_TEST blocker is not code/build/runtime configuration: every available protected-deployment access method from the connected Vercel integration returns scope 403 for team `dibyendu-dutta`. No Deployment Protection setting was weakened.
 
 ## 10. Proposed replacement-B0 ceilings
 
@@ -338,8 +325,11 @@ R2:
 - no completed-capture delete through gateway
 
 Supabase:
-- database must remain <200,000,000 bytes at all times
-- operational B0 start gate <=199,500,000 bytes
+- absolute owner quota: <500,000,000 bytes
+- WARNING threshold: 400,000,000 bytes
+- ACTION threshold: 450,000,000 bytes
+- B0/noncritical HARD STOP threshold: 475,000,000 bytes
+- fresh capacity snapshot required before writes
 - fresh grant <=1
 - consumed grant row <=1
 - provider usage row <=1
@@ -364,7 +354,7 @@ Vercel build/deployment: **PASS / READY**.
 
 Deployed 40 MiB Node runtime self-test: **NOT VERIFIED due protected-preview tooling access**.
 
-Database size gate: **BLOCKED — current 202,812,563 bytes > 200,000,000**.
+Database capacity gate: **PASS / NORMAL — 202,812,563 bytes of 500,000,000**.
 
 Replacement acquisition grant: **NOT CREATED**.
 
