@@ -164,6 +164,9 @@ export function validateReviewedRequirementEvidence(input: {
   const supportIds: string[] = []
   const insufficientIds: string[] = []
   const contradictIds: string[] = []
+  const documentarySupportKeys: string[] = []
+  const ownershipPeriods: string[] = []
+  const ownershipRequirement = /(OWNERSHIP|PROMOTER|FII|DII|INSTITUTIONAL|SHAREHOLDING)/u.test(requirementCode)
   let latestSource: ReviewedSourceRecord | null = null
   let latestReview: RequirementReview | null = null
 
@@ -234,6 +237,26 @@ export function validateReviewedRequirementEvidence(input: {
       continue
     }
 
+    if (ownershipRequirement) {
+      if (!review.reviewed_by) return fail("REVIEW_REQUIRED", "HUMAN_REVIEW_AUTHORITY_MISSING", [review.id])
+      const ownershipValue = str(review.metadata.numeric_value)
+      const ownershipSeries = str(review.metadata.ownership_series)
+      const ownershipBasis = str(review.metadata.ownership_basis)
+      const periodAnchor = str(review.metadata.period_anchor)
+      const basisAnchor = str(review.metadata.basis_anchor)
+      if (!ownershipValue || !DECIMAL.test(ownershipValue) || Number(ownershipValue) < 0 || Number(ownershipValue) > 100
+        || review.unit !== "PERCENT" || !review.period_end || !validDate(review.period_end)
+        || review.period_type !== "QUARTER" || !ownershipSeries || !ownershipBasis
+        || !periodAnchor || !basisAnchor || !review.supporting_quote.includes(periodAnchor)
+        || !review.supporting_quote.includes(basisAnchor) || !review.supporting_quote.includes(ownershipValue)
+        || !review.supporting_quote.includes("%")) {
+        return fail("REVIEW_REQUIRED", "OWNERSHIP_REVIEW_CONTRACT_INCOMPLETE", [review.id])
+      }
+      supportIds.push(review.id); ownershipPeriods.push(review.period_end)
+      latestReview = review; latestSource = bound.source
+      continue
+    }
+
     const document = bound.document
     if (!review.reviewed_by) return fail("REVIEW_REQUIRED", "HUMAN_REVIEW_AUTHORITY_MISSING", [review.id])
     if (!document) return fail("REVIEW_REQUIRED", "DOCUMENTARY_REVIEW_REQUIRES_DOCUMENT", [review.id])
@@ -243,7 +266,8 @@ export function validateReviewedRequirementEvidence(input: {
       return fail("REVIEW_REQUIRED", "DOCUMENT_REVIEW_PERIOD_MISMATCH", [review.id])
     if (review.period_type && document.reporting_period_type && review.period_type !== document.reporting_period_type)
       return fail("REVIEW_REQUIRED", "DOCUMENT_REVIEW_PERIOD_TYPE_MISMATCH", [review.id])
-    supportIds.push(review.id); latestReview = review; latestSource = bound.source
+    supportIds.push(review.id); documentarySupportKeys.push(document.id + ":" + (review.period_end ?? "NO_PERIOD"))
+    latestReview = review; latestSource = bound.source
   }
 
   if (contradictIds.length && supportIds.length)
@@ -253,6 +277,20 @@ export function validateReviewedRequirementEvidence(input: {
   if (!supportIds.length && insufficientIds.length)
     return fail("INSUFFICIENT", "REVIEWED_SOURCE_INSUFFICIENT", insufficientIds)
   if (!supportIds.length) return fail("REVIEW_REQUIRED", "NO_APPROVED_ACTIVE_REVIEW", active.map(r => r.id))
+
+  if (ownershipRequirement && supportIds.length) {
+    const distinctPeriods = [...new Set(ownershipPeriods)].sort()
+    if (distinctPeriods.length < input.minimum)
+      return fail("INSUFFICIENT", "DISTINCT_OWNERSHIP_PERIODS_INSUFFICIENT", supportIds)
+    return {
+      state: "FRESH", reason: "REVIEWED_OWNERSHIP_SERIES_READY", observations: [],
+      selectedReviewIds: supportIds, sourceRecordId: latestSource?.id ?? null,
+      sourceCode: latestSource?.source_code ?? null, retrievedAt: latestSource?.retrieved_at ?? null,
+      evidenceAsOfDate: distinctPeriods.at(-1) ?? null, freshThrough: latestReview?.fresh_through ?? null,
+      lineage: { version: "V1_4_REVIEW_LEDGER_ADAPTER_V1", reviewIds: supportIds,
+        ownershipPeriods: distinctPeriods, ownershipBasisReviewed: true },
+    }
+  }
 
   if (observations.length) {
     const validation = validateObservationSeries({
@@ -276,6 +314,9 @@ export function validateReviewedRequirementEvidence(input: {
         sourceRecordIds: [...new Set(selected.map(row=>row.source_record_id))] },
     }
   }
+
+  if (new Set(documentarySupportKeys).size < input.minimum)
+    return fail("INSUFFICIENT", "DISTINCT_DOCUMENTARY_EVIDENCE_INSUFFICIENT", supportIds)
 
   return {
     state: "FRESH", reason: "REVIEWED_DOCUMENTARY_SUPPORT_READY", observations: [],
