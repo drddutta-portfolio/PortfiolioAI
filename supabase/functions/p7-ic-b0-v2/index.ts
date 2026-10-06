@@ -91,16 +91,16 @@ async function uploadBytes(admin:ReturnType<typeof createClient>,path:string,byt
 async function syntheticLocalVerify(){
   const tmp="/tmp/"+crypto.randomUUID()+".json",results:Record<string,unknown>={}
   try{
-    const created=await createSyntheticFile(tmp);results.tmpCapture=created
+    const created=await createSyntheticFile(tmp);results.tmpCapture=created;console.log("B0_V2_SYNTH_PHASE TMP_CAPTURE_COMPLETE",JSON.stringify(created))
     const file=await Deno.open(tmp,{read:true})
     const scan=await scanMasterArtifact({chunks:readableStreamChunks(file.readable),definitions:defs(),requestedCodes:V1_4_BATCH_B_CODES,expectedSha256:created.sha256})
-    results.localReadback={byteLength:scan.byteLength,sha256:scan.sha256,rowCount:scan.rowCount,allExact:scan.preflight.every(x=>x.status==="EXACT_MATCH"),statuses:scan.preflight.map(x=>({code:x.code,status:x.status}))}
+    results.localReadback={byteLength:scan.byteLength,sha256:scan.sha256,rowCount:scan.rowCount,allExact:scan.preflight.every(x=>x.status==="EXACT_MATCH"),statuses:scan.preflight.map(x=>({code:x.code,status:x.status}))};console.log("B0_V2_SYNTH_PHASE PREFLIGHT_COMPLETE",JSON.stringify({byteLength:scan.byteLength,rowCount:scan.rowCount}))
     let malformed=""
     try{await scanMasterArtifact({chunks:(async function*(){yield new TextEncoder().encode('[{"broken":1}')})(),definitions:defs(),requestedCodes:V1_4_BATCH_B_CODES})}catch(e){malformed=safe(e)}
-    results.malformed=malformed
+    results.malformed=malformed;console.log("B0_V2_SYNTH_PHASE MALFORMED_COMPLETE",malformed)
     const oneMiB=new Uint8Array(1024*1024);let oversize=""
     try{await captureByteStream((async function*(){for(let i=0;i<65;i++)yield oneMiB})(),{write(){},close(){}},V1_4_MASTER_MAX_RESPONSE_BYTES)}catch(e){oversize=safe(e)}
-    results.oversize=oversize
+    results.oversize=oversize;console.log("B0_V2_SYNTH_PHASE OVERSIZE_COMPLETE",oversize)
     let acc=advanceMasterCaptureAccounting(emptyMasterCaptureAccounting(),{stage:"ATTEMPT_STARTED"});results.interrupted=acc
     acc=advanceMasterCaptureAccounting(acc,{stage:"RESPONSE_RECEIVED",responseOk:true})
     acc=advanceMasterCaptureAccounting(acc,{stage:"BODY_COMPLETE"})
