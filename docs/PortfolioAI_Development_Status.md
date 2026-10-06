@@ -8,6 +8,10 @@ All 111 frozen members have 1,608 mandatory requirement jobs. Cache review ident
 
 Private JSON/CSV provides 46 conditional Trendlyne raw-capture requests (44 parameter, 2 ownership), zero executable Angel One requests and zero document retrievals. There are 685 unresolved field/period/factual jobs and 307 unresolved history-authority jobs. Required provider volume and full bookkeeping-inclusive write ceiling remain NOT PROVEN. The 46-row raw cap is not a campaign grant. Complete source-bound cache review and a request-scoped dispatcher budget before any provider action; no general audit loop or V1-5 is authorized.
 
+Code commits `09c37456b83c6c27ba13f7cfbbf475be947d7768` and `710cbca9a52b80a78766bdcd2225002acf303d22` are published. Development `complete-research-refresh` v30 and `p7-ic2-materialize-readiness` v20 are ACTIVE; all fetched-back files match the tested package. Existing authentication flags and owner/grant checks are unchanged. Protected Development Preview `dpl_3L5Uv5Ad4u3bRkbN9mud1Ad2GFVm` is READY at `710cbca9a52b80a78766bdcd2225002acf303d22`; subsequent changes are documentation only.
+
+Read-only reconciliation after code deployment (`2026-10-06T02:53:02.263825+00:00`) found zero deltas in snapshots/items/selections/lineage, grants/consumption and provider usage (1,720), with empty cron jobs and unchanged source/observation/history fingerprints. No new data was materialized. The frozen cohort and values remain unchanged.
+
 Tests: 75 focused pure Edge tests, two mocked actual Deno handler/writer tests, strict checks, application build, architecture guard and changed-file lint passed. See [Phase 1 implementation and acquisition record](PortfolioAI_V1_4_ACTION_B_PHASE1_IMPLEMENTATION_AND_ACQUISITION_PLAN_2026-10-05.md) and its private artifact links. No Production/main, database/migration/Auth/RLS, provider, scheduler, R2 or P8 action occurred.
 
 ---

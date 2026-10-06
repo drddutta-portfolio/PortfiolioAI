@@ -77,7 +77,13 @@ Required cache inputs are named explicitly by the generator. It validates the fr
 
 Validation: 75 focused pure Edge tests passed; two actual Deno handler/writer tests passed with mocked transport and rejected any provider target/unexpected observation write; strict Deno checks passed for changed modules and planner; application TypeScript/Vite build and architecture guard passed; changed-file Edge lint passed. The build retains an existing chunk-size warning. A baseline full-repository lint failure is not described as a new PASS.
 
-Runtime deployment and final read-only side-effect reconciliation are recorded in the current Development Status after publication. No V1-4 readiness materialization or provider execution is included in Phase 1.
+Implementation commit: `09c37456b83c6c27ba13f7cfbbf475be947d7768`; source correction commit: `710cbca9a52b80a78766bdcd2225002acf303d22`. Diff review restored the pre-existing provider User-Agent header from the authoritative baseline; the only final client change is its typed JSON callback. Affected parser and actual-writer tests passed again.
+
+Development Edge code deployed and fetched back byte-for-byte against the source package: `complete-research-refresh` v30 ACTIVE, existing `verify_jwt:true`; `p7-ic2-materialize-readiness` v20 ACTIVE, existing `verify_jwt:false` with existing explicit owner authentication. Authentication flags and handler ownership/grant checks were preserved. Bundle integrity IDs: `7df41c4a437d1575176d3965dcde81027f3b93d0a8b71368b4b103678d65851e` and `91fc706f7de4cdd1df236b09f438eedf3336231a4b88aaee5e0388b010938d46` respectively. Deployment is code publication, not provider/function execution or readiness materialization.
+
+Protected Vercel Development Preview `dpl_3L5Uv5Ad4u3bRkbN9mud1Ad2GFVm` is READY at source correction SHA `710cbca9a52b80a78766bdcd2225002acf303d22`, branch `PortfolioAI-Development`, project `portfiolio-ai`, target null/Preview. Later record updates are documentation only; do not require another build to retest unchanged application code. Deployment Protection remains enabled. No new authenticated-browser acceptance is claimed for this parser-only phase.
+
+Post-deployment read-only reconciliation at `2026-10-06T02:53:02.263825+00:00` matches the pre-Phase-1 baseline exactly: snapshots 1,485; items 22,401; selections 956; lineage 478; issued grants 1,209; consumed grants 1,202; provider usage 1,720; cron jobs empty. Source, observation, stock-history and benchmark-history fingerprints all unchanged. Approved private manifest/hash unchanged. No Production/main, database/schema/Auth/RLS, provider, scheduler, R2/storage, P8, backup or restore action occurred. No V1-4 readiness materialization is included in Phase 1.
 
 ## Private review artifacts and integrity
 
