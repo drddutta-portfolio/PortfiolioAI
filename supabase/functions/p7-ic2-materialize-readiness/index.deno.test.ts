@@ -35,8 +35,7 @@ Deno.test("V1-4 read-only handler authenticates owner, rejects Production and ne
       }
       if (url.pathname === "/rest/v1/research_evidence_requirement_reviews") {
         if (!pagedReviews) return new Response("[]", { headers: { "Content-Type": "application/json" } })
-        const range = new Headers(init?.headers ?? (input instanceof Request ? input.headers : undefined)).get("range") ?? "0-499"
-        const start = Number(range.split("-")[0] ?? 0)
+        const start = Number(url.searchParams.get("offset") ?? 0)
         const count = start === 0 ? 500 : start === 500 ? 1 : 0
         const rows = Array.from({ length: count }, (_, i) => ({
           id: "review-" + (start + i), portfolio_id: "test-portfolio", security_id: coverage.rows[0]!.securityId,
