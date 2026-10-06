@@ -4,6 +4,7 @@ type Admin = SupabaseClient
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
 import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvidence,parseTrendlyneOwnershipHistory,guardedNumericEvidenceState} from "../_shared/p7-ic-evidence-normalization.ts"
 import {cachedEvidenceReadiness,inspectStoredHistory,validateObservationSeries,P7_IC_INPUT_VALIDATION_VERSION,type InputObservation,type MetricDefinition,type HistoryRow,type HistoryValidation} from "../_shared/p7-ic-input-validation.ts"
+import {validateReviewedRequirementEvidence,type RequirementReview,type ReviewedSourceRecord,type ReviewedResearchDocument} from "../_shared/v14-reviewed-evidence.ts"
 import {p7IcProfileContract} from "../_shared/p7-ic-profile-contracts.ts"
 import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json" with {type:"json"}
 
@@ -19,9 +20,10 @@ type Json=Record<string,unknown>
 type CoverageRow={securityId:string;symbol:string;sector:string;industry:string;ic1State:string;profileCode:string|null;subprofileCode:string|null;methodologyAuthority:string|null;r7PolicyCode:string|null}
 type Observation=InputObservation & {security_id:string}
 type SourceRecord={id:string;source_code:string;record_kind:string;retrieved_at:string;raw_payload:Json}
+type ReviewFacts={reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[]}
 type History=HistoryValidation & {security_id:string}
 type Benchmark={code:string;mapping_status:string;provider_code:string|null;provider_instrument_id:string|null;verified_at:string|null;history:HistoryValidation}
-type Facts={portfolioId:string;generatedAt:string;totalEquities:number;securities:Array<{id:string;symbol:string;isin:string;exchange:string}>;observations:Observation[];definitions:MetricDefinition[];sourceRecords:SourceRecord[];histories:History[];benchmarks:Benchmark[]}
+type Facts={portfolioId:string;generatedAt:string;totalEquities:number;securities:Array<{id:string;symbol:string;isin:string;exchange:string}>;observations:Observation[];definitions:MetricDefinition[];sourceRecords:SourceRecord[];histories:History[];benchmarks:Benchmark[];reviewFacts:ReviewFacts}
 type Item={requirement_code:string;metric_code:string|null;required:boolean;minimum_history:number;freshness_policy:string|null;benchmark_authority:string[];applicability:"APPLICABLE"|"NOT_APPLICABLE";evidence_state:"FRESH"|"STALE"|"MISSING"|"INSUFFICIENT"|"CONFLICTING"|"REVIEW_REQUIRED"|"NOT_APPLICABLE";candidate_evidence_ids:string[];selected_evidence_id:string|null;evidence_as_of_date:string|null;retrieved_at:string|null;fresh_through:string|null;source_provider:string|null;raw_source_record_id:string|null;normalized_value:unknown;validation_state:string;canonical_selection_state:string;reason_code:string;recommended_remediation_action:string}
 
 const canonicalMetricCodes = P7_IC_CANONICAL_REQUIREMENT_METRICS
@@ -60,6 +62,23 @@ async function loadObservations(admin:Admin,ids:readonly string[],sourceCutoffAt
  throw new Error("OBSERVATION_READ_BOUND_EXCEEDED")
 }
 
+async function loadReviewFacts(admin:Admin,portfolioId:string,ids:readonly string[],sourceCutoffAt:string):Promise<ReviewFacts>{
+ const reviewResult=await admin.from("research_evidence_requirement_reviews")
+  .select("id,portfolio_id,security_id,requirement_code,review_kind,decision,source_record_id,research_document_id,provider_document_id,source_payload_hash,supporting_quote,period_start,period_end,period_type,unit,currency,consolidation_scope,published_at,retrieved_at,fresh_through,review_version,reviewed_by,reviewed_at,review_hash,supersedes_review_id,metadata")
+  .eq("portfolio_id",portfolioId).in("security_id",ids).lte("reviewed_at",sourceCutoffAt).order("reviewed_at").order("id")
+ if(reviewResult.error)throw reviewResult.error
+ const reviews=(reviewResult.data??[]) as unknown as RequirementReview[]
+ const sourceIds=[...new Set(reviews.map(row=>row.source_record_id).filter((id):id is string=>Boolean(id)))]
+ const documentIds=[...new Set(reviews.map(row=>row.research_document_id).filter((id):id is string=>Boolean(id)))]
+ const [sourceResult,documentResult]=await Promise.all([
+  sourceIds.length?admin.from("data_source_records").select("id,source_code,retrieved_at,published_at,payload_hash,raw_payload").in("id",sourceIds):Promise.resolve({data:[],error:null}),
+  documentIds.length?admin.from("research_documents").select("id,security_id,reporting_period_start,reporting_period_end,reporting_period_type,published_at,canonical_content_hash,identity_status").in("id",documentIds):Promise.resolve({data:[],error:null}),
+ ])
+ if(sourceResult.error)throw sourceResult.error
+ if(documentResult.error)throw documentResult.error
+ return{reviews,reviewSources:(sourceResult.data??[]) as unknown as ReviewedSourceRecord[],researchDocuments:(documentResult.data??[]) as unknown as ReviewedResearchDocument[]}
+}
+
 async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit:number,sourceCutoffAt:string):Promise<Facts>{
  const holdings=await admin.from("current_holdings").select("security_id,current_quantity").eq("portfolio_id",portfolioId)
  if(holdings.error)throw holdings.error
@@ -69,19 +88,20 @@ async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit
  const securities=(securitiesResult.data??[]).slice(offset,offset+limit).map(row=>({id:String(row.id),symbol:String(row.symbol),isin:String(row.isin??""),exchange:String(row.exchange??"")}))
  const ids=securities.map(row=>row.id)
  const totalEquities=securitiesResult.data?.length??0
- if(!ids.length)return{portfolioId,generatedAt:new Date().toISOString(),totalEquities,securities,observations:[],definitions:[],sourceRecords:[],histories:[],benchmarks:[]}
+ if(!ids.length)return{portfolioId,generatedAt:new Date().toISOString(),totalEquities,securities,observations:[],definitions:[],sourceRecords:[],histories:[],benchmarks:[],reviewFacts:{reviews:[],reviewSources:[],researchDocuments:[]}}
  const benchmarkResult=await admin.from("market_benchmarks").select("code,mapping_status,provider_code,provider_instrument_id,verified_at")
  if(benchmarkResult.error)throw benchmarkResult.error
- const [observations,definitionsResult,sourceRecordsResult,histories,benchmarkHistory]=await Promise.all([
+ const [observations,definitionsResult,sourceRecordsResult,histories,benchmarkHistory,reviewFacts]=await Promise.all([
   loadObservations(admin,ids,sourceCutoffAt),
   admin.from("fundamental_metric_definitions").select("code,canonical_unit,value_kind,is_active,freshness_seconds,definition"),
   admin.from("data_source_records").select("id,source_code,record_kind,retrieved_at,raw_payload").in("record_kind",["COMPLETE_RESEARCH_STRUCTURED_METRICS","COMPLETE_RESEARCH_DOCUMENT_SEARCH","COMPLETE_RESEARCH_OWNERSHIP"]).in("raw_payload->>security_id",ids).lte("retrieved_at",sourceCutoffAt).order("retrieved_at"),
   loadStockHistories(admin,ids,sourceCutoffAt),
   loadBenchmarkHistories(admin,(benchmarkResult.data??[]).map(row=>String(row.code)),sourceCutoffAt),
+  loadReviewFacts(admin,portfolioId,ids,sourceCutoffAt),
  ])
  for(const result of [definitionsResult,sourceRecordsResult])if(result.error)throw result.error
  const benchmarks=(benchmarkResult.data??[]).map(row=>({code:String(row.code),mapping_status:String(row.mapping_status),provider_code:row.provider_code===null?null:String(row.provider_code),provider_instrument_id:row.provider_instrument_id===null?null:String(row.provider_instrument_id),verified_at:row.verified_at===null?null:String(row.verified_at),history:benchmarkHistory.get(String(row.code))??inspectStoredHistory([],252,Date.parse(sourceCutoffAt))}))
- return{portfolioId,generatedAt:new Date().toISOString(),totalEquities,securities,observations,definitions:(definitionsResult.data??[]) as MetricDefinition[],sourceRecords:(sourceRecordsResult.data??[]) as SourceRecord[],histories,benchmarks}
+ return{portfolioId,generatedAt:new Date().toISOString(),totalEquities,securities,observations,definitions:(definitionsResult.data??[]) as MetricDefinition[],sourceRecords:(sourceRecordsResult.data??[]) as SourceRecord[],histories,benchmarks,reviewFacts}
 }
 const benchmarkish=(c:string)=>/(APPROVED_BENCHMARK|BENCHMARK_HISTORY|BENCHMARK_RELATIVE)/u.test(c)
 const ownershipish=(c:string)=>/(OWNERSHIP|PROMOTER|FII|DII|INSTITUTIONAL|SHAREHOLDING)/u.test(c)
@@ -148,8 +168,8 @@ function projectCachedRecords(records:SourceRecord[],security:{id:string;symbol:
  })
 }
 
-function requirementItem(input:{code:string;minimum:number;freshness:string|null;benchmarks:string[];securityId:string;observations:Observation[];definitions:MetricDefinition[];records:SourceRecord[];history?:History;benchmarkByCode:Map<string,Benchmark>;evaluationAsOfMs:number;sourceCutoffAtMs:number}):Item{
- const {code,minimum,freshness,benchmarks,securityId,observations,definitions,records,history,benchmarkByCode,evaluationAsOfMs,sourceCutoffAtMs}=input
+function requirementItem(input:{code:string;minimum:number;freshness:string|null;benchmarks:string[];portfolioId:string;securityId:string;observations:Observation[];definitions:MetricDefinition[];records:SourceRecord[];reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];history?:History;benchmarkByCode:Map<string,Benchmark>;evaluationAsOfMs:number;sourceCutoffAtMs:number}):Item{
+ const {code,minimum,freshness,benchmarks,portfolioId,securityId,observations,definitions,records,reviews,reviewSources,researchDocuments,history,benchmarkByCode,evaluationAsOfMs,sourceCutoffAtMs}=input
 
  if(benchmarkish(code)){
    const required=benchmarks.filter(x=>x.startsWith("NIFTY_")),rows=required.map(x=>benchmarkByCode.get(x))
@@ -168,7 +188,14 @@ function requirementItem(input:{code:string;minimum:number;freshness:string|null
    if(ownershipish(code)&&raw.p7_ic2_ownership_history&&typeof raw.p7_ic2_ownership_history==="object")return [{record,value:raw.p7_ic2_ownership_history as Json,...cachedEvidenceReadiness(String((raw.p7_ic2_ownership_history as Json).state??"MISSING"),raw.p7_ic2_ownership_history,minimum)}]
    return items.filter(x=>x&&typeof x==="object"&&String((x as Json).evidenceCode)===code).map(x=>({record,value:x as Json,...cachedEvidenceReadiness(guardedNumericEvidenceState(String((x as Json).state??"MISSING"),x,minimum),x,minimum)}))
  })
- const metricCodes=canonicalMetricCodes[code]??[code],candidates=observations.filter(x=>x.security_id===securityId&&metricCodes.includes(x.metric_code))
+ const metricCodes=canonicalMetricCodes[code]??[code]
+ const reviewed=validateReviewedRequirementEvidence({portfolioId,securityId,requirementCode:code,metricCodes,minimum,reviews,sources:reviewSources,documents:researchDocuments,definitions,evaluationAsOfMs,sourceCutoffAtMs})
+ if(reviewed){
+   if(reviewed.state!=="FRESH")return {...blocked(code,minimum,freshness,benchmarks,reviewed.state,reviewed.reason,"RECONCILE_REVIEWED_EVIDENCE_CONTRACT"),candidate_evidence_ids:[...reviewed.selectedReviewIds],raw_source_record_id:reviewed.sourceRecordId,retrieved_at:reviewed.retrievedAt,evidence_as_of_date:reviewed.evidenceAsOfDate,fresh_through:dateOnly(reviewed.freshThrough),source_provider:reviewed.sourceCode,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,reviewedEvidence:reviewed.lineage,observations:reviewed.observations}}
+   const first=reviewed.observations[0]??null
+   return {...blocked(code,minimum,freshness,benchmarks,"FRESH",reviewed.reason,"NONE"),metric_code:first?.metric_code??null,candidate_evidence_ids:[...reviewed.selectedReviewIds],selected_evidence_id:reviewed.selectedReviewIds.at(-1)??null,evidence_as_of_date:reviewed.evidenceAsOfDate,retrieved_at:reviewed.retrievedAt,fresh_through:dateOnly(reviewed.freshThrough),source_provider:reviewed.sourceCode,raw_source_record_id:reviewed.sourceRecordId,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,reviewedEvidence:reviewed.lineage,series:reviewed.observations},validation_state:"VALIDATED_REVIEW_LEDGER",canonical_selection_state:"DETERMINISTIC_REVIEW_LEDGER"}
+ }
+ const candidates=observations.filter(x=>x.security_id===securityId&&metricCodes.includes(x.metric_code))
  if(candidates.length){
    const validation=validateObservationSeries({rows:candidates,definitions,minimum,evaluationAsOfMs,sourceCutoffAtMs})
    if(validation.state!=="FRESH")return {...blocked(code,minimum,freshness,benchmarks,validation.state,validation.reason,"RECONCILE_CANONICAL_INPUT_CONTRACT"),candidate_evidence_ids:candidates.map(x=>x.id),normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,observations:candidates}}
@@ -220,7 +247,7 @@ Deno.serve(async request=>{
    else{
     const contract=p7IcProfileContract(assignment.profileCode)
     const plan=buildProfileEvidencePlan(contract),baseRecords=facts.sourceRecords.filter(x=>String(x.raw_payload.security_id)===security.id),records=projectCachedRecords(baseRecords,security,plan)
-    items=plan.requirements.map(req=>requirementItem({code:req.evidenceCode,minimum:req.minimumPeriods,freshness:(contract.signalRequirements.find(x=>(x.evidenceCodes??[x.signalCode]).includes(req.evidenceCode)) as {freshnessPolicy?:string}|undefined)?.freshnessPolicy??null,benchmarks:[...(contract.benchmarkAuthority??[])],securityId:security.id,observations:facts.observations,definitions:facts.definitions,records,history:historyById.get(security.id),benchmarkByCode,evaluationAsOfMs,sourceCutoffAtMs}))
+    items=plan.requirements.map(req=>requirementItem({code:req.evidenceCode,minimum:req.minimumPeriods,freshness:(contract.signalRequirements.find(x=>(x.evidenceCodes??[x.signalCode]).includes(req.evidenceCode)) as {freshnessPolicy?:string}|undefined)?.freshnessPolicy??null,benchmarks:[...(contract.benchmarkAuthority??[])],portfolioId,securityId:security.id,observations:facts.observations,definitions:facts.definitions,records,reviews:facts.reviewFacts.reviews,reviewSources:facts.reviewFacts.reviewSources,researchDocuments:facts.reviewFacts.researchDocuments,history:historyById.get(security.id),benchmarkByCode,evaluationAsOfMs,sourceCutoffAtMs}))
    }
    const methodologyRole=assignment.subprofileCode??assignment.profileCode??"UNRESOLVED"
    const assignmentId=`${ASSIGNMENT_AUTHORITY}:${assignment.securityId}:${methodologyRole}`
