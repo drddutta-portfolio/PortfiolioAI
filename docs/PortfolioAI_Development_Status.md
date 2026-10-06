@@ -1,3 +1,7 @@
+## Codex V1-4 retained-master execution — 2026-10-07
+
+B0 capture/readback/preflight COMPLETE after append-only accounting and exact-length R2 gateway repairs. Protected Development Preview at `108508ef7817fffe12c7c4468dffc88be597a758` is READY and hosted 40 MiB spool/readback passes. The real 34,101,944-byte master is retained in Development R2 with verified SHA-256; all twelve original required NSE index identities are UNAVAILABLE under the unchanged exact-match contract. B1 eligibility is 0/12; no authentication/history campaign was executed. Existing canonical evidence, frozen cohort and release thresholds remain unchanged. Owner authorizes needed Angel One/Trendlyne V1-4 calls, but provider repetition cannot substitute for absent exact authority. V1-4 remains IN PROGRESS / NOT PROVEN; V1-5 unauthorized. See `PortfolioAI_V1_4_CODEX_B0_FIXED_LENGTH_REPAIR_2026-10-07.md` for actual tests, grants, call/write reconciliation and remaining blockers.
+
 ## V1-4 Codex B0 accounting repair — 7 October 2026
 
 V1-4 remains IN PROGRESS / NOT PROVEN; V1-5 unauthorized. The single fresh B0
