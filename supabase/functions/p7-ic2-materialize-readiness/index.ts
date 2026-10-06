@@ -189,20 +189,24 @@ function requirementItem(input:{code:string;minimum:number;freshness:string|null
    return items.filter(x=>x&&typeof x==="object"&&String((x as Json).evidenceCode)===code).map(x=>({record,value:x as Json,...cachedEvidenceReadiness(guardedNumericEvidenceState(String((x as Json).state??"MISSING"),x,minimum),x,minimum)}))
  })
  const metricCodes=canonicalMetricCodes[code]??[code]
+ const candidates=observations.filter(x=>x.security_id===securityId&&metricCodes.includes(x.metric_code))
+ let canonicalFailure:Item|null=null
+ if(candidates.length){
+   const validation=validateObservationSeries({rows:candidates,definitions,minimum,evaluationAsOfMs,sourceCutoffAtMs})
+   if(validation.state==="FRESH"){
+     const selected=validation.selected,x=newestObservation(selected)
+     const freshDates=selected.map(row=>row.fresh_until!).sort()
+     return {...blocked(code,minimum,freshness,benchmarks,"FRESH",validation.reason,"NONE"),metric_code:x.metric_code,candidate_evidence_ids:candidates.map(row=>row.id),selected_evidence_id:x.id,evidence_as_of_date:selected.at(-1)!.period_end,retrieved_at:x.retrieved_at,fresh_through:dateOnly(freshDates[0]!),source_provider:x.source_code,raw_source_record_id:x.source_record_id,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,series:selected},validation_state:"VALIDATED",canonical_selection_state:"DETERMINISTIC_HISTORY_AGGREGATE"}
+   }
+   canonicalFailure={...blocked(code,minimum,freshness,benchmarks,validation.state,validation.reason,"RECONCILE_CANONICAL_INPUT_CONTRACT"),candidate_evidence_ids:candidates.map(x=>x.id),normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,observations:candidates}}
+ }
  const reviewed=validateReviewedRequirementEvidence({portfolioId,securityId,requirementCode:code,metricCodes,minimum,reviews,sources:reviewSources,documents:researchDocuments,definitions,evaluationAsOfMs,sourceCutoffAtMs})
  if(reviewed){
-   if(reviewed.state!=="FRESH")return {...blocked(code,minimum,freshness,benchmarks,reviewed.state,reviewed.reason,"RECONCILE_REVIEWED_EVIDENCE_CONTRACT"),candidate_evidence_ids:[...reviewed.selectedReviewIds],raw_source_record_id:reviewed.sourceRecordId,retrieved_at:reviewed.retrievedAt,evidence_as_of_date:reviewed.evidenceAsOfDate,fresh_through:dateOnly(reviewed.freshThrough),source_provider:reviewed.sourceCode,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,reviewedEvidence:reviewed.lineage,observations:reviewed.observations}}
+   if(reviewed.state!=="FRESH")return canonicalFailure??{...blocked(code,minimum,freshness,benchmarks,reviewed.state,reviewed.reason,"RECONCILE_REVIEWED_EVIDENCE_CONTRACT"),candidate_evidence_ids:[...reviewed.selectedReviewIds],raw_source_record_id:reviewed.sourceRecordId,retrieved_at:reviewed.retrievedAt,evidence_as_of_date:reviewed.evidenceAsOfDate,fresh_through:dateOnly(reviewed.freshThrough),source_provider:reviewed.sourceCode,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,reviewedEvidence:reviewed.lineage,observations:reviewed.observations}}
    const first=reviewed.observations[0]??null
    return {...blocked(code,minimum,freshness,benchmarks,"FRESH",reviewed.reason,"NONE"),metric_code:first?.metric_code??null,candidate_evidence_ids:[...reviewed.selectedReviewIds],selected_evidence_id:reviewed.selectedReviewIds.at(-1)??null,evidence_as_of_date:reviewed.evidenceAsOfDate,retrieved_at:reviewed.retrievedAt,fresh_through:dateOnly(reviewed.freshThrough),source_provider:reviewed.sourceCode,raw_source_record_id:reviewed.sourceRecordId,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,reviewedEvidence:reviewed.lineage,series:reviewed.observations},validation_state:"VALIDATED_REVIEW_LEDGER",canonical_selection_state:"DETERMINISTIC_REVIEW_LEDGER"}
  }
- const candidates=observations.filter(x=>x.security_id===securityId&&metricCodes.includes(x.metric_code))
- if(candidates.length){
-   const validation=validateObservationSeries({rows:candidates,definitions,minimum,evaluationAsOfMs,sourceCutoffAtMs})
-   if(validation.state!=="FRESH")return {...blocked(code,minimum,freshness,benchmarks,validation.state,validation.reason,"RECONCILE_CANONICAL_INPUT_CONTRACT"),candidate_evidence_ids:candidates.map(x=>x.id),normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,observations:candidates}}
-   const selected=validation.selected,x=newestObservation(selected)
-   const freshDates=selected.map(row=>row.fresh_until!).sort()
-   return {...blocked(code,minimum,freshness,benchmarks,"FRESH",validation.reason,"NONE"),metric_code:x.metric_code,candidate_evidence_ids:candidates.map(row=>row.id),selected_evidence_id:x.id,evidence_as_of_date:selected.at(-1)!.period_end,retrieved_at:x.retrieved_at,fresh_through:dateOnly(freshDates[0]!),source_provider:x.source_code,raw_source_record_id:x.source_record_id,normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,series:selected},validation_state:"VALIDATED",canonical_selection_state:"DETERMINISTIC_HISTORY_AGGREGATE"}
- }
+ if(canonicalFailure)return canonicalFailure
  const review=normalized.find(x=>x.state.includes("REVIEW"))
  if(review){
    const historyReview=minimum>1&&Array.isArray(review.value.matchedSections)
