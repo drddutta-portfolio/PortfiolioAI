@@ -60,7 +60,10 @@ function safeCode(error:unknown) {
   return error instanceof Error && /^P7_IC_[A-Z0-9_]+$/u.test(error.message) ? error.message : "P7_IC_BENCHMARK_REFRESH_FAILED"
 }
 function actionCounters(counters:BatchBCounters) {
-  return { ...counters, providerCalls: counters.instrumentMasterRequests + counters.attemptedHistoryRequests }
+  return {
+    ...counters,
+    providerCalls:counters.instrumentMasterRequests+counters.providerAuthenticationRequests+counters.attemptedHistoryRequests,
+  }
 }
 function requestedCodes(body:Body) {
   return Array.isArray(body.benchmarkCodes) && body.benchmarkCodes.every(x=>typeof x==="string") ? body.benchmarkCodes as string[] : []
@@ -174,6 +177,7 @@ Deno.serve(async request=>{
         await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_MASTER_"+String(body.grantId),operationClass:"INSTRUMENT_MASTER",attemptedAt,completedAt,outcome:"FAILED",units:1,safeErrorCode:"P7_IC_BENCHMARK_MASTER_HTTP_FAILED"})
         throw new Error("P7_IC_BENCHMARK_MASTER_HTTP_FAILED")
       }
+      counters.successfulInstrumentMasterResponses+=1
       let parsed:unknown
       try{parsed=JSON.parse(bodyText)}catch{throw new Error("P7_IC_BENCHMARK_MASTER_JSON_INVALID")}
       if(!Array.isArray(parsed))throw new Error("P7_IC_BENCHMARK_MASTER_SCHEMA_INVALID")
@@ -205,19 +209,26 @@ Deno.serve(async request=>{
     leaseHolder=String(lease.data[0].lease_holder??"")
     const anchor=await admin.from("current_holdings").select("security_id").eq("portfolio_id",PORTFOLIO_ID).limit(1).single()
     if(anchor.error)throw new Error("P7_IC_BENCHMARK_ANCHOR_MISSING")
-    const provider=new AngelOneProvider(loadAngelOneConfig())
+    const provider=new AngelOneProvider(loadAngelOneConfig(),{
+      onAttempt(kind){
+        if(kind==="AUTHENTICATE")counters.providerAuthenticationRequests+=1
+        if(kind==="HISTORY")counters.attemptedHistoryRequests+=1
+      },
+      onResponse(kind,ok){
+        if(kind==="AUTHENTICATE"&&ok)counters.successfulAuthenticationResponses+=1
+      },
+    })
     const results:Record<string,unknown>[]=[]
 
     for(const code of codes){
       const identity=preflight.find(x=>x.code===code)?.identity
       if(!identity)throw new Error("P7_IC_BENCHMARK_MAPPING_MISSING")
       const attemptedAt=new Date().toISOString()
-      counters.attemptedHistoryRequests+=1
       let candles
       try{
         const from=new Date(window.requestFrom+"T00:00:00Z")
         const to=new Date(window.requestTo+"T00:00:00Z")
-        candles=await provider.getDailyHistory({
+        candles=await provider.getDailyHistoryNoRetry({
           mappingId:code,securityId:String(anchor.data.security_id),providerInstrumentId:identity.token,
           exchange:identity.exchange,tradingSymbol:identity.symbol,
         },kolkataDateTime(from),kolkataDateTime(new Date(to.getTime()+86400000-1)))
