@@ -6,8 +6,13 @@ other stocks use the pre-redesign page composition through a temporary fallback.
 New shell styles are scoped to the sample container. Shared canonical evidence
 safeguards remain active; no methodology, financial formula, database migration,
 provider acquisition or execution permission changes. This narrows the earlier
-shared-shell rollout; all-stock rollout awaits sample review. Hosted deployment
-status is pending verification.
+shared-shell rollout; all-stock rollout awaits sample review. Preview deployment for commit `2b3829e4` completed (Vercel GitHub check PASS).
+Preview: https://portfiolio-ai-git-research-shared-shell-redesign-dibyendu-dutta.vercel.app/app/research/b47b007d-1990-4504-a5a2-4391c07687c5
+The hosted route redirects to Vercel authentication; authenticated hosted acceptance
+remains pending. Local authenticated Chromium checks confirmed the HDFCBANK sample
+container and scoped styles, and the existing TORNTPHARM composition without sample
+styles. Build/TypeScript, architecture guard, changed-file lint and 17 focused tests
+passed. No Development-branch merge or Production promotion occurred.
 
 ---
 
