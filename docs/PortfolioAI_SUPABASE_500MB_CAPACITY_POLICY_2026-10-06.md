@@ -4,7 +4,10 @@
 
 PortfolioAI Development Supabase Postgres quota for application planning is:
 
-- **500,000,000 bytes**
+- Supabase platform documentation labels the Free-plan database-size threshold as **500 MB**.
+- Supabase documents `pg_database_size(...)` as the authoritative database-size measurement.
+- The platform documentation does **not** publish an exact decimal-vs-binary byte conversion for the displayed 500 MB label.
+- The owner therefore defines the PortfolioAI application quota conservatively as **500,000,000 bytes**.
 
 This replaces the obsolete 200,000,000-byte acquisition restriction.
 
