@@ -173,7 +173,7 @@ Supabase stores only small metadata:
 
 Never store the master JSON/base64 body in Postgres.
 
-This also protects the owner requirement that Supabase Postgres remain around/below the 200 MB operating ceiling.
+This also protects the owner-confirmed Supabase Postgres capacity policy: 500,000,000-byte quota, with large B0 artifacts kept in Cloudflare R2 and only compact control metadata retained in Postgres.
 
 ### Development Node function
 
