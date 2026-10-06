@@ -1,4 +1,5 @@
 import {createHash} from "node:crypto"
+import {spoolArtifact} from "../server/b0-artifact-spool.ts"
 import {
   V1_4_MASTER_MAX_RESPONSE_BYTES,
   V1_4_MASTER_FETCH_TIMEOUT_MS,
@@ -77,23 +78,31 @@ async function localFailureTests(){
 async function selfTest(){
   const start=performance.now(),before=snapshotMem(),peak={rss:before.rss,heapUsed:before.heapUsed}
   const scan=await scanMasterArtifact({chunks:syntheticMaster(TARGET_SYNTHETIC_BYTES,peak),definitions:defs(),requestedCodes:V1_4_BATCH_B_CODES})
+  const artifact=await spoolArtifact(syntheticMaster(TARGET_SYNTHETIC_BYTES,peak),V1_4_MASTER_MAX_RESPONSE_BYTES)
+  let spool
+  try{
+    const readback=await scanMasterArtifact({chunks:readableStreamChunks(artifact.stream() as unknown as ReadableStream<Uint8Array>),definitions:defs(),requestedCodes:V1_4_BATCH_B_CODES,expectedSha256:artifact.sha256})
+    if(readback.sha256!==scan.sha256||readback.byteLength!==scan.byteLength)throw new Error("B0_SPOOL_READBACK_MISMATCH")
+    spool={byteLength:artifact.byteLength,sha256:artifact.sha256,readbackVerified:true}
+  }finally{await artifact.cleanup()}
   const after=snapshotMem(),failures=await localFailureTests()
   return{
     runtime:{node:process.version,vercelEnv:process.env.VERCEL_ENV??null,gitRef:process.env.VERCEL_GIT_COMMIT_REF??null,region:process.env.VERCEL_REGION??null},
     durationMs:Math.round(performance.now()-start),
     memory:{before,after,observedPeak:{rss:Math.max(peak.rss,after.rss),heapUsed:Math.max(peak.heapUsed,after.heapUsed)}},
     synthetic:{byteLength:scan.byteLength,sha256:scan.sha256,rowCount:scan.rowCount,allExact:scan.preflight.every(x=>x.status==="EXACT_MATCH"),statuses:scan.preflight.map(x=>({code:x.code,status:x.status}))},
-    failures,
+    failures,spool,
   }
 }
 async function smallPayload(){
   const enc=new TextEncoder(),rows=[...exactRows(),{token:"X",exch_seg:"NSE",symbol:"OTHER",name:"OTHER",instrumenttype:"EQ",extra:"Y".repeat(128*1024)}]
   const b=enc.encode(JSON.stringify(rows));if(b.byteLength>MAX_TEST_OBJECT_BYTES)throw new Error("B0_TEST_OBJECT_TOO_LARGE");return b
 }
-async function gatewayFetch(token:string,key:string,method:string,body?:BodyInit){
+async function gatewayFetch(token:string,key:string,method:string,body?:BodyInit,byteLength?:number){
   if(!allowedObjectKey(key))throw new Error("B0_R2_KEY_FORBIDDEN")
   const headers=new Headers({authorization:"Bearer "+token,"x-b0-object-key":key})
   if(body)headers.set("content-type","application/json")
+  if(byteLength!==undefined)headers.set("content-length",String(byteLength))
   return fetch(GATEWAY_URL,{method,headers,body,redirect:"error",signal:AbortSignal.timeout(60_000),...(body?{duplex:"half" as const}:{})} as RequestInit)
 }
 async function r2Test(token:string){
@@ -124,15 +133,15 @@ async function capture(token:string,body:Record<string,unknown>){
   if(!response.ok||!response.body)throw new Error("B0_PROVIDER_HTTP_FAILED")
   const declared=Number(response.headers.get("content-length")??"0");if(declared>V1_4_MASTER_MAX_RESPONSE_BYTES)throw new Error("P7_IC_BENCHMARK_MASTER_RESPONSE_TOO_LARGE")
   const retrievedAt=new Date().toISOString(),objectKey=CAPTURE_PREFIX+grantId+"/"+retrievedAt.replace(/[:.]/gu,"-")+".json"
-  const hash=createHash("sha256");let bytes=0,complete=false
-  const stream=response.body.pipeThrough(new TransformStream<Uint8Array,Uint8Array>({transform(chunk,ctl){bytes+=chunk.byteLength;if(bytes>V1_4_MASTER_MAX_RESPONSE_BYTES)throw new Error("P7_IC_BENCHMARK_MASTER_RESPONSE_TOO_LARGE");hash.update(chunk);ctl.enqueue(chunk)},flush(){complete=true}}))
-  const put=await gatewayFetch(token,objectKey,"PUT",stream as unknown as BodyInit)
-  if(!complete)throw new Error("B0_BODY_INCOMPLETE")
-  const payloadHash=hash.digest("hex")
-  await control(token,{action:"MARK_STAGE",grantId,stage:"BODY_COMPLETE",requestOutcome:"SUCCEEDED",httpStatus:response.status,byteLength:bytes,payloadHash,objectKey})
-  const pc=classifyPutStatus(put.status);if(pc!=="OK")throw new Error(pc)
-  await control(token,{action:"MARK_STAGE",grantId,stage:"CAPTURE_PERSISTED",requestOutcome:"SUCCEEDED",httpStatus:response.status,byteLength:bytes,payloadHash,objectKey})
-  return{grantId,codes,objectKey,byteLength:bytes,payloadHash,retrievedAt}
+  const artifact=await spoolArtifact(readableStreamChunks(response.body),V1_4_MASTER_MAX_RESPONSE_BYTES)
+  try{
+    const bytes=artifact.byteLength,payloadHash=artifact.sha256
+    await control(token,{action:"MARK_STAGE",grantId,stage:"BODY_COMPLETE",requestOutcome:"SUCCEEDED",httpStatus:response.status,byteLength:bytes,payloadHash,objectKey})
+    const put=await gatewayFetch(token,objectKey,"PUT",artifact.stream() as unknown as BodyInit,bytes)
+    const pc=classifyPutStatus(put.status);if(pc!=="OK")throw new Error(pc)
+    await control(token,{action:"MARK_STAGE",grantId,stage:"CAPTURE_PERSISTED",requestOutcome:"SUCCEEDED",httpStatus:response.status,byteLength:bytes,payloadHash,objectKey})
+    return{grantId,codes,objectKey,byteLength:bytes,payloadHash,retrievedAt}
+  }finally{await artifact.cleanup()}
 }
 async function preflight(token:string,body:Record<string,unknown>){
   const grantId=String(body.grantId??""),objectKey=String(body.objectKey??""),expected=String(body.payloadHash??""),codes=validateCodes(body.benchmarkCodes)
