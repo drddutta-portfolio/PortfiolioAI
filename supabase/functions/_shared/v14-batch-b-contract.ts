@@ -51,6 +51,9 @@ export type IdentityPreflight = Readonly<{
 
 export type BatchBCounters = {
   instrumentMasterRequests: number
+  successfulInstrumentMasterResponses: number
+  providerAuthenticationRequests: number
+  successfulAuthenticationResponses: number
   attemptedHistoryRequests: number
   successfulHistoryResponses: number
   acceptedRows: number
@@ -58,7 +61,11 @@ export type BatchBCounters = {
 }
 
 export function emptyBatchBCounters(): BatchBCounters {
-  return { instrumentMasterRequests: 0, attemptedHistoryRequests: 0, successfulHistoryResponses: 0, acceptedRows: 0, persistedRows: 0 }
+  return {
+    instrumentMasterRequests:0,successfulInstrumentMasterResponses:0,
+    providerAuthenticationRequests:0,successfulAuthenticationResponses:0,
+    attemptedHistoryRequests:0,successfulHistoryResponses:0,acceptedRows:0,persistedRows:0,
+  }
 }
 
 function text(value: unknown) {
