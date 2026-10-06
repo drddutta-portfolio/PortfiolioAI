@@ -3,7 +3,7 @@
 **Date:** 6 October 2026 (Asia/Kolkata)
 **Repository:** drddutta-portfolio/PortfiolioAI
 **Target branch:** PortfolioAI-Development
-**Design version:** STOCK_RESEARCH_WORKSPACE_V2_1_PROPOSAL
+**Design version:** STOCK_RESEARCH_WORKSPACE_V2_2_TWO_PART_DESIGN
 **Status:** Consolidated design specification / implementation proposal. Documentation creation is authorized; this document does not independently authorize application changes, provider execution, migrations or later V1 gates.
 **Reference baseline:** `95ae01330f87e7adc35a79da084f4beb9157c2bd`
 **Product rule:** One PortfolioAI, one reusable stock Research shell, profile-specific research within it.
@@ -32,11 +32,27 @@ The R4M freeze lists detailed region ordering; the consistency audit describes a
 
 No existing reference is deleted, rewritten or declared obsolete by this document. Any future alteration to frozen region ordering must be a named, reviewable amendment.
 
-## 3. Fixed shell and dynamic research content
+## 3. Two-part stock-page design: common shell and stock-specific research
 
-Every stock uses the same route, layout components, tabs, card grammar, typography, evidence interactions and loading/error vocabulary.
+Every stock Research page consists of **two design parts**. This applies to ALL stocks, including stocks with incomplete research, blocked evidence or unsupported presentation metadata. HDFCBANK is a visual baseline for the common shell; its banking content is not the template for every stock.
 
-### Three distinct configuration layers
+### Part 1 — Basic shell, common to ALL stocks
+
+Every stock uses the same route, layout components, region order, tabs, card grammar, typography, responsive behavior, evidence interactions and loading/error vocabulary. The shell provides identity and classification, About, price/portfolio exposure, owner plan, advisory and interpretation slots, Key Insights, refresh controls, research navigation, context, cockpit, heatmap, ratings, readiness, snapshots, Research Health and access to Documents/Evidence.
+
+Common design does not mean identical values or research dimensions. These regions display the selected stock's actual data and applicable research, or an honest unavailable state. A blocked profile retains the shell. Section 4 defines its shared regions and section 17 maps the implementation.
+
+### Part 2 — Stock-specific research design and group-built research data
+
+Within the common shell, reusable research blocks present the content appropriate to the stock's canonical sector, industry, sub-sector/group/subgroup, approved research profile/subprofile and applicable approved overlays. These classification fields remain distinct from methodological assignments: the approved effective research contract selects requirements, dimensions, metrics and modules; the UI must not infer a methodology from a sector label or ticker.
+
+This part must expose the research data and results already built for the applicable group of stocks: relevant financial and operating observations, normalized metrics and history, business-model/exposure research, source documents, supporting and contradictory evidence, validation/review states, requirement coverage, freshness, blockers, and qualified persisted assessments and explanations where available. It is substantive research content, not merely a sector badge or a different card title.
+
+Stocks in the same approved research group reuse the group's presentation modules and methodology contract. Each stock displays only its own security-scoped observations, evidence and results, with portfolio scope where applicable. Group reuse must never copy another stock's values or apply banking metrics to an unrelated business. Existing research remains accessible through the relevant shared tabs and expandable specialist blocks even when the Overview shows only a compact selection.
+
+### Implementation configuration layers supporting the two design parts
+
+The following three technical layers implement the two design parts; they are not three separate page designs.
 
 1. **Universal shell:** identity, company description, exposure, owner plan, advisory regions, navigation, overview, evidence and document interactions.
 2. **Approved effective research contract:** applicable dimensions, metrics, requirements, history, freshness, benchmarks, labels and workspace modules.
@@ -102,7 +118,7 @@ Financial history tables should distinguish annual, quarterly, TTM, instant and 
 
 Evidence rows show human-readable explanations first and technical reason codes on expansion. Audit detail remains accessible; it is not removed to shorten the page.
 
-## 6. Sector, industry, group and subprofile adaptation
+## 6. Part 2 content: sector, industry, sub-sector and profile/subprofile adaptation
 
 The approved canonical assignment selects the effective methodology. A shared presentation registry maps that methodology to groups and labels; it must not classify the security or calculate scores.
 
@@ -480,7 +496,7 @@ with one basic shell for all stocks and stock/sector/industry/sub-sector researc
 blocks. This is presentation integration under D1–D3, not authorization to open
 V1-5 or downstream execution gates.
 
-### 17.1 Two composition layers
+### 17.1 Implementation of the two design parts
 
 **Basic shell:** identity/About/position; owner plan alongside read-only advisory;
 interpretation slot and Key Insights; compact refresh with expandable capabilities;
@@ -541,3 +557,30 @@ This implementation does not introduce source acquisition, normalization, eviden
 review writes, new formulas, provider permissions, migrations, Auth/RLS changes,
 schedulers, or recommendation-preview tracking writes. Scoring/advisory/AI completion
 and release acceptance retain their separate gate contracts.
+
+
+## 18. Two-part design implementation and acceptance clarification — 6 October 2026
+
+This amendment makes section 3 the explicit two-part product design contract. It clarifies presentation and preservation of research already built; it does not claim that every research engine, richer specialist view or downstream action workflow is implemented.
+
+### 18.1 Implementation sequence
+
+1. Maintain one shared stock-page shell and shared responsive styles for every stock. Preserve the old page's visual baseline and Development's evidence safeguards.
+2. Resolve canonical classification and the approved effective profile/subprofile through existing shared authorities. Show unresolved assignments explicitly.
+3. Select reusable group-specific presentation modules from that effective contract. Specialize content and applicability within common regions and tabs; do not create a separate page for each symbol.
+4. Bind the current security's existing research observations, normalized results, evidence requirements, reviews, documents and lineage into the applicable modules. Keep source availability, validated evidence, qualified assessment and actionable advice visibly distinct.
+5. Present compact research highlights in Overview and retain complete group-specific research in the relevant tabs, specialist disclosures and Evidence. Summary limits must not discard underlying research.
+6. Verify the common shell and the correct group-specific content across banks, Pharma, holding companies and other approved profiles, including unresolved, sparse and blocked states. New methodology or engine work retains its existing authorization boundary.
+
+### 18.2 Required acceptance evidence
+
+| Requirement | Acceptance evidence |
+|---|---|
+| Part 1: common shell for ALL stocks | Same shared route, regions, navigation, interaction grammar and responsive behavior across supported, unresolved and blocked profiles. |
+| Part 2: appropriate group-specific design | Canonical classification and approved profile/subprofile are visible; applicable metrics, requirements and specialist blocks differ according to the effective contract. |
+| Research built for the group is preserved | Trace each existing applicable research dataset/result to an Overview summary, relevant tab, specialist disclosure or Evidence detail; identify any missing presentation mapping rather than silently dropping it. |
+| Stock-specific values remain correct | Two stocks sharing a profile reuse presentation but each shows its own security-scoped facts, sources, periods and results. |
+| Evidence safeguards remain intact | Raw/retained observations, reviewed or validated evidence, qualified scores and advisory states remain distinct; unavailable results are not fabricated. |
+| Summary and full detail agree | Overview highlights link to the same security's complete research, requirement state, source bindings and lineage. |
+
+Section 17 records the existing bounded implementation. This section defines how to review and extend its coverage; richer group modules and research-result integrations remain pending wherever their data contract, authorized engine or presentation mapping is unavailable. Hosted verification and merge status are tracked separately from this design specification.
