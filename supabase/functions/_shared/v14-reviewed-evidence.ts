@@ -81,8 +81,11 @@ function sourceBinding(review:RequirementReview,source:ReviewedSourceRecord){
   return {ok:false as const,reason:"NUMERIC_SOURCE_VALUE_NOT_EXACTLY_BOUND"}
  if(entity&&!fragment.includes(entity))return {ok:false as const,reason:"NUMERIC_SOURCE_ENTITY_NOT_BOUND"}
  const pStart=str(b.period_start),pEnd=str(b.period_end),pType=str(b.period_type)
+ const pStartAnchor=str(b.period_start_anchor),pEndAnchor=str(b.period_end_anchor)
  if(pStart!==review.period_start||pEnd!==review.period_end||pType!==review.period_type||!safeDate(pEnd)||pStart!==null&&!safeDate(pStart))
   return {ok:false as const,reason:"NUMERIC_SOURCE_PERIOD_MISMATCH"}
+ if(!pEndAnchor||!fragment.includes(pEndAnchor)||(pStart!==null&&(!pStartAnchor||!fragment.includes(pStartAnchor))))
+  return {ok:false as const,reason:"NUMERIC_SOURCE_PERIOD_DATES_NOT_BOUND"}
  const scale=str(b.scale)??"1",conversion=str(b.conversion)??"IDENTITY"
  if(scale!=="1"||conversion!=="IDENTITY")return {ok:false as const,reason:"UNAPPROVED_SCALE_OR_UNIT_CONVERSION"}
  return {ok:true as const,value,fragment,kind,metric,periodLabel}
@@ -110,7 +113,7 @@ export async function validateReviewedRequirementEvidence(input:{
  readonly portfolioId:string; readonly portfolioOwnerId:string; readonly securityId:string; readonly requirementCode:string
  readonly family:ReviewEvidenceFamily; readonly metricCodes:readonly string[]; readonly minimum:number; readonly reviews:readonly RequirementReview[]
  readonly sources:readonly ReviewedSourceRecord[]; readonly documents:readonly ReviewedResearchDocument[]; readonly documentSources:readonly ReviewedDocumentSource[]
- readonly definitions:readonly MetricDefinition[]; readonly evaluationAsOfMs:number; readonly sourceCutoffAtMs:number
+ readonly definitions:readonly MetricDefinition[]; readonly evaluationAsOfMs:number; readonly sourceCutoffAtMs:number; readonly freshnessPolicy:string|null
 }):Promise<ReviewedEvidenceResult|null>{
  const {portfolioId,securityId,requirementCode,family,evaluationAsOfMs,sourceCutoffAtMs}=input
  if(!["NUMERIC_SERIES","OWNERSHIP_4Q","TEXT_EVIDENCE_REVIEW"].includes(family))return null
@@ -129,6 +132,8 @@ export async function validateReviewedRequirementEvidence(input:{
  const active=dated.filter(r=>!superseded.has(r.id)).sort((a,b)=>time(a.reviewed_at)-time(b.reviewed_at)||a.id.localeCompare(b.id))
  if(!active.length)return fail("REVIEW_REQUIRED","REVIEW_SUPERSESSION_CHAIN_INVALID")
  const sourceById=new Map(input.sources.map(x=>[x.id,x])),documentById=new Map(input.documents.map(x=>[x.id,x]))
+ const children=new Map<string,number>();for(const r of dated)if(r.supersedes_review_id)children.set(r.supersedes_review_id,(children.get(r.supersedes_review_id)??0)+1)
+ if([...children.values()].some(n=>n>1))return fail("REVIEW_REQUIRED","REVIEW_SUPERSESSION_BRANCH_INVALID")
  const observations:InputObservation[]=[],support:RequirementReview[]=[],contradict:RequirementReview[]=[],insufficient:RequirementReview[]=[]
  const ownershipRows:Array<{review:RequirementReview;series:string;basis:string;period:string;value:string;source:ReviewedSourceRecord}>=[]
  const documentRows:Array<{review:RequirementReview;document:ReviewedResearchDocument;link:ReviewedDocumentSource;source:ReviewedSourceRecord}>=[]
@@ -147,6 +152,7 @@ export async function validateReviewedRequirementEvidence(input:{
    if(!r.supporting_quote?.trim()||!exactFragmentPresent(source.raw_payload,r.supporting_quote))return fail("REVIEW_REQUIRED","REVIEW_QUOTE_NOT_BOUND_TO_SOURCE",[r.id])
    if(r.retrieved_at!==source.retrieved_at)return fail("REVIEW_REQUIRED","REVIEW_RETRIEVAL_MISMATCH",[r.id])
    if(r.published_at&&(!Number.isFinite(time(r.published_at))||time(r.published_at)>sourceCutoffAtMs))return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_POST_CUTOFF",[r.id])
+   if(source.published_at!==null&&r.published_at!==source.published_at)return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_MISMATCH",[r.id])
    if(r.fresh_through&&!Number.isFinite(time(r.fresh_through)))return fail("REVIEW_REQUIRED","REVIEW_FRESHNESS_INVALID",[r.id])
    if(family==="NUMERIC_SERIES"){
      const metric=str(r.metadata.metric_code),value=str(r.metadata.numeric_value)
@@ -172,14 +178,26 @@ export async function validateReviewedRequirementEvidence(input:{
    }
    if(family==="OWNERSHIP_4Q"){
      const value=str(r.metadata.numeric_value),series=str(r.metadata.ownership_series),basis=str(r.metadata.ownership_basis)
-     if(!value||!DECIMAL.test(value)||Number(value)<0||Number(value)>100||r.unit!=="PERCENT"||!series||!basis||!r.period_end||!safeDate(r.period_end)||r.period_type!=="QUARTER")
+     const seriesAnchor=str(r.metadata.ownership_series_anchor),basisAnchor=str(r.metadata.ownership_basis_anchor),periodAnchor=str(r.metadata.period_anchor)
+     if(!value||!DECIMAL.test(value)||Number(value)<0||Number(value)>100||r.unit!=="PERCENT"||!series||!basis||!r.period_end||!safeDate(r.period_end)||r.period_type!=="QUARTER"
+       ||!seriesAnchor||!basisAnchor||!periodAnchor||!r.supporting_quote.includes(seriesAnchor)||!r.supporting_quote.includes(basisAnchor)
+       ||!r.supporting_quote.includes(periodAnchor)||!r.supporting_quote.includes("%")||decimalTokens(r.supporting_quote).filter(x=>x===value).length!==1)
       return fail("REVIEW_REQUIRED","OWNERSHIP_REVIEW_CONTRACT_INCOMPLETE",[r.id])
      if(!r.fresh_through||time(r.fresh_through)<evaluationAsOfMs)return fail("STALE","OWNERSHIP_REVIEW_STALE",[r.id])
+     if(input.freshnessPolicy?.includes("150_DAYS")){
+       const ceiling=time(source.retrieved_at)+150*86400000
+       if(time(r.fresh_through)>ceiling||evaluationAsOfMs-time(r.period_end+"T00:00:00Z")>150*86400000)return fail("STALE","OWNERSHIP_REQUIRED_WINDOW_STALE",[r.id])
+     }
      ownershipRows.push({review:r,series,basis,period:r.period_end,value,source});support.push(r);continue
    }
    const document=r.research_document_id?documentById.get(r.research_document_id)??null:null
    const db=validateDocumentBinding(r,document,source,input.documentSources);if(!db.ok)return fail("REVIEW_REQUIRED",db.reason,[r.id])
+   if(document?.published_at!==null&&r.published_at!==document.published_at)return fail("REVIEW_REQUIRED","DOCUMENT_REVIEW_PUBLICATION_MISMATCH",[r.id])
    if(!r.fresh_through||time(r.fresh_through)<evaluationAsOfMs)return fail("STALE","DOCUMENT_REVIEW_STALE",[r.id])
+   if(input.freshnessPolicy?.includes("150_DAYS")){
+     const days=r.period_type==="YEAR"?550:150
+     if(time(r.fresh_through)>time(source.retrieved_at)+days*86400000)return fail("REVIEW_REQUIRED","DOCUMENT_FRESHNESS_CONTRACT_MISMATCH",[r.id])
+   }
    documentRows.push({review:r,document:document!,link:db.documentSource!,source});support.push(r)
  }
  if(contradict.length&&support.length)return fail("CONFLICTING","ACTIVE_REVIEWS_CONFLICT",[...support,...contradict].map(x=>x.id))
@@ -201,7 +219,7 @@ export async function validateReviewedRequirementEvidence(input:{
    return {state:"FRESH",reason:"REVIEWED_OWNERSHIP_SERIES_READY",observations:[],selectedReviewIds:selected.map(x=>x.review.id),
     sourceRecordIds:uniq(selected.map(x=>x.source.id)),researchDocumentIds:[],documentSourceIds:[],sourceCode:uniq(selected.map(x=>x.source.source_code)).length===1?selected[0]!.source.source_code:null,
     retrievedAt:maxInstant(selected.map(x=>x.source.retrieved_at)),evidenceAsOfDate:selected.map(x=>x.period).sort().at(-1)??null,freshThrough:minInstant(selected.map(x=>x.review.fresh_through)),
-    lineage:{version:"V1_4_REVIEW_LEDGER_ADAPTER_V2",reviewIds:selected.map(x=>x.review.id),sourceRecordIds:uniq(selected.map(x=>x.source.id)),ownershipSeries:series[0],ownershipBasis:bases[0],periods:selected.map(x=>x.period).sort()}}
+    lineage:{version:"V1_4_REVIEW_LEDGER_ADAPTER_V2",reviewIds:selected.map(x=>x.review.id),sourceRecordIds:uniq(selected.map(x=>x.source.id)),sourcePayloadHashes:uniq(selected.map(x=>x.source.payload_hash)),ownershipSeries:series[0],ownershipBasis:bases[0],periods:selected.map(x=>x.period).sort()}}
  }
  const identities=new Map<string,typeof documentRows>();for(const x of documentRows){const key=[x.document.canonical_content_hash,x.document.reporting_period_end??x.review.period_end??"NO_PERIOD"].join(":");const g=identities.get(key)??[];g.push(x);identities.set(key,g)}
  if(identities.size<input.minimum)return fail("INSUFFICIENT","DISTINCT_DOCUMENTARY_EVIDENCE_INSUFFICIENT",support.map(x=>x.id))
@@ -209,7 +227,7 @@ export async function validateReviewedRequirementEvidence(input:{
  return {state:"FRESH",reason:"REVIEWED_DOCUMENTARY_SUPPORT_READY",observations:[],selectedReviewIds:selected.map(x=>x.review.id),sourceRecordIds:uniq(selected.map(x=>x.source.id)),
   researchDocumentIds:uniq(selected.map(x=>x.document.id)),documentSourceIds:uniq(selected.map(x=>x.link.id)),sourceCode:uniq(selected.map(x=>x.source.source_code)).length===1?selected[0]!.source.source_code:null,
   retrievedAt:maxInstant(selected.map(x=>x.source.retrieved_at)),evidenceAsOfDate:selected.map(x=>x.document.reporting_period_end??x.review.period_end).filter((x):x is string=>Boolean(x)).sort().at(-1)??null,
-  freshThrough:minInstant(selected.map(x=>x.review.fresh_through)),lineage:{version:"V1_4_REVIEW_LEDGER_ADAPTER_V2",reviewIds:selected.map(x=>x.review.id),sourceRecordIds:uniq(selected.map(x=>x.source.id)),researchDocumentIds:uniq(selected.map(x=>x.document.id)),documentSourceIds:uniq(selected.map(x=>x.link.id)),contentHashes:uniq(selected.map(x=>x.document.canonical_content_hash!))}}
+  freshThrough:minInstant(selected.map(x=>x.review.fresh_through)),lineage:{version:"V1_4_REVIEW_LEDGER_ADAPTER_V2",reviewIds:selected.map(x=>x.review.id),sourceRecordIds:uniq(selected.map(x=>x.source.id)),sourcePayloadHashes:uniq(selected.map(x=>x.source.payload_hash)),researchDocumentIds:uniq(selected.map(x=>x.document.id)),documentSourceIds:uniq(selected.map(x=>x.link.id)),contentHashes:uniq(selected.map(x=>x.document.canonical_content_hash!))}}
 }
 function resultFrom(selected:readonly InputObservation[],reviews:readonly RequirementReview[],documentSources:readonly ReviewedDocumentSource[],reason:string):ReviewedEvidenceResult{
  const reviewById=new Map(reviews.map(x=>[x.id,x])),used=selected.map(x=>reviewById.get(x.id)!).filter(Boolean)
@@ -218,7 +236,7 @@ function resultFrom(selected:readonly InputObservation[],reviews:readonly Requir
  return {state:"FRESH",reason,observations:selected,selectedReviewIds:selected.map(x=>x.id),sourceRecordIds:uniq(selected.map(x=>x.source_record_id)),
   researchDocumentIds:docIds,documentSourceIds:uniq(links.map(x=>x.id)),sourceCode:uniq(selected.map(x=>x.source_code)).length===1?selected[0]?.source_code??null:null,
   retrievedAt:maxInstant(selected.map(x=>x.retrieved_at)),evidenceAsOfDate:selected.map(x=>x.period_end).filter((x):x is string=>Boolean(x)).sort().at(-1)??null,
-  freshThrough:minInstant(selected.map(x=>x.fresh_until)),lineage:{version:"V1_4_REVIEW_LEDGER_ADAPTER_V2",reviewIds:selected.map(x=>x.id),sourceRecordIds:uniq(selected.map(x=>x.source_record_id)),researchDocumentIds:docIds,documentSourceIds:uniq(links.map(x=>x.id))}}
+  freshThrough:minInstant(selected.map(x=>x.fresh_until)),lineage:{version:"V1_4_REVIEW_LEDGER_ADAPTER_V2",reviewIds:selected.map(x=>x.id),sourceRecordIds:uniq(selected.map(x=>x.source_record_id)),sourcePayloadHashes:uniq(used.map(x=>x.source_payload_hash).filter((x):x is string=>Boolean(x))),researchDocumentIds:docIds,documentSourceIds:uniq(links.map(x=>x.id))}}
 }
 
 export function reconcileCanonicalAndReviewed(input:{canonicalRows:readonly InputObservation[];reviewed:ReviewedEvidenceResult|null;definitions:readonly MetricDefinition[];minimum:number;evaluationAsOfMs:number;sourceCutoffAtMs:number;family:ReviewEvidenceFamily}){
