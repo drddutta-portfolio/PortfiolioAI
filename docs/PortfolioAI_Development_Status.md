@@ -1,3 +1,21 @@
+## V1-4 Action B approved boundary execution — 6 October 2026
+
+**Review ledger = COMPLETE / PASS. Trendlyne dated-field capability canary = COMPLETE / FAIL-CLOSED. NSE history-authority acquisition = NOT EXECUTED due prior canary failure. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT STARTED / NOT AUTHORIZED.**
+
+Owner approved all three bounded actions from the prior cache-first reconciliation. The additive Development-only review ledger was created and applied: `public.research_evidence_requirement_reviews`, repository migration commit `98f5c72080d71e030c363309efd50dff50be1c85`. RLS, owner-only authenticated SELECT, service-role write authority, append-only UPDATE/DELETE rejection, source/document foreign keys, review-hash and period-order validation are active. No review row was fabricated; table row count remains 0.
+
+The single Trendlyne canary used AKUMS / `ROCE_OR_ROIC` / provider instrument `2471889` with the exact Phase 1 `get_parameter_values_multi_stock` request. Exactly one provider attempt was made, retry 0, producing run `9242df7e-8d6d-4f8f-b608-07f22864f609`, raw source record `cf7ac23d-7314-412a-81fc-71405df95c1e` and response SHA-256 `1835639d2bc5138a52f185d3bce20f1c52375935e9fc9068f008c508f79f9919`. Transport succeeded but capability acceptance failed: only one explicit date (`2026-10-06`) appeared; reporting scope, unit metadata and publication metadata were absent. The endpoint therefore did not prove the source-bound dated historical metadata required by V1-4. No canonical observation or readiness write occurred.
+
+The one-shot Edge canary was immediately retired as a `410` responder with `verify_jwt:true`. Provider usage is now 1,721 (+1) and data source records 4,817 (+1); fundamental observations remain 2,475; snapshots/items/selections/lineage remain 1,485 / 22,401 / 956 / 478.
+
+Because the approved execution order required fail-closed stop on any contract failure, the third action—the bounded official NSE 1 October / 5 October session and corporate-action authority acquisition—was intentionally not executed. No NSE acquisition, P8 execution, R2 write or Angel One history request occurred.
+
+The remaining Phase 1 Trendlyne requests must not be expanded from this canary. A different approved source path is required for missing dated period/scope/publication metadata, or the affected requirements remain fail-closed.
+
+Detailed record: [PortfolioAI_V1_4_ACTION_B_APPROVED_BOUNDARY_EXECUTION_2026-10-06.md](PortfolioAI_V1_4_ACTION_B_APPROVED_BOUNDARY_EXECUTION_2026-10-06.md).
+
+---
+
 ## V1-4 Action B cache-first reconciliation — 6 October 2026
 
 **Cache-first reconciliation = COMPLETE / PASS. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT STARTED / NOT AUTHORIZED.**
