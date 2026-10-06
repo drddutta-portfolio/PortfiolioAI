@@ -151,10 +151,10 @@ Function ID:
 `ffa71346-b3be-4e95-9075-9f8c54ec0327`
 
 Version:
-**1**
+**4**
 
 Bundle SHA-256:
-`fb62ea6265247f6ac2cd9230c962af63346afa071e89288fb227630ac055f954`
+`894f0b59b192dfb23c69232a3003ec8095117145f4b7962779ada9181fd90b64`
 
 Control source commits:
 - `c9266e70352cb1fa0ba11b3100a45d5c91961605`
@@ -181,81 +181,86 @@ When later invoked under separate owner authorization, `BEGIN_CAPTURE`:
 
 `RESPONSE_RECEIVED` updates provider outcome only after a response is independently established.
 
-## 6. Vercel deployment
+## 6. Vercel deployment and verified runtime evidence
 
-Provider-free Node preview:
+Protected Development branch alias:
 
-Deployment:
-`dpl_Av32QZyCcsYYhfkci8dVvqXZCNrZ`
+`portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app`
 
-URL:
-`portfiolio-dejoyx613-dibyendu-dutta.vercel.app`
+Alias mapping verified from Vercel metadata:
+- deployment: `dpl_A9jugTdUESKUaa8aZHgeoLjTSZtv`
+- deployment URL: `portfiolio-blewbjb1f-dibyendu-dutta.vercel.app`
+- Git branch: `PortfolioAI-Development`
+- deployment Git SHA: `3fbc8e3c864ff40199e7a6770145d00d6e0b9e36`
+- deployment type: `LAMBDAS`
+- framework: `vite`
+- state: **READY**
+- region: `iad1`
 
-Commit:
-`a0f433a671a0a9a85f7c9f8cb61877cdebdeb3dd`
+### Effective B0 Node application SHA
 
-State:
-**READY**
+The deployment Git SHA includes later documentation/control-plane commits.
 
-Deployment type:
-`LAMBDAS`
+Source comparison from `2e14e073a917716a57746c1a8ec322bc59ccbcc6` to the deployed `3fbc8e3c864ff40199e7a6770145d00d6e0b9e36` shows only:
+- documentation changes; and
+- `supabase/functions/p7-ic-b0-node-control/index.ts` changes.
 
-Framework:
-`vite`
+The following Vercel B0 application files are byte-for-byte identical at both SHAs:
+- `api/b0-node.ts`
+- `supabase/functions/_shared/v14-master-capture.ts`
+- `supabase/functions/_shared/v14-batch-b-contract.ts`
+- `supabase/functions/_shared/p7-ic-benchmark-adapter.ts`
+- `vercel.json`
 
-Region:
-`iad1`
+Therefore the effective B0 Node application SHA serving the verified SELF_TEST is:
 
-Repository project configuration reports Node `24.x`.
+`2e14e073a917716a57746c1a8ec322bc59ccbcc6`
 
-GitHub combined status for this commit:
-- Vercel: **success**
+No application redeployment is required solely because later documentation/control-plane commits exist.
 
-### Deployed self-test limitation
+### Codex-verified protected runtime SELF_TEST — PASS
 
-The protected 40 MiB SELF_TEST was retried against the protected Development deployment and equivalent READY branch deployments using all available authenticated Vercel paths.
+Codex successfully invoked:
 
-Exact blocking response:
-- HTTP **403 Forbidden**
-- scope: `dibyendu-dutta`
-- message: `Not authorized: Trying to access resource under scope "dibyendu-dutta". You must re-authenticate to this scope or use a token with access to this scope.`
+`https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app/api/b0-node?action=SELF_TEST`
 
-Affected authenticated paths:
-- protected deployment fetch/share-link lookup;
-- project OIDC token creation;
-- project automation protection-bypass creation;
-- deployment-specific temporary protection-bypass creation.
+Verified response:
+- HTTP: **200**
+- Node: **v24.21.0**
+- environment: **preview**
+- branch: **PortfolioAI-Development**
+- region: **iad1**
+- synthetic payload: **41,972,803 bytes**
+- duration: **1,903 ms**
+- observed peak RSS: **163,631,104 bytes**
+- observed peak heap: **46,495,008 bytes**
+- parsed rows: **1,289**
+- twelve synthetic identities: **12/12 EXACT_MATCH**
+- SHA-256: `e53516e0ae20a683198452f399235f0b7c0ff7c40d77e0836d41cbd4adf4defa`
+- request ID: `bom1:iad1::iad1::456z5-1791312368062-4cfc7bf098fc`
 
-Therefore the requested **40 MiB SELF_TEST in the deployed Vercel function remains NOT VERIFIED at runtime**.
+Expected provider-free failure-path outputs were also returned for:
+- malformed JSON;
+- response >64 MiB;
+- hash mismatch;
+- ambiguous exact identity.
 
-It is not marked PASS by deployment status or inference.
+Runtime interpretation:
+- the 40 MiB-scale parser/hash path completes within the configured Vercel Node function envelope;
+- measured runtime and memory are materially below the configured 60-second / 1024 MB bounds;
+- all twelve synthetic exact identities resolve correctly in the real protected Development runtime.
 
-Owner-executable authenticated test, without weakening protection:
+This is **parser/runtime evidence only**.
 
-```bash
-vercel curl "https://portfiolio-bdftxip8k-dibyendu-dutta.vercel.app/api/b0-node?action=SELF_TEST"
-```
+It does **not** establish that any of the twelve real Angel One benchmark identities are available, exact, ambiguous or unavailable. Actual benchmark availability remains unproven until a separately authorized real master is captured and provider-free preflight is run against that retained artifact.
 
-Run that command from a Vercel CLI session authenticated to the `dibyendu-dutta` scope. The response must show:
-- `synthetic.byteLength` in the 32–48 MiB test range;
-- `synthetic.allExact = true`;
-- twelve exact benchmark statuses;
-- measured `durationMs`;
-- measured RSS / heap values;
-- malformed/oversize/hash-mismatch/interrupted/ambiguity failure checks.
+### Connector-access note
 
-Alternatively, re-authenticate the ChatGPT Vercel connection to the `dibyendu-dutta` team/project and rerun the same protected fetch.
+The ChatGPT Vercel connector still cannot itself invoke this protected preview because its current team-scoped access returns HTTP 403 for scope `dibyendu-dutta`.
 
-No Deployment Protection setting was disabled or weakened.
+That connector limitation does not negate the Codex-verified runtime PASS above. The runtime result is tied to the branch alias/deployment through Vercel alias metadata and source comparison.
 
-What is proven:
-- source compiles/builds in Vercel;
-- configured Node/Lambda preview is READY;
-- the route and 60s / 1024 MB configuration are accepted by the deployment;
-- the existing shared parser previously passed provider-free local synthetic-volume tests;
-- deployed Vercel runtime duration and process-memory measurements for the 40 MiB test remain unverified because invocation was blocked by deployment protection tooling.
-
-No deployment-protection setting was weakened.
+A runtime-log lookup using the supplied request ID returned no matching log entry in the available log window; no contradictory runtime evidence was found.
 
 ## 7. Authorized one-object R2 integration test
 
@@ -314,7 +319,7 @@ Current local route-guard mock checks PASS:
 - wrong preview branch rejected
 - exact Development preview context accepted
 
-The deployed `SELF_TEST` additionally contains hash-mismatch and malformed/interrupted/oversize/ambiguity cases but remains uninvoked due Vercel protection tooling.
+The deployed `SELF_TEST` returned the expected malformed-JSON, oversize, hash-mismatch and ambiguity results during the Codex-verified runtime PASS. Interrupted-accounting behavior remains covered by the shared provider-free test contract.
 
 ## 9. Required conditions before replacement B0
 
@@ -325,11 +330,11 @@ Capacity policy is no longer a blocker at the current 202,812,563-byte database 
 Before a replacement B0 acquisition:
 1. refresh and verify `pg_database_size('postgres')` within 30 minutes of the first B0 control write;
 2. require projected bounded B0 control writes to remain below the 475,000,000-byte hard-stop threshold and absolute 500,000,000-byte quota;
-3. complete the protected Development 40 MiB Vercel Node `SELF_TEST`;
-4. require recorded duration/RSS/heap and all twelve-code parser/failure-path checks to PASS;
-5. only then prepare a fresh one-time B0 grant for separate owner approval.
+3. use a **fresh** one-time grant scoped only to B0 V3 capture;
+4. preserve the exact immutable R2 master artifact before provider-free preflight;
+5. stop after B0 and obtain separate owner authorization before B1.
 
-Current SELF_TEST blocker is not code/build/runtime configuration: every available protected-deployment access method from the connected Vercel integration returns scope 403 for team `dibyendu-dutta`. No Deployment Protection setting was weakened.
+The protected Development 40 MiB Vercel Node `SELF_TEST` is **Codex-verified PASS** and is no longer a technical blocker.
 
 ## 10. Proposed replacement-B0 ceilings
 
@@ -373,11 +378,11 @@ R2 gateway: **DEPLOYED**.
 
 R2 one-object integrity/cleanup test: **PASS**.
 
-Supabase compact control endpoint: **DEPLOYED / WRITE-GATED CLOSED**.
+Supabase compact control endpoint: **DEPLOYED / CAPACITY-GATED / ACQUISITION NOT INVOKED**.
 
 Vercel build/deployment: **PASS / READY**.
 
-Deployed 40 MiB Node runtime self-test: **NOT VERIFIED due protected-preview tooling access**.
+Deployed 40 MiB Node runtime self-test: **PASS — Codex-verified protected Development runtime**.
 
 Database capacity gate: **PASS / NORMAL — 202,812,563 bytes of 500,000,000**.
 
