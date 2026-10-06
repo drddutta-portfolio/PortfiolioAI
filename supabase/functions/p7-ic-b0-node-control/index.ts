@@ -15,6 +15,25 @@ const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"au
 async function hexSha256(v:string){const b=new TextEncoder().encode(v);return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",b))).map(x=>x.toString(16).padStart(2,"0")).join("")}
 async function authorized(req:Request){const h=req.headers.get("authorization")??"";if(!h.startsWith("Bearer "))return false;return await hexSha256(h.slice(7))===AUTH_SHA256}
 const json=(s:number,b:unknown)=>new Response(JSON.stringify(b),{status:s,headers:{...cors,"Content-Type":"application/json"}})
+async function usageStart(admin:ReturnType<typeof createClient>,grantId:string){
+  const at=new Date().toISOString()
+  const ins=await admin.from("provider_usage_events").insert({
+    source_code:"ANGEL_ONE",
+    ingestion_run_id:null,run_item_id:null,security_id:null,
+    data_domain:"BENCHMARK_HISTORY",operation_class:"INSTRUMENT_MASTER",
+    accounting_class:"PROVIDER_TOOL_ATTEMPT",
+    estimated_internal_units:1,actual_internal_units:1,provider_reported_units:null,
+    attempted_at:at,completed_at:null,outcome:"UNKNOWN",safe_error_code:null,
+    retry_attempt:0,idempotency_key:"V1_4_B0_NODE_MASTER_"+grantId
+  })
+  if(ins.error)throw new Error("B0_CONTROL_USAGE_WRITE_FAILED")
+}
+async function usageResponse(admin:ReturnType<typeof createClient>,grantId:string,outcome:"SUCCEEDED"|"FAILED",code:string|null){
+  const up=await admin.from("provider_usage_events").update({
+    completed_at:new Date().toISOString(),outcome,safe_error_code:code
+  }).eq("source_code","ANGEL_ONE").eq("idempotency_key","V1_4_B0_NODE_MASTER_"+grantId)
+  if(up.error)throw new Error("B0_CONTROL_USAGE_UPDATE_FAILED")
+}
 async function stage(admin:ReturnType<typeof createClient>,grantId:string,name:string,payload:Record<string,unknown>){
   const at=new Date().toISOString(),raw={grant_id:grantId,stage:name,at,...payload}
   const ins=await admin.from("data_source_records").insert({source_code:"ANGEL_ONE",record_kind:STAGE_KIND,external_record_id:grantId+":"+name+":"+at,retrieved_at:at,payload_hash:await hexSha256(JSON.stringify(raw)),raw_payload:raw,terms_snapshot:{mode:"V1_4_B0_NODE_APPEND_ONLY"}})
@@ -38,13 +57,18 @@ Deno.serve(async req=>{
     if(action==="BEGIN_CAPTURE"){
       const grant=await consumeP4ExecutionGrant(admin,{grantId,action:ACTION,portfolioId:PORTFOLIO_ID,securityId:SENTINEL})
       if(!grant.ok)return json(409,{code:grant.code})
+      await usageStart(admin,grantId)
       await stage(admin,grantId,"ATTEMPT_STARTED",{request_outcome:"UNKNOWN"})
       return json(200,{ok:true,grantId})
     }
     if(action==="MARK_STAGE"){
       const stageName=String(body.stage??"")
       if(!["RESPONSE_RECEIVED","BODY_COMPLETE","CAPTURE_PERSISTED"].includes(stageName))return json(400,{code:"INVALID_STAGE"})
-      await stage(admin,grantId,stageName,{request_outcome:String(body.requestOutcome??"UNKNOWN"),http_status:body.httpStatus??null,byte_length:body.byteLength??null,payload_hash:body.payloadHash??null,object_key:body.objectKey??null})
+      const outcome=String(body.requestOutcome??"UNKNOWN")
+      await stage(admin,grantId,stageName,{request_outcome:outcome,http_status:body.httpStatus??null,byte_length:body.byteLength??null,payload_hash:body.payloadHash??null,object_key:body.objectKey??null})
+      if(stageName==="RESPONSE_RECEIVED"&&(outcome==="SUCCEEDED"||outcome==="FAILED")){
+        await usageResponse(admin,grantId,outcome,outcome==="SUCCEEDED"?null:"B0_PROVIDER_HTTP_FAILED")
+      }
       return json(200,{ok:true})
     }
     if(action==="PREFLIGHT_COMPLETE"){
