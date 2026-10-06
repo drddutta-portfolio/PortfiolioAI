@@ -6,7 +6,8 @@ let projectRef = "lrgpjimipfkyoqbpsqzz"
 let owned = true
 let validUser = true
 let nonEmpty = false
-const requests: Array<{ method: string; path: string }> = []
+let pagedReviews = false
+const requests: Array<{ method: string; path: string; range: string | null }> = []
 const originalServe = Deno.serve
 const originalEnvGet = Deno.env.get
 const originalFetch = globalThis.fetch
@@ -22,13 +23,34 @@ Deno.test("V1-4 read-only handler authenticates owner, rejects Production and ne
     globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) => {
       const url = new URL(input instanceof Request ? input.url : String(input))
       const method = init?.method ?? (input instanceof Request ? input.method : "GET")
-      requests.push({ method, path: url.pathname })
+      requests.push({ method, path: url.pathname, range: new Headers(init?.headers ?? (input instanceof Request ? input.headers : undefined)).get("range") })
       assert(method === "GET", "Read-only handler attempted a mutation or grant consumption")
       if (url.pathname === "/auth/v1/user") return new Response(JSON.stringify(validUser ? { id: "test-owner" } : { error: "Invalid session" }), { status: validUser ? 200 : 401, headers: { "Content-Type": "application/json" } })
       if (url.pathname === "/rest/v1/portfolios") {
-        assert(url.searchParams.get("user_id") === "eq.test-owner", "Portfolio read did not verify owner")
-        return new Response(JSON.stringify(owned ? { id: "test-portfolio" } : null), { headers: { "Content-Type": "application/json" } })
+        if (url.searchParams.has("user_id")) {
+          assert(url.searchParams.get("user_id") === "eq.test-owner", "Portfolio read did not verify owner")
+          return new Response(JSON.stringify(owned ? { id: "test-portfolio" } : null), { headers: { "Content-Type": "application/json" } })
+        }
+        return new Response(JSON.stringify(owned ? { user_id: "test-owner" } : null), { headers: { "Content-Type": "application/json" } })
       }
+      if (url.pathname === "/rest/v1/research_evidence_requirement_reviews") {
+        if (!pagedReviews) return new Response("[]", { headers: { "Content-Type": "application/json" } })
+        const range = new Headers(init?.headers ?? (input instanceof Request ? input.headers : undefined)).get("range") ?? "0-499"
+        const start = Number(range.split("-")[0] ?? 0)
+        const count = start === 0 ? 500 : start === 500 ? 1 : 0
+        const rows = Array.from({ length: count }, (_, i) => ({
+          id: "review-" + (start + i), portfolio_id: "test-portfolio", security_id: coverage.rows[0]!.securityId,
+          requirement_code: "NON_MATCHING_TEST_REQUIREMENT", review_kind: "OWNER_DOCUMENT_REVIEW", decision: "INSUFFICIENT",
+          source_record_id: null, research_document_id: null, provider_document_id: null, source_payload_hash: null,
+          supporting_quote: null, period_start: null, period_end: null, period_type: null, unit: null, currency: null,
+          consolidation_scope: null, published_at: null, retrieved_at: null, fresh_through: null,
+          review_version: "V1_4_REQUIREMENT_REVIEW_V2", reviewed_by: "test-owner", reviewed_at: "2026-10-05T11:00:00Z",
+          review_hash: "a".repeat(64), supersedes_review_id: null, metadata: {}, created_at: "2026-10-05T11:00:00Z",
+        }))
+        return new Response(JSON.stringify(rows), { headers: { "Content-Type": "application/json" } })
+      }
+      if (url.pathname === "/rest/v1/research_documents" || url.pathname === "/rest/v1/research_document_sources")
+        return new Response("[]", { headers: { "Content-Type": "application/json" } })
       const fixture = coverage.rows[0]!
       const records = url.pathname === "/rest/v1/current_holdings" ? nonEmpty ? [{ security_id: fixture.securityId, current_quantity: "1" }] : []
         : url.pathname === "/rest/v1/securities" ? nonEmpty ? [{ id: fixture.securityId, symbol: fixture.symbol, isin: "TEST", exchange: "NSE", asset_class: "EQUITY" }] : []
@@ -53,13 +75,18 @@ Deno.test("V1-4 read-only handler authenticates owner, rejects Production and ne
     const body = await response.json()
     assert(response.status === 200 && body.dryRun === true && body.providerCalls === 0, "Owner read-only evaluation failed")
     assert(body.processed === 0 && body.writeTotals.snapshotsCreated === 0 && body.writeTotals.selectionsCreated === 0, "Empty portfolio caused writes")
-    assert(requests.every(row => row.method === "GET" && !row.path.includes("rpc") && !row.path.includes("data_source_records")), "Read-only mode consumed a grant or invoked a write RPC")
+    assert(requests.every(row => row.method === "GET" && !row.path.includes("rpc")), "Read-only mode consumed a grant or invoked a write RPC")
     nonEmpty = true; requests.length = 0
     response = await handler(request())
     const populated = await response.json()
     assert(response.status === 200 && populated.processed === 1 && populated.results[0].status !== "READY", "Absent input was silently promoted to readiness")
     assert(populated.results[0].items.length > 0 && requests.every(row => row.method === "GET" && !row.path.includes("rpc")), "Populated validation attempted a write")
-    nonEmpty = false
+    pagedReviews = true; requests.length = 0
+    response = await handler(request())
+    assert(response.status === 200, "Paginated review load failed")
+    const reviewReads = requests.filter(row => row.path === "/rest/v1/research_evidence_requirement_reviews")
+    assert(reviewReads.length >= 2, "Review loading silently stopped at the first API page")
+    pagedReviews = false; nonEmpty = false
     requests.length = 0; projectRef = "uxiyufbsbgzzdujzcdxe"
     response = await handler(request())
     assert(response.status === 409 && requests.length === 0, "Production was not rejected before network access")
