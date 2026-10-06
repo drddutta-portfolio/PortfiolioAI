@@ -50,14 +50,16 @@ async function ensureBucket(admin:ReturnType<typeof createClient>){
 }
 function validateCodes(v:unknown){if(!Array.isArray(v)||!v.every(x=>typeof x==="string")||!exactOriginalBatchBOrder(v as string[]))throw new Error("P7_IC_BATCH_B_EXACT_ORDER_REQUIRED");return v as string[]}
 function encodedPath(p:string){return p.split("/").map(encodeURIComponent).join("/")}
-async function uploadFile(admin:ReturnType<typeof createClient>,path:string,filePath:string,contentType:string){
-  const file=await Deno.open(filePath,{read:true})
-  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),V1_4_MASTER_STORAGE_TIMEOUT_MS)
-  try{
-    const r=await admin.storage.from(BUCKET).upload(path,file.readable,{contentType,upsert:false})
-    if(r.error)throw new Error("P7_IC_B0_V2_STORAGE_UPLOAD_FAILED")
-    return r.data.path
-  }finally{clearTimeout(timer)}
+async function uploadFile(url:string,key:string,path:string,filePath:string,contentType:string){
+  const file=await Deno.open(filePath,{read:true}),stat=await Deno.stat(filePath)
+  const r=await fetch(url+"/storage/v1/object/"+BUCKET+"/"+encodedPath(path),{
+    method:"POST",
+    headers:{Authorization:"Bearer "+key,apikey:key,"Content-Type":contentType,"Content-Length":String(stat.size),"x-upsert":"false"},
+    body:file.readable,
+    signal:AbortSignal.timeout(V1_4_MASTER_STORAGE_TIMEOUT_MS),
+  })
+  if(!r.ok)throw new Error("P7_IC_B0_V2_STORAGE_UPLOAD_FAILED")
+  return path
 }
 async function signedRead(admin:ReturnType<typeof createClient>,path:string){
   const signed=await admin.storage.from(BUCKET).createSignedUrl(path,60)
@@ -91,7 +93,7 @@ async function syntheticVerify(admin:ReturnType<typeof createClient>){
   const cleanup=[good,bad],results:Record<string,unknown>={}
   try{
     const created=await createSyntheticFile(tmp);results.tmpCapture=created
-    await uploadFile(admin,good,tmp,"application/json")
+    await uploadFile(Deno.env.get("SUPABASE_URL")!,Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,good,tmp,"application/json")
     const rr=await signedRead(admin,good)
     const scan=await scanMasterArtifact({chunks:readableStreamChunks(rr.body!),definitions:defs(),requestedCodes:V1_4_BATCH_B_CODES,expectedSha256:created.sha256})
     results.readback={byteLength:scan.byteLength,sha256:scan.sha256,rowCount:scan.rowCount,allExact:scan.preflight.every(x=>x.status==="EXACT_MATCH"),statuses:scan.preflight.map(x=>({code:x.code,status:x.status}))}
@@ -151,7 +153,7 @@ Deno.serve(async req=>{
       try{
         const cap=await captureByteStream(readableStreamChunks(response.body),await fileSink(tmp))
         state=advanceMasterCaptureAccounting(state,{stage:"BODY_COMPLETE"});await stage(admin,grantId,"BODY_COMPLETE",state,{byte_length:cap.byteLength,payload_hash:cap.sha256})
-        const objectPath="angel-one/instrument-master/"+grantId+".json";await uploadFile(admin,objectPath,tmp,response.headers.get("content-type")??"application/json")
+        const objectPath="angel-one/instrument-master/"+grantId+".json";await uploadFile(url,key,objectPath,tmp,response.headers.get("content-type")??"application/json")
         state=advanceMasterCaptureAccounting(state,{stage:"CAPTURE_PERSISTED"});await stage(admin,grantId,"CAPTURE_PERSISTED",state,{storage_bucket:BUCKET,object_path:objectPath,byte_length:cap.byteLength,payload_hash:cap.sha256})
         const completedAt=new Date().toISOString(),meta={storage_bucket:BUCKET,object_path:objectPath,byte_length:cap.byteLength,http_status:response.status,content_type:response.headers.get("content-type"),codes,stage:"CAPTURE_PERSISTED"}
         const rec=await admin.from("data_source_records").insert({source_code:"ANGEL_ONE",record_kind:MASTER_KIND,external_record_id:"V1_4_B0_V2_MASTER_"+grantId,source_observed_at:completedAt,retrieved_at:completedAt,payload_hash:cap.sha256,source_url:MASTER_URL,raw_payload:meta,terms_snapshot:{mode:"V1_4_B0_V2",retry_attempt:0,history_calls:0,max_response_bytes:V1_4_MASTER_MAX_RESPONSE_BYTES}}).select("id").single()
