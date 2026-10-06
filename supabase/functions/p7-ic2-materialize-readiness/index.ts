@@ -4,7 +4,7 @@ type Admin = SupabaseClient
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
 import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvidence,parseTrendlyneOwnershipHistory,guardedNumericEvidenceState} from "../_shared/p7-ic-evidence-normalization.ts"
 import {cachedEvidenceReadiness,inspectStoredHistory,validateObservationSeries,P7_IC_INPUT_VALIDATION_VERSION,type InputObservation,type MetricDefinition,type HistoryRow,type HistoryValidation} from "../_shared/p7-ic-input-validation.ts"
-import {validateReviewedRequirementEvidence,type RequirementReview,type ReviewedSourceRecord,type ReviewedResearchDocument} from "../_shared/v14-reviewed-evidence.ts"
+import {validateReviewedRequirementEvidence,reconcileCanonicalAndReviewed,type RequirementReview,type ReviewedSourceRecord,type ReviewedResearchDocument,type ReviewedDocumentSource,type ReviewEvidenceFamily} from "../_shared/v14-reviewed-evidence.ts"
 import {p7IcProfileContract} from "../_shared/p7-ic-profile-contracts.ts"
 import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json" with {type:"json"}
 
@@ -20,10 +20,10 @@ type Json=Record<string,unknown>
 type CoverageRow={securityId:string;symbol:string;sector:string;industry:string;ic1State:string;profileCode:string|null;subprofileCode:string|null;methodologyAuthority:string|null;r7PolicyCode:string|null}
 type Observation=InputObservation & {security_id:string}
 type SourceRecord={id:string;source_code:string;record_kind:string;retrieved_at:string;raw_payload:Json}
-type ReviewFacts={reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[]}
+type ReviewFacts={reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];documentSources:ReviewedDocumentSource[]}
 type History=HistoryValidation & {security_id:string}
 type Benchmark={code:string;mapping_status:string;provider_code:string|null;provider_instrument_id:string|null;verified_at:string|null;history:HistoryValidation}
-type Facts={portfolioId:string;generatedAt:string;totalEquities:number;securities:Array<{id:string;symbol:string;isin:string;exchange:string}>;observations:Observation[];definitions:MetricDefinition[];sourceRecords:SourceRecord[];histories:History[];benchmarks:Benchmark[];reviewFacts:ReviewFacts}
+type Facts={portfolioId:string;portfolioOwnerId:string;generatedAt:string;totalEquities:number;securities:Array<{id:string;symbol:string;isin:string;exchange:string}>;observations:Observation[];definitions:MetricDefinition[];sourceRecords:SourceRecord[];histories:History[];benchmarks:Benchmark[];reviewFacts:ReviewFacts}
 type Item={requirement_code:string;metric_code:string|null;required:boolean;minimum_history:number;freshness_policy:string|null;benchmark_authority:string[];applicability:"APPLICABLE"|"NOT_APPLICABLE";evidence_state:"FRESH"|"STALE"|"MISSING"|"INSUFFICIENT"|"CONFLICTING"|"REVIEW_REQUIRED"|"NOT_APPLICABLE";candidate_evidence_ids:string[];selected_evidence_id:string|null;evidence_as_of_date:string|null;retrieved_at:string|null;fresh_through:string|null;source_provider:string|null;raw_source_record_id:string|null;normalized_value:unknown;validation_state:string;canonical_selection_state:string;reason_code:string;recommended_remediation_action:string}
 
 const canonicalMetricCodes = P7_IC_CANONICAL_REQUIREMENT_METRICS
@@ -63,23 +63,43 @@ async function loadObservations(admin:Admin,ids:readonly string[],sourceCutoffAt
 }
 
 async function loadReviewFacts(admin:Admin,portfolioId:string,ids:readonly string[],sourceCutoffAt:string):Promise<ReviewFacts>{
- const reviewResult=await admin.from("research_evidence_requirement_reviews")
-  .select("id,portfolio_id,security_id,requirement_code,review_kind,decision,source_record_id,research_document_id,provider_document_id,source_payload_hash,supporting_quote,period_start,period_end,period_type,unit,currency,consolidation_scope,published_at,retrieved_at,fresh_through,review_version,reviewed_by,reviewed_at,review_hash,supersedes_review_id,metadata")
-  .eq("portfolio_id",portfolioId).in("security_id",ids).lte("reviewed_at",sourceCutoffAt).order("reviewed_at").order("id")
- if(reviewResult.error)throw reviewResult.error
- const reviews=(reviewResult.data??[]) as unknown as RequirementReview[]
+ const reviews:RequirementReview[]=[]
+ for(let offset=0;offset<5000;offset+=500){
+  const result=await admin.from("research_evidence_requirement_reviews")
+   .select("id,portfolio_id,security_id,requirement_code,review_kind,decision,source_record_id,research_document_id,provider_document_id,source_payload_hash,supporting_quote,period_start,period_end,period_type,unit,currency,consolidation_scope,published_at,retrieved_at,fresh_through,review_version,reviewed_by,reviewed_at,review_hash,supersedes_review_id,metadata,created_at")
+   .eq("portfolio_id",portfolioId).in("security_id",ids).lte("reviewed_at",sourceCutoffAt).order("reviewed_at").order("id").range(offset,offset+499)
+  if(result.error)throw result.error
+  reviews.push(...(result.data??[]) as unknown as RequirementReview[])
+  if((result.data?.length??0)<500)break
+  if(offset===4500)throw new Error("REVIEW_FACTS_COMPLETENESS_NOT_PROVEN")
+ }
  const sourceIds=[...new Set(reviews.map(row=>row.source_record_id).filter((id):id is string=>Boolean(id)))]
  const documentIds=[...new Set(reviews.map(row=>row.research_document_id).filter((id):id is string=>Boolean(id)))]
- const [sourceResult,documentResult]=await Promise.all([
-  sourceIds.length?admin.from("data_source_records").select("id,source_code,retrieved_at,published_at,payload_hash,raw_payload").in("id",sourceIds):Promise.resolve({data:[],error:null}),
-  documentIds.length?admin.from("research_documents").select("id,security_id,reporting_period_start,reporting_period_end,reporting_period_type,published_at,canonical_content_hash,identity_status").in("id",documentIds):Promise.resolve({data:[],error:null}),
- ])
- if(sourceResult.error)throw sourceResult.error
- if(documentResult.error)throw documentResult.error
- return{reviews,reviewSources:(sourceResult.data??[]) as unknown as ReviewedSourceRecord[],researchDocuments:(documentResult.data??[]) as unknown as ReviewedResearchDocument[]}
+ const reviewSources:ReviewedSourceRecord[]=[],researchDocuments:ReviewedResearchDocument[]=[],documentSources:ReviewedDocumentSource[]=[]
+ for(let i=0;i<sourceIds.length;i+=100){
+  const result=await admin.from("data_source_records").select("id,source_code,retrieved_at,published_at,payload_hash,raw_payload").in("id",sourceIds.slice(i,i+100))
+  if(result.error)throw result.error
+  reviewSources.push(...(result.data??[]) as unknown as ReviewedSourceRecord[])
+ }
+ for(let i=0;i<documentIds.length;i+=100){
+  const idsChunk=documentIds.slice(i,i+100)
+  const [docs,links]=await Promise.all([
+   admin.from("research_documents").select("id,security_id,reporting_period_start,reporting_period_end,reporting_period_type,published_at,canonical_content_hash,identity_status,authoritative_identifier_scheme,authoritative_identifier,metadata_identity_hash").in("id",idsChunk),
+   admin.from("research_document_sources").select("id,research_document_id,source_record_id,source_code,content_hash,source_status,provider_document_id,source_url,retrieved_at").in("research_document_id",idsChunk),
+  ])
+  if(docs.error)throw docs.error;if(links.error)throw links.error
+  researchDocuments.push(...(docs.data??[]) as unknown as ReviewedResearchDocument[])
+  documentSources.push(...(links.data??[]) as unknown as ReviewedDocumentSource[])
+ }
+ if(reviewSources.length!==sourceIds.length||researchDocuments.length!==documentIds.length)throw new Error("REVIEW_REFERENCED_FACTS_INCOMPLETE")
+ return{reviews,reviewSources,researchDocuments,documentSources}
 }
 
 async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit:number,sourceCutoffAt:string):Promise<Facts>{
+ const portfolio=await admin.from("portfolios").select("user_id").eq("id",portfolioId).maybeSingle()
+ if(portfolio.error)throw portfolio.error
+ if(!portfolio.data?.user_id)throw new Error("PORTFOLIO_OWNER_AUTHORITY_NOT_PROVEN")
+ const portfolioOwnerId=String(portfolio.data.user_id)
  const holdings=await admin.from("current_holdings").select("security_id,current_quantity").eq("portfolio_id",portfolioId)
  if(holdings.error)throw holdings.error
  const openIds=(holdings.data??[]).filter(row=>Number(row.current_quantity)>0).map(row=>String(row.security_id))
@@ -88,7 +108,7 @@ async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit
  const securities=(securitiesResult.data??[]).slice(offset,offset+limit).map(row=>({id:String(row.id),symbol:String(row.symbol),isin:String(row.isin??""),exchange:String(row.exchange??"")}))
  const ids=securities.map(row=>row.id)
  const totalEquities=securitiesResult.data?.length??0
- if(!ids.length)return{portfolioId,generatedAt:new Date().toISOString(),totalEquities,securities,observations:[],definitions:[],sourceRecords:[],histories:[],benchmarks:[],reviewFacts:{reviews:[],reviewSources:[],researchDocuments:[]}}
+ if(!ids.length)return{portfolioId,portfolioOwnerId,generatedAt:new Date().toISOString(),totalEquities,securities,observations:[],definitions:[],sourceRecords:[],histories:[],benchmarks:[],reviewFacts:{reviews:[],reviewSources:[],researchDocuments:[],documentSources:[]}}
  const benchmarkResult=await admin.from("market_benchmarks").select("code,mapping_status,provider_code,provider_instrument_id,verified_at")
  if(benchmarkResult.error)throw benchmarkResult.error
  const [observations,definitionsResult,sourceRecordsResult,histories,benchmarkHistory,reviewFacts]=await Promise.all([
@@ -101,7 +121,7 @@ async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit
  ])
  for(const result of [definitionsResult,sourceRecordsResult])if(result.error)throw result.error
  const benchmarks=(benchmarkResult.data??[]).map(row=>({code:String(row.code),mapping_status:String(row.mapping_status),provider_code:row.provider_code===null?null:String(row.provider_code),provider_instrument_id:row.provider_instrument_id===null?null:String(row.provider_instrument_id),verified_at:row.verified_at===null?null:String(row.verified_at),history:benchmarkHistory.get(String(row.code))??inspectStoredHistory([],252,Date.parse(sourceCutoffAt))}))
- return{portfolioId,generatedAt:new Date().toISOString(),totalEquities,securities,observations,definitions:(definitionsResult.data??[]) as MetricDefinition[],sourceRecords:(sourceRecordsResult.data??[]) as SourceRecord[],histories,benchmarks,reviewFacts}
+ return{portfolioId,portfolioOwnerId,generatedAt:new Date().toISOString(),totalEquities,securities,observations,definitions:(definitionsResult.data??[]) as MetricDefinition[],sourceRecords:(sourceRecordsResult.data??[]) as SourceRecord[],histories,benchmarks,reviewFacts}
 }
 const benchmarkish=(c:string)=>/(APPROVED_BENCHMARK|BENCHMARK_HISTORY|BENCHMARK_RELATIVE)/u.test(c)
 const ownershipish=(c:string)=>/(OWNERSHIP|PROMOTER|FII|DII|INSTITUTIONAL|SHAREHOLDING)/u.test(c)
