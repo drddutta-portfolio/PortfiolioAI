@@ -95,7 +95,7 @@ function validateSourceBinding(review: RequirementReview, securityId: string,
   sourceCutoffAtMs: number) {
   const source = review.source_record_id ? sourceById.get(review.source_record_id) ?? null : null
   const document = review.research_document_id ? documentById.get(review.research_document_id) ?? null : null
-  if (!source && !document) return { ok: false as const, reason: "REVIEW_SOURCE_ANCHOR_MISSING", source, document }
+  if (!source) return { ok: false as const, reason: "REVIEW_SOURCE_RECORD_REQUIRED", source, document }
   if (source) {
     if (!review.source_payload_hash || !HASH.test(review.source_payload_hash) || review.source_payload_hash !== source.payload_hash)
       return { ok: false as const, reason: "REVIEW_SOURCE_HASH_MISMATCH", source, document }
@@ -104,6 +104,8 @@ function validateSourceBinding(review: RequirementReview, securityId: string,
     const payloadSecurityId = str(source.raw_payload.security_id)
     if (payloadSecurityId && payloadSecurityId !== securityId)
       return { ok: false as const, reason: "REVIEW_SOURCE_SECURITY_MISMATCH", source, document }
+    if (!payloadSecurityId && !document)
+      return { ok: false as const, reason: "REVIEW_SOURCE_SECURITY_NOT_PROVEN", source, document }
   }
   if (document) {
     if (document.security_id !== securityId || document.identity_status !== "VERIFIED")
@@ -113,9 +115,8 @@ function validateSourceBinding(review: RequirementReview, securityId: string,
       return { ok: false as const, reason: "REVIEW_DOCUMENT_HASH_MISMATCH", source, document }
   }
   if (review.supporting_quote) {
-    const inSource = source ? payloadContains(source.raw_payload, review.supporting_quote) : false
-    const documentQuote = str(review.metadata.document_excerpt)
-    if (!inSource && documentQuote !== review.supporting_quote)
+    const inSource = payloadContains(source.raw_payload, review.supporting_quote)
+    if (!inSource)
       return { ok: false as const, reason: "REVIEW_QUOTE_NOT_BOUND_TO_SOURCE", source, document }
   }
   return { ok: true as const, source, document }
