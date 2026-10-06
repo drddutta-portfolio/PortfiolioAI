@@ -32,7 +32,10 @@ describe("V1-4 review ledger adapter",()=>{
   expect(run({metadata:{...review.metadata,publication_anchor:"1 Oct 2026"}})).toMatchObject({state:"REVIEW_REQUIRED",reason:"REVIEW_PUBLICATION_ANCHOR_NOT_IN_QUOTE"})
  })
  it("recognizes percent field-label evidence without pretending that it proves the whole metadata contract",()=>expect(run({metadata:{...review.metadata,unit_anchor:null}})).toMatchObject({state:"FRESH"}))
- it("rejects multi-year averages as distinct annual observations by period count",()=>expect(run({metadata:{...review.metadata,numeric_value:"12.50"},period_type:"YEAR",period_end:"2026-03-31"},{...[] as ReviewedSourceRecord[]} as any)).not.toBeNull())
+ it("does not treat one reviewed annual value as multiple distinct annual observations",()=>{
+  const result=validateReviewedRequirementEvidence({portfolioId:"p",securityId:"sec",requirementCode:"ROCE_OR_ROIC",metricCodes:["ROCE_ANNUAL"],minimum:3,reviews:[review],sources:[source],documents:[document],definitions:[definition],evaluationAsOfMs:Date.parse("2026-10-05T19:25:54Z"),sourceCutoffAtMs:Date.parse("2026-10-05T19:25:54Z")})
+  expect(result).toMatchObject({state:"INSUFFICIENT",reason:"DISTINCT_REPORTING_PERIODS_INSUFFICIENT"})
+ })
  it("requires human reviewer identity when review authority is human",()=>expect(run({review_kind:"HUMAN_DOCUMENT_REVIEW",reviewed_by:null})).toMatchObject({state:"REVIEW_REQUIRED",reason:"HUMAN_REVIEW_AUTHORITY_MISSING"}))
  it("rejects post-cutoff reviews instead of backdating them",()=>expect(run({reviewed_at:"2026-10-06T01:00:00Z"})).toMatchObject({state:"REVIEW_REQUIRED",reason:"REVIEW_CREATED_AFTER_SOURCE_CUTOFF"}))
  it("fails document references without bound body evidence",()=>expect(run({supporting_quote:"invented quote",metadata:{...review.metadata,document_excerpt:"invented quote"}})).toMatchObject({state:"REVIEW_REQUIRED",reason:"REVIEW_QUOTE_NOT_BOUND_TO_SOURCE"}))
