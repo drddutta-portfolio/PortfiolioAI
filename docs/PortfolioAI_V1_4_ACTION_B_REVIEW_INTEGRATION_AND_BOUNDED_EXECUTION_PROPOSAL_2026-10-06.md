@@ -411,3 +411,121 @@ The independent next actions are now:
 Any H1/O1/F0 evidence retrieved after the historical 5 October cutoff must be evaluated prospectively under an explicit later source cutoff. Frozen membership and frozen valuation do not change. No retrieval or review timestamp may be backdated.
 
 V1-4 remains **IN PROGRESS / NOT PROVEN** and V1-5 remains unauthorized.
+
+
+---
+
+## 14. Owner-approved H1 / O1 / F0-DISCOVERY execution — 6 October 2026
+
+Owner authorization:
+
+> Approved: H1, O1 and F0-DISCOVERY as three independent bounded batches under their documented ceilings. No T1 parameter campaign, no review persistence, no canonical materialization, no broad filing expansion, and no V1-5 work. Stop and report after each acquisition/discovery batch.
+
+### H1 — COMPLETE / CAPTURE SUCCEEDED
+
+Run ID: \`e2e978fa-004f-450c-840f-bdcd00df271d\`.
+
+External request usage: **6/6**, retries **0**. All six requests returned HTTP 200.
+
+Captured immutable source records:
+
+1. NSE 1-Oct-2026 bhavcopy
+   - record: \`0775efe3-8781-4900-9bff-c79af88e9b61\`
+   - SHA-256: \`ccc5fb27872716bbcc99d2d87e522ab304f6620e11c3a5045c30e1ff25cbfb73\`
+   - 208,712 bytes
+2. NSE 5-Oct-2026 bhavcopy
+   - record: \`f19dce57-6f6d-42d7-a677-d3bc1fcdb454\`
+   - SHA-256: \`43913a4ef72663e2d3fbb0c3b9c686ed8c3d23e5df6ee6b756f8a5c954559ceb\`
+   - 207,906 bytes
+3. NIFTY 500 TRI response, 1-Oct through 5-Oct-2026
+   - record: \`87baa591-3b0d-4f1c-96ce-9ce2bc6b4c88\`
+   - SHA-256: \`605642b3800bd48aa58c4d5bfc27a5026f17d0df4631439e7a529358f41c21a6\`
+   - 79,251 bytes
+4. NSE corporate actions, 1-Oct through 5-Oct-2026
+   - record: \`7244f482-177e-4622-b2d2-b3dff9f45e00\`
+   - SHA-256: \`e5cce8c71c996a4b061dba76a3ef79becec5e614580a3f39be21dd2651205eee\`
+   - 1,442 bytes
+
+No commercial-provider usage event, market-history row, fundamental observation, review row, snapshot/item/selection/lineage row, R2 write or P8 execution occurred.
+
+H1 acquisition success is **not** readiness success. Validation/normalization/materialization remains a separately controlled next step.
+
+The one-time H1 executor was retired behind JWT protection and HTTP 410.
+
+### O1 — COMPLETE / CAPTURE SUCCEEDED
+
+Run ID: \`8888f406-42c2-4766-960c-a7c5b8e5a1b7\`.
+
+Provider tool attempts: **2/2**, retries **0**.
+
+1. SBIN \`get_ownership_deals_insider_sast({"stock_code":"SBIN","type":"shareholding"})\`
+   - raw source record: \`95adfc40-0b3d-4bbd-b556-7b8811910243\`
+   - SHA-256: \`ce526833ed71e80d96dd2f28344d2d0b01baa95d4c2df7cb09ebed3e48e8f32c\`
+   - provider result length: 5,911 chars
+2. WABAG \`get_ownership_deals_insider_sast({"stock_code":"WABAG","type":"shareholding"})\`
+   - raw source record: \`0ed88b27-bd50-4d90-bf5c-71145dd88103\`
+   - SHA-256: \`4e78559c7b0c3b7d530b6711e78123207de55e11d985145fb8f4c1570886f057\`
+   - provider result length: 5,981 chars
+
+No fundamental observations, requirement reviews, snapshots/items/selections/lineage were written.
+
+O1 capture success is **not** readiness success. Series/basis, quarter-window, freshness and conflict review remain required by the repaired validator.
+
+The one-time O1 executor was retired behind JWT protection and HTTP 410.
+
+### F0-DISCOVERY — COMPLETE / OFFICIAL URLS RESOLVED
+
+External discovery requests used: **2/4 maximum**, retries **0**, writes **0**.
+
+Exact NSE query for AKUMS on 8-Aug-2026 resolved the representative artifacts:
+
+1. Investor Presentation
+   - announcement: Analysts/Institutional Investor Meet/Con. Call Updates
+   - time: 08-Aug-2026 17:16:45
+   - NSE attachment:
+     \`https://nsearchives.nseindia.com/corporate/NSEAKUMS10_08082026171637_AKUMSINVESTORPRESENTATION.pdf\`
+   - NSE sequence ID: \`106733318\`
+   - NSE ISIN: \`INE09XN01023\`
+   - file size reported by NSE: 2.87 MB
+
+2. Financial-results / board-outcome candidate A
+   - announcement: Updates
+   - time: 08-Aug-2026 16:13:39
+   - disclosure text: unaudited financial results for quarter ended 30-Jun-2026
+   - NSE attachment:
+     \`https://nsearchives.nseindia.com/corporate/NSEAKUMS10_08082026161109_AKUMSBMOUTCOME.pdf\`
+   - sequence ID: \`106733132\`
+   - reported size: 5.66 MB
+
+3. Financial-results / board-outcome candidate B
+   - announcement: Outcome of Board Meeting
+   - time: 08-Aug-2026 15:46:10
+   - disclosure text: financial results for period ended 30-Jun-2026
+   - NSE attachment:
+     \`https://nsearchives.nseindia.com/corporate/NSEAKUMS10_08082026154548_AKUMSBMOUTCOME.pdf\`
+   - sequence ID: \`106733103\`
+   - reported size: 5.66 MB
+
+The two 5.66 MB result candidates may be duplicate/revised representations. They were **not** fetched in F0-DISCOVERY, so no content-hash deduplication is claimed.
+
+F0-DISCOVERY removed only \`OFFICIAL_URL_UNKNOWN\` for the representative artifacts. Content identity, canonical hash, factual extraction, review validation and readiness remain unproven.
+
+The one-time F0 discovery executor was retired behind JWT protection and HTTP 410.
+
+### Stop boundary after the three batches
+
+All three owner-approved independent batches are complete.
+
+No further action is authorized in this execution:
+- no T1 parameter campaign;
+- no review persistence;
+- no canonical observations/materialization;
+- no broad filing expansion;
+- no raw F0 filing-body capture;
+- no H1 normalization/materialization;
+- no O1 reviewed-evidence persistence;
+- no V1-5.
+
+Any next step requires a new explicit owner approval.
+
+V1-4 remains **IN PROGRESS / NOT PROVEN**.
