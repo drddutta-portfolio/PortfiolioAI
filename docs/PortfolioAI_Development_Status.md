@@ -1,3 +1,23 @@
+## V1-4 evidence remediation / closure preparation — 6 October 2026
+
+**H1 semantic correction = COMPLETE. Source/history/ownership validator repairs = DEPLOYED. Consolidated next execution package = PREPARED / NOT EXECUTED. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT AUTHORIZED.**
+
+Remote starting HEAD was independently verified as `9333cfa6e453da0a7d3719bbe8d75c90e6788d99` with no intervening changes.
+
+H1 NIFTY record `87baa591-3b0d-4f1c-96ce-9ce2bc6b4c88` is preserved as HTTP-200/HTML-Error-500 failure evidence; prior "capture succeeded" wording is corrected so response capture is not confused with usable acquisition. Existing Oct-1/Oct-5 bhavcopies were read-only validated with exact raw-body hashes, correct dates/schema and no conflicting matched EQ rows. The five-action NSE response is valid JSON, but held NATCOPHARM/IGL action ISINs do not equal current canonical ISINs and remain excluded pending historical-identity reconciliation.
+
+Ownership freshness now applies timeliness to the latest required quarter rather than invalidating every historical comparison quarter. Runtime policy check: normal four-quarter series ending Jun-2026 = FRESH; latest required quarter Mar-2026 = STALE. No owner reviewer identity or review write was fabricated.
+
+New `v14-source-validation.ts` rejects HTTP-200 error/login/challenge pages and validates TRI/bhavcopy semantics. New `v14-history-readiness.ts` proves sessions, calendar, corporate actions, return basis, exact benchmark mapping/alignment, cutoff/freshness and lineage. The materializer now consumes append-only `V1_4_HISTORY_CONTRACT_VALIDATION` proofs rather than requiring mutation of raw history.
+
+Focused runtime checks passed **8/8** capture/history cases; ownership success/stale policy canary passed. Temporary analyzers/selftests were retired behind JWT/HTTP 410.
+
+Development `p7-ic2-materialize-readiness` = ACTIVE v27, bundle `7ac14bc0bb6b8de22b7fe3c2647559a87fe064abf8b81b6fd25888df391d7eb2`. No canonical materialization was run.
+
+Single consolidated next package: `docs/PortfolioAI_V1_4_EVIDENCE_REMEDIATION_CLOSURE_EXECUTION_PACKAGE_2026-10-06.md`. It defines bounded history-action coverage, supported missing Angel benchmarks, append-only history-proof writes, owner factual ownership review, AKUMS official PDF/storage dependency, and the dependent frozen-111 materialization ceiling.
+
+---
+
 ## V1-4 H1 / O1 / F0 execution — 6 October 2026
 
 **H1 = COMPLETE / CAPTURE SUCCEEDED. O1 = COMPLETE / CAPTURE SUCCEEDED. F0-DISCOVERY = COMPLETE / OFFICIAL URLS RESOLVED. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT AUTHORIZED.**
