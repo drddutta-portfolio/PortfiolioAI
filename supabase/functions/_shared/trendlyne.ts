@@ -82,7 +82,7 @@ export function parseMcpResult(body:string):unknown {
   let payload:Record<string,unknown>
   try {
     const events=body.split(/\r?\n/).map(x=>x.trim()).filter(x=>x.startsWith("data:")).map(x=>x.slice(5).trim()).filter(x=>x&&x!=="[DONE]")
-    payload=(events.length ? events.map(JSON.parse).at(-1) : JSON.parse(body)) as Record<string,unknown>
+    payload=(events.length ? events.map(event => JSON.parse(event)).at(-1) : JSON.parse(body)) as Record<string,unknown>
   }
   catch { throw new Error("PROVIDER_PROTOCOL_ERROR") }
   if(!payload)throw new Error("PROVIDER_PROTOCOL_ERROR")

@@ -4,7 +4,7 @@ const decodeMcpResult = (body: string): unknown => {
   let payload: Record<string, unknown>
   try {
     const events = body.split(/\r?\n/).map(x => x.trim()).filter(x => x.startsWith("data:")).map(x => x.slice(5).trim()).filter(x => x && x !== "[DONE]")
-    payload = (events.length ? events.map(JSON.parse).at(-1) : JSON.parse(body)) as Record<string, unknown>
+    payload = (events.length ? events.map(event => JSON.parse(event)).at(-1) : JSON.parse(body)) as Record<string, unknown>
   } catch {
     throw new Error("PROVIDER_PROTOCOL_ERROR")
   }
@@ -30,7 +30,6 @@ export class TrendlyneObservedMcpClient {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       "Accept": "application/json, text/event-stream",
-      "User-Agent": "PortfolioAI/1.0",
     }
     if (this.#session) headers["Mcp-Session-Id"] = this.#session
 
@@ -59,7 +58,6 @@ export class TrendlyneObservedMcpClient {
     })
     await this.#post({ jsonrpc: "2.0", method: "notifications/initialized", params: {} })
   }
-
 
   async call(name: string, args: Readonly<Record<string, unknown>>): Promise<string> {
     if (!this.#session) await this.initialize()

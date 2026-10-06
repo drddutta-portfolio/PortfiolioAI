@@ -1,6 +1,7 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+import { parseExactTrendlyneFields, parseOwnershipQuarterCandidates } from "../_shared/v14-evidence-remediation.ts"
+import { createClient, type SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.115.0"
 import { PLANNED_PRIMARY_ENRICHMENT_SOURCE } from "../_shared/enrichment.ts"
-import { mapApprovedCompleteResearchMetrics } from "../_shared/trendlyne-complete-research-mapping.ts"
+import { APPROVED_COMPLETE_RESEARCH_MAPPINGS, mapApprovedCompleteResearchMetrics } from "../_shared/trendlyne-complete-research-mapping.ts"
 import { buildProfileAwareTrendlyneQueries, buildProfileEvidencePlan, normalizeDocumentEvidence, normalizeNumericEvidence, parseTrendlyneOwnershipHistory, type Ic1ProfileEvidenceContract } from "../_shared/p7-ic-evidence-normalization.ts"
 import { p7IcProfileContract } from "../_shared/p7-ic-profile-contracts.ts"
 import { p7IcHeldProfileAssignment } from "../_shared/p7-ic-held-profile-assignments.ts"
@@ -32,13 +33,12 @@ const P4_SECURITY_IDS = new Set([
   "6771f493-c29a-477e-8cc8-2bede0941e44",
 ])
 const projectRef = (value: string) => { try { return new URL(value).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1] ?? null } catch { return null } }
-const RESERVED_UNITS = 4
 const MAX_CAPTURE_BYTES = 512 * 1024
 const DAY = 24 * 60 * 60 * 1000
 const DOMAINS = ["TTM_FUNDAMENTALS", "DETAILED_FUNDAMENTALS", "OWNERSHIP", "DOCUMENT_DISCOVERY"] as const
 
 type Domain = typeof DOMAINS[number]
-type Admin = ReturnType<typeof createClient>
+type Admin = SupabaseClient
 type RequestBody = {
   readonly action?: unknown
   readonly portfolioId?: unknown
@@ -73,14 +73,14 @@ async function sourceRecord(admin: Admin, runId: string, kind: string, externalI
   const inserted = await admin.from("data_source_records").upsert(row, {
     onConflict: "source_code,record_kind,external_record_id,payload_hash",
     ignoreDuplicates: true,
-  }).select("id,retrieved_at").maybeSingle()
+  }).select("id,retrieved_at,payload_hash").maybeSingle()
   if (inserted.error) throw inserted.error
-  if (inserted.data) return inserted.data as { id: string; retrieved_at: string }
-  const existing = await admin.from("data_source_records").select("id,retrieved_at")
+  if (inserted.data) return inserted.data as { id: string; retrieved_at: string; payload_hash: string }
+  const existing = await admin.from("data_source_records").select("id,retrieved_at,payload_hash")
     .eq("source_code", SOURCE_CODE).eq("record_kind", kind).eq("external_record_id", externalId)
     .eq("payload_hash", payloadHash).single()
   if (existing.error) throw existing.error
-  return existing.data as { id: string; retrieved_at: string }
+  return existing.data as { id: string; retrieved_at: string; payload_hash: string }
 }
 
 async function recordUsage(admin: Admin, runId: string, itemId: string, securityId: string, domain: Domain, operation: string, sequence: number, attemptedAt: string, outcome: "SUCCEEDED" | "FAILED", safeCode: string | null) {
@@ -116,7 +116,7 @@ async function markItem(admin: Admin, itemId: string, status: "ACCEPTED" | "FAIL
   if (result.error) throw new Error("RUN_ITEM_ACCOUNTING_FAILED")
 }
 
-async function writeOverview(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string) {
+async function writeOverview(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string, metadataOnly = false) {
   const overview = parseOverview(text)
   assertExpectedStockId(providerInstrumentId, overview.identity.stockId)
   if (overview.identity.symbol !== security.symbol) throw new Error("UNEXPECTED_PROVIDER_SECURITY")
@@ -127,6 +127,7 @@ async function writeOverview(admin: Admin, runId: string, security: Security, pr
     provider_tool: "get_overview_news_corp_events",
     result: text,
   })
+  if (metadataOnly) return { metricCount: 0, identity: overview.identity, metadataReviewRequired: true }
   const freshUntil = new Date(new Date(record.retrieved_at).getTime() + 30 * DAY).toISOString()
   const rows = overview.metrics.map(metric => ({
     security_id: security.id,
@@ -157,8 +158,8 @@ async function writeOverview(admin: Admin, runId: string, security: Security, pr
   return { metricCount: rows.length, identity: overview.identity }
 }
 
-async function writeDetailed(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string, ic2Plan: ReturnType<typeof buildProfileEvidencePlan> | null = null) {
-  let normalizedEvidence: ReturnType<typeof normalizeNumericEvidence> | null = null
+export async function writeDetailed(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string, ic2Plan: ReturnType<typeof buildProfileEvidencePlan> | null = null) {
+  let normalizedEvidence: ReturnType<typeof normalizeNumericEvidence> | null
   try {
     normalizedEvidence = ic2Plan ? normalizeNumericEvidence({ providerResult: text, expectedSymbol: security.symbol, expectedInstrumentId: providerInstrumentId, requirements: ic2Plan.requirements }) : null
   } catch (error) {
@@ -180,6 +181,17 @@ async function writeDetailed(admin: Admin, runId: string, security: Security, pr
     p7_ic2_normalized_evidence: normalizedEvidence,
     result: text,
   })
+  if (ic2Plan) {
+    const candidates = parseExactTrendlyneFields(text, {
+      securityId: security.id, symbol: security.symbol, instrumentId: providerInstrumentId,
+      recordId: record.id, payloadHash: record.payload_hash, provider: SOURCE_CODE,
+      retrievedAt: record.retrieved_at, publishedAt: null,
+    }, APPROVED_COMPLETE_RESEARCH_MAPPINGS.map(mapping => ({ metricCode: mapping.canonicalCode,
+      providerLabel: mapping.providerLabel, unit: mapping.canonicalUnit, periodType: mapping.periodType })))
+    // Raw capture is useful; an undated/UNKNOWN observation must not be labelled AVAILABLE.
+    return { metricCount: 0, captured: true, metadataReviewRequired: true,
+      exactFieldCandidates: candidates.filter(candidate => candidate.value !== null) }
+  }
   const mapped = mapApprovedCompleteResearchMetrics(text, security.symbol, providerInstrumentId)
   if (!mapped.length) return { metricCount: 0, captured: true }
   const definitions = await admin.from("fundamental_metric_definitions").select("code,canonical_unit,is_active,freshness_seconds")
@@ -224,7 +236,7 @@ async function writeDetailed(admin: Admin, runId: string, security: Security, pr
   return { metricCount: rows.length, captured: true }
 }
 
-async function writeOwnership(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string, ic2Plan: ReturnType<typeof buildProfileEvidencePlan> | null = null) {
+export async function writeOwnership(admin: Admin, runId: string, security: Security, providerInstrumentId: string, text: string, ic2Plan: ReturnType<typeof buildProfileEvidencePlan> | null = null) {
   const values = parseOwnership(text)
   const ownershipHistory = ic2Plan ? parseTrendlyneOwnershipHistory(text) : null
   const record = await sourceRecord(admin, runId, "COMPLETE_RESEARCH_OWNERSHIP", `${providerInstrumentId}:ownership:${runId}`, {
@@ -235,6 +247,14 @@ async function writeOwnership(admin: Admin, runId: string, security: Security, p
     p7_ic2_ownership_history: ownershipHistory,
     result: text,
   })
+  if (ic2Plan) {
+    const candidates = parseOwnershipQuarterCandidates(text, {
+      securityId: security.id, symbol: security.symbol, instrumentId: providerInstrumentId,
+      recordId: record.id, payloadHash: record.payload_hash, provider: SOURCE_CODE,
+      retrievedAt: record.retrieved_at, publishedAt: null,
+    })
+    return { metricCount: 0, captured: true, metadataReviewRequired: true, quarterCandidates: candidates }
+  }
   const freshUntil = new Date(new Date(record.retrieved_at).getTime() + 45 * DAY).toISOString()
   const rows = values.map(value => ({
     security_id: security.id,
@@ -604,7 +624,7 @@ Deno.serve(async request => {
           "TTM_FUNDAMENTALS",
           "GET_OVERVIEW_NEWS_CORP_EVENTS",
           () => client.getOverviewNewsCorpEvents(security.symbol, "overview"),
-          async text => writeOverview(admin, runId, security, providerInstrumentId, text),
+          async text => writeOverview(admin, runId, security, providerInstrumentId, text, p7ic2),
         )
         if (!overviewOk) abortRemaining = true
       }

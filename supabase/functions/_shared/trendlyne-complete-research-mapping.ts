@@ -8,7 +8,7 @@ export type CompleteResearchMetric = {
 
 type MappingSpec = Omit<CompleteResearchMetric, "numericValue">
 
-const APPROVED_MAPPINGS: readonly MappingSpec[] = [
+export const APPROVED_COMPLETE_RESEARCH_MAPPINGS: readonly MappingSpec[] = [
   { canonicalCode: "ROCE_ANNUAL", providerLabel: "ROCE Ann. %", canonicalUnit: "PERCENT", periodType: "YEAR" },
   { canonicalCode: "OPM_TTM", providerLabel: "OPM TTM %", canonicalUnit: "PERCENT", periodType: "TTM" },
   { canonicalCode: "SHAREHOLDING_PROMOTER_PLEDGE_PERCENT", providerLabel: "Promoter holding pledge percentage % Qtr", canonicalUnit: "PERCENT_OF_PROMOTER_HOLDING", periodType: "QUARTER" },
@@ -17,6 +17,7 @@ const APPROVED_MAPPINGS: readonly MappingSpec[] = [
   { canonicalCode: "EPS_GROWTH_YOY", providerLabel: "EPS Qtr YoY Growth %", canonicalUnit: "PERCENT", periodType: "QUARTER" },
   { canonicalCode: "PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT", providerLabel: "Fair Price 5YrPE Upside%", canonicalUnit: "PERCENT", periodType: "POINT_IN_TIME" },
 ]
+const APPROVED_MAPPINGS = APPROVED_COMPLETE_RESEARCH_MAPPINGS
 
 const unwrapMarkdown = (providerResult: string): string => {
   let parsed: unknown

@@ -1,3 +1,4 @@
+import { P7_IC_CANONICAL_REQUIREMENT_METRICS } from "../_shared/p7-ic-requirement-metrics.ts"
 import {createClient,type SupabaseClient} from "https://esm.sh/@supabase/supabase-js@2.115.0"
 type Admin = SupabaseClient
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
@@ -23,12 +24,8 @@ type Benchmark={code:string;mapping_status:string;provider_code:string|null;prov
 type Facts={portfolioId:string;generatedAt:string;totalEquities:number;securities:Array<{id:string;symbol:string;isin:string;exchange:string}>;observations:Observation[];definitions:MetricDefinition[];sourceRecords:SourceRecord[];histories:History[];benchmarks:Benchmark[]}
 type Item={requirement_code:string;metric_code:string|null;required:boolean;minimum_history:number;freshness_policy:string|null;benchmark_authority:string[];applicability:"APPLICABLE"|"NOT_APPLICABLE";evidence_state:"FRESH"|"STALE"|"MISSING"|"INSUFFICIENT"|"CONFLICTING"|"REVIEW_REQUIRED"|"NOT_APPLICABLE";candidate_evidence_ids:string[];selected_evidence_id:string|null;evidence_as_of_date:string|null;retrieved_at:string|null;fresh_through:string|null;source_provider:string|null;raw_source_record_id:string|null;normalized_value:unknown;validation_state:string;canonical_selection_state:string;reason_code:string;recommended_remediation_action:string}
 
-const canonicalMetricCodes:Readonly<Record<string,readonly string[]>>={
- ROCE_OR_ROIC:["ROCE_ANNUAL","ROCE_MANAGEMENT_ANNUAL"],OPERATING_MARGIN_HISTORY:["OPM_TTM","OPERATING_PROFIT_QUARTER"],GROSS_OPERATING_MARGIN_HISTORY:["OPM_TTM"],
- REVENUE_GROWTH_MULTI_PERIOD:["REVENUE_ANNUAL","REVENUE_TTM"],NET_PROFIT_GROWTH_MULTI_PERIOD:["NET_PROFIT_TTM","PAT_ATTRIBUTABLE_ANNUAL"],EPS_GROWTH_MULTI_PERIOD:["EPS_DILUTED_ANNUAL","EPS_DILUTED"],
- CFO_OR_FCF_CONVERSION:["CFO_ANNUAL","FREE_CASH_FLOW_ANNUAL"],NET_CASH_OR_LEVERAGE:["NET_DEBT_EBITDA_ANNUAL","TOTAL_DEBT_ANNUAL","DEBT_EQUITY"],PE:["PE_TTM","PE_5Y_AVG_IMPLIED_UPSIDE_PERCENT"],
- GROSS_NPA_PERCENT:["GROSS_NPA_PERCENT"],NET_NPA_PERCENT:["NET_NPA_PERCENT"],EPS_GROWTH_YOY:["EPS_GROWTH_YOY"],ADVANCES_GROWTH_YOY:["ADVANCES_GROWTH_YOY"],DEPOSITS_GROWTH_YOY:["DEPOSITS_GROWTH_YOY"]
-}
+const canonicalMetricCodes = P7_IC_CANONICAL_REQUIREMENT_METRICS
+
 const projectRef=(v:string)=>{try{return new URL(v).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1]??null}catch{return null}}
 const sha=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify(v))))).map(b=>b.toString(16).padStart(2,"0")).join("")
 const reply=(status:number,body:Json)=>new Response(JSON.stringify(body),{status,headers:{"Content-Type":"application/json"}})

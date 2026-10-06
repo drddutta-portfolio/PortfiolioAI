@@ -1,3 +1,17 @@
+## V1-4 Action B Phase 1 — 5 October 2026
+
+**Phase 1 parser/validator implementation and private acquisition artifacts prepared. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT AUTHORIZED.**
+
+Owner authorized Phase 1 only. Implemented exact-decimal primary-entity/field parsing, source-bound metadata review, dated ownership candidates, cited document-excerpt review, strict Angel raw-candle parsing and reviewed calendar/adjustment/benchmark validation. IC2 captures do not append undated/UNKNOWN observations as AVAILABLE. Shared P/E aliases exclude fair-price upside percentage. No methodology requirements or frozen release criteria changed.
+
+All 111 frozen members have 1,608 mandatory requirement jobs. Cache review identified 741 numeric candidates, 4,350 ownership-quarter candidates and 421 distinct document references; these are not readiness progress. Two existing bank growth requirements validate; zero new normalizations/materializations were written. Current frozen cohort remains 111 REVIEW_REQUIRED / 0 READY; all equities remain 231 REVIEW_REQUIRED / 8 INSUFFICIENT / 0 READY.
+
+Private JSON/CSV provides 46 conditional Trendlyne raw-capture requests (44 parameter, 2 ownership), zero executable Angel One requests and zero document retrievals. There are 685 unresolved field/period/factual jobs and 307 unresolved history-authority jobs. Required provider volume and full bookkeeping-inclusive write ceiling remain NOT PROVEN. The 46-row raw cap is not a campaign grant. Complete source-bound cache review and a request-scoped dispatcher budget before any provider action; no general audit loop or V1-5 is authorized.
+
+Tests: 75 focused pure Edge tests, two mocked actual Deno handler/writer tests, strict checks, application build, architecture guard and changed-file lint passed. See [Phase 1 implementation and acquisition record](PortfolioAI_V1_4_ACTION_B_PHASE1_IMPLEMENTATION_AND_ACQUISITION_PLAN_2026-10-05.md) and its private artifact links. No Production/main, database/migration/Auth/RLS, provider, scheduler, R2 or P8 action occurred.
+
+---
+
 ## V1-4 Action A completed — 5 October 2026
 
 **Action A = COMPLETE / PASS. V1-4 = NOT PROVEN. Action B = PROPOSAL ONLY. V1-5 = NOT AUTHORIZED.**
@@ -8762,3 +8776,4 @@ Evidence closure results:
 **V1 implementation remains NOT AUTHORIZED.**
 
 The immediate unresolved items are the broken current Development deployment/browser proof, isolated restore/recovery acceptance, and evidence/engine remediation required before a non-arbitrary V1 usable-intelligence release threshold can be derived.
+
