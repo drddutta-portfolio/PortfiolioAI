@@ -1,0 +1,320 @@
+# PortfolioAI Stock Research Page Design and Implementation Plan
+
+**Date:** 6 October 2026 (Asia/Kolkata)
+**Repository:** drddutta-portfolio/PortfiolioAI
+**Target branch:** PortfolioAI-Development
+**Design version:** STOCK_RESEARCH_WORKSPACE_V2_PROPOSAL
+**Status:** Consolidated design specification / implementation proposal. Documentation creation is authorized; this document does not independently authorize application changes, provider execution, migrations or later V1 gates.
+**Reference baseline:** `95ae01330f87e7adc35a79da084f4beb9157c2bd`
+**Product rule:** One PortfolioAI, one reusable stock Research shell, profile-specific research within it.
+
+## 1. Purpose and boundaries
+
+Make every stock Research page understandable, consistent and useful while preserving the frozen R4M shell, existing methodology, canonical authorities and all retained evidence. The first screen and the beginning of Overview must explain the company, the owner's exposure, what research is established, and why any conclusion is unavailable.
+
+This document consolidates PortfolioAI sources only. No design, code, taxonomy or methodology from another program is incorporated.
+
+This is an upgrade of the existing Research workspace, not a replacement application. It changes presentation contracts and implementation planning; it does not approve scoring formulas, source substitutions or methodology assignments. Implementation must remain subordinate to the Master Blueprint, Research and Intelligence Architecture, Single Source of Truth Architecture, Database Architecture, Development Rules, current Scope Freeze A/B and explicit gate authorization.
+
+## 2. Source references and their authority
+
+| Reference | Recorded status and contribution | How this plan uses it |
+|---|---|---|
+| [R4M Universal Research Workspace Freeze](R4M_Universal_Research_Workspace_Freeze.md) | Frozen R4M_V1; records owner-approved PR #100 merged at de54ed1fa9569e9db0c14cfa8dac6dfbc2638c9f. Defines common regions, tabs, interfaces and prohibited extensions. | Governs the shared shell and state vocabulary. Its existing freeze is preserved. |
+| [R4M Profile-Driven Research Workspace Plan](R4M_Profile_Driven_Research_Workspace_Plan.md) | Records a reusable workspace, profile UI registry, compact summaries, responsive presentation and regression requirements. | Supplies presentation extension patterns and consolidation rules. Implementation-complete statements in this historical document are not proof of current compliance. |
+| [Sector Research Profile Architecture](PortfolioAI_Sector_Research_Profile_Architecture.md) | Labels itself an architecture candidate for owner review; distinguishes sectors, subprofiles and overlays. | Supplies the research framework. Examples are not new approved routes, formulas or source permissions. Current approved canonical assignments and contracts determine applicability. |
+| [Research Page Consistency Audit](R4N_HDFCBANK_TORNTPHARM_Research_Page_Consistency_Audit.md) | Defines the shared overview spine, common visual grammar and compact specialist workspace with collapsed deeper controls. | Supplies layout consistency and progressive disclosure. |
+| [Product UI and Decision Workflow](PortfolioAI_Product_UI_and_Decision_Workflow.md) | Higher-level product workflow; V1 is integration/correctness/completion, not a broad redesign. | Keeps this work a bounded restoration and extension of the existing Research experience. |
+| [Scope Freeze B and Build Plan](PortfolioAI_V1_SCOPE_FREEZE_B_AND_BUILD_PLAN_2026-10-05.md) | Governs current V1 gates, evidence and release acceptance. | Determines execution boundaries; design publication does not open a gate. |
+| [Versioned Build and Baseline Preservation Plan](PortfolioAI_VERSIONED_BUILD_AND_BASELINE_PRESERVATION_PLAN_2026-10-05.md) | Requires cumulative upgrades and preservation of valid prior work. | Requires reuse, extension and traceable migration of presentation components. |
+
+The R4M freeze lists detailed region ordering; the consistency audit describes a shorter overview spine with slightly different readiness placement. For this consolidation, preserve the explicit frozen R4M region sequence below. Use the audit's compact summaries, common grammar and specialist placement. Do not silently treat the shorter audit diagram as approval to replace the frozen sequence.
+
+No existing reference is deleted, rewritten or declared obsolete by this document. Any future alteration to frozen region ordering must be a named, reviewable amendment.
+
+## 3. Fixed shell and dynamic research content
+
+Every stock uses the same route, layout components, tabs, card grammar, typography, evidence interactions and loading/error vocabulary.
+
+### Three distinct configuration layers
+
+1. **Universal shell:** identity, company description, exposure, owner plan, advisory regions, navigation, overview, evidence and document interactions.
+2. **Approved effective research contract:** applicable dimensions, metrics, requirements, history, freshness, benchmarks, labels and workspace modules.
+3. **Security-scoped state:** actual assignments, facts, observations, reviews, readiness, engine runs, recommendations and owner decisions.
+
+Industry/sector/group/subgroup labels are canonical classification facts. Research profiles/subprofiles are methodological assignments. They may correspond, but they are not interchangeable and the UI must not infer one from the other.
+
+An overlay changes only those research modules and applicability rules explicitly specified by the approved effective contract. It does not independently change canonical sector, assign a portfolio role or create an opinion.
+
+Unknown or unresolved profiles use the same shell with explicit unresolved applicability and blocked results. They must not inherit a generic scoring model or bank metrics.
+
+## 4. Entire page structure
+
+| Order | Shared region | Content and behavior |
+|---:|---|---|
+| 1 | Security header and classification | Company name, symbol, exchange, asset class, canonical sector/industry/group/subgroup where available; resolved research profile/subprofile and assignment date. Long names wrap by words. |
+| 2 | About company | Compact source-supported description of business, products/services, customers/geographies and material operating exposures. If absent, one concise unavailable message; no fabricated company narrative. |
+| 3 | Portfolio and price summary | CMP with price timestamp/session and freshness, quantity, cost basis/method, invested cost, current value, P&L and portfolio weight. Broker/account attribution remains explicit when incomplete. |
+| 4 | Decision Workspace | Owner-controlled plan: role, target weight, horizon, target price and stop-loss reference. Edit controls use existing authorized owner workflows. |
+| 5 | PortfolioAI Suggestion | Separate read-only advisory region: recommendation state, applicable role/action/range and portfolio context only from qualified canonical outputs. Otherwise explain the exact missing prerequisites. |
+| 6 | AI Interpretation | Same location and interaction grammar for all profiles; enabled only under existing downstream authorization and qualified deterministic recommendation. Never invent a thesis, metric or action. |
+| 7 | Key Insights | Up to three to five concise source-supported findings, material risks or unanswered research questions. Do not repeat the suggestion card verbatim. |
+| 8 | Research Refresh | Compact shared control strip plus expandable profile capability modules; no provider calls on rendering/navigation. Explicit lifecycle and separate planning/execution controls. |
+| 9 | Research navigation | Overview / Financials / Quality & Growth / Ownership / Valuation / Documents / Evidence. Same labels and order for all stocks. |
+| 10 | Research at a glance | Three-card strip: effective research model, portfolio exposure, canonical evidence/readiness summary with evaluation timestamp. |
+| 11 | Investment Decision Cockpit and section summaries | Independent dimensions, assessment state and material reasons from qualified persisted outputs; explicit engine/evidence blocks when unavailable. |
+| 12 | Investment heatmap | Shared geometry and accessibility; only applicable approved dimensions. No manufactured scores, misleading curves or zero-filled missing cells. |
+| 13 | External ratings | Clearly separate provider opinions/ratings from PortfolioAI conclusions. Compact empty state and source/date metadata. |
+| 14 | Research Readiness | Compact grouped summary, validated applicable requirement counts and top blockers. Full requirement matrix and lineage belong in expandable detail/Evidence. |
+| 15 | Profile metric snapshots and detailed content | A small set of relevant source-bound metrics, followed by Research Health and the profile-specific deep-research extension. Detailed content is selected through common tabs. |
+
+Regions 4–7 may share a responsive container while preserving their reading order and distinct authority. Regions may be compact, collapsed or show a concise unavailable state; do not replace the common shell with a stock-specific empty layout.
+
+The full methodology-requirements table must not precede Research at a glance in the default Overview. Readiness appears once as a summary; other locations link to the same details rather than duplicating them.
+
+### Structure diagram
+
+```mermaid
+flowchart TD
+    A["Identity → About → Position"] --> B["Owner plan | Canonical advisory | Interpretation | Insights"]
+    B --> C["Compact refresh controls"]
+    C --> D["Shared research tabs"]
+    D --> E["Overview: Context → Cockpit → Heatmap → Ratings → Readiness"]
+    E --> F["Applicable metric snapshots → Research Health"]
+    F --> G["Sector/profile deep research: compact summary + expandable modules"]
+    D --> H["Financials / Quality & Growth / Ownership / Valuation"]
+    D --> I["Documents / Evidence: complete facts, requirements and lineage"]
+```
+
+## 5. Tab contracts
+
+| Tab | Questions answered | Required presentation |
+|---|---|---|
+| Overview | What is this business, what is our exposure, what is known and what prevents a conclusion? | Shared sequence above; prioritized findings and blockers; specialist summary after shared research health. |
+| Financials | How has performance, cash generation and balance-sheet strength changed? | Relevant annual/quarterly series, units, periods and scope; no charts without validated comparable observations. |
+| Quality & Growth | Is performance durable and what drives it? | Profile-specific quality, growth, cash conversion, durability and operating drivers; deterministic assessments separate from raw observations. |
+| Ownership | Who owns the business and what changed? | Dated compatible ownership series, pledge, dilution and documented governance events; explain denominators and overlapping categories. |
+| Valuation | What is the valuation basis and is it economically applicable? | Valid profile-specific methods, dated denominators, price timestamp and approved peer/own-history context; no invented upside or fair value. |
+| Documents | Which primary artifacts support the research? | Verified document identity, issuer/source, publication/period, content identity, reviewed passages and requirement links; discovery-only records marked as such. |
+| Evidence | What has actually passed validation and what remains blocked? | Complete requirement matrix, applicability/history units, periods/freshness, review status, source IDs/hashes and expandable reproducible lineage. |
+
+Financial history tables should distinguish annual, quarterly, TTM, instant and comparative/restated facts. Do not combine incompatible bases to create a trend.
+
+Evidence rows show human-readable explanations first and technical reason codes on expansion. Audit detail remains accessible; it is not removed to shorten the page.
+
+## 6. Sector, industry, group and subprofile adaptation
+
+The approved canonical assignment selects the effective methodology. A shared presentation registry maps that methodology to groups and labels; it must not classify the security or calculate scores.
+
+| Research family | Typical content focus, subject to approved contract | Prevent misleading carry-over |
+|---|---|---|
+| Banks | Loan/deposit growth, asset quality, margins, capital, profitability and applicable book-value valuation | Do not generalize bank measures to all financial companies. |
+| NBFC/lending | AUM, funding/liquidity, credit losses, leverage and lending economics | Do not treat deposits/CASA as universally applicable. |
+| Insurance | Life: APE/VNB/EV/persistency; general: underwriting/combined ratio/solvency | Do not mix life and general-insurance metrics or bank capital measures. |
+| AMC/broker/exchange/depository | AUM/flows, client assets/activity, volumes, market share and fee economics as applicable | Each approved operating-model subgroup controls metrics. |
+| Financial holding company | Subsidiary economics, look-through earnings, capital allocation, liquidity/leverage and approved SOTP/NAV context | No generic bank deposits/NPA grid or arbitrary holding-company discount. |
+| IT/services/product | Revenue/margins, cash conversion, client/deal concentration and approved product/service operating measures | Do not turn unverified AI exposure into a quality conclusion. |
+| Pharma/healthcare | Role-selected business model, financials, regulatory/site evidence, product/pipeline and cash quality | Domestic formulations, generics, API, CDMO and other reviewed subprofiles retain distinct applicability. |
+| Industrials/capital goods/defence | Order book/execution, margins, working capital, capacity and customer/project exposure | Order backlog is not automatically recognized revenue or a recommendation. |
+| Consumer/retail/durables | Demand, mix, distribution, unit economics, margins and cash generation | Use approved operating-model distinctions rather than one consumer formula. |
+| Commodity/cyclical businesses | Cycle-aware margins/cash flow, leverage, capacity/cost context and sufficiently long history | A peak quarter must not become permanent quality/growth. |
+| Real estate/construction | Cash collection, project/land/liability evidence, execution and approved valuation basis | Do not substitute ordinary industrial sales/margins for project economics. |
+| Power/utilities/telecom/infrastructure | Regulated/contracted revenue, assets, utilization, cash flows, leverage and capital intensity | Operator, infrastructure and regulated subgroups may require different measures. |
+
+This table illustrates presentation families; it does not approve new profiles or claim implemented engines. The implementation coverage manifest must enumerate **every current approved profile/subprofile**, including those omitted from the examples, and identify presentation support, unresolved applicability and engine availability separately. Current portfolio profile counts are observations, not permanent limits.
+
+### Pharma extension example
+
+Keep a compact model summary and then two collapsed-by-default groups:
+
+1. Business model & exposure map: primary business, reviewed material overlays, emerging/unresolved exposures and their methodology applicability.
+2. Evidence operations & review controls: source acquisition/review tools and complete retained methodology detail.
+
+Preserve valid prior methodology and research structures. Role-specific denominator inclusion follows approved contracts; the UI cannot decide which exposure counts.
+
+A security's evidence, assignments and lineage must never be inherited from another reference stock.
+
+## 7. Canonical facts and display contracts
+
+| Displayed fact | Authority / shared consumption rule |
+|---|---|
+| Quantity, cost basis, realized/unrealized P&L | Existing canonical ledger/accounting/portfolio view path. No Research-page arithmetic competing with Holdings or Dashboard. |
+| Portfolio role, target and horizon | Owner-controlled canonical settings, kept separate from recommendations and asset class. |
+| Price and history | Existing approved market-data authority and validated history path; session/freshness shown. |
+| Sector/industry/group/subgroup | Canonical identity/classification projection. Missing hierarchy levels remain unavailable. |
+| Profile/subprofile and methodology version | Current approved canonical route/assignment, with effective-contract lineage. |
+| Evidence readiness | Current selected canonical evidence snapshot and requirement items, with evaluation/source cutoff; not raw provider status. |
+| Engine availability and assessments | Existing canonical engine registry/runs, separately identified from evidence readiness. |
+| Advisory action and fit/sizing/exit | Qualified canonical persisted outputs with portfolio context and reproducible lineage. |
+| Company narrative and primary documents | Approved source-supported document/profile path; absent content is not generated as fact. |
+
+### Required metric view model
+
+A metric card/table cell consumes, at minimum:
+
+- canonical metric code and investor-facing label;
+- value kind, exact value or null, display precision and canonical unit;
+- currency and source scale where applicable;
+- period start/end/type and reporting scope;
+- publication and retrieval dates;
+- applicable freshness limit and current state;
+- source identity and observation/document/review references;
+- validation state distinct from provider/raw availability;
+- effective profile/contract version and applicability;
+- reason for an unavailable, conflicting, stale or unreviewed display.
+
+Display formatting uses the existing approved decimal/rounding contracts. Do not reinterpret a percent, ratio or currency amount in JSX. Retain source-value evidence and deterministic conversion lineage.
+
+A raw/source value may be shown as such when safe, but must not receive a canonical VERIFIED badge merely because a legacy/provider flag says verified. A value whose unit or currency cannot be represented safely is not shown as an apparently interpretable financial amount.
+
+### State vocabulary
+
+Preserve R4M's explicit states:
+
+- SCORED: qualified numeric assessment exists.
+- EVIDENCE_NOT_SCORE_READY: validated evidence exists but scoring prerequisites are not met.
+- NO_VALIDATED_EVIDENCE: no qualifying evidence exists.
+- NOT_APPLICABLE: the approved effective contract excludes this item.
+- NO_DATA: raw/source information is absent.
+
+Expose the underlying evidence states without conversion to a default opinion: fresh, stale, missing, insufficient, conflicting or review required.
+
+Not available means no approved capability; not ready means prerequisites are missing; pending means an initiated process is awaiting completion. Do not use Pending for every empty or unimplemented result.
+
+Keep profile resolved, evidence ready, engine implemented, assessment available and advisory available as independent facts.
+
+### Readiness and freshness summaries
+
+Compute summaries in the shared canonical selector/view-model layer. Count only applicable requirements with the approved mandatory/important/supplementary definitions. Show numerator, denominator and evaluation date; do not combine different readiness denominators.
+
+Snapshot age and current price freshness are separate. A stored snapshot dated October 5 must not appear to be a newly evaluated October 6 result. Do not derive or persist readiness while rendering.
+
+## 8. Investor-facing information hierarchy
+
+Each page should support three reading depths:
+
+1. **Understand:** compact identity, company description, exposure and research state.
+2. **Investigate:** applicable financial/quality/valuation/ownership facts and material research questions.
+3. **Audit:** complete source documents, requirement details, review decisions and reproducible lineage.
+
+Key Insights must explain supported observations, not manufacture strengths/risks from missing evidence. If no conclusion is qualified, use a concise research summary such as: “A current investment assessment is unavailable because the required annual profitability series and benchmark-aligned history have not been validated.”
+
+Business questions may be displayed as questions awaiting evidence; they must not masquerade as answered analysis.
+
+Refresh operations and internal development terminology are secondary. Translate reason codes into specific plain-language explanations while retaining the original codes in Evidence.
+
+## 9. Visual, responsive and accessibility rules
+
+- Keep the existing PortfolioAI typography, colors, card grammar, tabs and navigation. Avoid another independent stylesheet/design system per profile.
+- Use compact cards, consistent spacing and content-driven empty-state heights.
+- On desktop, use a stable main-content and compact secondary-context layout where existing shell supports it.
+- On narrow screens, stack regions in their defined reading order; avoid horizontal page overflow or character-by-character wrapping.
+- Preserve shared tab order; allow keyboard-accessible scrolling when space is limited.
+- Use labeled controls, visible focus, semantic headings and accessible disclosure states.
+- Never convey readiness, gain/loss or risk by color alone.
+- Tables may scroll within their container on mobile; offer readable summaries before dense tables.
+- Round displayed weights through existing formatting rules; do not expose twenty-decimal raw percentages.
+- Conditionally show meaningful controls through shared capability states, not symbol-specific CSS/JSX.
+- Expanded/collapsed state should not reset unexpectedly during ordinary navigation.
+
+## 10. Defects observed in the live Development UI
+
+The following observations were made read-only on 6 October 2026. They are repair targets, not new canonical facts or permission to change assignments.
+
+| Observed issue | Planned correction | Verification |
+|---|---|---|
+| Large methodology matrix precedes Research at a glance | Restore the frozen overview sequence; compact readiness summary and expandable full Evidence detail. | Default Overview heading/order and screenshot regression. |
+| Decision/readiness status repeated in several blocks | Distinct responsibilities for suggestion, insights, readiness and research health; shared underlying state. | No duplicate generic Pending/Review required narrative. |
+| AKUMS header says primary subprofile pending while snapshot names CDMO CRAMS | Reconcile authority, version and timestamps; display current assignment separately from historical snapshot assignment if different. | Never guess which source is current or overwrite an assignment. |
+| Owner role appears as Other and Unclassified | Use the same owner-role view model everywhere; do not confuse asset class/profile with role. | Cross-surface role consistency. |
+| Financial values lack visible period/unit/scale | Enforce metric display contract and explicit unavailable metadata. | Unit/currency/period fixtures and live inspection. |
+| Non-bank financial company shows bank-oriented metric placeholders | Approved effective-contract applicability drives all tabs and groups. | No bank-metric leakage into holding-company, Pharma or other non-bank pages. |
+| Cached VERIFIED labels coexist with blocked canonical evidence | Show raw/source availability and canonical validation as distinct concepts. | Legacy flags cannot imply current methodology readiness. |
+| Empty company description uses prominent space | Compact truthful empty state; source enrichment remains separately authorized. | Sparse-evidence screenshot. |
+
+The page length alone is not an error: complete research must remain available. The error is forcing deep diagnostics before the primary research summary.
+
+## 11. Implementation architecture and reuse
+
+Reuse and extend:
+
+- `src/pages/ResearchPage.tsx` for the common route/composition;
+- `src/features/research/researchProfileUiContract.ts` for presentation metadata;
+- existing readiness view models/adapters, including `pharmaReadinessViewModel.ts`;
+- existing accounting/portfolio hooks and canonical route/snapshot selectors;
+- existing shared metric, cockpit, heatmap, document and evidence components.
+
+These paths are starting points to inspect, not proof that all current implementations already comply.
+
+Prohibit:
+
+- stock-specific pages or permanent symbol-specific component trees;
+- page-local sector routing, score calculations, readiness reconstruction or direct canonical-storage queries;
+- duplicated source/provider or accounting logic;
+- provider calls, score/recommendation tracking writes or persistence caused by rendering;
+- new hidden fallback scoring, invented company descriptions or placeholder numerical data;
+- deleting prior evidence/methodology merely to simplify the UI.
+
+If an existing render path writes recommendation-preview tracking, identify and preserve its authorization boundary; a read-only visual check must not accidentally exercise it.
+
+## 12. Bounded implementation sequence and V1 placement
+
+| Step | Work | Gate relationship / boundary |
+|---|---|---|
+| D1 | Compare current shared composition against this contract; inspect relevant components and authority paths. Produce a focused file/change map. | Design preflight, not another general V1 audit. |
+| D2 | Repair ordering, progressive disclosure, label/context conflicts and metric presentation. Extend shared profile UI configuration. | Bounded presentation integration alongside authorized V1-4 work; application execution must be explicitly authorized. |
+| D3 | Ensure all current approved profiles/subprofiles use the shell and honest applicability/unsupported states. | No new methodology, evidence or engine implementation implied. |
+| D4 | Populate assessment regions from qualified deterministic outputs as engines become available. | V1-5 after separate authorization. |
+| D5 | Populate eligibility, fit/sizing/exit and portfolio-aware action regions. | V1-6/V1-7 after their separate authorizations. |
+| D6 | Integrate approved thesis, interpretation and owner-decision workflows. | V1-8 after separate authorization. |
+| D7 | Verify complete authenticated workflows, maintenance/outage states and release acceptance. | V1-9; restore proof remains separately mandatory. |
+
+D2 must not wait for all stocks to become READY: blocked pages still need accurate, organized research. Conversely, a polished page does not close V1-4 or any downstream gate.
+
+Implementation commits should be small and focused. Preserve the repaired evidence validator workstream and do not mix UI repairs with provider campaigns or schema changes.
+
+## 13. Acceptance matrix
+
+The following is the design acceptance contract; no PASS is claimed by publishing it.
+
+| Area | Required proof |
+|---|---|
+| Shared shell | Same regions and tab order across bank, holding company, Pharma, non-financial specialist, unknown profile and sparse/blocked states. |
+| First-glance clarity | At 1440×900, first screen identifies the company, exposure and research/advisory state; first Overview screen after selecting the tab shows the research summary before the full evidence matrix. |
+| Profile applicability | Every current approved profile/subprofile has an explicit presentation outcome; no irrelevant bank metrics appear outside approved bank/lending applicability. |
+| Canonical consistency | Identity, role, quantity, cost, price and weight agree with their shared authorities and other surfaces using the same snapshot/time context. |
+| Value meaning | No financial amount appears without safe unit/currency/scale and period context; missing metadata remains explicit. |
+| State meaning | Raw data, validated evidence, engine capability, assessments and advice remain distinguishable. |
+| Evidence integrity | Complete requirements and lineage remain reachable; detail is collapsed, not removed. |
+| Advisory safety | No fallback HOLD, invented score, implied recommendation or hidden readiness promotion. |
+| Read-only browsing | No provider calls, refresh execution, database writes or scheduler actions from ordinary navigation/rendering. |
+| Responsive/accessibility | Check 1440px, 1024px and 390px widths, keyboard navigation, focus, text wrapping and accessible disclosures. |
+| Resilience | Loading, error, empty, partial, stale, conflicting, short history and unavailable engine states preserve the common shell. |
+| Preservation | Existing valid research, methodology, owner settings and evidence remain intact. |
+
+Use real Development cases for visual acceptance, including HDFCBANK, TORNTPHARM, AKUMS and ABCAPITAL when accessible, plus representative approved profiles and unresolved cases. Reference companies are test cases, not presentation branching keys. Keep private holding quantities/account details out of committed screenshots or use sanitized fixtures.
+
+## 14. Tests, deployment verification and completion evidence
+
+For implementation:
+
+1. Add meaningful composition/order, profile applicability, metric metadata, state semantics and canonical consistency regressions.
+2. Test both populated and sparse/blocked view models and unknown-profile behavior.
+3. Run relevant tests, TypeScript, changed-file lint, architecture guard and production build; disclose pre-existing failures separately.
+4. Verify the Development Preview and deployed source equivalence. Documentation-only differences do not require repeated application acceptance.
+5. Use authenticated browser inspection with existing protected access; never weaken Vercel or PortfolioAI authentication.
+6. Verify relevant tab/disclosure interactions without executing provider controls, edits or tracking writes.
+7. Record tested application SHA, UI cases, viewport screenshots, omitted checks and remaining limitations.
+8. Update Development Status only when implementation reality or the approved milestone changes.
+
+Documentation-only publication requires reference/path checking, Markdown/whitespace checks and verification of the documentation-only commit. It does not require an unrelated application build.
+
+## 15. Completion boundaries
+
+**Design complete:** one documented shell, profile-extension rules, full tab contracts, state/metric semantics, current defect map, implementation sequence and acceptance criteria.
+
+**Implementation complete:** repaired shared workspace is deployed and verified across representative profiles/states, with coverage of every approved profile configuration and preserved underlying logic.
+
+**Evidence/engine/release complete:** only the relevant V1 gate's acceptance contract may establish this; neither design nor UI completion implies it.
+
+This publication creates one consolidated design plan on Development. It does not amend frozen cohort membership/value, release thresholds, methodology, provider budgets, Production, main, Auth/RLS, schedulers, storage or migration state.
