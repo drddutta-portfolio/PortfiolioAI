@@ -529,3 +529,19 @@ No further action is authorized in this execution:
 Any next step requires a new explicit owner approval.
 
 V1-4 remains **IN PROGRESS / NOT PROVEN**.
+
+
+---
+
+## 15. H1 semantic-validation correction and V1-4 closure preparation — 6 October 2026
+
+The prior H1 wording "CAPTURE SUCCEEDED" described request execution/response capture, not semantic acquisition success. The immutable NIFTY record `87baa591-3b0d-4f1c-96ce-9ce2bc6b4c88` is HTTP 200 but `text/html` with an **Error 500** page. It is preserved as failure evidence. Correct disposition: request executed = success; response captured = success; usable NIFTY data acquired = failed; semantic validation = failed.
+
+The two bhavcopy captures and corporate-action response were processed read-only and are structurally/hash valid. Corporate-action identity remains unresolved for held NATCOPHARM and IGL because the response ISINs differ from current canonical ISINs; no generic adjustment factor or automatic symbol-only attachment is allowed.
+
+Development now includes semantic source validation, the corrected ownership freshness rule, and deterministic history readiness integrated into the real materializer. History readiness requires explicit calendar/action/return-basis/mapping/alignment/freshness/lineage proof and can consume append-only `V1_4_HISTORY_CONTRACT_VALIDATION` records without mutating raw Angel One rows.
+
+Full findings and the single consolidated next execution package are authoritative in:
+`docs/PortfolioAI_V1_4_EVIDENCE_REMEDIATION_CLOSURE_EXECUTION_PACKAGE_2026-10-06.md`.
+
+Development materializer deployed as v27; no materialization or evidence persistence was run. V1-4 remains **IN PROGRESS / NOT PROVEN**; V1-5 remains unauthorized.
