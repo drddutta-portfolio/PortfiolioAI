@@ -128,6 +128,36 @@ function validateBody(body:Body,action:Action) {
   return {codes,cutoffDate:body.cutoffDate}
 }
 
+async function createAuditRun(admin:ReturnType<typeof createClient>,action:Action,grantId:unknown,counters:BatchBCounters){
+  const isMaster=action==="P7_IC2_CAPTURE_MASTER"
+  const r=await admin.from("data_ingestion_runs").insert({
+    source_code:"ANGEL_ONE",
+    operation:isMaster?"V1_4_BATCH_B_MASTER_PREFLIGHT":"V1_4_BATCH_B_HISTORY_RESUME",
+    portfolio_id:PORTFOLIO_ID,
+    status:"RUNNING",
+    requested_count:isMaster?1:V1_4_BATCH_B_CODES.length,
+    estimated_call_count:isMaster?1:13,
+    reserved_call_count:isMaster?1:13,
+    attempted_call_count:0,
+    accepted_count:0,
+    orchestration_type:"V1_4_BATCH_B_RESUMPTION",
+    trigger_source:"OWNER",
+    metadata:{contract_version:V1_4_BATCH_B_CONTRACT_VERSION,action,grant_id:grantId??null,counters:{...counters}},
+  }).select("id").single()
+  if(r.error)throw new Error("P7_IC_BATCH_B_RUN_CREATE_FAILED")
+  return String(r.data.id)
+}
+async function updateAuditRun(admin:ReturnType<typeof createClient>,runId:string,status:"SUCCEEDED"|"FAILED",counters:BatchBCounters,extra:Record<string,unknown>={}){
+  const attempted=counters.instrumentMasterRequests+counters.providerAuthenticationRequests+counters.attemptedHistoryRequests
+  const r=await admin.from("data_ingestion_runs").update({
+    status,completed_at:new Date().toISOString(),attempted_call_count:attempted,
+    accepted_count:counters.acceptedRows,fetched_count:counters.successfulHistoryResponses+counters.successfulInstrumentMasterResponses,
+    failed_count:status==="FAILED"?1:0,error_summary:status==="FAILED"?String(extra.code??"P7_IC_BATCH_B_FAILED"):null,
+    metadata:{contract_version:V1_4_BATCH_B_CONTRACT_VERSION,counters:{...counters},...extra},
+  }).eq("id",runId)
+  if(r.error)throw new Error("P7_IC_BATCH_B_RUN_UPDATE_FAILED")
+}
+
 Deno.serve(async request=>{
   if(request.method==="OPTIONS")return new Response("ok",{headers:cors})
   if(request.method!=="POST")return json(405,{error:"Method not allowed.",...actionCounters(emptyBatchBCounters())})
@@ -140,9 +170,12 @@ Deno.serve(async request=>{
   const counters=emptyBatchBCounters()
   const admin=createClient(supabaseUrl,serviceKey,{auth:{persistSession:false}})
   let leaseHolder:string|null=null
+  let runId:string|null=null
+  let activeAction:Action|null=null
   try{
     const body=await request.json() as Body
     const action=body.action as Action
+    activeAction=action
     if(!["P7_IC2_PLAN","P7_IC2_PREFLIGHT_EXISTING_MASTER","P7_IC2_CAPTURE_MASTER","P7_IC2_EXECUTE_BATCH_B_V1"].includes(action))
       return json(400,{error:"Unknown action.",code:"P7_IC_UNKNOWN_ACTION",...actionCounters(counters)})
     const {codes,cutoffDate}=validateBody(body,action)
@@ -163,6 +196,7 @@ Deno.serve(async request=>{
 
     if(action==="P7_IC2_CAPTURE_MASTER"){
       await consumeGrant(admin,body,action,MASTER_SENTINEL)
+      runId=await createAuditRun(admin,action,body.grantId,counters)
       const attemptedAt=new Date().toISOString()
       counters.instrumentMasterRequests+=1
       let response:Response
@@ -191,7 +225,8 @@ Deno.serve(async request=>{
       if(record.error)throw new Error("P7_IC_BENCHMARK_MASTER_PERSIST_FAILED")
       await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_MASTER_"+String(body.grantId),operationClass:"INSTRUMENT_MASTER",attemptedAt,completedAt,outcome:"SUCCEEDED",units:1})
       const preflight=preflightAllBenchmarkIdentities(definitionsForBatchB(),codes,parsed as readonly MasterRow[])
-      return json(200,{mode:"P7_IC2_BATCH_B_MASTER_PREFLIGHT",masterSourceRecordId:record.data.id,master:{sourceUrl:MASTER_URL,retrievedAt:completedAt,payloadHash:hash,rowCount:parsed.length},preflight,allExact:preflight.every(x=>x.status==="EXACT_MATCH"),...actionCounters(counters)})
+      await updateAuditRun(admin,runId,"SUCCEEDED",counters,{master_source_record_id:record.data.id,all_exact:preflight.every(x=>x.status==="EXACT_MATCH")})
+      return json(200,{mode:"P7_IC2_BATCH_B_MASTER_PREFLIGHT",runId,masterSourceRecordId:record.data.id,master:{sourceUrl:MASTER_URL,retrievedAt:completedAt,payloadHash:hash,rowCount:parsed.length},preflight,allExact:preflight.every(x=>x.status==="EXACT_MATCH"),...actionCounters(counters)})
     }
 
     const retained=await loadRetainedMaster(admin,body.masterSourceRecordId)
@@ -201,6 +236,7 @@ Deno.serve(async request=>{
     }
 
     await consumeGrant(admin,body,action,EXECUTE_SENTINEL)
+    runId=await createAuditRun(admin,action,body.grantId,counters)
     if(!preflight.every(x=>x.status==="EXACT_MATCH"))
       return json(409,{error:"All twelve exact benchmark identities must pass before history acquisition.",code:"P7_IC_BATCH_B_PREFLIGHT_NOT_ALL_EXACT",masterSourceRecordId:retained.recordId,preflight,...actionCounters(counters)})
 
@@ -263,9 +299,14 @@ Deno.serve(async request=>{
       await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_HISTORY_"+String(body.grantId)+"_"+code,operationClass:"HISTORY",attemptedAt,completedAt,outcome:"SUCCEEDED",units:1})
       results.push({code,status:"REFRESHED",identity,requestWindow:window,distinctSessions:validated.distinctSessions,firstSession:validated.firstSession,lastSession:validated.lastSession,acceptedRows:validated.rows.length,persistedRows:persisted})
     }
-    return json(200,{mode:"P7_IC2_BATCH_B_EXECUTED",contractVersion:V1_4_BATCH_B_CONTRACT_VERSION,masterSourceRecordId:retained.recordId,preflight,results,...actionCounters(counters)})
+    await updateAuditRun(admin,runId,"SUCCEEDED",counters,{master_source_record_id:retained.recordId,completed_codes:results.map(x=>x.code)})
+    return json(200,{mode:"P7_IC2_BATCH_B_EXECUTED",runId,contractVersion:V1_4_BATCH_B_CONTRACT_VERSION,masterSourceRecordId:retained.recordId,preflight,results,...actionCounters(counters)})
   }catch(error){
-    return json(409,{error:"P7-IC Batch B failed safely.",code:safeCode(error),...actionCounters(counters)})
+    const code=safeCode(error)
+    if(runId){
+      try{await updateAuditRun(admin,runId,"FAILED",counters,{code,action:activeAction})}catch{}
+    }
+    return json(409,{error:"P7-IC Batch B failed safely.",code,runId,...actionCounters(counters)})
   }finally{
     if(leaseHolder){
       await admin.rpc("release_market_data_operation_lease",{p_portfolio_id:PORTFOLIO_ID,p_provider_code:"ANGEL_ONE",p_operation:"REFRESH_HISTORY",p_lease_holder:leaseHolder}).catch(()=>undefined)
