@@ -1,3 +1,18 @@
+## HDFCBANK sample deployment to Development — 6 October 2026
+
+Owner explicitly requested the HDFCBANK-only redesigned sample on the existing
+PortfolioAI-Development branch URL. PR #104 is being integrated with the latest
+Development work; the only conflict was the append-only status record and both
+workstreams were preserved. Vercel reported a daily deployment limit on the latest
+sample-branch check; Development deployment and authenticated acceptance are pending.
+The isolated preview used a backend missing the canonical evidence lineage view;
+its visual verification did not establish Development evidence readiness. The
+existing Development branch configuration must be retained for this deployment.
+Other stocks retain the existing page composition. No Production promotion,
+backend migration, provider execution or new evidence/scoring authorization.
+
+---
+
 ## HDFCBANK-only redesign sample rollout — 6 October 2026
 
 Owner requested deployment of HDFCBANK only as the initial sample. The route selects
@@ -58,6 +73,40 @@ changes. This does not certify new sector engines, numeric sizing, AI execution,
 evidence readiness or V1 release completion. See section 17 of
 `PortfolioAI_STOCK_RESEARCH_PAGE_DESIGN_PLAN_2026-10-06.md` for composition layers,
 component/authority map and honest unavailable combinations.
+
+---
+
+## V1-4 Batch B repair and verified resumption contract — 6 October 2026
+
+**Batch B code repair = COMPLETE / TESTED / DEPLOYED. Identity evidence = BLOCKED pending one retained replacement master fetch. History acquisition = NOT AUTHORIZED. V1-4 = IN PROGRESS / NOT PROVEN.**
+
+- Starting remote HEAD: `fbf96266a47d1056f952342d4b7414023c932e0a`.
+- Initial deployed v5 differed from repository source and included an undeclared live diagnostic master-fetch path; that master artifact was not retained.
+- Repaired `p7-ic-benchmark-refresh` deployed as **v9**, bundle `5bf0c2d26f1a7700d27ac5459acf045eb45640798a2b2f5d253d241b5c0b22ac`; deployed index source equals current repository source.
+- Exact 12-code order is enforced. All 12 identities are preflighted against one retained/hash-verified master artifact before the first history request.
+- History acceptance now requires ≥252 distinct usable sessions, exact 2025-09-01→2026-10-06 window/cutoff, valid OHLC, ≤400 rows/code and ≤4,800 total before any write.
+- Independent durable counters cover master, authentication, history attempts/successes, accepted rows and persisted rows; failure counters persist in an audit run.
+- Batch B uses a no-retry history path. A cold-worker campaign requires an explicit auth allowance, so corrected combined ceiling is 1 B0 master request + up to 13 later B1 requests (1 auth + 12 history) = 14 maximum across both stages.
+- No retained authorized Angel master artifact exists; current reproducibly eligible history set is therefore **0/12**.
+- Provider-free runtime tests: **16/16 PASS**. Final provider-free PLAN: replacement master required, fresh grant required, old grant unusable, all counters zero.
+- History-proof preparation now keeps calendar, corporate-action treatment and stock freshness independent. Current full-window exchange calendar remains UNVERIFIED; two bhavcopy canaries are insufficient.
+- 110/111 frozen stocks currently end at 2026-09-25; HDFCBANK ends at 2026-10-05. Benchmark recovery cannot itself refresh stock history.
+- Existing 111 Batch C proofs were preserved; no superseding proof was written.
+- Detailed record/proposal: `docs/PortfolioAI_V1_4_BATCH_B_REPAIR_AND_VERIFIED_RESUMPTION_CONTRACT_2026-10-06.md`.
+- Proposed next step is **B0 only**: one retained replacement master fetch + complete 12-code preflight, zero history calls, then stop/report.
+
+---
+
+## V1-4 owner-approved execution — 6 October 2026
+
+**Batch A = COMPLETE / PASS. Batch B = STOPPED / BLOCKED. Batch C = COMPLETE / TRUTHFUL NON-READY. Batch E = COMPLETE / PASS. Batch D = NOT EXECUTED. Batch F = NOT ELIGIBLE / NOT EXECUTED. V1-4 = IN PROGRESS / NOT PROVEN.**
+
+- Batch A: run `a7375df9-16b7-4bb2-b214-73a4cf29d0c0`; 16 external requests total, 15 accepted monthly action captures, zero retries.
+- Batch B: grant `34e7c8c0-6edf-4541-8051-b621499ae450`; stopped at first exact identity failure `NIFTY_CAPITAL_GOODS / P7_IC_BENCHMARK_IDENTITY_NOT_FOUND`; shared instrument master only; Angel history calls 0; remaining codes not attempted.
+- Batch C: 111 append-only security history-contract proofs; all 111 calendar UNVERIFIED because Batch B failed; 10 names additionally UNSUPPORTED for structural-action/raw-close treatment.
+- Batch E: private `research-source-documents` bucket created; 3 official NSE PDFs captured; 14,886,580 bytes; 3 source records; 2 deduplicated research documents; 3 source appearances; no Auth/RLS changes.
+- Review ledger remains 0. Snapshot/item/selection/lineage counts remain 1,485 / 22,401 / 956 / 478; Batch F was therefore not run.
+- Execution record: `docs/PortfolioAI_V1_4_OWNER_APPROVED_BATCHES_ABC_E_EXECUTION_RECORD_2026-10-06.md`.
 
 ---
 

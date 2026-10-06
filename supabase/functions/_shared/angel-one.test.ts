@@ -43,4 +43,19 @@ describe("Angel One session lifecycle", () => {
     })
     expect(fetchMock).toHaveBeenCalledTimes(4)
   })
+  it("Batch B no-retry history path exposes exact auth/history transport attempts", async () => {
+    const token = jwt(Date.now() / 1000 + 3600)
+    const events:string[]=[]
+    const fetchMock = vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(new Response(JSON.stringify({ status: true, data: { jwtToken: token } }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ status: false, errorcode: "AB1004" }), { status: 502 }))
+    const provider=new AngelOneProvider(config,{
+      onAttempt(kind){events.push("attempt:"+kind)},
+      onResponse(kind,ok){events.push("response:"+kind+":"+String(ok))},
+    })
+    await expect(provider.getDailyHistoryNoRetry(instrument,"2025-09-01 00:00","2026-10-06 23:59")).rejects.toMatchObject({code:"ANGEL_PROVIDER_ERROR_AB1004"})
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(events).toEqual(["attempt:AUTHENTICATE","response:AUTHENTICATE:true","attempt:HISTORY"])
+  })
+
 })

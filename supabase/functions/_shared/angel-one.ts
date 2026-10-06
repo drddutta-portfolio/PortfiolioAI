@@ -10,6 +10,11 @@ import {
 } from "./market-data.ts"
 import { SAFE_PROVIDER_FAILURE, SafeOperationalError } from "./security.ts"
 
+export interface AngelTransportObserver {
+  onAttempt?(kind:"AUTHENTICATE"|"HISTORY"|"QUOTE"):void
+  onResponse?(kind:"AUTHENTICATE"|"HISTORY"|"QUOTE",ok:boolean):void
+}
+
 interface AngelOneConfig {
   readonly apiKey: string
   readonly clientCode: string
@@ -175,14 +180,16 @@ export function clearAngelSession() {
   cachedJwt = null
 }
 
-async function authenticate(config: AngelOneConfig, now = Date.now()) {
+async function authenticate(config: AngelOneConfig, now = Date.now(), observer?:AngelTransportObserver) {
   if (cachedJwt && cachedJwt.expiresAt > now + SESSION_SAFETY_MS) return cachedJwt.token
+  observer?.onAttempt?.("AUTHENTICATE")
   const response = await fetch("https://apiconnect.angelone.in/rest/auth/angelbroking/user/v1/loginByPassword", {
     method: "POST",
     headers: headers(config),
     body: JSON.stringify({ clientcode: config.clientCode, password: config.pin, totp: await totp(config.totpSecret) }),
   })
   const body = await responseJson<{ readonly jwtToken?: string }>(response)
+  observer?.onResponse?.("AUTHENTICATE",true)
   const token = body.data?.jwtToken
   if (!token) throw new AngelProviderError("MISSING_JWT", true)
   cachedJwt = { token, expiresAt: sessionExpiresAt(token, now) }
@@ -215,7 +222,7 @@ function parseDailyCandles(data: readonly unknown[][] | undefined, retrievedAt: 
 
 export class AngelOneProvider implements MarketDataProvider {
   readonly code = MARKET_DATA_PROVIDER
-  constructor(private readonly config: AngelOneConfig) {}
+  constructor(private readonly config: AngelOneConfig, private readonly observer?:AngelTransportObserver) {}
 
   async getLatestPrices(instruments: readonly ProviderInstrument[]) {
     return this.getLatestPricesAttempt(instruments, false)
@@ -225,6 +232,10 @@ export class AngelOneProvider implements MarketDataProvider {
     return this.getDailyHistoryAttempt(instrument, fromDate, toDate, false, false)
   }
 
+  async getDailyHistoryNoRetry(instrument: ProviderInstrument, fromDate: string, toDate: string) {
+    return this.getDailyHistoryAttempt(instrument, fromDate, toDate, true, true)
+  }
+
   private async getDailyHistoryAttempt(
     instrument: ProviderInstrument,
     fromDate: string,
@@ -232,9 +243,10 @@ export class AngelOneProvider implements MarketDataProvider {
     reauthenticated: boolean,
     transientRetried: boolean,
   ): Promise<AngelDailyCandle[]> {
-    const jwt = await authenticate(this.config)
+    const jwt = await authenticate(this.config, Date.now(), this.observer)
     const retrievedAt = new Date().toISOString()
     try {
+      this.observer?.onAttempt?.("HISTORY")
       const response = await fetch("https://apiconnect.angelone.in/rest/secure/angelbroking/historical/v1/getCandleData", {
         method: "POST",
         headers: headers(this.config, jwt),
@@ -247,6 +259,7 @@ export class AngelOneProvider implements MarketDataProvider {
         }),
       })
       const body = await responseJson<readonly unknown[][]>(response)
+      this.observer?.onResponse?.("HISTORY",true)
       return parseDailyCandles(body.data, retrievedAt)
     } catch (error) {
       if (error instanceof AngelProviderError && error.sessionExpired && !reauthenticated) {
@@ -262,7 +275,7 @@ export class AngelOneProvider implements MarketDataProvider {
   }
 
   private async getLatestPricesAttempt(instruments: readonly ProviderInstrument[], reauthenticated: boolean): Promise<LatestPriceObservation[]> {
-    const jwt = await authenticate(this.config)
+    const jwt = await authenticate(this.config, Date.now(), this.observer)
     const observations: LatestPriceObservation[] = []
     try {
       for (const batch of chunk(instruments, QUOTE_BATCH_SIZE)) {
@@ -271,12 +284,14 @@ export class AngelOneProvider implements MarketDataProvider {
           ;(exchangeTokens[instrument.exchange] ??= []).push(instrument.providerInstrumentId)
         })
         const requestedAt = new Date().toISOString()
+        this.observer?.onAttempt?.("QUOTE")
         const response = await fetch("https://apiconnect.angelone.in/rest/secure/angelbroking/market/v1/quote/", {
           method: "POST",
           headers: headers(this.config, jwt),
           body: JSON.stringify({ mode: "FULL", exchangeTokens }),
         })
         const body = await responseJson<{ readonly fetched?: readonly AngelQuote[]; readonly unfetched?: readonly unknown[] }>(response)
+        this.observer?.onResponse?.("QUOTE",true)
         const byIdentity = new Map(batch.map((instrument) => [`${instrument.exchange}:${instrument.providerInstrumentId}`, instrument]))
         for (const quote of body.data?.fetched ?? []) {
           const instrument = byIdentity.get(`${String(quote.exchange)}:${String(quote.symbolToken)}`)

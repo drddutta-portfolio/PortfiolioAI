@@ -1,13 +1,21 @@
+
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { AngelOneProvider, loadAngelOneConfig } from "../_shared/angel-one.ts"
 import { consumeP4ExecutionGrant } from "../_shared/p4-execution-grant.ts"
+import { P7_IC_BENCHMARK_REGISTRY } from "../_shared/p7-ic-benchmark-adapter.ts"
 import {
-  buildBenchmarkExecutionPlan,
-  P7_IC_BENCHMARK_REGISTRY,
-  resolveAngelOneBenchmarkInstrument,
-  type BenchmarkCacheState,
-  type P7IcBenchmarkCode,
-} from "../_shared/p7-ic-benchmark-adapter.ts"
+  V1_4_BATCH_B_CODES,
+  V1_4_BATCH_B_CONTRACT_VERSION,
+  V1_4_BATCH_B_MAX_ROWS_PER_BENCHMARK,
+  V1_4_BATCH_B_MAX_TOTAL_ROWS,
+  batchBRequestWindow,
+  emptyBatchBCounters,
+  exactOriginalBatchBOrder,
+  preflightAllBenchmarkIdentities,
+  validateBatchBHistoryResponse,
+  type BatchBCounters,
+  type MasterRow,
+} from "../_shared/v14-batch-b-contract.ts"
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -19,13 +27,20 @@ const json = (status: number, body: Record<string, unknown>) =>
 const DEV_REF = "lrgpjimipfkyoqbpsqzz"
 const PROD_REF = "uxiyufbsbgzzdujzcdxe"
 const PORTFOLIO_ID = "6193a4aa-3235-4057-bddc-209fcf443fc2"
-const CONFIRMATION = "OWNER_CONFIRMED_P7_IC2_BENCHMARK_REFRESH"
-const DAY = 86_400_000
+const MASTER_URL = "https://margincalculator.angelone.in/OpenAPI_File/files/OpenAPIScripMaster.json"
+const MASTER_CONFIRMATION = "OWNER_CONFIRMED_V1_4_BATCH_B_MASTER_PREFLIGHT"
+const EXECUTE_CONFIRMATION = "OWNER_CONFIRMED_V1_4_BATCH_B_RESUME"
+const MASTER_KIND = "V1_4_ANGEL_INSTRUMENT_MASTER"
+const MASTER_SENTINEL = "P7_IC2_BATCH_B_MASTER_PREFLIGHT"
+const EXECUTE_SENTINEL = "P7_IC2_BENCHMARKS:" + V1_4_BATCH_B_CODES.join(",")
 
+type Action = "P7_IC2_PLAN" | "P7_IC2_PREFLIGHT_EXISTING_MASTER" | "P7_IC2_CAPTURE_MASTER" | "P7_IC2_EXECUTE_BATCH_B_V1"
 type Body = {
   readonly action?: unknown
   readonly portfolioId?: unknown
   readonly benchmarkCodes?: unknown
+  readonly cutoffDate?: unknown
+  readonly masterSourceRecordId?: unknown
   readonly confirmation?: unknown
   readonly grantId?: unknown
 }
@@ -35,204 +50,278 @@ function projectRef(value: string) {
 }
 function kolkataDateTime(date: Date) {
   const local = new Date(date.getTime() + 5.5 * 60 * 60_000)
-  return `${local.toISOString().slice(0, 10)} ${local.toISOString().slice(11, 16)}`
+  return local.toISOString().slice(0, 10) + " " + local.toISOString().slice(11, 16)
+}
+async function sha256Text(value:string) {
+  const bytes=new TextEncoder().encode(value)
+  return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(x=>x.toString(16).padStart(2,"0")).join("")
+}
+function safeCode(error:unknown) {
+  return error instanceof Error && /^P7_IC_[A-Z0-9_]+$/u.test(error.message) ? error.message : "P7_IC_BENCHMARK_REFRESH_FAILED"
+}
+function actionCounters(counters:BatchBCounters) {
+  return {
+    ...counters,
+    providerCalls:counters.instrumentMasterRequests+counters.providerAuthenticationRequests+counters.attemptedHistoryRequests,
+  }
+}
+function requestedCodes(body:Body) {
+  return Array.isArray(body.benchmarkCodes) && body.benchmarkCodes.every(x=>typeof x==="string") ? body.benchmarkCodes as string[] : []
+}
+function definitionsForBatchB() {
+  return P7_IC_BENCHMARK_REGISTRY.filter(x=>V1_4_BATCH_B_CODES.includes(x.code as typeof V1_4_BATCH_B_CODES[number]))
+}
+async function loadRetainedMaster(admin:ReturnType<typeof createClient>,id:unknown) {
+  if (typeof id!=="string" || !/^[0-9a-f-]{36}$/iu.test(id)) throw new Error("P7_IC_BENCHMARK_MASTER_ARTIFACT_REQUIRED")
+  const r=await admin.from("data_source_records")
+    .select("id,source_code,record_kind,source_url,retrieved_at,payload_hash,raw_payload")
+    .eq("id",id).eq("source_code","ANGEL_ONE").eq("record_kind",MASTER_KIND).maybeSingle()
+  if(r.error||!r.data)throw new Error("P7_IC_BENCHMARK_MASTER_ARTIFACT_NOT_FOUND")
+  const body=(r.data.raw_payload as Record<string,unknown>)?.body_text
+  if(typeof body!=="string")throw new Error("P7_IC_BENCHMARK_MASTER_BODY_MISSING")
+  if(await sha256Text(body)!==r.data.payload_hash)throw new Error("P7_IC_BENCHMARK_MASTER_HASH_MISMATCH")
+  let parsed:unknown
+  try{parsed=JSON.parse(body)}catch{throw new Error("P7_IC_BENCHMARK_MASTER_JSON_INVALID")}
+  if(!Array.isArray(parsed))throw new Error("P7_IC_BENCHMARK_MASTER_SCHEMA_INVALID")
+  return {
+    recordId:r.data.id as string,
+    sourceUrl:r.data.source_url as string|null,
+    retrievedAt:r.data.retrieved_at as string,
+    payloadHash:r.data.payload_hash as string,
+    rows:parsed as readonly MasterRow[],
+  }
+}
+async function persistUsage(admin:ReturnType<typeof createClient>,input:{
+  idempotencyKey:string; operationClass:string; attemptedAt:string; completedAt:string; outcome:string; units:number; safeErrorCode?:string|null
+}) {
+  const r=await admin.from("provider_usage_events").upsert({
+    source_code:"ANGEL_ONE",
+    ingestion_run_id:null,
+    run_item_id:null,
+    security_id:null,
+    data_domain:"BENCHMARK_HISTORY",
+    operation_class:input.operationClass,
+    accounting_class:"EXTERNAL_REQUEST",
+    estimated_internal_units:1,
+    actual_internal_units:input.units,
+    provider_reported_units:null,
+    attempted_at:input.attemptedAt,
+    completed_at:input.completedAt,
+    outcome:input.outcome,
+    safe_error_code:input.safeErrorCode??null,
+    retry_attempt:0,
+    idempotency_key:input.idempotencyKey,
+  },{onConflict:"idempotency_key"})
+  if(r.error)throw new Error("P7_IC_PROVIDER_USAGE_PERSIST_FAILED")
+}
+async function consumeGrant(admin:ReturnType<typeof createClient>,body:Body,action:Action,sentinel:string) {
+  const grant=await consumeP4ExecutionGrant(admin,{grantId:body.grantId,action,portfolioId:PORTFOLIO_ID,securityId:sentinel})
+  if(!grant.ok)throw new Error(grant.code)
+}
+function validateBody(body:Body,action:Action) {
+  if(body.portfolioId!==PORTFOLIO_ID)throw new Error("P7_IC_FROZEN_PORTFOLIO_REQUIRED")
+  const codes=requestedCodes(body)
+  if(!exactOriginalBatchBOrder(codes))throw new Error("P7_IC_BATCH_B_EXACT_ORDER_REQUIRED")
+  if(typeof body.cutoffDate!=="string"||!/^\d{4}-\d{2}-\d{2}$/u.test(body.cutoffDate))throw new Error("P7_IC_BENCHMARK_CUTOFF_INVALID")
+  if(action==="P7_IC2_CAPTURE_MASTER"&&body.confirmation!==MASTER_CONFIRMATION)throw new Error("P7_IC_BATCH_B_MASTER_CONFIRMATION_REQUIRED")
+  if(action==="P7_IC2_EXECUTE_BATCH_B_V1"&&body.confirmation!==EXECUTE_CONFIRMATION)throw new Error("P7_IC_BATCH_B_EXECUTE_CONFIRMATION_REQUIRED")
+  return {codes,cutoffDate:body.cutoffDate}
 }
 
-Deno.serve(async request => {
-  if (request.method === "OPTIONS") return new Response("ok", { headers: cors })
-  if (request.method !== "POST") return json(405, { error: "Method not allowed." })
+async function createAuditRun(admin:ReturnType<typeof createClient>,action:Action,grantId:unknown,counters:BatchBCounters){
+  const isMaster=action==="P7_IC2_CAPTURE_MASTER"
+  const r=await admin.from("data_ingestion_runs").insert({
+    source_code:"ANGEL_ONE",
+    operation:isMaster?"V1_4_BATCH_B_MASTER_PREFLIGHT":"V1_4_BATCH_B_HISTORY_RESUME",
+    portfolio_id:PORTFOLIO_ID,
+    status:"RUNNING",
+    requested_count:isMaster?1:V1_4_BATCH_B_CODES.length,
+    estimated_call_count:isMaster?1:13,
+    reserved_call_count:isMaster?1:13,
+    attempted_call_count:0,
+    accepted_count:0,
+    orchestration_type:"V1_4_BATCH_B_RESUMPTION",
+    trigger_source:"OWNER",
+    metadata:{contract_version:V1_4_BATCH_B_CONTRACT_VERSION,action,grant_id:grantId??null,counters:{...counters}},
+  }).select("id").single()
+  if(r.error)throw new Error("P7_IC_BATCH_B_RUN_CREATE_FAILED")
+  return String(r.data.id)
+}
+async function updateAuditRun(admin:ReturnType<typeof createClient>,runId:string,status:"SUCCEEDED"|"FAILED",counters:BatchBCounters,extra:Record<string,unknown>={}){
+  const attempted=counters.instrumentMasterRequests+counters.providerAuthenticationRequests+counters.attemptedHistoryRequests
+  const r=await admin.from("data_ingestion_runs").update({
+    status,completed_at:new Date().toISOString(),attempted_call_count:attempted,
+    accepted_count:counters.acceptedRows,fetched_count:counters.successfulHistoryResponses+counters.successfulInstrumentMasterResponses,
+    failed_count:status==="FAILED"?1:0,error_summary:status==="FAILED"?String(extra.code??"P7_IC_BATCH_B_FAILED"):null,
+    metadata:{contract_version:V1_4_BATCH_B_CONTRACT_VERSION,counters:{...counters},...extra},
+  }).eq("id",runId)
+  if(r.error)throw new Error("P7_IC_BATCH_B_RUN_UPDATE_FAILED")
+}
 
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")
-  const anonKey = Deno.env.get("SUPABASE_ANON_KEY")
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
-  if (!supabaseUrl || !anonKey || !serviceKey) return json(500, { error: "Supabase server configuration is incomplete." })
+Deno.serve(async request=>{
+  if(request.method==="OPTIONS")return new Response("ok",{headers:cors})
+  if(request.method!=="POST")return json(405,{error:"Method not allowed.",...actionCounters(emptyBatchBCounters())})
+  const supabaseUrl=Deno.env.get("SUPABASE_URL"),serviceKey=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+  if(!supabaseUrl||!serviceKey)return json(500,{error:"Supabase server configuration is incomplete.",...actionCounters(emptyBatchBCounters())})
+  const ref=projectRef(supabaseUrl)
+  if(ref===PROD_REF)return json(409,{error:"Refuses Production.",code:"UNEXPECTED_PRODUCTION_DB_TARGET",...actionCounters(emptyBatchBCounters())})
+  if(ref!==DEV_REF)return json(409,{error:"Requires PortfolioAI Dev.",code:"UNAPPROVED_DEVELOPMENT_DB_TARGET",...actionCounters(emptyBatchBCounters())})
 
-  const ref = projectRef(supabaseUrl)
-  if (ref === PROD_REF) return json(409, { error: "P7-IC benchmark refresh refuses Production.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
-  if (ref !== DEV_REF) return json(409, { error: "P7-IC benchmark refresh requires PortfolioAI Dev.", code: "UNAPPROVED_DEVELOPMENT_DB_TARGET", providerCalls: 0 })
+  const counters=emptyBatchBCounters()
+  const admin=createClient(supabaseUrl,serviceKey,{auth:{persistSession:false}})
+  let leaseHolder:string|null=null
+  let runId:string|null=null
+  let activeAction:Action|null=null
+  try{
+    const body=await request.json() as Body
+    const action=body.action as Action
+    activeAction=action
+    if(!["P7_IC2_PLAN","P7_IC2_PREFLIGHT_EXISTING_MASTER","P7_IC2_CAPTURE_MASTER","P7_IC2_EXECUTE_BATCH_B_V1"].includes(action))
+      return json(400,{error:"Unknown action.",code:"P7_IC_UNKNOWN_ACTION",...actionCounters(counters)})
+    const {codes,cutoffDate}=validateBody(body,action)
+    const window=batchBRequestWindow(cutoffDate)
 
-  try {
-    const body = await request.json() as Body
-    if (body.action !== "P7_IC2_PLAN" && body.action !== "P7_IC2_EXECUTE") return json(400, { error: "Unknown action.", providerCalls: 0 })
-    if (body.portfolioId !== PORTFOLIO_ID) return json(409, { error: "Frozen Development portfolio is required.", providerCalls: 0 })
-
-    const requested = Array.isArray(body.benchmarkCodes) && body.benchmarkCodes.every(code => typeof code === "string")
-      ? [...new Set(body.benchmarkCodes as string[])]
-      : []
-    const allowed = new Set(P7_IC_BENCHMARK_REGISTRY.map(item => item.code))
-    if (!requested.length || requested.length > P7_IC_BENCHMARK_REGISTRY.length || requested.some(code => !allowed.has(code as P7IcBenchmarkCode))) {
-      return json(400, { error: "One to 22 approved benchmark codes are required.", providerCalls: 0 })
-    }
-
-    const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
-    if (typeof body.grantId === "string") {
-      const sentinel = `P7_IC2_BENCHMARKS:${requested.join(",")}`
-      const grant = await consumeP4ExecutionGrant(admin, {
-        grantId: body.grantId,
-        action: String(body.action),
-        portfolioId: PORTFOLIO_ID,
-        securityId: sentinel,
-      })
-      if (!grant.ok) return json(401, { error: grant.message, code: grant.code, providerCalls: 0 })
-      const portfolio = await admin.from("portfolios").select("id").eq("id", PORTFOLIO_ID).single()
-      if (portfolio.error) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
-    } else {
-      const authorization = request.headers.get("Authorization")
-      if (!authorization) return json(401, { error: "Authentication required.", providerCalls: 0 })
-      const user = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authorization } } })
-      const auth = await user.auth.getUser()
-      if (auth.error || !auth.data.user) return json(401, { error: "Invalid authenticated session.", providerCalls: 0 })
-      const portfolio = await admin.from("portfolios").select("id").eq("id", PORTFOLIO_ID).eq("user_id", auth.data.user.id).single()
-      if (portfolio.error) return json(404, { error: "Portfolio not found.", providerCalls: 0 })
-    }
-
-    const [mappingResult, historyResult, anchorResult] = await Promise.all([
-      admin.from("market_benchmarks").select("code,mapping_status").in("code", requested),
-      admin.from("market_benchmark_price_history").select("benchmark_code,period_start").in("benchmark_code", requested)
-        .eq("provider_code", "ANGEL_ONE").eq("interval", "ONE_DAY"),
-      admin.from("current_holdings").select("security_id").eq("portfolio_id", PORTFOLIO_ID).limit(1).single(),
-    ])
-    if (mappingResult.error || historyResult.error || anchorResult.error) throw new Error("P7_IC2_BENCHMARK_CACHE_READ_FAILED")
-
-    const mappingByCode = new Map((mappingResult.data ?? []).map(row => [row.code, row.mapping_status]))
-    const historyByCode = new Map<string, string[]>()
-    for (const row of historyResult.data ?? []) {
-      const list = historyByCode.get(row.benchmark_code) ?? []
-      list.push(String(row.period_start).slice(0, 10))
-      historyByCode.set(row.benchmark_code, list)
-    }
-
-    const cache: BenchmarkCacheState[] = requested.map(code => {
-      const days = (historyByCode.get(code) ?? []).sort()
-      return {
-        code: code as P7IcBenchmarkCode,
-        mappingStatus: mappingByCode.get(code) === "VERIFIED" ? "VERIFIED" : mappingByCode.has(code) ? "UNRESOLVED" : "MISSING",
-        earliestStoredCandle: days[0] ?? null,
-        latestStoredCandle: days.at(-1) ?? null,
-      }
-    })
-    const plan = buildBenchmarkExecutionPlan({
-      requiredCodes: requested as P7IcBenchmarkCode[],
-      cache,
-      asOfDate: new Date().toISOString().slice(0, 10),
-    })
-
-    if (body.action === "P7_IC2_PLAN") return json(200, { mode: "P7_IC2_BENCHMARK_PLAN", providerCalls: 0, ...plan })
-    if (body.confirmation !== CONFIRMATION) return json(409, { error: "Exact P7-IC IC2 benchmark owner confirmation is required.", providerCalls: 0 })
-
-    const holder = crypto.randomUUID()
-    const lease = await admin.rpc("acquire_market_data_operation_lease", {
-      p_portfolio_id: PORTFOLIO_ID,
-      p_provider_code: "ANGEL_ONE",
-      p_operation: "REFRESH_HISTORY",
-      p_lease_holder: holder,
-      p_lease_seconds: 900,
-    })
-    if (lease.error || lease.data?.[0]?.acquired !== true) return json(429, { error: "Another market-history operation is active.", providerCalls: 0 })
-
-    let providerCalls = 0
-    try {
-      let master: readonly Record<string, unknown>[] = []
-      if (plan.sharedInstrumentMasterFetches) {
-        const response = await fetch("https://margincalculator.angelone.in/OpenAPI_File/files/OpenAPIScripMaster.json")
-        if (!response.ok) throw new Error("P7_IC2_BENCHMARK_MASTER_FAILED")
-        master = await response.json() as readonly Record<string, unknown>[]
-      }
-
-      const provider = new AngelOneProvider(loadAngelOneConfig())
-      const results: Record<string, unknown>[] = []
-      for (const item of plan.plans) {
-        let mapping = cache.find(row => row.code === item.code)?.mappingStatus === "VERIFIED"
-          ? null
-          : resolveAngelOneBenchmarkInstrument(item.code, master)
-
-        if (mapping) {
-          const definition = P7_IC_BENCHMARK_REGISTRY.find(row => row.code === item.code)!
-          const upsert = await admin.from("market_benchmarks").upsert({
-            code: item.code,
-            name: definition.displayName,
-            provider_code: "ANGEL_ONE",
-            provider_instrument_id: mapping.token,
-            exchange: mapping.exchange,
-            trading_symbol: mapping.symbol,
-            mapping_status: "VERIFIED",
-            mapping_evidence: { method: mapping.resolutionBasis, adapter_version: "P7_IC_BENCHMARK_ADAPTER_V1" },
-            verified_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          }, { onConflict: "code" })
-          if (upsert.error) throw upsert.error
-        }
-
-        if (item.providerCalls === 0) {
-          results.push({ code: item.code, status: "CACHE_REUSED" })
-          continue
-        }
-
-        if (!mapping) {
-          const current = await admin.from("market_benchmarks")
-            .select("provider_instrument_id,exchange,trading_symbol").eq("code", item.code).single()
-          if (current.error || !current.data.provider_instrument_id || !current.data.trading_symbol) throw new Error("P7_IC2_BENCHMARK_MAPPING_MISSING")
-          mapping = {
-            code: item.code,
-            token: String(current.data.provider_instrument_id),
-            exchange: "NSE",
-            symbol: String(current.data.trading_symbol),
-            name: null,
-            instrumentType: "AMXIDX",
-            resolutionBasis: "EXACT_NORMALIZED_ALIAS",
-          }
-        }
-
-        const from = new Date(String(item.requestFrom) + "T00:00:00Z")
-        const to = new Date(String(item.requestTo) + "T00:00:00Z")
-        const candles = await provider.getDailyHistory({
-          mappingId: item.code,
-          securityId: String(anchorResult.data.security_id),
-          providerInstrumentId: mapping.token,
-          exchange: mapping.exchange,
-          tradingSymbol: mapping.symbol,
-        }, kolkataDateTime(from), kolkataDateTime(new Date(to.getTime() + DAY - 1)))
-        providerCalls += 1
-        if (candles.length < 120) throw new Error("P7_IC2_BENCHMARK_HISTORY_INSUFFICIENT")
-
-        const inserted = await admin.from("market_benchmark_price_history").upsert(candles.map(candle => ({
-          benchmark_code: item.code,
-          provider_code: "ANGEL_ONE",
-          interval: "ONE_DAY",
-          period_start: candle.periodStart,
-          open: candle.open,
-          high: candle.high,
-          low: candle.low,
-          close: candle.close,
-          volume: candle.volume,
-          retrieved_at: candle.retrievedAt,
-          provenance: {
-            adapter_version: "P7_IC_BENCHMARK_ADAPTER_V1",
-            requested_from: item.requestFrom,
-            requested_to: item.requestTo,
-          },
-        })), { onConflict: "benchmark_code,provider_code,interval,period_start" })
-        if (inserted.error) throw inserted.error
-        results.push({ code: item.code, status: "REFRESHED", candles: candles.length })
-        if (item !== plan.plans.at(-1)) await new Promise(resolve => setTimeout(resolve, 1_500))
-      }
-      return json(200, {
-        mode: "P7_IC2_BENCHMARK_REFRESH",
-        providerCalls,
-        sharedInstrumentMasterFetches: plan.sharedInstrumentMasterFetches,
-        results,
-      })
-    } finally {
-      await admin.rpc("release_market_data_operation_lease", {
-        p_portfolio_id: PORTFOLIO_ID,
-        p_provider_code: "ANGEL_ONE",
-        p_operation: "REFRESH_HISTORY",
-        p_lease_holder: holder,
-        p_cooldown_seconds: 0,
+    if(action==="P7_IC2_PLAN"){
+      const existing=await admin.from("data_source_records").select("id,retrieved_at,payload_hash,source_url")
+        .eq("source_code","ANGEL_ONE").eq("record_kind",MASTER_KIND).order("retrieved_at",{ascending:false}).limit(10)
+      if(existing.error)throw new Error("P7_IC_BENCHMARK_MASTER_SEARCH_FAILED")
+      return json(200,{
+        mode:"P7_IC2_BATCH_B_PLAN",version:V1_4_BATCH_B_CONTRACT_VERSION,codes,window,
+        retainedMasterArtifacts:existing.data??[],masterReplacementRequired:(existing.data?.length??0)===0,
+        freshGrantRequired:true,oldGrantReusable:false,
+        rowCeilings:{perBenchmark:V1_4_BATCH_B_MAX_ROWS_PER_BENCHMARK,total:V1_4_BATCH_B_MAX_TOTAL_ROWS},
+        ...actionCounters(counters),
       })
     }
-  } catch (error) {
-    const code = error instanceof Error ? error.message : "P7_IC2_BENCHMARK_REFRESH_FAILED"
-    return json(500, { error: "P7-IC benchmark refresh failed safely.", code, providerCalls: 0 })
+
+    if(action==="P7_IC2_CAPTURE_MASTER"){
+      await consumeGrant(admin,body,action,MASTER_SENTINEL)
+      runId=await createAuditRun(admin,action,body.grantId,counters)
+      const attemptedAt=new Date().toISOString()
+      counters.instrumentMasterRequests+=1
+      let response:Response
+      try{response=await fetch(MASTER_URL,{headers:{Accept:"application/json"}})}
+      catch(error){
+        await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_MASTER_"+String(body.grantId),operationClass:"INSTRUMENT_MASTER",attemptedAt,completedAt:new Date().toISOString(),outcome:"FAILED",units:1,safeErrorCode:"P7_IC_BENCHMARK_MASTER_FETCH_FAILED"})
+        throw error
+      }
+      const bodyText=await response.text()
+      const completedAt=new Date().toISOString()
+      if(!response.ok) {
+        await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_MASTER_"+String(body.grantId),operationClass:"INSTRUMENT_MASTER",attemptedAt,completedAt,outcome:"FAILED",units:1,safeErrorCode:"P7_IC_BENCHMARK_MASTER_HTTP_FAILED"})
+        throw new Error("P7_IC_BENCHMARK_MASTER_HTTP_FAILED")
+      }
+      counters.successfulInstrumentMasterResponses+=1
+      let parsed:unknown
+      try{parsed=JSON.parse(bodyText)}catch{throw new Error("P7_IC_BENCHMARK_MASTER_JSON_INVALID")}
+      if(!Array.isArray(parsed))throw new Error("P7_IC_BENCHMARK_MASTER_SCHEMA_INVALID")
+      const hash=await sha256Text(bodyText)
+      const record=await admin.from("data_source_records").insert({
+        source_code:"ANGEL_ONE",record_kind:MASTER_KIND,external_record_id:"V1_4_BATCH_B_MASTER_"+completedAt,
+        source_observed_at:completedAt,retrieved_at:completedAt,payload_hash:hash,source_url:MASTER_URL,
+        raw_payload:{http_status:response.status,content_type:response.headers.get("content-type"),byte_length:new TextEncoder().encode(bodyText).length,body_text:bodyText,row_count:parsed.length,semantic_validation:"PASS"},
+        terms_snapshot:{mode:"V1_4_BATCH_B_MASTER_PREFLIGHT",retry_attempt:0,history_calls:0},
+      }).select("id").single()
+      if(record.error)throw new Error("P7_IC_BENCHMARK_MASTER_PERSIST_FAILED")
+      await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_MASTER_"+String(body.grantId),operationClass:"INSTRUMENT_MASTER",attemptedAt,completedAt,outcome:"SUCCEEDED",units:1})
+      const preflight=preflightAllBenchmarkIdentities(definitionsForBatchB(),codes,parsed as readonly MasterRow[])
+      await updateAuditRun(admin,runId,"SUCCEEDED",counters,{master_source_record_id:record.data.id,all_exact:preflight.every(x=>x.status==="EXACT_MATCH")})
+      return json(200,{mode:"P7_IC2_BATCH_B_MASTER_PREFLIGHT",runId,masterSourceRecordId:record.data.id,master:{sourceUrl:MASTER_URL,retrievedAt:completedAt,payloadHash:hash,rowCount:parsed.length},preflight,allExact:preflight.every(x=>x.status==="EXACT_MATCH"),...actionCounters(counters)})
+    }
+
+    const retained=await loadRetainedMaster(admin,body.masterSourceRecordId)
+    const preflight=preflightAllBenchmarkIdentities(definitionsForBatchB(),codes,retained.rows)
+    if(action==="P7_IC2_PREFLIGHT_EXISTING_MASTER"){
+      return json(200,{mode:"P7_IC2_BATCH_B_EXISTING_MASTER_PREFLIGHT",master:{recordId:retained.recordId,sourceUrl:retained.sourceUrl,retrievedAt:retained.retrievedAt,payloadHash:retained.payloadHash},preflight,allExact:preflight.every(x=>x.status==="EXACT_MATCH"),...actionCounters(counters)})
+    }
+
+    await consumeGrant(admin,body,action,EXECUTE_SENTINEL)
+    runId=await createAuditRun(admin,action,body.grantId,counters)
+    if(!preflight.every(x=>x.status==="EXACT_MATCH"))
+      return json(409,{error:"All twelve exact benchmark identities must pass before history acquisition.",code:"P7_IC_BATCH_B_PREFLIGHT_NOT_ALL_EXACT",masterSourceRecordId:retained.recordId,preflight,...actionCounters(counters)})
+
+    const lease=await admin.rpc("acquire_market_data_operation_lease",{p_portfolio_id:PORTFOLIO_ID,p_provider_code:"ANGEL_ONE",p_operation:"REFRESH_HISTORY",p_lease_holder:crypto.randomUUID(),p_lease_seconds:900})
+    if(lease.error||lease.data?.[0]?.acquired!==true)throw new Error("P7_IC_BENCHMARK_LEASE_UNAVAILABLE")
+    leaseHolder=String(lease.data[0].lease_holder??"")
+    const anchor=await admin.from("current_holdings").select("security_id").eq("portfolio_id",PORTFOLIO_ID).limit(1).single()
+    if(anchor.error)throw new Error("P7_IC_BENCHMARK_ANCHOR_MISSING")
+    const provider=new AngelOneProvider(loadAngelOneConfig(),{
+      onAttempt(kind){
+        if(kind==="AUTHENTICATE")counters.providerAuthenticationRequests+=1
+        if(kind==="HISTORY")counters.attemptedHistoryRequests+=1
+      },
+      onResponse(kind,ok){
+        if(kind==="AUTHENTICATE"&&ok)counters.successfulAuthenticationResponses+=1
+      },
+    })
+    const results:Record<string,unknown>[]=[]
+
+    for(const code of codes){
+      const identity=preflight.find(x=>x.code===code)?.identity
+      if(!identity)throw new Error("P7_IC_BENCHMARK_MAPPING_MISSING")
+      const attemptedAt=new Date().toISOString()
+      const authBefore=counters.providerAuthenticationRequests
+      const authSuccessBefore=counters.successfulAuthenticationResponses
+      const historyBefore=counters.attemptedHistoryRequests
+      let candles
+      try{
+        const from=new Date(window.requestFrom+"T00:00:00Z")
+        const to=new Date(window.requestTo+"T00:00:00Z")
+        candles=await provider.getDailyHistoryNoRetry({
+          mappingId:code,securityId:String(anchor.data.security_id),providerInstrumentId:identity.token,
+          exchange:identity.exchange,tradingSymbol:identity.symbol,
+        },kolkataDateTime(from),kolkataDateTime(new Date(to.getTime()+86400000-1)))
+        counters.successfulHistoryResponses+=1
+      }catch(error){
+        const completedAt=new Date().toISOString()
+        if(counters.providerAuthenticationRequests>authBefore){
+          await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_AUTH_"+String(body.grantId)+"_"+code,operationClass:"AUTHENTICATE",attemptedAt,completedAt,outcome:counters.successfulAuthenticationResponses>authSuccessBefore?"SUCCEEDED":"FAILED",units:1,safeErrorCode:counters.successfulAuthenticationResponses>authSuccessBefore?null:safeCode(error)})
+        }
+        if(counters.attemptedHistoryRequests>historyBefore){
+          await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_HISTORY_"+String(body.grantId)+"_"+code,operationClass:"HISTORY",attemptedAt,completedAt,outcome:"FAILED",units:1,safeErrorCode:safeCode(error)})
+        }
+        throw error
+      }
+      const validated=validateBatchBHistoryResponse({candles,requestFrom:window.requestFrom,requestTo:window.requestTo,cutoffDate:window.cutoffDate,alreadyAcceptedTotal:counters.acceptedRows})
+      counters.acceptedRows+=validated.rows.length
+
+      const mappingWrite=await admin.from("market_benchmarks").upsert({
+        code,name:P7_IC_BENCHMARK_REGISTRY.find(x=>x.code===code)!.displayName,provider_code:"ANGEL_ONE",
+        provider_instrument_id:identity.token,exchange:identity.exchange,trading_symbol:identity.symbol,mapping_status:"VERIFIED",
+        mapping_evidence:{method:identity.resolutionBasis,matched_alias:identity.matchedAlias,matched_field:identity.matchedField,master_source_record_id:retained.recordId,master_payload_hash:retained.payloadHash,contract_version:V1_4_BATCH_B_CONTRACT_VERSION},
+        verified_at:new Date().toISOString(),updated_at:new Date().toISOString(),
+      },{onConflict:"code"})
+      if(mappingWrite.error)throw new Error("P7_IC_BENCHMARK_MAPPING_WRITE_FAILED")
+
+      const payload=validated.rows.map(candle=>({
+        benchmark_code:code,provider_code:"ANGEL_ONE",interval:"ONE_DAY",period_start:candle.periodStart,
+        open:candle.open,high:candle.high,low:candle.low,close:candle.close,volume:candle.volume,retrieved_at:candle.retrievedAt,
+        provenance:{contract_version:V1_4_BATCH_B_CONTRACT_VERSION,master_source_record_id:retained.recordId,master_payload_hash:retained.payloadHash,requested_from:window.requestFrom,requested_to:window.requestTo,cutoff_date:window.cutoffDate,identity_token:identity.token,identity_symbol:identity.symbol},
+      }))
+      if(payload.length>V1_4_BATCH_B_MAX_ROWS_PER_BENCHMARK||counters.persistedRows+payload.length>V1_4_BATCH_B_MAX_TOTAL_ROWS)throw new Error("P7_IC_BENCHMARK_WRITE_CEILING_EXCEEDED")
+      const write=await admin.from("market_benchmark_price_history").upsert(payload,{onConflict:"benchmark_code,provider_code,interval,period_start"}).select("benchmark_code")
+      if(write.error)throw new Error("P7_IC_BENCHMARK_HISTORY_WRITE_FAILED")
+      const persisted=write.data?.length??0
+      if(persisted!==payload.length)throw new Error("P7_IC_BENCHMARK_PERSIST_COUNT_MISMATCH")
+      counters.persistedRows+=persisted
+      const completedAt=new Date().toISOString()
+      if(counters.providerAuthenticationRequests>authBefore){
+        await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_AUTH_"+String(body.grantId)+"_"+code,operationClass:"AUTHENTICATE",attemptedAt,completedAt,outcome:"SUCCEEDED",units:1})
+      }
+      await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_HISTORY_"+String(body.grantId)+"_"+code,operationClass:"HISTORY",attemptedAt,completedAt,outcome:"SUCCEEDED",units:1})
+      results.push({code,status:"REFRESHED",identity,requestWindow:window,distinctSessions:validated.distinctSessions,firstSession:validated.firstSession,lastSession:validated.lastSession,acceptedRows:validated.rows.length,persistedRows:persisted})
+    }
+    await updateAuditRun(admin,runId,"SUCCEEDED",counters,{master_source_record_id:retained.recordId,completed_codes:results.map(x=>x.code)})
+    return json(200,{mode:"P7_IC2_BATCH_B_EXECUTED",runId,contractVersion:V1_4_BATCH_B_CONTRACT_VERSION,masterSourceRecordId:retained.recordId,preflight,results,...actionCounters(counters)})
+  }catch(error){
+    const code=safeCode(error)
+    if(runId){
+      try{await updateAuditRun(admin,runId,"FAILED",counters,{code,action:activeAction})}catch{}
+    }
+    return json(409,{error:"P7-IC Batch B failed safely.",code,runId,...actionCounters(counters)})
+  }finally{
+    if(leaseHolder){
+      await admin.rpc("release_market_data_operation_lease",{p_portfolio_id:PORTFOLIO_ID,p_provider_code:"ANGEL_ONE",p_operation:"REFRESH_HISTORY",p_lease_holder:leaseHolder}).catch(()=>undefined)
+    }
   }
 })
