@@ -59,7 +59,7 @@ describe("V1-4 Batch B contract",()=>{
  })
  it("builds exact 400-day request window",()=>expect(batchBRequestWindow("2026-10-06")).toEqual({requestFrom:"2025-09-01",requestTo:"2026-10-06",cutoffDate:"2026-10-06"}))
  it("keeps independent counters",()=>{
-  const c=emptyBatchBCounters();c.instrumentMasterRequests++;c.attemptedHistoryRequests++;c.successfulHistoryResponses++;c.acceptedRows+=252;c.persistedRows+=252
-  expect(c).toEqual({instrumentMasterRequests:1,attemptedHistoryRequests:1,successfulHistoryResponses:1,acceptedRows:252,persistedRows:252})
+  const c=emptyBatchBCounters();c.instrumentMasterRequests++;c.successfulInstrumentMasterResponses++;c.providerAuthenticationRequests++;c.successfulAuthenticationResponses++;c.attemptedHistoryRequests++;c.successfulHistoryResponses++;c.acceptedRows+=252;c.persistedRows+=252
+  expect(c).toEqual({instrumentMasterRequests:1,successfulInstrumentMasterResponses:1,providerAuthenticationRequests:1,successfulAuthenticationResponses:1,attemptedHistoryRequests:1,successfulHistoryResponses:1,acceptedRows:252,persistedRows:252})
  })
 })
