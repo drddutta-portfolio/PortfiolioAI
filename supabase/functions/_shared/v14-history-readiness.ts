@@ -6,15 +6,19 @@ export interface QualifiedHistoryResult{readonly state:InputState;readonly reaso
 const instant=(v:string|null)=>v?Date.parse(v):NaN
 const session=(v:string)=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(v))
 const fail=(state:InputState,reason:string,base:ReturnType<typeof inspectStoredHistory>,extra:Json={}):QualifiedHistoryResult=>({state,reason,distinctSessions:base.distinctSessions,latestSession:base.latestSession,retrievedAt:base.retrievedAt,selectedSessions:[],returnBasis:null,lineage:{version:"V1_4_HISTORY_READINESS_V1",...extra}})
-export function historyProofFromRows(rows:readonly HistoryRow[]):HistoryContractProof|null{
- const proofs=rows.map(r=>r.provenance&&typeof r.provenance==="object"?(r.provenance as Json).v1_4_history_contract:null).filter(Boolean)
- if(!proofs.length||proofs.length!==rows.length)return null
- const canonical=JSON.stringify(proofs[0]);if(proofs.some(p=>JSON.stringify(p)!==canonical))return null
- const p=proofs[0] as Json
+export function parseHistoryContractProof(value:unknown):HistoryContractProof|null{
+ if(!value||typeof value!=="object"||Array.isArray(value))return null
+ const p=value as Json
  const ids=(v:unknown)=>Array.isArray(v)&&v.every(x=>typeof x==="string")?v as string[]:null
  const cal=ids(p.exchangeCalendarSourceRecordIds),ca=ids(p.corporateActionSourceRecordIds),lin=ids(p.lineageSourceRecordIds)
  if(p.version!=="V1_4_HISTORY_CONTRACT_V1"||typeof p.sourceAuthority!=="string"||!["VERIFIED","UNVERIFIED"].includes(String(p.exchangeCalendarState))||!["COMPLETE","INCOMPLETE","UNSUPPORTED"].includes(String(p.corporateActionState))||!["PRICE_RETURN_RAW_CLOSE","PRICE_RETURN_CORPORATE_ACTION_ADJUSTED","TOTAL_RETURN_INDEX"].includes(String(p.returnBasis))||typeof p.freshnessThrough!=="string"||!Number.isFinite(Date.parse(p.freshnessThrough))||!cal||!ca||!lin||!Number.isInteger(p.unresolvedCorporateActionCount))return null
  return p as unknown as HistoryContractProof
+}
+export function historyProofFromRows(rows:readonly HistoryRow[]):HistoryContractProof|null{
+ const proofs=rows.map(r=>r.provenance&&typeof r.provenance==="object"?(r.provenance as Json).v1_4_history_contract:null).filter(Boolean)
+ if(!proofs.length||proofs.length!==rows.length)return null
+ const canonical=JSON.stringify(proofs[0]);if(proofs.some(p=>JSON.stringify(p)!==canonical))return null
+ return parseHistoryContractProof(proofs[0])
 }
 function selectedSessions(rows:readonly HistoryRow[],minimum:number){const dates=[...new Set(rows.map(r=>session(r.period_start)))].sort();return dates.slice(-minimum)}
 export function validateStockHistoryReadiness(input:{rows:readonly HistoryRow[];minimum:number;evaluationAsOfMs:number;sourceCutoffAtMs:number;freshnessPolicy:string|null;proof?:HistoryContractProof|null}):QualifiedHistoryResult{
