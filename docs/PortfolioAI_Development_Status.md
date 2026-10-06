@@ -1,3 +1,25 @@
+## V1-4 H1 / O1 / F0 execution — 6 October 2026
+
+**H1 = COMPLETE / CAPTURE SUCCEEDED. O1 = COMPLETE / CAPTURE SUCCEEDED. F0-DISCOVERY = COMPLETE / OFFICIAL URLS RESOLVED. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT AUTHORIZED.**
+
+Owner-approved independent bounded batches were executed and stopped after each report.
+
+H1 used exactly 6 official-source requests and 0 retries. Four immutable authority captures were stored under run \`e2e978fa-004f-450c-840f-bdcd00df271d\`: Oct-1 NSE bhavcopy, Oct-5 NSE bhavcopy, NIFTY 500 TRI response and Oct-1–5 NSE corporate actions. No provider usage, market-history, fundamental-observation, review, snapshot/item/selection/lineage, R2 or P8 writes occurred.
+
+O1 used exactly two Trendlyne ownership tool attempts and 0 retries under run \`8888f406-42c2-4766-960c-a7c5b8e5a1b7\`. SBIN raw capture: \`95adfc40-0b3d-4bbd-b556-7b8811910243\`; WABAG raw capture: \`0ed88b27-bd50-4d90-bf5c-71145dd88103\`. No observation, review or readiness writes occurred.
+
+F0-DISCOVERY used only 2 of 4 allowed official discovery requests, 0 retries and 0 writes. Exact AKUMS NSE attachments were resolved for the 8-Aug-2026 investor presentation and two same-day 5.66 MB board-outcome/results candidates. The result candidates were not fetched and are not assumed duplicate without content hashes.
+
+All one-time executors were retired behind JWT protection / HTTP 410.
+
+Acquisition/discovery success is not readiness success. H1 still requires separately approved normalization/validation; O1 still requires ownership series/basis/quarter review; F0 still requires separately approved raw official-body capture and content-hash identity before factual review.
+
+No T1, review persistence, canonical materialization, broad filing expansion or V1-5 work is authorized or performed.
+
+Full execution record is appended to \`docs/PortfolioAI_V1_4_ACTION_B_REVIEW_INTEGRATION_AND_BOUNDED_EXECUTION_PROPOSAL_2026-10-06.md\`.
+
+---
+
 ## V1-4 reviewed-evidence validator repair — 6 October 2026
 
 **Validator repair = COMPLETE / DEPLOYED / REGRESSION PASS. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT STARTED / NOT AUTHORIZED.**
