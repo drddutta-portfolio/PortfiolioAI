@@ -4,6 +4,7 @@ type Admin = SupabaseClient
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
 import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvidence,parseTrendlyneOwnershipHistory,guardedNumericEvidenceState} from "../_shared/p7-ic-evidence-normalization.ts"
 import {cachedEvidenceReadiness,inspectStoredHistory,validateObservationSeries,P7_IC_INPUT_VALIDATION_VERSION,type InputObservation,type MetricDefinition,type HistoryRow,type HistoryValidation} from "../_shared/p7-ic-input-validation.ts"
+import {validateStockHistoryReadiness,validateBenchmarkPairReadiness,historyProofFromRows} from "../_shared/v14-history-readiness.ts"
 import {validateReviewedRequirementEvidence,reconcileCanonicalAndReviewed,type RequirementReview,type ReviewedSourceRecord,type ReviewedResearchDocument,type ReviewedDocumentSource,type ReviewEvidenceFamily} from "../_shared/v14-reviewed-evidence.ts"
 import {p7IcProfileContract} from "../_shared/p7-ic-profile-contracts.ts"
 import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json" with {type:"json"}
@@ -11,7 +12,7 @@ import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLO
 const DEV_REF="lrgpjimipfkyoqbpsqzz",PROD_REF="uxiyufbsbgzzdujzcdxe",ACTION="P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS"
 const VALIDATE_ACTION="P7_IC3_VALIDATE_CANONICAL_INPUTS"
 const REGISTRY_VERSION="PORTFOLIOAI_P7_IC1_METHODOLOGY_R7_REGISTRY_V1"
-const MATERIALIZER_VERSION="P7_IC3_CANONICAL_SNAPSHOT_V2_INPUT_VALIDATION"
+const MATERIALIZER_VERSION="P7_IC3_CANONICAL_SNAPSHOT_V3_HISTORY_CONTRACT"
 const CLASSIFICATION_AUTHORITY="current_security_enrichment_v1"
 const CLASSIFICATION_VERSION="PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json"
 const ASSIGNMENT_AUTHORITY="PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1"
@@ -21,8 +22,9 @@ type CoverageRow={securityId:string;symbol:string;sector:string;industry:string;
 type Observation=InputObservation & {security_id:string}
 type SourceRecord={id:string;source_code:string;record_kind:string;retrieved_at:string;raw_payload:Json}
 type ReviewFacts={reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];documentSources:ReviewedDocumentSource[]}
-type History=HistoryValidation & {security_id:string}
-type Benchmark={code:string;mapping_status:string;provider_code:string|null;provider_instrument_id:string|null;verified_at:string|null;history:HistoryValidation}
+type LoadedHistory={rows:HistoryRow[];inspection:HistoryValidation}
+type History=LoadedHistory & {security_id:string}
+type Benchmark={code:string;mapping_status:string;provider_code:string|null;provider_instrument_id:string|null;verified_at:string|null;history:LoadedHistory}
 type Facts={portfolioId:string;portfolioOwnerId:string;generatedAt:string;totalEquities:number;securities:Array<{id:string;symbol:string;isin:string;exchange:string}>;observations:Observation[];definitions:MetricDefinition[];sourceRecords:SourceRecord[];histories:History[];benchmarks:Benchmark[];reviewFacts:ReviewFacts}
 type Item={requirement_code:string;metric_code:string|null;required:boolean;minimum_history:number;freshness_policy:string|null;benchmark_authority:string[];applicability:"APPLICABLE"|"NOT_APPLICABLE";evidence_state:"FRESH"|"STALE"|"MISSING"|"INSUFFICIENT"|"CONFLICTING"|"REVIEW_REQUIRED"|"NOT_APPLICABLE";candidate_evidence_ids:string[];selected_evidence_id:string|null;evidence_as_of_date:string|null;retrieved_at:string|null;fresh_through:string|null;source_provider:string|null;raw_source_record_id:string|null;normalized_value:unknown;validation_state:string;canonical_selection_state:string;reason_code:string;recommended_remediation_action:string}
 
@@ -46,10 +48,10 @@ async function loadHistoryRows(admin:Admin,table:"market_price_history"|"market_
  throw new Error("HISTORY_READ_BOUND_EXCEEDED")
 }
 async function loadStockHistories(admin:Admin,ids:readonly string[],sourceCutoffAt:string):Promise<History[]>{
- return await Promise.all(ids.map(async securityId=>({security_id:securityId,...inspectStoredHistory(await loadHistoryRows(admin,"market_price_history","security_id",securityId,sourceCutoffAt),252,Date.parse(sourceCutoffAt))})))
+ return await Promise.all(ids.map(async securityId=>{const rows=await loadHistoryRows(admin,"market_price_history","security_id",securityId,sourceCutoffAt);return{security_id:securityId,rows,inspection:inspectStoredHistory(rows,252,Date.parse(sourceCutoffAt))}}))
 }
 async function loadBenchmarkHistories(admin:Admin,codes:readonly string[],sourceCutoffAt:string){
- return new Map(await Promise.all(codes.map(async code=>[code,inspectStoredHistory(await loadHistoryRows(admin,"market_benchmark_price_history","benchmark_code",code,sourceCutoffAt),252,Date.parse(sourceCutoffAt))] as const)))
+ return new Map(await Promise.all(codes.map(async code=>{const rows=await loadHistoryRows(admin,"market_benchmark_price_history","benchmark_code",code,sourceCutoffAt);return[code,{rows,inspection:inspectStoredHistory(rows,252,Date.parse(sourceCutoffAt))}] as const})))
 }
 async function loadObservations(admin:Admin,ids:readonly string[],sourceCutoffAt:string):Promise<Observation[]>{
  const rows:Observation[]=[]
@@ -126,7 +128,7 @@ async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit
   loadReviewFacts(admin,portfolioId,ids,sourceCutoffAt),
  ])
  for(const result of [definitionsResult,sourceRecordsResult])if(result.error)throw result.error
- const benchmarks=(benchmarkResult.data??[]).map(row=>({code:String(row.code),mapping_status:String(row.mapping_status),provider_code:row.provider_code===null?null:String(row.provider_code),provider_instrument_id:row.provider_instrument_id===null?null:String(row.provider_instrument_id),verified_at:row.verified_at===null?null:String(row.verified_at),history:benchmarkHistory.get(String(row.code))??inspectStoredHistory([],252,Date.parse(sourceCutoffAt))}))
+ const benchmarks=(benchmarkResult.data??[]).map(row=>({code:String(row.code),mapping_status:String(row.mapping_status),provider_code:row.provider_code===null?null:String(row.provider_code),provider_instrument_id:row.provider_instrument_id===null?null:String(row.provider_instrument_id),verified_at:row.verified_at===null?null:String(row.verified_at),history:benchmarkHistory.get(String(row.code))??{rows:[],inspection:inspectStoredHistory([],252,Date.parse(sourceCutoffAt))}}))
  return{portfolioId,portfolioOwnerId,generatedAt:new Date().toISOString(),totalEquities,securities,observations,definitions:(definitionsResult.data??[]) as MetricDefinition[],sourceRecords:(sourceRecordsResult.data??[]) as SourceRecord[],histories,benchmarks,reviewFacts}
 }
 const benchmarkish=(c:string)=>/(APPROVED_BENCHMARK|BENCHMARK_HISTORY|BENCHMARK_RELATIVE)/u.test(c)
@@ -197,15 +199,19 @@ function projectCachedRecords(records:SourceRecord[],security:{id:string;symbol:
 async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;minimum:number;freshness:string|null;benchmarks:string[];portfolioId:string;portfolioOwnerId:string;securityId:string;observations:Observation[];definitions:MetricDefinition[];records:SourceRecord[];reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];documentSources:ReviewedDocumentSource[];history?:History;benchmarkByCode:Map<string,Benchmark>;evaluationAsOfMs:number;sourceCutoffAtMs:number}):Promise<Item>{
  const {code,family,minimum,freshness,benchmarks,portfolioId,portfolioOwnerId,securityId,observations,definitions,records,reviews,reviewSources,researchDocuments,documentSources,history,benchmarkByCode,evaluationAsOfMs,sourceCutoffAtMs}=input
  if(family==="BENCHMARK_HISTORY"){
-   const required=benchmarks.filter(x=>x.startsWith("NIFTY_")),rows=required.map(x=>benchmarkByCode.get(x))
-   const mapped=required.length>0&&rows.every(x=>x?.mapping_status==="VERIFIED"&&x.provider_code==="ANGEL_ONE"&&x.provider_instrument_id&&x.verified_at&&Date.parse(x.verified_at)<=sourceCutoffAtMs)
-   if(!mapped)return blocked(code,minimum,freshness,benchmarks,"MISSING","BENCHMARK_MAPPING_NOT_PROVEN","RECONCILE_EXACT_APPROVED_BENCHMARK_MAPPING")
-   const conflict=rows.find(x=>x?.history.state==="CONFLICTING"),short=rows.find(x=>(x?.history.distinctSessions??0)<minimum)
-   return {...blocked(code,minimum,freshness,benchmarks,conflict?"CONFLICTING":short?"INSUFFICIENT":"REVIEW_REQUIRED",conflict?"DUPLICATE_SESSION_CONFLICT":short?"BENCHMARK_DISTINCT_SESSIONS_INSUFFICIENT":"ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN","VALIDATE_APPROVED_HISTORY_CONTRACT"),normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,benchmarkCodes:required,histories:rows.map(x=>x?.history??null),stockHistory:history??null},retrieved_at:rows.map(x=>x?.history.retrievedAt??null).filter((x):x is string=>Boolean(x)).sort().at(-1)??null,source_provider:"ANGEL_ONE"}
+   const required=benchmarks.filter(x=>x.startsWith("NIFTY_"))
+   if(!required.length||!history)return blocked(code,minimum,freshness,benchmarks,"MISSING","BENCHMARK_OR_STOCK_HISTORY_MISSING","VALIDATE_APPROVED_HISTORY_CONTRACT")
+   const validations=required.map(benchmarkCode=>{const benchmark=benchmarkByCode.get(benchmarkCode);if(!benchmark)return{code:benchmarkCode,result:null};return{code:benchmarkCode,result:validateBenchmarkPairReadiness({stockRows:history.rows,benchmarkRows:benchmark.history.rows,minimum,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:freshness,benchmark:{code:benchmark.code,mapping_status:benchmark.mapping_status,provider_code:benchmark.provider_code,provider_instrument_id:benchmark.provider_instrument_id,verified_at:benchmark.verified_at},stockProof:historyProofFromRows(history.rows),benchmarkProof:historyProofFromRows(benchmark.history.rows)})}})
+   if(validations.some(v=>v.result===null))return blocked(code,minimum,freshness,benchmarks,"MISSING","BENCHMARK_MAPPING_NOT_PROVEN","RECONCILE_EXACT_APPROVED_BENCHMARK_MAPPING")
+   const priority=["CONFLICTING","REVIEW_REQUIRED","STALE","INSUFFICIENT","FRESH"] as const
+   const worst=validations.map(v=>v.result!).sort((a,b)=>priority.indexOf(a.state)-priority.indexOf(b.state))[0]!
+   const allFresh=validations.every(v=>v.result?.state==="FRESH")
+   return {...blocked(code,minimum,freshness,benchmarks,allFresh?"FRESH":worst.state,allFresh?"STOCK_BENCHMARK_HISTORY_READY":worst.reason,allFresh?"NONE":"VALIDATE_APPROVED_HISTORY_CONTRACT"),retrieved_at:validations.map(v=>v.result?.retrievedAt??null).filter((x):x is string=>Boolean(x)).sort().at(-1)??null,evidence_as_of_date:validations.map(v=>v.result?.latestSession??null).filter((x):x is string=>Boolean(x)).sort().at(-1)??null,source_provider:"ANGEL_ONE",normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,historyValidationVersion:"V1_4_HISTORY_READINESS_V1",benchmarkCodes:required,validations},validation_state:allFresh?"VALIDATED_HISTORY_CONTRACT":"FAIL_CLOSED",canonical_selection_state:allFresh?"DETERMINISTIC_HISTORY_CONTRACT":"NO_SELECTION"}
  }
  if(family==="MARKET_HISTORY"){
-   const state=history&&history.distinctSessions>=minimum?history.state:"INSUFFICIENT"
-   return {...blocked(code,minimum,freshness,benchmarks,state,history?.reason??"DISTINCT_SESSIONS_INSUFFICIENT","VALIDATE_APPROVED_HISTORY_CONTRACT"),retrieved_at:history?.retrievedAt??null,evidence_as_of_date:history?.latestSession??null,source_provider:"ANGEL_ONE",normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,...history}}
+   if(!history)return blocked(code,minimum,freshness,benchmarks,"INSUFFICIENT","DISTINCT_SESSIONS_INSUFFICIENT","VALIDATE_APPROVED_HISTORY_CONTRACT")
+   const validation=validateStockHistoryReadiness({rows:history.rows,minimum,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:freshness,proof:historyProofFromRows(history.rows)})
+   return {...blocked(code,minimum,freshness,benchmarks,validation.state,validation.reason,validation.state==="FRESH"?"NONE":"VALIDATE_APPROVED_HISTORY_CONTRACT"),retrieved_at:validation.retrievedAt,evidence_as_of_date:validation.latestSession,source_provider:"ANGEL_ONE",normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,historyValidationVersion:"V1_4_HISTORY_READINESS_V1",validation},validation_state:validation.state==="FRESH"?"VALIDATED_HISTORY_CONTRACT":"FAIL_CLOSED",canonical_selection_state:validation.state==="FRESH"?"DETERMINISTIC_HISTORY_CONTRACT":"NO_SELECTION"}
  }
  const normalized=records.flatMap(record=>{
    const raw=record.raw_payload,items=Array.isArray(raw.p7_ic2_normalized_evidence)?raw.p7_ic2_normalized_evidence:[]
