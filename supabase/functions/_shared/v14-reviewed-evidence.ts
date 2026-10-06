@@ -186,7 +186,7 @@ export async function validateReviewedRequirementEvidence(input:{
      if(!r.fresh_through||time(r.fresh_through)<evaluationAsOfMs)return fail("STALE","OWNERSHIP_REVIEW_STALE",[r.id])
      if(input.freshnessPolicy?.includes("150_DAYS")){
        const ceiling=time(source.retrieved_at)+150*86400000
-       if(time(r.fresh_through)>ceiling||evaluationAsOfMs-time(r.period_end+"T00:00:00Z")>150*86400000)return fail("STALE","OWNERSHIP_REQUIRED_WINDOW_STALE",[r.id])
+       if(time(r.fresh_through)>ceiling)return fail("REVIEW_REQUIRED","OWNERSHIP_FRESHNESS_BOUND_EXCEEDS_POLICY",[r.id])
      }
      ownershipRows.push({review:r,series,basis,period:r.period_end,value,source});support.push(r);continue
    }
@@ -216,6 +216,9 @@ export async function validateReviewedRequirementEvidence(input:{
    for(const g of byQuarter.values())if(uniq(g.map(x=>x.value)).length>1)return fail("CONFLICTING","OWNERSHIP_QUARTER_VALUE_CONFLICT",g.map(x=>x.review.id))
    const periods=[...byQuarter.keys()];if(!consecutiveLatestQuarters(periods,input.minimum))return fail("INSUFFICIENT","OWNERSHIP_REQUIRED_WINDOW_NOT_PROVEN",support.map(x=>x.id))
    const selected=[...byQuarter.entries()].sort(([a],[b])=>b.localeCompare(a)).slice(0,input.minimum).flatMap(([,g])=>[g.sort((a,b)=>time(b.review.reviewed_at)-time(a.review.reviewed_at))[0]!])
+   const latestPeriod=selected.map(x=>x.period).sort().at(-1)??null
+   if(input.freshnessPolicy?.includes("150_DAYS")&&latestPeriod&&evaluationAsOfMs-time(latestPeriod+"T00:00:00Z")>150*86400000)
+    return fail("STALE","OWNERSHIP_LATEST_REQUIRED_PERIOD_STALE",selected.map(x=>x.review.id))
    return {state:"FRESH",reason:"REVIEWED_OWNERSHIP_SERIES_READY",observations:[],selectedReviewIds:selected.map(x=>x.review.id),
     sourceRecordIds:uniq(selected.map(x=>x.source.id)),researchDocumentIds:[],documentSourceIds:[],sourceCode:uniq(selected.map(x=>x.source.source_code)).length===1?selected[0]!.source.source_code:null,
     retrievedAt:maxInstant(selected.map(x=>x.source.retrieved_at)),evidenceAsOfDate:selected.map(x=>x.period).sort().at(-1)??null,freshThrough:minInstant(selected.map(x=>x.review.fresh_through)),
