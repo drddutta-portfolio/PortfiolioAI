@@ -20,3 +20,5 @@ SELF_TEST now also stages and reads back its 40 MiB synthetic artifact with byte
 - `npm run build`: PASS; existing chunk-size advisory remains.
 - Development gateway deployment: `215ee591f5d44d59b489d3fd124028c7`.
 - Hosted runtime verification and replacement acquisition are recorded separately after actual execution; this preparation record does not claim them complete.
+
+The first hosted invocation exposed a packaging omission: Vercel did not include the imported server TypeScript helper. `includeFiles` now includes both shared contracts and the server helper. No acquisition was invoked on that failed deployment. Repository ESLint does not include server/API files in its project service; those invocations failed configuration resolution and are not counted as lint PASS.
