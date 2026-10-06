@@ -1,3 +1,16 @@
+## V1-4 owner-approved execution — 6 October 2026
+
+**Batch A = COMPLETE / PASS. Batch B = STOPPED / BLOCKED. Batch C = COMPLETE / TRUTHFUL NON-READY. Batch E = COMPLETE / PASS. Batch D = NOT EXECUTED. Batch F = NOT ELIGIBLE / NOT EXECUTED. V1-4 = IN PROGRESS / NOT PROVEN.**
+
+- Batch A: run `a7375df9-16b7-4bb2-b214-73a4cf29d0c0`; 16 external requests total, 15 accepted monthly action captures, zero retries.
+- Batch B: grant `34e7c8c0-6edf-4541-8051-b621499ae450`; stopped at first exact identity failure `NIFTY_CAPITAL_GOODS / P7_IC_BENCHMARK_IDENTITY_NOT_FOUND`; shared instrument master only; Angel history calls 0; remaining codes not attempted.
+- Batch C: 111 append-only security history-contract proofs; all 111 calendar UNVERIFIED because Batch B failed; 10 names additionally UNSUPPORTED for structural-action/raw-close treatment.
+- Batch E: private `research-source-documents` bucket created; 3 official NSE PDFs captured; 14,886,580 bytes; 3 source records; 2 deduplicated research documents; 3 source appearances; no Auth/RLS changes.
+- Review ledger remains 0. Snapshot/item/selection/lineage counts remain 1,485 / 22,401 / 956 / 478; Batch F was therefore not run.
+- Execution record: `docs/PortfolioAI_V1_4_OWNER_APPROVED_BATCHES_ABC_E_EXECUTION_RECORD_2026-10-06.md`.
+
+---
+
 ## V1-4 evidence remediation / closure preparation — 6 October 2026
 
 **H1 semantic correction = COMPLETE. Source/history/ownership validator repairs = DEPLOYED. Consolidated next execution package = PREPARED / NOT EXECUTED. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT AUTHORIZED.**
