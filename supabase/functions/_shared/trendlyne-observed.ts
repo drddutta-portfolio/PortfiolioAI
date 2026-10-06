@@ -30,6 +30,7 @@ export class TrendlyneObservedMcpClient {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       "Accept": "application/json, text/event-stream",
+      "User-Agent": "PortfolioAI/1.0",
     }
     if (this.#session) headers["Mcp-Session-Id"] = this.#session
 
@@ -58,6 +59,7 @@ export class TrendlyneObservedMcpClient {
     })
     await this.#post({ jsonrpc: "2.0", method: "notifications/initialized", params: {} })
   }
+
 
   async call(name: string, args: Readonly<Record<string, unknown>>): Promise<string> {
     if (!this.#session) await this.initialize()
