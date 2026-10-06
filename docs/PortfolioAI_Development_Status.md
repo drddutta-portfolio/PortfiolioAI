@@ -1,3 +1,23 @@
+## V1-4 Action B cache-first reconciliation — 6 October 2026
+
+**Cache-first reconciliation = COMPLETE / PASS. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT STARTED / NOT AUTHORIZED.**
+
+Starting remote Development HEAD was `af18ade2b049618a384fbf171785ade833d6fcf3`. The 1,608-row private Phase 1 member/requirement ledger was re-read in full and its counts reconcile exactly: 2 existing canonical-valid jobs, 183 cached numeric metadata reviews, 108 ownership-quarter reviews, 274 document-excerpt reviews, 49 conditional raw-acquisition jobs, 685 unresolved field/period/factual contracts and 307 unresolved history-authority jobs.
+
+The 183 cached numeric review jobs were traced back to 183 immutable source records. None of those source payloads contains an explicit ISO reporting date and none has a source publication timestamp. Retrieval dates, query wording, relative-year labels, or generic Annual/Quarter labels therefore cannot be promoted into reporting-period proof. No normalization or readiness write was performed.
+
+Existing approved tables do not provide a durable append-only requirement-level factual-review ledger with exact quote/source hash, reviewer/version, dated period, unit/currency/scope, publication/retrieval/freshness and supersession lineage. A narrowly additive `research_evidence_requirement_reviews` schema contract is proposed but **not applied**; owner schema approval is required before any migration.
+
+Read-only reuse inspection found all 111 frozen members linked to P8 historical identities and reusable official NSE cash-market/corporate-action/NIFTY500 TRI archives through 30 September 2026. No frozen member has a blocked adjustment-factor row in the inspected recent window, but six linked corporate-action normalizations remain blocked. Because the frozen V1-4 cutoff is 5 October, complete history authority is still unproven. NSE's 2 October 2026 trading holiday means the missing post-September trading-session authority is specifically 1 October and 5 October; no paused P8 workflow was run and no R2 write occurred.
+
+Development currently has 10 VERIFIED Angel One benchmark mappings, but the 32 frozen benchmark-mapping blockers include additional required authorities such as Consumer Services, Consumer Durables, Capital Goods, Telecom, Oil & Gas, Services Sector, Transportation & Logistics and Pharma subprofile authority. Existing mapped benchmarks cannot be silently substituted.
+
+The previously generated 46 Trendlyne requests remain conditional, not an execution grant. The next external boundary is reduced to two separately bounded canaries: one Trendlyne dated-field capability attempt, and one official-session/corporate-action authority acquisition for 1 and 5 October. Neither was executed. No provider usage delta, data mutation, migration, Auth/RLS change, scheduler, Production/main, P8 execution, R2 write, backup/restore or V1-5 action occurred.
+
+Detailed record: [PortfolioAI_V1_4_ACTION_B_CACHE_FIRST_RECONCILIATION_2026-10-06.md](PortfolioAI_V1_4_ACTION_B_CACHE_FIRST_RECONCILIATION_2026-10-06.md).
+
+---
+
 ## V1-4 Action B Phase 1 — 5 October 2026
 
 **Phase 1 parser/validator implementation and private acquisition artifacts prepared. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT AUTHORIZED.**
