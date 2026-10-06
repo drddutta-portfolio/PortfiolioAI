@@ -213,15 +213,40 @@ GitHub combined status for this commit:
 
 ### Deployed self-test limitation
 
-The protected preview could not be invoked from the available Vercel connection:
-- protection-bypass creation returned Vercel scope 403;
-- the protected fetch connector was blocked before issuing the request;
-- no Vercel CLI session is installed in the execution container;
-- direct web access to the protected preview is unavailable.
+The protected 40 MiB SELF_TEST was retried against the protected Development deployment and equivalent READY branch deployments using all available authenticated Vercel paths.
 
-Therefore the requested **40 MiB SELF_TEST in the deployed Vercel function has NOT been proven at runtime**.
+Exact blocking response:
+- HTTP **403 Forbidden**
+- scope: `dibyendu-dutta`
+- message: `Not authorized: Trying to access resource under scope "dibyendu-dutta". You must re-authenticate to this scope or use a token with access to this scope.`
 
-It is not marked PASS by inference.
+Affected authenticated paths:
+- protected deployment fetch/share-link lookup;
+- project OIDC token creation;
+- project automation protection-bypass creation;
+- deployment-specific temporary protection-bypass creation.
+
+Therefore the requested **40 MiB SELF_TEST in the deployed Vercel function remains NOT VERIFIED at runtime**.
+
+It is not marked PASS by deployment status or inference.
+
+Owner-executable authenticated test, without weakening protection:
+
+```bash
+vercel curl "https://portfiolio-bdftxip8k-dibyendu-dutta.vercel.app/api/b0-node?action=SELF_TEST"
+```
+
+Run that command from a Vercel CLI session authenticated to the `dibyendu-dutta` scope. The response must show:
+- `synthetic.byteLength` in the 32–48 MiB test range;
+- `synthetic.allExact = true`;
+- twelve exact benchmark statuses;
+- measured `durationMs`;
+- measured RSS / heap values;
+- malformed/oversize/hash-mismatch/interrupted/ambiguity failure checks.
+
+Alternatively, re-authenticate the ChatGPT Vercel connection to the `dibyendu-dutta` team/project and rerun the same protected fetch.
+
+No Deployment Protection setting was disabled or weakened.
 
 What is proven:
 - source compiles/builds in Vercel;
