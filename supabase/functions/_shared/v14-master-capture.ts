@@ -6,13 +6,14 @@ export const V1_4_MASTER_FETCH_TIMEOUT_MS=30_000
 export const V1_4_MASTER_STORAGE_TIMEOUT_MS=60_000
 export interface ByteSink{write(c:Uint8Array):Promise<void>|void;close():Promise<void>|void;abort?(e:unknown):Promise<void>|void}
 
-export type MasterCaptureStage="ATTEMPT_STARTED"|"RESPONSE_RECEIVED"|"CAPTURE_PERSISTED"|"PREFLIGHT_COMPLETED"
-export type MasterCaptureAccounting=Readonly<{attemptStarted:boolean;responseReceived:boolean;capturePersisted:boolean;preflightCompleted:boolean;requestOutcome:"UNKNOWN"|"SUCCEEDED"|"FAILED"}>
-export function emptyMasterCaptureAccounting():MasterCaptureAccounting{return{attemptStarted:false,responseReceived:false,capturePersisted:false,preflightCompleted:false,requestOutcome:"UNKNOWN"}}
+export type MasterCaptureStage="ATTEMPT_STARTED"|"RESPONSE_RECEIVED"|"BODY_COMPLETE"|"CAPTURE_PERSISTED"|"PREFLIGHT_COMPLETED"
+export type MasterCaptureAccounting=Readonly<{attemptStarted:boolean;responseReceived:boolean;bodyComplete:boolean;capturePersisted:boolean;preflightCompleted:boolean;requestOutcome:"UNKNOWN"|"SUCCEEDED"|"FAILED"}>
+export function emptyMasterCaptureAccounting():MasterCaptureAccounting{return{attemptStarted:false,responseReceived:false,bodyComplete:false,capturePersisted:false,preflightCompleted:false,requestOutcome:"UNKNOWN"}}
 export function advanceMasterCaptureAccounting(state:MasterCaptureAccounting,event:{stage:MasterCaptureStage;responseOk?:boolean}):MasterCaptureAccounting{
  if(event.stage==="ATTEMPT_STARTED")return{...state,attemptStarted:true,requestOutcome:"UNKNOWN"}
  if(event.stage==="RESPONSE_RECEIVED"){if(!state.attemptStarted)throw new Error("P7_IC_BENCHMARK_MASTER_ACCOUNTING_ORDER_INVALID");return{...state,responseReceived:true,requestOutcome:event.responseOk===true?"SUCCEEDED":"FAILED"}}
- if(event.stage==="CAPTURE_PERSISTED"){if(!state.responseReceived||state.requestOutcome!=="SUCCEEDED")throw new Error("P7_IC_BENCHMARK_MASTER_ACCOUNTING_ORDER_INVALID");return{...state,capturePersisted:true}}
+ if(event.stage==="BODY_COMPLETE"){if(!state.responseReceived||state.requestOutcome!=="SUCCEEDED")throw new Error("P7_IC_BENCHMARK_MASTER_ACCOUNTING_ORDER_INVALID");return{...state,bodyComplete:true}}
+ if(event.stage==="CAPTURE_PERSISTED"){if(!state.bodyComplete)throw new Error("P7_IC_BENCHMARK_MASTER_ACCOUNTING_ORDER_INVALID");return{...state,capturePersisted:true}}
  if(!state.capturePersisted)throw new Error("P7_IC_BENCHMARK_MASTER_ACCOUNTING_ORDER_INVALID");return{...state,preflightCompleted:true}
 }
 const txt=(v:unknown)=>typeof v==="string"&&v.trim()?v.trim():null
