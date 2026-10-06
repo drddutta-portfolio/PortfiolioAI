@@ -1,3 +1,31 @@
+## V1-4 Action B reviewed-evidence integration — 6 October 2026
+
+**Review-ledger integration = IMPLEMENTED / DEPLOYED / FOCUSED TESTS PASS. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT STARTED / NOT AUTHORIZED.**
+
+Starting authoritative Development HEAD for this pass was `f7426507687f9c6d8de9560708733a65c7dbfe8d`.
+
+The existing `research_evidence_requirement_reviews` ledger is now connected to the existing canonical readiness pipeline through `supabase/functions/_shared/v14-reviewed-evidence.ts`. The materializer retains canonical-observation precedence and consumes only source-bound, cutoff-compatible, requirement-scoped reviews that revalidate against the existing metric/input contract. Review foreign keys/hashes alone are insufficient. Numeric reviews require exact source quote/value/period/unit/scope/publication lineage as applicable; documentary and ownership reviews require human reviewer identity and enforce minimum distinct documentary evidence / ownership-quarter counts.
+
+The preserved AKUMS canary raw response was inspected directly. It does contain numeric values and percentage-labelled fields such as `ROCE Ann. %`, so a literal `%` may support the unit fact. The canary still fails the complete V1-4 contract because it does not prove the requested historical reporting-period dates, reporting scope or publication metadata; the `2026-10-06` entity/response date is not a historical reporting period, and a 3Y average is not three distinct annual observations.
+
+Focused Development self-tests passed **13/13** for source/hash/context/cutoff/period/scope/publication/unit/human-review/supersession/conflict rules and **4/4** for ownership/document evidence minima. Temporary self-test endpoints were immediately retired behind `verify_jwt:true` 410 responders. Development `p7-ic2-materialize-readiness` is ACTIVE version **23**, bundle SHA-256 `538a6408bf6237f636149bdb70ef46a0f6efea775edbf4916d68346a7bb517b6`. No broad materialization was run.
+
+The 1,608-row / 111-member private Phase 1 worklist was reconciled without a new general audit: 2 canonical-valid, 183 cached numeric metadata-review, 108 cached ownership-quarter review, 274 document-excerpt review, 49 raw-acquisition candidates, 685 blocked contract and 307 history-authority jobs. Current frozen research-document rows are discovery shells: 136 rows across 108 frozen members, but 0 VERIFIED identity rows, 0 dated periods, 0 period types, 0 canonical content hashes and 0 stored source URLs. They are not treated as evidence.
+
+Full private per-requirement proposal: `docs/private/PortfolioAI_V1_4_ACTION_B_BOUNDED_EXECUTION_PROPOSAL_2026-10-06.csv` (1,608 rows). Public focused record: `docs/PortfolioAI_V1_4_ACTION_B_REVIEW_INTEGRATION_AND_BOUNDED_EXECUTION_PROPOSAL_2026-10-06.md`.
+
+The remaining 47 Trendlyne parameter jobs deduplicate to 44 unique parameter requests and are **NOT EXECUTABLE** under the failed tested contract. Two independent ownership calls (SBIN, WABAG) are separately proposal-ready. The prior NSE Oct 1/5 history action is also proposal-ready as an independent capture-only amendment: six official external requests, zero retries, at most four raw authority source records, one bounded ingestion run/four logical run items, and zero history/observation/review/snapshot/item/selection/lineage writes during capture. P8/R2 remain untouched.
+
+Current readiness is unchanged and predicted readiness from implementation alone is also unchanged: **111 REVIEW_REQUIRED / 0 READY**. The review ledger still contains 0 rows. Capability implementation is not evidence readiness.
+
+Vercel protected Preview verification is unavailable in this pass: the connected Vercel tool returns team-scope 403/re-authentication-required using both known slug and returned team ID. Protection/authentication was not weakened and hosted acceptance is not claimed. No frontend source changed.
+
+No provider call, external filing acquisition, migration, broad materialization, Production/main, Auth/RLS, scheduler, R2/storage, P8, restore or V1-5 action occurred in this pass.
+
+Next owner approval boundary: (1) H1 independent NSE Oct 1/5 six-request capture-only authority batch; (2) O1 exactly two ownership-source calls. T1/F1/F2/B1 remain not executable and are not proposed for approval.
+
+---
+
 ## V1-4 Action B approved boundary execution — 6 October 2026
 
 **Review ledger = COMPLETE / PASS. Trendlyne dated-field capability canary = COMPLETE / FAIL-CLOSED. NSE history-authority acquisition = NOT EXECUTED due prior canary failure. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT STARTED / NOT AUTHORIZED.**
