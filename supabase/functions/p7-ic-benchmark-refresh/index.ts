@@ -260,6 +260,9 @@ Deno.serve(async request=>{
       const identity=preflight.find(x=>x.code===code)?.identity
       if(!identity)throw new Error("P7_IC_BENCHMARK_MAPPING_MISSING")
       const attemptedAt=new Date().toISOString()
+      const authBefore=counters.providerAuthenticationRequests
+      const authSuccessBefore=counters.successfulAuthenticationResponses
+      const historyBefore=counters.attemptedHistoryRequests
       let candles
       try{
         const from=new Date(window.requestFrom+"T00:00:00Z")
@@ -270,7 +273,13 @@ Deno.serve(async request=>{
         },kolkataDateTime(from),kolkataDateTime(new Date(to.getTime()+86400000-1)))
         counters.successfulHistoryResponses+=1
       }catch(error){
-        await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_HISTORY_"+String(body.grantId)+"_"+code,operationClass:"HISTORY",attemptedAt,completedAt:new Date().toISOString(),outcome:"FAILED",units:1,safeErrorCode:safeCode(error)})
+        const completedAt=new Date().toISOString()
+        if(counters.providerAuthenticationRequests>authBefore){
+          await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_AUTH_"+String(body.grantId)+"_"+code,operationClass:"AUTHENTICATE",attemptedAt,completedAt,outcome:counters.successfulAuthenticationResponses>authSuccessBefore?"SUCCEEDED":"FAILED",units:1,safeErrorCode:counters.successfulAuthenticationResponses>authSuccessBefore?null:safeCode(error)})
+        }
+        if(counters.attemptedHistoryRequests>historyBefore){
+          await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_HISTORY_"+String(body.grantId)+"_"+code,operationClass:"HISTORY",attemptedAt,completedAt,outcome:"FAILED",units:1,safeErrorCode:safeCode(error)})
+        }
         throw error
       }
       const validated=validateBatchBHistoryResponse({candles,requestFrom:window.requestFrom,requestTo:window.requestTo,cutoffDate:window.cutoffDate,alreadyAcceptedTotal:counters.acceptedRows})
@@ -296,6 +305,9 @@ Deno.serve(async request=>{
       if(persisted!==payload.length)throw new Error("P7_IC_BENCHMARK_PERSIST_COUNT_MISMATCH")
       counters.persistedRows+=persisted
       const completedAt=new Date().toISOString()
+      if(counters.providerAuthenticationRequests>authBefore){
+        await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_AUTH_"+String(body.grantId)+"_"+code,operationClass:"AUTHENTICATE",attemptedAt,completedAt,outcome:"SUCCEEDED",units:1})
+      }
       await persistUsage(admin,{idempotencyKey:"V1_4_BATCH_B_HISTORY_"+String(body.grantId)+"_"+code,operationClass:"HISTORY",attemptedAt,completedAt,outcome:"SUCCEEDED",units:1})
       results.push({code,status:"REFRESHED",identity,requestWindow:window,distinctSessions:validated.distinctSessions,firstSession:validated.firstSession,lastSession:validated.lastSession,acceptedRows:validated.rows.length,persistedRows:persisted})
     }
