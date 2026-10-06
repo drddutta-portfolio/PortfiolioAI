@@ -38,7 +38,8 @@ export interface InputValidation {
 export function validDate(value: string | null): value is string {
   if (!value || !/^\d{4}-\d{2}-\d{2}$/u.test(value)) return false
   const parsed = Date.parse(value + "T00:00:00Z")
-  return Number.isFinite(parsed) && new Date(parsed).toISOString().slice(0, 10) === value
+  if (!Number.isFinite(parsed)) return false
+  try { return new Date(parsed).toISOString().slice(0, 10) === value } catch { return false }
 }
 const timestamp = (value: string | null) => value ? Date.parse(value) : NaN
 const fail = (state: InputState, reason: string): InputValidation => ({ state, reason, selected: [] })
