@@ -71,6 +71,7 @@ async function signedRead(admin:ReturnType<typeof createClient>,path:string){
 async function fileSink(path:string):Promise<ByteSink>{
   const f=await Deno.open(path,{create:true,write:true,truncate:true}),w=f.writable.getWriter()
   return{write:c=>w.write(c),close:()=>w.close(),abort:async()=>{try{await w.abort()}catch{}}}
+}
 async function* syntheticMaster(){
   const enc=new TextEncoder(),filler="X".repeat(48*1024),row=JSON.stringify({token:"S",exch_seg:"NSE",symbol:"OTHER",name:"OTHER",instrumenttype:"EQ",extra:filler})
   yield enc.encode("[");let n=1,i=0
