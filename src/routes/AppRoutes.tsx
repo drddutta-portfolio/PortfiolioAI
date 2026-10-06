@@ -34,8 +34,8 @@ const TransactionsPage = lazy(async () => {
   return { default: module.TransactionsPage }
 })
 const ResearchPage = lazy(async () => {
-  const module = await import("../pages/ResearchPage")
-  return { default: module.ResearchPage }
+  const module = await import("../pages/StockResearchRoute")
+  return { default: module.StockResearchRoute }
 })
 const ResearchCoveragePage = lazy(async () => {
   const module = await import("../pages/ResearchCoveragePage")

@@ -1,3 +1,4 @@
+@scope (.research-sample-shell) {
 /* One shared research shell. Profiles change content, never layout selectors. */
 .research-page .research-header { padding: 1rem; align-items: start; }
 .research-page .research-title h1 { white-space: normal; overflow-wrap: break-word; word-break: normal; }
@@ -51,3 +52,5 @@
 @media (max-width: 800px) { .profile-requirement-grid { grid-template-columns: minmax(0, 1fr); } }
 .refresh-capabilities > summary { cursor: pointer; color: #2a6040; font-size: .78rem; font-weight: 700; padding: .45rem 0; }
 .research-page .research-decision-body .position-decision-panel { align-self: start; }
+
+}

@@ -1,3 +1,16 @@
+## HDFCBANK-only redesign sample rollout — 6 October 2026
+
+Owner requested deployment of HDFCBANK only as the initial sample. The route selects
+the new reusable composition for its canonical security ID or HDFCBANK ticker;
+other stocks use the pre-redesign page composition through a temporary fallback.
+New shell styles are scoped to the sample container. Shared canonical evidence
+safeguards remain active; no methodology, financial formula, database migration,
+provider acquisition or execution permission changes. This narrows the earlier
+shared-shell rollout; all-stock rollout awaits sample review. Hosted deployment
+status is pending verification.
+
+---
+
 ## Shared stock Research shell restoration — 6 October 2026
 
 **Owner-authorized D1–D3 presentation work = IMPLEMENTED / LOCALLY VERIFIED; hosted Development acceptance and merge remain pending. V1-4 remains IN PROGRESS / NOT PROVEN. V1-5 and downstream execution gates remain unchanged.**

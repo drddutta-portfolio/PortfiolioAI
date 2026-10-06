@@ -584,3 +584,8 @@ This amendment makes section 3 the explicit two-part product design contract. It
 | Summary and full detail agree | Overview highlights link to the same security's complete research, requirement state, source bindings and lineage. |
 
 Section 17 records the existing bounded implementation. This section defines how to review and extend its coverage; richer group modules and research-result integrations remain pending wherever their data contract, authorized engine or presentation mapping is unavailable. Hosted verification and merge status are tracked separately from this design specification.
+
+
+### 18.3 Initial sample rollout
+
+The initial hosted sample enables the redesigned composition only for HDFCBANK (security `b47b007d-1990-4504-a5a2-4391c07687c5`, or its ticker route). Other stocks retain the pre-redesign page composition through a temporary rollout fallback. Sample styles are scoped to the sample container. This routing condition controls presentation only; it does not assign a research profile, alter evidence or introduce a stock-specific formula. The reusable shell remains the intended design for all stocks after sample review. Shared evidence safeguards remain in force.
