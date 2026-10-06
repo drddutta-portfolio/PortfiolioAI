@@ -235,6 +235,7 @@ export function validateReviewedRequirementEvidence(input: {
     }
 
     const document = bound.document
+    if (!review.reviewed_by) return fail("REVIEW_REQUIRED", "HUMAN_REVIEW_AUTHORITY_MISSING", [review.id])
     if (!document) return fail("REVIEW_REQUIRED", "DOCUMENTARY_REVIEW_REQUIRES_DOCUMENT", [review.id])
     if (!review.fresh_through || !Number.isFinite(time(review.fresh_through)) || time(review.fresh_through) < evaluationAsOfMs)
       return fail("REVIEW_REQUIRED", "DOCUMENT_REVIEW_FRESHNESS_NOT_PROVEN", [review.id])
