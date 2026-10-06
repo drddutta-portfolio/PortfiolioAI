@@ -188,8 +188,8 @@ async function authenticate(config: AngelOneConfig, now = Date.now(), observer?:
     headers: headers(config),
     body: JSON.stringify({ clientcode: config.clientCode, password: config.pin, totp: await totp(config.totpSecret) }),
   })
-  observer?.onResponse?.("AUTHENTICATE",response.ok)
   const body = await responseJson<{ readonly jwtToken?: string }>(response)
+  observer?.onResponse?.("AUTHENTICATE",true)
   const token = body.data?.jwtToken
   if (!token) throw new AngelProviderError("MISSING_JWT", true)
   cachedJwt = { token, expiresAt: sessionExpiresAt(token, now) }
@@ -258,8 +258,8 @@ export class AngelOneProvider implements MarketDataProvider {
           todate: toDate,
         }),
       })
-      this.observer?.onResponse?.("HISTORY",response.ok)
       const body = await responseJson<readonly unknown[][]>(response)
+      this.observer?.onResponse?.("HISTORY",true)
       return parseDailyCandles(body.data, retrievedAt)
     } catch (error) {
       if (error instanceof AngelProviderError && error.sessionExpired && !reauthenticated) {
@@ -290,8 +290,8 @@ export class AngelOneProvider implements MarketDataProvider {
           headers: headers(this.config, jwt),
           body: JSON.stringify({ mode: "FULL", exchangeTokens }),
         })
-        this.observer?.onResponse?.("QUOTE",response.ok)
         const body = await responseJson<{ readonly fetched?: readonly AngelQuote[]; readonly unfetched?: readonly unknown[] }>(response)
+        this.observer?.onResponse?.("QUOTE",true)
         const byIdentity = new Map(batch.map((instrument) => [`${instrument.exchange}:${instrument.providerInstrumentId}`, instrument]))
         for (const quote of body.data?.fetched ?? []) {
           const instrument = byIdentity.get(`${String(quote.exchange)}:${String(quote.symbolToken)}`)
