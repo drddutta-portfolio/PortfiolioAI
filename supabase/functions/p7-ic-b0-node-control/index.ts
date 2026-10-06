@@ -9,6 +9,7 @@ const AUTH_SHA256="a975f44698cbc12c688ce48da0100afa49ea6ca8bcc7d49b391164dc3e398
 const STAGE_KIND="V1_4_B0_NODE_STAGE_V3"
 const META_KIND="V1_4_ANGEL_INSTRUMENT_MASTER_V3"
 const MAX_DB_BYTES=200_000_000
+const WRITE_GATE_OPEN=false
 const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, content-type"}
 
 async function hexSha256(v:string){const b=new TextEncoder().encode(v);return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",b))).map(x=>x.toString(16).padStart(2,"0")).join("")}
@@ -30,9 +31,9 @@ Deno.serve(async req=>{
     const body=await req.json() as Record<string,unknown>,action=String(body.action??"")
     if(action==="HEALTH")return json(200,{ok:true,project:DEV_REF,maxDbBytes:MAX_DB_BYTES,writeGate:"FAIL_CLOSED_WHEN_SIZE_UNKNOWN"})
     // Current verified Dev database size is above MAX_DB_BYTES. Mutating actions remain
-    // fail-closed until a later provider-free deployment explicitly reopens this gate
-    // after an external authoritative pg_database_size verification below the ceiling.
-    return json(409,{code:"DB_SIZE_GATE_BLOCKED",maxDbBytes:MAX_DB_BYTES})
+    // fail-closed until a later provider-free deployment explicitly reopens this constant
+    // after an authoritative pg_database_size verification below the ceiling.
+    if(!WRITE_GATE_OPEN)return json(409,{code:"DB_SIZE_GATE_BLOCKED",maxDbBytes:MAX_DB_BYTES})
     const grantId=String(body.grantId??"")
     if(action==="BEGIN_CAPTURE"){
       const grant=await consumeP4ExecutionGrant(admin,{grantId,action:ACTION,portfolioId:PORTFOLIO_ID,securityId:SENTINEL})
