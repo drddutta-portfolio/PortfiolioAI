@@ -1,6 +1,6 @@
 # V1-4 exact official benchmark fallback — reviewable proposal
 
-Status: PROPOSED / OWNER SOURCE-AUTHORITY DECISION REQUIRED. V1-4 remains IN PROGRESS / NOT PROVEN. V1-5 and later gates remain unauthorized. This proposal changes the acquisition source for missing exact benchmark history, not the frozen equity cohort, classification hierarchy, methodology requirements, release thresholds or benchmark assignment.
+Status: OWNER APPROVED — benchmark-only official NSE/Nifty fallback, recorded from explicit owner approval on 2026-10-07 IST. V1-4 remains IN PROGRESS / NOT PROVEN. V1-5 and later gates remain unauthorized. This proposal changes the acquisition source for missing exact benchmark history, not the frozen equity cohort, classification hierarchy, methodology requirements, release thresholds or benchmark assignment.
 
 ## Verified capability, not fabricated data
 
@@ -50,3 +50,9 @@ Checks: nine new provider-free regression assertions PASS; existing source valid
 No Angel One or Trendlyne call was needed for this capability proof. In addition to the two official history POSTs, direct source discovery made one historical-page GET and three script requests (one timed out; duplicate script links yielded the same retained JavaScript). Web-tool catalogue discovery was separate. No automatic retries, Production/main changes, database mutation, migration, Auth/RLS change, scheduler action, P8 execution or V1-5 work occurred. Exactly two new raw capability objects were written to Development R2.
 
 Proceed with the exact-source adapter/acquisition integration only after the owner accepts the limited benchmark source exception. Other valid cached evidence work can continue independently; missing mandatory facts and factual reviews must remain explicit.
+
+## Approved execution follow-up
+
+Owner source-policy approval has been received. Ten additional exact-name price-index requests were executed without retries; each returned 276 unique sessions and passed the close-only parser. Capital Goods reuses its retained source; Telecom remains an explicit identity exception. See `PortfolioAI_V1_4_OFFICIAL_BENCHMARK_CAPTURE_MANIFEST_2026-10-07.json`.
+
+Raw-object GET through the Cloudflare connector returned `Cloudflare API error: 200` / `INVALID_ARGUMENT`. Successful upload metadata and matching byte counts establish storage acknowledgement, but do not substitute for readback hash validation. Canonical consumption must verify raw bytes against the recorded SHA-256 before selection. The new parser is not yet connected to the deployed canonical materializer and no readiness promotion is claimed.

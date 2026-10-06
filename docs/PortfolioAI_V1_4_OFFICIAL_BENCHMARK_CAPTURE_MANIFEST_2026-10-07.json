@@ -1,0 +1,168 @@
+{
+  "status": "CAPTURED_VALIDATED_NOT_CANONICALLY_MATERIALIZED",
+  "ownerAuthorization": "Official benchmark-only fallback approved; stock OHLCV authority remains Angel One",
+  "requestCount": 10,
+  "retries": 0,
+  "returnBasis": "PRICE_RETURN_RAW_CLOSE",
+  "captures": [
+    {
+      "code": "NIFTY_CHEMICALS",
+      "name": "NIFTY CHEMICALS",
+      "status": 200,
+      "bytes": 52063,
+      "sha256": "253914fdeaab215ab1b78518cef2c497bca7a0938cb50c8afc4e5919fd56c759",
+      "retrievedAt": "2026-10-06T20:03:56.972427+00:00",
+      "endpoint": "https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString",
+      "request": {
+        "cinfo": "{'name':'NIFTY CHEMICALS','startDate':'25-Aug-2025','endDate':'06-Oct-2026','indexName':'NIFTY CHEMICALS'}"
+      },
+      "sessions": 276,
+      "r2Bucket": "portfolioai-history-dev",
+      "r2Key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/253914fdeaab215ab1b78518cef2c497bca7a0938cb50c8afc4e5919fd56c759.json"
+    },
+    {
+      "code": "NIFTY_CONSUMER_DURABLES",
+      "name": "NIFTY CONSUMER DURABLES",
+      "status": 200,
+      "bytes": 55292,
+      "sha256": "7fd1670ea286e077c02cd480e6987b304767baae0160b382591b51cc15cfc9d0",
+      "retrievedAt": "2026-10-06T20:03:57.128359+00:00",
+      "endpoint": "https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString",
+      "request": {
+        "cinfo": "{'name':'NIFTY CONSUMER DURABLES','startDate':'25-Aug-2025','endDate':'06-Oct-2026','indexName':'NIFTY CONSUMER DURABLES'}"
+      },
+      "sessions": 276,
+      "r2Bucket": "portfolioai-history-dev",
+      "r2Key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/7fd1670ea286e077c02cd480e6987b304767baae0160b382591b51cc15cfc9d0.json"
+    },
+    {
+      "code": "NIFTY_CONSUMER_SERVICES",
+      "name": "NIFTY CONSUMER SERVICES",
+      "status": 200,
+      "bytes": 49681,
+      "sha256": "288c1494dfab91813b5859399e3e4021c6d24a45234f419ef212eac33e46227d",
+      "retrievedAt": "2026-10-06T20:03:57.422410+00:00",
+      "endpoint": "https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString",
+      "request": {
+        "cinfo": "{'name':'NIFTY CONSUMER SERVICES','startDate':'25-Aug-2025','endDate':'06-Oct-2026','indexName':'NIFTY CONSUMER SERVICES'}"
+      },
+      "sessions": 276,
+      "r2Bucket": "portfolioai-history-dev",
+      "r2Key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/288c1494dfab91813b5859399e3e4021c6d24a45234f419ef212eac33e46227d.json"
+    },
+    {
+      "code": "NIFTY_FINANCIAL_SERVICES_EX_BANK",
+      "name": "NIFTY FINANCIAL SERVICES EX-BANK",
+      "status": 200,
+      "bytes": 57720,
+      "sha256": "e933065394dc5c241bec413589fbb4fec61657fde618180c9e64a251689293f7",
+      "retrievedAt": "2026-10-06T20:03:57.517192+00:00",
+      "endpoint": "https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString",
+      "request": {
+        "cinfo": "{'name':'NIFTY FINANCIAL SERVICES EX-BANK','startDate':'25-Aug-2025','endDate':'06-Oct-2026','indexName':'NIFTY FINANCIAL SERVICES EX-BANK'}"
+      },
+      "sessions": 276,
+      "r2Bucket": "portfolioai-history-dev",
+      "r2Key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/e933065394dc5c241bec413589fbb4fec61657fde618180c9e64a251689293f7.json"
+    },
+    {
+      "code": "NIFTY_HOSPITALS",
+      "name": "NIFTY HOSPITALS",
+      "status": 200,
+      "bytes": 47473,
+      "sha256": "2f04532a49463ac0f654bbdb95f7f2e626c380f36d0385d54dfea5fe5400fb44",
+      "retrievedAt": "2026-10-06T20:03:57.957171+00:00",
+      "endpoint": "https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString",
+      "request": {
+        "cinfo": "{'name':'NIFTY HOSPITALS','startDate':'25-Aug-2025','endDate':'06-Oct-2026','indexName':'NIFTY HOSPITALS'}"
+      },
+      "sessions": 276,
+      "r2Bucket": "portfolioai-history-dev",
+      "r2Key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/2f04532a49463ac0f654bbdb95f7f2e626c380f36d0385d54dfea5fe5400fb44.json"
+    },
+    {
+      "code": "NIFTY_INDIA_DEFENCE",
+      "name": "NIFTY INDIA DEFENCE",
+      "status": 200,
+      "bytes": 53052,
+      "sha256": "a97332fe41445295b1af78af9d74bafe4dc74a04a8db558d2cc6da4776734b81",
+      "retrievedAt": "2026-10-06T20:03:57.838623+00:00",
+      "endpoint": "https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString",
+      "request": {
+        "cinfo": "{'name':'NIFTY INDIA DEFENCE','startDate':'25-Aug-2025','endDate':'06-Oct-2026','indexName':'NIFTY INDIA DEFENCE'}"
+      },
+      "sessions": 276,
+      "r2Bucket": "portfolioai-history-dev",
+      "r2Key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/a97332fe41445295b1af78af9d74bafe4dc74a04a8db558d2cc6da4776734b81.json"
+    },
+    {
+      "code": "NIFTY_OIL_GAS",
+      "name": "NIFTY OIL & GAS",
+      "status": 200,
+      "bytes": 53072,
+      "sha256": "1e4de2f7936173e86d6da17017afe226de8ad996c749334a02a2dd90ecc24e86",
+      "retrievedAt": "2026-10-06T20:03:58.190813+00:00",
+      "endpoint": "https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString",
+      "request": {
+        "cinfo": "{'name':'NIFTY OIL & GAS','startDate':'25-Aug-2025','endDate':'06-Oct-2026','indexName':'NIFTY OIL & GAS'}"
+      },
+      "sessions": 276,
+      "r2Bucket": "portfolioai-history-dev",
+      "r2Key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/1e4de2f7936173e86d6da17017afe226de8ad996c749334a02a2dd90ecc24e86.json"
+    },
+    {
+      "code": "NIFTY_POWER",
+      "name": "NIFTY POWER",
+      "status": 200,
+      "bytes": 46369,
+      "sha256": "834c5c02701733f68510fd02d82a2c7642f7fa6f1bb539292a39b76ec2db5da4",
+      "retrievedAt": "2026-10-06T20:03:58.446842+00:00",
+      "endpoint": "https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString",
+      "request": {
+        "cinfo": "{'name':'NIFTY POWER','startDate':'25-Aug-2025','endDate':'06-Oct-2026','indexName':'NIFTY POWER'}"
+      },
+      "sessions": 276,
+      "r2Bucket": "portfolioai-history-dev",
+      "r2Key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/834c5c02701733f68510fd02d82a2c7642f7fa6f1bb539292a39b76ec2db5da4.json"
+    },
+    {
+      "code": "NIFTY_SERVICES_SECTOR",
+      "name": "NIFTY SERVICES SECTOR",
+      "status": 200,
+      "bytes": 54699,
+      "sha256": "d8cc85f3aa06fcb4f2aa9d04ee5829ea9f2f00ade3acb380765c3a43af71f60c",
+      "retrievedAt": "2026-10-06T20:03:58.524557+00:00",
+      "endpoint": "https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString",
+      "request": {
+        "cinfo": "{'name':'NIFTY SERVICES SECTOR','startDate':'25-Aug-2025','endDate':'06-Oct-2026','indexName':'NIFTY SERVICES SECTOR'}"
+      },
+      "sessions": 276,
+      "r2Bucket": "portfolioai-history-dev",
+      "r2Key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/d8cc85f3aa06fcb4f2aa9d04ee5829ea9f2f00ade3acb380765c3a43af71f60c.json"
+    },
+    {
+      "code": "NIFTY_TRANSPORTATION_LOGISTICS",
+      "name": "NIFTY TRANSPORTATION & LOGISTICS",
+      "status": 200,
+      "bytes": 57758,
+      "sha256": "e25c9694131d43742497e6114c0f5af45db8b133d00e556ebedf47d2dbe5d3a8",
+      "retrievedAt": "2026-10-06T20:03:58.783716+00:00",
+      "endpoint": "https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString",
+      "request": {
+        "cinfo": "{'name':'NIFTY TRANSPORTATION & LOGISTICS','startDate':'25-Aug-2025','endDate':'06-Oct-2026','indexName':'NIFTY TRANSPORTATION & LOGISTICS'}"
+      },
+      "sessions": 276,
+      "r2Bucket": "portfolioai-history-dev",
+      "r2Key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/e25c9694131d43742497e6114c0f5af45db8b133d00e556ebedf47d2dbe5d3a8.json"
+    }
+  ],
+  "reusedCapitalGoodsPriceSha256": "7e6b840117f2eaff9a07b2438516da6e939d8ef58f205b3dc912b252edbb6b6e",
+  "unresolved": [
+    {
+      "code": "NIFTY_TELECOM",
+      "reason": "Official Nifty Telecommunications does not match currently approved exact aliases; no substitution made"
+    }
+  ],
+  "calendarProof": "NOT_ESTABLISHED_BY_CAPTURE",
+  "readinessPromoted": false
+}

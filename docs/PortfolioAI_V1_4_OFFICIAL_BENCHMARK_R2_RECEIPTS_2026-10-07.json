@@ -1,0 +1,96 @@
+{
+  "bucket": "portfolioai-history-dev",
+  "objects": [
+    {
+      "code": "NIFTY_CHEMICALS",
+      "key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/253914fdeaab215ab1b78518cef2c497bca7a0938cb50c8afc4e5919fd56c759.json",
+      "bytes": 52063,
+      "version": "7e5eed2e922448373ef8fe56dbe65787",
+      "uploaded": "2026-10-06T20:04:37.918Z",
+      "sha256": "253914fdeaab215ab1b78518cef2c497bca7a0938cb50c8afc4e5919fd56c759",
+      "readbackHashVerified": false
+    },
+    {
+      "code": "NIFTY_CONSUMER_DURABLES",
+      "key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/7fd1670ea286e077c02cd480e6987b304767baae0160b382591b51cc15cfc9d0.json",
+      "bytes": 55292,
+      "version": "7e5eed2e5cafd2d9adf556b2ad0c07e4",
+      "uploaded": "2026-10-06T20:04:51.590Z",
+      "sha256": "7fd1670ea286e077c02cd480e6987b304767baae0160b382591b51cc15cfc9d0",
+      "readbackHashVerified": false
+    },
+    {
+      "code": "NIFTY_CONSUMER_SERVICES",
+      "key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/288c1494dfab91813b5859399e3e4021c6d24a45234f419ef212eac33e46227d.json",
+      "bytes": 49681,
+      "version": "7e5eed2e2ac701d47badbe9b2d97769a",
+      "uploaded": "2026-10-06T20:05:04.361Z",
+      "sha256": "288c1494dfab91813b5859399e3e4021c6d24a45234f419ef212eac33e46227d",
+      "readbackHashVerified": false
+    },
+    {
+      "code": "NIFTY_FINANCIAL_SERVICES_EX_BANK",
+      "key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/e933065394dc5c241bec413589fbb4fec61657fde618180c9e64a251689293f7.json",
+      "bytes": 57720,
+      "version": "7e5eed2df95e7a8028913c64ffb652d3",
+      "uploaded": "2026-10-06T20:05:16.993Z",
+      "sha256": "e933065394dc5c241bec413589fbb4fec61657fde618180c9e64a251689293f7",
+      "readbackHashVerified": false
+    },
+    {
+      "code": "NIFTY_HOSPITALS",
+      "key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/2f04532a49463ac0f654bbdb95f7f2e626c380f36d0385d54dfea5fe5400fb44.json",
+      "bytes": 47473,
+      "version": "7e5eed2dc8506197e75ce8b39852c583",
+      "uploaded": "2026-10-06T20:05:29.551Z",
+      "sha256": "2f04532a49463ac0f654bbdb95f7f2e626c380f36d0385d54dfea5fe5400fb44",
+      "readbackHashVerified": false
+    },
+    {
+      "code": "NIFTY_INDIA_DEFENCE",
+      "key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/a97332fe41445295b1af78af9d74bafe4dc74a04a8db558d2cc6da4776734b81.json",
+      "bytes": 53052,
+      "version": "7e5eed2d9c10296b2f3ba0a32b4e2f26",
+      "uploaded": "2026-10-06T20:05:40.924Z",
+      "sha256": "a97332fe41445295b1af78af9d74bafe4dc74a04a8db558d2cc6da4776734b81",
+      "readbackHashVerified": false
+    },
+    {
+      "code": "NIFTY_OIL_GAS",
+      "key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/1e4de2f7936173e86d6da17017afe226de8ad996c749334a02a2dd90ecc24e86.json",
+      "bytes": 53072,
+      "version": "7e5eed2d0ad8726be9b6133e33d2a455",
+      "uploaded": "2026-10-06T20:06:18.057Z",
+      "sha256": "1e4de2f7936173e86d6da17017afe226de8ad996c749334a02a2dd90ecc24e86",
+      "readbackHashVerified": false
+    },
+    {
+      "code": "NIFTY_POWER",
+      "key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/834c5c02701733f68510fd02d82a2c7642f7fa6f1bb539292a39b76ec2db5da4.json",
+      "bytes": 46369,
+      "version": "7e5eed2cddd73edad949e4a310b6f756",
+      "uploaded": "2026-10-06T20:06:29.602Z",
+      "sha256": "834c5c02701733f68510fd02d82a2c7642f7fa6f1bb539292a39b76ec2db5da4",
+      "readbackHashVerified": false
+    },
+    {
+      "code": "NIFTY_SERVICES_SECTOR",
+      "key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/d8cc85f3aa06fcb4f2aa9d04ee5829ea9f2f00ade3acb380765c3a43af71f60c.json",
+      "bytes": 54699,
+      "version": "7e5eed2c7fbb041ddec4bff4b92da49f",
+      "uploaded": "2026-10-06T20:06:53.711Z",
+      "sha256": "d8cc85f3aa06fcb4f2aa9d04ee5829ea9f2f00ade3acb380765c3a43af71f60c",
+      "readbackHashVerified": false
+    },
+    {
+      "code": "NIFTY_TRANSPORTATION_LOGISTICS",
+      "key": "portfolioai-research/development/v1-4/official-index-capability/2026-10-07/e25c9694131d43742497e6114c0f5af45db8b133d00e556ebedf47d2dbe5d3a8.json",
+      "bytes": 57758,
+      "version": "7e5eed2bf0dbcc4526a3f4a14fcf648d",
+      "uploaded": "2026-10-06T20:07:30.171Z",
+      "sha256": "e25c9694131d43742497e6114c0f5af45db8b133d00e556ebedf47d2dbe5d3a8",
+      "readbackHashVerified": false
+    }
+  ],
+  "totalBytes": 527179
+}

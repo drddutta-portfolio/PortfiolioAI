@@ -862,3 +862,7 @@ Research exposes the immutable requirement items belonging to the same portfolio
 
 The existing structured-parameter normalizer now refuses to count matching metric labels or growth horizons as dated reporting periods for a multi-period requirement. Such retained observations remain `EVIDENCE_PRESENT_REVIEW_REQUIRED / DATED_REPORTING_PERIODS_NOT_PROVEN`, with deterministicScoreReady false. Version `P7_IC_EVIDENCE_NORMALIZATION_V2_PERIOD_GUARD` identifies this repository guard. It does not normalize invented dates, overwrite prior source payloads or selections, or establish units/currency/scope, corporate-action adjustment, benchmark alignment or freshness by itself. Existing live snapshots and deployed Edge Functions remain unchanged by a repository commit; V1-4 closure requires separate proof of valid inputs before execution/materialization.
 
+
+### V1-4 owner-approved benchmark-only source exception (2026-10-07 IST)
+
+Where Angel One cannot resolve the exact approved benchmark, official NSE/Nifty index history may supply that benchmark only. Angel One remains the stock CMP/OHLCV authority. Preserve exact approved index identity, explicit price-index versus total-return basis, immutable raw-source hash/R2 reference, and all calendar, freshness, adjustment and owner-review gates. Close-only series must not manufacture OHLC. No nearest-index substitution or readiness promotion follows merely from acquisition. See `PortfolioAI_V1_4_OFFICIAL_BENCHMARK_FALLBACK_PROPOSAL_2026-10-07.md` for the approved contract.

@@ -9048,3 +9048,11 @@ Evidence closure results:
 
 The immediate unresolved items are the broken current Development deployment/browser proof, isolated restore/recovery acceptance, and evidence/engine remediation required before a non-arbitrary V1 usable-intelligence release threshold can be derived.
 
+
+### 2026-10-07 IST — owner-approved official benchmark fallback
+
+The owner approved official NSE/Nifty history as a benchmark-only fallback when Angel One lacks the exact approved instrument. Angel One remains stock CMP/OHLCV authority. Ten additional official price-index requests returned HTTP 200 with zero retries; all validated to 276 unique dated sessions each (2025-08-25 through 2026-10-06). Capital Goods reuses the previously captured 276-session response. Raw bodies belong in private Development R2; the capture manifest records exact requests, dates, hashes and references without embedding large bodies in Supabase/GitHub.
+
+The shared close-only parser preserves decimal strings, enforces exact approved aliases, explicit price/TRI basis, real dates, request bounds, duplicate rejection and 252/400 session limits. Provider-free regression and lint pass; the retained Capital Goods price and TRI bodies independently pass. It does not manufacture OHLC or certify a calendar/readiness state. Telecom remains unresolved because the official Nifty Telecommunications name does not match the currently approved aliases. No similarity replacement was made.
+
+This is acquisition/adapter progress, not V1-4 completion. Canonical R2-reader integration, source/usage registration, complete calendar/alignment and adjustment proofs, and reviewed mandatory evidence remain outstanding. No canonical selections or READY states have been changed by this step. Frozen private manifest SHA-256 remains `79f551558333adc1f37d6a26298d8088ee02db3161f03c6d6e59f9a19a93fc27`. V1-4 remains IN PROGRESS / NOT PROVEN; V1-5 remains unauthorized.
