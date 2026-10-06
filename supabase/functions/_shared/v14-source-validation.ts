@@ -2,7 +2,16 @@ export type CaptureFormat="ZIP"|"JSON"|"NIFTY_TRI_JSON"
 export type CaptureValidation={ok:true;reason:"CAPTURE_SEMANTICALLY_VALID";details:Record<string,unknown>}|{ok:false;reason:string;details:Record<string,unknown>}
 const text=(v:unknown)=>typeof v==="string"?v.trim():null
 const num=(v:unknown)=>{const n=typeof v==="number"?v:Number(String(v??"").replace(/,/gu,""));return Number.isFinite(n)?n:null}
-const iso=(v:unknown)=>{const s=text(v);if(!s)return null;const m=/^(\d{2})-([A-Za-z]{3})-(\d{4})$/u.exec(s);if(m){const months:Record<string,string>={Jan:"01",Feb:"02",Mar:"03",Apr:"04",May:"05",Jun:"06",Jul:"07",Aug:"08",Sep:"09",Oct:"10",Nov:"11",Dec:"12"};const mm=months[m[2]];return mm?m[3]+"-"+mm+"-"+m[1]:null}const raw=s.slice(0,10);return /^\d{4}-\d{2}-\d{2}$/u.test(raw)&&Number.isFinite(Date.parse(raw+"T00:00:00Z"))?raw:null}
+const iso=(v:unknown)=>{
+ const s=text(v);if(!s)return null
+ const m=/^(\d{2})[- ]([A-Za-z]{3})[- ](\d{4})$/u.exec(s)
+ const months:Record<string,string>={jan:"01",feb:"02",mar:"03",apr:"04",may:"05",jun:"06",jul:"07",aug:"08",sep:"09",oct:"10",nov:"11",dec:"12"}
+ const month=m?months[m[2]!.toLowerCase()]:null
+ const raw=m?(month?m[3]+"-"+month+"-"+m[1]:null):s.slice(0,10)
+ if(!raw||!/^\d{4}-\d{2}-\d{2}$/u.test(raw))return null
+ const instant=Date.parse(raw+"T00:00:00Z")
+ return Number.isFinite(instant)&&new Date(instant).toISOString().slice(0,10)===raw?raw:null
+}
 function looksLikeHtmlError(body:string){const x=body.slice(0,200000).toLowerCase();return /<html|<!doctype html/u.test(x)&&(/<title[^>]*>\s*error\b/u.test(x)||/\berror\s*(4\d\d|5\d\d)\b/u.test(x)||/access denied|login|sign in|captcha|challenge/u.test(x))}
 export function validateCapturedResponse(input:{status:number;contentType:string|null;bodyText?:string|null;format:CaptureFormat;expectedIndex?:string;requestedFrom?:string;requestedTo?:string;requiredDates?:readonly string[]}):CaptureValidation{
  const ct=(input.contentType??"").toLowerCase(),body=input.bodyText??""
