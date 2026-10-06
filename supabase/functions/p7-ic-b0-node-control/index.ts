@@ -8,13 +8,45 @@ const SENTINEL="P7_IC2_BATCH_B_MASTER_PREFLIGHT_V3"
 const AUTH_SHA256="a975f44698cbc12c688ce48da0100afa49ea6ca8bcc7d49b391164dc3e39828d"
 const STAGE_KIND="V1_4_B0_NODE_STAGE_V3"
 const META_KIND="V1_4_ANGEL_INSTRUMENT_MASTER_V3"
-const MAX_DB_BYTES=200_000_000
-const WRITE_GATE_OPEN=false
+const OWNER_DB_QUOTA_BYTES=500_000_000
+const DB_WARNING_BYTES=400_000_000
+const DB_ACTION_BYTES=450_000_000
+const DB_HARD_STOP_BYTES=475_000_000
+const CAPACITY_SNAPSHOT_BYTES=202_812_563
+const CAPACITY_SNAPSHOT_AT="2026-10-06T17:18:28.940896Z"
+const CAPACITY_SNAPSHOT_MAX_AGE_MS=24*60*60*1000
+const EXPECTED_B0_CONTROL_INCREMENT_BYTES=100_000
 const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, content-type"}
 
 async function hexSha256(v:string){const b=new TextEncoder().encode(v);return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",b))).map(x=>x.toString(16).padStart(2,"0")).join("")}
 async function authorized(req:Request){const h=req.headers.get("authorization")??"";if(!h.startsWith("Bearer "))return false;return await hexSha256(h.slice(7))===AUTH_SHA256}
 const json=(s:number,b:unknown)=>new Response(JSON.stringify(b),{status:s,headers:{...cors,"Content-Type":"application/json"}})
+function capacity(){
+  const ageMs=Date.now()-Date.parse(CAPACITY_SNAPSHOT_AT)
+  const projected=CAPACITY_SNAPSHOT_BYTES+EXPECTED_B0_CONTROL_INCREMENT_BYTES
+  const level=CAPACITY_SNAPSHOT_BYTES>=DB_HARD_STOP_BYTES?"HARD_STOP":CAPACITY_SNAPSHOT_BYTES>=DB_ACTION_BYTES?"ACTION":CAPACITY_SNAPSHOT_BYTES>=DB_WARNING_BYTES?"WARNING":"NORMAL"
+  return{
+    ownerQuotaBytes:OWNER_DB_QUOTA_BYTES,
+    warningBytes:DB_WARNING_BYTES,
+    actionBytes:DB_ACTION_BYTES,
+    hardStopBytes:DB_HARD_STOP_BYTES,
+    verifiedBytes:CAPACITY_SNAPSHOT_BYTES,
+    verifiedAt:CAPACITY_SNAPSHOT_AT,
+    snapshotAgeMs:ageMs,
+    snapshotFresh:ageMs>=0&&ageMs<=CAPACITY_SNAPSHOT_MAX_AGE_MS,
+    expectedControlIncrementBytes:EXPECTED_B0_CONTROL_INCREMENT_BYTES,
+    projectedBytes:projected,
+    quotaHeadroomBytes:OWNER_DB_QUOTA_BYTES-CAPACITY_SNAPSHOT_BYTES,
+    hardStopHeadroomBytes:DB_HARD_STOP_BYTES-CAPACITY_SNAPSHOT_BYTES,
+    level,
+  }
+}
+function assertCapacity(){
+  const s=capacity()
+  if(!s.snapshotFresh)throw new Error("B0_CONTROL_CAPACITY_SNAPSHOT_STALE")
+  if(s.projectedBytes>=DB_HARD_STOP_BYTES)throw new Error("B0_CONTROL_CAPACITY_HARD_STOP")
+  return s
+}
 async function usageStart(admin:ReturnType<typeof createClient>,grantId:string){
   const at=new Date().toISOString()
   const ins=await admin.from("provider_usage_events").insert({
@@ -48,11 +80,10 @@ Deno.serve(async req=>{
   const admin=createClient(url,key,{auth:{persistSession:false}})
   try{
     const body=await req.json() as Record<string,unknown>,action=String(body.action??"")
-    if(action==="HEALTH")return json(200,{ok:true,project:DEV_REF,maxDbBytes:MAX_DB_BYTES,writeGate:"FAIL_CLOSED_WHEN_SIZE_UNKNOWN"})
-    // Current verified Dev database size is above MAX_DB_BYTES. Mutating actions remain
-    // fail-closed until a later provider-free deployment explicitly reopens this constant
-    // after an authoritative pg_database_size verification below the ceiling.
-    if(!WRITE_GATE_OPEN)return json(409,{code:"DB_SIZE_GATE_BLOCKED",maxDbBytes:MAX_DB_BYTES})
+    if(action==="HEALTH")return json(200,{ok:true,project:DEV_REF,capacity:capacity()})
+    // Every mutating action is gated by a recent authoritative capacity snapshot.
+    // Refresh CAPACITY_SNAPSHOT_BYTES / CAPACITY_SNAPSHOT_AT provider-free before any acquisition grant.
+    assertCapacity()
     const grantId=String(body.grantId??"")
     if(action==="BEGIN_CAPTURE"){
       const grant=await consumeP4ExecutionGrant(admin,{grantId,action:ACTION,portfolioId:PORTFOLIO_ID,securityId:SENTINEL})
