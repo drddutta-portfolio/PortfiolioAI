@@ -44,7 +44,7 @@ async function ensureBucket(admin:ReturnType<typeof createClient>){
   const existing=listed.data.find(x=>x.name===BUCKET)
   if(!existing){
     const c=await admin.storage.createBucket(BUCKET,{public:false,fileSizeLimit:V1_4_MASTER_MAX_RESPONSE_BYTES,allowedMimeTypes:["application/json","application/octet-stream"]})
-    if(c.error)throw new Error("P7_IC_B0_V2_STORAGE_CREATE_FAILED")
+    if(c.error){console.error("B0_V2_STORAGE_CREATE_ERROR",JSON.stringify({message:c.error.message,statusCode:(c.error as {statusCode?:unknown}).statusCode,error:(c.error as {error?:unknown}).error}));throw new Error("P7_IC_B0_V2_STORAGE_CREATE_FAILED")}
   }
   return true
 }
