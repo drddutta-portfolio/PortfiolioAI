@@ -1,3 +1,29 @@
+## V1-4 reviewed-evidence validator repair — 6 October 2026
+
+**Validator repair = COMPLETE / DEPLOYED / REGRESSION PASS. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT STARTED / NOT AUTHORIZED.**
+
+Starting authoritative Development HEAD: \`c9462adaec4269dacc67a978da9c2b17e29556f3\`.
+
+The demonstrated false-FRESH paths in \`v14-reviewed-evidence.ts\` were repaired. Requirement family now comes from the approved deterministic coverage rule; numeric evidence requires exact context-bound decimal/source-period binding; ownership requires consistent series/basis, source anchors, freshness, consecutive quarter windows and duplicate-quarter conflict handling; document support requires VERIFIED content identity plus a unique matching \`research_document_sources\` link/content hash; reviewer authority is tied to the portfolio owner; review kind/version and deterministic integrity hash are validated; malformed dates fail closed; supersession chronology/context/branching are checked; canonical conflicts and contradictory reviews are preserved; compatible reviewed numeric rows may supplement only incomplete canonical series through the existing validator.
+
+Review rows and referenced document-source reads are paginated with explicit bounds. Selected lineage retains all contributing review/source/document/document-source IDs and hashes. Security-level CONFLICTING now outranks REVIEW_REQUIRED.
+
+Committed regression coverage was updated in the V1-4 adapter and real materializer mock tests. Final focused repaired-source helper checks passed **7/7**. The actual materializer handler was exercised with mocked Auth/PostgREST transport and **501 review rows across 2 pages**: HTTP 200, one security processed, zero provider calls, zero RPCs, zero snapshot/selection writes and no false READY. Temporary self-test endpoints were retired behind JWT protection / HTTP 410.
+
+Development Edge \`p7-ic2-materialize-readiness\` is ACTIVE **v25**, bundle SHA-256 \`be640f03e696169dc0e4198adfc74d8946ec932bd8de862593326870d2f6b0a0\`. Supabase deployment/bundling passed. GitHub's Vercel status on the implementation commit is success; direct Vercel connector access remains blocked by team-scope 403/re-authentication-required, separate from Deployment Protection/application login, so hosted Preview acceptance is not claimed.
+
+No evidence/readiness data was mutated: snapshots 1,485; items 22,401; selections 956; lineage 478; provider usage events 1,721; source records 4,817; fundamental observations 2,475; review rows 0. Therefore persisted frozen readiness is not promoted by this repair.
+
+The 1,608-job worklist family counts remain unchanged because the review ledger is empty, but acceptance gates are stricter. The representative official-filing path is now concrete: AKUMS cached Investor Presentation provider document 2256940 / existing discovery document \`4a4db3f9-a589-4467-984b-1e2c43616ba6\`, plus cached result identities 2256758/2256745 dated 8 August 2026, are the F0 source-capability canary. Exact official URLs are absent from cache.
+
+The updated execution proposal defines **F0-DISCOVERY**: AKUMS only, maximum four official NSE/BSE/issuer discovery requests, zero retries, zero commercial-provider calls and zero writes, stopping after exact URL resolution. H1 and O1 remain separate approval tracks; T1 and B1 remain not executable. New evidence after the historical cutoff must use a prospective later source cutoff without changing the frozen cohort/value.
+
+Full amendment: \`docs/PortfolioAI_V1_4_ACTION_B_REVIEW_INTEGRATION_AND_BOUNDED_EXECUTION_PROPOSAL_2026-10-06.md\`.
+
+No provider call, official filing acquisition, review persistence, broad materialization, migration, Production/main, Auth/RLS, scheduler, R2, P8 or V1-5 work occurred.
+
+---
+
 ## V1-4 Action B reviewed-evidence integration — 6 October 2026
 
 **Review-ledger integration = IMPLEMENTED / DEPLOYED / FOCUSED TESTS PASS. V1-4 = IN PROGRESS / NOT PROVEN. V1-5 = NOT STARTED / NOT AUTHORIZED.**
