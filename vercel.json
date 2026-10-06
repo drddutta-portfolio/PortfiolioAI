@@ -20,5 +20,11 @@
       "source": "/app/:path*",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "api/b0-node.ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  }
 }
