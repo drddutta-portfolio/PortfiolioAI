@@ -190,3 +190,112 @@ Existing rows: **UNCHANGED**.
 R2 P8 objects: **UNCHANGED**.
 
 Production: **UNTOUCHED**.
+
+
+## Bounded first offload proposal — review only
+
+### Exact dataset
+
+Table:
+`public.market_price_history`
+
+Candidate rows:
+`period_start < '2026-01-01T00:00:00Z'`
+
+Read-only audit result:
+- rows: **20,774**
+- securities: **238**
+- date range: **2025-08-07 18:30:00+00** through **2025-12-31 18:30:00+00**
+- logical tuple bytes from `sum(pg_column_size(row))`: **8,130,387 bytes**
+- current full table: 63,932 rows, 40,370,176 bytes total table+indexes
+- proportional candidate total footprint including indexes: approximately **13.1 MB**
+
+The proportional figure is planning evidence, not a promise of immediately reclaimable physical disk.
+
+### Cloudflare destination
+
+Proposed immutable prefix:
+
+`portfolioai-history/development/market-price-history/v1/period-year=2025/`
+
+Proposed files:
+- partitioned immutable data objects, preferably Parquet for compact typed analytics;
+- one JSON manifest containing schema version, row count, min/max period, security count, object SHA-256 values and aggregate fingerprint.
+
+No P8 prefix is reused.
+
+### Integrity verification
+
+Before any later row retirement:
+1. export exactly the 20,774 scoped rows ordered by `security_id, provider_code, interval, period_start`;
+2. calculate deterministic row-set fingerprint before export;
+3. calculate SHA-256 for every R2 object;
+4. read all objects back from R2;
+5. reconstruct the canonical row set;
+6. require exact:
+   - row count = 20,774;
+   - security count = 238;
+   - min/max timestamps;
+   - key coverage;
+   - aggregate fingerprint;
+   - OHLC/adjusted-close/volume values;
+7. compare representative application queries against current Postgres results.
+
+### Required reference/application change
+
+R2 does not replace relational querying directly.
+
+Before deletion, introduce a market-history repository/adapter with:
+- hot Postgres source for retained/current rows;
+- cold R2 source for archived partitions;
+- deterministic merge by existing natural key;
+- identical response contract for current callers.
+
+A compact Supabase manifest reference may be added later under a separately authorized migration/change contract. No migration is authorized by this plan.
+
+### Compatibility gate
+
+Must demonstrate:
+- Holdings/stock research pages still obtain required price history;
+- research/scoring code receives identical candles for archived dates;
+- no provider call is triggered merely because history moved to R2;
+- backtest/P8 consumers are explicitly mapped before they are allowed to depend on this archive;
+- no silent empty-history fallback.
+
+### Rollback
+
+Until a separately approved cleanup phase:
+- keep all 20,774 Postgres rows unchanged;
+- treat R2 export as a verified duplicate/canary only;
+- rollback is simply switching reads back to Postgres and abandoning the R2 manifest/object set.
+
+After any future retirement, rollback requires re-import from the immutable R2 manifest and hash-verified objects before removing the archive.
+
+### Physical-space expectation
+
+Deleting rows later would create reusable space inside the relation but does **not** guarantee an immediate reduction in `pg_database_size`.
+
+Supabase/Postgres documentation notes that physical files do not automatically shrink after ordinary row deletion. A later explicit physical compaction/rewrite could be required to reduce reported database size. Such operations are intentionally **not authorized in this phase**.
+
+Therefore:
+- logical candidate payload: ~8.13 MB;
+- proportional table/index footprint: ~13.1 MB;
+- immediately reportable physical reduction after a future ordinary delete: **not guaranteed**;
+- actual post-cleanup reclamation must be measured after the separately authorized maintenance strategy.
+
+## Growth outlook
+
+Current `market_price_history` density:
+- 63,932 rows occupy ~40.37 MB total;
+- approximately 631 bytes of total table/index footprint per row at the current layout.
+
+At roughly 240 securities × 252 exchange sessions/year, another full year of daily history would add about 60,480 rows. At current density, that is approximately **38 MB/year** before schema/index changes.
+
+This is a structural projection, not an observed ingestion-rate forecast.
+
+Large JSON evidence is a second growth vector:
+- `data_source_records` currently has ~13.98 MB of TOAST storage;
+- 714 rows have individual `raw_payload` sizes >=8 KiB;
+- those 714 payloads total ~10.35 MB by `pg_column_size(raw_payload)`.
+
+Because `data_source_records` has many incoming foreign keys, the safe future strategy is payload externalization while retaining the relational record, not bulk row deletion.
