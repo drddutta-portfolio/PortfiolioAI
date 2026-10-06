@@ -22,9 +22,10 @@
     }
   ],
   "functions": {
-    "api/b0-node.ts": {
+    "api/b0*.ts": {
       "maxDuration": 60,
-      "memory": 1024
+      "memory": 1024,
+      "includeFiles": "supabase/functions/_shared/*.ts"
     }
   }
 }
