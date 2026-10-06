@@ -14,14 +14,6 @@ const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"au
 async function hexSha256(v:string){const b=new TextEncoder().encode(v);return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",b))).map(x=>x.toString(16).padStart(2,"0")).join("")}
 async function authorized(req:Request){const h=req.headers.get("authorization")??"";if(!h.startsWith("Bearer "))return false;return await hexSha256(h.slice(7))===AUTH_SHA256}
 const json=(s:number,b:unknown)=>new Response(JSON.stringify(b),{status:s,headers:{...cors,"Content-Type":"application/json"}})
-async function dbBytes(admin:ReturnType<typeof createClient>){const q=await admin.rpc("pg_database_size",{name:"postgres"});if(!q.error&&typeof q.data==="number")return q.data;const r=await admin.from("data_source_records").select("id",{head:true,count:"exact"}).limit(0);if(r.error)throw new Error("B0_CONTROL_DB_SIZE_CHECK_FAILED");const direct=await admin.rpc("get_database_size_bytes");if(direct.error)throw new Error("B0_CONTROL_DB_SIZE_CHECK_UNAVAILABLE");return Number(direct.data)}
-async function dbBytesViaRest(admin:ReturnType<typeof createClient>){const {data,error}=await admin.rpc("exec_sql_scalar",{sql:"select pg_database_size('postgres')::bigint"});if(error)throw error;return Number(data)}
-async function readDbSize(admin:ReturnType<typeof createClient>){
-  // Hosted service-role clients cannot execute arbitrary SQL directly. Use the management value injected by caller only for HEALTH;
-  // all mutating actions additionally require a conservative fail-closed size check supplied by B0_EXPECTED_DB_BYTES and capped below MAX.
-  const configured=Number(Deno.env.get("B0_EXPECTED_DB_BYTES")??"NaN")
-  return Number.isFinite(configured)?configured:MAX_DB_BYTES
-}
 async function stage(admin:ReturnType<typeof createClient>,grantId:string,name:string,payload:Record<string,unknown>){
   const at=new Date().toISOString(),raw={grant_id:grantId,stage:name,at,...payload}
   const ins=await admin.from("data_source_records").insert({source_code:"ANGEL_ONE",record_kind:STAGE_KIND,external_record_id:grantId+":"+name+":"+at,retrieved_at:at,payload_hash:await hexSha256(JSON.stringify(raw)),raw_payload:raw,terms_snapshot:{mode:"V1_4_B0_NODE_APPEND_ONLY"}})
@@ -37,8 +29,10 @@ Deno.serve(async req=>{
   try{
     const body=await req.json() as Record<string,unknown>,action=String(body.action??"")
     if(action==="HEALTH")return json(200,{ok:true,project:DEV_REF,maxDbBytes:MAX_DB_BYTES,writeGate:"FAIL_CLOSED_WHEN_SIZE_UNKNOWN"})
-    const expected=Number(body.expectedDbBytes)
-    if(!Number.isFinite(expected)||expected>=MAX_DB_BYTES)return json(409,{code:"DB_SIZE_GATE_BLOCKED",expectedDbBytes:expected,maxDbBytes:MAX_DB_BYTES})
+    // Current verified Dev database size is above MAX_DB_BYTES. Mutating actions remain
+    // fail-closed until a later provider-free deployment explicitly reopens this gate
+    // after an external authoritative pg_database_size verification below the ceiling.
+    return json(409,{code:"DB_SIZE_GATE_BLOCKED",maxDbBytes:MAX_DB_BYTES})
     const grantId=String(body.grantId??"")
     if(action==="BEGIN_CAPTURE"){
       const grant=await consumeP4ExecutionGrant(admin,{grantId,action:ACTION,portfolioId:PORTFOLIO_ID,securityId:SENTINEL})
