@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { evidenceStatus, latestByCode, metricLabel } from "./researchPolicy"
+import { evidenceStatus, latestByCode, metricLabel, formatSourceResearchMetric } from "./researchPolicy"
 import type { ResearchMetric } from "./types"
 import { loadSecurityResearch } from "../../data/researchRepository"
 
@@ -37,4 +37,11 @@ describe("research evidence policy", () => {
     const implementation = loadSecurityResearch.toString()
     expect(implementation).not.toMatch(/functions\.invoke|refresh-security-enrichment|provider_usage|reserve_provider|data_ingestion_run/iu)
   })
+  it("does not guess currency for provider crore magnitudes", () => {
+    expect(formatSourceResearchMetric(metric({ value: "1111989.2", unit: "Cr.", currency: null }))).toBe("Unit / currency unproven")
+    expect(formatSourceResearchMetric(metric({ value: "13.8", unit: null }))).toBe("Unit unavailable")
+    expect(formatSourceResearchMetric(metric({ value: "0", unit: "PERCENT" }))).toBe("0%")
+    expect(formatSourceResearchMetric(metric({ value: "1000", unit: "INR_CRORE", currency: "INR" }))).toBe("₹1,000 Cr")
+  })
+
 })

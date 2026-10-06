@@ -5,17 +5,20 @@ function label(value: string) {
 }
 
 /** Evidence readiness is the canonical stored contract, independent of engine/score availability. */
-export function CanonicalEvidenceReadinessPanel({ portfolioId, securityId, assetClass }: { readonly portfolioId: string; readonly securityId: string; readonly assetClass: string }) {
+export function CanonicalEvidenceReadinessPanel({ portfolioId, securityId, assetClass, compact = false }: { readonly portfolioId: string; readonly securityId: string; readonly assetClass: string; readonly compact?: boolean }) {
   const evidence = useCanonicalEvidenceReadiness(portfolioId, securityId, assetClass)
-  if (!evidence.applicable) return <section className="panel"><h2>Methodology evidence requirements</h2><p>Not applicable: equity methodology requirements do not apply to this asset class.</p></section>
+  if (!evidence.applicable) return <section className="panel"><h2>{compact ? "Research Readiness" : "Methodology evidence requirements"}</h2><p>Not applicable: equity methodology requirements do not apply to this asset class.</p></section>
   if (evidence.isLoading) return <section className="panel" role="status">Loading canonical evidence requirements…</section>
   if (evidence.error) return <section className="notice notice-error" role="alert"><strong>Canonical evidence requirements could not be loaded.</strong><p>{evidence.error}</p></section>
-  if (!evidence.data) return <section className="panel"><h2>Methodology evidence requirements</h2><p>Not ready: no canonical evidence snapshot is selected for this holding.</p></section>
+  if (!evidence.data) return <section className="panel"><h2>{compact ? "Research Readiness" : "Methodology evidence requirements"}</h2><p>Not ready: no canonical evidence snapshot is selected for this holding.</p></section>
   const { snapshot, requirements } = evidence.data
+  const blockers = requirements.filter(item => item.applicability === "APPLICABLE" && item.evidence_state !== "FRESH")
   return <section className="panel" aria-label="Canonical methodology evidence readiness">
-    <h2>Methodology evidence requirements</h2>
+    <h2>{compact ? "Research Readiness" : "Methodology evidence requirements"}</h2>
     <p><strong>{label(snapshot.snapshotStatus)}</strong> · {label(snapshot.profileCode)}{snapshot.subprofileCode ? ` / ${label(snapshot.subprofileCode)}` : ""} · snapshot as of {snapshot.asOfDate}</p>
     <p>This is the stored evidence assessment, separate from scoring-engine availability. Browsing does not refresh evidence. Source dates and freshness limits below describe the retained snapshot.</p>
+    {compact ? <ul className="readiness-blockers">{blockers.slice(0, 3).map(item => <li key={item.id}><strong>{label(item.requirement_code)}</strong> — {label(item.evidence_state).toLocaleLowerCase()}: {label(item.reason_code).toLocaleLowerCase()}</li>)}{!blockers.length ? <li>{requirements.length ? "No blockers recorded in this stored snapshot." : "No requirement items retained; completeness cannot be established."}</li> : null}</ul> : null}
+    <details className="readiness-detail" open={compact ? undefined : true}><summary>Complete requirements and source lineage</summary>
     {!requirements.length ? <p role="alert">Not ready: the selected snapshot has no requirement items. Evidence completeness cannot be established.</p> : <div className="research-table-wrap" tabIndex={0} aria-label="Scrollable methodology evidence requirements"><table className="research-table">
       <thead><tr><th>Requirement / history</th><th>Stored state / reason</th><th>Source / dates</th><th>Evidence and lineage</th></tr></thead>
       <tbody>{requirements.map(item => <tr key={item.id}>
@@ -25,6 +28,6 @@ export function CanonicalEvidenceReadinessPanel({ portfolioId, securityId, asset
         <td><small>{label(item.validation_state)} · {label(item.canonical_selection_state)}</small><details><summary>Inspect retained evidence and provenance</summary><p>Selected evidence: {item.selected_evidence_id ?? "No individual selection (see selection state)"}</p><p>Raw source: {item.raw_source_record_id ?? "Unavailable"}</p><p>Candidate references: {item.candidate_evidence_ids.length ? item.candidate_evidence_ids.join(", ") : "None retained"}</p><p>Metric: {item.metric_code ?? "Requirement-specific evidence"}</p><pre>{item.normalized_value == null ? "Normalized evidence unavailable" : JSON.stringify(item.normalized_value, null, 2)}</pre></details></td>
       </tr>)}</tbody>
     </table></div>}
-    <details><summary>Snapshot provenance</summary><p>Snapshot {snapshot.snapshotId}</p><p>{snapshot.methodologyAuthority} / {snapshot.methodologyVersion}</p><p>Assignment {snapshot.assignmentAuthority ?? "Unavailable"} / {snapshot.assignmentVersion} / {snapshot.assignmentId}</p><p>Classification {snapshot.classificationVersion}</p></details>
+    </details><details><summary>Snapshot provenance</summary><p>Snapshot {snapshot.snapshotId}</p><p>{snapshot.methodologyAuthority} / {snapshot.methodologyVersion}</p><p>Assignment {snapshot.assignmentAuthority ?? "Unavailable"} / {snapshot.assignmentVersion} / {snapshot.assignmentId}</p><p>Classification {snapshot.classificationVersion}</p></details>
   </section>
 }

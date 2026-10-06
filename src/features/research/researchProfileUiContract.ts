@@ -139,7 +139,7 @@ const COMMON_SECTION_GROUPS = [
   { label: "Risk", codes: ["RISK"] },
 ] as const
 
-const GENERAL_SNAPSHOT_GROUPS: readonly ResearchSnapshotGroup[] = [
+const BANK_SNAPSHOT_GROUPS: readonly ResearchSnapshotGroup[] = [
   {
     title: "Quality at a glance",
     codes: ["CFO_ANNUAL", "ROE_ANNUAL", "ROCE_ANNUAL", "OPM_TTM", "GROSS_NPA_PERCENT", "NET_NPA_PERCENT"],
@@ -273,7 +273,12 @@ const PHARMA_REFRESH_MODULES: readonly ResearchRefreshModule[] = [
 const GENERAL_CONTRACT: ResearchProfileUiContract = {
   profileCode: "GENERAL",
   profileDisplayName: "General Research",
-  snapshotGroups: GENERAL_SNAPSHOT_GROUPS,
+  snapshotGroups: [
+    { title: "Quality at a glance", codes: ["ROE_ANNUAL", "ROCE_ANNUAL", "CFO_ANNUAL"] },
+    { title: "Growth at a glance", codes: ["REVENUE_TTM", "NET_PROFIT_TTM", "EPS_GROWTH_YOY"] },
+    { title: "Valuation snapshot", codes: ["PE_TTM", "EV_EBITDA", "FCF_YIELD_PERCENT"] },
+    { title: "Ownership & governance", codes: OWNERSHIP_CODES },
+  ],
   scoreSectionGroups: COMMON_SECTION_GROUPS,
   financialWorkspaceSections: [],
   qualityGrowthWorkspaceSections: [],
@@ -291,6 +296,7 @@ const BANK_NBFC_CONTRACT: ResearchProfileUiContract = {
   ...GENERAL_CONTRACT,
   profileCode: "BANK_NBFC",
   profileDisplayName: "Banks / NBFCs",
+  snapshotGroups: BANK_SNAPSHOT_GROUPS,
   notApplicableDimensions: ["CASH_FLOW"],
   readinessMode: "PROFILE_CONTRACT",
   refreshModules: BANK_NBFC_REFRESH_MODULES,
@@ -322,6 +328,7 @@ const PHARMA_V1_CONTRACT: ResearchProfileUiContract = {
 
 const CONTRACTS: Readonly<Record<string, ResearchProfileUiContract>> = {
   BANK_NBFC: BANK_NBFC_CONTRACT,
+  BANK: BANK_NBFC_CONTRACT,
   PHARMA_V1: PHARMA_V1_CONTRACT,
 }
 
@@ -330,7 +337,7 @@ const CONTRACTS: Readonly<Record<string, ResearchProfileUiContract>> = {
  * or creates evidence. The already-resolved scoring profile chooses the UI contract.
  */
 export function researchProfileUiContract(profileCode: string | null | undefined): ResearchProfileUiContract {
-  return profileCode ? (CONTRACTS[profileCode] ?? GENERAL_CONTRACT) : GENERAL_CONTRACT
+  return profileCode ? (CONTRACTS[profileCode] ?? { ...GENERAL_CONTRACT, profileCode, profileDisplayName: profileCode.replaceAll("_", " "), snapshotGroups: [{ title: "Quality at a glance", codes: [] }, { title: "Growth at a glance", codes: [] }, { title: "Valuation snapshot", codes: [] }, { title: "Ownership & governance", codes: [] }], dimensionOrder: [], scoreSectionGroups: [], completeResearchRefreshMode: "PROFILE_GATED" }) : { ...GENERAL_CONTRACT, profileCode: "UNRESOLVED", profileDisplayName: "Research profile unresolved", completeResearchRefreshMode: "PROFILE_GATED", dimensionOrder: [], scoreSectionGroups: [] }
 }
 
 export function researchRefreshModulesForSecurity(profileCode: string | null | undefined, symbol: string): readonly ResearchRefreshModule[] {

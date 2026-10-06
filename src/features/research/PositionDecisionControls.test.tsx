@@ -32,12 +32,12 @@ describe("PositionDecisionControls owner authority", () => {
       currency="INR"
     />)
 
-    await waitFor(() => expect(screen.getByText("Owner-controlled")).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText("Owner-controlled plan")).toBeInTheDocument())
 
-    expect(screen.getByText("Current weight").closest("article")).toHaveTextContent("1.32%")
-    expect(screen.getByText("Your target weight").closest("article")).toHaveTextContent("2.5%")
-    expect(screen.getByText("Portfolio role").closest("article")).toHaveTextContent("Other")
-    expect(screen.getByText(/Historical previews are not used/i)).toBeInTheDocument()
+    expect(screen.getByText(/Manual portfolio decision · current weight/).closest("div")).toHaveTextContent("1.32%")
+    expect(screen.getByText("Target weight").closest("article")).toHaveTextContent("2.50%")
+    expect(screen.getByText("Your selected role").closest("div")).toHaveTextContent("Other")
+    expect(screen.getByText(/PortfolioAI advisory output is displayed separately/i)).toBeInTheDocument()
 
     expect(screen.queryByText("PortfolioAI suggestion")).not.toBeInTheDocument()
     expect(screen.queryByText("Action bias")).not.toBeInTheDocument()
@@ -67,11 +67,11 @@ describe("PositionDecisionControls owner authority", () => {
       currency="INR"
     />)
 
-    await waitFor(() => expect(screen.getByText("Portfolio role").closest("article")).toHaveTextContent("Core"))
-    expect(screen.getByText("Current weight").closest("article")).toHaveTextContent("1.32%")
-    expect(screen.getByText("Your target weight").closest("article")).toHaveTextContent("3.5%")
-    expect(screen.getByText("Your target price").closest("article")).toHaveTextContent("₹420")
-    expect(screen.getByText("Your stop-loss reference").closest("article")).toHaveTextContent("₹300")
+    await waitFor(() => expect(screen.getByText("Your selected role").closest("div")).toHaveTextContent("Core"))
+    expect(screen.getByText(/Manual portfolio decision · current weight/).closest("div")).toHaveTextContent("1.32%")
+    expect(screen.getByText("Target weight").closest("article")).toHaveTextContent("3.50%")
+    expect(screen.getByText("Target price").closest("article")).toHaveTextContent("₹420")
+    expect(screen.getByText("Stop loss").closest("article")).toHaveTextContent("₹300")
     expect(screen.getByText("Investment horizon").closest("article")).toHaveTextContent("3–5 years")
   })
 
@@ -99,8 +99,8 @@ describe("PositionDecisionControls owner authority", () => {
       currency="INR"
     />)
 
-    await waitFor(() => expect(screen.getByRole("button", { name: "Edit" })).toBeInTheDocument())
-    fireEvent.click(screen.getByRole("button", { name: "Edit" }))
+    await waitFor(() => expect(screen.getByRole("button", { name: "Edit plan" })).toBeInTheDocument())
+    fireEvent.click(screen.getByRole("button", { name: "Edit plan" }))
 
     fireEvent.change(screen.getByLabelText("Portfolio role"), { target: { value: "CORE" } })
     fireEvent.change(screen.getByLabelText("Target weight (%)"), { target: { value: "4" } })

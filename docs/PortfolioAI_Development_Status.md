@@ -1,3 +1,81 @@
+## HDFCBANK sample deployment to Development — 6 October 2026
+
+Owner explicitly requested the HDFCBANK-only redesigned sample on the existing
+PortfolioAI-Development branch URL. PR #104 is being integrated with the latest
+Development work; the only conflict was the append-only status record and both
+workstreams were preserved. Vercel reported a daily deployment limit on the latest
+sample-branch check; Development deployment and authenticated acceptance are pending.
+The isolated preview used a backend missing the canonical evidence lineage view;
+its visual verification did not establish Development evidence readiness. The
+existing Development branch configuration must be retained for this deployment.
+Other stocks retain the existing page composition. No Production promotion,
+backend migration, provider execution or new evidence/scoring authorization.
+
+---
+
+## HDFCBANK-only redesign sample rollout — 6 October 2026
+
+Owner requested deployment of HDFCBANK only as the initial sample. The route selects
+the new reusable composition for its canonical security ID or HDFCBANK ticker;
+other stocks use the pre-redesign page composition through a temporary fallback.
+New shell styles are scoped to the sample container. Shared canonical evidence
+safeguards remain active; no methodology, financial formula, database migration,
+provider acquisition or execution permission changes. This narrows the earlier
+shared-shell rollout; all-stock rollout awaits sample review. Preview deployment for commit `2b3829e4` completed (Vercel GitHub check PASS).
+Preview: https://portfiolio-ai-git-research-shared-shell-redesign-dibyendu-dutta.vercel.app/app/research/b47b007d-1990-4504-a5a2-4391c07687c5
+The hosted route redirects to Vercel authentication; authenticated hosted acceptance
+remains pending. Local authenticated Chromium checks confirmed the HDFCBANK sample
+container and scoped styles, and the existing TORNTPHARM composition without sample
+styles. Build/TypeScript, architecture guard, changed-file lint and 17 focused tests
+passed. No Development-branch merge or Production promotion occurred.
+
+---
+
+## Shared stock Research shell restoration — 6 October 2026
+
+**Owner-authorized D1–D3 presentation work = IMPLEMENTED / LOCALLY VERIFIED; hosted Development acceptance and merge remain pending. V1-4 remains IN PROGRESS / NOT PROVEN. V1-5 and downstream execution gates remain unchanged.**
+
+Restores the original HDFCBANK visual grammar through the shared Research route:
+owner plan beside read-only advisory/Key Insights, disabled interpretation slot,
+compact refresh with expandable profile capabilities, original context roles,
+preserved cockpit/heatmap/ratings in blocked states, compact readiness with
+collapsed immutable detail, source snapshots, Research Health and stock-specific
+profile/subprofile requirement/result blocks. Existing Pharma deep research remains.
+Unsupported profile presentation mappings retain explicit shared slots and the
+selected canonical requirement workspace rather than inheriting bank templates.
+
+Canonical reads remain the existing portfolio/accounting, position settings,
+company/research, scoring, R10 attention and selected evidence-detail paths.
+Retained external rating reads reuse the scoring repository's rating selection/map
+independently of score qualification. Tracking history uses the existing owner-scoped
+recommendation history SELECT; viewing does not create evaluations. Source availability
+is not presented as canonical VERIFIED; ambiguous source currency/scale and bare
+horizon units are not guessed. No new business fact, accounting formula or evidence
+validator is introduced; canonical-authority registry remains unchanged.
+
+Local authenticated browser checks against Development data covered HDFCBANK,
+TORNTPHARM, AKUMS and ABCAPITAL. Each retained the cockpit/heatmap/profile workspace;
+Pharma/holding-company snapshots showed no bank placeholders. HDFCBANK checked at
+1440, 1024 and 390px without horizontal page overflow or JavaScript errors.
+Evidence-tab requirements, Overview detail disclosure and refresh-capability
+disclosure were verified without invoking execution/edit controls. Only existing
+READ_CACHE market-price and terminal-disposition read requests were observed;
+no acquisition, refresh execution, review/materialization, tracking append or
+owner-setting writes were performed. Private screenshots remain outside the repo.
+
+Production build (including TypeScript) and architecture guard passed; changed-file
+lint passed. Repository-wide lint remains blocked by 81 errors / 4 warnings in
+unchanged files; the existing large Research bundle warning remains. 95 focused
+Research/canonical-route regressions passed across 10 test files.
+
+No migrations created or applied; no schema/Auth/RLS/provider/scheduler/Production
+changes. This does not certify new sector engines, numeric sizing, AI execution,
+evidence readiness or V1 release completion. See section 17 of
+`PortfolioAI_STOCK_RESEARCH_PAGE_DESIGN_PLAN_2026-10-06.md` for composition layers,
+component/authority map and honest unavailable combinations.
+
+---
+
 ## V1-4 Batch B repair and verified resumption contract — 6 October 2026
 
 **Batch B code repair = COMPLETE / TESTED / DEPLOYED. Identity evidence = BLOCKED pending one retained replacement master fetch. History acquisition = NOT AUTHORIZED. V1-4 = IN PROGRESS / NOT PROVEN.**
