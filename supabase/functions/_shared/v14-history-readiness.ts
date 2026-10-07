@@ -1,7 +1,7 @@
 import {inspectStoredHistory,type HistoryRow,type InputState} from "./p7-ic-input-validation.ts"
 type Json=Readonly<Record<string,unknown>>
 export type HistoryReturnBasis="PRICE_RETURN_RAW_CLOSE"|"PRICE_RETURN_CORPORATE_ACTION_ADJUSTED"|"TOTAL_RETURN_INDEX"
-export interface HistoryContractProof{readonly version:string;readonly sourceAuthority:string;readonly exchangeCalendarState:"VERIFIED"|"UNVERIFIED";readonly exchangeCalendarSourceRecordIds:readonly string[];readonly corporateActionState:"COMPLETE"|"INCOMPLETE"|"UNSUPPORTED";readonly corporateActionSourceRecordIds:readonly string[];readonly unresolvedCorporateActionCount:number;readonly returnBasis:HistoryReturnBasis;readonly freshnessThrough:string;readonly lineageSourceRecordIds:readonly string[];readonly mixedReturnBasisApproved?:boolean;readonly dailySessionState?:"LATEST_COMPLETED_SESSION_PRE_CLOSE";readonly dailySessionProofRecordIds?:readonly string[]}
+export interface HistoryContractProof{readonly version:string;readonly sourceAuthority:string;readonly exchangeCalendarState:"VERIFIED"|"UNVERIFIED";readonly exchangeCalendarSourceRecordIds:readonly string[];readonly corporateActionState:"COMPLETE"|"INCOMPLETE"|"UNSUPPORTED";readonly corporateActionSourceRecordIds:readonly string[];readonly unresolvedCorporateActionCount:number;readonly returnBasis:HistoryReturnBasis;readonly freshnessThrough:string;readonly lineageSourceRecordIds:readonly string[];readonly mixedReturnBasisApproved?:boolean;readonly dailySessionState?:"LATEST_COMPLETED_SESSION_PRE_CLOSE"|"LATEST_COMPLETED_SESSION_POST_CLOSE";readonly dailySessionProofRecordIds?:readonly string[]}
 export interface QualifiedHistoryResult{readonly state:InputState;readonly reason:string;readonly distinctSessions:number;readonly latestSession:string|null;readonly retrievedAt:string|null;readonly selectedSessions:readonly string[];readonly returnBasis:HistoryReturnBasis|null;readonly lineage:Json}
 const instant=(v:string|null)=>v?Date.parse(v):NaN
 const DAILY_CLOSE_EVIDENCE_GRACE_MS=4*60*60*1000
@@ -14,8 +14,8 @@ export function parseHistoryContractProof(value:unknown):HistoryContractProof|nu
  const cal=ids(p.exchangeCalendarSourceRecordIds),ca=ids(p.corporateActionSourceRecordIds),lin=ids(p.lineageSourceRecordIds)
  const dailyIds=p.dailySessionProofRecordIds===undefined?[]:ids(p.dailySessionProofRecordIds)
  if(p.version!=="V1_4_HISTORY_CONTRACT_V1"||typeof p.sourceAuthority!=="string"||!["VERIFIED","UNVERIFIED"].includes(String(p.exchangeCalendarState))||!["COMPLETE","INCOMPLETE","UNSUPPORTED"].includes(String(p.corporateActionState))||!["PRICE_RETURN_RAW_CLOSE","PRICE_RETURN_CORPORATE_ACTION_ADJUSTED","TOTAL_RETURN_INDEX"].includes(String(p.returnBasis))||typeof p.freshnessThrough!=="string"||!Number.isFinite(Date.parse(p.freshnessThrough))||!cal||!ca||!lin||!Number.isInteger(p.unresolvedCorporateActionCount)||dailyIds===null)return null
- if(p.dailySessionState!==undefined&&p.dailySessionState!=="LATEST_COMPLETED_SESSION_PRE_CLOSE")return null
- if(p.dailySessionState==="LATEST_COMPLETED_SESSION_PRE_CLOSE"&&dailyIds.length===0)return null
+ if(p.dailySessionState!==undefined&&!["LATEST_COMPLETED_SESSION_PRE_CLOSE","LATEST_COMPLETED_SESSION_POST_CLOSE"].includes(String(p.dailySessionState)))return null
+ if((p.dailySessionState==="LATEST_COMPLETED_SESSION_PRE_CLOSE"||p.dailySessionState==="LATEST_COMPLETED_SESSION_POST_CLOSE")&&dailyIds.length===0)return null
  return p as unknown as HistoryContractProof
 }
 export function historyProofFromRows(rows:readonly HistoryRow[]):HistoryContractProof|null{
