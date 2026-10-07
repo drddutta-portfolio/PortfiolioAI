@@ -43,7 +43,7 @@ describe("V1-4 metadata remediation", () => {
     expect(result.deterministicScoreReady).toBe(false)
   })
   it("retains stale facts for review without extending freshness", () => {
-    const result = normalize({ evaluationAt: "2026-10-07T10:00:00Z" })
+    const result = normalize({ evaluationAt: "2026-10-07T10:00:00Z", cutoffAt: "2026-10-07T10:00:00Z" })
     expect(result.validation.state).toBe("STALE"); expect(result.row).toBeNull()
   })
   it.each(["UNKNOWN", "UNSPECIFIED"])("rejects unproven %s scope", scope => {

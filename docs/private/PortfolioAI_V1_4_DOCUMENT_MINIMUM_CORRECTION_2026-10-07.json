@@ -1,0 +1,457 @@
+{
+  "authority": "Explicit owner approval in Codex on 2026-10-07",
+  "affected_items": 45,
+  "affected_stocks": 44,
+  "items": [
+    {
+      "item_id": "ORP115-V1-0006",
+      "symbol": "ABCAPITAL",
+      "requirement_code": "HOLDCO_DISCOUNT_LEVERAGE_COMPLEXITY",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0018",
+      "symbol": "AKUMS",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0021",
+      "symbol": "ALIVUS",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0041",
+      "symbol": "ARVIND",
+      "requirement_code": "COTTON_INPUT_FX_DEMAND_CYCLE",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0069",
+      "symbol": "AUROPHARMA",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0077",
+      "symbol": "AVTNPL",
+      "requirement_code": "CROP_INPUT_PRICE_FX_CUSTOMER_CONCENTRATION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0083",
+      "symbol": "AWHCL",
+      "requirement_code": "COUNTERPARTY_RECEIVABLE_REGULATORY_PROJECT",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0141",
+      "symbol": "BHARTIARTL",
+      "requirement_code": "REGULATION_COMPETITION_CAPEX_TECH_TRANSITION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0152",
+      "symbol": "BIOCON",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0155",
+      "symbol": "BLUESTARCO",
+      "requirement_code": "INPUT_COST_DEMAND_COMPETITION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0158",
+      "symbol": "BLUSPRING",
+      "requirement_code": "CLIENT_CONCENTRATION_LABOUR_REGULATION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0170",
+      "symbol": "CAPLIPOINT",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0187",
+      "symbol": "CGCL",
+      "requirement_code": "RATING_TREND",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 3,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0198",
+      "symbol": "CHOLAFIN",
+      "requirement_code": "RATING_TREND",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 3,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0205",
+      "symbol": "CIPLA",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0206",
+      "symbol": "COALINDIA",
+      "requirement_code": "COMMODITY_POLICY_ENERGY_TRANSITION_MINING",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0218",
+      "symbol": "CPPLUS",
+      "requirement_code": "INPUT_COST_DEMAND_CAPEX",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0222",
+      "symbol": "CROMPTON",
+      "requirement_code": "INPUT_COST_DEMAND_COMPETITION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0233",
+      "symbol": "DEEPINDS",
+      "requirement_code": "COMMODITY_POLICY_COUNTERPARTY_TRANSITION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0238",
+      "symbol": "DELHIVERY",
+      "requirement_code": "FUEL_COMPETITION_CLIENT_CONCENTRATION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0254",
+      "symbol": "DMART",
+      "requirement_code": "INVENTORY_COMPETITION_UNIT_ECONOMICS",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0261",
+      "symbol": "ECLERX",
+      "requirement_code": "CLIENT_CONCENTRATION_WAGE_FX_AUTOMATION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0268",
+      "symbol": "EIEL",
+      "requirement_code": "COUNTERPARTY_RECEIVABLE_REGULATORY_PROJECT",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0275",
+      "symbol": "EMCURE",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0276",
+      "symbol": "EMSLIMITED",
+      "requirement_code": "COUNTERPARTY_RECEIVABLE_REGULATORY_PROJECT",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0292",
+      "symbol": "ERIS",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0296",
+      "symbol": "ETERNAL",
+      "requirement_code": "INVENTORY_COMPETITION_UNIT_ECONOMICS",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0301",
+      "symbol": "ETHOSLTD",
+      "requirement_code": "GOLD_PRICE_INVENTORY_REGULATION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0309",
+      "symbol": "FAZE3Q",
+      "requirement_code": "COTTON_INPUT_FX_DEMAND_CYCLE",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0342",
+      "symbol": "GLENMARK",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0350",
+      "symbol": "GNFC",
+      "requirement_code": "ENVIRONMENTAL_COMPLIANCE",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0351",
+      "symbol": "GNFC",
+      "requirement_code": "FEEDSTOCK_GLOBAL_PRICING",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0357",
+      "symbol": "GOKEX",
+      "requirement_code": "COTTON_INPUT_FX_DEMAND_CYCLE",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0364",
+      "symbol": "GOLDIAM",
+      "requirement_code": "GOLD_PRICE_INVENTORY_REGULATION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0381",
+      "symbol": "GRANULES",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0471",
+      "symbol": "HUDCO",
+      "requirement_code": "RATING_TREND",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 3,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0490",
+      "symbol": "ICIL",
+      "requirement_code": "COTTON_INPUT_FX_DEMAND_CYCLE",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0520",
+      "symbol": "IKS",
+      "requirement_code": "CLIENT_CONCENTRATION_WAGE_FX_AUTOMATION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0539",
+      "symbol": "INDUSTOWER",
+      "requirement_code": "CUSTOMER_CONCENTRATION_RECEIVABLE_REGULATION",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0559",
+      "symbol": "IONEXCHANG",
+      "requirement_code": "COUNTERPARTY_RECEIVABLE_REGULATORY_PROJECT",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0571",
+      "symbol": "IREDA",
+      "requirement_code": "RATING_TREND",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 3,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0587",
+      "symbol": "JASH",
+      "requirement_code": "INPUT_COST_DEMAND_CAPEX",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0602",
+      "symbol": "JIOFIN",
+      "requirement_code": "HOLDCO_DISCOUNT_LEVERAGE_COMPLEXITY",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0621",
+      "symbol": "JTLIND",
+      "requirement_code": "INPUT_COST_DEMAND_CAPEX",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    },
+    {
+      "item_id": "ORP115-V1-0631",
+      "symbol": "JUBLPHARMA",
+      "requirement_code": "REGULATORY_RISK",
+      "old_document_identity_count": 252,
+      "new_document_identity_count": 1,
+      "original_signal_lookback": 252,
+      "owner_review_required": true,
+      "readiness_promoted": false
+    }
+  ]
+}

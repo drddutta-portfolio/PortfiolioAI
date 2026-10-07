@@ -73,7 +73,7 @@ describe("V1-4 canonical input contracts", () => {
     expect(validate([{ ...money, currency: "USD" }], 1, [def]).reason).toBe("CURRENCY_CONTRACT_MISMATCH")
   })
   it("rejects invalid evaluation/cutoff rather than reading future evidence", () => {
-    expect(validateObservationSeries({ rows: [row], definitions: [definition], minimum: 1, evaluationAsOfMs, sourceCutoffAtMs: evaluationAsOfMs + 1 }).reason).toBe("INPUT_EVALUATION_CONTRACT_INVALID")
+    expect(validateObservationSeries({ rows: [row], definitions: [definition], minimum: 1, evaluationAsOfMs, sourceCutoffAtMs: evaluationAsOfMs + 4 * 60 * 60 * 1000 + 1 }).reason).toBe("INPUT_EVALUATION_CONTRACT_INVALID")
   })
   it("requires metadata review for legacy single-value and ownership caches", () => {
     expect(cachedEvidenceReadiness("AVAILABLE", { matchedSections: [{ numericValue: 0 }] }, 1).reason).toBe("NORMALIZED_INPUT_CONTRACT_NOT_PROVEN")

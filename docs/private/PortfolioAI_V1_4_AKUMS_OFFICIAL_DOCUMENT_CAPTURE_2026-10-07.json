@@ -1,0 +1,23 @@
+{
+  "symbol": "AKUMS",
+  "source_url": "https://www.akums.in/wp-content/uploads/2026/06/Integrated-Annual-Report-2025-26.pdf",
+  "r2_bucket": "portfolioai-history-dev",
+  "r2_key": "portfolioai-research/development/v1-4/official-documents/content/444cf28dfffc8e8bb719d25b8aa27fa646ed43276adad4ff656d4c9849345711.pdf",
+  "sha256": "444cf28dfffc8e8bb719d25b8aa27fa646ed43276adad4ff656d4c9849345711",
+  "byte_length": 12635788,
+  "readback_verified": true,
+  "receipt": {
+    "ok": true,
+    "key": "portfolioai-research/development/v1-4/official-documents/content/444cf28dfffc8e8bb719d25b8aa27fa646ed43276adad4ff656d4c9849345711.pdf",
+    "size": 12635788,
+    "etag": "7e90dc477f910559d89783301f699bdd"
+  },
+  "supabase": {
+    "project_ref": "lrgpjimipfkyoqbpsqzz",
+    "document_id": "4e56ca65-5384-4bc8-992e-55bac5fd4f05",
+    "source_record_id": "ad65f907-f246-40d7-8b9f-15c6a8650346",
+    "source_appearance_id": "c9cb2051-f380-4976-aaf7-77b837742cec",
+    "identity_status": "VERIFIED",
+    "owner_review": "NOT_REVIEWED"
+  }
+}
