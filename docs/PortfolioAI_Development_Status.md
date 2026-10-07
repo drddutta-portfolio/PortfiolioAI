@@ -1,7 +1,8 @@
 ## Stock research UI-G2 selected-contract coverage — 7 October 2026
 
-Implementation prepared on `research-g2-profile-coverage`; Gate 2 is not yet
-merged or visually accepted on the hosted deployment.
+**UI-G2 implementation and automated acceptance = COMPLETE for the current
+shared data contracts.** Delivery record: PR #109 → `PortfolioAI-Development`.
+Authenticated hosted visual acceptance remains pending UI-G5.2.
 
 - UI-G1 PR #108 merged at `3a573ecdbabe16b8b91482d54d83410f2c39eb54` after
   all remote checks passed. Development's READY deployment at

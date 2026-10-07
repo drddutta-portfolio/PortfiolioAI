@@ -709,3 +709,23 @@ unavailable deeper classification fields remain a documented data-contract limit
 Gate 2 introduces no new profile assignment, methodology, formula, evidence
 promotion, provider call, database/schema change or migration. Gates UI-G3–UI-G5
 remain outstanding. V1-4 remains NOT PROVEN and V1-5 remains unauthorized.
+
+
+### UI-G2 completion decision — 7 October 2026
+
+**G2.1, G2.2 and G2.3: ACCEPTED for the current canonical data contracts.**
+Delivery is tracked by [PR #109](https://github.com/drddutta-portfolio/PortfiolioAI/pull/109)
+targeting `PortfolioAI-Development`; merge is conditional on passing CI.
+
+The acceptance evidence is 132 passing focused tests across 12 files, the
+architecture guard, TypeScript/production build, changed-file lint and whitespace
+checks. The reviewed implementation preserves selected-contract identity,
+complete retained-result access, explicit exclusions and presentation support
+states. Repository-wide lint has 85 errors and four warnings in unchanged files;
+the existing research bundle-size warning remains.
+
+This closes the UI coverage gate against available contracts. It does not certify
+live evidence completion, invent unavailable hierarchy fields, approve new
+methodologies, or pass authenticated hosted visual acceptance. Those limits and
+UI-G3–UI-G5 remain explicit. No database migration or evidence/provider mutation
+is part of this completion.
