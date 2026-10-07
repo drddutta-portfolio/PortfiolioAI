@@ -80,6 +80,9 @@ Deno.serve(async req=>{
  const url="https://"+DEV+".supabase.co",key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??""
  if(!key)return reply(409,{code:"UNAPPROVED_DEVELOPMENT_TARGET"})
  const body=await req.json().catch(()=>({})) as Record<string,unknown>
+ const requested=Array.isArray(body.codes)?body.codes.filter((x):x is string=>typeof x==="string"):null
+ const items=requested&&requested.length?ITEMS.filter(([code])=>requested.includes(code)):ITEMS
+ if(requested&&requested.length&&items.length!==new Set(requested).size)return reply(400,{code:"BENCHMARK_SUBSET_INVALID"})
  const admin=createClient(url,key,{auth:{persistSession:false}})
  const grant=await consumeP4ExecutionGrant(admin,{grantId:body.grantId,action:ACTION,portfolioId:PORTFOLIO,securityId:SENTINEL})
  if(!grant.ok)return reply(401,{code:grant.code})
@@ -90,7 +93,7 @@ Deno.serve(async req=>{
  const nseSetCookies=(nseWarm.headers as Headers & {getSetCookie?:()=>string[]}).getSetCookie?.()??[]
  const nseCookie=nseSetCookies.map(v=>v.split(";")[0]).filter(Boolean).join("; ")
  const out=[]
- for(const [code,name] of ITEMS){
+ for(const [code,name] of items){
   const attemptedAt=new Date().toISOString()
   try{
    const cinfo=JSON.stringify({name,startDate:"25-Aug-2025",endDate:"07-Oct-2026",indexName:name})
@@ -122,9 +125,9 @@ Deno.serve(async req=>{
     if(!r.ok)throw new Error("NSE_HTTP_"+r.status)
     const parsed=parseNse(text,name),sha256=await hex(bytes)
     out.push({code,name,state:"SUCCEEDED",attemptedAt,completedAt:new Date().toISOString(),httpStatus:r.status,byteLength:bytes.length,sha256,...parsed,returnBasis:"PRICE_RETURN_RAW_CLOSE",sourceUrl:NSE_ENDPOINT,transport:"NSE_HISTORICAL_OR",body:text,niftyFallbackError:niftyError instanceof Error?niftyError.message:"UNKNOWN"})
-   }catch(nseError){out.push({code,name,state:"FAILED",attemptedAt,completedAt:new Date().toISOString(),error:nseError instanceof Error?nseError.message:"UNKNOWN",niftyError:niftyError instanceof Error?niftyError.message:"UNKNOWN"})}
+     }catch(nseError){out.push({code,name,state:"FAILED",attemptedAt,completedAt:new Date().toISOString(),error:nseError instanceof Error?nseError.message:"UNKNOWN",niftyError:niftyError instanceof Error?niftyError.message:"UNKNOWN",nseBodyHead:typeof text==="string"?text.slice(0,1000):null})}
   }
  }
  const ok=out.every(x=>x.state==="SUCCEEDED")
- return reply(ok?200:207,{endpoint:ENDPOINT,nseEndpoint:NSE_ENDPOINT,warmStatus:warm.status,cookieCount:setCookies.length,nseWarmStatus:nseWarm.status,nseCookieCount:nseSetCookies.length,retries:0,requestCount:ITEMS.length,allPass:ok,results:out})
+ return reply(ok?200:207,{endpoint:ENDPOINT,nseEndpoint:NSE_ENDPOINT,warmStatus:warm.status,cookieCount:setCookies.length,nseWarmStatus:nseWarm.status,nseCookieCount:nseSetCookies.length,retries:0,requestCount:items.length,allPass:ok,results:out})
 })
