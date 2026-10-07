@@ -112,6 +112,7 @@ Deno.serve(async req=>{
    const parsed=parse(text,name),sha256=await hex(bytes)
    out.push({code,name,state:"SUCCEEDED",attemptedAt,completedAt:new Date().toISOString(),httpStatus:r.status,byteLength:bytes.length,sha256,...parsed,returnBasis:"PRICE_RETURN_RAW_CLOSE",sourceUrl:ENDPOINT,body:text})
   }catch(niftyError){
+   let nseText=""
    try{
     const q=new URLSearchParams({indexType:name,from:"25-08-2025",to:"07-10-2026"})
     const r=await fetch(NSE_ENDPOINT+"?"+q.toString(),{method:"GET",headers:{
@@ -121,11 +122,11 @@ Deno.serve(async req=>{
       "referer":"https://www.nseindia.com/reports-indices-historical-index-data",
       ...(nseCookie?{"cookie":nseCookie}:{})
     },signal:AbortSignal.timeout(30000)})
-    const text=await r.text(),bytes=new TextEncoder().encode(text)
+    nseText=await r.text();const bytes=new TextEncoder().encode(nseText)
     if(!r.ok)throw new Error("NSE_HTTP_"+r.status)
-    const parsed=parseNse(text,name),sha256=await hex(bytes)
-    out.push({code,name,state:"SUCCEEDED",attemptedAt,completedAt:new Date().toISOString(),httpStatus:r.status,byteLength:bytes.length,sha256,...parsed,returnBasis:"PRICE_RETURN_RAW_CLOSE",sourceUrl:NSE_ENDPOINT,transport:"NSE_HISTORICAL_OR",body:text,niftyFallbackError:niftyError instanceof Error?niftyError.message:"UNKNOWN"})
-     }catch(nseError){out.push({code,name,state:"FAILED",attemptedAt,completedAt:new Date().toISOString(),error:nseError instanceof Error?nseError.message:"UNKNOWN",niftyError:niftyError instanceof Error?niftyError.message:"UNKNOWN",nseBodyHead:typeof text==="string"?text.slice(0,1000):null})}
+    const parsed=parseNse(nseText,name),sha256=await hex(bytes)
+    out.push({code,name,state:"SUCCEEDED",attemptedAt,completedAt:new Date().toISOString(),httpStatus:r.status,byteLength:bytes.length,sha256,...parsed,returnBasis:"PRICE_RETURN_RAW_CLOSE",sourceUrl:NSE_ENDPOINT,transport:"NSE_HISTORICAL_OR",body:nseText,niftyFallbackError:niftyError instanceof Error?niftyError.message:"UNKNOWN"})
+     }catch(nseError){out.push({code,name,state:"FAILED",attemptedAt,completedAt:new Date().toISOString(),error:nseError instanceof Error?nseError.message:"UNKNOWN",niftyError:niftyError instanceof Error?niftyError.message:"UNKNOWN",nseBodyHead:nseText.slice(0,1400)})}
   }
  }
  const ok=out.every(x=>x.state==="SUCCEEDED")
