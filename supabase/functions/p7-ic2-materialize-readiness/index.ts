@@ -14,7 +14,7 @@ import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLO
 const DEV_REF="lrgpjimipfkyoqbpsqzz",PROD_REF="uxiyufbsbgzzdujzcdxe",ACTION="P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS"
 const VALIDATE_ACTION="P7_IC3_VALIDATE_CANONICAL_INPUTS"
 const REGISTRY_VERSION="PORTFOLIOAI_P7_IC1_METHODOLOGY_R7_REGISTRY_V1"
-const MATERIALIZER_VERSION="P7_IC3_CANONICAL_SNAPSHOT_V4_BENCHMARK_AUTHORITY_RESOLUTION"
+const MATERIALIZER_VERSION="P7_IC3_CANONICAL_SNAPSHOT_V5_OFFICIAL_BENCHMARK_DELTA_APPEND"
 const CLASSIFICATION_AUTHORITY="current_security_enrichment_v1"
 const CLASSIFICATION_VERSION="PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json"
 const ASSIGNMENT_AUTHORITY="PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1"
@@ -85,6 +85,39 @@ async function loadOfficialBenchmarkSources(admin:Admin,codes:readonly string[],
  }
  return out
 }
+async function loadOfficialBenchmarkDeltaSources(admin:Admin,codes:readonly string[],sourceCutoffAt:string):Promise<Map<string,OfficialBenchmarkSourceRecord>>{
+ const rows:OfficialBenchmarkSourceRecord[]=[]
+ if(!codes.length)return new Map()
+ for(let offset=0;offset<5000;offset+=500){
+  const result=await admin.from("data_source_records")
+   .select("id,source_code,record_kind,retrieved_at,payload_hash,raw_payload,source_url")
+   .eq("source_code","NIFTY_OFFICIAL")
+   .eq("record_kind","V1_4_OFFICIAL_BENCHMARK_DELTA_CAPTURE")
+   .eq("raw_payload->>return_basis","PRICE_RETURN_RAW_CLOSE")
+   .in("raw_payload->>benchmark_code",codes)
+   .lte("retrieved_at",sourceCutoffAt)
+   .order("retrieved_at").order("id").range(offset,offset+499)
+  if(result.error)throw result.error
+  rows.push(...(result.data??[]) as unknown as OfficialBenchmarkSourceRecord[])
+  if((result.data?.length??0)<500)break
+  if(offset===4500)throw new Error("OFFICIAL_BENCHMARK_DELTA_READ_BOUND_EXCEEDED")
+ }
+ const grouped=new Map<string,OfficialBenchmarkSourceRecord[]>()
+ for(const row of rows){
+  const code=String(row.raw_payload.benchmark_code??"")
+  if(!code)continue
+  const list=grouped.get(code)??[];list.push(row);grouped.set(code,list)
+ }
+ const out=new Map<string,OfficialBenchmarkSourceRecord>()
+ for(const [code,list] of grouped){
+  list.sort((a,b)=>a.retrieved_at.localeCompare(b.retrieved_at)||a.id.localeCompare(b.id))
+  const latest=list.at(-1)!
+  const tied=list.filter(x=>x.retrieved_at===latest.retrieved_at)
+  if(tied.length>1&&new Set(tied.map(x=>x.payload_hash)).size>1)throw new Error("OFFICIAL_BENCHMARK_DELTA_CONFLICT")
+  out.set(code,latest)
+ }
+ return out
+}
 async function loadExchangeCalendarProofIds(admin:Admin,sourceCutoffAt:string):Promise<string[]>{
  const result=await admin.from("data_source_records")
   .select("id,retrieved_at,raw_payload")
@@ -115,13 +148,14 @@ async function loadExchangeCalendarProofIds(admin:Admin,sourceCutoffAt:string):P
 async function loadBenchmarkHistories(admin:Admin,benchmarks:readonly Array<{code:string;provider_code:string|null;mapping_status:string}>,sourceCutoffAt:string){
  const officialCodes=benchmarks.filter(x=>x.provider_code==="NIFTY_OFFICIAL"&&x.mapping_status==="VERIFIED").map(x=>x.code)
  const official=await loadOfficialBenchmarkSources(admin,officialCodes,sourceCutoffAt)
+ const officialDeltas=await loadOfficialBenchmarkDeltaSources(admin,officialCodes,sourceCutoffAt)
  const calendarSourceRecordIds=await loadExchangeCalendarProofIds(admin,sourceCutoffAt)
  return new Map(await Promise.all(benchmarks.map(async benchmark=>{
   const code=String(benchmark.code)
   if(benchmark.provider_code==="NIFTY_OFFICIAL"&&benchmark.mapping_status==="VERIFIED"){
    const source=official.get(code)
    if(!source)return[code,{rows:[] as HistoryRow[],inspection:inspectStoredHistory([],252,Date.parse(sourceCutoffAt)),sourceRecordId:null}] as const
-   const loaded=await loadVerifiedOfficialBenchmarkHistory({record:source,sourceCutoffAt,minimum:252,maximum:400,exchangeCalendarSourceRecordIds:calendarSourceRecordIds})
+   const loaded=await loadVerifiedOfficialBenchmarkHistory({record:source,deltaRecord:officialDeltas.get(code)??null,sourceCutoffAt,minimum:252,maximum:400,exchangeCalendarSourceRecordIds:calendarSourceRecordIds})
    return[code,{rows:loaded.rows,inspection:inspectStoredHistory(loaded.rows,252,Date.parse(sourceCutoffAt)),sourceRecordId:loaded.sourceRecordId}] as const
   }
   const rows=await loadHistoryRows(admin,"market_benchmark_price_history","benchmark_code",code,sourceCutoffAt)
