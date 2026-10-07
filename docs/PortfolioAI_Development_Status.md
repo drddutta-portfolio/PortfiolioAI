@@ -1,3 +1,28 @@
+## V1-4 115-stock remediation execution — 7 October 2026
+
+**115-stock evidence-remediation execution = COMPLETE. V1-4 acceptance = NOT PROVEN.**
+
+Exact remediation population: 115 stocks from selection run `b2091394-4b6b-4016-bbe9-75c9d58f3e23`, anchored by `docs/private/PortfolioAI_V1_4_115_EXECUTION_MANIFEST_2026-10-07.json`.
+
+Trendlyne remediation completed with 148/148 successful provider attempts and zero failed provider events. Final retained-domain coverage is 113/115 stocks at 4/4 domains; E2E and ICEMAKE remain 3/4 because document discovery is fail-closed.
+
+New canonical rerun: `b88f4d34-287c-4974-b5b6-14f6e5a4b28a`.
+
+Result:
+- READY 0
+- REVIEW_REQUIRED 114
+- CONFLICTING 1 (HINDUNILVR)
+- INSUFFICIENT 0
+
+The principal remaining gate is the owner-bound reviewed-evidence ledger. Current review-dependent remediation affects 114/115 stocks, and the validator requires `reviewed_by` to equal the portfolio owner. No prior deterministic owner-review policy exists that permits automation to sign these rows. No owner identity or factual decision was fabricated.
+
+Authoritative record:
+`docs/PortfolioAI_V1_4_115_STOCK_REMEDIATION_EXECUTION_RECORD_2026-10-07.md`.
+
+V1-5 remains unauthorized.
+
+---
+
 ## Shared stock identity title sizing — 7 October 2026
 
 Owner requested smaller, fully visible stock/company names in the top identity
