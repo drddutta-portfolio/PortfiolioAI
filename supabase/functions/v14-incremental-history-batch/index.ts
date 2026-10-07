@@ -7,7 +7,7 @@ const DEV_REF="lrgpjimipfkyoqbpsqzz"
 const PORTFOLIO_ID="6193a4aa-3235-4057-bddc-209fcf443fc2"
 const ACTION="V1_4_INCREMENTAL_HISTORY_BATCH"
 const CONFIRMATION="OWNER_APPROVED_V1_4_INCREMENTAL_HISTORY_2026_10_07"
-const CUTOFF="2026-10-06"
+const CUTOFF="2026-10-07"
 const MAX_ITEMS=20
 const reply=(s:number,b:unknown)=>new Response(JSON.stringify(b),{status:s,headers:{"content-type":"application/json","cache-control":"no-store"}})
 const localDate=(iso:string)=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(iso))
