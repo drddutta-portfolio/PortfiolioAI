@@ -1,3 +1,41 @@
+## V1-4 fixed-115 owner-review package — 7 October 2026
+
+**Package preparation = COMPLETE. Owner approval = NOT GIVEN / NOT PERSISTED. V1-4 remains IN PROGRESS / NOT PROVEN.**
+
+Private package identifier:
+`PAI-V1-4-115-OWNER-REVIEW-V1-2026-10-07`
+
+Authority JSON:
+`docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V1_2026-10-07.json`
+
+- fixed execution population: 115 stocks
+- review-dependent requirement items: 638 across 114 stocks
+- Class A mechanical: 0
+- Class B owner-approval-ready: 0
+- Class C unresolved / interpretive: 638
+- ownership items: 112
+- structured numeric items: 234
+- qualitative document items: 292
+- package JSON SHA-256: `9821e5294a87e3a5cc3ed9af0e5acd423c67936d985f92afe9a0a6a18f6a374f`
+- package CSV SHA-256: `47dacf5bc18e908b60156aa08a990a397a2e51479aa1a497a8e80381b68e513e`
+- package Markdown SHA-256: `7be698193a96a6cac10b7304093591c4fb9d450726d9f6b2e6a046a59710e8a3`
+- dry-run SHA-256: `6f2c61f16fdf3041fba076d6f2657f4e62cef16d9fd3a2058da8082b07abef6a`
+
+Source-binding conclusion:
+
+- no review-dependent item is currently valid for an owner ACCEPT decision;
+- ownership still lacks an approved canonical series/basis;
+- structured numerics lack complete period/unit/scope source binding;
+- qualitative document evidence lacks validator-ready verified document identity plus matching source/canonical content hashes.
+
+Independent history remediation improved the fixed 115 to 111/115 current through 6-Oct. Residual Angel HTTP-403 histories: CHOLAFIN, GESHIP, HEXT and JIOFIN. Repeated blind retries were stopped.
+
+Dry-run result: `PASS_NO_ACCEPT_ITEMS_ELIGIBLE`; zero review rows would be inserted, updated or deleted. The review ledger remains append-only and no owner identity/session/signature was fabricated.
+
+V1-5 remains unauthorized.
+
+---
+
 ## V1-4 115-stock remediation execution — 7 October 2026
 
 **115-stock evidence-remediation execution = COMPLETE. V1-4 acceptance = NOT PROVEN.**
