@@ -1,7 +1,7 @@
 import {inspectStoredHistory,type HistoryRow,type InputState} from "./p7-ic-input-validation.ts"
 type Json=Readonly<Record<string,unknown>>
 export type HistoryReturnBasis="PRICE_RETURN_RAW_CLOSE"|"PRICE_RETURN_CORPORATE_ACTION_ADJUSTED"|"TOTAL_RETURN_INDEX"
-export interface HistoryContractProof{readonly version:string;readonly sourceAuthority:string;readonly exchangeCalendarState:"VERIFIED"|"UNVERIFIED";readonly exchangeCalendarSourceRecordIds:readonly string[];readonly corporateActionState:"COMPLETE"|"INCOMPLETE"|"UNSUPPORTED";readonly corporateActionSourceRecordIds:readonly string[];readonly unresolvedCorporateActionCount:number;readonly returnBasis:HistoryReturnBasis;readonly freshnessThrough:string;readonly lineageSourceRecordIds:readonly string[];readonly mixedReturnBasisApproved?:boolean}
+export interface HistoryContractProof{readonly version:string;readonly sourceAuthority:string;readonly exchangeCalendarState:"VERIFIED"|"UNVERIFIED";readonly exchangeCalendarSourceRecordIds:readonly string[];readonly corporateActionState:"COMPLETE"|"INCOMPLETE"|"UNSUPPORTED";readonly corporateActionSourceRecordIds:readonly string[];readonly unresolvedCorporateActionCount:number;readonly returnBasis:HistoryReturnBasis;readonly freshnessThrough:string;readonly lineageSourceRecordIds:readonly string[];readonly mixedReturnBasisApproved?:boolean;readonly dailySessionState?:"LATEST_COMPLETED_SESSION_PRE_CLOSE";readonly dailySessionProofRecordIds?:readonly string[]}
 export interface QualifiedHistoryResult{readonly state:InputState;readonly reason:string;readonly distinctSessions:number;readonly latestSession:string|null;readonly retrievedAt:string|null;readonly selectedSessions:readonly string[];readonly returnBasis:HistoryReturnBasis|null;readonly lineage:Json}
 const instant=(v:string|null)=>v?Date.parse(v):NaN
 const DAILY_CLOSE_EVIDENCE_GRACE_MS=4*60*60*1000
@@ -12,7 +12,10 @@ export function parseHistoryContractProof(value:unknown):HistoryContractProof|nu
  const p=value as Json
  const ids=(v:unknown)=>Array.isArray(v)&&v.every(x=>typeof x==="string")?v as string[]:null
  const cal=ids(p.exchangeCalendarSourceRecordIds),ca=ids(p.corporateActionSourceRecordIds),lin=ids(p.lineageSourceRecordIds)
- if(p.version!=="V1_4_HISTORY_CONTRACT_V1"||typeof p.sourceAuthority!=="string"||!["VERIFIED","UNVERIFIED"].includes(String(p.exchangeCalendarState))||!["COMPLETE","INCOMPLETE","UNSUPPORTED"].includes(String(p.corporateActionState))||!["PRICE_RETURN_RAW_CLOSE","PRICE_RETURN_CORPORATE_ACTION_ADJUSTED","TOTAL_RETURN_INDEX"].includes(String(p.returnBasis))||typeof p.freshnessThrough!=="string"||!Number.isFinite(Date.parse(p.freshnessThrough))||!cal||!ca||!lin||!Number.isInteger(p.unresolvedCorporateActionCount))return null
+ const dailyIds=p.dailySessionProofRecordIds===undefined?[]:ids(p.dailySessionProofRecordIds)
+ if(p.version!=="V1_4_HISTORY_CONTRACT_V1"||typeof p.sourceAuthority!=="string"||!["VERIFIED","UNVERIFIED"].includes(String(p.exchangeCalendarState))||!["COMPLETE","INCOMPLETE","UNSUPPORTED"].includes(String(p.corporateActionState))||!["PRICE_RETURN_RAW_CLOSE","PRICE_RETURN_CORPORATE_ACTION_ADJUSTED","TOTAL_RETURN_INDEX"].includes(String(p.returnBasis))||typeof p.freshnessThrough!=="string"||!Number.isFinite(Date.parse(p.freshnessThrough))||!cal||!ca||!lin||!Number.isInteger(p.unresolvedCorporateActionCount)||dailyIds===null)return null
+ if(p.dailySessionState!==undefined&&p.dailySessionState!=="LATEST_COMPLETED_SESSION_PRE_CLOSE")return null
+ if(p.dailySessionState==="LATEST_COMPLETED_SESSION_PRE_CLOSE"&&dailyIds.length===0)return null
  return p as unknown as HistoryContractProof
 }
 export function historyProofFromRows(rows:readonly HistoryRow[]):HistoryContractProof|null{
@@ -22,6 +25,15 @@ export function historyProofFromRows(rows:readonly HistoryRow[]):HistoryContract
  return parseHistoryContractProof(proofs[0])
 }
 function selectedSessions(rows:readonly HistoryRow[],minimum:number){const dates=[...new Set(rows.map(r=>session(r.period_start)))].sort();return dates.slice(-minimum)}
+function proofFreshAtEvaluation(proof:HistoryContractProof,base:ReturnType<typeof inspectStoredHistory>,evaluationAsOfMs:number){
+ const freshness=instant(proof.freshnessThrough)
+ if(!Number.isFinite(freshness))return false
+ if(freshness>=evaluationAsOfMs)return true
+ if(proof.dailySessionState!=="LATEST_COMPLETED_SESSION_PRE_CLOSE"||!(proof.dailySessionProofRecordIds?.length))return false
+ const gap=evaluationAsOfMs-freshness
+ if(gap<=0||gap>24*60*60*1000||!base.latestSession)return false
+ return proof.freshnessThrough.slice(0,10)===base.latestSession
+}
 export function validateStockHistoryReadiness(input:{rows:readonly HistoryRow[];minimum:number;evaluationAsOfMs:number;sourceCutoffAtMs:number;freshnessPolicy:string|null;proof?:HistoryContractProof|null}):QualifiedHistoryResult{
  const base=inspectStoredHistory(input.rows,input.minimum,input.sourceCutoffAtMs);if(base.state==="CONFLICTING"||base.state==="INSUFFICIENT")return fail(base.state,base.reason,base)
  if(base.reason==="HISTORY_INPUT_INVALID")return fail("REVIEW_REQUIRED",base.reason,base)
