@@ -586,17 +586,17 @@ This amendment makes section 3 the explicit two-part product design contract. It
 Section 17 records the existing bounded implementation. This section defines how to review and extend its coverage; richer group modules and research-result integrations remain pending wherever their data contract, authorized engine or presentation mapping is unavailable. Hosted verification and merge status are tracked separately from this design specification.
 
 
-### 18.3 Initial sample rollout
+### 18.3 Initial sample rollout (historical; superseded by UI-G1)
 
-The initial hosted sample enables the redesigned composition only for HDFCBANK (security `b47b007d-1990-4504-a5a2-4391c07687c5`, or its ticker route). Other stocks retain the pre-redesign page composition through a temporary rollout fallback. Sample styles are scoped to the sample container. This routing condition controls presentation only; it does not assign a research profile, alter evidence or introduce a stock-specific formula. The reusable shell remains the intended design for all stocks after sample review. Shared evidence safeguards remain in force.
+The initial hosted sample enabled the redesigned composition only for HDFCBANK (security `b47b007d-1990-4504-a5a2-4391c07687c5`, or its ticker route). Other stocks initially retained the pre-redesign page composition through a temporary rollout fallback. Sample styles were scoped to the sample container. UI-G1 replaces that split with the universal composition described below. This routing condition controls presentation only; it does not assign a research profile, alter evidence or introduce a stock-specific formula. The reusable shell remains the intended design for all stocks after sample review. Shared evidence safeguards remain in force.
 
 
 ## 19. Sticky stock-section menu — shared shell amendment, 7 October 2026
 
 The owner requested a Dashboard-style sticky menu at the top of the stock page.
 `StockSectionNavigator` is part of **Part 1: the basic shell for ALL stocks**,
-including the HDFCBANK redesigned sample and the current composition for other
-stocks. It does not enable the rest of the redesigned composition for all stocks.
+including HDFCBANK and every other stock. UI-G1 extends the full common
+composition to those same routes.
 
 The opaque menu remains visible while scrolling, with horizontal scrolling on
 small screens. It links to Summary, Position, Owner plan & suggestion, Insights,
@@ -638,3 +638,45 @@ font size, full text, wrapping without horizontal overflow and the same treatmen
 on stocks using the existing composition. This is typography only; classification,
 methodology, research data, evidence safeguards and the stock-menu behavior remain
 unchanged.
+
+
+## UI acceptance gates — 7 October 2026
+
+These five UI gates contain 15 sub-gates. Their `UI-G` prefix distinguishes them
+from research methodology, evidence validation and V1 release gates. Passing a
+UI gate never validates missing research or authorizes investment engines.
+
+| Gate | Sub-gates |
+| --- | --- |
+| UI-G1: common shell | G1.1 one reusable composition for every stock; G1.2 shared header, sticky navigation, tabs and block order; G1.3 explicit loading, blocked and unavailable states |
+| UI-G2: stock-specific coverage | G2.1 canonical sector/industry/sub-sector/profile selection; G2.2 applicable research requirements and retained results; G2.3 specialist modules and unsupported-profile disclosure |
+| UI-G3: evidence safeguards | G3.1 canonical score eligibility; G3.2 provenance, units, periods and independent ratings; G3.3 owner role/targets separated from qualified recommendations |
+| UI-G4: interaction and layout | G4.1 sticky links, tab switching and keyboard focus; G4.2 responsive layout and fully wrapped stock names; G4.3 refresh, documents and evidence workflows |
+| UI-G5: final acceptance | G5.1 representative profile/state regression matrix; G5.2 authenticated visual verification on the hosted Development deployment; G5.3 recorded final decision and rollout evidence |
+
+### UI-G1 implementation
+
+Every `/app/research/:security` now resolves to `StockResearchRoute` → `ResearchPage`
+inside `.research-workspace-shell`. The HDFCBANK-only branch and duplicate
+`ExistingResearchPage` are removed. Identity chooses canonical data, never a
+separate layout. Route identity changes reset the page's tab state.
+
+The common shell owns the sticky navigator, compact wrapping title, About,
+position, owner plan/current advisory, interpretation availability, insights and
+tracking history, refresh and the seven research tabs. Overview ordering is:
+context → cockpit/ratings → compact readiness → source snapshots → research
+health → stock-specific research. Detailed readiness remains in Evidence.
+
+Profile-selected snapshot groups, applicable canonical requirements and the
+existing pharmaceutical sub-profile workspace remain stock-specific content.
+This consolidation does not certify complete coverage of every profile; that is
+UI-G2 work. Existing score/evidence safeguards remain authoritative.
+
+During cached-research loading, failure or absence, the common Overview regions
+stay mounted. Their independent canonical hooks continue to disclose their own
+states. Missing source counts say `Unavailable`, never zero. Source-dependent
+tabs disclose unavailability; portfolio-load failures and unknown holdings remain
+explicit entry states rather than fabricated stock pages.
+
+G1.1–G1.3 are implemented with automated regression checks. Hosted visual acceptance
+is pending UI-G5.2; local component tests and builds are not hosted visual proof.

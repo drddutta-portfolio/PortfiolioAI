@@ -1,4 +1,4 @@
-@scope (.research-sample-shell) {
+@scope (.research-workspace-shell) {
 /* One shared research shell. Profiles change content, never layout selectors. */
 .research-page .research-header { padding: 1rem; align-items: start; }
 .research-page .research-title h1 { white-space: normal; overflow-wrap: break-word; word-break: normal; }

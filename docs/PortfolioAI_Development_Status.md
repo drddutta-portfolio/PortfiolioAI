@@ -24,6 +24,28 @@ No Production/main, V1-5, P8, migration, Auth/RLS or scheduler change was author
 
 ---
 
+## Stock research UI-G1 common shell — 7 October 2026
+
+Implementation prepared on `research-g1-common-shell`; Development deployment and
+hosted visual acceptance are not yet claimed.
+
+- One lazy `StockResearchRoute` → `ResearchPage` composition replaces the HDFCBANK
+  sample versus legacy-page split for every stock identity.
+- Shared styling, compact wrapping title, sticky navigation, advisory/owner-plan
+  slots, tabs and Overview region order apply to all stock pages.
+- Cached-research loading/error/absence preserves independent cockpit, readiness
+  and profile blocks, with unavailable source counts rather than invented zeros.
+- Existing canonical profile selection, pharmaceutical workspace, evidence/score
+  guards and independent ratings access paths are retained.
+- No database/schema, accounting, RLS, provider campaign or evidence-review changes.
+  No research methodology or V1 gate is opened or passed by this UI work.
+- Verification: 69 focused tests, architecture guard, TypeScript/production build,
+  changed-file ESLint and whitespace checks pass. Vite retains its existing
+  warning for a research chunk above 500 kB. Full-repository lint reports
+  85 errors and four warnings in unchanged files; changed-file lint passes.
+- UI-G2–UI-G5 remain outstanding; the design plan records all five UI gates and
+  15 sub-gates. Authenticated hosted visual acceptance remains pending.
+
 ## V1-4 fixed-115 owner-review package — 7 October 2026
 
 **Package preparation = COMPLETE. Owner approval = NOT GIVEN / NOT PERSISTED. V1-4 remains IN PROGRESS / NOT PROVEN.**

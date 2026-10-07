@@ -22,14 +22,42 @@ const revenue = { ...metric, id: "revenue", code: "REVENUE_TTM", label: "Revenue
 const research: SecurityResearch = { securityId: "s1", companyName: "Bharat Electronics Limited", sector: "Industrials", industry: "Defence", marketCapCategory: null, freshUntil: "2099-09-09T00:00:00Z", state: "VERIFIED", metrics: [metric, ownership, roe, revenue], documents: [{ id: "d1", type: "ANNUAL_REPORT", title: "Annual Report appearance", publishedAt: "2026-08-01", periodStart: null, periodEnd: "2026-03-31", periodType: "YEAR", provider: "TRENDLYNE_MCP", retrievedAt: "2026-09-09T00:00:00Z", status: "REVIEW_REQUIRED", externalReference: null }] }
 
 vi.mock("../features/portfolio/usePortfolioView", () => ({ usePortfolioView: () => ({ portfolio, error: null, isLoading: false }) }))
-vi.mock("../features/research/useSecurityResearch", () => ({ useSecurityResearch: () => ({ data: research, error: null, isLoading: false }) }))
+const specialistState = { resolved: false }
+vi.mock("../features/research/usePharmaSubprofileResolution", () => ({ usePharmaSubprofileResolution: () => ({ data: specialistState.resolved ? { status: "RESOLVED" } : null }) }))
+vi.mock("../features/research/PharmaResearchWorkspacePanel", () => ({ PharmaResearchWorkspacePanel: () => <p>Retained pharmaceutical workspace</p> }))
+
+const researchState = { data: research as SecurityResearch | null, error: null as string | null, isLoading: false }
+vi.mock("../features/research/useSecurityResearch", () => ({ useSecurityResearch: () => researchState }))
 
 function renderPage(path = "/app/research/s1") {
   return render(<MemoryRouter initialEntries={[path]}><Routes><Route path="/app/research/:security" element={<ResearchPage />} /></Routes></MemoryRouter>)
 }
 
 describe("ResearchPage", () => {
-  afterEach(() => { cleanup(); providerCall.mockReset() })
+  afterEach(() => { cleanup(); providerCall.mockReset(); specialistState.resolved = false; Object.assign(researchState, { data: research, error: null, isLoading: false }) })
+  it.each(["loading", "error", "empty"])("preserves overview regions when research is %s without fabricated counts", (state) => {
+    Object.assign(researchState, { data: null, isLoading: state === "loading", error: state === "error" ? "Cache read failed" : null })
+    renderPage()
+    const ids = ["stock-summary", "stock-refresh", "stock-workspace", "stock-assessment", "stock-readiness", "stock-snapshots", "stock-health", "stock-specialist"]
+    const nodes = ids.map(id => document.getElementById(id)!)
+    nodes.forEach(node => expect(node).not.toBeNull())
+    nodes.slice(1).forEach((node, index) => expect(nodes[index]!.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy())
+    expect(document.getElementById("stock-health")).toHaveTextContent("ConflictsUnavailable")
+    expect(screen.getByRole("navigation", { name: "Stock page sections" })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("tab", { name: "Documents" }))
+    expect(screen.getByRole("tabpanel")).toHaveTextContent("Documents unavailable")
+    expect(providerCall).not.toHaveBeenCalled()
+  })
+  it("preserves the pharmaceutical specialist selected by its canonical resolution", () => {
+    specialistState.resolved = true
+    renderPage()
+    expect(document.getElementById("stock-specialist")).toHaveTextContent("Retained pharmaceutical workspace")
+    expect(providerCall).not.toHaveBeenCalled()
+  })
+  it("does not attach pharmaceutical content without an applicable canonical resolution", () => {
+    renderPage()
+    expect(screen.queryByText("Retained pharmaceutical workspace")).not.toBeInTheDocument()
+  })
   it("uses Angel One CMP and preserves unavailable instead of zero", () => {
     renderPage()
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Bharat Electronics Limited")
