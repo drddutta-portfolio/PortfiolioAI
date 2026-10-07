@@ -409,5 +409,5 @@ Deno.serve(async request=>{
   const safeDetail=obj?{message:typeof obj.message==="string"?obj.message:null,details:typeof obj.details==="string"?obj.details:null,hint:typeof obj.hint==="string"?obj.hint:null}:null
   console.error("IC3_MATERIALIZATION_ERROR",JSON.stringify({code,safeDetail}))
   return reply(500,{error:"IC3 canonical snapshot materialization failed safely.",code,safeDetail})
- }}
+ }
 })
