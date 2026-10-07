@@ -51,12 +51,24 @@ Deno.serve(async req=>{
  const admin=createClient(url,key,{auth:{persistSession:false}})
  const grant=await consumeP4ExecutionGrant(admin,{grantId:body.grantId,action:ACTION,portfolioId:PORTFOLIO,securityId:SENTINEL})
  if(!grant.ok)return reply(401,{code:grant.code})
+ const warm=await fetch("https://www.niftyindices.com/reports/historical-data",{headers:{"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36","accept":"text/html,application/xhtml+xml","accept-language":"en-US,en;q=0.9"},redirect:"follow",signal:AbortSignal.timeout(30000)})
+ const setCookies=(warm.headers as Headers & {getSetCookie?:()=>string[]}).getSetCookie?.()??[]
+ const cookie=setCookies.map(v=>v.split(";")[0]).filter(Boolean).join("; ")
  const out=[]
  for(const [code,name] of ITEMS){
   const attemptedAt=new Date().toISOString()
   try{
    const cinfo=JSON.stringify({name,startDate:"25-Aug-2025",endDate:"07-Oct-2026",indexName:name})
-   const r=await fetch(ENDPOINT,{method:"POST",headers:{"content-type":"application/json","accept":"application/json","user-agent":"Mozilla/5.0"},body:JSON.stringify({cinfo}),signal:AbortSignal.timeout(30000)})
+   const r=await fetch(ENDPOINT,{method:"POST",headers:{
+    "content-type":"application/json; charset=UTF-8",
+    "accept":"application/json, text/javascript, */*; q=0.01",
+    "accept-language":"en-US,en;q=0.9",
+    "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "origin":"https://www.niftyindices.com",
+    "referer":"https://www.niftyindices.com/reports/historical-data",
+    "x-requested-with":"XMLHttpRequest",
+    ...(cookie?{"cookie":cookie}:{})
+   },body:JSON.stringify({cinfo}),signal:AbortSignal.timeout(30000)})
    const text=await r.text(),bytes=new TextEncoder().encode(text)
    if(!r.ok)throw new Error("HTTP_"+r.status)
    const parsed=parse(text,name),sha256=await hex(bytes)
@@ -64,5 +76,5 @@ Deno.serve(async req=>{
   }catch(e){out.push({code,name,state:"FAILED",attemptedAt,completedAt:new Date().toISOString(),error:e instanceof Error?e.message:"UNKNOWN"})}
  }
  const ok=out.every(x=>x.state==="SUCCEEDED")
- return reply(ok?200:207,{endpoint:ENDPOINT,retries:0,requestCount:ITEMS.length,allPass:ok,results:out})
+ return reply(ok?200:207,{endpoint:ENDPOINT,warmStatus:warm.status,cookieCount:setCookies.length,retries:0,requestCount:ITEMS.length,allPass:ok,results:out})
 })
