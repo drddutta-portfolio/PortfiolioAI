@@ -27,10 +27,14 @@ Deno.serve(async req=>{
   if(mappings.error)throw mappings.error
   const mappingByCode=new Map((mappings.data??[]).map(r=>[String(r.code),r]))
   const results=[]
+  const sessionSets:Array<{code:string;sessions:string[];hash:string}>=[]
   for(const code of CODES){
    const record=byCode.get(code);const mapping=mappingByCode.get(code)
    if(!record||!mapping){results.push({code,pass:false,reason:"SOURCE_OR_MAPPING_MISSING"});continue}
    const loaded=await loadVerifiedOfficialBenchmarkHistory({record,sourceCutoffAt:"2026-10-06T23:59:59Z",minimum:252,maximum:400})
+   const sessions=[...new Set(loaded.rows.map(row=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(row.period_start))))].sort()
+   const sessionHash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify(sessions))))).map(x=>x.toString(16).padStart(2,"0")).join("")
+   sessionSets.push({code,sessions,hash:sessionHash})
    const proof=historyProofFromRows(loaded.rows)
    const stockRows=loaded.rows.map(row=>({...row,provenance:{v1_4_history_contract:{
     version:"V1_4_HISTORY_CONTRACT_V1",sourceAuthority:"ANGEL_ONE",exchangeCalendarState:"VERIFIED",
@@ -57,6 +61,8 @@ Deno.serve(async req=>{
     pass:loaded.rows.length===276&&failClosed.state==="REVIEW_REQUIRED"&&failClosed.reason==="BENCHMARK_AUTHORITY_OR_CALENDAR_NOT_PROVEN"&&accepted.state==="FRESH"&&accepted.reason==="STOCK_BENCHMARK_HISTORY_READY"
    })
   }
-  return reply(results.every(x=>x.pass)?200:409,{status:results.every(x=>x.pass)?"PASS":"FAIL",results})
+  const calendarHashes=[...new Set(sessionSets.map(x=>x.hash))]
+  const allSameCalendar=calendarHashes.length===1&&sessionSets.every(x=>x.sessions.length===276&&x.sessions[0]==="2025-08-25"&&x.sessions.at(-1)==="2026-10-06")
+  return reply(results.every(x=>x.pass)&&allSameCalendar?200:409,{status:results.every(x=>x.pass)&&allSameCalendar?"PASS":"FAIL",calendar:{allSameCalendar,sessionCount:sessionSets[0]?.sessions.length??0,firstSession:sessionSets[0]?.sessions[0]??null,lastSession:sessionSets[0]?.sessions.at(-1)??null,sessionSetSha256:calendarHashes.length===1?calendarHashes[0]:null,distinctSessionSetHashes:calendarHashes},results})
  }catch(e){return reply(500,{status:"FAIL",code:e instanceof Error?e.message:"SELFTEST_FAILED"})}
 })
