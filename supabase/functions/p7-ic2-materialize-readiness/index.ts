@@ -358,7 +358,8 @@ Deno.serve(async request=>{
   const body=await request.json() as Json,portfolioId=String(body.portfolioId??""),offset=Number(body.offset??0),limit=Number(body.limit??40),selectionRunId=String(body.selectionRunId??""),evaluationAsOf=String(body.evaluationAsOf??""),sourceCutoffAt=String(body.sourceCutoffAt??"")
   const evaluationAsOfMs=Date.parse(evaluationAsOf),sourceCutoffAtMs=Date.parse(sourceCutoffAt)
   const dryRun=body.action===VALIDATE_ACTION
-  if((body.action!==ACTION&&!dryRun)||!portfolioId||!Number.isInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>40||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu.test(selectionRunId)||!Number.isFinite(evaluationAsOfMs)||!Number.isFinite(sourceCutoffAtMs)||sourceCutoffAtMs>evaluationAsOfMs)return reply(400,{error:"Exact action, portfolioId, bounded slice, selection run, evaluation time, and source cutoff are required."})
+  const postCloseRetrievalWindowMs=6*60*60*1000
+  if((body.action!==ACTION&&!dryRun)||!portfolioId||!Number.isInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>40||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu.test(selectionRunId)||!Number.isFinite(evaluationAsOfMs)||!Number.isFinite(sourceCutoffAtMs)||sourceCutoffAtMs<evaluationAsOfMs||sourceCutoffAtMs>evaluationAsOfMs+postCloseRetrievalWindowMs)return reply(400,{error:"Exact action, portfolioId, bounded slice, selection run, evaluation time, and bounded post-close source cutoff are required."})
   const scope=`ALL_HELD_EQUITIES:${offset}:${limit}`
   const admin=createClient(url,key,{auth:{persistSession:false}})
   if(dryRun){
