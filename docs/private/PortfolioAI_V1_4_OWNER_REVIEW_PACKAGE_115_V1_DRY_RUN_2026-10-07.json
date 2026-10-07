@@ -1,0 +1,37 @@
+{
+  "package_identifier": "PAI-V1-4-115-OWNER-REVIEW-V1-2026-10-07",
+  "package_json_sha256": "9821e5294a87e3a5cc3ed9af0e5acd423c67936d985f92afe9a0a6a18f6a374f",
+  "executed_at": "2026-10-07T11:16:39.516Z",
+  "provider_calls": 0,
+  "owner_review_rows_before": 0,
+  "owner_binding_exists": true,
+  "package_counts": {
+    "items": 638,
+    "accept": 0,
+    "reject": 0,
+    "defer": 638,
+    "ledger_eligible_accept": 0
+  },
+  "simulated_application": {
+    "approved_accept_filter_count": 0,
+    "would_insert_review_rows": 0,
+    "would_update_existing_rows": 0,
+    "would_delete_existing_rows": 0,
+    "rejected_or_deferred_promoted": 0,
+    "historical_observations_modified": 0,
+    "membership_modified": 0,
+    "frozen_values_modified": 0,
+    "methodology_modified": 0
+  },
+  "contract_checks": {
+    "unique_item_ids": true,
+    "all_source_records_present": true,
+    "all_source_hashes_valid": true,
+    "all_items_defer": true,
+    "append_only": "UPDATE/DELETE rejected by research_evidence_requirement_reviews_append_only trigger",
+    "idempotency": "unique(review_hash)",
+    "reviewer_identity": "must equal portfolio owner; future application resolves from portfolios.user_id after explicit package approval",
+    "persisted_review_rows_this_dry_run": false
+  },
+  "result": "PASS_NO_ACCEPT_ITEMS_ELIGIBLE"
+}

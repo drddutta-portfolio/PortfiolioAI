@@ -1,0 +1,40 @@
+{
+  "package_identifier": "PAI-V1-4-115-OWNER-REVIEW-V1-2026-10-07",
+  "item_count": 638,
+  "distinct_member_coverage": 114,
+  "canonical_run": "b88f4d34-287c-4974-b5b6-14f6e5a4b28a",
+  "execution_manifest_path": "docs/private/PortfolioAI_V1_4_115_EXECUTION_MANIFEST_2026-10-07.json",
+  "frozen_111_manifest_sha256": "79f551558333adc1f37d6a26298d8088ee02db3161f03c6d6e59f9a19a93fc27",
+  "evaluation_as_of": "2026-10-07T09:53:53Z",
+  "source_cutoff_at": "2026-10-07T09:53:53Z",
+  "files": {
+    "json": {
+      "path": "docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V1_2026-10-07.json",
+      "sha256": "9821e5294a87e3a5cc3ed9af0e5acd423c67936d985f92afe9a0a6a18f6a374f",
+      "authority": true
+    },
+    "csv": {
+      "path": "docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V1_2026-10-07.csv",
+      "sha256": "47dacf5bc18e908b60156aa08a990a397a2e51479aa1a497a8e80381b68e513e",
+      "rows": 638
+    },
+    "markdown": {
+      "path": "docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V1_2026-10-07.md",
+      "sha256": null
+    },
+    "dry_run": {
+      "path": "docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V1_DRY_RUN_2026-10-07.json",
+      "sha256": "6f2c61f16fdf3041fba076d6f2657f4e62cef16d9fd3a2058da8082b07abef6a"
+    }
+  },
+  "consistency": {
+    "json_items": 638,
+    "csv_rows": 638,
+    "unique_item_ids": 638,
+    "class_A": 0,
+    "class_B": 0,
+    "class_C": 638,
+    "cross_file_item_count_match": true,
+    "all_decisions_defer": true
+  }
+}
