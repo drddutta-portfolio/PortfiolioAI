@@ -403,5 +403,11 @@ Deno.serve(async request=>{
    if(written.snapshot_created)writeTotals.snapshotsCreated++;if(written.snapshot_reused)writeTotals.snapshotsReused++;if(written.selection_created)writeTotals.selectionsCreated++;if(written.selection_reused)writeTotals.selectionsReused++
   }
   return reply(200,{status:dryRun?"IC3_CANONICAL_INPUTS_VALIDATED_READ_ONLY":"IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",dryRun,inputValidationVersion:P7_IC_INPUT_VALIDATION_VERSION,...(dryRun?{results:dryRunResults}:{}),portfolioId,selectionRunId,evaluationAsOf,sourceCutoffAt,offset,processed:slice.length,totalEquities:facts.totalEquities,nextOffset:offset+slice.length<facts.totalEquities?offset+slice.length:null,providerCalls:0,totals,writeTotals,snapshotIds,selectionIds})
- }catch(error){return reply(500,{error:"IC3 canonical snapshot materialization failed safely.",code:error instanceof Error?error.message:"IC3_MATERIALIZATION_FAILED"})}
+ }catch(error){
+  const obj=error&&typeof error==="object"&&!Array.isArray(error)?error as Record<string,unknown>:null
+  const code=error instanceof Error?error.message:typeof obj?.code==="string"?String(obj.code):"IC3_MATERIALIZATION_FAILED"
+  const safeDetail=obj?{message:typeof obj.message==="string"?obj.message:null,details:typeof obj.details==="string"?obj.details:null,hint:typeof obj.hint==="string"?obj.hint:null}:null
+  console.error("IC3_MATERIALIZATION_ERROR",JSON.stringify({code,safeDetail}))
+  return reply(500,{error:"IC3 canonical snapshot materialization failed safely.",code,safeDetail})
+ }}
 })
