@@ -119,7 +119,8 @@ export async function validateReviewedRequirementEvidence(input:{
  if(!["NUMERIC_SERIES","OWNERSHIP_4Q","TEXT_EVIDENCE_REVIEW"].includes(family))return null
  const scoped=input.reviews.filter(r=>r.portfolio_id===portfolioId&&r.security_id===securityId&&r.requirement_code===requirementCode)
  if(!scoped.length)return null
- if(!Number.isFinite(evaluationAsOfMs)||!Number.isFinite(sourceCutoffAtMs)||sourceCutoffAtMs>evaluationAsOfMs)return fail("REVIEW_REQUIRED","REVIEW_EVALUATION_CONTRACT_INVALID")
+ const postCloseRetrievalWindowMs=6*60*60*1000
+ if(!Number.isFinite(evaluationAsOfMs)||!Number.isFinite(sourceCutoffAtMs)||sourceCutoffAtMs<evaluationAsOfMs||sourceCutoffAtMs>evaluationAsOfMs+postCloseRetrievalWindowMs)return fail("REVIEW_REQUIRED","REVIEW_EVALUATION_CONTRACT_INVALID")
  const dated=scoped.filter(r=>Number.isFinite(time(r.reviewed_at))&&time(r.reviewed_at)<=sourceCutoffAtMs)
  if(!dated.length)return fail("REVIEW_REQUIRED","REVIEW_CREATED_AFTER_SOURCE_CUTOFF",scoped.map(r=>r.id))
  const byId=new Map(dated.map(r=>[r.id,r]))
@@ -151,7 +152,7 @@ export async function validateReviewedRequirementEvidence(input:{
    const payloadSecurity=str(source.raw_payload.security_id);if(payloadSecurity&&payloadSecurity!==securityId)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_SECURITY_MISMATCH",[r.id])
    if(!r.supporting_quote?.trim()||!exactFragmentPresent(source.raw_payload,r.supporting_quote))return fail("REVIEW_REQUIRED","REVIEW_QUOTE_NOT_BOUND_TO_SOURCE",[r.id])
    if(r.retrieved_at!==source.retrieved_at)return fail("REVIEW_REQUIRED","REVIEW_RETRIEVAL_MISMATCH",[r.id])
-   if(r.published_at&&(!Number.isFinite(time(r.published_at))||time(r.published_at)>sourceCutoffAtMs))return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_POST_CUTOFF",[r.id])
+   if(r.published_at&&(!Number.isFinite(time(r.published_at))||time(r.published_at)>evaluationAsOfMs))return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_POST_EVALUATION",[r.id])
    if(source.published_at!==null&&r.published_at!==source.published_at)return fail("REVIEW_REQUIRED","REVIEW_PUBLICATION_MISMATCH",[r.id])
    if(r.fresh_through&&!Number.isFinite(time(r.fresh_through)))return fail("REVIEW_REQUIRED","REVIEW_FRESHNESS_INVALID",[r.id])
    if(family==="NUMERIC_SERIES"){
