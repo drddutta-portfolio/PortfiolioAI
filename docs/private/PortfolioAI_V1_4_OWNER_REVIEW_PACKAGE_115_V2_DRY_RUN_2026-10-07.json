@@ -1,0 +1,11 @@
+{
+  "package_identifier": "PAI-V1-4-115-OWNER-REVIEW-V2-2026-10-07",
+  "validator_contract": "V1_4_REQUIREMENT_REVIEW_V2",
+  "proposed_accept_items": 0,
+  "actual_accept_item_validator_invocations": 0,
+  "owner_review_rows_before": 0,
+  "owner_review_rows_after": 0,
+  "result": "NOT_APPLICABLE_NO_PROPOSED_ACCEPT_ITEMS",
+  "assertion": "No zero-insert execution is represented as proof of ACCEPT validity.",
+  "deployed_validator_changed": false
+}
