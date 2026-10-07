@@ -34,6 +34,20 @@ The deployed parser exposes Promoter, Institutional, FII, MF, DII and Public qua
 
 There are no proposed ACCEPT items, so there is no legitimate ACCEPT-item validator invocation to run. No zero-insert dry run is represented as proof.
 
+
+## Consolidated ownership-methodology decision required
+
+The 112 ownership review items break down as:
+- `OWNERSHIP_TREND_4Q`: 53 items
+- `OWNERSHIP_GOVERNANCE`: 49 items
+- `INSTITUTIONAL_OWNERSHIP_TREND_4Q`: 10 items
+
+Retained Trendlyne ownership responses expose separate quarter series for **Promoter, Institutional, FII, MF, DII and Public**. The deployed validator requires one consistent `ownership_series` and one consistent `ownership_basis` across the required consecutive-quarter window and rejects mixed bases.
+
+**Decision proposal (not approval):** amend the methodology contract only after the owner chooses, per requirement family, the authoritative series and percentage basis. The decision must explicitly state whether `Institutional` is used as the provider's own non-overlapping aggregate or whether a narrower component series is required. FII, MF, DII and Institutional must not be added together unless the approved methodology proves they are non-overlapping for that provider contract.
+
+Until that methodology decision is made, these 112 items remain DEFER; the choice is not inferred from stock type or from whichever series happens to have four quarters.
+
 ## Owner boundary
 No owner review rows were inserted. No reviewer identity or approval was fabricated.
 V1-4 remains IN PROGRESS / NOT PROVEN.
