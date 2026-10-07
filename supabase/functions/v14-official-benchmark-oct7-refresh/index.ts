@@ -44,7 +44,7 @@ function parse(body:string,identity:string){
  if(max!=="2026-10-07")throw new Error("LATEST_SESSION_"+max)
  return{sessions:seen.size,firstSession:min,lastSession:max}
 }
-function parseNse(body:string,identity:string){
+function parseNse(body:string,identity:string,minimum=1){
  const root=JSON.parse(body) as Record<string,unknown>
  const data=Array.isArray(root.data)?root.data:
    (root.data&&typeof root.data==="object"&&!Array.isArray(root.data)&&Array.isArray((root.data as Record<string,unknown>).indexCloseOnlineRecords))
@@ -64,13 +64,13 @@ function parseNse(body:string,identity:string){
   else if(m2)day=`${m2[3]}-${m2[2]}-${m2[1]}`
   else throw new Error("NSE_DATE_INVALID:"+rawDate)
   const ms=Date.parse(day+"T00:00:00Z")
-  if(!Number.isFinite(ms)||new Date(ms).toISOString().slice(0,10)!==day||day<"2025-08-25"||day>"2026-10-07")throw new Error("NSE_DATE_WINDOW")
+  if(!Number.isFinite(ms)||new Date(ms).toISOString().slice(0,10)!==day||day!=="2026-10-07")throw new Error("NSE_DATE_WINDOW")
   if(seen.has(day))throw new Error("NSE_DUPLICATE")
   seen.add(day);min=min===null||day<min?day:min;max=max===null||day>max?day:max
   const close=String(row.EOD_CLOSE_INDEX_VAL??row.CLOSE??"")
   if(!/^\d+(?:\.\d+)?$/.test(close)||!/[1-9]/.test(close))throw new Error("NSE_CLOSE_INVALID")
  }
- if(seen.size<252||seen.size>400)throw new Error("NSE_SESSION_COUNT_"+seen.size)
+ if(seen.size<minimum||seen.size>10)throw new Error("NSE_SESSION_COUNT_"+seen.size)
  if(max!=="2026-10-07")throw new Error("NSE_LATEST_SESSION_"+max)
  return{sessions:seen.size,firstSession:min,lastSession:max}
 }
@@ -114,7 +114,7 @@ Deno.serve(async req=>{
   }catch(niftyError){
    let nseText=""
    try{
-    const q=new URLSearchParams({indexType:name,from:"25-08-2025",to:"07-10-2026"})
+    const q=new URLSearchParams({indexType:name,from:"07-10-2026",to:"07-10-2026"})
     const r=await fetch(NSE_ENDPOINT+"?"+q.toString(),{method:"GET",headers:{
       "accept":"application/json,text/plain,*/*",
       "accept-language":"en-US,en;q=0.9",
@@ -124,8 +124,8 @@ Deno.serve(async req=>{
     },signal:AbortSignal.timeout(30000)})
     nseText=await r.text();const bytes=new TextEncoder().encode(nseText)
     if(!r.ok)throw new Error("NSE_HTTP_"+r.status)
-    const parsed=parseNse(nseText,name),sha256=await hex(bytes)
-    out.push({code,name,state:"SUCCEEDED",attemptedAt,completedAt:new Date().toISOString(),httpStatus:r.status,byteLength:bytes.length,sha256,...parsed,returnBasis:"PRICE_RETURN_RAW_CLOSE",sourceUrl:NSE_ENDPOINT,transport:"NSE_HISTORICAL_OR",body:nseText,niftyFallbackError:niftyError instanceof Error?niftyError.message:"UNKNOWN"})
+    const parsed=parseNse(nseText,name,1),sha256=await hex(bytes)
+    out.push({code,name,state:"SUCCEEDED",attemptedAt,completedAt:new Date().toISOString(),httpStatus:r.status,byteLength:bytes.length,sha256,...parsed,returnBasis:"PRICE_RETURN_RAW_CLOSE",sourceUrl:NSE_ENDPOINT,transport:"NSE_HISTORICAL_OR_DELTA_2026_10_07",body:nseText,niftyFallbackError:niftyError instanceof Error?niftyError.message:"UNKNOWN"})
      }catch(nseError){out.push({code,name,state:"FAILED",attemptedAt,completedAt:new Date().toISOString(),error:nseError instanceof Error?nseError.message:"UNKNOWN",niftyError:niftyError instanceof Error?niftyError.message:"UNKNOWN",nseBodyHead:nseText.slice(0,1400)})}
   }
  }
