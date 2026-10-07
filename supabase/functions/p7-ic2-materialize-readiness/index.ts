@@ -8,12 +8,13 @@ import {validateStockHistoryReadiness,validateBenchmarkPairReadiness,historyProo
 import {loadVerifiedOfficialBenchmarkHistory,type OfficialBenchmarkSourceRecord} from "../_shared/v14-official-benchmark-r2.ts"
 import {validateReviewedRequirementEvidence,reconcileCanonicalAndReviewed,type RequirementReview,type ReviewedSourceRecord,type ReviewedResearchDocument,type ReviewedDocumentSource,type ReviewEvidenceFamily} from "../_shared/v14-reviewed-evidence.ts"
 import {p7IcProfileContract} from "../_shared/p7-ic-profile-contracts.ts"
+import {executableV14BenchmarkCodes,resolveV14BenchmarkAuthority} from "../_shared/v14-benchmark-authority-resolution.ts"
 import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json" with {type:"json"}
 
 const DEV_REF="lrgpjimipfkyoqbpsqzz",PROD_REF="uxiyufbsbgzzdujzcdxe",ACTION="P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS"
 const VALIDATE_ACTION="P7_IC3_VALIDATE_CANONICAL_INPUTS"
 const REGISTRY_VERSION="PORTFOLIOAI_P7_IC1_METHODOLOGY_R7_REGISTRY_V1"
-const MATERIALIZER_VERSION="P7_IC3_CANONICAL_SNAPSHOT_V3_HISTORY_CONTRACT"
+const MATERIALIZER_VERSION="P7_IC3_CANONICAL_SNAPSHOT_V4_BENCHMARK_AUTHORITY_RESOLUTION"
 const CLASSIFICATION_AUTHORITY="current_security_enrichment_v1"
 const CLASSIFICATION_VERSION="PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json"
 const ASSIGNMENT_AUTHORITY="PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1"
@@ -220,7 +221,10 @@ async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit
  const requiredBenchmarkCodes=[...new Set(securities.flatMap(security=>{
   const assignment=coverageById.get(security.id)
   if(!assignment||assignment.ic1State!=="RESOLVED"||!assignment.profileCode)return[]
-  try{return [...(p7IcProfileContract(assignment.profileCode).benchmarkAuthority??[])].filter(code=>code.startsWith("NIFTY_"))}catch{return[]}
+  try{
+   const authority=resolveV14BenchmarkAuthority({profileCode:assignment.profileCode,subprofileCode:assignment.subprofileCode,benchmarkAuthority:p7IcProfileContract(assignment.profileCode).benchmarkAuthority??[]})
+   return executableV14BenchmarkCodes(authority)
+  }catch{return[]}
  }))]
  const benchmarkResult=requiredBenchmarkCodes.length
   ?await admin.from("market_benchmarks").select("code,mapping_status,provider_code,provider_instrument_id,verified_at").in("code",requiredBenchmarkCodes)
@@ -307,7 +311,7 @@ function projectCachedRecords(records:SourceRecord[],security:{id:string;symbol:
 async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;minimum:number;freshness:string|null;benchmarks:string[];portfolioId:string;portfolioOwnerId:string;securityId:string;observations:Observation[];definitions:MetricDefinition[];records:SourceRecord[];reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];documentSources:ReviewedDocumentSource[];history?:History;benchmarkByCode:Map<string,Benchmark>;historyProofs:Map<string,HistoryContractProof>;evaluationAsOfMs:number;sourceCutoffAtMs:number}):Promise<Item>{
  const {code,family,minimum,freshness,benchmarks,portfolioId,portfolioOwnerId,securityId,observations,definitions,records,reviews,reviewSources,researchDocuments,documentSources,history,benchmarkByCode,historyProofs,evaluationAsOfMs,sourceCutoffAtMs}=input
  if(family==="BENCHMARK_HISTORY"){
-   const required=benchmarks.filter(x=>x.startsWith("NIFTY_"))
+   const required=executableV14BenchmarkCodes(benchmarks)
    if(!required.length||!history)return blocked(code,minimum,freshness,benchmarks,"MISSING","BENCHMARK_OR_STOCK_HISTORY_MISSING","VALIDATE_APPROVED_HISTORY_CONTRACT")
    const validations=required.map(benchmarkCode=>{const benchmark=benchmarkByCode.get(benchmarkCode);if(!benchmark)return{code:benchmarkCode,result:null};return{code:benchmarkCode,result:validateBenchmarkPairReadiness({stockRows:history.rows,benchmarkRows:benchmark.history.rows,minimum,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:freshness,benchmark:{code:benchmark.code,mapping_status:benchmark.mapping_status,provider_code:benchmark.provider_code,provider_instrument_id:benchmark.provider_instrument_id,verified_at:benchmark.verified_at},stockProof:historyProofs.get("SECURITY:"+securityId)??historyProofFromRows(history.rows),benchmarkProof:historyProofs.get("BENCHMARK:"+benchmarkCode)??historyProofFromRows(benchmark.history.rows)})}})
    if(validations.some(v=>v.result===null))return blocked(code,minimum,freshness,benchmarks,"MISSING","BENCHMARK_MAPPING_NOT_PROVEN","RECONCILE_EXACT_APPROVED_BENCHMARK_MAPPING")
@@ -393,8 +397,9 @@ Deno.serve(async request=>{
    if(assignment.ic1State!=="RESOLVED"||!assignment.profileCode){items=[blocked("METHODOLOGY_ASSIGNMENT",1,null,[],"REVIEW_REQUIRED","METHODOLOGY_REVIEW_REQUIRED","OWNER_FACTUAL_REVIEW")]}
    else{
     const contract=p7IcProfileContract(assignment.profileCode)
+    const benchmarkAuthority=resolveV14BenchmarkAuthority({profileCode:assignment.profileCode,subprofileCode:assignment.subprofileCode,benchmarkAuthority:contract.benchmarkAuthority??[]})
     const plan=buildProfileEvidencePlan(contract),baseRecords=facts.sourceRecords.filter(x=>String(x.raw_payload.security_id)===security.id),records=projectCachedRecords(baseRecords,security,plan)
-    items=await Promise.all(plan.requirements.map(req=>requirementItem({code:req.evidenceCode,family:req.deterministicCoverageRule,minimum:req.minimumPeriods,freshness:(contract.signalRequirements.find(x=>(x.evidenceCodes??[x.signalCode]).includes(req.evidenceCode)) as {freshnessPolicy?:string}|undefined)?.freshnessPolicy??null,benchmarks:[...(contract.benchmarkAuthority??[])],portfolioId,portfolioOwnerId:facts.portfolioOwnerId,securityId:security.id,observations:facts.observations,definitions:facts.definitions,records,reviews:facts.reviewFacts.reviews,reviewSources:facts.reviewFacts.reviewSources,researchDocuments:facts.reviewFacts.researchDocuments,documentSources:facts.reviewFacts.documentSources,history:historyById.get(security.id),benchmarkByCode,historyProofs:facts.historyProofs,evaluationAsOfMs,sourceCutoffAtMs})))
+    items=await Promise.all(plan.requirements.map(req=>requirementItem({code:req.evidenceCode,family:req.deterministicCoverageRule,minimum:req.minimumPeriods,freshness:(contract.signalRequirements.find(x=>(x.evidenceCodes??[x.signalCode]).includes(req.evidenceCode)) as {freshnessPolicy?:string}|undefined)?.freshnessPolicy??null,benchmarks:benchmarkAuthority,portfolioId,portfolioOwnerId:facts.portfolioOwnerId,securityId:security.id,observations:facts.observations,definitions:facts.definitions,records,reviews:facts.reviewFacts.reviews,reviewSources:facts.reviewFacts.reviewSources,researchDocuments:facts.reviewFacts.researchDocuments,documentSources:facts.reviewFacts.documentSources,history:historyById.get(security.id),benchmarkByCode,historyProofs:facts.historyProofs,evaluationAsOfMs,sourceCutoffAtMs})))
    }
    const methodologyRole=assignment.subprofileCode??assignment.profileCode??"UNRESOLVED"
    const assignmentId=`${ASSIGNMENT_AUTHORITY}:${assignment.securityId}:${methodologyRole}`
