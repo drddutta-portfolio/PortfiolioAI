@@ -1,0 +1,43 @@
+{
+  "package_id": "PORTFOLIOAI_V1_4_OWNER_REVIEW_115_V1_2026_10_07",
+  "version": "1.0.0",
+  "authority_file": "PortfolioAI_V1_4_OWNER_REVIEW_115_V1_2026-10-07.json",
+  "files": {
+    "json": {
+      "sha256": "413024fea778db65fdc1533ee92b4796cbdf2d85008bd7ca1e9df8f1ebbddecc",
+      "item_count": 638
+    },
+    "csv": {
+      "sha256": "0384e0d1de2a85c218b3a64ad69d54a719255f327909a32e0709609d9c103b17",
+      "data_row_count": 638
+    },
+    "markdown": {
+      "sha256": "a19e5514c0bd6399fc08a34d15010817e155eb2100337c7c11c6c2ea81615b0b"
+    },
+    "dry_run": {
+      "sha256": "3903e338e8b76145038e8f133e0113ca66057c86332f0b7539bc8137047f70db"
+    }
+  },
+  "consistency": {
+    "json_item_count": 638,
+    "csv_data_row_count": 638,
+    "json_csv_item_ids_match": true,
+    "review_dependent_member_coverage": 114,
+    "class_counts": {
+      "A": 0,
+      "B": 0,
+      "C": 638
+    },
+    "decisions": {
+      "ACCEPT": 0,
+      "REJECT": 0,
+      "DEFER": 638
+    }
+  },
+  "canonical_run_id": "b88f4d34-287c-4974-b5b6-14f6e5a4b28a",
+  "evaluation_as_of": "2026-10-07T09:53:53Z",
+  "source_cutoff_at": "2026-10-07T09:53:53Z",
+  "execution_manifest": "docs/private/PortfolioAI_V1_4_115_EXECUTION_MANIFEST_2026-10-07.json",
+  "frozen_release_cohort_sha256": "79f551558333adc1f37d6a26298d8088ee02db3161f03c6d6e59f9a19a93fc27",
+  "owner_approval_persisted": false
+}
