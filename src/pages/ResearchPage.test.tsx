@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import type { PortfolioViewModel } from "../features/portfolio/types"
+import type { SecurityScoringSnapshot } from "../features/research/scoringTypes"
 import type { SecurityResearch } from "../features/research/types"
 import { formatResearchMetric } from "../features/research/researchPolicy"
 import { ResearchPage } from "./ResearchPage"
@@ -22,6 +23,8 @@ const revenue = { ...metric, id: "revenue", code: "REVENUE_TTM", label: "Revenue
 const research: SecurityResearch = { securityId: "s1", companyName: "Bharat Electronics Limited", sector: "Industrials", industry: "Defence", marketCapCategory: null, freshUntil: "2099-09-09T00:00:00Z", state: "VERIFIED", metrics: [metric, ownership, roe, revenue], documents: [{ id: "d1", type: "ANNUAL_REPORT", title: "Annual Report appearance", publishedAt: "2026-08-01", periodStart: null, periodEnd: "2026-03-31", periodType: "YEAR", provider: "TRENDLYNE_MCP", retrievedAt: "2026-09-09T00:00:00Z", status: "REVIEW_REQUIRED", externalReference: null }] }
 
 vi.mock("../features/portfolio/usePortfolioView", () => ({ usePortfolioView: () => ({ portfolio, error: null, isLoading: false }) }))
+const scoringSnapshot: SecurityScoringSnapshot = { profileCode: "BANK_NBFC", profileName: "Bank fixture", profileSource: "REVIEWED_ASSIGNMENT", modelName: "test", modelStatus: "DRAFT", runState: null, overallScore: null, evidenceCoverage: null, scoreReadyCoverage: null, evidenceConfidence: null, asOfDate: null, dimensions: [], ratings: [] }
+vi.mock("../features/research/useSecurityScoring", () => ({ useSecurityScoring: () => ({ data: scoringSnapshot, isLoading: false, error: null }) }))
 const specialistState = { resolved: false }
 vi.mock("../features/research/usePharmaSubprofileResolution", () => ({ usePharmaSubprofileResolution: () => ({ data: specialistState.resolved ? { status: "RESOLVED" } : null }) }))
 vi.mock("../features/research/PharmaResearchWorkspacePanel", () => ({ PharmaResearchWorkspacePanel: () => <p>Retained pharmaceutical workspace</p> }))

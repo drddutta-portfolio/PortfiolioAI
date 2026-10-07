@@ -1,6 +1,6 @@
 import { SECTOR_ENGINE_REGISTRY } from "./sectorEngineRegistry"
 import { describe, expect, it } from "vitest"
-import { researchProfileUiContract, researchRefreshModulesForSecurity } from "./researchProfileUiContract"
+import { researchProfileUiContract, researchRefreshModulesForSecurity, researchProfilePresentationState } from "./researchProfileUiContract"
 
 const BANK_ONLY_CODES = [
   "ADVANCES_GROWTH_YOY",
@@ -11,6 +11,17 @@ const BANK_ONLY_CODES = [
 ] as const
 
 describe("researchProfileUiContract", () => {
+  it("maps the canonical Pharma identity to its existing presentation without bank leakage", () => {
+    expect(researchProfileUiContract("PHARMA")).toEqual(researchProfileUiContract("PHARMA_V1"))
+    expect(researchProfileUiContract("PHARMA").snapshotGroups.flatMap(group => group.codes)).not.toContain("GROSS_NPA_PERCENT")
+  })
+  it("does not show generic operating metrics while the assignment is unresolved", () => {
+    expect(researchProfileUiContract(null).snapshotGroups.flatMap(group => group.codes)).toEqual([])
+    expect(researchProfilePresentationState(null)).toBe("UNRESOLVED")
+    expect(researchProfilePresentationState("UNRESOLVED")).toBe("UNRESOLVED")
+    expect(researchProfilePresentationState("BANK")).toBe("SPECIALIST")
+    expect(researchProfilePresentationState("NBFC_LENDING")).toBe("CONTRACT_RESULTS_ONLY")
+  })
   it("keeps BANK_NBFC presentation behavior isolated from PHARMA_V1", () => {
     const bank = researchProfileUiContract("BANK_NBFC")
     const pharma = researchProfileUiContract("PHARMA_V1")
