@@ -44,6 +44,12 @@ function parse(body:string,identity:string){
  if(max!=="2026-10-07")throw new Error("LATEST_SESSION_"+max)
  return{sessions:seen.size,firstSession:min,lastSession:max}
 }
+const NSE_RESPONSE_ALIASES:Readonly<Record<string,readonly string[]>>={
+ "NIFTY CONSUMER DURABLES":["NIFTY CONSR DURBL"],
+ "NIFTY FINANCIAL SERVICES EX-BANK":["NIFTY FINSEREXBNK"],
+ "NIFTY SERVICES SECTOR":["NIFTY SERV SECTOR"],
+ "NIFTY TRANSPORTATION & LOGISTICS":["NIFTY TRANS LOGIS"],
+}
 function parseNse(body:string,identity:string,minimum=1){
  const root=JSON.parse(body) as Record<string,unknown>
  const data=Array.isArray(root.data)?root.data:
@@ -55,7 +61,7 @@ function parseNse(body:string,identity:string,minimum=1){
   if(!u||typeof u!=="object"||Array.isArray(u))throw new Error("NSE_ROW_INVALID")
   const row=u as Record<string,unknown>
   const got=String(row.EOD_INDEX_NAME??row.INDEX_NAME??row.indexName??"")
-  if(norm(got)!==norm(identity))throw new Error("NSE_IDENTITY_MISMATCH:"+got)
+  const accepted=[identity,...(NSE_RESPONSE_ALIASES[identity]??[])].map(norm);if(!accepted.includes(norm(got)))throw new Error("NSE_IDENTITY_MISMATCH:"+got)
   const rawDate=String(row.EOD_TIMESTAMP??row.HistoricalDate??row.Date??"")
   const m=/^(\d{2})[- ]([A-Za-z]{3})[- ](\d{4})$/.exec(rawDate)
   const m2=/^(\d{2})-(\d{2})-(\d{4})$/.exec(rawDate)
