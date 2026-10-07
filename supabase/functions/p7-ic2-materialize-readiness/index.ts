@@ -84,15 +84,43 @@ async function loadOfficialBenchmarkSources(admin:Admin,codes:readonly string[],
  }
  return out
 }
+async function loadExchangeCalendarProofIds(admin:Admin,sourceCutoffAt:string):Promise<string[]>{
+ const result=await admin.from("data_source_records")
+  .select("id,retrieved_at,raw_payload")
+  .eq("source_code","NIFTY_OFFICIAL")
+  .eq("record_kind","V1_4_EXCHANGE_CALENDAR_PROOF")
+  .lte("retrieved_at",sourceCutoffAt)
+  .order("retrieved_at",{ascending:false})
+  .order("id",{ascending:false})
+  .limit(5)
+ if(result.error)throw result.error
+ const valid=(result.data??[]).filter(row=>{
+  const p=row.raw_payload as Json
+  return p.version==="V1_4_EXCHANGE_CALENDAR_PROOF_V1"
+   &&p.exchange==="NSE"
+   &&p.authority==="NIFTY_OFFICIAL"
+   &&p.all_source_session_sets_identical===true
+   &&Number(p.session_count)>=252
+   &&String(p.first_session)<="2025-09-01"
+   &&String(p.last_session)>="2026-10-06"
+   &&/^[a-f0-9]{64}$/u.test(String(p.session_set_sha256??""))
+ })
+ if(!valid.length)return[]
+ const latest=valid[0]!
+ const sameTime=valid.filter(row=>row.retrieved_at===latest.retrieved_at)
+ if(sameTime.length>1&&new Set(sameTime.map(row=>JSON.stringify(row.raw_payload))).size>1)throw new Error("EXCHANGE_CALENDAR_PROOF_CONFLICT")
+ return[String(latest.id)]
+}
 async function loadBenchmarkHistories(admin:Admin,benchmarks:readonly Array<{code:string;provider_code:string|null;mapping_status:string}>,sourceCutoffAt:string){
  const officialCodes=benchmarks.filter(x=>x.provider_code==="NIFTY_OFFICIAL"&&x.mapping_status==="VERIFIED").map(x=>x.code)
  const official=await loadOfficialBenchmarkSources(admin,officialCodes,sourceCutoffAt)
+ const calendarSourceRecordIds=await loadExchangeCalendarProofIds(admin,sourceCutoffAt)
  return new Map(await Promise.all(benchmarks.map(async benchmark=>{
   const code=String(benchmark.code)
   if(benchmark.provider_code==="NIFTY_OFFICIAL"&&benchmark.mapping_status==="VERIFIED"){
    const source=official.get(code)
    if(!source)return[code,{rows:[] as HistoryRow[],inspection:inspectStoredHistory([],252,Date.parse(sourceCutoffAt)),sourceRecordId:null}] as const
-   const loaded=await loadVerifiedOfficialBenchmarkHistory({record:source,sourceCutoffAt,minimum:252,maximum:400})
+   const loaded=await loadVerifiedOfficialBenchmarkHistory({record:source,sourceCutoffAt,minimum:252,maximum:400,exchangeCalendarSourceRecordIds:calendarSourceRecordIds})
    return[code,{rows:loaded.rows,inspection:inspectStoredHistory(loaded.rows,252,Date.parse(sourceCutoffAt)),sourceRecordId:loaded.sourceRecordId}] as const
   }
   const rows=await loadHistoryRows(admin,"market_benchmark_price_history","benchmark_code",code,sourceCutoffAt)
