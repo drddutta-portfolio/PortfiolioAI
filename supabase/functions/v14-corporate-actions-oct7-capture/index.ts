@@ -9,9 +9,8 @@ const reply=(s:number,b:unknown)=>new Response(JSON.stringify(b),{status:s,heade
 const digest=async(s:string)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)))).map(b=>b.toString(16).padStart(2,"0")).join("")
 Deno.serve(async req=>{
  if(req.method!=="POST")return reply(405,{code:"METHOD_NOT_ALLOWED"})
- const u=Deno.env.get("SUPABASE_URL")??"",k=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??""
- let ref:string|null=null;try{ref=new URL(u).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1]??null}catch{}
- if(ref!==DEV||!k)return reply(409,{code:"UNAPPROVED_DEVELOPMENT_TARGET"})
+ const u="https://"+DEV+".supabase.co",k=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??""
+ if(!k)return reply(409,{code:"UNAPPROVED_DEVELOPMENT_TARGET"})
  const body=await req.json().catch(()=>({})) as Record<string,unknown>
  const admin=createClient(u,k,{auth:{persistSession:false}})
  const grant=await consumeP4ExecutionGrant(admin,{grantId:body.grantId,action:ACTION,portfolioId:PORTFOLIO,securityId:SENTINEL})
