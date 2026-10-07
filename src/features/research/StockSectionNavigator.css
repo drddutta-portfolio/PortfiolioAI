@@ -1,0 +1,21 @@
+.stock-section-navigator {
+  position: sticky; top: .75rem; z-index: 50;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center; gap: .8rem; margin-bottom: .9rem; padding: .65rem .8rem;
+  border: 1px solid #d7e3dc; border-radius: 16px; background: #fbfdfb;
+  box-shadow: 0 8px 24px rgba(38, 74, 55, .12);
+}
+.stock-section-navigator-title { color: #315f48; font-size: .68rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.stock-section-navigator-links { display: flex; gap: .35rem; min-width: 0; overflow-x: auto; scrollbar-width: thin; }
+.stock-section-navigator a { flex: 0 0 auto; padding: .5rem .7rem; border: 1px solid #dce7df; border-radius: 999px; background: #fff; color: #355944; font-size: .74rem; font-weight: 700; line-height: 1.2; text-decoration: none; white-space: nowrap; }
+.stock-section-navigator a:hover { background: #f2f8f4; border-color: #8db29d; }
+.stock-section-navigator a:focus-visible { outline: 2px solid #315f48; outline-offset: 2px; }
+.research-page [id^="stock-"] { scroll-margin-top: 6.5rem; }
+@media (max-width: 920px) {
+  .stock-section-navigator { grid-template-columns: minmax(0, 1fr) auto; }
+  .stock-section-navigator-title { display: none; }
+}
+@media (max-width: 640px) {
+  .stock-section-navigator { top: .35rem; gap: .45rem; padding: .55rem; border-radius: 14px; }
+  .stock-section-navigator a { padding: .5rem .62rem; font-size: .7rem; }
+}

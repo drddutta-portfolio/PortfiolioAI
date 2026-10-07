@@ -1,3 +1,20 @@
+## Shared stock sticky section menu — 7 October 2026
+
+Owner-authorized shell presentation change implemented: `StockSectionNavigator`
+provides Dashboard-style sticky block links in both HDFCBANK's redesigned page and
+the existing composition used by other stocks. It selects the appropriate research
+tab before scrolling, offsets the sticky bar and focuses targets; mobile navigation
+scrolls horizontally and honors reduced motion. Research-dependent links are hidden
+when their blocks are absent. The HDFCBANK-only redesign rollout remains unchanged.
+Canonical data access, profile applicability, accounting and evidence safeguards
+are unchanged. No schema/Auth/RLS/provider changes or migrations. Production build/TypeScript, architecture guard, changed-file lint and 21 focused
+page/rollout/navigation tests passed. Local authenticated Chromium checked HDFCBANK
+and TORNTPHARM, tab switching, focused/visible target blocks, sticky positioning and
+390px mobile overflow; no JavaScript errors observed. Hosted rollout is pending;
+this record does not claim deployment or release closure.
+
+---
+
 ## V1-4 official benchmark capability proof — 7 October 2026
 
 Official Nifty Capital Goods history is available despite absent exact Angel One identity: two source-only POSTs returned 276 price-index close sessions and 276 TRI sessions. Both raw captures are preserved in private Development R2; no canonical history/readiness was changed. Shared capture validation is repaired for the official `06 Oct 2026` date format, with impossible-date rejection retained. Existing source regressions and nine new checks PASS; architecture/build PASS. The benchmark-only official-source fallback is reviewable in `PortfolioAI_V1_4_OFFICIAL_BENCHMARK_FALLBACK_PROPOSAL_2026-10-07.md`; source authority is not silently changed. A private source-bound review draft now contains 48 latest-quarter observations across six distinct series for the existing SBIN/WABAG O1 captures; no new Trendlyne calls or accepted reviews. Owner review and return-basis contracts remain required. V1-4 IN PROGRESS / NOT PROVEN; V1-5 unauthorized.

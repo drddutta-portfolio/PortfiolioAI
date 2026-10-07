@@ -589,3 +589,29 @@ Section 17 records the existing bounded implementation. This section defines how
 ### 18.3 Initial sample rollout
 
 The initial hosted sample enables the redesigned composition only for HDFCBANK (security `b47b007d-1990-4504-a5a2-4391c07687c5`, or its ticker route). Other stocks retain the pre-redesign page composition through a temporary rollout fallback. Sample styles are scoped to the sample container. This routing condition controls presentation only; it does not assign a research profile, alter evidence or introduce a stock-specific formula. The reusable shell remains the intended design for all stocks after sample review. Shared evidence safeguards remain in force.
+
+
+## 19. Sticky stock-section menu — shared shell amendment, 7 October 2026
+
+The owner requested a Dashboard-style sticky menu at the top of the stock page.
+`StockSectionNavigator` is part of **Part 1: the basic shell for ALL stocks**,
+including the HDFCBANK redesigned sample and the current composition for other
+stocks. It does not enable the rest of the redesigned composition for all stocks.
+
+The opaque menu remains visible while scrolling, with horizontal scrolling on
+small screens. It links to Summary, Position, Owner plan & suggestion, Insights,
+Refresh, Overview, Cockpit & ratings, Readiness, Snapshots, Research health,
+applicable Stock research, Documents and Evidence, plus return to page top.
+Detailed research links appear only when their blocks are available. Existing
+research tabs and profile-specific content are retained.
+
+A link targeting another tab selects that tab before scrolling. Jumps account for
+the sticky menu height, focus the target block for keyboard users, preserve router
+history state and respect reduced-motion preferences. Navigation never invokes
+refresh execution, changes owner settings or calculates research results; existing
+read paths and evidence safeguards remain authoritative.
+
+Acceptance: verify tab switching followed by section navigation, keyboard focus,
+menu visibility while scrolling, no page overflow at desktop/mobile widths, and
+the menu on HDFCBANK and a stock using the existing composition. No database,
+provider permissions, classification or methodology changes are required.
