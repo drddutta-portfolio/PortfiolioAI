@@ -777,8 +777,11 @@ whitespace and credential-pattern checks passed. Full-repository lint has 85
 errors and four warnings in unchanged files, and the existing research bundle
 size warning remains.
 
-**Implementation decision:** prepared for review; Gate 4 merge/deployment is not
-claimed. UI-G5's representative profile/state matrix, authenticated hosted visual
+**Implementation decision:** reviewed and merged into `PortfolioAI-Development`
+through [PR #111](https://github.com/drddutta-portfolio/PortfiolioAI/pull/111) after
+CI passed at head `47b90ccaafa6f70fe55b90affeab042883cff53f`. Merge commit
+`211767ad439d30f3a492885d40f2cc72279fe9f1` has a verified READY Vercel Preview
+deployment, `dpl_EgJnXQutWCSAbEBJ6Y8SCdtnCWog`. UI-G5's representative profile/state matrix, authenticated hosted visual
 verification and final rollout decision remain outstanding. At minimum that
 hosted review must exercise HDFCBANK, TORNTPHARM, an unregistered/unresolved
 profile, sparse/error states, 390/768/1024/1440px widths, long names (including
@@ -789,3 +792,12 @@ review and do not pass research methodology/evidence or V1 investment-engine gat
 There are no schema/migrations, new business facts, new provider capabilities,
 financial formulas, evidence-review writes, automatic owner-setting changes or
 Auth/RLS changes in Gate 4.
+
+### UI-G5 acceptance status — 7 October 2026 (UTC)
+
+The representative profile/state regression matrix passes 182 focused tests across
+11 files. See [the Gate 5 acceptance report](PortfolioAI_STOCK_RESEARCH_UI_GATE_5_ACCEPTANCE_2026-10-07.md)
+for coverage, deployment evidence and the remaining hosted review. **Gate 5 is not
+passed and the design is not finally accepted for all stocks:** G5.2 requires
+authenticated hosted visual evidence; the Development URL currently redirects the
+review browser to Vercel authentication. G5.3 records a hold until that review passes.
