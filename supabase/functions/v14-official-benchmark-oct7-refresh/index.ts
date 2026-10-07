@@ -86,6 +86,19 @@ Deno.serve(async req=>{
  const admin=createClient(url,key,{auth:{persistSession:false}})
  const grant=await consumeP4ExecutionGrant(admin,{grantId:body.grantId,action:ACTION,portfolioId:PORTFOLIO,securityId:SENTINEL})
  if(!grant.ok)return reply(401,{code:grant.code})
+ if(body.catalogDiagnostic===true){
+  const warm=await fetch("https://www.nseindia.com/market-data/live-market-indices",{headers:{"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36","accept":"text/html,application/xhtml+xml","accept-language":"en-US,en;q=0.9"},redirect:"follow",signal:AbortSignal.timeout(30000)})
+  const cookies=(warm.headers as Headers & {getSetCookie?:()=>string[]}).getSetCookie?.()??[]
+  const cookie=cookies.map(v=>v.split(";")[0]).filter(Boolean).join("; ")
+  const cr=await fetch("https://www.nseindia.com/api/allIndices",{headers:{"accept":"application/json,text/plain,*/*","accept-language":"en-US,en;q=0.9","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36","referer":"https://www.nseindia.com/market-data/live-market-indices",...(cookie?{"cookie":cookie}:{})},signal:AbortSignal.timeout(30000)})
+  const text=await cr.text()
+  if(!cr.ok)return reply(502,{code:"NSE_CATALOG_FETCH_FAILED",status:cr.status})
+  const raw=JSON.parse(text) as Record<string,unknown>
+  const rows=Array.isArray(raw.data)?raw.data as Record<string,unknown>[]:[]
+  const tokens=["CAPITAL","CONSUM","DURBL","FINSER","SERV","TRANS","LOGIS","CHEM","OIL"]
+  const candidates=rows.map(x=>String(x.index??x.indexSymbol??x.indexName??x.name??"")).filter(v=>tokens.some(t=>v.toUpperCase().includes(t)))
+  return reply(200,{status:"NSE_INDEX_CATALOG_DIAGNOSTIC",warmStatus:warm.status,cookieCount:cookies.length,candidates:[...new Set(candidates)].sort()})
+ }
  const warm=await fetch("https://www.niftyindices.com/reports/historical-data",{headers:{"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36","accept":"text/html,application/xhtml+xml","accept-language":"en-US,en;q=0.9"},redirect:"follow",signal:AbortSignal.timeout(30000)})
  const setCookies=(warm.headers as Headers & {getSetCookie?:()=>string[]}).getSetCookie?.()??[]
  const cookie=setCookies.map(v=>v.split(";")[0]).filter(Boolean).join("; ")
