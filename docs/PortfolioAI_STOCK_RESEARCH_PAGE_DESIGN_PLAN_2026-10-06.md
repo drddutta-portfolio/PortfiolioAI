@@ -809,3 +809,15 @@ HDFCBANK and TORNTPHARM; tablet score-label overflow was found and a shared-shel
 CSS correction prepared. The verifier's login-redirect timing and READ_CACHE
 allowance were corrected. G5.2 is now in review, rather than access-blocked; final
 acceptance remains HOLD pending deployed re-verification. See the Gate 5 report.
+
+### UI-G5 current decision — 8 October 2026 (Asia/Kolkata)
+
+Authenticated hosted inspection now works. HDFCBANK and TORNTPHARM completed 74
+checks with only two tablet overflow failures. ABCAPITAL and ACMESOLAR completed
+74 checks with the proposed CSS injected temporarily; retained stock-specific
+research and explicit unregistered-presentation limits were confirmed. The common
+score-header correction is in PR #113. Vercel rejected its latest build with
+"Deployment rate limited — retry in 24 hours." Final acceptance remains HOLD;
+PR #113 is unmerged and the correction is not claimed live at Development.
+See the Gate 5 acceptance report and sanitized hosted evidence. Native browser
+zoom and the exact deployed fixed revision still require verification.

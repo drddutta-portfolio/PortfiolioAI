@@ -111,7 +111,7 @@ async function main() {
       await page.keyboard.press('End')
       check(`${stock.symbol}: keyboard tabs`, await page.getByRole('tab', { name: 'Evidence', exact: true }).getAttribute('aria-selected') === 'true' && await page.getByRole('tab', { name: 'Evidence', exact: true }).evaluate(el => el === document.activeElement))
       await page.getByRole('heading', { name: 'Evidence ledger', exact: true }).waitFor({ timeout: 30000 })
-      const status = page.getByLabel('Status', { exact: true })
+      const status = page.locator('.evidence-filter select')
       await status.selectOption('CONFLICTING')
       check(`${stock.symbol}: source-status filter`, await status.inputValue() === 'CONFLICTING')
       await capture(`${stock.symbol}-evidence`)
