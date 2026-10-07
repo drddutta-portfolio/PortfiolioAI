@@ -1,0 +1,81 @@
+{
+  "records": [
+    {
+      "symbol": "ALIVUS",
+      "source_url": "https://alivus.b-cdn.net/alivus_pdfs/investors/financials/reports_presentation/Alivus%20Life%20Sciences%20Limited_AR_2026.pdf",
+      "retrieved_at": "2026-10-07T13:19:20.046117+00:00",
+      "r2_bucket": "portfolioai-history-dev",
+      "r2_key": "portfolioai-research/development/v1-4/official-documents/content/6ed009360182d998563943968f6681f11de3d5d9e5d3f86ed82186cea79fdc24.pdf",
+      "sha256": "6ed009360182d998563943968f6681f11de3d5d9e5d3f86ed82186cea79fdc24",
+      "byte_length": 17669887,
+      "readback_verified": true,
+      "receipt": {
+        "ok": true,
+        "key": "portfolioai-research/development/v1-4/official-documents/content/6ed009360182d998563943968f6681f11de3d5d9e5d3f86ed82186cea79fdc24.pdf",
+        "size": 17669887,
+        "etag": "d7084f710e71e6effc3c3558199dd023"
+      },
+      "owner_review": "NOT_REVIEWED",
+      "supabase": {
+        "project_ref": "lrgpjimipfkyoqbpsqzz",
+        "document_id": "753cbb33-84dc-428b-ae32-ed93953877a6",
+        "source_record_id": "d6cf9833-a7b2-4bfa-a93e-1efdbd02a533",
+        "source_appearance_id": "a0152bfc-8bcb-480b-ab51-11153b0ddb2f",
+        "identity_status": "VERIFIED",
+        "owner_review": "NOT_REVIEWED"
+      }
+    },
+    {
+      "symbol": "ABCAPITAL",
+      "source_url": "https://www.adityabirlacapital.com/-/media/ABCL/pdf/Financial-Reports/Annual-Reports-New-2025-26/130726_Annual-Report-for-2025-26.ashx",
+      "retrieved_at": "2026-10-07T13:19:30.654121+00:00",
+      "r2_bucket": "portfolioai-history-dev",
+      "r2_key": "portfolioai-research/development/v1-4/official-documents/content/c16cd105e1ba0dc820478f6b7337eb3e43bb85d15670b6752145e0826e88f137.pdf",
+      "sha256": "c16cd105e1ba0dc820478f6b7337eb3e43bb85d15670b6752145e0826e88f137",
+      "byte_length": 20662762,
+      "readback_verified": true,
+      "receipt": {
+        "ok": true,
+        "key": "portfolioai-research/development/v1-4/official-documents/content/c16cd105e1ba0dc820478f6b7337eb3e43bb85d15670b6752145e0826e88f137.pdf",
+        "size": 20662762,
+        "etag": "046f00920ffd3e23f869ae304fee50c1"
+      },
+      "owner_review": "NOT_REVIEWED",
+      "supabase": {
+        "project_ref": "lrgpjimipfkyoqbpsqzz",
+        "document_id": "89d1b8c0-15f1-4b7f-b947-4bd0ec2398f2",
+        "source_record_id": "bd660a63-18f5-4fee-a78e-7a270b68d665",
+        "source_appearance_id": "dbde8ed5-50e5-4192-9fb5-2af22480232f",
+        "identity_status": "VERIFIED",
+        "owner_review": "NOT_REVIEWED"
+      }
+    },
+    {
+      "symbol": "ACMESOLAR",
+      "source_url": "https://www.acmesolar.in/assets/pdf/Annual-Reports/ACME-Solar-Holdings-Ltd-Annual-Report-FY-2025-26.pdf",
+      "retrieved_at": "2026-10-07T13:19:19.399737+00:00",
+      "r2_bucket": "portfolioai-history-dev",
+      "r2_key": "portfolioai-research/development/v1-4/official-documents/content/e185fa45cfe5937c7c343cb35a329e04263ba439c650c8a4bc5280ab3d3dc881.pdf",
+      "sha256": "e185fa45cfe5937c7c343cb35a329e04263ba439c650c8a4bc5280ab3d3dc881",
+      "byte_length": 13804794,
+      "readback_verified": true,
+      "receipt": {
+        "ok": true,
+        "key": "portfolioai-research/development/v1-4/official-documents/content/e185fa45cfe5937c7c343cb35a329e04263ba439c650c8a4bc5280ab3d3dc881.pdf",
+        "size": 13804794,
+        "etag": "9905003fb7f51268ad68f5002ca9143b"
+      },
+      "owner_review": "NOT_REVIEWED",
+      "supabase": {
+        "project_ref": "lrgpjimipfkyoqbpsqzz",
+        "document_id": "3d41f17b-c447-4af2-b311-cfd09aebadd0",
+        "source_record_id": "67bbaacb-d430-4607-bef9-091c9b2ea3ab",
+        "source_appearance_id": "b251c184-3fef-4341-a9af-cc35c7287081",
+        "identity_status": "VERIFIED",
+        "owner_review": "NOT_REVIEWED"
+      }
+    }
+  ],
+  "readiness_promoted": 0,
+  "normalization": "NOT_YET_APPROVED"
+}

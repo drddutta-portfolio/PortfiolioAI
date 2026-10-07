@@ -25,3 +25,11 @@ The original AKUMS FY2024–25 and FY2025–26 annual PDFs were acquired from th
 The FY2025–26 PDF is 12,635,788 bytes, SHA-256 444cf28dfffc8e8bb719d25b8aa27fa646ed43276adad4ff656d4c9849345711. It has a new canonical document identity and source appearance. About 20 KB of source-linked excerpts and metadata were appended to Supabase; the full body remains in R2. Publication and normalized reporting metadata remain unclaimed until source proof is established. Document identity VERIFIED does not mean requirement review ACCEPTED.
 
 No owner signature was fabricated. No readiness materialization has been run from these repairs alone. No Production/main changes, migrations, Auth/RLS changes, scheduler actions or P8 execution occurred.
+
+## Further verified acquisition and hosted build
+
+ALIVUS, ABCAPITAL and ACMESOLAR FY2025–26 original annual reports were resolved from their official company report listings, downloaded, content-checked, appended to private Development R2 and independently read back. Their canonical document identities, source records and source appearances were appended idempotently; large PDFs remain outside Supabase. The continuation receipt manifest records exact hashes, byte counts and row IDs. These are source acquisitions, not owner ACCEPT decisions or completed readiness requirements.
+
+All five PDF bodies retained during this continuation total 74,334,985 bytes in R2. Four current reports have new compact canonical source/document references; the historical AKUMS FY2024–25 report remains retained as historical support. The pre-write Development database measurement was 214,412,435 bytes, below the owner's 500,000,000-byte policy.
+
+Development application commit 31a1ed7f1f875fa1d3cd6f4a8f0e604b891a94c6 has READY Preview deployment dpl_G9paANnA4E1m3Fb29LoeubjfdFUN at portfiolio-e6gwgr84f-dibyendu-dutta.vercel.app. Deployed materializer source readback matches both local repaired modules exactly. No interactive browser PASS is claimed from deployment status.
