@@ -17,12 +17,12 @@ export interface OfficialBenchmarkSourceRecord{
 
 const digest=async(bytes:Uint8Array)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(b=>b.toString(16).padStart(2,"0")).join("")
 
-function historyProof(input:{sourceRecordId:string;freshnessThrough:string;returnBasis:OfficialIndexBasis}){
+function historyProof(input:{sourceRecordId:string;freshnessThrough:string;returnBasis:OfficialIndexBasis;exchangeCalendarSourceRecordIds:readonly string[]}){
  return {
   version:"V1_4_HISTORY_CONTRACT_V1",
   sourceAuthority:"NIFTY_OFFICIAL",
-  exchangeCalendarState:"UNVERIFIED" as const,
-  exchangeCalendarSourceRecordIds:[] as string[],
+  exchangeCalendarState:input.exchangeCalendarSourceRecordIds.length>0?"VERIFIED" as const:"UNVERIFIED" as const,
+  exchangeCalendarSourceRecordIds:[...input.exchangeCalendarSourceRecordIds],
   corporateActionState:"COMPLETE" as const,
   corporateActionSourceRecordIds:[] as string[],
   unresolvedCorporateActionCount:0,
@@ -38,6 +38,7 @@ export async function loadVerifiedOfficialBenchmarkHistory(input:{
  readonly sourceCutoffAt:string
  readonly minimum?:number
  readonly maximum?:number
+ readonly exchangeCalendarSourceRecordIds?:readonly string[]
 }):Promise<{rows:HistoryRow[];sourceRecordId:string;sourceAuthority:"NIFTY_OFFICIAL";returnBasis:OfficialIndexBasis;payloadHash:string}>{
  const {record}=input,raw=record.raw_payload
  if(record.source_code!=="NIFTY_OFFICIAL"||record.record_kind!=="V1_4_OFFICIAL_BENCHMARK_CAPTURE")throw new Error("OFFICIAL_BENCHMARK_SOURCE_RECORD_INVALID")
@@ -54,7 +55,7 @@ export async function loadVerifiedOfficialBenchmarkHistory(input:{
  const actualHash=await digest(buffer)
  if(actualHash!==record.payload_hash)throw new Error("OFFICIAL_BENCHMARK_R2_HASH_MISMATCH")
  const parsed=parseOfficialBenchmarkHistory({body:new TextDecoder().decode(buffer),code,basis,from:String(raw.first_session??"2025-08-25"),to:String(raw.last_session??"2026-10-06"),minimum:input.minimum??252,maximum:input.maximum??400})
- const proof=historyProof({sourceRecordId:record.id,freshnessThrough:parsed.rows.at(-1)!.session,returnBasis:basis})
+ const proof=historyProof({sourceRecordId:record.id,freshnessThrough:parsed.rows.at(-1)!.session,returnBasis:basis,exchangeCalendarSourceRecordIds:input.exchangeCalendarSourceRecordIds??[]})
  return {
   rows:parsed.rows.map(row=>({
    period_start:row.session+"T00:00:00.000Z",
