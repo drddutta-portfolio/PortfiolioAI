@@ -1,0 +1,12 @@
+/* Shared identity typography for every stock-page composition. */
+.research-page .research-header .research-title {
+  min-inline-size: 0;
+}
+.research-page .research-header .research-title h1 {
+  max-inline-size: 100%;
+  font-size: clamp(1.25rem, 1.7vw, 1.65rem);
+  line-height: 1.2;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}

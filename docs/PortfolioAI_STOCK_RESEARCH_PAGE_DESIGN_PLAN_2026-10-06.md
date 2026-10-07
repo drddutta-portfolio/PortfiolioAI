@@ -38,7 +38,7 @@ Every stock Research page consists of **two design parts**. This applies to ALL 
 
 ### Part 1 — Basic shell, common to ALL stocks
 
-Every stock uses the same route, layout components, region order, tabs, card grammar, typography, responsive behavior, evidence interactions and loading/error vocabulary. The shell provides identity and classification, About, price/portfolio exposure, owner plan, advisory and interpretation slots, Key Insights, refresh controls, research navigation, context, cockpit, heatmap, ratings, readiness, snapshots, Research Health and access to Documents/Evidence.
+Every stock uses the same route, layout components, region order, tabs, card grammar, typography, responsive behavior, evidence interactions and loading/error vocabulary. Stock identity titles use the shared compact, fully wrapping typography specified in section 20. The shell provides identity and classification, About, price/portfolio exposure, owner plan, advisory and interpretation slots, Key Insights, refresh controls, research navigation, context, cockpit, heatmap, ratings, readiness, snapshots, Research Health and access to Documents/Evidence.
 
 Common design does not mean identical values or research dimensions. These regions display the selected stock's actual data and applicable research, or an honest unavailable state. A blocked profile retains the shell. Section 4 defines its shared regions and section 17 maps the implementation.
 
@@ -615,3 +615,26 @@ Acceptance: verify tab switching followed by section navigation, keyboard focus,
 menu visibility while scrolling, no page overflow at desktop/mobile widths, and
 the menu on HDFCBANK and a stock using the existing composition. No database,
 provider permissions, classification or methodology changes are required.
+
+
+## 20. Compact, fully visible stock identity — shared shell amendment, 7 October 2026
+
+The top-block stock/company name is part of **Part 1: the common shell for ALL
+stocks**. Use `StockResearchShell.css` in both the redesigned HDFCBANK composition
+and the existing stock-page composition. No ticker-specific font sizing or
+shortened display names are permitted.
+
+Use `clamp(1.25rem, 1.7vw, 1.65rem)` with a 1.2 line height, normal whitespace and
+normal word boundaries. Names containing spaces wrap between words. Unbroken
+symbols or unusually long words wrap within the available identity-column width
+only when necessary (`overflow-wrap: anywhere`). The container can shrink with the
+responsive layout, and the complete name remains visible over as many lines as
+needed. Do not crop, ellipsize, apply a line clamp, force nowrap or constrain the
+title to a fixed height. Preserve the existing canonical display-name authority.
+
+Acceptance: inspect HDFCBANK, SRHHYPLTD, a longer unbroken symbol and a long company
+name containing spaces at desktop, intermediate and mobile widths. Confirm compact
+font size, full text, wrapping without horizontal overflow and the same treatment
+on stocks using the existing composition. This is typography only; classification,
+methodology, research data, evidence safeguards and the stock-menu behavior remain
+unchanged.

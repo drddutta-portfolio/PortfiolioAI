@@ -1,3 +1,4 @@
+import "../features/research/StockResearchShell.css"
 import { StockSectionNavigator } from "../features/research/StockSectionNavigator"
 import Decimal from "decimal.js"
 import { useState, type KeyboardEvent } from "react"
