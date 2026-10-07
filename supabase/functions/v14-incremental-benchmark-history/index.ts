@@ -12,7 +12,7 @@ const CODES=[
  "NIFTY_INFRASTRUCTURE","NIFTY_IT","NIFTY_METAL","NIFTY_PHARMA","NIFTY_REALTY"
 ] as const
 const SENTINEL="V1_4_EXISTING_ANGEL_BENCHMARKS:"+CODES.join(",")
-const FROM="2026-09-29",TO="2026-10-06"
+const FROM="2026-09-29",TO="2026-10-07"
 const reply=(s:number,b:unknown)=>new Response(JSON.stringify(b),{status:s,headers:{"content-type":"application/json","cache-control":"no-store"}})
 const day=(iso:string)=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(iso))
 const safe=(e:unknown)=>e instanceof Error?e.message.replace(/[^A-Z0-9_]/giu,"_").toUpperCase().slice(0,80):"BENCHMARK_HISTORY_FAILED"
