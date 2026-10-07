@@ -1,5 +1,5 @@
 import { ResearchSectionScore } from "./ResearchSectionScore"
-import { GROWTH_CODES, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatResearchMetric, latestByCode, metricLabel } from "./researchPolicy"
+import { GROWTH_CODES, OWNERSHIP_CODES, QUALITY_CODES, VALUATION_CODES, coverageStatus, formatSourceResearchMetric, latestByCode, metricLabel } from "./researchPolicy"
 import { researchProfileUiContract, type ResearchWorkspaceSection } from "./researchProfileUiContract"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "./types"
 import type { SecurityScoringSnapshot } from "./scoringTypes"
@@ -27,7 +27,7 @@ function latestCards(rows: readonly ResearchMetric[], empty: string) {
   if (!cards.length) return <div className="data-empty"><strong>Unavailable</strong><p>{empty}</p></div>
   return <div className="professional-metric-grid">{cards.map((metric) => <article key={metric.code}>
     <div><span>{metric.label}</span><Status value={coverageStatus(metric)} /></div>
-    <strong>{formatResearchMetric(metric)}</strong>
+    <strong>{formatSourceResearchMetric(metric)}</strong>
     <small>{period(metric)}</small>
     <em>{metric.provider}</em>
   </article>)}</div>
@@ -40,7 +40,7 @@ function profileSectionCards(section: ResearchWorkspaceSection, latest: Readonly
       const metric = latest.get(code)
       return <article key={code} className={!metric ? "metric-missing" : ""}>
         <div><span>{metric?.label ?? metricLabel(code)}</span><Status value={coverageStatus(metric)} /></div>
-        <strong>{metric ? formatResearchMetric(metric) : "—"}</strong>
+        <strong>{metric ? formatSourceResearchMetric(metric) : "—"}</strong>
         <small>{metric ? period(metric) : "No cached observation"}</small>
         {metric ? <em>{metric.provider}</em> : null}
       </article>
@@ -55,7 +55,7 @@ function HistoryTable({ rows, columns }: { readonly rows: readonly ResearchMetri
   if (!filtered.length) return null
   return <details className="evidence-history" open={false}>
     <summary><strong>Evidence history</strong><span>{filtered.length} period-qualified observations</span><b>Show history</b></summary>
-    <div className="professional-table-wrap"><table className="professional-table"><thead><tr><th>Metric</th><th>Value</th><th>Period</th><th>Status</th><th>Source</th></tr></thead><tbody>{filtered.map((metric) => <tr key={`${metric.code}-${metric.periodType}-${metric.periodEnd}`}><td><strong>{metric.label}</strong><small>{metric.code}</small></td><td>{formatResearchMetric(metric)}</td><td>{period(metric)}</td><td><Status value={metric.status} /></td><td>{metric.provider}</td></tr>)}</tbody></table></div>
+    <div className="professional-table-wrap"><table className="professional-table"><thead><tr><th>Metric</th><th>Value</th><th>Period</th><th>Status</th><th>Source</th></tr></thead><tbody>{filtered.map((metric) => <tr key={`${metric.code}-${metric.periodType}-${metric.periodEnd}`}><td><strong>{metric.label}</strong><small>{metric.code}</small></td><td>{formatSourceResearchMetric(metric)}</td><td>{period(metric)}</td><td><Status value={metric.status} /></td><td>{metric.provider}</td></tr>)}</tbody></table></div>
   </details>
 }
 
@@ -111,7 +111,7 @@ export function QualityGrowthWorkspace({ research, snapshot }: { readonly resear
   const groups = [{ title: "Quality", subtitle: "Durability, profitability and operating strength", codes: [...QUALITY_CODES] }, { title: "Growth", subtitle: "Earnings and business expansion", codes: [...GROWTH_CODES] }]
   return <><ResearchSectionScore snapshot={snapshot} section="QUALITY_GROWTH" />
     <div className="workspace-heading"><div><p className="eyebrow">Business performance</p><h2>Quality & Growth</h2><p>Reviewed evidence is separated into quality and growth so a strong company is not confused with a fast-growing company.</p></div></div>
-    <div className="quality-growth-grid">{groups.map((group) => <section className="professional-panel" key={group.title}><header><div><h3>{group.title}</h3><p>{group.subtitle}</p></div><span>{group.codes.filter((code) => latest.has(code)).length}/{group.codes.length} available</span></header><div className="professional-metric-grid compact">{group.codes.map((code) => { const metric = latest.get(code); return <article key={code} className={!metric ? "metric-missing" : ""}><div><span>{metric?.label ?? title(code)}</span><Status value={coverageStatus(metric)} /></div><strong>{metric ? formatResearchMetric(metric) : "—"}</strong><small>{metric ? period(metric) : "No cached observation"}</small>{metric ? <em>{metric.provider}</em> : null}</article> })}</div></section>)}</div>
+    <div className="quality-growth-grid">{groups.map((group) => <section className="professional-panel" key={group.title}><header><div><h3>{group.title}</h3><p>{group.subtitle}</p></div><span>{group.codes.filter((code) => latest.has(code)).length}/{group.codes.length} available</span></header><div className="professional-metric-grid compact">{group.codes.map((code) => { const metric = latest.get(code); return <article key={code} className={!metric ? "metric-missing" : ""}><div><span>{metric?.label ?? title(code)}</span><Status value={coverageStatus(metric)} /></div><strong>{metric ? formatSourceResearchMetric(metric) : "—"}</strong><small>{metric ? period(metric) : "No cached observation"}</small>{metric ? <em>{metric.provider}</em> : null}</article> })}</div></section>)}</div>
     <HistoryTable rows={research.metrics.filter((metric) => QUALITY_CODES.has(metric.code) || GROWTH_CODES.has(metric.code))} />
   </>
 }
@@ -125,8 +125,8 @@ export function OwnershipWorkspace({ research, snapshot }: { readonly research: 
   const rowByPeriodCode = new Map(rows.map((row) => [`${row.periodEnd}|${row.code}`, row]))
   return <><ResearchSectionScore snapshot={snapshot} section="OWNERSHIP" />
     <div className="workspace-heading"><div><p className="eyebrow">Ownership & governance</p><h2>Shareholding structure</h2><p>Current ownership is shown first; the retained quarterly series below reveals whether institutional participation is strengthening or weakening.</p></div><div className="workspace-stat"><strong>{periods.length}</strong><span>reporting periods</span></div></div>
-    <div className="ownership-snapshot">{OWNERSHIP_ORDER.map((code) => { const metric = latest.get(code); return <article key={code}><span>{metric?.label ?? title(code.replace("SHAREHOLDING_", ""))}</span><strong>{metric ? formatResearchMetric(metric) : "—"}</strong><small>{metric ? period(metric) : "Unavailable"}</small><Status value={coverageStatus(metric)} /></article> })}</div>
-    {periods.length ? <section className="professional-panel ownership-trend"><header><div><h3>Quarterly ownership trend</h3><p>One selected observation per metric and reporting period; repeated ingestion copies are hidden here and remain in Evidence.</p></div></header><div className="professional-table-wrap"><table className="professional-table ownership-table"><thead><tr><th>Quarter</th>{OWNERSHIP_ORDER.map((code) => <th key={code}>{latest.get(code)?.label ?? title(code.replace("SHAREHOLDING_", ""))}</th>)}</tr></thead><tbody>{periods.map((periodEnd) => <tr key={periodEnd}><td><strong>{date(periodEnd)}</strong></td>{OWNERSHIP_ORDER.map((code) => { const metric = rowByPeriodCode.get(`${periodEnd}|${code}`); return <td key={code}>{metric ? formatResearchMetric(metric) : "—"}</td> })}</tr>)}</tbody></table></div></section> : null}
+    <div className="ownership-snapshot">{OWNERSHIP_ORDER.map((code) => { const metric = latest.get(code); return <article key={code}><span>{metric?.label ?? title(code.replace("SHAREHOLDING_", ""))}</span><strong>{metric ? formatSourceResearchMetric(metric) : "—"}</strong><small>{metric ? period(metric) : "Unavailable"}</small><Status value={coverageStatus(metric)} /></article> })}</div>
+    {periods.length ? <section className="professional-panel ownership-trend"><header><div><h3>Quarterly ownership trend</h3><p>One selected observation per metric and reporting period; repeated ingestion copies are hidden here and remain in Evidence.</p></div></header><div className="professional-table-wrap"><table className="professional-table ownership-table"><thead><tr><th>Quarter</th>{OWNERSHIP_ORDER.map((code) => <th key={code}>{latest.get(code)?.label ?? title(code.replace("SHAREHOLDING_", ""))}</th>)}</tr></thead><tbody>{periods.map((periodEnd) => <tr key={periodEnd}><td><strong>{date(periodEnd)}</strong></td>{OWNERSHIP_ORDER.map((code) => { const metric = rowByPeriodCode.get(`${periodEnd}|${code}`); return <td key={code}>{metric ? formatSourceResearchMetric(metric) : "—"}</td> })}</tr>)}</tbody></table></div></section> : null}
   </>
 }
 

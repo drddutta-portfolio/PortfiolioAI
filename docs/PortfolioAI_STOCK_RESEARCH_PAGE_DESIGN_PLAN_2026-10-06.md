@@ -729,3 +729,22 @@ live evidence completion, invent unavailable hierarchy fields, approve new
 methodologies, or pass authenticated hosted visual acceptance. Those limits and
 UI-G3–UI-G5 remain explicit. No database migration or evidence/provider mutation
 is part of this completion.
+
+
+### UI-G3 safeguards implementation — 8 October 2026
+
+Gate 2 was reviewed, passed CI and merged through PR #109 at
+`1533ab292b82a44d278141583c75ee7c17042f0c`. Gate 3 is a separate UI safeguard
+change; it does not open a methodology, evidence-approval or V1 engine gate.
+
+| Sub-gate | Implementation and acceptance evidence |
+| --- | --- |
+| G3.1 canonical score eligibility | Header and cockpit consume one shared display-eligibility selector and the same existing Program B prerequisite presentation. Loading/errors, unresolved/review routes, unavailable methodology, pending/blocked execution or engine, stale/conflicting/missing/review evidence, preview/partial runs, missing run identity and non-finite/missing overall scores suppress retained numbers. Existing Pharma primary-assignment prerequisites apply to both surfaces. A legitimate qualified zero remains zero. No score is reconstructed or persisted. |
+| G3.2 provenance and independent ratings | Unit-safe source formatting extends to the detailed tabs and Evidence. Contradictory currency and invalid numeric values are disclosed; original source values remain inspectable in Evidence. The readiness strip uses actual canonical methodology version and evidence snapshot identity, separately from the score-run ID; missing lineage is unavailable rather than filled with a profile name or date. Ratings retain their independent source/date/status/reference and remain available when scoring is blocked. |
+| G3.3 owner/advisory separation | Saved role and owner targets remain separate from the read-only recommendation slots. Regression cases verify that blocked/retained scores do not populate a suggested role or weight range from owner settings. No new recommendation, sizing output, AI capability or owner-setting write is enabled. |
+
+These are display safeguards over existing shared repositories/hooks and
+canonical contracts. Legacy optional metadata retains its existing compatibility
+semantics; current canonical reads remain governed by the canonical scoring
+loader. UI-G4 and UI-G5, including authenticated hosted visual acceptance,
+remain outstanding. Gate 3 implementation is prepared for review, not yet merged.

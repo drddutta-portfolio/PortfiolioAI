@@ -17,10 +17,11 @@ import { PharmaSubprofileSummary } from "../features/research/PharmaSubprofileSu
 import { FinancialsWorkspace, OwnershipWorkspace, QualityGrowthWorkspace, ValuationWorkspace } from "../features/research/ResearchEvidenceWorkspace"
 import { CanonicalEvidenceReadinessPanel } from "../features/research/CanonicalEvidenceReadinessPanel"
 import { PositionDecisionControls } from "../features/research/PositionDecisionControls"
-import { latestByCode, metricLabel, coverageStatus, formatResearchMetric, formatSourceResearchMetric } from "../features/research/researchPolicy"
+import { latestByCode, metricLabel, coverageStatus, formatSourceResearchMetric } from "../features/research/researchPolicy"
 import { researchSnapshotGroups } from "../features/research/researchPresentationPolicy"
 import { researchProfileDisplayName } from "../features/research/researchProfileUiContract"
-import { buildProgramBR6ScoringPresentation } from "../features/research/programBR6Presentation"
+import { isQualifiedResearchScore } from "../features/research/researchScoreEligibility"
+import { buildProgramBR6ScoringPresentation, type ProgramBR6ScoringPresentation } from "../features/research/programBR6Presentation"
 import { ResearchScorecardPanel } from "../features/research/ResearchScorecardPanel"
 import type { ResearchEvidenceStatus, ResearchMetric, SecurityResearch } from "../features/research/types"
 import { ResearchTrackingHistory } from "../features/research/ResearchTrackingHistory"
@@ -35,6 +36,7 @@ const TABS = ["Overview", "Financials", "Quality & Growth", "Ownership", "Valuat
 type Tab = typeof TABS[number]
 
 type ScoringHook = ReturnType<typeof useSecurityScoring>
+type ResearchScoreContext = { readonly programB: ProgramBR6ScoringPresentation | null; readonly hasPharmaResolution: boolean }
 
 export function ResearchPage() {
   const { security } = useParams()
@@ -46,19 +48,22 @@ export function ResearchPage() {
     : null
   const research = useSecurityResearch(position?.securityId ?? null)
   const scoring = useSecurityScoring(position?.securityId ?? null, research.data?.sector ?? position?.sector ?? null, research.data?.industry ?? position?.industry ?? null, portfolio?.portfolio.id ?? null, position?.assetClass ?? null)
+  const pharmaResolution = usePharmaSubprofileResolution(position?.securityId ?? null)
+  const programB = scoring.data && position ? buildProgramBR6ScoringPresentation({ securityId: position.securityId, snapshot: scoring.data, pharmaResolution: pharmaResolution.data }) : null
+  const hasPharmaResolution = pharmaResolution.data?.status === "RESOLVED"
   const [tab, setTab] = useState<Tab>("Overview")
   if (portfolioLoading) return <Loading label="Loading cached portfolio context…" />
   if (portfolioError) return <div className="notice notice-error" role="alert">{portfolioError}</div>
   if (!position || !portfolio) return <ResearchNotFound />
   return <section className="research-page">
     <StockSectionNavigator activeTab={tab} onTabChange={setTab} hasSpecialist hasResearch />
-    <ResearchHeader position={position} research={research.data} scoring={scoring} currency={portfolio.portfolio.currency} portfolioId={portfolio.portfolio.id} actionAttention={actionAttention} onPositionSaved={reloadPortfolio} />
+    <ResearchHeader programB={programB} position={position} research={research.data} scoring={scoring} currency={portfolio.portfolio.currency} portfolioId={portfolio.portfolio.id} actionAttention={actionAttention} onPositionSaved={reloadPortfolio} />
     <div id="stock-refresh" tabIndex={-1}><CompleteResearchRefreshPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} symbol={position.symbol} profileCode={scoring.data?.profileCode} onCompleted={() => { research.reload(); scoring.reload() }} /></div>
     <ResearchTabs value={tab} onChange={setTab} />
     <div id="stock-workspace" tabIndex={-1}>
     {tab === "Evidence" ? <CanonicalEvidenceReadinessPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} assetClass={position.assetClass} /> : null}
     {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : !research.data ? <Empty title="Cached research unavailable" detail="No retained research was returned for this security." /> : null}
-    <TabPanel tab={tab} position={position} research={research.isLoading || research.error ? null : research.data} scoring={scoring} portfolioId={portfolio.portfolio.id} onTabChange={setTab} />
+    <TabPanel programB={programB} hasPharmaResolution={hasPharmaResolution} tab={tab} position={position} research={research.isLoading || research.error ? null : research.data} scoring={scoring} portfolioId={portfolio.portfolio.id} onTabChange={setTab} />
     </div>
   </section>
 }
@@ -72,7 +77,7 @@ export function ResearchIndexPage() {
   return <section className="research-page"><div className="portfolio-hero compact-hero"><div><p className="eyebrow">Cached evidence library</p><h1>Research</h1><p>Open a current holding to inspect its trusted cached research evidence. Browsing this workspace never refreshes a provider.</p></div></div><section className="panel"><label className="research-search"><span>Find a security</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Ticker or company" /></label><div className="research-directory">{positions.map((position) => <Link key={position.securityId} to={`/app/research/${position.securityId}`}><span><strong>{position.symbol}</strong>{position.company}</span><small>{position.exchange} · {position.assetClass} · {position.sector ?? "Sector awaiting canonical classification"}</small></Link>)}</div>{!positions.length ? <Empty title="No matching securities" detail="Adjust the search to find a current holding." /> : null}</section></section>
 }
 
-function ResearchHeader({ position, research, scoring, currency, portfolioId, actionAttention, onPositionSaved }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly currency: string; readonly portfolioId: string; readonly actionAttention: ProgramCR10AttentionView | null; readonly onPositionSaved: () => void }) {
+function ResearchHeader({ programB, position, research, scoring, currency, portfolioId, actionAttention, onPositionSaved }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly currency: string; readonly portfolioId: string; readonly actionAttention: ProgramCR10AttentionView | null; readonly onPositionSaved: () => void; readonly programB: ProgramBR6ScoringPresentation | null }) {
   const marketCap = latestByCode(research?.metrics ?? []).get("MARKET_CAP_PROVIDER_RAW")
   const brokers = position.brokerExposure ?? []
   const sector = research?.sector ?? position.sector
@@ -99,7 +104,7 @@ function ResearchHeader({ position, research, scoring, currency, portfolioId, ac
         </div>
         <div className="research-decision-body">
           <PositionDecisionControls key={`${portfolioId}:${position.securityId}`} portfolioId={portfolioId} securityId={position.securityId} currentRole={position.role} currentWeight={position.portfolioWeightPercent} fallbackTargetWeight={position.settings.targetWeight} fallbackInvestmentHorizon={position.settings.investmentHorizon} currency={currency} onSaved={onPositionSaved} />
-          <ResearchDecisionState position={position} scoring={scoring} attention={actionAttention} />
+          <ResearchDecisionState programB={programB} position={position} scoring={scoring} attention={actionAttention} />
         </div>
       </section>
       <section className="research-interpretation" aria-label="AI Interpretation"><div><p className="eyebrow">AI Interpretation</p><h3>Explain a qualified recommendation</h3><p>Not ready: a qualified recommendation and authorized interpretation capability are required.</p></div><button type="button" className="button button-secondary" disabled>Generate AI interpretation</button></section>
@@ -108,10 +113,10 @@ function ResearchHeader({ position, research, scoring, currency, portfolioId, ac
   </header>
 }
 
-function ResearchDecisionState({ position, scoring, attention }: { readonly position: PortfolioPosition; readonly scoring: ScoringHook; readonly attention: ProgramCR10AttentionView | null }) {
+function ResearchDecisionState({ programB, position, scoring, attention }: { readonly programB: ProgramBR6ScoringPresentation | null; readonly position: PortfolioPosition; readonly scoring: ScoringHook; readonly attention: ProgramCR10AttentionView | null }) {
   const snapshot = scoring.data
   const profileDisplayName = researchProfileDisplayName(snapshot)
-  const currentScore = snapshot?.runState === "COMPLETE" && snapshot.scoreRunId && (!snapshot.canonicalEvidenceState || snapshot.canonicalEvidenceState === "FRESH") && (!snapshot.methodologyState || snapshot.methodologyState === "AVAILABLE") && !snapshot.previewMode && snapshot.scoringExecutionState !== "BLOCKED" && snapshot.overallScore != null ? snapshot.overallScore.toFixed(0) : null
+  const currentScore = isQualifiedResearchScore(snapshot, scoring.isLoading, scoring.error, programB) ? snapshot!.overallScore!.toFixed(0) : null
   const evidence = snapshot?.evidenceCoverage == null ? "Unavailable" : `${Math.round(snapshot.evidenceCoverage * 100)}%`
   const readiness = snapshot?.scoreReadyCoverage == null ? "Unavailable" : `${Math.round(snapshot.scoreReadyCoverage * 100)}%`
   const advisoryState = attention?.stateLabel ?? "Unavailable"
@@ -169,10 +174,10 @@ function ResearchTabs({ value, onChange }: { readonly value: Tab; readonly onCha
   return <div className="research-tabs" role="tablist" aria-label="Research sections">{TABS.map((tab, index) => <button id={`research-tab-${index}`} key={tab} type="button" role="tab" aria-selected={value === tab} aria-controls="research-panel" tabIndex={value === tab ? 0 : -1} onClick={() => onChange(tab)} onKeyDown={(event) => activate(event, index)}>{tab}</button>)}</div>
 }
 
-function TabPanel({ tab, position, research, scoring, portfolioId, onTabChange }: { readonly tab: Tab; readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly portfolioId: string; readonly onTabChange: (tab: Tab) => void }) {
+function TabPanel({ programB, hasPharmaResolution, tab, position, research, scoring, portfolioId, onTabChange }: { readonly tab: Tab; readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly portfolioId: string; readonly onTabChange: (tab: Tab) => void } & ResearchScoreContext) {
   return <div id="research-panel" role="tabpanel" tabIndex={0} aria-labelledby={`research-tab-${TABS.indexOf(tab)}`} className="research-panel">
     {tab !== "Overview" && !research ? <Empty title={`${tab} unavailable`} detail="Retained research must finish loading successfully before these records can be displayed." /> : null}
-    {tab === "Overview" ? <Overview portfolioId={portfolioId} position={position} research={research} scoring={scoring} onViewEvidence={() => onTabChange("Evidence")} /> : null}
+    {tab === "Overview" ? <Overview programB={programB} hasPharmaResolution={hasPharmaResolution} portfolioId={portfolioId} position={position} research={research} scoring={scoring} onViewEvidence={() => onTabChange("Evidence")} /> : null}
     {tab === "Financials" && research ? <FinancialsWorkspace research={research} snapshot={scoring.data} /> : null}
     {tab === "Quality & Growth" && research ? <QualityGrowthWorkspace research={research} snapshot={scoring.data} /> : null}
     {tab === "Ownership" && research ? <OwnershipWorkspace research={research} snapshot={scoring.data} /> : null}
@@ -182,9 +187,8 @@ function TabPanel({ tab, position, research, scoring, portfolioId, onTabChange }
   </div>
 }
 
-function Overview({ position, research, scoring, portfolioId, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly portfolioId: string; readonly onViewEvidence: () => void }) {
+function Overview({ programB, hasPharmaResolution, position, research, scoring, portfolioId, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly portfolioId: string; readonly onViewEvidence: () => void } & ResearchScoreContext) {
   const ratings = useExternalRatings(position.securityId)
-  const pharmaResolution = usePharmaSubprofileResolution(position.securityId)
   const metrics = latestByCode(research?.metrics ?? [])
   const profileDisplayName = researchProfileDisplayName(scoring.data)
   const groups = researchSnapshotGroups(scoring.data?.profileCode)
@@ -193,9 +197,6 @@ function Overview({ position, research, scoring, portfolioId, onViewEvidence }: 
   const reviewRequired = research?.documents.filter((document) => document.status === "REVIEW_REQUIRED").length
   const stale = research?.metrics.filter((metric) => metric.status === "STALE").length
   const coverage = research?.metrics.length ? "Partial" : "Unavailable"
-  const programB = scoring.data
-    ? buildProgramBR6ScoringPresentation({ securityId: position.securityId, snapshot: scoring.data, pharmaResolution: pharmaResolution.data })
-    : null
   return <>
     <SectionHeading title="Research at a glance" detail="Designed to give investment clarity first, with the detailed tabs preserving the evidence behind every conclusion." />
     <section className="context-strip" aria-label="Research and portfolio context"><div><span>Business / research context</span><strong>{profileDisplayName}</strong><small>{research?.industry ?? position.industry ?? (scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed profile · industry pending" : "Industry unavailable")}</small></div><div><span>Your portfolio role</span><strong>{position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</strong><small>{formatPercent(position.portfolioWeightPercent)} current weight · role remains your choice</small></div><div><span>Classification</span><strong>{research?.sector ?? position.sector ?? "Sector unavailable"}</strong><small>{research?.industry ?? position.industry ?? "Industry unavailable"} · {research?.marketCapCategory ? titleCase(research?.marketCapCategory) : "Cap class unavailable"}</small></div></section>
@@ -205,7 +206,7 @@ function Overview({ position, research, scoring, portfolioId, onViewEvidence }: 
     <div id="stock-snapshots" tabIndex={-1} className="research-cockpit">{groups.map((group) => <section className="cockpit-panel" key={group.title}><h2>{group.title}</h2>{group.title.includes("Ownership") ? <p className="assessment-note">Mutual funds may be included in DII holdings; these categories are not additive.</p> : null}<div className="snapshot-list">{!group.codes.length ? <p className="assessment-note">Presentation mapping unavailable for this profile. Its applicable retained results are in the stock-specific workspace and Evidence.</p> : null}{group.codes.map((code) => { const metric = metrics.get(code); return <div key={code}><span>{metric?.label ?? metricLabelForCode(code)}</span><strong>{formatSourceResearchMetric(metric)}</strong><small>{metric ? `${period(metric)} · ${metric.scope ?? "Scope unavailable"} · ${metric.unit ?? "Unit unavailable"}` : "Unavailable"}</small><span className={`evidence-badge evidence-${coverageStatus(metric).toLocaleLowerCase()}`}>Source: {coverageStatus(metric) === "VERIFIED" ? "Retained available" : coverageStatus(metric).replaceAll("_", " ")}</span></div> })}</div></section>)}</div>
     <section id="stock-health" tabIndex={-1} className="research-health"><div><p className="eyebrow">Research health</p><h2>{coverage} coverage</h2><p>{research ? research.metrics.length : "Unavailable"} cached observations · {stale ? "mixed freshness" : research?.metrics.length ? "current cache" : "freshness unavailable"}</p></div><dl><div><dt>Conflicts</dt><dd>{conflicts ?? "Unavailable"}</dd></div><div><dt>Review required</dt><dd>{reviewRequired ?? "Unavailable"}</dd></div><div><dt>Provisional</dt><dd>{provisional ?? "Unavailable"}</dd></div></dl><button type="button" className="button button-secondary" onClick={onViewEvidence}>View Evidence</button></section>
     <div id="stock-specialist" tabIndex={-1}><ProfileResearchBlocks portfolioId={portfolioId} securityId={position.securityId} assetClass={position.assetClass} onViewEvidence={onViewEvidence} />
-    {research && (scoring.data?.profileCode === "PHARMA_V1" || pharmaResolution.data?.status === "RESOLVED") ? <PharmaResearchWorkspacePanel securityId={position.securityId} symbol={position.symbol} research={research} /> : null}</div>
+    {research && (scoring.data?.profileCode === "PHARMA_V1" || hasPharmaResolution) ? <PharmaResearchWorkspacePanel securityId={position.securityId} symbol={position.symbol} research={research} /> : null}</div>
   </>
 }
 
@@ -221,7 +222,7 @@ function Evidence({ research }: { readonly research: SecurityResearch }) {
 
 function MetricTable({ rows, empty, detailed = false }: { readonly rows: readonly ResearchMetric[]; readonly empty: string; readonly detailed?: boolean }) {
   if (!rows.length) return <Empty title="Unavailable" detail={empty} />
-  return <div className="research-table-wrap" tabIndex={0} aria-label="Scrollable research evidence"><table className="research-table"><thead><tr><th>Metric</th><th>Value</th><th>Period</th><th>Status</th>{detailed ? <><th>Provider / field</th><th>Scope / unit</th><th>Retrieved / freshness</th><th>Selection</th></> : <th>Source</th>}</tr></thead><tbody>{rows.map((metric) => <tr key={metric.id}><td><strong>{metric.label}</strong><small>{metric.code}</small></td><td>{formatResearchMetric(metric)}</td><td>{period(metric)}</td><td><Status value={metric.status} /></td>{detailed ? <><td>{metric.provider}<small>{metric.sourceField ?? "Source field unavailable"}</small></td><td>{metric.scope ?? "Scope unavailable"}<small>{[metric.unit, metric.currency].filter(Boolean).join(" · ") || "Unit unavailable"}</small></td><td>{dateTime(metric.retrievedAt)}<small>Fresh through {dateTime(metric.freshUntil)}</small></td><td>{metric.selected ? "Selected" : "Competing / unselected"}</td></> : <td>{metric.provider}<small>{dateTime(metric.retrievedAt)}</small></td>}</tr>)}</tbody></table></div>
+  return <div className="research-table-wrap" tabIndex={0} aria-label="Scrollable research evidence"><table className="research-table"><thead><tr><th>Metric</th><th>Value</th><th>Period</th><th>Status</th>{detailed ? <><th>Provider / field</th><th>Scope / unit</th><th>Retrieved / freshness</th><th>Selection</th></> : <th>Source</th>}</tr></thead><tbody>{rows.map((metric) => <tr key={metric.id}><td><strong>{metric.label}</strong><small>{metric.code}</small></td><td>{formatSourceResearchMetric(metric)}<details><summary>Original source value</summary><p>{metric.value ?? "Unavailable"}</p></details></td><td>{period(metric)}</td><td><Status value={metric.status} /></td>{detailed ? <><td>{metric.provider}<small>{metric.sourceField ?? "Source field unavailable"}</small></td><td>{metric.scope ?? "Scope unavailable"}<small>{[metric.unit, metric.currency].filter(Boolean).join(" · ") || "Unit unavailable"}</small></td><td>{dateTime(metric.retrievedAt)}<small>Fresh through {dateTime(metric.freshUntil)}</small></td><td>{metric.selected ? "Selected" : "Competing / unselected"}</td></> : <td>{metric.provider}<small>{dateTime(metric.retrievedAt)}</small></td>}</tr>)}</tbody></table></div>
 }
 
 function Status({ value }: { readonly value: ResearchEvidenceStatus }) { return <span className={`evidence-badge evidence-${value.toLocaleLowerCase()}`}>{value.replaceAll("_", " ")}</span> }

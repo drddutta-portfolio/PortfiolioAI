@@ -36,7 +36,7 @@ describe("ResearchScorecardPanel shared score states", () => {
   afterEach(cleanup)
 
   it("retains numeric scored cards for BANK_NBFC", () => {
-    render(<ResearchScorecardPanel snapshot={{ ...snapshot("BANK_NBFC", [dimension("QUALITY", 87, .81)]), runState: "COMPLETE", scoreRunId: "run-1" }} isLoading={false} error={null} />)
+    render(<ResearchScorecardPanel snapshot={{ ...snapshot("BANK_NBFC", [dimension("QUALITY", 87, .81)]), runState: "COMPLETE", scoreRunId: "run-1", overallScore: 87 }} isLoading={false} error={null} />)
     const quality = screen.getByText("Quality").closest("summary")
     expect(quality).not.toBeNull()
     expect(within(quality!).getByText("87")).toBeInTheDocument()
@@ -138,6 +138,7 @@ describe("ResearchScorecardPanel shared score states", () => {
     render(<ResearchScorecardPanel snapshot={null} isLoading={false} error={null} retainedRatings={[{ id: "rating", agencyCode: "Agency", instrumentType: "BOND", instrumentDescription: "Rated bond", ratingSymbol: "AAA", outlook: "STABLE", ratingAction: null, ratingDate: "2026-06-30", sourceUrl: "https://example.com/rating", retrievedAt: "2026-07-01", freshUntil: "2026-08-01", evidenceStatus: "REVIEW_REQUIRED" }]} />)
     expect(screen.getAllByText("AAA / Stable")).toHaveLength(2)
     expect(screen.getByText(/Source status: REVIEW_REQUIRED/)).toBeInTheDocument()
+    expect(screen.getByText("Source reference: https://example.com/rating")).toBeInTheDocument()
     expect(screen.queryByText("Why this score?")).not.toBeInTheDocument()
   })
 

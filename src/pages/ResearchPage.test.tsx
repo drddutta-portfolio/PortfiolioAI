@@ -23,8 +23,9 @@ const revenue = { ...metric, id: "revenue", code: "REVENUE_TTM", label: "Revenue
 const research: SecurityResearch = { securityId: "s1", companyName: "Bharat Electronics Limited", sector: "Industrials", industry: "Defence", marketCapCategory: null, freshUntil: "2099-09-09T00:00:00Z", state: "VERIFIED", metrics: [metric, ownership, roe, revenue], documents: [{ id: "d1", type: "ANNUAL_REPORT", title: "Annual Report appearance", publishedAt: "2026-08-01", periodStart: null, periodEnd: "2026-03-31", periodType: "YEAR", provider: "TRENDLYNE_MCP", retrievedAt: "2026-09-09T00:00:00Z", status: "REVIEW_REQUIRED", externalReference: null }] }
 
 vi.mock("../features/portfolio/usePortfolioView", () => ({ usePortfolioView: () => ({ portfolio, error: null, isLoading: false }) }))
-const scoringSnapshot: SecurityScoringSnapshot = { profileCode: "BANK_NBFC", profileName: "Bank fixture", profileSource: "REVIEWED_ASSIGNMENT", modelName: "test", modelStatus: "DRAFT", runState: null, overallScore: null, evidenceCoverage: null, scoreReadyCoverage: null, evidenceConfidence: null, asOfDate: null, dimensions: [], ratings: [] }
-vi.mock("../features/research/useSecurityScoring", () => ({ useSecurityScoring: () => ({ data: scoringSnapshot, isLoading: false, error: null }) }))
+const initialScoringSnapshot: SecurityScoringSnapshot = { profileCode: "BANK_NBFC", profileName: "Bank fixture", profileSource: "REVIEWED_ASSIGNMENT", modelName: "test", modelStatus: "DRAFT", runState: null, overallScore: null, evidenceCoverage: null, scoreReadyCoverage: null, evidenceConfidence: null, asOfDate: null, dimensions: [], ratings: [] }
+const scoringState = { data: initialScoringSnapshot }
+vi.mock("../features/research/useSecurityScoring", () => ({ useSecurityScoring: () => ({ data: scoringState.data, isLoading: false, error: null }) }))
 const specialistState = { resolved: false }
 vi.mock("../features/research/usePharmaSubprofileResolution", () => ({ usePharmaSubprofileResolution: () => ({ data: specialistState.resolved ? { status: "RESOLVED" } : null }) }))
 vi.mock("../features/research/PharmaResearchWorkspacePanel", () => ({ PharmaResearchWorkspacePanel: () => <p>Retained pharmaceutical workspace</p> }))
@@ -37,7 +38,22 @@ function renderPage(path = "/app/research/s1") {
 }
 
 describe("ResearchPage", () => {
-  afterEach(() => { cleanup(); providerCall.mockReset(); specialistState.resolved = false; Object.assign(researchState, { data: research, error: null, isLoading: false }) })
+  afterEach(() => { cleanup(); providerCall.mockReset(); scoringState.data = initialScoringSnapshot; specialistState.resolved = false; Object.assign(researchState, { data: research, error: null, isLoading: false }) })
+  it.each(["PENDING_ADAPTER", "BLOCKED"] as const)("keeps the header and cockpit consistent when execution is %s", state => {
+    scoringState.data = { ...initialScoringSnapshot, runState: "COMPLETE", scoreRunId: "old-run", overallScore: 97, methodologyState: "AVAILABLE", scoringExecutionState: state }
+    renderPage()
+    expect(document.querySelector(".portfolioai-primary-state")).toHaveTextContent("Canonical scoreNot ready")
+    expect(screen.queryByText("97")).not.toBeInTheDocument()
+    expect(document.querySelector(".portfolioai-advisory-slots")).toHaveTextContent("Suggested roleNot ready")
+    expect(document.querySelector(".portfolioai-advisory-slots")).toHaveTextContent("Suggested weight rangeNot available")
+    expect(document.getElementById("stock-insights")).toHaveTextContent("Your saved portfolio role")
+  })
+  it("suppresses the same retained Pharma score in the header and cockpit without a reviewed primary assignment", () => {
+    scoringState.data = { ...initialScoringSnapshot, profileCode: "PHARMA_V1", runState: "COMPLETE", scoreRunId: "old-run", overallScore: 97, methodologyState: "AVAILABLE", scoringExecutionState: "AVAILABLE" }
+    renderPage()
+    expect(document.querySelector(".portfolioai-primary-state")).toHaveTextContent("Canonical scoreNot ready")
+    expect(screen.queryByText("97")).not.toBeInTheDocument()
+  })
   it.each(["loading", "error", "empty"])("preserves overview regions when research is %s without fabricated counts", (state) => {
     Object.assign(researchState, { data: null, isLoading: state === "loading", error: state === "error" ? "Cache read failed" : null })
     renderPage()

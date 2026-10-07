@@ -52,6 +52,17 @@ function resolved(primary: PharmaSubprofileCode, assignmentVersion = 1): Extract
 }
 
 describe("Program B canonical R6 scoring presentation", () => {
+  it("keeps evidence snapshot identity and methodology version distinct from the score run", () => {
+    const canonicalRoute = { profileCode: "BANK", subprofileCode: null, methodologyAuthority: "bank-authority", methodologyVersion: "bank-v2", assignmentAuthority: "approved-assignment", assignmentVersion: "v1", assignmentId: "a1", snapshotId: "evidence-snapshot-1", asOfDate: "2026-10-08" }
+    const result = buildProgramBR6ScoringPresentation({ securityId: "s1", snapshot: snapshot({ profileCode: "BANK_NBFC", canonicalRoute }), pharmaResolution: null })
+    expect(result.evidenceSnapshotIdentity).toBe("evidence-snapshot-1")
+    expect(result.methodologyVersion).toBe("bank-v2")
+    expect(result.scoreRunId).toBe("score-run-1")
+    expect(result.asOfDate).toBe("2026-10-08")
+    const legacy = buildProgramBR6ScoringPresentation({ securityId: "s1", snapshot: snapshot({ profileCode: "BANK_NBFC" }), pharmaResolution: null })
+    expect(legacy.evidenceSnapshotIdentity).toBeNull()
+    expect(legacy.methodologyVersion).toBeNull()
+  })
   it.each([
     ["TORNTPHARM", "DOMESTIC_FORMULATIONS"],
     ["ALIVUS", "API_BULK_DRUGS"],

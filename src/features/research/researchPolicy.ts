@@ -142,6 +142,10 @@ export function formatSourceResearchMetric(metric: ResearchMetric | undefined) {
   if (!metric?.value) return "Unavailable"
   const unit = metric.unit
   if (!unit || unit === "UNKNOWN") return "Unit unavailable"
-  if (unit.includes("PERCENT") || ["INR_CRORE", "INR_PER_SHARE", "INR", "RATIO"].includes(unit)) return formatResearchMetric(metric)
+  if (["INR_CRORE", "INR_PER_SHARE", "INR"].includes(unit) && metric.currency && metric.currency !== "INR") return "Unit / currency conflict"
+  if (unit.includes("PERCENT") || ["INR_CRORE", "INR_PER_SHARE", "INR", "RATIO"].includes(unit)) {
+    if (!metric.value.trim() || !Number.isFinite(Number(metric.value))) return "Value unavailable"
+    return formatResearchMetric(metric)
+  }
   return "Unit / currency unproven"
 }
