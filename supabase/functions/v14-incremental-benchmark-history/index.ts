@@ -7,11 +7,19 @@ const DEV_REF="lrgpjimipfkyoqbpsqzz"
 const PORTFOLIO_ID="6193a4aa-3235-4057-bddc-209fcf443fc2"
 const ACTION="V1_4_INCREMENTAL_BENCHMARK_HISTORY_BATCH"
 const CONFIRMATION="OWNER_APPROVED_V1_4_INCREMENTAL_BENCHMARK_HISTORY_2026_10_07"
-const CODES=[
+const APPROVED_CODES=[
  "NIFTY_500","NIFTY_AUTO","NIFTY_BANK","NIFTY_FINANCIAL_SERVICES","NIFTY_FMCG",
  "NIFTY_INFRASTRUCTURE","NIFTY_IT","NIFTY_METAL","NIFTY_PHARMA","NIFTY_REALTY"
 ] as const
-const SENTINEL="V1_4_EXISTING_ANGEL_BENCHMARKS:"+CODES.join(",")
+type ApprovedCode=typeof APPROVED_CODES[number]
+const requestedCodes=(value:unknown):ApprovedCode[]|null=>{
+ if(value===undefined)return[...APPROVED_CODES]
+ if(!Array.isArray(value)||value.length<1||value.length>APPROVED_CODES.length||value.some(x=>typeof x!=="string"))return null
+ const requested=value as string[]
+ if(new Set(requested).size!==requested.length||requested.some(x=>!(APPROVED_CODES as readonly string[]).includes(x)))return null
+ const set=new Set(requested)
+ return APPROVED_CODES.filter(code=>set.has(code))
+}
 const FROM="2026-09-29",TO="2026-10-07"
 const reply=(s:number,b:unknown)=>new Response(JSON.stringify(b),{status:s,headers:{"content-type":"application/json","cache-control":"no-store"}})
 const day=(iso:string)=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(iso))
@@ -25,17 +33,20 @@ Deno.serve(async req=>{
  try{
   const body=await req.json() as Record<string,unknown>
   if(body.action!==ACTION||body.confirmation!==CONFIRMATION||body.portfolioId!==PORTFOLIO_ID)return reply(409,{code:"V1_4_BENCHMARK_BATCH_SCOPE_MISMATCH"})
+  const codes=requestedCodes(body.codes)
+  if(!codes)return reply(400,{code:"V1_4_BENCHMARK_CODE_SUBSET_INVALID"})
+  const sentinel="V1_4_EXISTING_ANGEL_BENCHMARKS:"+codes.join(",")
   const admin=createClient(url,key,{auth:{persistSession:false}})
-  const grant=await consumeP4ExecutionGrant(admin,{grantId:body.grantId,action:ACTION,portfolioId:PORTFOLIO_ID,securityId:SENTINEL})
+  const grant=await consumeP4ExecutionGrant(admin,{grantId:body.grantId,action:ACTION,portfolioId:PORTFOLIO_ID,securityId:sentinel})
   if(!grant.ok)return reply(401,{code:grant.code,error:grant.message})
 
   const maps=await admin.from("market_benchmarks")
    .select("code,provider_code,provider_instrument_id,exchange,trading_symbol,mapping_status,verified_at")
-   .in("code",[...CODES]).eq("provider_code","ANGEL_ONE").eq("mapping_status","VERIFIED")
+   .in("code",codes).eq("provider_code","ANGEL_ONE").eq("mapping_status","VERIFIED")
   if(maps.error)throw maps.error
-  if((maps.data??[]).length!==CODES.length)return reply(409,{code:"VERIFIED_BENCHMARK_MAPPING_SET_INCOMPLETE",found:(maps.data??[]).length})
+  if((maps.data??[]).length!==codes.length)return reply(409,{code:"VERIFIED_BENCHMARK_MAPPING_SET_INCOMPLETE",found:(maps.data??[]).length,requested:codes.length})
   const byCode=new Map((maps.data??[]).map(x=>[String(x.code),x]))
-  if(CODES.some(code=>!byCode.get(code)?.provider_instrument_id||!byCode.get(code)?.trading_symbol||!byCode.get(code)?.exchange))
+  if(codes.some(code=>!byCode.get(code)?.provider_instrument_id||!byCode.get(code)?.trading_symbol||!byCode.get(code)?.exchange))
     return reply(409,{code:"VERIFIED_BENCHMARK_MAPPING_FIELDS_INCOMPLETE"})
 
   const anchor=await admin.from("current_holdings").select("security_id").eq("portfolio_id",PORTFOLIO_ID).gt("current_quantity",0).limit(1).single()
@@ -43,9 +54,9 @@ Deno.serve(async req=>{
 
   const run=await admin.from("data_ingestion_runs").insert({
     source_code:"ANGEL_ONE",operation:"V1_4_INCREMENTAL_BENCHMARK_HISTORY",portfolio_id:PORTFOLIO_ID,status:"RUNNING",
-    requested_count:CODES.length,estimated_call_count:CODES.length+1,reserved_call_count:CODES.length+1,
+    requested_count:codes.length,estimated_call_count:codes.length+1,reserved_call_count:codes.length+1,
     attempted_call_count:0,accepted_count:0,orchestration_type:"V1_4_INCREMENTAL_BENCHMARK_HISTORY",trigger_source:"OWNER",
-    metadata:{codes:[...CODES],from:FROM,to:TO,retry_policy:"ZERO",grant_id:String(body.grantId)}
+    metadata:{codes,from:FROM,to:TO,retry_policy:"ZERO",grant_id:String(body.grantId)}
   }).select("id").single()
   if(run.error)throw run.error
 
@@ -58,7 +69,7 @@ Deno.serve(async req=>{
   const results:Array<Record<string,unknown>>=[]
   let persistedRows=0,acceptedRows=0,failed=0
 
-  for(const code of CODES){
+  for(const code of codes){
    const m=byCode.get(code)!
    const attemptedAt=new Date().toISOString()
    let outcome="UNKNOWN",safeErrorCode:string|null=null,rowsStored=0
@@ -102,7 +113,7 @@ Deno.serve(async req=>{
    attempted_call_count:transport.authenticationRequests+transport.historyRequests,
    fetched_count:transport.successfulAuthenticationResponses+transport.successfulHistoryResponses,
    accepted_count:acceptedRows,failed_count:failed,error_summary:failed?"PARTIAL_BENCHMARK_HISTORY_FAILURE":null,
-   metadata:{codes:[...CODES],from:FROM,to:TO,retry_policy:"ZERO",transport,persistedRows,results}
+   metadata:{codes,from:FROM,to:TO,retry_policy:"ZERO",transport,persistedRows,results}
   }).eq("id",run.data.id)
 
   return reply(failed?207:200,{mode:ACTION,runId:run.data.id,transport,acceptedRows,persistedRows,failed,results})
