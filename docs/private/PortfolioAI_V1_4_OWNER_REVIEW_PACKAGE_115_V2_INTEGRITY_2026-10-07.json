@@ -1,0 +1,58 @@
+{
+  "package_identifier": "PAI-V1-4-115-OWNER-REVIEW-V2-2026-10-07",
+  "v1_authoritative_json_sha256": "9821e5294a87e3a5cc3ed9af0e5acd423c67936d985f92afe9a0a6a18f6a374f",
+  "frozen_111_sha256": "79f551558333adc1f37d6a26298d8088ee02db3161f03c6d6e59f9a19a93fc27",
+  "files": {
+    "authoritative_json": {
+      "path": "docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V2_2026-10-07.json",
+      "sha256": "a9240f89d89ac948ae15f5d3a91d4187688b9a8a6dbb53b1cc38ea2823fdd67f",
+      "blob_sha": "cfb561cf690ac63b1abecdc55f629084c73ac1fe",
+      "items": 638
+    },
+    "csv": {
+      "path": "docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V2_2026-10-07.csv",
+      "sha256": "579a53d1c2fcd680dd2d8661c5ca08dfea47aa3d0f6321c8b52fbeee1c0a3f9c",
+      "blob_sha": "604e080a821d0b3c26c31733ce1110b6c7fa3043",
+      "items": 638
+    },
+    "markdown": {
+      "path": "docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V2_2026-10-07.md",
+      "sha256": "be3a6afab67b9e205cec7e885b0a4b3b733d3d39d87490b3266f42505f34ba19",
+      "blob_sha": "98f225dfd5474f4f3762ccca892de4714fe38d7a"
+    },
+    "dry_run": {
+      "path": "docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V2_DRY_RUN_2026-10-07.json",
+      "sha256": "dbc1f22ab7c2caa6b7919e8bc7896881558a37dd29532b1b0d0c11dd43207767",
+      "blob_sha": "7b0cbb8a6316002b10d7f9509c6110e71bbd958d"
+    }
+  },
+  "cross_file_checks": {
+    "json_item_count": 638,
+    "csv_item_count": 638,
+    "item_count_match": true,
+    "decisions": {
+      "ACCEPT": 0,
+      "REJECT": 0,
+      "DEFER": 638
+    },
+    "review_dependent_stocks": 114,
+    "fixed_execution_population": 115
+  },
+  "remediation": {
+    "angel_history_run_id": "72524602-bf82-4f03-8e46-cb690604cfcc",
+    "symbols": [
+      "CHOLAFIN",
+      "GESHIP",
+      "HEXT",
+      "JIOFIN"
+    ],
+    "distinct_sessions_each": 276,
+    "authentication_requests": 1,
+    "history_requests": 4,
+    "successful_responses": 5,
+    "retries": 0
+  },
+  "owner_review_rows_persisted": 0,
+  "no_owner_approval_fabricated": true,
+  "v1_5_authorized": false
+}
