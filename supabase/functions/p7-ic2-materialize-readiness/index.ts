@@ -216,7 +216,15 @@ async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit
  const ids=securities.map(row=>row.id)
  const totalEquities=securitiesResult.data?.length??0
  if(!ids.length)return{portfolioId,portfolioOwnerId,generatedAt:new Date().toISOString(),totalEquities,securities,observations:[],definitions:[],sourceRecords:[],histories:[],benchmarks:[],reviewFacts:{reviews:[],reviewSources:[],researchDocuments:[],documentSources:[]},historyProofs:new Map()}
- const benchmarkResult=await admin.from("market_benchmarks").select("code,mapping_status,provider_code,provider_instrument_id,verified_at")
+ const coverageById=new Map((coverage as {rows:CoverageRow[]}).rows.map(row=>[row.securityId,row]))
+ const requiredBenchmarkCodes=[...new Set(securities.flatMap(security=>{
+  const assignment=coverageById.get(security.id)
+  if(!assignment||assignment.ic1State!=="RESOLVED"||!assignment.profileCode)return[]
+  try{return [...(p7IcProfileContract(assignment.profileCode).benchmarkAuthority??[])].filter(code=>code.startsWith("NIFTY_"))}catch{return[]}
+ }))]
+ const benchmarkResult=requiredBenchmarkCodes.length
+  ?await admin.from("market_benchmarks").select("code,mapping_status,provider_code,provider_instrument_id,verified_at").in("code",requiredBenchmarkCodes)
+  :{data:[],error:null}
  if(benchmarkResult.error)throw benchmarkResult.error
  const [observations,definitionsResult,sourceRecordsResult,histories,benchmarkHistory,reviewFacts,historyProofs]=await Promise.all([
   loadObservations(admin,ids,sourceCutoffAt),
