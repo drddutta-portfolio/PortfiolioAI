@@ -1,9 +1,24 @@
+## Stock research UI-G5 acceptance — 7 October 2026 (UTC)
+
+G5.1's integrated representative profile/state suite passes 182 tests across 11
+files. G5.2 remains blocked by Vercel authentication on the hosted Development
+URL; no stock-page visual acceptance is claimed. G5.3 records **HOLD / NOT FINAL**
+until authenticated hosted review passes. The shared shell is already implemented;
+this hold concerns final acceptance, not a claim that existing pages are disabled.
+
+See [the Gate 5 acceptance report](PortfolioAI_STOCK_RESEARCH_UI_GATE_5_ACCEPTANCE_2026-10-07.md)
+for the matrix, exact Gate 4 deployment evidence and hosted-only verifier. No
+methodology/evidence approval, provider execution, database change, Production
+promotion or V1 gate disposition is implied by this UI work.
+
 ## Stock research UI-G4 interaction and layout — 7 October 2026 (UTC)
 
-**UI-G4 implementation prepared for review on `research-g4-interaction-layout`.**
+**UI-G4 reviewed and merged into `PortfolioAI-Development` through PR #111.**
 Gate 3 PR #110 is merged into Development at
 `f59b5f93675150f496b8d24d1cbafda2867796b2`; the matching Vercel deployment was
-verified READY. This Gate 4 record does not claim its own merge or deployment.
+verified READY. Gate 4 CI passed at `47b90ccaafa6f70fe55b90affeab042883cff53f`;
+merge `211767ad439d30f3a492885d40f2cc72279fe9f1` has verified READY deployment
+`dpl_EgJnXQutWCSAbEBJ6Y8SCdtnCWog`.
 
 - One shared destination contract now gives all seven tabs distinct bookmarkable
   anchors. Opening a bookmark or changing the hash restores its intended tab
