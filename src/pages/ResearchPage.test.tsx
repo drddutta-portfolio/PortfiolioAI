@@ -7,7 +7,15 @@ import type { SecurityResearch } from "../features/research/types"
 import { formatResearchMetric } from "../features/research/researchPolicy"
 import { ResearchPage } from "./ResearchPage"
 
-const providerCall = vi.fn()
+const providerCall = vi.hoisted(() => vi.fn())
+// No unit test may initialise the live client or make an unmocked provider call.
+vi.mock("../lib/supabase", () => ({ supabase: { functions: { invoke: providerCall }, from: () => { throw new Error("Unexpected database read in ResearchPage unit test") } } }))
+vi.mock("../features/decision/useProgramCR10ActionCenter", () => ({ useProgramCR10ActionCenter: () => ({ data: null, isLoading: false, error: null }) }))
+vi.mock("../data/companyProfileRepository", () => ({ companyLogoPublicUrl: () => null }))
+vi.mock("../features/research/useCompanyProfile", () => ({ useCompanyProfile: () => ({ data: null, isLoading: false, error: null }) }))
+vi.mock("../features/research/useExternalRatings", () => ({ useExternalRatings: () => ({ data: [], isLoading: false, error: null }) }))
+vi.mock("../features/research/useCanonicalEvidenceReadiness", () => ({ useCanonicalEvidenceReadiness: () => ({ applicable: true, data: null, isLoading: false, error: null }) }))
+vi.mock("../data/positionDecisionRepository", () => ({ loadPositionDecisionSettings: () => Promise.resolve(null), savePositionDecisionSettings: vi.fn() }))
 const position = {
   securityId: "s1", symbol: "BEL", company: "Bharat Electronics", sector: null, industry: null, assetClass: "EQUITY", exchange: "NSE", isin: null,
   instrumentType: "STOCK", series: "EQ", role: "CORE", settings: { id: null, portfolioRole: "CORE", targetWeight: null, minimumWeight: null, maximumWeight: null, priority: null, isWatchlisted: false, isFrozen: false, investmentHorizon: null, notes: null }, themes: [], snapshotEvidence: null,

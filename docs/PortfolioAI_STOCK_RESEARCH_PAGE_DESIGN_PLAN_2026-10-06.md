@@ -769,7 +769,9 @@ modified clicks, sticky-offset arithmetic, focus, reduced motion, keyboard keys,
 quota blocks, cancellation, busy controls, failed re-planning, failure and partial
 completion, long full company names, archive references and existing evidence
 filtering. CI now explicitly runs the shared stock-shell interaction/safeguard
-regression suite and changed-component lint. The focused suite passed 167 tests
+regression suite and changed-component lint. Unit suites isolate the live client
+and cached-data boundaries and require no Supabase credentials/configuration.
+The focused suite passed 167 tests
 across 11 files; architecture, TypeScript/production build, changed-file lint,
 whitespace and credential-pattern checks passed. Full-repository lint has 85
 errors and four warnings in unchanged files, and the existing research bundle

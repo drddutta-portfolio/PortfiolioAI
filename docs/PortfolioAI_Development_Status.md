@@ -17,7 +17,8 @@ verified READY. This Gate 4 record does not claim its own merge or deployment.
 - Refresh remains explicitly owner-initiated, quota/capability-gated and confirmed.
   Failed re-planning removes obsolete plans, all capability errors remain visible,
   and busy state is exposed to assistive technology. Tests use mocked repositories;
-  no live provider execution took place.
+  no live provider execution took place. The unit suites mock the client and
+  cached-data boundaries and run with Supabase configuration absent.
 - Documents expose the actual retained archive reference in a disclosure, without
   assuming it is a lawful/public URL. Evidence retains filters, competing values,
   original values, period/unit/scope/provider and independent readiness states.

@@ -4,6 +4,8 @@ import { CompleteResearchRefreshPanel } from "./CompleteResearchRefreshPanel"
 
 import { planCompleteResearchRefresh, executeCompleteResearchRefresh, type CompleteResearchRefreshPlan } from "../../data/completeResearchRefreshRepository"
 import { discoverBankGrowthContract } from "../../data/bankGrowthDiscoveryRepository"
+// Other capability repositories may be imported, but no live client is created.
+vi.mock("../../lib/supabase", () => ({ supabase: { functions: { invoke: () => { throw new Error("Unexpected live refresh in unit test") } } } }))
 vi.mock("../../data/completeResearchRefreshRepository", () => ({ planCompleteResearchRefresh: vi.fn(), executeCompleteResearchRefresh: vi.fn() }))
 vi.mock("../../data/bankGrowthDiscoveryRepository", () => ({ discoverBankGrowthContract: vi.fn() }))
 const plan: CompleteResearchRefreshPlan = { mode: "COMPLETE_RESEARCH_REFRESH_PLAN", providerCalls: 0, security: "security-1", company: "HDFC Bank", providerInstrumentId: "provider-1", estimatedProviderCalls: 4, dailyObservedUsage: 10, projectedDailyUsage: 14, dailyLimit: 100, providerQuotaStatus: "AVAILABLE", ingestionEnabled: true, executionAllowed: true, components: [{ domain: "FUNDAMENTALS", calls: 1 }], note: "Plan only" }
