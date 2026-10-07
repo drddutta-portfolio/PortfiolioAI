@@ -1,3 +1,20 @@
+## Shared stock identity title sizing — 7 October 2026
+
+Owner requested smaller, fully visible stock/company names in the top identity
+block. Shared `StockResearchShell.css` is imported by both stock-page compositions:
+responsive 1.25–1.65rem titles, 1.2 line height, word wrapping and emergency wrapping
+for long unbroken symbols, without truncation or fixed-height clipping. This is
+common shell presentation, not an HDFCBANK-only override. Existing display-name
+and canonical data authorities are unchanged. No schema, accounting, scoring,
+provider or Auth/RLS changes; no migrations. Build/TypeScript, architecture guard,
+changed-file lint and diff checks passed. Authenticated local browser checks covered
+four title samples at 1440/1024/390px on HDFCBANK and TORNTPHARM compositions: full
+text, compact sizing and wrapping without title clipping or title overflow. The
+older composition has separate advisory-panel overflow at 1024px; it is outside
+this title fix. Hosted deployment status is tracked through the associated PR.
+
+---
+
 ## Shared stock sticky section menu — 7 October 2026
 
 Owner-authorized shell presentation change implemented: `StockSectionNavigator`

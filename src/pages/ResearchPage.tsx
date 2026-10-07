@@ -1,3 +1,4 @@
+import "../features/research/StockResearchShell.css"
 import { StockSectionNavigator } from "../features/research/StockSectionNavigator"
 import "../features/research/ResearchWorkspaceShell.css"
 import Decimal from "decimal.js"
