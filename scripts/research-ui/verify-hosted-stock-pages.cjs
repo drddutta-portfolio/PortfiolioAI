@@ -28,11 +28,18 @@ async function main() {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' })
   const page = await context.newPage()
   page.on('pageerror', () => { report.runtimeErrors += 1 })
-  await context.route('**/functions/v1/**', route => { report.blockedProviderRequests += 1; return route.abort() })
+  await context.route('**/functions/v1/**', route => {
+    const request = route.request()
+    const endpoint = new URL(request.url()).pathname.split('/').pop()
+    const body = request.postData() ? request.postDataJSON() : null
+    if (request.method() === 'OPTIONS' || endpoint === 'p6-terminal-disposition-read' || (endpoint === 'refresh-market-data' && body?.action === 'READ_CACHE')) return route.continue()
+    report.blockedProviderRequests += 1; return route.abort()
+  })
   const check = (name, pass, detail = undefined) => report.checks.push({ name, pass: Boolean(pass), ...(detail === undefined ? {} : { detail }) })
   async function capture(name) {
     const file = `${name}.png`
     await page.screenshot({ path: path.join(output, file), fullPage: true })
+    await page.screenshot({ path: path.join(output, `${name}-viewport.png`), fullPage: false })
     report.screenshots.push(file)
   }
   async function layout(name) {
@@ -63,6 +70,7 @@ async function main() {
       return
     }
     await page.goto(`${ORIGIN}/app/research/${STOCKS[0].id}`, { waitUntil: 'domcontentloaded' })
+    await page.waitForFunction(() => location.pathname === '/login' || document.querySelector('.research-title h1'), null, { timeout: 30000 })
     if (new URL(page.url()).pathname === '/login') {
       if (!config.email || !config.password) { report.status = 'BLOCKED_APP_AUTH'; return }
       await page.locator('input[name="email"]').fill(config.email)
@@ -101,6 +109,7 @@ async function main() {
       await page.setViewportSize({ width: 390, height: 1000 })
       await layout(`${stock.symbol}-390-expanded-refresh`)
       await capture(`${stock.symbol}-390-expanded-refresh`)
+      await page.evaluate(() => window.scrollTo(0, 0))
       for (const [index, stressName] of ['SRHHYPLTD', 'EXTREMELYLONGUNBROKENSTOCKSYMBOLFORWRAPPING', 'International Speciality Research and Manufacturing Company Limited'].entries()) {
         await page.locator('.research-title h1').evaluate((el, text) => { el.textContent = text }, stressName)
         await layout(`${stock.symbol}-long-name-${index}`)
@@ -125,7 +134,8 @@ async function main() {
     report.status = report.checks.every(item => item.pass) ? 'AUTOMATED_CHECKS_PASS_VISUAL_REVIEW_REQUIRED' : 'FAIL'
   } catch (error) {
     report.status = 'INCOMPLETE'
-    check('Browser workflow completed', false, error.name)
+    check('Browser workflow completed', false, { error: error.name, pathname: new URL(page.url()).pathname })
+    await capture('workflow-stopped').catch(() => {})
   } finally {
     report.finishedAt = new Date().toISOString()
     await fs.writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2), { mode: 0o600 })

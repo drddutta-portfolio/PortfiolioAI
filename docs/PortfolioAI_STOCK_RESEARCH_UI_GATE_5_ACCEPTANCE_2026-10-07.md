@@ -80,3 +80,22 @@ script syntax and whitespace checks pass. The existing 543.73 kB research bundle
 warning remains. No product implementation changed in this Gate 5 increment;
 the new work adds integrated regressions, the hosted verification runner and an
 honest acceptance record. Full authenticated browser-runner behavior is pending.
+
+## Hosted review update — 8 October 2026 (Asia/Kolkata)
+
+A newly supplied share URL unlocked Vercel protection and the authorized app login
+succeeded. The hosted-only run completed 72 checks across HDFCBANK and TORNTPHARM
+with zero runtime errors and zero blocked provider-execution requests. The initial
+run found two failures: both stock pages had 793px document width at a 768px viewport.
+The visible score-coverage label "Unavailable" overflowed its constrained third
+column. The common-shell correction stacks the score header below 800px and permits
+long score labels to wrap. Final deployed re-verification remains necessary.
+
+The verifier now waits for the asynchronous app login redirect and permits the
+reviewed `refresh-market-data` **READ_CACHE** operation needed to render portfolio
+facts. It continues to block REFRESH/provider execution. It captures viewport
+images as well as full-page images and saves sanitized stop-screen diagnostics.
+Access is no longer blocked; G5.2 is **IN REVIEW / FIX PENDING VERIFICATION**, and
+the overall decision remains HOLD until the deployed correction and remaining
+representative-stock/zoom checks are verified. No access URL, token or credentials
+are retained in this record.

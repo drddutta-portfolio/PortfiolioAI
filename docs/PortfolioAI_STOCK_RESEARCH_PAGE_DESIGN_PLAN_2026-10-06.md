@@ -801,3 +801,11 @@ for coverage, deployment evidence and the remaining hosted review. **Gate 5 is n
 passed and the design is not finally accepted for all stocks:** G5.2 requires
 authenticated hosted visual evidence; the Development URL currently redirects the
 review browser to Vercel authentication. G5.3 records a hold until that review passes.
+
+### UI-G5 hosted review update — 8 October 2026 (Asia/Kolkata)
+
+The new Development share link and app login worked. Hosted checks exercised
+HDFCBANK and TORNTPHARM; tablet score-label overflow was found and a shared-shell
+CSS correction prepared. The verifier's login-redirect timing and READ_CACHE
+allowance were corrected. G5.2 is now in review, rather than access-blocked; final
+acceptance remains HOLD pending deployed re-verification. See the Gate 5 report.
