@@ -58,8 +58,10 @@ export function validateObservationSeries(input: {
   readonly sourceCutoffAtMs: number
 }): InputValidation {
   const { rows, minimum, evaluationAsOfMs, sourceCutoffAtMs } = input
+  const postCloseRetrievalWindowMs=6*60*60*1000
   if (!Number.isInteger(minimum) || minimum < 1 || !Number.isFinite(evaluationAsOfMs)
-    || !Number.isFinite(sourceCutoffAtMs) || sourceCutoffAtMs > evaluationAsOfMs) {
+    || !Number.isFinite(sourceCutoffAtMs) || sourceCutoffAtMs < evaluationAsOfMs
+    || sourceCutoffAtMs > evaluationAsOfMs + postCloseRetrievalWindowMs) {
     return fail("REVIEW_REQUIRED", "INPUT_EVALUATION_CONTRACT_INVALID")
   }
   if (!rows.length) return fail("INSUFFICIENT", "REQUIRED_EVIDENCE_MISSING")
@@ -87,7 +89,7 @@ export function validateObservationSeries(input: {
     if (contract?.scope_guard === "CONSOLIDATED_ATTRIBUTABLE_TO_OWNERS" && row.consolidation_scope !== "CONSOLIDATED") return fail("REVIEW_REQUIRED", "REPORTING_SCOPE_MISMATCH")
     if (!row.source_record_id || !row.source_code || !Number.isFinite(timestamp(row.retrieved_at))
       || timestamp(row.retrieved_at) > sourceCutoffAtMs
-      || (row.published_at != null && (!Number.isFinite(timestamp(row.published_at)) || timestamp(row.published_at) > sourceCutoffAtMs))) return fail("REVIEW_REQUIRED", "SOURCE_PROVENANCE_NOT_PROVEN")
+      || (row.published_at != null && (!Number.isFinite(timestamp(row.published_at)) || timestamp(row.published_at) > evaluationAsOfMs))) return fail("REVIEW_REQUIRED", "SOURCE_PROVENANCE_NOT_PROVEN")
     if (typeof contract?.provider === "string" && contract.provider !== row.source_code) return fail("REVIEW_REQUIRED", "SOURCE_AUTHORITY_MISMATCH")
     if (Array.isArray(contract?.source_priority) && !contract.source_priority.includes(row.source_code)) return fail("REVIEW_REQUIRED", "SOURCE_AUTHORITY_MISMATCH")
     const valueValid = definition.value_kind === "NUMERIC" ? row.numeric_value != null && /^-?\d+(?:\.\d+)?$/u.test(String(row.numeric_value))
