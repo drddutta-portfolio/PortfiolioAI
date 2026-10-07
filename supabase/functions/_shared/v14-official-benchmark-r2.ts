@@ -67,7 +67,7 @@ export async function loadVerifiedOfficialBenchmarkHistory(input:{
   if(d.readback_verified!==true||d.r2_bucket!=="portfolioai-history-dev"||typeof d.r2_key!=="string")throw new Error("OFFICIAL_BENCHMARK_DELTA_R2_VERIFICATION_MISSING")
   if(String(d.sha256??"")!==delta.payload_hash||!/^[a-f0-9]{64}$/u.test(delta.payload_hash))throw new Error("OFFICIAL_BENCHMARK_DELTA_HASH_INVALID")
   const session=String(d.session??""),close=String(d.close??""),identity=String(d.official_identity??"")
-  if(!/^\\d{4}-\\d{2}-\\d{2}$/u.test(session)||!/^\\d+(?:\\.\\d+)?$/u.test(close)||!identity)throw new Error("OFFICIAL_BENCHMARK_DELTA_FACT_INVALID")
+  if(!/^\d{4}-\d{2}-\d{2}$/u.test(session)||!/^\d+(?:\.\d+)?$/u.test(close)||!identity)throw new Error("OFFICIAL_BENCHMARK_DELTA_FACT_INVALID")
   const last=rows.at(-1)?.session??""
   if(session<=last)throw new Error("OFFICIAL_BENCHMARK_DELTA_NOT_APPEND_ONLY")
   rows.push({session,close,officialIdentity:identity})
