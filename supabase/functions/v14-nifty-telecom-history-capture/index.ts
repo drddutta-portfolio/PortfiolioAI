@@ -47,12 +47,27 @@ Deno.serve(async req=>{
  if(!grant.ok)return reply(401,{code:grant.code})
  const warm=await fetch("https://www.nseindia.com/reports-indices-historical-index-data",{headers:{"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36","accept":"text/html,application/xhtml+xml"},redirect:"follow",signal:AbortSignal.timeout(30000)})
  const cookies=(warm.headers as Headers&{getSetCookie?:()=>string[]}).getSetCookie?.()??[],cookie=cookies.map(v=>v.split(";")[0]).join("; ")
- const q=new URLSearchParams({indexType:"NIFTY TELECOM",from:"25-08-2025",to:"07-10-2026"})
- const res=await fetch(ENDPOINT+"?"+q.toString(),{headers:{"accept":"application/json,text/plain,*/*","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36","referer":"https://www.nseindia.com/reports-indices-historical-index-data",...(cookie?{"cookie":cookie}:{})},signal:AbortSignal.timeout(30000)})
- const text=await res.text(),bytes=new TextEncoder().encode(text)
- if(!res.ok)return reply(502,{code:"NSE_HTTP",status:res.status})
+ const ranges=[["25-08-2025","24-08-2026"],["25-08-2026","07-10-2026"]] as const
+ const captures:{from:string;to:string;requestUrl:string;body:string;byteLength:number;sha256:string}[]=[]
+ const mergedRaw:unknown[]=[]
+ for(const [from,to] of ranges){
+  const q=new URLSearchParams({indexType:"NIFTY TELECOM",from,to})
+  const requestUrl=ENDPOINT+"?"+q.toString()
+  const res=await fetch(requestUrl,{headers:{"accept":"application/json,text/plain,*/*","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36","referer":"https://www.nseindia.com/reports-indices-historical-index-data",...(cookie?{"cookie":cookie}:{})},signal:AbortSignal.timeout(30000)})
+  const text=await res.text(),bytes=new TextEncoder().encode(text)
+  if(!res.ok)return reply(502,{code:"NSE_HTTP",status:res.status,from,to})
+  const root=JSON.parse(text) as Record<string,unknown>
+  const data=Array.isArray(root.data)?root.data:
+   (root.data&&typeof root.data==="object"&&!Array.isArray(root.data)&&Array.isArray((root.data as Record<string,unknown>).indexCloseOnlineRecords))
+    ?(root.data as Record<string,unknown>).indexCloseOnlineRecords as unknown[]:[]
+  if(!data.length)return reply(409,{code:"NIFTY_TELECOM_RANGE_EMPTY",from,to,bodyHead:text.slice(0,1000)})
+  mergedRaw.push(...data)
+  captures.push({from,to,requestUrl,body:text,byteLength:bytes.length,sha256:await sha(bytes)})
+ }
+ const combinedBody=JSON.stringify({data:mergedRaw})
+ const combinedBytes=new TextEncoder().encode(combinedBody)
  try{
-  const rows=parse(text),digest=await sha(bytes)
-  return reply(200,{code:"NIFTY_TELECOM",identity:"NIFTY TELECOM",basis:"PRICE_RETURN_RAW_CLOSE",sourceUrl:ENDPOINT,requestUrl:ENDPOINT+"?"+q.toString(),retrievedAt:new Date().toISOString(),sha256:digest,byteLength:bytes.length,sessions:rows.length,firstSession:rows[0]!.session,lastSession:rows.at(-1)!.session,rows,body:text})
- }catch(e){return reply(409,{code:"NIFTY_TELECOM_VALIDATION_FAILED",error:e instanceof Error?e.message:"UNKNOWN",bodyHead:text.slice(0,1500)})}
+  const rows=parse(combinedBody),digest=await sha(combinedBytes)
+  return reply(200,{code:"NIFTY_TELECOM",identity:"NIFTY TELECOM",basis:"PRICE_RETURN_RAW_CLOSE",sourceUrl:ENDPOINT,retrievedAt:new Date().toISOString(),sha256:digest,byteLength:combinedBytes.length,sessions:rows.length,firstSession:rows[0]!.session,lastSession:rows.at(-1)!.session,rows,captures,body:combinedBody})
+ }catch(e){return reply(409,{code:"NIFTY_TELECOM_VALIDATION_FAILED",error:e instanceof Error?e.message:"UNKNOWN",rangeCount:captures.length})}
 })
