@@ -53,4 +53,12 @@
 .refresh-capabilities > summary { cursor: pointer; color: #2a6040; font-size: .78rem; font-weight: 700; padding: .45rem 0; }
 .research-page .research-decision-body .position-decision-panel { align-self: start; }
 
+.research-assignment-summary { margin: .5rem 0; font-size: .7rem; overflow-wrap: anywhere; }
+.research-assignment-summary summary { cursor: pointer; font-weight: 700; }
+.profile-research-filters { display: flex; flex-wrap: wrap; gap: .75rem; margin: .75rem 0; }
+.profile-research-filters label { display: flex; flex-direction: column; gap: .3rem; font-size: .75rem; min-width: 0; }
+.profile-research-filters input, .profile-research-filters select { max-width: 100%; }
+.profile-research-remaining summary { cursor: pointer; font-weight: 700; padding: .5rem 0; }
+.profile-requirement-grid h3, .profile-requirement-grid p, .profile-requirement-grid small { overflow-wrap: anywhere; }
+
 }

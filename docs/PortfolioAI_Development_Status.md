@@ -1,3 +1,33 @@
+## Stock research UI-G2 selected-contract coverage — 7 October 2026
+
+**UI-G2 implementation and automated acceptance = COMPLETE for the current
+shared data contracts.** Delivery record: PR #109 → `PortfolioAI-Development`.
+Authenticated hosted visual acceptance remains pending UI-G5.2.
+
+- UI-G1 PR #108 merged at `3a573ecdbabe16b8b91482d54d83410f2c39eb54` after
+  all remote checks passed. Development's READY deployment at
+  `bd399096ba69829cde553dcba690a568866a2f3f` contains that merge; deployment
+  metadata is not authenticated visual acceptance.
+- Common header disclosure exposes existing canonical profile/subprofile and
+  assignment lineage. Sector/industry retain shared classification ownership.
+  Deeper hierarchy fields are explicitly unavailable in the current projection.
+- All selected immutable research requirements/results are accessible, with a
+  compact preview, full remaining-results disclosure, search/state filters and
+  separate not-applicable items. No requirement is silently discarded after six.
+- Bank/Pharma specialist content is retained; other profiles explicitly expose
+  selected-contract results without an invented general/bank presentation. An
+  unresolved profile has no generic operating snapshot fallback.
+- Regression coverage includes every registered sector-engine profile, holding
+  company, retail, unknown/unresolved, sparse/error states and source lineage.
+- Verification: 132 focused tests across 12 files, architecture guard, TypeScript /
+  production build, changed-file ESLint and whitespace checks pass. The existing
+  research chunk-size warning remains. Full-repository lint reports 85 errors /
+  four warnings in unchanged files; changed-file lint passes. Hosted visual
+  acceptance is pending.
+- No schema/migrations, evidence-review writes, provider execution, formulas,
+  accounting, Auth/RLS or V1 engine/release gates change. V1-4 remains NOT PROVEN.
+- UI-G3–UI-G5 and authenticated hosted visual acceptance remain outstanding.
+
 ## V1-4 final execution disposition — 7 October 2026
 
 **V1-4 execution = COMPLETE / NOT PROVEN. V1-4 PASS is not established. V1-5 remains unauthorized.**
@@ -26,8 +56,8 @@ No Production/main, V1-5, P8, migration, Auth/RLS or scheduler change was author
 
 ## Stock research UI-G1 common shell — 7 October 2026
 
-Implementation prepared on `research-g1-common-shell`; Development deployment and
-hosted visual acceptance are not yet claimed.
+Merged through PR #108 after CI passed; Development includes this implementation.
+Authenticated hosted visual acceptance remains pending.
 
 - One lazy `StockResearchRoute` → `ResearchPage` composition replaces the HDFCBANK
   sample versus legacy-page split for every stock identity.
@@ -43,7 +73,7 @@ hosted visual acceptance are not yet claimed.
   changed-file ESLint and whitespace checks pass. Vite retains its existing
   warning for a research chunk above 500 kB. Full-repository lint reports
   85 errors and four warnings in unchanged files; changed-file lint passes.
-- UI-G2–UI-G5 remain outstanding; the design plan records all five UI gates and
+- UI-G2 is now prepared separately; UI-G3–UI-G5 remain outstanding. The design plan records all five UI gates and
   15 sub-gates. Authenticated hosted visual acceptance remains pending.
 
 ## V1-4 fixed-115 owner-review package — 7 October 2026

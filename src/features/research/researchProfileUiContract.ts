@@ -330,14 +330,25 @@ const CONTRACTS: Readonly<Record<string, ResearchProfileUiContract>> = {
   BANK_NBFC: BANK_NBFC_CONTRACT,
   BANK: BANK_NBFC_CONTRACT,
   PHARMA_V1: PHARMA_V1_CONTRACT,
+  PHARMA: PHARMA_V1_CONTRACT, // Canonical PHARMA route uses the existing PHARMA_V1 presentation adapter.
 }
+
+export type ResearchProfilePresentationState = "SPECIALIST" | "CONTRACT_RESULTS_ONLY" | "UNRESOLVED"
+
+/** Availability of presentation only; never a methodology or evidence eligibility decision. */
+export function researchProfilePresentationState(profileCode: string | null | undefined): ResearchProfilePresentationState {
+  if (!profileCode || profileCode === "UNRESOLVED") return "UNRESOLVED"
+  return CONTRACTS[profileCode] ? "SPECIALIST" : "CONTRACT_RESULTS_ONLY"
+}
+
+const UNMAPPED_SNAPSHOT_GROUPS: readonly ResearchSnapshotGroup[] = [{ title: "Profile research results", codes: [] }]
 
 /**
  * Presentation contract only. It never reclassifies a security, changes a score,
  * or creates evidence. The already-resolved scoring profile chooses the UI contract.
  */
 export function researchProfileUiContract(profileCode: string | null | undefined): ResearchProfileUiContract {
-  return profileCode ? (CONTRACTS[profileCode] ?? { ...GENERAL_CONTRACT, profileCode, profileDisplayName: profileCode.replaceAll("_", " "), snapshotGroups: [{ title: "Quality at a glance", codes: [] }, { title: "Growth at a glance", codes: [] }, { title: "Valuation snapshot", codes: [] }, { title: "Ownership & governance", codes: [] }], dimensionOrder: [], scoreSectionGroups: [], completeResearchRefreshMode: "PROFILE_GATED" }) : { ...GENERAL_CONTRACT, profileCode: "UNRESOLVED", profileDisplayName: "Research profile unresolved", completeResearchRefreshMode: "PROFILE_GATED", dimensionOrder: [], scoreSectionGroups: [] }
+  return profileCode ? (CONTRACTS[profileCode] ?? { ...GENERAL_CONTRACT, profileCode, profileDisplayName: profileCode.replaceAll("_", " "), snapshotGroups: UNMAPPED_SNAPSHOT_GROUPS, dimensionOrder: [], scoreSectionGroups: [], completeResearchRefreshMode: "PROFILE_GATED" }) : { ...GENERAL_CONTRACT, profileCode: "UNRESOLVED", profileDisplayName: "Research profile unresolved", snapshotGroups: UNMAPPED_SNAPSHOT_GROUPS, completeResearchRefreshMode: "PROFILE_GATED", dimensionOrder: [], scoreSectionGroups: [] }
 }
 
 export function researchRefreshModulesForSecurity(profileCode: string | null | undefined, symbol: string): readonly ResearchRefreshModule[] {

@@ -680,3 +680,52 @@ explicit entry states rather than fabricated stock pages.
 
 G1.1–G1.3 are implemented with automated regression checks. Hosted visual acceptance
 is pending UI-G5.2; local component tests and builds are not hosted visual proof.
+
+
+### UI-G2: selected-contract research coverage implementation
+
+**Baseline:** UI-G1 PR #108 merged into Development at
+`3a573ecdbabe16b8b91482d54d83410f2c39eb54` after all CI checks passed.
+
+| Sub-gate | Implementation / boundary |
+| --- | --- |
+| G2.1 canonical context | Shared header disclosure presents the selected canonical profile/subprofile, assignment state, methodology/version, assignment authority/version/ID, snapshot ID and evaluation date. Sector/industry remain the shared classification facts. Macro-economic sector, basic industry, sub-sector/group are explicitly unavailable because the current shared projection does not expose them; no profile name is substituted for those fields. |
+| G2.2 requirements and retained results | Every immutable requirement from the selected portfolio/security snapshot is accessible in the stock-specific workspace. The first six form a compact preview; the rest are in an expandable block. Search and stored-state filtering span the complete applicable set. Not-applicable items retain their own disclosure and are never counted as missing evidence. Cards preserve normalized results, selected/candidate evidence IDs, source reference/provider, dates/freshness, history, benchmark context, validation/selection state and remediation. |
+| G2.3 presentation outcomes | Bank and Pharma retain their existing specialist presentation. The canonical `PHARMA` identity aliases its existing `PHARMA_V1` presentation adapter without changing the canonical assignment. All other profiles use their actual selected-contract results and explicitly disclose that bespoke snapshot presentation is unregistered. Unresolved profiles display no generic operating snapshots or inferred bank metrics. Existing pharmaceutical subprofile/exposure workspace is preserved. |
+
+Item totals describe retained records only; they are not readiness denominators or
+validated coverage percentages. Stored evidence states are shown verbatim in
+readable labels. Structured normalized values retain supplied unit, period, scope
+and currency metadata; missing fields are not inferred. A retained result never
+creates a score, role recommendation or sizing output.
+
+Coverage regressions exercise every profile in `SECTOR_ENGINE_REGISTRY`, plus
+financial holding companies, retail commerce and an unregistered profile; more
+than six results, sparse/error/loading states, exclusions and a real zero result
+are covered. These fixture checks prove rendering, not live research completion
+for every application stock. Hosted visual acceptance remains UI-G5.2, and the
+unavailable deeper classification fields remain a documented data-contract limit.
+
+Gate 2 introduces no new profile assignment, methodology, formula, evidence
+promotion, provider call, database/schema change or migration. Gates UI-G3–UI-G5
+remain outstanding. V1-4 remains NOT PROVEN and V1-5 remains unauthorized.
+
+
+### UI-G2 completion decision — 7 October 2026
+
+**G2.1, G2.2 and G2.3: ACCEPTED for the current canonical data contracts.**
+Delivery is tracked by [PR #109](https://github.com/drddutta-portfolio/PortfiolioAI/pull/109)
+targeting `PortfolioAI-Development`; merge is conditional on passing CI.
+
+The acceptance evidence is 132 passing focused tests across 12 files, the
+architecture guard, TypeScript/production build, changed-file lint and whitespace
+checks. The reviewed implementation preserves selected-contract identity,
+complete retained-result access, explicit exclusions and presentation support
+states. Repository-wide lint has 85 errors and four warnings in unchanged files;
+the existing research bundle-size warning remains.
+
+This closes the UI coverage gate against available contracts. It does not certify
+live evidence completion, invent unavailable hierarchy fields, approve new
+methodologies, or pass authenticated hosted visual acceptance. Those limits and
+UI-G3–UI-G5 remain explicit. No database migration or evidence/provider mutation
+is part of this completion.
