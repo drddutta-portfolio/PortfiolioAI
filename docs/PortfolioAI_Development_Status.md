@@ -1,3 +1,29 @@
+## V1-4 final execution disposition — 7 October 2026
+
+**V1-4 execution = COMPLETE / NOT PROVEN. V1-4 PASS is not established. V1-5 remains unauthorized.**
+
+Final canonical 115-member run: `5763ee72-3e33-4419-9b74-0811e9fabe6a`.
+
+- READY 0
+- REVIEW_REQUIRED 114
+- CONFLICTING 1
+- INSUFFICIENT 0
+- STALE 0
+- review-ledger rows: 0
+- Development DB size: 219,458,707 bytes
+- materializer: ACTIVE v36, `ed4955f4275ac5ce4559cf789aeb771e2e96cc98b68144ee9c73f1e21a5809b5`
+- stock-history helper: ACTIVE v2, `b4f6610211081c5939d8205df86b64435fd074892af408c2285f1eb70d2d37cf`
+- benchmark-history helper: ACTIVE v2, `7cbda9b21596cf347eff8233901a04a94645524e421fcdc54822a4ff0571449a`
+- hosted Development Preview at application SHA `42c43583336612811fbf140bc2840f6911012ad4` is READY; authenticated route fetch passed and no 24h runtime-error clusters were found.
+
+History-currentness repair was executed without weakening contracts: run `39f2c645-61b6-490e-ad33-1bc392e444fa` fetched 10/10 stocks through 7-Oct with 1 auth + 10 history requests, zero failures; a later 10-stock currentness check made zero provider calls. Remaining blockers are predominantly documentary review, numeric source binding, ownership/methodology review, benchmark/history-contract proof, HINDUNILVR corporate-action conflict and structural listing-history insufficiency.
+
+Authoritative disposition record: `docs/PortfolioAI_V1_4_FINAL_NOT_PROVEN_2026-10-07.md`.
+
+No Production/main, V1-5, P8, migration, Auth/RLS or scheduler change was authorized or performed.
+
+---
+
 ## Stock research UI-G1 common shell — 7 October 2026
 
 Implementation prepared on `research-g1-common-shell`; Development deployment and

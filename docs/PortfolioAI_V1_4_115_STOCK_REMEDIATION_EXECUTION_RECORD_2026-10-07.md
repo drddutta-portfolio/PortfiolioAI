@@ -194,3 +194,26 @@ Temporary 115-remediation execution functions were retired behind JWT protection
 The next legitimate step is not another blind provider campaign. It is to prepare/approve the owner-bound review ledger for the retained evidence, then re-run canonical materialization and continue only the residual automatic history/benchmark/input-contract repairs that remain after that review is applied.
 
 V1-5 remains unauthorized.
+
+
+## Final continuation disposition — 7 October 2026
+
+V1-4 execution is now **COMPLETE / NOT PROVEN**. PASS is not established; V1-5 remains unauthorized.
+
+Continuation starting HEAD was `cc387c8f68cdd64cf38bef00b02035ad35c0b01c`.
+
+Repairs completed during final continuation:
+- stock incremental-history cutoff advanced to 7-Oct and deployed as v2;
+- benchmark incremental-history cutoff/contract aligned to 7-Oct and deployed as v2;
+- controlled stock-history run `39f2c645-61b6-490e-ad33-1bc392e444fa` fetched 10/10 stocks through 7-Oct with 1 auth + 10 history requests and zero failures;
+- later currentness run `5673d6a0-be84-4cb4-b386-a6f841d3cffd` skipped 10/10 already-current stocks with zero provider calls;
+- final full canonical 115-member run `5763ee72-3e33-4419-9b74-0811e9fabe6a` produced 0 READY / 114 REVIEW_REQUIRED / 1 CONFLICTING / 0 INSUFFICIENT / 0 STALE;
+- review ledger remains 0 rows;
+- Development database size is 219,458,707 bytes;
+- protected Development Preview at application SHA `42c43583336612811fbf140bc2840f6911012ad4` returned authenticated HTTP 200 and no 24-hour runtime error clusters were found.
+
+Remaining blocker families are source/evidence-contract blockers rather than a single acquisition failure: required evidence missing, normalized input contract not proven, documentary review, dated-period proof, history/benchmark contract proof, numeric reporting-period/unit/scope review, ownership/methodology decisions, HINDUNILVR corporate-action conflict, and structural listing-history insufficiency for GROWW/ICICIAMC.
+
+See `docs/PortfolioAI_V1_4_FINAL_NOT_PROVEN_2026-10-07.md` for the consolidated final disposition.
+
+No Production/main, V1-5, P8, migration, Auth/RLS or scheduler change was performed.
