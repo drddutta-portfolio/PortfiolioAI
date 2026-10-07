@@ -1,8 +1,47 @@
+## Stock research UI-G4 interaction and layout — 7 October 2026 (UTC)
+
+**UI-G4 implementation prepared for review on `research-g4-interaction-layout`.**
+Gate 3 PR #110 is merged into Development at
+`f59b5f93675150f496b8d24d1cbafda2867796b2`; the matching Vercel deployment was
+verified READY. This Gate 4 record does not claim its own merge or deployment.
+
+- One shared destination contract now gives all seven tabs distinct bookmarkable
+  anchors. Opening a bookmark or changing the hash restores its intended tab
+  before the menu offsets the section below the sticky control and focuses it.
+- Arrow keys, Home/End and roving tab focus retain accessible tab/panel semantics;
+  Evidence drill-down focuses the panel and Top restores focus to the app header.
+- Tabs no longer overlap the sticky section menu. Shrinkable cards, long source
+  references and compact full names wrap; expanded refresh modules form a
+  responsive grid that stacks on small screens. Wide evidence tables retain
+  their own keyboard-accessible horizontal scroll area.
+- Refresh remains explicitly owner-initiated, quota/capability-gated and confirmed.
+  Failed re-planning removes obsolete plans, all capability errors remain visible,
+  and busy state is exposed to assistive technology. Tests use mocked repositories;
+  no live provider execution took place. The unit suites mock the client and
+  cached-data boundaries and run with Supabase configuration absent.
+- Documents expose the actual retained archive reference in a disclosure, without
+  assuming it is a lawful/public URL. Evidence retains filters, competing values,
+  original values, period/unit/scope/provider and independent readiness states.
+- Canonical authority paths are unchanged: `usePortfolioView`,
+  `useSecurityResearch`, `useSecurityScoring`, `useCanonicalEvidenceReadiness`,
+  existing rating/profile hooks and existing refresh repositories. Navigation
+  metadata owns only UI destinations; it cannot select a methodology.
+- Verification: 167 focused tests across 11 files passed. Architecture, TypeScript /
+  production build, changed-file lint, whitespace and credential-pattern checks
+  passed. Full-repository lint reports 85 errors and four warnings in unchanged
+  files; the existing research bundle-size warning remains.
+- No database/schema/migrations, accounting/formula, Auth/RLS, capability approvals,
+  evidence promotions or V1 gate dispositions change. UI-G5 remains outstanding.
+  DOM/fixture tests do not certify real viewport overflow, sticky positioning,
+  browser downloads or authenticated hosted layout. Those require UI-G5.2.
+
 ## Stock research UI-G3 safeguards — 8 October 2026
 
 Gate 2 PR #109 is merged at `1533ab292b82a44d278141583c75ee7c17042f0c`
-after passing CI. Gate 3 is prepared on `research-g3-evidence-safeguards` for
-review; its merge/deployment and hosted visual acceptance are not claimed.
+after passing CI. Gate 3 was reviewed and merged through PR #110 at
+`f59b5f93675150f496b8d24d1cbafda2867796b2` after CI passed. Vercel confirmed
+a READY Development deployment at that exact revision. Authenticated hosted
+visual acceptance is not claimed.
 
 - Header and cockpit share numeric-score display eligibility and the same existing
   Program B prerequisite context, including Pharma primary-assignment readiness.

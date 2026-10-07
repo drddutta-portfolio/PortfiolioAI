@@ -1,13 +1,21 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
-import { afterEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import type { PortfolioViewModel } from "../features/portfolio/types"
 import type { SecurityScoringSnapshot } from "../features/research/scoringTypes"
 import type { SecurityResearch } from "../features/research/types"
 import { formatResearchMetric } from "../features/research/researchPolicy"
 import { ResearchPage } from "./ResearchPage"
 
-const providerCall = vi.fn()
+const providerCall = vi.hoisted(() => vi.fn())
+// No unit test may initialise the live client or make an unmocked provider call.
+vi.mock("../lib/supabase", () => ({ supabase: { functions: { invoke: providerCall }, from: () => { throw new Error("Unexpected database read in ResearchPage unit test") } } }))
+vi.mock("../features/decision/useProgramCR10ActionCenter", () => ({ useProgramCR10ActionCenter: () => ({ data: null, isLoading: false, error: null }) }))
+vi.mock("../data/companyProfileRepository", () => ({ companyLogoPublicUrl: () => null }))
+vi.mock("../features/research/useCompanyProfile", () => ({ useCompanyProfile: () => ({ data: null, isLoading: false, error: null }) }))
+vi.mock("../features/research/useExternalRatings", () => ({ useExternalRatings: () => ({ data: [], isLoading: false, error: null }) }))
+vi.mock("../features/research/useCanonicalEvidenceReadiness", () => ({ useCanonicalEvidenceReadiness: () => ({ applicable: true, data: null, isLoading: false, error: null }) }))
+vi.mock("../data/positionDecisionRepository", () => ({ loadPositionDecisionSettings: () => Promise.resolve(null), savePositionDecisionSettings: vi.fn() }))
 const position = {
   securityId: "s1", symbol: "BEL", company: "Bharat Electronics", sector: null, industry: null, assetClass: "EQUITY", exchange: "NSE", isin: null,
   instrumentType: "STOCK", series: "EQ", role: "CORE", settings: { id: null, portfolioRole: "CORE", targetWeight: null, minimumWeight: null, maximumWeight: null, priority: null, isWatchlisted: false, isFrozen: false, investmentHorizon: null, notes: null }, themes: [], snapshotEvidence: null,
@@ -38,7 +46,11 @@ function renderPage(path = "/app/research/s1") {
 }
 
 describe("ResearchPage", () => {
-  afterEach(() => { cleanup(); providerCall.mockReset(); scoringState.data = initialScoringSnapshot; specialistState.resolved = false; Object.assign(researchState, { data: research, error: null, isLoading: false }) })
+  beforeEach(() => {
+    window.history.replaceState(null, "", "/app/research/s1")
+    vi.stubGlobal("scrollTo", vi.fn())
+  })
+  afterEach(() => { cleanup(); vi.unstubAllGlobals(); providerCall.mockReset(); scoringState.data = initialScoringSnapshot; specialistState.resolved = false; Object.assign(researchState, { data: research, error: null, isLoading: false }) })
   it.each(["PENDING_ADAPTER", "BLOCKED"] as const)("keeps the header and cockpit consistent when execution is %s", state => {
     scoringState.data = { ...initialScoringSnapshot, runState: "COMPLETE", scoreRunId: "old-run", overallScore: 97, methodologyState: "AVAILABLE", scoringExecutionState: state }
     renderPage()
@@ -123,6 +135,8 @@ describe("ResearchPage", () => {
     expect(panel).not.toHaveTextContent("Total quantity")
     fireEvent.click(screen.getByRole("button", { name: "View Evidence" }))
     expect(screen.getByRole("tabpanel")).toHaveTextContent("Evidence ledger")
+    expect(screen.getByRole("tabpanel")).toHaveFocus()
+    expect(window.location.hash).toBe("#stock-evidence")
     expect(providerCall).not.toHaveBeenCalled()
   })
   it("changes tabs and filters evidence without a provider or budget action", () => {
@@ -148,7 +162,7 @@ describe("ResearchPage", () => {
     expect(screen.getByText("No lawful retained open reference")).toBeInTheDocument()
     expect(screen.queryByRole("link", { name: /open/i })).not.toBeInTheDocument()
   })
-  it.each([390, 768, 1024, 1440])("renders accessible tabs at %ipx without page-level overflow", (width) => {
+  it.each([390, 768, 1024, 1440])("renders accessible tab semantics with a %ipx viewport setting", (width) => {
     Object.defineProperty(window, "innerWidth", { configurable: true, value: width })
     renderPage()
     expect(screen.getAllByRole("tab")).toHaveLength(7)
@@ -156,4 +170,39 @@ describe("ResearchPage", () => {
     expect(document.querySelector(".research-table-wrap")).not.toBeInTheDocument()
     expect(providerCall).not.toHaveBeenCalled()
   })
+  it("supports arrow, Home and End keys with one tabbable tab", () => {
+    renderPage()
+    const overview = screen.getByRole("tab", { name: "Overview" })
+    overview.focus()
+    fireEvent.keyDown(overview, { key: "ArrowLeft" })
+    const evidence = screen.getByRole("tab", { name: "Evidence" })
+    expect(evidence).toHaveFocus()
+    expect(evidence).toHaveAttribute("aria-selected", "true")
+    expect(screen.getAllByRole("tab").filter(tab => tab.tabIndex === 0)).toEqual([evidence])
+    expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", evidence.id)
+    fireEvent.keyDown(evidence, { key: "Home" })
+    expect(overview).toHaveFocus()
+    fireEvent.keyDown(overview, { key: "ArrowRight" })
+    expect(screen.getByRole("tab", { name: "Financials" })).toHaveFocus()
+    fireEvent.keyDown(document.activeElement!, { key: "End" })
+    expect(evidence).toHaveFocus()
+  })
+  it("opens a bookmarked Evidence tab and preserves original source values", () => {
+    window.history.replaceState(null, "", "#stock-evidence")
+    renderPage()
+    expect(screen.getByRole("tab", { name: "Evidence" })).toHaveAttribute("aria-selected", "true")
+    expect(document.activeElement?.id).toBe("stock-evidence")
+    expect(screen.getAllByText("Original source value")).toHaveLength(research.metrics.length)
+  })
+  it("retains the complete long company name and exposes archive references without inventing open actions", () => {
+    const name = "SRHHYPLTD International Speciality Research and Manufacturing Limited"
+    researchState.data = { ...research, companyName: name, documents: [{ ...research.documents[0]!, externalReference: "archive/vendor/report-id-123456789" }] }
+    renderPage()
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(name)
+    fireEvent.click(screen.getByRole("tab", { name: "Documents" }))
+    expect(screen.getByText("Retained archive reference")).toBeInTheDocument()
+    expect(screen.getByText("archive/vendor/report-id-123456789")).toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: /open/i })).not.toBeInTheDocument()
+  })
+
 })

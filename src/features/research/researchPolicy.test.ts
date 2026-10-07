@@ -1,7 +1,10 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import { evidenceStatus, latestByCode, metricLabel, formatSourceResearchMetric } from "./researchPolicy"
 import type { ResearchMetric } from "./types"
 import { loadSecurityResearch } from "../../data/researchRepository"
+
+// The repository boundary assertion inspects code; it never executes a query.
+vi.mock("../../lib/supabase", () => ({ supabase: {} }))
 
 const metric = (overrides: Partial<ResearchMetric> = {}): ResearchMetric => ({
   id: "m1", code: "REVENUE_TTM", label: "Revenue (TTM)", value: null, numericValue: null,
