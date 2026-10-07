@@ -58,7 +58,7 @@ export function validateObservationSeries(input: {
   readonly sourceCutoffAtMs: number
 }): InputValidation {
   const { rows, minimum, evaluationAsOfMs, sourceCutoffAtMs } = input
-  const postCloseRetrievalWindowMs=6*60*60*1000
+  const postCloseRetrievalWindowMs=4*60*60*1000
   if (!Number.isInteger(minimum) || minimum < 1 || !Number.isFinite(evaluationAsOfMs)
     || !Number.isFinite(sourceCutoffAtMs) || sourceCutoffAtMs < evaluationAsOfMs
     || sourceCutoffAtMs > evaluationAsOfMs + postCloseRetrievalWindowMs) {
