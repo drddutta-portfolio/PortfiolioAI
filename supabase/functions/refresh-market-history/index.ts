@@ -240,10 +240,12 @@ Deno.serve(async (request) => {
     }
     const a2Window = typeof body.requestFrom === "string" && typeof body.requestTo === "string"
     if ((body.requestFrom === undefined) !== (body.requestTo === undefined)) return json(400, { error: "requestFrom and requestTo must be supplied together.", code: "PROVIDER_SCHEMA_MISMATCH" })
-    if (a2Window && !p4Internal) {
-      const local = isLocalSupabaseUrl(supabaseUrl)
-      if (!local) return json(409, { error: "Program A A2 execution is local-only.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
-      if (!/^\d{4}-\d{2}-\d{2}$/u.test(body.requestFrom as string) || !/^\d{4}-\d{2}-\d{2}$/u.test(body.requestTo as string)) return json(400, { error: "A2 history window must use ISO dates.", code: "PROVIDER_SCHEMA_MISMATCH" })
+    if (a2Window) {
+      if (!/^\d{4}-\d{2}-\d{2}$/u.test(body.requestFrom as string) || !/^\d{4}-\d{2}-\d{2}$/u.test(body.requestTo as string)) return json(400, { error: "History window must use ISO dates.", code: "PROVIDER_SCHEMA_MISMATCH" })
+      if (!boundedInternal) {
+        const local = isLocalSupabaseUrl(supabaseUrl)
+        if (!local) return json(409, { error: "Explicit history windows are restricted to bounded internal execution in hosted Development.", code: "UNEXPECTED_PRODUCTION_DB_TARGET", providerCalls: 0 })
+      }
     }
     const to = a2Window ? new Date(`${body.requestTo as string}T00:00:00.000Z`) : new Date()
     const from = a2Window ? new Date(`${body.requestFrom as string}T00:00:00.000Z`) : new Date(to.getTime() - HISTORY_DAYS * DAY)
@@ -252,7 +254,7 @@ Deno.serve(async (request) => {
     if (latestExisting.error) throw latestExisting.error
 
     if (body.action === "PLAN" || body.action === "P4_PLAN" || body.action === "P4B_PLAN") {
-      if (p4Internal) {
+      if (boundedInternal) {
         try { loadAngelOneConfig() } catch { return json(409, { error: "Angel One runtime configuration is incomplete.", code: "AUTH_OR_CONFIG_ERROR", providerCalls: 0 }) }
       }
       return json(200, {
@@ -284,8 +286,16 @@ Deno.serve(async (request) => {
     }).select("id").single()
     if (runError) throw runError
 
+    const transport={authenticationRequests:0,historyRequests:0,successfulResponses:0}
+    const observer={
+      onAttempt:(kind:"AUTHENTICATE"|"HISTORY"|"QUOTE")=>{if(kind==="AUTHENTICATE")transport.authenticationRequests+=1;else if(kind==="HISTORY")transport.historyRequests+=1},
+      onResponse:(kind:"AUTHENTICATE"|"HISTORY"|"QUOTE",ok:boolean)=>{if(ok&&(kind==="AUTHENTICATE"||kind==="HISTORY"))transport.successfulResponses+=1},
+    }
     try {
-      const candles = await new AngelOneProvider(loadAngelOneConfig()).getDailyHistory(instrument, kolkataDateTime(from), kolkataDateTime(to))
+      const provider=new AngelOneProvider(loadAngelOneConfig(),observer)
+      const candles = p4bInternal
+        ? await provider.getDailyHistoryNoRetry(instrument, kolkataDateTime(from), kolkataDateTime(to))
+        : await provider.getDailyHistory(instrument, kolkataDateTime(from), kolkataDateTime(to))
       if (!candles.length) throw new SafeOperationalError("ANGEL_HISTORY_EMPTY", "Angel One returned no daily history for the verified instrument.", 502)
       const historyRows = candles.map((candle) => ({
         security_id: security.id,
@@ -339,13 +349,16 @@ Deno.serve(async (request) => {
         status: "SUCCEEDED",
         completed_at: new Date().toISOString(),
         fetched_security_count: 1,
-        metadata: { operation: "REFRESH_HISTORY", security_id: security.id, symbol: security.symbol, interval: "ONE_DAY", candles: candles.length, derived_metrics: metrics.map((metric) => metric.metric_code) },
+        metadata: { operation: "REFRESH_HISTORY", security_id: security.id, symbol: security.symbol, interval: "ONE_DAY", candles: candles.length, derived_metrics: metrics.map((metric) => metric.metric_code), transport },
       }).eq("id", run.id)
       return json(200, {
         mode: "MARKET_HISTORY_REFRESH",
         runId: run.id,
         security: security.symbol,
-        providerCalls: 1,
+        providerCalls: transport.historyRequests,
+        providerAuthenticationRequests: transport.authenticationRequests,
+        attemptedHistoryRequests: transport.historyRequests,
+        successfulTransportResponses: transport.successfulResponses,
         candlesStored: candles.length,
         historyStart: candles[0].periodStart,
         historyEnd: candles.at(-1)!.periodStart,
@@ -354,8 +367,8 @@ Deno.serve(async (request) => {
       })
     } catch (error) {
       const operational = safeError(error)
-      await admin.from("market_data_refresh_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), failed_security_count: 1, error_summary: operational.code }).eq("id", run.id)
-      throw error
+      await admin.from("market_data_refresh_runs").update({ status: "FAILED", completed_at: new Date().toISOString(), failed_security_count: 1, error_summary: operational.code, metadata: { operation: "REFRESH_HISTORY", security_id: security.id, symbol: security.symbol, interval: "ONE_DAY", requested_from: body.requestFrom ?? null, requested_to: body.requestTo ?? null, transport } }).eq("id", run.id)
+      return json(operational.status,{error:operational.message,code:operational.code,providerCalls:transport.historyRequests,providerAuthenticationRequests:transport.authenticationRequests,attemptedHistoryRequests:transport.historyRequests,successfulTransportResponses:transport.successfulResponses})
     } finally {
       await releaseLease(admin, portfolio.id, leaseHolder, boundedInternal ? 1 : COOLDOWN_SECONDS)
     }
