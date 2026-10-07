@@ -638,3 +638,16 @@ font size, full text, wrapping without horizontal overflow and the same treatmen
 on stocks using the existing composition. This is typography only; classification,
 methodology, research data, evidence safeguards and the stock-menu behavior remain
 unchanged.
+
+
+## 21. Application-wide final-design review — 7 October 2026
+
+See [HDFCBANK/TORNTPHARM final design acceptance review](PortfolioAI_STOCK_RESEARCH_PAGE_FINAL_DESIGN_REVIEW_2026-10-07.md).
+The review recommends the HDFCBANK reusable shell as the application-wide target,
+with stock/group-specific research selected through approved contracts and preserved
+Pharma specialist research. Current all-stock implementation is **NOT FINAL**:
+the HDFCBANK-only composition split, legacy evidence ordering/qualification semantics,
+intermediate-width overflow and incomplete all-profile/result coverage require
+closure. This records a review recommendation, not approval of universal rollout,
+new engines or downstream gates. The report distinguishes deployed-source evidence
+from local authenticated rendering and lists the remaining hosted acceptance proof.
