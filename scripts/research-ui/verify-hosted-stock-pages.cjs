@@ -27,20 +27,15 @@ async function main() {
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_EXECUTABLE_PATH || '/usr/bin/chromium', headless: true, proxy: process.env.HTTPS_PROXY || process.env.HTTP_PROXY ? { server: process.env.HTTPS_PROXY || process.env.HTTP_PROXY } : undefined, args: ['--no-sandbox', '--disable-dev-shm-usage'] })
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' })
   const page = await context.newPage()
-  const pendingReads = new Set()
-  let lastReadAt = Date.now()
-  page.on('request', request => {
-    if (/\/(rest|functions)\/v1\//.test(new URL(request.url()).pathname)) { pendingReads.add(request); lastReadAt = Date.now() }
-  })
-  const finishedRead = request => { if (pendingReads.delete(request)) lastReadAt = Date.now() }
-  page.on('requestfinished', finishedRead)
-  page.on('requestfailed', finishedRead)
   async function settleReads() {
-    const deadline = Date.now() + 30000
-    while (pendingReads.size || Date.now() - lastReadAt < 750) {
-      if (Date.now() > deadline) throw new Error('Cached reads did not settle')
-      await new Promise(resolve => setTimeout(resolve, 100))
-    }
+    // Observe the rendered cached-read lifecycle. Cancelled reads from a prior
+    // navigation can remain in Chromium's network bookkeeping indefinitely.
+    await page.waitForFunction(() => {
+      const page = document.querySelector('.research-page')
+      if (!page) return false
+      return !/\bLoading[ .…]|Canonical profile loading/.test(page.innerText)
+    }, null, { timeout: 30000 })
+    await page.waitForTimeout(750)
   }
   page.on('pageerror', () => { report.runtimeErrors += 1 })
   await context.route('**/functions/v1/**', route => {
@@ -52,7 +47,7 @@ async function main() {
   })
   const check = (name, pass, detail = undefined) => report.checks.push({ name, pass: Boolean(pass), ...(detail === undefined ? {} : { detail }) })
   async function capture(name) {
-    await settleReads()
+    if (name !== 'workflow-stopped') await settleReads()
     const file = `${name}.png`
     await page.screenshot({ path: path.join(output, file), fullPage: true })
     await page.screenshot({ path: path.join(output, `${name}-viewport.png`), fullPage: false })
