@@ -101,7 +101,7 @@ Deno.serve(async req=>{
   if(!cr.ok)return reply(502,{code:"NSE_CATALOG_FETCH_FAILED",status:cr.status})
   const raw=JSON.parse(text) as Record<string,unknown>
   const rows=Array.isArray(raw.data)?raw.data as Record<string,unknown>[]:[]
-  const tokens=["CAPITAL","CONSUM","DURBL","FINSER","SERV","TRANS","LOGIS","CHEM","OIL"]
+  const tokens=["CAPITAL","CONSUM","DURBL","FINSER","SERV","TRANS","LOGIS","CHEM","OIL","TELE","TELCO"]
   const candidates=rows.map(x=>String(x.index??x.indexSymbol??x.indexName??x.name??"")).filter(v=>tokens.some(t=>v.toUpperCase().includes(t)))
   return reply(200,{status:"NSE_INDEX_CATALOG_DIAGNOSTIC",warmStatus:warm.status,cookieCount:cookies.length,candidates:[...new Set(candidates)].sort()})
  }
