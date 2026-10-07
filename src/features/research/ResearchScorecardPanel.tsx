@@ -1,3 +1,4 @@
+import { isQualifiedResearchScore } from "./researchScoreEligibility"
 import "./ResearchScorecardPanel.css"
 import "./ResearchScorecardPolish.css"
 import { researchProfileUiContract } from "./researchProfileUiContract"
@@ -47,7 +48,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error, programB = 
   readonly programB?: ProgramBR6ScoringPresentation | null
 }) {
   const unavailableReason = isLoading ? "Loading scoring framework…" : error ? error : !snapshot ? "No current scoring snapshot is available." : snapshot.methodologyState === "NOT_APPLICABLE" ? "Equity scoring not applicable. Portfolio accounting and owner settings are preserved." : snapshot.methodologyState === "REVIEW_REQUIRED" ? "The canonical assignment, its lineage or required primary subprofile needs review." : snapshot.methodologyState === "METHODOLOGY_NOT_AVAILABLE" ? "No approved methodology is available. PortfolioAI will not substitute the GENERAL scoring profile." : snapshot.scoringExecutionState === "PENDING_ADAPTER" ? "Sector methodology available; scoring execution is pending evidence/adapter rollout." : snapshot.scoringExecutionState === "BLOCKED" ? "Methodology resolved · scoring blocked. Required current evidence is not ready." : null
-  const qualified = Boolean(snapshot && !unavailableReason && !snapshot.previewMode && snapshot.runState === "COMPLETE" && snapshot.scoreRunId && (!snapshot.canonicalEvidenceState || snapshot.canonicalEvidenceState === "FRESH") && (!programB || programB.canScore))
+  const qualified = isQualifiedResearchScore(snapshot, isLoading, error, programB)
   const current: SecurityScoringSnapshot = snapshot ?? { profileCode: "UNRESOLVED", profileName: "Research profile unresolved", modelName: "PortfolioAI scoring", modelStatus: "UNAVAILABLE", profileSource: "METHODOLOGY_UNAVAILABLE", runState: null, overallScore: null, evidenceCoverage: null, scoreReadyCoverage: null, dimensions: [], ratings: [], evidenceConfidence: null, asOfDate: null }
   const ui = researchProfileUiContract(current.profileCode)
   const byCode = new Map(current.dimensions.map((dimension) => [dimension.dimensionCode, dimension]))
@@ -152,7 +153,7 @@ export function ResearchScorecardPanel({ snapshot, isLoading, error, programB = 
         const representative = senior[0] ?? sorted[0]
         return <details key={agency} className="rating-agency-row">
           <summary><strong>{agency}</strong><span>{representative ? `${representative.ratingSymbol}${representative.outlook ? ` / ${label(representative.outlook)}` : ""}` : "Rating available"}</span><small>{ratings.length} instruments · latest {ratingDate(sorted[0]?.ratingDate ?? null)}</small><b>Details</b></summary>
-          <div className="rating-instrument-list">{sorted.map((rating) => <article key={rating.id}><div><strong>{rating.instrumentDescription ?? (rating.instrumentType ? label(rating.instrumentType) : "Instrument")}</strong><span>{rating.ratingSymbol}{rating.outlook ? ` / ${label(rating.outlook)}` : ""}</span></div><small>{rating.ratingAction ? label(rating.ratingAction) : "Action unavailable"} · {ratingDate(rating.ratingDate)} · Source status: {rating.evidenceStatus} · Fresh through {ratingDate(rating.freshUntil)} · Retrieved {ratingDate(rating.retrievedAt)}</small></article>)}</div>
+          <div className="rating-instrument-list">{sorted.map((rating) => <article key={rating.id}><div><strong>{rating.instrumentDescription ?? (rating.instrumentType ? label(rating.instrumentType) : "Instrument")}</strong><span>{rating.ratingSymbol}{rating.outlook ? ` / ${label(rating.outlook)}` : ""}</span></div><small>{rating.ratingAction ? label(rating.ratingAction) : "Action unavailable"} · {ratingDate(rating.ratingDate)} · Source status: {rating.evidenceStatus} · Fresh through {ratingDate(rating.freshUntil)} · Retrieved {ratingDate(rating.retrievedAt)}</small><small>Source reference: {rating.sourceUrl || "Unavailable"}</small></article>)}</div>
         </details>
       })}</div> : <div className="data-empty"><strong>{ratingsLoading ? "Loading retained ratings…" : ratingsError ? "External ratings unavailable" : "No external agency ratings cached"}</strong><p>Provider rating availability is independent of PortfolioAI score readiness.</p></div>}
     </section>}

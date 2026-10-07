@@ -37,6 +37,11 @@ describe("research evidence policy", () => {
     const implementation = loadSecurityResearch.toString()
     expect(implementation).not.toMatch(/functions\.invoke|refresh-security-enrichment|provider_usage|reserve_provider|data_ingestion_run/iu)
   })
+  it("rejects contradictory currency and nonnumeric source values without formatting NaN", () => {
+    expect(formatSourceResearchMetric(metric({ value: "1000", unit: "INR_CRORE", currency: "USD" }))).toBe("Unit / currency conflict")
+    expect(formatSourceResearchMetric(metric({ value: "pending", unit: "INR" }))).toBe("Value unavailable")
+    expect(formatSourceResearchMetric(metric({ value: "Infinity", unit: "PERCENT" }))).toBe("Value unavailable")
+  })
   it("does not guess currency for provider crore magnitudes", () => {
     expect(formatSourceResearchMetric(metric({ value: "1111989.2", unit: "Cr.", currency: null }))).toBe("Unit / currency unproven")
     expect(formatSourceResearchMetric(metric({ value: "13.8", unit: null }))).toBe("Unit unavailable")

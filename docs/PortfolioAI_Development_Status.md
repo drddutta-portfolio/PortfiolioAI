@@ -1,3 +1,28 @@
+## Stock research UI-G3 safeguards — 8 October 2026
+
+Gate 2 PR #109 is merged at `1533ab292b82a44d278141583c75ee7c17042f0c`
+after passing CI. Gate 3 is prepared on `research-g3-evidence-safeguards` for
+review; its merge/deployment and hosted visual acceptance are not claimed.
+
+- Header and cockpit share numeric-score display eligibility and the same existing
+  Program B prerequisite context, including Pharma primary-assignment readiness.
+- Pending/blocked execution, invalid/missing/non-finite scores and unsuccessful
+  reads cannot expose retained numeric scores as current results.
+- Detailed research tabs use the unit-safe source formatter. Currency conflicts
+  and invalid numeric values are explicit; Evidence preserves original values.
+- Scoring provenance displays canonical evidence snapshot identity and methodology
+  version rather than substituting a score-run ID, profile name or date.
+- Independent rating provenance and owner/advisory separation are retained.
+- No database/schema, migration, provider execution, evidence-review write,
+  calculation formula, recommendation/sizing, Auth/RLS or owner-setting change.
+- Verification: 153 focused tests across 11 files, architecture guard, TypeScript /
+  production build, changed-file lint and whitespace checks pass. Existing
+  research bundle-size warning remains. Full-repository lint reports 85 errors and
+  four warnings in unchanged files; changed-file lint passes. Hosted visual
+  acceptance is pending.
+- UI-G4/UI-G5 remain outstanding. This UI work does not change research/V1 gate
+  dispositions or establish live research completion.
+
 ## Stock research UI-G2 selected-contract coverage — 7 October 2026
 
 **UI-G2 implementation and automated acceptance = COMPLETE for the current
