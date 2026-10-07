@@ -26,6 +26,10 @@ jobs:
         run: npm ci
       - name: Enforce presentation data boundaries
         run: npm run check:architecture
+      - name: Verify stock research shell interactions and safeguards
+        run: npx vitest run src/pages/ResearchPage.test.tsx src/pages/StockResearchRoute.test.tsx src/features/research/StockSectionNavigator.test.tsx src/features/research/CompleteResearchRefreshPanel.test.tsx src/features/research/ResearchScorecardPanel.test.tsx src/features/research/researchScoreEligibility.test.ts src/features/research/researchPolicy.test.ts src/features/research/programBR6Presentation.test.ts src/features/research/ProfileResearchBlocks.test.tsx src/features/research/CanonicalEvidenceReadinessPanel.test.tsx src/features/research/researchProfileUiContract.test.ts
+      - name: Lint stock research shell interactions
+        run: npx eslint src/pages/ResearchPage.tsx src/pages/ResearchPage.test.tsx src/features/research/StockSectionNavigator.tsx src/features/research/StockSectionNavigator.test.tsx src/features/research/stockResearchNavigation.ts src/features/research/CompleteResearchRefreshPanel.tsx src/features/research/CompleteResearchRefreshPanel.test.tsx
       - name: Verify canonical authority contracts
         run: npx vitest run src/contracts/canonicalDataAuthorities.test.ts src/features/research/sectorResearchMapping.test.ts src/features/research/researchProfileRouting.test.ts src/features/research/portfolioCoverageProjection.test.ts src/features/research/pharmaResearchProfile.test.ts src/features/research/pharmaSourceReadiness.test.ts src/features/research/pharmaHistoricalSourceContracts.test.ts src/features/research/pharmaProviderDiscoveryPlan.test.ts src/features/research/pharmaReadinessViewModel.test.ts
       - name: Verify Gate H deterministic score and closure invariants

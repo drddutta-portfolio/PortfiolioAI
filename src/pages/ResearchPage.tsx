@@ -2,7 +2,7 @@ import "../features/research/StockResearchShell.css"
 import { StockSectionNavigator } from "../features/research/StockSectionNavigator"
 import "../features/research/ResearchWorkspaceShell.css"
 import Decimal from "decimal.js"
-import { useMemo, useState, type KeyboardEvent } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react"
 import { Link, useParams } from "react-router-dom"
 import { ProgramCR10AttentionBadge } from "../components/ProgramCR10AttentionBadge"
 import type { ProgramCR10AttentionView } from "../features/decision/r10ActionCenterViewModel"
@@ -32,7 +32,7 @@ import { useSecurityResearch } from "../features/research/useSecurityResearch"
 import { usePharmaSubprofileResolution } from "../features/research/usePharmaSubprofileResolution"
 import { useSecurityScoring } from "../features/research/useSecurityScoring"
 
-const TABS = ["Overview", "Financials", "Quality & Growth", "Ownership", "Valuation", "Documents", "Evidence"] as const
+import { STOCK_RESEARCH_TABS as TABS, STOCK_RESEARCH_TAB_TARGETS, stockResearchTabForHash, jumpToStockSection } from "../features/research/stockResearchNavigation"
 type Tab = typeof TABS[number]
 
 type ScoringHook = ReturnType<typeof useSecurityScoring>
@@ -51,19 +51,33 @@ export function ResearchPage() {
   const pharmaResolution = usePharmaSubprofileResolution(position?.securityId ?? null)
   const programB = scoring.data && position ? buildProgramBR6ScoringPresentation({ securityId: position.securityId, snapshot: scoring.data, pharmaResolution: pharmaResolution.data }) : null
   const hasPharmaResolution = pharmaResolution.data?.status === "RESOLVED"
-  const [tab, setTab] = useState<Tab>("Overview")
+  const [tab, setTab] = useState<Tab>(() => stockResearchTabForHash(window.location.hash))
+  const focusPanel = useRef(false)
+  const changeTab = useCallback((next: Tab) => {
+    window.history.replaceState(window.history.state, "", `#${STOCK_RESEARCH_TAB_TARGETS[next]}`)
+    setTab(next)
+  }, [])
+  useEffect(() => {
+    if (focusPanel.current) {
+      jumpToStockSection(STOCK_RESEARCH_TAB_TARGETS[tab], document.querySelector<HTMLElement>(".stock-section-navigator"), "research-panel")
+      focusPanel.current = false
+    }
+  }, [tab])
+  const viewTab = (next: Tab) => { focusPanel.current = true; changeTab(next) }
   if (portfolioLoading) return <Loading label="Loading cached portfolio context…" />
   if (portfolioError) return <div className="notice notice-error" role="alert">{portfolioError}</div>
   if (!position || !portfolio) return <ResearchNotFound />
   return <section className="research-page">
-    <StockSectionNavigator activeTab={tab} onTabChange={setTab} hasSpecialist hasResearch />
+    <StockSectionNavigator activeTab={tab} onTabChange={changeTab} hasSpecialist hasResearch />
     <ResearchHeader programB={programB} position={position} research={research.data} scoring={scoring} currency={portfolio.portfolio.currency} portfolioId={portfolio.portfolio.id} actionAttention={actionAttention} onPositionSaved={reloadPortfolio} />
     <div id="stock-refresh" tabIndex={-1}><CompleteResearchRefreshPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} symbol={position.symbol} profileCode={scoring.data?.profileCode} onCompleted={() => { research.reload(); scoring.reload() }} /></div>
-    <ResearchTabs value={tab} onChange={setTab} />
+    <ResearchTabs value={tab} onChange={changeTab} />
     <div id="stock-workspace" tabIndex={-1}>
+    <div id={tab === "Overview" ? undefined : STOCK_RESEARCH_TAB_TARGETS[tab]} tabIndex={-1}>
     {tab === "Evidence" ? <CanonicalEvidenceReadinessPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} assetClass={position.assetClass} /> : null}
     {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : !research.data ? <Empty title="Cached research unavailable" detail="No retained research was returned for this security." /> : null}
-    <TabPanel programB={programB} hasPharmaResolution={hasPharmaResolution} tab={tab} position={position} research={research.isLoading || research.error ? null : research.data} scoring={scoring} portfolioId={portfolio.portfolio.id} onTabChange={setTab} />
+    <TabPanel programB={programB} hasPharmaResolution={hasPharmaResolution} tab={tab} position={position} research={research.isLoading || research.error ? null : research.data} scoring={scoring} portfolioId={portfolio.portfolio.id} onTabChange={viewTab} />
+    </div>
     </div>
   </section>
 }
@@ -169,7 +183,10 @@ function ResearchTabs({ value, onChange }: { readonly value: Tab; readonly onCha
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return
     event.preventDefault()
     const next = event.key === "Home" ? 0 : event.key === "End" ? TABS.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + TABS.length) % TABS.length
-    onChange(TABS[next]!); document.getElementById(`research-tab-${next}`)?.focus()
+    onChange(TABS[next]!)
+    const target = document.getElementById(`research-tab-${next}`)
+    target?.focus({ preventScroll: true })
+    target?.scrollIntoView?.({ block: "nearest", inline: "nearest" })
   }
   return <div className="research-tabs" role="tablist" aria-label="Research sections">{TABS.map((tab, index) => <button id={`research-tab-${index}`} key={tab} type="button" role="tab" aria-selected={value === tab} aria-controls="research-panel" tabIndex={value === tab ? 0 : -1} onClick={() => onChange(tab)} onKeyDown={(event) => activate(event, index)}>{tab}</button>)}</div>
 }
@@ -211,7 +228,7 @@ function Overview({ programB, hasPharmaResolution, position, research, scoring, 
 }
 
 function Documents({ research }: { readonly research: SecurityResearch }) {
-  return <><SectionHeading title="Research documents" detail="Metadata and source appearances only; document bodies are not stored here." />{research.documents.length ? <div className="document-list">{research.documents.map((document) => <article key={document.id}><div><p className="eyebrow">{document.type.replaceAll("_", " ")}</p><h2>{document.title ?? "Title unavailable"}</h2><p>{document.periodEnd ? `Period ending ${date(document.periodEnd)}` : "Reporting period unavailable"} · {document.publishedAt ? `Published ${date(document.publishedAt)}` : "Publication date unavailable"}</p></div><div><Status value={document.status} /><small>{document.provider} · retrieved {dateTime(document.retrievedAt)}</small>{document.externalReference ? <span className="document-reference">Archived reference retained</span> : <span className="unavailable">No lawful retained open reference</span>}</div></article>)}</div> : <Empty title="No cached document appearances" detail="No document metadata has been retained for this security." />}</>
+  return <><SectionHeading title="Research documents" detail="Metadata and source appearances only; document bodies are not stored here." />{research.documents.length ? <div className="document-list">{research.documents.map((document) => <article key={document.id}><div><p className="eyebrow">{document.type.replaceAll("_", " ")}</p><h2>{document.title ?? "Title unavailable"}</h2><p>{document.periodEnd ? `Period ending ${date(document.periodEnd)}` : "Reporting period unavailable"} · {document.publishedAt ? `Published ${date(document.publishedAt)}` : "Publication date unavailable"}</p></div><div><Status value={document.status} /><small>{document.provider} · retrieved {dateTime(document.retrievedAt)}</small>{document.externalReference ? <details className="document-reference"><summary>Retained archive reference</summary><p>{document.externalReference}</p></details> : <span className="unavailable">No lawful retained open reference</span>}</div></article>)}</div> : <Empty title="No cached document appearances" detail="No document metadata has been retained for this security." />}</>
 }
 
 function Evidence({ research }: { readonly research: SecurityResearch }) {

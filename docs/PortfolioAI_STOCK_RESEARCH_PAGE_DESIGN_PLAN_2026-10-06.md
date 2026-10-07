@@ -747,4 +747,43 @@ These are display safeguards over existing shared repositories/hooks and
 canonical contracts. Legacy optional metadata retains its existing compatibility
 semantics; current canonical reads remain governed by the canonical scoring
 loader. UI-G4 and UI-G5, including authenticated hosted visual acceptance,
-remain outstanding. Gate 3 implementation is prepared for review, not yet merged.
+remain outstanding. Gate 3 passed review and CI, merged through PR #110 at
+`f59b5f93675150f496b8d24d1cbafda2867796b2`, and its matching Development
+deployment was verified READY. This is deployment metadata, not hosted visual proof.
+
+
+### UI-G4 interaction and layout implementation — 7 October 2026 (UTC)
+
+Gate 4 builds on the reviewed, deployed Gate 3 revision above. Its changes belong
+to **Part 1: the common shell for ALL stocks**. Profile/subprofile selection and
+Part 2's stock-specific evidence and methodology contracts remain unchanged.
+
+| Sub-gate | Implementation / review evidence |
+| --- | --- |
+| G4.1 navigation and focus | One shared destination contract maps all seven tabs to distinct stable anchors. The legacy `#stock-workspace` means Overview; Documents/Evidence use `#stock-documents`/`#stock-evidence`. Initial bookmarks and browser hash changes activate the intended tab before focus/scroll; clearing the hash restores Overview. Section jumps preserve router history state, offset the sticky menu and respect reduced motion. Modified clicks retain browser behavior. ArrowLeft/ArrowRight wrap; Home/End select the first/last tab; one tab is in the Tab sequence, and the panel names its selected tab. Evidence drill-down focuses and scrolls to the panel with the same sticky offset; Top focuses the app header. |
+| G4.2 responsive common layout | The section menu remains the sticky control; tabs stay in normal document flow to avoid overlapping it. Shrinkable grid/flex children and long retained references wrap. Refresh-capability disclosures span the available canvas; modules use two columns and stack below 600px. Existing compact, unrestricted full-name wrapping remains mandatory, and wide evidence tables scroll within their own focusable container. Automated checks retain long text and accessibility semantics; actual layout/overflow/zoom remains hosted visual acceptance work. |
+| G4.3 owner-controlled workflows | Planning starts only on owner action, clears its obsolete prior plan and announces busy state. Quota/capability blocks, confirmation, cancellation and explicit errors remain in place. Complete success/partial completion invokes the existing cached-research/scoring reload callback; failure does not claim accepted evidence. Documents disclose actual retained references rather than inventing an open/download URL. Evidence keeps independent canonical readiness, source-status filtering, original values and competing observations. No live refresh or evidence acceptance was performed by this UI gate. |
+
+Automated review covers bookmark/hash restoration, all distinct tab links,
+modified clicks, sticky-offset arithmetic, focus, reduced motion, keyboard keys,
+quota blocks, cancellation, busy controls, failed re-planning, failure and partial
+completion, long full company names, archive references and existing evidence
+filtering. CI now explicitly runs the shared stock-shell interaction/safeguard
+regression suite and changed-component lint. The focused suite passed 167 tests
+across 11 files; architecture, TypeScript/production build, changed-file lint,
+whitespace and credential-pattern checks passed. Full-repository lint has 85
+errors and four warnings in unchanged files, and the existing research bundle
+size warning remains.
+
+**Implementation decision:** prepared for review; Gate 4 merge/deployment is not
+claimed. UI-G5's representative profile/state matrix, authenticated hosted visual
+verification and final rollout decision remain outstanding. At minimum that
+hosted review must exercise HDFCBANK, TORNTPHARM, an unregistered/unresolved
+profile, sparse/error states, 390/768/1024/1440px widths, long names (including
+SRHHYPLTD and longer unbroken symbols), zoom, sticky-link focus and expanded
+refresh/document/evidence content. Local DOM tests are not a substitute for this
+review and do not pass research methodology/evidence or V1 investment-engine gates.
+
+There are no schema/migrations, new business facts, new provider capabilities,
+financial formulas, evidence-review writes, automatic owner-setting changes or
+Auth/RLS changes in Gate 4.

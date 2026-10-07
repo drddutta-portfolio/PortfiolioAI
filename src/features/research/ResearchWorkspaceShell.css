@@ -61,4 +61,29 @@
 .profile-research-remaining summary { cursor: pointer; font-weight: 700; padding: .5rem 0; }
 .profile-requirement-grid h3, .profile-requirement-grid p, .profile-requirement-grid small { overflow-wrap: anywhere; }
 
+/* The section menu is the sticky control; tabs must not stack over its links. */
+.research-page .research-tabs { position: static; min-width: 0; max-width: 100%; }
+.research-page, .research-page .research-header > *, .research-page .research-panel,
+.research-page .research-decision-body > *, .research-page .research-metric-card,
+.research-page .document-list article > div { min-width: 0; }
+.research-page .research-metric-card, .research-page .portfolioai-state-panel,
+.research-page .document-list, .research-page .research-key-insights,
+.research-page .company-about-heading { overflow-wrap: anywhere; }
+.research-page .research-table-wrap { min-width: 0; }
+.research-page .research-table td { overflow-wrap: anywhere; }
+.research-page .document-reference { max-width: 100%; font-size: .75rem; }
+.research-page .document-reference summary { cursor: pointer; }
+.research-page .refresh-capabilities { grid-column: 1 / -1; min-width: 0; }
+.research-page .refresh-capabilities .profile-refresh-workspace {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem;
+}
+.research-page [id^="stock-"]:focus-visible, .research-page .research-panel:focus-visible {
+  outline: 2px solid #315f48; outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .research-page .refresh-capabilities .profile-refresh-workspace { grid-template-columns: minmax(0, 1fr); }
+  .research-page .profile-refresh-status { flex-wrap: wrap; }
+  .research-page .company-about-header { flex-wrap: wrap; }
+}
+
 }

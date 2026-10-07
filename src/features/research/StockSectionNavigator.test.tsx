@@ -1,13 +1,14 @@
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react"
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react"
 import { useState } from "react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { StockSectionNavigator, type StockResearchTab } from "./StockSectionNavigator"
+import { STOCK_RESEARCH_TAB_TARGETS } from "./stockResearchNavigation"
 
 function Workspace({ hasResearch = true }: { hasResearch?: boolean }) {
   const [tab, setTab] = useState<StockResearchTab>("Overview")
-  return <><StockSectionNavigator activeTab={tab} onTabChange={setTab} hasResearch={hasResearch} hasSpecialist />
+  return <><header id="app-top">App header</header><StockSectionNavigator activeTab={tab} onTabChange={setTab} hasResearch={hasResearch} hasSpecialist />
     <div id="stock-summary" tabIndex={-1}>Summary block</div>
-    <div id="stock-workspace" tabIndex={-1}>{tab} content</div>
+    <div id="stock-workspace" tabIndex={-1}><div id={tab === "Overview" ? undefined : STOCK_RESEARCH_TAB_TARGETS[tab]} tabIndex={-1}>{tab} content</div></div>
     {tab === "Overview" && hasResearch ? <div id="stock-health" tabIndex={-1}>Health block</div> : null}
   </>
 }
@@ -25,7 +26,7 @@ describe("shared stock section navigation", () => {
     const menu = within(screen.getByRole("navigation", { name: "Stock page sections" }))
     fireEvent.click(menu.getByRole("link", { name: "Documents" }))
     expect(screen.getByText("Documents content")).toBeInTheDocument()
-    expect(document.activeElement?.id).toBe("stock-workspace")
+    expect(document.activeElement?.id).toBe("stock-documents")
     expect(window.history.state).toEqual({ key: "router-state" })
     fireEvent.click(menu.getByRole("link", { name: "Research health" }))
     expect(screen.getByText("Overview content")).toBeInTheDocument()
@@ -59,5 +60,45 @@ describe("shared stock section navigation", () => {
     fireEvent.click(screen.getByRole("link", { name: "Back to page top" }))
     expect(scrollTo).toHaveBeenLastCalledWith({ top: 0, behavior: "instant" })
     expect(window.location.hash).toBe("#app-top")
+    expect(document.activeElement?.id).toBe("app-top")
   })
+  it("restores a bookmarked tab and responds to hash changes", () => {
+    window.history.replaceState({ key: "router-state" }, "", "#stock-documents")
+    render(<Workspace />)
+    expect(screen.getByText("Documents content")).toBeInTheDocument()
+    expect(document.activeElement?.id).toBe("stock-documents")
+    act(() => {
+      window.history.replaceState(window.history.state, "", "#stock-health")
+      window.dispatchEvent(new HashChangeEvent("hashchange"))
+    })
+    expect(screen.getByText("Overview content")).toBeInTheDocument()
+    expect(document.activeElement?.id).toBe("stock-health")
+    act(() => {
+      window.history.replaceState(window.history.state, "", "#stock-evidence")
+      window.dispatchEvent(new HashChangeEvent("hashchange"))
+    })
+    expect(screen.getByText("Evidence content")).toBeInTheDocument()
+    expect(document.activeElement?.id).toBe("stock-evidence")
+    act(() => {
+      window.history.replaceState(window.history.state, "", "/app/research/example")
+      window.dispatchEvent(new HashChangeEvent("hashchange"))
+    })
+    expect(screen.getByText("Overview content")).toBeInTheDocument()
+    expect(document.activeElement?.id).toBe("stock-workspace")
+  })
+  it("gives every detailed tab its own standard anchor", () => {
+    render(<Workspace />)
+    for (const [tab, id] of Object.entries(STOCK_RESEARCH_TAB_TARGETS)) {
+      expect(screen.getByRole("link", { name: tab })).toHaveAttribute("href", `#${id}`)
+    }
+  })
+  it("ignores unknown hashes and preserves modified-click browser behavior", () => {
+    window.history.replaceState(null, "", "#unknown-section")
+    render(<Workspace />)
+    expect(scrollTo).not.toHaveBeenCalled()
+    fireEvent.click(screen.getByRole("link", { name: "Documents" }), { ctrlKey: true })
+    expect(screen.getByText("Overview content")).toBeInTheDocument()
+    expect(scrollTo).not.toHaveBeenCalled()
+  })
+
 })

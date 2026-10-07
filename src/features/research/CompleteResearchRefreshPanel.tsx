@@ -30,7 +30,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
   const [busy, setBusy] = useState<"PLAN" | "EXECUTE" | "MARKET_PLAN" | "MARKET_EXECUTE" | "BENCHMARK_PLAN" | "BENCHMARK_EXECUTE" | "VALUATION_PLAN" | "VALUATION_EXECUTE" | "GROWTH" | null>(null)
 
   const createPlan = async () => {
-    setBusy("PLAN"); setError(null); setResult(null)
+    setBusy("PLAN"); setError(null); setResult(null); setPlan(null)
     try { setPlan(await planCompleteResearchRefresh(portfolioId, securityId, ui.profileCode)) }
     catch (reason: unknown) { setError(displayError(reason)) }
     finally { setBusy(null) }
@@ -51,7 +51,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
   }
 
   const createMarketPlan = async () => {
-    setBusy("MARKET_PLAN"); setError(null); setMarketResult(null)
+    setBusy("MARKET_PLAN"); setError(null); setMarketResult(null); setMarketPlan(null)
     try { setMarketPlan(await planMarketHistoryRefresh(portfolioId, securityId)) }
     catch (reason: unknown) { setError(displayError(reason)) }
     finally { setBusy(null) }
@@ -72,7 +72,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
   }
 
   const createBenchmarkPlan = async () => {
-    setBusy("BENCHMARK_PLAN"); setError(null); setBenchmarkResult(null)
+    setBusy("BENCHMARK_PLAN"); setError(null); setBenchmarkResult(null); setBenchmarkPlan(null)
     try { setBenchmarkPlan(await planBankBenchmarkRefresh(portfolioId, securityId)) }
     catch (reason: unknown) { setError(displayError(reason)) }
     finally { setBusy(null) }
@@ -93,7 +93,7 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
   }
 
   const createValuationPlan = async () => {
-    setBusy("VALUATION_PLAN"); setError(null); setValuationResult(null)
+    setBusy("VALUATION_PLAN"); setError(null); setValuationResult(null); setValuationPlan(null)
     try { setValuationPlan(await planValuationEvidenceRefresh(portfolioId, securityId)) }
     catch (reason: unknown) { setError(displayError(reason)) }
     finally { setBusy(null) }
@@ -122,7 +122,8 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
     finally { setBusy(null) }
   }
 
-  return <section className="panel complete-research-refresh" aria-labelledby="complete-research-refresh-title">
+  return <section className="panel complete-research-refresh" aria-labelledby="complete-research-refresh-title" aria-busy={busy !== null}>
+    {error ? <div className="notice notice-error" role="alert">{error}</div> : null}
     {ui.completeResearchRefreshMode === "ENABLED" ? <><div className="section-heading">
       <div>
         <p className="eyebrow">Owner-controlled research refresh</p>
@@ -131,8 +132,6 @@ export function CompleteResearchRefreshPanel({ portfolioId, securityId, symbol, 
       </div>
       <button type="button" className="button button-secondary" disabled={busy !== null} onClick={() => void createPlan()}>{busy === "PLAN" ? "Planning…" : plan ? "Re-plan" : "Plan complete refresh"}</button>
     </div>
-
-    {error ? <div className="notice notice-error" role="alert">{error}</div> : null}
 
     {plan ? <div className="complete-refresh-plan">
       <div className="summary-grid">
