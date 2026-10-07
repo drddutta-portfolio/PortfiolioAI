@@ -20,7 +20,7 @@
     },
     "markdown": {
       "path": "docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V1_2026-10-07.md",
-      "sha256": null
+      "sha256": "7be698193a96a6cac10b7304093591c4fb9d450726d9f6b2e6a046a59710e8a3"
     },
     "dry_run": {
       "path": "docs/private/PortfolioAI_V1_4_OWNER_REVIEW_PACKAGE_115_V1_DRY_RUN_2026-10-07.json",
@@ -35,6 +35,7 @@
     "class_B": 0,
     "class_C": 638,
     "cross_file_item_count_match": true,
-    "all_decisions_defer": true
+    "all_decisions_defer": true,
+    "markdown_hash_corrected_from_committed_utf8": true
   }
 }
