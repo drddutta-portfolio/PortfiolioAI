@@ -27,6 +27,21 @@ async function main() {
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_EXECUTABLE_PATH || '/usr/bin/chromium', headless: true, proxy: process.env.HTTPS_PROXY || process.env.HTTP_PROXY ? { server: process.env.HTTPS_PROXY || process.env.HTTP_PROXY } : undefined, args: ['--no-sandbox', '--disable-dev-shm-usage'] })
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' })
   const page = await context.newPage()
+  const pendingReads = new Set()
+  let lastReadAt = Date.now()
+  page.on('request', request => {
+    if (/\/(rest|functions)\/v1\//.test(new URL(request.url()).pathname)) { pendingReads.add(request); lastReadAt = Date.now() }
+  })
+  const finishedRead = request => { if (pendingReads.delete(request)) lastReadAt = Date.now() }
+  page.on('requestfinished', finishedRead)
+  page.on('requestfailed', finishedRead)
+  async function settleReads() {
+    const deadline = Date.now() + 30000
+    while (pendingReads.size || Date.now() - lastReadAt < 750) {
+      if (Date.now() > deadline) throw new Error('Cached reads did not settle')
+      await new Promise(resolve => setTimeout(resolve, 100))
+    }
+  }
   page.on('pageerror', () => { report.runtimeErrors += 1 })
   await context.route('**/functions/v1/**', route => {
     const request = route.request()
@@ -37,10 +52,11 @@ async function main() {
   })
   const check = (name, pass, detail = undefined) => report.checks.push({ name, pass: Boolean(pass), ...(detail === undefined ? {} : { detail }) })
   async function capture(name) {
+    await settleReads()
     const file = `${name}.png`
     await page.screenshot({ path: path.join(output, file), fullPage: true })
     await page.screenshot({ path: path.join(output, `${name}-viewport.png`), fullPage: false })
-    report.screenshots.push(file)
+    report.screenshots.push(file, `${name}-viewport.png`)
   }
   async function layout(name) {
     const measured = await page.evaluate(() => {
@@ -84,6 +100,7 @@ async function main() {
       await page.goto(`${ORIGIN}/app/research/${stock.id}`, { waitUntil: 'domcontentloaded' })
       await page.locator('.research-title h1').waitFor({ timeout: 30000 })
       await page.waitForFunction(() => ![...document.querySelectorAll('.research-page .portfolio-loading')].some(el => el.getClientRects().length), null, { timeout: 30000 })
+      await settleReads()
       const title = await page.locator('.research-title h1').textContent()
       check(`${stock.symbol}: common shell`, await page.locator('.research-workspace-shell').count() === 1 && await page.getByRole('tab').count() === 7)
       for (const width of WIDTHS) {
@@ -98,8 +115,10 @@ async function main() {
       await page.getByRole('tab', { name: 'Overview', exact: true }).focus()
       await page.keyboard.press('End')
       check(`${stock.symbol}: keyboard tabs`, await page.getByRole('tab', { name: 'Evidence', exact: true }).getAttribute('aria-selected') === 'true' && await page.getByRole('tab', { name: 'Evidence', exact: true }).evaluate(el => el === document.activeElement))
+      await page.getByRole('heading', { name: 'Evidence ledger', exact: true }).waitFor({ timeout: 30000 })
       const status = page.getByLabel('Status', { exact: true })
-      if (await status.count()) await status.selectOption('CONFLICTING')
+      await status.selectOption('CONFLICTING')
+      check(`${stock.symbol}: source-status filter`, await status.inputValue() === 'CONFLICTING')
       await capture(`${stock.symbol}-evidence`)
       await page.getByRole('tab', { name: 'Documents', exact: true }).click()
       await capture(`${stock.symbol}-documents`)
