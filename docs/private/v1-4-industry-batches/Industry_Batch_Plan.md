@@ -186,3 +186,25 @@ Maintain a separate batch execution ledger with: security ID, symbol, frozen coh
 The canonical release threshold remains **at least 100 members of the unchanged frozen 111 READY, and ₹11,93,271.27 in frozen READY value**. Fixed 115 and frozen 111 are distinct, overlapping populations. A batch pilot, UI demonstration or passing code suite does not itself establish persisted READY or V1-4 PASS.
 
 ---
+
+
+## Owner-approved final frozen-cohort industry execution order — 8 October 2026
+
+**Superseding owner decision:** the original four-stock cross-group bank reference pilot is superseded by the **full 13-frozen-stock banking pilot**, covering G01 (7), G20 (4), G46 (1) and G48 (1). The underlying group/batch assignments and frozen values are unchanged. This is an execution-window overlay, not a canonical industry or methodology merge.
+
+**Banking pilot 01 — frozen cohort, all included:** BANKBARODA, FEDERALBNK, HDFCBANK, ICICIBANK, KARURVYSYA, KOTAKBANK, SBIN (G01); AXISBANK, BANDHANBNK, IDBI, IDFCFIRSTB (G20); INDIANB (G46); AUBANK (G48). Combined frozen value **₹2,05,138.62**. Include original BANK/PSU/private/small-finance distinctions in actual reviewed evidence and effective profile requirements. The non-frozen RBLBANK and UNIONBANK remain in the full-portfolio plan, not the frozen readiness numerator.
+
+**Authoritative subsequent order:** execute the frozen members of G02, G03, G04, G05, G06, G07, G08, G09, G10, G11, G12, G13, G14, G15, G16, G17, G18, G19, then G21 through G45 (skipping the already-piloted G20), G47 (skipping G46), G49 through G60 (skipping G48); finally G61–G81 have no frozen release members and remain portfolio-wide follow-on, not prerequisites for the frozen V1 minimum. Original G01, G20, G46, G48 ledger results are each closed independently, and **never counted or fetched twice**. Stock grouping remains by original industry and approved methodological subprofile, with explicit exception review before any reassignment.
+
+**Pharma — frozen 13, no implicit common scorer:**
+- G06 GLOBAL_GENERICS (5): AUROPHARMA, CAPLIPOINT, CIPLA, EMCURE, GLENMARK
+- G09 DOMESTIC_FORMULATIONS (2): MANKIND, TORNTPHARM
+- G11 API_BULK_DRUGS (2): LAURUSLABS, SUPRIYA
+- G33 CDMO_CRAMS (2): AKUMS, JUBLPHARMA
+- G51 BIOPHARMA_BIOSIMILARS (1): BIOCON
+- G58 ASSIGNMENT_REVIEW_REQUIRED (1): BLUEJET. **Do not declare BLUEJET methodology-ready until its reviewed primary assignment is confirmed.**
+Retained non-frozen Pharma references such as ALIVUS/SYNGENE may be used only as lawful comparative references and do not count toward frozen READY. A secondary business overlay does not change a company's approved primary research subprofile. Keep all five method-specific source, factor and profile scoring rules independent.
+
+**Execution discipline:** For G02–G60, evaluate frozen stock(s) first and record non-frozen equities as retained full-portfolio scope. Share provider-independent repairs across groups; do not turn a passed sample into stock readiness. If the same canonical source-contract or benchmark dependency blocks multiple groups, repair it once without changing this owner-approved group order. Structural shortages and uncertain taxonomy go to reviewed exception paths, not silent omissions. Append execution outcomes under original `proposed_batch_id`; use `execution_window_id` only as an additional scheduling reference.
+
+**Immutable release gate:** 111 original members, value ₹13,25,856.96, 76 within fixed-115 and 35 outside, release minimum 100 READY original frozen members **and** ₹11,93,271.27 frozen READY value. No new evidence acceptance, deployment, database write, production change, or V1-5 authorization results from this planning amendment. All relevant current source, assignment and readiness claims require a fresh read-only census before execution.
