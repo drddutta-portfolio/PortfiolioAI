@@ -22,5 +22,5 @@ export async function invokeBankingReadOnlyValidation(request: BankingReadOnlyRe
   const response: unknown = await supabase.functions.invoke(VALIDATOR_FUNCTION, { body: request })
   const { data, error } = response as { data: unknown; error: { message?: string } | null }
   if (error) throw new Error("Read-only validator failed. Confirm the Development session and function availability.")
-  return data as unknown
+  return data
 }
