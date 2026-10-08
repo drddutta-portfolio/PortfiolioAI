@@ -10,7 +10,11 @@ business-model review. Existing canonical assignments remain authoritative until
 reviewed revalidation/reassignment; UI does not create a competing router.
 
 The Research and Intelligence Architecture, Single Source of Truth Architecture
-and two-part stock Research design plan are aligned. This is a documentation
+and two-part stock Research design plan are aligned. The design specification now
+includes an Industry-led identity card, separate classification/assignment states,
+a shared framework summary, contract-selected tab content, five distinct Pharma
+subprofile presentations and explicit acceptance criteria. These layout changes
+are specified but not yet implemented or deployed. This is a documentation
 amendment, not implementation or C1/C8 closure. The [Pharma/sector display review](PortfolioAI_PHARMA_AND_SECTOR_DISPLAY_REVIEW_2026-10-08.md)
 records open assignment-display, methodology-panel and classification integration
 gaps; the earlier Gate 5 shell PASS does not close those findings. No application,
