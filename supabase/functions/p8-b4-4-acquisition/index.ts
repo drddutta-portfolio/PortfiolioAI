@@ -21,8 +21,6 @@ type ProviderIdentityRow = {
   readonly evidence_status: string
 }
 type SecurityRow = { readonly id: string; readonly symbol: string }
-type ExistingCaptureRow = { readonly record_kind: string; readonly raw_payload: unknown }
-
 const reply=(status:number,body:Record<string,unknown>)=>new Response(JSON.stringify(body),{status,headers:{"content-type":"application/json"}})
 const sha256=async(s:string)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)))).map(x=>x.toString(16).padStart(2,"0")).join("")
 
