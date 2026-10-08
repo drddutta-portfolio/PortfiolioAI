@@ -1,0 +1,41 @@
+{
+  "project_id": "lrgpjimipfkyoqbpsqzz",
+  "function": "p7-ic2-materialize-readiness",
+  "version": 41,
+  "status": "ACTIVE",
+  "verify_jwt": false,
+  "bundle_sha256": "3484aad133d82ab5ee82a01ee3e93d127a9d0d7c3b0b5f4b4cd46fc54c3dd5ea",
+  "source_commit": "f818810e6e75f7b73d2a1b22720d5e0deebc178c",
+  "implementation_commit": "08eccdc5ec77ead2e0949ad95297bef7dacc3657",
+  "file_count": 16,
+  "source_mismatches": [],
+  "verified_at_utc": "2026-10-08T15:13:28Z",
+  "owner_authenticated_banking_validation": "NOT_EXECUTED_OWNER_SESSION_UNAVAILABLE",
+  "authorization": "User: Sure Deploy",
+  "previous_version": 40,
+  "live_smoke_checks": [
+    {
+      "check": "missing-owner-session",
+      "http_status": 401,
+      "response": {
+        "error": "An authenticated owner session is required."
+      }
+    },
+    {
+      "check": "duplicate-targets",
+      "http_status": 400,
+      "response": {
+        "error": "SECURITY_IDS_DUPLICATED",
+        "code": "SECURITY_IDS_DUPLICATED"
+      }
+    },
+    {
+      "check": "write-targets-rejected",
+      "http_status": 400,
+      "response": {
+        "error": "SECURITY_IDS_REQUIRE_READ_ONLY_VALIDATION",
+        "code": "SECURITY_IDS_REQUIRE_READ_ONLY_VALIDATION"
+      }
+    }
+  ]
+}

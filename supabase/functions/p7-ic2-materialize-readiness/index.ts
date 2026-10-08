@@ -1,4 +1,5 @@
 import { P7_IC_CANONICAL_REQUIREMENT_METRICS } from "../_shared/p7-ic-requirement-metrics.ts"
+import {readOnlySecurityIds,selectReadOnlySecurities,ReadOnlyTargetError} from "../_shared/p7-ic-read-only-targeting.ts"
 import {createClient,type SupabaseClient} from "https://esm.sh/@supabase/supabase-js@2.115.0"
 type Admin = SupabaseClient
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
@@ -34,7 +35,8 @@ const canonicalMetricCodes = P7_IC_CANONICAL_REQUIREMENT_METRICS
 
 const projectRef=(v:string)=>{try{return new URL(v).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1]??null}catch{return null}}
 const sha=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify(v))))).map(b=>b.toString(16).padStart(2,"0")).join("")
-const reply=(status:number,body:Json)=>new Response(JSON.stringify(body),{status,headers:{"Content-Type":"application/json"}})
+const corsHeaders={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, x-client-info, apikey, content-type","Access-Control-Allow-Methods":"POST, OPTIONS"}
+const reply=(status:number,body:Json)=>new Response(JSON.stringify(body),{status,headers:{...corsHeaders,"Content-Type":"application/json"}})
 const dateOnly=(v:string|null)=>v?v.slice(0,10):null
 
 async function loadHistoryRows(admin:Admin,table:"market_price_history"|"market_benchmark_price_history",column:"security_id"|"benchmark_code",id:string,sourceCutoffAt:string):Promise<HistoryRow[]>{
@@ -236,7 +238,7 @@ async function loadReviewFacts(admin:Admin,portfolioId:string,ids:readonly strin
  return{reviews,reviewSources,researchDocuments,documentSources}
 }
 
-async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit:number,sourceCutoffAt:string):Promise<Facts>{
+async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit:number,sourceCutoffAt:string,securityIds?:readonly string[]):Promise<Facts>{
  const portfolio=await admin.from("portfolios").select("user_id").eq("id",portfolioId).maybeSingle()
  if(portfolio.error)throw portfolio.error
  if(!portfolio.data?.user_id)throw new Error("PORTFOLIO_OWNER_AUTHORITY_NOT_PROVEN")
@@ -246,7 +248,8 @@ async function loadSliceFacts(admin:Admin,portfolioId:string,offset:number,limit
  const openIds=(holdings.data??[]).filter(row=>Number(row.current_quantity)>0).map(row=>String(row.security_id))
  const securitiesResult=await admin.from("securities").select("id,symbol,isin,exchange,asset_class").in("id",openIds).eq("asset_class","EQUITY").order("symbol")
  if(securitiesResult.error)throw securitiesResult.error
- const securities=(securitiesResult.data??[]).slice(offset,offset+limit).map(row=>({id:String(row.id),symbol:String(row.symbol),isin:String(row.isin??""),exchange:String(row.exchange??"")}))
+ const eligible=(securitiesResult.data??[]).map(row=>({id:String(row.id),symbol:String(row.symbol),isin:String(row.isin??""),exchange:String(row.exchange??"")}))
+ const securities=securityIds?selectReadOnlySecurities(eligible,securityIds):eligible.slice(offset,offset+limit)
  const ids=securities.map(row=>row.id)
  const totalEquities=securitiesResult.data?.length??0
  if(!ids.length)return{portfolioId,portfolioOwnerId,generatedAt:new Date().toISOString(),totalEquities,securities,observations:[],definitions:[],sourceRecords:[],histories:[],benchmarks:[],reviewFacts:{reviews:[],reviewSources:[],researchDocuments:[],documentSources:[]},historyProofs:new Map()}
@@ -415,6 +418,7 @@ async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;mi
 }
 
 Deno.serve(async request=>{
+ if(request.method==="OPTIONS")return new Response(null,{status:204,headers:corsHeaders})
  if(request.method!=="POST")return reply(405,{error:"Method not allowed."})
  const url=Deno.env.get("SUPABASE_URL")??"",key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??"",ref=projectRef(url)
  if(ref===PROD_REF)return reply(409,{error:"P7 IC2 materializer refuses Production.",code:"UNEXPECTED_PRODUCTION_DB_TARGET"})
@@ -423,6 +427,7 @@ Deno.serve(async request=>{
   const body=await request.json() as Json,portfolioId=String(body.portfolioId??""),offset=Number(body.offset??0),limit=Number(body.limit??40),selectionRunId=String(body.selectionRunId??""),evaluationAsOf=String(body.evaluationAsOf??""),sourceCutoffAt=String(body.sourceCutoffAt??"")
   const evaluationAsOfMs=Date.parse(evaluationAsOf),sourceCutoffAtMs=Date.parse(sourceCutoffAt)
   const dryRun=body.action===VALIDATE_ACTION
+  const securityIds=readOnlySecurityIds(body)
   const postCloseRetrievalWindowMs=4*60*60*1000
   if((body.action!==ACTION&&!dryRun)||!portfolioId||!Number.isInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>40||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu.test(selectionRunId)||!Number.isFinite(evaluationAsOfMs)||!Number.isFinite(sourceCutoffAtMs)||sourceCutoffAtMs<evaluationAsOfMs||sourceCutoffAtMs>evaluationAsOfMs+postCloseRetrievalWindowMs)return reply(400,{error:"Exact action, portfolioId, bounded slice, selection run, evaluation time, and bounded post-close source cutoff are required."})
   const scope=`ALL_HELD_EQUITIES:${offset}:${limit}`
@@ -439,7 +444,7 @@ Deno.serve(async request=>{
    const grant=await consumeP4ExecutionGrant(admin,{grantId:body.grantId,action:ACTION,portfolioId,securityId:scope})
    if(!grant.ok)return reply(401,{error:grant.message,code:grant.code})
   }
-  const facts=await loadSliceFacts(admin,portfolioId,offset,limit,sourceCutoffAt),coverageRows=(coverage as {rows:CoverageRow[]}).rows,coverageById=new Map(coverageRows.map(x=>[x.securityId,x])),historyById=new Map(facts.histories.map(x=>[x.security_id,x])),benchmarkByCode=new Map(facts.benchmarks.map(x=>[x.code,x]))
+  const facts=await loadSliceFacts(admin,portfolioId,offset,limit,sourceCutoffAt,securityIds),coverageRows=(coverage as {rows:CoverageRow[]}).rows,coverageById=new Map(coverageRows.map(x=>[x.securityId,x])),historyById=new Map(facts.histories.map(x=>[x.security_id,x])),benchmarkByCode=new Map(facts.benchmarks.map(x=>[x.code,x]))
   const dryRunResults:Array<{securityId:string;status:string;snapshotHash:string;items:Item[]}>=[]
   const snapshotIds:string[]=[],selectionIds:string[]=[],totals:Record<string,number>={},writeTotals={snapshotsCreated:0,snapshotsReused:0,selectionsCreated:0,selectionsReused:0}
   const slice=facts.securities
@@ -468,8 +473,9 @@ Deno.serve(async request=>{
    snapshotIds.push(String(written.snapshot_id));selectionIds.push(String(written.selection_id))
    if(written.snapshot_created)writeTotals.snapshotsCreated++;if(written.snapshot_reused)writeTotals.snapshotsReused++;if(written.selection_created)writeTotals.selectionsCreated++;if(written.selection_reused)writeTotals.selectionsReused++
   }
-  return reply(200,{status:dryRun?"IC3_CANONICAL_INPUTS_VALIDATED_READ_ONLY":"IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",dryRun,inputValidationVersion:P7_IC_INPUT_VALIDATION_VERSION,...(dryRun?{results:dryRunResults}:{}),portfolioId,selectionRunId,evaluationAsOf,sourceCutoffAt,offset,processed:slice.length,totalEquities:facts.totalEquities,nextOffset:offset+slice.length<facts.totalEquities?offset+slice.length:null,providerCalls:0,totals,writeTotals,snapshotIds,selectionIds})
+  return reply(200,{status:dryRun?"IC3_CANONICAL_INPUTS_VALIDATED_READ_ONLY":"IC3_CANONICAL_SNAPSHOTS_MATERIALIZED",dryRun,inputValidationVersion:P7_IC_INPUT_VALIDATION_VERSION,...(dryRun?{results:dryRunResults}:{}),portfolioId,selectionRunId,evaluationAsOf,sourceCutoffAt,offset:securityIds?null:offset,processed:slice.length,totalEquities:facts.totalEquities,nextOffset:securityIds?null:offset+slice.length<facts.totalEquities?offset+slice.length:null,...(securityIds?{selectionMode:"SECURITY_IDS",requestedSecurityIds:securityIds}:{}),providerCalls:0,totals,writeTotals,snapshotIds,selectionIds})
  }catch(error){
+  if(error instanceof ReadOnlyTargetError)return reply(error.status,{error:error.message,code:error.code})
   const obj=error&&typeof error==="object"&&!Array.isArray(error)?error as Record<string,unknown>:null
   const code=error instanceof Error?error.message:typeof obj?.code==="string"?String(obj.code):"IC3_MATERIALIZATION_FAILED"
   const safeDetail=obj?{message:typeof obj.message==="string"?obj.message:null,details:typeof obj.details==="string"?obj.details:null,hint:typeof obj.hint==="string"?obj.hint:null}:null

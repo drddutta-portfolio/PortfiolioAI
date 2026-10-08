@@ -1,3 +1,15 @@
+## V1-4 banking validator — approved Development deployment, 8 October 2026
+
+After explicit owner approval (“Sure Deploy”), deployed only `p7-ic2-materialize-readiness` to Development `lrgpjimipfkyoqbpsqzz`: version **41 ACTIVE**, source commit `f818810e6e75f7b73d2a1b22720d5e0deebc178c`, bundle SHA-256 `3484aad133d82ab5ee82a01ee3e93d127a9d0d7c3b0b5f4b4cd46fc54c3dd5ea`. Retrieved deployed source matches all 16 tested bundle files exactly. Existing gateway configuration and handler owner/grant authentication preserved. Live rejection smoke checks passed: missing owner session 401; duplicate IDs 400; security-ID write targeting 400. Verification at 20:43 IST (15:13 UTC).
+
+Actual authenticated four-slice banking replay remains NOT EXECUTED: current managed runtime has no provisioned owner session. No canonical materialization, provider acquisition, R2 write, migration, scheduler or Production change. Deployment does not establish new READY stocks or V1-4 PASS. Evidence: `docs/private/v1-4-industry-batches/Banking_13_Development_Deployment_2026-10-08.json`. Previous verification/activation statements below describe the pre-deployment boundary.
+
+## V1-4 banking engineering verification — 8 October 2026
+
+Implementation commit `08eccdc5ec77ead2e0949ad95297bef7dacc3657` adds bounded owner-authenticated read-only security-ID targeting to the existing canonical materializer. Full architecture, TypeScript, lint, production build, 2,300 application tests, 375 Edge tests and two type-checked Deno handler tests passed on that code tree. Handler tests cover the exact four bank slices using mocked transport; live authenticated Development validation and deployment remain NOT EXECUTED.
+
+Fresh read-only banking census: 0 READY / 11 REVIEW_REQUIRED / 2 CONFLICTING; 234 blocked items. All 13 persisted assignments match the bundled RESOLVED/BANK authority. KARURVYSYA/KOTAKBANK each retain five corporate-action conflicts despite 276 sessions; later retained COMPLETE proofs require source/treatment/freshness reconciliation through actual authenticated validation. No automatic promotion or financial-semantics change. Report: `docs/private/v1-4-industry-batches/Banking_13_Codex_Engineering_Result_2026-10-08.md`; exact request manifest and item-linked audit beside it. No provider calls, live database/R2 writes, migrations, deployments, grant consumption, Production or V1-5 changes. V1-4 NOT PROVEN.
+
 ## V1-4 hybrid industry execution — Phase 1 read-only preparation (8 October 2026)
 
 Owner authorized five execution phases, not five new product stages. Development-only Phase 1 performed with frozen 111/111 and 13-bank pilot, without provider calls, database writes, migration, deployment, grant consumption, Production or V1-5.
