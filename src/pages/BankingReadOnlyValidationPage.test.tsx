@@ -43,7 +43,7 @@ describe("V1-4 banking read-only owner UI", () => {
   })
 
   it("uses only the frozen four slices and exact read-only request contract", async () => {
-    invoke.mockImplementation(async (body: { securityIds: readonly string[] }) => {
+    invoke.mockImplementation((body: { securityIds: readonly string[] }) => {
       const slice = manifest.slices.find(s => JSON.stringify(s.securityIds) === JSON.stringify(body.securityIds))
       if (!slice) throw Error("Unexpected slice")
       return response(slice)
