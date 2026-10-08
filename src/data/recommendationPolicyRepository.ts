@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js"
+import { unknownRecord } from "../lib/edgeFunction"
 import { supabase } from "../lib/supabase"
 
 const db = supabase as unknown as SupabaseClient
@@ -86,23 +87,44 @@ function weightPolicy(value: unknown): RecommendationWeightPolicy {
 export async function loadRecommendationPolicy(profileCode: string): Promise<RecommendationPolicy | null> {
   const result = await db.from("recommendation_profile_policies").select("profile_code,policy_version,status,min_score_ready_coverage,core_min_score,satellite_min_score,watch_min_score,mandatory_dimension_floors,caution_rules,sector_focus,persistence_rules,weight_policy,notes").eq("profile_code", profileCode).in("status", ["ACTIVE", "REVIEWED", "DRAFT"]).order("policy_version", { ascending: false }).limit(1).maybeSingle()
   if (result.error) throw result.error
-  if (!result.data) return null
-  const persistence = (result.data.persistence_rules ?? {}) as Record<string, unknown>
+  const data: unknown = result.data
+  const row = unknownRecord(data)
+  if (!row) return null
+  const persistence = unknownRecord(row.persistence_rules) ?? {}
   return {
-    profileCode: String(result.data.profile_code), policyVersion: Number(result.data.policy_version), status: result.data.status as RecommendationPolicy["status"],
-    minScoreReadyCoverage: Number(result.data.min_score_ready_coverage ?? 0.7), coreMinScore: numberOrNull(result.data.core_min_score), satelliteMinScore: numberOrNull(result.data.satellite_min_score), watchMinScore: numberOrNull(result.data.watch_min_score),
-    mandatoryDimensionFloors: (result.data.mandatory_dimension_floors ?? {}) as RecommendationPolicy["mandatoryDimensionFloors"], cautionRules: (result.data.caution_rules ?? {}) as RecommendationPolicy["cautionRules"], sectorFocus: (result.data.sector_focus ?? {}) as RecommendationPolicy["sectorFocus"],
-    persistenceRules: { upgradeConfirmations: Number(persistence.upgrade_confirmations ?? 2), downgradeConfirmations: Number(persistence.downgrade_confirmations ?? 2) },
-    weightPolicy: weightPolicy(result.data.weight_policy), notes: typeof result.data.notes === "string" ? result.data.notes : null,
+    profileCode: String(row.profile_code),
+    policyVersion: Number(row.policy_version),
+    status: String(row.status) as RecommendationPolicy["status"],
+    minScoreReadyCoverage: Number(row.min_score_ready_coverage ?? 0.7),
+    coreMinScore: numberOrNull(row.core_min_score),
+    satelliteMinScore: numberOrNull(row.satellite_min_score),
+    watchMinScore: numberOrNull(row.watch_min_score),
+    mandatoryDimensionFloors: (unknownRecord(row.mandatory_dimension_floors) ?? {}) as RecommendationPolicy["mandatoryDimensionFloors"],
+    cautionRules: (unknownRecord(row.caution_rules) ?? {}) as RecommendationPolicy["cautionRules"],
+    sectorFocus: (unknownRecord(row.sector_focus) ?? {}) as RecommendationPolicy["sectorFocus"],
+    persistenceRules: {
+      upgradeConfirmations: Number(persistence.upgrade_confirmations ?? 2),
+      downgradeConfirmations: Number(persistence.downgrade_confirmations ?? 2),
+    },
+    weightPolicy: weightPolicy(row.weight_policy),
+    notes: typeof row.notes === "string" ? row.notes : null,
   }
 }
 
 export async function loadPortfolioProfileExposure(portfolioId: string, securityId: string, profileCode: string): Promise<PortfolioProfileExposure> {
   const result = await db.rpc("get_portfolio_profile_weight_context_v1", { p_portfolio_id: portfolioId, p_security_id: securityId, p_profile_code: profileCode })
   if (result.error) throw result.error
-  const row = Array.isArray(result.data) ? result.data[0] : result.data
+  const data: unknown = result.data
+  const row = Array.isArray(data) ? unknownRecord(data[0]) : unknownRecord(data)
   if (!row) return { profileCode, currentWeight: 0, sameProfileWeight: 0, reviewedAssignmentCoverage: 0, reviewedAssignmentCount: 0, totalPositionCount: 0 }
-  return { profileCode, currentWeight: Number(row.current_weight ?? 0), sameProfileWeight: Number(row.same_profile_weight ?? 0), reviewedAssignmentCoverage: Number(row.reviewed_assignment_coverage ?? 0), reviewedAssignmentCount: Number(row.reviewed_assignment_count ?? 0), totalPositionCount: Number(row.total_position_count ?? 0) }
+  return {
+    profileCode,
+    currentWeight: Number(row.current_weight ?? 0),
+    sameProfileWeight: Number(row.same_profile_weight ?? 0),
+    reviewedAssignmentCoverage: Number(row.reviewed_assignment_coverage ?? 0),
+    reviewedAssignmentCount: Number(row.reviewed_assignment_count ?? 0),
+    totalPositionCount: Number(row.total_position_count ?? 0),
+  }
 }
 
 export async function recordRecommendationPreview(input: {
@@ -118,21 +140,40 @@ export async function recordRecommendationPreview(input: {
     p_suggested_weight_min: input.suggestedWeightMin, p_suggested_weight_max: input.suggestedWeightMax, p_rationale: input.rationale,
   })
   if (result.error) throw result.error
-  const row = Array.isArray(result.data) ? result.data[0] : result.data
+  const data: unknown = result.data
+  const row = Array.isArray(data) ? unknownRecord(data[0]) : unknownRecord(data)
   if (!row) throw new Error("Recommendation tracking result was empty")
   return {
-    id: String(row.id), suggestedRole: String(row.suggested_role), actionBias: typeof row.action_bias === "string" ? row.action_bias : null,
-    suggestedWeightMin: numberOrNull(row.suggested_weight_min), suggestedWeightMax: numberOrNull(row.suggested_weight_max), changeSignal: typeof row.change_signal === "string" ? row.change_signal : null,
-    transitionStatus: row.transition_status as RecommendationTransitionStatus, persistenceCount: Number(row.persistence_count ?? 1), createdAt: String(row.created_at),
+    id: String(row.id),
+    suggestedRole: String(row.suggested_role),
+    actionBias: typeof row.action_bias === "string" ? row.action_bias : null,
+    suggestedWeightMin: numberOrNull(row.suggested_weight_min),
+    suggestedWeightMax: numberOrNull(row.suggested_weight_max),
+    changeSignal: typeof row.change_signal === "string" ? row.change_signal : null,
+    transitionStatus: String(row.transition_status) as RecommendationTransitionStatus,
+    persistenceCount: Number(row.persistence_count ?? 1),
+    createdAt: String(row.created_at),
   }
 }
 
 export async function loadRecommendationHistory(portfolioId: string, securityId: string, limit = 6): Promise<readonly RecommendationTrackingRecord[]> {
   const result = await db.from("stock_recommendation_runs").select("id,suggested_role,action_bias,suggested_weight_min,suggested_weight_max,change_signal,transition_status,persistence_count,created_at").eq("portfolio_id", portfolioId).eq("security_id", securityId).order("created_at", { ascending: false }).limit(limit)
   if (result.error) throw result.error
-  return (result.data ?? []).map((row) => ({
-    id: String(row.id), suggestedRole: String(row.suggested_role), actionBias: typeof row.action_bias === "string" ? row.action_bias : null,
-    suggestedWeightMin: numberOrNull(row.suggested_weight_min), suggestedWeightMax: numberOrNull(row.suggested_weight_max), changeSignal: typeof row.change_signal === "string" ? row.change_signal : null,
-    transitionStatus: row.transition_status as RecommendationTransitionStatus, persistenceCount: Number(row.persistence_count ?? 1), createdAt: String(row.created_at),
-  }))
+  const data: unknown = result.data
+  if (!Array.isArray(data)) return []
+  return data.flatMap((value): RecommendationTrackingRecord[] => {
+    const row = unknownRecord(value)
+    if (!row) return []
+    return [{
+      id: String(row.id),
+      suggestedRole: String(row.suggested_role),
+      actionBias: typeof row.action_bias === "string" ? row.action_bias : null,
+      suggestedWeightMin: numberOrNull(row.suggested_weight_min),
+      suggestedWeightMax: numberOrNull(row.suggested_weight_max),
+      changeSignal: typeof row.change_signal === "string" ? row.change_signal : null,
+      transitionStatus: String(row.transition_status) as RecommendationTransitionStatus,
+      persistenceCount: Number(row.persistence_count ?? 1),
+      createdAt: String(row.created_at),
+    }]
+  })
 }
