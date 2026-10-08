@@ -3,7 +3,7 @@ import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 import { PHARMA_V1_SOURCE_READINESS, type PharmaSourceReadinessState } from "./pharmaSourceReadiness"
 import type { ResearchMetric, SecurityResearch } from "./types"
 
-export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V7" as const
+export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V8_SECURITY_EVIDENCE" as const
 
 export type PharmaReadinessDisplayState = "NORMALIZATION_READY" | "VALIDATED_SOURCE" | "PARTIAL" | "PENDING" | "OFFICIAL_SOURCE_PENDING"
 export type PharmaEvidenceReadinessState = "READY" | "PARTIAL" | "MISSING"
