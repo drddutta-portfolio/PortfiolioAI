@@ -27,7 +27,10 @@ export function useP5TerminalDispositions(portfolioId: string | null) {
     return () => { active = false }
   }, [portfolioId])
 
-  const data = state?.portfolioId === portfolioId ? state.data : []
+  const data = useMemo(
+    () => state?.portfolioId === portfolioId ? state.data : [],
+    [portfolioId, state],
+  )
   const bySecurityId = useMemo(
     () => new Map(data.map((row) => [row.securityId, row] as const)),
     [data],
