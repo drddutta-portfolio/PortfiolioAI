@@ -1,3 +1,23 @@
+### Stock-page Industry-first Stage 5 — 8 October 2026
+
+Stage 5.1–5.4 page-design acceptance PASS: 224 relevant tests across 16 files,
+TypeScript/production build, full application lint and architecture guard pass.
+Independent hosted verification passed 1,424 checks: 55 desktop stocks covering
+45 live profiles, eight tablet cases, three mobile cases and simulated
+loading/error/empty/cross-snapshot failures. Runtime errors, provider refresh
+attempts and research writes were zero; ordinary browsing had no REST read
+failures. Six safety regressions and the explicit Stage 5 acceptance contract were
+added; application runtime is unchanged from the verified Stage 4 revision.
+See the [Stage 5 acceptance record](PortfolioAI_STOCK_RESEARCH_STAGE_5_ACCEPTANCE_2026-10-08.md)
+for evidence and the Stage 1 proof/limit matrix. The full repository test attempt
+was interrupted; its Dashboard case passed in isolation, but full-suite
+acceptance is not claimed. GitHub CI remains blocked before runner assignment by
+billing/spending limits; documentation-only Vercel builds are rate-limited.
+Stages 4 and 5 stay on draft PR #117, unmerged, per the requested joint release.
+C1/C8 taxonomy proof, exact specialised evidence bindings and qualified
+scores/advice retain their own upstream gates. No migrations, financial changes,
+research writes, provider execution or Auth/RLS changes were made.
+
 ### Stock-page Industry-first Stage 4 — 8 October 2026
 
 Stage 4 implements a selected framework summary, canonical-contract result tabs,

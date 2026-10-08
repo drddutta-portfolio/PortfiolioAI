@@ -96,6 +96,19 @@ Stage 3 common identity presentation, final hosted visual PASS and its projectio
 
 Stage 4 specialist result implementation, coverage and exact-binding limitations are recorded in the [Stage 4 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_4_SPECIALIST_RESULTS_2026-10-08.md).
 
+Stage 5 acceptance covers these four sub-stages, using the section 13 matrix:
+
+| Sub-stage | Required acceptance |
+|---|---|
+| 5.1 Cross-profile integration | Check the common shell and selected assignment across current profile definitions and representative hosted stocks, including all five Pharma models, non-financial businesses and unresolved cases. |
+| 5.2 Resilience and safeguards | Verify loading/error/empty, stale/conflicting/short-history evidence, unavailable engines, unchanged owner roles and no implicit score/advice promotion. |
+| 5.3 Hosted usability | Verify 1440px, 1024px and 390px layouts, complete text wrapping, keyboard tabs/section links/disclosures and read-only network behavior on the review deployment. |
+| 5.4 Acceptance evidence and handoff | Record exact application revision, reproducible checks and remaining upstream limitations; retain Stages 4 and 5 unmerged until the requested joint Development merge. CI must be assessed separately from local and hosted acceptance. |
+
+Stage 5 verification and its release boundary are recorded in the [Stage 5 acceptance record](PortfolioAI_STOCK_RESEARCH_STAGE_5_ACCEPTANCE_2026-10-08.md).
+
+Stage 5 validates the consumer page against the supplied canonical facts. It cannot certify missing official node IDs, hierarchy verification, Basic Industry mappings or specialised numeric evidence. These remain C1/C8 and research-evidence work, with their existing approval gates. Stage 6 is the subsequent controlled Development rollout and post-merge verification; Stage 5 does not authorize an early merge.
+
 ## 4. Entire page structure
 
 | Order | Shared region | Content and behavior |

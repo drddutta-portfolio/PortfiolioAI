@@ -29,6 +29,15 @@ function open() { const onViewEvidence = vi.fn(); render(<ProfileResearchBlocks 
 afterEach(() => { cleanup(); Object.assign(evidence, { applicable: true, isLoading: false, error: null, data: details }); load.mockClear() })
 
 describe("selected-contract stock research", () => {
+  it.each(["STALE", "MISSING", "INSUFFICIENT", "CONFLICTING", "REVIEW_REQUIRED"] as const)("retains %s evidence without turning an observation into a score", state => {
+    evidence.data = { ...details, requirements: [requirement(1, { evidence_state: state, validation_state: "UNVALIDATED", normalized_value: { value: "0", unit: "PERCENT", period_end: "2026-03-31", period_type: "FY", scope: "CONSOLIDATED" } })] }
+    open()
+    expect(screen.getByRole("heading", { name: "Requirement 1" })).toBeInTheDocument()
+    expect(screen.getByText("0", { selector: "td" })).toBeInTheDocument()
+    expect(screen.getByText(/NO VALIDATED EVIDENCE/)).toBeInTheDocument()
+    expect(screen.getByText("Source reference: source-1")).toBeInTheDocument()
+    expect(screen.queryByText(/Canonical score|Suggested role: Core|Suggested role: Satellite/)).not.toBeInTheDocument()
+  })
   it("fails closed on an item from another snapshot", () => {
     evidence.data = { ...details, requirements: [requirement(1, { snapshot_id: "another-snapshot" })] }
     open()
