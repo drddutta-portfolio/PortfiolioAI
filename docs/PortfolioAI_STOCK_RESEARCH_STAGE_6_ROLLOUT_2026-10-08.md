@@ -1,8 +1,10 @@
 # Stock research Stage 6 — Development rollout and financial color theme
 
-**Date:** 8 October 2026 (Asia/Kolkata)  
-**Target:** PortfolioAI-Development only  
-**Status:** Implementation and release verification in progress; hosted acceptance is pending a READY build of this revision.
+**Date:** 8 October 2026 (Asia/Kolkata)
+
+**Target:** PortfolioAI-Development only
+
+**Status:** Implementation checks PASS; Development code rollout is tracked in PR #119. Hosted publication/visual acceptance is BLOCKED by Vercel deployment rate limiting. Stage 6 is not finally accepted.
 
 Stage 6 rolls out the accepted Industry-first, business-model-aware research page and adds the owner's requested application-wide gain/loss presentation. It preserves the two-part design: the common shell applies to every stock; the effective canonical research assignment selects specialist content. Sector remains contextual metadata. This stage does not certify missing taxonomy, evidence, ownership provider semantics or qualified recommendations.
 
@@ -23,11 +25,21 @@ The Research P/L card now labels zero **No change**, rather than Gain. Amount an
 
 ## Verification and release record
 
-Focused application tests: **136 PASS across six files**, including all profile contracts, selected-context safeguards, Research zero/loss/unavailable regression cases, financial sign precision and covered allocation P/L states. Integrated concurrent ownership guard: **5 PASS** under the Edge Vitest configuration; this is not an authenticated Deno handler/source-readiness proof. Changed TSX/helper/test ESLint, architecture guard, added-line credential scan and diff checks pass. Production TypeScript/build PASS (existing large-chunk advisory retained). Review PR: #119. Exact final revision/deployment and hosted checks remain pending. The preview branch has only the two public Supabase frontend variables copied from Development; no private provider credentials or Production/Development configuration were changed.
+Focused application tests: **137 PASS across six files**, including all profile contracts, selected-context safeguards, Research zero/loss/unavailable regression cases, financial sign precision and covered allocation P/L states. Integrated concurrent ownership guard: **5 PASS** under the Edge Vitest configuration; this is not an authenticated Deno handler/source-readiness proof. Changed TSX/helper/test ESLint, architecture guard, added-line credential scan and diff checks pass. Production TypeScript/build PASS (existing large-chunk advisory retained). Review PR: #119. Final source revision and CI result are recorded below; hosted checks remain pending. The preview branch has only the two public Supabase frontend variables copied from Development; no private provider credentials or Production/Development configuration were changed.
 
 Measured text contrast: gain 7.13:1 on white / 6.81:1 on its pale surface; loss 6.57:1 on white / 5.98:1 on its pale surface. This exceeds WCAG AA normal-text contrast; hosted geometry and CSS loading-order checks remain separate. No locally rendered app is used for visual acceptance. Unit tests and the production build are local engineering checks, distinct from hosted browser acceptance.
 
 A Vercel READY build must contain this stage's actual code. The existing Stage 4/5 READY artifact cannot prove or publish the new theme. The previously observed daily deployment-count limit and GitHub runner billing restriction are independent of storage/traffic usage. If they still prevent builds, retain an explicit publication/acceptance block; do not repeatedly retry or bypass quotas.
+
+## Hosted release block and current live artifact
+
+Vercel accepted the first preview at `67ac91fe5757215bc7aafb3effe9ca61f76e56e5` but rejected its strict test-fixture typing (`dpl_7AkgAUpxiZmJ7dXR96BkBjqh3z8q`, ERROR). Both fixture typing issues are corrected and the final local production build passes. The next corrected revision (`235844afb62d81d54de3648ceb7ba346e09c1178`) received the GitHub Vercel status **Deployment rate limited — retry in 24 hours**. No READY Stage 6 artifact exists; no old artifact is relabelled as Stage 6 and no quota bypass is attempted.
+
+The Development alias was independently inspected and still points to `dpl_6v1mxijEWaoky6jAG3YniiVB1e25`, the previously accepted Stage 4/5 build. New gain/loss styling therefore cannot be claimed visible there yet. All Stage 6 hosted visual checks remain pending; no local render or injected CSS is substituted for acceptance.
+
+GitHub runner availability has recovered: run `37782352355` executed its application, methodology, architecture, lint/typecheck and production build steps successfully, then failed only two Markdown trailing-space lines in the new rollout document. These lines are corrected. The final PR head must pass the rerun before merge; Vercel's quota failure is assessed separately and must remain explicit.
+
+**Release decision:** approve the verified presentation code for the normal Development merge after final CI; do not declare hosted rollout or Stage 6.4 acceptance complete. When Vercel permits a normal build, require the exact merged source to reach READY and independently complete the hosted acceptance matrix above before final all-stock release acceptance. No upgrade or account/project switch is made to bypass the limit.
 
 ## Boundaries and rollback
 

@@ -83,6 +83,15 @@ describe("ResearchPage", () => {
     expect(card).toHaveTextContent(label)
     if (tone === "neutral") expect(card).not.toHaveTextContent("Gain")
   })
+  it("does not color an unavailable return as a gain when the amount is known", () => {
+    portfolioState.data = { ...portfolio, openPositions: [{ ...portfolio.openPositions[0]!, unrealisedPnl: "200", unrealisedPnlPercent: null }] }
+    renderPage()
+    const card = document.querySelector(".pnl-card")
+    expect(card?.querySelector("strong")).toHaveTextContent("+₹200.00")
+    expect(card?.querySelector("strong")).toHaveClass("financial-gain")
+    expect(card?.querySelector("small")).toHaveTextContent("Unavailable")
+    expect(card?.querySelector("small")).toHaveClass("financial-unavailable")
+  })
   it.each(["PENDING_ADAPTER", "BLOCKED"] as const)("keeps the header and cockpit consistent when execution is %s", state => {
     scoringState.data = { ...initialScoringSnapshot, runState: "COMPLETE", scoreRunId: "old-run", overallScore: 97, methodologyState: "AVAILABLE", scoringExecutionState: state }
     renderPage()
