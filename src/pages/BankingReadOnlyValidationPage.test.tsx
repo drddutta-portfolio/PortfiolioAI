@@ -50,7 +50,8 @@ describe("V1-4 banking read-only owner UI", () => {
     })
     view()
     for (const [index, slice] of manifest.slices.entries()) {
-      const button = screen.getAllByRole("button", { name: "Run read-only validation" })[index] as HTMLElement
+      const button = screen.getByText(new RegExp(slice.slice_id + ":")).closest(".panel")?.querySelector("button")
+      if (!button) throw new Error(`Missing banking slice button: ${slice.slice_id}`)
       fireEvent.click(button)
       await waitFor(() => expect(invoke).toHaveBeenCalledTimes(index + 1))
       await waitFor(() => expect(screen.getAllByText(/Prospective only:/)).toHaveLength(index + 1))
