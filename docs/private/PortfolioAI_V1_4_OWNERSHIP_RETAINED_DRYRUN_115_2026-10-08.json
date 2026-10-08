@@ -1,0 +1,3158 @@
+{
+  "version": "V1_4_OWNERSHIP_RETAINED_DRY_RUN_V1",
+  "head": "1db4eed499c4920c60c0abc4e6a50c9628e2accb",
+  "source_run": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+  "interpretation": "Provider-free source-item replay of the versioned guard algorithm using immutable selected item-linked retained source payloads; not execution of the deployed Deno handler, not canonical writes, and not proof that field or denominator semantics are valid.",
+  "total_securities": 115,
+  "applicable_securities": 114,
+  "not_applicable_securities": 1,
+  "ownership_requirement_items": 114,
+  "reason_counts": {
+    "OWNERSHIP_SERIES_MISSING": 39,
+    "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED": 51,
+    "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN": 24
+  },
+  "contract_valid_candidates": 0,
+  "canonical_writes": 0,
+  "provider_calls": 0,
+  "rows": [
+    {
+      "security_id": "3833b30d-f007-486a-afd4-d44d313f8e99",
+      "symbol": "ABCAPITAL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "3ebf6952-6444-48fa-af58-096987f813a7",
+          "source_record_id": "c7f20da2-e8e2-4d4c-a0d0-76e376e1dec5",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "9b1c89981b9604f9168657bcb6d2802fdd5bfabe8d423d711b8d60f257801055",
+          "retrieved_at": "2026-09-26 20:27:19.287+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "5b9171f3-d8cb-4b24-8432-1905b214915a",
+      "symbol": "ACMESOLAR",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "0987590e-6549-4787-8bd1-483d98db914a",
+          "source_record_id": "a8db744f-5ec2-4ffd-9e17-86cb47cbf8fe",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "50915a747f8d10b6f39aa11599dde0154f9897a2065fcdea5b3f39288deb0f18",
+          "retrieved_at": "2026-09-26 20:27:36.335+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "89d94355-8c96-4d21-8bb7-1e3bcf096a93",
+      "symbol": "AKUMS",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "ed6a9f01-26af-4d9e-b193-b31afddc1a0d",
+          "source_record_id": "28142fcc-cc19-483d-b99b-c6f5ddb4eebb",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "9ebb7f34181bf574be72076e910f21693cb979c943f7205dc1affb46577f8721",
+          "retrieved_at": "2026-09-26 20:28:41.27+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "de565d84-02de-4e97-a255-43ee56c8650e",
+      "symbol": "ALIVUS",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "200baf7e-bb01-4c54-955e-7453cc18fb03",
+          "source_record_id": "c974323a-9647-4974-90ac-1824685ec9e4",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "44edeb62386d7c53fef58984293b25c9e6688ff9879617f0969d4e38fda1d6d6",
+          "retrieved_at": "2026-10-07 09:15:34.157+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "b2d907e5-f8a1-4755-9fec-0cbbbd0e247f",
+      "symbol": "ANANTRAJ",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "002df8c5-aeaf-4dd1-8a2d-5c26b74ad72e",
+          "source_record_id": "a4eb5eb5-2324-4a53-b595-421348e4e505",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "a55949bd5d56bdc37377d46f3baf905aa4a7f6d7af2916a1ab7846dcaed7415b",
+          "retrieved_at": "2026-09-26 20:29:03.58+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "86bd087c-8fe1-45da-9ff9-04036a500da5",
+      "symbol": "ANGELONE",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "b0fab462-f33a-423b-b721-9ca5d5b61ebf",
+          "source_record_id": "bbc4ee43-c136-400d-a5ce-45455ce37396",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "0178fa82895c9f982da1ede82e735bad6f65d6accc60221d1c1ef837c4d5796e",
+          "retrieved_at": "2026-10-07 09:19:19.986+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "9e54e6a0-b1ba-46ca-91d2-8eddcb85a5ec",
+      "symbol": "APLAPOLLO",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "b599f41f-e7a1-4674-b377-6f7bbb279ea3",
+          "source_record_id": "3a0e2362-5c0c-46f3-a617-935dd2c5db87",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "088bb61f51bbc65a93a8754a2d934ee504e974725d111ce412e2b01036d5778e",
+          "retrieved_at": "2026-09-26 20:29:29.74+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "b034a0c0-27bc-46fd-a0eb-c038004a31aa",
+      "symbol": "ARVIND",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "b9de82b5-28d3-4451-81b0-52017b1f0c28",
+          "source_record_id": "ad153cdd-da68-4c7c-b4ce-42f62a37dda2",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "dcc6ee0125d86b91d60dc2c33070e9e070ca3d51a54cee2bb3fa64271a683ed5",
+          "retrieved_at": "2026-09-29 16:47:59.663+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "a9520a7e-e19d-461c-a819-f08e16022c28",
+      "symbol": "ASTRAL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "ae9544de-e89b-44a2-8ba0-32b1d9841f67",
+          "source_record_id": "33696978-c3b0-4b67-9f2a-5bdac2dea7bb",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "7595ab81b37f6052f49bd7dce147992f502daeaf830a90528151e91aebc636c0",
+          "retrieved_at": "2026-09-26 20:32:00.383+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "eb3bc12d-6d21-40ec-8bcc-054713ee91b6",
+      "symbol": "ASTRAMICRO",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "99ea8a1e-c041-47a7-adb6-dd20fbd5c1b0",
+          "source_record_id": "d4dbcf9d-bc0e-4acc-8f45-d9b2c34e9f66",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "af3d281714c0e81a7a6c8e3e549ffadd0718408a536282c44215f043585dcea5",
+          "retrieved_at": "2026-09-26 20:32:13.766+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "f5c47463-3c6d-4db0-a815-e4301e990213",
+      "symbol": "AUBANK",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Institutional",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "9af08057-cd40-4670-8849-2752e68dcec2",
+          "source_record_id": "17a7c7ef-c9f5-4858-8084-965e2384b0ed",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "ab8c6e528b1f237fd96e718f3edf6b160459517cdcc0942a3369e77284168315",
+          "retrieved_at": "2026-09-26 20:32:31.316+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "3268daa2-a50a-4333-8f5e-9ce78d3e5270",
+      "symbol": "AUROPHARMA",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "0bd694ef-96b1-45d6-88b8-5739a7ae7d07",
+          "source_record_id": "ede5ce02-1d25-4cf6-b97f-0102a17c7a8f",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "a6e9e19fb55add5a18203c498452ebd7f2b19eaa8e1cb88d991dee0303ebe888",
+          "retrieved_at": "2026-09-26 20:32:54.239+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "87132afb-e054-4ba2-adae-dc325637c001",
+      "symbol": "AVALON",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "8623fc7f-2771-4a86-bc7a-5645339a0109",
+          "source_record_id": "8abd71d5-f1b7-49f5-b61b-a2ab26fd18ba",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "70f234df55d645f6945c1f896af4a60ced438efe4b6c93adf95c3f95e86fc14e",
+          "retrieved_at": "2026-09-26 20:39:59.606+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "73c3c463-cea3-4d6c-b8e6-c96619fd4bae",
+      "symbol": "AVTNPL",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "7b6331ef-ba20-49d3-9b0a-89d639586c87",
+          "source_record_id": "03b108e9-e430-4895-ac95-3f027461c35f",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "45feb120b1e7937ba2788d17c520ee5f1fb4a1ce4a7d4360fa35deb6d4e93a84",
+          "retrieved_at": "2026-10-07 09:19:35.496+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "bff07007-d776-4803-8513-aa61e59a74fd",
+      "symbol": "AWHCL",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "a07120fb-59a8-4c66-b35e-fc4928004555",
+          "source_record_id": "aae0f0ff-e75c-464c-8e63-73d1d291bd81",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "f766d84dbda565c967e9d551bff528bf1ca39133e524ebfb5c61d8cdde2e1ba6",
+          "retrieved_at": "2026-10-07 09:19:48.328+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+      "symbol": "AXISBANK",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Institutional",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "c52cece7-5821-4793-a77d-d1aa4f52997a",
+          "source_record_id": "e0d46eba-05b4-4d55-a9e9-042bbfa31839",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "0142c813efb3c85c27f619880f0637f1de337b48b952ade5d7c9e22ba00186c8",
+          "retrieved_at": "2026-09-26 20:40:25.346+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "30ce066a-6410-4b11-9b85-e41324971261",
+      "symbol": "BANDHANBNK",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Institutional",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "f7b6af6e-f8a4-4a2d-bf46-7e10a90dee9a",
+          "source_record_id": "352ceb1a-3c75-482f-9cda-f305511f4b6d",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "6fc82f5607370db9a3e341fa49db7338b4c8e3e070c2343d7f43226566486ba7",
+          "retrieved_at": "2026-09-26 20:40:47.554+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+      "symbol": "BANKBARODA",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Institutional",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "bc7a1287-67de-4644-9a29-8daba2da6172",
+          "source_record_id": "0ff07d19-830e-41b4-ae7c-cdde5e391e96",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "d852e19ee642baf31580df73b103ca380a5ced63ed5640f00aa6ca4da13cdf38",
+          "retrieved_at": "2026-09-26 19:37:05.334+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "5aa0fc8f-da21-4468-aac8-c0b5bec17669",
+      "symbol": "BBOX",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "fa0f4b56-df52-4285-a9ca-e52533454f8f",
+          "source_record_id": "7ca6f2e5-b4e3-49b8-98d2-00d7446ce11b",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "be5c7f9113d31d94c9d48c97652366b8bb8910bf63ea56c1d4419252b1a84551",
+          "retrieved_at": "2026-09-26 20:42:15.412+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "abc4a0b2-9063-4a8c-8bf9-5f1ea69ea87f",
+      "symbol": "BECTORFOOD",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "47df3b7d-6972-4ae4-98b8-e100560b3180",
+          "source_record_id": "a20cc51f-1425-4bac-80c9-6ffc0cd0e042",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "1d795d5ece17331072e860a5c6e84f7a72d4336f6e654ec381b1459df10b14e3",
+          "retrieved_at": "2026-10-07 09:25:23.427+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "fdec39e9-08a7-418d-ae96-9d8ce834d26c",
+      "symbol": "BEL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "279fb403-0fe9-4622-ab50-3f54bd7490e6",
+          "source_record_id": "fa2d5fea-e519-456b-af62-269191a15185",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "ecdca5af2df22e8fabcab1f3658c2815b4779968f52ac823e40ffd738b93e465",
+          "retrieved_at": "2026-09-26 19:35:33.163+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "b5aefac8-52bb-45b0-b9d0-87c9aad7c3a0",
+      "symbol": "BHARTIARTL",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "af13f8b2-74e0-4398-82f8-b760d4583eec",
+          "source_record_id": "82c7ce3c-5ffa-4514-9cf2-03bab7546e59",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "4557b004d97e82cc9eb9cbc4998f28f4027c0304423b957d85a6fb842a76b841",
+          "retrieved_at": "2026-10-07 09:25:39.276+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "25ae050e-8ce0-4c17-9dfc-56fb8202e7b0",
+      "symbol": "BIKAJI",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "1747fbf5-0b83-4479-b7fc-fa389682444d",
+          "source_record_id": "9ccca9b4-2098-4c09-a208-74313e914f81",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "7214ab709fe9210fa02cc425dcca1b7ab0025f7463db818e1b9af06f6133f5a1",
+          "retrieved_at": "2026-09-26 20:44:02.578+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "bfc9de73-b3a2-42d9-9d25-a7f871890ccd",
+      "symbol": "BIOCON",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "1a8187e6-4319-4f4f-bc9b-208c883a1fb4",
+          "source_record_id": "e500aa30-3bec-4676-8e22-0cd83e091f44",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "83c9c1fa4324e55bd6da150a3d3f7745ecb65bed577c3ac22b567bb04a53046f",
+          "retrieved_at": "2026-09-26 20:44:20.293+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "c9b5f6f8-76be-435d-bba0-c4432e8441df",
+      "symbol": "BLUEJET",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 0,
+      "items": []
+    },
+    {
+      "security_id": "062e06db-2e81-4698-86f0-aa6b90f83853",
+      "symbol": "BLUESTARCO",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "1f9074ba-d97d-47b6-baa9-dcf63dac187e",
+          "source_record_id": "e3c25d67-8a9d-4046-acbb-03544404a749",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "ac3b08d684494cd4dc93058ab26ba688809dc6e13e2634a66c22498148881a54",
+          "retrieved_at": "2026-09-26 20:45:08.084+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "e08c0b9e-a2d9-45b4-97b1-49e078869d3b",
+      "symbol": "BLUSPRING",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "74de1059-d4ee-444d-8fbd-4b47ba240b88",
+          "source_record_id": "109bb846-f749-476b-834f-6bddc95d594a",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "1253bb70afdaab96e4078dc855669c52473d9b6ba1aa8910a165690ec2f6538d",
+          "retrieved_at": "2026-09-26 20:45:26.54+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "dd22c8e2-bb46-4176-a308-fab7afccf3e3",
+      "symbol": "CAMS",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "5f8bfe2a-3509-41fa-b69f-956143ee72ee",
+          "source_record_id": "ec7c6c50-2fc6-475b-ad0e-f9bcd00e22b2",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "38c32425fbca013e9ef6d89079791412106548a7d1e9384d5f105d27f56e871b",
+          "retrieved_at": "2026-09-26 20:47:18.074+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "af35913f-9aa6-44b0-b50f-1f35902ffac2",
+      "symbol": "CAPLIPOINT",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "b2570613-f609-4ff3-9cb7-3b47a9f7a7e0",
+          "source_record_id": "c5d9f987-12ed-4e57-843d-3900cf4f4187",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "3b3add794dfb63c4082f3d9dffe2602af4ad62fffeb846afdef3a71ea1208f73",
+          "retrieved_at": "2026-09-26 20:47:40.84+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "6ba09398-e18c-41d5-af2f-db6fe3d9e591",
+      "symbol": "CCL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "310ccd72-85d1-4118-ab78-7c2ea8a188cd",
+          "source_record_id": "d2afacf9-8b66-49eb-9130-0e026a493fdf",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "c72f09261638979bfe658c029af9a7dbe99445f9fa5d55d2f0d00ee71046565b",
+          "retrieved_at": "2026-09-26 20:48:00.04+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "06ca3419-841d-454d-ac8b-8d898e21a81e",
+      "symbol": "CEMPRO",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "4df021b3-a7c1-4644-a52a-e4a1a08068cb",
+          "source_record_id": "2de907c4-4c8b-4625-9586-d8c8979d93e8",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "d44e0d1d35a8f1c5ab337855bf7003fc84fcf1b2f8bba5dead099d75d90f19bc",
+          "retrieved_at": "2026-10-07 09:26:00.754+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "80a64fe7-8dcd-4c6c-8093-fd6b6ee1606a",
+      "symbol": "CGCL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "7679dee7-236e-4ce6-b121-4924b14cf08b",
+          "source_record_id": "577c8963-d754-4dac-acd7-f2dcc837cff2",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "7dfb433d1e710ffe6734fe393fbabe8d6ea3fb832b469255a80f13c742f1768d",
+          "retrieved_at": "2026-09-26 20:48:29.026+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "5643737c-3c55-472d-af20-59d3121d6b9c",
+      "symbol": "CGPOWER",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "d52452a9-556e-4092-afed-6565d2fbff7e",
+          "source_record_id": "27813495-25b1-4635-ac1a-30f65a5cee68",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "6cef09a042fd68c3bf174e9f9aa1b6faa1e82fbfa3817b543d90ea02343caaa0",
+          "retrieved_at": "2026-09-26 20:49:34.974+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "cbdbea24-eb1d-489f-ab6f-7800f04f28ca",
+      "symbol": "CHOLAFIN",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "44ecc4ea-abce-4a50-a7b8-d0e98c5ce514",
+          "source_record_id": "0e73e3f1-2447-4d44-8e04-89e154ce3820",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "1c48c158d0998afebfc16538252874ffc3337b9cc2c1bf36659a286a7bcc1348",
+          "retrieved_at": "2026-10-07 09:26:23.068+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "f77ecec3-0e2b-4628-b923-1c99b640b363",
+      "symbol": "CIEINDIA",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "2bd5d5e2-d424-4c2f-86f8-48553b046db6",
+          "source_record_id": "89565936-6fc2-48dc-89fc-8faeb3e999d0",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "eb1e66497bf35943e92dd5fe8e0a52a5089a1af6ebaa40844bd3c6867170b7d9",
+          "retrieved_at": "2026-09-26 20:50:25.609+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "8a9e5286-a857-4cd9-8eda-e82378482ff6",
+      "symbol": "CIPLA",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "295668e8-819c-404a-9627-d4719f55f3ab",
+          "source_record_id": "4ed80bf3-f094-4a0c-9ade-90aa7bf7e5b1",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "8be57c45966591ac1025818815abb19016c8d4112ac2ef3001151031a583d15f",
+          "retrieved_at": "2026-09-26 20:50:47.536+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "b9ec22c1-bb74-4206-8d14-45b1f4b10293",
+      "symbol": "COALINDIA",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "549600b1-18a4-4a34-9472-31923b1c7ff3",
+          "source_record_id": "0cd000f9-6fac-42e7-ab0f-70b4728af8fa",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "a4173bf80902af13c5a3623729242197ed94a93fc562266c43345337cc7947e9",
+          "retrieved_at": "2026-09-26 20:51:06.539+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "1c205f01-6864-4628-8613-8580e5211fb9",
+      "symbol": "COROMANDEL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "d5fee2e4-8360-4ed5-bad7-ec3ec3c16223",
+          "source_record_id": "dcc885c8-7d07-423e-aae7-c2c3eee7f92f",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "08554d42a287885ae68df3ff81b2ef595787c117b99fba269dcd45eda61a17da",
+          "retrieved_at": "2026-09-26 20:52:03.334+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "39eeaf90-d688-45c5-a6af-41651226afa4",
+      "symbol": "CPPLUS",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "81738eef-65c8-499f-9974-a77060b4bf16",
+          "source_record_id": "183eaa93-dc9b-4cbe-8396-d889254dfd9f",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "dcb53b5f0b3dc6509b28b5244f1bc2d2423e6dff634ce597c8ef5515e2095ad1",
+          "retrieved_at": "2026-10-07 09:26:46.389+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "4b5237ea-28d4-4320-be0e-3ea0cc5da04a",
+      "symbol": "CROMPTON",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "bc0d4c48-2617-4bee-aaf8-6490ffdecd22",
+          "source_record_id": "ae93dec1-77fe-486a-860b-44226d626885",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "b19485531495af1329dfccaaad3d9d6e4a764aafb291d3084e2010408baed70a",
+          "retrieved_at": "2026-09-26 20:52:24.787+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "4cd44d45-e5c6-4696-9744-25c19f44ac8e",
+      "symbol": "DATAPATTNS",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "756de9cd-d0fe-4d53-8d2a-4b596bf45e84",
+          "source_record_id": "7376edd0-76fd-4398-9e06-7d0e99298b0e",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "4817024bd14e4f6966637ac85bf7ae9b7e78489307c0d45e8e2de48bb3340718",
+          "retrieved_at": "2026-09-26 20:52:44.273+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "142f3023-ca8d-4f46-a42d-ba0d06c7a4c7",
+      "symbol": "DEEPAKFERT",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "e13cd093-3f75-4506-8e24-9acd24b98d72",
+          "source_record_id": "db5dac67-de78-43c2-96a1-b039e44e2be2",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "7b30638fb8e0b88d26fed90805be11891e82aff766f071364a76aed1282d7738",
+          "retrieved_at": "2026-09-26 20:53:09.587+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "01922190-3635-4057-b6b6-36bab37637cb",
+      "symbol": "DEEPINDS",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "4f1c3d9e-375e-4505-b785-befd475fb65e",
+          "source_record_id": "8c8028d2-463d-491c-9084-b91146739105",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "1f592ffcbf3a04e9f57ca2186092bc69622b3b6c284cedcbc723a14306debb33",
+          "retrieved_at": "2026-09-29 16:53:35.846+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "eaa32fc2-c081-4565-8836-26017cbaf1bd",
+      "symbol": "DELHIVERY",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "0f0620aa-a705-4bbb-ad3d-901e6fda9a6b",
+          "source_record_id": "3f14bd97-3d07-4aea-a343-30065ee56d0f",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "fc90881288fa1531165e6930f80d88553cf7cdd532168529b2102aaf9c27936a",
+          "retrieved_at": "2026-09-26 20:55:09.479+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "a683fb9b-5bb0-4347-8fe4-57e282b6bc77",
+      "symbol": "DHARMAJ",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "0a8c9f2c-c541-4831-8e5f-f903efa680f1",
+          "source_record_id": "07ec9a45-ad06-470f-aaf6-22255660c558",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "73d54a364febb739bdae09bdd8e77d3ff3b240d253650a372415a6e389fe5bf6",
+          "retrieved_at": "2026-10-07 09:27:07.753+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "f374e641-2d87-43b0-b886-7a8728bf4d8d",
+      "symbol": "DLINKINDIA",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "69a4c144-fd29-43c9-9da9-a4327b0b4784",
+          "source_record_id": "349eea63-ece3-4664-8a6a-2444a472570e",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "0f3795be2ee095ec748904d8f1ec68a9bd37644115302ab2f63cdafb54dbd9be",
+          "retrieved_at": "2026-10-07 09:20:01.9+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "00e60a7c-0bb1-4c04-8eea-e5e0fc039bdb",
+      "symbol": "DMART",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "c0a6616a-be71-4219-9412-240b52275ed9",
+          "source_record_id": "35d49565-4897-4429-a209-17b4efc59925",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "cc26cd574205da7da27abd37218c92ee4dd6382c3c179bde132d97075f2ca169",
+          "retrieved_at": "2026-09-26 20:55:31.572+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "950b0778-a1fa-4ad2-bbdc-27158e6fce03",
+      "symbol": "E2E",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "1618a53e-3e69-4d98-8112-573ddabc2d6f",
+          "source_record_id": "b5b50364-216d-42cf-86f3-ecdd610673d5",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "ec3eb28dc17c9a5b6b217985243f18b14b116fdfdfd1a57537c439f9ac1939b1",
+          "retrieved_at": "2026-10-07 09:20:13.675+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "9503c7f0-33f1-42aa-a804-134c848c18fb",
+      "symbol": "EBGNG",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "8a962fb6-59be-4df2-befd-df8a394b1d91",
+          "source_record_id": "6ee9b92a-e455-4798-a81d-dbbc50b750d5",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "981d7fe3419618edc76f6d19dafe705780a197d48834f7d1dfa38b859d183bb5",
+          "retrieved_at": "2026-09-26 20:56:06.756+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "39844b75-4a2e-4aca-a8c9-9f9ce078734a",
+      "symbol": "ECLERX",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "cc7a4c9a-8ee6-4f89-a019-0021d3e11a81",
+          "source_record_id": "9f46d057-7940-4eeb-a5f4-cb4b7b83a7a1",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "62cfdc34a81145ea6abd1ec9531bac18bf93cbf9d7ebb7cb6f12e40776327f8c",
+          "retrieved_at": "2026-09-26 20:56:24.286+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "4e30d7b2-e298-44a7-a8de-bbfc00402cf2",
+      "symbol": "EIEL",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "7f4e512e-eb2e-4c22-bac3-429ba73677fc",
+          "source_record_id": "0d228cf6-0d21-4ee6-8289-4231d66f261e",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "b5a133af43ed5d252ceb473560957721e58e620fa822e4d39d677b89ca543bf7",
+          "retrieved_at": "2026-10-07 09:20:28.794+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "61d141a2-b37b-473f-b912-bf2ba373e5c7",
+      "symbol": "EMCURE",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "54edab84-53a1-4aef-aa75-707a37dde28b",
+          "source_record_id": "2e2f07cb-bf60-481d-8766-c1afc852994b",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "42750a0161b53f01f2afdcaf458d149e1e74e060f520a1ed0e43710e1e66ec82",
+          "retrieved_at": "2026-09-26 20:56:47.747+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "04e452f8-8461-4655-a4e3-5c9c13a07694",
+      "symbol": "EMSLIMITED",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026",
+            "Sep 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "2a3144d5-6442-4b2d-a2f5-9e3dbc77449f",
+          "source_record_id": "e43580bb-2849-40d2-9d13-1b1834117380",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "795cd16a350070b6b4ee13480efc88be4557964c50aad5907572d36dc35dc6d6",
+          "retrieved_at": "2026-10-07 09:21:50.27+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "348077cc-8eaa-4bdd-9251-e168d7e9c5ed",
+      "symbol": "ENDURANCE",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "ac8aff07-cd80-4ef3-860e-bb8109a4bdb2",
+          "source_record_id": "4efd275d-3e88-46ea-adc7-2e3465600836",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "43befc2fbc705a244db4eb562348b3f2ea41602b05e15d44342740c2bef60647",
+          "retrieved_at": "2026-09-26 20:57:10.726+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "536a43df-2b25-420c-b307-0cad6d62c7d0",
+      "symbol": "EPL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "8ba4524d-49d4-4aa2-af7e-91553d47e177",
+          "source_record_id": "4586a5ff-db23-43fc-a875-e3d73c63e007",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "8b9818cfee0bc5303263dc91aa36f6a2082794c1034a5a26fb6d59886833ff4c",
+          "retrieved_at": "2026-09-27 00:35:36.992+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "5c4f255d-6421-4ed3-82c5-bff6437e10e9",
+      "symbol": "ERIS",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "0530e207-f957-47d4-95ef-ec1bfd796e7a",
+          "source_record_id": "af1637ab-dda2-4893-8544-6c69ce858a24",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "5a292b85801c656fb999f7775d004ac1a7b018dc98a907fc4a1925c4f0082f98",
+          "retrieved_at": "2026-10-07 09:22:07.805+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "af7fdb13-3ed4-489c-800d-5ab12e08c1c0",
+      "symbol": "ETERNAL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "82cdc438-af68-47fd-9b96-e473f544dac0",
+          "source_record_id": "4fb24213-3e75-4f4e-ada5-27d9ca176a8e",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "57f501536235b52a59d5b5ad1c6bd9d67b2deba61cf9561b3210587283fd5dac",
+          "retrieved_at": "2026-09-27 00:36:45.29+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "136be3f7-8b5a-4b98-8935-119053a9df8e",
+      "symbol": "ETHOSLTD",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "7232943d-45ea-44b0-a7f4-85759f40cd37",
+          "source_record_id": "2662675b-27b4-4aad-af0d-ce8bf7802432",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "029f48ed42f2d096cc7fd542503a6c02c5988adbddb4eef0edd7555a2040769f",
+          "retrieved_at": "2026-10-07 09:22:20.287+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "f77a3b26-13a4-4935-b051-ea5fa61a1d70",
+      "symbol": "EXIDEIND",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "7dfdc627-27dc-4c46-9506-6078ed6f14a7",
+          "source_record_id": "b65f1499-9eed-4484-a1d3-ff75196f19ad",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "915377f16db6c2ee2060d080a2ac7c4f87fec51c47cc5794a2f356ca463126b8",
+          "retrieved_at": "2026-09-27 00:37:13.203+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "9c938fe4-7567-4e76-a8f2-edf98098ac42",
+      "symbol": "FAZE3Q",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "c3e04352-b77c-4e81-956d-7f29baf8d936",
+          "source_record_id": "eaff4e67-1503-434a-ba77-c0a38401fac2",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "b524184c16fe0d27a0fdf70b644a972ec1ce086e0f4b600b54ff84f04baa1fbb",
+          "retrieved_at": "2026-10-07 09:23:00.291+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "63889b52-85da-4a1b-9046-c1e975819f99",
+      "symbol": "FEDERALBNK",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Institutional",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "9309ff0e-faf4-4a78-b90a-2f50a83688a9",
+          "source_record_id": "febe4431-1ea1-448b-987c-08e29eeb9f33",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "c85d1c83354dc8a927d8db685712345861d97421d6e422ad90cf0ffd3fcbbfc9",
+          "retrieved_at": "2026-09-29 16:46:50.011+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "5457a4ce-ec0a-43a2-8436-d8e1a330bbd8",
+      "symbol": "FORTIS",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "980c8fbf-a76e-41dc-90aa-025fd8340c2d",
+          "source_record_id": "6e28a8e9-ed32-4f04-b5e0-5159d571c49d",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "422cba318b65f1c666f1a0fc42d530f459c17f3960bd0e36530a6af5d5ea5eb3",
+          "retrieved_at": "2026-10-07 09:23:13.432+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "9bb1ec21-89b8-4f1a-80c7-46c2a5269c14",
+      "symbol": "GAIL",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "fd697964-81fc-47b1-b996-2decd63cd853",
+          "source_record_id": "685aeee0-25de-4a30-b0f7-2bce57842beb",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "1e80d7b8716e3b5631102aca2f3308b5b3682846bb1dbdfd71e98a8ed373d852",
+          "retrieved_at": "2026-09-27 00:37:38.071+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "0dde9c0f-4bfe-463c-9a21-3712868f98d3",
+      "symbol": "GESHIP",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "3b97de96-b2e7-496a-a285-e0496b592e3b",
+          "source_record_id": "2cf75218-9f1b-489d-96ed-c5567f8ee582",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "83ca70fbf190b1248fbfe66660830685201785bf25fafc814cd8fe0231212aab",
+          "retrieved_at": "2026-10-07 09:23:26.102+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "9c577a90-f930-4d16-8bae-2d3f52698069",
+      "symbol": "GLENMARK",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "7c57d452-512e-48dc-be6d-e0f997440d83",
+          "source_record_id": "63a55fde-212b-42a8-9aee-f006aab88f20",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "df110fc88c578dd735f43ca957e1c142b6576a5b355023e46a153dfa25ac9887",
+          "retrieved_at": "2026-09-27 00:38:05.15+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "ec24a599-8ce8-42af-99c4-aae80f715132",
+      "symbol": "GMBREW",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "5985352d-0c13-4f8a-a2d3-4ab379173cb3",
+          "source_record_id": "c75c0c21-e200-4642-9626-c478518c64c3",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "9665cb517a03d264bbac01539a7f39b954cb6f0ffcacec2e1773b6fd28c77f72",
+          "retrieved_at": "2026-10-07 09:29:19.492+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "56520f0f-1be1-474f-89b0-b5613a1082d9",
+      "symbol": "GNFC",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "22bc495b-355f-4080-8de9-81bbb08fc8e6",
+          "source_record_id": "f4ce912e-40e8-4d8c-9322-97a331e84f67",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "69c6574ca0326ad258e0688d8845ca6d40875119a5c6e9af4dc0d133455c34c6",
+          "retrieved_at": "2026-10-07 09:29:31.277+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "8dd18833-e48d-4351-b248-8757246f4ae2",
+      "symbol": "GOKEX",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "92f0d0ab-7f10-471b-a3f9-a78350ba62fc",
+          "source_record_id": "86e6c5ad-5f22-42ef-bf4e-cdba80996841",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "56544edc82b482187ec266569b638a92d498b45dabedd37a9ead8564489820d5",
+          "retrieved_at": "2026-10-07 09:29:58.547+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "bdd7b1fa-cc3d-40cd-aa67-7b00d5034545",
+      "symbol": "GOLDIAM",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "52cc60da-1b91-464a-bf5f-01618498bc6c",
+          "source_record_id": "09f632c2-3e78-41cd-8eca-a6e0fd077b88",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "70627ee7086e3c32e65fa9059d945d1009ca7ae22e393e571beba04fedd15c20",
+          "retrieved_at": "2026-10-07 09:30:11.717+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "85ad787f-607a-4439-a6db-9b65b03195f1",
+      "symbol": "GOODLUCK",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "6157c4be-3890-44a6-b975-d55273e1e912",
+          "source_record_id": "0b6d5ae5-3256-4240-8622-fac0f042ea8c",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "a954829ee5ded9b4d6954028af5b90fcd68795ec37b31b7829298a50351bdabc",
+          "retrieved_at": "2026-09-27 00:38:30.673+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "7d734810-b30d-469b-9015-2c43207355b1",
+      "symbol": "GOPAL",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "e5ce3494-8728-4807-a768-72eb699c18fb",
+          "source_record_id": "02b866c9-e467-4e43-8364-7140595cd192",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "d532fe85f37df065bbb1f10da03080ab1a0326214973c47d4b9a2a6177f9b37b",
+          "retrieved_at": "2026-10-07 09:31:23.207+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "0be332d7-4bac-4a00-a630-a3e2bbc10eb4",
+      "symbol": "GRANULES",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "47d518f9-80b7-4c93-b322-517431b6fef8",
+          "source_record_id": "7ae11f0d-3607-4772-a98c-dd287caf7c16",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "95a4c36cbbcb3fd7e4a725fb78b518f93196dabc6efd14be95a64ada8bf7b496",
+          "retrieved_at": "2026-10-07 09:31:38.466+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "ceca07c4-c14a-49c4-8add-fbc3e69ec89b",
+      "symbol": "GRASIM",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "3bc24cf2-2d6c-4d8a-a3f4-df332e08ecb9",
+          "source_record_id": "a0e9c7b9-89d1-4502-8377-4ff5975f0ea2",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "e95f654984d1c1764677045216e18a5808d8384cfcfce596e1d49a48a9beb4dd",
+          "retrieved_at": "2026-09-27 00:42:24.447+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "fab25835-38a0-4e57-9209-880d43bc131e",
+      "symbol": "GRAVITA",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "d693a748-1fd8-463f-8154-85a8854b9fa4",
+          "source_record_id": "a8f46cda-f379-451e-9446-9d570087bd13",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "e4e47db22cdc3690b89dfaab77273e6e0607898b2d307a06043966d606464f18",
+          "retrieved_at": "2026-09-27 00:42:48.297+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "ba228714-f7a2-4ff5-97ff-9dfda103ea06",
+      "symbol": "GROWW",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "1cef3c0d-2570-4e44-8f54-f66af2b74539",
+          "source_record_id": null,
+          "source_code": null,
+          "payload_hash": null,
+          "retrieved_at": null,
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "REQUIRED_EVIDENCE_MISSING"
+        }
+      ]
+    },
+    {
+      "security_id": "5661e19b-de4b-4ddf-a034-46d6c9f0af8f",
+      "symbol": "GRSE",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "d7d2e03b-14f1-4175-b905-eb63563235ba",
+          "source_record_id": "f9797580-2502-40bf-9d5c-7742c26c95ea",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "b8fa650c00dd757e03f1be44808e8d0fdbe72e53c1bbe9c4485a795e9436a67b",
+          "retrieved_at": "2026-10-07 09:32:05.637+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "ece0aa93-0d35-4748-9316-dd2eb100ad63",
+      "symbol": "HAL",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "87fc6f46-188c-4f20-a562-33bbd46d72ee",
+          "source_record_id": "19a90aff-a61e-4f98-8196-7e31235ebc1a",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "f0a1dc2c34b21355e701f6e5c464efd2397ffbf31fc97b19ccd791fca9172e28",
+          "retrieved_at": "2026-10-07 09:33:11.993+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "1d24de75-d7cd-47b7-bb71-e4234cbead4a",
+      "symbol": "HBLENGINE",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "b643f7c3-d02c-4e31-9bc5-57b20675f38d",
+          "source_record_id": "c0d4ad19-75ae-4634-b944-fa7c8f9b93fc",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "fc9673c4b3164d3249e1cea55fff0ea94bcdb58b834fff416f97e588f6adfd94",
+          "retrieved_at": "2026-10-07 09:33:28.465+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "2461f612-2535-4f21-b8f2-6e71eb422427",
+      "symbol": "HCLTECH",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "b0535649-1c3b-4ed6-8d90-03cf8be7eade",
+          "source_record_id": "29febc1c-878a-4b88-9f47-3d28be6a4701",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "02c992885b26aa1f4bc2ab8eebf822bd2211776a0e9aeb00c82244ff1f7c6973",
+          "retrieved_at": "2026-10-07 09:33:45.125+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "7bc3f24e-0802-4464-ad8f-348dd8c8de57",
+      "symbol": "HDFCAMC",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "7e33ff52-06bb-453d-8b0e-8d1725e9a0f1",
+          "source_record_id": "254cd112-feff-4948-84f5-23cf7429d976",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "23394c9146590c15e6163f87ccf93eeae6303f919b31c29cca23ddf7469b4e48",
+          "retrieved_at": "2026-09-27 00:44:56.201+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "b47b007d-1990-4504-a5a2-4391c07687c5",
+      "symbol": "HDFCBANK",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Institutional",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "4151f125-2209-4ba1-b1f5-2630dc511214",
+          "source_record_id": "5a951d45-a52b-4efc-8115-4d30470ae641",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "6ed5bb8b72fbb5df479650cc4d4dfb82e16e1562b741278e04a1fa22b77067d7",
+          "retrieved_at": "2026-09-10 19:03:34.677+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "c27b3997-f74b-432e-8b17-0837cce4c2fc",
+      "symbol": "HEXT",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "68f18e3f-2838-4060-aa2c-c870dc188fb7",
+          "source_record_id": "d7119eeb-0fd1-4e18-af5c-6b4ddddae160",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "65c59e2a5191cae96aaf03e470a23809de90d3de76a4ab592ec06158ed68caf6",
+          "retrieved_at": "2026-09-27 00:44:54.146+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "89b62217-7cf7-4fd6-ba43-31f3b78c1929",
+      "symbol": "HINDALCO",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "71b64f6a-fdfa-4fe3-8f45-19b9273f3e5a",
+          "source_record_id": "607a9dfd-7c1a-4a48-956c-879f0668071f",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "3443b3198bbe32d3ca01d34b94268e8a0027eb208624a9e9a954c81ec9120689",
+          "retrieved_at": "2026-09-27 00:45:23.593+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "dc15f48d-36d7-461f-a5ba-87604c75cef7",
+      "symbol": "HINDCOPPER",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "2543c867-119b-419a-bc7a-9bb153967c3c",
+          "source_record_id": "ba409451-d71d-4619-991e-fcb0fec662c3",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "e2e9d5885e396789cf0d3d18bd456c3ca95769271299ec50098a32fb30e6530d",
+          "retrieved_at": "2026-09-27 00:45:22.152+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "5f9e4c04-44ec-4d01-ae15-180dc1794547",
+      "symbol": "HINDUNILVR",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "50e37a98-5753-4b6f-9912-657621d9e77c",
+          "source_record_id": "c7a115a8-7f33-41cd-80e8-3309b89461d5",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "e84eeaf1e183827e7c9faf5dc42689366d4e582218b37e455afb32f0d2949640",
+          "retrieved_at": "2026-09-27 00:45:28.796+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "d2ac8d11-68a9-4cf8-8476-139b0495ab7d",
+      "symbol": "HINDZINC",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "d095467b-e92a-4258-98eb-af0cfb03422f",
+          "source_record_id": "50d82e18-1476-4e1a-b44c-91dbad3240c6",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "0d12a195c801420462032e9e44ad039e18c578e9e85dc638a86b2a87635846a4",
+          "retrieved_at": "2026-09-27 00:45:55.492+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "2eda5141-166f-48e3-9f0e-625814ab7019",
+      "symbol": "HUDCO",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "b1a5c382-a596-449a-8303-dffba2504be9",
+          "source_record_id": "8b8b18d3-9370-46c3-a620-6ef1347decb4",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "675266552199a8544c9a8f775fd91272fb52622f796de93e868008890a966b41",
+          "retrieved_at": "2026-09-27 00:45:52.076+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "6a3d3238-6e7d-4d3e-8be6-d239764abe45",
+      "symbol": "HYUNDAI",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "02ff3e74-d278-45b4-a2a1-88de2840dbf7",
+          "source_record_id": "94780ccc-fe29-4967-8ae7-994fb80534f6",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "65d609d803c4b0c428811b253adec9eb0d6f67e74aa099956be8a66e9c306982",
+          "retrieved_at": "2026-09-27 00:45:53.906+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "80b0c585-6ac4-4f41-b90c-6f37baa1e5b0",
+      "symbol": "ICEMAKE",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "b941f77e-52a0-4c1c-8112-a7f8254844a8",
+          "source_record_id": "d324db68-79de-4944-8f16-4e656bc4366b",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "cd2b58e459e9ff2d881809eea39612a483657d4357c3e8fe30599b47713ceb73",
+          "retrieved_at": "2026-10-07 09:33:58.229+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "dbe682c2-9ebd-44ef-827d-c386b103222d",
+      "symbol": "ICICIAMC",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "a4ab0728-d256-457d-98a7-5d240e324cf2",
+          "source_record_id": null,
+          "source_code": null,
+          "payload_hash": null,
+          "retrieved_at": null,
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "REQUIRED_EVIDENCE_MISSING"
+        }
+      ]
+    },
+    {
+      "security_id": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+      "symbol": "ICICIBANK",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Institutional",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "267c83db-9892-4f1e-b515-d3fead3a7b52",
+          "source_record_id": "aace5192-1de4-4c1c-928f-1f55ea4ca3ef",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "278748d44f4634d008f94258d92e8097612368729229a0ee9bdc493cc42d8d1c",
+          "retrieved_at": "2026-09-27 00:46:15.173+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "0071a138-f152-412f-a71a-34075ae7ed2e",
+      "symbol": "ICIL",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "d5ddd09f-617b-46a9-9b65-1589ba6c5501",
+          "source_record_id": "caebf136-908b-4437-b30f-516db01c8670",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "c5766607c7e10715755b342198c9de410615e711bb86d120a8db2f26a362fc81",
+          "retrieved_at": "2026-10-07 09:35:09.831+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "a5639446-3238-4e08-9d02-59bc529982db",
+      "symbol": "IDBI",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Institutional",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "b037bbd2-79c8-4442-a967-e56a937e3e6f",
+          "source_record_id": "e1f99fb7-059e-48ac-8e95-b7fbc9894baf",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "61eb716601c3dfe06c00a029e3b3afdc7f1166e11b1b1fc91b4851ecefec6d15",
+          "retrieved_at": "2026-09-27 00:48:39.911+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+      "symbol": "IDFCFIRSTB",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Institutional",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "7e8d3f2b-0d15-49e1-bc74-e120ee3fefcb",
+          "source_record_id": "0e9235b8-1ba9-412e-aa6b-02ec2ba77f6a",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "91aaeef8be214a652a07a0c699358f75526846a47550b470dc5c3cf6d0ded07f",
+          "retrieved_at": "2026-09-27 00:48:40.789+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "259861a8-729a-42e3-b8a9-9a000113a870",
+      "symbol": "IGL",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "c102d708-408b-4a42-8b5c-6498b5b2ff7c",
+          "source_record_id": "5f1a5bad-ddc2-4349-b6b7-fbecc723174a",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "4478ddd0f86fad928613adaafdb7f9fbb819b99cb83e6eff144ea6a28c4cf7bd",
+          "retrieved_at": "2026-10-07 09:35:22.146+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "0c94c922-356c-41e0-b503-3de0e315eb23",
+      "symbol": "IKS",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "b46fb44f-c1fc-4319-b987-91a607b594af",
+          "source_record_id": "30ac253b-dc1b-4ade-aa2b-93b53664367b",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "59d2a7adb115f1203ad87be877e57b38d331bd41e8e27140a2871f50ba36c5b6",
+          "retrieved_at": "2026-09-27 00:49:05.509+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "81ac2bfc-bb2b-44eb-9f36-dcc3de29b16f",
+      "symbol": "INDHOTEL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "c5c95f8a-3df2-4879-8247-e7f04b755637",
+          "source_record_id": "30461da5-8530-4141-a91d-1af11231982a",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "e61f38899fac55c950bf4d2ebfa9f8f96be76a2fa83b87ff789ff32da3d8e859",
+          "retrieved_at": "2026-09-27 00:49:06.334+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+      "symbol": "INDIANB",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Institutional",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "INSTITUTIONAL_OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "e47c4e70-9d39-4d5a-855b-bb48d6d45dfc",
+          "source_record_id": "ca453da6-07c0-470f-b07c-1e675ea86dee",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "a048b163b9d123cc1b6df3dcf7b02c81addc46903e608654ca72365d51fa67dd",
+          "retrieved_at": "2026-09-27 00:49:34.356+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "1c038626-26ac-4632-a446-4de7f0fc3245",
+      "symbol": "INDUSTOWER",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "d6ef6c10-e323-422b-9f7f-565ae72bda8d",
+          "source_record_id": "25788a0e-9141-4f2c-ba4c-2b6ac51896c4",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "c323c6d9f4828eff14753a7f848445772c208200f034c98f451264b91c17ce63",
+          "retrieved_at": "2026-09-27 00:49:33.24+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "ba7b2673-39d9-47ec-b2b2-cd19922aec36",
+      "symbol": "INFY",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "1520da68-1dc7-469d-a62d-8b7d6a949755",
+          "source_record_id": "644f4526-b15c-4ca9-a546-03b9fa58cb3f",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "b32b8bf38a8edfb003fd416c71944b0bccd4060a4d882e63bbf4c7142abadc3e",
+          "retrieved_at": "2026-09-27 00:49:28.113+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "d6a4507e-86a5-4ea4-8033-465378b82cac",
+      "symbol": "INOXWIND",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "939c55fd-fece-4a68-96e0-5d9d64e0df58",
+          "source_record_id": "d0608ead-25a2-4a4b-8ff8-744acb207b66",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "ad35e662d6f8f29d23c96dec994040143e2f7a285a16ef1ccf29c68447c0d6a9",
+          "retrieved_at": "2026-10-07 09:35:34.789+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "5639e7a2-275a-4c8c-be0b-3e0d59a1ecec",
+      "symbol": "IONEXCHANG",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "a4b6824f-2219-4f43-818f-35e449d99245",
+          "source_record_id": "fa140e7a-119c-4ac5-a580-33286faef501",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "2383f2a5745aa6d81c3873a82fd279b8416bf3c6d940397ba9d582c742547225",
+          "retrieved_at": "2026-09-27 00:50:47.453+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "7775968c-3fc7-4d59-8c28-ff8837bfc8d7",
+      "symbol": "IPL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "caac60cf-3cf3-4890-94ee-f4a3060a5448",
+          "source_record_id": "bfe3e410-27dd-4079-8d44-df0154867114",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "3b2e4fe51e27b0ff2ef05d840e8498282063faa149f980f0480b9ce4446294f3",
+          "retrieved_at": "2026-09-27 00:50:48.161+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "ef6062bb-1e44-4c28-9d3b-a2b0397757e8",
+      "symbol": "IREDA",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "c626a4a9-a622-4600-8699-a75c4a68779c",
+          "source_record_id": "09144157-0d7f-4bcb-8932-e1ae377c4124",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "9f3b932bcccc1f419971b2441596cbe6087f564607136986920c793f25bab000",
+          "retrieved_at": "2026-09-27 00:51:08.313+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "bf46f902-d54b-4add-b470-70d5171773ba",
+      "symbol": "IRMENERGY",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "7524d983-8bbb-4df2-8847-4a277c311453",
+          "source_record_id": "c4a0e6d8-fccd-4e35-8fff-85e64fbde37b",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "a58c2629107cda09d35d61eaee4fc535eed57febe14b58905269582c2f50e30d",
+          "retrieved_at": "2026-10-07 09:35:48.051+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "d8c32eab-90ce-4202-9d44-6534d4d13e5e",
+      "symbol": "ITCHOTELS",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "7a2cf834-7315-416f-9a80-2c2c9cd8cc71",
+          "source_record_id": "70795ce6-9c10-44f0-be15-80d6b8547ce0",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "d7b808592819ba8735dc4aec211920a478668624068c4e5626ac60853509012c",
+          "retrieved_at": "2026-09-27 00:51:14.976+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "a9f819b2-d9bc-40e9-817e-d8d9d7d21505",
+      "symbol": "JASH",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "e6993f46-e9e6-4a59-9d34-98918df5d5d3",
+          "source_record_id": "a644e73a-92a2-4953-8ef9-5b0d7ed02206",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "c8403abaa8b47299856a9e1e1eb334b25a46c237c6cb5c65b7bf34ac0234632b",
+          "retrieved_at": "2026-10-07 09:36:56.241+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "13582fb2-7c6c-4fcd-a2cd-253c86a79efb",
+      "symbol": "JINDALSTEL",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "dbcc92d2-d8ed-46d6-8d1b-47df7e346add",
+          "source_record_id": "c17c37e1-649b-440d-adcb-bb368acd6a98",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "b2e8a6dae5351ed605ebfce1ff9028b5c8e65da498ee42d9bb3a702ef192a58f",
+          "retrieved_at": "2026-09-27 00:51:41.6+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "db90cabf-5c5d-44a8-9da3-798368e2b458",
+      "symbol": "JIOFIN",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "aae2d9a0-1ee1-4089-877d-c54008c66721",
+          "source_record_id": "7ea01f25-e385-4292-8201-4737e812bcc8",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "bc3f9b053a724f2a7096202fcfa62a3d36cdf66e0c97290d89b999e5ef8b7199",
+          "retrieved_at": "2026-09-27 00:51:43.933+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "fe076725-5b5a-4bf6-a76d-16211b5ebe2a",
+      "symbol": "JKLAKSHMI",
+      "in_frozen_111": false,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN",
+          "series": "Promoter",
+          "quarters": [
+            "Mar 2025",
+            "Jun 2025",
+            "Sep 2025",
+            "Dec 2025",
+            "Mar 2026",
+            "Jun 2026"
+          ],
+          "seriesState": "CHART_QUARTERS_SYNTACTICALLY_VALID_ONLY",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "1196928e-2e70-4040-aca6-ce04e892987b",
+          "source_record_id": "437eb523-96ba-45e9-9036-4e121f74fe01",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "886e4679c0d4c858e4e19c4cba15e13a7d5277d534b81e844c00d84e36434ee1",
+          "retrieved_at": "2026-10-07 09:37:10.584+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "819fde8b-75bc-4327-b456-bce1a8b7a63f",
+      "symbol": "JSWENERGY",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "fff13f1c-50a1-4be4-9f60-12eb005ebef5",
+          "source_record_id": "52dbc73d-5c72-4bb9-a887-60939e5bf204",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "f891871ebe1b81c746a1393f226f28fc26f41f98da4b7742b2376fe999b02d97",
+          "retrieved_at": "2026-09-27 00:53:03.548+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "80aa69b4-1b40-476d-a8f2-ac509a129300",
+      "symbol": "JTLIND",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "e5258ae5-a660-4e86-9112-93d9125deb89",
+          "source_record_id": "699c7881-21df-4d11-be00-afc710559a46",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "4281b05775e842ba15966e3a345cccee35deb855fc7b00746c9dc53807cf425f",
+          "retrieved_at": "2026-09-27 00:53:08.75+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "8874186e-a6bc-49eb-9163-28cae2b31dd6",
+      "symbol": "JUBLFOOD",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "3363255a-92c1-4fd5-8fcb-a6a99a4073c5",
+          "source_record_id": "bd768d0c-dbdb-4b0f-bd47-9e361f042df1",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "bd8658a71929baa6df008d97d3c0170f38424c1553146309313c14e2f3f374de",
+          "retrieved_at": "2026-09-27 00:53:34.826+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "91520c5a-60a2-4719-9a5e-eeb3da6df18c",
+      "symbol": "JUBLPHARMA",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_SERIES_MISSING",
+          "series": "Promoter",
+          "quarters": [],
+          "seriesState": "MISSING_OR_LESS_THAN_FOUR",
+          "requirement_code": "OWNERSHIP_TREND_4Q",
+          "snapshot_item_id": "3f14b932-5f3a-4d15-86eb-03b7c8f420b0",
+          "source_record_id": "45097558-0002-4719-a36a-a993c8cf8bb3",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "74729a754ab1963369a8025868410a2b3200d247056d599cbb28c89811852c26",
+          "retrieved_at": "2026-09-27 00:53:39.248+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    },
+    {
+      "security_id": "08939466-a3bb-4a59-8605-8917d6a547de",
+      "symbol": "JYOTHYLAB",
+      "in_frozen_111": true,
+      "contract_version": "V1_4_OWNERSHIP_METHOD_SELECTION_V1",
+      "applicable_count": 1,
+      "items": [
+        {
+          "reason": "OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",
+          "series": null,
+          "quarters": [],
+          "seriesState": "REVIEW_PENDING",
+          "requirement_code": "OWNERSHIP_GOVERNANCE",
+          "snapshot_item_id": "92b28c13-5244-473d-8a2e-c628e038e818",
+          "source_record_id": "ed1d7662-9f2d-4e16-a714-0affce1ff6db",
+          "source_code": "TRENDLYNE_MCP",
+          "payload_hash": "5f9a96ce7c654926810765e27843cf6d2afe1ee1ed61f2e2a817b5248f709815",
+          "retrieved_at": "2026-09-27 00:53:36.531+00",
+          "denominator_proven": false,
+          "period_semantics_proven": false,
+          "governance_review_proven": false,
+          "valid_canonical_candidate": false,
+          "prior_reason": "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN"
+        }
+      ]
+    }
+  ]
+}

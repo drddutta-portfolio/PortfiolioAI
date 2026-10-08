@@ -15,6 +15,12 @@ and Deno limits remain explicit. See the [release record](PortfolioAI_STOCK_RESE
 No Production, migration, evidence write, Auth/RLS or Supabase Edge-function release
 was performed. C1/C8 and evidence/operational ownership gates remain separate.
 
+## Operational V1-4 ownership — provider-free replay and isolated tests (8 October 2026)
+
+**Methodology direction implemented but canonical V1-4 still NOT PROVEN.** Development source HEAD prior to this continuation: `1db4eed499c4920c60c0abc4e6a50c9628e2accb` (concurrent UI changes preserved). Strict isolated TypeScript compilation and **11/11 Node.js behavioral ownership guard checks PASSED** on a local copy of the identified functions; this does not replace full repository verification, currently inaccessible due to container GitHub DNS failure. Provider original `Promoter Holding (%)`/`Holding (%)` headers show percentages but do not prove denominator or aggregation/overlap.
+
+Retained source-linked fixed-115 report: `docs/private/PortfolioAI_V1_4_OWNERSHIP_RETAINED_DRYRUN_115_2026-10-08.json`. All 115 accounted for: 114 ownership requirement items on 114 securities, one not applicable; 24 syntactically plausible series still lacking denominator semantics, 39 lacking selected series in **item-linked** source, 51 requiring separate governance document review. This is an item-linked guard replay, not exact deployed Deno dry-run materialization. Safe candidates 0; provider calls 0; DB/R2 writes 0. Governance 49→51 explained as potentially incomparable source-link count vs current item denominator: both current full runs have 51 governance items; 49 currently have a raw ownership source link and 2 do not. No factual ACCEPT/reviewer action. See `docs/PortfolioAI_V1_4_OWNERSHIP_IMPLEMENTATION_AND_ACTIVATION_2026-10-08.md`. Full repo/Edge/Deno tests and exact handler validation remain unexecuted; do not infer a CI PASS. V1-5 remains unauthorized.
+
 ### Stock-page Industry-first Stage 5 — 8 October 2026
 
 Stage 5.1–5.4 page-design acceptance PASS: 224 relevant tests across 16 files,
