@@ -19,3 +19,19 @@ export async function invokeEdgeFunction(
     error: record.error ?? null,
   }
 }
+
+
+export function asEdgeFunctionError(error: unknown, fallback = "Edge function request failed."): Error {
+  if (error instanceof Error) return error
+  if (typeof error === "string" && error.trim()) return new Error(error)
+  if (error && typeof error === "object" && !Array.isArray(error)) {
+    const record = error as Record<string, unknown>
+    const message = typeof record.message === "string" && record.message.trim()
+      ? record.message
+      : typeof record.error === "string" && record.error.trim()
+        ? record.error
+        : fallback
+    return new Error(message, { cause: error })
+  }
+  return new Error(fallback, { cause: error })
+}
