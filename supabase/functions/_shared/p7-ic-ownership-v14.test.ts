@@ -38,4 +38,21 @@ describe("V1-4 ownership methodology fail-closed canonical guard",()=>{
    series:null,reason:"OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",eligibleForCanonicalPersistence:false
   })
  })
+
+ it("reprojects retained original ownership text when cached chart history is absent",()=>{
+  const original=[
+   "summaryData:",
+   "chartData:",
+   '  Promoter:',
+   '    ["Quarter","Promoter Holding (%)"], ["Mar 2025",45.1], ["Jun 2025",45.2], ["Sep 2025",45.3], ["Dec 2025",45.4]',
+   '  Institutional:',
+   '    ["Quarter","Holding (%)"], ["Mar 2025",20.1], ["Jun 2025",20.2], ["Sep 2025",20.3], ["Dec 2025",20.4]',
+   "insights:"
+  ].join("\n")
+  const parsed=parseTrendlyneOwnershipHistory(original)
+  expect(parsed.series.Promoter).toHaveLength(4)
+  expect(parsed.series.Institutional).toHaveLength(4)
+  expect(validateV14SelectedOwnership({requirementCode:"OWNERSHIP_TREND_4Q",history:parsed}).reason).toBe("OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN")
+  expect(validateV14SelectedOwnership({requirementCode:"INSTITUTIONAL_OWNERSHIP_TREND_4Q",history:parsed}).reason).toBe("OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN")
+ })
 })
