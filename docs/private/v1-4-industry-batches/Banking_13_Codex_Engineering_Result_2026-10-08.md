@@ -71,4 +71,3 @@ Use `Banking_13_Read_Only_Request_Manifest.json`, add the verified portfolio ID,
 Deployment authorization here would cover only that one Development function. It would not authorize materialization, provider acquisition or documentary decisions. After read-only results identify genuinely admissible candidates, request separately bounded execution authority if needed.
 
 Frozen 111 membership, ₹13,25,856.96 baseline and minimum 100 READY / ₹11,93,271.27 remain unchanged. No live before/after improvement is claimed.
-
