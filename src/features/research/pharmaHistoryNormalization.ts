@@ -1,6 +1,6 @@
 import Decimal from "decimal.js"
 
-export const PHARMA_HISTORY_NORMALIZATION_VERSION = "PHARMA_HISTORY_NORMALIZATION_V2" as const
+export const PHARMA_HISTORY_NORMALIZATION_VERSION = "PHARMA_HISTORY_NORMALIZATION_V3" as const
 
 export type PharmaAnnualPeriod = "Y0" | "Y1" | "Y2" | "Y3" | "Y4" | "Y5"
 export type PharmaQuarterPeriod = "Q0" | "Q1" | "Q2" | "Q3" | "Q4" | "Q5" | "Q6" | "Q7" | "Q8"
@@ -101,6 +101,16 @@ function parseFiniteDecimal(value: string | number | null): Decimal | null {
   }
 }
 
+export function derivePharmaOperatingMarginPercent(
+  operatingProfit: string | number | null,
+  operatingRevenue: string | number | null,
+): string | null {
+  const profit = parseFiniteDecimal(operatingProfit)
+  const revenue = parseFiniteDecimal(operatingRevenue)
+  if (!profit || !revenue || revenue.lte(0)) return null
+  return profit.div(revenue).mul(100).toDecimalPlaces(6, Decimal.ROUND_HALF_UP).toString()
+}
+
 function firstExactLabel(byLabel: ReadonlyMap<string, ProviderHistoryValue>, labels: readonly string[]) {
   for (const label of labels) {
     const match = byLabel.get(normalizeLabel(label))
@@ -175,16 +185,16 @@ export function derivePharmaQuarterlyOperatingMargin(values: readonly ProviderHi
     }
     const revenue = parseFiniteDecimal(revenueItem.value)
     const profit = parseFiniteDecimal(profitItem.value)
-    if (!revenue || !profit || revenue.lte(0)) {
+    const marginPercent = derivePharmaOperatingMarginPercent(profit?.toString() ?? null, revenue?.toString() ?? null)
+    if (!revenue || !profit || marginPercent === null) {
       invalidPeriods.push(period)
       continue
     }
-    const margin = profit.div(revenue).mul(100)
     points.push({
       period,
       operatingProfit: profit.toString(),
       operatingRevenue: revenue.toString(),
-      marginPercent: margin.toDecimalPlaces(6, Decimal.ROUND_HALF_UP).toString(),
+      marginPercent,
       sourceLabels: [profitItem.label, revenueItem.label],
     })
   }
@@ -208,7 +218,7 @@ export const PHARMA_HISTORY_NORMALIZATION_CONTRACT = {
     annualRevenue: "Only exact operating-revenue annual labels may satisfy the series. Generic Rev. Ann. or Total Rev. Ann. values are not interchangeable with Operating Rev. Ann. and are never substituted.",
     annualCfo: "Exact annual CFO labels are normalized to Y0-Y5; CFO alone does not satisfy PHARMA cash-conversion readiness.",
     quarterlyInputs: "Reviewed provider spelling aliases such as 6Qtr/7Qtr are accepted only when the parser has already ruled out duplicate-value conflicts for that exact label.",
-    operatingMargin: "PortfolioAI derives each quarterly OPM from matched-period operating profit / operating revenue × 100 using Decimal arithmetic. The raw operating-profit and operating-revenue observations remain the canonical evidence; the derived margin is not written as provider evidence.",
+    operatingMargin: "PortfolioAI derives each quarterly OPM through derivePharmaOperatingMarginPercent from compatible matched-period operating profit / operating revenue × 100 using Decimal arithmetic at six-decimal calculation precision. Display rounding is presentation-only. Raw observations remain canonical evidence; the derived margin is never written as provider evidence.",
     missingData: "Missing, invalid, conflicting or unmatched period values remain missing/invalid and are never coerced to zero.",
   },
 } as const
