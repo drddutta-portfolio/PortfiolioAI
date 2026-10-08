@@ -7,8 +7,11 @@ name wrapping, sticky section navigation and owner Core/Satellite controls remai
 Missing taxonomy projection fields remain unavailable rather than inferred.
 Terminal research failures no longer leave false loading labels in the summary.
 See the [Stage 3 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_3_SHARED_SHELL_2026-10-08.md)
-for validation and the hosted acceptance boundary. Implementation is on the review
-branch, not merged to Development; full hosted acceptance and C1/C8 remain open.
+for validation and the hosted acceptance boundary. The first hosted commit passed
+115 checks across seven stocks, with zero runtime errors/provider refreshes/writes.
+A subsequent spacing fix passes build but its preview is rate-limited by Vercel;
+final visual acceptance remains open. Implementation is on the review branch,
+not merged to Development; C1/C8 remain open.
 
 ### Stock-page Industry-first Stage 2 — 8 October 2026
 

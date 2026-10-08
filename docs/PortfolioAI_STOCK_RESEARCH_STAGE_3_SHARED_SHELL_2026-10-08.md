@@ -7,8 +7,9 @@ Date: 8 October 2026
 Stage 3 implements the Industry-first identity presentation in the common
 ResearchPage shell, for every stock using that page. It consumes Stage 2's selected
 canonical scoring/evidence context; it does not select or reassign methodologies.
-Implementation is ready for review. Hosted visual acceptance is pending a new
-Vercel preview; this record does not approve an all-stock final rollout.
+Implementation is ready for review. The first hosted implementation passed 115 checks; final visual acceptance of
+the subsequent spacing correction is blocked by Vercel's deployment rate limit.
+This record does not approve an all-stock final rollout.
 
 ## Sub-stages
 
@@ -56,3 +57,29 @@ been merged or deployed to Development. Hosted acceptance must use the exact new
 commit on Vercel with the approved Development backend, including desktop/mobile
 name wrapping, section navigation and representative bank/Pharma pages; local
 rendering or an older preview cannot substitute for that evidence.
+
+## Hosted evidence — 8 October 2026
+
+Authenticated, read-only Chromium verification against deployment
+`dpl_3dD2iX5q1bkKcJHit1G2fxLP3Q2E`, application commit
+`bfbc00d15c25a86919d69dcb2325b3920447e6c5`, passed all 115 checks.
+The seven stocks were HDFCBANK, TORNTPHARM, ALIVUS, AUROPHARMA, BIOCON,
+AKUMS and ABCAPITAL. Each selected one canonical snapshot with no live legacy
+assignment read; header, specialist requirements and Evidence retained matching
+assignment/snapshot lineage. All five Pharma primary labels matched their deep
+frameworks. Industry-first identity, unavailable Basic Industry/verification,
+independent owner role, desktop name containment and mobile page containment
+passed. Runtime errors, provider refresh attempts and research writes: zero.
+Desktop HDFCBANK and mobile AKUMS screenshots were inspected privately; screenshots
+containing portfolio data are not committed.
+
+Visual inspection found excessive paragraph spacing. Application commit
+`506ffbd91808bc70fa01be9c07395febda5b3e40` reduces the shared identity paragraph
+spacing/font size while retaining full wrapping. Its TypeScript/build passed,
+but Vercel rejected its preview with **Deployment rate limited — retry in 24
+hours**. The 115-check report is evidence for the earlier commit, not the final
+spacing correction. Final desktop/mobile visual acceptance, including the added
+mobile sticky-menu interaction check, remains pending. No quota/protection changes
+or alternate local application screenshots were used.
+
+Sanitized evidence: [hosted verification report](research-ui-sector-review-evidence/stock-research-stage-3-verification-2026-10-08.json).
