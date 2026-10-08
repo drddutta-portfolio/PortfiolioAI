@@ -1,10 +1,12 @@
 import type { SecurityScoringSnapshot } from "./scoringTypes"
 
 /** Canonical assignment lineage is distinct from descriptive sector/industry labels. */
-export function ResearchAssignmentSummary({ snapshot, isLoading, error }: {
+export function ResearchAssignmentSummary({ snapshot, isLoading, error, sector, industry }: {
   readonly snapshot: SecurityScoringSnapshot | null
   readonly isLoading: boolean
   readonly error: string | null
+  readonly sector?: string | null
+  readonly industry?: string | null
 }) {
   const route = snapshot?.canonicalRoute
   return <details className="research-assignment-summary">
@@ -16,10 +18,15 @@ export function ResearchAssignmentSummary({ snapshot, isLoading, error }: {
       {route ? <>
         <p>Methodology: {route.methodologyAuthority} / {route.methodologyVersion}</p>
         <p>Assignment: {route.assignmentAuthority ?? "Authority unavailable"} / {route.assignmentVersion} / {route.assignmentId}</p>
+        <p>Classification version: {route.classificationVersion ?? "Unavailable"}</p>
         <p>Selected snapshot: {route.snapshotId} · as of {route.asOfDate}</p>
       </> : <p>No canonical assignment lineage supplied. Classification cannot substitute for an approved research assignment.</p>}
     </>}
-    <p><strong>Macro-economic sector / basic industry / sub-sector / group:</strong> Unavailable in the current shared classification projection.</p>
-    <p>Sector and industry are shown above. Research profiles and subprofiles describe methodology; they are not substitute classification labels.</p>
+    <p><strong>Macro-economic sector / basic industry:</strong> Unavailable in the current shared classification projection.</p>
+    <p><strong>Official taxonomy node IDs and source version:</strong> Unavailable in the shared projection; classification version above belongs to the selected assignment lineage.</p>
+    <p><strong>Sector:</strong> {sector ?? "Unavailable"}</p>
+    <p><strong>Industry:</strong> {industry ?? "Unavailable"}</p>
+    <p><strong>Classification verification:</strong> Unavailable; a methodology assignment does not verify the economic hierarchy.</p>
+    <p>Sector and industry are shown above. Subprofile is an analytical refinement, not an additional official taxonomy level. Research profiles and subprofiles describe methodology; they are not substitute classification labels.</p>
   </details>
 }

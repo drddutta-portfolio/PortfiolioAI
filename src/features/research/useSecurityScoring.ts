@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { loadSecurityScoringSnapshot } from "../../data/scoringRepository"
 import { displayError } from "../../lib/displayError"
+import type { P7CurrentEvidenceSnapshot } from "../../data/p7CurrentIntelligenceRepository"
 import type { SecurityScoringSnapshot } from "./scoringTypes"
 
 const scoringCache = new Map<string, SecurityScoringSnapshot>()
@@ -48,27 +49,31 @@ function subscribe(securityId: string, listener: (snapshot: SecurityScoringSnaps
   }
 }
 
-export function useSecurityScoring(securityId: string | null, sector: string | null, industry: string | null, portfolioId: string | null, assetClass: string | null) {
-  const cacheKey = securityId && portfolioId && assetClass ? `${portfolioId}:${securityId}:${assetClass}` : null
-  const [loaded, setLoaded] = useState<{ key: string | null; revision: number; data: SecurityScoringSnapshot | null; error: string | null }>({ key: null, revision: 0, data: null, error: null })
+export function useSecurityScoring(securityId: string | null, sector: string | null, industry: string | null, portfolioId: string | null, assetClass: string | null, selection?: { readonly snapshot: P7CurrentEvidenceSnapshot | null; readonly revision?: number; readonly isLoading: boolean; readonly error: string | null }) {
+  const selectedSnapshot = selection?.snapshot
+  const selectionRevision = selection?.revision
+  const selectionLoading = selection?.isLoading ?? false
+  const selectionError = selection?.error ?? null
+  const cacheKey = securityId && portfolioId && assetClass ? `${portfolioId}:${securityId}:${assetClass}${selection ? `:${selectedSnapshot?.snapshotId ?? "no-snapshot"}` : ""}` : null
+  const [loaded, setLoaded] = useState<{ key: string | null; revision: number; selectedSnapshot?: P7CurrentEvidenceSnapshot | null; selectionRevision?: number; data: SecurityScoringSnapshot | null; error: string | null }>({ key: null, revision: 0, data: null, error: null })
   const [revision, setRevision] = useState(0)
-  const current = loaded.key === cacheKey && loaded.revision === revision
+  const current = !selectionLoading && !selectionError && loaded.key === cacheKey && loaded.revision === revision && loaded.selectedSnapshot === selectedSnapshot && loaded.selectionRevision === selectionRevision
   const data = current ? loaded.data : null
-  const error = current ? loaded.error : null
+  const error = selectionError ?? (current ? loaded.error : null)
 
   useEffect(() => {
     let active = true
-    if (!securityId || !portfolioId || !assetClass || !cacheKey) return () => { active = false }
+    if (selectionLoading || selectionError || !securityId || !portfolioId || !assetClass || !cacheKey) return () => { active = false }
 
-    const unsubscribe = subscribe(cacheKey, (snapshot) => { if (active) setLoaded({ key: cacheKey, revision, data: snapshot, error: null }) })
+    const unsubscribe = subscribe(cacheKey, (snapshot) => { if (active) setLoaded({ key: cacheKey, revision, selectedSnapshot, selectionRevision, data: snapshot, error: null }) })
 
-    const loader = loadSecurityScoringSnapshot(securityId, sector, industry, { portfolioId, assetClass })
+    const loader = loadSecurityScoringSnapshot(securityId, sector, industry, { portfolioId, assetClass, ...(selectedSnapshot === undefined ? {} : { selectedSnapshot }) })
     void loader
-      .then((value) => { if (active) setLoaded({ key: cacheKey, revision, data: publishSnapshot(cacheKey, value), error: null }) })
-      .catch((reason: unknown) => { if (active) setLoaded({ key: cacheKey, revision, data: null, error: displayError(reason) }) })
+      .then((value) => { if (active) setLoaded({ key: cacheKey, revision, selectedSnapshot, selectionRevision, data: publishSnapshot(cacheKey, value), error: null }) })
+      .catch((reason: unknown) => { if (active) setLoaded({ key: cacheKey, revision, selectedSnapshot, selectionRevision, data: null, error: displayError(reason) }) })
 
     return () => { active = false; unsubscribe() }
-  }, [securityId, sector, industry, portfolioId, assetClass, cacheKey, revision])
+  }, [securityId, sector, industry, portfolioId, assetClass, cacheKey, revision, selectedSnapshot, selectionLoading, selectionError, selectionRevision])
 
   return {
     data,

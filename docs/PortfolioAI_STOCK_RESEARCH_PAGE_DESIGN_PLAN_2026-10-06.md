@@ -3,7 +3,7 @@
 **Date:** 6 October 2026 (Asia/Kolkata)
 **Repository:** drddutta-portfolio/PortfiolioAI
 **Target branch:** PortfolioAI-Development
-**Design version:** STOCK_RESEARCH_WORKSPACE_V2_2_TWO_PART_DESIGN
+**Design version:** STOCK_RESEARCH_WORKSPACE_V2_3_INDUSTRY_FIRST_TWO_PART_DESIGN
 **Status:** Consolidated design specification / implementation proposal. Documentation creation is authorized; this document does not independently authorize application changes, provider execution, migrations or later V1 gates.
 **Reference baseline:** `95ae01330f87e7adc35a79da084f4beb9157c2bd`
 **Product rule:** One PortfolioAI, one reusable stock Research shell, profile-specific research within it.
@@ -44,7 +44,33 @@ Common design does not mean identical values or research dimensions. These regio
 
 ### Part 2 — Stock-specific research design and group-built research data
 
-Within the common shell, reusable research blocks present the content appropriate to the stock's canonical sector, industry, sub-sector/group/subgroup, approved research profile/subprofile and applicable approved overlays. These classification fields remain distinct from methodological assignments: the approved effective research contract selects requirements, dimensions, metrics and modules; the UI must not infer a methodology from a sector label or ticker.
+Within the common shell, reusable research blocks are **Industry-first and
+business-model-aware**. Sector is visible context and portfolio grouping, never
+an independent company-template or methodology selector. Exact versioned Industry
+mappings select the candidate research framework; Basic Industry refines it;
+reviewed business-model/subprofile evidence resolves specialised methodology
+where required. Industry alone must not force a route when its businesses have
+materially different economics. The approved effective canonical assignment,
+not a page-local classifier, selects requirements, dimensions, metrics and modules.
+
+The identity block distinguishes **official economic classification**
+(Macro-Economic Sector → Sector → Industry → Basic Industry) from **PortfolioAI
+research assignment** (methodology/business-model profile → required subprofile).
+Do not introduce a parallel sub-sector/group hierarchy or infer missing levels.
+Primary subprofile and separately reviewed secondary exposures remain distinct.
+The top summary, deep research and readiness views must consume one assignment
+contract; a canonical resolved primary must not appear as awaiting assignment
+because an older independent read is empty. Missing richer provenance or an
+actual conflict remains explicit rather than fabricated.
+
+Stock-specific presentation and eligible R6/R7/downstream outputs follow that
+same reviewed methodology. Sector pages remain for allocation/exposure, macro
+trends, concentration, relative performance and news. Healthcare business families
+and Financial Services business models must not receive one generic sector-driven
+company framework; the five existing Pharma subprofiles remain separate portable
+authorities. See C1/C8 of the [permanent classification/remediation plan](PortfolioAI_PERMANENT_CANONICAL_CLASSIFICATION_AND_TAXONOMY_REMEDIATION_PLAN_2026-10-01.md).
+This owner-directed clarification does not activate research engines or approve
+classification/methodology changes.
 
 This part must expose the research data and results already built for the applicable group of stocks: relevant financial and operating observations, normalized metrics and history, business-model/exposure research, source documents, supporting and contradictory evidence, validation/review states, requirement coverage, freshness, blockers, and qualified persisted assessments and explanations where available. It is substantive research content, not merely a sector badge or a different card title.
 
@@ -58,17 +84,21 @@ The following three technical layers implement the two design parts; they are no
 2. **Approved effective research contract:** applicable dimensions, metrics, requirements, history, freshness, benchmarks, labels and workspace modules.
 3. **Security-scoped state:** actual assignments, facts, observations, reviews, readiness, engine runs, recommendations and owner decisions.
 
-Industry/sector/group/subgroup labels are canonical classification facts. Research profiles/subprofiles are methodological assignments. They may correspond, but they are not interchangeable and the UI must not infer one from the other.
+Macro-Economic Sector, Sector, Industry and Basic Industry are the official canonical classification levels. Group/subgroup and research subprofile must not be presented as additional official taxonomy levels. Research profiles/subprofiles are methodological assignments. They may correspond, but they are not interchangeable and the UI must not infer one from the other.
 
 An overlay changes only those research modules and applicability rules explicitly specified by the approved effective contract. It does not independently change canonical sector, assign a portfolio role or create an opinion.
 
 Unknown or unresolved profiles use the same shell with explicit unresolved applicability and blocked results. They must not inherit a generic scoring model or bank metrics.
 
+Stage 1 implementation preparation is specified in the [Industry-first Stage 1 contract](PortfolioAI_STOCK_RESEARCH_INDUSTRY_FIRST_STAGE_1_CONTRACT_2026-10-08.md). Its acceptance cases must be verified during integration; documentation completion does not imply live-page acceptance. Stage 2 data-flow integration and its hosted rebuild blocker are recorded in the [Stage 2 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_2_CANONICAL_INTEGRATION_2026-10-08.md).
+
+Stage 3 common identity presentation, final hosted visual PASS and its projection limitations are recorded in the [Stage 3 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_3_SHARED_SHELL_2026-10-08.md). This implements the shared shell; it does not certify classification or complete specialist results.
+
 ## 4. Entire page structure
 
 | Order | Shared region | Content and behavior |
 |---:|---|---|
-| 1 | Security header and classification | Company name, symbol, exchange, asset class, canonical sector/industry/group/subgroup where available; resolved research profile/subprofile and assignment date. Long names wrap by words. |
+| 1 | Security header and classification | Company name, symbol, exchange, asset class, Industry prominently, Basic Industry as refinement, Sector as context; resolved research framework and primary business-model/subprofile with assignment status. Full official hierarchy and lineage remain available in disclosure. Long names wrap by words. |
 | 2 | About company | Compact source-supported description of business, products/services, customers/geographies and material operating exposures. If absent, one concise unavailable message; no fabricated company narrative. |
 | 3 | Portfolio and price summary | CMP with price timestamp/session and freshness, quantity, cost basis/method, invested cost, current value, P&L and portfolio weight. Broker/account attribution remains explicit when incomplete. |
 | 4 | Decision Workspace | Owner-controlled plan: role, target weight, horizon, target price and stop-loss reference. Edit controls use existing authorized owner workflows. |
@@ -88,6 +118,23 @@ Regions 4–7 may share a responsive container while preserving their reading or
 
 The full methodology-requirements table must not precede Research at a glance in the default Overview. Readiness appears once as a summary; other locations link to the same details rather than duplicating them.
 
+### 4.1 Industry-first identity card — 8 October 2026 amendment
+
+The common shell must make the distinction visible, rather than merely changing the routing terminology:
+
+| Card region, in reading order | Required presentation |
+|---|---|
+| Identity | Compact complete company name, wrapping without clipping; symbol, exchange and asset class beneath it. Retain the shared sticky section menu. |
+| Business classification | **Industry** is the leading classification label. Show **Basic Industry** separately as refinement and **Sector** as contextual metadata. Do not substitute a methodology name for any official classification level. |
+| Research framework | Show the canonical methodology/profile and **Primary business model / subprofile** separately from official classification. Human-readable labels may include their canonical code in the detail disclosure. Required unresolved assignments say “Awaiting reviewed assignment”; an optional, inapplicable subprofile says “Not applicable”. |
+| Independent status | Classification verification/conflict state and research assignment state are separate. A resolved methodology does not prove that the Sector/Industry hierarchy is correct. Evidence readiness, engine availability and assessment/advisory state retain their separate existing displays. |
+| Portfolio context | Market-cap class, themes and owner-selected Core/Satellite role remain separate from business classification and PortfolioAI's qualified role suggestion. “Unclassified” owner role must not imply an unclassified Industry. |
+| Classification and assignment detail | Accessible disclosure shows Macro-Economic Sector → Sector → Industry → Basic Industry, supplied node IDs, source/taxonomy version, hierarchy review state, and separate methodology/assignment lineage. Missing facts remain explicit; no invented group/sub-sector nodes. |
+
+Use one canonical assignment projection for this card, the framework summary, research tabs, deep workspace and readiness. A legacy empty assignment read must not display “Awaiting reviewed assignment” while the canonical assignment is resolved. Conversely, never infer resolution from a company name, sector label or another stock.
+
+Long labels wrap inside the existing identity region at desktop and mobile widths. Keep important classification and research-framework labels visible without opening the disclosure; move technical lineage, not the primary business model, into detail. Historical implementation notes below record earlier behavior and do not establish acceptance of this amended layout.
+
 ### Structure diagram
 
 ```mermaid
@@ -97,7 +144,7 @@ flowchart TD
     C --> D["Shared research tabs"]
     D --> E["Overview: Context → Cockpit → Heatmap → Ratings → Readiness"]
     E --> F["Applicable metric snapshots → Research Health"]
-    F --> G["Sector/profile deep research: compact summary + expandable modules"]
+    F --> G["Industry/business-model research: compact summary + expandable modules"]
     D --> H["Financials / Quality & Growth / Ownership / Valuation"]
     D --> I["Documents / Evidence: complete facts, requirements and lineage"]
 ```
@@ -118,7 +165,7 @@ Financial history tables should distinguish annual, quarterly, TTM, instant and 
 
 Evidence rows show human-readable explanations first and technical reason codes on expansion. Audit detail remains accessible; it is not removed to shorten the page.
 
-## 6. Part 2 content: sector, industry, sub-sector and profile/subprofile adaptation
+## 6. Part 2 content: Industry-first, business-model-aware research adaptation
 
 The approved canonical assignment selects the effective methodology. A shared presentation registry maps that methodology to groups and labels; it must not classify the security or calculate scores.
 
@@ -130,7 +177,9 @@ The approved canonical assignment selects the effective methodology. A shared pr
 | AMC/broker/exchange/depository | AUM/flows, client assets/activity, volumes, market share and fee economics as applicable | Each approved operating-model subgroup controls metrics. |
 | Financial holding company | Subsidiary economics, look-through earnings, capital allocation, liquidity/leverage and approved SOTP/NAV context | No generic bank deposits/NPA grid or arbitrary holding-company discount. |
 | IT/services/product | Revenue/margins, cash conversion, client/deal concentration and approved product/service operating measures | Do not turn unverified AI exposure into a quality conclusion. |
-| Pharma/healthcare | Role-selected business model, financials, regulatory/site evidence, product/pipeline and cash quality | Domestic formulations, generics, API, CDMO and other reviewed subprofiles retain distinct applicability. |
+| Pharmaceuticals & Biotechnology | Reviewed business-model-specific financials, regulatory/site evidence, products/pipeline and cash quality | The five Pharma subprofiles retain separate requirements; Healthcare Services and Equipment must not inherit this template. |
+| Healthcare Services | Approved service/operator economics, utilization, capacity, payer mix and cash quality where applicable | Do not inherit pharmaceutical pipeline or API/CDMO requirements. |
+| Healthcare Equipment & Supplies | Approved product mix, manufacturing/distribution economics, regulatory evidence and cash quality where applicable | Do not inherit hospital utilization or pharmaceutical requirements. |
 | Industrials/capital goods/defence | Order book/execution, margins, working capital, capacity and customer/project exposure | Order backlog is not automatically recognized revenue or a recommendation. |
 | Consumer/retail/durables | Demand, mix, distribution, unit economics, margins and cash generation | Use approved operating-model distinctions rather than one consumer formula. |
 | Commodity/cyclical businesses | Cycle-aware margins/cash flow, leverage, capacity/cost context and sufficiently long history | A peak quarter must not become permanent quality/growth. |
@@ -139,7 +188,19 @@ The approved canonical assignment selects the effective methodology. A shared pr
 
 This table illustrates presentation families; it does not approve new profiles or claim implemented engines. The implementation coverage manifest must enumerate **every current approved profile/subprofile**, including those omitted from the examples, and identify presentation support, unresolved applicability and engine availability separately. Current portfolio profile counts are observations, not permanent limits.
 
+### Industry-selected research blocks and tab content
+
+Keep the shared shell, section anchors and tab names across all stocks. Under that shell, the canonical Industry-led assignment selects the approved methodology contract, refined by Basic Industry and required reviewed business model. The presentation registry renders that contract; it does not perform classification or reassignment.
+
+The stock-specific workspace begins with a compact **Research framework** summary: Industry, Basic Industry, applied methodology, primary subprofile, assignment state and applicable limitations. Follow it with contract-selected operating drivers/KPIs, financial quality and growth, valuation basis, risks, research results and source-linked evidence. Overview summarizes these results; Financials, Quality & Growth, Valuation and Evidence expose the same selected contract's relevant detail. Ownership and Documents retain their shared data authorities. Required retained research must remain reachable even when specialist presentation or scoring is unavailable.
+
+Banks, NBFCs, AMCs, insurers, brokers and fintech businesses must not receive one Financial Services template. Likewise, Healthcare Services and Healthcare Equipment & Supplies remain distinct from Pharmaceuticals & Biotechnology. These are design distinctions, not approval of new engines or inferred company assignments. A mixed business requires the approved Basic Industry/business-model refinement before a qualified research template or score can be asserted.
+
+If classification or required assignment is unresolved/conflicting, preserve the shell and valid retained data, expose the review state and avoid borrowing another industry's metrics or implying score/advisory readiness. Existing approved assignments remain authoritative until explicit reviewed revalidation/reassignment; a classification warning alone cannot silently reroute them.
+
 ### Pharma extension example
+
+Show the primary reviewed subprofile in the identity card and framework summary. Support all five distinct canonical subprofiles: **API_BULK_DRUGS**, **DOMESTIC_FORMULATIONS**, **GLOBAL_GENERICS**, **BIOPHARMA_BIOSIMILARS** and **CDMO_CRAMS**. Their specialised research requirements and results must come from their existing approved contracts; one generic Pharma checklist is insufficient. Secondary/material exposures appear separately and cannot masquerade as multiple primary assignments.
 
 Keep a compact model summary and then two collapsed-by-default groups:
 
@@ -157,7 +218,7 @@ A security's evidence, assignments and lineage must never be inherited from anot
 | Quantity, cost basis, realized/unrealized P&L | Existing canonical ledger/accounting/portfolio view path. No Research-page arithmetic competing with Holdings or Dashboard. |
 | Portfolio role, target and horizon | Owner-controlled canonical settings, kept separate from recommendations and asset class. |
 | Price and history | Existing approved market-data authority and validated history path; session/freshness shown. |
-| Sector/industry/group/subgroup | Canonical identity/classification projection. Missing hierarchy levels remain unavailable. |
+| Macro-Economic Sector / Sector / Industry / Basic Industry | Canonical identity/classification projection with taxonomy version and hierarchy validation state. Industry leads the display; Sector is context. Missing levels remain unavailable; research subprofiles cannot fill them. |
 | Profile/subprofile and methodology version | Current approved canonical route/assignment, with effective-contract lineage. |
 | Evidence readiness | Current selected canonical evidence snapshot and requirement items, with evaluation/source cutoff; not raw provider status. |
 | Engine availability and assessments | Existing canonical engine registry/runs, separately identified from evidence readiness. |
@@ -299,6 +360,11 @@ The following is the design acceptance contract; no PASS is claimed by publishin
 | First-glance clarity | At 1440×900, first screen identifies the company, exposure and research/advisory state; first Overview screen after selecting the tab shows the research summary before the full evidence matrix. |
 | Profile applicability | Every current approved profile/subprofile has an explicit presentation outcome; no irrelevant bank metrics appear outside approved bank/lending applicability. |
 | Canonical consistency | Identity, role, quantity, cost, price and weight agree with their shared authorities and other surfaces using the same snapshot/time context. |
+| Industry-first identity | Industry and Basic Industry are distinct from contextual Sector and methodology/subprofile. Long labels remain fully visible at every required viewport; absent levels are not filled with profile names. |
+| Assignment consistency | Header, framework summary, tabs, deep workspace and readiness consume the same canonical assignment/version. A stale or empty legacy assignment cannot contradict a resolved canonical assignment. |
+| Methodology selection | Same-Sector businesses with different Industries receive their approved distinct frameworks; heterogeneous Industries require the approved Basic Industry/business-model refinement. Changing Sector labels alone cannot select or reroute a method. |
+| Pharma specialisation | Verify all five subprofiles against their own approved requirements and results, including blocked/sparse cases and separate secondary exposures. Existing specialised methodology panels and retained research remain accessible. |
+| Classification conflicts | Verify a known conflicting hierarchy such as SKYGOLD separately from a resolved research assignment. Display the canonical review state without silently correcting classification or rerouting methodology; unknown verification is not presented as reviewed. |
 | Value meaning | No financial amount appears without safe unit/currency/scale and period context; missing metadata remains explicit. |
 | State meaning | Raw data, validated evidence, engine capability, assessments and advice remain distinguishable. |
 | Evidence integrity | Complete requirements and lineage remain reachable; detail is collapsed, not removed. |
@@ -337,7 +403,7 @@ This publication creates one consolidated design plan on Development. It does no
 
 ## 16. Owner-supplied original stock-page baseline — 6 October 2026 amendment
 
-**Design decision:** The three HDFCBANK screenshots supplied by the owner are the visual and feature baseline for the shared stock Research page. Retain the complete feature set and recognizable layout, and extend it through approved sector/industry/group/subgroup and profile/subprofile contracts.
+**Design decision:** The three HDFCBANK screenshots supplied by the owner are the visual and feature baseline for the shared stock Research page. Retain the complete feature set and recognizable layout, and extend it through approved Industry/Basic Industry and reviewed methodology/subprofile contracts.
 
 This amendment clarifies feature preservation in sections 4–9. It does not remove AI Interpretation, readiness or specialist research already required by R4M merely because those regions are not visible in the supplied screenshots.
 
@@ -377,7 +443,7 @@ Every row below must have an explicit implementation/test outcome. Unavailable f
 | Original feature | Required shared behavior | Sector/profile adaptation and safety |
 |---|---|---|
 | Back-to-Research link | Preserve navigation to coverage/list and useful navigation context. | Same behavior for every stock. |
-| Stock identity panel | Name, symbol, exchange, asset class, classification, market-cap class and themes. | Canonical sector/industry/group/subgroup and research assignment remain separate; missing facts explicit. |
+| Stock identity panel | Name, symbol, exchange, asset class, classification, market-cap class and themes. | Official classification hierarchy and research assignment remain separate; missing facts explicit. |
 | Company logo and About panel | Compact logo/fallback and source-supported business description with source/date access. | Describe this company's actual operating model; never generate unsupported factual enrichment. |
 | Position summary | CMP, quantity, average/canonical cost, weight, invested amount, current value, P&L and brokers/demat. | Shared accounting authority; explain gross/net or cost-method limits and incomplete broker attribution. |
 | Edit plan | Retain the existing owner-controlled editing workflow. | No advisory write-through; editing remains an explicit owner action. |
@@ -403,7 +469,7 @@ Every row below must have an explicit implementation/test outcome. Unavailable f
 | Read-only advisory notice | Preserve concise owner-control explanation. | No implied trading, role changes or account action. |
 | Target/stop-loss notification note | Preserve the applicable existing notification feature and its honest state. | Do not promise notifications when capability is absent or inactive; no scheduler activation from page rendering. |
 | Plan complete refresh | Preserve zero-call planning entry point and exact proposed operations. | Uses effective profile capability contract, budget, eligibility and execution grants. |
-| Valuation refresh card | Preserve module slot and shared control grammar. | Approved sector-specific valuation source/requirements; no generic P/E request forced on all profiles. |
+| Valuation refresh card | Preserve module slot and shared control grammar. | Approved Industry/business-model-specific valuation source/requirements; no generic P/E request forced on all profiles. |
 | Market-history refresh card | Preserve incremental history planning and evidence state. | Actual approved source/window, session and adjustment validation; no call on navigation. |
 | Benchmark-relative card | Preserve benchmark planning/context slot. | Exact approved benchmark mapping; no substitution with NIFTY Bank outside applicable contracts. |
 | Missing-field discovery card | Preserve a capability module for bounded discovery when supported. | HDFCBANK reference-stock entitlement is not expanded to other stocks; display explicit unsupported state elsewhere. |
@@ -428,7 +494,7 @@ For the owner-supplied baseline, retain the three original context roles:
 
 1. **Business / research context:** canonical industry and approved profile/subprofile, with clear assignment state.
 2. **Your portfolio role:** owner's role, current weight and preserved manual-control semantics.
-3. **Classification:** canonical sector/industry/group/subgroup summary, market-cap class and themes as available.
+3. **Classification:** Industry-led official classification summary with Sector as context, market-cap class and themes as available.
 
 This clarifies section 4, region 10, which previously described an evidence-summary third card. Evidence readiness is still prominent and mandatory, but belongs in the dedicated cockpit evidence/score-readiness cards and the readiness summary rather than displacing Classification.
 
@@ -449,7 +515,7 @@ The same shell must accommodate these distinct outputs:
 
 These are illustrative content directions, not new formula/metric approvals. The approved effective contract controls exact requirements, source authority, history, applicability, overlays and outputs.
 
-The sector-specific deep workspace follows the shared Overview and Research Health. It can contain model/operating-driver detail, applicable methodology, source-linked supporting and contradicting evidence, unresolved questions and collapsible evidence operations. It must not push the common cockpit below a long operational checklist.
+The Industry/business-model-specific deep workspace follows the shared Overview and Research Health. It can contain model/operating-driver detail, applicable methodology, source-linked supporting and contradicting evidence, unresolved questions and collapsible evidence operations. It must not push the common cockpit below a long operational checklist.
 
 ### 16.5 Result publication contract
 
@@ -472,7 +538,7 @@ An unimplemented engine may show validated facts and research questions but cann
 2. Restore the original compact visual grammar; remove unnecessary blank space and giant pre-overview evidence tables.
 3. Repair identity/owner-role/state contradictions and unsafe metric formatting.
 4. Extend the shared UI contracts for all current approved profiles/subprofiles; remove irrelevant metric leakage.
-5. Connect qualified sector-specific results into the existing cockpit, heatmap, snapshot, explanation and deep-research regions as their authorized V1 gates complete.
+5. Connect qualified Industry/business-model-specific results into the existing cockpit, heatmap, snapshot, explanation and deep-research regions as their authorized V1 gates complete.
 6. Verify populated, blocked, sparse, stale, conflicting, unknown-profile and unavailable-engine states in the same shell.
 
 Preservation does not mean showing every banking metric for every stock. It means retaining every product capability and shared region while selecting the economically applicable research content.

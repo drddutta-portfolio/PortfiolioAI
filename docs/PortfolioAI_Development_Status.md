@@ -1,3 +1,70 @@
+### Stock-page Industry-first Stage 3 — 8 October 2026
+
+The common identity shell now leads with Industry, separates Basic Industry and
+Sector context from methodology/primary subprofile, and shows independent
+classification-verification, assignment, evidence and engine states. Compact full
+name wrapping, sticky section navigation and owner Core/Satellite controls remain.
+Missing taxonomy projection fields remain unavailable rather than inferred.
+Terminal research failures no longer leave false loading labels in the summary.
+See the [Stage 3 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_3_SHARED_SHELL_2026-10-08.md)
+for validation and the hosted acceptance boundary. Final hosted visual acceptance
+is PASS: 118 checks across seven stocks, including all five Pharma models and
+mobile sticky navigation; zero runtime errors, provider refreshes, research writes
+or REST read failures. The verified commit includes the compact spacing fix.
+Application CI passed; later documentation CI could not start due to GitHub's
+account billing/spending-limit restriction. Implementation is on the review branch,
+not merged to Development; C1/C8 remain open.
+
+### Stock-page Industry-first Stage 2 — 8 October 2026
+
+Stage 2.1–2.4 are implemented on the review branch: one selected P7 evidence
+snapshot now supplies scoring, readiness and profile requirements; canonical
+assignment supplies the Pharma header, live framework and R6 role/lineage.
+Original review material is separately labelled and cannot override the current
+route. Qualification of unbound Pharma parent scores remains blocked.
+See the [Stage 2 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_2_CANONICAL_INTEGRATION_2026-10-08.md)
+for validation and release status. All 264 focused tests, TypeScript/build, full
+lint and the architecture guard pass. Authenticated backend reads confirm seven
+representative snapshots and all five Pharma models. Final hosted acceptance is
+blocked: the earlier preview used a backend without the canonical lineage view;
+review-branch public Supabase settings now match Development, but Vercel rejects
+new builds for 24 hours. This work has not merged or deployed to Development.
+The earlier hosted rebuild blocker was cleared during Stage 3 acceptance; see
+the Stage 3 record above. Industry-led shell layout is Stage 3; full
+specialised result presentation is Stage 4. C1/C8 remediation is not closed.
+
+### Stock-page Industry-first Stage 1 — 8 October 2026
+
+Stage 1.1–1.4 contract specification is complete: official classification levels,
+analytical assignment separation, exact Industry-led selection/refinement rules,
+and unresolved/conflicting-state safeguards. The [Stage 1 contract](PortfolioAI_STOCK_RESEARCH_INDUSTRY_FIRST_STAGE_1_CONTRACT_2026-10-08.md)
+defines nine acceptance cases for implementation verification and records existing
+compatibility/legacy-read gaps. These cases have not yet been executed against a
+new implementation. Next work is Stage 2 canonical consumer/data-flow integration.
+This does not pass remediation C1/C8 or approve changed stock assignments. No app,
+database, provider or deployment changes were made.
+
+### Industry-first company-research rule — 8 October 2026
+
+Owner directed a permanent Industry-first, business-model-aware company-research
+rule. C1's taxonomy contract and C8's methodology reassignment rules now explicitly
+require: Sector = contextual/portfolio grouping; Industry = primary framework
+selector; Basic Industry = refinement; reviewed business-model/subprofile =
+specialised refinement where needed. Sector alone cannot select a company research
+template or methodology, and heterogeneous industries cannot bypass required
+business-model review. Existing canonical assignments remain authoritative until
+reviewed revalidation/reassignment; UI does not create a competing router.
+
+The Research and Intelligence Architecture, Single Source of Truth Architecture
+and two-part stock Research design plan are aligned. The design specification now
+includes an Industry-led identity card, separate classification/assignment states,
+a shared framework summary, contract-selected tab content, five distinct Pharma
+subprofile presentations and explicit acceptance criteria. These layout changes
+are specified but not yet implemented or deployed. This is a documentation
+amendment, not implementation or C1/C8 closure. The [Pharma/sector display review](PortfolioAI_PHARMA_AND_SECTOR_DISPLAY_REVIEW_2026-10-08.md)
+records open assignment-display, methodology-panel and classification integration
+gaps; the earlier Gate 5 shell PASS does not close those findings. No application,
+provider, database, scoring or deployment changes were performed by this amendment.
 ## Operational V1-4 evidence gate — 8 October 2026
 
 **Disposition: NOT PROVEN. V1-5 remains unauthorized.**

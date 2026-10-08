@@ -4,6 +4,8 @@ export type ScoringMethodologyState = "AVAILABLE" | "METHODOLOGY_NOT_AVAILABLE" 
 export type ScoringExecutionState = "AVAILABLE" | "PENDING_ADAPTER" | "BLOCKED"
 
 export interface CanonicalScoringRoute {
+  readonly classificationVersion?: string
+  readonly methodologyRole?: string
   readonly profileCode: string
   readonly subprofileCode: string | null
   readonly methodologyAuthority: string

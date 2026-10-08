@@ -44,7 +44,7 @@ const researchState = { data: research as SecurityResearch | null, error: null a
 vi.mock("../features/research/useSecurityResearch", () => ({ useSecurityResearch: () => researchState }))
 
 const ratingState = { data: [] as readonly ExternalRatingObservation[] }
-const evidenceState = { applicable: true, data: null as P7CurrentEvidenceDetails | null, isLoading: false, error: null as string | null }
+const evidenceState = { applicable: true, data: null as P7CurrentEvidenceDetails | null, isLoading: false, error: null as string | null, reload: vi.fn() }
 const canonicalRoute = { profileCode: "BANK", subprofileCode: "RETAIL_BANK", methodologyAuthority: "test-methodology", methodologyVersion: "test-v1", assignmentAuthority: "test-authority", assignmentVersion: "test-v1", assignmentId: "test-assignment", snapshotId: "test-snapshot", asOfDate: "2026-10-07" }
 function retainedRequirement(): P7EvidenceRequirement {
   return { id: "test-requirement", snapshot_id: "test-snapshot", requirement_code: "TEST_RETAINED_REQUIREMENT", metric_code: null, required: true, minimum_history: 5, freshness_policy: "ANNUAL", benchmark_authority: [], applicability: "APPLICABLE", evidence_state: "REVIEW_REQUIRED", candidate_evidence_ids: ["test-candidate"], selected_evidence_id: null, evidence_as_of_date: "2026-03-31", retrieved_at: "2026-10-07", fresh_through: null, source_provider: "TEST_SOURCE", raw_source_record_id: "test-source-reference", normalized_value: { value: 0, unit: "RATIO", period_end: "2026-03-31", scope: "CONSOLIDATED" }, validation_state: "REVIEW_REQUIRED", canonical_selection_state: "UNSELECTED", reason_code: "SOURCE_REVIEW_REQUIRED", recommended_remediation_action: "REVIEW_SOURCE" }
@@ -55,6 +55,16 @@ function renderPage(path = "/app/research/s1") {
 }
 
 describe("ResearchPage", () => {
+  it("keeps terminal research errors distinct from loading in the common shell", () => {
+    Object.assign(scoringState, { data: null, isLoading: false, error: "Canonical read failed" })
+    renderPage()
+    expect(document.querySelector(".stock-research-classification")).toHaveTextContent("Research assignment: Unavailable")
+    expect(document.querySelector(".portfolioai-state-grid")).not.toHaveTextContent("Canonical profile loading")
+    expect(document.getElementById("stock-insights")).not.toHaveTextContent("Canonical profile loading")
+    expect(document.querySelector(".research-title")).toHaveTextContent("Your portfolio role:")
+    expect(screen.getByRole("navigation", { name: "Stock page sections" })).toBeInTheDocument()
+    expect(providerCall).not.toHaveBeenCalled()
+  })
   beforeEach(() => {
     window.history.replaceState(null, "", "/app/research/s1")
     vi.stubGlobal("scrollTo", vi.fn())
@@ -89,12 +99,14 @@ describe("ResearchPage", () => {
     expect(providerCall).not.toHaveBeenCalled()
   })
   it("preserves the pharmaceutical specialist selected by its canonical resolution", () => {
-    specialistState.resolved = true
+    scoringState.data = { ...initialScoringSnapshot, profileCode: "PHARMA_V1", profileSource: "CANONICAL_ASSIGNMENT", routeState: "RESOLVED", canonicalRoute: { ...canonicalRoute, profileCode: "PHARMA", subprofileCode: "CDMO_CRAMS" } }
+    specialistState.resolved = false
     renderPage()
     expect(document.getElementById("stock-specialist")).toHaveTextContent("Retained pharmaceutical workspace")
     expect(providerCall).not.toHaveBeenCalled()
   })
-  it("does not attach pharmaceutical content without an applicable canonical resolution", () => {
+  it("does not attach pharmaceutical content from a resolved legacy row without an applicable canonical resolution", () => {
+    specialistState.resolved = true
     renderPage()
     expect(screen.queryByText("Retained pharmaceutical workspace")).not.toBeInTheDocument()
   })
@@ -218,6 +230,10 @@ describe("ResearchPage", () => {
   it.each([
     ["HDFCBANK", "BANK", "RETAIL_BANK"],
     ["TORNTPHARM", "PHARMA", "DOMESTIC_FORMULATIONS"],
+    ["ALIVUS", "PHARMA", "API_BULK_DRUGS"],
+    ["AUROPHARMA", "PHARMA", "GLOBAL_GENERICS"],
+    ["BIOCON", "PHARMA", "BIOPHARMA_BIOSIMILARS"],
+    ["AKUMS", "PHARMA", "CDMO_CRAMS"],
     ["HOLDING_TEST", "FINANCIAL_HOLDING_COMPANY", null],
     ["RETAIL_TEST", "RETAIL_COMMERCE", null],
     ["UTILITY_TEST", "REGULATED_NETWORK", null],

@@ -1,4 +1,7 @@
-import { useMemo } from "react"
+import { canonicalPharmaPrimary } from "./canonicalResearchAssignment"
+import { composePharmaSubprofileContract, PHARMA_SUBPROFILE_CONTRACTS } from "./pharmaSubprofileContracts"
+import type { SecurityScoringSnapshot } from "./scoringTypes"
+import { useMemo, useState } from "react"
 import "./PharmaResearchWorkspacePanel.css"
 import { buildTorntpharmEvidencePilotPreview } from "./pharmaEvidencePilotPreview"
 import { buildPharmaBusinessModelEvidenceAcquisitionPlan, type PharmaBusinessModelEvidenceAcquisitionItem } from "./pharmaBusinessModelEvidenceAcquisitionContract"
@@ -167,7 +170,7 @@ function AcquisitionRequirementList({ items }: { readonly items: readonly Pharma
   </div>
 }
 
-export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: { readonly securityId: string; readonly symbol: string; readonly research: SecurityResearch }) {
+function RetainedPharmaResearchWorkspacePanel({ securityId, symbol, research }: { readonly securityId: string; readonly symbol: string; readonly research: SecurityResearch }) {
   const resolution = usePharmaSubprofileResolution(securityId)
   const evaluationDate = useMemo(() => new Date().toISOString().slice(0, 10), [])
 
@@ -1519,6 +1522,39 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research }: {
     </section> : null}
 
       </div>
+    </details>
+  </section>
+}
+
+/** The selected P7 assignment owns the live framework; earlier review material stays explicitly separate. */
+export function PharmaResearchWorkspacePanel({ securityId, symbol, research, snapshot }: {
+  readonly securityId: string
+  readonly symbol: string
+  readonly research: SecurityResearch
+  readonly snapshot: SecurityScoringSnapshot | null
+}) {
+  const [showEarlierReview, setShowEarlierReview] = useState(false)
+  const primary = canonicalPharmaPrimary(snapshot)
+  const route = snapshot?.canonicalRoute
+  if (!primary || !route) return <section className="pharma-workspace-panel pharma-workspace-blocked">
+    <h2>Subprofile review required</h2><p>The selected canonical assignment has no resolved primary Pharma subprofile. Retained evidence does not resolve this assignment.</p>
+  </section>
+  const contract = composePharmaSubprofileContract(primary)
+  return <section className="pharma-workspace-panel" aria-label="Canonical Pharma research framework">
+    <p className="eyebrow">Industry research framework · Pharmaceuticals</p>
+    <h2>Pharmaceuticals deep research</h2>
+    <p><strong>Primary model:</strong> {PHARMA_SUBPROFILE_CONTRACTS[primary].displayName} · Canonical assignment</p>
+    <p>Assignment resolution is separate from classification verification, evidence readiness and scoring availability. Secondary exposure review metadata is not supplied by this canonical projection.</p>
+    <details><summary>Selected Pharma contract and assignment</summary>
+      <p>{route.methodologyAuthority} / {route.methodologyVersion}</p>
+      <p>Assignment {route.assignmentAuthority ?? "Unavailable"} / {route.assignmentVersion} / {route.assignmentId}</p>
+      <p>Snapshot {route.snapshotId} · as of {route.asOfDate}</p>
+      <ul>{contract.metrics.map(metric => <li key={metric.metricCode}>{metric.metricCode.replaceAll("_", " ")} · {metric.applicability.replaceAll("_", " ")} · {metric.requirementLevel.toLocaleLowerCase()}</li>)}</ul>
+      <p>These are methodology requirements, not an evidence-completeness assessment. The selected snapshot's retained results and states remain in Stock-specific research and Evidence.</p>
+    </details>
+    <details onToggle={event => setShowEarlierReview(event.currentTarget.open)}><summary>Earlier reviewed Pharma research and evidence operations</summary>
+      <p>This retained workspace uses its original reviewed assignment and source observations. It is historical review detail, not the selected canonical assignment or evidence readiness. No earlier score or reference recommendation is promoted into the live page.</p>
+      {showEarlierReview ? <RetainedPharmaResearchWorkspacePanel key={securityId} securityId={securityId} symbol={symbol} research={research} /> : null}
     </details>
   </section>
 }

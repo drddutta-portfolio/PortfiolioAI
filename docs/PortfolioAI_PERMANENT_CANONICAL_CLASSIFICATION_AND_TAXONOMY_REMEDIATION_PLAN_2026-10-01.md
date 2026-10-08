@@ -24,6 +24,38 @@ These are connected by explicit, versioned mappings and assignments, but are not
 
 The final current read authority should be `current_security_classification_v2`, consumed through one repository/service contract. `current_security_enrichment_v2` may compose this classification with market-cap facts, but must not own or recalculate classification. During cutover, V1 names may exist only as forwarding compatibility views over V2; they may not remain independent authorities.
 
+### Permanent company-research rule — owner direction, 8 October 2026
+
+> **All company research pages and specialised research methodologies must be Industry-first and business-model-aware. Sector may be displayed and used for portfolio/macro analysis, but Sector alone must never select a company research template or methodology.**
+
+The navigation/context hierarchy remains:
+
+```text
+Macro-Economic Sector → Sector → Industry → Basic Industry
+                                         ↓
+                 PortfolioAI Methodology / Business-model Profile
+                                         ↓
+                     Specialised Subprofile where required
+```
+
+Industry is the primary framework selector through exact versioned taxonomy-node
+mappings. Basic Industry refines that framework; reviewed company business-model
+and subprofile evidence resolves economically heterogeneous groups. Neither
+Industry alone nor a display label may force a specialised methodology. Sector
+supplies economic context and hierarchy validation, not an independent scorer or
+page-template selector. The shared stock-page shell remains common to all stocks.
+
+Sector pages serve allocation/exposure, macro trends, concentration risk, relative
+performance and sector news. They are not the primary company research framework.
+Healthcare must distinguish pharmaceutical/biotechnology, healthcare-services and
+equipment/supplies businesses. Financial Services must distinguish banks, NBFCs,
+AMCs, insurers, brokers and fintech businesses. These are business-family examples,
+not new official taxonomy nodes, assignments, thresholds or execution permissions.
+
+This direction authorizes the documentation amendment. It does not pass C1/C8,
+authorize migrations or reassignment writes, activate R6/R7, or change the execution
+checkpoints and scope boundaries below.
+
 ## 2. Verified current-state audit
 
 ### 2.1 Repository and P8 state
@@ -315,7 +347,23 @@ Include fingerprints of immutable evidence, selected V1 mapping and P8 table cou
 
 Freeze level definitions, node identity, parent-child rules, source priority, validity semantics, normalization-only equivalence, conflict rules, freshness, review states and taxonomy version change procedure. Reconcile the Gate-K architecture with official NSE terminology. Do not preselect the number of nodes.
 
-**PASS:** one approved contract and tests for hierarchy, synonym mapping, conflicts and invalid parentage.  
+The C1 contract must encode the permanent Industry-first rule as a normative
+selection contract: Sector = context/portfolio grouping; Industry = primary
+research-framework selector; Basic Industry = further economic refinement;
+reviewed business model/subprofile = specialised refinement where needed. Keep
+these analytical refinements distinct from the four official economic levels;
+do not add an invented parallel "sub-sector" hierarchy. Selection uses exact
+versioned node IDs and reviewed mappings, never sector-only/wildcard/display-label
+routing. Ambiguous industry membership or unresolved required business-model
+refinement is REVIEW_REQUIRED; no nearest-looking methodology is selected.
+
+**PASS:** one approved contract and tests for hierarchy, synonym mapping, conflicts
+and invalid parentage; same-sector/different-industry cases select distinct
+frameworks, heterogeneous-industry cases require the correct Basic Industry/
+reviewed business model, and a sector display-label change alone cannot select a
+new methodology. Tests include Healthcare and Financial Services separation and
+the five distinct Pharma subprofiles without cross-subprofile contract borrowing.
+
 **Owner checkpoint C-A:** approve the contract and permission to design—not apply—the migration.
 
 ### C2 — Authoritative acquisition plan
@@ -426,6 +474,18 @@ methodology version and authority
 
 Retain correct methodology assignments by reference; do not recreate them. Changed assignments append a superseding version. Exact taxonomy-node/business-model mappings replace wildcard routing.
 
+For every C8 disposition, record the Industry/Basic Industry node IDs and taxonomy
+version, reviewed business-model/subprofile evidence where required, exact mapping
+authority/version, selected methodology and R7 authority, and the reason for an
+unchanged or changed route. Sector is retained as context and validated parentage;
+it cannot choose or override the company methodology. Industry starts candidate
+selection; required Basic Industry/business-model refinement determines the final
+reviewed assignment. Render the research extension and generate eligible R6/R7
+and dependent downstream outputs from that same canonical assignment, not separate
+page-local selectors. Missing/conflicting classification or required refinement
+fails closed. Preserve prior correct P7 assignments by reference; a taxonomy
+correction triggers revalidation rather than automatic reassignment.
+
 **PASS:** 239 dispositions; 238 prior resolved methodologies accounted for; BLUEJET remains review-required until evidence resolves it; changed methodologies receive explicit owner review. A security whose economic classification remains unresolved cannot receive a guessed methodology, `GENERAL` fallback, specialised R6/R7 score or downstream analytical action that depends on valid methodology.  
 **Owner checkpoint C-D:** approve changed methodology/subprofile assignments.
 
@@ -524,7 +584,7 @@ Prominently record:
 ## 8. Methodology revalidation rules
 
 - Exact V2 node IDs and approved business-model mappings route methodology; display labels do not.
-- Sector alone never selects a specialised methodology.
+- All company research templates and specialised methodologies are Industry-first and business-model-aware; Sector alone never selects either.
 - Industry/Basic Industry may identify the candidate family, but company business-model evidence resolves economically heterogeneous groups.
 - A prior P7 assignment is retained when corrected classification and company evidence still support it.
 - A changed economic classification triggers revalidation, not automatic reassignment.

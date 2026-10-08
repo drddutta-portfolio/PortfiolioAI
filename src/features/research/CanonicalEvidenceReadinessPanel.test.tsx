@@ -71,4 +71,13 @@ describe("canonical evidence requirement presentation", () => {
     expect(screen.getByText("View complete profile evidence")).toBeInTheDocument()
   })
 
+  it("renders the shared selection and disables independent selection in both consumers", () => {
+    const selected = { applicable: true, revision: 0, isLoading: false, error: null, data: { snapshot, requirements: [requirement] }, reload: vi.fn() }
+    mocks.hook.mockReturnValue({ applicable: true, isLoading: true, data: null, error: null })
+    render(<><CanonicalEvidenceReadinessPanel portfolioId="portfolio" securityId="security" assetClass="EQUITY" evidence={selected} /><ProfileResearchBlocks portfolioId="portfolio" securityId="security" assetClass="EQUITY" evidence={selected} onViewEvidence={vi.fn()} /></>)
+    expect(mocks.hook.mock.calls.every(call => call[3] === false)).toBe(true)
+    expect(screen.queryByText(/Loading canonical evidence/)).not.toBeInTheDocument()
+    expect(screen.getAllByText(/RETAIL_COMMERCE|Retail Commerce/).length).toBeGreaterThan(0)
+  })
+
 })

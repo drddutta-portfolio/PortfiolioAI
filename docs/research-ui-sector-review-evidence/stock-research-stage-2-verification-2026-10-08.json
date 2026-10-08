@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-08",
+  "timezone": "Asia/Kolkata",
+  "applicationRevision": "18cca189e08ba34dd58b4570cef6dc9d817622af",
+  "developmentBase": "d51b385e66279321033f5893143c83339e783b75",
+  "status": "IMPLEMENTED_LOCAL_PASS_HOSTED_ACCEPTANCE_BLOCKED",
+  "tests": {
+    "files": 21,
+    "passed": 264
+  },
+  "checks": {
+    "typecheck": "PASS",
+    "productionBuild": "PASS",
+    "fullLint": "PASS",
+    "architecture": "PASS",
+    "developmentDiffWhitespace": "PASS"
+  },
+  "authenticatedDevelopmentBackend": {
+    "status": "PASS",
+    "representativeSnapshots": 7,
+    "pharmaPrimaryCodes": 5,
+    "researchWrites": 0,
+    "providerCalls": 0
+  },
+  "availablePreview": {
+    "deploymentId": "dpl_CuRoyBnLrMoSaVMsGgtPjPgcPyg7",
+    "revision": "fbe27b4092bc47a94c075d398d8ddcc3f7bb3d70",
+    "visualAcceptance": "BLOCKED_CANONICAL_VIEW_MISSING_IN_PREVIEW_BACKEND",
+    "observedRuntimeErrors": 0,
+    "observedProviderAttempts": 0,
+    "observedResearchWrites": 0
+  },
+  "configurationRepair": {
+    "scope": "Preview/research-pharma-sector-display-review only",
+    "publicConfigMatchesDevelopment": true,
+    "backendSchemaChanges": false,
+    "productionOrDevelopmentConfigChanges": false
+  },
+  "finalPreviewBlocker": "Vercel deployment rate limited; retry in 24 hours",
+  "developmentMerged": false,
+  "ci": {
+    "status": "PASS",
+    "verifiedRevision": "ddae8c89",
+    "runUrl": "https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/37732538454",
+    "vercelPreviewStatus": "BLOCKED_RATE_LIMIT"
+  }
+}

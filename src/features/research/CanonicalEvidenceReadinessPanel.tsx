@@ -1,12 +1,13 @@
-import { useCanonicalEvidenceReadiness } from "./useCanonicalEvidenceReadiness"
+import { useCanonicalEvidenceReadiness, type CanonicalEvidenceReadiness } from "./useCanonicalEvidenceReadiness"
 
 function label(value: string) {
   return value.replaceAll("_", " ")
 }
 
 /** Evidence readiness is the canonical stored contract, independent of engine/score availability. */
-export function CanonicalEvidenceReadinessPanel({ portfolioId, securityId, assetClass, compact = false }: { readonly portfolioId: string; readonly securityId: string; readonly assetClass: string; readonly compact?: boolean }) {
-  const evidence = useCanonicalEvidenceReadiness(portfolioId, securityId, assetClass)
+export function CanonicalEvidenceReadinessPanel({ portfolioId, securityId, assetClass, compact = false, evidence: selectedEvidence }: { readonly portfolioId: string; readonly securityId: string; readonly assetClass: string; readonly compact?: boolean; readonly evidence?: CanonicalEvidenceReadiness }) {
+  const ownEvidence = useCanonicalEvidenceReadiness(portfolioId, securityId, assetClass, selectedEvidence === undefined)
+  const evidence = selectedEvidence ?? ownEvidence
   if (!evidence.applicable) return <section className="panel"><h2>{compact ? "Research Readiness" : "Methodology evidence requirements"}</h2><p>Not applicable: equity methodology requirements do not apply to this asset class.</p></section>
   if (evidence.isLoading) return <section className="panel" role="status">Loading canonical evidence requirements…</section>
   if (evidence.error) return <section className="notice notice-error" role="alert"><strong>Canonical evidence requirements could not be loaded.</strong><p>{evidence.error}</p></section>

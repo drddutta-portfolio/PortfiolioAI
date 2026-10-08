@@ -776,6 +776,30 @@ Missing industry or business-model evidence is a research-readiness problem, not
 
 The classification-to-methodology hierarchy above is a **system-wide architecture invariant**.
 
+### 19.0 Permanent Industry-first company-research invariant — 8 October 2026
+
+All company research pages and specialised research methodologies are
+**Industry-first and business-model-aware**. Sector is contextual metadata and a
+portfolio/macro grouping; it alone must never select a company research template,
+metric set or scoring methodology. Industry selects the candidate framework
+through exact versioned taxonomy mappings. Basic Industry refines it; reviewed
+business-model/subprofile assignments determine the specialised authority when
+industry membership is economically heterogeneous. Industry alone is insufficient
+in those cases. Official economic hierarchy and analytical assignment remain
+separate: Macro-Economic Sector → Sector → Industry → Basic Industry, followed by
+PortfolioAI methodology/business-model profile and required subprofile refinement.
+
+The shared shell stays universal. Its stock-specific blocks and eligible R6/R7
+and downstream outputs consume the same reviewed canonical methodology assignment.
+A missing, ambiguous or conflicting required refinement fails closed. A present
+approved assignment remains authoritative until reviewed revalidation/reassignment;
+UI rendering cannot reroute it from sector or industry text. Sector pages cover
+exposure/allocation, macro trends, concentration, relative performance and news.
+
+The classification/remediation plan's C1 taxonomy contract and C8 reassignment
+rules must enforce this invariant; this documentation amendment grants no runtime,
+methodology-change, evidence-promotion or migration authority.
+
 ### 19.1 Required runtime behavior
 
 For an operating-company equity:
@@ -805,13 +829,13 @@ A specialised score or recommendation must not be generated merely because a bro
 The implementation should maintain a versioned machine-readable mapping from:
 
 ```text
-Sector + Industry + Basic Industry / Business Model
-→ Research Profile
-→ Research Subprofile
-→ Methodology Version
+Exact Industry node + required Basic Industry refinement
++ reviewed business-model/subprofile evidence where required
+→ Canonical Research Profile / required Subprofile assignment
+→ Methodology Authority and Version
 ```
 
-Stage-specific taxonomy files may evolve as research packages are developed, but they must conform to this canonical architecture and may not weaken the fail-closed rule.
+Sector remains contextual metadata and validated parentage in this mapping; it is not a Sector-only selector. Stage-specific taxonomy files may evolve as research packages are developed, but they must conform to this canonical architecture and may not weaken the fail-closed rule.
 
 ### 19.3 Automated enforcement
 
@@ -866,3 +890,31 @@ The existing structured-parameter normalizer now refuses to count matching metri
 ### V1-4 owner-approved benchmark-only source exception (2026-10-07 IST)
 
 Where Angel One cannot resolve the exact approved benchmark, official NSE/Nifty index history may supply that benchmark only. Angel One remains the stock CMP/OHLCV authority. Preserve exact approved index identity, explicit price-index versus total-return basis, immutable raw-source hash/R2 reference, and all calendar, freshness, adjustment and owner-review gates. Close-only series must not manufacture OHLC. No nearest-index substitution or readiness promotion follows merely from acquisition. See `PortfolioAI_V1_4_OFFICIAL_BENCHMARK_FALLBACK_PROPOSAL_2026-10-07.md` for the approved contract.
+
+## Stock-page Stage 2 shared selection — 8 October 2026
+
+The current stock Research page selects its portfolio/security-scoped immutable
+snapshot through `loadP7CurrentEvidenceDetails -> useCanonicalEvidenceReadiness ->
+useStockResearchContext`. That same snapshot is supplied to
+`loadSecurityScoringSnapshot` through `useSecurityScoring`; the scoring repository
+checks the requested portfolio/security and does not reselect when an explicit
+snapshot or explicit null is supplied. Readiness, Evidence and ProfileResearchBlocks
+receive the shared evidence result instead of independently selecting current rows.
+Refresh completion reloads this shared selection; errors and navigation cannot
+retain a prior selection's score.
+
+Header, Pharma primary model, deep-workspace framework and R6 presentation consume
+the resolved `canonicalRoute`. Assignment/version, methodology, actual supplied
+classification version and snapshot/date remain distinct. Official hierarchy
+fields absent from the existing classification projection remain unavailable;
+this change does not implement taxonomy remediation or reassign companies.
+
+Original Pharma reviewed research remains reachable in a separately labelled,
+collapsed earlier-review workspace. Its legacy assignment read runs only when
+that detail is opened and cannot determine the live primary assignment, block a
+resolved P7 assignment, or supply current readiness. Secondary exposure/reviewer/
+effective-date metadata absent from P7 is not invented or imported as current.
+The preserved Pharma parent-score adapter does not prove score binding to the
+selected subprofile and immutable evidence snapshot; R6 therefore cannot qualify
+such a parent score merely because the canonical primary now displays correctly.
+No scoring formulas, assignments, schema, RLS or provider execution change.

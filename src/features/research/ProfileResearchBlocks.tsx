@@ -2,7 +2,7 @@ import { useState } from "react"
 import type { P7EvidenceRequirement } from "../../data/p7CurrentIntelligenceRepository"
 import { metricLabel } from "./researchPolicy"
 import { researchProfilePresentationState } from "./researchProfileUiContract"
-import { useCanonicalEvidenceReadiness } from "./useCanonicalEvidenceReadiness"
+import { useCanonicalEvidenceReadiness, type CanonicalEvidenceReadiness } from "./useCanonicalEvidenceReadiness"
 
 const label = (value: string) => value.replaceAll("_", " ").toLocaleLowerCase().replace(/(^|\s)\S/gu, part => part.toLocaleUpperCase())
 const STATES = ["ALL", "FRESH", "STALE", "MISSING", "INSUFFICIENT", "CONFLICTING", "REVIEW_REQUIRED"] as const
@@ -31,10 +31,11 @@ function RequirementCard({ item }: { readonly item: P7EvidenceRequirement }) {
 }
 
 /** Every selected immutable requirement is accessible, without stock/sector routing or fabricated research. */
-export function ProfileResearchBlocks({ portfolioId, securityId, assetClass, onViewEvidence }: {
-  readonly portfolioId: string; readonly securityId: string; readonly assetClass: string; readonly onViewEvidence: () => void
+export function ProfileResearchBlocks({ portfolioId, securityId, assetClass, onViewEvidence, evidence: selectedEvidence }: {
+  readonly portfolioId: string; readonly securityId: string; readonly assetClass: string; readonly onViewEvidence: () => void; readonly evidence?: CanonicalEvidenceReadiness
 }) {
-  const evidence = useCanonicalEvidenceReadiness(portfolioId, securityId, assetClass)
+  const ownEvidence = useCanonicalEvidenceReadiness(portfolioId, securityId, assetClass, selectedEvidence === undefined)
+  const evidence = selectedEvidence ?? ownEvidence
   const [query, setQuery] = useState("")
   const [state, setState] = useState<string>("ALL")
   const data = evidence.data
