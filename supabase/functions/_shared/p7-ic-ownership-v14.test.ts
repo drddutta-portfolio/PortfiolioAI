@@ -40,7 +40,15 @@ describe("V1-4 ownership methodology fail-closed canonical guard",()=>{
  })
 
  it("reprojects retained original ownership text when cached chart history is absent",()=>{
-  const original='summaryData:\\nchartData:\\n  Promoter:\\n    ["Quarter","Promoter Holding (%)"], ["Mar 2025",45.1], ["Jun 2025",45.2], ["Sep 2025",45.3], ["Dec 2025",45.4]\\n  Institutional:\\n    ["Quarter","Holding (%)"], ["Mar 2025",20.1], ["Jun 2025",20.2], ["Sep 2025",20.3], ["Dec 2025",20.4]\\ninsights:'
+  const original=[
+   "summaryData:",
+   "chartData:",
+   '  Promoter:',
+   '    ["Quarter","Promoter Holding (%)"], ["Mar 2025",45.1], ["Jun 2025",45.2], ["Sep 2025",45.3], ["Dec 2025",45.4]',
+   '  Institutional:',
+   '    ["Quarter","Holding (%)"], ["Mar 2025",20.1], ["Jun 2025",20.2], ["Sep 2025",20.3], ["Dec 2025",20.4]',
+   "insights:"
+  ].join("\n")
   const parsed=parseTrendlyneOwnershipHistory(original)
   expect(parsed.series.Promoter).toHaveLength(4)
   expect(parsed.series.Institutional).toHaveLength(4)
