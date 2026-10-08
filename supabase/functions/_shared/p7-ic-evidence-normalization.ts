@@ -119,7 +119,7 @@ export function validateV14SelectedOwnership(input:{
  const quarters=entries.map(x=>x.quarter)
  if(entries.length<4)return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_SERIES_MISSING"}
  const months:Readonly<Record<string,number>>={Mar:0,Jun:1,Sep:2,Dec:3}
- const periodKeys=quarters.map(q=>{const match=/^(Mar|Jun|Sep|Dec) (\\d{4})$/u.exec(q);return match?Number(match[2])*4+months[match[1]]:NaN})
+ const periodKeys=quarters.map(q=>{const match=/^(Mar|Jun|Sep|Dec) (\d{4})$/u.exec(q);return match?Number(match[2])*4+months[match[1]]:NaN})
  const valid=periodKeys.every(Number.isFinite)&&new Set(periodKeys).size===periodKeys.length&&
   [...periodKeys].sort((a,b)=>a-b).slice(-4).every((n,i,arr)=>i===0||n===arr[i-1]+1)&&
   entries.every(x=>Number.isFinite(x.value)&&x.value>=0&&x.value<=100)
