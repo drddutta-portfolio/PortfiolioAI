@@ -75,7 +75,7 @@ describe("ResearchPage", () => {
     ["-200", "-20", "loss", "Loss"],
     [null, null, "unavailable", "Unavailable"],
   ] as const)("renders P/L %s with its own semantic tone", (pnl, percent, tone, label) => {
-    portfolioState.data = { ...portfolio, openPositions: [{ ...portfolio.openPositions[0], unrealisedPnl: pnl, unrealisedPnlPercent: percent }] }
+    portfolioState.data = { ...portfolio, openPositions: [{ ...portfolio.openPositions[0]!, unrealisedPnl: pnl, unrealisedPnlPercent: percent }] }
     renderPage()
     const card = document.querySelector(".pnl-card")
     expect(card?.querySelector("strong")).toHaveClass(`financial-${tone}`)

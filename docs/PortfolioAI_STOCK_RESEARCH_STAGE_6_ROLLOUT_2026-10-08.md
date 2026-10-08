@@ -23,7 +23,9 @@ The Research P/L card now labels zero **No change**, rather than Gain. Amount an
 
 ## Verification and release record
 
-To be updated with final check results and exact revision/PR/deployment IDs. No locally rendered app is used for visual acceptance. Unit tests and the production build are local engineering checks, distinct from hosted browser acceptance.
+Focused application tests: **136 PASS across six files**, including all profile contracts, selected-context safeguards, Research zero/loss/unavailable regression cases, financial sign precision and covered allocation P/L states. Integrated concurrent ownership guard: **5 PASS** under the Edge Vitest configuration; this is not an authenticated Deno handler/source-readiness proof. Changed TSX/helper/test ESLint, architecture guard, added-line credential scan and diff checks pass. Production TypeScript/build and exact revision/PR/deployment IDs remain pending.
+
+Measured text contrast: gain 7.13:1 on white / 6.81:1 on its pale surface; loss 6.57:1 on white / 5.98:1 on its pale surface. This exceeds WCAG AA normal-text contrast; hosted geometry and CSS loading-order checks remain separate. No locally rendered app is used for visual acceptance. Unit tests and the production build are local engineering checks, distinct from hosted browser acceptance.
 
 A Vercel READY build must contain this stage's actual code. The existing Stage 4/5 READY artifact cannot prove or publish the new theme. The previously observed daily deployment-count limit and GitHub runner billing restriction are independent of storage/traffic usage. If they still prevent builds, retain an explicit publication/acceptance block; do not repeatedly retry or bypass quotas.
 
