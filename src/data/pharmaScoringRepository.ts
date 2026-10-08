@@ -106,12 +106,12 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
   const failure = [modelResult, profileResult, assignmentResult, rulesResult, dimensionsResult, observationsResult, ratingsResult].find((result) => result.error)
   if (failure?.error) throw failure.error
 
-  const model = modelResult.data as { id: string; name: string; status: string } | null
-  const profile = profileResult.data as { code: string; name: string } | null
+  const model = modelResult.data
+  const profile = profileResult.data
   if (!model || !profile) throw new Error("PHARMA_V1 scoring contract is unavailable.")
 
-  const rules = (rulesResult.data ?? []) as RuleRow[]
-  const dimensionsForModel = ((dimensionsResult.data ?? []) as Array<DimensionRow & { scoring_model_id: string }>).filter((row) => row.scoring_model_id === model.id)
+  const rules: RuleRow[] = rulesResult.data ?? []
+  const dimensionsForModel: Array<DimensionRow & { scoring_model_id: string }> = (dimensionsResult.data ?? []).filter((row) => row.scoring_model_id === model.id)
   if (!rules.length || !dimensionsForModel.length) throw new Error("PHARMA_V1 scoring rules are unavailable.")
 
   const runResult = await db.from("stock_score_runs")
@@ -119,7 +119,7 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
     .eq("security_id", securityId).eq("scoring_model_id", model.id).eq("scoring_profile", "PHARMA_V1")
     .order("as_of_date", { ascending: false }).order("created_at", { ascending: false }).limit(1).maybeSingle()
   if (runResult.error) throw runResult.error
-  const run = runResult.data as ScoreRunRow | null
+  const run: ScoreRunRow | null = runResult.data
 
   let dimensionScores: DimensionScore[]
   if (run) {
@@ -136,7 +136,8 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
       heatState: row.heat_state as DimensionScore["heatState"],
     }))
   } else {
-    dimensionScores = previewDimensions(rules, (observationsResult.data ?? []) as PharmaScoringObservation[], dimensionsForModel)
+    const observations: PharmaScoringObservation[] = observationsResult.data ?? []
+    dimensionScores = previewDimensions(rules, observations, dimensionsForModel)
   }
 
   const weighted = dimensionScores.filter((dimension) => dimension.dimensionWeight > 0)
@@ -162,7 +163,7 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
     evidenceConfidence: run ? Number(run.evidence_confidence) : Math.round(previewEvidence * 100),
     asOfDate: run?.as_of_date ?? null,
     dimensions: dimensionScores,
-    ratings: ratings((ratingsResult.data ?? []) as RatingRow[]),
+    ratings: ratings((ratingsResult.data ?? []) satisfies RatingRow[]),
     previewMode: !run,
   }
 }
