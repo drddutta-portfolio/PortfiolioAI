@@ -156,3 +156,33 @@ Structural short histories and unresolved corporate actions remain explicit. Nev
 - `Frozen_111_Industry_Batches.csv`: frozen-only execution subset.
 
 Verified: 239 unique equities; 111 frozen IDs matched exactly; frozen hash unchanged; frozen total 132,585,696 paise; 76 overlap and 35 additional frozen members; 81 planning groups. No live readiness or current holdings verification was performed.
+
+## Owner approval and execution amendments — 8 October 2026
+
+**Decision:** Owner approved the **hybrid industry-based V1-4 batch architecture, subject to the five targeted amendments below**. Approval authorizes repository planning, read-only blocker reconciliation, append-only *repository* execution-ledger preparation and pilot preparation. It does **not** authorize paid provider requests, factual ACCEPT, database/R2 writes, deployment, migration, scheduler activation or V1-5. The original 239-stock and frozen 111-stock CSVs are immutable planning inputs.
+
+### A. Pilot selection is not industry-batch membership
+
+The **cross-group banking pilot** is `HDFCBANK`, `ICICIBANK`, `SBIN` (G01), plus `BANDHANBNK` (G20). This four-stock pilot is a *test/reference set*, **not a new execution batch**. BANDHANBNK remains in `G20-L01-B01`; all other stock-to-batch assignments remain unchanged. Pilot results must write back to each stock's canonical original batch in the execution ledger. Verify current approved banking profile, source requirements and one genuinely blocked case before execution.
+
+### B. Read-only prioritization, no invented recoverability
+
+Before execution compute a fresh security/requirement-level blocker matrix for all 111 frozen members, including the 35 outside fixed 115, from selected Development snapshots and their lineage. Include frozen value, current selected state, blocker family and count, source reuse opportunity, documentary/factual owner-review need, structural impossibility, provider budget and exact methodology assignment verification. Calculate batch priority from *evidence*, not merely value. Until measured, label priority `PENDING_LIVE_BLOCKER_CENSUS` and leave predicted ready count/value blank. No inferred READY.
+
+### C. Group execution windows without collapsing batches
+
+Up to several small groups may share one operator execution window to reduce 62 frozen-batch overhead. Every original `proposed_batch_id` retains independent authorizations, source selection, test results, stop conditions, immutable lineage and closure status. Shared provider requests require source-bound deduplication and their own bounded authorization. A completed window does not imply all constituent batches are complete.
+
+### D. Assignment verification
+
+Verify current effective reviewed primary industry/profile/subprofile assignments before a stock is processed, especially IT services/technology, industrial products, leisure, banks, financial intermediaries, and the Pharma assignment-review lane (BLUEJET). Retain source labels as historical planning inputs. A secondary business overlay is not an alternate primary scorer. Block uncertain assignments for factual owner review rather than silently changing canonical taxonomy.
+
+### E. Append-only execution ledger
+
+Maintain a separate batch execution ledger with: security ID, symbol, frozen cohort membership/value, original group and batch IDs, cross-group pilot ID (optional), current assignment version, selected snapshot/run ID, requirement-level blockers and source IDs/hashes, authorization/grant, provider usage, factual reviewer decision, test/dry-run evidence, planned and actual writes, resulting selected readiness, READY frozen-member count/value contribution, exception reason and immutable change/run timestamp. **Initial ledger rows are PLANNED / NOT_EXECUTED only**, and later updates are appended, not destructive replacements.
+
+### Acceptance
+
+The canonical release threshold remains **at least 100 members of the unchanged frozen 111 READY, and ₹11,93,271.27 in frozen READY value**. Fixed 115 and frozen 111 are distinct, overlapping populations. A batch pilot, UI demonstration or passing code suite does not itself establish persisted READY or V1-4 PASS.
+
+---
