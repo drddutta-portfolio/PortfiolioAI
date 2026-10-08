@@ -54,11 +54,12 @@ mutable shared state or competing authority.
 
 Review: https://github.com/drddutta-portfolio/PortfiolioAI/pull/116
 
-Stage 4 specialist result expansion is outside this change. This branch has not
-been merged or deployed to Development. Hosted acceptance must use the exact new
-commit on Vercel with the approved Development backend, including desktop/mobile
-name wrapping, section navigation and representative bank/Pharma pages; local
-rendering or an older preview cannot substitute for that evidence.
+Stage 4 specialist result expansion is outside this change. The reviewed branch
+was subsequently merged to `PortfolioAI-Development` through PR #116 as merge
+commit `00a0dfe5621450354c7e6027820870becc5f9f11`. This merge is repository state,
+not a Production deployment. Hosted acceptance remains anchored to the exact
+reviewed commit/deployment evidence below; local rendering or an older preview
+cannot substitute for that evidence.
 
 ## Initial hosted evidence — 8 October 2026 (superseded by final acceptance)
 
