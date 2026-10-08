@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase"
+import { invokeEdgeFunctionUnknown, unknownRecord } from "../lib/edgeFunction"
 
 export interface RecommendationInterpretation {
   readonly headline: string
@@ -59,13 +59,14 @@ async function detailedFunctionError(error: unknown): Promise<Error> {
 }
 
 const invoke = async <T>(body: Record<string, unknown>): Promise<T> => {
-  const { data, error } = await supabase.functions.invoke("generate-recommendation-interpretation", { body })
+  const { data, error } = await invokeEdgeFunctionUnknown("generate-recommendation-interpretation", body)
   if (error) throw await detailedFunctionError(error)
   if (!data || typeof data !== "object") throw new Error("AI interpretation returned no result.")
-  if ("error" in data && typeof data.error === "string") {
-    const detail = "detail" in data && typeof data.detail === "string" ? data.detail : null
-    const code = "code" in data && typeof data.code === "string" ? data.code : null
-    throw new Error([data.error, detail, code ? `[${code}]` : null].filter(Boolean).join(" "))
+  const record = unknownRecord(data)
+  if (record && typeof record.error === "string") {
+    const detail = typeof record.detail === "string" ? record.detail : null
+    const code = typeof record.code === "string" ? record.code : null
+    throw new Error([record.error, detail, code ? `[${code}]` : null].filter(Boolean).join(" "))
   }
   return data as T
 }
