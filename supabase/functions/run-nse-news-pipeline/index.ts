@@ -127,7 +127,7 @@ async function fetchBounded(url: string, accept: string, maxBytes: number) {
     if (bytes.byteLength > maxBytes) throw new Error("NSE_RESPONSE_TOO_LARGE")
     return { bytes, status: response.status, contentType: normalizeContentType(response.headers.get("content-type")) }
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") throw new Error("NSE_FETCH_TIMEOUT")
+    if (error instanceof DOMException && error.name === "AbortError") throw new Error("NSE_FETCH_TIMEOUT", { cause: error })
     throw error
   } finally {
     clearTimeout(timeout)
