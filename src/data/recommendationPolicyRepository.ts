@@ -1,7 +1,6 @@
-import type { SupabaseClient } from "@supabase/supabase-js"
 import { supabase } from "../lib/supabase"
 
-const db = supabase as unknown as SupabaseClient
+const db = supabase
 
 export interface RecommendationWeightPolicy {
   readonly singleStockMax: number | null
