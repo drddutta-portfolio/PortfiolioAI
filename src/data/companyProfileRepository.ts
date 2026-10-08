@@ -1,4 +1,5 @@
 import { publicConfig } from "../lib/config"
+import { invokeEdgeFunctionUnknown, unknownErrorMessage, unknownRecord } from "../lib/edgeFunction"
 import { supabase } from "../lib/supabase"
 
 export type CompanyProfile = {
@@ -55,12 +56,12 @@ export async function getCachedCompanyProfile(securityId: string): Promise<Compa
 }
 
 export async function discoverCompanyProfile(portfolioId: string, securityId: string) {
-  const result = await supabase.functions.invoke("discover-company-profile", {
-    body: { portfolioId, securityId },
-  })
-  if (result.error) throw new Error(result.error.message || "Company profile discovery failed.")
-  const payload = result.data as { readonly error?: string; readonly code?: string } | null
-  if (payload?.error) throw new Error(payload.code ? `${payload.error} (${payload.code})` : payload.error)
+  const result = await invokeEdgeFunctionUnknown("discover-company-profile", { portfolioId, securityId })
+  if (result.error) throw new Error(unknownErrorMessage(result.error, "Company profile discovery failed."))
+  const payload = unknownRecord(result.data)
+  if (typeof payload?.error === "string") {
+    throw new Error(typeof payload.code === "string" ? `${payload.error} (${payload.code})` : payload.error)
+  }
 }
 
 export function companyLogoPublicUrl(path: string | null) {
