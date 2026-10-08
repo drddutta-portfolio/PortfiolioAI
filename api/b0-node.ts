@@ -107,16 +107,25 @@ async function gatewayFetch(token:string,key:string,method:string,body?:BodyInit
 }
 async function r2Test(token:string){
   const id=crypto.randomUUID(),key=TEST_PREFIX+id+"/master.json",payload=await smallPayload(),expected=createHash("sha256").update(payload).digest("hex"),start=performance.now()
-  let uploaded=false,deleted=false
+  let uploaded=false
+  let result:{key:string;byteLength:number;sha256:string;rowCount:number;allExact:boolean;durationMs:number}|null=null
+  let primaryError:Error|null=null
   try{
     const put=await gatewayFetch(token,key,"PUT",payload);const pc=classifyPutStatus(put.status);if(pc!=="OK")throw new Error(pc);uploaded=true
     const get=await gatewayFetch(token,key,"GET");if(!get.ok||!get.body)throw new Error("B0_R2_READBACK_FAILED")
     const read=await scanMasterArtifact({chunks:readableStreamChunks(get.body),definitions:defs(),requestedCodes:V1_4_BATCH_B_CODES,expectedSha256:expected,maxBytes:MAX_TEST_OBJECT_BYTES})
     if(read.byteLength!==payload.byteLength)throw new Error("B0_R2_BYTE_LENGTH_MISMATCH")
-    return{key,byteLength:read.byteLength,sha256:read.sha256,rowCount:read.rowCount,allExact:read.preflight.every(x=>x.status==="EXACT_MATCH"),durationMs:Math.round(performance.now()-start)}
-  }finally{
-    if(uploaded){const del=await gatewayFetch(token,key,"DELETE");deleted=del.status===204;if(!deleted)throw new Error("B0_R2_TEST_CLEANUP_FAILED")}
+    result={key,byteLength:read.byteLength,sha256:read.sha256,rowCount:read.rowCount,allExact:read.preflight.every(x=>x.status==="EXACT_MATCH"),durationMs:Math.round(performance.now()-start)}
+  }catch(error){
+    primaryError=error instanceof Error?error:new Error("B0_R2_TEST_FAILED",{cause:error})
   }
+  if(uploaded){
+    const del=await gatewayFetch(token,key,"DELETE")
+    if(del.status!==204&&!primaryError)primaryError=new Error("B0_R2_TEST_CLEANUP_FAILED")
+  }
+  if(primaryError)throw primaryError
+  if(!result)throw new Error("B0_R2_TEST_RESULT_MISSING")
+  return result
 }
 async function control(token:string,body:Record<string,unknown>){
   const r=await fetch(CONTROL_URL,{method:"POST",headers:{authorization:"Bearer "+token,"content-type":"application/json"},body:JSON.stringify(body),redirect:"error",signal:AbortSignal.timeout(15_000)})
@@ -128,7 +137,7 @@ async function capture(token:string,body:Record<string,unknown>){
   await control(token,{action:"BEGIN_CAPTURE",grantId})
   let response:Response
   try{response=await fetch(MASTER_URL,{headers:{accept:"application/json"},redirect:"error",signal:AbortSignal.timeout(V1_4_MASTER_FETCH_TIMEOUT_MS)})}
-  catch(e){throw new Error("B0_PROVIDER_TRANSPORT_UNKNOWN")}
+  catch(error){throw new Error("B0_PROVIDER_TRANSPORT_UNKNOWN",{cause:error})}
   await control(token,{action:"MARK_STAGE",grantId,stage:"RESPONSE_RECEIVED",requestOutcome:response.ok?"SUCCEEDED":"FAILED",httpStatus:response.status})
   if(!response.ok||!response.body)throw new Error("B0_PROVIDER_HTTP_FAILED")
   const declared=Number(response.headers.get("content-length")??"0");if(declared>V1_4_MASTER_MAX_RESPONSE_BYTES)throw new Error("P7_IC_BENCHMARK_MASTER_RESPONSE_TOO_LARGE")
