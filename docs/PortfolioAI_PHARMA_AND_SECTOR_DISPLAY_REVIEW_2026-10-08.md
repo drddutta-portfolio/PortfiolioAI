@@ -148,6 +148,50 @@ classification hierarchy is not currently exposed there.
 classification access path. Do not infer an exchange sub-sector from a research
 subprofile, or reinterpret an unapproved provider label as canonical classification.
 
+## Stock-name-card follow-up: jewellery classification mismatch
+
+The supplied AKUMS/AUROPHARMA screenshots reproduce finding 1. An additional
+hosted read-only inspection of TITAN, GOLDIAM and SKYGOLD completed with zero
+runtime errors and zero provider-execution attempts.
+
+| Card | Observed issue | Review disposition |
+| --- | --- | --- |
+| AKUMS | Canonical CDMO_CRAMS route, older summary says awaiting assignment | Pharma assignment-display contradiction; no extra primary subprofile inferred |
+| AUROPHARMA | Canonical GLOBAL_GENERICS route, older summary says awaiting assignment | Same Pharma assignment-display contradiction |
+| TITAN | Sector Gems and Jewellery; industry Gems & Jewellery; research profile JEWELLERY | Redundant/variant labels; no complete official four-tier classification is demonstrated |
+| GOLDIAM | Sector Gems and Jewellery; industry Gems, Jewellery And Watches; research profile JEWELLERY | Mixed-level/normalization concern; not evidence of multiple reviewed sub-sectors |
+| SKYGOLD | Sector Textiles Apparels & Accessories; industry Gems & Jewellery; research profile JEWELLERY | Known economic classification-pair mismatch requiring reconciliation |
+
+SKYGOLD's sector/industry pair already appears as a REVIEW_REQUIRED case in
+`PortfolioAI_GATE_K_K1_SECTOR_INVENTORY_PRIORITY_LOCK.md`, section 6, and is retained
+in the older frozen portfolio snapshot. The current P7 research assignment is
+RESOLVED to JEWELLERY. These are different dispositions: resolved methodology
+routing does not certify that the economic hierarchy has been reconciled.
+
+Research and the shared portfolio classification read
+`current_security_enrichment_v1`. Its selected sector and industry values are
+separate attributes; the V1 classification view's conflict flag only tests the
+selected observations' statuses, rather than validating their complete hierarchy
+or comparing all competing evidence. Thus a displayed "canonical" label is not
+proof that an incoherent selected pair has been repaired.
+
+The repository's frozen November 2022 NSE taxonomy identifies **Gems, Jewellery
+And Watches** as a BASIC_INDUSTRY beneath Consumer Durables, not as an INDUSTRY.
+This reference demonstrates the level ambiguity in GOLDIAM's card. It is not
+sufficient evidence to overwrite any company's current classification with that
+historical taxonomy path. Verify current issuer/exchange assignment, source,
+effective date and taxonomy version before a canonical correction.
+
+**Required correction:** keep official economic classification and research
+methodology as distinct, clearly labelled parts of the card. Use source-backed
+hierarchy codes/labels rather than merging synonyms by appearance. Show genuine
+classification review/conflict states and provenance. Reconcile the shared
+classification authority for SKYGOLD so all consuming pages agree; changing its
+card alone or copying JEWELLERY into its sector would hide the defect. Do not infer
+multiple primary subprofiles from different labels or fabricate secondary business
+exposures. Owner role UNCLASSIFIED is a separate portfolio setting and is not a
+sector-classification failure.
+
 ## All held research profiles: observed presentation matrix
 
 Every row below has matching canonical profile and methodology authority in the
