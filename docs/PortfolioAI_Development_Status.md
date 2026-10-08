@@ -1,3 +1,28 @@
+## R1–R4 audit remediation / repository completion — 8 October 2026
+
+**Status: R1–R4 repository implementation and verification COMPLETE for the audited repository scope.**
+
+Scope is the historical R1/R2/R3/R4 workstreams, not the newer operational V1-4 evidence stage.
+
+Authoritative verification evidence:
+- first fully green executable head: `aefef83da45e3274e44a6d8819ee354dbace33b4`;
+- GitHub Actions job `113170264795`: architecture, typecheck, application lint, Edge lint, 2,167 application tests, 2 Deno handler tests, 359 Edge tests, production build and `git diff --check` all PASS;
+- later commits through the current documentation update are documentation/private-evidence only relative to that green executable head; no executable R1–R4 code changed;
+- current-head workflow run `37755743453` was retried and failed before runner assignment (empty steps, `runner_id: 0`), so it provides no code verdict and is tracked as CI infrastructure failure rather than a repository regression.
+
+Audit findings remediated:
+- global `ResizeObserver` test support restored without skipping assertions;
+- Angel One public session-error contract aligned to provider-specific safe codes with bounded retry behavior preserved;
+- canonical Pharma historical selection is fail-closed for value conflicts and incompatible period/scope/unit/currency/source semantics;
+- Pharma operating margin has one Decimal-based six-decimal calculation owner, with display rounding separated;
+- Pharma readiness/UI no longer claims global R4H ingestion from a pilot/migration record and uses security-specific cached evidence.
+
+No migrations were created or applied by this remediation. No production deployment, provider spending, ingestion write, scheduler activation, Auth/RLS/grant change or portfolio-wide readiness assertion was performed.
+
+Detailed matrix and evidence: `docs/PortfolioAI_R1_R4_AUDIT_REMEDIATION_2026-10-08.md`.
+
+---
+
 ### Stock-page Industry-first Stage 3 — 8 October 2026
 
 The common identity shell now leads with Industry, separates Basic Industry and
