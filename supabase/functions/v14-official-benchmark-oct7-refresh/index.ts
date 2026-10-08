@@ -65,7 +65,7 @@ function parseNse(body:string,identity:string,minimum=1){
   const rawDate=String(row.EOD_TIMESTAMP??row.HistoricalDate??row.Date??"")
   const m=/^(\d{2})[- ]([A-Za-z]{3})[- ](\d{4})$/.exec(rawDate)
   const m2=/^(\d{2})-(\d{2})-(\d{4})$/.exec(rawDate)
-  let day=""
+  let day:string
   if(m){const mi=months.findIndex(x=>x.toLowerCase()===m[2]!.toLowerCase());if(mi<0)throw new Error("NSE_MONTH_INVALID");day=`${m[3]}-${String(mi+1).padStart(2,"0")}-${m[1]}`}
   else if(m2)day=`${m2[3]}-${m2[2]}-${m2[1]}`
   else throw new Error("NSE_DATE_INVALID:"+rawDate)
@@ -142,7 +142,7 @@ Deno.serve(async req=>{
       ...(nseCookie?{"cookie":nseCookie}:{})
     },signal:AbortSignal.timeout(30000)})
     nseText=await r.text();const bytes=new TextEncoder().encode(nseText)
-    if(!r.ok)throw new Error("NSE_HTTP_"+r.status)
+    if(!r.ok)throw new Error("NSE_HTTP_"+r.status,{cause:niftyError})
     const parsed=parseNse(nseText,name,1),sha256=await hex(bytes)
     out.push({code,name,state:"SUCCEEDED",attemptedAt,completedAt:new Date().toISOString(),httpStatus:r.status,byteLength:bytes.length,sha256,...parsed,returnBasis:"PRICE_RETURN_RAW_CLOSE",sourceUrl:NSE_ENDPOINT,transport:"NSE_HISTORICAL_OR_DELTA_2026_10_07",body:nseText,niftyFallbackError:niftyError instanceof Error?niftyError.message:"UNKNOWN"})
      }catch(nseError){out.push({code,name,state:"FAILED",attemptedAt,completedAt:new Date().toISOString(),error:nseError instanceof Error?nseError.message:"UNKNOWN",niftyError:niftyError instanceof Error?niftyError.message:"UNKNOWN",nseBodyHead:nseText.slice(0,1400)})}
