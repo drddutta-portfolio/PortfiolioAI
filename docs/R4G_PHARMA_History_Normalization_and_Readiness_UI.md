@@ -1,6 +1,6 @@
 # R4G — PHARMA History Normalization and Readiness UI
 
-Status: **ENGINE CONTRACT COMPLETE / UI READINESS SURFACE COMPLETE / PRODUCTION INGESTION NOT APPLIED**
+Status: **REPOSITORY NORMALIZATION CONTRACT COMPLETE / SECURITY-SPECIFIC READINESS SURFACE IMPLEMENTED / PRODUCTION INGESTION NOT IMPLIED**
 
 ## Purpose
 
@@ -19,7 +19,7 @@ It also surfaces that distinction in the Research Overview for securities whose 
 
 ## Normalization contract
 
-Version: `PHARMA_HISTORY_NORMALIZATION_V1`
+Version: `PHARMA_HISTORY_NORMALIZATION_V2`
 
 Validated provider tool: `get_parameter_values_multi_stock`
 
@@ -45,7 +45,7 @@ For each matched quarter:
 
 `Operating Margin % = Operating Profit / Operating Revenue × 100`
 
-The calculation uses `decimal.js` and rounds only the normalized output to six decimal places using half-up rounding.
+The calculation is owned by `pharmaOperatingMargin.ts`, uses `decimal.js` at deterministic calculation precision, and does not perform display rounding. Presentation surfaces may round only when formatting the derived value.
 
 A quarter is unavailable when either input is missing. Revenue of zero or an invalid numeric input makes that period invalid; it is never converted to zero-margin evidence.
 
@@ -63,9 +63,9 @@ The panel distinguishes:
 - `Pending`;
 - `Official source pending`.
 
-Revenue history and operating-margin history are currently shown as `Normalization ready`.
+The source-contract state and the security-specific cached-evidence state are displayed separately. A source contract is never treated as proof that a particular security has enough canonical observations.
 
-The panel continues to show `INSUFFICIENT EVIDENCE` overall because normalized raw-history values have not yet been promoted into canonical observations and several mandatory PHARMA domains remain unresolved.
+The panel continues to show `INSUFFICIENT EVIDENCE` overall unless the security-specific mandatory evidence contracts and observation minima are actually satisfied. R4H's prepared TORNTPHARM ingestion manifest is not interpreted as a production write.
 
 ## Explicit blockers after R4G
 
@@ -100,7 +100,16 @@ After R4G is merged and the local checkout is updated, open a Pharma holding suc
 The PHARMA readiness panel should appear below the research scorecard and should show:
 
 - overall `Insufficient evidence`;
-- `Revenue history — Normalization ready`;
-- `Operating margin history — Normalization ready`;
-- pending/partial states for the remaining core domains;
-- canonical cached observation counts separately from source-contract status.
+- source-contract state separately from the security-specific cached-evidence state;
+- actual canonical cached observation counts and minimum/preferred thresholds;
+- unresolved/conflicting history excluded from derived margins;
+- no claim that a prepared pilot manifest was ingested merely because repository code exists.
+
+
+## 8 October 2026 audit-remediation clarification
+
+The canonical history view now consumes the existing `fundamental_observation_decisions` selection authority through `ResearchMetric.selected`. When no canonical selection exists it may collapse only semantically identical duplicate captures with the same value. Conflicting values, incompatible period semantics, scope, unit, currency, or source semantics remain unresolved and are omitted from derived history.
+
+Quarterly operating margin now has one deterministic calculation owner: `src/features/research/pharmaOperatingMargin.ts`. The canonical history view and raw-history normalization both delegate to it. Derived calculation precision is retained; two-decimal UI formatting remains presentation-only.
+
+R4H remains a prepared repository pilot unless separately evidenced as applied. This document does not claim production ingestion, deployment, or portfolio-wide Pharma readiness.

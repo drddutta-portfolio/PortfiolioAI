@@ -1,4 +1,5 @@
-import Decimal from "decimal.js"
+import { compatibleForDerivedRatio, selectCanonicalMetricSeries } from "./canonicalMetricSeries"
+import { deriveOperatingMarginPercent } from "./pharmaOperatingMargin"
 import type { ResearchMetric, SecurityResearch } from "./types"
 
 export interface PharmaCanonicalPoint {
@@ -19,52 +20,73 @@ export interface PharmaCanonicalHistoryView {
   readonly quarterlyOperatingRevenue: readonly PharmaCanonicalPoint[]
   readonly quarterlyOperatingProfit: readonly PharmaCanonicalPoint[]
   readonly quarterlyOpm: readonly PharmaCanonicalOpmPoint[]
-}
-
-function verifiedByCode(metrics: readonly ResearchMetric[], code: string) {
-  const latest = new Map<string, ResearchMetric>()
-  for (const metric of metrics) {
-    if (metric.code !== code || metric.status !== "VERIFIED" || !metric.numericValue || !metric.periodEnd) continue
-    const current = latest.get(metric.periodEnd)
-    if (!current || metric.retrievedAt > current.retrievedAt) latest.set(metric.periodEnd, metric)
+  readonly unresolvedPeriods: {
+    readonly annualRevenue: readonly string[]
+    readonly annualCfo: readonly string[]
+    readonly quarterlyOperatingRevenue: readonly string[]
+    readonly quarterlyOperatingProfit: readonly string[]
+    readonly quarterlyOpm: readonly string[]
   }
-  return [...latest.values()].sort((a, b) => (a.periodEnd ?? "").localeCompare(b.periodEnd ?? ""))
 }
 
-function points(metrics: readonly ResearchMetric[], code: string): PharmaCanonicalPoint[] {
-  return verifiedByCode(metrics, code).map((metric) => ({ periodEnd: metric.periodEnd!, value: metric.numericValue! }))
+function points(metrics: readonly ResearchMetric[], code: string) {
+  const selection = selectCanonicalMetricSeries(metrics, code)
+  return {
+    points: selection.accepted.map((metric) => ({ periodEnd: metric.periodEnd!, value: metric.numericValue! })),
+    rows: selection.accepted,
+    unresolvedPeriods: selection.unresolvedPeriods,
+  }
 }
 
 export function buildPharmaCanonicalHistoryView(research: SecurityResearch): PharmaCanonicalHistoryView | null {
   if (research.sector !== "Pharma") return null
 
-  const annualRevenue = points(research.metrics, "REVENUE_ANNUAL")
-  const annualCfo = points(research.metrics, "CFO_ANNUAL")
-  const quarterlyOperatingRevenue = points(research.metrics, "OPERATING_REVENUE_QUARTER")
-  const quarterlyOperatingProfit = points(research.metrics, "OPERATING_PROFIT_QUARTER")
+  const annualRevenueSelection = points(research.metrics, "REVENUE_ANNUAL")
+  const annualCfoSelection = points(research.metrics, "CFO_ANNUAL")
+  const quarterlyRevenueSelection = points(research.metrics, "OPERATING_REVENUE_QUARTER")
+  const quarterlyProfitSelection = points(research.metrics, "OPERATING_PROFIT_QUARTER")
 
-  const revenueByPeriod = new Map(quarterlyOperatingRevenue.map((point) => [point.periodEnd, point.value]))
-  const profitByPeriod = new Map(quarterlyOperatingProfit.map((point) => [point.periodEnd, point.value]))
+  const revenueByPeriod = new Map(quarterlyRevenueSelection.rows.map((row) => [row.periodEnd!, row]))
+  const profitByPeriod = new Map(quarterlyProfitSelection.rows.map((row) => [row.periodEnd!, row]))
   const quarterlyOpm: PharmaCanonicalOpmPoint[] = []
+  const unresolvedOpm = new Set([
+    ...quarterlyRevenueSelection.unresolvedPeriods,
+    ...quarterlyProfitSelection.unresolvedPeriods,
+  ])
 
-  for (const [periodEnd, revenueValue] of revenueByPeriod) {
-    const profitValue = profitByPeriod.get(periodEnd)
-    if (!profitValue) continue
-    try {
-      const revenue = new Decimal(revenueValue)
-      const profit = new Decimal(profitValue)
-      if (!revenue.isFinite() || !profit.isFinite() || revenue.lte(0)) continue
-      quarterlyOpm.push({
-        periodEnd,
-        operatingRevenue: revenue.toString(),
-        operatingProfit: profit.toString(),
-        marginPercent: profit.div(revenue).mul(100).toDecimalPlaces(2, Decimal.ROUND_HALF_UP).toString(),
-      })
-    } catch {
-      // Fail closed: invalid numeric evidence is omitted from the derived series.
+  for (const [periodEnd, revenue] of revenueByPeriod) {
+    const profit = profitByPeriod.get(periodEnd)
+    if (!profit) continue
+    if (!compatibleForDerivedRatio(revenue, profit)) {
+      unresolvedOpm.add(periodEnd)
+      continue
     }
+    const marginPercent = deriveOperatingMarginPercent(profit.numericValue!, revenue.numericValue!)
+    if (marginPercent === null) {
+      unresolvedOpm.add(periodEnd)
+      continue
+    }
+    quarterlyOpm.push({
+      periodEnd,
+      operatingRevenue: revenue.numericValue!,
+      operatingProfit: profit.numericValue!,
+      marginPercent,
+    })
   }
 
   quarterlyOpm.sort((a, b) => a.periodEnd.localeCompare(b.periodEnd))
-  return { annualRevenue, annualCfo, quarterlyOperatingRevenue, quarterlyOperatingProfit, quarterlyOpm }
+  return {
+    annualRevenue: annualRevenueSelection.points,
+    annualCfo: annualCfoSelection.points,
+    quarterlyOperatingRevenue: quarterlyRevenueSelection.points,
+    quarterlyOperatingProfit: quarterlyProfitSelection.points,
+    quarterlyOpm,
+    unresolvedPeriods: {
+      annualRevenue: annualRevenueSelection.unresolvedPeriods,
+      annualCfo: annualCfoSelection.unresolvedPeriods,
+      quarterlyOperatingRevenue: quarterlyRevenueSelection.unresolvedPeriods,
+      quarterlyOperatingProfit: quarterlyProfitSelection.unresolvedPeriods,
+      quarterlyOpm: [...unresolvedOpm].sort(),
+    },
+  }
 }

@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase"
+import { invokeEdgeFunctionUnknown, unknownErrorMessage, unknownRecord } from "../lib/edgeFunction"
 
 export interface BankGrowthDiscoveryResult {
   readonly mode: "BANK_GROWTH_CONTRACT_DISCOVERY"
@@ -10,11 +10,10 @@ export interface BankGrowthDiscoveryResult {
 }
 
 export async function discoverBankGrowthContract(portfolioId: string, securityId: string) {
-  const { data, error } = await supabase.functions.invoke("discover-trendlyne-bank-growth-contract", {
-    body: { portfolioId, securityId, confirmation: "OWNER_CONFIRMED_BANK_GROWTH_DISCOVERY" },
-  })
-  if (error) throw error
-  if (!data || typeof data !== "object") throw new Error("Bank growth discovery returned no result.")
-  if ("error" in data && typeof data.error === "string") throw new Error(data.error)
+  const { data, error } = await invokeEdgeFunctionUnknown("discover-trendlyne-bank-growth-contract", { portfolioId, securityId, confirmation: "OWNER_CONFIRMED_BANK_GROWTH_DISCOVERY" })
+  if (error) throw new Error(unknownErrorMessage(error, "Bank growth discovery failed."))
+  const record = unknownRecord(data)
+  if (!record) throw new Error("Bank growth discovery returned no result.")
+  if (typeof record.error === "string") throw new Error(record.error)
   return data as BankGrowthDiscoveryResult
 }

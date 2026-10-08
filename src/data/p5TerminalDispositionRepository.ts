@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase"
+import { invokeEdgeFunctionUnknown, unknownErrorMessage, unknownRecord } from "../lib/edgeFunction"
 
 export type P5TerminalR6Disposition =
   | "SCORED"
@@ -41,23 +41,14 @@ export interface P5TerminalDisposition {
   readonly sizingDisposition: string | null
 }
 
-interface P5TerminalResponse {
-  readonly version: string
-  readonly portfolioId: string
-  readonly count: number
-  readonly rows: readonly P5TerminalDisposition[]
-}
-
 export async function loadP5TerminalDispositions(
   portfolioId: string,
 ): Promise<readonly P5TerminalDisposition[]> {
-  const result = await supabase.functions.invoke("p6-terminal-disposition-read", {
-    body: { portfolioId },
-  })
-  if (result.error) throw result.error
-  const data = result.data as P5TerminalResponse | null
-  if (!data || data.portfolioId !== portfolioId || !Array.isArray(data.rows)) {
+  const result = await invokeEdgeFunctionUnknown("p6-terminal-disposition-read", { portfolioId })
+  if (result.error) throw new Error(unknownErrorMessage(result.error, "P5 terminal disposition read failed."))
+  const record = unknownRecord(result.data)
+  if (!record || record.portfolioId !== portfolioId || !Array.isArray(record.rows)) {
     throw new Error("P5 terminal disposition response is invalid.")
   }
-  return data.rows
+  return record.rows as unknown as readonly P5TerminalDisposition[]
 }

@@ -1,11 +1,13 @@
 import { buildPharmaCanonicalHistoryView } from "./pharmaCanonicalHistoryView"
+import { selectCanonicalMetricSeries } from "./canonicalMetricSeries"
 import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 import { PHARMA_V1_SOURCE_READINESS, type PharmaSourceReadinessState } from "./pharmaSourceReadiness"
 import type { ResearchMetric, SecurityResearch } from "./types"
 
-export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V7" as const
+export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V8_SECURITY_EVIDENCE" as const
 
 export type PharmaReadinessDisplayState = "NORMALIZATION_READY" | "VALIDATED_SOURCE" | "PARTIAL" | "PENDING" | "OFFICIAL_SOURCE_PENDING"
+export type PharmaEvidenceReadinessState = "READY" | "PARTIAL" | "MISSING"
 
 type PharmaMetricCode =
   | "PHARMA_REVENUE_GROWTH_HISTORY"
@@ -30,6 +32,7 @@ export interface PharmaReadinessDomain {
   readonly conditionCode: string | null
   readonly state: PharmaReadinessDisplayState
   readonly sourceState: PharmaSourceReadinessState
+  readonly evidenceState: PharmaEvidenceReadinessState
   readonly canonicalObservationCount: number
   readonly observationCountLabel: string
   readonly minimumObservations: number
@@ -122,17 +125,20 @@ const R4H_REVIEWED_HISTORY_CODES = new Set([
 ])
 
 function countCanonicalObservations(metrics: readonly ResearchMetric[], codes: readonly string[]) {
-  if (!codes.length) return 0
-  const distinct = new Set<string>()
-  for (const metric of metrics) {
-    if (!codes.includes(metric.code)) continue
-    const accepted = R4H_REVIEWED_HISTORY_CODES.has(metric.code)
-      ? metric.status === "VERIFIED" && Boolean(metric.periodEnd)
-      : metric.selected && metric.status !== "UNAVAILABLE"
-    if (!accepted) continue
-    distinct.add(`${metric.code}:${metric.periodEnd ?? metric.id}`)
+  let count = 0
+  for (const code of codes) {
+    if (R4H_REVIEWED_HISTORY_CODES.has(code)) {
+      count += selectCanonicalMetricSeries(metrics, code).accepted.length
+      continue
+    }
+    const distinct = new Set(
+      metrics
+        .filter((metric) => metric.code === code && metric.selected && metric.status !== "UNAVAILABLE")
+        .map((metric) => `${metric.code}:${metric.periodEnd ?? metric.id}`),
+    )
+    count += distinct.size
   }
-  return distinct.size
+  return count
 }
 
 function domainObservationCount(research: SecurityResearch, metricCode: PharmaMetricCode, canonicalEvidenceCodes: readonly string[]) {
@@ -153,6 +159,11 @@ function domainObservationCount(research: SecurityResearch, metricCode: PharmaMe
     count: countCanonicalObservations(research.metrics, canonicalEvidenceCodes),
     label: "Canonical reviewed observations",
   }
+}
+
+function evidenceState(count: number, minimum: number): PharmaEvidenceReadinessState {
+  if (count >= minimum) return "READY"
+  return count > 0 ? "PARTIAL" : "MISSING"
 }
 
 function displayState(sourceState: PharmaSourceReadinessState): PharmaReadinessDisplayState {
@@ -180,6 +191,7 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
       conditionCode: contract.conditionCode,
       state: displayState(source.state),
       sourceState: source.state,
+      evidenceState: evidenceState(observationCount.count, contract.history.minimumObservations),
       canonicalObservationCount: observationCount.count,
       observationCountLabel: observationCount.label,
       minimumObservations: contract.history.minimumObservations,
@@ -202,6 +214,6 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
     mandatoryDomainCount: mandatoryDomains.length,
     totalDomainCount: domains.length,
     blockers,
-    notice: "PHARMA_V1 remains fail-closed until the mandatory evidence contracts are satisfied. Partial source capability, cached observations and profile-specific UI coverage do not by themselves create a score or recommendation.",
+    notice: `This security currently has ${mandatoryDomains.filter((domain) => domain.evidenceState === "READY").length}/${mandatoryDomains.length} mandatory domains meeting their cached evidence minima. Source-contract validation is separate from cached evidence sufficiency; PHARMA_V1 remains fail-closed until both are satisfied.`,
   }
 }

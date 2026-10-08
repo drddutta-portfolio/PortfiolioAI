@@ -1,4 +1,5 @@
 import Decimal from "decimal.js"
+import { deriveOperatingMarginPercent } from "./pharmaOperatingMargin"
 
 export const PHARMA_HISTORY_NORMALIZATION_VERSION = "PHARMA_HISTORY_NORMALIZATION_V2" as const
 
@@ -179,12 +180,16 @@ export function derivePharmaQuarterlyOperatingMargin(values: readonly ProviderHi
       invalidPeriods.push(period)
       continue
     }
-    const margin = profit.div(revenue).mul(100)
+    const marginPercent = deriveOperatingMarginPercent(profit.toString(), revenue.toString())
+    if (marginPercent === null) {
+      invalidPeriods.push(period)
+      continue
+    }
     points.push({
       period,
       operatingProfit: profit.toString(),
       operatingRevenue: revenue.toString(),
-      marginPercent: margin.toDecimalPlaces(6, Decimal.ROUND_HALF_UP).toString(),
+      marginPercent,
       sourceLabels: [profitItem.label, revenueItem.label],
     })
   }
@@ -208,7 +213,7 @@ export const PHARMA_HISTORY_NORMALIZATION_CONTRACT = {
     annualRevenue: "Only exact operating-revenue annual labels may satisfy the series. Generic Rev. Ann. or Total Rev. Ann. values are not interchangeable with Operating Rev. Ann. and are never substituted.",
     annualCfo: "Exact annual CFO labels are normalized to Y0-Y5; CFO alone does not satisfy PHARMA cash-conversion readiness.",
     quarterlyInputs: "Reviewed provider spelling aliases such as 6Qtr/7Qtr are accepted only when the parser has already ruled out duplicate-value conflicts for that exact label.",
-    operatingMargin: "PortfolioAI derives each quarterly OPM from matched-period operating profit / operating revenue × 100 using Decimal arithmetic. The raw operating-profit and operating-revenue observations remain the canonical evidence; the derived margin is not written as provider evidence.",
+    operatingMargin: "PortfolioAI derives each quarterly OPM through the single pharmaOperatingMargin deterministic owner from matched-period operating profit / operating revenue × 100 using Decimal arithmetic. Calculation precision is retained; display rounding occurs only in presentation. The raw operating-profit and operating-revenue observations remain the canonical evidence; the derived margin is not written as provider evidence.",
     missingData: "Missing, invalid, conflicting or unmatched period values remain missing/invalid and are never coerced to zero.",
   },
 } as const

@@ -74,9 +74,14 @@ jobs:
         run: npm run typecheck
       - name: Lint architecture boundary
         run: npm run lint:architecture
-      - name: Full repository lint diagnostic
-        continue-on-error: true
+      - name: Full repository lint
         run: npm run lint
+      - name: Edge lint
+        run: npm run lint:edge
+      - name: Full application test suite
+        run: npm test
+      - name: Dedicated Edge test suite
+        run: npm run test:edge
       - name: Production build
         run: npm run build
       - name: Git diff whitespace check

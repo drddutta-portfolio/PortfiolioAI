@@ -256,7 +256,10 @@ export interface DomesticBusinessDurabilityScores {
 }
 
 export function evaluateDomesticBusinessDurability(input: DomesticBusinessDurabilityScores) {
-  Object.entries(input).forEach(([key, value]) => assertScore(value, key))
+  assertScore(input.brandTherapyLeadershipScore, "brandTherapyLeadershipScore")
+  assertScore(input.fieldForceProductivityScore, "fieldForceProductivityScore")
+  assertScore(input.rndProductivityScore, "rndProductivityScore")
+  assertScore(input.pipelineCorporateExecutionScore, "pipelineCorporateExecutionScore")
   return {
     combinedScore:
       input.brandTherapyLeadershipScore * 0.35
@@ -292,7 +295,9 @@ export interface DomesticOwnershipGovernanceScores {
 }
 
 export function evaluateDomesticOwnershipGovernance(input: DomesticOwnershipGovernanceScores) {
-  Object.entries(input).forEach(([key, value]) => assertScore(value, key))
+  assertScore(input.ownershipStabilityScore, "ownershipStabilityScore")
+  assertScore(input.pledgeControlRiskScore, "pledgeControlRiskScore")
+  assertScore(input.nonG4GovernanceContextScore, "nonG4GovernanceContextScore")
   return {
     combinedScore:
       input.ownershipStabilityScore * 0.45

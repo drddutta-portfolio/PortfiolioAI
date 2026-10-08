@@ -75,7 +75,7 @@ describe("PHARMA history normalization", () => {
       period: "Q0",
       operatingProfit: "1664",
       operatingRevenue: "4921",
-      marginPercent: "33.814265",
+      marginPercent: "33.81426539321276163381426539321276163381",
     })
     expect(result.missingPeriods).toEqual(["Q8"])
   })

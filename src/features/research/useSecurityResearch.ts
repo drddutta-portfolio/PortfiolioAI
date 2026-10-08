@@ -10,7 +10,6 @@ export function useSecurityResearch(securityId: string | null) {
   useEffect(() => {
     let active = true
     if (!securityId) return () => { active = false }
-    setError(null)
     void loadSecurityResearch(securityId).then((value) => { if (active) setData(value) })
       .catch((reason: unknown) => { if (active) setError({ securityId, message: displayError(reason) }) })
     return () => { active = false }
