@@ -9,6 +9,20 @@ const MAX_BYTES=512*1024
 const FUND_KINDS=["P8_B4_3_CANARY_FUNDAMENTALS","P8_B4_4_FUNDAMENTALS"]
 const DOC_KINDS=["P8_B4_3_CANARY_DOCUMENTS","P8_B4_4_DOCUMENTS"]
 
+type HistoricalIdentityRow = {
+  readonly id: string
+  readonly historical_isin: string
+  readonly canonical_security_id: string
+}
+type ProviderIdentityRow = {
+  readonly security_id: string
+  readonly provider_instrument_id: string
+  readonly observed_isin: string
+  readonly evidence_status: string
+}
+type SecurityRow = { readonly id: string; readonly symbol: string }
+type ExistingCaptureRow = { readonly record_kind: string; readonly raw_payload: unknown }
+
 const reply=(status:number,body:Record<string,unknown>)=>new Response(JSON.stringify(body),{status,headers:{"content-type":"application/json"}})
 const sha256=async(s:string)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)))).map(x=>x.toString(16).padStart(2,"0")).join("")
 
@@ -58,19 +72,23 @@ Deno.serve(async req=>{
 
   const since=new Date(); since.setUTCHours(0,0,0,0)
   const usage=await admin.from("provider_usage_events").select("actual_internal_units").eq("source_code",SOURCE).eq("accounting_class","PROVIDER_TOOL_ATTEMPT").gte("attempted_at",since.toISOString())
-  const usedToday=(usage.data??[]).reduce((a:any,x:any)=>a+Number(x.actual_internal_units??0),0)
+  const usedToday=(usage.data??[]).reduce((sum,row)=>sum+Number(row.actual_internal_units??0),0)
   const frozenRemaining=Math.max(0,1000-usedToday)
   if(frozenRemaining<1) return reply(200,{state:"DAILY_PLANNED_CEILING_REACHED",providerCalls:0,usedToday,frozenRemaining})
 
   const hist=await admin.from("p8_historical_security_identities").select("id,historical_isin,canonical_security_id").not("canonical_security_id","is",null).range(0,4999)
   const pid=await admin.from("security_identity_observations").select("security_id,provider_instrument_id,observed_isin,evidence_status").eq("source_code",SOURCE).eq("evidence_status","MATCHED").not("provider_instrument_id","is",null).range(0,999)
   if(hist.error||pid.error) return reply(500,{error:"IDENTITY_READ_FAILED",providerCalls:0})
-  const pmap=new Map((pid.data??[]).map((x:any)=>[x.security_id,x]))
-  const exact=(hist.data??[]).filter((x:any)=>{const p=pmap.get(x.canonical_security_id) as any;return p&&p.observed_isin===x.historical_isin}).sort((a:any,b:any)=>String(a.historical_isin).localeCompare(String(b.historical_isin))||String(a.id).localeCompare(String(b.id)))
-  const secIds=exact.map((x:any)=>x.canonical_security_id)
+  const identityRows=(pid.data??[]) as ProviderIdentityRow[]
+  const pmap=new Map(identityRows.map((row)=>[row.security_id,row] as const))
+  const historicalRows=(hist.data??[]) as HistoricalIdentityRow[]
+  const exact=historicalRows.filter((row)=>pmap.get(row.canonical_security_id)?.observed_isin===row.historical_isin)
+    .sort((a,b)=>a.historical_isin.localeCompare(b.historical_isin)||a.id.localeCompare(b.id))
+  const secIds=exact.map((row)=>row.canonical_security_id)
   const sec=await admin.from("securities").select("id,symbol").in("id",secIds)
   if(sec.error) return reply(500,{error:"SECURITY_READ_FAILED",providerCalls:0})
-  const smap=new Map((sec.data??[]).map((x:any)=>[x.id,x.symbol]))
+  const securityRows=(sec.data??[]) as SecurityRow[]
+  const smap=new Map(securityRows.map((row)=>[row.id,row.symbol] as const))
 
   const haveFund=new Set<string>(),haveDoc=new Set<string>()
   for(let from=0;;from+=500){
@@ -81,26 +99,29 @@ Deno.serve(async req=>{
     if(existing.error) return reply(500,{error:"CAPTURE_READ_FAILED",providerCalls:0})
     const rows=existing.data??[]
     for(const r of rows){
-      const id=String((r.raw_payload as any)?.historical_identity_id??"")
+      const payload=r.raw_payload&&typeof r.raw_payload==="object"&&!Array.isArray(r.raw_payload)
+        ? r.raw_payload as Record<string,unknown>
+        : {}
+      const id=String(payload.historical_identity_id??"")
       if(FUND_KINDS.includes(r.record_kind))haveFund.add(id)
       if(DOC_KINDS.includes(r.record_kind))haveDoc.add(id)
     }
     if(rows.length<500) break
   }
-  const completeBefore=exact.filter((x:any)=>haveFund.has(x.id)&&haveDoc.has(x.id)).length
+  const completeBefore=exact.filter((row)=>haveFund.has(row.id)&&haveDoc.has(row.id)).length
   if(completeBefore<160) return reply(409,{error:"CAPTURE_LEDGER_UNDERCOUNT",providerCalls:0,completeBefore,totalExact:exact.length})
-  const todo=exact.filter((x:any)=>!(haveFund.has(x.id)&&haveDoc.has(x.id))).slice(0,batchSize)
+  const todo=exact.filter((row)=>!(haveFund.has(row.id)&&haveDoc.has(row.id))).slice(0,batchSize)
   if(!todo.length) return reply(200,{state:"CAMPAIGN_COMPLETE",providerCalls:0,completeBefore,totalExact:exact.length})
 
   let planned=0
   for(const x of todo){if(!haveFund.has(x.id))planned++;if(!haveDoc.has(x.id))planned++}
   planned=Math.min(planned,frozenRemaining,control.data.per_run_internal_attempt_limit)
   if(planned<1) return reply(200,{state:"NO_PLANNED_CAPACITY",providerCalls:0,completeBefore,totalExact:exact.length,usedToday})
-  const selected:any[]=[]; let capacity=planned
+  const selected:HistoricalIdentityRow[]=[]; let capacity=planned
   for(const x of todo){const need=(haveFund.has(x.id)?0:1)+(haveDoc.has(x.id)?0:1);if(need<=capacity){selected.push(x);capacity-=need}else break}
   const reserve=planned-capacity
 
-  const run=await admin.from("data_ingestion_runs").insert({source_code:SOURCE,portfolio_id:PORTFOLIO_ID,operation:"P8_B4_4_ACQUISITION",orchestration_type:"P8_B4_4_ACQUISITION",trigger_source:"OWNER",requested_by:REQUESTED_BY,status:"RUNNING",requested_count:selected.length,estimated_call_count:reserve,reserved_call_count:reserve,attempted_call_count:0,policy_version:control.data.policy_version,metadata:{mode:"P8_B4_4",complete_before:completeBefore,selected:selected.map((x:any)=>({id:x.id,isin:x.historical_isin,symbol:smap.get(x.canonical_security_id)})),canonical_promotion_performed:false,b4_schema_write_performed:false}}).select("id").single()
+  const run=await admin.from("data_ingestion_runs").insert({source_code:SOURCE,portfolio_id:PORTFOLIO_ID,operation:"P8_B4_4_ACQUISITION",orchestration_type:"P8_B4_4_ACQUISITION",trigger_source:"OWNER",requested_by:REQUESTED_BY,status:"RUNNING",requested_count:selected.length,estimated_call_count:reserve,reserved_call_count:reserve,attempted_call_count:0,policy_version:control.data.policy_version,metadata:{mode:"P8_B4_4",complete_before:completeBefore,selected:selected.map((row)=>({id:row.id,isin:row.historical_isin,symbol:smap.get(row.canonical_security_id)})),canonical_promotion_performed:false,b4_schema_write_performed:false}}).select("id").single()
   if(run.error) return reply(500,{error:"RUN_ACCOUNTING_FAILED",providerCalls:0})
   const runId=run.data.id
   const reservation=await admin.rpc("reserve_provider_budget_v1",{p_source_code:SOURCE,p_ingestion_run_id:runId,p_reservation_key:`${runId}:P8_B4_4`,p_estimated_units:reserve,p_reservation_seconds:1800})
@@ -108,13 +129,13 @@ Deno.serve(async req=>{
   if(reservation.error||!rr?.reserved){await admin.from("data_ingestion_runs").update({status:"FAILED",completed_at:new Date().toISOString(),error_summary:rr?.reason_code??"BUDGET_RESERVATION_FAILED"}).eq("id",runId);return reply(429,{error:"BUDGET_RESERVATION_FAILED",providerCalls:0,runId})}
 
   const client=new MCP(mcpUrl); let attempted=0,succeeded=0,failed=0,terminal:string|null=null,completed=0
-  const captures:any[]=[]
+  const captures:Record<string,unknown>[]=[]
   const use=async(itemId:string,securityId:string,op:string,outcome:"SUCCEEDED"|"FAILED",code:string|null)=>{
     const r=await admin.rpc("record_provider_usage_event_v1",{p_source_code:SOURCE,p_ingestion_run_id:runId,p_run_item_id:itemId,p_security_id:securityId,p_data_domain:"P8_B4_POINT_IN_TIME_EVIDENCE",p_operation_class:op,p_accounting_class:"PROVIDER_TOOL_ATTEMPT",p_estimated_internal_units:1,p_actual_internal_units:1,p_attempted_at:new Date().toISOString(),p_completed_at:new Date().toISOString(),p_outcome:outcome,p_safe_error_code:code,p_retry_attempt:0,p_idempotency_key:`${runId}:${op}:${attempted}`})
     if(r.error) throw new Error("USAGE_ACCOUNTING_FAILED")
   }
-  const cap=async(x:any,kind:string,tool:string,query:string,result:string)=>{
-    const raw={mode:"P8_B4_4",run_id:runId,historical_identity_id:x.id,historical_isin:x.historical_isin,security_id:x.canonical_security_id,security_symbol:smap.get(x.canonical_security_id),provider_instrument_id:(pmap.get(x.canonical_security_id) as any).provider_instrument_id,provider_tool:tool,query,result}
+  const cap=async(x:HistoricalIdentityRow,kind:string,tool:string,query:string,result:string)=>{
+    const raw={mode:"P8_B4_4",run_id:runId,historical_identity_id:x.id,historical_isin:x.historical_isin,security_id:x.canonical_security_id,security_symbol:smap.get(x.canonical_security_id),provider_instrument_id:pmap.get(x.canonical_security_id)?.provider_instrument_id??null,provider_tool:tool,query,result}
     const ser=JSON.stringify(raw);if(new TextEncoder().encode(ser).byteLength>MAX_BYTES)throw new Error("CAPTURE_PAYLOAD_TOO_LARGE")
     const hash=await sha256(ser);const ins=await admin.from("data_source_records").insert({source_code:SOURCE,ingestion_run_id:runId,record_kind:kind,external_record_id:`${raw.provider_instrument_id}:${kind}:${runId}`,retrieved_at:new Date().toISOString(),payload_hash:hash,raw_payload:raw,terms_snapshot:{mode:"P8_B4_4",historical_identity_id:x.id,historical_isin:x.historical_isin,canonical_promotion_performed:false,b4_schema_write_performed:false}}).select("id").single()
     if(ins.error)throw new Error("CAPTURE_PERSISTENCE_FAILED");captures.push({historicalIdentityId:x.id,symbol:raw.security_symbol,kind,recordId:ins.data.id,payloadHash:hash,resultLength:result.length})
@@ -122,7 +143,7 @@ Deno.serve(async req=>{
 
   for(const x of selected){
     if(terminal)break
-    const securityId=x.canonical_security_id, symbol=String(smap.get(securityId)), p=pmap.get(securityId) as any
+    const securityId=x.canonical_security_id, symbol=String(smap.get(securityId)??""), p=pmap.get(securityId)
     if(!symbol||!p||p.observed_isin!==x.historical_isin){terminal="IDENTITY_DIVERGENCE";break}
     const item=await admin.from("data_ingestion_run_items").insert({ingestion_run_id:runId,security_id:securityId,data_domain:"P8_B4_POINT_IN_TIME_EVIDENCE",status:"PLANNED",metadata:{historical_identity_id:x.id,historical_isin:x.historical_isin}}).select("id").single()
     if(item.error){terminal="RUN_ITEM_ACCOUNTING_FAILED";break}
