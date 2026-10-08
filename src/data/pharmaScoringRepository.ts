@@ -1,6 +1,6 @@
 import { supabase } from "../lib/supabase"
 import { assessPharmaV1Evidence, type PharmaScoringObservation } from "../features/research/pharmaScoringEvidence"
-import type { DimensionScore, ExternalRatingObservation, MetricScoreSignal, ScoringProfileSource, SecurityScoringSnapshot } from "../features/research/scoringTypes"
+import type { DimensionScore, ExternalRatingObservation, HeatState, MetricScoreSignal, ScoringProfileSource, SecurityScoringSnapshot } from "../features/research/scoringTypes"
 
 const db = supabase
 
@@ -27,6 +27,20 @@ type RatingRow = {
   retrieved_at: string
   fresh_until: string
   evidence_status: string
+}
+
+function heatState(value: string): HeatState {
+  switch (value) {
+    case "STRONG":
+    case "POSITIVE":
+    case "NEUTRAL":
+    case "WEAK":
+    case "RISK":
+    case "INSUFFICIENT":
+      return value
+    default:
+      return "INSUFFICIENT"
+  }
 }
 
 function label(inputCode: string) {
@@ -132,7 +146,7 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
       evidenceCoverage: Number(row.evidence_coverage),
       scoreReadyCoverage: Number(row.evidence_coverage),
       confidence: Number(row.confidence),
-      heatState: row.heat_state,
+      heatState: heatState(row.heat_state),
     }))
   } else {
     dimensionScores = previewDimensions(rules, (observationsResult.data ?? []) as PharmaScoringObservation[], dimensionsForModel)
