@@ -43,14 +43,14 @@ export async function getCachedCompanyProfile(securityId: string): Promise<Compa
     select: "profile_status,about_summary,company_website_url,logo_storage_path,source_url,last_checked_at,last_safe_error_code",
     security_id: `eq.${securityId}`,
     limit: "1",
-  })
+  )
   const response = await fetch(`${publicConfig.supabaseUrl}/rest/v1/security_company_profiles?${params.toString()}`, {
     headers: {
       apikey: publicConfig.supabasePublishableKey,
       Authorization: `Bearer ${session.access_token}`,
       Accept: "application/json",
     },
-  })
+  )
   if (!response.ok) throw new Error("Cached company profile could not be loaded.")
   const rows = await response.json() as CompanyProfileRow[]
   return rows[0] ? mapRow(rows[0]) : null
@@ -58,7 +58,7 @@ export async function getCachedCompanyProfile(securityId: string): Promise<Compa
 
 export async function discoverCompanyProfile(portfolioId: string, securityId: string) {
   const result = await invokeEdgeFunction("discover-company-profile", { portfolioId, securityId },
-  })
+  )
   if (result.error) throw new Error(displayError(result.error) || "Company profile discovery failed.")
   const payload = result.data as { readonly error?: string; readonly code?: string } | null
   if (payload?.error) throw new Error(payload.code ? `${payload.error} (${payload.code})` : payload.error)
