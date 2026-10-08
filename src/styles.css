@@ -3,10 +3,10 @@
   --color-loss: #b42318;
   --color-financial-neutral: #334155;
   --color-financial-unavailable: #64748b;
-  --color-gain-surface: #f0fdf4;
-  --color-loss-surface: #fff1f2;
-  --color-gain-border: #bbdfc6;
-  --color-loss-border: #efc5c2;
+  --color-gain-surface: #dcfce7;
+  --color-loss-surface: #fee2e2;
+  --color-gain-border: #86cba0;
+  --color-loss-border: #efa0a0;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #18211d;
   background: #f3f5f1;
@@ -1044,3 +1044,30 @@ th { color: #69746d; background: #f7f9f7; font-size: 0.7rem; letter-spacing: 0.0
 .numeric-cell span[class*="financial-"] > strong,
 .dashboard-role-row span[class*="financial-"] > strong,
 .dashboard-theme-row span[class*="financial-"] > strong { color: inherit; }
+
+/* Shared financial surfaces: only canonical signed-result classes opt in.
+   Mixed-sign containers retain separate value boxes; whole cells follow the
+   primary ledger result, while imported evidence keeps its own signed box. */
+.financial-gain { background-color: var(--color-gain-surface) !important; box-shadow: inset 0 0 0 1px var(--color-gain-border); }
+.financial-loss { background-color: var(--color-loss-surface) !important; box-shadow: inset 0 0 0 1px var(--color-loss-border); }
+:is(span, strong, b, small).financial-gain,
+:is(span, strong, b, small).financial-loss { padding: .18rem .35rem; border-radius: .3rem; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+td.financial-gain, td.financial-loss { border-radius: 0; }
+.numeric-cell:has(> span.financial-gain),
+.research-metric-card.pnl-gain,
+.dashboard-pulse-card.positive,
+.dashboard-contribution-card article:has(> div > span.financial-gain),
+article.dashboard-signed-positive { background-color: var(--color-gain-surface) !important; border-color: var(--color-gain-border); box-shadow: inset 0 0 0 1px var(--color-gain-border); }
+.numeric-cell:has(> span.financial-loss),
+.research-metric-card.pnl-loss,
+.dashboard-pulse-card.negative,
+.dashboard-contribution-card article:has(> div > span.financial-loss),
+article.dashboard-signed-negative { background-color: var(--color-loss-surface) !important; border-color: var(--color-loss-border); box-shadow: inset 0 0 0 1px var(--color-loss-border); }
+/* Give signed role/theme cells their full grid area without changing columns. */
+:is(.dashboard-role-row, .dashboard-theme-row) > :is(.financial-gain, .financial-loss) { padding: .35rem .45rem; border-radius: .35rem; }
+/* A missing or zero secondary metric remains visibly neutral inside a signed card. */
+:is(.pnl-card, .dashboard-kpi-card) :is(.financial-neutral, .financial-unavailable) { background-color: #f8fafc; border-radius: .3rem; }
+
+.position-dashboard :is(.pnl-gain, .pnl-loss) > span,
+:is(.dashboard-signed-positive, .dashboard-signed-negative) :is(small, p, div > span):not([class*="financial-"]),
+.dashboard-pulse-card:is(.positive, .negative) > :is(small, p) { color: #475569; }

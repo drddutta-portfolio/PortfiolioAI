@@ -9620,3 +9620,7 @@ HDFCBANK and TORNTPHARM; tablet score-label overflow was found and a shared-shel
 CSS correction prepared. The verifier's login-redirect timing and READ_CACHE
 allowance were corrected. G5.2 is now in review, rather than access-blocked; final
 acceptance remains HOLD pending deployed re-verification. See the Gate 5 report.
+
+### Stage 6 financial surface enhancement — 8 October 2026
+
+Owner requested stronger application-wide gain/loss visibility after text-only Research colors proved too subtle. Shared CSS now applies visible green/red fills and matching borders to canonical signed cards, cells and inline boxes across Research, Dashboard, Holdings and transaction position context. Mixed-sign values retain independent boxes; zero/unavailable remain neutral. Presentation-only enhancement; no financial formula, database, RLS, provider or methodology changes. Review/publication and hosted acceptance are pending for this enhancement.
