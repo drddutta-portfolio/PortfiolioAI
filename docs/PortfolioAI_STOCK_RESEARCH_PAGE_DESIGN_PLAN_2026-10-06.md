@@ -115,6 +115,8 @@ The Stage 6 sub-stages and release evidence are recorded in the [Stage 6 rollout
 
 The **common shell for ALL stocks** uses the application-wide financial theme: gains green, losses red, zero neutral, missing values explicitly unavailable. Color follows each canonical value before display rounding; signs and explanatory labels remain readable. The theme applies to P/L amounts and returns, not to arbitrary positive prices, balances or research scores. It does not alter the Industry-first specialist selector or evidence safeguards.
 
+Stage 6.1–6.4 is accepted for the Development design rollout on 8 October 2026: PR #119, exact merged-source READY deployment and 350 hosted checks are recorded in the Stage 6 release evidence. The common shell and financial color contract apply to ALL stocks. Upstream taxonomy, source-evidence, numeric methodology and recommendation approvals remain separate; successful UI rollout does not certify their completion.
+
 ## 4. Entire page structure
 
 | Order | Shared region | Content and behavior |
