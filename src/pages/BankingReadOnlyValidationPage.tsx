@@ -8,7 +8,7 @@ import manifest from "../../docs/private/v1-4-industry-batches/Banking_13_Read_O
 
 const ACTION = "P7_IC3_VALIDATE_CANONICAL_INPUTS"
 const DEV_HOST = "portfolioai-development"
-const configuredHostname = (typeof import.meta.env.VITE_V1_4_BANKING_ALLOWED_HOSTNAME === "string" ? (import.meta.env.VITE_V1_4_BANKING_ALLOWED_HOSTNAME as string).trim().toLowerCase() : "")
+const configuredHostname = (typeof import.meta.env.VITE_V1_4_BANKING_ALLOWED_HOSTNAME === "string" ? import.meta.env.VITE_V1_4_BANKING_ALLOWED_HOSTNAME.trim().toLowerCase() : "")
 type Requirement = { requirement_code?: string; evidence_state?: string; reason_code?: string; validation_state?: string; canonical_selection_state?: string; raw_source_record_id?: string | null; candidate_evidence_ids?: string[] }
 type StockResult = { securityId: string; status: string; snapshotHash: string; items: Requirement[] }
 type SliceResult = { sliceId: string; evaluationAsOf: string; sourceCutoffAt: string; selectionRunId: string; deployment: string; results: StockResult[]; providerCalls: number; writeTotals: Record<string, number>; processed: number }
