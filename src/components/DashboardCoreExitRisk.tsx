@@ -6,7 +6,7 @@ import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { useResearchCoverage } from "../features/research/useResearchCoverage"
 import { buildProgramCR8LivePortfolioProjection } from "../features/decision/r8LivePortfolioAdapter"
 import { useP5TerminalDispositions } from "../features/decision/useP5TerminalDispositions"
-import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./DashboardScopeContext"
+import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./dashboardScope"
 import "./DashboardCoreExitRisk.css"
 
 type AdvisoryState = "supportive" | "review" | "neutral"
