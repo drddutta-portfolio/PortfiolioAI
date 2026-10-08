@@ -118,8 +118,8 @@ export function validateV14SelectedOwnership(input:{
  const entries=input.history.series[series]??[]
  const quarters=entries.map(x=>x.quarter)
  if(entries.length<4)return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_SERIES_MISSING"}
- const months:Readonly<Record<string,number>>={Mar:2,Jun:5,Sep:8,Dec:11}
- const periodKeys=quarters.map(q=>{const match=/^(Mar|Jun|Sep|Dec) (\\d{4})$/u.exec(q);return match?Number(match[2])*4+months[match[1]]/3:NaN})
+ const months:Readonly<Record<string,number>>={Mar:0,Jun:1,Sep:2,Dec:3}
+ const periodKeys=quarters.map(q=>{const match=/^(Mar|Jun|Sep|Dec) (\\d{4})$/u.exec(q);return match?Number(match[2])*4+months[match[1]]:NaN})
  const valid=periodKeys.every(Number.isFinite)&&new Set(periodKeys).size===periodKeys.length&&
   [...periodKeys].sort((a,b)=>a-b).slice(-4).every((n,i,arr)=>i===0||n===arr[i-1]+1)&&
   entries.every(x=>Number.isFinite(x.value)&&x.value>=0&&x.value<=100)
@@ -130,10 +130,9 @@ export function parseTrendlyneOwnershipHistory(providerResult:string){
  const sections=["Promoter","Institutional","FII","MF","DII","Public"] as const
  const result:Record<string,Array<{quarter:string;value:number;exactValue:string}>>={}
  for(const section of sections){
-  const escaped=section.replace(/[.*+?^$\\{\\}()|[\\]\\]/gu,"\\$&")
-  const match=providerResult.match(new RegExp(escaped+":\\\\s*\\\\n([\\\\s\\\\S]*?)(?=\\\\n\\\\s{2}[A-Z][A-Za-z]+:|\\\\ninsights:|$)","u"))
+  const match=providerResult.match(new RegExp(section+":\\s*\\n([\\s\\S]*?)(?=\\n\\s{2}[A-Z][A-Za-z]+:|\\ninsights:|$)","u"))
   if(!match)continue
-  const values=[...match[1].matchAll(/\\[\\?"([A-Z][a-z]{2} \\d{4})\\?",\\s*(-?\\d+(?:\\.\\d+)?)/gu)].map(item=>({quarter:item[1],value:Number(item[2]),exactValue:item[2]}))
+  const values=[...match[1].matchAll(/\[\\?"([A-Z][a-z]{2} \d{4})\\?",\s*(-?\d+(?:\.\d+)?)/gu)].map(item=>({quarter:item[1],value:Number(item[2]),exactValue:item[2]}))
   if(values.length)result[section]=values
  }
  // AVAILABLE means chart capture exists; it is NOT approved percentage semantics or READY.
