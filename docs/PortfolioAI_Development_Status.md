@@ -1,3 +1,15 @@
+### Stock-page Industry-first Stage 4 — 8 October 2026
+
+Stage 4 implements a selected framework summary, canonical-contract result tabs,
+readable retained observation tables and five distinct Pharma specialised
+requirement/result views. Exact snapshot/code binding is required; missing
+subprofile evidence or dimension metadata remains explicitly unproven. All
+current 47 canonical profiles retain access to their selected immutable items.
+See the [Stage 4 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_4_SPECIALIST_RESULTS_2026-10-08.md)
+for safeguards, checks and hosted acceptance. No classification, financial,
+evidence-selection, database or provider semantics change. This is on the review
+branch, not merged to Development; operational V1-4 and C1/C8 remain separate.
+
 ## R1–R4 audit remediation / repository completion — 8 October 2026
 
 **Status: R1–R4 repository implementation and verification COMPLETE for the audited repository scope.**

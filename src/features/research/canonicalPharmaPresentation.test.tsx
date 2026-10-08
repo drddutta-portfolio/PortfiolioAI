@@ -18,7 +18,7 @@ describe("canonical Pharma consistency", () => {
   it.each(PHARMA_SUBPROFILE_CODES)("uses %s in header, workspace and R6 despite missing legacy rows", primary => {
     const selected = snapshot(primary)
     render(<><PharmaSubprofileSummary snapshot={selected} isLoading={false} error={null} /><PharmaResearchWorkspacePanel securityId="test" symbol="TEST" research={research} snapshot={selected} /></>)
-    expect(screen.getAllByText(new RegExp(PHARMA_SUBPROFILE_CONTRACTS[primary].displayName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")))).toHaveLength(2)
+    expect(screen.getAllByText(new RegExp(PHARMA_SUBPROFILE_CONTRACTS[primary].displayName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")))).toHaveLength(3)
     expect(screen.queryByText(/Awaiting reviewed assignment/)).not.toBeInTheDocument()
     expect(legacy).not.toHaveBeenCalled()
     const r6 = buildProgramBR6ScoringPresentation({ securityId: "test", snapshot: selected, pharmaResolution: null })

@@ -1,0 +1,322 @@
+{
+  "date": "2026-10-08",
+  "authority": "P7_IC_PROFILE_CONTRACTS",
+  "purpose": "Presentation coverage only; no company assignment or engine approval",
+  "profiles": [
+    {
+      "profileCode": "AGRI_PROCESSING",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "AGRO_FERTILISER",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "AUTO_COMPONENTS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "AUTO_OEM",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "BANK",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "BRANDED_CONSUMER_FMCG",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "BUSINESS_SERVICES",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "CAPITAL_EQUIPMENT_ELECTRICAL",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "CAPITAL_MARKETS_AMC",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "CEMENT_BUILDING_MATERIALS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "COMMODITY_PROCESS_CHEMICALS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "CONSUMER_DURABLES",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "DEFENCE_AEROSPACE",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "DIVERSIFIED_CHEMICALS_PETROCHEM",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "ENVIRONMENTAL_SERVICES",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "FINANCIAL_HOLDING_COMPANY",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "FINTECH_PLATFORM",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "GENERATION_INTEGRATED_UTILITY",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "HOSPITAL",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "HOSPITALITY_LEISURE",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "INDUSTRIAL_PRODUCTS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "INSURANCE",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "INTEGRATED_REFINING_PETCHEM",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "IT_BPM_SERVICES",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "IT_DIGITAL_INFRA_HARDWARE",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "IT_SERVICES",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "IT_SOFTWARE_PRODUCTS_PLATFORMS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "JEWELLERY",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "LOGISTICS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "MIDSTREAM_CITY_GAS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "NBFC_LENDING",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "NON_FERROUS_DIVERSIFIED_METALS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "OIL_OPERATIONS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "PHARMA",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "CANONICAL_PHARMA_PARENT_FALLBACK",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "PROJECT_EPC",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "REAL_ESTATE_DEVELOPER",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "REGULATED_NETWORK",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "RENEWABLE_IPP",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "RETAIL_COMMERCE",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "SHIPPING",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "SOLID_FUELS_MINING",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "SPECIALTY_CHEMICALS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "STEEL_FERROUS",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "TELECOM_INFRA",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "TELECOM_OPERATOR",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "TEXTILES_APPAREL",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "EXACT_CONTRACT_DIMENSIONS",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    },
+    {
+      "profileCode": "UPSTREAM_E_AND_P",
+      "retainedResultPresentation": "ALL_SELECTED_IMMUTABLE_ITEMS",
+      "dimensionMapping": "UNMAPPED_REQUIREMENTS_REMAIN_IN_OVERVIEW_AND_EVIDENCE",
+      "engineAvailability": "READ_SELECTED_CANONICAL_STATE_SEPARATELY"
+    }
+  ],
+  "pharmaPrimaryProfiles": [
+    {
+      "subprofileCode": "API_BULK_DRUGS",
+      "specialistRequirementSource": "composePharmaSubprofileContract",
+      "resultBinding": "EXACT_SELECTED_SNAPSHOT_REQUIREMENT_OR_METRIC_CODE_ONLY",
+      "unboundState": "EVIDENCE_QUALIFICATION_UNPROVEN"
+    },
+    {
+      "subprofileCode": "DOMESTIC_FORMULATIONS",
+      "specialistRequirementSource": "composePharmaSubprofileContract",
+      "resultBinding": "EXACT_SELECTED_SNAPSHOT_REQUIREMENT_OR_METRIC_CODE_ONLY",
+      "unboundState": "EVIDENCE_QUALIFICATION_UNPROVEN"
+    },
+    {
+      "subprofileCode": "GLOBAL_GENERICS",
+      "specialistRequirementSource": "composePharmaSubprofileContract",
+      "resultBinding": "EXACT_SELECTED_SNAPSHOT_REQUIREMENT_OR_METRIC_CODE_ONLY",
+      "unboundState": "EVIDENCE_QUALIFICATION_UNPROVEN"
+    },
+    {
+      "subprofileCode": "BIOPHARMA_BIOSIMILARS",
+      "specialistRequirementSource": "composePharmaSubprofileContract",
+      "resultBinding": "EXACT_SELECTED_SNAPSHOT_REQUIREMENT_OR_METRIC_CODE_ONLY",
+      "unboundState": "EVIDENCE_QUALIFICATION_UNPROVEN"
+    },
+    {
+      "subprofileCode": "CDMO_CRAMS",
+      "specialistRequirementSource": "composePharmaSubprofileContract",
+      "resultBinding": "EXACT_SELECTED_SNAPSHOT_REQUIREMENT_OR_METRIC_CODE_ONLY",
+      "unboundState": "EVIDENCE_QUALIFICATION_UNPROVEN"
+    }
+  ],
+  "unknownProfileBehavior": "Retain selected snapshot items; no bank/default framework substitution"
+}

@@ -94,6 +94,8 @@ Stage 1 implementation preparation is specified in the [Industry-first Stage 1 c
 
 Stage 3 common identity presentation, final hosted visual PASS and its projection limitations are recorded in the [Stage 3 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_3_SHARED_SHELL_2026-10-08.md). This implements the shared shell; it does not certify classification or complete specialist results.
 
+Stage 4 specialist result implementation, coverage and exact-binding limitations are recorded in the [Stage 4 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_4_SPECIALIST_RESULTS_2026-10-08.md).
+
 ## 4. Entire page structure
 
 | Order | Shared region | Content and behavior |
