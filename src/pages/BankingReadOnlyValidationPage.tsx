@@ -19,7 +19,7 @@ function isDevelopment() {
   const hostname = window.location.hostname.toLowerCase()
   const project = getSupabaseProjectRef(publicConfig.supabaseUrl)
   return project === DEVELOPMENT_SUPABASE_PROJECT_REF &&
-    (hostname.includes(DEV_HOST) || hostname === "localhost" || hostname === "127.0.0.1")
+    (hostname === DEV_HOST || hostname.startsWith(`${DEV_HOST}.`) || hostname === "localhost" || hostname === "127.0.0.1")
 }
 
 function cleanResult(raw: unknown, expectedIds: readonly string[]): Omit<SliceResult, "sliceId" | "evaluationAsOf" | "sourceCutoffAt" | "selectionRunId" | "deployment"> {
@@ -29,10 +29,10 @@ function cleanResult(raw: unknown, expectedIds: readonly string[]): Omit<SliceRe
   if (!Array.isArray(body.results)) throw new Error("Missing per-stock validation results")
   const stocks = body.results as Record<string, unknown>[]
   if (stocks.length !== expectedIds.length || stocks.some((stock, index) => stock.securityId !== expectedIds[index])) throw new Error("Validator returned mismatched banking identities")
-  if (body.providerCalls !== 0) throw new Error("Validator reported provider calls; results withheld")
+  if (body.providerCalls !== 0) throw new Error("Validator reported provider calls or omitted call count; results withheld")
   const writes = (body.writeTotals || {}) as Record<string, unknown>
-  if (Object.values(writes).some(value => value !== 0)) throw new Error("Validator reported writes; results withheld")
-  if ((body.snapshotIds as unknown[] | undefined)?.length || (body.selectionIds as unknown[] | undefined)?.length) throw new Error("Validator reported selected snapshots")
+  if (["snapshotsCreated", "snapshotsReused", "selectionsCreated", "selectionsReused"].some(key => writes[key] !== 0)) throw new Error("Validator write counters are missing or nonzero; results withheld")
+  if (!Array.isArray(body.snapshotIds) || !Array.isArray(body.selectionIds) || body.snapshotIds.length || body.selectionIds.length) throw new Error("Validator snapshot selection proof is missing or nonempty")
   return {
     processed: Number(body.processed),
     providerCalls: 0,
@@ -80,7 +80,7 @@ export function BankingReadOnlyValidationPage() {
       const { data, error } = await supabase.functions.invoke(FUNCTION, { body })
       if (error) throw new Error("Read-only validator failed. Confirm that your Development session is still valid and the function is available.")
       const cleaned = cleanResult(data, slice.securityIds)
-      if (cleaned.processed !== slice.securityIds.length) throw new Error("Validator processed an unexpected number of securities")
+      if (cleaned.processed !== slice.securityIds.length || cleaned.results.some(stock => !stock.status || !stock.snapshotHash || !stock.items.length)) throw new Error("Validator returned incomplete stock or requirement results")
       const result: SliceResult = { sliceId: slice.slice_id, evaluationAsOf, sourceCutoffAt, selectionRunId, deployment: "Development function p7-ic2-materialize-readiness; verify actual deployed version separately", ...cleaned }
       setStates(previous => ({ ...previous, [slice.slice_id]: { status: "completed", result } }))
     } catch (error) {
