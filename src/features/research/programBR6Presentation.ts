@@ -1,3 +1,4 @@
+import { canonicalPharmaPrimary } from "./canonicalResearchAssignment"
 import { K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_VERSION } from "./k5CurrentPortfolioRoutingSnapshot"
 import type { PharmaSubprofileResolution } from "./pharmaSubprofileAssignment"
 import type { ProgramBScoringReadinessState } from "./programBR6Contract"
@@ -38,14 +39,21 @@ export function buildProgramBR6ScoringPresentation(input: {
 }): ProgramBR6ScoringPresentation {
   const { snapshot } = input
   const isPharma = snapshot.profileCode === "PHARMA_V1"
-  let role: string | null = isPharma ? null : snapshot.profileCode
-  let assignmentId: string | null = null
-  let assignmentVersion: string | number | null = null
+  const canonical = snapshot.canonicalRoute
+  let role: string | null = isPharma ? null : canonical?.profileCode ?? snapshot.profileCode
+  let assignmentId: string | null = canonical?.assignmentId ?? null
+  let assignmentVersion: string | number | null = canonical?.assignmentVersion ?? null
   const blockers: string[] = []
   let readinessState: ProgramBScoringReadinessState = "INSUFFICIENT_EVIDENCE"
 
   if (isPharma) {
-    if (input.pharmaResolution?.status === "RESOLVED") {
+    if (canonical || snapshot.routeState) {
+      role = canonicalPharmaPrimary(snapshot)
+      if (!role) {
+        blockers.push(snapshot.methodologyReasonCode ?? "CANONICAL_PHARMA_PRIMARY_REVIEW_REQUIRED")
+        readinessState = "REVIEW_REQUIRED"
+      }
+    } else if (input.pharmaResolution?.status === "RESOLVED") {
       role = input.pharmaResolution.assignment.primarySubprofileCode
       assignmentId = input.pharmaResolution.assignment.assignmentId ?? null
       assignmentVersion = input.pharmaResolution.assignment.assignmentVersion
@@ -80,6 +88,10 @@ export function buildProgramBR6ScoringPresentation(input: {
       } else if (snapshot.previewMode || snapshot.runState !== "COMPLETE" || !snapshot.scoreRunId || snapshot.overallScore === null || !Number.isFinite(snapshot.overallScore)) {
         readinessState = "INSUFFICIENT_EVIDENCE"
         blockers.push("CANONICAL_COMPLETE_SCORE_RUN_REQUIRED")
+      } else if (isPharma && canonical) {
+        // The preserved parent adapter does not supply a score-to-subprofile/snapshot binding.
+        readinessState = "BLOCKED_PREREQUISITE"
+        blockers.push("CANONICAL_PHARMA_SCORE_ASSIGNMENT_BINDING_UNPROVEN")
       } else {
         readinessState = "READY"
       }
@@ -97,7 +109,7 @@ export function buildProgramBR6ScoringPresentation(input: {
     methodologyRole: role,
     assignmentId,
     assignmentVersion,
-    classificationVersion: K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_VERSION,
+    classificationVersion: canonical ? canonical.classificationVersion ?? "UNAVAILABLE" : K5_CURRENT_PORTFOLIO_ROUTING_SNAPSHOT_VERSION,
     evidenceSnapshotIdentity: snapshot.canonicalRoute?.snapshotId ?? null,
     asOfDate: snapshot.canonicalRoute?.asOfDate ?? snapshot.asOfDate,
     blockerCount: blockers.length,

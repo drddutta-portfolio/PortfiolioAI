@@ -29,14 +29,16 @@ import { ResearchAssignmentSummary } from "../features/research/ResearchAssignme
 import { ProfileResearchBlocks } from "../features/research/ProfileResearchBlocks"
 import { useExternalRatings } from "../features/research/useExternalRatings"
 import { useSecurityResearch } from "../features/research/useSecurityResearch"
-import { usePharmaSubprofileResolution } from "../features/research/usePharmaSubprofileResolution"
+import { useStockResearchContext } from "../features/research/useStockResearchContext"
+import { canonicalPharmaPrimary } from "../features/research/canonicalResearchAssignment"
+import type { CanonicalEvidenceReadiness } from "../features/research/useCanonicalEvidenceReadiness"
 import { useSecurityScoring } from "../features/research/useSecurityScoring"
 
 import { STOCK_RESEARCH_TABS as TABS, STOCK_RESEARCH_TAB_TARGETS, stockResearchTabForHash, jumpToStockSection } from "../features/research/stockResearchNavigation"
 type Tab = typeof TABS[number]
 
 type ScoringHook = ReturnType<typeof useSecurityScoring>
-type ResearchScoreContext = { readonly programB: ProgramBR6ScoringPresentation | null; readonly hasPharmaResolution: boolean }
+type ResearchScoreContext = { readonly programB: ProgramBR6ScoringPresentation | null; readonly hasPharmaResolution: boolean; readonly evidence: CanonicalEvidenceReadiness }
 
 export function ResearchPage() {
   const { security } = useParams()
@@ -47,10 +49,10 @@ export function ResearchPage() {
     ? actionCenter.data?.view.find((item) => item.securityId === position.securityId) ?? null
     : null
   const research = useSecurityResearch(position?.securityId ?? null)
-  const scoring = useSecurityScoring(position?.securityId ?? null, research.data?.sector ?? position?.sector ?? null, research.data?.industry ?? position?.industry ?? null, portfolio?.portfolio.id ?? null, position?.assetClass ?? null)
-  const pharmaResolution = usePharmaSubprofileResolution(position?.securityId ?? null)
-  const programB = scoring.data && position ? buildProgramBR6ScoringPresentation({ securityId: position.securityId, snapshot: scoring.data, pharmaResolution: pharmaResolution.data }) : null
-  const hasPharmaResolution = pharmaResolution.data?.status === "RESOLVED"
+  const context = useStockResearchContext({ securityId: position?.securityId ?? null, sector: research.data?.sector ?? position?.sector ?? null, industry: research.data?.industry ?? position?.industry ?? null, portfolioId: portfolio?.portfolio.id ?? null, assetClass: position?.assetClass ?? null })
+  const { scoring, evidence } = context
+  const programB = scoring.data && position ? buildProgramBR6ScoringPresentation({ securityId: position.securityId, snapshot: scoring.data, pharmaResolution: null }) : null
+  const hasPharmaResolution = canonicalPharmaPrimary(scoring.data) !== null
   const [tab, setTab] = useState<Tab>(() => stockResearchTabForHash(window.location.hash))
   const focusPanel = useRef(false)
   const changeTab = useCallback((next: Tab) => {
@@ -70,13 +72,13 @@ export function ResearchPage() {
   return <section className="research-page">
     <StockSectionNavigator activeTab={tab} onTabChange={changeTab} hasSpecialist hasResearch />
     <ResearchHeader programB={programB} position={position} research={research.data} scoring={scoring} currency={portfolio.portfolio.currency} portfolioId={portfolio.portfolio.id} actionAttention={actionAttention} onPositionSaved={reloadPortfolio} />
-    <div id="stock-refresh" tabIndex={-1}><CompleteResearchRefreshPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} symbol={position.symbol} profileCode={scoring.data?.profileCode} onCompleted={() => { research.reload(); scoring.reload() }} /></div>
+    <div id="stock-refresh" tabIndex={-1}><CompleteResearchRefreshPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} symbol={position.symbol} profileCode={scoring.data?.profileCode} onCompleted={() => { research.reload(); context.reload() }} /></div>
     <ResearchTabs value={tab} onChange={changeTab} />
     <div id="stock-workspace" tabIndex={-1}>
     <div id={tab === "Overview" ? undefined : STOCK_RESEARCH_TAB_TARGETS[tab]} tabIndex={-1}>
-    {tab === "Evidence" ? <CanonicalEvidenceReadinessPanel portfolioId={portfolio.portfolio.id} securityId={position.securityId} assetClass={position.assetClass} /> : null}
+    {tab === "Evidence" ? <CanonicalEvidenceReadinessPanel evidence={evidence} portfolioId={portfolio.portfolio.id} securityId={position.securityId} assetClass={position.assetClass} /> : null}
     {research.isLoading ? <Loading label="Loading cached research evidence…" /> : research.error ? <div className="notice notice-error" role="alert"><strong>Cached research could not be loaded.</strong><span>{research.error}</span></div> : !research.data ? <Empty title="Cached research unavailable" detail="No retained research was returned for this security." /> : null}
-    <TabPanel programB={programB} hasPharmaResolution={hasPharmaResolution} tab={tab} position={position} research={research.isLoading || research.error ? null : research.data} scoring={scoring} portfolioId={portfolio.portfolio.id} onTabChange={viewTab} />
+    <TabPanel evidence={evidence} programB={programB} hasPharmaResolution={hasPharmaResolution} tab={tab} position={position} research={research.isLoading || research.error ? null : research.data} scoring={scoring} portfolioId={portfolio.portfolio.id} onTabChange={viewTab} />
     </div>
     </div>
   </section>
@@ -99,7 +101,7 @@ function ResearchHeader({ programB, position, research, scoring, currency, portf
   const profileSource = scoring.data?.profileSource === "CANONICAL_ASSIGNMENT" ? "Canonical assignment" : scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed" : scoring.data?.profileSource === "SECTOR_RULE" ? "Sector-resolved" : scoring.data ? "Methodology unavailable" : null
   const profileDisplayName = researchProfileDisplayName(scoring.data)
   return <header id="stock-summary" tabIndex={-1} className="research-header">
-    <div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><h1>{research?.companyName ?? position.company}</h1><p className="security-identity-line"><strong>{position.symbol}</strong> · {position.exchange} · {titleCase(position.instrumentType)}</p><p><strong>Scoring profile:</strong> {scoring.data ? profileDisplayName : scoring.isLoading ? "Loading…" : "Unavailable"}{profileSource ? ` · ${profileSource}` : ""}</p><ResearchAssignmentSummary snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} /><PharmaSubprofileSummary securityId={position.securityId} enabled={scoring.data?.profileCode === "PHARMA_V1"} /><p>Canonical sector: {sector ?? "Awaiting classification"} · Canonical industry: {industry ?? "Awaiting classification"}</p><p>{research?.marketCapCategory ? titleCase(research.marketCapCategory) : "Market-cap category unavailable"} · {position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</p><p className="raw-market-cap">Market cap: {formatSourceResearchMetric(marketCap)}</p><div className="identity-chips" aria-label="Themes">{position.themes.length ? position.themes.map((theme) => <span key={theme.id}>{theme.name}</span>) : <span>No themes</span>}</div></div>
+    <div className="research-title"><Link to="/app/research" className="research-back">← Research</Link><h1>{research?.companyName ?? position.company}</h1><p className="security-identity-line"><strong>{position.symbol}</strong> · {position.exchange} · {titleCase(position.instrumentType)}</p><p><strong>Scoring profile:</strong> {scoring.data ? profileDisplayName : scoring.isLoading ? "Loading…" : "Unavailable"}{profileSource ? ` · ${profileSource}` : ""}</p><ResearchAssignmentSummary snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} /><PharmaSubprofileSummary snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} /><p>Canonical sector: {sector ?? "Awaiting classification"} · Canonical industry: {industry ?? "Awaiting classification"}</p><p>{research?.marketCapCategory ? titleCase(research.marketCapCategory) : "Market-cap category unavailable"} · {position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</p><p className="raw-market-cap">Market cap: {formatSourceResearchMetric(marketCap)}</p><div className="identity-chips" aria-label="Themes">{position.themes.length ? position.themes.map((theme) => <span key={theme.id}>{theme.name}</span>) : <span>No themes</span>}</div></div>
     <CompanyAboutPanel portfolioId={portfolioId} securityId={position.securityId} symbol={position.symbol} companyName={research?.companyName ?? position.company} />
     <section id="stock-position" tabIndex={-1} className="position-dashboard" aria-labelledby="position-dashboard-title"><h2 id="position-dashboard-title">Your position</h2><div className="research-head-metrics">
       <MetricCard label="Current price / CMP" value={formatMoney(position.currentPrice, currency)} detail={position.currentPrice === null ? "Unavailable" : `${position.isPriceStale ? "Stale price" : "Current cache"} · ${position.priceProvider ?? "Provider unavailable"} · ${position.priceTimestamp ? dateTime(position.priceTimestamp) : "Timestamp unavailable"}`} />
@@ -191,10 +193,10 @@ function ResearchTabs({ value, onChange }: { readonly value: Tab; readonly onCha
   return <div className="research-tabs" role="tablist" aria-label="Research sections">{TABS.map((tab, index) => <button id={`research-tab-${index}`} key={tab} type="button" role="tab" aria-selected={value === tab} aria-controls="research-panel" tabIndex={value === tab ? 0 : -1} onClick={() => onChange(tab)} onKeyDown={(event) => activate(event, index)}>{tab}</button>)}</div>
 }
 
-function TabPanel({ programB, hasPharmaResolution, tab, position, research, scoring, portfolioId, onTabChange }: { readonly tab: Tab; readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly portfolioId: string; readonly onTabChange: (tab: Tab) => void } & ResearchScoreContext) {
+function TabPanel({ programB, hasPharmaResolution, evidence, tab, position, research, scoring, portfolioId, onTabChange }: { readonly tab: Tab; readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly portfolioId: string; readonly onTabChange: (tab: Tab) => void } & ResearchScoreContext) {
   return <div id="research-panel" role="tabpanel" tabIndex={0} aria-labelledby={`research-tab-${TABS.indexOf(tab)}`} className="research-panel">
     {tab !== "Overview" && !research ? <Empty title={`${tab} unavailable`} detail="Retained research must finish loading successfully before these records can be displayed." /> : null}
-    {tab === "Overview" ? <Overview programB={programB} hasPharmaResolution={hasPharmaResolution} portfolioId={portfolioId} position={position} research={research} scoring={scoring} onViewEvidence={() => onTabChange("Evidence")} /> : null}
+    {tab === "Overview" ? <Overview evidence={evidence} programB={programB} hasPharmaResolution={hasPharmaResolution} portfolioId={portfolioId} position={position} research={research} scoring={scoring} onViewEvidence={() => onTabChange("Evidence")} /> : null}
     {tab === "Financials" && research ? <FinancialsWorkspace research={research} snapshot={scoring.data} /> : null}
     {tab === "Quality & Growth" && research ? <QualityGrowthWorkspace research={research} snapshot={scoring.data} /> : null}
     {tab === "Ownership" && research ? <OwnershipWorkspace research={research} snapshot={scoring.data} /> : null}
@@ -204,7 +206,7 @@ function TabPanel({ programB, hasPharmaResolution, tab, position, research, scor
   </div>
 }
 
-function Overview({ programB, hasPharmaResolution, position, research, scoring, portfolioId, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly portfolioId: string; readonly onViewEvidence: () => void } & ResearchScoreContext) {
+function Overview({ programB, hasPharmaResolution, evidence, position, research, scoring, portfolioId, onViewEvidence }: { readonly position: PortfolioPosition; readonly research: SecurityResearch | null; readonly scoring: ScoringHook; readonly portfolioId: string; readonly onViewEvidence: () => void } & ResearchScoreContext) {
   const ratings = useExternalRatings(position.securityId)
   const metrics = latestByCode(research?.metrics ?? [])
   const profileDisplayName = researchProfileDisplayName(scoring.data)
@@ -218,12 +220,12 @@ function Overview({ programB, hasPharmaResolution, position, research, scoring, 
     <SectionHeading title="Research at a glance" detail="Designed to give investment clarity first, with the detailed tabs preserving the evidence behind every conclusion." />
     <section className="context-strip" aria-label="Research and portfolio context"><div><span>Business / research context</span><strong>{profileDisplayName}</strong><small>{research?.industry ?? position.industry ?? (scoring.data?.profileSource === "REVIEWED_ASSIGNMENT" ? "Reviewed profile · industry pending" : "Industry unavailable")}</small></div><div><span>Your portfolio role</span><strong>{position.role === "UNCLASSIFIED" ? "Unclassified" : titleCase(position.role)}</strong><small>{formatPercent(position.portfolioWeightPercent)} current weight · role remains your choice</small></div><div><span>Classification</span><strong>{research?.sector ?? position.sector ?? "Sector unavailable"}</strong><small>{research?.industry ?? position.industry ?? "Industry unavailable"} · {research?.marketCapCategory ? titleCase(research?.marketCapCategory) : "Cap class unavailable"}</small></div></section>
     <div id="stock-assessment" tabIndex={-1}><ResearchScorecardPanel snapshot={scoring.data} isLoading={scoring.isLoading} error={scoring.error} programB={programB} retainedRatings={ratings.data} ratingsError={ratings.error} ratingsLoading={ratings.isLoading} /></div>
-    <div id="stock-readiness" tabIndex={-1}><CanonicalEvidenceReadinessPanel portfolioId={portfolioId} securityId={position.securityId} assetClass={position.assetClass} compact /></div>
+    <div id="stock-readiness" tabIndex={-1}><CanonicalEvidenceReadinessPanel evidence={evidence} portfolioId={portfolioId} securityId={position.securityId} assetClass={position.assetClass} compact /></div>
     <p className="assessment-note">Source snapshots below retain provider observations. Source status is separate from canonical validation and score readiness.</p>
     <div id="stock-snapshots" tabIndex={-1} className="research-cockpit">{groups.map((group) => <section className="cockpit-panel" key={group.title}><h2>{group.title}</h2>{group.title.includes("Ownership") ? <p className="assessment-note">Mutual funds may be included in DII holdings; these categories are not additive.</p> : null}<div className="snapshot-list">{!group.codes.length ? <p className="assessment-note">Presentation mapping unavailable for this profile. Its applicable retained results are in the stock-specific workspace and Evidence.</p> : null}{group.codes.map((code) => { const metric = metrics.get(code); return <div key={code}><span>{metric?.label ?? metricLabelForCode(code)}</span><strong>{formatSourceResearchMetric(metric)}</strong><small>{metric ? `${period(metric)} · ${metric.scope ?? "Scope unavailable"} · ${metric.unit ?? "Unit unavailable"}` : "Unavailable"}</small><span className={`evidence-badge evidence-${coverageStatus(metric).toLocaleLowerCase()}`}>Source: {coverageStatus(metric) === "VERIFIED" ? "Retained available" : coverageStatus(metric).replaceAll("_", " ")}</span></div> })}</div></section>)}</div>
     <section id="stock-health" tabIndex={-1} className="research-health"><div><p className="eyebrow">Research health</p><h2>{coverage} coverage</h2><p>{research ? research.metrics.length : "Unavailable"} cached observations · {stale ? "mixed freshness" : research?.metrics.length ? "current cache" : "freshness unavailable"}</p></div><dl><div><dt>Conflicts</dt><dd>{conflicts ?? "Unavailable"}</dd></div><div><dt>Review required</dt><dd>{reviewRequired ?? "Unavailable"}</dd></div><div><dt>Provisional</dt><dd>{provisional ?? "Unavailable"}</dd></div></dl><button type="button" className="button button-secondary" onClick={onViewEvidence}>View Evidence</button></section>
-    <div id="stock-specialist" tabIndex={-1}><ProfileResearchBlocks portfolioId={portfolioId} securityId={position.securityId} assetClass={position.assetClass} onViewEvidence={onViewEvidence} />
-    {research && (scoring.data?.profileCode === "PHARMA_V1" || hasPharmaResolution) ? <PharmaResearchWorkspacePanel securityId={position.securityId} symbol={position.symbol} research={research} /> : null}</div>
+    <div id="stock-specialist" tabIndex={-1}><ProfileResearchBlocks evidence={evidence} portfolioId={portfolioId} securityId={position.securityId} assetClass={position.assetClass} onViewEvidence={onViewEvidence} />
+    {research && (scoring.data?.profileCode === "PHARMA_V1" || hasPharmaResolution) ? <PharmaResearchWorkspacePanel snapshot={scoring.data} securityId={position.securityId} symbol={position.symbol} research={research} /> : null}</div>
   </>
 }
 

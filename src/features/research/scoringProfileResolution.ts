@@ -25,6 +25,7 @@ export const CANONICAL_ROUTE_ASSIGNMENT_VERSION = "e7c021b865fcd1d49a7c59924ef9c
 export function resolveCanonicalScoringProfile(snapshot: P7CurrentEvidenceSnapshot): ScoringProfileResolution {
   const canonicalRoute: CanonicalScoringRoute = {
     profileCode: snapshot.profileCode, subprofileCode: snapshot.subprofileCode,
+    classificationVersion: snapshot.classificationVersion, methodologyRole: snapshot.methodologyRole,
     methodologyAuthority: snapshot.methodologyAuthority, methodologyVersion: snapshot.methodologyVersion,
     assignmentAuthority: snapshot.assignmentAuthority ?? null, assignmentVersion: snapshot.assignmentVersion,
     assignmentId: snapshot.assignmentId, snapshotId: snapshot.snapshotId, asOfDate: snapshot.asOfDate,

@@ -16,10 +16,11 @@ export function ResearchAssignmentSummary({ snapshot, isLoading, error }: {
       {route ? <>
         <p>Methodology: {route.methodologyAuthority} / {route.methodologyVersion}</p>
         <p>Assignment: {route.assignmentAuthority ?? "Authority unavailable"} / {route.assignmentVersion} / {route.assignmentId}</p>
+        <p>Classification version: {route.classificationVersion ?? "Unavailable"}</p>
         <p>Selected snapshot: {route.snapshotId} · as of {route.asOfDate}</p>
       </> : <p>No canonical assignment lineage supplied. Classification cannot substitute for an approved research assignment.</p>}
     </>}
-    <p><strong>Macro-economic sector / basic industry / sub-sector / group:</strong> Unavailable in the current shared classification projection.</p>
-    <p>Sector and industry are shown above. Research profiles and subprofiles describe methodology; they are not substitute classification labels.</p>
+    <p><strong>Macro-economic sector / basic industry:</strong> Unavailable in the current shared classification projection.</p>
+    <p>Sector and industry are shown above. Subprofile is an analytical refinement, not an additional official taxonomy level. Research profiles and subprofiles describe methodology; they are not substitute classification labels.</p>
   </details>
 }

@@ -304,7 +304,7 @@ function evidenceState(status: P7CurrentEvidenceSnapshot["snapshotStatus"]): Sec
 
 export async function loadSecurityScoringSnapshot(
   securityId: string, sector: string | null, industry: string | null,
-  context: { readonly portfolioId: string; readonly assetClass: string },
+  context: { readonly portfolioId: string; readonly assetClass: string; readonly selectedSnapshot?: P7CurrentEvidenceSnapshot | null },
 ): Promise<SecurityScoringSnapshot> {
   if (context.assetClass !== "EQUITY") return blockedSnapshot({
     profileCode: null, ruleProfile: null, profileSource: "METHODOLOGY_UNAVAILABLE",
@@ -312,7 +312,12 @@ export async function loadSecurityScoringSnapshot(
     routeState: "NOT_APPLICABLE", reasonCode: "NON_EQUITY_SCORING_NOT_APPLICABLE", legacyAssignmentCode: null,
   })
 
-  const canonical = await loadP7CurrentEvidenceSnapshot(context.portfolioId, securityId)
+  const canonical = context.selectedSnapshot === undefined
+    ? await loadP7CurrentEvidenceSnapshot(context.portfolioId, securityId)
+    : context.selectedSnapshot
+  if (canonical && (canonical.portfolioId !== context.portfolioId || canonical.securityId !== securityId)) {
+    throw new Error("Selected research snapshot does not belong to the requested portfolio/security")
+  }
   if (!canonical) return blockedSnapshot({
     profileCode: null, ruleProfile: null, profileSource: "METHODOLOGY_UNAVAILABLE",
     methodologyState: "REVIEW_REQUIRED", scoringExecutionState: "BLOCKED", engineState: "BLOCKED",

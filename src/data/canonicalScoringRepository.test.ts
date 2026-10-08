@@ -18,6 +18,20 @@ const fixture = (overrides: Partial<P7CurrentEvidenceSnapshot> = {}): P7CurrentE
 const load = (assetClass = "EQUITY") => loadSecurityScoringSnapshot("security", "Pharma", "Pharmaceuticals", { portfolioId: "portfolio", assetClass })
 
 describe("held-security canonical scoring boundary", () => {
+  it("uses an explicitly selected snapshot without selecting another current snapshot", async () => {
+    const selected = fixture()
+    const result = await loadSecurityScoringSnapshot("security", null, null, { portfolioId: "portfolio", assetClass: "EQUITY", selectedSnapshot: selected })
+    expect(result.canonicalRoute?.snapshotId).toBe(selected.snapshotId)
+    expect(mocks.canonical).not.toHaveBeenCalled()
+  })
+  it.each([{ portfolioId: "another-portfolio" }, { securityId: "another-security" }])("rejects a selected snapshot belonging to another owner/security", async overrides => {
+    await expect(loadSecurityScoringSnapshot("security", null, null, { portfolioId: "portfolio", assetClass: "EQUITY", selectedSnapshot: fixture(overrides) })).rejects.toThrow("does not belong")
+    expect(mocks.canonical).not.toHaveBeenCalled(); expect(mocks.from).not.toHaveBeenCalled()
+  })
+  it("keeps an explicit null selection unavailable instead of reselecting", async () => {
+    expect(await loadSecurityScoringSnapshot("security", "Banking", "Banks", { portfolioId: "portfolio", assetClass: "EQUITY", selectedSnapshot: null })).toMatchObject({ routeState: "UNAVAILABLE", overallScore: null })
+    expect(mocks.canonical).not.toHaveBeenCalled()
+  })
   beforeEach(() => { vi.resetAllMocks(); mocks.from.mockImplementation(() => { throw new Error("Unexpected scoring query") }); mocks.canonical.mockResolvedValue(fixture()) })
   it.each(["INSUFFICIENT", "STALE", "CONFLICTING", "REVIEW_REQUIRED"] as const)("keeps %s evidence blocked even with an existing Bank engine", async snapshotStatus => {
     mocks.canonical.mockResolvedValue(fixture({ snapshotStatus }))
