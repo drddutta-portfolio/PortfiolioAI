@@ -113,18 +113,18 @@ export function validateV14SelectedOwnership(input:{
  readonly history:ReturnType<typeof parseTrendlyneOwnershipHistory>
 }):V14OwnershipValidation{
  const base={contractVersion:V14_OWNERSHIP_METHOD_VERSION,status:"REVIEW_REQUIRED" as const,eligibleForCanonicalPersistence:false as const}
- if(input.requirementCode==="OWNERSHIP_GOVERNANCE")return {...base,series:null,observedQuarters:[],reason:"OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED"}
+ if(input.requirementCode==="OWNERSHIP_GOVERNANCE")return {...base,series:null,observedQuarters:[],reason:"OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED" as const}
  const series=input.requirementCode==="OWNERSHIP_TREND_4Q"?"Promoter" as const:"Institutional" as const
  const entries=input.history.series[series]??[]
  const quarters=entries.map(x=>x.quarter)
- if(entries.length<4)return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_SERIES_MISSING"}
+ if(entries.length<4)return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_SERIES_MISSING" as const}
  const months:Readonly<Record<string,number>>={Mar:0,Jun:1,Sep:2,Dec:3}
- const periodKeys=quarters.map(q=>{const match=/^(Mar|Jun|Sep|Dec) (\d{4})$/u.exec(q);return match?Number(match[2])*4+months[match[1]]:NaN})
+ const periodKeys=quarters.map(q=>{const match=/^(Mar|Jun|Sep|Dec) (\d{4})$/u.exec(q);return match?Number(match[2])*4+months[match[1]]!:NaN})
  const valid=periodKeys.every(Number.isFinite)&&new Set(periodKeys).size===periodKeys.length&&
   [...periodKeys].sort((a,b)=>a-b).slice(-4).every((n,i,arr)=>i===0||n===arr[i-1]+1)&&
   entries.every(x=>Number.isFinite(x.value)&&x.value>=0&&x.value<=100)
- if(!valid)return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_QUARTERS_INVALID"}
- return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN"}
+ if(!valid)return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_QUARTERS_INVALID" as const}
+ return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN" as const}
 }
 export function parseTrendlyneOwnershipHistory(providerResult:string){
  const sections=["Promoter","Institutional","FII","MF","DII","Public"] as const
