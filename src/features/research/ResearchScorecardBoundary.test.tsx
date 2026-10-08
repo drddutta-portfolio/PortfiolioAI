@@ -14,7 +14,7 @@ describe("Research fail-closed rendering", () => {
     expect(screen.getByText("Methodology resolved · scoring blocked. Required current evidence is not ready.")).toBeTruthy()
     expect(screen.getByText("Overall stock score")).toBeTruthy()
     expect(screen.getByText("Not ready")).toBeTruthy()
-    expect(screen.getByText("No current canonical score")).toBeTruthy()
+    expect(screen.getAllByText("No current canonical score").length).toBeGreaterThan(0)
   })
   it("keeps missing adapters distinct from unresolved routes", () => {
     render(<ResearchScorecardPanel snapshot={{ ...blocked, profileCode: "RETAIL_COMMERCE", profileName: "Retail commerce", scoringExecutionState: "PENDING_ADAPTER" }} isLoading={false} error={null} />)
