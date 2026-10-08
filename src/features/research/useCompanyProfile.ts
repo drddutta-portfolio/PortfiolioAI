@@ -28,7 +28,7 @@ export function useCompanyProfile(portfolioId: string, securityId: string) {
     return () => { active = false }
   }, [securityId, revision])
 
-  const reload = useCallback(async () => {
+  const reload = useCallback(() => {
     setRevision((value) => value + 1)
   }, [])
 
