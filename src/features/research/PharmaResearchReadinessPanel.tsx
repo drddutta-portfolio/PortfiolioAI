@@ -33,6 +33,7 @@ export function PharmaResearchReadinessPanel({ securityId, research }: { readonl
             <b>{stateLabel[domain.state]}</b>
           </div>
           <p>{domain.detail}</p>
+          <p className="assessment-note">Cached evidence: <strong>{domain.evidenceState}</strong></p>
           <footer>
             <span>{domain.observationCountLabel}: <strong>{domain.canonicalObservationCount}</strong></span>
             <span>Minimum / preferred: <strong>{domain.minimumObservations} / {domain.preferredObservations}</strong></span>
