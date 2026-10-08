@@ -1,3 +1,9 @@
+## V1-4 banking engineering verification — 8 October 2026
+
+Implementation commit `08eccdc5ec77ead2e0949ad95297bef7dacc3657` adds bounded owner-authenticated read-only security-ID targeting to the existing canonical materializer. Full architecture, TypeScript, lint, production build, 2,300 application tests, 375 Edge tests and two type-checked Deno handler tests passed on that code tree. Handler tests cover the exact four bank slices using mocked transport; live authenticated Development validation and deployment remain NOT EXECUTED.
+
+Fresh read-only banking census: 0 READY / 11 REVIEW_REQUIRED / 2 CONFLICTING; 234 blocked items. All 13 persisted assignments match the bundled RESOLVED/BANK authority. KARURVYSYA/KOTAKBANK each retain five corporate-action conflicts despite 276 sessions; later retained COMPLETE proofs require source/treatment/freshness reconciliation through actual authenticated validation. No automatic promotion or financial-semantics change. Report: `docs/private/v1-4-industry-batches/Banking_13_Codex_Engineering_Result_2026-10-08.md`; exact request manifest and item-linked audit beside it. No provider calls, live database/R2 writes, migrations, deployments, grant consumption, Production or V1-5 changes. V1-4 NOT PROVEN.
+
 ## V1-4 hybrid industry execution — Phase 1 read-only preparation (8 October 2026)
 
 Owner authorized five execution phases, not five new product stages. Development-only Phase 1 performed with frozen 111/111 and 13-bank pilot, without provider calls, database writes, migration, deployment, grant consumption, Production or V1-5.
