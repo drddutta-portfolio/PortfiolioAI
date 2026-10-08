@@ -52,7 +52,7 @@ export async function loadP5TerminalDispositions(
   portfolioId: string,
 ): Promise<readonly P5TerminalDisposition[]> {
   const result = await invokeEdgeFunction("p6-terminal-disposition-read", { portfolioId },
-  })
+  )
   if (result.error) throw result.error
   const data = result.data as P5TerminalResponse | null
   if (!data || data.portfolioId !== portfolioId || !Array.isArray(data.rows)) {
