@@ -1,3 +1,7 @@
+## Operational V1-4 ownership method owner selections — 8 October 2026
+
+Owner selected Promoter/total equity for `OWNERSHIP_TREND_4Q`, Institutional/total equity for `INSTITUTIONAL_OWNERSHIP_TREND_4Q`, and independently sourced ownership and governance evidence for `OWNERSHIP_GOVERNANCE`, **for canonical architecture review**, not immediate approval of an unsupported provider denominator or source fact. Versioned proposal: `docs/PortfolioAI_V1_4_OWNERSHIP_METHOD_SELECTION_V1_PROPOSAL_2026-10-08.md`. Original field definitions and percentage basis, four distinct consecutive reporting quarters, independently verifiable source-bound governance documents and canonical conjunction remain mandatory validation gates. No runtime code, evidence, reviewer status, R2, database, deployment or production changes were authorized or made. V1-4 **NOT PROVEN**; V1-5 unauthorized.
+
 ## Operational V1-4 executable remediation preparation — 8 October 2026
 
 **PREPARED / NOT PROVEN.** Added `docs/private/PortfolioAI_V1_4_BOUNDED_ACQUISITION_GROUPS_2026-10-08.json` and `docs/PortfolioAI_V1_4_EXECUTABLE_REMEDIATION_BATCH_CONTRACT_2026-10-08.md`.
