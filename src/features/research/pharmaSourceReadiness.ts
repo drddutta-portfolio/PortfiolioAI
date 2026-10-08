@@ -33,7 +33,7 @@ export const PHARMA_V1_SOURCE_READINESS: readonly PharmaSourceReadinessItem[] = 
     observedProviderLabels: ["Operating Rev. Ann.", "Total Rev. Ann. 1Y Ago", "Rev. Ann. 2Y ago", "Rev. Ann. 3Y ago", "Rev. Ann. 4Y ago", "Rev. Ann. 5Y ago"],
     approvedSource: "ISSUER_ANNUAL_REPORT / COMPANY_EXCHANGE_FILING",
     canUseExistingCacheWithoutProviderCall: true,
-    reason: "Current provider history mixes operating-revenue and broader total-revenue semantics. The R4L parent contract therefore requires a consistent reviewed operating-revenue series; the planned official TORNTPHARM evidence set is separately production-gated.",
+    reason: "Current provider history mixes operating-revenue and broader total-revenue semantics. The R4L parent contract therefore requires a consistent reviewed operating-revenue series; issuer-specific official evidence ingestion remains separately production-gated.",
   },
   {
     metricCode: "PHARMA_OPERATING_MARGIN_HISTORY",

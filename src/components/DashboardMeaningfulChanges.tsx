@@ -4,7 +4,7 @@ import { buildProgramCR9LiveObservedProjection } from "../features/decision/r9Li
 import { createProgramCR9LiveSessionStore } from "../features/decision/r9LiveSessionStore"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { useResearchCoverage } from "../features/research/useResearchCoverage"
-import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./DashboardScopeContext"
+import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./dashboardScope"
 import "./DashboardMeaningfulChanges.css"
 
 function pretty(value: string) {

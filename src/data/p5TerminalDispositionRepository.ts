@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase"
+import { asEdgeFunctionError, invokeEdgeFunction } from "../lib/edgeFunction"
 
 export type P5TerminalR6Disposition =
   | "SCORED"
@@ -48,16 +48,36 @@ interface P5TerminalResponse {
   readonly rows: readonly P5TerminalDisposition[]
 }
 
+
+function isP5TerminalDisposition(value: unknown): value is P5TerminalDisposition {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false
+  const row = value as Record<string, unknown>
+  return typeof row.securityId === "string"
+    && typeof row.retrievedAt === "string"
+    && Array.isArray(row.r6ReasonCodes)
+    && Array.isArray(row.r7ReasonCodes)
+    && typeof row.r6Disposition === "string"
+    && typeof row.r7Disposition === "string"
+}
+
+function isP5TerminalResponse(value: unknown, portfolioId: string): value is P5TerminalResponse {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false
+  const record = value as Record<string, unknown>
+  return record.portfolioId === portfolioId
+    && typeof record.version === "string"
+    && typeof record.count === "number"
+    && Array.isArray(record.rows)
+    && record.rows.every(isP5TerminalDisposition)
+}
+
 export async function loadP5TerminalDispositions(
   portfolioId: string,
 ): Promise<readonly P5TerminalDisposition[]> {
-  const result = await supabase.functions.invoke("p6-terminal-disposition-read", {
-    body: { portfolioId },
-  })
-  if (result.error) throw result.error
-  const data = result.data as P5TerminalResponse | null
-  if (!data || data.portfolioId !== portfolioId || !Array.isArray(data.rows)) {
+  const result = await invokeEdgeFunction("p6-terminal-disposition-read", { portfolioId },
+  )
+  if (result.error) throw asEdgeFunctionError(result.error, "P5 terminal disposition read failed.")
+  if (!isP5TerminalResponse(result.data, portfolioId)) {
     throw new Error("P5 terminal disposition response is invalid.")
   }
-  return data.rows
+  return result.data.rows
 }

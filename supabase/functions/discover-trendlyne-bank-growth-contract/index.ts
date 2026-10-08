@@ -3,7 +3,7 @@ import { TrendlyneObservedMcpClient } from "../_shared/trendlyne-observed.ts"
 
 const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, x-client-info, apikey, content-type"}
 const reply=(status:number,body:Record<string,unknown>)=>new Response(JSON.stringify(body),{status,headers:{...cors,"Content-Type":"application/json"}})
-const SOURCE_CODE="TRENDLYNE_MCP",DATA_DOMAIN="BANK_GROWTH_CONTRACT_DISCOVERY",RECORD_KIND="BANK_GROWTH_CONTRACT_DISCOVERY",RESERVED_UNITS=1,MAX_CAPTURE_BYTES=512*1024
+const SOURCE_CODE="TRENDLYNE_MCP",DATA_DOMAIN="BANK_GROWTH_CONTRACT_DISCOVERY",RECORD_KIND="BANK_GROWTH_CONTRACT_DISCOVERY",MAX_CAPTURE_BYTES=512*1024
 const CONFIRMATION="OWNER_CONFIRMED_BANK_GROWTH_DISCOVERY"
 type Admin=ReturnType<typeof createClient>
 type Body={portfolioId?:unknown;securityId?:unknown;confirmation?:unknown}

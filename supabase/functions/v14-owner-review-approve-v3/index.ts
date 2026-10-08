@@ -16,7 +16,7 @@ const asString=(v:unknown)=>typeof v==="string"?v:null
 Deno.serve(async req=>{
  if(req.method!=="POST")return reply(405,{code:"METHOD_NOT_ALLOWED"})
  const url=Deno.env.get("SUPABASE_URL")??"",service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??""
- let ref:string|null=null;try{ref=new URL(url).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1]??null}catch{}
+ let ref:string|null=null;try{ref=new URL(url).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1]??null}catch { /* malformed runtime URL stays fail-closed below */ }
  if(ref!==DEV||!service)return reply(409,{code:"UNAPPROVED_DEVELOPMENT_TARGET"})
  const token=(req.headers.get("authorization")??"").replace(/^Bearer\s+/iu,"").trim()
  if(!token)return reply(401,{code:"OWNER_AUTH_REQUIRED"})

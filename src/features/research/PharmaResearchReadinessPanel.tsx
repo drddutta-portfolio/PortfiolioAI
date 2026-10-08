@@ -15,6 +15,13 @@ const stateLabel: Readonly<Record<PharmaReadinessDisplayState, string>> = {
   OFFICIAL_SOURCE_PENDING: "Official source pending",
 }
 
+const cachedEvidenceLabel = {
+  READY: "Cached evidence ready",
+  PARTIAL: "Cached evidence partial",
+  MISSING: "Cached evidence missing",
+  CONFLICTING: "Cached evidence conflicted",
+} as const
+
 const dateLabel = (value: string) => new Date(`${value}T00:00:00Z`).toLocaleDateString("en-IN", { month: "short", year: "numeric", timeZone: "UTC" })
 const numberLabel = (value: string) => new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(Number(value))
 
@@ -26,6 +33,10 @@ export function PharmaResearchReadinessPanel({ securityId, research }: { readonl
   if (!view || !history) return null
 
   const ready = view.validatedSourceDomains + view.normalizationReadyDomains
+  const rawHistoryCount = history.annualCfo.length + history.annualRevenue.length + history.quarterlyOperatingRevenue.length + history.quarterlyOperatingProfit.length
+  const historyNotice = rawHistoryCount === 0
+    ? "No reviewed canonical Pharma financial-history rows are cached for this security."
+    : `This security currently has ${rawHistoryCount} reviewed canonical raw history observations. Repository pilot preparation or migration files do not imply production ingestion for other securities.`
   const details = <><div className="pharma-readiness-grid">
         {view.domains.map((domain) => <article key={domain.metricCode} className={`pharma-domain pharma-domain-${domain.state.toLocaleLowerCase()}`}>
           <div className="pharma-domain-head">
@@ -33,8 +44,10 @@ export function PharmaResearchReadinessPanel({ securityId, research }: { readonl
             <b>{stateLabel[domain.state]}</b>
           </div>
           <p>{domain.detail}</p>
+          <p className="pharma-source-contract-detail"><strong>Source contract:</strong> {domain.sourceContractDetail}</p>
           <footer>
             <span>{domain.observationCountLabel}: <strong>{domain.canonicalObservationCount}</strong></span>
+            <span>Cache state: <strong>{cachedEvidenceLabel[domain.cachedEvidenceState]}</strong></span>
             <span>Minimum / preferred: <strong>{domain.minimumObservations} / {domain.preferredObservations}</strong></span>
           </footer>
         </article>)}
@@ -107,8 +120,10 @@ export function PharmaResearchReadinessPanel({ securityId, research }: { readonl
           <p className="eyebrow">Canonical Pharma financial history</p>
           <h3>Reviewed canonical evidence</h3>
         </div>
-        <span>{history.annualCfo.length + history.annualRevenue.length + history.quarterlyOperatingRevenue.length + history.quarterlyOperatingProfit.length} reviewed raw observations · View history</span>
+        <span>{rawHistoryCount} reviewed raw observations · View history</span>
       </summary>
+      <p className="pharma-history-caution">{historyNotice}</p>
+      {history.unresolvedIssues.length || history.incompatibleOpmPeriods.length ? <p className="pharma-history-caution"><strong>Unresolved canonical evidence:</strong> {history.unresolvedIssues.length} period issue(s) · {history.incompatibleOpmPeriods.length} incompatible OPM pairing(s). These periods remain excluded from derived margin history.</p> : null}
       <div className="pharma-history-summary-grid">
         <article><strong>{history.annualRevenue.length}</strong><span>annual operating revenue periods</span></article>
         <article><strong>{history.annualCfo.length}</strong><span>annual CFO periods</span></article>

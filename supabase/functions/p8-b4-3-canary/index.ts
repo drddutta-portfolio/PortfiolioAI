@@ -34,6 +34,7 @@ const COHORT = [
     cacheState: "PARTIAL_PUBLICATION_DATED_FUNDAMENTALS",
   },
 ] as const
+type CohortMember = (typeof COHORT)[number]
 
 const json = (status:number, body:Record<string,unknown>) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type":"application/json" } })
@@ -172,7 +173,7 @@ Deno.serve(async (req)=>{
     if(r.error) throw new Error("USAGE_ACCOUNTING_FAILED")
   }
 
-  const capture=async(c:any,kind:string,tool:string,query:string,result:string)=>{
+  const capture=async(c:CohortMember,kind:string,tool:string,query:string,result:string)=>{
     const raw={mode:"P8_B4_3_CANARY",run_id:runId,historical_identity_id:c.historicalIdentityId,
       historical_isin:c.isin,security_id:c.securityId,security_symbol:c.symbol,
       provider_instrument_id:c.providerId,provider_tool:tool,query,result}

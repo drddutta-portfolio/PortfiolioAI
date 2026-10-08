@@ -3,9 +3,10 @@ import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 import { PHARMA_V1_SOURCE_READINESS, type PharmaSourceReadinessState } from "./pharmaSourceReadiness"
 import type { ResearchMetric, SecurityResearch } from "./types"
 
-export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V7" as const
+export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V8" as const
 
 export type PharmaReadinessDisplayState = "NORMALIZATION_READY" | "VALIDATED_SOURCE" | "PARTIAL" | "PENDING" | "OFFICIAL_SOURCE_PENDING"
+export type PharmaCachedEvidenceState = "READY" | "PARTIAL" | "MISSING" | "CONFLICTING"
 
 type PharmaMetricCode =
   | "PHARMA_REVENUE_GROWTH_HISTORY"
@@ -30,6 +31,8 @@ export interface PharmaReadinessDomain {
   readonly conditionCode: string | null
   readonly state: PharmaReadinessDisplayState
   readonly sourceState: PharmaSourceReadinessState
+  readonly cachedEvidenceState: PharmaCachedEvidenceState
+  readonly sourceContractDetail: string
   readonly canonicalObservationCount: number
   readonly observationCountLabel: string
   readonly minimumObservations: number
@@ -40,7 +43,7 @@ export interface PharmaReadinessDomain {
 export interface PharmaReadinessViewModel {
   readonly profileCode: "PHARMA"
   readonly profileVersion: "PHARMA_V1"
-  readonly normalizationVersion: "PHARMA_HISTORY_NORMALIZATION_V2"
+  readonly normalizationVersion: "PHARMA_HISTORY_NORMALIZATION_V3"
   readonly state: "INSUFFICIENT_EVIDENCE"
   readonly canonicalSector: "Pharma"
   readonly domains: readonly PharmaReadinessDomain[]
@@ -162,6 +165,33 @@ function displayState(sourceState: PharmaSourceReadinessState): PharmaReadinessD
   return "PENDING"
 }
 
+function cachedEvidenceState(
+  metricCode: PharmaMetricCode,
+  count: number,
+  minimum: number,
+  research: SecurityResearch,
+): PharmaCachedEvidenceState {
+  const history = buildPharmaCanonicalHistoryView(research)
+  const hasHistoryConflict = metricCode === "PHARMA_REVENUE_GROWTH_HISTORY"
+    ? Boolean(history?.unresolvedIssues.some((issue) => issue.code === "REVENUE_ANNUAL"))
+    : metricCode === "PHARMA_OPERATING_MARGIN_HISTORY"
+      ? Boolean(
+        history?.incompatibleOpmPeriods.length
+        || history?.unresolvedIssues.some((issue) => issue.code === "OPERATING_REVENUE_QUARTER" || issue.code === "OPERATING_PROFIT_QUARTER"),
+      )
+      : false
+  if (hasHistoryConflict) return "CONFLICTING"
+  if (count === 0) return "MISSING"
+  return count >= minimum ? "READY" : "PARTIAL"
+}
+
+function cachedEvidenceDetail(state: PharmaCachedEvidenceState, count: number, minimum: number) {
+  if (state === "CONFLICTING") return `Current security cache has unresolved incompatible/conflicting evidence; ${count} evaluable observations remain usable outside the blocked periods.`
+  if (state === "MISSING") return "No qualifying canonical evidence is cached for this security."
+  if (state === "READY") return `Current security cache has ${count} qualifying canonical observations, meeting the minimum evidence count of ${minimum}.`
+  return `Current security cache has ${count} qualifying canonical observations; minimum required is ${minimum}.`
+}
+
 export function buildPharmaReadinessView(research: SecurityResearch): PharmaReadinessViewModel | null {
   if (research.sector !== "Pharma") return null
 
@@ -172,6 +202,7 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
     const source = readinessByCode.get(metricCode)
     if (!contract || !source) return []
     const observationCount = domainObservationCount(research, metricCode, source.canonicalEvidenceCodes)
+    const evidenceState = cachedEvidenceState(metricCode, observationCount.count, contract.history.minimumObservations, research)
     return [{
       metricCode,
       label: DOMAIN_LABELS[metricCode],
@@ -180,11 +211,13 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
       conditionCode: contract.conditionCode,
       state: displayState(source.state),
       sourceState: source.state,
+      cachedEvidenceState: evidenceState,
+      sourceContractDetail: source.reason,
       canonicalObservationCount: observationCount.count,
       observationCountLabel: observationCount.label,
       minimumObservations: contract.history.minimumObservations,
       preferredObservations: contract.history.preferredObservations,
-      detail: source.reason,
+      detail: cachedEvidenceDetail(evidenceState, observationCount.count, contract.history.minimumObservations),
     }]
   })
 
@@ -193,7 +226,7 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
   return {
     profileCode: "PHARMA",
     profileVersion: "PHARMA_V1",
-    normalizationVersion: "PHARMA_HISTORY_NORMALIZATION_V2",
+    normalizationVersion: "PHARMA_HISTORY_NORMALIZATION_V3",
     state: "INSUFFICIENT_EVIDENCE",
     canonicalSector: "Pharma",
     domains,
@@ -202,6 +235,6 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
     mandatoryDomainCount: mandatoryDomains.length,
     totalDomainCount: domains.length,
     blockers,
-    notice: "PHARMA_V1 remains fail-closed until the mandatory evidence contracts are satisfied. Partial source capability, cached observations and profile-specific UI coverage do not by themselves create a score or recommendation.",
+    notice: "PHARMA_V1 remains fail-closed until mandatory evidence and source contracts are satisfied for this security. Cached evidence readiness and source-contract validation are shown separately; repository pilots or migration files do not prove that this security has production evidence.",
   }
 }

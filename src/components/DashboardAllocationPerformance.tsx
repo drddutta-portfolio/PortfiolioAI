@@ -7,7 +7,7 @@ import { formatMoney } from "../features/portfolio/format"
 import type { PortfolioPosition } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { MARKET_CAP_COLORS } from "./dashboardAllocationPalette"
-import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./DashboardScopeContext"
+import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./dashboardScope"
 import "./DashboardAllocationPerformance.css"
 
 type SortKey = "weight" | "return" | "pnl" | "impact" | "holdings"

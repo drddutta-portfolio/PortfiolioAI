@@ -1,9 +1,8 @@
-import type { SupabaseClient } from "@supabase/supabase-js"
 import { supabase } from "../lib/supabase"
 import { assessPharmaV1Evidence, type PharmaScoringObservation } from "../features/research/pharmaScoringEvidence"
-import type { DimensionScore, ExternalRatingObservation, MetricScoreSignal, ScoringProfileSource, SecurityScoringSnapshot } from "../features/research/scoringTypes"
+import type { DimensionScore, ExternalRatingObservation, HeatState, MetricScoreSignal, ScoringProfileSource, SecurityScoringSnapshot } from "../features/research/scoringTypes"
 
-const db = supabase as unknown as SupabaseClient
+const db = supabase
 
 type RuleRow = {
   dimension_code: string
@@ -28,6 +27,20 @@ type RatingRow = {
   retrieved_at: string
   fresh_until: string
   evidence_status: string
+}
+
+function heatState(value: string): HeatState {
+  switch (value) {
+    case "STRONG":
+    case "POSITIVE":
+    case "NEUTRAL":
+    case "WEAK":
+    case "RISK":
+    case "INSUFFICIENT":
+      return value
+    default:
+      return "INSUFFICIENT"
+  }
 }
 
 function label(inputCode: string) {
@@ -106,8 +119,8 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
   const failure = [modelResult, profileResult, assignmentResult, rulesResult, dimensionsResult, observationsResult, ratingsResult].find((result) => result.error)
   if (failure?.error) throw failure.error
 
-  const model = modelResult.data as { id: string; name: string; status: string } | null
-  const profile = profileResult.data as { code: string; name: string } | null
+  const model = modelResult.data
+  const profile = profileResult.data
   if (!model || !profile) throw new Error("PHARMA_V1 scoring contract is unavailable.")
 
   const rules = (rulesResult.data ?? []) as RuleRow[]
@@ -133,10 +146,10 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
       evidenceCoverage: Number(row.evidence_coverage),
       scoreReadyCoverage: Number(row.evidence_coverage),
       confidence: Number(row.confidence),
-      heatState: row.heat_state as DimensionScore["heatState"],
+      heatState: heatState(row.heat_state),
     }))
   } else {
-    dimensionScores = previewDimensions(rules, (observationsResult.data ?? []) as PharmaScoringObservation[], dimensionsForModel)
+    dimensionScores = previewDimensions(rules, observationsResult.data ?? [], dimensionsForModel)
   }
 
   const weighted = dimensionScores.filter((dimension) => dimension.dimensionWeight > 0)
@@ -162,7 +175,7 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
     evidenceConfidence: run ? Number(run.evidence_confidence) : Math.round(previewEvidence * 100),
     asOfDate: run?.as_of_date ?? null,
     dimensions: dimensionScores,
-    ratings: ratings((ratingsResult.data ?? []) as RatingRow[]),
+    ratings: ratings(ratingsResult.data ?? []),
     previewMode: !run,
   }
 }

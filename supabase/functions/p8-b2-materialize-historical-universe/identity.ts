@@ -1,6 +1,6 @@
 import {
   Admin, Json, PORTFOLIO_ID, EXPERIMENT_ID, clean, isUuid, isHash, frozenIsin,
-  canonical, sha256, deterministicUuid, chunks, ownerId,
+  sha256, deterministicUuid, chunks, ownerId,
 } from "./shared.ts"
 
 const MAX_IDENTITY_BATCH = 500

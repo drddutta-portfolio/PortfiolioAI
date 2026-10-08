@@ -25,15 +25,6 @@ export function historyProofFromRows(rows:readonly HistoryRow[]):HistoryContract
  return parseHistoryContractProof(proofs[0])
 }
 function selectedSessions(rows:readonly HistoryRow[],minimum:number){const dates=[...new Set(rows.map(r=>session(r.period_start)))].sort();return dates.slice(-minimum)}
-function proofFreshAtEvaluation(proof:HistoryContractProof,base:ReturnType<typeof inspectStoredHistory>,evaluationAsOfMs:number){
- const freshness=instant(proof.freshnessThrough)
- if(!Number.isFinite(freshness))return false
- if(freshness>=evaluationAsOfMs)return true
- if(proof.dailySessionState!=="LATEST_COMPLETED_SESSION_PRE_CLOSE"||!(proof.dailySessionProofRecordIds?.length))return false
- const gap=evaluationAsOfMs-freshness
- if(gap<=0||gap>24*60*60*1000||!base.latestSession)return false
- return proof.freshnessThrough.slice(0,10)===base.latestSession
-}
 export function validateStockHistoryReadiness(input:{rows:readonly HistoryRow[];minimum:number;evaluationAsOfMs:number;sourceCutoffAtMs:number;freshnessPolicy:string|null;proof?:HistoryContractProof|null}):QualifiedHistoryResult{
  const base=inspectStoredHistory(input.rows,input.minimum,input.sourceCutoffAtMs);if(base.state==="CONFLICTING"||base.state==="INSUFFICIENT")return fail(base.state,base.reason,base)
  if(base.reason==="HISTORY_INPUT_INVALID")return fail("REVIEW_REQUIRED",base.reason,base)

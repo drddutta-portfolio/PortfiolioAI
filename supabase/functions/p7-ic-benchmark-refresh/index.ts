@@ -316,7 +316,7 @@ Deno.serve(async request=>{
   }catch(error){
     const code=safeCode(error)
     if(runId){
-      try{await updateAuditRun(admin,runId,"FAILED",counters,{code,action:activeAction})}catch{}
+      try{await updateAuditRun(admin,runId,"FAILED",counters,{code,action:activeAction})}catch { /* audit-run failure logging is best effort */ }
     }
     return json(409,{error:"P7-IC Batch B failed safely.",code,runId,...actionCounters(counters)})
   }finally{

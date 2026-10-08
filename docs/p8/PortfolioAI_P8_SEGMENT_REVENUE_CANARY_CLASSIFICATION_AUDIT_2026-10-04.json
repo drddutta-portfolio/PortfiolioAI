@@ -18,14 +18,14 @@
   },
   "policy_status": {
     "owner_policy_status": {
-      "OD1": "PENDING_OWNER_DECISION",
-      "OD2": "PENDING_OWNER_DECISION",
-      "OD3": "PENDING_OWNER_DECISION",
-      "OD4": "PENDING_OWNER_DECISION"
+      "OD1": "APPROVED",
+      "OD2": "APPROVED_WITH_REVIEW_CONTROL",
+      "OD3": "APPROVED",
+      "OD4": "BLOCKED"
     },
-    "taxonomy_adopted": false
+    "taxonomy_adopted": true
   },
-  "pre_router_fingerprint_sha256": "b9a698f36168586d3fc0b560d8ec0e69c6e36f465ce997f710c7ac3f6167c95c",
+  "pre_router_fingerprint_sha256": "ad1a7f4ab43da6feb64dc88e9a7c42c8fc18761ccc11019a96beea08c6555d20",
   "results": [
     {
       "accounting_state": "ACCOUNTING_BLOCKED",
@@ -587,5 +587,5 @@
     "complete_normalized_input_pairs": 0,
     "reason": "No authoritative route exists while OD1-OD3 remain unapproved. For candidate routes, canonical requirements are selected but existing raw historical XBRL is not promoted to normalized route input completeness without an explicit canonical normalization mapping."
   },
-  "final_fingerprint_sha256": "146206681ac7cc7f5f2978b8d7f1954afca56ce65aa7082e1ec17d2c2f032667"
+  "final_fingerprint_sha256": "7ef0ba1b116a9b15e27ee05cff38dbe3ed94b2a9f7ba226cd37e29184e05956d"
 }

@@ -1,5 +1,7 @@
 import { publicConfig } from "../lib/config"
 import { supabase } from "../lib/supabase"
+import { invokeEdgeFunction } from "../lib/edgeFunction"
+import { displayError } from "../lib/displayError"
 
 export type CompanyProfile = {
   readonly profileStatus: "MISSING" | "PARTIAL" | "READY" | "FAILED"
@@ -55,10 +57,9 @@ export async function getCachedCompanyProfile(securityId: string): Promise<Compa
 }
 
 export async function discoverCompanyProfile(portfolioId: string, securityId: string) {
-  const result = await supabase.functions.invoke("discover-company-profile", {
-    body: { portfolioId, securityId },
-  })
-  if (result.error) throw new Error(result.error.message || "Company profile discovery failed.")
+  const result = await invokeEdgeFunction("discover-company-profile", { portfolioId, securityId },
+  )
+  if (result.error) throw new Error(displayError(result.error) || "Company profile discovery failed.")
   const payload = result.data as { readonly error?: string; readonly code?: string } | null
   if (payload?.error) throw new Error(payload.code ? `${payload.error} (${payload.code})` : payload.error)
 }
