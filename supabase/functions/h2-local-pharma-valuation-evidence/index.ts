@@ -325,7 +325,7 @@ Deno.serve(async request => {
       failed = succeeded ? 0 : 1
       const safeCode = error instanceof Error ? error.message.replace(/[^A-Z0-9_]/gi, "_").toUpperCase().slice(0,120) : "H2_LOCAL_VALUATION_FAILED"
       if (!succeeded) {
-        try { await recordUsage(admin, runId, itemId, tornt.id, attemptedAt, "FAILED", safeCode) } catch {}
+        try { await recordUsage(admin, runId, itemId, tornt.id, attemptedAt, "FAILED", safeCode) } catch { /* usage-accounting failure is secondary to the provider failure */ }
       }
       await admin.rpc("settle_provider_budget_v1", { p_reservation_id: reservationId, p_consumed_units: succeeded, p_failed_units: failed, p_released_units: 0 })
       await admin.rpc("record_refresh_item_result_v1", {
