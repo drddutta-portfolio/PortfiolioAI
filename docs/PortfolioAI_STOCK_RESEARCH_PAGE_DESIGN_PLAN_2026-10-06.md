@@ -92,7 +92,7 @@ Unknown or unresolved profiles use the same shell with explicit unresolved appli
 
 Stage 1 implementation preparation is specified in the [Industry-first Stage 1 contract](PortfolioAI_STOCK_RESEARCH_INDUSTRY_FIRST_STAGE_1_CONTRACT_2026-10-08.md). Its acceptance cases must be verified during integration; documentation completion does not imply live-page acceptance. Stage 2 data-flow integration and its hosted rebuild blocker are recorded in the [Stage 2 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_2_CANONICAL_INTEGRATION_2026-10-08.md).
 
-Stage 3 common identity presentation and its projection limitations are recorded in the [Stage 3 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_3_SHARED_SHELL_2026-10-08.md). This implements the shared shell; it does not certify classification or complete specialist results.
+Stage 3 common identity presentation, final hosted visual PASS and its projection limitations are recorded in the [Stage 3 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_3_SHARED_SHELL_2026-10-08.md). This implements the shared shell; it does not certify classification or complete specialist results.
 
 ## 4. Entire page structure
 

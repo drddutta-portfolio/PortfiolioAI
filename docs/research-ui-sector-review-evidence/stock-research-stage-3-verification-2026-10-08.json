@@ -1,7 +1,7 @@
 {
-  "origin": "https://portfiolio-agjp485kx-dibyendu-dutta.vercel.app",
-  "revision": "bfbc00d15c25a86919d69dcb2325b3920447e6c5",
-  "deploymentId": "dpl_3dD2iX5q1bkKcJHit1G2fxLP3Q2E",
+  "origin": "https://portfiolio-2wkchcs2g-dibyendu-dutta.vercel.app",
+  "revision": "9e736abc80d87b551e5c15f045d69ab2c74d31e3",
+  "deploymentId": "dpl_5EdyfbpZpmw339krsZ3nznSQWPUn",
   "status": "PASS",
   "runtimeErrors": 0,
   "blockedProviderRequests": 0,
@@ -452,6 +452,18 @@
       "pass": true
     },
     {
+      "name": "Mobile: full name wraps without clipping",
+      "pass": true
+    },
+    {
+      "name": "Mobile: section menu stays sticky",
+      "pass": true
+    },
+    {
+      "name": "Mobile: summary menu targets shared header",
+      "pass": true
+    },
+    {
       "name": "Mobile: no document overflow",
       "pass": true
     },
@@ -548,6 +560,10 @@
     }
   ],
   "readFailures": [],
-  "acceptanceScope": "Initial Stage 3 application commit only; final spacing fix 506ffbd91808bc70fa01be9c07395febda5b3e40 requires hosted verification",
-  "finalPreviewBlocker": "Vercel: Deployment rate limited \u2014 retry in 24 hours"
+  "acceptanceScope": "Stage 3 common shell, including final application spacing correction 506ffbd91808bc70fa01be9c07395febda5b3e40; no Development merge or C1/C8 closure",
+  "visuallyInspectedScreenshots": [
+    "HDFCBANK desktop 1440",
+    "TORNTPHARM desktop 1440",
+    "AKUMS mobile 390"
+  ]
 }

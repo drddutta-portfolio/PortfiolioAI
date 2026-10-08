@@ -7,10 +7,12 @@ name wrapping, sticky section navigation and owner Core/Satellite controls remai
 Missing taxonomy projection fields remain unavailable rather than inferred.
 Terminal research failures no longer leave false loading labels in the summary.
 See the [Stage 3 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_3_SHARED_SHELL_2026-10-08.md)
-for validation and the hosted acceptance boundary. The first hosted commit passed
-115 checks across seven stocks, with zero runtime errors/provider refreshes/writes.
-A subsequent spacing fix passes build but its preview is rate-limited by Vercel;
-final visual acceptance remains open. Implementation is on the review branch,
+for validation and the hosted acceptance boundary. Final hosted visual acceptance
+is PASS: 118 checks across seven stocks, including all five Pharma models and
+mobile sticky navigation; zero runtime errors, provider refreshes, research writes
+or REST read failures. The verified commit includes the compact spacing fix.
+Application CI passed; later documentation CI could not start due to GitHub's
+account billing/spending-limit restriction. Implementation is on the review branch,
 not merged to Development; C1/C8 remain open.
 
 ### Stock-page Industry-first Stage 2 — 8 October 2026
@@ -27,7 +29,8 @@ representative snapshots and all five Pharma models. Final hosted acceptance is
 blocked: the earlier preview used a backend without the canonical lineage view;
 review-branch public Supabase settings now match Development, but Vercel rejects
 new builds for 24 hours. This work has not merged or deployed to Development.
-Industry-led shell layout is Stage 3; full
+The earlier hosted rebuild blocker was cleared during Stage 3 acceptance; see
+the Stage 3 record above. Industry-led shell layout is Stage 3; full
 specialised result presentation is Stage 4. C1/C8 remediation is not closed.
 
 ### Stock-page Industry-first Stage 1 — 8 October 2026

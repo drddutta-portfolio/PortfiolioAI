@@ -7,9 +7,11 @@ Date: 8 October 2026
 Stage 3 implements the Industry-first identity presentation in the common
 ResearchPage shell, for every stock using that page. It consumes Stage 2's selected
 canonical scoring/evidence context; it does not select or reassign methodologies.
-Implementation is ready for review. The first hosted implementation passed 115 checks; final visual acceptance of
-the subsequent spacing correction is blocked by Vercel's deployment rate limit.
-This record does not approve an all-stock final rollout.
+**Decision: Stage 3 implementation and hosted visual acceptance PASS.** The
+final spacing correction is included in the verified hosted build. All 118
+read-only checks passed across seven representative stocks. This accepts the
+Stage 3 common shell; it does not certify C1/C8 classification, specialist result
+expansion, research evidence qualification or an all-stock final rollout.
 
 ## Sub-stages
 
@@ -58,7 +60,7 @@ commit on Vercel with the approved Development backend, including desktop/mobile
 name wrapping, section navigation and representative bank/Pharma pages; local
 rendering or an older preview cannot substitute for that evidence.
 
-## Hosted evidence — 8 October 2026
+## Initial hosted evidence — 8 October 2026 (superseded by final acceptance)
 
 Authenticated, read-only Chromium verification against deployment
 `dpl_3dD2iX5q1bkKcJHit1G2fxLP3Q2E`, application commit
@@ -83,3 +85,38 @@ mobile sticky-menu interaction check, remains pending. No quota/protection chang
 or alternate local application screenshots were used.
 
 Sanitized evidence: [hosted verification report](research-ui-sector-review-evidence/stock-research-stage-3-verification-2026-10-08.json).
+
+## Final hosted visual acceptance — PASS, 8 October 2026
+
+The retry built the exact final repository commit
+`9e736abc80d87b551e5c15f045d69ab2c74d31e3`, including application spacing fix
+`506ffbd91808bc70fa01be9c07395febda5b3e40`. Deployment
+`dpl_5EdyfbpZpmw339krsZ3nznSQWPUn` is READY at
+https://portfiolio-2wkchcs2g-dibyendu-dutta.vercel.app.
+This is a review preview, not the Development branch alias.
+
+Authenticated Chromium checked HDFCBANK, TORNTPHARM, ALIVUS, AUROPHARMA,
+BIOCON, AKUMS and ABCAPITAL at desktop width 1440 and AKUMS at mobile width
+390. **All 118 checks passed**: compact full-name containment, Industry-led
+classification presentation, explicit missing Basic Industry/verification,
+independent owner role, all five Pharma primary models matching their deep
+frameworks, one canonical snapshot selection and consistent assignment/evidence
+lineage, mobile page containment, sticky section-menu position and Summary link
+navigation. No live legacy assignment reads, runtime errors, provider refresh
+attempts, research writes or REST read failures occurred.
+
+HDFCBANK and TORNTPHARM desktop screenshots and AKUMS mobile screenshot were
+visually inspected from the hosted build. The excessive identity-row spacing is
+resolved and no identity labels or company names are cropped. Screenshots and
+browser authentication remain private. The sanitized report below now records
+this final deployment rather than the earlier first-pass build.
+
+The application commit's Architecture Guard CI passed:
+https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/37734884062.
+The later documentation-only commit's CI job did not start: GitHub reported
+failed recent account payments or a spending limit requiring adjustment. This is
+an independent CI infrastructure blocker, not a failed visual or application
+check. No billing changes were made. Development merge/release remains separate.
+
+No application code changed during this acceptance retry. Only acceptance records
+and sanitized verification evidence are updated after the hosted PASS.
