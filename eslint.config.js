@@ -13,7 +13,20 @@ export default tseslint.config(
       ecmaVersion: 2022,
       globals: globals.browser,
       parserOptions: {
-        projectService: true,
+        projectService: {
+          allowDefaultProject: [
+            "api/b0-import-probe.ts",
+            "api/b0-node.ts",
+            "api/b0-probe.ts",
+            "cloudflare/portfolioai-history-dev-api/src/index.ts",
+            "scripts/p8/p8-apply-historical-crosswalk-router.ts",
+            "scripts/p8/p8-apply-segment-canary-router.ts",
+            "scripts/p8/p8-apply-xbrl-v3-router.ts",
+            "scripts/v14-action-b-phase1-plan.ts",
+            "server/b0-artifact-spool.ts",
+          ],
+          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 12,
+        },
         tsconfigRootDir: import.meta.dirname,
       },
     },
