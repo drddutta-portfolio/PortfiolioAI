@@ -105,8 +105,8 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
   const failure = [modelResult, profileResult, assignmentResult, rulesResult, dimensionsResult, observationsResult, ratingsResult].find((result) => result.error)
   if (failure?.error) throw failure.error
 
-  const model = modelResult.data as { id: string; name: string; status: string } | null
-  const profile = profileResult.data as { code: string; name: string } | null
+  const model = modelResult.data
+  const profile = profileResult.data
   if (!model || !profile) throw new Error("PHARMA_V1 scoring contract is unavailable.")
 
   const rules = (rulesResult.data ?? []) as RuleRow[]
@@ -132,7 +132,7 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
       evidenceCoverage: Number(row.evidence_coverage),
       scoreReadyCoverage: Number(row.evidence_coverage),
       confidence: Number(row.confidence),
-      heatState: row.heat_state as DimensionScore["heatState"],
+      heatState: row.heat_state,
     }))
   } else {
     dimensionScores = previewDimensions(rules, (observationsResult.data ?? []) as PharmaScoringObservation[], dimensionsForModel)
@@ -161,7 +161,7 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
     evidenceConfidence: run ? Number(run.evidence_confidence) : Math.round(previewEvidence * 100),
     asOfDate: run?.as_of_date ?? null,
     dimensions: dimensionScores,
-    ratings: ratings((ratingsResult.data ?? []) as RatingRow[]),
+    ratings: ratings(ratingsResult.data ?? []),
     previewMode: !run,
   }
 }
