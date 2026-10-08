@@ -35,7 +35,8 @@ const canonicalMetricCodes = P7_IC_CANONICAL_REQUIREMENT_METRICS
 
 const projectRef=(v:string)=>{try{return new URL(v).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1]??null}catch{return null}}
 const sha=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify(v))))).map(b=>b.toString(16).padStart(2,"0")).join("")
-const reply=(status:number,body:Json)=>new Response(JSON.stringify(body),{status,headers:{"Content-Type":"application/json"}})
+const corsHeaders={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, x-client-info, apikey, content-type","Access-Control-Allow-Methods":"POST, OPTIONS"}
+const reply=(status:number,body:Json)=>new Response(JSON.stringify(body),{status,headers:{...corsHeaders,"Content-Type":"application/json"}})
 const dateOnly=(v:string|null)=>v?v.slice(0,10):null
 
 async function loadHistoryRows(admin:Admin,table:"market_price_history"|"market_benchmark_price_history",column:"security_id"|"benchmark_code",id:string,sourceCutoffAt:string):Promise<HistoryRow[]>{
@@ -417,6 +418,7 @@ async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;mi
 }
 
 Deno.serve(async request=>{
+ if(request.method==="OPTIONS")return new Response(null,{status:204,headers:corsHeaders})
  if(request.method!=="POST")return reply(405,{error:"Method not allowed."})
  const url=Deno.env.get("SUPABASE_URL")??"",key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??"",ref=projectRef(url)
  if(ref===PROD_REF)return reply(409,{error:"P7 IC2 materializer refuses Production.",code:"UNEXPECTED_PRODUCTION_DB_TARGET"})
