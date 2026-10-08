@@ -1,3 +1,44 @@
+## Operational V1-4 evidence gate — 8 October 2026
+
+**Disposition: NOT PROVEN. V1-5 remains unauthorized.**
+
+Authoritative closure record: `docs/PortfolioAI_V1_4_OPERATIONAL_EVIDENCE_GATE_CLOSURE_2026-10-08.md`.
+
+Current evidence state:
+- fixed remediation manifest reconciled exactly: **115/115**
+- latest fixed-115 canonical run: `c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83`
+- canonical status: **0 READY / 115 REVIEW_REQUIRED**
+- review-ledger rows: **0**
+- frozen release cohort: **111 members / 132,585,696 paise**
+- current frozen READY coverage: **0 members / 0 paise**
+- release minimum: **100 members AND 119,327,127 paise**
+- current latest frozen states: **108 REVIEW_REQUIRED / 3 CONFLICTING**
+- current DB size: **222,809,235 bytes**
+
+Current fixed-115 blocker census:
+- 460 REQUIRED_EVIDENCE_MISSING
+- 346 NORMALIZED_INPUT_CONTRACT_NOT_PROVEN
+- 292 DOCUMENT_EVIDENCE_REQUIRES_REVIEW
+- 189 DATED_REPORTING_PERIODS_NOT_PROVEN
+- 71 REPORTING_PERIOD_INVALID
+- 33 METRIC_CONTRACT_NOT_REVIEWED
+- 10 REPORTING_PERIOD_TYPE_NOT_PROVEN
+- 9 BENCHMARK_LATEST_SESSION_STALE
+- 6 DISTINCT_SESSIONS_INSUFFICIENT
+- 1 METHODOLOGY_REVIEW_REQUIRED
+
+Prepared current review packages:
+- `docs/private/PortfolioAI_V1_4_STRUCTURED_NUMERIC_NORMALIZATION_WORKLIST_2026-10-08.json`
+- `docs/private/PortfolioAI_V1_4_DOCUMENT_REVIEW_PROPOSALS_CURRENT_2026-10-08.json`
+- `docs/private/PortfolioAI_V1_4_OWNERSHIP_METHOD_DECISION_PACKAGE_2026-10-08.md`
+- `docs/private/PortfolioAI_V1_4_OWNERSHIP_METHOD_DECISION_PACKAGE_2026-10-08.json`
+
+No owner review decision, provider call, R2 write, canonical evidence write, migration, Production/main change, V1-5 work, P8 work, Auth/RLS change or scheduler activation was performed in this closure continuation.
+
+Repository/build verification remains separate from V1-4 factual acceptance. The last code-bearing parent `aefef83da45e3274e44a6d8819ee354dbace33b4` passed the repository verification workflow; documentation-only workflow invocations after that are currently failing before steps start and are not represented as green evidence.
+
+---
+
 ## R1–R4 audit remediation — 8 October 2026
 
 **Repository implementation and verification: COMPLETE for the audited R1–R4 repository scope.**
