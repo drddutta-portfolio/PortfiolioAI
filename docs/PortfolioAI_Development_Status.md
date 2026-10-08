@@ -1,23 +1,24 @@
 ## R1–R4 audit remediation / repository completion — 8 October 2026
 
-**Status: R1–R4 repository implementation and verification COMPLETE for the audited repository scope.**
+**Status: R1–R4 audit-remediation implementation is COMPLETE for the audited repository scope. Exact-current-head full-suite re-verification is CI-INFRASTRUCTURE BLOCKED.**
 
 Scope is the historical R1/R2/R3/R4 workstreams, not the newer operational V1-4 evidence stage.
 
-Authoritative verification evidence:
-- first fully green executable head: `aefef83da45e3274e44a6d8819ee354dbace33b4`;
-- GitHub Actions job `113170264795`: architecture, typecheck, application lint, Edge lint, 2,167 application tests, 2 Deno handler tests, 359 Edge tests, production build and `git diff --check` all PASS;
-- later commits through the current documentation update are documentation/private-evidence only relative to that green executable head; no executable R1–R4 code changed;
-- current-head workflow run `37755743453` was retried and failed before runner assignment (empty steps, `runner_id: 0`), so it provides no code verdict and is tracked as CI infrastructure failure rather than a repository regression.
+Verification evidence:
+- the audit-remediation executable head `aefef83da45e3274e44a6d8819ee354dbace33b4` passed architecture, typecheck, application lint, Edge lint, **2,167 application tests**, **2 Deno handler tests**, **359 Edge tests**, production build and whitespace checks in GitHub Actions job `113170264795`;
+- PR #116 later merged additional Research/canonical-context code to Development as `00a0dfe5621450354c7e6027820870becc5f9f11`;
+- PR #116's Architecture Guard runs `37732538454` and `37734884062` passed their Stage 2/shell/canonical-authority tests, TypeScript, full repository lint, production build and whitespace checks;
+- hosted commit `9e736abc80d87b551e5c15f045d69ab2c74d31e3` (including application fix `506ffbd91808bc70fa01be9c07395febda5b3e40`) passed **118 authenticated read-only checks** across seven representative stocks with zero runtime errors, provider refresh attempts or research writes;
+- dedicated R1–R4 workflow runs on the latest Development commits currently fail before runner assignment because GitHub reports the account billing/spending-limit restriction. The observed jobs have `runner_id: 0` and no steps, so they provide no code verdict and are not treated as repository-test failures.
 
 Audit findings remediated:
 - global `ResizeObserver` test support restored without skipping assertions;
 - Angel One public session-error contract aligned to provider-specific safe codes with bounded retry behavior preserved;
-- canonical Pharma historical selection is fail-closed for value conflicts and incompatible period/scope/unit/currency/source semantics;
+- canonical Pharma historical selection fail-closes value conflicts and incompatible period/scope/unit/currency/source semantics;
 - Pharma operating margin has one Decimal-based six-decimal calculation owner, with display rounding separated;
 - Pharma readiness/UI no longer claims global R4H ingestion from a pilot/migration record and uses security-specific cached evidence.
 
-No migrations were created or applied by this remediation. No production deployment, provider spending, ingestion write, scheduler activation, Auth/RLS/grant change or portfolio-wide readiness assertion was performed.
+No migration was created or applied by this audit remediation. No production deployment, provider spending, ingestion write, scheduler activation, Auth/RLS/grant change or portfolio-wide readiness assertion was performed.
 
 Detailed matrix and evidence: `docs/PortfolioAI_R1_R4_AUDIT_REMEDIATION_2026-10-08.md`.
 
