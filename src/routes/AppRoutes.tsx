@@ -61,6 +61,10 @@ const BacktestingReadinessPage = lazy(async () => {
   const module = await import("../pages/BacktestingReadinessPage")
   return { default: module.BacktestingReadinessPage }
 })
+const BankingReadOnlyValidationPage = lazy(async () => {
+  const module = await import("../pages/BankingReadOnlyValidationPage")
+  return { default: module.BankingReadOnlyValidationPage }
+})
 const SettingsPage = lazy(async () => {
   const module = await import("../pages/SettingsPage")
   return { default: module.SettingsPage }
@@ -152,7 +156,7 @@ export function AppRoutes() {
           path="/app/settings/diagnostics/operations"
           element={<AppShell><Suspense fallback={<PageLoader label="Loading diagnostics" />}><OperationsPage /></Suspense></AppShell>}
         />
-        <Route path="/app/operations" element={<Navigate to="/app/settings/diagnostics/operations" replace />} />
+        <Route path="/app/settings/diagnostics/banking-v1-4" element={<AppShell><Suspense fallback={<PageLoader label="Loading banking validator" />}><BankingReadOnlyValidationPage /></Suspense></AppShell>} />\n        <Route path="/app/operations" element={<Navigate to="/app/settings/diagnostics/operations" replace />} />
         <Route path="/app/investment-committee" element={<Navigate to="/app/intelligence/investment-committee" replace />} />
         <Route
           path="/app/import"
