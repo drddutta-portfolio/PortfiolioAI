@@ -8,7 +8,7 @@ import {
   type MarketDataProvider,
   type ProviderInstrument,
 } from "./market-data.ts"
-import { SAFE_PROVIDER_FAILURE, SafeOperationalError } from "./security.ts"
+import { SafeOperationalError } from "./security.ts"
 
 export interface AngelTransportObserver {
   onAttempt?(kind:"AUTHENTICATE"|"HISTORY"|"QUOTE"):void
