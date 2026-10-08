@@ -1,3 +1,14 @@
+### Stock-page Industry-first Stage 1 — 8 October 2026
+
+Stage 1.1–1.4 contract specification is complete: official classification levels,
+analytical assignment separation, exact Industry-led selection/refinement rules,
+and unresolved/conflicting-state safeguards. The [Stage 1 contract](PortfolioAI_STOCK_RESEARCH_INDUSTRY_FIRST_STAGE_1_CONTRACT_2026-10-08.md)
+defines nine acceptance cases for implementation verification and records existing
+compatibility/legacy-read gaps. These cases have not yet been executed against a
+new implementation. Next work is Stage 2 canonical consumer/data-flow integration.
+This does not pass remediation C1/C8 or approve changed stock assignments. No app,
+database, provider or deployment changes were made.
+
 ### Industry-first company-research rule — 8 October 2026
 
 Owner directed a permanent Industry-first, business-model-aware company-research

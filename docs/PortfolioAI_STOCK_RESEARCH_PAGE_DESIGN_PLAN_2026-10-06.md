@@ -90,6 +90,8 @@ An overlay changes only those research modules and applicability rules explicitl
 
 Unknown or unresolved profiles use the same shell with explicit unresolved applicability and blocked results. They must not inherit a generic scoring model or bank metrics.
 
+Stage 1 implementation preparation is specified in the [Industry-first Stage 1 contract](PortfolioAI_STOCK_RESEARCH_INDUSTRY_FIRST_STAGE_1_CONTRACT_2026-10-08.md). Its acceptance cases must be verified during integration; documentation completion does not imply live-page acceptance.
+
 ## 4. Entire page structure
 
 | Order | Shared region | Content and behavior |
