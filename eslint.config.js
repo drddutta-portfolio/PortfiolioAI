@@ -7,26 +7,21 @@ import tseslint from "typescript-eslint"
 export default tseslint.config(
   { ignores: ["dist", "coverage", "supabase/types/database.types.ts", "supabase/functions"] },
   {
+    files: ["api/**/*.ts", "server/**/*.ts", "scripts/**/*.ts", "cloudflare/**/*.ts"],
+    extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 2023,
+      globals: { ...globals.browser, ...globals.node, Deno: "readonly" },
+    },
+  },
+  {
     extends: [eslint.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
-    files: ["**/*.{ts,tsx}"],
+    files: ["src/**/*.{ts,tsx}", "vite.config.ts", "vitest.edge.config.ts"],
     languageOptions: {
       ecmaVersion: 2022,
       globals: globals.browser,
       parserOptions: {
-        projectService: {
-          allowDefaultProject: [
-            "api/b0-import-probe.ts",
-            "api/b0-node.ts",
-            "api/b0-probe.ts",
-            "cloudflare/portfolioai-history-dev-api/src/index.ts",
-            "scripts/p8/p8-apply-historical-crosswalk-router.ts",
-            "scripts/p8/p8-apply-segment-canary-router.ts",
-            "scripts/p8/p8-apply-xbrl-v3-router.ts",
-            "scripts/v14-action-b-phase1-plan.ts",
-            "server/b0-artifact-spool.ts",
-          ],
-          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 12,
-        },
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
