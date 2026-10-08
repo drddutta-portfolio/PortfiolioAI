@@ -6,7 +6,12 @@ requirement/result views. Exact snapshot/code binding is required; missing
 subprofile evidence or dimension metadata remains explicitly unproven. All
 current 47 canonical profiles retain access to their selected immutable items.
 See the [Stage 4 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_4_SPECIALIST_RESULTS_2026-10-08.md)
-for safeguards, checks and hosted acceptance. No classification, financial,
+for safeguards, checks and hosted acceptance. All 147 focused tests pass; build,
+full application lint and architecture guard pass. Final hosted visual acceptance
+is PASS with 216 checks across seven desktop and three mobile stocks, including
+expanded specialist grids and the corrected reference wrapping. No runtime errors,
+provider refreshes, research writes or REST read failures occurred. CI could not
+start due to GitHub account billing/spending limits. No classification, financial,
 evidence-selection, database or provider semantics change. This is on the review
 branch, not merged to Development; operational V1-4 and C1/C8 remain separate.
 

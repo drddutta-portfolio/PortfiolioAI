@@ -2,6 +2,8 @@
 
 Date: 8 October 2026
 
+**Decision: Stage 4.1–4.4 implementation and hosted visual acceptance PASS.**
+
 ## Scope and authority
 
 Stage 4 implements the Industry-first plan's stock-specific research presentation
@@ -47,9 +49,37 @@ Initial focused verification: 147 tests across six files passed, covering all
 47 profile definitions, all five Pharma primary labels, exact contract tab
 selection, unknown-profile fallback, snapshot mismatch, zero/precision, unsafe
 currency bases, preserved original payloads and unchanged canonical normalization.
-TypeScript/build, full lint and architecture data-boundary checks passed.
+TypeScript/build, full application lint, changed shared Edge-module lint and
+architecture data-boundary checks passed. Canonical normalization regressions
+passed in Vitest; Deno integration was not rerun locally because Deno is unavailable.
 
-Hosted visual acceptance must verify this exact Stage 4 application commit on
-Vercel against the approved Development backend; local screenshots cannot replace
-that evidence. Final hosted results and review link will be recorded here after
-verification. Stage 4 has not been merged to Development.
+Final hosted visual acceptance used application commit
+`20d47fd82fde6fd16b2d6f3754334089a81d83a8` (including the mobile contract-reference
+wrapping fix), deployment `dpl_FdYvpLHHFLjP4C9ZcmCdG5Rrqspo`, at
+https://portfiolio-cn9k0ebe0-dibyendu-dutta.vercel.app.
+
+All **216 authenticated, read-only Chromium checks PASS**. Desktop width 1440
+covered HDFCBANK, TORNTPHARM, ALIVUS, AUROPHARMA, BIOCON, AKUMS and ABCAPITAL;
+mobile width 390 covered HDFCBANK, TORNTPHARM and AKUMS. Checks included all five
+Pharma primary frameworks, specialised contract disclosures/unproven bindings,
+the three selected-result tabs, stable snapshot/assignment lineage, one snapshot
+selection across tab navigation, expanded mobile grid containment, tab/page
+containment and sticky-menu Summary navigation. Runtime errors, provider refresh
+attempts, research writes and REST read failures were all zero.
+
+Desktop HDFCBANK Financials, TORNTPHARM expanded specialised requirements, and
+mobile TORNTPHARM/AKUMS screenshots were visually inspected privately. The first
+mobile run found long contract-version strings overflowing; the final application
+commit wraps those references and the full hosted run above verifies the fix.
+No localhost application or screenshot was used. Browser auth and portfolio
+screenshots are not committed.
+
+[Sanitized final hosted evidence](research-ui-sector-review-evidence/stock-research-stage-4-verification-2026-10-08.json)
+and the coverage manifest are committed. Review:
+https://github.com/drddutta-portfolio/PortfiolioAI/pull/117.
+
+GitHub Actions could not start the architecture job: account payments/spending
+limits blocked runner startup (empty steps). This is not a green CI claim or a
+failed application check. Local checks above passed; no billing/protection changes
+were made. Stage 4 has not been merged to Development. C1/C8 classification and
+operational evidence-gate acceptance remain separate and unproven where recorded.
