@@ -1,0 +1,60 @@
+{
+  "version": "V1_4_OWNERSHIP_METHOD_DECISION_PACKAGE_V1",
+  "generated_date": "2026-10-08",
+  "branch": "PortfolioAI-Development",
+  "development_project": "lrgpjimipfkyoqbpsqzz",
+  "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+  "current_inventory": {
+    "OWNERSHIP_TREND_4Q": {
+      "items": 53,
+      "stocks": 53
+    },
+    "OWNERSHIP_GOVERNANCE": {
+      "items": 51,
+      "stocks": 51
+    },
+    "INSTITUTIONAL_OWNERSHIP_TREND_4Q": {
+      "items": 10,
+      "stocks": 10
+    }
+  },
+  "available_provider_series": [
+    "Promoter",
+    "Institutional",
+    "FII",
+    "MF",
+    "DII",
+    "Public"
+  ],
+  "constraints": {
+    "minimum_consecutive_quarters": 4,
+    "consistent_series_required": true,
+    "consistent_basis_required": true,
+    "no_overlap_summation": true,
+    "owner_approval_persisted": false
+  },
+  "proposals": {
+    "OWNERSHIP_TREND_4Q": {
+      "decision": "DEFER",
+      "options": [
+        "Promoter/TOTAL_EQUITY_PERCENT",
+        "Institutional/TOTAL_EQUITY_PERCENT",
+        "explicitly named other single provider series",
+        "DEFER"
+      ]
+    },
+    "INSTITUTIONAL_OWNERSHIP_TREND_4Q": {
+      "decision": "DEFER_PENDING_OWNER_APPROVAL",
+      "proposed_series": "Institutional",
+      "proposed_basis": "TOTAL_EQUITY_PERCENT"
+    },
+    "OWNERSHIP_GOVERNANCE": {
+      "decision": "DEFER",
+      "options": [
+        "single ownership series plus separate governance evidence",
+        "explicit two-component composite",
+        "DEFER"
+      ]
+    }
+  }
+}
