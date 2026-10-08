@@ -31,6 +31,8 @@ Measured text contrast: gain 7.13:1 on white / 6.81:1 on its pale surface; loss 
 
 A Vercel READY build must contain this stage's actual code. The existing Stage 4/5 READY artifact cannot prove or publish the new theme. The previously observed daily deployment-count limit and GitHub runner billing restriction are independent of storage/traffic usage. If they still prevent builds, retain an explicit publication/acceptance block; do not repeatedly retry or bypass quotas.
 
+Application source revision: `0fddf87c89471aeaee17c2acddd5fc3360eebd38`; `src` tree: `4ac1800a434a3369b5c5271a6ebbf6aa57ecb65c`. Subsequent evidence-only commits preserve this application source tree. Review/release tracking: [PR #119](https://github.com/drddutta-portfolio/PortfiolioAI/pull/119). The final check and merge identities remain available on that PR; this document does not predict their outcome. Sanitized evidence: [Stage 6 rollout manifest](research-ui-sector-review-evidence/stock-research-stage-6-rollout-2026-10-08.json).
+
 ## Hosted release block and current live artifact
 
 Vercel accepted the first preview at `67ac91fe5757215bc7aafb3effe9ca61f76e56e5` but rejected its strict test-fixture typing (`dpl_7AkgAUpxiZmJ7dXR96BkBjqh3z8q`, ERROR). Both fixture typing issues are corrected and the final local production build passes. The next corrected revision (`235844afb62d81d54de3648ceb7ba346e09c1178`) received the GitHub Vercel status **Deployment rate limited — retry in 24 hours**. No READY Stage 6 artifact exists; no old artifact is relabelled as Stage 6 and no quota bypass is attempted.
