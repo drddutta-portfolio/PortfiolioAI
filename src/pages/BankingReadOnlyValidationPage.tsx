@@ -8,7 +8,7 @@ import manifest from "../../docs/private/v1-4-industry-batches/Banking_13_Read_O
 
 const ACTION = "P7_IC3_VALIDATE_CANONICAL_INPUTS"
 const DEV_HOST = "portfolioai-development"
-const configuredHostname = import.meta.env.VITE_V1_4_BANKING_ALLOWED_HOSTNAME?.trim().toLowerCase() ?? ""
+const configuredHostname = (typeof import.meta.env.VITE_V1_4_BANKING_ALLOWED_HOSTNAME === "string" ? (import.meta.env.VITE_V1_4_BANKING_ALLOWED_HOSTNAME as string).trim().toLowerCase() : "")
 type Requirement = { requirement_code?: string; evidence_state?: string; reason_code?: string; validation_state?: string; canonical_selection_state?: string; raw_source_record_id?: string | null; candidate_evidence_ids?: string[] }
 type StockResult = { securityId: string; status: string; snapshotHash: string; items: Requirement[] }
 type SliceResult = { sliceId: string; evaluationAsOf: string; sourceCutoffAt: string; selectionRunId: string; deployment: string; results: StockResult[]; providerCalls: number; writeTotals: Record<string, number>; processed: number }
@@ -32,7 +32,7 @@ function cleanResult(raw: unknown, expectedIds: readonly string[]): Omit<SliceRe
   if (body.providerCalls !== 0) throw new Error("Validator reported provider calls or omitted call count; results withheld")
   const writes = (body.writeTotals || {}) as Record<string, unknown>
   if (["snapshotsCreated", "snapshotsReused", "selectionsCreated", "selectionsReused"].some(key => writes[key] !== 0)) throw new Error("Validator write counters are missing or nonzero; results withheld")
-  if (!Array.isArray(body.snapshotIds) || !Array.isArray(body.selectionIds) || body.snapshotIds.length || body.selectionIds.length) throw new Error("Validator snapshot selection proof is missing or nonempty")
+  if (!Array.isArray(body.snapshotIds) || !Array.isArray(body.selectionIds) || (body.snapshotIds as unknown[]).length || (body.selectionIds as unknown[]).length) throw new Error("Validator snapshot selection proof is missing or nonempty")
   return {
     processed: Number(body.processed),
     providerCalls: 0,
@@ -42,11 +42,11 @@ function cleanResult(raw: unknown, expectedIds: readonly string[]): Omit<SliceRe
       status: String(stock.status),
       snapshotHash: String(stock.snapshotHash),
       items: Array.isArray(stock.items) ? (stock.items as Record<string, unknown>[]).map(item => ({
-        requirement_code: String(item.requirement_code ?? ""),
-        evidence_state: String(item.evidence_state ?? ""),
-        reason_code: String(item.reason_code ?? ""),
-        validation_state: String(item.validation_state ?? ""),
-        canonical_selection_state: String(item.canonical_selection_state ?? ""),
+        requirement_code: typeof item.requirement_code === "string" ? item.requirement_code : "",
+        evidence_state: typeof item.evidence_state === "string" ? item.evidence_state : "",
+        reason_code: typeof item.reason_code === "string" ? item.reason_code : "",
+        validation_state: typeof item.validation_state === "string" ? item.validation_state : "",
+        canonical_selection_state: typeof item.canonical_selection_state === "string" ? item.canonical_selection_state : "",
         raw_source_record_id: typeof item.raw_source_record_id === "string" ? item.raw_source_record_id : null,
         candidate_evidence_ids: Array.isArray(item.candidate_evidence_ids) ? item.candidate_evidence_ids.filter((id): id is string => typeof id === "string") : [],
       })) : [],
