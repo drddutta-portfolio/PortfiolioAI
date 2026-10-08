@@ -41,13 +41,6 @@ export interface P5TerminalDisposition {
   readonly sizingDisposition: string | null
 }
 
-interface P5TerminalResponse {
-  readonly version: string
-  readonly portfolioId: string
-  readonly count: number
-  readonly rows: readonly P5TerminalDisposition[]
-}
-
 export async function loadP5TerminalDispositions(
   portfolioId: string,
 ): Promise<readonly P5TerminalDisposition[]> {
