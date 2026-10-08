@@ -1,4 +1,5 @@
 import { buildPharmaCanonicalHistoryView } from "./pharmaCanonicalHistoryView"
+import { selectCanonicalMetricSeries } from "./canonicalMetricSeries"
 import { PHARMA_RESEARCH_PROFILE_V1 } from "./pharmaResearchProfile"
 import { PHARMA_V1_SOURCE_READINESS, type PharmaSourceReadinessState } from "./pharmaSourceReadiness"
 import type { ResearchMetric, SecurityResearch } from "./types"
@@ -116,25 +117,8 @@ const PROFILE_CODES: readonly PharmaMetricCode[] = [
   "PHARMA_VALUATION_CONTEXT",
 ]
 
-const R4H_REVIEWED_HISTORY_CODES = new Set([
-  "REVENUE_ANNUAL",
-  "OPERATING_REVENUE_QUARTER",
-  "OPERATING_PROFIT_QUARTER",
-  "CFO_ANNUAL",
-])
-
 function countCanonicalObservations(metrics: readonly ResearchMetric[], codes: readonly string[]) {
-  if (!codes.length) return 0
-  const distinct = new Set<string>()
-  for (const metric of metrics) {
-    if (!codes.includes(metric.code)) continue
-    const accepted = R4H_REVIEWED_HISTORY_CODES.has(metric.code)
-      ? metric.status === "VERIFIED" && Boolean(metric.periodEnd)
-      : metric.selected && metric.status !== "UNAVAILABLE"
-    if (!accepted) continue
-    distinct.add(`${metric.code}:${metric.periodEnd ?? metric.id}`)
-  }
-  return distinct.size
+  return codes.reduce((sum, code) => sum + selectCanonicalMetricSeries(metrics, code).accepted.length, 0)
 }
 
 function domainObservationCount(research: SecurityResearch, metricCode: PharmaMetricCode, canonicalEvidenceCodes: readonly string[]) {
