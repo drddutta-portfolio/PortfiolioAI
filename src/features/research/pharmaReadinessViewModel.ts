@@ -6,6 +6,7 @@ import type { ResearchMetric, SecurityResearch } from "./types"
 export const PHARMA_READINESS_VIEW_VERSION = "PHARMA_READINESS_VIEW_V7" as const
 
 export type PharmaReadinessDisplayState = "NORMALIZATION_READY" | "VALIDATED_SOURCE" | "PARTIAL" | "PENDING" | "OFFICIAL_SOURCE_PENDING"
+export type PharmaEvidenceReadinessState = "READY" | "PARTIAL" | "MISSING"
 
 type PharmaMetricCode =
   | "PHARMA_REVENUE_GROWTH_HISTORY"
@@ -30,6 +31,7 @@ export interface PharmaReadinessDomain {
   readonly conditionCode: string | null
   readonly state: PharmaReadinessDisplayState
   readonly sourceState: PharmaSourceReadinessState
+  readonly evidenceState: PharmaEvidenceReadinessState
   readonly canonicalObservationCount: number
   readonly observationCountLabel: string
   readonly minimumObservations: number
@@ -155,6 +157,11 @@ function domainObservationCount(research: SecurityResearch, metricCode: PharmaMe
   }
 }
 
+function evidenceState(count: number, minimum: number): PharmaEvidenceReadinessState {
+  if (count >= minimum) return "READY"
+  return count > 0 ? "PARTIAL" : "MISSING"
+}
+
 function displayState(sourceState: PharmaSourceReadinessState): PharmaReadinessDisplayState {
   if (sourceState === "PROVIDER_HISTORY_VALIDATED") return "VALIDATED_SOURCE"
   if (sourceState === "OFFICIAL_SOURCE_CONTRACT_PENDING") return "OFFICIAL_SOURCE_PENDING"
@@ -180,6 +187,7 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
       conditionCode: contract.conditionCode,
       state: displayState(source.state),
       sourceState: source.state,
+      evidenceState: evidenceState(observationCount.count, contract.history.minimumObservations),
       canonicalObservationCount: observationCount.count,
       observationCountLabel: observationCount.label,
       minimumObservations: contract.history.minimumObservations,
@@ -202,6 +210,6 @@ export function buildPharmaReadinessView(research: SecurityResearch): PharmaRead
     mandatoryDomainCount: mandatoryDomains.length,
     totalDomainCount: domains.length,
     blockers,
-    notice: "PHARMA_V1 remains fail-closed until the mandatory evidence contracts are satisfied. Partial source capability, cached observations and profile-specific UI coverage do not by themselves create a score or recommendation.",
+    notice: `This security currently has ${mandatoryDomains.filter((domain) => domain.evidenceState === "READY").length}/${mandatoryDomains.length} mandatory domains meeting their cached evidence minima. Source-contract validation is separate from cached evidence sufficiency; PHARMA_V1 remains fail-closed until both are satisfied.`,
   }
 }
