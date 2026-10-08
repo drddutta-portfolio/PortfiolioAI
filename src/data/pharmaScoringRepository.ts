@@ -149,7 +149,7 @@ export async function loadPharmaV1ScoringSnapshot(securityId: string): Promise<S
       heatState: heatState(row.heat_state),
     }))
   } else {
-    dimensionScores = previewDimensions(rules, (observationsResult.data ?? []) as PharmaScoringObservation[], dimensionsForModel)
+    dimensionScores = previewDimensions(rules, observationsResult.data ?? [], dimensionsForModel)
   }
 
   const weighted = dimensionScores.filter((dimension) => dimension.dimensionWeight > 0)
