@@ -1,9 +1,8 @@
-import type { SupabaseClient } from "@supabase/supabase-js"
 import { supabase } from "../lib/supabase"
 import { assessPharmaV1Evidence, type PharmaScoringObservation } from "../features/research/pharmaScoringEvidence"
 import type { DimensionScore, ExternalRatingObservation, MetricScoreSignal, ScoringProfileSource, SecurityScoringSnapshot } from "../features/research/scoringTypes"
 
-const db = supabase as unknown as SupabaseClient
+const db = supabase
 
 type RuleRow = {
   dimension_code: string
