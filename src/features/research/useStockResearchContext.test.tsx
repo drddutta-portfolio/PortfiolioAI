@@ -1,8 +1,9 @@
 import { act, cleanup, renderHook, waitFor } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import type { loadSecurityScoringSnapshot } from "../../data/scoringRepository"
 import type { P7CurrentEvidenceDetails } from "../../data/p7CurrentIntelligenceRepository"
 import type { SecurityScoringSnapshot } from "./scoringTypes"
-const mocks = vi.hoisted(() => ({ evidence: vi.fn(), scoring: vi.fn() }))
+const mocks = vi.hoisted(() => ({ evidence: vi.fn(), scoring: vi.fn<typeof loadSecurityScoringSnapshot>() }))
 vi.mock("../../data/p7CurrentIntelligenceRepository", () => ({ loadP7CurrentEvidenceDetails: mocks.evidence }))
 vi.mock("../../data/scoringRepository", () => ({ loadSecurityScoringSnapshot: mocks.scoring }))
 import { useStockResearchContext } from "./useStockResearchContext"
@@ -21,7 +22,7 @@ describe("one selected Research snapshot", () => {
     expect(result.current.scoring.isLoading).toBe(true)
     expect(mocks.scoring).not.toHaveBeenCalled()
     const selected = details("selected-one")
-    await act(async () => { finish(selected) })
+    await act(async () => { finish(selected); await Promise.resolve() })
     await waitFor(() => expect(result.current.scoring.data).toEqual(score))
     expect(mocks.evidence).toHaveBeenCalledTimes(1)
     expect(mocks.scoring.mock.calls[0]?.[3].selectedSnapshot).toBe(selected.snapshot)
@@ -35,9 +36,9 @@ describe("one selected Research snapshot", () => {
     act(() => result.current.reload())
     expect(result.current.evidence.data).toBeNull()
     expect(result.current.scoring.data).toBeNull()
-    await act(async () => { finish(details("second")) })
+    await act(async () => { finish(details("second")); await Promise.resolve() })
     await waitFor(() => expect(mocks.scoring).toHaveBeenCalledTimes(2))
-    expect(mocks.scoring.mock.calls[1]?.[3].selectedSnapshot.snapshotId).toBe("second")
+    expect(mocks.scoring.mock.calls[1]?.[3].selectedSnapshot?.snapshotId).toBe("second")
   })
   it("clears old scoring when reloading the same snapshot identity", async () => {
     mocks.evidence.mockResolvedValue(details("same-id"))
@@ -48,7 +49,7 @@ describe("one selected Research snapshot", () => {
     act(() => result.current.reload())
     await waitFor(() => expect(mocks.scoring).toHaveBeenCalledTimes(2))
     expect(result.current.scoring.data).toBeNull()
-    await act(async () => { finish(score) })
+    await act(async () => { finish(score); await Promise.resolve() })
     await waitFor(() => expect(result.current.scoring.data).toEqual(score))
   })
   it("propagates failed selection without scoring or falling back to another assignment", async () => {
@@ -67,8 +68,8 @@ describe("one selected Research snapshot", () => {
     await waitFor(() => expect(result.current.scoring.data).toEqual(score))
     rerender({ portfolioId: "other-portfolio" })
     expect(result.current.scoring.data).toBeNull()
-    await act(async () => { finish(details("other", "other-portfolio")) })
+    await act(async () => { finish(details("other", "other-portfolio")); await Promise.resolve() })
     await waitFor(() => expect(mocks.scoring).toHaveBeenCalledTimes(2))
-    expect(mocks.scoring.mock.calls[1]?.[3].selectedSnapshot.portfolioId).toBe("other-portfolio")
+    expect(mocks.scoring.mock.calls[1]?.[3].selectedSnapshot?.portfolioId).toBe("other-portfolio")
   })
 })

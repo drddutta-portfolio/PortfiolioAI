@@ -72,7 +72,7 @@ describe("canonical evidence requirement presentation", () => {
   })
 
   it("renders the shared selection and disables independent selection in both consumers", () => {
-    const selected = { applicable: true, isLoading: false, error: null, data: { snapshot, requirements: [requirement] }, reload: vi.fn() }
+    const selected = { applicable: true, revision: 0, isLoading: false, error: null, data: { snapshot, requirements: [requirement] }, reload: vi.fn() }
     mocks.hook.mockReturnValue({ applicable: true, isLoading: true, data: null, error: null })
     render(<><CanonicalEvidenceReadinessPanel portfolioId="portfolio" securityId="security" assetClass="EQUITY" evidence={selected} /><ProfileResearchBlocks portfolioId="portfolio" securityId="security" assetClass="EQUITY" evidence={selected} onViewEvidence={vi.fn()} /></>)
     expect(mocks.hook.mock.calls.every(call => call[3] === false)).toBe(true)

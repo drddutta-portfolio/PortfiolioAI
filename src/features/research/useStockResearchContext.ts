@@ -12,6 +12,7 @@ export function useStockResearchContext(input: {
   const evidence = useCanonicalEvidenceReadiness(input.portfolioId ?? "", input.securityId ?? "", input.assetClass ?? "")
   const scoring = useSecurityScoring(input.securityId, input.sector, input.industry, input.portfolioId, input.assetClass, {
     snapshot: evidence.data?.snapshot ?? null,
+    revision: evidence.revision,
     isLoading: evidence.isLoading,
     error: evidence.error,
   })

@@ -16,7 +16,7 @@ export function useCanonicalEvidenceReadiness(portfolioId: string, securityId: s
       .catch((reason: unknown) => { if (active) setLoaded({ key, revision, data: null, error: displayError(reason) }) })
     return () => { active = false }
   }, [key, applicable, portfolioId, securityId, enabled, revision])
-  return { applicable, data: current?.data ?? null, error: current?.error ?? null, isLoading: enabled && applicable && Boolean(portfolioId && securityId) && !current, reload: () => setRevision(value => value + 1) }
+  return { applicable, revision, data: current?.data ?? null, error: current?.error ?? null, isLoading: enabled && applicable && Boolean(portfolioId && securityId) && !current, reload: () => setRevision(value => value + 1) }
 }
 
 export type CanonicalEvidenceReadiness = ReturnType<typeof useCanonicalEvidenceReadiness>
