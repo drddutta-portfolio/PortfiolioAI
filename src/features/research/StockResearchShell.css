@@ -4,10 +4,13 @@
   overflow-wrap: anywhere;
 }
 .stock-research-classification .stock-primary-industry {
-  font-size: 1rem;
+  font-size: .9rem;
   font-weight: 600;
 }
 .stock-research-classification p {
+  margin: .3rem 0;
+  font-size: .78rem;
+  line-height: 1.4;
   max-inline-size: 100%;
   white-space: normal;
   overflow-wrap: anywhere;
