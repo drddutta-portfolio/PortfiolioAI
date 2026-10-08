@@ -8,6 +8,7 @@ export type CanonicalSeriesIssueReason =
   | "UNRESOLVED_REVIEW"
 
 export interface CanonicalSeriesIssue {
+  readonly code: string
   readonly periodEnd: string
   readonly reason: CanonicalSeriesIssueReason
   readonly observationIds: readonly string[]
@@ -63,13 +64,13 @@ export function selectCanonicalResearchSeries(
   for (const [periodEnd, periodMetrics] of byPeriod) {
     const decisionSelected = periodMetrics.filter((metric) => metric.selected)
     if (decisionSelected.length > 1) {
-      issues.push({ periodEnd, reason: "MULTIPLE_SELECTED_OBSERVATIONS", observationIds: decisionSelected.map((metric) => metric.id).sort() })
+      issues.push({ code, periodEnd, reason: "MULTIPLE_SELECTED_OBSERVATIONS", observationIds: decisionSelected.map((metric) => metric.id).sort() })
       continue
     }
     if (decisionSelected.length === 1) {
       const chosen = decisionSelected[0]!
       if (chosen.status === "VERIFIED") selected.push(chosen)
-      else issues.push({ periodEnd, reason: "UNRESOLVED_REVIEW", observationIds: periodMetrics.map((metric) => metric.id).sort() })
+      else issues.push({ code, periodEnd, reason: "UNRESOLVED_REVIEW", observationIds: periodMetrics.map((metric) => metric.id).sort() })
       continue
     }
 
@@ -79,13 +80,13 @@ export function selectCanonicalResearchSeries(
 
     const semanticKeys = new Set(usable.map(semanticIdentity))
     if (semanticKeys.size !== 1) {
-      issues.push({ periodEnd, reason: "INCOMPATIBLE_SEMANTICS", observationIds: usable.map((metric) => metric.id).sort() })
+      issues.push({ code, periodEnd, reason: "INCOMPATIBLE_SEMANTICS", observationIds: usable.map((metric) => metric.id).sort() })
       continue
     }
 
     const values = new Set(usable.map((metric) => decimalIdentity(metric.numericValue!)))
     if (values.size !== 1) {
-      issues.push({ periodEnd, reason: "CONFLICTING_VALUES", observationIds: usable.map((metric) => metric.id).sort() })
+      issues.push({ code, periodEnd, reason: "CONFLICTING_VALUES", observationIds: usable.map((metric) => metric.id).sort() })
       continue
     }
 
