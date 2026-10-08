@@ -10,7 +10,7 @@ export interface BankGrowthDiscoveryResult {
 }
 
 export async function discoverBankGrowthContract(portfolioId: string, securityId: string) {
-  const { data, error } = await supabase.functions.invoke("discover-trendlyne-bank-growth-contract", {
+  const { data, error } = await supabase.functions.invoke<unknown>("discover-trendlyne-bank-growth-contract", {
     body: { portfolioId, securityId, confirmation: "OWNER_CONFIRMED_BANK_GROWTH_DISCOVERY" },
   })
   if (error) throw error
