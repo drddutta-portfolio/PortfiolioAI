@@ -142,7 +142,7 @@ const timeoutFetch: typeof fetch = async (input, init = {}) => {
     return await fetch(input, { ...init, signal: controller.signal })
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
-      throw new Error("PROVIDER_REQUEST_TIMEOUT")
+      throw new Error("PROVIDER_REQUEST_TIMEOUT", { cause: error })
     }
     throw error
   } finally {
