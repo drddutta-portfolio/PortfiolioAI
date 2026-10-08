@@ -15,7 +15,7 @@ const sleep=(ms:number)=>new Promise(r=>setTimeout(r,ms))
 Deno.serve(async req=>{
  if(req.method!=="POST")return reply(405,{code:"METHOD_NOT_ALLOWED"})
  const url=Deno.env.get("SUPABASE_URL")??"",key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??""
- let ref:string|null=null;try{ref=new URL(url).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1]??null}catch{}
+ let ref:string|null=null;try{ref=new URL(url).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1]??null}catch { /* malformed runtime URL stays fail-closed below */ }
  if(ref!==DEV_REF||!key)return reply(409,{code:"UNAPPROVED_DEVELOPMENT_TARGET"})
  try{
   const body=await req.json() as Record<string,unknown>
