@@ -144,12 +144,12 @@ async function loadExchangeCalendarProofIds(admin:Admin,sourceCutoffAt:string):P
  if(sameTime.length>1&&new Set(sameTime.map(row=>JSON.stringify(row.raw_payload))).size>1)throw new Error("EXCHANGE_CALENDAR_PROOF_CONFLICT")
  return[String(latest.id)]
 }
-async function loadBenchmarkHistories(admin:Admin,benchmarks:readonly Array<{code:string;provider_code:string|null;mapping_status:string}>,sourceCutoffAt:string){
+async function loadBenchmarkHistories(admin:Admin,benchmarks:ReadonlyArray<{code:string;provider_code:string|null;mapping_status:string}>,sourceCutoffAt:string){
  const officialCodes=benchmarks.filter(x=>x.provider_code==="NIFTY_OFFICIAL"&&x.mapping_status==="VERIFIED").map(x=>x.code)
  const official=await loadOfficialBenchmarkSources(admin,officialCodes,sourceCutoffAt)
  const officialDeltas=await loadOfficialBenchmarkDeltaSources(admin,officialCodes,sourceCutoffAt)
  const calendarSourceRecordIds=await loadExchangeCalendarProofIds(admin,sourceCutoffAt)
- return new Map(await Promise.all(benchmarks.map(async benchmark=>{
+ return new Map<string,{rows:HistoryRow[];inspection:HistoryValidation;sourceRecordId:string|null}>(await Promise.all(benchmarks.map(async benchmark=>{
   const code=String(benchmark.code)
   if(benchmark.provider_code==="NIFTY_OFFICIAL"&&benchmark.mapping_status==="VERIFIED"){
    const source=official.get(code)

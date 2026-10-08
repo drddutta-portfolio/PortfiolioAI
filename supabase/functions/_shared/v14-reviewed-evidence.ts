@@ -192,8 +192,9 @@ export async function validateReviewedRequirementEvidence(input:{
      ownershipRows.push({review:r,series,basis,period:r.period_end,value,source});support.push(r);continue
    }
    const document=r.research_document_id?documentById.get(r.research_document_id)??null:null
+   if(!document)return fail("REVIEW_REQUIRED","DOCUMENTARY_REVIEW_REQUIRES_DOCUMENT",[r.id])
    const db=validateDocumentBinding(r,document,source,input.documentSources);if(!db.ok)return fail("REVIEW_REQUIRED",db.reason,[r.id])
-   if(document?.published_at!==null&&r.published_at!==document.published_at)return fail("REVIEW_REQUIRED","DOCUMENT_REVIEW_PUBLICATION_MISMATCH",[r.id])
+   if(document.published_at!==null&&r.published_at!==document.published_at)return fail("REVIEW_REQUIRED","DOCUMENT_REVIEW_PUBLICATION_MISMATCH",[r.id])
    if(!r.fresh_through||time(r.fresh_through)<evaluationAsOfMs)return fail("STALE","DOCUMENT_REVIEW_STALE",[r.id])
    if(input.freshnessPolicy?.includes("150_DAYS")){
      const days=r.period_type==="YEAR"?550:150

@@ -65,6 +65,62 @@ amendment, not implementation or C1/C8 closure. The [Pharma/sector display revie
 records open assignment-display, methodology-panel and classification integration
 gaps; the earlier Gate 5 shell PASS does not close those findings. No application,
 provider, database, scoring or deployment changes were performed by this amendment.
+## Operational V1-4 evidence gate — 8 October 2026
+
+**Disposition: NOT PROVEN. V1-5 remains unauthorized.**
+
+Authoritative closure record: `docs/PortfolioAI_V1_4_OPERATIONAL_EVIDENCE_GATE_CLOSURE_2026-10-08.md`.
+
+Current evidence state:
+- fixed remediation manifest reconciled exactly: **115/115**
+- latest fixed-115 canonical run: `c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83`
+- canonical status: **0 READY / 115 REVIEW_REQUIRED**
+- review-ledger rows: **0**
+- frozen release cohort: **111 members / 132,585,696 paise**
+- current frozen READY coverage: **0 members / 0 paise**
+- release minimum: **100 members AND 119,327,127 paise**
+- current latest frozen states: **108 REVIEW_REQUIRED / 3 CONFLICTING**
+- current DB size: **222,809,235 bytes**
+
+Current fixed-115 blocker census:
+- 460 REQUIRED_EVIDENCE_MISSING
+- 346 NORMALIZED_INPUT_CONTRACT_NOT_PROVEN
+- 292 DOCUMENT_EVIDENCE_REQUIRES_REVIEW
+- 189 DATED_REPORTING_PERIODS_NOT_PROVEN
+- 71 REPORTING_PERIOD_INVALID
+- 33 METRIC_CONTRACT_NOT_REVIEWED
+- 10 REPORTING_PERIOD_TYPE_NOT_PROVEN
+- 9 BENCHMARK_LATEST_SESSION_STALE
+- 6 DISTINCT_SESSIONS_INSUFFICIENT
+- 1 METHODOLOGY_REVIEW_REQUIRED
+
+Prepared current review packages:
+- `docs/private/PortfolioAI_V1_4_STRUCTURED_NUMERIC_NORMALIZATION_WORKLIST_2026-10-08.json`
+- `docs/private/PortfolioAI_V1_4_DOCUMENT_REVIEW_PROPOSALS_CURRENT_2026-10-08.json`
+- `docs/private/PortfolioAI_V1_4_OWNERSHIP_METHOD_DECISION_PACKAGE_2026-10-08.md`
+- `docs/private/PortfolioAI_V1_4_OWNERSHIP_METHOD_DECISION_PACKAGE_2026-10-08.json`
+
+No owner review decision, provider call, R2 write, canonical evidence write, migration, Production/main change, V1-5 work, P8 work, Auth/RLS change or scheduler activation was performed in this closure continuation.
+
+Repository/build verification remains separate from V1-4 factual acceptance. The last code-bearing parent `aefef83da45e3274e44a6d8819ee354dbace33b4` passed the repository verification workflow; documentation-only workflow invocations after that are currently failing before steps start and are not represented as green evidence.
+
+---
+
+## R1–R4 audit remediation — 8 October 2026
+
+**Repository implementation and verification: COMPLETE for the audited R1–R4 repository scope.**
+
+The supplied audit baseline `9362f15` was reconciled against current Development rather than treated as current state. The R1–R4 scope is now explicitly separated from the newer operational V1-4 evidence-readiness stage.
+
+Resolved audit areas include the ResearchPage test environment, Angel One safe session-error contract, fail-closed Pharma canonical-series reconciliation, a single Decimal operating-margin calculation owner, and security-specific Pharma readiness messaging. The final verification repair also cleared eight Deno type-check issues in shared Edge code without weakening lint, typing, architecture or security controls.
+
+Verification at code head `aefef83da45e3274e44a6d8819ee354dbace33b4` passed architecture, TypeScript, application lint, Edge lint, **2,167 application tests**, **2 Deno handler tests**, **359 Edge tests**, production build and diff check. No migration, provider execution, ingestion write, scheduler activation, Production deployment or Auth/RLS/grant change was performed.
+
+R4H TORNTPHARM production ingestion remains separately approval-gated. Portfolio-wide Pharma evidence readiness is not claimed. The newer operational V1-4 stage is not closed by this R1–R4 repository result.
+
+See [R1–R4 Audit Remediation and Repository Completion](PortfolioAI_R1_R4_AUDIT_REMEDIATION_2026-10-08.md).
+
+---
 
 ### UI-G5 final decision — 8 October 2026 (Asia/Kolkata)
 

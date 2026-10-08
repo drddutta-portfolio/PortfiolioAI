@@ -14,6 +14,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -24,6 +26,14 @@ jobs:
       - run: npm run lint
       - run: npm run lint:edge
       - run: npm test
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Run Deno handler tests
+        run: >-
+          deno test --allow-env --allow-net=esm.sh
+          supabase/functions/complete-research-refresh/index.deno.test.ts
+          supabase/functions/p7-ic2-materialize-readiness/index.deno.test.ts
       - run: npm run test:edge
       - run: npm run build
       - run: git diff --check HEAD^ HEAD

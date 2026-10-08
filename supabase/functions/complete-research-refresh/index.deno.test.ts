@@ -17,7 +17,7 @@ Deno.test("IC2 detailed and ownership capture never append undated/UNKNOWN canon
     const { writeDetailed, writeOwnership } = await import("./index.ts")
     const admin = createClient("https://lrgpjimipfkyoqbpsqzz.supabase.co", "test-only-placeholder", { auth: { persistSession: false, autoRefreshToken: false } })
     const security = { id: "test-security", symbol: "TEST", name: "Test", asset_class: "EQUITY" }
-    const plan = { version: "P7_IC_EVIDENCE_NORMALIZATION_V2_PERIOD_GUARD" as const, profileCode: "TEST", requirements: [], providerPlan: { structuredParameterCalls: 1, ownershipCalls: 1, documentCalls: 0, stockHistoryCalls: 0, benchmarkHistoryShared: false, parameterHints: [], documentKeywords: [] } }
+    const plan = { version: "P7_IC_EVIDENCE_NORMALIZATION_V3_TYPED_DOCUMENT_MINIMA" as const, profileCode: "TEST", requirements: [], providerPlan: { structuredParameterCalls: 1, ownershipCalls: 1, documentCalls: 0, stockHistoryCalls: 0, benchmarkHistoryShared: false, parameterHints: [], documentKeywords: [] } }
     const detailed = await writeDetailed(admin, "test-run", security, "12", JSON.stringify({ markdown_data: "12|Test|TEST|1|2026-10-05\nROCE Ann. %\nTEST:12.1234567890123456789\n---" }), plan)
     assert(detailed.metricCount === 0 && detailed.metadataReviewRequired === true, "Detailed capture manufactured readiness")
     assert(detailed.exactFieldCandidates?.[0]?.value === "12.1234567890123456789", "Capture lost decimal precision")
