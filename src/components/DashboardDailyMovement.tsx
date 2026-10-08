@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import { useDashboardDailyMarketSnapshots } from "../features/dashboard/useDashboardEvidence"
 import { formatMoney } from "../features/portfolio/format"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
-import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./DashboardScopeContext"
+import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./dashboardScope"
 import "./DashboardDailyMovement.css"
 
 type MovementRow = {
