@@ -109,3 +109,30 @@ Existing production-dependent artifacts remain governed by `AGENTS.md`. In parti
 **R1–R4 repository implementation and verification: COMPLETE for the audited repository scope.**
 
 This statement does **not** mean R4H production ingestion is executed, all Pharma holdings are evidence-ready, provider work is authorized, the newer operational V1-4 evidence stage is complete, or portfolio-wide investment intelligence is READY.
+
+
+## Current-head verification equivalence — 8 October 2026
+
+The remote `PortfolioAI-Development` head inspected after the green R1–R4 verification was `3530f192e989ddf915533e9cf62787660306e2e0`.
+
+A direct GitHub comparison from the first fully green code-verification head `aefef83da45e3274e44a6d8819ee354dbace33b4` to `3530f192e989ddf915533e9cf62787660306e2e0` shows eight later commits and only documentation/private-evidence changes:
+
+- `docs/PortfolioAI_Development_Status.md`
+- `docs/PortfolioAI_R1_R4_AUDIT_REMEDIATION_2026-10-08.md`
+- `docs/PortfolioAI_V1_4_OPERATIONAL_EVIDENCE_GATE_CLOSURE_2026-10-08.md`
+- `docs/private/PortfolioAI_V1_4_DOCUMENT_REVIEW_PROPOSALS_CURRENT_2026-10-08.json`
+- `docs/private/PortfolioAI_V1_4_OWNERSHIP_METHOD_DECISION_PACKAGE_2026-10-08.json`
+- `docs/private/PortfolioAI_V1_4_OWNERSHIP_METHOD_DECISION_PACKAGE_2026-10-08.md`
+- `docs/private/PortfolioAI_V1_4_STRUCTURED_NUMERIC_NORMALIZATION_WORKLIST_2026-10-08.json`
+
+No `src/`, `api/`, `supabase/functions/`, lint configuration, build configuration, package dependency, migration, or R1–R4 verification-workflow file changed after the fully green executable head.
+
+The current-head verification workflow run `37755743453` was retried once. Both attempts failed before any workflow step was started: GitHub reported an empty steps array and `runner_id: 0`. Therefore this is recorded as a **GitHub runner/provisioning failure, not a repository test failure**. It does not replace the successful full verification evidence at `aefef83da45e3274e44a6d8819ee354dbace33b4`; current executable-source equivalence to that green head is proven by the GitHub compare above.
+
+This distinction is intentional:
+
+- executable R1–R4 repository state: source-equivalent to the fully green verification head;
+- latest current-head GitHub Actions attempt: infrastructure-not-executed / no code verdict;
+- production, provider, ingestion and portfolio-wide readiness: unchanged and still subject to their separate gates.
+
+The repository-completion statement below therefore remains limited to the audited R1–R4 repository scope.
