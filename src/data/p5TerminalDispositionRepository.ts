@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase"
+import { invokeEdgeFunction } from "../lib/edgeFunction"
 
 export type P5TerminalR6Disposition =
   | "SCORED"
@@ -51,8 +51,7 @@ interface P5TerminalResponse {
 export async function loadP5TerminalDispositions(
   portfolioId: string,
 ): Promise<readonly P5TerminalDisposition[]> {
-  const result = await supabase.functions.invoke<unknown>("p6-terminal-disposition-read", {
-    body: { portfolioId },
+  const result = await invokeEdgeFunction("p6-terminal-disposition-read", { portfolioId },
   })
   if (result.error) throw result.error
   const data = result.data as P5TerminalResponse | null
