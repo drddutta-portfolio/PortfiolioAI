@@ -1,4 +1,4 @@
-import { invokeEdgeFunction } from "../lib/edgeFunction"
+import { asEdgeFunctionError, invokeEdgeFunction } from "../lib/edgeFunction"
 
 export interface BankGrowthDiscoveryResult {
   readonly mode: "BANK_GROWTH_CONTRACT_DISCOVERY"
@@ -12,7 +12,7 @@ export interface BankGrowthDiscoveryResult {
 export async function discoverBankGrowthContract(portfolioId: string, securityId: string) {
   const { data, error } = await invokeEdgeFunction("discover-trendlyne-bank-growth-contract", { portfolioId, securityId, confirmation: "OWNER_CONFIRMED_BANK_GROWTH_DISCOVERY" },
   )
-  if (error) throw error
+  if (error) throw asEdgeFunctionError(error, "Bank growth discovery failed.")
   if (!data || typeof data !== "object") throw new Error("Bank growth discovery returned no result.")
   if ("error" in data && typeof data.error === "string") throw new Error(data.error)
   return data as BankGrowthDiscoveryResult
