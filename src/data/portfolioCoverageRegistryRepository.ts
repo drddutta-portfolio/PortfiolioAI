@@ -1,4 +1,4 @@
-import { invokeEdgeFunction } from "../lib/edgeFunction"
+import { asEdgeFunctionError, invokeEdgeFunction } from "../lib/edgeFunction"
 
 export interface PortfolioCoverageClassification {
   readonly sector: string | null
@@ -90,7 +90,7 @@ function isRegistryResponse(value: unknown): value is PortfolioCoverageRegistryR
 export async function loadPortfolioCoverageRegistry(portfolioId: string): Promise<PortfolioCoverageRegistryResponse> {
   const { data, error } = await invokeEdgeFunction("portfolio-coverage-registry", { portfolioId },
   )
-  if (error) throw error
+  if (error) throw asEdgeFunctionError(error, "Portfolio coverage registry failed.")
   if (!isRegistryResponse(data)) throw new Error("Portfolio coverage registry returned an invalid response.")
   return data
 }
