@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 import { Link } from "react-router-dom"
-import { supabase } from "../lib/supabase"
+import { invokeBankingReadOnlyValidation } from "../data/bankingValidationRepository"
 import { getSupabaseProjectRef, DEVELOPMENT_SUPABASE_PROJECT_REF } from "../lib/environment"
 import { publicConfig } from "../lib/config"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
@@ -69,17 +69,13 @@ export function BankingReadOnlyValidationPage() {
     setActive(slice.slice_id)
     setStates(previous => ({ ...previous, [slice.slice_id]: { status: "running" } }))
     try {
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
-      if (sessionError || !sessionData.session) throw new Error("Session unavailable or expired. Sign in again using the existing login page.")
       const evaluationAsOf = new Date().toISOString()
       const sourceCutoffAt = evaluationAsOf
       const selectionRunId = crypto.randomUUID()
-      const body = {
+      const data = await invokeBankingReadOnlyValidation({
         action: ACTION, portfolioId: portfolio.portfolio.id,
         securityIds: slice.securityIds, selectionRunId, evaluationAsOf, sourceCutoffAt,
-      }
-      const { data, error } = await supabase.functions.invoke(FUNCTION, { body })
-      if (error) throw new Error("Read-only validator failed. Confirm that your Development session is still valid and the function is available.")
+      })
       const cleaned = cleanResult(data, slice.securityIds)
       if (cleaned.processed !== slice.securityIds.length || cleaned.results.some(stock => !stock.status || !stock.snapshotHash || !stock.items.length)) throw new Error("Validator returned incomplete stock or requirement results")
       const result: SliceResult = { sliceId: slice.slice_id, evaluationAsOf, sourceCutoffAt, selectionRunId, deployment: "Development function p7-ic2-materialize-readiness; verify actual deployed version separately", ...cleaned }
