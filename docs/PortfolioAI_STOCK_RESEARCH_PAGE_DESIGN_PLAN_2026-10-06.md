@@ -793,7 +793,9 @@ There are no schema/migrations, new business facts, new provider capabilities,
 financial formulas, evidence-review writes, automatic owner-setting changes or
 Auth/RLS changes in Gate 4.
 
-### UI-G5 acceptance status — 7 October 2026 (UTC)
+### Historical UI-G5 acceptance status — 7 October 2026 (UTC)
+
+The following hold and hosted-review update are superseded by the final PASS below.
 
 The representative profile/state regression matrix passes 182 focused tests across
 11 files. See [the Gate 5 acceptance report](PortfolioAI_STOCK_RESEARCH_UI_GATE_5_ACCEPTANCE_2026-10-07.md)
@@ -810,14 +812,27 @@ CSS correction prepared. The verifier's login-redirect timing and READ_CACHE
 allowance were corrected. G5.2 is now in review, rather than access-blocked; final
 acceptance remains HOLD pending deployed re-verification. See the Gate 5 report.
 
-### UI-G5 current decision — 8 October 2026 (Asia/Kolkata)
+### UI-G5 final decision — 8 October 2026 (Asia/Kolkata)
 
-Authenticated hosted inspection now works. HDFCBANK and TORNTPHARM completed 74
-checks with only two tablet overflow failures. ABCAPITAL and ACMESOLAR completed
-74 checks with the proposed CSS injected temporarily; retained stock-specific
-research and explicit unregistered-presentation limits were confirmed. The common
-score-header correction is in PR #113. Vercel rejected its latest build with
-"Deployment rate limited — retry in 24 hours." Final acceptance remains HOLD;
-PR #113 is unmerged and the correction is not claimed live at Development.
-See the Gate 5 acceptance report and sanitized hosted evidence. Native browser
-zoom and the exact deployed fixed revision still require verification.
+**PASS — Gate 5 is complete.** The shared shell plus canonical stock-specific
+research composition is accepted as the baseline for all stock research pages,
+within each profile's declared capabilities. PR #113 passed CI and Vercel Preview
+at `ad2359f6b9cff0b182c6c52b72f34c884dcfcb07`, then merged into
+`PortfolioAI-Development` at `1a6d16e0a553ba08232bdc5f003e78b8f032c404`.
+Deployment `dpl_8bzgi9ueeZQAp5NfBJiNMN427CYA` was READY at that exact merge;
+the Development alias remained on it before and after hosted verification.
+
+Authenticated hosted verification passed **146 checks** across HDFCBANK,
+TORNTPHARM, ABCAPITAL and ACMESOLAR, plus **four native 200% browser-zoom checks**.
+Representative screenshots were inspected by the agent without owner intervention.
+No local app, injected proposed CSS, provider refresh or runtime errors were used
+or observed in the final run. The 182 focused regression tests also pass.
+
+Part 1 remains the common shell: compact unrestricted full-name wrapping, sticky
+section navigation, holdings, separate owner plan/advisory state, shared tabs,
+readiness, documents and evidence controls. Part 2 retains canonical sector,
+industry, sub-sector and subprofile assignments, applicable research requirements,
+results and provenance. Unregistered specialist presentations keep their own
+requirements and explicit capability limits; they do not borrow a banking model.
+Research methodology/evidence approvals and investment-engine gates remain separate.
+See [the final Gate 5 acceptance report](PortfolioAI_STOCK_RESEARCH_UI_GATE_5_ACCEPTANCE_2026-10-07.md).

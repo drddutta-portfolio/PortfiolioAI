@@ -1,0 +1,1207 @@
+{
+  "origin": "https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app",
+  "startedAt": "2026-10-08T02:16:12.775Z",
+  "status": "AUTOMATED_CHECKS_PASS_VISUAL_REVIEW_REQUIRED",
+  "scope": "Authenticated hosted application; no local server and no provider execution",
+  "checks": [
+    {
+      "name": "HDFCBANK: common shell",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK-390: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "HDFCBANK-390: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK-768: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 768,
+        "pageWidth": 768,
+        "title": {
+          "width": 680,
+          "scrollWidth": 680,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "HDFCBANK-768: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK-1024: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1024,
+        "pageWidth": 1024,
+        "title": {
+          "width": 918,
+          "scrollWidth": 918,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "HDFCBANK-1024: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK-1440: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1440,
+        "pageWidth": 1440,
+        "title": {
+          "width": 248,
+          "scrollWidth": 248,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "HDFCBANK-1440: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "Jump Summary: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Summary: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.765625,
+        "targetHeight": 1065.125
+      }
+    },
+    {
+      "name": "Jump Position: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Position: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.671875,
+        "targetHeight": 96.375
+      }
+    },
+    {
+      "name": "Jump Owner plan & suggestion: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Owner plan & suggestion: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.5625,
+        "targetHeight": 615.328125
+      }
+    },
+    {
+      "name": "Jump Refresh: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Refresh: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.890625,
+        "targetHeight": 159.875
+      }
+    },
+    {
+      "name": "Jump Research health: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Research health: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.953125,
+        "targetHeight": 115.5625
+      }
+    },
+    {
+      "name": "Jump Documents: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Documents: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 565.765625,
+        "targetHeight": 384
+      }
+    },
+    {
+      "name": "Jump Evidence: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Evidence: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.765625,
+        "targetHeight": 17335.90625
+      }
+    },
+    {
+      "name": "HDFCBANK: keyboard tabs",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK: source-status filter",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK-390-expanded-refresh: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "HDFCBANK-390-expanded-refresh: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK-long-name-0: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "HDFCBANK-long-name-0: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK-long-name-1: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "HDFCBANK-long-name-1: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK-long-name-2: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "HDFCBANK-long-name-2: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK-200-percent-css-zoom-stress: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1440,
+        "pageWidth": 1440,
+        "title": {
+          "width": 248,
+          "scrollWidth": 248,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "HDFCBANK-200-percent-css-zoom-stress: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "HDFCBANK: injected cached-read error retains shell",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM: common shell",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM-390: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "TORNTPHARM-390: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM-768: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 768,
+        "pageWidth": 768,
+        "title": {
+          "width": 680,
+          "scrollWidth": 680,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "TORNTPHARM-768: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM-1024: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1024,
+        "pageWidth": 1024,
+        "title": {
+          "width": 918,
+          "scrollWidth": 918,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "TORNTPHARM-1024: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM-1440: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1440,
+        "pageWidth": 1440,
+        "title": {
+          "width": 248,
+          "scrollWidth": 248,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "TORNTPHARM-1440: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "Jump Summary: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Summary: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.765625,
+        "targetHeight": 1096.234375
+      }
+    },
+    {
+      "name": "Jump Position: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Position: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 79.265625,
+        "targetHeight": 125.90625
+      }
+    },
+    {
+      "name": "Jump Owner plan & suggestion: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Owner plan & suggestion: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.671875,
+        "targetHeight": 615.328125
+      }
+    },
+    {
+      "name": "Jump Refresh: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Refresh: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 79,
+        "targetHeight": 159.875
+      }
+    },
+    {
+      "name": "Jump Research health: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Research health: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 79.171875,
+        "targetHeight": 115.5625
+      }
+    },
+    {
+      "name": "Jump Documents: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Documents: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 565.875,
+        "targetHeight": 384
+      }
+    },
+    {
+      "name": "Jump Evidence: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Evidence: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.875,
+        "targetHeight": 7750.125
+      }
+    },
+    {
+      "name": "TORNTPHARM: keyboard tabs",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM: source-status filter",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM-390-expanded-refresh: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "TORNTPHARM-390-expanded-refresh: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM-long-name-0: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "TORNTPHARM-long-name-0: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM-long-name-1: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "TORNTPHARM-long-name-1: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM-long-name-2: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "TORNTPHARM-long-name-2: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM-200-percent-css-zoom-stress: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1440,
+        "pageWidth": 1440,
+        "title": {
+          "width": 248,
+          "scrollWidth": 248,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "TORNTPHARM-200-percent-css-zoom-stress: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "TORNTPHARM: injected cached-read error retains shell",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL: common shell",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL-390: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ABCAPITAL-390: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL-768: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 768,
+        "pageWidth": 768,
+        "title": {
+          "width": 680,
+          "scrollWidth": 680,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ABCAPITAL-768: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL-1024: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1024,
+        "pageWidth": 1024,
+        "title": {
+          "width": 918,
+          "scrollWidth": 918,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ABCAPITAL-1024: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL-1440: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1440,
+        "pageWidth": 1440,
+        "title": {
+          "width": 248,
+          "scrollWidth": 248,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ABCAPITAL-1440: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "Jump Summary: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Summary: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.765625,
+        "targetHeight": 1056.265625
+      }
+    },
+    {
+      "name": "Jump Position: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Position: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 79.28125,
+        "targetHeight": 125.90625
+      }
+    },
+    {
+      "name": "Jump Owner plan & suggestion: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Owner plan & suggestion: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.703125,
+        "targetHeight": 615.328125
+      }
+    },
+    {
+      "name": "Jump Refresh: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Refresh: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 79.03125,
+        "targetHeight": 168.890625
+      }
+    },
+    {
+      "name": "Jump Research health: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Research health: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 79.1875,
+        "targetHeight": 115.5625
+      }
+    },
+    {
+      "name": "Jump Documents: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Documents: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 491.921875,
+        "targetHeight": 457.59375
+      }
+    },
+    {
+      "name": "Jump Evidence: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Evidence: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.921875,
+        "targetHeight": 1789.96875
+      }
+    },
+    {
+      "name": "ABCAPITAL: keyboard tabs",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL: source-status filter",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL-390-expanded-refresh: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ABCAPITAL-390-expanded-refresh: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL-long-name-0: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ABCAPITAL-long-name-0: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL-long-name-1: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ABCAPITAL-long-name-1: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL-long-name-2: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ABCAPITAL-long-name-2: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL-200-percent-css-zoom-stress: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1440,
+        "pageWidth": 1440,
+        "title": {
+          "width": 248,
+          "scrollWidth": 248,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ABCAPITAL-200-percent-css-zoom-stress: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ABCAPITAL: injected cached-read error retains shell",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR: common shell",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR-390: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ACMESOLAR-390: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR-768: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 768,
+        "pageWidth": 768,
+        "title": {
+          "width": 680,
+          "scrollWidth": 680,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ACMESOLAR-768: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR-1024: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1024,
+        "pageWidth": 1024,
+        "title": {
+          "width": 918,
+          "scrollWidth": 918,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ACMESOLAR-1024: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR-1440: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1440,
+        "pageWidth": 1440,
+        "title": {
+          "width": 248,
+          "scrollWidth": 248,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ACMESOLAR-1440: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "Jump Summary: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Summary: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.765625,
+        "targetHeight": 1041.21875
+      }
+    },
+    {
+      "name": "Jump Position: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Position: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.515625,
+        "targetHeight": 96.375
+      }
+    },
+    {
+      "name": "Jump Owner plan & suggestion: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Owner plan & suggestion: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.65625,
+        "targetHeight": 615.328125
+      }
+    },
+    {
+      "name": "Jump Refresh: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Refresh: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.984375,
+        "targetHeight": 168.890625
+      }
+    },
+    {
+      "name": "Jump Research health: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Research health: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 79.140625,
+        "targetHeight": 115.5625
+      }
+    },
+    {
+      "name": "Jump Documents: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Documents: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 565.875,
+        "targetHeight": 384
+      }
+    },
+    {
+      "name": "Jump Evidence: focus",
+      "pass": true
+    },
+    {
+      "name": "Jump Evidence: focus and sticky clearance",
+      "pass": true,
+      "detail": {
+        "menuBottom": 66.984375,
+        "targetTop": 78.875,
+        "targetHeight": 1789.96875
+      }
+    },
+    {
+      "name": "ACMESOLAR: keyboard tabs",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR: source-status filter",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR-390-expanded-refresh: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ACMESOLAR-390-expanded-refresh: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR-long-name-0: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ACMESOLAR-long-name-0: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR-long-name-1: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ACMESOLAR-long-name-1: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR-long-name-2: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "title": {
+          "width": 314,
+          "scrollWidth": 314,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ACMESOLAR-long-name-2: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR-200-percent-css-zoom-stress: no page overflow",
+      "pass": true,
+      "detail": {
+        "viewport": 1440,
+        "pageWidth": 1440,
+        "title": {
+          "width": 248,
+          "scrollWidth": 248,
+          "whiteSpace": "normal",
+          "textOverflow": "clip",
+          "maxHeight": "none",
+          "overflowWrap": "anywhere",
+          "lineClamp": "none"
+        }
+      }
+    },
+    {
+      "name": "ACMESOLAR-200-percent-css-zoom-stress: complete wrapping title",
+      "pass": true
+    },
+    {
+      "name": "ACMESOLAR: injected cached-read error retains shell",
+      "pass": true
+    },
+    {
+      "name": "No automatic provider execution",
+      "pass": true
+    },
+    {
+      "name": "No browser runtime errors",
+      "pass": true
+    }
+  ],
+  "runtimeErrors": 0,
+  "blockedProviderRequests": 0,
+  "finishedAt": "2026-10-08T02:19:37.950Z",
+  "verifiedRevision": "1a6d16e0a553ba08232bdc5f003e78b8f032c404",
+  "deploymentId": "dpl_8bzgi9ueeZQAp5NfBJiNMN427CYA",
+  "temporaryProposedStyles": false,
+  "agentVisualReview": "PASS: representative hosted screenshots inspected; see acceptance record"
+}
