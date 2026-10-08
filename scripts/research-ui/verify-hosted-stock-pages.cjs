@@ -27,13 +27,31 @@ async function main() {
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_EXECUTABLE_PATH || '/usr/bin/chromium', headless: true, proxy: process.env.HTTPS_PROXY || process.env.HTTP_PROXY ? { server: process.env.HTTPS_PROXY || process.env.HTTP_PROXY } : undefined, args: ['--no-sandbox', '--disable-dev-shm-usage'] })
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' })
   const page = await context.newPage()
+  async function settleReads() {
+    // Observe the rendered cached-read lifecycle. Cancelled reads from a prior
+    // navigation can remain in Chromium's network bookkeeping indefinitely.
+    await page.waitForFunction(() => {
+      const page = document.querySelector('.research-page')
+      if (!page) return false
+      return !/\bLoading[ .…]|Canonical profile loading/.test(page.innerText)
+    }, null, { timeout: 30000 })
+    await page.waitForTimeout(750)
+  }
   page.on('pageerror', () => { report.runtimeErrors += 1 })
-  await context.route('**/functions/v1/**', route => { report.blockedProviderRequests += 1; return route.abort() })
+  await context.route('**/functions/v1/**', route => {
+    const request = route.request()
+    const endpoint = new URL(request.url()).pathname.split('/').pop()
+    const body = request.postData() ? request.postDataJSON() : null
+    if (request.method() === 'OPTIONS' || endpoint === 'p6-terminal-disposition-read' || (endpoint === 'refresh-market-data' && body?.action === 'READ_CACHE')) return route.continue()
+    report.blockedProviderRequests += 1; return route.abort()
+  })
   const check = (name, pass, detail = undefined) => report.checks.push({ name, pass: Boolean(pass), ...(detail === undefined ? {} : { detail }) })
   async function capture(name) {
+    if (name !== 'workflow-stopped') await settleReads()
     const file = `${name}.png`
     await page.screenshot({ path: path.join(output, file), fullPage: true })
-    report.screenshots.push(file)
+    await page.screenshot({ path: path.join(output, `${name}-viewport.png`), fullPage: false })
+    report.screenshots.push(file, `${name}-viewport.png`)
   }
   async function layout(name) {
     const measured = await page.evaluate(() => {
@@ -63,6 +81,7 @@ async function main() {
       return
     }
     await page.goto(`${ORIGIN}/app/research/${STOCKS[0].id}`, { waitUntil: 'domcontentloaded' })
+    await page.waitForFunction(() => location.pathname === '/login' || document.querySelector('.research-title h1'), null, { timeout: 30000 })
     if (new URL(page.url()).pathname === '/login') {
       if (!config.email || !config.password) { report.status = 'BLOCKED_APP_AUTH'; return }
       await page.locator('input[name="email"]').fill(config.email)
@@ -76,6 +95,7 @@ async function main() {
       await page.goto(`${ORIGIN}/app/research/${stock.id}`, { waitUntil: 'domcontentloaded' })
       await page.locator('.research-title h1').waitFor({ timeout: 30000 })
       await page.waitForFunction(() => ![...document.querySelectorAll('.research-page .portfolio-loading')].some(el => el.getClientRects().length), null, { timeout: 30000 })
+      await settleReads()
       const title = await page.locator('.research-title h1').textContent()
       check(`${stock.symbol}: common shell`, await page.locator('.research-workspace-shell').count() === 1 && await page.getByRole('tab').count() === 7)
       for (const width of WIDTHS) {
@@ -90,8 +110,10 @@ async function main() {
       await page.getByRole('tab', { name: 'Overview', exact: true }).focus()
       await page.keyboard.press('End')
       check(`${stock.symbol}: keyboard tabs`, await page.getByRole('tab', { name: 'Evidence', exact: true }).getAttribute('aria-selected') === 'true' && await page.getByRole('tab', { name: 'Evidence', exact: true }).evaluate(el => el === document.activeElement))
-      const status = page.getByLabel('Status', { exact: true })
-      if (await status.count()) await status.selectOption('CONFLICTING')
+      await page.getByRole('heading', { name: 'Evidence ledger', exact: true }).waitFor({ timeout: 30000 })
+      const status = page.locator('.evidence-filter select')
+      await status.selectOption('CONFLICTING')
+      check(`${stock.symbol}: source-status filter`, await status.inputValue() === 'CONFLICTING')
       await capture(`${stock.symbol}-evidence`)
       await page.getByRole('tab', { name: 'Documents', exact: true }).click()
       await capture(`${stock.symbol}-documents`)
@@ -101,6 +123,7 @@ async function main() {
       await page.setViewportSize({ width: 390, height: 1000 })
       await layout(`${stock.symbol}-390-expanded-refresh`)
       await capture(`${stock.symbol}-390-expanded-refresh`)
+      await page.evaluate(() => window.scrollTo(0, 0))
       for (const [index, stressName] of ['SRHHYPLTD', 'EXTREMELYLONGUNBROKENSTOCKSYMBOLFORWRAPPING', 'International Speciality Research and Manufacturing Company Limited'].entries()) {
         await page.locator('.research-title h1').evaluate((el, text) => { el.textContent = text }, stressName)
         await layout(`${stock.symbol}-long-name-${index}`)
@@ -125,7 +148,8 @@ async function main() {
     report.status = report.checks.every(item => item.pass) ? 'AUTOMATED_CHECKS_PASS_VISUAL_REVIEW_REQUIRED' : 'FAIL'
   } catch (error) {
     report.status = 'INCOMPLETE'
-    check('Browser workflow completed', false, error.name)
+    check('Browser workflow completed', false, { error: error.name, pathname: new URL(page.url()).pathname })
+    await capture('workflow-stopped').catch(() => {})
   } finally {
     report.finishedAt = new Date().toISOString()
     await fs.writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2), { mode: 0o600 })

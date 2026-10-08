@@ -1,3 +1,15 @@
+### UI-G5 current decision — 8 October 2026 (Asia/Kolkata)
+
+Authenticated hosted inspection now works. HDFCBANK and TORNTPHARM completed 74
+checks with only two tablet overflow failures. ABCAPITAL and ACMESOLAR completed
+74 checks with the proposed CSS injected temporarily; retained stock-specific
+research and explicit unregistered-presentation limits were confirmed. The common
+score-header correction is in PR #113. Vercel rejected its latest build with
+"Deployment rate limited — retry in 24 hours." Final acceptance remains HOLD;
+PR #113 is unmerged and the correction is not claimed live at Development.
+See the Gate 5 acceptance report and sanitized hosted evidence. Native browser
+zoom and the exact deployed fixed revision still require verification.
+
 ## Stock research UI-G5 acceptance — 7 October 2026 (UTC)
 
 G5.1's integrated representative profile/state suite passes 182 tests across 11
@@ -9317,3 +9329,11 @@ This is acquisition/adapter progress, not V1-4 completion. Canonical R2-reader i
 V1-4 remains IN PROGRESS / NOT PROVEN; V1-5 remains unauthorized. Owner-approved separation of 252 market-session lookback from explicit documentary identity minima is implemented for 45 requirement items across 44 stocks. The VERIFIED-versus-AVAILABLE document-source adapter mismatch is repaired. Development materializer v36 source readback matches the repository modules; 86 focused V1-4 tests and build/architecture checks pass. Two unrelated legacy Program A source-text tests remain failing in the broader Edge suite.
 
 Repair application commit 31a1ed7f1f875fa1d3cd6f4a8f0e604b891a94c6 has a READY Development Preview. Four genuine current annual reports (AKUMS, ALIVUS, ABCAPITAL, ACMESOLAR) now have original-PDF R2 retention, verified readback hashes and compact canonical source/document links. Historical AKUMS FY2024–25 is also retained. No requirement-review ACCEPT rows or new readiness selections were written. The frozen 111 manifest hash remains 79f551558333adc1f37d6a26298d8088ee02db3161f03c6d6e59f9a19a93fc27. See PortfolioAI_V1_4_TYPED_DOCUMENT_CONTRACT_REPAIR_2026-10-07.md and private capture receipts. No Production/main, migrations, Auth/RLS, schedulers or P8 changes occurred.
+
+### UI-G5 hosted review update — 8 October 2026 (Asia/Kolkata)
+
+The new Development share link and app login worked. Hosted checks exercised
+HDFCBANK and TORNTPHARM; tablet score-label overflow was found and a shared-shell
+CSS correction prepared. The verifier's login-redirect timing and READ_CACHE
+allowance were corrected. G5.2 is now in review, rather than access-blocked; final
+acceptance remains HOLD pending deployed re-verification. See the Gate 5 report.

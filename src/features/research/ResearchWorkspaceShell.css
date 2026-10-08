@@ -87,3 +87,11 @@
 }
 
 }
+
+/* Tablet score labels need the same stacked layout as narrower stock pages.
+   The shared three-column override otherwise constrains "Unavailable" to 8rem. */
+@media (max-width: 800px) {
+  .research-page .scoring-summary-head { grid-template-columns: minmax(0, 1fr); }
+}
+.research-page .overall-score-box strong,
+.research-page .score-coverage-box strong { overflow-wrap: anywhere; }
