@@ -32,3 +32,5 @@
 .retained-result-table th, .retained-result-table td { padding: .45rem; border-bottom: 1px solid #d7e3dc; text-align: left; min-inline-size: 8rem; overflow-wrap: anywhere; }
 .retained-research-result { min-inline-size: 0; }
 .retained-research-result summary { cursor: pointer; font-weight: 600; }
+.pharma-workspace-panel p, .pharma-workspace-panel summary { overflow-wrap: anywhere; }
+.pharma-workspace-panel details { min-inline-size: 0; max-inline-size: 100%; }
