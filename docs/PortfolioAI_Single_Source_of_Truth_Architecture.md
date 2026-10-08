@@ -389,6 +389,28 @@ Any remaining legacy drift discovered by the guard should be recorded and remove
 
 That rule is part of PortfolioAI's architecture, not a UI convention.
 
+## Industry-first research selection — 8 October 2026
+
+Company research is Industry-first and business-model-aware: Sector provides
+context and portfolio/macro grouping; exact versioned Industry mappings select
+the candidate framework; Basic Industry and reviewed business-model/subprofile
+assignments resolve the final specialised authority where needed. Sector alone
+must never select the template or methodology, and Industry alone must not force
+a route within an economically heterogeneous group. The official four-level
+hierarchy and PortfolioAI analytical assignments remain distinct.
+
+One canonical reviewed assignment must supply the header, methodology summary,
+stock-specific research blocks, readiness reasons and eligible R6/R7/downstream
+outputs. Presentation registries format that assignment; they do not create a
+second sector/industry router or promote provisional data. Classification correction
+requires explicit methodology revalidation; correct existing P7 assignments remain
+referenced until an approved superseding assignment exists. Missing/conflicting
+required hierarchy or business-model refinement remains an explicit blocker.
+
+C1/C8 in the permanent classification/remediation plan encode this contract.
+Current deployed compatibility authorities below remain in place until the
+separately reviewed cutover; documenting the rule does not perform that cutover.
+
 ## V1-3 canonical routing compatibility — 2026-10-05
 
 Research consumes the approved P7 IC1 assignment from the same portfolio-scoped `current_research_evidence_snapshot_lineage_v1` projection used by Dashboard and Intelligence. `loadP7CurrentEvidenceSnapshot` → `resolveCanonicalScoringProfile` → `loadSecurityScoringSnapshot` → `useSecurityScoring` is the shared access path. A present canonical assignment takes precedence over legacy assignments and classification routing. Unreviewed assignment lineage fails closed; there is no page-level copy of the 45-profile taxonomy. The approved assignment version is preserved, not regenerated.

@@ -776,6 +776,30 @@ Missing industry or business-model evidence is a research-readiness problem, not
 
 The classification-to-methodology hierarchy above is a **system-wide architecture invariant**.
 
+### 19.0 Permanent Industry-first company-research invariant — 8 October 2026
+
+All company research pages and specialised research methodologies are
+**Industry-first and business-model-aware**. Sector is contextual metadata and a
+portfolio/macro grouping; it alone must never select a company research template,
+metric set or scoring methodology. Industry selects the candidate framework
+through exact versioned taxonomy mappings. Basic Industry refines it; reviewed
+business-model/subprofile assignments determine the specialised authority when
+industry membership is economically heterogeneous. Industry alone is insufficient
+in those cases. Official economic hierarchy and analytical assignment remain
+separate: Macro-Economic Sector → Sector → Industry → Basic Industry, followed by
+PortfolioAI methodology/business-model profile and required subprofile refinement.
+
+The shared shell stays universal. Its stock-specific blocks and eligible R6/R7
+and downstream outputs consume the same reviewed canonical methodology assignment.
+A missing, ambiguous or conflicting required refinement fails closed. A present
+approved assignment remains authoritative until reviewed revalidation/reassignment;
+UI rendering cannot reroute it from sector or industry text. Sector pages cover
+exposure/allocation, macro trends, concentration, relative performance and news.
+
+The classification/remediation plan's C1 taxonomy contract and C8 reassignment
+rules must enforce this invariant; this documentation amendment grants no runtime,
+methodology-change, evidence-promotion or migration authority.
+
 ### 19.1 Required runtime behavior
 
 For an operating-company equity:
@@ -805,13 +829,13 @@ A specialised score or recommendation must not be generated merely because a bro
 The implementation should maintain a versioned machine-readable mapping from:
 
 ```text
-Sector + Industry + Basic Industry / Business Model
-→ Research Profile
-→ Research Subprofile
-→ Methodology Version
+Exact Industry node + required Basic Industry refinement
++ reviewed business-model/subprofile evidence where required
+→ Canonical Research Profile / required Subprofile assignment
+→ Methodology Authority and Version
 ```
 
-Stage-specific taxonomy files may evolve as research packages are developed, but they must conform to this canonical architecture and may not weaken the fail-closed rule.
+Sector remains contextual metadata and validated parentage in this mapping; it is not a Sector-only selector. Stage-specific taxonomy files may evolve as research packages are developed, but they must conform to this canonical architecture and may not weaken the fail-closed rule.
 
 ### 19.3 Automated enforcement
 

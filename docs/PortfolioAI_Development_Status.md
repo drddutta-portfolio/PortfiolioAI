@@ -1,3 +1,21 @@
+### Industry-first company-research rule — 8 October 2026
+
+Owner directed a permanent Industry-first, business-model-aware company-research
+rule. C1's taxonomy contract and C8's methodology reassignment rules now explicitly
+require: Sector = contextual/portfolio grouping; Industry = primary framework
+selector; Basic Industry = refinement; reviewed business-model/subprofile =
+specialised refinement where needed. Sector alone cannot select a company research
+template or methodology, and heterogeneous industries cannot bypass required
+business-model review. Existing canonical assignments remain authoritative until
+reviewed revalidation/reassignment; UI does not create a competing router.
+
+The Research and Intelligence Architecture, Single Source of Truth Architecture
+and two-part stock Research design plan are aligned. This is a documentation
+amendment, not implementation or C1/C8 closure. The [Pharma/sector display review](PortfolioAI_PHARMA_AND_SECTOR_DISPLAY_REVIEW_2026-10-08.md)
+records open assignment-display, methodology-panel and classification integration
+gaps; the earlier Gate 5 shell PASS does not close those findings. No application,
+provider, database, scoring or deployment changes were performed by this amendment.
+
 ### UI-G5 final decision — 8 October 2026 (Asia/Kolkata)
 
 **PASS — Gate 5 is complete.** The shared shell plus canonical stock-specific

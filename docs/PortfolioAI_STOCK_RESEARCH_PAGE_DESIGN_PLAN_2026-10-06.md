@@ -44,7 +44,33 @@ Common design does not mean identical values or research dimensions. These regio
 
 ### Part 2 — Stock-specific research design and group-built research data
 
-Within the common shell, reusable research blocks present the content appropriate to the stock's canonical sector, industry, sub-sector/group/subgroup, approved research profile/subprofile and applicable approved overlays. These classification fields remain distinct from methodological assignments: the approved effective research contract selects requirements, dimensions, metrics and modules; the UI must not infer a methodology from a sector label or ticker.
+Within the common shell, reusable research blocks are **Industry-first and
+business-model-aware**. Sector is visible context and portfolio grouping, never
+an independent company-template or methodology selector. Exact versioned Industry
+mappings select the candidate research framework; Basic Industry refines it;
+reviewed business-model/subprofile evidence resolves specialised methodology
+where required. Industry alone must not force a route when its businesses have
+materially different economics. The approved effective canonical assignment,
+not a page-local classifier, selects requirements, dimensions, metrics and modules.
+
+The identity block distinguishes **official economic classification**
+(Macro-Economic Sector → Sector → Industry → Basic Industry) from **PortfolioAI
+research assignment** (methodology/business-model profile → required subprofile).
+Do not introduce a parallel sub-sector/group hierarchy or infer missing levels.
+Primary subprofile and separately reviewed secondary exposures remain distinct.
+The top summary, deep research and readiness views must consume one assignment
+contract; a canonical resolved primary must not appear as awaiting assignment
+because an older independent read is empty. Missing richer provenance or an
+actual conflict remains explicit rather than fabricated.
+
+Stock-specific presentation and eligible R6/R7/downstream outputs follow that
+same reviewed methodology. Sector pages remain for allocation/exposure, macro
+trends, concentration, relative performance and news. Healthcare business families
+and Financial Services business models must not receive one generic sector-driven
+company framework; the five existing Pharma subprofiles remain separate portable
+authorities. See C1/C8 of the [permanent classification/remediation plan](PortfolioAI_PERMANENT_CANONICAL_CLASSIFICATION_AND_TAXONOMY_REMEDIATION_PLAN_2026-10-01.md).
+This owner-directed clarification does not activate research engines or approve
+classification/methodology changes.
 
 This part must expose the research data and results already built for the applicable group of stocks: relevant financial and operating observations, normalized metrics and history, business-model/exposure research, source documents, supporting and contradictory evidence, validation/review states, requirement coverage, freshness, blockers, and qualified persisted assessments and explanations where available. It is substantive research content, not merely a sector badge or a different card title.
 
@@ -97,7 +123,7 @@ flowchart TD
     C --> D["Shared research tabs"]
     D --> E["Overview: Context → Cockpit → Heatmap → Ratings → Readiness"]
     E --> F["Applicable metric snapshots → Research Health"]
-    F --> G["Sector/profile deep research: compact summary + expandable modules"]
+    F --> G["Industry/business-model research: compact summary + expandable modules"]
     D --> H["Financials / Quality & Growth / Ownership / Valuation"]
     D --> I["Documents / Evidence: complete facts, requirements and lineage"]
 ```
