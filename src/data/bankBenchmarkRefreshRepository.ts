@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase"
+import { invokeEdgeFunction } from "../lib/edgeFunction"
 
 export interface BankBenchmarkRefreshPlan {
   readonly mode: "BANK_BENCHMARK_REFRESH_PLAN"
@@ -44,7 +44,7 @@ async function edgeErrorMessage(error: unknown): Promise<string> {
 }
 
 const invoke = async <T>(body: Record<string, unknown>): Promise<T> => {
-  const { data, error } = await supabase.functions.invoke<unknown>("refresh-bank-benchmark", { body })
+  const { data, error } = await invokeEdgeFunction("refresh-bank-benchmark", body)
   if (error) throw new Error(await edgeErrorMessage(error))
   if (!data || typeof data !== "object") throw new Error("Bank benchmark refresh returned no result.")
   if ("error" in data && typeof data.error === "string") {
