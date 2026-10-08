@@ -1,3 +1,12 @@
+## Operational V1-4 executable remediation preparation — 8 October 2026
+
+**PREPARED / NOT PROVEN.** Added `docs/private/PortfolioAI_V1_4_BOUNDED_ACQUISITION_GROUPS_2026-10-08.json` and `docs/PortfolioAI_V1_4_EXECUTABLE_REMEDIATION_BATCH_CONTRACT_2026-10-08.md`.
+These provide 131 deduplicated document acquisition groups (114 linked canonical research-document IDs plus 17 source-unlinked requirement groups) for 292 review items, and 252 numeric source groups for 537 numeric requirement items. Each group retains security/requirement lineage and frozen-111 membership where proven. This is a source-group inventory; missing authoritative original-document URLs and exact dated field methods remain explicit, so provider call counts for B/C must not be fabricated.
+
+Proposed (not approved) ownership choices: Promoter series for generic four-quarter trend; Institutional series for institutional four-quarter trend; Promoter ownership and separately reviewed governance documents for governance. Full versioned choices/controls are in the bounded batch contract.
+
+Existing official benchmark-only source-policy approval is preserved. Prepared two exact index refreshes, Telecom identity reconciliation, one-security HINDUNILVR append-only corrective proof, and deferred review/materialization; execution/write grants remain missing. No current V1-4 canonical blockers removed and no new provider calls, R2 writes, DB writes, migrations, materialization, deployment, production, or scheduler changes occurred. V1-5 remains unauthorized. This preparation is not current-HEAD code-test PASS.
+
 ## R1–R4 audit remediation / repository completion — 8 October 2026
 
 **Status: R1–R4 audit-remediation implementation is COMPLETE for the audited repository scope. Exact-current-head full-suite re-verification is CI-INFRASTRUCTURE BLOCKED.**
