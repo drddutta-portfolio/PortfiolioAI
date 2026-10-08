@@ -1,3 +1,19 @@
+## R1–R4 audit remediation — 8 October 2026
+
+**Repository implementation and verification: COMPLETE for the audited R1–R4 repository scope.**
+
+The supplied audit baseline `9362f15` was reconciled against current Development rather than treated as current state. The R1–R4 scope is now explicitly separated from the newer operational V1-4 evidence-readiness stage.
+
+Resolved audit areas include the ResearchPage test environment, Angel One safe session-error contract, fail-closed Pharma canonical-series reconciliation, a single Decimal operating-margin calculation owner, and security-specific Pharma readiness messaging. The final verification repair also cleared eight Deno type-check issues in shared Edge code without weakening lint, typing, architecture or security controls.
+
+Verification at code head `aefef83da45e3274e44a6d8819ee354dbace33b4` passed architecture, TypeScript, application lint, Edge lint, **2,167 application tests**, **2 Deno handler tests**, **359 Edge tests**, production build and diff check. No migration, provider execution, ingestion write, scheduler activation, Production deployment or Auth/RLS/grant change was performed.
+
+R4H TORNTPHARM production ingestion remains separately approval-gated. Portfolio-wide Pharma evidence readiness is not claimed. The newer operational V1-4 stage is not closed by this R1–R4 repository result.
+
+See [R1–R4 Audit Remediation and Repository Completion](PortfolioAI_R1_R4_AUDIT_REMEDIATION_2026-10-08.md).
+
+---
+
 ### UI-G5 final decision — 8 October 2026 (Asia/Kolkata)
 
 **PASS — Gate 5 is complete.** The shared shell plus canonical stock-specific
