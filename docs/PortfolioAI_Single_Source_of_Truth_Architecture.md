@@ -424,3 +424,31 @@ Research exposes the immutable requirement items belonging to the same portfolio
 
 The existing structured-parameter normalizer now refuses to count matching metric labels or growth horizons as dated reporting periods for a multi-period requirement. Such retained observations remain `EVIDENCE_PRESENT_REVIEW_REQUIRED / DATED_REPORTING_PERIODS_NOT_PROVEN`, with deterministicScoreReady false. Version `P7_IC_EVIDENCE_NORMALIZATION_V2_PERIOD_GUARD` identifies this repository guard. It does not normalize invented dates, overwrite prior source payloads or selections, or establish units/currency/scope, corporate-action adjustment, benchmark alignment or freshness by itself. Existing live snapshots and deployed Edge Functions remain unchanged by a repository commit; V1-4 closure requires separate proof of valid inputs before execution/materialization.
 
+
+## Stock-page Stage 2 shared selection — 8 October 2026
+
+The current stock Research page selects its portfolio/security-scoped immutable
+snapshot through `loadP7CurrentEvidenceDetails -> useCanonicalEvidenceReadiness ->
+useStockResearchContext`. That same snapshot is supplied to
+`loadSecurityScoringSnapshot` through `useSecurityScoring`; the scoring repository
+checks the requested portfolio/security and does not reselect when an explicit
+snapshot or explicit null is supplied. Readiness, Evidence and ProfileResearchBlocks
+receive the shared evidence result instead of independently selecting current rows.
+Refresh completion reloads this shared selection; errors and navigation cannot
+retain a prior selection's score.
+
+Header, Pharma primary model, deep-workspace framework and R6 presentation consume
+the resolved `canonicalRoute`. Assignment/version, methodology, actual supplied
+classification version and snapshot/date remain distinct. Official hierarchy
+fields absent from the existing classification projection remain unavailable;
+this change does not implement taxonomy remediation or reassign companies.
+
+Original Pharma reviewed research remains reachable in a separately labelled,
+collapsed earlier-review workspace. Its legacy assignment read runs only when
+that detail is opened and cannot determine the live primary assignment, block a
+resolved P7 assignment, or supply current readiness. Secondary exposure/reviewer/
+effective-date metadata absent from P7 is not invented or imported as current.
+The preserved Pharma parent-score adapter does not prove score binding to the
+selected subprofile and immutable evidence snapshot; R6 therefore cannot qualify
+such a parent score merely because the canonical primary now displays correctly.
+No scoring formulas, assignments, schema, RLS or provider execution change.

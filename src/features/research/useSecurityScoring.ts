@@ -54,9 +54,9 @@ export function useSecurityScoring(securityId: string | null, sector: string | n
   const selectionLoading = selection?.isLoading ?? false
   const selectionError = selection?.error ?? null
   const cacheKey = securityId && portfolioId && assetClass ? `${portfolioId}:${securityId}:${assetClass}${selection ? `:${selectedSnapshot?.snapshotId ?? "no-snapshot"}` : ""}` : null
-  const [loaded, setLoaded] = useState<{ key: string | null; revision: number; data: SecurityScoringSnapshot | null; error: string | null }>({ key: null, revision: 0, data: null, error: null })
+  const [loaded, setLoaded] = useState<{ key: string | null; revision: number; selectedSnapshot?: P7CurrentEvidenceSnapshot | null; data: SecurityScoringSnapshot | null; error: string | null }>({ key: null, revision: 0, data: null, error: null })
   const [revision, setRevision] = useState(0)
-  const current = !selectionLoading && !selectionError && loaded.key === cacheKey && loaded.revision === revision
+  const current = !selectionLoading && !selectionError && loaded.key === cacheKey && loaded.revision === revision && loaded.selectedSnapshot === selectedSnapshot
   const data = current ? loaded.data : null
   const error = selectionError ?? (current ? loaded.error : null)
 
@@ -64,12 +64,12 @@ export function useSecurityScoring(securityId: string | null, sector: string | n
     let active = true
     if (selectionLoading || selectionError || !securityId || !portfolioId || !assetClass || !cacheKey) return () => { active = false }
 
-    const unsubscribe = subscribe(cacheKey, (snapshot) => { if (active) setLoaded({ key: cacheKey, revision, data: snapshot, error: null }) })
+    const unsubscribe = subscribe(cacheKey, (snapshot) => { if (active) setLoaded({ key: cacheKey, revision, selectedSnapshot, data: snapshot, error: null }) })
 
     const loader = loadSecurityScoringSnapshot(securityId, sector, industry, { portfolioId, assetClass, ...(selectedSnapshot === undefined ? {} : { selectedSnapshot }) })
     void loader
-      .then((value) => { if (active) setLoaded({ key: cacheKey, revision, data: publishSnapshot(cacheKey, value), error: null }) })
-      .catch((reason: unknown) => { if (active) setLoaded({ key: cacheKey, revision, data: null, error: displayError(reason) }) })
+      .then((value) => { if (active) setLoaded({ key: cacheKey, revision, selectedSnapshot, data: publishSnapshot(cacheKey, value), error: null }) })
+      .catch((reason: unknown) => { if (active) setLoaded({ key: cacheKey, revision, selectedSnapshot, data: null, error: displayError(reason) }) })
 
     return () => { active = false; unsubscribe() }
   }, [securityId, sector, industry, portfolioId, assetClass, cacheKey, revision, selectedSnapshot, selectionLoading, selectionError])

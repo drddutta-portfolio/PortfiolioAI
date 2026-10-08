@@ -74,6 +74,12 @@ describe("Program B canonical R6 scoring presentation", () => {
     expect(result).toMatchObject({ readinessState: "READY", researchProfileCode: "PHARMA_V1", methodologyRole: primary })
   })
 
+  it("retains the canonical primary and version despite a conflicting legacy primary", () => {
+    const canonicalRoute = { profileCode: "PHARMA", subprofileCode: "CDMO_CRAMS", methodologyAuthority: "approved-pharma", methodologyVersion: "V1", assignmentAuthority: "approved-P7", assignmentVersion: "P7-preserved-version", assignmentId: "P7-assignment", snapshotId: "selected-snapshot", asOfDate: "2026-10-08", classificationVersion: "selected-classification" }
+    const result = buildProgramBR6ScoringPresentation({ securityId: "s1", snapshot: snapshot({ canonicalRoute, routeState: "RESOLVED", scoringExecutionState: "BLOCKED" }), pharmaResolution: resolved("GLOBAL_GENERICS") })
+    expect(result).toMatchObject({ methodologyRole: "CDMO_CRAMS", assignmentId: "P7-assignment", assignmentVersion: "P7-preserved-version", classificationVersion: "selected-classification", score: null, canScore: false })
+  })
+
   it("fails closed without a reviewed Primary and never displays generic PHARMA", () => {
     const result = buildProgramBR6ScoringPresentation({ securityId: "security-biocon", snapshot: snapshot(), pharmaResolution: null })
     expect(result.readinessState).toBe("BLOCKED_PREREQUISITE")

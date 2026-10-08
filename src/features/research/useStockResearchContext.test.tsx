@@ -39,6 +39,18 @@ describe("one selected Research snapshot", () => {
     await waitFor(() => expect(mocks.scoring).toHaveBeenCalledTimes(2))
     expect(mocks.scoring.mock.calls[1]?.[3].selectedSnapshot.snapshotId).toBe("second")
   })
+  it("clears old scoring when reloading the same snapshot identity", async () => {
+    mocks.evidence.mockResolvedValue(details("same-id"))
+    const { result } = renderHook(() => useStockResearchContext(input))
+    await waitFor(() => expect(result.current.scoring.data).toEqual(score))
+    let finish!: (value: SecurityScoringSnapshot) => void
+    mocks.scoring.mockImplementationOnce(() => new Promise(resolve => { finish = resolve }))
+    act(() => result.current.reload())
+    await waitFor(() => expect(mocks.scoring).toHaveBeenCalledTimes(2))
+    expect(result.current.scoring.data).toBeNull()
+    await act(async () => { finish(score) })
+    await waitFor(() => expect(result.current.scoring.data).toEqual(score))
+  })
   it("propagates failed selection without scoring or falling back to another assignment", async () => {
     mocks.evidence.mockRejectedValue(new Error("Selection unavailable"))
     const { result } = renderHook(() => useStockResearchContext(input))

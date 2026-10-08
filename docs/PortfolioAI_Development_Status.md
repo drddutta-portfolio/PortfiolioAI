@@ -1,3 +1,14 @@
+### Stock-page Industry-first Stage 2 — 8 October 2026
+
+Stage 2.1–2.4 are implemented on the review branch: one selected P7 evidence
+snapshot now supplies scoring, readiness and profile requirements; canonical
+assignment supplies the Pharma header, live framework and R6 role/lineage.
+Original review material is separately labelled and cannot override the current
+route. Qualification of unbound Pharma parent scores remains blocked.
+See the [Stage 2 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_2_CANONICAL_INTEGRATION_2026-10-08.md)
+for validation and release status. Industry-led shell layout is Stage 3; full
+specialised result presentation is Stage 4. C1/C8 remediation is not closed.
+
 ### Stock-page Industry-first Stage 1 — 8 October 2026
 
 Stage 1.1–1.4 contract specification is complete: official classification levels,
