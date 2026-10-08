@@ -1,0 +1,52 @@
+name: Banking V1-4 Full Verification
+
+on:
+  pull_request:
+    paths:
+      - "src/pages/BankingReadOnlyValidationPage.tsx"
+      - "src/data/bankingValidationRepository.ts"
+      - "src/routes/AppRoutes.tsx"
+      - "src/pages/SettingsPage.tsx"
+      - "supabase/functions/p7-ic2-materialize-readiness/**"
+      - ".github/workflows/banking-v1-4-full-verification.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  banking-full-verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch Program D reference branch for historical audit
+        run: git fetch origin refs/heads/program-d-operations-optional-ai:refs/remotes/origin/program-d-operations-optional-ai
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Architecture boundary
+        run: npm run check:architecture
+      - name: Architecture lint
+        run: npm run lint:architecture
+      - name: TypeScript
+        run: npm run typecheck
+      - name: Full application lint
+        run: npm run lint
+      - name: Edge lint
+        run: npm run lint:edge
+      - name: Full Edge tests
+        run: npm run test:edge
+      - name: Full application tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Diff whitespace
+        run: git diff --check

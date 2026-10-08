@@ -1,0 +1,68 @@
+{
+  "project_id": "lrgpjimipfkyoqbpsqzz",
+  "action": "P7_IC3_VALIDATE_CANONICAL_INPUTS",
+  "execution_status": "NOT_EXECUTED",
+  "required_runtime_fields": [
+    "portfolioId",
+    "selectionRunId",
+    "evaluationAsOf",
+    "sourceCutoffAt"
+  ],
+  "instructions": "Supply verified owner portfolio ID, fresh selection-run UUID and explicit valid cutoffs at execution; omit offset and limit. No credentials in this file.",
+  "slices": [
+    {
+      "slice_id": "BANK-P1-01",
+      "symbols": [
+        "BANKBARODA",
+        "ICICIBANK",
+        "SBIN",
+        "FEDERALBNK"
+      ],
+      "securityIds": [
+        "6771f493-c29a-477e-8cc8-2bede0941e44",
+        "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+        "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+        "63889b52-85da-4a1b-9046-c1e975819f99"
+      ]
+    },
+    {
+      "slice_id": "BANK-P1-02",
+      "symbols": [
+        "KARURVYSYA",
+        "KOTAKBANK",
+        "HDFCBANK",
+        "AXISBANK"
+      ],
+      "securityIds": [
+        "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+        "05744a34-415b-4084-b832-ce3436ba0694",
+        "b47b007d-1990-4504-a5a2-4391c07687c5",
+        "b330c9fe-ae35-469a-9975-d5af26843b1c"
+      ]
+    },
+    {
+      "slice_id": "BANK-P1-03",
+      "symbols": [
+        "IDFCFIRSTB",
+        "BANDHANBNK",
+        "IDBI",
+        "INDIANB"
+      ],
+      "securityIds": [
+        "ba340b06-fd44-4d80-9ce7-d280616354ed",
+        "30ce066a-6410-4b11-9b85-e41324971261",
+        "a5639446-3238-4e08-9d02-59bc529982db",
+        "5275dd14-35ba-4feb-94d8-f8d1facb19d3"
+      ]
+    },
+    {
+      "slice_id": "BANK-P1-04",
+      "symbols": [
+        "AUBANK"
+      ],
+      "securityIds": [
+        "f5c47463-3c6d-4db0-a815-e4301e990213"
+      ]
+    }
+  ]
+}
