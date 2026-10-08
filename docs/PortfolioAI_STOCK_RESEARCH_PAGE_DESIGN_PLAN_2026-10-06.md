@@ -109,6 +109,12 @@ Stage 5 verification and its release boundary are recorded in the [Stage 5 accep
 
 Stage 5 validates the consumer page against the supplied canonical facts. It cannot certify missing official node IDs, hierarchy verification, Basic Industry mappings or specialised numeric evidence. These remain C1/C8 and research-evidence work, with their existing approval gates. Stage 6 is the subsequent controlled Development rollout and post-merge verification; Stage 5 does not authorize an early merge.
 
+### Stage 6 — controlled Development rollout and shared financial theme
+
+The Stage 6 sub-stages and release evidence are recorded in the [Stage 6 rollout record](PortfolioAI_STOCK_RESEARCH_STAGE_6_ROLLOUT_2026-10-08.md): 6.1 preserve the release contract; 6.2 implement shared financial colors; 6.3 review and publish to Development; 6.4 verify the exact hosted build and hand off. Publication and hosted acceptance must not be declared complete without a READY build containing the new code.
+
+The **common shell for ALL stocks** uses the application-wide financial theme: gains green, losses red, zero neutral, missing values explicitly unavailable. Color follows each canonical value before display rounding; signs and explanatory labels remain readable. The theme applies to P/L amounts and returns, not to arbitrary positive prices, balances or research scores. It does not alter the Industry-first specialist selector or evidence safeguards.
+
 ## 4. Entire page structure
 
 | Order | Shared region | Content and behavior |

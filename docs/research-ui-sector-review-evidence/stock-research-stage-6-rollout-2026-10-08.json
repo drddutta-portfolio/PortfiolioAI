@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-08",
+  "timezone": "Asia/Kolkata",
+  "stage": "STOCK_RESEARCH_STAGE_6",
+  "sourceRevision": "0fddf87c89471aeaee17c2acddd5fc3360eebd38",
+  "applicationSourceTree": "4ac1800a434a3369b5c5271a6ebbf6aa57ecb65c",
+  "pullRequest": "https://github.com/drddutta-portfolio/PortfiolioAI/pull/119",
+  "checks": {
+    "applicationTests": {
+      "files": 6,
+      "passed": 137
+    },
+    "integratedOwnershipGuardTests": {
+      "files": 1,
+      "passed": 5
+    },
+    "productionTypeScriptAndBuild": "PASS",
+    "changedFileEslint": "PASS",
+    "architectureGuard": "PASS",
+    "diffAgainstDevelopmentBaseline": "PASS",
+    "addedLineCredentialScan": "PASS"
+  },
+  "financialTheme": {
+    "gain": "#166534",
+    "loss": "#b42318",
+    "zero": "NEUTRAL",
+    "missing": "UNAVAILABLE",
+    "canonicalValuesChanged": false,
+    "gainContrastWhite": 7.13,
+    "gainContrastTint": 6.81,
+    "lossContrastWhite": 6.57,
+    "lossContrastTint": 5.98
+  },
+  "release": {
+    "target": "PortfolioAI-Development",
+    "productionPublished": false,
+    "hostedAcceptance": "BLOCKED",
+    "hostedChecksExecutedForNewRevision": 0,
+    "block": "Deployment rate limited \u2014 retry in 24 hours.",
+    "currentDevelopmentDeployment": "dpl_6v1mxijEWaoky6jAG3YniiVB1e25",
+    "readyStage6Artifact": null,
+    "finalCiAndMerge": "SEE_PR_119"
+  },
+  "boundaries": {
+    "migrationsCreated": 0,
+    "migrationsApplied": 0,
+    "supabaseFunctionsDeployed": 0,
+    "providerRefreshesExecuted": 0,
+    "researchWritesExecuted": 0,
+    "authOrRlsChanges": 0,
+    "methodologyAssignmentsChanged": 0,
+    "quotaBypass": false
+  },
+  "remaining": [
+    "READY Vercel build of the actual merged source",
+    "Independent hosted desktop/tablet/mobile acceptance including financial tones and CSS loading order",
+    "Existing upstream taxonomy/evidence/methodology limitations are not certified by this UI release"
+  ]
+}

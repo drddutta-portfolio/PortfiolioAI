@@ -78,23 +78,23 @@
 }
 
 .ddm-summary-grid article.positive {
-  background: #f2faf5;
-  border-color: #bfe2ca;
+  background:var(--color-gain-surface);
+  border-color:var(--color-gain-border);
 }
 
 .ddm-summary-grid article.negative {
-  background: #fff6f6;
-  border-color: #efcaca;
+  background:var(--color-loss-surface);
+  border-color:var(--color-loss-border);
 }
 
-.positive > strong,
-.positive strong {
-  color: #13723e !important;
+.dashboard-daily-movement .positive > strong,
+.dashboard-daily-movement .positive strong {
+  color:var(--color-gain) !important;
 }
 
-.negative > strong,
-.negative strong {
-  color: #ad3434 !important;
+.dashboard-daily-movement .negative > strong,
+.dashboard-daily-movement .negative strong {
+  color:var(--color-loss) !important;
 }
 
 .ddm-movers-grid {

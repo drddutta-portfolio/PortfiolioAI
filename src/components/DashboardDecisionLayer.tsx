@@ -2,7 +2,7 @@ import Decimal from "decimal.js"
 import { useMemo } from "react"
 import { Link } from "react-router-dom"
 import { useProgramCR10ActionCenter } from "../features/decision/useProgramCR10ActionCenter"
-import { formatMoney } from "../features/portfolio/format"
+import { financialClass, formatMoney } from "../features/portfolio/format"
 import type { PortfolioPosition, PortfolioRole } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import "./DashboardDecisionLayer.css"
@@ -78,7 +78,7 @@ export function DashboardDecisionLayer() {
             <div className="dashboard-role-row dashboard-theme-header"><span>Role</span><span>Exposure</span><span>Covered return</span><span>Largest holding</span><span>Sizing targets</span></div>
             {roleRows.map((row) => {
               const roleReturn = row.coveredCount && !row.coveredCost.isZero() ? row.coveredPnl.div(row.coveredCost).times(100) : null
-              return <div className="dashboard-role-row" key={row.role}><span><strong>{row.label}</strong><small>{row.holdingCount} holding{row.holdingCount === 1 ? "" : "s"}</small></span><span><strong>{pct(row.exposure)}</strong><small>{formatMoney(row.currentValue.toFixed())}</small></span><span className={roleReturn?.gte(0) ? "is-positive" : roleReturn?.lt(0) ? "is-negative" : ""}><strong>{pct(roleReturn)}</strong><small>{row.coveredCount}/{row.holdingCount} covered</small></span><span>{row.largest ? <><Link to={`/app/research/${row.largest.securityId}`}>{row.largest.symbol}</Link><small>{formatMoney(row.largest.currentValue)}</small></> : <><strong>—</strong><small>Unpriced</small></>}</span><span><strong>{row.targetCount}/{row.holdingCount}</strong><small>User target weights</small></span></div>
+              return <div className="dashboard-role-row" key={row.role}><span><strong>{row.label}</strong><small>{row.holdingCount} holding{row.holdingCount === 1 ? "" : "s"}</small></span><span><strong>{pct(row.exposure)}</strong><small>{formatMoney(row.currentValue.toFixed())}</small></span><span className={financialClass(roleReturn)}><strong>{pct(roleReturn)}</strong><small>{row.coveredCount}/{row.holdingCount} covered</small></span><span>{row.largest ? <><Link to={`/app/research/${row.largest.securityId}`}>{row.largest.symbol}</Link><small>{formatMoney(row.largest.currentValue)}</small></> : <><strong>—</strong><small>Unpriced</small></>}</span><span><strong>{row.targetCount}/{row.holdingCount}</strong><small>User target weights</small></span></div>
             })}
           </div>
         </section>
@@ -88,7 +88,7 @@ export function DashboardDecisionLayer() {
           {themeRows.length ? <div className="dashboard-theme-table"><div className="dashboard-theme-row dashboard-theme-header"><span>Theme</span><span>Exposure</span><span>Covered return</span><span>Best contributor</span><span>Allocation cap</span></div>{themeRows.slice(0, 8).map((row) => {
             const themeReturn = row.coveredCount && !row.coveredCost.isZero() ? row.coveredPnl.div(row.coveredCost).times(100) : null
             const max = d(row.maxAllocation); const overCap = max !== null && row.exposure.gt(max)
-            return <div className="dashboard-theme-row" key={row.id}><span><strong>{row.name}</strong><small>{row.holdingCount} holding{row.holdingCount === 1 ? "" : "s"}</small></span><span className={overCap ? "is-warning" : ""}><strong>{pct(row.exposure)}</strong><small>{formatMoney(row.currentValue.toFixed())}</small></span><span className={themeReturn?.gte(0) ? "is-positive" : themeReturn?.lt(0) ? "is-negative" : ""}><strong>{pct(themeReturn)}</strong><small>{row.coveredCount}/{row.holdingCount} covered</small></span><span>{row.best ? <><Link to={`/app/research/${row.best.securityId}`}>{row.best.symbol}</Link><small>{formatMoney(row.best.unrealisedPnl)}</small></> : <><strong>—</strong><small>Unavailable</small></>}</span><span className={overCap ? "is-warning" : ""}><strong>{max ? pct(max) : "Not set"}</strong><small>{overCap ? "Above configured cap" : "User setting"}</small></span></div>
+            return <div className="dashboard-theme-row" key={row.id}><span><strong>{row.name}</strong><small>{row.holdingCount} holding{row.holdingCount === 1 ? "" : "s"}</small></span><span className={overCap ? "is-warning" : ""}><strong>{pct(row.exposure)}</strong><small>{formatMoney(row.currentValue.toFixed())}</small></span><span className={financialClass(themeReturn)}><strong>{pct(themeReturn)}</strong><small>{row.coveredCount}/{row.holdingCount} covered</small></span><span>{row.best ? <><Link to={`/app/research/${row.best.securityId}`}>{row.best.symbol}</Link><small className={financialClass(row.best.unrealisedPnl)}>{formatMoney(row.best.unrealisedPnl)}</small></> : <><strong>—</strong><small>Unavailable</small></>}</span><span className={overCap ? "is-warning" : ""}><strong>{max ? pct(max) : "Not set"}</strong><small>{overCap ? "Above configured cap" : "User setting"}</small></span></div>
           })}</div> : <div className="dashboard-next-empty">No active theme assignments are available yet.</div>}
         </section>
       </div>

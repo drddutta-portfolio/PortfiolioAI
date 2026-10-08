@@ -159,8 +159,8 @@
 .dap-table-card th button { padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; letter-spacing: inherit; text-transform: inherit; }
 .dap-table-card td strong { display: block; color: #294b3a; font-size: 10.5px; }
 .dap-table-card td small { display: block; margin-top: 2px; color: #869189; font-size: 8.5px; white-space: normal; }
-.dap-table-card .is-positive { color: #1e7b4a; font-weight: 800; }
-.dap-table-card .is-negative { color: #b23b3b; font-weight: 800; }
+.dap-table-card .is-positive { color:var(--color-gain); font-weight: 800; }
+.dap-table-card .is-negative { color:var(--color-loss); font-weight: 800; }
 .dap-empty { padding: 24px 13px; color: #7b8881; font-size: 11px; }
 .dap-group-trigger,
 .dap-holdings-trigger { padding: 0; border: 0; background: transparent; color: #28533f; cursor: pointer; font: inherit; font-weight: 800; text-decoration: underline dotted; text-underline-offset: 2px; }
@@ -204,8 +204,8 @@
 .dap-holdings-popover td:first-child { text-align: left; }
 .dap-holdings-popover td b { display: block; color: #294b3a; font-size: 10.5px; }
 .dap-holdings-popover td small { display: block; max-width: 160px; overflow: hidden; color: #87928c; text-overflow: ellipsis; }
-.dap-holdings-popover .is-positive { color: #1e7b4a; font-weight: 800; }
-.dap-holdings-popover .is-negative { color: #b23b3b; font-weight: 800; }
+.dap-holdings-popover .is-positive { color:var(--color-gain); font-weight: 800; }
+.dap-holdings-popover .is-negative { color:var(--color-loss); font-weight: 800; }
 
 @media (max-width: 1199px) {
   .dap-sector-layout,

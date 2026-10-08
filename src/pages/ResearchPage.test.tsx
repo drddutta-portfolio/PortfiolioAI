@@ -70,6 +70,28 @@ describe("ResearchPage", () => {
     vi.stubGlobal("scrollTo", vi.fn())
   })
   afterEach(() => { cleanup(); vi.unstubAllGlobals(); providerCall.mockReset(); Object.assign(scoringState, { data: initialScoringSnapshot, isLoading: false, error: null }); specialistState.resolved = false; portfolioState.data = portfolio; ratingState.data = []; Object.assign(evidenceState, { applicable: true, data: null, isLoading: false, error: null }); Object.assign(researchState, { data: research, error: null, isLoading: false }) })
+  it.each([
+    ["0", "0", "neutral", "No change"],
+    ["-200", "-20", "loss", "Loss"],
+    [null, null, "unavailable", "Unavailable"],
+  ] as const)("renders P/L %s with its own semantic tone", (pnl, percent, tone, label) => {
+    portfolioState.data = { ...portfolio, openPositions: [{ ...portfolio.openPositions[0]!, unrealisedPnl: pnl, unrealisedPnlPercent: percent }] }
+    renderPage()
+    const card = document.querySelector(".pnl-card")
+    expect(card?.querySelector("strong")).toHaveClass(`financial-${tone}`)
+    expect(card?.querySelector("small")).toHaveClass(`financial-${tone}`)
+    expect(card).toHaveTextContent(label)
+    if (tone === "neutral") expect(card).not.toHaveTextContent("Gain")
+  })
+  it("does not color an unavailable return as a gain when the amount is known", () => {
+    portfolioState.data = { ...portfolio, openPositions: [{ ...portfolio.openPositions[0]!, unrealisedPnl: "200", unrealisedPnlPercent: null }] }
+    renderPage()
+    const card = document.querySelector(".pnl-card")
+    expect(card?.querySelector("strong")).toHaveTextContent("+₹200.00")
+    expect(card?.querySelector("strong")).toHaveClass("financial-gain")
+    expect(card?.querySelector("small")).toHaveTextContent("Unavailable")
+    expect(card?.querySelector("small")).toHaveClass("financial-unavailable")
+  })
   it.each(["PENDING_ADAPTER", "BLOCKED"] as const)("keeps the header and cockpit consistent when execution is %s", state => {
     scoringState.data = { ...initialScoringSnapshot, runState: "COMPLETE", scoreRunId: "old-run", overallScore: 97, methodologyState: "AVAILABLE", scoringExecutionState: state }
     renderPage()
