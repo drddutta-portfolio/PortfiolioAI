@@ -1,4 +1,5 @@
 import { supabase } from "../lib/supabase"
+import type { Database, Json } from "../../supabase/types/database.types"
 
 const db = supabase
 
@@ -58,6 +59,35 @@ export interface PortfolioProfileExposure {
   readonly totalPositionCount: number
 }
 
+type RecommendationPreviewArgs = Omit<
+  Database["public"]["Functions"]["record_recommendation_preview_v2"]["Args"],
+  "p_current_weight" | "p_evidence_confidence" | "p_overall_score" | "p_suggested_weight_min" | "p_suggested_weight_max" | "p_rationale"
+> & {
+  readonly p_current_weight: number | null
+  readonly p_evidence_confidence: number | null
+  readonly p_overall_score: number | null
+  readonly p_suggested_weight_min: number | null
+  readonly p_suggested_weight_max: number | null
+  readonly p_rationale: Json
+}
+
+function jsonValue(value: unknown): Json {
+  if (value === null || typeof value === "string" || typeof value === "boolean") return value
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) throw new Error("Recommendation rationale contains a non-finite number.")
+    return value
+  }
+  if (Array.isArray(value)) return value.map(jsonValue)
+  if (typeof value === "object") {
+    const result: { [key: string]: Json | undefined } = {}
+    for (const [key, child] of Object.entries(value)) {
+      if (child !== undefined) result[key] = jsonValue(child)
+    }
+    return result
+  }
+  throw new Error("Recommendation rationale contains a non-JSON value.")
+}
+
 function numberOrNull(value: unknown) {
   if (typeof value === "number") return value
   if (typeof value === "string" && value.trim() !== "") { const parsed = Number(value); return Number.isFinite(parsed) ? parsed : null }
@@ -110,12 +140,18 @@ export async function recordRecommendationPreview(input: {
   readonly actionBias: string; readonly currentUserRole: string; readonly currentWeight: number | null; readonly suggestedWeightMin: number | null; readonly suggestedWeightMax: number | null
   readonly rationale: Readonly<Record<string, unknown>>
 }): Promise<RecommendationTrackingRecord> {
-  const result = await db.rpc("record_recommendation_preview_v2", {
+  const args: RecommendationPreviewArgs = {
     p_portfolio_id: input.portfolioId, p_security_id: input.securityId, p_scoring_profile_code: input.profileCode, p_policy_version: input.policyVersion,
     p_evaluation_key: input.evaluationKey, p_overall_score: input.overallScore, p_score_ready_coverage: input.scoreReadyCoverage, p_evidence_confidence: input.evidenceConfidence,
     p_suggested_role: input.suggestedRole, p_action_bias: input.actionBias, p_current_user_role: input.currentUserRole, p_current_weight: input.currentWeight,
-    p_suggested_weight_min: input.suggestedWeightMin, p_suggested_weight_max: input.suggestedWeightMax, p_rationale: input.rationale,
-  })
+    p_suggested_weight_min: input.suggestedWeightMin, p_suggested_weight_max: input.suggestedWeightMax, p_rationale: jsonValue(input.rationale),
+  }
+  // Supabase's generated RPC Args type cannot express SQL parameters that accept NULL.
+  // Preserve PortfolioAI's null-as-unknown semantics at this single typed boundary.
+  const result = await db.rpc(
+    "record_recommendation_preview_v2",
+    args as unknown as Database["public"]["Functions"]["record_recommendation_preview_v2"]["Args"],
+  )
   if (result.error) throw result.error
   const row = Array.isArray(result.data) ? result.data[0] : result.data
   if (!row) throw new Error("Recommendation tracking result was empty")
