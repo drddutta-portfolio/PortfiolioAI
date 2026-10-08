@@ -21,6 +21,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch Program D reference branch for historical audit
+        run: git fetch origin refs/heads/program-d-operations-optional-ai:refs/remotes/origin/program-d-operations-optional-ai
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
