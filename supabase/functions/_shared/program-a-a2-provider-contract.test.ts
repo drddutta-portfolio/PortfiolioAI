@@ -39,15 +39,16 @@ describe("Program A A2 provider-control reuse", () => {
   it("passes the approved incremental window into the existing Angel One adapter", () => {
     expect(history).toContain('readonly requestFrom?: unknown')
     expect(history).toContain('readonly requestTo?: unknown')
-    expect(history).toContain('Program A A2 execution is local-only')
-    expect(history).toContain('url.hostname === "kong" && url.port === "8000"')
+    expect(history).toContain('consumeP4ExecutionGrant')
+    expect(history).toContain('Explicit history windows are restricted to bounded internal execution in hosted Development.')
+    expect(history).toContain('ref !== "lrgpjimipfkyoqbpsqzz"')
     expect(history).toContain('to.getTime() - from.getTime() > HISTORY_DAYS * DAY')
     expect(history).toContain('getDailyHistory(instrument, kolkataDateTime(from), kolkataDateTime(to))')
     expect(history).toContain('acquire_market_data_operation_lease')
   })
 
   it("retains the reviewed R3 budget, lease, accounting, and canonical persistence path", () => {
-    expect(complete).toContain('const RESERVED_UNITS = 4')
+    expect(complete).toContain('const reservedUnits = activeDomains.length')
     expect(complete).toContain('reserve_provider_budget_v1')
     expect(complete).toContain('acquire_data_ingestion_lease_v1')
     expect(complete).toContain('record_provider_usage_event_v1')
