@@ -1,7 +1,7 @@
 # Stock Research Page Changes — Stage 1 Contract
 
-**Date:** 8 October 2026 (UTC)  
-**Status:** Stage 1 specification complete; implementation verification pending.  
+**Date:** 8 October 2026 (UTC)
+**Status:** Stage 1 specification complete; implementation verification pending.
 **Scope:** Confirm the contracts for the six-stage page-change plan. This is not completion of taxonomy remediation C1 or C8, approval of changed company assignments, or a deployment.
 
 ## Authority and boundaries
