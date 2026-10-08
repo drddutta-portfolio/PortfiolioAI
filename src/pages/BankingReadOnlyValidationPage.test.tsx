@@ -50,11 +50,11 @@ describe("V1-4 banking read-only owner UI", () => {
     })
     view()
     for (const [index, slice] of manifest.slices.entries()) {
-      const button = screen.getAllByRole("button", { name: "Run read-only validation" })[index]
+      const button = screen.getAllByRole("button", { name: "Run read-only validation" })[index] as HTMLElement
       fireEvent.click(button)
       await waitFor(() => expect(invoke).toHaveBeenCalledTimes(index + 1))
       await waitFor(() => expect(screen.getAllByText(/Prospective only:/)).toHaveLength(index + 1))
-      const request = invoke.mock.calls[index][0]
+      const request = invoke.mock.calls[index]?.[0] as { action: string; portfolioId: string; securityIds: string[]; selectionRunId: string; evaluationAsOf: string; sourceCutoffAt: string }
       expect(request).toEqual(expect.objectContaining({
         action: "P7_IC3_VALIDATE_CANONICAL_INPUTS",
         portfolioId: "owned-portfolio",
@@ -70,13 +70,13 @@ describe("V1-4 banking read-only owner UI", () => {
   })
 
   it("fails closed on missing write proof and permits safe retry", async () => {
-    const slice = manifest.slices[0]
+    const slice = manifest.slices[0] as (typeof manifest.slices)[number]
     invoke.mockResolvedValueOnce({ ...response(slice), writeTotals: {} }).mockResolvedValueOnce(response(slice))
     view()
-    fireEvent.click(screen.getAllByRole("button", { name: "Run read-only validation" })[0])
+    fireEvent.click(screen.getAllByRole("button", { name: "Run read-only validation" })[0] as HTMLElement)
     await waitFor(() => expect(screen.getByRole("alert").textContent).toContain("write counters"))
     expect(screen.queryByText(/Prospective only:/)).toBeNull()
-    fireEvent.click(screen.getAllByRole("button", { name: "Run read-only validation" })[0])
+    fireEvent.click(screen.getAllByRole("button", { name: "Run read-only validation" })[0] as HTMLElement)
     await waitFor(() => expect(screen.getByText(/Prospective only:/)).toBeTruthy())
     expect(invoke).toHaveBeenCalledTimes(2)
   })
@@ -84,7 +84,7 @@ describe("V1-4 banking read-only owner UI", () => {
   it("shows expired-session failures without claiming a successful slice", async () => {
     invoke.mockRejectedValueOnce(new Error("Session unavailable or expired. Sign in again."))
     view()
-    fireEvent.click(screen.getAllByRole("button", { name: "Run read-only validation" })[0])
+    fireEvent.click(screen.getAllByRole("button", { name: "Run read-only validation" })[0] as HTMLElement)
     await waitFor(() => expect(screen.getByRole("alert").textContent).toContain("Session unavailable"))
     expect(screen.queryByText(/Prospective only:/)).toBeNull()
   })
@@ -94,10 +94,10 @@ describe("V1-4 banking read-only owner UI", () => {
     invoke.mockImplementationOnce(() => new Promise(resolve => { release = resolve }))
     view()
     const buttons = screen.getAllByRole("button", { name: "Run read-only validation" })
-    fireEvent.click(buttons[0])
-    expect(screen.getAllByRole("button", { name: "Run read-only validation" })[0].hasAttribute("disabled")).toBe(true)
+    fireEvent.click(buttons[0] as HTMLElement)
+    expect(screen.getAllByRole("button", { name: "Run read-only validation" })[0] as HTMLElement.hasAttribute("disabled")).toBe(true)
     expect(invoke).toHaveBeenCalledTimes(1)
-    release(response(manifest.slices[0]))
+    release(response(manifest.slices[0] as (typeof manifest.slices)[number]))
     await waitFor(() => expect(screen.getByText(/Prospective only:/)).toBeTruthy())
   })
 })
