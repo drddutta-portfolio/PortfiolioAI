@@ -58,7 +58,7 @@ describe("DashboardAllocationPerformance", () => {
   ] as const)("preserves covered P/L %s and distinguishes zero from unavailable", (pnl, tone, text) => {
     renderAllocation([position({ unrealisedPnl: pnl })], new Map())
     const section = screen.getByRole("heading", { name: "Sector performance" }).closest("section")!
-    const row = within(section).getAllByRole("row")[1]
+    const row = within(section).getAllByRole("row")[1]!
     const cells = within(row).getAllByRole("cell")
     expect(cells[5]).toHaveTextContent(text)
     expect(cells[5]).toHaveClass(`financial-${tone}`)
