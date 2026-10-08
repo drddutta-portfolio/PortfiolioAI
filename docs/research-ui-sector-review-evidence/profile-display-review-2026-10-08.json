@@ -1,0 +1,467 @@
+{
+  "reviewDate": "2026-10-08",
+  "timezone": "Asia/Kolkata",
+  "revision": "a2e9aa1f17ad05e3bfd68e5084f7605c3eda29ab",
+  "deploymentId": "dpl_AmgC8F3ckvFA9LP7W8t14VBHuuAE",
+  "scope": "Hosted Development, all 45 held profiles represented; 52 pages including five Pharma subprofiles and BLUEJET exception. No local app. Representative screenshots inspected separately.",
+  "canonicalSnapshotCount": 239,
+  "holdingCount": 248,
+  "heldPharmaCount": 26,
+  "hostedPages": 52,
+  "runtimeErrors": 0,
+  "blockedProviderRequests": 0,
+  "localContractTests": 198,
+  "status": "FINDINGS_OPEN_SECTOR_SUBPROFILE_INTEGRATION_NOT_FINAL",
+  "profiles": [
+    {
+      "profile": "AGRI_PROCESSING",
+      "methodologyAuthority": "P7_IC1_AGRI_PROCESSING_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "AGRO_FERTILISER",
+      "methodologyAuthority": "CHEMICALS_V1_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "AUTO_COMPONENTS",
+      "methodologyAuthority": "AUTO_COMPONENTS_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "AUTO_OEM",
+      "methodologyAuthority": "AUTO_COMPONENTS_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "BANK",
+      "methodologyAuthority": "BANK_NBFC_STAGE_8_BANK_V1",
+      "retainedRequirements": 23,
+      "snapshotStatus": "CONFLICTING",
+      "presentation": "PARENT_SPECIALIST",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "BRANDED_CONSUMER_FMCG",
+      "methodologyAuthority": "CONSUMER_FMCG_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "BUSINESS_SERVICES",
+      "methodologyAuthority": "P7_IC1_BUSINESS_SERVICES_METHODOLOGY_V1",
+      "retainedRequirements": 20,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "CAPITAL_EQUIPMENT_ELECTRICAL",
+      "methodologyAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "INSUFFICIENT",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "CAPITAL_MARKETS_AMC",
+      "methodologyAuthority": "FIN_SERVICES_NON_LENDER_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "CEMENT_BUILDING_MATERIALS",
+      "methodologyAuthority": "P7_IC1_CEMENT_BUILDING_MATERIALS_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "COMMODITY_PROCESS_CHEMICALS",
+      "methodologyAuthority": "CHEMICALS_V1_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "CONSUMER_DURABLES",
+      "methodologyAuthority": "P7_IC1_CONSUMER_DURABLES_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "INSUFFICIENT",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "DEFENCE_AEROSPACE",
+      "methodologyAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "DIVERSIFIED_CHEMICALS_PETROCHEM",
+      "methodologyAuthority": "P7_IC1_DIVERSIFIED_CHEMICALS_PETROCHEM_METHODOLOGY_V1",
+      "retainedRequirements": 21,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "ENVIRONMENTAL_SERVICES",
+      "methodologyAuthority": "P7_IC1_ENVIRONMENTAL_SERVICES_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "FINANCIAL_HOLDING_COMPANY",
+      "methodologyAuthority": "P7_IC1_FINANCIAL_HOLDING_COMPANY_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "FINTECH_PLATFORM",
+      "methodologyAuthority": "FIN_SERVICES_NON_LENDER_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "GENERATION_INTEGRATED_UTILITY",
+      "methodologyAuthority": "POWER_RENEWABLES_V1_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "HOSPITAL",
+      "methodologyAuthority": "HEALTHCARE_SERVICES_V1_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "HOSPITALITY_LEISURE",
+      "methodologyAuthority": "P7_IC1_HOSPITALITY_LEISURE_METHODOLOGY_V1",
+      "retainedRequirements": 20,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "INDUSTRIAL_PRODUCTS",
+      "methodologyAuthority": "P7_IC1_INDUSTRIAL_PRODUCTS_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "INSURANCE",
+      "methodologyAuthority": "FIN_SERVICES_NON_LENDER_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "INTEGRATED_REFINING_PETCHEM",
+      "methodologyAuthority": "OIL_GAS_V1_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "IT_BPM_SERVICES",
+      "methodologyAuthority": "P7_IC1_IT_BPM_SERVICES_METHODOLOGY_V1",
+      "retainedRequirements": 20,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "IT_DIGITAL_INFRA_HARDWARE",
+      "methodologyAuthority": "IT_TECH_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "IT_SERVICES",
+      "methodologyAuthority": "IT_TECH_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "IT_SOFTWARE_PRODUCTS_PLATFORMS",
+      "methodologyAuthority": "IT_TECH_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "JEWELLERY",
+      "methodologyAuthority": "P7_IC1_JEWELLERY_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "LOGISTICS",
+      "methodologyAuthority": "P7_IC1_LOGISTICS_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "MIDSTREAM_CITY_GAS",
+      "methodologyAuthority": "OIL_GAS_V1_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "NBFC_LENDING",
+      "methodologyAuthority": "P7_IC1_NBFC_LENDING_METHODOLOGY_V1",
+      "retainedRequirements": 24,
+      "snapshotStatus": "INSUFFICIENT",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "NON_FERROUS_DIVERSIFIED_METALS",
+      "methodologyAuthority": "METALS_COMMODITIES_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "OIL_OPERATIONS",
+      "methodologyAuthority": "P7_IC1_OIL_OPERATIONS_METHODOLOGY_V1",
+      "retainedRequirements": 18,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "PHARMA",
+      "methodologyAuthority": "PHARMA_V1_PLUS_REVIEWED_PRIMARY_SUBPROFILE",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "PARENT_SPECIALIST",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "PROJECT_EPC",
+      "methodologyAuthority": "INDUSTRIALS_CAPITAL_GOODS_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "REAL_ESTATE_DEVELOPER",
+      "methodologyAuthority": "P7_IC1_REAL_ESTATE_DEVELOPER_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "REGULATED_NETWORK",
+      "methodologyAuthority": "POWER_RENEWABLES_V1_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "RENEWABLE_IPP",
+      "methodologyAuthority": "POWER_RENEWABLES_V1_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "RETAIL_COMMERCE",
+      "methodologyAuthority": "P7_IC1_RETAIL_COMMERCE_METHODOLOGY_V1",
+      "retainedRequirements": 20,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "SHIPPING",
+      "methodologyAuthority": "P7_IC1_SHIPPING_METHODOLOGY_V1",
+      "retainedRequirements": 18,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "SOLID_FUELS_MINING",
+      "methodologyAuthority": "P7_IC1_SOLID_FUELS_MINING_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "STEEL_FERROUS",
+      "methodologyAuthority": "METALS_COMMODITIES_K4B_SCORING_V1",
+      "retainedRequirements": 11,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "TELECOM_INFRA",
+      "methodologyAuthority": "P7_IC1_TELECOM_INFRA_METHODOLOGY_V1",
+      "retainedRequirements": 19,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "TELECOM_OPERATOR",
+      "methodologyAuthority": "P7_IC1_TELECOM_OPERATOR_METHODOLOGY_V1",
+      "retainedRequirements": 18,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    },
+    {
+      "profile": "TEXTILES_APPAREL",
+      "methodologyAuthority": "P7_IC1_TEXTILES_APPAREL_METHODOLOGY_V1",
+      "retainedRequirements": 20,
+      "snapshotStatus": "REVIEW_REQUIRED",
+      "presentation": "CONTRACT_RESULTS_ONLY",
+      "headerMatchesCanonicalProfile": true,
+      "workspaceMatchesCanonicalAuthority": true,
+      "documentOverflow": false
+    }
+  ]
+}
