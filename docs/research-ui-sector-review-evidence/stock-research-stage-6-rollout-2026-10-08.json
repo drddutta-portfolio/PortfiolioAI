@@ -18,7 +18,13 @@
     "changedFileEslint": "PASS",
     "architectureGuard": "PASS",
     "diffAgainstDevelopmentBaseline": "PASS",
-    "addedLineCredentialScan": "PASS"
+    "addedLineCredentialScan": "PASS",
+    "finalGithubCi": {
+      "state": "PASS",
+      "runId": 37783573991,
+      "jobId": 113332495091,
+      "headRevision": "445b0a5e0781b1e0c2c4ffa4fe2e50ac9b15fbb0"
+    }
   },
   "financialTheme": {
     "gain": "#166534",
@@ -34,12 +40,17 @@
   "release": {
     "target": "PortfolioAI-Development",
     "productionPublished": false,
-    "hostedAcceptance": "BLOCKED",
-    "hostedChecksExecutedForNewRevision": 0,
-    "block": "Deployment rate limited \u2014 retry in 24 hours.",
-    "currentDevelopmentDeployment": "dpl_6v1mxijEWaoky6jAG3YniiVB1e25",
-    "readyStage6Artifact": null,
-    "finalCiAndMerge": "SEE_PR_119"
+    "hostedAcceptance": "PASS",
+    "hostedChecksExecutedForNewRevision": 350,
+    "block": null,
+    "currentDevelopmentDeployment": "dpl_HLHjfTM8447XDHKYAfoJoGF7bT9z",
+    "readyStage6Artifact": "dpl_HLHjfTM8447XDHKYAfoJoGF7bT9z",
+    "finalCiAndMerge": "PASS",
+    "developmentMerge": "5d50c5c8a76359c02489c3b07e6317b86197860e",
+    "deploymentSourceRevision": "5d50c5c8a76359c02489c3b07e6317b86197860e",
+    "developmentUrl": "https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app",
+    "immutableDeploymentUrl": "https://portfiolio-hh08dz9xr-dibyendu-dutta.vercel.app",
+    "rollbackDeployment": "dpl_6v1mxijEWaoky6jAG3YniiVB1e25"
   },
   "boundaries": {
     "migrationsCreated": 0,
@@ -52,8 +63,1546 @@
     "quotaBypass": false
   },
   "remaining": [
-    "READY Vercel build of the actual merged source",
-    "Independent hosted desktop/tablet/mobile acceptance including financial tones and CSS loading order",
-    "Existing upstream taxonomy/evidence/methodology limitations are not certified by this UI release"
-  ]
+    "No stock-design rollout blocker remains. Existing upstream taxonomy/evidence/methodology and qualified-recommendation approvals remain separate.",
+    "Full-repository Vitest and authenticated Deno handler/source-readiness proofs are not claimed by this presentation release."
+  ],
+  "hostedVerification": {
+    "stockMatrix": {
+      "checks": [
+        {
+          "name": "HDFCBANK: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: canonical snapshot read once",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: no legacy assignment read for live page",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: canonical profile matches header",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: industry leads common identity",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: classification verification explicit",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: Basic Industry not inferred",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: independent owner role",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: selected assignment visible",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: same snapshot in retained research",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: full company name fits",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: framework summary retained",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: Financials preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: Financials explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: Financials does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: Quality & Growth preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: Quality & Growth explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: Quality & Growth does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: Valuation preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: Valuation explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: Valuation does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: same snapshot in Evidence",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: tab navigation does not reselect",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: no legacy assignment from tab navigation",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: canonical snapshot read once",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: no legacy assignment read for live page",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: canonical profile matches header",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: industry leads common identity",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: classification verification explicit",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: Basic Industry not inferred",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: independent owner role",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: selected assignment visible",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: primary matches header",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: primary matches deep framework",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: same assignment in deep framework",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: no active primary blocker",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: same snapshot in retained research",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: full company name fits",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: framework summary retained",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: specialised requirement contract visible",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: unbound specialised evidence not promoted",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: Financials preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: Financials explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: Financials does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: Quality & Growth preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: Quality & Growth explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: Quality & Growth does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: Valuation preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: Valuation explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: Valuation does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: same snapshot in Evidence",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: tab navigation does not reselect",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: no legacy assignment from tab navigation",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: canonical snapshot read once",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: no legacy assignment read for live page",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: canonical profile matches header",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: industry leads common identity",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: classification verification explicit",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: Basic Industry not inferred",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: independent owner role",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: selected assignment visible",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: primary matches header",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: primary matches deep framework",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: same assignment in deep framework",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: no active primary blocker",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: same snapshot in retained research",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: full company name fits",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: framework summary retained",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: specialised requirement contract visible",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: unbound specialised evidence not promoted",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: Financials preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: Financials explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: Financials does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: Quality & Growth preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: Quality & Growth explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: Quality & Growth does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: Valuation preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: Valuation explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: Valuation does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: same snapshot in Evidence",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: tab navigation does not reselect",
+          "pass": true
+        },
+        {
+          "name": "ALIVUS: no legacy assignment from tab navigation",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: canonical snapshot read once",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: no legacy assignment read for live page",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: canonical profile matches header",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: industry leads common identity",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: classification verification explicit",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: Basic Industry not inferred",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: independent owner role",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: selected assignment visible",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: primary matches header",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: primary matches deep framework",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: same assignment in deep framework",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: no active primary blocker",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: same snapshot in retained research",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: full company name fits",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: framework summary retained",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: specialised requirement contract visible",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: unbound specialised evidence not promoted",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: Financials preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: Financials explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: Financials does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: Quality & Growth preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: Quality & Growth explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: Quality & Growth does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: Valuation preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: Valuation explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: Valuation does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: same snapshot in Evidence",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: tab navigation does not reselect",
+          "pass": true
+        },
+        {
+          "name": "AUROPHARMA: no legacy assignment from tab navigation",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: canonical snapshot read once",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: no legacy assignment read for live page",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: canonical profile matches header",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: industry leads common identity",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: classification verification explicit",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: Basic Industry not inferred",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: independent owner role",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: selected assignment visible",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: primary matches header",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: primary matches deep framework",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: same assignment in deep framework",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: no active primary blocker",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: same snapshot in retained research",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: full company name fits",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: framework summary retained",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: specialised requirement contract visible",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: unbound specialised evidence not promoted",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: Financials preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: Financials explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: Financials does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: Quality & Growth preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: Quality & Growth explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: Quality & Growth does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: Valuation preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: Valuation explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: Valuation does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: same snapshot in Evidence",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: tab navigation does not reselect",
+          "pass": true
+        },
+        {
+          "name": "BIOCON: no legacy assignment from tab navigation",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: canonical snapshot read once",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: no legacy assignment read for live page",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: canonical profile matches header",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: industry leads common identity",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: classification verification explicit",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: Basic Industry not inferred",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: independent owner role",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: selected assignment visible",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: primary matches header",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: primary matches deep framework",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: same assignment in deep framework",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: no active primary blocker",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: same snapshot in retained research",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: full company name fits",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: framework summary retained",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: specialised requirement contract visible",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: unbound specialised evidence not promoted",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: Financials preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: Financials explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: Financials does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: Quality & Growth preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: Quality & Growth explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: Quality & Growth does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: Valuation preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: Valuation explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: Valuation does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: same snapshot in Evidence",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: tab navigation does not reselect",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: no legacy assignment from tab navigation",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: canonical snapshot read once",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: no legacy assignment read for live page",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: canonical profile matches header",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: industry leads common identity",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: classification verification explicit",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: Basic Industry not inferred",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: independent owner role",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: selected assignment visible",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: same snapshot in retained research",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: full company name fits",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: framework summary retained",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: Financials preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: Financials explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: Financials does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: Quality & Growth preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: Quality & Growth explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: Quality & Growth does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: Valuation preserves assignment snapshot",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: Valuation explicit contract mapping",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: Valuation does not reselect snapshot",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: same snapshot in Evidence",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: tab navigation does not reselect",
+          "pass": true
+        },
+        {
+          "name": "ABCAPITAL: no legacy assignment from tab navigation",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: mobile Financials contains full results",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: mobile Financials no document overflow",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: mobile Quality & Growth contains full results",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: mobile Quality & Growth no document overflow",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: mobile Valuation contains full results",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK: mobile Valuation no document overflow",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: mobile specialised grid contains full labels",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: mobile Financials contains full results",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: mobile Financials no document overflow",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: mobile Quality & Growth contains full results",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: mobile Quality & Growth no document overflow",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: mobile Valuation contains full results",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM: mobile Valuation no document overflow",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: mobile specialised grid contains full labels",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: mobile Financials contains full results",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: mobile Financials no document overflow",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: mobile Quality & Growth contains full results",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: mobile Quality & Growth no document overflow",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: mobile Valuation contains full results",
+          "pass": true
+        },
+        {
+          "name": "AKUMS: mobile Valuation no document overflow",
+          "pass": true
+        },
+        {
+          "name": "Mobile: section menu stays sticky",
+          "pass": true
+        },
+        {
+          "name": "Mobile: summary menu targets shared header",
+          "pass": true
+        }
+      ],
+      "stocks": [
+        {
+          "symbol": "HDFCBANK",
+          "profile": "BANK",
+          "subprofile": null,
+          "snapshotId": "de6796b4-d076-4d1e-a120-393347019424",
+          "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:b47b007d-1990-4504-a5a2-4391c07687c5:BANK",
+          "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+          "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+          "pointSnapshotReads": 1,
+          "legacyReads": 0
+        },
+        {
+          "symbol": "TORNTPHARM",
+          "profile": "PHARMA",
+          "subprofile": "DOMESTIC_FORMULATIONS",
+          "snapshotId": "47446aab-5cfb-40cc-853a-432b91fc671d",
+          "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:da69b3eb-0343-44f8-912c-288b826118cc:DOMESTIC_FORMULATIONS",
+          "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+          "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+          "pointSnapshotReads": 1,
+          "legacyReads": 0
+        },
+        {
+          "symbol": "ALIVUS",
+          "profile": "PHARMA",
+          "subprofile": "API_BULK_DRUGS",
+          "snapshotId": "13037d81-005d-4af3-976b-eb684633f89d",
+          "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:de565d84-02de-4e97-a255-43ee56c8650e:API_BULK_DRUGS",
+          "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+          "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+          "pointSnapshotReads": 1,
+          "legacyReads": 0
+        },
+        {
+          "symbol": "AUROPHARMA",
+          "profile": "PHARMA",
+          "subprofile": "GLOBAL_GENERICS",
+          "snapshotId": "bce467e7-5063-44e1-9b3a-9837340b60b2",
+          "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:3268daa2-a50a-4333-8f5e-9ce78d3e5270:GLOBAL_GENERICS",
+          "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+          "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+          "pointSnapshotReads": 1,
+          "legacyReads": 0
+        },
+        {
+          "symbol": "BIOCON",
+          "profile": "PHARMA",
+          "subprofile": "BIOPHARMA_BIOSIMILARS",
+          "snapshotId": "48331078-60af-410b-b77a-92f482518511",
+          "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:bfc9de73-b3a2-42d9-9d25-a7f871890ccd:BIOPHARMA_BIOSIMILARS",
+          "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+          "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+          "pointSnapshotReads": 1,
+          "legacyReads": 0
+        },
+        {
+          "symbol": "AKUMS",
+          "profile": "PHARMA",
+          "subprofile": "CDMO_CRAMS",
+          "snapshotId": "4d2aa67f-3804-4d4a-9cad-397220aabfc6",
+          "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:89d94355-8c96-4d21-8bb7-1e3bcf096a93:CDMO_CRAMS",
+          "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+          "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+          "pointSnapshotReads": 1,
+          "legacyReads": 0
+        },
+        {
+          "symbol": "ABCAPITAL",
+          "profile": "FINANCIAL_HOLDING_COMPANY",
+          "subprofile": null,
+          "snapshotId": "c477cd00-30b9-4d87-95eb-23eb8a4c944d",
+          "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:3833b30d-f007-486a-afd4-d44d313f8e99:FINANCIAL_HOLDING_COMPANY",
+          "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+          "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+          "pointSnapshotReads": 1,
+          "legacyReads": 0
+        }
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "checkCount": 234
+    },
+    "candidateSurfaces": {
+      "checks": [
+        {
+          "name": "Mobile: section menu stays sticky",
+          "pass": true
+        },
+        {
+          "name": "Mobile: summary menu targets shared header",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 1440: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 1440: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 1440: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 1440: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "Holdings 1440: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Holdings 1440: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Holdings 1440: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Holdings 1440: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "Transactions 1440: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Transactions 1440: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Transactions 1440: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Transactions 1440: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 1440: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 1440: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 1440: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK 1440: daily movement selectors do not leak",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 390: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 390: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 390: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 390: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "Holdings 390: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Holdings 390: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Holdings 390: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Holdings 390: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "Transactions 390: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Transactions 390: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Transactions 390: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Transactions 390: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 390: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 390: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 390: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK 390: daily movement selectors do not leak",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM tablet: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM tablet: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM tablet: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Tablet: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "BLUEJET: unresolved primary remains explicit",
+          "pass": true
+        },
+        {
+          "name": "BLUEJET unresolved: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "BLUEJET unresolved: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "BLUEJET unresolved: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Simulated zero: canonical P/L presentation state",
+          "pass": true
+        },
+        {
+          "name": "Simulated zero: accessible label",
+          "pass": true
+        },
+        {
+          "name": "Simulated zero: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Simulated zero: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Simulated zero: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Simulated missing: canonical P/L presentation state",
+          "pass": true
+        },
+        {
+          "name": "Simulated missing: accessible label",
+          "pass": true
+        },
+        {
+          "name": "Simulated missing: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Simulated missing: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Simulated missing: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK restored actual cache: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK restored actual cache: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK restored actual cache: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "No runtime errors",
+          "pass": true
+        },
+        {
+          "name": "No provider refresh attempts",
+          "pass": true
+        },
+        {
+          "name": "No research writes",
+          "pass": true
+        }
+      ],
+      "widths": [
+        1440,
+        1024,
+        390
+      ],
+      "checkCount": 58,
+      "financialSamples": {
+        "gain": 1446,
+        "loss": 1070,
+        "neutral": 444,
+        "unavailable": 2
+      },
+      "simulations": [
+        "client-only zero quote",
+        "client-only missing quote"
+      ]
+    },
+    "postPublicationDevelopment": {
+      "checks": [
+        {
+          "name": "Mobile: section menu stays sticky",
+          "pass": true
+        },
+        {
+          "name": "Mobile: summary menu targets shared header",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 1440: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 1440: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 1440: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 1440: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "Holdings 1440: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Holdings 1440: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Holdings 1440: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Holdings 1440: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "Transactions 1440: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Transactions 1440: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Transactions 1440: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Transactions 1440: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 1440: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 1440: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 1440: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK 1440: daily movement selectors do not leak",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 390: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 390: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 390: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Dashboard 390: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "Holdings 390: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Holdings 390: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Holdings 390: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Holdings 390: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "Transactions 390: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Transactions 390: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Transactions 390: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Transactions 390: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 390: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 390: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK after Dashboard 390: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK 390: daily movement selectors do not leak",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM tablet: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM tablet: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "TORNTPHARM tablet: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Tablet: no document overflow",
+          "pass": true
+        },
+        {
+          "name": "BLUEJET: unresolved primary remains explicit",
+          "pass": true
+        },
+        {
+          "name": "BLUEJET unresolved: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "BLUEJET unresolved: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "BLUEJET unresolved: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Simulated zero: canonical P/L presentation state",
+          "pass": true
+        },
+        {
+          "name": "Simulated zero: accessible label",
+          "pass": true
+        },
+        {
+          "name": "Simulated zero: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Simulated zero: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Simulated zero: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "Simulated missing: canonical P/L presentation state",
+          "pass": true
+        },
+        {
+          "name": "Simulated missing: accessible label",
+          "pass": true
+        },
+        {
+          "name": "Simulated missing: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "Simulated missing: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "Simulated missing: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK restored actual cache: signed classes visible",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK restored actual cache: each financial value uses its own semantic color",
+          "pass": true
+        },
+        {
+          "name": "HDFCBANK restored actual cache: financial theme tokens present",
+          "pass": true
+        },
+        {
+          "name": "No runtime errors",
+          "pass": true
+        },
+        {
+          "name": "No provider refresh attempts",
+          "pass": true
+        },
+        {
+          "name": "No research writes",
+          "pass": true
+        }
+      ],
+      "widths": [
+        1440,
+        1024,
+        390
+      ],
+      "checkCount": 58,
+      "financialSamples": {
+        "gain": 1256,
+        "loss": 992,
+        "neutral": 444,
+        "unavailable": 2
+      },
+      "simulations": [
+        "client-only zero quote",
+        "client-only missing quote"
+      ]
+    },
+    "runtimeErrors": 0,
+    "providerRefreshAttempts": 0,
+    "researchWrites": 0,
+    "restReadFailures": 0,
+    "testCorrections": [
+      "Dashboard readiness uses its actual h2 headings; its owner-scoped news-feed RPC is read-only.",
+      "Transaction assertions target known HDFCBANK position context. The first historical row had no current position, so its literal Unavailable state had no signed-value classes. Incorrect first-row assertions are superseded by the passing focused run."
+    ],
+    "syntheticPricePersistence": "NONE; client-only fixtures restored the actual cache after checking zero and unavailable P/L."
+  }
 }
