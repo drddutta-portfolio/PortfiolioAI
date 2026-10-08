@@ -34,7 +34,7 @@ export type ManualRefreshExecution = {
 const CONFIRMATION = "OWNER_CONFIRMED_COHORT_A_FUNDAMENTALS"
 
 export async function planManualResearchRefresh(portfolioId: string): Promise<ManualRefreshPlan> {
-  const { data, error } = await supabase.functions.invoke("manual-research-refresh", {
+  const { data, error } = await supabase.functions.invoke<unknown>("manual-research-refresh", {
     body: { action: "PLAN", portfolioId },
   })
   if (error) throw error
@@ -42,7 +42,7 @@ export async function planManualResearchRefresh(portfolioId: string): Promise<Ma
 }
 
 export async function executeManualResearchRefreshWave(portfolioId: string, waveNumber: number): Promise<ManualRefreshExecution> {
-  const { data, error } = await supabase.functions.invoke("manual-research-refresh", {
+  const { data, error } = await supabase.functions.invoke<unknown>("manual-research-refresh", {
     body: { action: "EXECUTE_WAVE", portfolioId, waveNumber, confirmation: CONFIRMATION },
   })
   if (error) throw error
