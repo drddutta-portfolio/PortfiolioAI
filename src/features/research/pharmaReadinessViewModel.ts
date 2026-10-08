@@ -117,8 +117,28 @@ const PROFILE_CODES: readonly PharmaMetricCode[] = [
   "PHARMA_VALUATION_CONTEXT",
 ]
 
+const R4H_REVIEWED_HISTORY_CODES = new Set([
+  "REVENUE_ANNUAL",
+  "OPERATING_REVENUE_QUARTER",
+  "OPERATING_PROFIT_QUARTER",
+  "CFO_ANNUAL",
+])
+
 function countCanonicalObservations(metrics: readonly ResearchMetric[], codes: readonly string[]) {
-  return codes.reduce((sum, code) => sum + selectCanonicalMetricSeries(metrics, code).accepted.length, 0)
+  let count = 0
+  for (const code of codes) {
+    if (R4H_REVIEWED_HISTORY_CODES.has(code)) {
+      count += selectCanonicalMetricSeries(metrics, code).accepted.length
+      continue
+    }
+    const distinct = new Set(
+      metrics
+        .filter((metric) => metric.code === code && metric.selected && metric.status !== "UNAVAILABLE")
+        .map((metric) => `${metric.code}:${metric.periodEnd ?? metric.id}`),
+    )
+    count += distinct.size
+  }
+  return count
 }
 
 function domainObservationCount(research: SecurityResearch, metricCode: PharmaMetricCode, canonicalEvidenceCodes: readonly string[]) {
