@@ -15,7 +15,7 @@ export interface OfficialBenchmarkSourceRecord{
  readonly source_url:string|null
 }
 
-const digest=async(bytes:Uint8Array)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(b=>b.toString(16).padStart(2,"0")).join("")
+const digest=async(bytes:Uint8Array)=>{const copy=new Uint8Array(bytes.byteLength);copy.set(bytes);return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",copy.buffer))).map(b=>b.toString(16).padStart(2,"0")).join("")}
 
 function historyProof(input:{sourceRecordIds:readonly string[];freshnessThrough:string;returnBasis:OfficialIndexBasis;exchangeCalendarSourceRecordIds:readonly string[]}){
  return {
