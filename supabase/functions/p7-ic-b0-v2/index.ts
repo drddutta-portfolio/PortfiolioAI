@@ -70,7 +70,7 @@ async function signedRead(admin:ReturnType<typeof createClient>,path:string){
 }
 async function fileSink(path:string):Promise<ByteSink>{
   const f=await Deno.open(path,{create:true,write:true,truncate:true}),w=f.writable.getWriter()
-  return{write:c=>w.write(c),close:()=>w.close(),abort:async()=>{try{await w.abort()}catch{}}}
+  return{write:c=>w.write(c),close:()=>w.close(),abort:async()=>{try{await w.abort()}catch { /* best-effort writer abort */ }}}
 }
 async function* syntheticMaster(){
   const enc=new TextEncoder(),filler="X".repeat(48*1024),row=JSON.stringify({token:"S",exch_seg:"NSE",symbol:"OTHER",name:"OTHER",instrumenttype:"EQ",extra:filler})
@@ -167,11 +167,9 @@ Deno.serve(async req=>{
       await ensureBucket(admin)
       const grant=await consumeP4ExecutionGrant(admin,{grantId,action:CAPTURE_ACTION,portfolioId:PORTFOLIO_ID,securityId:CAPTURE_SENTINEL})
       if(!grant.ok)throw new Error(grant.code)
-      let state=advanceMasterCaptureAccounting(emptyMasterCaptureAccounting(),{stage:"ATTEMPT_STARTED"}),at=new Date().toISOString()
+      let state=advanceMasterCaptureAccounting(emptyMasterCaptureAccounting(),{stage:"ATTEMPT_STARTED"});const at=new Date().toISOString()
       await stage(admin,grantId,"ATTEMPT_STARTED",state);await usageStart(admin,grantId,at)
-      let response:Response
-      try{response=await fetch(MASTER_URL,{headers:{Accept:"application/json"},signal:AbortSignal.timeout(V1_4_MASTER_FETCH_TIMEOUT_MS)})}
-      catch(e){throw e}
+      const response=await fetch(MASTER_URL,{headers:{Accept:"application/json"},signal:AbortSignal.timeout(V1_4_MASTER_FETCH_TIMEOUT_MS)})
       state=advanceMasterCaptureAccounting(state,{stage:"RESPONSE_RECEIVED",responseOk:response.ok});await stage(admin,grantId,"RESPONSE_RECEIVED",state,{http_status:response.status,content_type:response.headers.get("content-type"),content_length:response.headers.get("content-length")})
       await usageFinish(admin,grantId,response.ok?"SUCCEEDED":"FAILED",response.ok?null:"P7_IC_BENCHMARK_MASTER_HTTP_FAILED")
       if(!response.ok||!response.body)throw new Error("P7_IC_BENCHMARK_MASTER_HTTP_FAILED")
