@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase"
+import { invokeEdgeFunction } from "../lib/edgeFunction"
 
 export interface ValuationEvidenceRefreshPlan {
   readonly mode: "VALUATION_EVIDENCE_REFRESH_PLAN"
@@ -31,7 +31,7 @@ export interface ValuationEvidenceRefreshResult {
 }
 
 const invoke = async <T>(body: Record<string, unknown>): Promise<T> => {
-  const { data, error } = await supabase.functions.invoke<unknown>("refresh-valuation-evidence", { body })
+  const { data, error } = await invokeEdgeFunction("refresh-valuation-evidence", body)
   if (error) throw error
   if (!data || typeof data !== "object") throw new Error("Valuation evidence refresh returned no result.")
   if ("error" in data && typeof data.error === "string") throw new Error(data.error)
