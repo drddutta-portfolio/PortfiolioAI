@@ -1,3 +1,20 @@
+### Stock-page Stages 4 and 5 — Development release, 8 October 2026
+
+PR #117 merged into PortfolioAI-Development at `1db4eed499c4920c60c0abc4e6a50c9628e2accb`
+following the owner's explicit publication request. The Development alias now
+serves READY deployment `dpl_6v1mxijEWaoky6jAG3YniiVB1e25`. Its build-source commit
+`1b47a5df59e34989c83aff5ba55af9e9d8a68dcf` has the exact same full Git tree as the
+merge. An existing build was published through normal alias assignment because
+Vercel rejected new builds at its daily limit; the source commit is not relabelled.
+Post-publication hosted verification PASS: 216 checks on seven desktop and three
+mobile stock cases, all five Pharma models, zero runtime errors, provider refresh
+attempts, research writes or REST read failures. The integrated branch passed
+171 focused tests, production TypeScript/build, changed app/Edge lint and the
+architecture guard. GitHub CI could not start due to account billing; full-suite
+and Deno limits remain explicit. See the [release record](PortfolioAI_STOCK_RESEARCH_STAGES_4_5_DEVELOPMENT_RELEASE_2026-10-08.md).
+No Production, migration, evidence write, Auth/RLS or Supabase Edge-function release
+was performed. C1/C8 and evidence/operational ownership gates remain separate.
+
 ### Stock-page Industry-first Stage 5 — 8 October 2026
 
 Stage 5.1–5.4 page-design acceptance PASS: 224 relevant tests across 16 files,
@@ -13,7 +30,8 @@ for evidence and the Stage 1 proof/limit matrix. The full repository test attemp
 was interrupted; its Dashboard case passed in isolation, but full-suite
 acceptance is not claimed. GitHub CI remains blocked before runner assignment by
 billing/spending limits; documentation-only Vercel builds are rate-limited.
-Stages 4 and 5 stay on draft PR #117, unmerged, per the requested joint release.
+At acceptance, Stages 4 and 5 stayed unmerged on PR #117. Their subsequent
+owner-requested merge and publication are recorded above.
 C1/C8 taxonomy proof, exact specialised evidence bindings and qualified
 scores/advice retain their own upstream gates. No migrations, financial changes,
 research writes, provider execution or Auth/RLS changes were made.
@@ -32,8 +50,9 @@ is PASS with 216 checks across seven desktop and three mobile stocks, including
 expanded specialist grids and the corrected reference wrapping. No runtime errors,
 provider refreshes, research writes or REST read failures occurred. CI could not
 start due to GitHub account billing/spending limits. No classification, financial,
-evidence-selection, database or provider semantics change. This is on the review
-branch, not merged to Development; operational V1-4 and C1/C8 remain separate.
+evidence-selection, database or provider semantics change. Stage 4 subsequently
+merged with Stage 5 through PR #117; the release is recorded above. Operational
+V1-4 and C1/C8 remain separate.
 
 ## Operational V1-4 ownership runtime guard — 8 October 2026
 

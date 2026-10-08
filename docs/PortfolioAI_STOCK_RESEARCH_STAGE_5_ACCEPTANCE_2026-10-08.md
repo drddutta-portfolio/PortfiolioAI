@@ -2,7 +2,7 @@
 
 Date: 8 October 2026
 
-**Decision: Stage 5.1–5.4 page-design acceptance PASS; joint Development release HELD.**
+**Decision: Stage 5.1–5.4 page-design acceptance PASS. The subsequent owner-requested Development release is recorded [here](PortfolioAI_STOCK_RESEARCH_STAGES_4_5_DEVELOPMENT_RELEASE_2026-10-08.md).**
 
 ## Scope and changes
 
@@ -91,7 +91,9 @@ Unavailable quotes/current values remain unavailable and do not trigger refresh.
 ## Release boundary
 
 Draft review: https://github.com/drddutta-portfolio/PortfiolioAI/pull/117.
-Both stages remain on `research-stage-4-specialist-results`, unmerged, as requested.
+At Stage 5 acceptance, both stages remained on `research-stage-4-specialist-results`,
+unmerged, as requested. They subsequently merged through PR #117 following the
+owner's explicit publication request; see the release record above.
 
 GitHub job `113284738232` failed before a runner started (`runner_id: 0`, empty
 steps): account payments/spending-limit restriction. The latest documentation-only

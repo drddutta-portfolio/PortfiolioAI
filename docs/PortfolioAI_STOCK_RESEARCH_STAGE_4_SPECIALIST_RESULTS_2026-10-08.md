@@ -83,3 +83,10 @@ limits blocked runner startup (empty steps). This is not a green CI claim or a
 failed application check. Local checks above passed; no billing/protection changes
 were made. Stage 4 has not been merged to Development. C1/C8 classification and
 operational evidence-gate acceptance remain separate and unproven where recorded.
+
+## Subsequent Development release
+
+Stages 4 and 5 subsequently merged through PR #117 and were published at the
+Development alias following the owner's explicit request. The [release record](PortfolioAI_STOCK_RESEARCH_STAGES_4_5_DEVELOPMENT_RELEASE_2026-10-08.md)
+distinguishes the reused READY artifact, source equivalence and CI limits from
+the earlier Stage 4 acceptance. Upstream taxonomy/evidence gates remain separate.
