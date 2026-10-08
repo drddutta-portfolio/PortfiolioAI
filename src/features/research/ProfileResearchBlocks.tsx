@@ -1,3 +1,8 @@
+import { ResearchRetainedResult } from "./ResearchRetainedResult"
+import { selectSectionRequirements, type ResearchResultSection } from "./selectedResearchPresentation"
+import type { SecurityScoringSnapshot } from "./scoringTypes"
+import { canonicalPharmaPrimary } from "./canonicalResearchAssignment"
+import { PHARMA_SUBPROFILE_CONTRACTS } from "./pharmaSubprofileContracts"
 import { useState } from "react"
 import type { P7EvidenceRequirement } from "../../data/p7CurrentIntelligenceRepository"
 import { metricLabel } from "./researchPolicy"
@@ -13,6 +18,7 @@ function RequirementCard({ item }: { readonly item: P7EvidenceRequirement }) {
     <h3>{item.metric_code ? metricLabel(item.metric_code) : label(item.requirement_code)}</h3>
     {item.metric_code ? <p>{label(item.requirement_code)}</p> : null}<strong>{label(item.evidence_state)}</strong><p>{label(item.reason_code)}</p>
     <small>{item.source_provider ?? "Source unavailable"} · evidence as of {item.evidence_as_of_date ?? "Unavailable"}</small>
+    <ResearchRetainedResult item={item} />
     <details><summary>Retained result and source binding</summary>
       <p>Retained normalized result (including units, period and scope when supplied):</p>
       <pre>{item.normalized_value == null ? "No qualifying normalized result retained" : JSON.stringify(item.normalized_value, null, 2)}</pre>
@@ -31,27 +37,38 @@ function RequirementCard({ item }: { readonly item: P7EvidenceRequirement }) {
 }
 
 /** Every selected immutable requirement is accessible, without stock/sector routing or fabricated research. */
-export function ProfileResearchBlocks({ portfolioId, securityId, assetClass, onViewEvidence, evidence: selectedEvidence }: {
-  readonly portfolioId: string; readonly securityId: string; readonly assetClass: string; readonly onViewEvidence: () => void; readonly evidence?: CanonicalEvidenceReadiness
+export function ProfileResearchBlocks({ portfolioId, securityId, assetClass, onViewEvidence, evidence: selectedEvidence, section = "Overview", industry, sector, snapshot }: {
+  readonly portfolioId: string; readonly securityId: string; readonly assetClass: string; readonly onViewEvidence: () => void; readonly evidence?: CanonicalEvidenceReadiness; readonly section?: ResearchResultSection; readonly industry?: string | null; readonly sector?: string | null; readonly snapshot?: SecurityScoringSnapshot | null
 }) {
   const ownEvidence = useCanonicalEvidenceReadiness(portfolioId, securityId, assetClass, selectedEvidence === undefined)
   const evidence = selectedEvidence ?? ownEvidence
   const [query, setQuery] = useState("")
   const [state, setState] = useState<string>("ALL")
-  const data = evidence.data
-  const applicable = data?.requirements.filter(item => item.applicability === "APPLICABLE").sort((a, b) => Number(b.required) - Number(a.required) || a.requirement_code.localeCompare(b.requirement_code)) ?? []
-  const excluded = data?.requirements.filter(item => item.applicability === "NOT_APPLICABLE") ?? []
+  const data = evidence.isLoading || evidence.error ? null : evidence.data
+  const primary = canonicalPharmaPrimary(snapshot ?? null)
+  const scoped = data ? selectSectionRequirements(data.requirements, data.snapshot.profileCode, section) : []
+  const itemMismatch = data?.requirements.some(item => item.snapshot_id !== data.snapshot.snapshotId) ?? false
+  const applicable = scoped.filter(item => item.applicability === "APPLICABLE").sort((a, b) => Number(b.required) - Number(a.required) || a.requirement_code.localeCompare(b.requirement_code)) ?? []
+  const excluded = scoped.filter(item => item.applicability === "NOT_APPLICABLE") ?? []
   const search = query.trim().toLocaleLowerCase()
   const filtered = applicable.filter(item => (state === "ALL" || item.evidence_state === state) && (!search || [item.requirement_code, item.metric_code, item.reason_code, item.source_provider].join(" ").toLocaleLowerCase().includes(search)))
   const filtering = Boolean(search) || state !== "ALL"
   const visible = filtering ? filtered : filtered.slice(0, 6)
   const remaining = filtering ? [] : filtered.slice(6)
   const presentation = researchProfilePresentationState(data?.snapshot.profileCode)
-  return <section className="panel profile-research-extension" aria-label="Stock-specific research">
+  return <section className="panel profile-research-extension" aria-label={section === "Overview" ? "Stock-specific research" : `${section} selected contract results`}>
     <p className="eyebrow">Stock-specific research</p>
     <h2>{data ? `${label(data.snapshot.profileCode)}${data.snapshot.subprofileCode ? ` / ${label(data.snapshot.subprofileCode)}` : ""}` : "Research profile"} workspace</h2>
     <p>Approved business-model requirements and retained results for this stock. Classification and research assignment remain separate.</p>
-    {!evidence.applicable ? <p>Equity research is not applicable to this asset class.</p> : evidence.error ? <p role="alert">{evidence.error}</p> : evidence.isLoading ? <p role="status">Loading the selected research contract…</p> : !data ? <p>No selected profile evidence snapshot. Applicability is unresolved.</p> : <>
+    {!evidence.applicable ? <p>Equity research is not applicable to this asset class.</p> : evidence.error ? <p role="alert">{evidence.error}</p> : evidence.isLoading ? <p role="status">Loading the selected research contract…</p> : !data ? <p>No selected profile evidence snapshot. Applicability is unresolved.</p> : itemMismatch ? <p role="alert">Retained item snapshot mismatch. Result display is blocked; no cross-snapshot evidence is shown.</p> : <>
+      <section className="selected-research-framework" aria-label="Selected research framework">
+        <h3>Research framework</h3>
+        <p><strong>Industry:</strong> {industry ?? "Unavailable"} · <strong>Basic Industry:</strong> Unavailable · <strong>Sector context:</strong> {sector ?? "Unavailable"}</p>
+        <p><strong>Applied methodology:</strong> {label(data.snapshot.profileCode)} · <strong>Primary subprofile:</strong> {snapshot && snapshot.routeState !== "RESOLVED" ? "Awaiting reviewed assignment" : primary ? PHARMA_SUBPROFILE_CONTRACTS[primary].displayName : data.snapshot.subprofileCode ? label(data.snapshot.subprofileCode) : "Not supplied"}</p>
+        <p><strong>Assignment state:</strong> {snapshot?.routeState ? label(snapshot.routeState) : "Canonical snapshot retained; route verification not supplied"} · <strong>Assessment engine:</strong> {snapshot?.engineState ? label(snapshot.engineState) : "Unavailable"}</p>
+        <p>Framework presentation does not verify classification, evidence completeness or an investment recommendation. Secondary exposure review metadata is not supplied.</p>
+      </section>
+      {section !== "Overview" ? <p>{section} displays exact requirements mapped by the canonical IC1 contract. Items without a registered dimension remain accessible in Overview and complete Evidence.</p> : null}
       <p className="assessment-note">{data.snapshot.methodologyAuthority} · {data.snapshot.methodologyVersion} · stored snapshot {data.snapshot.asOfDate} · {label(data.snapshot.snapshotStatus)}</p>
       <p>{presentation === "SPECIALIST" ? "Specialist presentation is available for this profile; stored evidence states still govern readiness." : presentation === "CONTRACT_RESULTS_ONLY" ? "Specialist snapshot presentation is not registered for this profile. Its selected contract requirements and retained results remain available below; no general or bank methodology is substituted." : "Research profile is unresolved. Retained snapshot items do not establish an approved methodology."}</p>
       <details><summary>Selected contract and assignment lineage</summary>

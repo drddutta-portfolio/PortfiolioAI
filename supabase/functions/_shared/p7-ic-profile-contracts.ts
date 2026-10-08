@@ -1,4 +1,4 @@
-import type {Ic1ProfileEvidenceContract} from "./p7-ic-evidence-normalization.ts"
+import type {Ic1ProfileEvidenceContract} from "./p7-ic-profile-requirements.ts"
 export const P7_IC_PROFILE_CONTRACTS={
   "AGRI_PROCESSING": {
     "profileCode": "AGRI_PROCESSING",

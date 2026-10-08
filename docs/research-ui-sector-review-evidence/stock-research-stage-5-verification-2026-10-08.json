@@ -1,0 +1,6401 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-08",
+  "decision": "PAGE_DESIGN_ACCEPTANCE_PASS_RELEASE_HELD",
+  "scope": "Industry-first stock-page Stages 4 and 5; not taxonomy certification, evidence qualification or Development merge",
+  "applicationRevision": "20d47fd82fde6fd16b2d6f3754334089a81d83a8",
+  "runtimeUnchangedDuringStage5": true,
+  "hostedCrossProfile": {
+    "origin": "https://portfiolio-cn9k0ebe0-dibyendu-dutta.vercel.app",
+    "revision": "20d47fd82fde6fd16b2d6f3754334089a81d83a8",
+    "deploymentId": "dpl_FdYvpLHHFLjP4C9ZcmCdG5Rrqspo",
+    "status": "PASS",
+    "runtimeErrors": 0,
+    "blockedProviderRequests": 0,
+    "blockedWrites": 0,
+    "checks": [
+      {
+        "name": "HDFCBANK: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: primary matches header",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: primary matches deep framework",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: same assignment in deep framework",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: no active primary blocker",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: specialised requirement contract visible",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: unbound specialised evidence not promoted",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: primary matches header",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: primary matches deep framework",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: same assignment in deep framework",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: no active primary blocker",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: specialised requirement contract visible",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: unbound specialised evidence not promoted",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "ALIVUS: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: primary matches header",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: primary matches deep framework",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: same assignment in deep framework",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: no active primary blocker",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: specialised requirement contract visible",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: unbound specialised evidence not promoted",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "AUROPHARMA: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: primary matches header",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: primary matches deep framework",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: same assignment in deep framework",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: no active primary blocker",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: specialised requirement contract visible",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: unbound specialised evidence not promoted",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "BIOCON: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: primary matches header",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: primary matches deep framework",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: same assignment in deep framework",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: no active primary blocker",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: specialised requirement contract visible",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: unbound specialised evidence not promoted",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "ICIL: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "ICIL: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "ICIL: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "ICIL: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "ICIL: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "ICIL: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "ICIL: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "ICIL: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "ICIL: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "ICIL: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "ICIL: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "ICIL: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ICIL: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ICIL: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ICIL: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ICIL: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ICIL: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ICIL: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ICIL: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ICIL: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ICIL: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "ICIL: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "ICIL: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "DMART: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "DMART: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "DMART: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "DMART: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "DMART: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "DMART: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "DMART: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "DMART: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "DMART: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "DMART: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "DMART: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "DMART: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DMART: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DMART: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DMART: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DMART: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DMART: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DMART: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DMART: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DMART: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DMART: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "DMART: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "DMART: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "DEEPINDS: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "PPLPHARMA: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "LGEINDIA: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "UTLSOLAR: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "RELIANCE: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "EMSLIMITED: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "KOTAKBANK: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "CEMPRO: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "YATRA: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "YATRA: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "YATRA: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "YATRA: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "YATRA: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "YATRA: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "YATRA: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "YATRA: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "YATRA: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "YATRA: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "YATRA: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "YATRA: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "YATRA: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "YATRA: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "YATRA: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "YATRA: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "YATRA: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "YATRA: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "YATRA: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "YATRA: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "YATRA: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "YATRA: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "YATRA: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "PAYTM: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "JYOTHYLAB: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "NETWEB: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "LTFOODS: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "IKS: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "IKS: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "IKS: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "IKS: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "IKS: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "IKS: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "IKS: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "IKS: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "IKS: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "IKS: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "IKS: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "IKS: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "IKS: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "IKS: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "IKS: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "IKS: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "IKS: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "IKS: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "IKS: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "IKS: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "IKS: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "IKS: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "IKS: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "GESHIP: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "JINDALSTEL: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "ETHOSLTD: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "DEEPAKFERT: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "COROMANDEL: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "PHOENIXLTD: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "INDUSTOWER: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "IGL: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "IGL: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "IGL: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "IGL: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "IGL: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "IGL: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "IGL: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "IGL: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "IGL: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "IGL: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "IGL: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "IGL: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "IGL: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "IGL: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "IGL: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "IGL: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "IGL: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "IGL: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "IGL: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "IGL: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "IGL: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "IGL: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "IGL: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "VEDL: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "VEDL: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "VEDL: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "VEDL: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "VEDL: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "VEDL: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "VEDL: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "VEDL: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "VEDL: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "VEDL: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "VEDL: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "VEDL: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "VEDL: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "VEDL: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "VEDL: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "VEDL: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "VEDL: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "VEDL: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "VEDL: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "VEDL: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "VEDL: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "VEDL: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "VEDL: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "TATACAP: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "ENDURANCE: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "CPPLUS: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "TATVA: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "TATVA: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "TATVA: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "TATVA: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "TATVA: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "TATVA: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "TATVA: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "TATVA: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "TATVA: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "TATVA: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "TATVA: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "TATVA: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATVA: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TATVA: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATVA: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATVA: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TATVA: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATVA: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATVA: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TATVA: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TATVA: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "TATVA: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "TATVA: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "ZAGGLE: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "DATAPATTNS: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "QUESS: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "QUESS: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "QUESS: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "QUESS: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "QUESS: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "QUESS: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "QUESS: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "QUESS: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "QUESS: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "QUESS: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "QUESS: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "QUESS: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "QUESS: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "QUESS: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "QUESS: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "QUESS: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "QUESS: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "QUESS: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "QUESS: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "QUESS: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "QUESS: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "QUESS: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "QUESS: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "ACMESOLAR: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "HYUNDAI: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "HDFCAMC: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "JSWENERGY: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "BHARTIARTL: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "EBGNG: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "COALINDIA: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "DELHIVERY: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "POWERGRID: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "GRASIM: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "GOLDIAM: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "TITAN: canonical snapshot read once",
+        "pass": true
+      },
+      {
+        "name": "TITAN: no legacy assignment read for live page",
+        "pass": true
+      },
+      {
+        "name": "TITAN: canonical profile matches header",
+        "pass": true
+      },
+      {
+        "name": "TITAN: industry leads common identity",
+        "pass": true
+      },
+      {
+        "name": "TITAN: classification verification explicit",
+        "pass": true
+      },
+      {
+        "name": "TITAN: Basic Industry not inferred",
+        "pass": true
+      },
+      {
+        "name": "TITAN: independent owner role",
+        "pass": true
+      },
+      {
+        "name": "TITAN: selected assignment visible",
+        "pass": true
+      },
+      {
+        "name": "TITAN: same snapshot in retained research",
+        "pass": true
+      },
+      {
+        "name": "TITAN: full company name fits",
+        "pass": true
+      },
+      {
+        "name": "TITAN: framework summary retained",
+        "pass": true
+      },
+      {
+        "name": "TITAN: Financials preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TITAN: Financials explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TITAN: Financials does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TITAN: Quality & Growth preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TITAN: Quality & Growth explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TITAN: Quality & Growth does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TITAN: Valuation preserves assignment snapshot",
+        "pass": true
+      },
+      {
+        "name": "TITAN: Valuation explicit contract mapping",
+        "pass": true
+      },
+      {
+        "name": "TITAN: Valuation does not reselect snapshot",
+        "pass": true
+      },
+      {
+        "name": "TITAN: same snapshot in Evidence",
+        "pass": true
+      },
+      {
+        "name": "TITAN: tab navigation does not reselect",
+        "pass": true
+      },
+      {
+        "name": "TITAN: no legacy assignment from tab navigation",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: tablet full title wraps",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: tablet no document overflow",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: keyboard activates Financials",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: tablet Financials contained",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: keyboard activates Quality & Growth",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: tablet Quality & Growth contained",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: keyboard activates Valuation",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: tablet Valuation contained",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: keyboard Summary hash",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: tablet full title wraps",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: tablet no document overflow",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: keyboard activates Financials",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: tablet Financials contained",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: keyboard activates Quality & Growth",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: tablet Quality & Growth contained",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: keyboard activates Valuation",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: tablet Valuation contained",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: keyboard Summary hash",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: tablet full title wraps",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: tablet no document overflow",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: keyboard activates Financials",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: tablet Financials contained",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: keyboard activates Quality & Growth",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: tablet Quality & Growth contained",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: keyboard activates Valuation",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: tablet Valuation contained",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: keyboard Summary hash",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: tablet full title wraps",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: tablet no document overflow",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: keyboard activates Financials",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: tablet Financials contained",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: keyboard activates Quality & Growth",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: tablet Quality & Growth contained",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: keyboard activates Valuation",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: tablet Valuation contained",
+        "pass": true
+      },
+      {
+        "name": "ABCAPITAL: keyboard Summary hash",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: tablet full title wraps",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: tablet no document overflow",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: keyboard activates Financials",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: tablet Financials contained",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: keyboard activates Quality & Growth",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: tablet Quality & Growth contained",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: keyboard activates Valuation",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: tablet Valuation contained",
+        "pass": true
+      },
+      {
+        "name": "FORTIS: keyboard Summary hash",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: tablet full title wraps",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: tablet no document overflow",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: keyboard activates Financials",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: tablet Financials contained",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: keyboard activates Quality & Growth",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: tablet Quality & Growth contained",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: keyboard activates Valuation",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: tablet Valuation contained",
+        "pass": true
+      },
+      {
+        "name": "SKYGOLD: keyboard Summary hash",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: tablet full title wraps",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: tablet no document overflow",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: keyboard activates Financials",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: tablet Financials contained",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: keyboard activates Quality & Growth",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: tablet Quality & Growth contained",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: keyboard activates Valuation",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: tablet Valuation contained",
+        "pass": true
+      },
+      {
+        "name": "BLUEJET: keyboard Summary hash",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: tablet full title wraps",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: tablet no document overflow",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: keyboard activates Financials",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: tablet Financials contained",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: keyboard activates Quality & Growth",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: tablet Quality & Growth contained",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: keyboard activates Valuation",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: tablet Valuation contained",
+        "pass": true
+      },
+      {
+        "name": "STARHEALTH: keyboard Summary hash",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: mobile Financials contains full results",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: mobile Financials no document overflow",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: mobile Quality & Growth contains full results",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: mobile Quality & Growth no document overflow",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: mobile Valuation contains full results",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: mobile Valuation no document overflow",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: mobile specialised grid contains full labels",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: mobile Financials contains full results",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: mobile Financials no document overflow",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: mobile Quality & Growth contains full results",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: mobile Quality & Growth no document overflow",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: mobile Valuation contains full results",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: mobile Valuation no document overflow",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: mobile specialised grid contains full labels",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: mobile Financials contains full results",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: mobile Financials no document overflow",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: mobile Quality & Growth contains full results",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: mobile Quality & Growth no document overflow",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: mobile Valuation contains full results",
+        "pass": true
+      },
+      {
+        "name": "AKUMS: mobile Valuation no document overflow",
+        "pass": true
+      },
+      {
+        "name": "Mobile: section menu stays sticky",
+        "pass": true
+      },
+      {
+        "name": "Mobile: summary menu targets shared header",
+        "pass": true
+      },
+      {
+        "name": "No runtime errors",
+        "pass": true
+      },
+      {
+        "name": "No provider refresh attempts",
+        "pass": true
+      },
+      {
+        "name": "No research writes",
+        "pass": true
+      }
+    ],
+    "stocks": [
+      {
+        "symbol": "HDFCBANK",
+        "profile": "BANK",
+        "subprofile": null,
+        "snapshotId": "de6796b4-d076-4d1e-a120-393347019424",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:b47b007d-1990-4504-a5a2-4391c07687c5:BANK",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "TORNTPHARM",
+        "profile": "PHARMA",
+        "subprofile": "DOMESTIC_FORMULATIONS",
+        "snapshotId": "47446aab-5cfb-40cc-853a-432b91fc671d",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:da69b3eb-0343-44f8-912c-288b826118cc:DOMESTIC_FORMULATIONS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "ALIVUS",
+        "profile": "PHARMA",
+        "subprofile": "API_BULK_DRUGS",
+        "snapshotId": "13037d81-005d-4af3-976b-eb684633f89d",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:de565d84-02de-4e97-a255-43ee56c8650e:API_BULK_DRUGS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "AUROPHARMA",
+        "profile": "PHARMA",
+        "subprofile": "GLOBAL_GENERICS",
+        "snapshotId": "bce467e7-5063-44e1-9b3a-9837340b60b2",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:3268daa2-a50a-4333-8f5e-9ce78d3e5270:GLOBAL_GENERICS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "BIOCON",
+        "profile": "PHARMA",
+        "subprofile": "BIOPHARMA_BIOSIMILARS",
+        "snapshotId": "48331078-60af-410b-b77a-92f482518511",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:bfc9de73-b3a2-42d9-9d25-a7f871890ccd:BIOPHARMA_BIOSIMILARS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "AKUMS",
+        "profile": "PHARMA",
+        "subprofile": "CDMO_CRAMS",
+        "snapshotId": "4d2aa67f-3804-4d4a-9cad-397220aabfc6",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:89d94355-8c96-4d21-8bb7-1e3bcf096a93:CDMO_CRAMS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "ABCAPITAL",
+        "profile": "FINANCIAL_HOLDING_COMPANY",
+        "subprofile": null,
+        "snapshotId": "c477cd00-30b9-4d87-95eb-23eb8a4c944d",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:3833b30d-f007-486a-afd4-d44d313f8e99:FINANCIAL_HOLDING_COMPANY",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "ICIL",
+        "profile": "TEXTILES_APPAREL",
+        "subprofile": null,
+        "snapshotId": "edd7f681-4d1d-413b-82c1-0b5d5b484e2a",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:0071a138-f152-412f-a71a-34075ae7ed2e:TEXTILES_APPAREL",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "DMART",
+        "profile": "RETAIL_COMMERCE",
+        "subprofile": null,
+        "snapshotId": "2cae84ad-d6cb-4021-a1c7-3cb99546f5f6",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:00e60a7c-0bb1-4c04-8eea-e5e0fc039bdb:RETAIL_COMMERCE",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "DEEPINDS",
+        "profile": "OIL_OPERATIONS",
+        "subprofile": null,
+        "snapshotId": "7e1644ea-1329-4c90-9fc7-697abb598261",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:01922190-3635-4057-b6b6-36bab37637cb:OIL_OPERATIONS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "PPLPHARMA",
+        "profile": "PHARMA",
+        "subprofile": "CDMO_CRAMS",
+        "snapshotId": "13ca4123-32c3-4581-bd18-ec24cea400b7",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:02e53d39-2b52-43d7-aa8c-46e7c5605e8d:CDMO_CRAMS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "LGEINDIA",
+        "profile": "CONSUMER_DURABLES",
+        "subprofile": null,
+        "snapshotId": "29546668-50ab-4c87-b4a9-ce7f8f0c1f51",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:0451a0ce-963e-4d08-acb1-e46c113fc102:CONSUMER_DURABLES",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "UTLSOLAR",
+        "profile": "CAPITAL_EQUIPMENT_ELECTRICAL",
+        "subprofile": null,
+        "snapshotId": "5ea04d14-23be-42b6-8b87-df060822f714",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:04cca0a6-b5ac-4f4b-9320-9efe98532d7b:CAPITAL_EQUIPMENT_ELECTRICAL",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "RELIANCE",
+        "profile": "INTEGRATED_REFINING_PETCHEM",
+        "subprofile": null,
+        "snapshotId": "c2685547-2914-4e12-86f3-99f90a8250e4",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:04dd96b3-6772-4871-b52d-60c4a162efe8:INTEGRATED_REFINING_PETCHEM",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "EMSLIMITED",
+        "profile": "ENVIRONMENTAL_SERVICES",
+        "subprofile": null,
+        "snapshotId": "14d5d5c2-c177-4be6-9baf-101dad64a852",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:04e452f8-8461-4655-a4e3-5c9c13a07694:ENVIRONMENTAL_SERVICES",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "KOTAKBANK",
+        "profile": "BANK",
+        "subprofile": null,
+        "snapshotId": "a02ac622-85f7-4824-9522-ce38d66524d0",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:05744a34-415b-4084-b832-ce3436ba0694:BANK",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "CEMPRO",
+        "profile": "PROJECT_EPC",
+        "subprofile": null,
+        "snapshotId": "46d2e134-eb7f-43c3-89a5-749d44e1432b",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:06ca3419-841d-454d-ac8b-8d898e21a81e:PROJECT_EPC",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "YATRA",
+        "profile": "HOSPITALITY_LEISURE",
+        "subprofile": null,
+        "snapshotId": "9fd9146d-26a7-4944-85e6-c9ca31f1a17b",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:06d58b99-b545-4fa8-8f88-9f8faab0c404:HOSPITALITY_LEISURE",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "PAYTM",
+        "profile": "FINTECH_PLATFORM",
+        "subprofile": null,
+        "snapshotId": "3ceecae8-d33a-4a54-9bcd-314cb9705261",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:0758f9b1-e2ef-4d20-8a54-f9bbb4826a90:FINTECH_PLATFORM",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "JYOTHYLAB",
+        "profile": "BRANDED_CONSUMER_FMCG",
+        "subprofile": null,
+        "snapshotId": "bd289126-32c3-4e3d-8100-b34b8f37a738",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:08939466-a3bb-4a59-8605-8917d6a547de:BRANDED_CONSUMER_FMCG",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "NETWEB",
+        "profile": "IT_SERVICES",
+        "subprofile": null,
+        "snapshotId": "c10249e4-b423-44e7-9768-e3efc6bf5a54",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:0d324841-f9bf-45b8-a772-0793e19526eb:IT_SERVICES",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "LTFOODS",
+        "profile": "AGRI_PROCESSING",
+        "subprofile": null,
+        "snapshotId": "c3c783c6-bdc9-4259-8cd6-d1fb83e0e127",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:0a967dcc-ec82-403b-a45f-aea133a54a93:AGRI_PROCESSING",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "IKS",
+        "profile": "IT_BPM_SERVICES",
+        "subprofile": null,
+        "snapshotId": "ec90cd17-e617-4162-b87e-929907c1a6de",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:0c94c922-356c-41e0-b503-3de0e315eb23:IT_BPM_SERVICES",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "GESHIP",
+        "profile": "SHIPPING",
+        "subprofile": null,
+        "snapshotId": "0fc3b58c-ed1f-4a47-8bba-5ceaa3c2ff9f",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:0dde9c0f-4bfe-463c-9a21-3712868f98d3:SHIPPING",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "JINDALSTEL",
+        "profile": "STEEL_FERROUS",
+        "subprofile": null,
+        "snapshotId": "40175142-6d15-4734-ad7a-37418ec90662",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:13582fb2-7c6c-4fcd-a2cd-253c86a79efb:STEEL_FERROUS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "ETHOSLTD",
+        "profile": "JEWELLERY",
+        "subprofile": null,
+        "snapshotId": "059eb181-1c07-4d63-a956-4ff47435c5f5",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:136be3f7-8b5a-4b98-8935-119053a9df8e:JEWELLERY",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "DEEPAKFERT",
+        "profile": "COMMODITY_PROCESS_CHEMICALS",
+        "subprofile": null,
+        "snapshotId": "9eee417b-5628-4ba6-bf5f-01213a5cf734",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:142f3023-ca8d-4f46-a42d-ba0d06c7a4c7:COMMODITY_PROCESS_CHEMICALS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "COROMANDEL",
+        "profile": "AGRO_FERTILISER",
+        "subprofile": null,
+        "snapshotId": "d5c7ac23-dadc-4ca7-a8d4-7d27e7b59ec9",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:1c205f01-6864-4628-8613-8580e5211fb9:AGRO_FERTILISER",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "PHOENIXLTD",
+        "profile": "REAL_ESTATE_DEVELOPER",
+        "subprofile": null,
+        "snapshotId": "a3a33514-30cd-493b-892d-2da0e14d0866",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:1dc1f881-96ec-459f-a406-404b2014e125:REAL_ESTATE_DEVELOPER",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "INDUSTOWER",
+        "profile": "TELECOM_INFRA",
+        "subprofile": null,
+        "snapshotId": "ee75119b-6900-4d21-98ba-21c3df9a86b8",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:1c038626-26ac-4632-a446-4de7f0fc3245:TELECOM_INFRA",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "IGL",
+        "profile": "MIDSTREAM_CITY_GAS",
+        "subprofile": null,
+        "snapshotId": "6da5cc2b-c3fe-46e6-b9bd-d3c685c253af",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:259861a8-729a-42e3-b8a9-9a000113a870:MIDSTREAM_CITY_GAS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "VEDL",
+        "profile": "NON_FERROUS_DIVERSIFIED_METALS",
+        "subprofile": null,
+        "snapshotId": "3fcfbf1c-6556-4470-97cf-17da86302864",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:2065b292-6f3a-4c30-8e63-e2b845862ad4:NON_FERROUS_DIVERSIFIED_METALS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "TATACAP",
+        "profile": "NBFC_LENDING",
+        "subprofile": null,
+        "snapshotId": "ff23412f-3d6a-4328-b684-1921e5dac4a5",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:2b2180a3-8f19-4de5-9532-2851da98f3c4:NBFC_LENDING",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "ENDURANCE",
+        "profile": "AUTO_COMPONENTS",
+        "subprofile": null,
+        "snapshotId": "defbbb97-c6bb-4ef3-9a98-dddc70b317a6",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:348077cc-8eaa-4bdd-9251-e168d7e9c5ed:AUTO_COMPONENTS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "CPPLUS",
+        "profile": "INDUSTRIAL_PRODUCTS",
+        "subprofile": null,
+        "snapshotId": "2c6cdc73-6e1c-4f55-b84e-42dbe2f05b86",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:39eeaf90-d688-45c5-a6af-41651226afa4:INDUSTRIAL_PRODUCTS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "TATVA",
+        "profile": "DIVERSIFIED_CHEMICALS_PETROCHEM",
+        "subprofile": null,
+        "snapshotId": "662dae11-f349-494d-9dee-ceba1a9ba262",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:3f3e4dc7-7a59-4bca-9fc4-2a9039d97763:DIVERSIFIED_CHEMICALS_PETROCHEM",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "ZAGGLE",
+        "profile": "IT_SOFTWARE_PRODUCTS_PLATFORMS",
+        "subprofile": null,
+        "snapshotId": "e39950a6-af41-435f-be07-07166d71627a",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:462c3c0e-a356-417d-8e8b-d3aa7b3d7b10:IT_SOFTWARE_PRODUCTS_PLATFORMS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "DATAPATTNS",
+        "profile": "DEFENCE_AEROSPACE",
+        "subprofile": null,
+        "snapshotId": "65b0e2ef-1951-479e-a277-f87df46a0a1b",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:4cd44d45-e5c6-4696-9744-25c19f44ac8e:DEFENCE_AEROSPACE",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "FORTIS",
+        "profile": "HOSPITAL",
+        "subprofile": null,
+        "snapshotId": "adcb8f50-bab7-4e1f-9be0-491ef299fc17",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:5457a4ce-ec0a-43a2-8436-d8e1a330bbd8:HOSPITAL",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "QUESS",
+        "profile": "BUSINESS_SERVICES",
+        "subprofile": null,
+        "snapshotId": "768dd84c-7e3a-44d2-a255-3f3036d252e1",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:594ae613-188b-4dd5-b533-5ff21a67e96b:BUSINESS_SERVICES",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "ACMESOLAR",
+        "profile": "RENEWABLE_IPP",
+        "subprofile": null,
+        "snapshotId": "e328a0b6-5cbd-4906-8e61-e00e609fbe38",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:5b9171f3-d8cb-4b24-8432-1905b214915a:RENEWABLE_IPP",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "HYUNDAI",
+        "profile": "AUTO_OEM",
+        "subprofile": null,
+        "snapshotId": "7d908413-b8ac-4bf8-8d49-b2204e83b444",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:6a3d3238-6e7d-4d3e-8be6-d239764abe45:AUTO_OEM",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "HDFCAMC",
+        "profile": "CAPITAL_MARKETS_AMC",
+        "subprofile": null,
+        "snapshotId": "82ba6192-57ce-4055-8ebc-4490f8d1e2da",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:7bc3f24e-0802-4464-ad8f-348dd8c8de57:CAPITAL_MARKETS_AMC",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "STARHEALTH",
+        "profile": "INSURANCE",
+        "subprofile": null,
+        "snapshotId": "3c73e83e-0440-48f7-8e3e-be6399d3f697",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:7176239e-fd2d-4d2d-83e6-7cc1a6b3f8ff:INSURANCE",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "JSWENERGY",
+        "profile": "GENERATION_INTEGRATED_UTILITY",
+        "subprofile": null,
+        "snapshotId": "1d20e6ca-f539-4225-a21c-f934ce5a3b1c",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:819fde8b-75bc-4327-b456-bce1a8b7a63f:GENERATION_INTEGRATED_UTILITY",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "BHARTIARTL",
+        "profile": "TELECOM_OPERATOR",
+        "subprofile": null,
+        "snapshotId": "5ca70804-d426-4fa8-a605-ab60295e3fa7",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:b5aefac8-52bb-45b0-b9d0-87c9aad7c3a0:TELECOM_OPERATOR",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "EBGNG",
+        "profile": "IT_DIGITAL_INFRA_HARDWARE",
+        "subprofile": null,
+        "snapshotId": "5b7c3c30-7a5a-42a7-b487-e682dd7ff563",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:9503c7f0-33f1-42aa-a804-134c848c18fb:IT_DIGITAL_INFRA_HARDWARE",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "COALINDIA",
+        "profile": "SOLID_FUELS_MINING",
+        "subprofile": null,
+        "snapshotId": "7a6da391-4e3c-4065-bf8f-db80679f55e4",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:b9ec22c1-bb74-4206-8d14-45b1f4b10293:SOLID_FUELS_MINING",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "DELHIVERY",
+        "profile": "LOGISTICS",
+        "subprofile": null,
+        "snapshotId": "7d1aca73-8b75-4eb7-8ccb-caecfc5d08c8",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:eaa32fc2-c081-4565-8836-26017cbaf1bd:LOGISTICS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "POWERGRID",
+        "profile": "REGULATED_NETWORK",
+        "subprofile": null,
+        "snapshotId": "a57ab349-f984-4790-834f-f76930ba417c",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:bd23e8c3-1c00-4dab-8610-f12e1e0f26e3:REGULATED_NETWORK",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "GRASIM",
+        "profile": "CEMENT_BUILDING_MATERIALS",
+        "subprofile": null,
+        "snapshotId": "80a0f0de-f504-483f-a69b-25c1cb649da4",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:ceca07c4-c14a-49c4-8add-fbc3e69ec89b:CEMENT_BUILDING_MATERIALS",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "BLUEJET",
+        "profile": "PHARMA",
+        "subprofile": null,
+        "snapshotId": "5fa30f08-c473-47bd-9e4b-db85193d8fe5",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:c9b5f6f8-76be-435d-bba0-c4432e8441df:PHARMA",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "GOLDIAM",
+        "profile": "JEWELLERY",
+        "subprofile": null,
+        "snapshotId": "6f57e188-304f-42d5-9c89-22c85992c42d",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:bdd7b1fa-cc3d-40cd-aa67-7b00d5034545:JEWELLERY",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "SKYGOLD",
+        "profile": "JEWELLERY",
+        "subprofile": null,
+        "snapshotId": "361a0591-06f2-4823-9a89-e82fb9df270f",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:3cf38a68-6c5b-42b4-861d-0df520c9bb4a:JEWELLERY",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      },
+      {
+        "symbol": "TITAN",
+        "profile": "JEWELLERY",
+        "subprofile": null,
+        "snapshotId": "ebe00681-2875-4913-aaf5-959e7375d3c0",
+        "assignmentId": "PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1:77f3f9a4-62e0-4b36-8e73-09e1e281ecbf:JEWELLERY",
+        "assignmentVersion": "e7c021b865fcd1d49a7c59924ef9c44f0383f301",
+        "classificationVersion": "PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json",
+        "pointSnapshotReads": 1,
+        "legacyReads": 0
+      }
+    ],
+    "readFailures": []
+  },
+  "hostedResilience": {
+    "origin": "https://portfiolio-cn9k0ebe0-dibyendu-dutta.vercel.app",
+    "revision": "20d47fd82fde6fd16b2d6f3754334089a81d83a8",
+    "deploymentId": "dpl_FdYvpLHHFLjP4C9ZcmCdG5Rrqspo",
+    "status": "PASS",
+    "runtimeErrors": 0,
+    "blockedProviderRequests": 0,
+    "blockedWrites": 0,
+    "checks": [
+      {
+        "name": "HDFCBANK: 900px first-glance .research-title h1",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: 900px first-glance #stock-position",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: 900px first-glance .research-decision-heading",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: keyboard opens lineage",
+        "pass": true
+      },
+      {
+        "name": "HDFCBANK: keyboard closes lineage",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: 900px first-glance .research-title h1",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: 900px first-glance #stock-position",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: 900px first-glance .research-decision-heading",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: keyboard opens lineage",
+        "pass": true
+      },
+      {
+        "name": "TORNTPHARM: keyboard closes lineage",
+        "pass": true
+      },
+      {
+        "name": "error: identity remains",
+        "pass": true
+      },
+      {
+        "name": "error: common menu remains",
+        "pass": true
+      },
+      {
+        "name": "error: no qualified decision",
+        "pass": true
+      },
+      {
+        "name": "error: no retained source values",
+        "pass": true
+      },
+      {
+        "name": "error: selected results unavailable",
+        "pass": true
+      },
+      {
+        "name": "empty: identity remains",
+        "pass": true
+      },
+      {
+        "name": "empty: common menu remains",
+        "pass": true
+      },
+      {
+        "name": "empty: no qualified decision",
+        "pass": true
+      },
+      {
+        "name": "empty: no retained source values",
+        "pass": true
+      },
+      {
+        "name": "empty: selected results unavailable",
+        "pass": true
+      },
+      {
+        "name": "loading: loading explicit",
+        "pass": true
+      },
+      {
+        "name": "loading: old assignment hidden",
+        "pass": true
+      },
+      {
+        "name": "loading: identity remains",
+        "pass": true
+      },
+      {
+        "name": "loading: common menu remains",
+        "pass": true
+      },
+      {
+        "name": "loading: no qualified decision",
+        "pass": true
+      },
+      {
+        "name": "loading: no retained source values",
+        "pass": true
+      },
+      {
+        "name": "loading: selected results unavailable",
+        "pass": true
+      },
+      {
+        "name": "Cross-snapshot: results blocked",
+        "pass": true
+      },
+      {
+        "name": "Cross-snapshot: no values displayed",
+        "pass": true
+      },
+      {
+        "name": "No runtime errors",
+        "pass": true
+      },
+      {
+        "name": "No provider refresh attempts",
+        "pass": true
+      },
+      {
+        "name": "No research writes",
+        "pass": true
+      }
+    ],
+    "stocks": [],
+    "readFailures": [
+      {
+        "table": "current_research_evidence_snapshot_lineage_v1",
+        "status": 503,
+        "message": "Stage 5 simulated read failure"
+      },
+      {
+        "table": "current_research_evidence_snapshot_lineage_v1",
+        "status": 503,
+        "message": "Stage 5 simulated read failure"
+      },
+      {
+        "table": "current_research_evidence_snapshot_lineage_v1",
+        "status": 503,
+        "message": "Stage 5 simulated read failure"
+      },
+      {
+        "table": "current_research_evidence_snapshot_lineage_v1",
+        "status": 503,
+        "message": "Stage 5 simulated read failure"
+      }
+    ],
+    "simulatedNetworkStates": true
+  },
+  "localChecks": {
+    "stockPageRegression": {
+      "files": 13,
+      "tests": 199,
+      "status": "PASS"
+    },
+    "pharmaAssignmentAndContracts": {
+      "files": 3,
+      "tests": 25,
+      "status": "PASS"
+    },
+    "dashboardIsolation": {
+      "files": 1,
+      "tests": 2,
+      "status": "PASS"
+    },
+    "fullApplicationLint": "PASS",
+    "productionTypecheckBuild": "PASS",
+    "architectureGuard": "PASS",
+    "fullRepositorySuite": "INCOMPLETE_INTERRUPTED_AFTER_STALL_AND_ONE_DASHBOARD_FAILURE_ISOLATION_PASSED",
+    "denoIntegration": "NOT_RUN_DENO_UNAVAILABLE"
+  },
+  "ci": {
+    "jobId": 113284738232,
+    "runnerId": 0,
+    "steps": [],
+    "status": "NOT_STARTED_ACCOUNT_BILLING_SPENDING_LIMIT",
+    "latestVercelStatus": "DOCUMENTATION_ONLY_COMMIT_BUILD_RATE_LIMIT",
+    "reviewPr": "https://github.com/drddutta-portfolio/PortfiolioAI/pull/117",
+    "merged": false
+  },
+  "remainingLimits": [
+    "Official node identities, taxonomy source/version, Basic Industry and hierarchy verification unavailable in shared projection; C1/C8 unclosed",
+    "Specialised numeric results require exact selected-snapshot binding; unbound metrics unproven",
+    "Secondary business exposure review metadata not supplied",
+    "Profiles without declared requirement dimensions retain all items in Overview/Evidence",
+    "Full repository suite and required CI not accepted by this record",
+    "No local Deno integration rerun; no Stage 5 Edge runtime change"
+  ],
+  "profilesNotRepresentedInHostedSample": [
+    "SPECIALTY_CHEMICALS",
+    "UPSTREAM_E_AND_P"
+  ]
+}

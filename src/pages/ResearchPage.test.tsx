@@ -253,7 +253,7 @@ describe("ResearchPage", () => {
     const workspace = within(screen.getByRole("region", { name: "Stock-specific research" }))
     expect(workspace.getByRole("heading", { name: "Test Retained Requirement" })).toBeInTheDocument()
     expect(workspace.getByText("Source reference: test-source-reference")).toBeInTheDocument()
-    expect(workspace.getByText(/CONSOLIDATED/)).toBeInTheDocument()
+    expect(workspace.getByText(/CONSOLIDATED/, { selector: "pre" })).toBeInTheDocument()
     expect(document.querySelector(".portfolioai-primary-state")).toHaveTextContent("Canonical scoreNot ready")
     expect(document.querySelector(".portfolioai-advisory-slots")).toHaveTextContent("Suggested roleNot ready")
     if (isPharma) expect(screen.getByText("Retained pharmaceutical workspace")).toBeInTheDocument()

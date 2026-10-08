@@ -1,3 +1,40 @@
+### Stock-page Industry-first Stage 5 — 8 October 2026
+
+Stage 5.1–5.4 page-design acceptance PASS: 224 relevant tests across 16 files,
+TypeScript/production build, full application lint and architecture guard pass.
+Independent hosted verification passed 1,424 checks: 55 desktop stocks covering
+45 live profiles, eight tablet cases, three mobile cases and simulated
+loading/error/empty/cross-snapshot failures. Runtime errors, provider refresh
+attempts and research writes were zero; ordinary browsing had no REST read
+failures. Six safety regressions and the explicit Stage 5 acceptance contract were
+added; application runtime is unchanged from the verified Stage 4 revision.
+See the [Stage 5 acceptance record](PortfolioAI_STOCK_RESEARCH_STAGE_5_ACCEPTANCE_2026-10-08.md)
+for evidence and the Stage 1 proof/limit matrix. The full repository test attempt
+was interrupted; its Dashboard case passed in isolation, but full-suite
+acceptance is not claimed. GitHub CI remains blocked before runner assignment by
+billing/spending limits; documentation-only Vercel builds are rate-limited.
+Stages 4 and 5 stay on draft PR #117, unmerged, per the requested joint release.
+C1/C8 taxonomy proof, exact specialised evidence bindings and qualified
+scores/advice retain their own upstream gates. No migrations, financial changes,
+research writes, provider execution or Auth/RLS changes were made.
+
+### Stock-page Industry-first Stage 4 — 8 October 2026
+
+Stage 4 implements a selected framework summary, canonical-contract result tabs,
+readable retained observation tables and five distinct Pharma specialised
+requirement/result views. Exact snapshot/code binding is required; missing
+subprofile evidence or dimension metadata remains explicitly unproven. All
+current 47 canonical profiles retain access to their selected immutable items.
+See the [Stage 4 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_4_SPECIALIST_RESULTS_2026-10-08.md)
+for safeguards, checks and hosted acceptance. All 147 focused tests pass; build,
+full application lint and architecture guard pass. Final hosted visual acceptance
+is PASS with 216 checks across seven desktop and three mobile stocks, including
+expanded specialist grids and the corrected reference wrapping. No runtime errors,
+provider refreshes, research writes or REST read failures occurred. CI could not
+start due to GitHub account billing/spending limits. No classification, financial,
+evidence-selection, database or provider semantics change. This is on the review
+branch, not merged to Development; operational V1-4 and C1/C8 remain separate.
+
 ## Operational V1-4 ownership runtime guard — 8 October 2026
 
 **REPOSITORY IMPLEMENTATION PARTIAL / VERIFICATION PENDING / NOT DEPLOYED / NOT PROVEN.** Versioned owner-selected Promoter, Institutional and separately reviewed Governance evidence rules are now wired into the existing `p7-ic2-materialize-readiness` canonical requirement path, with a strict fail-closed validation guard and focused tests. Changed `p7-ic-evidence-normalization.ts`, materializer `index.ts`, and added `p7-ic-ownership-v14.test.ts`. Retained Development source census: 53 promoter trend, 10 institutional trend, 51 ownership governance; 112/114 requirement items link to raw source records. Field-level total-equity percentage denominator and governance-document approval are not established, so no automatic canonical candidates are accepted. No live validator run or materialization was executed. **Full code tests/typecheck/build are not claimed** because an executable full current repository checkout was unavailable in the session. See `docs/PortfolioAI_V1_4_OWNERSHIP_IMPLEMENTATION_AND_ACTIVATION_2026-10-08.md`. Provider calls, R2/database writes, deployments, migrations and Production changes: none. V1-4 remains NOT PROVEN, V1-5 unauthorized.

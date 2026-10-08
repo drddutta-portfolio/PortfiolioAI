@@ -1,3 +1,6 @@
+import { metricLabel } from "./researchPolicy"
+import { ResearchRetainedResult } from "./ResearchRetainedResult"
+import type { CanonicalEvidenceReadiness } from "./useCanonicalEvidenceReadiness"
 import { canonicalPharmaPrimary } from "./canonicalResearchAssignment"
 import { composePharmaSubprofileContract, PHARMA_SUBPROFILE_CONTRACTS } from "./pharmaSubprofileContracts"
 import type { SecurityScoringSnapshot } from "./scoringTypes"
@@ -1527,11 +1530,12 @@ function RetainedPharmaResearchWorkspacePanel({ securityId, symbol, research }: 
 }
 
 /** The selected P7 assignment owns the live framework; earlier review material stays explicitly separate. */
-export function PharmaResearchWorkspacePanel({ securityId, symbol, research, snapshot }: {
+export function PharmaResearchWorkspacePanel({ securityId, symbol, research, snapshot, evidence }: {
   readonly securityId: string
   readonly symbol: string
   readonly research: SecurityResearch
   readonly snapshot: SecurityScoringSnapshot | null
+  readonly evidence?: CanonicalEvidenceReadiness
 }) {
   const [showEarlierReview, setShowEarlierReview] = useState(false)
   const primary = canonicalPharmaPrimary(snapshot)
@@ -1545,6 +1549,24 @@ export function PharmaResearchWorkspacePanel({ securityId, symbol, research, sna
     <h2>Pharmaceuticals deep research</h2>
     <p><strong>Primary model:</strong> {PHARMA_SUBPROFILE_CONTRACTS[primary].displayName} · Canonical assignment</p>
     <p>Assignment resolution is separate from classification verification, evidence readiness and scoring availability. Secondary exposure review metadata is not supplied by this canonical projection.</p>
+    <details><summary>Business model and specialised research results</summary>
+      <p>Primary contract: {contract.displayName} · {contract.profileVersion}. Secondary and emerging exposures require separate reviewed metadata; none is inferred here.</p>
+      <p>Only exact metric/requirement-code bindings to this assignment's selected snapshot are shown. Parent-profile evidence does not prove specialised subprofile completeness.</p>
+      {[...new Set(contract.metrics.map(metric => metric.dimension))].map(dimension => <details key={dimension}>
+        <summary>{dimension.replaceAll("_", " ")} requirements</summary>
+        <div className="profile-requirement-grid">{contract.metrics.filter(metric => metric.dimension === dimension).map(metric => {
+          const bound = !evidence?.isLoading && !evidence?.error && evidence?.data?.snapshot.snapshotId === route.snapshotId
+            ? evidence.data.requirements.filter(item => item.snapshot_id === route.snapshotId && (item.metric_code === metric.metricCode || item.requirement_code === metric.metricCode)) : []
+          return <article key={metric.metricCode}><h3>{metricLabel(metric.metricCode)}</h3>
+            <p>{metric.applicability.replaceAll("_", " ")} · {metric.requirementLevel.toLowerCase()}</p>
+            <p>History: {metric.history.minimumObservations} {metric.history.historyUnit.toLowerCase()} observations · periods: {metric.periodTypes.join(" / ")}</p>
+            <p>{metric.sourceContract}</p>
+            <p>Freshness: {metric.freshnessPolicy}</p>
+            {bound.length ? bound.map(item => <ResearchRetainedResult key={item.id} item={item} />) : <p>No exact selected-snapshot result binding. Specialised evidence qualification is unproven.</p>}
+          </article>
+        })}</div>
+      </details>)}
+    </details>
     <details><summary>Selected Pharma contract and assignment</summary>
       <p>{route.methodologyAuthority} / {route.methodologyVersion}</p>
       <p>Assignment {route.assignmentAuthority ?? "Unavailable"} / {route.assignmentVersion} / {route.assignmentId}</p>

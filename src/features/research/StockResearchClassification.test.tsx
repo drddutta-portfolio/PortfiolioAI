@@ -12,6 +12,15 @@ const snapshot: SecurityScoringSnapshot = {
 }
 afterEach(cleanup)
 describe("Industry-first shared identity", () => {
+  it("retains the approved methodology when contextual sector labels change", () => {
+    const view = render(<StockResearchClassification industry="Pharmaceuticals" sector="Healthcare" snapshot={snapshot} isLoading={false} error={null} />)
+    const method = screen.getByText("Methodology / profile:").closest("p")?.textContent
+    view.rerender(<StockResearchClassification industry="Pharmaceuticals" sector="Conflicting legacy sector" snapshot={snapshot} isLoading={false} error={null} />)
+    expect(screen.getByText("Sector context:").closest("p")).toHaveTextContent("Conflicting legacy sector")
+    expect(screen.getByText("Methodology / profile:").closest("p")?.textContent).toBe(method)
+    expect(screen.getByText("Primary subprofile:").closest("p")).toHaveTextContent("Domestic Formulations")
+    expect(screen.getByText("Classification verification:").closest("p")).toHaveTextContent("Unavailable")
+  })
   it("separates industry, sector, unknown Basic Industry, assignment and readiness", () => {
     render(<StockResearchClassification industry="Pharmaceuticals & Biotechnology" sector="Healthcare" snapshot={snapshot} isLoading={false} error={null} />)
     const section = screen.getByRole("region", { name: "Industry and research assignment" })

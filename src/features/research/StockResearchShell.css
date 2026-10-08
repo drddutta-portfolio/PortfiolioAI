@@ -23,3 +23,14 @@
   word-break: normal;
   overflow-wrap: anywhere;
 }
+
+/* Contract result components share layout across industries and business models. */
+.selected-research-framework { border: 1px solid #d7e3dc; border-radius: .7rem; padding: .75rem; margin: .7rem 0; background: #f5faf7; }
+.selected-research-framework p, .retained-research-result p { font-size: .78rem; line-height: 1.45; overflow-wrap: anywhere; }
+.retained-result-table { max-inline-size: 100%; overflow-x: auto; }
+.retained-result-table table { width: 100%; border-collapse: collapse; font-size: .72rem; }
+.retained-result-table th, .retained-result-table td { padding: .45rem; border-bottom: 1px solid #d7e3dc; text-align: left; min-inline-size: 8rem; overflow-wrap: anywhere; }
+.retained-research-result { min-inline-size: 0; }
+.retained-research-result summary { cursor: pointer; font-weight: 600; }
+.pharma-workspace-panel p, .pharma-workspace-panel summary { overflow-wrap: anywhere; }
+.pharma-workspace-panel details { min-inline-size: 0; max-inline-size: 100%; }

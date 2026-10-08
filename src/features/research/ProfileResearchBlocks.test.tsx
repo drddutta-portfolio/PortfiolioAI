@@ -29,14 +29,37 @@ function open() { const onViewEvidence = vi.fn(); render(<ProfileResearchBlocks 
 afterEach(() => { cleanup(); Object.assign(evidence, { applicable: true, isLoading: false, error: null, data: details }); load.mockClear() })
 
 describe("selected-contract stock research", () => {
+  it.each(["STALE", "MISSING", "INSUFFICIENT", "CONFLICTING", "REVIEW_REQUIRED"] as const)("retains %s evidence without turning an observation into a score", state => {
+    evidence.data = { ...details, requirements: [requirement(1, { evidence_state: state, validation_state: "UNVALIDATED", normalized_value: { value: "0", unit: "PERCENT", period_end: "2026-03-31", period_type: "FY", scope: "CONSOLIDATED" } })] }
+    open()
+    expect(screen.getByRole("heading", { name: "Requirement 1" })).toBeInTheDocument()
+    expect(screen.getByText("0", { selector: "td" })).toBeInTheDocument()
+    expect(screen.getByText(/NO VALIDATED EVIDENCE/)).toBeInTheDocument()
+    expect(screen.getByText("Source reference: source-1")).toBeInTheDocument()
+    expect(screen.queryByText(/Canonical score|Suggested role: Core|Suggested role: Satellite/)).not.toBeInTheDocument()
+  })
+  it("fails closed on an item from another snapshot", () => {
+    evidence.data = { ...details, requirements: [requirement(1, { snapshot_id: "another-snapshot" })] }
+    open()
+    expect(screen.getByRole("alert")).toHaveTextContent("Retained item snapshot mismatch")
+    expect(screen.queryByText("Source reference: source-1")).not.toBeInTheDocument()
+  })
+  it("uses exact contract dimensions on the valuation tab while retaining unmapped items in Overview", () => {
+    evidence.data = { ...details, snapshot: { ...snapshot, profileCode: "PHARMA" }, requirements: [requirement(1, { requirement_code: "PE" }), requirement(2, { requirement_code: "CFO_OR_FCF_CONVERSION" }), requirement(3, { requirement_code: "UNKNOWN" })] }
+    render(<ProfileResearchBlocks portfolioId="p1" securityId="s1" assetClass="EQUITY" section="Valuation" onViewEvidence={vi.fn()} />)
+    expect(screen.getByRole("region", { name: "Valuation selected contract results" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Pe" })).toBeInTheDocument()
+    expect(screen.queryByRole("heading", { name: "Cfo Or Fcf Conversion" })).not.toBeInTheDocument()
+    expect(screen.getByText(/Items without a registered dimension remain accessible/)).toBeInTheDocument()
+  })
   it("retains all results beyond the compact preview, with full source binding", () => {
     const viewEvidence = open()
     expect(load).toHaveBeenCalledWith("p1", "s1", "EQUITY")
     expect(screen.getByText("All remaining applicable research (3)")).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Requirement 8" })).toBeInTheDocument()
     expect(screen.getByText("Source reference: source-8")).toBeInTheDocument()
-    expect(screen.getAllByText(/INR_CRORE/)).toHaveLength(8)
-    expect(screen.getAllByText(/CONSOLIDATED/)).toHaveLength(8)
+    expect(screen.getAllByText(/INR_CRORE/, { selector: "pre" })).toHaveLength(8)
+    expect(screen.getAllByText(/CONSOLIDATED/, { selector: "pre" })).toHaveLength(8)
     expect(screen.getByText(/9 applicable retained requirements · 1 not applicable/)).toBeInTheDocument()
     expect(screen.getByText(/Explicit contract exclusions are not missing evidence/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: "View complete profile evidence" }))
