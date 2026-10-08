@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import {
+  derivePharmaOperatingMarginPercent,
   derivePharmaQuarterlyOperatingMargin,
   normalizePharmaAnnualCfo,
   normalizePharmaAnnualRevenue,
@@ -10,7 +11,7 @@ import {
 
 describe("PHARMA history normalization", () => {
   it("is versioned for the R4H raw-history contract", () => {
-    expect(PHARMA_HISTORY_NORMALIZATION_VERSION).toBe("PHARMA_HISTORY_NORMALIZATION_V2")
+    expect(PHARMA_HISTORY_NORMALIZATION_VERSION).toBe("PHARMA_HISTORY_NORMALIZATION_V3")
   })
 
   it("keeps operating revenue semantically strict and rejects total/generic revenue substitutions", () => {
@@ -47,6 +48,13 @@ describe("PHARMA history normalization", () => {
     ])
     expect(result.points).toContainEqual({ period: "Q7", value: "939", sourceLabel: "Operating Profit 7Qtr Ago" })
     expect(result.missingPeriods).toContain("Q6")
+  })
+
+
+  it("uses one six-decimal Decimal owner for operating-margin calculation", () => {
+    expect(derivePharmaOperatingMarginPercent("1664", "4921")).toBe("33.814265")
+    expect(derivePharmaOperatingMarginPercent("20", "0")).toBeNull()
+    expect(derivePharmaOperatingMarginPercent(null, "100")).toBeNull()
   })
 
   it("derives OPM from matched quarterly operating profit and revenue with exact decimal arithmetic", () => {
