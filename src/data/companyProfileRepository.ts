@@ -55,7 +55,7 @@ export async function getCachedCompanyProfile(securityId: string): Promise<Compa
 }
 
 export async function discoverCompanyProfile(portfolioId: string, securityId: string) {
-  const result = await supabase.functions.invoke("discover-company-profile", {
+  const result = await supabase.functions.invoke<unknown>("discover-company-profile", {
     body: { portfolioId, securityId },
   })
   if (result.error) throw new Error(result.error.message || "Company profile discovery failed.")
