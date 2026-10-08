@@ -88,7 +88,7 @@ function isRegistryResponse(value: unknown): value is PortfolioCoverageRegistryR
 }
 
 export async function loadPortfolioCoverageRegistry(portfolioId: string): Promise<PortfolioCoverageRegistryResponse> {
-  const { data, error } = await supabase.functions.invoke("portfolio-coverage-registry", {
+  const { data, error } = await supabase.functions.invoke<unknown>("portfolio-coverage-registry", {
     body: { portfolioId },
   })
   if (error) throw error
