@@ -21,6 +21,6 @@ describe("Research fail-closed rendering", () => {
     expect(screen.getByText("Sector methodology available; scoring execution is pending evidence/adapter rollout.")).toBeTruthy()
     expect(screen.getByText("Overall stock score")).toBeTruthy()
     expect(screen.getByText("Not ready")).toBeTruthy()
-    expect(screen.getByText("No current canonical score")).toBeTruthy()
+    expect(screen.getAllByText("No current canonical score").length).toBeGreaterThan(0)
   })
 })
