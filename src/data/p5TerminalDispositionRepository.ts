@@ -51,7 +51,7 @@ interface P5TerminalResponse {
 export async function loadP5TerminalDispositions(
   portfolioId: string,
 ): Promise<readonly P5TerminalDisposition[]> {
-  const result = await supabase.functions.invoke("p6-terminal-disposition-read", {
+  const result = await supabase.functions.invoke<unknown>("p6-terminal-disposition-read", {
     body: { portfolioId },
   })
   if (result.error) throw result.error
