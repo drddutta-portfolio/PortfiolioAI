@@ -1,0 +1,62 @@
+{
+  "origin": "https://portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app",
+  "zoom": 200,
+  "method": "Chromium native zoom preference for default storage partition; private app-auth context; CSS zoom unchanged",
+  "checks": [
+    {
+      "symbol": "HDFCBANK",
+      "pass": true,
+      "measurements": {
+        "width": 720,
+        "outer": 1440,
+        "dpr": 2,
+        "cssZoom": "1",
+        "pageWidth": 720,
+        "scoreColumns": "336.422px 128px 128px"
+      }
+    },
+    {
+      "symbol": "TORNTPHARM",
+      "pass": true,
+      "measurements": {
+        "width": 720,
+        "outer": 1440,
+        "dpr": 2,
+        "cssZoom": "1",
+        "pageWidth": 720,
+        "scoreColumns": "336.422px 128px 128px"
+      }
+    },
+    {
+      "symbol": "ABCAPITAL",
+      "pass": true,
+      "measurements": {
+        "width": 720,
+        "outer": 1440,
+        "dpr": 2,
+        "cssZoom": "1",
+        "pageWidth": 720,
+        "scoreColumns": "336.422px 128px 128px"
+      }
+    },
+    {
+      "symbol": "ACMESOLAR",
+      "pass": true,
+      "measurements": {
+        "width": 720,
+        "outer": 1440,
+        "dpr": 2,
+        "cssZoom": "1",
+        "pageWidth": 720,
+        "scoreColumns": "336.422px 128px 128px"
+      }
+    }
+  ],
+  "runtimeErrors": 0,
+  "blockedProviderRequests": 0,
+  "status": "AUTOMATED_PASS_VISUAL_REVIEW_REQUIRED",
+  "verifiedRevision": "1a6d16e0a553ba08232bdc5f003e78b8f032c404",
+  "deploymentId": "dpl_8bzgi9ueeZQAp5NfBJiNMN427CYA",
+  "temporaryProposedStyles": false,
+  "agentVisualReview": "PASS: representative hosted screenshots inspected; see acceptance record"
+}

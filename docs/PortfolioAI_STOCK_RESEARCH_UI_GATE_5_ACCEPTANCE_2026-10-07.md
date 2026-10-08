@@ -3,17 +3,62 @@
 Date: 7 October 2026 (UTC). Scope: the common shell for all stocks plus canonical
 stock/sector/industry/sub-sector/subprofile-specific research presentation.
 
-**Current decision, 8 October 2026 (Asia/Kolkata): HOLD / NOT FINAL.** Authenticated
-hosted inspection is now complete for the available representative checks. It found
-shared tablet score-label overflow. The fix is reviewable in PR #113, but Vercel
-build-rate limiting prevents final Development deployment and re-verification.
-Gate 5 cannot yet certify final acceptance for every stock.
+**Final decision, 8 October 2026 (Asia/Kolkata): PASS.** The two-part design
+is accepted as the common baseline for all stock research pages within declared
+profile capabilities. The tablet overflow fix is merged and deployed to Development.
+This decision approves UI presentation, not research readiness or investment advice.
 
-| Sub-gate | Result | Evidence / remaining work |
+| Sub-gate | Result | Final evidence |
 | --- | --- | --- |
-| G5.1 representative profile/state regression | PASS | 182 tests across 11 focused files, including 37 integrated ResearchPage cases. Fixtures isolate cached repositories and are not claims about live research readiness. |
-| G5.2 authenticated hosted visual review | FINDING OPEN | Access and app login now work. HDFCBANK/TORNTPHARM: 74 checks, two 768px overflow failures. ABCAPITAL/ACMESOLAR: 74 checks passed with temporary proposed CSS; this is not deployed-fix proof. |
-| G5.3 recorded final decision and rollout proof | HOLD | Vercel reports "Deployment rate limited — retry in 24 hours." PR #113 is not merged and its final fix is not claimed live at Development. Final acceptance requires successful deployment and re-verification of the exact fixed revision. |
+| G5.1 representative profile/state regression | PASS | 182 tests across 11 focused files, including 37 integrated ResearchPage cases. |
+| G5.2 authenticated hosted visual review | PASS | 146 checks across four real stocks, four native 200% browser-zoom checks and agent inspection of representative screenshots. |
+| G5.3 recorded final decision and rollout proof | PASS | PR #113 passed CI and Preview, merged into Development; exact merged deployment verified READY before and after hosted review. |
+
+## Final deployed acceptance evidence
+
+- Reviewed PR: [#113](https://github.com/drddutta-portfolio/PortfiolioAI/pull/113).
+- Validated head: `ad2359f6b9cff0b182c6c52b72f34c884dcfcb07`; architecture CI run `37682912089` succeeded, and Vercel Preview `dpl_WCmtJ1GtS4VxCwmgKwFyhRADKyLN` was READY.
+- Development merge: `1a6d16e0a553ba08232bdc5f003e78b8f032c404`.
+- Exact merged deployment: `dpl_8bzgi9ueeZQAp5NfBJiNMN427CYA`, READY.
+- Alias: `portfiolio-ai-git-portfolioai-development-dibyendu-dutta.vercel.app`; verified on the same revision before and after review.
+- Final hosted run began `2026-10-08T02:16:12.775Z`: 146 passed, zero failed, zero runtime errors and zero blocked provider-execution attempts. No proposed CSS was injected.
+
+| Actual stock | Canonical profile / retained presentation |
+| --- | --- |
+| HDFCBANK | BANK / RETAIL_BANK; own banking requirements and evidence lineage. |
+| TORNTPHARM | PHARMA / DOMESTIC_FORMULATIONS; retained Pharma specialist presentation, primary-source gaps and adapter limits remain explicit. |
+| ABCAPITAL | FINANCIAL_HOLDING_COMPANY; own requirements retained, unregistered specialist presentation disclosed. |
+| ACMESOLAR | RENEWABLE_IPP; own requirements retained, unregistered specialist presentation disclosed. |
+
+Hosted checks cover 390/768/1024/1440px layouts, compact complete names including
+SRHHYPLTD and longer symbols, shared tabs, sticky section links, keyboard/focus,
+evidence filters, documents, expanded refresh and an injected cached-read failure.
+The failure/name scenarios are temporary inspection scenarios, not stored changes.
+The agent inspected representative header, narrow-layout, stock-specific research,
+evidence/document, error and zoom screenshots; no owner intervention was needed.
+
+Native browser zoom used Chromium's default-storage-partition zoom preference
+(`partition.default_zoom_level.x = log(2)/log(1.2)`) before launch, with app login
+in a separate private memory context. On all four stocks, outer width 1440 became
+inner width 720, devicePixelRatio was 2, CSS body zoom stayed 1 and document width
+was 720. Chromium compositor screenshots (`Page.captureScreenshot` with
+`fromSurface:false`) supplied complete native-zoom images. Score labels wrap fully
+at this zoom; some long labels span several lines rather than all cards stacking.
+No label or stock name is cropped and no document-level overflow was observed.
+This native evidence is separate from the runner's CSS zoom stress test.
+Temporary browser profiles were deleted; auth state and network traces were not saved.
+
+Sanitized final evidence: [146 hosted checks](research-ui-g5-evidence/development-final-acceptance-checks.json)
+and [four native zoom checks](research-ui-g5-evidence/native-200-percent-zoom-checks.json).
+Private screenshots remain outside git. Machine reports still explicitly require
+visual review; this acceptance record supplies the subsequent agent decision.
+
+**Rollout decision:** use this two-part baseline for all stock research pages.
+The shared shell owns layout and interaction; canonical profile capabilities own
+stock-specific blocks and research data. Missing, stale, conflicting or unapproved
+evidence stays explicit. Owner Core/Satellite selection remains separate from any
+qualified recommendation. No methodology/evidence approval, provider execution,
+schema/RLS change, Production promotion or V1 investment-engine gate is granted.
 
 ## Regression matrix
 
@@ -49,6 +94,9 @@ reviewed with no blocking findings and merged after CI passed at exact head
 
 ## Hosted verification procedure
 
+The final authenticated procedure has now passed; the access-blocked and quota
+records below are historical and superseded by the final evidence above.
+
 `scripts/research-ui/verify-hosted-stock-pages.cjs` uses Playwright and an installed
 Chromium executable against the fixed Development origin. It never starts a local
 app. Playwright is a browser-runner prerequisite, not a new application dependency.
@@ -58,11 +106,10 @@ put access URLs or credentials into git, command arguments or saved reports.
 
 The verifier saves private screenshots and a sanitized report under `/tmp`; it
 persists no cookies, auth state or network traces. Provider-function calls are
-blocked during inspection. Its access-blocked path has been exercised; the full
-authenticated path remains unverified until access is supplied. Even its eventual
-automated success explicitly requires agent inspection of the screenshots.
+blocked during inspection. Its access-blocked and authenticated paths have been exercised. Automated success
+explicitly requires agent inspection of the screenshots, completed for this review.
 
-Remaining hosted checks: HDFCBANK, TORNTPHARM and an actual unresolved/unregistered
+Completed final hosted checks: HDFCBANK, TORNTPHARM and an actual unresolved/unregistered
 or sparse stock; 390/768/1024/1440px widths; section links and keyboard focus;
 expanded refresh, documents and evidence; cached-read failure; long names without
 cropping. Temporary DOM name stress and cached-read fault injection are labelled
@@ -79,11 +126,11 @@ methodologies or investment recommendations are approved.
 
 TypeScript/production build, the canonical data-boundary guard, changed-test lint,
 script syntax and whitespace checks pass. The existing 543.73 kB research bundle
-warning remains. No product implementation changed in this Gate 5 increment;
-the new work adds integrated regressions, the hosted verification runner and an
-honest acceptance record. Full authenticated browser-runner behavior is pending.
+warning remains. Gate 5 adds integrated regressions, the hosted verification runner, the shared
+tablet score-label correction and this acceptance record. Authenticated hosted
+behavior has passed at the deployed revision above.
 
-## Hosted review update — 8 October 2026 (Asia/Kolkata)
+## Historical hosted review update — 8 October 2026 (Asia/Kolkata)
 
 A newly supplied share URL unlocked Vercel protection and the authorized app login
 succeeded. The hosted-only run completed 72 checks across HDFCBANK and TORNTPHARM
@@ -102,7 +149,7 @@ the overall decision remains HOLD until the deployed correction and remaining
 representative-stock/zoom checks are verified. No access URL, token or credentials
 are retained in this record.
 
-## Review outcome and remaining deployment blocker — 8 October 2026 (Asia/Kolkata)
+## Historical review outcome and deployment blocker — 8 October 2026 (Asia/Kolkata)
 
 The supplied share link works; no further access link or manual visual inspection
 is requested. The final actual-Development run completed **74 checks: 72 pass,
