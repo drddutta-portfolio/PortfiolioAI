@@ -1,0 +1,351 @@
+{
+  "version": "V1_4_BANKING_13_PILOT_PREPARATION_V1",
+  "source_census": "Frozen_111_Fresh_Selected_Blocker_Census_2026-10-08.json",
+  "source_branch": "PortfolioAI-Development",
+  "snapshot_basis": "Latest selected research_evidence_snapshot_selections; read-only census, not a handler dry run",
+  "source_identity": "Development Supabase lrgpjimipfkyoqbpsqzz",
+  "pilot_stock_count": 13,
+  "approved_original_groups": [
+    "G01",
+    "G20",
+    "G46",
+    "G48"
+  ],
+  "combined_frozen_value_paise": 20513862,
+  "technical_slices": [
+    {
+      "technical_slice_id": "BANK-P1-01",
+      "member_count": 4,
+      "securities": [
+        {
+          "symbol": "BANKBARODA",
+          "security_id": "6771f493-c29a-477e-8cc8-2bede0941e44",
+          "group": "G01",
+          "batch": "G01-L01-B01",
+          "snapshot_id": "ff6163db-fe29-4f23-aae4-cedb9cf94abe",
+          "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 17,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        },
+        {
+          "symbol": "ICICIBANK",
+          "security_id": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+          "group": "G01",
+          "batch": "G01-L01-B01",
+          "snapshot_id": "cd640846-2474-4b3d-abb0-f302c5a7bd89",
+          "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 17,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        },
+        {
+          "symbol": "SBIN",
+          "security_id": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+          "group": "G01",
+          "batch": "G01-L01-B01",
+          "snapshot_id": "e2470e85-10e0-430b-a1fe-6569518c5f87",
+          "selection_run_id": "4d6ef6d6-ca7c-4fbc-8362-827edcfc6075",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 22,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        },
+        {
+          "symbol": "FEDERALBNK",
+          "security_id": "63889b52-85da-4a1b-9046-c1e975819f99",
+          "group": "G01",
+          "batch": "G01-L01-B01",
+          "snapshot_id": "3696242d-eb86-42e8-8dc7-152c5a40231b",
+          "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 17,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        }
+      ],
+      "reason": "Limit read-only revalidation to 4 securities per slice to make failure isolation and contract review tractable; exact handler capacity must be verified before any actual handler invocation",
+      "provider_calls_approved": 0,
+      "planned_canonical_writes": 0,
+      "planned_r2_writes": 0,
+      "read_only": true,
+      "stop_conditions": [
+        "Development identity mismatch",
+        "Unexpected portfolio owner or security ID",
+        "Cutoff or source proof missing",
+        "Unexpected DB or R2 mutation attempt",
+        "Provider request or grant consumption"
+      ],
+      "post_action": "Compare read-only selected snapshot IDs and immutable source hashes to pre-action baseline; do not claim READY unless persistently reselected under authorized materializer"
+    },
+    {
+      "technical_slice_id": "BANK-P1-02",
+      "member_count": 4,
+      "securities": [
+        {
+          "symbol": "KARURVYSYA",
+          "security_id": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+          "group": "G01",
+          "batch": "G01-L01-B01",
+          "snapshot_id": "6f51ead4-b4da-46dc-85af-c7b185ab0e3c",
+          "selection_run_id": "59f828ac-2442-47fe-83d3-cd320eb16973",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "CONFLICTING",
+          "blocker_count": 22,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "REPORTING_PERIOD_INVALID",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "CORPORATE_ACTION_TREATMENT_NOT_PROVEN",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "security_id": "05744a34-415b-4084-b832-ce3436ba0694",
+          "group": "G01",
+          "batch": "G01-L01-B01",
+          "snapshot_id": "a02ac622-85f7-4824-9522-ce38d66524d0",
+          "selection_run_id": "59f828ac-2442-47fe-83d3-cd320eb16973",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "CONFLICTING",
+          "blocker_count": 22,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "CORPORATE_ACTION_TREATMENT_NOT_PROVEN",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        },
+        {
+          "symbol": "HDFCBANK",
+          "security_id": "b47b007d-1990-4504-a5a2-4391c07687c5",
+          "group": "G01",
+          "batch": "G01-L01-B01",
+          "snapshot_id": "de6796b4-d076-4d1e-a120-393347019424",
+          "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 15,
+          "blocker_reasons": [
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "REPORTING_PERIOD_INVALID",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "REQUIRED_EVIDENCE_MISSING",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        },
+        {
+          "symbol": "AXISBANK",
+          "security_id": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+          "group": "G20",
+          "batch": "G20-L01-B01",
+          "snapshot_id": "f81e4d3e-ba6b-496f-b3f8-8bea8da75828",
+          "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 17,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        }
+      ],
+      "reason": "Limit read-only revalidation to 4 securities per slice to make failure isolation and contract review tractable; exact handler capacity must be verified before any actual handler invocation",
+      "provider_calls_approved": 0,
+      "planned_canonical_writes": 0,
+      "planned_r2_writes": 0,
+      "read_only": true,
+      "stop_conditions": [
+        "Development identity mismatch",
+        "Unexpected portfolio owner or security ID",
+        "Cutoff or source proof missing",
+        "Unexpected DB or R2 mutation attempt",
+        "Provider request or grant consumption"
+      ],
+      "post_action": "Compare read-only selected snapshot IDs and immutable source hashes to pre-action baseline; do not claim READY unless persistently reselected under authorized materializer"
+    },
+    {
+      "technical_slice_id": "BANK-P1-03",
+      "member_count": 4,
+      "securities": [
+        {
+          "symbol": "IDFCFIRSTB",
+          "security_id": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+          "group": "G20",
+          "batch": "G20-L01-B01",
+          "snapshot_id": "769ddaca-ce52-4166-b48c-7da636aef070",
+          "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 17,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        },
+        {
+          "symbol": "BANDHANBNK",
+          "security_id": "30ce066a-6410-4b11-9b85-e41324971261",
+          "group": "G20",
+          "batch": "G20-L01-B01",
+          "snapshot_id": "4eeb7ec0-151f-458c-9573-40e6fd1715e2",
+          "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 17,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "REPORTING_PERIOD_INVALID",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        },
+        {
+          "symbol": "IDBI",
+          "security_id": "a5639446-3238-4e08-9d02-59bc529982db",
+          "group": "G20",
+          "batch": "G20-L01-B01",
+          "snapshot_id": "a3e13a87-b856-4eea-b109-81de0210738c",
+          "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 17,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        },
+        {
+          "symbol": "INDIANB",
+          "security_id": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+          "group": "G46",
+          "batch": "G46-L01-B01",
+          "snapshot_id": "c3fa5774-47cf-48cc-97ac-55be1ac5a669",
+          "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 17,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        }
+      ],
+      "reason": "Limit read-only revalidation to 4 securities per slice to make failure isolation and contract review tractable; exact handler capacity must be verified before any actual handler invocation",
+      "provider_calls_approved": 0,
+      "planned_canonical_writes": 0,
+      "planned_r2_writes": 0,
+      "read_only": true,
+      "stop_conditions": [
+        "Development identity mismatch",
+        "Unexpected portfolio owner or security ID",
+        "Cutoff or source proof missing",
+        "Unexpected DB or R2 mutation attempt",
+        "Provider request or grant consumption"
+      ],
+      "post_action": "Compare read-only selected snapshot IDs and immutable source hashes to pre-action baseline; do not claim READY unless persistently reselected under authorized materializer"
+    },
+    {
+      "technical_slice_id": "BANK-P1-04",
+      "member_count": 1,
+      "securities": [
+        {
+          "symbol": "AUBANK",
+          "security_id": "f5c47463-3c6d-4db0-a815-e4301e990213",
+          "group": "G48",
+          "batch": "G48-L01-B01",
+          "snapshot_id": "6193b778-5063-46df-8c9c-940d484c2963",
+          "selection_run_id": "c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83",
+          "profile": "BANK",
+          "subprofile": null,
+          "state": "REVIEW_REQUIRED",
+          "blocker_count": 17,
+          "blocker_reasons": [
+            "REQUIRED_EVIDENCE_MISSING",
+            "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN",
+            "DOCUMENT_EVIDENCE_REQUIRES_REVIEW",
+            "REPORTING_PERIOD_TYPE_NOT_PROVEN"
+          ]
+        }
+      ],
+      "reason": "Limit read-only revalidation to 4 securities per slice to make failure isolation and contract review tractable; exact handler capacity must be verified before any actual handler invocation",
+      "provider_calls_approved": 0,
+      "planned_canonical_writes": 0,
+      "planned_r2_writes": 0,
+      "read_only": true,
+      "stop_conditions": [
+        "Development identity mismatch",
+        "Unexpected portfolio owner or security ID",
+        "Cutoff or source proof missing",
+        "Unexpected DB or R2 mutation attempt",
+        "Provider request or grant consumption"
+      ],
+      "post_action": "Compare read-only selected snapshot IDs and immutable source hashes to pre-action baseline; do not claim READY unless persistently reselected under authorized materializer"
+    }
+  ],
+  "blocker_counts_by_requirement_reason": {
+    "REQUIRED_EVIDENCE_MISSING": 77,
+    "NORMALIZED_INPUT_CONTRACT_NOT_PROVEN": 94,
+    "DOCUMENT_EVIDENCE_REQUIRES_REVIEW": 32,
+    "REPORTING_PERIOD_TYPE_NOT_PROVEN": 13,
+    "ADJUSTMENT_CALENDAR_ALIGNMENT_NOT_PROVEN": 5,
+    "REPORTING_PERIOD_INVALID": 3,
+    "CORPORATE_ACTION_TREATMENT_NOT_PROVEN": 10
+  },
+  "ready_candidates": [],
+  "reason_no_candidates": "Current latest selection: all 13 banks REVIEW_REQUIRED or CONFLICTING, no reviewed admission path accepted",
+  "missing_factual_reviews": "Required document evidence review and numeric/period/source-contract review according to each census item",
+  "authorization": "This phase permits read-only checks, repository edits, tests and package preparation only",
+  "next_safe_actions": [
+    "Prove evidence projection and canonical source ownership contract",
+    "Verify profile assignment per bank under current reviewed assignment authority",
+    "Invoke actual authenticated read-only Deno validation only with accessible supported runtime",
+    "Prepare bounded per-requirement factual review sources; no fabricated owner decisions"
+  ],
+  "preserved_population": "111 frozen members, 132585696 paise, 76 fixed-115 overlap"
+}

@@ -156,3 +156,55 @@ Structural short histories and unresolved corporate actions remain explicit. Nev
 - `Frozen_111_Industry_Batches.csv`: frozen-only execution subset.
 
 Verified: 239 unique equities; 111 frozen IDs matched exactly; frozen hash unchanged; frozen total 132,585,696 paise; 76 overlap and 35 additional frozen members; 81 planning groups. No live readiness or current holdings verification was performed.
+
+## Owner approval and execution amendments — 8 October 2026
+
+**Decision:** Owner approved the **hybrid industry-based V1-4 batch architecture, subject to the five targeted amendments below**. Approval authorizes repository planning, read-only blocker reconciliation, append-only *repository* execution-ledger preparation and pilot preparation. It does **not** authorize paid provider requests, factual ACCEPT, database/R2 writes, deployment, migration, scheduler activation or V1-5. The original 239-stock and frozen 111-stock CSVs are immutable planning inputs.
+
+### A. Pilot selection is not industry-batch membership
+
+The **cross-group banking pilot** is `HDFCBANK`, `ICICIBANK`, `SBIN` (G01), plus `BANDHANBNK` (G20). This four-stock pilot is a *test/reference set*, **not a new execution batch**. BANDHANBNK remains in `G20-L01-B01`; all other stock-to-batch assignments remain unchanged. Pilot results must write back to each stock's canonical original batch in the execution ledger. Verify current approved banking profile, source requirements and one genuinely blocked case before execution.
+
+### B. Read-only prioritization, no invented recoverability
+
+Before execution compute a fresh security/requirement-level blocker matrix for all 111 frozen members, including the 35 outside fixed 115, from selected Development snapshots and their lineage. Include frozen value, current selected state, blocker family and count, source reuse opportunity, documentary/factual owner-review need, structural impossibility, provider budget and exact methodology assignment verification. Calculate batch priority from *evidence*, not merely value. Until measured, label priority `PENDING_LIVE_BLOCKER_CENSUS` and leave predicted ready count/value blank. No inferred READY.
+
+### C. Group execution windows without collapsing batches
+
+Up to several small groups may share one operator execution window to reduce 62 frozen-batch overhead. Every original `proposed_batch_id` retains independent authorizations, source selection, test results, stop conditions, immutable lineage and closure status. Shared provider requests require source-bound deduplication and their own bounded authorization. A completed window does not imply all constituent batches are complete.
+
+### D. Assignment verification
+
+Verify current effective reviewed primary industry/profile/subprofile assignments before a stock is processed, especially IT services/technology, industrial products, leisure, banks, financial intermediaries, and the Pharma assignment-review lane (BLUEJET). Retain source labels as historical planning inputs. A secondary business overlay is not an alternate primary scorer. Block uncertain assignments for factual owner review rather than silently changing canonical taxonomy.
+
+### E. Append-only execution ledger
+
+Maintain a separate batch execution ledger with: security ID, symbol, frozen cohort membership/value, original group and batch IDs, cross-group pilot ID (optional), current assignment version, selected snapshot/run ID, requirement-level blockers and source IDs/hashes, authorization/grant, provider usage, factual reviewer decision, test/dry-run evidence, planned and actual writes, resulting selected readiness, READY frozen-member count/value contribution, exception reason and immutable change/run timestamp. **Initial ledger rows are PLANNED / NOT_EXECUTED only**, and later updates are appended, not destructive replacements.
+
+### Acceptance
+
+The canonical release threshold remains **at least 100 members of the unchanged frozen 111 READY, and ₹11,93,271.27 in frozen READY value**. Fixed 115 and frozen 111 are distinct, overlapping populations. A batch pilot, UI demonstration or passing code suite does not itself establish persisted READY or V1-4 PASS.
+
+---
+
+
+## Owner-approved final frozen-cohort industry execution order — 8 October 2026
+
+**Superseding owner decision:** the original four-stock cross-group bank reference pilot is superseded by the **full 13-frozen-stock banking pilot**, covering G01 (7), G20 (4), G46 (1) and G48 (1). The underlying group/batch assignments and frozen values are unchanged. This is an execution-window overlay, not a canonical industry or methodology merge.
+
+**Banking pilot 01 — frozen cohort, all included:** BANKBARODA, FEDERALBNK, HDFCBANK, ICICIBANK, KARURVYSYA, KOTAKBANK, SBIN (G01); AXISBANK, BANDHANBNK, IDBI, IDFCFIRSTB (G20); INDIANB (G46); AUBANK (G48). Combined frozen value **₹2,05,138.62**. Include original BANK/PSU/private/small-finance distinctions in actual reviewed evidence and effective profile requirements. The non-frozen RBLBANK and UNIONBANK remain in the full-portfolio plan, not the frozen readiness numerator.
+
+**Authoritative subsequent order:** execute the frozen members of G02, G03, G04, G05, G06, G07, G08, G09, G10, G11, G12, G13, G14, G15, G16, G17, G18, G19, then G21 through G45 (skipping the already-piloted G20), G47 (skipping G46), G49 through G60 (skipping G48); finally G61–G81 have no frozen release members and remain portfolio-wide follow-on, not prerequisites for the frozen V1 minimum. Original G01, G20, G46, G48 ledger results are each closed independently, and **never counted or fetched twice**. Stock grouping remains by original industry and approved methodological subprofile, with explicit exception review before any reassignment.
+
+**Pharma — frozen 13, no implicit common scorer:**
+- G06 GLOBAL_GENERICS (5): AUROPHARMA, CAPLIPOINT, CIPLA, EMCURE, GLENMARK
+- G09 DOMESTIC_FORMULATIONS (2): MANKIND, TORNTPHARM
+- G11 API_BULK_DRUGS (2): LAURUSLABS, SUPRIYA
+- G33 CDMO_CRAMS (2): AKUMS, JUBLPHARMA
+- G51 BIOPHARMA_BIOSIMILARS (1): BIOCON
+- G58 ASSIGNMENT_REVIEW_REQUIRED (1): BLUEJET. **Do not declare BLUEJET methodology-ready until its reviewed primary assignment is confirmed.**
+Retained non-frozen Pharma references such as ALIVUS/SYNGENE may be used only as lawful comparative references and do not count toward frozen READY. A secondary business overlay does not change a company's approved primary research subprofile. Keep all five method-specific source, factor and profile scoring rules independent.
+
+**Execution discipline:** For G02–G60, evaluate frozen stock(s) first and record non-frozen equities as retained full-portfolio scope. Share provider-independent repairs across groups; do not turn a passed sample into stock readiness. If the same canonical source-contract or benchmark dependency blocks multiple groups, repair it once without changing this owner-approved group order. Structural shortages and uncertain taxonomy go to reviewed exception paths, not silent omissions. Append execution outcomes under original `proposed_batch_id`; use `execution_window_id` only as an additional scheduling reference.
+
+**Immutable release gate:** 111 original members, value ₹13,25,856.96, 76 within fixed-115 and 35 outside, release minimum 100 READY original frozen members **and** ₹11,93,271.27 frozen READY value. No new evidence acceptance, deployment, database write, production change, or V1-5 authorization results from this planning amendment. All relevant current source, assignment and readiness claims require a fresh read-only census before execution.
