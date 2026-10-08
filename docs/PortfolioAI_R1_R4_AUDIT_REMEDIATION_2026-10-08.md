@@ -111,28 +111,27 @@ Existing production-dependent artifacts remain governed by `AGENTS.md`. In parti
 This statement does **not** mean R4H production ingestion is executed, all Pharma holdings are evidence-ready, provider work is authorized, the newer operational V1-4 evidence stage is complete, or portfolio-wide investment intelligence is READY.
 
 
-## Current-head verification equivalence — 8 October 2026
+## Current-head verification after concurrent research-shell merge — 8 October 2026
 
-The remote `PortfolioAI-Development` head inspected after the green R1–R4 verification was `3530f192e989ddf915533e9cf62787660306e2e0`.
+The first fully green audit-remediation executable head remains `aefef83da45e3274e44a6d8819ee354dbace33b4`. After that verification, PR #116 (`feat(research): share canonical research context and Industry-first stock shell`) was merged into `PortfolioAI-Development` as `00a0dfe5621450354c7e6027820870becc5f9f11`. The current Development head at this documentation update is `d3883d3182f686c82bdde1d2840b68285ac61421`.
 
-A direct GitHub comparison from the first fully green code-verification head `aefef83da45e3274e44a6d8819ee354dbace33b4` to `3530f192e989ddf915533e9cf62787660306e2e0` shows eight later commits and only documentation/private-evidence changes:
+This later merge contains executable Research-page/canonical-context changes. It therefore supersedes the earlier temporary statement that the post-`aefef83d` branch contained only documentation. The core audit-remediation owners remain unchanged after the green head except for additional `ResearchPage.test.tsx` coverage: `src/test/setup.ts`, `vitest.config.ts`, `supabase/functions/_shared/angel-one.ts`, `canonicalResearchSeries.ts`, `pharmaCanonicalHistoryView.ts`, `pharmaHistoryNormalization.ts`, `pharmaReadinessViewModel.ts`, `PharmaResearchReadinessPanel.tsx`, `.github/workflows/r1-r4-verification.yml` and `eslint.config.js` did not change in the PR #116 merge.
 
-- `docs/PortfolioAI_Development_Status.md`
-- `docs/PortfolioAI_R1_R4_AUDIT_REMEDIATION_2026-10-08.md`
-- `docs/PortfolioAI_V1_4_OPERATIONAL_EVIDENCE_GATE_CLOSURE_2026-10-08.md`
-- `docs/private/PortfolioAI_V1_4_DOCUMENT_REVIEW_PROPOSALS_CURRENT_2026-10-08.json`
-- `docs/private/PortfolioAI_V1_4_OWNERSHIP_METHOD_DECISION_PACKAGE_2026-10-08.json`
-- `docs/private/PortfolioAI_V1_4_OWNERSHIP_METHOD_DECISION_PACKAGE_2026-10-08.md`
-- `docs/private/PortfolioAI_V1_4_STRUCTURED_NUMERIC_NORMALIZATION_WORKLIST_2026-10-08.json`
+PR #116 has separate repository and hosted verification evidence:
 
-No `src/`, `api/`, `supabase/functions/`, lint configuration, build configuration, package dependency, migration, or R1–R4 verification-workflow file changed after the fully green executable head.
+- Architecture Guard run `37732538454` at `ddae8c897f43a929baf463dc90c9cc80c7d06b10` completed successfully, including Stage 2 integration tests, shell safeguards, canonical-authority checks, TypeScript, full repository lint, production build and whitespace check.
+- Architecture Guard run `37734884062` at application commit `506ffbd91808bc70fa01be9c07395febda5b3e40` completed successfully with the same code-quality/build gates.
+- Final hosted review commit `9e736abc80d87b551e5c15f045d69ab2c74d31e3`, which includes `506ffbd9`, passed 118 authenticated read-only Chromium checks across seven representative stocks; the sanitized evidence records zero runtime errors, zero provider refresh attempts and zero research writes.
+- PR #116 was subsequently merged to Development as `00a0dfe5621450354c7e6027820870becc5f9f11`.
 
-The current-head verification workflow run `37755743453` was retried once. Both attempts failed before any workflow step was started: GitHub reported an empty steps array and `runner_id: 0`. Therefore this is recorded as a **GitHub runner/provisioning failure, not a repository test failure**. It does not replace the successful full verification evidence at `aefef83da45e3274e44a6d8819ee354dbace33b4`; current executable-source equivalence to that green head is proven by the GitHub compare above.
+The dedicated current-head R1–R4 verification workflow could not obtain a GitHub-hosted runner after the account billing/spending-limit restriction began. Runs including `37755743453`, `37766046568`, `37766062400` and `37766093515` completed with `runner_id: 0` and an empty step list. A retry of `37755743453` behaved identically. These runs provide **no code verdict** and are recorded as CI provisioning/infrastructure failures, not as passing or failing repository checks.
 
-This distinction is intentional:
+Therefore the evidence boundary is:
 
-- executable R1–R4 repository state: source-equivalent to the fully green verification head;
-- latest current-head GitHub Actions attempt: infrastructure-not-executed / no code verdict;
-- production, provider, ingestion and portfolio-wide readiness: unchanged and still subject to their separate gates.
+- the audit-remediation implementation itself has a full green verification at `aefef83da45e3274e44a6d8819ee354dbace33b4`;
+- the later merged Research/canonical-context code has successful targeted architecture/type/lint/build verification and final hosted read-only acceptance before merge;
+- an exact full-suite run on the current merged Development head remains **not executed because GitHub did not provision a runner**;
+- production/provider/ingestion and portfolio-wide readiness remain separate approval/evidence gates.
 
-The repository-completion statement below therefore remains limited to the audited R1–R4 repository scope.
+The repository-completion statement is limited accordingly: the audited R1–R4 remediation is implemented and verified, while exact-current-head full-suite re-verification remains an infrastructure-blocked verification item rather than an implementation defect.
+

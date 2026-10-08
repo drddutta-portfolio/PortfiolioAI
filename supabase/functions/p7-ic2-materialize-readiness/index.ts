@@ -2,7 +2,7 @@ import { P7_IC_CANONICAL_REQUIREMENT_METRICS } from "../_shared/p7-ic-requiremen
 import {createClient,type SupabaseClient} from "https://esm.sh/@supabase/supabase-js@2.115.0"
 type Admin = SupabaseClient
 import {consumeP4ExecutionGrant} from "../_shared/p4-execution-grant.ts"
-import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvidence,parseTrendlyneOwnershipHistory,guardedNumericEvidenceState} from "../_shared/p7-ic-evidence-normalization.ts"
+import {buildProfileEvidencePlan,normalizeNumericEvidence,normalizeDocumentEvidence,parseTrendlyneOwnershipHistory,validateV14SelectedOwnership,guardedNumericEvidenceState} from "../_shared/p7-ic-evidence-normalization.ts"
 import {cachedEvidenceReadiness,inspectStoredHistory,P7_IC_INPUT_VALIDATION_VERSION,type InputObservation,type MetricDefinition,type HistoryRow,type HistoryValidation} from "../_shared/p7-ic-input-validation.ts"
 import {validateStockHistoryReadiness,validateBenchmarkPairReadiness,historyProofFromRows,parseHistoryContractProof,type HistoryContractProof} from "../_shared/v14-history-readiness.ts"
 import {loadVerifiedOfficialBenchmarkHistory,type OfficialBenchmarkSourceRecord} from "../_shared/v14-official-benchmark-r2.ts"
@@ -357,6 +357,16 @@ async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;mi
    if(!history)return blocked(code,minimum,freshness,benchmarks,"INSUFFICIENT","DISTINCT_SESSIONS_INSUFFICIENT","VALIDATE_APPROVED_HISTORY_CONTRACT")
    const validation=validateStockHistoryReadiness({rows:history.rows,minimum,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:freshness,proof:historyProofs.get("SECURITY:"+securityId)??historyProofFromRows(history.rows)})
    return {...blocked(code,minimum,freshness,benchmarks,validation.state,validation.reason,validation.state==="FRESH"?"NONE":"VALIDATE_APPROVED_HISTORY_CONTRACT"),retrieved_at:validation.retrievedAt,evidence_as_of_date:validation.latestSession,source_provider:"ANGEL_ONE",normalized_value:{validationVersion:P7_IC_INPUT_VALIDATION_VERSION,historyValidationVersion:"V1_4_HISTORY_READINESS_V1",validation},validation_state:validation.state==="FRESH"?"VALIDATED_HISTORY_CONTRACT":"FAIL_CLOSED",canonical_selection_state:validation.state==="FRESH"?"DETERMINISTIC_HISTORY_CONTRACT":"NO_SELECTION"}
+ }
+ if(family==="OWNERSHIP_4Q"&&(code==="OWNERSHIP_TREND_4Q"||code==="INSTITUTIONAL_OWNERSHIP_TREND_4Q"||code==="OWNERSHIP_GOVERNANCE")){
+  const ownershipSource=records.find(record=>record.record_kind==="COMPLETE_RESEARCH_OWNERSHIP")
+  const rawHistory=ownershipSource?.raw_payload.p7_ic2_ownership_history
+  const history=rawHistory&&typeof rawHistory==="object"?rawHistory as ReturnType<typeof parseTrendlyneOwnershipHistory>:null
+  const validation=validateV14SelectedOwnership({requirementCode:code,history:history??{series:{},state:"INSUFFICIENT_PERIODS",minimumQuarterSeries:4,semanticBasisVerified:false}})
+  return {...blocked(code,minimum,freshness,benchmarks,"REVIEW_REQUIRED",validation.reason,"RECONCILE_CANONICAL_INPUT_CONTRACT"),
+   raw_source_record_id:ownershipSource?.id??null,source_provider:ownershipSource?.source_code??null,
+   retrieved_at:ownershipSource?.retrieved_at??null,normalized_value:{ownershipValidation:validation},
+   validation_state:"FAIL_CLOSED",canonical_selection_state:"NO_SELECTION"}
  }
  const normalized=records.flatMap(record=>{
    const raw=record.raw_payload,items=Array.isArray(raw.p7_ic2_normalized_evidence)?raw.p7_ic2_normalized_evidence:[]

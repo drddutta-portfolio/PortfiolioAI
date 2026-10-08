@@ -249,3 +249,18 @@ V1-4's actual acceptance criteria **do not pass**.
 - V1-5 authorization: **NO**
 
 **Final V1-4 disposition: NOT PROVEN.**
+
+
+## Fresh current-head continuation verification — 2026-10-08
+
+A fresh read-only reconciliation was performed at remote Development HEAD `c63e8770b90d499bf48c9a2463c51a4d7b826a2a` after the closure package was prepared.
+
+- Development Supabase identity was re-confirmed as `lrgpjimipfkyoqbpsqzz` / `PortfolioAI Dev` / `ACTIVE_HEALTHY`.
+- No selection run later than `c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83` exists in the current V1-4 sequence; that run still contains exactly **115** selections.
+- Re-read canonical status for that run remains **0 READY / 115 REVIEW_REQUIRED**.
+- Re-read blocking reasons remain: **460 REQUIRED_EVIDENCE_MISSING; 346 NORMALIZED_INPUT_CONTRACT_NOT_PROVEN; 292 DOCUMENT_EVIDENCE_REQUIRES_REVIEW; 189 DATED_REPORTING_PERIODS_NOT_PROVEN; 71 REPORTING_PERIOD_INVALID; 33 METRIC_CONTRACT_NOT_REVIEWED; 10 REPORTING_PERIOD_TYPE_NOT_PROVEN; 9 BENCHMARK_LATEST_SESSION_STALE; 6 DISTINCT_SESSIONS_INSUFFICIENT; 1 METHODOLOGY_REVIEW_REQUIRED**. Positive reason rows were excluded from the blocker census.
+- Requirement-review ledger rows remain **0**; no owner ACCEPT/REJECT/DEFER decision was fabricated.
+- Active/unexpired provider budget reservations remain **0**.
+- Development database size remains **222,809,235 bytes**.
+
+This fresh read does not change the acceptance result. Operational V1-4 remains **NOT PROVEN**. The remaining actions in sections A–F above are the minimum bounded prerequisites; each requires the specific owner/methodology/execution authority described there before mutation or provider execution. No V1-5 work is authorized by this verification.

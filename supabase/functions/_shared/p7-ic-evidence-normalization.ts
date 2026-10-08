@@ -93,4 +93,48 @@ export function normalizeNumericEvidence(input:{readonly providerResult:string;r
  })
 }
 export function normalizeDocumentEvidence(input:{readonly providerResult:string;readonly expectedSymbol:string;readonly expectedInstrumentId:string;readonly requirements:readonly EvidenceRequirementPlan[]}){const markdown=unwrapTrendlyneMarkdown(input.providerResult),identityRows=markdown.split(/\r?\n/u).map(line=>line.trim()).filter(line=>line.includes("|")).slice(0,100),expected=identityRows.some(line=>{const fields=line.split("|").map(x=>x.trim());return fields.length>=4&&fields[2]?.toUpperCase()===input.expectedSymbol.toUpperCase()&&(fields[3]===input.expectedInstrumentId||fields[0]===input.expectedInstrumentId)});if(!expected)throw new Error("PROVIDER_PRIMARY_ENTITY_MISMATCH");const flat=markdown.replace(/\s+/gu," ");return input.requirements.filter(req=>req.channels.includes("TRENDLYNE_DOCUMENTS")).map(req=>{const hits=req.documentKeywords.filter(keyword=>flat.toLowerCase().includes(keyword.toLowerCase()));return {evidenceCode:req.evidenceCode,state:hits.length?"EVIDENCE_PRESENT_REVIEW_REQUIRED":"MISSING",matchedKeywords:hits,deterministicScoreReady:false}})}
-export function parseTrendlyneOwnershipHistory(providerResult:string){const sections=["Promoter","Institutional","FII","MF","DII","Public"] as const,result:Record<string,Array<{quarter:string;value:number}>>={};for(const section of sections){const match=providerResult.match(new RegExp(section+":\\s*\\n([\\s\\S]*?)(?=\\n\\s{2}[A-Z][A-Za-z]+:|\\ninsights:|$)","u"));if(!match)continue;const values=[...match[1].matchAll(/\[\\?"([A-Z][a-z]{2} \d{4})\\?",\s*(-?\d+(?:\.\d+)?)/gu)].map(item=>({quarter:item[1],value:Number(item[2])}));if(values.length)result[section]=values}const availableSeries=Object.values(result).filter(series=>series.length>=4).length;return {series:result,state:availableSeries?"AVAILABLE":"INSUFFICIENT_PERIODS",minimumQuarterSeries:4}}
+export const V14_OWNERSHIP_METHOD_VERSION="V1_4_OWNERSHIP_METHOD_SELECTION_V1" as const
+export type V14OwnershipRequirement="OWNERSHIP_TREND_4Q"|"INSTITUTIONAL_OWNERSHIP_TREND_4Q"|"OWNERSHIP_GOVERNANCE"
+export interface V14OwnershipValidation{
+ readonly contractVersion:typeof V14_OWNERSHIP_METHOD_VERSION
+ readonly status:"REVIEW_REQUIRED"
+ readonly reason:"OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN"|"OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED"|"OWNERSHIP_QUARTERS_INVALID"|"OWNERSHIP_SERIES_MISSING"
+ readonly series:"Promoter"|"Institutional"|null
+ readonly observedQuarters:readonly string[]
+ readonly eligibleForCanonicalPersistence:false
+}
+/** Provider chart values cannot establish percentage denominator or a factual governance review.
+ * This validator applies the owner-selected series and quarter constraints, and deliberately
+ * refuses automatic FRESH/READY until the established reviewed-evidence authority proves source semantics.
+ */
+export function validateV14SelectedOwnership(input:{
+ readonly requirementCode:V14OwnershipRequirement
+ readonly history:ReturnType<typeof parseTrendlyneOwnershipHistory>
+}):V14OwnershipValidation{
+ const base={contractVersion:V14_OWNERSHIP_METHOD_VERSION,status:"REVIEW_REQUIRED" as const,eligibleForCanonicalPersistence:false as const}
+ if(input.requirementCode==="OWNERSHIP_GOVERNANCE")return {...base,series:null,observedQuarters:[],reason:"OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED" as const}
+ const series=input.requirementCode==="OWNERSHIP_TREND_4Q"?"Promoter" as const:"Institutional" as const
+ const entries=input.history.series[series]??[]
+ const quarters=entries.map(x=>x.quarter)
+ if(entries.length<4)return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_SERIES_MISSING" as const}
+ const months:Readonly<Record<string,number>>={Mar:0,Jun:1,Sep:2,Dec:3}
+ const periodKeys=quarters.map(q=>{const match=/^(Mar|Jun|Sep|Dec) (\d{4})$/u.exec(q);return match?Number(match[2])*4+months[match[1]]!:NaN})
+ const valid=periodKeys.every(Number.isFinite)&&new Set(periodKeys).size===periodKeys.length&&
+  [...periodKeys].sort((a,b)=>a-b).slice(-4).every((n,i,arr)=>i===0||n===arr[i-1]+1)&&
+  entries.every(x=>Number.isFinite(x.value)&&x.value>=0&&x.value<=100)
+ if(!valid)return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_QUARTERS_INVALID" as const}
+ return {...base,series,observedQuarters:quarters,reason:"OWNERSHIP_SOURCE_SEMANTICS_NOT_PROVEN" as const}
+}
+export function parseTrendlyneOwnershipHistory(providerResult:string){
+ const sections=["Promoter","Institutional","FII","MF","DII","Public"] as const
+ const result:Record<string,Array<{quarter:string;value:number;exactValue:string}>>={}
+ for(const section of sections){
+  const match=providerResult.match(new RegExp(section+":\\s*\\n([\\s\\S]*?)(?=\\n\\s{2}[A-Z][A-Za-z]+:|\\ninsights:|$)","u"))
+  if(!match)continue
+  const values=[...match[1].matchAll(/\[\\?"([A-Z][a-z]{2} \d{4})\\?",\s*(-?\d+(?:\.\d+)?)/gu)].map(item=>({quarter:item[1],value:Number(item[2]),exactValue:item[2]}))
+  if(values.length)result[section]=values
+ }
+ // AVAILABLE means chart capture exists; it is NOT approved percentage semantics or READY.
+ const availableSeries=Object.values(result).filter(series=>series.length>=4).length
+ return {series:result,state:availableSeries?"AVAILABLE":"INSUFFICIENT_PERIODS",minimumQuarterSeries:4,semanticBasisVerified:false}
+}

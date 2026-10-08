@@ -35,26 +35,44 @@ start due to GitHub account billing/spending limits. No classification, financia
 evidence-selection, database or provider semantics change. This is on the review
 branch, not merged to Development; operational V1-4 and C1/C8 remain separate.
 
+## Operational V1-4 ownership runtime guard — 8 October 2026
+
+**REPOSITORY IMPLEMENTATION PARTIAL / VERIFICATION PENDING / NOT DEPLOYED / NOT PROVEN.** Versioned owner-selected Promoter, Institutional and separately reviewed Governance evidence rules are now wired into the existing `p7-ic2-materialize-readiness` canonical requirement path, with a strict fail-closed validation guard and focused tests. Changed `p7-ic-evidence-normalization.ts`, materializer `index.ts`, and added `p7-ic-ownership-v14.test.ts`. Retained Development source census: 53 promoter trend, 10 institutional trend, 51 ownership governance; 112/114 requirement items link to raw source records. Field-level total-equity percentage denominator and governance-document approval are not established, so no automatic canonical candidates are accepted. No live validator run or materialization was executed. **Full code tests/typecheck/build are not claimed** because an executable full current repository checkout was unavailable in the session. See `docs/PortfolioAI_V1_4_OWNERSHIP_IMPLEMENTATION_AND_ACTIVATION_2026-10-08.md`. Provider calls, R2/database writes, deployments, migrations and Production changes: none. V1-4 remains NOT PROVEN, V1-5 unauthorized.
+
+## Operational V1-4 ownership method owner selections — 8 October 2026
+
+Owner selected Promoter/total equity for `OWNERSHIP_TREND_4Q`, Institutional/total equity for `INSTITUTIONAL_OWNERSHIP_TREND_4Q`, and independently sourced ownership and governance evidence for `OWNERSHIP_GOVERNANCE`, **for canonical architecture review**, not immediate approval of an unsupported provider denominator or source fact. Versioned proposal: `docs/PortfolioAI_V1_4_OWNERSHIP_METHOD_SELECTION_V1_PROPOSAL_2026-10-08.md`. Original field definitions and percentage basis, four distinct consecutive reporting quarters, independently verifiable source-bound governance documents and canonical conjunction remain mandatory validation gates. No runtime code, evidence, reviewer status, R2, database, deployment or production changes were authorized or made. V1-4 **NOT PROVEN**; V1-5 unauthorized.
+
+## Operational V1-4 executable remediation preparation — 8 October 2026
+
+**PREPARED / NOT PROVEN.** Added `docs/private/PortfolioAI_V1_4_BOUNDED_ACQUISITION_GROUPS_2026-10-08.json` and `docs/PortfolioAI_V1_4_EXECUTABLE_REMEDIATION_BATCH_CONTRACT_2026-10-08.md`.
+These provide 131 deduplicated document acquisition groups (114 linked canonical research-document IDs plus 17 source-unlinked requirement groups) for 292 review items, and 252 numeric source groups for 537 numeric requirement items. Each group retains security/requirement lineage and frozen-111 membership where proven. This is a source-group inventory; missing authoritative original-document URLs and exact dated field methods remain explicit, so provider call counts for B/C must not be fabricated.
+
+Proposed (not approved) ownership choices: Promoter series for generic four-quarter trend; Institutional series for institutional four-quarter trend; Promoter ownership and separately reviewed governance documents for governance. Full versioned choices/controls are in the bounded batch contract.
+
+Existing official benchmark-only source-policy approval is preserved. Prepared two exact index refreshes, Telecom identity reconciliation, one-security HINDUNILVR append-only corrective proof, and deferred review/materialization; execution/write grants remain missing. No current V1-4 canonical blockers removed and no new provider calls, R2 writes, DB writes, migrations, materialization, deployment, production, or scheduler changes occurred. V1-5 remains unauthorized. This preparation is not current-HEAD code-test PASS.
+
 ## R1–R4 audit remediation / repository completion — 8 October 2026
 
-**Status: R1–R4 repository implementation and verification COMPLETE for the audited repository scope.**
+**Status: R1–R4 audit-remediation implementation is COMPLETE for the audited repository scope. Exact-current-head full-suite re-verification is CI-INFRASTRUCTURE BLOCKED.**
 
 Scope is the historical R1/R2/R3/R4 workstreams, not the newer operational V1-4 evidence stage.
 
-Authoritative verification evidence:
-- first fully green executable head: `aefef83da45e3274e44a6d8819ee354dbace33b4`;
-- GitHub Actions job `113170264795`: architecture, typecheck, application lint, Edge lint, 2,167 application tests, 2 Deno handler tests, 359 Edge tests, production build and `git diff --check` all PASS;
-- later commits through the current documentation update are documentation/private-evidence only relative to that green executable head; no executable R1–R4 code changed;
-- current-head workflow run `37755743453` was retried and failed before runner assignment (empty steps, `runner_id: 0`), so it provides no code verdict and is tracked as CI infrastructure failure rather than a repository regression.
+Verification evidence:
+- the audit-remediation executable head `aefef83da45e3274e44a6d8819ee354dbace33b4` passed architecture, typecheck, application lint, Edge lint, **2,167 application tests**, **2 Deno handler tests**, **359 Edge tests**, production build and whitespace checks in GitHub Actions job `113170264795`;
+- PR #116 later merged additional Research/canonical-context code to Development as `00a0dfe5621450354c7e6027820870becc5f9f11`;
+- PR #116's Architecture Guard runs `37732538454` and `37734884062` passed their Stage 2/shell/canonical-authority tests, TypeScript, full repository lint, production build and whitespace checks;
+- hosted commit `9e736abc80d87b551e5c15f045d69ab2c74d31e3` (including application fix `506ffbd91808bc70fa01be9c07395febda5b3e40`) passed **118 authenticated read-only checks** across seven representative stocks with zero runtime errors, provider refresh attempts or research writes;
+- dedicated R1–R4 workflow runs on the latest Development commits currently fail before runner assignment because GitHub reports the account billing/spending-limit restriction. The observed jobs have `runner_id: 0` and no steps, so they provide no code verdict and are not treated as repository-test failures.
 
 Audit findings remediated:
 - global `ResizeObserver` test support restored without skipping assertions;
 - Angel One public session-error contract aligned to provider-specific safe codes with bounded retry behavior preserved;
-- canonical Pharma historical selection is fail-closed for value conflicts and incompatible period/scope/unit/currency/source semantics;
+- canonical Pharma historical selection fail-closes value conflicts and incompatible period/scope/unit/currency/source semantics;
 - Pharma operating margin has one Decimal-based six-decimal calculation owner, with display rounding separated;
 - Pharma readiness/UI no longer claims global R4H ingestion from a pilot/migration record and uses security-specific cached evidence.
 
-No migrations were created or applied by this remediation. No production deployment, provider spending, ingestion write, scheduler activation, Auth/RLS/grant change or portfolio-wide readiness assertion was performed.
+No migration was created or applied by this audit remediation. No production deployment, provider spending, ingestion write, scheduler activation, Auth/RLS/grant change or portfolio-wide readiness assertion was performed.
 
 Detailed matrix and evidence: `docs/PortfolioAI_R1_R4_AUDIT_REMEDIATION_2026-10-08.md`.
 
@@ -164,7 +182,10 @@ Prepared current review packages:
 
 No owner review decision, provider call, R2 write, canonical evidence write, migration, Production/main change, V1-5 work, P8 work, Auth/RLS change or scheduler activation was performed in this closure continuation.
 
-Repository/build verification remains separate from V1-4 factual acceptance. The last code-bearing parent `aefef83da45e3274e44a6d8819ee354dbace33b4` passed the repository verification workflow; documentation-only workflow invocations after that are currently failing before steps start and are not represented as green evidence.
+Repository/build verification remains separate from V1-4 factual acceptance.
+
+Fresh current-head reconciliation: at Development HEAD `c63e8770b90d499bf48c9a2463c51a4d7b826a2a`, a read-only recheck confirmed the same canonical V1-4 state: latest full fixed-115 run `c0b7f1c4-3e36-4d5c-b79a-19e44fe74e83`; **0 READY / 115 REVIEW_REQUIRED**; requirement-review rows **0**; active provider reservations **0**; Development DB size **222,809,235 bytes**. The blocker census remains unchanged. This confirmation is recorded in the authoritative closure document and does not authorize V1-5.
+ The last code-bearing parent `aefef83da45e3274e44a6d8819ee354dbace33b4` passed the repository verification workflow; documentation-only workflow invocations after that are currently failing before steps start and are not represented as green evidence.
 
 ---
 
