@@ -1,3 +1,7 @@
+## Operational V1-4 ownership — independent Trendlyne source evidence (8 October 2026)
+
+Trendlyne's published help documentation confirms Institutional includes FII, DII and other holdings and must not be recomputed by summation. Retained MCP original charts display Promoter Holding (%) and separate ownership categories; the exact total-equity denominator, institutional overlap with MF, source quarter publication dates and historical revision policy remain unproven. See `docs/PortfolioAI_V1_4_OWNERSHIP_SOURCE_PROOF_GAPS_2026-10-08.md`. The existing fail-closed ownership guard remains **incomplete for eventual proven-source canonical admission**, so do not deploy it as a completed ownership solution. Existing 115-member item-linked replay remains a source-item replay, not the full Deno handler. An isolated guard TypeScript compilation and 11 behavior checks passed; exact repository full suites still unrun owing to GitHub clone DNS failure in the container. No writes/provider calls/deployment; V1-4 NOT PROVEN and V1-5 unauthorized.
+
 ### Stock-page Stages 4 and 5 — Development release, 8 October 2026
 
 PR #117 merged into PortfolioAI-Development at `1db4eed499c4920c60c0abc4e6a50c9628e2accb`
