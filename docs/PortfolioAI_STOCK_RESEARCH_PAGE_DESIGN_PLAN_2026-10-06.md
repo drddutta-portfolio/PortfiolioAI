@@ -90,7 +90,7 @@ An overlay changes only those research modules and applicability rules explicitl
 
 Unknown or unresolved profiles use the same shell with explicit unresolved applicability and blocked results. They must not inherit a generic scoring model or bank metrics.
 
-Stage 1 implementation preparation is specified in the [Industry-first Stage 1 contract](PortfolioAI_STOCK_RESEARCH_INDUSTRY_FIRST_STAGE_1_CONTRACT_2026-10-08.md). Its acceptance cases must be verified during integration; documentation completion does not imply live-page acceptance.
+Stage 1 implementation preparation is specified in the [Industry-first Stage 1 contract](PortfolioAI_STOCK_RESEARCH_INDUSTRY_FIRST_STAGE_1_CONTRACT_2026-10-08.md). Its acceptance cases must be verified during integration; documentation completion does not imply live-page acceptance. Stage 2 data-flow integration and its hosted rebuild blocker are recorded in the [Stage 2 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_2_CANONICAL_INTEGRATION_2026-10-08.md).
 
 ## 4. Entire page structure
 

@@ -6,7 +6,13 @@ assignment supplies the Pharma header, live framework and R6 role/lineage.
 Original review material is separately labelled and cannot override the current
 route. Qualification of unbound Pharma parent scores remains blocked.
 See the [Stage 2 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_2_CANONICAL_INTEGRATION_2026-10-08.md)
-for validation and release status. Industry-led shell layout is Stage 3; full
+for validation and release status. All 264 focused tests, TypeScript/build, full
+lint and the architecture guard pass. Authenticated backend reads confirm seven
+representative snapshots and all five Pharma models. Final hosted acceptance is
+blocked: the earlier preview used a backend without the canonical lineage view;
+review-branch public Supabase settings now match Development, but Vercel rejects
+new builds for 24 hours. This work has not merged or deployed to Development.
+Industry-led shell layout is Stage 3; full
 specialised result presentation is Stage 4. C1/C8 remediation is not closed.
 
 ### Stock-page Industry-first Stage 1 — 8 October 2026
