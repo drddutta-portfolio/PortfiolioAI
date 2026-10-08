@@ -1,3 +1,15 @@
+### Stock-page Industry-first Stage 3 — 8 October 2026
+
+The common identity shell now leads with Industry, separates Basic Industry and
+Sector context from methodology/primary subprofile, and shows independent
+classification-verification, assignment, evidence and engine states. Compact full
+name wrapping, sticky section navigation and owner Core/Satellite controls remain.
+Missing taxonomy projection fields remain unavailable rather than inferred.
+Terminal research failures no longer leave false loading labels in the summary.
+See the [Stage 3 implementation record](PortfolioAI_STOCK_RESEARCH_STAGE_3_SHARED_SHELL_2026-10-08.md)
+for validation and the hosted acceptance boundary. Implementation is on the review
+branch, not merged to Development; full hosted acceptance and C1/C8 remain open.
+
 ### Stock-page Industry-first Stage 2 — 8 October 2026
 
 Stage 2.1–2.4 are implemented on the review branch: one selected P7 evidence

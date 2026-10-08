@@ -1,6 +1,16 @@
 /* Shared identity typography for every stock-page composition. */
 .research-page .research-header .research-title {
   min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.stock-research-classification .stock-primary-industry {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.stock-research-classification p {
+  max-inline-size: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 .research-page .research-header .research-title h1 {
   max-inline-size: 100%;

@@ -55,6 +55,16 @@ function renderPage(path = "/app/research/s1") {
 }
 
 describe("ResearchPage", () => {
+  it("keeps terminal research errors distinct from loading in the common shell", () => {
+    Object.assign(scoringState, { data: null, isLoading: false, error: "Canonical read failed" })
+    renderPage()
+    expect(document.querySelector(".stock-research-classification")).toHaveTextContent("Research assignment: Unavailable")
+    expect(document.querySelector(".portfolioai-state-grid")).not.toHaveTextContent("Canonical profile loading")
+    expect(document.getElementById("stock-insights")).not.toHaveTextContent("Canonical profile loading")
+    expect(document.querySelector(".research-title")).toHaveTextContent("Your portfolio role:")
+    expect(screen.getByRole("navigation", { name: "Stock page sections" })).toBeInTheDocument()
+    expect(providerCall).not.toHaveBeenCalled()
+  })
   beforeEach(() => {
     window.history.replaceState(null, "", "/app/research/s1")
     vi.stubGlobal("scrollTo", vi.fn())
