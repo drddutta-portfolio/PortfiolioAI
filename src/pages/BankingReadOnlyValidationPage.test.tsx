@@ -95,7 +95,7 @@ describe("V1-4 banking read-only owner UI", () => {
     view()
     const buttons = screen.getAllByRole("button", { name: "Run read-only validation" })
     fireEvent.click(buttons[0] as HTMLElement)
-    expect(screen.getAllByRole("button", { name: "Run read-only validation" })[0] as HTMLElement.hasAttribute("disabled")).toBe(true)
+    expect((screen.getAllByRole("button", { name: "Run read-only validation" })[0] as HTMLElement).hasAttribute("disabled")).toBe(true)
     expect(invoke).toHaveBeenCalledTimes(1)
     release(response(manifest.slices[0] as (typeof manifest.slices)[number]))
     await waitFor(() => expect(screen.getByText(/Prospective only:/)).toBeTruthy())
