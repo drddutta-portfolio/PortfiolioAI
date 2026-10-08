@@ -74,6 +74,7 @@ describe("buildPharmaCanonicalHistoryView", () => {
 
     expect(view?.quarterlyOperatingRevenue).toEqual([])
     expect(view?.unresolvedIssues).toContainEqual({
+      code: "OPERATING_REVENUE_QUARTER",
       periodEnd: "2026-06-30",
       reason: "CONFLICTING_VALUES",
       observationIds: [newer.id, older.id].sort(),
