@@ -19,7 +19,8 @@ export async function invokeBankingReadOnlyValidation(request: BankingReadOnlyRe
   if (sessionError || !session.session) {
     throw new Error("Session unavailable or expired. Sign in again using the existing login page.")
   }
-  const { data, error } = await supabase.functions.invoke(VALIDATOR_FUNCTION, { body: request })
+  const response: unknown = await supabase.functions.invoke(VALIDATOR_FUNCTION, { body: request })
+  const { data, error } = response as { data: unknown; error: { message?: string } | null }
   if (error) throw new Error("Read-only validator failed. Confirm the Development session and function availability.")
   return data as unknown
 }
