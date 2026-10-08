@@ -1321,3 +1321,7 @@ The Development Status and stage-specific documents should reference this file w
 Recommended filename:
 
 `PortfolioAI_Product_UI_and_Decision_Workflow.md`
+
+### Visible financial surfaces — 8 October 2026
+
+The shared shell and all application financial-result surfaces must use clearly visible green gain fills (`#dcfce7`) and red loss fills (`#fee2e2`), with matching borders and dark readable text. Research P/L cards, Dashboard signed cards, primary Holdings P/L/return cells and allocation/broker/daily-movement cells receive the signed surface. Inline or mixed-sign contexts use separately colored value boxes so one gain cannot recolor a loss. Zero and unavailable results remain neutral, including missing secondary percentages inside a gain/loss card. The existing exact-value sign helper, financial authorities, labels, accounting formulas and evidence safeguards remain unchanged.
