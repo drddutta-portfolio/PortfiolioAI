@@ -30,6 +30,8 @@ if (typeof window !== "undefined") {
   assertEnvironmentIsolation(supabaseUrl, window.location.hostname)
 }
 
+const configuredHistoryApiUrl = environmentString("VITE_HISTORY_API_URL")?.trim()
+
 export const publicConfig = {
   supabaseUrl,
   supabasePublishableKey: requireEnvironmentVariable(
@@ -37,8 +39,8 @@ export const publicConfig = {
     environmentString("VITE_SUPABASE_PUBLISHABLE_KEY"),
   ),
   marketDataEnabled: environmentString("VITE_MARKET_DATA_ENABLED") === "true",
-  historyApiUrl: environmentString("VITE_HISTORY_API_URL")?.trim()
-    ? normalizeOrigin(environmentString("VITE_HISTORY_API_URL")!.trim())
+  historyApiUrl: configuredHistoryApiUrl
+    ? normalizeOrigin(configuredHistoryApiUrl)
     : supabaseUrl.includes("lrgpjimipfkyoqbpsqzz")
       ? "https://portfolioai-history-dev-api.dr-d-dutta.workers.dev"
       : null,
