@@ -6,7 +6,7 @@ import { isMarketDataEnabled, refreshPortfolioMarketData } from "../data/marketD
 import { displayError } from "../lib/displayError"
 import { enrichmentAllocation } from "../features/enrichment/allocation"
 import { usePortfolioEnrichment } from "../features/enrichment/usePortfolioEnrichment"
-import { formatMoney, formatPercent } from "../features/portfolio/format"
+import { financialClass, financialTone, formatMoney, formatPercent } from "../features/portfolio/format"
 import type { PortfolioPosition, PortfolioRole, PortfolioViewModel } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import "./DashboardDesign.css"
@@ -104,10 +104,9 @@ function positionScopeWeight(position: PortfolioPosition, scopedValue: string | 
 }
 
 function signedTone(value: string | null): SignedTone {
-  if (value === null) return "neutral"
-  const decimal = new Decimal(value)
-  if (decimal.gt(0)) return "positive"
-  if (decimal.lt(0)) return "negative"
+  const tone = financialTone(value)
+  if (tone === "gain") return "positive"
+  if (tone === "loss") return "negative"
   return "neutral"
 }
 
@@ -226,8 +225,8 @@ export function DashboardPage() {
             <Link to="/app/holdings">View holdings →</Link>
           </div>
           <div className="dashboard-pulse-grid">
-            <PulseCard tone="positive" label="Strongest supported return" position={leadWinner} />
-            <PulseCard tone="negative" label="Weakest supported return" position={leadLaggard} />
+            <PulseCard label="Strongest supported return" position={leadWinner} />
+            <PulseCard label="Weakest supported return" position={leadLaggard} />
             <article className="dashboard-pulse-card neutral">
               <span className="dashboard-pulse-icon">◔</span><small>Largest priced position</small>
               <strong>{largestPosition?.label ?? "Unavailable"}</strong>
@@ -282,8 +281,8 @@ export function DashboardPage() {
           <div className="dashboard-section-heading compact"><div><p className="eyebrow">Key insights</p><h2>{selectedScopeLabel}</h2></div></div>
           <div className="dashboard-key-insight-list">
             <InsightRow label="Largest position" value={largestPosition?.label ?? "Unavailable"} detail={largestPosition ? `${new Decimal(largestPosition.percentage).toDecimalPlaces(2).toFixed(2)}% of selected priced scope` : "Awaiting price coverage"} />
-            <InsightRow label="Strongest return" value={leadWinner?.symbol ?? "Unavailable"} detail={leadWinner ? formatSignedPercent(leadWinner.unrealisedPnlPercent) : "Awaiting supported accounting"} tone="positive" />
-            <InsightRow label="Weakest return" value={leadLaggard?.symbol ?? "Unavailable"} detail={leadLaggard ? formatSignedPercent(leadLaggard.unrealisedPnlPercent) : "Awaiting supported accounting"} tone="negative" />
+            <InsightRow label="Strongest return" value={leadWinner?.symbol ?? "Unavailable"} detail={leadWinner ? formatSignedPercent(leadWinner.unrealisedPnlPercent) : "Awaiting supported accounting"} tone={signedTone(leadWinner?.unrealisedPnlPercent ?? null)} />
+            <InsightRow label="Weakest return" value={leadLaggard?.symbol ?? "Unavailable"} detail={leadLaggard ? formatSignedPercent(leadLaggard.unrealisedPnlPercent) : "Awaiting supported accounting"} tone={signedTone(leadLaggard?.unrealisedPnlPercent ?? null)} />
             <InsightRow label="Price coverage" value={`${pricedCoveragePercent}%`} detail={`${scopedCurrent.coverage}/${scopedPositions.length} holdings priced`} />
             <InsightRow label="Sizing targets" value={`${sizingEligiblePositions.filter((position) => position.settings.targetWeight !== null).length}/${sizingEligiblePositions.length}`} detail="Non-ETF holdings with a user target weight" />
           </div>
@@ -315,10 +314,10 @@ export function DashboardPage() {
   </section>
 }
 
-function PulseCard({ tone, label, position }: { readonly tone: "positive" | "negative"; readonly label: string; readonly position: PortfolioPosition | null }) {
-  return <article className={`dashboard-pulse-card ${tone}`}>
-    <span className="dashboard-pulse-icon">{tone === "positive" ? "↗" : "↘"}</span><small>{label}</small>
-    {position ? <><Link to={`/app/research/${position.securityId}`}>{position.symbol}</Link><b>{formatSignedPercent(position.unrealisedPnlPercent)}</b><p>{position.company}</p></> : <><strong>Unavailable</strong><b>—</b><p>Supported accounting and a trusted current price are required.</p></>}
+function PulseCard({ label, position }: { readonly label: string; readonly position: PortfolioPosition | null }) {
+  return <article className={`dashboard-pulse-card ${signedTone(position?.unrealisedPnlPercent ?? null)}`}>
+    <span className="dashboard-pulse-icon">{position === null ? "—" : financialTone(position.unrealisedPnlPercent) === "gain" ? "↗" : financialTone(position.unrealisedPnlPercent) === "loss" ? "↘" : "→"}</span><small>{label}</small>
+    {position ? <><Link to={`/app/research/${position.securityId}`}>{position.symbol}</Link><b className={financialClass(position.unrealisedPnlPercent)}>{formatSignedPercent(position.unrealisedPnlPercent)}</b><p>{position.company}</p></> : <><strong>Unavailable</strong><b>—</b><p>Supported accounting and a trusted current price are required.</p></>}
   </article>
 }
 
@@ -396,7 +395,7 @@ function VerticalPerformanceChart({ title: chartTitle, positions, tone }: { read
   return <section className={`dashboard-vertical-chart ${tone}`}><h3>{chartTitle}</h3>{positions.length ? <div className="dashboard-column-chart">{positions.map((position) => {
     const value = new Decimal(position.unrealisedPnlPercent ?? 0)
     const height = Decimal.max(4, value.abs().div(max).times(100)).toFixed()
-    return <Link key={position.securityId} to={`/app/research/${position.securityId}`} title={`${position.symbol}: ${formatSignedPercent(position.unrealisedPnlPercent)}`}><span>{formatSignedPercent(position.unrealisedPnlPercent)}</span><i style={{ height: `${height}%` }} /><strong>{position.symbol}</strong></Link>
+    return <Link key={position.securityId} to={`/app/research/${position.securityId}`} title={`${position.symbol}: ${formatSignedPercent(position.unrealisedPnlPercent)}`}><span className={financialClass(position.unrealisedPnlPercent)}>{formatSignedPercent(position.unrealisedPnlPercent)}</span><i style={{ height: `${height}%` }} /><strong>{position.symbol}</strong></Link>
   })}</div> : <EmptyData text="No supported positions in this direction." />}</section>
 }
 
@@ -405,7 +404,7 @@ function PnlContributionList({ title: listTitle, positions, tone }: { readonly t
   return <section className={`dashboard-contribution-card ${tone}`}><h3>{listTitle}</h3>{positions.length ? <div>{positions.map((position) => {
     const amount = new Decimal(position.unrealisedPnl ?? 0)
     const width = Decimal.max(3, amount.abs().div(max).times(100)).toFixed()
-    return <article key={position.securityId}><div><Link to={`/app/research/${position.securityId}`}>{position.symbol}</Link><span>{formatMoney(position.unrealisedPnl)}</span></div><div className="dashboard-contribution-track"><i style={{ width: `${width}%` }} /></div><small>{position.portfolioWeightPercent === null ? "Portfolio weight unavailable" : `${new Decimal(position.portfolioWeightPercent).toDecimalPlaces(2).toFixed(2)}% portfolio weight`}</small></article>
+    return <article key={position.securityId}><div><Link to={`/app/research/${position.securityId}`}>{position.symbol}</Link><span className={financialClass(position.unrealisedPnl)}>{formatMoney(position.unrealisedPnl)}</span></div><div className="dashboard-contribution-track"><i style={{ width: `${width}%` }} /></div><small>{position.portfolioWeightPercent === null ? "Portfolio weight unavailable" : `${new Decimal(position.portfolioWeightPercent).toDecimalPlaces(2).toFixed(2)}% portfolio weight`}</small></article>
   })}</div> : <EmptyData text="No supported positions in this direction." />}</section>
 }
 

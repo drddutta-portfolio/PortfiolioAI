@@ -13,3 +13,19 @@ export function formatMoney(value: string | null, currency = "INR") {
 export function formatPercent(value: string | null) {
   return value === null ? "Unavailable" : `${new Decimal(value).toDecimalPlaces(2).toFixed(2)}%`
 }
+
+/** Presentation only: classify the canonical value before display rounding. */
+export function financialTone(value: string | Decimal | null | undefined): "gain" | "loss" | "neutral" | "unavailable" {
+  if (value === null || value === undefined) return "unavailable"
+  try {
+    const decimal = new Decimal(value)
+    if (!decimal.isFinite()) return "unavailable"
+    return decimal.gt(0) ? "gain" : decimal.lt(0) ? "loss" : "neutral"
+  } catch {
+    return "unavailable"
+  }
+}
+
+export function financialClass(value: string | Decimal | null | undefined) {
+  return `financial-${financialTone(value)}`
+}

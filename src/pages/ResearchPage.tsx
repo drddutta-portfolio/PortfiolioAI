@@ -1,13 +1,12 @@
 import "../features/research/StockResearchShell.css"
 import { StockSectionNavigator } from "../features/research/StockSectionNavigator"
 import "../features/research/ResearchWorkspaceShell.css"
-import Decimal from "decimal.js"
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react"
 import { Link, useParams } from "react-router-dom"
 import { ProgramCR10AttentionBadge } from "../components/ProgramCR10AttentionBadge"
 import type { ProgramCR10AttentionView } from "../features/decision/r10ActionCenterViewModel"
 import { useProgramCR10ActionCenter } from "../features/decision/useProgramCR10ActionCenter"
-import { formatMoney, formatPercent, formatQuantity } from "../features/portfolio/format"
+import { financialClass, financialTone, formatMoney, formatPercent, formatQuantity } from "../features/portfolio/format"
 import type { PortfolioPosition } from "../features/portfolio/types"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { CompanyAboutPanel } from "../features/research/CompanyAboutPanel"
@@ -245,10 +244,11 @@ function MetricTable({ rows, empty, detailed = false }: { readonly rows: readonl
 
 function Status({ value }: { readonly value: ResearchEvidenceStatus }) { return <span className={`evidence-badge evidence-${value.toLocaleLowerCase()}`}>{value.replaceAll("_", " ")}</span> }
 function PnlCard({ position, currency }: { readonly position: PortfolioPosition; readonly currency: string }) {
-  const sign = position.unrealisedPnl === null ? "" : new Decimal(position.unrealisedPnl).gte(0) ? "+" : ""
-  const percentSign = position.unrealisedPnlPercent === null ? "" : new Decimal(position.unrealisedPnlPercent).gte(0) ? "+" : ""
-  const direction = position.unrealisedPnl === null ? "Unavailable" : new Decimal(position.unrealisedPnl).gte(0) ? "Gain" : "Loss"
-  return <article className={`research-metric-card pnl-card pnl-${direction.toLocaleLowerCase()}`}><span>P/L</span><strong>{position.unrealisedPnl === null ? "Unavailable" : `${sign}${formatMoney(position.unrealisedPnl, currency)}`}</strong><small>{position.unrealisedPnlPercent === null ? "Unavailable" : `${percentSign}${formatPercent(position.unrealisedPnlPercent)} · ${direction}`}</small></article>
+  const sign = position.unrealisedPnl === null ? "" : financialTone(position.unrealisedPnl) === "gain" ? "+" : ""
+  const percentSign = position.unrealisedPnlPercent === null ? "" : financialTone(position.unrealisedPnlPercent) === "gain" ? "+" : ""
+  const tone = financialTone(position.unrealisedPnl)
+  const direction = tone === "gain" ? "Gain" : tone === "loss" ? "Loss" : tone === "neutral" ? "No change" : "Unavailable"
+  return <article className={`research-metric-card pnl-card pnl-${tone}`}><span>P/L</span><strong className={financialClass(position.unrealisedPnl)}>{position.unrealisedPnl === null ? "Unavailable" : `${sign}${formatMoney(position.unrealisedPnl, currency)}`}</strong><small className={financialClass(position.unrealisedPnlPercent)}>{position.unrealisedPnlPercent === null ? "Unavailable" : `${percentSign}${formatPercent(position.unrealisedPnlPercent)} · ${direction}`}</small></article>
 }
 function MetricCard({ label, value, detail }: { readonly label: string; readonly value: string; readonly detail?: string }) { return <article className="research-metric-card"><span>{label}</span><strong>{value}</strong>{detail ? <small>{detail}</small> : null}</article> }
 function SectionHeading({ title, detail }: { readonly title: string; readonly detail: string }) { return <div className="research-section-heading"><h2>{title}</h2><p>{detail}</p></div> }

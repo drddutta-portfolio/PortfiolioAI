@@ -2,7 +2,7 @@ import Decimal from "decimal.js"
 import { useMemo } from "react"
 import { Link } from "react-router-dom"
 import { useDashboardDailyMarketSnapshots } from "../features/dashboard/useDashboardEvidence"
-import { formatMoney } from "../features/portfolio/format"
+import { financialClass, formatMoney } from "../features/portfolio/format"
 import { usePortfolioView } from "../features/portfolio/usePortfolioView"
 import { dashboardScopeLabel, positionsForDashboardScope, useDashboardScope } from "./dashboardScope"
 import "./DashboardDailyMovement.css"
@@ -110,11 +110,11 @@ export function DashboardDailyMovement() {
     {snapshots.error ? <div className="ddm-notice">Daily movement evidence could not be read from the cached market-data layer.</div> : null}
 
     <div className="ddm-summary-grid">
-      <article className={tone(model.totalPnl)}><small>{sessionLabel} P&amp;L</small><strong>{signedMoney(model.totalPnl)}</strong><span>{signedPercent(model.dayReturn)}</span></article>
+      <article className={tone(model.totalPnl)}><small>{sessionLabel} P&amp;L</small><strong className={financialClass(model.totalPnl)}>{signedMoney(model.totalPnl)}</strong><span className={financialClass(model.dayReturn)}>{signedPercent(model.dayReturn)}</span></article>
       <article><small>Movement coverage</small><strong>{model.rows.length}/{model.scoped.length}</strong><span>scoped holdings with previous close</span></article>
       <article><small>Market breadth</small><strong>{model.advancers} ↑ · {model.decliners} ↓</strong><span>{model.unchanged} unchanged</span></article>
-      <article className={best ? tone(best.dayPnl) : "neutral"}><small>Largest positive impact</small><strong>{best?.symbol ?? "—"}</strong><span>{best ? `${signedMoney(best.dayPnl)} · ${signedPercent(best.dayReturn)}` : "Unavailable"}</span></article>
-      <article className={worst ? tone(worst.dayPnl) : "neutral"}><small>Largest negative impact</small><strong>{worst?.symbol ?? "—"}</strong><span>{worst ? `${signedMoney(worst.dayPnl)} · ${signedPercent(worst.dayReturn)}` : "Unavailable"}</span></article>
+      <article className={best ? tone(best.dayPnl) : "neutral"}><small>Largest positive impact</small><strong>{best?.symbol ?? "—"}</strong><span>{best ? <><span className={financialClass(best.dayPnl)}>{signedMoney(best.dayPnl)}</span> · <span className={financialClass(best.dayReturn)}>{signedPercent(best.dayReturn)}</span></> : "Unavailable"}</span></article>
+      <article className={worst ? tone(worst.dayPnl) : "neutral"}><small>Largest negative impact</small><strong>{worst?.symbol ?? "—"}</strong><span>{worst ? <><span className={financialClass(worst.dayPnl)}>{signedMoney(worst.dayPnl)}</span> · <span className={financialClass(worst.dayReturn)}>{signedPercent(worst.dayReturn)}</span></> : "Unavailable"}</span></article>
     </div>
 
     <div className="ddm-movers-grid">
@@ -131,8 +131,8 @@ function MovementList({ title, rows }: { title: string; rows: readonly MovementR
     <div className="ddm-list-heading"><h3>{title}</h3><span>Daily impact</span></div>
     {rows.length ? rows.map((row) => <article key={row.securityId}>
       <div><Link to={`/app/research/${row.securityId}`}>{row.symbol}</Link><span>{row.company}</span></div>
-      <div className={tone(row.dayReturn)}><strong>{signedPercent(row.dayReturn)}</strong><span>price move</span></div>
-      <div className={tone(row.dayPnl)}><strong>{signedMoney(row.dayPnl)}</strong><span>portfolio impact</span></div>
+      <div className={tone(row.dayReturn)}><strong className={financialClass(row.dayReturn)}>{signedPercent(row.dayReturn)}</strong><span>price move</span></div>
+      <div className={tone(row.dayPnl)}><strong className={financialClass(row.dayPnl)}>{signedMoney(row.dayPnl)}</strong><span>portfolio impact</span></div>
     </article>) : <div className="ddm-empty">No supported daily movement is available for this scope.</div>}
   </section>
 }

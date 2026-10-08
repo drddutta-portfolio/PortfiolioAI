@@ -7,6 +7,12 @@
 
 ---
 
+## Shared signed-financial-value colors — 8 October 2026
+
+All application surfaces use the same presentation tokens for canonical signed financial results: green (`--color-gain`) for gains, red (`--color-loss`) for losses, neutral for zero and muted for unavailable values. This applies to realised/unrealised P/L, covered returns, daily price movement and return contributions. Preserve signs, labels, coverage and source/period context; color alone must not convey a conclusion. Classify the canonical Decimal value before display rounding through the shared portfolio formatting helper. Colors must never introduce a separate calculation or turn unknown values into zero.
+
+Prices, quantities, balances, categorical allocation charts, transaction types and research-readiness/quality states retain their own meanings. A green gain is not a research approval or buy recommendation. The common stock shell includes this rule for every stock; specialist research remains Industry-first and uses the effective canonical assignment.
+
 ## Scope Freeze A UI/release boundary — 5 October 2026
 
 The V1 release boundary is governed by [PortfolioAI V1/V1.1/V2 Product Scope Freeze A](PortfolioAI_V1_V2_PRODUCT_SCOPE_FREEZE_2026-10-05.md).
