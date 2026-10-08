@@ -8,7 +8,7 @@ import manifest from "../../docs/private/v1-4-industry-batches/Banking_13_Read_O
 
 const ACTION = "P7_IC3_VALIDATE_CANONICAL_INPUTS"
 const FUNCTION = "p7-ic2-materialize-readiness"
-const DEV_HOST = "portfolioai-development"
+const DEV_HOST = "portfolioai-development"\nconst configuredHostname = import.meta.env.VITE_V1_4_BANKING_ALLOWED_HOSTNAME?.trim().toLowerCase() ?? ""
 type Requirement = { requirement_code?: string; evidence_state?: string; reason_code?: string; validation_state?: string; canonical_selection_state?: string; raw_source_record_id?: string | null; candidate_evidence_ids?: string[] }
 type StockResult = { securityId: string; status: string; snapshotHash: string; items: Requirement[] }
 type SliceResult = { sliceId: string; evaluationAsOf: string; sourceCutoffAt: string; selectionRunId: string; deployment: string; results: StockResult[]; providerCalls: number; writeTotals: Record<string, number>; processed: number }
@@ -19,7 +19,7 @@ function isDevelopment() {
   const hostname = window.location.hostname.toLowerCase()
   const project = getSupabaseProjectRef(publicConfig.supabaseUrl)
   return project === DEVELOPMENT_SUPABASE_PROJECT_REF &&
-    (hostname === DEV_HOST || hostname.startsWith(`${DEV_HOST}.`) || hostname === "localhost" || hostname === "127.0.0.1")
+    (hostname === DEV_HOST || hostname.startsWith(`${DEV_HOST}.`) || (configuredHostname.length > 0 && hostname === configuredHostname) || hostname === "localhost" || hostname === "127.0.0.1")
 }
 
 function cleanResult(raw: unknown, expectedIds: readonly string[]): Omit<SliceResult, "sliceId" | "evaluationAsOf" | "sourceCutoffAt" | "selectionRunId" | "deployment"> {
