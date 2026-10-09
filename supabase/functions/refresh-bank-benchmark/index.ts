@@ -146,6 +146,25 @@ Deno.serve(async (request) => {
       }
       const history = await admin.from("market_benchmark_price_history").upsert(candles.map((candle) => ({ benchmark_code: BENCHMARK_CODE, provider_code: MARKET_DATA_PROVIDER, interval: "ONE_DAY", period_start: candle.periodStart, open: candle.open, high: candle.high, low: candle.low, close: candle.close, volume: candle.volume, retrieved_at: candle.retrievedAt, provenance: { endpoint: "/rest/secure/angelbroking/historical/v1/getCandleData", benchmark_code: BENCHMARK_CODE, exchange: resolved.exchange, trading_symbol: resolved.symbol, symbol_token: resolved.token, requested_from: kolkataDateTime(from), requested_to: kolkataDateTime(to) } })), { onConflict: "benchmark_code,provider_code,interval,period_start", ignoreDuplicates: true })
       if (history.error) throw history.error
+      // Post-conflict readback is mandatory: a racing different provider
+      // response must be detected rather than treated as an idempotent run.
+      const { data: finalBars, error: finalError } = await admin
+        .from("market_benchmark_price_history")
+        .select("period_start,open,high,low,close,volume")
+        .eq("benchmark_code", BENCHMARK_CODE)
+        .eq("provider_code", MARKET_DATA_PROVIDER)
+        .eq("interval", "ONE_DAY")
+        .in("period_start", candles.map(candle => candle.periodStart))
+      if (finalError) throw finalError
+      const finalByDate = new Map((finalBars ?? []).map(row => [new Date(row.period_start).toISOString(), row]))
+      for (const incoming of candles) {
+        const persisted = finalByDate.get(new Date(incoming.periodStart).toISOString())
+        if (!persisted || (["open", "high", "low", "close", "volume"] as const).some(field =>
+          !sameQualifiedHistoryNumeric(persisted[field], incoming[field]))) {
+          throw new SafeOperationalError("BENCHMARK_CONCURRENT_CORRECTION_REQUIRES_REVIEW",
+            "Concurrent NIFTY_BANK revision or missing persisted session requires source-bound review.", 409)
+        }
+      }
 
       const derived = relativeStrength(stockRows, candles)
       const retrievedAt = candles.at(-1)!.retrievedAt
