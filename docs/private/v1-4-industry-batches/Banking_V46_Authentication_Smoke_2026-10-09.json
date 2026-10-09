@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-10-09T05:07:51.750554+00:00",
+  "verifiedAt": "2026-10-09T05:08:13.968998+00:00",
   "boundary": "NO_OWNER_SESSION; NO_VALIDATION_OR_WRITES",
   "results": [
     {
@@ -13,6 +13,13 @@
       "status": 400,
       "cors": "*",
       "body": "{\"error\":\"SECURITY_IDS_CANNOT_COMBINE_WITH_PAGINATION\",\"code\":\"SECURITY_IDS_CANNOT_COMBINE_WITH_PAGINATION\"}"
+    },
+    {
+      "method": "POST",
+      "contract": "VALID_EXACT_SECURITY_IDS_WITHOUT_PAGINATION_OR_OWNER_SESSION",
+      "status": 401,
+      "cors": "*",
+      "body": "{\"error\":\"An authenticated owner session is required.\"}"
     }
   ]
 }
