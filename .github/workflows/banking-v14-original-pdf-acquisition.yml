@@ -1,0 +1,31 @@
+name: Banking V1-4 Original PDF Acquisition (One Shot)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/banking-v14-original-pdf-acquisition.mjs'
+      - '.github/workflows/banking-v14-original-pdf-acquisition.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fetch-original-pdfs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch original issuer bytes and hash
+        id: acquire
+        continue-on-error: true
+        run: node scripts/banking-v14-original-pdf-acquisition.mjs
+      - name: Upload one-shot original source bytes and manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: banking-v14-pr124-original-pdf-sources
+          path: bank-original-source-artifact/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Report missing original bytes without claiming admission
+        if: steps.acquire.outcome == 'failure'
+        run: echo 'Some or all original issuer downloads failed. Inspect artifact manifest. No factual admission executed.'
