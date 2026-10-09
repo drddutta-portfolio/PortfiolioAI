@@ -1,3 +1,9 @@
+## Banking V1-4 evidence execution — 9 October 2026
+
+Actual owner replay: 299 items / 15 FRESH / 284 blocked / 0 prospective READY. Fresh SQL readback confirms 0/13 persisted READY and unchanged selected snapshot IDs. All 13 Angel One mappings and NIFTY_BANK mapping verified. Of 470 retained fundamental observations, 318 lack period_end and 468 have UNKNOWN/null scope; safe bulk admission is not established. No active unconsumed portfolio execution grants; no provider secrets/tool transport in this managed runtime. Existing incremental history handlers are fixed to October 7 and the stock handler upserts overlap, so they must not be used unchanged for the proposed October 8 append-only tails.
+
+Concrete 14-request tail package, all-299-item remediation worklist, source inventory and independent persisted readback committed under `docs/private/v1-4-industry-batches/`; acceptance report `Banking_13_Acceptance_Execution_2026-10-09.md`. No provider, database/R2, deployment, grant or canonical mutation in this continuation. No financial semantics weakened. Banking V1-4 NOT PROVEN; provider execution and source-bound admission remain gated. No V1-5 work.
+
 ## V1-4 banking validator — approved Development deployment, 8 October 2026
 
 After explicit owner approval (“Sure Deploy”), deployed only `p7-ic2-materialize-readiness` to Development `lrgpjimipfkyoqbpsqzz`: version **41 ACTIVE**, source commit `f818810e6e75f7b73d2a1b22720d5e0deebc178c`, bundle SHA-256 `3484aad133d82ab5ee82a01ee3e93d127a9d0d7c3b0b5f4b4cd46fc54c3dd5ea`. Retrieved deployed source matches all 16 tested bundle files exactly. Existing gateway configuration and handler owner/grant authentication preserved. Live rejection smoke checks passed: missing owner session 401; duplicate IDs 400; security-ID write targeting 400. Verification at 20:43 IST (15:13 UTC).
