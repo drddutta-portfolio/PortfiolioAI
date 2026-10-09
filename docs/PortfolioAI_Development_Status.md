@@ -1,3 +1,11 @@
+## Banking V1-4 — consolidated remaining owner decision checkpoint (10 October 2026)
+
+**Document:** `docs/private/v1-4-industry-batches/Banking_V1_4_Consolidated_Execution_Contract_V1_2026-10-10.md`, version `BANK_V1_4_CONSOLIDATED_EXECUTION_CONTRACT_V1_2026_10_10`. Reconciled live PR #124 `176fbdce38a1c64b68b90647f33018ec4ad27333`, unmerged PRs #121/#123, Development canonical validator v51 SHA `260c202064096ac7f426b33feea1eff9ceccf6bc3180a8ff6c55438e14cbbe3d`, four **active** direct M1–M4 definitions and approved dual clocks, four original PDF source records (including SBIN) with durable R2 keys. Their issuer publication timestamps remain NULL. Existing **26 NPA ACCEPTED**; new M1–M4 factual reviews 0; persisted 0/13 READY, 11 REVIEW_REQUIRED / 2 CONFLICTING, ₹0/₹2,05,138.62.
+
+The contract **does not re-request** existing approvals: direct M1–M4, dual-clock 150/550, issuer original source pathway, controlled Development work and no waiver/production. One proposed checkpoint remains for M5 PB_RELATIVE, M6 PB_ADJUSTED_FOR_ROE (default defer as financially unvalidated), M7 PE_TTM_RELATIVE, AUBANK SFB applicability/scoring, and exact recurring O budget/schedule. No proposed models or jobs activated. Actual five-year point-in-time P/B and P/E coverage not demonstrated; registry has no M5–M7 normalized observations. Gate A/B both NOT PROVEN.
+
+---
+
 ## Banking V1-4 — approved dual clocks, four original PDFs in R2, Development v51 — 10 October 2026
 
 Owner approved M1–M3 dual 150-day reporting/source-byte verification ceilings, M4 dual 550-day ceilings, earliest expiry, explicit source supersession/conflict handling, and narrowed delegated review of verified official issuer-hosted originals within the 13 frozen banks. These do not authorize individual factual ACCEPT, arbitrary hosts, scoring changes, or recurring execution. M5–M7 deferred/mandatory, O1 scheduler OFF.
