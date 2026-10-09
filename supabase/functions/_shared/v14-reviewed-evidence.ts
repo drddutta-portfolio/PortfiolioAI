@@ -220,7 +220,7 @@ export async function validateReviewedRequirementEvidence(input:{
      if(!fresh)return fail("REVIEW_REQUIRED","REVIEW_FRESHNESS_NOT_PROVEN",[r.id])
      observations.push({id:r.id,metric_code:metric,numeric_value:value,text_value:null,boolean_value:null,date_value:null,unit:r.unit,currency:r.currency,
       consolidation_scope:r.consolidation_scope,period_start:r.period_start,period_end:r.period_end,period_type:r.period_type,retrieved_at:retrieved,
-      fresh_until:fresh,published_at:r.published_at??source.published_at,evidence_status:"AVAILABLE",source_code:source.source_code,source_record_id:source.id})
+      fresh_until:fresh,published_at:r.published_at??source.published_at,evidence_status:"AVAILABLE",source_code:source.source_code,source_record_id:source.id,\n      source_verified_at:typeof source.raw_payload.original_bytes_verified_at==="string"?source.raw_payload.original_bytes_verified_at:null,\n      disqualifying_event_at:typeof source.raw_payload.disqualifying_event_at==="string"?source.raw_payload.disqualifying_event_at:null})
      support.push(r);continue
    }
    if(family==="OWNERSHIP_4Q"){
