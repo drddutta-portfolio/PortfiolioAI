@@ -11,7 +11,7 @@ const definition:MetricDefinition={
 const row:InputObservation={
  id:"source-fact-1",metric_code:"CET1_RATIO",numeric_value:"17.98",text_value:null,boolean_value:null,date_value:null,
  unit:"PERCENT",currency:null,consolidation_scope:"STANDALONE",period_start:"2026-06-30",period_end:"2026-06-30",
- period_type:"REGULATORY_AS_OF",retrieved_at:"2026-10-09T17:00:00Z",fresh_until:"2026-10-16T00:00:00Z",
+ period_type:"REGULATORY_AS_OF",retrieved_at:"2026-10-09T17:00:00Z",source_verified_at:"2026-10-09T17:00:00Z",fresh_until:"2026-10-16T00:00:00Z",
  published_at:"2026-07-22T13:00:00Z",evidence_status:"AVAILABLE",source_code:"COMPANY_EXCHANGE_FILING",
  source_record_id:"official-original-fact-1"
 };
