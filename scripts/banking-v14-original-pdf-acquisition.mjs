@@ -6,7 +6,8 @@ import { join } from "node:path";
 const targets = [
  {symbol:"ICICIBANK",url:"https://www.icici.bank.in/content/dam/icicibank/missing-assets/basel-pillar-3-disclosureat-june-30-2026.pdf"},
  {symbol:"BANDHANBNK",url:"https://www.bandhan.bank.in/sites/default/files/2026-07/Basel-III-Disclosure-as-on-June-30-2026.pdf"},
- {symbol:"KARURVYSYA",url:"https://www.kvb.bank.in/docs/disclosure-of-june-2026.pdf"}
+ {symbol:"KARURVYSYA",url:"https://www.kvb.bank.in/docs/disclosure-of-june-2026.pdf"},
+ {symbol:"SBIN",url:"https://sbi.bank.in/documents/17826/34672/07.08.2026_FINAL%2BP3D-DFs%2BJUNE%2B2026%2BDTD%2B07082026.pdf/ff6f28c2-855a-31e9-2d79-9b1ef8dc36b9?t=1786100952704"}
 ];
 const directory="bank-original-source-artifact";
 await mkdir(directory,{recursive:true});
@@ -23,7 +24,7 @@ for (const target of targets){
   if(!response.ok)throw Error("HTTP_"+response.status);
   if(new URL(finalUrl).protocol!=="https:")throw Error("NON_HTTPS_FINAL_URL");
   // Redirect outside official source identity is recorded and blocked.
-  const approvedHosts=new Set(["www.icici.bank.in","www.bandhan.bank.in","www.kvb.bank.in","icici.bank.in","bandhan.bank.in","kvb.bank.in"]);
+  const approvedHosts=new Set(["www.icici.bank.in","www.bandhan.bank.in","www.kvb.bank.in","icici.bank.in","bandhan.bank.in","kvb.bank.in","sbi.bank.in"]);
   if(!approvedHosts.has(new URL(finalUrl).hostname))throw Error("UNAPPROVED_REDIRECT_HOST_"+new URL(finalUrl).hostname);
   const buffer=Buffer.from(await response.arrayBuffer());
   if(buffer.length<1024||buffer.length>35_000_000||buffer.subarray(0,5).toString()!=="%PDF-")throw Error("INVALID_OR_OVERSIZED_PDF");
