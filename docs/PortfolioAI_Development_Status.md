@@ -1,3 +1,15 @@
+## Banking V1-4 M1–M4 registry compatibility and deployed validator — 9 October 2026
+
+PR #124 code commit `838a9406` passed Banking V1-4 Full Verification and Architecture Guard. Canonical Development `p7-ic2-materialize-readiness` was deployed as **v47 ACTIVE**, SHA-256 `c5dff71f63cdcff0fea1eeacbecda9c1fa3927e800676bc1a3d39b4fbf48abf6`, with preserved custom owner/grant authorization boundary. Independent live bundle readback confirmed source-hash review and M1–M4 source-only/bypass guards.
+
+Four M1–M4 metric data rows were registered and read back; compatibility audit found **120-day / 90-day caps not explicitly approved** and BANK selected requirement freshness_policy null. They remain registered but **is_active=false** with explicit BLOCKED_PENDING_EXPLICIT_FINANCIAL_FRESHNESS_POLICY status until genuine numeric-reporting expiry/source-clock policy is resolved. No schema migration. No M1–M4 factual acceptance; existing 26 NPA ACCEPTED unchanged.
+
+Original ICICI June 2026 issuer Pillar 3 document was accessed via official linked PDF: consolidated CET1 16.11%, total CRAR 16.75%, standalone CET1 16.19%, total CRAR 16.84%. Original PDF byte download/hash was unsuccessful, so no admission was fabricated. Detailed facts, failed deployment packaging and successful v47 parity, and expiry decision: `docs/private/v1-4-industry-batches/Banking_13_Registry_Deployment_Original_Source_Audit_2026-10-09.md`.
+
+**Gate A NOT PROVEN, 0/13 READY. Gate B NOT PROVEN, recurring maintenance OFF.** M5–M7 deferred and mandatory. No Production/main change.
+
+---
+
 ## Banking V1-4 M1–M4 canonical review integration — 9 October 2026
 
 M1–M4 approved direct-source semantic proof has now been added to the existing `v14-reviewed-evidence.ts` reviewer after original hash, exact source quote, numeric value and financial period binding; negative source-substitution integration regressions committed. This is **repository integration**, not Development Edge deployment, registry registration, factual admission or current handler materialization. A read-only retained-source scan confirmed candidate NIM/CET1/CAR/ROA mentions but no fully verified direct-source period/scope/denominator fragments admitted in this execution. **New reviews/observations/selections: 0.** Existing 26 accepted NPA reviews unchanged. No provider calls, grant creation, cron, Production or V1-5 changes.
