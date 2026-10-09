@@ -41,7 +41,9 @@ export function approvedBankOfficialFallback(review:RequirementReview,source:Rev
       ||typeof p.source_scope!=="string"||!p.source_scope) return false
    const hosts=issuerPolicy.approvedIssuerHosts[review.security_id as keyof typeof issuerPolicy.approvedIssuerHosts] as readonly string[]|undefined
    try{const u=new URL(p.original_url as string);return u.protocol==="https:"&&u.username===""&&u.password===""&&Boolean(hosts?.includes(u.hostname))
-     &&u.search===""&&u.hash===""&&u.pathname.toLowerCase().endsWith(".pdf")}
+     &&u.hash===""&&((u.search===""&&u.pathname.toLowerCase().endsWith(".pdf"))
+     ||(u.hostname==="sbi.bank.in"&&u.pathname.startsWith("/documents/17826/34672/")
+        &&/\.pdf\/[a-f0-9-]{36}$/i.test(u.pathname)&&/^\?t=\d+$/.test(u.search)))}
    catch{return false}
  }
  if(!policy.fallbackSources.includes(source.source_code))return false
