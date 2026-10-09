@@ -1,0 +1,18 @@
+{
+  "verifiedAt": "2026-10-09T05:07:51.750554+00:00",
+  "boundary": "NO_OWNER_SESSION; NO_VALIDATION_OR_WRITES",
+  "results": [
+    {
+      "method": "OPTIONS",
+      "status": 204,
+      "cors": "*",
+      "body": ""
+    },
+    {
+      "method": "POST",
+      "status": 400,
+      "cors": "*",
+      "body": "{\"error\":\"SECURITY_IDS_CANNOT_COMBINE_WITH_PAGINATION\",\"code\":\"SECURITY_IDS_CANNOT_COMBINE_WITH_PAGINATION\"}"
+    }
+  ]
+}

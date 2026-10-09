@@ -1,3 +1,13 @@
+## Banking V1-4 approved delegated admission — 9 October 2026
+
+Owner approved the bounded Development source/review policy. Implemented `V1_4_BANK_PRIMARY_FILING_DELEGATION_V1` with exact portfolio/owner/thirteen-security scope. Appended thirteen primary-filing fact records and **26 delegated NPA reviews**, all with personal `reviewed_by = null` and integrity-hashed executor/authorization metadata. No schema or RLS change. Original June-quarter filings match security symbol/ISIN/Equity class, explicit quarterly start/end and Standalone scope. No conversions, financial formulas, date invention or provider relabeling.
+
+Database readback and the actual canonical requirement evaluator, including 52 retained NPA observations, verify **26/26 NPA requirements FRESH**. Qualified primary evidence retains priority; comparable conflicts remain blocked. This is a provider-free evaluator replay, not an authenticated full 299-item HTTP replay or materialization. Independent persisted selection readback remains **0/13 READY, 11 REVIEW_REQUIRED, 2 CONFLICTING**, unchanged selections and zero READY frozen value. No stock is falsely promoted.
+
+Development canonical validator **v46 ACTIVE**, bundle SHA-256 `8a5ba7e87577fff8ae1c938ed537cd861fc89643e0a0994e47f98ee265b28e57`. Current verification: 375 Edge tests, three type-checked canonical-handler Deno integration tests, architecture, TypeScript, lint, build and whitespace PASS. Prior 2,305 application-test PASS is retained as historical evidence, not rerun on this policy change. Authority and executed evidence: `docs/private/v1-4-industry-batches/Banking_13_Approved_Delegated_Admission_Result_2026-10-09.md`.
+
+Ownership semantics, unresolved bank metric/valuation contracts, additional financial facts, ratings/governance and three corporate-action cases remain blocked. Fresh registry check finds no NIM_TTM/CET1_RATIO/CAPITAL_ADEQUACY_RATIO/ROA_ANNUAL/PB_ADJUSTED_FOR_ROE definitions; do not invent replacements. No canonical materialization, Production, migrations, Auth/RLS, provider acquisition, R2, scheduler, frozen-cohort or V1-5 change in this approval continuation. Work remains on draft PR #124; no merge. Earlier sections are historical checkpoints.
+
 ## Banking V1-4 executed acquisition and admission repairs — 9 October 2026
 
 **Banking NOT PROVEN: 0/13 persisted READY, 11 REVIEW_REQUIRED, 2 CONFLICTING; READY frozen value zero.** Independent post-execution readback confirms unchanged selected snapshot IDs. Original owner replay remains 299 requirements / 15 FRESH / 284 blocked; no later full authenticated banking replay is claimed.

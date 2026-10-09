@@ -1,6 +1,6 @@
 # Banking V1-4 — bounded source-admission architecture decision
 
-**PROPOSAL ONLY — not activated or an owner ACCEPT attestation.**
+**APPROVED by the owner on 9 October 2026 (reply: “Approved”).** Implemented as the exact-scope delegated policy with empty personal-review attribution and integrity-hashed executor metadata; no migration or RLS change required. Approval is not a personal owner ACCEPT attestation. Actual first admission: 26 source-bound NPA reviews, described in `Banking_13_Approved_Delegated_Admission_Result_2026-10-09.md`. The proposal text below is preserved as the approved decision contract.
 
 The owner's provider-call authorization has been executed. The remaining issue is admitting facts through the canonical review contract, not permission to acquire more data.
 

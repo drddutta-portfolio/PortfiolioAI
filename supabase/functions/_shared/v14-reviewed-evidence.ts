@@ -1,5 +1,6 @@
 import { validateObservationSeries, type InputObservation, type MetricDefinition, validDate } from "./p7-ic-input-validation.ts"
 import {selectedV14OwnershipSeries,type EvidenceRequirementPlan} from "./p7-ic-evidence-normalization.ts"
+import {approvedBankDelegatedReview,approvedBankOfficialFallback} from "./v14-bank-approved-delegation.ts"
 
 type Json = Readonly<Record<string, unknown>>
 export type ReviewEvidenceFamily = EvidenceRequirementPlan["deterministicCoverageRule"]
@@ -139,8 +140,9 @@ export async function validateReviewedRequirementEvidence(input:{
  const ownershipRows:Array<{review:RequirementReview;series:string;basis:string;period:string;value:string;source:ReviewedSourceRecord}>=[]
  const documentRows:Array<{review:RequirementReview;document:ReviewedResearchDocument;link:ReviewedDocumentSource;source:ReviewedSourceRecord}>=[]
  for(const r of active){
-   if(r.review_version!==SUPPORTED_VERSION||!APPROVED_KINDS[family].includes(r.review_kind))return fail("REVIEW_REQUIRED","REVIEW_KIND_OR_VERSION_NOT_APPROVED",[r.id])
-   if(r.reviewed_by!==input.portfolioOwnerId)return fail("REVIEW_REQUIRED","REVIEWER_NOT_AUTHORIZED_FOR_PORTFOLIO",[r.id])
+   const delegated=approvedBankDelegatedReview(r,input.portfolioOwnerId,family)
+   if(r.review_version!==SUPPORTED_VERSION||!APPROVED_KINDS[family].includes(r.review_kind)&&!delegated)return fail("REVIEW_REQUIRED","REVIEW_KIND_OR_VERSION_NOT_APPROVED",[r.id])
+   if(r.reviewed_by!==input.portfolioOwnerId&&!delegated)return fail("REVIEW_REQUIRED","REVIEWER_NOT_AUTHORIZED_FOR_PORTFOLIO",[r.id])
    if(!HASH.test(r.review_hash)||await sha256(stable(reviewHashPayload(r)))!==r.review_hash)return fail("REVIEW_REQUIRED","REVIEW_INTEGRITY_HASH_INVALID",[r.id])
    const decision=r.decision.toUpperCase();if(decision==="INSUFFICIENT"){insufficient.push(r);continue}
    if(decision==="CONTRADICTS"||decision==="REJECTED"){contradict.push(r);continue}
@@ -148,6 +150,8 @@ export async function validateReviewedRequirementEvidence(input:{
    const source=r.source_record_id?sourceById.get(r.source_record_id)??null:null
    if(!source||!r.source_payload_hash||r.source_payload_hash!==source.payload_hash||!HASH.test(source.payload_hash))
     return fail("REVIEW_REQUIRED","REVIEW_SOURCE_HASH_OR_RECORD_INVALID",[r.id])
+   if(delegated&&source.source_code!=="TRENDLYNE_MCP"&&!approvedBankOfficialFallback(r,source,input.portfolioOwnerId,family))
+    return fail("REVIEW_REQUIRED","DELEGATED_SOURCE_AUTHORITY_NOT_PROVEN",[r.id])
    if(!Number.isFinite(time(source.retrieved_at))||time(source.retrieved_at)>sourceCutoffAtMs)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_POST_CUTOFF",[r.id])
    const payloadSecurity=str(source.raw_payload.security_id);if(payloadSecurity&&payloadSecurity!==securityId)return fail("REVIEW_REQUIRED","REVIEW_SOURCE_SECURITY_MISMATCH",[r.id])
    if(!r.supporting_quote?.trim()||!exactFragmentPresent(source.raw_payload,r.supporting_quote))return fail("REVIEW_REQUIRED","REVIEW_QUOTE_NOT_BOUND_TO_SOURCE",[r.id])
@@ -207,10 +211,21 @@ export async function validateReviewedRequirementEvidence(input:{
  if(!support.length&&insufficient.length)return fail("INSUFFICIENT","REVIEWED_SOURCE_INSUFFICIENT",insufficient.map(x=>x.id))
  if(!support.length)return fail("REVIEW_REQUIRED","NO_APPROVED_ACTIVE_REVIEW",active.map(x=>x.id))
  if(family==="NUMERIC_SERIES"){
-   const v=validateObservationSeries({rows:observations,definitions:input.definitions,minimum:input.minimum,evaluationAsOfMs,sourceCutoffAtMs})
+   // Scoped owner-approved primary-filing fallback. Never change global metric
+   // definitions or relabel source facts as Trendlyne.
+   const definitions=input.definitions.map(d=>{
+    const relevant=support.filter(r=>r.metadata.metric_code===d.code)
+    if(!relevant.length||!relevant.every(r=>{const s=r.source_record_id?sourceById.get(r.source_record_id):undefined;return s&&approvedBankOfficialFallback(r,s,input.portfolioOwnerId,family)}))return d
+    const sourceCodes=uniq(observations.filter(o=>o.metric_code===d.code).map(o=>o.source_code))
+    if(sourceCodes.length!==1)return d
+    return {...d,definition:{...d.definition,provider:sourceCodes[0],source_priority:sourceCodes,bank_source_admission_policy:"V1_4_BANK_PRIMARY_FILING_DELEGATION_V1"}}
+   })
+   const v=validateObservationSeries({rows:observations,definitions,minimum:input.minimum,evaluationAsOfMs,sourceCutoffAtMs})
    if(v.state!=="FRESH")return {...fail(v.state,v.reason,support.map(x=>x.id)),observations,sourceRecordIds:uniq(observations.map(x=>x.source_record_id)),
     researchDocumentIds:uniq(support.map(x=>x.research_document_id).filter((x):x is string=>Boolean(x))),lineage:{version:"V1_4_REVIEW_LEDGER_ADAPTER_V2",reviewIds:support.map(x=>x.id),reason:v.reason}}
-   return resultFrom(v.selected,support,input.documentSources,"REVIEWED_CANONICAL_OBSERVATION_READY")
+   const result=resultFrom(v.selected,support,input.documentSources,"REVIEWED_CANONICAL_OBSERVATION_READY")
+   const approvedFallback=support.every(r=>{const s=r.source_record_id?sourceById.get(r.source_record_id):undefined;return s&&approvedBankOfficialFallback(r,s,input.portfolioOwnerId,family)})
+   return approvedFallback?{...result,lineage:{...result.lineage,sourceAdmissionPolicy:"V1_4_BANK_PRIMARY_FILING_DELEGATION_V1",executor:"CODEX",personalOwnerReview:false}}:result
  }
  if(family==="OWNERSHIP_4Q"){
    const series=uniq(ownershipRows.map(x=>x.series)),bases=uniq(ownershipRows.map(x=>x.basis));if(series.length!==1||bases.length!==1)return fail("REVIEW_REQUIRED","OWNERSHIP_SERIES_OR_BASIS_MIXED",support.map(x=>x.id))
@@ -254,6 +269,18 @@ export function reconcileCanonicalAndReviewed(input:{canonicalRows:readonly Inpu
  const r=input.reviewed
  if(canonical.state==="CONFLICTING")return {authority:"CANONICAL" as const,validation:canonical,reviewed:r,reason:"CANONICAL_CONFLICT_PRESERVED"}
  if(r?.state==="CONFLICTING")return {authority:"CONFLICT" as const,validation:{state:"CONFLICTING" as const,reason:r.reason,selected:[]},reviewed:r,reason:"REVIEW_CONFLICT_PRESERVED"}
+ const approvedFallback=r?.state==="FRESH"&&r.lineage.sourceAdmissionPolicy==="V1_4_BANK_PRIMARY_FILING_DELEGATION_V1"
+ if(approvedFallback&&input.family==="NUMERIC_SERIES"){
+   const decimal=(v:number|string|null)=>String(v).replace(/(\.\d*?)0+$/u,"$1").replace(/\.$/u,"")
+   // Comparable retained facts may contradict a fallback even if other metadata
+   // is incomplete. Never select by retrieval recency or mix source authorities.
+   const conflict=input.canonicalRows.some(c=>r.observations.some(o=>c.metric_code===o.metric_code&&c.period_end===o.period_end
+     &&c.period_type===o.period_type&&c.unit===o.unit&&c.currency===o.currency&&c.consolidation_scope===o.consolidation_scope
+     &&c.numeric_value!==null&&o.numeric_value!==null&&decimal(c.numeric_value)!==decimal(o.numeric_value)))
+   if(conflict)return {authority:"CONFLICT" as const,validation:{state:"CONFLICTING" as const,reason:"OFFICIAL_FALLBACK_CANONICAL_VALUE_CONFLICT",selected:[]},reviewed:r,reason:"OFFICIAL_FALLBACK_CANONICAL_VALUE_CONFLICT"}
+   if(canonical.state==="FRESH")return {authority:"CANONICAL" as const,validation:canonical,reviewed:r,reason:"CANONICAL_FRESH_PRIMARY"}
+   return {authority:"REVIEW" as const,validation:{state:"FRESH" as const,reason:r.reason,selected:r.observations},reviewed:r,reason:"APPROVED_OFFICIAL_FILING_FALLBACK"}
+ }
  if(canonical.state==="FRESH"){
    if(r?.state==="FRESH"&&input.family==="NUMERIC_SERIES"&&r.observations.length){
      const combined=validateObservationSeries({rows:[...input.canonicalRows,...r.observations],definitions:input.definitions,minimum:input.minimum,evaluationAsOfMs:input.evaluationAsOfMs,sourceCutoffAtMs:input.sourceCutoffAtMs})
