@@ -50,7 +50,10 @@ jobs:
           from pathlib import Path
           p=Path("bank-original-source-artifact/manifest.json")
           m=json.loads(p.read_text())
-          raw=os.environ["CLOUDFLARE_R2_ACCOUNT_ID"].strip()\n          endpoint=raw if raw.startswith("https://") else "https://"+raw+".r2.cloudflarestorage.com"\n          from urllib.parse import urlparse\n          assert urlparse(endpoint).hostname.endswith(".r2.cloudflarestorage.com") and urlparse(endpoint).path in ("","/")
+          raw=os.environ["CLOUDFLARE_R2_ACCOUNT_ID"].strip()
+          endpoint=raw if raw.startswith("https://") else "https://"+raw+".r2.cloudflarestorage.com"
+          from urllib.parse import urlparse
+          assert urlparse(endpoint).hostname.endswith(".r2.cloudflarestorage.com") and urlparse(endpoint).path in ("","/")
           bucket=os.environ["CLOUDFLARE_R2_BUCKET"]
           for x in m["results"]:
             src=Path("bank-original-source-artifact")/x["filename"]
