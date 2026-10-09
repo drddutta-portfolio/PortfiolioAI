@@ -23,6 +23,9 @@ describe("V1-4 banking continuing-freshness plan (no IO)", () => {
   it("requests only absent completed stock sessions and one shared NIFTY_BANK delta", () => {
     const plan = planBankMaintenance(base())
     expect(plan.executionAllowed).toBe(false)
+    expect(plan.requiresManualCanary).toBe(true)
+    expect(plan.boundedTotalRequestCount).toBe(2)
+    expect(plan.boundedStockRequestCount).toBe(1)
     expect(plan.safeToAcquire).toBe(true)
     expect(plan.missingBenchmarkSessions).toEqual(["2026-10-08"])
     expect(plan.benchmarkFetchCount).toBe(1)
@@ -85,3 +88,18 @@ describe("V1-4 banking continuing-freshness plan (no IO)", () => {
     expect(()=>planBankMaintenance({...base(),benchmarkCode:"NIFTY_500" as "NIFTY_BANK"})).toThrow("BANK_BENCHMARK_IDENTITY_INVALID")
   })
 })
+
+describe("owner-approved bounded 14-call maintenance planning",()=>{
+ it("does not issue provider spending or activate unattended execution",()=>{
+  const plan=planBankMaintenance(base());expect(plan.executionAllowed).toBe(false);expect(plan.requiresManualCanary).toBe(true);
+ });
+ it("never plans more than one distinct missing trading session per bounded run",()=>{
+  const p=planBankMaintenance({...base(),completedSessions:["2026-10-07","2026-10-08","2026-10-09"]});
+  expect(p.safeToAcquire).toBe(false);expect(p.failureReasons).toContain("BUDGET_UNAVAILABLE");
+ });
+ it("caps 13 stock candidates and a single shared benchmark to 14 call attempts",()=>{
+  const ids=Array.from({length:13},(_,i)=>"00000000-0000-0000-0000-"+String(i).padStart(12,"0"));
+  const p=planBankMaintenance({...base(),securityIds:ids,completedSessions:["2026-10-08"],stockSessions:{},benchmarkSessions:[]});
+  expect(p.boundedStockRequestCount).toBe(13);expect(p.boundedTotalRequestCount).toBe(14);expect(p.benchmarkFetchCount).toBe(1);
+ });
+});
