@@ -32,7 +32,7 @@ export function CanonicalEvidenceReadinessPanel({ portfolioId, securityId, asset
   const bankVeto = snapshot.profileCode === "BANK" ? bankCurrentDisplayVeto(requirements, currentClock) : null
   return <section className="panel" aria-label="Canonical methodology evidence readiness">
     <h2>{compact ? "Research Readiness" : "Methodology evidence requirements"}</h2>
-    <p><strong>{label(snapshot.snapshotStatus)}</strong> · {label(snapshot.profileCode)}{snapshot.subprofileCode ? ` / ${label(snapshot.subprofileCode)}` : ""} · snapshot as of {snapshot.asOfDate}</p>
+    <p><strong>{snapshot.profileCode === "BANK" ? `HISTORICAL ${label(snapshot.snapshotStatus)} (CURRENT NOT VERIFIED)` : label(snapshot.snapshotStatus)}</strong> · {label(snapshot.profileCode)}{snapshot.subprofileCode ? ` / ${label(snapshot.subprofileCode)}` : ""} · snapshot as of {snapshot.asOfDate}</p>
     {bankSelected && !compact ? <div className="panel" aria-label="Bank current canonical validation">
       <h3>Live Development canonical revalidation</h3>
       <p>Owner-session read-only check. Prospective evidence status is NOT persisted research READY; no provider calls, reviews or selection writes are permitted.</p>
