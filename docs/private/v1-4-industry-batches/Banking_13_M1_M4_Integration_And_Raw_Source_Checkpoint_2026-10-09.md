@@ -8,7 +8,7 @@
 - Commit `8676504b5ef3a4068654b1d7bbb7c8deaf773138`: added integration guard regression assertions.
 - Earlier `v14-bank-approved-direct-preflight.ts` remains a non-authoritative candidate preflight; it does not by itself prove source truth or issue ACCEPT/READY.
 - No metric definition registered: Development `fundamental_metric_definitions` still has zero of the four codes as of this checkpoint. No migration/schema mutation is authorized.
-- **Important authorization gap:** existing scoped delegated factual-review policy was approved for precise NPA requirements. An M1–M4 *methodology* approval does not extend that policy or synthesize an accepted reviewer. Therefore no M1–M4 factual admission was performed without a demonstrably valid existing owner/delegated authorization.
+- **Corrected authorization finding:** the existing scoped delegated policy `v14-bank-approved-delegation.json` explicitly includes M1–M4 codes (as well as NPA and other requirements). It is therefore unnecessary to invent a new delegated policy merely to admit a properly bound M1–M4 fact. However, the pre-existing policy's issuer/NSE fallback and integrity controls must be met for each factual review, and methodology approval alone never creates an `ACCEPTED` review. No M1–M4 admission was executed because exact qualifying original-source evidence has not yet been demonstrated. For Trendlyne, the separate provider-specific source semantics and owner-review requirements also remain in force.
 
 ## Read-only retained-source inspection
 
@@ -28,7 +28,7 @@ Counts are retained raw *records*, not bank/metric-qualified fact counts, period
 ## Remaining hard boundaries
 
 1. Source-grade M1–M4 original issuer regulatory/audited documents and exact quoted native fragments per bank; proper source/period and secure storage linkages.
-2. Appropriately authorized controlled registry and factual-review write path, preserving `AGENTS.md` migration instructions; do not extend NPA delegation without independent authorization.
+2. Appropriately authorized controlled registry and factual-review write path, preserving `AGENTS.md` migration instructions; reuse the existing M1–M4 listed delegated policy without weakening its source and execution contract.
 3. Genuine owner-authenticated current 299-requirement handler execution and individual materialization only after all requirements pass.
 4. **M5 PB_RELATIVE, M6 PB_ADJUSTED_FOR_ROE, M7 PE_TTM_RELATIVE are mandatory applicable in all 13 selected bank snapshots** (13 each). Their deferral therefore independently blocks Gate A for the full frozen banking population. Do not remove required flags or reuse implied upside.
 5. Gate B is still planning/testing only. No recurring paid provider calls, schedule, unattended grant or automatic materialization authorized.
