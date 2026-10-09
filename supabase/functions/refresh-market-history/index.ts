@@ -320,7 +320,29 @@ Deno.serve(async (request) => {
           requested_to: kolkataDateTime(to),
         },
       }))
-      const { error: historyError } = await admin.from("market_price_history").upsert(historyRows, { onConflict: "security_id,provider_code,interval,period_start" })
+      // Fail closed on corrections: an existing OHLCV row is immutable in this legacy
+      // control plane. Corrections require a source-bound supersession path.
+      const sessionStarts = historyRows.map(row => row.period_start)
+      const { data: retainedRows, error: retainedError } = await admin
+        .from("market_price_history")
+        .select("period_start,open,high,low,close,volume")
+        .eq("security_id", security.id)
+        .eq("provider_code", MARKET_DATA_PROVIDER)
+        .eq("interval", "ONE_DAY")
+        .in("period_start", sessionStarts)
+      if (retainedError) throw retainedError
+      const retainedByDate = new Map((retainedRows ?? []).map(row => [new Date(row.period_start).toISOString(), row]))
+      for (const incoming of historyRows) {
+        const previous = retainedByDate.get(new Date(incoming.period_start).toISOString())
+        if (!previous) continue
+        for (const field of ["open", "high", "low", "close", "volume"] as const) {
+          if (String(Number(previous[field])) !== String(Number(incoming[field]))) {
+            throw new SafeOperationalError("HISTORY_CORRECTION_REQUIRES_REVIEW",
+              "An existing history session conflicts with provider data; source-bound correction review is required.", 409)
+          }
+        }
+      }
+      const { error: historyError } = await admin.from("market_price_history").upsert(historyRows, { onConflict: "security_id,provider_code,interval,period_start", ignoreDuplicates: true })
       if (historyError) throw historyError
 
       const metrics = deriveMetrics(candles)
