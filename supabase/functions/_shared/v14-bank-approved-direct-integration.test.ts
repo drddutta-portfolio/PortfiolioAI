@@ -29,6 +29,12 @@ describe("M1-M4 binding inside canonical reviewed-evidence owner",()=>{
   expect(materializer).toContain('reviewed?.state!=="FRESH"')
   expect(materializer).toContain("QUALIFY_SOURCE_BOUND_BANK_DIRECT_REVIEW")
  })
+ it("rejects non-allowlisted providers and absent exact issuer identity",()=>{
+  expect(source).toContain("BANK_DIRECT_SOURCE_AUTHORITY_NOT_APPROVED")
+  expect(source).toContain("BANK_DIRECT_ISSUER_SECURITY_IDENTITY_NOT_PROVEN")
+  expect(source).toContain("approvedSources.includes(source.source_code)")
+  expect(source).toContain("source.raw_payload.security_id")
+ })
  it("never gates historical NPA or invents M5-M7",()=>{
   expect(source).not.toContain('["GROSS_NPA","NET_NPA","NIM_TTM"')
   expect(source).not.toContain('"PB_ADJUSTED_FOR_ROE","PB_RELATIVE","PE_TTM_RELATIVE"].includes(requirementCode)')
