@@ -166,6 +166,40 @@ export async function validateReviewedRequirementEvidence(input:{
       return fail("REVIEW_REQUIRED","REVIEW_NUMERIC_METADATA_INCOMPLETE",[r.id])
      const binding=sourceBinding(r,source);if(!binding.ok)return fail("REVIEW_REQUIRED",binding.reason,[r.id])
      if(binding.value!==value)return fail("REVIEW_REQUIRED","NUMERIC_SOURCE_VALUE_MISMATCH",[r.id])
+     // M1-M4 owner-approved source-only contracts: do not trust a claimed
+     // certification flag or derive a financial fact from unbound metadata.
+     // sourceBinding has independently verified the exact fragment in the
+     // immutable source record and its metric/period/value anchors.
+     if(["NIM_TTM","CET1_RATIO","CAPITAL_ADEQUACY_RATIO","ROA_ANNUAL"].includes(requirementCode)){
+       if(metric!==requirementCode || r.unit!=="PERCENT" || Number(value)<=0)
+         return fail("REVIEW_REQUIRED","BANK_DIRECT_METRIC_UNIT_OR_IDENTITY_INVALID",[r.id])
+       const literal=binding.fragment.toLowerCase()
+       const start=r.period_start,end=r.period_end
+       if(requirementCode==="NIM_TTM"&&(
+         !start||r.period_type!=="TRAILING_FOUR_QUARTERS"||
+         Date.parse(end+"T00:00:00Z")-Date.parse(start+"T00:00:00Z")<350*86400000||
+         !/(nim|net interest margin)/i.test(literal)||
+         !/(ttm|trailing (four|4) quarters|last (four|4) quarters)/i.test(literal)||
+         !/(average interest.earning assets|average earning assets)/i.test(literal)
+       ))return fail("REVIEW_REQUIRED","BANK_DIRECT_TTM_NIM_SOURCE_PROOF_MISSING",[r.id])
+       if((requirementCode==="CET1_RATIO"||requirementCode==="CAPITAL_ADEQUACY_RATIO")&&(
+         start!==end||r.period_type!=="REGULATORY_AS_OF"||
+         !/basel\s*(iii|3)/i.test(literal)||
+         !/(risk.weighted assets|rwa)/i.test(literal)
+       ))return fail("REVIEW_REQUIRED","BANK_DIRECT_BASEL_III_SOURCE_PROOF_MISSING",[r.id])
+       if(requirementCode==="CET1_RATIO"&&!/(cet1|common equity tier[ -]?1)/i.test(literal))
+         return fail("REVIEW_REQUIRED","BANK_CET1_NOT_EXPLICITLY_SOURCED",[r.id])
+       if(requirementCode==="CAPITAL_ADEQUACY_RATIO"&&!/(total capital adequacy|total crar|total car|total regulatory capital)/i.test(literal))
+         return fail("REVIEW_REQUIRED","BANK_TOTAL_CAR_NOT_EXPLICITLY_SOURCED",[r.id])
+       if(requirementCode==="ROA_ANNUAL"&&(
+         !start||r.period_type!=="YEAR"||
+         Date.parse(end+"T00:00:00Z")-Date.parse(start+"T00:00:00Z")<350*86400000||
+         !/(return on assets|annual roa)/i.test(literal)||
+         !/(annual|financial year|full.year|audited)/i.test(literal)||
+         !/(average (total )?assets)/i.test(literal)
+       ))return fail("REVIEW_REQUIRED","BANK_DIRECT_FULL_YEAR_ROA_SOURCE_PROOF_MISSING",[r.id])
+     }
+
      const document=r.research_document_id?documentById.get(r.research_document_id)??null:null
      if(document){
        const db=validateDocumentBinding(r,document,source,input.documentSources);if(!db.ok)return fail("REVIEW_REQUIRED",db.reason,[r.id])
