@@ -24,7 +24,7 @@ jobs:
         with:
           name: banking-v14-pr124-original-pdf-sources
           path: bank-original-source-artifact/
-          retention-days: 7
+          retention-days: 90
           if-no-files-found: error
       - name: Report missing original bytes without claiming admission
         if: steps.acquire.outcome == 'failure'
