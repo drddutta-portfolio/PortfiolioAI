@@ -1,5 +1,10 @@
 name: Banking V1-4 Original PDF Acquisition (One Shot)
 on:
+  pull_request:
+    types: [synchronize]
+    paths:
+      - '.github/workflows/banking-v14-original-pdf-acquisition.yml'
+      - 'scripts/banking-v14-original-pdf-acquisition.mjs'
   workflow_dispatch:
 permissions:
   contents: read
@@ -35,7 +40,7 @@ jobs:
           from pathlib import Path
           p=Path("bank-original-source-artifact/manifest.json")
           m=json.loads(p.read_text())
-          assert len(m["results"])==3
+          assert len(m["results"])==4
           assert all(x["status"]=="ORIGINAL_BYTES_CAPTURED_NOT_ADMITTED" for x in m["results"])
           for x in m["results"]:
             x["r2_object_key"]="portfolioai-research/development/v1-4/bank-original-pdf/sha256/"+x["originalSha256"]+".pdf"
@@ -63,7 +68,7 @@ jobs:
             dest.unlink()
             x["durable_storage_verified"]=True
           p.write_text(json.dumps(m,indent=2)+"\n")
-          print("R2_ORIGINAL_BYTES_PRESERVED=3; INDEPENDENT_SHA256_READBACK=3")
+          print("R2_ORIGINAL_BYTES_PRESERVED=4; INDEPENDENT_SHA256_READBACK=4")
           PY
       - name: Upload one-shot original source bytes and manifest
         if: always()
