@@ -1,3 +1,17 @@
+## Banking V1-4 — original bytes acquired, delegated issuer-source boundary — 10 October 2026
+
+**Progress (NOT Gate A completion):** GitHub Actions one-shot original issuer PDF acquisition succeeded for ICICIBANK, BANDHANBNK, KARURVYSYA. Independently rehashed original PDF bytes, verified exact standalone/consolidated 30 June 2026 Basel III CET1 and total CRAR tables. Original-source artifact run `37977912532`, artifact `11639583150`; 90-day retained rerun `37978638995`, artifact `11640330272` expires **2027-01-07**. Three PDFs and actual hashes/values/remaining source gaps are recorded in `docs/private/v1-4-industry-batches/Banking_13_Original_Bytes_Capital_Ratio_Qualification_2026-10-10.json` and `Banking_13_Acquisition_And_Admission_Readiness_2026-10-10.md`. No PDF bytes committed; content-addressed R2 copy remains uncompleted.
+
+M1–M4 source authority now explicitly checked inside canonical factual review against registry source_priority and exact source raw security_id. Dedicated source numeric-validator test includes unknown provider, invalid original provenance, mixed official/Trendlyne bases and period/scope mismatch. **Code commit tests need successful exact-HEAD CI before live deploy.** Deployed canonical function still v47, with earlier source-guard but not this newest review-source whitelist change.
+
+**Crucial review authorization finding:** existing delegated `approvedBankOfficialFallback` covers exact NSE `nsearchives.nseindia.com/corporate/` originals only; these issuer-hosted PDFs do not satisfy that scoped path even with correct original byte hashes. Do not silently widen delegation. Published_at, long-lived R2 original linkage, exact chosen regulatory perimeter and explicit M1–M4 financial dual-clock policy remain to be proven/approved. The four definitions remain registered **inactive**; issuer source values are not `REVIEW_ACCEPTED` yet. Existing 26 NPA ACCEPTED unchanged. No M1–M4 reviews, observations or READY selections.
+
+**AUBANK exception:** RBI Basel III circular explicitly excludes SFBs and separate 2025 SFB capital directions apply. AU's June 2026 Pillar 3 is labelled Basel II. Its M2/M3 BANK Basel III applicability requires a **bank-specific owner decision**, not an invented Basel III fact, dropped cohort member or automatic NA. See cited RBI/issuer links in acquisition readiness document. M5–M7 still mandatory and deferred; O1 recurrence OFF; Production unchanged.
+
+**Independent persisted readback:** 0/13 READY; 11 REVIEW_REQUIRED, 2 CONFLICTING; ₹0/₹2,05,138.62 READY. Gate A/B NOT PROVEN.
+
+---
+
 ## Banking V1-4 inherited freshness and direct-source compatibility — 10 October 2026
 
 **PR #124** continuation from `b76deb83675a08f24b22142d0edf90dbc1f28d9b` (both CI checks SUCCESS). BANK profile requirements contain no explicit M1–M4 `freshnessPolicy` even though other profiles explicitly inherit `FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS`. A proposed BANK dual-clock policy (150 days reporting end for quarter/regulatory, 550 days annual, independent source-verification time, explicit amendment supersession) is **NOT APPROVED**, so four M1–M4 definitions remain inactive. No invented 120/90-day activation. Full boundary examples and official-source investigation are in `docs/private/v1-4-industry-batches/Banking_13_Dual_Clock_Freshness_And_Issuer_Source_Investigation_2026-10-10.md`.
