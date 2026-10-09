@@ -1,0 +1,91 @@
+{
+  "version": "BANK_V1_4_ORIGINAL_ISSUER_CANDIDATES_V1",
+  "acquisition": {
+    "run_id": 37977912532,
+    "artifact_id": 11639583150,
+    "artifact_url": "https://github.com/drddutta-portfolio/PortfiolioAI/actions/runs/37977912532/artifacts/11639583150",
+    "retention_days": 7,
+    "method": "GitHub Actions direct HTTPS PDF bytes, independent local SHA256 verified",
+    "retrieval_window": "2026-10-09T19:06:22Z/2026-10-09T19:06:29Z"
+  },
+  "state": "ORIGINAL_BYTES_CAPTURED / EXACT_METRIC_LOCATED; SOURCE_FACT_QUALIFIED=false; REVIEW_ACCEPTED=false",
+  "issuer_sources": [
+    {
+      "symbol": "ICICIBANK",
+      "url": "https://www.icici.bank.in/content/dam/icicibank/missing-assets/basel-pillar-3-disclosureat-june-30-2026.pdf",
+      "sha256": "fb01aa8597ecff1a2ddad6d24c993a71f04f643d2f86fd788ba1d1d5720f559c",
+      "bytes": 831504,
+      "reporting_date": "2026-06-30",
+      "scope_options": [
+        {
+          "scope": "CONSOLIDATED",
+          "CET1_RATIO": "16.11",
+          "CAPITAL_ADEQUACY_RATIO": "16.75"
+        },
+        {
+          "scope": "STANDALONE",
+          "CET1_RATIO": "16.19",
+          "CAPITAL_ADEQUACY_RATIO": "16.84"
+        }
+      ],
+      "pdf_page_index": 2,
+      "exact_source_fragment": "CET1 CRAR 16.11% 16.19% ... Total CRAR 16.75% 16.84%",
+      "publication_at": "NOT_PROVEN_FROM_ORIGINAL_PDF",
+      "review_gap": [
+        "Issuer publication timestamp with authenticated evidence",
+        "Approved regulatory-perimeter selection",
+        "Existing delegated policy does not allow issuer-site URL",
+        "Four M1–M4 definitions inactive pending approved dual-clock policy",
+        "Durable original document archive link"
+      ]
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "url": "https://www.bandhan.bank.in/sites/default/files/2026-07/Basel-III-Disclosure-as-on-June-30-2026.pdf",
+      "sha256": "36fe252bcf987cb2fcbeeb40f35c5ff45d747123cac1c4fa5874ec674f79d11a",
+      "bytes": 670216,
+      "reporting_date": "2026-06-30",
+      "scope_options": [
+        {
+          "scope": "STANDALONE",
+          "CET1_RATIO": "17.54",
+          "CAPITAL_ADEQUACY_RATIO": "18.15"
+        }
+      ],
+      "pdf_page_index": 2,
+      "exact_source_fragment": "The standalone CRAR position of the Bank as on June 30, 2026 ... CET I 17.54% ... TOTAL 18.15%",
+      "publication_at": "NOT_PROVEN_FROM_ORIGINAL_PDF",
+      "review_gap": [
+        "Verified issuer publication timestamp",
+        "Delegated issuer-site URL approval or authorized owner review",
+        "Four M1–M4 definitions inactive pending expiry policy",
+        "Durable original-document archive link"
+      ]
+    },
+    {
+      "symbol": "KARURVYSYA",
+      "url": "https://www.kvb.bank.in/docs/disclosure-of-june-2026.pdf",
+      "sha256": "b008bfaec6a0fccf91aaab45a8ef2cd7f445a2b4968991146532a1c4525056d6",
+      "bytes": 786715,
+      "reporting_date": "2026-06-30",
+      "scope_options": [
+        {
+          "scope": "STANDALONE_NO_SUBSIDIARIES",
+          "CET1_RATIO": "17.98",
+          "CAPITAL_ADEQUACY_RATIO": "18.61"
+        }
+      ],
+      "pdf_page_index": 2,
+      "exact_source_fragment": "7. CET 1 Ratio (%) 17.98 ... 10. Total CRAR (Basel III) (%) 18.61",
+      "publication_at": "NOT_PROVEN_FROM_ORIGINAL_PDF",
+      "review_gap": [
+        "Verified issuer publication timestamp",
+        "Delegated issuer-site URL approval or authorized owner review",
+        "Four M1–M4 definitions inactive pending expiry policy",
+        "Durable original-document archive link"
+      ]
+    }
+  ],
+  "source_authority_observation": "Existing V1_4_BANK_PRIMARY_FILING_DELEGATION_V1 fallback requires https://nsearchives.nseindia.com/corporate/ and does NOT cover issuer-hosted PDFs; do not spoof source_code or grant.",
+  "compliance": "M5-M7 deferred, scheduler OFF, no factual ACCEPT executed"
+}
