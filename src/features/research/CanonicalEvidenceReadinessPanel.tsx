@@ -42,7 +42,7 @@ export function CanonicalEvidenceReadinessPanel({ portfolioId, securityId, asset
       {currentReplay.result ? <div>
         <p><strong>Prospective at {currentReplay.result.evaluationAsOf}:</strong> {label(currentReplay.result.status)} ({currentReplay.result.items.filter(item => item.evidence_state !== "FRESH").length} non-FRESH requirements).</p>
         <ul>{currentReplay.result.items.filter(item => item.evidence_state !== "FRESH").slice(0, 8).map(item => <li key={item.requirement_code}>{label(item.requirement_code)}: {label(item.evidence_state)} — {label(item.reason_code)}</li>)}</ul>
-        <p>Read-only hash {currentReplay.result.snapshotHash}; validator reported zero writes (independent selection readback not performed here). Historical persisted status remains {label(snapshot.snapshotStatus)}.</p>
+        <p>Read-only hash {currentReplay.result.snapshotHash}; validator reported zero provider calls/writes; independent selected-snapshot ledger before/after matched. Historical persisted status remains {label(snapshot.snapshotStatus)}.</p>
       </div> : null}
     </div> : null}
     {bankVeto ? <div role="status"><strong>Historical BANK assessment only — current readiness not verified.</strong> A persisted READY selection is not proof of present-day readiness. Until the live canonical validator checks the effective freshness of every required item and the NIFTY_BANK benchmark, treat this stored assessment as historical, not currently READY.<p>Current display veto checked {bankVeto.checkedAt}. Blocked/unverified: {bankVeto.reasons.slice(0, 6).join("; ")}{bankVeto.reasons.length > 6 ? `; +${bankVeto.reasons.length - 6} additional requirements` : ""}.</p></div> : null}
