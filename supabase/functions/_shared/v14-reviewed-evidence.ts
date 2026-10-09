@@ -171,6 +171,14 @@ export async function validateReviewedRequirementEvidence(input:{
      // sourceBinding has independently verified the exact fragment in the
      // immutable source record and its metric/period/value anchors.
      if(["NIM_TTM","CET1_RATIO","CAPITAL_ADEQUACY_RATIO","ROA_ANNUAL"].includes(requirementCode)){
+       const directDefinition=input.definitions.find(x=>x.code===metric)
+       const approvedSources=directDefinition?.definition?.source_priority
+       if(!Array.isArray(approvedSources)||!approvedSources.includes(source.source_code)
+         ||!["COMPANY_EXCHANGE_FILING","NSE_OFFICIAL","TRENDLYNE_MCP"].includes(source.source_code))
+         return fail("REVIEW_REQUIRED","BANK_DIRECT_SOURCE_AUTHORITY_NOT_APPROVED",[r.id])
+       if(str(source.raw_payload.security_id)!==securityId)
+         return fail("REVIEW_REQUIRED","BANK_DIRECT_ISSUER_SECURITY_IDENTITY_NOT_PROVEN",[r.id])
+
        if(metric!==requirementCode || r.unit!=="PERCENT" || Number(value)<=0)
          return fail("REVIEW_REQUIRED","BANK_DIRECT_METRIC_UNIT_OR_IDENTITY_INVALID",[r.id])
        const literal=binding.fragment.toLowerCase()
