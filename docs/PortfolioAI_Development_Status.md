@@ -1,3 +1,13 @@
+## Banking V1-4 inherited freshness and direct-source compatibility — 10 October 2026
+
+**PR #124** continuation from `b76deb83675a08f24b22142d0edf90dbc1f28d9b` (both CI checks SUCCESS). BANK profile requirements contain no explicit M1–M4 `freshnessPolicy` even though other profiles explicitly inherit `FUNDAMENTAL_150_DAYS_ANNUAL_550_DAYS`. A proposed BANK dual-clock policy (150 days reporting end for quarter/regulatory, 550 days annual, independent source-verification time, explicit amendment supersession) is **NOT APPROVED**, so four M1–M4 definitions remain inactive. No invented 120/90-day activation. Full boundary examples and official-source investigation are in `docs/private/v1-4-industry-batches/Banking_13_Dual_Clock_Freshness_And_Issuer_Source_Investigation_2026-10-10.md`.
+
+Corrected a demonstrated pre-existing definition incompatibility through the existing data registry: `definition.provider=TRENDLYNE_MCP` conflicted with the owner-approved direct `source_priority` hierarchy and the canonical validator's exact provider check, unfairly rejecting official issuer/NSE records. Removed only the hardcoded provider restriction from the **four inactive rows**, retaining `source_priority` and source-binding guards; independently returned all four with source hierarchy intact and `is_active=false`. No schema migration, write of review/observation, paid call or READY change.
+
+Public original June 2026 Basel III disclosures actually inspected for **BANDHANBNK** (standalone 17.54% CET1 / 18.15% CRAR) and **KARURVYSYA** (17.98% CET1 / 18.61% CRAR), plus earlier ICICIBANK 16.11% / 16.75% consolidated and 16.19% / 16.84% standalone. Official issuer directory links identified for the remaining banks, with precise missing source-level proof tracked. Original PDF bytes could not be obtained via container transport; **0 new reviews or admissions**. Existing 26 NPA ACCEPTED preserved; 0/13 READY; M5–M7 deferred; maintenance scheduler OFF.
+
+---
+
 ## Banking V1-4 M1–M4 registry compatibility and deployed validator — 9 October 2026
 
 PR #124 code commit `838a9406` passed Banking V1-4 Full Verification and Architecture Guard. Canonical Development `p7-ic2-materialize-readiness` was deployed as **v47 ACTIVE**, SHA-256 `c5dff71f63cdcff0fea1eeacbecda9c1fa3927e800676bc1a3d39b4fbf48abf6`, with preserved custom owner/grant authorization boundary. Independent live bundle readback confirmed source-hash review and M1–M4 source-only/bypass guards.
