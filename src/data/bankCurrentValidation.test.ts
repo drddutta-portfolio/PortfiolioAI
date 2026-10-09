@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { validateEffectiveBankReadOnly } from "./bankCurrentValidation"
 const invoke=vi.hoisted(()=>vi.fn())
+const selected=vi.hoisted(()=>vi.fn())
+vi.mock("../lib/supabase",()=>({supabase:{from:()=>({select:()=>({eq:()=>({eq:()=>({order:()=>({limit:selected})})})})})}}))
 vi.mock("./bankingValidationRepository",()=>({invokeBankingReadOnlyValidation:invoke}))
 const portfolio="6193a4aa-3235-4057-bddc-209fcf443fc2"
 const security="6771f493-c29a-477e-8cc8-2bede0941e44"
@@ -10,7 +12,11 @@ function sample():Record<string,unknown> {
   snapshotIds:[],selectionIds:[],writeTotals:{snapshotsCreated:0,snapshotsReused:0,selectionsCreated:0,selectionsReused:0},
   results:[{securityId:security,status:"REVIEW_REQUIRED",snapshotHash:"a".repeat(64),items:[{requirement_code:"ROE_ANNUAL",evidence_state:"REVIEW_REQUIRED",reason_code:"REPORTING_PERIOD_TYPE_NOT_PROVEN"}]}]}
 }
-beforeEach(()=>invoke.mockReset())
+beforeEach(()=>{
+ invoke.mockReset()
+ selected.mockReset()
+ selected.mockResolvedValue({data:[{id:"sel-a",snapshot_id:"snap-a",selected_at:"2026-10-09T01:00:00Z"}],count:1,error:null})
+})
 describe("owner-session one-bank canonical current validation",()=>{
  it("sends only exact read-only action, identity and current cutoff",async()=>{
   invoke.mockResolvedValue(sample())
@@ -34,6 +40,17 @@ describe("owner-session one-bank canonical current validation",()=>{
    {...sample(),results:[{...((sample().results as Record<string,unknown>[])[0]),securityId:portfolio}]},
    {...sample(),results:[{...((sample().results as Record<string,unknown>[])[0]),items:[]}]},
   ]) {invoke.mockResolvedValueOnce(bad);await expect(validateEffectiveBankReadOnly(portfolio,security,cutoff)).rejects.toThrow()}
+ })
+ it("rejects a concurrent canonical selection change despite zero reported writes",async()=>{
+   invoke.mockResolvedValue(sample())
+   selected.mockResolvedValueOnce({data:[{id:"sel-a",snapshot_id:"snap-a",selected_at:"2026-10-09T01:00:00Z"}],count:1,error:null})
+     .mockResolvedValueOnce({data:[{id:"sel-b",snapshot_id:"snap-b",selected_at:"2026-10-09T02:00:00Z"}],count:2,error:null})
+   await expect(validateEffectiveBankReadOnly(portfolio,security,cutoff)).rejects.toThrow("BANK_READ_ONLY_SELECTED_SNAPSHOT_CHANGED")
+ })
+ it("requires independent selection read access and does not trust validator counters alone",async()=>{
+  selected.mockResolvedValueOnce({data:[],count:null,error:{message:"Access denied"}})
+  await expect(validateEffectiveBankReadOnly(portfolio,security,cutoff)).rejects.toThrow("BANK_SELECTED_SNAPSHOT_READBACK_UNAVAILABLE")
+  expect(invoke).not.toHaveBeenCalled()
  })
  it("never issues a call for invalid security or portfolio IDs",async()=>{
   await expect(validateEffectiveBankReadOnly("not-a-uuid",security,cutoff)).rejects.toThrow("SCOPE_INVALID")
