@@ -97,7 +97,7 @@ export function planBankMaintenance(input: BankMaintenanceInput): BankMaintenanc
       expiredOrUnproven: expired || expiryUnproven,
       reviewPending,
       evaluationRequired: expired || expiryUnproven || reviewPending || missing.length > 0,
-      mustNotDisplayCurrentReady: expired || expiryUnproven || reviewPending || missing.length > 0 || !input.calendarVerified,
+      mustNotDisplayCurrentReady: expired || expiryUnproven || reviewPending || missing.length > 0 || missingBenchmarkSessions.length > 0 || !input.calendarVerified,
       reasons,
     }
   })
