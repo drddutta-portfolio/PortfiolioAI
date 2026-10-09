@@ -46,6 +46,10 @@ export interface BankMaintenancePlan {
   readonly benchmarkFetchCount: 0 | 1
   readonly safeToAcquire: boolean
   readonly failureReasons: readonly BankMaintenanceReason[]
+  /** Owner-approved upper bound, not authority to execute provider calls. */
+  readonly boundedStockRequestCount: number
+  readonly boundedTotalRequestCount: number
+  readonly requiresManualCanary: true
 }
 
 const validDate = (v: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(v) &&
@@ -101,12 +105,19 @@ export function planBankMaintenance(input: BankMaintenanceInput): BankMaintenanc
       reasons,
     }
   })
+  const boundedStockRequestCount=stockDecisions.filter(d=>d.acquireStockSessions.length>0).length
+  const boundedTotalRequestCount=boundedStockRequestCount+(missingBenchmarkSessions.length>0?1:0)
+  if(sessions.length>1 && boundedTotalRequestCount>0)failureReasons.push("BUDGET_UNAVAILABLE")
+  if(boundedTotalRequestCount>14)failureReasons.push("BUDGET_UNAVAILABLE")
   return {
     executionAllowed: false,
+    boundedStockRequestCount,
+    boundedTotalRequestCount,
+    requiresManualCanary:true,
     stockDecisions,
     missingBenchmarkSessions,
     benchmarkFetchCount: missingBenchmarkSessions.length ? 1 : 0,
-    safeToAcquire,
+    safeToAcquire:failureReasons.length===0,
     failureReasons,
   }
 }
