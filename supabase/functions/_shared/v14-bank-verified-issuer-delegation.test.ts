@@ -22,7 +22,7 @@ const source={
  original_url:"https://www.icici.bank.in/content/dam/icicibank/missing-assets/basel-pillar-3-disclosureat-june-30-2026.pdf",
  original_sha256:sha,r2_verified_sha256:sha,r2_bucket:issuerPolicy.storageBucket,
  r2_object_key:issuerPolicy.storageKeyPrefix+sha+".pdf",original_bytes_verified_at:"2026-10-09T19:25:46Z",
- published_at:"2026-07-18T09:00:00Z",
+ published_at:"2026-07-18T09:00:00Z",factual_review_status:"SOURCE_FACT_QUALIFIED",source_text_attestation:"VERIFIED_FROM_ORIGINAL_PDF_BYTES",
  },
 } satisfies ReviewedSourceRecord;
 const permits=(s:ReviewedSourceRecord=source,r:RequirementReview=review)=>approvedBankOfficialFallback(r,s,issuerPolicy.ownerId,"NUMERIC_SERIES");
@@ -38,6 +38,7 @@ describe("owner-approved issuer-hosted BANK M1-M4 fallback",()=>{
   expect(permits(sourceForSbi,reviewForSbi)).toBe(true)
   expect(permits({...sourceForSbi,raw_payload:{...sourceForSbi.raw_payload,original_url:original_url+"&other=true"}},reviewForSbi)).toBe(false)
  });
+ it("blocks raw-only candidate captures from factual admission",()=>expect(permits({...source,raw_payload:{...source.raw_payload,factual_review_status:"PENDING"}})).toBe(false));
  it("blocks a foreign issuer host",()=>expect(permits({...source,raw_payload:{...source.raw_payload,original_url:"https://example.com/official.pdf"}})).toBe(false));
  it("blocks wrong bank identity",()=>expect(permits({...source,raw_payload:{...source.raw_payload,security_id:"other-bank"}})).toBe(false));
  it("blocks unverified original-byte hash",()=>expect(permits({...source,raw_payload:{...source.raw_payload,r2_verified_sha256:"b".repeat(64)}})).toBe(false));
