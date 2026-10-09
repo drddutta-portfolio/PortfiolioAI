@@ -1,5 +1,7 @@
 # Banking V1-4 acceptance execution — 9 October 2026
 
+> Historical read-only checkpoint. Later authorized acquisition, Development deployments and history qualification are recorded in [Banking_13_Acquisition_And_Admission_Result_2026-10-09.md](Banking_13_Acquisition_And_Admission_Result_2026-10-09.md). Zero-write/no-provider statements below apply only to this earlier checkpoint.
+
 ## Current disposition
 
 NOT PROVEN. Actual owner replay accounts for 13 securities / 299 requirement items: 15 FRESH, 284 blocked, zero prospective READY. Fresh Development readback at 2026-10-09T01:30:38.489233Z confirms persisted 11 REVIEW_REQUIRED / 2 CONFLICTING / 0 READY. No database, provider, R2, deployment or grant mutation was performed in this continuation.

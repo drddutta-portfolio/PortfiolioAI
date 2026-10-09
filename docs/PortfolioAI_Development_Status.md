@@ -1,8 +1,16 @@
-## Banking V1-4 evidence execution — 9 October 2026
+## Banking V1-4 executed acquisition and admission repairs — 9 October 2026
 
-Actual owner replay: 299 items / 15 FRESH / 284 blocked / 0 prospective READY. Fresh SQL readback confirms 0/13 persisted READY and unchanged selected snapshot IDs. All 13 Angel One mappings and NIFTY_BANK mapping verified. Of 470 retained fundamental observations, 318 lack period_end and 468 have UNKNOWN/null scope; safe bulk admission is not established. No active unconsumed portfolio execution grants; no provider secrets/tool transport in this managed runtime. Existing incremental history handlers are fixed to October 7 and the stock handler upserts overlap, so they must not be used unchanged for the proposed October 8 append-only tails.
+**Banking NOT PROVEN: 0/13 persisted READY, 11 REVIEW_REQUIRED, 2 CONFLICTING; READY frozen value zero.** Independent post-execution readback confirms unchanged selected snapshot IDs. Original owner replay remains 299 requirements / 15 FRESH / 284 blocked; no later full authenticated banking replay is claimed.
 
-Concrete 14-request tail package, all-299-item remediation worklist, source inventory and independent persisted readback committed under `docs/private/v1-4-industry-batches/`; acceptance report `Banking_13_Acceptance_Execution_2026-10-09.md`. No provider, database/R2, deployment, grant or canonical mutation in this continuation. No financial semantics weakened. Banking V1-4 NOT PROVEN; provider execution and source-bound admission remain gated. No V1-5 work.
+Following explicit owner authorization, executed 14 Angel One history requests and appended 16 stock sessions plus one NIFTY_BANK session. Captured 65 official ownership XBRL filings and 207 official financial/governance filings for all 13 banks, with original URL/hash manifests and append-only structured source records. One scoped Trendlyne SBIN call returned provider business failure (1011, no shareholding data); it was not admitted and was not retried. Budget settled. No R2 or canonical snapshot/selection writes.
+
+Actual existing-canonical-module replay over read-only history projections passes stock and benchmark histories for 10 banks at 2026-10-09T03:37:19.040Z. HDFCBANK, KARURVYSYA and KOTAKBANK retain unqualified corporate-action treatment. This is not an authenticated handler or full requirement replay. Freshness is bounded by real qualification time and the existing grace period, not a durable readiness promise.
+
+Repaired unreachable ownership review admission, enforced selected series / TOTAL_EQUITY / minimum-four-quarter / single-authority guards, connected BANK NPA names to existing percentage primitives and preserved the CORS/owner-authentication contract. Development canonical validator **v44 ACTIVE**, bundle SHA-256 `93e0f0b2a4db3918bad720e4512ebc43e7fc8db012c5987d5ffe72f5e8305016`. Executed local checks: architecture, TypeScript, lint, 2,305 application tests, 375 Edge tests, five type-checked Deno tests, build and whitespace PASS. Tests use explicit mocks; live owner-authenticated v44 replay remains pending.
+
+Authoritative execution record: `docs/private/v1-4-industry-batches/Banking_13_Acquisition_And_Admission_Result_2026-10-09.md`. Source-admission/delegated-review proposal beside it is not activated. Primary filings cannot be mislabeled as TRENDLYNE_MCP; source identity/denominator/period/scope, rating/document review and established valuation evidence still require qualification. No auto-signed owner review or readiness fabrication.
+
+Implementation/evidence are on draft PR #124, dependent on #123/#121; no merge. Development HEAD remains `927181cf02d01d5f27d441dea6fac9d9b11a6d9b`. No Production, migrations, Auth/RLS, scheduler, financial formula, frozen cohort or V1-5 changes. Earlier sections below are historical checkpoints, not the current execution boundary.
 
 ## V1-4 banking validator — approved Development deployment, 8 October 2026
 

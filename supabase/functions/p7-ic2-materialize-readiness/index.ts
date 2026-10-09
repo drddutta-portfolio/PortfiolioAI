@@ -35,7 +35,8 @@ const canonicalMetricCodes = P7_IC_CANONICAL_REQUIREMENT_METRICS
 
 const projectRef=(v:string)=>{try{return new URL(v).hostname.match(/^([a-z0-9]+)\.supabase\.co$/u)?.[1]??null}catch{return null}}
 const sha=async(v:unknown)=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify(v))))).map(b=>b.toString(16).padStart(2,"0")).join("")
-const reply=(status:number,body:Json)=>new Response(JSON.stringify(body),{status,headers:{"Content-Type":"application/json"}})
+const corsHeaders={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, x-client-info, apikey, content-type","Access-Control-Allow-Methods":"POST, OPTIONS"}
+const reply=(status:number,body:Json)=>new Response(JSON.stringify(body),{status,headers:{...corsHeaders,"Content-Type":"application/json"}})
 const dateOnly=(v:string|null)=>v?v.slice(0,10):null
 
 async function loadHistoryRows(admin:Admin,table:"market_price_history"|"market_benchmark_price_history",column:"security_id"|"benchmark_code",id:string,sourceCutoffAt:string):Promise<HistoryRow[]>{
@@ -341,7 +342,7 @@ function projectCachedRecords(records:SourceRecord[],security:{id:string;symbol:
  })
 }
 
-async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;minimum:number;freshness:string|null;benchmarks:string[];portfolioId:string;portfolioOwnerId:string;securityId:string;observations:Observation[];definitions:MetricDefinition[];records:SourceRecord[];reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];documentSources:ReviewedDocumentSource[];history?:History;benchmarkByCode:Map<string,Benchmark>;historyProofs:Map<string,HistoryContractProof>;evaluationAsOfMs:number;sourceCutoffAtMs:number}):Promise<Item>{
+export async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;minimum:number;freshness:string|null;benchmarks:string[];portfolioId:string;portfolioOwnerId:string;securityId:string;observations:Observation[];definitions:MetricDefinition[];records:SourceRecord[];reviews:RequirementReview[];reviewSources:ReviewedSourceRecord[];researchDocuments:ReviewedResearchDocument[];documentSources:ReviewedDocumentSource[];history?:History;benchmarkByCode:Map<string,Benchmark>;historyProofs:Map<string,HistoryContractProof>;evaluationAsOfMs:number;sourceCutoffAtMs:number}):Promise<Item>{
  const {code,family,minimum,freshness,benchmarks,portfolioId,portfolioOwnerId,securityId,observations,definitions,records,reviews,reviewSources,researchDocuments,documentSources,history,benchmarkByCode,historyProofs,evaluationAsOfMs,sourceCutoffAtMs}=input
  if(family==="BENCHMARK_HISTORY"){
    const required=executableV14BenchmarkCodes(benchmarks)
@@ -364,6 +365,18 @@ async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;mi
   // Reprojected raw captures are assessed together; never accept the first/most recently retrieved
   // conflicting record as canonical evidence. Original records and approved selection remain authoritative.
   const ownershipSources=records.filter(record=>record.record_kind==="COMPLETE_RESEARCH_OWNERSHIP")
+  // Qualified owner reviews are the existing admission authority. Raw chart guards
+  // remain the fallback, rather than making the reviewed path unreachable.
+  if(code!=="OWNERSHIP_GOVERNANCE"){
+   const reviewed=await validateReviewedRequirementEvidence({portfolioId,portfolioOwnerId,securityId,requirementCode:code,family,metricCodes:[],minimum,reviews,sources:reviewSources,documents:researchDocuments,documentSources,definitions,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:freshness})
+   if(reviewed){
+    return {...blocked(code,minimum,freshness,benchmarks,reviewed.state,reviewed.reason,reviewed.state==="FRESH"?"NONE":"RECONCILE_CANONICAL_INPUT_CONTRACT"),
+     candidate_evidence_ids:[...ownershipSources.map(record=>record.id),...reviewed.selectedReviewIds],selected_evidence_id:reviewed.state==="FRESH"?reviewed.selectedReviewIds.at(-1)??null:null,
+     raw_source_record_id:reviewed.sourceRecordIds.at(-1)??null,retrieved_at:reviewed.retrievedAt,evidence_as_of_date:reviewed.evidenceAsOfDate,fresh_through:dateOnly(reviewed.freshThrough),source_provider:reviewed.sourceCode,
+     normalized_value:{ownershipContractVersion:"V1_4_OWNERSHIP_METHOD_SELECTION_V1",reviewedEvidence:reviewed.lineage,retainedUnadmittedSourceIds:ownershipSources.map(record=>record.id)},
+     validation_state:reviewed.state==="FRESH"?"VALIDATED_REVIEW_LEDGER":"FAIL_CLOSED",canonical_selection_state:reviewed.state==="FRESH"?"DETERMINISTIC_REVIEW_LEDGER":"NO_SELECTION"}
+   }
+  }
   const assessed=ownershipSources.map(record=>{
    const rawHistory=record.raw_payload.p7_ic2_ownership_history
    const history=rawHistory&&typeof rawHistory==="object"?rawHistory as ReturnType<typeof parseTrendlyneOwnershipHistory>:null
@@ -417,6 +430,7 @@ async function requirementItem(input:{code:string;family:ReviewEvidenceFamily;mi
 }
 
 Deno.serve(async request=>{
+ if(request.method==="OPTIONS")return new Response(null,{status:204,headers:corsHeaders})
  if(request.method!=="POST")return reply(405,{error:"Method not allowed."})
  const url=Deno.env.get("SUPABASE_URL")??"",key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??"",ref=projectRef(url)
  if(ref===PROD_REF)return reply(409,{error:"P7 IC2 materializer refuses Production.",code:"UNEXPECTED_PRODUCTION_DB_TARGET"})

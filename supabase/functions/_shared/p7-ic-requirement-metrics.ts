@@ -11,6 +11,8 @@ export const P7_IC_CANONICAL_REQUIREMENT_METRICS: Readonly<Record<string, readon
   // Implied upside is a percentage. It must never satisfy a P/E-ratio requirement.
   PE: ["PE_TTM"],
   GROSS_NPA_PERCENT: ["GROSS_NPA_PERCENT"], NET_NPA_PERCENT: ["NET_NPA_PERCENT"],
+  // BANK profile requirement names refer to these established percentage primitives.
+  GROSS_NPA: ["GROSS_NPA_PERCENT"], NET_NPA: ["NET_NPA_PERCENT"],
   EPS_GROWTH_YOY: ["EPS_GROWTH_YOY"], ADVANCES_GROWTH_YOY: ["ADVANCES_GROWTH_YOY"],
   DEPOSITS_GROWTH_YOY: ["DEPOSITS_GROWTH_YOY"],
 }

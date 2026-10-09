@@ -1,0 +1,13 @@
+{
+  "http_status": 200,
+  "response": {
+    "status": "RAW_CAPTURED_NOT_QUALIFIED",
+    "code": null,
+    "providerCalls": 1,
+    "retries": 0,
+    "canonicalWrites": 0,
+    "runId": "b1e68758-1796-4535-b42a-c9fb4e8974ea",
+    "sourceRecordId": "2bcf7129-0d28-4b62-9959-c9b4a908a31c",
+    "budgetSettled": true
+  }
+}

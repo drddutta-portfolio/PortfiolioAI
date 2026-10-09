@@ -1,5 +1,5 @@
 import { validateObservationSeries, type InputObservation, type MetricDefinition, validDate } from "./p7-ic-input-validation.ts"
-import type { EvidenceRequirementPlan } from "./p7-ic-evidence-normalization.ts"
+import {selectedV14OwnershipSeries,type EvidenceRequirementPlan} from "./p7-ic-evidence-normalization.ts"
 
 type Json = Readonly<Record<string, unknown>>
 export type ReviewEvidenceFamily = EvidenceRequirementPlan["deterministicCoverageRule"]
@@ -214,10 +214,15 @@ export async function validateReviewedRequirementEvidence(input:{
  }
  if(family==="OWNERSHIP_4Q"){
    const series=uniq(ownershipRows.map(x=>x.series)),bases=uniq(ownershipRows.map(x=>x.basis));if(series.length!==1||bases.length!==1)return fail("REVIEW_REQUIRED","OWNERSHIP_SERIES_OR_BASIS_MIXED",support.map(x=>x.id))
+   const expectedSeries=selectedV14OwnershipSeries(requirementCode)
+   if(requirementCode==="OWNERSHIP_GOVERNANCE")return fail("REVIEW_REQUIRED","OWNERSHIP_GOVERNANCE_DOCUMENT_REVIEW_REQUIRED",support.map(x=>x.id))
+   if(expectedSeries&&(series[0]!==expectedSeries.toUpperCase()||bases[0]!=="TOTAL_EQUITY"))return fail("REVIEW_REQUIRED","OWNERSHIP_SELECTED_SERIES_OR_BASIS_NOT_PROVEN",support.map(x=>x.id))
+   if(expectedSeries&&uniq(ownershipRows.map(x=>x.source.source_code)).length!==1)return fail("REVIEW_REQUIRED","OWNERSHIP_SOURCE_AUTHORITY_MIXED",support.map(x=>x.id))
+   const requiredPeriods=expectedSeries?Math.max(4,input.minimum):input.minimum
    const byQuarter=new Map<string,typeof ownershipRows>();for(const x of ownershipRows){const g=byQuarter.get(x.period)??[];g.push(x);byQuarter.set(x.period,g)}
    for(const g of byQuarter.values())if(uniq(g.map(x=>x.value)).length>1)return fail("CONFLICTING","OWNERSHIP_QUARTER_VALUE_CONFLICT",g.map(x=>x.review.id))
-   const periods=[...byQuarter.keys()];if(!consecutiveLatestQuarters(periods,input.minimum))return fail("INSUFFICIENT","OWNERSHIP_REQUIRED_WINDOW_NOT_PROVEN",support.map(x=>x.id))
-   const selected=[...byQuarter.entries()].sort(([a],[b])=>b.localeCompare(a)).slice(0,input.minimum).flatMap(([,g])=>[g.sort((a,b)=>time(b.review.reviewed_at)-time(a.review.reviewed_at))[0]!])
+   const periods=[...byQuarter.keys()];if(!consecutiveLatestQuarters(periods,requiredPeriods))return fail("INSUFFICIENT","OWNERSHIP_REQUIRED_WINDOW_NOT_PROVEN",support.map(x=>x.id))
+   const selected=[...byQuarter.entries()].sort(([a],[b])=>b.localeCompare(a)).slice(0,requiredPeriods).flatMap(([,g])=>[g.sort((a,b)=>time(b.review.reviewed_at)-time(a.review.reviewed_at))[0]!])
    const latestPeriod=selected.map(x=>x.period).sort().at(-1)??null
    if(input.freshnessPolicy?.includes("150_DAYS")&&latestPeriod&&evaluationAsOfMs-time(latestPeriod+"T00:00:00Z")>150*86400000)
     return fail("STALE","OWNERSHIP_LATEST_REQUIRED_PERIOD_STALE",selected.map(x=>x.review.id))

@@ -1,0 +1,17 @@
+{
+  "project": "lrgpjimipfkyoqbpsqzz",
+  "id": "6831e28c-0bce-4a59-b069-544b8726465f",
+  "slug": "p7-ic2-materialize-readiness",
+  "name": "p7-ic2-materialize-readiness",
+  "status": "ACTIVE",
+  "version": 44,
+  "created_at": 1790682388961,
+  "updated_at": 1791519369598,
+  "verify_jwt": false,
+  "import_map": true,
+  "entrypoint_path": "file:///tmp/user_fn_lrgpjimipfkyoqbpsqzz_6831e28c-0bce-4a59-b069-544b8726465f_44/source/supabase/functions/p7-ic2-materialize-readiness/index.ts",
+  "import_map_path": "file:///tmp/user_fn_lrgpjimipfkyoqbpsqzz_6831e28c-0bce-4a59-b069-544b8726465f_44/source/supabase/functions/p7-ic2-materialize-readiness/deno.json",
+  "ezbr_sha256": "93e0f0b2a4db3918bad720e4512ebc43e7fc8db012c5987d5ffe72f5e8305016",
+  "authentication": "Existing custom portfolio-owner / P4 grant authentication retained; verify_jwt unchanged",
+  "canonicalWrites": 0
+}

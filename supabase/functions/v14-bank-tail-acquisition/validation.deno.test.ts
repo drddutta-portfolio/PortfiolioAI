@@ -1,4 +1,4 @@
-import {validateBankTail} from "./v14-bank-tail-validation.ts"
+import {validateBankTail} from "../_shared/v14-bank-tail-validation.ts"
 const candle={periodStart:"2026-10-08T00:00:00+05:30",open:"100.00",high:"102",low:"99.5",close:"101.25",volume:"0",retrievedAt:"2026-10-09T00:00:00Z"}
 Deno.test("bounded append-only bank tails validate exact prices and reject incomplete or contradictory windows",()=>{
  validateBankTail([candle],"2026-10-08","2026-10-08")
