@@ -28,6 +28,16 @@ const source={
 const permits=(s:ReviewedSourceRecord=source,r:RequirementReview=review)=>approvedBankOfficialFallback(r,s,issuerPolicy.ownerId,"NUMERIC_SERIES");
 describe("owner-approved issuer-hosted BANK M1-M4 fallback",()=>{
  it("accepts only precisely scoped original byte-linked official issuer sources for subsequent factual review",()=>expect(permits()).toBe(true));
+ it("accepts only the exact official SBI document permalink pattern",()=>{
+  const id="d77abadc-d171-49d9-bfee-0b34dd0281f4"
+  const sha="6cb4b2e20a0e72dbdfc266b578e77873f8d46a98e9d950cb8a80719aaf20c426"
+  const original_url="https://sbi.bank.in/documents/17826/34672/07.08.2026_FINAL%2BP3D-DFs%2BJUNE%2B2026%2BDTD%2B07082026.pdf/ff6f28c2-855a-31e9-2d79-9b1ef8dc36b9?t=1786100952704"
+  const sourceForSbi={...source,raw_payload:{...source.raw_payload,security_id:id,symbol:"SBIN",original_url,
+    original_sha256:sha,r2_verified_sha256:sha,r2_object_key:issuerPolicy.storageKeyPrefix+sha+".pdf"}}
+  const reviewForSbi={...review,security_id:id}
+  expect(permits(sourceForSbi,reviewForSbi)).toBe(true)
+  expect(permits({...sourceForSbi,raw_payload:{...sourceForSbi.raw_payload,original_url:original_url+"&other=true"}},reviewForSbi)).toBe(false)
+ });
  it("blocks a foreign issuer host",()=>expect(permits({...source,raw_payload:{...source.raw_payload,original_url:"https://example.com/official.pdf"}})).toBe(false));
  it("blocks wrong bank identity",()=>expect(permits({...source,raw_payload:{...source.raw_payload,security_id:"other-bank"}})).toBe(false));
  it("blocks unverified original-byte hash",()=>expect(permits({...source,raw_payload:{...source.raw_payload,r2_verified_sha256:"b".repeat(64)}})).toBe(false));
