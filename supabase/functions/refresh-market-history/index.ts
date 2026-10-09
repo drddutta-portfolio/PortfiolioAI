@@ -345,6 +345,25 @@ Deno.serve(async (request) => {
       }
       const { error: historyError } = await admin.from("market_price_history").upsert(historyRows, { onConflict: "security_id,provider_code,interval,period_start", ignoreDuplicates: true })
       if (historyError) throw historyError
+      // Re-read after ON CONFLICT DO NOTHING: a concurrent writer may have
+      // inserted a different bar after our pre-check. Never silently accept it.
+      const { data: finalBars, error: finalError } = await admin
+        .from("market_price_history")
+        .select("period_start,open,high,low,close,volume")
+        .eq("security_id", security.id)
+        .eq("provider_code", MARKET_DATA_PROVIDER)
+        .eq("interval", "ONE_DAY")
+        .in("period_start", sessionStarts)
+      if (finalError) throw finalError
+      const finalByDate = new Map((finalBars ?? []).map(row => [new Date(row.period_start).toISOString(), row]))
+      for (const incoming of historyRows) {
+        const persisted = finalByDate.get(new Date(incoming.period_start).toISOString())
+        if (!persisted || (["open", "high", "low", "close", "volume"] as const).some(field =>
+          !sameQualifiedHistoryNumeric(persisted[field], incoming[field]))) {
+          throw new SafeOperationalError("HISTORY_CONCURRENT_CORRECTION_REQUIRES_REVIEW",
+            "Concurrent price revision or missing persisted session requires a source-bound review.", 409)
+        }
+      }
 
       const metrics = deriveMetrics(candles)
       if (metrics.length) {
