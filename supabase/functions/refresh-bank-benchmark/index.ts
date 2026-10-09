@@ -1,3 +1,4 @@
+import { sameQualifiedHistoryNumeric } from "../_shared/v14-history-numeric-equality.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { AngelOneProvider, loadAngelOneConfig, type AngelDailyCandle } from "../_shared/angel-one.ts"
 import { MARKET_DATA_PROVIDER, type ProviderInstrument } from "../_shared/market-data.ts"
@@ -137,7 +138,7 @@ Deno.serve(async (request) => {
         const previous = existingByDate.get(new Date(incoming.periodStart).toISOString())
         if (!previous) continue
         for (const field of ["open", "high", "low", "close", "volume"] as const) {
-          if (String(Number(previous[field])) !== String(Number(incoming[field]))) {
+          if (!sameQualifiedHistoryNumeric(previous[field], incoming[field])) {
             throw new SafeOperationalError("BENCHMARK_CORRECTION_REQUIRES_REVIEW",
               "A retained NIFTY_BANK bar conflicts with provider history; qualified correction review is required.", 409)
           }
