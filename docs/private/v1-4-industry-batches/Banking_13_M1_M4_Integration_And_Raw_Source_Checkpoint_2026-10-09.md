@@ -19,9 +19,9 @@
 | V1_4_BANK_EXACT_PARAMETER_CAPTURE | 4 | ROA mentions 4 |
 | V1_4_BANK_FINANCIAL_CONTRACT_CAPTURE | 4 | NIM, CET1, CAR mentions 4 each |
 | V1_4_BANK_PRIMARY_FILING_CAPTURE | 13 | CAR/ROA mentions 13 each |
-| V1_4_OFFICIAL_ANNUAL_REPORT_CAPTURE | 4 | CAR mention 1 |
+| V1_4_OFFICIAL_ANNUAL_REPORT_CAPTURE | 4 | **0 in frozen bank scope**: source security identities are ABCAPITAL, ACMESOLAR, AKUMS, ALIVUS; exclude completely from BANK qualification. |
 
-Counts are retained raw *records*, not bank/metric-qualified fact counts, period verification, or source-backed approvals. Native annual NIM/Tier1 and unverified annual ROA values remain excluded. Original facts need explicit bank/ISIN, source fragment, original bytes/hash, denominator, regulatory/year/TTM period and standalone/regulatory scope. Do not substitute provider retrieval timestamp.
+Counts are retained raw *records*, not bank/metric-qualified fact counts, period verification, or source-backed approvals. The official annual report group above is **outside the 13-bank target** and must not be used as banking evidence. Native annual NIM/Tier1 and unverified annual ROA values remain excluded. Original facts need explicit bank/ISIN, source fragment, original bytes/hash, denominator, regulatory/year/TTM period and standalone/regulatory scope. Do not substitute provider retrieval timestamp.
 
 **Result:** qualified new M1–M4 bank-metric facts independently proven and accepted this execution: **0**; new normalized M1–M4 observations: **0**; new factual reviews: **0**; new materializations: **0**. Existing 26 accepted delegated NPA reviews must not be repeated. CI validation is tracked by final code commit and not inferred from a committed test file.
 
