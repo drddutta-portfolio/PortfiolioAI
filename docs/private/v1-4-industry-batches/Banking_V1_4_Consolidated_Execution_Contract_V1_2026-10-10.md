@@ -1,6 +1,6 @@
 # PortfolioAI Banking V1-4 — Consolidated Execution Contract V1
 
-**Version:** BANK_V1_4_CONSOLIDATED_EXECUTION_CONTRACT_V1_2026_10_10  
+**Version:** BANK_V1_4_CONSOLIDATED_EXECUTION_CONTRACT_V1_2026_10_10
 **Prepared:** 2026-10-10. **Execution branch:** `codex/banking-source-remediation`; **review:** draft PR #124; **Development** Supabase `lrgpjimipfkyoqbpsqzz`. **No Production, main, V1-5 or PR merge authority.** This document records existing owner approvals separately from unapproved proposals. It does not silently activate anything.
 
 ## 1. Live reconciliation at preparation (not based on old brief)
