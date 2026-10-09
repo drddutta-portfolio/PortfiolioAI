@@ -403,6 +403,17 @@ export async function requirementItem(input:{code:string;family:ReviewEvidenceFa
  const metricCodes=canonicalMetricCodes[code]??[code]
  const candidates=observations.filter(x=>x.security_id===securityId&&metricCodes.includes(x.metric_code))
  const reviewed=await validateReviewedRequirementEvidence({portfolioId,portfolioOwnerId,securityId,requirementCode:code,family,metricCodes,minimum,reviews,sources:reviewSources,documents:researchDocuments,documentSources,definitions,evaluationAsOfMs,sourceCutoffAtMs,freshnessPolicy:freshness})
+ // M1-M4 direct-source approval is NOT permission to accept an unreviewed
+ // normalized observation. The canonical reviewer must first establish exact
+ // source-fragment/hash/period/scope facts. Existing canonical conflicts are
+ // still reconciled below when a qualifying reviewed fact exists.
+ if(["NIM_TTM","CET1_RATIO","CAPITAL_ADEQUACY_RATIO","ROA_ANNUAL"].includes(code)&&reviewed?.state!=="FRESH"){
+   return {...blocked(code,minimum,freshness,benchmarks,
+     reviewed?.state==="CONFLICTING"?"CONFLICTING":"REVIEW_REQUIRED",
+     reviewed?.reason??"BANK_DIRECT_FACTUAL_REVIEW_REQUIRED","QUALIFY_SOURCE_BOUND_BANK_DIRECT_REVIEW"),
+     candidate_evidence_ids:[...new Set([...candidates.map(x=>x.id),...(reviewed?.selectedReviewIds??[])])],
+     normalized_value:{reviewedEvidence:reviewed?.lineage??null,unreviewedCanonicalCandidateCount:candidates.length}}
+ }
  const reconciliation=reconcileCanonicalAndReviewed({canonicalRows:candidates,reviewed,definitions,minimum,evaluationAsOfMs,sourceCutoffAtMs,family})
  if(reconciliation.validation.state==="FRESH"){
    const selected=reconciliation.validation.selected
