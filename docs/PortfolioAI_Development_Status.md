@@ -1,3 +1,13 @@
+## Banking V1-4 — consolidated owner approval and executable M5/M7 / bounded maintenance (10 October 2026)
+
+Owner approved the **recommended proposals** from `BANK_V1_4_CONSOLIDATED_EXECUTION_CONTRACT_V1_2026_10_10`: M5 same-bank 60-month point-in-time PB relative and M7 analogous positive-earnings TTM PE relative, minimum 36/60 with five-year temporal spread; **M6 recommended deferral**, not a made-up ROE adjustment; AUBANK SFB-specific regulatory mapping direction, and bounded Development maintenance proposal subject to manual live canary, genuine provider/grant budgets and verified exchange-final publication. Approval record: `docs/private/v1-4-industry-batches/Banking_V1_4_Consolidated_Contract_V1_Owner_Approval_2026-10-10.md`.
+
+Implemented pure fail-closed M5/M7 60-month comparator and source/coverage tests in `v14-bank-valuation-self-history.ts` and `.test.ts`. Implemented 14-attempt maximum and single missing-session bound in **read-only** maintenance planner, with guard tests. These are **not wired to canonical evaluator or activated** pending real period-dated five-year point-in-time observations; M6 remains required and deferred. Cron/recurring spend remains OFF because no live grant-bound end-to-end canary or observed scheduled run exists.
+
+Independent live reconciliation preceding changes: PR #124 draft/unmerged, base `codex/v1-4-bank-owner-ui`; PR #121/#123 unmerged. Development canonical v51, active M1–M4 definitions, four R2 original source records including SBIN with `published_at=NULL`, no newly accepted bank capital reviews (only 26 accepted NPA), persisted 0/13 READY and ₹0/₹2,05,138.62. Production/main unchanged. Final commit CI must be checked; do not promote these commit-only tests to verified PASS prematurely.
+
+---
+
 ## Banking V1-4 — consolidated remaining owner decision checkpoint (10 October 2026)
 
 **Document:** `docs/private/v1-4-industry-batches/Banking_V1_4_Consolidated_Execution_Contract_V1_2026-10-10.md`, version `BANK_V1_4_CONSOLIDATED_EXECUTION_CONTRACT_V1_2026_10_10`. Reconciled live PR #124 `176fbdce38a1c64b68b90647f33018ec4ad27333`, unmerged PRs #121/#123, Development canonical validator v51 SHA `260c202064096ac7f426b33feea1eff9ceccf6bc3180a8ff6c55438e14cbbe3d`, four **active** direct M1–M4 definitions and approved dual clocks, four original PDF source records (including SBIN) with durable R2 keys. Their issuer publication timestamps remain NULL. Existing **26 NPA ACCEPTED**; new M1–M4 factual reviews 0; persisted 0/13 READY, 11 REVIEW_REQUIRED / 2 CONFLICTING, ₹0/₹2,05,138.62.
