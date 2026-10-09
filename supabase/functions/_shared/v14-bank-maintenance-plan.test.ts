@@ -30,6 +30,15 @@ describe("V1-4 banking continuing-freshness plan (no IO)", () => {
     expect(plan.stockDecisions[1]?.acquireStockSessions).toEqual([])
     expect(plan.stockDecisions[0]?.mustNotDisplayCurrentReady).toBe(true)
   })
+  it("missing shared benchmark blocks current display even with complete stock bars", () => {
+    const input = base()
+    const p = planBankMaintenance({ ...input,
+      stockSessions: { [A]: ["2026-10-07","2026-10-08"], [B]: ["2026-10-07","2026-10-08"] },
+      requiredEvidenceFreshUntil: { [A]: "2026-10-10T00:00:00Z", [B]: "2026-10-10T00:00:00Z" },
+    })
+    expect(p.missingBenchmarkSessions).toEqual(["2026-10-08"])
+    expect(p.stockDecisions.every(d => d.mustNotDisplayCurrentReady)).toBe(true)
+  })
   it("repeated discovery with qualified tail has no missing requests", () => {
     const input=base()
     const plan=planBankMaintenance({ ...input,
