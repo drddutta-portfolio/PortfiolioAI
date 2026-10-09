@@ -20,7 +20,7 @@ describe("owner-session one-bank canonical current validation",()=>{
    action:"P7_IC3_VALIDATE_CANONICAL_INPUTS",portfolioId:portfolio,securityIds:[security],
    evaluationAsOf:cutoff,sourceCutoffAt:cutoff,
   }))
-  expect(invoke.mock.calls[0]?.[0].selectionRunId).toMatch(/^[\da-f-]{36}$/i)
+  expect((invoke.mock.calls[0]?.[0] as { selectionRunId:string }).selectionRunId).toMatch(/^[\da-f-]{36}$/i)
  })
  it("fails closed on missing or nonzero write proof",async()=>{
   for(const bad of [{...sample(),writeTotals:{}},{...sample(),providerCalls:1},{...sample(),selectionIds:["unapproved"]}]){
