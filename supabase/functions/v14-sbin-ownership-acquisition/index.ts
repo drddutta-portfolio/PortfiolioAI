@@ -44,14 +44,15 @@ Deno.serve(async req=>{
   }
   const attemptedAt=new Date().toISOString();let providerSucceeded=false,safeCode:string|null=null,sourceRecordId:string|null=null,result:string|null=null
   try{
-   result=await new TrendlyneObservedMcpClient(mcp).getOwnershipDealsInsiderSast(String(identity.data.provider_instrument_id),"shareholding")
+   // Live tool catalog requires an NSE symbol/BSE code/ISIN, not its internal ID.
+   result=await new TrendlyneObservedMcpClient(mcp).getOwnershipDealsInsiderSast("SBIN","shareholding")
    providerSucceeded=ownershipTransportContainsEvidence(result)
    if(!providerSucceeded)safeCode="PROVIDER_BUSINESS_DATA_UNAVAILABLE"
   }catch{safeCode="PROVIDER_REQUEST_FAILED"}
   const usage=await admin.rpc("record_provider_usage_event_v1",{p_source_code:SOURCE,p_ingestion_run_id:runId,p_run_item_id:itemId,p_security_id:SECURITY,p_data_domain:DOMAIN,p_operation_class:OPERATION,p_accounting_class:"PROVIDER_TOOL_ATTEMPT",p_estimated_internal_units:1,p_actual_internal_units:1,p_attempted_at:attemptedAt,p_completed_at:new Date().toISOString(),p_outcome:providerSucceeded?"SUCCEEDED":"FAILED",p_safe_error_code:safeCode,p_retry_attempt:0,p_idempotency_key:`${runId}:${DOMAIN}:1`})
   if(usage.error)safeCode="USAGE_ACCOUNTING_FAILED"
   if(result!==null){
-   const payload={mode:ACTION,run_id:runId,security_id:SECURITY,security_symbol:"SBIN",provider_instrument_id:identity.data.provider_instrument_id,provider_tool:"get_ownership_deals_insider_sast",result}
+   const payload={mode:ACTION,run_id:runId,security_id:SECURITY,security_symbol:"SBIN",provider_instrument_id:identity.data.provider_instrument_id,provider_stock_code:"SBIN",provider_selector_contract:"NSE_SYMBOL_FROM_LIVE_TOOL_CATALOG_2026_10_09",provider_tool:"get_ownership_deals_insider_sast",result}
    if(new TextEncoder().encode(JSON.stringify(payload)).byteLength>512*1024)safeCode="SOURCE_CAPTURE_TOO_LARGE"
    else{const raw=await admin.from("data_source_records").insert({source_code:SOURCE,ingestion_run_id:runId,record_kind:providerSucceeded?"COMPLETE_RESEARCH_OWNERSHIP":"V1_4_BANK_TRENDLYNE_FAILED_CAPTURE",external_record_id:`${identity.data.provider_instrument_id}:bank-v14-ownership:${runId}`,retrieved_at:new Date().toISOString(),payload_hash:await hash(payload),raw_payload:payload,terms_snapshot:{mode:ACTION,owner_authorized:true,canonical_admission:false,retries:0}}).select("id").single();if(raw.error)safeCode="RAW_CAPTURE_FAILED";else sourceRecordId=String(raw.data.id)}
   }

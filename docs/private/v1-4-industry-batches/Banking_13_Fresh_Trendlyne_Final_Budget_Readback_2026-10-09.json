@@ -1,0 +1,156 @@
+[
+  {
+    "run_id": "0ded18d7-86cd-424f-9fbe-b58c18acbdc5",
+    "operation": "V1_4_BANK_FINANCIAL_CAPTURE_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "63938e9b-c648-41ef-bfea-72b493bdf697",
+    "operation": "V1_4_BANK_FINANCIAL_CAPTURE_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "ff42c357-e5fb-4df1-a0aa-c0247386e91a",
+    "operation": "V1_4_BANK_FINANCIAL_CAPTURE_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "b50a3c04-37c4-4170-a674-fbbbff8205dc",
+    "operation": "V1_4_BANK_FINANCIAL_CAPTURE_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "08a7f39d-0aa4-457a-9234-f73201fd95dc",
+    "operation": "V1_4_BANK_TOOL_CATALOG_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "TRANSPORT_BOOTSTRAP",
+    "actual_internal_units": 0,
+    "reservation_status": "SETTLED",
+    "consumed_units": 0,
+    "failed_units": 0,
+    "released_units": 1
+  },
+  {
+    "run_id": "732b641c-05cc-4b84-a517-b554b636f1d0",
+    "operation": "V1_4_SBIN_OWNERSHIP_CAPTURE_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "73217d21-a25c-4c1d-ab5e-56ee1aefeebe",
+    "operation": "V1_4_BANK_PARAMETER_SEARCH_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "1c4ea559-472c-45c4-ad31-c826619f5ffd",
+    "operation": "V1_4_BANK_EXACT_PARAMETERS_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "91e493df-18f0-4532-ab06-194564005447",
+    "operation": "V1_4_BANK_EXACT_PARAMETERS_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "46639924-7543-4542-8fb2-0aea97c0a33e",
+    "operation": "V1_4_BANK_EXACT_PARAMETERS_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "a3050792-ee18-4aad-b6b2-69fdca8ec5a3",
+    "operation": "V1_4_BANK_EXACT_PARAMETERS_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "a7535135-3844-4f11-bed0-4c00f602bd14",
+    "operation": "V1_4_BANK_PARAMETER_SEARCH_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "6bf5d2e0-3f6d-4ada-a2ba-1cd030b2e2e3",
+    "operation": "V1_4_BANK_PARAMETER_SEARCH_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  },
+  {
+    "run_id": "1ee5861e-36b8-43b8-baf4-edb1388bb423",
+    "operation": "V1_4_BANK_PARAMETER_SEARCH_2026_10_09",
+    "status": "SUCCEEDED",
+    "accounting_class": "PROVIDER_TOOL_ATTEMPT",
+    "actual_internal_units": 1,
+    "reservation_status": "SETTLED",
+    "consumed_units": 1,
+    "failed_units": 0,
+    "released_units": 0
+  }
+]

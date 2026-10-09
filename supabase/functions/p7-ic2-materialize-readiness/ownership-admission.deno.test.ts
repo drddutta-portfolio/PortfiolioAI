@@ -7,7 +7,7 @@ const sign=async(r:RequirementReview)=>{
 Deno.test("canonical ownership requirement admits qualified reviews and keeps wrong series/basis, raw charts and governance blocked",async()=>{
  const serve=Deno.serve
  try{
-  Deno.serve=((_fn:(request:Request)=>Promise<Response>)=>({})) as typeof Deno.serve
+  Deno.serve=(()=>({})) as unknown as typeof Deno.serve
   const {requirementItem}=await import("./index.ts")
   const now="2026-10-09T03:00:00Z",retrieved="2026-10-09T02:00:00Z",security="33333333-3333-4333-8333-333333333333",owner="11111111-1111-4111-8111-111111111111",portfolio="22222222-2222-4222-8222-222222222222"
   const periods=["2025-09-30","2025-12-31","2026-03-31","2026-06-30"]

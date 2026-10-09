@@ -5,7 +5,7 @@ import type {RequirementReview,ReviewedSourceRecord} from "../_shared/v14-review
 import type {MetricDefinition,InputObservation} from "../_shared/p7-ic-input-validation.ts"
 const serve=Deno.serve
 let evaluate:typeof import("../p7-ic2-materialize-readiness/index.ts").requirementItem
-try{Deno.serve=((_fn:(r:Request)=>Promise<Response>)=>({})) as typeof Deno.serve;evaluate=(await import("../p7-ic2-materialize-readiness/index.ts")).requirementItem}finally{Deno.serve=serve}
+try{Deno.serve=(()=>({})) as unknown as typeof Deno.serve;evaluate=(await import("../p7-ic2-materialize-readiness/index.ts")).requirementItem}finally{Deno.serve=serve}
 const evidence=JSON.parse(await Deno.readTextFile(Deno.args[0]!)) as {sources:ReviewedSourceRecord[];reviews:RequirementReview[]}
 const definitions=JSON.parse(await Deno.readTextFile(Deno.args[1]!)) as MetricDefinition[]
 const observations=JSON.parse(await Deno.readTextFile(Deno.args[2]!)) as (InputObservation&{security_id:string})[]

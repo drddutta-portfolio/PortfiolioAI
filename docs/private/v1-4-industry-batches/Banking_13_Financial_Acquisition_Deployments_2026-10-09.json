@@ -1,0 +1,45 @@
+{
+  "executed": {
+    "id": "18fd5670-a906-4435-ab09-37b76c7d6879",
+    "slug": "v14-bank-financial-acquisition",
+    "name": "v14-bank-financial-acquisition",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": 1791522715365,
+    "updated_at": 1791522715365,
+    "verify_jwt": false,
+    "import_map": false,
+    "entrypoint_path": "file:///tmp/user_fn_lrgpjimipfkyoqbpsqzz_18fd5670-a906-4435-ab09-37b76c7d6879_1/source/supabase/functions/v14-bank-financial-acquisition/index.ts",
+    "ezbr_sha256": "28f457941e0a3966f060727455e30457de5e07204afc9acc06589d6f225a0d1e"
+  },
+  "note": "Four calls executed v1; v2 adds JSON business-error rejection and retains run scope metadata. No v2 provider execution.",
+  "originalActiveAfterBroadCalls": {
+    "id": "18fd5670-a906-4435-ab09-37b76c7d6879",
+    "slug": "v14-bank-financial-acquisition",
+    "name": "v14-bank-financial-acquisition",
+    "status": "ACTIVE",
+    "version": 2,
+    "created_at": 1791522715365,
+    "updated_at": 1791523128715,
+    "verify_jwt": false,
+    "import_map": false,
+    "entrypoint_path": "file:///tmp/user_fn_lrgpjimipfkyoqbpsqzz_18fd5670-a906-4435-ab09-37b76c7d6879_2/source/supabase/functions/v14-bank-financial-acquisition/index.ts",
+    "ezbr_sha256": "c748eb62d6d895a3f5a19fe74941ed50d2cd6cd2b895ef7714b3e8e40d7757e2"
+  },
+  "finalActive": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"id\":\"18fd5670-a906-4435-ab09-37b76c7d6879\",\"slug\":\"v14-bank-financial-acquisition\",\"name\":\"v14-bank-financial-acquisition\",\"status\":\"ACTIVE\",\"version\":7,\"created_at\":1791522715365,\"updated_at\":1791536257022,\"verify_jwt\":false,\"import_map\":false,\"entrypoint_path\":\"file:///tmp/user_fn_lrgpjimipfkyoqbpsqzz_18fd5670-a906-4435-ab09-37b76c7d6879_7/source/supabase/functions/v14-bank-financial-acquisition/index.ts\",\"ezbr_sha256\":\"c6558102460e6d31a93608dd80ef00c29a86bad2d856d4b9101d6e4fb422c5bb\"}"
+      }
+    ],
+    "isError": false
+  },
+  "executedNativeVersions": {
+    "catalog": 3,
+    "coreParameterSearch": 4,
+    "exactROEROA": 5,
+    "focusedParameterSearches": 6
+  },
+  "finalVersion7Boundary": "Scope hardening; not re-executed against provider"
+}

@@ -1,0 +1,172 @@
+[
+  {
+    "id": "1b3a7970-8d12-4157-947e-b7f300007380",
+    "record_kind": "V1_4_BANK_EXACT_PARAMETER_CAPTURE",
+    "retrieved_at": "2026-10-09 05:36:47.635+00",
+    "payload_hash": "b172ec12e7535c11269782225e48f4f90bf291750a5ad7560aed57e695c85505",
+    "raw_payload": {
+      "mode": "V1_4_BANK_EXACT_PARAMETERS_2026_10_09",
+      "query": null,
+      "result": "{\"status\": \"success\", \"data\": \"1786|IDFC First Bank|IDFCFIRSTB|539437|2026-10-09\\n79883|Bandhan Bank|BANDHANBNK|541153|2026-10-09\\n588|IDBI Bank|IDBI|500116|2026-10-09\\n609|Indian Bank|INDIANB|532814|2026-10-09\\n\\nROE Ann. %\\nIDFCFIRSTB:3.39\\nBANDHANBNK:4.78\\nIDBI:15.21\\nINDIANB:16.03\\n\\n---\\n\\nRoA Ann. %\\nIDFCFIRSTB:0.40\\nBANDHANBNK:0.57\\nIDBI:1.97\\nINDIANB:1.18\\n\\n---\"}",
+      "run_id": "46639924-7543-4542-8fb2-0aea97c0a33e",
+      "slice_id": "BANK-P1-03",
+      "identities": [
+        {
+          "symbol": "IDFCFIRSTB",
+          "securityId": "ba340b06-fd44-4d80-9ce7-d280616354ed",
+          "instrumentId": "1786"
+        },
+        {
+          "symbol": "BANDHANBNK",
+          "securityId": "30ce066a-6410-4b11-9b85-e41324971261",
+          "instrumentId": "79883"
+        },
+        {
+          "symbol": "IDBI",
+          "securityId": "a5639446-3238-4e08-9d02-59bc529982db",
+          "instrumentId": "588"
+        },
+        {
+          "symbol": "INDIANB",
+          "securityId": "5275dd14-35ba-4feb-94d8-f8d1facb19d3",
+          "instrumentId": "609"
+        }
+      ],
+      "parameters": [
+        "roea",
+        "roaa"
+      ],
+      "security_ids": [
+        "ba340b06-fd44-4d80-9ce7-d280616354ed",
+        "30ce066a-6410-4b11-9b85-e41324971261",
+        "a5639446-3238-4e08-9d02-59bc529982db",
+        "5275dd14-35ba-4feb-94d8-f8d1facb19d3"
+      ],
+      "provider_tool": "get_stock_parameter_values",
+      "parameter_source_id": "e3fb5878-aac8-41d1-a4b4-5d8d3143d4db"
+    }
+  },
+  {
+    "id": "37c96c19-5664-4f7f-a8d9-5f0483321ed4",
+    "record_kind": "V1_4_BANK_EXACT_PARAMETER_CAPTURE",
+    "retrieved_at": "2026-10-09 05:36:54.649+00",
+    "payload_hash": "abc238e2a861fcbd60bfb23cf963ec459fb292c641fd59e4e617a311f9adf4e4",
+    "raw_payload": {
+      "mode": "V1_4_BANK_EXACT_PARAMETERS_2026_10_09",
+      "query": null,
+      "result": "{\"status\": \"success\", \"data\": \"54902|AU SF Bank|AUBANK|540611|2026-10-09\\n\\nROE Ann. %\\nAUBANK:13.22\\n\\n---\\n\\nRoA Ann. %\\nAUBANK:1.37\\n\\n---\"}",
+      "run_id": "a3050792-ee18-4aad-b6b2-69fdca8ec5a3",
+      "slice_id": "BANK-P1-04",
+      "identities": [
+        {
+          "symbol": "AUBANK",
+          "securityId": "f5c47463-3c6d-4db0-a815-e4301e990213",
+          "instrumentId": "54902"
+        }
+      ],
+      "parameters": [
+        "roea",
+        "roaa"
+      ],
+      "security_ids": [
+        "f5c47463-3c6d-4db0-a815-e4301e990213"
+      ],
+      "provider_tool": "get_stock_parameter_values",
+      "parameter_source_id": "e3fb5878-aac8-41d1-a4b4-5d8d3143d4db"
+    }
+  },
+  {
+    "id": "a95a35cf-e3c3-40bc-ac53-31f81a3a4fde",
+    "record_kind": "V1_4_BANK_EXACT_PARAMETER_CAPTURE",
+    "retrieved_at": "2026-10-09 05:36:33.109+00",
+    "payload_hash": "022aaca116060befd6fbcb6d951b37625389b3fd036f3a26e285cecce324a5a3",
+    "raw_payload": {
+      "mode": "V1_4_BANK_EXACT_PARAMETERS_2026_10_09",
+      "query": null,
+      "result": "{\"status\": \"success\", \"data\": \"162|Bank of Baroda|BANKBARODA|532134|2026-10-09\\n584|ICICI Bank|ICICIBANK|532174|2026-10-09\\n1193|SBI|SBIN|500112|2026-10-09\\n412|Federal Bank|FEDERALBNK|500469|2026-10-09\\n\\nROE Ann. %\\nBANKBARODA:11.96\\nICICIBANK:15.09\\nSBIN:14.82\\nFEDERALBNK:10.85\\n\\n---\\n\\nRoA Ann. %\\nBANKBARODA:0.94\\nICICIBANK:1.85\\nSBIN:1.00\\nFEDERALBNK:1.08\\n\\n---\"}",
+      "run_id": "1c4ea559-472c-45c4-ad31-c826619f5ffd",
+      "slice_id": "BANK-P1-01",
+      "identities": [
+        {
+          "symbol": "BANKBARODA",
+          "securityId": "6771f493-c29a-477e-8cc8-2bede0941e44",
+          "instrumentId": "162"
+        },
+        {
+          "symbol": "ICICIBANK",
+          "securityId": "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+          "instrumentId": "584"
+        },
+        {
+          "symbol": "SBIN",
+          "securityId": "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+          "instrumentId": "1193"
+        },
+        {
+          "symbol": "FEDERALBNK",
+          "securityId": "63889b52-85da-4a1b-9046-c1e975819f99",
+          "instrumentId": "412"
+        }
+      ],
+      "parameters": [
+        "roea",
+        "roaa"
+      ],
+      "security_ids": [
+        "6771f493-c29a-477e-8cc8-2bede0941e44",
+        "5760ce4e-97ac-40ef-af3b-d2a5dce596cf",
+        "d77abadc-d171-49d9-bfee-0b34dd0281f4",
+        "63889b52-85da-4a1b-9046-c1e975819f99"
+      ],
+      "provider_tool": "get_stock_parameter_values",
+      "parameter_source_id": "e3fb5878-aac8-41d1-a4b4-5d8d3143d4db"
+    }
+  },
+  {
+    "id": "adde4733-e1b1-409c-8a1d-47d15502b2c8",
+    "record_kind": "V1_4_BANK_EXACT_PARAMETER_CAPTURE",
+    "retrieved_at": "2026-10-09 05:36:40.428+00",
+    "payload_hash": "f87452810a6b35ff39687b672671a1b5dc2e45fba3842820fa6a8fe191a83150",
+    "raw_payload": {
+      "mode": "V1_4_BANK_EXACT_PARAMETERS_2026_10_09",
+      "query": null,
+      "result": "{\"status\": \"success\", \"data\": \"721|Karur Vysya Bank|KARURVYSYA|590003|2026-10-09\\n758|Kotak Mahindra Bank|KOTAKBANK|500247|2026-10-09\\n533|HDFC Bank|HDFCBANK|500180|2026-10-09\\n140|Axis Bank|AXISBANK|532215|2026-10-09\\n\\nROE Ann. %\\nKARURVYSYA:17.79\\nKOTAKBANK:10.64\\nHDFCBANK:12.97\\nAXISBANK:12.27\\n\\n---\\n\\nRoA Ann. %\\nKARURVYSYA:1.83\\nKOTAKBANK:1.92\\nHDFCBANK:1.54\\nAXISBANK:1.35\\n\\n---\"}",
+      "run_id": "91e493df-18f0-4532-ab06-194564005447",
+      "slice_id": "BANK-P1-02",
+      "identities": [
+        {
+          "symbol": "KARURVYSYA",
+          "securityId": "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+          "instrumentId": "721"
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "securityId": "05744a34-415b-4084-b832-ce3436ba0694",
+          "instrumentId": "758"
+        },
+        {
+          "symbol": "HDFCBANK",
+          "securityId": "b47b007d-1990-4504-a5a2-4391c07687c5",
+          "instrumentId": "533"
+        },
+        {
+          "symbol": "AXISBANK",
+          "securityId": "b330c9fe-ae35-469a-9975-d5af26843b1c",
+          "instrumentId": "140"
+        }
+      ],
+      "parameters": [
+        "roea",
+        "roaa"
+      ],
+      "security_ids": [
+        "be55b3cc-0400-45af-84aa-2a95e2c361c5",
+        "05744a34-415b-4084-b832-ce3436ba0694",
+        "b47b007d-1990-4504-a5a2-4391c07687c5",
+        "b330c9fe-ae35-469a-9975-d5af26843b1c"
+      ],
+      "provider_tool": "get_stock_parameter_values",
+      "parameter_source_id": "e3fb5878-aac8-41d1-a4b4-5d8d3143d4db"
+    }
+  }
+]

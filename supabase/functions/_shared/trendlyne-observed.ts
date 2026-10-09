@@ -81,6 +81,23 @@ export class TrendlyneObservedMcpClient {
     return this.call("get_parameter_values_multi_stock", { query, type })
   }
 
+  async searchFinancialParameters(query: string): Promise<string> {
+    return this.call("search_financial_parameters", { query })
+  }
+
+  async getStockParameterValues(stockCodes: readonly string[], parameters: readonly string[]): Promise<string> {
+    if (!stockCodes.length || stockCodes.length > 10 || !parameters.length || parameters.length > 10) throw new Error("PROVIDER_EXACT_PARAMETER_SCOPE_INVALID")
+    return this.call("get_stock_parameter_values", { stock_codes: stockCodes, parameters })
+  }
+
+  /** MCP capability discovery only; never financial evidence or a tool execution. */
+  async listAvailableTools(): Promise<string> {
+    if (!this.#session) await this.initialize()
+    const result = await this.#post({jsonrpc:"2.0",id:this.#next++,method:"tools/list",params:{}}) as {tools?:{name?:unknown;inputSchema?:unknown}[]}
+    if(!Array.isArray(result?.tools)||!result.tools.length||result.tools.some(t=>typeof t.name!=="string"||!t.inputSchema||typeof t.inputSchema!=="object"))throw new Error("PROVIDER_TOOL_CATALOG_MISSING")
+    return JSON.stringify(result)
+  }
+
   async getOverviewNewsCorpEvents(stockCode: string, type: "overview" | "technical" | "news" | "events"): Promise<string> {
     return this.call("get_overview_news_corp_events", { stock_code: stockCode, type })
   }
