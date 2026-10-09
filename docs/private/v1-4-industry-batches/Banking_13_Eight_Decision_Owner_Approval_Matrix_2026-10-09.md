@@ -1,7 +1,7 @@
 # BANK V1-4 — eight independent owner decisions (seven M + one O)
-**Status:** ALL PROPOSED / NONE APPROVED BY THIS DOCUMENT. 2026-10-09. Development-only. Existing bank methodology, 13-member cohort, original requirements, canonical authorities, RLS and Production unchanged.
+**Status:** M1–M4 APPROVED DIRECT-SOURCE ONLY; M5–M7 DEFERRED; O1 APPROVED FOR PLANNING/TESTING ONLY. See explicit owner decision record `Banking_13_Owner_Decision_Record_2026-10-09.md`. 2026-10-09. Development-only. Existing bank methodology, 13-member cohort, original requirements, canonical authorities, RLS and Production unchanged.
 
-This table supplements the earlier consolidated package; it does not grant factual acceptance, source override, new financial calculations, paid calls or scheduler activation. The source definitions below are proposed contractual decisions. Synthetic worked examples are not actual bank evidence.
+This table supplements the earlier consolidated package. Owner explicitly authorized direct-source implementation for M1–M4 only and read-only planning/testing for O1. It does not grant factual acceptance, source override, new derived financial calculations, recurring paid calls or scheduler activation. M1–M4 are authorized strictly as direct-source contracts; M5–M7 model rows remain unapproved candidates. Synthetic worked examples are not actual bank evidence.
 
 | Decision | Exact recommendation | Source / period / perimeter / units | Synthetic worked case; rejected alternative | Requirement unlocked only after review |
 |---|---|---|---|---|
