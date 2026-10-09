@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import source from "./v14-reviewed-evidence.ts?raw"
+import materializer from "../p7-ic2-materialize-readiness/index.ts?raw"
 
 /** Integration regression: the canonical reviewer, not UI or metadata preflight,
  * must enforce direct M1-M4 source proof after original source-binding checks. */
@@ -22,6 +23,11 @@ describe("M1-M4 binding inside canonical reviewed-evidence owner",()=>{
   expect(source).toContain('r.period_type!=="YEAR"')
   expect(source).toContain("BANK_DIRECT_FULL_YEAR_ROA_SOURCE_PROOF_MISSING")
   expect(source).toContain("average (total )?assets")
+ })
+ it("blocks an unreviewed canonical M1-M4 observation from being promoted",()=>{
+  expect(materializer).toContain("BANK_DIRECT_FACTUAL_REVIEW_REQUIRED")
+  expect(materializer).toContain('reviewed?.state!=="FRESH"')
+  expect(materializer).toContain("QUALIFY_SOURCE_BOUND_BANK_DIRECT_REVIEW")
  })
  it("never gates historical NPA or invents M5-M7",()=>{
   expect(source).not.toContain('["GROSS_NPA","NET_NPA","NIM_TTM"')
