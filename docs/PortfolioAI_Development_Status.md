@@ -1,3 +1,13 @@
+## Banking V1-4 seven-contract and maintenance decision handoff — 9 October 2026
+
+**Gate A NOT PROVEN (0/13 READY, ₹0). Gate B NOT PROVEN (scheduler OFF).** Source-backed owner decision work has been consolidated, not activated. Current read-only Development registry still lacks seven BANK metric definitions: NIM_TTM, CET1_RATIO, CAPITAL_ADEQUACY_RATIO, ROA_ANNUAL, PB_RELATIVE, PB_ADJUSTED_FOR_ROE and PE_TTM_RELATIVE. Live selected 13×23 requirement census totals 299 applicable, 65 historical FRESH and 234 historical blocked; the old selected snapshot counts must not be presented as current freshness and do not include subsequent source admissions.
+
+- Prepared `docs/private/v1-4-industry-batches/Banking_13_Consolidated_Methodology_And_Maintenance_Approval_Package_2026-10-09.md` — seven exact source/semantic recommendations, guarded valuation alternatives, test expectations and separate bounded recurring-policy choices; **PROPOSED / NOT APPROVED**.
+- Added 299-row `docs/private/v1-4-industry-batches/Banking_13_By_Requirement_Execution_Ledger_2026-10-09.csv` covering all 13 exact banks in four owner slices and all 23 registered BANK codes. It records bank/requirement source context, proof and decision dependencies, next step and unexecuted current replay; it does **not** assert new facts admitted.
+- No provider call, new review/observation/snapshot/selection, migration, Auth/RLS change, Development Edge deployment, recurring activation, PR merge, Production or V1-5 change during this documentation handoff. Earlier live history writer v20/v11 deployments remain separately recorded.
+
+---
+
 ## Banking V1-4 Development history write-safety deployment — 9 October 2026
 
 **Gate A:** NOT PROVEN. **Gate B:** NOT PROVEN. Recurring scheduler remains OFF.
