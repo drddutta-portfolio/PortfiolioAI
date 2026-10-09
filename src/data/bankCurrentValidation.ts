@@ -1,3 +1,4 @@
+import { supabase } from "../lib/supabase"
 import { invokeBankingReadOnlyValidation } from "./bankingValidationRepository"
 
 type BankingRequirement = { requirement_code: string; evidence_state: string; reason_code: string }
@@ -13,6 +14,18 @@ export type EffectiveBankReadOnlyResult = {
 
 const action = "P7_IC3_VALIDATE_CANONICAL_INPUTS"
 
+async function selectedFingerprint(portfolioId:string,securityId:string):Promise<string> {
+  const result = await supabase.from("research_evidence_snapshot_selections")
+    .select("id,snapshot_id,selected_at",{count:"exact"})
+    .eq("portfolio_id",portfolioId).eq("security_id",securityId)
+    .order("selected_at",{ascending:false}).limit(1)
+  if (result.error || result.count===null) throw new Error("BANK_SELECTED_SNAPSHOT_READBACK_UNAVAILABLE")
+  const rows = result.data ?? []
+  if (rows.length>1) throw new Error("BANK_SELECTED_SNAPSHOT_READBACK_INCOMPLETE")
+  return JSON.stringify({total:result.count,latest:rows[0]??null})
+}
+
+
 /**
  * An authenticated, read-only canonical evaluation, NEVER a persisted READY.
  * Fail closed on incomplete identities, requirements, side effects or counters.
@@ -23,11 +36,14 @@ export async function validateEffectiveBankReadOnly(
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(portfolioId) ||
       !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(securityId) ||
       !Number.isFinite(Date.parse(evaluationAsOf))) throw new Error("BANK_CURRENT_VALIDATION_SCOPE_INVALID")
+  const beforeSelection = await selectedFingerprint(portfolioId,securityId)
   const selectionRunId=crypto.randomUUID()
   const raw = await invokeBankingReadOnlyValidation({
     action, portfolioId, securityIds:[securityId],
     selectionRunId, evaluationAsOf, sourceCutoffAt:evaluationAsOf,
   })
+  const afterSelection = await selectedFingerprint(portfolioId,securityId)
+  if (beforeSelection!==afterSelection) throw new Error("BANK_READ_ONLY_SELECTED_SNAPSHOT_CHANGED")
   if (!raw || typeof raw !== "object") throw new Error("BANK_CURRENT_VALIDATION_INCOMPLETE")
   const body = raw as Record<string,unknown>
   const writes = body.writeTotals as Record<string,unknown> | undefined
