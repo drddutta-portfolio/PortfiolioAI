@@ -1,3 +1,17 @@
+## Banking V1-4 Development history write-safety deployment — 9 October 2026
+
+**Gate A:** NOT PROVEN. **Gate B:** NOT PROVEN. Recurring scheduler remains OFF.
+
+- Independent live-source comparison found Development `refresh-market-history` v19 and `refresh-bank-benchmark` v10 lagged the remediation branch and did not include the already-tested append-only correction/race safeguards.
+- Deployed the exact remediation implementations to Development only. `refresh-market-history` is now **v20**, bundle `940be77753e9dbfe4f12126383b7e2c6a1736fb6c25d13c1dfad216dd821fdbf`; `refresh-bank-benchmark` is now **v11**, bundle `5182e4faafc20feca78bba1c7dfad9127a922f0e0a67a99b8a0c3bcf15e8cdb0`.
+- Post-deployment bundle readback verifies both live functions now contain source-bound numeric equality, duplicate-ignore persistence, correction-review blocking, concurrent-correction detection and final post-write readback.
+- No provider invocation, migration, Auth/RLS change, factual review, canonical snapshot/selection write, Production deployment, PR merge, cohort change or scheduler activation occurred.
+- Independent database readback after deployment confirms the same 13 selections remain selected: **0 READY / 11 REVIEW_REQUIRED / 2 CONFLICTING**; the delegated review ledger remains exactly **26** rows. READY frozen value remains **₹0**.
+- Exact deployment record: `docs/private/v1-4-industry-batches/Banking_13_History_Write_Safety_Deployment_2026-10-09.md`.
+- Gate B still requires a qualified current-session execution/canary path, expiry/event revalidation evidence, recovery monitoring and valid recurring activation authority. Gate A still requires approved source/methodology contracts and successful whole-bank canonical materialization/readback.
+
+---
+
 ## Banking V1-4 continuing qualification and current-readiness bridge — 9 October 2026
 
 **Scope:** Draft PR #124, Development-only. **Gate A:** NOT PROVEN (0/13 persisted READY; frozen READY ₹0/₹2,05,138.62). **Gate B:** NOT PROVEN; recurring scheduler OFF. All 111 frozen securities and methodology unchanged.
