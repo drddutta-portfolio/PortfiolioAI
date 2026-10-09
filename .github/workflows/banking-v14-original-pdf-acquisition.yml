@@ -1,9 +1,5 @@
 name: Banking V1-4 Original PDF Acquisition (One Shot)
 on:
-  pull_request:
-    types: [synchronize]
-    paths:
-      - '.github/workflows/banking-v14-original-pdf-acquisition.yml'
   workflow_dispatch:
 permissions:
   contents: read
