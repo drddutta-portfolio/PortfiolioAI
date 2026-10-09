@@ -107,7 +107,8 @@ export function planBankMaintenance(input: BankMaintenanceInput): BankMaintenanc
   })
   const boundedStockRequestCount=stockDecisions.filter(d=>d.acquireStockSessions.length>0).length
   const boundedTotalRequestCount=boundedStockRequestCount+(missingBenchmarkSessions.length>0?1:0)
-  if(sessions.length>1 && boundedTotalRequestCount>0)failureReasons.push("BUDGET_UNAVAILABLE")
+  const requestedSessions=new Set([...missingBenchmarkSessions,...stockDecisions.flatMap(d=>d.acquireStockSessions)])
+  if(requestedSessions.size>1)failureReasons.push("BUDGET_UNAVAILABLE")
   if(boundedTotalRequestCount>14)failureReasons.push("BUDGET_UNAVAILABLE")
   return {
     executionAllowed: false,
