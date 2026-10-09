@@ -1,3 +1,16 @@
+## Banking V1-4 continuing qualification and current-readiness bridge — 9 October 2026
+
+**Scope:** Draft PR #124, Development-only. **Gate A:** NOT PROVEN (0/13 persisted READY; frozen READY ₹0/₹2,05,138.62). **Gate B:** NOT PROVEN; recurring scheduler OFF. All 111 frozen securities and methodology unchanged.
+
+- Independent readback located **13/13 October 8 stock bars and one NIFTY_BANK bar**, each with raw `V1_4_BANK_TAIL_CAPTURE` record provenance and payload hash. These records already exist; no repeat October 8 acquisition needed. See `docs/private/v1-4-industry-batches/Banking_13_Oct8_Capture_And_NPA_Independent_Readback_2026-10-09.md` for exact security, retained source and snapshot/selection IDs.
+- Independently reconciled **26/26 ACCEPTED** delegated quarterly standalone percent Gross/Net NPA review rows; all have corresponding retained source records and matching original source payload hashes. These accepted individual reviews have **not** yet generated a fresh selected snapshot. Current owner-authenticated full canonical replay is outstanding.
+- Added current-clock BANK display-veto logic and an explicitly prospective **authenticated read-only** single-stock canonical-replay bridge for the frozen 13-bank Development research page, with strict zero-provider/zero-write response checks. It cannot upgrade historical selected status. Simulated timestamp and Development-host regression tests were added. **Not deployed or live owner-browser-verified.**
+- The deployed Development canonical validator remains `p7-ic2-materialize-readiness` v46; the historical tail-acquisition function remains v1. The grant ledger showed no unexpired unconsumed P4 grant. No grant was fabricated, no owner JWT obtained and no fresh HTTP validation or materialization was performed.
+- Stage 8.1C and 8.6D leave specific NIM TTM, CET1, CAR, annual ROA and generic/ROE-adjusted P/B semantics unresolved. A single source-bound decision package is recorded at `docs/private/v1-4-industry-batches/Banking_13_Methodology_Contract_Decision_Package_2026-10-09.md`, without inventing financial formulas.
+- No additional provider call, factual review, database/R2/canonical write, backend redeployment, PR merge, Production change or recurring scheduler activation in this continuation. Source availability, historical selections, prospective statuses and actual persisted READY remain separate.
+
+---
+
 ## Banking V1-4 native Trendlyne correction — 9 October 2026
 
 Executed 13 fresh scoped Trendlyne tool calls plus one capability-discovery request. All fourteen reservations SETTLED; thirteen internal units, no retries. Corrected SBIN selector from internal ID to NSE symbol: six quarters of both selected ownership series recovered. Ownership histories now available for **13/13**, with source semantics still blocked. Four source-token-bound exact slice calls returned annual ROE and ROA for all thirteen banks; broad-search absence was not provider absence. Native annual NIM/Tier 1 are not substitutes for NIM TTM/CET1. No invented reporting dates, fiscal scope or missing metric definitions.
