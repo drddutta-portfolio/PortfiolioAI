@@ -1,3 +1,11 @@
+## Banking V1-4 M1–M4 canonical review integration — 9 October 2026
+
+M1–M4 approved direct-source semantic proof has now been added to the existing `v14-reviewed-evidence.ts` reviewer after original hash, exact source quote, numeric value and financial period binding; negative source-substitution integration regressions committed. This is **repository integration**, not Development Edge deployment, registry registration, factual admission or current handler materialization. A read-only retained-source scan confirmed candidate NIM/CET1/CAR/ROA mentions but no fully verified direct-source period/scope/denominator fragments admitted in this execution. **New reviews/observations/selections: 0.** Existing 26 accepted NPA reviews unchanged. No provider calls, grant creation, cron, Production or V1-5 changes.
+
+All three deferred valuation requirements remain mandatory in the 13 selected BANK snapshots; they block Gate A irrespective of M1–M4 progress. Precise source inspection and remaining boundary: `docs/private/v1-4-industry-batches/Banking_13_M1_M4_Integration_And_Raw_Source_Checkpoint_2026-10-09.md`. Gate A **NOT PROVEN (0/13 READY)**; Gate B **NOT PROVEN (scheduler OFF)**.
+
+---
+
 ## Banking V1-4 explicit owner decision and direct-source preflight — 9 October 2026
 
 The owner explicitly approved **M1–M4 DIRECT ONLY** (NIM_TTM, CET1_RATIO, CAPITAL_ADEQUACY_RATIO, ROA_ANNUAL); **M5–M7 DEFERRED** (PB_RELATIVE, PB_ADJUSTED_FOR_ROE, PE_TTM_RELATIVE); and **O1 APPROVED FOR PLANNING/TESTING ONLY**, without scheduler activation or recurring provider spend. The specific source is `docs/private/v1-4-industry-batches/Banking_13_Owner_Decision_Record_2026-10-09.md`, reflected in the eight-decision matrix.
