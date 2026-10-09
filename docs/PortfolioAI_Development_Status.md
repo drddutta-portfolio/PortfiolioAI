@@ -1,3 +1,11 @@
+## Banking V1-4 explicit owner decision and direct-source preflight — 9 October 2026
+
+The owner explicitly approved **M1–M4 DIRECT ONLY** (NIM_TTM, CET1_RATIO, CAPITAL_ADEQUACY_RATIO, ROA_ANNUAL); **M5–M7 DEFERRED** (PB_RELATIVE, PB_ADJUSTED_FOR_ROE, PE_TTM_RELATIVE); and **O1 APPROVED FOR PLANNING/TESTING ONLY**, without scheduler activation or recurring provider spend. The specific source is `docs/private/v1-4-industry-batches/Banking_13_Owner_Decision_Record_2026-10-09.md`, reflected in the eight-decision matrix.
+
+Implemented a pure source semantic preflight `supabase/functions/_shared/v14-bank-approved-direct-preflight.ts` and matching `.test.ts`. It rejects unsupported annual NIM→TTM, Tier 1→CET1, Basel II→Basel III, quarterly→annual ROA and missing identity/hash/period/denominator proof. Passing is **only eligible for subsequent factual review**, never `ACCEPTED` or `READY`; not yet wired to the canonical adapter nor deployed to an Edge runtime. Direct reported values remain subject to exact source semantics/period/scope and existing immutable review authority. No metric registry activation/migration, provider calls, review writes, canonical selections, schedule, Production or V1-5 changes. Gate A and Gate B remain **NOT PROVEN**.
+
+---
+
 ## Banking V1-4 seven-contract and maintenance decision handoff — 9 October 2026
 
 **Gate A NOT PROVEN (0/13 READY, ₹0). Gate B NOT PROVEN (scheduler OFF).** Source-backed owner decision work has been consolidated, not activated. Current read-only Development registry still lacks seven BANK metric definitions: NIM_TTM, CET1_RATIO, CAPITAL_ADEQUACY_RATIO, ROA_ANNUAL, PB_RELATIVE, PB_ADJUSTED_FOR_ROE and PE_TTM_RELATIVE. Live selected 13×23 requirement census totals 299 applicable, 65 historical FRESH and 234 historical blocked; the old selected snapshot counts must not be presented as current freshness and do not include subsequent source admissions.
