@@ -12,6 +12,20 @@ function mount() { return render(<CanonicalEvidenceReadinessPanel portfolioId="p
 describe("canonical evidence requirement presentation", () => {
   afterEach(cleanup)
   beforeEach(() => { mocks.hook.mockReturnValue({ applicable: true, isLoading: false, error: null, data: { snapshot, requirements: [requirement] } }) })
+  it("does not present an old persisted BANK READY selection as verified current READY", () => {
+    mocks.hook.mockReturnValue({
+      applicable: true, isLoading: false, error: null,
+      data: { snapshot: { ...snapshot, profileCode: "BANK", snapshotStatus: "READY" }, requirements: [{ ...requirement, evidence_state: "FRESH" }] },
+    })
+    mount()
+    expect(screen.getByRole("status").textContent).toContain("Historical BANK assessment only")
+    expect(screen.getByRole("status").textContent).toContain("not currently READY")
+    expect(screen.getByText(/This is the stored evidence assessment/)).toBeTruthy()
+  })
+  it("does not apply banking historical-display warning to another profile", () => {
+    mount()
+    expect(screen.queryByText(/Historical BANK assessment only/)).toBeNull()
+  })
   it("exposes missing approved benchmark requirements for a profile without requiring a scoring engine", () => {
     mount()
     expect(screen.getByText("REVIEW REQUIRED")).toBeTruthy()
