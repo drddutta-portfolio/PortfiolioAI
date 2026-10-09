@@ -1,5 +1,9 @@
 name: Banking V1-4 Original PDF Acquisition (One Shot)
 on:
+  pull_request:
+    types: [synchronize]
+    paths:
+      - '.github/workflows/banking-v14-original-pdf-acquisition.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -13,6 +17,55 @@ jobs:
         id: acquire
         continue-on-error: true
         run: node scripts/banking-v14-original-pdf-acquisition.mjs
+      - name: Preserve original bytes in Development R2 and verify SHA256
+        if: steps.acquire.outcome == 'success'
+        env:
+          CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+        run: |
+          set -euo pipefail
+          test -n "${CLOUDFLARE_R2_ACCOUNT_ID:-}"
+          test -n "${AWS_ACCESS_KEY_ID:-}"
+          test -n "${AWS_SECRET_ACCESS_KEY:-}"
+          test "${CLOUDFLARE_R2_BUCKET}" = "portfolioai-history-dev"
+          ENDPOINT="https://${CLOUDFLARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("bank-original-source-artifact/manifest.json")
+          m=json.loads(p.read_text())
+          assert len(m["results"])==3
+          assert all(x["status"]=="ORIGINAL_BYTES_CAPTURED_NOT_ADMITTED" for x in m["results"])
+          for x in m["results"]:
+            x["r2_object_key"]="portfolioai-research/development/v1-4/bank-original-pdf/sha256/"+x["originalSha256"]+".pdf"
+          p.write_text(json.dumps(m,indent=2)+"\n")
+          PY
+          python - <<'PY'
+          import json,subprocess,hashlib,os
+          from pathlib import Path
+          p=Path("bank-original-source-artifact/manifest.json")
+          m=json.loads(p.read_text())
+          endpoint="https://"+os.environ["CLOUDFLARE_R2_ACCOUNT_ID"]+".r2.cloudflarestorage.com"
+          bucket=os.environ["CLOUDFLARE_R2_BUCKET"]
+          for x in m["results"]:
+            src=Path("bank-original-source-artifact")/x["filename"]
+            actual=hashlib.sha256(src.read_bytes()).hexdigest()
+            assert actual==x["originalSha256"]
+            uri="s3://"+bucket+"/"+x["r2_object_key"]
+            subprocess.run(["aws","s3","cp",str(src),uri,"--endpoint-url",endpoint,"--only-show-errors"],check=True)
+            dest=Path("bank-original-source-artifact")/("r2-verified-"+x["filename"])
+            subprocess.run(["aws","s3","cp",uri,str(dest),"--endpoint-url",endpoint,"--only-show-errors"],check=True)
+            assert hashlib.sha256(dest.read_bytes()).hexdigest()==actual,"R2_SHA256_MISMATCH"
+            dest.unlink()
+            x["durable_storage_verified"]=True
+          p.write_text(json.dumps(m,indent=2)+"\n")
+          print("R2_ORIGINAL_BYTES_PRESERVED=3; INDEPENDENT_SHA256_READBACK=3")
+          PY
       - name: Upload one-shot original source bytes and manifest
         if: always()
         uses: actions/upload-artifact@v4
