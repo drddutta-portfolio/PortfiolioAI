@@ -34,3 +34,5 @@ Counts are retained raw *records*, not bank/metric-qualified fact counts, period
 5. Gate B is still planning/testing only. No recurring paid provider calls, schedule, unattended grant or automatic materialization authorized.
 
 Selected baseline remains 0 READY, 11 REVIEW_REQUIRED, 2 CONFLICTING, ₹0/₹2,05,138.62 READY pending an independent current readback. Production/main/V1-5 unchanged.
+
+**Independent scope and admission status check:** all thirteen `V1_4_BANK_PRIMARY_FILING_CAPTURE` records have `admissionStatus=RAW_SOURCE_CAPTURE_ONLY`. Each states that literal HTML table cells still require fact-level period/type/scope links; no ratio conversion, annualization or institutional aggregation has been performed. Therefore these records are **not** factual ACCEPT candidates until fact-level source binding is demonstrated. The four `V1_4_OFFICIAL_ANNUAL_REPORT_CAPTURE` records inspected are entirely outside the frozen bank population (ABCAPITAL, ACMESOLAR, AKUMS, ALIVUS).
