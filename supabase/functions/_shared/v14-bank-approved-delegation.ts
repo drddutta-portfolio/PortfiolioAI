@@ -30,7 +30,7 @@ export function approvedBankOfficialFallback(review:RequirementReview,source:Rev
  const a=review.metadata.review_authorization as Record<string,unknown>|null
  if(a?.policy_id===issuerPolicy.id){
    const p=source.raw_payload
-   if(source.source_code!=="COMPANY_EXCHANGE_FILING"||p.security_id!==review.security_id
+   if(source.source_code!=="COMPANY_EXCHANGE_FILING"||p.factual_review_status!=="SOURCE_FACT_QUALIFIED"\n      ||p.source_text_attestation!=="VERIFIED_FROM_ORIGINAL_PDF_BYTES"||p.security_id!==review.security_id
       ||p.policy_id!==issuerPolicy.id||typeof p.original_url!=="string"
       ||typeof p.original_sha256!=="string"||! /^[0-9a-f]{64}$/u.test(p.original_sha256)
       ||p.original_sha256!==p.r2_verified_sha256
