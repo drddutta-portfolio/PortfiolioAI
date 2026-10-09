@@ -77,7 +77,6 @@ export function planBankMaintenance(input: BankMaintenanceInput): BankMaintenanc
   if (!input.publicationReady) failureReasons.push("SESSION_UNPUBLISHED")
   if (!input.providerAvailable) failureReasons.push("PROVIDER_UNAVAILABLE")
   if (!input.budgetAvailable) failureReasons.push("BUDGET_UNAVAILABLE")
-  const safeToAcquire = failureReasons.length === 0
   const missingBenchmarkSessions = sessions.filter(s => !input.benchmarkSessions.includes(s))
   const reviewIds = new Set(input.pendingReviewSecurityIds)
   const inFlightIds = new Set(input.inFlightSecurityIds)
