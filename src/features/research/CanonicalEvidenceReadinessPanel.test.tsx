@@ -37,6 +37,7 @@ describe("canonical evidence requirement presentation", () => {
       data: { snapshot: { ...snapshot, profileCode: "BANK", snapshotStatus: "READY" }, requirements: [{ ...requirement, evidence_state: "FRESH" }] },
     })
     mount()
+    expect(screen.getByText("HISTORICAL READY (CURRENT NOT VERIFIED)")).toBeTruthy()
     expect(screen.getByRole("status").textContent).toContain("Historical BANK assessment only")
     expect(screen.getByRole("status").textContent).toContain("not currently READY")
     expect(screen.getByText(/This is the stored evidence assessment/)).toBeTruthy()
