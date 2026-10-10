@@ -1,5 +1,5 @@
 # BANK V1-4 — October 8 persistence and historical-archive reconciliation
-**Date:** 2026-10-10  
+**Date:** 2026-10-10
 **Scope:** Draft PR #124 / Development only. Production/main/V1-5 unchanged.
 
 ## 1. October 8 persistence discrepancy — PROVEN CAUSE
