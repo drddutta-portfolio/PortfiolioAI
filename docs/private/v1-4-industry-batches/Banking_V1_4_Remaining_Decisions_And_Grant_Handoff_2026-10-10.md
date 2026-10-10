@@ -1,5 +1,5 @@
 # BANK V1-4 — remaining decisions and grant handoff
-**Date:** 2026-10-10  
+**Date:** 2026-10-10
 **Scope:** Draft PR #124 / Development only. This document does not re-request already recorded approvals and does not authorize Production, V1-5 or any merge.
 
 ## Already approved / do not reopen
@@ -32,17 +32,17 @@ The steady-state identity `Justified P/B = (ROE - g)/(Ke - g)` is **not** activa
 
 **Recommended approval:** allow the single canonical reviewer to consume immutable precision metadata without fabricating `published_at`.
 
-A. **EXACT timestamp**  
+A. **EXACT timestamp**
 Existing path. Exact issuer/exchange publication timestamp is stored and may admit a fact if every other source, scope, period, cutoff, freshness and review control passes.
 
-B. **DATE_ONLY**  
+B. **DATE_ONLY**
 - Keep `published_at = NULL`.
 - Store `publication_precision = DATE_ONLY`, proven `publication_date`, exact provenance URL/hash and verification metadata.
 - Derive a conservative factual-eligibility availability bound at **23:59:59.999 Asia/Kolkata** on that proven date.
 - Do not admit an intraday historical observation earlier than that bound.
 - If an exact timestamp is later proven for the same document/version, append/supersede precision evidence rather than overwrite history.
 
-C. **UNKNOWN publication date, verified original bytes**  
+C. **UNKNOWN publication date, verified original bytes**
 - Keep `published_at = NULL`.
 - Store `publication_precision = UNKNOWN` and exact `first_verified_available_at` from the first independently verified retrieval of the immutable original bytes.
 - Retrieval proves the source was available **no later than that retrieval instant**; it is not an issuer publication claim.
