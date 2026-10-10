@@ -7,3 +7,8 @@ Deno.test("bounded append-only bank tails validate exact prices and reject incom
   if(!failed)throw new Error("Invalid source candles accepted")
  }
 })
+
+Deno.test("UTC storage representation resolves to the intended NSE local session",()=>{
+  const {bankTailDay}=await import("../_shared/v14-bank-tail-validation.ts")
+  if(bankTailDay("2026-10-07T18:30:00.000Z")!=="2026-10-08")throw new Error("UTC timestamp was misclassified as the previous NSE session")
+})
