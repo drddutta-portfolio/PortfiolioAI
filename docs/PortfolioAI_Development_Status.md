@@ -1,3 +1,15 @@
+## Banking V1-4 — CI PASS, M6 decision and measured evidence blockers — 10 October 2026
+
+**Verified** code commit `a6c84f5584e9c1f12173612bd083bf636ab1baed`: Banking V1-4 Full Verification PASS and PortfolioAI Architecture Guard PASS. M6 `PB_ADJUSTED_FOR_ROE` is **required**, BANK profile order 14. The ROE-median division/clamp heuristic lacks financial justification. Versioned owner-ready choice to keep required+blocked pending calibrated residual-income `justified PB=(through-cycle ROE−g)/(Ke−g)` with full source/risk/scoring sensitivity, or formally replace/reweight in a versioned BANK methodology without silently deleting requirement. See `docs/private/v1-4-industry-batches/Banking_V1_4_M6_Financial_Model_Or_Amendment_Decision_2026-10-10.md`. **No M6 approval/activation inferred**.
+
+Official ICICI financial iXBRL from NSE and issuer earnings/results establish 18 July 2026 board date; Bandhan bank regulatory listing and July results dates exist; KVB July 20 letter references Pillar 3. **None proves the exact issuer publication timestamp of the acquired same-hash Pillar 3 PDFs.** Four original-source records have `published_at=NULL`, hence no new M1–M4 factual ACCEPT. Precise evidence/date-only possible representation and non-invented publication-clock proposal recorded in `Banking_V1_4_Publication_And_Canary_Preflight_2026-10-10.md`. Existing accepted 26 NPA reviews unchanged.
+
+Measured live `market_price_history` coverage across all 13 BANK symbols is **15 distinct months each**, versus approved required ≥36 qualified of preceding 60 across all five years; current point-in-time BVPS/TTM EPS history still unproven. Do not derive five-year comparator scores from 15 months, confuse it with separate P8 archived data or activate M5/M7.
+
+Bounded recurring operating canary **NOT EXECUTED**: Trendlyne scheduler OFF and quota last owner-verified on 2026-09-29, no confirmed current Angel One scoped provider entitlement/budget grant/issuer machine identity; manual planner tests are not a live canary. No provider attempts or recurring activation. Full authenticated canonical 299-item evaluation and bank selection write similarly not executed without qualifying financial facts and valid owner grant. Latest selected 0/13 READY; Gate A/B NOT PROVEN. PR #124 remains draft, Production/main untouched.
+
+---
+
 ## Banking V1-4 — consolidated owner approval and executable M5/M7 / bounded maintenance (10 October 2026)
 
 Owner approved the **recommended proposals** from `BANK_V1_4_CONSOLIDATED_EXECUTION_CONTRACT_V1_2026_10_10`: M5 same-bank 60-month point-in-time PB relative and M7 analogous positive-earnings TTM PE relative, minimum 36/60 with five-year temporal spread; **M6 recommended deferral**, not a made-up ROE adjustment; AUBANK SFB-specific regulatory mapping direction, and bounded Development maintenance proposal subject to manual live canary, genuine provider/grant budgets and verified exchange-final publication. Approval record: `docs/private/v1-4-industry-batches/Banking_V1_4_Consolidated_Contract_V1_Owner_Approval_2026-10-10.md`.
