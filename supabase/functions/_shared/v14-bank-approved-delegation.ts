@@ -38,8 +38,8 @@ export function approvedBankOfficialFallback(review:RequirementReview,source:Rev
       ||p.r2_bucket!==issuerPolicy.storageBucket
       ||p.r2_object_key!==issuerPolicy.storageKeyPrefix+p.original_sha256+".pdf"
       ||!Number.isFinite(Date.parse(String(p.original_bytes_verified_at??"")))
-      ||!["EXACT","DATE_ONLY","UNKNOWN","UNKNOWN_DATE"].includes(String(p.publication_precision??""))
-      ||(String(p.publication_precision??"")==="EXACT"&&!Number.isFinite(Date.parse(String(p.published_at??""))))
+      ||!["EXACT","DATE_ONLY","UNKNOWN","UNKNOWN_DATE"].includes(String(p.publication_precision??(Number.isFinite(Date.parse(String(p.published_at??"")))?"EXACT":"")))
+      ||(String(p.publication_precision??(Number.isFinite(Date.parse(String(p.published_at??"")))?"EXACT":""))==="EXACT"&&!Number.isFinite(Date.parse(String(p.published_at??""))))
       ||(String(p.publication_precision??"")==="DATE_ONLY"&&!/^\d{4}-\d{2}-\d{2}$/u.test(String(p.publication_date??"")))
       ||(["UNKNOWN","UNKNOWN_DATE"].includes(String(p.publication_precision??""))&&!Number.isFinite(Date.parse(String(p.first_verified_available_at??""))))
       ||typeof p.source_scope!=="string"||!p.source_scope) return false
