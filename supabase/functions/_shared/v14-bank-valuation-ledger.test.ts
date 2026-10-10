@@ -4,7 +4,7 @@ const H="a".repeat(64),SEC="be55b3cc-0400-45af-84aa-2a95e2c361c5"
 function row(id:string,month:string,role:"CURRENT"|"HISTORICAL",multiple=2.5,published?:string,price?:string):BankValuationLedgerRecord{
  return{id,record_kind:BANK_VALUATION_LEDGER_RECORD_KIND,retrieved_at:"2026-10-10T00:00:00Z",raw_payload:{
   version:BANK_VALUATION_LEDGER_VERSION,security_id:SEC,requirement_code:"PB_RELATIVE",role,month,multiple,
-  source_published_at:published??month+"-01T00:00:00Z",price_as_of:price??month+"-28T10:00:00Z",
+  source_published_at:published??month+"-01T00:00:00Z",price_as_of:price??(role==="CURRENT"?"2026-10-09T10:00:00Z":month+"-28T10:00:00Z"),
   reporting_scope:"STANDALONE",corporate_action_basis:"SPLIT_BONUS_ALIGNED_PER_SHARE",
   source_hash:H,admitted:true,price_source_record_ids:["price-"+id],denominator_source_record_ids:["denom-"+id],
   corporate_action_source_record_ids:["ca-"+id]
