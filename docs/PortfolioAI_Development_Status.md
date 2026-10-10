@@ -1,3 +1,13 @@
+## Banking V1-4 — 10 Oct source-precision code, M6 recommendation, historical and canary readbacks
+
+PR #124 current continuation adds pure `v14-bank-publication-precision.ts` and negative tests for three distinct original-document cases: (A) proven exact issuer publication instant, (B) proven official publication date only with conservative end-of-day IST bound, and (C) unknown publication date with original bytes and first verified retrieval, **never falsely setting published_at**. B/C remain **non-admitting** pending a narrow explicit canonical precision amendment; historical point-in-time valuation must never use pre-availability data. Source `published_at` NULL not patched.
+
+M6 exact recommended **governed BANK V2 amendment retiring required `PB_ADJUSTED_FOR_ROE` from the new model with proportional redistribution of validated surviving scores**, after authoritative weights/all-13 impact/threshold comparisons and owner approval. This is not currently authorized or activated. See `docs/private/v1-4-industry-batches/Banking_V1_4_M6_And_Publication_Precision_Final_Decision_2026-10-10.md`.
+
+Read-only reconciliation confirms `market_price_history` and `market_benchmark_price_history` max ANGEL_ONE October 7 2026, with **0 October 8 rows**. `p8_b3_adjusted_market_price_series` **0 rows**; `p8_historical_source_archives` has 32 NSE security-master objects, not admissible historical valuation time series. All 13 BANK market price samples provide only 15 distinct months against approved ≥36 of 60. No new M1–M4 ACCEPT, no 299-item current handler proof, no READY increase. Maintainer canary not run: current Angel One provider grant/quota and current original-source availability not evidenced, provider schedulers OFF. Existing 26 NPA reviews unchanged; Gate A/B NOT PROVEN. Final new commit CI must be read back before claiming verification; Production/main unchanged.
+
+---
+
 ## Banking V1-4 — CI PASS, M6 decision and measured evidence blockers — 10 October 2026
 
 **Verified** code commit `a6c84f5584e9c1f12173612bd083bf636ab1baed`: Banking V1-4 Full Verification PASS and PortfolioAI Architecture Guard PASS. M6 `PB_ADJUSTED_FOR_ROE` is **required**, BANK profile order 14. The ROE-median division/clamp heuristic lacks financial justification. Versioned owner-ready choice to keep required+blocked pending calibrated residual-income `justified PB=(through-cycle ROE−g)/(Ke−g)` with full source/risk/scoring sensitivity, or formally replace/reweight in a versioned BANK methodology without silently deleting requirement. See `docs/private/v1-4-industry-batches/Banking_V1_4_M6_Financial_Model_Or_Amendment_Decision_2026-10-10.md`. **No M6 approval/activation inferred**.
