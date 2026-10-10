@@ -33,6 +33,15 @@ describe("owner approved BANK financial dual clock",()=>{
   const old={...observation,period_start:"2025-06-30",period_end:"2025-06-30"};
   expect(evalRows([old]).reason).toBe("BANK_DUAL_CLOCK_FRESH_UNTIL_EXCEEDS_EXPIRY");
  });
+ it("accepts approved UNKNOWN publication via proven current availability without resetting period age",()=>{
+  const unknown={...observation,published_at:null,proven_availability_at:"2026-10-09T19:06:22Z"};
+  expect(evalRows([unknown]).state).toBe("FRESH");
+  const x=bankDualClockExpiry({...base,publishedAt:null,provenAvailabilityAt:"2026-10-09T19:06:22Z"});
+  expect(x.expiryMs).toBe(bankReportingDeadline("2026-06-30",150));
+ });
+ it("does not admit UNKNOWN publication without a proven availability bound",()=>{
+  expect(evalRows([{...observation,published_at:null,proven_availability_at:null}]).reason).toBe("BANK_DIRECT_ORIGINAL_VERIFICATION_REQUIRED");
+ });
  it("blocks unauthorized fresh_until but accepts a bounded direct source",()=>{
   expect(evalRows([observation]).state).toBe("FRESH");
   expect(evalRows([{...observation,fresh_until:"2027-03-01T00:00:00Z"}]).reason).toBe("BANK_DUAL_CLOCK_FRESH_UNTIL_EXCEEDS_EXPIRY");
