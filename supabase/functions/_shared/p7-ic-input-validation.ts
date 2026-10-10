@@ -26,6 +26,7 @@ export interface InputObservation {
   readonly retrieved_at: string
   readonly fresh_until: string | null
   readonly published_at: string | null
+  readonly proven_availability_at?: string | null
   readonly evidence_status: string
   readonly source_code: string
   readonly source_record_id: string
@@ -102,10 +103,11 @@ export function validateObservationSeries(input: {
     if (!valueValid) return fail("REVIEW_REQUIRED", definition.value_kind === "NUMERIC" ? "NUMERIC_INPUT_INVALID" : "CANONICAL_VALUE_KIND_INVALID")
     if (row.evidence_status !== "AVAILABLE") return fail(row.evidence_status === "STALE" ? "STALE" : "REVIEW_REQUIRED", "OBSERVATION_NOT_AVAILABLE")
     if (Object.hasOwn(BANK_DIRECT_CEILINGS,row.metric_code)) {
-      if (!row.source_verified_at || !row.published_at) return fail("REVIEW_REQUIRED", "BANK_DIRECT_ORIGINAL_VERIFICATION_REQUIRED")
+      const availability=row.published_at??row.proven_availability_at??null
+      if (!row.source_verified_at || !availability) return fail("REVIEW_REQUIRED", "BANK_DIRECT_ORIGINAL_VERIFICATION_REQUIRED")
       const bounded=bankDualClockExpiry({
         code:row.metric_code,periodEnd:row.period_end!,lastVerifiedOriginalBytesAt:row.source_verified_at,
-        publishedAt:row.published_at,retrievedAt:row.retrieved_at,cutoffAtMs:sourceCutoffAtMs,
+        publishedAt:row.published_at,provenAvailabilityAt:row.proven_availability_at??null,retrievedAt:row.retrieved_at,cutoffAtMs:sourceCutoffAtMs,
         disqualifyingEventAt:row.disqualifying_event_at,
       });
       if(!bounded.ok) return fail("REVIEW_REQUIRED", bounded.reason)
