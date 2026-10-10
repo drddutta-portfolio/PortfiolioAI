@@ -359,6 +359,17 @@ export function reconcileCanonicalAndReviewed(input:{canonicalRows:readonly Inpu
    if(canonical.state==="FRESH")return {authority:"CANONICAL" as const,validation:canonical,reviewed:r,reason:"CANONICAL_FRESH_PRIMARY"}
    return {authority:"REVIEW" as const,validation:{state:"FRESH" as const,reason:r.reason,selected:r.observations},reviewed:r,reason:"APPROVED_OFFICIAL_FILING_FALLBACK"}
  }
+ if(r?.state==="FRESH"&&input.family==="NUMERIC_SERIES"&&input.minimum===1&&r.observations.length===1
+   &&input.canonicalRows.length>0&&canonical.state==="INSUFFICIENT"){
+   const reviewedRow=r.observations[0]!
+   const decimal=(v:number|string|null)=>String(v).replace(/(\.\d*?)0+$/u,"$1").replace(/\.$/u,"")
+   const sameValue=input.canonicalRows.every(c=>c.metric_code===reviewedRow.metric_code
+     &&c.numeric_value!==null&&reviewedRow.numeric_value!==null&&decimal(c.numeric_value)===decimal(reviewedRow.numeric_value))
+   const metadataOnly=input.canonicalRows.every(c=>!c.period_end||!c.period_type||!c.consolidation_scope||c.consolidation_scope==="UNKNOWN")
+   if(sameValue&&metadataOnly){
+     return {authority:"REVIEW" as const,validation:{state:"FRESH" as const,reason:r.reason,selected:r.observations},reviewed:r,reason:"REVIEW_REPAIRS_UNDATED_CANONICAL_METADATA"}
+   }
+ }
  if(canonical.state==="FRESH"){
    if(r?.state==="FRESH"&&input.family==="NUMERIC_SERIES"&&r.observations.length){
      const combined=validateObservationSeries({rows:[...input.canonicalRows,...r.observations],definitions:input.definitions,minimum:input.minimum,evaluationAsOfMs:input.evaluationAsOfMs,sourceCutoffAtMs:input.sourceCutoffAtMs})
