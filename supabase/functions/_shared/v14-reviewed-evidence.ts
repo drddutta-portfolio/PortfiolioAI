@@ -360,7 +360,9 @@ export function reconcileCanonicalAndReviewed(input:{canonicalRows:readonly Inpu
    return {authority:"REVIEW" as const,validation:{state:"FRESH" as const,reason:r.reason,selected:r.observations},reviewed:r,reason:"APPROVED_OFFICIAL_FILING_FALLBACK"}
  }
  if(r?.state==="FRESH"&&input.family==="NUMERIC_SERIES"&&input.minimum===1&&r.observations.length===1
-   &&input.canonicalRows.length>0&&canonical.state==="INSUFFICIENT"){
+   &&input.canonicalRows.length>0
+   &&(canonical.state==="INSUFFICIENT"||(canonical.state==="REVIEW_REQUIRED"
+     &&["REPORTING_PERIOD_TYPE_NOT_PROVEN","REPORTING_PERIOD_INVALID","CONSOLIDATION_SCOPE_NOT_PROVEN"].includes(canonical.reason)))){
    const reviewedRow=r.observations[0]!
    const decimal=(v:number|string|null)=>String(v).replace(/(\.\d*?)0+$/u,"$1").replace(/\.$/u,"")
    const sameValue=input.canonicalRows.every(c=>c.metric_code===reviewedRow.metric_code
