@@ -46,7 +46,7 @@ Deno.serve(async req=>{
    operation:ACTION,
    portfolio_id:PORTFOLIO,
    orchestration_type:"V1_4_BANK_MAINTENANCE_CANARY",
-   trigger_source:"OWNER_GRANTED_MANUAL_CANARY",
+   trigger_source:"MANUAL",
    status:"RUNNING",
    requested_count:HISTORY_LIMIT,
    estimated_call_count:HISTORY_LIMIT,
