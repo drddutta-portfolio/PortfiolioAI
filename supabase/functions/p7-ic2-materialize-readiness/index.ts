@@ -9,6 +9,7 @@ import {validateStockHistoryReadiness,validateBenchmarkPairReadiness,historyProo
 import {loadVerifiedOfficialBenchmarkHistory,type OfficialBenchmarkSourceRecord} from "../_shared/v14-official-benchmark-r2.ts"
 import {validateReviewedRequirementEvidence,reconcileCanonicalAndReviewed,type RequirementReview,type ReviewedSourceRecord,type ReviewedResearchDocument,type ReviewedDocumentSource,type ReviewEvidenceFamily} from "../_shared/v14-reviewed-evidence.ts"
 import {p7IcProfileContract,BANK_ACTIVE_METHODOLOGY_AUTHORITY,BANK_V2_VALUATION_WEIGHTS} from "../_shared/p7-ic-profile-contracts.ts"
+import {evaluateBankValuationLedger,BANK_VALUATION_LEDGER_RECORD_KIND,type BankValuationLedgerRecord} from "../_shared/v14-bank-valuation-ledger.ts"
 import {executableV14BenchmarkCodes,resolveV14BenchmarkAuthority} from "../_shared/v14-benchmark-authority-resolution.ts"
 import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json" with {type:"json"}
 
@@ -393,6 +394,20 @@ export async function requirementItem(input:{code:string;family:ReviewEvidenceFa
     sources:assessed.map(x=>({sourceRecordId:x.record.id,retrievedAt:x.record.retrieved_at,validation:x.validation})),
     candidateCount:assessed.length,requiresExactDenominatorAndSourceSelection:true},
    validation_state:"FAIL_CLOSED",canonical_selection_state:"NO_SELECTION"}
+ }
+
+ if(code==="PE_TTM_RELATIVE"||code==="PB_RELATIVE"){
+  const ledgerRows=records.filter(record=>record.record_kind===BANK_VALUATION_LEDGER_RECORD_KIND) as unknown as BankValuationLedgerRecord[]
+  const valuation=evaluateBankValuationLedger({code,securityId,asOf:new Date(evaluationAsOfMs).toISOString(),rows:ledgerRows})
+  return {...blocked(code,minimum,freshness,benchmarks,valuation.state,valuation.reason,valuation.state==="FRESH"?"NONE":"BUILD_PUBLICATION_BOUNDED_BANK_VALUATION_PIT_LEDGER"),
+   candidate_evidence_ids:[...new Set([...(valuation.currentRecordId?[valuation.currentRecordId]:[]),...valuation.historicalRecordIds])],
+   selected_evidence_id:valuation.state==="FRESH"?valuation.currentRecordId??null:null,
+   evidence_as_of_date:valuation.state==="FRESH"?new Date(evaluationAsOfMs).toISOString().slice(0,10):null,
+   source_provider:valuation.state==="FRESH"?"NSE_OFFICIAL":null,
+   raw_source_record_id:valuation.currentRecordId??null,
+   normalized_value:{valuationComparator:"V1_4_BANK_SELF_HISTORY_36_OF_60_V1",validation:valuation},
+   validation_state:valuation.state==="FRESH"?"VALIDATED_BANK_PIT_SELF_HISTORY":"FAIL_CLOSED",
+   canonical_selection_state:valuation.state==="FRESH"?"DETERMINISTIC_BANK_PIT_SELF_HISTORY":"NO_SELECTION"}
  }
 
  const normalized=records.flatMap(record=>{
