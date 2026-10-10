@@ -8,14 +8,14 @@ import {cachedEvidenceReadiness,inspectStoredHistory,P7_IC_INPUT_VALIDATION_VERS
 import {validateStockHistoryReadiness,validateBenchmarkPairReadiness,historyProofFromRows,parseHistoryContractProof,type HistoryContractProof} from "../_shared/v14-history-readiness.ts"
 import {loadVerifiedOfficialBenchmarkHistory,type OfficialBenchmarkSourceRecord} from "../_shared/v14-official-benchmark-r2.ts"
 import {validateReviewedRequirementEvidence,reconcileCanonicalAndReviewed,type RequirementReview,type ReviewedSourceRecord,type ReviewedResearchDocument,type ReviewedDocumentSource,type ReviewEvidenceFamily} from "../_shared/v14-reviewed-evidence.ts"
-import {p7IcProfileContract} from "../_shared/p7-ic-profile-contracts.ts"
+import {p7IcProfileContract,BANK_ACTIVE_METHODOLOGY_AUTHORITY,BANK_V2_VALUATION_WEIGHTS} from "../_shared/p7-ic-profile-contracts.ts"
 import {executableV14BenchmarkCodes,resolveV14BenchmarkAuthority} from "../_shared/v14-benchmark-authority-resolution.ts"
 import coverage from "../../../docs/p7-ic/PortfolioAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_2026-09-29.json" with {type:"json"}
 
 const DEV_REF="lrgpjimipfkyoqbpsqzz",PROD_REF="uxiyufbsbgzzdujzcdxe",ACTION="P7_IC3_MATERIALIZE_CANONICAL_SNAPSHOTS"
 const VALIDATE_ACTION="P7_IC3_VALIDATE_CANONICAL_INPUTS"
 const REGISTRY_VERSION="PORTFOLIOAI_P7_IC1_METHODOLOGY_R7_REGISTRY_V1"
-const MATERIALIZER_VERSION="P7_IC3_CANONICAL_SNAPSHOT_V5_OFFICIAL_BENCHMARK_DELTA_APPEND"
+const MATERIALIZER_VERSION="P7_IC3_CANONICAL_SNAPSHOT_V6_BANK_V2_AND_PUBLICATION_PRECISION"
 const CLASSIFICATION_AUTHORITY="current_security_enrichment_v1"
 const CLASSIFICATION_VERSION="PortfolioAI_P7_IC0_PORTFOLIO_COVERAGE_MATRIX_2026-09-28.json"
 const ASSIGNMENT_AUTHORITY="PORTFOLIOAI_P7_IC1_PORTFOLIO_METHODOLOGY_COVERAGE_V1"
@@ -474,7 +474,7 @@ Deno.serve(async request=>{
   for(const security of slice){
    const assignment=coverageById.get(security.id);if(!assignment)throw new Error(`METHODOLOGY_ASSIGNMENT_MISSING:${security.symbol}`)
    let items:Item[]
-   const authority=assignment.methodologyAuthority??"P7_IC1_REVIEW_REQUIRED",profile=assignment.profileCode??"UNRESOLVED"
+   const profile=assignment.profileCode??"UNRESOLVED",authority=profile==="BANK"?BANK_ACTIVE_METHODOLOGY_AUTHORITY:assignment.methodologyAuthority??"P7_IC1_REVIEW_REQUIRED"
    if(assignment.ic1State!=="RESOLVED"||!assignment.profileCode){items=[blocked("METHODOLOGY_ASSIGNMENT",1,null,[],"REVIEW_REQUIRED","METHODOLOGY_REVIEW_REQUIRED","OWNER_FACTUAL_REVIEW")]}
    else{
     const contract=p7IcProfileContract(assignment.profileCode)
@@ -484,13 +484,13 @@ Deno.serve(async request=>{
    }
    const methodologyRole=assignment.subprofileCode??assignment.profileCode??"UNRESOLVED"
    const assignmentId=`${ASSIGNMENT_AUTHORITY}:${assignment.securityId}:${methodologyRole}`
-   const lineage={classification_authority:CLASSIFICATION_AUTHORITY,classification_version:CLASSIFICATION_VERSION,methodology_role:methodologyRole,assignment_authority:ASSIGNMENT_AUTHORITY,assignment_id:assignmentId,assignment_version:ASSIGNMENT_VERSION}
+   const lineage={classification_authority:CLASSIFICATION_AUTHORITY,classification_version:CLASSIFICATION_VERSION,methodology_role:methodologyRole,assignment_authority:ASSIGNMENT_AUTHORITY,assignment_id:assignmentId,assignment_version:ASSIGNMENT_VERSION,...(profile==="BANK"?{bank_methodology_authority:BANK_ACTIVE_METHODOLOGY_AUTHORITY,bank_methodology_version:"V2",bank_valuation_weights:BANK_V2_VALUATION_WEIGHTS}: {})}
    items.push({...blocked("IC3_SNAPSHOT_LINEAGE",1,null,[],"FRESH","IC3_LINEAGE_READY","NONE"),required:true,evidence_state:"FRESH",normalized_value:{sector:assignment.sector,industry:assignment.industry,...lineage},validation_state:"VALIDATED",canonical_selection_state:"IMMUTABLE_LINEAGE"})
    const states=new Set(items.map(x=>x.evidence_state)),status=states.has("CONFLICTING")?"CONFLICTING":states.has("REVIEW_REQUIRED")?"REVIEW_REQUIRED":states.has("STALE")?"STALE":states.has("MISSING")||states.has("INSUFFICIENT")?"INSUFFICIENT":"READY"
    totals[status]=(totals[status]??0)+1
    const hash=await sha({securityId:security.id,authority,profile,subprofile:assignment.subprofileCode,registry:REGISTRY_VERSION,lineage,items})
    if(dryRun){dryRunResults.push({securityId:security.id,status,snapshotHash:hash,items});continue}
-   const result=await admin.rpc("append_and_select_research_evidence_snapshot_v3",{p_snapshot:{portfolio_id:portfolioId,security_id:security.id,as_of_date:new Date(evaluationAsOfMs).toISOString().slice(0,10),methodology_authority:authority,methodology_version:"V1",profile_code:profile,subprofile_code:assignment.subprofileCode,requirement_registry_version:REGISTRY_VERSION,snapshot_status:status,snapshot_hash:hash,created_by:null},p_items:items,p_selection:{selection_run_id:selectionRunId,execution_grant_id:String(body.grantId??""),evaluation_as_of:evaluationAsOf,source_cutoff_at:sourceCutoffAt,selection_basis:"IC3_CANONICAL_MATERIALIZATION",materializer_version:MATERIALIZER_VERSION,selected_by:null},p_lineage:lineage})
+   const result=await admin.rpc("append_and_select_research_evidence_snapshot_v3",{p_snapshot:{portfolio_id:portfolioId,security_id:security.id,as_of_date:new Date(evaluationAsOfMs).toISOString().slice(0,10),methodology_authority:authority,methodology_version:profile==="BANK"?"V2":"V1",profile_code:profile,subprofile_code:assignment.subprofileCode,requirement_registry_version:REGISTRY_VERSION,snapshot_status:status,snapshot_hash:hash,created_by:null},p_items:items,p_selection:{selection_run_id:selectionRunId,execution_grant_id:String(body.grantId??""),evaluation_as_of:evaluationAsOf,source_cutoff_at:sourceCutoffAt,selection_basis:"IC3_CANONICAL_MATERIALIZATION",materializer_version:MATERIALIZER_VERSION,selected_by:null},p_lineage:lineage})
    if(result.error)throw result.error
    const written=result.data as {snapshot_id:string;selection_id:string;snapshot_created:boolean;snapshot_reused:boolean;selection_created:boolean;selection_reused:boolean}
    snapshotIds.push(String(written.snapshot_id));selectionIds.push(String(written.selection_id))
