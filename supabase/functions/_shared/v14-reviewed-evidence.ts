@@ -39,6 +39,7 @@ export interface ReviewedEvidenceResult {
 }
 
 const HASH=/^[0-9a-f]{64}$/u, DECIMAL=/^-?\d+(?:\.\d+)?$/u
+const AUBANK_SECURITY_ID="f5c47463-3c6d-4db0-a815-e4301e990213"
 const SUPPORTED_VERSION="V1_4_REQUIREMENT_REVIEW_V2"
 const APPROVED_KINDS:Readonly<Record<ReviewEvidenceFamily,readonly string[]>>={
   NUMERIC_SERIES:["OWNER_NUMERIC_REVIEW"], OWNERSHIP_4Q:["OWNER_OWNERSHIP_REVIEW"], TEXT_EVIDENCE_REVIEW:["OWNER_DOCUMENT_REVIEW"],
@@ -201,10 +202,20 @@ export async function validateReviewedRequirementEvidence(input:{
        if(str(source.raw_payload.security_id)!==securityId)
          return fail("REVIEW_REQUIRED","BANK_DIRECT_ISSUER_SECURITY_IDENTITY_NOT_PROVEN",[r.id])
 
-       if(metric!==requirementCode || r.unit!=="PERCENT" || Number(value)<=0)
+       const sfbMetric=(securityId===AUBANK_SECURITY_ID&&source.raw_payload.regulatory_entity_type==="SMALL_FINANCE_BANK"&&(
+         requirementCode==="CET1_RATIO"&&metric==="SFB_PRUDENTIAL_CET1"||
+         requirementCode==="CAPITAL_ADEQUACY_RATIO"&&metric==="SFB_PRUDENTIAL_TOTAL_CRAR"
+       ))
+       if((metric!==requirementCode&&!sfbMetric) || r.unit!=="PERCENT" || Number(value)<=0)
          return fail("REVIEW_REQUIRED","BANK_DIRECT_METRIC_UNIT_OR_IDENTITY_INVALID",[r.id])
        const literal=binding.fragment.toLowerCase()
        const start=r.period_start,end=r.period_end
+       if(sfbMetric&&(
+         start!==end||r.period_type!=="REGULATORY_AS_OF"||
+         !/(small finance bank|sfb)/i.test(literal)||
+         !/(rbi|reserve bank of india)/i.test(literal)||
+         !/(prudential|capital adequacy|capital adequacy ratio|car)/i.test(literal)
+       ))return fail("REVIEW_REQUIRED","BANK_SFB_REGULATORY_SOURCE_PROOF_MISSING",[r.id])
        if(requirementCode==="NIM_TTM"&&(
          !start||r.period_type!=="TRAILING_FOUR_QUARTERS"||
          Date.parse(end+"T00:00:00Z")-Date.parse(start+"T00:00:00Z")<350*86400000||
@@ -212,7 +223,7 @@ export async function validateReviewedRequirementEvidence(input:{
          !/(ttm|trailing (four|4) quarters|last (four|4) quarters)/i.test(literal)||
          !/(average interest.earning assets|average earning assets)/i.test(literal)
        ))return fail("REVIEW_REQUIRED","BANK_DIRECT_TTM_NIM_SOURCE_PROOF_MISSING",[r.id])
-       if((requirementCode==="CET1_RATIO"||requirementCode==="CAPITAL_ADEQUACY_RATIO")&&(
+       if(!sfbMetric&&(requirementCode==="CET1_RATIO"||requirementCode==="CAPITAL_ADEQUACY_RATIO")&&(
          start!==end||r.period_type!=="REGULATORY_AS_OF"||
          !/basel\s*(iii|3)/i.test(literal)||
          !/(risk.weighted assets|rwa)/i.test(literal)
