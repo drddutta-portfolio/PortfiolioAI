@@ -11,6 +11,7 @@ import { DashboardDecisionLayer } from "../components/DashboardDecisionLayer"
 import { DashboardMonitoringReadiness } from "../components/DashboardMonitoringReadiness"
 import { DashboardNewsPreview } from "../components/DashboardNewsPreview"
 import { DashboardPortfolioIntelligence } from "../components/DashboardPortfolioIntelligence"
+import { DashboardPositionSizing } from "../components/DashboardPositionSizing"
 import { DashboardResearchIntelligence } from "../components/DashboardResearchIntelligence"
 import { DashboardRiskConcentration } from "../components/DashboardRiskConcentration"
 import { DashboardScopeProvider } from "../components/DashboardScopeContext"
@@ -84,6 +85,7 @@ export function AppRoutes() {
                 <div id="dashboard-performance" className="dashboard-section-anchor"><DashboardAllocationPerformance /></div>
                 <div id="dashboard-structure" className="dashboard-section-anchor"><DashboardDecisionLayer /></div>
                 <div id="dashboard-health" className="dashboard-section-anchor"><DashboardCoreExitRisk /></div>
+                <div id="dashboard-sizing" className="dashboard-section-anchor"><DashboardPositionSizing /></div>
                 <div id="dashboard-risk" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="risk" label="Portfolio Risk & Concentration" anchorId="dashboard-risk" defaultOpen><DashboardRiskConcentration /></DashboardCollapsibleSection></div>
                 <div id="dashboard-monitoring" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="monitoring" label="Monitoring & Configuration Coverage" anchorId="dashboard-monitoring"><DashboardMonitoringReadiness /></DashboardCollapsibleSection></div>
                 <div id="dashboard-research" className="dashboard-section-anchor"><DashboardCollapsibleSection storageKey="research" label="Research & Intelligence Status" anchorId="dashboard-research"><DashboardResearchIntelligence /></DashboardCollapsibleSection></div>
