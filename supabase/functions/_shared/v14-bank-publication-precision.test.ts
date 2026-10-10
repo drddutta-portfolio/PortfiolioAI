@@ -12,16 +12,23 @@ describe("distinct bank publication precision",()=>{
   const r=evaluateBankPublicationAvailability({...base,proof:{kind:"EXACT",publishedAt:"2026-07-18T11:30:00Z",sourceProofHash:sha},historicalObservationAsOf:"2026-07-17T10:00:00Z"});
   expect(r.historicalApplicable).toBe(false);
  });
- it("B holds date-only pending precision policy with conservative 23:59 IST bound",()=>{
+ it("B allows current factual review at conservative 23:59 IST bound without historical inference",()=>{
   const r=evaluateBankPublicationAvailability({...base,proof:{kind:"DATE_ONLY",publishedDate:"2026-07-18",sourceProofHash:sha}});
-  expect(r.eligibleForFactualReview).toBe(false);
+  expect(r.eligibleForFactualReview).toBe(true);
   expect(r.earliestProvenAvailabilityMs).toBe(Date.parse("2026-07-18T18:29:59.999Z"));
+  expect(r.historicalApplicable).toBe(false);
  });
- it("C records proven retrieval availability, not invented publication time",()=>{
+ it("C allows current factual review from first verified retrieval without inventing publication",()=>{
   const r=evaluateBankPublicationAvailability({...base,proof:{kind:"UNKNOWN_DATE",firstVerifiedRetrievalAt:base.retrievedAt,sourceProofHash:sha}});
-  expect(r.eligibleForFactualReview).toBe(false);
+  expect(r.eligibleForFactualReview).toBe(true);
   expect(r.historicalApplicable).toBe(false);
   expect(r.earliestProvenAvailabilityMs).toBe(Date.parse(base.retrievedAt));
+ });
+ it("DATE_ONLY does not admit before conservative availability bound",()=>{
+  const r=evaluateBankPublicationAvailability({...base,evaluationAsOf:"2026-07-18T12:00:00Z",proof:{kind:"DATE_ONLY",publishedDate:"2026-07-18",sourceProofHash:sha}});
+  expect(r.eligibleForFactualReview).toBe(false);
+  expect(r.reason).toBe("BANK_PUBLICATION_AFTER_EVALUATION");
+  expect(r.historicalApplicable).toBe(false);
  });
  it("C refuses unbound claimed earlier timestamps",()=>{
   expect(evaluateBankPublicationAvailability({...base,proof:{kind:"UNKNOWN_DATE",firstVerifiedRetrievalAt:"2026-07-18T00:00:00Z",sourceProofHash:sha}}).reason).toBe("BANK_UNKNOWN_PUBLICATION_NO_PROVEN_AVAILABILITY");
