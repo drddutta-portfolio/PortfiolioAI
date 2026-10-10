@@ -26,17 +26,17 @@ export function bankVerificationDeadline(verifiedAt:string,days:number):number{
 }
 export function bankDualClockExpiry(input:{
  code:string;periodEnd:string;lastVerifiedOriginalBytesAt:string;
- publishedAt:string;retrievedAt:string;cutoffAtMs:number;
+ publishedAt?:string|null;provenAvailabilityAt?:string|null;retrievedAt:string;cutoffAtMs:number;
  disqualifyingEventAt?:string|null;
 }):{ok:boolean;expiryMs:number;reason:string}{
  const days=BANK_DIRECT_CEILINGS[input.code];
  if(!days) return {ok:false,expiryMs:NaN,reason:"BANK_DUAL_CLOCK_CODE_NOT_APPROVED"};
  const period=bankReportingDeadline(input.periodEnd,days);
  const verified=bankVerificationDeadline(input.lastVerifiedOriginalBytesAt,days);
- const publish=Date.parse(input.publishedAt),retrieve=Date.parse(input.retrievedAt),proof=Date.parse(input.lastVerifiedOriginalBytesAt);
- if(![period,verified,publish,retrieve,proof,input.cutoffAtMs].every(Number.isFinite))
+ const availability=Date.parse(input.publishedAt??input.provenAvailabilityAt??""),retrieve=Date.parse(input.retrievedAt),proof=Date.parse(input.lastVerifiedOriginalBytesAt);
+ if(![period,verified,availability,retrieve,proof,input.cutoffAtMs].every(Number.isFinite))
   return {ok:false,expiryMs:NaN,reason:"BANK_DUAL_CLOCK_PROVENANCE_INCOMPLETE"};
- if(publish<Date.parse(input.periodEnd+"T00:00:00Z")||publish>input.cutoffAtMs||retrieve>input.cutoffAtMs||proof>input.cutoffAtMs)
+ if(availability<Date.parse(input.periodEnd+"T00:00:00Z")||availability>input.cutoffAtMs||retrieve>input.cutoffAtMs||proof>input.cutoffAtMs)
   return {ok:false,expiryMs:NaN,reason:"BANK_DUAL_CLOCK_SOURCE_CUTOFF_INVALID"};
  const adverse=input.disqualifyingEventAt?Date.parse(input.disqualifyingEventAt):Infinity;
  if(input.disqualifyingEventAt&&!Number.isFinite(adverse))
