@@ -50,7 +50,7 @@ Deno.serve(async req=>{
   if(ctl.error||!ctl.data.ingestion_enabled||ctl.data.actual_provider_quota_status!=="VERIFIED"||Number(ctl.data.per_run_internal_attempt_limit)<PLANNED)return reply(409,{code:"PROVIDER_CONTROLS_BLOCK"})
   const run=await admin.from("data_ingestion_runs").insert({
    source_code:SOURCE,portfolio_id:PORTFOLIO,operation:ACTION,orchestration_type:"V1_4_BANK_VALUATION_HISTORY_ACQUISITION",
-   trigger_source:"OWNER_GRANTED",status:"RUNNING",requested_count:scope.length,estimated_call_count:PLANNED,reserved_call_count:PLANNED,
+   trigger_source:"OWNER",status:"RUNNING",requested_count:scope.length,estimated_call_count:PLANNED,reserved_call_count:PLANNED,
    attempted_call_count:0,policy_version:ctl.data.policy_version,metadata:{grant_id:body.grantId,years:"2021-2026",retry_policy:"ZERO",canonical_promotion:false}
   }).select("id").single()
   if(run.error)throw new Error("RUN_CREATE_FAILED")
